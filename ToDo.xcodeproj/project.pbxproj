@@ -63,9 +63,6 @@
 		A761B5BD16EB597B0095A9A8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */; };
 		A761B5E116EB5A130095A9A8 /* FacebookCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = A761B5CA16EB5A130095A9A8 /* FacebookCommunicator.m */; };
 		A761B5E216EB5A130095A9A8 /* KPParseCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = A761B5CD16EB5A130095A9A8 /* KPParseCommunicator.m */; };
-		A761B5E516EB5A130095A9A8 /* ImageClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A761B5D616EB5A130095A9A8 /* ImageClass.m */; };
-		A761B5E616EB5A130095A9A8 /* LocationClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A761B5D816EB5A130095A9A8 /* LocationClass.m */; };
-		A761B5E716EB5A130095A9A8 /* TimerClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A761B5DA16EB5A130095A9A8 /* TimerClass.m */; };
 		A761B5E816EB5A130095A9A8 /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A761B5DC16EB5A130095A9A8 /* UtilityClass.m */; };
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
@@ -153,12 +150,6 @@
 		A761B5CC16EB5A130095A9A8 /* KPParseCommunicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPParseCommunicator.h; sourceTree = "<group>"; };
 		A761B5CD16EB5A130095A9A8 /* KPParseCommunicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPParseCommunicator.m; sourceTree = "<group>"; };
 		A761B5CE16EB5A130095A9A8 /* Includes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Includes.h; sourceTree = "<group>"; };
-		A761B5D516EB5A130095A9A8 /* ImageClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageClass.h; sourceTree = "<group>"; };
-		A761B5D616EB5A130095A9A8 /* ImageClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageClass.m; sourceTree = "<group>"; };
-		A761B5D716EB5A130095A9A8 /* LocationClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationClass.h; sourceTree = "<group>"; };
-		A761B5D816EB5A130095A9A8 /* LocationClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationClass.m; sourceTree = "<group>"; };
-		A761B5D916EB5A130095A9A8 /* TimerClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimerClass.h; sourceTree = "<group>"; };
-		A761B5DA16EB5A130095A9A8 /* TimerClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimerClass.m; sourceTree = "<group>"; };
 		A761B5DB16EB5A130095A9A8 /* UtilityClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilityClass.h; sourceTree = "<group>"; };
 		A761B5DC16EB5A130095A9A8 /* UtilityClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UtilityClass.m; sourceTree = "<group>"; };
 		A7778CCA16EB5884004D95E5 /* ToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -344,12 +335,6 @@
 		A761B5D416EB5A130095A9A8 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				A761B5D516EB5A130095A9A8 /* ImageClass.h */,
-				A761B5D616EB5A130095A9A8 /* ImageClass.m */,
-				A761B5D716EB5A130095A9A8 /* LocationClass.h */,
-				A761B5D816EB5A130095A9A8 /* LocationClass.m */,
-				A761B5D916EB5A130095A9A8 /* TimerClass.h */,
-				A761B5DA16EB5A130095A9A8 /* TimerClass.m */,
 				A761B5DB16EB5A130095A9A8 /* UtilityClass.h */,
 				A761B5DC16EB5A130095A9A8 /* UtilityClass.m */,
 			);
@@ -701,9 +686,6 @@
 				A7778CDE16EB5884004D95E5 /* AppDelegate.m in Sources */,
 				A761B5E116EB5A130095A9A8 /* FacebookCommunicator.m in Sources */,
 				A761B5E216EB5A130095A9A8 /* KPParseCommunicator.m in Sources */,
-				A761B5E516EB5A130095A9A8 /* ImageClass.m in Sources */,
-				A761B5E616EB5A130095A9A8 /* LocationClass.m in Sources */,
-				A761B5E716EB5A130095A9A8 /* TimerClass.m in Sources */,
 				A761B5E816EB5A130095A9A8 /* UtilityClass.m in Sources */,
 				A7DEF8DB16ECDC5600884F13 /* Datamodel.xcdatamodeld in Sources */,
 				A7CA744F16FE3D28001BD204 /* RootViewController.m in Sources */,
