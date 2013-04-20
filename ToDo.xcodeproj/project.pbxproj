@@ -94,7 +94,19 @@
 		A78C9D93172135FB00D4BC13 /* KPSegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A78C9D92172135FB00D4BC13 /* KPSegmentedViewController.m */; };
 		A78F391416F7D5BA00A8C78D /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78F391316F7D5BA00A8C78D /* AddressBook.framework */; };
 		A78F392E16F7DC1900A8C78D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78F392D16F7DC1800A8C78D /* MessageUI.framework */; };
-		A7917ED517225C8D007845AF /* AddToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7917ED417225C8D007845AF /* AddToDoViewController.m */; };
+		A7917F101722617D007845AF /* UIView+JMNoise.m in Sources */ = {isa = PBXBuildFile; fileRef = A7917EFC1722617D007845AF /* UIView+JMNoise.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A7917F111722617D007845AF /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = A7917EFE1722617D007845AF /* close.png */; };
+		A7917F121722617D007845AF /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7917EFF1722617D007845AF /* close@2x.png */; };
+		A7917F131722617D007845AF /* modalButton-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = A7917F001722617D007845AF /* modalButton-selected.png */; };
+		A7917F141722617D007845AF /* modalButton-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7917F011722617D007845AF /* modalButton-selected@2x.png */; };
+		A7917F151722617D007845AF /* modalButton.png in Resources */ = {isa = PBXBuildFile; fileRef = A7917F021722617D007845AF /* modalButton.png */; };
+		A7917F161722617D007845AF /* modalButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7917F031722617D007845AF /* modalButton@2x.png */; };
+		A7917F171722617D007845AF /* UAModalPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = A7917F061722617D007845AF /* UAModalPanel.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A7917F181722617D007845AF /* UATitledModalPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = A7917F081722617D007845AF /* UATitledModalPanel.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A7917F191722617D007845AF /* UAGradientBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = A7917F0B1722617D007845AF /* UAGradientBackground.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A7917F1A1722617D007845AF /* UANoisyGradientBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = A7917F0D1722617D007845AF /* UANoisyGradientBackground.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A7917F1B1722617D007845AF /* UARoundedRectView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7917F0F1722617D007845AF /* UARoundedRectView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A7917F1E17226276007845AF /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7917F1D17226276007845AF /* AddPanelView.m */; };
 		A7CA744F16FE3D28001BD204 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CA744E16FE3D28001BD204 /* RootViewController.m */; };
 		A7DEF8DB16ECDC5600884F13 /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7DEF8D916ECDC5600884F13 /* Datamodel.xcdatamodeld */; };
 		A7F0B9D81700C0F0003BBDD1 /* KPParseCoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F0B9D71700C0EF003BBDD1 /* KPParseCoreData.m */; };
@@ -197,8 +209,26 @@
 		A78C9D92172135FB00D4BC13 /* KPSegmentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPSegmentedViewController.m; path = ViewControllers/Segmented/KPSegmentedViewController.m; sourceTree = "<group>"; };
 		A78F391316F7D5BA00A8C78D /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A78F392D16F7DC1800A8C78D /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		A7917ED317225C8D007845AF /* AddToDoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddToDoViewController.h; path = ViewControllers/Add/AddToDoViewController.h; sourceTree = "<group>"; };
-		A7917ED417225C8D007845AF /* AddToDoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddToDoViewController.m; path = ViewControllers/Add/AddToDoViewController.m; sourceTree = "<group>"; };
+		A7917EFB1722617D007845AF /* UIView+JMNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+JMNoise.h"; sourceTree = "<group>"; };
+		A7917EFC1722617D007845AF /* UIView+JMNoise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+JMNoise.m"; sourceTree = "<group>"; };
+		A7917EFE1722617D007845AF /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
+		A7917EFF1722617D007845AF /* close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@2x.png"; sourceTree = "<group>"; };
+		A7917F001722617D007845AF /* modalButton-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "modalButton-selected.png"; sourceTree = "<group>"; };
+		A7917F011722617D007845AF /* modalButton-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "modalButton-selected@2x.png"; sourceTree = "<group>"; };
+		A7917F021722617D007845AF /* modalButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = modalButton.png; sourceTree = "<group>"; };
+		A7917F031722617D007845AF /* modalButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "modalButton@2x.png"; sourceTree = "<group>"; };
+		A7917F051722617D007845AF /* UAModalPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAModalPanel.h; sourceTree = "<group>"; };
+		A7917F061722617D007845AF /* UAModalPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAModalPanel.m; sourceTree = "<group>"; };
+		A7917F071722617D007845AF /* UATitledModalPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UATitledModalPanel.h; sourceTree = "<group>"; };
+		A7917F081722617D007845AF /* UATitledModalPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UATitledModalPanel.m; sourceTree = "<group>"; };
+		A7917F0A1722617D007845AF /* UAGradientBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAGradientBackground.h; sourceTree = "<group>"; };
+		A7917F0B1722617D007845AF /* UAGradientBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAGradientBackground.m; sourceTree = "<group>"; };
+		A7917F0C1722617D007845AF /* UANoisyGradientBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UANoisyGradientBackground.h; sourceTree = "<group>"; };
+		A7917F0D1722617D007845AF /* UANoisyGradientBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UANoisyGradientBackground.m; sourceTree = "<group>"; };
+		A7917F0E1722617D007845AF /* UARoundedRectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UARoundedRectView.h; sourceTree = "<group>"; };
+		A7917F0F1722617D007845AF /* UARoundedRectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UARoundedRectView.m; sourceTree = "<group>"; };
+		A7917F1C17226276007845AF /* AddPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddPanelView.h; path = ViewControllers/Add/AddPanelView.h; sourceTree = "<group>"; };
+		A7917F1D17226276007845AF /* AddPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddPanelView.m; path = ViewControllers/Add/AddPanelView.m; sourceTree = "<group>"; };
 		A7CA744D16FE3D28001BD204 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RootViewController.h; path = ViewControllers/Menu/RootViewController.h; sourceTree = "<group>"; };
 		A7CA744E16FE3D28001BD204 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RootViewController.m; path = ViewControllers/Menu/RootViewController.m; sourceTree = "<group>"; };
 		A7DEF8DA16ECDC5600884F13 /* Datamodel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Datamodel.xcdatamodel; sourceTree = "<group>"; };
@@ -507,6 +537,7 @@
 		A78F38DE16F7CA1F00A8C78D /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				A7917EF91722617D007845AF /* UAModalPanel */,
 				A78C9D84172128C500D4BC13 /* ATSDragToReorderTableViewController */,
 				A78C9D761720A00100D4BC13 /* SBScrollNavigation */,
 			);
@@ -516,10 +547,68 @@
 		A7917ED217225C7A007845AF /* AddToDo */ = {
 			isa = PBXGroup;
 			children = (
-				A7917ED317225C8D007845AF /* AddToDoViewController.h */,
-				A7917ED417225C8D007845AF /* AddToDoViewController.m */,
+				A7917F1C17226276007845AF /* AddPanelView.h */,
+				A7917F1D17226276007845AF /* AddPanelView.m */,
 			);
 			name = AddToDo;
+			sourceTree = "<group>";
+		};
+		A7917EF91722617D007845AF /* UAModalPanel */ = {
+			isa = PBXGroup;
+			children = (
+				A7917EFA1722617D007845AF /* Categories */,
+				A7917EFD1722617D007845AF /* Images */,
+				A7917F041722617D007845AF /* Panels */,
+				A7917F091722617D007845AF /* Views */,
+			);
+			name = UAModalPanel;
+			path = UAModalPanel/UAModalPanel/Panel;
+			sourceTree = "<group>";
+		};
+		A7917EFA1722617D007845AF /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				A7917EFB1722617D007845AF /* UIView+JMNoise.h */,
+				A7917EFC1722617D007845AF /* UIView+JMNoise.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		A7917EFD1722617D007845AF /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				A7917EFE1722617D007845AF /* close.png */,
+				A7917EFF1722617D007845AF /* close@2x.png */,
+				A7917F001722617D007845AF /* modalButton-selected.png */,
+				A7917F011722617D007845AF /* modalButton-selected@2x.png */,
+				A7917F021722617D007845AF /* modalButton.png */,
+				A7917F031722617D007845AF /* modalButton@2x.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		A7917F041722617D007845AF /* Panels */ = {
+			isa = PBXGroup;
+			children = (
+				A7917F051722617D007845AF /* UAModalPanel.h */,
+				A7917F061722617D007845AF /* UAModalPanel.m */,
+				A7917F071722617D007845AF /* UATitledModalPanel.h */,
+				A7917F081722617D007845AF /* UATitledModalPanel.m */,
+			);
+			path = Panels;
+			sourceTree = "<group>";
+		};
+		A7917F091722617D007845AF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A7917F0A1722617D007845AF /* UAGradientBackground.h */,
+				A7917F0B1722617D007845AF /* UAGradientBackground.m */,
+				A7917F0C1722617D007845AF /* UANoisyGradientBackground.h */,
+				A7917F0D1722617D007845AF /* UANoisyGradientBackground.m */,
+				A7917F0E1722617D007845AF /* UARoundedRectView.h */,
+				A7917F0F1722617D007845AF /* UARoundedRectView.m */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		A7F0B9BC1700BCE3003BBDD1 /* CustomClasses */ = {
@@ -629,6 +718,12 @@
 				A78C9D6D172092C600D4BC13 /* cross@2x.png in Resources */,
 				A78C9D6E172092C600D4BC13 /* list.png in Resources */,
 				A78C9D6F172092C600D4BC13 /* list@2x.png in Resources */,
+				A7917F111722617D007845AF /* close.png in Resources */,
+				A7917F121722617D007845AF /* close@2x.png in Resources */,
+				A7917F131722617D007845AF /* modalButton-selected.png in Resources */,
+				A7917F141722617D007845AF /* modalButton-selected@2x.png in Resources */,
+				A7917F151722617D007845AF /* modalButton.png in Resources */,
+				A7917F161722617D007845AF /* modalButton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -702,7 +797,13 @@
 				A78C9D8D17212B4600D4BC13 /* DoneViewController.m in Sources */,
 				A78C9D90172131F700D4BC13 /* ToDoCell.m in Sources */,
 				A78C9D93172135FB00D4BC13 /* KPSegmentedViewController.m in Sources */,
-				A7917ED517225C8D007845AF /* AddToDoViewController.m in Sources */,
+				A7917F101722617D007845AF /* UIView+JMNoise.m in Sources */,
+				A7917F171722617D007845AF /* UAModalPanel.m in Sources */,
+				A7917F181722617D007845AF /* UATitledModalPanel.m in Sources */,
+				A7917F191722617D007845AF /* UAGradientBackground.m in Sources */,
+				A7917F1A1722617D007845AF /* UANoisyGradientBackground.m in Sources */,
+				A7917F1B1722617D007845AF /* UARoundedRectView.m in Sources */,
+				A7917F1E17226276007845AF /* AddPanelView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

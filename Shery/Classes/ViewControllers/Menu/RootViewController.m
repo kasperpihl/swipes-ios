@@ -13,8 +13,7 @@
 #import "BacklogViewController.h"
 #import "TodayViewController.h"
 #import "DoneViewController.h"
-#import "UIViewController+MJPopupViewController.h"
-#import "AddToDoViewController.h"
+#import "AddPanelView.h"
 
 @interface RootViewController () <UINavigationControllerDelegate>
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
@@ -33,7 +32,10 @@ static RootViewController *sharedObject;
     return sharedObject;
 }
 -(void)pressedAdd:(id)sender{
-    [self presentPopupViewController:[[AddToDoViewController alloc] init] animationType:MJPopupViewAnimationFade];
+    AddPanelView *panelView = [[AddPanelView alloc] initWithFrame:self.view.bounds];
+    [self.view addSubview:panelView];
+    [panelView showFromPoint:[self.view center]];
+    //[self presentPopupViewController:[[AddToDoViewController alloc] init] animationType:MJPopupViewAnimationFade];
 }
 -(void)changeToMenu:(NSString*)viewControllerString storyboard:(BOOL)storyboard identifier:(NSString*)identifier{
     UIViewController *viewController;
