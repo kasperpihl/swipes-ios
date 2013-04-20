@@ -8,9 +8,10 @@
 
 #import "BacklogViewController.h"
 #import "ToDoCell.h"
+#import "KPToDo.h"
 
 @interface BacklogViewController () <MCSwipeTableViewCellDelegate>
-
+@property (nonatomic,strong) NSArray *items;
 @end
 
 @implementation BacklogViewController
@@ -19,17 +20,32 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+        
     }
     return self;
 }
-
+-(NSArray*)loadItems{
+    return [KPToDo MR_findAll];
+}
+-(NSArray *)items{
+    if(!_items){
+        _items = [self loadItems];
+    }
+    return _items;
+}
+-(void)update{
+    self.items = [self loadItems];
+    [self.tableView reloadData];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    notify(@"updatedBacklog", update);
     self.tableView.backgroundColor = [UIColor colorWithRed:227.0 / 255.0 green:227.0 / 255.0 blue:227.0 / 255.0 alpha:1.0];
 }
-
+-(void)dealloc{
+    clearNotify();
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -41,17 +57,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 0;
+    return self.items.count;
 }
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"SwipeCell";
-    ToDoCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (!cell) {
-        cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-    }
-    [cell setMode:MCSwipeTableViewCellModeExit];
-    [cell setDelegate:self];
+-(UITableViewCell *)cell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     [cell setFirstStateIconName:@"clock.png"
                      firstColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
             secondStateIconName: @"check.png"
@@ -64,17 +72,19 @@
     [cell.contentView setBackgroundColor:[UIColor whiteColor]];
     [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
     
-    return cell;
-    // Configure the cell...
-    
+    KPToDo *toDo = [self.items objectAtIndex:indexPath.row];
+    cell.textLabel.text = toDo.title;
     return cell;
 }
 
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
+    NSLog(@"move row at indexpath");
 }
-
+- (void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController willEndDraggingToRow:(NSIndexPath *)destinationIndexPath{
+    NSLog(@"dragged ended");
+}
 
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath

@@ -7,7 +7,10 @@
 //
 
 #import "UAModalPanel.h"
-
+@protocol AddPanelDelegate
+@optional
+-(void)didAddItem:(NSString*)item;
+@end
 @interface AddPanelView : UAModalPanel
-
+@property (nonatomic,weak) NSObject<AddPanelDelegate> *addDelegate;
 @end

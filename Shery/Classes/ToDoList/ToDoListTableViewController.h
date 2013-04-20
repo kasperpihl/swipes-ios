@@ -7,7 +7,7 @@
 //
 
 #import "ATSDragToReorderTableViewController.h"
-
+@class ToDoCell;
 @interface ToDoListTableViewController : ATSDragToReorderTableViewController
-
+- (UITableViewCell *)cell:(ToDoCell*)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
 @end

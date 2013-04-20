@@ -14,8 +14,9 @@
 #import "TodayViewController.h"
 #import "DoneViewController.h"
 #import "AddPanelView.h"
+#import "KPToDo.h"
 
-@interface RootViewController () <UINavigationControllerDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,AddPanelDelegate>
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
 @end
 
@@ -33,9 +34,17 @@ static RootViewController *sharedObject;
 }
 -(void)pressedAdd:(id)sender{
     AddPanelView *panelView = [[AddPanelView alloc] initWithFrame:self.view.bounds];
+    panelView.addDelegate = self;
     [self.view addSubview:panelView];
     [panelView showFromPoint:[self.view center]];
+    
     //[self presentPopupViewController:[[AddToDoViewController alloc] init] animationType:MJPopupViewAnimationFade];
+}
+-(void)didAddItem:(NSString *)item{
+    KPToDo *newToDo = [KPToDo newObjectInContext:nil];
+    newToDo.title = item;
+    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"updatedBacklog" object:self];
 }
 -(void)changeToMenu:(NSString*)viewControllerString storyboard:(BOOL)storyboard identifier:(NSString*)identifier{
     UIViewController *viewController;
@@ -52,19 +61,6 @@ static RootViewController *sharedObject;
     }
     NSArray *viewControllers = @[viewController];
     [self setViewControllers:viewControllers];
-}
--(void)setCurrentViewController:(UIViewController *)viewController atIndex:(NSInteger)index{
-    if(self.viewControllers.count <= index) return;
-    NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:self.viewControllers];
-    UIViewController *currentViewController = [viewControllers lastObject];
-    [viewControllers replaceObjectAtIndex:index withObject:viewController];
-    viewController.view.alpha = 0;
-    [UIView animateWithDuration:0.5 animations:^{
-        viewController.view.alpha = 1;
-        currentViewController.view.alpha = 0.0;
-        self.viewControllers = [viewControllers subarrayWithRange:NSMakeRange(0, index+1)];
-    } completion:^(BOOL finished) {
-    }];
 }
 -(void)setupMenu{
     if(!self.menuViewController){

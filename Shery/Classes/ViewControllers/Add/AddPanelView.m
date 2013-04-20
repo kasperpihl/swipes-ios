@@ -7,21 +7,35 @@
 //
 
 #import "AddPanelView.h"
-
+#define POP_Y 100
+#define POP_HEIGHT 100
+#define POP_WIDTH 280
+#define TEXT_Y 10
+@interface AddPanelView () <UITextFieldDelegate>
+@end
 @implementation AddPanelView
-
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if(self.addDelegate && [self.addDelegate respondsToSelector:@selector(didAddItem:)])
+        [self.addDelegate didAddItem:textField.text];
+    textField.text = @"";
+    return NO;
+}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
-        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 100)];
-        UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 280, 60)];
-        [backgroundView addSubview:textField];
+        self.margin = UIEdgeInsetsMake(POP_Y, (320-POP_WIDTH)/2, self.frame.size.height-POP_HEIGHT-POP_Y, (320-POP_WIDTH)/2);
+        self.padding = UIEdgeInsetsMake(10, 10, 10, 10);
+        self.shouldBounce = NO;
+        UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(0, TEXT_Y, POP_WIDTH-(2*10), 30.0)];
+        textField.delegate = self;
+        textField.returnKeyType = UIReturnKeyNext;
+        textField.borderStyle = UITextBorderStyleRoundedRect;
         self.contentColor = [UIColor whiteColor];
-        self.contentView.frame = backgroundView.frame;
-        [self.contentView addSubview:backgroundView];
+        [self.contentView addSubview:textField];
+        [textField becomeFirstResponder];
     }
+    
     return self;
 }
 

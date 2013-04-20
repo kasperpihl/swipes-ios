@@ -8,6 +8,7 @@ PODS:
 - PRTween (0.0.1)
 - Parse (1.2.6):
   - Facebook-iOS-SDK (~> 3.2)
+- UAModalPanel (1.1.1)
 
 DEPENDENCIES:
 - AKSegmentedControl (~> 1.0.2)
@@ -17,6 +18,7 @@ DEPENDENCIES:
 - MagicalRecord (~> 2.1)
 - PRTween (~> 0.0.1)
 - Parse (~> 1.2.6)
+- UAModalPanel (~> 1.1.1)
 
 SPEC CHECKSUMS:
   AKSegmentedControl: 200a37463b1d4320d433d55c8008d95549159a25
@@ -26,5 +28,6 @@ SPEC CHECKSUMS:
   MagicalRecord: 64e7184c240087a45e9588a722eaf05b0ad837f7
   PRTween: d0439e7917031328f81de4910c5b02e202389939
   Parse: a95544844ca126246be01831f9e1330869f23a1e
+  UAModalPanel: e0f697b4d89ccf0f07c3dc2eb7d17d0e3cb7fe56
 
 COCOAPODS: 0.16.2

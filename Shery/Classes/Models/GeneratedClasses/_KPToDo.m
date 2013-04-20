@@ -4,6 +4,8 @@
 #import "_KPToDo.h"
 
 const struct KPToDoAttributes KPToDoAttributes = {
+	.order = @"order",
+	.state = @"state",
 	.title = @"title",
 };
 
@@ -39,9 +41,47 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"orderValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"order"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic order;
+
+
+
+- (int32_t)orderValue {
+	NSNumber *result = [self order];
+	return [result intValue];
+}
+
+- (void)setOrderValue:(int32_t)value_ {
+	[self setOrder:[NSNumber numberWithInt:value_]];
+}
+
+- (int32_t)primitiveOrderValue {
+	NSNumber *result = [self primitiveOrder];
+	return [result intValue];
+}
+
+- (void)setPrimitiveOrderValue:(int32_t)value_ {
+	[self setPrimitiveOrder:[NSNumber numberWithInt:value_]];
+}
+
+
+
+
+
+@dynamic state;
+
+
 
 
 

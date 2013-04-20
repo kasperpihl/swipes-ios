@@ -31,6 +31,7 @@
 
 #pragma mark - Instantiate object
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context{
+    if(!context) context = [NSManagedObjectContext MR_defaultContext];
     KPParseObject *coreDataObject;
     coreDataObject = [[self class] MR_createInContext:context];
     return coreDataObject;

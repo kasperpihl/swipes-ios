@@ -5,6 +5,8 @@
 #import "KPParseObject.h"
 
 extern const struct KPToDoAttributes {
+	__unsafe_unretained NSString *order;
+	__unsafe_unretained NSString *state;
 	__unsafe_unretained NSString *title;
 } KPToDoAttributes;
 
@@ -17,6 +19,8 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+
+
 @interface KPToDoID : NSManagedObjectID {}
 @end
 
@@ -25,6 +29,30 @@ extern const struct KPToDoFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (KPToDoID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* order;
+
+
+
+@property int32_t orderValue;
+- (int32_t)orderValue;
+- (void)setOrderValue:(int32_t)value_;
+
+//- (BOOL)validateOrder:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* state;
+
+
+
+//- (BOOL)validateState:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -48,6 +76,21 @@ extern const struct KPToDoFetchedProperties {
 @end
 
 @interface _KPToDo (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSNumber*)primitiveOrder;
+- (void)setPrimitiveOrder:(NSNumber*)value;
+
+- (int32_t)primitiveOrderValue;
+- (void)setPrimitiveOrderValue:(int32_t)value_;
+
+
+
+
+- (NSString*)primitiveState;
+- (void)setPrimitiveState:(NSString*)value;
+
+
 
 
 - (NSString*)primitiveTitle;
