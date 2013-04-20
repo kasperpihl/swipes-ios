@@ -2,7 +2,6 @@
 PODS:
 - AKSegmentedControl (1.0.2)
 - Facebook-iOS-SDK (3.5.0)
-- HPGrowingTextView (0.0.1)
 - KGStatusBar (1.0)
 - MCSwipeTableViewCell (1.0.0)
 - MagicalRecord (2.1)
@@ -13,7 +12,6 @@ PODS:
 DEPENDENCIES:
 - AKSegmentedControl (~> 1.0.2)
 - Facebook-iOS-SDK (~> 3.5.0)
-- HPGrowingTextView (~> 0.0.1)
 - KGStatusBar (~> 1.0)
 - MCSwipeTableViewCell (~> 1.0.0)
 - MagicalRecord (~> 2.1)
@@ -23,7 +21,6 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   AKSegmentedControl: 200a37463b1d4320d433d55c8008d95549159a25
   Facebook-iOS-SDK: df5c04b1927e1a535733192857f8e5b9774407d1
-  HPGrowingTextView: 42fee2f684a8c98e61bc19579d274d7fc12b48ca
   KGStatusBar: e47f19745f6aeb0fabe37e8360df26bf87b1e2ff
   MCSwipeTableViewCell: 3779b743bf5fa5a73f4f9e6eb0ddc907bffb829f
   MagicalRecord: 64e7184c240087a45e9588a722eaf05b0ad837f7

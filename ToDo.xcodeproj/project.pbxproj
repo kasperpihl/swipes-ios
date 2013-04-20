@@ -89,15 +89,15 @@
 		A78C9D7217209AE600D4BC13 /* KPToDo.m in Sources */ = {isa = PBXBuildFile; fileRef = A78C9D7117209AE600D4BC13 /* KPToDo.m */; };
 		A78C9D7517209AED00D4BC13 /* _KPToDo.m in Sources */ = {isa = PBXBuildFile; fileRef = A78C9D7417209AED00D4BC13 /* _KPToDo.m */; };
 		A78C9D791720A00100D4BC13 /* SBScrollNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = A78C9D781720A00100D4BC13 /* SBScrollNavigation.m */; };
-		A78C9D7F17211AA500D4BC13 /* SBSegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A78C9D7E17211AA500D4BC13 /* SBSegmentedViewController.m */; };
 		A78C9D8217211CF100D4BC13 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A78C9D8117211CF100D4BC13 /* TodayViewController.m */; };
 		A78C9D87172128C500D4BC13 /* ATSDragToReorderTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A78C9D86172128C500D4BC13 /* ATSDragToReorderTableViewController.m */; };
 		A78C9D8A172128E700D4BC13 /* ToDoListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A78C9D89172128E700D4BC13 /* ToDoListTableViewController.m */; };
 		A78C9D8D17212B4600D4BC13 /* DoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A78C9D8C17212B4600D4BC13 /* DoneViewController.m */; };
 		A78C9D90172131F700D4BC13 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A78C9D8F172131F700D4BC13 /* ToDoCell.m */; };
-		A78C9D93172135FB00D4BC13 /* KPSegentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A78C9D92172135FB00D4BC13 /* KPSegentedViewController.m */; };
+		A78C9D93172135FB00D4BC13 /* KPSegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A78C9D92172135FB00D4BC13 /* KPSegmentedViewController.m */; };
 		A78F391416F7D5BA00A8C78D /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78F391316F7D5BA00A8C78D /* AddressBook.framework */; };
 		A78F392E16F7DC1900A8C78D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78F392D16F7DC1800A8C78D /* MessageUI.framework */; };
+		A7917ED517225C8D007845AF /* AddToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7917ED417225C8D007845AF /* AddToDoViewController.m */; };
 		A7CA744F16FE3D28001BD204 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CA744E16FE3D28001BD204 /* RootViewController.m */; };
 		A7DEF8DB16ECDC5600884F13 /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7DEF8D916ECDC5600884F13 /* Datamodel.xcdatamodeld */; };
 		A7F0B9D81700C0F0003BBDD1 /* KPParseCoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F0B9D71700C0EF003BBDD1 /* KPParseCoreData.m */; };
@@ -192,8 +192,6 @@
 		A78C9D7417209AED00D4BC13 /* _KPToDo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _KPToDo.m; sourceTree = "<group>"; };
 		A78C9D771720A00100D4BC13 /* SBScrollNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBScrollNavigation.h; sourceTree = "<group>"; };
 		A78C9D781720A00100D4BC13 /* SBScrollNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBScrollNavigation.m; sourceTree = "<group>"; };
-		A78C9D7D17211AA500D4BC13 /* SBSegmentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SBSegmentedViewController.h; path = SBSegmentedViewController/SBSegmentedViewController.h; sourceTree = "<group>"; };
-		A78C9D7E17211AA500D4BC13 /* SBSegmentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SBSegmentedViewController.m; path = SBSegmentedViewController/SBSegmentedViewController.m; sourceTree = "<group>"; };
 		A78C9D8017211CF100D4BC13 /* TodayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TodayViewController.h; path = ViewControllers/Today/TodayViewController.h; sourceTree = "<group>"; };
 		A78C9D8117211CF100D4BC13 /* TodayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TodayViewController.m; path = ViewControllers/Today/TodayViewController.m; sourceTree = "<group>"; };
 		A78C9D85172128C500D4BC13 /* ATSDragToReorderTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATSDragToReorderTableViewController.h; sourceTree = "<group>"; };
@@ -204,10 +202,12 @@
 		A78C9D8C17212B4600D4BC13 /* DoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DoneViewController.m; path = ViewControllers/Done/DoneViewController.m; sourceTree = "<group>"; };
 		A78C9D8E172131F700D4BC13 /* ToDoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToDoCell.h; path = ToDoList/ToDoCell.h; sourceTree = "<group>"; };
 		A78C9D8F172131F700D4BC13 /* ToDoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ToDoCell.m; path = ToDoList/ToDoCell.m; sourceTree = "<group>"; };
-		A78C9D91172135FB00D4BC13 /* KPSegentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPSegentedViewController.h; path = ViewControllers/Segmented/KPSegentedViewController.h; sourceTree = "<group>"; };
-		A78C9D92172135FB00D4BC13 /* KPSegentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPSegentedViewController.m; path = ViewControllers/Segmented/KPSegentedViewController.m; sourceTree = "<group>"; };
+		A78C9D91172135FB00D4BC13 /* KPSegmentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPSegmentedViewController.h; path = ViewControllers/Segmented/KPSegmentedViewController.h; sourceTree = "<group>"; };
+		A78C9D92172135FB00D4BC13 /* KPSegmentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPSegmentedViewController.m; path = ViewControllers/Segmented/KPSegmentedViewController.m; sourceTree = "<group>"; };
 		A78F391316F7D5BA00A8C78D /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A78F392D16F7DC1800A8C78D /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		A7917ED317225C8D007845AF /* AddToDoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddToDoViewController.h; path = ViewControllers/Add/AddToDoViewController.h; sourceTree = "<group>"; };
+		A7917ED417225C8D007845AF /* AddToDoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddToDoViewController.m; path = ViewControllers/Add/AddToDoViewController.m; sourceTree = "<group>"; };
 		A7CA744D16FE3D28001BD204 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RootViewController.h; path = ViewControllers/Menu/RootViewController.h; sourceTree = "<group>"; };
 		A7CA744E16FE3D28001BD204 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RootViewController.m; path = ViewControllers/Menu/RootViewController.m; sourceTree = "<group>"; };
 		A7DEF8DA16ECDC5600884F13 /* Datamodel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Datamodel.xcdatamodel; sourceTree = "<group>"; };
@@ -277,6 +277,7 @@
 		A74F61B016EB6852004927DA /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A7917ED217225C7A007845AF /* AddToDo */,
 				A78C9D831721283800D4BC13 /* ToDoList */,
 				A78C9D5B17208F9E00D4BC13 /* Backlog */,
 				A78C9D7A1720A45C00D4BC13 /* Today */,
@@ -487,15 +488,6 @@
 			name = Done;
 			sourceTree = "<group>";
 		};
-		A78C9D7C172119E500D4BC13 /* SBSegmentedViewController */ = {
-			isa = PBXGroup;
-			children = (
-				A78C9D7D17211AA500D4BC13 /* SBSegmentedViewController.h */,
-				A78C9D7E17211AA500D4BC13 /* SBSegmentedViewController.m */,
-			);
-			name = SBSegmentedViewController;
-			sourceTree = "<group>";
-		};
 		A78C9D831721283800D4BC13 /* ToDoList */ = {
 			isa = PBXGroup;
 			children = (
@@ -521,8 +513,8 @@
 			children = (
 				A7CA744D16FE3D28001BD204 /* RootViewController.h */,
 				A7CA744E16FE3D28001BD204 /* RootViewController.m */,
-				A78C9D91172135FB00D4BC13 /* KPSegentedViewController.h */,
-				A78C9D92172135FB00D4BC13 /* KPSegentedViewController.m */,
+				A78C9D91172135FB00D4BC13 /* KPSegmentedViewController.h */,
+				A78C9D92172135FB00D4BC13 /* KPSegmentedViewController.m */,
 			);
 			name = Menu;
 			sourceTree = "<group>";
@@ -531,10 +523,18 @@
 			isa = PBXGroup;
 			children = (
 				A78C9D84172128C500D4BC13 /* ATSDragToReorderTableViewController */,
-				A78C9D7C172119E500D4BC13 /* SBSegmentedViewController */,
 				A78C9D761720A00100D4BC13 /* SBScrollNavigation */,
 			);
 			path = Libs;
+			sourceTree = "<group>";
+		};
+		A7917ED217225C7A007845AF /* AddToDo */ = {
+			isa = PBXGroup;
+			children = (
+				A7917ED317225C8D007845AF /* AddToDoViewController.h */,
+				A7917ED417225C8D007845AF /* AddToDoViewController.m */,
+			);
+			name = AddToDo;
 			sourceTree = "<group>";
 		};
 		A7F0B9BC1700BCE3003BBDD1 /* CustomClasses */ = {
@@ -714,13 +714,13 @@
 				A78C9D7217209AE600D4BC13 /* KPToDo.m in Sources */,
 				A78C9D7517209AED00D4BC13 /* _KPToDo.m in Sources */,
 				A78C9D791720A00100D4BC13 /* SBScrollNavigation.m in Sources */,
-				A78C9D7F17211AA500D4BC13 /* SBSegmentedViewController.m in Sources */,
 				A78C9D8217211CF100D4BC13 /* TodayViewController.m in Sources */,
 				A78C9D87172128C500D4BC13 /* ATSDragToReorderTableViewController.m in Sources */,
 				A78C9D8A172128E700D4BC13 /* ToDoListTableViewController.m in Sources */,
 				A78C9D8D17212B4600D4BC13 /* DoneViewController.m in Sources */,
 				A78C9D90172131F700D4BC13 /* ToDoCell.m in Sources */,
-				A78C9D93172135FB00D4BC13 /* KPSegentedViewController.m in Sources */,
+				A78C9D93172135FB00D4BC13 /* KPSegmentedViewController.m in Sources */,
+				A7917ED517225C8D007845AF /* AddToDoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

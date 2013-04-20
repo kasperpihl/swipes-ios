@@ -9,14 +9,15 @@
 #import "RootViewController.h"
 #import <Parse/Parse.h>
 #import "FacebookCommunicator.h"
-#import "SBSegmentedViewController.h"
+#import "KPSegmentedViewController.h"
 #import "BacklogViewController.h"
 #import "TodayViewController.h"
 #import "DoneViewController.h"
-
+#import "UIViewController+MJPopupViewController.h"
+#import "AddToDoViewController.h"
 
 @interface RootViewController () <UINavigationControllerDelegate>
-@property (nonatomic,strong) SBSegmentedViewController *menuViewController;
+@property (nonatomic,strong) KPSegmentedViewController *menuViewController;
 @end
 
 @implementation RootViewController
@@ -30,6 +31,9 @@ static RootViewController *sharedObject;
         sharedObject = [[RootViewController allocWithZone:NULL] init];
     }
     return sharedObject;
+}
+-(void)pressedAdd:(id)sender{
+    [self presentPopupViewController:[[AddToDoViewController alloc] init] animationType:MJPopupViewAnimationFade];
 }
 -(void)changeToMenu:(NSString*)viewControllerString storyboard:(BOOL)storyboard identifier:(NSString*)identifier{
     UIViewController *viewController;
@@ -67,8 +71,8 @@ static RootViewController *sharedObject;
         TodayViewController *vc2 = [[TodayViewController alloc] initWithStyle:UITableViewStylePlain];
         
         DoneViewController *vc3 = [[DoneViewController alloc] initWithStyle:UITableViewStylePlain];
-        SBSegmentedViewController *menuViewController = [[SBSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3] titles:@[@"Backlog",@"Today",@"Done"]];
-        menuViewController.position = SBSegmentedViewControllerControlPositionNavigationBar;
+        KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3] titles:@[@"Backlog",@"Today",@"Done"]];
+        menuViewController.position = KPSegmentedViewControllerControlPositionNavigationBar;
         
         UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(pressedAdd:)];
         menuViewController.navigationItem.rightBarButtonItem = addButton;

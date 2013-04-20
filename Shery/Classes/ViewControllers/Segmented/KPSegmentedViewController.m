@@ -1,16 +1,16 @@
 //
-//  SBSegmentedViewController.m
-//  SBSegmentedViewController
+//  KPSegentedViewController.m
+//  ToDo
 //
-//  Created by Scott Berrevoets on 3/15/13.
-//  Copyright (c) 2013 Scotty Doesn't Code. All rights reserved.
+//  Created by Kasper Pihl Tornøe on 19/04/13.
+//  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "SBSegmentedViewController.h"
+#import "KPSegmentedViewController.h"
 
 #define DEFAULT_SELECTED_INDEX 0
 
-@interface SBSegmentedViewController ()
+@interface KPSegmentedViewController ()
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) NSMutableArray *titles;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
@@ -20,7 +20,7 @@
 @property (nonatomic) BOOL hasAppeared;
 @end
 
-@implementation SBSegmentedViewController
+@implementation KPSegmentedViewController
 
 - (NSMutableArray *)viewControllers {
 	if (!_viewControllers)
@@ -44,7 +44,7 @@
 	return _segmentedControl;
 }
 
-- (void)setPosition:(SBSegmentedViewControllerControlPosition)position {
+- (void)setPosition:(KPSegmentedViewControllerControlPosition)position {
 	_position = position;
 	[self moveControlToPosition:position];
 }
@@ -84,13 +84,13 @@
     }
 }
 
-- (void)moveControlToPosition:(SBSegmentedViewControllerControlPosition)newPosition {
+- (void)moveControlToPosition:(KPSegmentedViewControllerControlPosition)newPosition {
 	
 	switch (newPosition) {
-		case SBSegmentedViewControllerControlPositionNavigationBar:
+		case KPSegmentedViewControllerControlPositionNavigationBar:
 			self.navigationItem.titleView = self.segmentedControl;
 			break;
-		case SBSegmentedViewControllerControlPositionToolbar: {
+		case KPSegmentedViewControllerControlPositionToolbar: {
 			
 			UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
 																					  target:nil
@@ -107,19 +107,23 @@
 }
 
 - (void)changeViewController:(UISegmentedControl *)segmentedControl {
-	
+	CGFloat width = self.view.frame.size.width;
+    CGFloat height = self.view.frame.size.height;
+    CGFloat delta = (self.currentSelectedIndex < segmentedControl.selectedSegmentIndex) ? width : -width;
 	UIViewController *oldViewController = self.viewControllers[self.currentSelectedIndex];
 	[oldViewController willMoveToParentViewController:nil];
 	
 	UIViewController *newViewController = self.viewControllers[segmentedControl.selectedSegmentIndex];
 	[self addChildViewController:newViewController];
-	newViewController.view.frame = self.view.frame;
-	
+	newViewController.view.frame = CGRectSetPos(self.view.frame, delta, 0);
 	[self transitionFromViewController:oldViewController
 					  toViewController:newViewController
-							  duration:0
+							  duration:0.4
 							   options:UIViewAnimationOptionTransitionNone
-							animations:nil
+							animations:^(void) {
+                                oldViewController.view.frame = CGRectMake(0 - delta, 0, width, height);
+                                newViewController.view.frame = CGRectMake(0, 0, width, height);
+                            }
 							completion:^(BOOL finished) {
 								if (finished) {
 									
@@ -127,11 +131,10 @@
 									
 									self.currentSelectedIndex = segmentedControl.selectedSegmentIndex;
 									
-									if (self.position == SBSegmentedViewControllerControlPositionToolbar)
+									if (self.position == KPSegmentedViewControllerControlPositionToolbar)
 										self.title = newViewController.title;
 								}
 							}];
 	
 }
-
 @end

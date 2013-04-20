@@ -7,15 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-typedef NS_ENUM(NSInteger, SBSegmentedViewControllerControlPosition) {
-	SBSegmentedViewControllerControlPositionNavigationBar,
-	SBSegmentedViewControllerControlPositionToolbar
+typedef NS_ENUM(NSInteger, KPSegmentedViewControllerControlPosition) {
+	KPSegmentedViewControllerControlPositionNavigationBar,
+	KPSegmentedViewControllerControlPositionToolbar
 };
 
-@interface KPSegentedViewController : UIViewController
+@interface KPSegmentedViewController : UIViewController
 
 @property (nonatomic, readonly, strong) UISegmentedControl *segmentedControl;
-@property (nonatomic) SBSegmentedViewControllerControlPosition position;
+@property (nonatomic) KPSegmentedViewControllerControlPosition position;
 
 // NSArray of UIViewController subclasses
 - (id)initWithViewControllers:(NSArray *)viewControllers;

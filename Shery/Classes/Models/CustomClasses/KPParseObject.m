@@ -30,6 +30,11 @@
 -(void)finishedSaving:(BOOL)successful error:(NSError*)error{ }
 
 #pragma mark - Instantiate object
++(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context{
+    KPParseObject *coreDataObject;
+    coreDataObject = [[self class] MR_createInContext:context];
+    return coreDataObject;
+}
 +(KPParseObject *)object:(PFObject*)object context:(NSManagedObjectContext*)context{
     if(!context) context = [NSManagedObjectContext MR_defaultContext];
     __block KPParseObject *coreDataObject;
