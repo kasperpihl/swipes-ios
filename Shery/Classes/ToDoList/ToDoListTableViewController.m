@@ -14,8 +14,22 @@
 @end
 
 @implementation ToDoListTableViewController
+-(NSArray*)loadItems{
+    return [KPToDo MR_findAllSortedBy:@"order" ascending:NO];
+}
+-(NSArray *)items{
+    if(!_items){
+        _items = [NSArray array];
+    }
+    return _items;
+}
 - (UITableViewCell *)cell:(ToDoCell*)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     return cell;
+}
+// Override to support rearranging the table view.
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+{
+    NSLog(@"move row at indexpath");
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"SwipeCell";

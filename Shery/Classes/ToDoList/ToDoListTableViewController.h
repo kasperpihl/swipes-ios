@@ -7,7 +7,10 @@
 //
 
 #import "ATSDragToReorderTableViewController.h"
+#import "KPToDo.h"
 @class ToDoCell;
 @interface ToDoListTableViewController : ATSDragToReorderTableViewController
 - (UITableViewCell *)cell:(ToDoCell*)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
+@property (nonatomic,strong) NSArray *items;
+-(NSArray*)loadItems;
 @end

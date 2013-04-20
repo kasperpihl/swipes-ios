@@ -9,7 +9,8 @@
 
 
 @implementation KPToDo
-
-// Custom logic goes here.
-
+-(void)changeToOrder:(NSInteger)newOrder{
+    self.orderValue = newOrder;
+    
+}
 @end

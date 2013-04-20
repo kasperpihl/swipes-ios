@@ -8,10 +8,8 @@
 
 #import "BacklogViewController.h"
 #import "ToDoCell.h"
-#import "KPToDo.h"
 
 @interface BacklogViewController () <MCSwipeTableViewCellDelegate>
-@property (nonatomic,strong) NSArray *items;
 @end
 
 @implementation BacklogViewController
@@ -24,15 +22,7 @@
     }
     return self;
 }
--(NSArray*)loadItems{
-    return [KPToDo MR_findAll];
-}
--(NSArray *)items{
-    if(!_items){
-        _items = [self loadItems];
-    }
-    return _items;
-}
+
 -(void)update{
     self.items = [self loadItems];
     [self.tableView reloadData];
@@ -77,12 +67,8 @@
     return cell;
 }
 
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-    NSLog(@"move row at indexpath");
-}
-- (void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController willEndDraggingToRow:(NSIndexPath *)destinationIndexPath{
+
+- (void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController didEndDraggingToRow:(NSIndexPath *)destinationIndexPath{
     NSLog(@"dragged ended");
 }
 

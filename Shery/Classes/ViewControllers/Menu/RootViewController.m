@@ -43,6 +43,8 @@ static RootViewController *sharedObject;
 -(void)didAddItem:(NSString *)item{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
     newToDo.title = item;
+    NSNumber *count = [KPToDo MR_numberOfEntities];
+    newToDo.order = count;
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updatedBacklog" object:self];
 }
