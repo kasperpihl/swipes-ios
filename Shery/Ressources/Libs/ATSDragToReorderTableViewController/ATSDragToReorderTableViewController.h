@@ -90,6 +90,8 @@
 #import <QuartzCore/CADisplayLink.h>
 #import <QuartzCore/CALayer.h>
 
+#define DISTANCE_TO_AUTO_SCROLL 150
+
 @class ATSDragToReorderTableViewController;
 
 @protocol ATSDragToReorderTableViewControllerDelegate

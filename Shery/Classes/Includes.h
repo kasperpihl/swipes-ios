@@ -13,28 +13,11 @@ typedef enum {
     FBReturnTypeSuccess
 } FBReturnType;
 typedef enum {
-    MenuLogin,
-    MenuHome,
-    MenuEngageFriends,
-    MenuFriends,
-    MenuProfile,
-} MenuType;
-typedef enum {
-    MenuButtonHome = 0,
-    MenuButtonEngageFriends,
-    MenuButtonFriends,
-    MenuButtonProfile,
-    MenuButtonLogout,
-    MenuButtonTotalCount,
-} MenuButton;
-typedef enum {
     KPDLResultDownloading,
     KPDLResultError,
     KPDLResultSuccess
 } KPDLResult;
 /* Insert below in pods target if it is logs */
-#define MR_ENABLE_ACTIVE_RECORD_LOGGING 0
-#import "CoreData+MagicalRecord.h"
 NS_INLINE void mainBlock(void (^block)(void))
 {
     if(dispatch_get_current_queue() == dispatch_get_main_queue()){

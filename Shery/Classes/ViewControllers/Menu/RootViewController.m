@@ -37,45 +37,27 @@ static RootViewController *sharedObject;
     panelView.addDelegate = self;
     [self.view addSubview:panelView];
     [panelView showFromPoint:[self.view center]];
-    
     //[self presentPopupViewController:[[AddToDoViewController alloc] init] animationType:MJPopupViewAnimationFade];
 }
 -(void)didAddItem:(NSString *)item{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
     newToDo.title = item;
+    newToDo.state = @"backlog";
     NSNumber *count = [KPToDo MR_numberOfEntities];
     newToDo.order = count;
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updatedBacklog" object:self];
 }
--(void)changeToMenu:(NSString*)viewControllerString storyboard:(BOOL)storyboard identifier:(NSString*)identifier{
-    UIViewController *viewController;
-    self.navigationBarHidden = NO;
-    NSString *vcClassName = [NSString stringWithFormat:@"%@ViewController",viewControllerString];
-    if(storyboard){
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-        viewController = [storyboard instantiateViewControllerWithIdentifier:vcClassName];
-    }
-    else{
-        Class class = NSClassFromString(vcClassName);
-        if(!class) return;
-        viewController = [[class alloc] init];
-    }
-    NSArray *viewControllers = @[viewController];
-    [self setViewControllers:viewControllers];
-}
 -(void)setupMenu{
     if(!self.menuViewController){
         BacklogViewController *vc1 = [[BacklogViewController alloc] initWithStyle:UITableViewStylePlain];
-        
+
         TodayViewController *vc2 = [[TodayViewController alloc] initWithStyle:UITableViewStylePlain];
-        
+
         DoneViewController *vc3 = [[DoneViewController alloc] initWithStyle:UITableViewStylePlain];
-        KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3] titles:@[@"Backlog",@"Today",@"Done"]];
+        KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3] titles:@[@"Schedule",@"Today",@"Done"]];
         menuViewController.position = KPSegmentedViewControllerControlPositionNavigationBar;
         
-        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(pressedAdd:)];
-        menuViewController.navigationItem.rightBarButtonItem = addButton;
         menuViewController.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
         self.menuViewController = menuViewController;
         self.viewControllers = @[menuViewController];

@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ToDoListTableViewController.h"
 
-@interface DoneViewController : UITableViewController
+@interface DoneViewController : ToDoListTableViewController
 
 @end

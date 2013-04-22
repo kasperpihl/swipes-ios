@@ -7,10 +7,12 @@
 //
 
 #import "UAModalPanel.h"
+#import "KPPickerView.h"
 @protocol AddPanelDelegate
 @optional
 -(void)didAddItem:(NSString*)item;
 @end
 @interface AddPanelView : UAModalPanel
 @property (nonatomic,weak) NSObject<AddPanelDelegate> *addDelegate;
+@property (nonatomic,weak) NSObject<KPPickerViewDataSource> *forwardDatasource;
 @end

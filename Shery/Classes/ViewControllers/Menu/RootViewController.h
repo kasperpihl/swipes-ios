@@ -16,4 +16,5 @@
 
 @interface RootViewController : UINavigationController
 +(RootViewController*)sharedInstance;
+-(void)pressedAdd:(id)sender;
 @end

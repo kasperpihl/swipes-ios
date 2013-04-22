@@ -22,6 +22,11 @@
 
 /* Begin PBXBuildFile section */
 		A2C9157AB40E430C8F5DD47F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A136D6C864AF43788D47AB2C /* libPods.a */; };
+		A70C56531723EFAC00AD0B0C /* KPPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A70C56521723EFAC00AD0B0C /* KPPickerView.m */; };
+		A70C56591723FE4600AD0B0C /* addbutton-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = A70C56551723FE4600AD0B0C /* addbutton-highlighted.png */; };
+		A70C565A1723FE4600AD0B0C /* addbutton-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A70C56561723FE4600AD0B0C /* addbutton-highlighted@2x.png */; };
+		A70C565B1723FE4600AD0B0C /* addbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A70C56571723FE4600AD0B0C /* addbutton.png */; };
+		A70C565C1723FE4600AD0B0C /* addbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A70C56581723FE4600AD0B0C /* addbutton@2x.png */; };
 		A73C9F9C16FE477C00B0CB71 /* segmented-bg-pressed-center.png in Resources */ = {isa = PBXBuildFile; fileRef = A73C9F8C16FE477C00B0CB71 /* segmented-bg-pressed-center.png */; };
 		A73C9F9D16FE477C00B0CB71 /* segmented-bg-pressed-center@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A73C9F8D16FE477C00B0CB71 /* segmented-bg-pressed-center@2x.png */; };
 		A73C9F9E16FE477C00B0CB71 /* segmented-bg-pressed-left.png in Resources */ = {isa = PBXBuildFile; fileRef = A73C9F8E16FE477C00B0CB71 /* segmented-bg-pressed-left.png */; };
@@ -97,12 +102,19 @@
 		A7917F1E17226276007845AF /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7917F1D17226276007845AF /* AddPanelView.m */; };
 		A7CA744F16FE3D28001BD204 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CA744E16FE3D28001BD204 /* RootViewController.m */; };
 		A7DEF8DB16ECDC5600884F13 /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7DEF8D916ECDC5600884F13 /* Datamodel.xcdatamodeld */; };
+		A7EA9915172588CC004A3BF2 /* MCSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7EA9914172588CC004A3BF2 /* MCSwipeTableViewCell.m */; };
 		A7F0B9D81700C0F0003BBDD1 /* KPParseCoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F0B9D71700C0EF003BBDD1 /* KPParseCoreData.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		A136D6C864AF43788D47AB2C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A70C56511723EFAC00AD0B0C /* KPPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPPickerView.h; path = Views/PickerView/KPPickerView.h; sourceTree = "<group>"; };
+		A70C56521723EFAC00AD0B0C /* KPPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPPickerView.m; path = Views/PickerView/KPPickerView.m; sourceTree = "<group>"; };
+		A70C56551723FE4600AD0B0C /* addbutton-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "addbutton-highlighted.png"; sourceTree = "<group>"; };
+		A70C56561723FE4600AD0B0C /* addbutton-highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "addbutton-highlighted@2x.png"; sourceTree = "<group>"; };
+		A70C56571723FE4600AD0B0C /* addbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addbutton.png; sourceTree = "<group>"; };
+		A70C56581723FE4600AD0B0C /* addbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "addbutton@2x.png"; sourceTree = "<group>"; };
 		A73C9F8C16FE477C00B0CB71 /* segmented-bg-pressed-center.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "segmented-bg-pressed-center.png"; path = "AKSegmentedControl/segmented-bg-pressed-center.png"; sourceTree = "<group>"; };
 		A73C9F8D16FE477C00B0CB71 /* segmented-bg-pressed-center@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "segmented-bg-pressed-center@2x.png"; path = "AKSegmentedControl/segmented-bg-pressed-center@2x.png"; sourceTree = "<group>"; };
 		A73C9F8E16FE477C00B0CB71 /* segmented-bg-pressed-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "segmented-bg-pressed-left.png"; path = "AKSegmentedControl/segmented-bg-pressed-left.png"; sourceTree = "<group>"; };
@@ -202,6 +214,8 @@
 		A7CA744D16FE3D28001BD204 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RootViewController.h; path = ViewControllers/Menu/RootViewController.h; sourceTree = "<group>"; };
 		A7CA744E16FE3D28001BD204 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RootViewController.m; path = ViewControllers/Menu/RootViewController.m; sourceTree = "<group>"; };
 		A7DEF8DA16ECDC5600884F13 /* Datamodel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Datamodel.xcdatamodel; sourceTree = "<group>"; };
+		A7EA9913172588CC004A3BF2 /* MCSwipeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSwipeTableViewCell.h; sourceTree = "<group>"; };
+		A7EA9914172588CC004A3BF2 /* MCSwipeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSwipeTableViewCell.m; sourceTree = "<group>"; };
 		A7F0B9D61700C0EF003BBDD1 /* KPParseCoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPParseCoreData.h; sourceTree = "<group>"; };
 		A7F0B9D71700C0EF003BBDD1 /* KPParseCoreData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPParseCoreData.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -242,6 +256,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A70C564F1723EF6500AD0B0C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A70C56501723EF7300AD0B0C /* PickerView */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		A70C56501723EF7300AD0B0C /* PickerView */ = {
+			isa = PBXGroup;
+			children = (
+				A70C56511723EFAC00AD0B0C /* KPPickerView.h */,
+				A70C56521723EFAC00AD0B0C /* KPPickerView.m */,
+			);
+			name = PickerView;
+			sourceTree = "<group>";
+		};
+		A70C56541723FE4600AD0B0C /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				A70C56551723FE4600AD0B0C /* addbutton-highlighted.png */,
+				A70C56561723FE4600AD0B0C /* addbutton-highlighted@2x.png */,
+				A70C56571723FE4600AD0B0C /* addbutton.png */,
+				A70C56581723FE4600AD0B0C /* addbutton@2x.png */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
 		A73C9F6B16FE474B00B0CB71 /* AKSegmentedControl */ = {
 			isa = PBXGroup;
 			children = (
@@ -290,6 +332,7 @@
 		A74F61CE16EBC3B9004927DA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A70C56541723FE4600AD0B0C /* Buttons */,
 				A78C9D5F172092B800D4BC13 /* SwipeCell */,
 				A73C9F6B16FE474B00B0CB71 /* AKSegmentedControl */,
 			);
@@ -303,6 +346,7 @@
 				A761B5C816EB5A130095A9A8 /* Communicators */,
 				A761B5CF16EB5A130095A9A8 /* Models */,
 				A761B5D416EB5A130095A9A8 /* Utilities */,
+				A70C564F1723EF6500AD0B0C /* Views */,
 				A74F61B016EB6852004927DA /* ViewControllers */,
 			);
 			path = Classes;
@@ -507,6 +551,7 @@
 		A78F38DE16F7CA1F00A8C78D /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				A7EA9912172588CC004A3BF2 /* MCSwipeTableViewCell */,
 				A78C9D84172128C500D4BC13 /* ATSDragToReorderTableViewController */,
 				A78C9D761720A00100D4BC13 /* SBScrollNavigation */,
 			);
@@ -521,6 +566,16 @@
 			);
 			name = AddToDo;
 			sourceTree = "<group>";
+		};
+		A7EA9912172588CC004A3BF2 /* MCSwipeTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				A7EA9913172588CC004A3BF2 /* MCSwipeTableViewCell.h */,
+				A7EA9914172588CC004A3BF2 /* MCSwipeTableViewCell.m */,
+			);
+			name = MCSwipeTableViewCell;
+			path = Shery/Classes/Views/MCSwipeTableViewCell;
+			sourceTree = SOURCE_ROOT;
 		};
 		A7F0B9BC1700BCE3003BBDD1 /* CustomClasses */ = {
 			isa = PBXGroup;
@@ -629,6 +684,10 @@
 				A78C9D6D172092C600D4BC13 /* cross@2x.png in Resources */,
 				A78C9D6E172092C600D4BC13 /* list.png in Resources */,
 				A78C9D6F172092C600D4BC13 /* list@2x.png in Resources */,
+				A70C56591723FE4600AD0B0C /* addbutton-highlighted.png in Resources */,
+				A70C565A1723FE4600AD0B0C /* addbutton-highlighted@2x.png in Resources */,
+				A70C565B1723FE4600AD0B0C /* addbutton.png in Resources */,
+				A70C565C1723FE4600AD0B0C /* addbutton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -703,6 +762,8 @@
 				A78C9D90172131F700D4BC13 /* ToDoCell.m in Sources */,
 				A78C9D93172135FB00D4BC13 /* KPSegmentedViewController.m in Sources */,
 				A7917F1E17226276007845AF /* AddPanelView.m in Sources */,
+				A70C56531723EFAC00AD0B0C /* KPPickerView.m in Sources */,
+				A7EA9915172588CC004A3BF2 /* MCSwipeTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -794,6 +855,45 @@
 				GCC_PREFIX_HEADER = "Shery/ToDo-Prefix.pch";
 				INFOPLIST_FILE = "Shery/ToDo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lsqlite3",
+					"-lsqlite3.0",
+					"-lz",
+					"-framework",
+					AudioToolbox,
+					"-framework",
+					CFNetwork,
+					"-framework",
+					CoreData,
+					"-framework",
+					CoreGraphics,
+					"-framework",
+					CoreLocation,
+					"-framework",
+					MobileCoreServices,
+					"-framework",
+					Parse,
+					"-framework",
+					QuartzCore,
+					"-framework",
+					Security,
+					"-framework",
+					StoreKit,
+					"-framework",
+					SystemConfiguration,
+					"-framework",
+					UIKit,
+					"-weak_framework",
+					Accounts,
+					"-weak_framework",
+					AdSupport,
+					"-weak_framework",
+					Security,
+					"-weak_framework",
+					Social,
+					"-all_load",
+				);
 				PRODUCT_NAME = ToDo;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -810,6 +910,45 @@
 				GCC_PREFIX_HEADER = "Shery/ToDo-Prefix.pch";
 				INFOPLIST_FILE = "Shery/ToDo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lsqlite3",
+					"-lsqlite3.0",
+					"-lz",
+					"-framework",
+					AudioToolbox,
+					"-framework",
+					CFNetwork,
+					"-framework",
+					CoreData,
+					"-framework",
+					CoreGraphics,
+					"-framework",
+					CoreLocation,
+					"-framework",
+					MobileCoreServices,
+					"-framework",
+					Parse,
+					"-framework",
+					QuartzCore,
+					"-framework",
+					Security,
+					"-framework",
+					StoreKit,
+					"-framework",
+					SystemConfiguration,
+					"-framework",
+					UIKit,
+					"-weak_framework",
+					Accounts,
+					"-weak_framework",
+					AdSupport,
+					"-weak_framework",
+					Security,
+					"-weak_framework",
+					Social,
+					"-all_load",
+				);
 				PRODUCT_NAME = ToDo;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
