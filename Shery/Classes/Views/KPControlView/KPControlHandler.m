@@ -7,25 +7,34 @@
 //
 
 #define ADD_BUTTON_TAG 13000
+#define DELETE_BUTTON_TAG 13001
+#define DESELECT_BUTTON_TAG 13002
+#define SHARE_BUTTON_TAG 13003
 
 #define BIG_BUTTON_HEIGHT 90
-#define BIG_BUTTON_BOTTOM_MARGIN 10
-#define SMALL_BUTTON_HEIGHT 52
+#define BIG_BUTTON_BOTTOM_MARGIN 0
+#define SMALL_BUTTON_HEIGHT 70
 #define SMALL_BUTTON_BOTTOM_MARGIN 5
-#define ANIMATION_DURATION 0.3
+
+#define ANIMATION_DURATION 0.15f
+
 #define ADD_BUTTON_X ((320/2)-(BIG_BUTTON_HEIGHT/2))
 
+#define SMALL_BUTTON_SPACING 5
+#define DELETE_BUTTON_X SMALL_BUTTON_SPACING
+#define DESELECT_BUTTON_X 150
+#define SHARE_BUTTON_X 250
 
 #import "KPControlHandler.h"
 #import "RootViewController.h"
 typedef void (^voidBlock)(void);
 @interface KPControlHandler ()
-@property (nonatomic) KPControlViewState activeState;
+@property (nonatomic) KPControlHandlerState activeState;
 @property (nonatomic,weak) UIView* view;
-@property (nonatomic,strong) UIButton *addButton;
-@property (nonatomic,strong) UIButton *deleteButton;
-@property (nonatomic,strong) UIButton *deselectButton;
-@property (nonatomic,strong) UIButton *shareButton;
+@property (nonatomic,weak) UIButton *addButton;
+@property (nonatomic,weak) UIButton *deleteButton;
+@property (nonatomic,weak) UIButton *deselectButton;
+@property (nonatomic,weak) UIButton *shareButton;
 @end
 @implementation KPControlHandler
 +(KPControlHandler*)instanceInView:(UIView*)view{
@@ -53,65 +62,86 @@ typedef void (^voidBlock)(void);
         [view addSubview:addButton];
         self.addButton = (UIButton*)[view viewWithTag:ADD_BUTTON_TAG];
         
-        [self setState:KPControlViewStateAdd animated:NO];
+        UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        deleteButton.frame = CGRectMake(DELETE_BUTTON_X,view.frame.size.height,SMALL_BUTTON_HEIGHT,SMALL_BUTTON_HEIGHT);
+        deleteButton.tag = DELETE_BUTTON_TAG;
+        [deleteButton addTarget:self action:@selector(pressedDelete:) forControlEvents:UIControlEventTouchUpInside];
+        [deleteButton setImage:[UIImage imageNamed:@"deletebutton"] forState:UIControlStateNormal];
+        //[deleteButton setImage:[UIImage imageNamed:@"addbutton-highlighted"] forState:UIControlStateHighlighted];
+        [view addSubview:deleteButton];
+        self.deleteButton = (UIButton*)[view viewWithTag:DELETE_BUTTON_TAG];
+        
+        UIButton *deselectButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        deselectButton.frame = CGRectMake(DESELECT_BUTTON_X,view.frame.size.height,SMALL_BUTTON_HEIGHT,SMALL_BUTTON_HEIGHT);
+        deselectButton.tag = DESELECT_BUTTON_TAG;
+        [deselectButton addTarget:self action:@selector(pressedDeselect:) forControlEvents:UIControlEventTouchUpInside];
+        [deselectButton setImage:[UIImage imageNamed:@"closebutton"] forState:UIControlStateNormal];
+        //[deselectButton setImage:[UIImage imageNamed:@"addbutton-highlighted"] forState:UIControlStateHighlighted];
+        [view addSubview:deselectButton];
+        self.deselectButton = (UIButton*)[view viewWithTag:DESELECT_BUTTON_TAG];
+        
+        
+        [self setState:KPControlHandlerStateAdd animated:NO];
     }
     return self;
 }
--(voidBlock)getClearBlockForState:(KPControlViewState)state{
+-(voidBlock)getClearBlockForState:(KPControlHandlerState)state{
     CGFloat targetY = self.view.frame.size.height;
     voidBlock block = ^(void) {
         switch (state) {
-            case KPControlViewStateNone:
+            case KPControlHandlerStateNone:
                 break;
-            case KPControlViewStateAdd:
+            case KPControlHandlerStateAdd:
                 CGRectSetY(self.addButton.frame, targetY);
                 break;
-            case KPControlViewStateEdit:
+            case KPControlHandlerStateEdit:
                 CGRectSetY(self.deleteButton.frame, targetY);
-                CGRectSetY(self.deselectButton.frame, targetY);
+                //CGRectSetY(self.deselectButton.frame, targetY);
                 CGRectSetY(self.shareButton.frame, targetY);
                 break;
         }
     };
     return block;
 }
--(voidBlock)getShowBlockForState:(KPControlViewState)state{
+-(voidBlock)getShowBlockForState:(KPControlHandlerState)state{
     CGFloat bigButtonY = [self getYForBigSize:YES];
     CGFloat smallButtonY = [self getYForBigSize:NO];
     voidBlock block = ^(void) {
         switch (state) {
-            case KPControlViewStateNone:
+            case KPControlHandlerStateNone:
                 break;
-            case KPControlViewStateAdd:
+            case KPControlHandlerStateAdd:
                 CGRectSetY(self.addButton.frame, bigButtonY);
                 break;
-            case KPControlViewStateEdit:
+            case KPControlHandlerStateEdit:
                 CGRectSetY(self.deleteButton.frame, smallButtonY);
-                CGRectSetY(self.deselectButton.frame, smallButtonY);
+                //CGRectSetY(self.deselectButton.frame, smallButtonY);
                 CGRectSetY(self.shareButton.frame, smallButtonY);
                 break;
         }
     };
     return block;
 }
--(void)setState:(KPControlViewState)state animated:(BOOL)animated{
+-(void)setState:(KPControlHandlerState)state animated:(BOOL)animated{
     if(state == self.activeState) return;
     voidBlock clearBlock = [self getClearBlockForState:self.activeState];
-    CGFloat clearDuration = (self.activeState == KPControlViewStateNone) ? 0 : ANIMATION_DURATION;
-    CGFloat showDuration = (state == KPControlViewStateNone) ? 0 : ANIMATION_DURATION;
+    CGFloat clearDuration = (self.activeState == KPControlHandlerStateNone) ? 0 : ANIMATION_DURATION;
+    CGFloat showDuration = (state == KPControlHandlerStateNone) ? 0 : ANIMATION_DURATION;
+    UIViewAnimationOptions clearAnimationOption = UIViewAnimationOptionCurveEaseIn;
+    UIViewAnimationOptions showAnimationOption = UIViewAnimationOptionCurveEaseInOut;
     voidBlock showBlock = [self getShowBlockForState:state];
     if(animated){
-        voidBlock nextBlock = clearBlock;
         if(clearDuration == 0){
-            nextBlock();
-            nextBlock = showBlock;
+            clearBlock();
+            clearBlock = showBlock;
+            clearAnimationOption = showAnimationOption;
             showBlock = nil;
             clearDuration = showDuration;
         }
-        [UIView animateWithDuration:clearDuration delay:0 options:UIViewAnimationOptionCurveEaseIn animations:nextBlock completion:^(BOOL finished) {
+        [UIView animateWithDuration:clearDuration delay:0 options:clearAnimationOption animations:clearBlock completion:^(BOOL finished) {
             if(finished && showBlock){
                 if(showDuration == 0) showBlock();
-                else [UIView animateWithDuration:showDuration delay:0 options:UIViewAnimationOptionCurveEaseOut animations:showBlock completion:nil];
+                else [UIView animateWithDuration:showDuration delay:0 options:showAnimationOption animations:showBlock completion:nil];
             }
         }];
     }

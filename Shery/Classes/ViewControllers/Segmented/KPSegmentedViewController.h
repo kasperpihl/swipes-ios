@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+typedef NS_ENUM(NSUInteger, KPControlCurrentState){
+    KPControlCurrentStateAdd,
+    KPControlCurrentStateEdit
+};
 @interface KPSegmentedViewController : UIViewController
-
 @property (nonatomic, readonly, strong) UISegmentedControl *segmentedControl;
-
+@property (nonatomic) KPControlCurrentState currentState;
 // NSArray of UIViewController subclasses
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 

@@ -101,6 +101,10 @@
 		A78F392E16F7DC1900A8C78D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78F392D16F7DC1800A8C78D /* MessageUI.framework */; };
 		A7917F1E17226276007845AF /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7917F1D17226276007845AF /* AddPanelView.m */; };
 		A7CA744F16FE3D28001BD204 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CA744E16FE3D28001BD204 /* RootViewController.m */; };
+		A7DB5CEC1727FDA3001C6D53 /* closebutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A7DB5CE81727FDA3001C6D53 /* closebutton.png */; };
+		A7DB5CED1727FDA3001C6D53 /* closebutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7DB5CE91727FDA3001C6D53 /* closebutton@2x.png */; };
+		A7DB5CEE1727FDA3001C6D53 /* deletebutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A7DB5CEA1727FDA3001C6D53 /* deletebutton.png */; };
+		A7DB5CEF1727FDA3001C6D53 /* deletebutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7DB5CEB1727FDA3001C6D53 /* deletebutton@2x.png */; };
 		A7DEF8DB16ECDC5600884F13 /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7DEF8D916ECDC5600884F13 /* Datamodel.xcdatamodeld */; };
 		A7EA9915172588CC004A3BF2 /* MCSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7EA9914172588CC004A3BF2 /* MCSwipeTableViewCell.m */; };
 		A7EA99191725B6C9004A3BF2 /* KPControlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7EA99181725B6C9004A3BF2 /* KPControlHandler.m */; };
@@ -214,6 +218,10 @@
 		A7917F1D17226276007845AF /* AddPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddPanelView.m; path = ViewControllers/Add/AddPanelView.m; sourceTree = "<group>"; };
 		A7CA744D16FE3D28001BD204 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RootViewController.h; path = ViewControllers/Menu/RootViewController.h; sourceTree = "<group>"; };
 		A7CA744E16FE3D28001BD204 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RootViewController.m; path = ViewControllers/Menu/RootViewController.m; sourceTree = "<group>"; };
+		A7DB5CE81727FDA3001C6D53 /* closebutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = closebutton.png; sourceTree = "<group>"; };
+		A7DB5CE91727FDA3001C6D53 /* closebutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closebutton@2x.png"; sourceTree = "<group>"; };
+		A7DB5CEA1727FDA3001C6D53 /* deletebutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = deletebutton.png; sourceTree = "<group>"; };
+		A7DB5CEB1727FDA3001C6D53 /* deletebutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "deletebutton@2x.png"; sourceTree = "<group>"; };
 		A7DEF8DA16ECDC5600884F13 /* Datamodel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Datamodel.xcdatamodel; sourceTree = "<group>"; };
 		A7EA9913172588CC004A3BF2 /* MCSwipeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSwipeTableViewCell.h; sourceTree = "<group>"; };
 		A7EA9914172588CC004A3BF2 /* MCSwipeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSwipeTableViewCell.m; sourceTree = "<group>"; };
@@ -262,7 +270,7 @@
 		A70C564F1723EF6500AD0B0C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A7EA99161725B6B1004A3BF2 /* ControlView */,
+				A7EA99161725B6B1004A3BF2 /* ControlHandler */,
 				A70C56501723EF7300AD0B0C /* PickerView */,
 			);
 			name = Views;
@@ -284,6 +292,10 @@
 				A70C56561723FE4600AD0B0C /* addbutton-highlighted@2x.png */,
 				A70C56571723FE4600AD0B0C /* addbutton.png */,
 				A70C56581723FE4600AD0B0C /* addbutton@2x.png */,
+				A7DB5CE81727FDA3001C6D53 /* closebutton.png */,
+				A7DB5CE91727FDA3001C6D53 /* closebutton@2x.png */,
+				A7DB5CEA1727FDA3001C6D53 /* deletebutton.png */,
+				A7DB5CEB1727FDA3001C6D53 /* deletebutton@2x.png */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -581,13 +593,13 @@
 			path = Shery/Classes/Views/MCSwipeTableViewCell;
 			sourceTree = SOURCE_ROOT;
 		};
-		A7EA99161725B6B1004A3BF2 /* ControlView */ = {
+		A7EA99161725B6B1004A3BF2 /* ControlHandler */ = {
 			isa = PBXGroup;
 			children = (
 				A7EA99171725B6C9004A3BF2 /* KPControlHandler.h */,
 				A7EA99181725B6C9004A3BF2 /* KPControlHandler.m */,
 			);
-			name = ControlView;
+			name = ControlHandler;
 			sourceTree = "<group>";
 		};
 		A7F0B9BC1700BCE3003BBDD1 /* CustomClasses */ = {
@@ -701,6 +713,10 @@
 				A70C565A1723FE4600AD0B0C /* addbutton-highlighted@2x.png in Resources */,
 				A70C565B1723FE4600AD0B0C /* addbutton.png in Resources */,
 				A70C565C1723FE4600AD0B0C /* addbutton@2x.png in Resources */,
+				A7DB5CEC1727FDA3001C6D53 /* closebutton.png in Resources */,
+				A7DB5CED1727FDA3001C6D53 /* closebutton@2x.png in Resources */,
+				A7DB5CEE1727FDA3001C6D53 /* deletebutton.png in Resources */,
+				A7DB5CEF1727FDA3001C6D53 /* deletebutton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

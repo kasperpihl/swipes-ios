@@ -20,6 +20,10 @@
 @end
 
 @implementation ToDoListTableViewController
+-(KPSegmentedViewController *)parent{
+    KPSegmentedViewController *parent = (KPSegmentedViewController*)[self parentViewController];
+    return parent;
+}
 -(void)loadItems{
     self.items = [[KPToDo MR_findByAttribute:@"state" withValue:self.state andOrderBy:@"order" ascending:NO] mutableCopy];
 }
@@ -41,6 +45,7 @@
 -(NSString*)stateForTriggerState:(MCSwipeTableViewCellState)state{ return nil; }
 
 -(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
+    [[self parent] show:NO controlsAnimated:YES];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
     if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
@@ -65,8 +70,9 @@
 -(void)deselectAllRows:(id)sender{
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
     for(NSIndexPath *indexPath in selectedIndexPaths){
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
+    [self.selectedRows removeAllObjects];
 }
 -(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
     if(cell != self.swipingCell) return;
@@ -82,6 +88,7 @@
         [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
         [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
         [self.selectedRows removeAllObjects];
+        [[self parent] setCurrentState:KPControlCurrentStateAdd];
     }
     else{
         NSArray *visibleCells = [self.tableView visibleCells];
@@ -103,6 +110,7 @@
         }
         
     }
+    [[self parent] show:YES controlsAnimated:YES];
     self.swipingCell = nil;
 }
 #pragma mark - Dragable Controller
@@ -110,10 +118,18 @@
     self.isScrollingFast = YES;
     self.dragRow = dragRow;
     self.draggingObject = [self.items objectAtIndex:dragRow.row];
+    [self deselectAllRows:self];
+}
+-(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
+    KPToDo *itemToMove = [self.items objectAtIndex:sourceIndexPath.row];
+	[self.items removeObjectAtIndex:sourceIndexPath.row];
+	[self.items insertObject:itemToMove atIndex:destinationIndexPath.row];
+    // TODO: Fix this items
 }
 -(void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController didEndDraggingToRow:(NSIndexPath *)destinationIndexPath{
     NSInteger targetRow;
     self.tableView.allowsMultipleSelection = YES;
+    [[self parent] setCurrentState:KPControlCurrentStateAdd];
     if(destinationIndexPath.row > self.dragRow.row) targetRow = destinationIndexPath.row-1;
     else if(destinationIndexPath.row < self.dragRow.row) targetRow = destinationIndexPath.row+1;
     else targetRow = destinationIndexPath.row;
@@ -154,17 +170,32 @@
     }    
 	return cell;
 }
+-(void)deleteSelectedItems:(id)sender{
+    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+    NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
+    for(NSIndexPath *indexPath in selectedIndexPaths){
+        KPToDo *toDo = [self.items objectAtIndex:indexPath.row];
+        [toDo MR_deleteInContext:[NSManagedObjectContext MR_defaultContext]];
+        [indexSet addIndex:indexPath.row];
+    }
+    [self.items removeObjectsAtIndexes:indexSet];
+    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+    [self.tableView deleteRowsAtIndexPaths:selectedIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+    [self.selectedRows removeAllObjects];
+}
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     [self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"did deselect");
     [self.selectedRows removeObject:indexPath];
+    if(self.selectedRows.count == 0) [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //MCSwipeTableViewCell *cell = (MCSwipeTableViewCell*)[self tableView:self.tableView cellForRowAtIndexPath:indexPath];
     if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
+    [self parent].currentState = KPControlCurrentStateEdit;
     //[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     /*self.selectedRow = indexPath.row+1;
     [self.tableView beginUpdates];
@@ -172,11 +203,7 @@
     
     
 }
--(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
-    KPToDo *itemToMove = [self.items objectAtIndex:sourceIndexPath.row];
-	[self.items removeObjectAtIndex:sourceIndexPath.row];
-	[self.items insertObject:itemToMove atIndex:destinationIndexPath.row];
-}
+
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -212,8 +239,7 @@
 -(void)setIsScrollingFast:(BOOL)isScrollingFast{
     if(_isScrollingFast != isScrollingFast){
         _isScrollingFast = isScrollingFast;
-        KPSegmentedViewController *viewController = (KPSegmentedViewController*)[self parentViewController];
-        [viewController show:!isScrollingFast controlsAnimated:YES];
+        [[self parent] show:!isScrollingFast controlsAnimated:YES];
     }
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -249,7 +275,7 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.selectedRows removeAllObjects];
-    self.isScrollingFast = NO;
+    [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
 
 - (void)didReceiveMemoryWarning

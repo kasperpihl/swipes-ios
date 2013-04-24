@@ -12,6 +12,7 @@
 #import "AddPanelView.h"
 #import "ToDoListTableViewController.h"
 #import "KPToDo.h"
+#import "UtilityClass.h"
 #define DEFAULT_SELECTED_INDEX 0
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
@@ -48,8 +49,29 @@
 #pragma mark - KPControlViewDelegate
 
 #pragma mark - AddPanelDelegate
+-(void)pressedAdd:(id)sender{
+    [self show:NO controlsAnimated:YES];
+    //[panelView.textField becomeFirstResponder];
+    [self changeToIndex:1];
+    [self.addPanel show:YES];
+    //[self.menuViewController.segmentedControl setSelectedSegmentIndex:1];
+}
+-(void)pressedDelete:(id)sender{
+    [UTILITY confirmBoxWithTitle:@"Delete items" andMessage:@"Are you sure?" block:^(BOOL succeeded, NSError *error) {
+        if(succeeded){
+            ToDoListTableViewController *viewController = (ToDoListTableViewController*)self.viewControllers[self.currentSelectedIndex];
+            [viewController deleteSelectedItems:self];
+            [self setCurrentState:KPControlCurrentStateAdd];
+        }
+    }];
+}
+-(void)pressedDeselect:(id)sender{
+    ToDoListTableViewController *viewController = (ToDoListTableViewController*)self.viewControllers[self.currentSelectedIndex];
+    [viewController deselectAllRows:self];
+    [self setCurrentState:KPControlCurrentStateAdd];
+}
 -(void)closedAddPanel:(AddPanelView *)addPanel{
-    [self.controlHandler setState:KPControlViewStateAdd animated:YES];
+    [self show:YES controlsAnimated:YES];
 }
 -(void)didAddItem:(NSString *)item{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
@@ -60,14 +82,7 @@
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated" object:self];
 }
--(void)pressedAdd:(id)sender{
-    [self.controlHandler setState:KPControlViewStateNone animated:YES];
-    //[panelView.textField becomeFirstResponder];
-    [self changeToIndex:1];
-    [self.addPanel show:YES];
-    //[self.menuViewController.segmentedControl setSelectedSegmentIndex:1];
-    
-}
+
 
 - (NSMutableArray *)viewControllers {
 	if (!_viewControllers)
@@ -112,9 +127,22 @@
 	
 	return self;
 }
+
+-(KPControlHandlerState)handlerStateForCurrent:(KPControlCurrentState)state{
+    if(state == KPControlCurrentStateAdd) return KPControlHandlerStateAdd;
+    else return KPControlHandlerStateEdit;
+}
+-(void)setCurrentState:(KPControlCurrentState)currentState{
+    if(currentState != _currentState){
+        _currentState = currentState;
+    }
+    [self show:YES controlsAnimated:YES];
+}
 -(void)show:(BOOL)show controlsAnimated:(BOOL)animated{
-    if(show) [self.controlHandler setState:KPControlViewStateAdd animated:YES];
-    else [self.controlHandler setState:KPControlViewStateNone animated:YES];
+    if(show){
+        [self.controlHandler setState:[self handlerStateForCurrent:self.currentState] animated:YES];
+    }
+    else [self.controlHandler setState:KPControlHandlerStateNone animated:YES];
 }
 -(void)viewDidLoad{
     [super viewDidLoad];
@@ -147,9 +175,6 @@
     [self changeViewController:self.segmentedControl];
 }
 - (void)changeViewController:(UISegmentedControl *)segmentedControl {
-    NSLog(@"fired");
-
-    
 	CGFloat width = self.view.frame.size.width;
     CGFloat height = self.view.frame.size.height;
     CGFloat delta = (self.currentSelectedIndex < segmentedControl.selectedSegmentIndex) ? width : -width;
