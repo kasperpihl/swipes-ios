@@ -40,39 +40,29 @@
                      firstColor:nil//[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
             secondStateIconName: nil
                     secondColor: nil
-                  thirdIconName: @"clock.png"
-                     thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
-                 fourthIconName:@"list.png"
-                    fourthColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
+                  thirdIconName:@"list.png"
+                     thirdColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
+                 fourthIconName:@"clock.png"
+                    fourthColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]];
     
     KPToDo *toDo = [self.items objectAtIndex:indexPath.row];
     cell.textLabel.text = toDo.title;
     cell.activatedDirection = MCSwipeTableViewCellActivatedDirectionLeft;
     return cell;
 }
--(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    KPToDo *toDo = [self.items objectAtIndex:indexPath.row];
-    NSString *newState;
-    
+-(NSString *)stateForTriggerState:(MCSwipeTableViewCellState)state{
     switch (state) {
         case MCSwipeTableViewCellState3:
-            newState = @"today";
+            return @"today";
             break;
         case MCSwipeTableViewCellState4:
-            newState = @"backlog";
+            return @"backlog";
             break;
         case MCSwipeTableViewCellState1:
         case MCSwipeTableViewCellState2:
         case MCSwipeTableViewCellStateNone:
-            NSLog(@"none triggered");
+            return nil;
             break;
     }
-    NSLog(@"swiping new:%@",newState);
-    [toDo changeState:newState];
-    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
-    [self loadItems];
-    [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationFade];
 }
-
 @end

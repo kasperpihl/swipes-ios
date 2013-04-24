@@ -36,33 +36,24 @@
     cell.textLabel.text = toDo.title;
     return cell;
 }
--(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    KPToDo *toDo = [self.items objectAtIndex:indexPath.row];
-    NSString *newState;
-    
+-(NSString *)stateForTriggerState:(MCSwipeTableViewCellState)state{
     switch (state) {
         case MCSwipeTableViewCellState1:
-            newState = @"done";
+            return @"done";
             break;
         case MCSwipeTableViewCellState3:
-            newState = @"backlog";
+            return @"backlog";
             break;
         case MCSwipeTableViewCellState4:
-            newState = @"deleted";
+            return @"deleted";
             break;
+        
         case MCSwipeTableViewCellState2:
         case MCSwipeTableViewCellStateNone:
-            NSLog(@"none triggered");
+            return nil;
             break;
     }
-    NSLog(@"swiping new:%@",newState);
-    [toDo changeState:newState];
-    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
-    [self loadItems];
-    [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationFade];
 }
-
 
 - (void)viewDidLoad
 {

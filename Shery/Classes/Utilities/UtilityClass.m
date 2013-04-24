@@ -79,7 +79,19 @@ static UtilityClass *sharedObject;
     }
     return s;
 }
-
+static inline double radians (double degrees) {return degrees * M_PI/180;}
+UIImage* rotate(UIImage* src, NSInteger degrees)
+{
+    UIGraphicsBeginImageContext(src.size);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextRotateCTM (context, radians(degrees));
+    
+    [src drawAtPoint:CGPointMake(0, 0)];
+    
+    return UIGraphicsGetImageFromCurrentImageContext();
+}
 #pragma mark - User Defaults
 -(NSUserDefaults *)userDefaults{
     if(!_userDefaults) _userDefaults = [NSUserDefaults standardUserDefaults];

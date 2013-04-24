@@ -9,5 +9,6 @@
 #import "MCSwipeTableViewCell.h"
 
 @interface ToDoCell : MCSwipeTableViewCell
+-(void)select:(BOOL)select;
 
 @end

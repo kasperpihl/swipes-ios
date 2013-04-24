@@ -103,6 +103,7 @@
 		A7CA744F16FE3D28001BD204 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CA744E16FE3D28001BD204 /* RootViewController.m */; };
 		A7DEF8DB16ECDC5600884F13 /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7DEF8D916ECDC5600884F13 /* Datamodel.xcdatamodeld */; };
 		A7EA9915172588CC004A3BF2 /* MCSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7EA9914172588CC004A3BF2 /* MCSwipeTableViewCell.m */; };
+		A7EA99191725B6C9004A3BF2 /* KPControlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7EA99181725B6C9004A3BF2 /* KPControlHandler.m */; };
 		A7F0B9D81700C0F0003BBDD1 /* KPParseCoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F0B9D71700C0EF003BBDD1 /* KPParseCoreData.m */; };
 /* End PBXBuildFile section */
 
@@ -216,6 +217,8 @@
 		A7DEF8DA16ECDC5600884F13 /* Datamodel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Datamodel.xcdatamodel; sourceTree = "<group>"; };
 		A7EA9913172588CC004A3BF2 /* MCSwipeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSwipeTableViewCell.h; sourceTree = "<group>"; };
 		A7EA9914172588CC004A3BF2 /* MCSwipeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSwipeTableViewCell.m; sourceTree = "<group>"; };
+		A7EA99171725B6C9004A3BF2 /* KPControlHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPControlHandler.h; path = Views/KPControlView/KPControlHandler.h; sourceTree = "<group>"; };
+		A7EA99181725B6C9004A3BF2 /* KPControlHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPControlHandler.m; path = Views/KPControlView/KPControlHandler.m; sourceTree = "<group>"; };
 		A7F0B9D61700C0EF003BBDD1 /* KPParseCoreData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPParseCoreData.h; sourceTree = "<group>"; };
 		A7F0B9D71700C0EF003BBDD1 /* KPParseCoreData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPParseCoreData.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -259,6 +262,7 @@
 		A70C564F1723EF6500AD0B0C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A7EA99161725B6B1004A3BF2 /* ControlView */,
 				A70C56501723EF7300AD0B0C /* PickerView */,
 			);
 			name = Views;
@@ -312,9 +316,6 @@
 			children = (
 				A7917ED217225C7A007845AF /* AddToDo */,
 				A78C9D831721283800D4BC13 /* ToDoList */,
-				A78C9D5B17208F9E00D4BC13 /* Backlog */,
-				A78C9D7A1720A45C00D4BC13 /* Today */,
-				A78C9D7B1720A46700D4BC13 /* Done */,
 				A78F38BB16F7AB1500A8C78D /* Menu */,
 			);
 			name = ViewControllers;
@@ -502,8 +503,6 @@
 		A78C9D7A1720A45C00D4BC13 /* Today */ = {
 			isa = PBXGroup;
 			children = (
-				A78C9D8017211CF100D4BC13 /* TodayViewController.h */,
-				A78C9D8117211CF100D4BC13 /* TodayViewController.m */,
 			);
 			name = Today;
 			sourceTree = "<group>";
@@ -524,6 +523,11 @@
 				A78C9D89172128E700D4BC13 /* ToDoListTableViewController.m */,
 				A78C9D8E172131F700D4BC13 /* ToDoCell.h */,
 				A78C9D8F172131F700D4BC13 /* ToDoCell.m */,
+				A78C9D5B17208F9E00D4BC13 /* Backlog */,
+				A78C9D7A1720A45C00D4BC13 /* Today */,
+				A78C9D8017211CF100D4BC13 /* TodayViewController.h */,
+				A78C9D8117211CF100D4BC13 /* TodayViewController.m */,
+				A78C9D7B1720A46700D4BC13 /* Done */,
 			);
 			name = ToDoList;
 			sourceTree = "<group>";
@@ -576,6 +580,15 @@
 			name = MCSwipeTableViewCell;
 			path = Shery/Classes/Views/MCSwipeTableViewCell;
 			sourceTree = SOURCE_ROOT;
+		};
+		A7EA99161725B6B1004A3BF2 /* ControlView */ = {
+			isa = PBXGroup;
+			children = (
+				A7EA99171725B6C9004A3BF2 /* KPControlHandler.h */,
+				A7EA99181725B6C9004A3BF2 /* KPControlHandler.m */,
+			);
+			name = ControlView;
+			sourceTree = "<group>";
 		};
 		A7F0B9BC1700BCE3003BBDD1 /* CustomClasses */ = {
 			isa = PBXGroup;
@@ -764,6 +777,7 @@
 				A7917F1E17226276007845AF /* AddPanelView.m in Sources */,
 				A70C56531723EFAC00AD0B0C /* KPPickerView.m in Sources */,
 				A7EA9915172588CC004A3BF2 /* MCSwipeTableViewCell.m in Sources */,
+				A7EA99191725B6C9004A3BF2 /* KPControlHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -141,20 +141,20 @@ secondStateIconName:(NSString *)secondIconName
     [self addGestureRecognizer:_panGestureRecognizer];
     [_panGestureRecognizer setDelegate:self];
 }
-
 #pragma mark - Handle Gestures
+- (void)publicHandlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation {
+    [self privateHandlePanGestureRecognizer:gesture withTranslation:translation];
+}
+-(void)privateHandlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation{
 
-- (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
     UIGestureRecognizerState state = [gesture state];
-    CGPoint translation = [gesture translationInView:self];
     CGPoint velocity = [gesture velocityInView:self];
     CGFloat percentage = [self percentageWithOffset:CGRectGetMinX(self.contentView.frame) relativeToWidth:CGRectGetWidth(self.bounds)];
     
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
     _direction = [self directionWithPercentage:percentage];
-
-    if (state == UIGestureRecognizerStateBegan) {
-    }
+    
+   
     if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
         CGPoint center = CGPointMake(self.contentView.center.x + translation.x, self.contentView.center.y);
         if(translation.x < 0 && (self.contentView.center.x/self.contentView.frame.size.width) <= 0.5 && !(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionBoth || self.activatedDirection == MCSwipeTableViewCellActivatedDirectionLeft)){
@@ -167,7 +167,7 @@ secondStateIconName:(NSString *)secondIconName
             if(center.x > maxAllowed) center.x = maxAllowed;
         }
         else{
-           
+            
         }
         [self.contentView setCenter:center];
         [self animateWithOffset:CGRectGetMinX(self.contentView.frame)];
@@ -177,16 +177,26 @@ secondStateIconName:(NSString *)secondIconName
         _currentImageName = [self imageNameWithPercentage:percentage];
         _currentPercentage = percentage;
         MCSwipeTableViewCellState cellState= [self stateWithPercentage:percentage];
-
+        
         if (_mode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState])
             [self moveWithDuration:animationDuration andDirection:_direction];
         else
             [self bounceToOrigin];
     }
 }
+- (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
+    if ([gesture state] == UIGestureRecognizerStateBegan) {
+        if([self.delegate respondsToSelector:@selector(swipeTableViewCell:didStartPanningWithMode:)])
+            [self.delegate swipeTableViewCell:self didStartPanningWithMode:self.mode];
+    }
+    CGPoint translation = [gesture translationInView:self];
+    [self privateHandlePanGestureRecognizer:gesture withTranslation:translation];
+    if([self.delegate respondsToSelector:@selector(swipeTableViewCell:didHandleGestureRecognizer:withTranslation:)]){
+        [self.delegate swipeTableViewCell:self didHandleGestureRecognizer:gesture withTranslation:translation];
+    }
+}
 
 #pragma mark - UIGestureRecognizerDelegate
-
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     if (gestureRecognizer == _panGestureRecognizer) {
         UIScrollView *superview = (UIScrollView *) self.superview;
@@ -205,7 +215,6 @@ secondStateIconName:(NSString *)secondIconName
 
     if (offset < -width) offset = -width;
     else if (offset > width) offset = 1.0;
-    NSLog(@"offset:%f",offset);
     return offset;
 }
 
@@ -255,12 +264,15 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (CGFloat)imageAlphaWithPercentage:(CGFloat)percentage {
-    CGFloat alpha;
+    CGFloat alpha = 0;
 
-    if (percentage >= 0 && percentage < kMCStop1)
-        alpha = percentage / kMCStop1;
-    else if (percentage < 0 && percentage > -kMCStop1)
-        alpha = fabsf(percentage / kMCStop1);
+    if (percentage >= 0 && percentage < kMCStop1){
+        if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionBoth || self.activatedDirection ==  MCSwipeTableViewCellActivatedDirectionLeft) alpha = percentage / kMCStop1;
+    }
+        
+    else if (percentage < 0 && percentage > -kMCStop1){
+        if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionBoth || self.activatedDirection == MCSwipeTableViewCellActivatedDirectionRight) alpha = fabsf(percentage / kMCStop1);
+    }
     else alpha = 1.0;
 
     return alpha;
@@ -484,12 +496,9 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)notifyDelegate {
     MCSwipeTableViewCellState state = [self stateWithPercentage:_currentPercentage];
-
-    if (state != MCSwipeTableViewCellStateNone) {
         if (_delegate != nil && [_delegate respondsToSelector:@selector(swipeTableViewCell:didTriggerState:withMode:)]) {
             [_delegate swipeTableViewCell:self didTriggerState:state withMode:_mode];
         }
-    }
 }
 
 #pragma mark - Setter

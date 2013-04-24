@@ -13,11 +13,12 @@
 #import "BacklogViewController.h"
 #import "TodayViewController.h"
 #import "DoneViewController.h"
-#import "AddPanelView.h"
-#import "KPToDo.h"
 
-@interface RootViewController () <UINavigationControllerDelegate,AddPanelDelegate>
+
+
+@interface RootViewController () <UINavigationControllerDelegate>
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
+
 @end
 
 @implementation RootViewController
@@ -32,22 +33,7 @@ static RootViewController *sharedObject;
     }
     return sharedObject;
 }
--(void)pressedAdd:(id)sender{
-    AddPanelView *panelView = [[AddPanelView alloc] initWithFrame:self.view.bounds];
-    panelView.addDelegate = self;
-    [self.view addSubview:panelView];
-    [panelView showFromPoint:[self.view center]];
-    //[self presentPopupViewController:[[AddToDoViewController alloc] init] animationType:MJPopupViewAnimationFade];
-}
--(void)didAddItem:(NSString *)item{
-    KPToDo *newToDo = [KPToDo newObjectInContext:nil];
-    newToDo.title = item;
-    newToDo.state = @"backlog";
-    NSNumber *count = [KPToDo MR_numberOfEntities];
-    newToDo.order = count;
-    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"updatedBacklog" object:self];
-}
+
 -(void)setupMenu{
     if(!self.menuViewController){
         BacklogViewController *vc1 = [[BacklogViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -56,8 +42,6 @@ static RootViewController *sharedObject;
 
         DoneViewController *vc3 = [[DoneViewController alloc] initWithStyle:UITableViewStylePlain];
         KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3] titles:@[@"Schedule",@"Today",@"Done"]];
-        menuViewController.position = KPSegmentedViewControllerControlPositionNavigationBar;
-        
         menuViewController.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
         self.menuViewController = menuViewController;
         self.viewControllers = @[menuViewController];

@@ -36,12 +36,12 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
 @protocol MCSwipeTableViewCellDelegate <NSObject>
 
 @optional
+-(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode;
 - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode;
-
+- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation;
 @end
 
 @interface MCSwipeTableViewCell : UITableViewCell
-
 @property(nonatomic, assign) id <MCSwipeTableViewCellDelegate> delegate;
 
 @property(nonatomic, copy) NSString *firstIconName;
@@ -55,7 +55,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
 @property(nonatomic, strong) UIColor *fourthColor;
 @property(nonatomic, assign) MCSwipeTableViewCellActivatedDirection activatedDirection;
 @property(nonatomic, assign) MCSwipeTableViewCellMode mode;
-
+- (void)publicHandlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation;
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier
  firstStateIconName:(NSString *)firstIconName

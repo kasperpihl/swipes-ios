@@ -8,21 +8,26 @@
 
 #import "KPSegmentedViewController.h"
 #import "RootViewController.h"
+#import "KPControlHandler.h"
+#import "AddPanelView.h"
+#import "ToDoListTableViewController.h"
+#import "KPToDo.h"
 #define DEFAULT_SELECTED_INDEX 0
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
 #define ADD_BUTTON_MARGIN_BOTTOM 0
 #define CONTENT_VIEW_TAG 1000
 #define CONTROLS_VIEW_TAG 1001
-#define CONTROL_VIEW_X (self.contentView.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
-#define CONTROL_VIEW_Y (self.contentView.frame.size.height-ADD_BUTTON_SIZE-ADD_BUTTON_MARGIN_BOTTOM)
+#define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
+#define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
-@interface KPSegmentedViewController ()
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate>
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) NSMutableArray *titles;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
 @property (nonatomic, weak) IBOutlet UIView *contentView;
-@property (nonatomic,weak) IBOutlet UIView *controlView;
+@property (nonatomic,strong) KPControlHandler *controlHandler;
+@property (nonatomic,strong) AddPanelView *addPanel;
 
 @property (nonatomic) NSInteger currentSelectedIndex;
 
@@ -32,6 +37,37 @@
 @end
 
 @implementation KPSegmentedViewController
+-(AddPanelView *)addPanel{
+    if(!_addPanel){
+        _addPanel = [[AddPanelView alloc] initWithFrame:self.navigationController.view.bounds];
+        _addPanel.addDelegate = self;
+        [self.navigationController.view addSubview:_addPanel];
+    }
+    return _addPanel;
+}
+#pragma mark - KPControlViewDelegate
+
+#pragma mark - AddPanelDelegate
+-(void)closedAddPanel:(AddPanelView *)addPanel{
+    [self.controlHandler setState:KPControlViewStateAdd animated:YES];
+}
+-(void)didAddItem:(NSString *)item{
+    KPToDo *newToDo = [KPToDo newObjectInContext:nil];
+    newToDo.title = item;
+    newToDo.state = @"today";
+    NSNumber *count = [KPToDo MR_numberOfEntities];
+    newToDo.order = count;
+    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"updated" object:self];
+}
+-(void)pressedAdd:(id)sender{
+    [self.controlHandler setState:KPControlViewStateNone animated:YES];
+    //[panelView.textField becomeFirstResponder];
+    [self changeToIndex:1];
+    [self.addPanel show:YES];
+    //[self.menuViewController.segmentedControl setSelectedSegmentIndex:1];
+    
+}
 
 - (NSMutableArray *)viewControllers {
 	if (!_viewControllers)
@@ -55,11 +91,6 @@
 	return _segmentedControl;
 }
 
-- (void)setPosition:(KPSegmentedViewControllerControlPosition)position {
-	_position = position;
-	[self moveControlToPosition:position];
-}
-
 - (id)initWithViewControllers:(NSArray *)viewControllers {
 	return [self initWithViewControllers:viewControllers titles:[viewControllers valueForKeyPath:@"@unionOfObjects.title"]];
 }
@@ -76,65 +107,31 @@
 				[self.titles addObject:titles[index]];
 			}
 		}];
+        self.navigationItem.titleView = self.segmentedControl;
 	}
 	
 	return self;
 }
 -(void)show:(BOOL)show controlsAnimated:(BOOL)animated{
-    if(show && self.hidden){
-        self.hidden = NO;
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction  animations:^
-         {
-             self.controlView.frame = CGRectSetPos(self.controlView.frame, CONTROL_VIEW_X, CONTROL_VIEW_Y);
-             
-             /*CGRect naviFrame = self.navigationController.view.frame;
-             self.navigationController.navigationBar.frame = CGRectSetPos(self.navigationController.navigationBar.frame, 0, 0);
-             */
-             
-         } completion:^(BOOL finished)
-         {
-             
-         }];
-        
-    }
-    else if(!show && !self.hidden){
-        self.hidden = YES;
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction  animations:^
-         {
-             self.controlView.frame = CGRectSetPos(self.controlView.frame, CONTROL_VIEW_X, self.contentView.frame.size.height);
-            /* CGRect naviFrame = self.navigationController.view.frame;
-             self.navigationController.navigationBar.frame = CGRectSetPos(self.navigationController.navigationBar.frame, 0, -44);
-             self.contentView.frame = CGRectSetPos(self.contentView.frame, 0, -44);*/
-             
-         } completion:^(BOOL finished)
-         {
-             
-         }];
-    }
+    if(show) [self.controlHandler setState:KPControlViewStateAdd animated:YES];
+    else [self.controlHandler setState:KPControlViewStateNone animated:YES];
+}
+-(void)viewDidLoad{
+    [super viewDidLoad];
+    
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	if (!self.hasAppeared) {
         self.hasAppeared = YES;
-        
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
         contentView.tag = CONTENT_VIEW_TAG;
         [self.view addSubview:contentView];
         self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
+        self.controlHandler = [KPControlHandler instanceInView:self.view];
+        self.controlHandler.delegate = self;
         
         
-        UIView *controlView = [[UIView alloc] initWithFrame:CGRectMake(CONTROL_VIEW_X, CONTROL_VIEW_Y,ADD_BUTTON_SIZE,ADD_BUTTON_SIZE+ADD_BUTTON_MARGIN_BOTTOM)];
-        controlView.tag = CONTROLS_VIEW_TAG;
-        controlView.opaque = NO;
-        controlView.userInteractionEnabled = YES;
-        UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        addButton.frame = CGRectMake(0,0,ADD_BUTTON_SIZE,ADD_BUTTON_SIZE);
-        [addButton addTarget:ROOT_CONTROLLER action:@selector(pressedAdd:) forControlEvents:UIControlEventTouchUpInside];
-        [addButton setImage:[UIImage imageNamed:@"addbutton"] forState:UIControlStateNormal];
-        [addButton setImage:[UIImage imageNamed:@"addbutton-highlighted"] forState:UIControlStateHighlighted];
-        [controlView addSubview:addButton];
-        [self.view addSubview:controlView];
-        self.controlView = [self.view viewWithTag:CONTROLS_VIEW_TAG];
         UIViewController *currentViewController = self.viewControllers[DEFAULT_SELECTED_INDEX];
         [self addChildViewController:currentViewController];
         
@@ -145,37 +142,27 @@
     }
 }
 
-- (void)moveControlToPosition:(KPSegmentedViewControllerControlPosition)newPosition {
-	
-	switch (newPosition) {
-		case KPSegmentedViewControllerControlPositionNavigationBar:
-			self.navigationItem.titleView = self.segmentedControl;
-			break;
-		case KPSegmentedViewControllerControlPositionToolbar: {
-			
-			UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-																					  target:nil
-																					  action:nil];
-			UIBarButtonItem *control = [[UIBarButtonItem alloc] initWithCustomView:self.segmentedControl];
-			
-			self.toolbarItems = @[flexible, control, flexible];
-			
-			UIViewController *currentViewController = self.viewControllers[self.currentSelectedIndex];
-			self.title = currentViewController.title;
-			break;
-		}
-	}
+-(void)changeToIndex:(NSInteger)index{
+    self.segmentedControl.selectedSegmentIndex = index;
+    [self changeViewController:self.segmentedControl];
 }
-
 - (void)changeViewController:(UISegmentedControl *)segmentedControl {
-    segmentedControl.userInteractionEnabled = NO;
+    NSLog(@"fired");
+
+    
 	CGFloat width = self.view.frame.size.width;
     CGFloat height = self.view.frame.size.height;
     CGFloat delta = (self.currentSelectedIndex < segmentedControl.selectedSegmentIndex) ? width : -width;
-	UIViewController *oldViewController = self.viewControllers[self.currentSelectedIndex];
+	ToDoListTableViewController *oldViewController = (ToDoListTableViewController*)self.viewControllers[self.currentSelectedIndex];
+    if(segmentedControl.selectedSegmentIndex == self.currentSelectedIndex){
+        [oldViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+        return;
+    }
+    segmentedControl.userInteractionEnabled = NO;
 	[oldViewController willMoveToParentViewController:nil];
 	
-	UIViewController *newViewController = self.viewControllers[segmentedControl.selectedSegmentIndex];
+	ToDoListTableViewController *newViewController = (ToDoListTableViewController*)self.viewControllers[segmentedControl.selectedSegmentIndex];
+    [newViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 	[self addChildViewController:newViewController];
 	newViewController.view.frame = CGRectSetPos(self.contentView.frame, delta, 0);
 	[self transitionFromViewController:oldViewController
@@ -193,9 +180,6 @@
 									[newViewController didMoveToParentViewController:self];
 									
 									self.currentSelectedIndex = segmentedControl.selectedSegmentIndex;
-									
-									if (self.position == KPSegmentedViewControllerControlPositionToolbar)
-										self.title = newViewController.title;
 								}
 							}];
 	

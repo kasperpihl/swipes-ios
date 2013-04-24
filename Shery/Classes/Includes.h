@@ -32,6 +32,8 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define clearNotify() [[NSNotificationCenter defaultCenter] removeObserver:self]
 #define kv(obj,key) [obj objectForKey:key]
 #define CGRectSetPos( r, x, y ) CGRectMake( x, y, r.size.width, r.size.height )
+#define CGRectSetX( r, x ) r = CGRectMake( x, r.origin.y, r.size.width, r.size.height )
+#define CGRectSetY( r, y ) r = CGRectMake( r.origin.x, y, r.size.width, r.size.height )
 #define parseFileCachePath(name) [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingFormat:@"/Parse/PFFileCache/%@",name]
 typedef void (^ResultBlock)(id result, NSError *error);
 typedef void (^ImageBlock)(UIImage *image, NSError *error);

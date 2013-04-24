@@ -15,4 +15,5 @@
 @property (nonatomic,strong) NSString *state;
 -(void)update;
 -(void)loadItems;
+-(NSString*)stateForTriggerState:(MCSwipeTableViewCellState)state;
 @end

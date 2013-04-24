@@ -272,7 +272,7 @@ typedef enum {
 	if ( !self.draggedCell )
 		return;
 	CGPoint translation = [dragGestureRecognizer translationInView:self.tableView];
-    NSLog(@"translation:%f:%f",translation.x,translation.y);
+    //NSLog(@"translation:%f:%f",translation.x,translation.y);
 	if (dragGestureRecognizer.state == UIGestureRecognizerStateEnded || dragGestureRecognizer.state == UIGestureRecognizerStateCancelled)
 		[self completeGesturesForTranslationPoint:translation];
 	else
@@ -287,7 +287,7 @@ typedef enum {
 		blankCell.hidden = YES;
 
 	CGFloat signedDistance = [self distanceOfCellCenterFromEdge];
-    NSLog(@"signedDistance:%f",signedDistance);
+    //NSLog(@"signedDistance:%f",signedDistance);
 	CGFloat absoluteDistance = fabs(signedDistance);
 
     

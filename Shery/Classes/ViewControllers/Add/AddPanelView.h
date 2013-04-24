@@ -6,13 +6,18 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "UAModalPanel.h"
+#import <UIKit/UIKit.h>
 #import "KPPickerView.h"
+#import "SLGlowingTextField.h"
+@class AddPanelView;
 @protocol AddPanelDelegate
+-(void)closedAddPanel:(AddPanelView*)addPanel;
 @optional
 -(void)didAddItem:(NSString*)item;
 @end
-@interface AddPanelView : UAModalPanel
+@interface AddPanelView : UIView
 @property (nonatomic,weak) NSObject<AddPanelDelegate> *addDelegate;
 @property (nonatomic,weak) NSObject<KPPickerViewDataSource> *forwardDatasource;
+-(void)show:(BOOL)show;
+
 @end

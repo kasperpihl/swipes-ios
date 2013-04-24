@@ -1,29 +1,35 @@
 PODS:
   - AKSegmentedControl (1.0.2)
+  - DAKeyboardControl (2.2.0)
   - Facebook-iOS-SDK (3.5.0)
   - KGStatusBar (1.0)
   - MagicalRecord (2.1)
   - Parse (1.2.6):
     - Facebook-iOS-SDK (~> 3.2)
   - PRTween (0.0.1)
+  - SLGlowingTextField (0.0.1)
   - UAModalPanel (1.1.1)
 
 DEPENDENCIES:
   - AKSegmentedControl (~> 1.0.2)
+  - DAKeyboardControl (~> 2.2.0)
   - Facebook-iOS-SDK (~> 3.5.0)
   - KGStatusBar (~> 1.0)
   - MagicalRecord (~> 2.1)
   - Parse (~> 1.2.6)
   - PRTween (~> 0.0.1)
+  - SLGlowingTextField (~> 0.0.1)
   - UAModalPanel (~> 1.1.1)
 
 SPEC CHECKSUMS:
   AKSegmentedControl: 200a37463b1d4320d433d55c8008d95549159a25
+  DAKeyboardControl: 64d5b35257a433abbcea57202b741f72c623d9ca
   Facebook-iOS-SDK: df5c04b1927e1a535733192857f8e5b9774407d1
   KGStatusBar: e47f19745f6aeb0fabe37e8360df26bf87b1e2ff
   MagicalRecord: 64e7184c240087a45e9588a722eaf05b0ad837f7
   Parse: a95544844ca126246be01831f9e1330869f23a1e
   PRTween: d0439e7917031328f81de4910c5b02e202389939
+  SLGlowingTextField: 0f276378f6d8173098cd75c34d733a78b2bd96b6
   UAModalPanel: e0f697b4d89ccf0f07c3dc2eb7d17d0e3cb7fe56
 
 COCOAPODS: 0.18.1
