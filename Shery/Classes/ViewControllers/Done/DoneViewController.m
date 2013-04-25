@@ -36,14 +36,14 @@
 }
 
 -(UITableViewCell *)cell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    [cell setFirstStateIconName:nil//@"cross.png"
-                     firstColor:nil//[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
+    [cell setFirstStateIconName:nil
+                     firstColor:nil
             secondStateIconName: nil
                     secondColor: nil
                   thirdIconName:@"list.png"
-                     thirdColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
+                     thirdColor:SWIPES_BLUE
                  fourthIconName:@"clock.png"
-                    fourthColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]];
+                    fourthColor:SCHEDULE_COLOR];
     
     KPToDo *toDo = [self.items objectAtIndex:indexPath.row];
     cell.textLabel.text = toDo.title;
@@ -56,7 +56,7 @@
             return @"today";
             break;
         case MCSwipeTableViewCellState4:
-            return @"backlog";
+            return @"schedule";
             break;
         case MCSwipeTableViewCellState1:
         case MCSwipeTableViewCellState2:

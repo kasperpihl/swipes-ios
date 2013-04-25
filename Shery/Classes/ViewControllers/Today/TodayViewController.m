@@ -24,11 +24,11 @@
 }
 -(UITableViewCell *)cell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     [cell setFirstStateIconName:@"check.png"
-                     firstColor:[UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
+                     firstColor:DONE_COLOR
             secondStateIconName:nil
                     secondColor:nil
                   thirdIconName:@"clock.png"
-                     thirdColor:[UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
+                     thirdColor:SCHEDULE_COLOR
                  fourthIconName:nil
                     fourthColor:nil];
     
@@ -42,7 +42,7 @@
             return @"done";
             break;
         case MCSwipeTableViewCellState3:
-            return @"backlog";
+            return @"schedule";
             break;
         case MCSwipeTableViewCellState4:
             return @"deleted";

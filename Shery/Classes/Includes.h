@@ -17,6 +17,15 @@ typedef enum {
     KPDLResultError,
     KPDLResultSuccess
 } KPDLResult;
+typedef NS_ENUM(NSUInteger, KPControlCurrentState){
+    KPControlCurrentStateAdd,
+    KPControlCurrentStateEdit
+};
+typedef NS_ENUM(NSUInteger, KPSegmentButtons) {
+    KPSegmentButtonSchedule,
+    KPSegmentButtonToday,
+    KPSegmentButtonDone
+};
 /* Insert below in pods target if it is logs */
 NS_INLINE void mainBlock(void (^block)(void))
 {

@@ -8,6 +8,6 @@
 
 #import "ToDoListTableViewController.h"
 
-@interface BacklogViewController : ToDoListTableViewController
+@interface ScheduleViewController : ToDoListTableViewController
 
 @end

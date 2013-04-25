@@ -6,17 +6,17 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "BacklogViewController.h"
+#import "ScheduleViewController.h"
 
-@interface BacklogViewController () <MCSwipeTableViewCellDelegate>
+@interface ScheduleViewController () <MCSwipeTableViewCellDelegate>
 @end
 
-@implementation BacklogViewController
+@implementation ScheduleViewController
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
-        self.state = @"backlog";
+        self.state = @"schedule";
     }
     return self;
 }
@@ -41,8 +41,6 @@
             return @"done";
             break;
         case MCSwipeTableViewCellState3:
-            return @"deleted";
-            break;
         case MCSwipeTableViewCellState4:
         case MCSwipeTableViewCellStateNone:
             return nil;
@@ -51,13 +49,13 @@
 }
 -(UITableViewCell *)cell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     [cell setFirstStateIconName:@"list.png"
-                     firstColor:[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]
+                     firstColor:SWIPES_BLUE
             secondStateIconName: @"check.png"
-                    secondColor: [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
-                  thirdIconName: nil//@"cross.png"
-                     thirdColor:nil//[UIColor colorWithRed:232.0 / 255.0 green:61.0 / 255.0 blue:14.0 / 255.0 alpha:1.0]
-                 fourthIconName:nil//@"list.png"
-                    fourthColor:nil];//[UIColor colorWithRed:206.0 / 255.0 green:149.0 / 255.0 blue:98.0 / 255.0 alpha:1.0]];
+                    secondColor: DONE_COLOR
+                  thirdIconName: nil
+                     thirdColor:nil
+                 fourthIconName:nil
+                    fourthColor:nil];
     KPToDo *toDo = [self.items objectAtIndex:indexPath.row];
     cell.textLabel.text = toDo.title;
     cell.activatedDirection = MCSwipeTableViewCellActivatedDirectionRight;

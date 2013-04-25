@@ -27,9 +27,14 @@
 @end
 @implementation AddPanelView
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if(self.addDelegate && [self.addDelegate respondsToSelector:@selector(didAddItem:)])
+    NSString *string = textField.text;
+    NSString *trimmedString = [string stringByTrimmingCharactersInSet:
+                               [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if(trimmedString.length > 0){
+        if(self.addDelegate && [self.addDelegate respondsToSelector:@selector(didAddItem:)])
         [self.addDelegate didAddItem:textField.text];
-    textField.text = @"";
+        textField.text = @"";
+    }
     return NO;
 }
 -(void)didPressClose:(id)sender{
@@ -57,7 +62,7 @@
         formView.backgroundColor = [UIColor whiteColor];
         SLGlowingTextField *textField = [[SLGlowingTextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, TEXT_FIELD_MARGIN_TOP, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), formView.frame.size.height-(2*TEXT_FIELD_MARGIN_TOP))];
         textField.tag = TEXT_FIELD_TAG;
-        
+        textField.returnKeyType = UIReturnKeyNext;
         textField.borderStyle = UITextBorderStyleNone;
         textField.delegate = self;
         textField.placeholder = @"Add a new item to Today";

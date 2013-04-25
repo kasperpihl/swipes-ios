@@ -204,7 +204,6 @@
 - (void)reloadData
 {
     // empty views
-    NSLog(@"reload");
     currentIndex = 0;
     itemCount = 0;
     
@@ -246,7 +245,6 @@
     for(int i = 0 ; i < self.indexOffsets.count ; i++){
         counter = i;
         CGFloat offset = [[self.indexOffsets objectAtIndex:i] floatValue] + ([self widthForIndex:i]/2);
-        NSLog(@"%i: %f",i,offset);
         if(offset >= target){
             if(i == 0) currentIndex = i;
             else if((target-oldOffset) > (offset-target)) currentIndex = i;
@@ -272,7 +270,6 @@
 - (void)determineCurrentItem
 {
     CGFloat target = self.contentView.contentOffset.x+(self.contentView.frame.size.width/2);
-    NSLog(@"target:%f",target);
     [self determineItemFromTarget:target];
 }
 

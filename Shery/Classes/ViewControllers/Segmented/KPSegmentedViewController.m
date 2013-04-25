@@ -13,19 +13,21 @@
 #import "ToDoListTableViewController.h"
 #import "KPToDo.h"
 #import "UtilityClass.h"
-#define DEFAULT_SELECTED_INDEX 0
+#import "AKSegmentedControl.h"
+#define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
 #define ADD_BUTTON_MARGIN_BOTTOM 0
 #define CONTENT_VIEW_TAG 1000
 #define CONTROLS_VIEW_TAG 1001
+#define INTERESTED_SEGMENT_RECT CGRectMake(0,0,200,37)
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
 @interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate>
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) NSMutableArray *titles;
-@property (nonatomic, strong) UISegmentedControl *segmentedControl;
+@property (nonatomic, strong) AKSegmentedControl *segmentedControl;
 @property (nonatomic, weak) IBOutlet UIView *contentView;
 @property (nonatomic,strong) KPControlHandler *controlHandler;
 @property (nonatomic,strong) AddPanelView *addPanel;
@@ -65,11 +67,6 @@
         }
     }];
 }
--(void)pressedDeselect:(id)sender{
-    ToDoListTableViewController *viewController = (ToDoListTableViewController*)self.viewControllers[self.currentSelectedIndex];
-    [viewController deselectAllRows:self];
-    [self setCurrentState:KPControlCurrentStateAdd];
-}
 -(void)closedAddPanel:(AddPanelView *)addPanel{
     [self show:YES controlsAnimated:YES];
 }
@@ -96,16 +93,71 @@
 	return _titles;
 }
 
-- (UISegmentedControl *)segmentedControl {
+- (AKSegmentedControl *)segmentedControl {
 	if (!_segmentedControl) {
-		_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];
-		_segmentedControl.selectedSegmentIndex = DEFAULT_SELECTED_INDEX;
-		
-		[_segmentedControl addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventValueChanged];
+		//_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];
+        AKSegmentedControl *segmentedControl = [[AKSegmentedControl alloc] initWithFrame:INTERESTED_SEGMENT_RECT];
+        [segmentedControl setSelectedIndex: DEFAULT_SELECTED_INDEX];
+        [segmentedControl addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventValueChanged];
+        UIImage *backgroundImage = [[UIImage imageNamed:@"segmented-bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
+        [segmentedControl setBackgroundImage:backgroundImage];
+        [segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(2.0, 2.0, 3.0, 2.0)];
+        [segmentedControl setSegmentedControlMode:AKSegmentedControlModeSticky];
+        [segmentedControl setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
+        UIButton *buttonSchedule = [self buttonForSegment:KPSegmentButtonSchedule];
+        UIButton *buttonToday = [self buttonForSegment:KPSegmentButtonToday];
+        UIButton *buttonDone = [self buttonForSegment:KPSegmentButtonDone];
+        
+        [segmentedControl setButtonsArray:@[buttonSchedule, buttonToday, buttonDone]];
+        _segmentedControl = segmentedControl;
 	}
 	return _segmentedControl;
 }
-
+-(UIButton*)buttonForSegment:(KPSegmentButtons)controlButton{
+    UIButton *button = [[UIButton alloc] init];
+    UIImage *backgroundImage;
+    UIImage *normalImage;
+    UIImage *highlightedImage;
+    switch (controlButton) {
+        case KPSegmentButtonSchedule:
+            backgroundImage = [[UIImage imageNamed:@"segmented-bg-pressed-left.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 4.0, 0.0, 1.0)];
+            normalImage = [UIImage imageNamed:@"schedule"];
+            highlightedImage = [UIImage imageNamed:@"schedule-highlighted"];
+            break;
+        case KPSegmentButtonToday:
+            backgroundImage = [[UIImage imageNamed:@"segmented-bg-pressed-center.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 4.0, 0.0, 1.0)];
+            normalImage = [UIImage imageNamed:@"today"];
+            highlightedImage = [UIImage imageNamed:@"today-highlighted"];
+            break;
+        case KPSegmentButtonDone:
+            backgroundImage = [[UIImage imageNamed:@"segmented-bg-pressed-right.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 1.0, 0.0, 4.0)];
+            normalImage = [UIImage imageNamed:@"done"];
+            highlightedImage = [UIImage imageNamed:@"done-highlighted"];
+            break;
+    }
+    [button setBackgroundImage:backgroundImage forState:UIControlStateHighlighted];
+    [button setBackgroundImage:backgroundImage forState:UIControlStateSelected];
+    [button setBackgroundImage:backgroundImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [button setImage:normalImage forState:UIControlStateNormal];
+    [button setImage:normalImage forState:UIControlStateSelected];
+    [button setImage:normalImage forState:UIControlStateHighlighted];
+    [button setImage:normalImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    button.imageView.animationDuration = 0.8;
+    if(highlightedImage) button.imageView.animationImages = @[highlightedImage];
+    return button;
+}
+-(void)timerFired:(NSTimer*)sender{
+    
+    NSDictionary *userInfo = [sender userInfo];
+    NSInteger index = [[userInfo objectForKey:@"button"] integerValue];
+    UIButton *button = [[self.segmentedControl buttonsArray] objectAtIndex:index];
+    [button.imageView stopAnimating];
+}
+-(void)highlightButton:(KPSegmentButtons)controlButton{
+    UIButton *button = [[self.segmentedControl buttonsArray] objectAtIndex:controlButton];
+    [button.imageView startAnimating];
+    [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(timerFired:) userInfo:@{@"button": [NSNumber numberWithInteger:controlButton]} repeats:NO];
+}
 - (id)initWithViewControllers:(NSArray *)viewControllers {
 	return [self initWithViewControllers:viewControllers titles:[viewControllers valueForKeyPath:@"@unionOfObjects.title"]];
 }
@@ -127,7 +179,6 @@
 	
 	return self;
 }
-
 -(KPControlHandlerState)handlerStateForCurrent:(KPControlCurrentState)state{
     if(state == KPControlCurrentStateAdd) return KPControlHandlerStateAdd;
     else return KPControlHandlerStateEdit;
@@ -142,11 +193,13 @@
     if(show){
         [self.controlHandler setState:[self handlerStateForCurrent:self.currentState] animated:YES];
     }
-    else [self.controlHandler setState:KPControlHandlerStateNone animated:YES];
+    else{
+        [self.controlHandler setState:KPControlHandlerStateNone animated:YES];
+    }
+    //[self.navigationController setNavigationBarHidden:!show animated:YES];
 }
 -(void)viewDidLoad{
     [super viewDidLoad];
-    
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -161,6 +214,7 @@
         
         
         UIViewController *currentViewController = self.viewControllers[DEFAULT_SELECTED_INDEX];
+        self.currentSelectedIndex = DEFAULT_SELECTED_INDEX;
         [self addChildViewController:currentViewController];
         
         currentViewController.view.frame = self.view.frame;
@@ -169,24 +223,25 @@
         [currentViewController didMoveToParentViewController:self];
     }
 }
-
 -(void)changeToIndex:(NSInteger)index{
-    self.segmentedControl.selectedSegmentIndex = index;
+    [self.segmentedControl setSelectedIndex:index];
     [self changeViewController:self.segmentedControl];
 }
-- (void)changeViewController:(UISegmentedControl *)segmentedControl {
+- (void)changeViewController:(AKSegmentedControl *)segmentedControl {
+    //[self highlightButton:KPSegmentButtonSchedule];
 	CGFloat width = self.view.frame.size.width;
     CGFloat height = self.view.frame.size.height;
-    CGFloat delta = (self.currentSelectedIndex < segmentedControl.selectedSegmentIndex) ? width : -width;
+    NSInteger selectedIndex = [[segmentedControl selectedIndexes] firstIndex];
+    CGFloat delta = (self.currentSelectedIndex < selectedIndex) ? width : -width;
 	ToDoListTableViewController *oldViewController = (ToDoListTableViewController*)self.viewControllers[self.currentSelectedIndex];
-    if(segmentedControl.selectedSegmentIndex == self.currentSelectedIndex){
+    if(selectedIndex == self.currentSelectedIndex){
         [oldViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
         return;
     }
     segmentedControl.userInteractionEnabled = NO;
 	[oldViewController willMoveToParentViewController:nil];
 	
-	ToDoListTableViewController *newViewController = (ToDoListTableViewController*)self.viewControllers[segmentedControl.selectedSegmentIndex];
+	ToDoListTableViewController *newViewController = (ToDoListTableViewController*)self.viewControllers[selectedIndex];
     [newViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 	[self addChildViewController:newViewController];
 	newViewController.view.frame = CGRectSetPos(self.contentView.frame, delta, 0);
@@ -204,7 +259,7 @@
 									
 									[newViewController didMoveToParentViewController:self];
 									
-									self.currentSelectedIndex = segmentedControl.selectedSegmentIndex;
+									self.currentSelectedIndex = selectedIndex;
 								}
 							}];
 	

@@ -17,7 +17,8 @@ static NSTimeInterval const kMCDurationLowLimit = 0.25; // Lowest duration when 
 static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration when swipping the cell because we try to simulate velocity
 
 @interface MCSwipeTableViewCell () <UIGestureRecognizerDelegate>
-
+#define REGRET_VELOCITY 50
+@property (nonatomic) BOOL didRegret;
 // Init
 - (void)initializer;
 
@@ -149,6 +150,7 @@ secondStateIconName:(NSString *)secondIconName
 
     UIGestureRecognizerState state = [gesture state];
     CGPoint velocity = [gesture velocityInView:self];
+    NSLog(@"velocity.x:%f",velocity.x);
     CGFloat percentage = [self percentageWithOffset:CGRectGetMinX(self.contentView.frame) relativeToWidth:CGRectGetWidth(self.bounds)];
     
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
@@ -156,9 +158,19 @@ secondStateIconName:(NSString *)secondIconName
     
    
     if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
+        switch (_direction) {
+            case MCSwipeTableViewCellDirectionLeft:
+                if(velocity.x > REGRET_VELOCITY) self.didRegret = YES;
+                else if(velocity.x < -REGRET_VELOCITY) self.didRegret = NO;
+                break;
+            case MCSwipeTableViewCellDirectionRight:
+                if(velocity.x < -REGRET_VELOCITY) self.didRegret = YES;
+                else if(velocity.x > REGRET_VELOCITY) self.didRegret = NO;
+            default:
+                break;
+        }
         CGPoint center = CGPointMake(self.contentView.center.x + translation.x, self.contentView.center.y);
         if(translation.x < 0 && (self.contentView.center.x/self.contentView.frame.size.width) <= 0.5 && !(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionBoth || self.activatedDirection == MCSwipeTableViewCellActivatedDirectionLeft)){
-            
             CGFloat minAllowed = (self.contentView.frame.size.width/2)-MAX_DRAGGING;
             if(center.x < minAllowed) center.x = minAllowed;
         }
@@ -249,17 +261,17 @@ secondStateIconName:(NSString *)secondIconName
 
 - (NSString *)imageNameWithPercentage:(CGFloat)percentage {
     NSString *imageName;
-
-    // Image
-    if (percentage >= 0 && percentage < kMCStop2)
-        imageName = _firstIconName;
-    else if (percentage >= kMCStop2)
-        imageName = _secondIconName;
-    else if (percentage < 0 && percentage > -kMCStop2)
-        imageName = _thirdIconName;
-    else if (percentage <= -kMCStop2)
-        imageName = _fourthIconName;
-
+    if(!self.didRegret){
+        // Image
+        if (percentage >= 0 && percentage < kMCStop2)
+            imageName = _firstIconName;
+        else if (percentage >= kMCStop2)
+            imageName = _secondIconName;
+        else if (percentage < 0 && percentage > -kMCStop2)
+            imageName = _thirdIconName;
+        else if (percentage <= -kMCStop2)
+            imageName = _fourthIconName;
+    }
     return imageName;
 }
 
@@ -279,20 +291,18 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (UIColor *)colorWithPercentage:(CGFloat)percentage {
-    UIColor *color;
-
-    // Background Color
-    if (percentage >= kMCStop1 && percentage < kMCStop2)
-        color = _firstColor;
-    else if (percentage >= kMCStop2)
-        color = _secondColor;
-    else if (percentage < -kMCStop1 && percentage > -kMCStop2)
-        color = _thirdColor;
-    else if (percentage <= -kMCStop2)
-        color = _fourthColor;
-    else
-        color = [UIColor clearColor];
-
+    UIColor *color = [UIColor clearColor];
+    if(!self.didRegret){
+        // Background Color
+        if (percentage >= kMCStop1 && percentage < kMCStop2)
+            color = _firstColor;
+        else if (percentage >= kMCStop2)
+            color = _secondColor;
+        else if (percentage < -kMCStop1 && percentage > -kMCStop2)
+            color = _thirdColor;
+        else if (percentage <= -kMCStop2)
+            color = _fourthColor;
+    }
     return color;
 }
 
@@ -300,19 +310,19 @@ secondStateIconName:(NSString *)secondIconName
     MCSwipeTableViewCellState state;
 
     state = MCSwipeTableViewCellStateNone;
-
-    if (percentage >= kMCStop1 && [self validateState:MCSwipeTableViewCellState1])
-        state = MCSwipeTableViewCellState1;
-
-    if (percentage >= kMCStop2 && [self validateState:MCSwipeTableViewCellState2])
-        state = MCSwipeTableViewCellState2;
-
-    if (percentage <= -kMCStop1 && [self validateState:MCSwipeTableViewCellState3])
-        state = MCSwipeTableViewCellState3;
-
-    if (percentage <= -kMCStop2 && [self validateState:MCSwipeTableViewCellState4])
-        state = MCSwipeTableViewCellState4;
-
+    if(!self.didRegret){
+        if (percentage >= kMCStop1 && [self validateState:MCSwipeTableViewCellState1])
+            state = MCSwipeTableViewCellState1;
+        
+        if (percentage >= kMCStop2 && [self validateState:MCSwipeTableViewCellState2])
+            state = MCSwipeTableViewCellState2;
+        
+        if (percentage <= -kMCStop1 && [self validateState:MCSwipeTableViewCellState3])
+            state = MCSwipeTableViewCellState3;
+        
+        if (percentage <= -kMCStop2 && [self validateState:MCSwipeTableViewCellState4])
+            state = MCSwipeTableViewCellState4;
+    }
     return state;
 }
 
@@ -363,7 +373,7 @@ secondStateIconName:(NSString *)secondIconName
 
     // Image Name
     NSString *imageName = [self imageNameWithPercentage:percentage];
-
+    if(self.didRegret) [_slidingImageView setImage:[UIImage imageNamed:nil]];
     // Image Position
     if (imageName != nil) {
         [_slidingImageView setImage:[UIImage imageNamed:imageName]];
@@ -383,11 +393,8 @@ secondStateIconName:(NSString *)secondIconName
     UIImage *slidingImage = [UIImage imageNamed:imageName];
     CGSize slidingImageSize = slidingImage.size;
     CGRect slidingImageRect;
-
     CGPoint position = CGPointZero;
-
     position.y = CGRectGetHeight(self.bounds) / 2.0;
-
     if (isDragging) {
         if (percentage >= 0 && percentage < kMCStop1) {
             position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];

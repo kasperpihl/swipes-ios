@@ -33,7 +33,6 @@ typedef void (^voidBlock)(void);
 @property (nonatomic,weak) UIView* view;
 @property (nonatomic,weak) UIButton *addButton;
 @property (nonatomic,weak) UIButton *deleteButton;
-@property (nonatomic,weak) UIButton *deselectButton;
 @property (nonatomic,weak) UIButton *shareButton;
 @end
 @implementation KPControlHandler
@@ -71,16 +70,6 @@ typedef void (^voidBlock)(void);
         [view addSubview:deleteButton];
         self.deleteButton = (UIButton*)[view viewWithTag:DELETE_BUTTON_TAG];
         
-        UIButton *deselectButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        deselectButton.frame = CGRectMake(DESELECT_BUTTON_X,view.frame.size.height,SMALL_BUTTON_HEIGHT,SMALL_BUTTON_HEIGHT);
-        deselectButton.tag = DESELECT_BUTTON_TAG;
-        [deselectButton addTarget:self action:@selector(pressedDeselect:) forControlEvents:UIControlEventTouchUpInside];
-        [deselectButton setImage:[UIImage imageNamed:@"closebutton"] forState:UIControlStateNormal];
-        //[deselectButton setImage:[UIImage imageNamed:@"addbutton-highlighted"] forState:UIControlStateHighlighted];
-        [view addSubview:deselectButton];
-        self.deselectButton = (UIButton*)[view viewWithTag:DESELECT_BUTTON_TAG];
-        
-        
         [self setState:KPControlHandlerStateAdd animated:NO];
     }
     return self;
@@ -96,7 +85,6 @@ typedef void (^voidBlock)(void);
                 break;
             case KPControlHandlerStateEdit:
                 CGRectSetY(self.deleteButton.frame, targetY);
-                //CGRectSetY(self.deselectButton.frame, targetY);
                 CGRectSetY(self.shareButton.frame, targetY);
                 break;
         }
@@ -115,7 +103,6 @@ typedef void (^voidBlock)(void);
                 break;
             case KPControlHandlerStateEdit:
                 CGRectSetY(self.deleteButton.frame, smallButtonY);
-                //CGRectSetY(self.deselectButton.frame, smallButtonY);
                 CGRectSetY(self.shareButton.frame, smallButtonY);
                 break;
         }
@@ -156,9 +143,6 @@ typedef void (^voidBlock)(void);
 }
 -(void)pressedDelete:(id)sender{
     if([self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:self];
-}
--(void)pressedDeselect:(id)sender{
-    if([self.delegate respondsToSelector:@selector(pressedDeselect:)]) [self.delegate pressedDeselect:self];
 }
 
 @end

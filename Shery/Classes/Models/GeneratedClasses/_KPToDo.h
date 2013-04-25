@@ -6,7 +6,9 @@
 
 extern const struct KPToDoAttributes {
 	__unsafe_unretained NSString *order;
+	__unsafe_unretained NSString *schedule;
 	__unsafe_unretained NSString *state;
+	__unsafe_unretained NSString *test;
 	__unsafe_unretained NSString *title;
 } KPToDoAttributes;
 
@@ -15,6 +17,8 @@ extern const struct KPToDoRelationships {
 
 extern const struct KPToDoFetchedProperties {
 } KPToDoFetchedProperties;
+
+
 
 
 
@@ -48,11 +52,31 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSDate* schedule;
+
+
+
+//- (BOOL)validateSchedule:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSString* state;
 
 
 
 //- (BOOL)validateState:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* test;
+
+
+
+//- (BOOL)validateTest:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -87,8 +111,20 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+- (NSDate*)primitiveSchedule;
+- (void)setPrimitiveSchedule:(NSDate*)value;
+
+
+
+
 - (NSString*)primitiveState;
 - (void)setPrimitiveState:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveTest;
+- (void)setPrimitiveTest:(NSString*)value;
 
 
 

@@ -10,7 +10,7 @@
 #import <Parse/Parse.h>
 #import "FacebookCommunicator.h"
 #import "KPSegmentedViewController.h"
-#import "BacklogViewController.h"
+#import "ScheduleViewController.h"
 #import "TodayViewController.h"
 #import "DoneViewController.h"
 
@@ -36,13 +36,12 @@ static RootViewController *sharedObject;
 
 -(void)setupMenu{
     if(!self.menuViewController){
-        BacklogViewController *vc1 = [[BacklogViewController alloc] initWithStyle:UITableViewStylePlain];
+        ScheduleViewController *vc1 = [[ScheduleViewController alloc] initWithStyle:UITableViewStylePlain];
 
         TodayViewController *vc2 = [[TodayViewController alloc] initWithStyle:UITableViewStylePlain];
 
         DoneViewController *vc3 = [[DoneViewController alloc] initWithStyle:UITableViewStylePlain];
         KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3] titles:@[@"Schedule",@"Today",@"Done"]];
-        menuViewController.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
         self.menuViewController = menuViewController;
         self.viewControllers = @[menuViewController];
     }

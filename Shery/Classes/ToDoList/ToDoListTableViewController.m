@@ -13,6 +13,7 @@
 @property (nonatomic,strong) KPToDo *draggingObject;
 @property (nonatomic,strong) MCSwipeTableViewCell *swipingCell;
 @property (nonatomic,strong) NSIndexPath *dragRow;
+@property (nonatomic) KPSegmentButtons segmentButton;
 @property (nonatomic) NSMutableArray *selectedRows;
 @property (nonatomic) CGPoint lastOffset;
 @property (nonatomic) NSTimeInterval lastOffsetCapture;
@@ -23,6 +24,18 @@
 -(KPSegmentedViewController *)parent{
     KPSegmentedViewController *parent = (KPSegmentedViewController*)[self parentViewController];
     return parent;
+}
+-(KPSegmentButtons)determineButtonFromState:(NSString*)state{
+    KPSegmentButtons thisButton;
+    if([state isEqualToString:@"today"]) thisButton = KPSegmentButtonToday;
+    else if([state isEqualToString:@"schedule"]) thisButton = KPSegmentButtonSchedule;
+    else thisButton = KPSegmentButtonDone;
+    return thisButton;
+}
+-(void)setState:(NSString *)state{
+    _state = state;
+    
+    
 }
 -(void)loadItems{
     self.items = [[KPToDo MR_findByAttribute:@"state" withValue:self.state andOrderBy:@"order" ascending:NO] mutableCopy];
@@ -89,6 +102,7 @@
         [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
         [self.selectedRows removeAllObjects];
         [[self parent] setCurrentState:KPControlCurrentStateAdd];
+        [[self parent] highlightButton:[self determineButtonFromState:[self stateForTriggerState:state]]];
     }
     else{
         NSArray *visibleCells = [self.tableView visibleCells];
@@ -187,21 +201,13 @@
     [self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"did deselect");
     [self.selectedRows removeObject:indexPath];
     if(self.selectedRows.count == 0) [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //MCSwipeTableViewCell *cell = (MCSwipeTableViewCell*)[self tableView:self.tableView cellForRowAtIndexPath:indexPath];
     if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
     [self parent].currentState = KPControlCurrentStateEdit;
-    //[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-    /*self.selectedRow = indexPath.row+1;
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];*/
-    
-    
 }
 
 // Override to support conditional rearranging of the table view.
