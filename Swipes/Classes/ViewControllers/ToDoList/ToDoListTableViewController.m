@@ -18,12 +18,17 @@
 @property (nonatomic) CGPoint lastOffset;
 @property (nonatomic) NSTimeInterval lastOffsetCapture;
 @property (nonatomic) BOOL isScrollingFast;
+@property (nonatomic,strong) NSMutableDictionary *stateDictionary;
 @end
 
 @implementation ToDoListTableViewController
 -(KPSegmentedViewController *)parent{
     KPSegmentedViewController *parent = (KPSegmentedViewController*)[self parentViewController];
     return parent;
+}
+-(NSMutableDictionary *)stateDictionary{
+    if(!_stateDictionary) _stateDictionary = [NSMutableDictionary dictionary];
+    return _stateDictionary;
 }
 -(KPSegmentButtons)determineButtonFromState:(NSString*)state{
     KPSegmentButtons thisButton;
@@ -34,8 +39,21 @@
 }
 -(void)setState:(NSString *)state{
     _state = state;
-    
-    
+    self.segmentButton = [self determineButtonFromState:state];
+    switch (self.segmentButton) {
+        case KPSegmentButtonSchedule:
+            [self.stateDictionary setObject:@"today" forKey:@"1"];
+            [self.stateDictionary setObject:@"done" forKey:@"2"];
+            break;
+        case KPSegmentButtonToday:
+            [self.stateDictionary setObject:@"done" forKey:@"1"];
+            [self.stateDictionary setObject:@"schedule" forKey:@"3"];
+            break;
+        case KPSegmentButtonDone:
+            [self.stateDictionary setObject:@"today" forKey:@"3"];
+            [self.stateDictionary setObject:@"schedule" forKey:@"4"];
+            break;
+    }
 }
 -(void)loadItems{
     self.items = [[KPToDo MR_findByAttribute:@"state" withValue:self.state andOrderBy:@"order" ascending:NO] mutableCopy];
@@ -55,78 +73,7 @@
     return _items;
 }
 - (UITableViewCell *)cell:(ToDoCell*)cell forRowAtIndexPath:(NSIndexPath *)indexPath{ return cell; }
--(NSString*)stateForTriggerState:(MCSwipeTableViewCellState)state{ return nil; }
 
--(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
-    [[self parent] show:NO controlsAnimated:YES];
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    self.swipingCell = cell;
-    if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
-    if(self.selectedRows.count > 0){
-        NSArray *visibleCells = [self.tableView visibleCells];
-        for(MCSwipeTableViewCell *localCell in visibleCells){
-            if(localCell.isSelected){
-                [localCell setSelected:NO];
-            }
-        }
-    }
-}
--(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation{
-    NSArray *visibleCells = [self.tableView visibleCells];
-    for(MCSwipeTableViewCell *localCell in visibleCells){
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
-        if(localCell != cell && [self.selectedRows containsObject:indexPath]){
-            [localCell publicHandlePanGestureRecognizer:gesture withTranslation:translation];
-        }
-    }
-}
--(void)deselectAllRows:(id)sender{
-    NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
-    for(NSIndexPath *indexPath in selectedIndexPaths){
-        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-    }
-    [self.selectedRows removeAllObjects];
-}
--(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
-    if(cell != self.swipingCell) return;
-    if(state != MCSwipeTableViewCellStateNone){
-        NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
-        for(NSIndexPath *indexPath in self.selectedRows){
-            KPToDo *toDo = [self.items objectAtIndex:indexPath.row];
-            NSString *newState = [self stateForTriggerState:state];
-            [toDo changeState:newState];
-            [indexSet addIndex:indexPath.row];
-        }
-        [self.items removeObjectsAtIndexes:indexSet];
-        [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
-        [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
-        [self.selectedRows removeAllObjects];
-        [[self parent] setCurrentState:KPControlCurrentStateAdd];
-        [[self parent] highlightButton:[self determineButtonFromState:[self stateForTriggerState:state]]];
-    }
-    else{
-        NSArray *visibleCells = [self.tableView visibleCells];
-        NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
-        if(self.selectedRows.count > 1){
-            //if(!swipingCellWasSelected)
-            for(MCSwipeTableViewCell *localCell in visibleCells){
-                NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
-                if([self.selectedRows containsObject:indexPath]){
-                    [localCell setSelected:YES];
-                    if(![selectedIndexPaths containsObject:indexPath]) [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-                }
-            }
-        }
-        else{
-            NSIndexPath *indexPathForCell = [self.tableView indexPathForCell:cell];
-            if([selectedIndexPaths containsObject:indexPathForCell]) [cell setSelected:YES];
-            else{ [self.selectedRows removeAllObjects]; }
-        }
-        
-    }
-    [[self parent] show:YES controlsAnimated:YES];
-    self.swipingCell = nil;
-}
 #pragma mark - Dragable Controller
 - (void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController didBeginDraggingAtRow:(NSIndexPath *)dragRow{
     self.isScrollingFast = YES;
@@ -197,8 +144,46 @@
     [self.tableView deleteRowsAtIndexPaths:selectedIndexPaths withRowAnimation:UITableViewRowAnimationFade];
     [self.selectedRows removeAllObjects];
 }
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
+-(void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
+    NSString *icon1,*icon2,*icon3,*icon4;
+    UIColor *color1,*color2,*color3,*color4;
+    MCSwipeTableViewCellActivatedDirection direction = MCSwipeTableViewCellActivatedDirectionBoth;
+    
+    switch (self.segmentButton) {
+        case KPSegmentButtonSchedule:
+            icon1 = @"list";
+            color1 = SWIPES_BLUE;
+            icon2 = @"check";
+            color2 = DONE_COLOR;
+            direction = MCSwipeTableViewCellActivatedDirectionRight;
+            break;
+        case KPSegmentButtonToday:
+            icon3 = @"clock.png";
+            color3 = SCHEDULE_COLOR;
+            icon1 = @"check.png";
+            color1 = DONE_COLOR;
+            
+            break;
+        case KPSegmentButtonDone:
+            direction = MCSwipeTableViewCellActivatedDirectionLeft;
+            icon3 = @"list";
+            color3 = SWIPES_BLUE;
+            icon4 = @"clock";
+            color4 = SCHEDULE_COLOR;
+            break;
+    }
+    cell.activatedDirection = direction;
+    [cell setFirstStateIconName:icon1
+                     firstColor:color1
+            secondStateIconName:icon2
+                    secondColor:color2
+                  thirdIconName:icon3
+                     thirdColor:color3
+                 fourthIconName:icon4
+                    fourthColor:color4];
+    KPToDo *toDo = [self.items objectAtIndex:indexPath.row];
+    cell.textLabel.text = toDo.title;
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.selectedRows removeObject:indexPath];
@@ -228,26 +213,16 @@
     }
 }
 #pragma mark - UI Specific
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    notify(@"updated", update);
-    self.dragDelegate = self;
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 70, 0);
-    self.tableView.allowsMultipleSelection = YES;
-    self.tableView.backgroundColor = [UIColor colorWithRed:227.0 / 255.0 green:227.0 / 255.0 blue:227.0 / 255.0 alpha:1.0];
-    [self.tableView setTableFooterView:[UIView new]];
-    UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
-    doubleTap.numberOfTapsRequired = 2;
-    doubleTap.numberOfTouchesRequired = 1;
-    [self.tableView addGestureRecognizer:doubleTap];
-}
--(void)setIsScrollingFast:(BOOL)isScrollingFast{
-    if(_isScrollingFast != isScrollingFast){
-        _isScrollingFast = isScrollingFast;
-        [[self parent] show:!isScrollingFast controlsAnimated:YES];
+
+
+-(void)deselectAllRows:(id)sender{
+    NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
+    for(NSIndexPath *indexPath in selectedIndexPaths){
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
+    [self.selectedRows removeAllObjects];
 }
+#pragma mark - ScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if(self.tableView.frame.size.height >= self.tableView.contentSize.height) return;
     CGPoint currentOffset = self.tableView.contentOffset;
@@ -269,6 +244,94 @@
         self.lastOffsetCapture = currentTime;
     }
     
+}
+-(void)setIsScrollingFast:(BOOL)isScrollingFast{
+    if(_isScrollingFast != isScrollingFast){
+        _isScrollingFast = isScrollingFast;
+        [[self parent] show:!isScrollingFast controlsAnimated:YES];
+    }
+}
+#pragma mark - SwipeTableCell
+-(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
+    [[self parent] show:NO controlsAnimated:YES];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    self.swipingCell = cell;
+    if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
+    if(self.selectedRows.count > 0){
+        NSArray *visibleCells = [self.tableView visibleCells];
+        for(MCSwipeTableViewCell *localCell in visibleCells){
+            if(localCell.isSelected){
+                [localCell setSelected:NO];
+            }
+        }
+    }
+}
+-(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation{
+    NSArray *visibleCells = [self.tableView visibleCells];
+    for(MCSwipeTableViewCell *localCell in visibleCells){
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
+        if(localCell != cell && [self.selectedRows containsObject:indexPath]){
+            [localCell publicHandlePanGestureRecognizer:gesture withTranslation:translation];
+        }
+    }
+}
+
+-(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
+    if(cell != self.swipingCell) return;
+    if(state != MCSwipeTableViewCellStateNone){
+        NSString *newState = [self.stateDictionary objectForKey:[NSString stringWithFormat:@"%i",state]];
+        if(newState){
+            NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+            for(NSIndexPath *indexPath in self.selectedRows){
+                KPToDo *toDo = [self.items objectAtIndex:indexPath.row];
+                [toDo changeState:newState];
+                [indexSet addIndex:indexPath.row];
+            }
+            [self.items removeObjectsAtIndexes:indexSet];
+            [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+            [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
+            [self.selectedRows removeAllObjects];
+            [[self parent] setCurrentState:KPControlCurrentStateAdd];
+            [[self parent] highlightButton:[self determineButtonFromState:newState]];
+        }
+    }
+    else{
+        NSArray *visibleCells = [self.tableView visibleCells];
+        NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
+        if(self.selectedRows.count > 1){
+            //if(!swipingCellWasSelected)
+            for(MCSwipeTableViewCell *localCell in visibleCells){
+                NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
+                if([self.selectedRows containsObject:indexPath]){
+                    [localCell setSelected:YES];
+                    if(![selectedIndexPaths containsObject:indexPath]) [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+                }
+            }
+        }
+        else{
+            NSIndexPath *indexPathForCell = [self.tableView indexPathForCell:cell];
+            if([selectedIndexPaths containsObject:indexPathForCell]) [cell setSelected:YES];
+            else{ [self.selectedRows removeAllObjects]; }
+        }
+        
+    }
+    [[self parent] show:YES controlsAnimated:YES];
+    self.swipingCell = nil;
+}
+#pragma mark - UIViewController stuff
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    notify(@"updated", update);
+    self.dragDelegate = self;
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 70, 0);
+    self.tableView.allowsMultipleSelection = YES;
+    self.tableView.backgroundColor = [UIColor colorWithRed:227.0 / 255.0 green:227.0 / 255.0 blue:227.0 / 255.0 alpha:1.0];
+    [self.tableView setTableFooterView:[UIView new]];
+    UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
+    doubleTap.numberOfTapsRequired = 2;
+    doubleTap.numberOfTouchesRequired = 1;
+    [self.tableView addGestureRecognizer:doubleTap];
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];

@@ -18,7 +18,6 @@
 @property (nonatomic,strong) NSString *state;
 -(void)update;
 -(void)loadItems;
--(NSString*)stateForTriggerState:(MCSwipeTableViewCellState)state;
 -(void)deselectAllRows:(id)sender;
 -(void)deleteSelectedItems:(id)sender;
 @end

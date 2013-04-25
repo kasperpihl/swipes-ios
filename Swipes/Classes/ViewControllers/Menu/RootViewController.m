@@ -1,18 +1,17 @@
 //
-//  RootViewController.m
-//  GoOut
+//  RootViewController2.m
+//  Swipes
 //
-//  Created by Kasper Pihl Tornøe on 24/08/12.
+//  Created by Kasper Pihl Tornøe on 25/04/13.
+//  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-//
+
 
 #import "RootViewController.h"
 #import <Parse/Parse.h>
 #import "FacebookCommunicator.h"
 #import "KPSegmentedViewController.h"
-#import "ScheduleViewController.h"
-#import "TodayViewController.h"
-#import "DoneViewController.h"
+#import "ToDoListTableViewController.h"
 
 
 
@@ -36,11 +35,12 @@ static RootViewController *sharedObject;
 
 -(void)setupMenu{
     if(!self.menuViewController){
-        ScheduleViewController *vc1 = [[ScheduleViewController alloc] initWithStyle:UITableViewStylePlain];
-
-        TodayViewController *vc2 = [[TodayViewController alloc] initWithStyle:UITableViewStylePlain];
-
-        DoneViewController *vc3 = [[DoneViewController alloc] initWithStyle:UITableViewStylePlain];
+        ToDoListTableViewController *vc1 = [[ToDoListTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        vc1.state = @"schedule";
+        ToDoListTableViewController *vc2 = [[ToDoListTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        vc2.state = @"today";
+        ToDoListTableViewController *vc3 = [[ToDoListTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        vc3.state = @"done";
         KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3] titles:@[@"Schedule",@"Today",@"Done"]];
         self.menuViewController = menuViewController;
         self.viewControllers = @[menuViewController];

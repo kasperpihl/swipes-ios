@@ -1,9 +1,9 @@
 //
-//  RootViewController.h
-//  GoOut
+//  RootViewController2.h
+//  Swipes
 //
-//  Created by Kasper Pihl Tornøe on 24/08/12.
-//
+//  Created by Kasper Pihl Tornøe on 25/04/13.
+//  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
 #define SIDE_MENU_WIDTH 250

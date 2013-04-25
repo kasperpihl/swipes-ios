@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A7778CC916EB5884004D95E5"
-               BuildableName = "ToDo.app"
-               BlueprintName = "ToDo"
-               ReferencedContainer = "container:ToDo.xcodeproj">
+               BuildableName = "Swipes.app"
+               BlueprintName = "Swipes"
+               ReferencedContainer = "container:Swipes.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "A7778CEF16EB5884004D95E5"
                BuildableName = "SheryTests.octest"
                BlueprintName = "SheryTests"
-               ReferencedContainer = "container:ToDo.xcodeproj">
+               ReferencedContainer = "container:Swipes.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A7778CC916EB5884004D95E5"
-            BuildableName = "ToDo.app"
-            BlueprintName = "ToDo"
-            ReferencedContainer = "container:ToDo.xcodeproj">
+            BuildableName = "Swipes.app"
+            BlueprintName = "Swipes"
+            ReferencedContainer = "container:Swipes.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A7778CC916EB5884004D95E5"
-            BuildableName = "ToDo.app"
-            BlueprintName = "ToDo"
-            ReferencedContainer = "container:ToDo.xcodeproj">
+            BuildableName = "Swipes.app"
+            BlueprintName = "Swipes"
+            ReferencedContainer = "container:Swipes.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A7778CC916EB5884004D95E5"
-            BuildableName = "ToDo.app"
-            BlueprintName = "ToDo"
-            ReferencedContainer = "container:ToDo.xcodeproj">
+            BuildableName = "Swipes.app"
+            BlueprintName = "Swipes"
+            ReferencedContainer = "container:Swipes.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

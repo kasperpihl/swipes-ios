@@ -17,7 +17,7 @@
                BlueprintIdentifier = "A7F0B9B71700BA40003BBDD1"
                BuildableName = "Mogenerator"
                BlueprintName = "Mogenerator"
-               ReferencedContainer = "container:ToDo.xcodeproj">
+               ReferencedContainer = "container:Swipes.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
