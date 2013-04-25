@@ -339,8 +339,8 @@
 		A781283E17294C56002226C8 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A781283F17294C56002226C8 /* Communicators */,
 				A781284517294C56002226C8 /* Includes.h */,
+				A781283F17294C56002226C8 /* Communicators */,
 				A7F4066E17296C0500DDE644 /* Handlers */,
 				A781284617294C56002226C8 /* Models */,
 				A781285A17294C56002226C8 /* Utilities */,
@@ -765,7 +765,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd Shery/Classes/Models\nmogenerator -m Datamodel.xcdatamodeld/Datamodel.xcdatamodel/ -M GeneratedClasses -H CustomClasses --template-var arc=true";
+			shellScript = "cd Swipes/Classes/Models\nmogenerator -m Datamodel.xcdatamodeld/Datamodel.xcdatamodel/ -M GeneratedClasses -H CustomClasses --template-var arc=true";
 		};
 /* End PBXShellScriptBuildPhase section */
 

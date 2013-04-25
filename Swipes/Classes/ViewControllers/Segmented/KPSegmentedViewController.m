@@ -24,7 +24,7 @@
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPPickerViewDataSource>
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) NSMutableArray *titles;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
@@ -44,9 +44,17 @@
     if(!_addPanel){
         _addPanel = [[AddPanelView alloc] initWithFrame:self.navigationController.view.bounds];
         _addPanel.addDelegate = self;
+        _addPanel.forwardDatasource = self;
         [self.navigationController.view addSubview:_addPanel];
     }
     return _addPanel;
+}
+#pragma mark - KPPickerView
+-(NSInteger)numberOfItemsInPickerView:(KPPickerView *)pickerView{
+    return 5;
+}
+-(NSString *)pickerView:(KPPickerView *)pickerView titleForItem:(NSInteger)item{
+    return @"No project";
 }
 #pragma mark - KPControlViewDelegate
 

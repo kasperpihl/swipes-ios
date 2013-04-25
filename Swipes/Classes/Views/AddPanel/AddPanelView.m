@@ -12,16 +12,19 @@
 #import "DAKeyboardControl.h"
 #define FORM_VIEW_TAG 1
 #define BACKGROUND_VIEW_TAG 2
-#define TEXT_FIELD_TAG 3
+#define PICKER_VIEW_TAG 3
+#define TEXT_FIELD_TAG 4
 #define ANIMATION_DURATION 0.25f
 
 #define TEXT_FIELD_MARGIN_SIDES 10
-#define TEXT_FIELD_MARGIN_TOP 8
-#define FORM_VIEW_HEIGHT 44
+#define TEXT_FIELD_MARGIN_BOTTOM 8
+#define TEXT_FIELD_HEIGHT 28
+#define FORM_VIEW_HEIGHT 90
 #define KEYBOARD_HEIGHT 216
 
 @interface AddPanelView () <UITextFieldDelegate>
 @property (nonatomic,weak) IBOutlet UIView *backgroundView;
+@property (nonatomic,weak) IBOutlet KPPickerView *pickerView;
 @property (nonatomic,weak) IBOutlet UIView *formView;
 @property (nonatomic,weak) IBOutlet SLGlowingTextField *textField;
 @end
@@ -39,6 +42,10 @@
 }
 -(void)didPressClose:(id)sender{
     [self show:NO];
+}
+-(void)setForwardDatasource:(NSObject<KPPickerViewDataSource> *)forwardDatasource{
+    _forwardDatasource = forwardDatasource;
+    [self.pickerView setDataSource:forwardDatasource];
 }
 - (id)initWithFrame:(CGRect)frame
 {
@@ -60,7 +67,14 @@
         UIView *formView = [[UIView alloc] initWithFrame:CGRectMake(0, frame.size.height, frame.size.width, FORM_VIEW_HEIGHT)];
         formView.tag = FORM_VIEW_TAG;
         formView.backgroundColor = [UIColor whiteColor];
-        SLGlowingTextField *textField = [[SLGlowingTextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, TEXT_FIELD_MARGIN_TOP, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), formView.frame.size.height-(2*TEXT_FIELD_MARGIN_TOP))];
+        
+        KPPickerView *pickerView = [[KPPickerView alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, 8, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), 30)];
+        pickerView.tag = PICKER_VIEW_TAG;
+        pickerView.backgroundColor = [UIColor whiteColor];
+        [formView addSubview:pickerView];
+        self.pickerView = (KPPickerView*)[formView viewWithTag:PICKER_VIEW_TAG];
+        
+        SLGlowingTextField *textField = [[SLGlowingTextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, FORM_VIEW_HEIGHT-TEXT_FIELD_MARGIN_BOTTOM-TEXT_FIELD_HEIGHT, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), TEXT_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
         textField.returnKeyType = UIReturnKeyNext;
         textField.borderStyle = UITextBorderStyleNone;

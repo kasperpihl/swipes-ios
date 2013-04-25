@@ -5,10 +5,12 @@
 #import "KPParseObject.h"
 
 extern const struct KPToDoAttributes {
+	__unsafe_unretained NSString *completionDate;
+	__unsafe_unretained NSString *notes;
 	__unsafe_unretained NSString *order;
 	__unsafe_unretained NSString *schedule;
 	__unsafe_unretained NSString *state;
-	__unsafe_unretained NSString *test;
+	__unsafe_unretained NSString *tags;
 	__unsafe_unretained NSString *title;
 } KPToDoAttributes;
 
@@ -25,6 +27,8 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+
+
 @interface KPToDoID : NSManagedObjectID {}
 @end
 
@@ -33,6 +37,26 @@ extern const struct KPToDoFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (KPToDoID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSDate* completionDate;
+
+
+
+//- (BOOL)validateCompletionDate:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* notes;
+
+
+
+//- (BOOL)validateNotes:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -72,11 +96,11 @@ extern const struct KPToDoFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* test;
+@property (nonatomic, strong) NSString* tags;
 
 
 
-//- (BOOL)validateTest:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateTags:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -102,6 +126,18 @@ extern const struct KPToDoFetchedProperties {
 @interface _KPToDo (CoreDataGeneratedPrimitiveAccessors)
 
 
+- (NSDate*)primitiveCompletionDate;
+- (void)setPrimitiveCompletionDate:(NSDate*)value;
+
+
+
+
+- (NSString*)primitiveNotes;
+- (void)setPrimitiveNotes:(NSString*)value;
+
+
+
+
 - (NSNumber*)primitiveOrder;
 - (void)setPrimitiveOrder:(NSNumber*)value;
 
@@ -123,8 +159,8 @@ extern const struct KPToDoFetchedProperties {
 
 
 
-- (NSString*)primitiveTest;
-- (void)setPrimitiveTest:(NSString*)value;
+- (NSString*)primitiveTags;
+- (void)setPrimitiveTags:(NSString*)value;
 
 
 

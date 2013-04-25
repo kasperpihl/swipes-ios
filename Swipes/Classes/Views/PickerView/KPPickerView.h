@@ -16,7 +16,7 @@
 
 @interface KPPickerView : UIView <UIScrollViewDelegate>
 {
-    __unsafe_unretained id <KPPickerViewDataSource> dataSource;
+
     __unsafe_unretained id <KPPickerViewDelegate> delegate;
     UIScrollView *contentView;
     UIImageView *glassView;

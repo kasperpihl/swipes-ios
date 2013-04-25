@@ -7,14 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+
 typedef NS_ENUM(NSUInteger, KPScheduleButtons){
-    KPScheduleButtonLater = 0,
+    KPScheduleButtonCancel = 0,
     KPScheduleButtonTomorrow,
-    KPScheduleButtonDayAfterTomorrow,
-    KPScheduleButtonWeekend,
-    KPScheduleButtonNextWeek
+    KPScheduleButtonEveryday,
+    KPScheduleButtonInAWeek,
+    KPScheduleButtonSpecificTime,
+    KPScheduleButtonUnscheduled
 };
-
+typedef void (^SchedulePopupBlock)(KPScheduleButtons button, NSDate *chosenDate);
 @interface SchedulePopup : UIView
-
++(SchedulePopup*)showInView:(UIView*)view withBlock:(SchedulePopupBlock)block;
 @end

@@ -4,10 +4,12 @@
 #import "_KPToDo.h"
 
 const struct KPToDoAttributes KPToDoAttributes = {
+	.completionDate = @"completionDate",
+	.notes = @"notes",
 	.order = @"order",
 	.schedule = @"schedule",
 	.state = @"state",
-	.test = @"test",
+	.tags = @"tags",
 	.title = @"title",
 };
 
@@ -55,6 +57,20 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 
 
+@dynamic completionDate;
+
+
+
+
+
+
+@dynamic notes;
+
+
+
+
+
+
 @dynamic order;
 
 
@@ -95,7 +111,7 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 
 
-@dynamic test;
+@dynamic tags;
 
 
 

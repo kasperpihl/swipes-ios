@@ -24,8 +24,8 @@
 @end
 
 @implementation KPPickerView
+@synthesize dataSource = _dataSource;
 
-@synthesize dataSource;
 @synthesize delegate;
 @synthesize contentView;
 @synthesize glassImage, backgroundImage, shadowImage;
@@ -200,7 +200,10 @@
 
 
 #pragma mark - Data handling and interaction
-
+-(void)setDataSource:(id<KPPickerViewDataSource>)dataSource{
+    _dataSource = dataSource;
+    [self reloadData];
+}
 - (void)reloadData
 {
     // empty views
@@ -216,15 +219,15 @@
     visibleViews = [[NSMutableSet alloc] init];
     recycledViews = [[NSMutableSet alloc] init];
     
-    if ([dataSource respondsToSelector:@selector(numberOfItemsInPickerView:)]) {
-        itemCount = [dataSource numberOfItemsInPickerView:self];
+    if ([self.dataSource respondsToSelector:@selector(numberOfItemsInPickerView:)]) {
+        itemCount = [self.dataSource numberOfItemsInPickerView:self];
     } else {
         itemCount = 0;
     }
     for(int i = 0 ; i < itemCount ; i++){
         NSString *title;
-        if ([dataSource respondsToSelector:@selector(pickerView:titleForItem:)]) {
-            title = [dataSource pickerView:self titleForItem:i];
+        if ([self.dataSource respondsToSelector:@selector(pickerView:titleForItem:)]) {
+            title = [self.dataSource pickerView:self titleForItem:i];
         }
         [self.titleArray addObject:title];
         [self.indexOffsets addObject:[NSNumber numberWithFloat:[self xCoordinateForIndex:i]]];

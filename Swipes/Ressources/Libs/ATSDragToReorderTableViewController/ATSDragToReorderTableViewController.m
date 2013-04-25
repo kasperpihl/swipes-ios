@@ -3,8 +3,9 @@
 
 #define TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING 100
 #define TAG_FOR_BELOW_SHADOW_VIEW_WHEN_DRAGGING 200
-
-
+#define CELL_WIDTH_SCALE 1.02
+#define CELL_HEIGHT_SCALE 1.05
+#define CGRectSetGrowth(r) r = CGRectMake(r.origin.x - (CELL_GROW_WIDTH/2),r.origin.y - (CELL_GROW_HEIGHT/2),r.size.width + CELL_GROW_WIDTH,r.size.height + CELL_GROW_HEIGHT)
 @interface ATSDragToReorderTableViewController ()
 
 typedef enum {
@@ -208,6 +209,7 @@ typedef enum {
 
 
 - (void)longPressRecognized {
+    
 	if ([self touchCanceledAfterDragGestureEstablishedButBeforeDragging]) {
 		[self completeGesturesForTranslationPoint:CGPointZero];
 		return;
@@ -227,9 +229,9 @@ typedef enum {
 	if ( !(indexPathOfRow.section == selectedPath.section && indexPathOfRow.row == selectedPath.row) )
 		indexPathOfRow = selectedPath;
 
-	UITableViewCell *highlightedCell = [self.tableView cellForRowAtIndexPath:indexPathOfRow];
+/*	UITableViewCell *highlightedCell = [self.tableView cellForRowAtIndexPath:indexPathOfRow];
 	if ( ![highlightedCell isHighlighted] )
-		return;
+		return;*/
 
 	if ([self.tableView.dataSource respondsToSelector:@selector(tableView:canMoveRowAtIndexPath:)]) {
 		if (![self.tableView.dataSource tableView:self.tableView canMoveRowAtIndexPath:indexPathOfRow])
@@ -245,11 +247,22 @@ typedef enum {
 
 	self.draggedCell = [self cellPreparedToAnimateAroundAtIndexPath:indexPathOfRow];
 
-	[self.draggedCell setHighlighted:YES animated:NO];
+	//[self.draggedCell setHighlighted:NO animated:NO];
+    [self.indicatorDelegate dragTableViewController:self addDraggableIndicatorsToCell:self.draggedCell forIndexPath:indexPathOfRow];
 	[UIView animateWithDuration:0.23 delay:0 options:(UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionCurveEaseInOut) animations:^{
-		[self.indicatorDelegate dragTableViewController:self addDraggableIndicatorsToCell:self.draggedCell forIndexPath:indexPathOfRow];
+        CGFloat widthScale = CELL_WIDTH_SCALE;
+        CGFloat heightScale = CELL_HEIGHT_SCALE;
+        self.draggedCell.transform = CGAffineTransformMakeScale(widthScale, heightScale);
+        /*CGRectSetGrowth(self.draggedCell.frame);
+        UIView *aboveShadowView = [self.draggedCell viewWithTag:TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING];
+        //CGRectSetGrowth(aboveShadowView.frame);
+        UIView *belowShadowView = [self.draggedCell viewWithTag:TAG_FOR_BELOW_SHADOW_VIEW_WHEN_DRAGGING];
+        //CGRectSetGrowth(belowShadowView.frame);*/
+        
+        
 	} completion:^(BOOL finished) {
 		if (finished) {
+            
 			self.draggedCell.layer.rasterizationScale = [[UIScreen mainScreen] scale];
 			self.draggedCell.layer.shouldRasterize = YES;
 		}
@@ -491,18 +504,21 @@ typedef enum {
 	if( [self.dragDelegate respondsToSelector:@selector(dragTableViewController:shouldHideDraggableIndicatorForDraggingToRow:)] )
 		hideDragIndicator = [self.dragDelegate dragTableViewController:self shouldHideDraggableIndicatorForDraggingToRow:blankIndexPath];
 	self.draggedCell.layer.shouldRasterize = NO;
-	if( hideDragIndicator )
+	/*if( hideDragIndicator )
 		[(UITableViewCell *)self.draggedCell setHighlighted:NO animated:YES];
-
+*/
 	[UIView animateWithDuration:0.25 delay:0 options:(UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionBeginFromCurrentState) animations:^{
-		oldDraggedCell.frame = rectForIndexPath;
-
+		//self.draggedCell.transform = CGAffineTransformMakeScale(1/CELL_WIDTH_SCALE, 1/CELL_HEIGHT_SCALE);
+        [self.indicatorDelegate dragTableViewController:self removeDraggableIndicatorsFromCell:oldDraggedCell];
+        self.draggedCell.transform = CGAffineTransformInvert(CGAffineTransformMakeScale(CELL_WIDTH_SCALE, CELL_HEIGHT_SCALE));
+        oldDraggedCell.frame = rectForIndexPath;
+        /*
 		if( hideDragIndicator )
-			[self.indicatorDelegate dragTableViewController:self hideDraggableIndicatorsOfCell:oldDraggedCell];
+			[self.indicatorDelegate dragTableViewController:self hideDraggableIndicatorsOfCell:oldDraggedCell];*/
 	} completion:^(BOOL finished) {
+        
 		[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:blankIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-		[self.indicatorDelegate dragTableViewController:self removeDraggableIndicatorsFromCell:oldDraggedCell];
-
+		
 		[oldDraggedCell removeFromSuperview];
 
 		if( [self.dragDelegate respondsToSelector:@selector(dragTableViewController:didEndDraggingToRow:)] )
@@ -791,10 +807,10 @@ typedef enum {
 
 	if (selectedCell.selectedBackgroundView == nil)
 		return nil;
-
+    
+    selectedCell.selectedBackgroundView.frame = selectedCell.frame;
 	CGFloat heightOfViews = 10; // make it enough space to show whole shadow
 	CGRect shadowPathFrame = selectedCell.selectedBackgroundView.frame;
-
 	CGRect aboveShadowViewFrame = {
 		.origin.x = 0,
 		.origin.y = -heightOfViews,
@@ -832,7 +848,9 @@ typedef enum {
 	UIView *belowShadowView = [self shadowViewWithFrame:belowShadowViewFrame andShadowPath:belowShadowPath.CGPath];
 	belowShadowView.tag = TAG_FOR_BELOW_SHADOW_VIEW_WHEN_DRAGGING;
 	belowShadowView.alpha = 0;
-
+    
+    
+    
 	[selectedCell addSubview:aboveShadowView];
 	[selectedCell addSubview:belowShadowView];
 	[selectedCell bringSubviewToFront:belowShadowView];

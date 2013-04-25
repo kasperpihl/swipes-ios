@@ -9,9 +9,10 @@
 #import "ToDoCell.h"
 #import "UtilityClass.h"
 #define LAYER_VIEW_TAG 1
-#define SELECTED_VIEW_TAG 2
+#define OVERLAY_VIEW_TAG 2
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *layerView;
+@property (nonatomic,weak) IBOutlet UIView *overlayView;
 @end
 @implementation ToDoCell
 
@@ -20,32 +21,18 @@
     if (self) {
         self.contentView.backgroundColor = [UIColor whiteColor];
         self.textLabel.backgroundColor = [UIColor whiteColor];
-        UIView *selectedView = [[UIView alloc] init];
-        selectedView.backgroundColor = [UtilityClass colorWithRed:155 green:155 blue:155 alpha:0.8];
-        [self setSelectedBackgroundView:selectedView];
-        /*UIView *layerView = [[UIView alloc] init];
-        layerView.tag = LAYER_VIEW_TAG;
-        layerView.backgroundColor = [UIColor whiteColor];
-        [self addSubview:layerView];
-        self.layerView = [self viewWithTag:LAYER_VIEW_TAG];
         
-        UIView *selectedView = [[UIView alloc] init];
-        selectedView.tag = SELECTED_VIEW_TAG;
-        selectedView.backgroundColor = [UtilityClass colorWithRed:155 green:155 blue:155 alpha:0.8];
-        selectedView.hidden = YES;
-        [self addSubview:selectedView];*/
+        UIView *overlayView = [[UIView alloc] initWithFrame:self.bounds];
+        overlayView.backgroundColor = [UtilityClass colorWithRed:155 green:155 blue:155 alpha:0.6];
+        overlayView.tag = OVERLAY_VIEW_TAG;
+        self.selectedBackgroundView = overlayView;
     }
     return self;
 }
--(void)setFrame:(CGRect)frame{
-    [super setFrame:frame];
-    self.layerView.frame = CGRectSetPos(frame,0,0);
-    //self.selectedView.frame = CGRectSetPos(frame, 0, 0);
-    //[self bringSubviewToFront:self.layerView];
-    
+-(void)setHighlighted:(BOOL)highlighted{
+    [super setHighlighted:highlighted];
 }
--(void)select:(BOOL)select{
-    [self setSelected:YES animated:NO];
-    //self.selectedView.hidden = !select;
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+    NSLog(@"setting highlighted animation");
 }
 @end
