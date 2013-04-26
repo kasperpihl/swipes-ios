@@ -312,10 +312,11 @@
             [SchedulePopup showInView:self.navigationController.view withBlock:^(KPScheduleButtons button, NSDate *date) {
                 if(button == KPScheduleButtonCancel){
                     [self bounceSelectedToOrigin];
+                    
                 }
                 else [self setNewStateForSelectedRows:newState];
             }];
-            
+            return;
         }
         else [self setNewStateForSelectedRows:newState];
     }

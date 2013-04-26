@@ -472,7 +472,7 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)bounceToOrigin {
     CGFloat bounceDistance = kMCBounceAmplitude * _currentPercentage;
-
+    self.didRegret = YES;
     [UIView animateWithDuration:kMCBounceDuration1
                           delay:0
                         options:(UIViewAnimationOptionCurveEaseOut)
