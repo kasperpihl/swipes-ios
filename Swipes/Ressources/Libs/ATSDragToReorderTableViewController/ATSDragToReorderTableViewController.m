@@ -248,7 +248,7 @@ typedef enum {
 	self.draggedCell = [self cellPreparedToAnimateAroundAtIndexPath:indexPathOfRow];
 
 	//[self.draggedCell setHighlighted:NO animated:NO];
-    [self.indicatorDelegate dragTableViewController:self addDraggableIndicatorsToCell:self.draggedCell forIndexPath:indexPathOfRow];
+    [self dragTableViewController:self addDraggableIndicatorsToCell:self.draggedCell forIndexPath:indexPathOfRow];
 	[UIView animateWithDuration:0.23 delay:0 options:(UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionCurveEaseInOut) animations:^{
         CGFloat widthScale = CELL_WIDTH_SCALE;
         CGFloat heightScale = CELL_HEIGHT_SCALE;
@@ -509,7 +509,7 @@ typedef enum {
 */
 	[UIView animateWithDuration:0.25 delay:0 options:(UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionBeginFromCurrentState) animations:^{
 		//self.draggedCell.transform = CGAffineTransformMakeScale(1/CELL_WIDTH_SCALE, 1/CELL_HEIGHT_SCALE);
-        [self.indicatorDelegate dragTableViewController:self removeDraggableIndicatorsFromCell:oldDraggedCell];
+        [self dragTableViewController:self removeDraggableIndicatorsFromCell:oldDraggedCell];
         self.draggedCell.transform = CGAffineTransformInvert(CGAffineTransformMakeScale(CELL_WIDTH_SCALE, CELL_HEIGHT_SCALE));
         oldDraggedCell.frame = rectForIndexPath;
         /*
@@ -540,7 +540,7 @@ typedef enum {
 	[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:self.indexPathBelowDraggedCell] withRowAnimation:UITableViewRowAnimationNone];
 	self.draggedCell.layer.shouldRasterize = NO;
 
-	[self.indicatorDelegate dragTableViewController:self removeDraggableIndicatorsFromCell:self.draggedCell];
+	[self dragTableViewController:self removeDraggableIndicatorsFromCell:self.draggedCell];
 
 	[self.draggedCell removeFromSuperview];
 

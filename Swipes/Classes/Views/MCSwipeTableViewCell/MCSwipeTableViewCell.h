@@ -9,13 +9,7 @@
 @class MCSwipeTableViewCell;
 
 #define MAX_DRAGGING 10
-typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellState){
-    MCSwipeTableViewCellStateNone = 0,
-    MCSwipeTableViewCellState1,
-    MCSwipeTableViewCellState2,
-    MCSwipeTableViewCellState3,
-    MCSwipeTableViewCellState4
-};
+
 typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellActivatedDirection) {
     MCSwipeTableViewCellActivatedDirectionBoth = 0,
     MCSwipeTableViewCellActivatedDirectionLeft,

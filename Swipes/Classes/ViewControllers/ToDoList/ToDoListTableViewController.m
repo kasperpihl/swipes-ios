@@ -9,6 +9,7 @@
 #import "ToDoListTableViewController.h"
 #import "KPSegmentedViewController.h"
 #import "UtilityClass.h"
+#import "ToDoHandler.h"
 #import "SchedulePopup.h"
 @interface ToDoListTableViewController ()<MCSwipeTableViewCellDelegate,ATSDragToReorderTableViewControllerDelegate>
 @property (nonatomic,strong) KPToDo *draggingObject;
@@ -307,7 +308,7 @@
 -(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
     if(cell != self.swipingCell) return;
     if(state != MCSwipeTableViewCellStateNone){
-        NSString *newState = [self.stateDictionary objectForKey:[NSString stringWithFormat:@"%i",state]];
+        NSString *newState = [TODOHANDLER ];
         if([newState isEqualToString:@"schedule"]){
             [SchedulePopup showInView:self.navigationController.view withBlock:^(KPScheduleButtons button, NSDate *date) {
                 if(button == KPScheduleButtonCancel){

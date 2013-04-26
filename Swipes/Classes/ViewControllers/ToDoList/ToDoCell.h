@@ -9,4 +9,5 @@
 #import "MCSwipeTableViewCell.h"
 
 @interface ToDoCell : MCSwipeTableViewCell
+@property (nonatomic) CellType cellType;
 @end

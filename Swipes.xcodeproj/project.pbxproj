@@ -113,6 +113,7 @@
 		A7F4066B17296BF100DDE644 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066817296BF100DDE644 /* ToDoCell.m */; };
 		A7F4066C17296BF100DDE644 /* ToDoListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066A17296BF100DDE644 /* ToDoListTableViewController.m */; };
 		A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4067117296C0500DDE644 /* KPControlHandler.m */; };
+		A7F40676172A785C00DDE644 /* ToDoHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F40675172A785C00DDE644 /* ToDoHandler.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -235,6 +236,8 @@
 		A7F4066A17296BF100DDE644 /* ToDoListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoListTableViewController.m; sourceTree = "<group>"; };
 		A7F4067017296C0500DDE644 /* KPControlHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPControlHandler.h; sourceTree = "<group>"; };
 		A7F4067117296C0500DDE644 /* KPControlHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPControlHandler.m; sourceTree = "<group>"; };
+		A7F40674172A785C00DDE644 /* ToDoHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDoHandler.h; sourceTree = "<group>"; };
+		A7F40675172A785C00DDE644 /* ToDoHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoHandler.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -609,6 +612,8 @@
 			isa = PBXGroup;
 			children = (
 				A7F4066F17296C0500DDE644 /* KPControlHandler */,
+				A7F40674172A785C00DDE644 /* ToDoHandler.h */,
+				A7F40675172A785C00DDE644 /* ToDoHandler.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -796,6 +801,7 @@
 				A7F4066B17296BF100DDE644 /* ToDoCell.m in Sources */,
 				A7F4066C17296BF100DDE644 /* ToDoListTableViewController.m in Sources */,
 				A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */,
+				A7F40676172A785C00DDE644 /* ToDoHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

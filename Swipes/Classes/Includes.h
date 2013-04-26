@@ -26,6 +26,19 @@ typedef NS_ENUM(NSUInteger, KPSegmentButtons) {
     KPSegmentButtonToday,
     KPSegmentButtonDone
 };
+typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellState){
+    MCSwipeTableViewCellStateNone = 0,
+    MCSwipeTableViewCellState1 = 1,
+    MCSwipeTableViewCellState2 = 2,
+    MCSwipeTableViewCellState3 = -1,
+    MCSwipeTableViewCellState4 = -2
+};
+typedef NS_ENUM(NSUInteger, CellType) {
+    CellTypeNone = 0,
+    CellTypeSchedule,
+    CellTypeToday,
+    CellTypeDone
+};
 /* Insert below in pods target if it is logs */
 NS_INLINE void mainBlock(void (^block)(void))
 {
@@ -36,6 +49,10 @@ NS_INLINE void mainBlock(void (^block)(void))
         dispatch_sync(dispatch_get_main_queue(), block);
     }
 }
+
+#define SWIPES_BLUE [UIColor colorWithRed:47.0 / 255.0 green:141.0 / 255.0 blue:211.0 / 255.0 alpha:1.0]
+#define DONE_COLOR [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
+#define SCHEDULE_COLOR [UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
 
 #define notify(notifcation,selectr) [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectr) name:notifcation object:nil]
 #define clearNotify() [[NSNotificationCenter defaultCenter] removeObserver:self]
