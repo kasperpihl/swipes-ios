@@ -92,15 +92,15 @@
 
 #define DISTANCE_TO_AUTO_SCROLL 150
 
-@class ATSDragToReorderTableViewController;
+@class KPReorderTableView;
 
 @protocol ATSDragToReorderTableViewControllerDelegate
 @optional
 
-- (void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController didBeginDraggingAtRow:(NSIndexPath *)dragRow;
-- (void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController willEndDraggingToRow:(NSIndexPath *)destinationIndexPath;
-- (void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController didEndDraggingToRow:(NSIndexPath *)destinationIndexPath;
-- (BOOL)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController shouldHideDraggableIndicatorForDraggingToRow:(NSIndexPath *)destinationIndexPath;
+- (void)dragTableViewController:(KPReorderTableView *)dragTableViewController didBeginDraggingAtRow:(NSIndexPath *)dragRow;
+- (void)dragTableViewController:(KPReorderTableView *)dragTableViewController willEndDraggingToRow:(NSIndexPath *)destinationIndexPath;
+- (void)dragTableViewController:(KPReorderTableView *)dragTableViewController didEndDraggingToRow:(NSIndexPath *)destinationIndexPath;
+- (BOOL)dragTableViewController:(KPReorderTableView *)dragTableViewController shouldHideDraggableIndicatorForDraggingToRow:(NSIndexPath *)destinationIndexPath;
 
 @end
 
@@ -109,7 +109,7 @@
 @optional
 // hate this, required to fix an iOS 6 bug where cell is hidden when going through normal paths to get a cell
 // you must make a new cell to return this (use reuseIdent == nil), do not use dequeueResable
-- (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController;
+- (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController;
 
 @required
 /*******
@@ -120,21 +120,22 @@
  *	These work in tandem, so if your subclass overrides any of them it should override the others as well.
  *
  *******/
-
+/*
 //	Customize cell to appear draggable. Will be called inside an animation block.
 //	Cell will have highlighted set to YES, animated NO. (changes are to the selectedBackgroundView if it exists)
-- (void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController addDraggableIndicatorsToCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath;
+- (void)dragTableViewController:(KPReorderTableView *)dragTableViewController addDraggableIndicatorsToCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath;
 //	You should set alpha of adjustments to 0 and similar. Will be called inside an animation block.
 //	This should make the cell look like a normal cell, but is not expected to actually be one.
-- (void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController hideDraggableIndicatorsOfCell:(UITableViewCell *)cell;
+- (void)dragTableViewController:(KPReorderTableView *)dragTableViewController hideDraggableIndicatorsOfCell:(UITableViewCell *)cell;
 //	Removes all adjustments to prepare cell for reuse. Will not be animated.
 //	-hideDraggableIndicatorsOfCell: will probably be called before this, but not necessarily.
-- (void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController removeDraggableIndicatorsFromCell:(UITableViewCell *)cell;
+- (void)dragTableViewController:(KPReorderTableView *)dragTableViewController removeDraggableIndicatorsFromCell:(UITableViewCell *)cell;
+ */
 
 @end
 
 
-@interface ATSDragToReorderTableViewController : UITableViewController <UIGestureRecognizerDelegate, ATSDragToReorderTableViewControllerDraggableIndicators>  {
+@interface KPReorderTableView : UITableView <UIGestureRecognizerDelegate>  {
 @protected
 	UIPanGestureRecognizer *dragGestureRecognizer;
 	UILongPressGestureRecognizer *longPressGestureRecognizer;

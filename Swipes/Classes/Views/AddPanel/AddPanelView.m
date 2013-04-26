@@ -19,7 +19,7 @@
 #define TEXT_FIELD_MARGIN_SIDES 10
 #define TEXT_FIELD_MARGIN_BOTTOM 8
 #define TEXT_FIELD_HEIGHT 28
-#define FORM_VIEW_HEIGHT 90
+#define FORM_VIEW_HEIGHT 44
 #define KEYBOARD_HEIGHT 216
 
 @interface AddPanelView () <UITextFieldDelegate>
@@ -68,12 +68,12 @@
         formView.tag = FORM_VIEW_TAG;
         formView.backgroundColor = [UIColor whiteColor];
         
-        KPPickerView *pickerView = [[KPPickerView alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, 8, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), 30)];
+        /*KPPickerView *pickerView = [[KPPickerView alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, 8, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), 30)];
         pickerView.tag = PICKER_VIEW_TAG;
         pickerView.backgroundColor = [UIColor whiteColor];
         [formView addSubview:pickerView];
         self.pickerView = (KPPickerView*)[formView viewWithTag:PICKER_VIEW_TAG];
-        
+        */
         SLGlowingTextField *textField = [[SLGlowingTextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, FORM_VIEW_HEIGHT-TEXT_FIELD_MARGIN_BOTTOM-TEXT_FIELD_HEIGHT, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), TEXT_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
         textField.returnKeyType = UIReturnKeyNext;

@@ -10,7 +10,7 @@
 #import "RootViewController.h"
 #import "KPControlHandler.h"
 #import "AddPanelView.h"
-#import "ToDoListTableViewController.h"
+#import "ToDoListViewController.h"
 #import "KPToDo.h"
 #import "UtilityClass.h"
 #import "AKSegmentedControl.h"
@@ -44,7 +44,7 @@
     if(!_addPanel){
         _addPanel = [[AddPanelView alloc] initWithFrame:self.navigationController.view.bounds];
         _addPanel.addDelegate = self;
-        _addPanel.forwardDatasource = self;
+        //_addPanel.forwardDatasource = self;
         [self.navigationController.view addSubview:_addPanel];
     }
     return _addPanel;
@@ -69,7 +69,7 @@
 -(void)pressedDelete:(id)sender{
     [UTILITY confirmBoxWithTitle:@"Delete items" andMessage:@"Are you sure?" block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
-            ToDoListTableViewController *viewController = (ToDoListTableViewController*)self.viewControllers[self.currentSelectedIndex];
+            ToDoListViewController *viewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
             [viewController deleteSelectedItems:self];
             [self setCurrentState:KPControlCurrentStateAdd];
         }
@@ -241,7 +241,7 @@
     CGFloat height = self.view.frame.size.height;
     NSInteger selectedIndex = [[segmentedControl selectedIndexes] firstIndex];
     CGFloat delta = (self.currentSelectedIndex < selectedIndex) ? width : -width;
-	ToDoListTableViewController *oldViewController = (ToDoListTableViewController*)self.viewControllers[self.currentSelectedIndex];
+	ToDoListViewController *oldViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
     if(selectedIndex == self.currentSelectedIndex){
         [oldViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
         return;
@@ -249,7 +249,7 @@
     segmentedControl.userInteractionEnabled = NO;
 	[oldViewController willMoveToParentViewController:nil];
 	
-	ToDoListTableViewController *newViewController = (ToDoListTableViewController*)self.viewControllers[selectedIndex];
+	ToDoListViewController *newViewController = (ToDoListViewController*)self.viewControllers[selectedIndex];
     [newViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 	[self addChildViewController:newViewController];
 	newViewController.view.frame = CGRectSetPos(self.contentView.frame, delta, 0);

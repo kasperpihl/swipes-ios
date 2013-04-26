@@ -11,7 +11,7 @@
 #import <Parse/Parse.h>
 #import "FacebookCommunicator.h"
 #import "KPSegmentedViewController.h"
-#import "ToDoListTableViewController.h"
+#import "ToDoListViewController.h"
 
 
 
@@ -35,11 +35,11 @@ static RootViewController *sharedObject;
 
 -(void)setupMenu{
     if(!self.menuViewController){
-        ToDoListTableViewController *vc1 = [[ToDoListTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        ToDoListViewController *vc1 = [[ToDoListViewController alloc] init];
         vc1.state = @"schedule";
-        ToDoListTableViewController *vc2 = [[ToDoListTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        ToDoListViewController *vc2 = [[ToDoListViewController alloc] init];
         vc2.state = @"today";
-        ToDoListTableViewController *vc3 = [[ToDoListTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        ToDoListViewController *vc3 = [[ToDoListViewController alloc] init];
         vc3.state = @"done";
         KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3] titles:@[@"Schedule",@"Today",@"Done"]];
         self.menuViewController = menuViewController;

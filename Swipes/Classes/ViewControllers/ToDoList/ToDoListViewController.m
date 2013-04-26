@@ -6,12 +6,13 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "ToDoListTableViewController.h"
+#import "ToDoListViewController.h"
 #import "KPSegmentedViewController.h"
 #import "UtilityClass.h"
 #import "ToDoHandler.h"
 #import "SchedulePopup.h"
-@interface ToDoListTableViewController ()<MCSwipeTableViewCellDelegate,ATSDragToReorderTableViewControllerDelegate>
+#define TABLEVIEW_TAG 500
+@interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,ATSDragToReorderTableViewControllerDelegate,UITableViewDataSource,UITableViewDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 @property (nonatomic,strong) KPToDo *draggingObject;
 @property (nonatomic,strong) MCSwipeTableViewCell *swipingCell;
 @property (nonatomic,strong) NSIndexPath *dragRow;
@@ -23,7 +24,7 @@
 @property (nonatomic,strong) NSMutableDictionary *stateDictionary;
 @end
 
-@implementation ToDoListTableViewController
+@implementation ToDoListViewController
 -(KPSegmentedViewController *)parent{
     KPSegmentedViewController *parent = (KPSegmentedViewController*)[self parentViewController];
     return parent;
@@ -78,7 +79,7 @@
 - (UITableViewCell *)cell:(ToDoCell*)cell forRowAtIndexPath:(NSIndexPath *)indexPath{ return cell; }
 
 #pragma mark - Dragable Controller
-- (void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController didBeginDraggingAtRow:(NSIndexPath *)dragRow{
+- (void)dragTableViewController:(KPReorderTableView *)dragTableViewController didBeginDraggingAtRow:(NSIndexPath *)dragRow{
     self.isScrollingFast = YES;
     self.dragRow = dragRow;
     self.draggingObject = [self.items objectAtIndex:dragRow.row];
@@ -90,7 +91,7 @@
 	[self.items insertObject:itemToMove atIndex:destinationIndexPath.row];
     // TODO: Fix this items
 }
--(void)dragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController didEndDraggingToRow:(NSIndexPath *)destinationIndexPath{
+-(void)dragTableViewController:(KPReorderTableView *)dragTableViewController didEndDraggingToRow:(NSIndexPath *)destinationIndexPath{
     NSInteger targetRow;
     self.tableView.allowsMultipleSelection = YES;
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
@@ -114,7 +115,7 @@
     else*/ return 60;
 }
 
-- (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(ATSDragToReorderTableViewController *)dragTableViewController {
+- (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
 	ToDoCell *cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [self readyCell:cell];
     [self tableView:self.tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
@@ -305,10 +306,11 @@
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
     [[self parent] highlightButton:[self determineButtonFromState:newState]];
 }
--(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
+-(void)swipeTableViewCell:(ToDoCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
+    
     if(cell != self.swipingCell) return;
     if(state != MCSwipeTableViewCellStateNone){
-        NSString *newState = [TODOHANDLER ];
+        NSString *newState = [TODOHANDLER stateForCellType:[TODOHANDLER cellTypeForCell:cell.cellType state:state]];
         if([newState isEqualToString:@"schedule"]){
             [SchedulePopup showInView:self.navigationController.view withBlock:^(KPScheduleButtons button, NSDate *date) {
                 if(button == KPScheduleButtonCancel){
@@ -349,7 +351,14 @@
 {
     [super viewDidLoad];
     notify(@"updated", update);
-    self.dragDelegate = self;
+    KPReorderTableView *tableView = [[KPReorderTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    tableView.delegate = self;
+    tableView.dataSource = self;
+    tableView.indicatorDelegate = self;
+    tableView.tag = TABLEVIEW_TAG;
+    [self.view addSubview:tableView];
+    self.tableView = (KPReorderTableView*)[self.view viewWithTag:TABLEVIEW_TAG];
+    self.tableView.dragDelegate = self;
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 70, 0);
     self.tableView.allowsMultipleSelection = YES;
     self.tableView.backgroundColor = [UIColor colorWithRed:227.0 / 255.0 green:227.0 / 255.0 blue:227.0 / 255.0 alpha:1.0];

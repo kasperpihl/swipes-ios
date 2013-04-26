@@ -6,11 +6,12 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "ATSDragToReorderTableViewController.h"
+#import "KPReorderTableView.h"
 #import "KPToDo.h"
 #import "ToDoCell.h"
-@interface ToDoListTableViewController : ATSDragToReorderTableViewController
+@interface ToDoListViewController : UIViewController
 @property (nonatomic,strong) NSMutableArray *items;
+@property (nonatomic,weak) IBOutlet KPReorderTableView *tableView;
 @property (nonatomic,strong) NSString *state;
 -(void)update;
 -(void)loadItems;
