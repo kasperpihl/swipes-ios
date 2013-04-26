@@ -8,22 +8,25 @@
 
 #define ADD_BUTTON_TAG 13000
 #define DELETE_BUTTON_TAG 13001
-#define DESELECT_BUTTON_TAG 13002
+#define TAG_BUTTON_TAG 13002
 #define SHARE_BUTTON_TAG 13003
 
 #define BIG_BUTTON_HEIGHT 90
 #define BIG_BUTTON_BOTTOM_MARGIN 0
-#define SMALL_BUTTON_HEIGHT 70
-#define SMALL_BUTTON_BOTTOM_MARGIN 5
+#define SMALL_BUTTON_HEIGHT 64
+#define SMALL_BUTTON_BOTTOM_MARGIN 0
 
 #define ANIMATION_DURATION 0.15f
 
 #define ADD_BUTTON_X ((320/2)-(BIG_BUTTON_HEIGHT/2))
 
 #define SMALL_BUTTON_SPACING 5
+
 #define DELETE_BUTTON_X SMALL_BUTTON_SPACING
+#define TAG_BUTTON_X (DELETE_BUTTON_X+SMALL_BUTTON_HEIGHT+SMALL_BUTTON_SPACING)
+#define SHARE_BUTTON_X (TAG_BUTTON_X+SMALL_BUTTON_HEIGHT+SMALL_BUTTON_SPACING)
+
 #define DESELECT_BUTTON_X 150
-#define SHARE_BUTTON_X 250
 
 #import "KPControlHandler.h"
 #import "RootViewController.h"
@@ -34,6 +37,7 @@ typedef void (^voidBlock)(void);
 @property (nonatomic,weak) UIButton *addButton;
 @property (nonatomic,weak) UIButton *deleteButton;
 @property (nonatomic,weak) UIButton *shareButton;
+@property (nonatomic,weak) UIButton *tagButton;
 @end
 @implementation KPControlHandler
 +(KPControlHandler*)instanceInView:(UIView*)view{
@@ -57,7 +61,6 @@ typedef void (^voidBlock)(void);
         addButton.tag = ADD_BUTTON_TAG;
         [addButton addTarget:self action:@selector(pressedAdd:) forControlEvents:UIControlEventTouchUpInside];
         [addButton setImage:[UIImage imageNamed:@"addbutton"] forState:UIControlStateNormal];
-        [addButton setImage:[UIImage imageNamed:@"addbutton-highlighted"] forState:UIControlStateHighlighted];
         [view addSubview:addButton];
         self.addButton = (UIButton*)[view viewWithTag:ADD_BUTTON_TAG];
         
@@ -66,9 +69,25 @@ typedef void (^voidBlock)(void);
         deleteButton.tag = DELETE_BUTTON_TAG;
         [deleteButton addTarget:self action:@selector(pressedDelete:) forControlEvents:UIControlEventTouchUpInside];
         [deleteButton setImage:[UIImage imageNamed:@"deletebutton"] forState:UIControlStateNormal];
-        //[deleteButton setImage:[UIImage imageNamed:@"addbutton-highlighted"] forState:UIControlStateHighlighted];
         [view addSubview:deleteButton];
         self.deleteButton = (UIButton*)[view viewWithTag:DELETE_BUTTON_TAG];
+        
+        UIButton *tagButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        tagButton.frame = CGRectMake(TAG_BUTTON_X,view.frame.size.height,SMALL_BUTTON_HEIGHT,SMALL_BUTTON_HEIGHT);
+        tagButton.tag = TAG_BUTTON_TAG;
+        [tagButton addTarget:self action:@selector(pressedTag:) forControlEvents:UIControlEventTouchUpInside];
+        [tagButton setImage:[UIImage imageNamed:@"tagbutton"] forState:UIControlStateNormal];
+        [view addSubview:tagButton];
+        self.tagButton = (UIButton*)[view viewWithTag:TAG_BUTTON_TAG];
+        
+        UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        shareButton.frame = CGRectMake(SHARE_BUTTON_X,view.frame.size.height,SMALL_BUTTON_HEIGHT,SMALL_BUTTON_HEIGHT);
+        shareButton.tag = SHARE_BUTTON_TAG;
+        [shareButton addTarget:self action:@selector(pressedShare:) forControlEvents:UIControlEventTouchUpInside];
+        [shareButton setImage:[UIImage imageNamed:@"sharebutton"] forState:UIControlStateNormal];
+        //[deleteButton setImage:[UIImage imageNamed:@"addbutton-highlighted"] forState:UIControlStateHighlighted];
+        [view addSubview:shareButton];
+        self.shareButton = (UIButton*)[view viewWithTag:SHARE_BUTTON_TAG];
         
         [self setState:KPControlHandlerStateAdd animated:NO];
     }
@@ -86,6 +105,7 @@ typedef void (^voidBlock)(void);
             case KPControlHandlerStateEdit:
                 CGRectSetY(self.deleteButton.frame, targetY);
                 CGRectSetY(self.shareButton.frame, targetY);
+                CGRectSetY(self.tagButton.frame, targetY);
                 break;
         }
     };
@@ -104,6 +124,7 @@ typedef void (^voidBlock)(void);
             case KPControlHandlerStateEdit:
                 CGRectSetY(self.deleteButton.frame, smallButtonY);
                 CGRectSetY(self.shareButton.frame, smallButtonY);
+                CGRectSetY(self.tagButton.frame, smallButtonY);
                 break;
         }
     };
@@ -144,5 +165,10 @@ typedef void (^voidBlock)(void);
 -(void)pressedDelete:(id)sender{
     if([self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:self];
 }
-
+-(void)pressedTag:(id)sender{
+    if([self.delegate respondsToSelector:@selector(pressedTag:)]) [self.delegate pressedTag:self];
+}
+-(void)pressedShare:(id)sender{
+    if([self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:self];
+}
 @end

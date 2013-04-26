@@ -18,6 +18,7 @@ typedef NS_ENUM(NSUInteger, KPControlHandlerState){
 @optional
 -(void)pressedAdd:(id)sender;
 -(void)pressedDelete:(id)sender;
+-(void)pressedTag:(id)sender;
 -(void)pressedShare:(id)sender;
 @end
 

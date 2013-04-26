@@ -108,6 +108,10 @@
 		A781290217294C56002226C8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A78128BA17294C56002226C8 /* main.m */; };
 		A78F391416F7D5BA00A8C78D /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78F391316F7D5BA00A8C78D /* AddressBook.framework */; };
 		A78F392E16F7DC1900A8C78D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78F392D16F7DC1800A8C78D /* MessageUI.framework */; };
+		A7933040172AADD200F1505E /* sharebutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A793303C172AADD200F1505E /* sharebutton.png */; };
+		A7933041172AADD200F1505E /* sharebutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A793303D172AADD200F1505E /* sharebutton@2x.png */; };
+		A7933042172AADD200F1505E /* tagbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A793303E172AADD200F1505E /* tagbutton.png */; };
+		A7933043172AADD200F1505E /* tagbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A793303F172AADD200F1505E /* tagbutton@2x.png */; };
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
 		A7F4066517296BC700DDE644 /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066417296BC700DDE644 /* AddPanelView.m */; };
 		A7F4066B17296BF100DDE644 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066817296BF100DDE644 /* ToDoCell.m */; };
@@ -226,6 +230,10 @@
 		A78128BC17294C56002226C8 /* Swipes-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Swipes-Prefix.pch"; sourceTree = "<group>"; };
 		A78F391316F7D5BA00A8C78D /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A78F392D16F7DC1800A8C78D /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		A793303C172AADD200F1505E /* sharebutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sharebutton.png; sourceTree = "<group>"; };
+		A793303D172AADD200F1505E /* sharebutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sharebutton@2x.png"; sourceTree = "<group>"; };
+		A793303E172AADD200F1505E /* tagbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tagbutton.png; sourceTree = "<group>"; };
+		A793303F172AADD200F1505E /* tagbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tagbutton@2x.png"; sourceTree = "<group>"; };
 		A7F4065F17294ECE00DDE644 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		A7F4066017294ECE00DDE644 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		A7F4066317296BC700DDE644 /* AddPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPanelView.h; sourceTree = "<group>"; };
@@ -540,6 +548,10 @@
 				A78128A017294C56002226C8 /* closebutton@2x.png */,
 				A78128A117294C56002226C8 /* deletebutton.png */,
 				A78128A217294C56002226C8 /* deletebutton@2x.png */,
+				A793303C172AADD200F1505E /* sharebutton.png */,
+				A793303D172AADD200F1505E /* sharebutton@2x.png */,
+				A793303E172AADD200F1505E /* tagbutton.png */,
+				A793303F172AADD200F1505E /* tagbutton@2x.png */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -726,6 +738,10 @@
 				A78128FF17294C56002226C8 /* Default@2x.png in Resources */,
 				A781290017294C56002226C8 /* icon-114.png in Resources */,
 				A781290117294C56002226C8 /* icon-57.png in Resources */,
+				A7933040172AADD200F1505E /* sharebutton.png in Resources */,
+				A7933041172AADD200F1505E /* sharebutton@2x.png in Resources */,
+				A7933042172AADD200F1505E /* tagbutton.png in Resources */,
+				A7933043172AADD200F1505E /* tagbutton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

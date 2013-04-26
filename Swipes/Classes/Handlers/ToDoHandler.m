@@ -16,17 +16,23 @@ static ToDoHandler *sharedObject;
     }
     return sharedObject;
 }
+-(void)scheduleToDo:(KPToDo *)toDo forDate:(NSDate *)date{
+    
+}
+-(MCSwipeTableViewCellActivatedDirection)directionForCellType:(CellType)type{
+    MCSwipeTableViewCellActivatedDirection direction = MCSwipeTableViewCellActivatedDirectionBoth;
+    if(type == CellTypeDone) direction = MCSwipeTableViewCellActivatedDirectionLeft;
+    return direction;
+}
 -(CellType)cellTypeForCell:(CellType)type state:(MCSwipeTableViewCellState)state{
     NSInteger result = type + state;
+    if(type == CellTypeSchedule && (result == type-1)) result = CellTypeSchedule;
     CellType returnValue;
     switch (result) {
         case CellTypeSchedule:
         case CellTypeToday:
         case CellTypeDone:
-            if(result != type){ returnValue = result; }
-            else{
-                returnValue = CellTypeNone;
-            }
+            returnValue = result;
             break;
         default:
             returnValue = CellTypeNone;

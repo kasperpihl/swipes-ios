@@ -16,7 +16,7 @@
 @property (nonatomic,strong) KPToDo *draggingObject;
 @property (nonatomic,strong) MCSwipeTableViewCell *swipingCell;
 @property (nonatomic,strong) NSIndexPath *dragRow;
-@property (nonatomic) KPSegmentButtons segmentButton;
+@property (nonatomic) CellType cellType;
 @property (nonatomic) NSMutableArray *selectedRows;
 @property (nonatomic) CGPoint lastOffset;
 @property (nonatomic) NSTimeInterval lastOffsetCapture;
@@ -33,31 +33,16 @@
     if(!_stateDictionary) _stateDictionary = [NSMutableDictionary dictionary];
     return _stateDictionary;
 }
--(KPSegmentButtons)determineButtonFromState:(NSString*)state{
-    KPSegmentButtons thisButton;
-    if([state isEqualToString:@"today"]) thisButton = KPSegmentButtonToday;
-    else if([state isEqualToString:@"schedule"]) thisButton = KPSegmentButtonSchedule;
-    else thisButton = KPSegmentButtonDone;
-    return thisButton;}
+-(CellType)determineCellTypeFromState:(NSString*)state{
+    CellType cellType;
+    if([state isEqualToString:@"today"]) cellType = CellTypeToday;
+    else if([state isEqualToString:@"schedule"]) cellType = CellTypeSchedule;
+    else cellType = CellTypeDone;
+    return cellType;
+}
 -(void)setState:(NSString *)state{
     _state = state;
-
-    self.segmentButton = [self determineButtonFromState:state];
-    switch (self.segmentButton) {
-        case KPSegmentButtonSchedule:
-            [self.stateDictionary setObject:@"today" forKey:@"1"];
-            [self.stateDictionary setObject:@"done" forKey:@"2"];
-            [self.stateDictionary setObject:@"schedule" forKey:@"3"];
-            break;
-        case KPSegmentButtonToday:
-            [self.stateDictionary setObject:@"done" forKey:@"1"];
-            [self.stateDictionary setObject:@"schedule" forKey:@"3"];
-            break;
-        case KPSegmentButtonDone:
-            [self.stateDictionary setObject:@"today" forKey:@"3"];
-            [self.stateDictionary setObject:@"schedule" forKey:@"4"];
-            break;
-    }
+    self.cellType = [self determineCellTypeFromState:state];
 }
 -(void)loadItems{
     self.items = [[KPToDo MR_findByAttribute:@"state" withValue:self.state andOrderBy:@"order" ascending:NO] mutableCopy];
@@ -124,43 +109,22 @@
 -(ToDoCell*)readyCell:(ToDoCell*)cell{
     [cell setMode:MCSwipeTableViewCellModeExit];
     cell.delegate = self;
+    cell.cellType = self.cellType;
+    cell.selectedBackgroundView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
     //cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    NSString *icon1,*icon2,*icon3,*icon4;
-    UIColor *color1,*color2,*color3,*color4;
-    MCSwipeTableViewCellActivatedDirection direction = MCSwipeTableViewCellActivatedDirectionBoth;
-    switch (self.segmentButton) {
-        case KPSegmentButtonSchedule:
-            icon1 = @"list";
-            color1 = SWIPES_BLUE;
-            icon2 = @"check";
-            color2 = DONE_COLOR;
-            icon3 = @"clock.png";
-            color3 = SCHEDULE_COLOR;
-            break;
-        case KPSegmentButtonToday:
-            icon3 = @"clock.png";
-            color3 = SCHEDULE_COLOR;
-            icon1 = @"check.png";
-            color1 = DONE_COLOR;
-            
-            break;
-        case KPSegmentButtonDone:
-            direction = MCSwipeTableViewCellActivatedDirectionLeft;
-            icon3 = @"list";
-            color3 = SWIPES_BLUE;
-            icon4 = @"clock";
-            color4 = SCHEDULE_COLOR;
-            break;
-    }
-    cell.activatedDirection = direction;
-    [cell setFirstStateIconName:icon1
-                     firstColor:color1
-            secondStateIconName:icon2
-                    secondColor:color2
-                  thirdIconName:icon3
-                     thirdColor:color3
-                 fourthIconName:icon4
-                    fourthColor:color4];
+    CellType firstCell = [TODOHANDLER cellTypeForCell:self.cellType state:MCSwipeTableViewCellState1];
+    CellType secondCell = [TODOHANDLER cellTypeForCell:self.cellType state:MCSwipeTableViewCellState2];
+    CellType thirdCell = [TODOHANDLER cellTypeForCell:self.cellType state:MCSwipeTableViewCellState3];
+    CellType fourthCell = [TODOHANDLER cellTypeForCell:self.cellType state:MCSwipeTableViewCellState4];
+    [cell setFirstColor:[TODOHANDLER colorForCellType:firstCell]];
+    [cell setSecondColor:[TODOHANDLER colorForCellType:secondCell]];
+    [cell setThirdColor:[TODOHANDLER colorForCellType:thirdCell]];
+    [cell setFourthColor:[TODOHANDLER colorForCellType:fourthCell]];
+    [cell setFirstIconName:[TODOHANDLER iconNameForCellType:firstCell]];
+    [cell setSecondIconName:[TODOHANDLER iconNameForCellType:secondCell]];
+    [cell setThirdIconName:[TODOHANDLER iconNameForCellType:thirdCell]];
+    [cell setFourthIconName:[TODOHANDLER iconNameForCellType:fourthCell]];
+    cell.activatedDirection = [TODOHANDLER directionForCellType:self.cellType];
     return cell;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -275,6 +239,7 @@
     }
 }
 -(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation{
+    if(cell != self.swipingCell) return;
     NSArray *visibleCells = [self.tableView visibleCells];
     for(MCSwipeTableViewCell *localCell in visibleCells){
         NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
@@ -292,36 +257,44 @@
         }
     }
 }
--(void)setNewStateForSelectedRows:(NSString*)newState{
+-(void)moveSelectedCellsToCellType:(CellType)cellType{
+    NSString *newState = [TODOHANDLER stateForCellType:cellType];
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     for(NSIndexPath *indexPath in self.selectedRows){
         KPToDo *toDo = [self.items objectAtIndex:indexPath.row];
         [toDo changeState:newState];
         [indexSet addIndex:indexPath.row];
     }
-    [self.items removeObjectsAtIndexes:indexSet];
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
-    [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
-    [self.selectedRows removeAllObjects];
+    if(self.cellType != cellType){
+        [self.items removeObjectsAtIndexes:indexSet];
+        [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
+        [self.selectedRows removeAllObjects];
+    }
+    else{
+        [self bounceSelectedToOrigin];
+        [self deselectAllRows:self];
+    
+    }
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
-    [[self parent] highlightButton:[self determineButtonFromState:newState]];
+    [[self parent] highlightButton:(KPSegmentButtons)cellType-1];
 }
 -(void)swipeTableViewCell:(ToDoCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
-    
+    NSLog(@"cell:%@ self.cell:%@",cell,self.swipingCell);
     if(cell != self.swipingCell) return;
     if(state != MCSwipeTableViewCellStateNone){
-        NSString *newState = [TODOHANDLER stateForCellType:[TODOHANDLER cellTypeForCell:cell.cellType state:state]];
-        if([newState isEqualToString:@"schedule"]){
+        CellType targetCellType = [TODOHANDLER cellTypeForCell:cell.cellType state:state];
+        if(targetCellType == CellTypeSchedule){
             [SchedulePopup showInView:self.navigationController.view withBlock:^(KPScheduleButtons button, NSDate *date) {
                 if(button == KPScheduleButtonCancel){
                     [self bounceSelectedToOrigin];
                     
                 }
-                else [self setNewStateForSelectedRows:newState];
+                else [self moveSelectedCellsToCellType:targetCellType];
             }];
             return;
         }
-        else [self setNewStateForSelectedRows:newState];
+        else [self moveSelectedCellsToCellType:targetCellType];
     }
     else{
         NSArray *visibleCells = [self.tableView visibleCells];

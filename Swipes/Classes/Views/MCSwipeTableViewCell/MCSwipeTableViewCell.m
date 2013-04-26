@@ -150,7 +150,6 @@ secondStateIconName:(NSString *)secondIconName
 
     UIGestureRecognizerState state = [gesture state];
     CGPoint velocity = [gesture velocityInView:self];
-    NSLog(@"velocity.x:%f",velocity.x);
     CGFloat percentage = [self percentageWithOffset:CGRectGetMinX(self.contentView.frame) relativeToWidth:CGRectGetWidth(self.bounds)];
     
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
