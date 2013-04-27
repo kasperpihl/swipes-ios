@@ -16,8 +16,26 @@ static ToDoHandler *sharedObject;
     }
     return sharedObject;
 }
--(void)scheduleToDo:(KPToDo *)toDo forDate:(NSDate *)date{
-    
+-(void)save{
+    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+}
+-(void)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date{
+    for(KPToDo *toDo in toDoArray){
+        [toDo scheduleForDate:date];
+    }
+    [self save];
+}
+-(void)completeToDos:(NSArray*)toDoArray{
+    for(KPToDo *toDo in toDoArray){
+        [toDo complete];
+    }
+    [self save];
+}
+-(void)setForTodayToDos:(NSArray *)toDoArray{
+    for(KPToDo *toDo in toDoArray){
+        [toDo setForToday];
+    }
+    [self save];
 }
 -(MCSwipeTableViewCellActivatedDirection)directionForCellType:(CellType)type{
     MCSwipeTableViewCellActivatedDirection direction = MCSwipeTableViewCellActivatedDirectionBoth;
@@ -25,6 +43,7 @@ static ToDoHandler *sharedObject;
     return direction;
 }
 -(CellType)cellTypeForCell:(CellType)type state:(MCSwipeTableViewCellState)state{
+    if(state == MCSwipeTableViewCellStateNone) return CellTypeNone;
     NSInteger result = type + state;
     if(type == CellTypeSchedule && (result == type-1)) result = CellTypeSchedule;
     CellType returnValue;

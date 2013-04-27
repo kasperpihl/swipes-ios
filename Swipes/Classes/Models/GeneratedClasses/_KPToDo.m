@@ -9,11 +9,11 @@ const struct KPToDoAttributes KPToDoAttributes = {
 	.order = @"order",
 	.schedule = @"schedule",
 	.state = @"state",
-	.tags = @"tags",
 	.title = @"title",
 };
 
 const struct KPToDoRelationships KPToDoRelationships = {
+	.tags = @"tags",
 };
 
 const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
@@ -111,19 +111,25 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 
 
-@dynamic tags;
-
-
-
-
-
-
 @dynamic title;
 
 
 
 
 
+
+@dynamic tags;
+
+	
+- (NSMutableSet*)tagsSet {
+	[self willAccessValueForKey:@"tags"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"tags"];
+  
+	[self didAccessValueForKey:@"tags"];
+	return result;
+}
+	
 
 
 

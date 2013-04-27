@@ -41,6 +41,12 @@
 		A761B5B916EB59710095A9A8 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B816EB59710095A9A8 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		A761B5BB16EB59760095A9A8 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BA16EB59760095A9A8 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		A761B5BD16EB597B0095A9A8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */; };
+		A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
+		A7680D23172C40E400BCB2D9 /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D22172C40E400BCB2D9 /* TagButton.m */; };
+		A7680D26172C5E9100BCB2D9 /* TagHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D25172C5E9100BCB2D9 /* TagHandler.m */; };
+		A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D28172C5EA800BCB2D9 /* _KPTag.m */; };
+		A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2B172C5EAF00BCB2D9 /* KPTag.m */; };
+		A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76B2386172C06CC00F742C2 /* ScheduleViewController.m */; };
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
 		A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CD116EB5884004D95E5 /* CoreGraphics.framework */; };
@@ -112,6 +118,10 @@
 		A7933041172AADD200F1505E /* sharebutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A793303D172AADD200F1505E /* sharebutton@2x.png */; };
 		A7933042172AADD200F1505E /* tagbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A793303E172AADD200F1505E /* tagbutton.png */; };
 		A7933043172AADD200F1505E /* tagbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A793303F172AADD200F1505E /* tagbutton@2x.png */; };
+		A7933049172AB63700F1505E /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933048172AB63700F1505E /* TodayViewController.m */; };
+		A793304D172B24D000F1505E /* DWTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = A793304C172B24D000F1505E /* DWTagList.m */; };
+		A7933050172B251A00F1505E /* KPAddTagPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = A793304F172B251A00F1505E /* KPAddTagPanel.m */; };
+		A7933056172B2BA100F1505E /* DoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933055172B2BA100F1505E /* DoneViewController.m */; };
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
 		A7F4066517296BC700DDE644 /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066417296BC700DDE644 /* AddPanelView.m */; };
 		A7F4066B17296BF100DDE644 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066817296BF100DDE644 /* ToDoCell.m */; };
@@ -142,6 +152,18 @@
 		A761B5B816EB59710095A9A8 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A761B5BA16EB59760095A9A8 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		A7680D1E172C0E1C00BCB2D9 /* NSDate-Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-Utilities.h"; sourceTree = "<group>"; };
+		A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-Utilities.m"; sourceTree = "<group>"; };
+		A7680D21172C40E400BCB2D9 /* TagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagButton.h; sourceTree = "<group>"; };
+		A7680D22172C40E400BCB2D9 /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
+		A7680D24172C5E9100BCB2D9 /* TagHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagHandler.h; sourceTree = "<group>"; };
+		A7680D25172C5E9100BCB2D9 /* TagHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagHandler.m; sourceTree = "<group>"; };
+		A7680D27172C5EA800BCB2D9 /* _KPTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _KPTag.h; sourceTree = "<group>"; };
+		A7680D28172C5EA800BCB2D9 /* _KPTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _KPTag.m; sourceTree = "<group>"; };
+		A7680D2A172C5EAF00BCB2D9 /* KPTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPTag.h; sourceTree = "<group>"; };
+		A7680D2B172C5EAF00BCB2D9 /* KPTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTag.m; sourceTree = "<group>"; };
+		A76B2385172C06CC00F742C2 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScheduleViewController.h; path = Schedule/ScheduleViewController.h; sourceTree = "<group>"; };
+		A76B2386172C06CC00F742C2 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScheduleViewController.m; path = Schedule/ScheduleViewController.m; sourceTree = "<group>"; };
 		A7778CCA16EB5884004D95E5 /* Swipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7778CCD16EB5884004D95E5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A7778CCF16EB5884004D95E5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -234,6 +256,14 @@
 		A793303D172AADD200F1505E /* sharebutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sharebutton@2x.png"; sourceTree = "<group>"; };
 		A793303E172AADD200F1505E /* tagbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tagbutton.png; sourceTree = "<group>"; };
 		A793303F172AADD200F1505E /* tagbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tagbutton@2x.png"; sourceTree = "<group>"; };
+		A7933047172AB63700F1505E /* TodayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TodayViewController.h; path = Today/TodayViewController.h; sourceTree = "<group>"; };
+		A7933048172AB63700F1505E /* TodayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TodayViewController.m; path = Today/TodayViewController.m; sourceTree = "<group>"; };
+		A793304B172B24D000F1505E /* DWTagList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWTagList.h; sourceTree = "<group>"; };
+		A793304C172B24D000F1505E /* DWTagList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWTagList.m; sourceTree = "<group>"; };
+		A793304E172B251A00F1505E /* KPAddTagPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPAddTagPanel.h; sourceTree = "<group>"; };
+		A793304F172B251A00F1505E /* KPAddTagPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPAddTagPanel.m; sourceTree = "<group>"; };
+		A7933054172B2BA100F1505E /* DoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DoneViewController.h; path = Done/DoneViewController.h; sourceTree = "<group>"; };
+		A7933055172B2BA100F1505E /* DoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DoneViewController.m; path = Done/DoneViewController.m; sourceTree = "<group>"; };
 		A7F4065F17294ECE00DDE644 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		A7F4066017294ECE00DDE644 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		A7F4066317296BC700DDE644 /* AddPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPanelView.h; sourceTree = "<group>"; };
@@ -390,6 +420,8 @@
 			children = (
 				A781284817294C56002226C8 /* KPParseObject.h */,
 				A781284917294C56002226C8 /* KPParseObject.m */,
+				A7680D2A172C5EAF00BCB2D9 /* KPTag.h */,
+				A7680D2B172C5EAF00BCB2D9 /* KPTag.m */,
 				A781284A17294C56002226C8 /* KPToDo.h */,
 				A781284B17294C56002226C8 /* KPToDo.m */,
 			);
@@ -401,6 +433,8 @@
 			children = (
 				A781284F17294C56002226C8 /* _KPParseObject.h */,
 				A781285017294C56002226C8 /* _KPParseObject.m */,
+				A7680D27172C5EA800BCB2D9 /* _KPTag.h */,
+				A7680D28172C5EA800BCB2D9 /* _KPTag.m */,
 				A781285117294C56002226C8 /* _KPToDo.h */,
 				A781285217294C56002226C8 /* _KPToDo.m */,
 			);
@@ -410,6 +444,8 @@
 		A781285A17294C56002226C8 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				A7680D1E172C0E1C00BCB2D9 /* NSDate-Utilities.h */,
+				A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */,
 				A781285B17294C56002226C8 /* UtilityClass.h */,
 				A781285C17294C56002226C8 /* UtilityClass.m */,
 			);
@@ -451,6 +487,7 @@
 				A781287417294C56002226C8 /* MCSwipeTableViewCell */,
 				A781287717294C56002226C8 /* PickerView */,
 				A781287A17294C56002226C8 /* SchedulePopup */,
+				A793304A172B24D000F1505E /* TagView */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -600,6 +637,46 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		A7933044172AB5AA00F1505E /* Schedule */ = {
+			isa = PBXGroup;
+			children = (
+				A76B2385172C06CC00F742C2 /* ScheduleViewController.h */,
+				A76B2386172C06CC00F742C2 /* ScheduleViewController.m */,
+			);
+			name = Schedule;
+			sourceTree = "<group>";
+		};
+		A7933045172AB5B100F1505E /* Today */ = {
+			isa = PBXGroup;
+			children = (
+				A7933047172AB63700F1505E /* TodayViewController.h */,
+				A7933048172AB63700F1505E /* TodayViewController.m */,
+			);
+			name = Today;
+			sourceTree = "<group>";
+		};
+		A7933046172AB5B800F1505E /* Done */ = {
+			isa = PBXGroup;
+			children = (
+				A7933054172B2BA100F1505E /* DoneViewController.h */,
+				A7933055172B2BA100F1505E /* DoneViewController.m */,
+			);
+			name = Done;
+			sourceTree = "<group>";
+		};
+		A793304A172B24D000F1505E /* TagView */ = {
+			isa = PBXGroup;
+			children = (
+				A793304E172B251A00F1505E /* KPAddTagPanel.h */,
+				A793304F172B251A00F1505E /* KPAddTagPanel.m */,
+				A793304B172B24D000F1505E /* DWTagList.h */,
+				A793304C172B24D000F1505E /* DWTagList.m */,
+				A7680D21172C40E400BCB2D9 /* TagButton.h */,
+				A7680D22172C40E400BCB2D9 /* TagButton.m */,
+			);
+			path = TagView;
+			sourceTree = "<group>";
+		};
 		A7F4066217296BC700DDE644 /* AddPanel */ = {
 			isa = PBXGroup;
 			children = (
@@ -612,6 +689,9 @@
 		A7F4066617296BF100DDE644 /* ToDoList */ = {
 			isa = PBXGroup;
 			children = (
+				A7933044172AB5AA00F1505E /* Schedule */,
+				A7933045172AB5B100F1505E /* Today */,
+				A7933046172AB5B800F1505E /* Done */,
 				A7F4066717296BF100DDE644 /* ToDoCell.h */,
 				A7F4066817296BF100DDE644 /* ToDoCell.m */,
 				A7F4066917296BF100DDE644 /* ToDoListViewController.h */,
@@ -626,6 +706,8 @@
 				A7F4066F17296C0500DDE644 /* KPControlHandler */,
 				A7F40674172A785C00DDE644 /* ToDoHandler.h */,
 				A7F40675172A785C00DDE644 /* ToDoHandler.m */,
+				A7680D24172C5E9100BCB2D9 /* TagHandler.h */,
+				A7680D25172C5E9100BCB2D9 /* TagHandler.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -818,6 +900,16 @@
 				A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */,
 				A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */,
 				A7F40676172A785C00DDE644 /* ToDoHandler.m in Sources */,
+				A7933049172AB63700F1505E /* TodayViewController.m in Sources */,
+				A793304D172B24D000F1505E /* DWTagList.m in Sources */,
+				A7933050172B251A00F1505E /* KPAddTagPanel.m in Sources */,
+				A7933056172B2BA100F1505E /* DoneViewController.m in Sources */,
+				A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */,
+				A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */,
+				A7680D23172C40E400BCB2D9 /* TagButton.m in Sources */,
+				A7680D26172C5E9100BCB2D9 /* TagHandler.m in Sources */,
+				A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */,
+				A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

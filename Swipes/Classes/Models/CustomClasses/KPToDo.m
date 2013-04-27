@@ -27,4 +27,16 @@
 -(void)changeState:(NSString *)state{
     self.state = state;
 }
+-(void)setForToday{
+    self.state = @"today";
+    self.schedule = [NSDate date];
+}
+-(void)complete{
+    self.state = @"done";
+    self.completionDate = [NSDate date];
+}
+-(void)scheduleForDate:(NSDate*)date{
+    self.state = @"schedule";
+    self.schedule = date;
+}
 @end

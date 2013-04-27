@@ -98,9 +98,6 @@
             self.formView.frame = CGRectSetPos(self.formView.frame, 0, self.frame.size.height-FORM_VIEW_HEIGHT);
             [self.superview bringSubviewToFront:self];
             [self.textField becomeFirstResponder];
-            
-            
-            
         };
         showBlock = ^(void) {
             self.backgroundView.alpha = 1;

@@ -9,6 +9,7 @@
 #import "SchedulePopup.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
+#import "NSDate-Utilities.h"
 #define POPUP_WIDTH 300
 #define CONTENT_VIEW_TAG 1
 
@@ -48,16 +49,16 @@
     [self returnState:KPScheduleButtonCancel date:nil];
 }
 -(void)pressedTomorrow:(id)sender{
-    [self returnState:KPScheduleButtonTomorrow date:nil];
+    [self returnState:KPScheduleButtonTomorrow date:[NSDate dateTomorrow]];
 }
 -(void)pressedInAWeek:(id)sender{
-    [self returnState:KPScheduleButtonInAWeek date:nil];
+    [self returnState:KPScheduleButtonInAWeek date:[NSDate dateWithDaysFromNow:7]];
 }
 -(void)pressedEveryday:(id)sender{
     [self returnState:KPScheduleButtonEveryday date:nil];
 }
 -(void)pressedSpecific:(id)sender{
-    
+    [self returnState:KPScheduleButtonSpecificTime date:[NSDate dateWithDaysFromNow:14]];
 }
 -(void)pressedUnspecified:(id)sender{
     [self returnState:KPScheduleButtonUnscheduled date:nil];

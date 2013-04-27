@@ -10,17 +10,17 @@ extern const struct KPToDoAttributes {
 	__unsafe_unretained NSString *order;
 	__unsafe_unretained NSString *schedule;
 	__unsafe_unretained NSString *state;
-	__unsafe_unretained NSString *tags;
 	__unsafe_unretained NSString *title;
 } KPToDoAttributes;
 
 extern const struct KPToDoRelationships {
+	__unsafe_unretained NSString *tags;
 } KPToDoRelationships;
 
 extern const struct KPToDoFetchedProperties {
 } KPToDoFetchedProperties;
 
-
+@class KPTag;
 
 
 
@@ -96,16 +96,6 @@ extern const struct KPToDoFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSString* tags;
-
-
-
-//- (BOOL)validateTags:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
 @property (nonatomic, strong) NSString* title;
 
 
@@ -116,10 +106,22 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *tags;
+
+- (NSMutableSet*)tagsSet;
+
+
+
+
 
 @end
 
 @interface _KPToDo (CoreDataGeneratedAccessors)
+
+- (void)addTags:(NSSet*)value_;
+- (void)removeTags:(NSSet*)value_;
+- (void)addTagsObject:(KPTag*)value_;
+- (void)removeTagsObject:(KPTag*)value_;
 
 @end
 
@@ -159,16 +161,15 @@ extern const struct KPToDoFetchedProperties {
 
 
 
-- (NSString*)primitiveTags;
-- (void)setPrimitiveTags:(NSString*)value;
-
-
-
-
 - (NSString*)primitiveTitle;
 - (void)setPrimitiveTitle:(NSString*)value;
 
 
+
+
+
+- (NSMutableSet*)primitiveTags;
+- (void)setPrimitiveTags:(NSMutableSet*)value;
 
 
 @end

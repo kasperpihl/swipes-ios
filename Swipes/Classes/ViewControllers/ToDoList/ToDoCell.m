@@ -7,7 +7,9 @@
 //
 
 #import "ToDoCell.h"
+#import "KPToDo.h"
 #import "UtilityClass.h"
+#import "ToDoHandler.h"
 #define LAYER_VIEW_TAG 1
 #define OVERLAY_VIEW_TAG 2
 @interface ToDoCell ()
@@ -29,10 +31,34 @@
     }
     return self;
 }
+-(void)changeToDo:(KPToDo *)toDo{
+    
+}
+-(void)setCellType:(CellType)cellType{
+    if(_cellType != cellType){
+        _cellType = cellType;
+        self.selectedBackgroundView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
+        /*self.contentView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
+        self.textLabel.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];*/
+        CellType firstCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
+        CellType secondCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState2];
+        CellType thirdCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState3];
+        CellType fourthCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState4];
+        [self setFirstColor:[TODOHANDLER colorForCellType:firstCell]];
+        [self setSecondColor:[TODOHANDLER colorForCellType:secondCell]];
+        [self setThirdColor:[TODOHANDLER colorForCellType:thirdCell]];
+        [self setFourthColor:[TODOHANDLER colorForCellType:fourthCell]];
+        [self setFirstIconName:[TODOHANDLER iconNameForCellType:firstCell]];
+        [self setSecondIconName:[TODOHANDLER iconNameForCellType:secondCell]];
+        [self setThirdIconName:[TODOHANDLER iconNameForCellType:thirdCell]];
+        [self setFourthIconName:[TODOHANDLER iconNameForCellType:fourthCell]];
+        self.activatedDirection = [TODOHANDLER directionForCellType:cellType];
+    }
+}
 -(void)setHighlighted:(BOOL)highlighted{
     [super setHighlighted:highlighted];
 }
 -(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
-    NSLog(@"setting highlighted animation");
+    //NSLog(@"setting highlighted animation");
 }
 @end

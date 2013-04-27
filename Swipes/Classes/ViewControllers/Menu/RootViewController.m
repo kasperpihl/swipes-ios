@@ -12,8 +12,9 @@
 #import "FacebookCommunicator.h"
 #import "KPSegmentedViewController.h"
 #import "ToDoListViewController.h"
-
-
+#import "ScheduleViewController.h"
+#import "TodayViewController.h"
+#import "DoneViewController.h"
 
 @interface RootViewController () <UINavigationControllerDelegate>
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
@@ -35,12 +36,9 @@ static RootViewController *sharedObject;
 
 -(void)setupMenu{
     if(!self.menuViewController){
-        ToDoListViewController *vc1 = [[ToDoListViewController alloc] init];
-        vc1.state = @"schedule";
-        ToDoListViewController *vc2 = [[ToDoListViewController alloc] init];
-        vc2.state = @"today";
-        ToDoListViewController *vc3 = [[ToDoListViewController alloc] init];
-        vc3.state = @"done";
+        ScheduleViewController *vc1 = [[ScheduleViewController alloc] init];
+        TodayViewController *vc2 = [[TodayViewController alloc] init];
+        DoneViewController *vc3 = [[DoneViewController alloc] init];
         KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3] titles:@[@"Schedule",@"Today",@"Done"]];
         self.menuViewController = menuViewController;
         self.viewControllers = @[menuViewController];

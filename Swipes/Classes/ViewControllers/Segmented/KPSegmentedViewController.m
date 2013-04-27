@@ -14,6 +14,7 @@
 #import "KPToDo.h"
 #import "UtilityClass.h"
 #import "AKSegmentedControl.h"
+#import "KPAddTagPanel.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
@@ -24,7 +25,7 @@
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPPickerViewDataSource>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPPickerViewDataSource,KPAddTagDelegate>
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) NSMutableArray *titles;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
@@ -65,6 +66,16 @@
     [self changeToIndex:1];
     [self.addPanel show:YES];
     //[self.menuViewController.segmentedControl setSelectedSegmentIndex:1];
+}
+-(void)tagPanel:(KPAddTagPanel *)tagPanel closedWithSelectedTags:(NSArray *)selectedTags unselectedTags:(NSArray *)unselectedTags{
+    [self show:YES controlsAnimated:YES];
+}
+-(void)pressedTag:(id)sender{
+    [self show:NO controlsAnimated:YES];
+    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.navigationController.view.bounds];
+    tagView.tagDelegate = self;
+    [self.navigationController.view addSubview:tagView];
+    [tagView show:YES];
 }
 -(void)pressedDelete:(id)sender{
     [UTILITY confirmBoxWithTitle:@"Delete items" andMessage:@"Are you sure?" block:^(BOOL succeeded, NSError *error) {

@@ -7,7 +7,8 @@
 //
 
 #import "MCSwipeTableViewCell.h"
-
+@class KPToDo;
 @interface ToDoCell : MCSwipeTableViewCell
 @property (nonatomic) CellType cellType;
+-(void)changeToDo:(KPToDo*)toDo;
 @end

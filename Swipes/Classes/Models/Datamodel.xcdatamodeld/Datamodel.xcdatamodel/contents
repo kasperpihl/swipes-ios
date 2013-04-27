@@ -6,17 +6,22 @@
         <attribute name="parseClassName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
+    <entity name="Tag" representedClassName="KPTag" parentEntity="ParseObject" syncable="YES">
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="todos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ToDo" inverseName="tags" inverseEntity="ToDo" syncable="YES"/>
+    </entity>
     <entity name="ToDo" representedClassName="KPToDo" parentEntity="ParseObject" syncable="YES">
         <attribute name="completionDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="schedule" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tags" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="todos" inverseEntity="Tag" syncable="YES"/>
     </entity>
     <elements>
         <element name="ParseObject" positionX="160" positionY="192" width="128" height="105"/>
         <element name="ToDo" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="Tag" positionX="160" positionY="192" width="128" height="75"/>
     </elements>
 </model>

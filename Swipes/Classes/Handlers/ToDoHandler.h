@@ -15,5 +15,7 @@
 -(NSString*)stateForCellType:(CellType)type;
 -(UIColor*)colorForCellType:(CellType)type;
 -(NSString*)iconNameForCellType:(CellType)type;
--(void)scheduleToDo:(KPToDo*)toDo forDate:(NSDate*)date;
+-(void)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date;
+-(void)completeToDos:(NSArray*)toDoArray;
+-(void)setForTodayToDos:(NSArray*)toDoArray;
 @end
