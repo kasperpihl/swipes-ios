@@ -21,7 +21,7 @@
 #define ADD_BUTTON_MARGIN_BOTTOM 0
 #define CONTENT_VIEW_TAG 1000
 #define CONTROLS_VIEW_TAG 1001
-#define INTERESTED_SEGMENT_RECT CGRectMake(0,0,200,37)
+#define INTERESTED_SEGMENT_RECT CGRectMake(0,0,148,44)
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
@@ -116,11 +116,11 @@
 	if (!_segmentedControl) {
 		//_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];
         AKSegmentedControl *segmentedControl = [[AKSegmentedControl alloc] initWithFrame:INTERESTED_SEGMENT_RECT];
+        UIImage *backgroundImage = [UIImage imageNamed:@"segmented_bg"];
+        [segmentedControl setBackgroundImage:backgroundImage];
         [segmentedControl setSelectedIndex: DEFAULT_SELECTED_INDEX];
         [segmentedControl addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventValueChanged];
-        UIImage *backgroundImage = [[UIImage imageNamed:@"segmented-bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
-        [segmentedControl setBackgroundImage:backgroundImage];
-        [segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(2.0, 2.0, 3.0, 2.0)];
+        [segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 2, 0, 2)];
         [segmentedControl setSegmentedControlMode:AKSegmentedControlModeSticky];
         [segmentedControl setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
         UIButton *buttonSchedule = [self buttonForSegment:KPSegmentButtonSchedule];
@@ -134,33 +134,30 @@
 }
 -(UIButton*)buttonForSegment:(KPSegmentButtons)controlButton{
     UIButton *button = [[UIButton alloc] init];
-    UIImage *backgroundImage;
     UIImage *normalImage;
+    UIImage *selectedImage;
     UIImage *highlightedImage;
     switch (controlButton) {
         case KPSegmentButtonSchedule:
-            backgroundImage = [[UIImage imageNamed:@"segmented-bg-pressed-left.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 4.0, 0.0, 1.0)];
-            normalImage = [UIImage imageNamed:@"schedule"];
+            normalImage = [UIImage imageNamed:@"schedule.png"];
+            selectedImage = [UIImage imageNamed:@"schedule-selected"];
             highlightedImage = [UIImage imageNamed:@"schedule-highlighted"];
             break;
         case KPSegmentButtonToday:
-            backgroundImage = [[UIImage imageNamed:@"segmented-bg-pressed-center.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 4.0, 0.0, 1.0)];
             normalImage = [UIImage imageNamed:@"today"];
+            selectedImage = [UIImage imageNamed:@"today-selected"];
             highlightedImage = [UIImage imageNamed:@"today-highlighted"];
             break;
         case KPSegmentButtonDone:
-            backgroundImage = [[UIImage imageNamed:@"segmented-bg-pressed-right.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 1.0, 0.0, 4.0)];
             normalImage = [UIImage imageNamed:@"done"];
+            selectedImage = [UIImage imageNamed:@"done-selected"];
             highlightedImage = [UIImage imageNamed:@"done-highlighted"];
             break;
     }
-    [button setBackgroundImage:backgroundImage forState:UIControlStateHighlighted];
-    [button setBackgroundImage:backgroundImage forState:UIControlStateSelected];
-    [button setBackgroundImage:backgroundImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
-    [button setImage:normalImage forState:UIControlStateNormal];
-    [button setImage:normalImage forState:UIControlStateSelected];
-    [button setImage:normalImage forState:UIControlStateHighlighted];
-    [button setImage:normalImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [button setBackgroundImage:selectedImage forState:UIControlStateHighlighted];
+    [button setBackgroundImage:selectedImage forState:UIControlStateSelected];
+    [button setBackgroundImage:selectedImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [button setBackgroundImage:normalImage forState:UIControlStateNormal];
     button.imageView.animationDuration = 0.8;
     if(highlightedImage) button.imageView.animationImages = @[highlightedImage];
     return button;

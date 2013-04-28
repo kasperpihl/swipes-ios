@@ -56,6 +56,10 @@
 		A7680D41172D2AC000BCB2D9 /* schedule-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7680D3B172D2AC000BCB2D9 /* schedule-selected@2x.png */; };
 		A7680D42172D2AC000BCB2D9 /* today-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = A7680D3C172D2AC000BCB2D9 /* today-selected.png */; };
 		A7680D43172D2AC000BCB2D9 /* today-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7680D3D172D2AC000BCB2D9 /* today-selected@2x.png */; };
+		A7680D46172D2E5900BCB2D9 /* segmented_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = A7680D44172D2E5900BCB2D9 /* segmented_bg.png */; };
+		A7680D47172D2E5900BCB2D9 /* segmented_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7680D45172D2E5900BCB2D9 /* segmented_bg@2x.png */; };
+		A7680D4B172D34F900BCB2D9 /* add_panel_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A7680D49172D34F900BCB2D9 /* add_panel_background.png */; };
+		A7680D4C172D34F900BCB2D9 /* add_panel_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7680D4A172D34F900BCB2D9 /* add_panel_background@2x.png */; };
 		A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76B2386172C06CC00F742C2 /* ScheduleViewController.m */; };
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
@@ -175,6 +179,10 @@
 		A7680D3B172D2AC000BCB2D9 /* schedule-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule-selected@2x.png"; sourceTree = "<group>"; };
 		A7680D3C172D2AC000BCB2D9 /* today-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today-selected.png"; sourceTree = "<group>"; };
 		A7680D3D172D2AC000BCB2D9 /* today-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today-selected@2x.png"; sourceTree = "<group>"; };
+		A7680D44172D2E5900BCB2D9 /* segmented_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = segmented_bg.png; sourceTree = "<group>"; };
+		A7680D45172D2E5900BCB2D9 /* segmented_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "segmented_bg@2x.png"; sourceTree = "<group>"; };
+		A7680D49172D34F900BCB2D9 /* add_panel_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_panel_background.png; sourceTree = "<group>"; };
+		A7680D4A172D34F900BCB2D9 /* add_panel_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_panel_background@2x.png"; sourceTree = "<group>"; };
 		A76B2385172C06CC00F742C2 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScheduleViewController.h; path = Schedule/ScheduleViewController.h; sourceTree = "<group>"; };
 		A76B2386172C06CC00F742C2 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScheduleViewController.m; path = Schedule/ScheduleViewController.m; sourceTree = "<group>"; };
 		A7778CCA16EB5884004D95E5 /* Swipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -334,6 +342,15 @@
 				A7680D35172D272300BCB2D9 /* navbar@2x.png */,
 			);
 			path = Navbar;
+			sourceTree = "<group>";
+		};
+		A7680D48172D34F900BCB2D9 /* AddPanel */ = {
+			isa = PBXGroup;
+			children = (
+				A7680D49172D34F900BCB2D9 /* add_panel_background.png */,
+				A7680D4A172D34F900BCB2D9 /* add_panel_background@2x.png */,
+			);
+			path = AddPanel;
 			sourceTree = "<group>";
 		};
 		A7778CC116EB5884004D95E5 = {
@@ -554,6 +571,7 @@
 		A781288217294C56002226C8 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A7680D48172D34F900BCB2D9 /* AddPanel */,
 				A7680D33172D272300BCB2D9 /* Navbar */,
 				A781288317294C56002226C8 /* AKSegmentedControl */,
 				A781289A17294C56002226C8 /* Buttons */,
@@ -572,6 +590,8 @@
 		A781288317294C56002226C8 /* AKSegmentedControl */ = {
 			isa = PBXGroup;
 			children = (
+				A7680D44172D2E5900BCB2D9 /* segmented_bg.png */,
+				A7680D45172D2E5900BCB2D9 /* segmented_bg@2x.png */,
 				A7680D38172D2AC000BCB2D9 /* done-selected.png */,
 				A7680D39172D2AC000BCB2D9 /* done-selected@2x.png */,
 				A7680D3A172D2AC000BCB2D9 /* schedule-selected.png */,
@@ -849,6 +869,10 @@
 				A7680D41172D2AC000BCB2D9 /* schedule-selected@2x.png in Resources */,
 				A7680D42172D2AC000BCB2D9 /* today-selected.png in Resources */,
 				A7680D43172D2AC000BCB2D9 /* today-selected@2x.png in Resources */,
+				A7680D46172D2E5900BCB2D9 /* segmented_bg.png in Resources */,
+				A7680D47172D2E5900BCB2D9 /* segmented_bg@2x.png in Resources */,
+				A7680D4B172D34F900BCB2D9 /* add_panel_background.png in Resources */,
+				A7680D4C172D34F900BCB2D9 /* add_panel_background@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

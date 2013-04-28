@@ -97,7 +97,7 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     /*if(self.selectedRow == indexPath.row+1) return 120;
-    else*/ return 85;
+    else*/ return CELL_HEIGHT;
 }
 -(ToDoCell*)readyCell:(ToDoCell*)cell{
     [cell setMode:MCSwipeTableViewCellModeExit];
@@ -133,7 +133,7 @@
     //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
     cell.cellType = self.cellType;
     KPToDo *toDo = [self itemForIndexPath:indexPath];
-    cell.textLabel.text = toDo.title;
+    [cell changeToDo:toDo];
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.selectedRows removeObject:indexPath];

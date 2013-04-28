@@ -12,9 +12,29 @@
 #import "ToDoHandler.h"
 #define LAYER_VIEW_TAG 1
 #define OVERLAY_VIEW_TAG 2
+#define TITLE_LABEL_TAG 3
+#define TAGS_LABEL_TAG 4
+
+#define TITLE_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Medium" size:18]
+#define TAGS_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue" size:12]
+
+#define TITLE_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
+#define TAGS_LABEL_COLOR [UtilityClass colorWithRed:153 green:153 blue:153 alpha:1]
+
+#define LABEL_X 19
+#define LABEL_WIDTH (320-(2*LABEL_X))
+#define TITLE_DELTA_Y -2
+#define LABEL_SPACE 2
+
+#define TITLE_LABEL_HEIGHT [@"Tg" sizeWithFont:TITLE_LABEL_FONT].height
+#define TAGS_LABEL_HEIGHT [@"Tg" sizeWithFont:TAGS_LABEL_FONT].height
+
+
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *layerView;
 @property (nonatomic,weak) IBOutlet UIView *overlayView;
+@property (nonatomic,weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
 @end
 @implementation ToDoCell
 
@@ -23,6 +43,25 @@
     if (self) {
         self.contentView.backgroundColor = [UIColor whiteColor];
         self.textLabel.backgroundColor = [UIColor whiteColor];
+        
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X,TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
+        titleLabel.tag = TITLE_LABEL_TAG;
+        titleLabel.numberOfLines = 1;
+        titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
+        titleLabel.font = TITLE_LABEL_FONT;
+        titleLabel.textColor = TITLE_LABEL_COLOR;
+        titleLabel.backgroundColor = [UIColor clearColor];
+        [self.contentView addSubview:titleLabel];
+        self.titleLabel = (UILabel*)[self.contentView viewWithTag:TITLE_LABEL_TAG];
+        
+        UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, titleLabel.frame.origin.y+titleLabel.frame.size.height+LABEL_SPACE, LABEL_WIDTH, TAGS_LABEL_HEIGHT)];
+        tagsLabel.tag = TAGS_LABEL_TAG;
+        tagsLabel.numberOfLines = 1;
+        tagsLabel.font = TAGS_LABEL_FONT;
+        tagsLabel.backgroundColor = [UIColor clearColor];
+        tagsLabel.textColor = TAGS_LABEL_COLOR;
+        [self.contentView addSubview:tagsLabel];
+        self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
         UIView *overlayView = [[UIView alloc] initWithFrame:self.bounds];
         overlayView.backgroundColor = [UtilityClass colorWithRed:155 green:155 blue:155 alpha:0.6];
@@ -33,6 +72,10 @@
 }
 -(void)changeToDo:(KPToDo *)toDo{
     
+    self.titleLabel.text = toDo.title;
+    //[self.titleLabel sizeToFit];
+    
+    self.tagsLabel.text = @"Black Squid, Design";
 }
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){

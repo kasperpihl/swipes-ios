@@ -57,8 +57,8 @@ NS_INLINE void mainBlock(void (^block)(void))
 }
 
 #define SWIPES_BLUE [UIColor colorWithRed:47.0 / 255.0 green:141.0 / 255.0 blue:211.0 / 255.0 alpha:1.0]
-#define DONE_COLOR [UIColor colorWithRed:85.0 / 255.0 green:213.0 / 255.0 blue:80.0 / 255.0 alpha:1.0]
-#define SCHEDULE_COLOR [UIColor colorWithRed:254.0 / 255.0 green:217.0 / 255.0 blue:56.0 / 255.0 alpha:1.0]
+#define DONE_COLOR [UIColor colorWithRed:182.0 / 255.0 green:225.0 / 255.0 blue:93.0 / 255.0 alpha:1.0]
+#define SCHEDULE_COLOR [UIColor colorWithRed:253.0 / 255.0 green:130.0 / 255.0 blue:109.0 / 255.0 alpha:1.0]
 
 #define notify(notifcation,selectr) [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectr) name:notifcation object:nil]
 #define clearNotify() [[NSNotificationCenter defaultCenter] removeObserver:self]

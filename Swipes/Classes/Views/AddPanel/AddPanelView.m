@@ -16,17 +16,19 @@
 #define TEXT_FIELD_TAG 4
 #define ANIMATION_DURATION 0.25f
 
-#define TEXT_FIELD_MARGIN_SIDES 10
-#define TEXT_FIELD_MARGIN_BOTTOM 8
-#define TEXT_FIELD_HEIGHT 28
-#define FORM_VIEW_HEIGHT 44
+
+#define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
+#define TEXT_FIELD_MARGIN_SIDES 12
+#define TEXT_FIELD_MARGIN_BOTTOM 1
+#define TEXT_FIELD_HEIGHT 30
+#define FORM_VIEW_HEIGHT 41
 #define KEYBOARD_HEIGHT 216
 
 @interface AddPanelView () <UITextFieldDelegate>
 @property (nonatomic,weak) IBOutlet UIView *backgroundView;
 @property (nonatomic,weak) IBOutlet KPPickerView *pickerView;
-@property (nonatomic,weak) IBOutlet UIView *formView;
-@property (nonatomic,weak) IBOutlet SLGlowingTextField *textField;
+@property (nonatomic,weak) IBOutlet UIImageView *formView;
+@property (nonatomic,weak) IBOutlet UITextField *textField;
 @end
 @implementation AddPanelView
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -64,26 +66,20 @@
         
         
         
-        UIView *formView = [[UIView alloc] initWithFrame:CGRectMake(0, frame.size.height, frame.size.width, FORM_VIEW_HEIGHT)];
+        UIImageView *formView = [[UIImageView alloc] initWithFrame:CGRectMake(0, frame.size.height, frame.size.width, 41)];
         formView.tag = FORM_VIEW_TAG;
-        formView.backgroundColor = [UIColor whiteColor];
-        
-        /*KPPickerView *pickerView = [[KPPickerView alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, 8, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), 30)];
-        pickerView.tag = PICKER_VIEW_TAG;
-        pickerView.backgroundColor = [UIColor whiteColor];
-        [formView addSubview:pickerView];
-        self.pickerView = (KPPickerView*)[formView viewWithTag:PICKER_VIEW_TAG];
-        */
-        SLGlowingTextField *textField = [[SLGlowingTextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, FORM_VIEW_HEIGHT-TEXT_FIELD_MARGIN_BOTTOM-TEXT_FIELD_HEIGHT, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), TEXT_FIELD_HEIGHT)];
+        formView.image = [UIImage imageNamed:@"add_panel_background"];
+        UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, FORM_VIEW_HEIGHT-TEXT_FIELD_MARGIN_BOTTOM-TEXT_FIELD_HEIGHT, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), TEXT_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
+        textField.font = TEXT_FIELD_FONT;
         textField.returnKeyType = UIReturnKeyNext;
         textField.borderStyle = UITextBorderStyleNone;
         textField.delegate = self;
         textField.placeholder = @"Add a new item to Today";
         [formView addSubview:textField];
-        self.textField = (SLGlowingTextField*)[formView viewWithTag:TEXT_FIELD_TAG];
+        self.textField = (UITextField*)[formView viewWithTag:TEXT_FIELD_TAG];
         [self addSubview:formView];
-        self.formView = [self viewWithTag:FORM_VIEW_TAG];
+        self.formView = (UIImageView*)[self viewWithTag:FORM_VIEW_TAG];
     }
     
     return self;
