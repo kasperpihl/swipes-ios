@@ -18,8 +18,10 @@
                   clientKey:@"vDxpjjyIDhp5DX30WnpTfsZANPCsFCdmDPpw31vj"];
     [PFFacebookUtils initializeFacebook];
     KPCORE;
+    NSLog(@"%@",[UIFont fontNamesForFamilyName:@"Franchise-Bold"]);
     /*MSNavigationPaneViewController *paneViewController = (MSNavigationPaneViewController *)self.window.rootViewController;
     ROOT_CONTROLLER.paneNavigationViewController = paneViewController;*/
+    
     return YES;
 }
 - (void)application:(UIApplication *)application

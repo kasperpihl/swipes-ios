@@ -43,7 +43,7 @@
 @implementation KPSegmentedViewController
 -(AddPanelView *)addPanel{
     if(!_addPanel){
-        _addPanel = [[AddPanelView alloc] initWithFrame:self.navigationController.view.bounds];
+        _addPanel = [[AddPanelView alloc] initWithFrame:self.navigationController.view.frame];
         _addPanel.addDelegate = self;
         //_addPanel.forwardDatasource = self;
         [self.navigationController.view addSubview:_addPanel];
@@ -72,8 +72,8 @@
 }
 -(void)pressedTag:(id)sender{
     [self show:NO controlsAnimated:YES];
-    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.navigationController.view.bounds];
-    tagView.tagDelegate = self;
+    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.navigationController.view.frame];
+    //tagView.tagDelegate = self;
     [self.navigationController.view addSubview:tagView];
     [tagView show:YES];
 }
@@ -238,7 +238,6 @@
         
         currentViewController.view.frame = self.view.frame;
         [self.contentView addSubview:currentViewController.view];
-        
         [currentViewController didMoveToParentViewController:self];
     }
 }

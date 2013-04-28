@@ -16,16 +16,13 @@
 
 @interface KPAddTagPanel ()
 @property (nonatomic,weak) IBOutlet UIView *backgroundView;
-@property (nonatomic,strong) NSMutableArray *selectedTags;
-@property (nonatomic,strong) NSMutableArray *unselectedTags;
-@property (nonatomic,weak) IBOutlet UIView *tagView;
 @end
 @implementation KPAddTagPanel
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectSetPos(frame, 0, 0)];
+        UIView *backgroundView = [[UIView alloc] initWithFrame:self.bounds];
         backgroundView.tag = BACKGROUND_VIEW_TAG;
         backgroundView.backgroundColor = [UtilityClass colorWithRed:125 green:125 blue:125 alpha:0.5];
         
@@ -37,8 +34,7 @@
         self.backgroundView = [self viewWithTag:BACKGROUND_VIEW_TAG];
         
         
-        UIView *tagView = [[UIView alloc] initWithFrame:CGRectMake(0, 5, 320, 60)];
-        tagView.backgroundColor = [UIColor whiteColor];
+        KPTagList *tagView = [[KPTagList alloc] initWithFrame:CGRectMake(0, 5, 320, 60)];
         tagView.tag = TAG_VIEW_TAG;
         [self addSubview:tagView];
         
@@ -79,7 +75,7 @@
             self.backgroundView.alpha = 0;
         };
         completionBlock = ^(void){
-            if([self.tagDelegate respondsToSelector:@selector(tagPanel:closedWithSelectedTags:unselectedTags:)]) [self.tagDelegate tagPanel:self closedWithSelectedTags:self.selectedTags unselectedTags:self.unselectedTags];
+            /*if([self.tagDelegate respondsToSelector:@selector(tagPanel:closedWithSelectedTags:unselectedTags:)]) [self.tagDelegate tagPanel:self closedWithSelectedTags:self.selectedTags unselectedTags:self.unselectedTags];*/
             [self removeFromSuperview];
         };
         

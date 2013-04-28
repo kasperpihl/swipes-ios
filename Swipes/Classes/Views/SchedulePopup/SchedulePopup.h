@@ -10,11 +10,11 @@
 
 typedef NS_ENUM(NSUInteger, KPScheduleButtons){
     KPScheduleButtonCancel = 0,
-    KPScheduleButtonTomorrow,
-    KPScheduleButtonEveryday,
-    KPScheduleButtonInAWeek,
-    KPScheduleButtonSpecificTime,
-    KPScheduleButtonUnscheduled
+    KPScheduleButtonTomorrow = 1,
+    KPScheduleButtonEveryday = 3,
+    KPScheduleButtonInAWeek = 2,
+    KPScheduleButtonSpecificTime = 9,
+    KPScheduleButtonUnscheduled = 5
 };
 typedef void (^SchedulePopupBlock)(KPScheduleButtons button, NSDate *chosenDate);
 @interface SchedulePopup : UIView

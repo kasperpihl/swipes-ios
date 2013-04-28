@@ -45,11 +45,15 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>72C</string>
+	<string>74A</string>
 	<key>FacebookAppID</key>
 	<string>507630089298523</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Franchise-Bold.ttf</string>
+	</array>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard</string>
 	<key>UIPrerenderedIcon</key>

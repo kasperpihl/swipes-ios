@@ -7,16 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KPTagList.h"
 @class KPAddTagPanel;
-@protocol KPAddTagDelegate
--(NSArray*)selectedTagsForTagPanel:(KPAddTagPanel*)tagPanel;
--(NSArray*)unselectedTagsForTagPanel:(KPAddTagPanel*)tagPanel;
-@optional
--(void)didCreateTag:(NSString*)tag;
--(void)tagPanel:(KPAddTagPanel*)tagPanel closedWithSelectedTags:(NSArray*)selectedTags unselectedTags:(NSArray*)unselectedTags;
-@end
+
 @interface KPAddTagPanel : UIView
-@property (nonatomic,weak) NSObject<KPAddTagDelegate> *tagDelegate;
--(void)addTags:(NSArray*)tags;
+@property (nonatomic,weak) IBOutlet KPTagList *tagView;
 -(void)show:(BOOL)show;
 @end

@@ -1,5 +1,5 @@
 //
-//  RootViewController2.m
+//  RootViewController.m
 //  Swipes
 //
 //  Created by Kasper Pihl Tornøe on 25/04/13.
@@ -47,9 +47,13 @@ static RootViewController *sharedObject;
 
 #pragma mark - Helping methods
 #pragma mark - ViewController methods
+-(void)setupAppearance{
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navbar"] forBarMetrics:UIBarMetricsDefault];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setupAppearance];
     if(!sharedObject) sharedObject = self;
     [self setupMenu];
     

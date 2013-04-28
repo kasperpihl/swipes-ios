@@ -13,13 +13,16 @@
 #define POPUP_WIDTH 300
 #define CONTENT_VIEW_TAG 1
 
+#define SEPERATOR_COLOR_DARK [UtilityClass colorWithRed:77 green:77 blue:77 alpha:0.7]
+#define SEPERATOR_COLOR_LIGHT [UtilityClass colorWithRed:128 green:128 blue:128 alpha:0.5]
+#define SEPERATOR_MARGIN 0.02
+#define SEPERATOR_WIDTH 2
 
-#define ROWS_NUMBER 2
-#define COLUMNS_NUMBER 2
-#define BUTTON_PADDING 20
-#define CONTENT_VIEW_HEIGHT 230
-#define CONTENT_VIEW_WIDTH 250
-#define UNSPECIFIED_HEIGHT 50
+#define BUTTON_FONT [UIFont fontWithName:@"Franchise-Bold" size:20]
+
+#define GRID_NUMBER 3
+#define BUTTON_PADDING 0
+#define CONTENT_VIEW_SIZE 300
 #define ANIMATION_SCALE 0.1
 #define ANIMATION_DURATION 0.25
 #define EXTRA_SCALE 1.02
@@ -63,6 +66,28 @@
 -(void)pressedUnspecified:(id)sender{
     [self returnState:KPScheduleButtonUnscheduled date:nil];
 }
+-(UIView*)seperatorWithSize:(CGFloat)size vertical:(BOOL)vertical{
+    CGFloat width = (vertical) ? SEPERATOR_WIDTH : size;
+    CGFloat height = (vertical) ? size : SEPERATOR_WIDTH;
+    UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
+    
+    UIView *seperator1,*seperator2;
+    if(vertical){
+        seperator1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SEPERATOR_WIDTH/2, height)];
+        seperator1.backgroundColor = SEPERATOR_COLOR_DARK;
+        seperator2 = [[UIView alloc] initWithFrame:CGRectMake(SEPERATOR_WIDTH/2, 0, SEPERATOR_WIDTH/2, height)];
+        seperator2.backgroundColor = SEPERATOR_COLOR_LIGHT;
+    }
+    else{
+        seperator1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, SEPERATOR_WIDTH/2)];
+        seperator1.backgroundColor = SEPERATOR_COLOR_LIGHT;
+        seperator2 = [[UIView alloc] initWithFrame:CGRectMake(0, SEPERATOR_WIDTH/2, width, SEPERATOR_WIDTH/2)];
+        seperator2.backgroundColor = SEPERATOR_COLOR_DARK;
+    }
+    [seperator addSubview:seperator1];
+    [seperator addSubview:seperator2];
+    return seperator;
+}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -73,43 +98,65 @@
         backgroundButton.frame = backgroundView.bounds;
         [backgroundButton addTarget:self action:@selector(pressedBackground:) forControlEvents:UIControlEventTouchUpInside];
         [backgroundView addSubview:backgroundButton];
+        
+        
         [self addSubview:backgroundView];
         
         
-        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake((self.frame.size.width-CONTENT_VIEW_WIDTH)/2, (self.frame.size.height-CONTENT_VIEW_HEIGHT)/2, CONTENT_VIEW_WIDTH, CONTENT_VIEW_HEIGHT+UNSPECIFIED_HEIGHT)];
-        contentView.backgroundColor = [UtilityClass colorWithRed:50 green:50 blue:50 alpha:0.8];
-        contentView.layer.cornerRadius = 10;
+        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake((self.frame.size.width-CONTENT_VIEW_SIZE)/2, (self.frame.size.height-CONTENT_VIEW_SIZE)/2, CONTENT_VIEW_SIZE, CONTENT_VIEW_SIZE)];
+        contentView.backgroundColor = [UtilityClass colorWithRed:77 green:77 blue:77 alpha:0.9];
+        contentView.layer.cornerRadius = 5;
         contentView.tag = CONTENT_VIEW_TAG;
         contentView.hidden = YES;
         
         
+        for(NSInteger i = 1 ; i < GRID_NUMBER ; i++){
+            UIView *verticalSeperatorView = [self seperatorWithSize:CONTENT_VIEW_SIZE*(1-(SEPERATOR_MARGIN*2)) vertical:YES];
+            UIView *horizontalSeperatorView = [self seperatorWithSize:CONTENT_VIEW_SIZE*(1-(SEPERATOR_MARGIN*2)) vertical:NO];
+            verticalSeperatorView.frame = CGRectSetPos(verticalSeperatorView.frame, CONTENT_VIEW_SIZE/GRID_NUMBER*i-(SEPERATOR_WIDTH/2),CONTENT_VIEW_SIZE*SEPERATOR_MARGIN);
+            horizontalSeperatorView.frame = CGRectSetPos(horizontalSeperatorView.frame,CONTENT_VIEW_SIZE*SEPERATOR_MARGIN, CONTENT_VIEW_SIZE/GRID_NUMBER*i-(SEPERATOR_WIDTH/2));
+            [contentView addSubview:verticalSeperatorView];
+            [contentView addSubview:horizontalSeperatorView];
+        }
         
-        UIButton *tomorrowButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        
+        UIButton *tomorrowButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        tomorrowButton.titleLabel.font = BUTTON_FONT;
+        tomorrowButton.titleLabel.textColor = [UIColor whiteColor];
         [tomorrowButton setTitle:@"Tomorrow" forState:UIControlStateNormal];
         tomorrowButton.frame = [self frameForButtonNumber:KPScheduleButtonTomorrow];
         [tomorrowButton addTarget:self action:@selector(pressedTomorrow:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:tomorrowButton];
         
-        UIButton *everyDayButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        UIButton *everyDayButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [everyDayButton setTitle:@"Everyday" forState:UIControlStateNormal];
+        everyDayButton.titleLabel.font = BUTTON_FONT;
+        everyDayButton.titleLabel.textColor = [UIColor whiteColor];
         everyDayButton.frame = [self frameForButtonNumber:KPScheduleButtonEveryday];
         [everyDayButton addTarget:self action:@selector(pressedEveryday:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:everyDayButton];
         
-        UIButton *inAWeekButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        UIButton *inAWeekButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        inAWeekButton.titleLabel.textColor = [UIColor whiteColor];
+        inAWeekButton.titleLabel.font = BUTTON_FONT;
         [inAWeekButton setTitle:@"In a week" forState:UIControlStateNormal];
         inAWeekButton.frame = [self frameForButtonNumber:KPScheduleButtonInAWeek];
         [inAWeekButton addTarget:self action:@selector(pressedInAWeek:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:inAWeekButton];
         
-        UIButton *specificTimeButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [specificTimeButton setTitle:@"Specific time" forState:UIControlStateNormal];
+        UIButton *specificTimeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        specificTimeButton.titleLabel.textColor = [UIColor whiteColor];
+        specificTimeButton.titleLabel.font = BUTTON_FONT;
+        [specificTimeButton setTitle:@"Pick a date" forState:UIControlStateNormal];
         specificTimeButton.frame = [self frameForButtonNumber:KPScheduleButtonSpecificTime];
         [contentView addSubview:specificTimeButton];
         
-        UIButton *unspecifiedButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [unspecifiedButton setTitle:@"No specified time" forState:UIControlStateNormal];
-        unspecifiedButton.frame = CGRectMake(30, CONTENT_VIEW_HEIGHT, CONTENT_VIEW_WIDTH-2*30, 44);
+        UIButton *unspecifiedButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        unspecifiedButton.titleLabel.textColor = [UIColor whiteColor];
+        unspecifiedButton.titleLabel.font = BUTTON_FONT;
+        [unspecifiedButton setTitle:@"Unspecified" forState:UIControlStateNormal];
+        unspecifiedButton.frame = [self frameForButtonNumber:KPScheduleButtonUnscheduled];
+        /*unspecifiedButton.frame = CGRectMake(30, CONTENT_VIEW_HEIGHT, CONTENT_VIEW_WIDTH-2*30, 44);*/
         [unspecifiedButton addTarget:self action:@selector(pressedUnspecified:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:unspecifiedButton];
         
@@ -119,11 +166,11 @@
     return self;
 }
 -(CGRect)frameForButtonNumber:(NSInteger)number{
-    CGFloat width = CONTENT_VIEW_WIDTH/COLUMNS_NUMBER-(2*BUTTON_PADDING);
-    CGFloat height = CONTENT_VIEW_HEIGHT/ROWS_NUMBER-(2*BUTTON_PADDING);
-    CGFloat x = ((number-1) % COLUMNS_NUMBER) * CONTENT_VIEW_WIDTH/COLUMNS_NUMBER + BUTTON_PADDING;
+    CGFloat width = CONTENT_VIEW_SIZE/GRID_NUMBER-(2*BUTTON_PADDING);
+    CGFloat height = CONTENT_VIEW_SIZE/GRID_NUMBER-(2*BUTTON_PADDING);
+    CGFloat x = ((number-1) % GRID_NUMBER) * CONTENT_VIEW_SIZE/GRID_NUMBER + BUTTON_PADDING;
     
-    CGFloat y = floor((number-1) / ROWS_NUMBER) * CONTENT_VIEW_HEIGHT/ROWS_NUMBER + BUTTON_PADDING;
+    CGFloat y = floor((number-1) / GRID_NUMBER) * CONTENT_VIEW_SIZE/GRID_NUMBER + BUTTON_PADDING;
     return CGRectMake(x, y, width, height);
 }
 -(void)show:(BOOL)show{
