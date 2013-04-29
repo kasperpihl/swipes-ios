@@ -72,6 +72,7 @@
         UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, FORM_VIEW_HEIGHT-TEXT_FIELD_MARGIN_BOTTOM-TEXT_FIELD_HEIGHT, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), TEXT_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
         textField.font = TEXT_FIELD_FONT;
+        textField.keyboardAppearance = UIKeyboardAppearanceAlert;
         textField.returnKeyType = UIReturnKeyNext;
         textField.borderStyle = UITextBorderStyleNone;
         textField.delegate = self;
@@ -81,7 +82,6 @@
         [self addSubview:formView];
         self.formView = (UIImageView*)[self viewWithTag:FORM_VIEW_TAG];
     }
-    
     return self;
 }
 -(void)show:(BOOL)show{
@@ -121,13 +121,5 @@
         }
     }];
 
-}
--(void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardDidHideNotification
-                                                  object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIKeyboardWillShowNotification
-                                                  object:nil];
 }
 @end

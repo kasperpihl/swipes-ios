@@ -2,8 +2,9 @@
 
 @interface KPToDo : _KPToDo {}
 -(void)changeToOrder:(NSInteger)newOrder;
--(void)changeState:(NSString*)state;
 -(void)setForToday;
 -(void)complete;
 -(void)scheduleForDate:(NSDate*)date;
+-(void)updateTagsString;
+-(NSString *)stringifyTags;
 @end

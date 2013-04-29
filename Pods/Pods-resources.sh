@@ -27,9 +27,3 @@ install_resource()
 }
 install_resource 'Facebook-iOS-SDK/src/FacebookSDKResources.bundle'
 install_resource 'Facebook-iOS-SDK/src/FBUserSettingsViewResources.bundle'
-install_resource 'UAModalPanel/UAModalPanel/Panel/Images/close.png'
-install_resource 'UAModalPanel/UAModalPanel/Panel/Images/close@2x.png'
-install_resource 'UAModalPanel/UAModalPanel/Panel/Images/modalButton-selected.png'
-install_resource 'UAModalPanel/UAModalPanel/Panel/Images/modalButton-selected@2x.png'
-install_resource 'UAModalPanel/UAModalPanel/Panel/Images/modalButton.png'
-install_resource 'UAModalPanel/UAModalPanel/Panel/Images/modalButton@2x.png'

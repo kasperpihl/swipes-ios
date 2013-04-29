@@ -24,7 +24,7 @@
 	return cell;
 }
 - (void)dragTableViewController:(KPReorderTableView *)dragTableViewController didBeginDraggingAtRow:(NSIndexPath *)dragRow{
-    self.isScrollingFast = YES;
+    [[self parent] show:NO controlsAnimated:YES];
     self.dragRow = dragRow;
     self.draggingObject = [self.items objectAtIndex:dragRow.row];
     [self deselectAllRows:self];
@@ -48,7 +48,6 @@
         [self update];
     }
     self.draggingObject = nil;
-    self.isScrollingFast = NO;
 }
 #pragma mark - UIViewControllerClasses
 - (void)viewDidLoad

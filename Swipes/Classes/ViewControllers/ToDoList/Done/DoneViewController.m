@@ -21,11 +21,12 @@
     [self sortItems];
 }
 -(void)sortItems{
-    self.sortedItems = [NSMutableDictionary dictionary];
+    self.sortedItems = [NSMutableArray array];
+    self.titleArray = [NSMutableArray array];
     for(KPToDo *toDo in self.items){
         NSDate *toDoDate = toDo.completionDate;
-        if(toDoDate.isToday) [self addItem:toDo toTitle:@"Today"];
-        else if(toDoDate.isYesterday) [self addItem:toDo toTitle:@"Yesterday"];
+        if(toDoDate.isToday) [self addItem:toDo withTitle:@"Today"];
+        else if(toDoDate.isYesterday) [self addItem:toDo withTitle:@"Yesterday"];
         else{
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             // this is imporant - we set our input date format to match our input string
@@ -33,7 +34,7 @@
             [dateFormatter setDateFormat:@"dd-MM-yyyy"];
             // voila!
             NSString *strDate = [dateFormatter stringFromDate:toDoDate];
-            [self addItem:toDo toTitle:strDate];
+            [self addItem:toDo withTitle:strDate];
         }
         
     }

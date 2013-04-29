@@ -13,10 +13,10 @@
 #import "KPSegmentedViewController.h"
 @interface ToDoListViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic,strong) NSMutableArray *items;
-@property (nonatomic,strong) NSMutableDictionary *sortedItems;
+@property (nonatomic,strong) NSMutableArray *titleArray;
+@property (nonatomic,strong) NSMutableArray *sortedItems;
 @property (nonatomic,strong) NSString *state;
 @property (nonatomic,weak) IBOutlet UITableView *tableView;
-@property (nonatomic) BOOL isScrollingFast;
 -(KPSegmentedViewController *)parent;
 -(ToDoCell*)readyCell:(ToDoCell*)cell;
 -(void)update;
@@ -25,6 +25,8 @@
 -(void)deselectAllRows:(id)sender;
 -(void)deleteSelectedItems:(id)sender;
 -(void)prepareTableView:(UITableView*)tableView;
+-(NSArray*)selectedItems;
 -(KPToDo*)itemForIndexPath:(NSIndexPath*)indexPath;
--(void)addItem:(KPToDo*)toDo toTitle:(NSString*)title;
+-(void)addItem:(KPToDo*)toDo withTitle:(NSString*)title;
+-(void)addItems:(NSMutableArray*)items withTitle:(NSString*)title;
 @end

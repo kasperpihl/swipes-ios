@@ -13,6 +13,7 @@
 #import "SchedulePopup.h"
 
 #define TABLEVIEW_TAG 500
+#define CONTENT_INSET_BOTTOM 100
 @interface ToDoListViewController ()<MCSwipeTableViewCellDelegate>
 
 @property (nonatomic,strong) MCSwipeTableViewCell *swipingCell;
@@ -66,13 +67,24 @@
     return _items;
 }
 - (UITableViewCell *)cell:(ToDoCell*)cell forRowAtIndexPath:(NSIndexPath *)indexPath{ return cell; }
-
--(void)addItem:(KPToDo*)toDo toTitle:(NSString*)title{
-    NSMutableArray *arrayOfItems = [self.sortedItems objectForKey:title];
-    if(!arrayOfItems){
-        [self.sortedItems setObject:[NSMutableArray array] forKey:title];
-        arrayOfItems = [self.sortedItems objectForKey:title];
+-(void)addItems:(NSMutableArray *)items withTitle:(NSString *)title{
+    NSMutableArray *arrayOfItems = [self arrayForTitle:title];
+    [arrayOfItems addObjectsFromArray:items];
+}
+-(NSMutableArray*)arrayForTitle:(NSString*)title{
+    NSInteger index = [self.titleArray indexOfObject:title];
+    NSMutableArray *arrayOfItems;
+    if(index != NSNotFound) arrayOfItems = [self.sortedItems objectAtIndex:index];
+    else{
+        [self.titleArray addObject:title];
+        [self.sortedItems addObject:[NSMutableArray array]];
+        arrayOfItems = [self.sortedItems lastObject];
     }
+    return arrayOfItems;
+    
+}
+-(void)addItem:(KPToDo*)toDo withTitle:(NSString*)title{
+    NSMutableArray *arrayOfItems = [self arrayForTitle:title];
     [arrayOfItems addObject:toDo];
 }
 
@@ -81,14 +93,13 @@
 #pragma mark - TableView delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if(self.sortedItems){
-        NSString *sectionIndex = [[self.sortedItems allKeys] objectAtIndex:section];
-        NSArray *itemsForSection = [self.sortedItems objectForKey:sectionIndex];
+        NSArray *itemsForSection = [self.sortedItems objectAtIndex:section];
         return itemsForSection.count;
     }
     return self.items.count;
 }
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    if(self.sortedItems) return [[self.sortedItems allKeys] objectAtIndex:section];
+    if(self.sortedItems) return [self.titleArray objectAtIndex:section];
     return nil;
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -116,19 +127,7 @@
 	return cell;
 }
 
--(void)deleteSelectedItems:(id)sender{
-    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
-    NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
-    for(NSIndexPath *indexPath in selectedIndexPaths){
-        KPToDo *toDo = [self itemForIndexPath:indexPath];
-        [toDo MR_deleteInContext:[NSManagedObjectContext MR_defaultContext]];
-        [indexSet addIndex:indexPath.row];
-    }
-    [self.items removeObjectsAtIndexes:indexSet];
-    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
-    [self.tableView deleteRowsAtIndexPaths:selectedIndexPaths withRowAnimation:UITableViewRowAnimationFade];
-    [self.selectedRows removeAllObjects];
-}
+
 -(void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
     cell.cellType = self.cellType;
@@ -162,12 +161,20 @@
     }
 }
 #pragma mark - UI Specific
-
+-(NSArray *)selectedItems{
+    NSMutableArray *array = [NSMutableArray array];
+    for(NSIndexPath *indexPath in self.selectedRows){
+        KPToDo *toDo = [self itemForIndexPath:indexPath];
+        NSLog(@"todo:%@",toDo);
+        [array addObject:toDo];
+    }
+    return array;
+}
 
 
 #pragma mark - ScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    if(self.tableView.frame.size.height - 150 >= self.tableView.contentSize.height) return;
+    //if(self.tableView.frame.size.height - 150 >= self.tableView.contentSize.height) return;
     CGPoint currentOffset = self.tableView.contentOffset;
     NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
     
@@ -179,8 +186,8 @@
         if (scrollSpeedNotAbs > 0.5 && currentOffset.y > 0) {
             [[self parent] show:NO controlsAnimated:YES];
         }
-        else if(distance < -10.0 && (currentOffset.y+self.tableView.frame.size.height) < self.tableView.contentSize.height){
-            [[self parent] show:YES controlsAnimated:YES];
+        else if(scrollSpeedNotAbs < -0.5 /* && (currentOffset.y+self.tableView.frame.size.height) < self.tableView.contentSize.height*/){
+            if((self.tableView.frame.size.height > self.tableView.contentSize.height && currentOffset.y < 0) || (currentOffset.y+self.tableView.frame.size.height) < self.tableView.contentSize.height+CONTENT_INSET_BOTTOM) [[self parent] show:YES controlsAnimated:YES];
         }
         
         self.lastOffset = currentOffset;
@@ -247,18 +254,24 @@
             return;
     }
     [self moveIndexSet:indexSet toCellType:targetCellType];
-    
-    
-    
 }
-/*
- 
-*/
+/*  */
+-(void)deleteSelectedItems:(id)sender{
+    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+    NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
+    for(NSIndexPath *indexPath in selectedIndexPaths){
+        KPToDo *toDo = [self itemForIndexPath:indexPath];
+        [toDo MR_deleteInContext:[NSManagedObjectContext MR_defaultContext]];
+        [indexSet addIndex:indexPath.row];
+    }
+    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+    [self removeItemsForIndexSet:indexSet];
+}
 -(void)removeItemsForIndexSet:(NSIndexSet*)indexSet{
     if(self.sortedItems){
-        NSArray *oldKeys = [self.sortedItems allKeys];
+        NSArray *oldKeys = [self.titleArray copy];
         [self loadItems];
-        NSArray *newKeys = [self.sortedItems allKeys];
+        NSArray *newKeys = [self.titleArray copy];
         NSMutableIndexSet *deletedSections = [NSMutableIndexSet indexSet];
         for(int i = 0 ; i < oldKeys.count ; i++){
             NSString *oldKey = [oldKeys objectAtIndex:i];
@@ -278,8 +291,7 @@
 }
 -(KPToDo *)itemForIndexPath:(NSIndexPath *)indexPath{
     if(self.sortedItems){
-        NSString *sectionIndex = [[self.sortedItems allKeys] objectAtIndex:indexPath.section];
-        KPToDo *toDo = [[self.sortedItems objectForKey:sectionIndex] objectAtIndex:indexPath.row];
+        KPToDo *toDo = [[self.sortedItems objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
         return toDo;
     }
     return [self.items objectAtIndex:indexPath.row];
@@ -320,13 +332,12 @@
     self.swipingCell = nil;
     [[self parent] show:YES controlsAnimated:YES];
 }
-
 -(void)prepareTableView:(UITableView *)tableView{
     tableView.allowsMultipleSelection = YES;
     tableView.backgroundColor = [UIColor colorWithRed:227.0 / 255.0 green:227.0 / 255.0 blue:227.0 / 255.0 alpha:1.0];
     [tableView setTableFooterView:[UIView new]];
     UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
-    
+    tableView.contentInset = UIEdgeInsetsMake(0, 0, CONTENT_INSET_BOTTOM, 0);
     tableView.delegate = self;
     tableView.dataSource = self;
     doubleTap.numberOfTapsRequired = 2;
@@ -338,6 +349,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.frame = [self parentViewController].view.bounds;
     notify(@"updated", update);
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     tableView.tag = TABLEVIEW_TAG;

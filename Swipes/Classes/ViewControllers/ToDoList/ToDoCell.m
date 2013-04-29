@@ -74,8 +74,9 @@
     
     self.titleLabel.text = toDo.title;
     //[self.titleLabel sizeToFit];
-    
-    self.tagsLabel.text = @"Black Squid, Design";
+    NSString *tagString = [toDo stringifyTags];
+    if(!tagString) tagString = @"No Tags";
+    self.tagsLabel.text = tagString;
 }
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){

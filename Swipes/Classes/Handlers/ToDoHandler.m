@@ -16,6 +16,14 @@ static ToDoHandler *sharedObject;
     }
     return sharedObject;
 }
+-(void)addItem:(NSString *)item{
+    KPToDo *newToDo = [KPToDo newObjectInContext:nil];
+    newToDo.title = item;
+    newToDo.state = @"today";
+    NSNumber *count = [KPToDo MR_numberOfEntities];
+    newToDo.order = count;
+    [self save];
+}
 -(void)save{
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
 }

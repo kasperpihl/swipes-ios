@@ -14,26 +14,27 @@
 @implementation ScheduleViewController
 -(void)loadItems{
     NSDate *startDate = [[NSDate dateTomorrow] dateAtStartOfDay];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@) AND (schedule > %@)",@"schedule", startDate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule > %@) OR (state == %@ AND schedule = nil)",@"schedule", startDate,@"schedule"];
     self.items = [[KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:predicate] mutableCopy];
     [self sortItems];
 }
 -(void)sortItems{
-    self.sortedItems = [NSMutableDictionary dictionary];
+    self.sortedItems = [NSMutableArray array];
+    self.titleArray = [NSMutableArray array];
+    NSMutableArray *unspecified = [NSMutableArray array];
     for(KPToDo *toDo in self.items){
         NSDate *toDoDate = toDo.schedule;
-        if(toDoDate.isTomorrow) [self addItem:toDo toTitle:@"Tomorrow"];
+        if(!toDoDate) [unspecified addObject:toDo];
+        else if(toDoDate.isTomorrow) [self addItem:toDo withTitle:@"Tomorrow"];
         else{
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"dd-MM-yyyy"];
+            [dateFormatter setDateFormat:@"EEEE, dd-MM"];
             NSString *strDate = [dateFormatter stringFromDate:toDoDate];
-            [self addItem:toDo toTitle:strDate];
+            [self addItem:toDo withTitle:strDate];
         }
-        
     }
+    [self addItems:unspecified withTitle:@"Unspecified"];
 }
-
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];

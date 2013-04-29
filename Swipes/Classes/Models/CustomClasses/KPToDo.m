@@ -1,14 +1,15 @@
 #import "KPToDo.h"
 
-
+#import "KPTag.h"
 @interface KPToDo ()
-
+@property (nonatomic,strong) NSString *readableTags;
 // Private interface goes here.
 
 @end
 
 
 @implementation KPToDo
+@synthesize readableTags = _readableTags;
 -(void)changeToOrder:(NSInteger)newOrder{
     if(newOrder == self.orderValue) return;
     BOOL decrease = (newOrder > self.orderValue);
@@ -24,8 +25,23 @@
     }
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
 }
--(void)changeState:(NSString *)state{
-    self.state = state;
+-(void)updateTagsString{
+    NSMutableString *mutableString;
+    NSInteger count = self.tags.count;
+    if(count > 0){
+        mutableString = [NSMutableString stringWithString:@""];
+        for(KPTag *tag in self.tags){
+            [mutableString appendFormat:@"%@, ",tag.title];
+        }
+        [mutableString deleteCharactersInRange:NSMakeRange([mutableString length]-2, 2)];
+        NSLog(@"mutableString:%@",mutableString);
+    }
+    self.readableTags = [mutableString copy];
+}
+-(NSString *)stringifyTags{
+    if(!self.readableTags) [self updateTagsString];
+    return self.readableTags;
+    
 }
 -(void)setForToday{
     self.state = @"today";

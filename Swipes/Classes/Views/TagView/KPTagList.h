@@ -8,14 +8,17 @@
 
 #import <UIKit/UIKit.h>
 @class KPTagList;
-@protocol KPAddTagDelegate
+@protocol KPTagDelegate
 -(NSArray*)tagsForTagList:(KPTagList*)tagList;
 -(NSArray*)selectedTagsForTagList:(KPTagList*)tagList;
 @optional
--(void)didCreateTag:(NSString*)tag;
--(void)tagPanel:(KPTagList*)tagPanel closedWithSelectedTags:(NSArray*)selectedTags removedTags:(NSArray*)removedTags;
+-(void)tagList:(KPTagList*)tagList selectedTag:(NSString*)tag;
+-(void)tagList:(KPTagList *)tagList deselectedTag:(NSString*)tag;
 @end
 @interface KPTagList : UIView
-@property (nonatomic,weak) NSObject<KPAddTagDelegate> *tagDelegate;
+@property (nonatomic,weak) NSObject<KPTagDelegate> *tagDelegate;
+@property (nonatomic,strong) NSMutableArray *tags;
+@property (nonatomic,strong) NSMutableArray *selectedTags;
 +(KPTagList*)tagListWithWidth:(CGFloat)width;
+-(void)addTag:(NSString*)tag selected:(BOOL)selected;
 @end

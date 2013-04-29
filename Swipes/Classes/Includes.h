@@ -66,6 +66,7 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define CGRectSetPos( r, x, y ) CGRectMake( x, y, r.size.width, r.size.height )
 #define CGRectSetX( r, x ) r = CGRectMake( x, r.origin.y, r.size.width, r.size.height )
 #define CGRectSetY( r, y ) r = CGRectMake( r.origin.x, y, r.size.width, r.size.height )
+#define CGRectSetSize( r, w, h ) r = CGRectMake( r.origin.x, r.origin.y, w, h )
 #define parseFileCachePath(name) [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingFormat:@"/Parse/PFFileCache/%@",name]
 typedef void (^ResultBlock)(id result, NSError *error);
 typedef void (^ImageBlock)(UIImage *image, NSError *error);

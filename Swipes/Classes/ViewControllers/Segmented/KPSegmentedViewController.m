@@ -11,7 +11,8 @@
 #import "KPControlHandler.h"
 #import "AddPanelView.h"
 #import "ToDoListViewController.h"
-#import "KPToDo.h"
+#import "ToDoHandler.h"
+#import "TagHandler.h"
 #import "UtilityClass.h"
 #import "AKSegmentedControl.h"
 #import "KPAddTagPanel.h"
@@ -25,13 +26,12 @@
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPPickerViewDataSource,KPAddTagDelegate>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPPickerViewDataSource,KPAddTagDelegate,KPTagDelegate>
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) NSMutableArray *titles;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
 @property (nonatomic, weak) IBOutlet UIView *contentView;
 @property (nonatomic,strong) KPControlHandler *controlHandler;
-@property (nonatomic,strong) AddPanelView *addPanel;
 
 @property (nonatomic) NSInteger currentSelectedIndex;
 
@@ -41,15 +41,6 @@
 @end
 
 @implementation KPSegmentedViewController
--(AddPanelView *)addPanel{
-    if(!_addPanel){
-        _addPanel = [[AddPanelView alloc] initWithFrame:self.navigationController.view.frame];
-        _addPanel.addDelegate = self;
-        //_addPanel.forwardDatasource = self;
-        [self.navigationController.view addSubview:_addPanel];
-    }
-    return _addPanel;
-}
 #pragma mark - KPPickerView
 -(NSInteger)numberOfItemsInPickerView:(KPPickerView *)pickerView{
     return 5;
@@ -58,22 +49,56 @@
     return @"No project";
 }
 #pragma mark - KPControlViewDelegate
+#pragma mark - KPAddTagDelegate
+-(void)tagPanel:(KPAddTagPanel *)tagPanel closedWithSelectedTags:(NSArray *)selectedTags{
+    NSArray *selectedItems = [[self currentViewController] selectedItems];
+    NSArray *currentSelectedTags = [TAGHANDLER selectedTagsForToDos:selectedItems];
+    NSMutableArray *removedTags = [NSMutableArray array];
 
+    for(NSString *tag in currentSelectedTags){
+        if(![selectedTags containsObject:tag]){
+            [removedTags addObject:tag];
+        }
+    }
+    [TAGHANDLER addTags:selectedTags andRemoveTags:removedTags fromToDos:selectedItems];
+    [self show:YES controlsAnimated:YES];
+    [[self currentViewController] deselectAllRows:self];
+    [[self currentViewController].tableView reloadData];
+}
+-(void)tagPanel:(KPAddTagPanel *)tagPanel createdTag:(NSString *)tag{
+    [TAGHANDLER addTag:tag];
+}
+-(NSArray *)selectedTagsForTagList:(KPTagList *)tagList{
+    NSArray *selectedItems = [[self currentViewController] selectedItems];
+    NSArray *selectedTags = [TAGHANDLER selectedTagsForToDos:selectedItems];
+    return selectedTags;
+}
+-(NSArray *)tagsForTagList:(KPTagList *)tagList{
+    NSArray *allTags = [TAGHANDLER allTags];
+    return allTags;
+}
 #pragma mark - AddPanelDelegate
 -(void)pressedAdd:(id)sender{
     [self show:NO controlsAnimated:YES];
+    AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.navigationController.view.bounds];
+    addPanel.addDelegate = self;
+    
+    [self.navigationController.view addSubview:addPanel];
+    [addPanel show:YES];
     //[panelView.textField becomeFirstResponder];
     [self changeToIndex:1];
-    [self.addPanel show:YES];
     //[self.menuViewController.segmentedControl setSelectedSegmentIndex:1];
 }
+#pragma mark - AddTagDelegate
 -(void)tagPanel:(KPAddTagPanel *)tagPanel closedWithSelectedTags:(NSArray *)selectedTags unselectedTags:(NSArray *)unselectedTags{
     [self show:YES controlsAnimated:YES];
 }
 -(void)pressedTag:(id)sender{
     [self show:NO controlsAnimated:YES];
-    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.navigationController.view.frame];
-    //tagView.tagDelegate = self;
+    
+    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.navigationController.view.bounds];
+    tagView.delegate = self;
+    tagView.tagView.tagDelegate = self;
     [self.navigationController.view addSubview:tagView];
     [tagView show:YES];
 }
@@ -90,15 +115,12 @@
     [self show:YES controlsAnimated:YES];
 }
 -(void)didAddItem:(NSString *)item{
-    KPToDo *newToDo = [KPToDo newObjectInContext:nil];
-    newToDo.title = item;
-    newToDo.state = @"today";
-    NSNumber *count = [KPToDo MR_numberOfEntities];
-    newToDo.order = count;
-    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+    [TODOHANDLER addItem:item];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated" object:self];
 }
-
+-(void)didAddTag:(NSString*)tag{
+    
+}
 
 - (NSMutableArray *)viewControllers {
 	if (!_viewControllers)
@@ -221,7 +243,7 @@
     [super viewWillAppear:animated];
 	if (!self.hasAppeared) {
         self.hasAppeared = YES;
-        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+        UIView *contentView = [[UIView alloc] initWithFrame:self.view.bounds];
         contentView.tag = CONTENT_VIEW_TAG;
         [self.view addSubview:contentView];
         self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
@@ -241,6 +263,10 @@
 -(void)changeToIndex:(NSInteger)index{
     [self.segmentedControl setSelectedIndex:index];
     [self changeViewController:self.segmentedControl];
+}
+-(ToDoListViewController*)currentViewController{
+    ToDoListViewController *currentViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
+    return currentViewController;
 }
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl {
     //[self highlightButton:KPSegmentButtonSchedule];
