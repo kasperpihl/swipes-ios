@@ -100,7 +100,14 @@
     }
 }
 -(void)setHighlighted:(BOOL)highlighted{
+    
     [super setHighlighted:highlighted];
+    /*if(highlighted){
+        self.tagsLabel.textColor = [UIColor whiteColor];
+    }
+    else {
+        self.tagsLabel.textColor = TAGS_LABEL_COLOR;
+    }*/
 }
 -(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
     //NSLog(@"setting highlighted animation");

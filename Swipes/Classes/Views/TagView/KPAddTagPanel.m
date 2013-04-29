@@ -17,7 +17,7 @@
 #define ADD_VIEW_HEIGHT 41
 #define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
 #define TEXT_FIELD_MARGIN_SIDES 60
-#define TEXT_FIELD_MARGIN_BOTTOM 1
+#define TEXT_FIELD_MARGIN_BOTTOM 8
 #define TEXT_FIELD_HEIGHT 30
 #define KEYBOARD_HEIGHT 216
 @interface KPAddTagPanel () <UITextFieldDelegate>
@@ -32,7 +32,7 @@
     if (self) {
         UIView *backgroundView = [[UIView alloc] initWithFrame:self.bounds];
         backgroundView.tag = BACKGROUND_VIEW_TAG;
-        backgroundView.backgroundColor = [UtilityClass colorWithRed:125 green:125 blue:125 alpha:0.5];
+        backgroundView.backgroundColor = [UtilityClass colorWithRed:125 green:125 blue:125 alpha:0.1];
         
         UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         closeButton.frame = backgroundView.frame;

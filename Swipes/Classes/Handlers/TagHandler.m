@@ -73,7 +73,7 @@ static TagHandler *sharedObject;
         }
         counter++;
     }
-    commonTags = common2Tags;
+    if(counter > 1) commonTags = common2Tags;
     return commonTags;
 }
 @end

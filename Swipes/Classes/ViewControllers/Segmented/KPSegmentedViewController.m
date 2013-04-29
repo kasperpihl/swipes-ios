@@ -51,7 +51,7 @@
 #pragma mark - KPControlViewDelegate
 #pragma mark - KPAddTagDelegate
 -(void)tagPanel:(KPAddTagPanel *)tagPanel closedWithSelectedTags:(NSArray *)selectedTags{
-    NSArray *selectedItems = [[self currentViewController] selectedItems];
+    /*NSArray *selectedItems = [[self currentViewController] selectedItems];
     NSArray *currentSelectedTags = [TAGHANDLER selectedTagsForToDos:selectedItems];
     NSMutableArray *removedTags = [NSMutableArray array];
 
@@ -60,14 +60,14 @@
             [removedTags addObject:tag];
         }
     }
-    [TAGHANDLER addTags:selectedTags andRemoveTags:removedTags fromToDos:selectedItems];
-    [self show:YES controlsAnimated:YES];
+    [TAGHANDLER addTags:selectedTags andRemoveTags:removedTags fromToDos:selectedItems];*/
+    self.currentState = KPControlCurrentStateAdd;
     [[self currentViewController] deselectAllRows:self];
-    [[self currentViewController].tableView reloadData];
 }
 -(void)tagPanel:(KPAddTagPanel *)tagPanel createdTag:(NSString *)tag{
     [TAGHANDLER addTag:tag];
 }
+#pragma mark - KPTagDelegate
 -(NSArray *)selectedTagsForTagList:(KPTagList *)tagList{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
     NSArray *selectedTags = [TAGHANDLER selectedTagsForToDos:selectedItems];
@@ -76,6 +76,16 @@
 -(NSArray *)tagsForTagList:(KPTagList *)tagList{
     NSArray *allTags = [TAGHANDLER allTags];
     return allTags;
+}
+-(void)tagList:(KPTagList *)tagList selectedTag:(NSString *)tag{
+    NSArray *selectedItems = [[self currentViewController] selectedItems];
+    [TAGHANDLER addTags:@[tag] andRemoveTags:nil fromToDos:selectedItems];
+    [[self currentViewController] updateWithoutLoading];
+}
+-(void)tagList:(KPTagList *)tagList deselectedTag:(NSString *)tag{
+    NSArray *selectedItems = [[self currentViewController] selectedItems];
+    [TAGHANDLER addTags:nil andRemoveTags:@[tag] fromToDos:selectedItems];
+    [[self currentViewController] updateWithoutLoading];
 }
 #pragma mark - AddPanelDelegate
 -(void)pressedAdd:(id)sender{
@@ -88,10 +98,6 @@
     //[panelView.textField becomeFirstResponder];
     [self changeToIndex:1];
     //[self.menuViewController.segmentedControl setSelectedSegmentIndex:1];
-}
-#pragma mark - AddTagDelegate
--(void)tagPanel:(KPAddTagPanel *)tagPanel closedWithSelectedTags:(NSArray *)selectedTags unselectedTags:(NSArray *)unselectedTags{
-    [self show:YES controlsAnimated:YES];
 }
 -(void)pressedTag:(id)sender{
     [self show:NO controlsAnimated:YES];

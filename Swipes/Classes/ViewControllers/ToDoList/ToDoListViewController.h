@@ -20,6 +20,7 @@
 -(KPSegmentedViewController *)parent;
 -(ToDoCell*)readyCell:(ToDoCell*)cell;
 -(void)update;
+-(void)updateWithoutLoading;
 -(void)loadItems;
 -(void)sortItems;
 -(void)deselectAllRows:(id)sender;

@@ -11,12 +11,11 @@
 #import <QuartzCore/QuartzCore.h>
 #define VERTICAL_MARGIN 5
 #define HORIZONTAL_MARGIN 5
-
 #define TAG_HORIZONTAL_PADDING 10
 #define TAG_VERTICAL_PADDING 7
 
 #define TAG_HORIZONTAL_SPACING 5
-#define TAG_VERTICAL_SPACING 10
+#define TAG_VERTICAL_SPACING 5
 
 #define TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:14]
 
@@ -55,8 +54,10 @@
 }
 -(void)addTag:(NSString *)tag selected:(BOOL)selected{
     [self.tags addObject:tag];
-    if(selected) [self.selectedTags addObject:tag];
-    NSLog(@"added self.tags:%@",self.tags);
+    if(selected){
+        [self.selectedTags addObject:tag];
+        if([self.tagDelegate respondsToSelector:@selector(tagList:selectedTag:)]) [self.tagDelegate tagList:self selectedTag:tag];
+    }
     [self layoutTagsResize:YES];
 }
 -(void)layoutTagsResize:(BOOL)resize{
@@ -64,10 +65,9 @@
     [self.tags sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     NSArray *views = [self subviews];
     for(UIView *view in views) [view removeFromSuperview];
-    CGFloat currentWidth = VERTICAL_MARGIN;
-    CGFloat currentHeight = HORIZONTAL_MARGIN;
+    CGFloat currentWidth = HORIZONTAL_MARGIN;
+    CGFloat currentHeight = VERTICAL_MARGIN;
     CGFloat tagHeight = 0;
-    NSLog(@"self.tags:%@",self.tags);
     if(self.tags.count > 0){
         for(NSString *tag in self.tags){
             UIButton *tagLabel = [self buttonWithTag:tag];
@@ -84,7 +84,7 @@
         }
     }
     else{
-        UILabel *noTagLabel = [[UILabel alloc]initWithFrame:CGRectMake(VERTICAL_MARGIN, HORIZONTAL_MARGIN, self.frame.size.width-2*VERTICAL_MARGIN, 30)];
+        UILabel *noTagLabel = [[UILabel alloc]initWithFrame:CGRectMake(HORIZONTAL_MARGIN, VERTICAL_MARGIN, self.frame.size.width-2*HORIZONTAL_MARGIN, 30)];
         noTagLabel.textAlignment = UITextAlignmentCenter;
         noTagLabel.text = @"No tags yet";
         [self addSubview:noTagLabel];
@@ -106,10 +106,12 @@
     if([self.selectedTags containsObject:tag]){
         [self.selectedTags removeObject:tag];
         sender.selected = NO;
+        if([self.tagDelegate respondsToSelector:@selector(tagList:deselectedTag:)]) [self.tagDelegate tagList:self deselectedTag:tag];
     }
     else {
         [self.selectedTags addObject:tag];
         sender.selected = YES;
+        if([self.tagDelegate respondsToSelector:@selector(tagList:selectedTag:)]) [self.tagDelegate tagList:self selectedTag:tag];
     }
 }
 -(UIButton*)buttonWithTag:(NSString*)tag{

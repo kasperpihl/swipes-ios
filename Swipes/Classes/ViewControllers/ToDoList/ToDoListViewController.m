@@ -52,6 +52,12 @@
 -(void)sortItems{
     
 }
+-(void)updateWithoutLoading{
+    [self.tableView reloadData];
+    for(NSIndexPath *indexPath in self.selectedRows){
+        [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }
+}
 -(void)update{
     [self loadItems];
     [self.tableView reloadData];
