@@ -100,11 +100,17 @@
     [self show:NO controlsAnimated:YES];
     AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.navigationController.view.bounds];
     addPanel.addDelegate = self;
+    self.presentedPanel = addPanel;
     
+    CGFloat timerToShow = 0.25f+0.25f*(((addPanel.frame.size.height)-216)/216);
+    NSLog(@"timerToShow:%f",timerToShow);
+    [self presentSemiView:addPanel withOptions:@{KNSemiModalOptionKeys.animationDuration:[NSNumber numberWithFloat: timerToShow]}];
+    [addPanel show:YES];
+    /*
     [self.navigationController.view addSubview:addPanel];
     [addPanel show:YES];
     //[panelView.textField becomeFirstResponder];
-    [self changeToIndex:1];
+    [self changeToIndex:1];*/
     //[self.menuViewController.segmentedControl setSelectedSegmentIndex:1];
 }
 -(void)pressedTag:(id)sender{
@@ -119,12 +125,19 @@
     //[tagView show:YES];
 }
 -(void)dismissSemiModalView {
-    KPAddTagPanel *panel = (KPAddTagPanel*)self.presentedPanel;
-    if(panel.isShowingKeyboard){
-        [panel.textField resignFirstResponder];
-        [NSTimer scheduledTimerWithTimeInterval:0.25f target:self selector:@selector(reallyDismiss) userInfo:nil repeats:NO];
+    if(self.presentedPanel.class == [KPAddTagPanel class]){
+        KPAddTagPanel *panel = (KPAddTagPanel*)self.presentedPanel;
+        if(panel.isShowingKeyboard){
+            [panel.textField resignFirstResponder];
+            [NSTimer scheduledTimerWithTimeInterval:0.25f target:self selector:@selector(reallyDismiss) userInfo:nil repeats:NO];
+        }
+        else{
+            [self reallyDismiss];
+        }
     }
     else{
+        AddPanelView *panel = (AddPanelView*)self.presentedPanel;
+        [panel show:NO];
         [self reallyDismiss];
     }
 	/*[self dismissSemiModalViewWithCompletion:^{
@@ -153,6 +166,7 @@
 -(void)didAddItem:(NSString *)item{
     [TODOHANDLER addItem:item];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated" object:self];
+    [self updateBackground];
 }
 -(void)didAddTag:(NSString*)tag{
     
@@ -212,10 +226,10 @@
             highlightedImage = [UIImage imageNamed:@"done-highlighted"];
             break;
     }
-    [button setBackgroundImage:selectedImage forState:UIControlStateHighlighted];
-    [button setBackgroundImage:selectedImage forState:UIControlStateSelected];
-    [button setBackgroundImage:selectedImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
-    [button setBackgroundImage:normalImage forState:UIControlStateNormal];
+    [button setImage:selectedImage forState:UIControlStateHighlighted];
+    [button setImage:selectedImage forState:UIControlStateSelected];
+    [button setImage:selectedImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [button setImage:normalImage forState:UIControlStateNormal];
     button.imageView.animationDuration = 0.8;
     if(highlightedImage) button.imageView.animationImages = @[highlightedImage];
     return button;
@@ -304,7 +318,7 @@
     ToDoListViewController *currentViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
     return currentViewController;
 }
-- (void)changeViewController:(AKSegmentedControl *)segmentedControl {
+- (void)changeViewController:(AKSegmentedControl *)segmentedControl{
     //[self highlightButton:KPSegmentButtonSchedule];
 	CGFloat width = self.view.frame.size.width;
     CGFloat height = self.view.frame.size.height;

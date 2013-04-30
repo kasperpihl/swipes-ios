@@ -54,6 +54,7 @@ typedef void (^KNTransitionCompletionBlock)(void);
 -(void)presentSemiView:(UIView*)view withOptions:(NSDictionary*)options;
 
 // Dismiss & resize
+-(void)updateBackground;
 -(void)resizeSemiView:(CGSize)newSize;
 -(void)dismissSemiModalView;
 -(void)dismissSemiModalViewWithCompletion:(KNTransitionCompletionBlock)completion;

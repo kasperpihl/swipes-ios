@@ -29,8 +29,10 @@
     NSMutableString *mutableString;
     NSInteger count = self.tags.count;
     if(count > 0){
+        NSSortDescriptor * titleDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
+        NSArray *tags = [self.tags sortedArrayUsingDescriptors:@[titleDescriptor]];
         mutableString = [NSMutableString stringWithString:@""];
-        for(KPTag *tag in self.tags){
+        for(KPTag *tag in tags){
             [mutableString appendFormat:@"%@, ",tag.title];
         }
         [mutableString deleteCharactersInRange:NSMakeRange([mutableString length]-2, 2)];

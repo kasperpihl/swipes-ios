@@ -29,6 +29,7 @@
 @property (nonatomic,weak) IBOutlet KPPickerView *pickerView;
 @property (nonatomic,weak) IBOutlet UIImageView *formView;
 @property (nonatomic,weak) IBOutlet UITextField *textField;
+@property (nonatomic) BOOL shouldRemove;
 @end
 @implementation AddPanelView
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -53,21 +54,10 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectSetPos(frame, 0, 0)];
-        backgroundView.tag = BACKGROUND_VIEW_TAG;
-        backgroundView.backgroundColor = [UtilityClass colorWithRed:125 green:125 blue:125 alpha:0.5];
-        
-        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        closeButton.frame = backgroundView.frame;
-        [closeButton addTarget:self action:@selector(didPressClose:) forControlEvents:UIControlEventTouchUpInside];
-        [backgroundView addSubview:closeButton];
-        [self addSubview:backgroundView];
-        self.backgroundView = [self viewWithTag:BACKGROUND_VIEW_TAG];
-        
-        
-        
-        UIImageView *formView = [[UIImageView alloc] initWithFrame:CGRectMake(0, frame.size.height, frame.size.width, 41)];
+        self.backgroundColor = [UIColor whiteColor];
+        UIImageView *formView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 41)];
         formView.tag = FORM_VIEW_TAG;
+        formView.userInteractionEnabled = YES;
         formView.image = [UIImage imageNamed:@"add_panel_background"];
         UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, FORM_VIEW_HEIGHT-TEXT_FIELD_MARGIN_BOTTOM-TEXT_FIELD_HEIGHT, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), TEXT_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
@@ -76,16 +66,30 @@
         textField.returnKeyType = UIReturnKeyNext;
         textField.borderStyle = UITextBorderStyleNone;
         textField.delegate = self;
+        textField.userInteractionEnabled = YES;
         textField.placeholder = @"Add a new item to Today";
         [formView addSubview:textField];
         self.textField = (UITextField*)[formView viewWithTag:TEXT_FIELD_TAG];
         [self addSubview:formView];
         self.formView = (UIImageView*)[self viewWithTag:FORM_VIEW_TAG];
+        CGRectSetSize(self.frame, self.frame.size.width, KEYBOARD_HEIGHT+self.formView.frame.size.height);
     }
     return self;
 }
+-(void)openTextField{
+    
+    
+}
 -(void)show:(BOOL)show{
-    void (^preblock)(void);
+    if(show){
+        [self.textField becomeFirstResponder];
+    /*CGFloat timerToShow = 0.25f*(((KEYBOARD_HEIGHT+self.formView.frame.size.height)-KEYBOARD_HEIGHT)/KEYBOARD_HEIGHT);
+        NSLog(@"timer to show %f",timerToShow);
+    [NSTimer scheduledTimerWithTimeInterval:timerToShow target:self selector:@selector(openTextField) userInfo:nil repeats:NO];
+    */
+     }
+    else [self.textField resignFirstResponder];
+    /*void (^preblock)(void);
     void (^showBlock)(void);
     void (^completionBlock)(void);
     if(show){
@@ -119,7 +123,7 @@
         if(finished){
             if(completionBlock) completionBlock();
         }
-    }];
+    }];*/
 
 }
 @end
