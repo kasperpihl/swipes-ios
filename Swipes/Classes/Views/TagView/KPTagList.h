@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 @class KPTagList;
+@protocol KPTagListResizeDelegate <NSObject>
+-(void)tagList:(KPTagList*)tagList changedSize:(CGSize)size;
+@end
 @protocol KPTagDelegate
 -(NSArray*)tagsForTagList:(KPTagList*)tagList;
 -(NSArray*)selectedTagsForTagList:(KPTagList*)tagList;
@@ -17,8 +20,9 @@
 @end
 @interface KPTagList : UIView
 @property (nonatomic,weak) NSObject<KPTagDelegate> *tagDelegate;
+@property (nonatomic,weak) NSObject<KPTagListResizeDelegate> *resizeDelegate;
 @property (nonatomic,strong) NSMutableArray *tags;
 @property (nonatomic,strong) NSMutableArray *selectedTags;
-+(KPTagList*)tagListWithWidth:(CGFloat)width;
++(KPTagList*)tagListWithWidth:(CGFloat)width andTags:(NSArray*)tags;
 -(void)addTag:(NSString*)tag selected:(BOOL)selected;
 @end

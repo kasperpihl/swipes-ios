@@ -33,7 +33,7 @@
             [self addItem:toDo withTitle:strDate];
         }
     }
-    [self addItems:unspecified withTitle:@"Unspecified"];
+    if(unspecified.count > 0)[self addItems:unspecified withTitle:@"Unspecified"];
 }
 - (void)viewDidLoad
 {

@@ -34,7 +34,6 @@
             [mutableString appendFormat:@"%@, ",tag.title];
         }
         [mutableString deleteCharactersInRange:NSMakeRange([mutableString length]-2, 2)];
-        NSLog(@"mutableString:%@",mutableString);
     }
     self.readableTags = [mutableString copy];
 }

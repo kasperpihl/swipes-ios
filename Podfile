@@ -7,5 +7,6 @@ pod 'PRTween', '~> 0.0.1'
 pod 'SLGlowingTextField', '~> 0.0.1'
 pod 'DAKeyboardControl', '~> 2.2.0'
 pod 'MagicalRecord', '~> 2.1'
+pod 'KNSemiModalViewController', '~> 0.3'
 
 #pod 'MCSwipeTableViewCell', '~> 1.0.0'

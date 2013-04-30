@@ -16,6 +16,8 @@
 #import "UtilityClass.h"
 #import "AKSegmentedControl.h"
 #import "KPAddTagPanel.h"
+
+#import "UIViewController+KNSemiModal.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
@@ -32,6 +34,7 @@
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
 @property (nonatomic, weak) IBOutlet UIView *contentView;
 @property (nonatomic,strong) KPControlHandler *controlHandler;
+@property (nonatomic,weak) IBOutlet UIView *presentedPanel;
 
 @property (nonatomic) NSInteger currentSelectedIndex;
 
@@ -67,6 +70,11 @@
 -(void)tagPanel:(KPAddTagPanel *)tagPanel createdTag:(NSString *)tag{
     [TAGHANDLER addTag:tag];
 }
+-(void)tagPanel:(KPAddTagPanel *)tagPanel changedSize:(CGSize)size{
+    NSLog(@"resized");
+    [self resizeSemiView:size];
+}
+
 #pragma mark - KPTagDelegate
 -(NSArray *)selectedTagsForTagList:(KPTagList *)tagList{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
@@ -102,11 +110,33 @@
 -(void)pressedTag:(id)sender{
     [self show:NO controlsAnimated:YES];
     
-    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.navigationController.view.bounds];
+    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, 450) andTags:[TAGHANDLER allTags]];
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
-    [self.navigationController.view addSubview:tagView];
-    [tagView show:YES];
+    self.presentedPanel = tagView;
+    [self presentSemiView:tagView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.30f}];
+    //[self.navigationController.view addSubview:tagView];
+    //[tagView show:YES];
+}
+-(void)dismissSemiModalView {
+    KPAddTagPanel *panel = (KPAddTagPanel*)self.presentedPanel;
+    if(panel.isShowingKeyboard){
+        [panel.textField resignFirstResponder];
+        [NSTimer scheduledTimerWithTimeInterval:0.25f target:self selector:@selector(reallyDismiss) userInfo:nil repeats:NO];
+    }
+    else{
+        [self reallyDismiss];
+    }
+	/*[self dismissSemiModalViewWithCompletion:^{
+        self.currentState = KPControlCurrentStateAdd;
+        [[self currentViewController] deselectAllRows:self];
+    }];*/
+}
+-(void)reallyDismiss{
+    [self dismissSemiModalViewWithCompletion:^{
+        self.currentState = KPControlCurrentStateAdd;
+        [[self currentViewController] deselectAllRows:self];
+     }];
 }
 -(void)pressedDelete:(id)sender{
     [UTILITY confirmBoxWithTitle:@"Delete items" andMessage:@"Are you sure?" block:^(BOOL succeeded, NSError *error) {

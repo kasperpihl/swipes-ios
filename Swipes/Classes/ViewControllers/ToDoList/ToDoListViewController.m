@@ -171,7 +171,6 @@
     NSMutableArray *array = [NSMutableArray array];
     for(NSIndexPath *indexPath in self.selectedRows){
         KPToDo *toDo = [self itemForIndexPath:indexPath];
-        NSLog(@"todo:%@",toDo);
         [array addObject:toDo];
     }
     return array;

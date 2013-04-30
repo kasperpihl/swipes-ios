@@ -24,8 +24,10 @@
 @interface KPTagList ()
 @end
 @implementation KPTagList
-+(KPTagList *)tagListWithWidth:(CGFloat)width{
-    KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, width, 10)];
++(KPTagList *)tagListWithWidth:(CGFloat)width andTags:(NSArray*)tags{
+    KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, width, 100)];
+    tagList.tags = [tags mutableCopy];
+    [tagList layoutTagsFirst:YES];
     return tagList;
 }
 -(NSMutableArray *)tags{
@@ -50,7 +52,7 @@
 -(void)reloadData{
     self.tags = [[self.tagDelegate tagsForTagList:self] mutableCopy];
     self.selectedTags = [[self.tagDelegate selectedTagsForTagList:self] mutableCopy];
-    [self layoutTagsResize:NO];
+    [self layoutTagsFirst:NO];
 }
 -(void)addTag:(NSString *)tag selected:(BOOL)selected{
     [self.tags addObject:tag];
@@ -58,9 +60,9 @@
         [self.selectedTags addObject:tag];
         if([self.tagDelegate respondsToSelector:@selector(tagList:selectedTag:)]) [self.tagDelegate tagList:self selectedTag:tag];
     }
-    [self layoutTagsResize:YES];
+    [self layoutTagsFirst:NO];
 }
--(void)layoutTagsResize:(BOOL)resize{
+-(void)layoutTagsFirst:(BOOL)first{
     CGFloat oldHeight = self.frame.size.height;
     [self.tags sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     NSArray *views = [self subviews];
@@ -93,7 +95,10 @@
     currentHeight += tagHeight + VERTICAL_MARGIN;
     CGRectSetSize(self.frame, self.frame.size.width, currentHeight);
     CGFloat differenceHeight = oldHeight-currentHeight;
-    if(resize) CGRectSetY(self.frame, self.frame.origin.y+differenceHeight);
+    if(!first && differenceHeight != 0 && [self.resizeDelegate respondsToSelector:@selector(tagList:changedSize:)]){
+        [self.resizeDelegate tagList:self changedSize:self.frame.size];
+    }
+    //if(resize) CGRectSetY(self.frame, self.frame.origin.y+differenceHeight);
 }
 -(CGSize)sizeForTagWithText:(NSString*)text{
     CGSize textSize = [text sizeWithFont:TAG_FONT];
