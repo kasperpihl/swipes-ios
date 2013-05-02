@@ -315,20 +315,21 @@
 }
 -(NSArray *)unselectedTagsForFilterMenu:(FilterMenu *)filterMenu{
     FilterHandler *filterHandler = [self filterHandler];
-    return filterHandler.remainingTags;
+    return filterHandler.remainingTags; 
 }
 -(void)pressedFilter:(id)sender event:(UIEvent*)event{
-    if(!self.presentedPanel){
+    FilterHandler *filterHandler = [self currentViewController].filterHandler;
+    if(filterHandler){
+        [self currentViewController].filterHandler = nil;
+        [[self currentViewController].tableView setTableHeaderView:[UIView new]];
+        [[self currentViewController] loadItems];
+    }
+    else{
+        filterHandler = [self filterHandler];
         FilterMenu *filterMenu = [[FilterMenu alloc] initWithFrame:self.view.bounds];
         filterMenu.dataSource = self;
         filterMenu.delegate = self;
-        [filterMenu popInWithEvent:event];
-        self.presentedPanel = filterMenu;
-    }
-    else{
-        FilterMenu *filterMenu = (FilterMenu *)self.presentedPanel;
-        [filterMenu hide];
-        self.presentedPanel = nil;
+        [[self currentViewController].tableView setTableHeaderView:filterMenu];
     }
 }
 -(void)viewDidLoad{

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 #import <UIKit/UIKit.h>
-#define DEFAULT_MAX_WIDTH 280
+#define DEFAULT_MAX_WIDTH 320
 @class FilterMenu;
 @protocol FilterMenuDataSource <NSObject>
 -(NSArray*)unselectedTagsForFilterMenu:(FilterMenu*)filterMenu;

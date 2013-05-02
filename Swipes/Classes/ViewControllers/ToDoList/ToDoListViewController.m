@@ -11,6 +11,7 @@
 #import "UtilityClass.h"
 #import "ToDoHandler.h"
 #import "SchedulePopup.h"
+#import "KPSearchBar.h"
 
 #define TABLEVIEW_TAG 500
 #define CONTENT_INSET_BOTTOM 100
@@ -349,6 +350,17 @@
     tableView.contentInset = UIEdgeInsetsMake(0, 0, CONTENT_INSET_BOTTOM, 0);
     tableView.delegate = self;
     tableView.dataSource = self;
+    
+    UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 250, 44)];
+    
+    [searchBar setBackgroundImage:[UIImage new]];
+    [searchBar setTranslucent:YES];
+    searchBar.backgroundColor = [UIColor clearColor];
+    [searchBarView addSubview:searchBar];
+    [tableView setTableHeaderView:searchBarView];
+    
+    
     doubleTap.numberOfTapsRequired = 2;
     doubleTap.numberOfTouchesRequired = 1;
     [tableView addGestureRecognizer:doubleTap];

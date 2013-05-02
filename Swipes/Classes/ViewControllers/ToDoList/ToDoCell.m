@@ -72,9 +72,7 @@
     return self;
 }
 -(void)changeToDo:(KPToDo *)toDo{
-    
     self.titleLabel.text = toDo.title;
-    //[self.titleLabel sizeToFit];
     NSString *tagString = [toDo stringifyTags];
     if(!tagString) tagString = @"No Tags";
     self.tagsLabel.text = tagString;

@@ -79,14 +79,11 @@
 }
 -(void)reframe{
     CGFloat tempHeight = 0;
-    if(self.selectedTags.count > 0){
-        self.selectedTagListView.hidden = NO;
-        tempHeight = self.selectedTagListView.frame.size.height;
-        NSLog(@"temp:%f",tempHeight);
-    }
-    else self.selectedTagListView.hidden = YES;
+    tempHeight += self.selectedTagListView.frame.size.height;
+    self.tagListView.hidden = NO;
     CGRectSetY(self.tagListView.frame, tempHeight);
-    CGRectSetSize(self.frame, self.tagListView.frame.size.width, self.tagListView.frame.origin.y+self.tagListView.frame.size.height);
+    tempHeight += self.tagListView.frame.size.height;
+    CGRectSetSize(self.frame, self.tagListView.frame.size.width, tempHeight);
 }
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
