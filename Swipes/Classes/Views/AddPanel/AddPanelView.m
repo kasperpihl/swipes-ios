@@ -17,11 +17,12 @@
 #define ANIMATION_DURATION 0.25f
 
 
-#define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
+#define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue" size:18]
+#define TEXT_FIELD_COLOR [UIColor whiteColor]
 #define TEXT_FIELD_MARGIN_SIDES 12
-#define TEXT_FIELD_MARGIN_BOTTOM 1
+#define TEXT_FIELD_MARGIN_BOTTOM 17
 #define TEXT_FIELD_HEIGHT 30
-#define FORM_VIEW_HEIGHT 41
+#define FORM_VIEW_HEIGHT 66
 #define KEYBOARD_HEIGHT 216
 
 @interface AddPanelView () <UITextFieldDelegate>
@@ -37,6 +38,7 @@
     NSString *trimmedString = [string stringByTrimmingCharactersInSet:
                                [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if(trimmedString.length > 0){
+        
         if(self.addDelegate && [self.addDelegate respondsToSelector:@selector(didAddItem:)])
         [self.addDelegate didAddItem:textField.text];
         textField.text = @"";
@@ -55,13 +57,14 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
-        UIImageView *formView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 41)];
+        UIImageView *formView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, FORM_VIEW_HEIGHT)];
         formView.tag = FORM_VIEW_TAG;
         formView.userInteractionEnabled = YES;
         formView.image = [UIImage imageNamed:@"add_panel_background"];
         UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, FORM_VIEW_HEIGHT-TEXT_FIELD_MARGIN_BOTTOM-TEXT_FIELD_HEIGHT, formView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), TEXT_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
         textField.font = TEXT_FIELD_FONT;
+        textField.textColor = TEXT_FIELD_COLOR;
         textField.keyboardAppearance = UIKeyboardAppearanceAlert;
         textField.returnKeyType = UIReturnKeyNext;
         textField.borderStyle = UITextBorderStyleNone;

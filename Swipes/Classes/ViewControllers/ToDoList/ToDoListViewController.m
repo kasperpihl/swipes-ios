@@ -48,6 +48,7 @@
 }
 -(void)loadItems{
     self.items = [[KPToDo MR_findByAttribute:@"state" withValue:self.state andOrderBy:@"order" ascending:NO] mutableCopy];
+    [self update];
 }
 -(void)sortItems{
     
@@ -59,7 +60,10 @@
     }
 }
 -(void)update{
-    [self loadItems];
+    if(self.filterHandler){
+        self.items = [self.filterHandler.sortedItems copy];
+    }
+    [self sortItems];
     [self.tableView reloadData];
 }
 -(NSMutableArray *)selectedRows{
@@ -339,7 +343,7 @@
 }
 -(void)prepareTableView:(UITableView *)tableView{
     tableView.allowsMultipleSelection = YES;
-    tableView.backgroundColor = [UIColor colorWithRed:227.0 / 255.0 green:227.0 / 255.0 blue:227.0 / 255.0 alpha:1.0];
+    tableView.backgroundColor = [UIColor colorWithRed:71.0 / 255.0 green:71.0 / 255.0 blue:71.0 / 255.0 alpha:1.0];
     [tableView setTableFooterView:[UIView new]];
     UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
     tableView.contentInset = UIEdgeInsetsMake(0, 0, CONTENT_INSET_BOTTOM, 0);
@@ -355,7 +359,7 @@
 {
     [super viewDidLoad];
     self.view.frame = [self parentViewController].view.bounds;
-    notify(@"updated", update);
+    notify(@"updated", loadItems);
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     tableView.tag = TABLEVIEW_TAG;
     [self prepareTableView:tableView];
@@ -365,7 +369,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self update];
+    [self loadItems];
 }
 -(void)dealloc{
     clearNotify();

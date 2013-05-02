@@ -19,12 +19,13 @@
 #define TAGS_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue" size:12]
 
 #define TITLE_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
-#define TAGS_LABEL_COLOR [UtilityClass colorWithRed:153 green:153 blue:153 alpha:1]
+#define TAGS_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
 
 #define LABEL_X 19
+
 #define LABEL_WIDTH (320-(2*LABEL_X))
 #define TITLE_DELTA_Y -2
-#define LABEL_SPACE 2
+#define LABEL_SPACE 6
 
 #define TITLE_LABEL_HEIGHT [@"Tg" sizeWithFont:TITLE_LABEL_FONT].height
 #define TAGS_LABEL_HEIGHT [@"Tg" sizeWithFont:TAGS_LABEL_FONT].height

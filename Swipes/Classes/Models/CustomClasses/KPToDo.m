@@ -10,6 +10,7 @@
 
 @implementation KPToDo
 @synthesize readableTags = _readableTags;
+@synthesize textTags = _textTags;
 -(void)changeToOrder:(NSInteger)newOrder{
     if(newOrder == self.orderValue) return;
     BOOL decrease = (newOrder > self.orderValue);
@@ -27,17 +28,26 @@
 }
 -(void)updateTagsString{
     NSMutableString *mutableString;
+    NSMutableArray *textTags = [NSMutableArray array];
     NSInteger count = self.tags.count;
     if(count > 0){
         NSSortDescriptor * titleDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
         NSArray *tags = [self.tags sortedArrayUsingDescriptors:@[titleDescriptor]];
         mutableString = [NSMutableString stringWithString:@""];
         for(KPTag *tag in tags){
+            [textTags addObject:tag.title];
             [mutableString appendFormat:@"%@, ",tag.title];
         }
         [mutableString deleteCharactersInRange:NSMakeRange([mutableString length]-2, 2)];
     }
+    self.textTags = textTags;
     self.readableTags = [mutableString copy];
+}
+-(NSArray *)textTags{
+    if(!_textTags){
+        [self updateTagsString];
+    }
+    return _textTags;
 }
 -(NSString *)stringifyTags{
     if(!self.readableTags) [self updateTagsString];

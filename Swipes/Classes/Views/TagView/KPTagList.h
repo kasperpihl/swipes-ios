@@ -12,17 +12,18 @@
 -(void)tagList:(KPTagList*)tagList changedSize:(CGSize)size;
 @end
 @protocol KPTagDelegate
+@optional
 -(NSArray*)tagsForTagList:(KPTagList*)tagList;
 -(NSArray*)selectedTagsForTagList:(KPTagList*)tagList;
-@optional
+-(NSArray*)deselectedTagsForTagList:(KPTagList*)tagList;
 -(void)tagList:(KPTagList*)tagList selectedTag:(NSString*)tag;
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString*)tag;
 @end
 @interface KPTagList : UIView
+@property (nonatomic) NSString *emptyText;
 @property (nonatomic,weak) NSObject<KPTagDelegate> *tagDelegate;
 @property (nonatomic,weak) NSObject<KPTagListResizeDelegate> *resizeDelegate;
-@property (nonatomic,strong) NSMutableArray *tags;
-@property (nonatomic,strong) NSMutableArray *selectedTags;
+-(void)setTags:(NSArray*)tags andSelectedTags:(NSArray*)selectedTags;
 +(KPTagList*)tagListWithWidth:(CGFloat)width andTags:(NSArray*)tags;
 -(void)addTag:(NSString*)tag selected:(BOOL)selected;
 @end

@@ -22,6 +22,8 @@
 #define TEXT_COLOR [UIColor blackColor]
 
 @interface KPTagList ()
+@property (nonatomic,strong) NSMutableArray *tags;
+@property (nonatomic,strong) NSMutableArray *selectedTags;
 @end
 @implementation KPTagList
 +(KPTagList *)tagListWithWidth:(CGFloat)width andTags:(NSArray*)tags{
@@ -38,10 +40,15 @@
     if(!_selectedTags) _selectedTags = [NSMutableArray array];
     return _selectedTags;
 }
+-(void)setTags:(NSArray *)tags andSelectedTags:(NSArray *)selectedTags{
+    self.tags = [tags mutableCopy];
+    self.selectedTags = [selectedTags mutableCopy];
+    [self layoutTagsFirst:NO];
+}
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
-        self.backgroundColor = [UIColor whiteColor];
+        //self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -50,8 +57,8 @@
     [self reloadData];
 }
 -(void)reloadData{
-    self.tags = [[self.tagDelegate tagsForTagList:self] mutableCopy];
-    self.selectedTags = [[self.tagDelegate selectedTagsForTagList:self] mutableCopy];
+    if([self.tagDelegate respondsToSelector:@selector(tagsForTagList:)]) self.tags = [[self.tagDelegate tagsForTagList:self] mutableCopy];
+    if([self.tagDelegate respondsToSelector:@selector(selectedTagsForTagList:)]) self.selectedTags = [[self.tagDelegate selectedTagsForTagList:self] mutableCopy];
     [self layoutTagsFirst:NO];
 }
 -(void)addTag:(NSString *)tag selected:(BOOL)selected{
@@ -88,7 +95,7 @@
     else{
         UILabel *noTagLabel = [[UILabel alloc]initWithFrame:CGRectMake(HORIZONTAL_MARGIN, VERTICAL_MARGIN, self.frame.size.width-2*HORIZONTAL_MARGIN, 30)];
         noTagLabel.textAlignment = UITextAlignmentCenter;
-        noTagLabel.text = @"No tags yet";
+        noTagLabel.text = self.emptyText ? self.emptyText : @"No tags";
         [self addSubview:noTagLabel];
         tagHeight = 30;
     }

@@ -16,6 +16,8 @@
 #import "UtilityClass.h"
 #import "AKSegmentedControl.h"
 #import "KPAddTagPanel.h"
+#import "FilterMenu.h"
+#import "FilterHandler.h"
 
 #import "UIViewController+KNSemiModal.h"
 #define DEFAULT_SELECTED_INDEX 1
@@ -24,11 +26,11 @@
 #define ADD_BUTTON_MARGIN_BOTTOM 0
 #define CONTENT_VIEW_TAG 1000
 #define CONTROLS_VIEW_TAG 1001
-#define INTERESTED_SEGMENT_RECT CGRectMake(0,0,148,44)
+#define INTERESTED_SEGMENT_RECT CGRectMake(0,0,138,44)
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPPickerViewDataSource,KPAddTagDelegate,KPTagDelegate>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPPickerViewDataSource,KPAddTagDelegate,KPTagDelegate,FilterMenuDataSource,FilterMenuDelegate>
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) NSMutableArray *titles;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
@@ -89,15 +91,18 @@
     NSArray *selectedItems = [[self currentViewController] selectedItems];
     [TAGHANDLER addTags:@[tag] andRemoveTags:nil fromToDos:selectedItems];
     [[self currentViewController] updateWithoutLoading];
+    [self updateBackground];
 }
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString *)tag{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
     [TAGHANDLER addTags:nil andRemoveTags:@[tag] fromToDos:selectedItems];
     [[self currentViewController] updateWithoutLoading];
+    [self updateBackground];
 }
 #pragma mark - AddPanelDelegate
 -(void)pressedAdd:(id)sender{
     [self show:NO controlsAnimated:YES];
+    [self changeToIndex:1];
     AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.navigationController.view.bounds];
     addPanel.addDelegate = self;
     self.presentedPanel = addPanel;
@@ -116,11 +121,11 @@
 -(void)pressedTag:(id)sender{
     [self show:NO controlsAnimated:YES];
     
-    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, 450) andTags:[TAGHANDLER allTags]];
+    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, 450) andTags:[TAGHANDLER allTags] andMaxHeight:450];
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     self.presentedPanel = tagView;
-    [self presentSemiView:tagView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.30f}];
+    [self presentSemiView:tagView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f}];
     //[self.navigationController.view addSubview:tagView];
     //[tagView show:YES];
 }
@@ -189,12 +194,12 @@
 		//_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];
         AKSegmentedControl *segmentedControl = [[AKSegmentedControl alloc] initWithFrame:INTERESTED_SEGMENT_RECT];
         UIImage *backgroundImage = [UIImage imageNamed:@"segmented_bg"];
-        [segmentedControl setBackgroundImage:backgroundImage];
+        //[segmentedControl setBackgroundImage:backgroundImage];
         [segmentedControl setSelectedIndex: DEFAULT_SELECTED_INDEX];
         [segmentedControl addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventValueChanged];
-        [segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 2, 0, 2)];
+        //[segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 2, 0, 2)];
         [segmentedControl setSegmentedControlMode:AKSegmentedControlModeSticky];
-        [segmentedControl setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
+        //[segmentedControl setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
         UIButton *buttonSchedule = [self buttonForSegment:KPSegmentButtonSchedule];
         UIButton *buttonToday = [self buttonForSegment:KPSegmentButtonToday];
         UIButton *buttonDone = [self buttonForSegment:KPSegmentButtonDone];
@@ -286,8 +291,50 @@
     }
     //[self.navigationController setNavigationBarHidden:!show animated:YES];
 }
+-(FilterHandler*)filterHandler{
+    FilterHandler *filterHandler = [self currentViewController].filterHandler;
+    if(!filterHandler){
+        filterHandler = [FilterHandler filterForItems:[self currentViewController].items];
+        [self currentViewController].filterHandler = filterHandler;
+    }
+    return filterHandler;
+}
+-(void)filterMenu:(FilterMenu *)filterMenu deselectedTag:(NSString *)tag{
+    FilterHandler *filterHandler = [self filterHandler];
+    [filterHandler deselectTag:tag];
+    [[self currentViewController] update];
+}
+-(void)filterMenu:(FilterMenu *)filterMenu selectedTag:(NSString *)tag{
+    FilterHandler *filterHandler = [self filterHandler];
+    [filterHandler selectTag:tag];
+    [[self currentViewController] update];
+}
+-(NSArray *)selectedTagsForFilterMenu:(FilterMenu *)filterMenu{
+    FilterHandler *filterHandler = [self filterHandler];
+    return [filterHandler.selectedTags copy];
+}
+-(NSArray *)unselectedTagsForFilterMenu:(FilterMenu *)filterMenu{
+    FilterHandler *filterHandler = [self filterHandler];
+    return filterHandler.remainingTags;
+}
+-(void)pressedFilter:(id)sender event:(UIEvent*)event{
+    if(!self.presentedPanel){
+        FilterMenu *filterMenu = [[FilterMenu alloc] initWithFrame:self.view.bounds];
+        filterMenu.dataSource = self;
+        filterMenu.delegate = self;
+        [filterMenu popInWithEvent:event];
+        self.presentedPanel = filterMenu;
+    }
+    else{
+        FilterMenu *filterMenu = (FilterMenu *)self.presentedPanel;
+        [filterMenu hide];
+        self.presentedPanel = nil;
+    }
+}
 -(void)viewDidLoad{
     [super viewDidLoad];
+    UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
+    self.navigationItem.rightBarButtonItem = filter;
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -312,40 +359,36 @@
 }
 -(void)changeToIndex:(NSInteger)index{
     [self.segmentedControl setSelectedIndex:index];
-    [self changeViewController:self.segmentedControl];
+    [self changeViewControllerAnimated:NO];
 }
--(ToDoListViewController*)currentViewController{
-    ToDoListViewController *currentViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
-    return currentViewController;
-}
-- (void)changeViewController:(AKSegmentedControl *)segmentedControl{
-    //[self highlightButton:KPSegmentButtonSchedule];
-	CGFloat width = self.view.frame.size.width;
+-(void)changeViewControllerAnimated:(BOOL)animated{
+    CGFloat width = self.view.frame.size.width;
     CGFloat height = self.view.frame.size.height;
-    NSInteger selectedIndex = [[segmentedControl selectedIndexes] firstIndex];
+    NSInteger selectedIndex = [[self.segmentedControl selectedIndexes] firstIndex];
     CGFloat delta = (self.currentSelectedIndex < selectedIndex) ? width : -width;
 	ToDoListViewController *oldViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
     if(selectedIndex == self.currentSelectedIndex){
         [oldViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
         return;
     }
-    segmentedControl.userInteractionEnabled = NO;
+    self.segmentedControl.userInteractionEnabled = NO;
 	[oldViewController willMoveToParentViewController:nil];
 	
 	ToDoListViewController *newViewController = (ToDoListViewController*)self.viewControllers[selectedIndex];
     [newViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 	[self addChildViewController:newViewController];
 	newViewController.view.frame = CGRectSetPos(self.contentView.frame, delta, 0);
-	[self transitionFromViewController:oldViewController
+    CGFloat duration = animated ? 0.4 : 0.0;
+    [self transitionFromViewController:oldViewController
 					  toViewController:newViewController
-							  duration:0.4
+							  duration:duration
 							   options:UIViewAnimationOptionTransitionNone
 							animations:^(void) {
                                 oldViewController.view.frame = CGRectMake(0 - delta, 0, width, height);
                                 newViewController.view.frame = CGRectMake(0, 0, width, height);
                             }
 							completion:^(BOOL finished) {
-                                segmentedControl.userInteractionEnabled = YES;
+                                self.segmentedControl.userInteractionEnabled = YES;
 								if (finished) {
 									
 									[newViewController didMoveToParentViewController:self];
@@ -353,6 +396,15 @@
 									self.currentSelectedIndex = selectedIndex;
 								}
 							}];
+}
+-(ToDoListViewController*)currentViewController{
+    ToDoListViewController *currentViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
+    return currentViewController;
+}
+- (void)changeViewController:(AKSegmentedControl *)segmentedControl{
+    [self changeViewControllerAnimated:YES];
+    //[self highlightButton:KPSegmentButtonSchedule];
+	
 	
 }
 @end

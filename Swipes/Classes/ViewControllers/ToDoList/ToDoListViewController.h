@@ -11,8 +11,10 @@
 #import "ToDoCell.h"
 #import "NSDate-Utilities.h"
 #import "KPSegmentedViewController.h"
+#import "FilterHandler.h"
 @interface ToDoListViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic,strong) NSMutableArray *items;
+@property (nonatomic,strong) FilterHandler *filterHandler;
 @property (nonatomic,strong) NSMutableArray *titleArray;
 @property (nonatomic,strong) NSMutableArray *sortedItems;
 @property (nonatomic,strong) NSString *state;

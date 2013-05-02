@@ -18,7 +18,6 @@
     NSDate *endDate = [[NSDate dateTomorrow] dateAtStartOfDay];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@) AND (completionDate >= %@) AND (completionDate < %@)",@"done", startDate, endDate];
     self.items = [[KPToDo MR_findAllSortedBy:@"completionDate" ascending:NO withPredicate:predicate] mutableCopy];
-    [self sortItems];
 }
 -(void)sortItems{
     self.sortedItems = [NSMutableArray array];

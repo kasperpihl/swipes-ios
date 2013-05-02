@@ -29,6 +29,11 @@
 		A74F61BB16EBA595004927DA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BA16EBA595004927DA /* AVFoundation.framework */; };
 		A74F61BD16EBA5A5004927DA /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BC16EBA5A5004927DA /* AssetsLibrary.framework */; };
 		A74F61BF16EBA5B8004927DA /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BE16EBA5B7004927DA /* MediaPlayer.framework */; };
+		A75207FA1730F5F700F1B4F7 /* ToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A75207F91730F5F700F1B4F7 /* ToDoViewController.m */; };
+		A75207FE1730FBD700F1B4F7 /* FilterMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A75207FD1730FBD700F1B4F7 /* FilterMenu.m */; };
+		A75DB210173119FE00FA256B /* FilterHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A75DB20F173119FE00FA256B /* FilterHandler.m */; };
+		A75DB2141731BB8600FA256B /* tagbuttonCell.png in Resources */ = {isa = PBXBuildFile; fileRef = A75DB2121731BB8600FA256B /* tagbuttonCell.png */; };
+		A75DB2151731BB8600FA256B /* tagbuttonCell@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A75DB2131731BB8600FA256B /* tagbuttonCell@2x.png */; };
 		A761B5A316EB59320095A9A8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A216EB59320095A9A8 /* CoreData.framework */; };
 		A761B5A516EB59370095A9A8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A416EB59370095A9A8 /* SystemConfiguration.framework */; };
 		A761B5A716EB593C0095A9A8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A616EB593C0095A9A8 /* StoreKit.framework */; };
@@ -140,6 +145,14 @@
 		A74F61BA16EBA595004927DA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A74F61BC16EBA5A5004927DA /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		A74F61BE16EBA5B7004927DA /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		A75207F81730F5F700F1B4F7 /* ToDoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToDoViewController.h; path = ToDo/ToDoViewController.h; sourceTree = "<group>"; };
+		A75207F91730F5F700F1B4F7 /* ToDoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ToDoViewController.m; path = ToDo/ToDoViewController.m; sourceTree = "<group>"; };
+		A75207FC1730FBD700F1B4F7 /* FilterMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterMenu.h; path = Swipes/Classes/Views/FilterMenu/FilterMenu.h; sourceTree = SOURCE_ROOT; };
+		A75207FD1730FBD700F1B4F7 /* FilterMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterMenu.m; path = Swipes/Classes/Views/FilterMenu/FilterMenu.m; sourceTree = SOURCE_ROOT; };
+		A75DB20E173119FE00FA256B /* FilterHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterHandler.h; sourceTree = "<group>"; };
+		A75DB20F173119FE00FA256B /* FilterHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterHandler.m; sourceTree = "<group>"; };
+		A75DB2121731BB8600FA256B /* tagbuttonCell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tagbuttonCell.png; sourceTree = "<group>"; };
+		A75DB2131731BB8600FA256B /* tagbuttonCell@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tagbuttonCell@2x.png"; sourceTree = "<group>"; };
 		A761B5A216EB59320095A9A8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A761B5A416EB59370095A9A8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		A761B5A616EB593C0095A9A8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -322,6 +335,34 @@
 			path = AddTagPanel;
 			sourceTree = "<group>";
 		};
+		A75207F71730F5E000F1B4F7 /* ToDo */ = {
+			isa = PBXGroup;
+			children = (
+				A75207F81730F5F700F1B4F7 /* ToDoViewController.h */,
+				A75207F91730F5F700F1B4F7 /* ToDoViewController.m */,
+			);
+			name = ToDo;
+			sourceTree = "<group>";
+		};
+		A75207FB1730FB5800F1B4F7 /* FilterMenu */ = {
+			isa = PBXGroup;
+			children = (
+				A75207FC1730FBD700F1B4F7 /* FilterMenu.h */,
+				A75207FD1730FBD700F1B4F7 /* FilterMenu.m */,
+			);
+			name = FilterMenu;
+			path = ../ViewControllers;
+			sourceTree = "<group>";
+		};
+		A75DB2111731BB8600FA256B /* ToDoCell */ = {
+			isa = PBXGroup;
+			children = (
+				A75DB2121731BB8600FA256B /* tagbuttonCell.png */,
+				A75DB2131731BB8600FA256B /* tagbuttonCell@2x.png */,
+			);
+			path = ToDoCell;
+			sourceTree = "<group>";
+		};
 		A7680D30172D219800BCB2D9 /* Font */ = {
 			isa = PBXGroup;
 			children = (
@@ -490,6 +531,7 @@
 			isa = PBXGroup;
 			children = (
 				A7F4066617296BF100DDE644 /* ToDoList */,
+				A75207F71730F5E000F1B4F7 /* ToDo */,
 				A781286717294C56002226C8 /* Menu */,
 				A781286A17294C56002226C8 /* Segmented */,
 			);
@@ -518,6 +560,7 @@
 			isa = PBXGroup;
 			children = (
 				A7F4066217296BC700DDE644 /* AddPanel */,
+				A75207FB1730FB5800F1B4F7 /* FilterMenu */,
 				A781287417294C56002226C8 /* MCSwipeTableViewCell */,
 				A781287717294C56002226C8 /* PickerView */,
 				A781287A17294C56002226C8 /* SchedulePopup */,
@@ -571,6 +614,7 @@
 				A7680D33172D272300BCB2D9 /* Navbar */,
 				A781288317294C56002226C8 /* AKSegmentedControl */,
 				A781289A17294C56002226C8 /* Buttons */,
+				A75DB2111731BB8600FA256B /* ToDoCell */,
 				A78128A317294C56002226C8 /* check.png */,
 				A78128A417294C56002226C8 /* check@2x.png */,
 				A78128A517294C56002226C8 /* clock.png */,
@@ -738,6 +782,8 @@
 				A7F40675172A785C00DDE644 /* ToDoHandler.m */,
 				A7680D24172C5E9100BCB2D9 /* TagHandler.h */,
 				A7680D25172C5E9100BCB2D9 /* TagHandler.m */,
+				A75DB20E173119FE00FA256B /* FilterHandler.h */,
+				A75DB20F173119FE00FA256B /* FilterHandler.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -855,6 +901,8 @@
 				A7680D4C172D34F900BCB2D9 /* add_panel_background@2x.png in Resources */,
 				A7338BD5172DB7BB004FCDC2 /* tag_background.png in Resources */,
 				A7338BD6172DB7BB004FCDC2 /* tag_selected_background.png in Resources */,
+				A75DB2141731BB8600FA256B /* tagbuttonCell.png in Resources */,
+				A75DB2151731BB8600FA256B /* tagbuttonCell@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -940,6 +988,9 @@
 				A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */,
 				A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */,
 				A7680D2F172C610B00BCB2D9 /* KPTagList.m in Sources */,
+				A75207FA1730F5F700F1B4F7 /* ToDoViewController.m in Sources */,
+				A75207FE1730FBD700F1B4F7 /* FilterMenu.m in Sources */,
+				A75DB210173119FE00FA256B /* FilterHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

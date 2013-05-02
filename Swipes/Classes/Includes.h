@@ -21,6 +21,11 @@ typedef NS_ENUM(NSUInteger, KPControlCurrentState){
     KPControlCurrentStateAdd,
     KPControlCurrentStateEdit
 };
+typedef NS_ENUM(NSUInteger, KPCurrentMenu) {
+    KPCurrentMenuSchedule,
+    KPCurrentMenuToday,
+    KPCurrentMenuDone
+};
 typedef NS_ENUM(NSUInteger, KPSegmentButtons) {
     KPSegmentButtonSchedule,
     KPSegmentButtonToday,

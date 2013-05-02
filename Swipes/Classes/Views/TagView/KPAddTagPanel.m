@@ -16,10 +16,10 @@
 #define DONE_EDITING_TAG 7
 #define ANIMATION_DURATION 0.25f
 
-#define ADD_VIEW_HEIGHT 41
+#define ADD_VIEW_HEIGHT 60
 #define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
 #define TEXT_FIELD_MARGIN_SIDES 60
-#define TEXT_FIELD_MARGIN_BOTTOM 8
+#define TEXT_FIELD_MARGIN_BOTTOM 15
 #define TEXT_FIELD_HEIGHT 30
 #define KEYBOARD_HEIGHT 216
 @interface KPAddTagPanel () <UITextFieldDelegate,KPTagListResizeDelegate>
@@ -30,14 +30,14 @@
 @end
 @implementation KPAddTagPanel
 +(KPAddTagPanel*)tagPanelWithTags:(NSArray*)tags maxHeight:(NSInteger)maxHeight{
-    KPAddTagPanel *tagPanel = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, maxHeight) andTags:tags];
-    tagPanel.maxHeight = maxHeight;
+    KPAddTagPanel *tagPanel = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, maxHeight) andTags:tags andMaxHeight:maxHeight];
     return tagPanel;
 }
-- (id)initWithFrame:(CGRect)frame andTags:(NSArray*)tags
+- (id)initWithFrame:(CGRect)frame andTags:(NSArray*)tags andMaxHeight:(NSInteger)maxHeight
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.maxHeight = maxHeight;
         self.backgroundColor = [UIColor whiteColor];
         UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height-ADD_VIEW_HEIGHT)];
         scrollView.tag = SCROLL_VIEW_TAG;
@@ -52,7 +52,9 @@
         scrollView.scrollEnabled = YES;
         [self addSubview:scrollView];
         self.scrollView = (UIScrollView*)[self viewWithTag:SCROLL_VIEW_TAG];
-        
+        CGFloat height = (self.tagView.frame.size.height > self.maxHeight) ? self.maxHeight : self.tagView.frame.size.height;
+        CGRectSetSize(self.scrollView.frame, self.scrollView.frame.size.width, height);
+        CGRectSetSize(self.frame, self.frame.size.width, self.scrollView.frame.origin.y+self.scrollView.frame.size.height+ADD_VIEW_HEIGHT);
         
         UIView *addTagView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-ADD_VIEW_HEIGHT, self.frame.size.width, ADD_VIEW_HEIGHT)];
         addTagView.backgroundColor = [UIColor whiteColor];
@@ -70,7 +72,7 @@
         [addTagView addSubview:textField];
         
         UIButton *doneEditingButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        doneEditingButton.frame = CGRectMake(self.frame.size.width-TEXT_FIELD_MARGIN_SIDES+5, 0, 50, 40);
+        doneEditingButton.frame = CGRectMake(self.frame.size.width-TEXT_FIELD_MARGIN_SIDES+5, 10, 50, 40);
         [doneEditingButton setTitle:@"Done" forState:UIControlStateNormal];
         doneEditingButton.tag = DONE_EDITING_TAG;
         doneEditingButton.hidden = YES;
@@ -98,24 +100,31 @@
     if([self.delegate respondsToSelector:@selector(tagPanel:changedSize:)]) [self.delegate tagPanel:self changedSize:CGSizeMake(self.frame.size.width, self.frame.size.height)];
 }
 -(void)keyboardWillHide:(id)sender{
- /*   self.isShowingKeyboard = NO;
-    self.textField.placeholder = @"Click to add a new tag";
-    if([self.delegate respondsToSelector:@selector(tagPanel:changedSize:)]) [self.delegate tagPanel:self changedSize:CGSizeMake(self.frame.size.width, self.frame.size.height-KEYBOARD_HEIGHT)];*/
+    self.isShowingKeyboard = NO;
+    
     [self shiftToAddMode:NO];
 }
 -(void)keyboardWillShow:(id)sender{
-    /*self.isShowingKeyboard = YES;
-    self.textField.placeholder = @"Type in the tag";
-    if([self.delegate respondsToSelector:@selector(tagPanel:changedSize:)]) [self.delegate tagPanel:self changedSize:CGSizeMake(self.frame.size.width, self.frame.size.height+KEYBOARD_HEIGHT)];*/
+    self.isShowingKeyboard = YES;
+    
     [self shiftToAddMode:YES];
 }
 -(void)shiftToAddMode:(BOOL)addMode{
-    void (^showBlock)(void);
+    self.doneEditingButton.hidden = !addMode;
+    CGFloat newHeight;
+    if(addMode) newHeight = self.frame.size.height + KEYBOARD_HEIGHT;
+    else newHeight = self.frame.size.height - KEYBOARD_HEIGHT;
+    if(newHeight > self.maxHeight){
+        newHeight = self.maxHeight;
+    }
+    self.textField.placeholder = !addMode ? @"Click to add a new tag" : @"Type in the tag";
+    if([self.delegate respondsToSelector:@selector(tagPanel:changedSize:)]) [self.delegate tagPanel:self changedSize:CGSizeMake(self.frame.size.width,newHeight)];
+ /*   void (^showBlock)(void);
     showBlock = ^(void) {
 //        CGRectSetY(self.scrollView.frame,self.scrollView.frame.origin.y-KEYBOARD_HEIGHT);
         CGRectSetSize(self.scrollView.frame, self.scrollView.frame.size.width, self.scrollView.frame.size.height-KEYBOARD_HEIGHT);
-        /*CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
-        [self.scrollView setContentOffset:bottomOffset animated:YES];*/
+        CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+        [self.scrollView setContentOffset:bottomOffset animated:YES];
         CGRectSetY(self.addTagView.frame, self.addTagView.frame.origin.y - KEYBOARD_HEIGHT);
         self.textField.placeholder = @"Type in the tag";
         self.doneEditingButton.hidden = NO;
@@ -130,7 +139,7 @@
     }
     [UIView animateWithDuration:ANIMATION_DURATION animations:showBlock completion:^(BOOL finished) {
         
-    }];
+    }];*/
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     NSString *string = textField.text;

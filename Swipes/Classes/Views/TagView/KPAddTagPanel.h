@@ -17,7 +17,7 @@
 
 @interface KPAddTagPanel : UIView
 +(KPAddTagPanel*)tagPanelWithTags:(NSArray*)tags maxHeight:(NSInteger)maxHeight;
-- (id)initWithFrame:(CGRect)frame andTags:(NSArray*)tags;
+- (id)initWithFrame:(CGRect)frame andTags:(NSArray*)tags andMaxHeight:(NSInteger)maxHeight;
 @property (nonatomic) BOOL isShowingKeyboard;
 @property (nonatomic,weak) IBOutlet KPTagList *tagView;
 @property (nonatomic,weak) IBOutlet UITextField *textField;
