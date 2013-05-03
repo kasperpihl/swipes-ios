@@ -111,6 +111,7 @@
     if(!(searchField == nil)) {
         self.searchField = searchField;
         CGRectSetSize(searchField.frame, 250, searchField.frame.size.height);
+        searchField.enabled = NO;
         //searchField.textColor = [UIColor whiteColor];
         //[searchField setBackground: [UIImage imageNamed:@"buscador.png"] ];
         //[searchField setBorderStyle:UITextBorderStyleNone];

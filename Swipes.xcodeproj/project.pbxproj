@@ -128,6 +128,7 @@
 		A7933049172AB63700F1505E /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933048172AB63700F1505E /* TodayViewController.m */; };
 		A7933050172B251A00F1505E /* KPAddTagPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = A793304F172B251A00F1505E /* KPAddTagPanel.m */; };
 		A7933056172B2BA100F1505E /* DoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933055172B2BA100F1505E /* DoneViewController.m */; };
+		A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B260921733D1FD000BADDE /* NotificationHandler.m */; };
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
 		A7F4066517296BC700DDE644 /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066417296BC700DDE644 /* AddPanelView.m */; };
 		A7F4066B17296BF100DDE644 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066817296BF100DDE644 /* ToDoCell.m */; };
@@ -279,6 +280,8 @@
 		A793304F172B251A00F1505E /* KPAddTagPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPAddTagPanel.m; sourceTree = "<group>"; };
 		A7933054172B2BA100F1505E /* DoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DoneViewController.h; path = Done/DoneViewController.h; sourceTree = "<group>"; };
 		A7933055172B2BA100F1505E /* DoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DoneViewController.m; path = Done/DoneViewController.m; sourceTree = "<group>"; };
+		A7B260911733D1FC000BADDE /* NotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationHandler.h; sourceTree = "<group>"; };
+		A7B260921733D1FD000BADDE /* NotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationHandler.m; sourceTree = "<group>"; };
 		A7F4065F17294ECE00DDE644 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		A7F4066017294ECE00DDE644 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		A7F4066317296BC700DDE644 /* AddPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPanelView.h; sourceTree = "<group>"; };
@@ -781,6 +784,8 @@
 				A7680D25172C5E9100BCB2D9 /* TagHandler.m */,
 				A75DB20E173119FE00FA256B /* FilterHandler.h */,
 				A75DB20F173119FE00FA256B /* FilterHandler.m */,
+				A7B260911733D1FC000BADDE /* NotificationHandler.h */,
+				A7B260921733D1FD000BADDE /* NotificationHandler.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -989,6 +994,7 @@
 				A75207FE1730FBD700F1B4F7 /* FilterMenu.m in Sources */,
 				A75DB210173119FE00FA256B /* FilterHandler.m in Sources */,
 				A75DB2181732FE1A00FA256B /* KPSearchBar.m in Sources */,
+				A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

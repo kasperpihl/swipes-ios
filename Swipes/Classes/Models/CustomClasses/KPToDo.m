@@ -47,25 +47,29 @@
 }
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags{
     if(!self.readableTags) [self updateTagsString];
-    
     NSMutableString *mutableString = [NSMutableString stringWithString:@""];
+    NSMutableArray *sortedArray = [[selectedTags sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] mutableCopy];
+    for(NSString *tag in sortedArray){
+        [mutableString appendFormat:@"%@, ",tag];
+    }
+    for(NSString *tag in self.textTags){
+        if(![sortedArray containsObject:tag]) [mutableString appendFormat:@"%@, ",tag];
+    }
+    [mutableString deleteCharactersInRange:NSMakeRange([mutableString length]-2, 2)];
     NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
                            TAGS_LABEL_FONT, NSFontAttributeName,
                            nil];
     NSDictionary *boldAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
                               TAGS_LABEL_BOLD_FONT, NSFontAttributeName, nil];
     NSMutableAttributedString *attributedText =
-    [[NSMutableAttributedString alloc] initWithString:self.readableTags
+    [[NSMutableAttributedString alloc] initWithString:mutableString
                                            attributes:attrs];
-    for(NSString *tag in self.textTags){
-        if([selectedTags containsObject:tag]){
-            NSRange range = NSMakeRange(mutableString.length,tag.length);
-            [attributedText setAttributes:boldAttrs range:range];
-        }
-        [mutableString appendFormat:@"%@, ",tag];
+    NSMutableString *mutableString2 = [NSMutableString stringWithString:@""];
+    for(NSString *tag in sortedArray){
+        NSRange range = NSMakeRange(mutableString2.length,tag.length);
+        [attributedText setAttributes:boldAttrs range:range];
+        [mutableString2 appendFormat:@"%@, ",tag];
     }
-    
-    
     return attributedText;
     
 }

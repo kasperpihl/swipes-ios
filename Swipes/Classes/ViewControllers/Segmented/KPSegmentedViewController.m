@@ -108,7 +108,6 @@
     self.presentedPanel = addPanel;
     
     CGFloat timerToShow = 0.25f+0.25f*(((addPanel.frame.size.height)-216)/216);
-    NSLog(@"timerToShow:%f",timerToShow);
     [self presentSemiView:addPanel withOptions:@{KNSemiModalOptionKeys.animationDuration:[NSNumber numberWithFloat: timerToShow]}];
     [addPanel show:YES];
     /*
