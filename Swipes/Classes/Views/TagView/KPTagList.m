@@ -95,6 +95,8 @@
     else{
         UILabel *noTagLabel = [[UILabel alloc]initWithFrame:CGRectMake(HORIZONTAL_MARGIN, VERTICAL_MARGIN, self.frame.size.width-2*HORIZONTAL_MARGIN, 30)];
         noTagLabel.textAlignment = UITextAlignmentCenter;
+        noTagLabel.backgroundColor = [UIColor clearColor];
+        noTagLabel.textColor = [UIColor whiteColor];
         noTagLabel.text = self.emptyText ? self.emptyText : @"No tags";
         [self addSubview:noTagLabel];
         tagHeight = 30;

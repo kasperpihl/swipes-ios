@@ -13,6 +13,12 @@
 
 @end
 @implementation FilterHandler
+-(NSArray *)unselectedTagsForSearchBar:(KPSearchBar *)searchBar{
+    return self.remainingTags;
+}
+-(NSArray *)selectedTagsForSearchBar:(KPSearchBar *)searchBar{
+    return [self.selectedTags copy];
+}
 -(NSMutableArray *)selectedTags{
     if(!_selectedTags) _selectedTags = [NSMutableArray array];
     return _selectedTags;
@@ -20,9 +26,12 @@
 +(FilterHandler *)filterForItems:(NSArray*)items{
     FilterHandler *filter = [[FilterHandler alloc] init];
     filter.items = items;
-    filter.allTags = [filter extractTags];
-    [filter runSort];
     return filter;
+}
+-(void)setItems:(NSArray *)items{
+    _items = items;
+    self.allTags = [self extractTags];
+    [self runSort];
 }
 -(NSArray*)extractTags{
     NSArray *tagArray = [NSArray array];
@@ -72,5 +81,9 @@
         [self runSort];
     }
     
+}
+-(void)clearAll{
+    [self.selectedTags removeAllObjects];
+    [self runSort];
 }
 @end

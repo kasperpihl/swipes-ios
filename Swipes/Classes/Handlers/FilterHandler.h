@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KPSearchBar.h"
 #define FILTER [FilterHandler sharedInstance]
-@interface FilterHandler : NSObject
+@interface FilterHandler : NSObject  <KPSearchBarDataSource>
 @property (nonatomic,strong) NSArray *items;
 @property (nonatomic,strong) NSArray *allTags;
 @property (nonatomic,strong) NSArray *remainingTags;
@@ -18,4 +19,5 @@
 +(FilterHandler *)filterForItems:(NSArray*)items;
 -(void)selectTag:(NSString*)tag;
 -(void)deselectTag:(NSString*)tag;
+-(void)clearAll;
 @end

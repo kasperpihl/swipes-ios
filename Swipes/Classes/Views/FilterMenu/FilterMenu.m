@@ -23,10 +23,6 @@
 @end
 
 @implementation FilterMenu
-+(FilterMenu *)filterMenuWithUnselectedTags:(NSArray *)unselectedTags selectedTags:(NSArray *)selectedTags{
-    FilterMenu *filterMenu = [[FilterMenu alloc] initWithFrame:CGRectMake(0, 0, DEFAULT_MAX_WIDTH, 10)];
-    return filterMenu;
-}
 -(void)setDataSource:(NSObject<FilterMenuDataSource> *)dataSource{
     _dataSource = dataSource;
     [self reloadData];
@@ -62,7 +58,6 @@
     [self reloadData];
 }
 -(void)render{
-    self.maxWidth = DEFAULT_MAX_WIDTH;
     self.backgroundColor = [UtilityClass colorWithRed:71 green:71 blue:71 alpha:1];
     KPTagList *selectedTagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.maxWidth, 0)];
     selectedTagList.emptyText = @"No tags selected";
@@ -84,6 +79,8 @@
     CGRectSetY(self.tagListView.frame, tempHeight);
     tempHeight += self.tagListView.frame.size.height;
     CGRectSetSize(self.frame, self.tagListView.frame.size.width, tempHeight);
+    [(UITableView *)self.superview setTableHeaderView:self];
+    //[self adjustTableHeaderHeight:tempHeight];
 }
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -103,42 +100,16 @@
     }
     [self popInView:view];
 }
-
 - (void)popInView:(UIView*)view
 {
-    //Set frame for menu view
     CGRect frame = view.frame;
     NSInteger menuHeight = self.frame.size.height;
     NSInteger menuWidth = self.frame.size.width;
     NSInteger menuX = frame.origin.x-menuWidth+frame.size.width;
-
-    //if (self.direction == MLPopupMenuUp) {
-        /*self.frame = CGRectMake(menuX,
-                                menuY,
-                                menuWidth,
-                                menuHeight);*/
-    //}else{
         self.frame = CGRectMake(menuX,
                                 64 - menuHeight,
                                 menuWidth,
                                 menuHeight);
-    //}
-    if (![self isPopped]){
-        
-        //Insert menu below superview
-        if ([view.superview isKindOfClass:[UINavigationBar class]]) {
-            UINavigationBar *navBar = (UINavigationBar*)view.superview;
-            [navBar.superview insertSubview:self belowSubview:navBar];
-            
-        }else if([view.superview isKindOfClass:[UITabBar class]]){
-            UITabBar *navBar = (UITabBar*)view.superview;
-            [navBar.superview insertSubview:self belowSubview:navBar];
-        }else{
-            [view.superview insertSubview:self belowSubview:view];
-        }
-    }
-    
-    //Animate popup
     [UIView animateWithDuration:0.3
                      animations:^{
                          self.frame = CGRectApplyAffineTransform(self.frame, CGAffineTransformMakeTranslation(0,  menuHeight));
@@ -152,11 +123,6 @@
 }
 - (void)hide
 {
-    //Get row height
-    //CGFloat cellSize = [self rowHeight];
-    //Get number of rows
-    //NSInteger numberOfRows = [self numberOfRowsInSection:0];
-    //Animate popup
     [UIView animateWithDuration:0.3
                      animations:^{
                          self.frame = CGRectApplyAffineTransform(self.frame, CGAffineTransformMakeTranslation(0, -self.frame.size.height));

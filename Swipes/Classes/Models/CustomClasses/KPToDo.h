@@ -8,4 +8,5 @@
 -(void)scheduleForDate:(NSDate*)date;
 -(void)updateTagsString;
 -(NSString *)stringifyTags;
+-(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags;
 @end

@@ -19,19 +19,10 @@
 @end
 
 
-
-typedef enum {
-    MLPopupMenuUp = 0,
-    MLPopupMenuDown = 1
-} MLPopupDirection;
-
 @interface FilterMenu : UIView
 @property (nonatomic,weak) NSObject<FilterMenuDataSource> *dataSource;
 @property (nonatomic,weak) NSObject<FilterMenuDelegate> *delegate;
 
 @property (nonatomic, assign) BOOL isPopped;
 @property (nonatomic) NSInteger maxWidth;
-+(FilterMenu*)filterMenuWithUnselectedTags:(NSArray *)tags selectedTags:(NSArray*)selectedTags;
-- (void)popInWithEvent:(UIEvent*)event;
-- (void)hide;
 @end

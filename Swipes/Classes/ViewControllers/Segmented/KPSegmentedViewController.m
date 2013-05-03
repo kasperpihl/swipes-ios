@@ -30,7 +30,7 @@
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPPickerViewDataSource,KPAddTagDelegate,KPTagDelegate,FilterMenuDataSource,FilterMenuDelegate>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPPickerViewDataSource,KPAddTagDelegate,KPTagDelegate>
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) NSMutableArray *titles;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
@@ -173,9 +173,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated" object:self];
     [self updateBackground];
 }
--(void)didAddTag:(NSString*)tag{
-    
-}
 
 - (NSMutableArray *)viewControllers {
 	if (!_viewControllers)
@@ -193,7 +190,7 @@
 	if (!_segmentedControl) {
 		//_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];
         AKSegmentedControl *segmentedControl = [[AKSegmentedControl alloc] initWithFrame:INTERESTED_SEGMENT_RECT];
-        UIImage *backgroundImage = [UIImage imageNamed:@"segmented_bg"];
+        //UIImage *backgroundImage = [UIImage imageNamed:@"segmented_bg"];
         //[segmentedControl setBackgroundImage:backgroundImage];
         [segmentedControl setSelectedIndex: DEFAULT_SELECTED_INDEX];
         [segmentedControl addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventValueChanged];
@@ -291,51 +288,10 @@
     }
     //[self.navigationController setNavigationBarHidden:!show animated:YES];
 }
--(FilterHandler*)filterHandler{
-    FilterHandler *filterHandler = [self currentViewController].filterHandler;
-    if(!filterHandler){
-        filterHandler = [FilterHandler filterForItems:[self currentViewController].items];
-        [self currentViewController].filterHandler = filterHandler;
-    }
-    return filterHandler;
-}
--(void)filterMenu:(FilterMenu *)filterMenu deselectedTag:(NSString *)tag{
-    FilterHandler *filterHandler = [self filterHandler];
-    [filterHandler deselectTag:tag];
-    [[self currentViewController] update];
-}
--(void)filterMenu:(FilterMenu *)filterMenu selectedTag:(NSString *)tag{
-    FilterHandler *filterHandler = [self filterHandler];
-    [filterHandler selectTag:tag];
-    [[self currentViewController] update];
-}
--(NSArray *)selectedTagsForFilterMenu:(FilterMenu *)filterMenu{
-    FilterHandler *filterHandler = [self filterHandler];
-    return [filterHandler.selectedTags copy];
-}
--(NSArray *)unselectedTagsForFilterMenu:(FilterMenu *)filterMenu{
-    FilterHandler *filterHandler = [self filterHandler];
-    return filterHandler.remainingTags; 
-}
--(void)pressedFilter:(id)sender event:(UIEvent*)event{
-    FilterHandler *filterHandler = [self currentViewController].filterHandler;
-    if(filterHandler){
-        [self currentViewController].filterHandler = nil;
-        [[self currentViewController].tableView setTableHeaderView:[UIView new]];
-        [[self currentViewController] loadItems];
-    }
-    else{
-        filterHandler = [self filterHandler];
-        FilterMenu *filterMenu = [[FilterMenu alloc] initWithFrame:self.view.bounds];
-        filterMenu.dataSource = self;
-        filterMenu.delegate = self;
-        [[self currentViewController].tableView setTableHeaderView:filterMenu];
-    }
-}
 -(void)viewDidLoad{
     [super viewDidLoad];
-    UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
-    self.navigationItem.rightBarButtonItem = filter;
+    //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
+    //self.navigationItem.rightBarButtonItem = filter;
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -369,14 +325,15 @@
     CGFloat delta = (self.currentSelectedIndex < selectedIndex) ? width : -width;
 	ToDoListViewController *oldViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
     if(selectedIndex == self.currentSelectedIndex){
-        [oldViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+        //[oldViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
         return;
     }
     self.segmentedControl.userInteractionEnabled = NO;
 	[oldViewController willMoveToParentViewController:nil];
 	
 	ToDoListViewController *newViewController = (ToDoListViewController*)self.viewControllers[selectedIndex];
-    [newViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+    newViewController.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(newViewController.tableView.tableHeaderView.bounds));
+    //[newViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 	[self addChildViewController:newViewController];
 	newViewController.view.frame = CGRectSetPos(self.contentView.frame, delta, 0);
     CGFloat duration = animated ? 0.4 : 0.0;

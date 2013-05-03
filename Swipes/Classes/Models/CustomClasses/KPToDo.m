@@ -1,6 +1,8 @@
 #import "KPToDo.h"
 
 #import "KPTag.h"
+#define TAGS_LABEL_BOLD_FONT [UIFont fontWithName:@"HelveticaNeue-Bold" size:12]
+#define TAGS_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue" size:12]
 @interface KPToDo ()
 @property (nonatomic,strong) NSString *readableTags;
 // Private interface goes here.
@@ -42,6 +44,30 @@
     }
     self.textTags = textTags;
     self.readableTags = [mutableString copy];
+}
+-(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags{
+    if(!self.readableTags) [self updateTagsString];
+    
+    NSMutableString *mutableString = [NSMutableString stringWithString:@""];
+    NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
+                           TAGS_LABEL_FONT, NSFontAttributeName,
+                           nil];
+    NSDictionary *boldAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
+                              TAGS_LABEL_BOLD_FONT, NSFontAttributeName, nil];
+    NSMutableAttributedString *attributedText =
+    [[NSMutableAttributedString alloc] initWithString:self.readableTags
+                                           attributes:attrs];
+    for(NSString *tag in self.textTags){
+        if([selectedTags containsObject:tag]){
+            NSRange range = NSMakeRange(mutableString.length,tag.length);
+            [attributedText setAttributes:boldAttrs range:range];
+        }
+        [mutableString appendFormat:@"%@, ",tag];
+    }
+    
+    
+    return attributedText;
+    
 }
 -(NSArray *)textTags{
     if(!_textTags){

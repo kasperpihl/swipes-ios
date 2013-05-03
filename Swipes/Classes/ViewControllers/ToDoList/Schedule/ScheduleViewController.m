@@ -16,6 +16,7 @@
     NSDate *startDate = [[NSDate dateTomorrow] dateAtStartOfDay];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule > %@) OR (state == %@ AND schedule = nil)",@"schedule", startDate,@"schedule"];
     self.items = [[KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:predicate] mutableCopy];
+    [self update];
 }
 -(void)sortItems{
     self.sortedItems = [NSMutableArray array];

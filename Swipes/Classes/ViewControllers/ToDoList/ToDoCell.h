@@ -11,5 +11,5 @@
 @class KPToDo;
 @interface ToDoCell : MCSwipeTableViewCell
 @property (nonatomic) CellType cellType;
--(void)changeToDo:(KPToDo*)toDo;
+-(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags;
 @end

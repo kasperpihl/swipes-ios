@@ -12,14 +12,16 @@
 #import "ToDoHandler.h"
 #import "SchedulePopup.h"
 #import "KPSearchBar.h"
+#import "FilterMenu.h"
 
 #define TABLEVIEW_TAG 500
 #define CONTENT_INSET_BOTTOM 100
-@interface ToDoListViewController ()<MCSwipeTableViewCellDelegate>
+@interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate>
 
 @property (nonatomic,strong) MCSwipeTableViewCell *swipingCell;
 
 @property (nonatomic) CellType cellType;
+@property (nonatomic,strong) KPSearchBar *searchBar;
 @property (nonatomic) NSMutableArray *selectedRows;
 @property (nonatomic) CGPoint lastOffset;
 @property (nonatomic) NSTimeInterval lastOffsetCapture;
@@ -28,6 +30,12 @@
 @end
 
 @implementation ToDoListViewController
+-(FilterHandler *)filterHandler{
+    if(!_filterHandler){
+        _filterHandler = [[FilterHandler alloc] init];
+    }
+    return _filterHandler;
+}
 -(KPSegmentedViewController *)parent{
     KPSegmentedViewController *parent = (KPSegmentedViewController*)[self parentViewController];
     return parent;
@@ -55,14 +63,15 @@
     
 }
 -(void)updateWithoutLoading{
-    [self.tableView reloadData];
+    [self update];
     for(NSIndexPath *indexPath in self.selectedRows){
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
 }
 -(void)update{
     if(self.filterHandler){
-        self.items = [self.filterHandler.sortedItems copy];
+        [self.filterHandler setItems:self.items];
+        self.items = [self.filterHandler.sortedItems mutableCopy];
     }
     [self sortItems];
     [self.tableView reloadData];
@@ -98,7 +107,32 @@
     NSMutableArray *arrayOfItems = [self arrayForTitle:title];
     [arrayOfItems addObject:toDo];
 }
-
+#pragma mark - FilterMenuDelegate
+-(void)searchBar:(KPSearchBar *)searchBar deselectedTag:(NSString *)tag{
+    [self.filterHandler deselectTag:tag];
+    [self loadItems];
+}
+-(void)searchBar:(KPSearchBar *)searchBar selectedTag:(NSString *)tag{
+    [self.filterHandler selectTag:tag];
+    [self update];
+}
+-(void)clearedAllFiltersForSearchBar:(KPSearchBar *)searchBar{
+    self.searchBar.currentMode = KPSearchBarModeNone;
+    [self.filterHandler clearAll];
+    [self loadItems];
+}
+#pragma mark - KPSearchBarDelegate
+-(void)searchBar:(KPSearchBar *)searchBar pressedFilterButton:(UIButton *)filterButton{
+    searchBar.currentMode = KPSearchBarModeTags;
+    /*FilterMenu *filterMenu = [[FilterMenu alloc] initWithFrame:self.view.bounds];
+    filterMenu.dataSource = self.filterHandler;
+    filterMenu.delegate = self;*/
+    /*CGRectSetY(filterMenu.frame, 0-filterMenu.frame.size.height+self.tableView.tableHeaderView.frame.size.height);
+    self.tableView.tableHeaderView = filterMenu;
+    [UIView animateWithDuration:3 animations:^{
+        CGRectSetY(filterMenu.frame, 0);
+    }];*/
+}
 #pragma mark - Dragable Controller
 
 #pragma mark - TableView delegate
@@ -134,16 +168,17 @@
         cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell = [self readyCell:cell];
         
-    }    
+    }
+    cell.cellType = self.cellType;
+    KPToDo *toDo = [self itemForIndexPath:indexPath];
+    [cell changeToDo:toDo withSelectedTags:self.filterHandler.selectedTags];
 	return cell;
 }
 
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
-    cell.cellType = self.cellType;
-    KPToDo *toDo = [self itemForIndexPath:indexPath];
-    [cell changeToDo:toDo];
+    
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.selectedRows removeObject:indexPath];
@@ -351,20 +386,17 @@
     tableView.delegate = self;
     tableView.dataSource = self;
     
-    UIView *searchBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 250, 44)];
     
-    [searchBar setBackgroundImage:[UIImage new]];
-    [searchBar setTranslucent:YES];
-    searchBar.backgroundColor = [UIColor clearColor];
-    [searchBarView addSubview:searchBar];
-    [tableView setTableHeaderView:searchBarView];
-    
+    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    searchBar.searchBarDelegate = self;
+    searchBar.searchBarDataSource = self.filterHandler;
+    self.searchBar = searchBar;
+    [tableView setTableHeaderView:searchBar];
+    tableView.contentOffset = CGPointMake(0, CGRectGetHeight(tableView.tableHeaderView.bounds));
     
     doubleTap.numberOfTapsRequired = 2;
     doubleTap.numberOfTouchesRequired = 1;
     [tableView addGestureRecognizer:doubleTap];
-    
 }
 #pragma mark - UIViewController stuff
 - (void)viewDidLoad
@@ -382,6 +414,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self loadItems];
+    
 }
 -(void)dealloc{
     clearNotify();

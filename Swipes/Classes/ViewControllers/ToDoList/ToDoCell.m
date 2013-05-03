@@ -65,24 +65,29 @@
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
         UIView *overlayView = [[UIView alloc] initWithFrame:self.bounds];
-        overlayView.backgroundColor = [UtilityClass colorWithRed:155 green:155 blue:155 alpha:0.6];
+        overlayView.backgroundColor = [UtilityClass colorWithRed:200 green:200 blue:200 alpha:0.6];
         overlayView.tag = OVERLAY_VIEW_TAG;
         self.selectedBackgroundView = overlayView;
     }
     return self;
 }
--(void)changeToDo:(KPToDo *)toDo{
+-(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags{
     self.titleLabel.text = toDo.title;
-    NSString *tagString = [toDo stringifyTags];
-    if(!tagString) tagString = @"No Tags";
-    self.tagsLabel.text = tagString;
+    if(selectedTags && selectedTags.count > 0 && [self.tagsLabel respondsToSelector:@selector(setAttributedText:)]){
+        [self.tagsLabel setAttributedText:[toDo stringForSelectedTags:selectedTags]];
+    }else{
+        NSString *tagString = [toDo stringifyTags];
+        if(!tagString) tagString = @"No Tags";
+        self.tagsLabel.font = TAGS_LABEL_FONT;
+        self.tagsLabel.text = tagString;
+    }
+    [self.tagsLabel setNeedsDisplay];
+    
 }
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){
         _cellType = cellType;
-        self.selectedBackgroundView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
-        /*self.contentView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
-        self.textLabel.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];*/
+        //self.selectedBackgroundView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
         CellType firstCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
         CellType secondCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState2];
         CellType thirdCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState3];
@@ -99,14 +104,7 @@
     }
 }
 -(void)setHighlighted:(BOOL)highlighted{
-    
     [super setHighlighted:highlighted];
-    /*if(highlighted){
-        self.tagsLabel.textColor = [UIColor whiteColor];
-    }
-    else {
-        self.tagsLabel.textColor = TAGS_LABEL_COLOR;
-    }*/
 }
 -(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
     //NSLog(@"setting highlighted animation");
