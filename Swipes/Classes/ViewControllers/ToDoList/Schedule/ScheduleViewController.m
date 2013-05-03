@@ -12,11 +12,11 @@
 @end
 
 @implementation ScheduleViewController
--(void)loadItems{
+-(void)loadItemsAndUpdate:(BOOL)update{
     NSDate *startDate = [[NSDate dateTomorrow] dateAtStartOfDay];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule > %@) OR (state == %@ AND schedule = nil)",@"schedule", startDate,@"schedule"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule > %@) OR (state == %@ AND schedule = nil)",@"scheduled", startDate,@"scheduled"];
     self.items = [[KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:predicate] mutableCopy];
-    [self update];
+    if(update) [self update];
 }
 -(void)sortItems{
     self.sortedItems = [NSMutableArray array];
@@ -24,6 +24,7 @@
     NSMutableArray *unspecified = [NSMutableArray array];
     for(KPToDo *toDo in self.items){
         NSDate *toDoDate = toDo.schedule;
+        NSLog(@"todoDate:%@",toDoDate);
         if(!toDoDate) [unspecified addObject:toDo];
         else if(toDoDate.isTomorrow) [self addItem:toDo withTitle:@"Tomorrow"];
         else{

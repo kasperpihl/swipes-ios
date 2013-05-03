@@ -11,7 +11,8 @@
 typedef NS_ENUM(NSUInteger, KPScheduleButtons){
     KPScheduleButtonCancel = 0,
     KPScheduleButtonTomorrow = 1,
-    KPScheduleButtonEveryday = 3,
+    KPScheduleButtonIn2Days = 2,
+    KPScheduleButtonIn3Days = 3,
     KPScheduleButtonInAWeek = 5,
     KPScheduleButtonSpecificTime = 9,
     KPScheduleButtonUnscheduled = 7

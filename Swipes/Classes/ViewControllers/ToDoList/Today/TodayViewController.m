@@ -17,6 +17,16 @@
 
 @implementation TodayViewController
 #pragma mark - Dragable delegate
+-(void)loadItemsAndUpdate:(BOOL)update{
+    NSDate *endDate = [[NSDate dateTomorrow] dateAtStartOfDay];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule < %@)",@"scheduled", endDate];
+    self.items = [[KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:predicate] mutableCopy];
+    NSLog(@"items");
+    for(KPToDo *toDo in self.items){
+        NSLog(@"tododate:%@",toDo.schedule);
+    }
+    if(update) [self update];
+}
 - (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
 	ToDoCell *cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [self readyCell:cell];

@@ -11,6 +11,7 @@
 
 @interface UtilityClass : NSObject
 -(int)ageForBirthday:(NSString *)birthday;
+@property (nonatomic,strong) NSUserDefaults *userDefaults;
 +(UtilityClass*)instance;
 -(NSNumber*)versionNumber;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block;

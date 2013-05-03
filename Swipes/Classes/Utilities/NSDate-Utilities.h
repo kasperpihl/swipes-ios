@@ -29,6 +29,7 @@
 - (BOOL) isToday;
 - (BOOL) isTomorrow;
 - (BOOL) isYesterday;
+- (BOOL) isSameDayAsDate: (NSDate *) aDate;
 - (BOOL) isSameWeekAsDate: (NSDate *) aDate;
 - (BOOL) isThisWeek;
 - (BOOL) isNextWeek;

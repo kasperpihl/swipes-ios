@@ -80,20 +80,15 @@
     return _textTags;
 }
 -(NSString *)stringifyTags{
-    if(!self.readableTags) [self updateTagsString];
+    self.state = @"scheduled";
     return self.readableTags;
     
-}
--(void)setForToday{
-    self.state = @"today";
-    self.schedule = [NSDate date];
 }
 -(void)complete{
     self.state = @"done";
     self.completionDate = [NSDate date];
 }
 -(void)scheduleForDate:(NSDate*)date{
-    self.state = @"schedule";
     self.schedule = date;
 }
 @end

@@ -13,18 +13,19 @@
 
 #define BIG_BUTTON_HEIGHT 80
 #define BIG_BUTTON_BOTTOM_MARGIN 5
-#define SMALL_BUTTON_HEIGHT 60
+#define SMALL_BUTTON_HEIGHT 70
 #define SMALL_BUTTON_BOTTOM_MARGIN 5
 
 #define ANIMATION_DURATION 0.15f
 
 #define ADD_BUTTON_X ((320/2)-(BIG_BUTTON_HEIGHT/2))
 
-#define SMALL_BUTTON_SPACING 15
+#define SMALL_BUTTON_SPACING 40
 
 
-#define TAG_BUTTON_X ((320/2)-(SMALL_BUTTON_HEIGHT/2))
-#define DELETE_BUTTON_X (TAG_BUTTON_X - SMALL_BUTTON_SPACING - SMALL_BUTTON_HEIGHT)
+#define TAG_BUTTON_X ((320/2)+(SMALL_BUTTON_SPACING/2))
+#define DELETE_BUTTON_X ((320/2)-(SMALL_BUTTON_HEIGHT)-(SMALL_BUTTON_SPACING/2))
+//(TAG_BUTTON_X - SMALL_BUTTON_SPACING - SMALL_BUTTON_HEIGHT)
 #define SHARE_BUTTON_X (TAG_BUTTON_X + SMALL_BUTTON_HEIGHT + SMALL_BUTTON_SPACING)
 
 #define DESELECT_BUTTON_X 150
@@ -105,7 +106,7 @@ typedef void (^voidBlock)(void);
                 break;
             case KPControlHandlerStateEdit:
                 CGRectSetY(self.deleteButton.frame, targetY);
-                CGRectSetY(self.shareButton.frame, targetY);
+                //CGRectSetY(self.shareButton.frame, targetY);
                 CGRectSetY(self.tagButton.frame, targetY);
                 break;
         }
@@ -124,7 +125,7 @@ typedef void (^voidBlock)(void);
                 break;
             case KPControlHandlerStateEdit:
                 CGRectSetY(self.deleteButton.frame, smallButtonY);
-                CGRectSetY(self.shareButton.frame, smallButtonY);
+                //CGRectSetY(self.shareButton.frame, smallButtonY);
                 CGRectSetY(self.tagButton.frame, smallButtonY);
                 break;
         }

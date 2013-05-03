@@ -7,8 +7,20 @@
 //
 
 #import "ToDoHandler.h"
-
+#import "NotificationHandler.h"
+#import "NSDate-Utilities.h"
+@interface ToDoHandler ()
+@property (nonatomic) NSMutableArray *handleNotifications;
+@end
 @implementation ToDoHandler
+-(NSMutableArray *)handleNotifications{
+    if(!_handleNotifications) _handleNotifications = [NSMutableArray array];
+    return _handleNotifications;
+}
+-(void)handleNotificationsForDate:(NSDate *)date{
+    NSDate *startDate = [date dateAtStartOfDay];
+    if(![self.handleNotifications containsObject:startDate]) [self.handleNotifications addObject:startDate];
+}
 static ToDoHandler *sharedObject;
 +(ToDoHandler *)sharedInstance{
     if(!sharedObject){
@@ -19,7 +31,8 @@ static ToDoHandler *sharedObject;
 -(void)addItem:(NSString *)item{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
     newToDo.title = item;
-    newToDo.state = @"today";
+    newToDo.schedule = [NSDate date];
+    newToDo.state = @"scheduled";
     NSNumber *count = [KPToDo MR_numberOfEntities];
     newToDo.order = count;
     [self save];
@@ -27,23 +40,36 @@ static ToDoHandler *sharedObject;
 -(void)save{
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
 }
+-(void)scheduleNotifications{
+    for(NSDate *date in self.handleNotifications){
+        NSDate *nextDate = [[date dateByAddingDays:1] dateAtStartOfDay];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@) AND (schedule >= %@) AND (schedule < %@)",@"scheduled", date, nextDate];
+        NSInteger counter = [KPToDo MR_countOfEntitiesWithPredicate:predicate];
+        NSLog(@"counter: %i forDate:%@ ",counter,date);
+        [NOTIHANDLER scheduleNumberOfTasks:counter forDate:date];
+    }
+    self.handleNotifications = nil;
+}
 -(void)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date{
     for(KPToDo *toDo in toDoArray){
+        if(toDo.schedule){
+            [self handleNotificationsForDate:toDo.schedule];
+        }
         [toDo scheduleForDate:date];
     }
+    if(date){
+        [self handleNotificationsForDate:date];
+    }
     [self save];
+    [self scheduleNotifications];
 }
 -(void)completeToDos:(NSArray*)toDoArray{
     for(KPToDo *toDo in toDoArray){
+        if(toDo.schedule) [self handleNotificationsForDate:toDo.schedule];
         [toDo complete];
     }
     [self save];
-}
--(void)setForTodayToDos:(NSArray *)toDoArray{
-    for(KPToDo *toDo in toDoArray){
-        [toDo setForToday];
-    }
-    [self save];
+    [self scheduleNotifications];
 }
 -(MCSwipeTableViewCellActivatedDirection)directionForCellType:(CellType)type{
     MCSwipeTableViewCellActivatedDirection direction = MCSwipeTableViewCellActivatedDirectionBoth;

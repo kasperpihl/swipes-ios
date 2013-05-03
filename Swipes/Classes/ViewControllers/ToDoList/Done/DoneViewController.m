@@ -12,12 +12,13 @@
 @end
 
 @implementation DoneViewController
--(void)loadItems{
+-(void)loadItemsAndUpdate:(BOOL)update{
     NSDate *startDate = [[NSDate date] dateAtStartOfDay];
     if(self.hasAskedForMore) startDate = [NSDate dateWithDaysBeforeNow:365];
     NSDate *endDate = [[NSDate dateTomorrow] dateAtStartOfDay];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@) AND (completionDate >= %@) AND (completionDate < %@)",@"done", startDate, endDate];
     self.items = [[KPToDo MR_findAllSortedBy:@"completionDate" ascending:NO withPredicate:predicate] mutableCopy];
+    if(update) [self update];
 }
 -(void)sortItems{
     self.sortedItems = [NSMutableArray array];

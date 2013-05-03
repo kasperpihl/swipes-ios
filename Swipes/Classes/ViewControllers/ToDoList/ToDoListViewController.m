@@ -55,9 +55,9 @@
     _state = state;
     self.cellType = [self determineCellTypeFromState:state];
 }
--(void)loadItems{
+-(void)loadItemsAndUpdate:(BOOL)update{
     self.items = [[KPToDo MR_findByAttribute:@"state" withValue:self.state andOrderBy:@"order" ascending:NO] mutableCopy];
-    [self update];
+    if(update) [self update];
 }
 -(void)sortItems{
     
@@ -110,7 +110,7 @@
 #pragma mark - FilterMenuDelegate
 -(void)searchBar:(KPSearchBar *)searchBar deselectedTag:(NSString *)tag{
     [self.filterHandler deselectTag:tag];
-    [self loadItems];
+    [self loadItemsAndUpdate:YES];
 }
 -(void)searchBar:(KPSearchBar *)searchBar selectedTag:(NSString *)tag{
     [self.filterHandler selectTag:tag];
@@ -119,7 +119,7 @@
 -(void)clearedAllFiltersForSearchBar:(KPSearchBar *)searchBar{
     self.searchBar.currentMode = KPSearchBarModeNone;
     [self.filterHandler clearAll];
-    [self loadItems];
+    [self loadItemsAndUpdate:YES];
 }
 #pragma mark - KPSearchBarDelegate
 -(void)searchBar:(KPSearchBar *)searchBar pressedFilterButton:(UIButton *)filterButton{
@@ -169,15 +169,16 @@
         cell = [self readyCell:cell];
         
     }
-    cell.cellType = self.cellType;
-    KPToDo *toDo = [self itemForIndexPath:indexPath];
-    [cell changeToDo:toDo withSelectedTags:self.filterHandler.selectedTags];
+    
 	return cell;
 }
 
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
+    cell.cellType = self.cellType;
+    KPToDo *toDo = [self itemForIndexPath:indexPath];
+    [cell changeToDo:toDo withSelectedTags:self.filterHandler.selectedTags];
     
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -289,7 +290,7 @@
             return;
         }
         case CellTypeToday:
-            [TODOHANDLER setForTodayToDos:toDosArray];
+            [TODOHANDLER scheduleToDos:toDosArray forDate:[NSDate date]];
             break;
         case CellTypeDone:
             [TODOHANDLER completeToDos:toDosArray];
@@ -315,7 +316,8 @@
 -(void)removeItemsForIndexSet:(NSIndexSet*)indexSet{
     if(self.sortedItems){
         NSArray *oldKeys = [self.titleArray copy];
-        [self loadItems];
+        [self loadItemsAndUpdate:NO];
+        [self sortItems];
         NSArray *newKeys = [self.titleArray copy];
         NSMutableIndexSet *deletedSections = [NSMutableIndexSet indexSet];
         for(int i = 0 ; i < oldKeys.count ; i++){
@@ -347,6 +349,7 @@
     }
     else{
         [self returnSelectedRowsAndBounce:YES];
+        [self loadItemsAndUpdate:YES];
         [self deselectAllRows:self];
     }
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
@@ -398,6 +401,9 @@
     doubleTap.numberOfTouchesRequired = 1;
     [tableView addGestureRecognizer:doubleTap];
 }
+-(void)loadItems{
+    [self loadItemsAndUpdate:YES];
+}
 #pragma mark - UIViewController stuff
 - (void)viewDidLoad
 {
@@ -413,7 +419,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self loadItems];
+    [self loadItemsAndUpdate:YES];
     
 }
 -(void)dealloc{

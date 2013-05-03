@@ -18,5 +18,4 @@
 -(NSString*)iconNameForCellType:(CellType)type;
 -(void)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date;
 -(void)completeToDos:(NSArray*)toDoArray;
--(void)setForTodayToDos:(NSArray*)toDoArray;
 @end

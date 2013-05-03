@@ -23,7 +23,7 @@
 -(ToDoCell*)readyCell:(ToDoCell*)cell;
 -(void)update;
 -(void)updateWithoutLoading;
--(void)loadItems;
+-(void)loadItemsAndUpdate:(BOOL)update;
 -(void)sortItems;
 -(void)deselectAllRows:(id)sender;
 -(void)deleteSelectedItems:(id)sender;

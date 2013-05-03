@@ -151,18 +151,15 @@
 }
 -(void)reframeToNone{
     NSUInteger oldHeight = self.frame.size.height;
-    self.filterView.hidden = YES;
     self.filterButton.hidden = NO;
     self.searchField.hidden = NO;
     [UIView beginAnimations:nil context:nil];
-    
     [UIView setAnimationDuration:0.2f];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
     
     NSInteger newHeight = SEARCH_BAR_ORIGINAL_HEIGHT;
     NSInteger originChange = oldHeight - newHeight;
-    NSLog(@"new:%i orig: %i",newHeight,originChange);
     self.frame = CGRectMake(self.frame.origin.x,
                             self.frame.origin.y,
                             self.frame.size.width,
@@ -177,18 +174,20 @@
                                 view.frame.size.width,
                                 view.frame.size.height);
     }
+    [(UITableView *)self.superview setTableHeaderView:self];
+    self.filterView.hidden = YES;
+    
     [UIView commitAnimations];
 }
 - (void)reframeToTags{
     NSUInteger oldHeight = self.frame.size.height;
     self.filterButton.hidden = YES;
     self.searchField.hidden = YES;
+  
     [UIView beginAnimations:nil context:nil];
     
-    [UIView setAnimationDuration:0.2f];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
-    self.filterView.hidden = NO;
+    [UIView setAnimationDuration:0.1f];
+
     [self.tagListView setTags:self.unselectedTags andSelectedTags:nil];
     [self.selectedTagListView setTags:self.selectedTags andSelectedTags:self.selectedTags];
     [self reframe];
@@ -208,10 +207,18 @@
                                 view.frame.size.width,
                                 view.frame.size.height);
     }
+    
+    [UIView commitAnimations];
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDelay:0.1f];
+    [UIView setAnimationDuration:0.1f];
+    self.filterView.hidden = NO;
+    [(UITableView *)self.superview setTableHeaderView:self];
     [UIView commitAnimations];
 }
 
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context{
-    [(UITableView *)self.superview setTableHeaderView:self];
+    
 }
 @end

@@ -126,7 +126,12 @@
 	NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
 	return [self isSameWeekAsDate:newDate];
 }
-
+-(BOOL)isSameDayAsDate:(NSDate*)aDate{
+    NSDateComponents *components1 = [CURRENT_CALENDAR components:NSYearCalendarUnit | NSMonthCalendarUnit fromDate:self];
+    NSDateComponents *components2 = [CURRENT_CALENDAR components:NSYearCalendarUnit | NSMonthCalendarUnit fromDate:aDate];
+    return ((components1.day == components2.day) && (components1.month == components2.month) &&
+            (components1.year == components2.year));
+}
 // Thanks, mspasov
 - (BOOL) isSameMonthAsDate: (NSDate *) aDate
 {
@@ -317,13 +322,11 @@
 	NSDateComponents *components = [CURRENT_CALENDAR components:NSHourCalendarUnit fromDate:newDate];
 	return components.hour;
 }
-
 - (NSInteger) hour
 {
 	NSDateComponents *components = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:self];
 	return components.hour;
 }
-
 - (NSInteger) minute
 {
 	NSDateComponents *components = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:self];

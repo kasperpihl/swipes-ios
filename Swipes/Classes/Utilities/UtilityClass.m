@@ -10,7 +10,6 @@
 #import "AppDelegate.h"
 #import "KPParseCommunicator.h"
 @interface UtilityClass () <UIAlertViewDelegate>
-@property (nonatomic,strong) NSUserDefaults *userDefaults;
 @property (nonatomic) dispatch_queue_t queue;
 @property (copy) SuccessfulBlock block;
 @end
