@@ -45,11 +45,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-<<<<<<< HEAD
 	<string>AE1</string>
-=======
-	<string>AE0</string>
->>>>>>> 44f1c4c... Fixed design
 	<key>FacebookAppID</key>
 	<string>507630089298523</string>
 	<key>LSRequiresIPhoneOS</key>

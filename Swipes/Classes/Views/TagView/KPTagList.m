@@ -169,20 +169,12 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
-<<<<<<< HEAD
-    button.layer.borderColor = [BORDER_COLOR CGColor];
-    button.layer.borderWidth = 1;
-    //button.layer.cornerRadius = 5;
-    //button.layer.masksToBounds = YES;
-    [button setTitleColor:BORDER_COLOR forState:UIControlStateNormal];
-=======
     //button.layer.borderColor = [COLOR_BLUE CGColor];
     //button.layer.borderWidth = 1;
     //button.layer.cornerRadius = 5;
     //button.layer.masksToBounds = YES;
-    [button setTitleColor:COLOR_DARK forState:UIControlStateNormal];
->>>>>>> 44f1c4c... Fixed design
-    [button setTitleColor:COLOR_WHITE forState:UIControlStateSelected];
+    [button setTitleColor:COLOR_WHITE forState:UIControlStateNormal];
+    [button setTitleColor:COLOR_DARK forState:UIControlStateSelected];
     [button setBackgroundImage:[UtilityClass imageWithColor:COLOR_WHITE] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:COLOR_BLUE] forState:UIControlStateSelected];
     button.titleLabel.font = TAG_FONT;
