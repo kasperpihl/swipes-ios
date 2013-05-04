@@ -10,20 +10,20 @@
 #import "KPTagList.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
-#define VERTICAL_MARGIN 0
-#define HORIZONTAL_MARGIN 0
+#define VERTICAL_MARGIN 5
+#define HORIZONTAL_MARGIN 5
 #define TAG_HEIGHT 44
 #define TAG_HORIZONTAL_PADDING 15
 
-#define TAG_HORIZONTAL_SPACING 0
-#define TAG_VERTICAL_SPACING 0
+#define DEFAULT_SPACING 5
 
 #define SPACE_HACK 1
 
 #define TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
 
-#define BORDER_COLOR [UtilityClass colorWithRed:51 green:51 blue:51 alpha:1]
-#define COLOR_DARK [UtilityClass colorWithRed:51 green:51 blue:51 alpha:1]
+
+#define COLOR_DARK [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
+//#define COLOR_DARK [UtilityClass colorWithRed:51 green:51 blue:51 alpha:1]
 #define COLOR_BLUE [UtilityClass colorWithRed:57 green:159 blue:219 alpha:1]
 #define COLOR_WHITE [UIColor whiteColor]
 
@@ -55,11 +55,11 @@
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
-        self.marginBottom = VERTICAL_MARGIN;
+        self.bottomMargin = VERTICAL_MARGIN;
         self.marginTop = VERTICAL_MARGIN;
         self.marginLeft = HORIZONTAL_MARGIN;
         self.marginRight = HORIZONTAL_MARGIN;
-        self.spacing = TAG_VERTICAL_SPACING;
+        self.spacing = DEFAULT_SPACING;
         //self.backgroundColor = [UIColor whiteColor];
     }
     return self;
@@ -136,7 +136,7 @@
         [self addSubview:noTagLabel];
         tagHeight = 30;
     }
-    currentHeight += tagHeight + self.marginTop;
+    currentHeight += tagHeight + self.bottomMargin;
     CGRectSetSize(self.frame, self.frame.size.width, currentHeight);
     CGFloat differenceHeight = oldHeight-currentHeight;
     if(!first && differenceHeight != 0 && [self.resizeDelegate respondsToSelector:@selector(tagList:changedSize:)]){
@@ -174,8 +174,8 @@
     //button.layer.cornerRadius = 5;
     //button.layer.masksToBounds = YES;
     [button setTitleColor:COLOR_WHITE forState:UIControlStateNormal];
-    [button setTitleColor:COLOR_DARK forState:UIControlStateSelected];
-    [button setBackgroundImage:[UtilityClass imageWithColor:COLOR_WHITE] forState:UIControlStateNormal];
+    [button setTitleColor:COLOR_WHITE forState:UIControlStateSelected];
+    [button setBackgroundImage:[UtilityClass imageWithColor:COLOR_DARK] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:COLOR_BLUE] forState:UIControlStateSelected];
     button.titleLabel.font = TAG_FONT;
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];

@@ -49,6 +49,7 @@ static RootViewController *sharedObject;
 #pragma mark - ViewController methods
 -(void)setupAppearance{
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navbar"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance]setShadowImage:[[UIImage alloc] init]];
 }
 - (void)viewDidLoad
 {

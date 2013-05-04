@@ -26,7 +26,7 @@
 #define ADD_BUTTON_MARGIN_BOTTOM 0
 #define CONTENT_VIEW_TAG 1000
 #define CONTROLS_VIEW_TAG 1001
-#define INTERESTED_SEGMENT_RECT CGRectMake(0,0,138,44)
+#define INTERESTED_SEGMENT_RECT CGRectMake(0,0,135,44)
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
@@ -124,7 +124,7 @@
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     self.presentedPanel = tagView;
-    [self presentSemiView:tagView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f}];
+    [self presentSemiView:tagView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f,KNSemiModalOptionKeys.shadowOpacity:@0.0f}];
     //[self.navigationController.view addSubview:tagView];
     //[tagView show:YES];
 }

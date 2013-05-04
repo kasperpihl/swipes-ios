@@ -382,7 +382,7 @@
 }
 -(void)prepareTableView:(UITableView *)tableView{
     tableView.allowsMultipleSelection = YES;
-    tableView.backgroundColor = [UIColor colorWithRed:71.0 / 255.0 green:71.0 / 255.0 blue:71.0 / 255.0 alpha:1.0];
+    tableView.backgroundColor = [UIColor colorWithRed:77.0 / 255.0 green:77.0 / 255.0 blue:77.0 / 255.0 alpha:1.0];
     [tableView setTableFooterView:[UIView new]];
     UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
     tableView.contentInset = UIEdgeInsetsMake(0, 0, CONTENT_INSET_BOTTOM, 0);

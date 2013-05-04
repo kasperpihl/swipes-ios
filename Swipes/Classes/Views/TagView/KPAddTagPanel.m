@@ -51,7 +51,6 @@
         UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height-ADD_VIEW_HEIGHT)];
         scrollView.tag = SCROLL_VIEW_TAG;
         KPTagList *tagView = [KPTagList tagListWithWidth:self.frame.size.width andTags:tags];
-        tagView.marginBottom = 10;
         tagView.marginLeft = 0;
         tagView.marginRight = 0;
         CGRectSetY(tagView.frame, 0);
