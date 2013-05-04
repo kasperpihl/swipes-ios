@@ -16,12 +16,20 @@
 #define DONE_EDITING_TAG 7
 #define ANIMATION_DURATION 0.25f
 
-#define ADD_VIEW_HEIGHT 60
+#define SEPERATOR_WIDTH 1
+#define SEPERATOR_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
+#define COLOR_SEPERATOR_HEIGHT 5
+#define ADD_VIEW_HEIGHT 50
+#define BAR_BOTTOM_BACKGROUND_COLOR [UtilityClass colorWithRed:51 green:51 blue:51 alpha:1]
+#define BAR_BOTTON_BUTTON_FONT [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:20]
 #define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
 #define TEXT_FIELD_MARGIN_SIDES 60
 #define TEXT_FIELD_MARGIN_BOTTOM 15
 #define TEXT_FIELD_HEIGHT 30
 #define KEYBOARD_HEIGHT 216
+
+#define NUMBER_OF_BAR_BUTTONS 3
+
 @interface KPAddTagPanel () <UITextFieldDelegate,KPTagListResizeDelegate>
 @property (nonatomic,weak) IBOutlet UIView *addTagView;
 @property (nonatomic,weak) IBOutlet UIScrollView *scrollView;
@@ -31,6 +39,7 @@
 @implementation KPAddTagPanel
 +(KPAddTagPanel*)tagPanelWithTags:(NSArray*)tags maxHeight:(NSInteger)maxHeight{
     KPAddTagPanel *tagPanel = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, maxHeight) andTags:tags andMaxHeight:maxHeight];
+    
     return tagPanel;
 }
 - (id)initWithFrame:(CGRect)frame andTags:(NSArray*)tags andMaxHeight:(NSInteger)maxHeight
@@ -38,10 +47,11 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.maxHeight = maxHeight;
-        self.backgroundColor = [UIColor whiteColor];
+        //self.backgroundColor = SWIPES_BLUE;
         UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height-ADD_VIEW_HEIGHT)];
         scrollView.tag = SCROLL_VIEW_TAG;
         KPTagList *tagView = [KPTagList tagListWithWidth:self.frame.size.width andTags:tags];
+        tagView.marginBottom = 10;
         CGRectSetY(tagView.frame, 0);
         tagView.resizeDelegate = self;
         tagView.tag = TAG_VIEW_TAG;
@@ -56,20 +66,49 @@
         CGRectSetSize(self.scrollView.frame, self.scrollView.frame.size.width, height);
         CGRectSetSize(self.frame, self.frame.size.width, self.scrollView.frame.origin.y+self.scrollView.frame.size.height+ADD_VIEW_HEIGHT);
         
-        UIView *addTagView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-ADD_VIEW_HEIGHT, self.frame.size.width, ADD_VIEW_HEIGHT)];
-        addTagView.backgroundColor = [UIColor whiteColor];
-        addTagView.tag = ADD_VIEW_TAG;
+        UIView *tagBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-ADD_VIEW_HEIGHT, self.frame.size.width, ADD_VIEW_HEIGHT)];
+        tagBarView.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR;
+        tagBarView.tag = ADD_VIEW_TAG;
+        UIView *tagBarColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tagBarView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+        tagBarColorSeperator.backgroundColor = SWIPES_BLUE;
+        [tagBarView addSubview:tagBarColorSeperator];
         
         
+        UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        addButton.frame = CGRectMake(0, COLOR_SEPERATOR_HEIGHT, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, ADD_VIEW_HEIGHT-COLOR_SEPERATOR_HEIGHT);
+        addButton.titleLabel.font = BAR_BOTTON_BUTTON_FONT;
+        addButton.titleLabel.textColor = [UIColor whiteColor];
+        [addButton setTitle:@"ADD" forState:UIControlStateNormal];
+        [tagBarView addSubview:addButton];
         
-        UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, ADD_VIEW_HEIGHT-TEXT_FIELD_MARGIN_BOTTOM-TEXT_FIELD_HEIGHT, addTagView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), TEXT_FIELD_HEIGHT)];
+        UIButton *editButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        editButton.frame = CGRectMake(tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*1, COLOR_SEPERATOR_HEIGHT, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, ADD_VIEW_HEIGHT-COLOR_SEPERATOR_HEIGHT);
+        editButton.titleLabel.font = BAR_BOTTON_BUTTON_FONT;
+        editButton.titleLabel.textColor = [UIColor whiteColor];
+        [editButton setTitle:@"EDIT" forState:UIControlStateNormal];
+        [tagBarView addSubview:editButton];
+        
+        UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        doneButton.frame = CGRectMake(tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*2, COLOR_SEPERATOR_HEIGHT, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, ADD_VIEW_HEIGHT-COLOR_SEPERATOR_HEIGHT);
+        doneButton.titleLabel.font = BAR_BOTTON_BUTTON_FONT;
+        doneButton.titleLabel.textColor = [UIColor whiteColor];
+        [doneButton setTitle:@"DONE" forState:UIControlStateNormal];
+        [tagBarView addSubview:doneButton];
+        
+        for(NSInteger i = 1 ; i < NUMBER_OF_BAR_BUTTONS ; i++){
+            UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake((tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*i)-(SEPERATOR_WIDTH/2), COLOR_SEPERATOR_HEIGHT, SEPERATOR_WIDTH, tagBarView.frame.size.height-COLOR_SEPERATOR_HEIGHT)];
+            seperator.backgroundColor = SEPERATOR_COLOR;
+            [tagBarView addSubview:seperator];
+        }
+        
+        /*UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_SIDES, ADD_VIEW_HEIGHT-TEXT_FIELD_MARGIN_BOTTOM-TEXT_FIELD_HEIGHT, tagBarView.frame.size.width-(2*TEXT_FIELD_MARGIN_SIDES), TEXT_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
         textField.font = TEXT_FIELD_FONT;
         textField.returnKeyType = UIReturnKeyNext;
         textField.borderStyle = UITextBorderStyleRoundedRect;
         textField.delegate = self;
         textField.placeholder = @"Click to add a new tag";
-        [addTagView addSubview:textField];
+        [tagBarView addSubview:textField];*/
         
         UIButton *doneEditingButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         doneEditingButton.frame = CGRectMake(self.frame.size.width-TEXT_FIELD_MARGIN_SIDES+5, 10, 50, 40);
@@ -77,11 +116,11 @@
         doneEditingButton.tag = DONE_EDITING_TAG;
         doneEditingButton.hidden = YES;
         [doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
-        [addTagView addSubview:doneEditingButton];
-        self.doneEditingButton = (UIButton*)[addTagView viewWithTag:DONE_EDITING_TAG];
+        [tagBarView addSubview:doneEditingButton];
+        self.doneEditingButton = (UIButton*)[tagBarView viewWithTag:DONE_EDITING_TAG];
         
-        self.textField = (UITextField*)[addTagView viewWithTag:TEXT_FIELD_TAG];
-        [self addSubview:addTagView];
+        self.textField = (UITextField*)[tagBarView viewWithTag:TEXT_FIELD_TAG];
+        [self addSubview:tagBarView];
         self.addTagView = [self viewWithTag:ADD_VIEW_TAG];
         CGRectSetSize(self.frame, self.frame.size.width, self.addTagView.frame.origin.y+self.addTagView.frame.size.height);
         notify(UIKeyboardWillShowNotification, keyboardWillShow:);

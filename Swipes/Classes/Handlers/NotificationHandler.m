@@ -19,6 +19,7 @@ static NotificationHandler *sharedObject;
 }
 -(void)scheduleNumberOfTasks:(NSInteger)numberOfTasks forDate:(NSDate *)date{
     date = [[date dateAtStartOfDay] dateByAddingHours:9];
+    if([date isInPast]) return;
     UIApplication *app = [UIApplication sharedApplication];
     NSArray *notifications = [app scheduledLocalNotifications];
     for(UILocalNotification *localNotification in notifications){
@@ -34,6 +35,7 @@ static NotificationHandler *sharedObject;
         return;
     }
     if(numberOfTasks < 1) return;
+
     UILocalNotification *localNotif = [[UILocalNotification alloc] init];
     localNotif.fireDate = date;
     localNotif.timeZone = [NSTimeZone defaultTimeZone];

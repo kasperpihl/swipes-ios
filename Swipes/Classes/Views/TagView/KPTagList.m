@@ -8,18 +8,23 @@
 
 
 #import "KPTagList.h"
+#import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
 #define VERTICAL_MARGIN 5
 #define HORIZONTAL_MARGIN 5
-#define TAG_HORIZONTAL_PADDING 10
-#define TAG_VERTICAL_PADDING 7
+#define TAG_HEIGHT 40
+#define TAG_HORIZONTAL_PADDING 15
 
 #define TAG_HORIZONTAL_SPACING 5
 #define TAG_VERTICAL_SPACING 5
 
-#define TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:14]
+#define SPACE_HACK 0
 
-#define TEXT_COLOR [UIColor blackColor]
+#define TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
+
+#define COLOR_DARK [UtilityClass colorWithRed:51 green:51 blue:51 alpha:1]
+#define COLOR_BLUE SWIPES_BLUE //[UtilityClass colorWithRed:57 green:159 blue:219 alpha:1]
+#define COLOR_WHITE [UIColor whiteColor]
 
 @interface KPTagList ()
 @property (nonatomic,strong) NSMutableArray *tags;
@@ -30,6 +35,7 @@
     KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, width, 100)];
     tagList.tags = [tags mutableCopy];
     [tagList layoutTagsFirst:YES];
+    
     return tagList;
 }
 -(NSMutableArray *)tags{
@@ -48,6 +54,11 @@
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
+        self.marginBottom = VERTICAL_MARGIN;
+        self.marginTop = VERTICAL_MARGIN;
+        self.marginLeft = HORIZONTAL_MARGIN;
+        self.marginRight = HORIZONTAL_MARGIN;
+        self.spacing = TAG_VERTICAL_SPACING;
         //self.backgroundColor = [UIColor whiteColor];
     }
     return self;
@@ -74,26 +85,49 @@
     [self.tags sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     NSArray *views = [self subviews];
     for(UIView *view in views) [view removeFromSuperview];
-    CGFloat currentWidth = HORIZONTAL_MARGIN;
-    CGFloat currentHeight = VERTICAL_MARGIN;
+    CGFloat currentWidth = self.marginLeft + SPACE_HACK;
+    CGFloat currentHeight = self.marginTop;
     CGFloat tagHeight = 0;
+    
     if(self.tags.count > 0){
-        for(NSString *tag in self.tags){
+        NSMutableArray *buttonLine = [NSMutableArray array];
+        for(NSInteger j = 0 ; j < self.tags.count ; j++){
+            NSString *tag = [self.tags objectAtIndex:j];
             UIButton *tagLabel = [self buttonWithTag:tag];
-            if([self.selectedTags containsObject:tag]) [tagLabel setSelected:YES];
-            if((currentWidth + tagLabel.frame.size.width + HORIZONTAL_MARGIN) > self.frame.size.width){
-                currentHeight = currentHeight + tagLabel.frame.size.height + TAG_VERTICAL_SPACING;
-                currentWidth = HORIZONTAL_MARGIN;
-                tagHeight = 0;
+            if([self.selectedTags containsObject:tag]){
+                [tagLabel setSelected:YES];
+                //[tagLabel.layer setBorderColor:[COLOR_WHITE CGColor]];
             }
+            CGFloat difference = (self.frame.size.width - self.marginRight - self.marginLeft) - currentWidth ;
+            BOOL nextLine = NO;
+            if((currentWidth + tagLabel.frame.size.width + self.marginRight) > self.frame.size.width){
+                currentHeight = currentHeight + tagLabel.frame.size.height + self.spacing - SPACE_HACK;
+                currentWidth = self.marginLeft + SPACE_HACK;
+                tagHeight = 0;
+                nextLine = YES;
+            }
+            
+            
             if(tagLabel.frame.size.height > tagHeight) tagHeight = tagLabel.frame.size.height;
-            tagLabel.frame = CGRectSetPos(tagLabel.frame, currentWidth, currentHeight);
-            currentWidth = currentWidth + tagLabel.frame.size.width + TAG_HORIZONTAL_SPACING;
+            
+            tagLabel.frame = CGRectSetPos(tagLabel.frame, currentWidth - SPACE_HACK, currentHeight);
+            currentWidth = currentWidth + tagLabel.frame.size.width + self.spacing - SPACE_HACK;
+            
+            if(nextLine){
+                CGFloat extraForEach = difference/buttonLine.count;
+                for(NSInteger i = 0 ; i < buttonLine.count ; i++){
+                    UIButton *tagButton = [buttonLine objectAtIndex:i];
+                    CGRectSetSize(tagButton.frame, tagButton.frame.size.width+extraForEach, tagButton.frame.size.height);
+                    CGRectSetX(tagButton.frame, tagButton.frame.origin.x+(i*extraForEach));
+                }
+                [buttonLine removeAllObjects];
+            }
+            [buttonLine addObject:tagLabel];
             [self addSubview:tagLabel];
         }
     }
     else{
-        UILabel *noTagLabel = [[UILabel alloc]initWithFrame:CGRectMake(HORIZONTAL_MARGIN, VERTICAL_MARGIN, self.frame.size.width-2*HORIZONTAL_MARGIN, 30)];
+        UILabel *noTagLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.marginLeft, self.marginTop, self.frame.size.width-self.marginLeft-self.marginRight, 30)];
         noTagLabel.textAlignment = UITextAlignmentCenter;
         noTagLabel.backgroundColor = [UIColor clearColor];
         noTagLabel.textColor = [UIColor whiteColor];
@@ -101,7 +135,7 @@
         [self addSubview:noTagLabel];
         tagHeight = 30;
     }
-    currentHeight += tagHeight + VERTICAL_MARGIN;
+    currentHeight += tagHeight + self.marginTop;
     CGRectSetSize(self.frame, self.frame.size.width, currentHeight);
     CGFloat differenceHeight = oldHeight-currentHeight;
     if(!first && differenceHeight != 0 && [self.resizeDelegate respondsToSelector:@selector(tagList:changedSize:)]){
@@ -112,7 +146,8 @@
 -(CGSize)sizeForTagWithText:(NSString*)text{
     CGSize textSize = [text sizeWithFont:TAG_FONT];
     textSize.width += TAG_HORIZONTAL_PADDING*2;
-    textSize.height += TAG_VERTICAL_PADDING*2;
+    textSize.height = TAG_HEIGHT;
+    //textSize.height += TAG_VERTICAL_PADDING*2;
     return textSize;
 }
 -(void)clickedButton:(UIButton*)sender{
@@ -132,10 +167,15 @@
     CGSize sizeForTag = [self sizeForTagWithText:tag];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
-    button.titleLabel.textColor = TEXT_COLOR;
     [button setTitle:tag forState:UIControlStateNormal];
-    [button setBackgroundImage:[UIImage imageNamed:@"tag_background"] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UIImage imageNamed:@"tag_selected_background"] forState:UIControlStateSelected];
+    //button.layer.borderColor = [COLOR_BLUE CGColor];
+    //button.layer.borderWidth = 1;
+    button.layer.cornerRadius = 5;
+    button.layer.masksToBounds = YES;
+    [button setTitleColor:COLOR_DARK forState:UIControlStateNormal];
+    [button setTitleColor:COLOR_WHITE forState:UIControlStateSelected];
+    [button setBackgroundImage:[UtilityClass imageWithColor:COLOR_WHITE] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UtilityClass imageWithColor:COLOR_BLUE] forState:UIControlStateSelected];
     button.titleLabel.font = TAG_FONT;
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];

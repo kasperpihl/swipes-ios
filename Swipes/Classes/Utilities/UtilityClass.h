@@ -12,6 +12,7 @@
 @interface UtilityClass : NSObject
 -(int)ageForBirthday:(NSString *)birthday;
 @property (nonatomic,strong) NSUserDefaults *userDefaults;
++ (UIImage *)imageWithColor:(UIColor *)color;
 +(UtilityClass*)instance;
 -(NSNumber*)versionNumber;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block;

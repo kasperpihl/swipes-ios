@@ -21,6 +21,12 @@
 @end
 @interface KPTagList : UIView
 @property (nonatomic) NSString *emptyText;
+@property (nonatomic) NSInteger marginTop;
+@property (nonatomic) NSInteger marginBottom;
+@property (nonatomic) NSInteger marginLeft;
+@property (nonatomic) NSInteger marginRight;
+@property (nonatomic) NSInteger spacing;
+
 @property (nonatomic,weak) NSObject<KPTagDelegate> *tagDelegate;
 @property (nonatomic,weak) NSObject<KPTagListResizeDelegate> *resizeDelegate;
 -(void)setTags:(NSArray*)tags andSelectedTags:(NSArray*)selectedTags;

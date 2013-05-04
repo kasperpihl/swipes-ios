@@ -21,6 +21,8 @@
 #define TITLE_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
 #define TAGS_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
 
+#define SELECTED_LINE_HEIGHT 10
+
 #define LABEL_X 19
 
 #define LABEL_WIDTH (320-(2*LABEL_X))
@@ -63,10 +65,17 @@
         [self.contentView addSubview:tagsLabel];
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
-        UIView *overlayView = [[UIView alloc] initWithFrame:self.bounds];
+        UIView *overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height-SELECTED_LINE_HEIGHT, self.bounds.size.width, SELECTED_LINE_HEIGHT)];
         overlayView.backgroundColor = [UtilityClass colorWithRed:204 green:204 blue:204 alpha:1];
         overlayView.tag = OVERLAY_VIEW_TAG;
+        //overlayView.hidden = YES;
         self.selectedBackgroundView = overlayView;
+        /*[self addSubview:overlayView];
+        self.overlayView = [self viewWithTag:OVERLAY_VIEW_TAG];
+        
+        UIView *selectedView = [[UIView alloc] initWithFrame:self.bounds];
+        selectedView.backgroundColor = [UtilityClass colorWithRed:255 green:255 blue:255 alpha:1];
+        self.selectedBackgroundView = selectedView;*/
     }
     return self;
 }
@@ -86,7 +95,7 @@
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){
         _cellType = cellType;
-        //self.selectedBackgroundView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
+        //self.overlayView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
         CellType firstCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
         CellType secondCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState2];
         CellType thirdCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState3];
@@ -103,6 +112,7 @@
     }
 }
 -(void)setHighlighted:(BOOL)highlighted{
+    //self.overlayView.hidden = !highlighted;
     [super setHighlighted:highlighted];
 }
 -(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{

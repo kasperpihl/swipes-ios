@@ -80,7 +80,6 @@
     return _textTags;
 }
 -(NSString *)stringifyTags{
-    self.state = @"scheduled";
     return self.readableTags;
     
 }
@@ -90,5 +89,6 @@
 }
 -(void)scheduleForDate:(NSDate*)date{
     self.schedule = date;
+    self.state = @"scheduled";
 }
 @end

@@ -24,7 +24,6 @@
     NSMutableArray *unspecified = [NSMutableArray array];
     for(KPToDo *toDo in self.items){
         NSDate *toDoDate = toDo.schedule;
-        NSLog(@"todoDate:%@",toDoDate);
         if(!toDoDate) [unspecified addObject:toDo];
         else if(toDoDate.isTomorrow) [self addItem:toDo withTitle:@"Tomorrow"];
         else{

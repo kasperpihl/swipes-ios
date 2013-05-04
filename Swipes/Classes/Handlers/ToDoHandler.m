@@ -45,7 +45,6 @@ static ToDoHandler *sharedObject;
         NSDate *nextDate = [[date dateByAddingDays:1] dateAtStartOfDay];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@) AND (schedule >= %@) AND (schedule < %@)",@"scheduled", date, nextDate];
         NSInteger counter = [KPToDo MR_countOfEntitiesWithPredicate:predicate];
-        NSLog(@"counter: %i forDate:%@ ",counter,date);
         [NOTIHANDLER scheduleNumberOfTasks:counter forDate:date];
     }
     self.handleNotifications = nil;
