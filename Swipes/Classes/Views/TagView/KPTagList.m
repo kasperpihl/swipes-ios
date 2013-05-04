@@ -10,20 +10,21 @@
 #import "KPTagList.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
-#define VERTICAL_MARGIN 5
-#define HORIZONTAL_MARGIN 5
-#define TAG_HEIGHT 40
+#define VERTICAL_MARGIN 0
+#define HORIZONTAL_MARGIN 0
+#define TAG_HEIGHT 44
 #define TAG_HORIZONTAL_PADDING 15
 
-#define TAG_HORIZONTAL_SPACING 5
-#define TAG_VERTICAL_SPACING 5
+#define TAG_HORIZONTAL_SPACING 0
+#define TAG_VERTICAL_SPACING 0
 
-#define SPACE_HACK 0
+#define SPACE_HACK 1
 
 #define TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
 
+#define BORDER_COLOR [UtilityClass colorWithRed:51 green:51 blue:51 alpha:1]
 #define COLOR_DARK [UtilityClass colorWithRed:51 green:51 blue:51 alpha:1]
-#define COLOR_BLUE SWIPES_BLUE //[UtilityClass colorWithRed:57 green:159 blue:219 alpha:1]
+#define COLOR_BLUE [UtilityClass colorWithRed:57 green:159 blue:219 alpha:1]
 #define COLOR_WHITE [UIColor whiteColor]
 
 @interface KPTagList ()
@@ -168,11 +169,11 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
-    //button.layer.borderColor = [COLOR_BLUE CGColor];
-    //button.layer.borderWidth = 1;
-    button.layer.cornerRadius = 5;
-    button.layer.masksToBounds = YES;
-    [button setTitleColor:COLOR_DARK forState:UIControlStateNormal];
+    button.layer.borderColor = [BORDER_COLOR CGColor];
+    button.layer.borderWidth = 1;
+    //button.layer.cornerRadius = 5;
+    //button.layer.masksToBounds = YES;
+    [button setTitleColor:BORDER_COLOR forState:UIControlStateNormal];
     [button setTitleColor:COLOR_WHITE forState:UIControlStateSelected];
     [button setBackgroundImage:[UtilityClass imageWithColor:COLOR_WHITE] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:COLOR_BLUE] forState:UIControlStateSelected];
