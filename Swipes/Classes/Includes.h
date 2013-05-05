@@ -74,6 +74,8 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define TEXTFIELD_BACKGROUND [UIColor colorWithRed:         70.0/255.0 green:   70.0/255.0 blue:    70.0/255.0 alpha:1.0]
 #define TABLE_VIEW_BACKGROUND [UIColor colorWithRed:        77.0/255.0 green:   77.0/255.0 blue:    77.0/255.0 alpha:1.0]
 #define GRAY_SEPERATOR_COLOR [UIColor colorWithRed:         102.0/255.0 green:  102.0/255.0 blue:   102.0/255.0 alpha:1.0]
+#define SCHEDULE_BUTTON_COLOR [UIColor colorWithRed:        237.0/255.0 green:  237.0/255.0 blue:   237.0/255.0 alpha:1.0]
+#define POPUP_BACKGROUND_COLOR [UIColor colorWithRed:       77.0/255.0 green:   77.0/255.0 blue:    77.0/255.0 alpha:0.97]
 
 
 #define notify(notifcation,selectr) [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectr) name:notifcation object:nil]

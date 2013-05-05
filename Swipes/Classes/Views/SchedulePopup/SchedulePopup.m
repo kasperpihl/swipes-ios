@@ -26,6 +26,9 @@
 
 #define PICKER_CUT_HEIGHT 10
 
+#define BUTTON_TOP_INSET 60
+#define BUTTON_IMAGE_BOTTOM_MARGIN 40
+
 #define MONTH_LABEL_Y 5
 #define MONTH_LABEL_HEIGHT 30
 #define MONTH_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Bold" size:16]
@@ -157,7 +160,7 @@ typedef enum {
         containerView.tag = CONTAINER_VIEW_TAG;
         
         UIView *contentView = [[UIView alloc] initWithFrame:containerView.bounds];
-        contentView.backgroundColor = [UtilityClass colorWithRed:77 green:77 blue:77 alpha:0.9];
+        contentView.backgroundColor = POPUP_BACKGROUND_COLOR;
         contentView.layer.cornerRadius = 5;
         contentView.tag = CONTENT_VIEW_TAG;
         
@@ -284,10 +287,40 @@ typedef enum {
 -(UIButton*)buttonForScheduleButton:(KPScheduleButtons)scheduleButton{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.titleLabel.font = BUTTON_FONT;
-    button.titleLabel.textColor = [UIColor whiteColor];
-    
+    button.titleEdgeInsets = UIEdgeInsetsMake(BUTTON_TOP_INSET, 0, 0, 0);
+    button.titleLabel.textColor = SCHEDULE_BUTTON_COLOR;
+    UIImage *iconImage = [self imageForScheduleButton:scheduleButton];
+    UIImageView *iconImageView = [[UIImageView alloc] initWithImage:iconImage];
     button.frame = [self frameForButtonNumber:scheduleButton];
+    iconImageView.frame = CGRectSetPos(iconImageView.frame, (button.frame.size.width-iconImage.size.width)/2,button.frame.size.height-BUTTON_IMAGE_BOTTOM_MARGIN-iconImage.size.height);
+    [button addSubview:iconImageView];
     return button;
+}
+-(UIImage *)imageForScheduleButton:(KPScheduleButtons)scheduleButton{
+    NSString *imageString;
+    switch (scheduleButton) {
+        case KPScheduleButtonTomorrow:
+            imageString = @"schedule_image_sun";
+            break;
+        case KPScheduleButtonIn2Days:
+            imageString = @"schedule_image_mountain";
+            break;
+        case KPScheduleButtonIn3Days:
+            imageString = @"schedule_image_notebook";
+            break;
+        case KPScheduleButtonInAWeek:
+            imageString = @"schedule_image_circle";
+            break;
+        case KPScheduleButtonUnscheduled:
+            imageString = @"schedule_image_list";
+            break;
+        case KPScheduleButtonSpecificTime:
+            imageString = @"schedule_image_calender";
+            break;
+        default:
+            break;
+    }
+    return [UIImage imageNamed:imageString];
 }
 -(CGRect)frameForButtonNumber:(NSInteger)number{
     CGFloat width = CONTENT_VIEW_SIZE/GRID_NUMBER-(2*BUTTON_PADDING);

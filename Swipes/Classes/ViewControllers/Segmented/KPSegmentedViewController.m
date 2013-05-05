@@ -112,7 +112,7 @@
 -(void)pressedTag:(id)sender{
     [self show:NO controlsAnimated:YES];
     
-    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, 450) andTags:[TAGHANDLER allTags] andMaxHeight:450];
+    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, 450) andTags:[TAGHANDLER allTags] andMaxHeight:320];
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     self.presentedPanel = tagView;

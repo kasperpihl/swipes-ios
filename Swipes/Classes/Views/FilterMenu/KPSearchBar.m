@@ -193,7 +193,7 @@
     NSUInteger oldHeight = self.frame.size.height;
     self.filterButton.hidden = YES;
     self.searchField.hidden = YES;
-  
+
     [UIView beginAnimations:nil context:nil];
     
     [UIView setAnimationDuration:0.1f];

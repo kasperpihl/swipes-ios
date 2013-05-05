@@ -165,8 +165,8 @@
     return self;
 }
 -(void)scrollIfNessecary{
-    CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
-    [self.scrollView setContentOffset:bottomOffset animated:YES];
+    //CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+    //[self.scrollView setContentOffset:bottomOffset animated:YES];
 }
 -(void)pressedAddButton:(id)sender{
     [self shiftToAddMode:YES];
@@ -186,9 +186,8 @@
 
 -(void)shiftToAddMode:(BOOL)addMode{
     if(addMode){
-        self.tagContainerView.alpha = 1;
-        [UIView animateWithDuration:0.1 animations:^{
-            self.tagContainerView.alpha = 0;
+        [UIView animateWithDuration:0.2 animations:^{
+            CGRectSetY(self.tagContainerView.frame, self.barBottomView.frame.origin.y);
             //self.barBottomView.hidden = YES;
         } completion:^(BOOL finished) {
             if(finished){
@@ -213,16 +212,18 @@
             CGRectSetY(self.addTagView.frame, self.frame.size.height);
         } completion:^(BOOL finished) {
             if(finished){
-                self.tagContainerView.alpha = 0;
                 self.addTagView.hidden = YES;
+                
                 self.tagContainerView.hidden = NO;
                 CGPoint topOffset = CGPointMake(0, 0);
                 [self.scrollView setContentOffset:topOffset animated:NO];
                 CGFloat newHeight = self.tagContainerView.frame.size.height + self.barBottomView.frame.size.height;
                  if([self.delegate respondsToSelector:@selector(tagPanel:changedSize:)]) [self.delegate tagPanel:self changedSize:CGSizeMake(self.frame.size.width,newHeight)];
-                 CGRectSetY(self.barBottomView.frame, self.frame.size.height-self.barBottomView.frame.size.height);
-                [UIView animateWithDuration:0.1 animations:^{
-                    self.tagContainerView.alpha = 1;
+                
+                CGRectSetY(self.barBottomView.frame, self.frame.size.height-self.barBottomView.frame.size.height);
+                CGRectSetY(self.tagContainerView.frame, self.barBottomView.frame.origin.y);
+                [UIView animateWithDuration:0.2 animations:^{
+                    CGRectSetY(self.tagContainerView.frame, 0);
                     //CGRectSetY(self.addTagView.frame, 0);
                     
                     
