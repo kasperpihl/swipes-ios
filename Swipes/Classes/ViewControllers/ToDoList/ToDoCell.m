@@ -45,6 +45,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.contentView.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor whiteColor];
         self.textLabel.backgroundColor = [UIColor whiteColor];
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X,TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
         titleLabel.tag = TITLE_LABEL_TAG;

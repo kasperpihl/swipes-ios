@@ -14,7 +14,6 @@
 @property (nonatomic,strong) NSIndexPath *dragRow;
 @property (nonatomic,strong) KPToDo *draggingObject;
 @end
-
 @implementation TodayViewController
 #pragma mark - Dragable delegate
 -(void)loadItemsAndUpdate:(BOOL)update{
@@ -60,6 +59,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"today_white_background"]];
+    imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
+    [self.view addSubview:imageView];
     self.state = @"today";
     [self.tableView removeFromSuperview];
     KPReorderTableView *tableView = [[KPReorderTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];

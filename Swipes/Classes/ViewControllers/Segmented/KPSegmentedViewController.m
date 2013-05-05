@@ -55,19 +55,8 @@
 }
 #pragma mark - KPControlViewDelegate
 #pragma mark - KPAddTagDelegate
--(void)tagPanel:(KPAddTagPanel *)tagPanel closedWithSelectedTags:(NSArray *)selectedTags{
-    /*NSArray *selectedItems = [[self currentViewController] selectedItems];
-    NSArray *currentSelectedTags = [TAGHANDLER selectedTagsForToDos:selectedItems];
-    NSMutableArray *removedTags = [NSMutableArray array];
-
-    for(NSString *tag in currentSelectedTags){
-        if(![selectedTags containsObject:tag]){
-            [removedTags addObject:tag];
-        }
-    }
-    [TAGHANDLER addTags:selectedTags andRemoveTags:removedTags fromToDos:selectedItems];*/
-    self.currentState = KPControlCurrentStateAdd;
-    [[self currentViewController] deselectAllRows:self];
+-(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
+    [self dismissSemiModalView];
 }
 -(void)tagPanel:(KPAddTagPanel *)tagPanel createdTag:(NSString *)tag{
     [TAGHANDLER addTag:tag];

@@ -12,7 +12,7 @@
 @protocol KPAddTagDelegate <NSObject>
 -(void)tagPanel:(KPAddTagPanel*)tagPanel changedSize:(CGSize)size;
 -(void)tagPanel:(KPAddTagPanel*)tagPanel createdTag:(NSString*)tag;
--(void)tagPanel:(KPAddTagPanel*)tagPanel closedWithSelectedTags:(NSArray*)selectedTags;
+-(void)closeTagPanel:(KPAddTagPanel*)tagPanel;
 @end
 
 @interface KPAddTagPanel : UIView

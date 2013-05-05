@@ -382,13 +382,12 @@
 }
 -(void)prepareTableView:(UITableView *)tableView{
     tableView.allowsMultipleSelection = YES;
-    tableView.backgroundColor = [UIColor colorWithRed:77.0 / 255.0 green:77.0 / 255.0 blue:77.0 / 255.0 alpha:1.0];
     [tableView setTableFooterView:[UIView new]];
     UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
     tableView.contentInset = UIEdgeInsetsMake(0, 0, CONTENT_INSET_BOTTOM, 0);
     tableView.delegate = self;
     tableView.dataSource = self;
-    
+    tableView.backgroundColor = [UIColor clearColor];
     
     KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     searchBar.searchBarDelegate = self;
@@ -408,6 +407,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorWithRed:77.0 / 255.0 green:77.0 / 255.0 blue:77.0 / 255.0 alpha:1.0];
     self.view.frame = [self parentViewController].view.bounds;
     notify(@"updated", loadItems);
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];

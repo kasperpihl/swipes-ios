@@ -17,7 +17,7 @@
 
 #define DEFAULT_SPACING 5
 
-#define SPACE_HACK 1
+#define SPACE_HACK 0
 
 #define TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
 
@@ -89,10 +89,10 @@
     CGFloat currentWidth = self.marginLeft + SPACE_HACK;
     CGFloat currentHeight = self.marginTop;
     CGFloat tagHeight = 0;
-    
-    if(self.tags.count > 0){
+    NSInteger numberOfTags = self.tags.count;
+    if(numberOfTags > 0){
         NSMutableArray *buttonLine = [NSMutableArray array];
-        for(NSInteger j = 0 ; j < self.tags.count ; j++){
+        for(NSInteger j = 0 ; j < numberOfTags ; j++){
             NSString *tag = [self.tags objectAtIndex:j];
             UIButton *tagLabel = [self buttonWithTag:tag];
             if([self.selectedTags containsObject:tag]){
@@ -115,10 +115,12 @@
             currentWidth = currentWidth + tagLabel.frame.size.width + self.spacing - SPACE_HACK;
             
             if(nextLine){
-                CGFloat extraForEach = difference/buttonLine.count;
-                for(NSInteger i = 0 ; i < buttonLine.count ; i++){
+                NSInteger numberOfButtonsInRow = buttonLine.count;
+                CGFloat extraForEach = (difference+self.spacing)/numberOfButtonsInRow;
+                for(NSInteger i = 0 ; i < numberOfButtonsInRow ; i++){
                     UIButton *tagButton = [buttonLine objectAtIndex:i];
-                    CGRectSetSize(tagButton.frame, tagButton.frame.size.width+extraForEach, tagButton.frame.size.height);
+                    CGFloat extraWidth = (i==(numberOfButtonsInRow-1)) ? 0 : 0;
+                    CGRectSetSize(tagButton.frame, tagButton.frame.size.width+extraForEach+extraWidth, tagButton.frame.size.height);
                     CGRectSetX(tagButton.frame, tagButton.frame.origin.x+(i*extraForEach));
                 }
                 [buttonLine removeAllObjects];
