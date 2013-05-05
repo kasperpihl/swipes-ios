@@ -15,6 +15,7 @@
 #define SCROLL_VIEW_TAG 6
 #define TAG_CONTAINER_VIEW_TAG 7
 #define ADD_VIEW_TAG 8
+#define DONE_EDITING_BUTTON_TAG 9
 
 
 #define ANIMATION_DURATION 0.25f
@@ -37,13 +38,29 @@
 @property (nonatomic,weak) IBOutlet UIView *tagContainerView;
 @property (nonatomic,weak) IBOutlet UIView *barBottomView;
 @property (nonatomic,weak) IBOutlet UIScrollView *scrollView;
+@property (nonatomic,weak) IBOutlet UIButton *doneEditingButton;
 @property (nonatomic) NSInteger maxHeight;
+@property (nonatomic) BOOL isRotated;
 @end
 @implementation KPAddTagPanel
 +(KPAddTagPanel*)tagPanelWithTags:(NSArray*)tags maxHeight:(NSInteger)maxHeight{
     KPAddTagPanel *tagPanel = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, maxHeight) andTags:tags andMaxHeight:maxHeight];
     
     return tagPanel;
+}
+-(IBAction)rotateButton
+{
+    NSLog( @"Rotating button" );
+    
+    [UIView beginAnimations:@"rotate" context:nil];
+    [UIView setAnimationDuration:.25f];
+    if( CGAffineTransformEqualToTransform( self.doneEditingButton.imageView.transform, CGAffineTransformIdentity ) )
+    {
+        self.doneEditingButton.imageView.transform = CGAffineTransformMakeRotation(3*M_PI/2);
+    } else {
+        self.doneEditingButton.imageView.transform = CGAffineTransformIdentity;
+    }
+    [UIView commitAnimations];
 }
 - (id)initWithFrame:(CGRect)frame andTags:(NSArray*)tags andMaxHeight:(NSInteger)maxHeight
 {
@@ -137,11 +154,15 @@
         
         UIButton *doneEditingButton = [UIButton buttonWithType:UIButtonTypeCustom];
         CGFloat buttonSize = addView.frame.size.height-COLOR_SEPERATOR_HEIGHT;
+        doneEditingButton.tag = DONE_EDITING_BUTTON_TAG;
+        doneEditingButton.imageView.clipsToBounds = NO;
+        doneEditingButton.imageView.contentMode = UIViewContentModeCenter;
         doneEditingButton.frame = CGRectMake(addView.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
         [doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
         [doneEditingButton setImage:[UIImage imageNamed:@"hide_keyboard_arrow"] forState:UIControlStateNormal];
         [doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         [addView addSubview:doneEditingButton];
+        self.doneEditingButton = (UIButton*)[addView viewWithTag:DONE_EDITING_BUTTON_TAG];
         
         UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, TEXT_FIELD_MARGIN_TOP, addView.frame.size.width-TEXT_FIELD_MARGIN_LEFT-buttonSize, TEXT_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
@@ -152,14 +173,13 @@
         textField.borderStyle = UITextBorderStyleNone;
         textField.delegate = self;
         textField.placeholder = @"Type the name of the tag";
+        [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         [addView addSubview:textField];
         self.textField = (UITextField*)[addView viewWithTag:TEXT_FIELD_TAG];
         
         
         [self addSubview:addView];
         self.addTagView = [self viewWithTag:ADD_VIEW_TAG];
-        
-        
         
         CGRectSetSize(self.frame, self.frame.size.width, self.barBottomView.frame.origin.y+self.barBottomView.frame.size.height);
     }
@@ -176,6 +196,7 @@
     [self.delegate closeTagPanel:self];
 }
 -(void)pressedDoneEditing:(id)sender{
+    [self textFieldShouldReturn:self.textField];
     [self shiftToAddMode:NO];
 }
 -(void)tagList:(KPTagList *)tagList changedSize:(CGSize)size{
@@ -233,6 +254,23 @@
                 }];
             }
         }];
+    }
+}
+-(void)textFieldDidChange:(UITextField*)textField{
+    NSString *string = textField.text;
+    NSString *trimmedString = [string stringByTrimmingCharactersInSet:
+                               [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if(trimmedString.length > 0){
+        if(!self.isRotated){
+            [self rotateButton];
+            self.isRotated = YES;
+        }
+    }
+    else{
+        if(self.isRotated){
+            [self rotateButton];
+            self.isRotated = NO;
+        }
     }
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

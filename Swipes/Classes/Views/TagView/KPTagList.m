@@ -136,7 +136,8 @@
         }
     }
     else{
-        
+        tagHeight = TAG_HEIGHT;
+        CGFloat totalHeight = self.marginTop + self.bottomMargin + TAG_HEIGHT;
         self.isEmptyList = YES;
         UILabel *noTagLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.marginLeft, self.marginTop, self.frame.size.width-self.marginLeft-self.marginRight, 30)];
         noTagLabel.font = NO_TAG_FONT;
@@ -145,9 +146,9 @@
         noTagLabel.textColor = [UIColor whiteColor];
         noTagLabel.text = self.emptyText ? self.emptyText : @"No tags";
         [noTagLabel sizeToFit];
-        noTagLabel.frame = CGRectSetPos(noTagLabel.frame, ((self.frame.size.width-noTagLabel.frame.size.width)/2)+self.emptyLabelMarginHack, (self.frame.size.height-noTagLabel.frame.size.height)/2);
+        noTagLabel.frame = CGRectSetPos(noTagLabel.frame, ((self.frame.size.width-noTagLabel.frame.size.width)/2)+self.emptyLabelMarginHack, (totalHeight-noTagLabel.frame.size.height)/2);
         [self addSubview:noTagLabel];
-        tagHeight = TAG_HEIGHT;
+        
     }
     currentHeight += tagHeight + self.bottomMargin;
     CGRectSetSize(self.frame, self.frame.size.width, currentHeight);

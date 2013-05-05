@@ -121,10 +121,10 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 @dynamic tags;
 
 	
-- (NSMutableSet*)tagsSet {
+- (NSMutableOrderedSet*)tagsSet {
 	[self willAccessValueForKey:@"tags"];
   
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"tags"];
+	NSMutableOrderedSet *result = (NSMutableOrderedSet*)[self mutableOrderedSetValueForKey:@"tags"];
   
 	[self didAccessValueForKey:@"tags"];
 	return result;
