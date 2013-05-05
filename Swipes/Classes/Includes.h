@@ -60,6 +60,10 @@ NS_INLINE void mainBlock(void (^block)(void))
         dispatch_sync(dispatch_get_main_queue(), block);
     }
 }
+#define TAG_HEIGHT 44
+#define DEFAULT_SPACING 5
+
+
 #define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
 #define TEXT_FIELD_CONTAINER_HEIGHT 55
 #define COLOR_SEPERATOR_HEIGHT 5
@@ -68,15 +72,15 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define TEXT_FIELD_MARGIN_TOP 12
 #define TEXT_FIELD_HEIGHT 30
 
-#define SWIPES_BLUE [UIColor colorWithRed:                  47.0/255.0 green:   141.0/255.0 blue:   211.0/255.0 alpha:1.0]
-#define DONE_COLOR [UIColor colorWithRed:                   182.0/255.0 green:  225.0/255.0 blue:   93.0/255.0 alpha:1.0]
-#define SCHEDULE_COLOR [UIColor colorWithRed:               253.0/255.0 green:  130.0/255.0 blue:   109.0/255.0 alpha:1.0]
+#define SWIPES_BLUE [UIColor colorWithRed:                  57.0/255.0 green:   156.0/255.0 blue:   217.0/255.0 alpha:1.0]
+#define DONE_COLOR [UIColor colorWithRed:                   180.0/255.0 green:  223.0/255.0 blue:   93.0/255.0 alpha:1.0]
+#define SCHEDULE_COLOR [UIColor colorWithRed:               252.0/255.0 green:  128.0/255.0 blue:   109.0/255.0 alpha:1.0]
 #define TEXTFIELD_BACKGROUND [UIColor colorWithRed:         70.0/255.0 green:   70.0/255.0 blue:    70.0/255.0 alpha:1.0]
 #define TABLE_VIEW_BACKGROUND [UIColor colorWithRed:        77.0/255.0 green:   77.0/255.0 blue:    77.0/255.0 alpha:1.0]
 #define GRAY_SEPERATOR_COLOR [UIColor colorWithRed:         102.0/255.0 green:  102.0/255.0 blue:   102.0/255.0 alpha:1.0]
 #define SCHEDULE_BUTTON_COLOR [UIColor colorWithRed:        237.0/255.0 green:  237.0/255.0 blue:   237.0/255.0 alpha:1.0]
 #define POPUP_BACKGROUND_COLOR [UIColor colorWithRed:       77.0/255.0 green:   77.0/255.0 blue:    77.0/255.0 alpha:0.97]
-
+#define BAR_BOTTOM_BACKGROUND_COLOR [UIColor colorWithRed:  51.0/255.0 green:   51.0/255.0 blue:    51.0/255.0 alpha:1.0]
 
 #define notify(notifcation,selectr) [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectr) name:notifcation object:nil]
 #define clearNotify() [[NSNotificationCenter defaultCenter] removeObserver:self]

@@ -12,19 +12,19 @@
 #import <QuartzCore/QuartzCore.h>
 #define VERTICAL_MARGIN 5
 #define HORIZONTAL_MARGIN 5
-#define TAG_HEIGHT 44
 #define TAG_HORIZONTAL_PADDING 15
 
-#define DEFAULT_SPACING 5
+
 
 #define SPACE_HACK 0
 
+#define NO_TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:20]
 #define TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
 
 
 #define COLOR_DARK [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
 //#define COLOR_DARK [UtilityClass colorWithRed:51 green:51 blue:51 alpha:1]
-#define COLOR_BLUE [UtilityClass colorWithRed:57 green:159 blue:219 alpha:1]
+#define COLOR_BLUE SWIPES_BLUE //[UtilityClass colorWithRed:57 green:159 blue:219 alpha:1]
 #define COLOR_WHITE [UIColor whiteColor]
 
 @interface KPTagList ()
@@ -90,7 +90,9 @@
     CGFloat currentHeight = self.marginTop;
     CGFloat tagHeight = 0;
     NSInteger numberOfTags = self.tags.count;
+    self.numberOfRows = 1;
     if(numberOfTags > 0){
+        self.isEmptyList = NO;
         NSMutableArray *buttonLine = [NSMutableArray array];
         for(NSInteger j = 0 ; j < numberOfTags ; j++){
             NSString *tag = [self.tags objectAtIndex:j];
@@ -106,6 +108,7 @@
                 currentWidth = self.marginLeft + SPACE_HACK;
                 tagHeight = 0;
                 nextLine = YES;
+                self.numberOfRows++;
             }
             /*if(j == numberOfTags-1){
                 nextLine = YES;
@@ -133,13 +136,18 @@
         }
     }
     else{
+        
+        self.isEmptyList = YES;
         UILabel *noTagLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.marginLeft, self.marginTop, self.frame.size.width-self.marginLeft-self.marginRight, 30)];
+        noTagLabel.font = NO_TAG_FONT;
         noTagLabel.textAlignment = UITextAlignmentCenter;
         noTagLabel.backgroundColor = [UIColor clearColor];
         noTagLabel.textColor = [UIColor whiteColor];
         noTagLabel.text = self.emptyText ? self.emptyText : @"No tags";
+        [noTagLabel sizeToFit];
+        noTagLabel.frame = CGRectSetPos(noTagLabel.frame, ((self.frame.size.width-noTagLabel.frame.size.width)/2)+self.emptyLabelMarginHack, (self.frame.size.height-noTagLabel.frame.size.height)/2);
         [self addSubview:noTagLabel];
-        tagHeight = 30;
+        tagHeight = TAG_HEIGHT;
     }
     currentHeight += tagHeight + self.bottomMargin;
     CGRectSetSize(self.frame, self.frame.size.width, currentHeight);

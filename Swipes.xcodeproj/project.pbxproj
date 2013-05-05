@@ -145,6 +145,8 @@
 		A7BDD4C517369A6900C1A97E /* schedule_image_notebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BDD4B917369A6900C1A97E /* schedule_image_notebook@2x.png */; };
 		A7BDD4C617369A6900C1A97E /* schedule_image_sun.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BDD4BA17369A6900C1A97E /* schedule_image_sun.png */; };
 		A7BDD4C717369A6900C1A97E /* schedule_image_sun@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BDD4BB17369A6900C1A97E /* schedule_image_sun@2x.png */; };
+		A7BDD4CA1736BAFE00C1A97E /* cross_button.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BDD4C81736BAFE00C1A97E /* cross_button.png */; };
+		A7BDD4CB1736BAFE00C1A97E /* cross_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BDD4C91736BAFE00C1A97E /* cross_button@2x.png */; };
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
 		A7F4066517296BC700DDE644 /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066417296BC700DDE644 /* AddPanelView.m */; };
 		A7F4066B17296BF100DDE644 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066817296BF100DDE644 /* ToDoCell.m */; };
@@ -316,6 +318,8 @@
 		A7BDD4B917369A6900C1A97E /* schedule_image_notebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule_image_notebook@2x.png"; sourceTree = "<group>"; };
 		A7BDD4BA17369A6900C1A97E /* schedule_image_sun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = schedule_image_sun.png; sourceTree = "<group>"; };
 		A7BDD4BB17369A6900C1A97E /* schedule_image_sun@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule_image_sun@2x.png"; sourceTree = "<group>"; };
+		A7BDD4C81736BAFE00C1A97E /* cross_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cross_button.png; sourceTree = "<group>"; };
+		A7BDD4C91736BAFE00C1A97E /* cross_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cross_button@2x.png"; sourceTree = "<group>"; };
 		A7F4065F17294ECE00DDE644 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		A7F4066017294ECE00DDE644 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		A7F4066317296BC700DDE644 /* AddPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPanelView.h; sourceTree = "<group>"; };
@@ -630,6 +634,8 @@
 				A781289A17294C56002226C8 /* Buttons */,
 				A7BDD4AF17369A6900C1A97E /* SchedulePopup */,
 				A78128A317294C56002226C8 /* done_icon.png */,
+				A7BDD4C81736BAFE00C1A97E /* cross_button.png */,
+				A7BDD4C91736BAFE00C1A97E /* cross_button@2x.png */,
 				A7BDD4AB1736694300C1A97E /* filter_button.png */,
 				A7BDD4AC1736694300C1A97E /* filter_button@2x.png */,
 				A78128A417294C56002226C8 /* done_icon@2x.png */,
@@ -979,6 +985,8 @@
 				A7BDD4C517369A6900C1A97E /* schedule_image_notebook@2x.png in Resources */,
 				A7BDD4C617369A6900C1A97E /* schedule_image_sun.png in Resources */,
 				A7BDD4C717369A6900C1A97E /* schedule_image_sun@2x.png in Resources */,
+				A7BDD4CA1736BAFE00C1A97E /* cross_button.png in Resources */,
+				A7BDD4CB1736BAFE00C1A97E /* cross_button@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

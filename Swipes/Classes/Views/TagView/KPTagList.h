@@ -26,7 +26,9 @@
 @property (nonatomic) NSInteger marginLeft;
 @property (nonatomic) NSInteger marginRight;
 @property (nonatomic) NSInteger spacing;
-
+@property (nonatomic) NSInteger emptyLabelMarginHack;
+@property (nonatomic) BOOL isEmptyList;
+@property (nonatomic) NSInteger numberOfRows;
 @property (nonatomic,weak) NSObject<KPTagDelegate> *tagDelegate;
 @property (nonatomic,weak) NSObject<KPTagListResizeDelegate> *resizeDelegate;
 -(void)setTags:(NSArray*)tags andSelectedTags:(NSArray*)selectedTags;

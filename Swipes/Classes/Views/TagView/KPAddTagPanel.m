@@ -25,7 +25,7 @@
 #define SEPERATOR_WIDTH 1
 
 #define TAB_BAR_VIEW_HEIGHT 50
-#define BAR_BOTTOM_BACKGROUND_COLOR [UtilityClass colorWithRed:51 green:51 blue:51 alpha:1]
+
 #define BAR_BOTTON_BUTTON_FONT [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:20]
 
 #define KEYBOARD_HEIGHT 216
@@ -54,7 +54,7 @@
         UIView *tagContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height-TAB_BAR_VIEW_HEIGHT)];
         tagContainerView.tag = TAG_CONTAINER_VIEW_TAG;
         UIView *tagContainerColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tagContainerView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        tagContainerColorSeperator.backgroundColor = SWIPES_BLUE;
+        tagContainerColorSeperator.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR;
         [tagContainerView addSubview:tagContainerColorSeperator];
         
         UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, COLOR_SEPERATOR_HEIGHT, tagContainerView.frame.size.width, tagContainerView.frame.size.height-COLOR_SEPERATOR_HEIGHT)];
@@ -63,6 +63,7 @@
         KPTagList *tagView = [KPTagList tagListWithWidth:self.frame.size.width andTags:tags];
         tagView.marginLeft = 0;
         tagView.marginRight = 0;
+        tagView.emptyText = @"No tags";
         CGRectSetY(tagView.frame, 0);
         tagView.resizeDelegate = self;
         tagView.tag = TAG_VIEW_TAG;
