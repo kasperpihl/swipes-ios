@@ -278,6 +278,7 @@
     NSString *trimmedString = [string stringByTrimmingCharactersInSet:
                                [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if(trimmedString.length > 0){
+        [self textFieldDidChange:self.textField];
         if(self.delegate && [self.delegate respondsToSelector:@selector(tagPanel:createdTag:)])
             [self.delegate tagPanel:self createdTag:trimmedString];
         [self.tagView addTag:trimmedString selected:YES];
