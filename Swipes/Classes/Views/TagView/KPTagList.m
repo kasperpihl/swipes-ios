@@ -107,6 +107,10 @@
                 tagHeight = 0;
                 nextLine = YES;
             }
+            /*if(j == numberOfTags-1){
+                nextLine = YES;
+                [buttonLine addObject:tagLabel];
+            }*/
             
             
             if(tagLabel.frame.size.height > tagHeight) tagHeight = tagLabel.frame.size.height;
@@ -119,8 +123,7 @@
                 CGFloat extraForEach = (difference+self.spacing)/numberOfButtonsInRow;
                 for(NSInteger i = 0 ; i < numberOfButtonsInRow ; i++){
                     UIButton *tagButton = [buttonLine objectAtIndex:i];
-                    CGFloat extraWidth = (i==(numberOfButtonsInRow-1)) ? 0 : 0;
-                    CGRectSetSize(tagButton.frame, tagButton.frame.size.width+extraForEach+extraWidth, tagButton.frame.size.height);
+                    CGRectSetSize(tagButton.frame, tagButton.frame.size.width+extraForEach, tagButton.frame.size.height);
                     CGRectSetX(tagButton.frame, tagButton.frame.origin.x+(i*extraForEach));
                 }
                 [buttonLine removeAllObjects];

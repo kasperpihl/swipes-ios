@@ -11,7 +11,7 @@
 #import "SLGlowingTextField.h"
 @class AddPanelView;
 @protocol AddPanelDelegate
--(void)closedAddPanel:(AddPanelView*)addPanel;
+-(void)closeAddPanel:(AddPanelView*)addPanel;
 @optional
 -(void)didAddItem:(NSString*)item;
 @end

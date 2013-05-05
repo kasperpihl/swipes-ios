@@ -15,7 +15,7 @@
 #define CLEAR_FILTER_BUTTON_WIDTH 60
 #define CLEAR_FILTER_BUTTON_Y 4
 #define CLEAR_FILTER_BUTTON_HEIGHT 30
-#define SEARCH_BAR_ORIGINAL_HEIGHT 44
+
 
 #import "KPSearchBar.h"
 #import "KPTagList.h"
@@ -57,16 +57,23 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBackgroundImage:[UIImage new]];
-        [self setTranslucent:YES];
-        self.placeholder = @"Search";
+        [self setBackgroundImage:[UtilityClass imageWithColor:TEXTFIELD_BACKGROUND]];
+        //[self setTranslucent:YES];
+        self.placeholder = @"Search ";
         self.backgroundColor = [UIColor clearColor];
         
+        UIView *colorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-COLOR_SEPERATOR_HEIGHT, self.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+        colorSeperator.backgroundColor = SWIPES_BLUE;
+        [self addSubview:colorSeperator];
+        
+        
+        CGFloat buttonSize = self.frame.size.height-COLOR_SEPERATOR_HEIGHT;
         UIButton *filterButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [filterButton addTarget:self action:@selector(pressedFilter:) forControlEvents:UIControlEventTouchUpInside];
         filterButton.tag = FILTER_BUTTON_TAG;
-        filterButton.frame = CGRectMake(320-57, 0, 44, 44);
-        [filterButton setImage:[UIImage imageNamed:@"filterButton"] forState:UIControlStateNormal];
+        filterButton.frame = CGRectMake(self.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
+        [filterButton setImage:[UIImage imageNamed:@"filter_button"] forState:UIControlStateNormal];
+        [filterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
         [self addSubview:filterButton];
         self.filterButton = (UIButton*)[self viewWithTag:FILTER_BUTTON_TAG];
         
@@ -108,13 +115,16 @@
         }
     }
     [super layoutSubviews];
-    if(!(searchField == nil)) {
+    if(!(searchField == nil) && !self.searchField) {
         self.searchField = searchField;
-        CGRectSetSize(searchField.frame, 250, searchField.frame.size.height);
-        searchField.enabled = NO;
-        //searchField.textColor = [UIColor whiteColor];
-        //[searchField setBackground: [UIImage imageNamed:@"buscador.png"] ];
-        //[searchField setBorderStyle:UITextBorderStyleNone];
+        CGRectSetSize(searchField.frame, self.frame.size.width-(2*searchField.frame.origin.x)-(self.frame.size.height-COLOR_SEPERATOR_HEIGHT), searchField.frame.size.height);
+        searchField.font = TEXT_FIELD_FONT;
+        searchField.borderStyle = UITextBorderStyleNone;
+        searchField.textColor = [UIColor whiteColor];
+        [searchField setBackground:[[UIImage alloc] init]];
+        //[searchField setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
+        searchField.leftView = nil;
+
     }
     
     
@@ -158,7 +168,7 @@
     [UIView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
     
-    NSInteger newHeight = SEARCH_BAR_ORIGINAL_HEIGHT;
+    NSInteger newHeight = TEXT_FIELD_CONTAINER_HEIGHT;
     NSInteger originChange = oldHeight - newHeight;
     self.frame = CGRectMake(self.frame.origin.x,
                             self.frame.origin.y,

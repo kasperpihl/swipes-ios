@@ -55,6 +55,9 @@
 }
 #pragma mark - KPControlViewDelegate
 #pragma mark - KPAddTagDelegate
+-(void)closeAddPanel:(AddPanelView *)addPanel{
+    [self dismissSemiModalView];
+}
 -(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
     [self dismissSemiModalView];
 }
@@ -63,7 +66,7 @@
 }
 -(void)tagPanel:(KPAddTagPanel *)tagPanel changedSize:(CGSize)size{
     NSLog(@"resized");
-    [self resizeSemiView:size];
+    [self resizeSemiView:size animated:NO];
 }
 
 #pragma mark - KPTagDelegate
@@ -113,7 +116,9 @@
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     self.presentedPanel = tagView;
-    [self presentSemiView:tagView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f,KNSemiModalOptionKeys.shadowOpacity:@0.0f}];
+    [self presentSemiView:tagView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f,KNSemiModalOptionKeys.shadowOpacity:@0.0f} completion:^{
+        [tagView scrollIfNessecary];
+    }];
     //[self.navigationController.view addSubview:tagView];
     //[tagView show:YES];
 }
@@ -153,15 +158,11 @@
         }
     }];
 }
--(void)closedAddPanel:(AddPanelView *)addPanel{
-    [self show:YES controlsAnimated:YES];
-}
 -(void)didAddItem:(NSString *)item{
     [TODOHANDLER addItem:item];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated" object:self];
     [self updateBackground];
 }
-
 - (NSMutableArray *)viewControllers {
 	if (!_viewControllers)
 		_viewControllers = [NSMutableArray array];

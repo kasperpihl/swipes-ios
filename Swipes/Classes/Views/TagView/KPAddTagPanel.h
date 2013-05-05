@@ -22,4 +22,5 @@
 @property (nonatomic,weak) IBOutlet KPTagList *tagView;
 @property (nonatomic,weak) IBOutlet UITextField *textField;
 @property (nonatomic,weak) NSObject <KPAddTagDelegate> *delegate;
+-(void)scrollIfNessecary;
 @end

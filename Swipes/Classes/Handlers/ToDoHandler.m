@@ -113,13 +113,13 @@ static ToDoHandler *sharedObject;
     NSString *iconName;
     switch (type) {
         case CellTypeSchedule:
-            iconName = @"clock";
+            iconName = @"schedule_icon";
             break;
         case CellTypeToday:
-            iconName = @"list";
+            iconName = @"today_icon";
             break;
         case CellTypeDone:
-            iconName = @"check";
+            iconName = @"done_icon";
             break;
         default:
             break;

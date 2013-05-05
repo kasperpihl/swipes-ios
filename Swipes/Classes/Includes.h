@@ -60,10 +60,21 @@ NS_INLINE void mainBlock(void (^block)(void))
         dispatch_sync(dispatch_get_main_queue(), block);
     }
 }
+#define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
+#define TEXT_FIELD_CONTAINER_HEIGHT 55
+#define COLOR_SEPERATOR_HEIGHT 5
 
-#define SWIPES_BLUE [UIColor colorWithRed:47.0 / 255.0 green:141.0 / 255.0 blue:211.0 / 255.0 alpha:1.0]
-#define DONE_COLOR [UIColor colorWithRed:182.0 / 255.0 green:225.0 / 255.0 blue:93.0 / 255.0 alpha:1.0]
-#define SCHEDULE_COLOR [UIColor colorWithRed:253.0 / 255.0 green:130.0 / 255.0 blue:109.0 / 255.0 alpha:1.0]
+#define TEXT_FIELD_MARGIN_LEFT 10
+#define TEXT_FIELD_MARGIN_TOP 12
+#define TEXT_FIELD_HEIGHT 30
+
+#define SWIPES_BLUE [UIColor colorWithRed:                  47.0/255.0 green:   141.0/255.0 blue:   211.0/255.0 alpha:1.0]
+#define DONE_COLOR [UIColor colorWithRed:                   182.0/255.0 green:  225.0/255.0 blue:   93.0/255.0 alpha:1.0]
+#define SCHEDULE_COLOR [UIColor colorWithRed:               253.0/255.0 green:  130.0/255.0 blue:   109.0/255.0 alpha:1.0]
+#define TEXTFIELD_BACKGROUND [UIColor colorWithRed:         70.0/255.0 green:   70.0/255.0 blue:    70.0/255.0 alpha:1.0]
+#define TABLE_VIEW_BACKGROUND [UIColor colorWithRed:        77.0/255.0 green:   77.0/255.0 blue:    77.0/255.0 alpha:1.0]
+#define GRAY_SEPERATOR_COLOR [UIColor colorWithRed:         102.0/255.0 green:  102.0/255.0 blue:   102.0/255.0 alpha:1.0]
+
 
 #define notify(notifcation,selectr) [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectr) name:notifcation object:nil]
 #define clearNotify() [[NSNotificationCenter defaultCenter] removeObserver:self]
