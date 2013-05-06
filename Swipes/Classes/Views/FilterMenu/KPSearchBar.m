@@ -225,6 +225,7 @@
                                     view.frame.size.height);
         }*/
         [(UITableView *)self.superview setTableHeaderView:self];
+        [(UITableView *)self.superview setContentOffset:CGPointMake(0, TEXT_FIELD_CONTAINER_HEIGHT)];
     } completion:^(BOOL finished) {
         self.filterButton.hidden = NO;
         self.clearedColorSeperatorView.hidden = NO;

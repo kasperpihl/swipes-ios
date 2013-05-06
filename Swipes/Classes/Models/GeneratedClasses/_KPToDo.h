@@ -106,9 +106,9 @@ extern const struct KPToDoFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSOrderedSet *tags;
+@property (nonatomic, strong) NSSet *tags;
 
-- (NSMutableOrderedSet*)tagsSet;
+- (NSMutableSet*)tagsSet;
 
 
 
@@ -118,8 +118,8 @@ extern const struct KPToDoFetchedProperties {
 
 @interface _KPToDo (CoreDataGeneratedAccessors)
 
-- (void)addTags:(NSOrderedSet*)value_;
-- (void)removeTags:(NSOrderedSet*)value_;
+- (void)addTags:(NSSet*)value_;
+- (void)removeTags:(NSSet*)value_;
 - (void)addTagsObject:(KPTag*)value_;
 - (void)removeTagsObject:(KPTag*)value_;
 
@@ -168,8 +168,8 @@ extern const struct KPToDoFetchedProperties {
 
 
 
-- (NSMutableOrderedSet*)primitiveTags;
-- (void)setPrimitiveTags:(NSMutableOrderedSet*)value;
+- (NSMutableSet*)primitiveTags;
+- (void)setPrimitiveTags:(NSMutableSet*)value;
 
 
 @end

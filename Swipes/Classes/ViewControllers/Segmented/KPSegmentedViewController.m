@@ -322,7 +322,6 @@
 	
 	ToDoListViewController *newViewController = (ToDoListViewController*)self.viewControllers[selectedIndex];
     newViewController.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(newViewController.tableView.tableHeaderView.bounds));
-    //[newViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 	[self addChildViewController:newViewController];
 	newViewController.view.frame = CGRectSetPos(self.contentView.frame, delta, 0);
     CGFloat duration = animated ? 0.4 : 0.0;

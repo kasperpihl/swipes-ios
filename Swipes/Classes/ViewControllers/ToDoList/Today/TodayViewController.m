@@ -19,7 +19,7 @@
 -(void)loadItemsAndUpdate:(BOOL)update{
     NSDate *endDate = [[NSDate dateTomorrow] dateAtStartOfDay];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule < %@)",@"scheduled", endDate];
-    self.items = [[KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:predicate] mutableCopy];
+    self.items = [[KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate] mutableCopy];
 
     if(update) [self update];
 }

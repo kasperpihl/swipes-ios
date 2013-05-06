@@ -11,7 +11,7 @@
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
 #define VERTICAL_MARGIN 5
-#define HORIZONTAL_MARGIN 5
+#define HORIZONTAL_MARGIN 0
 #define TAG_HORIZONTAL_PADDING 15
 
 
@@ -108,6 +108,7 @@
                 currentWidth = self.marginLeft + SPACE_HACK;
                 tagHeight = 0;
                 nextLine = YES;
+                NSLog(@"test");
                 self.numberOfRows++;
             }
             /*if(j == numberOfTags-1){

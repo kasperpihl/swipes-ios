@@ -15,6 +15,8 @@
 #import "FilterMenu.h"
 
 #define TABLEVIEW_TAG 500
+#define BACKGROUND_IMAGE_VIEW_TAG 501
+#define BACKGROUND_LABEL_VIEW_TAG 502
 #define CONTENT_INSET_BOTTOM 100
 @interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate>
 
@@ -124,14 +126,6 @@
 #pragma mark - KPSearchBarDelegate
 -(void)searchBar:(KPSearchBar *)searchBar pressedFilterButton:(UIButton *)filterButton{
     searchBar.currentMode = KPSearchBarModeTags;
-    /*FilterMenu *filterMenu = [[FilterMenu alloc] initWithFrame:self.view.bounds];
-    filterMenu.dataSource = self.filterHandler;
-    filterMenu.delegate = self;*/
-    /*CGRectSetY(filterMenu.frame, 0-filterMenu.frame.size.height+self.tableView.tableHeaderView.frame.size.height);
-    self.tableView.tableHeaderView = filterMenu;
-    [UIView animateWithDuration:3 animations:^{
-        CGRectSetY(filterMenu.frame, 0);
-    }];*/
 }
 #pragma mark - Dragable Controller
 

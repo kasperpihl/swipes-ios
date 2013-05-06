@@ -7,7 +7,12 @@
 //
 
 #import "KPParseCoreData.h"
+#import "UtilityClass.h"
+#import "ToDoHandler.h"
+#import "TagHandler.h"
+/*
 
+*/
 @interface KPParseCoreData ()
 @property (nonatomic,assign) BOOL isPerformingOperation;
 @property (nonatomic,assign) BOOL didLogout;
@@ -32,6 +37,9 @@ static KPParseCoreData *sharedObject;
 #pragma mark Core data stuff
 -(void)initialize{
     [self loadDatabase];
+    if(![UTILITY.userDefaults boolForKey:@"seeded"]){
+        [self seedObjects];
+    }
 }
 -(void)loadDatabase{
     NSLog(@"error here");
@@ -64,4 +72,34 @@ static KPParseCoreData *sharedObject;
     [MagicalRecord cleanUp];
 }
 
+-(void)seedObjects{
+    NSArray *tagArray = @[
+                        @"Home",
+                        @"Guide",
+                        @"Swipes",
+                        @"Work"
+    ];
+    for(NSString *tag in tagArray){
+        [TAGHANDLER addTag:tag];
+    }
+    NSArray *toDoArray = @[
+                       @"Hold to drag me up and down",
+                       @"Swipe left to schedule me",
+                       @"Swipe right to complete me",
+                       @"Assign us tags",
+                       @"Select me too",
+                       @"Tap to select me"
+                       ];
+    for(NSInteger i = 0 ; i < toDoArray.count ; i++){
+        NSString *item = [toDoArray objectAtIndex:i];
+        [TODOHANDLER addItem:item];
+        
+        if(i == 3) [TAGHANDLER addTags:@[@"Work",@"Swipes"] andRemoveTags:nil fromToDos:@[]];
+    }
+    
+    NSArray *todosForTagsArray = [KPToDo MR_findAll];
+    todosForTagsArray = [todosForTagsArray subarrayWithRange:NSMakeRange(0, 3)];
+    [TAGHANDLER addTags:@[@"Guide",@"Swipes"] andRemoveTags:nil fromToDos:todosForTagsArray];
+    [UTILITY.userDefaults setBool:YES forKey:@"seeded"];
+}
 @end

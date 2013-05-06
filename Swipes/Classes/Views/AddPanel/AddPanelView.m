@@ -53,10 +53,10 @@
     NSString *trimmedString = [string stringByTrimmingCharactersInSet:
                                [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if(trimmedString.length > 0){
-        [self textFieldDidChange:self.textField];
         if(self.addDelegate && [self.addDelegate respondsToSelector:@selector(didAddItem:)])
         [self.addDelegate didAddItem:textField.text];
         textField.text = @"";
+        [self textFieldDidChange:self.textField];
     }
     return NO;
 }

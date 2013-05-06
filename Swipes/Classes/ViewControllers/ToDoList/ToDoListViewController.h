@@ -14,6 +14,8 @@
 #import "FilterHandler.h"
 @interface ToDoListViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic,strong) NSMutableArray *items;
+@property (nonatomic,weak) IBOutlet UIImageView *backgroundImage;
+@property (nonatomic,weak) IBOutlet UILabel *backgroundLabel;
 @property (nonatomic,strong) FilterHandler *filterHandler;
 @property (nonatomic,strong) NSMutableArray *titleArray;
 @property (nonatomic,strong) NSMutableArray *sortedItems;
