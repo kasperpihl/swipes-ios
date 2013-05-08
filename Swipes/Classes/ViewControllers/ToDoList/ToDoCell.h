@@ -12,4 +12,5 @@
 @interface ToDoCell : MCSwipeTableViewCell
 @property (nonatomic) CellType cellType;
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags;
+-(void)setOrderNumber:(NSInteger)orderNumber;
 @end

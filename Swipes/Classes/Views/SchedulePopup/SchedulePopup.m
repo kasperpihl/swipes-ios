@@ -12,35 +12,37 @@
 #import "NSDate-Utilities.h"
 #define POPUP_WIDTH 300
 #define CONTENT_VIEW_TAG 1
-#define CONTAINER_VIEW_TAG 2
 #define SELECT_DATE_VIEW_TAG 3
 #define DATE_PICKER_TAG 4
 #define MONTH_LABEL_TAG 5
+#define BACK_ONE_MONTH_BUTTON_TAG 6
+#define FORWARD_ONE_MONTH_BUTTON_TAG 7
+
 
 #define SEPERATOR_COLOR_DARK [UtilityClass colorWithRed:77 green:77 blue:77 alpha:0.7]
 #define SEPERATOR_COLOR_LIGHT [UtilityClass colorWithRed:128 green:128 blue:128 alpha:0.5]
-#define SEPERATOR_MARGIN 0.02
-#define SEPERATOR_WIDTH 2
+#define SEPERATOR_MARGIN 0//0.02
 
-#define BUTTON_FONT [UIFont fontWithName:@"Franchise-Bold" size:20]
+
+#define SCHEDULE_BUTTON_FONT [UIFont fontWithName:@"Franchise-Bold" size:20]
 
 #define PICKER_CUT_HEIGHT 10
+#define PICKER_CUT_WIDTH 15
 
 #define BUTTON_TOP_INSET 60
 #define BUTTON_IMAGE_BOTTOM_MARGIN 40
 
-#define MONTH_LABEL_Y 5
+
+
+#define PICK_DATE_BUTTON_HEIGHT 45
+
+#define MONTH_LABEL_Y 10
 #define MONTH_LABEL_HEIGHT 30
-#define MONTH_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Bold" size:16]
-#define MONTH_LABEL_COLOR [UtilityClass colorWithRed:255 green:255 blue:255 alpha:1]
 
 #define GRID_NUMBER 3
 #define BUTTON_PADDING 0
 #define CONTENT_VIEW_SIZE 300
-#define ANIMATION_SCALE 0.1
-#define ANIMATION_DURATION 0.25
-#define EXTRA_SCALE 1.02
-#define EXTRA_DURATION 0.1
+
 typedef enum {
     CustomPickerTypeDay = 0,
     CustomPickerTypeHour,
@@ -50,29 +52,29 @@ typedef enum {
 
 @interface SchedulePopup ()
 @property (nonatomic,copy) SchedulePopupBlock block;
-@property (nonatomic,weak) IBOutlet UIView *containerView;
 @property (nonatomic,weak) IBOutlet UIDatePicker *datePicker;
 @property (nonatomic,weak) IBOutlet UILabel *monthLabel;
 @property (nonatomic,weak) IBOutlet UIView *contentView;
 @property (nonatomic,weak) IBOutlet UIView *selectDateView;
+@property (nonatomic,weak) IBOutlet UIButton *backOneMonth;
+@property (nonatomic,weak) IBOutlet UIButton *forwardOneMonth;
+
 @property (nonatomic) BOOL isPickingDate;
-@property (nonatomic) NSDate *selectedDate;
-@property (nonatomic) KPScheduleButtons selectedButton;
 @end
 @implementation SchedulePopup
 +(SchedulePopup *)showInView:(UIView *)view withBlock:(SchedulePopupBlock)block{
     SchedulePopup *scheduleView = [[SchedulePopup alloc] initWithFrame:view.bounds];
     [view addSubview:scheduleView];
     scheduleView.block = block;
-    [scheduleView show:YES];
+    [scheduleView show:YES completed:nil];
     return scheduleView;
 }
 -(void)returnState:(KPScheduleButtons)state date:(NSDate*)date{
-    self.selectedButton = state;
-    self.selectedDate = date;
-    [self show:NO];
+    [self show:NO completed:^(BOOL succeeded, NSError *error) {
+        if(self.block) self.block(state,date);
+    }];
 }
--(void)pressedBackground:(id)sender{
+-(void)cancelled{
     [self returnState:KPScheduleButtonCancel date:nil];
 }
 -(void)pressedTomorrow:(id)sender{
@@ -89,7 +91,7 @@ typedef enum {
 }
 -(void)pressedSpecific:(id)sender{
     [UIView transitionWithView:self.containerView
-                      duration:0.7f
+                      duration:0.5f
                        options:(self.isPickingDate ? UIViewAnimationOptionTransitionFlipFromRight :
                                 UIViewAnimationOptionTransitionFlipFromLeft)
                     animations: ^{
@@ -122,46 +124,17 @@ typedef enum {
     CGFloat width = (vertical) ? SEPERATOR_WIDTH : size;
     CGFloat height = (vertical) ? size : SEPERATOR_WIDTH;
     UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
-    
-    UIView *seperator1,*seperator2;
-    if(vertical){
-        seperator1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SEPERATOR_WIDTH/2, height)];
-        seperator1.backgroundColor = SEPERATOR_COLOR_DARK;
-        seperator2 = [[UIView alloc] initWithFrame:CGRectMake(SEPERATOR_WIDTH/2, 0, SEPERATOR_WIDTH/2, height)];
-        seperator2.backgroundColor = SEPERATOR_COLOR_LIGHT;
-    }
-    else{
-        seperator1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, SEPERATOR_WIDTH/2)];
-        seperator1.backgroundColor = SEPERATOR_COLOR_LIGHT;
-        seperator2 = [[UIView alloc] initWithFrame:CGRectMake(0, SEPERATOR_WIDTH/2, width, SEPERATOR_WIDTH/2)];
-        seperator2.backgroundColor = SEPERATOR_COLOR_DARK;
-    }
-    [seperator addSubview:seperator1];
-    [seperator addSubview:seperator2];
+    seperator.backgroundColor = SEPERATOR_COLOR_LIGHT;
     return seperator;
 }
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        UIView *backgroundView = [[UIView alloc] initWithFrame:frame];
-        backgroundView.backgroundColor = [UtilityClass colorWithRed:155 green:155 blue:155 alpha:0.5];
-        UIButton *backgroundButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        backgroundButton.frame = backgroundView.bounds;
-        [backgroundButton addTarget:self action:@selector(pressedBackground:) forControlEvents:UIControlEventTouchUpInside];
-        [backgroundView addSubview:backgroundButton];
-        
-        
-        [self addSubview:backgroundView];
-        
-        
-        UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake((self.frame.size.width-CONTENT_VIEW_SIZE)/2, (self.frame.size.height-CONTENT_VIEW_SIZE)/2, CONTENT_VIEW_SIZE, CONTENT_VIEW_SIZE)];
-        containerView.hidden = YES;
-        containerView.tag = CONTAINER_VIEW_TAG;
-        
-        UIView *contentView = [[UIView alloc] initWithFrame:containerView.bounds];
-        contentView.backgroundColor = POPUP_BACKGROUND_COLOR;
-        contentView.layer.cornerRadius = 5;
+        [self setContainerSize:CGSizeMake(POPUP_WIDTH, POPUP_WIDTH)];
+        UIView *contentView = [[UIView alloc] initWithFrame:self.containerView.bounds];
+        contentView.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR;//POPUP_BACKGROUND_COLOR;
+        //contentView.layer.cornerRadius = 5;
         contentView.tag = CONTENT_VIEW_TAG;
         
         for(NSInteger i = 1 ; i < GRID_NUMBER ; i++){
@@ -209,71 +182,124 @@ typedef enum {
         [unspecifiedButton setTitle:@"Unspecified" forState:UIControlStateNormal];
         [unspecifiedButton addTarget:self action:@selector(pressedUnspecified:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:unspecifiedButton];
-        [containerView addSubview:contentView];
-        self.contentView = [containerView viewWithTag:CONTENT_VIEW_TAG];
-        
-        
-        
-        UIView *selectDateView = [[UIView alloc] initWithFrame:containerView.bounds];
-        selectDateView.hidden = YES;
-        selectDateView.tag = SELECT_DATE_VIEW_TAG;
-        selectDateView.backgroundColor = [UtilityClass colorWithRed:77 green:77 blue:77 alpha:0.9];
-        selectDateView.layer.cornerRadius = 5;
-        
-        UILabel *monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, MONTH_LABEL_Y, selectDateView.frame.size.width, MONTH_LABEL_HEIGHT)];
-        monthLabel.textAlignment = UITextAlignmentCenter;
-        monthLabel.textColor = MONTH_LABEL_COLOR;
-        monthLabel.tag = MONTH_LABEL_TAG;
-        monthLabel.backgroundColor = [UIColor clearColor];
-        monthLabel.font = MONTH_LABEL_FONT;
-        [selectDateView addSubview:monthLabel];
-        self.monthLabel = (UILabel*)[selectDateView viewWithTag:MONTH_LABEL_TAG];
-        
-        UIDatePicker *picker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, -PICKER_CUT_HEIGHT, 280, 200)];
-        picker.minimumDate = [[NSDate dateTomorrow] dateAtStartOfDay];
-        picker.minuteInterval = 5;
-        picker.tag = DATE_PICKER_TAG;
-        picker.maximumDate = [NSDate dateWithDaysFromNow:730];
-        [picker addTarget:self action:@selector(changedDate:) forControlEvents:UIControlEventValueChanged];
-        picker.datePickerMode = UIDatePickerModeDateAndTime;
-        [self changedDate:picker];
-        CGSize pickerSize = [picker sizeThatFits:CGSizeZero];
-        
-        UIView *pickerTransformView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, pickerSize.width, pickerSize.height-2*PICKER_CUT_HEIGHT)];
-        pickerTransformView.transform = CGAffineTransformMakeScale(0.9f, 0.9f);
-        [pickerTransformView addSubview:picker];
-        pickerTransformView.layer.borderWidth = 1;
-        pickerTransformView.layer.borderColor = [[UIColor blackColor] CGColor];
-        pickerTransformView.layer.cornerRadius = 5;
-        pickerTransformView.layer.masksToBounds = YES;
-        pickerTransformView.frame = CGRectSetPos(pickerTransformView.frame, (selectDateView.frame.size.width-pickerTransformView.frame.size.width)/2, 50);
-        self.datePicker = (UIDatePicker*)[pickerTransformView viewWithTag:DATE_PICKER_TAG];
-        [selectDateView addSubview:pickerTransformView];
-        
-        
-        UIButton *backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        backButton.frame = CGRectMake(15, 235, 50, 44);
-        [backButton addTarget:self action:@selector(pressedSpecific:) forControlEvents:UIControlEventTouchUpInside];
-        [backButton setTitle:@"Back" forState:UIControlStateNormal];
-        [selectDateView addSubview:backButton];
-        
-        UIButton *setDateButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        setDateButton.frame = CGRectMake(200, 235, 80, 44);
-        [setDateButton setTitle:@"Set date" forState:UIControlStateNormal];
-        [setDateButton addTarget:self action:@selector(selectedDate:) forControlEvents:UIControlEventTouchUpInside];
-        [selectDateView addSubview:setDateButton];
-        
-        
-        
-        [containerView addSubview:selectDateView];
-        self.selectDateView = [containerView viewWithTag:SELECT_DATE_VIEW_TAG];
-        
-        
-        [self addSubview:containerView];
-        self.containerView = [self viewWithTag:CONTAINER_VIEW_TAG];
+        [self.containerView addSubview:contentView];
+        self.contentView = [self.containerView viewWithTag:CONTENT_VIEW_TAG];
+        [self addPickerView];
         
     }
     return self;
+}
+-(void)addPickerView{
+    UIView *selectDateView = [[UIView alloc] initWithFrame:self.containerView.bounds];
+    selectDateView.hidden = YES;
+    selectDateView.tag = SELECT_DATE_VIEW_TAG;
+    selectDateView.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR; //POPUP_BACKGROUND_COLOR
+    //selectDateView.layer.cornerRadius = 5;
+    selectDateView.layer.masksToBounds = YES;
+    
+    UIView *colorBottomSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, selectDateView.frame.size.height-COLOR_SEPERATOR_HEIGHT, selectDateView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+    colorBottomSeperator.backgroundColor = SWIPES_BLUE;
+    [selectDateView addSubview:colorBottomSeperator];
+    
+    UIButton *backOneMonthButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [backOneMonthButton setImage:[UIImage imageNamed:@"left_arrow"] forState:UIControlStateNormal];
+    backOneMonthButton.layer.borderWidth = 1;
+    [backOneMonthButton addTarget:self action:@selector(pressedBackMonth:) forControlEvents:UIControlEventTouchUpInside];
+    backOneMonthButton.tag = BACK_ONE_MONTH_BUTTON_TAG;
+    backOneMonthButton.layer.borderColor = SEPERATOR_COLOR_DARK.CGColor;
+    backOneMonthButton.frame = CGRectMake(-1, -1, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT);
+    [selectDateView addSubview:backOneMonthButton];
+    self.backOneMonth = (UIButton*)[selectDateView viewWithTag:BACK_ONE_MONTH_BUTTON_TAG];
+    
+    UIButton *forwardOneMonthButton = [UIButton buttonWithType:UIButtonTypeCustom];
+
+    [forwardOneMonthButton setImage:[UIImage imageNamed:@"right_arrow"] forState:UIControlStateNormal];
+    forwardOneMonthButton.frame = CGRectMake(selectDateView.frame.size.width-COLOR_SEPERATOR_HEIGHT-PICK_DATE_BUTTON_HEIGHT+1, -1, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT);
+    forwardOneMonthButton.layer.borderWidth = 1;
+    forwardOneMonthButton.layer.borderColor = SEPERATOR_COLOR_DARK.CGColor;
+    [forwardOneMonthButton addTarget:self action:@selector(pressedForwardMonth:) forControlEvents:UIControlEventTouchUpInside];
+    [selectDateView addSubview:forwardOneMonthButton];
+    
+    UILabel *monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, MONTH_LABEL_Y, selectDateView.frame.size.width, MONTH_LABEL_HEIGHT)];
+    monthLabel.textAlignment = UITextAlignmentCenter;
+    monthLabel.textColor = BUTTON_COLOR;
+    monthLabel.tag = MONTH_LABEL_TAG;
+    monthLabel.backgroundColor = [UIColor clearColor];
+    monthLabel.font = BUTTON_FONT;
+    [selectDateView addSubview:monthLabel];
+    self.monthLabel = (UILabel*)[selectDateView viewWithTag:MONTH_LABEL_TAG];
+    
+    UIDatePicker *picker = [[UIDatePicker alloc] initWithFrame:CGRectMake(-PICKER_CUT_WIDTH, -PICKER_CUT_HEIGHT, 240, 200)];
+    picker.minimumDate = [[NSDate dateTomorrow] dateAtStartOfDay];
+    picker.minuteInterval = 5;
+    picker.tag = DATE_PICKER_TAG;
+    picker.maximumDate = [NSDate dateWithDaysFromNow:730];
+    [picker addTarget:self action:@selector(changedDate:) forControlEvents:UIControlEventValueChanged];
+    picker.datePickerMode = UIDatePickerModeDateAndTime;
+    [self changedDate:picker];
+    CGSize pickerSize = [picker sizeThatFits:CGSizeZero];
+    
+    UIView *pickerTransformView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, pickerSize.width-2*PICKER_CUT_WIDTH, pickerSize.height-2*PICKER_CUT_HEIGHT)];
+    pickerTransformView.transform = CGAffineTransformMakeScale(0.9f, 0.9f);
+    [pickerTransformView addSubview:picker];
+    pickerTransformView.layer.borderWidth = 1;
+    pickerTransformView.layer.borderColor = [[UIColor blackColor] CGColor];
+    pickerTransformView.layer.cornerRadius = 5;
+    pickerTransformView.layer.masksToBounds = YES;
+    pickerTransformView.frame = CGRectSetPos(pickerTransformView.frame, (selectDateView.frame.size.width-pickerTransformView.frame.size.width)/2, ((selectDateView.frame.size.height-2*PICK_DATE_BUTTON_HEIGHT-COLOR_SEPERATOR_HEIGHT)-pickerTransformView.frame.size.height)/2+PICK_DATE_BUTTON_HEIGHT);
+    self.datePicker = (UIDatePicker*)[pickerTransformView viewWithTag:DATE_PICKER_TAG];
+    [selectDateView addSubview:pickerTransformView];
+    
+    
+    
+    CGFloat buttonY = selectDateView.frame.size.height-COLOR_SEPERATOR_HEIGHT-PICK_DATE_BUTTON_HEIGHT;
+    CGFloat buttonWidth = selectDateView.frame.size.width/2;
+    
+    UIView *pickerButtonSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, buttonY-SEPERATOR_WIDTH, selectDateView.frame.size.width, SEPERATOR_WIDTH)];
+    pickerButtonSeperator.backgroundColor = SEPERATOR_COLOR_DARK;
+    [selectDateView addSubview:pickerButtonSeperator];
+    
+    
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.titleLabel.font = BUTTON_FONT;
+    backButton.frame = CGRectMake(0, buttonY , buttonWidth , PICK_DATE_BUTTON_HEIGHT);
+    [backButton addTarget:self action:@selector(pressedSpecific:) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setTitle:@"BACK" forState:UIControlStateNormal];
+    [selectDateView addSubview:backButton];
+    
+    
+    UIView *dateButtonsSeperator = [[UIView alloc] initWithFrame:CGRectMake(buttonWidth-SEPERATOR_WIDTH/2, buttonY, SEPERATOR_WIDTH, PICK_DATE_BUTTON_HEIGHT)];
+    dateButtonsSeperator.backgroundColor = SEPERATOR_COLOR_DARK;
+    [selectDateView addSubview:dateButtonsSeperator];
+    
+    UIButton *setDateButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    setDateButton.titleLabel.font = BUTTON_FONT;
+    setDateButton.frame = CGRectMake(buttonWidth, buttonY,buttonWidth , PICK_DATE_BUTTON_HEIGHT);
+    [setDateButton setTitle:@"SET DATE" forState:UIControlStateNormal];
+    [setDateButton addTarget:self action:@selector(selectedDate:) forControlEvents:UIControlEventTouchUpInside];
+    [selectDateView addSubview:setDateButton];
+    
+    
+    
+    [self.containerView addSubview:selectDateView];
+    self.selectDateView = [self.containerView viewWithTag:SELECT_DATE_VIEW_TAG];
+    
+}
+-(void)pressedBackMonth:(UIButton*)sender{
+    NSDateComponents* dateComponents = [[NSDateComponents alloc]init];
+    [dateComponents setMonth:-1];
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    NSDate* newDate = [calendar dateByAddingComponents:dateComponents toDate:self.datePicker.date options:0];
+    [self.datePicker setDate:newDate animated:YES];
+    [self changedDate:self.datePicker];
+}
+-(void)pressedForwardMonth:(UIButton*)sender{
+    NSDateComponents* dateComponents = [[NSDateComponents alloc]init];
+    [dateComponents setMonth:1];
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    NSDate* newDate = [calendar dateByAddingComponents:dateComponents toDate:self.datePicker.date options:0];
+    [self.datePicker setDate:newDate animated:YES];
+    [self changedDate:self.datePicker];
 }
 -(void)changedDate:(UIDatePicker*)picker{
     if([picker.date compare:picker.minimumDate] == NSOrderedSame){
@@ -282,11 +308,15 @@ typedef enum {
     NSDateFormatter *weekday = [[NSDateFormatter alloc] init];
     [weekday setDateFormat: @"MMMM Y"];
     NSString *monthLabelString = [weekday stringFromDate:picker.date];
-    if(![self.monthLabel.text isEqualToString:monthLabelString])[self.monthLabel setText:monthLabelString];
+    if(![self.monthLabel.text isEqualToString:monthLabelString]){
+        [self.monthLabel setText:[monthLabelString uppercaseString]];
+        self.backOneMonth.enabled = ![picker.date isThisMonth];
+    }
+    
 }
 -(UIButton*)buttonForScheduleButton:(KPScheduleButtons)scheduleButton{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.titleLabel.font = BUTTON_FONT;
+    button.titleLabel.font = SCHEDULE_BUTTON_FONT;
     button.titleEdgeInsets = UIEdgeInsetsMake(BUTTON_TOP_INSET, 0, 0, 0);
     button.titleLabel.textColor = SCHEDULE_BUTTON_COLOR;
     UIImage *iconImage = [self imageForScheduleButton:scheduleButton];
@@ -329,31 +359,5 @@ typedef enum {
     
     CGFloat y = floor((number-1) / GRID_NUMBER) * CONTENT_VIEW_SIZE/GRID_NUMBER + BUTTON_PADDING;
     return CGRectMake(x, y, width, height);
-}
--(void)show:(BOOL)show{
-    if(show){
-        self.containerView.transform = CGAffineTransformMakeScale(ANIMATION_SCALE, ANIMATION_SCALE);
-        self.containerView.hidden = NO;
-        [UIView animateWithDuration:ANIMATION_DURATION delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            self.containerView.transform = CGAffineTransformMakeScale(EXTRA_SCALE, EXTRA_SCALE);
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:EXTRA_DURATION delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-                self.containerView.transform = CGAffineTransformMakeScale(EXTRA_SCALE/EXTRA_SCALE, EXTRA_SCALE/EXTRA_SCALE);
-            } completion:^(BOOL finished) {
-               
-            }];
-        }];
-    }else{
-        [UIView animateWithDuration:EXTRA_DURATION delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            self.containerView.transform = CGAffineTransformMakeScale(EXTRA_SCALE, EXTRA_SCALE);
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:ANIMATION_DURATION delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-                self.containerView.transform = CGAffineTransformMakeScale(ANIMATION_SCALE, ANIMATION_SCALE);
-            } completion:^(BOOL finished) {
-                if(self.block) self.block(self.selectedButton,self.self.selectedDate);
-                [self removeFromSuperview];
-            }];
-        }];
-    }
 }
 @end

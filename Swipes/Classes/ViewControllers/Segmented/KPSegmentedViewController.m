@@ -18,6 +18,7 @@
 #import "KPAddTagPanel.h"
 #import "FilterMenu.h"
 #import "FilterHandler.h"
+#import "KPAlert.h"
 
 #import "UIViewController+KNSemiModal.h"
 #define DEFAULT_SELECTED_INDEX 1
@@ -150,7 +151,7 @@
      }];
 }
 -(void)pressedDelete:(id)sender{
-    [UTILITY confirmBoxWithTitle:@"Delete items" andMessage:@"Are you sure?" block:^(BOOL succeeded, NSError *error) {
+    [KPAlert confirmInView:self.navigationController.view title:@"Delete items" message:@"Are you sure?" block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             ToDoListViewController *viewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
             [viewController deleteSelectedItems:self];

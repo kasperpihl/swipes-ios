@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "KPPopup.h"
 
 typedef NS_ENUM(NSUInteger, KPScheduleButtons){
     KPScheduleButtonCancel = 0,
@@ -18,6 +18,6 @@ typedef NS_ENUM(NSUInteger, KPScheduleButtons){
     KPScheduleButtonUnscheduled = 7
 };
 typedef void (^SchedulePopupBlock)(KPScheduleButtons button, NSDate *chosenDate);
-@interface SchedulePopup : UIView
+@interface SchedulePopup : KPPopup
 +(SchedulePopup*)showInView:(UIView*)view withBlock:(SchedulePopupBlock)block;
 @end

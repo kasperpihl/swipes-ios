@@ -197,6 +197,7 @@ secondStateIconName:(NSString *)secondIconName
 }
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
     if ([gesture state] == UIGestureRecognizerStateBegan) {
+        
         if([self.delegate respondsToSelector:@selector(swipeTableViewCell:didStartPanningWithMode:)])
             [self.delegate swipeTableViewCell:self didStartPanningWithMode:self.mode];
     }
@@ -290,7 +291,7 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (UIColor *)colorWithPercentage:(CGFloat)percentage {
-    UIColor *color = [UIColor clearColor];
+    UIColor *color = TABLE_VIEW_BACKGROUND;
     if(!self.didRegret){
         // Background Color
         if (percentage >= kMCStop1 && percentage < kMCStop2)

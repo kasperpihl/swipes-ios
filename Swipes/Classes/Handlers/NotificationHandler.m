@@ -25,14 +25,14 @@ static NotificationHandler *sharedObject;
     for(UILocalNotification *localNotification in notifications){
         if([localNotification.fireDate compare:date] != NSOrderedSame) continue;
         if(![[localNotification.userInfo objectForKey:@"type"] isEqualToString:@"schedule"]) continue;
+        [app cancelLocalNotification:localNotification];
         if(numberOfTasks == 0){
-            [app cancelLocalNotification:localNotification];
             return;
         }
-        NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"schedule",@"type",[NSNumber numberWithInteger:numberOfTasks],@"number",nil];
+        /*NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"schedule",@"type",[NSNumber numberWithInteger:numberOfTasks],@"number",nil];
         localNotification.userInfo= infoDict;
         localNotification.alertBody = [NSString stringWithFormat:@"You have %i tasks today",numberOfTasks];
-        return;
+        return;*/
     }
     if(numberOfTasks < 1) return;
 
@@ -46,5 +46,6 @@ static NotificationHandler *sharedObject;
     NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"schedule",@"type",[NSNumber numberWithInteger:numberOfTasks],@"number",nil];
     localNotif.userInfo = infoDict;
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
+    NSLog(@"%@",app.scheduledLocalNotifications);
 }
 @end

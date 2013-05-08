@@ -17,6 +17,7 @@
 #define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 501
 #define BACKGROUND_LABEL_VIEW_TAG 502
+#define SEARCH_BAR_TAG 503
 #define CONTENT_INSET_BOTTOM 100
 @interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate>
 
@@ -182,7 +183,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
-    //ToDoCell *cell = (ToDoCell*)[self tableView:self.tableView cellForRowAtIndexPath:indexPath];
     [self parent].currentState = KPControlCurrentStateEdit;
 }
 
@@ -214,6 +214,8 @@
 
 #pragma mark - ScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    
     //if(self.tableView.frame.size.height - 150 >= self.tableView.contentSize.height) return;
     CGPoint currentOffset = self.tableView.contentOffset;
     NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
@@ -233,7 +235,19 @@
         self.lastOffset = currentOffset;
         self.lastOffsetCapture = currentTime;
     }
-    
+    if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
+        
+        if (scrollView.contentOffset.y < self.searchBar.frame.size.height) {
+            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, 0, 0);
+        } else {
+            self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+        }
+        
+        CGRect searchBarFrame = self.searchBar.frame;
+        searchBarFrame.origin.y = MIN(scrollView.contentOffset.y, 0);
+        //NSLog(@"%@,scrollView:%f",self.searchBar,searchBarFrame.origin.y);
+        self.searchBar.frame = searchBarFrame;
+    }
 }
 #pragma mark - SwipeTableCell
 -(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
@@ -380,14 +394,20 @@
     UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
     tableView.contentInset = UIEdgeInsetsMake(0, 0, CONTENT_INSET_BOTTOM, 0);
     tableView.delegate = self;
+    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.dataSource = self;
     tableView.backgroundColor = [UIColor clearColor];
     
-    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
+    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
+    headerView.hidden = YES;
+    tableView.tableHeaderView = headerView;
+    
+    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,0, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
     searchBar.searchBarDelegate = self;
     searchBar.searchBarDataSource = self.filterHandler;
-    self.searchBar = searchBar;
-    [tableView setTableHeaderView:searchBar];
+    searchBar.tag = SEARCH_BAR_TAG;
+    [tableView addSubview:searchBar];
+    self.searchBar = (KPSearchBar*)[tableView viewWithTag:SEARCH_BAR_TAG];
     tableView.contentOffset = CGPointMake(0, CGRectGetHeight(tableView.tableHeaderView.bounds));
     
     doubleTap.numberOfTapsRequired = 2;

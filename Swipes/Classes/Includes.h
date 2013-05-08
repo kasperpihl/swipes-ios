@@ -60,17 +60,25 @@ NS_INLINE void mainBlock(void (^block)(void))
         dispatch_sync(dispatch_get_main_queue(), block);
     }
 }
+#define CLEAR [UIColor clearColor]
+
+
 #define TAG_HEIGHT 44
 #define DEFAULT_SPACING 5
-
+#define BUTTON_HEIGHT 44
 
 #define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
+#define BUTTON_FONT [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:20]
+
 #define TEXT_FIELD_CONTAINER_HEIGHT 55
 #define COLOR_SEPERATOR_HEIGHT 5
 
 #define TEXT_FIELD_MARGIN_LEFT 10
 #define TEXT_FIELD_MARGIN_TOP 12
 #define TEXT_FIELD_HEIGHT 30
+#define SEPERATOR_WIDTH 1
+
+
 
 #define SWIPES_BLUE [UIColor colorWithRed:                  57.0/255.0 green:   156.0/255.0 blue:   217.0/255.0 alpha:1.0]
 #define DONE_COLOR [UIColor colorWithRed:                   180.0/255.0 green:  223.0/255.0 blue:   93.0/255.0 alpha:1.0]
@@ -79,8 +87,12 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define TABLE_VIEW_BACKGROUND [UIColor colorWithRed:        77.0/255.0 green:   77.0/255.0 blue:    77.0/255.0 alpha:1.0]
 #define GRAY_SEPERATOR_COLOR [UIColor colorWithRed:         102.0/255.0 green:  102.0/255.0 blue:   102.0/255.0 alpha:1.0]
 #define SCHEDULE_BUTTON_COLOR [UIColor colorWithRed:        237.0/255.0 green:  237.0/255.0 blue:   237.0/255.0 alpha:1.0]
-#define POPUP_BACKGROUND_COLOR [UIColor colorWithRed:       77.0/255.0 green:   77.0/255.0 blue:    77.0/255.0 alpha:0.97]
+//#define POPUP_BACKGROUND_COLOR [UIColor colorWithRed:       77.0/255.0 green:   77.0/255.0 blue:    77.0/255.0 alpha:0.97]
 #define BAR_BOTTOM_BACKGROUND_COLOR [UIColor colorWithRed:  51.0/255.0 green:   51.0/255.0 blue:    51.0/255.0 alpha:1.0]
+#define POPUP_OVERLAY_COLOR [UIColor colorWithRed:          155.0/255.0 green:  155.0/255.0 blue:   155.0/255.0 alpha:0.5]
+#define ALERT_BOX_BACKGROUND [UIColor colorWithRed:         37.0/255.0 green:  37.0/255.0 blue:   37.0/255.0 alpha:1.0]
+#define BUTTON_COLOR [UIColor whiteColor]
+
 
 #define notify(notifcation,selectr) [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectr) name:notifcation object:nil]
 #define clearNotify() [[NSNotificationCenter defaultCenter] removeObserver:self]

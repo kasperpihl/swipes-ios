@@ -11,7 +11,8 @@
 #import "UtilityClass.h"
 #import "ToDoHandler.h"
 #define LAYER_VIEW_TAG 1
-#define OVERLAY_VIEW_TAG 2
+#define OVERLAY_VIEW_TAG 3020
+#define OVERLAY_VIEW2_TAG 3021
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
 
@@ -21,7 +22,7 @@
 #define TITLE_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
 #define TAGS_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
 
-#define SELECTED_LINE_HEIGHT 10
+#define SELECTED_LINE_HEIGHT 5
 
 #define LABEL_X 19
 
@@ -36,6 +37,7 @@
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *layerView;
 @property (nonatomic,weak) IBOutlet UIView *overlayView;
+@property (nonatomic,weak) IBOutlet UIView *overlayView2;
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
 @end
@@ -44,6 +46,7 @@
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.contentView.backgroundColor = [UIColor whiteColor];
         self.backgroundColor = [UIColor whiteColor];
         self.textLabel.backgroundColor = [UIColor whiteColor];
@@ -67,16 +70,20 @@
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
         UIView *overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height-SELECTED_LINE_HEIGHT, self.bounds.size.width, SELECTED_LINE_HEIGHT)];
-        overlayView.backgroundColor = [UtilityClass colorWithRed:204 green:204 blue:204 alpha:1];
+        overlayView.backgroundColor = [UtilityClass colorWithRed:204 green:204 blue:204 alpha:0];
         overlayView.tag = OVERLAY_VIEW_TAG;
-        //overlayView.hidden = YES;
-        self.selectedBackgroundView = overlayView;
-        /*[self addSubview:overlayView];
+       
+        [self addSubview:overlayView];
+        [self bringSubviewToFront:overlayView];
         self.overlayView = [self viewWithTag:OVERLAY_VIEW_TAG];
         
-        UIView *selectedView = [[UIView alloc] initWithFrame:self.bounds];
-        selectedView.backgroundColor = [UtilityClass colorWithRed:255 green:255 blue:255 alpha:1];
-        self.selectedBackgroundView = selectedView;*/
+        
+        UIView *overlayView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, SELECTED_LINE_HEIGHT)];
+        overlayView2.backgroundColor = [UtilityClass colorWithRed:204 green:204 blue:204 alpha:0];
+        overlayView2.tag = OVERLAY_VIEW2_TAG;
+        [self addSubview:overlayView2];
+        [self bringSubviewToFront:overlayView2];
+        self.overlayView2 = [self viewWithTag:OVERLAY_VIEW2_TAG];
     }
     return self;
 }
@@ -93,10 +100,20 @@
     [self.tagsLabel setNeedsDisplay];
     
 }
+-(void)setOrderNumber:(NSInteger)orderNumber{
+    
+}
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    self.overlayView.hidden = !selected;
+    self.overlayView2.hidden = !selected;
+    [super setSelected:selected animated:animated];
+}
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){
         _cellType = cellType;
-        //self.overlayView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
+        CGRectSetY(self.overlayView.frame, self.frame.size.height-SELECTED_LINE_HEIGHT);
+        self.overlayView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
+        self.overlayView2.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
         CellType firstCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
         CellType secondCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState2];
         CellType thirdCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState3];
@@ -111,12 +128,5 @@
         [self setFourthIconName:[TODOHANDLER iconNameForCellType:fourthCell]];
         self.activatedDirection = [TODOHANDLER directionForCellType:cellType];
     }
-}
--(void)setHighlighted:(BOOL)highlighted{
-    //self.overlayView.hidden = !highlighted;
-    [super setHighlighted:highlighted];
-}
--(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
-    //NSLog(@"setting highlighted animation");
 }
 @end

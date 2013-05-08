@@ -224,7 +224,7 @@
                                     view.frame.size.width,
                                     view.frame.size.height);
         }*/
-        [(UITableView *)self.superview setTableHeaderView:self];
+        [self resizeTableHeader];
         [(UITableView *)self.superview setContentOffset:CGPointMake(0, TEXT_FIELD_CONTAINER_HEIGHT)];
     } completion:^(BOOL finished) {
         self.filterButton.hidden = NO;
@@ -250,7 +250,7 @@
         //NSLog(@"newHeight%i",newHeight);
         if(originChange > 0){
             CGRectSetSize(self.frame,self.frame.size.width,newHeight);
-            [(UITableView *)self.superview setTableHeaderView:self];
+            [self resizeTableHeader];
         }
         else if(originChange < 0){
             for (UIView *view in [(UITableView *)self.superview subviews]) {
@@ -264,9 +264,15 @@
     } completion:^(BOOL finished) {
         if(originChange < 0){
             CGRectSetSize(self.frame,self.frame.size.width,self.filterView.frame.size.height);
-            [(UITableView *)self.superview setTableHeaderView:self];
+            [self resizeTableHeader];
         }
     }];
+}
+-(void)resizeTableHeader{
+    UITableView *superView = (UITableView *)self.superview;
+    UIView *tableHeader = superView.tableHeaderView;
+    tableHeader.frame = self.bounds;
+    [superView setTableHeaderView:tableHeader];
 }
 - (void)reframeTags{
     NSUInteger oldHeight = self.frame.size.height;
@@ -289,7 +295,8 @@
                                 view.frame.size.width,
                                 view.frame.size.height);
     }
-    [(UITableView *)self.superview setTableHeaderView:self];
+    [self resizeTableHeader];
+    
     
     /*
     [UIView animateWithDuration:0.1f animations:^{
@@ -354,7 +361,8 @@
                                 newHeight);
         self.filterView.hidden = NO;
         self.clearedColorSeperatorView.hidden = YES;
-        [(UITableView *)self.superview setTableHeaderView:self];
+        [self resizeTableHeader];
+        //[(UITableView *)self.superview setTableHeaderView:self];
     }];
 }
 

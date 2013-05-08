@@ -27,7 +27,6 @@
 
 #define TAB_BAR_VIEW_HEIGHT 50
 
-#define BAR_BOTTON_BUTTON_FONT [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:20]
 
 #define KEYBOARD_HEIGHT 216
 
@@ -109,9 +108,9 @@
         
         UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
         addButton.frame = CGRectMake(0, COLOR_SEPERATOR_HEIGHT, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-COLOR_SEPERATOR_HEIGHT);
-        addButton.titleLabel.font = BAR_BOTTON_BUTTON_FONT;
+        addButton.titleLabel.font = BUTTON_FONT;
         [addButton addTarget:self action:@selector(pressedAddButton:) forControlEvents:UIControlEventTouchUpInside];
-        addButton.titleLabel.textColor = [UIColor whiteColor];
+        addButton.titleLabel.textColor = BUTTON_COLOR;
         [addButton setTitle:@"ADD" forState:UIControlStateNormal];
         [tagBarView addSubview:addButton];
         
@@ -124,8 +123,8 @@
         
         UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
         doneButton.frame = CGRectMake(tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*1, COLOR_SEPERATOR_HEIGHT, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-COLOR_SEPERATOR_HEIGHT);
-        doneButton.titleLabel.font = BAR_BOTTON_BUTTON_FONT;
-        doneButton.titleLabel.textColor = [UIColor whiteColor];
+        doneButton.titleLabel.font = BUTTON_FONT;
+        doneButton.titleLabel.textColor = BUTTON_COLOR;
         [doneButton addTarget:self action:@selector(pressedDoneButton:) forControlEvents:UIControlEventTouchUpInside];
         [doneButton setTitle:@"DONE" forState:UIControlStateNormal];
         [tagBarView addSubview:doneButton];
