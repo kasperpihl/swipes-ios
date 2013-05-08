@@ -26,6 +26,7 @@
 - (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
 	ToDoCell *cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [self readyCell:cell];
+    [cell setSelected:NO animated:NO];
     [self tableView:self.tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
 	return cell;
 }

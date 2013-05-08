@@ -255,14 +255,14 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
     if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
-    if(self.selectedRows.count > 0){
+    /*if(self.selectedRows.count > 0){
         NSArray *visibleCells = [self.tableView visibleCells];
         for(MCSwipeTableViewCell *localCell in visibleCells){
             if(localCell.isSelected){
                 [localCell setSelected:NO];
             }
         }
-    }
+    }*/
 }
 -(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation{
     if(cell != self.swipingCell) return;
@@ -402,7 +402,7 @@
     headerView.hidden = YES;
     tableView.tableHeaderView = headerView;
     
-    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,0, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
+    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithCellType:[self determineCellTypeFromState:self.state] frame:CGRectMake(0,0, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
     searchBar.searchBarDelegate = self;
     searchBar.searchBarDataSource = self.filterHandler;
     searchBar.tag = SEARCH_BAR_TAG;
@@ -418,6 +418,7 @@
     [self loadItemsAndUpdate:YES];
 }
 #pragma mark - UIViewController stuff
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

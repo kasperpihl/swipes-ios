@@ -27,6 +27,6 @@ typedef NS_ENUM(NSUInteger, KPSearchBarMode) {
 @property (nonatomic,weak) NSObject<KPSearchBarDelegate> *searchBarDelegate;
 @property (nonatomic,weak) NSObject<KPSearchBarDataSource> *searchBarDataSource;
 @property (nonatomic) KPSearchBarMode currentMode;
-
-
+@property (nonatomic) CellType cellType;
+-(id)initWithCellType:(CellType)cellType frame:(CGRect)frame;
 @end

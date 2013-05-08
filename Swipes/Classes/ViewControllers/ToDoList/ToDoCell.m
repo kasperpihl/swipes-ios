@@ -13,6 +13,7 @@
 #define LAYER_VIEW_TAG 1
 #define OVERLAY_VIEW_TAG 3020
 #define OVERLAY_VIEW2_TAG 3021
+#define SEPERATOR_LINE_TAG 3022
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
 
@@ -22,7 +23,7 @@
 #define TITLE_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
 #define TAGS_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
 
-#define SELECTED_LINE_HEIGHT 5
+#define SELECTED_LINE_HEIGHT 8
 
 #define LABEL_X 19
 
@@ -37,6 +38,7 @@
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *layerView;
 @property (nonatomic,weak) IBOutlet UIView *overlayView;
+@property (nonatomic,weak) IBOutlet UIView *seperatorLine;
 @property (nonatomic,weak) IBOutlet UIView *overlayView2;
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
@@ -69,21 +71,29 @@
         [self.contentView addSubview:tagsLabel];
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
-        UIView *overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height-SELECTED_LINE_HEIGHT, self.bounds.size.width, SELECTED_LINE_HEIGHT)];
+        UIView *seperatorLine = [[UIView alloc] initWithFrame:CGRectMake(0, CELL_HEIGHT-SEPERATOR_WIDTH, self.bounds.size.width, SEPERATOR_WIDTH)];
+        [seperatorLine setBackgroundColor:GRAY_SEPERATOR_COLOR];
+        seperatorLine.tag = SEPERATOR_LINE_TAG;
+        [self.contentView addSubview:seperatorLine];
+        self.seperatorLine = [self.contentView viewWithTag:SEPERATOR_LINE_TAG];
+        
+        UIView *overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, 0 , SELECTED_LINE_HEIGHT, CELL_HEIGHT)];
         overlayView.backgroundColor = [UtilityClass colorWithRed:204 green:204 blue:204 alpha:0];
         overlayView.tag = OVERLAY_VIEW_TAG;
        
-        [self addSubview:overlayView];
-        [self bringSubviewToFront:overlayView];
-        self.overlayView = [self viewWithTag:OVERLAY_VIEW_TAG];
+        [self.contentView addSubview:overlayView];
+        [self.contentView bringSubviewToFront:overlayView];
+        self.overlayView = [self.contentView viewWithTag:OVERLAY_VIEW_TAG];
         
         
-        UIView *overlayView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, SELECTED_LINE_HEIGHT)];
+        
+        
+        UIView *overlayView2 = [[UIView alloc] initWithFrame:CGRectMake(self.bounds.size.width-SELECTED_LINE_HEIGHT,0 , SELECTED_LINE_HEIGHT, CELL_HEIGHT)];
         overlayView2.backgroundColor = [UtilityClass colorWithRed:204 green:204 blue:204 alpha:0];
         overlayView2.tag = OVERLAY_VIEW2_TAG;
-        [self addSubview:overlayView2];
-        [self bringSubviewToFront:overlayView2];
-        self.overlayView2 = [self viewWithTag:OVERLAY_VIEW2_TAG];
+        [self.contentView addSubview:overlayView2];
+        [self.contentView bringSubviewToFront:overlayView2];
+        self.overlayView2 = [self.contentView viewWithTag:OVERLAY_VIEW2_TAG];
     }
     return self;
 }
@@ -106,12 +116,14 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     self.overlayView.hidden = !selected;
     self.overlayView2.hidden = !selected;
+    //self.seperatorLine.hidden = selected;
     [super setSelected:selected animated:animated];
 }
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){
         _cellType = cellType;
-        CGRectSetY(self.overlayView.frame, self.frame.size.height-SELECTED_LINE_HEIGHT);
+        //CGRectSetY(self.overlayView.frame, CELL_HEIGHT-SELECTED_LINE_HEIGHT);
+        //CGRectSetY(self.seperatorLine.frame, CELL_HEIGHT-SEPERATOR_WIDTH);
         self.overlayView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
         self.overlayView2.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
         CellType firstCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
