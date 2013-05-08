@@ -11,6 +11,7 @@
 @class KPToDo;
 @interface ToDoCell : MCSwipeTableViewCell
 @property (nonatomic) CellType cellType;
+@property (nonatomic,weak) IBOutlet UIView *seperatorLine;
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags;
 -(void)setOrderNumber:(NSInteger)orderNumber;
 @end

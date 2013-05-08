@@ -44,11 +44,6 @@
 {
     self.state = @"done";
     [super viewDidLoad];
-    
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"done_white_background"]];
-    imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
-    [self.view addSubview:imageView];
-    [self.view sendSubviewToBack:imageView];
 	// Do any additional setup after loading the view.
 }
 

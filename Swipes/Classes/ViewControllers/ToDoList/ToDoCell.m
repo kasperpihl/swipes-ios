@@ -38,7 +38,6 @@
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *layerView;
 @property (nonatomic,weak) IBOutlet UIView *overlayView;
-@property (nonatomic,weak) IBOutlet UIView *seperatorLine;
 @property (nonatomic,weak) IBOutlet UIView *overlayView2;
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;

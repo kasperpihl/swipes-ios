@@ -26,6 +26,7 @@
 - (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
 	ToDoCell *cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [self readyCell:cell];
+    cell.seperatorLine.hidden = YES;
     [cell setSelected:NO animated:NO];
     [self tableView:self.tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
 	return cell;
@@ -56,14 +57,13 @@
     }
     self.draggingObject = nil;
 }
+
 #pragma mark - UIViewControllerClasses
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"today_white_background"]];
-    imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
-    [self.view addSubview:imageView];
     self.state = @"today";
+    [super viewDidLoad];
+    
     [self.tableView removeFromSuperview];
     KPReorderTableView *tableView = [[KPReorderTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [self prepareTableView:tableView];
@@ -74,7 +74,6 @@
     self.tableView.indicatorDelegate = self;
 	// Do any additional setup after loading the view.
 }
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

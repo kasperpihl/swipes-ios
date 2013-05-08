@@ -15,7 +15,7 @@
 #import "FilterMenu.h"
 
 #define TABLEVIEW_TAG 500
-#define BACKGROUND_IMAGE_VIEW_TAG 501
+#define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
 #define SEARCH_BAR_TAG 503
 #define CONTENT_INSET_BOTTOM 100
@@ -402,7 +402,7 @@
     headerView.hidden = YES;
     tableView.tableHeaderView = headerView;
     
-    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithCellType:[self determineCellTypeFromState:self.state] frame:CGRectMake(0,0, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
+    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,0, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
     searchBar.searchBarDelegate = self;
     searchBar.searchBarDataSource = self.filterHandler;
     searchBar.tag = SEARCH_BAR_TAG;
@@ -422,8 +422,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.view.backgroundColor = TABLE_VIEW_BACKGROUND;
     self.view.frame = [self parentViewController].view.bounds;
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_white_background",self.state]]];
+    imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
+    imageView.tag = BACKGROUND_IMAGE_VIEW_TAG;
+    [self.view addSubview:imageView];
+    self.backgroundImage = (UIImageView*)[self.view viewWithTag:BACKGROUND_IMAGE_VIEW_TAG];
+    
     notify(@"updated", loadItems);
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     tableView.tag = TABLEVIEW_TAG;
@@ -436,6 +443,18 @@
     [super viewWillAppear:animated];
     [self loadItemsAndUpdate:YES];
     
+}
+-(void)switchToEmptyView:(BOOL)emptyView animated:(BOOL)animated{
+    self.view.backgroundColor = TABLE_VIEW_LIGHT_BACKGROUND;
+    [UIView transitionWithView:self.view
+                      duration:1.0f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+                        self.backgroundImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@_color_background",self.state]];
+                    } completion:nil];
+}
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
 }
 -(void)dealloc{
     clearNotify();
