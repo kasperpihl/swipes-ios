@@ -198,32 +198,43 @@
 }
 -(UIButton*)buttonForSegment:(KPSegmentButtons)controlButton{
     UIButton *button = [[UIButton alloc] init];
+    [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BUTTON_BACKGROUND] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UtilityClass imageWithColor:ALERT_BOX_BACKGROUND] forState:UIControlStateSelected];
     UIImage *normalImage;
+    UIColor *thisColor;
     UIImage *selectedImage;
     UIImage *highlightedImage;
     switch (controlButton) {
         case KPSegmentButtonSchedule:
+            thisColor = SCHEDULE_COLOR;
             normalImage = [UIImage imageNamed:@"schedule.png"];
-            selectedImage = [UIImage imageNamed:@"schedule-selected"];
             highlightedImage = [UIImage imageNamed:@"schedule-highlighted"];
             break;
         case KPSegmentButtonToday:
+            thisColor = SWIPES_BLUE;
             normalImage = [UIImage imageNamed:@"today"];
-            selectedImage = [UIImage imageNamed:@"today-selected"];
             highlightedImage = [UIImage imageNamed:@"today-highlighted"];
             break;
         case KPSegmentButtonDone:
+            thisColor = DONE_COLOR;
             normalImage = [UIImage imageNamed:@"done"];
-            selectedImage = [UIImage imageNamed:@"done-selected"];
             highlightedImage = [UIImage imageNamed:@"done-highlighted"];
             break;
     }
-    [button setImage:selectedImage forState:UIControlStateHighlighted];
+    UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height-COLOR_SEPERATOR_HEIGHT, button.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+
+    colorView.backgroundColor = thisColor;
+    colorView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin);
+    [button addSubview:colorView];
+    [button setImage:normalImage forState:UIControlStateNormal];
+    button.imageView.animationImages = @[highlightedImage];
+    button.imageView.animationDuration = 0.8;
+    /*[button setImage:selectedImage forState:UIControlStateHighlighted];
     [button setImage:selectedImage forState:UIControlStateSelected];
     [button setImage:selectedImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
-    [button setImage:normalImage forState:UIControlStateNormal];
-    button.imageView.animationDuration = 0.8;
-    if(highlightedImage) button.imageView.animationImages = @[highlightedImage];
+    
+   */
+    
     return button;
 }
 -(void)timerFired:(NSTimer*)sender{

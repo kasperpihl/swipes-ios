@@ -57,7 +57,7 @@ const struct KNSemiModalOptionKeys KNSemiModalOptionKeys = {
      KNSemiModalOptionKeys.traverseParentHierarchy : @(YES),
      KNSemiModalOptionKeys.pushParentBack : @(YES),
      KNSemiModalOptionKeys.animationDuration : @(0.5),
-     KNSemiModalOptionKeys.parentAlpha : @(0.5),
+     KNSemiModalOptionKeys.parentAlpha : @(0.8),
      KNSemiModalOptionKeys.shadowOpacity : @(0.8),
      KNSemiModalOptionKeys.transitionStyle : @(KNSemiModalTransitionStyleSlideUp),
      KNSemiModalOptionKeys.disableCancel : @(NO),
@@ -88,7 +88,7 @@ const struct KNSemiModalOptionKeys KNSemiModalOptionKeys = {
     
     CABasicAnimation *animation2 = [CABasicAnimation animationWithKeyPath:@"transform"];
     animation2.toValue = [NSValue valueWithCATransform3D:(_forward?t2:CATransform3DIdentity)];
-    animation2.beginTime = animation.duration;
+    //animation2.beginTime = animation.duration;
     animation2.duration = animation.duration;
     animation2.fillMode = kCAFillModeForwards;
     animation2.removedOnCompletion = NO;
@@ -96,8 +96,8 @@ const struct KNSemiModalOptionKeys KNSemiModalOptionKeys = {
     CAAnimationGroup *group = [CAAnimationGroup animation];
     group.fillMode = kCAFillModeForwards;
     group.removedOnCompletion = NO;
-    [group setDuration:animation.duration*2];
-    [group setAnimations:[NSArray arrayWithObjects:animation,animation2, nil]];
+    [group setDuration:animation.duration];
+    [group setAnimations:[NSArray arrayWithObjects:animation2, nil]];
     return group;
 }
 

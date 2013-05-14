@@ -202,26 +202,13 @@
     }
 }
 -(void)reframeToNone{
-    //NSUInteger oldHeight = self.frame.size.height;
     [self.superview bringSubviewToFront:self];
     [UIView animateWithDuration:0.5 animations:^{
-        
         CGRectSetY(self.filterView.frame,0-self.filterView.frame.size.height-TEXT_FIELD_CONTAINER_HEIGHT);
-        //NSInteger newHeight = TEXT_FIELD_CONTAINER_HEIGHT;
-        //NSInteger originChange = oldHeight - newHeight;
         self.frame = CGRectMake(self.frame.origin.x,
                                 self.frame.origin.y,
                                 self.frame.size.width,
                                 TEXT_FIELD_CONTAINER_HEIGHT);
-        /*for (UIView *view in [(UITableView *)self.superview subviews]) {
-            if ([view isKindOfClass:[self class]]) {
-                continue;
-            }
-            view.frame = CGRectMake(view.frame.origin.x,
-                                    view.frame.origin.y - originChange,
-                                    view.frame.size.width,
-                                    view.frame.size.height);
-        }*/
         [self resizeTableHeader];
         [(UITableView *)self.superview setContentOffset:CGPointMake(0, TEXT_FIELD_CONTAINER_HEIGHT)];
     } completion:^(BOOL finished) {
@@ -294,33 +281,6 @@
                                 view.frame.size.height);
     }
     [self resizeTableHeader];
-    
-    
-    /*
-    [UIView animateWithDuration:0.1f animations:^{
-        [self.tagListView setTags:self.unselectedTags andSelectedTags:nil];
-        [self.selectedTagListView setTags:self.selectedTags andSelectedTags:self.selectedTags];
-        [self reframe];
-        NSInteger newHeight = self.filterView.frame.size.height;
-        NSInteger originChange = oldHeight - newHeight;
-        self.frame = CGRectMake(self.frame.origin.x,
-                                self.frame.origin.y,
-                                self.frame.size.width,
-                                newHeight);
-        
-        for (UIView *view in [(UITableView *)self.superview subviews]) {
-            if ([view isKindOfClass:[self class]]) {
-                continue;
-            }
-            view.frame = CGRectMake(view.frame.origin.x,
-                                    view.frame.origin.y - originChange,
-                                    view.frame.size.width,
-                                    view.frame.size.height);
-        }
-    } completion:^(BOOL finished) {
-          [(UITableView *)self.superview setTableHeaderView:self];
-    }];*/
-
 }
 - (void)reframeToTags{
     NSUInteger oldHeight = self.frame.size.height;
@@ -335,13 +295,6 @@
         NSInteger newHeight = self.filterView.frame.size.height;
         CGRectSetY(self.filterView.frame, 0);
         NSInteger originChange = oldHeight - newHeight;
-        
-        //NSLog(@"newHeight%i",newHeight);
-       /* self.frame = CGRectMake(self.frame.origin.x,
-                                self.frame.origin.y,
-                                self.frame.size.width,
-                                newHeight);
-        */
         for (UIView *view in [(UITableView *)self.superview subviews]) {
             if ([view isKindOfClass:[self class]]) {
                 continue;
@@ -360,7 +313,6 @@
         self.filterView.hidden = NO;
         self.clearedColorSeperatorView.hidden = YES;
         [self resizeTableHeader];
-        //[(UITableView *)self.superview setTableHeaderView:self];
     }];
 }
 

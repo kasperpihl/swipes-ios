@@ -255,14 +255,14 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
     if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
-    /*if(self.selectedRows.count > 0){
+    if(self.selectedRows.count > 0){
         NSArray *visibleCells = [self.tableView visibleCells];
         for(MCSwipeTableViewCell *localCell in visibleCells){
             if(localCell.isSelected){
                 [localCell setSelected:NO];
             }
         }
-    }*/
+    }
 }
 -(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation{
     if(cell != self.swipingCell) return;
@@ -443,15 +443,6 @@
     [super viewWillAppear:animated];
     [self loadItemsAndUpdate:YES];
     
-}
--(void)switchToEmptyView:(BOOL)emptyView animated:(BOOL)animated{
-    self.view.backgroundColor = TABLE_VIEW_LIGHT_BACKGROUND;
-    [UIView transitionWithView:self.view
-                      duration:1.0f
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^{
-                        self.backgroundImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@_color_background",self.state]];
-                    } completion:nil];
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
