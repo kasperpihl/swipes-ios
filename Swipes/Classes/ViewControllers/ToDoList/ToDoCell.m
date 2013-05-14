@@ -21,7 +21,7 @@
 #define TITLE_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Medium" size:18]
 #define TAGS_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue" size:12]
 
-#define TITLE_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
+
 #define TAGS_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
 
 #define SELECTED_LINE_HEIGHT 8

@@ -92,6 +92,7 @@ const struct KNSemiModalOptionKeys KNSemiModalOptionKeys = {
     animation2.duration = animation.duration;
     animation2.fillMode = kCAFillModeForwards;
     animation2.removedOnCompletion = NO;
+    [animation2 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
     
     CAAnimationGroup *group = [CAAnimationGroup animation];
     group.fillMode = kCAFillModeForwards;
@@ -247,7 +248,7 @@ const struct KNSemiModalOptionKeys KNSemiModalOptionKeys = {
         view.layer.shouldRasterize = YES;
         view.layer.rasterizationScale = [[UIScreen mainScreen] scale];
         
-        [UIView animateWithDuration:duration animations:^{
+        [UIView animateWithDuration:duration delay:0 options:UIViewAnimationCurveEaseOut  animations:^{
             if (transitionStyle == KNSemiModalTransitionStyleSlideUp) {
                 view.frame = semiViewFrame;
             } else if (transitionStyle == KNSemiModalTransitionStyleFadeIn || transitionStyle == KNSemiModalTransitionStyleFadeInOut) {
@@ -301,7 +302,7 @@ const struct KNSemiModalOptionKeys KNSemiModalOptionKeys = {
 		[vc beginAppearanceTransition:NO animated:YES]; // iOS 6
 	}
 	
-    [UIView animateWithDuration:duration animations:^{
+    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationCurveEaseOut  animations:^{
         if (transitionStyle == KNSemiModalTransitionStyleSlideUp) {
             modal.frame = CGRectMake(0, target.bounds.size.height, modal.frame.size.width, modal.frame.size.height);
         } else if (transitionStyle == KNSemiModalTransitionStyleFadeOut || transitionStyle == KNSemiModalTransitionStyleFadeInOut) {

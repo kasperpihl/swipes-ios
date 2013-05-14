@@ -199,7 +199,7 @@
 -(UIButton*)buttonForSegment:(KPSegmentButtons)controlButton{
     UIButton *button = [[UIButton alloc] init];
     [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BUTTON_BACKGROUND] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UtilityClass imageWithColor:ALERT_BOX_BACKGROUND] forState:UIControlStateSelected];
+    [button setBackgroundImage:[UtilityClass imageWithColor:TEXTFIELD_BACKGROUND] forState:UIControlStateSelected];
     UIImage *normalImage;
     UIColor *thisColor;
     UIImage *selectedImage;
@@ -223,7 +223,7 @@
     }
     UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height-COLOR_SEPERATOR_HEIGHT, button.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
 
-    colorView.backgroundColor = thisColor;
+    colorView.backgroundColor = TEXTFIELD_BACKGROUND;//thisColor;
     colorView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin);
     [button addSubview:colorView];
     [button setImage:normalImage forState:UIControlStateNormal];

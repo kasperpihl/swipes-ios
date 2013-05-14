@@ -69,11 +69,11 @@
         self.placeholder = @"Search";
         self.backgroundColor = [UIColor clearColor];
         
-        UIView *colorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-COLOR_SEPERATOR_HEIGHT, self.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+        /*UIView *colorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-COLOR_SEPERATOR_HEIGHT, self.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
         colorSeperator.backgroundColor = SWIPES_BLUE;
         colorSeperator.tag = CLEARED_SEPERATOR_TAG;
         [self addSubview:colorSeperator];
-        self.clearedColorSeperatorView = [self viewWithTag:CLEARED_SEPERATOR_TAG];
+        self.clearedColorSeperatorView = [self viewWithTag:CLEARED_SEPERATOR_TAG];*/
         
         CGFloat buttonSize = self.frame.size.height-COLOR_SEPERATOR_HEIGHT;
         UIButton *filterButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -81,7 +81,7 @@
         filterButton.tag = FILTER_BUTTON_TAG;
         filterButton.frame = CGRectMake(self.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
         [filterButton setImage:[UIImage imageNamed:@"filter_button"] forState:UIControlStateNormal];
-        [filterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
+        //[filterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
         [self addSubview:filterButton];
         self.filterButton = (UIButton*)[self viewWithTag:FILTER_BUTTON_TAG];
         
@@ -90,21 +90,21 @@
         UIView *filterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 10)];
         filterView.tag = FILTER_VIEW_TAG;
         filterView.hidden = YES;
-        filterView.backgroundColor = TEXTFIELD_BACKGROUND;
+        filterView.backgroundColor = SEGMENT_BUTTON_BACKGROUND;
         
-        UIView *filterViewColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, filterView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+        /*UIView *filterViewColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, filterView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
         filterViewColorSeperator.tag = FILTER_VIEW_MIDDLE_SEPERATOR_TAG;
         filterViewColorSeperator.backgroundColor = SWIPES_BLUE;
         [filterView addSubview:filterViewColorSeperator];
-        self.filterViewMiddleSeperator = [filterView viewWithTag:FILTER_VIEW_MIDDLE_SEPERATOR_TAG];
+        self.filterViewMiddleSeperator = [filterView viewWithTag:FILTER_VIEW_MIDDLE_SEPERATOR_TAG];*/
         
         
-        UIView *filterViewBottomColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, filterView.frame.size.height-COLOR_SEPERATOR_HEIGHT, filterView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+        /*UIView *filterViewBottomColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, filterView.frame.size.height-COLOR_SEPERATOR_HEIGHT, filterView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
         filterViewBottomColorSeperator.tag = FILTER_VIEW_BOTTOM_SEPERATOR_TAG;
         filterViewBottomColorSeperator.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR;
         filterViewBottomColorSeperator.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
         [filterView addSubview:filterViewBottomColorSeperator];
-        self.filterViewBottomSeperator = [filterView viewWithTag:FILTER_VIEW_BOTTOM_SEPERATOR_TAG];
+        self.filterViewBottomSeperator = [filterView viewWithTag:FILTER_VIEW_BOTTOM_SEPERATOR_TAG];*/
         
         KPTagList *selectedTagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width-TAG_HEIGHT-DEFAULT_SPACING, 0)];
         selectedTagList.marginLeft = 0;
@@ -117,9 +117,9 @@
         selectedTagList.tag = SELECTED_TAG_LIST_TAG;
         [filterView addSubview:selectedTagList];
         
-        UIButton *clearFilterButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        UIButton *clearFilterButton = [UIButton buttonWithType:UIButtonTypeCustom];
         clearFilterButton.frame = CGRectMake(self.frame.size.width-buttonSize,0,buttonSize,buttonSize);
-        [clearFilterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
+        //[clearFilterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
         [clearFilterButton setImage:[UIImage imageNamed:@"cross_button"] forState:UIControlStateNormal];
         [clearFilterButton addTarget:self action:@selector(pressedClearFilter:) forControlEvents:UIControlEventTouchUpInside];
         [filterView addSubview:clearFilterButton];
@@ -128,7 +128,7 @@
         tagList.emptyText = @"No tags available for items";
         tagList.marginLeft = 0;
         tagList.marginRight = 0;
-        tagList.backgroundColor = [UIColor blackColor];
+        tagList.backgroundColor = SEGMENT_BUTTON_BACKGROUND;
         tagList.tagDelegate = self;
         tagList.tag = TAG_LIST_TAG;
         [filterView addSubview:tagList];
@@ -154,7 +154,7 @@
         searchField.borderStyle = UITextBorderStyleNone;
         searchField.textColor = [UIColor whiteColor];
         [searchField setBackground:[[UIImage alloc] init]];
-        //[searchField setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
+        [searchField setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
         searchField.leftView = nil;
 
     }

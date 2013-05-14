@@ -92,10 +92,9 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define BAR_BOTTOM_BACKGROUND_COLOR [UIColor colorWithRed:  51.0/255.0 green:   51.0/255.0 blue:    51.0/255.0 alpha:1.0]
 #define POPUP_OVERLAY_COLOR [UIColor colorWithRed:          155.0/255.0 green:  155.0/255.0 blue:   155.0/255.0 alpha:0.5]
 #define ALERT_BOX_BACKGROUND [UIColor colorWithRed:         37.0/255.0 green:   37.0/255.0 blue:    37.0/255.0 alpha:1.0]
-#define SEGMENT_BUTTON_BACKGROUND [UIColor colorWithRed:    77.0/255.0 green:   77.0/255.0 blue:    77.0/255.0 alpha:1.0]
+#define SEGMENT_BUTTON_BACKGROUND [UIColor colorWithRed:    128.0/255.0 green:   128.0/255.0 blue:    128.0/255.0 alpha:1.0]
 #define BUTTON_COLOR [UIColor whiteColor]
-
-
+#define TITLE_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
 
 
 #define notify(notifcation,selectr) [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectr) name:notifcation object:nil]
