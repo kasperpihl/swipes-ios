@@ -18,14 +18,9 @@
 
 #define SPACE_HACK 0
 
-#define NO_TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:20]
+#define NO_TAG_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
 #define TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
 
-
-#define COLOR_DARK [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]
-//#define COLOR_DARK [UtilityClass colorWithRed:51 green:51 blue:51 alpha:1]
-#define COLOR_BLUE SWIPES_BLUE //[UtilityClass colorWithRed:57 green:159 blue:219 alpha:1]
-#define COLOR_WHITE [UIColor whiteColor]
 
 @interface KPTagList ()
 @property (nonatomic,strong) NSMutableArray *tags;
@@ -108,7 +103,6 @@
                 currentWidth = self.marginLeft + SPACE_HACK;
                 tagHeight = 0;
                 nextLine = YES;
-                NSLog(@"test");
                 self.numberOfRows++;
             }
             /*if(j == numberOfTags-1){
@@ -138,16 +132,15 @@
     }
     else{
         tagHeight = TAG_HEIGHT;
-        CGFloat totalHeight = self.marginTop + self.bottomMargin + TAG_HEIGHT;
         self.isEmptyList = YES;
-        UILabel *noTagLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.marginLeft, self.marginTop, self.frame.size.width-self.marginLeft-self.marginRight, 30)];
+        UILabel *noTagLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.marginLeft+self.emptyLabelMarginHack, self.marginTop, self.frame.size.width-self.marginLeft-self.marginRight, TAG_HEIGHT)];
         noTagLabel.font = NO_TAG_FONT;
-        noTagLabel.textAlignment = UITextAlignmentCenter;
+        noTagLabel.textAlignment = UITextAlignmentLeft;
         noTagLabel.backgroundColor = [UIColor clearColor];
         noTagLabel.textColor = [UIColor whiteColor];
         noTagLabel.text = self.emptyText ? self.emptyText : @"No tags";
-        [noTagLabel sizeToFit];
-        noTagLabel.frame = CGRectSetPos(noTagLabel.frame, ((self.frame.size.width-noTagLabel.frame.size.width)/2)+self.emptyLabelMarginHack, (totalHeight-noTagLabel.frame.size.height)/2);
+        //[noTagLabel sizeToFit];
+        //noTagLabel.frame = CGRectSetPos(noTagLabel.frame, ((self.frame.size.width-noTagLabel.frame.size.width)/2)+self.emptyLabelMarginHack, (totalHeight-noTagLabel.frame.size.height)/2);
         [self addSubview:noTagLabel];
         
     }
@@ -181,17 +174,12 @@
 }
 -(UIButton*)buttonWithTag:(NSString*)tag{
     CGSize sizeForTag = [self sizeForTagWithText:tag];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
-    //button.layer.borderColor = [COLOR_BLUE CGColor];
-    //button.layer.borderWidth = 1;
-    //button.layer.cornerRadius = 5;
-    //button.layer.masksToBounds = YES;
-    [button setTitleColor:COLOR_WHITE forState:UIControlStateNormal];
-    [button setTitleColor:COLOR_WHITE forState:UIControlStateSelected];
-    [button setBackgroundImage:[UtilityClass imageWithColor:COLOR_DARK] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UtilityClass imageWithColor:COLOR_BLUE] forState:UIControlStateSelected];
+    [button setTitleColor:BUTTON_COLOR forState:UIControlStateNormal];
+    [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BACKGROUND] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateSelected];
     button.titleLabel.font = TAG_FONT;
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];

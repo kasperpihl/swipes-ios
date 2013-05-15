@@ -64,17 +64,11 @@
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBackgroundImage:[UtilityClass imageWithColor:TEXTFIELD_BACKGROUND]];
+        [self setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED]];
         //[self setTranslucent:YES];
         self.placeholder = @"Search";
         self.backgroundColor = [UIColor clearColor];
-        
-        /*UIView *colorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-COLOR_SEPERATOR_HEIGHT, self.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        colorSeperator.backgroundColor = SWIPES_BLUE;
-        colorSeperator.tag = CLEARED_SEPERATOR_TAG;
-        [self addSubview:colorSeperator];
-        self.clearedColorSeperatorView = [self viewWithTag:CLEARED_SEPERATOR_TAG];*/
-        
+           
         CGFloat buttonSize = self.frame.size.height-COLOR_SEPERATOR_HEIGHT;
         UIButton *filterButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [filterButton addTarget:self action:@selector(pressedFilter:) forControlEvents:UIControlEventTouchUpInside];
@@ -90,26 +84,12 @@
         UIView *filterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 10)];
         filterView.tag = FILTER_VIEW_TAG;
         filterView.hidden = YES;
-        filterView.backgroundColor = SEGMENT_BUTTON_BACKGROUND;
-        
-        /*UIView *filterViewColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, filterView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        filterViewColorSeperator.tag = FILTER_VIEW_MIDDLE_SEPERATOR_TAG;
-        filterViewColorSeperator.backgroundColor = SWIPES_BLUE;
-        [filterView addSubview:filterViewColorSeperator];
-        self.filterViewMiddleSeperator = [filterView viewWithTag:FILTER_VIEW_MIDDLE_SEPERATOR_TAG];*/
-        
-        
-        /*UIView *filterViewBottomColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, filterView.frame.size.height-COLOR_SEPERATOR_HEIGHT, filterView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        filterViewBottomColorSeperator.tag = FILTER_VIEW_BOTTOM_SEPERATOR_TAG;
-        filterViewBottomColorSeperator.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR;
-        filterViewBottomColorSeperator.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
-        [filterView addSubview:filterViewBottomColorSeperator];
-        self.filterViewBottomSeperator = [filterView viewWithTag:FILTER_VIEW_BOTTOM_SEPERATOR_TAG];*/
-        
+        filterView.backgroundColor = SEGMENT_SELECTED;
+
         KPTagList *selectedTagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width-TAG_HEIGHT-DEFAULT_SPACING, 0)];
         selectedTagList.marginLeft = 0;
-        selectedTagList.marginTop = 6;
-        selectedTagList.emptyLabelMarginHack = (TAG_HEIGHT+DEFAULT_SPACING)/2;
+        selectedTagList.marginTop = 0;
+        selectedTagList.emptyLabelMarginHack = 10;//(TAG_HEIGHT+DEFAULT_SPACING)/2;
         selectedTagList.marginRight = 6;
         selectedTagList.bottomMargin = 0;
         selectedTagList.emptyText = @"Filter";
@@ -125,10 +105,10 @@
         [filterView addSubview:clearFilterButton];
         self.selectedTagListView = (KPTagList*)[filterView viewWithTag:SELECTED_TAG_LIST_TAG];
         KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
-        tagList.emptyText = @"No tags available for items";
+        tagList.emptyText = @"No tags assigned";
         tagList.marginLeft = 0;
+        tagList.marginTop = 0;
         tagList.marginRight = 0;
-        tagList.backgroundColor = SEGMENT_BUTTON_BACKGROUND;
         tagList.tagDelegate = self;
         tagList.tag = TAG_LIST_TAG;
         [filterView addSubview:tagList];
@@ -149,13 +129,16 @@
     [super layoutSubviews];
     if(!(searchField == nil) && !self.searchField) {
         self.searchField = searchField;
+        CGRectSetX(searchField.frame, 10);
         CGRectSetSize(searchField.frame, self.frame.size.width-(2*searchField.frame.origin.x)-(self.frame.size.height-COLOR_SEPERATOR_HEIGHT), searchField.frame.size.height);
         searchField.font = TEXT_FIELD_FONT;
         searchField.borderStyle = UITextBorderStyleNone;
         searchField.textColor = [UIColor whiteColor];
         [searchField setBackground:[[UIImage alloc] init]];
+        
         [searchField setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
         searchField.leftView = nil;
+        
 
     }
     
@@ -165,21 +148,20 @@
     if([self.searchBarDelegate respondsToSelector:@selector(clearedAllFiltersForSearchBar:)]) [self.searchBarDelegate clearedAllFiltersForSearchBar:self];
 }
 -(void)reframe{
-    CGFloat tempHeight = 0;
-    tempHeight += self.selectedTagListView.frame.size.height;
-    CGRectSetY(self.filterViewMiddleSeperator.frame, tempHeight);
-    tempHeight += COLOR_SEPERATOR_HEIGHT;
-    if(!self.tagListView.isEmptyList){
-        CGRectSetY(self.tagListView.frame, tempHeight);
-        tempHeight += self.tagListView.frame.size.height + COLOR_SEPERATOR_HEIGHT;
-        self.tagListView.hidden = NO;
-        self.filterViewMiddleSeperator.hidden = NO;
-    }
-    else{
-        self.tagListView.hidden = YES;
-        self.filterViewMiddleSeperator.hidden = YES;
-    }
+    [self.selectedTagListView setTags:self.selectedTags andSelectedTags:self.selectedTags];
+    CGFloat tagWidth = self.selectedTagListView.isEmptyList ? (self.frame.size.width-TAG_HEIGHT-DEFAULT_SPACING) : self.frame.size.width;
+    CGRectSetSize(self.tagListView.frame, tagWidth, self.tagListView.frame.size.height);
+    [self.tagListView setTags:self.unselectedTags andSelectedTags:nil];
     
+    CGFloat tempHeight = 0;
+    self.selectedTagListView.hidden = self.selectedTagListView.isEmptyList;
+    if(!self.selectedTagListView.isEmptyList){
+        tempHeight += self.selectedTagListView.frame.size.height + COLOR_SEPERATOR_HEIGHT;
+    }
+    if(!self.selectedTagListView.isEmptyList) self.tagListView.hidden = self.tagListView.isEmptyList;
+    else self.tagListView.hidden = NO;
+    CGRectSetY(self.tagListView.frame, tempHeight);
+    tempHeight += self.tagListView.frame.size.height;
     CGRectSetSize(self.filterView.frame, self.frame.size.width, tempHeight);
 }
 -(void)pressedFilter:(UIButton*)sender{
@@ -221,38 +203,6 @@
     }];
 
 }
-- (void)reframeTagsSave{
-    NSUInteger oldHeight = self.frame.size.height;
-    __block NSInteger originChange;
-    [self.tagListView setTags:self.unselectedTags andSelectedTags:nil];
-    [self.selectedTagListView setTags:self.selectedTags andSelectedTags:self.selectedTags];
-    [self reframe];
-    [UIView animateWithDuration:1.25f animations:^{
-        
-        NSInteger newHeight = self.filterView.frame.size.height;
-        originChange = oldHeight - newHeight;
-        NSLog(@"old: %i new: %i originChange:%i",oldHeight,newHeight,originChange);
-        //NSLog(@"newHeight%i",newHeight);
-        if(originChange > 0){
-            CGRectSetSize(self.frame,self.frame.size.width,newHeight);
-            [self resizeTableHeader];
-        }
-        else if(originChange < 0){
-            for (UIView *view in [(UITableView *)self.superview subviews]) {
-                if ([view isKindOfClass:[self class]]) {
-                    continue;
-                }
-                CGRectSetY(view.frame,view.frame.origin.y - originChange);
-            }
-        }
-        
-    } completion:^(BOOL finished) {
-        if(originChange < 0){
-            CGRectSetSize(self.frame,self.frame.size.width,self.filterView.frame.size.height);
-            [self resizeTableHeader];
-        }
-    }];
-}
 -(void)resizeTableHeader{
     UITableView *superView = (UITableView *)self.superview;
     UIView *tableHeader = superView.tableHeaderView;
@@ -260,34 +210,18 @@
     [superView setTableHeaderView:tableHeader];
 }
 - (void)reframeTags{
-    NSUInteger oldHeight = self.frame.size.height;
-    [self.tagListView setTags:self.unselectedTags andSelectedTags:nil];
-    [self.selectedTagListView setTags:self.selectedTags andSelectedTags:self.selectedTags];
     [self reframe];
     NSInteger newHeight = self.filterView.frame.size.height;
-    NSInteger originChange = oldHeight - newHeight;
     self.frame = CGRectMake(self.frame.origin.x,
                             self.frame.origin.y,
                             self.frame.size.width,
                             newHeight);
-    
-    for (UIView *view in [(UITableView *)self.superview subviews]) {
-        if ([view isKindOfClass:[self class]]) {
-            continue;
-        }
-        view.frame = CGRectMake(view.frame.origin.x,
-                                view.frame.origin.y - originChange,
-                                view.frame.size.width,
-                                view.frame.size.height);
-    }
     [self resizeTableHeader];
 }
 - (void)reframeToTags{
     NSUInteger oldHeight = self.frame.size.height;
     self.filterButton.hidden = YES;
     self.searchField.hidden = YES;
-    [self.tagListView setTags:self.unselectedTags andSelectedTags:nil];
-    [self.selectedTagListView setTags:self.selectedTags andSelectedTags:self.selectedTags];
     [self reframe];
     CGRectSetY(self.filterView.frame, 0-self.filterView.frame.size.height+oldHeight);
     self.filterView.hidden = NO;

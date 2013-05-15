@@ -198,11 +198,10 @@
 }
 -(UIButton*)buttonForSegment:(KPSegmentButtons)controlButton{
     UIButton *button = [[UIButton alloc] init];
-    [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BUTTON_BACKGROUND] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UtilityClass imageWithColor:TEXTFIELD_BACKGROUND] forState:UIControlStateSelected];
+    [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BACKGROUND] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED] forState:UIControlStateSelected];
     UIImage *normalImage;
     UIColor *thisColor;
-    UIImage *selectedImage;
     UIImage *highlightedImage;
     switch (controlButton) {
         case KPSegmentButtonSchedule:
@@ -223,7 +222,7 @@
     }
     UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height-COLOR_SEPERATOR_HEIGHT, button.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
 
-    colorView.backgroundColor = TEXTFIELD_BACKGROUND;//thisColor;
+    colorView.backgroundColor = SEGMENT_SELECTED;//thisColor;
     colorView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin);
     [button addSubview:colorView];
     [button setImage:normalImage forState:UIControlStateNormal];

@@ -44,6 +44,17 @@ static UtilityClass *sharedObject;
     
     return image;
 }
++(UIImage *)navbarImage{
+    CGFloat navbarWidth = 1;
+    CGFloat navbarHeight = 44;
+    CGSize navbarSize = CGSizeMake(navbarWidth, navbarHeight);
+    UIGraphicsBeginImageContext(navbarSize);
+    UIImage *topColorImage = [UtilityClass imageWithColor:NAVBAR_BACKROUND];
+    UIImage *bottomColorImage = [UtilityClass imageWithColor:SEGMENT_SELECTED];
+    [topColorImage drawInRect:CGRectMake(0, 0, navbarWidth, navbarHeight-COLOR_SEPERATOR_HEIGHT)];
+    [bottomColorImage drawInRect:CGRectMake(0, navbarHeight-COLOR_SEPERATOR_HEIGHT, navbarWidth, COLOR_SEPERATOR_HEIGHT)];
+    return UIGraphicsGetImageFromCurrentImageContext();
+}
 -(NSNumber *)versionNumber{
     NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
     [f setNumberStyle:NSNumberFormatterDecimalStyle];

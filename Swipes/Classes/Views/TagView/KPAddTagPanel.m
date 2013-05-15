@@ -25,7 +25,7 @@
 
 #define SEPERATOR_WIDTH 1
 
-#define TAB_BAR_VIEW_HEIGHT 50
+#define TAB_BAR_VIEW_HEIGHT 45
 
 
 #define KEYBOARD_HEIGHT 216
@@ -69,15 +69,16 @@
         /* Initialize taglistview + scrolling */
         UIView *tagContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height-TAB_BAR_VIEW_HEIGHT)];
         tagContainerView.tag = TAG_CONTAINER_VIEW_TAG;
-        UIView *tagContainerColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tagContainerView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+        /*UIView *tagContainerColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tagContainerView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
         tagContainerColorSeperator.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR;
-        [tagContainerView addSubview:tagContainerColorSeperator];
+        [tagContainerView addSubview:tagContainerColorSeperator];*/
         
         UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, COLOR_SEPERATOR_HEIGHT, tagContainerView.frame.size.width, tagContainerView.frame.size.height-COLOR_SEPERATOR_HEIGHT)];
         scrollView.tag = SCROLL_VIEW_TAG;
         
         KPTagList *tagView = [KPTagList tagListWithWidth:self.frame.size.width andTags:tags];
         tagView.marginLeft = 0;
+        tagView.bottomMargin = 15;
         tagView.marginRight = 0;
         tagView.emptyText = @"No tags";
         CGRectSetY(tagView.frame, 0);
@@ -92,7 +93,7 @@
         [self addSubview:tagContainerView];
         self.tagContainerView = [self viewWithTag:TAG_CONTAINER_VIEW_TAG];
         self.scrollView = (UIScrollView*)[self viewWithTag:SCROLL_VIEW_TAG];
-        self.scrollView.backgroundColor = [UIColor blackColor];
+        self.scrollView.backgroundColor = SEGMENT_SELECTED;
         [self tagList:self.tagView changedSize:CGSizeMake(self.frame.size.width, self.tagView.frame.size.height)];
         CGRectSetSize(self.frame, self.frame.size.width, self.tagContainerView.frame.origin.y+self.tagContainerView.frame.size.height+TAB_BAR_VIEW_HEIGHT);
         
@@ -102,12 +103,12 @@
         UIView *tagBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TAB_BAR_VIEW_HEIGHT, self.frame.size.width, TAB_BAR_VIEW_HEIGHT)];
         tagBarView.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR;
         tagBarView.tag = TAB_BAR_VIEW_TAG;
-        UIView *tagBarColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tagBarView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        tagBarColorSeperator.backgroundColor = SWIPES_BLUE;
+        UIView *tagBarColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tagBarView.frame.size.width, SEPERATOR_WIDTH)];
+        tagBarColorSeperator.backgroundColor = GRAY_SEPERATOR_COLOR;
         [tagBarView addSubview:tagBarColorSeperator];
         
         UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        addButton.frame = CGRectMake(0, COLOR_SEPERATOR_HEIGHT, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-COLOR_SEPERATOR_HEIGHT);
+        addButton.frame = CGRectMake(0, SEPERATOR_WIDTH, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-SEPERATOR_WIDTH);
         addButton.titleLabel.font = BUTTON_FONT;
         [addButton addTarget:self action:@selector(pressedAddButton:) forControlEvents:UIControlEventTouchUpInside];
         addButton.titleLabel.textColor = BUTTON_COLOR;
@@ -122,7 +123,7 @@
         [tagBarView addSubview:editButton];*/
         
         UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        doneButton.frame = CGRectMake(tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*1, COLOR_SEPERATOR_HEIGHT, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-COLOR_SEPERATOR_HEIGHT);
+        doneButton.frame = CGRectMake(tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*1, SEPERATOR_WIDTH, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-SEPERATOR_WIDTH);
         doneButton.titleLabel.font = BUTTON_FONT;
         doneButton.titleLabel.textColor = BUTTON_COLOR;
         [doneButton addTarget:self action:@selector(pressedDoneButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -130,7 +131,7 @@
         [tagBarView addSubview:doneButton];
         
         for(NSInteger i = 1 ; i < NUMBER_OF_BAR_BUTTONS ; i++){
-            UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake((tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*i)-(SEPERATOR_WIDTH/2), COLOR_SEPERATOR_HEIGHT, SEPERATOR_WIDTH, tagBarView.frame.size.height-COLOR_SEPERATOR_HEIGHT)];
+            UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake((tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*i)-(SEPERATOR_WIDTH/2), SEPERATOR_WIDTH, SEPERATOR_WIDTH, tagBarView.frame.size.height-SEPERATOR_WIDTH)];
             seperator.backgroundColor = GRAY_SEPERATOR_COLOR;
             [tagBarView addSubview:seperator];
         }

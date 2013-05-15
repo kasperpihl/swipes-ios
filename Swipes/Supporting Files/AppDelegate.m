@@ -18,7 +18,7 @@
                   clientKey:@"vDxpjjyIDhp5DX30WnpTfsZANPCsFCdmDPpw31vj"];
     [PFFacebookUtils initializeFacebook];
     KPCORE;
-    NSLog(@"%@",application.scheduledLocalNotifications);
+    //NSLog(@"%@",application.scheduledLocalNotifications);
     /*MSNavigationPaneViewController *paneViewController = (MSNavigationPaneViewController *)self.window.rootViewController;
     ROOT_CONTROLLER.paneNavigationViewController = paneViewController;*/
     

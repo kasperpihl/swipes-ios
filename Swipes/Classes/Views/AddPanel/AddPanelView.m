@@ -89,7 +89,7 @@
         UIView *formView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, TEXT_FIELD_CONTAINER_HEIGHT)];
         formView.tag = FORM_VIEW_TAG;
         formView.userInteractionEnabled = YES;
-        formView.backgroundColor = TEXTFIELD_BACKGROUND;
+        formView.backgroundColor = SEGMENT_SELECTED;
         UIView *textFieldColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, formView.frame.size.height-COLOR_SEPERATOR_HEIGHT, formView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
         textFieldColorSeperator.backgroundColor = SWIPES_BLUE;
         [formView addSubview:textFieldColorSeperator];

@@ -46,6 +46,6 @@ static NotificationHandler *sharedObject;
     NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"schedule",@"type",[NSNumber numberWithInteger:numberOfTasks],@"number",nil];
     localNotif.userInfo = infoDict;
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
-    NSLog(@"%@",app.scheduledLocalNotifications);
+    //NSLog(@"%@",app.scheduledLocalNotifications);
 }
 @end

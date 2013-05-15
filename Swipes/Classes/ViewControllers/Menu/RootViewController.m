@@ -15,7 +15,7 @@
 #import "ScheduleViewController.h"
 #import "TodayViewController.h"
 #import "DoneViewController.h"
-
+#import "UtilityClass.h"
 @interface RootViewController () <UINavigationControllerDelegate>
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
 
@@ -48,7 +48,7 @@ static RootViewController *sharedObject;
 #pragma mark - Helping methods
 #pragma mark - ViewController methods
 -(void)setupAppearance{
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navbar"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBackgroundImage:[UtilityClass navbarImage] forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance]setShadowImage:[[UIImage alloc] init]];
 }
 - (void)viewDidLoad

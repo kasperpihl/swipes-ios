@@ -35,7 +35,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 200)];
-        contentView.backgroundColor = ALERT_BOX_BACKGROUND;
+        contentView.backgroundColor = SEGMENT_SELECTED;
         [self setContainerSize:contentView.frame.size];
         
         
@@ -61,7 +61,7 @@
         CGFloat buttonWidth = contentView.frame.size.width/2;
         
         UIView *buttonSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, buttonY-SEPERATOR_WIDTH, contentView.frame.size.width, SEPERATOR_WIDTH)];
-        buttonSeperator.backgroundColor = TEXTFIELD_BACKGROUND;
+        buttonSeperator.backgroundColor = SEGMENT_SELECTED;
         [contentView addSubview:buttonSeperator];
         
         
