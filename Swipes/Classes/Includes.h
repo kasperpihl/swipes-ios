@@ -61,7 +61,8 @@ NS_INLINE void mainBlock(void (^block)(void))
     }
 }
 #define CLEAR [UIColor clearColor]
-
+#define color(r,g,b,a) [UIColor colorWithRed: r/255.0 green: g/255.0 blue: b/255.0 alpha:a]
+#define gray(l,a) [UIColor colorWithRed: l/255.0 green: l/255.0 blue: l/255.0 alpha:a]
 
 #define TAG_HEIGHT 44
 #define DEFAULT_SPACING 5
@@ -76,26 +77,25 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define TEXT_FIELD_MARGIN_LEFT 10
 #define TEXT_FIELD_MARGIN_TOP 12
 #define TEXT_FIELD_HEIGHT 30
-#define SEPERATOR_WIDTH 1
+#define SEPERATOR_WIDTH .5
 
-#define SEGMENT_BACKGROUND [UIColor colorWithRed:           128.0/255.0 green:  128.0/255.0 blue:   128.0/255.0 alpha:1.0]
-#define SEGMENT_SELECTED [UIColor colorWithRed:             70.0/255.0 green:   70.0/255.0 blue:    70.0/255.0 alpha:1.0]
-#define NAVBAR_BACKROUND [UIColor colorWithRed:             168.0/255.0 green:  168.0/255.0 blue:   168.0/255.0 alpha:1.0]
-#define TABLE_VIEW_BACKGROUND [UIColor colorWithRed:        230.0/255.0 green:  230.0/255.0 blue:   230.0/255.0 alpha:1.0]
+#define SEGMENT_BACKGROUND              gray(128,1)
+#define SEGMENT_SELECTED                gray(70,1)
+#define NAVBAR_BACKROUND                gray(168,1)
+#define TABLE_BACKGROUND                gray(230,1)
+#define TABLE_CELL_BACKGROUND           gray(255,1)
 
 
-#define SWIPES_BLUE [UIColor colorWithRed:                  57.0/255.0 green:   156.0/255.0 blue:   217.0/255.0 alpha:1.0]
-#define DONE_COLOR [UIColor colorWithRed:                   180.0/255.0 green:  223.0/255.0 blue:   93.0/255.0 alpha:1.0]
-#define SCHEDULE_COLOR [UIColor colorWithRed:               252.0/255.0 green:  128.0/255.0 blue:   109.0/255.0 alpha:1.0]
-
+#define SWIPES_BLUE                     color(57,156,217,1)
+#define DONE_COLOR                      color(180,223,93,1)
+#define SCHEDULE_COLOR                  color(252,128,109,1)
 
 //#define TABLE_VIEW_BACKGROUND [UIColor colorWithRed:        77.0/255.0 green:   77.0/255.0 blue:    77.0/255.0 alpha:1.0]
 //#define TABLE_VIEW_LIGHT_BACKGROUND [UIColor colorWithRed:  230.0/255.0 green:  230.0/255.0 blue:   230.0/255.0 alpha:1.0]
-#define GRAY_SEPERATOR_COLOR [UIColor colorWithRed:         102.0/255.0 green:  102.0/255.0 blue:   102.0/255.0 alpha:1.0]
-#define SCHEDULE_BUTTON_COLOR [UIColor colorWithRed:        237.0/255.0 green:  237.0/255.0 blue:   237.0/255.0 alpha:1.0]
-#define BAR_BOTTOM_BACKGROUND_COLOR [UIColor colorWithRed:  51.0/255.0 green:   51.0/255.0 blue:    51.0/255.0 alpha:1.0]
-#define POPUP_OVERLAY_COLOR [UIColor colorWithRed:          155.0/255.0 green:  155.0/255.0 blue:   155.0/255.0 alpha:0.5]
-#define ALERT_BOX_BACKGROUND [UIColor colorWithRed:         37.0/255.0 green:   37.0/255.0 blue:    37.0/255.0 alpha:1.0]
+//#define SCHEDULE_BUTTON_COLOR           gray(237,1)
+#define BAR_BOTTOM_BACKGROUND_COLOR     gray(51,1)
+#define POPUP_OVERLAY_COLOR             gray(155,0.5)
+#define ALERT_BOX_BACKGROUND            gray(37,1)
 
 #define BUTTON_COLOR [UIColor whiteColor]
 #define TITLE_LABEL_COLOR [UtilityClass colorWithRed:102 green:102 blue:102 alpha:1]

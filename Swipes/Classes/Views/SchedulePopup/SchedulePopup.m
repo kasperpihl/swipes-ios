@@ -19,8 +19,8 @@
 #define FORWARD_ONE_MONTH_BUTTON_TAG 7
 
 
-#define SEPERATOR_COLOR_DARK [UtilityClass colorWithRed:77 green:77 blue:77 alpha:0.7]
-#define SEPERATOR_COLOR_LIGHT [UtilityClass colorWithRed:128 green:128 blue:128 alpha:0.5]
+#define SEPERATOR_COLOR_DARK gray(77,0.7)
+#define SEPERATOR_COLOR_LIGHT gray(128,0.5)
 #define SEPERATOR_MARGIN 0//0.02
 
 
@@ -318,7 +318,7 @@ typedef enum {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.titleLabel.font = SCHEDULE_BUTTON_FONT;
     button.titleEdgeInsets = UIEdgeInsetsMake(BUTTON_TOP_INSET, 0, 0, 0);
-    button.titleLabel.textColor = SCHEDULE_BUTTON_COLOR;
+    button.titleLabel.textColor = TABLE_CELL_BACKGROUND;
     UIImage *iconImage = [self imageForScheduleButton:scheduleButton];
     UIImageView *iconImageView = [[UIImageView alloc] initWithImage:iconImage];
     button.frame = [self frameForButtonNumber:scheduleButton];

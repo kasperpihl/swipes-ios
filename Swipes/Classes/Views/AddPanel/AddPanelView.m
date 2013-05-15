@@ -86,19 +86,19 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
-        UIView *formView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, TEXT_FIELD_CONTAINER_HEIGHT)];
+        UIView *formView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, TEXT_FIELD_CONTAINER_HEIGHT+COLOR_SEPERATOR_HEIGHT)];
         formView.tag = FORM_VIEW_TAG;
         formView.userInteractionEnabled = YES;
         formView.backgroundColor = SEGMENT_SELECTED;
         UIView *textFieldColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, formView.frame.size.height-COLOR_SEPERATOR_HEIGHT, formView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        textFieldColorSeperator.backgroundColor = SWIPES_BLUE;
+        textFieldColorSeperator.backgroundColor = NAVBAR_BACKROUND;
         [formView addSubview:textFieldColorSeperator];
         
         UIButton *doneEditingButton = [UIButton buttonWithType:UIButtonTypeCustom];
         doneEditingButton.tag = DONE_EDITING_BUTTON_TAG;
         CGFloat buttonSize = formView.frame.size.height-COLOR_SEPERATOR_HEIGHT;
         doneEditingButton.frame = CGRectMake(formView.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
-        [doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
+        //[doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
         [doneEditingButton setImage:[UIImage imageNamed:@"hide_keyboard_arrow"] forState:UIControlStateNormal];
         [doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -110,6 +110,7 @@
         UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, TEXT_FIELD_MARGIN_TOP, formView.frame.size.width-TEXT_FIELD_MARGIN_LEFT-buttonSize, TEXT_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
         textField.font = TEXT_FIELD_FONT;
+        
         textField.textColor = TEXT_FIELD_COLOR;
         textField.keyboardAppearance = UIKeyboardAppearanceAlert;
         textField.returnKeyType = UIReturnKeyNext;
@@ -120,6 +121,7 @@
         [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         [formView addSubview:textField];
         self.textField = (UITextField*)[formView viewWithTag:TEXT_FIELD_TAG];
+        [self.textField setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
         [self addSubview:formView];
         
         

@@ -28,7 +28,6 @@
 		A74F61BD16EBA5A5004927DA /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BC16EBA5A5004927DA /* AssetsLibrary.framework */; };
 		A74F61BF16EBA5B8004927DA /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BE16EBA5B7004927DA /* MediaPlayer.framework */; };
 		A75207FA1730F5F700F1B4F7 /* ToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A75207F91730F5F700F1B4F7 /* ToDoViewController.m */; };
-		A75207FE1730FBD700F1B4F7 /* FilterMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A75207FD1730FBD700F1B4F7 /* FilterMenu.m */; };
 		A75700291738FA0100CDB4F3 /* left_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = A75700251738FA0100CDB4F3 /* left_arrow.png */; };
 		A757002A1738FA0100CDB4F3 /* left_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A75700261738FA0100CDB4F3 /* left_arrow@2x.png */; };
 		A757002B1738FA0100CDB4F3 /* right_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = A75700271738FA0100CDB4F3 /* right_arrow.png */; };
@@ -57,8 +56,6 @@
 		A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2B172C5EAF00BCB2D9 /* KPTag.m */; };
 		A7680D2F172C610B00BCB2D9 /* KPTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2E172C610B00BCB2D9 /* KPTagList.m */; };
 		A7680D32172D21B600BCB2D9 /* Franchise-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7680D31172D21B600BCB2D9 /* Franchise-Bold.ttf */; };
-		A7680D4B172D34F900BCB2D9 /* add_panel_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A7680D49172D34F900BCB2D9 /* add_panel_background.png */; };
-		A7680D4C172D34F900BCB2D9 /* add_panel_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7680D4A172D34F900BCB2D9 /* add_panel_background@2x.png */; };
 		A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76B2386172C06CC00F742C2 /* ScheduleViewController.m */; };
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
@@ -160,8 +157,6 @@
 		A74F61BE16EBA5B7004927DA /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		A75207F81730F5F700F1B4F7 /* ToDoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToDoViewController.h; path = ToDo/ToDoViewController.h; sourceTree = "<group>"; };
 		A75207F91730F5F700F1B4F7 /* ToDoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ToDoViewController.m; path = ToDo/ToDoViewController.m; sourceTree = "<group>"; };
-		A75207FC1730FBD700F1B4F7 /* FilterMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterMenu.h; path = Swipes/Classes/Views/FilterMenu/FilterMenu.h; sourceTree = SOURCE_ROOT; };
-		A75207FD1730FBD700F1B4F7 /* FilterMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterMenu.m; path = Swipes/Classes/Views/FilterMenu/FilterMenu.m; sourceTree = SOURCE_ROOT; };
 		A75700251738FA0100CDB4F3 /* left_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left_arrow.png; sourceTree = "<group>"; };
 		A75700261738FA0100CDB4F3 /* left_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left_arrow@2x.png"; sourceTree = "<group>"; };
 		A75700271738FA0100CDB4F3 /* right_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right_arrow.png; sourceTree = "<group>"; };
@@ -199,8 +194,6 @@
 		A7680D2D172C610B00BCB2D9 /* KPTagList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPTagList.h; sourceTree = "<group>"; };
 		A7680D2E172C610B00BCB2D9 /* KPTagList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTagList.m; sourceTree = "<group>"; };
 		A7680D31172D21B600BCB2D9 /* Franchise-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Franchise-Bold.ttf"; path = "Font/Franchise-Bold.ttf"; sourceTree = "<group>"; };
-		A7680D49172D34F900BCB2D9 /* add_panel_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_panel_background.png; sourceTree = "<group>"; };
-		A7680D4A172D34F900BCB2D9 /* add_panel_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_panel_background@2x.png"; sourceTree = "<group>"; };
 		A76B2385172C06CC00F742C2 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScheduleViewController.h; path = Schedule/ScheduleViewController.h; sourceTree = "<group>"; };
 		A76B2386172C06CC00F742C2 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScheduleViewController.m; path = Schedule/ScheduleViewController.m; sourceTree = "<group>"; };
 		A7778CCA16EB5884004D95E5 /* Swipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -374,8 +367,6 @@
 		A75207FB1730FB5800F1B4F7 /* FilterMenu */ = {
 			isa = PBXGroup;
 			children = (
-				A75207FC1730FBD700F1B4F7 /* FilterMenu.h */,
-				A75207FD1730FBD700F1B4F7 /* FilterMenu.m */,
 				A75DB2161732FE1A00FA256B /* KPSearchBar.h */,
 				A75DB2171732FE1A00FA256B /* KPSearchBar.m */,
 			);
@@ -407,15 +398,6 @@
 				A7680D31172D21B600BCB2D9 /* Franchise-Bold.ttf */,
 			);
 			name = Font;
-			sourceTree = "<group>";
-		};
-		A7680D48172D34F900BCB2D9 /* AddPanel */ = {
-			isa = PBXGroup;
-			children = (
-				A7680D49172D34F900BCB2D9 /* add_panel_background.png */,
-				A7680D4A172D34F900BCB2D9 /* add_panel_background@2x.png */,
-			);
-			path = AddPanel;
 			sourceTree = "<group>";
 		};
 		A7778CC116EB5884004D95E5 = {
@@ -642,7 +624,6 @@
 			children = (
 				A79DB41B17358C33007A48E2 /* Backgrounds */,
 				A79DB3F21735892C007A48E2 /* Navbar */,
-				A7680D48172D34F900BCB2D9 /* AddPanel */,
 				A781289A17294C56002226C8 /* Buttons */,
 				A7BDD4AF17369A6900C1A97E /* SchedulePopup */,
 				A78128A317294C56002226C8 /* done_icon.png */,
@@ -946,8 +927,6 @@
 				A7933042172AADD200F1505E /* tagbutton.png in Resources */,
 				A7933043172AADD200F1505E /* tagbutton@2x.png in Resources */,
 				A7680D32172D21B600BCB2D9 /* Franchise-Bold.ttf in Resources */,
-				A7680D4B172D34F900BCB2D9 /* add_panel_background.png in Resources */,
-				A7680D4C172D34F900BCB2D9 /* add_panel_background@2x.png in Resources */,
 				A79DB4071735892C007A48E2 /* done-highlighted.png in Resources */,
 				A79DB4081735892C007A48E2 /* done-highlighted@2x.png in Resources */,
 				A79DB40B1735892C007A48E2 /* done.png in Resources */,
@@ -1071,7 +1050,6 @@
 				A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */,
 				A7680D2F172C610B00BCB2D9 /* KPTagList.m in Sources */,
 				A75207FA1730F5F700F1B4F7 /* ToDoViewController.m in Sources */,
-				A75207FE1730FBD700F1B4F7 /* FilterMenu.m in Sources */,
 				A75DB210173119FE00FA256B /* FilterHandler.m in Sources */,
 				A75DB2181732FE1A00FA256B /* KPSearchBar.m in Sources */,
 				A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */,

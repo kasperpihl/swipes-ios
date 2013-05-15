@@ -16,7 +16,6 @@
 #import "UtilityClass.h"
 #import "AKSegmentedControl.h"
 #import "KPAddTagPanel.h"
-#import "FilterMenu.h"
 #import "FilterHandler.h"
 #import "KPAlert.h"
 
@@ -181,7 +180,7 @@
 		//_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];
         AKSegmentedControl *segmentedControl = [[AKSegmentedControl alloc] initWithFrame:INTERESTED_SEGMENT_RECT];
         //UIImage *backgroundImage = [UIImage imageNamed:@"segmented_bg"];
-        //[segmentedControl setBackgroundImage:backgroundImage];
+        [segmentedControl setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED]];
         [segmentedControl setSelectedIndex: DEFAULT_SELECTED_INDEX];
         [segmentedControl addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventValueChanged];
         //[segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 2, 0, 2)];

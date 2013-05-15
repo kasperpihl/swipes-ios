@@ -10,23 +10,12 @@
 #import "AppDelegate.h"
 #import "KPParseCommunicator.h"
 @interface UtilityClass () <UIAlertViewDelegate>
-@property (nonatomic) dispatch_queue_t queue;
 @property (copy) SuccessfulBlock block;
 @end
 
 @implementation UtilityClass
 @synthesize userDefaults = _userDefaults;
 static UtilityClass *sharedObject;
--(dispatch_queue_t)queue{
-    if(!_queue){
-        NSString *string;
-        int interval = (int)[[NSDate date] timeIntervalSince1970];
-        string = [NSString stringWithFormat:@"update%i",interval];
-        _queue = dispatch_queue_create([string UTF8String], NULL);
-    }
-    return _queue;
-}
-
 +(UtilityClass*)instance{
     if(sharedObject == nil) sharedObject = [[super allocWithZone:NULL] init];
     return sharedObject;
@@ -88,10 +77,6 @@ static UtilityClass *sharedObject;
     }
     self.block = nil;
 }
-
-+(UIColor*)colorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha{
-    return [UIColor colorWithRed:red/255.0 green:green/255.0 blue:blue/255.0 alpha:alpha];
-}
 +(NSString*)generateIdWithLength:(NSInteger)length{
     NSString *alphabet  = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
     NSMutableString *s = [NSMutableString stringWithCapacity:length];
@@ -130,8 +115,5 @@ UIImage* rotate(UIImage* src, NSInteger degrees)
     int days = allDays%365;
     int years = (allDays-days)/365;
     return years;
-}
--(void)dealloc{
-    dispatch_release(self.queue);
 }
 @end

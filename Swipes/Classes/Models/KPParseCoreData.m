@@ -42,8 +42,6 @@ static KPParseCoreData *sharedObject;
     }
 }
 -(void)loadDatabase{
-    NSLog(@"error here");
-    //[MagicalRecord setupCoreDataStackWithInMemoryStore];
     @try {
         [MagicalRecord setupCoreDataStackWithStoreNamed:@"shery"];
     }
@@ -53,12 +51,10 @@ static KPParseCoreData *sharedObject;
     @finally {
         
     }
-    
-    NSLog(@"no here");
 }
 
 -(void)cleanUp{
-    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"coredata.sqlite"];
+    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"shery"];
     NSError *error;
     BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
     if(removed){

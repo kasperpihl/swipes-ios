@@ -21,10 +21,6 @@
 #define ANIMATION_DURATION 0.25f
 
 
-#define ADD_BACKGROUND_COLOR [UtilityClass colorWithRed:70 green:70 blue:70 alpha:1]
-
-#define SEPERATOR_WIDTH 1
-
 #define TAB_BAR_VIEW_HEIGHT 45
 
 
@@ -104,7 +100,7 @@
         tagBarView.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR;
         tagBarView.tag = TAB_BAR_VIEW_TAG;
         UIView *tagBarColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tagBarView.frame.size.width, SEPERATOR_WIDTH)];
-        tagBarColorSeperator.backgroundColor = GRAY_SEPERATOR_COLOR;
+        tagBarColorSeperator.backgroundColor = NAVBAR_BACKROUND;
         [tagBarView addSubview:tagBarColorSeperator];
         
         UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -132,7 +128,7 @@
         
         for(NSInteger i = 1 ; i < NUMBER_OF_BAR_BUTTONS ; i++){
             UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake((tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*i)-(SEPERATOR_WIDTH/2), SEPERATOR_WIDTH, SEPERATOR_WIDTH, tagBarView.frame.size.height-SEPERATOR_WIDTH)];
-            seperator.backgroundColor = GRAY_SEPERATOR_COLOR;
+            seperator.backgroundColor = NAVBAR_BACKROUND;
             [tagBarView addSubview:seperator];
         }
         [self addSubview:tagBarView];
@@ -144,11 +140,11 @@
         
         /* Initialize addView */
         
-        UIView *addView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height, self.bounds.size.width, TEXT_FIELD_CONTAINER_HEIGHT)];
+        UIView *addView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height, self.bounds.size.width, TEXT_FIELD_CONTAINER_HEIGHT+COLOR_SEPERATOR_HEIGHT)];
         addView.tag = ADD_VIEW_TAG;
-        addView.backgroundColor = ADD_BACKGROUND_COLOR;
+        addView.backgroundColor = SEGMENT_SELECTED;
         UIView *addViewColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, addView.frame.size.height-COLOR_SEPERATOR_HEIGHT, addView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        addViewColorSeperator.backgroundColor = SWIPES_BLUE;
+        addViewColorSeperator.backgroundColor = NAVBAR_BACKROUND;
         [addView addSubview:addViewColorSeperator];
         
         
@@ -158,7 +154,7 @@
         doneEditingButton.imageView.clipsToBounds = NO;
         doneEditingButton.imageView.contentMode = UIViewContentModeCenter;
         doneEditingButton.frame = CGRectMake(addView.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
-        [doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
+        //[doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
         [doneEditingButton setImage:[UIImage imageNamed:@"hide_keyboard_arrow"] forState:UIControlStateNormal];
         [doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         [addView addSubview:doneEditingButton];
@@ -176,7 +172,7 @@
         [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         [addView addSubview:textField];
         self.textField = (UITextField*)[addView viewWithTag:TEXT_FIELD_TAG];
-        
+        [self.textField setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
         
         [self addSubview:addView];
         self.addTagView = [self viewWithTag:ADD_VIEW_TAG];
@@ -222,8 +218,6 @@
                 [self.textField becomeFirstResponder];
                 [UIView animateWithDuration:ANIMATION_DURATION animations:^{
                     CGRectSetY(self.addTagView.frame, 0);
-                    
-                    
                 }];
             }
         }];

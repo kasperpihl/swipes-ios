@@ -11,16 +11,16 @@
 #define TAG_BUTTON_TAG 13002
 #define SHARE_BUTTON_TAG 13003
 
-#define BIG_BUTTON_HEIGHT 80
+#define BIG_BUTTON_HEIGHT 70
 #define BIG_BUTTON_BOTTOM_MARGIN 15
-#define SMALL_BUTTON_HEIGHT 70
-#define SMALL_BUTTON_BOTTOM_MARGIN 5
+#define SMALL_BUTTON_HEIGHT 60
+#define SMALL_BUTTON_BOTTOM_MARGIN 15
 
 #define ANIMATION_DURATION 0.15f
 
 #define ADD_BUTTON_X ((320/2)-(BIG_BUTTON_HEIGHT/2))
 
-#define SMALL_BUTTON_SPACING 40
+#define SMALL_BUTTON_SPACING 24
 
 
 #define TAG_BUTTON_X ((320/2)+(SMALL_BUTTON_SPACING/2))
@@ -30,8 +30,10 @@
 
 #define DESELECT_BUTTON_X 150
 
+#import "UtilityClass.h"
 #import "KPControlHandler.h"
 #import "RootViewController.h"
+#import <QuartzCore/QuartzCore.h>
 typedef void (^voidBlock)(void);
 @interface KPControlHandler ()
 @property (nonatomic) KPControlHandlerState activeState;
@@ -58,32 +60,34 @@ typedef void (^voidBlock)(void);
     self = [super init];
     if (self) {
         self.view = view;
-        UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        addButton.frame = CGRectMake(ADD_BUTTON_X,view.frame.size.height,BIG_BUTTON_HEIGHT,BIG_BUTTON_HEIGHT);
+        
+        
+        UIButton *addButton = [self roundedButtonWithSize:BIG_BUTTON_HEIGHT];
+        addButton.frame = CGRectSetPos(addButton.frame, ADD_BUTTON_X,view.frame.size.height);
         addButton.tag = ADD_BUTTON_TAG;
         [addButton addTarget:self action:@selector(pressedAdd:) forControlEvents:UIControlEventTouchUpInside];
         [addButton setImage:[UIImage imageNamed:@"addbutton"] forState:UIControlStateNormal];
         [view addSubview:addButton];
         self.addButton = (UIButton*)[view viewWithTag:ADD_BUTTON_TAG];
         
-        UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        deleteButton.frame = CGRectMake(DELETE_BUTTON_X,view.frame.size.height,SMALL_BUTTON_HEIGHT,SMALL_BUTTON_HEIGHT);
+        UIButton *deleteButton = [self roundedButtonWithSize:SMALL_BUTTON_HEIGHT];
+        deleteButton.frame = CGRectSetPos(deleteButton.frame, DELETE_BUTTON_X,view.frame.size.height);
         deleteButton.tag = DELETE_BUTTON_TAG;
         [deleteButton addTarget:self action:@selector(pressedDelete:) forControlEvents:UIControlEventTouchUpInside];
         [deleteButton setImage:[UIImage imageNamed:@"deletebutton"] forState:UIControlStateNormal];
         [view addSubview:deleteButton];
         self.deleteButton = (UIButton*)[view viewWithTag:DELETE_BUTTON_TAG];
         
-        UIButton *tagButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        tagButton.frame = CGRectMake(TAG_BUTTON_X,view.frame.size.height,SMALL_BUTTON_HEIGHT,SMALL_BUTTON_HEIGHT);
+        UIButton *tagButton = [self roundedButtonWithSize:SMALL_BUTTON_HEIGHT];
+        tagButton.frame = CGRectSetPos(tagButton.frame,TAG_BUTTON_X,view.frame.size.height);
         tagButton.tag = TAG_BUTTON_TAG;
         [tagButton addTarget:self action:@selector(pressedTag:) forControlEvents:UIControlEventTouchUpInside];
         [tagButton setImage:[UIImage imageNamed:@"tagbutton"] forState:UIControlStateNormal];
         [view addSubview:tagButton];
         self.tagButton = (UIButton*)[view viewWithTag:TAG_BUTTON_TAG];
         
-        UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        shareButton.frame = CGRectMake(SHARE_BUTTON_X,view.frame.size.height,SMALL_BUTTON_HEIGHT,SMALL_BUTTON_HEIGHT);
+        UIButton *shareButton = [self roundedButtonWithSize:SMALL_BUTTON_HEIGHT];
+        shareButton.frame = CGRectSetPos(shareButton.frame, SHARE_BUTTON_X,view.frame.size.height);
         shareButton.tag = SHARE_BUTTON_TAG;
         [shareButton addTarget:self action:@selector(pressedShare:) forControlEvents:UIControlEventTouchUpInside];
         [shareButton setImage:[UIImage imageNamed:@"sharebutton"] forState:UIControlStateNormal];
@@ -94,6 +98,15 @@ typedef void (^voidBlock)(void);
         [self setState:KPControlHandlerStateAdd animated:NO];
     }
     return self;
+}
+-(UIButton*)roundedButtonWithSize:(NSInteger)size{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *buttonBackgroundImage = [UtilityClass imageWithColor:SEGMENT_BACKGROUND];
+    CGRectSetSize(button.frame, size, size);
+    button.layer.cornerRadius = size/2;
+    button.layer.masksToBounds = YES;
+    [button setBackgroundImage:buttonBackgroundImage forState:UIControlStateNormal];
+    return button;
 }
 -(voidBlock)getClearBlockForState:(KPControlHandlerState)state{
     CGFloat targetY = self.view.frame.size.height;

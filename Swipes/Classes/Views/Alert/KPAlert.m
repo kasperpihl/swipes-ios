@@ -61,7 +61,7 @@
         CGFloat buttonWidth = contentView.frame.size.width/2;
         
         UIView *buttonSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, buttonY-SEPERATOR_WIDTH, contentView.frame.size.width, SEPERATOR_WIDTH)];
-        buttonSeperator.backgroundColor = SEGMENT_SELECTED;
+        buttonSeperator.backgroundColor = TABLE_CELL_BACKGROUND;
         [contentView addSubview:buttonSeperator];
         
         
@@ -74,7 +74,7 @@
         
         
         UIView *buttonSpecificSeperator = [[UIView alloc] initWithFrame:CGRectMake(buttonWidth-SEPERATOR_WIDTH/2, buttonY, SEPERATOR_WIDTH, BUTTON_HEIGHT)];
-        buttonSpecificSeperator.backgroundColor = TABLE_VIEW_BACKGROUND;
+        buttonSpecificSeperator.backgroundColor = TABLE_CELL_BACKGROUND;
         [contentView addSubview:buttonSpecificSeperator];
         
         UIButton *yesButton = [UIButton buttonWithType:UIButtonTypeCustom];

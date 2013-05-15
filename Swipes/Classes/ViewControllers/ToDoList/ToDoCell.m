@@ -32,7 +32,7 @@
 #define TITLE_DELTA_Y -2
 #define LABEL_SPACE 6
 
-#define TITLE_LABEL_HEIGHT [@"Tg" sizeWithFont:TITLE_LABEL_FONT].height
+#define TITLE_LABEL_HEIGHT [@"Tjgq" sizeWithFont:TITLE_LABEL_FONT].height
 #define TAGS_LABEL_HEIGHT [@"Tg" sizeWithFont:TAGS_LABEL_FONT].height
 
 
@@ -49,15 +49,15 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         //self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.contentView.backgroundColor = [UIColor whiteColor];
-        self.backgroundColor = [UIColor whiteColor];
-        self.textLabel.backgroundColor = [UIColor whiteColor];
+        self.contentView.backgroundColor = TABLE_CELL_BACKGROUND;
+        //self.backgroundColor = [UIColor whiteColor];
+        //self.textLabel.backgroundColor = [UIColor whiteColor];
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X,TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
         titleLabel.tag = TITLE_LABEL_TAG;
         titleLabel.numberOfLines = 1;
         titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
         titleLabel.font = TITLE_LABEL_FONT;
-        titleLabel.textColor = TITLE_LABEL_COLOR;
+        titleLabel.textColor = SEGMENT_SELECTED;
         titleLabel.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:titleLabel];
         self.titleLabel = (UILabel*)[self.contentView viewWithTag:TITLE_LABEL_TAG];
@@ -67,18 +67,20 @@
         tagsLabel.numberOfLines = 1;
         tagsLabel.font = TAGS_LABEL_FONT;
         tagsLabel.backgroundColor = [UIColor clearColor];
-        tagsLabel.textColor = TAGS_LABEL_COLOR;
+        tagsLabel.textColor = SEGMENT_SELECTED;
         [self.contentView addSubview:tagsLabel];
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
-        /*UIView *seperatorLine = [[UIView alloc] initWithFrame:CGRectMake(0, CELL_HEIGHT-SEPERATOR_WIDTH, self.bounds.size.width, SEPERATOR_WIDTH)];
-        [seperatorLine setBackgroundColor:TABLE_VIEW_LIGHT_BACKGROUND];
+        CGFloat seperatorHeight = .5;
+        
+        UIView *seperatorLine = [[UIView alloc] initWithFrame:CGRectMake(0, CELL_HEIGHT-seperatorHeight, self.bounds.size.width, seperatorHeight)];
+        [seperatorLine setBackgroundColor:NAVBAR_BACKROUND];
         seperatorLine.tag = SEPERATOR_LINE_TAG;
         [self.contentView addSubview:seperatorLine];
-        self.seperatorLine = [self.contentView viewWithTag:SEPERATOR_LINE_TAG];*/
+        self.seperatorLine = [self.contentView viewWithTag:SEPERATOR_LINE_TAG];
         
         UIView *overlayView = [[UIView alloc] initWithFrame:self.bounds];
-        overlayView.backgroundColor = [UtilityClass colorWithRed:200 green:200 blue:200 alpha:1];
+        overlayView.backgroundColor = TABLE_BACKGROUND;
         overlayView.tag = OVERLAY_VIEW_TAG;
         self.selectedBackgroundView = overlayView;
         
@@ -133,6 +135,7 @@
         CGRectSetX(self.tagsLabel.frame, LABEL_X);
     }
     //self.seperatorLine.hidden = selected;*/
+    //self.seperatorLine.hidden = selected;
     [super setSelected:selected animated:animated];
 }
 -(void)setCellType:(CellType)cellType{

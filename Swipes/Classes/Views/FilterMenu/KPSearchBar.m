@@ -135,7 +135,6 @@
         searchField.borderStyle = UITextBorderStyleNone;
         searchField.textColor = [UIColor whiteColor];
         [searchField setBackground:[[UIImage alloc] init]];
-        
         [searchField setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
         searchField.leftView = nil;
         

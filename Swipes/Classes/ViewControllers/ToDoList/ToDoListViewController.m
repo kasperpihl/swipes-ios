@@ -12,13 +12,13 @@
 #import "ToDoHandler.h"
 #import "SchedulePopup.h"
 #import "KPSearchBar.h"
-#import "FilterMenu.h"
 
 #define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
 #define SEARCH_BAR_TAG 503
-#define CONTENT_INSET_BOTTOM 100
+#define FOOTER_VIEW_TAG 505
+#define CONTENT_INSET_BOTTOM 5// 100
 @interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate>
 
 @property (nonatomic,strong) MCSwipeTableViewCell *swipingCell;
@@ -238,9 +238,9 @@
     if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
         
         if (scrollView.contentOffset.y < self.searchBar.frame.size.height) {
-            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, 0, 0);
+            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, COLOR_SEPERATOR_HEIGHT, 0);
         } else {
-            self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, COLOR_SEPERATOR_HEIGHT, 0);
         }
         
         CGRect searchBarFrame = self.searchBar.frame;
@@ -394,13 +394,15 @@
     UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
     tableView.contentInset = UIEdgeInsetsMake(0, 0, CONTENT_INSET_BOTTOM, 0);
     tableView.delegate = self;
-    //tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.dataSource = self;
     tableView.backgroundColor = [UIColor clearColor];
     
     UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
     headerView.hidden = YES;
     tableView.tableHeaderView = headerView;
+    
+    
     
     KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,0, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
     searchBar.searchBarDelegate = self;
@@ -413,6 +415,8 @@
     doubleTap.numberOfTapsRequired = 2;
     doubleTap.numberOfTouchesRequired = 1;
     [tableView addGestureRecognizer:doubleTap];
+    
+    
 }
 -(void)loadItems{
     [self loadItemsAndUpdate:YES];
@@ -423,8 +427,14 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = TABLE_VIEW_BACKGROUND;
+    self.view.backgroundColor = TABLE_BACKGROUND;
     self.view.frame = [self parentViewController].view.bounds;
+    
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-COLOR_SEPERATOR_HEIGHT, self.view.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+    footerView.backgroundColor = SEGMENT_SELECTED;
+    footerView.tag = FOOTER_VIEW_TAG;
+    [self.view addSubview:footerView];
+    
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_white_background",self.state]]];
     imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
     imageView.tag = BACKGROUND_IMAGE_VIEW_TAG;
@@ -442,7 +452,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self loadItemsAndUpdate:YES];
-    
+    [self.view bringSubviewToFront:[self.view viewWithTag:FOOTER_VIEW_TAG]];
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
