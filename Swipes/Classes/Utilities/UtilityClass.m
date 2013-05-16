@@ -34,14 +34,16 @@ static UtilityClass *sharedObject;
     return image;
 }
 +(UIImage *)navbarImage{
+    return [UtilityClass imageWithColor:NAVBAR_BACKROUND];
     CGFloat navbarWidth = 1;
     CGFloat navbarHeight = 44;
+    CGFloat sepHeight = .5;
     CGSize navbarSize = CGSizeMake(navbarWidth, navbarHeight);
     UIGraphicsBeginImageContext(navbarSize);
     UIImage *topColorImage = [UtilityClass imageWithColor:NAVBAR_BACKROUND];
     UIImage *bottomColorImage = [UtilityClass imageWithColor:SEGMENT_SELECTED];
-    [topColorImage drawInRect:CGRectMake(0, 0, navbarWidth, navbarHeight-COLOR_SEPERATOR_HEIGHT)];
-    [bottomColorImage drawInRect:CGRectMake(0, navbarHeight-COLOR_SEPERATOR_HEIGHT, navbarWidth, COLOR_SEPERATOR_HEIGHT)];
+    [topColorImage drawInRect:CGRectMake(0, 0, navbarWidth, navbarHeight-sepHeight)];
+    [bottomColorImage drawInRect:CGRectMake(0, navbarHeight-sepHeight, navbarWidth, sepHeight)];
     return UIGraphicsGetImageFromCurrentImageContext();
 }
 -(NSNumber *)versionNumber{

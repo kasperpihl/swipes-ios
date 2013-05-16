@@ -86,19 +86,19 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
-        UIView *formView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, TEXT_FIELD_CONTAINER_HEIGHT+COLOR_SEPERATOR_HEIGHT)];
+        UIView *formView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, TEXT_FIELD_CONTAINER_HEIGHT)];
         formView.tag = FORM_VIEW_TAG;
         formView.userInteractionEnabled = YES;
         formView.backgroundColor = SEGMENT_SELECTED;
         UIView *textFieldColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, formView.frame.size.height-COLOR_SEPERATOR_HEIGHT, formView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        textFieldColorSeperator.backgroundColor = NAVBAR_BACKROUND;
-        [formView addSubview:textFieldColorSeperator];
+        textFieldColorSeperator.backgroundColor = SWIPES_BLUE;
+        //[formView addSubview:textFieldColorSeperator];
         
         UIButton *doneEditingButton = [UIButton buttonWithType:UIButtonTypeCustom];
         doneEditingButton.tag = DONE_EDITING_BUTTON_TAG;
-        CGFloat buttonSize = formView.frame.size.height-COLOR_SEPERATOR_HEIGHT;
+        CGFloat buttonSize = formView.frame.size.height;
         doneEditingButton.frame = CGRectMake(formView.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
-        //[doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
+        [doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
         [doneEditingButton setImage:[UIImage imageNamed:@"hide_keyboard_arrow"] forState:UIControlStateNormal];
         [doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         

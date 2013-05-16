@@ -134,10 +134,6 @@
         [self addSubview:tagBarView];
         self.barBottomView = [self viewWithTag:TAB_BAR_VIEW_TAG];
         
-        
-        
-        
-        
         /* Initialize addView */
         
         UIView *addView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height, self.bounds.size.width, TEXT_FIELD_CONTAINER_HEIGHT+COLOR_SEPERATOR_HEIGHT)];
@@ -146,7 +142,6 @@
         UIView *addViewColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, addView.frame.size.height-COLOR_SEPERATOR_HEIGHT, addView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
         addViewColorSeperator.backgroundColor = NAVBAR_BACKROUND;
         [addView addSubview:addViewColorSeperator];
-        
         
         UIButton *doneEditingButton = [UIButton buttonWithType:UIButtonTypeCustom];
         CGFloat buttonSize = addView.frame.size.height-COLOR_SEPERATOR_HEIGHT;
@@ -159,7 +154,7 @@
         [doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         [addView addSubview:doneEditingButton];
         self.doneEditingButton = (UIButton*)[addView viewWithTag:DONE_EDITING_BUTTON_TAG];
-        
+
         UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, TEXT_FIELD_MARGIN_TOP, addView.frame.size.width-TEXT_FIELD_MARGIN_LEFT-buttonSize, TEXT_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
         textField.font = TEXT_FIELD_FONT;

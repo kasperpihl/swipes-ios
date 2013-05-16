@@ -101,7 +101,7 @@ typedef void (^voidBlock)(void);
 }
 -(UIButton*)roundedButtonWithSize:(NSInteger)size{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *buttonBackgroundImage = [UtilityClass imageWithColor:SEGMENT_BACKGROUND];
+    UIImage *buttonBackgroundImage = [UtilityClass imageWithColor:SWIPES_BLUE];
     CGRectSetSize(button.frame, size, size);
     button.layer.cornerRadius = size/2;
     button.layer.masksToBounds = YES;

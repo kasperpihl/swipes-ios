@@ -71,7 +71,8 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
 #define BUTTON_FONT [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:20]
 
-#define TEXT_FIELD_CONTAINER_HEIGHT 50
+
+#define TEXT_FIELD_CONTAINER_HEIGHT 55
 #define COLOR_SEPERATOR_HEIGHT 5
 
 #define TEXT_FIELD_MARGIN_LEFT 10
@@ -79,20 +80,25 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define TEXT_FIELD_HEIGHT 30
 #define SEPERATOR_WIDTH .5
 
+#define SEGMENT_BUTTON_WIDTH 50
+#define SEGMENT_BUTTON_HEIGHT 44
+
+
 #define SEGMENT_BACKGROUND              gray(128,1)
 #define SEGMENT_SELECTED                gray(70,1)
+#define TEXTFIELD_BACKGROUND            gray(51,1)
+#define TABLE_CELL_BACKGROUND           gray(51,1)
+#define TABLE_CELL_SELECTED_BACKGROUND  gray(23,1)
 #define NAVBAR_BACKROUND                gray(168,1)
 #define TABLE_BACKGROUND                gray(230,1)
-#define TABLE_CELL_BACKGROUND           gray(255,1)
 
+#define CELL_TITLE_COLOR                gray(255,1)
+#define CELL_TAG_COLOR                  gray()
 
 #define SWIPES_BLUE                     color(57,156,217,1)
 #define DONE_COLOR                      color(180,223,93,1)
 #define SCHEDULE_COLOR                  color(252,128,109,1)
 
-//#define TABLE_VIEW_BACKGROUND [UIColor colorWithRed:        77.0/255.0 green:   77.0/255.0 blue:    77.0/255.0 alpha:1.0]
-//#define TABLE_VIEW_LIGHT_BACKGROUND [UIColor colorWithRed:  230.0/255.0 green:  230.0/255.0 blue:   230.0/255.0 alpha:1.0]
-//#define SCHEDULE_BUTTON_COLOR           gray(237,1)
 #define BAR_BOTTOM_BACKGROUND_COLOR     gray(51,1)
 #define POPUP_OVERLAY_COLOR             gray(155,0.5)
 #define ALERT_BOX_BACKGROUND            gray(37,1)

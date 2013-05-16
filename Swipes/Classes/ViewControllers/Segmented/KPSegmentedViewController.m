@@ -26,7 +26,7 @@
 #define ADD_BUTTON_MARGIN_BOTTOM 0
 #define CONTENT_VIEW_TAG 1000
 #define CONTROLS_VIEW_TAG 1001
-#define INTERESTED_SEGMENT_RECT CGRectMake(0,0,135,44)
+#define INTERESTED_SEGMENT_RECT CGRectMake(0,0,(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),44)
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
@@ -179,11 +179,10 @@
 	if (!_segmentedControl) {
 		//_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];
         AKSegmentedControl *segmentedControl = [[AKSegmentedControl alloc] initWithFrame:INTERESTED_SEGMENT_RECT];
-        //UIImage *backgroundImage = [UIImage imageNamed:@"segmented_bg"];
         [segmentedControl setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED]];
         [segmentedControl setSelectedIndex: DEFAULT_SELECTED_INDEX];
         [segmentedControl addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventValueChanged];
-        //[segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 2, 0, 2)];
+        [segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 1, 0, 1)];
         [segmentedControl setSegmentedControlMode:AKSegmentedControlModeSticky];
         //[segmentedControl setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
         UIButton *buttonSchedule = [self buttonForSegment:KPSegmentButtonSchedule];
@@ -197,7 +196,8 @@
 }
 -(UIButton*)buttonForSegment:(KPSegmentButtons)controlButton{
     UIButton *button = [[UIButton alloc] init];
-    [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BACKGROUND] forState:UIControlStateNormal];
+    CGRectSetSize(button.frame, SEGMENT_BUTTON_WIDTH, SEGMENT_BUTTON_HEIGHT);
+    [button setBackgroundImage:[UtilityClass imageWithColor:NAVBAR_BACKROUND] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED] forState:UIControlStateSelected];
     UIImage *normalImage;
     UIColor *thisColor;
@@ -219,20 +219,9 @@
             highlightedImage = [UIImage imageNamed:@"done-highlighted"];
             break;
     }
-    UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height-COLOR_SEPERATOR_HEIGHT, button.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-
-    colorView.backgroundColor = SEGMENT_SELECTED;//thisColor;
-    colorView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin);
-    [button addSubview:colorView];
     [button setImage:normalImage forState:UIControlStateNormal];
     button.imageView.animationImages = @[highlightedImage];
-    button.imageView.animationDuration = 0.8;
-    /*[button setImage:selectedImage forState:UIControlStateHighlighted];
-    [button setImage:selectedImage forState:UIControlStateSelected];
-    [button setImage:selectedImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
-    
-   */
-    
+    button.imageView.animationDuration = 0.8;    
     return button;
 }
 -(void)timerFired:(NSTimer*)sender{

@@ -12,12 +12,12 @@
 #import "ToDoHandler.h"
 #import "SchedulePopup.h"
 #import "KPSearchBar.h"
-
+#import <QuartzCore/QuartzCore.h>
 #define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
 #define SEARCH_BAR_TAG 503
-#define FOOTER_VIEW_TAG 505
+#define FAKE_HEADER_VIEW_TAG 505
 #define CONTENT_INSET_BOTTOM 5// 100
 @interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate>
 
@@ -28,6 +28,7 @@
 @property (nonatomic) NSMutableArray *selectedRows;
 @property (nonatomic) CGPoint lastOffset;
 @property (nonatomic) NSTimeInterval lastOffsetCapture;
+@property (nonatomic,weak) UIView *fakeHeaderView;
 
 @property (nonatomic,strong) NSMutableDictionary *stateDictionary;
 @end
@@ -236,7 +237,8 @@
         self.lastOffsetCapture = currentTime;
     }
     if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
-        
+        NSLog(@"offset:%f",scrollView.contentOffset.y);
+        self.fakeHeaderView.hidden = !(scrollView.contentOffset.y > self.tableView.tableHeaderView.frame.size.height);
         if (scrollView.contentOffset.y < self.searchBar.frame.size.height) {
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, COLOR_SEPERATOR_HEIGHT, 0);
         } else {
@@ -244,7 +246,7 @@
         }
         
         CGRect searchBarFrame = self.searchBar.frame;
-        searchBarFrame.origin.y = MIN(scrollView.contentOffset.y, 0);
+        searchBarFrame.origin.y = MIN(scrollView.contentOffset.y, 0)-COLOR_SEPERATOR_HEIGHT;
         //NSLog(@"%@,scrollView:%f",self.searchBar,searchBarFrame.origin.y);
         self.searchBar.frame = searchBarFrame;
     }
@@ -391,20 +393,21 @@
 -(void)prepareTableView:(UITableView *)tableView{
     tableView.allowsMultipleSelection = YES;
     [tableView setTableFooterView:[UIView new]];
+    tableView.frame = CGRectMake(0, COLOR_SEPERATOR_HEIGHT, tableView.frame.size.width, tableView.frame.size.height-COLOR_SEPERATOR_HEIGHT);
     UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
     tableView.contentInset = UIEdgeInsetsMake(0, 0, CONTENT_INSET_BOTTOM, 0);
     tableView.delegate = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.dataSource = self;
     tableView.backgroundColor = [UIColor clearColor];
-    
-    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
+    tableView.layer.masksToBounds = NO;
+    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, TEXT_FIELD_CONTAINER_HEIGHT-COLOR_SEPERATOR_HEIGHT)];
     headerView.hidden = YES;
     tableView.tableHeaderView = headerView;
     
     
     
-    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,0, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
+    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,-COLOR_SEPERATOR_HEIGHT, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
     searchBar.searchBarDelegate = self;
     searchBar.searchBarDataSource = self.filterHandler;
     searchBar.tag = SEARCH_BAR_TAG;
@@ -430,10 +433,15 @@
     self.view.backgroundColor = TABLE_BACKGROUND;
     self.view.frame = [self parentViewController].view.bounds;
     
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-COLOR_SEPERATOR_HEIGHT, self.view.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+    headerView.backgroundColor = SEGMENT_SELECTED;
+    headerView.tag = FAKE_HEADER_VIEW_TAG;
+    [self.view addSubview:headerView];
+    self.fakeHeaderView = [self.view viewWithTag:FAKE_HEADER_VIEW_TAG];
+   /* UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-COLOR_SEPERATOR_HEIGHT, self.view.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
     footerView.backgroundColor = SEGMENT_SELECTED;
-    footerView.tag = FOOTER_VIEW_TAG;
-    [self.view addSubview:footerView];
+    footerView.tag = FOOTER_VIEW_TAG;*/
+    //[self.view addSubview:footerView];
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_white_background",self.state]]];
     imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
@@ -452,7 +460,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self loadItemsAndUpdate:YES];
-    [self.view bringSubviewToFront:[self.view viewWithTag:FOOTER_VIEW_TAG]];
+    [self.view bringSubviewToFront:[self.view viewWithTag:FAKE_HEADER_VIEW_TAG]];
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
