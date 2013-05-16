@@ -99,7 +99,7 @@ static ToDoHandler *sharedObject;
             returnColor = SCHEDULE_COLOR;
             break;
         case CellTypeToday:
-            returnColor = SWIPES_BLUE;
+            returnColor = TODAY_COLOR;
             break;
         case CellTypeDone:
             returnColor = DONE_COLOR;

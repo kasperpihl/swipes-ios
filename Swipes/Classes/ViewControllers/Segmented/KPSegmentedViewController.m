@@ -179,7 +179,7 @@
 	if (!_segmentedControl) {
 		//_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];
         AKSegmentedControl *segmentedControl = [[AKSegmentedControl alloc] initWithFrame:INTERESTED_SEGMENT_RECT];
-        [segmentedControl setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED]];
+        [segmentedControl setBackgroundImage:[UtilityClass imageWithColor:[UIColor whiteColor]]];
         [segmentedControl setSelectedIndex: DEFAULT_SELECTED_INDEX];
         [segmentedControl addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventValueChanged];
         [segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 1, 0, 1)];
@@ -209,7 +209,7 @@
             highlightedImage = [UIImage imageNamed:@"schedule-highlighted"];
             break;
         case KPSegmentButtonToday:
-            thisColor = SWIPES_BLUE;
+            thisColor = TODAY_COLOR;
             normalImage = [UIImage imageNamed:@"today"];
             highlightedImage = [UIImage imageNamed:@"today-highlighted"];
             break;

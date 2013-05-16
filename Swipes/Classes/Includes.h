@@ -85,19 +85,23 @@ NS_INLINE void mainBlock(void (^block)(void))
 
 
 #define SEGMENT_BACKGROUND              gray(128,1)
-#define SEGMENT_SELECTED                gray(70,1)
-#define TEXTFIELD_BACKGROUND            gray(51,1)
-#define TABLE_CELL_BACKGROUND           gray(51,1)
-#define TABLE_CELL_SELECTED_BACKGROUND  gray(23,1)
-#define NAVBAR_BACKROUND                gray(168,1)
-#define TABLE_BACKGROUND                gray(230,1)
+#define SEGMENT_SELECTED                color(128,129,125,1)
+#define TEXTFIELD_BACKGROUND            gray(97,1)
+#define TABLE_CELL_BACKGROUND           gray(255,1)
+#define TABLE_CELL_SELECTED_BACKGROUND  TEXTFIELD_BACKGROUND
+#define NAVBAR_BACKROUND                color(167,168,168,1)
+#define TABLE_BACKGROUND                color(227,232,232,1)
 
-#define CELL_TITLE_COLOR                gray(255,1)
+#define CELL_TITLE_COLOR                gray(118,1)
 #define CELL_TAG_COLOR                  gray()
 
+
 #define SWIPES_BLUE                     color(57,156,217,1)
-#define DONE_COLOR                      color(180,223,93,1)
+#define TODAY_COLOR                     color(240,237,38,1)
+#define DONE_COLOR                      color(63,186,141,1)
 #define SCHEDULE_COLOR                  color(252,128,109,1)
+
+
 
 #define BAR_BOTTOM_BACKGROUND_COLOR     gray(51,1)
 #define POPUP_OVERLAY_COLOR             gray(155,0.5)

@@ -20,7 +20,7 @@
 
 #define TITLE_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Medium" size:18]
 #define TAGS_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue" size:12]
-#define ORDER_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:18]
+#define ORDER_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:26]
 
 
 #define INDICATOR_X 40
@@ -75,7 +75,7 @@
         UILabel *orderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, INDICATOR_X, CELL_HEIGHT)];
         orderLabel.textAlignment = UITextAlignmentCenter;
         orderLabel.tag = ORDER_LABEL_TAG;
-        orderLabel.textColor = CELL_TITLE_COLOR;
+        orderLabel.textColor = SWIPES_BLUE;
         orderLabel.font = ORDER_LABEL_FONT;
         orderLabel.backgroundColor = CLEAR;
         orderLabel.text = @"1";
