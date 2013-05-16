@@ -26,7 +26,11 @@
 #define ADD_BUTTON_MARGIN_BOTTOM 0
 #define CONTENT_VIEW_TAG 1000
 #define CONTROLS_VIEW_TAG 1001
-#define INTERESTED_SEGMENT_RECT CGRectMake(0,0,(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),44)
+#define SEGMENT_BORDER_RADIUS 10
+#define TODAY_EXTRA_INSET 3
+#define SEGMENT_BORDER_WIDTH 0
+#define SEGMENT_HEIGHT (44-7+SEGMENT_BORDER_RADIUS)
+#define INTERESTED_SEGMENT_RECT CGRectMake(0,(44-SEGMENT_HEIGHT),(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),SEGMENT_HEIGHT)
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
@@ -179,10 +183,14 @@
 	if (!_segmentedControl) {
 		//_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];
         AKSegmentedControl *segmentedControl = [[AKSegmentedControl alloc] initWithFrame:INTERESTED_SEGMENT_RECT];
-        [segmentedControl setBackgroundImage:[UtilityClass imageWithColor:[UIColor whiteColor]]];
+        [segmentedControl setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BORDER_COLOR]];
         [segmentedControl setSelectedIndex: DEFAULT_SELECTED_INDEX];
+        segmentedControl.layer.cornerRadius = SEGMENT_BORDER_RADIUS;
+        segmentedControl.layer.masksToBounds = YES;
+        segmentedControl.layer.borderColor = SEGMENT_BORDER_COLOR.CGColor;
+        segmentedControl.layer.borderWidth = SEGMENT_BORDER_WIDTH;
         [segmentedControl addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventValueChanged];
-        [segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 1, 0, 1)];
+        [segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
         [segmentedControl setSegmentedControlMode:AKSegmentedControlModeSticky];
         //[segmentedControl setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
         UIButton *buttonSchedule = [self buttonForSegment:KPSegmentButtonSchedule];
@@ -196,10 +204,12 @@
 }
 -(UIButton*)buttonForSegment:(KPSegmentButtons)controlButton{
     UIButton *button = [[UIButton alloc] init];
-    CGRectSetSize(button.frame, SEGMENT_BUTTON_WIDTH, SEGMENT_BUTTON_HEIGHT);
-    [button setBackgroundImage:[UtilityClass imageWithColor:NAVBAR_BACKROUND] forState:UIControlStateNormal];
+    CGRectSetSize(button.frame, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
+    [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BACKGROUND] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED] forState:UIControlStateSelected];
     UIImage *normalImage;
+    CGFloat imageInset = SEGMENT_BORDER_RADIUS-COLOR_SEPERATOR_HEIGHT;
+    
     UIColor *thisColor;
     UIImage *highlightedImage;
     switch (controlButton) {
@@ -210,6 +220,7 @@
             break;
         case KPSegmentButtonToday:
             thisColor = TODAY_COLOR;
+            imageInset += TODAY_EXTRA_INSET;
             normalImage = [UIImage imageNamed:@"today"];
             highlightedImage = [UIImage imageNamed:@"today-highlighted"];
             break;
@@ -219,6 +230,7 @@
             highlightedImage = [UIImage imageNamed:@"done-highlighted"];
             break;
     }
+    button.imageEdgeInsets = UIEdgeInsetsMake(0, 0, imageInset, 0);
     [button setImage:normalImage forState:UIControlStateNormal];
     button.imageView.animationImages = @[highlightedImage];
     button.imageView.animationDuration = 0.8;    

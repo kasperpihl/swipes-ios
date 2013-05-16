@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 
 #import "AKSegmentedControl.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define kAKButtonSeparatorWidth 1.0
 
@@ -216,7 +217,14 @@
     _selectedIndexes = [selectedIndexes copy];
     [self updateButtons];
 }
-
+-(void)setFrame:(CGRect)frame{
+    CGFloat cornerRadius = self.layer.cornerRadius;
+    CGFloat superViewHeight = [self superview].frame.size.height;
+    frame.origin.y = superViewHeight - frame.size.height + cornerRadius;
+    [self superview].layer.masksToBounds = YES;
+    
+    [super setFrame:frame];
+}
 
 #pragma mark - Rearranging
 

@@ -84,13 +84,20 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define SEGMENT_BUTTON_HEIGHT 44
 
 
-#define SEGMENT_BACKGROUND              gray(128,1)
-#define SEGMENT_SELECTED                color(128,129,125,1)
+#define SEGMENT_SELECTED                color(128,129,125,1)//gray(128,1)
+#define NAVBAR_BACKROUND                gray(200,1)
+#define SEGMENT_BACKGROUND              color(167,168,168,1)//NAVBAR_BACKROUND
+#define TABLE_BACKGROUND                color(227,232,232,1)
 #define TEXTFIELD_BACKGROUND            gray(97,1)
 #define TABLE_CELL_BACKGROUND           gray(255,1)
-#define TABLE_CELL_SELECTED_BACKGROUND  TEXTFIELD_BACKGROUND
-#define NAVBAR_BACKROUND                color(167,168,168,1)
-#define TABLE_BACKGROUND                color(227,232,232,1)
+
+
+
+#define SEGMENT_BORDER_COLOR            SEGMENT_SELECTED
+#define TABLE_CELL_SELECTED_BACKGROUND  NAVBAR_BACKROUND
+#define TAG_COLOR_BACKGROUND            SEGMENT_SELECTED
+#define TABLE_CELL_SEPERATOR_COLOR      SEGMENT_SELECTED
+
 
 #define CELL_TITLE_COLOR                gray(118,1)
 #define CELL_TAG_COLOR                  gray()

@@ -20,7 +20,7 @@
 
 #define TITLE_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Medium" size:18]
 #define TAGS_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue" size:12]
-#define ORDER_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:26]
+#define ORDER_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:28]
 
 
 #define INDICATOR_X 40
@@ -85,7 +85,7 @@
         
         
         UIView *seperatorLine = [[UIView alloc] initWithFrame:CGRectMake(0, CELL_HEIGHT-seperatorHeight, self.bounds.size.width, seperatorHeight)];
-        [seperatorLine setBackgroundColor:NAVBAR_BACKROUND];
+        [seperatorLine setBackgroundColor:TABLE_CELL_SEPERATOR_COLOR];
         seperatorLine.tag = SEPERATOR_LINE_TAG;
         [self.contentView addSubview:seperatorLine];
         self.seperatorLine = [self.contentView viewWithTag:SEPERATOR_LINE_TAG];

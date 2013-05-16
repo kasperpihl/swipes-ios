@@ -178,7 +178,7 @@
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
     [button setTitleColor:BUTTON_COLOR forState:UIControlStateNormal];
-    [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BACKGROUND] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UtilityClass imageWithColor:TAG_COLOR_BACKGROUND] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateSelected];
     button.titleLabel.font = TAG_FONT;
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
