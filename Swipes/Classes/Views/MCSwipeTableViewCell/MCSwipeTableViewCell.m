@@ -214,12 +214,13 @@ secondStateIconName:(NSString *)secondIconName
 
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    if (gestureRecognizer == _panGestureRecognizer) {
-        UIScrollView *superview = (UIScrollView *) self.superview;
-        CGPoint translation = [(UIPanGestureRecognizer *) gestureRecognizer translationInView:superview];
-
-        // Make sure it is scrolling horizontally
-        return ((fabs(translation.x) / fabs(translation.y) > 1) ? YES : NO && (superview.contentOffset.y == 0.0 && superview.contentOffset.x == 0.0));
+    if ([gestureRecognizer class] == [UIPanGestureRecognizer class]) {
+        UIPanGestureRecognizer *g = (UIPanGestureRecognizer *)gestureRecognizer;
+        CGPoint point = [g velocityInView:self];
+        //NSLog(@"%f,%f",point.x,point.y);
+        if (fabsf(point.x) > fabsf(point.y) ) {
+            return YES;
+        }
     }
     return NO;
 }
@@ -230,7 +231,7 @@ secondStateIconName:(NSString *)secondIconName
     CGFloat offset = percentage * width;
 
     if (offset < -width) offset = -width;
-    else if (offset > width) offset = 1.0;
+    else if (offset > width) offset = width;
     return offset;
 }
 

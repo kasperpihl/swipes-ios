@@ -417,6 +417,7 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
         if([self.selectedRows containsObject:indexPath]){
             [localCell showTimeline:YES];
+            [localCell setDotColor:[TODOHANDLER colorForCellType:self.cellType]];
             if(bounce) [localCell bounceToOrigin];
             if(shouldBeSelected)[localCell setSelected:YES];
             if(![selectedIndexPaths containsObject:indexPath] && shouldBeSelected) [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
