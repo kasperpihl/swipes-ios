@@ -265,7 +265,6 @@ secondStateIconName:(NSString *)secondIconName
 
 - (NSString *)imageNameWithPercentage:(CGFloat)percentage {
     NSString *imageName;
-    if(!self.didRegret){
         // Image
         if (percentage >= 0 && percentage < kMCStop2)
             imageName = _firstIconName;
@@ -275,7 +274,6 @@ secondStateIconName:(NSString *)secondIconName
             imageName = _thirdIconName;
         else if (percentage <= -kMCStop2)
             imageName = _fourthIconName;
-    }
     return imageName;
 }
 

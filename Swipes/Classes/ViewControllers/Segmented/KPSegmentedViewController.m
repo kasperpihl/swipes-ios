@@ -30,7 +30,7 @@
 #define TODAY_EXTRA_INSET 3
 #define SEGMENT_BORDER_WIDTH 0
 #define SEGMENT_HEIGHT (44)
-#define INTERESTED_SEGMENT_RECT CGRectMake(0,(44-SEGMENT_HEIGHT)/2,(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),SEGMENT_HEIGHT)
+#define INTERESTED_SEGMENT_RECT CGRectMake(0,0,(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),SEGMENT_HEIGHT)
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
@@ -272,6 +272,7 @@
 			}
 		}];
         [self.view addSubview:self.segmentedControl];
+        
         //self.navigationItem.titleView = self.segmentedControl;
 	}
 	
@@ -305,7 +306,7 @@
     [super viewWillAppear:animated];
 	if (!self.hasAppeared) {
         self.hasAppeared = YES;
-        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 44, 320, self.view.bounds.size.height-44)];
+        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, SEGMENT_HEIGHT, 320, self.view.bounds.size.height-SEGMENT_HEIGHT)];
         contentView.tag = CONTENT_VIEW_TAG;
         [self.view addSubview:contentView];
         self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
