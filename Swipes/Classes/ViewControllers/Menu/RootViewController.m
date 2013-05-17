@@ -36,6 +36,7 @@ static RootViewController *sharedObject;
 
 -(void)setupMenu{
     if(!self.menuViewController){
+        [self setNavigationBarHidden:YES];
         ScheduleViewController *vc1 = [[ScheduleViewController alloc] init];
         TodayViewController *vc2 = [[TodayViewController alloc] init];
         DoneViewController *vc3 = [[DoneViewController alloc] init];

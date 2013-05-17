@@ -70,43 +70,50 @@ NS_INLINE void mainBlock(void (^block)(void))
 
 #define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
 #define BUTTON_FONT [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:20]
-
+#define SECTION_HEADER_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
 
 #define TEXT_FIELD_CONTAINER_HEIGHT 55
 #define COLOR_SEPERATOR_HEIGHT 5
 
+#define TABLE_CELL_SEPERATOR_HEIGHT 1
+
 #define TEXT_FIELD_MARGIN_LEFT 10
+
 #define TEXT_FIELD_MARGIN_TOP 12
 #define TEXT_FIELD_HEIGHT 30
 #define SEPERATOR_WIDTH .5
 
-#define SEGMENT_BUTTON_WIDTH 50
+#define SEGMENT_BUTTON_WIDTH 106
 #define SEGMENT_BUTTON_HEIGHT 44
 
 
-#define SEGMENT_SELECTED                color(128,129,125,1)//gray(128,1)
-#define NAVBAR_BACKROUND                gray(200,1)
-#define SEGMENT_BACKGROUND              color(167,168,168,1)//NAVBAR_BACKROUND
-#define TABLE_BACKGROUND                color(227,232,232,1)
-#define TEXTFIELD_BACKGROUND            gray(97,1)
-#define TABLE_CELL_BACKGROUND           gray(255,1)
+#define SEGMENT_SELECTED                color(44,50,59,1)
+#define NAVBAR_BACKROUND                gray(38,1)
+#define SEGMENT_BACKGROUND              color(30,34,40,1) //gray(51,1)//NAVBAR_BACKROUND
+#define TABLE_CELL_BACKGROUND           color(59,67,79,1)
+#define TABLE_BACKGROUND                color(44,50,59,1) //TABLE_CELL_BACKGROUND
+#define TEXTFIELD_BACKGROUND            color(25,29,35,1) //SEGMENT_BACKGROUND
 
-
-
-#define SEGMENT_BORDER_COLOR            SEGMENT_SELECTED
-#define TABLE_CELL_SELECTED_BACKGROUND  NAVBAR_BACKROUND
-#define TAG_COLOR_BACKGROUND            SEGMENT_SELECTED
-#define TABLE_CELL_SEPERATOR_COLOR      SEGMENT_SELECTED
-
-
-#define CELL_TITLE_COLOR                gray(118,1)
-#define CELL_TAG_COLOR                  gray()
-
-
-#define SWIPES_BLUE                     color(57,156,217,1)
-#define TODAY_COLOR                     color(240,237,38,1)
+#define TODAY_COLOR                     color(214,196,45,1)
 #define DONE_COLOR                      color(63,186,141,1)
 #define SCHEDULE_COLOR                  color(252,128,109,1)
+#define SWIPES_BLUE                     TODAY_COLOR
+
+// 
+// Seperator :: gray(77,1)
+
+#define SEGMENT_BORDER_COLOR            gray(61,1)
+#define TABLE_CELL_SELECTED_BACKGROUND  SEGMENT_BACKGROUND
+#define TAG_COLOR_BACKGROUND            SEGMENT_SELECTED
+#define TABLE_CELL_SEPERATOR_COLOR      color(44,50,59,1)
+#define SECTION_HEADER_BACKGROUND       SEGMENT_BACKGROUND
+
+#define SECTION_HEADER_COLOR            color(98,105,114,1)
+#define CELL_TITLE_COLOR                color(177,180,185,1)
+#define CELL_TAG_COLOR                  gray(230,1)
+
+
+
 
 
 

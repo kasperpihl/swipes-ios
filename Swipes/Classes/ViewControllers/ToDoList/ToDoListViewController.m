@@ -17,7 +17,9 @@
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
 #define SEARCH_BAR_TAG 503
+#define SECTION_HEADER_HEIGHT 30
 #define FAKE_HEADER_VIEW_TAG 505
+#define SECTION_HEADER_X 19
 #define CONTENT_INSET_BOTTOM 5// 100
 @interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate>
 
@@ -139,8 +141,27 @@
     }
     return self.items.count;
 }
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if(self.sortedItems) return SECTION_HEADER_HEIGHT;
+    else return 0;
+}
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    if(self.sortedItems){
+        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 30)];
+        headerView.backgroundColor = SECTION_HEADER_BACKGROUND;
+        NSString *title = [self.titleArray objectAtIndex:section];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(SECTION_HEADER_X, 0, tableView.bounds.size.width-SECTION_HEADER_X, SECTION_HEADER_HEIGHT)];
+        titleLabel.backgroundColor = CLEAR;
+        titleLabel.textColor = SECTION_HEADER_COLOR;
+        titleLabel.text = [title capitalizedString];
+        [headerView addSubview:titleLabel];
+        return headerView;
+    }
+    else return nil;
+    
+}
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    if(self.sortedItems) return [self.titleArray objectAtIndex:section];
+    
     return nil;
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -237,7 +258,6 @@
         self.lastOffsetCapture = currentTime;
     }
     if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
-        NSLog(@"offset:%f",scrollView.contentOffset.y);
         self.fakeHeaderView.hidden = !(scrollView.contentOffset.y > self.tableView.tableHeaderView.frame.size.height);
         if (scrollView.contentOffset.y < self.searchBar.frame.size.height) {
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, COLOR_SEPERATOR_HEIGHT, 0);
@@ -288,7 +308,7 @@
     CellType targetCellType = [TODOHANDLER cellTypeForCell:cell.cellType state:state];
     switch (targetCellType) {
         case CellTypeSchedule:{
-            [SchedulePopup showInView:self.navigationController.view withBlock:^(KPScheduleButtons button, NSDate *date) {
+            [SchedulePopup showInView:self.parent.view withBlock:^(KPScheduleButtons button, NSDate *date) {
                 if(button == KPScheduleButtonCancel){
                     [self returnSelectedRowsAndBounce:YES];
                 }

@@ -26,11 +26,11 @@
 #define ADD_BUTTON_MARGIN_BOTTOM 0
 #define CONTENT_VIEW_TAG 1000
 #define CONTROLS_VIEW_TAG 1001
-#define SEGMENT_BORDER_RADIUS 10
+#define SEGMENT_BORDER_RADIUS 0
 #define TODAY_EXTRA_INSET 3
 #define SEGMENT_BORDER_WIDTH 0
-#define SEGMENT_HEIGHT (44-7+SEGMENT_BORDER_RADIUS)
-#define INTERESTED_SEGMENT_RECT CGRectMake(0,(44-SEGMENT_HEIGHT),(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),SEGMENT_HEIGHT)
+#define SEGMENT_HEIGHT (44)
+#define INTERESTED_SEGMENT_RECT CGRectMake(0,(44-SEGMENT_HEIGHT)/2,(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),SEGMENT_HEIGHT)
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
@@ -207,6 +207,7 @@
     CGRectSetSize(button.frame, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
     [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BACKGROUND] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED] forState:UIControlStateSelected];
+    button.adjustsImageWhenHighlighted = NO;
     UIImage *normalImage;
     CGFloat imageInset = SEGMENT_BORDER_RADIUS-COLOR_SEPERATOR_HEIGHT;
     
@@ -230,7 +231,7 @@
             highlightedImage = [UIImage imageNamed:@"done-highlighted"];
             break;
     }
-    button.imageEdgeInsets = UIEdgeInsetsMake(0, 0, imageInset, 0);
+    button.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     [button setImage:normalImage forState:UIControlStateNormal];
     button.imageView.animationImages = @[highlightedImage];
     button.imageView.animationDuration = 0.8;    
@@ -264,7 +265,8 @@
 				[self.titles addObject:titles[index]];
 			}
 		}];
-        self.navigationItem.titleView = self.segmentedControl;
+        [self.view addSubview:self.segmentedControl];
+        //self.navigationItem.titleView = self.segmentedControl;
 	}
 	
 	return self;
@@ -297,14 +299,14 @@
     [super viewWillAppear:animated];
 	if (!self.hasAppeared) {
         self.hasAppeared = YES;
-        UIView *contentView = [[UIView alloc] initWithFrame:self.view.bounds];
+        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 44, 320, self.view.bounds.size.height-44)];
         contentView.tag = CONTENT_VIEW_TAG;
         [self.view addSubview:contentView];
         self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
         self.controlHandler = [KPControlHandler instanceInView:self.view];
         self.controlHandler.delegate = self;
         
-        
+        [self.view bringSubviewToFront:self.segmentedControl];
         UIViewController *currentViewController = self.viewControllers[DEFAULT_SELECTED_INDEX];
         self.currentSelectedIndex = DEFAULT_SELECTED_INDEX;
         [self addChildViewController:currentViewController];
@@ -319,8 +321,8 @@
     [self changeViewControllerAnimated:NO];
 }
 -(void)changeViewControllerAnimated:(BOOL)animated{
-    CGFloat width = self.view.frame.size.width;
-    CGFloat height = self.view.frame.size.height;
+    CGFloat width = self.contentView.frame.size.width;
+    CGFloat height = self.contentView.frame.size.height;
     NSInteger selectedIndex = [[self.segmentedControl selectedIndexes] firstIndex];
     CGFloat delta = (self.currentSelectedIndex < selectedIndex) ? width : -width;
 	ToDoListViewController *oldViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];

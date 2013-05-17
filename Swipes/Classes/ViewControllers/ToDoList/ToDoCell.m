@@ -17,10 +17,10 @@
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
 #define ORDER_LABEL_TAG 5
-
-#define TITLE_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Medium" size:18]
-#define TAGS_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue" size:12]
-#define ORDER_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:28]
+#define DOT_VIEW_TAG 6
+#define TITLE_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
+#define TAGS_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:12]
+#define ORDER_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:18]
 
 
 #define INDICATOR_X 40
@@ -42,6 +42,7 @@
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *layerView;
 @property (nonatomic,weak) IBOutlet UIView *indicatorView;
+@property (nonatomic,weak) IBOutlet UIView *dotView;
 @property (nonatomic,weak) IBOutlet UILabel *orderLabel;
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
@@ -68,19 +69,19 @@
         tagsLabel.numberOfLines = 1;
         tagsLabel.font = TAGS_LABEL_FONT;
         tagsLabel.backgroundColor = [UIColor clearColor];
-        tagsLabel.textColor = CELL_TITLE_COLOR;
+        tagsLabel.textColor = CELL_TAG_COLOR;
         [self.contentView addSubview:tagsLabel];
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
-        UILabel *orderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, INDICATOR_X, CELL_HEIGHT)];
+        /*UILabel *orderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, INDICATOR_X, CELL_HEIGHT)];
         orderLabel.textAlignment = UITextAlignmentCenter;
         orderLabel.tag = ORDER_LABEL_TAG;
-        orderLabel.textColor = SWIPES_BLUE;
+        orderLabel.textColor = gray(0,1);
         orderLabel.font = ORDER_LABEL_FONT;
         orderLabel.backgroundColor = CLEAR;
-        orderLabel.text = @"1";
-        [self.contentView addSubview:orderLabel];
-        CGFloat seperatorHeight = .5;
+        orderLabel.text = @"2.";
+        [self.contentView addSubview:orderLabel];*/
+        CGFloat seperatorHeight = TABLE_CELL_SEPERATOR_HEIGHT;
         
         
         
@@ -99,6 +100,13 @@
         indicatorView.hidden = YES;
         [self.contentView addSubview:indicatorView];
         self.indicatorView = [self.contentView viewWithTag:INDICATOR_TAG];
+        
+        
+        UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(9, (CELL_HEIGHT-14)/2 , 14,14)];
+        dotView.layer.cornerRadius = 7;
+        dotView.tag = DOT_VIEW_TAG;
+        [self.contentView addSubview:dotView];
+        self.dotView = [self.contentView viewWithTag:DOT_VIEW_TAG];
         
     }
     return self;
@@ -141,7 +149,7 @@
         //CGRectSetY(self.overlayView.frame, CELL_HEIGHT-SELECTED_LINE_HEIGHT);
         //CGRectSetY(self.seperatorLine.frame, CELL_HEIGHT-SEPERATOR_WIDTH);
         self.indicatorView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
-        //self.overlayView2.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
+        self.dotView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
         CellType firstCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
         CellType secondCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState2];
         CellType thirdCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState3];
