@@ -34,7 +34,8 @@ static UtilityClass *sharedObject;
     return image;
 }
 +(UIImage *)navbarImage{
-    return [UtilityClass imageWithColor:NAVBAR_BACKROUND];
+    return nil;
+    /*return [UtilityClass imageWithColor:];
     CGFloat navbarWidth = 1;
     CGFloat navbarHeight = 44;
     CGFloat sepHeight = .5;
@@ -44,7 +45,7 @@ static UtilityClass *sharedObject;
     UIImage *bottomColorImage = [UtilityClass imageWithColor:SEGMENT_SELECTED];
     [topColorImage drawInRect:CGRectMake(0, 0, navbarWidth, navbarHeight-sepHeight)];
     [bottomColorImage drawInRect:CGRectMake(0, navbarHeight-sepHeight, navbarWidth, sepHeight)];
-    return UIGraphicsGetImageFromCurrentImageContext();
+    return UIGraphicsGetImageFromCurrentImageContext();*/
 }
 -(NSNumber *)versionNumber{
     NSNumberFormatter * f = [[NSNumberFormatter alloc] init];

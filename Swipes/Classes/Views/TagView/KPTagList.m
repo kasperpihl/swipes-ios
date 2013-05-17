@@ -179,7 +179,7 @@
     [button setTitle:tag forState:UIControlStateNormal];
     [button setTitleColor:BUTTON_COLOR forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:TAG_COLOR_BACKGROUND] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateSelected];
+    [button setBackgroundImage:[UtilityClass imageWithColor:SWIPES_COLOR] forState:UIControlStateSelected];
     button.titleLabel.font = TAG_FONT;
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];

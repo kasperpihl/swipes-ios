@@ -89,22 +89,23 @@
         [self addSubview:tagContainerView];
         self.tagContainerView = [self viewWithTag:TAG_CONTAINER_VIEW_TAG];
         self.scrollView = (UIScrollView*)[self viewWithTag:SCROLL_VIEW_TAG];
-        self.scrollView.backgroundColor = SEGMENT_SELECTED;
+        self.scrollView.backgroundColor = MANAGE_TAGS_BACKGROUND;
         [self tagList:self.tagView changedSize:CGSizeMake(self.frame.size.width, self.tagView.frame.size.height)];
         CGRectSetSize(self.frame, self.frame.size.width, self.tagContainerView.frame.origin.y+self.tagContainerView.frame.size.height+TAB_BAR_VIEW_HEIGHT);
         
         
         
+        CGFloat sepHeight = COLOR_SEPERATOR_HEIGHT;
         /* Initialize tagbar view */
         UIView *tagBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TAB_BAR_VIEW_HEIGHT, self.frame.size.width, TAB_BAR_VIEW_HEIGHT)];
         tagBarView.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR;
         tagBarView.tag = TAB_BAR_VIEW_TAG;
-        UIView *tagBarColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tagBarView.frame.size.width, SEPERATOR_WIDTH)];
-        tagBarColorSeperator.backgroundColor = NAVBAR_BACKROUND;
+        UIView *tagBarColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tagBarView.frame.size.width, sepHeight)];
+        tagBarColorSeperator.backgroundColor = BAR_BOTTOM_BUTTON_SEPS;
         [tagBarView addSubview:tagBarColorSeperator];
         
         UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        addButton.frame = CGRectMake(0, SEPERATOR_WIDTH, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-SEPERATOR_WIDTH);
+        addButton.frame = CGRectMake(0, sepHeight, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-sepHeight);
         addButton.titleLabel.font = BUTTON_FONT;
         [addButton addTarget:self action:@selector(pressedAddButton:) forControlEvents:UIControlEventTouchUpInside];
         addButton.titleLabel.textColor = BUTTON_COLOR;
@@ -119,7 +120,7 @@
         [tagBarView addSubview:editButton];*/
         
         UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        doneButton.frame = CGRectMake(tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*1, SEPERATOR_WIDTH, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-SEPERATOR_WIDTH);
+        doneButton.frame = CGRectMake(tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*1, sepHeight, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-sepHeight);
         doneButton.titleLabel.font = BUTTON_FONT;
         doneButton.titleLabel.textColor = BUTTON_COLOR;
         [doneButton addTarget:self action:@selector(pressedDoneButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -127,8 +128,8 @@
         [tagBarView addSubview:doneButton];
         
         for(NSInteger i = 1 ; i < NUMBER_OF_BAR_BUTTONS ; i++){
-            UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake((tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*i)-(SEPERATOR_WIDTH/2), SEPERATOR_WIDTH, SEPERATOR_WIDTH, tagBarView.frame.size.height-SEPERATOR_WIDTH)];
-            seperator.backgroundColor = NAVBAR_BACKROUND;
+            UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake((tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*i)-(SEPERATOR_WIDTH/2), sepHeight, SEPERATOR_WIDTH, tagBarView.frame.size.height-sepHeight)];
+            seperator.backgroundColor = BAR_BOTTOM_BUTTON_SEPS;
             [tagBarView addSubview:seperator];
         }
         [self addSubview:tagBarView];
@@ -138,9 +139,9 @@
         
         UIView *addView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height, self.bounds.size.width, TEXT_FIELD_CONTAINER_HEIGHT+COLOR_SEPERATOR_HEIGHT)];
         addView.tag = ADD_VIEW_TAG;
-        addView.backgroundColor = SEGMENT_SELECTED;
+        addView.backgroundColor = TEXTFIELD_BACKGROUND;
         UIView *addViewColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, addView.frame.size.height-COLOR_SEPERATOR_HEIGHT, addView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        addViewColorSeperator.backgroundColor = NAVBAR_BACKROUND;
+        addViewColorSeperator.backgroundColor = ADD_TAG_SEPERATOR_COLOR;
         [addView addSubview:addViewColorSeperator];
         
         UIButton *doneEditingButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -149,7 +150,7 @@
         doneEditingButton.imageView.clipsToBounds = NO;
         doneEditingButton.imageView.contentMode = UIViewContentModeCenter;
         doneEditingButton.frame = CGRectMake(addView.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
-        //[doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
+        [doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_COLOR] forState:UIControlStateNormal];
         [doneEditingButton setImage:[UIImage imageNamed:@"hide_keyboard_arrow"] forState:UIControlStateNormal];
         [doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         [addView addSubview:doneEditingButton];
@@ -158,16 +159,16 @@
         UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, TEXT_FIELD_MARGIN_TOP, addView.frame.size.width-TEXT_FIELD_MARGIN_LEFT-buttonSize, TEXT_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
         textField.font = TEXT_FIELD_FONT;
-        textField.textColor = [UIColor whiteColor];
+        textField.textColor = TEXT_FIELD_COLOR;
         textField.returnKeyType = UIReturnKeyNext;
         textField.keyboardAppearance = UIKeyboardAppearanceAlert;
         textField.borderStyle = UITextBorderStyleNone;
         textField.delegate = self;
-        textField.placeholder = @"Type the name of the tag";
+        textField.placeholder = @"Add a tag";
         [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         [addView addSubview:textField];
         self.textField = (UITextField*)[addView viewWithTag:TEXT_FIELD_TAG];
-        [self.textField setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
+        [self.textField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];
         
         [self addSubview:addView];
         self.addTagView = [self viewWithTag:ADD_VIEW_TAG];

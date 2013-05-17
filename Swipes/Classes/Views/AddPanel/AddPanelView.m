@@ -9,15 +9,12 @@
 #import "AddPanelView.h"
 
 #import "UtilityClass.h"
-#import "DAKeyboardControl.h"
 #define FORM_VIEW_TAG 1
 #define BACKGROUND_VIEW_TAG 2
 #define PICKER_VIEW_TAG 3
 #define TEXT_FIELD_TAG 4
 #define DONE_EDITING_BUTTON_TAG 5
 #define ANIMATION_DURATION 0.25f
-
-#define TEXT_FIELD_COLOR [UIColor whiteColor]
 
 #define KEYBOARD_HEIGHT 216
 
@@ -91,14 +88,14 @@
         formView.userInteractionEnabled = YES;
         formView.backgroundColor = SEGMENT_SELECTED;
         UIView *textFieldColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, formView.frame.size.height-COLOR_SEPERATOR_HEIGHT, formView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        textFieldColorSeperator.backgroundColor = SWIPES_BLUE;
-        //[formView addSubview:textFieldColorSeperator];
+        textFieldColorSeperator.backgroundColor = SWIPES_COLOR;
+        [formView addSubview:textFieldColorSeperator];
         
         UIButton *doneEditingButton = [UIButton buttonWithType:UIButtonTypeCustom];
         doneEditingButton.tag = DONE_EDITING_BUTTON_TAG;
         CGFloat buttonSize = formView.frame.size.height;
         doneEditingButton.frame = CGRectMake(formView.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
-        [doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
+        [doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_COLOR] forState:UIControlStateNormal];
         [doneEditingButton setImage:[UIImage imageNamed:@"hide_keyboard_arrow"] forState:UIControlStateNormal];
         [doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         

@@ -1,8 +1,7 @@
 #import "KPToDo.h"
 
 #import "KPTag.h"
-#define TAGS_LABEL_BOLD_FONT [UIFont fontWithName:@"HelveticaNeue-Bold" size:12]
-#define TAGS_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue" size:12]
+
 @interface KPToDo ()
 @property (nonatomic,strong) NSString *readableTags;
 // Private interface goes here.

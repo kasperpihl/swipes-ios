@@ -80,7 +80,7 @@
         filterButton.tag = FILTER_BUTTON_TAG;
         filterButton.frame = CGRectMake(self.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
         [filterButton setImage:[UIImage imageNamed:@"filter_button"] forState:UIControlStateNormal];
-        //[filterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
+        //[filterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_COLOR] forState:UIControlStateNormal];
         [self addSubview:filterButton];
         self.filterButton = (UIButton*)[self viewWithTag:FILTER_BUTTON_TAG];
         
@@ -93,7 +93,7 @@
         KPTagList *selectedTagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width-TAG_HEIGHT-DEFAULT_SPACING, 0)];
         selectedTagList.marginLeft = 0;
         selectedTagList.marginTop = 5;
-        selectedTagList.emptyLabelMarginHack = 10;//(TAG_HEIGHT+DEFAULT_SPACING)/2;
+        //(TAG_HEIGHT+DEFAULT_SPACING)/2;
         selectedTagList.marginRight = 6;
         selectedTagList.bottomMargin = 0;
         selectedTagList.emptyText = @"Filter";
@@ -103,7 +103,7 @@
         
         UIButton *clearFilterButton = [UIButton buttonWithType:UIButtonTypeCustom];
         clearFilterButton.frame = CGRectMake(self.frame.size.width-buttonSize,0,buttonSize,buttonSize);
-        //[clearFilterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_BLUE] forState:UIControlStateNormal];
+        //[clearFilterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_COLOR] forState:UIControlStateNormal];
         [clearFilterButton setImage:[UIImage imageNamed:@"cross_button"] forState:UIControlStateNormal];
         [clearFilterButton addTarget:self action:@selector(pressedClearFilter:) forControlEvents:UIControlEventTouchUpInside];
         [filterView addSubview:clearFilterButton];
@@ -112,6 +112,7 @@
         tagList.emptyText = @"No tags assigned";
         tagList.marginLeft = 0;
         tagList.marginTop = 5;
+        tagList.emptyLabelMarginHack = 10;
         tagList.marginRight = 0;
         tagList.tagDelegate = self;
         tagList.tag = TAG_LIST_TAG;
@@ -137,9 +138,9 @@
         CGRectSetSize(searchField.frame, self.frame.size.width-(2*searchField.frame.origin.x)-(self.frame.size.height-COLOR_SEPERATOR_HEIGHT), searchField.frame.size.height);
         searchField.font = TEXT_FIELD_FONT;
         searchField.borderStyle = UITextBorderStyleNone;
-        searchField.textColor = [UIColor whiteColor];
+        searchField.textColor = TEXT_FIELD_COLOR;
         [searchField setBackground:[[UIImage alloc] init]];
-        [searchField setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
+        [searchField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];
         searchField.leftView = nil;
         
 
@@ -189,7 +190,20 @@
     }
 }
 -(void)reframeToNone{
-    [self.superview bringSubviewToFront:self];
+    UITableView* superView = (UITableView*)self.superview;
+    [UIView animateWithDuration:.5f animations:^{
+        self.filterView.alpha = 0;
+        //CGRectSetY(self.frame, self.frame.origin.y-self.frame.size.height);
+        [superView setContentOffset:CGPointMake(0, superView.tableHeaderView.frame.size.height)];
+    } completion:^(BOOL finished) {
+        CGRectSetSize(self.frame, self.frame.size.width, SEARCH_BAR_DEFAULT_HEIGHT);
+        
+        self.filterView.hidden = YES;
+        self.filterButton.hidden = NO;
+        self.searchField.hidden = NO;
+        [self resizeTableHeader];
+    }];
+    /*[self.superview bringSubviewToFront:self];
     [UIView animateWithDuration:0.5 animations:^{
         CGRectSetY(self.filterView.frame,0-self.filterView.frame.size.height-TEXT_FIELD_CONTAINER_HEIGHT);
         self.frame = CGRectMake(self.frame.origin.x,
@@ -203,10 +217,11 @@
         self.clearedColorSeperatorView.hidden = NO;
         self.searchField.hidden = NO;
         self.filterView.hidden = YES;
-    }];
+    }];*/
 
 }
 -(void)resizeTableHeader{
+    
     UITableView *superView = (UITableView *)self.superview;
     UIView *tableHeader = superView.tableHeaderView;
     tableHeader.frame = self.bounds;

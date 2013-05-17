@@ -1,35 +1,23 @@
 PODS:
-  - AKSegmentedControl (1.0.2)
-  - DAKeyboardControl (2.2.0)
   - Facebook-iOS-SDK (3.5.1)
   - KGStatusBar (1.0)
-  - KNSemiModalViewController (0.3)
   - MagicalRecord (2.1)
-  - Parse (1.2.7):
+  - Parse (1.2.9):
     - Facebook-iOS-SDK (~> 3.5.1)
   - PRTween (0.0.1)
-  - SLGlowingTextField (0.0.1)
 
 DEPENDENCIES:
-  - AKSegmentedControl (~> 1.0.2)
-  - DAKeyboardControl (~> 2.2.0)
   - Facebook-iOS-SDK (~> 3.5.0)
   - KGStatusBar (~> 1.0)
-  - KNSemiModalViewController (~> 0.3)
   - MagicalRecord (~> 2.1)
   - Parse (~> 1.2.6)
   - PRTween (~> 0.0.1)
-  - SLGlowingTextField (~> 0.0.1)
 
 SPEC CHECKSUMS:
-  AKSegmentedControl: 200a37463b1d4320d433d55c8008d95549159a25
-  DAKeyboardControl: 64d5b35257a433abbcea57202b741f72c623d9ca
   Facebook-iOS-SDK: 0dbd897e842cefeb012ec2eb8eba659ba6b96b12
   KGStatusBar: e47f19745f6aeb0fabe37e8360df26bf87b1e2ff
-  KNSemiModalViewController: 976b739f57aa595359a2cfdf6aadde991ada8f99
   MagicalRecord: 64e7184c240087a45e9588a722eaf05b0ad837f7
-  Parse: 72283d40c16e03aeb32e0db689c628f7a0f838bc
+  Parse: 9d763110e8cebe319243ee38dc3c34d3475b98d6
   PRTween: d0439e7917031328f81de4910c5b02e202389939
-  SLGlowingTextField: 0f276378f6d8173098cd75c34d733a78b2bd96b6
 
 COCOAPODS: 0.18.1

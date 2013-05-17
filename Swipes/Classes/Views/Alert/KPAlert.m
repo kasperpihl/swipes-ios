@@ -35,12 +35,12 @@
     self = [super initWithFrame:frame];
     if (self) {
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 200)];
-        contentView.backgroundColor = SEGMENT_SELECTED;
+        contentView.backgroundColor = SEGMENT_BACKGROUND;
         [self setContainerSize:contentView.frame.size];
         
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT)];
-        titleLabel.backgroundColor = [UIColor blackColor];
+        titleLabel.backgroundColor = TEXTFIELD_BACKGROUND;
         titleLabel.tag = TITLE_LABEL_TAG;
         titleLabel.textColor = BUTTON_COLOR;
         titleLabel.textAlignment = UITextAlignmentCenter;
@@ -60,8 +60,8 @@
         CGFloat buttonY = contentView.frame.size.height-COLOR_SEPERATOR_HEIGHT-BUTTON_HEIGHT;
         CGFloat buttonWidth = contentView.frame.size.width/2;
         
-        UIView *buttonSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, buttonY-SEPERATOR_WIDTH, contentView.frame.size.width, SEPERATOR_WIDTH)];
-        buttonSeperator.backgroundColor = TABLE_CELL_BACKGROUND;
+        UIView *buttonSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, buttonY-COLOR_SEPERATOR_HEIGHT, contentView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+        buttonSeperator.backgroundColor = SEGMENT_SELECTED;
         [contentView addSubview:buttonSeperator];
         
         
@@ -74,7 +74,7 @@
         
         
         UIView *buttonSpecificSeperator = [[UIView alloc] initWithFrame:CGRectMake(buttonWidth-SEPERATOR_WIDTH/2, buttonY, SEPERATOR_WIDTH, BUTTON_HEIGHT)];
-        buttonSpecificSeperator.backgroundColor = TABLE_CELL_BACKGROUND;
+        buttonSpecificSeperator.backgroundColor = SEGMENT_SELECTED;
         [contentView addSubview:buttonSpecificSeperator];
         
         UIButton *yesButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -86,7 +86,7 @@
         
         
         UIView *colorBottomSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-COLOR_SEPERATOR_HEIGHT, contentView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        colorBottomSeperator.backgroundColor = SWIPES_BLUE;
+        colorBottomSeperator.backgroundColor = SWIPES_COLOR;
         [contentView addSubview:colorBottomSeperator];
         [self.containerView addSubview:contentView];
     }

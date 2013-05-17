@@ -63,6 +63,7 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 @property(nonatomic, strong) UIImageView *slidingImageView;
 @property(nonatomic, strong) NSString *currentImageName;
 @property(nonatomic, strong) UIView *colorIndicatorView;
+@property (nonatomic) MCSwipeTableViewCellState currentState;
 
 @end
 
@@ -196,6 +197,9 @@ secondStateIconName:(NSString *)secondIconName
     }
 }
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
+    if([self.delegate respondsToSelector:@selector(swipeTableViewCell:shouldHandleGestureRecognizer:)]){
+        if(![self.delegate swipeTableViewCell:self shouldHandleGestureRecognizer:gesture]) return;
+    }
     if ([gesture state] == UIGestureRecognizerStateBegan) {
         
         if([self.delegate respondsToSelector:@selector(swipeTableViewCell:didStartPanningWithMode:)])
@@ -303,6 +307,7 @@ secondStateIconName:(NSString *)secondIconName
         else if (percentage <= -kMCStop2)
             color = _fourthColor;
     }
+    self.currentState = [self stateWithPercentage:percentage];
     return color;
 }
 
@@ -323,7 +328,15 @@ secondStateIconName:(NSString *)secondIconName
         if (percentage <= -kMCStop2 && [self validateState:MCSwipeTableViewCellState4])
             state = MCSwipeTableViewCellState4;
     }
+    
     return state;
+}
+-(void)setCurrentState:(MCSwipeTableViewCellState)currentState{
+    NSLog(@"state:%i",currentState);
+    if(currentState != _currentState){
+        _currentState = currentState;
+        if([self.delegate respondsToSelector:@selector(swipeTableViewCell:slidedIntoState:)]) [self.delegate swipeTableViewCell:self slidedIntoState:currentState];
+    }
 }
 
 - (BOOL)validateState:(MCSwipeTableViewCellState)state {

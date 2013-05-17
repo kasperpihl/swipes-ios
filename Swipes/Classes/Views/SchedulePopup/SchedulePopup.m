@@ -133,8 +133,9 @@ typedef enum {
     if (self) {
         [self setContainerSize:CGSizeMake(POPUP_WIDTH, POPUP_WIDTH)];
         UIView *contentView = [[UIView alloc] initWithFrame:self.containerView.bounds];
-        contentView.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR;//POPUP_BACKGROUND_COLOR;
-        //contentView.layer.cornerRadius = 5;
+        
+        contentView.backgroundColor = POPUP_BACKGROUND;//POPUP_BACKGROUND_COLOR;
+        contentView.layer.cornerRadius = 10;
         contentView.tag = CONTENT_VIEW_TAG;
         
         for(NSInteger i = 1 ; i < GRID_NUMBER ; i++){
@@ -193,29 +194,29 @@ typedef enum {
     UIView *selectDateView = [[UIView alloc] initWithFrame:self.containerView.bounds];
     selectDateView.hidden = YES;
     selectDateView.tag = SELECT_DATE_VIEW_TAG;
-    selectDateView.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR; //POPUP_BACKGROUND_COLOR
-    //selectDateView.layer.cornerRadius = 5;
+    selectDateView.backgroundColor = POPUP_BACKGROUND; //POPUP_BACKGROUND_COLOR
+    selectDateView.layer.cornerRadius = 10;
     selectDateView.layer.masksToBounds = YES;
     
     UIView *colorBottomSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, selectDateView.frame.size.height-COLOR_SEPERATOR_HEIGHT, selectDateView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-    colorBottomSeperator.backgroundColor = SWIPES_BLUE;
+    colorBottomSeperator.backgroundColor = SWIPES_COLOR;
     [selectDateView addSubview:colorBottomSeperator];
     
     UIButton *backOneMonthButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backOneMonthButton setImage:[UIImage imageNamed:@"left_arrow"] forState:UIControlStateNormal];
-    backOneMonthButton.layer.borderWidth = 1;
+    //backOneMonthButton.layer.borderWidth = 1;
     [backOneMonthButton addTarget:self action:@selector(pressedBackMonth:) forControlEvents:UIControlEventTouchUpInside];
     backOneMonthButton.tag = BACK_ONE_MONTH_BUTTON_TAG;
     backOneMonthButton.layer.borderColor = SEPERATOR_COLOR_DARK.CGColor;
-    backOneMonthButton.frame = CGRectMake(-1, -1, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT);
+    backOneMonthButton.frame = CGRectMake(0, 0, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT);
     [selectDateView addSubview:backOneMonthButton];
     self.backOneMonth = (UIButton*)[selectDateView viewWithTag:BACK_ONE_MONTH_BUTTON_TAG];
     
     UIButton *forwardOneMonthButton = [UIButton buttonWithType:UIButtonTypeCustom];
 
     [forwardOneMonthButton setImage:[UIImage imageNamed:@"right_arrow"] forState:UIControlStateNormal];
-    forwardOneMonthButton.frame = CGRectMake(selectDateView.frame.size.width-COLOR_SEPERATOR_HEIGHT-PICK_DATE_BUTTON_HEIGHT+1, -1, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT);
-    forwardOneMonthButton.layer.borderWidth = 1;
+    forwardOneMonthButton.frame = CGRectMake(selectDateView.frame.size.width-COLOR_SEPERATOR_HEIGHT-PICK_DATE_BUTTON_HEIGHT, 0, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT);
+    //forwardOneMonthButton.layer.borderWidth = 1;
     forwardOneMonthButton.layer.borderColor = SEPERATOR_COLOR_DARK.CGColor;
     [forwardOneMonthButton addTarget:self action:@selector(pressedForwardMonth:) forControlEvents:UIControlEventTouchUpInside];
     [selectDateView addSubview:forwardOneMonthButton];
@@ -255,8 +256,8 @@ typedef enum {
     CGFloat buttonY = selectDateView.frame.size.height-COLOR_SEPERATOR_HEIGHT-PICK_DATE_BUTTON_HEIGHT;
     CGFloat buttonWidth = selectDateView.frame.size.width/2;
     
-    UIView *pickerButtonSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, buttonY-SEPERATOR_WIDTH, selectDateView.frame.size.width, SEPERATOR_WIDTH)];
-    pickerButtonSeperator.backgroundColor = SEPERATOR_COLOR_DARK;
+    UIView *pickerButtonSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, buttonY-COLOR_SEPERATOR_HEIGHT, selectDateView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+    pickerButtonSeperator.backgroundColor = SEGMENT_SELECTED;
     [selectDateView addSubview:pickerButtonSeperator];
     
     
@@ -269,7 +270,7 @@ typedef enum {
     
     
     UIView *dateButtonsSeperator = [[UIView alloc] initWithFrame:CGRectMake(buttonWidth-SEPERATOR_WIDTH/2, buttonY, SEPERATOR_WIDTH, PICK_DATE_BUTTON_HEIGHT)];
-    dateButtonsSeperator.backgroundColor = SEPERATOR_COLOR_DARK;
+    dateButtonsSeperator.backgroundColor = SEGMENT_SELECTED;
     [selectDateView addSubview:dateButtonsSeperator];
     
     UIButton *setDateButton = [UIButton buttonWithType:UIButtonTypeCustom];

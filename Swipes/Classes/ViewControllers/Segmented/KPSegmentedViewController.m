@@ -207,6 +207,7 @@
     CGRectSetSize(button.frame, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
     [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BACKGROUND] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED] forState:UIControlStateSelected];
+    [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED] forState:UIControlStateHighlighted];
     button.adjustsImageWhenHighlighted = NO;
     UIImage *normalImage;
     CGFloat imageInset = SEGMENT_BORDER_RADIUS-COLOR_SEPERATOR_HEIGHT;
@@ -231,7 +232,12 @@
             highlightedImage = [UIImage imageNamed:@"done-highlighted"];
             break;
     }
-    button.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+    UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height-3, button.frame.size.width, 3)];
+    
+    colorView.backgroundColor = SEGMENT_SELECTED;//thisColor;
+    colorView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin);
+    [button addSubview:colorView];
+    button.imageEdgeInsets = UIEdgeInsetsMake(0, 0, COLOR_SEPERATOR_HEIGHT, 0);
     [button setImage:normalImage forState:UIControlStateNormal];
     button.imageView.animationImages = @[highlightedImage];
     button.imageView.animationDuration = 0.8;    

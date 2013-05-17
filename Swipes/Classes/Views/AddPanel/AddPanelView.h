@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "KPPickerView.h"
-#import "SLGlowingTextField.h"
 @class AddPanelView;
 @protocol AddPanelDelegate
 -(void)closeAddPanel:(AddPanelView*)addPanel;

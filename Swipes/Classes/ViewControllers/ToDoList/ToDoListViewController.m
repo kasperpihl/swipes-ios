@@ -160,10 +160,6 @@
     else return nil;
     
 }
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    
-    return nil;
-}
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     if(self.sortedItems) return [self.sortedItems count];
     return 1;
@@ -194,6 +190,8 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
     cell.cellType = self.cellType;
+    [cell showTimeline:YES];
+    [cell setDotColor:[TODOHANDLER colorForCellType:self.cellType]];
     KPToDo *toDo = [self itemForIndexPath:indexPath];
     [cell changeToDo:toDo withSelectedTags:self.filterHandler.selectedTags];
     
@@ -272,19 +270,26 @@
     }
 }
 #pragma mark - SwipeTableCell
--(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
+-(void)swipeTableViewCell:(ToDoCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
     [[self parent] show:NO controlsAnimated:YES];
+    [cell showTimeline:NO];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
     if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
     if(self.selectedRows.count > 0){
         NSArray *visibleCells = [self.tableView visibleCells];
-        for(MCSwipeTableViewCell *localCell in visibleCells){
+        for(ToDoCell *localCell in visibleCells){
             if(localCell.isSelected){
+                
                 [localCell setSelected:NO];
+                [localCell showTimeline:NO];
             }
         }
     }
+}
+-(BOOL)swipeTableViewCell:(MCSwipeTableViewCell *)cell shouldHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture{
+    if(self.swipingCell && cell != self.swipingCell) return NO;
+    else return YES;
 }
 -(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation{
     if(cell != self.swipingCell) return;
@@ -330,6 +335,16 @@
             return;
     }
     [self moveIndexSet:indexSet toCellType:targetCellType];
+}
+-(void)swipeTableViewCell:(ToDoCell *)cell slidedIntoState:(MCSwipeTableViewCellState)state{
+    NSLog(@"swiped into state:%i",state);
+    CellType targetType = self.cellType;
+    if(state != MCSwipeTableViewCellStateNone){
+        targetType = [TODOHANDLER cellTypeForCell:self.cellType state:state];
+    }
+    
+    UIColor *dotColor = [TODOHANDLER colorForCellType:targetType];
+    [cell setDotColor:dotColor];
 }
 /*  */
 -(void)deleteSelectedItems:(id)sender{
@@ -398,9 +413,10 @@
     NSArray *visibleCells = [self.tableView visibleCells];
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
     BOOL shouldBeSelected = (selectedIndexPaths.count > 0);
-    for(MCSwipeTableViewCell *localCell in visibleCells){
+    for(ToDoCell *localCell in visibleCells){
         NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
         if([self.selectedRows containsObject:indexPath]){
+            [localCell showTimeline:YES];
             if(bounce) [localCell bounceToOrigin];
             if(shouldBeSelected)[localCell setSelected:YES];
             if(![selectedIndexPaths containsObject:indexPath] && shouldBeSelected) [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
@@ -421,13 +437,15 @@
     tableView.dataSource = self;
     tableView.backgroundColor = [UIColor clearColor];
     tableView.layer.masksToBounds = NO;
-    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, TEXT_FIELD_CONTAINER_HEIGHT-COLOR_SEPERATOR_HEIGHT)];
+    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, SEARCH_BAR_DEFAULT_HEIGHT-COLOR_SEPERATOR_HEIGHT)];
     headerView.hidden = YES;
     tableView.tableHeaderView = headerView;
     
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+    footerView.backgroundColor = CELL_TIMELINE_COLOR;
+    //tableView.tableFooterView = footerView;
     
-    
-    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,-COLOR_SEPERATOR_HEIGHT, 320, TEXT_FIELD_CONTAINER_HEIGHT)];
+    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,-COLOR_SEPERATOR_HEIGHT, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
     searchBar.searchBarDelegate = self;
     searchBar.searchBarDataSource = self.filterHandler;
     searchBar.tag = SEARCH_BAR_TAG;
@@ -458,11 +476,7 @@
     headerView.tag = FAKE_HEADER_VIEW_TAG;
     [self.view addSubview:headerView];
     self.fakeHeaderView = [self.view viewWithTag:FAKE_HEADER_VIEW_TAG];
-   /* UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-COLOR_SEPERATOR_HEIGHT, self.view.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-    footerView.backgroundColor = SEGMENT_SELECTED;
-    footerView.tag = FOOTER_VIEW_TAG;*/
-    //[self.view addSubview:footerView];
-    
+
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_white_background",self.state]]];
     imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
     imageView.tag = BACKGROUND_IMAGE_VIEW_TAG;

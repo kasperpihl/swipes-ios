@@ -139,8 +139,9 @@
 		A7BDD4C717369A6900C1A97E /* schedule_image_sun@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BDD4BB17369A6900C1A97E /* schedule_image_sun@2x.png */; };
 		A7BDD4CA1736BAFE00C1A97E /* cross_button.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BDD4C81736BAFE00C1A97E /* cross_button.png */; };
 		A7BDD4CB1736BAFE00C1A97E /* cross_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BDD4C91736BAFE00C1A97E /* cross_button@2x.png */; };
-		A7E8FAFD1745184500CC2D26 /* navbar_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E8FAFC1745184500CC2D26 /* navbar_bg@2x.png */; };
-		A7E8FAFF17455AB500CC2D26 /* pressed_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E8FAFE17455AB500CC2D26 /* pressed_background@2x.png */; };
+		A7E8FB0917462F3600CC2D26 /* AKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */; };
+		A7E8FB0A17462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0617462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m */; };
+		A7E8FB0B17462F3600CC2D26 /* UIViewController+KNSemiModal.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0817462F3600CC2D26 /* UIViewController+KNSemiModal.m */; };
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
 		A7F4066517296BC700DDE644 /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066417296BC700DDE644 /* AddPanelView.m */; };
 		A7F4066B17296BF100DDE644 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066817296BF100DDE644 /* ToDoCell.m */; };
@@ -307,8 +308,13 @@
 		A7BDD4BB17369A6900C1A97E /* schedule_image_sun@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule_image_sun@2x.png"; sourceTree = "<group>"; };
 		A7BDD4C81736BAFE00C1A97E /* cross_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cross_button.png; sourceTree = "<group>"; };
 		A7BDD4C91736BAFE00C1A97E /* cross_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cross_button@2x.png"; sourceTree = "<group>"; };
-		A7E8FAFC1745184500CC2D26 /* navbar_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar_bg@2x.png"; sourceTree = "<group>"; };
-		A7E8FAFE17455AB500CC2D26 /* pressed_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pressed_background@2x.png"; sourceTree = "<group>"; };
+		A7E8FB001746276900CC2D26 /* DesignSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DesignSettings.h; sourceTree = "<group>"; };
+		A7E8FB0217462F3600CC2D26 /* AKSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKSegmentedControl.h; sourceTree = "<group>"; };
+		A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKSegmentedControl.m; sourceTree = "<group>"; };
+		A7E8FB0517462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+YMOptionsAndDefaults.h"; sourceTree = "<group>"; };
+		A7E8FB0617462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+YMOptionsAndDefaults.m"; sourceTree = "<group>"; };
+		A7E8FB0717462F3600CC2D26 /* UIViewController+KNSemiModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+KNSemiModal.h"; sourceTree = "<group>"; };
+		A7E8FB0817462F3600CC2D26 /* UIViewController+KNSemiModal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+KNSemiModal.m"; sourceTree = "<group>"; };
 		A7F4065F17294ECE00DDE644 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		A7F4066017294ECE00DDE644 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		A7F4066317296BC700DDE644 /* AddPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPanelView.h; sourceTree = "<group>"; };
@@ -470,6 +476,7 @@
 		A781283E17294C56002226C8 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A7E8FB001746276900CC2D26 /* DesignSettings.h */,
 				A781284517294C56002226C8 /* Includes.h */,
 				A781283F17294C56002226C8 /* Communicators */,
 				A7F4066E17296C0500DDE644 /* Handlers */,
@@ -574,6 +581,8 @@
 		A781287017294C56002226C8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A7E8FB0117462F3600CC2D26 /* KPSegmentedControl */,
+				A7E8FB0417462F3600CC2D26 /* KPSemiModal */,
 				A75700311739B59D00CDB4F3 /* Alert */,
 				A757002D1739AE9400CDB4F3 /* Popup */,
 				A7F4066217296BC700DDE644 /* AddPanel */,
@@ -747,8 +756,6 @@
 		A79DB3F21735892C007A48E2 /* Navbar */ = {
 			isa = PBXGroup;
 			children = (
-				A7E8FAFE17455AB500CC2D26 /* pressed_background@2x.png */,
-				A7E8FAFC1745184500CC2D26 /* navbar_bg@2x.png */,
 				A79DB3F31735892C007A48E2 /* done-highlighted.png */,
 				A79DB3F41735892C007A48E2 /* done-highlighted@2x.png */,
 				A79DB3F71735892C007A48E2 /* done.png */,
@@ -807,6 +814,26 @@
 				A7BDD4BB17369A6900C1A97E /* schedule_image_sun@2x.png */,
 			);
 			path = SchedulePopup;
+			sourceTree = "<group>";
+		};
+		A7E8FB0117462F3600CC2D26 /* KPSegmentedControl */ = {
+			isa = PBXGroup;
+			children = (
+				A7E8FB0217462F3600CC2D26 /* AKSegmentedControl.h */,
+				A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */,
+			);
+			path = KPSegmentedControl;
+			sourceTree = "<group>";
+		};
+		A7E8FB0417462F3600CC2D26 /* KPSemiModal */ = {
+			isa = PBXGroup;
+			children = (
+				A7E8FB0517462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.h */,
+				A7E8FB0617462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m */,
+				A7E8FB0717462F3600CC2D26 /* UIViewController+KNSemiModal.h */,
+				A7E8FB0817462F3600CC2D26 /* UIViewController+KNSemiModal.m */,
+			);
+			path = KPSemiModal;
 			sourceTree = "<group>";
 		};
 		A7F4066217296BC700DDE644 /* AddPanel */ = {
@@ -970,8 +997,6 @@
 				A757002A1738FA0100CDB4F3 /* left_arrow@2x.png in Resources */,
 				A757002B1738FA0100CDB4F3 /* right_arrow.png in Resources */,
 				A757002C1738FA0100CDB4F3 /* right_arrow@2x.png in Resources */,
-				A7E8FAFD1745184500CC2D26 /* navbar_bg@2x.png in Resources */,
-				A7E8FAFF17455AB500CC2D26 /* pressed_background@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1065,6 +1090,9 @@
 				A7B2609A17346EDC000BADDE /* EMHintsView.m in Sources */,
 				A75700301739AEB500CDB4F3 /* KPPopup.m in Sources */,
 				A75700341739B5B200CDB4F3 /* KPAlert.m in Sources */,
+				A7E8FB0917462F3600CC2D26 /* AKSegmentedControl.m in Sources */,
+				A7E8FB0A17462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m in Sources */,
+				A7E8FB0B17462F3600CC2D26 /* UIViewController+KNSemiModal.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
