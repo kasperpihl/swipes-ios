@@ -17,9 +17,12 @@
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
 #define SEARCH_BAR_TAG 503
+
 #define SECTION_HEADER_HEIGHT 30
 #define FAKE_HEADER_VIEW_TAG 505
-#define SECTION_HEADER_X 19
+#define MENU_TEXT_TAG 506
+#define COLORED_MENU_TEXT_TAG 507
+#define SECTION_HEADER_X 15
 #define CONTENT_INSET_BOTTOM 5// 100
 @interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate>
 
@@ -30,7 +33,10 @@
 @property (nonatomic) NSMutableArray *selectedRows;
 @property (nonatomic) CGPoint lastOffset;
 @property (nonatomic) NSTimeInterval lastOffsetCapture;
+@property (nonatomic,weak) IBOutlet UIView *menuText;
+@property (nonatomic,weak) IBOutlet UIView *coloredMenuText;
 @property (nonatomic,weak) UIView *fakeHeaderView;
+@property (nonatomic) BOOL isColored;
 
 @property (nonatomic,strong) NSMutableDictionary *stateDictionary;
 @end
@@ -81,6 +87,9 @@
     }
     [self sortItems];
     [self.tableView reloadData];
+    NSLog(@"updating:%i",self.items.count);
+    if([self.state isEqualToString:@"today"] && self.items.count == 0) [self changeToColored:YES animated:NO];
+    
 }
 -(NSMutableArray *)selectedRows{
     if(!_selectedRows) _selectedRows = [NSMutableArray array];
@@ -257,16 +266,24 @@
     }
     if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
         self.fakeHeaderView.hidden = !(scrollView.contentOffset.y > self.tableView.tableHeaderView.frame.size.height);
+         
         if (scrollView.contentOffset.y < self.searchBar.frame.size.height) {
+           
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, COLOR_SEPERATOR_HEIGHT, 0);
         } else {
+            
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, COLOR_SEPERATOR_HEIGHT, 0);
         }
-        
-        CGRect searchBarFrame = self.searchBar.frame;
-        searchBarFrame.origin.y = MIN(scrollView.contentOffset.y, 0)-COLOR_SEPERATOR_HEIGHT;
+        //searchBarFrame.origin.y = MIN(scrollView.contentOffset.y, 0)-COLOR_SEPERATOR_HEIGHT;
         //NSLog(@"%@,scrollView:%f",self.searchBar,searchBarFrame.origin.y);
-        self.searchBar.frame = searchBarFrame;
+        if(scrollView.contentOffset.y <= 0){
+            NSLog(@"scrollView.contentOffset.y:%f",scrollView.contentOffset.y);
+            CGRectSetSize(self.searchBar.frame, self.searchBar.frame.size.width, self.tableView.tableHeaderView.frame.size.height-scrollView.contentOffset.y+COLOR_SEPERATOR_HEIGHT);
+            CGRect searchBarFrame = self.searchBar.frame;
+            searchBarFrame.origin.y = scrollView.contentOffset.y-COLOR_SEPERATOR_HEIGHT;
+            
+            self.searchBar.frame = searchBarFrame;
+        }
     }
 }
 #pragma mark - SwipeTableCell
@@ -378,6 +395,7 @@
         [self.items removeObjectsAtIndexes:indexSet];
         [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
     }
+    if([self.state isEqualToString:@"today"] && self.items.count == 0) [self changeToColored:YES animated:YES];
     [self.selectedRows removeAllObjects];
     
 }
@@ -464,7 +482,36 @@
     [self loadItemsAndUpdate:YES];
 }
 #pragma mark - UIViewController stuff
-
+-(void)changeToColored:(BOOL)colored animated:(BOOL)animated{
+    NSString *imageString = colored ? @"today_color_background" : @"today_white_background";
+    UIImage *fadeToImage = [UIImage imageNamed:imageString];
+    if(colored){
+        self.coloredMenuText.alpha = 0;
+        self.coloredMenuText.hidden = NO;
+        self.menuText.hidden = YES;
+        [UIView transitionWithView:self.backgroundImage
+                          duration:0.8f
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{
+                            self.backgroundImage.image = fadeToImage;
+                        } completion:^(BOOL finished) {
+                            
+                        }];
+        
+        [UIView animateWithDuration:1.5 animations:^{
+            self.coloredMenuText.alpha = 1;
+        } completion:^(BOOL finished) {
+            self.menuText.hidden = YES;
+        }];
+    }
+    else{
+        self.backgroundImage.image = fadeToImage;
+        self.menuText.hidden = NO;
+        self.menuText.alpha = 1;
+        self.coloredMenuText.hidden = YES;
+    }
+    
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -483,6 +530,30 @@
     imageView.tag = BACKGROUND_IMAGE_VIEW_TAG;
     [self.view addSubview:imageView];
     self.backgroundImage = (UIImageView*)[self.view viewWithTag:BACKGROUND_IMAGE_VIEW_TAG];
+    
+    
+    
+    UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.frame.origin.y+imageView.frame.size.height, self.view.frame.size.width, TABLE_MENU_TEXT_HEIGHT)];
+    menuText.backgroundColor = CLEAR;
+    menuText.font = TABLE_MENU_FONT;
+    menuText.text = [self.state capitalizedString];
+    menuText.textAlignment = UITextAlignmentCenter;
+    menuText.textColor = TABLE_MENU_TEXT;
+    menuText.tag = MENU_TEXT_TAG;
+    [self.view addSubview:menuText];
+    self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];
+    
+    UILabel *coloredMenuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.frame.origin.y+imageView.frame.size.height, self.view.frame.size.width, TABLE_MENU_TEXT_HEIGHT)];
+    coloredMenuText.backgroundColor = CLEAR;
+    coloredMenuText.tag = COLORED_MENU_TEXT_TAG;
+    coloredMenuText.font = TABLE_MENU_FONT;
+    coloredMenuText.text = [self.state capitalizedString];
+    coloredMenuText.textAlignment = UITextAlignmentCenter;
+    coloredMenuText.hidden = YES;
+    coloredMenuText.text = @"Well Swiped!";
+    coloredMenuText.textColor = TABLE_MENU_COLORED_TEXT;
+    [self.view addSubview:coloredMenuText];
+    self.coloredMenuText = [self.view viewWithTag:COLORED_MENU_TEXT_TAG];
     
     notify(@"updated", loadItems);
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];

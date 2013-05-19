@@ -13,6 +13,7 @@
 @property (nonatomic,weak) IBOutlet KPReorderTableView *tableView;
 @property (nonatomic,strong) NSIndexPath *dragRow;
 @property (nonatomic,strong) KPToDo *draggingObject;
+
 @end
 @implementation TodayViewController
 #pragma mark - Dragable delegate

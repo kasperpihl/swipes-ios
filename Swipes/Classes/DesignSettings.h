@@ -7,31 +7,42 @@
 //
 
 /* Main colors */
-#define TODAY_COLOR                     color(214,196,45,1)
+#define TODAY_COLOR                     color(214,196,45,1)//color(253,230,73,1)
 #define DONE_COLOR                      color(63,186,141,1)
 #define SCHEDULE_COLOR                  color(252,128,109,1)
 #define SWIPES_COLOR                    TODAY_COLOR
 
-/* Theme colors  */
+/* Segmented controller  */
 #define SEGMENT_BACKGROUND              color(30,34,40,1) // Color for segment button that is not selected
 #define SEGMENT_SELECTED                color(44,50,59,1) // Color for selected segment
 #define SEGMENT_BORDER_COLOR            SEGMENT_SELECTED//gray(61,1)        // Color for the border between segments
 #define TEXTFIELD_BACKGROUND            color(25,29,35,1) // Background for text field ie. the drawer
+
+
+/* Table View */
 #define TABLE_BACKGROUND                SEGMENT_BACKGROUND//color(44,50,59,1) // Background for the tableview's
 #define TABLE_CELL_BACKGROUND           color(59,67,79,1) // Background for task table cells
- 
 #define TABLE_CELL_SEPERATOR_COLOR      SEGMENT_SELECTED // Seperator between task cells
 #define CELL_TIMELINE_COLOR             TABLE_CELL_SEPERATOR_COLOR//color(189,189,190,1)
-
-
-/* Text Colors */
 #define SECTION_HEADER_COLOR            color(98,105,114,1)
 #define CELL_TITLE_COLOR                color(177,180,185,1)
 #define CELL_TAG_COLOR                  gray(230,1)
+#define TABLE_MENU_TEXT                 TABLE_CELL_BACKGROUND
+#define TABLE_MENU_COLORED_TEXT         color(214,196,45,.7)
+#define TABLE_MENU_TEXT_HEIGHT          40
+#define TABLE_MENU_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:20]
+#define SECTION_HEADER_BACKGROUND       SEGMENT_BACKGROUND
 
+/* Text Colors */
 #define TEXT_FIELD_COLOR                gray(230,1)
 #define TITLE_LABEL_COLOR               gray(102,1)
 #define BUTTON_COLOR                    gray(255,1)
+
+
+
+#define TAG_COLOR_BACKGROUND            SEGMENT_SELECTED
+
+
 
 /* Add tag panel */
 #define MANAGE_TAGS_BACKGROUND          TEXTFIELD_BACKGROUND
@@ -83,9 +94,7 @@
 #define TABLE_CELL_SELECTED_TITLE_COLOR TABLE_CELL_BACKGROUND
 
 
-#define TAG_COLOR_BACKGROUND            SEGMENT_SELECTED
 
-#define SECTION_HEADER_BACKGROUND       SEGMENT_BACKGROUND
 
 
 

@@ -118,6 +118,7 @@
 		A79DB42317358C33007A48E2 /* done_white_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB41D17358C33007A48E2 /* done_white_background@2x.png */; };
 		A79DB42517358C33007A48E2 /* schedule_white_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB41F17358C33007A48E2 /* schedule_white_background@2x.png */; };
 		A79DB42717358C33007A48E2 /* today_white_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB42117358C33007A48E2 /* today_white_background@2x.png */; };
+		A7ABF4271746B0EF00DE033F /* today_color_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ABF4261746B0EF00DE033F /* today_color_background@2x.png */; };
 		A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B260921733D1FD000BADDE /* NotificationHandler.m */; };
 		A7B2609917346EDC000BADDE /* EMHint.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B2609617346EDC000BADDE /* EMHint.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A7B2609A17346EDC000BADDE /* EMHintsView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B2609817346EDC000BADDE /* EMHintsView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -284,6 +285,7 @@
 		A79DB41D17358C33007A48E2 /* done_white_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "done_white_background@2x.png"; sourceTree = "<group>"; };
 		A79DB41F17358C33007A48E2 /* schedule_white_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule_white_background@2x.png"; sourceTree = "<group>"; };
 		A79DB42117358C33007A48E2 /* today_white_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today_white_background@2x.png"; sourceTree = "<group>"; };
+		A7ABF4261746B0EF00DE033F /* today_color_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today_color_background@2x.png"; sourceTree = "<group>"; };
 		A7B260911733D1FC000BADDE /* NotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationHandler.h; sourceTree = "<group>"; };
 		A7B260921733D1FD000BADDE /* NotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationHandler.m; sourceTree = "<group>"; };
 		A7B2609517346EDC000BADDE /* EMHint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMHint.h; sourceTree = "<group>"; };
@@ -775,6 +777,7 @@
 		A79DB41B17358C33007A48E2 /* Backgrounds */ = {
 			isa = PBXGroup;
 			children = (
+				A7ABF4261746B0EF00DE033F /* today_color_background@2x.png */,
 				A79DB41D17358C33007A48E2 /* done_white_background@2x.png */,
 				A79DB41F17358C33007A48E2 /* schedule_white_background@2x.png */,
 				A79DB42117358C33007A48E2 /* today_white_background@2x.png */,
@@ -997,6 +1000,7 @@
 				A757002A1738FA0100CDB4F3 /* left_arrow@2x.png in Resources */,
 				A757002B1738FA0100CDB4F3 /* right_arrow.png in Resources */,
 				A757002C1738FA0100CDB4F3 /* right_arrow@2x.png in Resources */,
+				A7ABF4271746B0EF00DE033F /* today_color_background@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1150,6 +1154,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Kasper Pihl Tornoee";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kasper Pihl Tornoee";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
@@ -1195,6 +1201,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = Swipes;
+				PROVISIONING_PROFILE = "ECCB6C97-9173-42FB-B484-9299E402F89D";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ECCB6C97-9173-42FB-B484-9299E402F89D";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
