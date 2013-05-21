@@ -12,28 +12,27 @@
 @end
 
 @implementation ScheduleViewController
--(void)loadItemsAndUpdate:(BOOL)update{
+-(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     NSDate *startDate = [[NSDate dateTomorrow] dateAtStartOfDay];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule > %@) OR (state == %@ AND schedule = nil)",@"scheduled", startDate,@"scheduled"];
-    self.items = [[KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:predicate] mutableCopy];
-    if(update) [self update];
+    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule > %@)",@"scheduled", startDate];
+    NSPredicate *unspecifiedPredicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule = nil)",@"scheduled"];
+    NSArray *scheduleArray = [KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:schedulePredicate];
+    NSArray *unspecifiedArray = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:unspecifiedPredicate];
+    NSArray *totalArray = [scheduleArray arrayByAddingObjectsFromArray:unspecifiedArray];
+    return totalArray;
 }
--(void)sortItems{
-    self.sortedItems = [NSMutableArray array];
-    self.titleArray = [NSMutableArray array];
-    NSMutableArray *unspecified = [NSMutableArray array];
-    for(KPToDo *toDo in self.items){
-        NSDate *toDoDate = toDo.schedule;
-        if(!toDoDate) [unspecified addObject:toDo];
-        else if(toDoDate.isTomorrow) [self addItem:toDo withTitle:@"Tomorrow"];
-        else{
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"EEEE, dd-MM"];
-            NSString *strDate = [dateFormatter stringFromDate:toDoDate];
-            [self addItem:toDo withTitle:strDate];
-        }
+-(NSString *)itemHandler:(ItemHandler *)handler titleForItem:(KPToDo *)item{
+    NSString *title;
+    NSDate *toDoDate = item.schedule;
+    if(!toDoDate) title = @"Unspecified";
+    else if(toDoDate.isTomorrow) title = @"Tomorrow";
+    else{
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"EEEE, dd-MM"];
+        NSString *strDate = [dateFormatter stringFromDate:toDoDate];
+        title = strDate;
     }
-    if(unspecified.count > 0)[self addItems:unspecified withTitle:@"Unspecified"];
+    return title;
 }
 - (void)viewDidLoad
 {

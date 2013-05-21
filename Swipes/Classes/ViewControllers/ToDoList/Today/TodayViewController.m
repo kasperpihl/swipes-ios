@@ -12,50 +12,37 @@
 @interface TodayViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 @property (nonatomic,weak) IBOutlet KPReorderTableView *tableView;
 @property (nonatomic,strong) NSIndexPath *dragRow;
-@property (nonatomic,strong) KPToDo *draggingObject;
+
 
 @end
 @implementation TodayViewController
 #pragma mark - Dragable delegate
--(void)loadItemsAndUpdate:(BOOL)update{
+-(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber{
+    [self changeToColored:(itemNumber == 0)];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:itemNumber];
+}
+-(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     NSDate *endDate = [[NSDate dateTomorrow] dateAtStartOfDay];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule < %@)",@"scheduled", endDate];
-    self.items = [[KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate] mutableCopy];
-
-    if(update) [self update];
+    NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
+    return results;
 }
 - (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
 	ToDoCell *cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [self readyCell:cell];
-    [cell setSelected:NO animated:NO];
     [self tableView:self.tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
+    [cell showTimeline:NO];
 	return cell;
 }
 - (void)dragTableViewController:(KPReorderTableView *)dragTableViewController didBeginDraggingAtRow:(NSIndexPath *)dragRow{
     [[self parent] show:NO controlsAnimated:YES];
     self.dragRow = dragRow;
-    self.draggingObject = [self.items objectAtIndex:dragRow.row];
     [self deselectAllRows:self];
 }
--(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
-    KPToDo *itemToMove = [self.items objectAtIndex:sourceIndexPath.row];
-	[self.items removeObjectAtIndex:sourceIndexPath.row];
-	[self.items insertObject:itemToMove atIndex:destinationIndexPath.row];
-    // TODO: Fix this items
-}
 -(void)dragTableViewController:(KPReorderTableView *)dragTableViewController didEndDraggingToRow:(NSIndexPath *)destinationIndexPath{
-    NSInteger targetRow;
+    [self.itemHandler moveItem:self.dragRow toIndexPath:destinationIndexPath];
     self.tableView.allowsMultipleSelection = YES;
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
-    if(destinationIndexPath.row > self.dragRow.row) targetRow = destinationIndexPath.row-1;
-    else if(destinationIndexPath.row < self.dragRow.row) targetRow = destinationIndexPath.row+1;
-    else targetRow = destinationIndexPath.row;
-    KPToDo *replacingToDoObject = [self.items objectAtIndex:targetRow];
-    if(targetRow != destinationIndexPath.row){
-        [self.draggingObject changeToOrder:replacingToDoObject.orderValue];
-        [self update];
-    }
-    self.draggingObject = nil;
 }
 
 #pragma mark - UIViewControllerClasses

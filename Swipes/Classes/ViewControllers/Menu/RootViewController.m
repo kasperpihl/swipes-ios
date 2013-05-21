@@ -38,8 +38,10 @@ static RootViewController *sharedObject;
     if(!self.menuViewController){
         [self setNavigationBarHidden:YES];
         ScheduleViewController *vc1 = [[ScheduleViewController alloc] init];
+        
         TodayViewController *vc2 = [[TodayViewController alloc] init];
         DoneViewController *vc3 = [[DoneViewController alloc] init];
+        vc1.view.autoresizingMask = vc2.view.autoresizingMask = vc3.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3] titles:@[@"Schedule",@"Today",@"Done"]];
         self.menuViewController = menuViewController;
         self.viewControllers = @[menuViewController];
@@ -57,6 +59,7 @@ static RootViewController *sharedObject;
 {
     [super viewDidLoad];
     [self setupAppearance];
+    self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
     [self setupMenu];
     

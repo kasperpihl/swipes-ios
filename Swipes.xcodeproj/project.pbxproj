@@ -34,7 +34,7 @@
 		A757002C1738FA0100CDB4F3 /* right_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A75700281738FA0100CDB4F3 /* right_arrow@2x.png */; };
 		A75700301739AEB500CDB4F3 /* KPPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = A757002F1739AEB500CDB4F3 /* KPPopup.m */; };
 		A75700341739B5B200CDB4F3 /* KPAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A75700331739B5B200CDB4F3 /* KPAlert.m */; };
-		A75DB210173119FE00FA256B /* FilterHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A75DB20F173119FE00FA256B /* FilterHandler.m */; };
+		A75DB210173119FE00FA256B /* ItemHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A75DB20F173119FE00FA256B /* ItemHandler.m */; };
 		A75DB2181732FE1A00FA256B /* KPSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A75DB2171732FE1A00FA256B /* KPSearchBar.m */; };
 		A761B5A316EB59320095A9A8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A216EB59320095A9A8 /* CoreData.framework */; };
 		A761B5A516EB59370095A9A8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A416EB59370095A9A8 /* SystemConfiguration.framework */; };
@@ -169,8 +169,8 @@
 		A757002F1739AEB500CDB4F3 /* KPPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPPopup.m; path = KPPopup/KPPopup.m; sourceTree = "<group>"; };
 		A75700321739B5B200CDB4F3 /* KPAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPAlert.h; path = Alert/KPAlert.h; sourceTree = "<group>"; };
 		A75700331739B5B200CDB4F3 /* KPAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPAlert.m; path = Alert/KPAlert.m; sourceTree = "<group>"; };
-		A75DB20E173119FE00FA256B /* FilterHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterHandler.h; sourceTree = "<group>"; };
-		A75DB20F173119FE00FA256B /* FilterHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterHandler.m; sourceTree = "<group>"; };
+		A75DB20E173119FE00FA256B /* ItemHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemHandler.h; sourceTree = "<group>"; };
+		A75DB20F173119FE00FA256B /* ItemHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemHandler.m; sourceTree = "<group>"; };
 		A75DB2161732FE1A00FA256B /* KPSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPSearchBar.h; path = Swipes/Classes/Views/FilterMenu/KPSearchBar.h; sourceTree = SOURCE_ROOT; };
 		A75DB2171732FE1A00FA256B /* KPSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPSearchBar.m; path = Swipes/Classes/Views/FilterMenu/KPSearchBar.m; sourceTree = SOURCE_ROOT; };
 		A761B5A216EB59320095A9A8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -870,8 +870,8 @@
 				A7F40675172A785C00DDE644 /* ToDoHandler.m */,
 				A7680D24172C5E9100BCB2D9 /* TagHandler.h */,
 				A7680D25172C5E9100BCB2D9 /* TagHandler.m */,
-				A75DB20E173119FE00FA256B /* FilterHandler.h */,
-				A75DB20F173119FE00FA256B /* FilterHandler.m */,
+				A75DB20E173119FE00FA256B /* ItemHandler.h */,
+				A75DB20F173119FE00FA256B /* ItemHandler.m */,
 				A7B260911733D1FC000BADDE /* NotificationHandler.h */,
 				A7B260921733D1FD000BADDE /* NotificationHandler.m */,
 			);
@@ -1087,7 +1087,7 @@
 				A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */,
 				A7680D2F172C610B00BCB2D9 /* KPTagList.m in Sources */,
 				A75207FA1730F5F700F1B4F7 /* ToDoViewController.m in Sources */,
-				A75DB210173119FE00FA256B /* FilterHandler.m in Sources */,
+				A75DB210173119FE00FA256B /* ItemHandler.m in Sources */,
 				A75DB2181732FE1A00FA256B /* KPSearchBar.m in Sources */,
 				A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */,
 				A7B2609917346EDC000BADDE /* EMHint.m in Sources */,

@@ -3,8 +3,8 @@
 
 #define TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING 100
 #define TAG_FOR_BELOW_SHADOW_VIEW_WHEN_DRAGGING 200
-#define CELL_WIDTH_SCALE 1.02
-#define CELL_HEIGHT_SCALE 1.05
+#define CELL_WIDTH_SCALE 1.03
+#define CELL_HEIGHT_SCALE 1.07
 #define CGRectSetGrowth(r) r = CGRectMake(r.origin.x - (CELL_GROW_WIDTH/2),r.origin.y - (CELL_GROW_HEIGHT/2),r.size.width + CELL_GROW_WIDTH,r.size.height + CELL_GROW_HEIGHT)
 @interface KPReorderTableView ()
 
@@ -234,12 +234,6 @@ typedef enum {
         CGFloat widthScale = CELL_WIDTH_SCALE;
         CGFloat heightScale = CELL_HEIGHT_SCALE;
         self.draggedCell.transform = CGAffineTransformMakeScale(widthScale, heightScale);
-        /*CGRectSetGrowth(self.draggedCell.frame);
-        UIView *aboveShadowView = [self.draggedCell viewWithTag:TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING];
-        //CGRectSetGrowth(aboveShadowView.frame);
-        UIView *belowShadowView = [self.draggedCell viewWithTag:TAG_FOR_BELOW_SHADOW_VIEW_WHEN_DRAGGING];
-        //CGRectSetGrowth(belowShadowView.frame);*/
-        
         
 	} completion:^(BOOL finished) {
 		if (finished) {
@@ -785,7 +779,6 @@ typedef enum {
 
 	if (selectedCell.selectedBackgroundView == nil)
 		return nil;
-    
     selectedCell.selectedBackgroundView.frame = selectedCell.frame;
 	CGFloat heightOfViews = 10; // make it enough space to show whole shadow
 	CGRect shadowPathFrame = selectedCell.selectedBackgroundView.frame;
@@ -845,7 +838,7 @@ typedef enum {
 }
 
 - (void)dragTableViewController:(KPReorderTableView *)dragTableViewController hideDraggableIndicatorsOfCell:(UITableViewCell *)cell {
-	UIView *aboveShadowView = [cell viewWithTag:TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING];
+    UIView *aboveShadowView = [cell viewWithTag:TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING];
 	aboveShadowView.alpha = 0;
 	
 	UIView *belowShadowView = [cell viewWithTag:TAG_FOR_BELOW_SHADOW_VIEW_WHEN_DRAGGING];
@@ -853,7 +846,7 @@ typedef enum {
 }
 
 - (void)dragTableViewController:(KPReorderTableView *)dragTableViewController removeDraggableIndicatorsFromCell:(UITableViewCell *)cell {
-	UIView *aboveShadowView = [cell viewWithTag:TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING];
+    UIView *aboveShadowView = [cell viewWithTag:TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING];
 	[aboveShadowView removeFromSuperview];
 	
 	UIView *belowShadowView = [cell viewWithTag:TAG_FOR_BELOW_SHADOW_VIEW_WHEN_DRAGGING];

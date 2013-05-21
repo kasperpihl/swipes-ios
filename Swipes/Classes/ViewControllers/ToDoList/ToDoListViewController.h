@@ -11,27 +11,18 @@
 #import "ToDoCell.h"
 #import "NSDate-Utilities.h"
 #import "KPSegmentedViewController.h"
-#import "FilterHandler.h"
-@interface ToDoListViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
-@property (nonatomic,strong) NSMutableArray *items;
+#import "ItemHandler.h"
+@interface ToDoListViewController : UIViewController <UITableViewDelegate,ItemHandlerDelegate>
 @property (nonatomic,weak) IBOutlet UIImageView *backgroundImage;
 @property (nonatomic,weak) IBOutlet UILabel *backgroundLabel;
-@property (nonatomic,strong) FilterHandler *filterHandler;
-@property (nonatomic,strong) NSMutableArray *titleArray;
-@property (nonatomic,strong) NSMutableArray *sortedItems;
+@property (nonatomic,strong) ItemHandler *itemHandler;
 @property (nonatomic,strong) NSString *state;
 @property (nonatomic,weak) IBOutlet UITableView *tableView;
 -(KPSegmentedViewController *)parent;
 -(ToDoCell*)readyCell:(ToDoCell*)cell;
--(void)update;
--(void)updateWithoutLoading;
--(void)loadItemsAndUpdate:(BOOL)update;
--(void)sortItems;
 -(void)deselectAllRows:(id)sender;
 -(void)deleteSelectedItems:(id)sender;
 -(void)prepareTableView:(UITableView*)tableView;
 -(NSArray*)selectedItems;
--(KPToDo*)itemForIndexPath:(NSIndexPath*)indexPath;
--(void)addItem:(KPToDo*)toDo withTitle:(NSString*)title;
--(void)addItems:(NSMutableArray*)items withTitle:(NSString*)title;
+-(void)changeToColored:(BOOL)colored;
 @end

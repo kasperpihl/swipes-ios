@@ -16,7 +16,7 @@
 #import "UtilityClass.h"
 #import "AKSegmentedControl.h"
 #import "KPAddTagPanel.h"
-#import "FilterHandler.h"
+#import "ItemHandler.h"
 #import "KPAlert.h"
 
 #import "UIViewController+KNSemiModal.h"
@@ -29,7 +29,7 @@
 #define SEGMENT_BORDER_RADIUS 0
 #define TODAY_EXTRA_INSET 3
 #define SEGMENT_BORDER_WIDTH 0
-#define SEGMENT_HEIGHT (44)
+#define SEGMENT_HEIGHT 44
 #define INTERESTED_SEGMENT_RECT CGRectMake(0,0,(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),SEGMENT_HEIGHT)
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
@@ -86,13 +86,13 @@
 -(void)tagList:(KPTagList *)tagList selectedTag:(NSString *)tag{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
     [TAGHANDLER addTags:@[tag] andRemoveTags:nil fromToDos:selectedItems];
-    [[self currentViewController] updateWithoutLoading];
+    [[self currentViewController] didUpdateItemHandler:nil];
     [self updateBackground];
 }
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString *)tag{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
     [TAGHANDLER addTags:nil andRemoveTags:@[tag] fromToDos:selectedItems];
-    [[self currentViewController] updateWithoutLoading];
+    [[self currentViewController] didUpdateItemHandler:nil];
     [self updateBackground];
 }
 #pragma mark - AddPanelDelegate
@@ -163,8 +163,7 @@
     }];
 }
 -(void)didAddItem:(NSString *)item{
-    [TODOHANDLER addItem:item];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"updated" object:self];
+    [[self currentViewController].itemHandler addItem:item];
     [self updateBackground];
 }
 - (NSMutableArray *)viewControllers {
@@ -307,6 +306,8 @@
 	if (!self.hasAppeared) {
         self.hasAppeared = YES;
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, SEGMENT_HEIGHT, 320, self.view.bounds.size.height-SEGMENT_HEIGHT)];
+        self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+        contentView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         contentView.tag = CONTENT_VIEW_TAG;
         [self.view addSubview:contentView];
         self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
@@ -318,7 +319,7 @@
         self.currentSelectedIndex = DEFAULT_SELECTED_INDEX;
         [self addChildViewController:currentViewController];
         
-        currentViewController.view.frame = self.view.frame;
+        currentViewController.view.frame = self.contentView.bounds;
         [self.contentView addSubview:currentViewController.view];
         [currentViewController didMoveToParentViewController:self];
     }

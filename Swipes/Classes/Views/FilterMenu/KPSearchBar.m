@@ -78,7 +78,7 @@
         UIButton *filterButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [filterButton addTarget:self action:@selector(pressedFilter:) forControlEvents:UIControlEventTouchUpInside];
         filterButton.tag = FILTER_BUTTON_TAG;
-        filterButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
+        filterButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         filterButton.frame = CGRectMake(self.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
         [filterButton setImage:[UIImage imageNamed:@"filter_button"] forState:UIControlStateNormal];
         //[filterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_COLOR] forState:UIControlStateNormal];
@@ -143,7 +143,7 @@
         searchField.borderStyle = UITextBorderStyleNone;
         searchField.textColor = TEXT_FIELD_COLOR;
         [searchField setBackground:[[UIImage alloc] init]];
-        [searchField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];
+        //[searchField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];
         searchField.leftView = nil;
         
 

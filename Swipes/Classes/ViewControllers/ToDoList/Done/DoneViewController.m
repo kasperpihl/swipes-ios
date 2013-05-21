@@ -12,33 +12,30 @@
 @end
 
 @implementation DoneViewController
--(void)loadItemsAndUpdate:(BOOL)update{
+-(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     NSDate *startDate = [[NSDate date] dateAtStartOfDay];
     if(self.hasAskedForMore) startDate = [NSDate dateWithDaysBeforeNow:365];
     NSDate *endDate = [[NSDate dateTomorrow] dateAtStartOfDay];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@) AND (completionDate >= %@) AND (completionDate < %@)",@"done", startDate, endDate];
-    self.items = [[KPToDo MR_findAllSortedBy:@"completionDate" ascending:NO withPredicate:predicate] mutableCopy];
-    if(update) [self update];
+    return [KPToDo MR_findAllSortedBy:@"completionDate" ascending:NO withPredicate:predicate];
 }
--(void)sortItems{
-    self.sortedItems = [NSMutableArray array];
-    self.titleArray = [NSMutableArray array];
-    for(KPToDo *toDo in self.items){
-        NSDate *toDoDate = toDo.completionDate;
-        if(toDoDate.isToday) [self addItem:toDo withTitle:@"Today"];
-        else if(toDoDate.isYesterday) [self addItem:toDo withTitle:@"Yesterday"];
-        else{
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            // this is imporant - we set our input date format to match our input string
-            // if format doesn't match you'll get nil from your string, so be careful
-            [dateFormatter setDateFormat:@"dd-MM-yyyy"];
-            // voila!
-            NSString *strDate = [dateFormatter stringFromDate:toDoDate];
-            [self addItem:toDo withTitle:strDate];
-        }
-        
+-(NSString *)itemHandler:(ItemHandler *)handler titleForItem:(KPToDo *)item{
+    NSString *title;
+    NSDate *toDoDate = item.completionDate;
+    if(toDoDate.isToday) title = @"Today";
+    else if(toDoDate.isYesterday) title = @"Yesterday";
+    else{
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        // this is imporant - we set our input date format to match our input string
+        // if format doesn't match you'll get nil from your string, so be careful
+        [dateFormatter setDateFormat:@"dd-MM-yyyy"];
+        // voila!
+        NSString *strDate = [dateFormatter stringFromDate:toDoDate];
+        title = strDate;
     }
+    return title;
 }
+
 #pragma mark - ViewController stuff
 - (void)viewDidLoad
 {

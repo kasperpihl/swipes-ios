@@ -118,7 +118,7 @@
         [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         [formView addSubview:textField];
         self.textField = (UITextField*)[formView viewWithTag:TEXT_FIELD_TAG];
-        [self.textField setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
+        //[self.textField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];
         [self addSubview:formView];
         
         

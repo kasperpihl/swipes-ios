@@ -52,6 +52,8 @@
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.contentView.backgroundColor = TABLE_CELL_BACKGROUND;
+        self.backgroundColor = TABLE_CELL_BACKGROUND;
+        self.selectedBackgroundView.backgroundColor = TABLE_CELL_BACKGROUND;
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X,TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
         titleLabel.tag = TITLE_LABEL_TAG;
         titleLabel.numberOfLines = 1;
@@ -72,7 +74,7 @@
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
         UIView *overlayView = [[UIView alloc] initWithFrame:self.bounds];
-        overlayView.backgroundColor = TABLE_CELL_SELECTED_BACKGROUND;
+        overlayView.backgroundColor = TABLE_CELL_BACKGROUND;
         self.selectedBackgroundView = overlayView;
         
         UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake((LABEL_X-TIMELINE_WIDTH)/2, 0, TIMELINE_WIDTH, CELL_HEIGHT)];
