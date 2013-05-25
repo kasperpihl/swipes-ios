@@ -376,13 +376,13 @@
 			name = ToDo;
 			sourceTree = "<group>";
 		};
-		A75207FB1730FB5800F1B4F7 /* FilterMenu */ = {
+		A75207FB1730FB5800F1B4F7 /* KPSearchBar */ = {
 			isa = PBXGroup;
 			children = (
 				A75DB2161732FE1A00FA256B /* KPSearchBar.h */,
 				A75DB2171732FE1A00FA256B /* KPSearchBar.m */,
 			);
-			name = FilterMenu;
+			name = KPSearchBar;
 			path = ../ViewControllers;
 			sourceTree = "<group>";
 		};
@@ -588,7 +588,7 @@
 				A75700311739B59D00CDB4F3 /* Alert */,
 				A757002D1739AE9400CDB4F3 /* Popup */,
 				A7F4066217296BC700DDE644 /* AddPanel */,
-				A75207FB1730FB5800F1B4F7 /* FilterMenu */,
+				A75207FB1730FB5800F1B4F7 /* KPSearchBar */,
 				A781287417294C56002226C8 /* MCSwipeTableViewCell */,
 				A781287717294C56002226C8 /* PickerView */,
 				A781287A17294C56002226C8 /* SchedulePopup */,
@@ -1201,8 +1201,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "ECCB6C97-9173-42FB-B484-9299E402F89D";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ECCB6C97-9173-42FB-B484-9299E402F89D";
+				PROVISIONING_PROFILE = "0709E242-E720-401E-9605-1764EE2CFC95";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0709E242-E720-401E-9605-1764EE2CFC95";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

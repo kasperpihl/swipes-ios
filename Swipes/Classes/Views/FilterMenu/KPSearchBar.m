@@ -136,7 +136,7 @@
     if(!(searchField == nil) && !self.searchField) {
         self.searchField = searchField;
         CGRectSetX(searchField.frame, 10);
-        
+        searchField.userInteractionEnabled = NO;
         CGRectSetSize(searchField.frame, self.frame.size.width-(2*searchField.frame.origin.x)-(self.frame.size.height-COLOR_SEPERATOR_HEIGHT), searchField.frame.size.height);
         searchField.font = TEXT_FIELD_FONT;
         searchField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
@@ -145,8 +145,6 @@
         [searchField setBackground:[[UIImage alloc] init]];
         //[searchField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];
         searchField.leftView = nil;
-        
-
     }
     
     

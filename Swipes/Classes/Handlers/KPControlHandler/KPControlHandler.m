@@ -88,7 +88,7 @@ typedef void (^voidBlock)(void);
         [tagButton setImage:[UIImage imageNamed:@"tagbutton"] forState:UIControlStateNormal];
         [view addSubview:tagButton];
         self.tagButton = (UIButton*)[view viewWithTag:TAG_BUTTON_TAG];
-        
+
         UIButton *shareButton = [self roundedButtonWithSize:SMALL_BUTTON_HEIGHT];
         shareButton.frame = CGRectSetPos(shareButton.frame, SHARE_BUTTON_X,view.frame.size.height);
         shareButton.tag = SHARE_BUTTON_TAG;

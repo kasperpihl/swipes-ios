@@ -26,13 +26,6 @@ static NotificationHandler *sharedObject;
         if([localNotification.fireDate compare:date] != NSOrderedSame) continue;
         if(![[localNotification.userInfo objectForKey:@"type"] isEqualToString:@"schedule"]) continue;
         [app cancelLocalNotification:localNotification];
-        if(numberOfTasks == 0){
-            return;
-        }
-        /*NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"schedule",@"type",[NSNumber numberWithInteger:numberOfTasks],@"number",nil];
-        localNotification.userInfo= infoDict;
-        localNotification.alertBody = [NSString stringWithFormat:@"You have %i tasks today",numberOfTasks];
-        return;*/
     }
     if(numberOfTasks < 1) return;
 
@@ -40,9 +33,8 @@ static NotificationHandler *sharedObject;
     localNotif.fireDate = date;
     localNotif.timeZone = [NSTimeZone defaultTimeZone];
     localNotif.alertAction = NSLocalizedString(@"View Details", nil);
-    localNotif.alertBody = [NSString stringWithFormat:@"You have %i tasks today",numberOfTasks];
+    localNotif.alertBody = [NSString stringWithFormat:@"You have %i new tasks today",numberOfTasks];
     localNotif.soundName = UILocalNotificationDefaultSoundName;
-    localNotif.applicationIconBadgeNumber = numberOfTasks;
     NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"schedule",@"type",[NSNumber numberWithInteger:numberOfTasks],@"number",nil];
     localNotif.userInfo = infoDict;
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
