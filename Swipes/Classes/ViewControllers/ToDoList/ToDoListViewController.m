@@ -13,6 +13,8 @@
 #import "SchedulePopup.h"
 #import "KPSearchBar.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIViewController+KNSemiModal.h"
+#import "ToDoViewController.h"
 #define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
@@ -94,8 +96,9 @@
 }
 
 #pragma mark - KPSearchBarDelegate
--(void)searchBar:(KPSearchBar *)searchBar pressedFilterButton:(UIButton *)filterButton{
-    searchBar.currentMode = KPSearchBarModeTags;
+-(void)searchBar:(KPSearchBar *)searchBar searchedForString:(NSString *)searchString{
+    NSLog(@"testing delegate:%@",searchString);
+    [self.itemHandler searchForString:searchString];
 }
 -(void)searchBar:(KPSearchBar *)searchBar deselectedTag:(NSString *)tag{
     [self.itemHandler deselectTag:tag];
@@ -178,8 +181,13 @@
     {
         CGPoint p = [tap locationInView:tap.view];
         NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
-        ToDoCell* cell = (ToDoCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-        cell.tag = 1336;
+        NSLog(@"index:%@",indexPath);
+        if(indexPath){
+            KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
+            ToDoViewController *viewController = [[ToDoViewController alloc] init];
+            viewController.model = toDo;
+            [self presentSemiViewController:viewController withOptions:nil];
+        }
     }
 }
 #pragma mark - UI Specific
@@ -207,6 +215,7 @@
         //The multiply by 10, / 1000 isn't really necessary.......
         CGFloat scrollSpeedNotAbs = (distance * 10) / 1000; //in pixels per millisecond
         if (scrollSpeedNotAbs > 0.5 && currentOffset.y > 0) {
+            if(self.searchBar.currentMode == KPSearchBarModeSearch) [self.searchBar resignSearchField];
             [[self parent] show:NO controlsAnimated:YES];
         }
         else if(scrollSpeedNotAbs < -0.5 /* && (currentOffset.y+self.tableView.frame.size.height) < self.tableView.contentSize.height*/){
@@ -229,7 +238,7 @@
         //searchBarFrame.origin.y = MIN(scrollView.contentOffset.y, 0)-COLOR_SEPERATOR_HEIGHT;
         //NSLog(@"%@,scrollView:%f",self.searchBar,searchBarFrame.origin.y);
         if(scrollView.contentOffset.y <= 0){
-            CGRectSetSize(self.searchBar.frame, self.searchBar.frame.size.width, self.tableView.tableHeaderView.frame.size.height-scrollView.contentOffset.y+COLOR_SEPERATOR_HEIGHT);
+            CGRectSetHeight(self.searchBar, self.tableView.tableHeaderView.frame.size.height-scrollView.contentOffset.y+COLOR_SEPERATOR_HEIGHT);
             CGRect searchBarFrame = self.searchBar.frame;
             searchBarFrame.origin.y = scrollView.contentOffset.y-COLOR_SEPERATOR_HEIGHT;
             self.searchBar.frame = searchBarFrame;

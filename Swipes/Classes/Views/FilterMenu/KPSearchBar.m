@@ -26,10 +26,11 @@
 #import "KPTagList.h"
 #import "UtilityClass.h"
 #import "ToDoHandler.h"
-@interface KPSearchBar () <KPTagDelegate>
-@property (nonatomic,weak) IBOutlet UITextField *searchField;
+@interface KPSearchBar () <KPTagDelegate,UITextFieldDelegate>
+
 @property (nonatomic,weak) IBOutlet UIView *filterView;
 @property (nonatomic,weak) IBOutlet UIButton *filterButton;
+@property (nonatomic,weak) IBOutlet UITextField *searchField;
 @property (nonatomic,weak) IBOutlet KPTagList *selectedTagListView;
 @property (nonatomic,weak) IBOutlet UIView *clearedColorSeperatorView;
 @property (nonatomic,weak) IBOutlet UIView *filterViewMiddleSeperator;
@@ -135,19 +136,38 @@
     [super layoutSubviews];
     if(!(searchField == nil) && !self.searchField) {
         self.searchField = searchField;
-        CGRectSetX(searchField.frame, 10);
-        searchField.userInteractionEnabled = NO;
-        CGRectSetSize(searchField.frame, self.frame.size.width-(2*searchField.frame.origin.x)-(self.frame.size.height-COLOR_SEPERATOR_HEIGHT), searchField.frame.size.height);
+        CGRectSetX(searchField, 10);
+        //searchField.userInteractionEnabled = NO;
+        CGRectSetSize(searchField, self.frame.size.width-(2*searchField.frame.origin.x)-(self.frame.size.height-COLOR_SEPERATOR_HEIGHT), searchField.frame.size.height);
         searchField.font = TEXT_FIELD_FONT;
-        searchField.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        searchField.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
+        searchField.returnKeyType = UIReturnKeyDone;
         searchField.borderStyle = UITextBorderStyleNone;
         searchField.textColor = TEXT_FIELD_COLOR;
+        searchField.enablesReturnKeyAutomatically = NO;
+        searchField.clearButtonMode = UITextFieldViewModeNever;
+        [searchField addTarget:self action:@selector(startedSearch:) forControlEvents:UIControlEventEditingDidBegin];
+        [searchField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
         [searchField setBackground:[[UIImage alloc] init]];
         //[searchField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];
         searchField.leftView = nil;
     }
-    
-    
+}
+-(void)resignSearchField{
+    if(self.currentMode == KPSearchBarModeSearch){
+        if(self.searchField.text.length == 0) self.currentMode = KPSearchBarModeNone;
+        else [self.searchField resignFirstResponder];
+    }
+}
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
+}
+-(void)textFieldChanged:(UITextField*)sender{
+    if([self.searchBarDelegate respondsToSelector:@selector(searchBar:searchedForString:)]) [self.searchBarDelegate searchBar:self searchedForString:sender.text];
+}
+-(void)startedSearch:(UITextField*)sender{
+    self.currentMode = KPSearchBarModeSearch;
 }
 -(void)pressedClearFilter:(UIButton*)sender{
     if([self.searchBarDelegate respondsToSelector:@selector(clearedAllFiltersForSearchBar:)]) [self.searchBarDelegate clearedAllFiltersForSearchBar:self];
@@ -155,7 +175,7 @@
 -(void)reframe{
     [self.selectedTagListView setTags:self.selectedTags andSelectedTags:self.selectedTags];
     CGFloat tagWidth = self.selectedTagListView.isEmptyList ? (self.frame.size.width-TAG_HEIGHT-DEFAULT_SPACING) : self.frame.size.width;
-    CGRectSetSize(self.tagListView.frame, tagWidth, self.tagListView.frame.size.height);
+    CGRectSetWidth(self.tagListView, tagWidth);
     [self.tagListView setTags:self.unselectedTags andSelectedTags:nil];
     
     CGFloat tempHeight = 0;
@@ -165,68 +185,68 @@
     }
     if(!self.selectedTagListView.isEmptyList) self.tagListView.hidden = self.tagListView.isEmptyList;
     else self.tagListView.hidden = NO;
-    CGRectSetY(self.tagListView.frame, tempHeight);
-    tempHeight += self.tagListView.frame.size.height;
-    tempHeight += COLOR_SEPERATOR_HEIGHT;
-    CGRectSetSize(self.filterView.frame, self.frame.size.width, tempHeight);
+    if(self.tagListView.hidden == NO){
+        CGRectSetY(self.tagListView, tempHeight);
+        tempHeight += self.tagListView.frame.size.height;
+    }
+    tempHeight += 5;
+    CGRectSetSize(self.filterView, self.frame.size.width, tempHeight);
 }
 -(void)pressedFilter:(UIButton*)sender{
-    if([self.searchBarDelegate respondsToSelector:@selector(searchBar:pressedFilterButton:)])
-        [self.searchBarDelegate searchBar:self pressedFilterButton:sender];
+    if(self.currentMode == KPSearchBarModeNone){
+        self.currentMode = KPSearchBarModeTags;
+    }
+    else if(self.currentMode == KPSearchBarModeSearch){
+        if([self.searchBarDelegate respondsToSelector:@selector(clearedAllFiltersForSearchBar:)]) [self.searchBarDelegate clearedAllFiltersForSearchBar:self];
+        self.currentMode = KPSearchBarModeNone;
+    }
 }
 -(void)setCurrentMode:(KPSearchBarMode)currentMode{
     if(currentMode != _currentMode){
+        KPSearchBarMode oldMode = _currentMode;
         _currentMode = currentMode;
         switch (currentMode) {
             case KPSearchBarModeTags:
-                NSLog(@"height:%f",self.frame.size.height);
                 [self reloadDataAndUpdate:NO];
                 [self reframeToTags];
                 //[self reframeToTags];
                 break;
             case KPSearchBarModeNone:
-                [self reframeToNone];
+                [self reframeToNoneFrom:oldMode];
+            case KPSearchBarModeSearch:
+                [self reframeToSearch];
                 break;
         }
     }
 }
--(void)reframeToNone{
+-(void)reframeToSearch{
+    [self.filterButton setImage:[UIImage imageNamed:@"cross_button"] forState:UIControlStateNormal];
+}
+-(void)reframeToNoneFrom:(KPSearchBarMode)oldMode{
     UITableView* superView = (UITableView*)self.superview;
+    if(oldMode == KPSearchBarModeSearch){
+        [self.searchField resignFirstResponder];
+        self.searchField.text = @"";
+    }
     [UIView animateWithDuration:.5f animations:^{
         self.filterView.alpha = 0;
         //CGRectSetY(self.frame, self.frame.origin.y-self.frame.size.height);
         [superView setContentOffset:CGPointMake(0, superView.tableHeaderView.frame.size.height)];
     } completion:^(BOOL finished) {
-        CGRectSetSize(self.frame, self.frame.size.width, SEARCH_BAR_DEFAULT_HEIGHT);
-        
+        CGRectSetHeight(self,SEARCH_BAR_DEFAULT_HEIGHT);
+        [self.filterButton setImage:[UIImage imageNamed:@"filter_button"] forState:UIControlStateNormal];
         self.filterView.hidden = YES;
         self.filterButton.hidden = NO;
         self.searchField.hidden = NO;
         [self resizeTableHeader];
     }];
-    /*[self.superview bringSubviewToFront:self];
-    [UIView animateWithDuration:0.5 animations:^{
-        CGRectSetY(self.filterView.frame,0-self.filterView.frame.size.height-TEXT_FIELD_CONTAINER_HEIGHT);
-        self.frame = CGRectMake(self.frame.origin.x,
-                                self.frame.origin.y,
-                                self.frame.size.width,
-                                TEXT_FIELD_CONTAINER_HEIGHT);
-        [self resizeTableHeader];
-        [(UITableView *)self.superview setContentOffset:CGPointMake(0, TEXT_FIELD_CONTAINER_HEIGHT)];
-    } completion:^(BOOL finished) {
-        self.filterButton.hidden = NO;
-        self.clearedColorSeperatorView.hidden = NO;
-        self.searchField.hidden = NO;
-        self.filterView.hidden = YES;
-    }];*/
-
 }
 -(void)resizeTableHeader{
     
     UITableView *superView = (UITableView *)self.superview;
     UIView *tableHeader = superView.tableHeaderView;
     tableHeader.frame = self.bounds;
-    CGRectSetSize(tableHeader.frame,tableHeader.frame.size.width,tableHeader.frame.size.height-COLOR_SEPERATOR_HEIGHT);
+    CGRectSetHeight(tableHeader,tableHeader.frame.size.height-COLOR_SEPERATOR_HEIGHT);
     [superView setTableHeaderView:tableHeader];
 }
 - (void)reframeTags{
@@ -252,10 +272,10 @@
                            self.frame.origin.y,
                            self.frame.size.width,
                            newHeight);
-    CGRectSetY(self.frame, self.frame.origin.y+originChange);
+    CGRectSetY(self, self.frame.origin.y+originChange);
     [UIView animateWithDuration:.5f animations:^{
         self.filterView.alpha = 1;
-        CGRectSetY(self.frame, self.frame.origin.y-originChange);
+        CGRectSetY(self, self.frame.origin.y-originChange);
         
         for (UIView *view in [(UITableView *)self.superview subviews]) {
             if ([view isKindOfClass:[self class]]) {

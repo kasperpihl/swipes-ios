@@ -7,7 +7,6 @@
 //
 
 #import "KPSegmentedViewController.h"
-#import "RootViewController.h"
 #import "KPControlHandler.h"
 #import "AddPanelView.h"
 #import "ToDoListViewController.h"
@@ -16,7 +15,6 @@
 #import "UtilityClass.h"
 #import "AKSegmentedControl.h"
 #import "KPAddTagPanel.h"
-#import "ItemHandler.h"
 #import "KPAlert.h"
 
 #import "UIViewController+KNSemiModal.h"
@@ -99,6 +97,7 @@
 -(void)pressedAdd:(id)sender{
     [self show:NO controlsAnimated:YES];
     [self changeToIndex:1];
+    [[self currentViewController].itemHandler clearAll];
     AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.navigationController.view.bounds];
     addPanel.addDelegate = self;
     self.presentedPanel = addPanel;
@@ -203,7 +202,7 @@
 }
 -(UIButton*)buttonForSegment:(KPSegmentButtons)controlButton{
     UIButton *button = [[UIButton alloc] init];
-    CGRectSetSize(button.frame, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
+    CGRectSetSize(button, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
     [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BACKGROUND] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED] forState:UIControlStateSelected];
     [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED] forState:UIControlStateHighlighted];

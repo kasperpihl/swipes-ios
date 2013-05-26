@@ -25,12 +25,14 @@
 @property (nonatomic,strong) NSArray *remainingTags;
 @property (nonatomic,strong) NSMutableArray *selectedTags;
 @property (nonatomic) BOOL hasFilter;
+@property (nonatomic) BOOL hasSearched;
 @property (nonatomic) BOOL isSorted;
 @property (nonatomic) NSInteger itemCounter;
 @property (nonatomic) NSInteger itemCounterWithFilter;
 -(void)setItems:(NSArray*)items;
 -(void)selectTag:(NSString*)tag;
 -(void)deselectTag:(NSString*)tag;
+-(void)searchForString:(NSString*)string;
 -(void)clearAll;
 -(NSString *)titleForSection:(NSInteger)section;
 -(KPToDo*)itemForIndexPath:(NSIndexPath*)indexPath;

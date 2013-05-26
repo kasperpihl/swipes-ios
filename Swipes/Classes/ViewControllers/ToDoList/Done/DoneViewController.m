@@ -13,10 +13,10 @@
 
 @implementation DoneViewController
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
+    NSPredicate *predicate;
     NSDate *startDate = [[NSDate date] dateAtStartOfDay];
-    if(self.hasAskedForMore) startDate = [NSDate dateWithDaysBeforeNow:365];
-    NSDate *endDate = [[NSDate dateTomorrow] dateAtStartOfDay];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@) AND (completionDate >= %@) AND (completionDate < %@)",@"done", startDate, endDate];
+    if(!self.hasAskedForMore) predicate = [NSPredicate predicateWithFormat:@"(state == %@) AND (completionDate >= %@)",@"done", startDate];
+    else predicate = [NSPredicate predicateWithFormat:@"(state == %@)",@"done"];
     return [KPToDo MR_findAllSortedBy:@"completionDate" ascending:NO withPredicate:predicate];
 }
 -(NSString *)itemHandler:(ItemHandler *)handler titleForItem:(KPToDo *)item{
@@ -39,6 +39,7 @@
 #pragma mark - ViewController stuff
 - (void)viewDidLoad
 {
+    self.hasAskedForMore = YES;
     self.state = @"done";
     [super viewDidLoad];
 	// Do any additional setup after loading the view.

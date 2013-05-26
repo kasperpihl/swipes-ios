@@ -121,8 +121,8 @@
                 CGFloat extraForEach = (difference+self.spacing)/numberOfButtonsInRow;
                 for(NSInteger i = 0 ; i < numberOfButtonsInRow ; i++){
                     UIButton *tagButton = [buttonLine objectAtIndex:i];
-                    CGRectSetSize(tagButton.frame, tagButton.frame.size.width+extraForEach, tagButton.frame.size.height);
-                    CGRectSetX(tagButton.frame, tagButton.frame.origin.x+(i*extraForEach));
+                    CGRectSetWidth(tagButton, tagButton.frame.size.width+extraForEach);
+                    CGRectSetX(tagButton, tagButton.frame.origin.x+(i*extraForEach));
                 }
                 [buttonLine removeAllObjects];
             }
@@ -145,7 +145,7 @@
         
     }
     currentHeight += tagHeight + self.bottomMargin;
-    CGRectSetSize(self.frame, self.frame.size.width, currentHeight);
+    CGRectSetHeight(self, currentHeight);
     CGFloat differenceHeight = oldHeight-currentHeight;
     if(!first && differenceHeight != 0 && [self.resizeDelegate respondsToSelector:@selector(tagList:changedSize:)]){
         [self.resizeDelegate tagList:self changedSize:self.frame.size];

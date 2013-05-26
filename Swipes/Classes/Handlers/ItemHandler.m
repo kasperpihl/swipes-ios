@@ -14,6 +14,7 @@
 @property (nonatomic,strong) NSMutableArray *sortedItems;
 @property (nonatomic,strong) NSArray *items;
 @property (nonatomic,strong) NSArray *filteredItems;
+@property (nonatomic,strong) NSString *searchString;
 @end
 @implementation ItemHandler
 -(id)init{
@@ -96,6 +97,7 @@
 }
 -(void)clearAll{
     [self.selectedTags removeAllObjects];
+    self.searchString = @"";
     [self runSort];
     [self notifyUpdate];
 }
@@ -146,11 +148,15 @@
 }
 -(void)runSort{
     self.isSorted = NO;
+    self.hasFilter = NO;
+    self.hasSearched = NO;
     if([self.delegate respondsToSelector:@selector(itemHandler:titleForItem:)]) self.isSorted = YES;
     NSMutableSet *remainingTags = [NSMutableSet set];
     NSMutableArray *filteredItems = [NSMutableArray array];
-    self.hasFilter = YES;
-    if(self.selectedTags.count > 0){
+    BOOL hasSelectedTags = (self.selectedTags.count > 0);
+    BOOL hasSearchString = (self.searchString.length >= MIN_SEARCH_LETTER_LENGTH);
+    if(hasSelectedTags){
+        self.hasFilter = YES;
         for(KPToDo *toDo in self.items){
             BOOL didIt = YES;
             for(NSString *tag in self.selectedTags){
@@ -168,8 +174,12 @@
         }
         self.remainingTags = [[remainingTags allObjects] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     }
+    else if(hasSearchString){
+        self.hasSearched = YES;
+        NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:@"(title contains[cd] %@)",self.searchString];
+        filteredItems = [[self.items filteredArrayUsingPredicate:searchPredicate] mutableCopy];
+    }
     else{
-        self.hasFilter = NO;
         self.remainingTags = self.allTags;
         filteredItems = [self.items mutableCopy];
     }
@@ -179,9 +189,17 @@
         self.sortedItems = [NSMutableArray array];
         self.titleArray = [NSMutableArray array];
         for(KPToDo *toDo in self.filteredItems){
-            NSLog(@"sorting stuff");
             NSString *title = [self.delegate itemHandler:self titleForItem:toDo];
             [self addItem:toDo withTitle:title];
+        }
+    }
+}
+-(void)searchForString:(NSString*)string{
+    if(string != self.searchString){
+        if(string.length >= MIN_SEARCH_LETTER_LENGTH || self.hasSearched){
+            self.searchString = string;
+            [self runSort];
+            [self notifyUpdate];
         }
     }
 }

@@ -50,6 +50,7 @@ typedef NS_ENUM(NSUInteger, CellType) {
     CellTypeToday,
     CellTypeDone
 };
+
 /* Insert below in pods target if it is logs */
 NS_INLINE void mainBlock(void (^block)(void))
 {
@@ -68,9 +69,11 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define clearNotify() [[NSNotificationCenter defaultCenter] removeObserver:self]
 #define kv(obj,key) [obj objectForKey:key]
 #define CGRectSetPos( r, x, y ) CGRectMake( x, y, r.size.width, r.size.height )
-#define CGRectSetX( r, x ) r = CGRectMake( x, r.origin.y, r.size.width, r.size.height )
-#define CGRectSetY( r, y ) r = CGRectMake( r.origin.x, y, r.size.width, r.size.height )
-#define CGRectSetSize( r, w, h ) r = CGRectMake( r.origin.x, r.origin.y, w, h )
+#define CGRectSetX( r, x ) r.frame = CGRectMake( x, r.frame.origin.y, r.frame.size.width, r.frame.size.height )
+#define CGRectSetY( r, y ) r.frame = CGRectMake( r.frame.origin.x, y, r.frame.size.width, r.frame.size.height )
+#define CGRectSetSize( r, w, h ) r.frame = CGRectMake( r.frame.origin.x, r.frame.origin.y, w, h )
+#define CGRectSetWidth( r, w ) r.frame = CGRectMake( r.frame.origin.x, r.frame.origin.y, w, r.frame.size.height )
+#define CGRectSetHeight( r, h ) r.frame = CGRectMake( r.frame.origin.x, r.frame.origin.y, r.frame.size.width, h )
 #define parseFileCachePath(name) [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingFormat:@"/Parse/PFFileCache/%@",name]
 typedef void (^ResultBlock)(id result, NSError *error);
 typedef void (^ImageBlock)(UIImage *image, NSError *error);

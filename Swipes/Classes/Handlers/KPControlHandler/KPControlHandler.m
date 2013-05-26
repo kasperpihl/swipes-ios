@@ -106,7 +106,7 @@ typedef void (^voidBlock)(void);
 -(UIButton*)roundedButtonWithSize:(NSInteger)size{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *buttonBackgroundImage = [UtilityClass imageWithColor:SWIPES_COLOR];
-    CGRectSetSize(button.frame, size, size);
+    CGRectSetSize(button, size, size);
     button.layer.cornerRadius = size/2;
     button.layer.masksToBounds = YES;
     [button setBackgroundImage:buttonBackgroundImage forState:UIControlStateNormal];
@@ -119,12 +119,12 @@ typedef void (^voidBlock)(void);
             case KPControlHandlerStateNone:
                 break;
             case KPControlHandlerStateAdd:
-                CGRectSetY(self.addButton.frame, targetY);
+                CGRectSetY(self.addButton, targetY);
                 break;
             case KPControlHandlerStateEdit:
-                CGRectSetY(self.deleteButton.frame, targetY);
+                CGRectSetY(self.deleteButton, targetY);
                 //CGRectSetY(self.shareButton.frame, targetY);
-                CGRectSetY(self.tagButton.frame, targetY);
+                CGRectSetY(self.tagButton, targetY);
                 break;
         }
     };
@@ -138,12 +138,12 @@ typedef void (^voidBlock)(void);
             case KPControlHandlerStateNone:
                 break;
             case KPControlHandlerStateAdd:
-                CGRectSetY(self.addButton.frame, bigButtonY);
+                CGRectSetY(self.addButton, bigButtonY);
                 break;
             case KPControlHandlerStateEdit:
-                CGRectSetY(self.deleteButton.frame, smallButtonY);
+                CGRectSetY(self.deleteButton, smallButtonY);
                 //CGRectSetY(self.shareButton.frame, smallButtonY);
-                CGRectSetY(self.tagButton.frame, smallButtonY);
+                CGRectSetY(self.tagButton, smallButtonY);
                 break;
         }
     };

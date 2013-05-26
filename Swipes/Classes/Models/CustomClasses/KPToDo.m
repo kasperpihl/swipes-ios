@@ -79,8 +79,8 @@
     return _textTags;
 }
 -(NSString *)stringifyTags{
+    if(!self.readableTags) [self updateTagsString];
     return self.readableTags;
-    
 }
 -(void)complete{
     self.state = @"done";

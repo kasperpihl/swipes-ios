@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
+#define MIN_SEARCH_LETTER_LENGTH 3
+
 /* Main colors */
 #define TODAY_COLOR                     color(214,196,45,1)//color(253,230,73,1)
 #define DONE_COLOR                      color(63,186,141,1)
@@ -37,6 +39,9 @@
 #define TEXT_FIELD_COLOR                gray(230,1)
 #define TITLE_LABEL_COLOR               gray(102,1)
 #define BUTTON_COLOR                    gray(255,1)
+
+/* Edit Task view */
+#define EDIT_TASK_BACKGROUND            SEGMENT_BACKGROUND
 
 
 

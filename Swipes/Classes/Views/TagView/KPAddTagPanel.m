@@ -77,7 +77,7 @@
         tagView.bottomMargin = 15;
         tagView.marginRight = 0;
         tagView.emptyText = @"No tags";
-        CGRectSetY(tagView.frame, 0);
+        CGRectSetY(tagView, 0);
         tagView.resizeDelegate = self;
         tagView.tag = TAG_VIEW_TAG;
         [scrollView addSubview:tagView];
@@ -91,7 +91,7 @@
         self.scrollView = (UIScrollView*)[self viewWithTag:SCROLL_VIEW_TAG];
         self.scrollView.backgroundColor = MANAGE_TAGS_BACKGROUND;
         [self tagList:self.tagView changedSize:CGSizeMake(self.frame.size.width, self.tagView.frame.size.height)];
-        CGRectSetSize(self.frame, self.frame.size.width, self.tagContainerView.frame.origin.y+self.tagContainerView.frame.size.height+TAB_BAR_VIEW_HEIGHT);
+        CGRectSetHeight(self, self.tagContainerView.frame.origin.y+self.tagContainerView.frame.size.height+TAB_BAR_VIEW_HEIGHT);
         
         
         
@@ -173,7 +173,7 @@
         [self addSubview:addView];
         self.addTagView = [self viewWithTag:ADD_VIEW_TAG];
         
-        CGRectSetSize(self.frame, self.frame.size.width, self.barBottomView.frame.origin.y+self.barBottomView.frame.size.height);
+        CGRectSetHeight(self, self.barBottomView.frame.origin.y+self.barBottomView.frame.size.height);
     }
     return self;
 }
@@ -194,26 +194,26 @@
 -(void)tagList:(KPTagList *)tagList changedSize:(CGSize)size{
     self.scrollView.contentSize = size;
     CGFloat height = (size.height > self.maxHeight) ? self.maxHeight : size.height;
-    CGRectSetSize(self.tagContainerView.frame, self.tagContainerView.frame.size.width, height+COLOR_SEPERATOR_HEIGHT);
-    CGRectSetSize(self.scrollView.frame, self.scrollView.frame.size.width, height);
+    CGRectSetHeight(self.tagContainerView, height+COLOR_SEPERATOR_HEIGHT);
+    CGRectSetHeight(self.scrollView, height);
 }
 
 -(void)shiftToAddMode:(BOOL)addMode{
     if(addMode){
         [UIView animateWithDuration:0.2 animations:^{
-            CGRectSetY(self.tagContainerView.frame, self.barBottomView.frame.origin.y);
+            CGRectSetY(self.tagContainerView, self.barBottomView.frame.origin.y);
             //self.barBottomView.hidden = YES;
         } completion:^(BOOL finished) {
             if(finished){
                 self.tagContainerView.hidden = YES;
                 CGFloat newHeight = KEYBOARD_HEIGHT + self.addTagView.frame.size.height;
                 if([self.delegate respondsToSelector:@selector(tagPanel:changedSize:)]) [self.delegate tagPanel:self changedSize:CGSizeMake(self.frame.size.width,newHeight)];
-                CGRectSetY(self.barBottomView.frame, self.frame.size.height-self.barBottomView.frame.size.height);
-                CGRectSetY(self.addTagView.frame, self.frame.size.height);
+                CGRectSetY(self.barBottomView, self.frame.size.height-self.barBottomView.frame.size.height);
+                CGRectSetY(self.addTagView, self.frame.size.height);
                 self.addTagView.hidden = NO;
                 [self.textField becomeFirstResponder];
                 [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-                    CGRectSetY(self.addTagView.frame, 0);
+                    CGRectSetY(self.addTagView, 0);
                 }];
             }
         }];
@@ -221,7 +221,7 @@
     else{
         [self.textField resignFirstResponder];
         [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-            CGRectSetY(self.addTagView.frame, self.frame.size.height);
+            CGRectSetY(self.addTagView, self.frame.size.height);
         } completion:^(BOOL finished) {
             if(finished){
                 self.addTagView.hidden = YES;
@@ -232,10 +232,10 @@
                 CGFloat newHeight = self.tagContainerView.frame.size.height + self.barBottomView.frame.size.height;
                  if([self.delegate respondsToSelector:@selector(tagPanel:changedSize:)]) [self.delegate tagPanel:self changedSize:CGSizeMake(self.frame.size.width,newHeight)];
                 
-                CGRectSetY(self.barBottomView.frame, self.frame.size.height-self.barBottomView.frame.size.height);
-                CGRectSetY(self.tagContainerView.frame, self.barBottomView.frame.origin.y);
+                CGRectSetY(self.barBottomView, self.frame.size.height-self.barBottomView.frame.size.height);
+                CGRectSetY(self.tagContainerView, self.barBottomView.frame.origin.y);
                 [UIView animateWithDuration:0.2 animations:^{
-                    CGRectSetY(self.tagContainerView.frame, 0);
+                    CGRectSetY(self.tagContainerView, 0);
                     //CGRectSetY(self.addTagView.frame, 0);
                     
                     

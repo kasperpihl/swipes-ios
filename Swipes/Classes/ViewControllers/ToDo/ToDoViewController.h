@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class KPToDo;
 @interface ToDoViewController : UIViewController
-
+@property (nonatomic,strong) KPToDo *model;
 @end
