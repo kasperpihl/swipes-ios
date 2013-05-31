@@ -38,7 +38,7 @@ static KPParseCoreData *sharedObject;
 -(void)initialize{
     [self loadDatabase];
     if(![UTILITY.userDefaults boolForKey:@"seeded"]){
-        [self seedObjects];
+        //[self seedObjects];
     }
 }
 -(void)loadDatabase{
@@ -68,7 +68,7 @@ static KPParseCoreData *sharedObject;
     [MagicalRecord cleanUp];
 }
 
--(void)seedObjects{
+/*-(void)seedObjects{
     NSArray *tagArray = @[
                         @"Home",
                         @"Guide",
@@ -97,5 +97,5 @@ static KPParseCoreData *sharedObject;
     todosForTagsArray = [todosForTagsArray subarrayWithRange:NSMakeRange(0, 3)];
     [TAGHANDLER addTags:@[@"Guide",@"Swipes"] andRemoveTags:nil fromToDos:todosForTagsArray];
     [UTILITY.userDefaults setBool:YES forKey:@"seeded"];
-}
+}*/
 @end

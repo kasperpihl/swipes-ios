@@ -5,7 +5,7 @@
 -(void)changeToOrder:(NSInteger)newOrder;
 -(void)complete;
 -(void)scheduleForDate:(NSDate*)date;
--(void)updateTagsString;
 -(NSString *)stringifyTags;
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags;
+-(void)updateTagSet:(NSSet*)tagsSet withTags:(NSArray*)tags remove:(BOOL)remove;
 @end

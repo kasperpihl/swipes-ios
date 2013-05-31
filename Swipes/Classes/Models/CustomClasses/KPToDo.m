@@ -12,6 +12,7 @@
 @implementation KPToDo
 @synthesize readableTags = _readableTags;
 @synthesize textTags = _textTags;
+@synthesize tagString = _tagString;
 -(void)changeToOrder:(NSInteger)newOrder{
     if(newOrder == self.orderValue) return;
     BOOL decrease = (newOrder > self.orderValue);
@@ -27,44 +28,46 @@
     }
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
 }
--(void)updateTagsString{
-    NSMutableString *mutableString;
-    NSMutableArray *textTags = [NSMutableArray array];
-    NSInteger count = self.tags.count;
-    if(count > 0){
-        NSSortDescriptor * titleDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
-        NSArray *tags = [self.tags sortedArrayUsingDescriptors:@[titleDescriptor]];
-        mutableString = [NSMutableString stringWithString:@""];
-        for(KPTag *tag in tags){
-            [textTags addObject:tag.title];
-            [mutableString appendFormat:@"%@, ",tag.title];
-        }
-        [mutableString deleteCharactersInRange:NSMakeRange([mutableString length]-2, 2)];
+-(void)setTagString:(NSString *)tagString{
+    if(tagString.length == 0) _tagString = nil;
+    else _tagString = tagString;
+}
+-(void)updateTagSet:(NSSet*)tagsSet withTags:(NSArray*)tags remove:(BOOL)remove{
+    
+    NSMutableArray *tagsStrings = [NSMutableArray array];
+    if(self.tagString.length > 0) tagsStrings = [[self.tagString componentsSeparatedByString:@", "] mutableCopy];
+    if(remove) [self removeTags:tagsSet];
+    else [self addTags:tagsSet];
+    for(NSString *tag in tags){
+        BOOL contained = [tagsStrings containsObject:tag];
+        if(remove && contained) [tagsStrings removeObject:tag];
+        else if(!remove && !contained) [tagsStrings addObject:tag];
     }
-    self.textTags = textTags;
-    self.readableTags = [mutableString copy];
+    self.tagString = [tagsStrings componentsJoinedByString:@", "];
+    
 }
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags{
-    if(!self.readableTags) [self updateTagsString];
-    NSMutableString *mutableString = [NSMutableString stringWithString:@""];
-    NSMutableArray *sortedArray = [[selectedTags sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] mutableCopy];
-    for(NSString *tag in sortedArray){
-        [mutableString appendFormat:@"%@, ",tag];
-    }
-    for(NSString *tag in self.textTags){
-        if(![sortedArray containsObject:tag]) [mutableString appendFormat:@"%@, ",tag];
-    }
-    [mutableString deleteCharactersInRange:NSMakeRange([mutableString length]-2, 2)];
     NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
                            TAGS_LABEL_FONT, NSFontAttributeName,
                            nil];
     NSDictionary *boldAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
-                              TAGS_LABEL_BOLD_FONT, NSFontAttributeName, nil];
+                               TAGS_LABEL_BOLD_FONT, NSFontAttributeName, nil];
+    
+    
+    NSMutableArray *tagsStringArray = [[self.tagString componentsSeparatedByString:@", "] mutableCopy];
+    for(NSInteger i = 0  ; i < selectedTags.count ; i++){
+        NSString *tag = [selectedTags objectAtIndex:i];
+        [tagsStringArray removeObject:tag];
+        [tagsStringArray insertObject:tag atIndex:i];
+    }
+    
+    NSString *sortedTagString = [tagsStringArray componentsJoinedByString:@", "];
     NSMutableAttributedString *attributedText =
-    [[NSMutableAttributedString alloc] initWithString:mutableString
+    [[NSMutableAttributedString alloc] initWithString:sortedTagString
                                            attributes:attrs];
     NSMutableString *mutableString2 = [NSMutableString stringWithString:@""];
-    for(NSString *tag in sortedArray){
+    for(NSInteger i = 0 ; i < selectedTags.count ; i++){
+        NSString *tag = [tagsStringArray objectAtIndex:i];
         NSRange range = NSMakeRange(mutableString2.length,tag.length);
         [attributedText setAttributes:boldAttrs range:range];
         [mutableString2 appendFormat:@"%@, ",tag];
@@ -73,14 +76,12 @@
     
 }
 -(NSArray *)textTags{
-    if(!_textTags){
-        [self updateTagsString];
-    }
-    return _textTags;
+    return [self.tagString componentsSeparatedByString:@", "];
 }
 -(NSString *)stringifyTags{
-    if(!self.readableTags) [self updateTagsString];
-    return self.readableTags;
+    return self.tagString;
+    /*if(!self.readableTags) [self updateTagsString];
+    return self.readableTags;*/
 }
 -(void)complete{
     self.state = @"done";

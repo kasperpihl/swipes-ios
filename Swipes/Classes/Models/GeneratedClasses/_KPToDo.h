@@ -10,6 +10,7 @@ extern const struct KPToDoAttributes {
 	__unsafe_unretained NSString *order;
 	__unsafe_unretained NSString *schedule;
 	__unsafe_unretained NSString *state;
+	__unsafe_unretained NSString *tagString;
 	__unsafe_unretained NSString *title;
 } KPToDoAttributes;
 
@@ -21,6 +22,7 @@ extern const struct KPToDoFetchedProperties {
 } KPToDoFetchedProperties;
 
 @class KPTag;
+
 
 
 
@@ -96,6 +98,16 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSString* tagString;
+
+
+
+//- (BOOL)validateTagString:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSString* title;
 
 
@@ -157,6 +169,12 @@ extern const struct KPToDoFetchedProperties {
 
 - (NSString*)primitiveState;
 - (void)setPrimitiveState:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveTagString;
+- (void)setPrimitiveTagString:(NSString*)value;
 
 
 

@@ -25,12 +25,12 @@
     NSString *title;
     NSDate *toDoDate = item.schedule;
     if(!toDoDate) title = @"Unspecified";
-    else if(toDoDate.isTomorrow) title = @"Tomorrow";
+    else if(toDoDate.isTomorrow) title = @"Schedule Tomorrow";
     else{
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"EEEE, dd-MM"];
         NSString *strDate = [dateFormatter stringFromDate:toDoDate];
-        title = strDate;
+        title = [NSString stringWithFormat:@"Schedule %@",strDate];
     }
     return title;
 }

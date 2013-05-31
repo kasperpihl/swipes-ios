@@ -111,7 +111,7 @@
         [self.tagsLabel setAttributedText:[toDo stringForSelectedTags:selectedTags]];
     }else{
         NSString *tagString = [toDo stringifyTags];
-        if(!tagString) tagString = @"No Tags";
+        if(!tagString || tagString.length == 0) tagString = @"No Tags";
         self.tagsLabel.font = TAGS_LABEL_FONT;
         self.tagsLabel.text = tagString;
     }

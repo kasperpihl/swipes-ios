@@ -22,13 +22,13 @@
 -(NSString *)itemHandler:(ItemHandler *)handler titleForItem:(KPToDo *)item{
     NSString *title;
     NSDate *toDoDate = item.completionDate;
-    if(toDoDate.isToday) title = @"Today";
-    else if(toDoDate.isYesterday) title = @"Yesterday";
+    if(toDoDate.isToday) title = @"Completed Today";
+    else if(toDoDate.isYesterday) title = @"Completed Yesterday";
     else{
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         // this is imporant - we set our input date format to match our input string
         // if format doesn't match you'll get nil from your string, so be careful
-        [dateFormatter setDateFormat:@"dd-MM-yyyy"];
+        [dateFormatter setDateFormat:@"Completed dd-MM-yyyy"];
         // voila!
         NSString *strDate = [dateFormatter stringFromDate:toDoDate];
         title = strDate;
@@ -36,15 +36,31 @@
     return title;
 }
 
+-(void)didPressLoadMore:(id)sender{
+    self.hasAskedForMore = YES;
+    [self update];
+}
 #pragma mark - ViewController stuff
 - (void)viewDidLoad
 {
-    self.hasAskedForMore = YES;
     self.state = @"done";
     [super viewDidLoad];
+    UIView *askMoreView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
+    UIButton *loadMoreButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [loadMoreButton setTitle:@"Load more" forState:UIControlStateNormal];
+    [loadMoreButton addTarget:self action:@selector(didPressLoadMore:) forControlEvents:UIControlEventTouchUpInside];
+    loadMoreButton.frame = CGRectMake(10, 10, 300, 40);
+    [askMoreView addSubview:loadMoreButton];
+    [self.tableView setTableFooterView:askMoreView];
+    
 	// Do any additional setup after loading the view.
 }
-
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    if(!self.hasAskedForMore){
+        
+    }
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

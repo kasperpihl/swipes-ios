@@ -21,27 +21,11 @@ static TagHandler *sharedObject;
     newTag.title = tag;
     [self save];
 }
--(void)addTags:(NSArray *)addedTags andRemoveTags:(NSArray *)removedTags fromToDos:(NSArray *)toDos{
-    NSSet *addedTagsObjects;
-    NSSet *removedTagsObjects;
-    
-    if(addedTags){
-        NSPredicate *addedPredicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",addedTags];
-        addedTagsObjects = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:addedPredicate]];
-    }
-    if(removedTags){
-        NSPredicate *removedPredicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",removedTags];
-        removedTagsObjects = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:removedPredicate]];
-    }
-    
+-(void)updateTags:(NSArray *)tags remove:(BOOL)remove toDos:(NSArray *)toDos{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
+    NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
     for(KPToDo *toDo in toDos){
-        if(addedTagsObjects){
-            [toDo addTags:addedTagsObjects];
-        }
-        if(removedTagsObjects){
-            [toDo removeTags:removedTagsObjects];
-        }
-        [toDo updateTagsString];
+        [toDo updateTagSet:tagsSet withTags:tags remove:remove];
     }
     [self save];
 }

@@ -16,7 +16,7 @@
 #import "AKSegmentedControl.h"
 #import "KPAddTagPanel.h"
 #import "KPAlert.h"
-
+#import <QuartzCore/QuartzCore.h>
 #import "UIViewController+KNSemiModal.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
@@ -83,13 +83,13 @@
 }
 -(void)tagList:(KPTagList *)tagList selectedTag:(NSString *)tag{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
-    [TAGHANDLER addTags:@[tag] andRemoveTags:nil fromToDos:selectedItems];
+    [TAGHANDLER updateTags:@[tag] remove:NO toDos:selectedItems];
     [[self currentViewController] didUpdateItemHandler:nil];
     [self updateBackground];
 }
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString *)tag{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
-    [TAGHANDLER addTags:nil andRemoveTags:@[tag] fromToDos:selectedItems];
+    [TAGHANDLER updateTags:@[tag] remove:YES toDos:selectedItems];
     [[self currentViewController] didUpdateItemHandler:nil];
     [self updateBackground];
 }
@@ -97,7 +97,7 @@
 -(void)pressedAdd:(id)sender{
     [self show:NO controlsAnimated:YES];
     [self changeToIndex:1];
-    [[self currentViewController].itemHandler clearAll];
+    //[[self currentViewController].itemHandler clearAll];
     AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.navigationController.view.bounds];
     addPanel.addDelegate = self;
     self.presentedPanel = addPanel;
@@ -269,6 +269,7 @@
 				[self.titles addObject:titles[index]];
 			}
 		}];
+        self.view.layer.masksToBounds = YES;
         [self.view addSubview:self.segmentedControl];
         
         //self.navigationItem.titleView = self.segmentedControl;

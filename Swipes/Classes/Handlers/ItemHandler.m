@@ -43,6 +43,7 @@
     }
 }
 -(void)addItem:(NSString *)item{
+    if(self.hasFilter || self.hasSearched) [self clearAll];
     [TODOHANDLER addItem:item];
     [self reloadData];
 }
@@ -123,7 +124,8 @@
     return [self.filteredItems objectAtIndex:indexPath.row];
 }
 -(NSString *)titleForSection:(NSInteger)section{
-    return [self.titleArray objectAtIndex:section];
+    if(self.isSorted) return [self.titleArray objectAtIndex:section];
+    else return @"Today";
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     if(self.isSorted) return [self.sortedItems count];

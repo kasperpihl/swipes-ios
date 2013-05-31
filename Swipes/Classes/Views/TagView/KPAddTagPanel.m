@@ -247,9 +247,7 @@
     }
 }
 -(void)textFieldDidChange:(UITextField*)textField{
-    NSString *string = textField.text;
-    NSString *trimmedString = [string stringByTrimmingCharactersInSet:
-                               [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *trimmedString = trim(textField.text);
     if(trimmedString.length > 0){
         if(!self.isRotated){
             [self rotateButton];
@@ -264,9 +262,7 @@
     }
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    NSString *string = textField.text;
-    NSString *trimmedString = [string stringByTrimmingCharactersInSet:
-                               [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *trimmedString = trim(textField.text);
     if(trimmedString.length > 0){
                 if(self.delegate && [self.delegate respondsToSelector:@selector(tagPanel:createdTag:)])
             [self.delegate tagPanel:self createdTag:trimmedString];

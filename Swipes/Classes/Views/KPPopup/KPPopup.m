@@ -9,9 +9,9 @@
 
 #define DEFAULT_CONTENT_SIZE 200
 #define ANIMATION_SCALE 0.1
-#define ANIMATION_DURATION 0.15
+#define ANIMATION_DURATION 0.1
 #define EXTRA_SCALE 1.02
-#define EXTRA_DURATION 0.05
+#define EXTRA_DURATION 0.02
 
 #import "KPPopup.h"
 @interface KPPopup ()
@@ -54,7 +54,7 @@
         
         self.containerView.transform = CGAffineTransformMakeScale(ANIMATION_SCALE, ANIMATION_SCALE);
         self.containerView.hidden = NO;
-        [UIView animateWithDuration:ANIMATION_DURATION delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [UIView animateWithDuration:ANIMATION_DURATION delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
             self.containerView.transform = CGAffineTransformMakeScale(EXTRA_SCALE, EXTRA_SCALE);
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:EXTRA_DURATION delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
@@ -64,7 +64,7 @@
             }];
         }];
     }else{
-        [UIView animateWithDuration:EXTRA_DURATION delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [UIView animateWithDuration:EXTRA_DURATION delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
             self.containerView.transform = CGAffineTransformMakeScale(EXTRA_SCALE, EXTRA_SCALE);
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:ANIMATION_DURATION delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{

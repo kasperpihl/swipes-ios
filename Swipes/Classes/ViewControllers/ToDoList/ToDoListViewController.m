@@ -97,7 +97,6 @@
 
 #pragma mark - KPSearchBarDelegate
 -(void)searchBar:(KPSearchBar *)searchBar searchedForString:(NSString *)searchString{
-    NSLog(@"testing delegate:%@",searchString);
     [self.itemHandler searchForString:searchString];
 }
 -(void)searchBar:(KPSearchBar *)searchBar deselectedTag:(NSString *)tag{
@@ -112,11 +111,11 @@
 }
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if(self.itemHandler.isSorted) return SECTION_HEADER_HEIGHT;
-    else return 0;
+    if(!self.itemHandler.isSorted && self.itemHandler.itemCounterWithFilter == 0) return 0;
+    return SECTION_HEADER_HEIGHT;
+    
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    if(self.itemHandler.isSorted){
         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 30)];
         headerView.backgroundColor = SECTION_HEADER_BACKGROUND;
         NSString *title = [self.itemHandler titleForSection:section];
@@ -126,9 +125,6 @@
         titleLabel.text = [title capitalizedString];
         [headerView addSubview:titleLabel];
         return headerView;
-    }
-    else return nil;
-    
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     /*if(self.selectedRow == indexPath.row+1) return 120;
@@ -181,12 +177,11 @@
     {
         CGPoint p = [tap locationInView:tap.view];
         NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
-        NSLog(@"index:%@",indexPath);
         if(indexPath){
             KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
             ToDoViewController *viewController = [[ToDoViewController alloc] init];
             viewController.model = toDo;
-            [self presentSemiViewController:viewController withOptions:nil];
+            [self presentSemiViewController:viewController withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.30f}];
         }
     }
 }

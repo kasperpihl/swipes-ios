@@ -331,7 +331,6 @@ secondStateIconName:(NSString *)secondIconName
     return state;
 }
 -(void)setCurrentState:(MCSwipeTableViewCellState)currentState{
-    NSLog(@"state:%i",currentState);
     if(currentState != _currentState){
         _currentState = currentState;
         if([self.delegate respondsToSelector:@selector(swipeTableViewCell:slidedIntoState:)]) [self.delegate swipeTableViewCell:self slidedIntoState:currentState];

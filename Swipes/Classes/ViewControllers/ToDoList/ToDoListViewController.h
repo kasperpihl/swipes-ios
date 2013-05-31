@@ -24,5 +24,6 @@
 -(void)deleteSelectedItems:(id)sender;
 -(void)prepareTableView:(UITableView*)tableView;
 -(NSArray*)selectedItems;
+-(void)update;
 -(void)changeToColored:(BOOL)colored;
 @end

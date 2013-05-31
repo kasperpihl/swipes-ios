@@ -94,10 +94,10 @@
 
         KPTagList *selectedTagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width-TAG_HEIGHT-DEFAULT_SPACING, 0)];
         selectedTagList.marginLeft = 0;
-        selectedTagList.marginTop = 5;
+        selectedTagList.marginTop = 0;
         //(TAG_HEIGHT+DEFAULT_SPACING)/2;
-        selectedTagList.marginRight = 6;
-        selectedTagList.bottomMargin = 0;
+        selectedTagList.marginRight = selectedTagList.spacing;
+        selectedTagList.bottomMargin = selectedTagList.spacing;
         selectedTagList.emptyText = @"Filter";
         selectedTagList.tagDelegate = self;
         selectedTagList.tag = SELECTED_TAG_LIST_TAG;
@@ -113,8 +113,9 @@
         KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
         tagList.emptyText = @"No tags assigned";
         tagList.marginLeft = 0;
-        tagList.marginTop = 5;
+        tagList.marginTop = 0;
         tagList.emptyLabelMarginHack = 10;
+        tagList.bottomMargin = tagList.spacing;
         tagList.marginRight = 0;
         tagList.tagDelegate = self;
         tagList.tag = TAG_LIST_TAG;
@@ -179,9 +180,11 @@
     [self.tagListView setTags:self.unselectedTags andSelectedTags:nil];
     
     CGFloat tempHeight = 0;
+    tempHeight += self.selectedTagListView.spacing;
+    CGRectSetY(self.selectedTagListView, tempHeight);
     self.selectedTagListView.hidden = self.selectedTagListView.isEmptyList;
     if(!self.selectedTagListView.isEmptyList){
-        tempHeight += self.selectedTagListView.frame.size.height + COLOR_SEPERATOR_HEIGHT;
+        tempHeight += self.selectedTagListView.frame.size.height;
     }
     if(!self.selectedTagListView.isEmptyList) self.tagListView.hidden = self.tagListView.isEmptyList;
     else self.tagListView.hidden = NO;
@@ -189,8 +192,8 @@
         CGRectSetY(self.tagListView, tempHeight);
         tempHeight += self.tagListView.frame.size.height;
     }
-    tempHeight += 5;
-    CGRectSetSize(self.filterView, self.frame.size.width, tempHeight);
+    
+    CGRectSetSize(self.filterView, self.frame.size.width, tempHeight+COLOR_SEPERATOR_HEIGHT);
 }
 -(void)pressedFilter:(UIButton*)sender{
     if(self.currentMode == KPSearchBarModeNone){

@@ -122,8 +122,6 @@
         [self addSubview:formView];
         
         
-        
-        
         self.formView = (UIImageView*)[self viewWithTag:FORM_VIEW_TAG];
         CGRectSetHeight(self, KEYBOARD_HEIGHT+self.formView.frame.size.height);
     }

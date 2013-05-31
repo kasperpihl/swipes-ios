@@ -64,6 +64,8 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define CLEAR [UIColor clearColor]
 #define color(r,g,b,a) [UIColor colorWithRed: r/255.0 green: g/255.0 blue: b/255.0 alpha:a]
 #define gray(l,a) [UIColor colorWithRed: l/255.0 green: l/255.0 blue: l/255.0 alpha:a]
+#define trim(s) [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
+
 
 #define notify(notifcation,selectr) [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectr) name:notifcation object:nil]
 #define clearNotify() [[NSNotificationCenter defaultCenter] removeObserver:self]

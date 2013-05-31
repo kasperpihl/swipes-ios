@@ -9,6 +9,7 @@ const struct KPToDoAttributes KPToDoAttributes = {
 	.order = @"order",
 	.schedule = @"schedule",
 	.state = @"state",
+	.tagString = @"tagString",
 	.title = @"title",
 };
 
@@ -105,6 +106,13 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 
 @dynamic state;
+
+
+
+
+
+
+@dynamic tagString;
 
 
 
