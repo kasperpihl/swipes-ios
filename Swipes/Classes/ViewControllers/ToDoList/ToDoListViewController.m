@@ -1,6 +1,6 @@
 //
 //  ToDoListTableViewController.m
-//  ToDo
+//  Swipes
 //
 //  Created by Kasper Pihl Tornøe on 19/04/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
@@ -38,6 +38,7 @@
 @property (nonatomic,weak) IBOutlet UIView *coloredMenuText;
 @property (nonatomic,weak) UIView *fakeHeaderView;
 @property (nonatomic) BOOL isColored;
+@property (nonatomic) NSIndexPath *animatedIndexPath;
 
 @property (nonatomic,strong) NSMutableDictionary *stateDictionary;
 @end
@@ -111,11 +112,12 @@
 }
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if(!self.itemHandler.isSorted && self.itemHandler.itemCounterWithFilter == 0) return 0;
+    if(self.animatedIndexPath || (!self.itemHandler.isSorted && self.itemHandler.itemCounterWithFilter == 0)) return 0;
     return SECTION_HEADER_HEIGHT;
     
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    if(self.animatedIndexPath) return nil;
         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 30)];
         headerView.backgroundColor = SECTION_HEADER_BACKGROUND;
         NSString *title = [self.itemHandler titleForSection:section];
@@ -127,8 +129,11 @@
         return headerView;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    /*if(self.selectedRow == indexPath.row+1) return 120;
-    else*/ return CELL_HEIGHT;
+    if(self.animatedIndexPath && indexPath.row == self.animatedIndexPath.row && indexPath.section == self.animatedIndexPath.section){
+        NSLog(@"big height");
+        return self.tableView.frame.size.height;
+    }
+    else return CELL_HEIGHT;
 }
 -(ToDoCell*)readyCell:(ToDoCell*)cell{
     [cell setMode:MCSwipeTableViewCellModeExit];
@@ -149,10 +154,11 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
-    cell.cellType = self.cellType;
+    
     [cell showTimeline:YES];
     [cell setDotColor:[TODOHANDLER colorForCellType:self.cellType]];
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
+    cell.cellType = [toDo cellTypeForTodo];
     [cell changeToDo:toDo withSelectedTags:self.itemHandler.selectedTags];
     
 }
@@ -176,8 +182,15 @@
     if (UIGestureRecognizerStateEnded == tap.state)
     {
         CGPoint p = [tap locationInView:tap.view];
+        
         NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
         if(indexPath){
+            /*self.animatedIndexPath = indexPath;
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            [self.tableView setContentOffset:CGPointMake(1, cell.frame.origin.y) animated:YES];
+            [self.tableView beginUpdates];
+            [self.tableView endUpdates];
+            [self.tableView reloadData];*/
             KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
             ToDoViewController *viewController = [[ToDoViewController alloc] init];
             viewController.model = toDo;
@@ -350,6 +363,7 @@
     else{
         [self returnSelectedRowsAndBounce:YES];
         [self deselectAllRows:self];
+        [self update];
     }
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
     [[self parent] highlightButton:(KPSegmentButtons)cellType-1];

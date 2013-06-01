@@ -126,6 +126,23 @@ static ToDoHandler *sharedObject;
     }
     return iconName;
 }
+-(NSString *)coloredIconNameForCellType:(CellType)type{
+    NSString *iconName;
+    switch (type) {
+        case CellTypeSchedule:
+            iconName = @"schedule-highlighted";
+            break;
+        case CellTypeToday:
+            iconName = @"today-highlighted";
+            break;
+        case CellTypeDone:
+            iconName = @"done-highlighted";
+            break;
+        default:
+            break;
+    }
+    return iconName;
+}
 -(NSString *)stateForCellType:(CellType)type{
     NSString *state;
     switch (type) {

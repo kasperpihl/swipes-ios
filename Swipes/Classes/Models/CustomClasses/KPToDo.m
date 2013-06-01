@@ -1,7 +1,7 @@
 #import "KPToDo.h"
 
 #import "KPTag.h"
-
+#import "NSDate-Utilities.h"
 @interface KPToDo ()
 @property (nonatomic,strong) NSString *readableTags;
 // Private interface goes here.
@@ -13,6 +13,46 @@
 @synthesize readableTags = _readableTags;
 @synthesize textTags = _textTags;
 @synthesize tagString = _tagString;
+-(CellType)cellTypeForTodo{
+    if([self.state isEqualToString:@"done"]) return CellTypeDone;
+    else if([self.state isEqualToString:@"scheduled"]){
+        if([self.schedule isLaterThanDate:[[NSDate dateTomorrow] dateAtStartOfDay]] || !self.schedule) return CellTypeSchedule;
+        else return CellTypeToday;
+    }
+    return CellTypeNone;
+}
+-(NSString *)readableTitleForStatus{
+    NSString *title;
+    CellType cellType = [self cellTypeForTodo];
+    if(cellType == CellTypeToday) title = @"Schedule Today";
+    else if(cellType == CellTypeSchedule){
+        NSDate *toDoDate = self.schedule;
+        if(!toDoDate) title = @"Unspecified";
+        else if(toDoDate.isTomorrow) title = @"Schedule Tomorrow";
+        else{
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"EEEE, dd-MM"];
+            NSString *strDate = [dateFormatter stringFromDate:toDoDate];
+            title = [NSString stringWithFormat:@"Schedule %@",strDate];
+        }
+    }
+    else if(cellType == CellTypeDone){
+        NSDate *toDoDate = self.completionDate;
+        if(toDoDate.isToday) title = @"Completed Today";
+        else if(toDoDate.isYesterday) title = @"Completed Yesterday";
+        else{
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            // this is imporant - we set our input date format to match our input string
+            // if format doesn't match you'll get nil from your string, so be careful
+            [dateFormatter setDateFormat:@"Completed dd-MM-yyyy"];
+            // voila!
+            NSString *strDate = [dateFormatter stringFromDate:toDoDate];
+            title = strDate;
+        }
+    }
+    
+    return [title capitalizedString];
+}
 -(void)changeToOrder:(NSInteger)newOrder{
     if(newOrder == self.orderValue) return;
     BOOL decrease = (newOrder > self.orderValue);

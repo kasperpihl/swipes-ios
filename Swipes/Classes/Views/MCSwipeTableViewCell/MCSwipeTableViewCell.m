@@ -327,7 +327,6 @@ secondStateIconName:(NSString *)secondIconName
         if (percentage <= -kMCStop2 && [self validateState:MCSwipeTableViewCellState4])
             state = MCSwipeTableViewCellState4;
     }
-    
     return state;
 }
 -(void)setCurrentState:(MCSwipeTableViewCellState)currentState{
@@ -483,7 +482,7 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)bounceToOrigin {
     CGFloat bounceDistance = kMCBounceAmplitude * _currentPercentage;
-    self.didRegret = YES;
+    if(self.mode != MCSwipeTableViewCellModeSwitch) self.didRegret = YES;
     [UIView animateWithDuration:kMCBounceDuration1
                           delay:0
                         options:(UIViewAnimationOptionCurveEaseOut)
