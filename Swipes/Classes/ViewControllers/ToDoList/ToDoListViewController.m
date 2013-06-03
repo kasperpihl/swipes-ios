@@ -208,9 +208,17 @@
             self.tableView.scrollEnabled = NO;
             self.tableView.delaysContentTouches = NO;
         }
+        else if(indexPath && self.showingViewController){
+            [self didPressCloseToDoViewController:self.showingViewController];
+        }
     }
 }
-
+-(void)setShowingViewController:(ToDoViewController *)showingViewController{
+    if(_showingViewController != showingViewController){
+        _showingViewController = showingViewController;
+        self.isShowingItem = (showingViewController) ? YES : NO;
+    }
+}
 -(void)didPressCloseToDoViewController:(ToDoViewController *)viewController{
     NSIndexPath *indexPath = viewController.injectedIndexPath;
     [self cleanShowingViewAnimated:YES];

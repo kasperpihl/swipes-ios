@@ -29,24 +29,33 @@
     [NOTIHANDLER updateAlarm:self.alarm identifier:identifier title:self.title];
     if(save) [self save];
 }
+-(void)updateNotes:(NSString *)notes save:(BOOL)save{
+    self.notes = notes;
+    if(save) [self save];
+}
 -(void)save{
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
 }
--(NSString *)readableTime:(NSDate*)time{
+-(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime{
     if(!time) return nil;
     NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
     [timeFormatter setDateFormat:@"HH:mm"];
     NSString *timeString = [timeFormatter stringFromDate:time];
     
-    NSInteger numberOfDaysAfterTodays = [time daysAfterDate:[NSDate date]];
+    NSDate *beginningOfDate = [time dateAtStartOfDay];
+    NSInteger numberOfDaysAfterTodays = [beginningOfDate distanceInDaysToDate:[[NSDate date] dateAtStartOfDay]];
+    NSLog(@"number after:%i",numberOfDaysAfterTodays);
     NSString *dateString;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     [dateFormatter setLocale:usLocale];
     BOOL shouldFormat = NO;
-    if(time.isToday) dateString = @"Today";
-    else if(numberOfDaysAfterTodays == 1) dateString = @"Tomorrow";
-    else if(numberOfDaysAfterTodays < 7){
+    if(numberOfDaysAfterTodays == 0){
+        dateString = @"Today";
+    }
+    else if(numberOfDaysAfterTodays == -1) dateString = @"Tomorrow";
+    else if(numberOfDaysAfterTodays == 1) dateString = @"Yesterday";
+    else if(numberOfDaysAfterTodays < 7 && numberOfDaysAfterTodays > -7){
         [dateFormatter setDateFormat:@"EEEE"];
         shouldFormat = YES;
     }
@@ -57,42 +66,28 @@
     if(shouldFormat){
         dateString = [dateFormatter stringFromDate:time];
     }
-    
-    return [[NSString stringWithFormat:@"%@, %@",dateString,timeString] capitalizedString];
+    dateString = [dateString capitalizedString];
+    if(!showTime) return dateString;
+    return [NSString stringWithFormat:@"%@, %@",dateString,timeString];
     
 }
 -(NSString *)readableTitleForStatus{
     NSString *title;
     CellType cellType = [self cellTypeForTodo];
-    if(cellType == CellTypeToday) title = @"Schedule Today";
+    
+    if(cellType == CellTypeToday) title = @"Today";
     else if(cellType == CellTypeSchedule){
         NSDate *toDoDate = self.schedule;
         if(!toDoDate) title = @"Unspecified";
-        else if(toDoDate.isTomorrow) title = @"Schedule Tomorrow";
         else{
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"EEEE, dd-MM"];
-            NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-            [dateFormatter setLocale:usLocale];
-            NSString *strDate = [dateFormatter stringFromDate:toDoDate];
-            title = [NSString stringWithFormat:@"Schedule %@",strDate];
+            title = [self readableTime:toDoDate showTime:NO];
+            //title = [NSString stringWithFormat:@"Schedule %@",dateString];
         }
     }
     else if(cellType == CellTypeDone){
         NSDate *toDoDate = self.completionDate;
-        if(toDoDate.isToday) title = @"Completed Today";
-        else if(toDoDate.isYesterday) title = @"Completed Yesterday";
-        else{
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-            [dateFormatter setLocale:usLocale];
-            // this is imporant - we set our input date format to match our input string
-            // if format doesn't match you'll get nil from your string, so be careful
-            [dateFormatter setDateFormat:@"Completed dd-MM-yyyy"];
-            // voila!
-            NSString *strDate = [dateFormatter stringFromDate:toDoDate];
-            title = strDate;
-        }
+        NSString *dateString = [self readableTime:toDoDate showTime:NO];
+        title = [NSString stringWithFormat:@"Completed %@",dateString];
     }
     
     return [title capitalizedString];

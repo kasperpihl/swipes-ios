@@ -9,5 +9,5 @@
 #import "KPPopup.h"
 typedef void (^AlarmPopupBlock)(NSDate *chosenDate);
 @interface AlarmPopup : KPPopup
-+(AlarmPopup *)showInView:(UIView *)view withBlock:(AlarmPopupBlock)block;
++(AlarmPopup *)showInView:(UIView *)view withBlock:(AlarmPopupBlock)block andDate:(NSDate*)alarmDate;
 @end

@@ -51,6 +51,8 @@
 #import "SchedulePopup.h"
 #import "AlarmPopup.h"
 #import "NSDate-Utilities.h"
+#import "NotesView.h"
+#import "AlarmView.h"
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
     KPEditModeTitle,
@@ -59,7 +61,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNotes
 };
 
-@interface ToDoViewController () <HPGrowingTextViewDelegate,KPAddTagDelegate,KPTagDelegate>
+@interface ToDoViewController () <HPGrowingTextViewDelegate,KPAddTagDelegate,KPTagDelegate,NotesViewDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
 @property (nonatomic,weak) IBOutlet HPGrowingTextView *editTitleTextView;
 
@@ -296,16 +298,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self updateTags];
     [self.segmentedViewController updateBackground];
 }
--(void)pressedTags:(id)sender{
-    self.activeEditMode = KPEditModeTags;
-    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, 450) andTags:[TAGHANDLER allTags] andMaxHeight:320];
-    tagView.delegate = self;
-    tagView.tagView.tagDelegate = self;
-    
-    [self.segmentedViewController presentSemiView:tagView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f,KNSemiModalOptionKeys.shadowOpacity:@0.5f} completion:^{
-        [tagView scrollIfNessecary];
-    }];
-}
+
 #pragma mark HPGrowingTextViewDelegate
 - (void)growingTextViewDidChange:(HPGrowingTextView *)growingTextView{
     if(growingTextView.text.length > 255) growingTextView.text = [growingTextView.text substringToIndex:254];
@@ -333,14 +326,28 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetY(self.scrollView, titleHeight);
     CGRectSetHeight(self.scrollView, self.contentView.frame.size.height-titleHeight);
 }
+#pragma mark NotesViewDelegate
+-(void)pressedCancelNotesView:(NotesView *)notesView{
+    [self.segmentedViewController dismissSemiModalView];
+}
+-(void)savedNotesView:(NotesView *)notesView text:(NSString *)text{
+    [self.model updateNotes:text save:YES];
+    [self.segmentedViewController dismissSemiModalViewWithCompletion:^{
+        [self updateNotes];
+        [self layout];
+    }];
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
 }
 -(void)updateNotes{
+    if(!self.model.notes || self.model.notes.length == 0) self.notesView.text = @"Add notes";
+    else self.notesView.text = self.model.notes;
     
-    //self.notesView.text = self.model.notes;
     CGRectSetHeight(self.notesView, self.notesView.contentSize.height);
 }
 -(void)updateStatus{
@@ -369,7 +376,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
     else{
         self.alarmImage.highlighted = YES;
-        self.alarmLabel.text = [self.model readableTime:self.model.alarm];
+        self.alarmLabel.text = [self.model readableTime:self.model.alarm showTime:YES];
     }
 }
 -(void)setModel:(KPToDo *)model{
@@ -410,19 +417,34 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [[self.injectedCell viewWithTag:SHOW_ITEM_TAG] removeFromSuperview];
 }
 -(void)pressedDone:(id)sender{
-    [self cleanInjectedCell];
     [self.delegate didPressCloseToDoViewController:self];
 }
 -(void)pressedAlarm:(id)sender{
     self.activeEditMode = KPEditModeAlarm;
+    /*AlarmView *alarmView = [[AlarmView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)];
+    [self.segmentedViewController presentSemiView:alarmView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f,KNSemiModalOptionKeys.shadowOpacity:@0.5f} completion:^{
+    }];*/
     [AlarmPopup showInView:[self segmentedViewController].view withBlock:^(NSDate *chosenDate) {
         [self.model updateAlarm:chosenDate force:NO save:YES];
-        
         [self updateAlarm];
-    }];
+    } andDate:self.model.alarm];
 }
 -(void)pressedNotes:(id)sender{
-    NSLog(@"pressed wooohooo");
+    NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0, 320, self.segmentedViewController.view.frame.size.height - DEFAULT_SPACE_FROM_SLIDE_UP_VIEW)];
+    [notesView setNotesText:self.model.notes];
+    notesView.delegate = self;
+    [self.segmentedViewController presentSemiView:notesView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f,KNSemiModalOptionKeys.shadowOpacity:@0.5f} completion:^{
+    }];
+}
+-(void)pressedTags:(id)sender{
+    self.activeEditMode = KPEditModeTags;
+    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, 450) andTags:[TAGHANDLER allTags] andMaxHeight:320];
+    tagView.delegate = self;
+    tagView.tagView.tagDelegate = self;
+    
+    [self.segmentedViewController presentSemiView:tagView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f,KNSemiModalOptionKeys.shadowOpacity:@0.5f} completion:^{
+        [tagView scrollIfNessecary];
+    }];
 }
 -(void)dealloc{
     self.injectedCell = nil;

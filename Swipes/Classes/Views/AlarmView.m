@@ -1,11 +1,10 @@
 //
-//  AlertPopup.m
+//  AlarmView.m
 //  Swipes
 //
 //  Created by Kasper Pihl Tornøe on 03/06/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-
 #define POPUP_WIDTH 300
 #define CONTENT_VIEW_TAG 1
 #define SELECT_DATE_VIEW_TAG 3
@@ -28,8 +27,8 @@
 #import "AlarmPopup.h"
 #import <QuartzCore/QuartzCore.h>
 #import "NSDate-Utilities.h"
-@interface AlarmPopup ()
-@property (nonatomic,copy) AlarmPopupBlock block;
+#import "AlarmView.h"
+@interface AlarmView ()
 @property (nonatomic,weak) IBOutlet UIDatePicker *datePicker;
 @property (nonatomic,weak) IBOutlet UILabel *monthLabel;
 @property (nonatomic,weak) IBOutlet UIView *selectDateView;
@@ -37,30 +36,21 @@
 @property (nonatomic,weak) IBOutlet UIButton *forwardOneMonth;
 
 @end
-@implementation AlarmPopup
-+(AlarmPopup *)showInView:(UIView *)view withBlock:(AlarmPopupBlock)block andDate:(NSDate *)alarmDate{
-    
-    AlarmPopup *alertView = [[AlarmPopup alloc] initWithFrame:view.bounds];
-    [view addSubview:alertView];
-    alertView.block = block;
-    if(alarmDate && alarmDate.isInFuture) [alertView setPickerDate:alarmDate];
-    [alertView show:YES completed:nil];
-    return alertView;
-}
+@implementation AlarmView
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setContainerSize:CGSizeMake(POPUP_WIDTH, POPUP_WIDTH)];
-        UIView *selectDateView = [[UIView alloc] initWithFrame:self.containerView.bounds];
+        UIView *selectDateView = [[UIView alloc] initWithFrame:self.bounds];
         selectDateView.tag = SELECT_DATE_VIEW_TAG;
         selectDateView.backgroundColor = POPUP_BACKGROUND; //POPUP_BACKGROUND_COLOR
-        selectDateView.layer.cornerRadius = 10;
         selectDateView.layer.masksToBounds = YES;
         
-        UIView *colorBottomSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, selectDateView.frame.size.height-COLOR_SEPERATOR_HEIGHT, selectDateView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
+        /*UIView *colorBottomSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, selectDateView.frame.size.height-COLOR_SEPERATOR_HEIGHT, selectDateView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
         colorBottomSeperator.backgroundColor = SWIPES_COLOR;
-        [selectDateView addSubview:colorBottomSeperator];
+        [selectDateView addSubview:colorBottomSeperator];*/
+        
         
         UIButton *backOneMonthButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [backOneMonthButton setImage:[UIImage imageNamed:@"left_arrow"] forState:UIControlStateNormal];
@@ -114,11 +104,11 @@
         
         
         
-        CGFloat buttonY = selectDateView.frame.size.height-COLOR_SEPERATOR_HEIGHT-PICK_DATE_BUTTON_HEIGHT;
+        CGFloat buttonY = selectDateView.frame.size.height-PICK_DATE_BUTTON_HEIGHT;
         CGFloat buttonWidth = selectDateView.frame.size.width/2;
         
         UIView *pickerButtonSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, buttonY-COLOR_SEPERATOR_HEIGHT, selectDateView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        pickerButtonSeperator.backgroundColor = SEGMENT_SELECTED;
+        pickerButtonSeperator.backgroundColor = SWIPES_COLOR;
         [selectDateView addSubview:pickerButtonSeperator];
         
         
@@ -134,30 +124,23 @@
         dateButtonsSeperator.backgroundColor = SEGMENT_SELECTED;
         [selectDateView addSubview:dateButtonsSeperator];
         
+        
         UIButton *setDateButton = [UIButton buttonWithType:UIButtonTypeCustom];
         setDateButton.titleLabel.font = BUTTON_FONT;
         setDateButton.frame = CGRectMake(buttonWidth, buttonY,buttonWidth , PICK_DATE_BUTTON_HEIGHT);
         [setDateButton setTitle:@"REMIND ME" forState:UIControlStateNormal];
         [setDateButton addTarget:self action:@selector(selectedDate:) forControlEvents:UIControlEventTouchUpInside];
         [selectDateView addSubview:setDateButton];
-        
-        
-        
-        [self.containerView addSubview:selectDateView];
-        self.selectDateView = [self.containerView viewWithTag:SELECT_DATE_VIEW_TAG];
-        
+        [self addSubview:selectDateView];
     }
     return self;
 }
+
 -(void)pressedRemove{
-   [self show:NO completed:^(BOOL succeeded, NSError *error) {
-       if(self.block) self.block(nil);
-   }];
+   
 }
 -(void)selectedDate:(UIButton*)sender{
-    [self show:NO completed:^(BOOL succeeded, NSError *error) {
-        if(self.block) self.block(self.datePicker.date);
-    }];
+    
 }
 -(void)setPickerDate:(NSDate*)pickerDate{
     self.datePicker.date = pickerDate;

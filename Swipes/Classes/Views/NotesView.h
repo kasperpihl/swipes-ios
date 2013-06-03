@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class NotesView;
+@protocol NotesViewDelegate <NSObject>
+-(void)pressedCancelNotesView:(NotesView*)notesView;
+-(void)savedNotesView:(NotesView*)notesView text:(NSString*)text;
+@end
 @interface NotesView : UIView
-
+@property (nonatomic,weak) NSObject<NotesViewDelegate> *delegate;
+-(void)setNotesText:(NSString*)notesText;
 @end

@@ -16,7 +16,7 @@
 #define DONE_EDITING_BUTTON_TAG 5
 #define ANIMATION_DURATION 0.25f
 
-#define KEYBOARD_HEIGHT 216
+
 
 @interface AddPanelView () <UITextFieldDelegate>
 @property (nonatomic,weak) IBOutlet UIView *backgroundView;

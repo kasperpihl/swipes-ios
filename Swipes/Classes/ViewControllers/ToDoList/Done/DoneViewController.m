@@ -20,17 +20,7 @@
     return [KPToDo MR_findAllSortedBy:@"completionDate" ascending:NO withPredicate:predicate];
 }
 -(NSString *)itemHandler:(ItemHandler *)handler titleForItem:(KPToDo *)item{
-    NSString *title;
-    NSDate *toDoDate = item.completionDate;
-    if(toDoDate.isToday) title = @"Completed Today";
-    else if(toDoDate.isYesterday) title = @"Completed Yesterday";
-    else{
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"EEEE, dd-MM"];
-        NSString *strDate = [dateFormatter stringFromDate:toDoDate];
-        title = [NSString stringWithFormat:@"Completed %@",strDate];
-    }
-    return title;
+    return [item readableTitleForStatus];
 }
 
 -(void)didPressLoadMore:(id)sender{

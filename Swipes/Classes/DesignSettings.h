@@ -67,6 +67,9 @@
 #define BUTTON_HEIGHT 44
 #define SEARCH_BAR_DEFAULT_HEIGHT 55
 
+#define DEFAULT_SPACE_FROM_SLIDE_UP_VIEW 60
+#define KEYBOARD_HEIGHT 216
+
 #define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
 #define BUTTON_FONT [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:20]
 #define SECTION_HEADER_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
