@@ -4,6 +4,7 @@
 #import "_KPToDo.h"
 
 const struct KPToDoAttributes KPToDoAttributes = {
+	.alarm = @"alarm",
 	.completionDate = @"completionDate",
 	.notes = @"notes",
 	.order = @"order",
@@ -54,6 +55,13 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic alarm;
+
+
 
 
 

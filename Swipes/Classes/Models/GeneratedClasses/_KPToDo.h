@@ -5,6 +5,7 @@
 #import "KPParseObject.h"
 
 extern const struct KPToDoAttributes {
+	__unsafe_unretained NSString *alarm;
 	__unsafe_unretained NSString *completionDate;
 	__unsafe_unretained NSString *notes;
 	__unsafe_unretained NSString *order;
@@ -31,6 +32,7 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+
 @interface KPToDoID : NSManagedObjectID {}
 @end
 
@@ -39,6 +41,16 @@ extern const struct KPToDoFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (KPToDoID*)objectID;
+
+
+
+
+
+@property (nonatomic, strong) NSDate* alarm;
+
+
+
+//- (BOOL)validateAlarm:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -138,6 +150,12 @@ extern const struct KPToDoFetchedProperties {
 @end
 
 @interface _KPToDo (CoreDataGeneratedPrimitiveAccessors)
+
+
+- (NSDate*)primitiveAlarm;
+- (void)setPrimitiveAlarm:(NSDate*)value;
+
+
 
 
 - (NSDate*)primitiveCompletionDate;

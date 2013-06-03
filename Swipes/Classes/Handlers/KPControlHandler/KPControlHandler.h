@@ -25,6 +25,7 @@ typedef NS_ENUM(NSUInteger, KPControlHandlerState){
 @interface KPControlHandler : NSObject
 @property (nonatomic,readonly) KPControlHandlerState activeState;
 @property (nonatomic,weak) NSObject<KPControlHandlerDelegate> *delegate;
+@property (nonatomic) BOOL lock;
 +(KPControlHandler*)instanceInView:(UIView*)view;
 -(void)setState:(KPControlHandlerState)state animated:(BOOL)animated;
 @end

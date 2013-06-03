@@ -32,12 +32,34 @@ static NotificationHandler *sharedObject;
     UILocalNotification *localNotif = [[UILocalNotification alloc] init];
     localNotif.fireDate = date;
     localNotif.timeZone = [NSTimeZone defaultTimeZone];
-    localNotif.alertAction = NSLocalizedString(@"View Details", nil);
-    localNotif.alertBody = [NSString stringWithFormat:@"You have %i new tasks today",numberOfTasks];
+    localNotif.alertAction = NSLocalizedString(@"Open Swipes", nil);
+    NSString *taskString = (numberOfTasks > 1) ? @"tasks" : @"task";
+    localNotif.alertBody = [NSString stringWithFormat:@"Goodmorning. You have %i new %@ today",numberOfTasks,taskString];
     localNotif.soundName = UILocalNotificationDefaultSoundName;
     NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"schedule",@"type",[NSNumber numberWithInteger:numberOfTasks],@"number",nil];
     localNotif.userInfo = infoDict;
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
     //NSLog(@"%@",app.scheduledLocalNotifications);
+}
+-(void)updateAlarm:(NSDate *)alarm identifier:(NSString*)identifier title:(NSString *)title{
+    UIApplication *app = [UIApplication sharedApplication];
+    NSArray *notifications = [app scheduledLocalNotifications];
+    for(UILocalNotification *localNotification in notifications){
+        if(![[localNotification.userInfo objectForKey:@"type"] isEqualToString:@"alarm"]) continue;
+        if(![[localNotification.userInfo objectForKey:@"identifier"] isEqualToString:identifier]) continue;
+        [app cancelLocalNotification:localNotification];
+    }
+    if(alarm){
+        UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+        localNotif.fireDate = alarm;
+        localNotif.timeZone = [NSTimeZone defaultTimeZone];
+        localNotif.alertAction = NSLocalizedString(@"Open Swipes", nil);
+        if(title.length > 80) title = [title substringToIndex:80];
+        localNotif.alertBody = title;
+        localNotif.soundName = UILocalNotificationDefaultSoundName;
+        NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"alarm",@"type",identifier,@"identifier",nil];
+        localNotif.userInfo = infoDict;
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
+    }
 }
 @end

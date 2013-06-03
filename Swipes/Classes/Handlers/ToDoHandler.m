@@ -37,6 +37,12 @@ static ToDoHandler *sharedObject;
     newToDo.order = count;
     [self save];
 }
+-(void)changeToDos:(NSArray*)toDos title:(NSString *)title save:(BOOL)save{
+    for(KPToDo *toDo in toDos){
+        toDo.title = title;
+    }
+    if(save) [self save];
+}
 -(void)save{
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
 }
@@ -130,13 +136,13 @@ static ToDoHandler *sharedObject;
     NSString *iconName;
     switch (type) {
         case CellTypeSchedule:
-            iconName = @"schedule-highlighted";
+            iconName = @"schedule";
             break;
         case CellTypeToday:
-            iconName = @"today-highlighted";
+            iconName = @"today";
             break;
         case CellTypeDone:
-            iconName = @"done-highlighted";
+            iconName = @"done";
             break;
         default:
             break;

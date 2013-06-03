@@ -34,7 +34,7 @@
 #import "KPControlHandler.h"
 #import "RootViewController.h"
 #import <QuartzCore/QuartzCore.h>
-typedef void (^voidBlock)(void);
+
 @interface KPControlHandler ()
 @property (nonatomic) KPControlHandlerState activeState;
 @property (nonatomic,weak) UIView* view;
@@ -130,6 +130,18 @@ typedef void (^voidBlock)(void);
     };
     return block;
 }
+-(void)setLock:(BOOL)lock{
+    if(_lock != lock){
+        if(lock) [self setState:KPControlHandlerStateNone animated:YES];
+        _lock = lock;
+    }
+}
+-(void)forceHide{
+    CGFloat targetY = self.view.frame.size.height;
+    CGRectSetY(self.addButton, targetY);
+    CGRectSetY(self.deleteButton, targetY);
+    CGRectSetY(self.tagButton, targetY);
+}
 -(voidBlock)getShowBlockForState:(KPControlHandlerState)state{
     CGFloat bigButtonY = [self getYForBigSize:YES];
     CGFloat smallButtonY = [self getYForBigSize:NO];
@@ -150,7 +162,7 @@ typedef void (^voidBlock)(void);
     return block;
 }
 -(void)setState:(KPControlHandlerState)state animated:(BOOL)animated{
-    if(state == self.activeState) return;
+    if(state == self.activeState || self.lock) return;
     voidBlock clearBlock = [self getClearBlockForState:self.activeState];
     CGFloat clearDuration = (self.activeState == KPControlHandlerStateNone) ? 0 : ANIMATION_DURATION;
     CGFloat showDuration = (state == KPControlHandlerStateNone) ? 0 : ANIMATION_DURATION;
@@ -166,15 +178,22 @@ typedef void (^voidBlock)(void);
             clearDuration = showDuration;
         }
         [UIView animateWithDuration:clearDuration delay:0 options:clearAnimationOption animations:clearBlock completion:^(BOOL finished) {
+            if(self.lock){
+                [self forceHide];
+                return;
+            }
             if(finished && showBlock){
                 if(showDuration == 0) showBlock();
-                else [UIView animateWithDuration:showDuration delay:0 options:showAnimationOption animations:showBlock completion:nil];
+                else [UIView animateWithDuration:showDuration delay:0 options:showAnimationOption animations:showBlock completion:^(BOOL finished) {
+                    if(self.lock) [self forceHide];
+                }];
             }
         }];
     }
     else{
         clearBlock();
         showBlock();
+        if(self.lock) [self forceHide];
     }
     self.activeState = state;
 }

@@ -154,6 +154,8 @@ typedef enum {
         UIButton *in2DaysButton = [self buttonForScheduleButton:KPScheduleButtonIn2Days];
         NSDate *twoDaysDate = [NSDate dateWithDaysFromNow:2];
         NSDateFormatter *weekday = [[NSDateFormatter alloc] init];
+        NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+        [weekday setLocale:usLocale];
         [weekday setDateFormat: @"EEEE"];
         [in2DaysButton addTarget:self action:@selector(pressedIn2Days:) forControlEvents:UIControlEventTouchUpInside];
         NSString *twoDaysString = [weekday stringFromDate:twoDaysDate];

@@ -7,7 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+@class ToDoViewController;
+@class KPSegmentedViewController;
+@protocol ToDoVCDelegate <NSObject>
+-(void)didPressCloseToDoViewController:(ToDoViewController*)viewController;
+@end
 @class KPToDo;
+@class ToDoCell;
 @interface ToDoViewController : UIViewController
+@property (nonatomic,weak) NSObject<ToDoVCDelegate> *delegate;
 @property (nonatomic,strong) KPToDo *model;
+@property (nonatomic,weak) IBOutlet UIView *contentView;
+@property (nonatomic,strong) ToDoCell *injectedCell;
+@property (nonatomic,strong) NSIndexPath *injectedIndexPath;
+@property (nonatomic,weak) KPSegmentedViewController *segmentedViewController;
 @end

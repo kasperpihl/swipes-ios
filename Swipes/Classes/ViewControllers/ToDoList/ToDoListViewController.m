@@ -19,16 +19,20 @@
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
 #define SEARCH_BAR_TAG 503
-
-#define SECTION_HEADER_HEIGHT 30
 #define FAKE_HEADER_VIEW_TAG 505
 #define MENU_TEXT_TAG 506
 #define COLORED_MENU_TEXT_TAG 507
+
+
+#define SECTION_HEADER_HEIGHT 30
 #define SECTION_HEADER_X 15
 #define CONTENT_INSET_BOTTOM 5// 100
-@interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate>
+@interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate,ToDoVCDelegate>
 
 @property (nonatomic,strong) MCSwipeTableViewCell *swipingCell;
+
+@property (nonatomic,strong) ToDoViewController *showingViewController;
+@property (nonatomic) CGPoint savedContentOffset;
 @property (nonatomic) CellType cellType;
 @property (nonatomic,strong) KPSearchBar *searchBar;
 @property (nonatomic) NSMutableArray *selectedRows;
@@ -38,7 +42,6 @@
 @property (nonatomic,weak) IBOutlet UIView *coloredMenuText;
 @property (nonatomic,weak) UIView *fakeHeaderView;
 @property (nonatomic) BOOL isColored;
-@property (nonatomic) NSIndexPath *animatedIndexPath;
 
 @property (nonatomic,strong) NSMutableDictionary *stateDictionary;
 @end
@@ -112,12 +115,12 @@
 }
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if(self.animatedIndexPath || (!self.itemHandler.isSorted && self.itemHandler.itemCounterWithFilter == 0)) return 0;
+    if(self.showingViewController.injectedIndexPath || (!self.itemHandler.isSorted && self.itemHandler.itemCounterWithFilter == 0)) return 0;
     return SECTION_HEADER_HEIGHT;
     
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    if(self.animatedIndexPath) return nil;
+    if(self.showingViewController.injectedIndexPath) return nil;
         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 30)];
         headerView.backgroundColor = SECTION_HEADER_BACKGROUND;
         NSString *title = [self.itemHandler titleForSection:section];
@@ -129,9 +132,8 @@
         return headerView;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if(self.animatedIndexPath && indexPath.row == self.animatedIndexPath.row && indexPath.section == self.animatedIndexPath.section){
-        NSLog(@"big height");
-        return self.tableView.frame.size.height;
+    if(self.showingViewController.injectedIndexPath && indexPath.row == self.showingViewController.injectedIndexPath.row && indexPath.section == self.showingViewController.injectedIndexPath.section){
+        return self.tableView.frame.size.height+COLOR_SEPERATOR_HEIGHT;
     }
     else return CELL_HEIGHT;
 }
@@ -177,6 +179,7 @@
 {
     return YES;
 }
+
 -(void)doubleTap:(UISwipeGestureRecognizer*)tap
 {
     if (UIGestureRecognizerStateEnded == tap.state)
@@ -184,20 +187,38 @@
         CGPoint p = [tap locationInView:tap.view];
         
         NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
-        if(indexPath){
-            /*self.animatedIndexPath = indexPath;
-            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-            [self.tableView setContentOffset:CGPointMake(1, cell.frame.origin.y) animated:YES];
-            [self.tableView beginUpdates];
-            [self.tableView endUpdates];
-            [self.tableView reloadData];*/
+        if(indexPath && !self.showingViewController){
+            [[self parent] show:NO controlsAnimated:YES];
+            [self parent].lock = YES;
             KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
             ToDoViewController *viewController = [[ToDoViewController alloc] init];
+            viewController.delegate = self;
+            viewController.segmentedViewController = [self parent];
+            viewController.view.frame = CGRectMake(0, 0, 320, self.tableView.frame.size.height+COLOR_SEPERATOR_HEIGHT);
+            viewController.injectedIndexPath = indexPath;
+            self.showingViewController = viewController;
+            
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            self.savedContentOffset = self.tableView.contentOffset;
+            [self deselectAllRows:self];
+            ToDoCell *cell = (ToDoCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+            viewController.injectedCell = cell;
             viewController.model = toDo;
-            [self presentSemiViewController:viewController withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.30f}];
+            [self.tableView setContentOffset:CGPointMake(1, cell.frame.origin.y+COLOR_SEPERATOR_HEIGHT) animated:YES];
+            self.tableView.scrollEnabled = NO;
+            self.tableView.delaysContentTouches = NO;
         }
     }
 }
+
+-(void)didPressCloseToDoViewController:(ToDoViewController *)viewController{
+    NSIndexPath *indexPath = viewController.injectedIndexPath;
+    [self cleanShowingViewAnimated:YES];
+    
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [[self parent] show:YES controlsAnimated:YES];
+}
+
 #pragma mark - UI Specific
 -(NSArray *)selectedItems{
     NSMutableArray *array = [NSMutableArray array];
@@ -342,6 +363,7 @@
     [self removeItemsForIndexSet:indexSet];
 }
 -(void)removeItemsForIndexSet:(NSIndexSet*)indexSet{
+    [self runBeforeMoving];
     NSIndexSet *deletedSections = [self.itemHandler removeItemsForIndexSet:indexSet];
     if(deletedSections){
         [self.tableView beginUpdates];
@@ -352,11 +374,13 @@
     else{
         [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
     }
-    [self.selectedRows removeAllObjects];
+    [self cleanUpAfterMovingAnimated:YES];
     [self didUpdateCells];
 }
 
 -(void)moveIndexSet:(NSIndexSet*)indexSet toCellType:(CellType)cellType{
+    [[self parent] setCurrentState:KPControlCurrentStateAdd];
+    [[self parent] highlightButton:(KPSegmentButtons)cellType-1];
     if(self.cellType != cellType){
         [self removeItemsForIndexSet:indexSet];
     }
@@ -365,10 +389,31 @@
         [self deselectAllRows:self];
         [self update];
     }
-    [[self parent] setCurrentState:KPControlCurrentStateAdd];
-    [[self parent] highlightButton:(KPSegmentButtons)cellType-1];
-    [[self parent] show:YES controlsAnimated:YES];
+    
+}
+-(void)runBeforeMoving{
+    if(self.showingViewController){
+        self.showingViewController.injectedIndexPath = nil;
+    }
+}
+-(void)cleanShowingViewAnimated:(BOOL)animated{
+    if(self.showingViewController){
+        
+        self.showingViewController.injectedCell = nil;
+        self.showingViewController = nil;
+        self.tableView.scrollEnabled = YES;
+        self.tableView.delaysContentTouches = YES;
+        [self parent].lock = NO;
+        
+        if(animated) [self.tableView setContentOffset:self.savedContentOffset animated:YES];
+    }
+}
+-(void)cleanUpAfterMovingAnimated:(BOOL)animated{
+    [self.selectedRows removeAllObjects];
+    [self cleanShowingViewAnimated:animated];
     self.swipingCell = nil;
+    [[self parent] show:YES controlsAnimated:YES];
+    
 }
 -(void)deselectAllRows:(id)sender{
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
@@ -376,6 +421,7 @@
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
     [self.selectedRows removeAllObjects];
+    [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
 -(void)returnSelectedRowsAndBounce:(BOOL)bounce{
     NSArray *visibleCells = [self.tableView visibleCells];
@@ -514,10 +560,13 @@
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self.selectedRows removeAllObjects];
+    
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
-
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [self cleanUpAfterMovingAnimated:NO];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

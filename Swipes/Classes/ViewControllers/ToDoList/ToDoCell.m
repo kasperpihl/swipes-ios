@@ -50,6 +50,7 @@
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.contentView.layer.masksToBounds = YES;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.contentView.backgroundColor = TABLE_CELL_BACKGROUND;
         self.backgroundColor = TABLE_CELL_BACKGROUND;
@@ -99,6 +100,28 @@
         self.outlineView = [self.contentView viewWithTag:OUTLINE_TAG];
     }
     return self;
+}
+-(void)hideContent:(BOOL)hide animated:(BOOL)animated{
+    voidBlock block = ^(void) {
+        if(hide){
+                self.outlineView.alpha = 0;
+                self.dotView.alpha = 0;
+                self.timelineView.alpha = 0;
+                self.tagsLabel.alpha = 0;
+                self.titleLabel.alpha = 0;
+        }
+        else {
+            self.outlineView.alpha = 1;
+            self.dotView.alpha = 1;
+            self.timelineView.alpha = 1;
+            self.tagsLabel.alpha = 1;
+            self.titleLabel.alpha = 1;
+        }
+    };
+    if(animated){
+        [UIView animateWithDuration:0.25f animations:block];
+    }
+    else block();
 }
 -(void)showTimeline:(BOOL)show{
     self.timelineView.hidden = !show;

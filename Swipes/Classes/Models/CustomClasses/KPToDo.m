@@ -1,5 +1,6 @@
 #import "KPToDo.h"
 
+#import "NotificationHandler.h"
 #import "KPTag.h"
 #import "NSDate-Utilities.h"
 @interface KPToDo ()
@@ -21,6 +22,45 @@
     }
     return CellTypeNone;
 }
+-(void)updateAlarm:(NSDate*)alarm force:(BOOL)force save:(BOOL)save{
+    if([self.alarm isEqualToDate:alarm] && !force) return;
+    self.alarm = alarm;
+    NSString *identifier = [[self.objectID URIRepresentation] absoluteString];
+    [NOTIHANDLER updateAlarm:self.alarm identifier:identifier title:self.title];
+    if(save) [self save];
+}
+-(void)save{
+    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+}
+-(NSString *)readableTime:(NSDate*)time{
+    if(!time) return nil;
+    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+    [timeFormatter setDateFormat:@"HH:mm"];
+    NSString *timeString = [timeFormatter stringFromDate:time];
+    
+    NSInteger numberOfDaysAfterTodays = [time daysAfterDate:[NSDate date]];
+    NSString *dateString;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    [dateFormatter setLocale:usLocale];
+    BOOL shouldFormat = NO;
+    if(time.isToday) dateString = @"Today";
+    else if(numberOfDaysAfterTodays == 1) dateString = @"Tomorrow";
+    else if(numberOfDaysAfterTodays < 7){
+        [dateFormatter setDateFormat:@"EEEE"];
+        shouldFormat = YES;
+    }
+    else{
+        [dateFormatter setDateFormat:@"d MMMM"];
+        shouldFormat = YES;
+    }
+    if(shouldFormat){
+        dateString = [dateFormatter stringFromDate:time];
+    }
+    
+    return [[NSString stringWithFormat:@"%@, %@",dateString,timeString] capitalizedString];
+    
+}
 -(NSString *)readableTitleForStatus{
     NSString *title;
     CellType cellType = [self cellTypeForTodo];
@@ -32,6 +72,8 @@
         else{
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"EEEE, dd-MM"];
+            NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+            [dateFormatter setLocale:usLocale];
             NSString *strDate = [dateFormatter stringFromDate:toDoDate];
             title = [NSString stringWithFormat:@"Schedule %@",strDate];
         }
@@ -42,6 +84,8 @@
         else if(toDoDate.isYesterday) title = @"Completed Yesterday";
         else{
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+            [dateFormatter setLocale:usLocale];
             // this is imporant - we set our input date format to match our input string
             // if format doesn't match you'll get nil from your string, so be careful
             [dateFormatter setDateFormat:@"Completed dd-MM-yyyy"];

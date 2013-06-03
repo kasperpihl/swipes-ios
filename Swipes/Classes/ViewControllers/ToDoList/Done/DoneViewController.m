@@ -26,12 +26,9 @@
     else if(toDoDate.isYesterday) title = @"Completed Yesterday";
     else{
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        // this is imporant - we set our input date format to match our input string
-        // if format doesn't match you'll get nil from your string, so be careful
-        [dateFormatter setDateFormat:@"Completed dd-MM-yyyy"];
-        // voila!
+        [dateFormatter setDateFormat:@"EEEE, dd-MM"];
         NSString *strDate = [dateFormatter stringFromDate:toDoDate];
-        title = strDate;
+        title = [NSString stringWithFormat:@"Completed %@",strDate];
     }
     return title;
 }

@@ -19,6 +19,7 @@
 #pragma mark - Dragable delegate
 -(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber{
     [self changeToColored:(itemNumber == 0)];
+    [self.tableView setReorderingEnabled:(itemNumber > 1)];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:itemNumber];
 }
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
@@ -35,13 +36,14 @@
 	return cell;
 }
 - (void)dragTableViewController:(KPReorderTableView *)dragTableViewController didBeginDraggingAtRow:(NSIndexPath *)dragRow{
-    [[self parent] show:NO controlsAnimated:YES];
+    [self parent].lock = YES;
     self.dragRow = dragRow;
     [self deselectAllRows:self];
 }
 -(void)dragTableViewController:(KPReorderTableView *)dragTableViewController didEndDraggingToRow:(NSIndexPath *)destinationIndexPath{
     [self.itemHandler moveItem:self.dragRow toIndexPath:destinationIndexPath];
     self.tableView.allowsMultipleSelection = YES;
+    [self parent].lock = NO;
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
 

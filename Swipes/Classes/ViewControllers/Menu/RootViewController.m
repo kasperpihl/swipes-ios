@@ -16,7 +16,8 @@
 #import "TodayViewController.h"
 #import "DoneViewController.h"
 #import "UtilityClass.h"
-@interface RootViewController () <UINavigationControllerDelegate>
+#import "MYIntroductionView.h"
+@interface RootViewController () <UINavigationControllerDelegate,MYIntroductionDelegate>
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
 
 @end
@@ -47,7 +48,33 @@ static RootViewController *sharedObject;
         self.viewControllers = @[menuViewController];
     }
 }
-
+-(void)walkthrough{
+    //STEP 1 Construct Panels
+    MYIntroductionPanel *panel = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough1"] description:@""];
+    
+    //You may also add in a title for each panel
+    MYIntroductionPanel *panel2 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough1"] description:@""];
+    
+    //STEP 2 Create IntroductionView
+    
+    /*A standard version*/
+    //MYIntroductionView *introductionView = [[MYIntroductionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) headerImage:[UIImage imageNamed:@"SampleHeaderImage.png"] panels:@[panel, panel2]];
+    
+    
+    /*A version with no header (ala "Path")*/
+    //MYIntroductionView *introductionView = [[MYIntroductionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) panels:@[panel, panel2]];
+    
+    /*A more customized version*/
+    MYIntroductionView *introductionView = [[MYIntroductionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) panels:@[panel, panel2]];
+    [introductionView setBackgroundImage:[UtilityClass imageWithColor:color(58,67,79,1)]];
+    
+    
+    //Set delegate to self for callbacks (optional)
+    introductionView.delegate = self;
+    
+    //STEP 3: Show introduction view
+    [introductionView showInView:self.view];
+}
 #pragma mark - Helping methods
 #pragma mark - ViewController methods
 -(void)setupAppearance{
@@ -61,6 +88,7 @@ static RootViewController *sharedObject;
     [self setupAppearance];
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
+    //[self walkthrough];
     [self setupMenu];
     
 }

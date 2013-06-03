@@ -44,7 +44,7 @@
 
 @property (nonatomic) BOOL hasAppeared;
 @property (nonatomic) BOOL hidden;
-@property (nonatomic) BOOL lock;
+
 @end
 
 @implementation KPSegmentedViewController
@@ -286,6 +286,12 @@
         _currentState = currentState;
     }
     [self show:YES controlsAnimated:YES];
+}
+-(void)setLock:(BOOL)lock{
+    if(_lock != lock){
+        _lock = lock;
+        self.controlHandler.lock = lock;
+    }
 }
 -(void)show:(BOOL)show controlsAnimated:(BOOL)animated{
     if(show){

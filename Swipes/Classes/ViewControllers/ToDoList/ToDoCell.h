@@ -16,4 +16,5 @@
 -(void)setOrderNumber:(NSInteger)orderNumber;
 -(void)showTimeline:(BOOL)show;
 -(void)setDotColor:(UIColor*)color;
+-(void)hideContent:(BOOL)hide animated:(BOOL)animated;
 @end

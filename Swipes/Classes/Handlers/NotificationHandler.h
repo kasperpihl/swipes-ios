@@ -12,4 +12,5 @@
 @interface NotificationHandler : NSObject
 +(NotificationHandler*)sharedInstance;
 -(void)scheduleNumberOfTasks:(NSInteger)numberOfTasks forDate:(NSDate*)date;
+-(void)updateAlarm:(NSDate *)alarm identifier:(NSString*)identifier title:(NSString *)title;
 @end
