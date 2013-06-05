@@ -14,9 +14,10 @@
 @implementation DoneViewController
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     NSPredicate *predicate;
-    NSDate *startDate = [[NSDate date] dateAtStartOfDay];
-    if(!self.hasAskedForMore) predicate = [NSPredicate predicateWithFormat:@"(state == %@) AND (completionDate >= %@)",@"done", startDate];
-    else predicate = [NSPredicate predicateWithFormat:@"(state == %@)",@"done"];
+    /*NSDate *startDate = [[NSDate date] dateAtStartOfDay];
+    if(self.hasAskedForMore) predicate = [NSPredicate predicateWithFormat:@"(state == %@) AND (completionDate >= %@)",@"done", startDate];
+    else */
+    predicate = [NSPredicate predicateWithFormat:@"(state == %@)",@"done"];
     return [KPToDo MR_findAllSortedBy:@"completionDate" ascending:NO withPredicate:predicate];
 }
 -(NSString *)itemHandler:(ItemHandler *)handler titleForItem:(KPToDo *)item{
@@ -32,13 +33,13 @@
 {
     self.state = @"done";
     [super viewDidLoad];
-    UIView *askMoreView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
+    /*UIView *askMoreView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
     UIButton *loadMoreButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [loadMoreButton setTitle:@"Load more" forState:UIControlStateNormal];
     [loadMoreButton addTarget:self action:@selector(didPressLoadMore:) forControlEvents:UIControlEventTouchUpInside];
     loadMoreButton.frame = CGRectMake(10, 10, 300, 40);
     [askMoreView addSubview:loadMoreButton];
-    [self.tableView setTableFooterView:askMoreView];
+    [self.tableView setTableFooterView:askMoreView];*/
     
 	// Do any additional setup after loading the view.
 }

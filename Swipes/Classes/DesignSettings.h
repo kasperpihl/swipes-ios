@@ -20,28 +20,40 @@
 #define SEGMENT_BORDER_COLOR            SEGMENT_SELECTED//gray(61,1)        // Color for the border between segments
 #define TEXTFIELD_BACKGROUND            color(25,29,35,1) // Background for text field ie. the drawer
 
+/* Text Colors */
+#define TEXT_FIELD_COLOR                gray(230,1)
+#define TITLE_LABEL_COLOR               gray(102,1)
+#define BUTTON_COLOR                    gray(255,1)
+#define SECTION_HEADER_COLOR            color(98,105,114,1)
+#define CELL_TITLE_COLOR                color(177,180,185,1)
+#define CELL_TAG_COLOR                  TEXT_FIELD_COLOR
+
 
 /* Table View */
 #define TABLE_BACKGROUND                SEGMENT_BACKGROUND//color(44,50,59,1) // Background for the tableview's
 #define TABLE_CELL_BACKGROUND           color(59,67,79,1) // Background for task table cells
 #define TABLE_CELL_SEPERATOR_COLOR      SEGMENT_SELECTED // Seperator between task cells
 #define CELL_TIMELINE_COLOR             TABLE_CELL_SEPERATOR_COLOR//color(189,189,190,1)
-#define SECTION_HEADER_COLOR            color(98,105,114,1)
-#define CELL_TITLE_COLOR                color(177,180,185,1)
-#define CELL_TAG_COLOR                  gray(230,1)
-#define TABLE_MENU_TEXT                 TABLE_CELL_BACKGROUND
-#define TABLE_MENU_COLORED_TEXT         color(214,196,45,.7)
-#define TABLE_MENU_TEXT_HEIGHT          40
-#define TABLE_MENU_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:20]
-#define SECTION_HEADER_BACKGROUND       SEGMENT_BACKGROUND
+#define TABLE_EMPTY_BG_TEXT             TABLE_CELL_BACKGROUND
+#define TABLE_EMPTY_BG_COLORED_TEXT     alpha(SWIPES_COLOR,.7)
+#define TABLE_EMPTY_BG_TEXT_HEIGHT      40
 
-/* Text Colors */
-#define TEXT_FIELD_COLOR                gray(230,1)
-#define TITLE_LABEL_COLOR               gray(102,1)
-#define BUTTON_COLOR                    gray(255,1)
+#define SECTION_HEADER_BACKGROUND       SEGMENT_BACKGROUND
+#define TABLE_CELL_SELECTED_BACKGROUND  CELL_TIMELINE_COLOR//color(45,51,60,1)//[TODOHANDLER colorForCellType:self.cellType]//SEGMENT_BACKGROUND
+#define TABLE_CELL_SELECTED_TITLE_COLOR TABLE_CELL_BACKGROUND
+
 
 /* Edit Task view */
+#define EDIT_TASK_TITLE_COLOR           TEXT_FIELD_COLOR
+#define EDIT_TASK_TITLE_BACKGROUND      SEGMENT_SELECTED
 #define EDIT_TASK_BACKGROUND            TABLE_CELL_BACKGROUND//SEGMENT_BACKGROUND
+#define EDIT_TASK_SEPERATOR_COLOR       SECTION_HEADER_COLOR
+#define EDIT_TASK_TEXT_COLOR            BUTTON_COLOR
+#define EDIT_TASK_GRAYED_OUT_TEXT       gray(180,1)//EDIT_TASK_SEPERATOR_COLOR
+#define EDIT_TASK_SELECTED_OVERLAY      
+
+
+
 
 
 
@@ -62,6 +74,8 @@
 #define POPUP_BACKGROUND SEGMENT_BACKGROUND
 
 
+#define DOT_SIZE 12
+
 #define TAG_HEIGHT 44
 #define DEFAULT_SPACING 5
 #define BUTTON_HEIGHT 44
@@ -70,12 +84,32 @@
 #define DEFAULT_SPACE_FROM_SLIDE_UP_VIEW 60
 #define KEYBOARD_HEIGHT 216
 
-#define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
+
 #define BUTTON_FONT [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:20]
+
+#define TAGS_LABEL_BOLD_FONT [UIFont fontWithName:@"HelveticaNeue-Bold" size:12]
+
+#define TABLE_EMPTY_BG_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:20]
+
+#define SIGNUP_BUTTON_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
+#define NO_TAG_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
+#define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
 #define SECTION_HEADER_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
 #define TITLE_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
+
 #define TAGS_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:12]
-#define TAGS_LABEL_BOLD_FONT [UIFont fontWithName:@"HelveticaNeue-Bold" size:12]
+
+
+#define SCHEDULE_BUTTON_FONT [UIFont fontWithName:@"Franchise-Bold" size:20]
+
+
+#define TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
+
+
+
+
+
+
 
 
 
@@ -98,8 +132,7 @@
 
 //
 
-#define TABLE_CELL_SELECTED_BACKGROUND  CELL_TIMELINE_COLOR//color(45,51,60,1)//[TODOHANDLER colorForCellType:self.cellType]//SEGMENT_BACKGROUND
-#define TABLE_CELL_SELECTED_TITLE_COLOR TABLE_CELL_BACKGROUND
+
 
 
 

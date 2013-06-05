@@ -44,7 +44,6 @@
     
     NSDate *beginningOfDate = [time dateAtStartOfDay];
     NSInteger numberOfDaysAfterTodays = [beginningOfDate distanceInDaysToDate:[[NSDate date] dateAtStartOfDay]];
-    NSLog(@"number after:%i",numberOfDaysAfterTodays);
     NSString *dateString;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
@@ -141,6 +140,8 @@
     }
     
     NSString *sortedTagString = [tagsStringArray componentsJoinedByString:@", "];
+    NSLog(@"%@",sortedTagString);
+    if(!sortedTagString || sortedTagString.length == 0) return nil;
     NSMutableAttributedString *attributedText =
     [[NSMutableAttributedString alloc] initWithString:sortedTagString
                                            attributes:attrs];

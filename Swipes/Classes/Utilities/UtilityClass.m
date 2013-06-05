@@ -80,6 +80,52 @@ static UtilityClass *sharedObject;
     }
     self.block = nil;
 }
++(UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color{
+    UIImage *img = [UIImage imageNamed:name];
+    
+    // begin a new image context, to draw our colored image onto
+    UIGraphicsBeginImageContextWithOptions(img.size, NO, [UIScreen mainScreen].scale);
+    
+    // get a reference to that context we created
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    // set the fill color
+    [color setFill];
+    
+    // translate/flip the graphics context (for transforming from CG* coords to UI* coords
+    CGContextTranslateCTM(context, 0, img.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    
+    // set the blend mode to color burn, and the original image
+    CGContextSetBlendMode(context, kCGBlendModeMultiply);
+    CGRect rect = CGRectMake(0, 0, img.size.width, img.size.height);
+    CGContextDrawImage(context, rect, img.CGImage);
+    
+    // set a mask that matches the shape of the image, then draw (color burn) a colored rectangle
+    CGContextClipToMask(context, rect, img.CGImage);
+    CGContextAddRect(context, rect);
+    CGContextDrawPath(context,kCGPathFill);
+    
+    // generate a new UIImage from the graphics context we drew onto
+    UIImage *coloredImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    //return the color-burned image
+    return coloredImg;
+}
++ (BOOL) validateEmail: (NSString *) candidate {
+    NSString *emailRegex =
+    @"(?:[a-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[a-z0-9!#$%\\&'*+/=?\\^_`{|}"
+    @"~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\"
+    @"x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-"
+    @"z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5"
+    @"]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-"
+    @"9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21"
+    @"-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES[c] %@", emailRegex];
+    
+    return [emailTest evaluateWithObject:candidate];
+}
 +(NSString*)generateIdWithLength:(NSInteger)length{
     NSString *alphabet  = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
     NSMutableString *s = [NSMutableString stringWithCapacity:length];

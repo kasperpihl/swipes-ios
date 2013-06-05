@@ -27,4 +27,5 @@
 -(NSArray*)selectedItems;
 -(void)update;
 -(void)changeToColored:(BOOL)colored;
+-(void)didUpdateCells;
 @end

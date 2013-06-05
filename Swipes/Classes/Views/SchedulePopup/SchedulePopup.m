@@ -24,7 +24,7 @@
 #define SEPERATOR_MARGIN 0//0.02
 
 
-#define SCHEDULE_BUTTON_FONT [UIFont fontWithName:@"Franchise-Bold" size:20]
+
 
 #define PICKER_CUT_HEIGHT 10
 #define PICKER_CUT_WIDTH 15

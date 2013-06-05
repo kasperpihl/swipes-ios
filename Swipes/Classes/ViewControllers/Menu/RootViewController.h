@@ -8,7 +8,10 @@
 
 #define SIDE_MENU_WIDTH 250
 #import <UIKit/UIKit.h>
-
+typedef enum {
+    KPMenuLogin = 1,
+    KPMenuHome
+} KPMenu;
 #define ROOT_CONTROLLER [RootViewController sharedInstance]
 #define ERROR_MESSAGE [[error userInfo] objectForKey:@"error"]
 #define FB_ERROR_CODE [error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"code"] integerValue]
@@ -16,4 +19,5 @@
 
 @interface RootViewController : UINavigationController
 +(RootViewController*)sharedInstance;
+-(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated;
 @end

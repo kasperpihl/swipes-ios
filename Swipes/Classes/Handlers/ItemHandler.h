@@ -38,6 +38,7 @@
 -(KPToDo*)itemForIndexPath:(NSIndexPath*)indexPath;
 -(void)addItem:(NSString *)item;
 -(void)reloadData;
+-(void)refresh;
 -(NSIndexSet*)removeItemsForIndexSet:(NSIndexSet*)indexSet;
 -(void)moveItem:(NSIndexPath*)fromIndexPath toIndexPath:(NSIndexPath*)toIndexPath;
 @end

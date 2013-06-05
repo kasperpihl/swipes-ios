@@ -25,7 +25,7 @@
 
 #define LABEL_X 40
 
-#define DOT_SIZE 12
+
 #define DOT_OUTLINE_SIZE 4
 #define TIMELINE_WIDTH 2
 
@@ -130,10 +130,11 @@
 }
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags{
     self.titleLabel.text = toDo.title;
-    if(selectedTags && selectedTags.count > 0 && [self.tagsLabel respondsToSelector:@selector(setAttributedText:)]){
+    NSString *tagString = [toDo stringifyTags];
+    if(selectedTags && selectedTags.count > 0 && [self.tagsLabel respondsToSelector:@selector(setAttributedText:)] && tagString && tagString.length > 0){
         [self.tagsLabel setAttributedText:[toDo stringForSelectedTags:selectedTags]];
     }else{
-        NSString *tagString = [toDo stringifyTags];
+        
         if(!tagString || tagString.length == 0) tagString = @"No Tags";
         self.tagsLabel.font = TAGS_LABEL_FONT;
         self.tagsLabel.text = tagString;

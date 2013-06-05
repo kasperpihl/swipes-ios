@@ -18,8 +18,7 @@
 
 #define SPACE_HACK 0
 
-#define NO_TAG_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
-#define TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
+
 
 
 @interface KPTagList ()

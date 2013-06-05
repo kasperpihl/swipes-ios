@@ -10,14 +10,19 @@
 #import <Parse/Parse.h>
 #import "RootViewController.h"
 #import "KPParseCoreData.h"
+#import "Mixpanel.h"
+#import "AppsFlyer.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [Parse setApplicationId:@"MH7N6Vc0Z9AhSkAi6pxvJY0WLzcfdBF6JKaOvWYE"
-                  clientKey:@"vDxpjjyIDhp5DX30WnpTfsZANPCsFCdmDPpw31vj"];
+    [Parse setApplicationId:@"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
+                  clientKey:@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"];
     [PFFacebookUtils initializeFacebook];
     KPCORE;
+    [Mixpanel sharedInstanceWithToken:@"376b7b4c4c42cbdf5294ade7d15db3c4"];
+    
     //NSLog(@"%@",application.scheduledLocalNotifications);
     /*MSNavigationPaneViewController *paneViewController = (MSNavigationPaneViewController *)self.window.rootViewController;
     ROOT_CONTROLLER.paneNavigationViewController = paneViewController;*/
@@ -62,6 +67,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [AppsFlyer notifyAppID:@"657882159;TwJuYgpTKp9ENbxf6wMi8j"];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 

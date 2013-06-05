@@ -4,5 +4,6 @@
 #define __POD_Facebook_iOS_SDK
 #define __POD_KGStatusBar
 #define __POD_MagicalRecord
+#define __POD_Mixpanel
 #define __POD_PRTween
 #define __POD_Parse

@@ -29,4 +29,5 @@ typedef NS_ENUM(NSUInteger, KPSearchBarMode) {
 @property (nonatomic,weak) NSObject<KPSearchBarDataSource> *searchBarDataSource;
 @property (nonatomic) KPSearchBarMode currentMode;
 -(void)resignSearchField;
+-(void)reloadDataAndUpdate:(BOOL)update;
 @end

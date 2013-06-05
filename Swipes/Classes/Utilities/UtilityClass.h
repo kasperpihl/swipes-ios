@@ -20,4 +20,6 @@
 -(void)popupBoxWithTitle:(NSString*)title andMessage:(NSString*)message buttons:(NSArray*)buttons block:(SuccessfulBlock)block;
 +(NSString*)generateIdWithLength:(NSInteger)length;
 UIImage* rotate(UIImage* src, NSInteger degrees);
++ (BOOL) validateEmail: (NSString *) candidate;
++ (UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color;
 @end

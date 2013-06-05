@@ -136,11 +136,12 @@
             [self reallyDismiss];
         }
     }
-    else{
+    else if(self.presentedPanel.class == [AddPanelView class]){
         AddPanelView *panel = (AddPanelView*)self.presentedPanel;
         [panel show:NO];
         [self reallyDismiss];
     }
+    else [self reallyDismiss];
 	/*[self dismissSemiModalViewWithCompletion:^{
         self.currentState = KPControlCurrentStateAdd;
         [[self currentViewController] deselectAllRows:self];
@@ -150,6 +151,8 @@
     [self dismissSemiModalViewWithCompletion:^{
         self.currentState = KPControlCurrentStateAdd;
         [[self currentViewController] deselectAllRows:self];
+        [[self currentViewController].itemHandler refresh];
+        [[self currentViewController] didUpdateCells];
      }];
 }
 -(void)pressedDelete:(id)sender{

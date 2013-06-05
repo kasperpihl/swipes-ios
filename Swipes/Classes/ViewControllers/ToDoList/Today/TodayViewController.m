@@ -18,6 +18,7 @@
 @implementation TodayViewController
 #pragma mark - Dragable delegate
 -(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber{
+    [super itemHandler:handler changedItemNumber:itemNumber];
     [self changeToColored:(itemNumber == 0)];
     [self.tableView setReorderingEnabled:(itemNumber > 1)];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:itemNumber];

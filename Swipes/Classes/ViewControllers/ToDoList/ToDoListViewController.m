@@ -55,6 +55,9 @@
     return _itemHandler;
 }
 #pragma mark ItemHandlerDelegate
+-(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber{
+    [self didUpdateCells];
+}
 -(void)didUpdateItemHandler:(ItemHandler *)handler{
     [self.tableView reloadData];
 }
@@ -77,18 +80,13 @@
     _state = state;
     self.cellType = [self determineCellTypeFromState:state];
 }
--(void)updateWithoutLoading{
-    [self update];
-    for(NSIndexPath *indexPath in self.selectedRows){
-        [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-    }
-}
 -(void)update{
     [self.itemHandler reloadData];
-    [self didUpdateCells];
     
 }
 -(void)didUpdateCells{
+    NSLog(@"updating");
+    [self.searchBar reloadDataAndUpdate:YES];
     if([self.state isEqualToString:@"today"]){
         /*if(self.itemCounter == 0) [self changeToColored:YES];
         else [self changeToColored:NO];*/
@@ -373,17 +371,12 @@
 -(void)removeItemsForIndexSet:(NSIndexSet*)indexSet{
     [self runBeforeMoving];
     NSIndexSet *deletedSections = [self.itemHandler removeItemsForIndexSet:indexSet];
-    if(deletedSections){
-        [self.tableView beginUpdates];
-        [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
-        if(deletedSections.count > 0) [self.tableView deleteSections:deletedSections withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView endUpdates];
-    }
-    else{
-        [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
-    }
+    NSLog(@"sections:%@",deletedSections);
+    [self.tableView beginUpdates];
+    [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
+    if(deletedSections && deletedSections.count > 0) [self.tableView deleteSections:deletedSections withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
     [self cleanUpAfterMovingAnimated:YES];
-    [self didUpdateCells];
 }
 
 -(void)moveIndexSet:(NSIndexSet*)indexSet toCellType:(CellType)cellType{
@@ -417,10 +410,14 @@
     }
 }
 -(void)cleanUpAfterMovingAnimated:(BOOL)animated{
+    
     [self.selectedRows removeAllObjects];
     [self cleanShowingViewAnimated:animated];
     self.swipingCell = nil;
+    [self didUpdateCells];
     [[self parent] show:YES controlsAnimated:YES];
+}
+-(void)updateSearchBar{
     
 }
 -(void)deselectAllRows:(id)sender{
@@ -530,25 +527,25 @@
     [self.view addSubview:imageView];
     self.backgroundImage = (UIImageView*)[self.view viewWithTag:BACKGROUND_IMAGE_VIEW_TAG];
     
-    UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.frame.origin.y+imageView.frame.size.height, self.view.frame.size.width, TABLE_MENU_TEXT_HEIGHT)];
+    UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.frame.origin.y+imageView.frame.size.height, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
     menuText.backgroundColor = CLEAR;
-    menuText.font = TABLE_MENU_FONT;
+    menuText.font = TABLE_EMPTY_BG_FONT;
     menuText.text = [self.state capitalizedString];
     menuText.textAlignment = UITextAlignmentCenter;
-    menuText.textColor = TABLE_MENU_TEXT;
+    menuText.textColor = TABLE_EMPTY_BG_TEXT;
     menuText.tag = MENU_TEXT_TAG;
     [self.view addSubview:menuText];
     self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];
     
-    UILabel *coloredMenuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.frame.origin.y+imageView.frame.size.height, self.view.frame.size.width, TABLE_MENU_TEXT_HEIGHT)];
+    UILabel *coloredMenuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.frame.origin.y+imageView.frame.size.height, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
     coloredMenuText.backgroundColor = CLEAR;
     coloredMenuText.tag = COLORED_MENU_TEXT_TAG;
-    coloredMenuText.font = TABLE_MENU_FONT;
+    coloredMenuText.font = TABLE_EMPTY_BG_FONT;
     coloredMenuText.text = [self.state capitalizedString];
     coloredMenuText.textAlignment = UITextAlignmentCenter;
     coloredMenuText.hidden = YES;
     coloredMenuText.text = @"Well Swiped!";
-    coloredMenuText.textColor = TABLE_MENU_COLORED_TEXT;
+    coloredMenuText.textColor = TABLE_EMPTY_BG_COLORED_TEXT;
     [self.view addSubview:coloredMenuText];
     self.coloredMenuText = [self.view viewWithTag:COLORED_MENU_TEXT_TAG];
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];

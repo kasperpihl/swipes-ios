@@ -102,6 +102,7 @@
         selectedTagList.tagDelegate = self;
         selectedTagList.tag = SELECTED_TAG_LIST_TAG;
         [filterView addSubview:selectedTagList];
+
         
         UIButton *clearFilterButton = [UIButton buttonWithType:UIButtonTypeCustom];
         clearFilterButton.frame = CGRectMake(self.frame.size.width-buttonSize,0,buttonSize,buttonSize);
@@ -253,6 +254,10 @@
     [superView setTableHeaderView:tableHeader];
 }
 - (void)reframeTags{
+    if(self.currentMode != KPSearchBarModeTags){
+        NSLog(@"menu wasn't tags");
+        return;
+    }
     [self reframe];
     NSInteger newHeight = self.filterView.frame.size.height;
     self.frame = CGRectMake(self.frame.origin.x,

@@ -2,21 +2,24 @@ PODS:
   - Facebook-iOS-SDK (3.5.1)
   - KGStatusBar (1.0)
   - MagicalRecord (2.1)
+  - Mixpanel (2.0.0)
   - Parse (1.2.9):
     - Facebook-iOS-SDK (~> 3.5.1)
   - PRTween (0.0.1)
 
 DEPENDENCIES:
-  - Facebook-iOS-SDK (~> 3.5.0)
+  - Facebook-iOS-SDK (~> 3.5.1)
   - KGStatusBar (~> 1.0)
   - MagicalRecord (~> 2.1)
-  - Parse (~> 1.2.6)
+  - Mixpanel (~> 2.0.0)
+  - Parse (~> 1.2.9)
   - PRTween (~> 0.0.1)
 
 SPEC CHECKSUMS:
   Facebook-iOS-SDK: 0dbd897e842cefeb012ec2eb8eba659ba6b96b12
   KGStatusBar: e47f19745f6aeb0fabe37e8360df26bf87b1e2ff
   MagicalRecord: 64e7184c240087a45e9588a722eaf05b0ad837f7
+  Mixpanel: d456c27f7520e22784a15d0bcd9d5c287080b0cd
   Parse: 9d763110e8cebe319243ee38dc3c34d3475b98d6
   PRTween: d0439e7917031328f81de4910c5b02e202389939
 

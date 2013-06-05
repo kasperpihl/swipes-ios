@@ -21,23 +21,29 @@
 #define ALARM_CONTAINER_TAG 14
 #define ALARM_LABEL_TAG 15
 #define ALARM_IMAGE_TAG 16
+#define NOTES_CONTAINER_VIEW_TAG 17
+#define TAGS_IMAGE_VIEW_TAG 18
+#define NOTES_IMAGE_VIEW_TAG 19
+#define DOT_VIEW_TAG 20
 
 #define TOP_VIEW_MARGIN 60
 #define SHOW_ITEM_TAG 5432
 
 
-
+#define DEFAULT_ROW_HEIGHT 60
 
 #define LABEL_X 50
 
 #define TITLE_HEIGHT 44
 #define TITLE_TOP_MARGIN 7
-#define TITLE_X 6
-#define TITLE_WIDTH (320-2*TITLE_X)
+#define TITLE_WIDTH (320)
 #define TITLE_BOTTOM_MARGIN (TITLE_TOP_MARGIN+COLOR_SEPERATOR_HEIGHT)
 #define CONTAINER_INIT_HEIGHT (TITLE_HEIGHT + TITLE_TOP_MARGIN + TITLE_BOTTOM_MARGIN)
-#define TAGS_LABEL_PADDING 20
+
 #define TAGS_LABEL_RECT CGRectMake(LABEL_X,TAGS_LABEL_PADDING,320-LABEL_X-10,500)
+
+#define TAGS_LABEL_PADDING 18.5
+#define NOTES_PADDING 10.5
 
 
 #import "UIViewController+KNSemiModal.h"
@@ -53,6 +59,8 @@
 #import "NSDate-Utilities.h"
 #import "NotesView.h"
 #import "AlarmView.h"
+#import "UtilityClass.h"
+#import <QuartzCore/QuartzCore.h>
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
     KPEditModeTitle,
@@ -63,21 +71,28 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 @interface ToDoViewController () <HPGrowingTextViewDelegate,KPAddTagDelegate,KPTagDelegate,NotesViewDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
-@property (nonatomic,weak) IBOutlet HPGrowingTextView *editTitleTextView;
+
 
 @property (nonatomic,weak) IBOutlet UIView *titleContainerView;
+@property (nonatomic,weak) IBOutlet HPGrowingTextView *editTitleTextView;
+@property (nonatomic,weak) IBOutlet UIView *dotView;
 
 @property (nonatomic,weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic,weak) IBOutlet UIView *statusContainer;
 @property (nonatomic,weak) IBOutlet UIView *tagsContainerView;
 @property (nonatomic,weak) IBOutlet UIView *alarmContainer;
+@property (nonatomic,weak) IBOutlet UIView *notesContainer;
 
-@property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
-@property (nonatomic,weak) IBOutlet UITextView *notesView;
-@property (nonatomic,weak) IBOutlet UIImageView *statusImage;
+
 @property (nonatomic,weak) IBOutlet UILabel *statusLabel;
 @property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
+@property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
+@property (nonatomic,weak) IBOutlet UITextView *notesView;
+
+@property (nonatomic,weak) IBOutlet UIImageView *statusImage;
 @property (nonatomic,weak) IBOutlet UIImageView *alarmImage;
+@property (nonatomic,weak) IBOutlet UIImageView *tagsImage;
+@property (nonatomic,weak) IBOutlet UIImageView *notesImage;
 @end
 
 @implementation ToDoViewController
@@ -92,12 +107,36 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         UIView *titleContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, CONTAINER_INIT_HEIGHT)];
         titleContainerView.tag = TITLE_CONTAINER_VIEW_TAG;
-        //titleContainerView.backgroundColor = TEXTFIELD_BACKGROUND;
-        
-
-        
+        titleContainerView.backgroundColor = EDIT_TASK_TITLE_BACKGROUND;
         
         CGFloat buttonWidth = BUTTON_HEIGHT;
+        
+        HPGrowingTextView *textView;
+        textView = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(0, TITLE_TOP_MARGIN, TITLE_WIDTH-buttonWidth, TITLE_HEIGHT)];
+        textView.contentInset = UIEdgeInsetsMake(0, LABEL_X-8, 0, -8);
+        textView.tag = TITLE_TEXT_VIEW_TAG;
+        textView.minNumberOfLines = 1;
+        textView.backgroundColor = CLEAR;
+        textView.maxNumberOfLines = 6;
+        textView.returnKeyType = UIReturnKeyDone; //just as an example
+        textView.font = TEXT_FIELD_FONT;
+        textView.delegate = self;
+        textView.internalTextView.keyboardAppearance = UIKeyboardAppearanceAlert;
+        textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);
+        textView.textColor = TEXT_FIELD_COLOR;
+        
+        UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DOT_SIZE,DOT_SIZE)];
+        dotView.tag = DOT_VIEW_TAG;
+        dotView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin);
+        centerItemForSize(dotView, LABEL_X, textView.frame.size.height);
+        dotView.layer.cornerRadius = DOT_SIZE/2;
+        dotView.tag = DOT_VIEW_TAG;
+        [textView addSubview:dotView];
+        self.dotView = [textView viewWithTag:DOT_VIEW_TAG];
+    
+        [titleContainerView addSubview:textView];
+        self.editTitleTextView = (HPGrowingTextView*)[titleContainerView viewWithTag:TITLE_TEXT_VIEW_TAG];
+        
         
         UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
         doneButton.frame = CGRectMake(titleContainerView.frame.size.width-buttonWidth,0,buttonWidth,CONTAINER_INIT_HEIGHT-COLOR_SEPERATOR_HEIGHT);
@@ -105,29 +144,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [doneButton setImage:[UIImage imageNamed:@"cross_button"] forState:UIControlStateNormal];
         [doneButton addTarget:self action:@selector(pressedDone:) forControlEvents:UIControlEventTouchUpInside];
         [titleContainerView addSubview:doneButton];
-        
-        
-        HPGrowingTextView *textView;
-        textView = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(TITLE_X, TITLE_TOP_MARGIN, TITLE_WIDTH-buttonWidth, TITLE_HEIGHT)];
-        textView.contentInset = UIEdgeInsetsMake(0, 5, 0, 5);
-        textView.tag = TITLE_TEXT_VIEW_TAG;
-        textView.minNumberOfLines = 1;
-        textView.maxNumberOfLines = 6;
-        textView.returnKeyType = UIReturnKeyDone; //just as an example
-        textView.font = TEXT_FIELD_FONT;
-        textView.delegate = self;
-        textView.internalTextView.keyboardAppearance = UIKeyboardAppearanceAlert;
-        textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);
-        textView.backgroundColor = [UIColor clearColor];
-        textView.textColor = TEXT_FIELD_COLOR;
-        [titleContainerView addSubview:textView];
-        self.editTitleTextView = (HPGrowingTextView*)[titleContainerView viewWithTag:TITLE_TEXT_VIEW_TAG];
-        
-        UIView *colorBottomSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, CONTAINER_INIT_HEIGHT-COLOR_SEPERATOR_HEIGHT, contentView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        colorBottomSeperator.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-        colorBottomSeperator.backgroundColor = SWIPES_COLOR;
-        [titleContainerView addSubview:colorBottomSeperator];
-        
         
         [contentView addSubview:titleContainerView];
         self.titleContainerView = [contentView viewWithTag:TITLE_CONTAINER_VIEW_TAG];
@@ -144,7 +160,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          */
         UIView *statusContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
         statusContainer.tag = STATUS_CONTAINER_TAG;
-        
+        [self addSeperatorToView:statusContainer];
         UIImageView *statusImage = [[UIImageView alloc] init];
         statusImage.tag = STATUS_IMAGE_TAG;
         [statusContainer addSubview:statusImage];
@@ -152,7 +168,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         UILabel *statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, statusContainer.frame.size.height)];
         statusLabel.backgroundColor = CLEAR;
-        statusLabel.textColor = TEXT_FIELD_COLOR;
+        statusLabel.textColor = EDIT_TASK_TEXT_COLOR;
         statusLabel.font = TITLE_LABEL_FONT;
         statusLabel.tag = STATUS_LABEL_TAG;
         
@@ -165,29 +181,22 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
             Alarm container and button!
         */
-        UIView *alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
+        UIView *alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
         alarmContainer.tag = ALARM_CONTAINER_TAG;
-        
-        UIImageView *alarmImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"schedule"]];
-        alarmImage.tag = ALARM_IMAGE_TAG;
-        alarmImage.highlightedImage = [UIImage imageNamed:@"schedule-highlighted"];
-        alarmImage.frame = CGRectSetPos(alarmImage.frame, (LABEL_X-alarmImage.frame.size.width)/2, (alarmContainer.frame.size.height-alarmImage.frame.size.height)/2);
-        [alarmContainer addSubview:alarmImage];
-        self.alarmImage = (UIImageView*)[alarmContainer viewWithTag:ALARM_IMAGE_TAG];
-        
-        UIButton *alarmButton = [[UIButton alloc] initWithFrame:alarmContainer.bounds];
-        alarmButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-        [alarmButton addTarget:self action:@selector(pressedAlarm:) forControlEvents:UIControlEventTouchUpInside];
-        [alarmContainer addSubview:alarmButton];
+        [self addSeperatorToView:alarmContainer];
+
+        self.alarmImage = [self addAndGetImage:@"edit_alarm_icon" inView:alarmContainer tag:ALARM_IMAGE_TAG];
         
         UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, alarmContainer.frame.size.height)];
         alarmLabel.backgroundColor = CLEAR;
-        alarmLabel.textColor = TEXT_FIELD_COLOR;
+        [self setColorsFor:alarmLabel];
         alarmLabel.font = TITLE_LABEL_FONT;
         alarmLabel.tag = ALARM_LABEL_TAG;
         
         [alarmContainer addSubview:alarmLabel];
         self.alarmLabel = (UILabel*)[alarmContainer viewWithTag:ALARM_LABEL_TAG];
+        
+        [self addClickButtonToView:alarmContainer action:@selector(pressedAlarm:)];
         
         [scrollView addSubview:alarmContainer];
         self.alarmContainer = [scrollView viewWithTag:ALARM_CONTAINER_TAG];
@@ -195,26 +204,22 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
             Tags Container with button!
         */
-        UIView *tagsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 250, 320, 40)];
+        UIView *tagsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
         tagsContainer.tag = TAGS_CONTAINER_TAG;
-        UIImageView *tagsImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tagbutton"]];
-        tagsImage.frame = CGRectSetPos(tagsImage.frame, (LABEL_X-tagsImage.frame.size.width)/2, (tagsContainer.frame.size.height-tagsImage.frame.size.height)/2);
-        tagsImage.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
-        [tagsContainer addSubview:tagsImage];
+        [self addSeperatorToView:tagsContainer];
+        
+        self.tagsImage = [self addAndGetImage:@"edit_tags_icon" inView:tagsContainer tag:TAGS_IMAGE_VIEW_TAG];
         
         UILabel *tagsLabel = [[UILabel alloc] initWithFrame:TAGS_LABEL_RECT];
         tagsLabel.tag = TAGS_LABEL_TAG;
         tagsLabel.numberOfLines = 0;
         tagsLabel.font = TEXT_FIELD_FONT;
         tagsLabel.backgroundColor = [UIColor clearColor];
-        tagsLabel.textColor = CELL_TAG_COLOR;
+        [self setColorsFor:tagsLabel];
         [tagsContainer addSubview:tagsLabel];
         self.tagsLabel = (UILabel*)[tagsContainer viewWithTag:TAGS_LABEL_TAG];
         
-        UIButton *tagsButton = [[UIButton alloc] initWithFrame:tagsContainer.bounds];
-        tagsButton.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
-        [tagsButton addTarget:self action:@selector(pressedTags:) forControlEvents:UIControlEventTouchUpInside];
-        [tagsContainer addSubview:tagsButton];
+        [self addClickButtonToView:tagsContainer action:@selector(pressedTags:)];
         
         [scrollView addSubview:tagsContainer];
         self.tagsContainerView = [scrollView viewWithTag:TAGS_CONTAINER_TAG];
@@ -222,22 +227,26 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
          Notes view
         */
-        UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X-10, 500)];
+        UIView *notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
+        notesContainer.tag = NOTES_CONTAINER_VIEW_TAG;
+        [self addSeperatorToView:notesContainer];
+        self.notesImage = [self addAndGetImage:@"edit_notes_icon" inView:notesContainer tag:NOTES_IMAGE_VIEW_TAG];
+        self.notesImage.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+        
+        UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, 320-LABEL_X-10, 500)];
         notesView.tag = NOTES_TEXT_VIEW_TAG;
         notesView.font = TEXT_FIELD_FONT;
-        notesView.textColor = TEXT_FIELD_COLOR;
-        notesView.contentInset = UIEdgeInsetsMake(-4,-8,0,0);
+        notesView.contentInset = UIEdgeInsetsMake(0,-8,0,0);
         notesView.editable = NO;
         notesView.backgroundColor = CLEAR;
-        UIButton *clickedNotesButton = [[UIButton alloc] initWithFrame:notesView.bounds];
-        clickedNotesButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-        [clickedNotesButton addTarget:self action:@selector(pressedNotes:) forControlEvents:UIControlEventTouchUpInside];
-        [notesView addSubview:clickedNotesButton];
-    
-        [notesView setText:@"sajsahjk fhdskjfh kjdshf kjdshf kjhdsfkj hdskhf kjdshf kjdhsfkj hdskfjh \n\ndskjfh dskjhf kjdhsfkjh dskjfh dsk\n\njfh dksjhf kjdshfjk dhsfkj\n\nh dskjfh jkdshfkj dsfkjh dsf"];
-        [notesView sizeToFit];
-        [scrollView addSubview:notesView];
-        self.notesView = (UITextView*)[scrollView viewWithTag:NOTES_TEXT_VIEW_TAG];
+        [notesContainer addSubview:notesView];
+        self.notesView = (UITextView*)[notesContainer viewWithTag:NOTES_TEXT_VIEW_TAG];
+        
+        [self addClickButtonToView:notesContainer action:@selector(pressedNotes:)];
+        
+        
+        [scrollView addSubview:notesContainer];
+        self.notesContainer = [scrollView viewWithTag:NOTES_CONTAINER_VIEW_TAG];
         
         
         /* Adding scroll and content view */
@@ -247,6 +256,35 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
     }
     return self;
+}
+-(void)setColorsFor:(id)object{
+    if([object respondsToSelector:@selector(setTextColor:)]) [object setTextColor:EDIT_TASK_TEXT_COLOR];
+    if([object respondsToSelector:@selector(setHighlightedTextColor:)]) [object setHighlightedTextColor:EDIT_TASK_GRAYED_OUT_TEXT];
+}
+-(UIImageView *)addAndGetImage:(NSString*)imageName inView:(UIView*)view tag:(NSInteger)tag{
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
+    imageView.image = [UtilityClass imageNamed:imageName withColor:EDIT_TASK_GRAYED_OUT_TEXT];
+    imageView.tag = tag;
+    imageView.frame = CGRectSetPos(imageView.frame,(LABEL_X-imageView.frame.size.width)/2, (view.frame.size.height-imageView.frame.size.height)/2);
+    imageView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+    //imageView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
+    [view addSubview:imageView];
+    return (UIImageView*)[view viewWithTag:tag];
+}
+-(void)addClickButtonToView:(UIView*)view action:(SEL)action{
+    UIButton *clickedButton = [[UIButton alloc] initWithFrame:view.bounds];
+    clickedButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+    [clickedButton setBackgroundImage:[UtilityClass imageWithColor:color(55,55,55,0.5)] forState:UIControlStateHighlighted];
+    [clickedButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:clickedButton];
+}
+-(void)addSeperatorToView:(UIView*)view{
+    CGFloat seperatorHeight = 1;
+    CGFloat rightMargin = LABEL_X/3;
+    UIView *seperatorView = [[UIView alloc] initWithFrame:CGRectMake(rightMargin, view.frame.size.height-seperatorHeight, view.frame.size.width-2*rightMargin, seperatorHeight)];
+    seperatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    seperatorView.backgroundColor = EDIT_TASK_SEPERATOR_COLOR;
+    [view addSubview:seperatorView];
 }
 -(void)setActiveEditMode:(KPEditMode)activeEditMode{
     if(activeEditMode != _activeEditMode){
@@ -291,11 +329,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)tagList:(KPTagList *)tagList selectedTag:(NSString *)tag{
     [TAGHANDLER updateTags:@[tag] remove:NO toDos:@[self.model]];
     [self updateTags];
+    [self layout];
     [self.segmentedViewController updateBackground];
 }
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString *)tag{
     [TAGHANDLER updateTags:@[tag] remove:YES toDos:@[self.model]];
     [self updateTags];
+    [self layout];
     [self.segmentedViewController updateBackground];
 }
 
@@ -345,39 +385,65 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
 }
 -(void)updateNotes{
-    if(!self.model.notes || self.model.notes.length == 0) self.notesView.text = @"Add notes";
-    else self.notesView.text = self.model.notes;
-    
+    if(!self.model.notes || self.model.notes.length == 0){
+        self.notesView.text = @"Add notes";
+        self.notesImage.highlighted = YES;
+        self.notesView.textColor = EDIT_TASK_GRAYED_OUT_TEXT;
+    }
+    else{
+        self.notesImage.highlighted = NO;
+        self.notesView.textColor = EDIT_TASK_TEXT_COLOR;
+        self.notesView.text = self.model.notes;
+    }
     CGRectSetHeight(self.notesView, self.notesView.contentSize.height);
+    
+    CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
+    NSLog(@"notesHeight:%f",self.notesContainer.frame.size.height);
 }
 -(void)updateStatus{
-    UIImage *statusImage = [UIImage imageNamed:[TODOHANDLER coloredIconNameForCellType:[self.model cellTypeForTodo]]];
+    UIImage *statusImage = [UtilityClass imageNamed:[TODOHANDLER coloredIconNameForCellType:[self.model cellTypeForTodo]] withColor:EDIT_TASK_GRAYED_OUT_TEXT];
     self.statusLabel.text = [self.model readableTitleForStatus];
     CGFloat imageHeight = statusImage.size.height;
     CGFloat imageWidth = statusImage.size.width;
    
     self.statusImage.frame = CGRectMake( (LABEL_X-imageWidth)/2, (self.statusContainer.frame.size.height-imageHeight)/2, imageWidth, imageHeight);
     self.statusImage.image = statusImage;
+    NSLog(@"statusHeight:%f",self.statusContainer.frame.size.height);
 }
 -(void)updateTags{
     self.tagsLabel.frame = TAGS_LABEL_RECT;
     NSString *tagsString = [self.model stringifyTags];
-    if(!tagsString || tagsString.length == 0) tagsString = @"Set tags";
+    self.tagsImage.highlighted = NO;
+    self.tagsLabel.highlighted = NO;
+    if(!tagsString || tagsString.length == 0){
+        tagsString = @"Set tags";
+        self.tagsLabel.highlighted = YES;
+        self.tagsImage.highlighted = YES;
+    }
     self.tagsLabel.text = tagsString;
     [self.tagsLabel sizeToFit];
 
     CGFloat containerHeight = self.tagsLabel.frame.size.height + 2*TAGS_LABEL_PADDING;
     CGRectSetHeight(self.tagsContainerView, containerHeight);
+    NSLog(@"tagHeight:%f",containerHeight);
+}
+-(void)updateDot{
+    
+    self.dotView.backgroundColor = [TODOHANDLER colorForCellType:[self.model cellTypeForTodo]];
+    NSLog(@"dotView:%@ color:%@",self.dotView,[TODOHANDLER colorForCellType:[self.model cellTypeForTodo]]);
 }
 -(void)updateAlarm{
     if(!self.model.alarm || [self.model.alarm isInPast]){
-        self.alarmImage.highlighted = NO;
+        self.alarmImage.highlighted = YES;
+        self.alarmLabel.highlighted = YES;
         self.alarmLabel.text = @"Remind me";
     }
     else{
-        self.alarmImage.highlighted = YES;
+        self.alarmLabel.highlighted = NO;
+        self.alarmImage.highlighted = NO;
         self.alarmLabel.text = [self.model readableTime:self.model.alarm showTime:YES];
     }
+    NSLog(@"alarmHeight:%f",self.alarmContainer.frame.size.height);
 }
 -(void)setModel:(KPToDo *)model{
     if(_model != model){
@@ -387,6 +453,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self updateTags];
         [self updateAlarm];
         [self updateNotes];
+        [self updateDot];
         [self layout];
     }
 }
@@ -401,8 +468,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetY(self.tagsContainerView, tempHeight);
     tempHeight += self.tagsContainerView.frame.size.height;
     
-    CGRectSetY(self.notesView, tempHeight);
-    tempHeight += self.notesView.frame.size.height;
+    CGRectSetY(self.notesContainer, tempHeight);
+    tempHeight += self.notesContainer.frame.size.height;
     
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width,tempHeight);
 }

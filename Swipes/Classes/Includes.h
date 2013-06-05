@@ -64,13 +64,16 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define CLEAR [UIColor clearColor]
 #define color(r,g,b,a) [UIColor colorWithRed: r/255.0 green: g/255.0 blue: b/255.0 alpha:a]
 #define gray(l,a) [UIColor colorWithRed: l/255.0 green: l/255.0 blue: l/255.0 alpha:a]
+#define alpha(c,a) [c colorWithAlphaComponent:a]
 #define trim(s) [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
-
+#define CGRectSetPos( r, x, y ) CGRectMake( x, y, r.size.width, r.size.height )
+#define centerItemForSize( item, containerWidth, containerHeight) item.frame = CGRectSetPos(item.frame,(containerWidth-item.frame.size.width)/2,(containerHeight-item.frame.size.height)/2)
 
 #define notify(notifcation,selectr) [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectr) name:notifcation object:nil]
 #define clearNotify() [[NSNotificationCenter defaultCenter] removeObserver:self]
 #define kv(obj,key) [obj objectForKey:key]
-#define CGRectSetPos( r, x, y ) CGRectMake( x, y, r.size.width, r.size.height )
+
+
 #define CGRectSetX( r, x ) r.frame = CGRectMake( x, r.frame.origin.y, r.frame.size.width, r.frame.size.height )
 #define CGRectSetY( r, y ) r.frame = CGRectMake( r.frame.origin.x, y, r.frame.size.width, r.frame.size.height )
 #define CGRectSetSize( r, w, h ) r.frame = CGRectMake( r.frame.origin.x, r.frame.origin.y, w, h )

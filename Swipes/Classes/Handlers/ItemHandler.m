@@ -31,9 +31,12 @@
 }
 -(void)setItems:(NSArray *)items{
     _items = items;
-    self.itemCounter = items.count;
+    [self refresh];
+}
+-(void)refresh{
     self.allTags = [self extractTags];
     [self runSort];
+    self.itemCounter = self.items.count;
 }
 -(void)setItemCounter:(NSInteger)itemCounter{
     if(itemCounter != _itemCounter){
@@ -129,20 +132,22 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     if(self.isSorted) return [self.sortedItems count];
-    else return 1;
+    else return (self.itemCounterWithFilter > 0) ? 1 : 0;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if(self.isSorted){
         NSArray *itemsForSection = [self.sortedItems objectAtIndex:section];
         return itemsForSection.count;
     }
-    return self.filteredItems.count;
+    return self.itemCounterWithFilter;
 }
 #pragma mark Sort Handling
 -(NSArray*)extractTags{
     NSArray *tagArray = [NSArray array];
+    NSSet *fuckME;
     NSMutableSet *tagSet = [NSMutableSet set];
     for(KPToDo *toDo in self.items){
+        fuckME = toDo.tags;
         [tagSet addObjectsFromArray:toDo.textTags];
     }
     tagArray = [[tagSet allObjects] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
@@ -206,26 +211,30 @@
     }
 }
 -(NSIndexSet*)removeItemsForIndexSet:(NSIndexSet *)indexSet{
+    NSMutableIndexSet *deletedSections = [NSMutableIndexSet indexSet];
     if(self.isSorted){
         NSArray *oldKeys = [self.titleArray copy];
         [self fetchData];
         NSArray *newKeys = [self.titleArray copy];
-        NSMutableIndexSet *deletedSections = [NSMutableIndexSet indexSet];
+       
         for(int i = 0 ; i < oldKeys.count ; i++){
             NSString *oldKey = [oldKeys objectAtIndex:i];
             if(![newKeys containsObject:oldKey]) [deletedSections addIndex:i];
         }
-        return deletedSections;
+        
     }
     else{
-        NSMutableArray *newItems = [NSMutableArray array];
-        for(NSInteger i = 0 ; i < self.items.count ; i++){
-            if([indexSet containsIndex:i]) continue;
-            [newItems addObject:[self.items objectAtIndex:i]];
+        NSMutableArray *newItemsMutable = [self.items mutableCopy];
+        for(NSInteger i = 0 ; i < self.filteredItems.count ; i++){
+            if([indexSet containsIndex:i]) [newItemsMutable removeObject:[self.filteredItems objectAtIndex:i]];
         }
-        self.items = [newItems copy];
-        return nil;
+        NSLog(@"before:%i",self.itemCounterWithFilter);
+        self.items = [newItemsMutable copy];
+        NSLog(@"after:%i",self.itemCounterWithFilter);
+        NSInteger counter = (self.hasFilter) ? self.itemCounterWithFilter : self.itemCounter;
+        if(counter == 0) [deletedSections addIndex:0];
     }
+    return deletedSections;
     
 }
 -(NSMutableArray*)arrayForTitle:(NSString*)title{
