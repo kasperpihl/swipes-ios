@@ -10,13 +10,9 @@
 #define EDIT_BUTTON_TAG 3
 #define DONE_BUTTON_TAG 4
 #define TITLE_CONTAINER_VIEW_TAG 5
-#define STATUS_CELL_TAG 6
 #define TAGS_LABEL_TAG 7
 #define TAGS_CONTAINER_TAG 8
 #define CONTENT_VIEW_TAG 9
-#define STATUS_IMAGE_TAG 10
-#define STATUS_LABEL_TAG 11
-#define STATUS_CONTAINER_TAG 12
 #define SCROLL_VIEW_TAG 13
 #define ALARM_CONTAINER_TAG 14
 #define ALARM_LABEL_TAG 15
@@ -35,10 +31,13 @@
 #define LABEL_X 50
 
 #define TITLE_HEIGHT 44
-#define TITLE_TOP_MARGIN 7
+#define TITLE_TOP_MARGIN 13
 #define TITLE_WIDTH (320)
-#define TITLE_BOTTOM_MARGIN (TITLE_TOP_MARGIN+COLOR_SEPERATOR_HEIGHT)
+#define TITLE_BOTTOM_MARGIN (TITLE_TOP_MARGIN)
 #define CONTAINER_INIT_HEIGHT (TITLE_HEIGHT + TITLE_TOP_MARGIN + TITLE_BOTTOM_MARGIN)
+
+#define CLOSE_BUTTON_TOP_INSET -25
+#define CLOSE_BUTTON_RIGHT_INSET -10
 
 #define TAGS_LABEL_RECT CGRectMake(LABEL_X,TAGS_LABEL_PADDING,320-LABEL_X-10,500)
 
@@ -78,18 +77,14 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic,weak) IBOutlet UIView *dotView;
 
 @property (nonatomic,weak) IBOutlet UIScrollView *scrollView;
-@property (nonatomic,weak) IBOutlet UIView *statusContainer;
 @property (nonatomic,weak) IBOutlet UIView *tagsContainerView;
 @property (nonatomic,weak) IBOutlet UIView *alarmContainer;
 @property (nonatomic,weak) IBOutlet UIView *notesContainer;
 
-
-@property (nonatomic,weak) IBOutlet UILabel *statusLabel;
 @property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
 @property (nonatomic,weak) IBOutlet UITextView *notesView;
 
-@property (nonatomic,weak) IBOutlet UIImageView *statusImage;
 @property (nonatomic,weak) IBOutlet UIImageView *alarmImage;
 @property (nonatomic,weak) IBOutlet UIImageView *tagsImage;
 @property (nonatomic,weak) IBOutlet UIImageView *notesImage;
@@ -140,7 +135,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
         doneButton.frame = CGRectMake(titleContainerView.frame.size.width-buttonWidth,0,buttonWidth,CONTAINER_INIT_HEIGHT-COLOR_SEPERATOR_HEIGHT);
-        doneButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        doneButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+        doneButton.imageEdgeInsets = UIEdgeInsetsMake(CLOSE_BUTTON_TOP_INSET, 0, 0, CLOSE_BUTTON_RIGHT_INSET);
         [doneButton setImage:[UIImage imageNamed:@"cross_button"] forState:UIControlStateNormal];
         [doneButton addTarget:self action:@selector(pressedDone:) forControlEvents:UIControlEventTouchUpInside];
         [titleContainerView addSubview:doneButton];
@@ -154,29 +150,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         scrollView.scrollEnabled = YES;
         scrollView.alwaysBounceVertical = YES;
         
-        
-        /* 
-            Status container with views
-         */
-        UIView *statusContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
-        statusContainer.tag = STATUS_CONTAINER_TAG;
-        [self addSeperatorToView:statusContainer];
-        UIImageView *statusImage = [[UIImageView alloc] init];
-        statusImage.tag = STATUS_IMAGE_TAG;
-        [statusContainer addSubview:statusImage];
-        self.statusImage = (UIImageView*)[statusContainer viewWithTag:STATUS_IMAGE_TAG];
-        
-        UILabel *statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, statusContainer.frame.size.height)];
-        statusLabel.backgroundColor = CLEAR;
-        statusLabel.textColor = EDIT_TASK_TEXT_COLOR;
-        statusLabel.font = TITLE_LABEL_FONT;
-        statusLabel.tag = STATUS_LABEL_TAG;
-        
-        [statusContainer addSubview:statusLabel];
-        self.statusLabel = (UILabel*)[statusContainer viewWithTag:STATUS_LABEL_TAG];
-        
-        [scrollView addSubview:statusContainer];
-        self.statusContainer = [scrollView viewWithTag:STATUS_CONTAINER_TAG];
         
         /*
             Alarm container and button!
@@ -229,9 +202,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         */
         UIView *notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
         notesContainer.tag = NOTES_CONTAINER_VIEW_TAG;
-        [self addSeperatorToView:notesContainer];
+        //[self addSeperatorToView:notesContainer];
         self.notesImage = [self addAndGetImage:@"edit_notes_icon" inView:notesContainer tag:NOTES_IMAGE_VIEW_TAG];
-        self.notesImage.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+        //self.notesImage.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
         
         UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, 320-LABEL_X-10, 500)];
         notesView.tag = NOTES_TEXT_VIEW_TAG;
@@ -266,8 +239,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     imageView.image = [UtilityClass imageNamed:imageName withColor:EDIT_TASK_GRAYED_OUT_TEXT];
     imageView.tag = tag;
     imageView.frame = CGRectSetPos(imageView.frame,(LABEL_X-imageView.frame.size.width)/2, (view.frame.size.height-imageView.frame.size.height)/2);
-    imageView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
-    //imageView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
+    //imageView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+    imageView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
     [view addSubview:imageView];
     return (UIImageView*)[view viewWithTag:tag];
 }
@@ -364,6 +337,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGFloat titleHeight = height+TITLE_TOP_MARGIN+TITLE_BOTTOM_MARGIN;
     CGRectSetHeight(self.titleContainerView,titleHeight);
     CGRectSetY(self.scrollView, titleHeight);
+    NSLog(@"title height:%f",titleHeight);
     CGRectSetHeight(self.scrollView, self.contentView.frame.size.height-titleHeight);
 }
 #pragma mark NotesViewDelegate
@@ -399,16 +373,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
     CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
     NSLog(@"notesHeight:%f",self.notesContainer.frame.size.height);
-}
--(void)updateStatus{
-    UIImage *statusImage = [UtilityClass imageNamed:[TODOHANDLER coloredIconNameForCellType:[self.model cellTypeForTodo]] withColor:EDIT_TASK_GRAYED_OUT_TEXT];
-    self.statusLabel.text = [self.model readableTitleForStatus];
-    CGFloat imageHeight = statusImage.size.height;
-    CGFloat imageWidth = statusImage.size.width;
-   
-    self.statusImage.frame = CGRectMake( (LABEL_X-imageWidth)/2, (self.statusContainer.frame.size.height-imageHeight)/2, imageWidth, imageHeight);
-    self.statusImage.image = statusImage;
-    NSLog(@"statusHeight:%f",self.statusContainer.frame.size.height);
 }
 -(void)updateTags{
     self.tagsLabel.frame = TAGS_LABEL_RECT;
@@ -449,7 +413,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if(_model != model){
         _model = model;
         self.editTitleTextView.text = model.title;
-        [self updateStatus];
         [self updateTags];
         [self updateAlarm];
         [self updateNotes];
@@ -459,9 +422,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)layout{
     CGFloat tempHeight = 0;
-    CGRectSetY(self.statusContainer, tempHeight);
-    tempHeight += self.statusContainer.frame.size.height;
-    
     CGRectSetY(self.alarmContainer, tempHeight);
     tempHeight += self.alarmContainer.frame.size.height;
     

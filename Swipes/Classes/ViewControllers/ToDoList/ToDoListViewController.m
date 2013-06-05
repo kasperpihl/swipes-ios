@@ -113,25 +113,24 @@
 }
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if(self.showingViewController.injectedIndexPath || (!self.itemHandler.isSorted && self.itemHandler.itemCounterWithFilter == 0)) return 0;
+    if(!self.itemHandler.isSorted && self.itemHandler.itemCounterWithFilter == 0) return 0;
     return SECTION_HEADER_HEIGHT;
     
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    if(self.showingViewController.injectedIndexPath) return nil;
-        UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 30)];
-        headerView.backgroundColor = SECTION_HEADER_BACKGROUND;
-        NSString *title = [self.itemHandler titleForSection:section];
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(SECTION_HEADER_X, 0, tableView.bounds.size.width-SECTION_HEADER_X, SECTION_HEADER_HEIGHT)];
-        titleLabel.backgroundColor = CLEAR;
-        titleLabel.textColor = SECTION_HEADER_COLOR;
-        titleLabel.text = [title capitalizedString];
-        [headerView addSubview:titleLabel];
-        return headerView;
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 30)];
+    headerView.backgroundColor = SECTION_HEADER_BACKGROUND;
+    NSString *title = [self.itemHandler titleForSection:section];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(SECTION_HEADER_X, 0, tableView.bounds.size.width-SECTION_HEADER_X, SECTION_HEADER_HEIGHT)];
+    titleLabel.backgroundColor = CLEAR;
+    titleLabel.textColor = SECTION_HEADER_COLOR;
+    titleLabel.text = [title capitalizedString];
+    [headerView addSubview:titleLabel];
+    return headerView;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if(self.showingViewController.injectedIndexPath && indexPath.row == self.showingViewController.injectedIndexPath.row && indexPath.section == self.showingViewController.injectedIndexPath.section){
-        return self.tableView.frame.size.height+COLOR_SEPERATOR_HEIGHT;
+        return self.tableView.frame.size.height+COLOR_SEPERATOR_HEIGHT-SECTION_HEADER_HEIGHT;
     }
     else return CELL_HEIGHT;
 }
@@ -192,7 +191,7 @@
             ToDoViewController *viewController = [[ToDoViewController alloc] init];
             viewController.delegate = self;
             viewController.segmentedViewController = [self parent];
-            viewController.view.frame = CGRectMake(0, 0, 320, self.tableView.frame.size.height+COLOR_SEPERATOR_HEIGHT);
+            viewController.view.frame = CGRectMake(0, 0, 320, self.tableView.frame.size.height+COLOR_SEPERATOR_HEIGHT-SECTION_HEADER_HEIGHT);
             viewController.injectedIndexPath = indexPath;
             self.showingViewController = viewController;
             
@@ -202,9 +201,9 @@
             ToDoCell *cell = (ToDoCell*)[self.tableView cellForRowAtIndexPath:indexPath];
             viewController.injectedCell = cell;
             viewController.model = toDo;
-            [self.tableView setContentOffset:CGPointMake(1, cell.frame.origin.y+COLOR_SEPERATOR_HEIGHT) animated:YES];
+            [self.tableView setContentOffset:CGPointMake(1, cell.frame.origin.y+COLOR_SEPERATOR_HEIGHT-SECTION_HEADER_HEIGHT) animated:YES];
             self.tableView.scrollEnabled = NO;
-            self.tableView.delaysContentTouches = NO;
+            //self.tableView.delaysContentTouches = NO;
         }
         else if(indexPath && self.showingViewController){
             [self didPressCloseToDoViewController:self.showingViewController];
