@@ -46,6 +46,10 @@
 		A717BF1A175FAEEE004791BF /* fields_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717BF19175FAEEE004791BF /* fields_background@2x.png */; };
 		A717BF1C175FB21D004791BF /* login_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717BF1B175FB21D004791BF /* login_background@2x.png */; };
 		A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
+		A717BF24176115CD004791BF /* ProximaNova-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF20176115CD004791BF /* ProximaNova-Black.ttf */; };
+		A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */; };
+		A717BF26176115CD004791BF /* ProximaNova-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF22176115CD004791BF /* ProximaNova-Light.ttf */; };
+		A717BF27176115CD004791BF /* ProximaNova-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */; };
 		A71CCEB01758B1E400A41265 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A71CCEAD1758B1E400A41265 /* HPGrowingTextView.m */; };
 		A71CCEB11758B1E400A41265 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A71CCEAF1758B1E400A41265 /* HPTextViewInternal.m */; };
 		A74F61B616EB77B3004927DA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B516EB77B3004927DA /* MapKit.framework */; };
@@ -207,6 +211,10 @@
 		A717BF1B175FB21D004791BF /* login_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_background@2x.png"; sourceTree = "<group>"; };
 		A717BF1D17611162004791BF /* AnalyticsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsHandler.h; sourceTree = "<group>"; };
 		A717BF1E17611162004791BF /* AnalyticsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsHandler.m; sourceTree = "<group>"; };
+		A717BF20176115CD004791BF /* ProximaNova-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Black.ttf"; path = "Font/ProximaNova-Black.ttf"; sourceTree = "<group>"; };
+		A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Bold.ttf"; path = "Font/ProximaNova-Bold.ttf"; sourceTree = "<group>"; };
+		A717BF22176115CD004791BF /* ProximaNova-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Light.ttf"; path = "Font/ProximaNova-Light.ttf"; sourceTree = "<group>"; };
+		A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Regular.ttf"; path = "Font/ProximaNova-Regular.ttf"; sourceTree = "<group>"; };
 		A71CCEAC1758B1E400A41265 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
 		A71CCEAD1758B1E400A41265 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
 		A71CCEAE1758B1E400A41265 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
@@ -557,6 +565,10 @@
 		A7680D30172D219800BCB2D9 /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				A717BF20176115CD004791BF /* ProximaNova-Black.ttf */,
+				A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */,
+				A717BF22176115CD004791BF /* ProximaNova-Light.ttf */,
+				A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */,
 				A7680D31172D21B600BCB2D9 /* Franchise-Bold.ttf */,
 			);
 			name = Font;
@@ -1201,6 +1213,10 @@
 				A717BF17175F5E7B004791BF /* edit_tags_icon@2x.png in Resources */,
 				A717BF1A175FAEEE004791BF /* fields_background@2x.png in Resources */,
 				A717BF1C175FB21D004791BF /* login_background@2x.png in Resources */,
+				A717BF24176115CD004791BF /* ProximaNova-Black.ttf in Resources */,
+				A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */,
+				A717BF26176115CD004791BF /* ProximaNova-Light.ttf in Resources */,
+				A717BF27176115CD004791BF /* ProximaNova-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

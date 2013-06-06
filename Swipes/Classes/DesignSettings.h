@@ -56,15 +56,29 @@
 #define LOGIN_LOGO_Y        0
 #define LOGIN_FIELDS_Y      50
 #define FIELDS_WIDTH 260
-#define SIGNUP_BUTTONS_HEIGHT 44
+#define SIGNUP_BUTTONS_HEIGHT 50
+
+/* Fonts
+ "ProximaNova-Regular",
+ "ProximaNova-Light",
+ "ProximaNova-Black",
+ "ProximaNova-Bold"
+ 
+ 
+ */
+#define KP_LIGHT(fontSize) [UIFont fontWithName:@"ProximaNova-Light" size:fontSize]
+#define KP_BLACK(fontSize) [UIFont fontWithName:@"ProximaNova-Black" size:fontSize]
+#define KP_REGULAR(fontSize) [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize]
+#define KP_BOLD(fontSize) [UIFont fontWithName:@"ProximaNova-Bold" size:fontSize]
+
 
 #define LOGIN_BUTTON_BACKGROUND         TABLE_CELL_BACKGROUND
 #define SIGNUP_BUTTON_BACKGROUND        DONE_COLOR
 #define LOGIN_FIELDS_BACKGROUND         color(97,105,113,1)
 #define LOGIN_FIELDS_SEPERATOR_COLOR    color(187,195,203,1)
-#define SIGNUP_BUTTON_FONT              [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
-#define LOGIN_FIELDS_FONT               [UIFont fontWithName:@"HelveticaNeue-Light" size:14]
-#define LOGIN_LABEL_ABOVE_FONT          [UIFont fontWithName:@"HelveticaNeue-Light" size:12]
+#define SIGNUP_BUTTON_FONT              KP_LIGHT(18)
+#define LOGIN_FIELDS_FONT               KP_LIGHT(14)
+#define LOGIN_LABEL_ABOVE_FONT          KP_LIGHT(12)
 #define LOGIN_FIELDS_TEXT_COLOR         color(187,195,203,1)
 #define LOGIN_LABEL_ABOVE_COLOR         SECTION_HEADER_COLOR//color(204,208,214,1)
 
@@ -96,25 +110,25 @@
 #define KEYBOARD_HEIGHT 216
 
 
-#define BUTTON_FONT [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:20]
+#define BUTTON_FONT KP_BLACK(20)
 
-#define TAGS_LABEL_BOLD_FONT [UIFont fontWithName:@"HelveticaNeue-Bold" size:12]
+#define TAGS_LABEL_BOLD_FONT KP_BOLD(12)
 
-#define TABLE_EMPTY_BG_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:20]
+#define TABLE_EMPTY_BG_FONT KP_LIGHT(20)
 
 
-#define NO_TAG_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
-#define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
-#define SECTION_HEADER_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
-#define TITLE_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
+#define NO_TAG_FONT KP_LIGHT(18)
+#define TEXT_FIELD_FONT KP_LIGHT(18)
+#define SECTION_HEADER_FONT KP_LIGHT(18)
 
-#define TAGS_LABEL_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:12]
+#define TITLE_LABEL_FONT KP_LIGHT(19)
+#define TAGS_LABEL_FONT KP_LIGHT(13)
 
 
 #define SCHEDULE_BUTTON_FONT [UIFont fontWithName:@"Franchise-Bold" size:20]
 
 
-#define TAG_FONT [UIFont fontWithName:@"HelveticaNeue" size:16]
+#define TAG_FONT KP_REGULAR(16)
 
 
 

@@ -214,7 +214,7 @@ static RootViewController *sharedObject;
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
     
-    [PFUser logOut];
+    //[PFUser logOut];
     if(![PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
     else [self changeToMenu:KPMenuHome animated:NO];
     //[self walkthrough];

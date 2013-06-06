@@ -31,7 +31,7 @@
 
 #define LABEL_WIDTH (320-(2*LABEL_X))
 #define TITLE_DELTA_Y -1
-#define LABEL_SPACE 0
+#define LABEL_SPACE 4
 
 #define TITLE_LABEL_HEIGHT [@"Tjgq" sizeWithFont:TITLE_LABEL_FONT].height
 #define TAGS_LABEL_HEIGHT [@"Tg" sizeWithFont:TAGS_LABEL_FONT].height

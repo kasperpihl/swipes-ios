@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#define ANALYTICS [AnalyticsHandler sharedInstance]
 @interface AnalyticsHandler : NSObject
-
++(AnalyticsHandler*)sharedInstance;
 @end

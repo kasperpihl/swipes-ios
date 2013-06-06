@@ -239,8 +239,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     imageView.image = [UtilityClass imageNamed:imageName withColor:EDIT_TASK_GRAYED_OUT_TEXT];
     imageView.tag = tag;
     imageView.frame = CGRectSetPos(imageView.frame,(LABEL_X-imageView.frame.size.width)/2, (view.frame.size.height-imageView.frame.size.height)/2);
-    //imageView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
-    imageView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
+    imageView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+    //imageView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
     [view addSubview:imageView];
     return (UIImageView*)[view viewWithTag:tag];
 }

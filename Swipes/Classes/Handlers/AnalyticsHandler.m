@@ -9,5 +9,11 @@
 #import "AnalyticsHandler.h"
 
 @implementation AnalyticsHandler
-
+static AnalyticsHandler *sharedObject;
++(AnalyticsHandler *)sharedInstance{
+    if(!sharedObject){
+        sharedObject = [[AnalyticsHandler allocWithZone:NULL] init];
+    }
+    return sharedObject;
+}
 @end
