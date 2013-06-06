@@ -34,7 +34,7 @@ static NotificationHandler *sharedObject;
     localNotif.timeZone = [NSTimeZone defaultTimeZone];
     localNotif.alertAction = NSLocalizedString(@"Open Swipes", nil);
     NSString *taskString = (numberOfTasks > 1) ? @"tasks" : @"task";
-    localNotif.alertBody = [NSString stringWithFormat:@"Goodmorning. You have %i new %@ today",numberOfTasks,taskString];
+    localNotif.alertBody = [NSString stringWithFormat:@"Good morning. You have %i new %@",numberOfTasks,taskString];
     localNotif.soundName = UILocalNotificationDefaultSoundName;
     NSDictionary *infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"schedule",@"type",[NSNumber numberWithInteger:numberOfTasks],@"number",nil];
     localNotif.userInfo = infoDict;

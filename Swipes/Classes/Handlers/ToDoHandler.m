@@ -36,6 +36,7 @@ static ToDoHandler *sharedObject;
     NSNumber *count = [KPToDo MR_numberOfEntities];
     newToDo.order = count;
     [self save];
+    
 }
 -(void)changeToDos:(NSArray*)toDos title:(NSString *)title save:(BOOL)save{
     for(KPToDo *toDo in toDos){

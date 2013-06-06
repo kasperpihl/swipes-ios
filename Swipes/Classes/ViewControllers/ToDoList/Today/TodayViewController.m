@@ -42,6 +42,7 @@
     [self deselectAllRows:self];
 }
 -(void)dragTableViewController:(KPReorderTableView *)dragTableViewController didEndDraggingToRow:(NSIndexPath *)destinationIndexPath{
+    
     [self.itemHandler moveItem:self.dragRow toIndexPath:destinationIndexPath];
     self.tableView.allowsMultipleSelection = YES;
     [self parent].lock = NO;

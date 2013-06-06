@@ -18,6 +18,7 @@
 -(NSNumber*)versionNumber;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block;
 -(void)popupBoxWithTitle:(NSString*)title andMessage:(NSString*)message buttons:(NSArray*)buttons block:(SuccessfulBlock)block;
++ (UIColor *)darkerColor:(UIColor*)c;
 +(NSString*)generateIdWithLength:(NSInteger)length;
 UIImage* rotate(UIImage* src, NSInteger degrees);
 + (BOOL) validateEmail: (NSString *) candidate;

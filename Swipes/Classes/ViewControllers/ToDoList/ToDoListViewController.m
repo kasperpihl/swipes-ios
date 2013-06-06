@@ -285,7 +285,7 @@
     [cell showTimeline:NO];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
-    if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
+    if(indexPath && ![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
     if(self.selectedRows.count > 0){
         NSArray *visibleCells = [self.tableView visibleCells];
         for(ToDoCell *localCell in visibleCells){

@@ -248,13 +248,14 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     UIButton *clickedButton = [[UIButton alloc] initWithFrame:view.bounds];
     clickedButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
     [clickedButton setBackgroundImage:[UtilityClass imageWithColor:color(55,55,55,0.5)] forState:UIControlStateHighlighted];
+    //clickedButton.contentEdgeInsets = UIEdgeInsetsMake(0, LABEL_X, 0, LABEL_X/3);
     [clickedButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:clickedButton];
 }
 -(void)addSeperatorToView:(UIView*)view{
     CGFloat seperatorHeight = 1;
     CGFloat rightMargin = LABEL_X/3;
-    UIView *seperatorView = [[UIView alloc] initWithFrame:CGRectMake(rightMargin, view.frame.size.height-seperatorHeight, view.frame.size.width-2*rightMargin, seperatorHeight)];
+    UIView *seperatorView = [[UIView alloc] initWithFrame:CGRectMake(LABEL_X, view.frame.size.height-seperatorHeight, view.frame.size.width-LABEL_X-rightMargin, seperatorHeight)];
     seperatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     seperatorView.backgroundColor = EDIT_TASK_SEPERATOR_COLOR;
     [view addSubview:seperatorView];

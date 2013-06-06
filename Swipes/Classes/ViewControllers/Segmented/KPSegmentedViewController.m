@@ -179,7 +179,9 @@
 		_titles = [NSMutableArray array];
 	return _titles;
 }
-
+-(void)showNavBar:(BOOL)show duration:(NSTimeInterval)duration{
+    
+}
 - (AKSegmentedControl *)segmentedControl {
 	if (!_segmentedControl) {
 		//_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];

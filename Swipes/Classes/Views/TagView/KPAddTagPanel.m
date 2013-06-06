@@ -77,6 +77,7 @@
         tagView.bottomMargin = 15;
         tagView.marginRight = 0;
         tagView.emptyText = @"No tags";
+        
         CGRectSetY(tagView, 0);
         tagView.resizeDelegate = self;
         tagView.tag = TAG_VIEW_TAG;
@@ -161,6 +162,7 @@
         textField.font = TEXT_FIELD_FONT;
         textField.textColor = TEXT_FIELD_COLOR;
         textField.returnKeyType = UIReturnKeyNext;
+        textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
         textField.keyboardAppearance = UIKeyboardAppearanceAlert;
         textField.borderStyle = UITextBorderStyleNone;
         textField.delegate = self;
@@ -168,7 +170,7 @@
         [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         [addView addSubview:textField];
         self.textField = (UITextField*)[addView viewWithTag:TEXT_FIELD_TAG];
-        [self.textField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];
+        //[self.textField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];
         
         [self addSubview:addView];
         self.addTagView = [self viewWithTag:ADD_VIEW_TAG];

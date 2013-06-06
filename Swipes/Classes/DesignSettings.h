@@ -52,10 +52,21 @@
 #define EDIT_TASK_GRAYED_OUT_TEXT       gray(180,1)//EDIT_TASK_SEPERATOR_COLOR
 #define EDIT_TASK_SELECTED_OVERLAY      
 
+/* Login View */
+#define LOGIN_LOGO_Y        0
+#define LOGIN_FIELDS_Y      50
+#define FIELDS_WIDTH 260
+#define SIGNUP_BUTTONS_HEIGHT 44
 
-
-
-
+#define LOGIN_BUTTON_BACKGROUND         TABLE_CELL_BACKGROUND
+#define SIGNUP_BUTTON_BACKGROUND        DONE_COLOR
+#define LOGIN_FIELDS_BACKGROUND         color(97,105,113,1)
+#define LOGIN_FIELDS_SEPERATOR_COLOR    color(187,195,203,1)
+#define SIGNUP_BUTTON_FONT              [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
+#define LOGIN_FIELDS_FONT               [UIFont fontWithName:@"HelveticaNeue-Light" size:14]
+#define LOGIN_LABEL_ABOVE_FONT          [UIFont fontWithName:@"HelveticaNeue-Light" size:12]
+#define LOGIN_FIELDS_TEXT_COLOR         color(187,195,203,1)
+#define LOGIN_LABEL_ABOVE_COLOR         SECTION_HEADER_COLOR//color(204,208,214,1)
 
 #define TAG_COLOR_BACKGROUND            SEGMENT_SELECTED
 
@@ -91,7 +102,7 @@
 
 #define TABLE_EMPTY_BG_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:20]
 
-#define SIGNUP_BUTTON_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
+
 #define NO_TAG_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
 #define TEXT_FIELD_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]
 #define SECTION_HEADER_FONT [UIFont fontWithName:@"HelveticaNeue-Light" size:18]

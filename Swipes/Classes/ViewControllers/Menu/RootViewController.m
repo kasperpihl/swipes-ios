@@ -21,6 +21,7 @@
 #import "SignupViewController.h"
 #import <Parse/PFFacebookUtils.h>
 #import "FacebookCommunicator.h"
+#import "Mixpanel.h"
 
 @interface RootViewController () <UINavigationControllerDelegate,MYIntroductionDelegate,PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
@@ -80,15 +81,20 @@
         return NO;
     }];
 }
-// Sent to the delegate when a PFUser is logged in.
-- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
+-(void)didLoginUser:(PFUser*)user{
+    NSString *wasSignup = user.isNew ? @"yes" : @"no";
+    [MIXPANEL track:@"Logged in" properties:@{@"Is signup":wasSignup}];
     if([PFFacebookUtils isLinkedWithUser:user]){
         if(!user.email){
             [self fetchDataFromFacebook];
         }
     }
     [self changeToMenu:KPMenuHome animated:YES];
-
+    
+}
+// Sent to the delegate when a PFUser is logged in.
+- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
+    [self didLoginUser:user];
 }
 // Sent to the delegate when the log in attempt fails.
 - (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error {
@@ -132,7 +138,7 @@
 // Sent to the delegate when a PFUser is signed up.
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user {
     [self dismissModalViewControllerAnimated:YES];
-    [self changeToMenu:KPMenuHome animated:YES];
+    [self didLoginUser:user];
 }
 
 // Sent to the delegate when the sign up attempt fails.
@@ -208,7 +214,7 @@ static RootViewController *sharedObject;
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
     
-    //[PFUser logOut];
+    [PFUser logOut];
     if(![PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
     else [self changeToMenu:KPMenuHome animated:NO];
     //[self walkthrough];

@@ -113,6 +113,27 @@ static UtilityClass *sharedObject;
     //return the color-burned image
     return coloredImg;
 }
++ (UIColor *)lighterColor:(UIColor*)c
+{
+    float h, s, b, a;
+    if ([c getHue:&h saturation:&s brightness:&b alpha:&a])
+        return [UIColor colorWithHue:h
+                          saturation:s
+                          brightness:MIN(b * 1.3, 1.0)
+                               alpha:a];
+    return nil;
+}
+
++ (UIColor *)darkerColor:(UIColor*)c
+{
+    float h, s, b, a;
+    if ([c getHue:&h saturation:&s brightness:&b alpha:&a])
+        return [UIColor colorWithHue:h
+                          saturation:s
+                          brightness:b * 0.75
+                               alpha:a];
+    return nil;
+}
 + (BOOL) validateEmail: (NSString *) candidate {
     NSString *emailRegex =
     @"(?:[a-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[a-z0-9!#$%\\&'*+/=?\\^_`{|}"
