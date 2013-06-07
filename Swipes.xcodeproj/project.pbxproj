@@ -1612,6 +1612,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Kasper Pihl Tornoee";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kasper Pihl Tornoee";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
@@ -1661,6 +1663,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = Swipes;
+				PROVISIONING_PROFILE = "4AABBC6D-5348-4649-8599-BCF3B3D5A66E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4AABBC6D-5348-4649-8599-BCF3B3D5A66E";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

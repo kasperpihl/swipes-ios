@@ -18,8 +18,7 @@
 #define DOT_VIEW_TAG 6
 #define TIMELINE_TAG 7
 #define OUTLINE_TAG 8
-#define ALARM_ICON_TAG 9
-#define NOTES_ICON_TAG 10
+#define ALARM_LABEL_TAG 9
 
 #define INDICATOR_X 40
 #define INDICATOR_HEIGHT 23
@@ -38,7 +37,9 @@
 #define TITLE_LABEL_HEIGHT [@"Tjgq" sizeWithFont:TITLE_LABEL_FONT].height
 #define TAGS_LABEL_HEIGHT [@"Tg" sizeWithFont:TAGS_LABEL_FONT].height
 
-#define ICON_SPACING 10
+#define ALARM_HACK 1
+#define ICON_SPACING 5
+#define ALARM_SPACING 3
 
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *layerView;
@@ -47,7 +48,7 @@
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UIView *outlineView;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
-@property (nonatomic,weak) IBOutlet UIImageView *alarmIcon;
+@property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
 @end
 @implementation ToDoCell
 
@@ -104,11 +105,16 @@
         self.outlineView = [self.contentView viewWithTag:OUTLINE_TAG];
         
 
-        UIImageView *alarmIcon = [[UIImageView alloc] initWithImage:[UtilityClass imageNamed:@"edit_alarm_icon" withColor:EDIT_TASK_GRAYED_OUT_TEXT]];
-        alarmIcon.tag = ALARM_ICON_TAG;
-        alarmIcon.hidden = YES;
-        [self.contentView addSubview:alarmIcon];
-        self.alarmIcon = (UIImageView*)[self.contentView viewWithTag:ALARM_ICON_TAG];
+        UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+        alarmLabel.tag = ALARM_LABEL_TAG;
+        alarmLabel.font = CELL_ALARM_FONT;
+        alarmLabel.textColor = CELL_ALARM_TEXT_COLOR;
+        alarmLabel.backgroundColor = CELL_ALARM_BACKGROUND;
+        alarmLabel.textAlignment = UITextAlignmentCenter;
+        self.alarmLabel.numberOfLines = 1;
+        alarmLabel.hidden = YES;
+        [self.contentView addSubview:alarmLabel];
+        self.alarmLabel = (UILabel*)[self.contentView viewWithTag:ALARM_LABEL_TAG];
     }
     return self;
 }
@@ -156,11 +162,19 @@
 }
 -(void)setIconsForToDo:(KPToDo*)toDo{
     CGFloat deltaX = LABEL_X;
-    self.alarmIcon.hidden = YES;
+    self.alarmLabel.hidden = YES;
     if(toDo.alarm && [toDo.alarm isInFuture]){
-        self.alarmIcon.frame = CGRectSetPos(self.alarmIcon.frame, deltaX, self.tagsLabel.center.y-(self.alarmIcon.frame.size.height/2));
-        deltaX += self.alarmIcon.frame.size.width + ICON_SPACING;
-        self.alarmIcon.hidden = NO;
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"h:mm a"];
+        NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+        [dateFormatter setLocale:usLocale];
+        NSString *dateInString = [[dateFormatter stringFromDate:toDo.alarm] lowercaseString];
+        self.alarmLabel.text = dateInString;
+        [self.alarmLabel sizeToFit];
+        CGRectSetWidth(self.alarmLabel, self.alarmLabel.frame.size.width+2*ALARM_SPACING);
+        self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, deltaX, self.tagsLabel.center.y-(self.alarmLabel.frame.size.height/2)-ALARM_HACK);
+        deltaX += self.alarmLabel.frame.size.width + ICON_SPACING;
+        self.alarmLabel.hidden = NO;
     }
     CGRectSetX(self.tagsLabel,deltaX);
 }

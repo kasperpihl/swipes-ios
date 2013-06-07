@@ -176,12 +176,12 @@
 }
 -(void)walkthrough{
     //STEP 1 Construct Panels
-    MYIntroductionPanel *panel = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough1"] title:@"Menu" description:@"Welcome to your powerful Menu bar! Here everything has its place. Plan and focus on your tasks today, complete them or schedule them for later."];
+    MYIntroductionPanel *panel = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough1"] title:@"MENU" description:@"Welcome to your powerful Menu bar! Here everything has its place. Plan and focus on your tasks today, complete them or schedule them for later."];
     
     //You may also add in a title for each panel
-    MYIntroductionPanel *panel2 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough2"] title:@"Schedule" description:@"This is your favorite schedule! Simply swipe your tasks to the left and set them up for later. You will get reminded, when the time’s right."];
+    MYIntroductionPanel *panel2 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough2"] title:@"SCHEDULE" description:@"This is your favorite schedule! Simply swipe your tasks to the left and set them up for later. You will get reminded, when the time’s right."];
     
-    MYIntroductionPanel *panel3 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough3"] title:@"Get started" description:@"Start swiping now. Plan your day and enjoy a productive flow!"];
+    MYIntroductionPanel *panel3 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough3"] title:@"GET STARTED" description:@"Start swiping now. Plan your day and enjoy a productive flow!"];
     
     
     //STEP 2 Create IntroductionView
@@ -195,7 +195,7 @@
     
     /*A more customized version*/
     MYIntroductionView *introductionView = [[MYIntroductionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) panels:@[panel, panel2, panel3]];
-    [introductionView setBackgroundImage:[UtilityClass imageWithColor:LOGIN_BACKGROUND]];
+    [introductionView setBackgroundImage:[UtilityClass imageWithColor:WALKTHROUGH_BACKGROUND]];
     
     
     //Set delegate to self for callbacks (optional)

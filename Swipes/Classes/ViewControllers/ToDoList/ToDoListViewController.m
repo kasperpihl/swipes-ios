@@ -410,6 +410,7 @@
 -(void)cleanUpAfterMovingAnimated:(BOOL)animated{
     
     [self.selectedRows removeAllObjects];
+    [self.itemHandler clearAll];
     [self cleanShowingViewAnimated:animated];
     self.swipingCell = nil;
     [self didUpdateCells];
@@ -564,7 +565,6 @@
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
 -(void)viewDidDisappear:(BOOL)animated{

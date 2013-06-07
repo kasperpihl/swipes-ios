@@ -185,7 +185,7 @@
     }
     else if(hasSearchString){
         self.hasSearched = YES;
-        NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:@"(title contains[cd] %@)",self.searchString];
+        NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:@"(title contains[cd] %@) OR (tagString contains[cd] %@)",self.searchString,self.searchString];
         filteredItems = [[self.items filteredArrayUsingPredicate:searchPredicate] mutableCopy];
     }
     else{
