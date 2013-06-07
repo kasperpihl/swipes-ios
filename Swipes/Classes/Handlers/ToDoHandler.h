@@ -20,4 +20,5 @@
 -(void)completeToDos:(NSArray*)toDoArray;
 -(NSString*)coloredIconNameForCellType:(CellType)type;
 -(void)changeToDos:(NSArray*)toDos title:(NSString *)title save:(BOOL)save;
+-(void)deleteToDos:(NSArray*)toDos save:(BOOL)save;
 @end

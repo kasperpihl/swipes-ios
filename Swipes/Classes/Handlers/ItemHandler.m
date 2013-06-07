@@ -8,6 +8,7 @@
 
 #import "ItemHandler.h"
 #import "TagHandler.h"
+#import "AnalyticsHandler.h"
 
 @interface ItemHandler ()
 @property (nonatomic,strong) NSMutableArray *titleArray;
@@ -84,6 +85,7 @@
         [self setItems:[newItems copy]];
         [self notifyUpdate];
     }
+    [ANALYTICS incrementKey:NUMBER_OF_REORDERED_TASKS_KEY withAmount:1];
 }
 -(void)selectTag:(NSString *)tag{
     if(![self.selectedTags containsObject:tag]){
@@ -228,9 +230,7 @@
         for(NSInteger i = 0 ; i < self.filteredItems.count ; i++){
             if([indexSet containsIndex:i]) [newItemsMutable removeObject:[self.filteredItems objectAtIndex:i]];
         }
-        NSLog(@"before:%i",self.itemCounterWithFilter);
         self.items = [newItemsMutable copy];
-        NSLog(@"after:%i",self.itemCounterWithFilter);
         NSInteger counter = (self.hasFilter) ? self.itemCounterWithFilter : self.itemCounter;
         if(counter == 0) [deletedSections addIndex:0];
     }

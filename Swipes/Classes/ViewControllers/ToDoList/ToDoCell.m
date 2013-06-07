@@ -11,19 +11,21 @@
 #import "UtilityClass.h"
 #import "ToDoHandler.h"
 #import <QuartzCore/QuartzCore.h>
+#import "NSDate-Utilities.h"
 #define LAYER_VIEW_TAG 1
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
 #define DOT_VIEW_TAG 6
 #define TIMELINE_TAG 7
 #define OUTLINE_TAG 8
+#define RIGHT_ICON_CONTAINER_TAG 9
 
 
 #define INDICATOR_X 40
 #define INDICATOR_HEIGHT 23
 #define INDICATOR_WIDTH 1
 
-#define LABEL_X 40
+#define LABEL_X 50
 
 
 #define DOT_OUTLINE_SIZE 4
@@ -36,6 +38,10 @@
 #define TITLE_LABEL_HEIGHT [@"Tjgq" sizeWithFont:TITLE_LABEL_FONT].height
 #define TAGS_LABEL_HEIGHT [@"Tg" sizeWithFont:TAGS_LABEL_FONT].height
 
+#define RIGHT_ICON_WIDTH 25
+#define RIGHT_ICON_RIGHT_MARGIN 10
+
+#define RIGHT_ICON_CORNER_RADIUS 5
 
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *layerView;
@@ -44,6 +50,7 @@
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UIView *outlineView;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
+@property (nonatomic,weak) IBOutlet UIView *rightIconContainer;
 @end
 @implementation ToDoCell
 
@@ -98,6 +105,18 @@
         [self.contentView addSubview:dotOutlineContainer];
         self.dotView = [self.contentView viewWithTag:DOT_VIEW_TAG];
         self.outlineView = [self.contentView viewWithTag:OUTLINE_TAG];
+        
+        UIView *rightIconContainer = [[UIView alloc]initWithFrame:CGRectMake(self.contentView.frame.size.width-RIGHT_ICON_WIDTH-RIGHT_ICON_RIGHT_MARGIN, (self.contentView.frame.size.height-RIGHT_ICON_WIDTH)/2, RIGHT_ICON_WIDTH, RIGHT_ICON_WIDTH)];
+        
+        rightIconContainer.tag = RIGHT_ICON_CONTAINER_TAG;
+        rightIconContainer.backgroundColor = TABLE_CELL_ICON_BACKGROUND;
+        rightIconContainer.layer.cornerRadius = RIGHT_ICON_CORNER_RADIUS;
+        UIImageView *rightIcon = [[UIImageView alloc] initWithImage:[UtilityClass imageNamed:@"edit_alarm_icon" withColor:EDIT_TASK_GRAYED_OUT_TEXT]];
+        rightIcon.frame = CGRectSetPos(rightIcon.frame, (rightIconContainer.frame.size.width-rightIcon.frame.size.width)/2, (rightIconContainer.frame.size.height-rightIcon.frame.size.height)/2);
+        [rightIconContainer addSubview:rightIcon];
+        rightIconContainer.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
+        [self.contentView addSubview:rightIconContainer];
+        self.rightIconContainer = [self.contentView viewWithTag:RIGHT_ICON_CONTAINER_TAG];
     }
     return self;
 }
@@ -139,13 +158,19 @@
         self.tagsLabel.font = TAGS_LABEL_FONT;
         self.tagsLabel.text = tagString;
     }
+    [self setIconsForToDo:toDo];
     [self.tagsLabel setNeedsDisplay];
     
 }
+-(void)setIconsForToDo:(KPToDo*)toDo{
+    BOOL shouldShowIcon = NO;
+    if(toDo.alarm && [toDo.alarm isInFuture]){
+        shouldShowIcon = YES;
+    }
+    self.rightIconContainer.hidden = !shouldShowIcon;
+}
 -(void)setDotColor:(UIColor *)color{
     self.dotView.backgroundColor = color;
-}
--(void)setOrderNumber:(NSInteger)orderNumber{
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     /*self.overlayView.hidden = !selected;

@@ -85,7 +85,6 @@
     
 }
 -(void)didUpdateCells{
-    NSLog(@"updating");
     [self.searchBar reloadDataAndUpdate:YES];
     if([self.state isEqualToString:@"today"]){
         /*if(self.itemCounter == 0) [self changeToColored:YES];
@@ -121,9 +120,10 @@
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 30)];
     headerView.backgroundColor = SECTION_HEADER_BACKGROUND;
     NSString *title = [self.itemHandler titleForSection:section];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(SECTION_HEADER_X, 0, tableView.bounds.size.width-SECTION_HEADER_X, SECTION_HEADER_HEIGHT)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(SECTION_HEADER_X, 0, tableView.bounds.size.width-2*SECTION_HEADER_X, SECTION_HEADER_HEIGHT)];
     titleLabel.backgroundColor = CLEAR;
-    titleLabel.textColor = SECTION_HEADER_COLOR;
+    titleLabel.font = SECTION_HEADER_FONT;
+    titleLabel.textColor = [TODOHANDLER colorForCellType:self.cellType];
     titleLabel.text = [title capitalizedString];
     [headerView addSubview:titleLabel];
     return headerView;
@@ -359,18 +359,17 @@
 -(void)deleteSelectedItems:(id)sender{
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
+    NSMutableArray *toDos = [NSMutableArray array];
     for(NSIndexPath *indexPath in selectedIndexPaths){
-        KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
-        [toDo MR_deleteInContext:[NSManagedObjectContext MR_defaultContext]];
+        [toDos addObject:[self.itemHandler itemForIndexPath:indexPath]];
         [indexSet addIndex:indexPath.row];
     }
-    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+    [TODOHANDLER deleteToDos:toDos save:YES];
     [self removeItemsForIndexSet:indexSet];
 }
 -(void)removeItemsForIndexSet:(NSIndexSet*)indexSet{
     [self runBeforeMoving];
     NSIndexSet *deletedSections = [self.itemHandler removeItemsForIndexSet:indexSet];
-    NSLog(@"sections:%@",deletedSections);
     [self.tableView beginUpdates];
     [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
     if(deletedSections && deletedSections.count > 0) [self.tableView deleteSections:deletedSections withRowAnimation:UITableViewRowAnimationFade];
@@ -448,6 +447,7 @@
 -(void)prepareTableView:(UITableView *)tableView{
     tableView.allowsMultipleSelection = YES;
     [tableView setTableFooterView:[UIView new]];
+    
     tableView.frame = CGRectMake(0, COLOR_SEPERATOR_HEIGHT, tableView.frame.size.width, tableView.frame.size.height-COLOR_SEPERATOR_HEIGHT);
     UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
     //tableView.contentInset = UIEdgeInsetsMake(0, 0, CONTENT_INSET_BOTTOM, 0);

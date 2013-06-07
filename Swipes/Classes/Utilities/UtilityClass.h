@@ -23,4 +23,5 @@
 UIImage* rotate(UIImage* src, NSInteger degrees);
 + (BOOL) validateEmail: (NSString *) candidate;
 + (UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color;
++(UIImage *)flippedImage:(UIImage*)flippingImage horizontal:(BOOL)horizontal;
 @end

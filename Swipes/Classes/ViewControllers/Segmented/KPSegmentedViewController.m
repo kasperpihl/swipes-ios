@@ -180,7 +180,9 @@
 	return _titles;
 }
 -(void)showNavBar:(BOOL)show duration:(NSTimeInterval)duration{
-    
+    if(show){
+        
+    }
 }
 - (AKSegmentedControl *)segmentedControl {
 	if (!_segmentedControl) {
@@ -236,7 +238,7 @@
             break;
     }
     UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height-3, button.frame.size.width, 3)];
-    
+    [button setImage:highlightedImage forState:UIControlStateSelected];
     colorView.backgroundColor = SEGMENT_SELECTED;//thisColor;
     colorView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin);
     [button addSubview:colorView];

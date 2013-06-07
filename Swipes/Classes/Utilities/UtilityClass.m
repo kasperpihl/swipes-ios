@@ -80,6 +80,11 @@ static UtilityClass *sharedObject;
     }
     self.block = nil;
 }
++(UIImage *)flippedImage:(UIImage*)flippingImage horizontal:(BOOL)horizontal{
+    UIImageOrientation orientation = UIImageOrientationUpMirrored;
+    return [UIImage imageWithCGImage:flippingImage.CGImage
+                               scale:[UIScreen mainScreen].scale orientation:orientation];
+}
 +(UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color{
     UIImage *img = [UIImage imageNamed:name];
     

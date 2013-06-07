@@ -9,6 +9,7 @@
 #import "ToDoHandler.h"
 #import "NotificationHandler.h"
 #import "NSDate-Utilities.h"
+#import "AnalyticsHandler.h"
 @interface ToDoHandler ()
 @property (nonatomic) NSMutableArray *handleNotifications;
 @end
@@ -28,6 +29,13 @@ static ToDoHandler *sharedObject;
     }
     return sharedObject;
 }
+-(void)deleteToDos:(NSArray*)toDos save:(BOOL)save{
+    for(KPToDo *toDo in toDos){
+        [toDo MR_deleteEntity];
+    }
+    if(save) [self save];
+    [ANALYTICS incrementKey:NUMBER_OF_DELETED_TASKS_KEY withAmount:toDos.count];
+}
 -(void)addItem:(NSString *)item{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
     newToDo.title = item;
@@ -36,7 +44,7 @@ static ToDoHandler *sharedObject;
     NSNumber *count = [KPToDo MR_numberOfEntities];
     newToDo.order = count;
     [self save];
-    
+    [ANALYTICS incrementKey:NUMBER_OF_ADDED_TASKS_KEY withAmount:1];
 }
 -(void)changeToDos:(NSArray*)toDos title:(NSString *)title save:(BOOL)save{
     for(KPToDo *toDo in toDos){
@@ -67,7 +75,10 @@ static ToDoHandler *sharedObject;
         [self handleNotificationsForDate:date];
     }
     [self save];
+    [ANALYTICS incrementKey:NUMBER_OF_SCHEDULES_KEY withAmount:toDoArray.count];
+    if(!date) [ANALYTICS incrementKey:NUMBER_OF_UNSPECIFIED_TASKS withAmount:toDoArray.count];
     [self scheduleNotifications];
+    
 }
 -(void)completeToDos:(NSArray*)toDoArray{
     for(KPToDo *toDo in toDoArray){
@@ -75,6 +86,7 @@ static ToDoHandler *sharedObject;
         [toDo complete];
     }
     [self save];
+    [ANALYTICS incrementKey:NUMBER_OF_COMPLETED_KEY withAmount:toDoArray.count];
     [self scheduleNotifications];
 }
 -(MCSwipeTableViewCellActivatedDirection)directionForCellType:(CellType)type{

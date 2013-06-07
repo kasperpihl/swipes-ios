@@ -31,7 +31,7 @@
 #define LABEL_X 50
 
 #define TITLE_HEIGHT 44
-#define TITLE_TOP_MARGIN 13
+#define TITLE_TOP_MARGIN 19
 #define TITLE_WIDTH (320)
 #define TITLE_BOTTOM_MARGIN (TITLE_TOP_MARGIN)
 #define CONTAINER_INIT_HEIGHT (TITLE_HEIGHT + TITLE_TOP_MARGIN + TITLE_BOTTOM_MARGIN)
@@ -114,11 +114,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         textView.backgroundColor = CLEAR;
         textView.maxNumberOfLines = 6;
         textView.returnKeyType = UIReturnKeyDone; //just as an example
-        textView.font = TEXT_FIELD_FONT;
+        textView.font = EDIT_TASK_TITLE_FONT;
         textView.delegate = self;
         textView.internalTextView.keyboardAppearance = UIKeyboardAppearanceAlert;
         textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);
-        textView.textColor = TEXT_FIELD_COLOR;
+        textView.textColor = EDIT_TASK_TITLE_COLOR;
         
         UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DOT_SIZE,DOT_SIZE)];
         dotView.tag = DOT_VIEW_TAG;
@@ -163,7 +163,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, alarmContainer.frame.size.height)];
         alarmLabel.backgroundColor = CLEAR;
         [self setColorsFor:alarmLabel];
-        alarmLabel.font = TITLE_LABEL_FONT;
+        alarmLabel.font = EDIT_TASK_TEXT_FONT;
         alarmLabel.tag = ALARM_LABEL_TAG;
         
         [alarmContainer addSubview:alarmLabel];
@@ -186,7 +186,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         UILabel *tagsLabel = [[UILabel alloc] initWithFrame:TAGS_LABEL_RECT];
         tagsLabel.tag = TAGS_LABEL_TAG;
         tagsLabel.numberOfLines = 0;
-        tagsLabel.font = TEXT_FIELD_FONT;
+        tagsLabel.font = EDIT_TASK_TEXT_FONT;
         tagsLabel.backgroundColor = [UIColor clearColor];
         [self setColorsFor:tagsLabel];
         [tagsContainer addSubview:tagsLabel];
@@ -208,7 +208,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, 320-LABEL_X-10, 500)];
         notesView.tag = NOTES_TEXT_VIEW_TAG;
-        notesView.font = TEXT_FIELD_FONT;
+        notesView.font = EDIT_TASK_TEXT_FONT;
         notesView.contentInset = UIEdgeInsetsMake(0,-8,0,0);
         notesView.editable = NO;
         notesView.backgroundColor = CLEAR;
@@ -280,7 +280,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 #pragma mark - KPAddTagDelegate
 -(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
-    NSLog(@"test");
     [self.segmentedViewController dismissSemiModalView];
     self.activeEditMode = KPEditModeNone;
 }
@@ -338,7 +337,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGFloat titleHeight = height+TITLE_TOP_MARGIN+TITLE_BOTTOM_MARGIN;
     CGRectSetHeight(self.titleContainerView,titleHeight);
     CGRectSetY(self.scrollView, titleHeight);
-    NSLog(@"title height:%f",titleHeight);
     CGRectSetHeight(self.scrollView, self.contentView.frame.size.height-titleHeight);
 }
 #pragma mark NotesViewDelegate
@@ -373,7 +371,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetHeight(self.notesView, self.notesView.contentSize.height);
     
     CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
-    NSLog(@"notesHeight:%f",self.notesContainer.frame.size.height);
 }
 -(void)updateTags{
     self.tagsLabel.frame = TAGS_LABEL_RECT;
@@ -390,12 +387,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
     CGFloat containerHeight = self.tagsLabel.frame.size.height + 2*TAGS_LABEL_PADDING;
     CGRectSetHeight(self.tagsContainerView, containerHeight);
-    NSLog(@"tagHeight:%f",containerHeight);
 }
 -(void)updateDot{
     
     self.dotView.backgroundColor = [TODOHANDLER colorForCellType:[self.model cellTypeForTodo]];
-    NSLog(@"dotView:%@ color:%@",self.dotView,[TODOHANDLER colorForCellType:[self.model cellTypeForTodo]]);
 }
 -(void)updateAlarm{
     if(!self.model.alarm || [self.model.alarm isInPast]){
@@ -408,7 +403,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.alarmImage.highlighted = NO;
         self.alarmLabel.text = [self.model readableTime:self.model.alarm showTime:YES];
     }
-    NSLog(@"alarmHeight:%f",self.alarmContainer.frame.size.height);
 }
 -(void)setModel:(KPToDo *)model{
     if(_model != model){

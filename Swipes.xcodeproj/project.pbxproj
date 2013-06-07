@@ -50,6 +50,16 @@
 		A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */; };
 		A717BF26176115CD004791BF /* ProximaNova-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF22176115CD004791BF /* ProximaNova-Light.ttf */; };
 		A717BF27176115CD004791BF /* ProximaNova-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */; };
+		A717BF2917611D2D004791BF /* ProximaNova-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */; };
+		A717BF2B17611EDB004791BF /* ProximaNovaCond-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF2A17611EDB004791BF /* ProximaNovaCond-Semibold.ttf */; };
+		A717BF3417613CA5004791BF /* walkthrough2.png in Resources */ = {isa = PBXBuildFile; fileRef = A717BF2C17613CA5004791BF /* walkthrough2.png */; };
+		A717BF3517613CA5004791BF /* walkthrough2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717BF2D17613CA5004791BF /* walkthrough2@2x.png */; };
+		A717BF3617613CA5004791BF /* walkthrough3.png in Resources */ = {isa = PBXBuildFile; fileRef = A717BF2E17613CA5004791BF /* walkthrough3.png */; };
+		A717BF3717613CA5004791BF /* walkthrough3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717BF2F17613CA5004791BF /* walkthrough3@2x.png */; };
+		A717BF3817613CA5004791BF /* walkthrough4.png in Resources */ = {isa = PBXBuildFile; fileRef = A717BF3017613CA5004791BF /* walkthrough4.png */; };
+		A717BF3917613CA5004791BF /* walkthrough4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717BF3117613CA5004791BF /* walkthrough4@2x.png */; };
+		A717BF3A17613CA5004791BF /* walkthrough5.png in Resources */ = {isa = PBXBuildFile; fileRef = A717BF3217613CA5004791BF /* walkthrough5.png */; };
+		A717BF3B17613CA5004791BF /* walkthrough5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717BF3317613CA5004791BF /* walkthrough5@2x.png */; };
 		A71CCEB01758B1E400A41265 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A71CCEAD1758B1E400A41265 /* HPGrowingTextView.m */; };
 		A71CCEB11758B1E400A41265 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A71CCEAF1758B1E400A41265 /* HPTextViewInternal.m */; };
 		A74F61B616EB77B3004927DA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B516EB77B3004927DA /* MapKit.framework */; };
@@ -215,6 +225,16 @@
 		A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Bold.ttf"; path = "Font/ProximaNova-Bold.ttf"; sourceTree = "<group>"; };
 		A717BF22176115CD004791BF /* ProximaNova-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Light.ttf"; path = "Font/ProximaNova-Light.ttf"; sourceTree = "<group>"; };
 		A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Regular.ttf"; path = "Font/ProximaNova-Regular.ttf"; sourceTree = "<group>"; };
+		A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Semibold.ttf"; path = "Font/ProximaNova-Semibold.ttf"; sourceTree = "<group>"; };
+		A717BF2A17611EDB004791BF /* ProximaNovaCond-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNovaCond-Semibold.ttf"; path = "Font/ProximaNovaCond-Semibold.ttf"; sourceTree = "<group>"; };
+		A717BF2C17613CA5004791BF /* walkthrough2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthrough2.png; sourceTree = "<group>"; };
+		A717BF2D17613CA5004791BF /* walkthrough2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "walkthrough2@2x.png"; sourceTree = "<group>"; };
+		A717BF2E17613CA5004791BF /* walkthrough3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthrough3.png; sourceTree = "<group>"; };
+		A717BF2F17613CA5004791BF /* walkthrough3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "walkthrough3@2x.png"; sourceTree = "<group>"; };
+		A717BF3017613CA5004791BF /* walkthrough4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthrough4.png; sourceTree = "<group>"; };
+		A717BF3117613CA5004791BF /* walkthrough4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "walkthrough4@2x.png"; sourceTree = "<group>"; };
+		A717BF3217613CA5004791BF /* walkthrough5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthrough5.png; sourceTree = "<group>"; };
+		A717BF3317613CA5004791BF /* walkthrough5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "walkthrough5@2x.png"; sourceTree = "<group>"; };
 		A71CCEAC1758B1E400A41265 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
 		A71CCEAD1758B1E400A41265 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
 		A71CCEAE1758B1E400A41265 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
@@ -569,6 +589,8 @@
 				A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */,
 				A717BF22176115CD004791BF /* ProximaNova-Light.ttf */,
 				A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */,
+				A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */,
+				A717BF2A17611EDB004791BF /* ProximaNovaCond-Semibold.ttf */,
 				A7680D31172D21B600BCB2D9 /* Franchise-Bold.ttf */,
 			);
 			name = Font;
@@ -1006,6 +1028,14 @@
 			children = (
 				A7BFA8B7175A8BAB00DF5F8D /* walkthrough1.png */,
 				A7BFA8B8175A8BAB00DF5F8D /* walkthrough1@2x.png */,
+				A717BF2C17613CA5004791BF /* walkthrough2.png */,
+				A717BF2D17613CA5004791BF /* walkthrough2@2x.png */,
+				A717BF2E17613CA5004791BF /* walkthrough3.png */,
+				A717BF2F17613CA5004791BF /* walkthrough3@2x.png */,
+				A717BF3017613CA5004791BF /* walkthrough4.png */,
+				A717BF3117613CA5004791BF /* walkthrough4@2x.png */,
+				A717BF3217613CA5004791BF /* walkthrough5.png */,
+				A717BF3317613CA5004791BF /* walkthrough5@2x.png */,
 				A7BFA8B9175A8BAB00DF5F8D /* walkthrough_background.png */,
 				A7BFA8BA175A8BAB00DF5F8D /* walkthrough_background@2x.png */,
 				A7BFA8BB175A8BAB00DF5F8D /* walkthrough_bottom_background.png */,
@@ -1217,6 +1247,16 @@
 				A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */,
 				A717BF26176115CD004791BF /* ProximaNova-Light.ttf in Resources */,
 				A717BF27176115CD004791BF /* ProximaNova-Regular.ttf in Resources */,
+				A717BF2917611D2D004791BF /* ProximaNova-Semibold.ttf in Resources */,
+				A717BF2B17611EDB004791BF /* ProximaNovaCond-Semibold.ttf in Resources */,
+				A717BF3417613CA5004791BF /* walkthrough2.png in Resources */,
+				A717BF3517613CA5004791BF /* walkthrough2@2x.png in Resources */,
+				A717BF3617613CA5004791BF /* walkthrough3.png in Resources */,
+				A717BF3717613CA5004791BF /* walkthrough3@2x.png in Resources */,
+				A717BF3817613CA5004791BF /* walkthrough4.png in Resources */,
+				A717BF3917613CA5004791BF /* walkthrough4@2x.png in Resources */,
+				A717BF3A17613CA5004791BF /* walkthrough5.png in Resources */,
+				A717BF3B17613CA5004791BF /* walkthrough5@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1384,7 +1424,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kasper Pihl Tornoee";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "ADHOC=1";
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -1568,6 +1608,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (

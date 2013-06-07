@@ -10,20 +10,30 @@
 #import <Parse/Parse.h>
 #import "RootViewController.h"
 #import "KPParseCoreData.h"
-#import "Mixpanel.h"
+#import "AnalyticsHandler.h"
 #import "AppsFlyer.h"
 #import "NSDate-Utilities.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSLog(@"%@",[UIFont familyNames]);
-    NSLog(@"%@",[UIFont fontNamesForFamilyName:@"Proxima Nova"]);
-    [Parse setApplicationId:@"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
-                  clientKey:@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"];
+    NSString *parseApplicationKey;
+    NSString *parseClientKey;
+    NSString *mixpanelToken;
+#ifdef RELEASE
+    parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
+    parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
+    mixpanelToken = @"376b7b4c4c42cbdf5294ade7d15db3c4";
+#else
+    parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
+    parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
+    mixpanelToken = @"c2d2126bfce5e54436fa131cfe6085ad";
+#endif
+    [Parse setApplicationId:parseApplicationKey
+                  clientKey:parseClientKey];
     [PFFacebookUtils initializeFacebook];
     KPCORE;
-    [Mixpanel sharedInstanceWithToken:@"376b7b4c4c42cbdf5294ade7d15db3c4"];
+    [Mixpanel sharedInstanceWithToken:mixpanelToken];
     /*MSNavigationPaneViewController *paneViewController = (MSNavigationPaneViewController *)self.window.rootViewController;
     ROOT_CONTROLLER.paneNavigationViewController = paneViewController;*/
     return YES;
@@ -56,7 +66,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 }
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    
+    [ANALYTICS endSession];
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -70,7 +80,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 {
     [AppsFlyer notifyAppID:@"657882159;TwJuYgpTKp9ENbxf6wMi8j"];
     NSString *isLoggedIn = ([PFUser currentUser]) ? @"yes" : @"no";
-    [MIXPANEL track:@"opened app" properties:@{@"Is logged in":isLoggedIn}];
+    if(isLoggedIn) [ANALYTICS startSession];
+    [MIXPANEL track:@"Opened app" properties:@{@"Is logged in":isLoggedIn}];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 

@@ -275,8 +275,8 @@
     //Build panel now that we have all the desired dimensions
     UIView *panelView = [[UIView alloc] initWithFrame:CGRectMake(*xIndex, 0, self.ContentScrollView.frame.size.width, 0)];
     
-    CGFloat imageHeight = panel.Image.size.height;
-    NSLog(@"%f",imageHeight);
+    CGFloat imageHeight = MIN(panel.Image.size.height, self.frame.size.width - 10);
+    
     //Build title container (if applicable)
     CGRect panelTitleLabelFrame;
     UILabel *panelTitleLabel;

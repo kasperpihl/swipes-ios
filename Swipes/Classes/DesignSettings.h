@@ -9,7 +9,7 @@
 #define MIN_SEARCH_LETTER_LENGTH 1
 
 /* Main colors */
-#define TODAY_COLOR                     color(214,196,45,1)//color(253,230,73,1)
+#define TODAY_COLOR                     color(214,196,45,1)//color(47,141,211,1)//color(253,230,73,1)
 #define DONE_COLOR                      color(63,186,141,1)
 #define SCHEDULE_COLOR                  color(252,128,109,1)
 #define SWIPES_COLOR                    TODAY_COLOR
@@ -24,7 +24,7 @@
 #define TEXT_FIELD_COLOR                gray(230,1)
 #define TITLE_LABEL_COLOR               gray(102,1)
 #define BUTTON_COLOR                    gray(255,1)
-#define SECTION_HEADER_COLOR            color(98,105,114,1)
+#define SECTION_HEADER_COLOR            color(97,105,113,1)
 #define CELL_TITLE_COLOR                color(177,180,185,1)
 #define CELL_TAG_COLOR                  TEXT_FIELD_COLOR
 
@@ -37,6 +37,7 @@
 #define TABLE_EMPTY_BG_TEXT             TABLE_CELL_BACKGROUND
 #define TABLE_EMPTY_BG_COLORED_TEXT     alpha(SWIPES_COLOR,.7)
 #define TABLE_EMPTY_BG_TEXT_HEIGHT      40
+#define TABLE_CELL_ICON_BACKGROUND      SECTION_HEADER_COLOR
 
 #define SECTION_HEADER_BACKGROUND       SEGMENT_BACKGROUND
 #define TABLE_CELL_SELECTED_BACKGROUND  CELL_TIMELINE_COLOR//color(45,51,60,1)//[TODOHANDLER colorForCellType:self.cellType]//SEGMENT_BACKGROUND
@@ -44,7 +45,9 @@
 
 
 /* Edit Task view */
-#define EDIT_TASK_TITLE_COLOR           TEXT_FIELD_COLOR
+#define EDIT_TASK_TITLE_FONT            KP_LIGHT(19)
+#define EDIT_TASK_TEXT_FONT             KP_LIGHT(16)
+#define EDIT_TASK_TITLE_COLOR           CELL_TITLE_COLOR
 #define EDIT_TASK_TITLE_BACKGROUND      SEGMENT_SELECTED
 #define EDIT_TASK_BACKGROUND            TABLE_CELL_BACKGROUND//SEGMENT_BACKGROUND
 #define EDIT_TASK_SEPERATOR_COLOR       SECTION_HEADER_COLOR
@@ -53,6 +56,7 @@
 #define EDIT_TASK_SELECTED_OVERLAY      
 
 /* Login View */
+#define LOGIN_BACKGROUND SEGMENT_BACKGROUND
 #define LOGIN_LOGO_Y        0
 #define LOGIN_FIELDS_Y      50
 #define FIELDS_WIDTH 260
@@ -70,7 +74,9 @@
 #define KP_BLACK(fontSize) [UIFont fontWithName:@"ProximaNova-Black" size:fontSize]
 #define KP_REGULAR(fontSize) [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize]
 #define KP_BOLD(fontSize) [UIFont fontWithName:@"ProximaNova-Bold" size:fontSize]
-
+#define KP_SEMIBOLD(fontSize) [UIFont fontWithName:@"ProximaNova-Semibold" size:fontSize]
+#define KP_COND_BOLD(fontSize) [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:fontSize]
+#define KP_COND_SEMIBOLD(fontSize) [UIFont fontWithName:@"ProximaNovaCond-Semibold" size:fontSize]
 
 #define LOGIN_BUTTON_BACKGROUND         TABLE_CELL_BACKGROUND
 #define SIGNUP_BUTTON_BACKGROUND        DONE_COLOR
@@ -78,7 +84,7 @@
 #define LOGIN_FIELDS_SEPERATOR_COLOR    color(187,195,203,1)
 #define SIGNUP_BUTTON_FONT              KP_LIGHT(18)
 #define LOGIN_FIELDS_FONT               KP_LIGHT(14)
-#define LOGIN_LABEL_ABOVE_FONT          KP_LIGHT(12)
+#define LOGIN_LABEL_ABOVE_FONT          KP_LIGHT(13)
 #define LOGIN_FIELDS_TEXT_COLOR         color(187,195,203,1)
 #define LOGIN_LABEL_ABOVE_COLOR         SECTION_HEADER_COLOR//color(204,208,214,1)
 
@@ -110,7 +116,7 @@
 #define KEYBOARD_HEIGHT 216
 
 
-#define BUTTON_FONT KP_BLACK(20)
+#define BUTTON_FONT KP_COND_BOLD(20)
 
 #define TAGS_LABEL_BOLD_FONT KP_BOLD(12)
 
@@ -128,7 +134,7 @@
 #define SCHEDULE_BUTTON_FONT [UIFont fontWithName:@"Franchise-Bold" size:20]
 
 
-#define TAG_FONT KP_REGULAR(16)
+#define TAG_FONT KP_REGULAR(17)
 
 
 

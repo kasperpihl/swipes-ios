@@ -255,7 +255,6 @@
 }
 - (void)reframeTags{
     if(self.currentMode != KPSearchBarModeTags){
-        NSLog(@"menu wasn't tags");
         return;
     }
     [self reframe];
