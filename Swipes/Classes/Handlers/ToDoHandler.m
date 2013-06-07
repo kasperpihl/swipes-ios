@@ -36,7 +36,7 @@ static ToDoHandler *sharedObject;
     if(save) [self save];
     [ANALYTICS incrementKey:NUMBER_OF_DELETED_TASKS_KEY withAmount:toDos.count];
 }
--(void)addItem:(NSString *)item{
+-(KPToDo*)addItem:(NSString *)item{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
     newToDo.title = item;
     newToDo.schedule = [NSDate date];
@@ -45,6 +45,7 @@ static ToDoHandler *sharedObject;
     newToDo.order = count;
     [self save];
     [ANALYTICS incrementKey:NUMBER_OF_ADDED_TASKS_KEY withAmount:1];
+    return newToDo;
 }
 -(void)changeToDos:(NSArray*)toDos title:(NSString *)title save:(BOOL)save{
     for(KPToDo *toDo in toDos){
@@ -76,7 +77,7 @@ static ToDoHandler *sharedObject;
     }
     [self save];
     [ANALYTICS incrementKey:NUMBER_OF_SCHEDULES_KEY withAmount:toDoArray.count];
-    if(!date) [ANALYTICS incrementKey:NUMBER_OF_UNSPECIFIED_TASKS withAmount:toDoArray.count];
+    if(!date) [ANALYTICS incrementKey:NUMBER_OF_UNSPECIFIED_TASKS_KEY withAmount:toDoArray.count];
     [self scheduleNotifications];
     
 }

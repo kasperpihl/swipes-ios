@@ -18,8 +18,8 @@
 #define DOT_VIEW_TAG 6
 #define TIMELINE_TAG 7
 #define OUTLINE_TAG 8
-#define RIGHT_ICON_CONTAINER_TAG 9
-
+#define ALARM_ICON_TAG 9
+#define NOTES_ICON_TAG 10
 
 #define INDICATOR_X 40
 #define INDICATOR_HEIGHT 23
@@ -31,17 +31,14 @@
 #define DOT_OUTLINE_SIZE 4
 #define TIMELINE_WIDTH 2
 
-#define LABEL_WIDTH (320-(2*LABEL_X))
+#define LABEL_WIDTH (320-(LABEL_X+(LABEL_X/3)))
 #define TITLE_DELTA_Y -1
 #define LABEL_SPACE 4
 
 #define TITLE_LABEL_HEIGHT [@"Tjgq" sizeWithFont:TITLE_LABEL_FONT].height
 #define TAGS_LABEL_HEIGHT [@"Tg" sizeWithFont:TAGS_LABEL_FONT].height
 
-#define RIGHT_ICON_WIDTH 25
-#define RIGHT_ICON_RIGHT_MARGIN 10
-
-#define RIGHT_ICON_CORNER_RADIUS 5
+#define ICON_SPACING 10
 
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *layerView;
@@ -50,7 +47,7 @@
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UIView *outlineView;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
-@property (nonatomic,weak) IBOutlet UIView *rightIconContainer;
+@property (nonatomic,weak) IBOutlet UIImageView *alarmIcon;
 @end
 @implementation ToDoCell
 
@@ -106,17 +103,12 @@
         self.dotView = [self.contentView viewWithTag:DOT_VIEW_TAG];
         self.outlineView = [self.contentView viewWithTag:OUTLINE_TAG];
         
-        UIView *rightIconContainer = [[UIView alloc]initWithFrame:CGRectMake(self.contentView.frame.size.width-RIGHT_ICON_WIDTH-RIGHT_ICON_RIGHT_MARGIN, (self.contentView.frame.size.height-RIGHT_ICON_WIDTH)/2, RIGHT_ICON_WIDTH, RIGHT_ICON_WIDTH)];
-        
-        rightIconContainer.tag = RIGHT_ICON_CONTAINER_TAG;
-        rightIconContainer.backgroundColor = TABLE_CELL_ICON_BACKGROUND;
-        rightIconContainer.layer.cornerRadius = RIGHT_ICON_CORNER_RADIUS;
-        UIImageView *rightIcon = [[UIImageView alloc] initWithImage:[UtilityClass imageNamed:@"edit_alarm_icon" withColor:EDIT_TASK_GRAYED_OUT_TEXT]];
-        rightIcon.frame = CGRectSetPos(rightIcon.frame, (rightIconContainer.frame.size.width-rightIcon.frame.size.width)/2, (rightIconContainer.frame.size.height-rightIcon.frame.size.height)/2);
-        [rightIconContainer addSubview:rightIcon];
-        rightIconContainer.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
-        [self.contentView addSubview:rightIconContainer];
-        self.rightIconContainer = [self.contentView viewWithTag:RIGHT_ICON_CONTAINER_TAG];
+
+        UIImageView *alarmIcon = [[UIImageView alloc] initWithImage:[UtilityClass imageNamed:@"edit_alarm_icon" withColor:EDIT_TASK_GRAYED_OUT_TEXT]];
+        alarmIcon.tag = ALARM_ICON_TAG;
+        alarmIcon.hidden = YES;
+        [self.contentView addSubview:alarmIcon];
+        self.alarmIcon = (UIImageView*)[self.contentView viewWithTag:ALARM_ICON_TAG];
     }
     return self;
 }
@@ -163,11 +155,14 @@
     
 }
 -(void)setIconsForToDo:(KPToDo*)toDo{
-    BOOL shouldShowIcon = NO;
+    CGFloat deltaX = LABEL_X;
+    self.alarmIcon.hidden = YES;
     if(toDo.alarm && [toDo.alarm isInFuture]){
-        shouldShowIcon = YES;
+        self.alarmIcon.frame = CGRectSetPos(self.alarmIcon.frame, deltaX, self.tagsLabel.center.y-(self.alarmIcon.frame.size.height/2));
+        deltaX += self.alarmIcon.frame.size.width + ICON_SPACING;
+        self.alarmIcon.hidden = NO;
     }
-    self.rightIconContainer.hidden = !shouldShowIcon;
+    CGRectSetX(self.tagsLabel,deltaX);
 }
 -(void)setDotColor:(UIColor *)color{
     self.dotView.backgroundColor = color;

@@ -26,6 +26,7 @@
 #import <UIKit/UIKit.h>
 #import "MYIntroductionPanel.h"
 #import <QuartzCore/QuartzCore.h>
+#import "SMPageControl.h"
 
 typedef enum {
 MYFinishTypeSwipeOut = 0,
@@ -88,7 +89,7 @@ typedef enum {
 @property (nonatomic, retain) UIScrollView *ContentScrollView;
 
 //PageControl/Skip Button
-@property (nonatomic, retain) UIPageControl *PageControl;
+@property (nonatomic, retain) SMPageControl *PageControl;
 @property (nonatomic, retain) UIButton *SkipButton;
 
 

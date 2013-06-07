@@ -7,3 +7,4 @@
 #define __POD_Mixpanel
 #define __POD_PRTween
 #define __POD_Parse
+#define __POD_SMPageControl

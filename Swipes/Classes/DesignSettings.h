@@ -5,6 +5,22 @@
 //  Created by Kasper Pihl Tornøe on 17/05/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
+/* Fonts
+ "ProximaNova-Regular",
+ "ProximaNova-Light",
+ "ProximaNova-Black",
+ "ProximaNova-Bold"
+ 
+ 
+ */
+#define KP_LIGHT(fontSize) [UIFont fontWithName:@"ProximaNova-Light" size:fontSize]
+#define KP_BLACK(fontSize) [UIFont fontWithName:@"ProximaNova-Black" size:fontSize]
+#define KP_REGULAR(fontSize) [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize]
+#define KP_BOLD(fontSize) [UIFont fontWithName:@"ProximaNova-Bold" size:fontSize]
+#define KP_SEMIBOLD(fontSize) [UIFont fontWithName:@"ProximaNova-Semibold" size:fontSize]
+#define KP_COND_BOLD(fontSize) [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:fontSize]
+#define KP_COND_SEMIBOLD(fontSize) [UIFont fontWithName:@"ProximaNovaCond-Semibold" size:fontSize]
+
 
 #define MIN_SEARCH_LETTER_LENGTH 1
 
@@ -62,21 +78,11 @@
 #define FIELDS_WIDTH 260
 #define SIGNUP_BUTTONS_HEIGHT 50
 
-/* Fonts
- "ProximaNova-Regular",
- "ProximaNova-Light",
- "ProximaNova-Black",
- "ProximaNova-Bold"
- 
- 
- */
-#define KP_LIGHT(fontSize) [UIFont fontWithName:@"ProximaNova-Light" size:fontSize]
-#define KP_BLACK(fontSize) [UIFont fontWithName:@"ProximaNova-Black" size:fontSize]
-#define KP_REGULAR(fontSize) [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize]
-#define KP_BOLD(fontSize) [UIFont fontWithName:@"ProximaNova-Bold" size:fontSize]
-#define KP_SEMIBOLD(fontSize) [UIFont fontWithName:@"ProximaNova-Semibold" size:fontSize]
-#define KP_COND_BOLD(fontSize) [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:fontSize]
-#define KP_COND_SEMIBOLD(fontSize) [UIFont fontWithName:@"ProximaNovaCond-Semibold" size:fontSize]
+/* Walk through */
+#define WALKTHROUGH_DESCRIPTION_FONT    KP_LIGHT(17)
+#define WALKTHROUGH_DESCRIPTION_COLOR   BUTTON_COLOR
+#define WALKTHROUGH_TITLE_FONT          KP_REGULAR(20)
+
 
 #define LOGIN_BUTTON_BACKGROUND         TABLE_CELL_BACKGROUND
 #define SIGNUP_BUTTON_BACKGROUND        DONE_COLOR
@@ -116,19 +122,19 @@
 #define KEYBOARD_HEIGHT 216
 
 
-#define BUTTON_FONT KP_COND_BOLD(20)
+#define BUTTON_FONT                     KP_COND_BOLD(20)
 
-#define TAGS_LABEL_BOLD_FONT KP_BOLD(12)
+#define TAGS_LABEL_BOLD_FONT            KP_BOLD(12)
 
-#define TABLE_EMPTY_BG_FONT KP_LIGHT(20)
+#define TABLE_EMPTY_BG_FONT             KP_LIGHT(20)
 
 
-#define NO_TAG_FONT KP_LIGHT(18)
-#define TEXT_FIELD_FONT KP_LIGHT(18)
-#define SECTION_HEADER_FONT KP_LIGHT(18)
+#define NO_TAG_FONT                     KP_LIGHT(18)
+#define TEXT_FIELD_FONT                 KP_LIGHT(18)
+#define SECTION_HEADER_FONT             KP_LIGHT(18)
 
-#define TITLE_LABEL_FONT KP_LIGHT(19)
-#define TAGS_LABEL_FONT KP_LIGHT(13)
+#define TITLE_LABEL_FONT                KP_LIGHT(19)
+#define TAGS_LABEL_FONT                 KP_LIGHT(13)
 
 
 #define SCHEDULE_BUTTON_FONT [UIFont fontWithName:@"Franchise-Bold" size:20]

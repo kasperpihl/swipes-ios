@@ -10,7 +10,7 @@
 #import "KPToDo.h"
 @interface ToDoHandler : NSObject
 +(ToDoHandler*)sharedInstance;
--(void)addItem:(NSString*)item;
+-(KPToDo*)addItem:(NSString*)item;
 -(MCSwipeTableViewCellActivatedDirection)directionForCellType:(CellType)type;
 -(CellType)cellTypeForCell:(CellType)type state:(MCSwipeTableViewCellState)state;
 -(NSString*)stateForCellType:(CellType)type;

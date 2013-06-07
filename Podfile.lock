@@ -6,6 +6,7 @@ PODS:
   - Parse (1.2.9):
     - Facebook-iOS-SDK (~> 3.5.1)
   - PRTween (0.0.1)
+  - SMPageControl (1.0)
 
 DEPENDENCIES:
   - Facebook-iOS-SDK (~> 3.5.1)
@@ -14,6 +15,7 @@ DEPENDENCIES:
   - Mixpanel (~> 2.0.0)
   - Parse (~> 1.2.9)
   - PRTween (~> 0.0.1)
+  - SMPageControl (~> 1.0)
 
 SPEC CHECKSUMS:
   Facebook-iOS-SDK: 0dbd897e842cefeb012ec2eb8eba659ba6b96b12
@@ -22,5 +24,6 @@ SPEC CHECKSUMS:
   Mixpanel: d456c27f7520e22784a15d0bcd9d5c287080b0cd
   Parse: 9d763110e8cebe319243ee38dc3c34d3475b98d6
   PRTween: d0439e7917031328f81de4910c5b02e202389939
+  SMPageControl: 9d100f9aa8ca0cf10222666ff31d4d1cbfdac674
 
 COCOAPODS: 0.18.1

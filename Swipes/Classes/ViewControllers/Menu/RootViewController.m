@@ -16,14 +16,14 @@
 #import "TodayViewController.h"
 #import "DoneViewController.h"
 #import "UtilityClass.h"
-#import "MYIntroductionView.h"
+
 #import "LoginViewController.h"
 #import "SignupViewController.h"
 #import <Parse/PFFacebookUtils.h>
 #import "FacebookCommunicator.h"
 #import "AnalyticsHandler.h"
 
-@interface RootViewController () <UINavigationControllerDelegate,MYIntroductionDelegate,PFLogInViewControllerDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate>
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
 
 @end
@@ -128,39 +128,7 @@ static RootViewController *sharedObject;
     return sharedObject;
 }
 
--(void)walkthrough{
-    //STEP 1 Construct Panels
-    MYIntroductionPanel *panel = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough1"] description:@"Welcome to your powerful Menu bar! Here everything has its place. Plan and focus on your tasks today, complete them or schedule them for later."];
-    
-    //You may also add in a title for each panel
-    MYIntroductionPanel *panel2 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough2"] description:@"Double tap a task to enter the edit mode. Quickly change titles, assign tags, notes and reminders."];
-    
-    MYIntroductionPanel *panel3 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough3"] description:@"Pull down the Menu bar. Type a name of a tag or simply chose it from the filter. Your result is there in a glimpse."];
-    
-    MYIntroductionPanel *panel4 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough4"] description:@"This is your favorite schedule! Simply swipe your tasks to the left and set them up for later. You will get reminded, when the time’s right."];
-    
-    MYIntroductionPanel *panel5 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough5"] description:@"Start swiping now. Plan your day and enjoy a productive flow!"];
-    
-    //STEP 2 Create IntroductionView
-    
-    /*A standard version*/
-    //MYIntroductionView *introductionView = [[MYIntroductionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) headerImage:[UIImage imageNamed:@"SampleHeaderImage.png"] panels:@[panel, panel2]];
-    
-    
-    /*A version with no header (ala "Path")*/
-    //MYIntroductionView *introductionView = [[MYIntroductionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) panels:@[panel, panel2]];
-    
-    /*A more customized version*/
-    MYIntroductionView *introductionView = [[MYIntroductionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) panels:@[panel, panel2, panel3, panel4, panel5]];
-    [introductionView setBackgroundImage:[UtilityClass imageWithColor:LOGIN_BACKGROUND]];
-    
-    
-    //Set delegate to self for callbacks (optional)
-    introductionView.delegate = self;
-    
-    //STEP 3: Show introduction view
-    [introductionView showInView:self.view];
-}
+
 #pragma mark - Helping methods
 #pragma mark - ViewController methods
 -(void)setupAppearance{
@@ -179,7 +147,7 @@ static RootViewController *sharedObject;
     //[PFUser logOut];
     if(![PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
     else [self changeToMenu:KPMenuHome animated:NO];
-    //[self walkthrough];
+    
 }
 
 - (void)viewDidUnload

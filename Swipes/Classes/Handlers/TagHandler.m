@@ -8,6 +8,7 @@
 
 #import "TagHandler.h"
 #import "KPToDo.h"
+#import "AnalyticsHandler.h"
 @implementation TagHandler
 static TagHandler *sharedObject;
 +(TagHandler *)sharedInstance{
@@ -20,6 +21,7 @@ static TagHandler *sharedObject;
     KPTag *newTag = [KPTag newObjectInContext:nil];
     newTag.title = tag;
     [self save];
+    [ANALYTICS incrementKey:NUMBER_OF_ADDED_TAGS_KEY withAmount:1];
 }
 -(void)updateTags:(NSArray *)tags remove:(BOOL)remove toDos:(NSArray *)toDos{
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
@@ -28,6 +30,8 @@ static TagHandler *sharedObject;
         [toDo updateTagSet:tagsSet withTags:tags remove:remove];
     }
     [self save];
+    if(remove) [ANALYTICS incrementKey:NUMBER_OF_RESIGNED_TAGS_KEY withAmount:toDos.count];
+    else [ANALYTICS incrementKey:NUMBER_OF_ASSIGNED_TAGS_KEY withAmount:toDos.count];
 }
 -(void)save{
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];

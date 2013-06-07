@@ -38,12 +38,12 @@ static KPParseCoreData *sharedObject;
 -(void)initialize{
     [self loadDatabase];
     if(![UTILITY.userDefaults boolForKey:@"seeded"]){
-        //[self seedObjects];
+        [self seedObjects];
     }
 }
 -(void)loadDatabase{
     @try {
-        [MagicalRecord setupCoreDataStackWithStoreNamed:@"shery"];
+        [MagicalRecord setupCoreDataStackWithStoreNamed:@"swipes"];
     }
     @catch (NSException *exception) {
         NSLog(@"%@",exception);
@@ -54,7 +54,7 @@ static KPParseCoreData *sharedObject;
 }
 
 -(void)cleanUp{
-    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"shery"];
+    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
     NSError *error;
     BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
     if(removed){
@@ -68,34 +68,33 @@ static KPParseCoreData *sharedObject;
     [MagicalRecord cleanUp];
 }
 
-/*-(void)seedObjects{
+-(void)seedObjects{
     NSArray *tagArray = @[
-                        @"Home",
-                        @"Guide",
-                        @"Swipes",
-                        @"Work"
+                        @"home",
+                        @"shopping",
+                        @"work"
     ];
     for(NSString *tag in tagArray){
         [TAGHANDLER addTag:tag];
     }
     NSArray *toDoArray = @[
-                       @"Hold to drag me up and down",
-                       @"Swipe left to schedule me",
-                       @"Swipe right to complete me",
-                       @"Assign us tags",
-                       @"Select me too",
-                       @"Tap to select me"
+                           @"Tap to select me",
+                           @"Swipe right to complete me",
+                           @"Swipe left to schedule me",
+                           @"Double-tap to edit me",
+                           @"Hold to drag me up and down",
+                           @"Pull down for search & filter"
                        ];
-    for(NSInteger i = 0 ; i < toDoArray.count ; i++){
+    for(NSInteger i = toDoArray.count-1 ; i >= 0  ; i--){
         NSString *item = [toDoArray objectAtIndex:i];
-        [TODOHANDLER addItem:item];
-        
-        if(i == 3) [TAGHANDLER addTags:@[@"Work",@"Swipes"] andRemoveTags:nil fromToDos:@[]];
+        KPToDo *toDo = [TODOHANDLER addItem:item];
+        if(i == 4)[TAGHANDLER updateTags:@[@"home"] remove:NO toDos:@[toDo]];
+        if(i == 5)[TAGHANDLER updateTags:@[@"work"] remove:NO toDos:@[toDo]];
     }
     
     NSArray *todosForTagsArray = [KPToDo MR_findAll];
     todosForTagsArray = [todosForTagsArray subarrayWithRange:NSMakeRange(0, 3)];
-    [TAGHANDLER addTags:@[@"Guide",@"Swipes"] andRemoveTags:nil fromToDos:todosForTagsArray];
+    
     [UTILITY.userDefaults setBool:YES forKey:@"seeded"];
-}*/
+}
 @end

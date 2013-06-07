@@ -35,11 +35,17 @@ static AnalyticsHandler *sharedObject;
              NUMBER_OF_ADDED_TASKS_KEY,
              NUMBER_OF_DELETED_TASKS_KEY,
              NUMBER_OF_REORDERED_TASKS_KEY,
-             NUMBER_OF_UNSPECIFIED_TASKS
+             NUMBER_OF_UNSPECIFIED_TASKS_KEY,
+             NUMBER_OF_ADDED_TAGS_KEY,
+             NUMBER_OF_ASSIGNED_TAGS_KEY,
+             NUMBER_OF_RESIGNED_TAGS_KEY,
+             NUMBER_OF_ACTIONS_KEY
             ];
 }
 -(void)incrementKey:(NSString *)key withAmount:(NSInteger)amount{
+    if(self.blockAnalytics) return;
     [self.stats setValue:[NSNumber numberWithInteger:[self amountForKey:key]+amount] forKey:key];
+    [self.stats setValue:[NSNumber numberWithInteger:[self amountForKey:key]+amount] forKey:NUMBER_OF_ACTIONS_KEY];
 }
 -(void)startSession{
     if(self.runningSession) return;

@@ -10,6 +10,7 @@
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SignupViewController.h"
+#import "MYIntroductionView.h"
 
 #define SIGNUP_INDICATOR_TAG 15530
 
@@ -25,7 +26,7 @@
 #define BUTTON_LABEL_SUBTRACTION 17
 
 
-@interface LoginViewController () < PFSignUpViewControllerDelegate>
+@interface LoginViewController () < PFSignUpViewControllerDelegate,MYIntroductionDelegate>
 @property (nonatomic,strong) IBOutlet UIView *fieldsBackground;
 @property (nonatomic,weak) IBOutlet UIActivityIndicatorView *signupIndicator;
 @end
@@ -173,6 +174,36 @@
         }
     }];
 }
+-(void)walkthrough{
+    //STEP 1 Construct Panels
+    MYIntroductionPanel *panel = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough1"] title:@"Menu" description:@"Welcome to your powerful Menu bar! Here everything has its place. Plan and focus on your tasks today, complete them or schedule them for later."];
+    
+    //You may also add in a title for each panel
+    MYIntroductionPanel *panel2 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough2"] title:@"Schedule" description:@"This is your favorite schedule! Simply swipe your tasks to the left and set them up for later. You will get reminded, when the time’s right."];
+    
+    MYIntroductionPanel *panel3 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough3"] title:@"Get started" description:@"Start swiping now. Plan your day and enjoy a productive flow!"];
+    
+    
+    //STEP 2 Create IntroductionView
+    
+    /*A standard version*/
+    //MYIntroductionView *introductionView = [[MYIntroductionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) headerImage:[UIImage imageNamed:@"SampleHeaderImage.png"] panels:@[panel, panel2]];
+    
+    
+    /*A version with no header (ala "Path")*/
+    //MYIntroductionView *introductionView = [[MYIntroductionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) panels:@[panel, panel2]];
+    
+    /*A more customized version*/
+    MYIntroductionView *introductionView = [[MYIntroductionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) panels:@[panel, panel2, panel3]];
+    [introductionView setBackgroundImage:[UtilityClass imageWithColor:LOGIN_BACKGROUND]];
+    
+    
+    //Set delegate to self for callbacks (optional)
+    introductionView.delegate = self;
+    
+    //STEP 3: Show introduction view
+    [introductionView showInView:self.view];
+}
 #pragma mark - PFSignUpViewControllerDelegate
 // Sent to the delegate to determine whether the sign up request should be submitted to the server.
 - (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info {
@@ -212,6 +243,7 @@
     }
     return informationComplete;
 }
+
 -(void)showIndicator:(BOOL)show{
     if(show){
         UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
@@ -276,10 +308,10 @@
     
 	// Do any additional setup after loading the view.
 }
-
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    }
+    [self walkthrough];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
