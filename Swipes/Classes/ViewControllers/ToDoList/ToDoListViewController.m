@@ -410,7 +410,6 @@
 -(void)cleanUpAfterMovingAnimated:(BOOL)animated{
     
     [self.selectedRows removeAllObjects];
-    [self.itemHandler clearAll];
     [self cleanShowingViewAnimated:animated];
     self.swipingCell = nil;
     [self didUpdateCells];
@@ -570,6 +569,8 @@
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     [self cleanUpAfterMovingAnimated:NO];
+    self.searchBar.currentMode = KPSearchBarModeNone;
+    [self.itemHandler clearAll];
 }
 - (void)didReceiveMemoryWarning
 {

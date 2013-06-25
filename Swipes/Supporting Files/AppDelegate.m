@@ -25,8 +25,8 @@
     parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
     mixpanelToken = @"376b7b4c4c42cbdf5294ade7d15db3c4";
 #else
-    parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
-    parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
+    parseApplicationKey = @"0qD3LLZIOwLOPRwbwLia9GJXTEUnEsSlBCufqDvr";
+    parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
     mixpanelToken = @"c2d2126bfce5e54436fa131cfe6085ad";
 #endif
     [Parse setApplicationId:parseApplicationKey

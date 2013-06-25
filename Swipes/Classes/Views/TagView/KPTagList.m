@@ -13,15 +13,15 @@
 #define VERTICAL_MARGIN 5
 #define HORIZONTAL_MARGIN 0
 #define TAG_HORIZONTAL_PADDING 15
-
+#define TAG_BUTTON_TAG 123
 
 
 #define SPACE_HACK 0
 
 
+#import "QBPopupMenu.h"
 
-
-@interface KPTagList ()
+@interface KPTagList () <UIGestureRecognizerDelegate>
 @property (nonatomic,strong) NSMutableArray *tags;
 @property (nonatomic,strong) NSMutableArray *selectedTags;
 @end
@@ -91,6 +91,7 @@
         for(NSInteger j = 0 ; j < numberOfTags ; j++){
             NSString *tag = [self.tags objectAtIndex:j];
             UIButton *tagLabel = [self buttonWithTag:tag];
+            tagLabel.tag = TAG_BUTTON_TAG + j;
             if([self.selectedTags containsObject:tag]){
                 [tagLabel setSelected:YES];
                 //[tagLabel.layer setBorderColor:[COLOR_WHITE CGColor]];
@@ -171,9 +172,44 @@
         if([self.tagDelegate respondsToSelector:@selector(tagList:selectedTag:)]) [self.tagDelegate tagList:self selectedTag:tag];
     }
 }
+- (void)longPressRecognized:(UIGestureRecognizer*)recognizer {
+    if(recognizer.state == UIGestureRecognizerStateBegan){
+        CGPoint touchLocation = [recognizer locationInView:self];
+        for(UIView *view in self.subviews){
+            if([view isKindOfClass:[UIButton class]]){
+                CGFloat x = view.frame.origin.x;
+                CGFloat endX = view.frame.origin.x+view.frame.size.width;
+                CGFloat y = view.frame.origin.y;
+                CGFloat endY = view.frame.origin.y + view.frame.size.height;
+                if(touchLocation.x > x && touchLocation.x < endX && touchLocation.y > y && touchLocation.y < endY){
+                    NSLog(@"touched:%@",[self.tags objectAtIndex:view.tag-TAG_BUTTON_TAG]);
+                    QBPopupMenu *popupMenu = [[QBPopupMenu alloc] init];
+                    
+                    QBPopupMenuItem *item = [QBPopupMenuItem itemWithTitle:@"Edit" target:self action:@selector(hoge:)];
+                    
+                    QBPopupMenuItem *item2 = [QBPopupMenuItem itemWithTitle:@"Delete" target:self action:@selector(hoge:)];
+                    
+                    popupMenu.items = [NSArray arrayWithObjects:item, item2, nil];
+                    
+                    [popupMenu showInView:self.superview.superview atPoint:CGPointMake(x+((endX-x)/2),self.superview.frame.origin.y+ self.frame.origin.y+y+5)];
+                }
+            }
+        }
+    }
+}
+-(void)hoge:(id)sender{
+    NSLog(@"haha:%@",sender);
+}
 -(UIButton*)buttonWithTag:(NSString*)tag{
     CGSize sizeForTag = [self sizeForTagWithText:tag];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
+    
+    longPressGestureRecognizer.delegate = self;
+    
+    [button addGestureRecognizer:longPressGestureRecognizer];
+    longPressGestureRecognizer.allowableMovement = 5.0;
+    
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
     [button setTitleColor:BUTTON_COLOR forState:UIControlStateNormal];
