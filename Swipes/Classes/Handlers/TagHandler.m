@@ -7,7 +7,7 @@
 //
 
 #import "TagHandler.h"
-#import "KPToDo.h"
+#import "ToDoHandler.h"
 #import "AnalyticsHandler.h"
 @implementation TagHandler
 static TagHandler *sharedObject;
@@ -43,6 +43,16 @@ static TagHandler *sharedObject;
         [tags addObject:tagObj.title];
     }
     return tags;
+}
+-(void)deleteTag:(NSString*)tag{
+    NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",@[tag]];
+    KPTag *tagObj = [KPTag MR_findFirstWithPredicate:tagPredicate];
+    
+    NSPredicate *toDoPredicate = [NSPredicate predicateWithFormat:@"ANY tags = %@",tagObj];
+    NSArray *toDos = [KPToDo MR_findAllWithPredicate:toDoPredicate];
+    [self updateTags:@[tag] remove:YES toDos:toDos];
+    [tagObj MR_deleteEntity];
+    [self save];
 }
 -(NSArray *)selectedTagsForToDos:(NSArray *)toDos{
     NSMutableArray *commonTags = [NSMutableArray array];

@@ -24,6 +24,7 @@
 @interface KPTagList () <UIGestureRecognizerDelegate>
 @property (nonatomic,strong) NSMutableArray *tags;
 @property (nonatomic,strong) NSMutableArray *selectedTags;
+@property (nonatomic,strong) NSString *editingTag;
 @end
 @implementation KPTagList
 +(KPTagList *)tagListWithWidth:(CGFloat)width andTags:(NSArray*)tags{
@@ -182,34 +183,38 @@
                 CGFloat y = view.frame.origin.y;
                 CGFloat endY = view.frame.origin.y + view.frame.size.height;
                 if(touchLocation.x > x && touchLocation.x < endX && touchLocation.y > y && touchLocation.y < endY){
-                    NSLog(@"touched:%@",[self.tags objectAtIndex:view.tag-TAG_BUTTON_TAG]);
+                    self.editingTag = [self.tags objectAtIndex:view.tag-TAG_BUTTON_TAG];
                     QBPopupMenu *popupMenu = [[QBPopupMenu alloc] init];
-                    
-                    QBPopupMenuItem *item = [QBPopupMenuItem itemWithTitle:@"Edit" target:self action:@selector(hoge:)];
-                    
-                    QBPopupMenuItem *item2 = [QBPopupMenuItem itemWithTitle:@"Delete" target:self action:@selector(hoge:)];
-                    
-                    popupMenu.items = [NSArray arrayWithObjects:item, item2, nil];
-                    
-                    [popupMenu showInView:self.superview.superview atPoint:CGPointMake(x+((endX-x)/2),self.superview.frame.origin.y+ self.frame.origin.y+y+5)];
+                    popupMenu.sidePadding = 5;
+                    popupMenu.unselectedColor = EDIT_TASK_GRAYED_OUT_TEXT;
+                    popupMenu.selectedColor = SEGMENT_SELECTED;
+                    popupMenu.textColor = TABLE_CELL_BACKGROUND;
+                    QBPopupMenuItem *item = [QBPopupMenuItem itemWithTitle:@"Delete" target:self action:@selector(delete:)];
+                    popupMenu.items = [NSArray arrayWithObjects:item, nil];
+                    [popupMenu showInView:self.superview.superview.superview.superview.superview atPoint:CGPointMake(x+((endX-x)/2),self.superview.superview.superview.frame.origin.y + self.superview.superview.frame.origin.y + self.superview.frame.origin.y+ self.frame.origin.y+y+5)];
                 }
             }
         }
     }
 }
--(void)hoge:(id)sender{
-    NSLog(@"haha:%@",sender);
+-(void)delete:(id)sender{
+    if(self.editingTag){
+        if([self.tags containsObject:self.editingTag]) [self.tags removeObject:self.editingTag];
+        if([self.selectedTags containsObject:self.editingTag]) [self.selectedTags removeObject:self.editingTag];
+        [self layoutTagsFirst:NO];
+        if([self.tagDelegate respondsToSelector:@selector(tagList:deletedTag:)]) [self.tagDelegate tagList:self deletedTag:self.editingTag];
+        self.editingTag = nil;
+    }
 }
 -(UIButton*)buttonWithTag:(NSString*)tag{
     CGSize sizeForTag = [self sizeForTagWithText:tag];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
-    
-    longPressGestureRecognizer.delegate = self;
-    
-    [button addGestureRecognizer:longPressGestureRecognizer];
-    longPressGestureRecognizer.allowableMovement = 5.0;
-    
+    if(self.enableEdit){
+        UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
+        longPressGestureRecognizer.delegate = self;
+        [button addGestureRecognizer:longPressGestureRecognizer];
+        longPressGestureRecognizer.allowableMovement = 5.0;
+    }
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
     [button setTitleColor:BUTTON_COLOR forState:UIControlStateNormal];

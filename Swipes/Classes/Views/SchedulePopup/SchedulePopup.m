@@ -235,6 +235,7 @@ typedef enum {
     UIDatePicker *picker = [[UIDatePicker alloc] initWithFrame:CGRectMake(-PICKER_CUT_WIDTH, -PICKER_CUT_HEIGHT, 240, 200)];
     picker.minimumDate = [[NSDate dateTomorrow] dateAtStartOfDay];
     picker.minuteInterval = 5;
+    picker.date = [[[NSDate dateTomorrow] dateAtStartOfDay] dateByAddingHours:9];
     picker.tag = DATE_PICKER_TAG;
     picker.maximumDate = [NSDate dateWithDaysFromNow:730];
     [picker addTarget:self action:@selector(changedDate:) forControlEvents:UIControlEventValueChanged];

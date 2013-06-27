@@ -36,6 +36,11 @@ typedef NS_ENUM(NSInteger, QBPopupMenuState) {
 @property (nonatomic, copy) NSArray *items;
 @property (nonatomic, assign) CGFloat cornerRadius;
 @property (nonatomic, assign) CGFloat arrowSize;
+@property (nonatomic, assign) CGFloat sidePadding;
+@property (nonatomic,strong) UIColor *textColor;
+@property (nonatomic,strong) UIFont *textFont;
+@property (nonatomic,strong) UIColor *unselectedColor;
+@property (nonatomic,strong) UIColor *selectedColor;
 @property (nonatomic, assign, getter = isAnimationEnabled) BOOL animationEnabled;
 
 - (instancetype)initWithItems:(NSArray *)items;

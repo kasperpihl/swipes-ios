@@ -104,9 +104,9 @@
     } else {
         if (self.width > 0) {
             width = self.width;
-            height = 50;
+            height = 44;
         } else {
-            height = 50;
+            height = 44;
             
             if (self.title && self.image) {
                 UIFont *font = (self.font) ? self.font : [QBPopupMenuItem fontForTitleWithImage];

@@ -155,6 +155,14 @@
     return attributedText;
     
 }
+-(void)clearAlarm{
+    [self updateAlarm:nil force:YES save:NO];
+}
+-(void)deleteToDoSave:(BOOL)save{
+    if(self.alarm) [self clearAlarm];
+    [self MR_deleteEntity];
+    if(save) [self save];
+}
 -(NSArray *)textTags{
     return [self.tagString componentsSeparatedByString:@", "];
 }
@@ -164,6 +172,7 @@
     return self.readableTags;*/
 }
 -(void)complete{
+    if(self.alarm) [self clearAlarm];
     self.state = @"done";
     self.completionDate = [NSDate date];
 }

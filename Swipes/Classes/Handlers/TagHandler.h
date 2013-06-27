@@ -13,6 +13,7 @@
 @interface TagHandler : NSObject
 +(TagHandler*)sharedInstance;
 -(void)addTag:(NSString *)tag;
+-(void)deleteTag:(NSString*)tag;
 -(NSArray *)allTags;
 //-(void)addTags:(NSArray*)addedTags andRemoveTags:(NSArray*)removedTags fromToDos:(NSArray*)toDos;
 -(void)updateTags:(NSArray*)tags remove:(BOOL)remove toDos:(NSArray*)toDos;

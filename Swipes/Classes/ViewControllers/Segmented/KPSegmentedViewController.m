@@ -93,6 +93,12 @@
     [[self currentViewController] didUpdateItemHandler:nil];
     [self updateBackground];
 }
+-(void)tagList:(KPTagList *)tagList deletedTag:(NSString *)tag{
+    [[self currentViewController].itemHandler deselectTag:tag];
+    [TAGHANDLER deleteTag:tag];
+    [[self currentViewController] didUpdateItemHandler:nil];
+    [self updateBackground];
+}
 #pragma mark - AddPanelDelegate
 -(void)pressedAdd:(id)sender{
     [self show:NO controlsAnimated:YES];

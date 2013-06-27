@@ -13,6 +13,7 @@
 @end
 @protocol KPTagDelegate
 @optional
+-(void)tagList:(KPTagList*)tagList deletedTag:(NSString*)tag;
 -(NSArray*)tagsForTagList:(KPTagList*)tagList;
 -(NSArray*)selectedTagsForTagList:(KPTagList*)tagList;
 -(NSArray*)deselectedTagsForTagList:(KPTagList*)tagList;
@@ -28,6 +29,7 @@
 @property (nonatomic) NSInteger spacing;
 @property (nonatomic) NSInteger emptyLabelMarginHack;
 @property (nonatomic) BOOL isEmptyList;
+@property (nonatomic) BOOL enableEdit;
 @property (nonatomic) NSInteger numberOfRows;
 @property (nonatomic,weak) NSObject<KPTagDelegate> *tagDelegate;
 @property (nonatomic,weak) NSObject<KPTagListResizeDelegate> *resizeDelegate;

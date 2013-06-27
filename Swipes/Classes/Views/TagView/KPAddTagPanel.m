@@ -28,12 +28,13 @@
 
 #define NUMBER_OF_BAR_BUTTONS 2
 
-@interface KPAddTagPanel () <UITextFieldDelegate,KPTagListResizeDelegate>
+@interface KPAddTagPanel () <UITextFieldDelegate,KPTagListResizeDelegate,KPTagDelegate>
 @property (nonatomic,weak) IBOutlet UIView *addTagView;
 @property (nonatomic,weak) IBOutlet UIView *tagContainerView;
 @property (nonatomic,weak) IBOutlet UIView *barBottomView;
 @property (nonatomic,weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic,weak) IBOutlet UIButton *doneEditingButton;
+@property (nonatomic) BOOL isAdding;
 @property (nonatomic) NSInteger maxHeight;
 @property (nonatomic) BOOL isRotated;
 @end
@@ -45,7 +46,7 @@
 }
 -(IBAction)rotateButton
 {
-    NSLog( @"Rotating button" );
+    NSLog( @"Rotating button");
     
     [UIView beginAnimations:@"rotate" context:nil];
     [UIView setAnimationDuration:.25f];
@@ -75,6 +76,7 @@
         KPTagList *tagView = [KPTagList tagListWithWidth:self.frame.size.width andTags:tags];
         tagView.marginLeft = 0;
         tagView.bottomMargin = 15;
+        tagView.enableEdit = YES;
         tagView.marginRight = 0;
         tagView.emptyText = @"No tags";
         
@@ -202,6 +204,7 @@
 
 -(void)shiftToAddMode:(BOOL)addMode{
     if(addMode){
+        self.isAdding = YES;
         [UIView animateWithDuration:0.2 animations:^{
             CGRectSetY(self.tagContainerView, self.barBottomView.frame.origin.y);
             //self.barBottomView.hidden = YES;
@@ -221,6 +224,7 @@
         }];
     }
     else{
+        self.isAdding = NO;
         [self.textField resignFirstResponder];
         [UIView animateWithDuration:ANIMATION_DURATION animations:^{
             CGRectSetY(self.addTagView, self.frame.size.height);
@@ -232,7 +236,7 @@
                 CGPoint topOffset = CGPointMake(0, 0);
                 [self.scrollView setContentOffset:topOffset animated:NO];
                 CGFloat newHeight = self.tagContainerView.frame.size.height + self.barBottomView.frame.size.height;
-                 if([self.delegate respondsToSelector:@selector(tagPanel:changedSize:)]) [self.delegate tagPanel:self changedSize:CGSizeMake(self.frame.size.width,newHeight)];
+                if([self.delegate respondsToSelector:@selector(tagPanel:changedSize:)]) [self.delegate tagPanel:self changedSize:CGSizeMake(self.frame.size.width,newHeight)];
                 
                 CGRectSetY(self.barBottomView, self.frame.size.height-self.barBottomView.frame.size.height);
                 CGRectSetY(self.tagContainerView, self.barBottomView.frame.origin.y);

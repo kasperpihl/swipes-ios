@@ -31,10 +31,14 @@ static ToDoHandler *sharedObject;
 }
 -(void)deleteToDos:(NSArray*)toDos save:(BOOL)save{
     for(KPToDo *toDo in toDos){
-        [toDo MR_deleteEntity];
+        if(toDo.schedule){
+            [self handleNotificationsForDate:toDo.schedule];
+        }
+        [toDo deleteToDoSave:NO];
     }
     if(save) [self save];
     [ANALYTICS incrementKey:NUMBER_OF_DELETED_TASKS_KEY withAmount:toDos.count];
+    [self scheduleNotifications];
 }
 -(KPToDo*)addItem:(NSString *)item{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
