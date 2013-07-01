@@ -92,7 +92,7 @@
         
         UIDatePicker *picker = [[UIDatePicker alloc] initWithFrame:CGRectMake(-PICKER_CUT_WIDTH, -PICKER_CUT_HEIGHT, 240, 200)];
         picker.minimumDate = [NSDate date];
-        picker.date = [[[NSDate dateTomorrow] dateAtStartOfDay] dateByAddingHours:9];
+        picker.date = [[NSDate date] dateByAddingHours:1];
         picker.minuteInterval = 5;
         picker.tag = DATE_PICKER_TAG;
         picker.maximumDate = [NSDate dateWithDaysFromNow:730];

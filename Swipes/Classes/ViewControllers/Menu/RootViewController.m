@@ -59,7 +59,6 @@
     return NO; // Interrupt login process
 }
 -(void)fetchDataFromFacebook{
-    
     __block NSString *requestPath = @"me?fields=email,gender";
     FBRequest *request = [FBRequest requestForGraphPath:requestPath];
     [FBC addRequest:request write:NO permissions:nil block:^BOOL(FBReturnType status, id result, NSError *error) {
@@ -71,7 +70,10 @@
             NSDictionary *userData = (NSDictionary *)result; // The result is a dictionary
             NSString *email = [userData objectForKey:@"email"];
             
-            if(email) [user setObject:email forKey:@"email"];
+            if(email){
+                [user setObject:email forKey:@"email"];
+                [MIXPANEL.people set:@"$email" to:email];
+            }
             NSString *gender = [userData objectForKey:@"gender"];
             if(gender) [user setObject:gender forKey:@"gender"];
             [user saveEventually];
@@ -90,6 +92,9 @@
         if(!user.email){
             [self fetchDataFromFacebook];
         }
+    }
+    else{
+        [MIXPANEL.people set:@"$email" to:user.username];
     }
     [self changeToMenu:KPMenuHome animated:YES];
     

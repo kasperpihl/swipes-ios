@@ -66,7 +66,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self setBackgroundImage:[UtilityClass imageWithColor:TEXTFIELD_BACKGROUND]];
-        //[self setTranslucent:YES];
+        //[self setSearchFieldBackgroundImage:[UtilityClass imageWithColor:TEXTFIELD_BACKGROUND] forState:UIControlStateNormal];
+        [self setTranslucent:YES];
         self.placeholder = @"Search";
         self.backgroundColor = [UIColor clearColor];
         UIView *colorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-COLOR_SEPERATOR_HEIGHT, self.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
@@ -138,7 +139,7 @@
     [super layoutSubviews];
     if(!(searchField == nil) && !self.searchField) {
         self.searchField = searchField;
-        CGRectSetX(searchField, 10);
+        //CGRectSetX(searchField, 10);
         //searchField.userInteractionEnabled = NO;
         CGRectSetSize(searchField, self.frame.size.width-(2*searchField.frame.origin.x)-(self.frame.size.height-COLOR_SEPERATOR_HEIGHT), searchField.frame.size.height);
         searchField.font = TEXT_FIELD_FONT;
@@ -243,6 +244,7 @@
         self.filterButton.hidden = NO;
         self.searchField.hidden = NO;
         [self resizeTableHeader];
+        [superView setContentOffset:CGPointMake(0, superView.tableHeaderView.frame.size.height)];
     }];
 }
 -(void)resizeTableHeader{

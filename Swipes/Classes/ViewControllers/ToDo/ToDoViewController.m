@@ -393,7 +393,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.dotView.backgroundColor = [TODOHANDLER colorForCellType:[self.model cellTypeForTodo]];
 }
 -(void)updateAlarm{
-    if(!self.model.alarm || [self.model.alarm isInPast]){
+    if(!self.model.schedule || [self.model.schedule isInPast]){
         self.alarmImage.highlighted = YES;
         self.alarmLabel.highlighted = YES;
         self.alarmLabel.text = @"Remind me";
@@ -401,7 +401,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     else{
         self.alarmLabel.highlighted = NO;
         self.alarmImage.highlighted = NO;
-        self.alarmLabel.text = [self.model readableTime:self.model.alarm showTime:YES];
+        self.alarmLabel.text = [self.model readableTime:self.model.schedule showTime:YES];
     }
 }
 -(void)setModel:(KPToDo *)model{

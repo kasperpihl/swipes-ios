@@ -58,7 +58,7 @@ typedef enum {
 @property (nonatomic,weak) IBOutlet UIView *selectDateView;
 @property (nonatomic,weak) IBOutlet UIButton *backOneMonth;
 @property (nonatomic,weak) IBOutlet UIButton *forwardOneMonth;
-
+@property (nonatomic) NSInteger startingHour;
 @property (nonatomic) BOOL isPickingDate;
 @end
 @implementation SchedulePopup
@@ -78,16 +78,16 @@ typedef enum {
     [self returnState:KPScheduleButtonCancel date:nil];
 }
 -(void)pressedTomorrow:(id)sender{
-    [self returnState:KPScheduleButtonTomorrow date:[NSDate dateTomorrow]];
+    [self returnState:KPScheduleButtonTomorrow date:[[[NSDate dateTomorrow] dateAtStartOfDay] dateByAddingHours:self.startingHour]];
 }
 -(void)pressedInAWeek:(id)sender{
-    [self returnState:KPScheduleButtonInAWeek date:[NSDate dateWithDaysFromNow:7]];
+    [self returnState:KPScheduleButtonInAWeek date:[[[NSDate dateWithDaysFromNow:7] dateAtStartOfDay] dateByAddingHours:self.startingHour]];
 }
 -(void)pressedIn2Days:(id)sender{
-    [self returnState:KPScheduleButtonIn2Days date:[NSDate dateWithDaysFromNow:2]];
+    [self returnState:KPScheduleButtonIn2Days date:[[[NSDate dateWithDaysFromNow:2] dateAtStartOfDay] dateByAddingHours:self.startingHour]];
 }
 -(void)pressedIn3Days:(id)sender{
-    [self returnState:KPScheduleButtonIn3Days date:[NSDate dateWithDaysFromNow:3]];
+    [self returnState:KPScheduleButtonIn3Days date:[[[NSDate dateWithDaysFromNow:3] dateAtStartOfDay] dateByAddingHours:self.startingHour]];
 }
 -(void)pressedSpecific:(id)sender{
     [UIView transitionWithView:self.containerView
@@ -131,6 +131,7 @@ typedef enum {
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.startingHour = 9;
         [self setContainerSize:CGSizeMake(POPUP_WIDTH, POPUP_WIDTH)];
         UIView *contentView = [[UIView alloc] initWithFrame:self.containerView.bounds];
         

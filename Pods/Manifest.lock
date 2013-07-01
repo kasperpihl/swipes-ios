@@ -1,5 +1,6 @@
 PODS:
-  - Facebook-iOS-SDK (3.5.2)
+  - Appirater (1.0.3)
+  - Facebook-iOS-SDK (3.5.3)
   - KGStatusBar (1.0)
   - MagicalRecord (2.1)
   - Mixpanel (2.0.0)
@@ -9,7 +10,8 @@ PODS:
   - SMPageControl (1.0)
 
 DEPENDENCIES:
-  - Facebook-iOS-SDK (~> 3.5.1)
+  - Appirater (~> 1.0.3)
+  - Facebook-iOS-SDK (~> 3.5.3)
   - KGStatusBar (~> 1.0)
   - MagicalRecord (~> 2.1)
   - Mixpanel (~> 2.0.0)
@@ -18,7 +20,8 @@ DEPENDENCIES:
   - SMPageControl (~> 1.0)
 
 SPEC CHECKSUMS:
-  Facebook-iOS-SDK: 0690c15914d4e412f5f0ef0f8cce34fd0d39f7ce
+  Appirater: 1c146af7b0ef3e2114a17db2e185f94367f63a99
+  Facebook-iOS-SDK: c11e851555d8cb8b55853ec2990b01d9e343d09e
   KGStatusBar: e47f19745f6aeb0fabe37e8360df26bf87b1e2ff
   MagicalRecord: 64e7184c240087a45e9588a722eaf05b0ad837f7
   Mixpanel: d456c27f7520e22784a15d0bcd9d5c287080b0cd
@@ -26,4 +29,4 @@ SPEC CHECKSUMS:
   PRTween: d0439e7917031328f81de4910c5b02e202389939
   SMPageControl: 9d100f9aa8ca0cf10222666ff31d4d1cbfdac674
 
-COCOAPODS: 0.18.1
+COCOAPODS: 0.20.2

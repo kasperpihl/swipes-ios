@@ -1,6 +1,7 @@
 platform :ios, '5.0'
+pod 'Appirater', '~> 1.0.3'
 pod 'Parse', '~> 1.2.9'
-pod 'Facebook-iOS-SDK', '~> 3.5.1'
+pod 'Facebook-iOS-SDK', '~> 3.5.3'
 pod 'KGStatusBar', '~> 1.0'
 pod 'PRTween', '~> 0.0.1'
 pod 'MagicalRecord', '~> 2.1'

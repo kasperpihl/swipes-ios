@@ -70,6 +70,7 @@
             [UIView animateWithDuration:ANIMATION_DURATION delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
                 self.containerView.transform = CGAffineTransformMakeScale(ANIMATION_SCALE, ANIMATION_SCALE);
             } completion:^(BOOL finished) {
+                self.hidden = YES;
                 if(block) block(finished,nil);
                 [self removeFromSuperview];
             }];

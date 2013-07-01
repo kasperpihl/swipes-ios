@@ -163,12 +163,12 @@
 -(void)setIconsForToDo:(KPToDo*)toDo{
     CGFloat deltaX = LABEL_X;
     self.alarmLabel.hidden = YES;
-    if(toDo.alarm && [toDo.alarm isInFuture]){
+    if(toDo.schedule && [toDo.schedule isInFuture]){
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"h:mm a"];
         NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
         [dateFormatter setLocale:usLocale];
-        NSString *dateInString = [[dateFormatter stringFromDate:toDo.alarm] lowercaseString];
+        NSString *dateInString = [[dateFormatter stringFromDate:toDo.schedule] lowercaseString];
         self.alarmLabel.text = dateInString;
         [self.alarmLabel sizeToFit];
         CGRectSetWidth(self.alarmLabel, self.alarmLabel.frame.size.width+2*ALARM_SPACING);

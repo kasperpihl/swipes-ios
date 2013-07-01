@@ -13,6 +13,7 @@
 #import "AnalyticsHandler.h"
 #import "AppsFlyer.h"
 #import "NSDate-Utilities.h"
+#import "Appirater.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -29,11 +30,19 @@
     parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
     mixpanelToken = @"c2d2126bfce5e54436fa131cfe6085ad";
 #endif
+    
+    [Appirater setAppId:@"657882159"];
+    [Appirater setDaysUntilPrompt:1];
+    [Appirater setUsesUntilPrompt:15];
+    [Appirater setSignificantEventsUntilPrompt:-1];
+    [Appirater setTimeBeforeReminding:1];
+    
     [Parse setApplicationId:parseApplicationKey
                   clientKey:parseClientKey];
     [PFFacebookUtils initializeFacebook];
     KPCORE;
     [Mixpanel sharedInstanceWithToken:mixpanelToken];
+    [Appirater appLaunched:YES];
     /*MSNavigationPaneViewController *paneViewController = (MSNavigationPaneViewController *)self.window.rootViewController;
     ROOT_CONTROLLER.paneNavigationViewController = paneViewController;*/
     return YES;
@@ -73,6 +82,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+    [Appirater appEnteredForeground:YES];
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 

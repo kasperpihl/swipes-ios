@@ -39,6 +39,7 @@
 - (void)dragTableViewController:(KPReorderTableView *)dragTableViewController didBeginDraggingAtRow:(NSIndexPath *)dragRow{
     [self parent].lock = YES;
     self.dragRow = dragRow;
+    [self.itemHandler setDraggingIndexPath:dragRow];
     [self deselectAllRows:self];
 }
 -(void)dragTableViewController:(KPReorderTableView *)dragTableViewController didEndDraggingToRow:(NSIndexPath *)destinationIndexPath{

@@ -16,6 +16,7 @@
 @property (nonatomic,strong) NSArray *items;
 @property (nonatomic,strong) NSArray *filteredItems;
 @property (nonatomic,strong) NSString *searchString;
+@property (nonatomic,strong) NSIndexPath *draggedCellPosition;
 @end
 @implementation ItemHandler
 -(id)init{
@@ -24,6 +25,10 @@
         self.itemCounter = -1;
     }
     return self;
+}
+-(void)setDraggingIndexPath:(NSIndexPath *)draggingIndexPath{
+    self.draggedCellPosition = draggingIndexPath;
+    _draggingIndexPath = draggingIndexPath;
 }
 #pragma mark - Getters and Setters
 -(NSMutableArray *)selectedTags{
@@ -66,6 +71,7 @@
 
 -(void)moveItem:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
     if(toIndexPath.row == fromIndexPath.row) return;
+    [self setDraggingIndexPath:nil];
     if(!self.isSorted){
         KPToDo *movingToDoObject = [self itemForIndexPath:fromIndexPath];
         KPToDo *replacingToDoObject = [self itemForIndexPath:toIndexPath];
@@ -116,7 +122,7 @@
 }
 #pragma mark UITableViewDataSource
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
-    
+    self.draggedCellPosition = destinationIndexPath;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     return [self.delegate cellForRowAtIndexPath:indexPath];
@@ -126,7 +132,24 @@
         KPToDo *toDo = [[self.sortedItems objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
         return toDo;
     }
-    return [self.filteredItems objectAtIndex:indexPath.row];
+    else{
+        NSInteger row = indexPath.row;
+       if(self.draggingIndexPath){
+            NSInteger draggedCellPosition = self.draggedCellPosition ? self.draggedCellPosition.row : self.draggingIndexPath.row;
+            NSInteger draggedCellOriginalPosition = self.draggingIndexPath.row;
+            
+            NSInteger renderedRow = indexPath.row;
+           NSLog(@"cellP: %i orgP: %i rendR: %i",draggedCellPosition, draggedCellOriginalPosition,renderedRow);
+            //if(positionRow == thisRow) row = self.draggingIndexPath.row;
+            if(renderedRow >= draggedCellOriginalPosition && draggedCellPosition > renderedRow){
+                row = renderedRow+1;
+            }
+            else if(renderedRow <= draggedCellOriginalPosition && draggedCellPosition < renderedRow){
+                row = renderedRow-1;
+            }
+        }
+        return [self.filteredItems objectAtIndex:row];
+    }
 }
 -(NSString *)titleForSection:(NSInteger)section{
     if(self.isSorted) return [self.titleArray objectAtIndex:section];

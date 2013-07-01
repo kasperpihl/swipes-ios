@@ -3,8 +3,8 @@
 
 #define TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING 100
 #define TAG_FOR_BELOW_SHADOW_VIEW_WHEN_DRAGGING 200
-#define CELL_WIDTH_SCALE 1.03
-#define CELL_HEIGHT_SCALE 1.07
+#define CELL_WIDTH_SCALE 1.05
+#define CELL_HEIGHT_SCALE 1.09
 #define CGRectSetGrowth(r) r = CGRectMake(r.origin.x - (CELL_GROW_WIDTH/2),r.origin.y - (CELL_GROW_HEIGHT/2),r.size.width + CELL_GROW_WIDTH,r.size.height + CELL_GROW_HEIGHT)
 @interface KPReorderTableView ()
 
@@ -13,6 +13,11 @@ typedef enum {
 	AutoscrollStatusCellAtTop,
 	AutoscrollStatusCellAtBottom
 } AutoscrollStatus;
+typedef enum {
+    DirectionNone = 0,
+    DirectionUp,
+    DirectionDown
+} DragDirection;
 
 - (void)establishGestures;
 - (void)longPressRecognized;
@@ -36,6 +41,9 @@ typedef enum {
 @property (strong) UITableViewCell *draggedCell;
 @property (strong) NSIndexPath *indexPathBelowDraggedCell;
 @property (strong) CADisplayLink *timerToAutoscroll;
+@property CGFloat savedYCoordinate;
+@property DragDirection dragDirection;
+@property DragDirection dragPosition;
 
 @end
 
@@ -228,8 +236,8 @@ typedef enum {
 
 	self.draggedCell = [self cellPreparedToAnimateAroundAtIndexPath:indexPathOfRow];
 
-	//[self.draggedCell setHighlighted:NO animated:NO];
-    [self dragTableViewController:self addDraggableIndicatorsToCell:self.draggedCell forIndexPath:indexPathOfRow];
+	[self.draggedCell setSelected:YES animated:NO];
+    
 	[UIView animateWithDuration:0.23 delay:0 options:(UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionCurveEaseInOut) animations:^{
         CGFloat widthScale = CELL_WIDTH_SCALE;
         CGFloat heightScale = CELL_HEIGHT_SCALE;
@@ -237,9 +245,9 @@ typedef enum {
         
 	} completion:^(BOOL finished) {
 		if (finished) {
-            
-			self.draggedCell.layer.rasterizationScale = [[UIScreen mainScreen] scale];
-			self.draggedCell.layer.shouldRasterize = YES;
+			//self.draggedCell.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+			//self.draggedCell.layer.shouldRasterize = YES;
+            //[self dragTableViewController:self addDraggableIndicatorsToCell:self.draggedCell forIndexPath:indexPathOfRow];
 		}
 	}];
 
@@ -260,7 +268,12 @@ typedef enum {
 	if ( !self.draggedCell )
 		return;
 	CGPoint translation = [dragGestureRecognizer translationInView:self];
-    //NSLog(@"translation:%f:%f",translation.x,translation.y);
+    if(self.savedYCoordinate){
+
+        if(translation.y < self.savedYCoordinate ) self.dragDirection = DirectionUp;
+        else if(translation.y > self.savedYCoordinate) self.dragDirection = DirectionDown;
+    }
+    self.savedYCoordinate = translation.y;
 	if (dragGestureRecognizer.state == UIGestureRecognizerStateEnded || dragGestureRecognizer.state == UIGestureRecognizerStateCancelled)
 		[self completeGesturesForTranslationPoint:translation];
 	else
@@ -291,8 +304,9 @@ typedef enum {
 
 	if ( autoscrollOption == AutoscrollStatusCellAtTop ) {
 
-		CGFloat scrollDistance = tableViewContentOffset.y;
-		tableViewContentOffset.y = 0;
+		CGFloat scrollDistance = autoscrollDistance;
+        CGFloat tableViewHeaderHeight = self.tableHeaderView.frame.size.height;
+		tableViewContentOffset.y = tableViewContentOffset.y < tableViewHeaderHeight ? tableViewContentOffset.y : self.tableHeaderView.frame.size.height;
 
 		draggedCell.center = CGPointMake(draggedCell.center.x, draggedCell.center.y - scrollDistance);
 
@@ -301,7 +315,7 @@ typedef enum {
 
 		CGFloat yOffsetForBottomOfTableViewContent = MAX(0, (self.contentSize.height - self.frame.size.height));
 
-		CGFloat scrollDistance = yOffsetForBottomOfTableViewContent - tableViewContentOffset.y;
+		CGFloat scrollDistance = autoscrollDistance;//yOffsetForBottomOfTableViewContent - tableViewContentOffset.y;
 		tableViewContentOffset.y = yOffsetForBottomOfTableViewContent;
 
 		draggedCell.center = CGPointMake(draggedCell.center.x, draggedCell.center.y + scrollDistance);
@@ -435,6 +449,7 @@ typedef enum {
 	 */
     //NSLog(@"%f:%f",absoluteDistance,distanceThresholdToAutoscroll);
 	if (absoluteDistance < distanceThresholdToAutoscroll) {
+        if(self.dragPosition != self.dragDirection) return;
 		/*
 			dragged cell is close to the top or bottom edge, so create an autoscroll timer if needed.
 		 */
@@ -463,11 +478,11 @@ typedef enum {
 		Tells the data model to update as appropriate.
  */
 - (void)endedDragGestureWithTranslationPoint:(CGPoint)translation {
-
-	[self updateFrameOfDraggedCellForTranlationPoint:translation];
+	
+    [self updateFrameOfDraggedCellForTranlationPoint:translation];
 	
 	[self shuffleCellsOutOfWayOfDraggedCellIfNeeded];
-
+    
 	if ([self.dragDelegate respondsToSelector:@selector(dragTableViewController:willEndDraggingToRow:)])
 		[self.dragDelegate dragTableViewController:self willEndDraggingToRow:self.indexPathBelowDraggedCell];
 	UITableViewCell *oldDraggedCell = self.draggedCell;
@@ -478,14 +493,14 @@ typedef enum {
 	BOOL hideDragIndicator = YES;
 	if( [self.dragDelegate respondsToSelector:@selector(dragTableViewController:shouldHideDraggableIndicatorForDraggingToRow:)] )
 		hideDragIndicator = [self.dragDelegate dragTableViewController:self shouldHideDraggableIndicatorForDraggingToRow:blankIndexPath];
-	self.draggedCell.layer.shouldRasterize = NO;
+	//self.draggedCell.layer.shouldRasterize = NO;
 	/*if( hideDragIndicator )
 		[(UITableViewCell *)self.draggedCell setHighlighted:NO animated:YES];
 */
 	[UIView animateWithDuration:0.25 delay:0 options:(UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionBeginFromCurrentState) animations:^{
 		//self.draggedCell.transform = CGAffineTransformMakeScale(1/CELL_WIDTH_SCALE, 1/CELL_HEIGHT_SCALE);
         [self dragTableViewController:self removeDraggableIndicatorsFromCell:oldDraggedCell];
-        self.draggedCell.transform = CGAffineTransformInvert(CGAffineTransformMakeScale(CELL_WIDTH_SCALE, CELL_HEIGHT_SCALE));
+        self.draggedCell.transform = CGAffineTransformIdentity;
         oldDraggedCell.frame = rectForIndexPath;
 	} completion:^(BOOL finished) {
         
@@ -656,12 +671,13 @@ typedef enum {
 		/*
 			Return positive because going down.
 		 */
-
+        self.dragPosition = DirectionDown;
 		return MAX((1.0 / [UIScreen mainScreen].scale), (heightOfTableView) - yOffsetOfDraggedCellCenter);
 	} else
 		/*
 			Return negative because going up.
 		 */
+        self.dragPosition = DirectionUp;
 		return -1 * MAX((1.0 / [UIScreen mainScreen].scale), yOffsetOfDraggedCellCenter);
 }
 
@@ -701,8 +717,7 @@ typedef enum {
 
 
 - (AutoscrollStatus)locationOfCellGivenSignedAutoscrollDistance:(CGFloat)signedAutoscrollDistance {
-
-	if ( signedAutoscrollDistance < 0 && self.contentOffset.y + signedAutoscrollDistance <= 0 )
+	if ( signedAutoscrollDistance < 0 && self.contentOffset.y + signedAutoscrollDistance <= self.tableHeaderView.frame.size.height )
 		return AutoscrollStatusCellAtTop;
 
 	if ( signedAutoscrollDistance > 0 && self.contentOffset.y + signedAutoscrollDistance >= self.contentSize.height - self.frame.size.height )
@@ -718,22 +733,12 @@ typedef enum {
 #pragma mark miscellaneous helper methods
 
 - (void)setInterferingElementsToEnabled:(BOOL)enabled {
-
-/*	if (self.navigationController != nil) {
-		self.navigationController.navigationBar.userInteractionEnabled = enabled;
-		self.navigationController.toolbar.userInteractionEnabled = enabled;
-	}
-
-	if (self.tabBarController != nil)
-		self.tabBarController.tabBar.userInteractionEnabled = enabled;
-*/
 	self.scrollsToTop = enabled;
 }
 
 
 - (void)resetTableViewAndNavBarToTypical {
 	[self setInterferingElementsToEnabled:YES];
-
 	self.allowsSelection = YES;
 
 }
