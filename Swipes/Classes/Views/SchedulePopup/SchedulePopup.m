@@ -77,6 +77,9 @@ typedef enum {
 -(void)cancelled{
     [self returnState:KPScheduleButtonCancel date:nil];
 }
+-(void)pressedLaterToday:(id)sender{
+    [self returnState:KPScheduleButtonLaterToday date:[[NSDate date] dateByAddingHours:3]];
+}
 -(void)pressedTomorrow:(id)sender{
     [self returnState:KPScheduleButtonTomorrow date:[[[NSDate dateTomorrow] dateAtStartOfDay] dateByAddingHours:self.startingHour]];
 }
@@ -151,6 +154,11 @@ typedef enum {
         [tomorrowButton setTitle:@"Tomorrow" forState:UIControlStateNormal];
         [tomorrowButton addTarget:self action:@selector(pressedTomorrow:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:tomorrowButton];
+        
+        UIButton *laterTodayButton = [self buttonForScheduleButton:KPScheduleButtonLaterToday];
+        [laterTodayButton setTitle:@"Later Today" forState:UIControlStateNormal];
+        [laterTodayButton addTarget:self action:@selector(pressedLaterToday:) forControlEvents:UIControlEventTouchUpInside];
+        [contentView addSubview:laterTodayButton];
         
         UIButton *in2DaysButton = [self buttonForScheduleButton:KPScheduleButtonIn2Days];
         NSDate *twoDaysDate = [NSDate dateWithDaysFromNow:2];
@@ -234,7 +242,7 @@ typedef enum {
     self.monthLabel = (UILabel*)[selectDateView viewWithTag:MONTH_LABEL_TAG];
     
     UIDatePicker *picker = [[UIDatePicker alloc] initWithFrame:CGRectMake(-PICKER_CUT_WIDTH, -PICKER_CUT_HEIGHT, 240, 200)];
-    picker.minimumDate = [[NSDate dateTomorrow] dateAtStartOfDay];
+    picker.minimumDate = [NSDate date];
     picker.minuteInterval = 5;
     picker.date = [[[NSDate dateTomorrow] dateAtStartOfDay] dateByAddingHours:9];
     picker.tag = DATE_PICKER_TAG;
@@ -335,6 +343,9 @@ typedef enum {
     NSString *imageString;
     switch (scheduleButton) {
         case KPScheduleButtonTomorrow:
+            imageString = @"schedule_image_sun";
+            break;
+        case KPScheduleButtonLaterToday:
             imageString = @"schedule_image_sun";
             break;
         case KPScheduleButtonIn2Days:

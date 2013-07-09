@@ -11,6 +11,7 @@
 @class KPSegmentedViewController;
 @protocol ToDoVCDelegate <NSObject>
 -(void)didPressCloseToDoViewController:(ToDoViewController*)viewController;
+-(void)scheduleToDoViewController:(ToDoViewController*)viewController;
 @end
 @class KPToDo;
 @class ToDoCell;

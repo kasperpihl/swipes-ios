@@ -54,10 +54,8 @@
 #import "ToDoHandler.h"
 #import "ToDoCell.h"
 #import "SchedulePopup.h"
-#import "AlarmPopup.h"
 #import "NSDate-Utilities.h"
 #import "NotesView.h"
-#import "AlarmView.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
 typedef NS_ENUM(NSUInteger, KPEditMode){
@@ -392,7 +390,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
     self.dotView.backgroundColor = [TODOHANDLER colorForCellType:[self.model cellTypeForTodo]];
 }
--(void)updateAlarm{
+-(void)updateSchedule{
     if(!self.model.schedule || [self.model.schedule isInPast]){
         self.alarmImage.highlighted = YES;
         self.alarmLabel.highlighted = YES;
@@ -409,7 +407,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         _model = model;
         self.editTitleTextView.text = model.title;
         [self updateTags];
-        [self updateAlarm];
+        [self updateSchedule];
         [self updateNotes];
         [self updateDot];
         [self layout];
@@ -443,13 +441,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)pressedAlarm:(id)sender{
     self.activeEditMode = KPEditModeAlarm;
-    /*AlarmView *alarmView = [[AlarmView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)];
-    [self.segmentedViewController presentSemiView:alarmView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f,KNSemiModalOptionKeys.shadowOpacity:@0.5f} completion:^{
-    }];*/
-    [AlarmPopup showInView:[self segmentedViewController].view withBlock:^(NSDate *chosenDate) {
-        [self.model updateAlarm:chosenDate force:NO save:YES];
-        [self updateAlarm];
-    } andDate:self.model.alarm];
+    if([self.delegate respondsToSelector:@selector(scheduleToDoViewController:)]) [self.delegate scheduleToDoViewController:self];
 }
 -(void)pressedNotes:(id)sender{
     NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0, 320, self.segmentedViewController.view.frame.size.height - DEFAULT_SPACE_FROM_SLIDE_UP_VIEW)];

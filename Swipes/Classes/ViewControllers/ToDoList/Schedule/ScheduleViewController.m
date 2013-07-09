@@ -13,7 +13,7 @@
 
 @implementation ScheduleViewController
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
-    NSDate *startDate = [[NSDate dateTomorrow] dateAtStartOfDay];
+    NSDate *startDate = [NSDate date];
     NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule > %@)",@"scheduled", startDate];
     NSPredicate *unspecifiedPredicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule = nil)",@"scheduled"];
     NSArray *scheduleArray = [KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:schedulePredicate];

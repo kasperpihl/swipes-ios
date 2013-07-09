@@ -24,8 +24,9 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:itemNumber];
 }
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
-    NSDate *endDate = [[NSDate dateTomorrow] dateAtStartOfDay];
+    NSDate *endDate = [NSDate date];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule < %@)",@"scheduled", endDate];
+
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
     return results;
 }

@@ -17,7 +17,7 @@
 -(CellType)cellTypeForTodo{
     if([self.state isEqualToString:@"done"]) return CellTypeDone;
     else if([self.state isEqualToString:@"scheduled"]){
-        if([self.schedule isLaterThanDate:[[NSDate dateTomorrow] dateAtStartOfDay]] || !self.schedule) return CellTypeSchedule;
+        if([self.schedule isLaterThanDate:[NSDate date]] || !self.schedule) return CellTypeSchedule;
         else return CellTypeToday;
     }
     return CellTypeNone;
@@ -51,6 +51,7 @@
     BOOL shouldFormat = NO;
     if(numberOfDaysAfterTodays == 0){
         dateString = @"Today";
+        if([time isLaterThanDate:[NSDate date]]) dateString = @"Later Today";
     }
     else if(numberOfDaysAfterTodays == -1) dateString = @"Tomorrow";
     else if(numberOfDaysAfterTodays == 1) dateString = @"Yesterday";
@@ -74,7 +75,7 @@
     NSString *title;
     CellType cellType = [self cellTypeForTodo];
     
-    if(cellType == CellTypeToday) title = @"Today";
+    if(cellType == CellTypeToday) title = @"Later Today";
     else if(cellType == CellTypeSchedule){
         NSDate *toDoDate = self.schedule;
         if(!toDoDate) title = @"Unspecified";

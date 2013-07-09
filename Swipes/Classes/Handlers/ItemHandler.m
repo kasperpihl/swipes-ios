@@ -153,7 +153,7 @@
 }
 -(NSString *)titleForSection:(NSInteger)section{
     if(self.isSorted) return [self.titleArray objectAtIndex:section];
-    else return @"Today";
+    else return @"Now";
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     if(self.isSorted) return [self.sortedItems count];

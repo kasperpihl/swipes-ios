@@ -223,7 +223,11 @@
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [[self parent] show:YES controlsAnimated:YES];
 }
-
+-(void)scheduleToDoViewController:(ToDoViewController *)viewController{
+    [self swipeTableViewCell:viewController.injectedCell didStartPanningWithMode:MCSwipeTableViewCellModeExit];
+    MCSwipeTableViewCellState targetState = (self.cellType == CellTypeDone) ? MCSwipeTableViewCellState4 : MCSwipeTableViewCellState3;
+    [viewController.injectedCell switchToState:targetState];
+}
 #pragma mark - UI Specific
 -(NSArray *)selectedItems{
     NSMutableArray *array = [NSMutableArray array];
@@ -320,7 +324,7 @@
         [toDosArray addObject:toDo];
         [indexSet addIndex:indexPath.row];
     }
-    CellType targetCellType = [TODOHANDLER cellTypeForCell:cell.cellType state:state];
+    __block CellType targetCellType = [TODOHANDLER cellTypeForCell:cell.cellType state:state];
     switch (targetCellType) {
         case CellTypeSchedule:{
             [SchedulePopup showInView:self.parent.view withBlock:^(KPScheduleButtons button, NSDate *date) {
@@ -328,6 +332,7 @@
                     [self returnSelectedRowsAndBounce:YES];
                 }
                 else{
+                    if([date isToday]) targetCellType = CellTypeToday;
                     [TODOHANDLER scheduleToDos:toDosArray forDate:date];
                     [self moveIndexSet:indexSet toCellType:targetCellType];
                 }
@@ -384,6 +389,7 @@
         [self removeItemsForIndexSet:indexSet];
     }
     else{
+        [self cleanShowingViewAnimated:NO];
         [self returnSelectedRowsAndBounce:YES];
         [self deselectAllRows:self];
         [self update];
@@ -431,6 +437,7 @@
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
     BOOL shouldBeSelected = (selectedIndexPaths.count > 0);
     for(ToDoCell *localCell in visibleCells){
+        
         NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
         if([self.selectedRows containsObject:indexPath]){
             [localCell showTimeline:YES];
@@ -529,7 +536,19 @@
     UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.frame.origin.y+imageView.frame.size.height, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
     menuText.backgroundColor = CLEAR;
     menuText.font = TABLE_EMPTY_BG_FONT;
-    menuText.text = [self.state capitalizedString];
+    NSString *text;
+    switch (self.cellType) {
+        case CellTypeDone:
+            text = @"Done";
+            break;
+        case CellTypeSchedule:
+            text = @"Later";
+            break;
+        default:
+            text = @"Now";
+            break;
+    }
+    menuText.text = text;
     menuText.textAlignment = UITextAlignmentCenter;
     menuText.textColor = TABLE_EMPTY_BG_TEXT;
     menuText.tag = MENU_TEXT_TAG;

@@ -19,6 +19,7 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 @interface MCSwipeTableViewCell () <UIGestureRecognizerDelegate>
 #define REGRET_VELOCITY 50
 @property (nonatomic) BOOL didRegret;
+@property (nonatomic) MCSwipeTableViewCellState forcedState;
 // Init
 - (void)initializer;
 
@@ -189,12 +190,49 @@ secondStateIconName:(NSString *)secondIconName
         _currentImageName = [self imageNameWithPercentage:percentage];
         _currentPercentage = percentage;
         MCSwipeTableViewCellState cellState= [self stateWithPercentage:percentage];
-        
+        // TODO: Build in forced moving
         if (_mode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState])
             [self moveWithDuration:animationDuration andDirection:_direction];
         else
             [self bounceToOrigin];
     }
+}
+-(void)switchToState:(MCSwipeTableViewCellState)state{
+    self.didRegret = NO;
+    CGFloat percentage;
+    MCSwipeTableViewCellDirection direction;
+    switch (state){
+        case MCSwipeTableViewCellState1:
+            percentage = kMCStop1+0.01;
+            break;
+        case MCSwipeTableViewCellState2:
+            percentage = kMCStop2+0.01;
+            break;
+        case MCSwipeTableViewCellState3:
+            percentage = -kMCStop1-0.01;
+            break;
+        case MCSwipeTableViewCellState4:
+            percentage = -kMCStop2-0.01;
+            break;
+        default:
+            return;
+    }
+    _currentPercentage = percentage;
+    _currentImageName = [self imageNameWithPercentage:percentage];
+    NSString *imageName = [self imageNameWithPercentage:percentage];
+    if (imageName != nil) {
+        [_slidingImageView setImage:[UIImage imageNamed:imageName]];
+        [_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
+    }
+    [self slideImageWithPercentage:percentage imageName:imageName isDragging:NO];
+    
+    // Color
+    UIColor *color = [self colorWithPercentage:percentage];
+    if (color != nil) {
+        [_colorIndicatorView setBackgroundColor:color];
+    }
+    direction = [self directionWithPercentage:percentage];
+    [self moveWithDuration:kMCDurationLowLimit andDirection:direction];
 }
 - (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture {
     if([self.delegate respondsToSelector:@selector(swipeTableViewCell:shouldHandleGestureRecognizer:)]){

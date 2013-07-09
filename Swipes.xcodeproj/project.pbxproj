@@ -161,9 +161,7 @@
 		A79DB42317358C33007A48E2 /* done_white_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB41D17358C33007A48E2 /* done_white_background@2x.png */; };
 		A79DB42517358C33007A48E2 /* schedule_white_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB41F17358C33007A48E2 /* schedule_white_background@2x.png */; };
 		A79DB42717358C33007A48E2 /* today_white_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB42117358C33007A48E2 /* today_white_background@2x.png */; };
-		A7A2AC23175CDB8D00329FD5 /* AlarmPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A2AC22175CDB8D00329FD5 /* AlarmPopup.m */; };
 		A7A2AC26175CF45600329FD5 /* NotesView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A2AC25175CF45600329FD5 /* NotesView.m */; };
-		A7A2AC2A175D0D5900329FD5 /* AlarmView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A2AC29175D0D5900329FD5 /* AlarmView.m */; };
 		A7ABF4271746B0EF00DE033F /* today_color_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ABF4261746B0EF00DE033F /* today_color_background@2x.png */; };
 		A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B260921733D1FD000BADDE /* NotificationHandler.m */; };
 		A7B2609917346EDC000BADDE /* EMHint.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B2609617346EDC000BADDE /* EMHint.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -388,12 +386,8 @@
 		A79DB41D17358C33007A48E2 /* done_white_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "done_white_background@2x.png"; sourceTree = "<group>"; };
 		A79DB41F17358C33007A48E2 /* schedule_white_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule_white_background@2x.png"; sourceTree = "<group>"; };
 		A79DB42117358C33007A48E2 /* today_white_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today_white_background@2x.png"; sourceTree = "<group>"; };
-		A7A2AC21175CDB8D00329FD5 /* AlarmPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlarmPopup.h; path = AlertPopup/AlarmPopup.h; sourceTree = "<group>"; };
-		A7A2AC22175CDB8D00329FD5 /* AlarmPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlarmPopup.m; path = AlertPopup/AlarmPopup.m; sourceTree = "<group>"; };
 		A7A2AC24175CF45500329FD5 /* NotesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotesView.h; sourceTree = "<group>"; };
 		A7A2AC25175CF45600329FD5 /* NotesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotesView.m; sourceTree = "<group>"; };
-		A7A2AC28175D0D5800329FD5 /* AlarmView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmView.h; sourceTree = "<group>"; };
-		A7A2AC29175D0D5900329FD5 /* AlarmView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmView.m; sourceTree = "<group>"; };
 		A7ABF4261746B0EF00DE033F /* today_color_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today_color_background@2x.png"; sourceTree = "<group>"; };
 		A7B260911733D1FC000BADDE /* NotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationHandler.h; sourceTree = "<group>"; };
 		A7B260921733D1FD000BADDE /* NotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationHandler.m; sourceTree = "<group>"; };
@@ -594,8 +588,6 @@
 		A757002D1739AE9400CDB4F3 /* Popup */ = {
 			isa = PBXGroup;
 			children = (
-				A7A2AC21175CDB8D00329FD5 /* AlarmPopup.h */,
-				A7A2AC22175CDB8D00329FD5 /* AlarmPopup.m */,
 				A757002E1739AEB500CDB4F3 /* KPPopup.h */,
 				A757002F1739AEB500CDB4F3 /* KPPopup.m */,
 			);
@@ -813,8 +805,6 @@
 			children = (
 				A717BF3C17624CA2004791BF /* KPPageControl.h */,
 				A717BF3D17624CA2004791BF /* KPPageControl.m */,
-				A7A2AC28175D0D5800329FD5 /* AlarmView.h */,
-				A7A2AC29175D0D5900329FD5 /* AlarmView.m */,
 				A7A2AC27175CF45B00329FD5 /* NotesView */,
 				A7E8FB0117462F3600CC2D26 /* KPSegmentedControl */,
 				A7E8FB0417462F3600CC2D26 /* KPSemiModal */,
@@ -1413,9 +1403,7 @@
 				A71CCEB11758B1E400A41265 /* HPTextViewInternal.m in Sources */,
 				A7BFA8B4175A861300DF5F8D /* MYIntroductionPanel.m in Sources */,
 				A7BFA8B5175A861300DF5F8D /* MYIntroductionView.m in Sources */,
-				A7A2AC23175CDB8D00329FD5 /* AlarmPopup.m in Sources */,
 				A7A2AC26175CF45600329FD5 /* NotesView.m in Sources */,
-				A7A2AC2A175D0D5900329FD5 /* AlarmView.m in Sources */,
 				A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */,
 				A717BEE5175DF5AF004791BF /* SignupViewController.m in Sources */,
 				A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */,

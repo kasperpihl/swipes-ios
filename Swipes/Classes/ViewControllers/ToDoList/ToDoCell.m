@@ -25,6 +25,7 @@
 #define INDICATOR_WIDTH 1
 
 #define LABEL_X 50
+#define TITLE_Y (TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
 
 
 #define DOT_OUTLINE_SIZE 4
@@ -60,7 +61,7 @@
         self.contentView.backgroundColor = TABLE_CELL_BACKGROUND;
         self.backgroundColor = TABLE_CELL_BACKGROUND;
         self.selectedBackgroundView.backgroundColor = TABLE_CELL_BACKGROUND;
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X,TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X,TITLE_Y, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
         titleLabel.tag = TITLE_LABEL_TAG;
         titleLabel.numberOfLines = 1;
         titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
@@ -118,6 +119,11 @@
     }
     return self;
 }
+-(void)setTextLabels:(BOOL)showBottomLine{
+    CGFloat titleY = showBottomLine ? TITLE_Y : ((self.frame.size.height - self.titleLabel.frame.size.height)/2);
+    CGRectSetY(self.titleLabel,titleY);
+    self.tagsLabel.hidden = !showBottomLine;
+}
 -(void)hideContent:(BOOL)hide animated:(BOOL)animated{
     voidBlock block = ^(void) {
         if(hide){
@@ -142,25 +148,21 @@
 }
 -(void)showTimeline:(BOOL)show{
     self.timelineView.hidden = !show;
-    /*UIColor *currentColor = self.isSelected ? TABLE_CELL_BACKGROUND : CELL_TIMELINE_COLOR;
-    self.outlineView.backgroundColor = show ? currentColor : CLEAR;*/
 }
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags{
+    BOOL showBottomLine = YES;
     self.titleLabel.text = toDo.title;
     NSString *tagString = [toDo stringifyTags];
     if(selectedTags && selectedTags.count > 0 && [self.tagsLabel respondsToSelector:@selector(setAttributedText:)] && tagString && tagString.length > 0){
         [self.tagsLabel setAttributedText:[toDo stringForSelectedTags:selectedTags]];
     }else{
-        
-        if(!tagString || tagString.length == 0) tagString = @"No Tags";
+        if (!tagString || tagString.length == 0){
+            showBottomLine = NO;
+            tagString = @"";
+        }
         self.tagsLabel.font = TAGS_LABEL_FONT;
         self.tagsLabel.text = tagString;
     }
-    [self setIconsForToDo:toDo];
-    [self.tagsLabel setNeedsDisplay];
-    
-}
--(void)setIconsForToDo:(KPToDo*)toDo{
     CGFloat deltaX = LABEL_X;
     self.alarmLabel.hidden = YES;
     if(toDo.schedule && [toDo.schedule isInFuture]){
@@ -175,29 +177,22 @@
         self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, deltaX, self.tagsLabel.center.y-(self.alarmLabel.frame.size.height/2)-ALARM_HACK);
         deltaX += self.alarmLabel.frame.size.width + ICON_SPACING;
         self.alarmLabel.hidden = NO;
+        showBottomLine = YES;
     }
     CGRectSetX(self.tagsLabel,deltaX);
+    [self setTextLabels:showBottomLine];
+    
+}
+-(void)setIconsForToDo:(KPToDo*)toDo{
+    
 }
 -(void)setDotColor:(UIColor *)color{
     self.dotView.backgroundColor = color;
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    /*self.overlayView.hidden = !selected;
-    self.overlayView2.hidden = !selected;
-    if(selected){
-        CGRectSetX(self.titleLabel.frame, 32);
-        CGRectSetX(self.tagsLabel.frame, 32);
-    }
-    else{
-        CGRectSetX(self.titleLabel.frame, LABEL_X);
-        CGRectSetX(self.tagsLabel.frame, LABEL_X);
-    }
-    //self.seperatorLine.hidden = selected;*/
-    //self.seperatorLine.hidden = selected;
     [super setSelected:selected animated:animated];
     UIColor *backgroundColor = selected ? TABLE_CELL_SELECTED_BACKGROUND : TABLE_CELL_BACKGROUND;
     UIColor *timelineColor = selected ? TABLE_CELL_BACKGROUND : CELL_TIMELINE_COLOR;
-    //self.outlineView.backgroundColor = timelineColor;
     self.timelineView.backgroundColor = timelineColor;
     self.contentView.backgroundColor = backgroundColor;
 }

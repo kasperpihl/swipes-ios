@@ -44,6 +44,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
 @property(nonatomic, strong) UIColor *fourthColor;
 @property(nonatomic, assign) MCSwipeTableViewCellActivatedDirection activatedDirection;
 @property(nonatomic, assign) MCSwipeTableViewCellMode mode;
+-(void)switchToState:(MCSwipeTableViewCellState)state;
 - (void)publicHandlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation;
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier

@@ -145,8 +145,7 @@ static RootViewController *sharedObject;
     [self setupAppearance];
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
-    
-    //[PFUser logOut];
+#warning Reverse the exclamation mark
     if(![PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
     else [self changeToMenu:KPMenuHome animated:NO];
     
