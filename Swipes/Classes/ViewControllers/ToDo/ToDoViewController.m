@@ -46,6 +46,7 @@
 
 
 #import "UIViewController+KNSemiModal.h"
+#import "ToDoListViewController.h"
 #import "KPAddTagPanel.h"
 #import "KPSegmentedViewController.h"
 #import "TagHandler.h"
@@ -309,7 +310,14 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self layout];
     [self.segmentedViewController updateBackground];
 }
-
+-(void)tagList:(KPTagList *)tagList deletedTag:(NSString *)tag{
+    [[self.segmentedViewController currentViewController].itemHandler deselectTag:tag];
+    [TAGHANDLER deleteTag:tag];
+    [[self.segmentedViewController currentViewController] didUpdateItemHandler:nil];
+    [self updateTags];
+    [self layout];
+    [self.segmentedViewController updateBackground];
+}
 #pragma mark HPGrowingTextViewDelegate
 - (void)growingTextViewDidChange:(HPGrowingTextView *)growingTextView{
     if(growingTextView.text.length > 255) growingTextView.text = [growingTextView.text substringToIndex:254];

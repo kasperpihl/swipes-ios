@@ -8,6 +8,7 @@
 
 #define SIDE_MENU_WIDTH 250
 #import <UIKit/UIKit.h>
+#import "KPSegmentedViewController.h"
 typedef enum {
     KPMenuLogin = 1,
     KPMenuHome
@@ -20,4 +21,5 @@ typedef enum {
 @interface RootViewController : UINavigationController
 +(RootViewController*)sharedInstance;
 -(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated;
+@property (nonatomic,strong) KPSegmentedViewController *menuViewController;
 @end

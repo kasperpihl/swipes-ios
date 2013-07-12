@@ -15,6 +15,8 @@
 @interface NSDate (Utilities)
 
 // Relative dates from the current date
++ (NSDate *) dateThisOrTheNextDayWithHours: (NSInteger) hours minutes: (NSInteger) minutes;
++ (NSDate *) dateThisOrNextWeekWithDay: (NSInteger) day hours: (NSInteger) hours minutes: (NSInteger) minutes;
 + (NSDate *) dateTomorrow;
 + (NSDate *) dateYesterday;
 + (NSDate *) dateWithDaysFromNow: (NSInteger) days;
@@ -58,6 +60,9 @@
 - (NSDate *) dateBySubtractingMinutes: (NSInteger) dMinutes;
 - (NSDate *) dateAtStartOfDay;
 
+// Rounding dates
+- (NSDate *)dateToNearest15Minutes;
+
 // Retrieving intervals
 - (NSInteger) minutesAfterDate: (NSDate *) aDate;
 - (NSInteger) minutesBeforeDate: (NSDate *) aDate;
@@ -66,6 +71,7 @@
 - (NSInteger) daysAfterDate: (NSDate *) aDate;
 - (NSInteger) daysBeforeDate: (NSDate *) aDate;
 - (NSInteger)distanceInDaysToDate:(NSDate *)anotherDate;
+
 
 // Decomposing dates
 @property (readonly) NSInteger nearestHour;

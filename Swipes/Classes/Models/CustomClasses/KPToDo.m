@@ -22,12 +22,10 @@
     }
     return CellTypeNone;
 }
--(void)updateAlarm:(NSDate*)alarm force:(BOOL)force save:(BOOL)save{
-    if([self.alarm isEqualToDate:alarm] && !force) return;
-    self.alarm = alarm;
+-(void)updateNotificationForDate:(NSDate*)date{
     NSString *identifier = [[self.objectID URIRepresentation] absoluteString];
-    [NOTIHANDLER updateAlarm:self.alarm identifier:identifier title:self.title];
-    if(save) [self save];
+    NSString *title = self.title;
+    [NOTIHANDLER scheduleDate:date identifier:identifier title:title];
 }
 -(void)updateNotes:(NSString *)notes save:(BOOL)save{
     self.notes = notes;
@@ -51,7 +49,7 @@
     BOOL shouldFormat = NO;
     if(numberOfDaysAfterTodays == 0){
         dateString = @"Today";
-        if([time isLaterThanDate:[NSDate date]]) dateString = @"Later Today";
+        if([time isLaterThanDate:[NSDate date]]) dateString = @"Today";
     }
     else if(numberOfDaysAfterTodays == -1) dateString = @"Tomorrow";
     else if(numberOfDaysAfterTodays == 1) dateString = @"Yesterday";
@@ -75,12 +73,13 @@
     NSString *title;
     CellType cellType = [self cellTypeForTodo];
     
-    if(cellType == CellTypeToday) title = @"Later Today";
+    if(cellType == CellTypeToday) title = @"Tasks";
     else if(cellType == CellTypeSchedule){
         NSDate *toDoDate = self.schedule;
         if(!toDoDate) title = @"Unspecified";
         else{
             title = [self readableTime:toDoDate showTime:NO];
+            if([title isEqualToString:@"Today"]) title = @"Later Today";
             //title = [NSString stringWithFormat:@"Schedule %@",dateString];
         }
     }
@@ -156,11 +155,8 @@
     return attributedText;
     
 }
--(void)clearAlarm{
-    [self updateAlarm:nil force:YES save:NO];
-}
 -(void)deleteToDoSave:(BOOL)save{
-    if(self.alarm) [self clearAlarm];
+    [self updateNotificationForDate:nil];
     [self MR_deleteEntity];
     if(save) [self save];
 }
@@ -173,11 +169,13 @@
     return self.readableTags;*/
 }
 -(void)complete{
-    if(self.alarm) [self clearAlarm];
+    [self updateNotificationForDate:nil];
+    self.schedule = nil;
     self.state = @"done";
     self.completionDate = [NSDate date];
 }
 -(void)scheduleForDate:(NSDate*)date{
+    [self updateNotificationForDate:date];
     self.schedule = date;
     self.state = @"scheduled";
 }

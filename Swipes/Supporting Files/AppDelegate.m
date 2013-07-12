@@ -26,6 +26,8 @@
     parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
     mixpanelToken = @"376b7b4c4c42cbdf5294ade7d15db3c4";
 #else
+    //parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
+    //parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
     parseApplicationKey = @"0qD3LLZIOwLOPRwbwLia9GJXTEUnEsSlBCufqDvr";
     parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
     mixpanelToken = @"c2d2126bfce5e54436fa131cfe6085ad";
@@ -45,6 +47,8 @@
     [Appirater appLaunched:YES];
     /*MSNavigationPaneViewController *paneViewController = (MSNavigationPaneViewController *)self.window.rootViewController;
     ROOT_CONTROLLER.paneNavigationViewController = paneViewController;*/
+    UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (notification) [self application:application didReceiveLocalNotification:notification];
     return YES;
 }
 - (void)application:(UIApplication *)application
@@ -56,9 +60,11 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     [currentInstallation saveInBackground];
     
 }
-- (void)application:(UIApplication *)application
-didReceiveRemoteNotification:(NSDictionary *)userInfo {
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [PFPush handlePush:userInfo];
+}
+-(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
+    [ROOT_CONTROLLER.menuViewController receivedLocalNotification:notification];
 }
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     return [PFFacebookUtils handleOpenURL:url];
@@ -91,13 +97,12 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [AppsFlyer notifyAppID:@"657882159;TwJuYgpTKp9ENbxf6wMi8j"];
     NSString *isLoggedIn = ([PFUser currentUser]) ? @"yes" : @"no";
     if(isLoggedIn) [ANALYTICS startSession];
-    [MIXPANEL track:@"Opened app" properties:@{@"Is logged in":isLoggedIn}];
+    else [MIXPANEL track:@"Opened app" properties:@{@"Is logged in":isLoggedIn}];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 

@@ -10,7 +10,6 @@
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags;
 -(void)updateTagSet:(NSSet*)tagsSet withTags:(NSArray*)tags remove:(BOOL)remove;
 -(NSString*)readableTitleForStatus;
--(void)updateAlarm:(NSDate*)alarm force:(BOOL)force save:(BOOL)save;
 -(void)updateNotes:(NSString *)notes save:(BOOL)save;
 -(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime;
 -(void)deleteToDoSave:(BOOL)save;

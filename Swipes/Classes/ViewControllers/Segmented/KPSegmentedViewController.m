@@ -32,7 +32,7 @@
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPPickerViewDataSource,KPAddTagDelegate,KPTagDelegate>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate>
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) NSMutableArray *titles;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
@@ -48,12 +48,8 @@
 @end
 
 @implementation KPSegmentedViewController
-#pragma mark - KPPickerView
--(NSInteger)numberOfItemsInPickerView:(KPPickerView *)pickerView{
-    return 5;
-}
--(NSString *)pickerView:(KPPickerView *)pickerView titleForItem:(NSInteger)item{
-    return @"No project";
+-(void)receivedLocalNotification:(UILocalNotification *)notification{
+    [[self currentViewController] update];
 }
 #pragma mark - KPControlViewDelegate
 #pragma mark - KPAddTagDelegate
@@ -61,6 +57,7 @@
     [self dismissSemiModalView];
 }
 -(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
+    [[self currentViewController] update];
     [self dismissSemiModalView];
 }
 -(void)tagPanel:(KPAddTagPanel *)tagPanel createdTag:(NSString *)tag{
@@ -120,7 +117,6 @@
 }
 -(void)pressedTag:(id)sender{
     [self show:NO controlsAnimated:YES];
-    
     KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, 450) andTags:[TAGHANDLER allTags] andMaxHeight:320];
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;

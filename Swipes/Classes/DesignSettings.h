@@ -13,14 +13,16 @@
  
  
  */
-#define KP_LIGHT(fontSize) [UIFont fontWithName:@"ProximaNova-Light" size:fontSize]
-#define KP_BLACK(fontSize) [UIFont fontWithName:@"ProximaNova-Black" size:fontSize]
-#define KP_REGULAR(fontSize) [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize]
+#define KP_LIGHT(fontSize) [UIFont fontWithName:@"ProximaNova-Light" size:fontSize] // 18
+#define KP_BLACK(fontSize) [UIFont fontWithName:@"ProximaNova-Black" size:fontSize] // OUT
+#define KP_REGULAR(fontSize) [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize] // 13
 #define KP_BOLD(fontSize) [UIFont fontWithName:@"ProximaNova-Bold" size:fontSize]
 #define KP_SEMIBOLD(fontSize) [UIFont fontWithName:@"ProximaNova-Semibold" size:fontSize]
 #define KP_COND_BOLD(fontSize) [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:fontSize]
 #define KP_COND_SEMIBOLD(fontSize) [UIFont fontWithName:@"ProximaNovaCond-Semibold" size:fontSize]
 
+#define SCHEDULE_BUTTON_FONT            KP_SEMIBOLD(14)
+#define SCHEDULE_BUTTON_CAPITAL         NO
 
 #define MIN_SEARCH_LETTER_LENGTH 1
 
@@ -59,7 +61,7 @@
 #define TABLE_CELL_SELECTED_TITLE_COLOR TABLE_CELL_BACKGROUND
 #define CELL_ALARM_TEXT_COLOR           CELL_TITLE_COLOR
 #define CELL_ALARM_BACKGROUND           SECTION_HEADER_COLOR
-#define CELL_ALARM_FONT                 KP_LIGHT(14)
+#define CELL_ALARM_FONT                 KP_REGULAR(14)
 
 /* Edit Task view */
 #define EDIT_TASK_TITLE_FONT            KP_LIGHT(19)
@@ -100,8 +102,6 @@
 
 #define TAG_COLOR_BACKGROUND            SEGMENT_SELECTED
 
-
-
 /* Add tag panel */
 #define MANAGE_TAGS_BACKGROUND          TEXTFIELD_BACKGROUND
 #define ADD_TAG_SEPERATOR_COLOR         SWIPES_COLOR
@@ -109,11 +109,11 @@
 #define BAR_BOTTOM_BUTTON_SEPS          SEGMENT_SELECTED
 
 /* KPPopup */
-#define POPUP_OVERLAY_COLOR             gray(102,0.5)
+#define POPUP_OVERLAY_COLOR             alpha(TABLE_CELL_BACKGROUND,.6)
 
 /* SchedulePopup */
-#define POPUP_BACKGROUND SEGMENT_BACKGROUND
-
+#define POPUP_BACKGROUND                alpha(SEGMENT_BACKGROUND,.9)
+#define POPUP_SELECTED                  gray(218,1)
 
 #define DOT_SIZE 12
 
@@ -136,17 +136,7 @@
 #define TAGS_LABEL_FONT                 KP_LIGHT(13)
 
 
-#define SCHEDULE_BUTTON_FONT [UIFont fontWithName:@"Franchise-Bold" size:20]
-
-
 #define TAG_FONT KP_REGULAR(17)
-
-
-
-
-
-
-
 
 
 #define TEXT_FIELD_CONTAINER_HEIGHT 50
@@ -162,24 +152,6 @@
 
 #define SEGMENT_BUTTON_WIDTH 106
 #define SEGMENT_BUTTON_HEIGHT 44
-
-
-
-
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #define ALERT_BOX_BACKGROUND            gray(37,1)
 

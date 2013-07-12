@@ -11,8 +11,10 @@
 #import <QuartzCore/QuartzCore.h>
 #import "SignupViewController.h"
 #import "MYIntroductionView.h"
+#import "KPAlert.h"
 
 #define SIGNUP_INDICATOR_TAG 15530
+#define PRIVACY_BUTTON_TAG 16630
 
 #define LOGIN_FIELDS_CORNER_RADIUS 5
 #define LOGIN_FIELDS_WIDTH FIELDS_WIDTH
@@ -29,6 +31,7 @@
 @interface LoginViewController () < PFSignUpViewControllerDelegate,MYIntroductionDelegate>
 @property (nonatomic,strong) IBOutlet UIView *fieldsBackground;
 @property (nonatomic,weak) IBOutlet UIActivityIndicatorView *signupIndicator;
+@property (nonatomic,weak) IBOutlet UIButton *privacyPolicyButton;
 @end
 
 @implementation LoginViewController
@@ -40,6 +43,7 @@
         self.signUpController = signupVC;
         self.fields = (PFLogInFieldsUsernameAndPassword | PFLogInFieldsFacebook | PFLogInFieldsLogInButton | PFLogInFieldsSignUpButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsDismissButton);
         self.facebookPermissions = @[@"email"];
+        self.logInView.externalLogInLabel.text = @"You can also sign up with facebook";
         [self.logInView.dismissButton setImage:[UIImage imageNamed:@"cross_button"] forState:UIControlStateNormal];
         [self.logInView.dismissButton setImage:nil forState:UIControlStateHighlighted];
         self.logInView.dismissButton.adjustsImageWhenHighlighted = true;
@@ -99,12 +103,23 @@
         [self.logInView.signUpButton setTitle:@"SIGN UP" forState:UIControlStateNormal];
         
         
+        
         [self.logInView.passwordForgottenButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal];
         [self.logInView.passwordForgottenButton setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
         [self.logInView.passwordForgottenButton setTitle:@"forgot password?" forState:UIControlStateNormal];
         self.logInView.passwordForgottenButton.titleLabel.font = LOGIN_FIELDS_FONT;
         [self.logInView.passwordForgottenButton setTitleColor:LOGIN_FIELDS_BACKGROUND forState:UIControlStateNormal];
         CGRectSetWidth(self.logInView.passwordForgottenButton, [@"forgot password?" sizeWithFont:LOGIN_FIELDS_FONT].width+20);
+        
+        UIButton *privacyPolicyButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        privacyPolicyButton.frame = CGRectMake(0, 0, [@"Privacy policy" sizeWithFont:LOGIN_FIELDS_FONT].width+20, self.logInView.passwordForgottenButton.frame.size.height);
+        privacyPolicyButton.titleLabel.font = LOGIN_FIELDS_FONT;
+        [privacyPolicyButton setTitleColor:LOGIN_FIELDS_BACKGROUND forState:UIControlStateNormal];
+        [privacyPolicyButton setTitle:@"Privacy policy" forState:UIControlStateNormal];
+        [privacyPolicyButton addTarget:self action:@selector(pressedPrivacy:) forControlEvents:UIControlEventTouchUpInside];
+        self.privacyPolicyButton = privacyPolicyButton;
+        [self.logInView addSubview:privacyPolicyButton];
+        
         [self.logInView.signUpButton removeTarget:nil
                            action:NULL
                  forControlEvents:UIControlEventAllEvents];
@@ -118,6 +133,13 @@
 }
 -(void)pressedSignUp:(UIButton*)sender{
     [self switchToSignup:YES animated:YES];
+}
+-(void)pressedPrivacy:(UIButton*)sender{
+    [UTILITY confirmBoxWithTitle:@"Privacy policy" andMessage:@"Do you want to open our privacy policy?" block:^(BOOL succeeded, NSError *error) {
+        if(succeeded){
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"http://swipesapp.com/privacypolicy.pdf"]];
+        }
+    }];
 }
 -(void)switchToSignup:(BOOL)signup animated:(BOOL)animated{
     voidBlock block;
@@ -176,10 +198,10 @@
 }
 -(void)walkthrough{
     //STEP 1 Construct Panels
-    MYIntroductionPanel *panel = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough1"] title:@"MENU" description:@"Welcome to your powerful Menu bar! Here everything has its place. Plan and focus on your tasks today, complete them or schedule them for later."];
+    MYIntroductionPanel *panel = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough1"] title:@"MENU" description:@"Welcome to your powerful Menu! Here everything has its place. Plan and focus on your tasks now, complete them or snooze them for later."];
     
     //You may also add in a title for each panel
-    MYIntroductionPanel *panel2 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough2"] title:@"SCHEDULE" description:@"This is your favorite schedule! Simply swipe your tasks to the left and set them up for later. You will get reminded, when the time’s right."];
+    MYIntroductionPanel *panel2 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough2"] title:@"SCHEDULE" description:@"This is your favorite schedule! Simply swipe your tasks to the left and snooze them for later. You will get reminded, when the time’s right."];
     
     MYIntroductionPanel *panel3 = [[MYIntroductionPanel alloc] initWithimage:[UIImage imageNamed:@"walkthrough3"] title:@"GET STARTED" description:@"Start swiping now. Plan your day and enjoy a productive flow!"];
     
@@ -268,6 +290,7 @@
 
 // Sent to the delegate when the sign up attempt fails.
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didFailToSignUpWithError:(NSError *)error {
+    NSLog(@"error:%@",error);
     [self.signUpController.signUpView.usernameField becomeFirstResponder];
     [self showIndicator:NO];
 }
@@ -294,6 +317,10 @@
     UIButton *forPassBtn = self.logInView.passwordForgottenButton;
     CGRectSetHeight(forPassBtn, 38);
     forPassBtn.frame = CGRectSetPos(forPassBtn.frame, self.logInView.frame.size.width-forPassBtn.frame.size.width, self.logInView.frame.size.height-forPassBtn.frame.size.height);
+    
+    UIButton *privacyBtn = self.privacyPolicyButton;
+    CGRectSetHeight(privacyBtn, 38);
+    privacyBtn.frame = CGRectSetPos(privacyBtn.frame, 0, self.logInView.frame.size.height-privacyBtn.frame.size.height);
 }
 -(void)setupButton:(UIButton*)button{
     [button setBackgroundImage:nil forState:UIControlStateHighlighted];

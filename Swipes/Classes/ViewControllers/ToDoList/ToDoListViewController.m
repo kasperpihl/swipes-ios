@@ -42,6 +42,8 @@
 @property (nonatomic,weak) IBOutlet UIView *coloredMenuText;
 @property (nonatomic,weak) UIView *fakeHeaderView;
 @property (nonatomic) BOOL isColored;
+@property (nonatomic) BOOL isHandlingTrigger;
+@property (nonatomic) BOOL isLonelyRider;
 
 @property (nonatomic,strong) NSMutableDictionary *stateDictionary;
 @end
@@ -99,16 +101,20 @@
 #pragma mark - KPSearchBarDelegate
 -(void)searchBar:(KPSearchBar *)searchBar searchedForString:(NSString *)searchString{
     [self.itemHandler searchForString:searchString];
+    [self deselectAllRows:self];
 }
 -(void)searchBar:(KPSearchBar *)searchBar deselectedTag:(NSString *)tag{
     [self.itemHandler deselectTag:tag];
+    [self deselectAllRows:self];
 }
 -(void)searchBar:(KPSearchBar *)searchBar selectedTag:(NSString *)tag{
     [self.itemHandler selectTag:tag];
+    [self deselectAllRows:self];
 }
 -(void)clearedAllFiltersForSearchBar:(KPSearchBar *)searchBar{
     self.searchBar.currentMode = KPSearchBarModeNone;
     [self.itemHandler clearAll];
+    [self deselectAllRows:self];
 }
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -246,7 +252,6 @@
     //if(self.tableView.frame.size.height - 150 >= self.tableView.contentSize.height) return;
     CGPoint currentOffset = self.tableView.contentOffset;
     NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
-    
     NSTimeInterval timeDiff = currentTime - self.lastOffsetCapture;
     if(timeDiff > 0.1) {
         CGFloat distance = currentOffset.y - self.lastOffset.y;
@@ -259,13 +264,11 @@
         else if(scrollSpeedNotAbs < -0.5 /* && (currentOffset.y+self.tableView.frame.size.height) < self.tableView.contentSize.height*/){
             if((self.tableView.frame.size.height > self.tableView.contentSize.height && currentOffset.y < 0) || (currentOffset.y+self.tableView.frame.size.height) < self.tableView.contentSize.height+CONTENT_INSET_BOTTOM) [[self parent] show:YES controlsAnimated:YES];
         }
-        
         self.lastOffset = currentOffset;
         self.lastOffsetCapture = currentTime;
     }
     if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
         self.fakeHeaderView.hidden = !(scrollView.contentOffset.y > self.tableView.tableHeaderView.frame.size.height);
-         
         if (scrollView.contentOffset.y < self.searchBar.frame.size.height) {
            
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, COLOR_SEPERATOR_HEIGHT, 0);
@@ -286,19 +289,26 @@
 #pragma mark - SwipeTableCell
 -(void)swipeTableViewCell:(ToDoCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
     [[self parent] show:NO controlsAnimated:YES];
-    [cell showTimeline:NO];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
-    if(indexPath && ![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
+    [cell showTimeline:NO];
     if(self.selectedRows.count > 0){
+        if(indexPath && ![self.selectedRows containsObject:indexPath]){
+            [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+            [self.selectedRows addObject:indexPath];
+        }
+        
         NSArray *visibleCells = [self.tableView visibleCells];
         for(ToDoCell *localCell in visibleCells){
             if(localCell.isSelected){
-                
-                [localCell setSelected:NO];
+                //[localCell setSelected:NO];
                 [localCell showTimeline:NO];
             }
         }
+    }
+    else{
+        self.isLonelyRider = YES;
+        [self.selectedRows addObject:indexPath];
     }
 }
 -(BOOL)swipeTableViewCell:(MCSwipeTableViewCell *)cell shouldHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture{
@@ -317,6 +327,8 @@
 }
 -(void)swipeTableViewCell:(ToDoCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
     if(cell != self.swipingCell) return;
+    if(self.isHandlingTrigger) return;
+    self.isHandlingTrigger = YES;
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     NSMutableArray *toDosArray = [NSMutableArray array];
     for(NSIndexPath *indexPath in self.selectedRows){
@@ -332,10 +344,11 @@
                     [self returnSelectedRowsAndBounce:YES];
                 }
                 else{
-                    if([date isToday]) targetCellType = CellTypeToday;
+                    if([date isEarlierThanDate:[NSDate date]]) targetCellType = CellTypeToday;
                     [TODOHANDLER scheduleToDos:toDosArray forDate:date];
                     [self moveIndexSet:indexSet toCellType:targetCellType];
                 }
+                self.isHandlingTrigger = NO;
             }];
             return;
         }
@@ -347,16 +360,17 @@
             break;
         case CellTypeNone:
             [self returnSelectedRowsAndBounce:NO];
+            self.isHandlingTrigger = NO;
             return;
     }
     [self moveIndexSet:indexSet toCellType:targetCellType];
+    self.isHandlingTrigger = NO;
 }
 -(void)swipeTableViewCell:(ToDoCell *)cell slidedIntoState:(MCSwipeTableViewCellState)state{
     CellType targetType = self.cellType;
     if(state != MCSwipeTableViewCellStateNone){
         targetType = [TODOHANDLER cellTypeForCell:self.cellType state:state];
     }
-    
     UIColor *dotColor = [TODOHANDLER colorForCellType:targetType];
     [cell setDotColor:dotColor];
 }
@@ -416,6 +430,7 @@
 -(void)cleanUpAfterMovingAnimated:(BOOL)animated{
     
     [self.selectedRows removeAllObjects];
+    self.isLonelyRider = NO;
     [self cleanShowingViewAnimated:animated];
     self.swipingCell = nil;
     [self didUpdateCells];
@@ -434,20 +449,18 @@
 }
 -(void)returnSelectedRowsAndBounce:(BOOL)bounce{
     NSArray *visibleCells = [self.tableView visibleCells];
-    NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
-    BOOL shouldBeSelected = (selectedIndexPaths.count > 0);
     for(ToDoCell *localCell in visibleCells){
-        
         NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
         if([self.selectedRows containsObject:indexPath]){
             [localCell showTimeline:YES];
             [localCell setDotColor:[TODOHANDLER colorForCellType:self.cellType]];
             if(bounce) [localCell bounceToOrigin];
-            if(shouldBeSelected)[localCell setSelected:YES];
-            if(![selectedIndexPaths containsObject:indexPath] && shouldBeSelected) [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
         }
     }
-    if(!shouldBeSelected) [self.selectedRows removeAllObjects];
+    if(self.isLonelyRider){
+        [self.selectedRows removeAllObjects];
+        self.isLonelyRider = NO;
+    }
     self.swipingCell = nil;
     [[self parent] show:YES controlsAnimated:YES];
 }
@@ -482,8 +495,6 @@
     doubleTap.numberOfTapsRequired = 2;
     doubleTap.numberOfTouchesRequired = 1;
     [tableView addGestureRecognizer:doubleTap];
-    
-    
 }
 #pragma mark - UIViewController stuff
 -(void)changeToColored:(BOOL)colored{
@@ -545,7 +556,7 @@
             text = @"Later";
             break;
         default:
-            text = @"Now";
+            text = @"Tasks";
             break;
     }
     menuText.text = text;

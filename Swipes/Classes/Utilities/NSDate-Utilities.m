@@ -16,7 +16,36 @@
 #define CURRENT_CALENDAR [NSCalendar currentCalendar]
 
 @implementation NSDate (Utilities)
-
++(NSDate *)dateThisOrTheNextDayWithHours:(NSInteger)hours minutes:(NSInteger)minutes{
+    NSDate *today = [NSDate date];
+    NSDate *returnDate = [[[today dateAtStartOfDay] dateByAddingHours:hours] dateByAddingMinutes:minutes];
+    if([returnDate isInPast]){
+        returnDate = [returnDate dateByAddingDays:1];
+    }
+    return returnDate;
+}
++ (NSDate *) dateThisOrNextWeekWithDay:(NSInteger)day hours:(NSInteger)hours minutes:(NSInteger)minutes{
+    NSDate *today = [NSDate date];
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    [gregorian setLocale:[NSLocale currentLocale]];
+    
+    NSDateComponents *nowComponents = [gregorian components:NSYearCalendarUnit | NSWeekCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:today];
+    
+    [nowComponents setWeekday:day]; //Monday
+    [nowComponents setHour:hours]; //8a.m.
+    [nowComponents setMinute:minutes];
+    [nowComponents setSecond:0];
+    
+    NSDate *beginningOfWeek = [gregorian dateFromComponents:nowComponents];
+    
+    
+    if([beginningOfWeek isInPast]){
+        [nowComponents setWeek: [nowComponents week] + 1];
+        beginningOfWeek = [gregorian dateFromComponents:nowComponents];
+    }
+    return beginningOfWeek;
+    
+}
 #pragma mark Relative Dates
 
 + (NSDate *) dateWithDaysFromNow: (NSInteger) days
@@ -196,8 +225,6 @@
 {
     return ([self isEarlierThanDate:[NSDate date]]);
 }
-
-
 #pragma mark Roles
 - (BOOL) isTypicallyWeekend
 {
@@ -214,7 +241,6 @@
 }
 
 #pragma mark Adjusting Dates
-
 - (NSDate *) dateByAddingDays: (NSInteger) dDays
 {
 	NSTimeInterval aTimeInterval = [self timeIntervalSinceReferenceDate] + D_DAY * dDays;
@@ -266,6 +292,22 @@
 	return dTime;
 }
 
+
+#pragma mark Rounding times
+- (NSDate *)dateToNearest15Minutes {
+    // Set up flags.
+    unsigned unitFlags = NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit;
+    // Extract components.
+    NSDateComponents *comps = [[NSCalendar currentCalendar] components:unitFlags fromDate:self];
+    // Set the minute to the nearest 15 minutes.
+    [comps setMinute:((([comps minute] - 8 ) / 15 ) * 15 ) + 15];
+    // Zero out the seconds.
+    [comps setSecond:0];
+    // Construct a new date.
+    return [[NSCalendar currentCalendar] dateFromComponents:comps];
+}
+
+
 #pragma mark Retrieving Intervals
 
 - (NSInteger) minutesAfterDate: (NSDate *) aDate
@@ -312,6 +354,7 @@
     NSDateComponents *components = [gregorianCalendar components:NSDayCalendarUnit fromDate:self toDate:anotherDate options:0];
     return components.day;
 }
+
 
 #pragma mark Decomposing Dates
 

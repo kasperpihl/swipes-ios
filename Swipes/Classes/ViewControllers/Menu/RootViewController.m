@@ -10,7 +10,7 @@
 #import "RootViewController.h"
 #import <Parse/Parse.h>
 #import "FacebookCommunicator.h"
-#import "KPSegmentedViewController.h"
+
 #import "ToDoListViewController.h"
 #import "ScheduleViewController.h"
 #import "TodayViewController.h"
@@ -24,7 +24,6 @@
 #import "AnalyticsHandler.h"
 
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate>
-@property (nonatomic,strong) KPSegmentedViewController *menuViewController;
 
 @end
 
@@ -145,7 +144,8 @@ static RootViewController *sharedObject;
     [self setupAppearance];
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
-#warning Reverse the exclamation mark
+    //[PFUser logOut];
+//#warning Reverse the exclamation mark
     if(![PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
     else [self changeToMenu:KPMenuHome animated:NO];
     

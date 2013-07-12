@@ -139,7 +139,6 @@
             NSInteger draggedCellOriginalPosition = self.draggingIndexPath.row;
             
             NSInteger renderedRow = indexPath.row;
-           NSLog(@"cellP: %i orgP: %i rendR: %i",draggedCellPosition, draggedCellOriginalPosition,renderedRow);
             //if(positionRow == thisRow) row = self.draggingIndexPath.row;
             if(renderedRow >= draggedCellOriginalPosition && draggedCellPosition > renderedRow){
                 row = renderedRow+1;
@@ -153,7 +152,7 @@
 }
 -(NSString *)titleForSection:(NSInteger)section{
     if(self.isSorted) return [self.titleArray objectAtIndex:section];
-    else return @"Now";
+    else return @"Tasks";
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     if(self.isSorted) return [self.sortedItems count];
@@ -187,8 +186,11 @@
     NSMutableArray *filteredItems = [NSMutableArray array];
     BOOL hasSelectedTags = (self.selectedTags.count > 0);
     BOOL hasSearchString = (self.searchString.length >= MIN_SEARCH_LETTER_LENGTH);
+    
+    NSInteger counter = 0;
     if(hasSelectedTags){
         self.hasFilter = YES;
+        NSMutableSet *matchingTags = [NSMutableSet set];
         for(KPToDo *toDo in self.items){
             BOOL didIt = YES;
             for(NSString *tag in self.selectedTags){
@@ -197,13 +199,24 @@
                 }
             }
             if(didIt){
+                if(toDo.textTags && toDo.textTags.count > 0){
+                    if(counter > 0) {
+                        NSSet *iteratingSet = [matchingTags copy];
+                        for(NSString *textTag in iteratingSet){
+                            if(![toDo.textTags containsObject:textTag] && [matchingTags containsObject:textTag]) [matchingTags removeObject:textTag];
+                        }
+                    }
+                    else [matchingTags addObjectsFromArray:toDo.textTags];
+                }
                 [remainingTags addObjectsFromArray:toDo.textTags];
                 [filteredItems addObject:toDo];
+                counter++;
             }
         }
         for(NSString *tag in self.selectedTags){
             [remainingTags removeObject:tag];
         }
+        for(NSString *textTag in matchingTags) [remainingTags removeObject:textTag];
         self.remainingTags = [[remainingTags allObjects] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     }
     else if(hasSearchString){

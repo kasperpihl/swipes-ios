@@ -85,9 +85,8 @@ static UtilityClass *sharedObject;
     return [UIImage imageWithCGImage:flippingImage.CGImage
                                scale:[UIScreen mainScreen].scale orientation:orientation];
 }
-+(UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color{
-    UIImage *img = [UIImage imageNamed:name];
-    
++(UIImage *)image:(UIImage *)image withColor:(UIColor *)color{
+    UIImage *img = image;
     // begin a new image context, to draw our colored image onto
     UIGraphicsBeginImageContextWithOptions(img.size, NO, [UIScreen mainScreen].scale);
     
@@ -117,6 +116,10 @@ static UtilityClass *sharedObject;
     
     //return the color-burned image
     return coloredImg;
+}
++(UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color{
+    UIImage *img = [UIImage imageNamed:name];
+    return [UtilityClass image:img withColor:color];
 }
 + (UIColor *)lighterColor:(UIColor*)c
 {

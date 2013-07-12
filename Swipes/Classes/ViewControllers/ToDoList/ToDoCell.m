@@ -105,7 +105,6 @@
         self.dotView = [self.contentView viewWithTag:DOT_VIEW_TAG];
         self.outlineView = [self.contentView viewWithTag:OUTLINE_TAG];
         
-
         UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
         alarmLabel.tag = ALARM_LABEL_TAG;
         alarmLabel.font = CELL_ALARM_FONT;
@@ -120,7 +119,7 @@
     return self;
 }
 -(void)setTextLabels:(BOOL)showBottomLine{
-    CGFloat titleY = showBottomLine ? TITLE_Y : ((self.frame.size.height - self.titleLabel.frame.size.height)/2);
+    CGFloat titleY = showBottomLine ? TITLE_Y : ((CELL_HEIGHT - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
     self.tagsLabel.hidden = !showBottomLine;
 }
@@ -181,7 +180,6 @@
     }
     CGRectSetX(self.tagsLabel,deltaX);
     [self setTextLabels:showBottomLine];
-    
 }
 -(void)setIconsForToDo:(KPToDo*)toDo{
     
