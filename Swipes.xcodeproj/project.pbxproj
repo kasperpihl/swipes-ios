@@ -192,6 +192,12 @@
 		A7BFA8C4175A8BAB00DF5F8D /* walkthrough_bottom_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BFA8BC175A8BAB00DF5F8D /* walkthrough_bottom_background@2x.png */; };
 		A7BFA8C5175A8BAB00DF5F8D /* walkthrough_top_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BFA8BD175A8BAB00DF5F8D /* walkthrough_top_background.png */; };
 		A7BFA8C6175A8BAB00DF5F8D /* walkthrough_top_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BFA8BE175A8BAB00DF5F8D /* walkthrough_top_background@2x.png */; };
+		A7DEA17F1790A5EA00EB1549 /* AccelerationAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA1731790A5EA00EB1549 /* AccelerationAnimation.m */; };
+		A7DEA1801790A5EA00EB1549 /* backbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A7DEA1741790A5EA00EB1549 /* backbutton.png */; };
+		A7DEA1811790A5EA00EB1549 /* Evaluate.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA1761790A5EA00EB1549 /* Evaluate.m */; };
+		A7DEA1831790A5EA00EB1549 /* REBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA17A1790A5EA00EB1549 /* REBackgroundView.m */; };
+		A7DEA1841790A5EA00EB1549 /* RESideMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA17C1790A5EA00EB1549 /* RESideMenu.m */; };
+		A7DEA1851790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA17E1790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.m */; };
 		A7E8FB0917462F3600CC2D26 /* AKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */; };
 		A7E8FB0A17462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0617462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m */; };
 		A7E8FB0B17462F3600CC2D26 /* UIViewController+KNSemiModal.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0817462F3600CC2D26 /* UIViewController+KNSemiModal.m */; };
@@ -427,6 +433,17 @@
 		A7BFA8BC175A8BAB00DF5F8D /* walkthrough_bottom_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "walkthrough_bottom_background@2x.png"; sourceTree = "<group>"; };
 		A7BFA8BD175A8BAB00DF5F8D /* walkthrough_top_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthrough_top_background.png; sourceTree = "<group>"; };
 		A7BFA8BE175A8BAB00DF5F8D /* walkthrough_top_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "walkthrough_top_background@2x.png"; sourceTree = "<group>"; };
+		A7DEA1721790A5EA00EB1549 /* AccelerationAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerationAnimation.h; sourceTree = "<group>"; };
+		A7DEA1731790A5EA00EB1549 /* AccelerationAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerationAnimation.m; sourceTree = "<group>"; };
+		A7DEA1741790A5EA00EB1549 /* backbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backbutton.png; sourceTree = "<group>"; };
+		A7DEA1751790A5EA00EB1549 /* Evaluate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Evaluate.h; sourceTree = "<group>"; };
+		A7DEA1761790A5EA00EB1549 /* Evaluate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Evaluate.m; sourceTree = "<group>"; };
+		A7DEA1791790A5EA00EB1549 /* REBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REBackgroundView.h; sourceTree = "<group>"; };
+		A7DEA17A1790A5EA00EB1549 /* REBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REBackgroundView.m; sourceTree = "<group>"; };
+		A7DEA17B1790A5EA00EB1549 /* RESideMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RESideMenu.h; sourceTree = "<group>"; };
+		A7DEA17C1790A5EA00EB1549 /* RESideMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RESideMenu.m; sourceTree = "<group>"; };
+		A7DEA17D1790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+RESideMenuExtensions.h"; sourceTree = "<group>"; };
+		A7DEA17E1790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+RESideMenuExtensions.m"; sourceTree = "<group>"; };
 		A7E8FB001746276900CC2D26 /* DesignSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DesignSettings.h; sourceTree = "<group>"; };
 		A7E8FB0217462F3600CC2D26 /* AKSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKSegmentedControl.h; sourceTree = "<group>"; };
 		A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKSegmentedControl.m; sourceTree = "<group>"; };
@@ -811,6 +828,7 @@
 		A781287017294C56002226C8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A7DEA1711790A5EA00EB1549 /* RESideMenu */,
 				A717BF3C17624CA2004791BF /* KPPageControl.h */,
 				A717BF3D17624CA2004791BF /* KPPageControl.m */,
 				A7A2AC27175CF45B00329FD5 /* NotesView */,
@@ -1097,6 +1115,24 @@
 			path = Walkthrough;
 			sourceTree = "<group>";
 		};
+		A7DEA1711790A5EA00EB1549 /* RESideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				A7DEA1721790A5EA00EB1549 /* AccelerationAnimation.h */,
+				A7DEA1731790A5EA00EB1549 /* AccelerationAnimation.m */,
+				A7DEA1741790A5EA00EB1549 /* backbutton.png */,
+				A7DEA1751790A5EA00EB1549 /* Evaluate.h */,
+				A7DEA1761790A5EA00EB1549 /* Evaluate.m */,
+				A7DEA1791790A5EA00EB1549 /* REBackgroundView.h */,
+				A7DEA17A1790A5EA00EB1549 /* REBackgroundView.m */,
+				A7DEA17B1790A5EA00EB1549 /* RESideMenu.h */,
+				A7DEA17C1790A5EA00EB1549 /* RESideMenu.m */,
+				A7DEA17D1790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.h */,
+				A7DEA17E1790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.m */,
+			);
+			path = RESideMenu;
+			sourceTree = "<group>";
+		};
 		A7E8FB0117462F3600CC2D26 /* KPSegmentedControl */ = {
 			isa = PBXGroup;
 			children = (
@@ -1319,6 +1355,7 @@
 				A7608925178E04C900C8735D /* schedule_image_cloud@2x.png in Resources */,
 				A7608926178E04C900C8735D /* schedule_image_glasses.png in Resources */,
 				A7608927178E04C900C8735D /* schedule_image_glasses@2x.png in Resources */,
+				A7DEA1801790A5EA00EB1549 /* backbutton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1427,6 +1464,11 @@
 				A7717C5317787BF10067325C /* QBPopupMenu.m in Sources */,
 				A7717C5417787BF10067325C /* QBPopupMenuItem.m in Sources */,
 				A7717C5517787BF10067325C /* QBPopupMenuOverlayView.m in Sources */,
+				A7DEA17F1790A5EA00EB1549 /* AccelerationAnimation.m in Sources */,
+				A7DEA1811790A5EA00EB1549 /* Evaluate.m in Sources */,
+				A7DEA1831790A5EA00EB1549 /* REBackgroundView.m in Sources */,
+				A7DEA1841790A5EA00EB1549 /* RESideMenu.m in Sources */,
+				A7DEA1851790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

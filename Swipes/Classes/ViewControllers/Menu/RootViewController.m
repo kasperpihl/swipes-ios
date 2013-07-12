@@ -22,9 +22,10 @@
 #import <Parse/PFFacebookUtils.h>
 #import "FacebookCommunicator.h"
 #import "AnalyticsHandler.h"
-
+#import "AppDelegate.h"
+#import "RESideMenu.h"
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate>
-
+@property (nonatomic,strong) RESideMenu *sideMenu;
 @end
 
 @implementation RootViewController
@@ -33,7 +34,6 @@
 -(KPSegmentedViewController *)menuViewController{
     if(!_menuViewController){
         ScheduleViewController *vc1 = [[ScheduleViewController alloc] init];
-        
         TodayViewController *vc2 = [[TodayViewController alloc] init];
         DoneViewController *vc3 = [[DoneViewController alloc] init];
         vc1.view.autoresizingMask = vc2.view.autoresizingMask = vc3.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
@@ -132,6 +132,9 @@ static RootViewController *sharedObject;
     return sharedObject;
 }
 
+-(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
+    [self.sideMenu panGestureRecognized:sender];
+}
 
 #pragma mark - Helping methods
 #pragma mark - ViewController methods
@@ -144,6 +147,11 @@ static RootViewController *sharedObject;
     [self setupAppearance];
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
+    self.sideMenu = [[RESideMenu alloc] init];
+    self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
+    [self.view addGestureRecognizer:panGestureRecognizer];
+    // Do any additional setup after loading the view.
     //[PFUser logOut];
 //#warning Reverse the exclamation mark
     if(![PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
