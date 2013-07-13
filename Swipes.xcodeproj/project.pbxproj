@@ -198,6 +198,7 @@
 		A7DEA1831790A5EA00EB1549 /* REBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA17A1790A5EA00EB1549 /* REBackgroundView.m */; };
 		A7DEA1841790A5EA00EB1549 /* RESideMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA17C1790A5EA00EB1549 /* RESideMenu.m */; };
 		A7DEA1851790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA17E1790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.m */; };
+		A7DEA1891790BD2D00EB1549 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA1881790BD2D00EB1549 /* MenuViewController.m */; };
 		A7E8FB0917462F3600CC2D26 /* AKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */; };
 		A7E8FB0A17462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0617462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m */; };
 		A7E8FB0B17462F3600CC2D26 /* UIViewController+KNSemiModal.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0817462F3600CC2D26 /* UIViewController+KNSemiModal.m */; };
@@ -444,6 +445,8 @@
 		A7DEA17C1790A5EA00EB1549 /* RESideMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RESideMenu.m; sourceTree = "<group>"; };
 		A7DEA17D1790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+RESideMenuExtensions.h"; sourceTree = "<group>"; };
 		A7DEA17E1790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+RESideMenuExtensions.m"; sourceTree = "<group>"; };
+		A7DEA1871790BD2D00EB1549 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
+		A7DEA1881790BD2D00EB1549 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		A7E8FB001746276900CC2D26 /* DesignSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DesignSettings.h; sourceTree = "<group>"; };
 		A7E8FB0217462F3600CC2D26 /* AKSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKSegmentedControl.h; sourceTree = "<group>"; };
 		A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKSegmentedControl.m; sourceTree = "<group>"; };
@@ -810,6 +813,8 @@
 		A781286717294C56002226C8 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				A7DEA1871790BD2D00EB1549 /* MenuViewController.h */,
+				A7DEA1881790BD2D00EB1549 /* MenuViewController.m */,
 				A7F4065F17294ECE00DDE644 /* RootViewController.h */,
 				A7F4066017294ECE00DDE644 /* RootViewController.m */,
 			);
@@ -1469,6 +1474,7 @@
 				A7DEA1831790A5EA00EB1549 /* REBackgroundView.m in Sources */,
 				A7DEA1841790A5EA00EB1549 /* RESideMenu.m in Sources */,
 				A7DEA1851790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.m in Sources */,
+				A7DEA1891790BD2D00EB1549 /* MenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

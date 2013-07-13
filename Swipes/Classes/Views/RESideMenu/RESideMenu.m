@@ -40,6 +40,7 @@ const int INTERSTITIAL_STEPS = 99;
 @property (strong, nonatomic) UIImageView *screenshotView;
 @property (strong, nonatomic) UIView *slidebackView;
 @property (nonatomic) CGFloat targetScale;
+@property (nonatomic) CGFloat transformScale;
 
 
 // Array containing menu (which are array of items)
@@ -52,7 +53,8 @@ const int INTERSTITIAL_STEPS = 99;
     self = [super init];
     if (!self)
         return nil;
-    self.targetScale = 0.6;
+    self.targetScale = 0.7;
+    self.transformScale = 0.95;
     self.hideStatusBarArea = YES;
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     self.panningRecognizer = panGestureRecognizer;
@@ -60,7 +62,6 @@ const int INTERSTITIAL_STEPS = 99;
     
     return self;
 }
-
 -(void)addPanningToView:(UIView *)view{
     [view addGestureRecognizer:self.panningRecognizer];
 }
@@ -73,13 +74,52 @@ const int INTERSTITIAL_STEPS = 99;
     
     _isShowing = YES;
     
-    // keep track of whether or not it was already hidden
-    _appIsHidingStatusBar=[[UIApplication sharedApplication] isStatusBarHidden];
     
-    if(!_appIsHidingStatusBar)
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     
-    [self performSelector:@selector(showAfterDelay) withObject:nil afterDelay:0];
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    // Take a snapshot
+    //
+    _screenshotView = [[UIImageView alloc] initWithFrame:CGRectNull];
+    _screenshotView.image = [window re_snapshotWithStatusBar:!self.hideStatusBarArea];
+    _screenshotView.frame = CGRectMake(0, 0, _screenshotView.image.size.width, _screenshotView.image.size.height);
+    _screenshotView.userInteractionEnabled = YES;
+    _screenshotView.layer.anchorPoint = CGPointMake(0, 0);
+    _originalSize = _screenshotView.frame.size;
+    
+    
+    
+    // Add views
+    //
+    _backgroundView = [[REBackgroundView alloc] initWithFrame:window.bounds];
+    _backgroundView.backgroundImage = _backgroundImage;
+    [window addSubview:_backgroundView];
+    
+    if(self.revealView){
+        _revealView.hidden = YES;
+        _revealView.alpha = 0;
+        [window addSubview:_revealView];
+    }
+    
+    _slidebackView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"backbutton"]];
+    _slidebackView.autoresizesSubviews = NO;
+    _slidebackView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
+    _slidebackView.userInteractionEnabled = YES;
+    _slidebackView.layer.anchorPoint = CGPointMake(0, 0);
+    CGRect slideBackFrame = _slidebackView.frame;
+    
+    _slidebackView.frame = CGRectMake(0-slideBackFrame.size.width, (window.frame.size.height-slideBackFrame.size.height)/2, slideBackFrame.size.width, slideBackFrame.size.height);
+    [window addSubview:_slidebackView];
+    
+    [window addSubview:_screenshotView];
+    
+    _revealView.hidden = NO;
+    //[self minimizeFromRect:CGRectMake(0, 0, _originalSize.width, _originalSize.height)];
+    
+    [_slidebackView addGestureRecognizer:self.panningRecognizer];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognized:)];
+    [_slidebackView addGestureRecognizer:tapGestureRecognizer];
+    
+    
 }
 
 - (void)hide
@@ -110,44 +150,16 @@ const int INTERSTITIAL_STEPS = 99;
 }
 
 //- (void)animate
-
-- (void)showAfterDelay
-{
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    // Take a snapshot
-    //
-    _screenshotView = [[UIImageView alloc] initWithFrame:CGRectNull];
-    _screenshotView.image = [window re_snapshotWithStatusBar:!self.hideStatusBarArea];
-    _screenshotView.frame = CGRectMake(0, 0, _screenshotView.image.size.width, _screenshotView.image.size.height);
-    _screenshotView.userInteractionEnabled = YES;
-    _screenshotView.layer.anchorPoint = CGPointMake(0, 0);
-    _originalSize = _screenshotView.frame.size;
+-(CGRect)frameForPercentage:(CGFloat)percentage{
+    CGFloat fullWidth = _originalSize.width;
+    CGFloat fullHeight = _originalSize.height;
+    CGFloat targetWidth = fullWidth * self.targetScale;
+    CGFloat targetHeight = fullHeight * self.targetScale;
     
-    // Add views
-    //
-    _backgroundView = [[REBackgroundView alloc] initWithFrame:window.bounds];
-    _backgroundView.backgroundImage = _backgroundImage;
-    [window addSubview:_backgroundView];
-    
-    _slidebackView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"backbutton"]];
-    _slidebackView.autoresizesSubviews = NO;
-    _slidebackView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
-    _slidebackView.userInteractionEnabled = YES;
-    _slidebackView.layer.anchorPoint = CGPointMake(0, 0);
-    CGRect slideBackFrame = _slidebackView.frame;
-    
-    _slidebackView.frame = CGRectMake(0-slideBackFrame.size.width, (window.frame.size.height-slideBackFrame.size.height)/2, slideBackFrame.size.width, slideBackFrame.size.height);
-    [window addSubview:_slidebackView];
-    
-    [window addSubview:_screenshotView];
-    
-    //[self minimizeFromRect:CGRectMake(0, 0, _originalSize.width, _originalSize.height)];
-    
-    [_slidebackView addGestureRecognizer:self.panningRecognizer];
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognized:)];
-    [_slidebackView addGestureRecognizer:tapGestureRecognizer];
+    CGFloat actualWidth = ((fullWidth-targetWidth)*(1-percentage))+targetWidth;
+    CGFloat actualHeight = ((fullHeight-targetHeight)*(1-percentage))+targetHeight;
+    return CGRectMake(percentage*fullWidth, (fullHeight-actualHeight)/2, actualWidth, actualHeight);
 }
-
 - (void)minimizeFromRect:(CGRect)rect
 {
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
@@ -174,6 +186,9 @@ const int INTERSTITIAL_STEPS = 99;
     _screenshotView.layer.position = CGPointMake(targetX, targetY);
     _screenshotView.layer.bounds = CGRectMake(targetX, targetY, newWidth, newHeight);
     [CATransaction commit];
+    [UIView animateWithDuration:duration animations:^{
+        _revealView.alpha = 1;
+    }];
 }
 - (void)restoreFromRect:(CGRect)rect
 {
@@ -190,6 +205,7 @@ const int INTERSTITIAL_STEPS = 99;
     CGFloat duration = 0.7*percentage;
     if(duration<0.1) duration = 0.1;
     
+    
     [CATransaction begin];
     [CATransaction setValue:[NSNumber numberWithFloat:duration] forKey:kCATransactionAnimationDuration];
     [self addAnimation:@"position.x" view:_screenshotView startValue:rect.origin.x endValue:0];
@@ -203,16 +219,13 @@ const int INTERSTITIAL_STEPS = 99;
     [CATransaction commit];
     [self performSelector:@selector(restoreView) withObject:nil afterDelay:duration];
     // restore the status bar to its original state.
-
+    
     _isShowing = NO;
-}
--(void)restoreStatusBar{
-    
-    
 }
 - (void)restoreView
 {
-    [[UIApplication sharedApplication] setStatusBarHidden:_appIsHidingStatusBar withAnimation:UIStatusBarAnimationNone];
+    //[[UIApplication sharedApplication] setStatusBarHidden:_appIsHidingStatusBar withAnimation:UIStatusBarAnimationNone];
+    [_revealView removeFromSuperview];
     [_backgroundView removeFromSuperview];
     [_screenshotView removeFromSuperview];
     [_slidebackView removeFromSuperview];
@@ -235,31 +248,17 @@ const int INTERSTITIAL_STEPS = 99;
         CGFloat targetX = window.frame.size.width;
         if(x > targetX) x = targetX;
         if(x < 0) x = 0;
-        CGFloat targetWidth = _originalSize.width * self.targetScale;
-        CGFloat targetHeight = _originalSize.height * self.targetScale;
         
-        
+        CGFloat startFadingInPlace = 0.25;
         CGFloat percentage = x/targetX;
         
-        
-        CGFloat width = (1-percentage)*(_originalSize.width-targetWidth)+targetWidth;
-        CGFloat height = (1-percentage)*(_originalSize.height-targetHeight)+targetHeight;
-        
-        CGFloat y = (window.frame.size.height - height) / 2.0;
-        
-        if (x < 0 || y < 0) {
-            _screenshotView.frame = CGRectMake(0, 0, width, height);
-            _slidebackView.frame = CGRectMake(0-_slidebackView.frame.size.width, _slidebackView.frame.origin.y, _slidebackView.frame.size.width, _slidebackView.frame.size.height);
-        } else {
-            _screenshotView.frame = CGRectMake(x, y, width, height);
-            _slidebackView.frame = CGRectMake(x-_slidebackView.frame.size.width, _slidebackView.frame.origin.y, _slidebackView.frame.size.width, _slidebackView.frame.size.height);
+        _screenshotView.frame = [self frameForPercentage:percentage];
+        _slidebackView.frame = CGRectMake(x-_slidebackView.frame.size.width, _slidebackView.frame.origin.y, _slidebackView.frame.size.width, _slidebackView.frame.size.height);
+        CGFloat revealOpacity = 0;
+        if(percentage > startFadingInPlace){
+            revealOpacity = (percentage-startFadingInPlace)/(1-startFadingInPlace);
         }
-        /*
-        CGFloat screenshotOpaque = 1-percentageForScreenshot;
-        _screenshotView.alpha = screenshotOpaque;
-        
-        CGFloat arrowOpaque = (translatedX >= targetX*percentToAnimateIn) ? ((translatedX-(targetX*percentToAnimateIn))/(targetX*percentToAnimateIn)) : 0;
-        _slidebackView.alpha = arrowOpaque;*/
+        _revealView.alpha = revealOpacity;
     }
     if (sender.state == UIGestureRecognizerStateEnded) {
         if ([sender velocityInView:window].x < 0) {

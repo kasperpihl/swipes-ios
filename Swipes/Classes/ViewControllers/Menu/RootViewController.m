@@ -24,6 +24,7 @@
 #import "AnalyticsHandler.h"
 #import "AppDelegate.h"
 #import "RESideMenu.h"
+#import "MenuViewController.h"
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @end
@@ -151,6 +152,8 @@ static RootViewController *sharedObject;
     self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     [self.view addGestureRecognizer:panGestureRecognizer];
+    MenuViewController *viewController = [[MenuViewController alloc] init];
+    self.sideMenu.revealView = viewController.view;
     // Do any additional setup after loading the view.
     //[PFUser logOut];
 //#warning Reverse the exclamation mark
