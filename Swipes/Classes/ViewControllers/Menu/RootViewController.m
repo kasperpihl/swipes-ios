@@ -148,10 +148,10 @@ static RootViewController *sharedObject;
     [self setupAppearance];
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
-    self.sideMenu = [[RESideMenu alloc] init];
+    //self.sideMenu = [[RESideMenu alloc] init];
     self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
-    [self.view addGestureRecognizer:panGestureRecognizer];
+    //[self.view addGestureRecognizer:panGestureRecognizer];
     MenuViewController *viewController = [[MenuViewController alloc] init];
     self.sideMenu.revealView = viewController.view;
     // Do any additional setup after loading the view.
