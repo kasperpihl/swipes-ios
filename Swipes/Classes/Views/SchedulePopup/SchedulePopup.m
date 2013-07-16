@@ -18,6 +18,8 @@
 #define BACK_ONE_MONTH_BUTTON_TAG 6
 #define FORWARD_ONE_MONTH_BUTTON_TAG 7
 #define TIME_VIEWER_TAG 8
+#define TIME_VIEWER_LABEL_TAG 9
+#define TIME_INDICATOR_TAG 10
 
 #define SEPERATOR_COLOR_LIGHT color(157,159,161,1)
 #define SEPERATOR_MARGIN 0//0.02
@@ -69,6 +71,9 @@ typedef struct
 @property (nonatomic) BOOL isPickingDate;
 @property (nonatomic) BOOL hasReturned;
 @property (nonatomic, weak) IBOutlet UIView *timeViewer;
+@property (nonatomic) NSDate *pickingDate;
+@property (nonatomic) NSDate *activeTime;
+@property (nonatomic) CGPoint lastPosition;
 @property TimeRef currentTime;
 @end
 @implementation SchedulePopup
@@ -449,37 +454,85 @@ typedef struct
     CGFloat y = floor((number-1) / GRID_NUMBER) * CONTENT_VIEW_SIZE/GRID_NUMBER + BUTTON_PADDING;
     return CGRectMake(x, y, width, height);
 }
--(void)showTime:(TimeRef)timeRef inPoint:(CGPoint)point {
-    UILabel *timeView = (UILabel*)[self viewWithTag:TIME_VIEWER_TAG];
+-(void)showTime:(NSDate*)time{
+    UIView *timeView = [self viewWithTag:TIME_VIEWER_TAG];
+    CGFloat startOfIndicator = 60;
+    CGFloat indicatorBottomMargin = 30;
+    CGFloat heightOfIndicator = self.bounds.size.height-startOfIndicator-indicatorBottomMargin;
+    
+    
     if(!timeView){
-        timeView = [[UILabel alloc] initWithFrame:CGRectMake(point.x, point.y, 100, 50)];
-        timeView.backgroundColor = [UIColor blackColor];
-        timeView.textColor = [UIColor whiteColor];
+        timeView = [[UIView alloc] initWithFrame:self.bounds];
+        timeView.backgroundColor = color(253, 99, 73, 0.95);
         timeView.tag = TIME_VIEWER_TAG;
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 20, 300, 60)];
+        label.tag = TIME_VIEWER_LABEL_TAG;
+        label.backgroundColor = [UIColor clearColor];
+        label.textColor = [UIColor whiteColor];
+        label.font = KP_BOLD(40);
+        label.textAlignment = UITextAlignmentCenter;
+        [timeView addSubview:label];
+        UIView *timeBackground = [[UIView alloc] initWithFrame:CGRectMake(300, startOfIndicator, 4,heightOfIndicator)];
+        timeBackground.backgroundColor = [UIColor whiteColor];
+        
+        UIView *indicatorView = [[UIView alloc] initWithFrame:CGRectMake(timeBackground.frame.origin.x+(4/2)-15, 0, 30, 30)];
+        indicatorView.backgroundColor = [UIColor whiteColor];
+        indicatorView.layer.cornerRadius = 15;
+        indicatorView.tag = TIME_INDICATOR_TAG;
+        
+        [timeView addSubview:timeBackground];
+        [timeView addSubview:indicatorView];
         [self addSubview:timeView];
     }
+    UIView *indicator = [self viewWithTag:TIME_INDICATOR_TAG];
     
-    timeView.text = [NSString stringWithFormat:@"%i:%i",timeRef.hours,timeRef.minutes];
-    timeView.frame = CGRectSetPos(timeView.frame, point.x, point.y);
+    NSDate *lowerLimit = [time dateAtHours:0 minutes:0];
+    NSInteger minutes = [time minutesAfterDate:lowerLimit];
+    CGFloat percentageOfDay = (float)minutes / 1440;
+    CGRectSetY(indicator, startOfIndicator+heightOfIndicator-(percentageOfDay*heightOfIndicator)-15);
+    
+    UILabel *timeLabel = (UILabel*)[timeView viewWithTag:TIME_VIEWER_LABEL_TAG];
+    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+    [timeFormatter setDateFormat:@"hh:mm a"];
+    NSString *timeString = [timeFormatter stringFromDate:time];
+    timeLabel.text = timeString;
+    //timeView.text = [NSString stringWithFormat:@"%i:%i",timeRef.hours,timeRef.minutes];
 }
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender
 {
-    CGPoint location = [sender locationInView:self];
-    //CGPoint translation = [sender translationInView:self];
+    CGFloat interval = 15;
     CGPoint velocity = [sender velocityInView:self];
-    NSLog(@"vel:%f",velocity.y);
-   
+    CGPoint location = [sender locationInView:self];
+    CGFloat vel = fabsf(velocity.y);
+    NSInteger minutesPerInterval = 5;
+    if(vel > 100) minutesPerInterval = 15;
+    if(vel > 200) minutesPerInterval = 60;
+    if(vel > 500) minutesPerInterval = 120;
+   // NSLog(@"vel:%f",vel);
     if (sender.state == UIGestureRecognizerStateBegan) {
-        TimeRef timeRef;
-        timeRef.hours = 9;
-        timeRef.minutes = 0;
-        [self showTime:timeRef inPoint:CGPointMake(location.x-50,location.y-100)];
-        self.currentTime = timeRef;
+        self.pickingDate = [[NSDate date] dateAtHours:13 minutes:15];
+        self.activeTime = self.pickingDate;
+        [self showTime:self.activeTime];
+        self.lastPosition = location;
     }
     if (sender.state == UIGestureRecognizerStateChanged) {
-        [self showTime:self.currentTime inPoint:CGPointMake(location.x-50,location.y-100)];
+        NSInteger movedIntervals = (self.lastPosition.y - location.y)/interval;
+        BOOL update = NO;
+        if(movedIntervals != 0){
+            self.activeTime = [self.activeTime dateByAddingMinutes:movedIntervals*minutesPerInterval];
+            NSDate *upperLimit = [self.pickingDate dateAtHours:23 minutes:59];
+            NSDate *lowerLimit = [self.pickingDate dateAtHours:0 minutes:0];
+            update = YES;
+            self.lastPosition = location;
+            self.activeTime = [self.activeTime dateToNearestMinutes:5];
+            if([self.activeTime isLaterThanDate:upperLimit]) self.activeTime = upperLimit;
+            if([self.activeTime isEarlierThanDate:lowerLimit]) self.activeTime = lowerLimit;
+        }
+        if(update) [self showTime:self.activeTime];
     }
     if (sender.state == UIGestureRecognizerStateEnded) {
+        UIView *timeView = (UILabel *)[self viewWithTag:TIME_VIEWER_TAG];
+        [timeView removeFromSuperview];
     }
 }
 @end

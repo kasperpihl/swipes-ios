@@ -276,7 +276,13 @@
 {
 	return [self dateByAddingMinutes: (dMinutes * -1)];
 }
-
+-(NSDate *)dateAtHours:(NSInteger)hours minutes:(NSInteger)minutes{
+    NSDateComponents *components = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:self];
+	components.hour = hours;
+	components.minute = minutes;
+	components.second = 0;
+	return [CURRENT_CALENDAR dateFromComponents:components];
+}
 - (NSDate *) dateAtStartOfDay
 {
 	NSDateComponents *components = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:self];
@@ -306,7 +312,18 @@
     // Construct a new date.
     return [[NSCalendar currentCalendar] dateFromComponents:comps];
 }
-
+- (NSDate *)dateToNearestMinutes:(NSInteger)minutes {
+    // Set up flags.
+    unsigned unitFlags = NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit;
+    // Extract components.
+    NSDateComponents *comps = [[NSCalendar currentCalendar] components:unitFlags fromDate:self];
+    // Set the minute to the nearest 15 minutes.
+    [comps setMinute:((([comps minute] - 8 ) / minutes ) * minutes ) + minutes];
+    // Zero out the seconds.
+    [comps setSecond:0];
+    // Construct a new date.
+    return [[NSCalendar currentCalendar] dateFromComponents:comps];
+}
 
 #pragma mark Retrieving Intervals
 

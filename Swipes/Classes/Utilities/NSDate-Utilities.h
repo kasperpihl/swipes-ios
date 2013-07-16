@@ -61,6 +61,7 @@
 - (NSDate *) dateAtStartOfDay;
 
 // Rounding dates
+- (NSDate *)dateToNearestMinutes:(NSInteger)minutes;
 - (NSDate *)dateToNearest15Minutes;
 
 // Retrieving intervals
@@ -72,6 +73,7 @@
 - (NSInteger) daysBeforeDate: (NSDate *) aDate;
 - (NSInteger)distanceInDaysToDate:(NSDate *)anotherDate;
 
+-(NSDate *)dateAtHours:(NSInteger)hours minutes:(NSInteger)minutes;
 
 // Decomposing dates
 @property (readonly) NSInteger nearestHour;
