@@ -94,14 +94,14 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self = [super init];
     if(self){
         self.view.tag = SHOW_ITEM_TAG;
-        self.view.backgroundColor = EDIT_TASK_BACKGROUND;
+        self.view.backgroundColor = tbackground(EditTaskBackground);
         UIView *contentView = [[UIView alloc] initWithFrame:self.view.bounds];
         contentView.tag = CONTENT_VIEW_TAG;
         contentView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
         
         UIView *titleContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, CONTAINER_INIT_HEIGHT)];
         titleContainerView.tag = TITLE_CONTAINER_VIEW_TAG;
-        titleContainerView.backgroundColor = EDIT_TASK_TITLE_BACKGROUND;
+        titleContainerView.backgroundColor = tbackground(EditTaskTitleBackground);
         
         CGFloat buttonWidth = BUTTON_HEIGHT;
         

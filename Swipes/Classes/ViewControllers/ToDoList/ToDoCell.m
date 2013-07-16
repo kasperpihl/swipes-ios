@@ -58,9 +58,9 @@
     if (self) {
         self.contentView.layer.masksToBounds = YES;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.contentView.backgroundColor = TABLE_CELL_BACKGROUND;
-        self.backgroundColor = TABLE_CELL_BACKGROUND;
-        self.selectedBackgroundView.backgroundColor = TABLE_CELL_BACKGROUND;
+        self.contentView.backgroundColor = tbackground(TaskCellBackground);
+        self.backgroundColor = tbackground(TaskCellBackground);
+        self.selectedBackgroundView.backgroundColor = tbackground(TaskCellBackground);
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X,TITLE_Y, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
         titleLabel.tag = TITLE_LABEL_TAG;
         titleLabel.numberOfLines = 1;
@@ -81,19 +81,19 @@
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
         UIView *overlayView = [[UIView alloc] initWithFrame:self.bounds];
-        overlayView.backgroundColor = TABLE_CELL_BACKGROUND;
+        overlayView.backgroundColor = tbackground(TaskCellBackground);
         self.selectedBackgroundView = overlayView;
         
         UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake((LABEL_X-TIMELINE_WIDTH)/2, 0, TIMELINE_WIDTH, CELL_HEIGHT)];
         timelineLine.tag = TIMELINE_TAG;
-        timelineLine.backgroundColor = CELL_TIMELINE_COLOR;
+        timelineLine.backgroundColor = tcolor(TaskCellTimelineColor);
         [self.contentView addSubview:timelineLine];
         self.timelineView = [self.contentView viewWithTag:TIMELINE_TAG];
         
         CGFloat outlineWidth = DOT_SIZE+(2*DOT_OUTLINE_SIZE);
         UIView *dotOutlineContainer = [[UIView alloc] initWithFrame:CGRectMake((LABEL_X-outlineWidth)/2, (CELL_HEIGHT-outlineWidth)/2, outlineWidth, outlineWidth)];
         dotOutlineContainer.tag = OUTLINE_TAG;
-        dotOutlineContainer.backgroundColor = TABLE_CELL_BACKGROUND;
+        dotOutlineContainer.backgroundColor = tbackground(TaskCellBackground);
         dotOutlineContainer.layer.cornerRadius = outlineWidth/2;
     
         
@@ -189,8 +189,8 @@
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-    UIColor *backgroundColor = selected ? TABLE_CELL_SELECTED_BACKGROUND : TABLE_CELL_BACKGROUND;
-    UIColor *timelineColor = selected ? TABLE_CELL_BACKGROUND : CELL_TIMELINE_COLOR;
+    UIColor *backgroundColor = selected ? tcolor(TaskCellTimelineColor) : tbackground(TaskCellBackground);
+    UIColor *timelineColor = selected ? tbackground(TaskCellBackground) : tcolor(TaskCellTimelineColor);
     self.timelineView.backgroundColor = timelineColor;
     self.contentView.backgroundColor = backgroundColor;
 }

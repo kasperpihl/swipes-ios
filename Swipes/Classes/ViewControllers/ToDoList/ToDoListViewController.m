@@ -124,7 +124,7 @@
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 30)];
-    headerView.backgroundColor = SECTION_HEADER_BACKGROUND;
+    headerView.backgroundColor = tbackground(TaskTableSectionHeaderBackground);
     NSString *title = [self.itemHandler titleForSection:section];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(SECTION_HEADER_X, 0, tableView.bounds.size.width-2*SECTION_HEADER_X, SECTION_HEADER_HEIGHT)];
     titleLabel.backgroundColor = CLEAR;
@@ -480,9 +480,6 @@
     headerView.hidden = YES;
     tableView.tableHeaderView = headerView;
     tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-    footerView.backgroundColor = CELL_TIMELINE_COLOR;
-    //tableView.tableFooterView = footerView;
     
     KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,-COLOR_SEPERATOR_HEIGHT, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
     searchBar.searchBarDelegate = self;
@@ -530,10 +527,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = TABLE_BACKGROUND;
+    self.view.backgroundColor = tbackground(TaskTableBackground);
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-    headerView.backgroundColor = SEGMENT_SELECTED;
+    headerView.backgroundColor = tbackground(MenuSelectedBackground);
     headerView.tag = FAKE_HEADER_VIEW_TAG;
     [self.view addSubview:headerView];
     self.fakeHeaderView = [self.view viewWithTag:FAKE_HEADER_VIEW_TAG];
@@ -561,7 +558,7 @@
     }
     menuText.text = text;
     menuText.textAlignment = UITextAlignmentCenter;
-    menuText.textColor = TABLE_EMPTY_BG_TEXT;
+    menuText.textColor = tcolor(TaskTableEmptyText);
     menuText.tag = MENU_TEXT_TAG;
     [self.view addSubview:menuText];
     self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];
@@ -574,7 +571,7 @@
     coloredMenuText.textAlignment = UITextAlignmentCenter;
     coloredMenuText.hidden = YES;
     coloredMenuText.text = @"Well Swiped!";
-    coloredMenuText.textColor = TABLE_EMPTY_BG_COLORED_TEXT;
+    coloredMenuText.textColor = tcolor(TaskTableEmptyTodayText);
     [self.view addSubview:coloredMenuText];
     self.coloredMenuText = [self.view viewWithTag:COLORED_MENU_TEXT_TAG];
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];

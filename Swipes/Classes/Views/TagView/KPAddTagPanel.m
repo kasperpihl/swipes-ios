@@ -101,10 +101,10 @@
         CGFloat sepHeight = COLOR_SEPERATOR_HEIGHT;
         /* Initialize tagbar view */
         UIView *tagBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TAB_BAR_VIEW_HEIGHT, self.frame.size.width, TAB_BAR_VIEW_HEIGHT)];
-        tagBarView.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR;
+        tagBarView.backgroundColor = tbackground(TagBarBackground);
         tagBarView.tag = TAB_BAR_VIEW_TAG;
         UIView *tagBarColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tagBarView.frame.size.width, sepHeight)];
-        tagBarColorSeperator.backgroundColor = BAR_BOTTOM_BUTTON_SEPS;
+        tagBarColorSeperator.backgroundColor = tbackground(TagBarBackground);
         [tagBarView addSubview:tagBarColorSeperator];
         
         UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -132,7 +132,7 @@
         
         for(NSInteger i = 1 ; i < NUMBER_OF_BAR_BUTTONS ; i++){
             UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake((tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*i)-(SEPERATOR_WIDTH/2), sepHeight, SEPERATOR_WIDTH, tagBarView.frame.size.height-sepHeight)];
-            seperator.backgroundColor = BAR_BOTTOM_BUTTON_SEPS;
+            seperator.backgroundColor = tbackground(MenuSelectedBackground);
             [tagBarView addSubview:seperator];
         }
         [self addSubview:tagBarView];
@@ -144,7 +144,7 @@
         addView.tag = ADD_VIEW_TAG;
         addView.backgroundColor = TEXTFIELD_BACKGROUND;
         UIView *addViewColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, addView.frame.size.height-COLOR_SEPERATOR_HEIGHT, addView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        addViewColorSeperator.backgroundColor = ADD_TAG_SEPERATOR_COLOR;
+        addViewColorSeperator.backgroundColor = tcolor(ColoredSeperator);
         [addView addSubview:addViewColorSeperator];
         
         UIButton *doneEditingButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -153,7 +153,7 @@
         doneEditingButton.imageView.clipsToBounds = NO;
         doneEditingButton.imageView.contentMode = UIViewContentModeCenter;
         doneEditingButton.frame = CGRectMake(addView.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
-        [doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_COLOR] forState:UIControlStateNormal];
+        [doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:tcolor(ColoredButton)] forState:UIControlStateNormal];
         [doneEditingButton setImage:[UIImage imageNamed:@"hide_keyboard_arrow"] forState:UIControlStateNormal];
         [doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         [addView addSubview:doneEditingButton];

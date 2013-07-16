@@ -26,7 +26,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         UIView *backgroundView = [[UIView alloc] initWithFrame:self.bounds];
-        backgroundView.backgroundColor = POPUP_OVERLAY_COLOR;
+        backgroundView.backgroundColor = alpha(tbackground(TaskCellBackground),.6);
         UIButton *backgroundButton = [UIButton buttonWithType:UIButtonTypeCustom];
         backgroundButton.frame = backgroundView.bounds;
         [backgroundButton addTarget:self action:@selector(pressedBackground:) forControlEvents:UIControlEventTouchUpInside];

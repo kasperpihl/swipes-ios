@@ -20,9 +20,9 @@
     
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = EDIT_TASK_BACKGROUND;
+        self.backgroundColor = tbackground(TaskCellBackground);
         UIView *buttonBarContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-KEYBOARD_HEIGHT-BUTTON_BAR_HEIGHT, 320, BUTTON_BAR_HEIGHT)];
-        buttonBarContainer.backgroundColor = SEGMENT_SELECTED;
+        buttonBarContainer.backgroundColor = tbackground(TagBackground);
         
         CGFloat buttonWidth = 320/2;
         
@@ -36,7 +36,7 @@
         
         
         UIView *buttonSpecificSeperator = [[UIView alloc] initWithFrame:CGRectMake(buttonWidth-SEPERATOR_WIDTH/2, 0, SEPERATOR_WIDTH, BUTTON_HEIGHT)];
-        buttonSpecificSeperator.backgroundColor = EDIT_TASK_BACKGROUND;
+        buttonSpecificSeperator.backgroundColor = tbackground(TaskCellBackground);
         [buttonBarContainer addSubview:buttonSpecificSeperator];
         
         UIButton *yesButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -48,7 +48,7 @@
         
         UIView *colorBottomSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, BUTTON_BAR_HEIGHT-COLOR_SEPERATOR_HEIGHT, buttonBarContainer.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
         colorBottomSeperator.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-        colorBottomSeperator.backgroundColor = SWIPES_COLOR;
+        colorBottomSeperator.backgroundColor = tcolor(ColoredSeperator);
         [buttonBarContainer addSubview:colorBottomSeperator];
         
         [self addSubview:buttonBarContainer];

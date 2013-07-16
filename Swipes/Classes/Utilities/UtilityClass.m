@@ -117,6 +117,33 @@ static UtilityClass *sharedObject;
     //return the color-burned image
     return coloredImg;
 }
++(UIColor *)inverseColor:(UIColor*)color {
+    
+    CGColorRef oldCGColor = color.CGColor;
+    
+    int numberOfComponents = CGColorGetNumberOfComponents(oldCGColor);
+    
+    // can not invert - the only component is the alpha
+    // e.g. self == [UIColor groupTableViewBackgroundColor]
+    if (numberOfComponents == 1) {
+        return [UIColor colorWithCGColor:oldCGColor];
+    }
+    
+    const CGFloat *oldComponentColors = CGColorGetComponents(oldCGColor);
+    CGFloat newComponentColors[numberOfComponents];
+    
+    int i = numberOfComponents - 1;
+    newComponentColors[i] = oldComponentColors[i]; // alpha
+    while (--i >= 0) {
+        newComponentColors[i] = 1 - oldComponentColors[i];
+    }
+    
+    CGColorRef newCGColor = CGColorCreate(CGColorGetColorSpace(oldCGColor), newComponentColors);
+    UIColor *newColor = [UIColor colorWithCGColor:newCGColor];
+    CGColorRelease(newCGColor);
+    
+    return newColor;
+}
 +(UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color{
     UIImage *img = [UIImage imageNamed:name];
     return [UtilityClass image:img withColor:color];

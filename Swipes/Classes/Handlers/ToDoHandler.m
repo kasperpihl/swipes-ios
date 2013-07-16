@@ -10,6 +10,7 @@
 #import "NotificationHandler.h"
 #import "NSDate-Utilities.h"
 #import "AnalyticsHandler.h"
+#import "ThemeHandler.h"
 @interface ToDoHandler ()
 @end
 @implementation ToDoHandler
@@ -89,13 +90,13 @@ static ToDoHandler *sharedObject;
     UIColor *returnColor;
     switch (type) {
         case CellTypeSchedule:
-            returnColor = SCHEDULE_COLOR;
+            returnColor = tcolor(MenuItemLater);
             break;
         case CellTypeToday:
-            returnColor = TODAY_COLOR;
+            returnColor = tcolor(MenuItemTasks);
             break;
         case CellTypeDone:
-            returnColor = DONE_COLOR;
+            returnColor = tcolor(MenuItemDone);
             break;
         default:
             break;

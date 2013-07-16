@@ -18,6 +18,7 @@
 #import "KPAlert.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIViewController+KNSemiModal.h"
+#import "ThemeHandler.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
@@ -190,11 +191,11 @@
 	if (!_segmentedControl) {
 		//_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];
         AKSegmentedControl *segmentedControl = [[AKSegmentedControl alloc] initWithFrame:INTERESTED_SEGMENT_RECT];
-        [segmentedControl setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BORDER_COLOR]];
+        [segmentedControl setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)]];
         [segmentedControl setSelectedIndex: DEFAULT_SELECTED_INDEX];
         segmentedControl.layer.cornerRadius = SEGMENT_BORDER_RADIUS;
         segmentedControl.layer.masksToBounds = YES;
-        segmentedControl.layer.borderColor = SEGMENT_BORDER_COLOR.CGColor;
+        segmentedControl.layer.borderColor = tbackground(MenuSelectedBackground).CGColor;
         segmentedControl.layer.borderWidth = SEGMENT_BORDER_WIDTH;
         [segmentedControl addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventValueChanged];
         [segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
@@ -212,9 +213,9 @@
 -(UIButton*)buttonForSegment:(KPSegmentButtons)controlButton{
     UIButton *button = [[UIButton alloc] init];
     CGRectSetSize(button, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
-    [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_BACKGROUND] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED] forState:UIControlStateSelected];
-    [button setBackgroundImage:[UtilityClass imageWithColor:SEGMENT_SELECTED] forState:UIControlStateHighlighted];
+    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuBackground)] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)] forState:UIControlStateSelected];
+    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuBackground)] forState:UIControlStateHighlighted];
     button.adjustsImageWhenHighlighted = NO;
     UIImage *normalImage;
     CGFloat imageInset = SEGMENT_BORDER_RADIUS-COLOR_SEPERATOR_HEIGHT;
@@ -223,25 +224,25 @@
     UIImage *highlightedImage;
     switch (controlButton) {
         case KPSegmentButtonSchedule:
-            thisColor = SCHEDULE_COLOR;
+            thisColor = tcolor(MenuItemLater);
             normalImage = [UIImage imageNamed:@"schedule.png"];
             highlightedImage = [UIImage imageNamed:@"schedule-highlighted"];
             break;
         case KPSegmentButtonToday:
-            thisColor = TODAY_COLOR;
+            thisColor = tcolor(MenuItemTasks);
             imageInset += TODAY_EXTRA_INSET;
             normalImage = [UIImage imageNamed:@"today"];
             highlightedImage = [UIImage imageNamed:@"today-highlighted"];
             break;
         case KPSegmentButtonDone:
-            thisColor = DONE_COLOR;
+            thisColor = tcolor(MenuItemDone);
             normalImage = [UIImage imageNamed:@"done"];
             highlightedImage = [UIImage imageNamed:@"done-highlighted"];
             break;
     }
     UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height-3, button.frame.size.width, 3)];
     //[button setImage:highlightedImage forState:UIControlStateSelected];
-    colorView.backgroundColor = SEGMENT_SELECTED;//thisColor;
+    colorView.backgroundColor = tbackground(MenuSelectedBackground);//thisColor;
     colorView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin);
     [button addSubview:colorView];
     button.imageEdgeInsets = UIEdgeInsetsMake(0, 0, COLOR_SEPERATOR_HEIGHT, 0);

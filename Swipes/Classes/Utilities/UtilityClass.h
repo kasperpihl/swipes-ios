@@ -25,4 +25,5 @@ UIImage* rotate(UIImage* src, NSInteger degrees);
 + (UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color;
 + (UIImage *)image:(UIImage *)image withColor:(UIColor *)color;
 +(UIImage *)flippedImage:(UIImage*)flippingImage horizontal:(BOOL)horizontal;
++(UIColor *)inverseColor:(UIColor*)color;
 @end

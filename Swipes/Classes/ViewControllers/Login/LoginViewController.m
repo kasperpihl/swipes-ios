@@ -48,7 +48,7 @@
         [self.logInView.dismissButton setImage:nil forState:UIControlStateHighlighted];
         self.logInView.dismissButton.adjustsImageWhenHighlighted = true;
         self.logInView.dismissButton.hidden = YES;
-        [self.logInView setBackgroundColor:LOGIN_BACKGROUND];
+        [self.logInView setBackgroundColor:tbackground(LoginBackground)];
         
         /*UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_background"]];
         backgroundImageView.contentMode = UIViewContentModeScaleToFill;
@@ -81,8 +81,8 @@
         
         
         [self setupButton:self.logInView.logInButton];
-        [self.logInView.logInButton setBackgroundImage:[UtilityClass imageWithColor:LOGIN_BUTTON_BACKGROUND] forState:UIControlStateNormal];
-        [self.logInView.logInButton setBackgroundImage:[UtilityClass imageWithColor:[UtilityClass darkerColor:LOGIN_BUTTON_BACKGROUND]] forState:UIControlStateHighlighted];
+        [self.logInView.logInButton setBackgroundImage:[UtilityClass imageWithColor:tbackground(LoginButtonBackground)] forState:UIControlStateNormal];
+        [self.logInView.logInButton setBackgroundImage:[UtilityClass imageWithColor:[UtilityClass darkerColor:tbackground(LoginButtonBackground)]] forState:UIControlStateHighlighted];
         
         
         self.logInView.externalLogInLabel.font = LOGIN_LABEL_ABOVE_FONT;

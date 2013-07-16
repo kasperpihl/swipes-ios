@@ -35,7 +35,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 200)];
-        contentView.backgroundColor = SEGMENT_BACKGROUND;
+        contentView.backgroundColor = tbackground(MenuBackground);
         [self setContainerSize:contentView.frame.size];
         
         
@@ -61,7 +61,7 @@
         CGFloat buttonWidth = contentView.frame.size.width/2;
         
         UIView *buttonSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, buttonY-COLOR_SEPERATOR_HEIGHT, contentView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        buttonSeperator.backgroundColor = SEGMENT_SELECTED;
+        buttonSeperator.backgroundColor = tbackground(MenuSelectedBackground);
         [contentView addSubview:buttonSeperator];
         
         
@@ -74,7 +74,7 @@
         
         
         UIView *buttonSpecificSeperator = [[UIView alloc] initWithFrame:CGRectMake(buttonWidth-SEPERATOR_WIDTH/2, buttonY, SEPERATOR_WIDTH, BUTTON_HEIGHT)];
-        buttonSpecificSeperator.backgroundColor = SEGMENT_SELECTED;
+        buttonSpecificSeperator.backgroundColor = tbackground(MenuSelectedBackground);
         [contentView addSubview:buttonSpecificSeperator];
         
         UIButton *yesButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -86,7 +86,7 @@
         
         
         UIView *colorBottomSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-COLOR_SEPERATOR_HEIGHT, contentView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        colorBottomSeperator.backgroundColor = SWIPES_COLOR;
+        colorBottomSeperator.backgroundColor = tcolor(ColoredSeperator);
         [contentView addSubview:colorBottomSeperator];
         [self.containerView addSubview:contentView];
     }

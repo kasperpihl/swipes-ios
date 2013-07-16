@@ -187,8 +187,8 @@
                     QBPopupMenu *popupMenu = [[QBPopupMenu alloc] init];
                     popupMenu.sidePadding = 5;
                     popupMenu.unselectedColor = EDIT_TASK_GRAYED_OUT_TEXT;
-                    popupMenu.selectedColor = SEGMENT_SELECTED;
-                    popupMenu.textColor = TABLE_CELL_BACKGROUND;
+                    popupMenu.selectedColor = tbackground(MenuSelectedBackground);
+                    popupMenu.textColor = tbackground(TaskCellBackground);
                     QBPopupMenuItem *item = [QBPopupMenuItem itemWithTitle:@"Delete" target:self action:@selector(delete:)];
                     popupMenu.items = [NSArray arrayWithObjects:item, nil];
                     [popupMenu showInView:self.superview.superview.superview.superview.superview atPoint:CGPointMake(x+((endX-x)/2),self.superview.superview.superview.frame.origin.y + self.superview.superview.frame.origin.y + self.superview.frame.origin.y+ self.frame.origin.y+y+5)];
@@ -218,8 +218,8 @@
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
     [button setTitleColor:BUTTON_COLOR forState:UIControlStateNormal];
-    [button setBackgroundImage:[UtilityClass imageWithColor:TAG_COLOR_BACKGROUND] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UtilityClass imageWithColor:SWIPES_COLOR] forState:UIControlStateSelected];
+    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagBackground)] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagSelectedBackground)] forState:UIControlStateSelected];
     button.titleLabel.font = TAG_FONT;
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];

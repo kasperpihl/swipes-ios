@@ -332,7 +332,7 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (UIColor *)colorWithPercentage:(CGFloat)percentage {
-    UIColor *color = TABLE_BACKGROUND;
+    UIColor *color = tbackground(TaskTableBackground);
     if(!self.didRegret){
         // Background Color
         if (percentage >= kMCStop1 && percentage < kMCStop2)

@@ -71,11 +71,11 @@
         self.placeholder = @"Search";
         self.backgroundColor = [UIColor clearColor];
         UIView *colorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-COLOR_SEPERATOR_HEIGHT, self.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-         colorSeperator.backgroundColor = SEGMENT_SELECTED;
+        colorSeperator.backgroundColor = tbackground(MenuSelectedBackground);
         colorSeperator.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
-         colorSeperator.tag = CLEARED_SEPERATOR_TAG;
-         [self addSubview:colorSeperator];
-         self.clearedColorSeperatorView = [self viewWithTag:CLEARED_SEPERATOR_TAG];
+        colorSeperator.tag = CLEARED_SEPERATOR_TAG;
+        [self addSubview:colorSeperator];
+        self.clearedColorSeperatorView = [self viewWithTag:CLEARED_SEPERATOR_TAG];
         CGFloat buttonSize = self.frame.size.height-COLOR_SEPERATOR_HEIGHT;
         UIButton *filterButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [filterButton addTarget:self action:@selector(pressedFilter:) forControlEvents:UIControlEventTouchUpInside];

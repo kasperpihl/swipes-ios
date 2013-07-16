@@ -17,6 +17,7 @@
 #define MONTH_LABEL_TAG 5
 #define BACK_ONE_MONTH_BUTTON_TAG 6
 #define FORWARD_ONE_MONTH_BUTTON_TAG 7
+#define TIME_VIEWER_TAG 8
 
 #define SEPERATOR_COLOR_LIGHT color(157,159,161,1)
 #define SEPERATOR_MARGIN 0//0.02
@@ -67,6 +68,8 @@ typedef struct
 @property (nonatomic) NSInteger startingHour;
 @property (nonatomic) BOOL isPickingDate;
 @property (nonatomic) BOOL hasReturned;
+@property (nonatomic, weak) IBOutlet UIView *timeViewer;
+@property TimeRef currentTime;
 @end
 @implementation SchedulePopup
 -(TimeRef)startingTimeForDate:(NSDate*)date{
@@ -246,7 +249,7 @@ typedef struct
     selectDateView.layer.masksToBounds = YES;
     
     UIView *colorBottomSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, selectDateView.frame.size.height-COLOR_SEPERATOR_HEIGHT, selectDateView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-    colorBottomSeperator.backgroundColor = SWIPES_COLOR;
+    colorBottomSeperator.backgroundColor = tcolor(ColoredSeperator);
     [selectDateView addSubview:colorBottomSeperator];
     
     UIButton *backOneMonthButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -305,7 +308,7 @@ typedef struct
     CGFloat buttonWidth = selectDateView.frame.size.width/2;
     
     UIView *pickerButtonSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, buttonY-COLOR_SEPERATOR_HEIGHT, selectDateView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-    pickerButtonSeperator.backgroundColor = SEGMENT_SELECTED;
+    //pickerButtonSeperator.backgroundColor = SEGMENT_SELECTED;
     [selectDateView addSubview:pickerButtonSeperator];
     
     
@@ -318,7 +321,7 @@ typedef struct
     
     
     UIView *dateButtonsSeperator = [[UIView alloc] initWithFrame:CGRectMake(buttonWidth-SEPERATOR_WIDTH/2, buttonY, SEPERATOR_WIDTH, PICK_DATE_BUTTON_HEIGHT)];
-    dateButtonsSeperator.backgroundColor = SEGMENT_SELECTED;
+    //dateButtonsSeperator.backgroundColor = SEGMENT_SELECTED;
     [selectDateView addSubview:dateButtonsSeperator];
     
     UIButton *setDateButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -377,17 +380,17 @@ typedef struct
     button.titleLabel.font = SCHEDULE_BUTTON_FONT;
     if(SCHEDULE_BUTTON_CAPITAL) title = [title uppercaseString];
     button.titleLabel.shadowOffset = CGSizeMake(1,1);
-    [button setTitleShadowColor:TABLE_CELL_BACKGROUND forState:UIControlStateNormal];
+    [button setTitleShadowColor:tbackground(TaskCellBackground) forState:UIControlStateNormal];
     [button setTitle:title forState:UIControlStateNormal];
     [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
     [button setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [button setTitleShadowColor:[UIColor clearColor] forState:UIControlStateHighlighted];
-    [button setTitleColor:TABLE_CELL_BACKGROUND forState:UIControlStateHighlighted];
+    [button setTitleColor:tbackground(TaskCellBackground) forState:UIControlStateHighlighted];
     UIImage *iconImage = [self imageForScheduleButton:scheduleButton];
     UIImageView *iconImageView = [[UIImageView alloc] initWithImage:iconImage];
     iconImageView.tag = 1337;
-    iconImageView.highlightedImage = [UtilityClass image:iconImage withColor:TABLE_CELL_BACKGROUND];
+    iconImageView.highlightedImage = [UtilityClass image:iconImage withColor:tbackground(TaskCellBackground)];
     button.frame = [self frameForButtonNumber:scheduleButton];
     CGFloat imageHeight = iconImageView.frame.size.height;
     CGFloat textHeight = [@"Kasjper" sizeWithFont:SCHEDULE_BUTTON_FONT].height;
@@ -396,7 +399,10 @@ typedef struct
     [button addTarget:self action:@selector(highlightedButton:) forControlEvents:UIControlEventTouchDown];
     [button addTarget:self action:@selector(highlightedButton:) forControlEvents:UIControlEventTouchDragInside];
     [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchCancel];
     [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchDragOutside];
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
+    [button addGestureRecognizer:panGestureRecognizer];
     iconImageView.frame = CGRectSetPos(iconImageView.frame, (button.frame.size.width-iconImage.size.width)/2,spacing);
     
     button.titleEdgeInsets = UIEdgeInsetsMake(0, 0, spacing, 0);
@@ -442,5 +448,38 @@ typedef struct
     
     CGFloat y = floor((number-1) / GRID_NUMBER) * CONTENT_VIEW_SIZE/GRID_NUMBER + BUTTON_PADDING;
     return CGRectMake(x, y, width, height);
+}
+-(void)showTime:(TimeRef)timeRef inPoint:(CGPoint)point {
+    UILabel *timeView = (UILabel*)[self viewWithTag:TIME_VIEWER_TAG];
+    if(!timeView){
+        timeView = [[UILabel alloc] initWithFrame:CGRectMake(point.x, point.y, 100, 50)];
+        timeView.backgroundColor = [UIColor blackColor];
+        timeView.textColor = [UIColor whiteColor];
+        timeView.tag = TIME_VIEWER_TAG;
+        [self addSubview:timeView];
+    }
+    
+    timeView.text = [NSString stringWithFormat:@"%i:%i",timeRef.hours,timeRef.minutes];
+    timeView.frame = CGRectSetPos(timeView.frame, point.x, point.y);
+}
+- (void)panGestureRecognized:(UIPanGestureRecognizer *)sender
+{
+    CGPoint location = [sender locationInView:self];
+    //CGPoint translation = [sender translationInView:self];
+    CGPoint velocity = [sender velocityInView:self];
+    NSLog(@"vel:%f",velocity.y);
+   
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        TimeRef timeRef;
+        timeRef.hours = 9;
+        timeRef.minutes = 0;
+        [self showTime:timeRef inPoint:CGPointMake(location.x-50,location.y-100)];
+        self.currentTime = timeRef;
+    }
+    if (sender.state == UIGestureRecognizerStateChanged) {
+        [self showTime:self.currentTime inPoint:CGPointMake(location.x-50,location.y-100)];
+    }
+    if (sender.state == UIGestureRecognizerStateEnded) {
+    }
 }
 @end
