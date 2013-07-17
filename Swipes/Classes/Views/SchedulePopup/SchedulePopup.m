@@ -456,12 +456,12 @@ typedef struct
 }
 -(void)showTime:(NSDate*)time{
     UIView *timeView = [self viewWithTag:TIME_VIEWER_TAG];
-    CGFloat startOfIndicator = 60;
-    CGFloat indicatorBottomMargin = 30;
-    CGFloat heightOfIndicator = self.bounds.size.height-startOfIndicator-indicatorBottomMargin;
-    
     
     if(!timeView){
+        CGFloat startOfIndicator = 100;
+        CGFloat indicatorBottomMargin = 50;
+        CGFloat heightOfIndicator = self.bounds.size.height-startOfIndicator-indicatorBottomMargin;
+        NSInteger widthOfIndicator = 260;
         timeView = [[UIView alloc] initWithFrame:self.bounds];
         timeView.backgroundColor = color(253, 99, 73, 0.95);
         timeView.tag = TIME_VIEWER_TAG;
@@ -472,24 +472,17 @@ typedef struct
         label.font = KP_BOLD(40);
         label.textAlignment = UITextAlignmentCenter;
         [timeView addSubview:label];
-        UIView *timeBackground = [[UIView alloc] initWithFrame:CGRectMake(300, startOfIndicator, 4,heightOfIndicator)];
-        timeBackground.backgroundColor = [UIColor whiteColor];
+        UIView *timeBackground = [[UIView alloc] initWithFrame:CGRectMake((320-widthOfIndicator)/2, startOfIndicator, widthOfIndicator,heightOfIndicator)];
+        timeBackground.backgroundColor = [UIColor clearColor];
+        timeBackground.layer.borderWidth = 2;
+        timeBackground.layer.borderColor = [UIColor whiteColor].CGColor;
         
-        UIView *indicatorView = [[UIView alloc] initWithFrame:CGRectMake(timeBackground.frame.origin.x+(4/2)-15, 0, 30, 30)];
-        indicatorView.backgroundColor = [UIColor whiteColor];
-        indicatorView.layer.cornerRadius = 15;
-        indicatorView.tag = TIME_INDICATOR_TAG;
+        
         
         [timeView addSubview:timeBackground];
-        [timeView addSubview:indicatorView];
         [self addSubview:timeView];
     }
-    UIView *indicator = [self viewWithTag:TIME_INDICATOR_TAG];
     
-    NSDate *lowerLimit = [time dateAtHours:0 minutes:0];
-    NSInteger minutes = [time minutesAfterDate:lowerLimit];
-    CGFloat percentageOfDay = (float)minutes / 1440;
-    CGRectSetY(indicator, startOfIndicator+heightOfIndicator-(percentageOfDay*heightOfIndicator)-15);
     
     UILabel *timeLabel = (UILabel*)[timeView viewWithTag:TIME_VIEWER_LABEL_TAG];
     NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
@@ -500,14 +493,21 @@ typedef struct
 }
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender
 {
-    CGFloat interval = 15;
+    
     CGPoint velocity = [sender velocityInView:self];
     CGPoint location = [sender locationInView:self];
     CGFloat vel = fabsf(velocity.y);
     NSInteger minutesPerInterval = 5;
-    if(vel > 100) minutesPerInterval = 15;
-    if(vel > 200) minutesPerInterval = 60;
-    if(vel > 500) minutesPerInterval = 120;
+    CGFloat interval = 5;
+    //if(vel > 100) minutesPerInterval = 15;
+    if(vel > 150){
+        minutesPerInterval = 60;
+        interval = 10;
+    }
+    if(vel > 1000){
+        minutesPerInterval = 120;
+        interval = 15;
+    }
    // NSLog(@"vel:%f",vel);
     if (sender.state == UIGestureRecognizerStateBegan) {
         self.pickingDate = [[NSDate date] dateAtHours:13 minutes:15];
@@ -516,15 +516,15 @@ typedef struct
         self.lastPosition = location;
     }
     if (sender.state == UIGestureRecognizerStateChanged) {
+        
         NSInteger movedIntervals = (self.lastPosition.y - location.y)/interval;
         BOOL update = NO;
         if(movedIntervals != 0){
             self.activeTime = [self.activeTime dateByAddingMinutes:movedIntervals*minutesPerInterval];
-            NSDate *upperLimit = [self.pickingDate dateAtHours:23 minutes:59];
+            NSDate *upperLimit = [self.pickingDate dateAtHours:23 minutes:55];
             NSDate *lowerLimit = [self.pickingDate dateAtHours:0 minutes:0];
             update = YES;
             self.lastPosition = location;
-            self.activeTime = [self.activeTime dateToNearestMinutes:5];
             if([self.activeTime isLaterThanDate:upperLimit]) self.activeTime = upperLimit;
             if([self.activeTime isEarlierThanDate:lowerLimit]) self.activeTime = lowerLimit;
         }
