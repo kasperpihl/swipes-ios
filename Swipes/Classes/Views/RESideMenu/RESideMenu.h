@@ -40,4 +40,5 @@
 - (void)hide;
 - (void)setRootViewController:(UIViewController *)viewController;
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender;
+- (void)restoreView;
 @end

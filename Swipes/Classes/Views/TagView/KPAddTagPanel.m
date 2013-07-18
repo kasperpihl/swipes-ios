@@ -79,7 +79,7 @@
         tagView.enableEdit = YES;
         tagView.marginRight = 0;
         tagView.emptyText = @"No tags";
-        
+        tagView.emptyLabelMarginHack = 10;
         CGRectSetY(tagView, 0);
         tagView.resizeDelegate = self;
         tagView.tag = TAG_VIEW_TAG;

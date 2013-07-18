@@ -7,7 +7,8 @@
 //
 
 #import "MenuViewController.h"
-
+#import "RootViewController.h"
+#import "ThemeHandler.h"
 @interface MenuViewController ()
 
 @end
@@ -29,8 +30,13 @@
     UIButton *tutorialButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [tutorialButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [tutorialButton setTitle:@"Tutorial for now and like the page asshole" forState:UIControlStateNormal];
+    [tutorialButton addTarget:self action:@selector(pressedTut) forControlEvents:UIControlEventTouchUpInside];
     tutorialButton.frame = CGRectMake(0, 10, 300, 44);
     [self.view addSubview:tutorialButton];
+}
+-(void)pressedTut{
+    [THEMER changeTheme];
+    [ROOT_CONTROLLER resetRoot];
 }
 - (void)didReceiveMemoryWarning
 {

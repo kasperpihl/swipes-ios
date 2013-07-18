@@ -24,7 +24,7 @@
 #define INDICATOR_HEIGHT 23
 #define INDICATOR_WIDTH 1
 
-#define LABEL_X 50
+#define LABEL_X 42
 #define TITLE_Y (TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
 
 
@@ -84,7 +84,7 @@
         overlayView.backgroundColor = tbackground(TaskCellBackground);
         self.selectedBackgroundView = overlayView;
         
-        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake((LABEL_X-TIMELINE_WIDTH)/2, 0, TIMELINE_WIDTH, CELL_HEIGHT)];
+        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (LABEL_X/2)+TIMELINE_WIDTH, CELL_HEIGHT)];
         timelineLine.tag = TIMELINE_TAG;
         timelineLine.backgroundColor = tcolor(TaskCellTimelineColor);
         [self.contentView addSubview:timelineLine];
@@ -93,7 +93,7 @@
         CGFloat outlineWidth = DOT_SIZE+(2*DOT_OUTLINE_SIZE);
         UIView *dotOutlineContainer = [[UIView alloc] initWithFrame:CGRectMake((LABEL_X-outlineWidth)/2, (CELL_HEIGHT-outlineWidth)/2, outlineWidth, outlineWidth)];
         dotOutlineContainer.tag = OUTLINE_TAG;
-        dotOutlineContainer.backgroundColor = tbackground(TaskCellBackground);
+        dotOutlineContainer.backgroundColor = tcolor(TaskCellTimelineColor);
         dotOutlineContainer.layer.cornerRadius = outlineWidth/2;
     
         
@@ -109,7 +109,7 @@
         alarmLabel.tag = ALARM_LABEL_TAG;
         alarmLabel.font = CELL_ALARM_FONT;
         alarmLabel.textColor = CELL_ALARM_TEXT_COLOR;
-        alarmLabel.backgroundColor = CELL_ALARM_BACKGROUND;
+        alarmLabel.backgroundColor = tbackground(TaskTableSectionHeaderBackground);
         alarmLabel.textAlignment = UITextAlignmentCenter;
         self.alarmLabel.numberOfLines = 1;
         alarmLabel.hidden = YES;
@@ -190,8 +190,8 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     UIColor *backgroundColor = selected ? tcolor(TaskCellTimelineColor) : tbackground(TaskCellBackground);
-    UIColor *timelineColor = selected ? tbackground(TaskCellBackground) : tcolor(TaskCellTimelineColor);
-    self.timelineView.backgroundColor = timelineColor;
+    //UIColor *timelineColor = selected ? tbackground(TaskCellBackground) : tcolor(TaskCellTimelineColor);
+    //self.timelineView.backgroundColor = timelineColor;
     self.contentView.backgroundColor = backgroundColor;
 }
 -(void)setCellType:(CellType)cellType{

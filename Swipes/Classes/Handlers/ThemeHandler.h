@@ -12,8 +12,8 @@
 #define tcolor(ThemerItem) [THEMER colorForItem:ThemerItem]
 #define tbackground(background) [THEMER colorForBackground:background]
 typedef enum {
-    ThemeDark,
-    ThemeLight
+    ThemeDark = 1,
+    ThemeLight = 2
 } Theme;
 typedef enum {
     MenuItemTasks,
@@ -49,4 +49,5 @@ typedef enum {
 -(UIColor*)colorForBackground:(Background)background;
 -(UIColor*)colorForItem:(ThemerItem)item;
 -(UIFont *)fontForItem:(ThemerItem)item;
+-(void)changeTheme;
 @end

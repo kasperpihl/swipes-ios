@@ -12,8 +12,14 @@ static ThemeHandler *sharedObject;
 +(ThemeHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[ThemeHandler allocWithZone:NULL] init];
+        sharedObject.currentTheme = [[NSUserDefaults standardUserDefaults] integerForKey:@"theme"];
     }
     return sharedObject;
+}
+-(void)changeTheme{
+    Theme newTheme = (self.currentTheme == ThemeDark) ? ThemeLight : ThemeDark;
+    [[NSUserDefaults standardUserDefaults] setInteger:newTheme forKey:@"theme"];
+    self.currentTheme = newTheme;
 }
 -(UIColor*)colorForBackground:(Background)background{
     switch (background) {
@@ -24,11 +30,11 @@ static ThemeHandler *sharedObject;
         case TaskCellBackground:
             return TASK_CELL_BACKGROUND;
         case TaskTableSectionHeaderBackground:
-            return [self colorForBackground:MenuBackground];
+            return TASK_TABLE_SECTION_BACKGROUND;
         case TagSelectedBackground:
             return [self colorForItem:MenuItemTasks];
         case TaskTableBackground:
-            return [self colorForBackground:MenuBackground];
+            return [self colorForBackground:TaskTableSectionHeaderBackground];
         case TagBackground:
             return [self colorForBackground:MenuSelectedBackground];
         case TagBarBackground:

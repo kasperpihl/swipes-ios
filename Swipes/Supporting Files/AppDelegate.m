@@ -53,8 +53,6 @@
     KPCORE;
     [Mixpanel sharedInstanceWithToken:mixpanelToken];
     [Appirater appLaunched:YES];
-    /*MSNavigationPaneViewController *paneViewController = (MSNavigationPaneViewController *)self.window.rootViewController;
-    ROOT_CONTROLLER.paneNavigationViewController = paneViewController;*/
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (notification) [self application:application didReceiveLocalNotification:notification];
     return YES;

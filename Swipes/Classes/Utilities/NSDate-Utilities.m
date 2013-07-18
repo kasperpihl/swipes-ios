@@ -324,7 +324,6 @@
     // Construct a new date.
     return [[NSCalendar currentCalendar] dateFromComponents:comps];
 }
-
 #pragma mark Retrieving Intervals
 
 - (NSInteger) minutesAfterDate: (NSDate *) aDate
@@ -392,7 +391,6 @@
 	NSDateComponents *components = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:self];
 	return components.minute;
 }
-
 - (NSInteger) seconds
 {
 	NSDateComponents *components = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:self];

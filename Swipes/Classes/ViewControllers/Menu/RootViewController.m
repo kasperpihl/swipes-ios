@@ -27,6 +27,7 @@
 #import "MenuViewController.h"
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
+@property (nonatomic,strong) MenuViewController *settingsViewController;
 @end
 
 @implementation RootViewController
@@ -132,33 +133,40 @@ static RootViewController *sharedObject;
     }
     return sharedObject;
 }
-
+-(void)resetRoot{
+    self.menuViewController = nil;
+    [self setupAppearance];
+    [self.sideMenu hide];
+    
+    
+}
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
+    if(self.lockSettings) return;
     [self.sideMenu panGestureRecognized:sender];
 }
 
 #pragma mark - Helping methods
 #pragma mark - ViewController methods
 -(void)setupAppearance{
+    self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+    if(!sharedObject) sharedObject = self;
+    if(![PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
+    else [self changeToMenu:KPMenuHome animated:NO];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
-    [self setupAppearance];
-    self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-    if(!sharedObject) sharedObject = self;
-    //self.sideMenu = [[RESideMenu alloc] init];
+    
+    self.sideMenu = [[RESideMenu alloc] init];
     self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;
+    self.settingsViewController = [[MenuViewController alloc] init];
+    self.sideMenu.revealView = self.settingsViewController.view;
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
-    //[self.view addGestureRecognizer:panGestureRecognizer];
-    MenuViewController *viewController = [[MenuViewController alloc] init];
-    self.sideMenu.revealView = viewController.view;
-    // Do any additional setup after loading the view.
-    //[PFUser logOut];
-//#warning Reverse the exclamation mark
-    if(![PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
-    else [self changeToMenu:KPMenuHome animated:NO];
+    [self.view addGestureRecognizer:panGestureRecognizer];
+    
+    [self setupAppearance];
+    
     
 }
 

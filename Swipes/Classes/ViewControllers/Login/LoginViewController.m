@@ -86,7 +86,7 @@
         
         
         self.logInView.externalLogInLabel.font = LOGIN_LABEL_ABOVE_FONT;
-        self.logInView.externalLogInLabel.textColor = LOGIN_LABEL_ABOVE_COLOR;
+        self.logInView.externalLogInLabel.textColor = tbackground(TaskTableSectionHeaderBackground);
         [self.logInView.externalLogInLabel setShadowOffset:CGSizeZero];
         [self setupButton:self.logInView.facebookButton];
         [self.logInView.facebookButton setBackgroundImage:[UtilityClass imageWithColor:color(57,159,219,1)] forState:UIControlStateNormal];
@@ -95,7 +95,7 @@
         
         
         self.logInView.signUpLabel.font = LOGIN_LABEL_ABOVE_FONT;
-        self.logInView.signUpLabel.textColor = LOGIN_LABEL_ABOVE_COLOR;
+        self.logInView.signUpLabel.textColor = tbackground(TaskTableSectionHeaderBackground);
         [self.logInView.signUpLabel setShadowOffset:CGSizeZero];
         [self setupButton:self.logInView.signUpButton];
         [self.logInView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:SIGNUP_BUTTON_BACKGROUND] forState:UIControlStateNormal];

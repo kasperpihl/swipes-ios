@@ -22,4 +22,6 @@ typedef enum {
 +(RootViewController*)sharedInstance;
 -(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated;
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
+@property (nonatomic) BOOL lockSettings;
+-(void)resetRoot;
 @end

@@ -29,5 +29,4 @@
 @interface UIWindow (RESideMenuExtensions)
 
 - (UIImage *)re_snapshotWithStatusBar:(BOOL)withStatusBar;
-
 @end

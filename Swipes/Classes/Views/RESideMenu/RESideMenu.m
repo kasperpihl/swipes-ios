@@ -26,6 +26,7 @@
 #import "RESideMenu.h"
 #import "AccelerationAnimation.h"
 #import "Evaluate.h"
+#import "RootViewController.h"
 
 const int INTERSTITIAL_STEPS = 99;
 
@@ -192,11 +193,22 @@ const int INTERSTITIAL_STEPS = 99;
 }
 - (void)restoreFromRect:(CGRect)rect
 {
+    
     _slidebackView.userInteractionEnabled = NO;
     while (_slidebackView.gestureRecognizers.count) {
         [_slidebackView removeGestureRecognizer:[_slidebackView.gestureRecognizers objectAtIndex:0]];
     }
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    // Take a snapshot
+    //
+    UIGraphicsBeginImageContext(ROOT_CONTROLLER.view.bounds.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [ROOT_CONTROLLER.view.layer renderInContext:context];
+    UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    _screenshotView.image = screenShot;
+    
+    
     CGFloat x = rect.origin.x;
     CGFloat targetX = window.frame.size.width;
     if(x > targetX) x = targetX;
