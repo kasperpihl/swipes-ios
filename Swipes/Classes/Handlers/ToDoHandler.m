@@ -90,13 +90,13 @@ static ToDoHandler *sharedObject;
     UIColor *returnColor;
     switch (type) {
         case CellTypeSchedule:
-            returnColor = tcolor(MenuItemLater);
+            returnColor = tcolor(LaterColor);
             break;
         case CellTypeToday:
-            returnColor = tcolor(MenuItemTasks);
+            returnColor = tcolor(TasksColor);
             break;
         case CellTypeDone:
-            returnColor = tcolor(MenuItemDone);
+            returnColor = tcolor(DoneColor);
             break;
         default:
             break;

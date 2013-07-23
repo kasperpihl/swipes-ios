@@ -5,7 +5,35 @@
 //  Created by Kasper Pihl Tornøe on 16/07/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
+/* Main colors */
+#define retColor(DarkColor,LightColor) ((THEMER.currentTheme == ThemeDark) ? DarkColor : LightColor)
+#define inv(color) [ThemeHandler inverseColor:color]
 
+#define TASKS_COLOR                     retColor(color(255,227,64,1),       color(255,227,64,1))
+#define DONE_COLOR                      retColor(color(63,186,141,1),       color(63,186,141,1))
+#define LATER_COLOR                     retColor(color(254,115,103,1),      color(254,115,103,1))
+/* Backgrounds */
+#define MENU_BACKGROUND                 retColor(color(44,50,59,1),         inv(color(44,50,59,1)))
+#define MENU_SELECTED_BACKGROUND        retColor(color(80,90,104,1),        inv(color(80,90,104,1)))
+#define SEARCH_DRAWER_BACKGROUND        retColor(color(69,77,89,1),         inv(color(69,77,89,1)))
+#define TASK_TABLE_BACKGROUND           retColor(color(106,117,131,1),      inv(color(106,117,131,1)))
+/* Texts */
+#define SEARCH_DRAWER_COLOR             retColor(color(189,194,201,1),      inv(color(189,194,201,1)))
+#define TASK_CELL_TAG_COLOR             retColor(color(160,169,179,1),      inv(color(160,169,179,1)))
+typedef enum {
+    BCTasksColor,
+    BCLaterColor,
+    BCDoneColor,
+    BCMenuBackground,
+    BCMenuSelectedBackground,
+    BCSearchDrawerBackground,
+    BCTaskTableBackground,
+    BCSearchDrawerColor,
+    BCTaskCellTagColor,
+    BCWhiteColor
+} BaseColors;
+
+#define bcolor(basecolor) [self colorForBase:basecolor]
 #import "ThemeHandler.h"
 @implementation ThemeHandler
 static ThemeHandler *sharedObject;
@@ -21,61 +49,105 @@ static ThemeHandler *sharedObject;
     [[NSUserDefaults standardUserDefaults] setInteger:newTheme forKey:@"theme"];
     self.currentTheme = newTheme;
 }
--(UIColor*)colorForBackground:(Background)background{
-    switch (background) {
-        case MenuBackground:
+-(UIColor *)colorForBase:(BaseColors)baseColor{
+    switch (baseColor) {
+        case BCTasksColor:
+            return TASKS_COLOR;
+        case BCLaterColor:
+            return LATER_COLOR;
+        case BCDoneColor:
+            return DONE_COLOR;
+        case BCMenuBackground:
             return MENU_BACKGROUND;
-        case MenuSelectedBackground:
+        case BCMenuSelectedBackground:
             return MENU_SELECTED_BACKGROUND;
-        case TaskCellBackground:
-            return TASK_CELL_BACKGROUND;
-        case TaskTableSectionHeaderBackground:
-            return TASK_TABLE_SECTION_BACKGROUND;
-        case TagSelectedBackground:
-            return [self colorForItem:MenuItemTasks];
-        case TaskTableBackground:
-            return [self colorForBackground:TaskTableSectionHeaderBackground];
-        case TagBackground:
-            return [self colorForBackground:MenuSelectedBackground];
-        case TagBarBackground:
-            return [self colorForBackground:MenuBackground];
-        case AlertBackground:
-            return [self colorForBackground:MenuBackground];
-        case LoginBackground:
-            return [self colorForBackground:MenuBackground];
-        case LoginButtonBackground:
-            return [self colorForBackground:TaskCellBackground];
-        case EditTaskBackground:
-            return [self colorForBackground:TaskCellBackground];
-        case EditTaskTitleBackground:
-            return [self colorForBackground:MenuSelectedBackground];
-        default:
-            break;
+        case BCSearchDrawerBackground:
+            return SEARCH_DRAWER_BACKGROUND;
+        case BCTaskTableBackground:
+            return TASK_TABLE_BACKGROUND;
+        case BCSearchDrawerColor:
+            return SEARCH_DRAWER_COLOR;
+        case BCTaskCellTagColor:
+            return TASK_CELL_TAG_COLOR;
+        case BCWhiteColor:
+            return [UIColor whiteColor];
     }
     return nil;
 }
--(UIColor*)colorForItem:(ThemerItem)item{
-    switch (item) {
-        case MenuItemTasks:
-            return TASKS_COLOR;
-        case MenuItemDone:
-            return DONE_COLOR;
-        case MenuItemLater:
-            return LATER_COLOR;
-        case TaskCellTimelineColor:
-            return [self colorForBackground:MenuSelectedBackground];
-        case ColoredSeperator:
-            return [self colorForItem:MenuItemTasks];
-        case ColoredButton:
-            return [self colorForItem:MenuItemTasks];
-        case TaskTableEmptyText:
-            return [self colorForBackground:TaskCellBackground];
-        case TaskTableEmptyTodayText:
-            return [self colorForItem:MenuItemTasks];
-        default:
+-(UIColor*)colorForBackground:(Background)background{
+    BaseColors color;
+    switch (background) {
+        case MenuBackground:
+        case TagBarBackground:
+        case AlertBackground:
+        case LoginBackground:
+            color = BCMenuBackground;
+            break;
+            
+        case MenuSelectedBackground:
+        case TaskCellBackground:
+        case LoginButtonBackground:
+        case TagBackground:
+            color = BCMenuSelectedBackground;
+            break;
+        case PopupBackground:
+            return [UIColor clearColor];
+            
+        case SearchDrawerBackground:
+        case EditTaskTitleBackground:
+        case TaskCellSelectedBackground:
+            color = BCSearchDrawerBackground;
+            break;
+        
+        case TagSelectedBackground:
+            color = BCDoneColor;
+            break;
+        
+        case EditTaskBackground:
+        case TaskTableBackground:
+            color = BCTaskTableBackground;
             break;
     }
-    return nil;
+    return bcolor(color);
+}
+-(UIColor*)colorForItem:(ThemerItem)item{
+    BaseColors color;
+    switch (item) {
+        case TasksColor:
+        case TaskTableEmptyTodayText:
+        case ColoredSeperator:
+        case ColoredButton:
+            color = BCTasksColor;
+            break;
+            
+        case DoneColor:
+            color = BCDoneColor;
+            break;
+        
+        case LaterColor:
+            color = BCLaterColor;
+            break;
+        
+        case TaskCellTimelineColor:
+            color = BCSearchDrawerBackground;
+            break;
+            
+        case SearchDrawerColor:
+        case TaskTableEmptyText:
+        case TaskCellTitle:
+            color = BCSearchDrawerColor;
+            break;
+            
+        case TaskCellTagColor:
+            color = BCTaskCellTagColor;
+            break;
+            
+        case TagColor:
+            color = BCWhiteColor;
+            break;
+        
+    }
+    return bcolor(color);
 }
 
 -(UIFont *)fontForItem:(ThemerItem)item{

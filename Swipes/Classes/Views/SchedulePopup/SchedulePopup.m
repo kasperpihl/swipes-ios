@@ -87,19 +87,12 @@ typedef struct
     time.minutes = 0;
     return time;
 }
-+(SchedulePopup *)showInView:(UIView *)view withBlock:(SchedulePopupBlock)block{
-    SchedulePopup *scheduleView = [[SchedulePopup alloc] initWithFrame:view.bounds];
-    [view addSubview:scheduleView];
-    scheduleView.block = block;
-    [scheduleView show:YES completed:nil];
-    return scheduleView;
-}
 -(void)returnState:(KPScheduleButtons)state date:(NSDate*)date{
     if(self.hasReturned) return;
     self.hasReturned = YES;
-    [self show:NO completed:^(BOOL succeeded, NSError *error) {
+    /*[self show:NO completed:^(BOOL succeeded, NSError *error) {
         if(self.block) self.block(state,date);
-    }];
+    }];*/
 }
 -(void)cancelled{
     [self returnState:KPScheduleButtonCancel date:nil];
@@ -131,7 +124,7 @@ typedef struct
     [self returnState:KPScheduleButtonThisWeekend date:nextWeek];
 }
 -(void)pressedSpecific:(id)sender{
-    [UIView transitionWithView:self.containerView
+    [UIView transitionWithView:self
                       duration:0.5f
                        options:(self.isPickingDate ? UIViewAnimationOptionTransitionFlipFromRight :
                                 UIViewAnimationOptionTransitionFlipFromLeft)
@@ -181,10 +174,10 @@ typedef struct
     self = [super initWithFrame:frame];
     if (self) {
         self.startingHour = 9;
-        [self setContainerSize:CGSizeMake(POPUP_WIDTH, POPUP_WIDTH)];
-        UIView *contentView = [[UIView alloc] initWithFrame:self.containerView.bounds];
+        self.frame = CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH);
+        UIView *contentView = [[UIView alloc] initWithFrame:self.bounds];
         
-        contentView.backgroundColor = POPUP_BACKGROUND;//POPUP_BACKGROUND_COLOR;
+        contentView.backgroundColor = tbackground(PopupBackground);//POPUP_BACKGROUND_COLOR;
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
         contentView.tag = CONTENT_VIEW_TAG;
@@ -241,15 +234,14 @@ typedef struct
         UIButton *unspecifiedButton = [self buttonForScheduleButton:KPScheduleButtonUnscheduled title:@"Unspecified"];
         [unspecifiedButton addTarget:self action:@selector(pressedUnspecified:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:unspecifiedButton];
-        [self.containerView addSubview:contentView];
-        self.contentView = [self.containerView viewWithTag:CONTENT_VIEW_TAG];
+        [self addSubview:contentView];
+        self.contentView = [self viewWithTag:CONTENT_VIEW_TAG];
         [self addPickerView];
-        
     }
     return self;
 }
 -(void)addPickerView{
-    UIView *selectDateView = [[UIView alloc] initWithFrame:self.containerView.bounds];
+    UIView *selectDateView = [[UIView alloc] initWithFrame:self.bounds];
     selectDateView.hidden = YES;
     selectDateView.tag = SELECT_DATE_VIEW_TAG;
     selectDateView.backgroundColor = POPUP_BACKGROUND; //POPUP_BACKGROUND_COLOR
@@ -281,7 +273,7 @@ typedef struct
     
     UILabel *monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, MONTH_LABEL_Y, selectDateView.frame.size.width, MONTH_LABEL_HEIGHT)];
     monthLabel.textAlignment = UITextAlignmentCenter;
-    monthLabel.textColor = BUTTON_COLOR;
+    monthLabel.textColor = tcolor(TagColor);
     monthLabel.tag = MONTH_LABEL_TAG;
     monthLabel.backgroundColor = [UIColor clearColor];
     monthLabel.font = BUTTON_FONT;
@@ -341,8 +333,8 @@ typedef struct
     
     
     
-    [self.containerView addSubview:selectDateView];
-    self.selectDateView = [self.containerView viewWithTag:SELECT_DATE_VIEW_TAG];
+    [self addSubview:selectDateView];
+    self.selectDateView = [self viewWithTag:SELECT_DATE_VIEW_TAG];
     
 }
 -(void)pressedBackMonth:(UIButton*)sender{

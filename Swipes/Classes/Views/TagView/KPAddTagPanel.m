@@ -92,7 +92,7 @@
         [self addSubview:tagContainerView];
         self.tagContainerView = [self viewWithTag:TAG_CONTAINER_VIEW_TAG];
         self.scrollView = (UIScrollView*)[self viewWithTag:SCROLL_VIEW_TAG];
-        self.scrollView.backgroundColor = MANAGE_TAGS_BACKGROUND;
+        self.scrollView.backgroundColor = tbackground(TagBarBackground);
         [self tagList:self.tagView changedSize:CGSizeMake(self.frame.size.width, self.tagView.frame.size.height)];
         CGRectSetHeight(self, self.tagContainerView.frame.origin.y+self.tagContainerView.frame.size.height+TAB_BAR_VIEW_HEIGHT);
         
@@ -111,7 +111,7 @@
         addButton.frame = CGRectMake(0, sepHeight, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-sepHeight);
         addButton.titleLabel.font = BUTTON_FONT;
         [addButton addTarget:self action:@selector(pressedAddButton:) forControlEvents:UIControlEventTouchUpInside];
-        addButton.titleLabel.textColor = BUTTON_COLOR;
+        addButton.titleLabel.textColor = tcolor(TagColor);
         [addButton setTitle:@"ADD" forState:UIControlStateNormal];
         [tagBarView addSubview:addButton];
         
@@ -125,7 +125,7 @@
         UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
         doneButton.frame = CGRectMake(tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*1, sepHeight, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-sepHeight);
         doneButton.titleLabel.font = BUTTON_FONT;
-        doneButton.titleLabel.textColor = BUTTON_COLOR;
+        doneButton.titleLabel.textColor = tcolor(TagColor);
         [doneButton addTarget:self action:@selector(pressedDoneButton:) forControlEvents:UIControlEventTouchUpInside];
         [doneButton setTitle:@"DONE" forState:UIControlStateNormal];
         [tagBarView addSubview:doneButton];
@@ -142,7 +142,7 @@
         
         UIView *addView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height, self.bounds.size.width, TEXT_FIELD_CONTAINER_HEIGHT+COLOR_SEPERATOR_HEIGHT)];
         addView.tag = ADD_VIEW_TAG;
-        addView.backgroundColor = TEXTFIELD_BACKGROUND;
+        addView.backgroundColor = tbackground(SearchDrawerBackground);
         UIView *addViewColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, addView.frame.size.height-COLOR_SEPERATOR_HEIGHT, addView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
         addViewColorSeperator.backgroundColor = tcolor(ColoredSeperator);
         [addView addSubview:addViewColorSeperator];
@@ -162,7 +162,7 @@
         UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, TEXT_FIELD_MARGIN_TOP, addView.frame.size.width-TEXT_FIELD_MARGIN_LEFT-buttonSize, TEXT_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
         textField.font = TEXT_FIELD_FONT;
-        textField.textColor = TEXT_FIELD_COLOR;
+        textField.textColor = tcolor(SearchDrawerColor);
         textField.returnKeyType = UIReturnKeyNext;
         textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
         textField.keyboardAppearance = UIKeyboardAppearanceAlert;

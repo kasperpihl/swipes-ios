@@ -213,16 +213,18 @@
         UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
         longPressGestureRecognizer.delegate = self;
         [button addGestureRecognizer:longPressGestureRecognizer];
-        longPressGestureRecognizer.allowableMovement = 5.0;
+        longPressGestureRecognizer.allowableMovement = 15.0;
     }
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
-    [button setTitleColor:BUTTON_COLOR forState:UIControlStateNormal];
+    [button setTitleColor:tcolor(TagColor) forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagBackground)] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagSelectedBackground)] forState:UIControlStateSelected];
     button.titleLabel.font = TAG_FONT;
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    button.layer.cornerRadius = 5;
+    button.layer.masksToBounds = YES;
     return button;
 }
 -(UILabel*)labelWithText:(NSString*)text{

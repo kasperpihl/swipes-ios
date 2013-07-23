@@ -102,7 +102,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     [AppsFlyer notifyAppID:@"657882159;TwJuYgpTKp9ENbxf6wMi8j"];
     NSString *isLoggedIn = ([PFUser currentUser]) ? @"yes" : @"no";
-    if(isLoggedIn) [ANALYTICS startSession];
+    if([isLoggedIn isEqualToString:@"yes"]) [ANALYTICS startSession];
     else [MIXPANEL track:@"Opened app" properties:@{@"Is logged in":isLoggedIn}];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }

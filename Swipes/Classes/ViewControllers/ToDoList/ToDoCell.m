@@ -66,7 +66,7 @@
         titleLabel.numberOfLines = 1;
         titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
         titleLabel.font = TITLE_LABEL_FONT;
-        titleLabel.textColor = CELL_TITLE_COLOR;
+        titleLabel.textColor = tcolor(TaskCellTitle);
         titleLabel.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:titleLabel];
         self.titleLabel = (UILabel*)[self.contentView viewWithTag:TITLE_LABEL_TAG];
@@ -76,7 +76,7 @@
         tagsLabel.numberOfLines = 1;
         tagsLabel.font = TAGS_LABEL_FONT;
         tagsLabel.backgroundColor = [UIColor clearColor];
-        tagsLabel.textColor = CELL_TAG_COLOR;
+        tagsLabel.textColor = tcolor(TaskCellTagColor);
         [self.contentView addSubview:tagsLabel];
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
@@ -108,8 +108,8 @@
         UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
         alarmLabel.tag = ALARM_LABEL_TAG;
         alarmLabel.font = CELL_ALARM_FONT;
-        alarmLabel.textColor = CELL_ALARM_TEXT_COLOR;
-        alarmLabel.backgroundColor = tbackground(TaskTableSectionHeaderBackground);
+        alarmLabel.textColor = tcolor(SearchDrawerColor);
+        alarmLabel.backgroundColor = tbackground(SearchDrawerBackground);
         alarmLabel.textAlignment = UITextAlignmentCenter;
         self.alarmLabel.numberOfLines = 1;
         alarmLabel.hidden = YES;
@@ -184,7 +184,16 @@
 -(void)setIconsForToDo:(KPToDo*)toDo{
     
 }
--(void)setDotColor:(UIColor *)color{
+-(void)setDotColor:(CellType)cellType{
+    UIColor *color = [TODOHANDLER colorForCellType:cellType];
+    if(![color isEqual:[TODOHANDLER colorForCellType:self.cellType]]){
+        self.timelineView.backgroundColor = color;
+        self.outlineView.backgroundColor = tbackground(TaskCellBackground);
+    }
+    else {
+        self.timelineView.backgroundColor = tcolor(TaskCellTimelineColor);
+        self.outlineView.backgroundColor = tcolor(TaskCellTimelineColor);
+    }
     self.dotView.backgroundColor = color;
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -214,6 +223,8 @@
         [self setThirdIconName:[TODOHANDLER iconNameForCellType:thirdCell]];
         [self setFourthIconName:[TODOHANDLER iconNameForCellType:fourthCell]];
         self.activatedDirection = [TODOHANDLER directionForCellType:cellType];
+        
+        
     }
 }
 @end

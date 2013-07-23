@@ -15,6 +15,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIViewController+KNSemiModal.h"
 #import "ToDoViewController.h"
+
+#import "SectionHeaderView.h"
+#import "KPBlurry.h"
 #define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
@@ -123,20 +126,28 @@
     
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 30)];
-    headerView.backgroundColor = tbackground(TaskTableSectionHeaderBackground);
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, SECTION_HEADER_HEIGHT)];
+    headerView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
     NSString *title = [self.itemHandler titleForSection:section];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(SECTION_HEADER_X, 0, tableView.bounds.size.width-2*SECTION_HEADER_X, SECTION_HEADER_HEIGHT)];
     titleLabel.backgroundColor = CLEAR;
-    titleLabel.font = SECTION_HEADER_FONT;
-    titleLabel.textColor = [TODOHANDLER colorForCellType:self.cellType];
+#warning change to theming
+    titleLabel.font = KP_BOLD(17);
+    titleLabel.textColor = color(44,50, 59, 1);
     titleLabel.text = [title capitalizedString];
     [headerView addSubview:titleLabel];
+    SectionHeaderView *shadowImageView = [[SectionHeaderView alloc] initWithFrame:headerView.bounds color:[TODOHANDLER colorForCellType:self.cellType]];
+    [headerView addSubview:shadowImageView];
+    CGFloat widthOfExtra = 30;
+    UIView *extraView = [[UIView alloc] initWithFrame:CGRectMake(320-widthOfExtra, headerView.frame.size.height, widthOfExtra, 10)];
+    extraView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
+    
+    [headerView addSubview:extraView];
     return headerView;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if(self.showingViewController.injectedIndexPath && indexPath.row == self.showingViewController.injectedIndexPath.row && indexPath.section == self.showingViewController.injectedIndexPath.section){
-        return self.tableView.frame.size.height+COLOR_SEPERATOR_HEIGHT-SECTION_HEADER_HEIGHT;
+        return self.tableView.frame.size.height-SECTION_HEADER_HEIGHT;
     }
     else return CELL_HEIGHT;
 }
@@ -160,10 +171,10 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
     
-    [cell showTimeline:YES];
-    [cell setDotColor:[TODOHANDLER colorForCellType:self.cellType]];
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     cell.cellType = [toDo cellTypeForTodo];
+    [cell showTimeline:YES];
+    [cell setDotColor:self.cellType];
     [cell changeToDo:toDo withSelectedTags:self.itemHandler.selectedTags];
     
 }
@@ -197,7 +208,7 @@
             ToDoViewController *viewController = [[ToDoViewController alloc] init];
             viewController.delegate = self;
             viewController.segmentedViewController = [self parent];
-            viewController.view.frame = CGRectMake(0, 0, 320, self.tableView.frame.size.height+COLOR_SEPERATOR_HEIGHT-SECTION_HEADER_HEIGHT);
+            viewController.view.frame = CGRectMake(0, 0, 320, self.tableView.frame.size.height-SECTION_HEADER_HEIGHT);
             viewController.injectedIndexPath = indexPath;
             self.showingViewController = viewController;
             
@@ -207,7 +218,7 @@
             ToDoCell *cell = (ToDoCell*)[self.tableView cellForRowAtIndexPath:indexPath];
             viewController.injectedCell = cell;
             viewController.model = toDo;
-            [self.tableView setContentOffset:CGPointMake(1, cell.frame.origin.y+COLOR_SEPERATOR_HEIGHT-SECTION_HEADER_HEIGHT) animated:YES];
+            [self.tableView setContentOffset:CGPointMake(1, cell.frame.origin.y-SECTION_HEADER_HEIGHT) animated:YES];
             self.tableView.scrollEnabled = NO;
             //self.tableView.delaysContentTouches = NO;
         }
@@ -268,7 +279,6 @@
         self.lastOffsetCapture = currentTime;
     }
     if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
-        self.fakeHeaderView.hidden = !(scrollView.contentOffset.y > self.tableView.tableHeaderView.frame.size.height);
         if (scrollView.contentOffset.y < self.searchBar.frame.size.height) {
            
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, COLOR_SEPERATOR_HEIGHT, 0);
@@ -291,19 +301,10 @@
     [[self parent] show:NO controlsAnimated:YES];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
-    [cell showTimeline:NO];
     if(self.selectedRows.count > 0){
         if(indexPath && ![self.selectedRows containsObject:indexPath]){
             [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
             [self.selectedRows addObject:indexPath];
-        }
-        
-        NSArray *visibleCells = [self.tableView visibleCells];
-        for(ToDoCell *localCell in visibleCells){
-            if(localCell.isSelected){
-                //[localCell setSelected:NO];
-                [localCell showTimeline:NO];
-            }
         }
     }
     else{
@@ -339,7 +340,16 @@
     __block CellType targetCellType = [TODOHANDLER cellTypeForCell:cell.cellType state:state];
     switch (targetCellType) {
         case CellTypeSchedule:{
-            [SchedulePopup showInView:self.parent.view withBlock:^(KPScheduleButtons button, NSDate *date) {
+            //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+            SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+            KPBlurry *blurryViewController = [[KPBlurry alloc] initWithView:popup];
+            blurryViewController.dismissAction = ^{
+                [self returnSelectedRowsAndBounce:YES];
+                self.isHandlingTrigger = NO;
+            };
+            [blurryViewController showInViewController:self.parent center:self.parent.view.center];
+            
+            /*[SchedulePopup showInView:self.parent.view withBlock:^(KPScheduleButtons button, NSDate *date) {
                 if(button == KPScheduleButtonCancel){
                     [self returnSelectedRowsAndBounce:YES];
                 }
@@ -349,7 +359,7 @@
                     [self moveIndexSet:indexSet toCellType:targetCellType];
                 }
                 self.isHandlingTrigger = NO;
-            }];
+            }];*/
             return;
         }
         case CellTypeToday:
@@ -371,8 +381,7 @@
     if(state != MCSwipeTableViewCellStateNone){
         targetType = [TODOHANDLER cellTypeForCell:self.cellType state:state];
     }
-    UIColor *dotColor = [TODOHANDLER colorForCellType:targetType];
-    [cell setDotColor:dotColor];
+    [cell setDotColor:targetType];
 }
 /*  */
 -(void)deleteSelectedItems:(id)sender{
@@ -452,8 +461,7 @@
     for(ToDoCell *localCell in visibleCells){
         NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
         if([self.selectedRows containsObject:indexPath]){
-            [localCell showTimeline:YES];
-            [localCell setDotColor:[TODOHANDLER colorForCellType:self.cellType]];
+            [localCell setDotColor:self.cellType];
             if(bounce) [localCell bounceToOrigin];
         }
     }
@@ -468,7 +476,7 @@
     tableView.allowsMultipleSelection = YES;
     [tableView setTableFooterView:[UIView new]];
     
-    tableView.frame = CGRectMake(0, COLOR_SEPERATOR_HEIGHT, tableView.frame.size.width, tableView.frame.size.height-COLOR_SEPERATOR_HEIGHT);
+    tableView.frame = CGRectMake(0, 0, tableView.frame.size.width, tableView.frame.size.height);
     UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
     //tableView.contentInset = UIEdgeInsetsMake(0, 0, CONTENT_INSET_BOTTOM, 0);
     tableView.delegate = self;
@@ -476,12 +484,12 @@
     tableView.dataSource = self.itemHandler;
     tableView.backgroundColor = [UIColor clearColor];
     tableView.layer.masksToBounds = NO;
-    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, SEARCH_BAR_DEFAULT_HEIGHT-COLOR_SEPERATOR_HEIGHT)];
+    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
     headerView.hidden = YES;
     tableView.tableHeaderView = headerView;
     tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     
-    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,-COLOR_SEPERATOR_HEIGHT, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
+    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,0, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
     searchBar.searchBarDelegate = self;
     searchBar.searchBarDataSource = self.itemHandler;
     searchBar.tag = SEARCH_BAR_TAG;
@@ -528,13 +536,6 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = tbackground(TaskTableBackground);
-    
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-    headerView.backgroundColor = tbackground(MenuSelectedBackground);
-    headerView.tag = FAKE_HEADER_VIEW_TAG;
-    [self.view addSubview:headerView];
-    self.fakeHeaderView = [self.view viewWithTag:FAKE_HEADER_VIEW_TAG];
-
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_white_background",self.state]]];
     imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
     imageView.tag = BACKGROUND_IMAGE_VIEW_TAG;

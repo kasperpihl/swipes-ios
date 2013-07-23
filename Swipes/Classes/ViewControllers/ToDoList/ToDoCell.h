@@ -14,6 +14,6 @@
 @property (nonatomic,weak) IBOutlet UIView *timelineView;
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags;
 -(void)showTimeline:(BOOL)show;
--(void)setDotColor:(UIColor*)color;
+-(void)setDotColor:(CellType)cellType;
 -(void)hideContent:(BOOL)hide animated:(BOOL)animated;
 @end

@@ -59,7 +59,7 @@
         notesView.tag = NOTES_VIEW_TAG;
         notesView.font = TEXT_FIELD_FONT;
         notesView.keyboardAppearance = UIKeyboardAppearanceAlert;
-        notesView.textColor = TEXT_FIELD_COLOR;
+        notesView.textColor = tcolor(SearchDrawerColor);
         [self addSubview:notesView];
         self.notesView = (UITextView*)[self viewWithTag:NOTES_VIEW_TAG];
         [self.notesView becomeFirstResponder];

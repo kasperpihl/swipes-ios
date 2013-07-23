@@ -332,7 +332,7 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (UIColor *)colorWithPercentage:(CGFloat)percentage {
-    UIColor *color = tbackground(TaskTableBackground);
+    UIColor *color = tbackground(TaskCellSelectedBackground);
     if(!self.didRegret){
         // Background Color
         if (percentage >= kMCStop1 && percentage < kMCStop2)
@@ -424,7 +424,7 @@ secondStateIconName:(NSString *)secondIconName
     if(self.didRegret) [_slidingImageView setImage:[UIImage imageNamed:nil]];
     // Image Position
     if (imageName != nil) {
-        [_slidingImageView setImage:[UIImage imageNamed:imageName]];
+        if(!self.didRegret)[_slidingImageView setImage:[UIImage imageNamed:imageName]];
         [_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
     }
     [self slideImageWithPercentage:percentage imageName:imageName isDragging:YES];
@@ -444,18 +444,19 @@ secondStateIconName:(NSString *)secondIconName
     CGPoint position = CGPointZero;
     position.y = CGRectGetHeight(self.bounds) / 2.0;
     if (isDragging) {
-        if (percentage >= 0 && percentage < kMCStop1) {
+        /*if (percentage >= 0 && percentage < kMCStop1) {
             position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
+            NSLog(@"x:%f",position.x);
+        }*/
 
-        else if (percentage >= kMCStop1) {
+        if (percentage >= 0) {
             position.x = [self offsetWithPercentage:percentage - (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
-        else if (percentage < 0 && percentage >= -kMCStop1) {
+       /* else if (percentage < 0 && percentage >= -kMCStop1) {
             position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
-        }
+        }*/
 
-        else if (percentage < -kMCStop1) {
+        else if (percentage < 0) {
             position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
     }
@@ -470,8 +471,6 @@ secondStateIconName:(NSString *)secondIconName
             return;
         }
     }
-
-
     slidingImageRect = CGRectMake(position.x - slidingImageSize.width / 2.0,
             position.y - slidingImageSize.height / 2.0,
             slidingImageSize.width,
@@ -543,6 +542,7 @@ secondStateIconName:(NSString *)secondIconName
                                           }
                                           completion:^(BOOL finished2) {
                                               [self notifyDelegate];
+                                              self.didRegret = NO;
                                           }];
                      }];
 }
@@ -551,9 +551,9 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)notifyDelegate {
     MCSwipeTableViewCellState state = [self stateWithPercentage:_currentPercentage];
-        if (_delegate != nil && [_delegate respondsToSelector:@selector(swipeTableViewCell:didTriggerState:withMode:)]) {
-            [_delegate swipeTableViewCell:self didTriggerState:state withMode:_mode];
-        }
+    if (_delegate != nil && [_delegate respondsToSelector:@selector(swipeTableViewCell:didTriggerState:withMode:)]) {
+        [_delegate swipeTableViewCell:self didTriggerState:state withMode:_mode];
+    }
 }
 
 #pragma mark - Setter

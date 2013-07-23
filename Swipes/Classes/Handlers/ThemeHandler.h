@@ -15,21 +15,28 @@ typedef enum {
     ThemeDark = 1,
     ThemeLight = 2
 } Theme;
+
 typedef enum {
-    MenuItemTasks,
-    MenuItemLater,
-    MenuItemDone,
+    TasksColor,
+    LaterColor,
+    DoneColor,
+    SearchDrawerColor,
     TaskTableEmptyText,
     TaskTableEmptyTodayText,
     TaskCellTimelineColor,
+    TaskCellTitle,
+    TaskCellTagColor,
     ColoredSeperator,
     ColoredButton,
+    TagColor
+    
 } ThemerItem;
+
 typedef enum {
     MenuBackground,
     MenuSelectedBackground,
+    SearchDrawerBackground,
     TaskTableBackground,
-    TaskTableSectionHeaderBackground,
     TaskCellBackground,
     TaskCellSelectedBackground,
     TagBackground,
@@ -39,13 +46,13 @@ typedef enum {
     EditTaskTitleBackground,
     AlertBackground,
     LoginBackground,
-    LoginButtonBackground
+    LoginButtonBackground,
+    PopupBackground
 } Background;
 
 @interface ThemeHandler : NSObject
 @property (nonatomic) Theme currentTheme;
 +(ThemeHandler*)sharedInstance;
-+(UIColor *)inverseColor:(UIColor*)color;
 -(UIColor*)colorForBackground:(Background)background;
 -(UIColor*)colorForItem:(ThemerItem)item;
 -(UIFont *)fontForItem:(ThemerItem)item;

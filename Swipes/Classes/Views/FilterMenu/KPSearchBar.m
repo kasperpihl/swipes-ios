@@ -32,7 +32,6 @@
 @property (nonatomic,weak) IBOutlet UIButton *filterButton;
 @property (nonatomic,weak) IBOutlet UITextField *searchField;
 @property (nonatomic,weak) IBOutlet KPTagList *selectedTagListView;
-@property (nonatomic,weak) IBOutlet UIView *clearedColorSeperatorView;
 @property (nonatomic,weak) IBOutlet UIView *filterViewMiddleSeperator;
 @property (nonatomic,weak) IBOutlet UIView *filterViewBottomSeperator;
 @property (nonatomic,strong) NSArray *selectedTags;
@@ -65,18 +64,12 @@
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBackgroundImage:[UtilityClass imageWithColor:TEXTFIELD_BACKGROUND]];
+        [self setBackgroundImage:[UtilityClass imageWithColor:tbackground(SearchDrawerBackground)]];
         //[self setSearchFieldBackgroundImage:[UtilityClass imageWithColor:TEXTFIELD_BACKGROUND] forState:UIControlStateNormal];
         [self setTranslucent:YES];
         self.placeholder = @"Search";
         self.backgroundColor = [UIColor clearColor];
-        UIView *colorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-COLOR_SEPERATOR_HEIGHT, self.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        colorSeperator.backgroundColor = tbackground(MenuSelectedBackground);
-        colorSeperator.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
-        colorSeperator.tag = CLEARED_SEPERATOR_TAG;
-        [self addSubview:colorSeperator];
-        self.clearedColorSeperatorView = [self viewWithTag:CLEARED_SEPERATOR_TAG];
-        CGFloat buttonSize = self.frame.size.height-COLOR_SEPERATOR_HEIGHT;
+        CGFloat buttonSize = self.frame.size.height;
         UIButton *filterButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [filterButton addTarget:self action:@selector(pressedFilter:) forControlEvents:UIControlEventTouchUpInside];
         filterButton.tag = FILTER_BUTTON_TAG;
@@ -146,7 +139,7 @@
         searchField.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
         searchField.returnKeyType = UIReturnKeyDone;
         searchField.borderStyle = UITextBorderStyleNone;
-        searchField.textColor = TEXT_FIELD_COLOR;
+        searchField.textColor = tcolor(SearchDrawerColor);
         searchField.enablesReturnKeyAutomatically = NO;
         searchField.clearButtonMode = UITextFieldViewModeNever;
         [searchField addTarget:self action:@selector(startedSearch:) forControlEvents:UIControlEventEditingDidBegin];

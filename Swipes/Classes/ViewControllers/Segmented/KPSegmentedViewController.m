@@ -194,9 +194,13 @@
         [segmentedControl setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)]];
         [segmentedControl setSelectedIndex: DEFAULT_SELECTED_INDEX];
         segmentedControl.layer.cornerRadius = SEGMENT_BORDER_RADIUS;
-        segmentedControl.layer.masksToBounds = YES;
+        segmentedControl.layer.masksToBounds = NO;
+        segmentedControl.layer.shadowOffset = CGSizeMake(0, 0);
+        segmentedControl.layer.shadowRadius = 5;
+        segmentedControl.layer.shadowOpacity = 0.5;
         segmentedControl.layer.borderColor = tbackground(MenuSelectedBackground).CGColor;
         segmentedControl.layer.borderWidth = SEGMENT_BORDER_WIDTH;
+        segmentedControl.layer.shadowPath = [UIBezierPath bezierPathWithRect:segmentedControl.bounds].CGPath;
         [segmentedControl addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventValueChanged];
         [segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
         [segmentedControl setSegmentedControlMode:AKSegmentedControlModeSticky];
@@ -215,38 +219,31 @@
     CGRectSetSize(button, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
     [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuBackground)] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)] forState:UIControlStateSelected];
-    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuBackground)] forState:UIControlStateHighlighted];
+    //[button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)] forState:UIControlStateHighlighted];
     button.adjustsImageWhenHighlighted = NO;
-    UIImage *normalImage;
-    CGFloat imageInset = SEGMENT_BORDER_RADIUS-COLOR_SEPERATOR_HEIGHT;
-    
+    NSString *imageString;
     UIColor *thisColor;
-    UIImage *highlightedImage;
     switch (controlButton) {
         case KPSegmentButtonSchedule:
-            thisColor = tcolor(MenuItemLater);
-            normalImage = [UIImage imageNamed:@"schedule.png"];
-            highlightedImage = [UIImage imageNamed:@"schedule-highlighted"];
+            
+            thisColor = tcolor(LaterColor);
+            imageString = @"schedule";
             break;
         case KPSegmentButtonToday:
-            thisColor = tcolor(MenuItemTasks);
-            imageInset += TODAY_EXTRA_INSET;
-            normalImage = [UIImage imageNamed:@"today"];
-            highlightedImage = [UIImage imageNamed:@"today-highlighted"];
+            thisColor = tcolor(TasksColor);
+            imageString = @"today";
             break;
         case KPSegmentButtonDone:
-            thisColor = tcolor(MenuItemDone);
-            normalImage = [UIImage imageNamed:@"done"];
-            highlightedImage = [UIImage imageNamed:@"done-highlighted"];
+            thisColor = tcolor(DoneColor);
+            imageString = @"done";
             break;
     }
-    UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(0, button.frame.size.height-3, button.frame.size.width, 3)];
-    //[button setImage:highlightedImage forState:UIControlStateSelected];
-    colorView.backgroundColor = tbackground(MenuSelectedBackground);//thisColor;
-    colorView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin);
-    [button addSubview:colorView];
-    button.imageEdgeInsets = UIEdgeInsetsMake(0, 0, COLOR_SEPERATOR_HEIGHT, 0);
+    UIImage *normalImage = [UIImage imageNamed:imageString];
+    UIImage *selectedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-selected"]];
+    UIImage *highlightedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-highlighted"]];;
     [button setImage:normalImage forState:UIControlStateNormal];
+    [button setImage:selectedImage forState:UIControlStateSelected];
+    [button setImage:selectedImage forState:UIControlStateHighlighted];
     button.imageView.animationImages = @[highlightedImage];
     button.imageView.animationDuration = 0.8;    
     return button;

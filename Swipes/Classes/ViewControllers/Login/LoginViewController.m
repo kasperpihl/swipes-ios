@@ -27,6 +27,10 @@
 #define SIGNUP_BUTTON_Y    (40      +(FACEBOOK_BUTTON_Y+SIGNUP_BUTTONS_HEIGHT))
 #define BUTTON_LABEL_SUBTRACTION 17
 
+#define LOGIN_LOGO_Y            0
+#define LOGIN_FIELDS_Y          50
+#define FIELDS_WIDTH            260
+#define SIGNUP_BUTTONS_HEIGHT   50
 
 @interface LoginViewController () < PFSignUpViewControllerDelegate,MYIntroductionDelegate>
 @property (nonatomic,strong) IBOutlet UIView *fieldsBackground;
@@ -86,7 +90,7 @@
         
         
         self.logInView.externalLogInLabel.font = LOGIN_LABEL_ABOVE_FONT;
-        self.logInView.externalLogInLabel.textColor = tbackground(TaskTableSectionHeaderBackground);
+        self.logInView.externalLogInLabel.textColor = tcolor(SearchDrawerColor);
         [self.logInView.externalLogInLabel setShadowOffset:CGSizeZero];
         [self setupButton:self.logInView.facebookButton];
         [self.logInView.facebookButton setBackgroundImage:[UtilityClass imageWithColor:color(57,159,219,1)] forState:UIControlStateNormal];
@@ -95,11 +99,11 @@
         
         
         self.logInView.signUpLabel.font = LOGIN_LABEL_ABOVE_FONT;
-        self.logInView.signUpLabel.textColor = tbackground(TaskTableSectionHeaderBackground);
+        self.logInView.signUpLabel.textColor = tcolor(SearchDrawerColor);
         [self.logInView.signUpLabel setShadowOffset:CGSizeZero];
         [self setupButton:self.logInView.signUpButton];
-        [self.logInView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:SIGNUP_BUTTON_BACKGROUND] forState:UIControlStateNormal];
-        [self.logInView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:[UtilityClass darkerColor:SIGNUP_BUTTON_BACKGROUND]] forState:UIControlStateHighlighted];
+        [self.logInView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:tcolor(DoneColor)] forState:UIControlStateNormal];
+        [self.logInView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:[UtilityClass darkerColor:tcolor(DoneColor)]] forState:UIControlStateHighlighted];
         [self.logInView.signUpButton setTitle:@"SIGN UP" forState:UIControlStateNormal];
         
         

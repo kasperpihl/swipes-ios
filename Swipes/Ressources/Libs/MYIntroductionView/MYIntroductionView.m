@@ -267,7 +267,7 @@
     panelDescriptionTextView.scrollEnabled = NO;
     panelDescriptionTextView.backgroundColor = [UIColor clearColor];
     panelDescriptionTextView.textAlignment = NSTextAlignmentCenter;
-    panelDescriptionTextView.textColor = WALKTHROUGH_DESCRIPTION_COLOR;
+    panelDescriptionTextView.textColor = tcolor(TagColor);
     panelDescriptionTextView.font = WALKTHROUGH_DESCRIPTION_FONT;
     panelDescriptionTextView.text = panel.Description;
     panelDescriptionTextView.editable = NO;

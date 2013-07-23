@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "KPPopup.h"
+#import <UIKit/UIKit.h>
 
-@interface KPAlert : KPPopup
+@interface KPAlert : UIView
 +(void)confirmInView:(UIView*)view title:(NSString*)title message:(NSString*)message block:(SuccessfulBlock)block;
 @end

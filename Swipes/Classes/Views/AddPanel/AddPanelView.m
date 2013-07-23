@@ -108,7 +108,7 @@
         textField.tag = TEXT_FIELD_TAG;
         textField.font = TEXT_FIELD_FONT;
         
-        textField.textColor = TEXT_FIELD_COLOR;
+        textField.textColor = tcolor(SearchDrawerColor);
         textField.keyboardAppearance = UIKeyboardAppearanceAlert;
         textField.returnKeyType = UIReturnKeyNext;
         textField.borderStyle = UITextBorderStyleNone;

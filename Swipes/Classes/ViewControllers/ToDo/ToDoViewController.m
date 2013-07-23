@@ -28,7 +28,7 @@
 
 #define DEFAULT_ROW_HEIGHT 60
 
-#define LABEL_X 50
+#define LABEL_X 42
 
 #define TITLE_HEIGHT 44
 #define TITLE_TOP_MARGIN 19
@@ -117,7 +117,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         textView.delegate = self;
         textView.internalTextView.keyboardAppearance = UIKeyboardAppearanceAlert;
         textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);
-        textView.textColor = EDIT_TASK_TITLE_COLOR;
+        textView.textColor = tcolor(SearchDrawerColor);
         
         UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DOT_SIZE,DOT_SIZE)];
         dotView.tag = DOT_VIEW_TAG;
@@ -230,12 +230,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     return self;
 }
 -(void)setColorsFor:(id)object{
-    if([object respondsToSelector:@selector(setTextColor:)]) [object setTextColor:EDIT_TASK_TEXT_COLOR];
+    if([object respondsToSelector:@selector(setTextColor:)]) [object setTextColor:tcolor(TagColor)];
     if([object respondsToSelector:@selector(setHighlightedTextColor:)]) [object setHighlightedTextColor:EDIT_TASK_GRAYED_OUT_TEXT];
 }
 -(UIImageView *)addAndGetImage:(NSString*)imageName inView:(UIView*)view tag:(NSInteger)tag{
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-    imageView.image = [UtilityClass imageNamed:imageName withColor:EDIT_TASK_GRAYED_OUT_TEXT];
+    imageView.image = [UIImage imageNamed:imageName];//[UtilityClass imageNamed: withColor:EDIT_TASK_GRAYED_OUT_TEXT];
     imageView.tag = tag;
     imageView.frame = CGRectSetPos(imageView.frame,(LABEL_X-imageView.frame.size.width)/2, (view.frame.size.height-imageView.frame.size.height)/2);
     imageView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
@@ -256,7 +256,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGFloat rightMargin = LABEL_X/3;
     UIView *seperatorView = [[UIView alloc] initWithFrame:CGRectMake(LABEL_X, view.frame.size.height-seperatorHeight, view.frame.size.width-LABEL_X-rightMargin, seperatorHeight)];
     seperatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    seperatorView.backgroundColor = tbackground(TaskTableSectionHeaderBackground);
+    seperatorView.backgroundColor = tbackground(TaskCellBackground);
     [view addSubview:seperatorView];
 }
 -(void)setActiveEditMode:(KPEditMode)activeEditMode{
@@ -371,7 +371,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
     else{
         self.notesImage.highlighted = NO;
-        self.notesView.textColor = EDIT_TASK_TEXT_COLOR;
+        self.notesView.textColor = tcolor(TagColor);
         self.notesView.text = self.model.notes;
     }
     CGRectSetHeight(self.notesView, self.notesView.contentSize.height);

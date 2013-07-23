@@ -25,13 +25,13 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        UIView *backgroundView = [[UIView alloc] initWithFrame:self.bounds];
+        /*UIView *backgroundView = [[UIView alloc] initWithFrame:self.bounds];
         backgroundView.backgroundColor = alpha(tbackground(TaskCellBackground),.6);
         UIButton *backgroundButton = [UIButton buttonWithType:UIButtonTypeCustom];
         backgroundButton.frame = backgroundView.bounds;
         [backgroundButton addTarget:self action:@selector(pressedBackground:) forControlEvents:UIControlEventTouchUpInside];
         [backgroundView addSubview:backgroundButton];
-        [self addSubview:backgroundView];
+        [self addSubview:backgroundView];*/
         
         UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake((self.frame.size.width-DEFAULT_CONTENT_SIZE)/2, (self.frame.size.height-DEFAULT_CONTENT_SIZE)/2, DEFAULT_CONTENT_SIZE, DEFAULT_CONTENT_SIZE)];
         containerView.hidden = YES;
@@ -78,12 +78,12 @@
     }
 }
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect
+ {
+ // Drawing code
+ }
+ */
 
 @end

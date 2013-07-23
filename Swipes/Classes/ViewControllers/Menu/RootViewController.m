@@ -25,6 +25,8 @@
 #import "AppDelegate.h"
 #import "RESideMenu.h"
 #import "MenuViewController.h"
+
+#import "CKCalendarView.h"
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
@@ -157,7 +159,11 @@ static RootViewController *sharedObject;
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
-    
+    /*CKCalendarView *calendarView = [[CKCalendarView alloc] initWithFrame:CGRectMake(0, 20, 320, 320)];
+    calendarView.onlyShowCurrentMonth = NO;
+    calendarView.adaptHeightToNumberOfWeeksInMonth = YES;
+    [self.view addSubview:calendarView];
+    return;*/
     self.sideMenu = [[RESideMenu alloc] init];
     self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;
     self.settingsViewController = [[MenuViewController alloc] init];

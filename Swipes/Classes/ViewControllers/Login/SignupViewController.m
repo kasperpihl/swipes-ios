@@ -31,8 +31,8 @@
         layer = self.signUpView.passwordField.layer;
         layer.shadowOpacity = 0.0;
         [self setupButton:self.signUpView.signUpButton];
-        [self.signUpView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:SIGNUP_BUTTON_BACKGROUND] forState:UIControlStateNormal];
-        [self.signUpView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:[UtilityClass darkerColor:SIGNUP_BUTTON_BACKGROUND]] forState:UIControlStateHighlighted];
+        [self.signUpView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:tcolor(DoneColor)] forState:UIControlStateNormal];
+        [self.signUpView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:[UtilityClass darkerColor:tcolor(DoneColor)]] forState:UIControlStateHighlighted];
         [self.signUpView.signUpButton setTitle:@"SIGN UP" forState:UIControlStateNormal];
     }
     return self;
