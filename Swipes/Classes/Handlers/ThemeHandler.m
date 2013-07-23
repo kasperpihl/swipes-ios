@@ -105,7 +105,7 @@ static ThemeHandler *sharedObject;
             color = BCMenuSelectedBackground;
             break;
         case PopupBackground:
-            return alpha(bcolor(BCLaterColor),0.3);//color(132,143,156,0.6);
+            return alpha(bcolor(BCLaterColor),0);//color(132,143,156,0.6);
             break;
             
         case SearchDrawerBackground:

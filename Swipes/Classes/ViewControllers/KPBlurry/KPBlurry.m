@@ -12,7 +12,7 @@
 #import <Accelerate/Accelerate.h>
 
 CGFloat const kRNGridMenuDefaultDuration = .12f;
-CGFloat const kRNGridMenuDefaultBlur = 0.2f;
+CGFloat const kRNGridMenuDefaultBlur = 0.4f;
 
 #pragma mark - Categories
 
@@ -235,27 +235,24 @@ static KPBlurry *rn_visibleGridMenu;
 - (void)createScreenshotAndLayoutWithScreenshotCompletion:(dispatch_block_t)screenshotCompletion {
     if (self.blurLevel > 0.f) {
         self.blurView.alpha = 0.f;
-        self.menuView.alpha = 0.0f;
-        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        closeButton.backgroundColor = tbackground(PopupBackground);
-        closeButton.frame = self.parentViewController.view.bounds;
-        closeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+        self.menuView.alpha = 0.f;
         
         
-        UIView *backgroundViewHack = [[UIView alloc] initWithFrame:self.menuView.frame];
-        backgroundViewHack.layer.cornerRadius = 10;
-        backgroundViewHack.backgroundColor = tcolor(LaterColor);
-        [self.parentViewController.view addSubview:closeButton];
+        
+        UIView *backgroundViewHack = [[UIView alloc] initWithFrame:self.parentViewController.view.bounds];
+        backgroundViewHack.backgroundColor = alpha(tcolor(LaterColor),0.8);
         [self.parentViewController.view addSubview:backgroundViewHack];
         UIImage *screenshot = [self.parentViewController.view rn_screenshot];
         [backgroundViewHack removeFromSuperview];
-        [closeButton removeFromSuperview];
         self.menuView.alpha = 1.f;
         self.blurView.alpha = 1.f;
         self.blurView.layer.contents = (id)screenshot.CGImage;
         
+        
+        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        closeButton.backgroundColor = CLEAR;//tbackground(PopupBackground);
+        closeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
         closeButton.frame = self.blurView.bounds;
-        closeButton.backgroundColor = CLEAR;
         [closeButton addTarget:self action:@selector(closeButton:) forControlEvents:UIControlEventTouchUpInside];
         [self.blurView addSubview:closeButton];
         if (screenshotCompletion != nil) {
