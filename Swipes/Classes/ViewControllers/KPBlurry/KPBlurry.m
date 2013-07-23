@@ -12,7 +12,7 @@
 #import <Accelerate/Accelerate.h>
 
 CGFloat const kRNGridMenuDefaultDuration = .12f;
-CGFloat const kRNGridMenuDefaultBlur = 0.5f;
+CGFloat const kRNGridMenuDefaultBlur = 0.2f;
 
 #pragma mark - Categories
 
@@ -235,15 +235,27 @@ static KPBlurry *rn_visibleGridMenu;
 - (void)createScreenshotAndLayoutWithScreenshotCompletion:(dispatch_block_t)screenshotCompletion {
     if (self.blurLevel > 0.f) {
         self.blurView.alpha = 0.f;
+        self.menuView.alpha = 0.0f;
+        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        closeButton.backgroundColor = tbackground(PopupBackground);
+        closeButton.frame = self.parentViewController.view.bounds;
+        closeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
         
-        self.menuView.alpha = 0.f;
+        
+        UIView *backgroundViewHack = [[UIView alloc] initWithFrame:self.menuView.frame];
+        backgroundViewHack.layer.cornerRadius = 10;
+        backgroundViewHack.backgroundColor = tcolor(LaterColor);
+        [self.parentViewController.view addSubview:closeButton];
+        [self.parentViewController.view addSubview:backgroundViewHack];
         UIImage *screenshot = [self.parentViewController.view rn_screenshot];
+        [backgroundViewHack removeFromSuperview];
+        [closeButton removeFromSuperview];
         self.menuView.alpha = 1.f;
         self.blurView.alpha = 1.f;
         self.blurView.layer.contents = (id)screenshot.CGImage;
-        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        
         closeButton.frame = self.blurView.bounds;
-        closeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+        closeButton.backgroundColor = CLEAR;
         [closeButton addTarget:self action:@selector(closeButton:) forControlEvents:UIControlEventTouchUpInside];
         [self.blurView addSubview:closeButton];
         if (screenshotCompletion != nil) {
@@ -299,35 +311,11 @@ static KPBlurry *rn_visibleGridMenu;
             CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
             opacityAnimation.fromValue = @0.;
             opacityAnimation.toValue = @1.;
-            opacityAnimation.duration = self.animationDuration * 0.5f;
+            opacityAnimation.duration = self.animationDuration;
             
-            CAKeyframeAnimation *scaleAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-            
-            CATransform3D startingScale = CATransform3DScale(self.menuView.layer.transform, 0, 0, 0);
-            CATransform3D overshootScale = CATransform3DScale(self.menuView.layer.transform, 1.05, 1.05, 1.0);
-            CATransform3D undershootScale = CATransform3DScale(self.menuView.layer.transform, 0.98, 0.98, 1.0);
-            CATransform3D endingScale = self.menuView.layer.transform;
-            
-            NSMutableArray *scaleValues = [NSMutableArray arrayWithObject:[NSValue valueWithCATransform3D:startingScale]];
-            NSMutableArray *keyTimes = [NSMutableArray arrayWithObject:@0.0f];
-            NSMutableArray *timingFunctions = [NSMutableArray arrayWithObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
-            
-            if (self.bounces) {
-                [scaleValues addObjectsFromArray:@[[NSValue valueWithCATransform3D:overshootScale], [NSValue valueWithCATransform3D:undershootScale]]];
-                [keyTimes addObjectsFromArray:@[@0.5f, @0.85f]];
-                [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-            }
-            
-            [scaleValues addObject:[NSValue valueWithCATransform3D:endingScale]];
-            [keyTimes addObject:@1.0f];
-            [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-            
-            scaleAnimation.values = scaleValues;
-            scaleAnimation.keyTimes = keyTimes;
-            scaleAnimation.timingFunctions = timingFunctions;
             
             CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
-            animationGroup.animations = @[scaleAnimation, opacityAnimation];
+            animationGroup.animations = @[opacityAnimation];
             animationGroup.duration = self.animationDuration;
             
             [self.menuView.layer addAnimation:animationGroup forKey:nil];
@@ -349,13 +337,8 @@ static KPBlurry *rn_visibleGridMenu;
         
         CATransform3D transform = CATransform3DScale(self.menuView.layer.transform, 0, 0, 0);
         
-        CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
-        scaleAnimation.fromValue = [NSValue valueWithCATransform3D:self.menuView.layer.transform];
-        scaleAnimation.toValue = [NSValue valueWithCATransform3D:transform];
-        scaleAnimation.duration = self.animationDuration;
-        
         CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
-        animationGroup.animations = @[opacityAnimation, scaleAnimation];
+        animationGroup.animations = @[opacityAnimation];
         animationGroup.duration = self.animationDuration;
         animationGroup.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
         [self.menuView.layer addAnimation:animationGroup forKey:nil];

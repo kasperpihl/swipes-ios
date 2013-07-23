@@ -21,8 +21,8 @@
 #define TIME_VIEWER_LABEL_TAG 9
 #define TIME_SLIDER_TAG 10
 
-#define SEPERATOR_COLOR_LIGHT color(157,159,161,1)
-#define SEPERATOR_MARGIN 0//0.02
+#define SEPERATOR_COLOR_LIGHT tcolor(TagColor)
+#define SEPERATOR_MARGIN 0.02//0.02
 
 
 #define SCHEUDLE_IMAGE_SIZE 36
@@ -43,7 +43,7 @@
 #define MONTH_LABEL_HEIGHT 30
 
 #define GRID_NUMBER 3
-#define BUTTON_PADDING 0
+#define BUTTON_PADDING 4
 #define CONTENT_VIEW_SIZE 310
 
 
@@ -177,11 +177,10 @@ typedef struct
         self.frame = CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH);
         UIView *contentView = [[UIView alloc] initWithFrame:self.bounds];
         
-        contentView.backgroundColor = tbackground(PopupBackground);//POPUP_BACKGROUND_COLOR;
+        contentView.backgroundColor = CLEAR;//POPUP_BACKGROUND_COLOR color(254,115,103,1);//;
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
         contentView.tag = CONTENT_VIEW_TAG;
-        
         for(NSInteger i = 1 ; i < GRID_NUMBER ; i++){
             UIView *verticalSeperatorView = [self seperatorWithSize:CONTENT_VIEW_SIZE*(1-(SEPERATOR_MARGIN*2)) vertical:YES];
             UIView *horizontalSeperatorView = [self seperatorWithSize:CONTENT_VIEW_SIZE*(1-(SEPERATOR_MARGIN*2)) vertical:NO];
@@ -379,13 +378,15 @@ typedef struct
     [button setBackgroundImage:[UtilityClass imageWithColor:POPUP_SELECTED] forState:UIControlStateHighlighted];
     button.titleLabel.font = SCHEDULE_BUTTON_FONT;
     if(SCHEDULE_BUTTON_CAPITAL) title = [title uppercaseString];
-    button.titleLabel.shadowOffset = CGSizeMake(1,1);
-    [button setTitleShadowColor:tbackground(TaskCellBackground) forState:UIControlStateNormal];
+    button.layer.cornerRadius = 10;
+    button.layer.masksToBounds = YES;
+    //button.titleLabel.shadowOffset = CGSizeMake(1,1);
+    //[button setTitleShadowColor:tbackground(TaskCellBackground) forState:UIControlStateNormal];
     [button setTitle:title forState:UIControlStateNormal];
     [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
     [button setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button setTitleShadowColor:[UIColor clearColor] forState:UIControlStateHighlighted];
+    //[button setTitleShadowColor:[UIColor clearColor] forState:UIControlStateHighlighted];
     [button setTitleColor:tbackground(TaskCellBackground) forState:UIControlStateHighlighted];
     UIImage *iconImage = [self imageForScheduleButton:scheduleButton];
     UIImageView *iconImageView = [[UIImageView alloc] initWithImage:iconImage];
@@ -404,7 +405,6 @@ typedef struct
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     [button addGestureRecognizer:panGestureRecognizer];
     iconImageView.frame = CGRectSetPos(iconImageView.frame, (button.frame.size.width-iconImage.size.width)/2,spacing);
-    
     button.titleEdgeInsets = UIEdgeInsetsMake(0, 0, spacing, 0);
     [button addSubview:iconImageView];
     return button;

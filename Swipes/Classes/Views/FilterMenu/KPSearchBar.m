@@ -86,7 +86,7 @@
         filterView.tag = FILTER_VIEW_TAG;
         filterView.hidden = YES;
 
-        KPTagList *selectedTagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width-TAG_HEIGHT-DEFAULT_SPACING, 0)];
+        KPTagList *selectedTagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
         selectedTagList.marginLeft = 0;
         selectedTagList.marginTop = 0;
         //(TAG_HEIGHT+DEFAULT_SPACING)/2;
@@ -107,11 +107,11 @@
         self.selectedTagListView = (KPTagList*)[filterView viewWithTag:SELECTED_TAG_LIST_TAG];
         KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
         tagList.emptyText = @"No tags assigned";
-        tagList.marginLeft = 0;
-        tagList.marginTop = 0;
+        tagList.marginLeft = 10;
+        tagList.marginTop = 40;
         tagList.emptyLabelMarginHack = 10;
         tagList.bottomMargin = tagList.spacing;
-        tagList.marginRight = 0;
+        tagList.marginRight = 10;
         tagList.tagDelegate = self;
         tagList.tag = TAG_LIST_TAG;
         [filterView addSubview:tagList];
@@ -170,8 +170,8 @@
 }
 -(void)reframe{
     [self.selectedTagListView setTags:self.selectedTags andSelectedTags:self.selectedTags];
-    CGFloat tagWidth = self.selectedTagListView.isEmptyList ? (self.frame.size.width-TAG_HEIGHT-DEFAULT_SPACING) : self.frame.size.width;
-    CGRectSetWidth(self.tagListView, tagWidth);
+    //CGFloat tagWidth = self.selectedTagListView.isEmptyList ? (self.frame.size.width-TAG_HEIGHT-DEFAULT_SPACING) : self.frame.size.width;
+    //CGRectSetWidth(self.tagListView, tagWidth);
     [self.tagListView setTags:self.unselectedTags andSelectedTags:nil];
     
     CGFloat tempHeight = 0;

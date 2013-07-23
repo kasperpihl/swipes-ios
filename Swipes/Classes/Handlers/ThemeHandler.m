@@ -12,6 +12,11 @@
 #define TASKS_COLOR                     retColor(color(255,227,64,1),       color(255,227,64,1))
 #define DONE_COLOR                      retColor(color(63,186,141,1),       color(63,186,141,1))
 #define LATER_COLOR                     retColor(color(254,115,103,1),      color(254,115,103,1))
+
+#define STRONG_TASKS_COLOR              color(228,192,21,1)
+#define STRONG_DONE_COLOR                color(45,141,115,1)
+#define STRONG_LATER_COLOR              color(254,69,52,1)
+
 /* Backgrounds */
 #define MENU_BACKGROUND                 retColor(color(44,50,59,1),         inv(color(44,50,59,1)))
 #define MENU_SELECTED_BACKGROUND        retColor(color(80,90,104,1),        inv(color(80,90,104,1)))
@@ -24,6 +29,9 @@ typedef enum {
     BCTasksColor,
     BCLaterColor,
     BCDoneColor,
+    BCStrongTasksColor,
+    BCStrongLaterColor,
+    BCStrongDoneColor,
     BCMenuBackground,
     BCMenuSelectedBackground,
     BCSearchDrawerBackground,
@@ -57,6 +65,12 @@ static ThemeHandler *sharedObject;
             return LATER_COLOR;
         case BCDoneColor:
             return DONE_COLOR;
+        case BCStrongTasksColor:
+            return STRONG_TASKS_COLOR;
+        case BCStrongDoneColor:
+            return STRONG_DONE_COLOR;
+        case BCStrongLaterColor:
+            return STRONG_LATER_COLOR;
         case BCMenuBackground:
             return MENU_BACKGROUND;
         case BCMenuSelectedBackground:
@@ -91,7 +105,8 @@ static ThemeHandler *sharedObject;
             color = BCMenuSelectedBackground;
             break;
         case PopupBackground:
-            return [UIColor clearColor];
+            return alpha(bcolor(BCLaterColor),0.3);//color(132,143,156,0.6);
+            break;
             
         case SearchDrawerBackground:
         case EditTaskTitleBackground:
