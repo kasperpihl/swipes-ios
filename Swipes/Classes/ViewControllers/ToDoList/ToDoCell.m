@@ -108,8 +108,8 @@
         UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
         alarmLabel.tag = ALARM_LABEL_TAG;
         alarmLabel.font = CELL_ALARM_FONT;
-        alarmLabel.textColor = tcolor(SearchDrawerColor);
-        alarmLabel.backgroundColor = tbackground(SearchDrawerBackground);
+        alarmLabel.textColor = tbackground(TaskCellBackground);
+        alarmLabel.backgroundColor = tcolor(TaskCellTagColor);
         alarmLabel.textAlignment = UITextAlignmentCenter;
         self.alarmLabel.numberOfLines = 1;
         alarmLabel.hidden = YES;
@@ -165,11 +165,7 @@
     CGFloat deltaX = LABEL_X;
     self.alarmLabel.hidden = YES;
     if(toDo.schedule && [toDo.schedule isInFuture]){
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"h:mm a"];
-        NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-        [dateFormatter setLocale:usLocale];
-        NSString *dateInString = [[dateFormatter stringFromDate:toDo.schedule] lowercaseString];
+        NSString *dateInString = [UtilityClass timeStringForDate:toDo.schedule];
         self.alarmLabel.text = dateInString;
         [self.alarmLabel sizeToFit];
         CGRectSetWidth(self.alarmLabel, self.alarmLabel.frame.size.width+2*ALARM_SPACING);

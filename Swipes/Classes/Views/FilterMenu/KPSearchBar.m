@@ -31,7 +31,6 @@
 @property (nonatomic,weak) IBOutlet UIView *filterView;
 @property (nonatomic,weak) IBOutlet UIButton *filterButton;
 @property (nonatomic,weak) IBOutlet UITextField *searchField;
-@property (nonatomic,weak) IBOutlet KPTagList *selectedTagListView;
 @property (nonatomic,weak) IBOutlet UIView *filterViewMiddleSeperator;
 @property (nonatomic,weak) IBOutlet UIView *filterViewBottomSeperator;
 @property (nonatomic,strong) NSArray *selectedTags;
@@ -85,18 +84,20 @@
         UIView *filterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 10)];
         filterView.tag = FILTER_VIEW_TAG;
         filterView.hidden = YES;
-
-        KPTagList *selectedTagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
-        selectedTagList.marginLeft = 0;
-        selectedTagList.marginTop = 0;
-        //(TAG_HEIGHT+DEFAULT_SPACING)/2;
-        selectedTagList.marginRight = selectedTagList.spacing;
-        selectedTagList.bottomMargin = selectedTagList.spacing;
-        selectedTagList.emptyText = @"Filter";
-        selectedTagList.tagDelegate = self;
-        selectedTagList.tag = SELECTED_TAG_LIST_TAG;
-        [filterView addSubview:selectedTagList];
-
+        
+        
+        KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
+        tagList.emptyText = @"No tags assigned";
+        tagList.marginLeft = tagList.spacing;
+        tagList.marginTop = 12;
+        tagList.emptyLabelMarginHack = 10;
+        tagList.firstRowSpacingHack = 44;
+        tagList.bottomMargin = tagList.spacing;
+        tagList.marginRight = tagList.spacing;
+        tagList.tagDelegate = self;
+        tagList.tag = TAG_LIST_TAG;
+        [filterView addSubview:tagList];
+        self.tagListView = (KPTagList*)[filterView viewWithTag:TAG_LIST_TAG];
         
         UIButton *clearFilterButton = [UIButton buttonWithType:UIButtonTypeCustom];
         clearFilterButton.frame = CGRectMake(self.frame.size.width-buttonSize,0,buttonSize,buttonSize);
@@ -104,18 +105,7 @@
         [clearFilterButton setImage:[UIImage imageNamed:@"cross_button"] forState:UIControlStateNormal];
         [clearFilterButton addTarget:self action:@selector(pressedClearFilter:) forControlEvents:UIControlEventTouchUpInside];
         [filterView addSubview:clearFilterButton];
-        self.selectedTagListView = (KPTagList*)[filterView viewWithTag:SELECTED_TAG_LIST_TAG];
-        KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
-        tagList.emptyText = @"No tags assigned";
-        tagList.marginLeft = 10;
-        tagList.marginTop = 40;
-        tagList.emptyLabelMarginHack = 10;
-        tagList.bottomMargin = tagList.spacing;
-        tagList.marginRight = 10;
-        tagList.tagDelegate = self;
-        tagList.tag = TAG_LIST_TAG;
-        [filterView addSubview:tagList];
-        self.tagListView = (KPTagList*)[filterView viewWithTag:TAG_LIST_TAG];
+        
         [self addSubview:filterView];
         self.filterView = [self viewWithTag:FILTER_VIEW_TAG];
     }
@@ -134,9 +124,9 @@
         self.searchField = searchField;
         //CGRectSetX(searchField, 10);
         //searchField.userInteractionEnabled = NO;
-        CGRectSetSize(searchField, self.frame.size.width-(2*searchField.frame.origin.x)-(self.frame.size.height-COLOR_SEPERATOR_HEIGHT), searchField.frame.size.height);
+        CGRectSetSize(searchField, self.frame.size.width-(2*searchField.frame.origin.x)-(self.frame.size.height), searchField.frame.size.height);
         searchField.font = TEXT_FIELD_FONT;
-        searchField.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
+        searchField.autoresizingMask = (UIViewAutoresizingNone);
         searchField.returnKeyType = UIReturnKeyDone;
         searchField.borderStyle = UITextBorderStyleNone;
         searchField.textColor = tcolor(SearchDrawerColor);
@@ -169,26 +159,12 @@
     if([self.searchBarDelegate respondsToSelector:@selector(clearedAllFiltersForSearchBar:)]) [self.searchBarDelegate clearedAllFiltersForSearchBar:self];
 }
 -(void)reframe{
-    [self.selectedTagListView setTags:self.selectedTags andSelectedTags:self.selectedTags];
-    //CGFloat tagWidth = self.selectedTagListView.isEmptyList ? (self.frame.size.width-TAG_HEIGHT-DEFAULT_SPACING) : self.frame.size.width;
-    //CGRectSetWidth(self.tagListView, tagWidth);
-    [self.tagListView setTags:self.unselectedTags andSelectedTags:nil];
-    
+    NSArray *totalTags = [self.selectedTags arrayByAddingObjectsFromArray:self.unselectedTags];
+    [self.tagListView setTags:totalTags andSelectedTags:self.selectedTags];
     CGFloat tempHeight = 0;
-    tempHeight += self.selectedTagListView.spacing;
-    CGRectSetY(self.selectedTagListView, tempHeight);
-    self.selectedTagListView.hidden = self.selectedTagListView.isEmptyList;
-    if(!self.selectedTagListView.isEmptyList){
-        tempHeight += self.selectedTagListView.frame.size.height;
-    }
-    if(!self.selectedTagListView.isEmptyList) self.tagListView.hidden = self.tagListView.isEmptyList;
-    else self.tagListView.hidden = NO;
-    if(self.tagListView.hidden == NO){
-        CGRectSetY(self.tagListView, tempHeight);
-        tempHeight += self.tagListView.frame.size.height;
-    }
-    
-    CGRectSetSize(self.filterView, self.frame.size.width, tempHeight+COLOR_SEPERATOR_HEIGHT);
+    CGRectSetY(self.tagListView, tempHeight);
+    tempHeight += self.tagListView.frame.size.height;
+    CGRectSetSize(self.filterView, self.frame.size.width, tempHeight);
 }
 -(void)pressedFilter:(UIButton*)sender{
     if(self.currentMode == KPSearchBarModeNone){
@@ -245,7 +221,7 @@
     UITableView *superView = (UITableView *)self.superview;
     UIView *tableHeader = superView.tableHeaderView;
     tableHeader.frame = self.bounds;
-    CGRectSetHeight(tableHeader,tableHeader.frame.size.height-COLOR_SEPERATOR_HEIGHT);
+    CGRectSetHeight(tableHeader,tableHeader.frame.size.height);
     [superView setTableHeaderView:tableHeader];
 }
 - (void)reframeTags{

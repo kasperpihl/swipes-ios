@@ -129,18 +129,18 @@
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, SECTION_HEADER_HEIGHT)];
     headerView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
     NSString *title = [self.itemHandler titleForSection:section];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(SECTION_HEADER_X, 0, tableView.bounds.size.width-2*SECTION_HEADER_X, SECTION_HEADER_HEIGHT)];
+    CGFloat labelDownPush = 3;
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(SECTION_HEADER_X, labelDownPush, tableView.bounds.size.width-2*SECTION_HEADER_X, SECTION_HEADER_HEIGHT-labelDownPush)];
     titleLabel.backgroundColor = CLEAR;
 #warning change to theming
     titleLabel.font = KP_BOLD(17);
     titleLabel.textColor = color(44,50, 59, 1);
+    if(self.cellType != CellTypeToday) titleLabel.textColor = tcolor(TagColor);
     titleLabel.text = [title capitalizedString];
     [headerView addSubview:titleLabel];
     SectionHeaderView *shadowImageView = [[SectionHeaderView alloc] initWithFrame:headerView.bounds color:[TODOHANDLER colorForCellType:self.cellType]];
+    SectionHeaderExtraView *extraView = [[SectionHeaderExtraView alloc] initWithFrame:CGRectMake(320-43, headerView.frame.size.height, 43, 8) color:[TODOHANDLER strongColorForCellType:self.cellType]];
     [headerView addSubview:shadowImageView];
-    CGFloat widthOfExtra = 30;
-    UIView *extraView = [[UIView alloc] initWithFrame:CGRectMake(320-widthOfExtra, headerView.frame.size.height, widthOfExtra, 10)];
-    extraView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
     
     [headerView addSubview:extraView];
     return headerView;
@@ -202,8 +202,7 @@
         
         NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
         if(indexPath && !self.showingViewController){
-            [[self parent] show:NO controlsAnimated:YES];
-            [self parent].lock = YES;
+            [[self parent] setLock:YES animated:NO];
             KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
             ToDoViewController *viewController = [[ToDoViewController alloc] init];
             viewController.delegate = self;
@@ -281,17 +280,17 @@
     if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
         if (scrollView.contentOffset.y < self.searchBar.frame.size.height) {
            
-            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, COLOR_SEPERATOR_HEIGHT, 0);
+            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, 0, 0);
         } else {
             
-            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, COLOR_SEPERATOR_HEIGHT, 0);
+            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         }
         //searchBarFrame.origin.y = MIN(scrollView.contentOffset.y, 0)-COLOR_SEPERATOR_HEIGHT;
         //NSLog(@"%@,scrollView:%f",self.searchBar,searchBarFrame.origin.y);
         if(scrollView.contentOffset.y <= 0){
-            CGRectSetHeight(self.searchBar, self.tableView.tableHeaderView.frame.size.height-scrollView.contentOffset.y+COLOR_SEPERATOR_HEIGHT);
+            CGRectSetHeight(self.searchBar, self.tableView.tableHeaderView.frame.size.height-scrollView.contentOffset.y);
             CGRect searchBarFrame = self.searchBar.frame;
-            searchBarFrame.origin.y = scrollView.contentOffset.y-COLOR_SEPERATOR_HEIGHT;
+            searchBarFrame.origin.y = scrollView.contentOffset.y;
             self.searchBar.frame = searchBarFrame;
         }
     }
@@ -341,24 +340,23 @@
     switch (targetCellType) {
         case CellTypeSchedule:{
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-            SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-            KPBlurry *blurryViewController = [[KPBlurry alloc] initWithView:popup];
-            blurryViewController.dismissAction = ^{
-                [self returnSelectedRowsAndBounce:YES];
-                self.isHandlingTrigger = NO;
-            };
-            [blurryViewController showInViewController:self.parent center:self.parent.view.center];
-            
-            /*[SchedulePopup showInView:self.parent.view withBlock:^(KPScheduleButtons button, NSDate *date) {
+            SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate) {
+                [BLURRY dismissAnimated:YES];
                 if(button == KPScheduleButtonCancel){
                     [self returnSelectedRowsAndBounce:YES];
                 }
                 else{
-                    if([date isEarlierThanDate:[NSDate date]]) targetCellType = CellTypeToday;
-                    [TODOHANDLER scheduleToDos:toDosArray forDate:date];
+                    if([chosenDate isEarlierThanDate:[NSDate date]]) targetCellType = CellTypeToday;
+                    [TODOHANDLER scheduleToDos:toDosArray forDate:chosenDate];
                     [self moveIndexSet:indexSet toCellType:targetCellType];
                 }
                 self.isHandlingTrigger = NO;
+            }];
+            BLURRY.blurLevel = 1.0f;
+            [BLURRY showView:popup inViewController:self.parent];
+            
+            /*[SchedulePopup showInView:self.parent.view withBlock:^(KPScheduleButtons button, NSDate *date) {
+                
             }];*/
             return;
         }

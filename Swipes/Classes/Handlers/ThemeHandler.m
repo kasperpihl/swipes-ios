@@ -9,9 +9,9 @@
 #define retColor(DarkColor,LightColor) ((THEMER.currentTheme == ThemeDark) ? DarkColor : LightColor)
 #define inv(color) [ThemeHandler inverseColor:color]
 
-#define TASKS_COLOR                     retColor(color(255,227,64,1),       color(255,227,64,1))
-#define DONE_COLOR                      retColor(color(63,186,141,1),       color(63,186,141,1))
-#define LATER_COLOR                     retColor(color(254,115,103,1),      color(254,115,103,1))
+#define TASKS_COLOR                     color(255,227,64,1)
+#define DONE_COLOR                      color(63,186,141,1)
+#define LATER_COLOR                     color(254,115,103,1)
 
 #define STRONG_TASKS_COLOR              color(228,192,21,1)
 #define STRONG_DONE_COLOR                color(45,141,115,1)
@@ -22,9 +22,11 @@
 #define MENU_SELECTED_BACKGROUND        retColor(color(80,90,104,1),        inv(color(80,90,104,1)))
 #define SEARCH_DRAWER_BACKGROUND        retColor(color(69,77,89,1),         inv(color(69,77,89,1)))
 #define TASK_TABLE_BACKGROUND           retColor(color(106,117,131,1),      inv(color(106,117,131,1)))
+#define TAG_BACKGROUND                  retColor(color(132,143,156,1),      inv(color(132,143,156,1)))
 /* Texts */
 #define SEARCH_DRAWER_COLOR             retColor(color(189,194,201,1),      inv(color(189,194,201,1)))
 #define TASK_CELL_TAG_COLOR             retColor(color(160,169,179,1),      inv(color(160,169,179,1)))
+#define TEXT_FIELD_COLOR                retColor(color(176,179,184,1),      inv(color(176,179,184,1)))
 typedef enum {
     BCTasksColor,
     BCLaterColor,
@@ -36,8 +38,10 @@ typedef enum {
     BCMenuSelectedBackground,
     BCSearchDrawerBackground,
     BCTaskTableBackground,
+    BCTagBackground,
     BCSearchDrawerColor,
     BCTaskCellTagColor,
+    BCTextFieldColor,
     BCWhiteColor
 } BaseColors;
 
@@ -79,10 +83,14 @@ static ThemeHandler *sharedObject;
             return SEARCH_DRAWER_BACKGROUND;
         case BCTaskTableBackground:
             return TASK_TABLE_BACKGROUND;
+        case BCTagBackground:
+            return TAG_BACKGROUND;
         case BCSearchDrawerColor:
             return SEARCH_DRAWER_COLOR;
         case BCTaskCellTagColor:
             return TASK_CELL_TAG_COLOR;
+        case BCTextFieldColor:
+            return TEXT_FIELD_COLOR;
         case BCWhiteColor:
             return [UIColor whiteColor];
     }
@@ -98,14 +106,16 @@ static ThemeHandler *sharedObject;
             color = BCMenuBackground;
             break;
             
+        case TagBackground:
         case MenuSelectedBackground:
         case TaskCellBackground:
+        case EditTaskBackground:
         case LoginButtonBackground:
-        case TagBackground:
             color = BCMenuSelectedBackground;
             break;
+            
         case PopupBackground:
-            return alpha(bcolor(BCLaterColor),0);//color(132,143,156,0.6);
+            return alpha(bcolor(BCLaterColor),0.8);//color(132,143,156,0.6);
             break;
             
         case SearchDrawerBackground:
@@ -118,7 +128,6 @@ static ThemeHandler *sharedObject;
             color = BCDoneColor;
             break;
         
-        case EditTaskBackground:
         case TaskTableBackground:
             color = BCTaskTableBackground;
             break;
@@ -131,20 +140,36 @@ static ThemeHandler *sharedObject;
         case TasksColor:
         case TaskTableEmptyTodayText:
         case ColoredSeperator:
-        case ColoredButton:
             color = BCTasksColor;
             break;
             
         case DoneColor:
+        case ColoredButton:
             color = BCDoneColor;
             break;
         
+        case StrongDoneColor:
+            color = BCStrongDoneColor;
+            break;
+            
         case LaterColor:
             color = BCLaterColor;
             break;
         
+        case StrongLaterColor:
+            color = BCStrongLaterColor;
+            break;
+            
+        case StrongTasksColor:
+            color = BCStrongTasksColor;
+            break;
+            
         case TaskCellTimelineColor:
             color = BCSearchDrawerBackground;
+            break;
+            
+        case TextFieldColor:
+            color = BCTextFieldColor;
             break;
             
         case SearchDrawerColor:

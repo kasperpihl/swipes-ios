@@ -144,6 +144,14 @@ static UtilityClass *sharedObject;
     
     return newColor;
 }
++(NSString*)timeStringForDate:(NSDate*)date{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    [dateFormatter setDateStyle:NSDateFormatterNoStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    return [[dateFormatter stringFromDate:date] lowercaseString];
+
+}
 +(UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color{
     UIImage *img = [UIImage imageNamed:name];
     return [UtilityClass image:img withColor:color];

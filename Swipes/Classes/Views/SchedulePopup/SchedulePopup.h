@@ -22,5 +22,6 @@ typedef NS_ENUM(NSUInteger, KPScheduleButtons){
 };
 typedef void (^SchedulePopupBlock)(KPScheduleButtons button, NSDate *chosenDate);
 @interface SchedulePopup : UIView
++(SchedulePopup*)popupWithFrame:(CGRect)frame block:(SchedulePopupBlock)block;
 //+(SchedulePopup*)showInView:(UIView*)view withBlock:(SchedulePopupBlock)block;
 @end

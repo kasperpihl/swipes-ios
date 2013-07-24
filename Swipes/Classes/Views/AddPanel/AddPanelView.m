@@ -7,7 +7,7 @@
 //
 
 #import "AddPanelView.h"
-
+#import "KPBlurry.h"
 #import "UtilityClass.h"
 #define FORM_VIEW_TAG 1
 #define BACKGROUND_VIEW_TAG 2
@@ -16,9 +16,13 @@
 #define DONE_EDITING_BUTTON_TAG 5
 #define ANIMATION_DURATION 0.25f
 
+#define SEPERATOR_SPACING 15
+
+#define ADD_VIEW_HEIGHT 70
+#define ADD_FIELD_HEIGHT 30
 
 
-@interface AddPanelView () <UITextFieldDelegate>
+@interface AddPanelView () <UITextFieldDelegate,KPBlurryDelegate>
 @property (nonatomic,weak) IBOutlet UIView *backgroundView;
 @property (nonatomic,weak) IBOutlet KPPickerView *pickerView;
 @property (nonatomic,weak) IBOutlet UIImageView *formView;
@@ -44,6 +48,18 @@
             self.isRotated = NO;
         }
     }
+}
+-(void)blurryWillShow:(KPBlurry *)blurry{
+    [self.textField becomeFirstResponder];
+    [UIView animateWithDuration:0.25f animations:^{
+        CGRectSetY(self.formView, self.frame.size.height-self.formView.frame.size.height-KEYBOARD_HEIGHT);
+    }];
+}
+-(void)blurryWillHide:(KPBlurry *)blurry{
+    [self.textField resignFirstResponder];
+    [UIView animateWithDuration:0.25f animations:^{
+        CGRectSetY(self.formView, self.frame.size.height-self.formView.frame.size.height);
+    }];
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     NSString *string = textField.text;
@@ -71,31 +87,27 @@
     }
     [UIView commitAnimations];
 }
--(void)didPressClose:(id)sender{
-    [self show:NO];
-}
--(void)setForwardDatasource:(NSObject<KPPickerViewDataSource> *)forwardDatasource{
-    _forwardDatasource = forwardDatasource;
-    [self.pickerView setDataSource:forwardDatasource];
+-(BOOL)blurryShouldClose:(KPBlurry *)blurry{
+    [self.addDelegate closeAddPanel:self];
+    return NO;
 }
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor whiteColor];
-        UIView *formView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, TEXT_FIELD_CONTAINER_HEIGHT)];
+        UIView *formView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, ADD_VIEW_HEIGHT)];
         formView.tag = FORM_VIEW_TAG;
         formView.userInteractionEnabled = YES;
-        formView.backgroundColor = tbackground(MenuSelectedBackground);
-        UIView *textFieldColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, formView.frame.size.height-COLOR_SEPERATOR_HEIGHT, formView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        textFieldColorSeperator.backgroundColor = tcolor(ColoredSeperator);
-        [formView addSubview:textFieldColorSeperator];
+        formView.backgroundColor = tbackground(MenuBackground);
+        
+        
         
         UIButton *doneEditingButton = [UIButton buttonWithType:UIButtonTypeCustom];
         doneEditingButton.tag = DONE_EDITING_BUTTON_TAG;
+        
         CGFloat buttonSize = formView.frame.size.height;
-        doneEditingButton.frame = CGRectMake(formView.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
-        [doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:tcolor(ColoredSeperator)] forState:UIControlStateNormal];
+        CGFloat buttonWidth = buttonSize;
+        doneEditingButton.frame = CGRectMake(formView.frame.size.width-buttonWidth, 0, buttonWidth, buttonSize);
         [doneEditingButton setImage:[UIImage imageNamed:@"hide_keyboard_arrow"] forState:UIControlStateNormal];
         [doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -104,11 +116,16 @@
         [formView addSubview:doneEditingButton];
         self.doneEditingButton = (UIButton*)[formView viewWithTag:DONE_EDITING_BUTTON_TAG];
         
-        UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, TEXT_FIELD_MARGIN_TOP, formView.frame.size.width-TEXT_FIELD_MARGIN_LEFT-buttonSize, TEXT_FIELD_HEIGHT)];
+        UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(formView.frame.size.width-buttonWidth-SEPERATOR_WIDTH, SEPERATOR_SPACING, SEPERATOR_WIDTH, formView.frame.size.height-(2*SEPERATOR_SPACING))];
+        seperator.backgroundColor = tcolor(SearchDrawerColor);
+        [formView addSubview:seperator];
+        
+        
+        UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, 25, formView.frame.size.width-TEXT_FIELD_MARGIN_LEFT-buttonWidth, ADD_FIELD_HEIGHT)];
         textField.tag = TEXT_FIELD_TAG;
         textField.font = TEXT_FIELD_FONT;
         
-        textField.textColor = tcolor(SearchDrawerColor);
+        textField.textColor = tcolor(TextFieldColor);
         textField.keyboardAppearance = UIKeyboardAppearanceAlert;
         textField.returnKeyType = UIReturnKeyNext;
         textField.borderStyle = UITextBorderStyleNone;
@@ -124,19 +141,12 @@
         
         self.formView = (UIImageView*)[self viewWithTag:FORM_VIEW_TAG];
         CGRectSetHeight(self, KEYBOARD_HEIGHT+self.formView.frame.size.height);
+        CGRectSetY(self.formView, self.frame.size.height-self.formView.frame.size.height);
     }
     return self;
 }
 -(void)pressedDoneEditing:(id)sender{
     [self textFieldShouldReturn:self.textField];
     [self.addDelegate closeAddPanel:self];
-}
--(void)show:(BOOL)show{
-    if(show){
-        [self.textField becomeFirstResponder];
-    }
-    else [self.textField resignFirstResponder];
-    
-
 }
 @end

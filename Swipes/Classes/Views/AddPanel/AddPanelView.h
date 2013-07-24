@@ -16,7 +16,4 @@
 @end
 @interface AddPanelView : UIView
 @property (nonatomic,weak) NSObject<AddPanelDelegate> *addDelegate;
-@property (nonatomic,weak) NSObject<KPPickerViewDataSource> *forwardDatasource;
--(void)show:(BOOL)show;
-
 @end

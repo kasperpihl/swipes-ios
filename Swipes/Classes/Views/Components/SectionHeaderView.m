@@ -7,6 +7,7 @@
 //
 
 #import "SectionHeaderView.h"
+#import <QuartzCore/QuartzCore.h>
 @interface SectionHeaderView ()
 @property (nonatomic) UIColor *color;
 @end
@@ -50,6 +51,9 @@
     
     CGGradientRelease(glossGradient);
     CGColorSpaceRelease(rgbColorspace);
+    
+    
+    
     // Drawing code
 }
 

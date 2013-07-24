@@ -13,6 +13,7 @@
 @property (nonatomic, readonly, strong) AKSegmentedControl *segmentedControl;
 @property (nonatomic) KPControlCurrentState currentState;
 @property (nonatomic) BOOL lock;
+-(void)setLock:(BOOL)lock animated:(BOOL)animated;
 // NSArray of UIViewController subclasses
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 -(void)highlightButton:(KPSegmentButtons)controlButton;

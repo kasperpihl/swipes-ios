@@ -103,34 +103,34 @@ static ToDoHandler *sharedObject;
     }
     return returnColor;
 }
--(NSString *)iconNameForCellType:(CellType)type{
-    NSString *iconName;
+-(UIColor *)strongColorForCellType:(CellType)type{
+    UIColor *returnColor;
     switch (type) {
         case CellTypeSchedule:
-            iconName = @"schedule_icon";
+            returnColor = tcolor(StrongLaterColor);
             break;
         case CellTypeToday:
-            iconName = @"today_icon";
+            returnColor = tcolor(StrongTasksColor);
             break;
         case CellTypeDone:
-            iconName = @"done_icon";
+            returnColor = tcolor(StrongDoneColor);
             break;
         default:
             break;
     }
-    return iconName;
+    return returnColor;
 }
--(NSString *)coloredIconNameForCellType:(CellType)type{
+-(NSString *)iconNameForCellType:(CellType)type{
     NSString *iconName;
     switch (type) {
         case CellTypeSchedule:
-            iconName = @"edit_schedule_icon";
+            iconName = @"schedule-selected";
             break;
         case CellTypeToday:
-            iconName = @"edit_today_icon";
+            iconName = @"today-selected";
             break;
         case CellTypeDone:
-            iconName = @"edit_done_icon";
+            iconName = @"done-selected";
             break;
         default:
             break;

@@ -44,12 +44,15 @@
 }
 -(void)setTags:(NSArray *)tags andSelectedTags:(NSArray *)selectedTags{
     self.tags = [tags mutableCopy];
+    NSLog(@"tags:%@",self.tags);
     self.selectedTags = [selectedTags mutableCopy];
+    NSLog(@"seltags:%@",self.selectedTags);
     [self layoutTagsFirst:NO];
 }
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
+        self.tagColor = tbackground(TagBackground);
         self.bottomMargin = VERTICAL_MARGIN;
         self.marginTop = VERTICAL_MARGIN;
         self.marginLeft = HORIZONTAL_MARGIN;
@@ -78,7 +81,7 @@
 }
 -(void)layoutTagsFirst:(BOOL)first{
     CGFloat oldHeight = self.frame.size.height;
-    [self.tags sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    //[self.tags sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     NSArray *views = [self subviews];
     for(UIView *view in views) [view removeFromSuperview];
     CGFloat currentWidth = self.marginLeft + SPACE_HACK;
@@ -90,6 +93,7 @@
         self.isEmptyList = NO;
         NSMutableArray *buttonLine = [NSMutableArray array];
         for(NSInteger j = 0 ; j < numberOfTags ; j++){
+            CGFloat targetWidth = (self.numberOfRows == 1) ? self.frame.size.width - self.firstRowSpacingHack : self.frame.size.width;
             NSString *tag = [self.tags objectAtIndex:j];
             UIButton *tagLabel = [self buttonWithTag:tag];
             tagLabel.tag = TAG_BUTTON_TAG + j;
@@ -97,9 +101,10 @@
                 [tagLabel setSelected:YES];
                 //[tagLabel.layer setBorderColor:[COLOR_WHITE CGColor]];
             }
-            CGFloat difference = (self.frame.size.width - self.marginRight - self.marginLeft) - currentWidth ;
+            CGFloat difference = (targetWidth - self.marginRight) - currentWidth ;
             BOOL nextLine = NO;
-            if((currentWidth + tagLabel.frame.size.width + self.marginRight) > self.frame.size.width){
+            
+            if((currentWidth + tagLabel.frame.size.width + self.marginRight) > targetWidth){
                 currentHeight = currentHeight + tagLabel.frame.size.height + self.spacing - SPACE_HACK;
                 currentWidth = self.marginLeft + SPACE_HACK;
                 tagHeight = 0;
@@ -210,6 +215,7 @@
     CGSize sizeForTag = [self sizeForTagWithText:tag];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     if(self.enableEdit){
+        NSLog(@"enabled");
         UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
         longPressGestureRecognizer.delegate = self;
         [button addGestureRecognizer:longPressGestureRecognizer];
@@ -218,8 +224,9 @@
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
     [button setTitleColor:tcolor(TagColor) forState:UIControlStateNormal];
-    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagBackground)] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UtilityClass imageWithColor:self.tagColor] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagSelectedBackground)] forState:UIControlStateSelected];
+    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagSelectedBackground)] forState:UIControlStateHighlighted];
     button.titleLabel.font = TAG_FONT;
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];

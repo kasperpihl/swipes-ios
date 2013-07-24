@@ -21,12 +21,14 @@
 #define TAGS_IMAGE_VIEW_TAG 18
 #define NOTES_IMAGE_VIEW_TAG 19
 #define DOT_VIEW_TAG 20
+#define TOOLBAR_TAG 21
 
 #define TOP_VIEW_MARGIN 60
 #define SHOW_ITEM_TAG 5432
 
 
-#define DEFAULT_ROW_HEIGHT 60
+#define TOOLBAR_HEIGHT 50
+#define DEFAULT_ROW_HEIGHT 50
 
 #define LABEL_X 42
 
@@ -41,7 +43,7 @@
 
 #define TAGS_LABEL_RECT CGRectMake(LABEL_X,TAGS_LABEL_PADDING,320-LABEL_X-10,500)
 
-#define TAGS_LABEL_PADDING 18.5
+#define TAGS_LABEL_PADDING 15.5
 #define NOTES_PADDING 10.5
 
 
@@ -59,6 +61,7 @@
 #import "NotesView.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
+#import "KPToolbar.h"
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
     KPEditModeTitle,
@@ -67,7 +70,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNotes
 };
 
-@interface ToDoViewController () <HPGrowingTextViewDelegate,KPAddTagDelegate,KPTagDelegate,NotesViewDelegate>
+@interface ToDoViewController () <HPGrowingTextViewDelegate,KPAddTagDelegate,KPTagDelegate,NotesViewDelegate,ToolbarDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
 
 
@@ -87,6 +90,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic,weak) IBOutlet UIImageView *alarmImage;
 @property (nonatomic,weak) IBOutlet UIImageView *tagsImage;
 @property (nonatomic,weak) IBOutlet UIImageView *notesImage;
+@property (nonatomic,weak) KPToolbar *toolbar;
 @end
 
 @implementation ToDoViewController
@@ -144,7 +148,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.titleContainerView = [contentView viewWithTag:TITLE_CONTAINER_VIEW_TAG];
         
         
-        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, titleContainerView.frame.size.height, 320, contentView.frame.size.height - titleContainerView.frame.size.height)];
+        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, titleContainerView.frame.size.height, 320, contentView.frame.size.height - titleContainerView.frame.size.height-TOOLBAR_HEIGHT)];
         scrollView.tag = SCROLL_VIEW_TAG;
         scrollView.scrollEnabled = YES;
         scrollView.alwaysBounceVertical = YES;
@@ -223,11 +227,30 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         /* Adding scroll and content view */
         [contentView addSubview:scrollView];
+        
+        KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-TOOLBAR_HEIGHT, contentView.frame.size.width, TOOLBAR_HEIGHT) items:@[@"toolbar_plus_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
+        toolbar.tag = TOOLBAR_TAG;
+        toolbar.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
+        toolbar.backgroundColor = tbackground(MenuBackground);
+        toolbar.delegate = self;
+        toolbar.seperatorColor = tcolor(SearchDrawerColor);
+        [contentView addSubview:toolbar];
+        self.toolbar = (KPToolbar*)[contentView viewWithTag:TOOLBAR_TAG];
         self.scrollView = (UIScrollView*)[contentView viewWithTag:SCROLL_VIEW_TAG];
         [self.view addSubview:contentView];
         self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
+        
+        
     }
     return self;
+}
+-(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
+    if(item == 0 && [self.delegate respondsToSelector:@selector(pressedTag:)]){
+        //[self.delegate pressedTag:self];
+    }
+    else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedDelete:)]){
+        //[self.delegate pressedDelete:self];
+    }
 }
 -(void)setColorsFor:(id)object{
     if([object respondsToSelector:@selector(setTextColor:)]) [object setTextColor:tcolor(TagColor)];
@@ -343,7 +366,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGFloat titleHeight = height+TITLE_TOP_MARGIN+TITLE_BOTTOM_MARGIN;
     CGRectSetHeight(self.titleContainerView,titleHeight);
     CGRectSetY(self.scrollView, titleHeight);
-    CGRectSetHeight(self.scrollView, self.contentView.frame.size.height-titleHeight);
+    CGRectSetHeight(self.scrollView, self.contentView.frame.size.height-titleHeight-TOOLBAR_HEIGHT);
 }
 #pragma mark NotesViewDelegate
 -(void)pressedCancelNotesView:(NotesView *)notesView{
@@ -465,7 +488,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     tagView.tagView.tagDelegate = self;
     
     [self.segmentedViewController presentSemiView:tagView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f,KNSemiModalOptionKeys.shadowOpacity:@0.5f} completion:^{
-        [tagView scrollIfNessecary];
     }];
 }
 -(void)dealloc{

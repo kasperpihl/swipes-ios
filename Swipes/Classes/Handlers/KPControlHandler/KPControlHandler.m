@@ -11,12 +11,12 @@
 #define TAG_BUTTON_TAG 13002
 #define TOOLBAR_TAG 13003
 
-#define BIG_BUTTON_HEIGHT 65
-#define BIG_BUTTON_BOTTOM_MARGIN 15
+#define BIG_BUTTON_HEIGHT 55
+#define BIG_BUTTON_BOTTOM_MARGIN 10
 #define SMALL_BUTTON_HEIGHT 60
-#define SMALL_BUTTON_BOTTOM_MARGIN 15
+#define SMALL_BUTTON_BOTTOM_MARGIN 10
 
-#define ANIMATION_DURATION 0.15f
+
 
 #define ADD_BUTTON_X 320-BIG_BUTTON_HEIGHT
 
@@ -40,6 +40,7 @@
 @property (nonatomic) KPControlHandlerState activeState;
 @property (nonatomic,weak) UIView* view;
 @property (nonatomic,weak) UIButton *addButton;
+@property (nonatomic,weak) UITableView *shrinkingView;
 @property (nonatomic,weak) KPToolbar *toolbar;
 @end
 @implementation KPControlHandler
@@ -50,7 +51,7 @@
 }
 -(CGFloat)getYForBigSize:(BOOL)big{
     CGFloat size;
-    if(big) size = (self.view.frame.size.height-BIG_BUTTON_HEIGHT-BIG_BUTTON_BOTTOM_MARGIN);
+    if(big) size = (self.view.frame.size.height-BIG_BUTTON_HEIGHT+3);
     else size = (self.view.frame.size.height-SMALL_BUTTON_HEIGHT);
     return size;
 }
@@ -59,14 +60,14 @@
     self = [super init];
     if (self) {
         self.view = view;
-        
-        
         UIButton *addButton = [self roundedButtonWithSize:BIG_BUTTON_HEIGHT];
-        addButton.frame = CGRectSetPos(addButton.frame, ADD_BUTTON_X,view.frame.size.height);
+        addButton.frame = CGRectSetPos(addButton.frame, ADD_BUTTON_X+5,view.frame.size.height);
         addButton.tag = ADD_BUTTON_TAG;
+        addButton.layer.borderColor = tcolor(StrongTasksColor).CGColor;
+        addButton.layer.borderWidth = 3;
         addButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
         [addButton addTarget:self action:@selector(pressedAdd:) forControlEvents:UIControlEventTouchUpInside];
-        [addButton setImage:[UIImage imageNamed:@"addbutton"] forState:UIControlStateNormal];
+        [addButton setImage:[UIImage imageNamed:@"toolbar_plus_icon"] forState:UIControlStateNormal];
         [view addSubview:addButton];
         self.addButton = (UIButton*)[view viewWithTag:ADD_BUTTON_TAG];
         
@@ -78,15 +79,15 @@
         [view addSubview:toolbar];
         self.toolbar = (KPToolbar*)[view viewWithTag:TOOLBAR_TAG];
         
-        [self setState:KPControlHandlerStateAdd animated:NO];
+        [self setState:KPControlHandlerStateAdd shrinkingView:self.shrinkingView animated:NO];
     }
     return self;
 }
 -(UIButton*)roundedButtonWithSize:(NSInteger)size{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *buttonBackgroundImage = [UtilityClass imageWithColor:tcolor(ColoredButton)];
+    UIImage *buttonBackgroundImage = [UtilityClass imageWithColor:tcolor(TasksColor)];
     CGRectSetSize(button, size, size);
-    button.layer.cornerRadius = size/2;
+    button.layer.cornerRadius = 5;//size/2;
     button.layer.masksToBounds = YES;
     [button setBackgroundImage:buttonBackgroundImage forState:UIControlStateNormal];
     return button;
@@ -101,6 +102,7 @@
                 CGRectSetY(self.addButton, targetY);
                 break;
             case KPControlHandlerStateEdit:
+                [self shrinkTableView:NO];
                 //CGRectSetY(self.deleteButton, targetY);
                 CGRectSetY(self.toolbar, targetY);
                 //CGRectSetY(self.tagButton, targetY);
@@ -109,11 +111,14 @@
     };
     return block;
 }
--(void)setLock:(BOOL)lock{
+-(void)setLock:(BOOL)lock animated:(BOOL)animated{
     if(_lock != lock){
-        if(lock) [self setState:KPControlHandlerStateNone animated:YES];
+        if(lock) [self setState:KPControlHandlerStateNone shrinkingView:self.shrinkingView animated:animated];
         _lock = lock;
     }
+}
+-(void)setLock:(BOOL)lock{
+    [self setLock:lock animated:YES];
 }
 -(void)forceHide{
     CGFloat targetY = self.view.frame.size.height;
@@ -121,6 +126,12 @@
     CGRectSetY(self.toolbar, targetY);
     //CGRectSetY(self.deleteButton, targetY);
     //CGRectSetY(self.tagButton, targetY);
+}
+-(void)shrinkTableView:(BOOL)shrink{
+    return;
+    CGFloat shrinkHeight = shrink ? 60 : 0;
+    self.shrinkingView.contentInset = UIEdgeInsetsMake(0, 0, shrinkHeight, 0);
+    //CGRectSetHeight(self.shrinkingView, self.view.frame.size.height-heightForNavigation-shrinkHeight);
 }
 -(voidBlock)getShowBlockForState:(KPControlHandlerState)state{
     CGFloat bigButtonY = [self getYForBigSize:YES];
@@ -133,6 +144,7 @@
                 CGRectSetY(self.addButton, bigButtonY);
                 break;
             case KPControlHandlerStateEdit:
+                [self shrinkTableView:YES];
                 //CGRectSetY(self.deleteButton, smallButtonY);
                 CGRectSetY(self.toolbar, smallButtonY);
                 //CGRectSetY(self.tagButton, smallButtonY);
@@ -141,8 +153,9 @@
     };
     return block;
 }
--(void)setState:(KPControlHandlerState)state animated:(BOOL)animated{
+-(void)setState:(KPControlHandlerState)state shrinkingView:(UITableView *)view animated:(BOOL)animated{
     if(state == self.activeState || self.lock) return;
+    self.shrinkingView = view;
     voidBlock clearBlock = [self getClearBlockForState:self.activeState];
     CGFloat clearDuration = (self.activeState == KPControlHandlerStateNone) ? 0 : ANIMATION_DURATION;
     CGFloat showDuration = (state == KPControlHandlerStateNone) ? 0 : ANIMATION_DURATION;
@@ -184,7 +197,7 @@
     if(item == 0 && [self.delegate respondsToSelector:@selector(pressedTag:)]){
         [self.delegate pressedTag:self];
     }
-    else if(item == 0 && [self.delegate respondsToSelector:@selector(pressedDelete:)]){
+    else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedDelete:)]){
         [self.delegate pressedDelete:self];
     }
 }

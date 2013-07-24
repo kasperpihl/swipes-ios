@@ -17,8 +17,10 @@
 #import "KPAddTagPanel.h"
 #import "KPAlert.h"
 #import <QuartzCore/QuartzCore.h>
-#import "UIViewController+KNSemiModal.h"
 #import "ThemeHandler.h"
+
+#import "KPBlurry.h"
+
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
@@ -40,7 +42,7 @@
 @property (nonatomic, weak) IBOutlet UIView *contentView;
 @property (nonatomic,strong) KPControlHandler *controlHandler;
 @property (nonatomic,weak) IBOutlet UIView *presentedPanel;
-
+@property (nonatomic) BOOL tableIsShrinked;
 @property (nonatomic) NSInteger currentSelectedIndex;
 
 @property (nonatomic) BOOL hasAppeared;
@@ -55,18 +57,17 @@
 #pragma mark - KPControlViewDelegate
 #pragma mark - KPAddTagDelegate
 -(void)closeAddPanel:(AddPanelView *)addPanel{
-    [self dismissSemiModalView];
+    [BLURRY dismissAnimated:YES];
+    [self show:YES controlsAnimated:YES];
 }
 -(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
     [[self currentViewController] update];
-    [self dismissSemiModalView];
 }
 -(void)tagPanel:(KPAddTagPanel *)tagPanel createdTag:(NSString *)tag{
     [TAGHANDLER addTag:tag];
 }
 -(void)tagPanel:(KPAddTagPanel *)tagPanel changedSize:(CGSize)size{
     NSLog(@"resized");
-    [self resizeSemiView:size animated:NO];
 }
 
 #pragma mark - KPTagDelegate
@@ -83,93 +84,52 @@
     NSArray *selectedItems = [[self currentViewController] selectedItems];
     [TAGHANDLER updateTags:@[tag] remove:NO toDos:selectedItems];
     [[self currentViewController] didUpdateItemHandler:nil];
-    [self updateBackground];
 }
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString *)tag{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
     [TAGHANDLER updateTags:@[tag] remove:YES toDos:selectedItems];
     [[self currentViewController] didUpdateItemHandler:nil];
-    [self updateBackground];
 }
 -(void)tagList:(KPTagList *)tagList deletedTag:(NSString *)tag{
     [[self currentViewController].itemHandler deselectTag:tag];
     [TAGHANDLER deleteTag:tag];
     [[self currentViewController] didUpdateItemHandler:nil];
-    [self updateBackground];
 }
 #pragma mark - AddPanelDelegate
 -(void)pressedAdd:(id)sender{
     [self show:NO controlsAnimated:YES];
     [self changeToIndex:1];
     //[[self currentViewController].itemHandler clearAll];
-    AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.navigationController.view.bounds];
-    addPanel.addDelegate = self;
-    self.presentedPanel = addPanel;
     
-    CGFloat timerToShow = 0.25f+0.25f*(((addPanel.frame.size.height)-216)/216);
-    [self presentSemiView:addPanel withOptions:@{KNSemiModalOptionKeys.animationDuration:[NSNumber numberWithFloat: timerToShow]}];
-    [addPanel show:YES];
-    /*
-    [self.navigationController.view addSubview:addPanel];
-    [addPanel show:YES];
-    //[panelView.textField becomeFirstResponder];
-    [self changeToIndex:1];*/
-    //[self.menuViewController.segmentedControl setSelectedSegmentIndex:1];
+    AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.view.bounds];
+    addPanel.addDelegate = self;
+    BLURRY.showPosition = PositionBottom;
+    [BLURRY showView:addPanel inViewController:self];
 }
 -(void)pressedTag:(id)sender{
-    [self show:NO controlsAnimated:YES];
-    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, 450) andTags:[TAGHANDLER allTags] andMaxHeight:320];
+    //[self show:NO controlsAnimated:YES];
+    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.view.bounds andTags:[TAGHANDLER allTags] andMaxHeight:320];
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
-    self.presentedPanel = tagView;
-    [self presentSemiView:tagView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f,KNSemiModalOptionKeys.shadowOpacity:@0.0f} completion:^{
-        [tagView scrollIfNessecary];
-    }];
-    //[self.navigationController.view addSubview:tagView];
-    //[tagView show:YES];
-}
--(void)dismissSemiModalView {
-    if(self.presentedPanel.class == [KPAddTagPanel class]){
-        KPAddTagPanel *panel = (KPAddTagPanel*)self.presentedPanel;
-        if(panel.isShowingKeyboard){
-            [panel.textField resignFirstResponder];
-            [NSTimer scheduledTimerWithTimeInterval:0.25f target:self selector:@selector(reallyDismiss) userInfo:nil repeats:NO];
-        }
-        else{
-            [self reallyDismiss];
-        }
-    }
-    else if(self.presentedPanel.class == [AddPanelView class]){
-        AddPanelView *panel = (AddPanelView*)self.presentedPanel;
-        [panel show:NO];
-        [self reallyDismiss];
-    }
-    else [self reallyDismiss];
-	/*[self dismissSemiModalViewWithCompletion:^{
-        self.currentState = KPControlCurrentStateAdd;
-        [[self currentViewController] deselectAllRows:self];
-    }];*/
-}
--(void)reallyDismiss{
-    [self dismissSemiModalViewWithCompletion:^{
-        self.currentState = KPControlCurrentStateAdd;
-        [[self currentViewController] deselectAllRows:self];
-        [[self currentViewController].itemHandler refresh];
-        [[self currentViewController] didUpdateCells];
-     }];
+    BLURRY.showPosition = PositionBottom;
+    [BLURRY showView:tagView inViewController:self];
 }
 -(void)pressedDelete:(id)sender{
-    [KPAlert confirmInView:self.navigationController.view title:@"Delete items" message:@"Are you sure?" block:^(BOOL succeeded, NSError *error) {
+    NSInteger numberOfTasks = [self currentViewController].selectedItems.count;
+    NSString *endString = (numberOfTasks > 1) ? @"tasks" : @"task";
+    NSString *titleString = [NSString stringWithFormat:@"Delete %i %@",numberOfTasks,endString];
+    KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:titleString message:@"This can't be undone" block:^(BOOL succeeded, NSError *error) {
+        [BLURRY dismissAnimated:YES];
         if(succeeded){
             ToDoListViewController *viewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
             [viewController deleteSelectedItems:self];
             [self setCurrentState:KPControlCurrentStateAdd];
         }
     }];
+    [BLURRY showView:alert inViewController:self];
 }
 -(void)didAddItem:(NSString *)item{
     [[self currentViewController].itemHandler addItem:item];
-    [self updateBackground];
 }
 - (NSMutableArray *)viewControllers {
 	if (!_viewControllers)
@@ -181,11 +141,6 @@
 	if (!_titles)
 		_titles = [NSMutableArray array];
 	return _titles;
-}
--(void)showNavBar:(BOOL)show duration:(NSTimeInterval)duration{
-    if(show){
-        
-    }
 }
 - (AKSegmentedControl *)segmentedControl {
 	if (!_segmentedControl) {
@@ -294,18 +249,21 @@
     }
     [self show:YES controlsAnimated:YES];
 }
--(void)setLock:(BOOL)lock{
+-(void)setLock:(BOOL)lock animated:(BOOL)animated{
     if(_lock != lock){
         _lock = lock;
-        self.controlHandler.lock = lock;
+        [self.controlHandler setLock:lock animated:animated];
     }
+}
+-(void)setLock:(BOOL)lock{
+    [self setLock:lock animated:YES];
 }
 -(void)show:(BOOL)show controlsAnimated:(BOOL)animated{
     if(show){
-        [self.controlHandler setState:[self handlerStateForCurrent:self.currentState] animated:YES];
+        [self.controlHandler setState:[self handlerStateForCurrent:self.currentState] shrinkingView:[self currentViewController].tableView animated:animated];
     }
     else{
-        [self.controlHandler setState:KPControlHandlerStateNone animated:YES];
+        [self.controlHandler setState:KPControlHandlerStateNone shrinkingView:[self currentViewController].tableView animated:animated];
     }
     //[self.navigationController setNavigationBarHidden:!show animated:YES];
 }

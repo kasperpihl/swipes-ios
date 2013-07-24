@@ -27,4 +27,5 @@ UIImage* rotate(UIImage* src, NSInteger degrees);
 + (UIImage *)image:(UIImage *)image withColor:(UIColor *)color;
 +(UIImage *)flippedImage:(UIImage*)flippingImage horizontal:(BOOL)horizontal;
 +(UIColor *)inverseColor:(UIColor*)color;
++(NSString*)timeStringForDate:(NSDate*)date;
 @end

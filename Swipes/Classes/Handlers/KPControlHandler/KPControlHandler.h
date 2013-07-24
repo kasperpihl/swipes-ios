@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#define ANIMATION_DURATION 0.15f
 
 typedef NS_ENUM(NSUInteger, KPControlHandlerState){
     KPControlHandlerStateNone = 0,
@@ -26,6 +26,7 @@ typedef NS_ENUM(NSUInteger, KPControlHandlerState){
 @property (nonatomic,readonly) KPControlHandlerState activeState;
 @property (nonatomic,weak) NSObject<KPControlHandlerDelegate> *delegate;
 @property (nonatomic) BOOL lock;
+-(void)setLock:(BOOL)lock animated:(BOOL)animated;
 +(KPControlHandler*)instanceInView:(UIView*)view;
--(void)setState:(KPControlHandlerState)state animated:(BOOL)animated;
+-(void)setState:(KPControlHandlerState)state shrinkingView:(UITableView*)view animated:(BOOL)animated;
 @end

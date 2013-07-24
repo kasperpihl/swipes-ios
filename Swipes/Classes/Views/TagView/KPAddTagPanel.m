@@ -8,12 +8,13 @@
 
 #import "KPAddTagPanel.h"
 #import "UtilityClass.h"
+#import "KPBlurry.h"
+#import "KPToolbar.h"
 #define BACKGROUND_VIEW_TAG 2
 #define TAG_VIEW_TAG 3
-#define TAB_BAR_VIEW_TAG 4
+#define TOOLBAR_TAG 4
 #define TEXT_FIELD_TAG 5
 #define SCROLL_VIEW_TAG 6
-#define TAG_CONTAINER_VIEW_TAG 7
 #define ADD_VIEW_TAG 8
 #define DONE_EDITING_BUTTON_TAG 9
 
@@ -21,17 +22,18 @@
 #define ANIMATION_DURATION 0.25f
 
 
-#define TAB_BAR_VIEW_HEIGHT 45
-
+#define TOOLBAR_HEIGHT 60
+#define TAG_VIEW_SIDE_MARGIN 10
+#define TAG_VIEW_BOTTOM_MARGIN 25
 
 #define KEYBOARD_HEIGHT 216
 
 #define NUMBER_OF_BAR_BUTTONS 2
 
-@interface KPAddTagPanel () <UITextFieldDelegate,KPTagListResizeDelegate,KPTagDelegate>
+@interface KPAddTagPanel () <UITextFieldDelegate,KPTagListResizeDelegate,KPTagDelegate,KPBlurryDelegate,ToolbarDelegate>
 @property (nonatomic,weak) IBOutlet UIView *addTagView;
 @property (nonatomic,weak) IBOutlet UIView *tagContainerView;
-@property (nonatomic,weak) IBOutlet UIView *barBottomView;
+@property (nonatomic,weak) IBOutlet KPToolbar *toolbar;
 @property (nonatomic,weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic,weak) IBOutlet UIButton *doneEditingButton;
 @property (nonatomic) BOOL isAdding;
@@ -43,6 +45,22 @@
     KPAddTagPanel *tagPanel = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, maxHeight) andTags:tags andMaxHeight:maxHeight];
     
     return tagPanel;
+}
+-(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
+    
+    if(item == 0){
+        [BLURRY dismissAnimated:YES];
+        [self.delegate closeTagPanel:self];
+    }
+    else if(item == 1){
+        
+    }
+    else if (item == 2) {
+        [self shiftToAddMode:YES];
+    }
+}
+-(void)pressedClose:(id)sender{
+    [self toolbar:self.toolbar pressedItem:0];
 }
 -(IBAction)rotateButton
 {
@@ -64,22 +82,21 @@
     if (self) {
         self.maxHeight = maxHeight;
         /* Initialize taglistview + scrolling */
-        UIView *tagContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height-TAB_BAR_VIEW_HEIGHT)];
-        tagContainerView.tag = TAG_CONTAINER_VIEW_TAG;
-        /*UIView *tagContainerColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tagContainerView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        tagContainerColorSeperator.backgroundColor = BAR_BOTTOM_BACKGROUND_COLOR;
-        [tagContainerView addSubview:tagContainerColorSeperator];*/
-        
-        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, COLOR_SEPERATOR_HEIGHT, tagContainerView.frame.size.width, tagContainerView.frame.size.height-COLOR_SEPERATOR_HEIGHT)];
+        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        closeButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+        closeButton.frame = self.bounds;
+        [closeButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:closeButton];
+        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height-TOOLBAR_HEIGHT)];
         scrollView.tag = SCROLL_VIEW_TAG;
         
         KPTagList *tagView = [KPTagList tagListWithWidth:self.frame.size.width andTags:tags];
-        tagView.marginLeft = 0;
-        tagView.bottomMargin = 15;
+        tagView.marginLeft = TAG_VIEW_SIDE_MARGIN;
         tagView.enableEdit = YES;
-        tagView.marginRight = 0;
-        tagView.emptyText = @"No tags";
+        tagView.marginRight = TAG_VIEW_SIDE_MARGIN;
+        tagView.emptyText = @"No tags - press the plus to add one";
         tagView.emptyLabelMarginHack = 10;
+        tagView.tagColor = tbackground(MenuBackground);
         CGRectSetY(tagView, 0);
         tagView.resizeDelegate = self;
         tagView.tag = TAG_VIEW_TAG;
@@ -88,72 +105,31 @@
         //CGRectSetSize(self.frame, self.frame.size.width, self.tagView.frame.size.height+ADD_VIEW_HEIGHT);//
         scrollView.contentSize = CGSizeMake(tagView.frame.size.width, tagView.frame.size.height);
         scrollView.scrollEnabled = YES;
-        [tagContainerView addSubview:scrollView];
-        [self addSubview:tagContainerView];
-        self.tagContainerView = [self viewWithTag:TAG_CONTAINER_VIEW_TAG];
+        
+        [self addSubview:scrollView];
         self.scrollView = (UIScrollView*)[self viewWithTag:SCROLL_VIEW_TAG];
-        self.scrollView.backgroundColor = tbackground(TagBarBackground);
         [self tagList:self.tagView changedSize:CGSizeMake(self.frame.size.width, self.tagView.frame.size.height)];
-        CGRectSetHeight(self, self.tagContainerView.frame.origin.y+self.tagContainerView.frame.size.height+TAB_BAR_VIEW_HEIGHT);
         
         
-        
-        CGFloat sepHeight = COLOR_SEPERATOR_HEIGHT;
         /* Initialize tagbar view */
-        UIView *tagBarView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TAB_BAR_VIEW_HEIGHT, self.frame.size.width, TAB_BAR_VIEW_HEIGHT)];
-        tagBarView.backgroundColor = tbackground(TagBarBackground);
-        tagBarView.tag = TAB_BAR_VIEW_TAG;
-        UIView *tagBarColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tagBarView.frame.size.width, sepHeight)];
-        tagBarColorSeperator.backgroundColor = tbackground(TagBarBackground);
-        [tagBarView addSubview:tagBarColorSeperator];
-        
-        UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        addButton.frame = CGRectMake(0, sepHeight, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-sepHeight);
-        addButton.titleLabel.font = BUTTON_FONT;
-        [addButton addTarget:self action:@selector(pressedAddButton:) forControlEvents:UIControlEventTouchUpInside];
-        addButton.titleLabel.textColor = tcolor(TagColor);
-        [addButton setTitle:@"ADD" forState:UIControlStateNormal];
-        [tagBarView addSubview:addButton];
-        
-        /*UIButton *editButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        editButton.frame = CGRectMake(tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*1, COLOR_SEPERATOR_HEIGHT, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-COLOR_SEPERATOR_HEIGHT);
-        editButton.titleLabel.font = BAR_BOTTON_BUTTON_FONT;
-        editButton.titleLabel.textColor = [UIColor whiteColor];
-        [editButton setTitle:@"EDIT" forState:UIControlStateNormal];
-        [tagBarView addSubview:editButton];*/
-        
-        UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        doneButton.frame = CGRectMake(tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*1, sepHeight, tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS, TAB_BAR_VIEW_HEIGHT-sepHeight);
-        doneButton.titleLabel.font = BUTTON_FONT;
-        doneButton.titleLabel.textColor = tcolor(TagColor);
-        [doneButton addTarget:self action:@selector(pressedDoneButton:) forControlEvents:UIControlEventTouchUpInside];
-        [doneButton setTitle:@"DONE" forState:UIControlStateNormal];
-        [tagBarView addSubview:doneButton];
-        
-        for(NSInteger i = 1 ; i < NUMBER_OF_BAR_BUTTONS ; i++){
-            UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake((tagBarView.frame.size.width/NUMBER_OF_BAR_BUTTONS*i)-(SEPERATOR_WIDTH/2), sepHeight, SEPERATOR_WIDTH, tagBarView.frame.size.height-sepHeight)];
-            seperator.backgroundColor = tbackground(MenuSelectedBackground);
-            [tagBarView addSubview:seperator];
-        }
-        [self addSubview:tagBarView];
-        self.barBottomView = [self viewWithTag:TAB_BAR_VIEW_TAG];
-        
+        KPToolbar *tagToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TOOLBAR_HEIGHT, self.frame.size.width, TOOLBAR_HEIGHT) items:@[@"toolbar_back_icon",@"toolbar_trashcan_icon",@"toolbar_plus_icon"]];
+        tagToolbar.backgroundColor = tbackground(TagBarBackground);
+        tagToolbar.delegate = self;
+        tagToolbar.tag = TOOLBAR_TAG;
+        [self addSubview:tagToolbar];
+        self.toolbar = (KPToolbar*)[self viewWithTag:TOOLBAR_TAG];
         /* Initialize addView */
         
-        UIView *addView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height, self.bounds.size.width, TEXT_FIELD_CONTAINER_HEIGHT+COLOR_SEPERATOR_HEIGHT)];
+        UIView *addView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height, self.bounds.size.width, TEXT_FIELD_CONTAINER_HEIGHT)];
         addView.tag = ADD_VIEW_TAG;
         addView.backgroundColor = tbackground(SearchDrawerBackground);
-        UIView *addViewColorSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, addView.frame.size.height-COLOR_SEPERATOR_HEIGHT, addView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        addViewColorSeperator.backgroundColor = tcolor(ColoredSeperator);
-        [addView addSubview:addViewColorSeperator];
         
         UIButton *doneEditingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        CGFloat buttonSize = addView.frame.size.height-COLOR_SEPERATOR_HEIGHT;
+        CGFloat buttonSize = addView.frame.size.height;
         doneEditingButton.tag = DONE_EDITING_BUTTON_TAG;
         doneEditingButton.imageView.clipsToBounds = NO;
         doneEditingButton.imageView.contentMode = UIViewContentModeCenter;
         doneEditingButton.frame = CGRectMake(addView.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
-        [doneEditingButton setBackgroundImage:[UtilityClass imageWithColor:tcolor(ColoredButton)] forState:UIControlStateNormal];
         [doneEditingButton setImage:[UIImage imageNamed:@"hide_keyboard_arrow"] forState:UIControlStateNormal];
         [doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         [addView addSubview:doneEditingButton];
@@ -173,23 +149,12 @@
         [addView addSubview:textField];
         self.textField = (UITextField*)[addView viewWithTag:TEXT_FIELD_TAG];
         //[self.textField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];
-        
         [self addSubview:addView];
         self.addTagView = [self viewWithTag:ADD_VIEW_TAG];
-        
-        CGRectSetHeight(self, self.barBottomView.frame.origin.y+self.barBottomView.frame.size.height);
+        self.addTagView.hidden = YES;
+        //CGRectSetHeight(self, self.barBottomView.frame.origin.y+self.barBottomView.frame.size.height);
     }
     return self;
-}
--(void)scrollIfNessecary{
-    //CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
-    //[self.scrollView setContentOffset:bottomOffset animated:YES];
-}
--(void)pressedAddButton:(id)sender{
-    [self shiftToAddMode:YES];
-}
--(void)pressedDoneButton:(id)sender{
-    [self.delegate closeTagPanel:self];
 }
 -(void)pressedDoneEditing:(id)sender{
     [self textFieldShouldReturn:self.textField];
@@ -198,56 +163,32 @@
 -(void)tagList:(KPTagList *)tagList changedSize:(CGSize)size{
     self.scrollView.contentSize = size;
     CGFloat height = (size.height > self.maxHeight) ? self.maxHeight : size.height;
-    CGRectSetHeight(self.tagContainerView, height+COLOR_SEPERATOR_HEIGHT);
     CGRectSetHeight(self.scrollView, height);
+    CGRectSetY(self.scrollView, self.frame.size.height - TOOLBAR_HEIGHT - self.scrollView.frame.size.height - TAG_VIEW_BOTTOM_MARGIN);
 }
 
 -(void)shiftToAddMode:(BOOL)addMode{
     if(addMode){
         self.isAdding = YES;
-        [UIView animateWithDuration:0.2 animations:^{
-            CGRectSetY(self.tagContainerView, self.barBottomView.frame.origin.y);
-            //self.barBottomView.hidden = YES;
+        
+        [self.textField becomeFirstResponder];
+        self.addTagView.hidden = NO;
+        CGRectSetY(self.addTagView,self.frame.size.height-self.addTagView.frame.size.height);
+        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
+            self.scrollView.alpha = 0;
+            CGRectSetY(self.addTagView,self.frame.size.height-self.addTagView.frame.size.height-KEYBOARD_HEIGHT);
         } completion:^(BOOL finished) {
-            if(finished){
-                self.tagContainerView.hidden = YES;
-                CGFloat newHeight = KEYBOARD_HEIGHT + self.addTagView.frame.size.height;
-                if([self.delegate respondsToSelector:@selector(tagPanel:changedSize:)]) [self.delegate tagPanel:self changedSize:CGSizeMake(self.frame.size.width,newHeight)];
-                CGRectSetY(self.barBottomView, self.frame.size.height-self.barBottomView.frame.size.height);
-                CGRectSetY(self.addTagView, self.frame.size.height);
-                self.addTagView.hidden = NO;
-                [self.textField becomeFirstResponder];
-                [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-                    CGRectSetY(self.addTagView, 0);
-                }];
-            }
         }];
     }
     else{
         self.isAdding = NO;
         [self.textField resignFirstResponder];
         [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-            CGRectSetY(self.addTagView, self.frame.size.height);
+            self.scrollView.alpha = 1;
+            CGRectSetY(self.addTagView,self.frame.size.height-self.addTagView.frame.size.height);
         } completion:^(BOOL finished) {
             if(finished){
                 self.addTagView.hidden = YES;
-                
-                self.tagContainerView.hidden = NO;
-                CGPoint topOffset = CGPointMake(0, 0);
-                [self.scrollView setContentOffset:topOffset animated:NO];
-                CGFloat newHeight = self.tagContainerView.frame.size.height + self.barBottomView.frame.size.height;
-                if([self.delegate respondsToSelector:@selector(tagPanel:changedSize:)]) [self.delegate tagPanel:self changedSize:CGSizeMake(self.frame.size.width,newHeight)];
-                
-                CGRectSetY(self.barBottomView, self.frame.size.height-self.barBottomView.frame.size.height);
-                CGRectSetY(self.tagContainerView, self.barBottomView.frame.origin.y);
-                [UIView animateWithDuration:0.2 animations:^{
-                    CGRectSetY(self.tagContainerView, 0);
-                    //CGRectSetY(self.addTagView.frame, 0);
-                    
-                    
-                } completion:^(BOOL finished) {
-                    [self scrollIfNessecary];
-                }];
             }
         }];
     }

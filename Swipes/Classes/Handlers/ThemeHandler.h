@@ -20,7 +20,12 @@ typedef enum {
     TasksColor,
     LaterColor,
     DoneColor,
+    StrongTasksColor,
+    StrongLaterColor,
+    StrongDoneColor,
+    
     SearchDrawerColor,
+    TextFieldColor,
     TaskTableEmptyText,
     TaskTableEmptyTodayText,
     TaskCellTimelineColor,

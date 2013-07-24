@@ -10,6 +10,7 @@
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
 #import "NSDate-Utilities.h"
+#import "KPBlurry.h"
 #define POPUP_WIDTH 310
 #define CONTENT_VIEW_TAG 1
 #define SELECT_DATE_VIEW_TAG 3
@@ -21,8 +22,8 @@
 #define TIME_VIEWER_LABEL_TAG 9
 #define TIME_SLIDER_TAG 10
 
-#define SEPERATOR_COLOR_LIGHT tcolor(TagColor)
-#define SEPERATOR_MARGIN 0.02//0.02
+#define SEPERATOR_COLOR_LIGHT tbackground(TaskTableBackground)//color(254,184,178,1)
+#define SEPERATOR_MARGIN 0.05//0.02
 
 
 #define SCHEUDLE_IMAGE_SIZE 36
@@ -59,7 +60,7 @@ typedef struct
     int     minutes;
 } TimeRef;
 
-@interface SchedulePopup ()
+@interface SchedulePopup () <KPBlurryDelegate>
 @property (nonatomic,copy) SchedulePopupBlock block;
 @property (nonatomic,weak) IBOutlet UIDatePicker *datePicker;
 @property (nonatomic,weak) IBOutlet UILabel *monthLabel;
@@ -87,11 +88,17 @@ typedef struct
     time.minutes = 0;
     return time;
 }
++(SchedulePopup*)popupWithFrame:(CGRect)frame block:(SchedulePopupBlock)block{
+    SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:frame];
+    popup.block = block;
+    return popup;
+}
 -(void)returnState:(KPScheduleButtons)state date:(NSDate*)date{
     if(self.hasReturned) return;
     self.hasReturned = YES;
+    if(self.block) self.block(state,date);
     /*[self show:NO completed:^(BOOL succeeded, NSError *error) {
-        if(self.block) self.block(state,date);
+        
     }];*/
 }
 -(void)cancelled{
@@ -174,10 +181,15 @@ typedef struct
     self = [super initWithFrame:frame];
     if (self) {
         self.startingHour = 9;
-        self.frame = CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH);
-        UIView *contentView = [[UIView alloc] initWithFrame:self.bounds];
+        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [closeButton addTarget:self action:@selector(cancelled) forControlEvents:UIControlEventTouchUpInside];
+        closeButton.frame = self.bounds;
+        closeButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+        [self addSubview:closeButton];
+        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH)];
+        contentView.center = self.center;
         
-        contentView.backgroundColor = CLEAR;//POPUP_BACKGROUND_COLOR color(254,115,103,1);//;
+        contentView.backgroundColor = tbackground(SearchDrawerBackground);//POPUP_BACKGROUND_COLOR color(254,115,103,1);//;
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
         contentView.tag = CONTENT_VIEW_TAG;
@@ -243,13 +255,9 @@ typedef struct
     UIView *selectDateView = [[UIView alloc] initWithFrame:self.bounds];
     selectDateView.hidden = YES;
     selectDateView.tag = SELECT_DATE_VIEW_TAG;
-    selectDateView.backgroundColor = POPUP_BACKGROUND; //POPUP_BACKGROUND_COLOR
     selectDateView.layer.cornerRadius = 10;
     selectDateView.layer.masksToBounds = YES;
     
-    UIView *colorBottomSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, selectDateView.frame.size.height-COLOR_SEPERATOR_HEIGHT, selectDateView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-    colorBottomSeperator.backgroundColor = tcolor(ColoredSeperator);
-    [selectDateView addSubview:colorBottomSeperator];
     
     UIButton *backOneMonthButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backOneMonthButton setImage:[UIImage imageNamed:@"left_arrow"] forState:UIControlStateNormal];
@@ -318,10 +326,6 @@ typedef struct
     [backButton setTitle:@"BACK" forState:UIControlStateNormal];
     [selectDateView addSubview:backButton];
     
-    
-    UIView *dateButtonsSeperator = [[UIView alloc] initWithFrame:CGRectMake(buttonWidth-SEPERATOR_WIDTH/2, buttonY, SEPERATOR_WIDTH, PICK_DATE_BUTTON_HEIGHT)];
-    //dateButtonsSeperator.backgroundColor = SEGMENT_SELECTED;
-    [selectDateView addSubview:dateButtonsSeperator];
     
     UIButton *setDateButton = [UIButton buttonWithType:UIButtonTypeCustom];
     setDateButton.titleLabel.font = BUTTON_FONT;
@@ -453,10 +457,7 @@ typedef struct
     
     UIView *timeView = [self viewWithTag:TIME_VIEWER_TAG];
     UILabel *timeLabel = (UILabel*)[timeView viewWithTag:TIME_VIEWER_LABEL_TAG];
-    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
-    [timeFormatter setDateFormat:@"hh:mm a"];
-    NSString *timeString = [timeFormatter stringFromDate:time];
-    timeLabel.text = timeString;
+    timeLabel.text = [UtilityClass timeStringForDate:time];
 }
 -(void)showTimeView:(BOOL)show{
     UIView *timeView = [self viewWithTag:TIME_VIEWER_TAG];

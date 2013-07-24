@@ -11,13 +11,14 @@
 #import <QuartzCore/QuartzCore.h>
 #import <Accelerate/Accelerate.h>
 
-CGFloat const kRNGridMenuDefaultDuration = .12f;
-CGFloat const kRNGridMenuDefaultBlur = 0.4f;
+CGFloat const kKPBlurryDefaultDuration = .18f;
+CGFloat const kKPBlurryDefaultBlur = 1.0f;
+#define KPBlurryDefaultTopBlurry alpha(tbackground(TaskTableBackground),0.5)
+DisplayPosition const kKPBlurryDefaultDisplayPosition = PositionCenter;
 
 #pragma mark - Categories
 
 @implementation UIView (Screenshot)
-
 - (UIImage *)rn_screenshot {
     UIGraphicsBeginImageContext(self.bounds.size);
     [self.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -161,36 +162,35 @@ CGFloat const kRNGridMenuDefaultBlur = 0.4f;
 @property (nonatomic, assign) CGPoint menuCenter;
 @property (nonatomic, strong) UIView *blurView;
 @property (nonatomic, assign) BOOL parentViewCouldScroll;
-
+@property (nonatomic,strong) UIView *menuView;
 @end
 
 static KPBlurry *rn_visibleGridMenu;
 
 @implementation KPBlurry
-
+static KPBlurry *sharedObject;
++(KPBlurry *)sharedInstance{
+    if (!sharedObject)
+        sharedObject = [[KPBlurry allocWithZone:NULL] init];
+    return sharedObject;
+}
 #pragma mark - Lifecycle
 
 + (instancetype)visibleGridMenu {
     return rn_visibleGridMenu;
 }
 
-- (instancetype)initWithView:(UIView *)modalView {
+- (id)init{
     if ((self = [super init])) {
-        
-        _blurLevel = kRNGridMenuDefaultBlur;
-        _animationDuration = kRNGridMenuDefaultDuration;
-        
-        _menuView = modalView;
-        _bounces = NO;
+        _blurLevel = kKPBlurryDefaultBlur;
+        _animationDuration = kKPBlurryDefaultDuration;
+        _blurryTopColor = KPBlurryDefaultTopBlurry;
+        _showPosition = kKPBlurryDefaultDisplayPosition;
     }
     
     return self;
 }
 
-- (instancetype)init {
-    NSAssert(NO, @"Unable to create with plain init.");
-    return nil;
-}
 
 #pragma mark - UIViewController
 
@@ -198,12 +198,6 @@ static KPBlurry *rn_visibleGridMenu;
     [super viewDidLoad];
     
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    CGFloat m34 = 1 / 300.f;
-    CATransform3D transform = CATransform3DIdentity;
-    transform.m34 = m34;
-    self.menuView.layer.transform = transform;
-    
 }
 
 - (void)viewWillLayoutSubviews {
@@ -228,29 +222,36 @@ static KPBlurry *rn_visibleGridMenu;
         [self createScreenshotAndLayoutWithScreenshotCompletion:nil];
     }
 }
+-(void)sendSelector:(SEL)selector{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+    if([self.menuView respondsToSelector:selector]) [self.menuView performSelector:selector];
+    if([self.delegate respondsToSelector:selector]) [self.delegate performSelector:selector];
+#pragma clang diagnostic pop
+}
 -(void)closeButton:(id)sender{
-    [self dismissAnimated:YES];
+    BOOL shouldClose = YES;
+    if([self.menuView respondsToSelector:@selector(blurryShouldClose:)]){
+        shouldClose = [(UIView<KPBlurryDelegate>*)self.menuView blurryShouldClose:self];
+    }
+    if([self.delegate respondsToSelector:@selector(blurryShouldClose:)]){
+        shouldClose = [self.delegate blurryShouldClose:self];
+    }
+    if(shouldClose) [self dismissAnimated:YES];
 }
 
 - (void)createScreenshotAndLayoutWithScreenshotCompletion:(dispatch_block_t)screenshotCompletion {
     if (self.blurLevel > 0.f) {
         self.blurView.alpha = 0.f;
         self.menuView.alpha = 0.f;
-        
-        
-        
-        UIView *backgroundViewHack = [[UIView alloc] initWithFrame:self.parentViewController.view.bounds];
-        backgroundViewHack.backgroundColor = alpha(tcolor(LaterColor),0.8);
-        [self.parentViewController.view addSubview:backgroundViewHack];
         UIImage *screenshot = [self.parentViewController.view rn_screenshot];
-        [backgroundViewHack removeFromSuperview];
         self.menuView.alpha = 1.f;
         self.blurView.alpha = 1.f;
         self.blurView.layer.contents = (id)screenshot.CGImage;
         
         
         UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        closeButton.backgroundColor = CLEAR;//tbackground(PopupBackground);
+        if(self.blurryTopColor) closeButton.backgroundColor = self.blurryTopColor;
         closeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
         closeButton.frame = self.blurView.bounds;
         [closeButton addTarget:self action:@selector(closeButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -281,17 +282,27 @@ static KPBlurry *rn_visibleGridMenu;
 
 #pragma mark - Animations
 
-- (void)showInViewController:(UIViewController *)parentViewController center:(CGPoint)center {
+- (void)showView:(UIView*)view inViewController:(UIViewController *)parentViewController{
     NSParameterAssert(parentViewController != nil);
     
     if (rn_visibleGridMenu != nil) {
         [rn_visibleGridMenu dismissAnimated:NO];
     }
-    
+    _menuView = view;
     [self rn_addToParentViewController:parentViewController callingAppearanceMethods:YES];
     // [self.view convertPoint:center toView:self.view];
     self.view.frame = parentViewController.view.bounds;
-    self.menuView.center = self.view.center;
+    switch (self.showPosition) {
+        case PositionTop:
+            self.menuView.center = CGPointMake(self.view.center.x, self.menuView.frame.size.height/2);
+            break;
+        case PositionCenter:
+            self.menuView.center = self.view.center;
+            break;
+        case PositionBottom:
+            self.menuView.center = CGPointMake(self.view.center.x, self.view.frame.size.height-(self.menuView.frame.size.height/2));
+            break;
+    }
     [self showAnimated:YES];
 }
 
@@ -302,7 +313,7 @@ static KPBlurry *rn_visibleGridMenu;
     self.blurView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.blurView];
     [self.view addSubview:self.menuView];
-    
+    if([self.menuView respondsToSelector:@selector(blurryWillShow:)]) [(UIView<KPBlurryDelegate>*)self.menuView blurryWillShow:self];
     [self createScreenshotAndLayoutWithScreenshotCompletion:^{
         if (animated) {
             CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
@@ -316,16 +327,20 @@ static KPBlurry *rn_visibleGridMenu;
             animationGroup.duration = self.animationDuration;
             
             [self.menuView.layer addAnimation:animationGroup forKey:nil];
+            [self performSelector:@selector(didShow) withObject:nil afterDelay:self.animationDuration];
         }
     }];
 }
-
+-(void)didShow{
+    if([self.menuView respondsToSelector:@selector(blurryDidShow:)]) [(UIView<KPBlurryDelegate>*)self.menuView blurryDidShow:self];
+}
 - (void)dismissAnimated:(BOOL)animated {
     if (self.dismissAction != nil) {
         self.dismissAction();
     }
     
     if (animated) {
+        if([self.menuView respondsToSelector:@selector(blurryWillHide:)]) [(UIView<KPBlurryDelegate>*)self.menuView blurryWillHide:self];
         CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
         opacityAnimation.fromValue = @1.;
         opacityAnimation.toValue = @0.;
@@ -351,6 +366,13 @@ static KPBlurry *rn_visibleGridMenu;
 }
 
 - (void)cleanup {
+    self.dismissAction = nil;
+    self.animationDuration = kKPBlurryDefaultDuration;
+    self.blurLevel = kKPBlurryDefaultBlur;
+    self.blurryTopColor = KPBlurryDefaultTopBlurry;
+    self.showPosition = kKPBlurryDefaultDisplayPosition;
+    if([self.menuView respondsToSelector:@selector(blurryDidHide:)]) [(UIView<KPBlurryDelegate>*)self.menuView blurryDidHide:self];
+    [self.menuView removeFromSuperview];
     [self rn_removeFromParentViewControllerCallingAppearanceMethods:YES];
 }
 
