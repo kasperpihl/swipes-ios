@@ -30,10 +30,11 @@
 #define TOOLBAR_HEIGHT 50
 #define DEFAULT_ROW_HEIGHT 50
 
-#define LABEL_X 42
+#define LABEL_X 52
+#define TITLE_LABEL_X 42
 
 #define TITLE_HEIGHT 44
-#define TITLE_TOP_MARGIN 19
+#define TITLE_TOP_MARGIN 13
 #define TITLE_WIDTH (320)
 #define TITLE_BOTTOM_MARGIN (TITLE_TOP_MARGIN)
 #define CONTAINER_INIT_HEIGHT (TITLE_HEIGHT + TITLE_TOP_MARGIN + TITLE_BOTTOM_MARGIN)
@@ -111,7 +112,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         HPGrowingTextView *textView;
         textView = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(0, TITLE_TOP_MARGIN, TITLE_WIDTH-buttonWidth, TITLE_HEIGHT)];
-        textView.contentInset = UIEdgeInsetsMake(0, LABEL_X-8, 0, -8);
+        textView.contentInset = UIEdgeInsetsMake(0, TITLE_LABEL_X-8, 0, -8);
         textView.tag = TITLE_TEXT_VIEW_TAG;
         textView.minNumberOfLines = 1;
         textView.backgroundColor = CLEAR;
@@ -126,7 +127,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DOT_SIZE,DOT_SIZE)];
         dotView.tag = DOT_VIEW_TAG;
         dotView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin);
-        centerItemForSize(dotView, LABEL_X, textView.frame.size.height);
+        centerItemForSize(dotView, TITLE_LABEL_X, textView.frame.size.height);
         dotView.layer.cornerRadius = DOT_SIZE/2;
         dotView.tag = DOT_VIEW_TAG;
         [textView addSubview:dotView];
@@ -159,7 +160,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         */
         UIView *alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
         alarmContainer.tag = ALARM_CONTAINER_TAG;
-        [self addSeperatorToView:alarmContainer];
 
         self.alarmImage = [self addAndGetImage:@"edit_alarm_icon" inView:alarmContainer tag:ALARM_IMAGE_TAG];
         
@@ -182,7 +182,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         */
         UIView *tagsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
         tagsContainer.tag = TAGS_CONTAINER_TAG;
-        [self addSeperatorToView:tagsContainer];
         
         self.tagsImage = [self addAndGetImage:@"edit_tags_icon" inView:tagsContainer tag:TAGS_IMAGE_VIEW_TAG];
         
@@ -273,14 +272,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     //clickedButton.contentEdgeInsets = UIEdgeInsetsMake(0, LABEL_X, 0, LABEL_X/3);
     [clickedButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:clickedButton];
-}
--(void)addSeperatorToView:(UIView*)view{
-    CGFloat seperatorHeight = 1;
-    CGFloat rightMargin = LABEL_X/3;
-    UIView *seperatorView = [[UIView alloc] initWithFrame:CGRectMake(LABEL_X, view.frame.size.height-seperatorHeight, view.frame.size.width-LABEL_X-rightMargin, seperatorHeight)];
-    seperatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    seperatorView.backgroundColor = tbackground(TaskCellBackground);
-    [view addSubview:seperatorView];
 }
 -(void)setActiveEditMode:(KPEditMode)activeEditMode{
     if(activeEditMode != _activeEditMode){

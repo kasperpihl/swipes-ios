@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+@class KPAddView;
 @protocol AddViewDelegate
--(void)pressedButtonWithTrimmedText:(NSString*)trimmedText;
--(void)pressedReturnWithTrimmedText:(NSString*)trimmedText;
+-(void)addView:(KPAddView*)addView enteredTrimmedText:(NSString*)trimmedText;
+-(void)addViewPressedDoneButton:(KPAddView*)addView;
 @end
 @interface KPAddView : UIView
+@property (nonatomic,weak) NSObject<AddViewDelegate> *delegate;
 @end

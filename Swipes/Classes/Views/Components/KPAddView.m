@@ -58,6 +58,7 @@
                                [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if(trimmedString.length > 0){
         [self textFieldDidChange:self.textField];
+        if([self.delegate respondsToSelector:@selector(addView:enteredTrimmedText:)]) [self.delegate addView:self enteredTrimmedText:trimmedString];
     }
     return NO;
 }
@@ -80,7 +81,7 @@
 }
 -(void)pressedDoneEditing:(id)sender{
     [self textFieldShouldReturn:self.textField];
-    
+    if([self.delegate respondsToSelector:@selector(addViewPressedDoneButton:)]) [self.delegate addViewPressedDoneButton:self];
 }
 -(IBAction)rotateButton
 {

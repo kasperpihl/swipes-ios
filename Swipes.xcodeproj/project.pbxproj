@@ -491,8 +491,8 @@
 		A7F4066017294ECE00DDE644 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		A7F4066317296BC700DDE644 /* AddPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPanelView.h; sourceTree = "<group>"; };
 		A7F4066417296BC700DDE644 /* AddPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPanelView.m; sourceTree = "<group>"; };
-		A7F4066717296BF100DDE644 /* ToDoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDoCell.h; sourceTree = "<group>"; };
-		A7F4066817296BF100DDE644 /* ToDoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoCell.m; sourceTree = "<group>"; };
+		A7F4066717296BF100DDE644 /* ToDoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToDoCell.h; path = ../ViewControllers/ToDoList/ToDoCell.h; sourceTree = "<group>"; };
+		A7F4066817296BF100DDE644 /* ToDoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ToDoCell.m; path = ../ViewControllers/ToDoList/ToDoCell.m; sourceTree = "<group>"; };
 		A7F4066917296BF100DDE644 /* ToDoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDoListViewController.h; sourceTree = "<group>"; };
 		A7F4066A17296BF100DDE644 /* ToDoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoListViewController.m; sourceTree = "<group>"; };
 		A7F4067017296C0500DDE644 /* KPControlHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPControlHandler.h; sourceTree = "<group>"; };
@@ -661,6 +661,8 @@
 		A75545DF179B4C5800CE2F4E /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				A7F4066717296BF100DDE644 /* ToDoCell.h */,
+				A7F4066817296BF100DDE644 /* ToDoCell.m */,
 				A72D5EBB179D669100BCB835 /* KPToolbar.h */,
 				A72D5EBC179D669100BCB835 /* KPToolbar.m */,
 				A75236C117A079010030ED1E /* KPAddView.h */,
@@ -1238,8 +1240,6 @@
 				A7933044172AB5AA00F1505E /* Schedule */,
 				A7933045172AB5B100F1505E /* Today */,
 				A7933046172AB5B800F1505E /* Done */,
-				A7F4066717296BF100DDE644 /* ToDoCell.h */,
-				A7F4066817296BF100DDE644 /* ToDoCell.m */,
 				A7F4066917296BF100DDE644 /* ToDoListViewController.h */,
 				A7F4066A17296BF100DDE644 /* ToDoListViewController.m */,
 			);
