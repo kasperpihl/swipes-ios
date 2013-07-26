@@ -12,6 +12,15 @@
  "ProximaNova-Bold"
 */
 #import "ThemeHandler.h"
+
+/* GLOBALS */
+#define GLOBAL_TOOLBAR_HEIGHT           50
+#define GLOBAL_ANIMATION_DURATION       0.15f
+#define GLOBAL_TEXTFIELD_HEIGHT         70
+#define KEYBOARD_HEIGHT                 216
+#define KEYBOARD_ANIMATION_DURATION     0.25f
+
+
 #define KP_LIGHT(fontSize)              [UIFont fontWithName:@"ProximaNova-Light" size:fontSize]
 #define KP_BLACK(fontSize)              [UIFont fontWithName:@"ProximaNova-Black" size:fontSize]
 #define KP_REGULAR(fontSize)            [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize]
@@ -24,6 +33,17 @@
 #define SCHEDULE_BUTTON_CAPITAL         NO
 
 #define MIN_SEARCH_LETTER_LENGTH        1
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
+//RGB color macro with alpha
+#define UIColorFromRGBWithAlpha(rgbValue,a) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
+
 
 
 /* Text Colors */
@@ -81,12 +101,11 @@
 #define SEARCH_BAR_DEFAULT_HEIGHT 55
 
 #define DEFAULT_SPACE_FROM_SLIDE_UP_VIEW 60
-#define KEYBOARD_HEIGHT 216
 
 
 #define BUTTON_FONT                     KP_COND_BOLD(20)
 #define TAGS_LABEL_BOLD_FONT            KP_BOLD(12)
-#define TABLE_EMPTY_BG_FONT             KP_LIGHT(20)
+#define TABLE_EMPTY_BG_FONT             KP_REGULAR(20)
 #define NO_TAG_FONT                     KP_LIGHT(18)
 #define TEXT_FIELD_FONT                 KP_LIGHT(18)
 #define SECTION_HEADER_FONT             KP_LIGHT(18)

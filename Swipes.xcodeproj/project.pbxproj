@@ -27,7 +27,6 @@
 		A700042E1762A02A008CB715 /* edit_tags_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A700042B1762A02A008CB715 /* edit_tags_icon.png */; };
 		A70004331762A038008CB715 /* done_white_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A700042F1762A038008CB715 /* done_white_background.png */; };
 		A70004341762A038008CB715 /* schedule_white_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70004301762A038008CB715 /* schedule_white_background.png */; };
-		A70004351762A038008CB715 /* today_color_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70004311762A038008CB715 /* today_color_background.png */; };
 		A70004361762A038008CB715 /* today_white_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70004321762A038008CB715 /* today_white_background.png */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
 		A717BEE5175DF5AF004791BF /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BEE4175DF5AF004791BF /* SignupViewController.m */; };
@@ -150,8 +149,6 @@
 		A78128D117294C56002226C8 /* SchedulePopup.m in Sources */ = {isa = PBXBuildFile; fileRef = A781287C17294C56002226C8 /* SchedulePopup.m */; };
 		A78128D217294C56002226C8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A781287D17294C56002226C8 /* InfoPlist.strings */; };
 		A78128D317294C56002226C8 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A781287F17294C56002226C8 /* MainStoryboard.storyboard */; };
-		A78128EC17294C56002226C8 /* addbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A781289D17294C56002226C8 /* addbutton.png */; };
-		A78128ED17294C56002226C8 /* addbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A781289E17294C56002226C8 /* addbutton@2x.png */; };
 		A78128FA17294C56002226C8 /* KPReorderTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A78128AE17294C56002226C8 /* KPReorderTableView.m */; };
 		A78128FB17294C56002226C8 /* SBScrollNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = A78128B117294C56002226C8 /* SBScrollNavigation.m */; };
 		A78128FC17294C56002226C8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A78128B417294C56002226C8 /* AppDelegate.m */; };
@@ -182,7 +179,6 @@
 		A79DB42517358C33007A48E2 /* schedule_white_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB41F17358C33007A48E2 /* schedule_white_background@2x.png */; };
 		A79DB42717358C33007A48E2 /* today_white_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB42117358C33007A48E2 /* today_white_background@2x.png */; };
 		A7A2AC26175CF45600329FD5 /* NotesView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A2AC25175CF45600329FD5 /* NotesView.m */; };
-		A7ABF4271746B0EF00DE033F /* today_color_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ABF4261746B0EF00DE033F /* today_color_background@2x.png */; };
 		A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B260921733D1FD000BADDE /* NotificationHandler.m */; };
 		A7B2609917346EDC000BADDE /* EMHint.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B2609617346EDC000BADDE /* EMHint.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A7B2609A17346EDC000BADDE /* EMHintsView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B2609817346EDC000BADDE /* EMHintsView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -213,8 +209,6 @@
 		A7DEA1891790BD2D00EB1549 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA1881790BD2D00EB1549 /* MenuViewController.m */; };
 		A7DEA18C17954C7400EB1549 /* ThemeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA18B17954C7400EB1549 /* ThemeHandler.m */; };
 		A7E8FB0917462F3600CC2D26 /* AKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */; };
-		A7E8FB0A17462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0617462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m */; };
-		A7E8FB0B17462F3600CC2D26 /* UIViewController+KNSemiModal.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0817462F3600CC2D26 /* UIViewController+KNSemiModal.m */; };
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
 		A7F4066517296BC700DDE644 /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066417296BC700DDE644 /* AddPanelView.m */; };
 		A7F4066B17296BF100DDE644 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066817296BF100DDE644 /* ToDoCell.m */; };
@@ -234,7 +228,6 @@
 		A700042B1762A02A008CB715 /* edit_tags_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_tags_icon.png; sourceTree = "<group>"; };
 		A700042F1762A038008CB715 /* done_white_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = done_white_background.png; sourceTree = "<group>"; };
 		A70004301762A038008CB715 /* schedule_white_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = schedule_white_background.png; sourceTree = "<group>"; };
-		A70004311762A038008CB715 /* today_color_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = today_color_background.png; sourceTree = "<group>"; };
 		A70004321762A038008CB715 /* today_white_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = today_white_background.png; sourceTree = "<group>"; };
 		A7090B6E175DF3F900728A3A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = Login/LoginViewController.h; sourceTree = "<group>"; };
 		A7090B6F175DF3F900728A3A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Login/LoginViewController.m; sourceTree = "<group>"; };
@@ -397,8 +390,6 @@
 		A781287C17294C56002226C8 /* SchedulePopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchedulePopup.m; sourceTree = "<group>"; };
 		A781287E17294C56002226C8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A781288017294C56002226C8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		A781289D17294C56002226C8 /* addbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addbutton.png; sourceTree = "<group>"; };
-		A781289E17294C56002226C8 /* addbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "addbutton@2x.png"; sourceTree = "<group>"; };
 		A78128AD17294C56002226C8 /* KPReorderTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPReorderTableView.h; sourceTree = "<group>"; };
 		A78128AE17294C56002226C8 /* KPReorderTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPReorderTableView.m; sourceTree = "<group>"; };
 		A78128B017294C56002226C8 /* SBScrollNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBScrollNavigation.h; sourceTree = "<group>"; };
@@ -438,7 +429,6 @@
 		A79DB42117358C33007A48E2 /* today_white_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today_white_background@2x.png"; sourceTree = "<group>"; };
 		A7A2AC24175CF45500329FD5 /* NotesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotesView.h; sourceTree = "<group>"; };
 		A7A2AC25175CF45600329FD5 /* NotesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotesView.m; sourceTree = "<group>"; };
-		A7ABF4261746B0EF00DE033F /* today_color_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today_color_background@2x.png"; sourceTree = "<group>"; };
 		A7B260911733D1FC000BADDE /* NotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationHandler.h; sourceTree = "<group>"; };
 		A7B260921733D1FD000BADDE /* NotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationHandler.m; sourceTree = "<group>"; };
 		A7B2609517346EDC000BADDE /* EMHint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMHint.h; sourceTree = "<group>"; };
@@ -483,10 +473,6 @@
 		A7E8FB001746276900CC2D26 /* DesignSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DesignSettings.h; sourceTree = "<group>"; };
 		A7E8FB0217462F3600CC2D26 /* AKSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKSegmentedControl.h; sourceTree = "<group>"; };
 		A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKSegmentedControl.m; sourceTree = "<group>"; };
-		A7E8FB0517462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+YMOptionsAndDefaults.h"; sourceTree = "<group>"; };
-		A7E8FB0617462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+YMOptionsAndDefaults.m"; sourceTree = "<group>"; };
-		A7E8FB0717462F3600CC2D26 /* UIViewController+KNSemiModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+KNSemiModal.h"; sourceTree = "<group>"; };
-		A7E8FB0817462F3600CC2D26 /* UIViewController+KNSemiModal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+KNSemiModal.m"; sourceTree = "<group>"; };
 		A7F4065F17294ECE00DDE644 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		A7F4066017294ECE00DDE644 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		A7F4066317296BC700DDE644 /* AddPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPanelView.h; sourceTree = "<group>"; };
@@ -667,6 +653,8 @@
 				A72D5EBC179D669100BCB835 /* KPToolbar.m */,
 				A75236C117A079010030ED1E /* KPAddView.h */,
 				A75236C217A079010030ED1E /* KPAddView.m */,
+				A7F43AAC179B06FF00DFC9AD /* SectionHeaderView.h */,
+				A7F43AAD179B06FF00DFC9AD /* SectionHeaderView.m */,
 				A72D5ED7179ED08E00BCB835 /* SectionHeaderExtraView.h */,
 				A72D5ED8179ED08E00BCB835 /* SectionHeaderExtraView.m */,
 				A717BF3C17624CA2004791BF /* KPPageControl.h */,
@@ -902,7 +890,6 @@
 				A7DEA1711790A5EA00EB1549 /* RESideMenu */,
 				A7A2AC27175CF45B00329FD5 /* NotesView */,
 				A7E8FB0117462F3600CC2D26 /* KPSegmentedControl */,
-				A7E8FB0417462F3600CC2D26 /* KPSemiModal */,
 				A75700311739B59D00CDB4F3 /* Alert */,
 				A7F4066217296BC700DDE644 /* AddPanel */,
 				A75207FB1730FB5800F1B4F7 /* KPSearchBar */,
@@ -962,21 +949,10 @@
 				A7BFA8B6175A8BAB00DF5F8D /* Walkthrough */,
 				A79DB41B17358C33007A48E2 /* Backgrounds */,
 				A79DB3F21735892C007A48E2 /* Navbar */,
-				A781289A17294C56002226C8 /* Buttons */,
 				A7BDD4AF17369A6900C1A97E /* SchedulePopup */,
-				A7F43AA7179AFDC600DFC9AD /* TaskList */,
 				A72D5EBE179D8DB600BCB835 /* Toolbarbuttons */,
 			);
 			path = Images;
-			sourceTree = "<group>";
-		};
-		A781289A17294C56002226C8 /* Buttons */ = {
-			isa = PBXGroup;
-			children = (
-				A781289D17294C56002226C8 /* addbutton.png */,
-				A781289E17294C56002226C8 /* addbutton@2x.png */,
-			);
-			path = Buttons;
 			sourceTree = "<group>";
 		};
 		A78128AB17294C56002226C8 /* Libs */ = {
@@ -1096,9 +1072,7 @@
 			children = (
 				A700042F1762A038008CB715 /* done_white_background.png */,
 				A70004301762A038008CB715 /* schedule_white_background.png */,
-				A70004311762A038008CB715 /* today_color_background.png */,
 				A70004321762A038008CB715 /* today_white_background.png */,
-				A7ABF4261746B0EF00DE033F /* today_color_background@2x.png */,
 				A79DB41D17358C33007A48E2 /* done_white_background@2x.png */,
 				A79DB41F17358C33007A48E2 /* schedule_white_background@2x.png */,
 				A79DB42117358C33007A48E2 /* today_white_background@2x.png */,
@@ -1214,17 +1188,6 @@
 			path = KPSegmentedControl;
 			sourceTree = "<group>";
 		};
-		A7E8FB0417462F3600CC2D26 /* KPSemiModal */ = {
-			isa = PBXGroup;
-			children = (
-				A7E8FB0517462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.h */,
-				A7E8FB0617462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m */,
-				A7E8FB0717462F3600CC2D26 /* UIViewController+KNSemiModal.h */,
-				A7E8FB0817462F3600CC2D26 /* UIViewController+KNSemiModal.m */,
-			);
-			path = KPSemiModal;
-			sourceTree = "<group>";
-		};
 		A7F4066217296BC700DDE644 /* AddPanel */ = {
 			isa = PBXGroup;
 			children = (
@@ -1284,15 +1247,6 @@
 			path = CKCalendarView;
 			sourceTree = "<group>";
 		};
-		A7F43AA7179AFDC600DFC9AD /* TaskList */ = {
-			isa = PBXGroup;
-			children = (
-				A7F43AAC179B06FF00DFC9AD /* SectionHeaderView.h */,
-				A7F43AAD179B06FF00DFC9AD /* SectionHeaderView.m */,
-			);
-			path = TaskList;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1349,8 +1303,6 @@
 			files = (
 				A78128D217294C56002226C8 /* InfoPlist.strings in Resources */,
 				A78128D317294C56002226C8 /* MainStoryboard.storyboard in Resources */,
-				A78128EC17294C56002226C8 /* addbutton.png in Resources */,
-				A78128ED17294C56002226C8 /* addbutton@2x.png in Resources */,
 				A78128FD17294C56002226C8 /* Default-568h@2x.png in Resources */,
 				A78128FE17294C56002226C8 /* Default.png in Resources */,
 				A78128FF17294C56002226C8 /* Default@2x.png in Resources */,
@@ -1384,7 +1336,6 @@
 				A757002A1738FA0100CDB4F3 /* left_arrow@2x.png in Resources */,
 				A757002B1738FA0100CDB4F3 /* right_arrow.png in Resources */,
 				A757002C1738FA0100CDB4F3 /* right_arrow@2x.png in Resources */,
-				A7ABF4271746B0EF00DE033F /* today_color_background@2x.png in Resources */,
 				A7BFA8BF175A8BAB00DF5F8D /* walkthrough1.png in Resources */,
 				A7BFA8C0175A8BAB00DF5F8D /* walkthrough1@2x.png in Resources */,
 				A7BFA8C1175A8BAB00DF5F8D /* walkthrough_background.png in Resources */,
@@ -1425,7 +1376,6 @@
 				A700042E1762A02A008CB715 /* edit_tags_icon.png in Resources */,
 				A70004331762A038008CB715 /* done_white_background.png in Resources */,
 				A70004341762A038008CB715 /* schedule_white_background.png in Resources */,
-				A70004351762A038008CB715 /* today_color_background.png in Resources */,
 				A70004361762A038008CB715 /* today_white_background.png in Resources */,
 				A760891A178CE55900C8735D /* schedule_image_coffee.png in Resources */,
 				A760891B178CE55900C8735D /* schedule_image_coffee@2x.png in Resources */,
@@ -1548,8 +1498,6 @@
 				A7B2609A17346EDC000BADDE /* EMHintsView.m in Sources */,
 				A75700341739B5B200CDB4F3 /* KPAlert.m in Sources */,
 				A7E8FB0917462F3600CC2D26 /* AKSegmentedControl.m in Sources */,
-				A7E8FB0A17462F3600CC2D26 /* NSObject+YMOptionsAndDefaults.m in Sources */,
-				A7E8FB0B17462F3600CC2D26 /* UIViewController+KNSemiModal.m in Sources */,
 				A71CCEB01758B1E400A41265 /* HPGrowingTextView.m in Sources */,
 				A71CCEB11758B1E400A41265 /* HPTextViewInternal.m in Sources */,
 				A7BFA8B4175A861300DF5F8D /* MYIntroductionPanel.m in Sources */,

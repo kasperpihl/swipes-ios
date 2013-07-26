@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#define ANIMATION_DURATION 0.15f
+#define ANIMATION_DURATION GLOBAL_ANIMATION_DURATION
 
 typedef NS_ENUM(NSUInteger, KPControlHandlerState){
     KPControlHandlerStateNone = 0,

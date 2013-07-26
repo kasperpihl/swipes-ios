@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface SectionHeaderExtraView : UIView
--(id)initWithFrame:(CGRect)frame color:(UIColor*)color;
+-(id)initWithColor:(UIColor *)color font:(UIFont*)font title:(NSString*)title;
+@property (nonatomic) UIColor *textColor;
 @end

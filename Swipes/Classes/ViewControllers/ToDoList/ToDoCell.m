@@ -7,7 +7,6 @@
 //
 
 #import "ToDoCell.h"
-#import "KPToDo.h"
 #import "UtilityClass.h"
 #import "ToDoHandler.h"
 #import <QuartzCore/QuartzCore.h>
@@ -25,14 +24,15 @@
 #define INDICATOR_WIDTH 1
 
 #define LABEL_X 42
-#define TITLE_Y (TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
+#define TITLE_DELTA_Y 4
+#define TITLE_Y (TITLE_DELTA_Y + (self.frame.size.height-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
 
 
 #define DOT_OUTLINE_SIZE 4
 #define TIMELINE_WIDTH 2
 
 #define LABEL_WIDTH (320-(LABEL_X+(LABEL_X/3)))
-#define TITLE_DELTA_Y -1
+
 #define LABEL_SPACE 4
 
 #define TITLE_LABEL_HEIGHT [@"Tjgq" sizeWithFont:TITLE_LABEL_FONT].height
@@ -84,14 +84,16 @@
         overlayView.backgroundColor = tbackground(TaskCellBackground);
         self.selectedBackgroundView = overlayView;
         
-        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (LABEL_X/2)+TIMELINE_WIDTH, CELL_HEIGHT)];
+        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (LABEL_X/2)+TIMELINE_WIDTH, self.contentView.frame.size.height)];
         timelineLine.tag = TIMELINE_TAG;
+        timelineLine.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         timelineLine.backgroundColor = tcolor(TaskCellTimelineColor);
         [self.contentView addSubview:timelineLine];
         self.timelineView = [self.contentView viewWithTag:TIMELINE_TAG];
         
         CGFloat outlineWidth = DOT_SIZE+(2*DOT_OUTLINE_SIZE);
-        UIView *dotOutlineContainer = [[UIView alloc] initWithFrame:CGRectMake((LABEL_X-outlineWidth)/2, (CELL_HEIGHT-outlineWidth)/2, outlineWidth, outlineWidth)];
+        UIView *dotOutlineContainer = [[UIView alloc] initWithFrame:CGRectMake((LABEL_X-outlineWidth)/2, (self.frame.size.height-outlineWidth)/2, outlineWidth, outlineWidth)];
+        dotOutlineContainer.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
         dotOutlineContainer.tag = OUTLINE_TAG;
         dotOutlineContainer.backgroundColor = tcolor(TaskCellTimelineColor);
         dotOutlineContainer.layer.cornerRadius = outlineWidth/2;
@@ -121,6 +123,8 @@
 -(void)setTextLabels:(BOOL)showBottomLine{
     CGFloat titleY = showBottomLine ? TITLE_Y : ((CELL_HEIGHT - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
+    CGRectSetY(self.tagsLabel, self.titleLabel.frame.origin.y+self.titleLabel.frame.size.height+LABEL_SPACE);
+    self.alarmLabel.center = CGPointMake(self.alarmLabel.center.x, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
 }
 -(void)hideContent:(BOOL)hide animated:(BOOL)animated{
@@ -203,9 +207,6 @@
     if(_cellType != cellType){
         _cellType = cellType;
         self.selectedBackgroundView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
-        //CGRectSetY(self.overlayView.frame, CELL_HEIGHT-SELECTED_LINE_HEIGHT);
-        //CGRectSetY(self.seperatorLine.frame, CELL_HEIGHT-SEPERATOR_WIDTH);
-        //self.dotView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
         CellType firstCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
         CellType secondCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState2];
         CellType thirdCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState3];

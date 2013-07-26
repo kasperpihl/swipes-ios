@@ -9,7 +9,7 @@
 #import "UtilityClass.h"
 #define SEP_WIDTH 0.5
 #define kDEF_SEP_COLOR [UIColor whiteColor]
-#define kDEF_BACK_COLOR [UIColor blackColor]
+#define kDEF_BACK_COLOR tbackground(ToolbarBackground)
 @interface KPToolbar ()
 @property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *barButtons;
 @property (nonatomic, strong) IBOutletCollection(UIView) NSArray *seperators;

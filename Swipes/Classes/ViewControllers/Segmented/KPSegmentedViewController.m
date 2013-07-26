@@ -37,7 +37,6 @@
 
 @interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate>
 @property (nonatomic, strong) NSMutableArray *viewControllers;
-@property (nonatomic, strong) NSMutableArray *titles;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
 @property (nonatomic, weak) IBOutlet UIView *contentView;
 @property (nonatomic,strong) KPControlHandler *controlHandler;
@@ -65,9 +64,6 @@
 }
 -(void)tagPanel:(KPAddTagPanel *)tagPanel createdTag:(NSString *)tag{
     [TAGHANDLER addTag:tag];
-}
--(void)tagPanel:(KPAddTagPanel *)tagPanel changedSize:(CGSize)size{
-    NSLog(@"resized");
 }
 
 #pragma mark - KPTagDelegate
@@ -108,7 +104,7 @@
 }
 -(void)pressedTag:(id)sender{
     //[self show:NO controlsAnimated:YES];
-    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.view.bounds andTags:[TAGHANDLER allTags] andMaxHeight:320];
+    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.view.bounds andTags:[TAGHANDLER allTags]];
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     BLURRY.showPosition = PositionBottom;
@@ -135,12 +131,6 @@
 	if (!_viewControllers)
 		_viewControllers = [NSMutableArray array];
 	return _viewControllers;
-}
-
-- (NSMutableArray *)titles {
-	if (!_titles)
-		_titles = [NSMutableArray array];
-	return _titles;
 }
 - (AKSegmentedControl *)segmentedControl {
 	if (!_segmentedControl) {
@@ -228,7 +218,6 @@
 				UIViewController *viewController = obj;
 				
 				[self.viewControllers addObject:viewController];
-				[self.titles addObject:titles[index]];
 			}
 		}];
         self.view.layer.masksToBounds = YES;

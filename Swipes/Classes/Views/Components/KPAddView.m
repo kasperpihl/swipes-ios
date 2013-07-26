@@ -10,7 +10,6 @@
 #import "KPAddView.h"
 @interface KPAddView () <UITextFieldDelegate>
 @property (nonatomic) IBOutlet UIButton *doneEditingButton;
-@property (nonatomic) IBOutlet UITextField *textField;
 @property (nonatomic) BOOL isRotated;
 @end
 @implementation KPAddView
@@ -33,7 +32,7 @@
         [self addSubview:self.doneEditingButton];
         
         UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width-buttonWidth-SEPERATOR_WIDTH, kDEFAULT_SPACING, SEPERATOR_WIDTH, self.frame.size.height-(2*kDEFAULT_SPACING))];
-        seperator.backgroundColor = tcolor(SearchDrawerColor);
+        seperator.backgroundColor = tcolor(SeperatorColor);
         [self addSubview:seperator];
         
         
@@ -46,7 +45,6 @@
         self.textField.borderStyle = UITextBorderStyleNone;
         self.textField.delegate = self;
         self.textField.userInteractionEnabled = YES;
-        self.textField.placeholder = @"Add a new task";
         [self.textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         [self addSubview:self.textField];
     }
@@ -57,6 +55,7 @@
     NSString *trimmedString = [string stringByTrimmingCharactersInSet:
                                [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if(trimmedString.length > 0){
+        self.textField.text = @"";
         [self textFieldDidChange:self.textField];
         if([self.delegate respondsToSelector:@selector(addView:enteredTrimmedText:)]) [self.delegate addView:self enteredTrimmedText:trimmedString];
     }

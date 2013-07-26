@@ -30,6 +30,7 @@
 @property (nonatomic) NSInteger spacing;
 @property (nonatomic) NSInteger emptyLabelMarginHack;
 @property (nonatomic) UIColor *tagColor;
+@property (nonatomic) BOOL sorted;
 @property (nonatomic) BOOL isEmptyList;
 @property (nonatomic) BOOL enableEdit;
 @property (nonatomic) NSInteger numberOfRows;

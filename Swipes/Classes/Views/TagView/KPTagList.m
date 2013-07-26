@@ -81,7 +81,7 @@
 }
 -(void)layoutTagsFirst:(BOOL)first{
     CGFloat oldHeight = self.frame.size.height;
-    //[self.tags sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    if(self.sorted) [self.tags sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     NSArray *views = [self subviews];
     for(UIView *view in views) [view removeFromSuperview];
     CGFloat currentWidth = self.marginLeft + SPACE_HACK;

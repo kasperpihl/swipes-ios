@@ -13,7 +13,6 @@
 #import "SchedulePopup.h"
 #import "KPSearchBar.h"
 #import <QuartzCore/QuartzCore.h>
-#import "UIViewController+KNSemiModal.h"
 #import "ToDoViewController.h"
 
 #import "SectionHeaderView.h"
@@ -27,7 +26,8 @@
 #define COLORED_MENU_TEXT_TAG 507
 
 
-#define SECTION_HEADER_HEIGHT 30
+#define SECTION_HEADER_HEIGHT 6
+#define SECTION_EXTRA_DELTA_Y -3
 #define SECTION_HEADER_X 15
 #define CONTENT_INSET_BOTTOM 5// 100
 @interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate,ToDoVCDelegate>
@@ -42,7 +42,6 @@
 @property (nonatomic) CGPoint lastOffset;
 @property (nonatomic) NSTimeInterval lastOffsetCapture;
 @property (nonatomic,weak) IBOutlet UIView *menuText;
-@property (nonatomic,weak) IBOutlet UIView *coloredMenuText;
 @property (nonatomic,weak) UIView *fakeHeaderView;
 @property (nonatomic) BOOL isColored;
 @property (nonatomic) BOOL isHandlingTrigger;
@@ -87,14 +86,9 @@
 }
 -(void)update{
     [self.itemHandler reloadData];
-    
 }
 -(void)didUpdateCells{
     [self.searchBar reloadDataAndUpdate:YES];
-    if([self.state isEqualToString:@"today"]){
-        /*if(self.itemCounter == 0) [self changeToColored:YES];
-        else [self changeToColored:NO];*/
-    }
 }
 -(NSMutableArray *)selectedRows{
     if(!_selectedRows) _selectedRows = [NSMutableArray array];
@@ -126,22 +120,14 @@
     
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIColor *backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, SECTION_HEADER_HEIGHT)];
-    headerView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
-    NSString *title = [self.itemHandler titleForSection:section];
-    CGFloat labelDownPush = 3;
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(SECTION_HEADER_X, labelDownPush, tableView.bounds.size.width-2*SECTION_HEADER_X, SECTION_HEADER_HEIGHT-labelDownPush)];
-    titleLabel.backgroundColor = CLEAR;
-#warning change to theming
-    titleLabel.font = KP_BOLD(17);
-    titleLabel.textColor = color(44,50, 59, 1);
-    if(self.cellType != CellTypeToday) titleLabel.textColor = tcolor(TagColor);
-    titleLabel.text = [title capitalizedString];
-    [headerView addSubview:titleLabel];
-    SectionHeaderView *shadowImageView = [[SectionHeaderView alloc] initWithFrame:headerView.bounds color:[TODOHANDLER colorForCellType:self.cellType]];
-    SectionHeaderExtraView *extraView = [[SectionHeaderExtraView alloc] initWithFrame:CGRectMake(320-43, headerView.frame.size.height, 43, 8) color:[TODOHANDLER strongColorForCellType:self.cellType]];
-    [headerView addSubview:shadowImageView];
-    
+    UIFont *font = KP_SEMIBOLD(15);
+    NSString *title = [[self.itemHandler titleForSection:section] capitalizedString];
+    headerView.backgroundColor = backgroundColor;
+    SectionHeaderExtraView *extraView = [[SectionHeaderExtraView alloc] initWithColor:[TODOHANDLER colorForCellType:self.cellType] font:font title:title];
+    if(self.cellType == CellTypeToday) extraView.textColor = color(44,50, 59, 1);
+    CGRectSetX(extraView, 320-extraView.frame.size.width);
     [headerView addSubview:extraView];
     return headerView;
 }
@@ -149,7 +135,9 @@
     if(self.showingViewController.injectedIndexPath && indexPath.row == self.showingViewController.injectedIndexPath.row && indexPath.section == self.showingViewController.injectedIndexPath.section){
         return self.tableView.frame.size.height-SECTION_HEADER_HEIGHT;
     }
-    else return CELL_HEIGHT;
+    else{
+        return CELL_HEIGHT;
+    } 
 }
 -(ToDoCell*)readyCell:(ToDoCell*)cell{
     [cell setMode:MCSwipeTableViewCellModeExit];
@@ -257,9 +245,6 @@
 
 #pragma mark - ScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
-    
-    //if(self.tableView.frame.size.height - 150 >= self.tableView.contentSize.height) return;
     CGPoint currentOffset = self.tableView.contentOffset;
     NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
     NSTimeInterval timeDiff = currentTime - self.lastOffsetCapture;
@@ -271,7 +256,7 @@
             if(self.searchBar.currentMode == KPSearchBarModeSearch) [self.searchBar resignSearchField];
             [[self parent] show:NO controlsAnimated:YES];
         }
-        else if(scrollSpeedNotAbs < -0.5 /* && (currentOffset.y+self.tableView.frame.size.height) < self.tableView.contentSize.height*/){
+        else if(scrollSpeedNotAbs < -0.5){
             if((self.tableView.frame.size.height > self.tableView.contentSize.height && currentOffset.y < 0) || (currentOffset.y+self.tableView.frame.size.height) < self.tableView.contentSize.height+CONTENT_INSET_BOTTOM) [[self parent] show:YES controlsAnimated:YES];
         }
         self.lastOffset = currentOffset;
@@ -279,14 +264,11 @@
     }
     if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
         if (scrollView.contentOffset.y < self.searchBar.frame.size.height) {
-           
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, 0, 0);
         } else {
             
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         }
-        //searchBarFrame.origin.y = MIN(scrollView.contentOffset.y, 0)-COLOR_SEPERATOR_HEIGHT;
-        //NSLog(@"%@,scrollView:%f",self.searchBar,searchBarFrame.origin.y);
         if(scrollView.contentOffset.y <= 0){
             CGRectSetHeight(self.searchBar, self.tableView.tableHeaderView.frame.size.height-scrollView.contentOffset.y);
             CGRect searchBarFrame = self.searchBar.frame;
@@ -486,7 +468,7 @@
     headerView.hidden = YES;
     tableView.tableHeaderView = headerView;
     tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-    
+    tableView.contentInset = UIEdgeInsetsMake(0, 0, GLOBAL_TOOLBAR_HEIGHT, 0);
     KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,0, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
     searchBar.searchBarDelegate = self;
     searchBar.searchBarDataSource = self.itemHandler;
@@ -503,44 +485,40 @@
 -(void)changeToColored:(BOOL)colored{
     if(self.isColored == colored) return;
     self.isColored = colored;
-    NSString *imageString = colored ? @"today_color_background" : @"today_white_background";
-    UIImage *fadeToImage = [UIImage imageNamed:imageString];
     if(colored){
-        self.coloredMenuText.alpha = 0;
-        self.coloredMenuText.hidden = NO;
-        self.menuText.hidden = YES;
-        [UIView transitionWithView:self.backgroundImage
-                          duration:0.8f
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{
-                            self.backgroundImage.image = fadeToImage;
-                        } completion:^(BOOL finished) {
-                        }];
+        self.menuText.alpha = 0;
+        self.menuText.hidden = NO;
         [UIView animateWithDuration:1.5 animations:^{
-            self.coloredMenuText.alpha = 1;
+            self.menuText.alpha = 1;
         } completion:^(BOOL finished) {
-            self.menuText.hidden = YES;
         }];
     }
     else{
-        self.backgroundImage.image = fadeToImage;
-        self.menuText.hidden = NO;
-        self.menuText.alpha = 1;
-        self.coloredMenuText.hidden = YES;
+        self.menuText.hidden = YES;
+        self.menuText.alpha = 0;
     }
-    
+ 
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.view.backgroundColor = tbackground(TaskTableBackground);
+    UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    UIImage *backgroundImage = [UtilityClass radialGradientImage:backgroundView.bounds.size start:tbackground(TaskTableGradientBackground) end:tbackground(TaskTableBackground) centre:CGPointMake(0.5f, 0.25f) radius:1.0f];
+    
+    
+    backgroundView.image = backgroundImage;
+    [self.view addSubview:backgroundView];
+    // tbackground(TaskTableBackground);
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_white_background",self.state]]];
-    imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
+    
+    imageView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/4);
+    //imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
     imageView.tag = BACKGROUND_IMAGE_VIEW_TAG;
     [self.view addSubview:imageView];
     self.backgroundImage = (UIImageView*)[self.view viewWithTag:BACKGROUND_IMAGE_VIEW_TAG];
     
-    UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.frame.origin.y+imageView.frame.size.height, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
+    UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.center.y+70, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
     menuText.backgroundColor = CLEAR;
     menuText.font = TABLE_EMPTY_BG_FONT;
     NSString *text;
@@ -562,17 +540,7 @@
     [self.view addSubview:menuText];
     self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];
     
-    UILabel *coloredMenuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.frame.origin.y+imageView.frame.size.height, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
-    coloredMenuText.backgroundColor = CLEAR;
-    coloredMenuText.tag = COLORED_MENU_TEXT_TAG;
-    coloredMenuText.font = TABLE_EMPTY_BG_FONT;
-    coloredMenuText.text = [self.state capitalizedString];
-    coloredMenuText.textAlignment = UITextAlignmentCenter;
-    coloredMenuText.hidden = YES;
-    coloredMenuText.text = @"Well Swiped!";
-    coloredMenuText.textColor = tcolor(TaskTableEmptyTodayText);
-    [self.view addSubview:coloredMenuText];
-    self.coloredMenuText = [self.view viewWithTag:COLORED_MENU_TEXT_TAG];
+
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     tableView.tag = TABLEVIEW_TAG;
     [self prepareTableView:tableView];

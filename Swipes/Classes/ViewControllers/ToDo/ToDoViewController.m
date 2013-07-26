@@ -27,14 +27,14 @@
 #define SHOW_ITEM_TAG 5432
 
 
-#define TOOLBAR_HEIGHT 50
+#define TOOLBAR_HEIGHT GLOBAL_TOOLBAR_HEIGHT
 #define DEFAULT_ROW_HEIGHT 50
 
 #define LABEL_X 52
 #define TITLE_LABEL_X 42
 
 #define TITLE_HEIGHT 44
-#define TITLE_TOP_MARGIN 13
+#define TITLE_TOP_MARGIN 15
 #define TITLE_WIDTH (320)
 #define TITLE_BOTTOM_MARGIN (TITLE_TOP_MARGIN)
 #define CONTAINER_INIT_HEIGHT (TITLE_HEIGHT + TITLE_TOP_MARGIN + TITLE_BOTTOM_MARGIN)
@@ -48,7 +48,6 @@
 #define NOTES_PADDING 10.5
 
 
-#import "UIViewController+KNSemiModal.h"
 #import "ToDoListViewController.h"
 #import "KPAddTagPanel.h"
 #import "KPSegmentedViewController.h"
@@ -71,7 +70,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNotes
 };
 
-@interface ToDoViewController () <HPGrowingTextViewDelegate,KPAddTagDelegate,KPTagDelegate,NotesViewDelegate,ToolbarDelegate>
+@interface ToDoViewController () <HPGrowingTextViewDelegate,NotesViewDelegate,ToolbarDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
 
 
@@ -122,7 +121,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         textView.delegate = self;
         textView.internalTextView.keyboardAppearance = UIKeyboardAppearanceAlert;
         textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);
-        textView.textColor = tcolor(SearchDrawerColor);
+        textView.textColor = tcolor(TaskCellTitle);
         
         UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DOT_SIZE,DOT_SIZE)];
         dotView.tag = DOT_VIEW_TAG;
@@ -136,14 +135,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [titleContainerView addSubview:textView];
         self.editTitleTextView = (HPGrowingTextView*)[titleContainerView viewWithTag:TITLE_TEXT_VIEW_TAG];
         
-        
-        UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        doneButton.frame = CGRectMake(titleContainerView.frame.size.width-buttonWidth,0,buttonWidth,CONTAINER_INIT_HEIGHT-COLOR_SEPERATOR_HEIGHT);
-        doneButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
-        doneButton.imageEdgeInsets = UIEdgeInsetsMake(CLOSE_BUTTON_TOP_INSET, 0, 0, CLOSE_BUTTON_RIGHT_INSET);
-        [doneButton setImage:[UIImage imageNamed:@"cross_button"] forState:UIControlStateNormal];
-        [doneButton addTarget:self action:@selector(pressedDone:) forControlEvents:UIControlEventTouchUpInside];
-        [titleContainerView addSubview:doneButton];
         
         [contentView addSubview:titleContainerView];
         self.titleContainerView = [contentView viewWithTag:TITLE_CONTAINER_VIEW_TAG];
@@ -227,12 +218,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /* Adding scroll and content view */
         [contentView addSubview:scrollView];
         
-        KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-TOOLBAR_HEIGHT, contentView.frame.size.width, TOOLBAR_HEIGHT) items:@[@"toolbar_plus_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
+        KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-TOOLBAR_HEIGHT, contentView.frame.size.width, TOOLBAR_HEIGHT) items:@[@"toolbar_back_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
         toolbar.tag = TOOLBAR_TAG;
         toolbar.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
-        toolbar.backgroundColor = tbackground(MenuBackground);
         toolbar.delegate = self;
-        toolbar.seperatorColor = tcolor(SearchDrawerColor);
         [contentView addSubview:toolbar];
         self.toolbar = (KPToolbar*)[contentView viewWithTag:TOOLBAR_TAG];
         self.scrollView = (UIScrollView*)[contentView viewWithTag:SCROLL_VIEW_TAG];
@@ -244,8 +233,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     return self;
 }
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
-    if(item == 0 && [self.delegate respondsToSelector:@selector(pressedTag:)]){
-        //[self.delegate pressedTag:self];
+    if(item == 0 && [self.delegate respondsToSelector:@selector(didPressCloseToDoViewController:)]){
+        [self.delegate didPressCloseToDoViewController:self];
     }
     else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedDelete:)]){
         //[self.delegate pressedDelete:self];
@@ -293,15 +282,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 #pragma mark - KPAddTagDelegate
 -(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
-    [self.segmentedViewController dismissSemiModalView];
     self.activeEditMode = KPEditModeNone;
 }
--(void)tagPanel:(KPAddTagPanel *)tagPanel createdTag:(NSString *)tag{
-    [TAGHANDLER addTag:tag];
-}
--(void)tagPanel:(KPAddTagPanel *)tagPanel changedSize:(CGSize)size{
-    [self.segmentedViewController resizeSemiView:size animated:NO];
-}
+
 
 #pragma mark - KPTagDelegate
 -(NSArray *)selectedTagsForTagList:(KPTagList *)tagList{
@@ -311,26 +294,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(NSArray *)tagsForTagList:(KPTagList *)tagList{
     NSArray *allTags = [TAGHANDLER allTags];
     return allTags;
-}
--(void)tagList:(KPTagList *)tagList selectedTag:(NSString *)tag{
-    [TAGHANDLER updateTags:@[tag] remove:NO toDos:@[self.model]];
-    [self updateTags];
-    [self layout];
-    [self.segmentedViewController updateBackground];
-}
--(void)tagList:(KPTagList *)tagList deselectedTag:(NSString *)tag{
-    [TAGHANDLER updateTags:@[tag] remove:YES toDos:@[self.model]];
-    [self updateTags];
-    [self layout];
-    [self.segmentedViewController updateBackground];
-}
--(void)tagList:(KPTagList *)tagList deletedTag:(NSString *)tag{
-    [[self.segmentedViewController currentViewController].itemHandler deselectTag:tag];
-    [TAGHANDLER deleteTag:tag];
-    [[self.segmentedViewController currentViewController] didUpdateItemHandler:nil];
-    [self updateTags];
-    [self layout];
-    [self.segmentedViewController updateBackground];
 }
 #pragma mark HPGrowingTextViewDelegate
 - (void)growingTextViewDidChange:(HPGrowingTextView *)growingTextView{
@@ -360,17 +323,15 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetHeight(self.scrollView, self.contentView.frame.size.height-titleHeight-TOOLBAR_HEIGHT);
 }
 #pragma mark NotesViewDelegate
--(void)pressedCancelNotesView:(NotesView *)notesView{
-    [self.segmentedViewController dismissSemiModalView];
-}
+
 -(void)savedNotesView:(NotesView *)notesView text:(NSString *)text{
     [self.model updateNotes:text save:YES];
-    [self.segmentedViewController dismissSemiModalViewWithCompletion:^{
-        [self updateNotes];
-        [self layout];
-    }];
+    [self updateNotes];
+    [self layout];
 }
-
+-(void)pressedCancelNotesView:(NotesView *)notesView{
+    
+}
 
 - (void)viewDidLoad
 {
@@ -469,17 +430,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0, 320, self.segmentedViewController.view.frame.size.height - DEFAULT_SPACE_FROM_SLIDE_UP_VIEW)];
     [notesView setNotesText:self.model.notes];
     notesView.delegate = self;
-    [self.segmentedViewController presentSemiView:notesView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f,KNSemiModalOptionKeys.shadowOpacity:@0.5f} completion:^{
-    }];
 }
 -(void)pressedTags:(id)sender{
     self.activeEditMode = KPEditModeTags;
-    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, 450) andTags:[TAGHANDLER allTags] andMaxHeight:320];
-    tagView.delegate = self;
-    tagView.tagView.tagDelegate = self;
-    
-    [self.segmentedViewController presentSemiView:tagView withOptions:@{KNSemiModalOptionKeys.animationDuration:@0.25f,KNSemiModalOptionKeys.shadowOpacity:@0.5f} completion:^{
-    }];
+//    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, 450) andTags:[TAGHANDLER allTags] andMaxHeight:320];
+ //   tagView.delegate = self;
+ //   tagView.tagView.tagDelegate = self;
 }
 -(void)dealloc{
     self.injectedCell = nil;

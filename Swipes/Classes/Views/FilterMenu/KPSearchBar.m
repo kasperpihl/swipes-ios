@@ -89,10 +89,10 @@
         KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
         tagList.emptyText = @"No tags assigned";
         tagList.marginLeft = tagList.spacing;
-        tagList.marginTop = 12;
+        tagList.marginTop = (12+tagList.spacing)/2;
         tagList.emptyLabelMarginHack = 10;
         tagList.firstRowSpacingHack = 44;
-        tagList.bottomMargin = tagList.spacing;
+        tagList.bottomMargin = (12+tagList.spacing)/2;
         tagList.marginRight = tagList.spacing;
         tagList.tagDelegate = self;
         tagList.tag = TAG_LIST_TAG;

@@ -9,7 +9,6 @@
 #define NOTES_VIEW_TAG 1
 
 #import "NotesView.h"
-#import "UIViewController+KNSemiModal.h"
 @interface NotesView ()
 @property (nonatomic,weak) UITextView *notesView;
 @end
@@ -48,7 +47,6 @@
         
         UIView *colorBottomSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, BUTTON_BAR_HEIGHT-COLOR_SEPERATOR_HEIGHT, buttonBarContainer.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
         colorBottomSeperator.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-        colorBottomSeperator.backgroundColor = tcolor(ColoredSeperator);
         [buttonBarContainer addSubview:colorBottomSeperator];
         
         [self addSubview:buttonBarContainer];

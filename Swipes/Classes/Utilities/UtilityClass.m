@@ -9,6 +9,7 @@
 #import "UtilityClass.h"
 #import "AppDelegate.h"
 #import "KPParseCommunicator.h"
+#define trgb(num) (num/255.0)
 @interface UtilityClass () <UIAlertViewDelegate>
 @property (copy) SuccessfulBlock block;
 @end
@@ -31,6 +32,51 @@ static UtilityClass *sharedObject;
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
+    return image;
+}
++ (UIImage *)radialGradientImage:(CGSize)size start:(UIColor*)start end:(UIColor*)end centre:(CGPoint)centre radius:(float)radius {
+    // Render a radial background
+    // http://developer.apple.com/library/ios/#documentation/GraphicsImaging/Conceptual/drawingwithquartz2d/dq_shadings/dq_shadings.html
+    
+    // Initialise
+    UIGraphicsBeginImageContextWithOptions(size, YES, 1);
+    
+    const CGFloat *components1 = CGColorGetComponents(start.CGColor);
+    CGFloat startRed = components1[0];
+    CGFloat startGreen = components1[1];
+    CGFloat startBlue = components1[2];
+    CGFloat startAlpha = components1[3];
+    
+    const CGFloat *components2 = CGColorGetComponents(end.CGColor);
+    CGFloat endRed = components2[0];
+    CGFloat endGreen = components2[1];
+    CGFloat endBlue = components2[2];
+    CGFloat endAlpha = components2[3];
+    // Create the gradient's colours
+    size_t num_locations = 2;
+    CGFloat locations[2] = { 0.0, 1.0 };
+    CGFloat components[8] = { startRed,startGreen,startBlue, startAlpha,  // Start color
+        endRed,endGreen,endBlue, endAlpha }; // End color
+    
+    CGColorSpaceRef myColorspace = CGColorSpaceCreateDeviceRGB();
+    CGGradientRef myGradient = CGGradientCreateWithColorComponents (myColorspace, components, locations, num_locations);
+    
+    // Normalise the 0-1 ranged inputs to the width of the image
+    CGPoint myCentrePoint = CGPointMake(centre.x * size.width, centre.y * size.height);
+    float myRadius = MIN(size.width, size.height) * radius;
+    
+    // Draw it!
+    CGContextDrawRadialGradient (UIGraphicsGetCurrentContext(), myGradient, myCentrePoint,
+                                 0, myCentrePoint, myRadius,
+                                 kCGGradientDrawsAfterEndLocation);
+    
+    // Grab it as an autoreleased image
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // Clean up
+    CGColorSpaceRelease(myColorspace); // Necessary?
+    CGGradientRelease(myGradient); // Necessary?
+    UIGraphicsEndImageContext(); // Clean up
     return image;
 }
 +(UIImage *)navbarImage{

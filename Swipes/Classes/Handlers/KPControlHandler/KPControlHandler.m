@@ -6,42 +6,23 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#define ADD_BUTTON_TAG 13000
-#define DELETE_BUTTON_TAG 13001
-#define TAG_BUTTON_TAG 13002
-#define TOOLBAR_TAG 13003
-
-#define BIG_BUTTON_HEIGHT 55
-#define BIG_BUTTON_BOTTOM_MARGIN 10
-#define SMALL_BUTTON_HEIGHT 60
-#define SMALL_BUTTON_BOTTOM_MARGIN 10
+#define ADD_TOOLBAR_TAG 13004
+#define EDIT_TOOLBAR_TAG 13003
 
 
-
-#define ADD_BUTTON_X 320-BIG_BUTTON_HEIGHT
-
-#define SMALL_BUTTON_SPACING 24
+#define ADD_TOOLBAR_HEIGHT GLOBAL_TOOLBAR_HEIGHT
+#define EDIT_TOOLBAR_HEIGHT GLOBAL_TOOLBAR_HEIGHT
 
 
-#define TAG_BUTTON_X ((320/2)+(SMALL_BUTTON_SPACING/2))
-#define DELETE_BUTTON_X ((320/2)-(SMALL_BUTTON_HEIGHT)-(SMALL_BUTTON_SPACING/2))
-//(TAG_BUTTON_X - SMALL_BUTTON_SPACING - SMALL_BUTTON_HEIGHT)
-#define SHARE_BUTTON_X (TAG_BUTTON_X + SMALL_BUTTON_HEIGHT + SMALL_BUTTON_SPACING)
-
-#define DESELECT_BUTTON_X 150
-
-#import "UtilityClass.h"
 #import "KPControlHandler.h"
-#import "RootViewController.h"
-#import <QuartzCore/QuartzCore.h>
 #import "KPToolbar.h"
 
 @interface KPControlHandler () <ToolbarDelegate>
 @property (nonatomic) KPControlHandlerState activeState;
 @property (nonatomic,weak) UIView* view;
-@property (nonatomic,weak) UIButton *addButton;
 @property (nonatomic,weak) UITableView *shrinkingView;
-@property (nonatomic,weak) KPToolbar *toolbar;
+@property (nonatomic,weak) KPToolbar *addToolbar;
+@property (nonatomic,weak) KPToolbar *editToolbar;
 @end
 @implementation KPControlHandler
 +(KPControlHandler*)instanceInView:(UIView*)view{
@@ -51,8 +32,8 @@
 }
 -(CGFloat)getYForBigSize:(BOOL)big{
     CGFloat size;
-    if(big) size = (self.view.frame.size.height-BIG_BUTTON_HEIGHT+3);
-    else size = (self.view.frame.size.height-SMALL_BUTTON_HEIGHT);
+    if(big) size = (self.view.frame.size.height-EDIT_TOOLBAR_HEIGHT);
+    else size = (self.view.frame.size.height-ADD_TOOLBAR_HEIGHT);
     return size;
 }
 - (id)initWithView:(UIView*)view
@@ -60,37 +41,22 @@
     self = [super init];
     if (self) {
         self.view = view;
-        UIButton *addButton = [self roundedButtonWithSize:BIG_BUTTON_HEIGHT];
-        addButton.frame = CGRectSetPos(addButton.frame, ADD_BUTTON_X+5,view.frame.size.height);
-        addButton.tag = ADD_BUTTON_TAG;
-        addButton.layer.borderColor = tcolor(StrongTasksColor).CGColor;
-        addButton.layer.borderWidth = 3;
-        addButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
-        [addButton addTarget:self action:@selector(pressedAdd:) forControlEvents:UIControlEventTouchUpInside];
-        [addButton setImage:[UIImage imageNamed:@"toolbar_plus_icon"] forState:UIControlStateNormal];
-        [view addSubview:addButton];
-        self.addButton = (UIButton*)[view viewWithTag:ADD_BUTTON_TAG];
         
-        KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, 60) items:@[@"toolbar_tag_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
-        toolbar.tag = TOOLBAR_TAG;
-        toolbar.backgroundColor = tbackground(MenuBackground);
-        toolbar.delegate = self;
-        toolbar.seperatorColor = tcolor(SearchDrawerColor);
-        [view addSubview:toolbar];
-        self.toolbar = (KPToolbar*)[view viewWithTag:TOOLBAR_TAG];
+        KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, ADD_TOOLBAR_HEIGHT) items:@[@"toolbar_plus_icon"]];
+        addToolbar.tag = ADD_TOOLBAR_TAG;
+        addToolbar.delegate = self;
+        [view addSubview:addToolbar];
+        self.addToolbar = (KPToolbar*)[view viewWithTag:ADD_TOOLBAR_TAG];
+        
+        KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[@"toolbar_tag_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
+        editToolbar.tag = EDIT_TOOLBAR_TAG;
+        editToolbar.delegate = self;
+        [view addSubview:editToolbar];
+        self.editToolbar = (KPToolbar*)[view viewWithTag:EDIT_TOOLBAR_TAG];
         
         [self setState:KPControlHandlerStateAdd shrinkingView:self.shrinkingView animated:NO];
     }
     return self;
-}
--(UIButton*)roundedButtonWithSize:(NSInteger)size{
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *buttonBackgroundImage = [UtilityClass imageWithColor:tcolor(TasksColor)];
-    CGRectSetSize(button, size, size);
-    button.layer.cornerRadius = 5;//size/2;
-    button.layer.masksToBounds = YES;
-    [button setBackgroundImage:buttonBackgroundImage forState:UIControlStateNormal];
-    return button;
 }
 -(voidBlock)getClearBlockForState:(KPControlHandlerState)state{
     CGFloat targetY = self.view.frame.size.height;
@@ -99,12 +65,12 @@
             case KPControlHandlerStateNone:
                 break;
             case KPControlHandlerStateAdd:
-                CGRectSetY(self.addButton, targetY);
+                CGRectSetY(self.addToolbar, targetY);
                 break;
             case KPControlHandlerStateEdit:
                 [self shrinkTableView:NO];
                 //CGRectSetY(self.deleteButton, targetY);
-                CGRectSetY(self.toolbar, targetY);
+                CGRectSetY(self.editToolbar, targetY);
                 //CGRectSetY(self.tagButton, targetY);
                 break;
         }
@@ -122,10 +88,8 @@
 }
 -(void)forceHide{
     CGFloat targetY = self.view.frame.size.height;
-    CGRectSetY(self.addButton, targetY);
-    CGRectSetY(self.toolbar, targetY);
-    //CGRectSetY(self.deleteButton, targetY);
-    //CGRectSetY(self.tagButton, targetY);
+    CGRectSetY(self.addToolbar, targetY);
+    CGRectSetY(self.editToolbar, targetY);
 }
 -(void)shrinkTableView:(BOOL)shrink{
     return;
@@ -141,12 +105,12 @@
             case KPControlHandlerStateNone:
                 break;
             case KPControlHandlerStateAdd:
-                CGRectSetY(self.addButton, bigButtonY);
+                CGRectSetY(self.addToolbar, smallButtonY);
                 break;
             case KPControlHandlerStateEdit:
                 [self shrinkTableView:YES];
                 //CGRectSetY(self.deleteButton, smallButtonY);
-                CGRectSetY(self.toolbar, smallButtonY);
+                CGRectSetY(self.editToolbar, bigButtonY);
                 //CGRectSetY(self.tagButton, smallButtonY);
                 break;
         }
@@ -190,15 +154,17 @@
     }
     self.activeState = state;
 }
--(void)pressedAdd:(id)sender{
-    if([self.delegate respondsToSelector:@selector(pressedAdd:)]) [self.delegate pressedAdd:self];
-}
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
-    if(item == 0 && [self.delegate respondsToSelector:@selector(pressedTag:)]){
-        [self.delegate pressedTag:self];
+    if(toolbar.tag == ADD_TOOLBAR_TAG){
+        if(item == 0 && [self.delegate respondsToSelector:@selector(pressedAdd:)]) [self.delegate pressedAdd:self];
     }
-    else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedDelete:)]){
-        [self.delegate pressedDelete:self];
+    else{
+        if(item == 0 && [self.delegate respondsToSelector:@selector(pressedTag:)]){
+            [self.delegate pressedTag:self];
+        }
+        else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedDelete:)]){
+            [self.delegate pressedDelete:self];
+        }
     }
 }
 @end

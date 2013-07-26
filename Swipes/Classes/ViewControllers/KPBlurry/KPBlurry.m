@@ -11,9 +11,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import <Accelerate/Accelerate.h>
 
-CGFloat const kKPBlurryDefaultDuration = .18f;
+CGFloat const kKPBlurryDefaultDuration = .30f;
 CGFloat const kKPBlurryDefaultBlur = 1.0f;
-#define KPBlurryDefaultTopBlurry alpha(tbackground(TaskTableBackground),0.5)
+#define KPBlurryDefaultTopBlurry tbackground(PopupBackground)
 DisplayPosition const kKPBlurryDefaultDisplayPosition = PositionCenter;
 
 #pragma mark - Categories
@@ -266,7 +266,7 @@ static KPBlurry *sharedObject;
             dispatch_async(dispatch_get_main_queue(), ^{
                 CATransition *transition = [CATransition animation];
                 
-                transition.duration = 0.2;
+                transition.duration = self.animationDuration/2;
                 transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
                 transition.type = kCATransitionFade;
                 
@@ -320,13 +320,7 @@ static KPBlurry *sharedObject;
             opacityAnimation.fromValue = @0.;
             opacityAnimation.toValue = @1.;
             opacityAnimation.duration = self.animationDuration;
-            
-            
-            CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
-            animationGroup.animations = @[opacityAnimation];
-            animationGroup.duration = self.animationDuration;
-            
-            [self.menuView.layer addAnimation:animationGroup forKey:nil];
+            [self.menuView.layer addAnimation:opacityAnimation forKey:nil];
             [self performSelector:@selector(didShow) withObject:nil afterDelay:self.animationDuration];
         }
     }];

@@ -24,15 +24,14 @@ typedef enum {
     StrongLaterColor,
     StrongDoneColor,
     
+    SeperatorColor,
+    
     SearchDrawerColor,
     TextFieldColor,
     TaskTableEmptyText,
-    TaskTableEmptyTodayText,
     TaskCellTimelineColor,
     TaskCellTitle,
     TaskCellTagColor,
-    ColoredSeperator,
-    ColoredButton,
     TagColor
     
 } ThemerItem;
@@ -42,10 +41,12 @@ typedef enum {
     MenuSelectedBackground,
     SearchDrawerBackground,
     TaskTableBackground,
+    TaskTableGradientBackground,
     TaskCellBackground,
     TaskCellSelectedBackground,
+    
     TagBackground,
-    TagBarBackground,
+    ToolbarBackground,
     TagSelectedBackground,
     EditTaskBackground,
     EditTaskTitleBackground,

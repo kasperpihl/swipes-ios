@@ -11,41 +11,28 @@
 #import <QuartzCore/QuartzCore.h>
 #import "NSDate-Utilities.h"
 #import "KPBlurry.h"
-#define POPUP_WIDTH 310
+#import "CKCalendarView.h"
+#define POPUP_WIDTH 309
 #define CONTENT_VIEW_TAG 1
-#define SELECT_DATE_VIEW_TAG 3
-#define DATE_PICKER_TAG 4
-#define MONTH_LABEL_TAG 5
-#define BACK_ONE_MONTH_BUTTON_TAG 6
-#define FORWARD_ONE_MONTH_BUTTON_TAG 7
 #define TIME_VIEWER_TAG 8
 #define TIME_VIEWER_LABEL_TAG 9
 #define TIME_SLIDER_TAG 10
+#define SCHEDULE_BUTTON_START_TAG 7367
 
-#define SEPERATOR_COLOR_LIGHT tbackground(TaskTableBackground)//color(254,184,178,1)
+#define SEPERATOR_COLOR_LIGHT tbackground(TaskTableGradientBackground)//color(254,184,178,1)
 #define SEPERATOR_MARGIN 0.05//0.02
 
 
 #define SCHEUDLE_IMAGE_SIZE 36
 #define SCHEDULE_IMAGE_CENTER_SPACING 13
 
-
-#define PICKER_CUT_HEIGHT 10
-#define PICKER_CUT_WIDTH 15
-
 #define BUTTON_TOP_INSET 60
 #define BUTTON_IMAGE_BOTTOM_MARGIN 40
 
 
-
-#define PICK_DATE_BUTTON_HEIGHT 45
-
-#define MONTH_LABEL_Y 10
-#define MONTH_LABEL_HEIGHT 30
-
 #define GRID_NUMBER 3
-#define BUTTON_PADDING 4
-#define CONTENT_VIEW_SIZE 310
+#define BUTTON_PADDING 0
+#define CONTENT_VIEW_SIZE 309
 
 
 typedef enum {
@@ -62,13 +49,8 @@ typedef struct
 
 @interface SchedulePopup () <KPBlurryDelegate>
 @property (nonatomic,copy) SchedulePopupBlock block;
-@property (nonatomic,weak) IBOutlet UIDatePicker *datePicker;
-@property (nonatomic,weak) IBOutlet UILabel *monthLabel;
 @property (nonatomic,weak) IBOutlet UIView *contentView;
 @property (nonatomic,weak) IBOutlet UIView *selectDateView;
-@property (nonatomic,weak) IBOutlet UIButton *backOneMonth;
-@property (nonatomic,weak) IBOutlet UIButton *forwardOneMonth;
-@property (nonatomic) NSInteger startingHour;
 @property (nonatomic) BOOL isPickingDate;
 @property (nonatomic) BOOL hasReturned;
 @property (nonatomic, weak) IBOutlet UIView *timeViewer;
@@ -78,7 +60,7 @@ typedef struct
 @property (nonatomic,weak) IBOutlet UIImageView *timeSlider;
 @property (nonatomic) CGFloat currentAngle;
 @property (nonatomic) CGFloat lastChangedAngle;
-@property CGFloat maxMeasuredVel;
+@property (nonatomic) CGFloat maxMeasuredVel;
 @end
 @implementation SchedulePopup
 -(TimeRef)startingTimeForDate:(NSDate*)date{
@@ -97,38 +79,50 @@ typedef struct
     if(self.hasReturned) return;
     self.hasReturned = YES;
     if(self.block) self.block(state,date);
-    /*[self show:NO completed:^(BOOL succeeded, NSError *error) {
-        
-    }];*/
+}
+-(NSDate*)dateForButton:(KPScheduleButtons)button{
+    NSDate *date;
+    switch (button) {
+        case KPScheduleButtonLaterToday:
+            date = [[NSDate dateWithHoursFromNow:3] dateToNearest15Minutes];
+            break;
+        case KPScheduleButtonThisEvening:
+            date = [NSDate dateThisOrTheNextDayWithHours:19 minutes:0];
+            break;
+        case KPScheduleButtonTomorrow:{
+            TimeRef time = [self startingTimeForDate:[NSDate dateTomorrow]];
+            date = [[NSDate dateTomorrow] dateAtHours:time.hours minutes:time.minutes];
+            break;
+        }
+        case KPScheduleButtonIn2Days:{
+            TimeRef time = [self startingTimeForDate:[NSDate dateWithDaysFromNow:2]];
+            date = [[NSDate dateWithDaysFromNow:2] dateAtHours:time.hours minutes:time.minutes];
+            break;
+        }
+        case KPScheduleButtonThisWeekend:
+            date = [NSDate dateThisOrNextWeekWithDay:7 hours:10 minutes:0];
+        case KPScheduleButtonNextWeek:
+            date = [NSDate dateThisOrNextWeekWithDay:2 hours:9 minutes:0];
+            break;
+        case KPScheduleButtonUnscheduled:
+            date = nil;
+        case KPScheduleButtonSpecificTime:
+        case KPScheduleButtonCancel:
+            return nil;
+    }
+    return date;
 }
 -(void)cancelled{
     [self returnState:KPScheduleButtonCancel date:nil];
 }
--(void)pressedLaterToday:(id)sender{
-    [self returnState:KPScheduleButtonLaterToday date:[[NSDate dateWithHoursFromNow:3] dateToNearest15Minutes]];
-}
--(void)pressedThisEvening:(id)sender{
-    NSDate *date = [NSDate dateThisOrTheNextDayWithHours:19 minutes:0];
-    [self returnState:KPScheduleButtonThisEvening date:date];
-}
--(void)pressedTomorrow:(id)sender{
-    NSDate *tomorrow = [[NSDate dateTomorrow] dateAtStartOfDay];
-    TimeRef time = [self startingTimeForDate:tomorrow];
-    [self returnState:KPScheduleButtonTomorrow date:[tomorrow dateByAddingHours:time.hours]];
-}
--(void)pressedIn2Days:(id)sender{
-    NSDate *in2Days = [[NSDate dateWithDaysFromNow:2] dateAtStartOfDay];
-    NSDate *startingTime = [in2Days dateByAddingHours:[self startingTimeForDate:in2Days].hours];
-    [self returnState:KPScheduleButtonIn2Days date:startingTime];
-}
--(void)pressedThisWeekend:(id)sender{
-    NSDate *thisWeekend = [NSDate dateThisOrNextWeekWithDay:7 hours:10 minutes:0];
-    [self returnState:KPScheduleButtonThisWeekend date:thisWeekend];
-}
--(void)pressedNextWeek:(id)sender{
-    
-    NSDate *nextWeek = [NSDate dateThisOrNextWeekWithDay:2 hours:self.startingHour minutes:0];
-    [self returnState:KPScheduleButtonThisWeekend date:nextWeek];
+-(void)pressedScheduleButton:(UIButton*)sender{
+    KPScheduleButtons thisButton = sender.tag - SCHEDULE_BUTTON_START_TAG;
+    NSLog(@"thisButton:%i",thisButton);
+    if(thisButton == KPScheduleButtonSpecificTime) [self pressedSpecific:self];
+    else if(thisButton != KPScheduleButtonCancel){
+        NSDate *date = [self dateForButton:thisButton];
+        [self returnState:thisButton date:date];
+    }
 }
 -(void)pressedSpecific:(id)sender{
     [UIView transitionWithView:self
@@ -153,13 +147,6 @@ typedef struct
                             self.isPickingDate = !self.isPickingDate;
                         }
                     }];
-    //[self returnState:KPScheduleButtonSpecificTime date:[NSDate dateWithDaysFromNow:14]];
-}
--(void)pressedUnspecified:(id)sender{
-    [self returnState:KPScheduleButtonUnscheduled date:nil];
-}
--(void)selectedDate:(UIButton*)sender{
-    [self returnState:KPScheduleButtonSpecificTime date:self.datePicker.date];
 }
 -(UIView*)seperatorWithSize:(CGFloat)size vertical:(BOOL)vertical{
     CGFloat width = (vertical) ? SEPERATOR_WIDTH : size;
@@ -180,7 +167,6 @@ typedef struct
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.startingHour = 9;
         UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [closeButton addTarget:self action:@selector(cancelled) forControlEvents:UIControlEventTouchUpInside];
         closeButton.frame = self.bounds;
@@ -196,28 +182,20 @@ typedef struct
         for(NSInteger i = 1 ; i < GRID_NUMBER ; i++){
             UIView *verticalSeperatorView = [self seperatorWithSize:CONTENT_VIEW_SIZE*(1-(SEPERATOR_MARGIN*2)) vertical:YES];
             UIView *horizontalSeperatorView = [self seperatorWithSize:CONTENT_VIEW_SIZE*(1-(SEPERATOR_MARGIN*2)) vertical:NO];
-            verticalSeperatorView.frame = CGRectSetPos(verticalSeperatorView.frame, CONTENT_VIEW_SIZE/GRID_NUMBER*i-(SEPERATOR_WIDTH/2),CONTENT_VIEW_SIZE*SEPERATOR_MARGIN);
-            horizontalSeperatorView.frame = CGRectSetPos(horizontalSeperatorView.frame,CONTENT_VIEW_SIZE*SEPERATOR_MARGIN, CONTENT_VIEW_SIZE/GRID_NUMBER*i-(SEPERATOR_WIDTH/2));
+            verticalSeperatorView.frame = CGRectSetPos(verticalSeperatorView.frame, CONTENT_VIEW_SIZE/GRID_NUMBER*i,CONTENT_VIEW_SIZE*SEPERATOR_MARGIN);
+            horizontalSeperatorView.frame = CGRectSetPos(horizontalSeperatorView.frame,CONTENT_VIEW_SIZE*SEPERATOR_MARGIN, CONTENT_VIEW_SIZE/GRID_NUMBER*i);
             [contentView addSubview:verticalSeperatorView];
             [contentView addSubview:horizontalSeperatorView];
         }
         
+        /* Schedule buttons */
         UIButton *laterTodayButton = [self buttonForScheduleButton:KPScheduleButtonLaterToday title:@"Later Today"];
-        
-        [laterTodayButton addTarget:self action:@selector(pressedLaterToday:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:laterTodayButton];
-        
-        NSString *thisEveText = ([[NSDate date] hour] >= 18) ? @"Tomorrow Eve" : @"This Evening";
+        NSString *thisEveText = ([[NSDate date] hour] >= 19) ? @"Tomorrow Eve" : @"This Evening";
         UIButton *thisEveningButton = [self buttonForScheduleButton:KPScheduleButtonThisEvening title:thisEveText];
-        [thisEveningButton addTarget:self action:@selector(pressedThisEvening:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:thisEveningButton];
-        
         UIButton *tomorrowButton = [self buttonForScheduleButton:KPScheduleButtonTomorrow title:@"Tomorrow"];
-        [tomorrowButton addTarget:self action:@selector(pressedTomorrow:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:tomorrowButton];
-        
-        
-        
         NSDate *twoDaysDate = [NSDate dateWithDaysFromNow:2];
         NSDateFormatter *weekday = [[NSDateFormatter alloc] init];
         NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
@@ -225,26 +203,16 @@ typedef struct
         [weekday setDateFormat: @"EEEE"];
         NSString *twoDaysString = [weekday stringFromDate:twoDaysDate];
         UIButton *in2DaysButton = [self buttonForScheduleButton:KPScheduleButtonIn2Days title:twoDaysString];
-        [in2DaysButton addTarget:self action:@selector(pressedIn2Days:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:in2DaysButton];
-        
-        
         UIButton *thisWeekendButton = [self buttonForScheduleButton:KPScheduleButtonThisWeekend title:@"This Weekend"];
-        [thisWeekendButton addTarget:self action:@selector(pressedThisWeekend:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:thisWeekendButton];
-        
-        
         UIButton *nextWeekButton = [self buttonForScheduleButton:KPScheduleButtonNextWeek title:@"Next Week"];
-        [nextWeekButton addTarget:self action:@selector(pressedNextWeek:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:nextWeekButton];
-        
         UIButton *specificTimeButton = [self buttonForScheduleButton:KPScheduleButtonSpecificTime title:@"Pick A Date"];
-        [specificTimeButton addTarget:self action:@selector(pressedSpecific:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:specificTimeButton];
-        
         UIButton *unspecifiedButton = [self buttonForScheduleButton:KPScheduleButtonUnscheduled title:@"Unspecified"];
-        [unspecifiedButton addTarget:self action:@selector(pressedUnspecified:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:unspecifiedButton];
+        
         [self addSubview:contentView];
         self.contentView = [self viewWithTag:CONTENT_VIEW_TAG];
         [self addPickerView];
@@ -252,122 +220,11 @@ typedef struct
     return self;
 }
 -(void)addPickerView{
-    UIView *selectDateView = [[UIView alloc] initWithFrame:self.bounds];
-    selectDateView.hidden = YES;
-    selectDateView.tag = SELECT_DATE_VIEW_TAG;
-    selectDateView.layer.cornerRadius = 10;
-    selectDateView.layer.masksToBounds = YES;
-    
-    
-    UIButton *backOneMonthButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backOneMonthButton setImage:[UIImage imageNamed:@"left_arrow"] forState:UIControlStateNormal];
-    //backOneMonthButton.layer.borderWidth = 1;
-    [backOneMonthButton addTarget:self action:@selector(pressedBackMonth:) forControlEvents:UIControlEventTouchUpInside];
-    backOneMonthButton.tag = BACK_ONE_MONTH_BUTTON_TAG;
-    backOneMonthButton.layer.borderColor = SEPERATOR_COLOR_LIGHT.CGColor;
-    backOneMonthButton.frame = CGRectMake(0, 0, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT);
-    [selectDateView addSubview:backOneMonthButton];
-    self.backOneMonth = (UIButton*)[selectDateView viewWithTag:BACK_ONE_MONTH_BUTTON_TAG];
-    
-    UIButton *forwardOneMonthButton = [UIButton buttonWithType:UIButtonTypeCustom];
-
-    [forwardOneMonthButton setImage:[UIImage imageNamed:@"right_arrow"] forState:UIControlStateNormal];
-    forwardOneMonthButton.frame = CGRectMake(selectDateView.frame.size.width-COLOR_SEPERATOR_HEIGHT-PICK_DATE_BUTTON_HEIGHT, 0, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT, PICK_DATE_BUTTON_HEIGHT+COLOR_SEPERATOR_HEIGHT);
-    //forwardOneMonthButton.layer.borderWidth = 1;
-    forwardOneMonthButton.layer.borderColor = SEPERATOR_COLOR_LIGHT.CGColor;
-    [forwardOneMonthButton addTarget:self action:@selector(pressedForwardMonth:) forControlEvents:UIControlEventTouchUpInside];
-    [selectDateView addSubview:forwardOneMonthButton];
-    
-    UILabel *monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, MONTH_LABEL_Y, selectDateView.frame.size.width, MONTH_LABEL_HEIGHT)];
-    monthLabel.textAlignment = UITextAlignmentCenter;
-    monthLabel.textColor = tcolor(TagColor);
-    monthLabel.tag = MONTH_LABEL_TAG;
-    monthLabel.backgroundColor = [UIColor clearColor];
-    monthLabel.font = BUTTON_FONT;
-    [selectDateView addSubview:monthLabel];
-    self.monthLabel = (UILabel*)[selectDateView viewWithTag:MONTH_LABEL_TAG];
-    
-    UIDatePicker *picker = [[UIDatePicker alloc] initWithFrame:CGRectMake(-PICKER_CUT_WIDTH, -PICKER_CUT_HEIGHT, 310, 216)];
-    picker.minimumDate = [NSDate date];
-    picker.minuteInterval = 5;
-    picker.date = [[NSDate date] dateByAddingHours:1];
-    picker.tag = DATE_PICKER_TAG;
-    picker.maximumDate = [NSDate dateWithDaysFromNow:730];
-    [picker addTarget:self action:@selector(changedDate:) forControlEvents:UIControlEventValueChanged];
-    picker.datePickerMode = UIDatePickerModeDateAndTime;
-    [self changedDate:picker];
-    CGSize pickerSize = [picker sizeThatFits:CGSizeZero];
-    
-    UIView *pickerTransformView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, pickerSize.width-2*PICKER_CUT_WIDTH, pickerSize.height-2*PICKER_CUT_HEIGHT)];
-    pickerTransformView.transform = CGAffineTransformMakeScale(0.9f, 0.9f);
-    [pickerTransformView addSubview:picker];
-    pickerTransformView.layer.borderWidth = 1;
-    pickerTransformView.layer.borderColor = [[UIColor blackColor] CGColor];
-    pickerTransformView.layer.cornerRadius = 5;
-    pickerTransformView.layer.masksToBounds = YES;
-    pickerTransformView.frame = CGRectSetPos(pickerTransformView.frame, (selectDateView.frame.size.width-pickerTransformView.frame.size.width)/2, ((selectDateView.frame.size.height-2*PICK_DATE_BUTTON_HEIGHT-COLOR_SEPERATOR_HEIGHT)-pickerTransformView.frame.size.height)/2+PICK_DATE_BUTTON_HEIGHT);
-    self.datePicker = (UIDatePicker*)[pickerTransformView viewWithTag:DATE_PICKER_TAG];
-    [selectDateView addSubview:pickerTransformView];
-    
-    
-    
-    CGFloat buttonY = selectDateView.frame.size.height-COLOR_SEPERATOR_HEIGHT-PICK_DATE_BUTTON_HEIGHT;
-    CGFloat buttonWidth = selectDateView.frame.size.width/2;
-    
-    UIView *pickerButtonSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, buttonY-COLOR_SEPERATOR_HEIGHT, selectDateView.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-    //pickerButtonSeperator.backgroundColor = SEGMENT_SELECTED;
-    [selectDateView addSubview:pickerButtonSeperator];
-    
-    
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.titleLabel.font = BUTTON_FONT;
-    backButton.frame = CGRectMake(0, buttonY , buttonWidth , PICK_DATE_BUTTON_HEIGHT);
-    [backButton addTarget:self action:@selector(pressedSpecific:) forControlEvents:UIControlEventTouchUpInside];
-    [backButton setTitle:@"BACK" forState:UIControlStateNormal];
-    [selectDateView addSubview:backButton];
-    
-    
-    UIButton *setDateButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    setDateButton.titleLabel.font = BUTTON_FONT;
-    setDateButton.frame = CGRectMake(buttonWidth, buttonY,buttonWidth , PICK_DATE_BUTTON_HEIGHT);
-    [setDateButton setTitle:@"SET DATE" forState:UIControlStateNormal];
-    [setDateButton addTarget:self action:@selector(selectedDate:) forControlEvents:UIControlEventTouchUpInside];
-    [selectDateView addSubview:setDateButton];
-    
-    
-    
-    [self addSubview:selectDateView];
-    self.selectDateView = [self viewWithTag:SELECT_DATE_VIEW_TAG];
-    
-}
--(void)pressedBackMonth:(UIButton*)sender{
-    NSDateComponents* dateComponents = [[NSDateComponents alloc]init];
-    [dateComponents setMonth:-1];
-    NSCalendar* calendar = [NSCalendar currentCalendar];
-    NSDate* newDate = [calendar dateByAddingComponents:dateComponents toDate:self.datePicker.date options:0];
-    [self.datePicker setDate:newDate animated:YES];
-    [self changedDate:self.datePicker];
-}
--(void)pressedForwardMonth:(UIButton*)sender{
-    NSDateComponents* dateComponents = [[NSDateComponents alloc]init];
-    [dateComponents setMonth:1];
-    NSCalendar* calendar = [NSCalendar currentCalendar];
-    NSDate* newDate = [calendar dateByAddingComponents:dateComponents toDate:self.datePicker.date options:0];
-    [self.datePicker setDate:newDate animated:YES];
-    [self changedDate:self.datePicker];
-}
--(void)changedDate:(UIDatePicker*)picker{
-    if([picker.date compare:picker.minimumDate] == NSOrderedSame){
-        [picker setDate:[picker.minimumDate dateByAddingMinutes:1] animated:YES];
-    }
-    NSDateFormatter *weekday = [[NSDateFormatter alloc] init];
-    [weekday setDateFormat: @"MMMM Y"];
-    NSString *monthLabelString = [weekday stringFromDate:picker.date];
-    if(![self.monthLabel.text isEqualToString:monthLabelString]){
-        [self.monthLabel setText:[monthLabelString uppercaseString]];
-        self.backOneMonth.enabled = ![picker.date isThisMonth];
-    }
-    
+    CKCalendarView *calendarView = [[CKCalendarView alloc] initWithFrame:CGRectMake(0, 20, 320, 320)];
+     calendarView.onlyShowCurrentMonth = NO;
+    calendarView.hidden = YES;
+     calendarView.adaptHeightToNumberOfWeeksInMonth = YES;
+     [self.contentView addSubview:calendarView];  
 }
 -(void)highlightedButton:(UIButton *)sender{
     UIImageView *iconImage = (UIImageView*)[sender viewWithTag:1337];
@@ -381,16 +238,13 @@ typedef struct
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage:[UtilityClass imageWithColor:POPUP_SELECTED] forState:UIControlStateHighlighted];
     button.titleLabel.font = SCHEDULE_BUTTON_FONT;
+    button.tag = SCHEDULE_BUTTON_START_TAG + scheduleButton;
     if(SCHEDULE_BUTTON_CAPITAL) title = [title uppercaseString];
-    button.layer.cornerRadius = 10;
-    button.layer.masksToBounds = YES;
-    //button.titleLabel.shadowOffset = CGSizeMake(1,1);
-    //[button setTitleShadowColor:tbackground(TaskCellBackground) forState:UIControlStateNormal];
     [button setTitle:title forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(pressedScheduleButton:) forControlEvents:UIControlEventTouchUpInside];
     [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
     [button setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    //[button setTitleShadowColor:[UIColor clearColor] forState:UIControlStateHighlighted];
     [button setTitleColor:tbackground(TaskCellBackground) forState:UIControlStateHighlighted];
     UIImage *iconImage = [self imageForScheduleButton:scheduleButton];
     UIImageView *iconImageView = [[UIImageView alloc] initWithImage:iconImage];
@@ -443,7 +297,7 @@ typedef struct
         default:
             break;
     }
-    return [UIImage imageNamed:imageString];//[SchedulePopup imageWithImage:[UIImage imageNamed:imageString] scaledToSize:CGSizeMake(SCHEUDLE_IMAGE_SIZE, SCHEUDLE_IMAGE_SIZE)];
+    return [UIImage imageNamed:imageString];
 }
 -(CGRect)frameForButtonNumber:(NSInteger)number{
     CGFloat width = CONTENT_VIEW_SIZE/GRID_NUMBER-(2*BUTTON_PADDING);
@@ -454,7 +308,6 @@ typedef struct
     return CGRectMake(x, y, width, height);
 }
 -(void)showTime:(NSDate*)time{
-    
     UIView *timeView = [self viewWithTag:TIME_VIEWER_TAG];
     UILabel *timeLabel = (UILabel*)[timeView viewWithTag:TIME_VIEWER_LABEL_TAG];
     timeLabel.text = [UtilityClass timeStringForDate:time];
@@ -487,13 +340,6 @@ typedef struct
 }
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender
 {
-    /*NSLog(@"angle: %f",angle);
-     if (angle < 0) {
-     angle = -angle;
-     }
-     else {
-     angle = 2*M_PI - angle;
-     }*/
     NSDate *upperLimit = [self.pickingDate dateAtHours:23 minutes:55];
     NSDate *lowerLimit = [self.pickingDate dateAtHours:0 minutes:0];
     CGPoint velocity = [sender velocityInView:self];
@@ -502,14 +348,11 @@ typedef struct
     NSInteger minutesPerInterval = 5;
     CGFloat angleInterval = 30;
     BOOL isHours = NO;
-    //if(vel > 100) minutesPerInterval = 15;
     if(vel > 800){
-        //isHours = YES;
         minutesPerInterval = 30;
         angleInterval = 30;
     }
     angleInterval = angleInterval*M_PI/180;
-    
     
     CGPoint sliderCenter = self.center;
     CGPoint sliderStartPoint = CGPointMake(sliderCenter.x, sliderCenter.y - 100.0);
@@ -538,7 +381,6 @@ typedef struct
             if(isHours) self.activeTime = [self.activeTime dateAtHours:self.activeTime.hour minutes:0];
             [self showTime:self.activeTime];
         }
-        //[self adjustImageForPoint:location];
     }
     if (sender.state == UIGestureRecognizerStateEnded) {
         UIView *timeView = (UILabel *)[self viewWithTag:TIME_VIEWER_TAG];

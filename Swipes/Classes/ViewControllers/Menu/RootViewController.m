@@ -41,7 +41,7 @@
         TodayViewController *vc2 = [[TodayViewController alloc] init];
         DoneViewController *vc3 = [[DoneViewController alloc] init];
         vc1.view.autoresizingMask = vc2.view.autoresizingMask = vc3.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-        KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3] titles:@[@"Schedule",@"Today",@"Done"]];
+        KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3]];
         _menuViewController = menuViewController;
     }
     return _menuViewController;
@@ -152,18 +152,13 @@ static RootViewController *sharedObject;
 -(void)setupAppearance{
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
-    if(![PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
+    if([PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
     else [self changeToMenu:KPMenuHome animated:NO];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
-    /*CKCalendarView *calendarView = [[CKCalendarView alloc] initWithFrame:CGRectMake(0, 20, 320, 320)];
-    calendarView.onlyShowCurrentMonth = NO;
-    calendarView.adaptHeightToNumberOfWeeksInMonth = YES;
-    [self.view addSubview:calendarView];
-    return;*/
     self.sideMenu = [[RESideMenu alloc] init];
     self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;
     self.settingsViewController = [[MenuViewController alloc] init];

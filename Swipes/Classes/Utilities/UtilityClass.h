@@ -16,6 +16,7 @@
 +(UIImage*)navbarImage;
 +(UtilityClass*)instance;
 -(NSNumber*)versionNumber;
++ (UIImage *)radialGradientImage:(CGSize)size start:(UIColor*)start end:(UIColor*)end centre:(CGPoint)centre radius:(float)radius;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block;
 -(void)popupBoxWithTitle:(NSString*)title andMessage:(NSString*)message buttons:(NSArray*)buttons block:(SuccessfulBlock)block;
 + (UIColor *)darkerColor:(UIColor*)c;
