@@ -126,8 +126,7 @@ typedef enum {
                 CGRectSetY(background, (kPhoneTopToStartOfCells + (ACTIVE_ROW * roundf(TABLE_WIDTH * CELL_HEIGHT))) - background.frame.size.height);
                 background.circleBottomLength = kCircleBottomOfBarToCenter + (ACTIVE_ROW * roundf(TABLE_WIDTH * CELL_HEIGHT));
                 [background setLeft:NO];
-                background.bottomColor = tcolor(StrongDoneColor);
-                background.topColor = tcolor(DoneColor);
+                
                 self.backgroundOverlay = background;
                 [self.phoneBackground addSubview:self.backgroundOverlay];
                 [self.backgroundOverlay show:NO];

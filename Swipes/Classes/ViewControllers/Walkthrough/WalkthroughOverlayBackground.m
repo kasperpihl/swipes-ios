@@ -10,16 +10,20 @@
 @interface WalkthroughOverlayBackground ()
 @property (nonatomic) UIBezierPath *punchedOutPath;
 @property (nonatomic) CGFloat height;
-
+@property (nonatomic,strong) UIView *popupView;
 @end
 @implementation WalkthroughOverlayBackground
 -(void)setLeft:(BOOL)left{
     CGFloat y = self.bounds.size.height - self.circleBottomLength - kCircleSize/2;
     if(left){
-        self.punchedOutPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(kCircleSideCenterMargin, y, kCircleSize, kCircleSize)];
+        self.punchedOutPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(kCircleSideCenterMargin - kCircleSize/2, y, kCircleSize, kCircleSize)];
+        self.bottomColor = tcolor(StrongLaterColor);
+        self.topColor = tcolor(LaterColor);
     }
     else{
         self.punchedOutPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width - kCircleSideCenterMargin - kCircleSize/2, y, kCircleSize, kCircleSize)];
+        self.bottomColor = tcolor(StrongDoneColor);
+        self.topColor = tcolor(DoneColor);
     }
     [self setNeedsDisplay];
 }
@@ -32,6 +36,14 @@
         self.height = frame.size.height;
         
         self.hidden = YES;
+        self.popupView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height-kBottomHeight)];
+        self.popupView.backgroundColor = CLEAR;
+        
+        UIButton *continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [continueButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
+        [self.popupView addSubview:continueButton];
+        
+        [self addSubview:self.popupView];
     }
     return self;
 }

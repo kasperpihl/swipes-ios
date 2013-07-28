@@ -9,7 +9,7 @@
 #define kBottomExtraSide 20
 #define kCircleSize 70
 #define kBottomToCircleLength 70
-#define kCircleSideCenterMargin (kBottomHeight + 21)
+#define kCircleSideCenterMargin (kBottomExtraSide + 40)
 #define kCircleBottomOfBarToCenter 16
 
 #import <UIKit/UIKit.h>
