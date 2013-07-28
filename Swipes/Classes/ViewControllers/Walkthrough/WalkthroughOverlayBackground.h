@@ -1,20 +1,23 @@
 //
-//  WalkthroughOverlayPopup.h
+//  WalkthroughOverlayBackground.h
 //  Swipes
 //
 //  Created by Kasper Pihl Tornøe on 28/07/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-
 #define kBottomHeight 38
 #define kBottomExtraSide 20
 #define kCircleSize 70
-#define kBottomToCircleLength 60
-
+#define kBottomToCircleLength 70
+#define kCircleSideCenterMargin (kBottomHeight + 21)
+#define kCircleBottomOfBarToCenter 16
 
 #import <UIKit/UIKit.h>
 
-@interface WalkthroughOverlayPopup : UIView
+@interface WalkthroughOverlayBackground : UIView
 @property (nonatomic) UIColor *bottomColor;
 @property (nonatomic) UIColor *topColor;
+@property CGFloat circleBottomLength;
+-(void)show:(BOOL)show;
+-(void)setLeft:(BOOL)left;
 @end

@@ -22,6 +22,7 @@
 #define GLOBAL_CELL_HEIGHT              70.0f
 #define KEYBOARD_HEIGHT                 216.0f
 #define KEYBOARD_ANIMATION_DURATION     0.25f
+#define GLOBAL_WT_TABLE_WIDTH           235.0f
 
 
 #define KP_LIGHT(fontSize)              [UIFont fontWithName:@"ProximaNova-Light" size:fontSize]

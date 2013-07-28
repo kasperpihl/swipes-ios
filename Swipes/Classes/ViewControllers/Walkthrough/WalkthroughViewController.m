@@ -9,11 +9,13 @@
 #import "WalkthroughViewController.h"
 #import "WalkthroughCell.h"
 #import "WalkthroughTitleView.h"
+#import "WalkthroughOverlayBackground.h"
 #import "ToDoHandler.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
 #define TABLE_Y 200
-#define TABLE_FRAME CGRectMake(13,116,TABLE_WIDTH,375)
+#define kPhoneTopToStartOfCells 116
+#define TABLE_FRAME CGRectMake(13,kPhoneTopToStartOfCells,TABLE_WIDTH,375)
 
 #define TEXT_COLOR  gray(128,1)
 
@@ -22,7 +24,7 @@
 #define ACTION_BUTTON_WIDTH 190
 #define ACTION_BUTTON_HEIGHT 58
 
-#define ACTIVE_ROW 1
+#define ACTIVE_ROW 2
 
 #define ACTION_BUTTON_CORNER_RADIUS 3
 #define kActionButtonBorderWidth 2
@@ -36,10 +38,14 @@
 #define kHelparrowPercentage 0.4
 #define kCloseButtonSize 44
 #define kDefTutAnimationTime 0.5f
+
+
+
 typedef enum {
     Waiting = 0,
     IntroductionPrepare,
-    Introduction,
+    SwipeRightToComplete,
+    SwipedToTheRight,
     Complete,
     Finish
 } WalkthroughState;
@@ -62,6 +68,7 @@ typedef enum {
 @property (nonatomic,strong) UIImageView *phoneBackground;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *items;
+@property (nonatomic,strong) WalkthroughOverlayBackground *backgroundOverlay;
 
 @end
 
@@ -97,7 +104,7 @@ typedef enum {
 -(UIViewAnimationOptions)optionsForState:(WalkthroughState)state{
     UIViewAnimationOptions options = UIViewAnimationOptionCurveEaseInOut;
     switch (state) {
-        case Introduction:
+        case SwipeRightToComplete:
             options = UIViewAnimationOptionCurveEaseOut;
             break;
         default:
@@ -108,9 +115,25 @@ typedef enum {
 -(voidBlock)preBlockForState:(WalkthroughState)state{
     voidBlock block;
     switch (state) {
-        case Introduction:{ block = ^{
+        case SwipeRightToComplete:{ block = ^{
             [self.titleView setTitle:@"Swipe right to complete" subtitle:@"There is no voodoo magic, it's all gestures"];
             CGRectSetY(self.titleView, TITLE_Y-40); }; }
+            break;
+        case SwipedToTheRight:{
+            block = ^{
+                WalkthroughOverlayBackground *background = [[WalkthroughOverlayBackground alloc] initWithFrame:CGRectMake(0, 0, TABLE_WIDTH + 2*kBottomExtraSide, 300)];
+                CGRectSetCenterX(background, self.phoneBackground.frame.size.width/2);
+                CGRectSetY(background, (kPhoneTopToStartOfCells + (ACTIVE_ROW * roundf(TABLE_WIDTH * CELL_HEIGHT))) - background.frame.size.height);
+                background.circleBottomLength = kCircleBottomOfBarToCenter + (ACTIVE_ROW * roundf(TABLE_WIDTH * CELL_HEIGHT));
+                [background setLeft:NO];
+                background.bottomColor = tcolor(StrongDoneColor);
+                background.topColor = tcolor(DoneColor);
+                self.backgroundOverlay = background;
+                [self.phoneBackground addSubview:self.backgroundOverlay];
+                [self.backgroundOverlay show:NO];
+            };
+            break;
+        }
         default:
             break;
     }
@@ -137,12 +160,19 @@ typedef enum {
             };
             break;
         }
-        case Introduction:{
+        case SwipeRightToComplete:{
             block = ^{
                 [self activeCell].helpingImage.alpha = 1;
                 self.titleView.alpha = 1;
             };
+            break;
         }
+        case SwipedToTheRight:{
+            block = ^{
+                [self.backgroundOverlay show:YES];
+            };
+        }
+        
         default:
             break;
     }
@@ -190,6 +220,7 @@ typedef enum {
     [cell setActivated:activated animated:NO];
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    NSLog(@"del");
     return 10;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -223,6 +254,7 @@ typedef enum {
 {
     [super viewDidLoad];
     self.view.backgroundColor = W_TIMELINE;
+    
     self.swipesLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wt_swipes_logo"]];
     self.swipesLogo.center = CGPointMake(self.view.center.x, self.swipesLogo.center.y+LOGO_Y);
     [self.view addSubview:self.swipesLogo];
@@ -284,7 +316,7 @@ typedef enum {
     
 }
 -(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
-    //if(state == MCSwipeTableViewCellStateNone) [cell bounceToOrigin];
+    if(state == MCSwipeTableViewCellState1 && self.currentState == SwipeRightToComplete) [self next];
 }
 - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell slidedIntoState:(MCSwipeTableViewCellState)state{
     WalkthroughCell *activeCell = [self activeCell];
@@ -295,7 +327,7 @@ typedef enum {
     if(color) [activeCell setDotColor:color];
 }
 -(void)panning:(UIPanGestureRecognizer*)recognizer{
-    if(self.currentState != Introduction) return;
+    if(self.currentState != SwipeRightToComplete) return;
     WalkthroughCell *activeCell = [self activeCell];
     CGPoint translation = [recognizer translationInView:self.view];
     [activeCell publicHandlePanGestureRecognizer:recognizer withTranslation:translation];
