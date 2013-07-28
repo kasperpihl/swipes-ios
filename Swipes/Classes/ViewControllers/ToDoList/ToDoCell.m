@@ -27,9 +27,8 @@
 #define TITLE_DELTA_Y 4
 #define TITLE_Y (TITLE_DELTA_Y + (self.frame.size.height-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
 
-
+#define DOT_SIZE GLOBAL_DOT_SIZE
 #define DOT_OUTLINE_SIZE 4
-#define TIMELINE_WIDTH 2
 
 #define LABEL_WIDTH (320-(LABEL_X+(LABEL_X/3)))
 
@@ -44,7 +43,7 @@
 
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *layerView;
-
+@property (nonatomic,weak) IBOutlet UIView *timelineView;
 @property (nonatomic,weak) IBOutlet UIView *dotView;
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UIView *outlineView;
@@ -56,6 +55,7 @@
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.shouldRegret = YES;
         self.contentView.layer.masksToBounds = YES;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.contentView.backgroundColor = tbackground(TaskCellBackground);
@@ -84,7 +84,7 @@
         overlayView.backgroundColor = tbackground(TaskCellBackground);
         self.selectedBackgroundView = overlayView;
         
-        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (LABEL_X/2)+TIMELINE_WIDTH, self.contentView.frame.size.height)];
+        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (LABEL_X/2), self.contentView.frame.size.height)];
         timelineLine.tag = TIMELINE_TAG;
         timelineLine.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         timelineLine.backgroundColor = tcolor(TaskCellTimelineColor);

@@ -14,10 +14,13 @@
 #import "ThemeHandler.h"
 
 /* GLOBALS */
-#define GLOBAL_TOOLBAR_HEIGHT           50
+#define GLOBAL_TOOLBAR_HEIGHT           50.0f
 #define GLOBAL_ANIMATION_DURATION       0.15f
-#define GLOBAL_TEXTFIELD_HEIGHT         70
-#define KEYBOARD_HEIGHT                 216
+#define GLOBAL_TEXTFIELD_HEIGHT         70.0f
+#define GLOBAL_DOT_SIZE                 12.0f
+#define GLOBAL_DOT_OUTLINE_SIZE         4.0f
+#define GLOBAL_CELL_HEIGHT              70.0f
+#define KEYBOARD_HEIGHT                 216.0f
 #define KEYBOARD_ANIMATION_DURATION     0.25f
 
 
@@ -93,7 +96,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #define POPUP_BACKGROUND                color(30,34,40,.9)
 #define POPUP_SELECTED                  gray(218,1)
 
-#define DOT_SIZE 12
 
 #define TAG_HEIGHT 38
 #define DEFAULT_SPACING 5

@@ -139,7 +139,7 @@ static ThemeHandler *sharedObject;
     switch (item) {
         case SeperatorColor:
             color = BCTaskTableGradientBackground;
-            
+            break;
         case TasksColor:
             color = BCTasksColor;
             break;

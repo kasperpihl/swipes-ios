@@ -13,7 +13,6 @@
 -(int)ageForBirthday:(NSString *)birthday;
 @property (nonatomic,strong) NSUserDefaults *userDefaults;
 + (UIImage *)imageWithColor:(UIColor *)color;
-+(UIImage*)navbarImage;
 +(UtilityClass*)instance;
 -(NSNumber*)versionNumber;
 + (UIImage *)radialGradientImage:(CGSize)size start:(UIColor*)start end:(UIColor*)end centre:(CGPoint)centre radius:(float)radius;
@@ -26,7 +25,11 @@ UIImage* rotate(UIImage* src, NSInteger degrees);
 + (BOOL) validateEmail: (NSString *) candidate;
 + (UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color;
 + (UIImage *)image:(UIImage *)image withColor:(UIColor *)color;
++ (UIImage *)imageWithName:(NSString *)imageName scaledToSize:(CGSize)newSize;
++ (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize;
+
 +(UIImage *)flippedImage:(UIImage*)flippingImage horizontal:(BOOL)horizontal;
 +(UIColor *)inverseColor:(UIColor*)color;
 +(NSString*)timeStringForDate:(NSDate*)date;
+
 @end

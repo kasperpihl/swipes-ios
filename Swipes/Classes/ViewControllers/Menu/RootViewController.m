@@ -26,7 +26,7 @@
 #import "RESideMenu.h"
 #import "MenuViewController.h"
 
-#import "CKCalendarView.h"
+#import "WalkthroughViewController.h"
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
@@ -159,6 +159,10 @@ static RootViewController *sharedObject;
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
+    self.viewControllers = @[[[WalkthroughViewController alloc]init]];
+    return;
+    
+    
     self.sideMenu = [[RESideMenu alloc] init];
     self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;
     self.settingsViewController = [[MenuViewController alloc] init];

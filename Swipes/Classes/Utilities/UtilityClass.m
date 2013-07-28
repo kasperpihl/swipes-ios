@@ -34,6 +34,17 @@ static UtilityClass *sharedObject;
     
     return image;
 }
++ (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    //UIGraphicsBeginImageContext(newSize);
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
++ (UIImage *)imageWithName:(NSString *)imageName scaledToSize:(CGSize)newSize {
+    return [self imageWithImage:[UIImage imageNamed:imageName] scaledToSize:newSize];
+}
 + (UIImage *)radialGradientImage:(CGSize)size start:(UIColor*)start end:(UIColor*)end centre:(CGPoint)centre radius:(float)radius {
     // Render a radial background
     // http://developer.apple.com/library/ios/#documentation/GraphicsImaging/Conceptual/drawingwithquartz2d/dq_shadings/dq_shadings.html
@@ -78,20 +89,6 @@ static UtilityClass *sharedObject;
     CGGradientRelease(myGradient); // Necessary?
     UIGraphicsEndImageContext(); // Clean up
     return image;
-}
-+(UIImage *)navbarImage{
-    return nil;
-    /*return [UtilityClass imageWithColor:];
-    CGFloat navbarWidth = 1;
-    CGFloat navbarHeight = 44;
-    CGFloat sepHeight = .5;
-    CGSize navbarSize = CGSizeMake(navbarWidth, navbarHeight);
-    UIGraphicsBeginImageContext(navbarSize);
-    UIImage *topColorImage = [UtilityClass imageWithColor:NAVBAR_BACKROUND];
-    UIImage *bottomColorImage = [UtilityClass imageWithColor:SEGMENT_SELECTED];
-    [topColorImage drawInRect:CGRectMake(0, 0, navbarWidth, navbarHeight-sepHeight)];
-    [bottomColorImage drawInRect:CGRectMake(0, navbarHeight-sepHeight, navbarWidth, sepHeight)];
-    return UIGraphicsGetImageFromCurrentImageContext();*/
 }
 -(NSNumber *)versionNumber{
     NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
@@ -147,7 +144,7 @@ static UtilityClass *sharedObject;
     CGContextScaleCTM(context, 1.0, -1.0);
     
     // set the blend mode to color burn, and the original image
-    CGContextSetBlendMode(context, kCGBlendModeMultiply);
+    CGContextSetBlendMode(context, kCGBlendModeColorBurn);
     CGRect rect = CGRectMake(0, 0, img.size.width, img.size.height);
     CGContextDrawImage(context, rect, img.CGImage);
     

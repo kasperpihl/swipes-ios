@@ -11,7 +11,7 @@
 @class KPToDo;
 @interface ToDoCell : MCSwipeTableViewCell
 @property (nonatomic) CellType cellType;
-@property (nonatomic,weak) IBOutlet UIView *timelineView;
+
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags;
 -(void)showTimeline:(BOOL)show;
 -(void)setDotColor:(CellType)cellType;

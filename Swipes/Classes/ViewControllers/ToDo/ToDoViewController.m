@@ -123,11 +123,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);
         textView.textColor = tcolor(TaskCellTitle);
         
-        UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DOT_SIZE,DOT_SIZE)];
+        UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, GLOBAL_DOT_SIZE,GLOBAL_DOT_SIZE)];
         dotView.tag = DOT_VIEW_TAG;
         dotView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin);
         centerItemForSize(dotView, TITLE_LABEL_X, textView.frame.size.height);
-        dotView.layer.cornerRadius = DOT_SIZE/2;
+        dotView.layer.cornerRadius = GLOBAL_DOT_SIZE/2;
         dotView.tag = DOT_VIEW_TAG;
         [textView addSubview:dotView];
         self.dotView = [textView viewWithTag:DOT_VIEW_TAG];

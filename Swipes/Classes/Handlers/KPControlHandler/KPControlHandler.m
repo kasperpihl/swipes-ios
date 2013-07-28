@@ -48,7 +48,7 @@
         [view addSubview:addToolbar];
         self.addToolbar = (KPToolbar*)[view viewWithTag:ADD_TOOLBAR_TAG];
         
-        KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[@"toolbar_tag_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
+        KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[@"toolbar_plus_icon",@"toolbar_tag_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
         editToolbar.tag = EDIT_TOOLBAR_TAG;
         editToolbar.delegate = self;
         [view addSubview:editToolbar];

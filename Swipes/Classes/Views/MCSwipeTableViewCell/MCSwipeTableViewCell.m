@@ -115,6 +115,7 @@ secondStateIconName:(NSString *)secondIconName
     self = [self initWithStyle:style reuseIdentifier:reuseIdentifier];
 
     if (self) {
+        
         [self setFirstStateIconName:firstIconName
                          firstColor:firstColor
                 secondStateIconName:secondIconName
@@ -130,7 +131,8 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)initializer {
     _mode = MCSwipeTableViewCellModeSwitch;
-
+    self.noneColor = tbackground(TaskCellSelectedBackground);
+    self.bounceAmplitude = kMCBounceAmplitude;
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
@@ -155,9 +157,10 @@ secondStateIconName:(NSString *)secondIconName
     CGFloat percentage = [self percentageWithOffset:CGRectGetMinX(self.contentView.frame) relativeToWidth:CGRectGetWidth(self.bounds)];
     
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
+    if(self.activatedDirection == MCSwipeTableViewCellDirectionRight && percentage < 0) percentage = 0;
+    else if(self.activatedDirection == MCSwipeTableViewCellDirectionLeft && percentage > 0) percentage = 0;
     _direction = [self directionWithPercentage:percentage];
-    
-   
+    self.readPercentage = percentage;
     if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
         switch (_direction) {
             case MCSwipeTableViewCellDirectionLeft:
@@ -171,16 +174,13 @@ secondStateIconName:(NSString *)secondIconName
                 break;
         }
         CGPoint center = CGPointMake(self.contentView.center.x + translation.x, self.contentView.center.y);
-        if(translation.x < 0 && (self.contentView.center.x/self.contentView.frame.size.width) <= 0.5 && !(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionBoth || self.activatedDirection == MCSwipeTableViewCellActivatedDirectionLeft)){
-            CGFloat minAllowed = (self.contentView.frame.size.width/2)-MAX_DRAGGING;
+        if(!(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionBoth || self.activatedDirection == MCSwipeTableViewCellActivatedDirectionLeft)){
+            CGFloat minAllowed = (self.contentView.frame.size.width/2)-self.bounceAmplitude;
             if(center.x < minAllowed) center.x = minAllowed;
         }
-        else if(translation.x > 0 && (self.contentView.center.x/self.contentView.frame.size.width) >= 0.5 && !(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionBoth || self.activatedDirection == MCSwipeTableViewCellActivatedDirectionRight)){
-            CGFloat maxAllowed = (self.contentView.frame.size.width/2)+MAX_DRAGGING;
+        else if(!(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionBoth || self.activatedDirection == MCSwipeTableViewCellActivatedDirectionRight)){
+            CGFloat maxAllowed = (self.contentView.frame.size.width/2)+self.bounceAmplitude;
             if(center.x > maxAllowed) center.x = maxAllowed;
-        }
-        else{
-            
         }
         [self.contentView setCenter:center];
         [self animateWithOffset:CGRectGetMinX(self.contentView.frame)];
@@ -196,6 +196,7 @@ secondStateIconName:(NSString *)secondIconName
         else
             [self bounceToOrigin];
     }
+    
 }
 -(void)switchToState:(MCSwipeTableViewCellState)state{
     self.didRegret = NO;
@@ -332,8 +333,8 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (UIColor *)colorWithPercentage:(CGFloat)percentage {
-    UIColor *color = tbackground(TaskCellSelectedBackground);
-    if(!self.didRegret){
+    UIColor *color = self.noneColor; 
+    if(!self.didRegret || !self.shouldRegret){
         // Background Color
         if (percentage >= kMCStop1 && percentage < kMCStop2)
             color = _firstColor;
@@ -352,7 +353,7 @@ secondStateIconName:(NSString *)secondIconName
     MCSwipeTableViewCellState state;
 
     state = MCSwipeTableViewCellStateNone;
-    if(!self.didRegret){
+    if(!self.didRegret || !self.shouldRegret){
         if (percentage >= kMCStop1 && [self validateState:MCSwipeTableViewCellState1])
             state = MCSwipeTableViewCellState1;
         
@@ -421,10 +422,10 @@ secondStateIconName:(NSString *)secondIconName
 
     // Image Name
     NSString *imageName = [self imageNameWithPercentage:percentage];
-    if(self.didRegret) [_slidingImageView setImage:[UIImage imageNamed:nil]];
+    if(self.didRegret && self.shouldRegret) [_slidingImageView setImage:[UIImage imageNamed:nil]];
     // Image Position
     if (imageName != nil) {
-        if(!self.didRegret)[_slidingImageView setImage:[UIImage imageNamed:imageName]];
+        if(!self.didRegret || !self.shouldRegret)[_slidingImageView setImage:[UIImage imageNamed:imageName]];
         [_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
     }
     [self slideImageWithPercentage:percentage imageName:imageName isDragging:YES];
@@ -518,7 +519,7 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (void)bounceToOrigin {
-    CGFloat bounceDistance = kMCBounceAmplitude * _currentPercentage;
+    CGFloat bounceDistance = self.bounceAmplitude * _currentPercentage;
     if(self.mode != MCSwipeTableViewCellModeSwitch) self.didRegret = YES;
     [UIView animateWithDuration:kMCBounceDuration1
                           delay:0

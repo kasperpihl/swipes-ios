@@ -75,6 +75,9 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define clearNotify() [[NSNotificationCenter defaultCenter] removeObserver:self]
 #define kv(obj,key) [obj objectForKey:key]
 
+#define CGRectSetCenter( r , x , y ) r.center = CGPointMake( x , y )
+#define CGRectSetCenterX( r, x ) r.center = CGPointMake( x , r.center.y )
+#define CGRectSetCenterY( r, y ) r.center = CGPointMake( r.center.x , y )
 
 #define CGRectSetX( r, x ) r.frame = CGRectMake( x, r.frame.origin.y, r.frame.size.width, r.frame.size.height )
 #define CGRectSetY( r, y ) r.frame = CGRectMake( r.frame.origin.x, y, r.frame.size.width, r.frame.size.height )
