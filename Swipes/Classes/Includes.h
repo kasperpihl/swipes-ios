@@ -62,6 +62,8 @@ NS_INLINE void mainBlock(void (^block)(void))
     }
 }
 
+#define kIsIphone5Size (fabs((double)[[UIScreen mainScreen] bounds].size.height - (double) 568) < DBL_EPSILON)
+#define valForScreen(iphone4, iphone5) (kIsIphone5Size ? iphone5 : iphone4)
 
 #define CLEAR [UIColor clearColor]
 #define color(r,g,b,a) [UIColor colorWithRed: r/255.0 green: g/255.0 blue: b/255.0 alpha:a]

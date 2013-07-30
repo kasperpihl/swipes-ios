@@ -27,7 +27,6 @@
     self.subtitleLabel.frame = CGRectSetPos(self.subtitleLabel.frame, (self.frame.size.width-self.subtitleLabel.frame.size.width)/2, self.titleLabel.frame.size.height + kDefTitleSpacing);
     
     CGRectSetHeight(self, self.subtitleLabel.frame.origin.y + self.subtitleLabel.frame.size.height);
-    NSLog(@"%@",self);
 }
 - (id)initWithFrame:(CGRect)frame
 {

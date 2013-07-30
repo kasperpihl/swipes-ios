@@ -23,7 +23,9 @@
 @property (nonatomic) BOOL activated;
 @end
 @implementation WalkthroughCell
-
+-(void)setTitle:(NSString *)title{
+    self.titleLabel.text = title;
+}
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {

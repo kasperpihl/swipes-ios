@@ -27,7 +27,7 @@
 #import "MenuViewController.h"
 
 #import "WalkthroughViewController.h"
-@interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 @end
@@ -110,7 +110,11 @@
 - (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error {
     NSLog(@"Failed to log in... %@",error);
 }
-
+-(void)walkthrough:(WalkthroughViewController *)walkthrough didFinishSuccesfully:(BOOL)successfully{
+    WalkthroughViewController *viewController = [[WalkthroughViewController alloc]init];
+    viewController.delegate = self;
+    self.viewControllers = @[viewController];
+}
 #pragma mark - Public API
 -(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated{
     UIViewController *viewController;
@@ -152,16 +156,13 @@ static RootViewController *sharedObject;
 -(void)setupAppearance{
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
-    if([PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
+    if(![PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
     else [self changeToMenu:KPMenuHome animated:NO];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
-    self.viewControllers = @[[[WalkthroughViewController alloc]init]];
-    return;
-    
     
     self.sideMenu = [[RESideMenu alloc] init];
     self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;

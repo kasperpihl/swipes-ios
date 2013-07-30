@@ -13,40 +13,65 @@
 #import "ToDoHandler.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
-#define TABLE_Y 200
+#define TABLE_Y valForScreen(160,200)
 #define kPhoneTopToStartOfCells 116
 #define TABLE_FRAME CGRectMake(13,kPhoneTopToStartOfCells,TABLE_WIDTH,375)
 
 #define TEXT_COLOR  gray(128,1)
 
-#define LOGO_Y 30
-#define TITLE_Y 140
+#define LOGO_Y valForScreen(20,30)
+#define TITLE_Y valForScreen(122,140)
 #define ACTION_BUTTON_WIDTH 190
-#define ACTION_BUTTON_HEIGHT 58
+#define ACTION_BUTTON_HEIGHT 44
 
-#define ACTIVE_ROW 2
+#define ACTIVE_ROW valForScreen(1,2)
 
 #define ACTION_BUTTON_CORNER_RADIUS 3
 #define kActionButtonBorderWidth 2
 #define kActionButtonFont KP_BOLD(23)
 
-#define kMenuButtonY 260
+#define kMenuButtonY valForScreen(220,260)
 #define kMenuButtonSize 60
 #define kMenuButtonTransform 0.8
+#define kMenuButtonTransformedSize (kMenuButtonSize * kMenuButtonTransform)
 #define kMenuButtonSideMargin 70
 #define kMenuButtonTransformedSideMargin 90
 #define kHelparrowPercentage 0.4
 #define kCloseButtonSize 44
-#define kDefTutAnimationTime 0.5f
+#define kDefTutAnimationTime 0.4f
 
+#define kSchedulePopupSize valForScreen(180,220)
+#define kSchedulePopupY kPhoneTopToStartOfCells-20
+#define kSchedulePopupTransformSize 0.2
+#define kColoredPopupHeight valForScreen(250,300)
 
+#define kTableBottomSizeForFirst valForScreen(200,250)
+
+#define kShadowBackExtraHeight 40
+#define kShadowBounce 15
+#define kSignatureX 160
+#define kSignatureSpacing 5
 
 typedef enum {
     Waiting = 0,
     IntroductionPrepare,
+    FocusOnTheTasksAtHand,
+    SendThePhoneToTop,
     SwipeRightToComplete,
-    SwipedToTheRight,
-    Complete,
+    AnimateUpDonePopup,
+    FadeInDonePopupTexts,
+    PressedContinueFromCompleted,
+    AnimatedPopupDownFromCompleted,
+    SwipeLeftToSchedule,
+    SwipedToTheLeft,
+    PressedSchedulePopup,
+    ScheduleTaskCompleted,
+    ScheduleTaskCompleted2,
+    PressedContinueFromSchedule,
+    ClosedSchedulePopup,
+    PushDownGreenBackground,
+    BounceGreenBackground,
+    ShowLastTexts,
     Finish
 } WalkthroughState;
 @interface WalkthroughViewController () <UITableViewDelegate,UITableViewDataSource,MCSwipeTableViewCellDelegate>
@@ -69,12 +94,40 @@ typedef enum {
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) WalkthroughOverlayBackground *backgroundOverlay;
+@property (nonatomic,strong) UIButton *schedulePopupButton;
+
+@property (nonatomic,strong) UIImageView *greenBackground;
+@property (nonatomic,strong) UIImageView *shadowBackground;
+@property (nonatomic,strong) UIImageView *signatureImage;
 
 @end
 
+
+
 @implementation WalkthroughViewController
+-(NSMutableArray *)items{
+    if(!_items){
+        _items = [@[@"Clean laundry",
+                  @"Wash the dishes",
+                  @"Make the accounting",
+                  @"Take out trash",
+                  @"Hit someone in the face",
+                  @"Now play with the global team",
+                  @"You are what you achieve",
+                  @"This was all the tasks"
+                  ] mutableCopy];
+    }
+    return _items;
+}
 -(void)next{
     self.currentState++;
+}
+-(void)removeActiveItem{
+    NSIndexPath *activeIndexPath = [self.tableView indexPathForCell:[self activeCell]];
+    [self.items removeObjectAtIndex:activeIndexPath.row];
+    [self.tableView beginUpdates];
+    [self.tableView deleteRowsAtIndexPaths:@[activeIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
 }
 #pragma mark - Getters and setters
 -(WalkthroughCell*)activeCell{
@@ -82,7 +135,6 @@ typedef enum {
 }
 -(void)setCurrentState:(WalkthroughState)currentState{
     if(_currentState != currentState){
-        
         if(currentState == Finish) return [self.delegate walkthrough:self didFinishSuccesfully:YES];
         else{
             [self changeToState:currentState];
@@ -95,6 +147,7 @@ typedef enum {
     voidBlock preBlock = [self preBlockForState:state];
     voidBlock showBlock = [self showBlockForState:state];
     voidBlock completionBlock = [self completionBlockForState:state];
+    if(state == PressedSchedulePopup) NSLog(@"loaded schedule blocks");
     CGFloat delay = [self delayForState:state];
     CGFloat duration = [self durationForState:state];
     UIViewAnimationOptions options = [self optionsForState:state];
@@ -115,21 +168,118 @@ typedef enum {
 -(voidBlock)preBlockForState:(WalkthroughState)state{
     voidBlock block;
     switch (state) {
-        case SwipeRightToComplete:{ block = ^{
-            [self.titleView setTitle:@"Swipe right to complete" subtitle:@"There is no voodoo magic, it's all gestures"];
-            CGRectSetY(self.titleView, TITLE_Y-40); }; }
-            break;
-        case SwipedToTheRight:{
+        case IntroductionPrepare:{
             block = ^{
-                WalkthroughOverlayBackground *background = [[WalkthroughOverlayBackground alloc] initWithFrame:CGRectMake(0, 0, TABLE_WIDTH + 2*kBottomExtraSide, 300)];
+                for(WalkthroughCell *cell in self.tableView.visibleCells)
+                    [cell setActivated:YES animated:NO];
+            };
+            break;
+        }
+        case FocusOnTheTasksAtHand:{
+            block = ^{
+                [self.actionButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
+                [self.titleView setTitle:@"Your main focus area" subtitle:@"Add your tasks and take an action on them."];
+                CGRectSetY(self.titleView, 2*LOGO_Y+kMenuButtonTransformedSize);
+                CGFloat span = self.view.bounds.size.height - kTableBottomSizeForFirst - CGRectGetMaxY(self.titleView.frame);
+                CGRectSetY(self.actionButton, CGRectGetMaxY(self.titleView.frame) + (span-self.actionButton.frame.size.height)/2);
+            };
+            break;
+        }
+        case SwipeRightToComplete:{ block = ^{
+            [self.titleView setTitle:@"Swipe right to complete" subtitle:@"Mark your tasks as done with one simple gesture."];
+            }; }
+            break;
+        case AnimateUpDonePopup:{
+            block = ^{
+                [self activeCell].helpingImage.alpha = 0;
+                WalkthroughOverlayBackground *background = [[WalkthroughOverlayBackground alloc] initWithFrame:CGRectMake(0, 0, TABLE_WIDTH + 2*kBottomExtraSide, kColoredPopupHeight) block:^(BOOL succeeded, NSError *error) {
+                    [self next];
+                }];
                 CGRectSetCenterX(background, self.phoneBackground.frame.size.width/2);
                 CGRectSetY(background, (kPhoneTopToStartOfCells + (ACTIVE_ROW * roundf(TABLE_WIDTH * CELL_HEIGHT))) - background.frame.size.height);
                 background.circleBottomLength = kCircleBottomOfBarToCenter + (ACTIVE_ROW * roundf(TABLE_WIDTH * CELL_HEIGHT));
-                [background setLeft:NO];
+                [background setLeft:NO title:@"Well done!" subtitle:@"You have completed a task. See a full history of your achievements in the “Done” area."];
                 
                 self.backgroundOverlay = background;
                 [self.phoneBackground addSubview:self.backgroundOverlay];
                 [self.backgroundOverlay show:NO];
+            };
+            break;
+        }
+        case ClosedSchedulePopup:
+        case AnimatedPopupDownFromCompleted:{
+            block = ^{
+                [self removeActiveItem];
+            };
+            break;
+        }
+        case SwipeLeftToSchedule:{
+            block = ^{
+                WalkthroughCell *activeCell = [self activeCell];
+                [activeCell setActivatedDirection:MCSwipeTableViewCellActivatedDirectionLeft];
+                CGRectSetX(activeCell.helpingImage, activeCell.frame.size.width - activeCell.helpingImage.frame.size.width);
+                [self activeCell].helpingImage.image = [UIImage imageNamed:@"walkthrough_swipe_schedule"];
+                [self.titleView setTitle:@"Swipe left to snooze." subtitle:@"Keep focus on the important tasks, schedule the rest for later."];
+            };
+            break;
+        }
+        case SwipedToTheLeft:{
+            block = ^{
+                self.schedulePopupButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                self.schedulePopupButton.frame = CGRectMake((self.phoneBackground.frame.size.width - kSchedulePopupSize)/2, kSchedulePopupY, kSchedulePopupSize, kSchedulePopupSize);
+                [self.schedulePopupButton addTarget:self action:@selector(pressedSchedule:) forControlEvents:UIControlEventTouchUpInside];
+                UIImage *image = [UtilityClass imageWithName:@"wt_schedule_popup" scaledToSize:CGSizeMake(kSchedulePopupSize, kSchedulePopupSize)];
+                [self.schedulePopupButton setImage:image forState:UIControlStateNormal];
+                [self.schedulePopupButton setImage:image forState:UIControlStateHighlighted];
+                [self activeCell].helpingImage.alpha = 0;
+                self.schedulePopupButton.transform = CGAffineTransformMakeScale(kSchedulePopupTransformSize, kSchedulePopupTransformSize);
+                [self.phoneBackground addSubview:self.schedulePopupButton];
+            };
+            break;
+        }
+        case ScheduleTaskCompleted:{
+            block = ^{
+                WalkthroughOverlayBackground *background = [[WalkthroughOverlayBackground alloc] initWithFrame:CGRectMake(0, 0, TABLE_WIDTH + 2*kBottomExtraSide, kColoredPopupHeight) block:^(BOOL succeeded, NSError *error) {
+                    [self next];
+                }];
+                CGRectSetCenterX(background, self.phoneBackground.frame.size.width/2);
+                CGRectSetY(background, (kPhoneTopToStartOfCells + (ACTIVE_ROW * roundf(TABLE_WIDTH * CELL_HEIGHT))) - background.frame.size.height);
+                background.circleBottomLength = kCircleBottomOfBarToCenter + (ACTIVE_ROW * roundf(TABLE_WIDTH * CELL_HEIGHT));
+                [background setLeft:YES title:@"Well done!" subtitle:@"You have snoozed a task. See your upcoming tasks in the “Later” area."];
+                self.backgroundOverlay = background;
+                [self.phoneBackground addSubview:self.backgroundOverlay];
+                [self.backgroundOverlay show:NO];
+            };
+            break;
+        }
+        case PushDownGreenBackground:{
+            block = ^{
+                self.greenBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wt_green_background"]];
+                self.shadowBackground = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"wt_background_shadow"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 0, 0, 0)]];
+                self.shadowBackground.contentMode = UIViewContentModeScaleToFill;
+                CGRectSetHeight(self.shadowBackground, self.greenBackground.frame.size.height+kShadowBackExtraHeight);
+                CGRectSetY(self.shadowBackground, -kShadowBackExtraHeight);
+                [self.view addSubview:self.greenBackground];
+                [self.view addSubview:self.shadowBackground];
+            };
+            break;
+        }
+        case ShowLastTexts:{
+            block = ^{
+                self.signatureImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wt_signature"]];
+                self.signatureImage.alpha = 0;
+                CGRectSetY(self.actionButton, self.view.bounds.size.height-LOGO_Y - self.actionButton.frame.size.height);
+                [self.titleView setTitle:@"Log in and start swiping" subtitle:@"P.S. The best features are yet to\ncome!\n\n     Love,"];
+                CGFloat span = self.actionButton.frame.origin.y - CGRectGetMaxY(self.shadowBackground.frame);
+                CGFloat actualHeight = self.titleView.frame.size.height + self.signatureImage.frame.size.height + kSignatureSpacing;
+                CGFloat titleY = CGRectGetMaxY(self.shadowBackground.frame) + (span-actualHeight)/2;
+                CGRectSetY(self.titleView, titleY);
+                CGRectSetX(self.signatureImage, kSignatureX);
+                CGRectSetY(self.signatureImage, CGRectGetMaxY(self.titleView.frame) + kSignatureSpacing);
+                [self.view addSubview:self.signatureImage];
+                
+                
+                [self.actionButton setTitle:@"GOT IT" forState:UIControlStateNormal];
             };
             break;
         }
@@ -147,9 +297,10 @@ typedef enum {
                 self.swipesLogo.alpha = 0;
                 self.titleView.alpha = 0;
                 self.menuExplainer.alpha = 0;
-                self.tasksButton.backgroundColor = gray(179,1);
+                self.doneButton.backgroundColor = gray(179,1);
                 self.scheduleButton.backgroundColor = gray(179,1);
-                CGRectSetY(self.phoneBackground, TABLE_Y);
+                NSLog(@"%f",CGRectGetMaxY(self.actionButton.frame));
+                CGRectSetY(self.phoneBackground, self.view.bounds.size.height - kTableBottomSizeForFirst);
                 CGFloat newButtonSize = roundf(kMenuButtonTransform * kMenuButtonSize);
                 
                 self.scheduleButton.center = CGPointMake(kMenuButtonTransformedSideMargin, LOGO_Y + newButtonSize/2);
@@ -159,19 +310,127 @@ typedef enum {
             };
             break;
         }
+        case FocusOnTheTasksAtHand:{
+            block = ^{
+                //[self activeCell].helpingImage.alpha = 1;
+                self.titleView.alpha = 1;
+                self.actionButton.alpha = 1;
+                
+                
+            };
+            break;
+        }
+        case SendThePhoneToTop:{
+            block = ^{
+                for(WalkthroughCell *cell in self.tableView.visibleCells)
+                    if(![cell isEqual:[self activeCell]]) [cell setActivated:NO animated:NO];
+                CGRectSetY(self.phoneBackground, CGRectGetMaxY(self.titleView.frame) + LOGO_Y);
+                self.tasksButton.backgroundColor = gray(179,1);
+                self.doneButton.backgroundColor = tcolor(DoneColor);
+                self.actionButton.alpha = 0;
+                self.titleView.alpha = 0;
+            };
+            break;
+        }
         case SwipeRightToComplete:{
             block = ^{
                 [self activeCell].helpingImage.alpha = 1;
                 self.titleView.alpha = 1;
+                [[self activeCell] setActivated:YES animated:NO];
+                
             };
             break;
         }
-        case SwipedToTheRight:{
+        case AnimateUpDonePopup:{
             block = ^{
+                self.titleView.alpha = 0;
                 [self.backgroundOverlay show:YES];
             };
+            break;
         }
-        
+        case ScheduleTaskCompleted2:
+        case FadeInDonePopupTexts:{
+            if(state == ScheduleTaskCompleted2) NSLog(@"got this block");
+            block = ^{
+                self.backgroundOverlay.popupView.alpha = 1;
+            };
+            break;
+        }
+        case PressedContinueFromSchedule:
+        case PressedContinueFromCompleted:{
+            block = ^{
+                self.backgroundOverlay.popupView.alpha = 0;
+                [self.backgroundOverlay show:NO];
+            };
+            break;
+        }
+        case AnimatedPopupDownFromCompleted:{
+            block = ^{
+                self.doneButton.backgroundColor = gray(179, 1);
+                self.scheduleButton.backgroundColor = tcolor(LaterColor);
+            };
+            break;
+        }
+        case SwipeLeftToSchedule:{
+            block = ^{
+                
+                self.titleView.alpha = 1;
+                [[self activeCell] setActivated:YES animated:NO];
+                [self activeCell].helpingImage.alpha = 1;
+                
+            };
+            break;
+        }
+        case SwipedToTheLeft:{
+            block = ^{
+                self.schedulePopupButton.transform = CGAffineTransformIdentity;
+                [self.titleView setTitle:@"... Then choose a time" subtitle:@"Pick the ”coffee cup” and the task will come back to you later."];
+            };
+            break;
+        }
+        case PressedSchedulePopup:{
+            block = ^{
+                self.schedulePopupButton.transform = CGAffineTransformMakeScale(kSchedulePopupTransformSize, kSchedulePopupTransformSize);
+            };
+            break;
+        }
+        case ScheduleTaskCompleted:{
+            block = ^{
+                self.titleView.alpha = 0;
+                [self.backgroundOverlay show:YES];
+            };
+            break;
+        }
+        case ClosedSchedulePopup:{
+            block = ^{
+                CGRectSetY(self.phoneBackground, self.view.bounds.size.height);
+                CGRectSetX(self.scheduleButton, 0 - self.scheduleButton.bounds.size.width);
+                CGRectSetX(self.doneButton, self.view.bounds.size.width);
+                CGRectSetY(self.tasksButton, 0 - self.tasksButton.frame.size.height);
+            };
+            break;
+        }
+        case PushDownGreenBackground:{
+            block = ^{
+                self.shadowBackground.frame = CGRectMake(0, self.greenBackground.frame.size.height-kShadowBackExtraHeight+kShadowBounce, self.shadowBackground.frame.size.width, kShadowBackExtraHeight);
+                
+            };
+            break;
+        }
+        case BounceGreenBackground:{
+            block = ^{
+                CGRectSetY(self.shadowBackground, self.greenBackground.frame.size.height-kShadowBackExtraHeight);
+            };
+            break;
+        }
+        case ShowLastTexts:{
+            block = ^{
+                self.actionButton.alpha = 1;
+                self.titleView.alpha = 1;
+                self.signatureImage.alpha = 1;
+            };
+            break;
+        }
         default:
             break;
     }
@@ -180,10 +439,47 @@ typedef enum {
 -(voidBlock)completionBlockForState:(WalkthroughState)state{
     voidBlock block;
     switch (state) {
-        case IntroductionPrepare:{
-            block = ^{
+        case IntroductionPrepare:
+        case SendThePhoneToTop:
+        case AnimateUpDonePopup:
+        case AnimatedPopupDownFromCompleted:
+        case PushDownGreenBackground:
+        case BounceGreenBackground:
+        case ScheduleTaskCompleted:
+        {
+            block = ^{ 
                 [self next];
             };
+            break;
+        }
+        case PressedContinueFromSchedule:
+        case PressedContinueFromCompleted:{
+            block = ^{
+                [self.backgroundOverlay removeFromSuperview];
+                self.backgroundOverlay = nil;
+                [self next];
+            };
+            break;
+        }
+        case PressedSchedulePopup:{
+            block = ^{
+                [self.schedulePopupButton removeFromSuperview];
+                self.schedulePopupButton = nil;
+                [self next];
+            };
+            break;
+        }
+        case ClosedSchedulePopup:{
+            block = ^{
+                [self.tasksButton removeFromSuperview];
+                self.tasksButton = nil;
+                [self.doneButton removeFromSuperview];
+                self.doneButton = nil;
+                [self.scheduleButton removeFromSuperview];
+                self.scheduleButton = nil;
+                [self next];
+            };
+            break;
         }
         default:
             break;
@@ -193,6 +489,13 @@ typedef enum {
 -(CGFloat)durationForState:(WalkthroughState)state{
     CGFloat duration = kDefTutAnimationTime;
     switch (state) {
+        case SwipedToTheLeft:
+        case FadeInDonePopupTexts:
+        case PressedSchedulePopup:
+        case BounceGreenBackground:
+        case ScheduleTaskCompleted2:
+            duration = 0.18f;
+            break;
         default:
             break;
     }
@@ -206,21 +509,26 @@ typedef enum {
     }
     return delay;
 }
-
+-(void)pressedSchedule:(UIButton*)sender{
+    if(self.currentState == SwipedToTheLeft){
+        [self next];
+    }
+    
+}
 -(void)pressedActionButton:(UIButton*)sender{
-    if(self.currentState == Waiting) [self next];
+    if(self.currentState == Waiting || self.currentState == FocusOnTheTasksAtHand || self.currentState == ShowLastTexts) [self next];
 }
 -(void)pressedCloseButton:(UIButton*)sender{
     [self.delegate walkthrough:self didFinishSuccesfully:NO];
 }
 #pragma mark UITableViewDataSource
 -(void)tableView:(UITableView *)tableView willDisplayCell:(WalkthroughCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    BOOL activated = (indexPath.row == ACTIVE_ROW) ? YES : NO;
-    [cell setActivated:activated animated:NO];
+    //BOOL activated = (indexPath.row == ACTIVE_ROW) ? YES : NO;
+    [cell setActivated:NO animated:NO];
+    [cell setTitle:[self.items objectAtIndex:indexPath.row]];
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSLog(@"del");
-    return 10;
+    return self.items.count;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *cellIdentifier = @"WalkthroughCell";
@@ -259,7 +567,7 @@ typedef enum {
     [self.view addSubview:self.swipesLogo];
     
     self.titleView = [[WalkthroughTitleView alloc] initWithFrame:CGRectMake(0, TITLE_Y, self.view.bounds.size.width, 0)];
-    [self.titleView setTitle:@"Welcome to Swipes" subtitle:@"This is your menu bar. Here everything has its place."];
+    [self.titleView setTitle:@"Welcome to Swipes" subtitle:@"With these 3 menus, you always keep your tasks perfectly organized."];
     
     [self.view addSubview:self.titleView];
     
@@ -278,7 +586,7 @@ typedef enum {
     [self.view addSubview:self.menuExplainer];
     
     self.actionButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.actionButton.frame = CGRectMake((self.view.bounds.size.width-ACTION_BUTTON_WIDTH)/2, self.view.bounds.size.height-ACTION_BUTTON_HEIGHT-30, 190, 58);
+    self.actionButton.frame = CGRectMake((self.view.bounds.size.width-ACTION_BUTTON_WIDTH)/2, self.view.bounds.size.height-ACTION_BUTTON_HEIGHT-30, ACTION_BUTTON_WIDTH, ACTION_BUTTON_HEIGHT);
     self.actionButton.layer.cornerRadius = ACTION_BUTTON_CORNER_RADIUS;
     self.actionButton.layer.borderColor = TEXT_COLOR.CGColor;
     self.actionButton.layer.borderWidth = kActionButtonBorderWidth;
@@ -291,9 +599,12 @@ typedef enum {
     
     self.phoneBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"walkthrough_phone_background"]];
     self.phoneBackground.frame = CGRectSetPos(self.phoneBackground.frame, self.view.center.x-self.phoneBackground.center.x , self.view.bounds.size.height);
+    self.phoneBackground.userInteractionEnabled = YES;
     //self.phoneBackground.userInteractionEnabled = YES;
     self.tableView = [[UITableView alloc] initWithFrame:TABLE_FRAME];
     self.tableView.rowHeight = (NSInteger)(CELL_HEIGHT * TABLE_WIDTH);
+    self.tableView.layer.masksToBounds = YES;
+    self.tableView.userInteractionEnabled = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.separatorColor = CLEAR;
     self.tableView.scrollEnabled = NO;
@@ -316,6 +627,7 @@ typedef enum {
 }
 -(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
     if(state == MCSwipeTableViewCellState1 && self.currentState == SwipeRightToComplete) [self next];
+    if(state == MCSwipeTableViewCellState3 && self.currentState == SwipeLeftToSchedule) [self next];
 }
 - (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell slidedIntoState:(MCSwipeTableViewCellState)state{
     WalkthroughCell *activeCell = [self activeCell];
@@ -326,7 +638,7 @@ typedef enum {
     if(color) [activeCell setDotColor:color];
 }
 -(void)panning:(UIPanGestureRecognizer*)recognizer{
-    if(self.currentState != SwipeRightToComplete) return;
+    if(!(self.currentState == SwipeRightToComplete || self.currentState == SwipeLeftToSchedule)) return;
     WalkthroughCell *activeCell = [self activeCell];
     CGPoint translation = [recognizer translationInView:self.view];
     [activeCell publicHandlePanGestureRecognizer:recognizer withTranslation:translation];
@@ -343,6 +655,8 @@ typedef enum {
     self.titleView = nil;
     self.swipesLogo = nil;
     self.actionButton = nil;
+    self.greenBackground = nil;
+    self.shadowBackground = nil;
 }
 - (void)didReceiveMemoryWarning
 {

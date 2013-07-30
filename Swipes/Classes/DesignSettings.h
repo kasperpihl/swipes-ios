@@ -15,16 +15,14 @@
 
 /* GLOBALS */
 #define GLOBAL_TOOLBAR_HEIGHT           50.0f
-#define GLOBAL_ANIMATION_DURATION       0.15f
+#define GLOBAL_ANIMATION_DURATION       0.20f
 #define GLOBAL_TEXTFIELD_HEIGHT         70.0f
 #define GLOBAL_DOT_SIZE                 12.0f
 #define GLOBAL_DOT_OUTLINE_SIZE         4.0f
 #define GLOBAL_CELL_HEIGHT              70.0f
 #define KEYBOARD_HEIGHT                 216.0f
 #define KEYBOARD_ANIMATION_DURATION     0.25f
-#define GLOBAL_WT_TABLE_WIDTH           235.0f
-
-
+#define GLOBAL_WT_TABLE_WIDTH           234.0f
 #define KP_LIGHT(fontSize)              [UIFont fontWithName:@"ProximaNova-Light" size:fontSize]
 #define KP_BLACK(fontSize)              [UIFont fontWithName:@"ProximaNova-Black" size:fontSize]
 #define KP_REGULAR(fontSize)            [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize]

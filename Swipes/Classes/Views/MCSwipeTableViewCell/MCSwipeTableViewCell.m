@@ -157,9 +157,11 @@ secondStateIconName:(NSString *)secondIconName
     CGFloat percentage = [self percentageWithOffset:CGRectGetMinX(self.contentView.frame) relativeToWidth:CGRectGetWidth(self.bounds)];
     
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
-    if(self.activatedDirection == MCSwipeTableViewCellDirectionRight && percentage < 0) percentage = 0;
-    else if(self.activatedDirection == MCSwipeTableViewCellDirectionLeft && percentage > 0) percentage = 0;
+    if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionLeft && percentage < 0) percentage = 0;
+    else if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionRight && percentage > 0) percentage = 0;
+    if(state == UIGestureRecognizerStateEnded) NSLog(@"perc:%f dir:%i",percentage,_direction);
     _direction = [self directionWithPercentage:percentage];
+    
     self.readPercentage = percentage;
     if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
         switch (_direction) {
@@ -196,7 +198,6 @@ secondStateIconName:(NSString *)secondIconName
         else
             [self bounceToOrigin];
     }
-    
 }
 -(void)switchToState:(MCSwipeTableViewCellState)state{
     self.didRegret = NO;

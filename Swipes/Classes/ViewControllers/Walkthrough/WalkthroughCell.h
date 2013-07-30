@@ -25,5 +25,5 @@
 @property (nonatomic,strong) UIImageView *helpingImage;
 -(void)setActivated:(BOOL)activated animated:(BOOL)animated;
 -(void)setDotColor:(UIColor*)color;
-
+-(void)setTitle:(NSString*)title;
 @end
