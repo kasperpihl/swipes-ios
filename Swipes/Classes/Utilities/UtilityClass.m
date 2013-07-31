@@ -9,6 +9,7 @@
 #import "UtilityClass.h"
 #import "AppDelegate.h"
 #import "KPParseCommunicator.h"
+#import <QuartzCore/QuartzCore.h>
 #define trgb(num) (num/255.0)
 @interface UtilityClass () <UIAlertViewDelegate>
 @property (copy) SuccessfulBlock block;
@@ -33,6 +34,14 @@ static UtilityClass *sharedObject;
     UIGraphicsEndImageContext();
     
     return image;
+}
++(UIImage*)screenshotOfView:(UIView*)view{
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0f);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [view.layer renderInContext:context];
+    UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return screenShot;
 }
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
     //UIGraphicsBeginImageContext(newSize);

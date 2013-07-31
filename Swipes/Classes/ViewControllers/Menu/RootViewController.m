@@ -111,9 +111,7 @@
     NSLog(@"Failed to log in... %@",error);
 }
 -(void)walkthrough:(WalkthroughViewController *)walkthrough didFinishSuccesfully:(BOOL)successfully{
-    WalkthroughViewController *viewController = [[WalkthroughViewController alloc]init];
-    viewController.delegate = self;
-    self.viewControllers = @[viewController];
+    [self dismissModalViewControllerAnimated:NO];
 }
 #pragma mark - Public API
 -(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated{
@@ -144,6 +142,12 @@ static RootViewController *sharedObject;
     [self setupAppearance];
     [self.sideMenu hide];
     
+    
+}
+-(void)walkthrough{
+    WalkthroughViewController *viewController = [[WalkthroughViewController alloc]init];
+    viewController.delegate = self;
+    [self presentModalViewController:viewController animated:NO];
     
 }
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{

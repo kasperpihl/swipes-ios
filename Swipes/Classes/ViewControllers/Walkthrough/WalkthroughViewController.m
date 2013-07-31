@@ -543,6 +543,7 @@ typedef enum {
         cell.activatedDirection = MCSwipeTableViewCellDirectionRight;
         cell.bounceAmplitude = 0;
         cell.delegate = self;
+        cell.shouldRegret = NO;
     }
 	return cell;
 }
@@ -567,7 +568,7 @@ typedef enum {
     [self.view addSubview:self.swipesLogo];
     
     self.titleView = [[WalkthroughTitleView alloc] initWithFrame:CGRectMake(0, TITLE_Y, self.view.bounds.size.width, 0)];
-    [self.titleView setTitle:@"Welcome to Swipes" subtitle:@"With these 3 menus, you always keep your tasks perfectly organized."];
+    [self.titleView setTitle:@"Welcome to Swipes" subtitle:@"With these 3 areas, you always keep your tasks perfectly organized."];
     
     [self.view addSubview:self.titleView];
     

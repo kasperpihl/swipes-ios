@@ -20,21 +20,24 @@
 @interface CKDateItem : NSObject
 
 @property (nonatomic, strong) UIColor *backgroundColor;
-@property (nonatomic, strong) UIColor *selectedBackgroundColor;
 @property (nonatomic, strong) UIColor *textColor;
 @property (nonatomic, strong) UIColor *selectedTextColor;
+@property (nonatomic, strong) UIColor *highlightedTextColor;
+@property (nonatomic, strong) UIFont *titleFont;
 
 @end
 
+typedef struct
+{
+    int     hours;
+    int     minutes;
+} TimeRef;
 typedef enum {
     startSunday = 1,
     startMonday = 2,
 } CKCalendarStartDay;
 
 @interface CKCalendarView : UIView
-
-- (id)initWithStartDay:(CKCalendarStartDay)firstDay;
-- (id)initWithStartDay:(CKCalendarStartDay)firstDay frame:(CGRect)frame;
 
 @property (nonatomic) CKCalendarStartDay calendarStartDay;
 @property (nonatomic, strong) NSLocale *locale;
@@ -67,7 +70,8 @@ typedef enum {
 @protocol CKCalendarDelegate <NSObject>
 
 @optional
-- (void)calendar:(CKCalendarView *)calendar configureDateItem:(CKDateItem *)dateItem forDate:(NSDate *)date;
+- (void)calendar:(CKCalendarView *)calendar pressedTitleButton:(UIButton*)sender;
+- (void)calendar:(CKCalendarView *)calendar updateTimeForDate:(NSDate**)date;
 - (BOOL)calendar:(CKCalendarView *)calendar willSelectDate:(NSDate *)date;
 - (void)calendar:(CKCalendarView *)calendar didSelectDate:(NSDate *)date;
 - (BOOL)calendar:(CKCalendarView *)calendar willDeselectDate:(NSDate *)date;

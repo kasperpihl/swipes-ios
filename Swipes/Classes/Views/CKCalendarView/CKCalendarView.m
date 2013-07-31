@@ -23,9 +23,9 @@
 #import "UtilityClass.h"
 
 #define BUTTON_MARGIN 4
-#define TOP_HEIGHT 44
-#define DAYS_HEADER_HEIGHT 22
-#define DEFAULT_CELL_WIDTH 43
+#define TOP_HEIGHT 60
+#define DAYS_HEADER_HEIGHT 30
+#define DEFAULT_CELL_WIDTH 45
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -50,10 +50,7 @@
     if(date != nil){
         NSDateComponents *comps = [self.calendar components:NSDayCalendarUnit|NSMonthCalendarUnit fromDate:date];
         [self setTitle:[NSString stringWithFormat:@"%d", comps.day] forState:UIControlStateNormal];
-        if([date isTypicallyWeekend]){
-            [self.titleLabel setFont:KP_BOLD(20)];
-        }
-        else [self.titleLabel setFont:KP_REGULAR(20)];
+        
     }
 }
 @end
@@ -64,8 +61,7 @@
     self = [super init];
     if (self) {
         self.backgroundColor = gray(255,1);
-        self.selectedBackgroundColor = tcolor(LaterColor);
-        self.textColor = color(120,124,129,1);
+        self.textColor = color(106,117,131,1);
         self.selectedTextColor = gray(255,1);
     }
     return self;
@@ -76,6 +72,7 @@
 @interface CKCalendarView ()
 
 @property(nonatomic, strong) UIView *highlight;
+@property (nonatomic,strong) UIButton *titleButton;
 @property(nonatomic, strong) UILabel *titleLabel;
 @property(nonatomic, strong) UIButton *prevButton;
 @property(nonatomic, strong) UIButton *nextButton;
@@ -96,13 +93,6 @@
 
 @dynamic locale;
 
-- (id)init {
-    return [self initWithStartDay:startSunday];
-}
-
-- (id)initWithStartDay:(CKCalendarStartDay)firstDay {
-    return [self initWithStartDay:firstDay frame:CGRectMake(0, 0, 320, 320)];
-}
 - (BOOL) isTypicallyWeekend:(NSDate*)date
 {
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:date];
@@ -111,8 +101,13 @@
         return YES;
     return NO;
 }
-- (void)_init:(CKCalendarStartDay)firstDay {
+-(void)setFormatForDate:(NSDate*)date{
+    if([date isSameYearAsDate:[NSDate date]]) self.dateFormatter.dateFormat = @"d LLL";
+    else self.dateFormatter.dateFormat = @"d LLL  '´'yy";
     
+}
+- (void)_init {
+    CKCalendarStartDay firstDay;
     self.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     firstDay = [[NSCalendar currentCalendar] firstWeekday];
     [self.calendar setLocale:[NSLocale currentLocale]];
@@ -121,8 +116,7 @@
 
     self.dateFormatter = [[NSDateFormatter alloc] init];
     [self.dateFormatter setTimeStyle:NSDateFormatterNoStyle];
-    self.dateFormatter.dateFormat = @"LLLL yyyy";
-
+    
     self.calendarStartDay = firstDay;
     self.onlyShowCurrentMonth = YES;
     self.adaptHeightToNumberOfWeeksInMonth = YES;
@@ -134,6 +128,12 @@
     titleLabel.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
     [self addSubview:titleLabel];
     self.titleLabel = titleLabel;
+    
+    UIButton *titleButton = [[UIButton alloc] initWithFrame:CGRectZero];
+    titleButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
+    [titleButton addTarget:self action:@selector(pressedTitleButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:titleButton];
+    self.titleButton = titleButton;
 
     UIButton *prevButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [prevButton setImage:[UIImage imageNamed:@"left_arrow.png"] forState:UIControlStateNormal];
@@ -179,8 +179,7 @@
         dateButton.calendar = self.calendar;
         dateButton.layer.masksToBounds = YES;
         [dateButton addTarget:self action:@selector(_dateButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [dateButton setBackgroundImage:[UtilityClass imageWithColor:tcolor(LaterColor)] forState:UIControlStateHighlighted];
-        [dateButton setTitleColor:gray(255, 1) forState:UIControlStateHighlighted];
+        [dateButton setBackgroundImage:[UIImage imageNamed:@"selected_circle"] forState:UIControlStateSelected];
         [dateButtons addObject:dateButton];
     }
     self.dateButtons = dateButtons;
@@ -191,25 +190,16 @@
     
     [self layoutSubviews]; // TODO: this is a hack to get the first month to show properly
 }
-
-- (id)initWithStartDay:(CKCalendarStartDay)firstDay frame:(CGRect)frame {
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self _init:firstDay];
+        [self _init];
     }
     return self;
 }
-
-- (id)initWithFrame:(CGRect)frame {
-    return [self initWithStartDay:startSunday frame:frame];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self _init:startSunday];
-    }
-    return self;
+-(void)pressedTitleButton:(UIButton*)sender{
+    if([self.delegate respondsToSelector:@selector(calendar:pressedTitleButton:)]) [self.delegate calendar:self pressedTitleButton:sender];
+    NSLog(@"pressedTitle");
 }
 
 - (void)layoutSubviews {
@@ -228,11 +218,13 @@
     newFrame.size.height = containerHeight + TOP_HEIGHT;
     self.frame = newFrame;
 
+    [self setFormatForDate:self.selectedDate];
+    NSString *monthYearString = [[self.dateFormatter stringFromDate:self.selectedDate] uppercaseString];
+    self.titleLabel.text = [NSString stringWithFormat:@"%@  |  %@",monthYearString, [UtilityClass timeStringForDate:self.selectedDate]];
+    self.titleLabel.frame = self.titleButton.frame = CGRectMake(0, 0, self.bounds.size.width, TOP_HEIGHT);
 
-    self.titleLabel.text = [[self.dateFormatter stringFromDate:_monthShowing] uppercaseString];
-    self.titleLabel.frame = CGRectMake(0, 0, self.bounds.size.width, TOP_HEIGHT);
-    self.prevButton.frame = CGRectMake(BUTTON_MARGIN, BUTTON_MARGIN, 48, 38);
-    self.nextButton.frame = CGRectMake(self.bounds.size.width - 48 - BUTTON_MARGIN, BUTTON_MARGIN, 48, 38);
+    self.prevButton.frame = CGRectMake(0,0 , TOP_HEIGHT, TOP_HEIGHT);
+    self.nextButton.frame = CGRectMake(self.bounds.size.width - TOP_HEIGHT, 0, TOP_HEIGHT, TOP_HEIGHT);
 
     self.calendarContainer.frame = CGRectMake(0, CGRectGetMaxY(self.titleLabel.frame), self.bounds.size.width, containerHeight);
     
@@ -267,45 +259,61 @@
     NSUInteger dateButtonPosition = 0;
     while ([date laterDate:endDate] != date) {
         DateButton *dateButton = [self.dateButtons objectAtIndex:dateButtonPosition];
-
         dateButton.date = date;
-        CKDateItem *item = [[CKDateItem alloc] init];
-        dateButton.enabled = YES;
-        if ([self _dateIsToday:dateButton.date]) {
-            
-        } else if (!self.onlyShowCurrentMonth && [self _compareByMonth:date toDate:self.monthShowing] != NSOrderedSame) {
-            dateButton.enabled = NO;
-            item.backgroundColor = gray(224,1);
-            item.textColor = gray(168,1);
-        }
-        else if([date isEarlierThanDate:[[NSDate date] dateAtStartOfDay]]){
-            item.textColor = gray(200, 1);
-        }
-
-        if (self.delegate && [self.delegate respondsToSelector:@selector(calendar:configureDateItem:forDate:)]) {
-            [self.delegate calendar:self configureDateItem:item forDate:date];
-        }
-
-        if (self.selectedDate && [self date:self.selectedDate isSameDayAsDate:date]) {
-            [dateButton setTitleColor:item.selectedTextColor forState:UIControlStateNormal];
-            dateButton.backgroundColor = item.selectedBackgroundColor;
-        } else {
-            [dateButton setTitleColor:item.textColor forState:UIControlStateNormal];
-            dateButton.backgroundColor = item.backgroundColor;
-        }
-
+        dateButton = [self layoutButton:dateButton];
+        
         dateButton.frame = [self _calculateDayCellFrame:date];
         [self.calendarContainer addSubview:dateButton];
-
+        
         date = [self _nextDay:date];
         dateButtonPosition++;
     }
-    
+    BOOL isEarliestMonth = [self.selectedDate isSameMonthAsDate:[NSDate date]];
+    self.prevButton.enabled = !isEarliestMonth;
     if ([self.delegate respondsToSelector:@selector(calendar:didLayoutInRect:)]) {
         [self.delegate calendar:self didLayoutInRect:self.frame];
     }
 }
-
+-(DateButton*)layoutButton:(DateButton*)button{
+    CKDateItem *item = [[CKDateItem alloc] init];
+    NSDate *date = button.date;
+    button.enabled = YES;
+    button.selected = NO;
+    UIImage *highlightedImage = [UIImage imageNamed:@"selected_circle"];
+    item.titleFont = KP_REGULAR(20);
+    if([date isTypicallyWeekend]) item.titleFont = KP_BOLD(20);
+    item.highlightedTextColor = gray(255, 1);
+    
+    
+    /* Days out of the current month */
+    if (!self.onlyShowCurrentMonth && [self _compareByMonth:date toDate:self.monthShowing] != NSOrderedSame) {
+        item.backgroundColor = color(189,194,201,1);
+        item.textColor = color(160,169,179,1);
+        
+        //highlightedImage = [UIImage imageNamed:nil];
+    }
+    /* Days earlier than current */
+    else if([date isEarlierThanDate:[[NSDate date] dateAtStartOfDay]]){
+        item.backgroundColor = [UIColor whiteColor];// color(189,194,201,1);
+        item.textColor = item.highlightedTextColor = color(189,194,201,1); //color(160,169,179,1);
+        item.titleFont = KP_LIGHT(20);
+        highlightedImage = [UIImage imageNamed:nil];
+        //item.textColor = gray(200, 1);
+    }
+    
+    /* If the day is the selected day */
+    if (self.selectedDate && [self date:self.selectedDate isSameDayAsDate:date]) {
+        item.textColor = item.selectedTextColor;
+        button.selected = YES;
+    }
+    [button setTitleColor:item.textColor forState:UIControlStateNormal];
+    [button setBackgroundImage:highlightedImage forState:UIControlStateSelected | UIControlStateHighlighted];
+    [button setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
+    [button setTitleColor:item.highlightedTextColor forState:UIControlStateHighlighted];
+    [button.titleLabel setFont:item.titleFont];
+    button.backgroundColor = item.backgroundColor;
+    return button;
+}
 - (void)_updateDayOfWeekLabels {
     NSArray *weekdays = [self.dateFormatter shortWeekdaySymbols];
     // adjust array depending on which weekday should be first
@@ -364,15 +372,20 @@
     _adaptHeightToNumberOfWeeksInMonth = adaptHeightToNumberOfWeeksInMonth;
     [self setNeedsLayout];
 }
-
+-(void)updateTimeForDate:(NSDate**)date{
+    
+}
 - (void)selectDate:(NSDate *)date makeVisible:(BOOL)visible {
     NSMutableArray *datesToReload = [NSMutableArray array];
+    if([date isEarlierThanDate:[NSDate date]]) date = [NSDate date];
     if (self.selectedDate) {
         [datesToReload addObject:self.selectedDate];
     }
     if (date) {
         [datesToReload addObject:date];
     }
+    if([self.delegate respondsToSelector:@selector(calendar:updateTimeForDate:)])
+        [self.delegate calendar:self updateTimeForDate:&date];
     self.selectedDate = date;
     [self reloadDates:datesToReload];
     if (visible && date) {
@@ -394,7 +407,7 @@
     self.backgroundColor = UIColorFromRGB(0x393B40);
 
     [self setTitleColor:[UIColor whiteColor]];
-    [self setTitleFont:KP_BOLD(15)];
+    [self setTitleFont:KP_BOLD(18)];
 
     [self setDayOfWeekFont:KP_LIGHT(13)];
     [self setDayOfWeekTextColor:UIColorFromRGB(0x999999)];
@@ -417,6 +430,7 @@
     if ([self.delegate respondsToSelector:@selector(calendar:willChangeToMonth:)] && ![self.delegate calendar:self willChangeToMonth:newMonth]) {
         return;
     } else {
+        [self selectDate:[self.calendar dateByAddingComponents:comps toDate:self.selectedDate options:0] makeVisible:YES];
         self.monthShowing = newMonth;
         if ([self.delegate respondsToSelector:@selector(calendar:didChangeToMonth:)] ) {
             [self.delegate calendar:self didChangeToMonth:self.monthShowing];
@@ -428,16 +442,18 @@
     NSDateComponents* comps = [[NSDateComponents alloc] init];
     [comps setMonth:-1];
     NSDate *newMonth = [self.calendar dateByAddingComponents:comps toDate:self.monthShowing options:0];
+    if([newMonth isEarlierThanDate:[NSDate date]] && ![newMonth isSameMonthAsDate:[NSDate date]]) return;
     if ([self.delegate respondsToSelector:@selector(calendar:willChangeToMonth:)] && ![self.delegate calendar:self willChangeToMonth:newMonth]) {
         return;
     } else {
         self.monthShowing = newMonth;
+        NSDate *selectionDate = [self.calendar dateByAddingComponents:comps toDate:self.selectedDate options:0];
+        [self selectDate:selectionDate makeVisible:YES];
         if ([self.delegate respondsToSelector:@selector(calendar:didChangeToMonth:)] ) {
             [self.delegate calendar:self didChangeToMonth:self.monthShowing];
         }
     }
 }
-
 - (void)_dateButtonPressed:(id)sender {
     DateButton *dateButton = sender;
     NSDate *date = dateButton.date;
@@ -448,7 +464,7 @@
     }
 
     [self selectDate:date makeVisible:YES];
-    [self.delegate calendar:self didSelectDate:date];
+    if([self.delegate respondsToSelector:@selector(calendar:didSelectDate:)]) [self.delegate calendar:self didSelectDate:date];
     [self setNeedsLayout];
 }
 

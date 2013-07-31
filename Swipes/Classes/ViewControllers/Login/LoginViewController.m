@@ -31,7 +31,11 @@
 #define FIELDS_WIDTH            260
 #define SIGNUP_BUTTONS_HEIGHT   50
 
-@interface LoginViewController () < PFSignUpViewControllerDelegate,WalkthroughDelegate>
+#define kDefTextColor gray(128,1)
+#define kDefBackColor gray(204,1)
+#define kDefButtonFont KP_BOLD(23)
+
+@interface LoginViewController () < PFSignUpViewControllerDelegate>
 @property (nonatomic,strong) IBOutlet UIView *fieldsBackground;
 @property (nonatomic,weak) IBOutlet UIActivityIndicatorView *signupIndicator;
 @property (nonatomic,weak) IBOutlet UIButton *privacyPolicyButton;
@@ -41,7 +45,9 @@
 -(id)init{
     self = [super init];
     if(self){
+        
         SignupViewController *signupVC = [[SignupViewController alloc] init];
+
         signupVC.delegate = self;
         self.signUpController = signupVC;
         self.fields = (PFLogInFieldsUsernameAndPassword | PFLogInFieldsFacebook | PFLogInFieldsLogInButton | PFLogInFieldsSignUpButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsDismissButton);
@@ -51,31 +57,24 @@
         [self.logInView.dismissButton setImage:nil forState:UIControlStateHighlighted];
         self.logInView.dismissButton.adjustsImageWhenHighlighted = true;
         self.logInView.dismissButton.hidden = YES;
-        [self.logInView setBackgroundColor:tbackground(LoginBackground)];
+        [self.logInView setBackgroundColor:kDefBackColor];
+
         
-        /*UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_background"]];
-        backgroundImageView.contentMode = UIViewContentModeScaleToFill;
-        backgroundImageView.autoresizesSubviews = (UIViewAutoresizingFlexibleHeight);
-        CGRectSetHeight(backgroundImageView, self.logInView.frame.size.height);
-        [self.logInView insertSubview:backgroundImageView atIndex:0];*/
-        
-        [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_logo.png"]]];
-        
+        [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wt_swipes_logo"]]];
+        self.logInView.logo.alpha = 0.5;
         // Add login field background
         self.fieldsBackground = [[UIView alloc] initWithFrame:CGRectMake((self.logInView.frame.size.width-LOGIN_FIELDS_WIDTH)/2, 0, LOGIN_FIELDS_WIDTH, LOGIN_FIELDS_HEIGHT)];
-        self.fieldsBackground.backgroundColor = LOGIN_FIELDS_BACKGROUND;
-        self.fieldsBackground.layer.cornerRadius = LOGIN_FIELDS_CORNER_RADIUS;
         UIView *fieldsSeperator = [[UIView alloc] initWithFrame:CGRectMake((LOGIN_FIELDS_WIDTH-LOGIN_FIELDS_SEPERATOR_WIDTH)/2, (LOGIN_FIELDS_HEIGHT-SEPERATOR_WIDTH)/2, LOGIN_FIELDS_SEPERATOR_WIDTH, SEPERATOR_WIDTH)];
-        fieldsSeperator.backgroundColor = LOGIN_FIELDS_SEPERATOR_COLOR;
+        fieldsSeperator.backgroundColor = kDefTextColor;
         [self.fieldsBackground addSubview:fieldsSeperator];
         [self.logInView insertSubview:self.fieldsBackground atIndex:1];
         
-        self.logInView.usernameField.font = LOGIN_FIELDS_FONT;
-        self.logInView.passwordField.font = LOGIN_FIELDS_FONT;
+        self.logInView.usernameField.font = KP_SEMIBOLD(15);
+        self.logInView.passwordField.font = KP_SEMIBOLD(15);
         self.logInView.usernameField.placeholder = @"email";
         self.logInView.passwordField.placeholder = @"password";
-        self.logInView.usernameField.textColor = LOGIN_FIELDS_TEXT_COLOR;
-        self.logInView.passwordField.textColor = LOGIN_FIELDS_TEXT_COLOR;
+        self.logInView.usernameField.textColor = kDefTextColor;
+        self.logInView.passwordField.textColor = kDefTextColor;
         self.logInView.usernameField.returnKeyType = UIReturnKeyNext;
         CALayer *layer = self.logInView.usernameField.layer;
         layer.shadowOpacity = 0.0;
@@ -199,14 +198,6 @@
         }
     }];
 }
--(void)walkthrough:(WalkthroughViewController *)walkthrough didFinishSuccesfully:(BOOL)successfully{
-    [self dismissModalViewControllerAnimated:YES];
-}
--(void)walkthrough{
-    WalkthroughViewController *viewController = [[WalkthroughViewController alloc]init];
-    viewController.delegate = self;
-    [self presentModalViewController:viewController animated:NO];
-}
 #pragma mark - PFSignUpViewControllerDelegate
 // Sent to the delegate to determine whether the sign up request should be submitted to the server.
 - (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info {
@@ -318,7 +309,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self walkthrough];
+    //[self walkthrough];
 }
 - (void)didReceiveMemoryWarning
 {

@@ -22,21 +22,22 @@
     NSLog(@"initialized");
 	// Do any additional setup after loading the view.
     UIButton *logOutButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [logOutButton setTitle:@"Logout for now and stop whining" forState:UIControlStateNormal];
+    [logOutButton setTitle:@"Logout" forState:UIControlStateNormal];
     logOutButton.frame = CGRectMake(0, self.view.frame.size.height-44, 300, 44);
     [logOutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.view addSubview:logOutButton];
     
     UIButton *tutorialButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [tutorialButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [tutorialButton setTitle:@"Tutorial for now and like the page asshole" forState:UIControlStateNormal];
+    [tutorialButton setTitle:@"Walkthrough" forState:UIControlStateNormal];
     [tutorialButton addTarget:self action:@selector(pressedTut) forControlEvents:UIControlEventTouchUpInside];
     tutorialButton.frame = CGRectMake(0, 10, 300, 44);
     [self.view addSubview:tutorialButton];
 }
 -(void)pressedTut{
-    [THEMER changeTheme];
-    [ROOT_CONTROLLER resetRoot];
+    [ROOT_CONTROLLER walkthrough];
+    //[THEMER changeTheme];
+    //[ROOT_CONTROLLER resetRoot];
 }
 - (void)didReceiveMemoryWarning
 {

@@ -12,7 +12,8 @@
 #import "NSDate-Utilities.h"
 #import "KPBlurry.h"
 #import "CKCalendarView.h"
-#define POPUP_WIDTH 309
+#import "KPToolbar.h"
+#define POPUP_WIDTH 315
 #define CONTENT_VIEW_TAG 1
 #define TIME_VIEWER_TAG 8
 #define TIME_VIEWER_LABEL_TAG 9
@@ -34,8 +35,9 @@
 
 #define GRID_NUMBER 3
 #define BUTTON_PADDING 0
-#define CONTENT_VIEW_SIZE 309
+#define CONTENT_VIEW_SIZE 315
 
+#define kToolbarHeight 60
 
 #define kSepExtraOut 5
 typedef enum {
@@ -44,13 +46,8 @@ typedef enum {
     CustomPickerTypeMinute,
     CustomPickerTypeAMPM
 } CustomPickerTypes;
-typedef struct
-{
-    int     hours;
-    int     minutes;
-} TimeRef;
 
-@interface SchedulePopup () <KPBlurryDelegate>
+@interface SchedulePopup () <KPBlurryDelegate,CKCalendarDelegate>
 @property (nonatomic,copy) SchedulePopupBlock block;
 @property (nonatomic,weak) IBOutlet UIView *contentView;
 @property (nonatomic) BOOL isPickingDate;
@@ -59,6 +56,7 @@ typedef struct
 @property (nonatomic) IBOutletCollection(UIView) NSArray *seperators;
 @property (nonatomic) IBOutletCollection(UIButton) NSMutableArray *scheduleButtons;
 @property (nonatomic,strong) CKCalendarView *calendarView;
+@property (nonatomic,strong) KPToolbar *toolbar;
 
 
 @property (nonatomic, weak) IBOutlet UIView *timeViewer;
@@ -148,28 +146,58 @@ typedef struct
 }
 -(void)pressedSpecific:(id)sender{
     if(!self.isPickingDate){
-        self.calendarView.transform = CGAffineTransformMakeScale(0.2, 0.2);
+        CGFloat contentHeight = self.calendarView.frame.size.height + kToolbarHeight;
+        CGFloat scaling = contentHeight/POPUP_WIDTH;
         self.calendarView.hidden = NO;
-        self.calendarView.alpha = 0;
-        [UIView animateWithDuration:1.0f animations:^{
+        self.calendarView.alpha = 1.f;
+        UIImage *screenShotOfCalendar = [UtilityClass screenshotOfView:self.calendarView];
+        self.calendarView.hidden = YES;
+        
+        UIImageView *calendarImageView = [[UIImageView alloc] initWithImage:screenShotOfCalendar];
+        
+        
+        calendarImageView.center = self.calendarView.center;
+        //calendarImageView.transform = CGAffineTransformMakeScale(0.2, 0.2);
+        calendarImageView.alpha = 0;
+        [self.contentView addSubview:calendarImageView];
+        
+        self.toolbar.alpha = 0;
+        self.toolbar.hidden = NO;
+        CGFloat duration = 0.2f;
+        [UIView animateWithDuration:duration animations:^{
+            
+            self.contentView.transform = CGAffineTransformMakeScale(1.0, scaling);
+            //
+            //calendarImageView.center = targetCenter;
             for (UIButton *button in self.scheduleButtons) {
-                if(button.tag - SCHEDULE_BUTTON_START_TAG == 5) button.hidden = YES;
-                button.frame = [self positionForButton:button];
+                //if(button.tag - SCHEDULE_BUTTON_START_TAG == 5) button.hidden = YES;
+                //button.frame = [self positionForButton:button];
+                button.alpha = 0;
             }
-            NSInteger counter = 0;
+            //NSInteger counter = 0;
             for(UIView *seperator in self.seperators){
-               
-                NSInteger targetCoordinate;
+                seperator.alpha = 0;
+                /*NSInteger targetCoordinate;
                 if(counter < 2) targetCoordinate = -SEPERATOR_WIDTH - kSepExtraOut;
-                else targetCoordinate = POPUP_WIDTH + SEPERATOR_WIDTH + kSepExtraOut;
+                else targetCoordinate = contentHeight + SEPERATOR_WIDTH + kSepExtraOut;
                 counter++;
                 if (counter % 2) CGRectSetX(seperator, targetCoordinate);
-                else CGRectSetY(seperator, targetCoordinate);
+                else CGRectSetY(seperator, targetCoordinate);*/
             }
-            self.calendarView.transform = CGAffineTransformIdentity;
-            self.calendarView.alpha = 1;
+            //calendarImageView.transform = CGAffineTransformIdentity;
         } completion:^(BOOL finished) {
+            self.contentView.transform = CGAffineTransformIdentity;
+            CGRectSetHeight(self.contentView, contentHeight);
+            self.contentView.center = self.center;
+            [UIView animateWithDuration:duration animations:^{
+                calendarImageView.alpha = 1;
+                self.toolbar.alpha = 1;
+            } completion:^(BOOL finished) {
+                self.calendarView.hidden = NO;
+                [calendarImageView removeFromSuperview];
+            }];
             
+            //self.toolbar.alpha = 1;
         }];
         
     }
@@ -250,14 +278,28 @@ typedef struct
     }
     return self;
 }
+-(void)calendar:(CKCalendarView *)calendar updateTimeForDate:(NSDate *__autoreleasing *)date{
+    TimeRef timeRef = [self startingTimeForDate:*date];
+    *date = [*date dateAtHours:timeRef.hours minutes:timeRef.minutes];
+}
 -(void)addPickerView{
-    self.calendarView = [[CKCalendarView alloc] initWithFrame:CGRectMake(0, 0, 309, 309)];
+    self.calendarView = [[CKCalendarView alloc] initWithFrame:CGRectMake(0, 0, 315, 315)];
     self.calendarView.onlyShowCurrentMonth = NO;
     self.calendarView.hidden = YES;
+    self.calendarView.delegate = self;
     self.calendarView.backgroundColor = CLEAR;
+    [self.calendarView selectDate:[NSDate date] makeVisible:YES];
     self.calendarView.titleColor = [UIColor whiteColor];
     self.calendarView.dayOfWeekTextColor = [UIColor whiteColor];
     self.calendarView.adaptHeightToNumberOfWeeksInMonth = YES;
+    
+    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-kToolbarHeight, self.contentView.frame.size.width, kToolbarHeight) items:@[@"toolbar_back_icon",@"toolbar_check_icon"]];
+    self.toolbar.hidden = YES;
+    self.toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    self.toolbar.backgroundColor = CLEAR;
+    //self.toolbar.delegate = self;
+    
+    [self.contentView addSubview:self.toolbar];
     [self.contentView addSubview:self.calendarView];
 }
 -(void)highlightedButton:(UIButton *)sender{
@@ -289,11 +331,9 @@ typedef struct
     CGFloat textHeight = [@"Kasjper" sizeWithFont:SCHEDULE_BUTTON_FONT].height;
     NSInteger dividor = (SCHEDULE_IMAGE_CENTER_SPACING == 0) ? 3 : 2;
     CGFloat spacing = (button.frame.size.height-imageHeight-textHeight-SCHEDULE_IMAGE_CENTER_SPACING)/dividor;
+    
     [button addTarget:self action:@selector(highlightedButton:) forControlEvents:UIControlEventTouchDown];
-    [button addTarget:self action:@selector(highlightedButton:) forControlEvents:UIControlEventTouchDragInside];
-    [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchUpInside];
-    [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchCancel];
-    [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchDragOutside];
+    [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchUpOutside];
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     [button addGestureRecognizer:panGestureRecognizer];
     iconImageView.frame = CGRectSetPos(iconImageView.frame, (button.frame.size.width-iconImage.size.width)/2,spacing);

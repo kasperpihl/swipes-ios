@@ -24,4 +24,5 @@ typedef enum {
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
 @property (nonatomic) BOOL lockSettings;
 -(void)resetRoot;
+-(void)walkthrough;
 @end

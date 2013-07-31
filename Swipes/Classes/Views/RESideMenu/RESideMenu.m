@@ -201,7 +201,7 @@ const int INTERSTITIAL_STEPS = 99;
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     // Take a snapshot
     //
-    UIGraphicsBeginImageContext(ROOT_CONTROLLER.view.bounds.size);
+    UIGraphicsBeginImageContextWithOptions(ROOT_CONTROLLER.view.bounds.size, YES, 0.0f);
     CGContextRef context = UIGraphicsGetCurrentContext();
     [ROOT_CONTROLLER.view.layer renderInContext:context];
     UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();

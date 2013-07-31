@@ -157,23 +157,25 @@ secondStateIconName:(NSString *)secondIconName
     CGFloat percentage = [self percentageWithOffset:CGRectGetMinX(self.contentView.frame) relativeToWidth:CGRectGetWidth(self.bounds)];
     
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
-    if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionLeft && percentage < 0) percentage = 0;
-    else if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionRight && percentage > 0) percentage = 0;
+    if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionLeft && percentage > 0) percentage = 0;
+    else if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionRight && percentage < 0) percentage = 0;
     if(state == UIGestureRecognizerStateEnded) NSLog(@"perc:%f dir:%i",percentage,_direction);
     _direction = [self directionWithPercentage:percentage];
     
     self.readPercentage = percentage;
     if (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStateChanged) {
-        switch (_direction) {
-            case MCSwipeTableViewCellDirectionLeft:
-                if(velocity.x > REGRET_VELOCITY) self.didRegret = YES;
-                else if(velocity.x < -REGRET_VELOCITY) self.didRegret = NO;
-                break;
-            case MCSwipeTableViewCellDirectionRight:
-                if(velocity.x < -REGRET_VELOCITY) self.didRegret = YES;
-                else if(velocity.x > REGRET_VELOCITY) self.didRegret = NO;
-            default:
-                break;
+        if(self.shouldRegret){
+            switch (_direction) {
+                case MCSwipeTableViewCellDirectionLeft:
+                    if(velocity.x > REGRET_VELOCITY) self.didRegret = YES;
+                    else if(velocity.x < -REGRET_VELOCITY) self.didRegret = NO;
+                    break;
+                case MCSwipeTableViewCellDirectionRight:
+                    if(velocity.x < -REGRET_VELOCITY) self.didRegret = YES;
+                    else if(velocity.x > REGRET_VELOCITY) self.didRegret = NO;
+                default:
+                    break;
+            }
         }
         CGPoint center = CGPointMake(self.contentView.center.x + translation.x, self.contentView.center.y);
         if(!(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionBoth || self.activatedDirection == MCSwipeTableViewCellActivatedDirectionLeft)){
