@@ -41,7 +41,7 @@ typedef enum {
 
 @property (nonatomic) CKCalendarStartDay calendarStartDay;
 @property (nonatomic, strong) NSLocale *locale;
-
+@property (nonatomic, readonly) NSDate *selectedDate;
 @property (nonatomic, readonly) NSArray *datesShowing;
 
 @property (nonatomic) BOOL onlyShowCurrentMonth;
@@ -72,13 +72,6 @@ typedef enum {
 @optional
 - (void)calendar:(CKCalendarView *)calendar pressedTitleButton:(UIButton*)sender;
 - (void)calendar:(CKCalendarView *)calendar updateTimeForDate:(NSDate**)date;
-- (BOOL)calendar:(CKCalendarView *)calendar willSelectDate:(NSDate *)date;
-- (void)calendar:(CKCalendarView *)calendar didSelectDate:(NSDate *)date;
-- (BOOL)calendar:(CKCalendarView *)calendar willDeselectDate:(NSDate *)date;
-- (void)calendar:(CKCalendarView *)calendar didDeselectDate:(NSDate *)date;
-
-- (BOOL)calendar:(CKCalendarView *)calendar willChangeToMonth:(NSDate *)date;
-- (void)calendar:(CKCalendarView *)calendar didChangeToMonth:(NSDate *)date;
 
 - (void)calendar:(CKCalendarView *)calendar didLayoutInRect:(CGRect)frame;
 

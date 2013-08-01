@@ -315,8 +315,6 @@ typedef enum {
                 //[self activeCell].helpingImage.alpha = 1;
                 self.titleView.alpha = 1;
                 self.actionButton.alpha = 1;
-                
-                
             };
             break;
         }
@@ -413,7 +411,6 @@ typedef enum {
         case PushDownGreenBackground:{
             block = ^{
                 self.shadowBackground.frame = CGRectMake(0, self.greenBackground.frame.size.height-kShadowBackExtraHeight+kShadowBounce, self.shadowBackground.frame.size.width, kShadowBackExtraHeight);
-                
             };
             break;
         }

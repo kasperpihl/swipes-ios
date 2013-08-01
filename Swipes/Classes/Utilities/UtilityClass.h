@@ -24,7 +24,7 @@
 UIImage* rotate(UIImage* src, NSInteger degrees);
 + (BOOL) validateEmail: (NSString *) candidate;
 + (UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color;
-+ (UIImage *)image:(UIImage *)image withColor:(UIColor *)color;
++ (UIImage *)image:(UIImage *)image withColor:(UIColor *)color multiply:(BOOL)multiply;
 + (UIImage *)imageWithName:(NSString *)imageName scaledToSize:(CGSize)newSize;
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize;
 +(UIImage*)screenshotOfView:(UIView*)view;

@@ -23,8 +23,9 @@
 #import "UtilityClass.h"
 
 #define BUTTON_MARGIN 4
-#define TOP_HEIGHT 60
-#define DAYS_HEADER_HEIGHT 30
+#define TOP_HEIGHT 70
+#define MONTH_BUTTON_WIDTH 60
+#define DAYS_HEADER_HEIGHT 20
 #define DEFAULT_CELL_WIDTH 45
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
@@ -179,7 +180,7 @@
         dateButton.calendar = self.calendar;
         dateButton.layer.masksToBounds = YES;
         [dateButton addTarget:self action:@selector(_dateButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [dateButton setBackgroundImage:[UIImage imageNamed:@"selected_circle"] forState:UIControlStateSelected];
+        
         [dateButtons addObject:dateButton];
     }
     self.dateButtons = dateButtons;
@@ -221,10 +222,10 @@
     [self setFormatForDate:self.selectedDate];
     NSString *monthYearString = [[self.dateFormatter stringFromDate:self.selectedDate] uppercaseString];
     self.titleLabel.text = [NSString stringWithFormat:@"%@  |  %@",monthYearString, [UtilityClass timeStringForDate:self.selectedDate]];
-    self.titleLabel.frame = self.titleButton.frame = CGRectMake(0, 0, self.bounds.size.width, TOP_HEIGHT);
-
-    self.prevButton.frame = CGRectMake(0,0 , TOP_HEIGHT, TOP_HEIGHT);
-    self.nextButton.frame = CGRectMake(self.bounds.size.width - TOP_HEIGHT, 0, TOP_HEIGHT, TOP_HEIGHT);
+    self.titleButton.frame = CGRectMake(0, 0, self.bounds.size.width, TOP_HEIGHT);
+    self.titleLabel.frame = CGRectMake(0, 0, self.bounds.size.width, TOP_HEIGHT);
+    self.prevButton.frame = CGRectMake(0,0 , MONTH_BUTTON_WIDTH, TOP_HEIGHT);
+    self.nextButton.frame = CGRectMake(self.bounds.size.width - MONTH_BUTTON_WIDTH, 0, MONTH_BUTTON_WIDTH, TOP_HEIGHT);
 
     self.calendarContainer.frame = CGRectMake(0, CGRectGetMaxY(self.titleLabel.frame), self.bounds.size.width, containerHeight);
     
@@ -233,7 +234,8 @@
 
     CGRect lastDayFrame = CGRectZero;
     for (UILabel *dayLabel in self.dayOfWeekLabels) {
-        dayLabel.frame = CGRectMake(CGRectGetMaxX(lastDayFrame), lastDayFrame.origin.y, self.cellWidth, self.daysHeader.frame.size.height);
+        CGSize size = [dayLabel.text sizeWithFont:dayLabel.font];
+        dayLabel.frame = CGRectMake(CGRectGetMaxX(lastDayFrame), lastDayFrame.origin.y, self.cellWidth, size.height);
         lastDayFrame = dayLabel.frame;
     }
 
@@ -279,7 +281,7 @@
     NSDate *date = button.date;
     button.enabled = YES;
     button.selected = NO;
-    UIImage *highlightedImage = [UIImage imageNamed:@"selected_circle"];
+    UIImage *highlightedImage = [UIImage imageNamed:@"selected_circle"];//[UtilityClass imageWithName: scaledToSize:CGSizeMake(kSelectedImageSize, kSelectedImageSize)];
     item.titleFont = KP_REGULAR(20);
     if([date isTypicallyWeekend]) item.titleFont = KP_BOLD(20);
     item.highlightedTextColor = gray(255, 1);
@@ -309,6 +311,7 @@
     [button setTitleColor:item.textColor forState:UIControlStateNormal];
     [button setBackgroundImage:highlightedImage forState:UIControlStateSelected | UIControlStateHighlighted];
     [button setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
+    [button setBackgroundImage:highlightedImage forState:UIControlStateSelected];
     [button setTitleColor:item.highlightedTextColor forState:UIControlStateHighlighted];
     [button.titleLabel setFont:item.titleFont];
     button.backgroundColor = item.backgroundColor;
@@ -409,7 +412,7 @@
     [self setTitleColor:[UIColor whiteColor]];
     [self setTitleFont:KP_BOLD(18)];
 
-    [self setDayOfWeekFont:KP_LIGHT(13)];
+    [self setDayOfWeekFont:KP_SEMIBOLD(13)];
     [self setDayOfWeekTextColor:UIColorFromRGB(0x999999)];
 
 }
@@ -427,15 +430,8 @@
     NSDateComponents* comps = [[NSDateComponents alloc] init];
     [comps setMonth:1];
     NSDate *newMonth = [self.calendar dateByAddingComponents:comps toDate:self.monthShowing options:0];
-    if ([self.delegate respondsToSelector:@selector(calendar:willChangeToMonth:)] && ![self.delegate calendar:self willChangeToMonth:newMonth]) {
-        return;
-    } else {
-        [self selectDate:[self.calendar dateByAddingComponents:comps toDate:self.selectedDate options:0] makeVisible:YES];
-        self.monthShowing = newMonth;
-        if ([self.delegate respondsToSelector:@selector(calendar:didChangeToMonth:)] ) {
-            [self.delegate calendar:self didChangeToMonth:self.monthShowing];
-        }
-    }
+    [self selectDate:[self.calendar dateByAddingComponents:comps toDate:self.selectedDate options:0] makeVisible:YES];
+    self.monthShowing = newMonth;
 }
 
 - (void)_moveCalendarToPreviousMonth {
@@ -443,28 +439,18 @@
     [comps setMonth:-1];
     NSDate *newMonth = [self.calendar dateByAddingComponents:comps toDate:self.monthShowing options:0];
     if([newMonth isEarlierThanDate:[NSDate date]] && ![newMonth isSameMonthAsDate:[NSDate date]]) return;
-    if ([self.delegate respondsToSelector:@selector(calendar:willChangeToMonth:)] && ![self.delegate calendar:self willChangeToMonth:newMonth]) {
-        return;
-    } else {
-        self.monthShowing = newMonth;
-        NSDate *selectionDate = [self.calendar dateByAddingComponents:comps toDate:self.selectedDate options:0];
-        [self selectDate:selectionDate makeVisible:YES];
-        if ([self.delegate respondsToSelector:@selector(calendar:didChangeToMonth:)] ) {
-            [self.delegate calendar:self didChangeToMonth:self.monthShowing];
-        }
-    }
+    self.monthShowing = newMonth;
+    NSDate *selectionDate = [self.calendar dateByAddingComponents:comps toDate:self.selectedDate options:0];
+    [self selectDate:selectionDate makeVisible:YES];
 }
 - (void)_dateButtonPressed:(id)sender {
     DateButton *dateButton = sender;
     NSDate *date = dateButton.date;
     if ([date isEqualToDate:self.selectedDate]) {
         return;
-    } else if ([self.delegate respondsToSelector:@selector(calendar:willSelectDate:)] && ![self.delegate calendar:self willSelectDate:date]) {
-        return;
     }
 
     [self selectDate:date makeVisible:YES];
-    if([self.delegate respondsToSelector:@selector(calendar:didSelectDate:)]) [self.delegate calendar:self didSelectDate:date];
     [self setNeedsLayout];
 }
 

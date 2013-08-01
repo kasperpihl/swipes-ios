@@ -164,6 +164,7 @@
     CGRectSetSize(button, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
     [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuBackground)] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)] forState:UIControlStateSelected];
+    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)] forState:UIControlStateHighlighted | UIControlStateSelected];
     //[button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)] forState:UIControlStateHighlighted];
     button.adjustsImageWhenHighlighted = NO;
     NSString *imageString;
@@ -188,6 +189,7 @@
     UIImage *highlightedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-highlighted"]];;
     [button setImage:normalImage forState:UIControlStateNormal];
     [button setImage:selectedImage forState:UIControlStateSelected];
+    [button setImage:selectedImage forState:UIControlStateSelected | UIControlStateHighlighted];
     [button setImage:selectedImage forState:UIControlStateHighlighted];
     button.imageView.animationImages = @[highlightedImage];
     button.imageView.animationDuration = 0.8;    

@@ -137,7 +137,7 @@ static UtilityClass *sharedObject;
     return [UIImage imageWithCGImage:flippingImage.CGImage
                                scale:[UIScreen mainScreen].scale orientation:orientation];
 }
-+(UIImage *)image:(UIImage *)image withColor:(UIColor *)color{
++(UIImage *)image:(UIImage *)image withColor:(UIColor *)color multiply:(BOOL)multiply{
     UIImage *img = image;
     // begin a new image context, to draw our colored image onto
     UIGraphicsBeginImageContextWithOptions(img.size, NO, [UIScreen mainScreen].scale);
@@ -153,7 +153,8 @@ static UtilityClass *sharedObject;
     CGContextScaleCTM(context, 1.0, -1.0);
     
     // set the blend mode to color burn, and the original image
-    CGContextSetBlendMode(context, kCGBlendModeColorBurn);
+    if(multiply) CGContextSetBlendMode(context, kCGBlendModeMultiply);
+    else CGContextSetBlendMode(context, kCGBlendModeColorBurn);
     CGRect rect = CGRectMake(0, 0, img.size.width, img.size.height);
     CGContextDrawImage(context, rect, img.CGImage);
     
@@ -206,7 +207,7 @@ static UtilityClass *sharedObject;
 }
 +(UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color{
     UIImage *img = [UIImage imageNamed:name];
-    return [UtilityClass image:img withColor:color];
+    return [UtilityClass image:img withColor:color multiply:NO];
 }
 + (UIColor *)lighterColor:(UIColor*)c
 {

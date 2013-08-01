@@ -314,6 +314,7 @@ static KPBlurry *sharedObject;
     [self.view addSubview:self.blurView];
     [self.view addSubview:self.menuView];
     if([self.menuView respondsToSelector:@selector(blurryWillShow:)]) [(UIView<KPBlurryDelegate>*)self.menuView blurryWillShow:self];
+    if([self.delegate respondsToSelector:@selector(blurryWillShow:)]) [self.delegate blurryWillShow:self];
     [self createScreenshotAndLayoutWithScreenshotCompletion:^{
         if (animated) {
             CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
@@ -327,6 +328,7 @@ static KPBlurry *sharedObject;
 }
 -(void)didShow{
     if([self.menuView respondsToSelector:@selector(blurryDidShow:)]) [(UIView<KPBlurryDelegate>*)self.menuView blurryDidShow:self];
+    if([self.delegate respondsToSelector:@selector(blurryDidShow:)]) [self.delegate blurryDidShow:self];
 }
 - (void)dismissAnimated:(BOOL)animated {
     if (self.dismissAction != nil) {
@@ -335,6 +337,7 @@ static KPBlurry *sharedObject;
     
     if (animated) {
         if([self.menuView respondsToSelector:@selector(blurryWillHide:)]) [(UIView<KPBlurryDelegate>*)self.menuView blurryWillHide:self];
+        if([self.delegate respondsToSelector:@selector(blurryWillHide:)]) [self.delegate blurryWillHide:self];
         CABasicAnimation *opacityAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
         opacityAnimation.fromValue = @1.;
         opacityAnimation.toValue = @0.;
@@ -366,6 +369,7 @@ static KPBlurry *sharedObject;
     self.blurryTopColor = KPBlurryDefaultTopBlurry;
     self.showPosition = kKPBlurryDefaultDisplayPosition;
     if([self.menuView respondsToSelector:@selector(blurryDidHide:)]) [(UIView<KPBlurryDelegate>*)self.menuView blurryDidHide:self];
+    if([self.delegate respondsToSelector:@selector(blurryDidHide:)]) [self.delegate blurryDidHide:self];
     [self.menuView removeFromSuperview];
     [self rn_removeFromParentViewControllerCallingAppearanceMethods:YES];
 }

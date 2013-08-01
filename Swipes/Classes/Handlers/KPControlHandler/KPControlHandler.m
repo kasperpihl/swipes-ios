@@ -48,7 +48,7 @@
         [view addSubview:addToolbar];
         self.addToolbar = (KPToolbar*)[view viewWithTag:ADD_TOOLBAR_TAG];
         
-        KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[@"toolbar_plus_icon",@"toolbar_tag_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
+        KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[@"toolbar_edit_icon",@"toolbar_tag_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
         editToolbar.tag = EDIT_TOOLBAR_TAG;
         editToolbar.delegate = self;
         [view addSubview:editToolbar];
@@ -68,10 +68,7 @@
                 CGRectSetY(self.addToolbar, targetY);
                 break;
             case KPControlHandlerStateEdit:
-                [self shrinkTableView:NO];
-                //CGRectSetY(self.deleteButton, targetY);
                 CGRectSetY(self.editToolbar, targetY);
-                //CGRectSetY(self.tagButton, targetY);
                 break;
         }
     };
@@ -91,12 +88,6 @@
     CGRectSetY(self.addToolbar, targetY);
     CGRectSetY(self.editToolbar, targetY);
 }
--(void)shrinkTableView:(BOOL)shrink{
-    return;
-    CGFloat shrinkHeight = shrink ? 60 : 0;
-    self.shrinkingView.contentInset = UIEdgeInsetsMake(0, 0, shrinkHeight, 0);
-    //CGRectSetHeight(self.shrinkingView, self.view.frame.size.height-heightForNavigation-shrinkHeight);
-}
 -(voidBlock)getShowBlockForState:(KPControlHandlerState)state{
     CGFloat bigButtonY = [self getYForBigSize:YES];
     CGFloat smallButtonY = [self getYForBigSize:NO];
@@ -108,10 +99,7 @@
                 CGRectSetY(self.addToolbar, smallButtonY);
                 break;
             case KPControlHandlerStateEdit:
-                [self shrinkTableView:YES];
-                //CGRectSetY(self.deleteButton, smallButtonY);
                 CGRectSetY(self.editToolbar, bigButtonY);
-                //CGRectSetY(self.tagButton, smallButtonY);
                 break;
         }
     };
@@ -159,12 +147,9 @@
         if(item == 0 && [self.delegate respondsToSelector:@selector(pressedAdd:)]) [self.delegate pressedAdd:self];
     }
     else{
-        if(item == 0 && [self.delegate respondsToSelector:@selector(pressedTag:)]){
-            [self.delegate pressedTag:self];
-        }
-        else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedDelete:)]){
-            [self.delegate pressedDelete:self];
-        }
+        if(item == 0 && [self.delegate respondsToSelector:@selector(pressedEdit:)]) [self.delegate pressedEdit:self];
+        else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedTag:)]) [self.delegate pressedTag:self];
+        else if(item == 2 && [self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:self];
     }
 }
 @end

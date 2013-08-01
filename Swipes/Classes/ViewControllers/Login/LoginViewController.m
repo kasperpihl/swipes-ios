@@ -11,7 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "SignupViewController.h"
 #import "KPAlert.h"
-#import "WalkthroughViewController.h"
+#import "RootViewController.h"
 #define SIGNUP_INDICATOR_TAG 15530
 #define PRIVACY_BUTTON_TAG 16630
 
@@ -309,7 +309,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    //[self walkthrough];
+    [ROOT_CONTROLLER walkthrough];
 }
 - (void)didReceiveMemoryWarning
 {

@@ -25,11 +25,13 @@
 #import "AppDelegate.h"
 #import "RESideMenu.h"
 #import "MenuViewController.h"
+#import "KPBlurry.h"
 
 #import "WalkthroughViewController.h"
-@interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
+
 @end
 
 @implementation RootViewController
@@ -45,6 +47,15 @@
         _menuViewController = menuViewController;
     }
     return _menuViewController;
+}
+
+-(void)blurryWillShow:(KPBlurry *)blurry{
+    NSLog(@"did show");
+    self.lockSettings = YES;
+    
+}
+-(void)blurryDidHide:(KPBlurry *)blurry{
+    self.lockSettings = NO;
 }
 #pragma mark - PFLogInViewControllerDelegate
 // Sent to the delegate to determine whether the log in request should be submitted to the server.
@@ -111,7 +122,8 @@
     NSLog(@"Failed to log in... %@",error);
 }
 -(void)walkthrough:(WalkthroughViewController *)walkthrough didFinishSuccesfully:(BOOL)successfully{
-    [self dismissModalViewControllerAnimated:NO];
+    [walkthrough.view removeFromSuperview];
+    [walkthrough removeFromParentViewController];
 }
 #pragma mark - Public API
 -(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated{
@@ -147,7 +159,9 @@ static RootViewController *sharedObject;
 -(void)walkthrough{
     WalkthroughViewController *viewController = [[WalkthroughViewController alloc]init];
     viewController.delegate = self;
-    [self presentModalViewController:viewController animated:NO];
+    [self addChildViewController:viewController];
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    [window addSubview:viewController.view];
     
 }
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
@@ -167,7 +181,7 @@ static RootViewController *sharedObject;
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
-    
+    BLURRY.delegate = self;
     self.sideMenu = [[RESideMenu alloc] init];
     self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;
     self.settingsViewController = [[MenuViewController alloc] init];
