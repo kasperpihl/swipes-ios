@@ -131,6 +131,9 @@ static ThemeHandler *sharedObject;
         case TaskTableGradientBackground:
             color = BCTaskTableGradientBackground;
             break;
+        case TimePickerWheelBackground:
+            color = BCTaskCellTagColor;
+            break;
     }
     return bcolor(color);
 }

@@ -35,6 +35,37 @@ static UtilityClass *sharedObject;
     
     return image;
 }
++ (UIColor *)colorFromColor:(UIColor *)fromColor toColor:(UIColor *)toColor percent:(float)percent
+{
+    float dec = percent / 100.f;
+    CGFloat fRed, fBlue, fGreen, fAlpha;
+    CGFloat tRed, tBlue, tGreen, tAlpha;
+    CGFloat red, green, blue, alpha;
+    
+    if(CGColorGetNumberOfComponents(fromColor.CGColor) == 2) {
+        [fromColor getWhite:&fRed alpha:&fAlpha];
+        fGreen = fRed;
+        fBlue = fRed;
+    }
+    else {
+        [fromColor getRed:&fRed green:&fGreen blue:&fBlue alpha:&fAlpha];
+    }
+    if(CGColorGetNumberOfComponents(toColor.CGColor) == 2) {
+        [toColor getWhite:&tRed alpha:&tAlpha];
+        tGreen = tRed;
+        tBlue = tRed;
+    }
+    else {
+        [toColor getRed:&tRed green:&tGreen blue:&tBlue alpha:&tAlpha];
+    }
+    
+    red = (dec * (tRed - fRed)) + fRed;
+    green = (dec * (tGreen - fGreen)) + fGreen;
+    blue = (dec * (tBlue - fBlue)) + fBlue;
+    alpha = (dec * (tAlpha - fAlpha)) + fAlpha;
+    
+    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+}
 +(UIImage*)screenshotOfView:(UIView*)view{
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0f);
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -253,7 +284,6 @@ static UtilityClass *sharedObject;
     }
     return s;
 }
-static inline double radians (double degrees) {return degrees * M_PI/180;}
 UIImage* rotate(UIImage* src, NSInteger degrees)
 {
     UIGraphicsBeginImageContext(src.size);

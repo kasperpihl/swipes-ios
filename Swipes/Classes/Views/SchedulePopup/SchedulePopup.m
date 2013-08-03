@@ -16,9 +16,8 @@
 #import "UIColor+Utilities.h"
 #define POPUP_WIDTH 315
 #define CONTENT_VIEW_TAG 1
-#define TIME_VIEWER_TAG 8
-#define TIME_VIEWER_LABEL_TAG 9
-#define TIME_SLIDER_TAG 10
+
+
 #define SCHEDULE_BUTTON_START_TAG 7367
 #define kSepHorTag 203
 #define kSepVerTag 204
@@ -61,12 +60,7 @@ typedef enum {
 
 
 @property (nonatomic, weak) IBOutlet UIView *timeViewer;
-@property (nonatomic) NSDate *activeTime;
-@property (nonatomic) CGPoint lastPosition;
-@property (nonatomic,weak) IBOutlet UIImageView *timeSlider;
-@property (nonatomic) CGFloat currentAngle;
-@property (nonatomic) CGFloat lastChangedAngle;
-@property (nonatomic) CGFloat maxMeasuredVel;
+
 @end
 @implementation SchedulePopup
 -(NSMutableArray *)scheduleButtons{
@@ -423,96 +417,9 @@ typedef enum {
     CGFloat y = floor((number-1) / GRID_NUMBER) * CONTENT_VIEW_SIZE/GRID_NUMBER + BUTTON_PADDING;
     return CGRectMake(x, y, width, height);
 }
--(void)showTime:(NSDate*)time{
-    UIView *timeView = [self viewWithTag:TIME_VIEWER_TAG];
-    UILabel *timeLabel = (UILabel*)[timeView viewWithTag:TIME_VIEWER_LABEL_TAG];
-    timeLabel.text = [UtilityClass timeStringForDate:time];
-}
--(void)showTimeView:(BOOL)show{
-    UIView *timeView = [self viewWithTag:TIME_VIEWER_TAG];
-    
-    if(!timeView){
-        CGFloat startOfIndicator = 100;
-        NSInteger widthOfIndicator = 200;
-        timeView = [[UIView alloc] initWithFrame:self.bounds];
-        timeView.backgroundColor = color(253, 99, 73, 0.95);
-        timeView.tag = TIME_VIEWER_TAG;
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 20, 300, 60)];
-        label.tag = TIME_VIEWER_LABEL_TAG;
-        label.backgroundColor = [UIColor clearColor];
-        label.textColor = [UIColor whiteColor];
-        label.font = KP_BOLD(40);
-        label.textAlignment = UITextAlignmentCenter;
-        [timeView addSubview:label];
-        
-        UIImageView *timeSlider = [[UIImageView alloc] initWithFrame:CGRectMake((320-widthOfIndicator)/2, startOfIndicator, widthOfIndicator,widthOfIndicator)];
-        timeSlider.tag = TIME_SLIDER_TAG;
-        timeSlider.image = [UIImage imageNamed:@"circle-03"];
-        timeSlider.center = self.center;
-        [timeView addSubview:timeSlider];
-        [self addSubview:timeView];
-        self.timeSlider = (UIImageView*)[self viewWithTag:TIME_SLIDER_TAG];
-    }
-}
-- (void)panGestureRecognized:(UIPanGestureRecognizer *)sender
-{
-    NSDate *upperLimit = [self.pickingDate dateAtHours:23 minutes:55];
-    NSDate *lowerLimit = [self.pickingDate dateAtHours:0 minutes:0];
-    CGPoint velocity = [sender velocityInView:self];
-    CGPoint location = [sender locationInView:self];
-    CGFloat vel = fabsf(velocity.y)+fabsf(velocity.x);
-    NSInteger minutesPerInterval = 5;
-    CGFloat angleInterval = 30;
-    BOOL isHours = NO;
-    if(vel > 800){
-        minutesPerInterval = 30;
-        angleInterval = 30;
-    }
-    angleInterval = angleInterval*M_PI/180;
-    
-    CGPoint sliderCenter = self.center;
-    CGPoint sliderStartPoint = CGPointMake(sliderCenter.x, sliderCenter.y - 100.0);
-    if(!CGPointEqualToPoint(self.lastPosition, CGPointZero)) sliderStartPoint = self.lastPosition;
-    CGFloat angle = [self angleBetweenCenterPoint:sliderCenter point1:sliderStartPoint point2:location];
-    self.lastChangedAngle = self.lastChangedAngle + angle;
-    self.lastPosition = location;
-    
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        [self showTimeView:YES];
-        self.pickingDate = [[NSDate date] dateAtHours:13 minutes:15];
-        self.activeTime = self.pickingDate;
-        [self showTime:self.activeTime];
-    }
-    if (sender.state == UIGestureRecognizerStateChanged || sender.state == UIGestureRecognizerStateBegan) {
-        self.currentAngle = self.currentAngle-angle;
-        self.timeSlider.transform = CGAffineTransformMakeRotation(self.currentAngle);
-        if(vel > self.maxMeasuredVel) self.maxMeasuredVel = vel;
-        NSInteger numberOfIntervals = round(self.lastChangedAngle/angleInterval);
-        if(numberOfIntervals != 0){
-            NSInteger timeAdded = minutesPerInterval*numberOfIntervals;
-            self.activeTime = [self.activeTime dateBySubtractingMinutes:timeAdded];
-            self.lastChangedAngle = 0;
-            if([self.activeTime isLaterThanDate:upperLimit]) self.activeTime = upperLimit;
-            if([self.activeTime isEarlierThanDate:lowerLimit]) self.activeTime = lowerLimit;
-            if(isHours) self.activeTime = [self.activeTime dateAtHours:self.activeTime.hour minutes:0];
-            [self showTime:self.activeTime];
-        }
-    }
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        UIView *timeView = (UILabel *)[self viewWithTag:TIME_VIEWER_TAG];
-        [timeView removeFromSuperview];
-        NSLog(@"max measured: %f",self.maxMeasuredVel);
-        self.maxMeasuredVel = 0;
-    }
-}
--(CGFloat)angleBetweenCenterPoint:(CGPoint)centerPoint point1:(CGPoint)p1 point2:(CGPoint)p2{
-    CGPoint v1 = CGPointMake(p1.x - centerPoint.x, p1.y - centerPoint.y);
-	CGPoint v2 = CGPointMake(p2.x - centerPoint.x, p2.y - centerPoint.y);
-	
-	CGFloat angle = atan2f(v2.x*v1.y - v1.x*v2.y, v1.x*v2.x + v1.y*v2.y);
-	
-	return angle;
-}
+
+
+
 -(void)dealloc{
     self.calendarView = nil;
 }

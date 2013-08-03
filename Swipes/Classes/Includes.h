@@ -61,6 +61,8 @@ NS_INLINE void mainBlock(void (^block)(void))
         dispatch_sync(dispatch_get_main_queue(), block);
     }
 }
+#define radians(degrees) (degrees * M_PI / 180)
+#define degrees(radians) (radians * 180 / M_PI)
 
 #define kIsIphone5Size (fabs((double)[[UIScreen mainScreen] bounds].size.height - (double) 568) < DBL_EPSILON)
 #define valForScreen(iphone4, iphone5) (kIsIphone5Size ? iphone5 : iphone4)

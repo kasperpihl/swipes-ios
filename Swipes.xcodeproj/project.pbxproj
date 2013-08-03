@@ -70,6 +70,9 @@
 		A72D5ED9179ED08E00BCB835 /* SectionHeaderExtraView.m in Sources */ = {isa = PBXBuildFile; fileRef = A72D5ED8179ED08E00BCB835 /* SectionHeaderExtraView.m */; };
 		A72DDD8217AAA9C000A00454 /* toolbar_edit_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A72DDD8017AAA9C000A00454 /* toolbar_edit_icon.png */; };
 		A72DDD8317AAA9C000A00454 /* toolbar_edit_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A72DDD8117AAA9C000A00454 /* toolbar_edit_icon@2x.png */; };
+		A72DDD8617AAAFAF00A00454 /* KPTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A72DDD8517AAAFAE00A00454 /* KPTimePicker.m */; };
+		A72DDD8A17AB024900A00454 /* picker_wheel.png in Resources */ = {isa = PBXBuildFile; fileRef = A72DDD8817AB024900A00454 /* picker_wheel.png */; };
+		A72DDD8B17AB024900A00454 /* picker_wheel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A72DDD8917AB024900A00454 /* picker_wheel@2x.png */; };
 		A742415517A5AAA9009C9735 /* done-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A742414F17A5AAA9009C9735 /* done-white.png */; };
 		A742415617A5AAA9009C9735 /* done-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A742415017A5AAA9009C9735 /* done-white@2x.png */; };
 		A742415717A5AAA9009C9735 /* schedule-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A742415117A5AAA9009C9735 /* schedule-white.png */; };
@@ -144,6 +147,8 @@
 		A7717C5317787BF10067325C /* QBPopupMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A7717C4E17787BF10067325C /* QBPopupMenu.m */; };
 		A7717C5417787BF10067325C /* QBPopupMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A7717C5017787BF10067325C /* QBPopupMenuItem.m */; };
 		A7717C5517787BF10067325C /* QBPopupMenuOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7717C5217787BF10067325C /* QBPopupMenuOverlayView.m */; };
+		A776D0B817AD2B0A0027CA23 /* back_icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = A776D0B617AD2B0A0027CA23 /* back_icon_white.png */; };
+		A776D0B917AD2B0A0027CA23 /* back_icon_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A776D0B717AD2B0A0027CA23 /* back_icon_white@2x.png */; };
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
 		A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CD116EB5884004D95E5 /* CoreGraphics.framework */; };
@@ -291,6 +296,10 @@
 		A72D5ED8179ED08E00BCB835 /* SectionHeaderExtraView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SectionHeaderExtraView.m; path = Components/SectionHeaderExtraView.m; sourceTree = "<group>"; };
 		A72DDD8017AAA9C000A00454 /* toolbar_edit_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = toolbar_edit_icon.png; sourceTree = "<group>"; };
 		A72DDD8117AAA9C000A00454 /* toolbar_edit_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbar_edit_icon@2x.png"; sourceTree = "<group>"; };
+		A72DDD8417AAAFAD00A00454 /* KPTimePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPTimePicker.h; sourceTree = "<group>"; };
+		A72DDD8517AAAFAE00A00454 /* KPTimePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTimePicker.m; sourceTree = "<group>"; };
+		A72DDD8817AB024900A00454 /* picker_wheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picker_wheel.png; sourceTree = "<group>"; };
+		A72DDD8917AB024900A00454 /* picker_wheel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "picker_wheel@2x.png"; sourceTree = "<group>"; };
 		A742414F17A5AAA9009C9735 /* done-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "done-white.png"; sourceTree = "<group>"; };
 		A742415017A5AAA9009C9735 /* done-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "done-white@2x.png"; sourceTree = "<group>"; };
 		A742415117A5AAA9009C9735 /* schedule-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule-white.png"; sourceTree = "<group>"; };
@@ -384,6 +393,8 @@
 		A7717C5017787BF10067325C /* QBPopupMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBPopupMenuItem.m; sourceTree = "<group>"; };
 		A7717C5117787BF10067325C /* QBPopupMenuOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBPopupMenuOverlayView.h; sourceTree = "<group>"; };
 		A7717C5217787BF10067325C /* QBPopupMenuOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBPopupMenuOverlayView.m; sourceTree = "<group>"; };
+		A776D0B617AD2B0A0027CA23 /* back_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_icon_white.png; sourceTree = "<group>"; };
+		A776D0B717AD2B0A0027CA23 /* back_icon_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_icon_white@2x.png"; sourceTree = "<group>"; };
 		A7778CCA16EB5884004D95E5 /* Swipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7778CCD16EB5884004D95E5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A7778CCF16EB5884004D95E5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -643,6 +654,17 @@
 				A72D5ECA179D8DB600BCB835 /* toolbar_trashcan_icon@2x.png */,
 			);
 			path = Toolbarbuttons;
+			sourceTree = "<group>";
+		};
+		A72DDD8717AB024900A00454 /* TimePicker */ = {
+			isa = PBXGroup;
+			children = (
+				A776D0B617AD2B0A0027CA23 /* back_icon_white.png */,
+				A776D0B717AD2B0A0027CA23 /* back_icon_white@2x.png */,
+				A72DDD8817AB024900A00454 /* picker_wheel.png */,
+				A72DDD8917AB024900A00454 /* picker_wheel@2x.png */,
+			);
+			path = TimePicker;
 			sourceTree = "<group>";
 		};
 		A742414E17A5AAA9009C9735 /* Icons */ = {
@@ -963,6 +985,8 @@
 		A781287017294C56002226C8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A72DDD8417AAAFAD00A00454 /* KPTimePicker.h */,
+				A72DDD8517AAAFAE00A00454 /* KPTimePicker.m */,
 				A75545DF179B4C5800CE2F4E /* Components */,
 				A78128AC17294C56002226C8 /* KPReorderTableView */,
 				A7F43AA31798A6FF00DFC9AD /* CKCalendarView */,
@@ -1020,6 +1044,7 @@
 			isa = PBXGroup;
 			children = (
 				A7F43A8F1797231400DFC9AD /* circle-03.png */,
+				A72DDD8717AB024900A00454 /* TimePicker */,
 				A717BF0C175F5E7B004791BF /* EditMode */,
 				A717BEF1175F5C0B004791BF /* Add */,
 				A717BEF4175F5C0B004791BF /* SearchBar */,
@@ -1440,6 +1465,10 @@
 				A724B01F17A9397D00E0EF83 /* selected_circle@2x.png in Resources */,
 				A72DDD8217AAA9C000A00454 /* toolbar_edit_icon.png in Resources */,
 				A72DDD8317AAA9C000A00454 /* toolbar_edit_icon@2x.png in Resources */,
+				A72DDD8A17AB024900A00454 /* picker_wheel.png in Resources */,
+				A72DDD8B17AB024900A00454 /* picker_wheel@2x.png in Resources */,
+				A776D0B817AD2B0A0027CA23 /* back_icon_white.png in Resources */,
+				A776D0B917AD2B0A0027CA23 /* back_icon_white@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1560,6 +1589,7 @@
 				A75236FA17A3361A0030ED1E /* WalkthroughTitleView.m in Sources */,
 				A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */,
 				A724B02217A96B8B00E0EF83 /* UIColor+Utilities.m in Sources */,
+				A72DDD8617AAAFAF00A00454 /* KPTimePicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

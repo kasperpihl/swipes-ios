@@ -189,30 +189,37 @@
         CGPoint p = [tap locationInView:tap.view];
         
         NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
-        if(indexPath && !self.showingViewController){
-            [[self parent] setLock:YES animated:NO];
-            KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
-            ToDoViewController *viewController = [[ToDoViewController alloc] init];
-            viewController.delegate = self;
-            viewController.segmentedViewController = [self parent];
-            viewController.view.frame = CGRectMake(0, 0, 320, self.tableView.frame.size.height-SECTION_HEADER_HEIGHT);
-            viewController.injectedIndexPath = indexPath;
-            self.showingViewController = viewController;
-            
-            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            self.savedContentOffset = self.tableView.contentOffset;
-            [self deselectAllRows:self];
-            ToDoCell *cell = (ToDoCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-            viewController.injectedCell = cell;
-            viewController.model = toDo;
-            [self.tableView setContentOffset:CGPointMake(1, cell.frame.origin.y-SECTION_HEADER_HEIGHT) animated:YES];
-            self.tableView.scrollEnabled = NO;
-            //self.tableView.delaysContentTouches = NO;
-        }
+        if(indexPath) [self editIndexPath:indexPath];
         else if(indexPath && self.showingViewController){
             [self didPressCloseToDoViewController:self.showingViewController];
         }
     }
+}
+-(void)editIndexPath:(NSIndexPath *)indexPath{
+    if(self.showingViewController) return;
+    [[self parent] setLock:YES animated:NO];
+    KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
+    ToDoViewController *viewController = [[ToDoViewController alloc] init];
+    viewController.delegate = self;
+    viewController.segmentedViewController = [self parent];
+    viewController.view.frame = CGRectMake(0, 0, 320, self.tableView.frame.size.height-SECTION_HEADER_HEIGHT);
+    viewController.injectedIndexPath = indexPath;
+    self.showingViewController = viewController;
+    
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    self.savedContentOffset = self.tableView.contentOffset;
+    [self deselectAllRows:self];
+    ToDoCell *cell = (ToDoCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    viewController.injectedCell = cell;
+    viewController.model = toDo;
+    [self.tableView setContentOffset:CGPointMake(1, cell.frame.origin.y-SECTION_HEADER_HEIGHT) animated:YES];
+    self.tableView.scrollEnabled = NO;
+    //self.tableView.delaysContentTouches = NO;
+}
+-(void)pressedEdit{
+    NSIndexPath *indexPath;
+    if(self.selectedRows.count > 0) indexPath = [self.selectedRows lastObject];
+    if(indexPath) [self editIndexPath:indexPath];
 }
 -(void)setShowingViewController:(ToDoViewController *)showingViewController{
     if(_showingViewController != showingViewController){
@@ -277,6 +284,7 @@
         }
     }
 }
+
 #pragma mark - SwipeTableCell
 -(void)swipeTableViewCell:(ToDoCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
     [[self parent] show:NO controlsAnimated:YES];

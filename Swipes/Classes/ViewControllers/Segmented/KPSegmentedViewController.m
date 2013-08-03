@@ -91,7 +91,7 @@
     [TAGHANDLER deleteTag:tag];
     [[self currentViewController] didUpdateItemHandler:nil];
 }
-#pragma mark - AddPanelDelegate
+#pragma mark - KPControlHandlerDelegate
 -(void)pressedAdd:(id)sender{
     [self show:NO controlsAnimated:YES];
     [self changeToIndex:1];
@@ -101,6 +101,9 @@
     addPanel.addDelegate = self;
     BLURRY.showPosition = PositionBottom;
     [BLURRY showView:addPanel inViewController:self];
+}
+-(void)pressedEdit:(id)sender{
+    [[self currentViewController] pressedEdit];
 }
 -(void)pressedTag:(id)sender{
     //[self show:NO controlsAnimated:YES];
@@ -124,6 +127,7 @@
     }];
     [BLURRY showView:alert inViewController:self];
 }
+#pragma mark - AddPanelDelegate
 -(void)didAddItem:(NSString *)item{
     [[self currentViewController].itemHandler addItem:item];
 }

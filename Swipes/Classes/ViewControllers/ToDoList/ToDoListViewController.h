@@ -28,4 +28,5 @@
 -(void)update;
 -(void)changeToColored:(BOOL)colored;
 -(void)didUpdateCells;
+-(void)pressedEdit;
 @end

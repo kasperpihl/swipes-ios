@@ -26,7 +26,7 @@
 #import "RESideMenu.h"
 #import "MenuViewController.h"
 #import "KPBlurry.h"
-
+#import "KPTimePicker.h"
 #import "WalkthroughViewController.h"
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
@@ -181,6 +181,12 @@ static RootViewController *sharedObject;
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
+    KPTimePicker *timePicker = [[KPTimePicker alloc] initWithFrame:self.view.bounds];
+    //timePicker.foregroundColor = tcolor(LaterColor);
+    //timePicker.lightColor = color(0,174,255,1);
+    //timePicker.darkColor = color(18,0,255,1);
+    [self.view addSubview:timePicker];
+    return;
     BLURRY.delegate = self;
     self.sideMenu = [[RESideMenu alloc] init];
     self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;

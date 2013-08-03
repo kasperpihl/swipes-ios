@@ -31,5 +31,5 @@ UIImage* rotate(UIImage* src, NSInteger degrees);
 +(UIImage *)flippedImage:(UIImage*)flippingImage horizontal:(BOOL)horizontal;
 +(UIColor *)inverseColor:(UIColor*)color;
 +(NSString*)timeStringForDate:(NSDate*)date;
-
++ (UIColor *)colorFromColor:(UIColor *)fromColor toColor:(UIColor *)toColor percent:(float)percent;
 @end

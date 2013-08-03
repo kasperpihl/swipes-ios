@@ -53,7 +53,8 @@ typedef enum {
     AlertBackground,
     LoginBackground,
     LoginButtonBackground,
-    PopupBackground
+    PopupBackground,
+    TimePickerWheelBackground
 } Background;
 
 @interface ThemeHandler : NSObject
