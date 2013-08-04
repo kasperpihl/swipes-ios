@@ -106,11 +106,17 @@
     [[self currentViewController] pressedEdit];
 }
 -(void)pressedTag:(id)sender{
+    [self tagViewWithDismissAction:^{
+        [[self currentViewController] deselectAllRows:self];
+    }];
+}
+-(void)tagViewWithDismissAction:(voidBlock)block{
     //[self show:NO controlsAnimated:YES];
     KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.view.bounds andTags:[TAGHANDLER allTags]];
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     BLURRY.showPosition = PositionBottom;
+    if(block) BLURRY.dismissAction = block;
     [BLURRY showView:tagView inViewController:self];
 }
 -(void)pressedDelete:(id)sender{

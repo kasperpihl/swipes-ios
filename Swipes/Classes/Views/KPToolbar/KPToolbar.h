@@ -18,6 +18,7 @@ typedef enum {
 -(void)toolbar:(KPToolbar*)toolbar pressedItem:(NSInteger)item;
 @end
 @interface KPToolbar : UIView
+@property (nonatomic, readonly) IBOutletCollection(UIButton) NSArray *barButtons;
 @property (nonatomic,weak) NSObject<ToolbarDelegate> *delegate;
 @property (nonatomic) UIColor *seperatorColor;
 @property (nonatomic) UIColor *highlightedColor;

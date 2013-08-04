@@ -47,7 +47,6 @@ static TagHandler *sharedObject;
 -(void)deleteTag:(NSString*)tag{
     NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",@[tag]];
     KPTag *tagObj = [KPTag MR_findFirstWithPredicate:tagPredicate];
-    
     NSPredicate *toDoPredicate = [NSPredicate predicateWithFormat:@"ANY tags = %@",tagObj];
     NSArray *toDos = [KPToDo MR_findAllWithPredicate:toDoPredicate];
     [self updateTags:@[tag] remove:YES toDos:toDos];

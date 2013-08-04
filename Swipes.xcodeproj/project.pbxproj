@@ -142,13 +142,13 @@
 		A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D28172C5EA800BCB2D9 /* _KPTag.m */; };
 		A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2B172C5EAF00BCB2D9 /* KPTag.m */; };
 		A7680D2F172C610B00BCB2D9 /* KPTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2E172C610B00BCB2D9 /* KPTagList.m */; };
-		A7680D32172D21B600BCB2D9 /* Franchise-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7680D31172D21B600BCB2D9 /* Franchise-Bold.ttf */; };
 		A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76B2386172C06CC00F742C2 /* ScheduleViewController.m */; };
 		A7717C5317787BF10067325C /* QBPopupMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A7717C4E17787BF10067325C /* QBPopupMenu.m */; };
 		A7717C5417787BF10067325C /* QBPopupMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A7717C5017787BF10067325C /* QBPopupMenuItem.m */; };
 		A7717C5517787BF10067325C /* QBPopupMenuOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7717C5217787BF10067325C /* QBPopupMenuOverlayView.m */; };
 		A776D0B817AD2B0A0027CA23 /* back_icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = A776D0B617AD2B0A0027CA23 /* back_icon_white.png */; };
 		A776D0B917AD2B0A0027CA23 /* back_icon_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A776D0B717AD2B0A0027CA23 /* back_icon_white@2x.png */; };
+		A776D0BB17AD39E30027CA23 /* ProximaNova-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A776D0BA17AD39E30027CA23 /* ProximaNova-ExtraBold.ttf */; };
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
 		A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CD116EB5884004D95E5 /* CoreGraphics.framework */; };
@@ -384,7 +384,6 @@
 		A7680D2B172C5EAF00BCB2D9 /* KPTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTag.m; sourceTree = "<group>"; };
 		A7680D2D172C610B00BCB2D9 /* KPTagList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPTagList.h; sourceTree = "<group>"; };
 		A7680D2E172C610B00BCB2D9 /* KPTagList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTagList.m; sourceTree = "<group>"; };
-		A7680D31172D21B600BCB2D9 /* Franchise-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Franchise-Bold.ttf"; path = "Font/Franchise-Bold.ttf"; sourceTree = "<group>"; };
 		A76B2385172C06CC00F742C2 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScheduleViewController.h; path = Schedule/ScheduleViewController.h; sourceTree = "<group>"; };
 		A76B2386172C06CC00F742C2 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScheduleViewController.m; path = Schedule/ScheduleViewController.m; sourceTree = "<group>"; };
 		A7717C4D17787BF10067325C /* QBPopupMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBPopupMenu.h; sourceTree = "<group>"; };
@@ -395,6 +394,7 @@
 		A7717C5217787BF10067325C /* QBPopupMenuOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBPopupMenuOverlayView.m; sourceTree = "<group>"; };
 		A776D0B617AD2B0A0027CA23 /* back_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_icon_white.png; sourceTree = "<group>"; };
 		A776D0B717AD2B0A0027CA23 /* back_icon_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_icon_white@2x.png"; sourceTree = "<group>"; };
+		A776D0BA17AD39E30027CA23 /* ProximaNova-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-ExtraBold.ttf"; path = "Font/ProximaNova-ExtraBold.ttf"; sourceTree = "<group>"; };
 		A7778CCA16EB5884004D95E5 /* Swipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7778CCD16EB5884004D95E5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A7778CCF16EB5884004D95E5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -781,13 +781,13 @@
 		A7680D30172D219800BCB2D9 /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				A776D0BA17AD39E30027CA23 /* ProximaNova-ExtraBold.ttf */,
 				A717BF20176115CD004791BF /* ProximaNova-Black.ttf */,
 				A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */,
 				A717BF22176115CD004791BF /* ProximaNova-Light.ttf */,
 				A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */,
 				A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */,
 				A717BF2A17611EDB004791BF /* ProximaNovaCond-Semibold.ttf */,
-				A7680D31172D21B600BCB2D9 /* Franchise-Bold.ttf */,
 			);
 			name = Font;
 			sourceTree = "<group>";
@@ -1360,7 +1360,6 @@
 				A78128FF17294C56002226C8 /* Default@2x.png in Resources */,
 				A781290017294C56002226C8 /* icon-114.png in Resources */,
 				A781290117294C56002226C8 /* icon-57.png in Resources */,
-				A7680D32172D21B600BCB2D9 /* Franchise-Bold.ttf in Resources */,
 				A79DB4071735892C007A48E2 /* done-highlighted.png in Resources */,
 				A79DB4081735892C007A48E2 /* done-highlighted@2x.png in Resources */,
 				A79DB40B1735892C007A48E2 /* done.png in Resources */,
@@ -1469,6 +1468,7 @@
 				A72DDD8B17AB024900A00454 /* picker_wheel@2x.png in Resources */,
 				A776D0B817AD2B0A0027CA23 /* back_icon_white.png in Resources */,
 				A776D0B917AD2B0A0027CA23 /* back_icon_white@2x.png in Resources */,
+				A776D0BB17AD39E30027CA23 /* ProximaNova-ExtraBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

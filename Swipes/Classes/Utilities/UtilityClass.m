@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "KPParseCommunicator.h"
 #import <QuartzCore/QuartzCore.h>
+#import "NSDate-Utilities.h"
 #define trgb(num) (num/255.0)
 @interface UtilityClass () <UIAlertViewDelegate>
 @property (copy) SuccessfulBlock block;
@@ -235,6 +236,30 @@ static UtilityClass *sharedObject;
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     return [[dateFormatter stringFromDate:date] lowercaseString];
 
+}
++(NSString*)dayStringForDate:(NSDate*)date{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    [dateFormatter setLocale:usLocale];
+    if([date isSameYearAsDate:[NSDate date]]) dateFormatter.dateFormat = @"d LLL";
+    else dateFormatter.dateFormat = @"d LLL '´'yy";
+    NSString *endingString = [dateFormatter stringFromDate:date];
+    
+    
+    NSDate *beginningOfDate = [date dateAtStartOfDay];
+    NSInteger numberOfDaysAfterTodays = [beginningOfDate distanceInDaysToDate:[[NSDate date] dateAtStartOfDay]];
+    NSString *dayString;
+    if(numberOfDaysAfterTodays == 0){
+        dayString = @"Today";
+        if([date isLaterThanDate:[NSDate date]]) dayString = @"Today";
+    }
+    else if(numberOfDaysAfterTodays == -1) dayString = @"Tomorrow";
+    else if(numberOfDaysAfterTodays == 1) dayString = @"Yesterday";
+    else{
+        dateFormatter.dateFormat = @"EEE";
+    }
+    if(!dayString) dayString = [dateFormatter stringFromDate:date];
+    return [NSString stringWithFormat:@"%@ - %@",dayString,endingString];
 }
 +(UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color{
     UIImage *img = [UIImage imageNamed:name];

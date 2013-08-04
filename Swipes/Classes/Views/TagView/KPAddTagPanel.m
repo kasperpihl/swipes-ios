@@ -10,6 +10,7 @@
 #import "KPBlurry.h"
 #import "KPToolbar.h"
 #import "KPAddView.h"
+#import "KPAlert.h"
 #define BACKGROUND_VIEW_TAG 2
 #define TAG_VIEW_TAG 3
 #define TOOLBAR_TAG 4
@@ -28,15 +29,22 @@
 
 #define NUMBER_OF_BAR_BUTTONS 2
 
-@interface KPAddTagPanel () <KPTagListResizeDelegate,KPTagDelegate,KPBlurryDelegate,ToolbarDelegate,AddViewDelegate>
+@interface KPAddTagPanel () <KPTagListResizeDelegate,KPTagListDeleteDelegate,KPBlurryDelegate,ToolbarDelegate,AddViewDelegate>
 @property (nonatomic,weak) IBOutlet KPAddView *addTagView;
 @property (nonatomic,weak) IBOutlet KPToolbar *toolbar;
 @property (nonatomic,weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic,weak) IBOutlet UIButton *doneEditingButton;
 @property (nonatomic) BOOL isAdding;
 @property (nonatomic) BOOL isRotated;
+@property (nonatomic) BOOL deleteMode;
 @end
 @implementation KPAddTagPanel
+-(void)setDeleteMode:(BOOL)deleteMode{
+    if(_deleteMode != deleteMode){
+        [self shiftToDeleteMode:deleteMode];
+        _deleteMode = deleteMode;
+    }
+}
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
     
     if(item == 0){
@@ -44,10 +52,13 @@
         [self.delegate closeTagPanel:self];
     }
     else if(item == 1){
-        
+        self.deleteMode = !self.deleteMode;
     }
     else if (item == 2) {
-        [self shiftToAddMode:YES];
+        if(self.deleteMode){
+            self.deleteMode = NO;
+        }
+        else [self shiftToAddMode:YES];
     }
 }
 -(void)blurryWillHide:(KPBlurry *)blurry{
@@ -71,7 +82,6 @@
         
         KPTagList *tagView = [KPTagList tagListWithWidth:self.frame.size.width andTags:tags];
         tagView.marginLeft = TAG_VIEW_SIDE_MARGIN;
-        tagView.enableEdit = YES;
         tagView.sorted = YES;
         tagView.marginRight = TAG_VIEW_SIDE_MARGIN;
         tagView.emptyText = @"No tags - press the plus to add one";
@@ -79,6 +89,7 @@
         tagView.tagColor = tbackground(MenuBackground);
         CGRectSetY(tagView, 0);
         tagView.resizeDelegate = self;
+        tagView.deleteDelegate = self;
         tagView.tag = TAG_VIEW_TAG;
         [scrollView addSubview:tagView];
         self.tagView = (KPTagList*)[scrollView viewWithTag:TAG_VIEW_TAG];
@@ -109,8 +120,25 @@
         [self addSubview:addView];
         self.addTagView = (KPAddView*)[self viewWithTag:ADD_VIEW_TAG];
         self.addTagView.hidden = YES;
+        [self updateTrashButton];
     }
     return self;
+}
+-(void)updateTrashButton{
+    UIButton* trashButton = (UIButton*)[self.toolbar.barButtons objectAtIndex:1];
+    trashButton.enabled = !(self.tagView.numberOfTags == 0);
+}
+-(void)tagList:(KPTagList *)tagList triedToDeleteTag:(NSString *)tag{
+    NSString *titleString = [NSString stringWithFormat:@"Delete tag: %@",tag];
+    __block KPAlert *alert = [KPAlert alertWithFrame:self.bounds title:titleString message:@"This can't be undone" block:^(BOOL succeeded, NSError *error) {
+        [alert removeFromSuperview];
+        if(succeeded){
+            [self.tagView deleteTag:tag];
+            if(self.tagView.numberOfTags == 0) self.deleteMode = NO;
+            [self updateTrashButton];
+        }
+    }];
+    [self addSubview:alert];
 }
 -(void)tagList:(KPTagList *)tagList changedSize:(CGSize)size{
     self.scrollView.contentSize = size;
@@ -119,7 +147,16 @@
     CGRectSetHeight(self.scrollView, height);
     CGRectSetY(self.scrollView, self.frame.size.height - TOOLBAR_HEIGHT - self.scrollView.frame.size.height - TAG_VIEW_BOTTOM_MARGIN);
 }
-
+-(void)shiftToDeleteMode:(BOOL)deleteMode{
+    UIButton *plusButton = [self.toolbar.barButtons lastObject];
+    [self.tagView setWobling:deleteMode];
+    CGAffineTransform transform = deleteMode ? CGAffineTransformMakeRotation(radians(45)) : CGAffineTransformIdentity;
+    [UIView animateWithDuration:0.2f animations:^{
+        plusButton.transform = transform;
+    } completion:^(BOOL finished) {
+        
+    }];
+}
 -(void)shiftToAddMode:(BOOL)addMode{
     if(addMode){
         self.isAdding = YES;
@@ -133,6 +170,7 @@
         }];
     }
     else{
+        [self updateTrashButton];
         self.isAdding = NO;
         [self.addTagView.textField resignFirstResponder];
         [UIView animateWithDuration:ANIMATION_DURATION animations:^{
@@ -148,9 +186,9 @@
     }
 }
 -(void)addView:(KPAddView *)addView enteredTrimmedText:(NSString *)trimmedText{
-    [self.tagView addTag:trimmedText selected:YES];
     if(self.delegate && [self.delegate respondsToSelector:@selector(tagPanel:createdTag:)])
         [self.delegate tagPanel:self createdTag:trimmedText];
+    [self.tagView addTag:trimmedText selected:YES];
 }
 -(void)addViewPressedDoneButton:(KPAddView *)addView{
     [self shiftToAddMode:NO];

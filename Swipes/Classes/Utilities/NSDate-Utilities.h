@@ -62,6 +62,7 @@
 
 // Rounding dates
 - (NSDate *)dateToNearestMinutes:(NSInteger)minutes;
+-(NSDate *)dateToNearest5Minutes;
 - (NSDate *)dateToNearest15Minutes;
 
 // Retrieving intervals

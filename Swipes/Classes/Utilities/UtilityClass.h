@@ -30,6 +30,7 @@ UIImage* rotate(UIImage* src, NSInteger degrees);
 +(UIImage*)screenshotOfView:(UIView*)view;
 +(UIImage *)flippedImage:(UIImage*)flippingImage horizontal:(BOOL)horizontal;
 +(UIColor *)inverseColor:(UIColor*)color;
++(NSString*)dayStringForDate:(NSDate*)date;
 +(NSString*)timeStringForDate:(NSDate*)date;
 + (UIColor *)colorFromColor:(UIColor *)fromColor toColor:(UIColor *)toColor percent:(float)percent;
 @end

@@ -26,7 +26,6 @@
 #import "RESideMenu.h"
 #import "MenuViewController.h"
 #import "KPBlurry.h"
-#import "KPTimePicker.h"
 #import "WalkthroughViewController.h"
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
@@ -50,7 +49,6 @@
 }
 
 -(void)blurryWillShow:(KPBlurry *)blurry{
-    NSLog(@"did show");
     self.lockSettings = YES;
     
 }
@@ -86,7 +84,6 @@
             
             if(email){
                 [user setObject:email forKey:@"email"];
-                [MIXPANEL.people set:@"$email" to:email];
             }
             NSString *gender = [userData objectForKey:@"gender"];
             if(gender) [user setObject:gender forKey:@"gender"];
@@ -106,9 +103,6 @@
         if(!user.email){
             [self fetchDataFromFacebook];
         }
-    }
-    else{
-        [MIXPANEL.people set:@"$email" to:user.username];
     }
     [self changeToMenu:KPMenuHome animated:YES];
     
@@ -181,14 +175,10 @@ static RootViewController *sharedObject;
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
-    KPTimePicker *timePicker = [[KPTimePicker alloc] initWithFrame:self.view.bounds];
-    //timePicker.foregroundColor = tcolor(LaterColor);
-    //timePicker.lightColor = color(0,174,255,1);
-    //timePicker.darkColor = color(18,0,255,1);
-    [self.view addSubview:timePicker];
-    return;
+    
     BLURRY.delegate = self;
     self.sideMenu = [[RESideMenu alloc] init];
+    self.sideMenu.backgroundImage = [UtilityClass imageWithColor:tcolor(DoneColor)];
     self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;
     self.settingsViewController = [[MenuViewController alloc] init];
     self.sideMenu.revealView = self.settingsViewController.view;

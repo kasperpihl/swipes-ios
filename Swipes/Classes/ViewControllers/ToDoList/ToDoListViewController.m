@@ -189,10 +189,9 @@
         CGPoint p = [tap locationInView:tap.view];
         
         NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
-        if(indexPath) [self editIndexPath:indexPath];
-        else if(indexPath && self.showingViewController){
-            [self didPressCloseToDoViewController:self.showingViewController];
-        }
+        if(!indexPath) return;
+        if(!self.showingViewController) [self editIndexPath:indexPath];
+        else [self didPressCloseToDoViewController:self.showingViewController];
     }
 }
 -(void)editIndexPath:(NSIndexPath *)indexPath{
@@ -205,10 +204,11 @@
     viewController.view.frame = CGRectMake(0, 0, 320, self.tableView.frame.size.height-SECTION_HEADER_HEIGHT);
     viewController.injectedIndexPath = indexPath;
     self.showingViewController = viewController;
-    
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    self.savedContentOffset = self.tableView.contentOffset;
     [self deselectAllRows:self];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    [self.selectedRows addObject:indexPath];
+    self.savedContentOffset = self.tableView.contentOffset;
     ToDoCell *cell = (ToDoCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     viewController.injectedCell = cell;
     viewController.model = toDo;
@@ -230,7 +230,6 @@
 -(void)didPressCloseToDoViewController:(ToDoViewController *)viewController{
     NSIndexPath *indexPath = viewController.injectedIndexPath;
     [self cleanShowingViewAnimated:YES];
-    
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [[self parent] show:YES controlsAnimated:YES];
 }
@@ -376,6 +375,7 @@
 -(void)deleteSelectedItems:(id)sender{
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
+    NSLog(@"real %@ arr %@",selectedIndexPaths,self.selectedRows);
     NSMutableArray *toDos = [NSMutableArray array];
     for(NSIndexPath *indexPath in selectedIndexPaths){
         [toDos addObject:[self.itemHandler itemForIndexPath:indexPath]];
@@ -421,7 +421,7 @@
         self.tableView.scrollEnabled = YES;
         self.tableView.delaysContentTouches = YES;
         [self parent].lock = NO;
-        
+        [self deselectAllRows:self];
         if(animated) [self.tableView setContentOffset:self.savedContentOffset animated:YES];
     }
 }

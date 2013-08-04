@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 @class KPTimePicker;
 @protocol KPTimePickerDelegate
--(void)timePicker:(KPTimePicker*)timePicker selectedTime:(NSDate *)time;
+-(void)timePicker:(KPTimePicker*)timePicker selectedDate:(NSDate *)date;
+@optional
+-(NSString*)timePicker:(KPTimePicker*)timePicker titleForDate:(NSDate *)time;
 @end
 
 
@@ -28,4 +30,6 @@
 @property (nonatomic) CGPoint centerPoint;
 @property (nonatomic) UIColor *lightColor;
 @property (nonatomic) UIColor *darkColor;
+
+-(void)forwardGesture:(UIPanGestureRecognizer*)sender;
 @end

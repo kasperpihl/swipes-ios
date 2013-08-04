@@ -21,4 +21,6 @@
 -(void)show:(BOOL)show controlsAnimated:(BOOL)animated;
 -(void)receivedLocalNotification:(UILocalNotification*)notification;
 -(ToDoListViewController*)currentViewController;
+-(void)tagViewWithDismissAction:(voidBlock)block;
+-(void)pressedDelete:(id)sender;
 @end

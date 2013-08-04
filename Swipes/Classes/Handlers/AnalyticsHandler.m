@@ -56,11 +56,9 @@ static AnalyticsHandler *sharedObject;
     if(!self.runningSession) return;
     NSMutableDictionary *closedAppProperties = [NSMutableDictionary dictionary];
     NSInteger numberOfSecondsInSession = [[NSDate date] timeIntervalSinceDate:self.startDate];
-    [MIXPANEL.people increment:@"Number of seconds in app" by:[NSNumber numberWithInteger:numberOfSecondsInSession]];
     for(NSString *key in [self keysArray]){
         NSInteger value = [self amountForKey:key];
         // Disabled the people API
-        [MIXPANEL.people increment:key by:[NSNumber numberWithInteger:value]];
         [closedAppProperties setObject:[NSNumber numberWithInteger:value] forKey:key];
     }
     [closedAppProperties setObject:[NSNumber numberWithInteger:numberOfSecondsInSession] forKey:@"Session length (seconds)"];

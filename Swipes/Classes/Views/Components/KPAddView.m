@@ -84,8 +84,6 @@
 }
 -(IBAction)rotateButton
 {
-    NSLog( @"Rotating button" );
-    
     [UIView beginAnimations:@"rotate" context:nil];
     [UIView setAnimationDuration:.25f];
     if( CGAffineTransformEqualToTransform( self.doneEditingButton.imageView.transform, CGAffineTransformIdentity ) )

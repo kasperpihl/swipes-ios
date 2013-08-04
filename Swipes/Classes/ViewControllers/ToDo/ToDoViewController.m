@@ -49,19 +49,14 @@
 
 
 #import "ToDoListViewController.h"
-#import "KPAddTagPanel.h"
 #import "KPSegmentedViewController.h"
-#import "TagHandler.h"
 #import "ToDoViewController.h"
 #import "HPGrowingTextView.h"
-#import "ToDoHandler.h"
-#import "ToDoCell.h"
-#import "SchedulePopup.h"
-#import "NSDate-Utilities.h"
 #import "NotesView.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
 #import "KPToolbar.h"
+#import "KPBlurry.h"
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
     KPEditModeTitle,
@@ -236,8 +231,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if(item == 0 && [self.delegate respondsToSelector:@selector(didPressCloseToDoViewController:)]){
         [self.delegate didPressCloseToDoViewController:self];
     }
-    else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedDelete:)]){
-        //[self.delegate pressedDelete:self];
+    else if(item == 1){
+        [self.segmentedViewController pressedDelete:self];
     }
 }
 -(void)setColorsFor:(id)object{
@@ -280,21 +275,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             break;
     }
 }
-#pragma mark - KPAddTagDelegate
--(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
-    self.activeEditMode = KPEditModeNone;
-}
 
 
-#pragma mark - KPTagDelegate
--(NSArray *)selectedTagsForTagList:(KPTagList *)tagList{
-    NSArray *selectedTags = [TAGHANDLER selectedTagsForToDos:@[self.model]];
-    return selectedTags;
-}
--(NSArray *)tagsForTagList:(KPTagList *)tagList{
-    NSArray *allTags = [TAGHANDLER allTags];
-    return allTags;
-}
 #pragma mark HPGrowingTextViewDelegate
 - (void)growingTextViewDidChange:(HPGrowingTextView *)growingTextView{
     if(growingTextView.text.length > 255) growingTextView.text = [growingTextView.text substringToIndex:254];
@@ -325,12 +307,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 #pragma mark NotesViewDelegate
 
 -(void)savedNotesView:(NotesView *)notesView text:(NSString *)text{
+    [BLURRY dismissAnimated:YES];
     [self.model updateNotes:text save:YES];
     [self updateNotes];
     [self layout];
 }
 -(void)pressedCancelNotesView:(NotesView *)notesView{
-    
+    [BLURRY dismissAnimated:YES];
 }
 
 - (void)viewDidLoad
@@ -427,15 +410,19 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if([self.delegate respondsToSelector:@selector(scheduleToDoViewController:)]) [self.delegate scheduleToDoViewController:self];
 }
 -(void)pressedNotes:(id)sender{
-    NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0, 320, self.segmentedViewController.view.frame.size.height - DEFAULT_SPACE_FROM_SLIDE_UP_VIEW)];
-    [notesView setNotesText:self.model.notes];
+    NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0, 320, self.segmentedViewController.view.frame.size.height)];
+    [notesView setNotesText:self.model.notes title:self.model.title];
     notesView.delegate = self;
+    BLURRY.showPosition = PositionBottom;
+    [BLURRY showView:notesView inViewController:self.segmentedViewController];
 }
 -(void)pressedTags:(id)sender{
     self.activeEditMode = KPEditModeTags;
-//    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:CGRectMake(0, 0, 320, 450) andTags:[TAGHANDLER allTags] andMaxHeight:320];
- //   tagView.delegate = self;
- //   tagView.tagView.tagDelegate = self;
+    [self.segmentedViewController tagViewWithDismissAction:^{
+        self.activeEditMode = KPEditModeNone;
+        [self updateTags];
+        [self layout];
+    }];
 }
 -(void)dealloc{
     self.injectedCell = nil;

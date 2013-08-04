@@ -5,75 +5,88 @@
 //  Created by Kasper Pihl Tornøe on 03/06/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define BUTTON_BAR_HEIGHT (44+COLOR_SEPERATOR_HEIGHT)
-#define NOTES_VIEW_TAG 1
+#define BUTTON_BAR_HEIGHT (50)
+#define kTitleHeight 50
+#define kTitleTopPadding 1
+#define kTextTopPadding 5
+#define kContentSpacing 10
 
 #import "NotesView.h"
-@interface NotesView ()
-@property (nonatomic,weak) UITextView *notesView;
+#import "KPToolbar.h"
+#import "KPBlurry.h"
+#import "KPAlert.h"
+@interface NotesView () <ToolbarDelegate,KPBlurryDelegate>
+@property (nonatomic,strong) UITextView *notesView;
+@property (nonatomic,strong) UILabel *titleLabel;
+@property (nonatomic,strong) KPToolbar *toolbar;
+@property (nonatomic) NSString *originalString;
 @end
 @implementation NotesView
-
+-(void)blurryWillShow:(KPBlurry *)blurry{
+    [self.notesView becomeFirstResponder];
+    [self showToolbar:YES];
+}
+-(void)blurryWillHide:(KPBlurry *)blurry{
+    if([self.notesView isFirstResponder]) [self.notesView resignFirstResponder];
+    [self showToolbar:NO];
+}
+-(void)showToolbar:(BOOL)show{
+    /*CGFloat yPosition = self.frame.size.height - BUTTON_BAR_HEIGHT;
+    if(show) yPosition -= KEYBOARD_HEIGHT;
+    [UIView animateWithDuration:0.25f animations:^{
+        CGRectSetY(self.toolbar, yPosition);
+    }];*/
+}
 - (id)initWithFrame:(CGRect)frame
 {
     
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = tbackground(TaskCellBackground);
-        UIView *buttonBarContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-KEYBOARD_HEIGHT-BUTTON_BAR_HEIGHT, 320, BUTTON_BAR_HEIGHT)];
-        buttonBarContainer.backgroundColor = tbackground(TagBackground);
+        self.backgroundColor = tbackground(TaskTableBackground);
         
-        CGFloat buttonWidth = 320/2;
+        self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, 0/*self.frame.size.height-BUTTON_BAR_HEIGHT*/, 320, BUTTON_BAR_HEIGHT) items:@[@"cross_button",@"",@"",@"",@"",@"toolbar_check_icon"]];
         
+        self.toolbar.backgroundColor = tbackground(MenuBackground);
+        self.toolbar.delegate = self;
+        [self addSubview:self.toolbar];
         
-        UIButton *noButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        noButton.titleLabel.font = BUTTON_FONT;
-        noButton.frame = CGRectMake(0, 0 , buttonWidth , BUTTON_HEIGHT);
-        [noButton addTarget:self action:@selector(pressedCancel:) forControlEvents:UIControlEventTouchUpInside];
-        [noButton setTitle:@"CANCEL" forState:UIControlStateNormal];
-        [buttonBarContainer addSubview:noButton];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(kContentSpacing, kTitleTopPadding, self.bounds.size.width-2*kContentSpacing, kTitleHeight-kTitleTopPadding)];
+        titleLabel.backgroundColor = CLEAR;
+        titleLabel.textColor = tcolor(TagColor);
+        titleLabel.font = KP_SEMIBOLD(22);
+        titleLabel.numberOfLines = 1;
+        titleLabel.text = @"NOTE";
+        titleLabel.textAlignment = UITextAlignmentCenter;
+        titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
+        [self addSubview:titleLabel];
+        self.titleLabel = titleLabel;
         
-        
-        UIView *buttonSpecificSeperator = [[UIView alloc] initWithFrame:CGRectMake(buttonWidth-SEPERATOR_WIDTH/2, 0, SEPERATOR_WIDTH, BUTTON_HEIGHT)];
-        buttonSpecificSeperator.backgroundColor = tbackground(TaskCellBackground);
-        [buttonBarContainer addSubview:buttonSpecificSeperator];
-        
-        UIButton *yesButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        yesButton.titleLabel.font = BUTTON_FONT;
-        yesButton.frame = CGRectMake(buttonWidth, 0,buttonWidth , BUTTON_HEIGHT);
-        [yesButton setTitle:@"DONE" forState:UIControlStateNormal];
-        [yesButton addTarget:self action:@selector(pressedDone:) forControlEvents:UIControlEventTouchUpInside];
-        [buttonBarContainer addSubview:yesButton];
-        
-        UIView *colorBottomSeperator = [[UIView alloc] initWithFrame:CGRectMake(0, BUTTON_BAR_HEIGHT-COLOR_SEPERATOR_HEIGHT, buttonBarContainer.frame.size.width, COLOR_SEPERATOR_HEIGHT)];
-        colorBottomSeperator.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-        [buttonBarContainer addSubview:colorBottomSeperator];
-        
-        [self addSubview:buttonBarContainer];
-        
-        
-        UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 320, self.frame.size.height-BUTTON_BAR_HEIGHT-KEYBOARD_HEIGHT)];
+        UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(kContentSpacing, kTitleHeight + kTextTopPadding, 320-2*kContentSpacing, self.frame.size.height-kTitleHeight-BUTTON_BAR_HEIGHT-KEYBOARD_HEIGHT)];
         notesView.backgroundColor = CLEAR;
-        notesView.tag = NOTES_VIEW_TAG;
-        notesView.font = TEXT_FIELD_FONT;
+        notesView.font = NOTES_VIEW_FONT;
         notesView.keyboardAppearance = UIKeyboardAppearanceAlert;
-        notesView.textColor = tcolor(SearchDrawerColor);
+        notesView.textColor = tcolor(TagColor);
         [self addSubview:notesView];
-        self.notesView = (UITextView*)[self viewWithTag:NOTES_VIEW_TAG];
-        [self.notesView becomeFirstResponder];
+        self.notesView = notesView;
+        
     }
     return self;
 }
--(void)pressedCancel:(id)sender{
-    [self.delegate pressedCancelNotesView:self];
-    if([self.notesView isFirstResponder]) [self.notesView resignFirstResponder];
+-(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
+    if(item == 0){
+        [self.delegate pressedCancelNotesView:self];
+    }else if(item == 5){
+        [self.delegate savedNotesView:self text:self.notesView.text];
+    }
 }
--(void)pressedDone:(id)sender{
-    if([self.notesView isFirstResponder]) [self.notesView resignFirstResponder];
-    [self.delegate savedNotesView:self text:self.notesView.text];
-}
--(void)setNotesText:(NSString*)notesText{
+-(void)setNotesText:(NSString*)notesText title:(NSString *)title{
     self.notesView.text = notesText;
+    //self.titleLabel.text = title;
+}
+-(void)dealloc{
+    self.toolbar = nil;
+    self.notesView = nil;
+    self.titleLabel = nil;
 }
 /*
 // Only override drawRect: if you perform custom drawing.

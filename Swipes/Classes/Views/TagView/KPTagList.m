@@ -89,6 +89,7 @@
     CGFloat tagHeight = 0;
     NSInteger numberOfTags = self.tags.count;
     self.numberOfRows = 1;
+    self.numberOfTags = numberOfTags;
     if(numberOfTags > 0){
         self.isEmptyList = NO;
         NSMutableArray *buttonLine = [NSMutableArray array];
@@ -135,6 +136,7 @@
             [buttonLine addObject:tagLabel];
             [self addSubview:tagLabel];
         }
+        
     }
     else{
         tagHeight = TAG_HEIGHT;
@@ -158,6 +160,52 @@
     }
     //if(resize) CGRectSetY(self.frame, self.frame.origin.y+differenceHeight);
 }
+- (void) animationKeyFramed: (CALayer *) layer
+                   delegate: (id) object
+                     forKey: (NSString *) key {
+    int random = arc4random() % 10 + 1;
+    CGFloat beginTime = 0.2f / random;
+    NSLog(@"random:%i - %f",random,beginTime);
+    CAKeyframeAnimation *animation;
+    animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
+    animation.duration = 0.2;
+    animation.beginTime = CACurrentMediaTime()+ beginTime;
+    animation.cumulative = YES;
+    animation.repeatCount = 1000;
+    animation.values = [NSArray arrayWithObjects:
+                        [NSNumber numberWithFloat: 0.0],
+                        [NSNumber numberWithFloat: radians(-2.0)],
+                        [NSNumber numberWithFloat: 0.0],
+                        [NSNumber numberWithFloat: radians(2.0)],
+                        [NSNumber numberWithFloat: 0.0], nil];
+    animation.fillMode = kCAFillModeForwards;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    animation.removedOnCompletion = NO;
+    animation.delegate = object;
+    
+    [layer addAnimation:animation forKey:key];
+}
+-(void)setWobling:(BOOL)wobling forView:(UIButton*)button{
+    _wobling = wobling;
+    if(wobling){
+        UIColor *woblingColor = tbackground(TaskTableGradientBackground);
+        [self animationKeyFramed:button.layer delegate:self forKey:@"wobbling"];
+        [button setBackgroundImage:[UtilityClass imageWithColor:woblingColor] forState:UIControlStateHighlighted];
+        [button setBackgroundImage:[UtilityClass imageWithColor:woblingColor] forState:UIControlStateSelected | UIControlStateHighlighted];
+    }
+    else{
+        [button.layer removeAnimationForKey:@"wobbling"];
+        [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagSelectedBackground)] forState:UIControlStateHighlighted];
+        [button setBackgroundImage:[UtilityClass imageWithColor:self.tagColor] forState:UIControlStateSelected | UIControlStateHighlighted];
+    }
+}
+-(void)setWobling:(BOOL)wobling{
+    _wobling = wobling;
+    for(UIButton *button in self.subviews){
+        if(![button isKindOfClass:[UIButton class]]) continue;
+        [self setWobling:wobling forView:button];
+    }
+}
 -(CGSize)sizeForTagWithText:(NSString*)text{
     CGSize textSize = [text sizeWithFont:TAG_FONT];
     textSize.width += TAG_HORIZONTAL_PADDING*2;
@@ -165,8 +213,20 @@
     //textSize.height += TAG_VERTICAL_PADDING*2;
     return textSize;
 }
+-(void)deleteTag:(NSString*)tag{
+    if([self.tags containsObject:tag]) [self.tags removeObject:tag];
+    if([self.selectedTags containsObject:tag]) [self.selectedTags removeObject:tag];
+    if([self.tagDelegate respondsToSelector:@selector(tagList:deletedTag:)])[self.tagDelegate tagList:self deletedTag:tag];
+    [self layoutTagsFirst:NO];
+    if(self.tags.count == 0) self.wobling = NO;
+}
 -(void)clickedButton:(UIButton*)sender{
     NSString *tag = sender.titleLabel.text;
+    if(self.wobling){
+        if([self.deleteDelegate respondsToSelector:@selector(tagList:triedToDeleteTag:)])
+            [self.deleteDelegate tagList:self triedToDeleteTag:tag];
+        return;
+    }
     if([self.selectedTags containsObject:tag]){
         [self.selectedTags removeObject:tag];
         sender.selected = NO;
@@ -179,6 +239,7 @@
     }
 }
 - (void)longPressRecognized:(UIGestureRecognizer*)recognizer {
+    if(self.wobling) return;
     if(recognizer.state == UIGestureRecognizerStateBegan){
         CGPoint touchLocation = [recognizer locationInView:self];
         for(UIView *view in self.subviews){
@@ -202,15 +263,6 @@
         }
     }
 }
--(void)delete:(id)sender{
-    if(self.editingTag){
-        if([self.tags containsObject:self.editingTag]) [self.tags removeObject:self.editingTag];
-        if([self.selectedTags containsObject:self.editingTag]) [self.selectedTags removeObject:self.editingTag];
-        [self layoutTagsFirst:NO];
-        if([self.tagDelegate respondsToSelector:@selector(tagList:deletedTag:)]) [self.tagDelegate tagList:self deletedTag:self.editingTag];
-        self.editingTag = nil;
-    }
-}
 -(UIButton*)buttonWithTag:(NSString*)tag{
     CGSize sizeForTag = [self sizeForTagWithText:tag];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -221,17 +273,20 @@
         [button addGestureRecognizer:longPressGestureRecognizer];
         longPressGestureRecognizer.allowableMovement = 15.0;
     }
+    
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
     [button setTitleColor:tcolor(TagColor) forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:self.tagColor] forState:UIControlStateNormal];
     [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagSelectedBackground)] forState:UIControlStateSelected];
     [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagSelectedBackground)] forState:UIControlStateHighlighted];
+    [button setBackgroundImage:[UtilityClass imageWithColor:self.tagColor] forState:UIControlStateSelected | UIControlStateHighlighted];
     button.titleLabel.font = TAG_FONT;
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
     button.layer.cornerRadius = 5;
     button.layer.masksToBounds = YES;
+    if(self.wobling) [self setWobling:YES forView:button];
     return button;
 }
 -(UILabel*)labelWithText:(NSString*)text{

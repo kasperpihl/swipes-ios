@@ -12,37 +12,41 @@
 #define kMinutesInHalfDay 720
 
 #define kDefWheelRadius valForScreen(120,135)
-#define kExtraWheelRadius 20
+#define kExtraWheelRadius valForScreen(15,20)
+
 
 #define kSunImageDistance valForScreen(200, 230)
-#define kClockLabelY valForScreen(0,20)
+#define kLabelSpacing valForScreen(0,0)
+#define kClockLabelY valForScreen(0,0)
+#define kClockLabelFont KP_EXTRABOLD(valForScreen(46,52))
+#define kDayLabelFont KP_REGULAR(valForScreen(16,19))
 #define kDefMiddleButtonRadius 60
 #define kDefClearMiddle 45
 
 #define kOpenedSunAngle valForScreen(70,60)
 #define kExtraAngleForIcons 5
 
-#define kDefWheelColor [UIColor whiteColor]
-#define kDefForegroundColor tbackground(MenuBackground) //tcolor(LaterColor)
+#define kDefWheelColor          [UIColor whiteColor]
+#define kDefForegroundColor     tbackground(MenuBackground) //tcolor(LaterColor)
 #define kDefWheelBackgroundColor tbackground(TimePickerWheelBackground)
-#define kDefLightColor tbackground(TaskTableGradientBackground) //tcolor(SearchDrawerColor)
-#define kDefDarkColor tbackground(SearchDrawerBackground)
+#define kDefLightColor          tbackground(TaskTableGradientBackground) //tcolor(SearchDrawerColor)
+#define kDefDarkColor           tbackground(SearchDrawerBackground)
 
-#define kEndAngle (360-(90-kOpenedSunAngle/2) + kExtraAngleForIcons)
-#define kStartAngle (kEndAngle-kOpenedSunAngle - kExtraAngleForIcons)
+#define kEndAngle               (360-(90-kOpenedSunAngle/2) + kExtraAngleForIcons)
+#define kStartAngle             (kEndAngle- kOpenedSunAngle - 2*kExtraAngleForIcons)
 
-#define kAngleSpan (kEndAngle-kStartAngle)
-#define kSunRiseMinutes 5*60
-#define kSunSetMinutes 19*60
-#define kSunSpan (kSunSetMinutes - kSunRiseMinutes)
-#define kMoonRiseMinutes    17*60
-#define kMoonRiseSpan       (kMinutesInDay - kMoonRiseMinutes)
-#define kMoonSetMinutes     7*60
-#define kMoonSetSpan        (kMoonSetMinutes)
-#define kGlowShowHack 0.4
-#define kGlowMiddleShowHack 0.12
-#define kGlowAnimationDuration 0.2f
-#define kBackButtonSize 52
+#define kAngleSpan              (kEndAngle-kStartAngle)
+#define kSunRiseMinutes         5*60
+#define kSunSetMinutes          19*60
+#define kSunSpan                (kSunSetMinutes - kSunRiseMinutes)
+#define kMoonRiseMinutes        17*60
+#define kMoonRiseSpan           (kMinutesInDay - kMoonRiseMinutes)
+#define kMoonSetMinutes         7*60
+#define kMoonSetSpan            (kMoonSetMinutes)
+#define kGlowShowHack           0.4
+#define kGlowMiddleShowHack     0.12
+#define kGlowAnimationDuration  0.2f
+#define kBackButtonSize         52
 
 #import <QuartzCore/QuartzCore.h>
 #import "KPTimePicker.h"
@@ -61,9 +65,6 @@
     if(self){
         self.backgroundColor = [UIColor clearColor];
         self.timePicker = timePicker;
-        
-        
-        
     }
     return self;
 }
@@ -108,16 +109,15 @@
     CGContextAddPath(currentContext, confirmButtonPath.CGPath);
     CGContextSetFillColorWithColor(currentContext,self.timePicker.foregroundColor.CGColor);
     CGContextFillPath(currentContext);
-    
-    
 }
 
 @end
 
 
-@interface KPTimePicker ()
+@interface KPTimePicker () <UIGestureRecognizerDelegate>
 @property (nonatomic) CGPoint lastPosition;
 @property (nonatomic) CGFloat lastChangedAngle;
+@property (nonatomic) CGFloat distanceForIcons;
 @property (nonatomic) BOOL isInConfirmButton;
 @property (nonatomic) BOOL isOutOfScope;
 
@@ -127,13 +127,16 @@
 @property (nonatomic,strong) UIImageView *sunImage;
 @property (nonatomic,strong) UIImageView *moonImage;
 @property (nonatomic,strong) _KPTimePickerForeGroundView *foregroundView;
+@property (nonatomic,strong) UILabel *dayLabel;
 @property (nonatomic,strong) UILabel *clockLabel;
 @end
 @implementation KPTimePicker
 -(void)setPickingDate:(NSDate *)pickingDate{
-    if(!_pickingDate) pickingDate = [pickingDate dateToNearestMinutes:5];
     if(_pickingDate != pickingDate){
+        if(pickingDate) pickingDate = [pickingDate dateToNearest5Minutes];
         _pickingDate = pickingDate;
+        [self updateForDate:pickingDate];
+        
     }
 }
 -(void)setIsInConfirmButton:(BOOL)isInConfirmButton{
@@ -168,19 +171,23 @@
 }
 #pragma mark Actions
 -(void)pressedBackButton:(UIButton*)sender{
-    [self.delegate timePicker:self selectedTime:nil];
+    [self.delegate timePicker:self selectedDate:nil];
+}
+-(void)pressedConfirmButton:(UIButton*)sender{
+    [self.delegate timePicker:self selectedDate:self.pickingDate];
+}
+-(void)forwardGesture:(UIPanGestureRecognizer *)sender{
+    [self panGestureRecognized:sender];
 }
 #define distanceBetween(p1,p2) sqrt(pow((p2.x-p1.x),2) + pow((p2.y-p1.y),2))
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender
 {
-    
-    
     CGPoint velocity = [sender velocityInView:self];
     CGPoint location = [sender locationInView:self];
     CGFloat vel = fabsf(velocity.y)+fabsf(velocity.x);
     NSInteger minutesPerInterval = 5;
     CGFloat angleInterval = 50;
-    NSLog(@"%f",vel);
+    //NSLog(@"%f",vel);
     if(vel > 1400){
         minutesPerInterval = 30;
         angleInterval = 40;
@@ -189,9 +196,6 @@
     CGFloat distanceToMiddle = distanceBetween(self.centerPoint, location);
     self.isInConfirmButton = (distanceToMiddle < self.middleRadius);
     self.isOutOfScope = (distanceToMiddle < kDefClearMiddle);
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        [self updateForDate:self.pickingDate];
-    }
     if (sender.state == UIGestureRecognizerStateChanged || sender.state == UIGestureRecognizerStateBegan) {
         if(!self.isOutOfScope){
             CGPoint sliderStartPoint = self.lastPosition;// CGPointMake(self.centerPoint.x, self.centerPoint.y - 100.0);
@@ -203,14 +207,13 @@
             if(numberOfIntervals != 0){
                 
                 NSInteger timeAdded = minutesPerInterval*numberOfIntervals;
-                self.pickingDate = [self.pickingDate dateBySubtractingMinutes:timeAdded];
-                //self.pickingDate = [self.pickingDate dateToNearestMinutes:5];
+                NSDate *newTime = [self.pickingDate dateBySubtractingMinutes:timeAdded];
                 self.lastChangedAngle = 0;
                 
-                if(self.minimumDate && [self.pickingDate isEarlierThanDate:self.minimumDate]) self.pickingDate = self.minimumDate;
-                if(self.maximumDate && [self.pickingDate isLaterThanDate:self.maximumDate]) self.pickingDate = self.maximumDate;
+                if(self.minimumDate && [newTime isEarlierThanDate:self.minimumDate]) newTime = self.minimumDate;
+                if(self.maximumDate && [newTime isLaterThanDate:self.maximumDate]) newTime = self.maximumDate;
                 
-                [self updateForDate:self.pickingDate];
+                self.pickingDate = newTime;
             }
         }
         else{
@@ -222,10 +225,10 @@
     if (sender.state == UIGestureRecognizerStateEnded) {
         self.lastPosition = CGPointZero;
         self.lastChangedAngle = 0;
+        self.confirmButton.backgroundColor = CLEAR;
         if(self.isInConfirmButton){
-            
+            [self.delegate timePicker:self selectedDate:self.pickingDate];
         }
-        //[timeView removeFromSuperview];
     }
 }
 -(CGFloat)angleBetweenCenterPoint:(CGPoint)centerPoint point1:(CGPoint)p1 point2:(CGPoint)p2{
@@ -248,6 +251,7 @@
     [dateFormatter setDateStyle:NSDateFormatterNoStyle];
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     self.clockLabel.text =  [[dateFormatter stringFromDate:date] lowercaseString];
+    self.dayLabel.text = [UtilityClass dayStringForDate:date];
     self.backgroundColor = [self colorForDate:date];
     BOOL hiddenSun = YES;
     CGFloat sunAngle = 0;
@@ -278,13 +282,21 @@
         //NSLog(@"moonangle:%f",moonAngle);
     }
     if(!hiddenSun){
-        self.sunImage.center = [self pointFromPoint:self.centerPoint withDistance:kSunImageDistance towardAngle:sunAngle];
+        self.sunImage.center = [self pointFromPoint:self.centerPoint withDistance:self.distanceForIcons towardAngle:sunAngle];
     }
     if(!hiddenMoon){
-        self.moonImage.center = [self pointFromPoint:self.centerPoint withDistance:kSunImageDistance towardAngle:moonAngle];
+        self.moonImage.center = [self pointFromPoint:self.centerPoint withDistance:self.distanceForIcons towardAngle:moonAngle];
+        CGFloat calcAngle = [self angleBetweenCenterPoint:self.centerPoint point1:CGPointMake(self.centerPoint.x+100, self.centerPoint.y) point2:self.moonImage.center];
+        NSLog(@"ang %f calc: %f",moonAngle,360-degrees(calcAngle));
     }
     self.moonImage.hidden = hiddenMoon;
-    
+}
+-(void)setDistanceForIcons:(CGFloat)distanceForIcons{
+    _distanceForIcons = distanceForIcons;
+    CGFloat calcMoonAngle = 360 - degrees([self angleBetweenCenterPoint:self.centerPoint point1:CGPointMake(self.centerPoint.x+100, self.centerPoint.y) point2:self.moonImage.center]);
+    CGFloat calcSunAngle = 360 - degrees([self angleBetweenCenterPoint:self.centerPoint point1:CGPointMake(self.centerPoint.x+100, self.centerPoint.y) point2:self.sunImage.center]);
+    self.moonImage.center = [self pointFromPoint:self.centerPoint withDistance:distanceForIcons towardAngle:calcMoonAngle];
+    self.sunImage.center = [self pointFromPoint:self.centerPoint withDistance:distanceForIcons towardAngle:calcSunAngle];
 }
 -(UIColor *)colorForDate:(NSDate*)date{
     
@@ -302,9 +314,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.centerPoint = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/3*2);
-        self.pickingDate = [NSDate date];
         self.foregroundColor = kDefForegroundColor;
         self.wheelBackgroundColor = kDefWheelBackgroundColor;
+        self.distanceForIcons = kSunImageDistance;
         self.wheelColor = kDefWheelColor;
         self.wheelRadius = kDefWheelRadius;
         self.middleRadius = kDefMiddleButtonRadius;
@@ -329,6 +341,7 @@
         [self.confirmButton setBackgroundImage:[UtilityClass imageWithColor:tcolor(DoneColor)] forState:UIControlStateHighlighted];
         self.confirmButton.frame = CGRectMake(0, 0, 2*self.middleRadius, 2*self.middleRadius);
         self.confirmButton.center = self.centerPoint;
+        [self.confirmButton addTarget:self action:@selector(pressedConfirmButton:) forControlEvents:UIControlEventTouchUpInside];
         [self.confirmButton setImage:[UIImage imageNamed:@"done-selected"] forState:UIControlStateNormal];
         [self.confirmButton setImage:[UIImage imageNamed:@"done-selected"] forState:UIControlStateHighlighted];
         self.confirmButton.layer.masksToBounds = YES;
@@ -348,17 +361,45 @@
         [self addSubview:self.backButton];
         
         UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
+        panGestureRecognizer.delegate = self;
         [self addGestureRecognizer:panGestureRecognizer];
         
+        self.dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 120)];
+        self.dayLabel.backgroundColor = [UIColor clearColor];
+        self.dayLabel.textColor = [UIColor whiteColor];
+        self.dayLabel.font = kDayLabelFont;
+        self.dayLabel.textAlignment = UITextAlignmentCenter;
+        [self addSubview:self.dayLabel];
+
         self.clockLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kClockLabelY, self.bounds.size.width, 120)];
         self.clockLabel.backgroundColor = [UIColor clearColor];
-        self.clockLabel.textColor = [UIColor whiteColor];
-        self.clockLabel.font = KP_BOLD(40);
+        self.clockLabel.textColor = [UIColor whiteColor]; //self.foregroundColor;
+        self.clockLabel.font = kClockLabelFont;
         self.clockLabel.textAlignment = UITextAlignmentCenter;
         [self addSubview:self.clockLabel];
-        [self updateForDate:self.pickingDate];
+        self.pickingDate = [NSDate date];
     }
     return self;
+}
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    CGFloat heightForContent = self.centerPoint.y - self.wheelRadius - kExtraWheelRadius;
+    
+    
+    CGFloat heightForDay = [@"abcdefghADB" sizeWithFont:self.dayLabel.font].height;
+    CGFloat heightForTime = [@"08:00pm" sizeWithFont:self.clockLabel.font].height;
+    CGFloat iconHeigt = self.sunImage.image.size.height;
+    
+    CGFloat overflowSpace = heightForContent - heightForDay - kLabelSpacing - heightForTime - iconHeigt;
+    CGFloat spacing = overflowSpace / 6;
+    
+    self.dayLabel.frame = CGRectMake(0, spacing, self.bounds.size.width, heightForDay);
+    self.clockLabel.frame = CGRectMake(0, spacing+heightForDay+kLabelSpacing, self.bounds.size.width, heightForTime);
+    
+    self.distanceForIcons = self.wheelRadius + kExtraWheelRadius + spacing*4 + iconHeigt/2;
+}
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    return YES;
 }
 -(void)dealloc{
     self.confirmButton = nil;

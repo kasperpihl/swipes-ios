@@ -70,7 +70,7 @@
 
 @end
 
-@interface CKCalendarView ()
+@interface CKCalendarView () <UIGestureRecognizerDelegate>
 
 @property(nonatomic, strong) UIView *highlight;
 @property (nonatomic,strong) UIButton *titleButton;
@@ -87,7 +87,7 @@
 @property (nonatomic, strong) NSDate *selectedDate;
 @property (nonatomic, strong) NSCalendar *calendar;
 @property(nonatomic, assign) CGFloat cellWidth;
-
+@property (nonatomic,strong) UILongPressGestureRecognizer *longPressRecognizer;
 @end
 
 @implementation CKCalendarView
@@ -105,14 +105,13 @@
 -(void)setFormatForDate:(NSDate*)date{
     if([date isSameYearAsDate:[NSDate date]]) self.dateFormatter.dateFormat = @"d LLL";
     else self.dateFormatter.dateFormat = @"d LLL  '´'yy";
-    
 }
 - (void)_init {
     CKCalendarStartDay firstDay;
     self.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     firstDay = [[NSCalendar currentCalendar] firstWeekday];
     [self.calendar setLocale:[NSLocale currentLocale]];
-
+    self.userInteractionEnabled = YES;
     self.cellWidth = self.bounds.size.width/7;
 
     self.dateFormatter = [[NSDateFormatter alloc] init];
@@ -175,12 +174,16 @@
 
     // at most we'll need 42 buttons, so let's just bite the bullet and make them now...
     NSMutableArray *dateButtons = [NSMutableArray array];
+    self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
+    self.longPressRecognizer.allowableMovement = 15.0f;
+    self.longPressRecognizer.delegate = self;
+    [self.calendarContainer addGestureRecognizer:self.longPressRecognizer];
     for (NSInteger i = 1; i <= 42; i++) {
         DateButton *dateButton = [DateButton buttonWithType:UIButtonTypeCustom];
         dateButton.calendar = self.calendar;
+        
         dateButton.layer.masksToBounds = YES;
         [dateButton addTarget:self action:@selector(_dateButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        
         [dateButtons addObject:dateButton];
     }
     self.dateButtons = dateButtons;
@@ -190,6 +193,9 @@
     [self _setDefaultStyle];
     
     [self layoutSubviews]; // TODO: this is a hack to get the first month to show properly
+}
+-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+    return YES;
 }
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -222,7 +228,7 @@
     [self setFormatForDate:self.selectedDate];
     NSString *monthYearString = [[self.dateFormatter stringFromDate:self.selectedDate] uppercaseString];
     self.titleLabel.text = [NSString stringWithFormat:@"%@  |  %@",monthYearString, [UtilityClass timeStringForDate:self.selectedDate]];
-    self.titleButton.frame = CGRectMake(0, 0, self.bounds.size.width, TOP_HEIGHT);
+    self.titleButton.frame = CGRectMake(MONTH_BUTTON_WIDTH, 0, self.bounds.size.width-2*MONTH_BUTTON_WIDTH, TOP_HEIGHT);
     self.titleLabel.frame = CGRectMake(0, 0, self.bounds.size.width, TOP_HEIGHT);
     self.prevButton.frame = CGRectMake(0,0 , MONTH_BUTTON_WIDTH, TOP_HEIGHT);
     self.nextButton.frame = CGRectMake(self.bounds.size.width - MONTH_BUTTON_WIDTH, 0, MONTH_BUTTON_WIDTH, TOP_HEIGHT);
@@ -274,6 +280,24 @@
     self.prevButton.enabled = !isEarliestMonth;
     if ([self.delegate respondsToSelector:@selector(calendar:didLayoutInRect:)]) {
         [self.delegate calendar:self didLayoutInRect:self.frame];
+    }
+}
+-(void)longPressRecognized:(UILongPressGestureRecognizer*)sender{
+    if(sender.state == UIGestureRecognizerStateBegan){
+        UIView *view = [self.calendarContainer hitTest:[sender locationInView:self.calendarContainer] withEvent:nil];
+        NSDate *date;
+        if([view isKindOfClass:[DateButton class]]){
+            DateButton *button = (DateButton*)view;
+            date = button.date;
+        }
+        else return;
+        if([self.delegate respondsToSelector:@selector(calendar:updateTimeForDate:)])
+            [self.delegate calendar:self updateTimeForDate:&date];
+        if ([self _compareByMonth:date toDate:self.monthShowing] == NSOrderedSame && [date isLaterThanDate:[[NSDate date] dateAtStartOfDay]]){
+            if([self.delegate respondsToSelector:@selector(calendar:longPressForDate:)]){
+                [self.delegate calendar:self longPressForDate:date];
+            }
+        }
     }
 }
 -(DateButton*)layoutButton:(DateButton*)button{

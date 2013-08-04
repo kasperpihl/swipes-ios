@@ -28,8 +28,10 @@
 #define KP_REGULAR(fontSize)            [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize]
 #define KP_BOLD(fontSize)               [UIFont fontWithName:@"ProximaNova-Bold" size:fontSize]
 #define KP_SEMIBOLD(fontSize)           [UIFont fontWithName:@"ProximaNova-Semibold" size:fontSize]
+#define KP_EXTRABOLD(fontSize)          [UIFont fontWithName:@"ProximaNova-Extrabld" size:fontSize]
 #define KP_COND_BOLD(fontSize)          [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:fontSize]
 #define KP_COND_SEMIBOLD(fontSize)      [UIFont fontWithName:@"ProximaNovaCond-Semibold" size:fontSize]
+
 
 #define SCHEDULE_BUTTON_FONT            KP_SEMIBOLD(14)
 #define SCHEDULE_BUTTON_CAPITAL         NO
@@ -49,8 +51,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 
 
 /* Text Colors */
-
-
 
 
 /* Table View */
@@ -109,6 +109,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #define TABLE_EMPTY_BG_FONT             KP_REGULAR(20)
 #define NO_TAG_FONT                     KP_LIGHT(18)
 #define TEXT_FIELD_FONT                 KP_LIGHT(18)
+#define NOTES_VIEW_FONT                 KP_REGULAR(17)
 #define SECTION_HEADER_FONT             KP_LIGHT(18)
 #define TITLE_LABEL_FONT                KP_LIGHT(19)
 #define TAGS_LABEL_FONT                 KP_LIGHT(13)

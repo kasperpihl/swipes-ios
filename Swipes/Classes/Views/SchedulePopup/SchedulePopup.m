@@ -14,6 +14,7 @@
 #import "CKCalendarView.h"
 #import "KPToolbar.h"
 #import "UIColor+Utilities.h"
+#import "KPTimePicker.h"
 #define POPUP_WIDTH 315
 #define CONTENT_VIEW_TAG 1
 
@@ -39,6 +40,8 @@
 
 #define kToolbarHeight 60
 
+#define kTimePickerDuration 0.20f
+
 #define kSepExtraOut 5
 typedef enum {
     CustomPickerTypeDay = 0,
@@ -47,7 +50,7 @@ typedef enum {
     CustomPickerTypeAMPM
 } CustomPickerTypes;
 
-@interface SchedulePopup () <KPBlurryDelegate,CKCalendarDelegate,ToolbarDelegate>
+@interface SchedulePopup () <KPBlurryDelegate,CKCalendarDelegate,ToolbarDelegate,KPTimePickerDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic,copy) SchedulePopupBlock block;
 @property (nonatomic,weak) IBOutlet UIView *contentView;
 @property (nonatomic) BOOL isPickingDate;
@@ -57,8 +60,9 @@ typedef enum {
 @property (nonatomic) IBOutletCollection(UIButton) NSMutableArray *scheduleButtons;
 @property (nonatomic,strong) CKCalendarView *calendarView;
 @property (nonatomic,strong) KPToolbar *toolbar;
-
-
+@property (nonatomic,strong) KPTimePicker *timePicker;
+@property (nonatomic) KPScheduleButtons activeButton;
+@property (nonatomic,strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, weak) IBOutlet UIView *timeViewer;
 
 @end
@@ -110,10 +114,10 @@ typedef enum {
             date = [NSDate dateThisOrNextWeekWithDay:2 hours:9 minutes:0];
             break;
         case KPScheduleButtonUnscheduled:
-            date = nil;
         case KPScheduleButtonSpecificTime:
         case KPScheduleButtonCancel:
-            return nil;
+            date = nil;
+            break;
     }
     return date;
 }
@@ -121,7 +125,7 @@ typedef enum {
     [self returnState:KPScheduleButtonCancel date:nil];
 }
 -(void)pressedScheduleButton:(UIButton*)sender{
-    KPScheduleButtons thisButton = sender.tag - SCHEDULE_BUTTON_START_TAG;
+    KPScheduleButtons thisButton = [self buttonForTag:sender.tag];
     [self deHighlightedButton:sender];
     NSLog(@"thisButton:%i",thisButton);
     if(thisButton == KPScheduleButtonSpecificTime) [self pressedSpecific:self];
@@ -131,7 +135,7 @@ typedef enum {
     }
 }
 -(CGRect)positionForButton:(UIButton*)scheduleButton{
-    KPScheduleButtons button = scheduleButton.tag - SCHEDULE_BUTTON_START_TAG;
+    KPScheduleButtons button = [self buttonForTag:scheduleButton.tag];
     CGFloat y = scheduleButton.frame.origin.y;
     CGFloat x = scheduleButton.frame.origin.x;
     if(button == 1 || button == 4 || button == 7) x = -scheduleButton.frame.size.width - kSepExtraOut;
@@ -221,6 +225,10 @@ typedef enum {
         }];
     }
 }
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    if([otherGestureRecognizer isEqual:self.panRecognizer] && !self.timePicker) return NO;
+    return YES;
+}
 -(void)calendar:(CKCalendarView *)calendar didLayoutInRect:(CGRect)frame{
     
     if(self.isPickingDate){
@@ -302,6 +310,10 @@ typedef enum {
         UIButton *unspecifiedButton = [self buttonForScheduleButton:KPScheduleButtonUnscheduled title:@"Unspecified"];
         [contentView addSubview:unspecifiedButton];
         
+        self.panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
+        self.panRecognizer.delegate = self;
+        [contentView addGestureRecognizer:self.panRecognizer];
+        
         [self addSubview:contentView];
         self.contentView = [self viewWithTag:CONTENT_VIEW_TAG];
         [self addPickerView];
@@ -311,10 +323,66 @@ typedef enum {
 -(void)calendar:(CKCalendarView *)calendar updateTimeForDate:(NSDate *__autoreleasing *)date{
     TimeRef timeRef = [self startingTimeForDate:*date];
     *date = [*date dateAtHours:timeRef.hours minutes:timeRef.minutes];
+    if([*date isToday] && [*date isEarlierThanDate:[NSDate date]]) *date = [[[NSDate date] dateByAddingMinutes:5] dateToNearest5Minutes];
+}
+-(void)calendar:(CKCalendarView *)calendar longPressForDate:(NSDate *)date{
+    [self openTimePickerWithButton:KPScheduleButtonSpecificTime andDate:date];
+}
+-(void)calendar:(CKCalendarView *)calendar pressedTitleButton:(UIButton *)sender{
+    [self openTimePickerWithButton:KPScheduleButtonSpecificTime andDate:self.calendarView.selectedDate];
+}
+-(void)openTimePickerWithButton:(KPScheduleButtons)button andDate:(NSDate*)date{
+    self.activeButton = button;
+    self.timePicker = [[KPTimePicker alloc] initWithFrame:self.bounds];
+    self.timePicker.delegate = self;
+    self.timePicker.pickingDate = date;
+    self.timePicker.minimumDate = [date dateAtStartOfDay];
+    if(button == KPScheduleButtonLaterToday || [date isToday]) self.timePicker.minimumDate = [[NSDate date] dateByAddingMinutes:5];
+    self.timePicker.maximumDate = [[[date dateByAddingDays:1] dateAtStartOfDay] dateBySubtractingMinutes:5];
+    self.timePicker.alpha = 0;
+    [self addSubview:self.timePicker];
+    [UIView animateWithDuration:kTimePickerDuration animations:^{
+        self.timePicker.alpha = 1;
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+-(NSString *)timePicker:(KPTimePicker *)timePicker titleForDate:(NSDate *)date{
+    return nil;
+}
+-(void)timePicker:(KPTimePicker *)timePicker selectedDate:(NSDate *)date{
+    NSLog(@"hehe :%@",date);
+    [UIView animateWithDuration:kTimePickerDuration animations:^{
+        timePicker.alpha = 0;
+    } completion:^(BOOL finished) {
+        if(finished){
+            [timePicker removeFromSuperview];
+            self.timePicker = nil;
+            if(date) [self returnState:self.activeButton date:date];
+        }
+    }];
+    
+}
+-(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
+    if(!self.timePicker) return;
+    [self.timePicker forwardGesture:sender];
+}
+-(void)longPressRecognized:(UIGestureRecognizer*)sender{
+    if(sender.state == UIGestureRecognizerStateBegan){
+        UIView *view = sender.view;
+        KPScheduleButtons button = [self buttonForTag:view.tag];
+        if(button == KPScheduleButtonSpecificTime){
+            [self pressedSpecific:self];
+            return;
+        }
+        NSDate *dateForButton = [self dateForButton:button];
+        if(!dateForButton) return;
+        [self openTimePickerWithButton:button andDate:dateForButton];
+    }
+    
 }
 -(void)addPickerView{
     //UIColor *weekdayColor = [[tbackground(SearchDrawerBackground) getColorSaturatedWithPercentage:-0.5] getColorBrightenedWithPercentage:0.5];
-    
     self.calendarView = [[CKCalendarView alloc] initWithFrame:CGRectMake(0, 0, 315, 315)];
     self.calendarView.onlyShowCurrentMonth = NO;
     self.calendarView.hidden = YES;
@@ -334,6 +402,12 @@ typedef enum {
     [self.contentView addSubview:self.toolbar];
     [self.contentView addSubview:self.calendarView];
 }
+-(KPScheduleButtons)buttonForTag:(NSInteger)tag{
+    return tag - SCHEDULE_BUTTON_START_TAG;
+}
+-(NSInteger)tagForButton:(KPScheduleButtons)button{
+    return button+SCHEDULE_BUTTON_START_TAG;
+}
 -(void)highlightedButton:(UIButton *)sender{
     
     UIImageView *iconImage = (UIImageView*)[sender viewWithTag:1337];
@@ -348,7 +422,7 @@ typedef enum {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage:[UtilityClass imageWithColor:POPUP_SELECTED] forState:UIControlStateHighlighted];
     button.titleLabel.font = SCHEDULE_BUTTON_FONT;
-    button.tag = SCHEDULE_BUTTON_START_TAG + scheduleButton;
+    button.tag = [self tagForButton:scheduleButton];
     if(SCHEDULE_BUTTON_CAPITAL) title = [title uppercaseString];
     [button setTitle:title forState:UIControlStateNormal];
     [button addTarget:self action:@selector(pressedScheduleButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -369,8 +443,10 @@ typedef enum {
     [button addTarget:self action:@selector(highlightedButton:) forControlEvents:UIControlEventTouchDown];
     [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchCancel];
     [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchUpOutside];
-    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
-    [button addGestureRecognizer:panGestureRecognizer];
+    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
+    longPressGestureRecognizer.allowableMovement = 44.0f;
+    longPressGestureRecognizer.delegate = self;
+    [button addGestureRecognizer:longPressGestureRecognizer];
     iconImageView.frame = CGRectSetPos(iconImageView.frame, (button.frame.size.width-iconImage.size.width)/2,spacing);
     button.titleEdgeInsets = UIEdgeInsetsMake(0, 0, spacing, 0);
     [button addSubview:iconImageView];

@@ -14,5 +14,5 @@
 @end
 @interface NotesView : UIView
 @property (nonatomic,weak) NSObject<NotesViewDelegate> *delegate;
--(void)setNotesText:(NSString*)notesText;
+-(void)setNotesText:(NSString*)notesText title:(NSString*)title;
 @end

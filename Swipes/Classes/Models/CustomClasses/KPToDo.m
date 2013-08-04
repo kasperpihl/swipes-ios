@@ -116,6 +116,8 @@
     if(self.tagString.length > 0) tagsStrings = [[self.tagString componentsSeparatedByString:@", "] mutableCopy];
     if(remove) [self removeTags:tagsSet];
     else [self addTags:tagsSet];
+    [self save];
+    NSLog(@"todo %@ tags:%i",tagsSet, self.tags.count);
     for(NSString *tag in tags){
         BOOL contained = [tagsStrings containsObject:tag];
         if(remove && contained) [tagsStrings removeObject:tag];

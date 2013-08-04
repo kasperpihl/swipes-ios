@@ -55,6 +55,7 @@
     [Appirater appLaunched:YES];
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (notification) [self application:application didReceiveLocalNotification:notification];
+    
     return YES;
 }
 - (void)application:(UIApplication *)application

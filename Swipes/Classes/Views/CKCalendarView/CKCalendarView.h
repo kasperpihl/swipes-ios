@@ -72,7 +72,7 @@ typedef enum {
 @optional
 - (void)calendar:(CKCalendarView *)calendar pressedTitleButton:(UIButton*)sender;
 - (void)calendar:(CKCalendarView *)calendar updateTimeForDate:(NSDate**)date;
-
+- (void)calendar:(CKCalendarView *)calendar longPressForDate:(NSDate *)date;
 - (void)calendar:(CKCalendarView *)calendar didLayoutInRect:(CGRect)frame;
 
 @end
