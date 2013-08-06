@@ -340,7 +340,9 @@
     	// Add the remainder of time to the date to round it up evenly
     	newDate = [self dateByAddingTimeInterval:60*(5-remain)];
     }
-    return newDate;
+    NSDateComponents *comps = [[NSCalendar currentCalendar] components:unitFlags fromDate:newDate];
+    [comps setSecond:0];
+    return [[NSCalendar currentCalendar] dateFromComponents:comps];
 }
 #pragma mark Retrieving Intervals
 

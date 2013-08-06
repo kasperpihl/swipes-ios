@@ -15,9 +15,10 @@
 #import "KPBlurry.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
+#import "MenuButton.h"
 #define kMenuButtonStartTag 4123
 
-#define SCHEDULE_IMAGE_CENTER_SPACING 13
+
 #define kSeperatorMargin 0
 #define kGridMargin 20
 #define kVerticalGridNumber 2
@@ -121,7 +122,7 @@
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
 -(void)pressedMenuButton:(UIButton*)sender{
-    [self deHighlightedButton:sender];
+    
     KPMenuButtons button = [self buttonForTag:sender.tag];
     switch (button) {
         case KPMenuButtonNotifications:
@@ -214,47 +215,11 @@
     CGFloat y = floor((button-1) / kVerticalGridNumber) * self.gridView.frame.size.width/kVerticalGridNumber + kGridButtonPadding;
     return CGRectMake(x, y, width, width);
 }
--(void)highlightedButton:(UIButton *)sender{
-    UIImageView *iconImage = (UIImageView*)[sender viewWithTag:1337];
-    iconImage.highlighted = YES;
-}
--(void)deHighlightedButton:(UIButton *)sender{
-    UIImageView *iconImage = (UIImageView*)[sender viewWithTag:1337];
-    iconImage.highlighted = NO;
-}
+
 -(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton title:(NSString *)title{
-    UIColor *highlightedColor = tbackground(TaskCellBackground);
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:title image:[self imageForMenuButton:menuButton]];
     button.tag = [self tagForButton:menuButton];
-    button.titleLabel.font = SCHEDULE_BUTTON_FONT;
-    [button setTitle:title forState:UIControlStateNormal];
-    
     [button addTarget:self action:@selector(pressedMenuButton:) forControlEvents:UIControlEventTouchUpInside];
-    [button addTarget:self action:@selector(highlightedButton:) forControlEvents:UIControlEventTouchDown];
-    [button addTarget:self action:@selector(highlightedButton:) forControlEvents:UIControlEventTouchDragInside];
-    [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchCancel];
-    [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchDragOutside];
-    
-    [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
-    [button setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
-    
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button setTitleColor:highlightedColor forState:UIControlStateHighlighted];
-    
-    UIImage *iconImage = [self imageForMenuButton:menuButton];
-    UIImageView *iconImageView = [[UIImageView alloc] initWithImage:iconImage];
-    iconImageView.tag = 1337;
-    iconImageView.highlightedImage = [UtilityClass image:iconImage withColor:highlightedColor multiply:YES];
-    
-    button.frame = [self frameForButton:menuButton];
-    CGFloat imageHeight = iconImageView.frame.size.height;
-    CGFloat textHeight = [@"Kasjper" sizeWithFont:SCHEDULE_BUTTON_FONT].height;
-    NSInteger dividor = (SCHEDULE_IMAGE_CENTER_SPACING == 0) ? 3 : 2;
-    CGFloat spacing = (button.frame.size.height-imageHeight-textHeight-SCHEDULE_IMAGE_CENTER_SPACING)/dividor;
-    
-    iconImageView.frame = CGRectSetPos(iconImageView.frame, (button.frame.size.width-iconImage.size.width)/2,spacing);
-    button.titleEdgeInsets = UIEdgeInsetsMake(0, 0, spacing, 0);
-    [button addSubview:iconImageView];
     [self.menuButtons addObject:button];
     return button;
 }

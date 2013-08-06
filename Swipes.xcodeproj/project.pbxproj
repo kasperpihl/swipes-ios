@@ -216,6 +216,7 @@
 		A7C90E7617A712A100C5F9E2 /* wt_signature.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E7417A712A100C5F9E2 /* wt_signature.png */; };
 		A7C90E7717A712A100C5F9E2 /* wt_signature@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E7517A712A100C5F9E2 /* wt_signature@2x.png */; };
 		A7D7D53317B1586A00FBC042 /* SettingsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53217B1586A00FBC042 /* SettingsHandler.m */; };
+		A7D7D53917B1A56C00FBC042 /* MenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53817B1A56B00FBC042 /* MenuButton.m */; };
 		A7DEA17F1790A5EA00EB1549 /* AccelerationAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA1731790A5EA00EB1549 /* AccelerationAnimation.m */; };
 		A7DEA1801790A5EA00EB1549 /* backbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A7DEA1741790A5EA00EB1549 /* backbutton.png */; };
 		A7DEA1811790A5EA00EB1549 /* Evaluate.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA1761790A5EA00EB1549 /* Evaluate.m */; };
@@ -509,6 +510,8 @@
 		A7C90E7517A712A100C5F9E2 /* wt_signature@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wt_signature@2x.png"; sourceTree = "<group>"; };
 		A7D7D53117B1586A00FBC042 /* SettingsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHandler.h; sourceTree = "<group>"; };
 		A7D7D53217B1586A00FBC042 /* SettingsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsHandler.m; sourceTree = "<group>"; };
+		A7D7D53717B1A56B00FBC042 /* MenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuButton.h; sourceTree = "<group>"; };
+		A7D7D53817B1A56B00FBC042 /* MenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuButton.m; sourceTree = "<group>"; };
 		A7DEA1721790A5EA00EB1549 /* AccelerationAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerationAnimation.h; sourceTree = "<group>"; };
 		A7DEA1731790A5EA00EB1549 /* AccelerationAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerationAnimation.m; sourceTree = "<group>"; };
 		A7DEA1741790A5EA00EB1549 /* backbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backbutton.png; sourceTree = "<group>"; };
@@ -1007,6 +1010,8 @@
 		A781286717294C56002226C8 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				A7D7D53717B1A56B00FBC042 /* MenuButton.h */,
+				A7D7D53817B1A56B00FBC042 /* MenuButton.m */,
 				A7DEA1871790BD2D00EB1549 /* MenuViewController.h */,
 				A7DEA1881790BD2D00EB1549 /* MenuViewController.m */,
 				A7F4065F17294ECE00DDE644 /* RootViewController.h */,
@@ -1678,6 +1683,7 @@
 				A72DDD8617AAAFAF00A00454 /* KPTimePicker.m in Sources */,
 				A7FA8B1D17AF094E00134ED0 /* SnoozesViewController.m in Sources */,
 				A7D7D53317B1586A00FBC042 /* SettingsHandler.m in Sources */,
+				A7D7D53917B1A56C00FBC042 /* MenuButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

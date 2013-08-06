@@ -11,6 +11,6 @@
 
 @interface NotificationHandler : NSObject
 +(NotificationHandler*)sharedInstance;
--(void)scheduleNumberOfTasks:(NSInteger)numberOfTasks forDate:(NSDate*)date;
--(void)scheduleDate:(NSDate *)date identifier:(NSString*)identifier title:(NSString *)title;
+//-(void)scheduleDate:(NSDate *)date identifier:(NSString*)identifier title:(NSString *)title;
+-(void)updateLocalNotifications;
 @end

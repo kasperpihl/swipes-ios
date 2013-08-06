@@ -56,6 +56,10 @@
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (notification) [self application:application didReceiveLocalNotification:notification];
     
+    NSArray *notifications = [application scheduledLocalNotifications];
+    for(UILocalNotification *lNoti in notifications){
+        NSLog(@"t: %i - %@ - %@",lNoti.applicationIconBadgeNumber,lNoti.alertBody,lNoti.fireDate);
+    }
     return YES;
 }
 - (void)application:(UIApplication *)application
@@ -89,6 +93,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [ANALYTICS endSession];
+    [ROOT_CONTROLLER closeApp];
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -96,6 +101,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     [Appirater appEnteredForeground:YES];
+    [ROOT_CONTROLLER openApp];
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
@@ -105,6 +111,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     NSString *isLoggedIn = ([PFUser currentUser]) ? @"yes" : @"no";
     if([isLoggedIn isEqualToString:@"yes"]) [ANALYTICS startSession];
     else [MIXPANEL track:@"Opened app" properties:@{@"Is logged in":isLoggedIn}];
+    NSLog(@"did become active");
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 

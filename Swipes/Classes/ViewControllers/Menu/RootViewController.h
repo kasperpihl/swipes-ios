@@ -26,4 +26,6 @@ typedef enum {
 -(void)resetRoot;
 -(void)walkthrough;
 -(void)logOut;
+-(void)closeApp;
+-(void)openApp;
 @end

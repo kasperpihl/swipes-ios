@@ -21,11 +21,6 @@
     }
     return CellTypeNone;
 }
--(void)updateNotificationForDate:(NSDate*)date{
-    NSString *identifier = [[self.objectID URIRepresentation] absoluteString];
-    NSString *title = self.title;
-    [NOTIHANDLER scheduleDate:date identifier:identifier title:title];
-}
 -(void)updateNotes:(NSString *)notes save:(BOOL)save{
     self.notes = notes;
     if(save) [self save];
@@ -155,7 +150,6 @@
     
 }
 -(void)deleteToDoSave:(BOOL)save{
-    [self updateNotificationForDate:nil];
     [self MR_deleteEntity];
     if(save) [self save];
 }
@@ -168,13 +162,11 @@
     return self.readableTags;*/
 }
 -(void)complete{
-    [self updateNotificationForDate:nil];
     self.schedule = nil;
     self.state = @"done";
     self.completionDate = [NSDate date];
 }
 -(void)scheduleForDate:(NSDate*)date{
-    [self updateNotificationForDate:date];
     self.schedule = date;
     self.state = @"scheduled";
 }

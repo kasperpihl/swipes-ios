@@ -28,10 +28,12 @@
 #import "KPBlurry.h"
 #import "WalkthroughViewController.h"
 #import "UIColor+Utilities.h"
+
+#import "NotificationHandler.h"
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
-
+@property (nonatomic) NSDate *lastClose;
 @end
 
 @implementation RootViewController
@@ -169,6 +171,13 @@ static RootViewController *sharedObject;
     [self.sideMenu panGestureRecognized:sender];
 }
 
+-(void)openApp{
+    NSLog(@"setting up stuff");
+    if(self.lastClose && [self.lastClose isLaterThanDate:[[NSDate date] dateByAddingMinutes:5]]) [self resetRoot];
+}
+-(void)closeApp{
+    self.lastClose = [NSDate date];
+}
 #pragma mark - Helping methods
 #pragma mark - ViewController methods
 -(void)setupAppearance{
@@ -181,7 +190,6 @@ static RootViewController *sharedObject;
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
-    
     BLURRY.delegate = self;
     self.sideMenu = kSideMenu;
     self.sideMenu.backgroundImage = [tbackground(TaskTableGradientBackground) image];
@@ -191,6 +199,7 @@ static RootViewController *sharedObject;
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     [self.view addGestureRecognizer:panGestureRecognizer];
     [self setupAppearance];
+    NSLog(@"did setup appearance");
 }
 
 - (void)viewDidUnload

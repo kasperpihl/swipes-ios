@@ -22,11 +22,14 @@ static ToDoHandler *sharedObject;
     return sharedObject;
 }
 -(void)deleteToDos:(NSArray*)toDos save:(BOOL)save{
+    BOOL shouldUpdateNotifications = NO;
     for(KPToDo *toDo in toDos){
+        if(!toDo.completionDate) shouldUpdateNotifications = YES;
         [toDo deleteToDoSave:NO];
     }
     if(save) [self save];
     [ANALYTICS incrementKey:NUMBER_OF_DELETED_TASKS_KEY withAmount:toDos.count];
+    if(shouldUpdateNotifications) [NOTIHANDLER updateLocalNotifications];
 }
 -(KPToDo*)addItem:(NSString *)item{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
@@ -37,6 +40,7 @@ static ToDoHandler *sharedObject;
     newToDo.order = count;
     [self save];
     [ANALYTICS incrementKey:NUMBER_OF_ADDED_TASKS_KEY withAmount:1];
+    [NOTIHANDLER updateLocalNotifications];
     return newToDo;
 }
 -(void)changeToDos:(NSArray*)toDos title:(NSString *)title save:(BOOL)save{
@@ -55,13 +59,14 @@ static ToDoHandler *sharedObject;
     [self save];
     [ANALYTICS incrementKey:NUMBER_OF_SCHEDULES_KEY withAmount:toDoArray.count];
     if(!date) [ANALYTICS incrementKey:NUMBER_OF_UNSPECIFIED_TASKS_KEY withAmount:toDoArray.count];
-    
+    [NOTIHANDLER updateLocalNotifications];
 }
 -(void)completeToDos:(NSArray*)toDoArray{
     for(KPToDo *toDo in toDoArray){
         [toDo complete];
     }
     [self save];
+    [NOTIHANDLER updateLocalNotifications];
     [ANALYTICS incrementKey:NUMBER_OF_COMPLETED_KEY withAmount:toDoArray.count];
 }
 -(MCSwipeTableViewCellActivatedDirection)directionForCellType:(CellType)type{

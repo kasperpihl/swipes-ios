@@ -15,8 +15,6 @@ static SettingsHandler *sharedObject;
     return sharedObject;
 }
 -(id)valueForSetting:(KPSettings)setting{
-    
-
     return nil;
 }
 -(void)setValue:(id)value forSetting:(KPSettings)setting{

@@ -126,6 +126,7 @@
     NSString *title = [[self.itemHandler titleForSection:section] capitalizedString];
     headerView.backgroundColor = backgroundColor;
     SectionHeaderExtraView *extraView = [[SectionHeaderExtraView alloc] initWithColor:[TODOHANDLER colorForCellType:self.cellType] font:font title:title];
+    extraView.tag = 13338;
     if(self.cellType == CellTypeToday) extraView.textColor = color(44,50, 59, 1);
     CGRectSetX(extraView, 320-extraView.frame.size.width);
     [headerView addSubview:extraView];

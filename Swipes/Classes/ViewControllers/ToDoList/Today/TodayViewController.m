@@ -8,7 +8,6 @@
 #define TABLEVIEW_TAG 501
 #import "TodayViewController.h"
 #import "KPReorderTableView.h"
-
 @interface TodayViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 @property (nonatomic,weak) IBOutlet KPReorderTableView *tableView;
 @property (nonatomic,strong) NSIndexPath *dragRow;
@@ -21,7 +20,6 @@
     [super itemHandler:handler changedItemNumber:itemNumber];
     [self changeToColored:(itemNumber == 0)];
     [self.tableView setReorderingEnabled:(itemNumber > 1)];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:itemNumber];
 }
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     NSDate *endDate = [NSDate date];
