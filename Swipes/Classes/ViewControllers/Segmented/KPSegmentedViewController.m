@@ -18,7 +18,7 @@
 #import "KPAlert.h"
 #import <QuartzCore/QuartzCore.h>
 #import "ThemeHandler.h"
-
+#import "UIColor+Utilities.h"
 #import "KPBlurry.h"
 
 #define DEFAULT_SELECTED_INDEX 1
@@ -146,7 +146,7 @@
 	if (!_segmentedControl) {
 		//_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];
         AKSegmentedControl *segmentedControl = [[AKSegmentedControl alloc] initWithFrame:INTERESTED_SEGMENT_RECT];
-        [segmentedControl setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)]];
+        [segmentedControl setBackgroundImage:[tbackground(MenuSelectedBackground) image]];
         [segmentedControl setSelectedIndex: DEFAULT_SELECTED_INDEX];
         segmentedControl.layer.cornerRadius = SEGMENT_BORDER_RADIUS;
         segmentedControl.layer.masksToBounds = NO;
@@ -172,9 +172,9 @@
 -(UIButton*)buttonForSegment:(KPSegmentButtons)controlButton{
     UIButton *button = [[UIButton alloc] init];
     CGRectSetSize(button, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
-    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuBackground)] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)] forState:UIControlStateSelected];
-    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)] forState:UIControlStateHighlighted | UIControlStateSelected];
+    [button setBackgroundImage:[tbackground(MenuBackground) image] forState:UIControlStateNormal];
+    [button setBackgroundImage:[tbackground(MenuSelectedBackground) image] forState:UIControlStateSelected];
+    [button setBackgroundImage:[tbackground(MenuSelectedBackground) image] forState:UIControlStateHighlighted | UIControlStateSelected];
     //[button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)] forState:UIControlStateHighlighted];
     button.adjustsImageWhenHighlighted = NO;
     NSString *imageString;

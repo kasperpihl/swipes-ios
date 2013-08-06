@@ -10,6 +10,7 @@
 #import "KPTagList.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIColor+Utilities.h"
 #define VERTICAL_MARGIN 5
 #define HORIZONTAL_MARGIN 0
 #define TAG_HORIZONTAL_PADDING 15
@@ -44,9 +45,7 @@
 }
 -(void)setTags:(NSArray *)tags andSelectedTags:(NSArray *)selectedTags{
     self.tags = [tags mutableCopy];
-    NSLog(@"tags:%@",self.tags);
     self.selectedTags = [selectedTags mutableCopy];
-    NSLog(@"seltags:%@",self.selectedTags);
     [self layoutTagsFirst:NO];
 }
 -(id)initWithFrame:(CGRect)frame{
@@ -165,7 +164,6 @@
                      forKey: (NSString *) key {
     int random = arc4random() % 10 + 1;
     CGFloat beginTime = 0.2f / random;
-    NSLog(@"random:%i - %f",random,beginTime);
     CAKeyframeAnimation *animation;
     animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
     animation.duration = 0.2;
@@ -190,13 +188,13 @@
     if(wobling){
         UIColor *woblingColor = tbackground(TaskTableGradientBackground);
         [self animationKeyFramed:button.layer delegate:self forKey:@"wobbling"];
-        [button setBackgroundImage:[UtilityClass imageWithColor:woblingColor] forState:UIControlStateHighlighted];
-        [button setBackgroundImage:[UtilityClass imageWithColor:woblingColor] forState:UIControlStateSelected | UIControlStateHighlighted];
+        [button setBackgroundImage:[woblingColor image] forState:UIControlStateHighlighted];
+        [button setBackgroundImage:[woblingColor image] forState:UIControlStateSelected | UIControlStateHighlighted];
     }
     else{
         [button.layer removeAnimationForKey:@"wobbling"];
-        [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagSelectedBackground)] forState:UIControlStateHighlighted];
-        [button setBackgroundImage:[UtilityClass imageWithColor:self.tagColor] forState:UIControlStateSelected | UIControlStateHighlighted];
+        [button setBackgroundImage:[tbackground(TagSelectedBackground) image] forState:UIControlStateHighlighted];
+        [button setBackgroundImage:[self.tagColor image] forState:UIControlStateSelected | UIControlStateHighlighted];
     }
 }
 -(void)setWobling:(BOOL)wobling{
@@ -267,7 +265,6 @@
     CGSize sizeForTag = [self sizeForTagWithText:tag];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     if(self.enableEdit){
-        NSLog(@"enabled");
         UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
         longPressGestureRecognizer.delegate = self;
         [button addGestureRecognizer:longPressGestureRecognizer];
@@ -277,10 +274,10 @@
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
     [button setTitleColor:tcolor(TagColor) forState:UIControlStateNormal];
-    [button setBackgroundImage:[UtilityClass imageWithColor:self.tagColor] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagSelectedBackground)] forState:UIControlStateSelected];
-    [button setBackgroundImage:[UtilityClass imageWithColor:tbackground(TagSelectedBackground)] forState:UIControlStateHighlighted];
-    [button setBackgroundImage:[UtilityClass imageWithColor:self.tagColor] forState:UIControlStateSelected | UIControlStateHighlighted];
+    [button setBackgroundImage:[self.tagColor image] forState:UIControlStateNormal];
+    [button setBackgroundImage:[tbackground(TagSelectedBackground) image] forState:UIControlStateSelected];
+    [button setBackgroundImage:[tbackground(TagSelectedBackground) image] forState:UIControlStateHighlighted];
+    [button setBackgroundImage:[self.tagColor image] forState:UIControlStateSelected | UIControlStateHighlighted];
     button.titleLabel.font = TAG_FONT;
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];

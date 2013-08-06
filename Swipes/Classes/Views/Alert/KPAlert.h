@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface KPAlert : UIView
++(void)alertInView:(UIView*)view title:(NSString*)title message:(NSString*)message block:(SuccessfulBlock)block;
 +(KPAlert*)alertWithFrame:(CGRect)frame title:(NSString *)title message:(NSString *)message block:(SuccessfulBlock)block;
 @end

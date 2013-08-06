@@ -26,6 +26,7 @@
 #import "KPTagList.h"
 #import "UtilityClass.h"
 #import "ToDoHandler.h"
+#import "UIColor+Utilities.h"
 @interface KPSearchBar () <KPTagDelegate,UITextFieldDelegate>
 
 @property (nonatomic,weak) IBOutlet UIView *filterView;
@@ -63,7 +64,7 @@
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBackgroundImage:[UtilityClass imageWithColor:tbackground(SearchDrawerBackground)]];
+        [self setBackgroundImage:[tbackground(SearchDrawerBackground) image]];
         //[self setSearchFieldBackgroundImage:[UtilityClass imageWithColor:TEXTFIELD_BACKGROUND] forState:UIControlStateNormal];
         [self setTranslucent:YES];
         self.placeholder = @"Search";

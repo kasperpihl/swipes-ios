@@ -52,6 +52,7 @@
 #import "KPTimePicker.h"
 #import "NSDate-Utilities.h"
 #import "UtilityClass.h"
+#import "UIColor+Utilities.h"
 @class KPTimePicker;
 @interface _KPTimePickerForeGroundView : UIView
 
@@ -286,8 +287,6 @@
     }
     if(!hiddenMoon){
         self.moonImage.center = [self pointFromPoint:self.centerPoint withDistance:self.distanceForIcons towardAngle:moonAngle];
-        CGFloat calcAngle = [self angleBetweenCenterPoint:self.centerPoint point1:CGPointMake(self.centerPoint.x+100, self.centerPoint.y) point2:self.moonImage.center];
-        NSLog(@"ang %f calc: %f",moonAngle,360-degrees(calcAngle));
     }
     self.moonImage.hidden = hiddenMoon;
 }
@@ -307,7 +306,7 @@
     CGFloat percentage = (CGFloat)minutesOfDayPassed / (CGFloat)kMinutesInHalfDay*100;
     UIColor *startColor = overNoon ? self.lightColor : self.darkColor;
     UIColor *endColor = overNoon ? self.darkColor : self.lightColor;
-    return [UtilityClass colorFromColor:startColor toColor:endColor percent:percentage];
+    return [startColor colorToColor:endColor percent:percentage];
 }
 - (id)initWithFrame:(CGRect)frame
 {
@@ -338,7 +337,7 @@
         
         self.confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.confirmButton.backgroundColor = [UIColor clearColor];
-        [self.confirmButton setBackgroundImage:[UtilityClass imageWithColor:tcolor(DoneColor)] forState:UIControlStateHighlighted];
+        [self.confirmButton setBackgroundImage:[tcolor(DoneColor) image] forState:UIControlStateHighlighted];
         self.confirmButton.frame = CGRectMake(0, 0, 2*self.middleRadius, 2*self.middleRadius);
         self.confirmButton.center = self.centerPoint;
         [self.confirmButton addTarget:self action:@selector(pressedConfirmButton:) forControlEvents:UIControlEventTouchUpInside];

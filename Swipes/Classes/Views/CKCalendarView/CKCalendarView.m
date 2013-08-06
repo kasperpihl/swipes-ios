@@ -206,7 +206,6 @@
 }
 -(void)pressedTitleButton:(UIButton*)sender{
     if([self.delegate respondsToSelector:@selector(calendar:pressedTitleButton:)]) [self.delegate calendar:self pressedTitleButton:sender];
-    NSLog(@"pressedTitle");
 }
 
 - (void)layoutSubviews {

@@ -9,18 +9,112 @@
 #import "UIColor+Utilities.h"
 
 @implementation UIColor (Utilities)
--(UIColor*)getColorSaturatedWithPercentage:(CGFloat)percentage{
+-(UIColor*)saturatedWithPercentage:(CGFloat)percentage{
     CGFloat dividor = 1 + percentage;
     float h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h saturation:s * dividor brightness:b alpha:a];
     return nil;
 }
--(UIColor*)getColorBrightenedWithPercentage:(CGFloat)percentage{
+-(UIColor*)brightenedWithPercentage:(CGFloat)percentage{
     CGFloat dividor = 1 + percentage;
     float h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h saturation:s brightness:b * dividor alpha:a];
     return nil;
 }
+-(UIColor *)inverse {
+    
+    CGColorRef oldCGColor = self.CGColor;
+    
+    int numberOfComponents = CGColorGetNumberOfComponents(oldCGColor);
+    
+    // can not invert - the only component is the alpha
+    // e.g. self == [UIColor groupTableViewBackgroundColor]
+    if (numberOfComponents == 1) {
+        return [UIColor colorWithCGColor:oldCGColor];
+    }
+    
+    const CGFloat *oldComponentColors = CGColorGetComponents(oldCGColor);
+    CGFloat newComponentColors[numberOfComponents];
+    
+    int i = numberOfComponents - 1;
+    newComponentColors[i] = oldComponentColors[i]; // alpha
+    while (--i >= 0) {
+        newComponentColors[i] = 1 - oldComponentColors[i];
+    }
+    
+    CGColorRef newCGColor = CGColorCreate(CGColorGetColorSpace(oldCGColor), newComponentColors);
+    UIColor *newColor = [UIColor colorWithCGColor:newCGColor];
+    CGColorRelease(newCGColor);
+    
+    return newColor;
+}
+- (UIColor *)colorToColor:(UIColor *)toColor percent:(float)percent
+{
+    float dec = percent / 100.f;
+    CGFloat fRed, fBlue, fGreen, fAlpha;
+    CGFloat tRed, tBlue, tGreen, tAlpha;
+    CGFloat red, green, blue, alpha;
+    
+    if(CGColorGetNumberOfComponents(self.CGColor) == 2) {
+        [self getWhite:&fRed alpha:&fAlpha];
+        fGreen = fRed;
+        fBlue = fRed;
+    }
+    else {
+        [self getRed:&fRed green:&fGreen blue:&fBlue alpha:&fAlpha];
+    }
+    if(CGColorGetNumberOfComponents(toColor.CGColor) == 2) {
+        [toColor getWhite:&tRed alpha:&tAlpha];
+        tGreen = tRed;
+        tBlue = tRed;
+    }
+    else {
+        [toColor getRed:&tRed green:&tGreen blue:&tBlue alpha:&tAlpha];
+    }
+    
+    red = (dec * (tRed - fRed)) + fRed;
+    green = (dec * (tGreen - fGreen)) + fGreen;
+    blue = (dec * (tBlue - fBlue)) + fBlue;
+    alpha = (dec * (tAlpha - fAlpha)) + fAlpha;
+    
+    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+}
+- (UIImage *)image{
+    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSetFillColorWithColor(context, [self CGColor]);
+    CGContextFillRect(context, rect);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
+-(UIColor *)lighter
+{
+    float h, s, b, a;
+    if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
+        return [UIColor colorWithHue:h
+                          saturation:s
+                          brightness:MIN(b * 1.3, 1.0)
+                               alpha:a];
+    return nil;
+}
+
+- (UIColor *)darker
+{
+    float h, s, b, a;
+    if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
+        return [UIColor colorWithHue:h
+                          saturation:s
+                          brightness:b * 0.75
+                               alpha:a];
+    return nil;
+}
+
 @end

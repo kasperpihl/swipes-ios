@@ -18,9 +18,18 @@
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UILabel *messageLabel;
 @property (nonatomic,copy) SuccessfulBlock block;
+@property (nonatomic) BOOL shouldRemove;
 @end
 
 @implementation KPAlert
++(void)alertInView:(UIView *)view title:(NSString *)title message:(NSString *)message block:(SuccessfulBlock)block{
+    KPAlert *alertView = [[KPAlert alloc] initWithFrame:view.bounds];
+    alertView.block = block;
+    alertView.titleLabel.text = title;
+    alertView.messageLabel.text = message;
+    alertView.shouldRemove = YES;
+    [view addSubview:alertView];
+}
 +(KPAlert*)alertWithFrame:(CGRect)frame title:(NSString *)title message:(NSString *)message block:(SuccessfulBlock)block{
     KPAlert *alertView = [[KPAlert alloc] initWithFrame:frame];
     alertView.block = block;
@@ -51,6 +60,7 @@
         messageLabel.font = KP_LIGHT(20);
         messageLabel.tag = MESSAGE_LABEL_TAG;
         messageLabel.textColor = tcolor(TagColor);
+        messageLabel.numberOfLines = 0;
         messageLabel.backgroundColor = tbackground(TaskTableGradientBackground);
         messageLabel.textAlignment = UITextAlignmentCenter;
         [contentView addSubview:messageLabel];
@@ -67,6 +77,7 @@
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
     if(item == 0 && self.block) self.block(NO,nil);
     else if(item == 1 && self.block) self.block(YES,nil);
+    if(self.shouldRemove) [self removeFromSuperview];
 }
 
 @end

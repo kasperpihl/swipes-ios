@@ -190,7 +190,6 @@
         self.items = self.items;
     }
     frame.origin.y = round(point.y - frame.size.height);
-    NSLog(@"%f,%f",minCheck,maxCheck);
     self.frame = frame;
     
     QBPopupMenuOverlayView *overlayView = [[QBPopupMenuOverlayView alloc] initWithFrame:view.bounds];

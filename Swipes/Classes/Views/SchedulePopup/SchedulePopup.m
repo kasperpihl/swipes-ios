@@ -13,8 +13,8 @@
 #import "KPBlurry.h"
 #import "CKCalendarView.h"
 #import "KPToolbar.h"
-#import "UIColor+Utilities.h"
 #import "KPTimePicker.h"
+#import "UIColor+Utilities.h"
 #define POPUP_WIDTH 315
 #define CONTENT_VIEW_TAG 1
 
@@ -127,7 +127,6 @@ typedef enum {
 -(void)pressedScheduleButton:(UIButton*)sender{
     KPScheduleButtons thisButton = [self buttonForTag:sender.tag];
     [self deHighlightedButton:sender];
-    NSLog(@"thisButton:%i",thisButton);
     if(thisButton == KPScheduleButtonSpecificTime) [self pressedSpecific:self];
     else if(thisButton != KPScheduleButtonCancel){
         NSDate *date = [self dateForButton:thisButton];
@@ -351,7 +350,6 @@ typedef enum {
     return nil;
 }
 -(void)timePicker:(KPTimePicker *)timePicker selectedDate:(NSDate *)date{
-    NSLog(@"hehe :%@",date);
     [UIView animateWithDuration:kTimePickerDuration animations:^{
         timePicker.alpha = 0;
     } completion:^(BOOL finished) {
@@ -411,7 +409,6 @@ typedef enum {
 -(void)highlightedButton:(UIButton *)sender{
     
     UIImageView *iconImage = (UIImageView*)[sender viewWithTag:1337];
-    NSLog(@"iconImage:%@",iconImage);
     iconImage.highlighted = YES;
 }
 -(void)deHighlightedButton:(UIButton *)sender{
@@ -420,7 +417,7 @@ typedef enum {
 }
 -(UIButton*)buttonForScheduleButton:(KPScheduleButtons)scheduleButton title:(NSString *)title{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setBackgroundImage:[UtilityClass imageWithColor:POPUP_SELECTED] forState:UIControlStateHighlighted];
+    [button setBackgroundImage:[POPUP_SELECTED image] forState:UIControlStateHighlighted];
     button.titleLabel.font = SCHEDULE_BUTTON_FONT;
     button.tag = [self tagForButton:scheduleButton];
     if(SCHEDULE_BUTTON_CAPITAL) title = [title uppercaseString];

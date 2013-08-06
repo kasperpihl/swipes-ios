@@ -23,50 +23,6 @@ static UtilityClass *sharedObject;
     if(sharedObject == nil) sharedObject = [[super allocWithZone:NULL] init];
     return sharedObject;
 }
-+ (UIImage *)imageWithColor:(UIColor *)color {
-    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
-}
-+ (UIColor *)colorFromColor:(UIColor *)fromColor toColor:(UIColor *)toColor percent:(float)percent
-{
-    float dec = percent / 100.f;
-    CGFloat fRed, fBlue, fGreen, fAlpha;
-    CGFloat tRed, tBlue, tGreen, tAlpha;
-    CGFloat red, green, blue, alpha;
-    
-    if(CGColorGetNumberOfComponents(fromColor.CGColor) == 2) {
-        [fromColor getWhite:&fRed alpha:&fAlpha];
-        fGreen = fRed;
-        fBlue = fRed;
-    }
-    else {
-        [fromColor getRed:&fRed green:&fGreen blue:&fBlue alpha:&fAlpha];
-    }
-    if(CGColorGetNumberOfComponents(toColor.CGColor) == 2) {
-        [toColor getWhite:&tRed alpha:&tAlpha];
-        tGreen = tRed;
-        tBlue = tRed;
-    }
-    else {
-        [toColor getRed:&tRed green:&tGreen blue:&tBlue alpha:&tAlpha];
-    }
-    
-    red = (dec * (tRed - fRed)) + fRed;
-    green = (dec * (tGreen - fGreen)) + fGreen;
-    blue = (dec * (tBlue - fBlue)) + fBlue;
-    alpha = (dec * (tAlpha - fAlpha)) + fAlpha;
-    
-    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
-}
 +(UIImage*)screenshotOfView:(UIView*)view{
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0f);
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -137,12 +93,6 @@ static UtilityClass *sharedObject;
     NSNumber * myNumber = [f numberFromString:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
     return myNumber;
 }
--(void)popupBoxWithTitle:(NSString*)title andMessage:(NSString*)message buttons:(NSArray*)buttons block:(SuccessfulBlock)block{
-    if(buttons.count < 1) return;
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:[buttons objectAtIndex:0] otherButtonTitles:[buttons objectAtIndex:1], nil];
-    self.block = block;
-    [alertView show];
-}
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block{
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
     self.block = block;
@@ -202,33 +152,6 @@ static UtilityClass *sharedObject;
     //return the color-burned image
     return coloredImg;
 }
-+(UIColor *)inverseColor:(UIColor*)color {
-    
-    CGColorRef oldCGColor = color.CGColor;
-    
-    int numberOfComponents = CGColorGetNumberOfComponents(oldCGColor);
-    
-    // can not invert - the only component is the alpha
-    // e.g. self == [UIColor groupTableViewBackgroundColor]
-    if (numberOfComponents == 1) {
-        return [UIColor colorWithCGColor:oldCGColor];
-    }
-    
-    const CGFloat *oldComponentColors = CGColorGetComponents(oldCGColor);
-    CGFloat newComponentColors[numberOfComponents];
-    
-    int i = numberOfComponents - 1;
-    newComponentColors[i] = oldComponentColors[i]; // alpha
-    while (--i >= 0) {
-        newComponentColors[i] = 1 - oldComponentColors[i];
-    }
-    
-    CGColorRef newCGColor = CGColorCreate(CGColorGetColorSpace(oldCGColor), newComponentColors);
-    UIColor *newColor = [UIColor colorWithCGColor:newCGColor];
-    CGColorRelease(newCGColor);
-    
-    return newColor;
-}
 +(NSString*)timeStringForDate:(NSDate*)date{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[NSLocale currentLocale]];
@@ -264,27 +187,6 @@ static UtilityClass *sharedObject;
 +(UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color{
     UIImage *img = [UIImage imageNamed:name];
     return [UtilityClass image:img withColor:color multiply:NO];
-}
-+ (UIColor *)lighterColor:(UIColor*)c
-{
-    float h, s, b, a;
-    if ([c getHue:&h saturation:&s brightness:&b alpha:&a])
-        return [UIColor colorWithHue:h
-                          saturation:s
-                          brightness:MIN(b * 1.3, 1.0)
-                               alpha:a];
-    return nil;
-}
-
-+ (UIColor *)darkerColor:(UIColor*)c
-{
-    float h, s, b, a;
-    if ([c getHue:&h saturation:&s brightness:&b alpha:&a])
-        return [UIColor colorWithHue:h
-                          saturation:s
-                          brightness:b * 0.75
-                               alpha:a];
-    return nil;
 }
 + (BOOL) validateEmail: (NSString *) candidate {
     NSString *emailRegex =

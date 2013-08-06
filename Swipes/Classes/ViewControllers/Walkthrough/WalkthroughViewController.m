@@ -147,7 +147,6 @@ typedef enum {
     voidBlock preBlock = [self preBlockForState:state];
     voidBlock showBlock = [self showBlockForState:state];
     voidBlock completionBlock = [self completionBlockForState:state];
-    if(state == PressedSchedulePopup) NSLog(@"loaded schedule blocks");
     CGFloat delay = [self delayForState:state];
     CGFloat duration = [self durationForState:state];
     UIViewAnimationOptions options = [self optionsForState:state];
@@ -299,7 +298,6 @@ typedef enum {
                 self.menuExplainer.alpha = 0;
                 self.doneButton.backgroundColor = gray(179,1);
                 self.scheduleButton.backgroundColor = gray(179,1);
-                NSLog(@"%f",CGRectGetMaxY(self.actionButton.frame));
                 CGRectSetY(self.phoneBackground, self.view.bounds.size.height - kTableBottomSizeForFirst);
                 CGFloat newButtonSize = roundf(kMenuButtonTransform * kMenuButtonSize);
                 
@@ -348,7 +346,6 @@ typedef enum {
         }
         case ScheduleTaskCompleted2:
         case FadeInDonePopupTexts:{
-            if(state == ScheduleTaskCompleted2) NSLog(@"got this block");
             block = ^{
                 self.backgroundOverlay.popupView.alpha = 1;
             };

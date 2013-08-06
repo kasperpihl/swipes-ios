@@ -63,7 +63,6 @@ static FacebookCommunicator *sharedObject;
              } else {
                  // Case C: Dialog shown and the user clicks Cancel or Send
                  NSDictionary *urlParams = [self parseURLParams:[resultURL query]];
-                 NSLog(@"urlParams:%@",urlParams);
                  if (![urlParams valueForKey:@"request"]) {
                      if(block) block(FBReturnTypeCancelled,nil,nil);
                  } else {

@@ -159,7 +159,6 @@ secondStateIconName:(NSString *)secondIconName
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
     if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionLeft && percentage > 0) percentage = 0;
     else if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionRight && percentage < 0) percentage = 0;
-    if(state == UIGestureRecognizerStateEnded) NSLog(@"perc:%f dir:%i",percentage,_direction);
     _direction = [self directionWithPercentage:percentage];
     
     self.readPercentage = percentage;

@@ -136,3 +136,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 
 
 
+#define W_TIMELINE              gray(204,1)
+#define W_CELL                  gray(230,1)
+
+#define W_TIMELINE_ACTIVATED    gray(128,1)
+#define W_CELL_ACTIVATED        gray(153,1)
+
+#define W_TITLE_ACTIVATED       gray(255,1)
+
+

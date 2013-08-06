@@ -9,6 +9,7 @@
 #import "SignupViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UtilityClass.h"
+#import "UIColor+Utilities.h"
 @interface SignupViewController ()
 @end
 
@@ -31,8 +32,8 @@
         layer = self.signUpView.passwordField.layer;
         layer.shadowOpacity = 0.0;
         [self setupButton:self.signUpView.signUpButton];
-        [self.signUpView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:tcolor(DoneColor)] forState:UIControlStateNormal];
-        [self.signUpView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:[UtilityClass darkerColor:tcolor(DoneColor)]] forState:UIControlStateHighlighted];
+        [self.signUpView.signUpButton setBackgroundImage:[tcolor(DoneColor) image] forState:UIControlStateNormal];
+        [self.signUpView.signUpButton setBackgroundImage:[[tcolor(DoneColor) darker] image] forState:UIControlStateHighlighted];
         [self.signUpView.signUpButton setTitle:@"SIGN UP" forState:UIControlStateNormal];
     }
     return self;

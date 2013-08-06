@@ -315,7 +315,6 @@
     }
 }
 -(void)swipeTableViewCell:(ToDoCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
-    NSLog(@"trig: %i",state);
     if(cell != self.swipingCell) return;
     if(self.isHandlingTrigger) return;
     self.isHandlingTrigger = YES;
@@ -375,7 +374,6 @@
 -(void)deleteSelectedItems:(id)sender{
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
-    NSLog(@"real %@ arr %@",selectedIndexPaths,self.selectedRows);
     NSMutableArray *toDos = [NSMutableArray array];
     for(NSIndexPath *indexPath in selectedIndexPaths){
         [toDos addObject:[self.itemHandler itemForIndexPath:indexPath]];

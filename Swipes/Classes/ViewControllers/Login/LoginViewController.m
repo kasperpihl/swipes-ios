@@ -12,6 +12,7 @@
 #import "SignupViewController.h"
 #import "KPAlert.h"
 #import "RootViewController.h"
+#import "UIColor+Utilities.h"
 #define SIGNUP_INDICATOR_TAG 15530
 #define PRIVACY_BUTTON_TAG 16630
 
@@ -45,9 +46,7 @@
 -(id)init{
     self = [super init];
     if(self){
-        
         SignupViewController *signupVC = [[SignupViewController alloc] init];
-
         signupVC.delegate = self;
         self.signUpController = signupVC;
         self.fields = (PFLogInFieldsUsernameAndPassword | PFLogInFieldsFacebook | PFLogInFieldsLogInButton | PFLogInFieldsSignUpButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsDismissButton);
@@ -83,16 +82,16 @@
         
         
         [self setupButton:self.logInView.logInButton];
-        [self.logInView.logInButton setBackgroundImage:[UtilityClass imageWithColor:tbackground(LoginButtonBackground)] forState:UIControlStateNormal];
-        [self.logInView.logInButton setBackgroundImage:[UtilityClass imageWithColor:[UtilityClass darkerColor:tbackground(LoginButtonBackground)]] forState:UIControlStateHighlighted];
+        [self.logInView.logInButton setBackgroundImage:[tbackground(LoginButtonBackground) image] forState:UIControlStateNormal];
+        [self.logInView.logInButton setBackgroundImage:[[tbackground(LoginButtonBackground) darker] image] forState:UIControlStateHighlighted];
         
         
         self.logInView.externalLogInLabel.font = LOGIN_LABEL_ABOVE_FONT;
         self.logInView.externalLogInLabel.textColor = tcolor(SearchDrawerColor);
         [self.logInView.externalLogInLabel setShadowOffset:CGSizeZero];
         [self setupButton:self.logInView.facebookButton];
-        [self.logInView.facebookButton setBackgroundImage:[UtilityClass imageWithColor:color(57,159,219,1)] forState:UIControlStateNormal];
-        [self.logInView.facebookButton setBackgroundImage:[UtilityClass imageWithColor:[UtilityClass darkerColor:color(57,159,219,1)]] forState:UIControlStateHighlighted];
+        [self.logInView.facebookButton setBackgroundImage:[color(57,159,219,1) image] forState:UIControlStateNormal];
+        [self.logInView.facebookButton setBackgroundImage:[[color(57,159,219,1) darker] image] forState:UIControlStateHighlighted];
         [self.logInView.facebookButton setTitle:@"FACEBOOK" forState:UIControlStateNormal];
         
         
@@ -100,8 +99,8 @@
         self.logInView.signUpLabel.textColor = tcolor(SearchDrawerColor);
         [self.logInView.signUpLabel setShadowOffset:CGSizeZero];
         [self setupButton:self.logInView.signUpButton];
-        [self.logInView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:tcolor(DoneColor)] forState:UIControlStateNormal];
-        [self.logInView.signUpButton setBackgroundImage:[UtilityClass imageWithColor:[UtilityClass darkerColor:tcolor(DoneColor)]] forState:UIControlStateHighlighted];
+        [self.logInView.signUpButton setBackgroundImage:[tcolor(DoneColor) image] forState:UIControlStateNormal];
+        [self.logInView.signUpButton setBackgroundImage:[[tcolor(DoneColor) darker] image] forState:UIControlStateHighlighted];
         [self.logInView.signUpButton setTitle:@"SIGN UP" forState:UIControlStateNormal];
         
         
@@ -304,11 +303,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
 	// Do any additional setup after loading the view.
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+}
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     [ROOT_CONTROLLER walkthrough];
 }
 - (void)didReceiveMemoryWarning

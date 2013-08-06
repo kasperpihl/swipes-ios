@@ -6,7 +6,6 @@
 @interface KPToDo ()
 @property (nonatomic,strong) NSString *readableTags;
 // Private interface goes here.
-
 @end
 
 
@@ -117,7 +116,6 @@
     if(remove) [self removeTags:tagsSet];
     else [self addTags:tagsSet];
     [self save];
-    NSLog(@"todo %@ tags:%i",tagsSet, self.tags.count);
     for(NSString *tag in tags){
         BOOL contained = [tagsStrings containsObject:tag];
         if(remove && contained) [tagsStrings removeObject:tag];
@@ -142,7 +140,6 @@
     }
     
     NSString *sortedTagString = [tagsStringArray componentsJoinedByString:@", "];
-    NSLog(@"%@",sortedTagString);
     if(!sortedTagString || sortedTagString.length == 0) return nil;
     NSMutableAttributedString *attributedText =
     [[NSMutableAttributedString alloc] initWithString:sortedTagString

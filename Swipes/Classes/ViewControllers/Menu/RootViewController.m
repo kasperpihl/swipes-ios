@@ -27,6 +27,7 @@
 #import "MenuViewController.h"
 #import "KPBlurry.h"
 #import "WalkthroughViewController.h"
+#import "UIColor+Utilities.h"
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
@@ -126,11 +127,12 @@
         case KPMenuLogin:{
             LoginViewController *loginVC = [[LoginViewController alloc] init];
             loginVC.delegate = self;
-            
+            self.lockSettings = YES;
             viewController = loginVC;
             break;
         }
         case KPMenuHome:
+            self.lockSettings = NO;
             viewController = self.menuViewController;
             break;
     }
@@ -143,12 +145,16 @@ static RootViewController *sharedObject;
     }
     return sharedObject;
 }
+-(void)logOut{
+    self.menuViewController = nil;
+    [PFUser logOut];
+    [self setupAppearance];
+    [self.sideMenu hide];
+}
 -(void)resetRoot{
     self.menuViewController = nil;
     [self setupAppearance];
     [self.sideMenu hide];
-    
-    
 }
 -(void)walkthrough{
     WalkthroughViewController *viewController = [[WalkthroughViewController alloc]init];
@@ -177,17 +183,14 @@ static RootViewController *sharedObject;
     [self setNavigationBarHidden:YES];
     
     BLURRY.delegate = self;
-    self.sideMenu = [[RESideMenu alloc] init];
-    self.sideMenu.backgroundImage = [UtilityClass imageWithColor:tcolor(DoneColor)];
+    self.sideMenu = kSideMenu;
+    self.sideMenu.backgroundImage = [tbackground(TaskTableGradientBackground) image];
     self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;
     self.settingsViewController = [[MenuViewController alloc] init];
     self.sideMenu.revealView = self.settingsViewController.view;
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     [self.view addGestureRecognizer:panGestureRecognizer];
-    
     [self setupAppearance];
-    
-    
 }
 
 - (void)viewDidUnload

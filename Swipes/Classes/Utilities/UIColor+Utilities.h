@@ -9,6 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @interface UIColor (Utilities)
--(UIColor*)getColorSaturatedWithPercentage:(CGFloat)percentage;
--(UIColor*)getColorBrightenedWithPercentage:(CGFloat)percentage;
+-(UIColor*)saturatedWithPercentage:(CGFloat)percentage;
+-(UIColor*)brightenedWithPercentage:(CGFloat)percentage;
+-(UIColor *)inverse;
+-(UIColor *)darker;
+-(UIColor *)lighter;
+-(UIImage*)image;
+-(UIColor *)colorToColor:(UIColor *)toColor percent:(float)percent;
 @end

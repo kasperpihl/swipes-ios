@@ -57,6 +57,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "KPToolbar.h"
 #import "KPBlurry.h"
+#import "UIColor+Utilities.h"
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
     KPEditModeTitle,
@@ -252,7 +253,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)addClickButtonToView:(UIView*)view action:(SEL)action{
     UIButton *clickedButton = [[UIButton alloc] initWithFrame:view.bounds];
     clickedButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-    [clickedButton setBackgroundImage:[UtilityClass imageWithColor:color(55,55,55,0.5)] forState:UIControlStateHighlighted];
+    [clickedButton setBackgroundImage:[color(55,55,55,0.5) image] forState:UIControlStateHighlighted];
     //clickedButton.contentEdgeInsets = UIEdgeInsetsMake(0, LABEL_X, 0, LABEL_X/3);
     [clickedButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:clickedButton];

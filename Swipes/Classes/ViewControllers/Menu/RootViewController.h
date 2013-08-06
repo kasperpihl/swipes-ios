@@ -25,4 +25,5 @@ typedef enum {
 @property (nonatomic) BOOL lockSettings;
 -(void)resetRoot;
 -(void)walkthrough;
+-(void)logOut;
 @end

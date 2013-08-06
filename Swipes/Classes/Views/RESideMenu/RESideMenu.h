@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 //
 
+#define kSideMenu [RESideMenu sharedInstance] 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "UIWindow+RESideMenuExtensions.h"
@@ -35,6 +36,7 @@
 @property (assign, readwrite, nonatomic) BOOL isShowing;
 @property (nonatomic,strong) UIGestureRecognizer *panningRecognizer;
 @property (nonatomic,strong) UIView *revealView;
++(RESideMenu*)sharedInstance;
 - (void)addPanningToView:(UIView*)view;
 - (void)show;
 - (void)hide;

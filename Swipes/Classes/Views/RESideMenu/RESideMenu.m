@@ -49,6 +49,11 @@ const int INTERSTITIAL_STEPS = 99;
 @end
 
 @implementation RESideMenu
+static RESideMenu *sharedObject;
++(RESideMenu *)sharedInstance{
+    if(!sharedObject) sharedObject = [[RESideMenu allocWithZone:NULL] init];
+    return sharedObject;
+}
 - (id)init
 {
     self = [super init];
@@ -101,7 +106,7 @@ const int INTERSTITIAL_STEPS = 99;
         [window addSubview:_revealView];
     }
     
-    _slidebackView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"backbutton"]];
+    _slidebackView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
     _slidebackView.autoresizesSubviews = NO;
     _slidebackView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
     _slidebackView.userInteractionEnabled = YES;
@@ -118,7 +123,7 @@ const int INTERSTITIAL_STEPS = 99;
     
     [_slidebackView addGestureRecognizer:self.panningRecognizer];
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognized:)];
-    [_slidebackView addGestureRecognizer:tapGestureRecognizer];
+    [_screenshotView addGestureRecognizer:tapGestureRecognizer];
     
     
 }
@@ -154,21 +159,12 @@ const int INTERSTITIAL_STEPS = 99;
 -(CGRect)frameForPercentage:(CGFloat)percentage{
     CGFloat fullWidth = _originalSize.width;
     CGFloat fullHeight = _originalSize.height;
-    CGFloat targetWidth = fullWidth * self.targetScale;
-    CGFloat targetHeight = fullHeight * self.targetScale;
-    
-    CGFloat actualWidth = ((fullWidth-targetWidth)*(1-percentage))+targetWidth;
-    CGFloat actualHeight = ((fullHeight-targetHeight)*(1-percentage))+targetHeight;
-    return CGRectMake(percentage*fullWidth, (fullHeight-actualHeight)/2, actualWidth, actualHeight);
+    return CGRectMake(percentage*fullWidth, 0, fullWidth, fullHeight);
 }
 - (void)minimizeFromRect:(CGRect)rect
 {
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    CGFloat m = self.targetScale;
-    CGFloat newWidth = _originalSize.width * m;
-    CGFloat newHeight = _originalSize.height * m;
     CGFloat targetX = window.frame.size.width;
-    CGFloat targetY = (window.frame.size.height - newHeight)/2.0;
     CGFloat sliderWidth = _slidebackView.frame.size.width;
     CGFloat x = rect.origin.x;
     if(x > targetX) x = targetX;
@@ -179,13 +175,13 @@ const int INTERSTITIAL_STEPS = 99;
     [CATransaction begin];
     [CATransaction setValue:[NSNumber numberWithFloat:duration] forKey:kCATransactionAnimationDuration];
     [self addAnimation:@"position.x" view:_screenshotView startValue:rect.origin.x endValue:targetX];
-    [self addAnimation:@"position.y" view:_screenshotView startValue:rect.origin.y endValue:targetY];
-    [self addAnimation:@"bounds.size.width" view:_screenshotView startValue:rect.size.width endValue:newWidth];
-    [self addAnimation:@"bounds.size.height" view:_screenshotView startValue:rect.size.height endValue:newHeight];
+    //[self addAnimation:@"position.y" view:_screenshotView startValue:rect.origin.y endValue:targetY];
+    //[self addAnimation:@"bounds.size.width" view:_screenshotView startValue:rect.size.width endValue:newWidth];
+    //[self addAnimation:@"bounds.size.height" view:_screenshotView startValue:rect.size.height endValue:newHeight];
     [self addAnimation:@"position.x" view:_slidebackView startValue:rect.origin.x-sliderWidth endValue:targetX-sliderWidth];
     _slidebackView.layer.position = CGPointMake(targetX-sliderWidth, _slidebackView.frame.origin.y);
-    _screenshotView.layer.position = CGPointMake(targetX, targetY);
-    _screenshotView.layer.bounds = CGRectMake(targetX, targetY, newWidth, newHeight);
+    _screenshotView.layer.position = CGPointMake(targetX, 0);
+    //CGRectSetX(_screenshotView.layer.bounds,targetX);
     [CATransaction commit];
     [UIView animateWithDuration:duration animations:^{
         _revealView.alpha = 1;
@@ -221,9 +217,9 @@ const int INTERSTITIAL_STEPS = 99;
     [CATransaction begin];
     [CATransaction setValue:[NSNumber numberWithFloat:duration] forKey:kCATransactionAnimationDuration];
     [self addAnimation:@"position.x" view:_screenshotView startValue:rect.origin.x endValue:0];
-    [self addAnimation:@"position.y" view:_screenshotView startValue:rect.origin.y endValue:0];
-    [self addAnimation:@"bounds.size.width" view:_screenshotView startValue:rect.size.width endValue:window.frame.size.width];
-    [self addAnimation:@"bounds.size.height" view:_screenshotView startValue:rect.size.height endValue:window.frame.size.height];
+    //[self addAnimation:@"position.y" view:_screenshotView startValue:rect.origin.y endValue:0];
+    //[self addAnimation:@"bounds.size.width" view:_screenshotView startValue:rect.size.width endValue:window.frame.size.width];
+    //[self addAnimation:@"bounds.size.height" view:_screenshotView startValue:rect.size.height endValue:window.frame.size.height];
     [self addAnimation:@"position.x" view:_slidebackView startValue:rect.origin.x-_slidebackView.frame.size.width endValue:0-_slidebackView.frame.size.width];
     _slidebackView.layer.position = CGPointMake(0-_slidebackView.frame.size.width, _slidebackView.frame.origin.y);
     _screenshotView.layer.position = CGPointMake(0, 0);
