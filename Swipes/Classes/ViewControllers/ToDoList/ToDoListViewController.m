@@ -125,7 +125,7 @@
     UIFont *font = KP_SEMIBOLD(15);
     NSString *title = [[self.itemHandler titleForSection:section] capitalizedString];
     headerView.backgroundColor = backgroundColor;
-    SectionHeaderExtraView *extraView = [[SectionHeaderExtraView alloc] initWithColor:[TODOHANDLER colorForCellType:self.cellType] font:font title:title];
+    SectionHeaderView *extraView = [[SectionHeaderView alloc] initWithColor:[TODOHANDLER colorForCellType:self.cellType] font:font title:title];
     extraView.tag = 13338;
     if(self.cellType == CellTypeToday) extraView.textColor = color(44,50, 59, 1);
     CGRectSetX(extraView, 320-extraView.frame.size.width);
@@ -557,12 +557,12 @@
     
 }
 -(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
     [self update];
-    [self.view bringSubviewToFront:[self.view viewWithTag:FAKE_HEADER_VIEW_TAG]];
+    [super viewWillAppear:animated];
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];

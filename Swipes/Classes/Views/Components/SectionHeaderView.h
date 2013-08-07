@@ -1,14 +1,14 @@
 //
-//  SectionHeaderView.h
+//  SectionHeaderExtraView.h
 //  Swipes
 //
-//  Created by Kasper Pihl Tornøe on 20/07/13.
+//  Created by Kasper Pihl Tornøe on 23/07/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "SectionHeaderExtraView.h"
 
 @interface SectionHeaderView : UIView
--(id)initWithFrame:(CGRect)frame color:(UIColor*)color;
+-(id)initWithColor:(UIColor *)color font:(UIFont*)font title:(NSString*)title;
+@property (nonatomic) UIColor *textColor;
 @end

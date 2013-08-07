@@ -182,6 +182,7 @@
     return tagArray;
 }
 -(void)runSort{
+    NSLog(@"sorting");
     self.isSorted = NO;
     self.hasFilter = NO;
     self.hasSearched = NO;

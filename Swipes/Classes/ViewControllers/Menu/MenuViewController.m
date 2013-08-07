@@ -94,7 +94,7 @@
     self.seperators = [seperatorArray copy];
     for(NSInteger i = 1 ; i <= 6 ; i++){
         KPMenuButtons button = i;
-        UIButton *actualButton = [self buttonForMenuButton:button title:[self titleForMenuButton:button]];
+        UIButton *actualButton = [self buttonForMenuButton:button];
         [self.gridView addSubview:actualButton];
     }
     self.gridView.center = CGPointMake(self.view.center.x, self.view.center.y-kToolbarHeight);
@@ -216,8 +216,8 @@
     return CGRectMake(x, y, width, width);
 }
 
--(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton title:(NSString *)title{
-    MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:title image:[self imageForMenuButton:menuButton]];
+-(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton{
+    MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton] image:[self imageForMenuButton:menuButton]];
     button.tag = [self tagForButton:menuButton];
     [button addTarget:self action:@selector(pressedMenuButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.menuButtons addObject:button];

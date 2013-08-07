@@ -28,7 +28,7 @@
 #import "KPBlurry.h"
 #import "WalkthroughViewController.h"
 #import "UIColor+Utilities.h"
-
+#import "KPDayPicker.h"
 #import "NotificationHandler.h"
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
@@ -190,6 +190,10 @@ static RootViewController *sharedObject;
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
+    KPDayPicker *dayPicker = [[KPDayPicker alloc] initWithHeight:65 selectedDay:1];
+    dayPicker.center = self.view.center;
+    [self.view addSubview:dayPicker];
+    return;
     BLURRY.delegate = self;
     self.sideMenu = kSideMenu;
     self.sideMenu.backgroundImage = [tbackground(TaskTableGradientBackground) image];

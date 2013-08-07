@@ -15,6 +15,7 @@
 #import "KPToolbar.h"
 #import "KPTimePicker.h"
 #import "UIColor+Utilities.h"
+#import "MenuButton.h"
 #define POPUP_WIDTH 315
 #define CONTENT_VIEW_TAG 1
 
@@ -126,7 +127,6 @@ typedef enum {
 }
 -(void)pressedScheduleButton:(UIButton*)sender{
     KPScheduleButtons thisButton = [self buttonForTag:sender.tag];
-    [self deHighlightedButton:sender];
     if(thisButton == KPScheduleButtonSpecificTime) [self pressedSpecific:self];
     else if(thisButton != KPScheduleButtonCancel){
         NSDate *date = [self dateForButton:thisButton];
@@ -406,47 +406,14 @@ typedef enum {
 -(NSInteger)tagForButton:(KPScheduleButtons)button{
     return button+SCHEDULE_BUTTON_START_TAG;
 }
--(void)highlightedButton:(UIButton *)sender{
-    
-    UIImageView *iconImage = (UIImageView*)[sender viewWithTag:1337];
-    iconImage.highlighted = YES;
-}
--(void)deHighlightedButton:(UIButton *)sender{
-    UIImageView *iconImage = (UIImageView*)[sender viewWithTag:1337];
-    iconImage.highlighted = NO;
-}
 -(UIButton*)buttonForScheduleButton:(KPScheduleButtons)scheduleButton title:(NSString *)title{
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setBackgroundImage:[POPUP_SELECTED image] forState:UIControlStateHighlighted];
-    button.titleLabel.font = SCHEDULE_BUTTON_FONT;
+    UIButton *button = [[MenuButton alloc] initWithFrame:[self frameForButtonNumber:scheduleButton] title:title image:[self imageForScheduleButton:scheduleButton]];
     button.tag = [self tagForButton:scheduleButton];
-    if(SCHEDULE_BUTTON_CAPITAL) title = [title uppercaseString];
-    [button setTitle:title forState:UIControlStateNormal];
     [button addTarget:self action:@selector(pressedScheduleButton:) forControlEvents:UIControlEventTouchUpInside];
-    [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
-    [button setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button setTitleColor:tbackground(TaskCellBackground) forState:UIControlStateHighlighted];
-    UIImage *iconImage = [self imageForScheduleButton:scheduleButton];
-    UIImageView *iconImageView = [[UIImageView alloc] initWithImage:iconImage];
-    iconImageView.tag = 1337;
-    iconImageView.highlightedImage = [UtilityClass image:iconImage withColor:tbackground(TaskCellBackground) multiply:YES];
-    button.frame = [self frameForButtonNumber:scheduleButton];
-    CGFloat imageHeight = iconImageView.frame.size.height;
-    CGFloat textHeight = [@"Kasjper" sizeWithFont:SCHEDULE_BUTTON_FONT].height;
-    NSInteger dividor = (SCHEDULE_IMAGE_CENTER_SPACING == 0) ? 3 : 2;
-    CGFloat spacing = (button.frame.size.height-imageHeight-textHeight-SCHEDULE_IMAGE_CENTER_SPACING)/dividor;
-    
-    [button addTarget:self action:@selector(highlightedButton:) forControlEvents:UIControlEventTouchDown];
-    [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchCancel];
-    [button addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchUpOutside];
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
     longPressGestureRecognizer.allowableMovement = 44.0f;
     longPressGestureRecognizer.delegate = self;
     [button addGestureRecognizer:longPressGestureRecognizer];
-    iconImageView.frame = CGRectSetPos(iconImageView.frame, (button.frame.size.width-iconImage.size.width)/2,spacing);
-    button.titleEdgeInsets = UIEdgeInsetsMake(0, 0, spacing, 0);
-    [button addSubview:iconImageView];
     [self.scheduleButtons addObject:button];
     return button;
 }
