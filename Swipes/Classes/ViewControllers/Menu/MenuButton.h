@@ -10,4 +10,5 @@
 
 @interface MenuButton : UIButton
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title image:(UIImage*)image;
+@property (nonatomic) UIColor *lampColor;
 @end

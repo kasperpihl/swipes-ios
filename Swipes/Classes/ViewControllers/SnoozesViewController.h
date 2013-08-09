@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-
+typedef enum {
+    SnoozeNone = -1,
+    SnoozeWeekStartTime = 0,
+    SnoozeEveningStartTime,
+    SnoozeWeekendStartTime,
+    SnoozeWeekStart,
+    SnoozeWeekendStart,
+    SnoozeLaterToday,
+    SnoozeTotalNumber
+} SnoozeSettings;
 @interface SnoozesViewController : UIViewController
 
 @end

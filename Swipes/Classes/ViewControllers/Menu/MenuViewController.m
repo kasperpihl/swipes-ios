@@ -16,8 +16,11 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "MenuButton.h"
+#import "SettingsHandler.h"
+#import "SnoozesViewController.h"
 #define kMenuButtonStartTag 4123
-
+#define kLampOnColor tcolor(DoneColor)
+#define kLampOffColor tbackground(MenuBackground)//tcolor(StrongLaterColor)
 
 #define kSeperatorMargin 0
 #define kGridMargin 20
@@ -27,12 +30,17 @@
 @interface MenuViewController () <MFMailComposeViewControllerDelegate,ToolbarDelegate>
 @property (nonatomic) IBOutletCollection(UIView) NSArray *seperators;
 @property (nonatomic) IBOutletCollection(UIButton) NSMutableArray *menuButtons;
+@property (nonatomic) NSMutableArray *viewControllers;
 @property (nonatomic) UIView *gridView;
 @property (nonatomic) KPToolbar *toolbar;
 @property (nonatomic) UIPanGestureRecognizer *menuPanning;
 @end
 
 @implementation MenuViewController
+-(NSMutableArray *)viewControllers{
+    if(!_viewControllers) _viewControllers = [NSMutableArray array];
+    return _viewControllers;
+}
 -(NSMutableArray *)menuButtons{
     if(_menuButtons) _menuButtons = [NSMutableArray array];
     return _menuButtons;
@@ -46,7 +54,11 @@
 }
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
     if(item == 0){
-        KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Log out" message:@"Warning: All your data will be lost, but we will introduce backup" block:^(BOOL succeeded, NSError *error) {
+        if(self.viewControllers.count > 0){
+            [self popViewControllerAnimated:YES];
+            return;
+        }
+        KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Log out" message:@"Warning: All your data will be lost. We will introduce backup soon." block:^(BOOL succeeded, NSError *error) {
             [BLURRY dismissAnimated:YES];
             if(succeeded){
                 [ROOT_CONTROLLER logOut];
@@ -121,14 +133,74 @@
     //handle any error
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
--(void)pressedMenuButton:(UIButton*)sender{
+-(void)popViewControllerAnimated:(BOOL)animated{
+    NSInteger level = self.viewControllers.count;
+    UIViewController *poppingViewController = [self.viewControllers lastObject];
+    
+    [poppingViewController removeFromParentViewController];
+    
+    UIView *showingView = (level == 1) ? self.gridView : [(UIViewController*)[self.viewControllers objectAtIndex:level-1] view];
+    [UIView animateWithDuration:0.1 animations:^{
+        poppingViewController.view.alpha = 0;
+        CGRectSetY(self.toolbar, self.view.bounds.size.height);
+    } completion:^(BOOL finished) {
+        showingView.alpha = 0;
+        if(level == 1) [self.toolbar setItems:@[@"menu_logout",@"menu_back"]];
+        [UIView animateWithDuration:0.2 animations:^{
+            CGRectSetY(self.toolbar, self.view.bounds.size.height-kToolbarHeight);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.1 animations:^{
+                showingView.alpha = 1;
+                
+            }];
+        }];
+    }];
+    [self.viewControllers removeLastObject];
+}
+
+-(void)pushViewController:(UIViewController*)viewController animated:(BOOL)animated{
+    NSInteger level = self.viewControllers.count;
+    
+    [self addChildViewController:viewController];
+    UIView *hidingView = (level == 0) ? self.gridView : [(UIViewController*)[self.viewControllers lastObject] view];
+    [UIView animateWithDuration:0.1 animations:^{
+        hidingView.alpha = 0;
+        CGRectSetY(self.toolbar, self.view.bounds.size.height);
+    } completion:^(BOOL finished) {
+        viewController.view.alpha = 0;
+        viewController.view.frame = self.view.bounds;
+        if(level == 0)[self.toolbar setItems:@[@"toolbar_back_icon",@""]];
+        CGRectSetHeight(viewController.view,viewController.view.bounds.size.height-kToolbarHeight);
+        [self.view addSubview:viewController.view];
+        [UIView animateWithDuration:0.2 animations:^{
+            CGRectSetY(self.toolbar, self.view.bounds.size.height-kToolbarHeight);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.1 animations:^{
+                viewController.view.alpha = 1;
+            }];
+        }];
+    }];
+    [self.viewControllers addObject:viewController];
+}
+-(void)pressedMenuButton:(MenuButton*)sender{
     
     KPMenuButtons button = [self buttonForTag:sender.tag];
     switch (button) {
-        case KPMenuButtonNotifications:
+        case KPMenuButtonNotifications:{
+            
+            BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
+            UIColor *lampColor = hasNotificationsOn ? kLampOffColor : kLampOnColor;
+            NSNumber *newSettingValue = hasNotificationsOn ? @NO : @YES;
+            NSLog(@"%@",newSettingValue);
+            [kSettings setValue:newSettingValue forSetting:SettingNotifications];
+            [sender setLampColor:lampColor];
             break;
-        case KPMenuButtonSnoozes:
+        }
+        case KPMenuButtonSnoozes:{
+            SnoozesViewController *snoozeVC = [[SnoozesViewController alloc] init];
+            [self pushViewController:snoozeVC animated:YES];
             break;
+        }
         case KPMenuButtonWalkthrough:
             [ROOT_CONTROLLER walkthrough];
             break;
@@ -144,6 +216,7 @@
             break;
         }
         case KPMenuButtonUpgrade:
+            [ROOT_CONTROLLER upgrade];
             break;
         case KPMenuButtonPolicy:{
             
@@ -218,6 +291,11 @@
 
 -(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton{
     MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton] image:[self imageForMenuButton:menuButton]];
+    if(menuButton == KPMenuButtonNotifications){
+        BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
+        UIColor *lampColor = hasNotificationsOn ? kLampOnColor : kLampOffColor;
+        [button setLampColor:lampColor];
+    }
     button.tag = [self tagForButton:menuButton];
     [button addTarget:self action:@selector(pressedMenuButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.menuButtons addObject:button];

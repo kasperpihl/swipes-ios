@@ -73,6 +73,12 @@
 		A72DDD8617AAAFAF00A00454 /* KPTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A72DDD8517AAAFAE00A00454 /* KPTimePicker.m */; };
 		A72DDD8A17AB024900A00454 /* picker_wheel.png in Resources */ = {isa = PBXBuildFile; fileRef = A72DDD8817AB024900A00454 /* picker_wheel.png */; };
 		A72DDD8B17AB024900A00454 /* picker_wheel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A72DDD8917AB024900A00454 /* picker_wheel@2x.png */; };
+		A730D39217B5149C005E1510 /* upgrade_plus_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39017B5149C005E1510 /* upgrade_plus_logo.png */; };
+		A730D39317B5149C005E1510 /* upgrade_plus_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39117B5149C005E1510 /* upgrade_plus_logo@2x.png */; };
+		A730D39617B51C24005E1510 /* upgrade_full.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39417B51C24005E1510 /* upgrade_full.png */; };
+		A730D39717B51C24005E1510 /* upgrade_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39517B51C24005E1510 /* upgrade_full@2x.png */; };
+		A730D39A17B54B17005E1510 /* upgrade_plus_button.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39817B54B17005E1510 /* upgrade_plus_button.png */; };
+		A730D39B17B54B17005E1510 /* upgrade_plus_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39917B54B17005E1510 /* upgrade_plus_button@2x.png */; };
 		A742415517A5AAA9009C9735 /* done-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A742414F17A5AAA9009C9735 /* done-white.png */; };
 		A742415617A5AAA9009C9735 /* done-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A742415017A5AAA9009C9735 /* done-white@2x.png */; };
 		A742415717A5AAA9009C9735 /* schedule-white.png in Resources */ = {isa = PBXBuildFile; fileRef = A742415117A5AAA9009C9735 /* schedule-white.png */; };
@@ -226,6 +232,13 @@
 		A7DEA1851790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA17E1790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.m */; };
 		A7DEA1891790BD2D00EB1549 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA1881790BD2D00EB1549 /* MenuViewController.m */; };
 		A7DEA18C17954C7400EB1549 /* ThemeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA18B17954C7400EB1549 /* ThemeHandler.m */; };
+		A7E2D93C17B2C5A4007BDE00 /* SettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D93B17B2C5A4007BDE00 /* SettingsCell.m */; };
+		A7E2D93F17B2E3B0007BDE00 /* schedule_image_location.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E2D93D17B2E3B0007BDE00 /* schedule_image_location.png */; };
+		A7E2D94017B2E3B0007BDE00 /* schedule_image_location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E2D93E17B2E3B0007BDE00 /* schedule_image_location@2x.png */; };
+		A7E2D94317B3B176007BDE00 /* picker_wheel_ip4.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E2D94117B3B176007BDE00 /* picker_wheel_ip4.png */; };
+		A7E2D94417B3B176007BDE00 /* picker_wheel_ip4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E2D94217B3B176007BDE00 /* picker_wheel_ip4@2x.png */; };
+		A7E2D94717B3F258007BDE00 /* DayPickerSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */; };
+		A7E2D94A17B4FE0F007BDE00 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D94917B4FE0F007BDE00 /* UpgradeViewController.m */; };
 		A7E8FB0917462F3600CC2D26 /* AKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */; };
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
 		A7F4066517296BC700DDE644 /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066417296BC700DDE644 /* AddPanelView.m */; };
@@ -320,6 +333,12 @@
 		A72DDD8517AAAFAE00A00454 /* KPTimePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTimePicker.m; sourceTree = "<group>"; };
 		A72DDD8817AB024900A00454 /* picker_wheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picker_wheel.png; sourceTree = "<group>"; };
 		A72DDD8917AB024900A00454 /* picker_wheel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "picker_wheel@2x.png"; sourceTree = "<group>"; };
+		A730D39017B5149C005E1510 /* upgrade_plus_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upgrade_plus_logo.png; sourceTree = "<group>"; };
+		A730D39117B5149C005E1510 /* upgrade_plus_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upgrade_plus_logo@2x.png"; sourceTree = "<group>"; };
+		A730D39417B51C24005E1510 /* upgrade_full.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upgrade_full.png; sourceTree = "<group>"; };
+		A730D39517B51C24005E1510 /* upgrade_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upgrade_full@2x.png"; sourceTree = "<group>"; };
+		A730D39817B54B17005E1510 /* upgrade_plus_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upgrade_plus_button.png; sourceTree = "<group>"; };
+		A730D39917B54B17005E1510 /* upgrade_plus_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upgrade_plus_button@2x.png"; sourceTree = "<group>"; };
 		A742414F17A5AAA9009C9735 /* done-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "done-white.png"; sourceTree = "<group>"; };
 		A742415017A5AAA9009C9735 /* done-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "done-white@2x.png"; sourceTree = "<group>"; };
 		A742415117A5AAA9009C9735 /* schedule-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule-white.png"; sourceTree = "<group>"; };
@@ -529,6 +548,16 @@
 		A7DEA1881790BD2D00EB1549 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		A7DEA18A17954C7400EB1549 /* ThemeHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThemeHandler.h; sourceTree = "<group>"; };
 		A7DEA18B17954C7400EB1549 /* ThemeHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThemeHandler.m; sourceTree = "<group>"; };
+		A7E2D93A17B2C5A4007BDE00 /* SettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsCell.h; sourceTree = "<group>"; };
+		A7E2D93B17B2C5A4007BDE00 /* SettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsCell.m; sourceTree = "<group>"; };
+		A7E2D93D17B2E3B0007BDE00 /* schedule_image_location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = schedule_image_location.png; sourceTree = "<group>"; };
+		A7E2D93E17B2E3B0007BDE00 /* schedule_image_location@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule_image_location@2x.png"; sourceTree = "<group>"; };
+		A7E2D94117B3B176007BDE00 /* picker_wheel_ip4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picker_wheel_ip4.png; sourceTree = "<group>"; };
+		A7E2D94217B3B176007BDE00 /* picker_wheel_ip4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "picker_wheel_ip4@2x.png"; sourceTree = "<group>"; };
+		A7E2D94517B3F258007BDE00 /* DayPickerSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DayPickerSettingsCell.h; sourceTree = "<group>"; };
+		A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DayPickerSettingsCell.m; sourceTree = "<group>"; };
+		A7E2D94817B4FE0F007BDE00 /* UpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UpgradeViewController.h; path = Upgrade/UpgradeViewController.h; sourceTree = "<group>"; };
+		A7E2D94917B4FE0F007BDE00 /* UpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UpgradeViewController.m; path = Upgrade/UpgradeViewController.m; sourceTree = "<group>"; };
 		A7E8FB001746276900CC2D26 /* DesignSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DesignSettings.h; sourceTree = "<group>"; };
 		A7E8FB0217462F3600CC2D26 /* AKSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKSegmentedControl.h; sourceTree = "<group>"; };
 		A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKSegmentedControl.m; sourceTree = "<group>"; };
@@ -702,12 +731,27 @@
 		A72DDD8717AB024900A00454 /* TimePicker */ = {
 			isa = PBXGroup;
 			children = (
+				A7E2D94117B3B176007BDE00 /* picker_wheel_ip4.png */,
+				A7E2D94217B3B176007BDE00 /* picker_wheel_ip4@2x.png */,
 				A776D0B617AD2B0A0027CA23 /* back_icon_white.png */,
 				A776D0B717AD2B0A0027CA23 /* back_icon_white@2x.png */,
 				A72DDD8817AB024900A00454 /* picker_wheel.png */,
 				A72DDD8917AB024900A00454 /* picker_wheel@2x.png */,
 			);
 			path = TimePicker;
+			sourceTree = "<group>";
+		};
+		A730D38F17B5149C005E1510 /* Upgrade */ = {
+			isa = PBXGroup;
+			children = (
+				A730D39817B54B17005E1510 /* upgrade_plus_button.png */,
+				A730D39917B54B17005E1510 /* upgrade_plus_button@2x.png */,
+				A730D39017B5149C005E1510 /* upgrade_plus_logo.png */,
+				A730D39117B5149C005E1510 /* upgrade_plus_logo@2x.png */,
+				A730D39417B51C24005E1510 /* upgrade_full.png */,
+				A730D39517B51C24005E1510 /* upgrade_full@2x.png */,
+			);
+			path = Upgrade;
 			sourceTree = "<group>";
 		};
 		A742414E17A5AAA9009C9735 /* Icons */ = {
@@ -994,6 +1038,9 @@
 		A781285D17294C56002226C8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A7E2D94B17B4FE16007BDE00 /* Upgrade */,
+				A7E2D94517B3F258007BDE00 /* DayPickerSettingsCell.h */,
+				A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */,
 				A7FA8B1B17AF094D00134ED0 /* SnoozesViewController.h */,
 				A7FA8B1C17AF094D00134ED0 /* SnoozesViewController.m */,
 				A75236C717A2EC6B0030ED1E /* Walkthrough */,
@@ -1003,6 +1050,8 @@
 				A75207F71730F5E000F1B4F7 /* ToDo */,
 				A781286717294C56002226C8 /* Menu */,
 				A781286A17294C56002226C8 /* Segmented */,
+				A7E2D93A17B2C5A4007BDE00 /* SettingsCell.h */,
+				A7E2D93B17B2C5A4007BDE00 /* SettingsCell.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1082,6 +1131,7 @@
 		A781288217294C56002226C8 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A730D38F17B5149C005E1510 /* Upgrade */,
 				A72DDD8717AB024900A00454 /* TimePicker */,
 				A717BF0C175F5E7B004791BF /* EditMode */,
 				A717BEF1175F5C0B004791BF /* Add */,
@@ -1226,6 +1276,8 @@
 		A7BDD4AF17369A6900C1A97E /* SchedulePopup */ = {
 			isa = PBXGroup;
 			children = (
+				A7E2D93D17B2E3B0007BDE00 /* schedule_image_location.png */,
+				A7E2D93E17B2E3B0007BDE00 /* schedule_image_location@2x.png */,
 				A724B01C17A9397D00E0EF83 /* selected_circle.png */,
 				A724B01D17A9397D00E0EF83 /* selected_circle@2x.png */,
 				A75700251738FA0100CDB4F3 /* left_arrow.png */,
@@ -1268,6 +1320,15 @@
 				A7DEA17E1790A5EA00EB1549 /* UIWindow+RESideMenuExtensions.m */,
 			);
 			path = RESideMenu;
+			sourceTree = "<group>";
+		};
+		A7E2D94B17B4FE16007BDE00 /* Upgrade */ = {
+			isa = PBXGroup;
+			children = (
+				A7E2D94817B4FE0F007BDE00 /* UpgradeViewController.h */,
+				A7E2D94917B4FE0F007BDE00 /* UpgradeViewController.m */,
+			);
+			name = Upgrade;
 			sourceTree = "<group>";
 		};
 		A7E8FB0117462F3600CC2D26 /* KPSegmentedControl */ = {
@@ -1552,6 +1613,16 @@
 				A7FA8B1617AECE3600134ED0 /* menu_walkthrough@2x.png in Resources */,
 				A7FA8B1917AEE11F00134ED0 /* menu_back.png in Resources */,
 				A7FA8B1A17AEE11F00134ED0 /* menu_back@2x.png in Resources */,
+				A7E2D93F17B2E3B0007BDE00 /* schedule_image_location.png in Resources */,
+				A7E2D94017B2E3B0007BDE00 /* schedule_image_location@2x.png in Resources */,
+				A7E2D94317B3B176007BDE00 /* picker_wheel_ip4.png in Resources */,
+				A7E2D94417B3B176007BDE00 /* picker_wheel_ip4@2x.png in Resources */,
+				A730D39217B5149C005E1510 /* upgrade_plus_logo.png in Resources */,
+				A730D39317B5149C005E1510 /* upgrade_plus_logo@2x.png in Resources */,
+				A730D39617B51C24005E1510 /* upgrade_full.png in Resources */,
+				A730D39717B51C24005E1510 /* upgrade_full@2x.png in Resources */,
+				A730D39A17B54B17005E1510 /* upgrade_plus_button.png in Resources */,
+				A730D39B17B54B17005E1510 /* upgrade_plus_button@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1676,6 +1747,9 @@
 				A7D7D53917B1A56C00FBC042 /* MenuButton.m in Sources */,
 				A7D7D53C17B1ADAA00FBC042 /* KPDayPicker.m in Sources */,
 				A7D7D53F17B1C00900FBC042 /* UIButton+PassTouch.m in Sources */,
+				A7E2D93C17B2C5A4007BDE00 /* SettingsCell.m in Sources */,
+				A7E2D94717B3F258007BDE00 /* DayPickerSettingsCell.m in Sources */,
+				A7E2D94A17B4FE0F007BDE00 /* UpgradeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

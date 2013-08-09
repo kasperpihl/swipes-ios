@@ -210,6 +210,11 @@ Copyright 2012. Arash Payan. This library is distributed under the terms of the 
    limitations under the License.
 
 
+## GoogleAnalytics-iOS-SDK
+
+Copyright 2009 - 2012 Google, Inc. All rights reserved.
+
+
 ## KGStatusBar
 
 Copyright (c) 2013 Kevin Gibbon

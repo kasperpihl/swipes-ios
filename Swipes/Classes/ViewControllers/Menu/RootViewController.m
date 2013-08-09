@@ -30,7 +30,9 @@
 #import "UIColor+Utilities.h"
 #import "KPDayPicker.h"
 #import "NotificationHandler.h"
-@interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate>
+
+#import "UpgradeViewController.h"
+@interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 @property (nonatomic) NSDate *lastClose;
@@ -158,6 +160,13 @@ static RootViewController *sharedObject;
     [self setupAppearance];
     [self.sideMenu hide];
 }
+-(void)upgrade{
+    UpgradeViewController *viewController = [[UpgradeViewController alloc]init];
+    viewController.delegate = self;
+    [self addChildViewController:viewController];
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    [window addSubview:viewController.view];
+}
 -(void)walkthrough{
     WalkthroughViewController *viewController = [[WalkthroughViewController alloc]init];
     viewController.delegate = self;
@@ -165,6 +174,10 @@ static RootViewController *sharedObject;
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     [window addSubview:viewController.view];
     
+}
+-(void)closedUpgradeViewController:(UpgradeViewController *)viewController{
+    [viewController.view removeFromSuperview];
+    [viewController removeFromParentViewController];
 }
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
     if(self.lockSettings) return;
@@ -190,10 +203,6 @@ static RootViewController *sharedObject;
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
-    KPDayPicker *dayPicker = [[KPDayPicker alloc] initWithHeight:65 selectedDay:1];
-    dayPicker.center = self.view.center;
-    [self.view addSubview:dayPicker];
-    return;
     BLURRY.delegate = self;
     self.sideMenu = kSideMenu;
     self.sideMenu.backgroundImage = [tbackground(TaskTableGradientBackground) image];

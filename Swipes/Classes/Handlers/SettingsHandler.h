@@ -8,9 +8,11 @@
 typedef enum {
     SettingWeekStartTime,
     SettingWeekendStartTime,
+    SettingEveningStartTime,
     SettingWeekStart,
     SettingWeekendStart,
-    SettingLaterToday
+    SettingLaterToday,
+    SettingNotifications
 } KPSettings;
 #import <Foundation/Foundation.h>
 #define kSettings [SettingsHandler sharedInstance]

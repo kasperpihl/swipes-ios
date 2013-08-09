@@ -6,10 +6,16 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 #define SCHEDULE_IMAGE_CENTER_SPACING 13
+#define kLampSize 25
+#define kLampBorderRadius 7
+#define kLampY 0
+#define kLampX 0
 #import "MenuButton.h"
 #import "UtilityClass.h"
+#import <QuartzCore/QuartzCore.h>
 @interface MenuButton ()
 @property (nonatomic) UIImageView *iconImageView;
+@property (nonatomic) UIView *lampView;
 @end
 @implementation MenuButton
 -(void)highlightedButton:(UIButton *)sender{
@@ -17,6 +23,11 @@
 }
 -(void)deHighlightedButton:(UIButton *)sender{
     self.iconImageView.highlighted = NO;
+}
+-(void)setLampColor:(UIColor*)lampColor{
+    _lampColor = lampColor;
+    self.lampView.hidden = (!lampColor);
+    self.lampView.backgroundColor = lampColor;
 }
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title image:(UIImage*)image{
     self = [super initWithFrame:frame];
@@ -38,6 +49,8 @@
         [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self setTitleColor:highlightedColor forState:UIControlStateHighlighted];
         
+        
+        
         self.iconImageView = [[UIImageView alloc] initWithImage:image];
         self.iconImageView.highlightedImage = [UtilityClass image:image withColor:highlightedColor multiply:YES];
         
@@ -49,6 +62,12 @@
         self.iconImageView.frame = CGRectSetPos(self.iconImageView.frame, (self.frame.size.width-image.size.width)/2,spacing);
         self.titleEdgeInsets = UIEdgeInsetsMake(0, 0, spacing, 0);
         [self addSubview:self.iconImageView];
+        
+        self.lampView = [[UIView alloc] initWithFrame:CGRectMake(kLampX, kLampY, kLampSize, kLampSize)];
+        self.lampView.hidden = YES;
+        self.lampView.layer.masksToBounds = YES;
+        self.lampView.layer.cornerRadius = kLampBorderRadius;
+        [self addSubview:self.lampView];
     }
     return self;
 }

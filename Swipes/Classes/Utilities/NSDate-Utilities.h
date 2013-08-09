@@ -75,7 +75,7 @@
 - (NSInteger)distanceInDaysToDate:(NSDate *)anotherDate;
 
 -(NSDate *)dateAtHours:(NSInteger)hours minutes:(NSInteger)minutes;
-
+-(NSDate *)dateAtWeekday:(NSInteger)weekday;
 // Decomposing dates
 @property (readonly) NSInteger nearestHour;
 @property (readonly) NSInteger hour;

@@ -12,8 +12,8 @@
 #define tcolor(ThemerItem) [THEMER colorForItem:ThemerItem]
 #define tbackground(background) [THEMER colorForBackground:background]
 typedef enum {
-    ThemeDark = 1,
-    ThemeLight = 2
+    ThemeDark = 0,
+    ThemeLight = 1
 } Theme;
 
 typedef enum {

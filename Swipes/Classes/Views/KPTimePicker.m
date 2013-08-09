@@ -132,6 +132,10 @@
 @property (nonatomic,strong) UILabel *clockLabel;
 @end
 @implementation KPTimePicker
+/*-(void)setDelegate:(NSObject<KPTimePickerDelegate> *)delegate{
+    _delegate = delegate;
+    [self updateForDate:self.pickingDate];
+}*/
 -(void)setPickingDate:(NSDate *)pickingDate{
     if(_pickingDate != pickingDate){
         if(pickingDate) pickingDate = [pickingDate dateToNearest5Minutes];
@@ -251,9 +255,20 @@
     [dateFormatter setLocale:[NSLocale currentLocale]];
     [dateFormatter setDateStyle:NSDateFormatterNoStyle];
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
-    self.clockLabel.text =  [[dateFormatter stringFromDate:date] lowercaseString];
-    self.dayLabel.text = [UtilityClass dayStringForDate:date];
+    NSString *dayString;
+    NSString *timeString;
+    if([self.delegate respondsToSelector:@selector(timePicker:titleForDate:)]) dayString = [self.delegate timePicker:self titleForDate:date];
+    if(!dayString) dayString = [UtilityClass dayStringForDate:date];
+    if([self.delegate respondsToSelector:@selector(timePicker:clockForDate:)]) timeString = [self.delegate timePicker:self clockForDate:date];
+    if(!timeString) timeString = [[dateFormatter stringFromDate:date] lowercaseString];
+    self.clockLabel.text = timeString;
+    self.dayLabel.text = dayString;
     self.backgroundColor = [self colorForDate:date];
+    if(self.hideIcons){
+        self.sunImage.hidden = YES;
+        self.moonImage.hidden = YES;
+        return;
+    }
     BOOL hiddenSun = YES;
     CGFloat sunAngle = 0;
     NSInteger minutesOfDayPassed = [date minutesAfterDate:[date dateAtStartOfDay]];
@@ -347,7 +362,7 @@
         self.confirmButton.layer.cornerRadius = self.middleRadius;
         [self addSubview:self.confirmButton];
         
-        self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"picker_wheel"]];
+        self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:valForScreen(@"picker_wheel_ip4",@"picker_wheel")]];
         self.timeSlider.center = self.centerPoint;
         [self addSubview:self.timeSlider];
         
@@ -376,12 +391,13 @@
         self.clockLabel.font = kClockLabelFont;
         self.clockLabel.textAlignment = UITextAlignmentCenter;
         [self addSubview:self.clockLabel];
-        self.pickingDate = [NSDate date];
     }
     return self;
 }
 -(void)layoutSubviews{
     [super layoutSubviews];
+    if(!self.pickingDate) self.pickingDate = [NSDate date];
+    else [self updateForDate:self.pickingDate];
     CGFloat heightForContent = self.centerPoint.y - self.wheelRadius - kExtraWheelRadius;
     
     

@@ -18,5 +18,4 @@
 @property (nonatomic) UIFont *font;
 @property (nonatomic,weak) NSObject<KPDayPickerDelegate> *delegate;
 -(id)initWithHeight:(CGFloat)height selectedDay:(NSInteger)selectedDay;
-
 @end

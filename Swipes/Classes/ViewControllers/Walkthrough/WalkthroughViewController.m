@@ -107,14 +107,13 @@ typedef enum {
 @implementation WalkthroughViewController
 -(NSMutableArray *)items{
     if(!_items){
-        _items = [@[@"Clean laundry",
-                  @"Wash the dishes",
-                  @"Make the accounting",
-                  @"Take out trash",
-                  @"Hit someone in the face",
-                  @"Now play with the global team",
-                  @"You are what you achieve",
-                  @"This was all the tasks"
+        _items = [@[@"Resend offer to Michael",
+                  @"Friday catch-up",
+                  @"Fix the presentation notes",
+                  @"Buy gift for Tom",
+                  @"Email Simon Gate",
+                  @"Appointment with the dentist",
+                  @"Birthday party"
                   ] mutableCopy];
     }
     return _items;

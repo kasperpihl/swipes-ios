@@ -171,7 +171,7 @@
 }
 #pragma mark Sort Handling
 -(NSArray*)extractTags{
-    NSArray *tagArray = [NSArray array];
+    NSArray *tagArray;
     NSSet *fuckME;
     NSMutableSet *tagSet = [NSMutableSet set];
     for(KPToDo *toDo in self.items){

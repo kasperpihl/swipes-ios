@@ -28,4 +28,5 @@ typedef enum {
 -(void)logOut;
 -(void)closeApp;
 -(void)openApp;
+-(void)upgrade;
 @end

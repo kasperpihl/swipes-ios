@@ -26,22 +26,20 @@
 }
 + (NSDate *) dateThisOrNextWeekWithDay:(NSInteger)day hours:(NSInteger)hours minutes:(NSInteger)minutes{
     NSDate *today = [NSDate date];
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    [gregorian setLocale:[NSLocale currentLocale]];
     
-    NSDateComponents *nowComponents = [gregorian components:NSYearCalendarUnit | NSWeekCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:today];
+    NSDateComponents *nowComponents = [CURRENT_CALENDAR components:NSYearCalendarUnit | NSWeekCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:today];
     
     [nowComponents setWeekday:day]; //Monday
     [nowComponents setHour:hours]; //8a.m.
     [nowComponents setMinute:minutes];
     [nowComponents setSecond:0];
     
-    NSDate *beginningOfWeek = [gregorian dateFromComponents:nowComponents];
+    NSDate *beginningOfWeek = [CURRENT_CALENDAR dateFromComponents:nowComponents];
     
     
     if([beginningOfWeek isInPast]){
         [nowComponents setWeek: [nowComponents week] + 1];
-        beginningOfWeek = [gregorian dateFromComponents:nowComponents];
+        beginningOfWeek = [CURRENT_CALENDAR dateFromComponents:nowComponents];
     }
     return beginningOfWeek;
     
@@ -282,6 +280,13 @@
 	components.minute = minutes;
 	components.second = 0;
 	return [CURRENT_CALENDAR dateFromComponents:components];
+}
+-(NSDate *)dateAtWeekday:(NSInteger)weekday{
+    NSDateComponents *components = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:self];
+    [components setWeekday:weekday];
+    [components setWeek:components.week+1];
+    NSDate *retDate = [CURRENT_CALENDAR dateByAddingComponents:components toDate:self options:0];
+    return retDate;
 }
 - (NSDate *) dateAtStartOfDay
 {

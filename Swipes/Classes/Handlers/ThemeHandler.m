@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 /* Main colors */
-#define retColor(DarkColor,LightColor) ((THEMER.currentTheme == ThemeDark) ? DarkColor : LightColor)
+#define retColor(DarkColor,LightColor) ((THEMER.currentTheme == ThemeDark) ? DarkColor : DarkColor)
 #define inv(color) [ThemeHandler inverseColor:color]
 
 #define TASKS_COLOR                     color(255,227,64,1)

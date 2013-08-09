@@ -30,6 +30,10 @@
         self.selectedDay = selectedButton.tag;
     }
 }
+-(void)setSelectedDay:(NSInteger)selectedDay{
+    _selectedDay = selectedDay;
+    [self setNeedsLayout];
+}
 -(UIButton*)buttonForTouches:(NSSet*)touches{
     if (touches.count != 1) {
         return nil;
@@ -79,10 +83,10 @@
             [buttonArray addObject:dayButton];
         }
         self.dayButtons = [buttonArray copy];
-        if(selectedDay < 0) selectedDay = 0;
-        if(selectedDay > 6) selectedDay = 6;
+        if(selectedDay < 1) selectedDay = 1;
+        if(selectedDay > 7) selectedDay = 7;
         self.font = kDefFont;
-        
+        self.selectedDay = selectedDay;
         self.selectedColor = kDefSelectedColor;
     }
     return self;
@@ -91,19 +95,15 @@
     NSInteger firstDay = [[NSCalendar currentCalendar] firstWeekday]-1;
     NSDateFormatter *weekdayFormater = [[NSDateFormatter alloc] init];
     weekdayFormater.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-    NSLog(@"firstDay:%i",firstDay);
-    firstDay = 0;
-    
     NSArray *weekdays = [weekdayFormater shortWeekdaySymbols];
-    NSLog(@"weekdays:%@",weekdays);
     for(NSInteger i = 0 ; i < 7 ; i++){
-        NSInteger day = (i + firstDay) % 7;
-        NSLog(@"day:%i",day);
+        NSInteger day = ((i + firstDay) % 7)+1;
+        //NSLog(@"day:%@",[weekdays objectAtIndex:day]);
         UIButton *dayButton = [self.dayButtons objectAtIndex:i];
         [dayButton setBackgroundImage:[self.selectedColor image] forState:UIControlStateSelected];
         [dayButton setBackgroundImage:[self.selectedColor image] forState:UIControlStateSelected|UIControlStateHighlighted];
         dayButton.tag = day;
-        [dayButton setTitle:[[weekdays objectAtIndex:day] uppercaseString] forState:UIControlStateNormal];
+        [dayButton setTitle:[[weekdays objectAtIndex:day-1] uppercaseString] forState:UIControlStateNormal];
         [dayButton setTitleColor:self.textColor forState:UIControlStateNormal];
         [dayButton.titleLabel setFont:self.font];
         if(day == self.selectedDay) self.selectedButton = dayButton;

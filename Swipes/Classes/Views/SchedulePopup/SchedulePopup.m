@@ -10,6 +10,7 @@
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
 #import "NSDate-Utilities.h"
+#import "SettingsHandler.h"
 #import "KPBlurry.h"
 #import "CKCalendarView.h"
 #import "KPToolbar.h"
@@ -72,12 +73,10 @@ typedef enum {
     if(!_scheduleButtons) _scheduleButtons = [NSMutableArray array];
     return _scheduleButtons;
 }
--(TimeRef)startingTimeForDate:(NSDate*)date{
-    TimeRef time;
-    if(date.isTypicallyWeekend) time.hours = 10;
-    else time.hours = 9;
-    time.minutes = 0;
-    return time;
+-(void)setStartingTimeForDate:(NSDate**)date{
+    KPSettings setting = [*date isTypicallyWeekend] ? SettingWeekendStartTime : SettingWeekStartTime;
+    NSDate *dateForSetting = (NSDate*)[kSettings valueForSetting:setting];
+    *date = [*date dateAtHours:dateForSetting.hour minutes:dateForSetting.minute];
 }
 +(SchedulePopup*)popupWithFrame:(CGRect)frame block:(SchedulePopupBlock)block{
     SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:frame];
@@ -95,27 +94,32 @@ typedef enum {
         case KPScheduleButtonLaterToday:
             date = [[NSDate dateWithHoursFromNow:3] dateToNearest15Minutes];
             break;
-        case KPScheduleButtonThisEvening:
-            date = [NSDate dateThisOrTheNextDayWithHours:19 minutes:0];
+        case KPScheduleButtonThisEvening:{
+            NSDate *eveningStartTimeDate = (NSDate*)[kSettings valueForSetting:SettingEveningStartTime];
+            date = [NSDate dateThisOrTheNextDayWithHours:eveningStartTimeDate.hour minutes:eveningStartTimeDate.minute];
             break;
+        }
         case KPScheduleButtonTomorrow:{
-            TimeRef time = [self startingTimeForDate:[NSDate dateTomorrow]];
-            date = [[NSDate dateTomorrow] dateAtHours:time.hours minutes:time.minutes];
+            date = [NSDate dateTomorrow];
+            [self setStartingTimeForDate:&date];
             break;
         }
         case KPScheduleButtonIn2Days:{
-            TimeRef time = [self startingTimeForDate:[NSDate dateWithDaysFromNow:2]];
-            date = [[NSDate dateWithDaysFromNow:2] dateAtHours:time.hours minutes:time.minutes];
+            date = [NSDate dateWithDaysFromNow:2];
+            [self setStartingTimeForDate:&date];
             break;
         }
         case KPScheduleButtonThisWeekend:
             date = [NSDate dateThisOrNextWeekWithDay:7 hours:10 minutes:0];
+            [self setStartingTimeForDate:&date];
             break;
         case KPScheduleButtonNextWeek:
             date = [NSDate dateThisOrNextWeekWithDay:2 hours:9 minutes:0];
+            [self setStartingTimeForDate:&date];
             break;
         case KPScheduleButtonUnscheduled:
         case KPScheduleButtonSpecificTime:
+        case KPScheduleButtonLocation:
         case KPScheduleButtonCancel:
             date = nil;
             break;
@@ -128,6 +132,7 @@ typedef enum {
 -(void)pressedScheduleButton:(UIButton*)sender{
     KPScheduleButtons thisButton = [self buttonForTag:sender.tag];
     if(thisButton == KPScheduleButtonSpecificTime) [self pressedSpecific:self];
+    else if(thisButton == KPScheduleButtonLocation) ;
     else if(thisButton != KPScheduleButtonCancel){
         NSDate *date = [self dateForButton:thisButton];
         [self returnState:thisButton date:date];
@@ -306,6 +311,9 @@ typedef enum {
         [contentView addSubview:nextWeekButton];
         UIButton *specificTimeButton = [self buttonForScheduleButton:KPScheduleButtonSpecificTime title:@"Pick A Date"];
         [contentView addSubview:specificTimeButton];
+        UIButton *locationButton = [self buttonForScheduleButton:KPScheduleButtonLocation title:@"At Location"];
+        [contentView addSubview:locationButton];
+        
         UIButton *unspecifiedButton = [self buttonForScheduleButton:KPScheduleButtonUnscheduled title:@"Unspecified"];
         [contentView addSubview:unspecifiedButton];
         
@@ -320,8 +328,7 @@ typedef enum {
     return self;
 }
 -(void)calendar:(CKCalendarView *)calendar updateTimeForDate:(NSDate *__autoreleasing *)date{
-    TimeRef timeRef = [self startingTimeForDate:*date];
-    *date = [*date dateAtHours:timeRef.hours minutes:timeRef.minutes];
+    [self setStartingTimeForDate:&*date];
     if([*date isToday] && [*date isEarlierThanDate:[NSDate date]]) *date = [[[NSDate date] dateByAddingMinutes:5] dateToNearest5Minutes];
 }
 -(void)calendar:(CKCalendarView *)calendar longPressForDate:(NSDate *)date{
@@ -396,7 +403,7 @@ typedef enum {
     self.toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     self.toolbar.backgroundColor = CLEAR;
     self.toolbar.delegate = self;
-    
+
     [self.contentView addSubview:self.toolbar];
     [self.contentView addSubview:self.calendarView];
 }
@@ -409,6 +416,7 @@ typedef enum {
 -(UIButton*)buttonForScheduleButton:(KPScheduleButtons)scheduleButton title:(NSString *)title{
     UIButton *button = [[MenuButton alloc] initWithFrame:[self frameForButtonNumber:scheduleButton] title:title image:[self imageForScheduleButton:scheduleButton]];
     button.tag = [self tagForButton:scheduleButton];
+    [button setBackgroundImage:[POPUP_SELECTED image] forState:UIControlStateHighlighted];
     [button addTarget:self action:@selector(pressedScheduleButton:) forControlEvents:UIControlEventTouchUpInside];
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
     longPressGestureRecognizer.allowableMovement = 44.0f;
@@ -440,6 +448,9 @@ typedef enum {
             break;
         case KPScheduleButtonUnscheduled:
             imageString = @"schedule_image_cloud";
+            break;
+        case KPScheduleButtonLocation:
+            imageString = @"schedule_image_location";
             break;
         case KPScheduleButtonSpecificTime:
             imageString = @"schedule_image_calender";

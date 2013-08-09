@@ -1,31 +1,34 @@
 PODS:
-  - Appirater (1.0.3)
-  - Facebook-iOS-SDK (3.5.3)
+  - Appirater (1.0.5)
+  - Facebook-iOS-SDK (3.6.0)
+  - GoogleAnalytics-iOS-SDK (2.0beta4)
   - KGStatusBar (1.0)
   - MagicalRecord (2.1)
   - Mixpanel (2.0.0)
-  - Parse (1.2.10):
-    - Facebook-iOS-SDK (~> 3.5.1)
+  - Parse (1.2.11):
+    - Facebook-iOS-SDK (~> 3.5)
   - PRTween (0.0.1)
   - SMPageControl (1.0)
 
 DEPENDENCIES:
   - Appirater (~> 1.0.3)
-  - Facebook-iOS-SDK (~> 3.5.3)
+  - Facebook-iOS-SDK (~> 3.6.0)
+  - GoogleAnalytics-iOS-SDK (~> 2.0beta4)
   - KGStatusBar (~> 1.0)
   - MagicalRecord (~> 2.1)
   - Mixpanel (~> 2.0.0)
-  - Parse (~> 1.2.9)
+  - Parse (~> 1.2.11)
   - PRTween (~> 0.0.1)
   - SMPageControl (~> 1.0)
 
 SPEC CHECKSUMS:
-  Appirater: 1c146af7b0ef3e2114a17db2e185f94367f63a99
-  Facebook-iOS-SDK: c11e851555d8cb8b55853ec2990b01d9e343d09e
+  Appirater: 5addfe3fac0aa85209b553f894b6b0533152786f
+  Facebook-iOS-SDK: a60c23acea22161609ef6144ffff686e6f133902
+  GoogleAnalytics-iOS-SDK: ae8e58e771b6dec84c0047154cc0e550a15e6f54
   KGStatusBar: e47f19745f6aeb0fabe37e8360df26bf87b1e2ff
   MagicalRecord: 64e7184c240087a45e9588a722eaf05b0ad837f7
-  Mixpanel: d456c27f7520e22784a15d0bcd9d5c287080b0cd
-  Parse: f678a56974e34a2549c21eabb0dcbad309b270b1
+  Mixpanel: e4af97adb60a10541b7869929a83d734025058a6
+  Parse: 4e4750205c339336efd11d2fe24e8ee3112fb3db
   PRTween: d0439e7917031328f81de4910c5b02e202389939
   SMPageControl: 9d100f9aa8ca0cf10222666ff31d4d1cbfdac674
 

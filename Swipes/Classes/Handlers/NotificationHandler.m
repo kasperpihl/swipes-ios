@@ -10,6 +10,7 @@
 #import "UtilityClass.h"
 #import "NSDate-Utilities.h"
 #import "KPToDo.h"
+#import "SettingsHandler.h"
 #define kMaxNotifications 25
 @implementation NotificationHandler
 static NotificationHandler *sharedObject;
@@ -32,8 +33,14 @@ static NotificationHandler *sharedObject;
     return localNotif;
 }
 -(void)updateLocalNotifications{
-    NSLog(@"updating notifications");
+    
+    BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
     UIApplication *app = [UIApplication sharedApplication];
+    if(!hasNotificationsOn){
+        [app cancelAllLocalNotifications];
+        return;
+    }
+    
     NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule < %@)",@"scheduled", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
     NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule > %@)",@"scheduled", [NSDate date]];
@@ -93,7 +100,6 @@ static NotificationHandler *sharedObject;
     for(UILocalNotification *notification in notificationsArray){
         [app scheduleLocalNotification:notification];
     }
-    NSLog(@"updated notifications");
 }
 
 @end
