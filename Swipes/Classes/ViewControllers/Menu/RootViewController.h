@@ -29,4 +29,5 @@ typedef enum {
 -(void)closeApp;
 -(void)openApp;
 -(void)upgrade;
+-(void)proWithMessage:(NSString*)message;
 @end

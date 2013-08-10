@@ -14,6 +14,7 @@
 #import "AppsFlyer.h"
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
+//#import "GAI.h"
 @implementation AppDelegate
 + (NSInteger)OSVersion
 {
@@ -52,6 +53,16 @@
     [PFFacebookUtils initializeFacebook];
     KPCORE;
     [Mixpanel sharedInstanceWithToken:mixpanelToken];
+    // Optional: automatically send uncaught exceptions to Google Analytics.
+   /* [GAI sharedInstance].trackUncaughtExceptions = YES;
+    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+    [GAI sharedInstance].dispatchInterval = 20;
+    // Optional: set debug to YES for extra debugging information.
+    [GAI sharedInstance].debug = YES;
+    // Create tracker instance.
+    [[GAI sharedInstance] trackerWithTrackingId:@"UA-YOUR-TRACKING-ID"];
+    */
+    
     [Appirater appLaunched:YES];
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (notification) [self application:application didReceiveLocalNotification:notification];

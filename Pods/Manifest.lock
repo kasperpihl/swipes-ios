@@ -1,7 +1,6 @@
 PODS:
   - Appirater (1.0.5)
   - Facebook-iOS-SDK (3.6.0)
-  - GoogleAnalytics-iOS-SDK (2.0beta4)
   - KGStatusBar (1.0)
   - MagicalRecord (2.1)
   - Mixpanel (2.0.0)
@@ -13,7 +12,6 @@ PODS:
 DEPENDENCIES:
   - Appirater (~> 1.0.3)
   - Facebook-iOS-SDK (~> 3.6.0)
-  - GoogleAnalytics-iOS-SDK (~> 2.0beta4)
   - KGStatusBar (~> 1.0)
   - MagicalRecord (~> 2.1)
   - Mixpanel (~> 2.0.0)
@@ -24,7 +22,6 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   Appirater: 5addfe3fac0aa85209b553f894b6b0533152786f
   Facebook-iOS-SDK: a60c23acea22161609ef6144ffff686e6f133902
-  GoogleAnalytics-iOS-SDK: ae8e58e771b6dec84c0047154cc0e550a15e6f54
   KGStatusBar: e47f19745f6aeb0fabe37e8360df26bf87b1e2ff
   MagicalRecord: 64e7184c240087a45e9588a722eaf05b0ad837f7
   Mixpanel: e4af97adb60a10541b7869929a83d734025058a6

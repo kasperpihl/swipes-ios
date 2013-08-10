@@ -20,7 +20,8 @@
 #import "ThemeHandler.h"
 #import "UIColor+Utilities.h"
 #import "KPBlurry.h"
-
+#import "PlusAlertView.h"
+#import "RootViewController.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
@@ -43,7 +44,6 @@
 @property (nonatomic,weak) IBOutlet UIView *presentedPanel;
 @property (nonatomic) BOOL tableIsShrinked;
 @property (nonatomic) NSInteger currentSelectedIndex;
-
 @property (nonatomic) BOOL hasAppeared;
 @property (nonatomic) BOOL hidden;
 
@@ -109,6 +109,15 @@
     [self tagViewWithDismissAction:^{
         [[self currentViewController] deselectAllRows:self];
     }];
+}
+-(void)pressedShare:(id)sender{
+    PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Sharing tasks are an upcomming feature in Swipes Plus. Check out the package." block:^(BOOL succeeded, NSError *error) {
+        [BLURRY dismissAnimated:YES];
+        if(succeeded){
+            [ROOT_CONTROLLER upgrade];
+        }
+    }];
+    [BLURRY showView:alert inViewController:self];
 }
 -(void)tagViewWithDismissAction:(voidBlock)block{
     //[self show:NO controlsAnimated:YES];

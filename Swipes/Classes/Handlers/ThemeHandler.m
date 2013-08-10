@@ -14,8 +14,8 @@
 #define LATER_COLOR                     color(254,115,103,1)
 
 #define STRONG_TASKS_COLOR              color(228,192,21,1)
-#define STRONG_DONE_COLOR                color(45,141,115,1)
-#define STRONG_LATER_COLOR              color(254,69,52,1)
+#define STRONG_DONE_COLOR                color(58,195,160,1)
+#define STRONG_LATER_COLOR              color(255,96,69,1)
 
 /* Backgrounds */
 #define MENU_BACKGROUND                 retColor(color(44,50,59,1),         inv(color(44,50,59,1)))

@@ -24,17 +24,24 @@
 
 #define LOGIN_BUTTON_Y     (10      +LOGIN_FIELDS_Y+LOGIN_FIELDS_HEIGHT)
 #define FACEBOOK_BUTTON_Y  (40      +(LOGIN_BUTTON_Y+SIGNUP_BUTTONS_HEIGHT))
-#define SIGNUP_BUTTON_Y    (40      +(FACEBOOK_BUTTON_Y+SIGNUP_BUTTONS_HEIGHT))
 #define BUTTON_LABEL_SUBTRACTION 17
+#define kExtraBottomSpacing 30
 
 #define LOGIN_LOGO_Y            0
-#define LOGIN_FIELDS_Y          50
+#define LOGIN_FIELDS_Y          100
 #define FIELDS_WIDTH            260
+#define kLoginButtonSpacing     20
 #define SIGNUP_BUTTONS_HEIGHT   50
 
-#define kDefTextColor gray(128,1)
+#define kButtonBorderWidth 2
+#define kButtonBorderColor [UIColor whiteColor]
+#define kButtonCornerRadius 5
+
+#define kDefTextColor gray(153,1)
 #define kDefBackColor gray(204,1)
 #define kDefButtonFont KP_BOLD(23)
+#define kDefLoginButtonsFont KP_REGULAR(20)
+#define kLoginButtonColor tbackground(TaskTableGradientBackground)
 
 @interface LoginViewController () < PFSignUpViewControllerDelegate>
 @property (nonatomic,strong) IBOutlet UIView *fieldsBackground;
@@ -46,48 +53,57 @@
 -(id)init{
     self = [super init];
     if(self){
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
         SignupViewController *signupVC = [[SignupViewController alloc] init];
         signupVC.delegate = self;
         self.signUpController = signupVC;
-        self.fields = (PFLogInFieldsUsernameAndPassword | PFLogInFieldsFacebook | PFLogInFieldsLogInButton | PFLogInFieldsSignUpButton | PFLogInFieldsPasswordForgotten | PFLogInFieldsDismissButton);
+        self.fields = (PFLogInFieldsUsernameAndPassword | PFLogInFieldsFacebook | PFLogInFieldsLogInButton | PFLogInFieldsSignUpButton | PFLogInFieldsPasswordForgotten);
         self.facebookPermissions = @[@"email"];
         self.logInView.externalLogInLabel.text = @"You can also sign up with facebook";
-        [self.logInView.dismissButton setImage:[UIImage imageNamed:@"cross_button"] forState:UIControlStateNormal];
-        [self.logInView.dismissButton setImage:nil forState:UIControlStateHighlighted];
-        self.logInView.dismissButton.adjustsImageWhenHighlighted = true;
-        self.logInView.dismissButton.hidden = YES;
         [self.logInView setBackgroundColor:kDefBackColor];
 
         
         [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wt_swipes_logo"]]];
-        self.logInView.logo.alpha = 0.5;
+        //self.logInView.logo.alpha = 0.5;
         // Add login field background
         self.fieldsBackground = [[UIView alloc] initWithFrame:CGRectMake((self.logInView.frame.size.width-LOGIN_FIELDS_WIDTH)/2, 0, LOGIN_FIELDS_WIDTH, LOGIN_FIELDS_HEIGHT)];
         UIView *fieldsSeperator = [[UIView alloc] initWithFrame:CGRectMake((LOGIN_FIELDS_WIDTH-LOGIN_FIELDS_SEPERATOR_WIDTH)/2, (LOGIN_FIELDS_HEIGHT-SEPERATOR_WIDTH)/2, LOGIN_FIELDS_SEPERATOR_WIDTH, SEPERATOR_WIDTH)];
-        fieldsSeperator.backgroundColor = kDefTextColor;
+        fieldsSeperator.backgroundColor = LOGIN_FIELDS_BACKGROUND;
         [self.fieldsBackground addSubview:fieldsSeperator];
         [self.logInView insertSubview:self.fieldsBackground atIndex:1];
         
+        @try {
+            [self.logInView.usernameField setValue:LOGIN_FIELDS_BACKGROUND
+                            forKeyPath:@"_placeholderLabel.textColor"];
+            [self.logInView.passwordField setValue:LOGIN_FIELDS_BACKGROUND
+                                        forKeyPath:@"_placeholderLabel.textColor"];
+        }
+        @catch (NSException *exception) {
+            
+        }
+        
         self.logInView.usernameField.font = KP_SEMIBOLD(15);
+        self.logInView.usernameField.keyboardAppearance = UIKeyboardAppearanceAlert;
+        self.logInView.passwordField.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.logInView.passwordField.font = KP_SEMIBOLD(15);
         self.logInView.usernameField.placeholder = @"email";
         self.logInView.passwordField.placeholder = @"password";
-        self.logInView.usernameField.textColor = kDefTextColor;
-        self.logInView.passwordField.textColor = kDefTextColor;
+        self.logInView.usernameField.textColor = LOGIN_FIELDS_BACKGROUND;
+        self.logInView.passwordField.textColor = LOGIN_FIELDS_BACKGROUND;
         self.logInView.usernameField.returnKeyType = UIReturnKeyNext;
         CALayer *layer = self.logInView.usernameField.layer;
         layer.shadowOpacity = 0.0;
         layer = self.logInView.passwordField.layer;
         layer.shadowOpacity = 0.0;
         
-        
         [self setupButton:self.logInView.logInButton];
-        [self.logInView.logInButton setBackgroundImage:[tbackground(LoginButtonBackground) image] forState:UIControlStateNormal];
-        [self.logInView.logInButton setBackgroundImage:[[tbackground(LoginButtonBackground) darker] image] forState:UIControlStateHighlighted];
+        [self.logInView.logInButton setBackgroundImage:[tbackground(TaskTableGradientBackground) image] forState:UIControlStateNormal];
+        [self.logInView.logInButton setBackgroundImage:[[tbackground(TaskTableGradientBackground) darker] image] forState:UIControlStateHighlighted];
         
         
         self.logInView.externalLogInLabel.font = LOGIN_LABEL_ABOVE_FONT;
-        self.logInView.externalLogInLabel.textColor = tcolor(SearchDrawerColor);
+        self.logInView.externalLogInLabel.textColor = LOGIN_FIELDS_BACKGROUND;
         [self.logInView.externalLogInLabel setShadowOffset:CGSizeZero];
         [self setupButton:self.logInView.facebookButton];
         [self.logInView.facebookButton setBackgroundImage:[color(57,159,219,1) image] forState:UIControlStateNormal];
@@ -95,12 +111,10 @@
         [self.logInView.facebookButton setTitle:@"FACEBOOK" forState:UIControlStateNormal];
         
         
-        self.logInView.signUpLabel.font = LOGIN_LABEL_ABOVE_FONT;
-        self.logInView.signUpLabel.textColor = tcolor(SearchDrawerColor);
-        [self.logInView.signUpLabel setShadowOffset:CGSizeZero];
+        self.logInView.signUpLabel.hidden = YES;
         [self setupButton:self.logInView.signUpButton];
-        [self.logInView.signUpButton setBackgroundImage:[tcolor(DoneColor) image] forState:UIControlStateNormal];
-        [self.logInView.signUpButton setBackgroundImage:[[tcolor(DoneColor) darker] image] forState:UIControlStateHighlighted];
+        [self.logInView.signUpButton setBackgroundImage:[tbackground(TaskTableGradientBackground) image] forState:UIControlStateNormal];
+        [self.logInView.signUpButton setBackgroundImage:[[tbackground(TaskTableGradientBackground) darker] image] forState:UIControlStateHighlighted];
         [self.logInView.signUpButton setTitle:@"SIGN UP" forState:UIControlStateNormal];
         
         
@@ -129,11 +143,18 @@
     }
     return self;
 }
--(void)pressedDismiss:(UIButton*)sender{
-    [self switchToSignup:NO animated:YES];
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    if([textField isEqual:self.logInView.usernameField]) return [super textFieldShouldReturn:textField];
+    else{
+        [self pressedSignUp:self.logInView.signUpButton];
+        return YES;
+    }
 }
 -(void)pressedSignUp:(UIButton*)sender{
-    [self switchToSignup:YES animated:YES];
+    //[self switchToSignup:YES animated:YES];
+    self.signUpController.signUpView.usernameField.text = self.logInView.usernameField.text;
+    self.signUpController.signUpView.passwordField.text = self.logInView.passwordField.text;
+    [self.signUpController.signUpView.signUpButton sendActionsForControlEvents:UIControlEventTouchUpInside];
 }
 -(void)pressedPrivacy:(UIButton*)sender{
     [UTILITY confirmBoxWithTitle:@"Privacy policy" andMessage:@"Do you want to open our privacy policy?" block:^(BOOL succeeded, NSError *error) {
@@ -142,59 +163,14 @@
         }
     }];
 }
--(void)switchToSignup:(BOOL)signup animated:(BOOL)animated{
-    voidBlock block;
-    voidBlock completion;
-    if(signup){
-        self.logInView.signUpButton.hidden = YES;
-        self.logInView.usernameField.hidden = YES;
-        self.logInView.passwordField.hidden = YES;
-        self.signUpController.signUpView.usernameField.frame = self.logInView.usernameField.frame;
-        self.signUpController.signUpView.passwordField.frame = self.logInView.passwordField.frame;
-        [self.logInView insertSubview:self.signUpController.signUpView.usernameField atIndex:2];
-        [self.logInView insertSubview:self.signUpController.signUpView.passwordField atIndex:2];
-        self.signUpController.signUpView.signUpButton.frame = self.logInView.signUpButton.frame;
-        [self.logInView insertSubview:self.signUpController.signUpView.signUpButton atIndex:3];
-        [self.signUpController.signUpView.usernameField becomeFirstResponder];
-        self.logInView.dismissButton.alpha = 0;
-        self.logInView.dismissButton.hidden = NO;
-        block = ^{
-            self.logInView.externalLogInLabel.alpha = 0;
-            self.logInView.facebookButton.alpha = 0;
-            self.logInView.logInButton.alpha = 0;
-            self.logInView.signUpLabel.alpha = 0;
-            self.logInView.passwordForgottenButton.alpha = 0;
-            self.logInView.dismissButton.alpha = 1;
-            self.signUpController.signUpView.signUpButton.frame = self.logInView.logInButton.frame;
-        };
-    }
-    else{
-        self.logInView.usernameField.hidden = NO;
-        self.logInView.passwordField.hidden = NO;
-        if([self.signUpController.signUpView.usernameField isFirstResponder]) [self.signUpController.signUpView.usernameField resignFirstResponder];
-        else if([self.signUpController.signUpView.passwordField isFirstResponder]) [self.signUpController.signUpView.passwordField resignFirstResponder];
-        [self.signUpController.signUpView.usernameField removeFromSuperview];
-        [self.signUpController.signUpView.passwordField removeFromSuperview];
-        block = ^{
-            self.logInView.externalLogInLabel.alpha = 1;
-            self.logInView.facebookButton.alpha = 1;
-            self.logInView.logInButton.alpha = 1;
-            self.logInView.signUpLabel.alpha = 1;
-            self.logInView.passwordForgottenButton.alpha = 1;
-            self.logInView.dismissButton.alpha = 0;
-            self.signUpController.signUpView.signUpButton.frame = self.logInView.signUpButton.frame;
-        };
-        completion = ^{
-            self.logInView.signUpButton.hidden = NO;
-            [self.signUpController.signUpView.signUpButton removeFromSuperview];
-        };
-    }
-    
-    
-    [UIView animateWithDuration:0.25f animations:block completion:^(BOOL finished) {
-        if(finished && completion){
-            completion();
-        }
+-(void)keyboardWillShow{
+    [UIView animateWithDuration:0.25f animations:^{
+        CGRectSetY(self.logInView, -30);
+    }];
+}
+-(void)keyboardWillHide{
+    [UIView animateWithDuration:0.25f animations:^{
+        CGRectSetY(self.logInView, 0);
     }];
 }
 #pragma mark - PFSignUpViewControllerDelegate
@@ -241,16 +217,16 @@
     if(show){
         UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         indicatorView.tag = SIGNUP_INDICATOR_TAG;
-        indicatorView.center = self.signUpController.signUpView.signUpButton.center;
+        indicatorView.center = self.logInView.signUpButton.center;
         [self.logInView insertSubview:indicatorView atIndex:3];
     
         self.signupIndicator = (UIActivityIndicatorView*)[self.logInView viewWithTag:SIGNUP_INDICATOR_TAG];
         [self.signupIndicator startAnimating];
-        self.signUpController.signUpView.signUpButton.hidden = YES;
+        self.logInView.signUpButton.hidden = YES;
     }
     else{
         [self.signupIndicator removeFromSuperview];
-        self.signUpController.signUpView.signUpButton.hidden = NO;
+        self.logInView.signUpButton.hidden = NO;
     }
 }
 // Sent to the delegate when a PFUser is signed up.
@@ -267,23 +243,24 @@
 }
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    CGFloat relativeStart = (self.logInView.frame.size.height-(SIGNUP_BUTTON_Y+SIGNUP_BUTTONS_HEIGHT))/2;
+    CGFloat relativeStart = (self.logInView.frame.size.height-(FACEBOOK_BUTTON_Y+SIGNUP_BUTTONS_HEIGHT))/2-kExtraBottomSpacing;
     if(relativeStart < 30) relativeStart = 5;
     CGFloat viewWidth = self.logInView.frame.size.width;
     [self.logInView.logInButton setTitle:@"LOG IN" forState:UIControlStateNormal];
     [self.logInView.logInButton setTitle:@"LOG IN" forState:UIControlStateHighlighted];
-    self.logInView.dismissButton.frame = CGRectMake(0, 0, 44, 44);
+
     CGRectSetY(self.logInView.logo, LOGIN_LOGO_Y+relativeStart);
     CGRectSetY(self.fieldsBackground, LOGIN_FIELDS_Y+relativeStart);
     CGFloat fieldHeight = LOGIN_FIELDS_HEIGHT/2;
     CGRectSetY(self.logInView.usernameField, LOGIN_FIELDS_Y+(fieldHeight-self.logInView.usernameField.frame.size.height)/2+relativeStart);
     CGRectSetY(self.logInView.passwordField, LOGIN_FIELDS_Y+(LOGIN_FIELDS_HEIGHT/2)+(fieldHeight-self.logInView.passwordField.frame.size.height)/2+relativeStart);
     
-    self.logInView.logInButton.frame = CGRectMake((viewWidth-FIELDS_WIDTH)/2,LOGIN_BUTTON_Y+relativeStart,FIELDS_WIDTH,SIGNUP_BUTTONS_HEIGHT);
+    CGFloat logSignButtonWidth = (FIELDS_WIDTH/2) - (kLoginButtonSpacing/2);
+    
+    self.logInView.logInButton.frame = CGRectMake((viewWidth-FIELDS_WIDTH)/2,LOGIN_BUTTON_Y+relativeStart,logSignButtonWidth,SIGNUP_BUTTONS_HEIGHT);
     self.logInView.facebookButton.frame = CGRectMake((viewWidth-FIELDS_WIDTH)/2,FACEBOOK_BUTTON_Y+relativeStart,FIELDS_WIDTH,SIGNUP_BUTTONS_HEIGHT);
     CGRectSetY(self.logInView.externalLogInLabel,FACEBOOK_BUTTON_Y-BUTTON_LABEL_SUBTRACTION+relativeStart);
-    self.logInView.signUpButton.frame = CGRectMake((viewWidth-FIELDS_WIDTH)/2,SIGNUP_BUTTON_Y+relativeStart,FIELDS_WIDTH,SIGNUP_BUTTONS_HEIGHT);
-    CGRectSetY(self.logInView.signUpLabel, SIGNUP_BUTTON_Y-BUTTON_LABEL_SUBTRACTION+relativeStart);
+    self.logInView.signUpButton.frame = CGRectMake((viewWidth-FIELDS_WIDTH)/2 + logSignButtonWidth + kLoginButtonSpacing,LOGIN_BUTTON_Y+relativeStart,logSignButtonWidth,SIGNUP_BUTTONS_HEIGHT);
     
     UIButton *forPassBtn = self.logInView.passwordForgottenButton;
     CGRectSetHeight(forPassBtn, 38);
@@ -295,10 +272,14 @@
 }
 -(void)setupButton:(UIButton*)button{
     [button setBackgroundImage:nil forState:UIControlStateHighlighted];
-    [button.titleLabel setFont:SIGNUP_BUTTON_FONT];
+    [button.titleLabel setFont:kDefLoginButtonsFont];
     [button setImage:[UIImage new] forState:UIControlStateNormal];
     [button setImage:nil forState:UIControlStateHighlighted];
     [button.titleLabel setShadowOffset:CGSizeZero];
+    button.layer.cornerRadius = kButtonCornerRadius;
+    button.layer.borderColor = kButtonBorderColor.CGColor;
+    button.layer.masksToBounds = YES;
+    button.layer.borderWidth = kButtonBorderWidth;
 }
 - (void)viewDidLoad
 {

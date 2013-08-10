@@ -212,6 +212,8 @@
 		A7BDD4C517369A6900C1A97E /* schedule_image_notebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BDD4B917369A6900C1A97E /* schedule_image_notebook@2x.png */; };
 		A7BDD4C617369A6900C1A97E /* schedule_image_sun.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BDD4BA17369A6900C1A97E /* schedule_image_sun.png */; };
 		A7BDD4C717369A6900C1A97E /* schedule_image_sun@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7BDD4BB17369A6900C1A97E /* schedule_image_sun@2x.png */; };
+		A7C7594517B574EE00A9F2D0 /* PlusAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C7594417B574EE00A9F2D0 /* PlusAlertView.m */; };
+		A7C7594817B5962100A9F2D0 /* KPSubtitleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C7594717B5962100A9F2D0 /* KPSubtitleButton.m */; };
 		A7C90E6A17A6ABF700C5F9E2 /* wt_schedule_popup.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */; };
 		A7C90E6B17A6ABF700C5F9E2 /* wt_schedule_popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */; };
 		A7C90E7017A70A2400C5F9E2 /* wt_background_shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6C17A70A2400C5F9E2 /* wt_background_shadow.png */; };
@@ -517,6 +519,11 @@
 		A7BDD4B917369A6900C1A97E /* schedule_image_notebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule_image_notebook@2x.png"; sourceTree = "<group>"; };
 		A7BDD4BA17369A6900C1A97E /* schedule_image_sun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = schedule_image_sun.png; sourceTree = "<group>"; };
 		A7BDD4BB17369A6900C1A97E /* schedule_image_sun@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule_image_sun@2x.png"; sourceTree = "<group>"; };
+		A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		A7C7594317B574EE00A9F2D0 /* PlusAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlusAlertView.h; path = Alert/PlusAlertView.h; sourceTree = "<group>"; };
+		A7C7594417B574EE00A9F2D0 /* PlusAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlusAlertView.m; path = Alert/PlusAlertView.m; sourceTree = "<group>"; };
+		A7C7594617B5962100A9F2D0 /* KPSubtitleButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPSubtitleButton.h; path = Components/KPSubtitleButton.h; sourceTree = "<group>"; };
+		A7C7594717B5962100A9F2D0 /* KPSubtitleButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPSubtitleButton.m; path = Components/KPSubtitleButton.m; sourceTree = "<group>"; };
 		A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wt_schedule_popup.png; sourceTree = "<group>"; };
 		A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wt_schedule_popup@2x.png"; sourceTree = "<group>"; };
 		A7C90E6C17A70A2400C5F9E2 /* wt_background_shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wt_background_shadow.png; sourceTree = "<group>"; };
@@ -829,6 +836,8 @@
 		A75545DF179B4C5800CE2F4E /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				A7C7594617B5962100A9F2D0 /* KPSubtitleButton.h */,
+				A7C7594717B5962100A9F2D0 /* KPSubtitleButton.m */,
 				A7A2AC24175CF45500329FD5 /* NotesView.h */,
 				A7A2AC25175CF45600329FD5 /* NotesView.m */,
 				A7F4066717296BF100DDE644 /* ToDoCell.h */,
@@ -859,6 +868,8 @@
 		A75700311739B59D00CDB4F3 /* Alert */ = {
 			isa = PBXGroup;
 			children = (
+				A7C7594317B574EE00A9F2D0 /* PlusAlertView.h */,
+				A7C7594417B574EE00A9F2D0 /* PlusAlertView.m */,
 				A75700321739B5B200CDB4F3 /* KPAlert.h */,
 				A75700331739B5B200CDB4F3 /* KPAlert.m */,
 			);
@@ -895,6 +906,7 @@
 		A7778CC116EB5884004D95E5 = {
 			isa = PBXGroup;
 			children = (
+				A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */,
 				A781283D17294C56002226C8 /* Swipes */,
 				A7778CCC16EB5884004D95E5 /* Frameworks */,
 				A7778CCB16EB5884004D95E5 /* Products */,
@@ -1750,6 +1762,8 @@
 				A7E2D93C17B2C5A4007BDE00 /* SettingsCell.m in Sources */,
 				A7E2D94717B3F258007BDE00 /* DayPickerSettingsCell.m in Sources */,
 				A7E2D94A17B4FE0F007BDE00 /* UpgradeViewController.m in Sources */,
+				A7C7594517B574EE00A9F2D0 /* PlusAlertView.m in Sources */,
+				A7C7594817B5962100A9F2D0 /* KPSubtitleButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

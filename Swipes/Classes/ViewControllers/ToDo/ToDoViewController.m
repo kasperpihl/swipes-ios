@@ -235,6 +235,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     else if(item == 1){
         [self.segmentedViewController pressedDelete:self];
     }
+    else if(item == 2){
+        [self.segmentedViewController pressedShare:self];
+    }
 }
 -(void)setColorsFor:(id)object{
     if([object respondsToSelector:@selector(setTextColor:)]) [object setTextColor:tcolor(TagColor)];

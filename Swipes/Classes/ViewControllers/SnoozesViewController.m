@@ -22,22 +22,22 @@
     NSString *setting;
     switch (snooze) {
         case SnoozeWeekStartTime:
-            setting = @"Start my day at...";
+            setting = @"Start my day at";
             break;
         case SnoozeEveningStartTime:
-            setting = @"Start my evening at...";
+            setting = @"Start my evening at";
             break;
         case SnoozeWeekendStartTime:
-            setting = @"Start my weekends at...";
+            setting = @"Start my weekends at";
             break;
         case SnoozeWeekStart:
-            setting = @"My week starts...";
+            setting = @"My week starts";
             break;
         case SnoozeWeekendStart:
-            setting = @"My weekend starts...";
+            setting = @"My weekend starts";
             break;
         case SnoozeLaterToday:
-            setting = @"Snooze Later Today...";
+            setting = @"Snooze Later Today";
             break;
         default:break;
     }

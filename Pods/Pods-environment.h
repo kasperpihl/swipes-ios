@@ -18,13 +18,6 @@
 #define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK 6
 #define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK 0
 
-// GoogleAnalytics-iOS-SDK
-#define COCOAPODS_POD_AVAILABLE_GoogleAnalytics_iOS_SDK
-// This library does not follow semantic-versioning,
-// so we were not able to define version macros.
-// Please contact the author.
-// Version: 2.0beta4.
-
 // KGStatusBar
 #define COCOAPODS_POD_AVAILABLE_KGStatusBar
 #define COCOAPODS_VERSION_MAJOR_KGStatusBar 1

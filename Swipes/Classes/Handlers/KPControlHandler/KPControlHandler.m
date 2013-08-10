@@ -150,6 +150,7 @@
         if(item == 0 && [self.delegate respondsToSelector:@selector(pressedEdit:)]) [self.delegate pressedEdit:self];
         else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedTag:)]) [self.delegate pressedTag:self];
         else if(item == 2 && [self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:self];
+        else if(item == 3 && [self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:self];
     }
 }
 @end

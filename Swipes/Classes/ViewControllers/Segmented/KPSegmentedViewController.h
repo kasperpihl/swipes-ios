@@ -23,4 +23,5 @@
 -(ToDoListViewController*)currentViewController;
 -(void)tagViewWithDismissAction:(voidBlock)block;
 -(void)pressedDelete:(id)sender;
+-(void)pressedShare:(id)sender;
 @end

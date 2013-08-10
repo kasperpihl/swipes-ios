@@ -30,12 +30,14 @@
 #import "UIColor+Utilities.h"
 #import "KPDayPicker.h"
 #import "NotificationHandler.h"
-
+#import "PlusAlertView.h"
 #import "UpgradeViewController.h"
+#import "KPParseCoreData.h"
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 @property (nonatomic) NSDate *lastClose;
+@property (nonatomic) KPMenu currentMenu;
 @end
 
 @implementation RootViewController
@@ -58,7 +60,7 @@
     
 }
 -(void)blurryDidHide:(KPBlurry *)blurry{
-    self.lockSettings = NO;
+    if(self.currentMenu != KPMenuLogin) self.lockSettings = NO;
 }
 #pragma mark - PFLogInViewControllerDelegate
 // Sent to the delegate to determine whether the log in request should be submitted to the server.
@@ -140,6 +142,7 @@
             viewController = self.menuViewController;
             break;
     }
+    self.currentMenu = menu;
     self.viewControllers = @[viewController];
 }
 static RootViewController *sharedObject;
@@ -150,15 +153,23 @@ static RootViewController *sharedObject;
     return sharedObject;
 }
 -(void)logOut{
-    self.menuViewController = nil;
     [PFUser logOut];
-    [self setupAppearance];
-    [self.sideMenu hide];
+    [[KPParseCoreData sharedInstance] cleanUp];
+    [self resetRoot];
+    
 }
 -(void)resetRoot{
     self.menuViewController = nil;
     [self setupAppearance];
     [self.sideMenu hide];
+}
+-(void)proWithMessage:(NSString*)message{
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    [PlusAlertView alertInView:window message:message block:^(BOOL succeeded, NSError *error) {
+        if(succeeded){
+            [self upgrade];
+        }
+    }];
 }
 -(void)upgrade{
     UpgradeViewController *viewController = [[UpgradeViewController alloc]init];

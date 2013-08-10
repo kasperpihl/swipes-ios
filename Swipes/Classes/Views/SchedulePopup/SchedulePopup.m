@@ -16,7 +16,9 @@
 #import "KPToolbar.h"
 #import "KPTimePicker.h"
 #import "UIColor+Utilities.h"
+#import "RootViewController.h"
 #import "MenuButton.h"
+#import "PlusAlertView.h"
 #define POPUP_WIDTH 315
 #define CONTENT_VIEW_TAG 1
 
@@ -132,7 +134,16 @@ typedef enum {
 -(void)pressedScheduleButton:(UIButton*)sender{
     KPScheduleButtons thisButton = [self buttonForTag:sender.tag];
     if(thisButton == KPScheduleButtonSpecificTime) [self pressedSpecific:self];
-    else if(thisButton == KPScheduleButtonLocation) ;
+    else if(thisButton == KPScheduleButtonLocation) {
+        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+        self.contentView.hidden = YES;
+        [PlusAlertView alertInView:window message:@"Location reminders are an upcomming feature in Swipes Plus. Check out the package." block:^(BOOL succeeded, NSError *error) {
+            self.contentView.hidden = NO;
+            if(succeeded){
+                [ROOT_CONTROLLER upgrade];
+            }
+        }];
+    }
     else if(thisButton != KPScheduleButtonCancel){
         NSDate *date = [self dateForButton:thisButton];
         [self returnState:thisButton date:date];
