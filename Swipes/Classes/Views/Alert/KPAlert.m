@@ -66,7 +66,7 @@
         [contentView addSubview:messageLabel];
         self.messageLabel = (UILabel*)[contentView viewWithTag:MESSAGE_LABEL_TAG];
         
-        KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT) items:@[@"toolbar_back_icon",@"toolbar_check_icon"]];
+        KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT) items:@[@"toolbar_check_icon",@"toolbar_back_icon"]];
         toolbar.delegate = self;
         toolbar.backgroundColor = CLEAR;
         [contentView addSubview:toolbar];
@@ -75,8 +75,8 @@
     return self;
 }
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
-    if(item == 0 && self.block) self.block(NO,nil);
-    else if(item == 1 && self.block) self.block(YES,nil);
+    if(item == 1 && self.block) self.block(NO,nil);
+    else if(item == 0 && self.block) self.block(YES,nil);
     if(self.shouldRemove) [self removeFromSuperview];
 }
 

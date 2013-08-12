@@ -538,7 +538,7 @@
             text = @"Later";
             break;
         default:
-            text = @"Tasks";
+            text = @"Well Swiped!";
             break;
     }
     menuText.text = text;

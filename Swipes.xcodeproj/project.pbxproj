@@ -51,6 +51,7 @@
 		A717BF3E17624CA3004791BF /* KPPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF3D17624CA2004791BF /* KPPageControl.m */; };
 		A71CCEB01758B1E400A41265 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A71CCEAD1758B1E400A41265 /* HPGrowingTextView.m */; };
 		A71CCEB11758B1E400A41265 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A71CCEAF1758B1E400A41265 /* HPTextViewInternal.m */; };
+		A723088D17B941860083ACF7 /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A723088B17B941860083ACF7 /* libGoogleAnalytics_debug.a */; };
 		A724B01E17A9397D00E0EF83 /* selected_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = A724B01C17A9397D00E0EF83 /* selected_circle.png */; };
 		A724B01F17A9397D00E0EF83 /* selected_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A724B01D17A9397D00E0EF83 /* selected_circle@2x.png */; };
 		A724B02217A96B8B00E0EF83 /* UIColor+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */; };
@@ -309,6 +310,13 @@
 		A71CCEAD1758B1E400A41265 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
 		A71CCEAE1758B1E400A41265 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
 		A71CCEAF1758B1E400A41265 /* HPTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
+		A723088517B941860083ACF7 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
+		A723088617B941860083ACF7 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
+		A723088717B941860083ACF7 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
+		A723088817B941860083ACF7 /* GAITransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITransaction.h; sourceTree = "<group>"; };
+		A723088917B941860083ACF7 /* GAITransactionItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITransactionItem.h; sourceTree = "<group>"; };
+		A723088A17B941860083ACF7 /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics.a; sourceTree = "<group>"; };
+		A723088B17B941860083ACF7 /* libGoogleAnalytics_debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics_debug.a; sourceTree = "<group>"; };
 		A724B01C17A9397D00E0EF83 /* selected_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = selected_circle.png; sourceTree = "<group>"; };
 		A724B01D17A9397D00E0EF83 /* selected_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected_circle@2x.png"; sourceTree = "<group>"; };
 		A724B02017A96B8B00E0EF83 /* UIColor+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utilities.h"; sourceTree = "<group>"; };
@@ -637,6 +645,7 @@
 				A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */,
 				A2C9157AB40E430C8F5DD47F /* libPods.a in Frameworks */,
 				A717BEF0175E83A0004791BF /* libAppsFlyerLib.a in Frameworks */,
+				A723088D17B941860083ACF7 /* libGoogleAnalytics_debug.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -712,6 +721,20 @@
 				A71CCEAF1758B1E400A41265 /* HPTextViewInternal.m */,
 			);
 			path = HPGrowingTextView;
+			sourceTree = "<group>";
+		};
+		A723088417B941860083ACF7 /* GoogleAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				A723088517B941860083ACF7 /* GAI.h */,
+				A723088617B941860083ACF7 /* GAITrackedViewController.h */,
+				A723088717B941860083ACF7 /* GAITracker.h */,
+				A723088817B941860083ACF7 /* GAITransaction.h */,
+				A723088917B941860083ACF7 /* GAITransactionItem.h */,
+				A723088A17B941860083ACF7 /* libGoogleAnalytics.a */,
+				A723088B17B941860083ACF7 /* libGoogleAnalytics_debug.a */,
+			);
+			path = GoogleAnalytics;
 			sourceTree = "<group>";
 		};
 		A72D5EBE179D8DB600BCB835 /* Toolbarbuttons */ = {
@@ -906,7 +929,6 @@
 		A7778CC116EB5884004D95E5 = {
 			isa = PBXGroup;
 			children = (
-				A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */,
 				A781283D17294C56002226C8 /* Swipes */,
 				A7778CCC16EB5884004D95E5 /* Frameworks */,
 				A7778CCB16EB5884004D95E5 /* Products */,
@@ -925,6 +947,7 @@
 		A7778CCC16EB5884004D95E5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */,
 				A75545DD179B481800CE2F4E /* Accelerate.framework */,
 				A717BEEB175E6857004791BF /* CoreTelephony.framework */,
 				A78F392D16F7DC1800A8C78D /* MessageUI.framework */,
@@ -1163,6 +1186,7 @@
 		A78128AB17294C56002226C8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				A723088417B941860083ACF7 /* GoogleAnalytics */,
 				A7717C4C17787BF10067325C /* QBPopupMenu */,
 				A717BEED175E83A0004791BF /* AppsFlyer */,
 				A71CCEAB1758B1E400A41265 /* HPGrowingTextView */,
@@ -1831,6 +1855,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Swipes/Ressources/Libs/AppsFlyer\"",
+					"\"$(SRCROOT)/Swipes/Ressources/Libs/GoogleAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1961,6 +1986,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Swipes/Ressources/Libs/AppsFlyer\"",
+					"\"$(SRCROOT)/Swipes/Ressources/Libs/GoogleAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -2023,6 +2049,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Swipes/Ressources/Libs/AppsFlyer\"",
+					"\"$(SRCROOT)/Swipes/Ressources/Libs/GoogleAnalytics\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",

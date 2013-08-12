@@ -29,12 +29,13 @@
     return results;
 }
 - (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
-	ToDoCell *cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    ToDoCell *cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [self readyCell:cell];
     [self tableView:self.tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
     [cell showTimeline:NO];
 	return cell;
 }
+
 - (void)dragTableViewController:(KPReorderTableView *)dragTableViewController didBeginDraggingAtRow:(NSIndexPath *)dragRow{
     [self parent].lock = YES;
     self.dragRow = dragRow;

@@ -14,7 +14,7 @@
 #import "AppsFlyer.h"
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
-//#import "GAI.h"
+#import "GAI.h"
 @implementation AppDelegate
 + (NSInteger)OSVersion
 {
@@ -54,14 +54,14 @@
     KPCORE;
     [Mixpanel sharedInstanceWithToken:mixpanelToken];
     // Optional: automatically send uncaught exceptions to Google Analytics.
-   /* [GAI sharedInstance].trackUncaughtExceptions = YES;
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
     // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
     [GAI sharedInstance].dispatchInterval = 20;
     // Optional: set debug to YES for extra debugging information.
     [GAI sharedInstance].debug = YES;
     // Create tracker instance.
-    [[GAI sharedInstance] trackerWithTrackingId:@"UA-YOUR-TRACKING-ID"];
-    */
+    [[GAI sharedInstance] trackerWithTrackingId:@"UA-41592802-2"];
+    
     
     [Appirater appLaunched:YES];
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];

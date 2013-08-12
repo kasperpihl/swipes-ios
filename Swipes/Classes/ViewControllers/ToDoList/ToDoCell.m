@@ -25,7 +25,7 @@
 
 #define LABEL_X 42
 #define TITLE_DELTA_Y 4
-#define TITLE_Y (TITLE_DELTA_Y + (self.frame.size.height-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
+#define TITLE_Y (TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
 
 #define DOT_SIZE GLOBAL_DOT_SIZE
 #define DOT_OUTLINE_SIZE 4
@@ -84,16 +84,15 @@
         overlayView.backgroundColor = tbackground(TaskCellBackground);
         self.selectedBackgroundView = overlayView;
         
-        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (LABEL_X/2), self.contentView.frame.size.height)];
+        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (LABEL_X/2), CELL_HEIGHT)];
         timelineLine.tag = TIMELINE_TAG;
-        timelineLine.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+        //timelineLine.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         timelineLine.backgroundColor = tcolor(TaskCellTimelineColor);
         [self.contentView addSubview:timelineLine];
         self.timelineView = [self.contentView viewWithTag:TIMELINE_TAG];
         
         CGFloat outlineWidth = DOT_SIZE+(2*DOT_OUTLINE_SIZE);
-        UIView *dotOutlineContainer = [[UIView alloc] initWithFrame:CGRectMake((LABEL_X-outlineWidth)/2, (self.frame.size.height-outlineWidth)/2, outlineWidth, outlineWidth)];
-        dotOutlineContainer.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
+        UIView *dotOutlineContainer = [[UIView alloc] initWithFrame:CGRectMake((LABEL_X-outlineWidth)/2, (CELL_HEIGHT-outlineWidth)/2, outlineWidth, outlineWidth)];
         dotOutlineContainer.tag = OUTLINE_TAG;
         dotOutlineContainer.backgroundColor = tcolor(TaskCellTimelineColor);
         dotOutlineContainer.layer.cornerRadius = outlineWidth/2;

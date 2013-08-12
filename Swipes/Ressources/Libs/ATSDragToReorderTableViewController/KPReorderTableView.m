@@ -23,7 +23,7 @@ typedef enum {
 - (void)longPressRecognized;
 - (void)dragGestureRecognized;
 - (void)shuffleCellsOutOfWayOfDraggedCellIfNeeded;
-- (void)keepDraggedCellVisible;
+//- (void)keepDraggedCellVisible;
 - (void)fastCompleteGesturesWithTranslationPoint:(CGPoint)translation;
 - (BOOL)touchCanceledAfterDragGestureEstablishedButBeforeDragging;
 - (void)completeGesturesForTranslationPoint:(CGPoint)translationPoint;
@@ -226,14 +226,12 @@ typedef enum {
 		if (![self.dataSource tableView:self canMoveRowAtIndexPath:indexPathOfRow])
 			return;
 	}
-
 	[self disableInterferingAspectsOfTableViewAndNavBar];
 
 	NSIndexPath *indexPathOfSomeOtherRow = [self indexPathOfSomeRowThatIsNotIndexPath:indexPathOfRow];
 
 	if (indexPathOfSomeOtherRow != nil)
 		[self reloadRowsAtIndexPaths:@[indexPathOfSomeOtherRow] withRowAnimation:UITableViewRowAnimationNone];
-
 	self.draggedCell = [self cellPreparedToAnimateAroundAtIndexPath:indexPathOfRow];
 
 	[self.draggedCell setSelected:YES animated:NO];
@@ -243,13 +241,7 @@ typedef enum {
         CGFloat heightScale = CELL_HEIGHT_SCALE;
         self.draggedCell.transform = CGAffineTransformMakeScale(widthScale, heightScale);
         
-	} completion:^(BOOL finished) {
-		if (finished) {
-			//self.draggedCell.layer.rasterizationScale = [[UIScreen mainScreen] scale];
-			//self.draggedCell.layer.shouldRasterize = YES;
-            //[self dragTableViewController:self addDraggableIndicatorsToCell:self.draggedCell forIndexPath:indexPathOfRow];
-		}
-	}];
+	} completion:nil];
 
 	initialYOffsetOfDraggedCellCenter = self.draggedCell.center.y - self.contentOffset.y;
 
@@ -282,7 +274,6 @@ typedef enum {
 
 
 - (void)fireAutoscrollTimer:(CADisplayLink *)sender {
-
 	UITableViewCell *blankCell = [self cellForRowAtIndexPath:self.indexPathBelowDraggedCell];
 	if (blankCell != nil && blankCell.hidden == NO)
 		blankCell.hidden = YES;
@@ -303,10 +294,11 @@ typedef enum {
 	CGPoint tableViewContentOffset = self.contentOffset;
 
 	if ( autoscrollOption == AutoscrollStatusCellAtTop ) {
-
+        
 		CGFloat scrollDistance = autoscrollDistance;
         CGFloat tableViewHeaderHeight = self.tableHeaderView.frame.size.height;
-		tableViewContentOffset.y = tableViewContentOffset.y < tableViewHeaderHeight ? tableViewContentOffset.y : self.tableHeaderView.frame.size.height;
+        
+		tableViewContentOffset.y = tableViewContentOffset.y < tableViewHeaderHeight ? tableViewContentOffset.y : tableViewHeaderHeight;
 
 		draggedCell.center = CGPointMake(draggedCell.center.x, draggedCell.center.y - scrollDistance);
 
@@ -322,14 +314,12 @@ typedef enum {
 
 		[self.timerToAutoscroll invalidate];
 	} else {
-
 		tableViewContentOffset.y += autoscrollDistance;
 		draggedCell.center = CGPointMake(draggedCell.center.x, draggedCell.center.y + autoscrollDistance);
 	}
 
 	self.contentOffset = tableViewContentOffset;
 
-	[self keepDraggedCellVisible];
 
 	[self shuffleCellsOutOfWayOfDraggedCellIfNeeded];
 }
@@ -391,29 +381,6 @@ typedef enum {
 #pragma mark -
 #pragma mark dragGestureRecognized helper methods
 
-- (void)keepDraggedCellVisible {
-
-	if (draggedCell.frame.origin.y <= 0) {
-		CGRect newDraggedCellFrame = draggedCell.frame;
-		newDraggedCellFrame.origin.y = 0;
-		draggedCell.frame = newDraggedCellFrame;
-
-		return;
-	}
-	CGRect contentRect = {
-		.origin = self.contentOffset,
-		.size = self.contentSize
-	};
-
-	CGFloat maxYOffsetOfDraggedCell = contentRect.origin.x + contentRect.size.height - draggedCell.frame.size.height;
-
-	if (draggedCell.frame.origin.y >= maxYOffsetOfDraggedCell) {
-		CGRect newDraggedCellFrame = draggedCell.frame;
-		newDraggedCellFrame.origin.y = maxYOffsetOfDraggedCell;
-		draggedCell.frame = newDraggedCellFrame;
-	}
-
-}
 - (void)updateFrameOfDraggedCellForTranlationPoint:(CGPoint)translation {
 	CGFloat newYCenter = initialYOffsetOfDraggedCellCenter + translation.y + self.contentOffset.y;
 	newYCenter = MAX(newYCenter, self.contentOffset.y);
@@ -429,7 +396,6 @@ typedef enum {
 	/*
 		Don't let the cell go off of the tableview
 	 */
-	[self keepDraggedCellVisible];
 }
 
 /*
@@ -499,7 +465,6 @@ typedef enum {
 */
 	[UIView animateWithDuration:0.25 delay:0 options:(UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionBeginFromCurrentState) animations:^{
 		//self.draggedCell.transform = CGAffineTransformMakeScale(1/CELL_WIDTH_SCALE, 1/CELL_HEIGHT_SCALE);
-        [self dragTableViewController:self removeDraggableIndicatorsFromCell:oldDraggedCell];
         self.draggedCell.transform = CGAffineTransformIdentity;
         oldDraggedCell.frame = rectForIndexPath;
 	} completion:^(BOOL finished) {
@@ -527,7 +492,6 @@ typedef enum {
 	[self reloadRowsAtIndexPaths:[NSArray arrayWithObject:self.indexPathBelowDraggedCell] withRowAnimation:UITableViewRowAnimationNone];
 	self.draggedCell.layer.shouldRasterize = NO;
 
-	[self dragTableViewController:self removeDraggableIndicatorsFromCell:self.draggedCell];
 
 	[self.draggedCell removeFromSuperview];
 
@@ -759,104 +723,6 @@ typedef enum {
 #pragma mark -
 #pragma mark add and remove indications of draggability methods
 
-- (UIView *)shadowViewWithFrame:(CGRect)frame andShadowPath:(CGPathRef)shadowPath {
-	UIView *shadowView = [[UIView alloc] initWithFrame:frame];
-
-	CGFloat commonShadowOpacity = 0.8;
-	CGSize commonShadowOffset = {
-		.width = 0,
-		.height = 1
-	};
-	CGFloat commonShadowRadius = 4;
-
-	shadowView.backgroundColor = [UIColor clearColor];
-	shadowView.opaque = NO;
-	shadowView.clipsToBounds = YES;
-
-	shadowView.layer.shadowPath = shadowPath;
-	shadowView.layer.shadowOpacity = commonShadowOpacity;
-	shadowView.layer.shadowOffset = commonShadowOffset;
-	shadowView.layer.shadowRadius = commonShadowRadius;
-
-	return shadowView;
-}
-- (NSArray *)addShadowViewsToCell:(UITableViewCell *)selectedCell {
-
-	if (selectedCell.selectedBackgroundView == nil)
-		return nil;
-    selectedCell.selectedBackgroundView.frame = selectedCell.frame;
-	CGFloat heightOfViews = 10; // make it enough space to show whole shadow
-	CGRect shadowPathFrame = selectedCell.selectedBackgroundView.frame;
-	CGRect aboveShadowViewFrame = {
-		.origin.x = 0,
-		.origin.y = -heightOfViews,
-		.size.width = shadowPathFrame.size.width,
-		.size.height = heightOfViews
-	};
-
-	CGRect shadowPathRectFromAbovePerspective = {
-		.origin.x = 0,
-		.origin.y = -aboveShadowViewFrame.origin.y,
-		.size = shadowPathFrame.size
-	};
-
-	UIBezierPath *aboveShadowPath = [UIBezierPath bezierPathWithRect:shadowPathRectFromAbovePerspective];
-
-	CGRect belowShadowViewFrame = {
-		.origin.x = 0,
-		.origin.y = shadowPathFrame.size.height,
-		.size.width = shadowPathFrame.size.width,
-		.size.height = heightOfViews
-	};
-
-	CGRect shadowPathRectFromBelowPerspective = {
-		.origin.x = 0,
-		.origin.y = -belowShadowViewFrame.origin.y,
-		.size = shadowPathFrame.size
-	};
-
-	UIBezierPath *belowShadowPath = [UIBezierPath bezierPathWithRect:shadowPathRectFromBelowPerspective];
-
-	UIView *aboveShadowView = [self shadowViewWithFrame:aboveShadowViewFrame andShadowPath:aboveShadowPath.CGPath];
-	aboveShadowView.tag = TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING;
-	aboveShadowView.alpha = 0; // set to 0 before adding as subview
-
-	UIView *belowShadowView = [self shadowViewWithFrame:belowShadowViewFrame andShadowPath:belowShadowPath.CGPath];
-	belowShadowView.tag = TAG_FOR_BELOW_SHADOW_VIEW_WHEN_DRAGGING;
-	belowShadowView.alpha = 0;
-    
-    
-    
-	[selectedCell addSubview:aboveShadowView];
-	[selectedCell addSubview:belowShadowView];
-	[selectedCell bringSubviewToFront:belowShadowView];
-
-	return [NSArray arrayWithObjects:aboveShadowView, belowShadowView, nil];
-}
-
-- (void)dragTableViewController:(KPReorderTableView *)dragTableViewController addDraggableIndicatorsToCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-
-	 NSArray *arrayOfShadowViews = [self addShadowViewsToCell:cell];
-
-	for (UIView *shadowView in arrayOfShadowViews)
-		shadowView.alpha = 1;
-}
-
-- (void)dragTableViewController:(KPReorderTableView *)dragTableViewController hideDraggableIndicatorsOfCell:(UITableViewCell *)cell {
-    UIView *aboveShadowView = [cell viewWithTag:TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING];
-	aboveShadowView.alpha = 0;
-	
-	UIView *belowShadowView = [cell viewWithTag:TAG_FOR_BELOW_SHADOW_VIEW_WHEN_DRAGGING];
-	belowShadowView.alpha = 0;
-}
-
-- (void)dragTableViewController:(KPReorderTableView *)dragTableViewController removeDraggableIndicatorsFromCell:(UITableViewCell *)cell {
-    UIView *aboveShadowView = [cell viewWithTag:TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING];
-	[aboveShadowView removeFromSuperview];
-	
-	UIView *belowShadowView = [cell viewWithTag:TAG_FOR_BELOW_SHADOW_VIEW_WHEN_DRAGGING];
-	[belowShadowView removeFromSuperview];
-}
 
 
 @end

@@ -83,7 +83,8 @@ static KPParseCoreData *sharedObject;
                            @"Swipe left to schedule me",
                            @"Double-tap to edit me",
                            @"Hold to drag me up and down",
-                           @"Pull down for search & filter"
+                           @"Pull down for search & filter",
+                           @"Swipe the menu for settings"
                        ];
     for(NSInteger i = toDoArray.count-1 ; i >= 0  ; i--){
         NSString *item = [toDoArray objectAtIndex:i];
