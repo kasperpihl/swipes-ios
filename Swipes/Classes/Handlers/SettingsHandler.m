@@ -50,13 +50,13 @@ static SettingsHandler *sharedObject;
         case SettingLaterToday:
             return [[NSDate date] dateAtHours:3 minutes:0];
         case SettingWeekStart:
-            return [[NSDate date] dateAtWeekday:2];
+            return [NSDate dateThisOrNextWeekWithDay:2 hours:8 minutes:0];
         case SettingWeekStartTime:
             return [[NSDate date] dateAtHours:kDefWeekStartTime minutes:0];
         case SettingEveningStartTime:
             return [[NSDate date] dateAtHours:kDefEveningStartTime minutes:0];
         case SettingWeekendStart:
-            return [[NSDate date] dateAtWeekday:7];
+            return [NSDate dateThisOrNextWeekWithDay:7 hours:8 minutes:0];
         case SettingWeekendStartTime:
             return [[NSDate date] dateAtHours:kDefWeekendStartTime minutes:0];
         case SettingNotifications:
@@ -68,7 +68,6 @@ static SettingsHandler *sharedObject;
     if(!index) return nil;
     id value = [[NSUserDefaults standardUserDefaults] objectForKey:index];
     if(!value) value = [self defaultValueForSettings:setting];
-    //if([value isKindOfClass:[NSDate class]])NSLog(@"st: %i vl: %i",setting,[(NSDate*)value weekday]);
     return value;
 }
 -(void)setValue:(id)value forSetting:(KPSettings)setting{

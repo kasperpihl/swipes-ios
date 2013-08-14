@@ -52,7 +52,8 @@
         shouldFormat = YES;
     }
     else{
-        [dateFormatter setDateFormat:@"d MMMM"];
+        if([time isSameYearAsDate:[NSDate date]]) dateFormatter.dateFormat = @"d LLL";
+        else dateFormatter.dateFormat = @"d LLL  '´'yy";
         shouldFormat = YES;
     }
     if(shouldFormat){
@@ -166,6 +167,7 @@
     self.completionDate = [NSDate date];
 }
 -(void)scheduleForDate:(NSDate*)date{
+    self.completionDate = nil;
     self.schedule = date;
     self.state = @"scheduled";
 }

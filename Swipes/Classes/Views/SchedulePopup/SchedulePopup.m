@@ -19,6 +19,7 @@
 #import "RootViewController.h"
 #import "MenuButton.h"
 #import "PlusAlertView.h"
+#import "AnalyticsHandler.h"
 #define POPUP_WIDTH 315
 #define CONTENT_VIEW_TAG 1
 
@@ -68,6 +69,7 @@ typedef enum {
 @property (nonatomic) KPScheduleButtons activeButton;
 @property (nonatomic,strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, weak) IBOutlet UIView *timeViewer;
+@property (nonatomic) BOOL openedTimePicker;
 
 @end
 @implementation SchedulePopup
@@ -135,9 +137,12 @@ typedef enum {
     KPScheduleButtons thisButton = [self buttonForTag:sender.tag];
     if(thisButton == KPScheduleButtonSpecificTime) [self pressedSpecific:self];
     else if(thisButton == KPScheduleButtonLocation) {
+        
         UIWindow *window = [[UIApplication sharedApplication] keyWindow];
         self.contentView.hidden = YES;
+        [ANALYTICS pushView:@"Location plus popup"];
         [PlusAlertView alertInView:window message:@"Location reminders are an upcomming feature in Swipes Plus. Check out the package." block:^(BOOL succeeded, NSError *error) {
+            [ANALYTICS popView];
             self.contentView.hidden = NO;
             if(succeeded){
                 [ROOT_CONTROLLER upgrade];
@@ -349,6 +354,8 @@ typedef enum {
     [self openTimePickerWithButton:KPScheduleButtonSpecificTime andDate:self.calendarView.selectedDate];
 }
 -(void)openTimePickerWithButton:(KPScheduleButtons)button andDate:(NSDate*)date{
+    if(self.openedTimePicker) return;
+    self.openedTimePicker = YES;
     self.activeButton = button;
     self.timePicker = [[KPTimePicker alloc] initWithFrame:self.bounds];
     self.timePicker.delegate = self;
@@ -368,6 +375,7 @@ typedef enum {
     return nil;
 }
 -(void)timePicker:(KPTimePicker *)timePicker selectedDate:(NSDate *)date{
+    self.openedTimePicker = NO;
     [UIView animateWithDuration:kTimePickerDuration animations:^{
         timePicker.alpha = 0;
     } completion:^(BOOL finished) {

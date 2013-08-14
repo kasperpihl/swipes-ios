@@ -33,6 +33,7 @@
 #import "PlusAlertView.h"
 #import "UpgradeViewController.h"
 #import "KPParseCoreData.h"
+#import "GAI.h"
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
@@ -102,9 +103,15 @@
     }];
 }
 -(void)didLoginUser:(PFUser*)user{
+    [[KPParseCoreData sharedInstance] seedObjects];
     NSString *wasSignup = user.isNew ? @"yes" : @"no";
     [MIXPANEL track:@"Logged in" properties:@{@"Is signup":wasSignup}];
     [MIXPANEL identify:user.objectId];
+    NSString *action = user.isNew ? @"sign_up" : @"sign_in";
+    [kGAnanlytics sendEventWithCategory:@"app_flow"
+                        withAction:action
+                         withLabel:nil
+                         withValue:nil]; // First activity of new session.
     [ANALYTICS startSession];
     if([PFFacebookUtils isLinkedWithUser:user]){
         if(!user.email){
@@ -123,6 +130,7 @@
     NSLog(@"Failed to log in... %@",error);
 }
 -(void)walkthrough:(WalkthroughViewController *)walkthrough didFinishSuccesfully:(BOOL)successfully{
+    [ANALYTICS popView];
     [walkthrough.view removeFromSuperview];
     [walkthrough removeFromParentViewController];
 }
@@ -177,6 +185,7 @@ static RootViewController *sharedObject;
     [self addChildViewController:viewController];
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     [window addSubview:viewController.view];
+    [ANALYTICS pushView:@"Upgrade to Plus"];
 }
 -(void)walkthrough{
     WalkthroughViewController *viewController = [[WalkthroughViewController alloc]init];
@@ -184,9 +193,10 @@ static RootViewController *sharedObject;
     [self addChildViewController:viewController];
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     [window addSubview:viewController.view];
-    
+    [ANALYTICS pushView:@"Walkthrough"];
 }
 -(void)closedUpgradeViewController:(UpgradeViewController *)viewController{
+    [ANALYTICS popView];
     [viewController.view removeFromSuperview];
     [viewController removeFromParentViewController];
 }
@@ -197,7 +207,8 @@ static RootViewController *sharedObject;
 
 -(void)openApp{
     NSLog(@"setting up stuff");
-    if(self.lastClose && [self.lastClose isLaterThanDate:[[NSDate date] dateByAddingMinutes:5]]) [self resetRoot];
+    if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:5]]) [self resetRoot];
+    else [[[self menuViewController] currentViewController] update];
 }
 -(void)closeApp{
     self.lastClose = [NSDate date];
@@ -224,8 +235,11 @@ static RootViewController *sharedObject;
     [self.view addGestureRecognizer:panGestureRecognizer];
     [self setupAppearance];
     NSLog(@"did setup appearance");
+    
 }
-
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+}
 - (void)viewDidUnload
 {
     [super viewDidUnload];

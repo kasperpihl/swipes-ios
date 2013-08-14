@@ -14,6 +14,8 @@
 #import "ThemeHandler.h"
 
 /* GLOBALS */
+#define kGAnanlytics [[GAI sharedInstance] defaultTracker]
+
 #define GLOBAL_TOOLBAR_HEIGHT           50.0f
 #define GLOBAL_ANIMATION_DURATION       0.20f
 #define GLOBAL_TEXTFIELD_HEIGHT         70.0f

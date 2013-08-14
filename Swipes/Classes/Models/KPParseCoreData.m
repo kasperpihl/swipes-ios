@@ -37,9 +37,9 @@ static KPParseCoreData *sharedObject;
 #pragma mark Core data stuff
 -(void)initialize{
     [self loadDatabase];
-    if(![UTILITY.userDefaults boolForKey:@"seeded"]){
+    /*if(![UTILITY.userDefaults boolForKey:@"seeded"]){
         [self seedObjects];
-    }
+    }*/
 }
 -(void)loadDatabase{
     @try {

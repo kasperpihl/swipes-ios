@@ -25,7 +25,8 @@
 #define LOGIN_BUTTON_Y     (10      +LOGIN_FIELDS_Y+LOGIN_FIELDS_HEIGHT)
 #define FACEBOOK_BUTTON_Y  (40      +(LOGIN_BUTTON_Y+SIGNUP_BUTTONS_HEIGHT))
 #define BUTTON_LABEL_SUBTRACTION 17
-#define kExtraBottomSpacing 30
+#define kExtraBottomSpacing valForScreen(10,30)
+#define kScrollupButtonsVal valForScreen(80,30)
 
 #define LOGIN_LOGO_Y            0
 #define LOGIN_FIELDS_Y          100
@@ -165,7 +166,7 @@
 }
 -(void)keyboardWillShow{
     [UIView animateWithDuration:0.25f animations:^{
-        CGRectSetY(self.logInView, -30);
+        CGRectSetY(self.logInView, -kScrollupButtonsVal);
     }];
 }
 -(void)keyboardWillHide{

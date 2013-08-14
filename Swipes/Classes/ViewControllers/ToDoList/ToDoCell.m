@@ -167,8 +167,9 @@
     }
     CGFloat deltaX = LABEL_X;
     self.alarmLabel.hidden = YES;
-    if(toDo.schedule && [toDo.schedule isInFuture]){
-        NSString *dateInString = [UtilityClass timeStringForDate:toDo.schedule];
+    if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
+        NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
+        NSString *dateInString = [UtilityClass timeStringForDate:showDate];
         self.alarmLabel.text = dateInString;
         [self.alarmLabel sizeToFit];
         CGRectSetWidth(self.alarmLabel, self.alarmLabel.frame.size.width+2*ALARM_SPACING);

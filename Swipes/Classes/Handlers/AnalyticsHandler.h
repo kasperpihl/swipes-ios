@@ -29,4 +29,6 @@
 -(void)incrementKey:(NSString*)key withAmount:(NSInteger)amount;
 -(void)startSession;
 -(void)endSession;
+-(void)pushView:(NSString*)view;
+-(void)popView;
 @end

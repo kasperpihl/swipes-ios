@@ -8,6 +8,7 @@
 #define TABLEVIEW_TAG 501
 #import "TodayViewController.h"
 #import "KPReorderTableView.h"
+#import "FacebookCommunicator.h"
 @interface TodayViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 @property (nonatomic,weak) IBOutlet KPReorderTableView *tableView;
 @property (nonatomic,strong) NSIndexPath *dragRow;
@@ -68,6 +69,9 @@
     self.tableView.dragDelegate = self;
     self.tableView.indicatorDelegate = self;
 	// Do any additional setup after loading the view.
+}
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
 }
 - (void)didReceiveMemoryWarning
 {

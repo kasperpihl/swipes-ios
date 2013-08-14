@@ -16,5 +16,6 @@ typedef void (^ManagedObjectBlock) (NSManagedObject *object,NSManagedObjectConte
 @property (nonatomic,assign) BOOL isSeeded;
 +(KPParseCoreData *)sharedInstance;
 -(void)cleanUp;
+-(void)seedObjects;
 +(NSString*)classNameFromParseName:(NSString*)parseClassName;
 @end

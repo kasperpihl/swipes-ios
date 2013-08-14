@@ -56,10 +56,8 @@
     // Optional: automatically send uncaught exceptions to Google Analytics.
     [GAI sharedInstance].trackUncaughtExceptions = YES;
     // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
-    [GAI sharedInstance].dispatchInterval = 20;
-    // Optional: set debug to YES for extra debugging information.
-    [GAI sharedInstance].debug = YES;
-    // Create tracker instance.
+    [GAI sharedInstance].dispatchInterval = 5;
+    
     [[GAI sharedInstance] trackerWithTrackingId:@"UA-41592802-2"];
     
     
@@ -67,10 +65,10 @@
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (notification) [self application:application didReceiveLocalNotification:notification];
     
-    NSArray *notifications = [application scheduledLocalNotifications];
+    /*NSArray *notifications = [application scheduledLocalNotifications];
     for(UILocalNotification *lNoti in notifications){
         NSLog(@"t: %i - %@ - %@",lNoti.applicationIconBadgeNumber,lNoti.alertBody,lNoti.fireDate);
-    }
+    }*/
     return YES;
 }
 - (void)application:(UIApplication *)application
@@ -122,7 +120,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     NSString *isLoggedIn = ([PFUser currentUser]) ? @"yes" : @"no";
     if([isLoggedIn isEqualToString:@"yes"]) [ANALYTICS startSession];
     else [MIXPANEL track:@"Opened app" properties:@{@"Is logged in":isLoggedIn}];
-    NSLog(@"did become active");
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 

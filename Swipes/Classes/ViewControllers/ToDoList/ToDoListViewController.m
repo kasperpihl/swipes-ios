@@ -17,6 +17,7 @@
 
 #import "SectionHeaderView.h"
 #import "KPBlurry.h"
+#import "AnalyticsHandler.h"
 #define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
@@ -126,7 +127,6 @@
     NSString *title = [[self.itemHandler titleForSection:section] capitalizedString];
     headerView.backgroundColor = backgroundColor;
     SectionHeaderView *extraView = [[SectionHeaderView alloc] initWithColor:[TODOHANDLER colorForCellType:self.cellType] font:font title:title];
-    extraView.tag = 13338;
     if(self.cellType == CellTypeToday) extraView.textColor = color(44,50, 59, 1);
     CGRectSetX(extraView, 320-extraView.frame.size.width);
     [headerView addSubview:extraView];
@@ -562,7 +562,19 @@
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    
+    NSString *activeView;
+    switch (self.cellType) {
+        case CellTypeDone:
+            activeView = @"Done Tab";
+            break;
+        case CellTypeSchedule:
+            activeView = @"Later Tab";
+            break;
+        default:
+            activeView = @"Tasks Tab";
+            break;
+    }
+    [ANALYTICS pushView:activeView];
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];

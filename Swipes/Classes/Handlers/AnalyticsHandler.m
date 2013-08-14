@@ -8,10 +8,12 @@
 
 #import "AnalyticsHandler.h"
 #import "NSDate-Utilities.h"
+#import "GAI.h"
 @interface AnalyticsHandler ()
 @property (nonatomic,strong) NSMutableDictionary *stats;
 @property (nonatomic) BOOL runningSession;
 @property (nonatomic) NSDate *startDate;
+@property (nonatomic) NSMutableArray *views;
 @end
 @implementation AnalyticsHandler
 static AnalyticsHandler *sharedObject;
@@ -20,6 +22,10 @@ static AnalyticsHandler *sharedObject;
         sharedObject = [[AnalyticsHandler allocWithZone:NULL] init];
     }
     return sharedObject;
+}
+-(NSMutableArray *)views{
+    if(!_views) _views = [NSMutableArray array];
+    return _views;
 }
 -(NSMutableDictionary *)stats{
     if(!_stats) _stats = [NSMutableDictionary dictionary];
@@ -41,6 +47,17 @@ static AnalyticsHandler *sharedObject;
              NUMBER_OF_RESIGNED_TAGS_KEY,
              NUMBER_OF_ACTIONS_KEY
             ];
+}
+-(void)pushView:(NSString *)view{
+    NSInteger viewsLeft = self.views.count;
+    if(viewsLeft > 5) [self.views removeObjectAtIndex:0];
+    [self.views addObject:view];
+    [kGAnanlytics sendView:view];
+}
+-(void)popView{
+    NSInteger viewsLeft = self.views.count;
+    if(viewsLeft > 0) [self.views removeLastObject];
+    if(viewsLeft > 1) [kGAnanlytics sendView:[self.views lastObject]];
 }
 -(void)incrementKey:(NSString *)key withAmount:(NSInteger)amount{
     if(self.blockAnalytics) return;

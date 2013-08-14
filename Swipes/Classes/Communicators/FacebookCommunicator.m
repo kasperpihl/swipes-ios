@@ -7,6 +7,8 @@
 //
 #import "FacebookCommunicator.h"
 #import <Parse/PFFacebookUtils.h>
+#import "DEFacebookComposeViewController.h"
+#import <Social/Social.h>
 
 @interface FacebookCommunicator () <FBDialogDelegate>
 @property (nonatomic,strong) FBRequestConnection *connection;
@@ -29,7 +31,35 @@ static FacebookCommunicator *sharedObject;
     
     return NO;
 }
+-(void)share:(NSString*)text image:(UIImage*)image url:(NSString*)url inViewController:(UIViewController*)viewController block:(FacebookRequestBlock)completionBlock{
+    BOOL isAvailable = ([[UIDevice currentDevice].systemVersion floatValue] >= 6 && [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]);
+    if (isAvailable) {
+        SLComposeViewController *shareVC = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+        if(text) [shareVC setInitialText:text];
+        if(image) [shareVC addImage:image];
+        if(url) [shareVC addURL:[NSURL URLWithString:url]];
+        
+        [viewController presentModalViewController:shareVC animated:YES];
+    }
+   
+    FacebookRequestBlock internResBlock = ^BOOL(FBReturnType status, id result, NSError *error){
+        
+        if(!error) [viewController dismissModalViewControllerAnimated:YES];
+        BOOL hasHandled = completionBlock(status,result,error);
+        return hasHandled;
+    };
+    DEFacebookComposeViewController *facebookViewComposer = [[DEFacebookComposeViewController alloc] initForceUseCustomController:YES];
+    viewController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    if(text)[facebookViewComposer setInitialText:text forced:NO];
+    if(image) [facebookViewComposer addImage:image];
+    if(url) [facebookViewComposer addURL:url];
+    facebookViewComposer.completionHandler = internResBlock;
+    [viewController presentModalViewController:facebookViewComposer animated:YES];
+}
 -(void)shareToFriend:(NSDictionary*)friend name:(NSString*)name caption:(NSString*)caption description:(NSString*)description imageURLString:(NSString*)imageString link:(NSString*)link block:(FacebookRequestBlock)block{
+    
+    
+    
     self.block = block;
     
     // Put together the dialog parameters
@@ -86,10 +116,18 @@ static FacebookCommunicator *sharedObject;
         }
     }
     if (updatePermissions && write) {
-        [PFFacebookUtils reauthorizeUser:[PFUser currentUser]  withPublishPermissions:FACEBOOK_WRITE_PERMISSIONS audience:FBSessionDefaultAudienceFriends block:^(BOOL succeeded, NSError *error) {
-            if(succeeded) [self runRequest:request block:block];
-            else block(FBReturnTypeCancelled, nil,error);
-        }];
+        if([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]){
+            [PFFacebookUtils reauthorizeUser:[PFUser currentUser]  withPublishPermissions:FACEBOOK_WRITE_PERMISSIONS audience:FBSessionDefaultAudienceFriends block:^(BOOL succeeded, NSError *error) {
+                if(succeeded) [self runRequest:request block:block];
+                else block(FBReturnTypeCancelled, nil,error);
+            }];
+        }
+        else{
+            [PFFacebookUtils linkUser:[PFUser currentUser] permissions:FACEBOOK_WRITE_PERMISSIONS block:^(BOOL succeeded, NSError *error) {
+                if(succeeded) [self runRequest:request block:block];
+                else block(FBReturnTypeCancelled, nil,error);
+            }];
+        }
         return;
     }
     else [self runRequest:request block:block];

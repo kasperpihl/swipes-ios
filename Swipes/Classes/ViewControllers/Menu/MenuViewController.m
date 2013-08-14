@@ -23,7 +23,7 @@
 #define kLampOffColor tbackground(MenuBackground)//tcolor(StrongLaterColor)
 
 #define kSeperatorMargin 0
-#define kGridMargin 20
+#define kGridMargin valForScreen(34,20)
 #define kVerticalGridNumber 2
 #define kGridButtonPadding 0
 #define kToolbarHeight GLOBAL_TOOLBAR_HEIGHT
@@ -191,9 +191,21 @@
             BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
             UIColor *lampColor = hasNotificationsOn ? kLampOffColor : kLampOnColor;
             NSNumber *newSettingValue = hasNotificationsOn ? @NO : @YES;
-            NSLog(@"%@",newSettingValue);
-            [kSettings setValue:newSettingValue forSetting:SettingNotifications];
-            [sender setLampColor:lampColor];
+            if(hasNotificationsOn){
+                KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off notification" message:@"Warning: You will no longer receive alarms or reminders." block:^(BOOL succeeded, NSError *error) {
+                    [BLURRY dismissAnimated:YES];
+                    if(succeeded){
+                        [kSettings setValue:newSettingValue forSetting:SettingNotifications];
+                        [sender setLampColor:lampColor];
+                    }
+                }];
+                [BLURRY showView:alert inViewController:self];
+            }
+            else{
+                [kSettings setValue:newSettingValue forSetting:SettingNotifications];
+                [sender setLampColor:lampColor];
+            }
+            
             break;
         }
         case KPMenuButtonSnoozes:{
@@ -212,6 +224,10 @@
                 [mailCont setSubject:@"Feedback for Swipes"];
                 [mailCont setMessageBody:@"" isHTML:NO];
                 [self presentViewController:mailCont animated:YES completion:nil];
+            }
+            else{
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Mail was not setup" message:@"You can send us feedback to support@swipesapp.com. Thanks" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+                [alert show];
             }
             break;
         }

@@ -27,6 +27,7 @@
 #import "AccelerationAnimation.h"
 #import "Evaluate.h"
 #import "RootViewController.h"
+#import "AnalyticsHandler.h"
 
 const int INTERSTITIAL_STEPS = 99;
 
@@ -124,12 +125,12 @@ static RESideMenu *sharedObject;
     [_slidebackView addGestureRecognizer:self.panningRecognizer];
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognized:)];
     [_screenshotView addGestureRecognizer:tapGestureRecognizer];
-    
-    
+    [ANALYTICS pushView:@"Settings menu"];
 }
 
 - (void)hide
 {
+    
     if (_isShowing)
         [self restoreFromRect:_screenshotView.frame];
 }
@@ -233,6 +234,7 @@ static RESideMenu *sharedObject;
 - (void)restoreView
 {
     //[[UIApplication sharedApplication] setStatusBarHidden:_appIsHidingStatusBar withAnimation:UIStatusBarAnimationNone];
+    [ANALYTICS popView];
     [_revealView removeFromSuperview];
     [_backgroundView removeFromSuperview];
     [_screenshotView removeFromSuperview];

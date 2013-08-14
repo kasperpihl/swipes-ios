@@ -282,11 +282,21 @@
 	return [CURRENT_CALENDAR dateFromComponents:components];
 }
 -(NSDate *)dateAtWeekday:(NSInteger)weekday{
-    NSDateComponents *components = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:self];
-    [components setWeekday:weekday];
-    [components setWeek:components.week+1];
-    NSDate *retDate = [CURRENT_CALENDAR dateByAddingComponents:components toDate:self options:0];
-    return retDate;
+    NSDate *today = [NSDate date];
+    
+    NSDateComponents *nowComponents = [CURRENT_CALENDAR components:NSYearCalendarUnit | NSWeekCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:today];
+    
+    [nowComponents setWeekday:weekday]; //Monday
+    [nowComponents setSecond:0];
+    
+    NSDate *beginningOfWeek = [CURRENT_CALENDAR dateFromComponents:nowComponents];
+    
+    
+    if([beginningOfWeek isInPast]){
+        [nowComponents setWeek: [nowComponents week] + 1];
+        beginningOfWeek = [CURRENT_CALENDAR dateFromComponents:nowComponents];
+    }   
+    return beginningOfWeek;
 }
 - (NSDate *) dateAtStartOfDay
 {
@@ -306,27 +316,26 @@
 
 #pragma mark Rounding times
 - (NSDate *)dateToNearest15Minutes {
-    // Set up flags.
-    unsigned unitFlags = NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit;
-    // Extract components.
-    NSDateComponents *comps = [[NSCalendar currentCalendar] components:unitFlags fromDate:self];
-    // Set the minute to the nearest 15 minutes.
-    [comps setMinute:((([comps minute] - 8 ) / 15 ) * 15 ) + 15];
-    // Zero out the seconds.
-    [comps setSecond:0];
-    // Construct a new date.
-    return [[NSCalendar currentCalendar] dateFromComponents:comps];
+    return [self dateToNearestMinutes:15];
 }
 - (NSDate *)dateToNearestMinutes:(NSInteger)minutes {
-    // Set up flags.
     unsigned unitFlags = NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit;
     // Extract components.
-    NSDateComponents *comps = [[NSCalendar currentCalendar] components:unitFlags fromDate:self];
-    // Set the minute to the nearest 15 minutes.
-    [comps setMinute:((([comps minute] - 8 ) / minutes ) * minutes ) + minutes];
-    // Zero out the seconds.
+    NSDateComponents *time = [[NSCalendar currentCalendar] components:unitFlags fromDate:self];
+    NSInteger thisMin = [time minute];
+    NSDate *newDate;
+    int remain = thisMin % minutes;
+    // if less then 3 then round down
+    NSInteger dividor = ceil(minutes/2);
+    if (remain<dividor){
+    	// Subtract the remainder of time to the date to round it down evenly
+    	newDate = [self dateByAddingTimeInterval:-60*(remain)];
+    }else{
+    	// Add the remainder of time to the date to round it up evenly
+    	newDate = [self dateByAddingTimeInterval:60*(5-remain)];
+    }
+    NSDateComponents *comps = [[NSCalendar currentCalendar] components:unitFlags fromDate:newDate];
     [comps setSecond:0];
-    // Construct a new date.
     return [[NSCalendar currentCalendar] dateFromComponents:comps];
 }
 -(NSDate *)dateToNearest5Minutes{

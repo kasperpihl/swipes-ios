@@ -11,6 +11,7 @@
 #import "UIColor+Utilities.h"
 #import <QuartzCore/QuartzCore.h>
 #import "KPSubtitleButton.h"
+#import "GAI.h"
 #define kCloseButtonSize 44
 #define kLogoTopMargin 35
 #define kSubscribeButtonWidth 140
@@ -43,6 +44,7 @@
 @property (nonatomic) UILabel *introLabel;
 @property (nonatomic) UIView *beforeView;
 @property (nonatomic) UIView *afterView;
+@property (nonatomic) UIScrollView *scrollView;
 @property (nonatomic) BOOL hasPressed;
 @end
 
@@ -59,6 +61,10 @@
     scrollView.bounces = NO;
     
     [scrollView addSubview:salesImage];
+    
+    UIButton *scrollToBottomButton = [[UIButton alloc] initWithFrame:CGRectMake(23, 28, 70, 70)];
+    [scrollToBottomButton addTarget:self action:@selector(pressedScrollToBottom:) forControlEvents:UIControlEventTouchUpInside];
+    [scrollView addSubview:scrollToBottomButton];
     
     UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, salesImage.frame.size.height, scrollView.frame.size.width, 250)];
     bottomView.backgroundColor = tcolor(StrongDoneColor);
@@ -126,7 +132,7 @@
     feedbackLabel.text = @"Thanks for your feedback!";
     feedbackLabel.numberOfLines = 0;
     [self.afterView addSubview:feedbackLabel];
-    self.afterView.hidden = YES;
+    
     
     UILabel *postedLabel = [[UILabel alloc] initWithFrame:CGRectMake((bottomView.frame.size.width-kAfterViewWidth)/2, CGRectGetMaxY(feedbackLabel.frame)+kAfterPostedSpacing, kAfterViewWidth, kAfterPostedHeight)];
     postedLabel.backgroundColor = CLEAR;
@@ -149,10 +155,14 @@
     
     [scrollView addSubview:bottomView];
     
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"hasChosenPrefered"]) self.beforeView.hidden = YES;
+    else self.afterView.hidden = YES;
+    
     scrollView.contentSize = CGSizeMake(320, salesImage.frame.size.height+bottomView.frame.size.height);
     
     
     [self.view addSubview:scrollView];
+    self.scrollView = scrollView;
     /*
     UIImageView *headerLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upgrade_plus_logo"]];
 	headerLogo.center = CGPointMake(self.view.center.x,kLogoTopMargin+headerLogo.frame.size.height/2);
@@ -170,6 +180,7 @@
 }
 -(void)changeToAfterView{
     if(self.hasPressed) return;
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasChosenPrefered"];
     self.hasPressed = YES;
     self.afterView.hidden = NO;
     self.afterView.alpha = 0;
@@ -180,17 +191,32 @@
         self.beforeView.hidden = YES;
     }];
 }
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+}
+-(void)completeGoalWithValue:(NSInteger)value{
+    NSNumber *valObj = [NSNumber numberWithInteger:value];
+    [kGAnanlytics trackEventWithCategory:@"app_flow" withAction:@"preferred_model" withLabel:nil withValue:valObj];
+}
+-(void)pressedScrollToBottom:(UIButton*)sender{
+    CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+    [self.scrollView setContentOffset:bottomOffset animated:YES];
+}
 -(void)pressedMonthButton:(UIButton*)sender{
-    
+    [self completeGoalWithValue:30];
     [self changeToAfterView];
-    
 }
 -(void)pressedYearButton:(UIButton*)sender{
-    
+    [self completeGoalWithValue:365];
     [self changeToAfterView];
 }
 -(void)pressedCloseButton:(UIButton*)sender{
     [self.delegate closedUpgradeViewController:self];
+}
+-(void)dealloc{
+    self.scrollView = nil;
+    self.afterView = nil;
+    self.beforeView = nil;
 }
 - (void)didReceiveMemoryWarning
 {

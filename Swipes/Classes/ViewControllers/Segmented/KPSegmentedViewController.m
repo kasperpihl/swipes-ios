@@ -22,6 +22,7 @@
 #import "KPBlurry.h"
 #import "PlusAlertView.h"
 #import "RootViewController.h"
+#import "AnalyticsHandler.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
@@ -111,7 +112,9 @@
     }];
 }
 -(void)pressedShare:(id)sender{
+    [ANALYTICS pushView:@"Sharing plus popup"];
     PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Sharing tasks are an upcomming feature in Swipes Plus. Check out the package." block:^(BOOL succeeded, NSError *error) {
+        [ANALYTICS popView];
         [BLURRY dismissAnimated:YES];
         if(succeeded){
             [ROOT_CONTROLLER upgrade];
