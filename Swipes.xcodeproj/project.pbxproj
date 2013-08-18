@@ -144,6 +144,7 @@
 		A761B5B916EB59710095A9A8 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B816EB59710095A9A8 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		A761B5BB16EB59760095A9A8 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BA16EB59760095A9A8 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		A761B5BD16EB597B0095A9A8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */; };
+		A764F79617BBAFBC0036383B /* KPRepeatPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A764F79517BBAFBC0036383B /* KPRepeatPicker.m */; };
 		A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
 		A7680D26172C5E9100BCB2D9 /* TagHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D25172C5E9100BCB2D9 /* TagHandler.m */; };
 		A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D28172C5EA800BCB2D9 /* _KPTag.m */; };
@@ -456,6 +457,8 @@
 		A761B5B816EB59710095A9A8 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A761B5BA16EB59760095A9A8 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		A764F79417BBAFBC0036383B /* KPRepeatPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPRepeatPicker.h; path = Components/KPRepeatPicker.h; sourceTree = "<group>"; };
+		A764F79517BBAFBC0036383B /* KPRepeatPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPRepeatPicker.m; path = Components/KPRepeatPicker.m; sourceTree = "<group>"; };
 		A7680D1E172C0E1C00BCB2D9 /* NSDate-Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-Utilities.h"; sourceTree = "<group>"; };
 		A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-Utilities.m"; sourceTree = "<group>"; };
 		A7680D24172C5E9100BCB2D9 /* TagHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagHandler.h; sourceTree = "<group>"; };
@@ -949,6 +952,8 @@
 				A72D5ED8179ED08E00BCB835 /* SectionHeaderView.m */,
 				A717BF3C17624CA2004791BF /* KPPageControl.h */,
 				A717BF3D17624CA2004791BF /* KPPageControl.m */,
+				A764F79417BBAFBC0036383B /* KPRepeatPicker.h */,
+				A764F79517BBAFBC0036383B /* KPRepeatPicker.m */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -1952,6 +1957,7 @@
 				A771359E17BABD080090BE89 /* DERuledView.m in Sources */,
 				A77135B717BABD080090BE89 /* UIApplication+DEFacebookComposeViewController.m in Sources */,
 				A77135B817BABD080090BE89 /* UIDevice+DEFacebookComposeViewController.m in Sources */,
+				A764F79617BBAFBC0036383B /* KPRepeatPicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

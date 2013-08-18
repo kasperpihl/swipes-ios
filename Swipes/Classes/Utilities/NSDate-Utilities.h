@@ -52,6 +52,9 @@
 - (BOOL) isTypicallyWeekend;
 
 // Adjusting dates
+- (NSDate *) dateByAddingYears:(NSInteger) dYears;
+- (NSDate *) dateByAddingMonths:(NSInteger) dMonths;
+- (NSDate *) dateByAddingWeeks:(NSInteger) dWeeks;
 - (NSDate *) dateByAddingDays: (NSInteger) dDays;
 - (NSDate *) dateBySubtractingDays: (NSInteger) dDays;
 - (NSDate *) dateByAddingHours: (NSInteger) dHours;
@@ -59,6 +62,8 @@
 - (NSDate *) dateByAddingMinutes: (NSInteger) dMinutes;
 - (NSDate *) dateBySubtractingMinutes: (NSInteger) dMinutes;
 - (NSDate *) dateAtStartOfDay;
+- (NSDate *) dateAtNextWorkday;
+- (NSDate *) dateAtNextWeekendDay;
 
 // Rounding dates
 - (NSDate *)dateToNearestMinutes:(NSInteger)minutes;

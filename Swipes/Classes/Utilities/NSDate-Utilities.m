@@ -274,6 +274,49 @@
 {
 	return [self dateByAddingMinutes: (dMinutes * -1)];
 }
+-(NSDate *)dateByAddingYears:(NSInteger)dYears{
+    NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
+    [offsetComponents setYear: dYears];
+    return [CURRENT_CALENDAR dateByAddingComponents:offsetComponents toDate:self options:0];
+}
+-(NSDate *)dateByAddingMonths:(NSInteger)dMonths{
+    NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
+    [offsetComponents setMonth:dMonths];
+    
+    NSDate *retDate = [CURRENT_CALENDAR dateByAddingComponents:offsetComponents toDate:self options:0];
+    NSInteger numberOfDaysInMonth = [CURRENT_CALENDAR rangeOfUnit:NSDayCalendarUnit
+                                                           inUnit:NSMonthCalendarUnit
+                                                          forDate:retDate].length;
+    NSLog(@"numberOfDays:%i",numberOfDaysInMonth);
+    if(retDate.day >= 28 && retDate.day < numberOfDaysInMonth){ 
+        offsetComponents = [[NSDateComponents alloc] init];
+        [offsetComponents setDay:numberOfDaysInMonth-retDate.day];
+        retDate = [CURRENT_CALENDAR dateByAddingComponents:offsetComponents toDate:retDate options:0];
+    }
+    
+    return retDate;
+}
+-(NSDate *)dateByAddingWeeks:(NSInteger) dWeeks{
+    NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
+    [offsetComponents setWeek: dWeeks];
+    return [CURRENT_CALENDAR dateByAddingComponents:offsetComponents toDate:self options:0];
+}
+-(NSDate *)dateAtNextWeekendDay{
+    return [self dateAtNextWorkOrWeekendDay:YES];
+}
+-(NSDate *)dateAtNextWorkday{
+    return [self dateAtNextWorkOrWeekendDay:NO];
+}
+-(NSDate *)dateAtNextWorkOrWeekendDay:(BOOL)isWeekendDay{
+    BOOL nextDayIsWorkday;
+    NSDate *nextDay = self;
+    do{
+        nextDay = [nextDay dateByAddingDays:1];
+        nextDayIsWorkday = nextDay.isTypicallyWorkday;
+    }
+    while (nextDayIsWorkday == isWeekendDay);
+    return nextDay;
+}
 -(NSDate *)dateAtHours:(NSInteger)hours minutes:(NSInteger)minutes{
     NSDateComponents *components = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:self];
 	components.hour = hours;
@@ -339,24 +382,7 @@
     return [[NSCalendar currentCalendar] dateFromComponents:comps];
 }
 -(NSDate *)dateToNearest5Minutes{
-    // Get the nearest 5 minute block
-    unsigned unitFlags = NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit;
-    // Extract components.
-    NSDateComponents *time = [[NSCalendar currentCalendar] components:unitFlags fromDate:self];
-    NSInteger minutes = [time minute];
-    NSDate *newDate;
-    int remain = minutes % 5;
-    // if less then 3 then round down
-    if (remain<3){
-    	// Subtract the remainder of time to the date to round it down evenly
-    	newDate = [self dateByAddingTimeInterval:-60*(remain)];
-    }else{
-    	// Add the remainder of time to the date to round it up evenly
-    	newDate = [self dateByAddingTimeInterval:60*(5-remain)];
-    }
-    NSDateComponents *comps = [[NSCalendar currentCalendar] components:unitFlags fromDate:newDate];
-    [comps setSecond:0];
-    return [[NSCalendar currentCalendar] dateFromComponents:comps];
+    return [self dateToNearestMinutes:5];
 }
 #pragma mark Retrieving Intervals
 

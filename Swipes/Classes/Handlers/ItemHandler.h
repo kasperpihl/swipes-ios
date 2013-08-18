@@ -27,6 +27,7 @@
 @property (nonatomic) BOOL hasFilter;
 @property (nonatomic) BOOL hasSearched;
 @property (nonatomic) BOOL isSorted;
+@property (nonatomic, strong) NSArray *filteredItems;
 @property (nonatomic) NSIndexPath *draggingIndexPath;
 @property (nonatomic) NSInteger itemCounter;
 @property (nonatomic) NSInteger itemCounterWithFilter;
@@ -36,6 +37,8 @@
 -(void)searchForString:(NSString*)string;
 -(void)clearAll;
 -(NSString *)titleForSection:(NSInteger)section;
+-(NSInteger)totalNumberOfItemsBeforeItem:(KPToDo*)item;
+-(NSIndexPath*)indexPathForItem:(KPToDo*)item;
 -(KPToDo*)itemForIndexPath:(NSIndexPath*)indexPath;
 -(void)addItem:(NSString *)item;
 -(void)reloadData;

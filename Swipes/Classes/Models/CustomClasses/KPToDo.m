@@ -25,6 +25,11 @@
     self.notes = notes;
     if(save) [self save];
 }
+-(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save{
+    self.repeatOptionValue = option;
+    self.repeatedDate = self.schedule;
+    if(save) [self save];
+}
 -(void)save{
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
 }
@@ -63,6 +68,67 @@
     if(!showTime) return dateString;
     return [NSString stringWithFormat:@"%@, %@",dateString,timeString];
     
+}
+-(NSDate *)nextDateFrom:(NSDate*)date{
+    NSDate *returnDate;
+    switch (self.repeatOption.integerValue) {
+        case RepeatEveryDay:
+            returnDate = [date dateByAddingDays:1];
+            break;
+        case RepeatEveryMonFriOrSatSun:
+            if(date.isTypicallyWeekend) returnDate = [date dateAtNextWeekendDay];
+            else returnDate = [date dateAtNextWorkday];
+            break;
+        case RepeatEveryWeek:
+            returnDate = [date dateByAddingWeeks:1];
+            break;
+        case RepeatEveryMonth:
+            returnDate = [date dateByAddingMonths:1];
+            break;
+        case RepeatEveryYear:
+            returnDate = [date dateByAddingYears:1];
+            break;
+    }
+    return returnDate;
+}
+-(NSArray*)nextNumberOfRepeatedDates:(NSInteger)numberOfDates{
+    if(self.repeatOptionValue == RepeatNever) return nil;
+    NSInteger counter = 0;
+    NSDate *date = self.schedule;
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:numberOfDates];
+    do {
+        date = [self nextDateFrom:date];
+        [array addObject:date];
+    } while (counter < numberOfDates);
+    return array;
+}
+-(KPToDo*)deepCopy{
+    KPToDo *newToDo = [KPToDo newObjectInContext:nil];
+    newToDo.completionDate = self.completionDate;
+    newToDo.notes = self.notes;
+    newToDo.order = self.order;
+    newToDo.schedule = self.schedule;
+    newToDo.state = self.state;
+    [newToDo setTags:self.tags];
+    newToDo.tagString = self.tagString;
+    newToDo.title = self.title;
+    return newToDo;
+}
+-(void)completeRepeatedTask{
+    if(self.repeatOptionValue == RepeatNever) return;
+    NSDate *next = [self nextDateFrom:self.repeatedDate];
+    
+    NSInteger numberOfRepeated = self.numberOfRepeatedValue;
+    while ([next isInPast]){
+        next = [self nextDateFrom:next];
+    }
+    KPToDo *toDoCopy = [self deepCopy];
+    toDoCopy.copyOf = self;
+    toDoCopy.numberOfRepeatedValue = numberOfRepeated;
+    [toDoCopy complete];
+    [self scheduleForDate:next];
+    self.repeatedDate = next;
+    self.numberOfRepeated = [NSNumber numberWithInteger:numberOfRepeated++];
 }
 -(NSString *)readableTitleForStatus{
     NSString *title;
@@ -162,6 +228,10 @@
     return self.readableTags;*/
 }
 -(void)complete{
+    if(self.repeatOptionValue > RepeatNever && !self.copyOf){
+        [self completeRepeatedTask];
+        return;
+    }
     self.schedule = nil;
     self.state = @"done";
     self.completionDate = [NSDate date];

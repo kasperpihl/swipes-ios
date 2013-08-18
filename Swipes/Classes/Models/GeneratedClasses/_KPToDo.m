@@ -7,7 +7,10 @@ const struct KPToDoAttributes KPToDoAttributes = {
 	.alarm = @"alarm",
 	.completionDate = @"completionDate",
 	.notes = @"notes",
+	.numberOfRepeated = @"numberOfRepeated",
 	.order = @"order",
+	.repeatOption = @"repeatOption",
+	.repeatedDate = @"repeatedDate",
 	.schedule = @"schedule",
 	.state = @"state",
 	.tagString = @"tagString",
@@ -15,6 +18,8 @@ const struct KPToDoAttributes KPToDoAttributes = {
 };
 
 const struct KPToDoRelationships KPToDoRelationships = {
+	.copies = @"copies",
+	.copyOf = @"copyOf",
 	.tags = @"tags",
 };
 
@@ -47,8 +52,18 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"numberOfRepeatedValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"numberOfRepeated"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 	if ([key isEqualToString:@"orderValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"order"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"repeatOptionValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"repeatOption"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -80,6 +95,32 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 
 
+@dynamic numberOfRepeated;
+
+
+
+- (int32_t)numberOfRepeatedValue {
+	NSNumber *result = [self numberOfRepeated];
+	return [result intValue];
+}
+
+- (void)setNumberOfRepeatedValue:(int32_t)value_ {
+	[self setNumberOfRepeated:[NSNumber numberWithInt:value_]];
+}
+
+- (int32_t)primitiveNumberOfRepeatedValue {
+	NSNumber *result = [self primitiveNumberOfRepeated];
+	return [result intValue];
+}
+
+- (void)setPrimitiveNumberOfRepeatedValue:(int32_t)value_ {
+	[self setPrimitiveNumberOfRepeated:[NSNumber numberWithInt:value_]];
+}
+
+
+
+
+
 @dynamic order;
 
 
@@ -101,6 +142,39 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 - (void)setPrimitiveOrderValue:(int32_t)value_ {
 	[self setPrimitiveOrder:[NSNumber numberWithInt:value_]];
 }
+
+
+
+
+
+@dynamic repeatOption;
+
+
+
+- (int32_t)repeatOptionValue {
+	NSNumber *result = [self repeatOption];
+	return [result intValue];
+}
+
+- (void)setRepeatOptionValue:(int32_t)value_ {
+	[self setRepeatOption:[NSNumber numberWithInt:value_]];
+}
+
+- (int32_t)primitiveRepeatOptionValue {
+	NSNumber *result = [self primitiveRepeatOption];
+	return [result intValue];
+}
+
+- (void)setPrimitiveRepeatOptionValue:(int32_t)value_ {
+	[self setPrimitiveRepeatOption:[NSNumber numberWithInt:value_]];
+}
+
+
+
+
+
+@dynamic repeatedDate;
+
 
 
 
@@ -133,6 +207,23 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 
 
+
+@dynamic copies;
+
+	
+- (NSMutableSet*)copiesSet {
+	[self willAccessValueForKey:@"copies"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"copies"];
+  
+	[self didAccessValueForKey:@"copies"];
+	return result;
+}
+	
+
+@dynamic copyOf;
+
+	
 
 @dynamic tags;
 

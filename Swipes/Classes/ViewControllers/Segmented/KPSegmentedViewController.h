@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class AKSegmentedControl,ToDoListViewController;
+@class AKSegmentedControl,ToDoListViewController, KPToDo;
 
 @interface KPSegmentedViewController : UIViewController
 @property (nonatomic, readonly, strong) AKSegmentedControl *segmentedControl;
 @property (nonatomic) KPControlCurrentState currentState;
 @property (nonatomic) BOOL lock;
+@property (nonatomic) KPToDo *showingModel;
 -(void)setLock:(BOOL)lock animated:(BOOL)animated;
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 -(void)highlightButton:(KPSegmentButtons)controlButton;
@@ -24,4 +25,5 @@
 -(void)tagViewWithDismissAction:(voidBlock)block;
 -(void)pressedDelete:(id)sender;
 -(void)pressedShare:(id)sender;
+-(void)changeToIndex:(NSInteger)index;
 @end

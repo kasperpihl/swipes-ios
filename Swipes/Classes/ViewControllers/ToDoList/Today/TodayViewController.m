@@ -25,7 +25,6 @@
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     NSDate *endDate = [NSDate date];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule < %@)",@"scheduled", endDate];
-
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
     return results;
 }

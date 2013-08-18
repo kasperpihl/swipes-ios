@@ -50,6 +50,15 @@ typedef NS_ENUM(NSUInteger, CellType) {
     CellTypeToday,
     CellTypeDone
 };
+typedef enum {
+    RepeatNever = 0,
+    RepeatEveryDay,
+    RepeatEveryMonFriOrSatSun,
+    RepeatEveryWeek,
+    RepeatEveryMonth,
+    RepeatEveryYear,
+    RepeatOptionsTotal
+} RepeatOptions;
 typedef void (^voidBlock)(void);
 /* Insert below in pods target if it is logs */
 NS_INLINE void mainBlock(void (^block)(void))

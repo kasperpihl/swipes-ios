@@ -52,6 +52,7 @@
 @end
 
 @implementation ToDoListViewController
+@synthesize showingViewController = _showingViewController;
 -(ItemHandler *)itemHandler{
     if(!_itemHandler){
         _itemHandler = [[ItemHandler alloc] init];
@@ -59,12 +60,51 @@
     }
     return _itemHandler;
 }
+-(ToDoViewController *)showingViewController{
+    if(!_showingViewController){
+        _showingViewController = [[ToDoViewController alloc] init];
+        _showingViewController.delegate = self;
+        _showingViewController.segmentedViewController = [self parent];
+        _showingViewController.view.frame = CGRectMake(0, 0, 320, self.tableView.frame.size.height-SECTION_HEADER_HEIGHT);
+    }
+    return _showingViewController;
+    
+    
+}
 #pragma mark ItemHandlerDelegate
 -(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber{
     [self didUpdateCells];
 }
+-(void)setIsShowingItem:(BOOL)isShowingItem{
+    NSString *isShowing = isShowingItem ? @"isShowing" : @"!isShowing";
+    NSLog(@"%@",isShowing);
+    _isShowingItem = isShowingItem;
+    self.tableView.scrollEnabled = !isShowingItem;
+    [self deselectAllRows:self];
+    if(isShowingItem){
+        [[self parent] setLock:isShowingItem animated:NO];
+        NSIndexPath *indexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
+        [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self.selectedRows addObject:indexPath];
+    }
+    else{
+        [[self parent] setLock:NO];
+        [self.showingViewController.view removeFromSuperview];
+    }
+}
 -(void)didUpdateItemHandler:(ItemHandler *)handler{
+    if(self.parent.showingModel && [self.itemHandler.filteredItems containsObject:self.parent.showingModel]) self.isShowingItem = YES;
+    else self.isShowingItem = NO;
     [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(self.isShowingItem){
+            NSIndexPath *cellIndexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
+            NSInteger numberOfCellsBefore = [self.itemHandler totalNumberOfItemsBeforeItem:self.parent.showingModel];
+            NSInteger numberOfSections = cellIndexPath.section;
+            CGFloat contentY = self.tableView.tableHeaderView.frame.size.height + numberOfCellsBefore * CELL_HEIGHT + numberOfSections * SECTION_HEADER_HEIGHT;
+            [self.tableView setContentOffset:CGPointMake(0,contentY) animated:NO];
+        }
+    });
 }
 -(KPSegmentedViewController *)parent{
     KPSegmentedViewController *parent = (KPSegmentedViewController*)[self parentViewController];
@@ -90,6 +130,7 @@
 }
 -(void)didUpdateCells{
     [self.searchBar reloadDataAndUpdate:YES];
+    
 }
 -(NSMutableArray *)selectedRows{
     if(!_selectedRows) _selectedRows = [NSMutableArray array];
@@ -133,12 +174,12 @@
     return headerView;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if(self.showingViewController.injectedIndexPath && indexPath.row == self.showingViewController.injectedIndexPath.row && indexPath.section == self.showingViewController.injectedIndexPath.section){
+    if(self.parent.showingModel && [[self.itemHandler itemForIndexPath:indexPath] isEqual:self.parent.showingModel]){
         return self.tableView.frame.size.height-SECTION_HEADER_HEIGHT;
     }
     else{
         return CELL_HEIGHT;
-    } 
+    }
 }
 -(ToDoCell*)readyCell:(ToDoCell*)cell{
     [cell setMode:MCSwipeTableViewCellModeExit];
@@ -155,17 +196,17 @@
     }
 	return cell;
 }
-
-
 -(void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
-    
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     cell.cellType = [toDo cellTypeForTodo];
     [cell showTimeline:YES];
     [cell setDotColor:self.cellType];
     [cell changeToDo:toDo withSelectedTags:self.itemHandler.selectedTags];
-    
+    if([toDo isEqual:self.parent.showingModel]){
+        self.showingViewController.model = toDo;
+        [self.showingViewController injectInCell:cell];
+    }
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.selectedRows removeObject:indexPath];
@@ -188,59 +229,64 @@
     if (UIGestureRecognizerStateEnded == tap.state)
     {
         CGPoint p = [tap locationInView:tap.view];
-        
         NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
         if(!indexPath) return;
-        if(!self.showingViewController) [self editIndexPath:indexPath];
-        else [self didPressCloseToDoViewController:self.showingViewController];
+        if(self.parent.showingModel && [[self.itemHandler itemForIndexPath:indexPath] isEqual:self.parent.showingModel]) [self didPressCloseToDoViewController:self.showingViewController];
+        else [self editIndexPath:indexPath];
     }
 }
 -(void)editIndexPath:(NSIndexPath *)indexPath{
-    if(self.showingViewController) return;
-    [[self parent] setLock:YES animated:NO];
+    
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
-    ToDoViewController *viewController = [[ToDoViewController alloc] init];
-    viewController.delegate = self;
-    viewController.segmentedViewController = [self parent];
-    viewController.view.frame = CGRectMake(0, 0, 320, self.tableView.frame.size.height-SECTION_HEADER_HEIGHT);
-    viewController.injectedIndexPath = indexPath;
-    self.showingViewController = viewController;
-    [self deselectAllRows:self];
+    self.parent.showingModel = toDo;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-    [self.selectedRows addObject:indexPath];
-    self.savedContentOffset = self.tableView.contentOffset;
+    self.isShowingItem = YES;
+    
     ToDoCell *cell = (ToDoCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-    viewController.injectedCell = cell;
-    viewController.model = toDo;
-    [self.tableView setContentOffset:CGPointMake(1, cell.frame.origin.y-SECTION_HEADER_HEIGHT) animated:YES];
-    self.tableView.scrollEnabled = NO;
-    //self.tableView.delaysContentTouches = NO;
+    [self.tableView setContentOffset:CGPointMake(0, cell.frame.origin.y-SECTION_HEADER_HEIGHT) animated:YES];
+    self.savedContentOffset = self.tableView.contentOffset;
+    
 }
 -(void)pressedEdit{
     NSIndexPath *indexPath;
     if(self.selectedRows.count > 0) indexPath = [self.selectedRows lastObject];
     if(indexPath) [self editIndexPath:indexPath];
 }
--(void)setShowingViewController:(ToDoViewController *)showingViewController{
-    if(_showingViewController != showingViewController){
-        _showingViewController = showingViewController;
-        self.isShowingItem = (showingViewController) ? YES : NO;
-    }
-}
 -(void)didPressCloseToDoViewController:(ToDoViewController *)viewController{
-    NSIndexPath *indexPath = viewController.injectedIndexPath;
-    [self cleanShowingViewAnimated:YES];
+    
+    NSLog(@"did press close");
+    NSIndexPath *indexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
+    self.parent.showingModel = nil;
+    self.isShowingItem = NO;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    if(!CGPointEqualToPoint(self.savedContentOffset,CGPointZero)){
+        [self.tableView setContentOffset:self.savedContentOffset animated:YES];
+        self.savedContentOffset = CGPointZero;
+    }
     [[self parent] show:YES controlsAnimated:YES];
 }
 -(void)scheduleToDoViewController:(ToDoViewController *)viewController{
-    [self swipeTableViewCell:viewController.injectedCell didStartPanningWithMode:MCSwipeTableViewCellModeExit];
-    MCSwipeTableViewCellState targetState = (self.cellType == CellTypeDone) ? MCSwipeTableViewCellState4 : MCSwipeTableViewCellState3;
-    [viewController.injectedCell switchToState:targetState];
+    SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate) {
+        [BLURRY dismissAnimated:YES];
+        if(button != KPScheduleButtonCancel){
+            if(!self.parent.showingModel) return;
+            [TODOHANDLER scheduleToDos:@[self.parent.showingModel] forDate:chosenDate];
+            if(self.cellType == CellTypeSchedule){
+                NSLog(@"cell type was schedule");
+                [self.showingViewController update];
+                [self update];
+            }
+            else{
+                [self.parent changeToIndex:0];
+            }
+        }
+    }];
+    BLURRY.blurLevel = 1.0f;
+    [BLURRY showView:popup inViewController:self.parent];
 }
 #pragma mark - UI Specific
 -(NSArray *)selectedItems{
+    if(self.isShowingItem) return @[self.parent.showingModel];
     NSMutableArray *array = [NSMutableArray array];
     for(NSIndexPath *indexPath in self.selectedRows){
         KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
@@ -344,10 +390,6 @@
             }];
             BLURRY.blurLevel = 1.0f;
             [BLURRY showView:popup inViewController:self.parent];
-            
-            /*[SchedulePopup showInView:self.parent.view withBlock:^(KPScheduleButtons button, NSDate *date) {
-                
-            }];*/
             return;
         }
         case CellTypeToday:
@@ -392,7 +434,6 @@
     [self.tableView endUpdates];
     [self cleanUpAfterMovingAnimated:YES];
 }
-
 -(void)moveIndexSet:(NSIndexSet*)indexSet toCellType:(CellType)cellType{
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
     [[self parent] highlightButton:(KPSegmentButtons)cellType-1];
@@ -400,7 +441,6 @@
         [self removeItemsForIndexSet:indexSet];
     }
     else{
-        [self cleanShowingViewAnimated:NO];
         [self returnSelectedRowsAndBounce:YES];
         [self deselectAllRows:self];
         [self update];
@@ -409,26 +449,13 @@
 }
 -(void)runBeforeMoving{
     if(self.showingViewController){
-        self.showingViewController.injectedIndexPath = nil;
-    }
-}
--(void)cleanShowingViewAnimated:(BOOL)animated{
-    if(self.showingViewController){
-        
-        self.showingViewController.injectedCell = nil;
-        self.showingViewController = nil;
-        self.tableView.scrollEnabled = YES;
-        self.tableView.delaysContentTouches = YES;
-        [self parent].lock = NO;
-        [self deselectAllRows:self];
-        if(animated) [self.tableView setContentOffset:self.savedContentOffset animated:YES];
+        //self.showingViewController.injectedIndexPath = nil;
     }
 }
 -(void)cleanUpAfterMovingAnimated:(BOOL)animated{
     
     [self.selectedRows removeAllObjects];
     self.isLonelyRider = NO;
-    [self cleanShowingViewAnimated:animated];
     self.swipingCell = nil;
     [self didUpdateCells];
     [[self parent] show:YES controlsAnimated:YES];

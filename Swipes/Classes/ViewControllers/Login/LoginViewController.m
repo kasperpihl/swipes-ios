@@ -86,6 +86,7 @@
         
         self.logInView.usernameField.font = KP_SEMIBOLD(15);
         self.logInView.usernameField.keyboardAppearance = UIKeyboardAppearanceAlert;
+        self.logInView.usernameField.keyboardType = UIKeyboardTypeEmailAddress;
         self.logInView.passwordField.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.logInView.passwordField.font = KP_SEMIBOLD(15);
         self.logInView.usernameField.placeholder = @"email";

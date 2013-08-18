@@ -21,4 +21,5 @@
 -(void)completeToDos:(NSArray*)toDoArray;
 -(void)changeToDos:(NSArray*)toDos title:(NSString *)title save:(BOOL)save;
 -(void)deleteToDos:(NSArray*)toDos save:(BOOL)save;
+-(BOOL)updateRepeatedToDos;
 @end

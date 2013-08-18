@@ -69,6 +69,7 @@
     for(UILocalNotification *lNoti in notifications){
         NSLog(@"t: %i - %@ - %@",lNoti.applicationIconBadgeNumber,lNoti.alertBody,lNoti.fireDate);
     }*/
+
     return YES;
 }
 - (void)application:(UIApplication *)application

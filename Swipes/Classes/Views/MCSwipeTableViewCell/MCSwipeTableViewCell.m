@@ -151,7 +151,7 @@ secondStateIconName:(NSString *)secondIconName
     [self privateHandlePanGestureRecognizer:gesture withTranslation:translation];
 }
 -(void)privateHandlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation{
-
+    if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionNone) return;
     UIGestureRecognizerState state = [gesture state];
     CGPoint velocity = [gesture velocityInView:self];
     CGFloat percentage = [self percentageWithOffset:CGRectGetMinX(self.contentView.frame) relativeToWidth:CGRectGetWidth(self.bounds)];

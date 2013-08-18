@@ -8,7 +8,10 @@ extern const struct KPToDoAttributes {
 	__unsafe_unretained NSString *alarm;
 	__unsafe_unretained NSString *completionDate;
 	__unsafe_unretained NSString *notes;
+	__unsafe_unretained NSString *numberOfRepeated;
 	__unsafe_unretained NSString *order;
+	__unsafe_unretained NSString *repeatOption;
+	__unsafe_unretained NSString *repeatedDate;
 	__unsafe_unretained NSString *schedule;
 	__unsafe_unretained NSString *state;
 	__unsafe_unretained NSString *tagString;
@@ -16,13 +19,20 @@ extern const struct KPToDoAttributes {
 } KPToDoAttributes;
 
 extern const struct KPToDoRelationships {
+	__unsafe_unretained NSString *copies;
+	__unsafe_unretained NSString *copyOf;
 	__unsafe_unretained NSString *tags;
 } KPToDoRelationships;
 
 extern const struct KPToDoFetchedProperties {
 } KPToDoFetchedProperties;
 
+@class KPToDo;
+@class KPToDo;
 @class KPTag;
+
+
+
 
 
 
@@ -76,6 +86,20 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSNumber* numberOfRepeated;
+
+
+
+@property int32_t numberOfRepeatedValue;
+- (int32_t)numberOfRepeatedValue;
+- (void)setNumberOfRepeatedValue:(int32_t)value_;
+
+//- (BOOL)validateNumberOfRepeated:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSNumber* order;
 
 
@@ -85,6 +109,30 @@ extern const struct KPToDoFetchedProperties {
 - (void)setOrderValue:(int32_t)value_;
 
 //- (BOOL)validateOrder:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* repeatOption;
+
+
+
+@property int32_t repeatOptionValue;
+- (int32_t)repeatOptionValue;
+- (void)setRepeatOptionValue:(int32_t)value_;
+
+//- (BOOL)validateRepeatOption:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSDate* repeatedDate;
+
+
+
+//- (BOOL)validateRepeatedDate:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -130,6 +178,20 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *copies;
+
+- (NSMutableSet*)copiesSet;
+
+
+
+
+@property (nonatomic, strong) KPToDo *copyOf;
+
+//- (BOOL)validateCopyOf:(id*)value_ error:(NSError**)error_;
+
+
+
+
 @property (nonatomic, strong) NSSet *tags;
 
 - (NSMutableSet*)tagsSet;
@@ -141,6 +203,11 @@ extern const struct KPToDoFetchedProperties {
 @end
 
 @interface _KPToDo (CoreDataGeneratedAccessors)
+
+- (void)addCopies:(NSSet*)value_;
+- (void)removeCopies:(NSSet*)value_;
+- (void)addCopiesObject:(KPToDo*)value_;
+- (void)removeCopiesObject:(KPToDo*)value_;
 
 - (void)addTags:(NSSet*)value_;
 - (void)removeTags:(NSSet*)value_;
@@ -170,11 +237,35 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+- (NSNumber*)primitiveNumberOfRepeated;
+- (void)setPrimitiveNumberOfRepeated:(NSNumber*)value;
+
+- (int32_t)primitiveNumberOfRepeatedValue;
+- (void)setPrimitiveNumberOfRepeatedValue:(int32_t)value_;
+
+
+
+
 - (NSNumber*)primitiveOrder;
 - (void)setPrimitiveOrder:(NSNumber*)value;
 
 - (int32_t)primitiveOrderValue;
 - (void)setPrimitiveOrderValue:(int32_t)value_;
+
+
+
+
+- (NSNumber*)primitiveRepeatOption;
+- (void)setPrimitiveRepeatOption:(NSNumber*)value;
+
+- (int32_t)primitiveRepeatOptionValue;
+- (void)setPrimitiveRepeatOptionValue:(int32_t)value_;
+
+
+
+
+- (NSDate*)primitiveRepeatedDate;
+- (void)setPrimitiveRepeatedDate:(NSDate*)value;
 
 
 
@@ -201,6 +292,16 @@ extern const struct KPToDoFetchedProperties {
 - (void)setPrimitiveTitle:(NSString*)value;
 
 
+
+
+
+- (NSMutableSet*)primitiveCopies;
+- (void)setPrimitiveCopies:(NSMutableSet*)value;
+
+
+
+- (KPToDo*)primitiveCopyOf;
+- (void)setPrimitiveCopyOf:(KPToDo*)value;
 
 
 

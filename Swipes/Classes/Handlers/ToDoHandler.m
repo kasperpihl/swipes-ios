@@ -21,6 +21,15 @@ static ToDoHandler *sharedObject;
     }
     return sharedObject;
 }
+-(BOOL)updateRepeatedToDos{
+    NSDate *now = [NSDate date];
+    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule < %@ AND repeatCopy != NO AND repeatOption > 0)",@"scheduled", now];
+    NSArray *scheduleArray = [KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:schedulePredicate];
+    for(KPToDo *toDo in scheduleArray){
+        NSLog(@"%@",toDo.schedule);
+    }
+    return NO;
+}
 -(void)deleteToDos:(NSArray*)toDos save:(BOOL)save{
     BOOL shouldUpdateNotifications = NO;
     for(KPToDo *toDo in toDos){

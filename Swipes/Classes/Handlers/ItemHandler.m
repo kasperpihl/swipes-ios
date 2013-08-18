@@ -14,7 +14,6 @@
 @property (nonatomic,strong) NSMutableArray *titleArray;
 @property (nonatomic,strong) NSMutableArray *sortedItems;
 @property (nonatomic,strong) NSArray *items;
-@property (nonatomic,strong) NSArray *filteredItems;
 @property (nonatomic,strong) NSString *searchString;
 @property (nonatomic,strong) NSIndexPath *draggedCellPosition;
 @end
@@ -127,27 +126,65 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     return [self.delegate cellForRowAtIndexPath:indexPath];
 }
--(KPToDo *)itemForIndexPath:(NSIndexPath *)indexPath{
+-(NSInteger)totalNumberOfItemsBeforeItem:(KPToDo*)item{
+    NSInteger numberOfItems = 0;
     if(self.isSorted){
-        KPToDo *toDo = [[self.sortedItems objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-        return toDo;
+        NSInteger sectionIndex = 0;
+        for(NSArray *array in self.sortedItems){
+            NSInteger index = [array indexOfObject:item];
+            if(index == NSNotFound) numberOfItems += array.count;
+            else return numberOfItems += index;
+            sectionIndex++;
+        }
     }
     else{
-        NSInteger row = indexPath.row;
-       if(self.draggingIndexPath){
-            NSInteger draggedCellPosition = self.draggedCellPosition ? self.draggedCellPosition.row : self.draggingIndexPath.row;
-            NSInteger draggedCellOriginalPosition = self.draggingIndexPath.row;
-            
-            NSInteger renderedRow = indexPath.row;
-            //if(positionRow == thisRow) row = self.draggingIndexPath.row;
-            if(renderedRow >= draggedCellOriginalPosition && draggedCellPosition > renderedRow){
-                row = renderedRow+1;
-            }
-            else if(renderedRow <= draggedCellOriginalPosition && draggedCellPosition < renderedRow){
-                row = renderedRow-1;
-            }
+        NSInteger index = [self.filteredItems indexOfObject:item];
+        if(index != NSNotFound) return numberOfItems += index;
+    }
+    return -1;
+}
+-(NSIndexPath*)indexPathForItem:(KPToDo*)item{
+    if(self.isSorted){
+        NSInteger sectionIndex = 0;
+        for(NSArray *array in self.sortedItems){
+            NSInteger index = [array indexOfObject:item];
+            if(index != NSNotFound) return [NSIndexPath indexPathForItem:index inSection:sectionIndex];
+            sectionIndex++;
         }
-        return [self.filteredItems objectAtIndex:row];
+    }
+    else{
+        NSInteger index = [self.filteredItems indexOfObject:item];
+        if(index != NSNotFound) return [NSIndexPath indexPathForItem:index inSection:0];
+    }
+    return nil;
+}
+-(KPToDo *)itemForIndexPath:(NSIndexPath *)indexPath{
+    @try {
+        if(self.isSorted){
+            KPToDo *toDo = [[self.sortedItems objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+            return toDo;
+        }
+        else{
+            NSInteger row = indexPath.row;
+            if(self.draggingIndexPath){
+                NSInteger draggedCellPosition = self.draggedCellPosition ? self.draggedCellPosition.row : self.draggingIndexPath.row;
+                NSInteger draggedCellOriginalPosition = self.draggingIndexPath.row;
+                
+                NSInteger renderedRow = indexPath.row;
+                //if(positionRow == thisRow) row = self.draggingIndexPath.row;
+                if(renderedRow >= draggedCellOriginalPosition && draggedCellPosition > renderedRow){
+                    row = renderedRow+1;
+                }
+                else if(renderedRow <= draggedCellOriginalPosition && draggedCellPosition < renderedRow){
+                    row = renderedRow-1;
+                }
+            }
+            if(row >= self.filteredItems.count) return nil;
+            return [self.filteredItems objectAtIndex:row];
+        }
+    }
+    @catch (NSException *exception) {
+        return nil;
     }
 }
 -(NSString *)titleForSection:(NSInteger)section{

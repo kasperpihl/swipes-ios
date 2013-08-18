@@ -28,12 +28,14 @@
 #import "KPBlurry.h"
 #import "WalkthroughViewController.h"
 #import "UIColor+Utilities.h"
-#import "KPDayPicker.h"
 #import "NotificationHandler.h"
 #import "PlusAlertView.h"
 #import "UpgradeViewController.h"
 #import "KPParseCoreData.h"
 #import "GAI.h"
+#import "KPRepeatPicker.h"
+#import "NSDate-Utilities.h"
+
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
@@ -206,9 +208,9 @@ static RootViewController *sharedObject;
 }
 
 -(void)openApp{
-    NSLog(@"setting up stuff");
-    if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:5]]) [self resetRoot];
+    if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:5]]);
     else [[[self menuViewController] currentViewController] update];
+    //[self resetRoot];
 }
 -(void)closeApp{
     self.lastClose = [NSDate date];
@@ -225,6 +227,7 @@ static RootViewController *sharedObject;
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
+    
     BLURRY.delegate = self;
     self.sideMenu = kSideMenu;
     self.sideMenu.backgroundImage = [tbackground(TaskTableGradientBackground) image];

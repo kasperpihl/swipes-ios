@@ -19,7 +19,7 @@
 @property (nonatomic,weak) NSObject<ToDoVCDelegate> *delegate;
 @property (nonatomic,strong) KPToDo *model;
 @property (nonatomic,weak) IBOutlet UIView *contentView;
-@property (nonatomic,strong) ToDoCell *injectedCell;
-@property (nonatomic,strong) NSIndexPath *injectedIndexPath;
 @property (nonatomic,weak) KPSegmentedViewController *segmentedViewController;
+-(void)injectInCell:(UITableViewCell*)cell;
+-(void)update;
 @end

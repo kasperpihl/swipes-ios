@@ -319,7 +319,6 @@
     CGFloat delta = (self.currentSelectedIndex < selectedIndex) ? width : -width;
 	ToDoListViewController *oldViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
     if(selectedIndex == self.currentSelectedIndex){
-        //[oldViewController.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
         return;
     }
     self.segmentedControl.userInteractionEnabled = NO;
@@ -329,7 +328,7 @@
     newViewController.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(newViewController.tableView.tableHeaderView.bounds));
 	[self addChildViewController:newViewController];
 	newViewController.view.frame = CGRectSetPos(self.contentView.frame, delta, 0);
-    CGFloat duration = animated ? 0.4 : 0.0;
+    CGFloat duration = animated ?  0.4 : 0.0;
     [self transitionFromViewController:oldViewController
 					  toViewController:newViewController
 							  duration:duration
@@ -340,12 +339,9 @@
                             }
 							completion:^(BOOL finished) {
                                 self.segmentedControl.userInteractionEnabled = YES;
-								if (finished) {
-									
-									[newViewController didMoveToParentViewController:self];
-									
-									self.currentSelectedIndex = selectedIndex;
-								}
+                                [newViewController didMoveToParentViewController:self];
+                                
+                                self.currentSelectedIndex = selectedIndex;
 							}];
 }
 -(ToDoListViewController*)currentViewController{
@@ -353,6 +349,7 @@
     return currentViewController;
 }
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl{
+    self.showingModel = nil;
     [self changeViewControllerAnimated:YES];
     //[self highlightButton:KPSegmentButtonSchedule];
 	
