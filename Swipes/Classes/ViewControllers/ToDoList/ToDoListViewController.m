@@ -76,28 +76,35 @@
     [self didUpdateCells];
 }
 -(void)setIsShowingItem:(BOOL)isShowingItem{
-    NSString *isShowing = isShowingItem ? @"isShowing" : @"!isShowing";
-    NSLog(@"%@",isShowing);
-    _isShowingItem = isShowingItem;
+    
     self.tableView.scrollEnabled = !isShowingItem;
-    [self deselectAllRows:self];
     if(isShowingItem){
         [[self parent] setLock:isShowingItem animated:NO];
-        NSIndexPath *indexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
-        [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-        [self.selectedRows addObject:indexPath];
+        [self selectShowingItem];
     }
-    else{
+    else if (_isShowingItem != isShowingItem){
         [[self parent] setLock:NO];
         [self.showingViewController.view removeFromSuperview];
     }
+    _isShowingItem = isShowingItem;
+}
+-(void)selectShowingItem{
+    NSIndexPath *indexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
+    if(!indexPath) return;
+    [self deselectAllRows:self];
+    [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    [self.selectedRows addObject:indexPath];
 }
 -(void)didUpdateItemHandler:(ItemHandler *)handler{
-    if(self.parent.showingModel && [self.itemHandler.filteredItems containsObject:self.parent.showingModel]) self.isShowingItem = YES;
-    else self.isShowingItem = NO;
+    if(self.parent.showingModel && [self.itemHandler.filteredItems containsObject:self.parent.showingModel]){
+        [self deselectAllRows:self];
+        self.isShowingItem = YES;
+    }else self.isShowingItem = NO;
+    if(self.parent.showingModel && !self.isShowingItem && [self.itemHandler.items containsObject:self.parent.showingModel]) self.parent.showingModel = nil;
     [self.tableView reloadData];
     dispatch_async(dispatch_get_main_queue(), ^{
         if(self.isShowingItem){
+            [self selectShowingItem];
             NSIndexPath *cellIndexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
             NSInteger numberOfCellsBefore = [self.itemHandler totalNumberOfItemsBeforeItem:self.parent.showingModel];
             NSInteger numberOfSections = cellIndexPath.section;
@@ -240,6 +247,7 @@
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     self.parent.showingModel = toDo;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self deselectAllRows:self];
     self.isShowingItem = YES;
     
     ToDoCell *cell = (ToDoCell*)[self.tableView cellForRowAtIndexPath:indexPath];
@@ -257,6 +265,7 @@
     NSLog(@"did press close");
     NSIndexPath *indexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
     self.parent.showingModel = nil;
+    [self deselectAllRows:self];
     self.isShowingItem = NO;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     if(!CGPointEqualToPoint(self.savedContentOffset,CGPointZero)){
@@ -417,6 +426,7 @@
 -(void)deleteSelectedItems:(id)sender{
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
+    NSLog(@"indexPaths: %@",selectedIndexPaths);
     NSMutableArray *toDos = [NSMutableArray array];
     for(NSIndexPath *indexPath in selectedIndexPaths){
         [toDos addObject:[self.itemHandler itemForIndexPath:indexPath]];
@@ -455,6 +465,7 @@
 -(void)cleanUpAfterMovingAnimated:(BOOL)animated{
     
     [self.selectedRows removeAllObjects];
+    self.isShowingItem = NO;
     self.isLonelyRider = NO;
     self.swipingCell = nil;
     [self didUpdateCells];

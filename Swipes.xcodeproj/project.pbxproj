@@ -277,6 +277,8 @@
 		A7E2D94717B3F258007BDE00 /* DayPickerSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */; };
 		A7E2D94A17B4FE0F007BDE00 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D94917B4FE0F007BDE00 /* UpgradeViewController.m */; };
 		A7E8FB0917462F3600CC2D26 /* AKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */; };
+		A7ECD37F17C14C1200F9BCF0 /* edit_repeat_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ECD37D17C14C1200F9BCF0 /* edit_repeat_icon.png */; };
+		A7ECD38017C14C1200F9BCF0 /* edit_repeat_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ECD37E17C14C1200F9BCF0 /* edit_repeat_icon@2x.png */; };
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
 		A7F4066517296BC700DDE644 /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066417296BC700DDE644 /* AddPanelView.m */; };
 		A7F4066B17296BF100DDE644 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066817296BF100DDE644 /* ToDoCell.m */; };
@@ -653,6 +655,8 @@
 		A7E8FB001746276900CC2D26 /* DesignSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DesignSettings.h; sourceTree = "<group>"; };
 		A7E8FB0217462F3600CC2D26 /* AKSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKSegmentedControl.h; sourceTree = "<group>"; };
 		A7E8FB0317462F3600CC2D26 /* AKSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKSegmentedControl.m; sourceTree = "<group>"; };
+		A7ECD37D17C14C1200F9BCF0 /* edit_repeat_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_repeat_icon.png; sourceTree = "<group>"; };
+		A7ECD37E17C14C1200F9BCF0 /* edit_repeat_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_repeat_icon@2x.png"; sourceTree = "<group>"; };
 		A7F4065F17294ECE00DDE644 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		A7F4066017294ECE00DDE644 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		A7F4066317296BC700DDE644 /* AddPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPanelView.h; sourceTree = "<group>"; };
@@ -779,6 +783,8 @@
 		A717BF0C175F5E7B004791BF /* EditMode */ = {
 			isa = PBXGroup;
 			children = (
+				A7ECD37D17C14C1200F9BCF0 /* edit_repeat_icon.png */,
+				A7ECD37E17C14C1200F9BCF0 /* edit_repeat_icon@2x.png */,
 				A70004291762A02A008CB715 /* edit_alarm_icon.png */,
 				A700042A1762A02A008CB715 /* edit_notes_icon.png */,
 				A700042B1762A02A008CB715 /* edit_tags_icon.png */,
@@ -1820,6 +1826,8 @@
 				A77135B417BABD080090BE89 /* NavBarLandscape1.png in Resources */,
 				A77135B517BABD080090BE89 /* NavBarLandscape@2x.png in Resources */,
 				A77135B617BABD080090BE89 /* NavBarLandscape@2x1.png in Resources */,
+				A7ECD37F17C14C1200F9BCF0 /* edit_repeat_icon.png in Resources */,
+				A7ECD38017C14C1200F9BCF0 /* edit_repeat_icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -3,9 +3,9 @@
 @interface KPToDo : _KPToDo {}
 @property (nonatomic,strong) NSArray *textTags;
 -(void)changeToOrder:(NSInteger)newOrder;
--(void)complete;
+-(BOOL)complete;
 -(CellType)cellTypeForTodo;
--(void)scheduleForDate:(NSDate*)date;
+-(BOOL)scheduleForDate:(NSDate*)date;
 -(NSString *)stringifyTags;
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags;
 -(void)updateTagSet:(NSSet*)tagsSet withTags:(NSArray*)tags remove:(BOOL)remove;

@@ -27,6 +27,7 @@
 @property (nonatomic) BOOL hasFilter;
 @property (nonatomic) BOOL hasSearched;
 @property (nonatomic) BOOL isSorted;
+@property (nonatomic,strong) NSArray *items;
 @property (nonatomic, strong) NSArray *filteredItems;
 @property (nonatomic) NSIndexPath *draggingIndexPath;
 @property (nonatomic) NSInteger itemCounter;

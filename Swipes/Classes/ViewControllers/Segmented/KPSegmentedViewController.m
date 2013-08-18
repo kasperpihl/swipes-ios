@@ -138,7 +138,7 @@
     KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:titleString message:@"This can't be undone" block:^(BOOL succeeded, NSError *error) {
         [BLURRY dismissAnimated:YES];
         if(succeeded){
-            ToDoListViewController *viewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
+            ToDoListViewController *viewController = [self currentViewController];
             [viewController deleteSelectedItems:self];
             [self setCurrentState:KPControlCurrentStateAdd];
         }
@@ -338,6 +338,7 @@
                                 newViewController.view.frame = CGRectMake(0, 0, width, height);
                             }
 							completion:^(BOOL finished) {
+                                NSLog(@"changed to:%i",selectedIndex);
                                 self.segmentedControl.userInteractionEnabled = YES;
                                 [newViewController didMoveToParentViewController:self];
                                 
@@ -346,6 +347,7 @@
 }
 -(ToDoListViewController*)currentViewController{
     ToDoListViewController *currentViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
+    NSLog(@"current:%@",currentViewController);
     return currentViewController;
 }
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl{

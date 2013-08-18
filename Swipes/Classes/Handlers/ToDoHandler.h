@@ -17,8 +17,8 @@
 -(UIColor*)colorForCellType:(CellType)type;
 -(UIColor*)strongColorForCellType:(CellType)type;
 -(NSString*)iconNameForCellType:(CellType)type;
--(void)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date;
--(void)completeToDos:(NSArray*)toDoArray;
+-(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date;
+-(NSArray*)completeToDos:(NSArray*)toDoArray;
 -(void)changeToDos:(NSArray*)toDos title:(NSString *)title save:(BOOL)save;
 -(void)deleteToDos:(NSArray*)toDos save:(BOOL)save;
 -(BOOL)updateRepeatedToDos;

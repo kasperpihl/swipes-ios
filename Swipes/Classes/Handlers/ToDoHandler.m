@@ -61,22 +61,28 @@ static ToDoHandler *sharedObject;
 -(void)save{
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
 }
--(void)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date{
+-(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date{
+    NSMutableArray *movedToDos = [NSMutableArray array];
     for(KPToDo *toDo in toDoArray){
-        [toDo scheduleForDate:date];
+        BOOL movedToDo = [toDo scheduleForDate:date];
+        if(movedToDo) [movedToDos addObject:toDo];
     }
     [self save];
     [ANALYTICS incrementKey:NUMBER_OF_SCHEDULES_KEY withAmount:toDoArray.count];
     if(!date) [ANALYTICS incrementKey:NUMBER_OF_UNSPECIFIED_TASKS_KEY withAmount:toDoArray.count];
     [NOTIHANDLER updateLocalNotifications];
+    return [movedToDos copy];
 }
--(void)completeToDos:(NSArray*)toDoArray{
+-(NSArray*)completeToDos:(NSArray*)toDoArray{
+    NSMutableArray *movedToDos = [NSMutableArray array];
     for(KPToDo *toDo in toDoArray){
-        [toDo complete];
+        BOOL movedToDo = [toDo complete];
+        if(movedToDo) [movedToDos addObject:toDo];
     }
     [self save];
     [NOTIHANDLER updateLocalNotifications];
     [ANALYTICS incrementKey:NUMBER_OF_COMPLETED_KEY withAmount:toDoArray.count];
+    return [movedToDos copy];
 }
 -(MCSwipeTableViewCellActivatedDirection)directionForCellType:(CellType)type{
     MCSwipeTableViewCellActivatedDirection direction = MCSwipeTableViewCellActivatedDirectionBoth;

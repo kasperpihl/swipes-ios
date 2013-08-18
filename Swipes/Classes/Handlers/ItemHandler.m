@@ -13,7 +13,6 @@
 @interface ItemHandler ()
 @property (nonatomic,strong) NSMutableArray *titleArray;
 @property (nonatomic,strong) NSMutableArray *sortedItems;
-@property (nonatomic,strong) NSArray *items;
 @property (nonatomic,strong) NSString *searchString;
 @property (nonatomic,strong) NSIndexPath *draggedCellPosition;
 @end

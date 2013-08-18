@@ -114,22 +114,7 @@
     newToDo.title = self.title;
     return newToDo;
 }
--(void)completeRepeatedTask{
-    if(self.repeatOptionValue == RepeatNever) return;
-    NSDate *next = [self nextDateFrom:self.repeatedDate];
-    
-    NSInteger numberOfRepeated = self.numberOfRepeatedValue;
-    while ([next isInPast]){
-        next = [self nextDateFrom:next];
-    }
-    KPToDo *toDoCopy = [self deepCopy];
-    toDoCopy.copyOf = self;
-    toDoCopy.numberOfRepeatedValue = numberOfRepeated;
-    [toDoCopy complete];
-    [self scheduleForDate:next];
-    self.repeatedDate = next;
-    self.numberOfRepeated = [NSNumber numberWithInteger:numberOfRepeated++];
-}
+
 -(NSString *)readableTitleForStatus{
     NSString *title;
     CellType cellType = [self cellTypeForTodo];
@@ -227,18 +212,40 @@
     /*if(!self.readableTags) [self updateTagsString];
     return self.readableTags;*/
 }
--(void)complete{
+-(void)completeRepeatedTask{
+    if(self.repeatOptionValue == RepeatNever) return;
+    NSDate *next = [self nextDateFrom:self.repeatedDate];
+    
+    NSInteger numberOfRepeated = self.numberOfRepeatedValue;
+    while ([next isInPast]){
+        next = [self nextDateFrom:next];
+    }
+    KPToDo *toDoCopy = [self deepCopy];
+    toDoCopy.copyOf = self;
+    toDoCopy.numberOfRepeatedValue = numberOfRepeated;
+    [toDoCopy complete];
+    [self scheduleForDate:next];
+    self.repeatedDate = next;
+    self.numberOfRepeated = [NSNumber numberWithInteger:numberOfRepeated++];
+}
+-(BOOL)complete{
     if(self.repeatOptionValue > RepeatNever && !self.copyOf){
         [self completeRepeatedTask];
-        return;
+        return ([self cellTypeForTodo] != CellTypeSchedule);
     }
-    self.schedule = nil;
-    self.state = @"done";
-    self.completionDate = [NSDate date];
+    else{
+        self.schedule = nil;
+        self.state = @"done";
+        self.completionDate = [NSDate date];
+        return YES;
+    }
 }
--(void)scheduleForDate:(NSDate*)date{
+-(BOOL)scheduleForDate:(NSDate*)date{
+    CellType oldCell = [self cellTypeForTodo];
     self.completionDate = nil;
     self.schedule = date;
     self.state = @"scheduled";
+    CellType newCell = [self cellTypeForTodo];
+    return (oldCell != newCell);
 }
 @end

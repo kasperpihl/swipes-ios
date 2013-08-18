@@ -140,7 +140,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         CGRectSetY(self.repeatPicker, DEFAULT_ROW_HEIGHT);
         [self.repeatedContainer addSubview:self.repeatPicker];
         
-        [self addAndGetImage:@"edit_alarm_icon" inView:self.repeatedContainer];
+        [self addAndGetImage:@"edit_repeat_icon" inView:self.repeatedContainer];
         self.repeatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.repeatedContainer.frame.size.height)];
         self.repeatedLabel.backgroundColor = CLEAR;
         [self setColorsFor:self.repeatedLabel];
