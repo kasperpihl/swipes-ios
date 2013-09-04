@@ -382,8 +382,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.dotView.backgroundColor = [TODOHANDLER colorForCellType:[self.model cellTypeForTodo]];
 }
 -(void)updateSchedule{
-    if(!self.model.schedule || [self.model.schedule isInPast]){
-        self.alarmLabel.text = @"Remind me";
+    if(!self.model.schedule){// || [self.model.schedule isInPast]){
+        self.alarmLabel.text = @"Unspecified";
     }
     else{
         self.alarmLabel.text = [self.model readableTime:self.model.schedule showTime:YES];
@@ -409,7 +409,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetY(self.alarmContainer, tempHeight);
     tempHeight += self.alarmContainer.frame.size.height;
     
-    self.repeatedContainer.hidden = (!self.model.schedule || [self.model.schedule isInPast]);
+    self.repeatedContainer.hidden = !self.model.schedule;
     if(!self.repeatedContainer.hidden){
         CGFloat repeatHeight = (self.activeEditMode == KPEditModeRepeat) ? DEFAULT_ROW_HEIGHT+kRepeatPickerHeight : DEFAULT_ROW_HEIGHT;
         CGRectSetHeight(self.repeatedContainer, repeatHeight);

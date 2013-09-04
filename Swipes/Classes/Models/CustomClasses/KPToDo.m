@@ -14,9 +14,10 @@
 @synthesize textTags = _textTags;
 @synthesize tagString = _tagString;
 -(CellType)cellTypeForTodo{
+    NSDate *now = [NSDate date];
     if([self.state isEqualToString:@"done"]) return CellTypeDone;
     else if([self.state isEqualToString:@"scheduled"]){
-        if([self.schedule isLaterThanDate:[NSDate date]] || !self.schedule) return CellTypeSchedule;
+        if(!self.schedule || ([self.schedule isLaterThanDate:now] && ![self.schedule isEqualToDate:now])) return CellTypeSchedule;
         else return CellTypeToday;
     }
     return CellTypeNone;
@@ -230,8 +231,10 @@
 }
 -(BOOL)complete{
     if(self.repeatOptionValue > RepeatNever && !self.copyOf){
+        CellType oldCell = [self cellTypeForTodo];
         [self completeRepeatedTask];
-        return ([self cellTypeForTodo] != CellTypeSchedule);
+        CellType newCell = [self cellTypeForTodo];
+        return (oldCell != newCell);
     }
     else{
         self.schedule = nil;

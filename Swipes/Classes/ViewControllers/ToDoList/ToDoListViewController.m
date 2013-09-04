@@ -374,13 +374,8 @@
     if(cell != self.swipingCell) return;
     if(self.isHandlingTrigger) return;
     self.isHandlingTrigger = YES;
-    NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
-    NSMutableArray *toDosArray = [NSMutableArray array];
-    for(NSIndexPath *indexPath in self.selectedRows){
-        KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
-        [toDosArray addObject:toDo];
-        [indexSet addIndex:indexPath.row];
-    }
+    NSArray *toDosArray = [self selectedItems];
+    NSArray *movedItems;
     __block CellType targetCellType = [TODOHANDLER cellTypeForCell:cell.cellType state:state];
     switch (targetCellType) {
         case CellTypeSchedule:{
@@ -392,8 +387,8 @@
                 }
                 else{
                     if([chosenDate isEarlierThanDate:[NSDate date]]) targetCellType = CellTypeToday;
-                    [TODOHANDLER scheduleToDos:toDosArray forDate:chosenDate];
-                    [self moveIndexSet:indexSet toCellType:targetCellType];
+                    NSArray *movedItems = [TODOHANDLER scheduleToDos:toDosArray forDate:chosenDate];
+                    [self moveItems:movedItems toCellType:targetCellType];
                 }
                 self.isHandlingTrigger = NO;
             }];
@@ -402,17 +397,18 @@
             return;
         }
         case CellTypeToday:
-            [TODOHANDLER scheduleToDos:toDosArray forDate:[NSDate date]];
+            movedItems = [TODOHANDLER scheduleToDos:toDosArray forDate:[NSDate date]];
             break;
         case CellTypeDone:
-            [TODOHANDLER completeToDos:toDosArray];
+            movedItems = [TODOHANDLER completeToDos:toDosArray];
+            NSLog(@"total: %i movedItemsCount:%i",toDosArray.count,movedItems.count);
             break;
         case CellTypeNone:
             [self returnSelectedRowsAndBounce:NO];
             self.isHandlingTrigger = NO;
             return;
     }
-    [self moveIndexSet:indexSet toCellType:targetCellType];
+    [self moveItems:movedItems toCellType:targetCellType];
     self.isHandlingTrigger = NO;
 }
 -(void)swipeTableViewCell:(ToDoCell *)cell slidedIntoState:(MCSwipeTableViewCellState)state{
@@ -433,22 +429,41 @@
         [indexSet addIndex:indexPath.row];
     }
     [TODOHANDLER deleteToDos:toDos save:YES];
-    [self removeItemsForIndexSet:indexSet];
+    [self removeItems:[self selectedItems]];
 }
--(void)removeItemsForIndexSet:(NSIndexSet*)indexSet{
+-(void)removeItems:(NSArray*)items{
     [self runBeforeMoving];
-    NSIndexSet *deletedSections = [self.itemHandler removeItemsForIndexSet:indexSet];
-    [self.tableView beginUpdates];
-    [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
-    if(deletedSections && deletedSections.count > 0) [self.tableView deleteSections:deletedSections withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView endUpdates];
-    [self cleanUpAfterMovingAnimated:YES];
+    //if(items.count == 0) return;
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    for(KPToDo *toDo in items){
+        NSIndexPath *toDoIP = [self.itemHandler indexPathForItem:toDo];
+        if(toDoIP) [indexPaths addObject:toDoIP];
+    }
+    NSIndexSet *deletedSections = [self.itemHandler removeItems:items];
+    
+    NSLog(@"selected: %i items: %i indexPaths: %i",self.selectedRows.count,items.count,indexPaths.count);
+    if(self.selectedRows.count != indexPaths.count){
+        [self update];
+        [self cleanUpAfterMovingAnimated:YES];
+    }
+    else{
+        [self.tableView beginUpdates];
+        //[self.tableView reloadData];
+        [CATransaction begin];
+        [CATransaction setCompletionBlock: ^{
+            [self cleanUpAfterMovingAnimated:YES];
+        }];
+        [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
+        if(deletedSections && deletedSections.count > 0) [self.tableView deleteSections:deletedSections withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView endUpdates];
+        [CATransaction commit];
+    }
 }
--(void)moveIndexSet:(NSIndexSet*)indexSet toCellType:(CellType)cellType{
+-(void)moveItems:(NSArray*)items toCellType:(CellType)cellType{
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
     [[self parent] highlightButton:(KPSegmentButtons)cellType-1];
     if(self.cellType != cellType){
-        [self removeItemsForIndexSet:indexSet];
+        [self removeItems:items];
     }
     else{
         [self returnSelectedRowsAndBounce:YES];

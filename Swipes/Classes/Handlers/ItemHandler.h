@@ -44,6 +44,6 @@
 -(void)addItem:(NSString *)item;
 -(void)reloadData;
 -(void)refresh;
--(NSIndexSet*)removeItemsForIndexSet:(NSIndexSet*)indexSet;
+-(NSIndexSet*)removeItems:(NSArray*)items;
 -(void)moveItem:(NSIndexPath*)fromIndexPath toIndexPath:(NSIndexPath*)toIndexPath;
 @end

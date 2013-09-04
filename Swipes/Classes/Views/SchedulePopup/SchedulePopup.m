@@ -95,9 +95,12 @@ typedef enum {
 -(NSDate*)dateForButton:(KPScheduleButtons)button{
     NSDate *date;
     switch (button) {
-        case KPScheduleButtonLaterToday:
-            date = [[NSDate dateWithHoursFromNow:3] dateToNearest15Minutes];
+        case KPScheduleButtonLaterToday:{
+            NSDate *laterToday = (NSDate*)[kSettings valueForSetting:SettingLaterToday];
+            NSInteger minutes = laterToday.hour * 60 + laterToday.minute;
+            date = [[NSDate dateWithMinutesFromNow:minutes] dateToNearest15Minutes];
             break;
+        }
         case KPScheduleButtonThisEvening:{
             NSDate *eveningStartTimeDate = (NSDate*)[kSettings valueForSetting:SettingEveningStartTime];
             date = [NSDate dateThisOrTheNextDayWithHours:eveningStartTimeDate.hour minutes:eveningStartTimeDate.minute];
@@ -113,14 +116,18 @@ typedef enum {
             [self setStartingTimeForDate:&date];
             break;
         }
-        case KPScheduleButtonThisWeekend:
-            date = [NSDate dateThisOrNextWeekWithDay:7 hours:10 minutes:0];
+        case KPScheduleButtonThisWeekend:{
+            NSDate *thisWeekend = (NSDate*)[kSettings valueForSetting:SettingWeekendStart];
+            date = [NSDate dateThisOrNextWeekWithDay:thisWeekend.weekday hours:10 minutes:0];
             [self setStartingTimeForDate:&date];
             break;
-        case KPScheduleButtonNextWeek:
-            date = [NSDate dateThisOrNextWeekWithDay:2 hours:9 minutes:0];
+        }
+        case KPScheduleButtonNextWeek:{
+            NSDate *nextWeek = (NSDate*)[kSettings valueForSetting:SettingWeekStart];
+            date = [NSDate dateThisOrNextWeekWithDay:nextWeek.weekday hours:9 minutes:0];
             [self setStartingTimeForDate:&date];
             break;
+        }
         case KPScheduleButtonUnscheduled:
         case KPScheduleButtonSpecificTime:
         case KPScheduleButtonLocation:
@@ -308,7 +315,9 @@ typedef enum {
         /* Schedule buttons */
         UIButton *laterTodayButton = [self buttonForScheduleButton:KPScheduleButtonLaterToday title:@"Later Today"];
         [contentView addSubview:laterTodayButton];
-        NSString *thisEveText = ([[NSDate date] hour] >= 19) ? @"Tomorrow Eve" : @"This Evening";
+        NSDate *eveningStartTimeDate = (NSDate*)[kSettings valueForSetting:SettingEveningStartTime];
+        NSDate *thisEveningTime = [[NSDate date] dateAtHours:eveningStartTimeDate.hour minutes:eveningStartTimeDate.minute];
+        NSString *thisEveText = ([[NSDate date] isLaterThanDate:thisEveningTime]) ? @"Tomorrow Eve" : @"This Evening";
         UIButton *thisEveningButton = [self buttonForScheduleButton:KPScheduleButtonThisEvening title:thisEveText];
         [contentView addSubview:thisEveningButton];
         UIButton *tomorrowButton = [self buttonForScheduleButton:KPScheduleButtonTomorrow title:@"Tomorrow"];

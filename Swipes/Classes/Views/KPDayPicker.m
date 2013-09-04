@@ -15,6 +15,7 @@
 #import "KPDayPicker.h"
 #import "UIColor+Utilities.h"
 #import "UIButton+PassTouch.h"
+#import "UIView+Utilities.h"
 @interface KPDayPicker ()
 @property (nonatomic) IBOutletCollection(UILabel) NSArray *dayButtons;
 @property (nonatomic) UIButton *selectedButton;
@@ -64,6 +65,7 @@
 -(id)initWithHeight:(CGFloat)height selectedDay:(NSInteger)selectedDay{
     self = [super initWithFrame:CGRectMake(0, 0, 320, height)];
     if(self){
+        
         self.userInteractionEnabled = YES;
         self.textColor = kDefTextColor;
         self.backgroundColor = kDefBackgroundColor;
@@ -88,6 +90,10 @@
         self.font = kDefFont;
         self.selectedDay = selectedDay;
         self.selectedColor = kDefSelectedColor;
+        UIButton *passthroughButton = [[UIButton alloc] initWithFrame:self.bounds];
+        [passthroughButton makeInsetShadowWithRadius:2 Color:alpha([UIColor blackColor],0.3) Directions:@[@"top",@"bottom"]];
+        [self addSubview:passthroughButton];
+        
     }
     return self;
 }

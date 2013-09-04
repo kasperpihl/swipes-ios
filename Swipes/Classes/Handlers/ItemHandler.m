@@ -288,7 +288,7 @@
         }
     }
 }
--(NSIndexSet*)removeItemsForIndexSet:(NSIndexSet *)indexSet{
+-(NSIndexSet*)removeItems:(NSArray*)items{
     NSMutableIndexSet *deletedSections = [NSMutableIndexSet indexSet];
     if(self.isSorted){
         NSArray *oldKeys = [self.titleArray copy];
@@ -303,8 +303,8 @@
     }
     else{
         NSMutableArray *newItemsMutable = [self.items mutableCopy];
-        for(NSInteger i = 0 ; i < self.filteredItems.count ; i++){
-            if([indexSet containsIndex:i]) [newItemsMutable removeObject:[self.filteredItems objectAtIndex:i]];
+        for(KPToDo *toDo in self.filteredItems){
+            if([items containsObject:toDo]) [newItemsMutable removeObject:toDo];
         }
         self.items = [newItemsMutable copy];
         NSInteger counter = (self.hasFilter) ? self.itemCounterWithFilter : self.itemCounter;
