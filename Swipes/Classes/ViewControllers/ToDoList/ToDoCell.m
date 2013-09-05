@@ -23,6 +23,12 @@
 #define INDICATOR_HEIGHT 23
 #define INDICATOR_WIDTH 1
 
+#define kIconSpacing 5
+#define kIconSize 8
+
+#define kTimeLabelMarginRight 5
+
+
 #define LABEL_X 42
 #define TITLE_DELTA_Y 2
 #define TITLE_Y (TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
@@ -49,6 +55,9 @@
 @property (nonatomic,weak) IBOutlet UIView *outlineView;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
 @property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
+
+@property (nonatomic,strong) UIImageView *notesIcon;
+@property (nonatomic,strong) UIImageView *recurringIcon;
 @end
 @implementation ToDoCell
 
@@ -106,6 +115,14 @@
         self.dotView = [self.contentView viewWithTag:DOT_VIEW_TAG];
         self.outlineView = [self.contentView viewWithTag:OUTLINE_TAG];
         
+        self.notesIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cell_note_icon"]];
+        
+        self.notesIcon.hidden = YES;
+        [self.contentView addSubview:self.notesIcon];
+        self.recurringIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cell_recurring_icon"]];
+        self.recurringIcon.hidden = YES;
+        [self.contentView addSubview:self.recurringIcon];
+        
         UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
         alarmLabel.tag = ALARM_LABEL_TAG;
         alarmLabel.font = CELL_ALARM_FONT;
@@ -123,7 +140,11 @@
     CGFloat titleY = showBottomLine ? TITLE_Y : ((CELL_HEIGHT - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
     CGRectSetY(self.tagsLabel, self.titleLabel.frame.origin.y+self.titleLabel.frame.size.height+LABEL_SPACE);
-    self.alarmLabel.center = CGPointMake(self.alarmLabel.center.x, self.tagsLabel.center.y);
+    CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y);
+    CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y);
+    /*if(showBottomLine) self.alarmLabel.center = CGPointMake(self.alarmLabel.center.x, self.tagsLabel.center.y);
+    else self.alarmLabel.center = CGPointMake(self.alarmLabel.center.x, CELL_HEIGHT/2);*/
+    CGRectSetCenterY(self.alarmLabel, self.titleLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
 }
 -(void)hideContent:(BOOL)hide animated:(BOOL)animated{
@@ -154,6 +175,7 @@
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags{
     BOOL showBottomLine = YES;
     self.titleLabel.text = toDo.title;
+    
     NSString *tagString = [toDo stringifyTags];
     if(selectedTags && selectedTags.count > 0 && [self.tagsLabel respondsToSelector:@selector(setAttributedText:)] && tagString && tagString.length > 0){
         [self.tagsLabel setAttributedText:[toDo stringForSelectedTags:selectedTags]];
@@ -166,6 +188,24 @@
         self.tagsLabel.text = tagString;
     }
     CGFloat deltaX = LABEL_X;
+    self.notesIcon.hidden = YES;
+    self.recurringIcon.hidden = YES;
+    
+    
+    if(toDo.notes && toDo.notes.length > 0){
+        self.notesIcon.hidden = NO;
+        showBottomLine = YES;
+        CGRectSetX(self.notesIcon, deltaX);
+        deltaX += self.notesIcon.frame.size.width + kIconSpacing;
+    }
+    if(toDo.repeatOptionValue > RepeatNever){
+        self.recurringIcon.hidden = NO;
+        showBottomLine = YES;
+        CGRectSetX(self.recurringIcon, deltaX);
+        deltaX += self.recurringIcon.frame.size.width + kIconSpacing;
+    }
+    CGRectSetX(self.tagsLabel,deltaX);
+    
     self.alarmLabel.hidden = YES;
     if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
         NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
@@ -173,12 +213,10 @@
         self.alarmLabel.text = dateInString;
         [self.alarmLabel sizeToFit];
         CGRectSetWidth(self.alarmLabel, self.alarmLabel.frame.size.width+2*ALARM_SPACING);
-        self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, deltaX, self.tagsLabel.center.y-(self.alarmLabel.frame.size.height/2)-ALARM_HACK);
-        deltaX += self.alarmLabel.frame.size.width + ICON_SPACING;
+        self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, self.frame.size.width-self.alarmLabel.frame.size.width-kTimeLabelMarginRight, (self.frame.size.height-self.alarmLabel.frame.size.height)/2);
         self.alarmLabel.hidden = NO;
-        showBottomLine = YES;
     }
-    CGRectSetX(self.tagsLabel,deltaX);
+    
     [self setTextLabels:showBottomLine];
 }
 -(void)setIconsForToDo:(KPToDo*)toDo{
@@ -220,8 +258,6 @@
         [self setThirdIconName:[TODOHANDLER iconNameForCellType:thirdCell]];
         [self setFourthIconName:[TODOHANDLER iconNameForCellType:fourthCell]];
         self.activatedDirection = [TODOHANDLER directionForCellType:cellType];
-        
-        
     }
 }
 @end

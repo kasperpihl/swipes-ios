@@ -10,8 +10,8 @@
 
 
 #define TOOLBAR_HEIGHT GLOBAL_TOOLBAR_HEIGHT
-#define DEFAULT_ROW_HEIGHT 50
-
+#define DEFAULT_ROW_HEIGHT 60
+#define SCHEDULE_ROW_HEIGHTS 46
 #define LABEL_X 52
 #define TITLE_LABEL_X 42
 
@@ -26,8 +26,8 @@
 
 #define TAGS_LABEL_RECT CGRectMake(LABEL_X,TAGS_LABEL_PADDING,320-LABEL_X-10,500)
 
-#define TAGS_LABEL_PADDING 15.5
-#define NOTES_PADDING 10.5
+#define TAGS_LABEL_PADDING 18.5
+#define NOTES_PADDING 13.5
 #define kRepeatPickerHeight 70
 
 
@@ -111,7 +111,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.titleContainerView addSubview:self.textView];
         [contentView addSubview:self.titleContainerView];
         
-        
         self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.titleContainerView.frame.size.height, 320, contentView.frame.size.height - self.titleContainerView.frame.size.height-TOOLBAR_HEIGHT)];
         self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         self.scrollView.scrollEnabled = YES;
@@ -121,7 +120,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
             Alarm container and button!
         */
-        self.alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
+        self.alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
         [self addAndGetImage:@"edit_alarm_icon" inView:self.alarmContainer];
         self.alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.alarmContainer.frame.size.height)];
         self.alarmLabel.backgroundColor = CLEAR;
@@ -131,13 +130,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self addClickButtonToView:self.alarmContainer action:@selector(pressedAlarm:)];
         [self.scrollView addSubview:self.alarmContainer];
 
-        self.repeatedContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
+        self.repeatedContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
         self.repeatedContainer.userInteractionEnabled = YES;
         self.repeatedContainer.layer.masksToBounds = YES;
         
         self.repeatPicker = [[KPRepeatPicker alloc] initWithHeight:70 selectedDate:[NSDate date] option:RepeatNever];
         self.repeatPicker.delegate = self;
-        CGRectSetY(self.repeatPicker, DEFAULT_ROW_HEIGHT);
+        CGRectSetY(self.repeatPicker, self.repeatedContainer.frame.size.height);
         [self.repeatedContainer addSubview:self.repeatPicker];
         
         [self addAndGetImage:@"edit_repeat_icon" inView:self.repeatedContainer];
@@ -153,7 +152,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             Tags Container with button!
         */
         self.tagsContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
-        
+        //[self addSeperatorToView:self.tagsContainerView];
         [self addAndGetImage:@"edit_tags_icon" inView:self.tagsContainerView];
         
         self.tagsLabel = [[UILabel alloc] initWithFrame:TAGS_LABEL_RECT];
@@ -180,9 +179,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.notesView.backgroundColor = CLEAR;
         [self.notesContainer addSubview:self.notesView];
         
-        [self addClickButtonToView:self.notesContainer action:@selector(pressedNotes:)];
-        
-        
+        [self addClickButtonToView:self.notesContainer action:@selector(pressedNotes:)];        
         [self.scrollView addSubview:self.notesContainer];
         
         
@@ -241,6 +238,19 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [clickedButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:clickedButton];
     return clickedButton;
+}
+-(void)addSeperatorToView:(UIView*)view{
+    CGFloat seperatorHeight = 1;
+    CGFloat leftMargin = LABEL_X;
+    CGFloat rightMargin = LABEL_X/3;
+    
+    UIView *seperator2View = [[UIView alloc] initWithFrame:CGRectMake(leftMargin, 0, view.frame.size.width-rightMargin-leftMargin, seperatorHeight)];
+    UIView *seperatorView = [[UIView alloc] initWithFrame:CGRectMake(leftMargin, view.frame.size.height-seperatorHeight, view.frame.size.width-rightMargin-leftMargin, seperatorHeight)];
+    seperatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    seperator2View.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+    seperatorView.backgroundColor = seperator2View.backgroundColor = tbackground(TaskTableGradientBackground);//tbackground(EditTaskTitleBackground);
+    [view addSubview:seperatorView];
+    [view addSubview:seperator2View];
 }
 -(void)setActiveEditMode:(KPEditMode)activeEditMode{
     if(activeEditMode != _activeEditMode){
@@ -324,32 +334,49 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
 }
 -(void)updateRepeated{
-    if(![self.repeatPicker.selectedDate isEqualToDate:self.model.schedule] || self.repeatPicker.currentOption != self.model.repeatOptionValue)  [self.repeatPicker setSelectedDate:self.model.schedule option:self.model.repeatOptionValue];
+    if(![self.repeatPicker.selectedDate isEqualToDate:self.model.repeatedDate] || self.repeatPicker.currentOption != self.model.repeatOptionValue)  [self.repeatPicker setSelectedDate:self.model.repeatedDate option:self.model.repeatOptionValue];
     NSString* labelText;
+    NSString *timeInString = [UtilityClass timeStringForDate:self.model.repeatedDate];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    BOOL addTime = YES;
     if(self.activeEditMode == KPEditModeRepeat){
         labelText = @"Repeat every...";
     }else{
         switch (self.model.repeatOptionValue) {
-            case RepeatEveryDay:
+            case RepeatEveryDay:{
                 labelText = @"Every day";
                 break;
-            case RepeatEveryMonFriOrSatSun:
-                if(self.model.schedule.isTypicallyWeekend) labelText = @"Saturday and Sunday";
-                else labelText = @"Monday to Friday";
+            }
+            case RepeatEveryMonFriOrSatSun:{
+                if(self.model.repeatedDate.isTypicallyWeekend) labelText = @"Every Saturday and Sunday";
+                else labelText = @"Every Monday to Friday";
                 break;
-            case RepeatEveryWeek:
-                labelText = @"Every week";
+            }
+            case RepeatEveryWeek:{
+                [dateFormatter setDateFormat:@"EEEE"];
+                NSString *weekday = [dateFormatter stringFromDate:self.model.repeatedDate];
+                labelText = [NSString stringWithFormat:@"Every %@",weekday];
                 break;
-            case RepeatEveryMonth:
-                labelText = @"Every month";
+            }
+            case RepeatEveryMonth:{
+                NSString *dateOfMonth = [UtilityClass dayOfMonthForDate:self.model.repeatedDate];
+                labelText = [NSString stringWithFormat:@"Every month the %@",dateOfMonth];
                 break;
-            case RepeatEveryYear:
-                labelText = @"Every year";
+            }
+            case RepeatEveryYear:{
+                NSString *dateOfMonth = [UtilityClass dayOfMonthForDate:self.model.repeatedDate];
+                [dateFormatter setDateFormat:@"MMMM"];
+                NSString *month = [dateFormatter stringFromDate:self.model.repeatedDate];
+                labelText = [NSString stringWithFormat:@"Every year %@ %@",month,dateOfMonth];
                 break;
+            }
             default:
+                addTime = NO;
                 labelText = @"Never repeat";
                 break;
         }
+        if(addTime) labelText = [labelText stringByAppendingFormat:@" at %@",timeInString];
     }
     self.repeatedLabel.text = labelText;
 }
@@ -401,8 +428,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)setModel:(KPToDo *)model{
     if(_model != model){
         _model = model;
-        [self update];
     }
+    [self update];
 }
 -(void)layout{
     CGFloat tempHeight = 0;
@@ -411,7 +438,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
     self.repeatedContainer.hidden = !self.model.schedule;
     if(!self.repeatedContainer.hidden){
-        CGFloat repeatHeight = (self.activeEditMode == KPEditModeRepeat) ? DEFAULT_ROW_HEIGHT+kRepeatPickerHeight : DEFAULT_ROW_HEIGHT;
+        CGFloat repeatHeight = (self.activeEditMode == KPEditModeRepeat) ? SCHEDULE_ROW_HEIGHTS+kRepeatPickerHeight : SCHEDULE_ROW_HEIGHTS;
         CGRectSetHeight(self.repeatedContainer, repeatHeight);
         CGRectSetY(self.repeatedContainer, tempHeight);
         tempHeight += self.repeatedContainer.frame.size.height;

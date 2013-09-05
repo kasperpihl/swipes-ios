@@ -19,11 +19,7 @@
 -(void)blurryWillHide:(KPBlurry *)blurry;
 -(void)blurryDidHide:(KPBlurry *)blurry;
 @end
-typedef enum {
-    PositionCenter,
-    PositionTop,
-    PositionBottom
-} DisplayPosition;
+
 
 @interface KPBlurry : UIViewController
 

@@ -59,6 +59,13 @@ typedef enum {
     RepeatEveryYear,
     RepeatOptionsTotal
 } RepeatOptions;
+
+typedef enum {
+    PositionCenter,
+    PositionTop,
+    PositionBottom
+} DisplayPosition;
+
 typedef void (^voidBlock)(void);
 /* Insert below in pods target if it is logs */
 NS_INLINE void mainBlock(void (^block)(void))

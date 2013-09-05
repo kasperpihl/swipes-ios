@@ -262,7 +262,6 @@
 }
 -(void)didPressCloseToDoViewController:(ToDoViewController *)viewController{
     
-    NSLog(@"did press close");
     NSIndexPath *indexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
     self.parent.showingModel = nil;
     [self deselectAllRows:self];
@@ -440,9 +439,9 @@
         if(toDoIP) [indexPaths addObject:toDoIP];
     }
     NSIndexSet *deletedSections = [self.itemHandler removeItems:items];
-    
     NSLog(@"selected: %i items: %i indexPaths: %i",self.selectedRows.count,items.count,indexPaths.count);
     if(self.selectedRows.count != indexPaths.count){
+        if(self.isShowingItem) self.parent.showingModel = nil;
         [self update];
         [self cleanUpAfterMovingAnimated:YES];
     }
@@ -460,7 +459,6 @@
     }
 }
 -(void)moveItems:(NSArray*)items toCellType:(CellType)cellType{
-    [[self parent] setCurrentState:KPControlCurrentStateAdd];
     [[self parent] highlightButton:(KPSegmentButtons)cellType-1];
     if(self.cellType != cellType){
         [self removeItems:items];
@@ -478,7 +476,6 @@
     }
 }
 -(void)cleanUpAfterMovingAnimated:(BOOL)animated{
-    
     [self.selectedRows removeAllObjects];
     self.isShowingItem = NO;
     self.isLonelyRider = NO;
@@ -610,6 +607,7 @@
     
 }
 -(void)viewWillAppear:(BOOL)animated{
+    
     [self update];
     [super viewWillAppear:animated];
 }
@@ -638,6 +636,9 @@
     [self cleanUpAfterMovingAnimated:NO];
     self.searchBar.currentMode = KPSearchBarModeNone;
     [self.itemHandler clearAll];
+}
+-(void)dealloc{
+    self.searchBar = nil;
 }
 - (void)didReceiveMemoryWarning
 {

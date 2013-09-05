@@ -338,7 +338,6 @@
                                 newViewController.view.frame = CGRectMake(0, 0, width, height);
                             }
 							completion:^(BOOL finished) {
-                                NSLog(@"changed to:%i",selectedIndex);
                                 self.segmentedControl.userInteractionEnabled = YES;
                                 [newViewController didMoveToParentViewController:self];
                                 
@@ -347,7 +346,6 @@
 }
 -(ToDoListViewController*)currentViewController{
     ToDoListViewController *currentViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
-    NSLog(@"current:%@",currentViewController);
     return currentViewController;
 }
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl{

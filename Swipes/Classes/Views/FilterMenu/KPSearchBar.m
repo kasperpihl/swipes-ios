@@ -206,7 +206,7 @@
     [UIView animateWithDuration:.5f animations:^{
         self.filterView.alpha = 0;
         //CGRectSetY(self.frame, self.frame.origin.y-self.frame.size.height);
-        [superView setContentOffset:CGPointMake(0, superView.tableHeaderView.frame.size.height)];
+        if(superView) [superView setContentOffset:CGPointMake(0, superView.tableHeaderView.frame.size.height)];
     } completion:^(BOOL finished) {
         CGRectSetHeight(self,SEARCH_BAR_DEFAULT_HEIGHT);
         [self.filterButton setImage:[UIImage imageNamed:@"filter_button"] forState:UIControlStateNormal];
@@ -214,7 +214,8 @@
         self.filterButton.hidden = NO;
         self.searchField.hidden = NO;
         [self resizeTableHeader];
-        [superView setContentOffset:CGPointMake(0, superView.tableHeaderView.frame.size.height)];
+        //NSLog(@"super:%f",superView.tableHeaderView.frame.size.height);
+        //if(superView && [superView isKindOfClass:[UITableView class]]) [superView setContentOffset:CGPointMake(0, superView.tableHeaderView.frame.size.height)];
     }];
 }
 -(void)resizeTableHeader{
@@ -239,7 +240,6 @@
 }
 - (void)reframeToTags{
     NSUInteger oldHeight = self.frame.size.height;
-    
     self.filterButton.hidden = YES;
     self.searchField.hidden = YES;
     self.filterView.hidden = NO;

@@ -28,4 +28,5 @@
 +(UIImage *)flippedImage:(UIImage*)flippingImage horizontal:(BOOL)horizontal;
 +(NSString*)dayStringForDate:(NSDate*)date;
 +(NSString*)timeStringForDate:(NSDate*)date;
++(NSString*)dayOfMonthForDate:(NSDate*)date;
 @end

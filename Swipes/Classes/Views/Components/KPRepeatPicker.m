@@ -7,7 +7,7 @@
 //
 #define kDefSelectedColor tcolor(DoneColor)
 #define kDefBackgroundColor tbackground(SearchDrawerBackground)
-#define kDefFont KP_SEMIBOLD(13)
+#define kDefFont KP_BOLD(13)
 #define kDefTextColor [UIColor whiteColor]
 #define kSepWidth 1
 #define kSepMargin 0.0
@@ -16,6 +16,7 @@
 #import "UIColor+Utilities.h"
 #import "UIButton+PassTouch.h"
 #import "NSDate-Utilities.h"
+#import "UIView+Utilities.h"
 @interface KPRepeatPicker ()
 @property (nonatomic) IBOutletCollection(UILabel) NSArray *optionsButtons;
 @property (nonatomic) UIButton *selectedButton;
@@ -63,7 +64,7 @@
     [self handleTouches:touches];
 }
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    [self handleTouches:touches];
+    [self handleTouches:touches];   
     [self.delegate repeatPicker:self selectedOption:self.selectedButton.tag];
 }
 -(id)initWithHeight:(CGFloat)height selectedDate:(NSDate *)date option:(RepeatOptions)option{
@@ -82,13 +83,13 @@
             dayButton.titleLabel.numberOfLines = 0;
             //dayButton.titleLabel.frame = dayButton.bounds;
             //dayButton.titleLabel.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-            dayButton.transform = CGAffineTransformMakeRotation(-M_PI/2);
+            //dayButton.transform = CGAffineTransformMakeRotation(-M_PI/2);
             dayButton.frame = CGRectMake(buttonX, 0, buttonWidth,self.frame.size.height);
             dayButton.titleLabel.textAlignment = UITextAlignmentCenter;
             [self addSubview:dayButton];
             if(i < 6){
                 UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(buttonX+buttonWidth, (self.frame.size.height-sepHeight)/2, kSepWidth, sepHeight)];
-                [seperator setBackgroundColor:self.textColor];
+                [seperator setBackgroundColor:tbackground(TaskTableGradientBackground)];
                 [self addSubview:seperator];
             }
             [buttonArray addObject:dayButton];
@@ -98,6 +99,9 @@
         self.selectedDate = date;
         self.currentOption = option;
         self.selectedColor = kDefSelectedColor;
+        UIButton *passthroughButton = [[UIButton alloc] initWithFrame:self.bounds];
+        [passthroughButton makeInsetShadowWithRadius:2 Color:alpha([UIColor blackColor],0.3) Directions:@[@"top",@"bottom"]];
+        [self addSubview:passthroughButton];
     }
     return self;
 }
@@ -105,23 +109,23 @@
     NSString *buttonString;
     switch (option) {
         case RepeatNever:
-            buttonString = @"NEVER";
+            buttonString = @"never";
             break;
         case RepeatEveryDay:
-            buttonString = @"DAY";
+            buttonString = @"day";
             break;
         case RepeatEveryMonFriOrSatSun:
-            if([self.selectedDate isTypicallyWorkday]) buttonString = @"MON-FRI";
-            else buttonString = @"SAT+SUN";
+            if([self.selectedDate isTypicallyWorkday]) buttonString = @"mon-fri";
+            else buttonString = @"sat+sun";
         break;
         case RepeatEveryWeek:
-            buttonString = @"WEEK";
+            buttonString = @"week";
             break;
         case RepeatEveryMonth:
-            buttonString = @"MONTH";
+            buttonString = @"month";
             break;
         case RepeatEveryYear:
-            buttonString = @"YEAR";
+            buttonString = @"year";
             break;
         default:
             break;

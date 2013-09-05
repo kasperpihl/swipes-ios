@@ -36,6 +36,8 @@
 #import "KPRepeatPicker.h"
 #import "NSDate-Utilities.h"
 
+#import "KPOverlay.h"
+
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
@@ -133,8 +135,8 @@
 }
 -(void)walkthrough:(WalkthroughViewController *)walkthrough didFinishSuccesfully:(BOOL)successfully{
     [ANALYTICS popView];
-    [walkthrough.view removeFromSuperview];
     [walkthrough removeFromParentViewController];
+    [OVERLAY popViewAnimated:YES];
 }
 #pragma mark - Public API
 -(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated{
@@ -185,22 +187,21 @@ static RootViewController *sharedObject;
     UpgradeViewController *viewController = [[UpgradeViewController alloc]init];
     viewController.delegate = self;
     [self addChildViewController:viewController];
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    [window addSubview:viewController.view];
+    [OVERLAY pushView:viewController.view animated:YES];
+    
     [ANALYTICS pushView:@"Upgrade to Plus"];
 }
 -(void)walkthrough{
     WalkthroughViewController *viewController = [[WalkthroughViewController alloc]init];
     viewController.delegate = self;
     [self addChildViewController:viewController];
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    [window addSubview:viewController.view];
+    [OVERLAY pushView:viewController.view animated:YES];
     [ANALYTICS pushView:@"Walkthrough"];
 }
 -(void)closedUpgradeViewController:(UpgradeViewController *)viewController{
     [ANALYTICS popView];
-    [viewController.view removeFromSuperview];
     [viewController removeFromParentViewController];
+    [OVERLAY popViewAnimated:YES];
 }
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
     if(self.lockSettings) return;
@@ -208,9 +209,11 @@ static RootViewController *sharedObject;
 }
 
 -(void)openApp{
-    if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:5]]);
-    else [[[self menuViewController] currentViewController] update];
-    //[self resetRoot];
+    if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
+        [OVERLAY popAllViewsAnimated:NO];
+        [self resetRoot];
+    }
+    else [[[self menuViewController] currentViewController] update];    
 }
 -(void)closeApp{
     self.lastClose = [NSDate date];
@@ -237,7 +240,6 @@ static RootViewController *sharedObject;
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     [self.view addGestureRecognizer:panGestureRecognizer];
     [self setupAppearance];
-    NSLog(@"did setup appearance");
     
 }
 -(void)viewDidAppear:(BOOL)animated{

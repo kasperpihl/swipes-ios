@@ -160,6 +160,25 @@ static UtilityClass *sharedObject;
     return [[dateFormatter stringFromDate:date] lowercaseString];
 
 }
++(NSString *)dayOfMonthForDate:(NSDate *)date{
+    
+    NSDateFormatter *prefixDateFormatter = [[NSDateFormatter alloc] init];
+    [prefixDateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+    [prefixDateFormatter setDateFormat:@"d."];//June 13th, 2013
+    NSString * prefixDateString = [prefixDateFormatter stringFromDate:date];
+    NSDateFormatter *monthDayFormatter = [[NSDateFormatter alloc] init];
+    [monthDayFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+    [monthDayFormatter setDateFormat:@"d"];
+    int date_day = [[monthDayFormatter stringFromDate:date] intValue];
+    NSString *suffix_string = @"|st|nd|rd|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|st|nd|rd|th|th|th|th|th|th|th|st";
+    NSArray *suffixes = [suffix_string componentsSeparatedByString: @"|"];
+    NSString *suffix = [suffixes objectAtIndex:date_day];
+    
+    prefixDateString = [prefixDateString stringByReplacingOccurrencesOfString:@"." withString:suffix];
+    NSString *dateString =prefixDateString;
+    //  NSLog(@"%@", dateString);
+    return dateString;
+}
 +(NSString*)dayStringForDate:(NSDate*)date{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];

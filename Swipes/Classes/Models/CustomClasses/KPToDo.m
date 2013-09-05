@@ -244,6 +244,10 @@
     }
 }
 -(BOOL)scheduleForDate:(NSDate*)date{
+    if(!date){
+        self.repeatedDate = nil;
+        self.repeatOptionValue = RepeatNever;
+    }
     CellType oldCell = [self cellTypeForTodo];
     self.completionDate = nil;
     self.schedule = date;
