@@ -26,7 +26,6 @@
 -(void)prepareTableView:(UITableView*)tableView;
 -(NSArray*)selectedItems;
 -(void)update;
--(void)changeToColored:(BOOL)colored;
 -(void)didUpdateCells;
 -(void)pressedEdit;
 @end

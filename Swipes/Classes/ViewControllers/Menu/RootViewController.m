@@ -38,6 +38,8 @@
 
 #import "KPOverlay.h"
 
+#import "LocalyticsSession.h"
+
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
@@ -96,6 +98,7 @@
             
             if(email){
                 [user setObject:email forKey:@"email"];
+                [[LocalyticsSession shared] setCustomerEmail:email];
             }
             NSString *gender = [userData objectForKey:@"gender"];
             if(gender) [user setObject:gender forKey:@"gender"];
@@ -110,7 +113,15 @@
     [[KPParseCoreData sharedInstance] seedObjects];
     NSString *wasSignup = user.isNew ? @"yes" : @"no";
     [MIXPANEL track:@"Logged in" properties:@{@"Is signup":wasSignup}];
+    if(user.isNew) {
+        [ANALYTICS tagEvent:@"Signed Up" options:@{}];
+    }
+    else{
+        [ANALYTICS tagEvent:@"Logged In" options:@{}];
+    }
+    
     [MIXPANEL identify:user.objectId];
+    [[LocalyticsSession shared] setCustomerId:user.objectId];
     NSString *action = user.isNew ? @"sign_up" : @"sign_in";
     [kGAnanlytics sendEventWithCategory:@"app_flow"
                         withAction:action
@@ -121,6 +132,9 @@
         if(!user.email){
             [self fetchDataFromFacebook];
         }
+    }
+    else{
+        [[LocalyticsSession shared] setCustomerEmail:user.email];
     }
     [self changeToMenu:KPMenuHome animated:YES];
     
@@ -188,7 +202,7 @@ static RootViewController *sharedObject;
     viewController.delegate = self;
     [self addChildViewController:viewController];
     [OVERLAY pushView:viewController.view animated:YES];
-    
+    [ANALYTICS tagEvent:@"Upgrade to Plus" options:nil];
     [ANALYTICS pushView:@"Upgrade to Plus"];
 }
 -(void)walkthrough{
@@ -230,6 +244,8 @@ static RootViewController *sharedObject;
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
+    
+    
     
     BLURRY.delegate = self;
     self.sideMenu = kSideMenu;

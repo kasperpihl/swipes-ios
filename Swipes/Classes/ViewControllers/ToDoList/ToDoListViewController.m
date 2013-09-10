@@ -72,7 +72,7 @@
     
 }
 #pragma mark ItemHandlerDelegate
--(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber{
+-(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber oldNumber:(NSInteger)oldNumber{
     [self didUpdateCells];
 }
 -(void)setIsShowingItem:(BOOL)isShowingItem{
@@ -481,7 +481,8 @@
     self.isLonelyRider = NO;
     self.swipingCell = nil;
     [self didUpdateCells];
-    [[self parent] show:YES controlsAnimated:YES];
+    [[self parent] setCurrentState:KPControlCurrentStateAdd];
+    
 }
 -(void)updateSearchBar{
     
@@ -540,23 +541,6 @@
     [tableView addGestureRecognizer:doubleTap];
 }
 #pragma mark - UIViewController stuff
--(void)changeToColored:(BOOL)colored{
-    if(self.isColored == colored) return;
-    self.isColored = colored;
-    if(colored){
-        self.menuText.alpha = 0;
-        self.menuText.hidden = NO;
-        [UIView animateWithDuration:1.5 animations:^{
-            self.menuText.alpha = 1;
-        } completion:^(BOOL finished) {
-        }];
-    }
-    else{
-        self.menuText.hidden = YES;
-        self.menuText.alpha = 0;
-    }
- 
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -569,7 +553,10 @@
     [self.view addSubview:backgroundView];
     // tbackground(TaskTableBackground);
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_white_background",self.state]]];
-    
+    if ([self.state isEqualToString:@"today"]) {
+        imageView.hidden = YES;
+    }
+    imageView.hidden = YES;
     imageView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/4);
     //imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
     imageView.tag = BACKGROUND_IMAGE_VIEW_TAG;
@@ -579,6 +566,7 @@
     UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.center.y+70, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
     menuText.backgroundColor = CLEAR;
     menuText.font = TABLE_EMPTY_BG_FONT;
+    menuText.hidden =YES;
     NSString *text;
     switch (self.cellType) {
         case CellTypeDone:
@@ -588,7 +576,7 @@
             text = @"Later";
             break;
         default:
-            text = @"Well Swiped!";
+            text = @"";
             break;
     }
     menuText.text = text;

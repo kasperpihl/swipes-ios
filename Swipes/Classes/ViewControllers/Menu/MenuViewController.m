@@ -18,6 +18,7 @@
 #import "MenuButton.h"
 #import "SettingsHandler.h"
 #import "SnoozesViewController.h"
+#import "AnalyticsHandler.h"
 #define kMenuButtonStartTag 4123
 #define kLampOnColor tcolor(DoneColor)
 #define kLampOffColor tbackground(MenuBackground)//tcolor(StrongLaterColor)
@@ -232,6 +233,7 @@
             break;
         }
         case KPMenuButtonUpgrade:
+            [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Settings"}];
             [ROOT_CONTROLLER upgrade];
             break;
         case KPMenuButtonPolicy:{

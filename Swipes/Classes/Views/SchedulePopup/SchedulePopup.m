@@ -148,7 +148,8 @@ typedef enum {
         UIWindow *window = [[UIApplication sharedApplication] keyWindow];
         self.contentView.hidden = YES;
         [ANALYTICS pushView:@"Location plus popup"];
-        [PlusAlertView alertInView:window message:@"Location reminders are an upcomming feature in Swipes Plus. Check out the package." block:^(BOOL succeeded, NSError *error) {
+        [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location"}];
+        [PlusAlertView alertInView:window message:@"Location reminders is an upcoming feature in Swipes Plus. Check out the package." block:^(BOOL succeeded, NSError *error) {
             [ANALYTICS popView];
             self.contentView.hidden = NO;
             if(succeeded){

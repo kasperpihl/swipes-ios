@@ -16,7 +16,7 @@
 -(void)didUpdateItemHandler:(ItemHandler*)handler;
 -(NSString *)itemHandler:(ItemHandler*)handler titleForItem:(KPToDo*)item;
 -(NSArray*)itemsForItemHandler:(ItemHandler*)handler;
--(void)itemHandler:(ItemHandler*)handler changedItemNumber:(NSInteger)itemNumber;
+-(void)itemHandler:(ItemHandler*)handler changedItemNumber:(NSInteger)itemNumber oldNumber:(NSInteger)oldNumber;
 @end
 
 @interface ItemHandler : NSObject  <KPSearchBarDataSource,UITableViewDataSource>

@@ -33,6 +33,7 @@
 #define KP_EXTRABOLD(fontSize)          [UIFont fontWithName:@"ProximaNova-Extrabld" size:fontSize]
 #define KP_COND_BOLD(fontSize)          [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:fontSize]
 #define KP_COND_SEMIBOLD(fontSize)      [UIFont fontWithName:@"ProximaNovaCond-Semibold" size:fontSize]
+#define KP_BEBAS(fontSize)              [UIFont fontWithName:@"BebasNeue" size:fontSize]
 
 
 #define SCHEDULE_BUTTON_FONT            KP_SEMIBOLD(14)

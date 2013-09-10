@@ -27,6 +27,7 @@
 +(AnalyticsHandler*)sharedInstance;
 -(NSInteger)amountForKey:(NSString*)key;
 -(void)incrementKey:(NSString*)key withAmount:(NSInteger)amount;
+-(void)tagEvent:(NSString*)event options:(NSDictionary*)options;
 -(void)startSession;
 -(void)endSession;
 -(void)pushView:(NSString*)view;

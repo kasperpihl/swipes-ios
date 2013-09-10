@@ -9,6 +9,8 @@
 #import "AnalyticsHandler.h"
 #import "NSDate-Utilities.h"
 #import "GAI.h"
+#import "LocalyticsSession.h"
+#import <Parse/PFUser.h>
 @interface AnalyticsHandler ()
 @property (nonatomic,strong) NSMutableDictionary *stats;
 @property (nonatomic) BOOL runningSession;
@@ -20,12 +22,20 @@ static AnalyticsHandler *sharedObject;
 +(AnalyticsHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[AnalyticsHandler allocWithZone:NULL] init];
+        PFUser *current = [PFUser currentUser];
+        if(current){
+            [[LocalyticsSession shared] setCustomerId:current.objectId];
+            if(current.email) [[LocalyticsSession shared] setCustomerEmail:current.email];
+        }
     }
     return sharedObject;
 }
 -(NSMutableArray *)views{
     if(!_views) _views = [NSMutableArray array];
     return _views;
+}
+-(void)tagEvent:(NSString *)event options:(NSDictionary *)options{
+    [[LocalyticsSession shared] tagEvent:event attributes:options];
 }
 -(NSMutableDictionary *)stats{
     if(!_stats) _stats = [NSMutableDictionary dictionary];
@@ -53,11 +63,15 @@ static AnalyticsHandler *sharedObject;
     if(viewsLeft > 5) [self.views removeObjectAtIndex:0];
     [self.views addObject:view];
     [kGAnanlytics sendView:view];
+    [[LocalyticsSession shared] tagScreen:view];
 }
 -(void)popView{
     NSInteger viewsLeft = self.views.count;
     if(viewsLeft > 0) [self.views removeLastObject];
-    if(viewsLeft > 1) [kGAnanlytics sendView:[self.views lastObject]];
+    if(viewsLeft > 1){
+        [[LocalyticsSession shared] tagScreen:[self.views lastObject]];
+        [kGAnanlytics sendView:[self.views lastObject]];
+    }
 }
 -(void)incrementKey:(NSString *)key withAmount:(NSInteger)amount{
     if(self.blockAnalytics) return;

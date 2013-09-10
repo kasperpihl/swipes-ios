@@ -11,6 +11,7 @@
 #import "ToDoHandler.h"
 #import <QuartzCore/QuartzCore.h>
 #import "NSDate-Utilities.h"
+#import "UIColor+Utilities.h"
 #define LAYER_VIEW_TAG 1
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
@@ -25,6 +26,9 @@
 
 #define kIconSpacing 5
 #define kIconSize 8
+#define kIndicatorHeight 4
+#define kIndicatorX 8
+#define kIndicatorHack 5
 
 #define kTimeLabelMarginRight 5
 
@@ -57,7 +61,6 @@
 @property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
 
 @property (nonatomic,strong) UIImageView *notesIcon;
-@property (nonatomic,strong) UIImageView *recurringIcon;
 @end
 @implementation ToDoCell
 
@@ -115,13 +118,10 @@
         self.dotView = [self.contentView viewWithTag:DOT_VIEW_TAG];
         self.outlineView = [self.contentView viewWithTag:OUTLINE_TAG];
         
-        self.notesIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cell_note_icon"]];
-        
+        self.notesIcon = [[UIImageView alloc] init];
+        self.notesIcon.frame = CGRectMake(kIndicatorX, 0, self.timelineView.frame.size.width-kIndicatorX, kIndicatorHeight);
         self.notesIcon.hidden = YES;
         [self.contentView addSubview:self.notesIcon];
-        self.recurringIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cell_recurring_icon"]];
-        self.recurringIcon.hidden = YES;
-        [self.contentView addSubview:self.recurringIcon];
         
         UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
         alarmLabel.tag = ALARM_LABEL_TAG;
@@ -139,12 +139,8 @@
 -(void)setTextLabels:(BOOL)showBottomLine{
     CGFloat titleY = showBottomLine ? TITLE_Y : ((CELL_HEIGHT - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
-    CGRectSetY(self.tagsLabel, self.titleLabel.frame.origin.y+self.titleLabel.frame.size.height+LABEL_SPACE);
-    CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y);
-    CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y);
-    /*if(showBottomLine) self.alarmLabel.center = CGPointMake(self.alarmLabel.center.x, self.tagsLabel.center.y);
-    else self.alarmLabel.center = CGPointMake(self.alarmLabel.center.x, CELL_HEIGHT/2);*/
-    CGRectSetCenterY(self.alarmLabel, self.titleLabel.center.y);
+    CGRectSetY(self.tagsLabel, TITLE_Y+self.titleLabel.frame.size.height+LABEL_SPACE);
+    CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
 }
 -(void)hideContent:(BOOL)hide animated:(BOOL)animated{
@@ -188,23 +184,7 @@
         self.tagsLabel.text = tagString;
     }
     CGFloat deltaX = LABEL_X;
-    self.notesIcon.hidden = YES;
-    self.recurringIcon.hidden = YES;
     
-    
-    if(toDo.notes && toDo.notes.length > 0){
-        self.notesIcon.hidden = NO;
-        showBottomLine = YES;
-        CGRectSetX(self.notesIcon, deltaX);
-        deltaX += self.notesIcon.frame.size.width + kIconSpacing;
-    }
-    if(toDo.repeatOptionValue > RepeatNever){
-        self.recurringIcon.hidden = NO;
-        showBottomLine = YES;
-        CGRectSetX(self.recurringIcon, deltaX);
-        deltaX += self.recurringIcon.frame.size.width + kIconSpacing;
-    }
-    CGRectSetX(self.tagsLabel,deltaX);
     
     self.alarmLabel.hidden = YES;
     if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
@@ -213,9 +193,12 @@
         self.alarmLabel.text = dateInString;
         [self.alarmLabel sizeToFit];
         CGRectSetWidth(self.alarmLabel, self.alarmLabel.frame.size.width+2*ALARM_SPACING);
-        self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, self.frame.size.width-self.alarmLabel.frame.size.width-kTimeLabelMarginRight, (self.frame.size.height-self.alarmLabel.frame.size.height)/2);
+        self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, deltaX, self.tagsLabel.center.y-(self.alarmLabel.frame.size.height/2)-ALARM_HACK);
+        deltaX += self.alarmLabel.frame.size.width + ICON_SPACING;
         self.alarmLabel.hidden = NO;
+        showBottomLine = YES;
     }
+    CGRectSetX(self.tagsLabel,deltaX);
     
     [self setTextLabels:showBottomLine];
 }

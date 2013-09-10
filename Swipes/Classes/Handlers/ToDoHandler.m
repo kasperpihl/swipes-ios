@@ -12,7 +12,7 @@
 #import "AnalyticsHandler.h"
 #import "ThemeHandler.h"
 @interface ToDoHandler ()
-@end
+@end    
 @implementation ToDoHandler
 static ToDoHandler *sharedObject;
 +(ToDoHandler *)sharedInstance{
@@ -48,6 +48,13 @@ static ToDoHandler *sharedObject;
     NSNumber *count = [KPToDo MR_numberOfEntities];
     newToDo.order = count;
     [self save];
+    NSString *taskLength = @"100+";
+    if(item.length <= 20) taskLength = @"1-20";
+    else if(item.length <= 40) taskLength = @"21-40";
+    else if(item.length <= 60) taskLength = @"41-60";
+    else if(item.length <= 80) taskLength = @"61-80";
+    else if(item.length <= 100) taskLength = @"81-100";
+    [ANALYTICS tagEvent:@"Added Task" options:@{@"Length":taskLength}];
     [ANALYTICS incrementKey:NUMBER_OF_ADDED_TASKS_KEY withAmount:1];
     [NOTIHANDLER updateLocalNotifications];
     return newToDo;
@@ -80,6 +87,8 @@ static ToDoHandler *sharedObject;
         if(movedToDo) [movedToDos addObject:toDo];
     }
     [self save];
+    NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
+    [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
     [NOTIHANDLER updateLocalNotifications];
     [ANALYTICS incrementKey:NUMBER_OF_COMPLETED_KEY withAmount:toDoArray.count];
     return [movedToDos copy];

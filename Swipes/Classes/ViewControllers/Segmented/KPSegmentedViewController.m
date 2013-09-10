@@ -113,7 +113,9 @@
 }
 -(void)pressedShare:(id)sender{
     [ANALYTICS pushView:@"Sharing plus popup"];
-    PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Sharing tasks are an upcomming feature in Swipes Plus. Check out the package." block:^(BOOL succeeded, NSError *error) {
+    
+    [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Sharing"}];
+    PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Sharing tasks is an upcoming feature in Swipes Plus. Check out the package." block:^(BOOL succeeded, NSError *error) {
         [ANALYTICS popView];
         [BLURRY dismissAnimated:YES];
         if(succeeded){
