@@ -43,6 +43,7 @@ static KPParseCoreData *sharedObject;
 }
 -(void)loadDatabase{
     @try {
+        
         //[MagicalRecord setupCoreDataStackWithStoreNamed:@"swipes"];
         [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
     }

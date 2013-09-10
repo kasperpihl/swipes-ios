@@ -22,13 +22,11 @@
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tagString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="copies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ToDo" inverseName="copyOf" inverseEntity="ToDo" syncable="YES"/>
-        <relationship name="copyOf" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ToDo" inverseName="copies" inverseEntity="ToDo" syncable="YES"/>
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="todos" inverseEntity="Tag" syncable="YES"/>
     </entity>
     <elements>
         <element name="ParseObject" positionX="160" positionY="192" width="128" height="105"/>
         <element name="Tag" positionX="160" positionY="192" width="128" height="75"/>
-        <element name="ToDo" positionX="160" positionY="192" width="128" height="255"/>
+        <element name="ToDo" positionX="160" positionY="192" width="128" height="225"/>
     </elements>
 </model>

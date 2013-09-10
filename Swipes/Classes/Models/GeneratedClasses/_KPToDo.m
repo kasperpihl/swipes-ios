@@ -18,8 +18,6 @@ const struct KPToDoAttributes KPToDoAttributes = {
 };
 
 const struct KPToDoRelationships KPToDoRelationships = {
-	.copies = @"copies",
-	.copyOf = @"copyOf",
 	.tags = @"tags",
 };
 
@@ -207,23 +205,6 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 
 
-
-@dynamic copies;
-
-	
-- (NSMutableSet*)copiesSet {
-	[self willAccessValueForKey:@"copies"];
-  
-	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"copies"];
-  
-	[self didAccessValueForKey:@"copies"];
-	return result;
-}
-	
-
-@dynamic copyOf;
-
-	
 
 @dynamic tags;
 

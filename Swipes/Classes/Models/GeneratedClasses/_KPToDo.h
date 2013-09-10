@@ -19,16 +19,12 @@ extern const struct KPToDoAttributes {
 } KPToDoAttributes;
 
 extern const struct KPToDoRelationships {
-	__unsafe_unretained NSString *copies;
-	__unsafe_unretained NSString *copyOf;
 	__unsafe_unretained NSString *tags;
 } KPToDoRelationships;
 
 extern const struct KPToDoFetchedProperties {
 } KPToDoFetchedProperties;
 
-@class KPToDo;
-@class KPToDo;
 @class KPTag;
 
 
@@ -178,20 +174,6 @@ extern const struct KPToDoFetchedProperties {
 
 
 
-@property (nonatomic, strong) NSSet *copies;
-
-- (NSMutableSet*)copiesSet;
-
-
-
-
-@property (nonatomic, strong) KPToDo *copyOf;
-
-//- (BOOL)validateCopyOf:(id*)value_ error:(NSError**)error_;
-
-
-
-
 @property (nonatomic, strong) NSSet *tags;
 
 - (NSMutableSet*)tagsSet;
@@ -203,11 +185,6 @@ extern const struct KPToDoFetchedProperties {
 @end
 
 @interface _KPToDo (CoreDataGeneratedAccessors)
-
-- (void)addCopies:(NSSet*)value_;
-- (void)removeCopies:(NSSet*)value_;
-- (void)addCopiesObject:(KPToDo*)value_;
-- (void)removeCopiesObject:(KPToDo*)value_;
 
 - (void)addTags:(NSSet*)value_;
 - (void)removeTags:(NSSet*)value_;
@@ -292,16 +269,6 @@ extern const struct KPToDoFetchedProperties {
 - (void)setPrimitiveTitle:(NSString*)value;
 
 
-
-
-
-- (NSMutableSet*)primitiveCopies;
-- (void)setPrimitiveCopies:(NSMutableSet*)value;
-
-
-
-- (KPToDo*)primitiveCopyOf;
-- (void)setPrimitiveCopyOf:(KPToDo*)value;
 
 
 

@@ -222,7 +222,6 @@
         next = [self nextDateFrom:next];
     }
     KPToDo *toDoCopy = [self deepCopy];
-    toDoCopy.copyOf = self;
     toDoCopy.numberOfRepeatedValue = numberOfRepeated;
     [toDoCopy complete];
     [self scheduleForDate:next];
@@ -230,7 +229,7 @@
     self.numberOfRepeated = [NSNumber numberWithInteger:numberOfRepeated++];
 }
 -(BOOL)complete{
-    if(self.repeatOptionValue > RepeatNever && !self.copyOf){
+    if(self.repeatOptionValue > RepeatNever){
         CellType oldCell = [self cellTypeForTodo];
         [self completeRepeatedTask];
         CellType newCell = [self cellTypeForTodo];
