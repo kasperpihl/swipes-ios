@@ -13,7 +13,7 @@
 -(void)updateNotes:(NSString *)notes save:(BOOL)save;
 -(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime;
 -(void)deleteToDoSave:(BOOL)save;
-
+-(void)updateRepeatedSave:(BOOL)save;
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save;
 -(NSArray*)nextNumberOfRepeatedDates:(NSInteger)numberOfDates;
 @end

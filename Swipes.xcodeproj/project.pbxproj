@@ -413,6 +413,7 @@
 		A742415417A5AAA9009C9735 /* tasks-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tasks-white@2x.png"; sourceTree = "<group>"; };
 		A742415E17A5BFB2009C9735 /* WalkthroughOverlayBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkthroughOverlayBackground.h; path = Walkthrough/WalkthroughOverlayBackground.h; sourceTree = "<group>"; };
 		A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkthroughOverlayBackground.m; path = Walkthrough/WalkthroughOverlayBackground.m; sourceTree = "<group>"; };
+		A747919617DF8540003A93FE /* Datamodel 1.0.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = "Datamodel 1.0.3.xcdatamodel"; path = "Datamodel.xcdatamodeld/Datamodel 1.0.3.xcdatamodel"; sourceTree = "<group>"; };
 		A74F61B516EB77B3004927DA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A74F61B816EBA58B004927DA /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		A74F61BA16EBA595004927DA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -1216,6 +1217,7 @@
 		A781284617294C56002226C8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A747919617DF8540003A93FE /* Datamodel 1.0.3.xcdatamodel */,
 				A781284717294C56002226C8 /* CustomClasses */,
 				A781284C17294C56002226C8 /* Datamodel.xcdatamodeld */,
 				A781284E17294C56002226C8 /* GeneratedClasses */,
@@ -1975,7 +1977,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd Swipes/Classes/Models\nmogenerator -m Datamodel.xcdatamodeld/Datamodel.xcdatamodel/ -M GeneratedClasses -H CustomClasses --template-var arc=true";
+			shellScript = "cd Swipes/Classes/Models\nmogenerator -m \"Datamodel.xcdatamodeld/Datamodel 1.0.3.xcdatamodel/\" -M GeneratedClasses -H CustomClasses --template-var arc=true";
 		};
 /* End PBXShellScriptBuildPhase section */
 

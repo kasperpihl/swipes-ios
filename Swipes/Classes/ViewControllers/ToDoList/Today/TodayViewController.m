@@ -51,7 +51,8 @@
                 if(isTwitterAvailable) self.twitterButton.hidden = NO;
                 self.facebookButton.alpha = self.twitterButton.alpha = 0;
             }
-            [UIView animateWithDuration:1.5 animations:^{
+            CGFloat animationTime = emptyBack ? 1.5f : 0.5f;
+            [UIView animateWithDuration:animationTime animations:^{
                 self.facebookButton.alpha = self.twitterButton.alpha = alpha;
                 self.youreAllDoneView.alpha = alpha;
             } completion:^(BOOL finished) {
@@ -224,7 +225,7 @@
     NSUInteger randomIndex = arc4random() % [targetArray count];
     NSString *string = [targetArray objectAtIndex:randomIndex];
     self.shareText = string;
-    [shareVC setInitialText:@"\"Well done for today\" said my boss ;) #productiveday"];
+    [shareVC setInitialText:string];
     [[self parent] presentModalViewController:shareVC animated:YES];
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];

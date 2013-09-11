@@ -40,10 +40,10 @@ static KPParseCoreData *sharedObject;
     /*if(![UTILITY.userDefaults boolForKey:@"seeded"]){
         [self seedObjects];
     }*/
-}
+}   
 -(void)loadDatabase{
     @try {
-        
+        //[MagicalRecord setShouldDeleteStoreOnModelMismatch:NO];
         //[MagicalRecord setupCoreDataStackWithStoreNamed:@"swipes"];
         [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
     }

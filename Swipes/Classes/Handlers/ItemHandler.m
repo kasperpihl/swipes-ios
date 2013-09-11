@@ -319,6 +319,7 @@
     NSMutableArray *arrayOfItems;
     if(index != NSNotFound) arrayOfItems = [self.sortedItems objectAtIndex:index];
     else{
+        if(!title) title = @"Unknown";
         [self.titleArray addObject:title];
         [self.sortedItems addObject:[NSMutableArray array]];
         arrayOfItems = [self.sortedItems lastObject];

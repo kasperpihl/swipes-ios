@@ -31,6 +31,12 @@
     self.repeatedDate = self.schedule;
     if(save) [self save];
 }
+-(void)updateRepeatedSave:(BOOL)save{
+    if(self.repeatOptionValue > RepeatNever){
+        self.repeatedDate = self.schedule;
+        if(save) [self save];
+    }
+}
 -(void)save{
     [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
 }

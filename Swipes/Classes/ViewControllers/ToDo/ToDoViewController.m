@@ -411,9 +411,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)updateSchedule{
     if(!self.model.schedule){// || [self.model.schedule isInPast]){
         self.alarmLabel.text = @"Unspecified";
+        if(self.model.completionDate){
+            self.alarmLabel.text = [NSString stringWithFormat:@"Completed: %@",[self.model readableTime:self.model.completionDate showTime:YES]];
+        }
     }
     else{
-        self.alarmLabel.text = [self.model readableTime:self.model.schedule showTime:YES];
+        self.alarmLabel.text = [NSString stringWithFormat:@"%@",[self.model readableTime:self.model.schedule showTime:YES]];
     }
 }
 -(void)update{

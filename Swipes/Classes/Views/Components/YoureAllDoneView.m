@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#define kColor [UIColor whiteColor]
+#define kColor alpha([UIColor whiteColor],0.8)
 
 #define kAnimationTime 0.5
 #define kStampViewSpacing 30

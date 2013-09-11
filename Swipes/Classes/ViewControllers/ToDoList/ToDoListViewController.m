@@ -74,6 +74,11 @@
 #pragma mark ItemHandlerDelegate
 -(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber oldNumber:(NSInteger)oldNumber{
     [self didUpdateCells];
+    [self showBackgroundItems:(itemNumber == 0)];
+}
+-(void)showBackgroundItems:(BOOL)show{
+    self.menuText.hidden = !show;
+    self.backgroundImage.hidden = !show;
 }
 -(void)setIsShowingItem:(BOOL)isShowingItem{
     
@@ -279,6 +284,7 @@
         if(button != KPScheduleButtonCancel){
             if(!self.parent.showingModel) return;
             [TODOHANDLER scheduleToDos:@[self.parent.showingModel] forDate:chosenDate];
+            [self.parent.showingModel updateRepeatedSave:YES];
             if(self.cellType == CellTypeSchedule){
                 NSLog(@"cell type was schedule");
                 [self.showingViewController update];
@@ -556,17 +562,15 @@
     if ([self.state isEqualToString:@"today"]) {
         imageView.hidden = YES;
     }
-    imageView.hidden = YES;
     imageView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/4);
     //imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
     imageView.tag = BACKGROUND_IMAGE_VIEW_TAG;
-    [self.view addSubview:imageView];
+    if (![self.state isEqualToString:@"today"]) [self.view addSubview:imageView];
     self.backgroundImage = (UIImageView*)[self.view viewWithTag:BACKGROUND_IMAGE_VIEW_TAG];
     
     UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.center.y+70, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
     menuText.backgroundColor = CLEAR;
     menuText.font = TABLE_EMPTY_BG_FONT;
-    menuText.hidden =YES;
     NSString *text;
     switch (self.cellType) {
         case CellTypeDone:
