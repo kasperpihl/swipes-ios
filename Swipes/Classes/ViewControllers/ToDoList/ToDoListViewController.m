@@ -427,7 +427,6 @@
 -(void)deleteSelectedItems:(id)sender{
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
-    NSLog(@"indexPaths: %@",selectedIndexPaths);
     NSMutableArray *toDos = [NSMutableArray array];
     for(NSIndexPath *indexPath in selectedIndexPaths){
         [toDos addObject:[self.itemHandler itemForIndexPath:indexPath]];

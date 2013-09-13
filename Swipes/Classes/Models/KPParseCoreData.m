@@ -10,6 +10,7 @@
 #import "UtilityClass.h"
 #import "ToDoHandler.h"
 #import "TagHandler.h"
+#import "NSDate-Utilities.h"
 /*
 
 */
@@ -26,15 +27,19 @@
 }
 -(void)saveInContext:(NSManagedObjectContext*)context{
     if(!context) context = [NSManagedObjectContext MR_defaultContext];
-    NSSet *updatedObjects = [context updatedObjects];
-    //NSSet *deletedObjects = [context deletedObjects];
-    for(KPParseObject *object in updatedObjects){
-        if([object isKindOfClass:[KPParseObject class]] && object.objectId){
-            [object updateChangedAttributes];
+    [context performBlockAndWait:^{
+        NSSet *updatedObjects = [context updatedObjects];
+        //NSSet *deletedObjects = [context deletedObjects];
+        NSLog(@"number of updates:%i",updatedObjects.count);
+        for(KPParseObject *object in updatedObjects){
+            if([object isKindOfClass:[KPParseObject class]] && object.objectId){
+                NSLog(@"updates changes");
+                [object updateChangedAttributes];
+                NSLog(@"changes:%@",[NSKeyedUnarchiver unarchiveObjectWithData:object.changedAttributes]);
+            }
         }
-    }
-    if([context isEqual:[NSManagedObjectContext MR_defaultContext]]) [context MR_saveOnlySelfAndWait];
-    else [context MR_saveToPersistentStoreAndWait];
+    }];
+    [context MR_saveToPersistentStoreAndWait];
     [self synchronize];
     return;
 }
@@ -74,57 +79,53 @@ static KPParseCoreData *sharedObject;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
     dispatch_async(queue, ^{
         NSLog(@"synchronizing");
+        NSDate *syncStart = [[NSDate date] dateByAddingTimeInterval:-1];
         CGFloat startTime = CACurrentMediaTime();
-        NSManagedObjectContext *context = [NSManagedObjectContext MR_contextForCurrentThread];
+        NSManagedObjectContext *context = [self context];
 
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(changedAttributes != nil AND objectId != nil) OR (objectId = nil)"];
-        NSArray *changedObjects = [KPParseObject MR_findAllWithPredicate:predicate inContext:context];
-        NSMutableArray *updatedObjects = [NSMutableArray array];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(!(changedAttributes == nil OR changedAttributes == NULL) AND objectId != nil) OR (objectId = nil)"];
+        NSArray *changedObjects = [KPParseObject MR_findAllWithPredicate:predicate inContext:[self context]];
         NSMutableArray *updatePFObjects = [NSMutableArray array];
+        NSMutableArray *updatedObjects = [NSMutableArray array];
         NSError *error;
-        NSInteger counter = 0;
         for(KPParseObject *object in changedObjects){
             PFObject *pfObj = [object objectToSave];
-            if(!pfObj.objectId){
-                counter++;
-                [pfObj save:&error];
-                if(!error){
-                    [object updateWithObject:pfObj context:context];
-                }
-                else{
-                    NSLog(@"error saving new object:%@",error);
-                    error = nil;
-                    continue;
-                }
+            if(!pfObj){
+                NSLog(@"skipped object:%@",object);
+                continue;
             }
-            else{
-                [updatePFObjects addObject:pfObj];
-                [updatedObjects addObject:object];
-            }
-            if(counter == 5){
-                NSLog(@"send 5 new objects");
-                [context MR_saveToPersistentStoreAndWait];
-                counter = 0;
-            }
-        }
-        if(counter > 0){
-            NSLog(@"saved %i new objects",counter);
-            [context MR_saveToPersistentStoreAndWait];
+            [updatePFObjects addObject:pfObj];
+            [updatedObjects addObject:object];
+            if(!object.changedAttributes) NSLog(@"no changed attributes, objectId: %@ object:%@",object.objectId,object);
         }
         if(updatePFObjects.count > 0){
-            NSLog(@"saving %i updated objects",updatePFObjects.count);
-            [PFObject saveAll:updatePFObjects error:&error];
+            NSLog(@"saving %i objects",updatePFObjects.count);
+            BOOL saved = [PFObject saveAll:updatePFObjects error:&error];
             if(error){
                 NSLog(@"error saving updated:%@",error);
             }
-            else{
-                [context performBlockAndWait:^{
-                    for (KPParseObject *object in updatedObjects) {
-                        [object setChangedAttributes:nil];
+            if(!saved) NSLog(@"didn't save");
+            [context performBlockAndWait:^{
+                NSInteger index = 0;
+                for (KPParseObject *object in updatedObjects) {
+                    PFObject *savedPFObject = [updatePFObjects objectAtIndex:index];
+                    if([savedPFObject.createdAt isLaterThanDate:syncStart]){
+                        [object updateWithObject:savedPFObject context:context];
+                        NSLog(@"object was new");
                     }
-                }];
-                [context MR_saveToPersistentStoreAndWait];
-            }
+                    else if([savedPFObject.updatedAt isLaterThanDate:syncStart]){
+                        [object updateWithObject:savedPFObject context:context];
+                        [object setChangedAttributes:nil];
+                        NSLog(@"successfuly updating");
+                    }
+                    else{
+                        NSLog(@"updated %@ lower %@ - %@",savedPFObject, savedPFObject.updatedAt,syncStart);
+                    }
+                    index++;
+                    
+                }
+            }];
+            [context MR_saveToPersistentStoreAndWait];
         }
         CGFloat endTime = CACurrentMediaTime();
         CGFloat takenTime = endTime - startTime;

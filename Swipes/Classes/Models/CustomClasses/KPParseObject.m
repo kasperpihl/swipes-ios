@@ -32,7 +32,7 @@
         self.updatedAt = object.updatedAt;
     }];
 }
--(void)setAttributesForSavingObject:(PFObject**)object{ }
+-(BOOL)setAttributesForSavingObject:(PFObject**)object{ return NO; }
 //-(void)finishedSaving:(BOOL)successful error:(NSError*)error{ }
 #pragma mark - Handling of changes
 -(void)updateChangedAttributes{
@@ -45,6 +45,9 @@
         [set addObjectsFromArray:changedKeys];
         
         changedKeys = [set allObjects];
+    }
+    if(!changedKeys || changedKeys.count == 0){
+        NSLog(@"empty changes");
     }
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:changedKeys];
     self.changedAttributes = data;
@@ -81,8 +84,9 @@
     NSString *parseClassName = [className substringFromIndex:2];
     PFObject *objectToSave = [PFObject objectWithClassName:parseClassName];
     if(self.objectId) objectToSave = [PFObject objectWithoutDataWithClassName:parseClassName objectId:self.objectId];
-    [self setAttributesForSavingObject:&objectToSave];
-    return objectToSave;
+    BOOL shouldUpdate = [self setAttributesForSavingObject:&objectToSave];
+    if(shouldUpdate)return objectToSave;
+    else return nil;
 }
 
 

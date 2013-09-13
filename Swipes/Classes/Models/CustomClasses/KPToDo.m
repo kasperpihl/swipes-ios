@@ -56,19 +56,22 @@
         if(save) [self save];
     }
 }
--(void)setAttributesForSavingObject:(PFObject *__autoreleasing *)object{
+-(BOOL)setAttributesForSavingObject:(PFObject *__autoreleasing *)object{
     BOOL setAll = NO;
     NSArray *changedAttributeKeys;
     NSDictionary *keyMatch = [self keyMatch];
     if(self.changedAttributes) changedAttributeKeys = [NSKeyedUnarchiver unarchiveObjectWithData:self.changedAttributes];
     if(!self.objectId) setAll = YES;
+    BOOL shouldUpdate = NO;
     for(NSString *cdKey in keyMatch){
         NSString *pfKey = [keyMatch objectForKey:cdKey];
         if(setAll || [changedAttributeKeys containsObject:cdKey]){
             if([self valueForKey:cdKey]) [*object setObject:[self valueForKey:cdKey] forKey:pfKey];
             else([*object setObject:[NSNull null] forKey:pfKey]);
+            shouldUpdate = YES;
         }
     }
+    return shouldUpdate;
 }
 -(void)save{
     [KPCORE saveInContext:nil];

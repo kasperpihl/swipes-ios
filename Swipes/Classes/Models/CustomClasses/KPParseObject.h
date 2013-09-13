@@ -13,6 +13,6 @@
 -(void)updateChangedAttributes;
 /* To use saveWithHandler: overwrite setAttributesForSavingObject: in subclass to set all the attributes to save */
 -(PFObject*)objectToSave;
--(void)setAttributesForSavingObject:(PFObject**)object;
+-(BOOL)setAttributesForSavingObject:(PFObject**)object;
 /* Overwrite for completion handler after saving */
 @end
