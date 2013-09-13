@@ -13,6 +13,7 @@
 #import "ToDoHandler.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
+#import "StyleHandler.h"
 #define TABLE_Y valForScreen(160,200)
 #define kPhoneTopToStartOfCells 116
 #define TABLE_FRAME CGRectMake(13,kPhoneTopToStartOfCells,TABLE_WIDTH,375)
@@ -528,10 +529,10 @@ typedef enum {
     WalkthroughCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         cell = [[WalkthroughCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.firstColor = [TODOHANDLER colorForCellType:CellTypeDone];
-        cell.firstIconName = [TODOHANDLER iconNameForCellType:CellTypeDone];
-        cell.thirdColor = [TODOHANDLER colorForCellType:CellTypeSchedule];
-        cell.thirdIconName = [TODOHANDLER iconNameForCellType:CellTypeSchedule];
+        cell.firstColor = [StyleHandler colorForCellType:CellTypeDone];
+        cell.firstIconName = [StyleHandler iconNameForCellType:CellTypeDone];
+        cell.thirdColor = [StyleHandler colorForCellType:CellTypeSchedule];
+        cell.thirdIconName = [StyleHandler iconNameForCellType:CellTypeSchedule];
         cell.mode = MCSwipeTableViewCellModeExit;
         cell.activatedDirection = MCSwipeTableViewCellDirectionRight;
         cell.bounceAmplitude = 0;

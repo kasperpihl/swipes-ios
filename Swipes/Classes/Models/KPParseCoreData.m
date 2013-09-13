@@ -16,11 +16,27 @@
 @interface KPParseCoreData ()
 @property (nonatomic,assign) BOOL isPerformingOperation;
 @property (nonatomic,assign) BOOL didLogout;
-@property (nonatomic,strong) NSManagedObjectContext *context;
+@property BOOL syncAgain;
+@property BOOL isSyncing;
+@property BOOL lockSaving;
 @end
 @implementation KPParseCoreData
 -(NSManagedObjectContext *)context{
     return [NSManagedObjectContext MR_defaultContext];
+}
+-(void)saveInContext:(NSManagedObjectContext*)context{
+    if(!context) context = [NSManagedObjectContext MR_defaultContext];
+    NSSet *updatedObjects = [context updatedObjects];
+    //NSSet *deletedObjects = [context deletedObjects];
+    for(KPParseObject *object in updatedObjects){
+        if([object isKindOfClass:[KPParseObject class]] && object.objectId){
+            [object updateChangedAttributes];
+        }
+    }
+    if([context isEqual:[NSManagedObjectContext MR_defaultContext]]) [context MR_saveOnlySelfAndWait];
+    else [context MR_saveToPersistentStoreAndWait];
+    [self synchronize];
+    return;
 }
 +(NSString *)classNameFromParseName:(NSString *)parseClassName{
     return [NSString stringWithFormat:@"KP%@",parseClassName];
@@ -37,14 +53,9 @@ static KPParseCoreData *sharedObject;
 #pragma mark Core data stuff
 -(void)initialize{
     [self loadDatabase];
-    /*if(![UTILITY.userDefaults boolForKey:@"seeded"]){
-        [self seedObjects];
-    }*/
 }   
 -(void)loadDatabase{
     @try {
-        //[MagicalRecord setShouldDeleteStoreOnModelMismatch:NO];
-        //[MagicalRecord setupCoreDataStackWithStoreNamed:@"swipes"];
         [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
     }
     @catch (NSException *exception) {
@@ -54,7 +65,80 @@ static KPParseCoreData *sharedObject;
         
     }
 }
+-(void)synchronize{
+    if(self.isSyncing){
+        self.syncAgain = YES;
+        return;
+    }
+    self.isSyncing = YES;
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+    dispatch_async(queue, ^{
+        NSLog(@"synchronizing");
+        CGFloat startTime = CACurrentMediaTime();
+        NSManagedObjectContext *context = [NSManagedObjectContext MR_contextForCurrentThread];
 
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(changedAttributes != nil AND objectId != nil) OR (objectId = nil)"];
+        NSArray *changedObjects = [KPParseObject MR_findAllWithPredicate:predicate inContext:context];
+        NSMutableArray *updatedObjects = [NSMutableArray array];
+        NSMutableArray *updatePFObjects = [NSMutableArray array];
+        NSError *error;
+        NSInteger counter = 0;
+        for(KPParseObject *object in changedObjects){
+            PFObject *pfObj = [object objectToSave];
+            if(!pfObj.objectId){
+                counter++;
+                [pfObj save:&error];
+                if(!error){
+                    [object updateWithObject:pfObj context:context];
+                }
+                else{
+                    NSLog(@"error saving new object:%@",error);
+                    error = nil;
+                    continue;
+                }
+            }
+            else{
+                [updatePFObjects addObject:pfObj];
+                [updatedObjects addObject:object];
+            }
+            if(counter == 5){
+                NSLog(@"send 5 new objects");
+                [context MR_saveToPersistentStoreAndWait];
+                counter = 0;
+            }
+        }
+        if(counter > 0){
+            NSLog(@"saved %i new objects",counter);
+            [context MR_saveToPersistentStoreAndWait];
+        }
+        if(updatePFObjects.count > 0){
+            NSLog(@"saving %i updated objects",updatePFObjects.count);
+            [PFObject saveAll:updatePFObjects error:&error];
+            if(error){
+                NSLog(@"error saving updated:%@",error);
+            }
+            else{
+                [context performBlockAndWait:^{
+                    for (KPParseObject *object in updatedObjects) {
+                        [object setChangedAttributes:nil];
+                    }
+                }];
+                [context MR_saveToPersistentStoreAndWait];
+            }
+        }
+        CGFloat endTime = CACurrentMediaTime();
+        CGFloat takenTime = endTime - startTime;
+        NSLog(@"sync completed in seconds: %f",takenTime);
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            self.isSyncing = NO;
+            if(self.syncAgain){
+                self.syncAgain = NO;
+                [self synchronize];
+            }
+        });
+    });
+    dispatch_release(queue);
+}
 -(void)cleanUp{
     NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
     NSError *error;

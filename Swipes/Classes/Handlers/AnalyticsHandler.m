@@ -22,10 +22,9 @@ static AnalyticsHandler *sharedObject;
 +(AnalyticsHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[AnalyticsHandler allocWithZone:NULL] init];
-        PFUser *current = [PFUser currentUser];
-        if(current){
-            [[LocalyticsSession shared] setCustomerId:current.objectId];
-            if(current.email) [[LocalyticsSession shared] setCustomerEmail:current.email];
+        if(kCurrent){
+            [[LocalyticsSession shared] setCustomerId:kCurrent.objectId];
+            if(kCurrent.email) [[LocalyticsSession shared] setCustomerEmail:kCurrent.email];
         }
     }
     return sharedObject;

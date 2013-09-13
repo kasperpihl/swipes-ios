@@ -16,4 +16,5 @@
 -(void)updateRepeatedSave:(BOOL)save;
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save;
 -(NSArray*)nextNumberOfRepeatedDates:(NSInteger)numberOfDates;
+
 @end

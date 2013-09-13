@@ -1,9 +1,7 @@
 #import "KPParseObject.h"
-
+#import "KPParseCoreData.h"
 
 @interface KPParseObject ()
-
--(void)updateWithObject:(PFObject*)object context:(NSManagedObjectContext*)context;
 @property (nonatomic,strong) NSMutableDictionary *downloadingKeys;
 @property (nonatomic,strong) NSMutableDictionary *downloadingBlocks;
 @end
@@ -25,10 +23,32 @@
 
 #pragma mark - Forward declarations
 +(PFQuery *)query{ return nil; }
--(void)updateWithObject:(PFObject *)object context:(NSManagedObjectContext*)context{  }
--(PFObject*)setAttributesForSavingObject:(PFObject*)object{ return object; }
--(void)finishedSaving:(BOOL)successful error:(NSError*)error{ }
-
+-(void)updateWithObject:(PFObject *)object context:(NSManagedObjectContext*)context{
+    if(!context) context = [KPCORE context];
+    [context performBlockAndWait:^{
+        self.objectId = object.objectId;
+        self.createdAt = object.createdAt;
+        if(!self.parseClassName) self.parseClassName = object.parseClassName;
+        self.updatedAt = object.updatedAt;
+    }];
+}
+-(void)setAttributesForSavingObject:(PFObject**)object{ }
+//-(void)finishedSaving:(BOOL)successful error:(NSError*)error{ }
+#pragma mark - Handling of changes
+-(void)updateChangedAttributes{
+    NSArray *alreadySaved;
+    
+    if(self.changedAttributes) alreadySaved = [NSKeyedUnarchiver unarchiveObjectWithData:self.changedAttributes];
+    NSArray *changedKeys = self.changedValues.allKeys;
+    if(alreadySaved && changedKeys){
+        NSMutableSet *set = [NSMutableSet setWithArray:alreadySaved];
+        [set addObjectsFromArray:changedKeys];
+        
+        changedKeys = [set allObjects];
+    }
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:changedKeys];
+    self.changedAttributes = data;
+}
 #pragma mark - Instantiate object
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context{
     if(!context) context = [NSManagedObjectContext MR_defaultContext];
@@ -36,7 +56,7 @@
     coreDataObject = [[self class] MR_createInContext:context];
     return coreDataObject;
 }
-+(KPParseObject *)object:(PFObject*)object context:(NSManagedObjectContext*)context{
++(KPParseObject *)getCDObjectFromObject:(PFObject*)object context:(NSManagedObjectContext*)context{
     if(!context) context = [NSManagedObjectContext MR_defaultContext];
     __block KPParseObject *coreDataObject;
     coreDataObject = [self objectById:object.objectId context:context];
@@ -56,22 +76,15 @@
     return object;
 }
 #pragma mark - Save to server
--(void)save:(PFObject*)object handler:(SuccessfulBlock)block{
-    if(!object) object = [PFObject objectWithoutDataWithClassName:self.parseClassName objectId:self.objectId];
-    if(![object.objectId isEqualToString:self.objectId]) return;
-    object = [self setAttributesForSavingObject:object];
-    __weak KPParseObject *weakSelf = self;
-    [PC saveObject:object priority:YES handler:^(BOOL successful, NSError *error) {
-        if(weakSelf){
-            [weakSelf finishedSaving:successful error:error];
-            NSManagedObjectContext *context = [weakSelf managedObjectContext];
-            if(context){
-                [context MR_saveToPersistentStoreAndWait];
-            }
-        }
-        if(block) block(successful,error);
-    }];
+-(PFObject*)objectToSave{
+    NSString *className = NSStringFromClass ([self class]);
+    NSString *parseClassName = [className substringFromIndex:2];
+    PFObject *objectToSave = [PFObject objectWithClassName:parseClassName];
+    if(self.objectId) objectToSave = [PFObject objectWithoutDataWithClassName:parseClassName objectId:self.objectId];
+    [self setAttributesForSavingObject:&objectToSave];
+    return objectToSave;
 }
+
 
 #pragma mark - Handle PFFile
 -(void)downloadFile:(PFFile*)file forKey:(NSString*)key withCompletion:(DataBlock)block{

@@ -112,6 +112,8 @@
     }];
 }
 -(void)pressedShare:(id)sender{
+    [ROOT_CONTROLLER shareTasks];
+    return;
     [ANALYTICS pushView:@"Sharing plus popup"];
     
     [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Sharing"}];

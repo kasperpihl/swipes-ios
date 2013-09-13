@@ -30,4 +30,5 @@ typedef enum {
 -(void)openApp;
 -(void)upgrade;
 -(void)proWithMessage:(NSString*)message;
+-(void)shareTasks;
 @end

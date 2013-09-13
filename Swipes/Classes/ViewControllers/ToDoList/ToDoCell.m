@@ -12,6 +12,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "NSDate-Utilities.h"
 #import "UIColor+Utilities.h"
+#import "StyleHandler.h"
 #define LAYER_VIEW_TAG 1
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
@@ -206,8 +207,8 @@
     
 }
 -(void)setDotColor:(CellType)cellType{
-    UIColor *color = [TODOHANDLER colorForCellType:cellType];
-    if(![color isEqual:[TODOHANDLER colorForCellType:self.cellType]]){
+    UIColor *color = [StyleHandler colorForCellType:cellType];
+    if(![color isEqual:[StyleHandler colorForCellType:self.cellType]]){
         self.timelineView.backgroundColor = color;
         self.outlineView.backgroundColor = tbackground(TaskCellBackground);
     }
@@ -227,20 +228,20 @@
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){
         _cellType = cellType;
-        self.selectedBackgroundView.backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
-        CellType firstCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
-        CellType secondCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState2];
-        CellType thirdCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState3];
-        CellType fourthCell = [TODOHANDLER cellTypeForCell:cellType state:MCSwipeTableViewCellState4];
-        [self setFirstColor:[TODOHANDLER colorForCellType:firstCell]];
-        [self setSecondColor:[TODOHANDLER colorForCellType:secondCell]];
-        [self setThirdColor:[TODOHANDLER colorForCellType:thirdCell]];
-        [self setFourthColor:[TODOHANDLER colorForCellType:fourthCell]];
-        [self setFirstIconName:[TODOHANDLER iconNameForCellType:firstCell]];
-        [self setSecondIconName:[TODOHANDLER iconNameForCellType:secondCell]];
-        [self setThirdIconName:[TODOHANDLER iconNameForCellType:thirdCell]];
-        [self setFourthIconName:[TODOHANDLER iconNameForCellType:fourthCell]];
-        self.activatedDirection = [TODOHANDLER directionForCellType:cellType];
+        self.selectedBackgroundView.backgroundColor = [StyleHandler colorForCellType:self.cellType];
+        CellType firstCell = [StyleHandler cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
+        CellType secondCell = [StyleHandler cellTypeForCell:cellType state:MCSwipeTableViewCellState2];
+        CellType thirdCell = [StyleHandler cellTypeForCell:cellType state:MCSwipeTableViewCellState3];
+        CellType fourthCell = [StyleHandler cellTypeForCell:cellType state:MCSwipeTableViewCellState4];
+        [self setFirstColor:[StyleHandler colorForCellType:firstCell]];
+        [self setSecondColor:[StyleHandler colorForCellType:secondCell]];
+        [self setThirdColor:[StyleHandler colorForCellType:thirdCell]];
+        [self setFourthColor:[StyleHandler colorForCellType:fourthCell]];
+        [self setFirstIconName:[StyleHandler iconNameForCellType:firstCell]];
+        [self setSecondIconName:[StyleHandler iconNameForCellType:secondCell]];
+        [self setThirdIconName:[StyleHandler iconNameForCellType:thirdCell]];
+        [self setFourthIconName:[StyleHandler iconNameForCellType:fourthCell]];
+        self.activatedDirection = [StyleHandler directionForCellType:cellType];
     }
 }
 @end

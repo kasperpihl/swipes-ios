@@ -11,6 +11,7 @@
 #import "NSDate-Utilities.h"
 #import "AnalyticsHandler.h"
 #import "ThemeHandler.h"
+#import "KPParseCoreData.h"
 @interface ToDoHandler ()
 @end    
 @implementation ToDoHandler
@@ -20,15 +21,6 @@ static ToDoHandler *sharedObject;
         sharedObject = [[ToDoHandler allocWithZone:NULL] init];
     }
     return sharedObject;
-}
--(BOOL)updateRepeatedToDos{
-    NSDate *now = [NSDate date];
-    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule < %@ AND repeatCopy != NO AND repeatOption > 0)",@"scheduled", now];
-    NSArray *scheduleArray = [KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:schedulePredicate];
-    for(KPToDo *toDo in scheduleArray){
-        NSLog(@"%@",toDo.schedule);
-    }
-    return NO;
 }
 -(void)deleteToDos:(NSArray*)toDos save:(BOOL)save{
     BOOL shouldUpdateNotifications = NO;
@@ -66,7 +58,7 @@ static ToDoHandler *sharedObject;
     if(save) [self save];
 }
 -(void)save{
-    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+    [KPCORE saveInContext:nil];
 }
 -(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date{
     NSMutableArray *movedToDos = [NSMutableArray array];
@@ -93,94 +85,8 @@ static ToDoHandler *sharedObject;
     [ANALYTICS incrementKey:NUMBER_OF_COMPLETED_KEY withAmount:toDoArray.count];
     return [movedToDos copy];
 }
--(MCSwipeTableViewCellActivatedDirection)directionForCellType:(CellType)type{
-    MCSwipeTableViewCellActivatedDirection direction = MCSwipeTableViewCellActivatedDirectionBoth;
-    if(type == CellTypeDone) direction = MCSwipeTableViewCellActivatedDirectionLeft;
-    return direction;
-}
--(CellType)cellTypeForCell:(CellType)type state:(MCSwipeTableViewCellState)state{
-    if(state == MCSwipeTableViewCellStateNone) return CellTypeNone;
-    NSInteger result = type + state;
-    if(type == CellTypeSchedule && (result == type-1)) result = CellTypeSchedule;
-    CellType returnValue;
-    switch (result) {
-        case CellTypeSchedule:
-        case CellTypeToday:
-        case CellTypeDone:
-            returnValue = result;
-            break;
-        default:
-            returnValue = CellTypeNone;
-            break;
-    }
-    return returnValue;
-}
--(UIColor *)colorForCellType:(CellType)type{
-    UIColor *returnColor;
-    switch (type) {
-        case CellTypeSchedule:
-            returnColor = tcolor(LaterColor);
-            break;
-        case CellTypeToday:
-            returnColor = tcolor(TasksColor);
-            break;
-        case CellTypeDone:
-            returnColor = tcolor(DoneColor);
-            break;
-        default:
-            break;
-    }
-    return returnColor;
-}
--(UIColor *)strongColorForCellType:(CellType)type{
-    UIColor *returnColor;
-    switch (type) {
-        case CellTypeSchedule:
-            returnColor = tcolor(StrongLaterColor);
-            break;
-        case CellTypeToday:
-            returnColor = tcolor(StrongTasksColor);
-            break;
-        case CellTypeDone:
-            returnColor = tcolor(StrongDoneColor);
-            break;
-        default:
-            break;
-    }
-    return returnColor;
-}
--(NSString *)iconNameForCellType:(CellType)type{
-    NSString *iconName;
-    switch (type) {
-        case CellTypeSchedule:
-            iconName = @"schedule-selected";
-            break;
-        case CellTypeToday:
-            iconName = @"today-selected";
-            break;
-        case CellTypeDone:
-            iconName = @"done-selected";
-            break;
-        default:
-            break;
-    }
-    return iconName;
-}
--(NSString *)stateForCellType:(CellType)type{
-    NSString *state;
-    switch (type) {
-        case CellTypeSchedule:
-            state = @"schedule";
-            break;
-        case CellTypeToday:
-            state = @"today";
-            break;
-        case CellTypeDone:
-            state = @"done";
-            break;
-        default:
-            break;
-    }
-    return state;
-}
+
+
+
+
 @end

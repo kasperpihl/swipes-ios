@@ -3,6 +3,8 @@
 #import "NotificationHandler.h"
 #import "KPTag.h"
 #import "NSDate-Utilities.h"
+#import "KPParseCoreData.h"
+
 @interface KPToDo ()
 @property (nonatomic,strong) NSString *readableTags;
 // Private interface goes here.
@@ -13,6 +15,23 @@
 @synthesize readableTags = _readableTags;
 @synthesize textTags = _textTags;
 @synthesize tagString = _tagString;
+-(NSDictionary*)keyMatch{
+    return @{
+      @"completionDate": @"completionDate",
+      @"title": @"title",
+      @"notes": @"notes",
+      @"schedule": @"schedule",
+      @"numberOfRepeated": @"repeatCount",
+      @"repeatedDate": @"repeatDate",
+      @"order": @"order"
+    };
+}
+-(void)updateWithObject:(PFObject *)object context:(NSManagedObjectContext *)context{
+    [super updateWithObject:object context:context];
+    [context performBlockAndWait:^{
+        
+    }];
+}
 -(CellType)cellTypeForTodo{
     NSDate *now = [NSDate date];
     if([self.state isEqualToString:@"done"]) return CellTypeDone;
@@ -37,8 +56,22 @@
         if(save) [self save];
     }
 }
+-(void)setAttributesForSavingObject:(PFObject *__autoreleasing *)object{
+    BOOL setAll = NO;
+    NSArray *changedAttributeKeys;
+    NSDictionary *keyMatch = [self keyMatch];
+    if(self.changedAttributes) changedAttributeKeys = [NSKeyedUnarchiver unarchiveObjectWithData:self.changedAttributes];
+    if(!self.objectId) setAll = YES;
+    for(NSString *cdKey in keyMatch){
+        NSString *pfKey = [keyMatch objectForKey:cdKey];
+        if(setAll || [changedAttributeKeys containsObject:cdKey]){
+            if([self valueForKey:cdKey]) [*object setObject:[self valueForKey:cdKey] forKey:pfKey];
+            else([*object setObject:[NSNull null] forKey:pfKey]);
+        }
+    }
+}
 -(void)save{
-    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+    [KPCORE saveInContext:nil];
 }
 -(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime{
     if(!time) return nil;
@@ -119,6 +152,7 @@
     [newToDo setTags:self.tags];
     newToDo.tagString = self.tagString;
     newToDo.title = self.title;
+    [newToDo updateChangedAttributes];
     return newToDo;
 }
 
@@ -157,7 +191,8 @@
         if(decrease) toDo.orderValue--;
         else toDo.orderValue++;
     }
-    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+    
+    [self save];
 }
 -(void)setTagString:(NSString *)tagString{
     if(tagString.length == 0) _tagString = nil;
@@ -209,6 +244,7 @@
 }
 -(void)deleteToDoSave:(BOOL)save{
     [self MR_deleteEntity];
+#warning Handle deleted objects in synchronize
     if(save) [self save];
 }
 -(NSArray *)textTags{

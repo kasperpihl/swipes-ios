@@ -176,7 +176,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     [AppsFlyer notifyAppID:@"657882159;TwJuYgpTKp9ENbxf6wMi8j"];
-    NSString *isLoggedIn = ([PFUser currentUser]) ? @"yes" : @"no";
+    NSString *isLoggedIn = (kCurrent) ? @"yes" : @"no";
     if([isLoggedIn isEqualToString:@"yes"]) [ANALYTICS startSession];
     else [MIXPANEL track:@"Opened app" properties:@{@"Is logged in":isLoggedIn}];
     [ANALYTICS tagEvent:@"App Open" options:@{@"Is Logged in":isLoggedIn}];

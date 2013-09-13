@@ -29,7 +29,7 @@
 #define TAGS_LABEL_PADDING 18.5
 #define NOTES_PADDING 13.5
 #define kRepeatPickerHeight 70
-
+#import "StyleHandler.h"
 
 #import "ToDoListViewController.h"
 #import "KPSegmentedViewController.h"
@@ -406,7 +406,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)updateDot{
     
-    self.dotView.backgroundColor = [TODOHANDLER colorForCellType:[self.model cellTypeForTodo]];
+    self.dotView.backgroundColor = [StyleHandler colorForCellType:[self.model cellTypeForTodo]];
 }
 -(void)updateSchedule{
     if(!self.model.schedule){// || [self.model.schedule isInPast]){

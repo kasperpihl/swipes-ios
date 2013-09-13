@@ -197,7 +197,6 @@
 		A78128BE17294C56002226C8 /* KPParseCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284417294C56002226C8 /* KPParseCommunicator.m */; };
 		A78128BF17294C56002226C8 /* KPParseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284917294C56002226C8 /* KPParseObject.m */; };
 		A78128C017294C56002226C8 /* KPToDo.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284B17294C56002226C8 /* KPToDo.m */; };
-		A78128C117294C56002226C8 /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A781284C17294C56002226C8 /* Datamodel.xcdatamodeld */; };
 		A78128C217294C56002226C8 /* _KPParseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285017294C56002226C8 /* _KPParseObject.m */; };
 		A78128C317294C56002226C8 /* _KPToDo.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285217294C56002226C8 /* _KPToDo.m */; };
 		A78128C417294C56002226C8 /* KPParseCoreData.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285417294C56002226C8 /* KPParseCoreData.m */; };
@@ -256,6 +255,8 @@
 		A7ADCB3517DD350400780F88 /* libLocalyticsAMP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7ADCB3017DD350400780F88 /* libLocalyticsAMP.a */; };
 		A7ADCB3617DD350400780F88 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB3117DD350400780F88 /* LICENSE */; };
 		A7ADCB3817DD352F00780F88 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A7ADCB3717DD352F00780F88 /* libz.dylib */; };
+		A7AF9B5717E210D000F9B26F /* StyleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5617E210D000F9B26F /* StyleHandler.m */; };
+		A7AF9B5C17E2244F00F9B26F /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B260921733D1FD000BADDE /* NotificationHandler.m */; };
 		A7B2609917346EDC000BADDE /* EMHint.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B2609617346EDC000BADDE /* EMHint.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A7B2609A17346EDC000BADDE /* EMHintsView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B2609817346EDC000BADDE /* EMHintsView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -413,7 +414,6 @@
 		A742415417A5AAA9009C9735 /* tasks-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tasks-white@2x.png"; sourceTree = "<group>"; };
 		A742415E17A5BFB2009C9735 /* WalkthroughOverlayBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkthroughOverlayBackground.h; path = Walkthrough/WalkthroughOverlayBackground.h; sourceTree = "<group>"; };
 		A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkthroughOverlayBackground.m; path = Walkthrough/WalkthroughOverlayBackground.m; sourceTree = "<group>"; };
-		A747919617DF8540003A93FE /* Datamodel 1.0.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; name = "Datamodel 1.0.3.xcdatamodel"; path = "Datamodel.xcdatamodeld/Datamodel 1.0.3.xcdatamodel"; sourceTree = "<group>"; };
 		A74F61B516EB77B3004927DA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A74F61B816EBA58B004927DA /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		A74F61BA16EBA595004927DA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -559,7 +559,6 @@
 		A781284917294C56002226C8 /* KPParseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPParseObject.m; sourceTree = "<group>"; };
 		A781284A17294C56002226C8 /* KPToDo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPToDo.h; sourceTree = "<group>"; };
 		A781284B17294C56002226C8 /* KPToDo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPToDo.m; sourceTree = "<group>"; };
-		A781284D17294C56002226C8 /* Datamodel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Datamodel.xcdatamodel; sourceTree = "<group>"; };
 		A781284F17294C56002226C8 /* _KPParseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _KPParseObject.h; sourceTree = "<group>"; };
 		A781285017294C56002226C8 /* _KPParseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _KPParseObject.m; sourceTree = "<group>"; };
 		A781285117294C56002226C8 /* _KPToDo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _KPToDo.h; sourceTree = "<group>"; };
@@ -638,6 +637,11 @@
 		A7ADCB3217DD350400780F88 /* LocalyticsAmpSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsAmpSession.h; sourceTree = "<group>"; };
 		A7ADCB3317DD350400780F88 /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
 		A7ADCB3717DD352F00780F88 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		A7AF9B5517E210D000F9B26F /* StyleHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleHandler.h; sourceTree = "<group>"; };
+		A7AF9B5617E210D000F9B26F /* StyleHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleHandler.m; sourceTree = "<group>"; };
+		A7AF9B5917E2244F00F9B26F /* Datamodel 1.0.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 1.0.3.xcdatamodel"; sourceTree = "<group>"; };
+		A7AF9B5A17E2244F00F9B26F /* Datamodel 1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 1.1.xcdatamodel"; sourceTree = "<group>"; };
+		A7AF9B5B17E2244F00F9B26F /* Datamodel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Datamodel.xcdatamodel; sourceTree = "<group>"; };
 		A7B260911733D1FC000BADDE /* NotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationHandler.h; sourceTree = "<group>"; };
 		A7B260921733D1FD000BADDE /* NotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationHandler.m; sourceTree = "<group>"; };
 		A7B2609517346EDC000BADDE /* EMHint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMHint.h; sourceTree = "<group>"; };
@@ -1217,9 +1221,8 @@
 		A781284617294C56002226C8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A747919617DF8540003A93FE /* Datamodel 1.0.3.xcdatamodel */,
+				A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */,
 				A781284717294C56002226C8 /* CustomClasses */,
-				A781284C17294C56002226C8 /* Datamodel.xcdatamodeld */,
 				A781284E17294C56002226C8 /* GeneratedClasses */,
 				A781285317294C56002226C8 /* KPParseCoreData.h */,
 				A781285417294C56002226C8 /* KPParseCoreData.m */,
@@ -1647,6 +1650,8 @@
 				A7DEA18B17954C7400EB1549 /* ThemeHandler.m */,
 				A7D7D53117B1586A00FBC042 /* SettingsHandler.h */,
 				A7D7D53217B1586A00FBC042 /* SettingsHandler.m */,
+				A7AF9B5517E210D000F9B26F /* StyleHandler.h */,
+				A7AF9B5617E210D000F9B26F /* StyleHandler.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -1977,7 +1982,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd Swipes/Classes/Models\nmogenerator -m \"Datamodel.xcdatamodeld/Datamodel 1.0.3.xcdatamodel/\" -M GeneratedClasses -H CustomClasses --template-var arc=true";
+			shellScript = "cd Swipes/Classes/Models\nmogenerator -m \"Datamodel.xcdatamodeld/Datamodel 1.1.xcdatamodel/\" -M GeneratedClasses -H CustomClasses --template-var arc=true";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1990,7 +1995,6 @@
 				A78128BE17294C56002226C8 /* KPParseCommunicator.m in Sources */,
 				A78128BF17294C56002226C8 /* KPParseObject.m in Sources */,
 				A78128C017294C56002226C8 /* KPToDo.m in Sources */,
-				A78128C117294C56002226C8 /* Datamodel.xcdatamodeld in Sources */,
 				A78128C217294C56002226C8 /* _KPParseObject.m in Sources */,
 				A78128C317294C56002226C8 /* _KPToDo.m in Sources */,
 				A78128C417294C56002226C8 /* KPParseCoreData.m in Sources */,
@@ -2074,6 +2078,8 @@
 				A789B3F917D79BFB00C25B73 /* KPOverlay.m in Sources */,
 				A789B40917D91EF600C25B73 /* DateStampView.m in Sources */,
 				A7ADCB2117DCE13100780F88 /* YoureAllDoneView.m in Sources */,
+				A7AF9B5717E210D000F9B26F /* StyleHandler.m in Sources */,
+				A7AF9B5C17E2244F00F9B26F /* Datamodel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2437,12 +2443,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		A781284C17294C56002226C8 /* Datamodel.xcdatamodeld */ = {
+		A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				A781284D17294C56002226C8 /* Datamodel.xcdatamodel */,
+				A7AF9B5917E2244F00F9B26F /* Datamodel 1.0.3.xcdatamodel */,
+				A7AF9B5A17E2244F00F9B26F /* Datamodel 1.1.xcdatamodel */,
+				A7AF9B5B17E2244F00F9B26F /* Datamodel.xcdatamodel */,
 			);
-			currentVersion = A781284D17294C56002226C8 /* Datamodel.xcdatamodel */;
+			currentVersion = A7AF9B5A17E2244F00F9B26F /* Datamodel 1.1.xcdatamodel */;
 			path = Datamodel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

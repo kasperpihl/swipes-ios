@@ -9,13 +9,14 @@
 @class NSManagedObject,NSManagedObjectContext;
 #import <Foundation/Foundation.h>
 #import <Parse/PFObject.h>
-typedef void (^ManagedObjectBlock) (NSManagedObject *object,NSManagedObjectContext *context, NSError *error);
 #define KPCORE [KPParseCoreData sharedInstance]
 @class ParseObject;
 @interface KPParseCoreData : NSObject
 @property (nonatomic,assign) BOOL isSeeded;
+@property (nonatomic,strong) NSManagedObjectContext *context;
 +(KPParseCoreData *)sharedInstance;
 -(void)cleanUp;
 -(void)seedObjects;
 +(NSString*)classNameFromParseName:(NSString*)parseClassName;
+-(void)saveInContext:(NSManagedObjectContext*)context;
 @end

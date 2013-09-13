@@ -116,14 +116,14 @@ static FacebookCommunicator *sharedObject;
         }
     }
     if (updatePermissions && write) {
-        if([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]){
-            [PFFacebookUtils reauthorizeUser:[PFUser currentUser]  withPublishPermissions:FACEBOOK_WRITE_PERMISSIONS audience:FBSessionDefaultAudienceFriends block:^(BOOL succeeded, NSError *error) {
+        if([PFFacebookUtils isLinkedWithUser:kCurrent]){
+            [PFFacebookUtils reauthorizeUser:kCurrent  withPublishPermissions:FACEBOOK_WRITE_PERMISSIONS audience:FBSessionDefaultAudienceFriends block:^(BOOL succeeded, NSError *error) {
                 if(succeeded) [self runRequest:request block:block];
                 else block(FBReturnTypeCancelled, nil,error);
             }];
         }
         else{
-            [PFFacebookUtils linkUser:[PFUser currentUser] permissions:FACEBOOK_WRITE_PERMISSIONS block:^(BOOL succeeded, NSError *error) {
+            [PFFacebookUtils linkUser:kCurrent permissions:FACEBOOK_WRITE_PERMISSIONS block:^(BOOL succeeded, NSError *error) {
                 if(succeeded) [self runRequest:request block:block];
                 else block(FBReturnTypeCancelled, nil,error);
             }];

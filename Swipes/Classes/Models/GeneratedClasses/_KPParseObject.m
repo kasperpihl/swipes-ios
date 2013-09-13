@@ -4,6 +4,7 @@
 #import "_KPParseObject.h"
 
 const struct KPParseObjectAttributes KPParseObjectAttributes = {
+	.changedAttributes = @"changedAttributes",
 	.createdAt = @"createdAt",
 	.objectId = @"objectId",
 	.parseClassName = @"parseClassName",
@@ -45,6 +46,13 @@ const struct KPParseObjectFetchedProperties KPParseObjectFetchedProperties = {
 
 	return keyPaths;
 }
+
+
+
+
+@dynamic changedAttributes;
+
+
 
 
 

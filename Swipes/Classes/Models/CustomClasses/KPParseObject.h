@@ -2,15 +2,17 @@
 #import "KPParseCommunicator.h"
 @interface KPParseObject : _KPParseObject {}
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context;
-+(KPParseObject *)object:(PFObject*)object context:(NSManagedObjectContext*)context;
++(KPParseObject *)getCDObjectFromObject:(PFObject*)object context:(NSManagedObjectContext*)context;
 +(KPParseObject *)objectById:(NSString *)identifier context:(NSManagedObjectContext*)context;
-+(PFQuery*)query;
 
+-(void)updateWithObject:(PFObject*)object context:(NSManagedObjectContext*)context;
+
++(PFQuery*)query;
 -(void)getDataforKey:(NSString*)key withCompletion:(DataBlock)downloadComplete;
 -(void)setFile:(PFFile*)file forKey:(NSString*)key;
-
+-(void)updateChangedAttributes;
 /* To use saveWithHandler: overwrite setAttributesForSavingObject: in subclass to set all the attributes to save */
--(void)save:(PFObject*)object handler:(SuccessfulBlock)block;
--(PFObject*)setAttributesForSavingObject:(PFObject*)object;
--(void)finishedSaving:(BOOL)successful error:(NSError*)error;
+-(PFObject*)objectToSave;
+-(void)setAttributesForSavingObject:(PFObject**)object;
+/* Overwrite for completion handler after saving */
 @end

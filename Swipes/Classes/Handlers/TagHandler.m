@@ -9,6 +9,7 @@
 #import "TagHandler.h"
 #import "ToDoHandler.h"
 #import "AnalyticsHandler.h"
+#import "KPParseCoreData.h"
 @implementation TagHandler
 static TagHandler *sharedObject;
 +(TagHandler *)sharedInstance{
@@ -34,7 +35,7 @@ static TagHandler *sharedObject;
     else [ANALYTICS incrementKey:NUMBER_OF_ASSIGNED_TAGS_KEY withAmount:toDos.count];
 }
 -(void)save{
-    [[NSManagedObjectContext MR_defaultContext] MR_saveOnlySelfAndWait];
+    [KPCORE saveInContext:nil];
 }
 -(NSArray *)allTags{
     NSArray *tagObjs = [KPTag MR_findAll];

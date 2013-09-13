@@ -11,15 +11,9 @@
 @interface ToDoHandler : NSObject
 +(ToDoHandler*)sharedInstance;
 -(KPToDo*)addItem:(NSString*)item;
--(MCSwipeTableViewCellActivatedDirection)directionForCellType:(CellType)type;
--(CellType)cellTypeForCell:(CellType)type state:(MCSwipeTableViewCellState)state;
--(NSString*)stateForCellType:(CellType)type;
--(UIColor*)colorForCellType:(CellType)type;
--(UIColor*)strongColorForCellType:(CellType)type;
--(NSString*)iconNameForCellType:(CellType)type;
+
 -(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date;
 -(NSArray*)completeToDos:(NSArray*)toDoArray;
 -(void)changeToDos:(NSArray*)toDos title:(NSString *)title save:(BOOL)save;
 -(void)deleteToDos:(NSArray*)toDos save:(BOOL)save;
--(BOOL)updateRepeatedToDos;
 @end

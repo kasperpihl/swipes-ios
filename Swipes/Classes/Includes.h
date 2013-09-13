@@ -77,6 +77,10 @@ NS_INLINE void mainBlock(void (^block)(void))
         dispatch_sync(dispatch_get_main_queue(), block);
     }
 }
+#define kCurrent [PFUser currentUser]
+#define kCurrentAttr(attr) [kCurrent objectForKey:attr]
+#define kCurrentSetAttr(key,attr) [kCurrent setObject:attr forKey:key]
+
 #define radians(degrees) (degrees * M_PI / 180)
 #define degrees(radians) (radians * 180 / M_PI)
 

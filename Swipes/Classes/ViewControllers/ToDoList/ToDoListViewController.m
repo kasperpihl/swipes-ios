@@ -18,6 +18,7 @@
 #import "SectionHeaderView.h"
 #import "KPBlurry.h"
 #import "AnalyticsHandler.h"
+#import "StyleHandler.h"
 #define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
@@ -174,12 +175,12 @@
     
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    UIColor *backgroundColor = [TODOHANDLER colorForCellType:self.cellType];
+    UIColor *backgroundColor = [StyleHandler colorForCellType:self.cellType];
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, SECTION_HEADER_HEIGHT)];
     UIFont *font = KP_SEMIBOLD(15);
     NSString *title = [[self.itemHandler titleForSection:section] capitalizedString];
     headerView.backgroundColor = backgroundColor;
-    SectionHeaderView *extraView = [[SectionHeaderView alloc] initWithColor:[TODOHANDLER colorForCellType:self.cellType] font:font title:title];
+    SectionHeaderView *extraView = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:self.cellType] font:font title:title];
     if(self.cellType == CellTypeToday) extraView.textColor = color(44,50, 59, 1);
     CGRectSetX(extraView, 320-extraView.frame.size.width);
     [headerView addSubview:extraView];
@@ -381,7 +382,7 @@
     self.isHandlingTrigger = YES;
     NSArray *toDosArray = [self selectedItems];
     NSArray *movedItems;
-    __block CellType targetCellType = [TODOHANDLER cellTypeForCell:cell.cellType state:state];
+    __block CellType targetCellType = [StyleHandler cellTypeForCell:cell.cellType state:state];
     switch (targetCellType) {
         case CellTypeSchedule:{
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
@@ -406,7 +407,6 @@
             break;
         case CellTypeDone:
             movedItems = [TODOHANDLER completeToDos:toDosArray];
-            NSLog(@"total: %i movedItemsCount:%i",toDosArray.count,movedItems.count);
             break;
         case CellTypeNone:
             [self returnSelectedRowsAndBounce:NO];
@@ -419,7 +419,7 @@
 -(void)swipeTableViewCell:(ToDoCell *)cell slidedIntoState:(MCSwipeTableViewCellState)state{
     CellType targetType = self.cellType;
     if(state != MCSwipeTableViewCellStateNone){
-        targetType = [TODOHANDLER cellTypeForCell:self.cellType state:state];
+        targetType = [StyleHandler cellTypeForCell:self.cellType state:state];
     }
     [cell setDotColor:targetType];
 }
@@ -445,7 +445,6 @@
         if(toDoIP) [indexPaths addObject:toDoIP];
     }
     NSIndexSet *deletedSections = [self.itemHandler removeItems:items];
-    NSLog(@"selected: %i items: %i indexPaths: %i",self.selectedRows.count,items.count,indexPaths.count);
     if(self.selectedRows.count != indexPaths.count){
         if(self.isShowingItem) self.parent.showingModel = nil;
         [self update];

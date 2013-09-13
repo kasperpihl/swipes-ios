@@ -69,7 +69,6 @@
     [self.tableView setReorderingEnabled:(itemNumber > 1)];
     [self updateBackground];
     [self setEmptyBack:(itemNumber == 0) animated:YES];
-    NSLog(@"updating number for today: %i from: %i",itemNumber,oldNumber);
     if(itemNumber == 0 && oldNumber > 0){
         NSInteger servicesAvailable = 0;
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) servicesAvailable++;

@@ -38,9 +38,11 @@
 
 #import "KPOverlay.h"
 
+#import "ToDoHandler.h"
 #import "LocalyticsSession.h"
+#import <MessageUI/MessageUI.h>
 
-@interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate>
 @property (nonatomic,strong) RESideMenu *sideMenu;
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 @property (nonatomic) NSDate *lastClose;
@@ -88,7 +90,7 @@
     __block NSString *requestPath = @"me?fields=email,gender";
     FBRequest *request = [FBRequest requestForGraphPath:requestPath];
     [FBC addRequest:request write:NO permissions:nil block:^BOOL(FBReturnType status, id result, NSError *error) {
-        PFUser *user = [PFUser currentUser];
+        PFUser *user = kCurrent;
         if(error) {
             return NO;
         }
@@ -197,6 +199,30 @@ static RootViewController *sharedObject;
         }
     }];
 }
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+    //handle any error
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+-(void)shareTasks{
+    if([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
+        mailCont.mailComposeDelegate = self;
+        [mailCont setSubject:@"Tasks from Swipes"];
+        
+        NSString *message = @"Tasks from Swipes: \r\n\r\n";
+        NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
+        for(KPToDo *toDo in tasks){
+            message = [message stringByAppendingFormat:@"◯ %@\r\n",toDo.title];
+        }
+        
+        [mailCont setMessageBody:message isHTML:NO];
+        [self presentViewController:mailCont animated:YES completion:nil];
+    }
+    else{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Mail was not setup" message:@"You can send us feedback to support@swipesapp.com. Thanks" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+}
 -(void)upgrade{
     UpgradeViewController *viewController = [[UpgradeViewController alloc]init];
     viewController.delegate = self;
@@ -227,7 +253,7 @@ static RootViewController *sharedObject;
         [OVERLAY popAllViewsAnimated:NO];
         [self resetRoot];
     }
-    else [[[self menuViewController] currentViewController] update];    
+    else if(self.lastClose) [[[self menuViewController] currentViewController] update];
 }
 -(void)closeApp{
     self.lastClose = [NSDate date];
@@ -237,7 +263,7 @@ static RootViewController *sharedObject;
 -(void)setupAppearance{
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
-    if(![PFUser currentUser]) [self changeToMenu:KPMenuLogin animated:NO];
+    if(!kCurrent) [self changeToMenu:KPMenuLogin animated:NO];
     else [self changeToMenu:KPMenuHome animated:NO];
 }
 - (void)viewDidLoad
