@@ -287,7 +287,6 @@
             [TODOHANDLER scheduleToDos:@[self.parent.showingModel] forDate:chosenDate];
             [self.parent.showingModel updateRepeatedSave:YES];
             if(self.cellType == CellTypeSchedule){
-                NSLog(@"cell type was schedule");
                 [self.showingViewController update];
                 [self update];
             }

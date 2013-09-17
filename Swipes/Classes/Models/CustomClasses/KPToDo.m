@@ -56,20 +56,48 @@
         if(save) [self save];
     }
 }
--(BOOL)setAttributesForSavingObject:(PFObject *__autoreleasing *)object{
+-(NSString*)stringForRepeatOption:(RepeatOptions)option{
+    NSString *repeatString;
+    switch (option) {
+        
+        case RepeatEveryDay:
+            repeatString = @"every day";
+            break;
+        case RepeatEveryMonFriOrSatSun:
+            repeatString = @"mon-fri or sat+sun";
+            break;
+        case RepeatEveryWeek:
+            repeatString = @"every week";
+            break;
+        case RepeatEveryMonth:
+            repeatString = @"every month";
+            break;
+        case RepeatEveryYear:
+            repeatString = @"every year";
+            break;
+        case RepeatNever:
+        default:
+            repeatString = @"never";
+            break;
+    }
+    return repeatString;
+}
+-(BOOL)setAttributesForSavingObject:(PFObject *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
     BOOL setAll = NO;
-    NSArray *changedAttributeKeys;
     NSDictionary *keyMatch = [self keyMatch];
-    if(self.changedAttributes) changedAttributeKeys = [NSKeyedUnarchiver unarchiveObjectWithData:self.changedAttributes];
     if(!self.objectId) setAll = YES;
     BOOL shouldUpdate = NO;
     for(NSString *cdKey in keyMatch){
         NSString *pfKey = [keyMatch objectForKey:cdKey];
-        if(setAll || [changedAttributeKeys containsObject:cdKey]){
+        if(setAll || [changedAttributes containsObject:cdKey]){
             if([self valueForKey:cdKey]) [*object setObject:[self valueForKey:cdKey] forKey:pfKey];
             else([*object setObject:[NSNull null] forKey:pfKey]);
             shouldUpdate = YES;
         }
+    }
+    if(setAll || [changedAttributes containsObject:@"repeatOption"]){
+        [*object setObject:[self stringForRepeatOption:self.repeatOptionValue] forKey:@"repeatOption"]; 
+        shouldUpdate = YES;
     }
     return shouldUpdate;
 }
@@ -155,7 +183,6 @@
     [newToDo setTags:self.tags];
     newToDo.tagString = self.tagString;
     newToDo.title = self.title;
-    [newToDo updateChangedAttributes];
     return newToDo;
 }
 

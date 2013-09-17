@@ -5,7 +5,6 @@
 
 
 extern const struct KPParseObjectAttributes {
-	__unsafe_unretained NSString *changedAttributes;
 	__unsafe_unretained NSString *createdAt;
 	__unsafe_unretained NSString *objectId;
 	__unsafe_unretained NSString *parseClassName;
@@ -24,7 +23,6 @@ extern const struct KPParseObjectFetchedProperties {
 
 
 
-
 @interface KPParseObjectID : NSManagedObjectID {}
 @end
 
@@ -33,16 +31,6 @@ extern const struct KPParseObjectFetchedProperties {
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
 - (KPParseObjectID*)objectID;
-
-
-
-
-
-@property (nonatomic, strong) NSData* changedAttributes;
-
-
-
-//- (BOOL)validateChangedAttributes:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -96,12 +84,6 @@ extern const struct KPParseObjectFetchedProperties {
 @end
 
 @interface _KPParseObject (CoreDataGeneratedPrimitiveAccessors)
-
-
-- (NSData*)primitiveChangedAttributes;
-- (void)setPrimitiveChangedAttributes:(NSData*)value;
-
-
 
 
 - (NSDate*)primitiveCreatedAt;

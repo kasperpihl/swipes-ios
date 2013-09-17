@@ -32,35 +32,18 @@
         self.updatedAt = object.updatedAt;
     }];
 }
--(BOOL)setAttributesForSavingObject:(PFObject**)object{ return NO; }
+-(BOOL)setAttributesForSavingObject:(PFObject**)object changedAttributes:(NSArray *)changedAttributes{ return NO; }
 //-(void)finishedSaving:(BOOL)successful error:(NSError*)error{ }
 #pragma mark - Handling of changes
--(void)updateChangedAttributes{
-    NSArray *alreadySaved;
-    
-    if(self.changedAttributes) alreadySaved = [NSKeyedUnarchiver unarchiveObjectWithData:self.changedAttributes];
-    NSArray *changedKeys = self.changedValues.allKeys;
-    if(alreadySaved && changedKeys){
-        NSMutableSet *set = [NSMutableSet setWithArray:alreadySaved];
-        [set addObjectsFromArray:changedKeys];
-        
-        changedKeys = [set allObjects];
-    }
-    if(!changedKeys || changedKeys.count == 0){
-        NSLog(@"empty changes");
-    }
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:changedKeys];
-    self.changedAttributes = data;
-}
 #pragma mark - Instantiate object
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context{
-    if(!context) context = [NSManagedObjectContext MR_defaultContext];
+    if(!context) context = [KPCORE context];
     KPParseObject *coreDataObject;
     coreDataObject = [[self class] MR_createInContext:context];
     return coreDataObject;
 }
 +(KPParseObject *)getCDObjectFromObject:(PFObject*)object context:(NSManagedObjectContext*)context{
-    if(!context) context = [NSManagedObjectContext MR_defaultContext];
+    if(!context) context = [KPCORE context];
     __block KPParseObject *coreDataObject;
     coreDataObject = [self objectById:object.objectId context:context];
     if(!coreDataObject){
@@ -74,19 +57,28 @@
     return coreDataObject;
 }
 +(KPParseObject *)objectById:(NSString *)identifier context:(NSManagedObjectContext*)context{
-    if(!context) context = [NSManagedObjectContext MR_defaultContext];
+    if(!context) context = [KPCORE context];
     KPParseObject *object = [[self class] MR_findFirstByAttribute:@"objectId" withValue:identifier inContext:context];
     return object;
 }
 #pragma mark - Save to server
--(PFObject*)objectToSave{
-    NSString *className = NSStringFromClass ([self class]);
-    NSString *parseClassName = [className substringFromIndex:2];
-    PFObject *objectToSave = [PFObject objectWithClassName:parseClassName];
-    if(self.objectId) objectToSave = [PFObject objectWithoutDataWithClassName:parseClassName objectId:self.objectId];
-    BOOL shouldUpdate = [self setAttributesForSavingObject:&objectToSave];
+-(PFObject*)objectToSaveInContext:(NSManagedObjectContext *)context{
+    if(!context) context = [KPCORE context];
+    __block BOOL shouldUpdate = NO;
+    __block PFObject *objectToSave;
+    [context performBlockAndWait:^{
+        NSString *className = NSStringFromClass ([self class]);
+        NSString *parseClassName = [className substringFromIndex:2];
+        objectToSave = [PFObject objectWithClassName:parseClassName];
+        if(self.objectId) objectToSave = [PFObject objectWithoutDataWithClassName:parseClassName objectId:self.objectId];
+        NSMutableSet *changeSet = [KPCORE.updateObjects objectForKey:self.objectId];
+        NSArray *changedAttributes;
+        if(changeSet) changedAttributes = [changeSet allObjects];
+        shouldUpdate = [self setAttributesForSavingObject:&objectToSave changedAttributes:changedAttributes];
+    }];
     if(shouldUpdate)return objectToSave;
     else return nil;
+    
 }
 
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12F37" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="ParseObject" representedClassName="KPParseObject" isAbstract="YES" syncable="YES">
-        <attribute name="changedAttributes" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="parseClassName" optional="YES" attributeType="String" syncable="YES"/>
@@ -26,7 +25,7 @@
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="todos" inverseEntity="Tag" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ParseObject" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="ParseObject" positionX="160" positionY="192" width="128" height="105"/>
         <element name="Tag" positionX="160" positionY="192" width="128" height="75"/>
         <element name="ToDo" positionX="160" positionY="192" width="128" height="225"/>
     </elements>

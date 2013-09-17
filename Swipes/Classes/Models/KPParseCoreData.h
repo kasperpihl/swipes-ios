@@ -14,6 +14,7 @@
 @interface KPParseCoreData : NSObject
 @property (nonatomic,assign) BOOL isSeeded;
 @property (nonatomic,strong) NSManagedObjectContext *context;
+@property (nonatomic) NSMutableDictionary *updateObjects;
 +(KPParseCoreData *)sharedInstance;
 -(void)cleanUp;
 -(void)seedObjects;

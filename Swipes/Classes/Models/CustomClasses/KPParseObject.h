@@ -10,9 +10,8 @@
 +(PFQuery*)query;
 -(void)getDataforKey:(NSString*)key withCompletion:(DataBlock)downloadComplete;
 -(void)setFile:(PFFile*)file forKey:(NSString*)key;
--(void)updateChangedAttributes;
 /* To use saveWithHandler: overwrite setAttributesForSavingObject: in subclass to set all the attributes to save */
--(PFObject*)objectToSave;
--(BOOL)setAttributesForSavingObject:(PFObject**)object;
+-(PFObject*)objectToSaveInContext:(NSManagedObjectContext *)context;
+-(BOOL)setAttributesForSavingObject:(PFObject**)object changedAttributes:(NSArray*)changedAttributes;
 /* Overwrite for completion handler after saving */
 @end

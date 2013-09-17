@@ -222,7 +222,6 @@
     return button;
 }
 -(void)timerFired:(NSTimer*)sender{
-    
     NSDictionary *userInfo = [sender userInfo];
     NSInteger index = [[userInfo objectForKey:@"button"] integerValue];
     UIButton *button = [[self.segmentedControl buttonsArray] objectAtIndex:index];
@@ -354,6 +353,12 @@
 }
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl{
     self.showingModel = nil;
+    UIButton *pressedButton = [[segmentedControl buttonsArray] objectAtIndex:[self.segmentedControl.selectedIndexes firstIndex]];
+    
+    /*[pressedButton.imageView stopAnimating];
+    [pressedButton setHighlighted:NO];
+    [pressedButton setSelected:YES];
+    */
     [self changeViewControllerAnimated:YES];
     //[self highlightButton:KPSegmentButtonSchedule];
 	
