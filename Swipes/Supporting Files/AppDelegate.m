@@ -121,7 +121,6 @@
     }
     [ANALYTICS tagEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism }];
 }
-
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
