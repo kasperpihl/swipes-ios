@@ -19,7 +19,6 @@
         <attribute name="repeatedDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="repeatOption" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="schedule" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tagString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="todos" inverseEntity="Tag" syncable="YES"/>
@@ -27,6 +26,6 @@
     <elements>
         <element name="ParseObject" positionX="160" positionY="192" width="128" height="105"/>
         <element name="Tag" positionX="160" positionY="192" width="128" height="75"/>
-        <element name="ToDo" positionX="160" positionY="192" width="128" height="225"/>
+        <element name="ToDo" positionX="160" positionY="192" width="128" height="210"/>
     </elements>
 </model>

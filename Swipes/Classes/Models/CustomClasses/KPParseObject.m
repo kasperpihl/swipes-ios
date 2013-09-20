@@ -20,15 +20,16 @@
     if(!_downloadingKeys) _downloadingKeys = [NSMutableDictionary dictionary];
     return _downloadingKeys;
 }
-
 #pragma mark - Forward declarations
 +(PFQuery *)query{ return nil; }
 -(void)updateWithObject:(PFObject *)object context:(NSManagedObjectContext*)context{
     if(!context) context = [KPCORE context];
     [context performBlockAndWait:^{
-        self.objectId = object.objectId;
-        self.createdAt = object.createdAt;
-        if(!self.parseClassName) self.parseClassName = object.parseClassName;
+        if(!self.objectId){
+            self.objectId = object.objectId;
+            self.createdAt = object.createdAt;
+            self.parseClassName = object.parseClassName;
+        }
         self.updatedAt = object.updatedAt;
     }];
 }
@@ -48,12 +49,7 @@
     coreDataObject = [self objectById:object.objectId context:context];
     if(!coreDataObject){
         coreDataObject = [[self class] MR_createInContext:context];
-        coreDataObject.objectId = object.objectId;
-        coreDataObject.createdAt = object.createdAt;
-        coreDataObject.parseClassName = object.parseClassName;
     }
-    coreDataObject.updatedAt = object.updatedAt;
-    [coreDataObject updateWithObject:object context:context];
     return coreDataObject;
 }
 +(KPParseObject *)objectById:(NSString *)identifier context:(NSManagedObjectContext*)context{

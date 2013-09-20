@@ -18,8 +18,6 @@
 #import "FBSystemAccountStoreAdapter.h"
 #import "FBSessionAppEventsState.h"
 
-@class FBSystemAccountStoreAdapter;
-
 extern NSString *const FBLoginUXClientState;
 extern NSString *const FBLoginUXClientStateIsClientState;
 extern NSString *const FBLoginUXClientStateIsOpenSession;
@@ -33,17 +31,19 @@ extern NSString *const FacebookNativeApplicationLoginDomain;
 
 @property(readonly) FBSessionDefaultAudience lastRequestedSystemAudience;
 @property(readonly, retain) FBSessionAppEventsState *appEventsState;
+@property(readonly) NSThread *affinitizedThread;
+@property(atomic, readonly) BOOL isRepairing;
 
 - (void)refreshAccessToken:(NSString*)token expirationDate:(NSDate*)expireDate;
 - (BOOL)shouldExtendAccessToken;
+- (BOOL)shouldRefreshPermissions;
+- (void)refreshPermissions:(NSArray *)permissions;
 - (void)closeAndClearTokenInformation:(NSError*) error;
 - (void)clearAffinitizedThread;
 
 + (FBSession*)activeSessionIfExists;
 
 + (FBSession*)activeSessionIfOpen;
-
-+ (void)deleteFacebookCookies;
 
 - (NSError*)errorLoginFailedWithReason:(NSString*)errorReason
                              errorCode:(NSString*)errorCode
@@ -53,8 +53,12 @@ extern NSString *const FacebookNativeApplicationLoginDomain;
               completionHandler:(FBSessionStateHandler) handler
    raiseExceptionIfInvalidState:(BOOL)raiseException;
 
-+ (BOOL)isOpenSessionResponseURL:(NSURL *)url;
-
 + (NSError *)sdkSurfacedErrorForNativeLoginError:(NSError *)nativeLoginError;
 
+- (void)repairWithHandler:(FBSessionRequestPermissionResultHandler) handler;
+
++ (BOOL)openActiveSessionWithPermissions:(NSArray*)permissions
+                            allowLoginUI:(BOOL)allowLoginUI
+                         defaultAudience:(FBSessionDefaultAudience)defaultAudience
+                       completionHandler:(FBSessionStateHandler)handler;
 @end

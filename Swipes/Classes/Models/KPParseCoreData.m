@@ -110,7 +110,6 @@ static KPParseCoreData *sharedObject;
     self.isSyncing = YES;
 
     NSLog(@"synchronizing");
-    NSDate *syncStart = [[NSDate date] dateByAddingTimeInterval:-1];
     CGFloat startTime = CACurrentMediaTime();
     [self updateTMPObjects];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(objectId IN %@) OR (objectId = nil)",[self.updateObjects allKeys]];
@@ -132,7 +131,6 @@ static KPParseCoreData *sharedObject;
             }
             [updatePFObjects addObject:pfObj];
             [updatedObjects addObject:object];
-            //if(!object.changedAttributes)
         }
         if(updatePFObjects.count > 0){
             NSLog(@"saving %i objects",updatePFObjects.count);
@@ -146,21 +144,12 @@ static KPParseCoreData *sharedObject;
             NSInteger index = 0;
             for (KPParseObject *object in updatedObjects) {
                 PFObject *savedPFObject = [updatePFObjects objectAtIndex:index];
-                if([savedPFObject.createdAt isLaterThanDate:syncStart]){
+                if(object.updatedAt){
                     [object updateWithObject:savedPFObject context:localContext];
                     [self.updateObjects removeObjectForKey:object.objectId];
-                }
-                else if([savedPFObject.updatedAt isLaterThanDate:syncStart]){
-                    [object updateWithObject:savedPFObject context:localContext];
-                    NSLog(@"successfuly updating");
-                    [self.updateObjects removeObjectForKey:object.objectId];
-                }
-                else{
-                    NSLog(@"updated %@ lower %@ - %@",savedPFObject, savedPFObject.updatedAt,syncStart);
                 }
                 index++;
             }
-            
         }
     } completion:^(BOOL success, NSError *localError) {
         if(localError) NSLog(@"error happened in the first save:%@",localError);
@@ -168,20 +157,48 @@ static KPParseCoreData *sharedObject;
         CGFloat endTime = CACurrentMediaTime();
         CGFloat takenTime = endTime - startTime;
         NSLog(@"sync completed in seconds: %f",takenTime);
-        self.isSyncing = NO;
         if(self.syncAgain){
+            self.isSyncing = NO;
             self.syncAgain = NO;
             [self synchronize];
         }
         else{
-            
+            [self update];
         }
     }];
-        /*PFQuery *taskQuery = [PFQuery queryWithClassName:@"ToDo"];
+        
+}
+-(void)update{
+    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
+        NSDate *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"];
+        PFQuery *taskQuery = [PFQuery queryWithClassName:@"ToDo"];
+        [taskQuery whereKey:@"owner" equalTo:kCurrent];
         [taskQuery setLimit:1000];
-        PFQuery *tagQuery = [PFQuery queryWithClassName:@"Tag"];
-        [tagQuery setLimit:1000];
-*/
+        if(lastUpdate) [taskQuery whereKey:@"updatedAt" greaterThanOrEqualTo:lastUpdate];
+        NSLog(@"lastUpdate:%@",lastUpdate);
+        NSError *error;
+        NSArray *tasks = [taskQuery findObjects:&error];
+        if(error){
+            NSLog(@"error query:%@",error);
+        }
+        return;
+        for(PFObject *object in tasks){
+            if(!lastUpdate) lastUpdate = object.updatedAt;
+            else if([object.updatedAt isLaterThanDate:lastUpdate]) lastUpdate = object.updatedAt;
+            Class class = NSClassFromString([KPParseCoreData classNameFromParseName:object.parseClassName]);
+            if(class && [class isSubclassOfClass:[KPParseObject class]]){
+                KPParseObject *cdObject = [class getCDObjectFromObject:object context:localContext];
+                [cdObject updateWithObject:object context:localContext];
+            }
+        }
+        if(lastUpdate) [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastUpdate"];
+    } completion:^(BOOL success, NSError *error) {
+        if(error) NSLog(@"error from update");
+        self.isSyncing = NO;
+        if(self.syncAgain) {
+            [self synchronize];
+        }
+    }];
     
     
 }

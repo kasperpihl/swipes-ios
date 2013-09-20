@@ -14,8 +14,8 @@
 @implementation ScheduleViewController
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     NSDate *startDate = [NSDate date];
-    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule > %@)",@"scheduled", startDate];
-    NSPredicate *unspecifiedPredicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule = nil)",@"scheduled"];
+    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil)", startDate];
+    NSPredicate *unspecifiedPredicate = [NSPredicate predicateWithFormat:@"(schedule = nil AND completionDate = nil)"];
     NSArray *scheduleArray = [KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:schedulePredicate];
     NSArray *unspecifiedArray = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:unspecifiedPredicate];
     NSArray *totalArray = [scheduleArray arrayByAddingObjectsFromArray:unspecifiedArray];

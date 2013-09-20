@@ -20,4 +20,5 @@
 -(void)seedObjects;
 +(NSString*)classNameFromParseName:(NSString*)parseClassName;
 -(void)saveInContext:(NSManagedObjectContext*)context;
+-(void)synchronize;
 @end

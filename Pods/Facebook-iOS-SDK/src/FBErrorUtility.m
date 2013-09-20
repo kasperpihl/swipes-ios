@@ -20,7 +20,7 @@
 #import "FBUtility.h"
 #import "FBAccessTokenData+Internal.h"
 
-static const int FBOAuthError = 190;
+const int FBOAuthError = 190;
 static const int FBAPISessionError = 102;
 static const int FBAPIServiceError = 2;
 static const int FBAPIUnknownError = 1;
@@ -240,7 +240,7 @@ static const int FBSDKSystemPasswordErrorSubcode = 65001;
 }
 
 + (void)fberrorGetCodeValueForError:(NSError *)error
-                              index:(int)index
+                              index:(NSUInteger)index
                                code:(int *)pcode
                             subcode:(int *)psubcode {
     

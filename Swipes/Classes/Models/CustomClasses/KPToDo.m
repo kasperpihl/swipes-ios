@@ -17,25 +17,41 @@
 @synthesize tagString = _tagString;
 -(NSDictionary*)keyMatch{
     return @{
-      @"completionDate": @"completionDate",
       @"title": @"title",
-      @"notes": @"notes",
       @"schedule": @"schedule",
-      @"numberOfRepeated": @"repeatCount",
-      @"repeatedDate": @"repeatDate",
+      @"completionDate": @"completionDate",
+      @"notes": @"notes",
+      @"repeatCount": @"numberOfRepeated",
+      @"repeatDate": @"repeatedDate",
       @"order": @"order"
     };
 }
+#define checkStringWithKey(object, pfKey, cdKey) if(![[self valueForKey:cdKey] isEqualToString:[object objectForKey:pfKey]]) [self setValue:[object valueForKey:pfKey] forKey:cdKey]
+#define checkDateWithKey(object, pfKey, cdKey) if(![[self valueForKey:cdKey] isEqualToDate:[object objectForKey:pfKey]]) [self setValue:[object valueForKey:pfKey] forKey:cdKey]
+#define checkNumberWithKey(object, pfKey, cdKey) if(![[self valueForKey:cdKey] isEqualToNumber:[object objectForKey:pfKey]]) [self setValue:[object valueForKey:pfKey] forKey:cdKey]
 -(void)updateWithObject:(PFObject *)object context:(NSManagedObjectContext *)context{
     [super updateWithObject:object context:context];
     [context performBlockAndWait:^{
-        
+        NSDictionary *keyMatch = [self keyMatch];
+        for(NSString *pfKey in [object allKeys]){
+            if([pfKey isEqualToString:@"repeatOption"]){
+                if(![[self stringForRepeatOption:self.repeatOptionValue] isEqualToString:[object objectForKey:@"repeatOption"]]) self.repeatOptionValue = [self optionForRepeatString:[object objectForKey:@"repeatOption"]];
+                continue;
+            }
+            NSString *cdKey = [keyMatch objectForKey:pfKey];
+            if(cdKey){
+                id cdValue = [self valueForKey:cdKey];
+                if([cdValue isKindOfClass:[NSString class]]){ checkStringWithKey(object, pfKey, cdKey); }
+                else if([cdValue isKindOfClass:[NSDate class]]){ checkDateWithKey(object, pfKey, cdKey); }
+                else if([cdValue isKindOfClass:[NSNumber class]]){ checkNumberWithKey(object, pfKey, cdKey); }
+            }
+        }
     }];
 }
 -(CellType)cellTypeForTodo{
     NSDate *now = [NSDate date];
-    if([self.state isEqualToString:@"done"]) return CellTypeDone;
-    else if([self.state isEqualToString:@"scheduled"]){
+    if(self.completionDate) return CellTypeDone;
+    else{
         if(!self.schedule || ([self.schedule isLaterThanDate:now] && ![self.schedule isEqualToDate:now])) return CellTypeSchedule;
         else return CellTypeToday;
     }
@@ -55,6 +71,15 @@
         self.repeatedDate = self.schedule;
         if(save) [self save];
     }
+}
+-(RepeatOptions)optionForRepeatString:(NSString*)repeatString{
+    RepeatOptions option = RepeatNever;
+    if([repeatString isEqualToString:@"every day"]) option = RepeatEveryDay;
+    else if([repeatString isEqualToString:@"mon-fri or sat+sun"]) option = RepeatEveryMonFriOrSatSun;
+    else if([repeatString isEqualToString:@"every week"]) option = RepeatEveryWeek;
+    else if([repeatString isEqualToString:@"every month"]) option = RepeatEveryMonth;
+    else if([repeatString isEqualToString:@"every year"]) option = RepeatEveryYear;
+    return option;
 }
 -(NSString*)stringForRepeatOption:(RepeatOptions)option{
     NSString *repeatString;
@@ -87,8 +112,8 @@
     NSDictionary *keyMatch = [self keyMatch];
     if(!self.objectId) setAll = YES;
     BOOL shouldUpdate = NO;
-    for(NSString *cdKey in keyMatch){
-        NSString *pfKey = [keyMatch objectForKey:cdKey];
+    for(NSString *pfKey in keyMatch){
+        NSString *cdKey = [keyMatch objectForKey:pfKey];
         if(setAll || [changedAttributes containsObject:cdKey]){
             if([self valueForKey:cdKey]) [*object setObject:[self valueForKey:cdKey] forKey:pfKey];
             else([*object setObject:[NSNull null] forKey:pfKey]);
@@ -179,7 +204,6 @@
     newToDo.notes = self.notes;
     newToDo.order = self.order;
     newToDo.schedule = self.schedule;
-    newToDo.state = self.state;
     [newToDo setTags:self.tags];
     newToDo.tagString = self.tagString;
     newToDo.title = self.title;
@@ -211,9 +235,9 @@
 -(void)changeToOrder:(NSInteger)newOrder{
     if(newOrder == self.orderValue) return;
     BOOL decrease = (newOrder > self.orderValue);
-    NSString *predicateRawString = (newOrder > self.orderValue) ? @"(order > %i) AND (order =< %i) AND state == %@" : @"(order < %i) AND (order >= %i) AND state == %@";
+    NSString *predicateRawString = (newOrder > self.orderValue) ? @"(order > %i) AND (order =< %i) AND completionDate != nil" : @"(order < %i) AND (order >= %i) AND completionDate != nil";
     
-    NSPredicate *betweenPredicate = [NSPredicate predicateWithFormat: predicateRawString, self.orderValue, newOrder,self.state];
+    NSPredicate *betweenPredicate = [NSPredicate predicateWithFormat: predicateRawString, self.orderValue, newOrder];
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:YES withPredicate:betweenPredicate];
     self.orderValue = newOrder;
     for (int i = 0 ; i < results.count; i++) {
@@ -294,11 +318,11 @@
         next = [self nextDateFrom:next];
     }
     KPToDo *toDoCopy = [self deepCopy];
-    toDoCopy.numberOfRepeatedValue = numberOfRepeated;
+    toDoCopy.numberOfRepeatedValue = ++numberOfRepeated;
     [toDoCopy complete];
     [self scheduleForDate:next];
     self.repeatedDate = next;
-    self.numberOfRepeated = [NSNumber numberWithInteger:numberOfRepeated++];
+    self.numberOfRepeated = [NSNumber numberWithInteger:numberOfRepeated];
 }
 -(BOOL)complete{
     if(self.repeatOptionValue > RepeatNever){
@@ -309,7 +333,6 @@
     }
     else{
         self.schedule = nil;
-        self.state = @"done";
         self.completionDate = [NSDate date];
         return YES;
     }
@@ -322,7 +345,6 @@
     CellType oldCell = [self cellTypeForTodo];
     self.completionDate = nil;
     self.schedule = date;
-    self.state = @"scheduled";
     CellType newCell = [self cellTypeForTodo];
     return (oldCell != newCell);
 }

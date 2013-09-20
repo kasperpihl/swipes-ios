@@ -249,6 +249,7 @@ static RootViewController *sharedObject;
 }
 
 -(void)openApp{
+    [KPCORE synchronize];
     if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
         [OVERLAY popAllViewsAnimated:NO];
         [self resetRoot];

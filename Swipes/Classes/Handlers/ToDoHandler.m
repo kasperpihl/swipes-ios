@@ -36,7 +36,6 @@ static ToDoHandler *sharedObject;
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
     newToDo.title = item;
     newToDo.schedule = [NSDate date];
-    newToDo.state = @"scheduled";
     NSNumber *count = [KPToDo MR_numberOfEntities];
     newToDo.order = count;
     [self save];

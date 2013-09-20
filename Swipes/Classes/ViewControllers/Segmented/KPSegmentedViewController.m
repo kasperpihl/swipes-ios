@@ -353,14 +353,7 @@
 }
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl{
     self.showingModel = nil;
-    UIButton *pressedButton = [[segmentedControl buttonsArray] objectAtIndex:[self.segmentedControl.selectedIndexes firstIndex]];
-    
-    /*[pressedButton.imageView stopAnimating];
-    [pressedButton setHighlighted:NO];
-    [pressedButton setSelected:YES];
-    */
     [self changeViewControllerAnimated:YES];
-    //[self highlightButton:KPSegmentButtonSchedule];
 	
 	
 }

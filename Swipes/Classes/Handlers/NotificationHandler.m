@@ -41,9 +41,9 @@ static NotificationHandler *sharedObject;
         return;
     }
     
-    NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule < %@)",@"scheduled", [NSDate date]];
+    NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
-    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(state == %@ AND schedule > %@)",@"scheduled", [NSDate date]];
+    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@) AND completionDate = nil", [NSDate date]];
     NSArray *scheduleArray = [KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:schedulePredicate];
     NSInteger scheduleCount = scheduleArray.count;
     NSInteger totalBadgeCount = todayCount;
