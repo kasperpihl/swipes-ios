@@ -16,3 +16,4 @@ ApptentiveConnect/build
 !default.xcworkspace
 xcuserdata
 *.moved-aside
+Pods/*
