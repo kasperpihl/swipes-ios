@@ -13,7 +13,7 @@
 #import "KPSubtitleButton.h"
 #import "AnalyticsHandler.h"
 #import "GAI.h"
-#define kCloseButtonSize 44
+#define kCloseButtonSize 60
 #define kLogoTopMargin 35
 #define kSubscribeButtonWidth 140
 #define kSubscribeButtonHeight 72

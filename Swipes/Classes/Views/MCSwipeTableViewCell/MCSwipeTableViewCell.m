@@ -20,42 +20,6 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 #define REGRET_VELOCITY 50
 @property (nonatomic) BOOL didRegret;
 @property (nonatomic) MCSwipeTableViewCellState forcedState;
-// Init
-- (void)initializer;
-
-// Handle Gestures
-- (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture;
-
-// Utils
-- (CGFloat)offsetWithPercentage:(CGFloat)percentage relativeToWidth:(CGFloat)width;
-
-- (CGFloat)percentageWithOffset:(CGFloat)offset relativeToWidth:(CGFloat)width;
-
-- (NSTimeInterval)animationDurationWithVelocity:(CGPoint)velocity;
-
-- (MCSwipeTableViewCellDirection)directionWithPercentage:(CGFloat)percentage;
-
-- (NSString *)imageNameWithPercentage:(CGFloat)percentage;
-
-- (UIColor *)colorWithPercentage:(CGFloat)percentage;
-
-- (MCSwipeTableViewCellState)stateWithPercentage:(CGFloat)percentage;
-
-- (CGFloat)imageAlphaWithPercentage:(CGFloat)percentage;
-
-- (BOOL)validateState:(MCSwipeTableViewCellState)state;
-
-// Movement
-- (void)slideImageWithPercentage:(CGFloat)percentage imageName:(NSString *)imageName isDragging:(BOOL)isDragging;
-
-- (void)animateWithOffset:(CGFloat)offset;
-
-- (void)moveWithDuration:(NSTimeInterval)duration andDirection:(MCSwipeTableViewCellDirection)direction;
-
-- (void)bounceToOrigin;
-
-// Delegate
-- (void)notifyDelegate;
 
 @property(nonatomic, assign) MCSwipeTableViewCellDirection direction;
 @property(nonatomic, assign) CGFloat currentPercentage;
@@ -136,7 +100,7 @@ secondStateIconName:(NSString *)secondIconName
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
-    [self insertSubview:_colorIndicatorView belowSubview:self.contentView];
+    [self insertSubview:_colorIndicatorView atIndex:0];
 
     _slidingImageView = [[UIImageView alloc] init];
     [_slidingImageView setContentMode:UIViewContentModeCenter];

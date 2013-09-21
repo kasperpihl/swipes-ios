@@ -171,6 +171,7 @@
             break;
     }
     self.currentMenu = menu;
+    CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
     self.viewControllers = @[viewController];
 }
 static RootViewController *sharedObject;
@@ -287,6 +288,7 @@ static RootViewController *sharedObject;
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
 }
 - (void)viewDidUnload
 {

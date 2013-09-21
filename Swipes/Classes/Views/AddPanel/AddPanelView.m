@@ -31,8 +31,10 @@
 @implementation AddPanelView
 -(void)blurryWillShow:(KPBlurry *)blurry{
     [self.addView.textField becomeFirstResponder];
-    [UIView animateWithDuration:0.25f animations:^{
+    [UIView animateWithDuration:0.25f delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         CGRectSetY(self.addView, self.frame.size.height-self.addView.frame.size.height-KEYBOARD_HEIGHT);
+    } completion:^(BOOL finished) {
+     
     }];
 }
 -(void)blurryWillHide:(KPBlurry *)blurry{
@@ -58,9 +60,9 @@
     if (self) {
         
         KPAddView *addView = [[KPAddView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, ADD_VIEW_HEIGHT)];
+        
         addView.tag = ADD_VIEW_TAG;
         addView.userInteractionEnabled = YES;
-        addView.backgroundColor = tbackground(MenuBackground);
         addView.textField.placeholder = @"Add a new task";
         addView.delegate = self;
         

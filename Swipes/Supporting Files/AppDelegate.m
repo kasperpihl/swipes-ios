@@ -21,6 +21,7 @@
 @implementation AppDelegate
 + (NSInteger)OSVersion
 {
+    
     static NSUInteger _deviceSystemMajorVersion = -1;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -70,6 +71,7 @@
     
     [[GAI sharedInstance] trackerWithTrackingId:@"UA-41592802-2"];
     
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     [Appirater appLaunched:YES];
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];

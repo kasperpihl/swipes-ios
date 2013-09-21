@@ -18,7 +18,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        self.backgroundColor = CLEAR;
         self.doneEditingButton = [UIButton buttonWithType:UIButtonTypeCustom];
         
         CGFloat buttonSize = self.frame.size.height;
@@ -31,20 +31,26 @@
         self.doneEditingButton.imageView.contentMode = UIViewContentModeCenter;
         [self addSubview:self.doneEditingButton];
         
-        UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width-buttonWidth-SEPERATOR_WIDTH, kDEFAULT_SPACING, SEPERATOR_WIDTH, self.frame.size.height-(2*kDEFAULT_SPACING))];
+        /*UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width-buttonWidth-SEPERATOR_WIDTH, kDEFAULT_SPACING, SEPERATOR_WIDTH, self.frame.size.height-(2*kDEFAULT_SPACING))];
         seperator.backgroundColor = tcolor(SeperatorColor);
         [self addSubview:seperator];
+        */
         
-        
-        self.textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, 25, self.frame.size.width-TEXT_FIELD_MARGIN_LEFT-buttonWidth, self.frame.size.height)];
-        self.textField.font = TEXT_FIELD_FONT;
-        
-        self.textField.textColor = tcolor(TextFieldColor);
+        self.textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, 0, self.frame.size.width-TEXT_FIELD_MARGIN_LEFT-buttonWidth, self.frame.size.height)];
+        self.textField.font = KP_REGULAR(18);
+        self.textField.textColor = tcolor(TagColor);
         self.textField.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.textField.returnKeyType = UIReturnKeyNext;
         self.textField.borderStyle = UITextBorderStyleNone;
         self.textField.delegate = self;
+        self.textField.placeholder = @"Add a new task";
         self.textField.userInteractionEnabled = YES;
+        @try {
+            [self.textField setValue:tcolor(TagColor) forKeyPath:@"_placeholderLabel.textColor"];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"excepton:%@",exception);
+        }
         [self.textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         [self addSubview:self.textField];
     }

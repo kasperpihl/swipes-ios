@@ -11,7 +11,7 @@
 #import "SettingsHandler.h"
 #import "NSDate-Utilities.h"
 #import "KPTimePicker.h"
-
+#import "AppDelegate.h"
 @interface SnoozesViewController () <UITableViewDataSource,UITableViewDelegate,KPTimePickerDelegate,DayPickerSettingsDelegate>
 @property (nonatomic) UITableView *tableView;
 @property (nonatomic) SnoozeSettings activeSnooze;
@@ -49,12 +49,17 @@
     self.activeSnooze = SnoozeNone;
     self.view.backgroundColor = CLEAR;
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
+    if(OSVER >= 7){
+        CGRectSetY(self.tableView, 20);
+        CGRectSetHeight(self.tableView, self.view.bounds.size.height-20);
+    }
     self.tableView.delegate = self;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     [self.tableView setSeparatorColor:tbackground(TimePickerWheelBackground)];
     [self.tableView setTableFooterView:[UIView new]];
+    NSLog(@"loaded snoozes");
     [self.view addSubview:self.tableView];
 	// Do any additional setup after loading the view.
 }
@@ -146,7 +151,6 @@
 }
 -(NSString *)timePicker:(KPTimePicker *)timePicker titleForDate:(NSDate *)time{
     return [self settingForSnooze:self.activeSnooze];
-    
 }
 -(void)dayPickerCell:(DayPickerSettingsCell *)cell pickedWeekDay:(NSInteger)weekday{
     KPSettings setting = [self settingValForSnooze:self.activeSnooze];

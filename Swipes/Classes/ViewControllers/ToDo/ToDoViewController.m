@@ -21,8 +21,6 @@
 #define TITLE_BOTTOM_MARGIN (TITLE_TOP_MARGIN)
 #define CONTAINER_INIT_HEIGHT (TITLE_HEIGHT + TITLE_TOP_MARGIN + TITLE_BOTTOM_MARGIN)
 
-#define CLOSE_BUTTON_TOP_INSET -25
-#define CLOSE_BUTTON_RIGHT_INSET -10
 
 #define TAGS_LABEL_RECT CGRectMake(LABEL_X,TAGS_LABEL_PADDING,320-LABEL_X-10,500)
 
@@ -43,6 +41,7 @@
 #import "UIColor+Utilities.h"
 #import "KPRepeatPicker.h"
 #import "UIButton+PassTouch.h"
+#import "AppDelegate.h"
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
     KPEditModeTitle,
@@ -173,7 +172,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self addAndGetImage:@"edit_notes_icon" inView:self.notesContainer];
         self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, 320-LABEL_X-10, 500)];
         self.notesView.font = EDIT_TASK_TEXT_FONT;
-        self.notesView.contentInset = UIEdgeInsetsMake(0,-8,0,0);
+        self.notesView.contentInset = UIEdgeInsetsMake(0,-5,0,0);
         self.notesView.editable = NO;
         self.notesView.textColor = tcolor(TagColor);
         self.notesView.backgroundColor = CLEAR;
@@ -472,7 +471,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if([self.delegate respondsToSelector:@selector(scheduleToDoViewController:)]) [self.delegate scheduleToDoViewController:self];
 }
 -(void)pressedNotes:(id)sender{
-    NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0, 320, self.segmentedViewController.view.frame.size.height)];
+    CGFloat extra = (OSVER >= 7) ? 20 : 0;
+    NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0+extra, 320, self.segmentedViewController.view.frame.size.height-extra)];
     [notesView setNotesText:self.model.notes title:self.model.title];
     notesView.delegate = self;
     BLURRY.showPosition = PositionBottom;

@@ -18,7 +18,7 @@
         self.dayPicker = [[KPDayPicker alloc] initWithHeight:kDayPickerHeight selectedDay:1];
         self.dayPicker.delegate = self;
         CGRectSetY(self.dayPicker, kCellHeight);
-        [self addSubview:self.dayPicker];
+        [self.contentView addSubview:self.dayPicker];
         self.layer.masksToBounds = YES;
     }
     return self;

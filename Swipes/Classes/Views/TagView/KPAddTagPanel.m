@@ -115,7 +115,6 @@
         addView.tag = ADD_VIEW_TAG;
         addView.userInteractionEnabled = YES;
         addView.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        addView.backgroundColor = tbackground(MenuBackground);
         addView.textField.placeholder = @"Add a new tag";
         addView.delegate = self;
         [self addSubview:addView];

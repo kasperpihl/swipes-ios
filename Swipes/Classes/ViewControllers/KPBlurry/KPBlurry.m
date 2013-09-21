@@ -51,7 +51,7 @@ DisplayPosition const kKPBlurryDefaultDisplayPosition = PositionCenter;
     
     // create unchanged copy of the area inside the exclusionPath
     UIImage *unblurredImage = nil;
-    if (exclusionPath != nil) {
+    /*if (exclusionPath != nil) {
         CAShapeLayer *maskLayer = [CAShapeLayer new];
         maskLayer.frame = (CGRect){CGPointZero, self.size};
         maskLayer.backgroundColor = [UIColor blackColor].CGColor;
@@ -78,7 +78,7 @@ DisplayPosition const kKPBlurryDefaultDisplayPosition = PositionCenter;
         CGContextDrawImage(context, maskLayer.bounds, self.CGImage);
         unblurredImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-    }
+    }*/
     
     //create vImage_Buffer with data from CGImageRef
     CGDataProviderRef inProvider = CGImageGetDataProvider(img);

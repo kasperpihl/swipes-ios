@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, KPSearchBarMode) {
 -(void)searchBar:(KPSearchBar *)searchBar searchedForString:(NSString*)searchString;
 @end
 
-@interface KPSearchBar : UISearchBar
+@interface KPSearchBar : UIView
 @property (nonatomic,weak) NSObject<KPSearchBarDelegate> *searchBarDelegate;
 @property (nonatomic,weak) NSObject<KPSearchBarDataSource> *searchBarDataSource;
 @property (nonatomic) KPSearchBarMode currentMode;

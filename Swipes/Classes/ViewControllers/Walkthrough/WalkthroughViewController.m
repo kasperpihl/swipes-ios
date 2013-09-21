@@ -38,7 +38,7 @@
 #define kMenuButtonSideMargin 70
 #define kMenuButtonTransformedSideMargin 90
 #define kHelparrowPercentage 0.4
-#define kCloseButtonSize 44
+#define kCloseButtonSize 60
 #define kDefTutAnimationTime 0.4f
 
 #define kSchedulePopupSize valForScreen(180,220)

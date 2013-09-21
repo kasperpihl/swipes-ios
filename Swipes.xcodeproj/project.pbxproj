@@ -49,8 +49,6 @@
 		A717BF2917611D2D004791BF /* ProximaNova-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */; };
 		A717BF2B17611EDB004791BF /* ProximaNovaCond-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF2A17611EDB004791BF /* ProximaNovaCond-Semibold.ttf */; };
 		A717BF3E17624CA3004791BF /* KPPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF3D17624CA2004791BF /* KPPageControl.m */; };
-		A71CCEB01758B1E400A41265 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A71CCEAD1758B1E400A41265 /* HPGrowingTextView.m */; };
-		A71CCEB11758B1E400A41265 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A71CCEAF1758B1E400A41265 /* HPTextViewInternal.m */; };
 		A723088F17B954370083ACF7 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A723088E17B954370083ACF7 /* libGoogleAnalytics.a */; };
 		A724B01E17A9397D00E0EF83 /* selected_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = A724B01C17A9397D00E0EF83 /* selected_circle.png */; };
 		A724B01F17A9397D00E0EF83 /* selected_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A724B01D17A9397D00E0EF83 /* selected_circle@2x.png */; };
@@ -151,6 +149,9 @@
 		A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2B172C5EAF00BCB2D9 /* KPTag.m */; };
 		A7680D2F172C610B00BCB2D9 /* KPTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2E172C610B00BCB2D9 /* KPTagList.m */; };
 		A76ADC0A17EC7BC900F52F40 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A76ADC0917EC7BC900F52F40 /* Parse.framework */; };
+		A76ADC1017EC9B5700F52F40 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A76ADC0D17EC9B5700F52F40 /* HPGrowingTextView.m */; };
+		A76ADC1117EC9B5700F52F40 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A76ADC0F17EC9B5700F52F40 /* HPTextViewInternal.m */; };
+		A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A76ADC1217ECA7AB00F52F40 /* Images.xcassets */; };
 		A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76B2386172C06CC00F742C2 /* ScheduleViewController.m */; };
 		A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A771356E17BABB5A0090BE89 /* UIView+Utilities.m */; };
 		A771359917BABD080090BE89 /* DEFacebookComposeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A771357117BABD080090BE89 /* DEFacebookComposeView.xib */; };
@@ -362,10 +363,6 @@
 		A717BF2A17611EDB004791BF /* ProximaNovaCond-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNovaCond-Semibold.ttf"; path = "Font/ProximaNovaCond-Semibold.ttf"; sourceTree = "<group>"; };
 		A717BF3C17624CA2004791BF /* KPPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPPageControl.h; path = KPPageControl/KPPageControl.h; sourceTree = "<group>"; };
 		A717BF3D17624CA2004791BF /* KPPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPPageControl.m; path = KPPageControl/KPPageControl.m; sourceTree = "<group>"; };
-		A71CCEAC1758B1E400A41265 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
-		A71CCEAD1758B1E400A41265 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
-		A71CCEAE1758B1E400A41265 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
-		A71CCEAF1758B1E400A41265 /* HPTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
 		A723088517B941860083ACF7 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
 		A723088617B941860083ACF7 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		A723088717B941860083ACF7 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
@@ -492,6 +489,11 @@
 		A7680D2D172C610B00BCB2D9 /* KPTagList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPTagList.h; sourceTree = "<group>"; };
 		A7680D2E172C610B00BCB2D9 /* KPTagList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTagList.m; sourceTree = "<group>"; };
 		A76ADC0917EC7BC900F52F40 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		A76ADC0C17EC9B5700F52F40 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
+		A76ADC0D17EC9B5700F52F40 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
+		A76ADC0E17EC9B5700F52F40 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
+		A76ADC0F17EC9B5700F52F40 /* HPTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
+		A76ADC1217ECA7AB00F52F40 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A76B2385172C06CC00F742C2 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScheduleViewController.h; path = Schedule/ScheduleViewController.h; sourceTree = "<group>"; };
 		A76B2386172C06CC00F742C2 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScheduleViewController.m; path = Schedule/ScheduleViewController.m; sourceTree = "<group>"; };
 		A771356D17BABB5A0090BE89 /* UIView+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Utilities.h"; sourceTree = "<group>"; };
@@ -844,17 +846,6 @@
 			path = EditMode;
 			sourceTree = "<group>";
 		};
-		A71CCEAB1758B1E400A41265 /* HPGrowingTextView */ = {
-			isa = PBXGroup;
-			children = (
-				A71CCEAC1758B1E400A41265 /* HPGrowingTextView.h */,
-				A71CCEAD1758B1E400A41265 /* HPGrowingTextView.m */,
-				A71CCEAE1758B1E400A41265 /* HPTextViewInternal.h */,
-				A71CCEAF1758B1E400A41265 /* HPTextViewInternal.m */,
-			);
-			path = HPGrowingTextView;
-			sourceTree = "<group>";
-		};
 		A723088417B941860083ACF7 /* GoogleAnalytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -1054,6 +1045,18 @@
 			name = Font;
 			sourceTree = "<group>";
 		};
+		A76ADC0B17EC9B5700F52F40 /* GrowingTextView */ = {
+			isa = PBXGroup;
+			children = (
+				A76ADC0C17EC9B5700F52F40 /* HPGrowingTextView.h */,
+				A76ADC0D17EC9B5700F52F40 /* HPGrowingTextView.m */,
+				A76ADC0E17EC9B5700F52F40 /* HPTextViewInternal.h */,
+				A76ADC0F17EC9B5700F52F40 /* HPTextViewInternal.m */,
+			);
+			name = GrowingTextView;
+			path = AppsFlyer/GrowingTextView;
+			sourceTree = "<group>";
+		};
 		A771357017BABD080090BE89 /* FacebookComposeViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1184,6 +1187,7 @@
 				A781287D17294C56002226C8 /* InfoPlist.strings */,
 				A781287F17294C56002226C8 /* MainStoryboard.storyboard */,
 				A781288117294C56002226C8 /* Ressources */,
+				A76ADC1217ECA7AB00F52F40 /* Images.xcassets */,
 				A78128B217294C56002226C8 /* Supporting Files */,
 			);
 			path = Swipes;
@@ -1391,7 +1395,7 @@
 				A723088417B941860083ACF7 /* GoogleAnalytics */,
 				A7717C4C17787BF10067325C /* QBPopupMenu */,
 				A717BEED175E83A0004791BF /* AppsFlyer */,
-				A71CCEAB1758B1E400A41265 /* HPGrowingTextView */,
+				A76ADC0B17EC9B5700F52F40 /* GrowingTextView */,
 			);
 			path = Libs;
 			sourceTree = "<group>";
@@ -1868,6 +1872,7 @@
 				A7FA8B1217AECE3600134ED0 /* menu_snoozes@2x.png in Resources */,
 				A7FA8B1317AECE3600134ED0 /* menu_support.png in Resources */,
 				A7FA8B1417AECE3600134ED0 /* menu_support@2x.png in Resources */,
+				A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */,
 				A7FA8B1517AECE3600134ED0 /* menu_walkthrough.png in Resources */,
 				A7FA8B1617AECE3600134ED0 /* menu_walkthrough@2x.png in Resources */,
 				A7FA8B1917AEE11F00134ED0 /* menu_back.png in Resources */,
@@ -1995,6 +2000,7 @@
 				A7F4066517296BC700DDE644 /* AddPanelView.m in Sources */,
 				A7F4066B17296BF100DDE644 /* ToDoCell.m in Sources */,
 				A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */,
+				A76ADC1117EC9B5700F52F40 /* HPTextViewInternal.m in Sources */,
 				A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */,
 				A7F40676172A785C00DDE644 /* ToDoHandler.m in Sources */,
 				A7933049172AB63700F1505E /* TodayViewController.m in Sources */,
@@ -2012,8 +2018,6 @@
 				A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */,
 				A75700341739B5B200CDB4F3 /* KPAlert.m in Sources */,
 				A7E8FB0917462F3600CC2D26 /* AKSegmentedControl.m in Sources */,
-				A71CCEB01758B1E400A41265 /* HPGrowingTextView.m in Sources */,
-				A71CCEB11758B1E400A41265 /* HPTextViewInternal.m in Sources */,
 				A7A2AC26175CF45600329FD5 /* NotesView.m in Sources */,
 				A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */,
 				A717BEE5175DF5AF004791BF /* SignupViewController.m in Sources */,
@@ -2060,6 +2064,7 @@
 				A77135B817BABD080090BE89 /* UIDevice+DEFacebookComposeViewController.m in Sources */,
 				A764F79617BBAFBC0036383B /* KPRepeatPicker.m in Sources */,
 				A789B3F917D79BFB00C25B73 /* KPOverlay.m in Sources */,
+				A76ADC1017EC9B5700F52F40 /* HPGrowingTextView.m in Sources */,
 				A789B40917D91EF600C25B73 /* DateStampView.m in Sources */,
 				A7ADCB2117DCE13100780F88 /* YoureAllDoneView.m in Sources */,
 				A7AF9B5717E210D000F9B26F /* StyleHandler.m in Sources */,
@@ -2121,6 +2126,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Kasper Pihl Tornoee";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kasper Pihl Tornoee";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2258,6 +2265,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2325,6 +2334,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Kasper Pihl Tornoee";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kasper Pihl Tornoee";
 				FRAMEWORK_SEARCH_PATHS = (

@@ -2,6 +2,7 @@
 
 #import "NotificationHandler.h"
 #import "KPTag.h"
+#import "UtilityClass.h"
 #import "NSDate-Utilities.h"
 #import "KPParseCoreData.h"
 
@@ -131,9 +132,7 @@
 }
 -(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime{
     if(!time) return nil;
-    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
-    [timeFormatter setDateFormat:@"HH:mm"];
-    NSString *timeString = [timeFormatter stringFromDate:time];
+    NSString *timeString = [UtilityClass timeStringForDate:time];
     
     NSDate *beginningOfDate = [time dateAtStartOfDay];
     NSInteger numberOfDaysAfterTodays = [beginningOfDate distanceInDaysToDate:[[NSDate date] dateAtStartOfDay]];

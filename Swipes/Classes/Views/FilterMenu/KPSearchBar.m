@@ -31,7 +31,7 @@
 
 @property (nonatomic,weak) IBOutlet UIView *filterView;
 @property (nonatomic,weak) IBOutlet UIButton *filterButton;
-@property (nonatomic,weak) IBOutlet UITextField *searchField;
+@property (nonatomic) IBOutlet UITextField *searchField;
 @property (nonatomic,weak) IBOutlet UIView *filterViewMiddleSeperator;
 @property (nonatomic,weak) IBOutlet UIView *filterViewBottomSeperator;
 @property (nonatomic,strong) NSArray *selectedTags;
@@ -64,11 +64,31 @@
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBackgroundImage:[tbackground(SearchDrawerBackground) image]];
-        //[self setSearchFieldBackgroundImage:[UtilityClass imageWithColor:TEXTFIELD_BACKGROUND] forState:UIControlStateNormal];
-        [self setTranslucent:YES];
-        self.placeholder = @"Search";
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = tbackground(SearchDrawerBackground);
+        self.searchField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, 0, self.frame.size.width-TEXT_FIELD_MARGIN_LEFT-self.frame.size.height, self.frame.size.height)];
+        self.searchField.font = TEXT_FIELD_FONT;
+        self.searchField.textColor = tcolor(SearchDrawerColor);
+        self.searchField.keyboardAppearance = UIKeyboardAppearanceAlert;
+        self.searchField.returnKeyType = UIReturnKeyDone;
+        self.searchField.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+        self.searchField.placeholder = @"Search";
+        self.searchField.borderStyle = UITextBorderStyleNone;
+        self.searchField.delegate = self;
+        @try {
+            [self.searchField setValue:tcolor(SearchDrawerColor) forKeyPath:@"_placeholderLabel.textColor"];
+        }
+        @catch (NSException *exception) {
+            
+        }
+        
+        self.searchField.userInteractionEnabled = YES;
+        //CGRectSetSize(searchField, self.frame.size.width-(2*searchField.frame.origin.x)-(self.frame.size.height), searchField.frame.size.height);
+        //searchField.enablesReturnKeyAutomatically = NO;
+        //searchField.clearButtonMode = UITextFieldViewModeNever;
+        [self.searchField addTarget:self action:@selector(startedSearch:) forControlEvents:UIControlEventEditingDidBegin];
+        [self.searchField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
+        [self addSubview:self.searchField];
+        
         CGFloat buttonSize = self.frame.size.height;
         UIButton *filterButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [filterButton addTarget:self action:@selector(pressedFilter:) forControlEvents:UIControlEventTouchUpInside];
@@ -111,34 +131,6 @@
         self.filterView = [self viewWithTag:FILTER_VIEW_TAG];
     }
     return self;
-}
-- (void)layoutSubviews {
-    UITextField *searchField;
-    NSUInteger numViews = [self.subviews count];
-    for(int i = 0; i < numViews; i++) {
-        if([[self.subviews objectAtIndex:i] isKindOfClass:[UITextField class]]) { //conform?
-            searchField = [self.subviews objectAtIndex:i];
-        }
-    }
-    [super layoutSubviews];
-    if(!(searchField == nil) && !self.searchField) {
-        self.searchField = searchField;
-        //CGRectSetX(searchField, 10);
-        //searchField.userInteractionEnabled = NO;
-        CGRectSetSize(searchField, self.frame.size.width-(2*searchField.frame.origin.x)-(self.frame.size.height), searchField.frame.size.height);
-        searchField.font = TEXT_FIELD_FONT;
-        searchField.autoresizingMask = (UIViewAutoresizingNone);
-        searchField.returnKeyType = UIReturnKeyDone;
-        searchField.borderStyle = UITextBorderStyleNone;
-        searchField.textColor = tcolor(SearchDrawerColor);
-        searchField.enablesReturnKeyAutomatically = NO;
-        searchField.clearButtonMode = UITextFieldViewModeNever;
-        [searchField addTarget:self action:@selector(startedSearch:) forControlEvents:UIControlEventEditingDidBegin];
-        [searchField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
-        [searchField setBackground:[[UIImage alloc] init]];
-        //[searchField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];
-        searchField.leftView = nil;
-    }
 }
 -(void)resignSearchField{
     if(self.currentMode == KPSearchBarModeSearch){
@@ -252,7 +244,7 @@
                            self.frame.size.width,
                            newHeight);
     CGRectSetY(self, self.frame.origin.y+originChange);
-    [UIView animateWithDuration:.5f animations:^{
+    [UIView animateWithDuration:.2f animations:^{
         self.filterView.alpha = 1;
         CGRectSetY(self, self.frame.origin.y-originChange);
         

@@ -35,6 +35,8 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.backgroundColor = CLEAR;
+        self.contentView.backgroundColor = CLEAR;
         self.labelColor = kDefTextColor;
         self.settingFont = kDefSettingFont;
         self.valueFont = kDefValueFont;

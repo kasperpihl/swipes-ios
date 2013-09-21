@@ -23,6 +23,7 @@
 #import "PlusAlertView.h"
 #import "RootViewController.h"
 #import "AnalyticsHandler.h"
+#import "AppDelegate.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
@@ -32,8 +33,9 @@
 #define SEGMENT_BORDER_RADIUS 0
 #define TODAY_EXTRA_INSET 3
 #define SEGMENT_BORDER_WIDTH 0
-#define SEGMENT_HEIGHT 44
-#define INTERESTED_SEGMENT_RECT CGRectMake(0,0,(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),SEGMENT_HEIGHT)
+#define SEGMENT_HEIGHT (44+TOP_HEIGHT)
+#define TOP_HEIGHT ((OSVER >= 7) ? 20 : 0)
+#define INTERESTED_SEGMENT_RECT CGRectMake(0,TOP_HEIGHT,(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),SEGMENT_HEIGHT-TOP_HEIGHT)
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
@@ -45,6 +47,7 @@
 @property (nonatomic,weak) IBOutlet UIView *presentedPanel;
 @property (nonatomic) BOOL tableIsShrinked;
 @property (nonatomic) NSInteger currentSelectedIndex;
+@property (nonatomic) UIView *ios7BackgroundView;
 @property (nonatomic) BOOL hasAppeared;
 @property (nonatomic) BOOL hidden;
 
@@ -249,10 +252,11 @@
 		}];
         self.view.layer.masksToBounds = YES;
         [self.view addSubview:self.segmentedControl];
-        
+        self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, TOP_HEIGHT)];
+        self.ios7BackgroundView.backgroundColor = [UIColor blackColor];
+        [self.view addSubview:self.ios7BackgroundView];
         //self.navigationItem.titleView = self.segmentedControl;
 	}
-	
 	return self;
 }
 -(KPControlHandlerState)handlerStateForCurrent:(KPControlCurrentState)state{
@@ -309,6 +313,9 @@
         currentViewController.view.frame = self.contentView.bounds;
         [self.contentView addSubview:currentViewController.view];
         [currentViewController didMoveToParentViewController:self];
+        if(OSVER >= 7){
+            [self.view bringSubviewToFront:self.ios7BackgroundView];
+        }
     }
 }
 -(void)changeToIndex:(NSInteger)index{
