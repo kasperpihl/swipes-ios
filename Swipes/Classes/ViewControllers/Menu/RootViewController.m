@@ -248,14 +248,16 @@ static RootViewController *sharedObject;
     if(self.lockSettings) return;
     [self.sideMenu panGestureRecognized:sender];
 }
-
 -(void)openApp{
     [KPCORE synchronize];
     if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
         [OVERLAY popAllViewsAnimated:NO];
         [self resetRoot];
     }
-    else if(self.lastClose) [[[self menuViewController] currentViewController] update];
+    else if(self.lastClose){
+        [[[self menuViewController] currentViewController] update];
+        [[[self menuViewController] currentViewController] deselectAllRows:self];
+    }
 }
 -(void)closeApp{
     self.lastClose = [NSDate date];
@@ -278,7 +280,7 @@ static RootViewController *sharedObject;
     BLURRY.delegate = self;
     self.sideMenu = kSideMenu;
     self.sideMenu.backgroundImage = [tbackground(TaskTableGradientBackground) image];
-    self.sideMenu.hideStatusBarArea = [AppDelegate OSVersion] < 7;
+    self.sideMenu.hideStatusBarArea = [Global OSVersion] < 7;
     self.settingsViewController = [[MenuViewController alloc] init];
     self.sideMenu.revealView = self.settingsViewController.view;
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];

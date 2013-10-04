@@ -7,7 +7,6 @@
 //
 #import "FacebookCommunicator.h"
 #import <Parse/PFFacebookUtils.h>
-#import "DEFacebookComposeViewController.h"
 #import <Social/Social.h>
 
 @interface FacebookCommunicator () <FBDialogDelegate>
@@ -41,20 +40,6 @@ static FacebookCommunicator *sharedObject;
         
         [viewController presentModalViewController:shareVC animated:YES];
     }
-   
-    FacebookRequestBlock internResBlock = ^BOOL(FBReturnType status, id result, NSError *error){
-        
-        if(!error) [viewController dismissModalViewControllerAnimated:YES];
-        BOOL hasHandled = completionBlock(status,result,error);
-        return hasHandled;
-    };
-    DEFacebookComposeViewController *facebookViewComposer = [[DEFacebookComposeViewController alloc] initForceUseCustomController:YES];
-    viewController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    if(text)[facebookViewComposer setInitialText:text forced:NO];
-    if(image) [facebookViewComposer addImage:image];
-    if(url) [facebookViewComposer addURL:url];
-    facebookViewComposer.completionHandler = internResBlock;
-    [viewController presentModalViewController:facebookViewComposer animated:YES];
 }
 -(void)shareToFriend:(NSDictionary*)friend name:(NSString*)name caption:(NSString*)caption description:(NSString*)description imageURLString:(NSString*)imageString link:(NSString*)link block:(FacebookRequestBlock)block{
     

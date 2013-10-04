@@ -232,7 +232,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(UIButton*)addClickButtonToView:(UIView*)view action:(SEL)action{
     UIButton *clickedButton = [[UIButton alloc] initWithFrame:view.bounds];
     clickedButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-    [clickedButton setBackgroundImage:[color(55,55,55,0.5) image] forState:UIControlStateHighlighted];
+    [clickedButton setBackgroundImage:[color(55,55,55,0.1) image] forState:UIControlStateHighlighted];
     //clickedButton.contentEdgeInsets = UIEdgeInsetsMake(0, LABEL_X, 0, LABEL_X/3);
     [clickedButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:clickedButton];
@@ -328,8 +328,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     else{
         self.notesView.text = self.model.notes;
     }
-    CGRectSetHeight(self.notesView, self.notesView.contentSize.height);
-    
+    self.notesView.frame = CGRectSetSize(self.notesView, self.view.frame.size.width, 500);
+    //CGSize contentSize = [self.notesView sizeThatFits:CGSizeMake(self.notesView.frame.size.width, 500)];
+    [self.notesView sizeToFit];
     CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
 }
 -(void)updateRepeated{

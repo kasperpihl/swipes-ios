@@ -205,7 +205,8 @@
     }
 }
 -(CGSize)sizeForTagWithText:(NSString*)text{
-    CGSize textSize = [text sizeWithFont:TAG_FONT];
+    
+    CGSize textSize = sizeWithFont(text, TAG_FONT);
     textSize.width += TAG_HORIZONTAL_PADDING*2;
     textSize.height = TAG_HEIGHT;
     //textSize.height += TAG_VERTICAL_PADDING*2;

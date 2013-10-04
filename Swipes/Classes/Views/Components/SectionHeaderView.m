@@ -28,7 +28,7 @@
         self.color = color;
         self.backgroundColor = CLEAR;
         self.textColor = [UIColor whiteColor];
-        CGSize textSize = [title sizeWithFont:font];
+        CGSize textSize = sizeWithFont(title, font);
         CGFloat actualHeight = textSize.height+kDefTopPadding+kDefBottomPadding;
         CGFloat leftPadding = (actualHeight*kDefLeftCutSize) + kDefLeftPadding;
         CGFloat actualWidth = textSize.width + leftPadding + kDefRightPadding ;

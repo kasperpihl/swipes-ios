@@ -10,6 +10,4 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-+ (NSInteger)OSVersion;
-#define OSVER [[(AppDelegate*)[[UIApplication sharedApplication] delegate] class] OSVersion]
 @end

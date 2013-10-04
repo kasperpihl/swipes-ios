@@ -49,6 +49,30 @@
         }
     }];
 }
+-(BOOL)setAttributesForSavingObject:(PFObject *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
+    BOOL setAll = NO;
+    NSDictionary *keyMatch = [self keyMatch];
+    if(!self.objectId) setAll = YES;
+    BOOL shouldUpdate = NO;
+    for(NSString *pfKey in keyMatch){
+        NSString *cdKey = [keyMatch objectForKey:pfKey];
+        if(setAll || [changedAttributes containsObject:cdKey]){
+            if([self valueForKey:cdKey]) [*object setObject:[self valueForKey:cdKey] forKey:pfKey];
+            else([*object setObject:[NSNull null] forKey:pfKey]);
+            shouldUpdate = YES;
+        }
+    }
+    if(setAll || [changedAttributes containsObject:@"repeatOption"]){
+        [*object setObject:[self stringForRepeatOption:self.repeatOptionValue] forKey:@"repeatOption"];
+        shouldUpdate = YES;
+    }
+    if(setAll || [changedAttributes containsObject:@"tags"]){
+        for(KPTag *tag in self.tags){
+            if(tag.objectId) [*object addUniqueObject:tag.objectId forKey:@"tags"];
+        }
+    }
+    return shouldUpdate;
+}
 -(CellType)cellTypeForTodo{
     NSDate *now = [NSDate date];
     if(self.completionDate) return CellTypeDone;
@@ -108,25 +132,7 @@
     }
     return repeatString;
 }
--(BOOL)setAttributesForSavingObject:(PFObject *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
-    BOOL setAll = NO;
-    NSDictionary *keyMatch = [self keyMatch];
-    if(!self.objectId) setAll = YES;
-    BOOL shouldUpdate = NO;
-    for(NSString *pfKey in keyMatch){
-        NSString *cdKey = [keyMatch objectForKey:pfKey];
-        if(setAll || [changedAttributes containsObject:cdKey]){
-            if([self valueForKey:cdKey]) [*object setObject:[self valueForKey:cdKey] forKey:pfKey];
-            else([*object setObject:[NSNull null] forKey:pfKey]);
-            shouldUpdate = YES;
-        }
-    }
-    if(setAll || [changedAttributes containsObject:@"repeatOption"]){
-        [*object setObject:[self stringForRepeatOption:self.repeatOptionValue] forKey:@"repeatOption"]; 
-        shouldUpdate = YES;
-    }
-    return shouldUpdate;
-}
+
 -(void)save{
     [KPCORE saveInContext:nil];
 }

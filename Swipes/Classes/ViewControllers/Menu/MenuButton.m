@@ -56,7 +56,7 @@
         self.iconImageView.highlightedImage = [UtilityClass image:image withColor:highlightedColor multiply:YES];
         
         CGFloat imageHeight = self.iconImageView.frame.size.height;
-        CGFloat textHeight = [@"Kasjper" sizeWithFont:SCHEDULE_BUTTON_FONT].height;
+        CGFloat textHeight = sizeWithFont(@"Kasjper",SCHEDULE_BUTTON_FONT).height;
         NSInteger dividor = (SCHEDULE_IMAGE_CENTER_SPACING == 0) ? 3 : 2;
         CGFloat spacing = (self.frame.size.height-imageHeight-textHeight-SCHEDULE_IMAGE_CENTER_SPACING)/dividor;
         

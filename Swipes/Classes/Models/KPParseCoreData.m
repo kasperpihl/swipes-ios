@@ -63,7 +63,7 @@ static KPParseCoreData *sharedObject;
 }
 #pragma mark Core data stuff
 -(void)initialize{
-    [self loadDatabase];
+    [self loadDatabase]; 
 }   
 -(void)loadDatabase{
     @try {
@@ -144,9 +144,9 @@ static KPParseCoreData *sharedObject;
             NSInteger index = 0;
             for (KPParseObject *object in updatedObjects) {
                 PFObject *savedPFObject = [updatePFObjects objectAtIndex:index];
-                if(object.updatedAt){
+                if(savedPFObject.updatedAt){
                     [object updateWithObject:savedPFObject context:localContext];
-                    [self.updateObjects removeObjectForKey:object.objectId];
+                    [self.updateObjects removeObjectForKey:savedPFObject.objectId];
                 }
                 index++;
             }

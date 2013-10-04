@@ -239,7 +239,7 @@
 
     CGRect lastDayFrame = CGRectZero;
     for (UILabel *dayLabel in self.dayOfWeekLabels) {
-        CGSize size = [dayLabel.text sizeWithFont:dayLabel.font];
+        CGSize size = sizeWithFont(dayLabel.text,dayLabel.font);
         dayLabel.frame = CGRectMake(CGRectGetMaxX(lastDayFrame), lastDayFrame.origin.y, self.cellWidth, size.height);
         lastDayFrame = dayLabel.frame;
     }

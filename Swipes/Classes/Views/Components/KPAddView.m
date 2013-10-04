@@ -38,6 +38,7 @@
         
         self.textField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, 0, self.frame.size.width-TEXT_FIELD_MARGIN_LEFT-buttonWidth, self.frame.size.height)];
         self.textField.font = KP_REGULAR(18);
+        self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.textField.textColor = tcolor(TagColor);
         self.textField.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.textField.returnKeyType = UIReturnKeyNext;

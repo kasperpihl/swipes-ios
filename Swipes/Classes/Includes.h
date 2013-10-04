@@ -81,6 +81,9 @@ NS_INLINE void mainBlock(void (^block)(void))
 #define kCurrentAttr(attr) [kCurrent objectForKey:attr]
 #define kCurrentSetAttr(key,attr) [kCurrent setObject:attr forKey:key]
 
+#define sizeWithFont(string,font) ((OSVER >= 7) ? [string sizeWithAttributes:@{NSFontAttributeName:font}] : [string sizeWithFont:font])
+
+
 #define radians(degrees) (degrees * M_PI / 180)
 #define degrees(radians) (radians * 180 / M_PI)
 

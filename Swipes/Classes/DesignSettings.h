@@ -18,7 +18,7 @@
 
 #define GLOBAL_TOOLBAR_HEIGHT           50.0f
 #define GLOBAL_ANIMATION_DURATION       0.20f
-#define GLOBAL_TEXTFIELD_HEIGHT         70.0f
+#define GLOBAL_TEXTFIELD_HEIGHT         55.0f
 #define GLOBAL_DOT_SIZE                 12.0f
 #define GLOBAL_DOT_OUTLINE_SIZE         4.0f
 #define GLOBAL_CELL_HEIGHT              70.0f

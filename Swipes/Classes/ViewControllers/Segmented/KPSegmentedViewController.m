@@ -338,11 +338,11 @@
     newViewController.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(newViewController.tableView.tableHeaderView.bounds));
 	[self addChildViewController:newViewController];
 	newViewController.view.frame = CGRectSetPos(self.contentView.frame, delta, 0);
-    CGFloat duration = animated ?  0.4 : 0.0;
+    CGFloat duration = animated ?  0.0f : 0.0;
     [self transitionFromViewController:oldViewController
 					  toViewController:newViewController
 							  duration:duration
-							   options:UIViewAnimationOptionTransitionNone
+							   options:UIViewAnimationOptionCurveEaseOut
 							animations:^(void) {
                                 oldViewController.view.frame = CGRectMake(0 - delta, 0, width, height);
                                 newViewController.view.frame = CGRectMake(0, 0, width, height);

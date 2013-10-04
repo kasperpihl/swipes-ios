@@ -103,14 +103,10 @@
 }
 -(void)didUpdateItemHandler:(ItemHandler *)handler{
     if(self.parent.showingModel && [self.itemHandler.filteredItems containsObject:self.parent.showingModel]){
-        [self deselectAllRows:self];
         self.isShowingItem = YES;
     }else self.isShowingItem = NO;
     if(self.parent.showingModel && !self.isShowingItem && [self.itemHandler.items containsObject:self.parent.showingModel]) self.parent.showingModel = nil;
     [self.tableView reloadData];
-    if(!self.isShowingItem){
-        [self deselectAllRows:self];
-    }
     dispatch_async(dispatch_get_main_queue(), ^{
         if(self.isShowingItem){
             [self selectShowingItem];
@@ -530,6 +526,7 @@
     tableView.backgroundColor = [UIColor clearColor];
     tableView.layer.masksToBounds = NO;
     UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
+    
     headerView.hidden = YES;
     headerView.backgroundColor = [UIColor redColor];
     tableView.tableHeaderView = headerView;
@@ -597,7 +594,6 @@
     [self prepareTableView:tableView];
     [self.view addSubview:tableView];
     self.tableView = (UITableView*)[self.view viewWithTag:TABLEVIEW_TAG];
-    
 }
 -(void)viewWillAppear:(BOOL)animated{
     

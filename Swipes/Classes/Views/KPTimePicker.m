@@ -401,8 +401,8 @@
     CGFloat heightForContent = self.centerPoint.y - self.wheelRadius - kExtraWheelRadius;
     
     
-    CGFloat heightForDay = [@"abcdefghADB" sizeWithFont:self.dayLabel.font].height;
-    CGFloat heightForTime = [@"08:00pm" sizeWithFont:self.clockLabel.font].height;
+    CGFloat heightForDay = sizeWithFont(@"abcdefghADB",self.dayLabel.font).height;
+    CGFloat heightForTime = sizeWithFont(@"08:00pm",self.clockLabel.font).height;
     CGFloat iconHeigt = self.sunImage.image.size.height;
     
     CGFloat overflowSpace = heightForContent - heightForDay - kLabelSpacing - heightForTime - iconHeigt;

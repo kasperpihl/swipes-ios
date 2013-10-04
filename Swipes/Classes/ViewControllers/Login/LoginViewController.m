@@ -126,10 +126,10 @@
         [self.logInView.passwordForgottenButton setTitle:@"forgot password?" forState:UIControlStateNormal];
         self.logInView.passwordForgottenButton.titleLabel.font = LOGIN_FIELDS_FONT;
         [self.logInView.passwordForgottenButton setTitleColor:LOGIN_FIELDS_BACKGROUND forState:UIControlStateNormal];
-        CGRectSetWidth(self.logInView.passwordForgottenButton, [@"forgot password?" sizeWithFont:LOGIN_FIELDS_FONT].width+20);
+        CGRectSetWidth(self.logInView.passwordForgottenButton, sizeWithFont(@"forgot password?",LOGIN_FIELDS_FONT).width+20);
         
         UIButton *privacyPolicyButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        privacyPolicyButton.frame = CGRectMake(0, 0, [@"Privacy policy" sizeWithFont:LOGIN_FIELDS_FONT].width+20, self.logInView.passwordForgottenButton.frame.size.height);
+        privacyPolicyButton.frame = CGRectMake(0, 0, sizeWithFont(@"Privacy policy" ,LOGIN_FIELDS_FONT).width+20, self.logInView.passwordForgottenButton.frame.size.height);
         privacyPolicyButton.titleLabel.font = LOGIN_FIELDS_FONT;
         [privacyPolicyButton setTitleColor:LOGIN_FIELDS_BACKGROUND forState:UIControlStateNormal];
         [privacyPolicyButton setTitle:@"Privacy policy" forState:UIControlStateNormal];

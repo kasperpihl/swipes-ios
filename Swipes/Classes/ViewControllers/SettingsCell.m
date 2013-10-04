@@ -25,7 +25,7 @@
 -(void)setSetting:(NSString *)setting value:(NSString *)value{
     self.settingLabel.text = setting;
     self.valueLabel.text = value;
-    CGSize textSize = [value sizeWithFont:self.valueFont];
+    CGSize textSize = sizeWithFont(value, self.valueFont);
     CGRectSetSize(self.valueLabel,textSize.width+2*kValueLabelSidePadding,textSize.height + 2*kValueLabelTopPadding);
     self.valueLabel.center = CGPointMake(self.bounds.size.width-kRightLabelMargin-(self.valueLabel.frame.size.width/2), kCellHeight/2);
     CGRectSetX(self.settingLabel, kRightLabelMargin);

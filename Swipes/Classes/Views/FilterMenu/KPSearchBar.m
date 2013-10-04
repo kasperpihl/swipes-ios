@@ -74,6 +74,7 @@
         self.searchField.placeholder = @"Search";
         self.searchField.borderStyle = UITextBorderStyleNone;
         self.searchField.delegate = self;
+        self.searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         @try {
             [self.searchField setValue:tcolor(SearchDrawerColor) forKeyPath:@"_placeholderLabel.textColor"];
         }
@@ -195,10 +196,10 @@
         [self.searchField resignFirstResponder];
         self.searchField.text = @"";
     }
-    [UIView animateWithDuration:.5f animations:^{
+    [UIView animateWithDuration:.2f animations:^{
         self.filterView.alpha = 0;
         //CGRectSetY(self.frame, self.frame.origin.y-self.frame.size.height);
-        if(superView) [superView setContentOffset:CGPointMake(0, superView.tableHeaderView.frame.size.height)];
+        if(superView) [superView setContentOffset:CGPointMake(0, self.frame.size.height)];
     } completion:^(BOOL finished) {
         CGRectSetHeight(self,SEARCH_BAR_DEFAULT_HEIGHT);
         [self.filterButton setImage:[UIImage imageNamed:@"filter_button"] forState:UIControlStateNormal];
@@ -206,6 +207,7 @@
         self.filterButton.hidden = NO;
         self.searchField.hidden = NO;
         [self resizeTableHeader];
+        [superView setContentOffset:CGPointMake(0, SEARCH_BAR_DEFAULT_HEIGHT)];
         //NSLog(@"super:%f",superView.tableHeaderView.frame.size.height);
         //if(superView && [superView isKindOfClass:[UITableView class]]) [superView setContentOffset:CGPointMake(0, superView.tableHeaderView.frame.size.height)];
     }];
@@ -231,6 +233,7 @@
     [self resizeTableHeader];
 }
 - (void)reframeToTags{
+    UITableView* superView = (UITableView*)self.superview;
     NSUInteger oldHeight = self.frame.size.height;
     self.filterButton.hidden = YES;
     self.searchField.hidden = YES;
@@ -247,16 +250,7 @@
     [UIView animateWithDuration:.2f animations:^{
         self.filterView.alpha = 1;
         CGRectSetY(self, self.frame.origin.y-originChange);
-        
-        for (UIView *view in [(UITableView *)self.superview subviews]) {
-            if ([view isKindOfClass:[self class]]) {
-                continue;
-            }
-            view.frame = CGRectMake(view.frame.origin.x,
-                                    view.frame.origin.y - originChange,
-                                    view.frame.size.width,
-                                    view.frame.size.height);
-        }
+        if(superView) [superView setContentOffset:CGPointMake(0, superView.contentOffset.y+originChange)];
     } completion:^(BOOL finished) {
         self.filterView.hidden = NO;
         [self resizeTableHeader];

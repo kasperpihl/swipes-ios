@@ -5,7 +5,6 @@
 //  Created by Kasper Pihl Tornøe on 03/06/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define BUTTON_BAR_HEIGHT (50)
 #define kTitleHeight 50
 #define kTitleTopPadding 1
 #define kTextTopPadding 5
@@ -44,7 +43,7 @@
     if (self) {
         self.backgroundColor = tbackground(TaskTableBackground);
         
-        self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, 0/*self.frame.size.height-BUTTON_BAR_HEIGHT*/, 320, BUTTON_BAR_HEIGHT) items:@[@"cross_button",@"",@"",@"",@"",@"toolbar_check_icon"]];
+        self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, 0/*self.frame.size.height-BUTTON_BAR_HEIGHT*/, 320, kTitleHeight) items:@[@"cross_button",@"",@"",@"",@"",@"toolbar_check_icon"]];
         
         self.toolbar.backgroundColor = tbackground(MenuBackground);
         self.toolbar.delegate = self;
@@ -61,7 +60,7 @@
         [self addSubview:titleLabel];
         self.titleLabel = titleLabel;
         
-        UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(kContentSpacing, kTitleHeight + kTextTopPadding, 320-2*kContentSpacing, self.frame.size.height-kTitleHeight-BUTTON_BAR_HEIGHT-KEYBOARD_HEIGHT)];
+        UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(kContentSpacing, kTitleHeight + kTextTopPadding, 320-2*kContentSpacing, self.bounds.size.height-kTitleHeight- 2* kTextTopPadding -KEYBOARD_HEIGHT)];
         notesView.backgroundColor = CLEAR;
         notesView.font = NOTES_VIEW_FONT;
         notesView.keyboardAppearance = UIKeyboardAppearanceAlert;
