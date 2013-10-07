@@ -32,13 +32,13 @@ static ToDoHandler *sharedObject;
     [ANALYTICS incrementKey:NUMBER_OF_DELETED_TASKS_KEY withAmount:toDos.count];
     if(shouldUpdateNotifications) [NOTIHANDLER updateLocalNotifications];
 }
--(KPToDo*)addItem:(NSString *)item{
+-(KPToDo*)addItem:(NSString *)item save:(BOOL)save{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
     newToDo.title = item;
     newToDo.schedule = [NSDate date];
     NSNumber *count = [KPToDo MR_numberOfEntities];
     newToDo.order = count;
-    [self save];
+    if(save) [self save];
     NSString *taskLength = @"100+";
     if(item.length <= 20) taskLength = @"1-20";
     else if(item.length <= 40) taskLength = @"21-40";

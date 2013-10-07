@@ -12,6 +12,7 @@
 #import "TagHandler.h"
 #import "NSDate-Utilities.h"
 #import <Parse/PFQuery.h>
+#import <Parse/PFRelation.h>
 #define kFetchLimit 0
 
 /*
@@ -21,7 +22,7 @@
 @property (nonatomic,assign) BOOL isPerformingOperation;
 @property (nonatomic,assign) BOOL didLogout;
 @property (nonatomic) NSMutableDictionary *tmpUpdatingObjects;
-@property (nonatomic) NSMutableArray *deletingObjects;
+@property (nonatomic) NSMutableDictionary *deleteObjects;
 @property BOOL syncAgain;
 @property BOOL isSyncing;
 @property BOOL lockSaving;
@@ -30,10 +31,20 @@
 -(NSManagedObjectContext *)context{
     return [NSManagedObjectContext MR_defaultContext];
 }
+-(NSMutableDictionary *)deleteObjects{
+    if(!_deleteObjects){
+        _deleteObjects = [[NSUserDefaults standardUserDefaults] objectForKey:@"deleteObjects"];
+        if(!_deleteObjects) _deleteObjects = [NSMutableDictionary dictionary];
+    }
+    return _deleteObjects;
+}
+-(void)deleteObject:(KPParseObject*)object{
+    [self.deleteObjects setObject:object.parseClassName forKey:object.objectId];
+}
 -(void)saveInContext:(NSManagedObjectContext*)context{
     if(!context) context = [self context];
     [context performBlockAndWait:^{
-        NSSet *insertedObjects = [context insertedObjects];
+        //NSSet *insertedObjects = [context insertedObjects];
         NSSet *updatedObjects = [context updatedObjects];
         NSSet *deletedObjects = [context deletedObjects];
         for(KPParseObject *object in updatedObjects){
@@ -43,6 +54,9 @@
             if(attributeArray) [attributeSet addObjectsFromArray:attributeArray];
             if(object.changedValues) [attributeSet addObjectsFromArray:[object.changedValues allKeys]];
             [self.tmpUpdatingObjects setObject:[attributeSet allObjects] forKey:object.objectId];
+        }
+        for(KPParseObject *object in deletedObjects){
+            if(object.objectId) [self deleteObject:object];
         }
     }];
     [context MR_saveToPersistentStoreAndWait];
@@ -61,10 +75,39 @@ static KPParseCoreData *sharedObject;
     }
     return sharedObject;
 }
+-(void)parseTest{
+    return;
+    NSInteger testNumber = 1;
+    PFObject *class = [PFObject objectWithClassName:@"TestClass"];
+    [class setObject:[@"testing-" stringByAppendingFormat:@"%i",testNumber] forKey:@"title"];
+
+    PFObject *target1 = [PFObject objectWithClassName:@"TestTarget"];
+    
+    [target1 setObject:[@"testing-1-" stringByAppendingFormat:@"%i",testNumber] forKey:@"title"];
+    PFObject *target2 = [PFObject objectWithClassName:@"TestTarget"];
+    [target2 setObject:[@"testing-2-" stringByAppendingFormat:@"%i",testNumber] forKey:@"title"];
+    
+    [class addUniqueObject:target1 forKey:@"targetArray"];
+    [class addUniqueObject:target2 forKey:@"targetArray"];
+    NSMutableArray *array = [NSMutableArray array];
+    for(NSInteger i = 0 ; i < 1300 ; i++){
+        PFObject *object = [PFObject objectWithClassName:@"TestTarget"];
+        [object setObject:[@"Testing-" stringByAppendingFormat:@"%i",i] forKey:@"title"];
+        [array addObject:object];
+    }
+    /*PFRelation *relation = [class relationforKey:@"targetsRelation"];
+    [relation addObject:target1];
+    [relation addObject:target2];*/
+    NSError *error;
+    [PFObject saveAll:array error:&error];
+    if(error){
+        NSLog(@"error:%@",error);
+    }
+}
 #pragma mark Core data stuff
 -(void)initialize{
-    [self loadDatabase]; 
-}   
+    [self loadDatabase];
+}
 -(void)loadDatabase{
     @try {
         [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
@@ -94,6 +137,7 @@ static KPParseCoreData *sharedObject;
 }
 -(void)saveUpdatingObjects{
     [[NSUserDefaults standardUserDefaults] setObject:self.updateObjects forKey:@"updateObjects"];
+    [[NSUserDefaults standardUserDefaults] setObject:self.deleteObjects forKey:@"deleteObjects"];
 }
 -(NSMutableDictionary*)updateObjects{
     if(!_updateObjects){
@@ -132,15 +176,18 @@ static KPParseCoreData *sharedObject;
             [updatePFObjects addObject:pfObj];
             [updatedObjects addObject:object];
         }
+        for(NSString *objectIdKey in self.deleteObjects){
+            NSString *className = [self.deleteObjects objectForKey:objectIdKey];
+            PFObject *deleteObject = [KPParseObject objectForDeletionWithClassName:className objectId:objectIdKey];
+            [updatePFObjects addObject:deleteObject];
+        }
         if(updatePFObjects.count > 0){
             NSLog(@"saving %i objects",updatePFObjects.count);
             NSError *error;
-            BOOL saved = [PFObject saveAll:updatePFObjects error:&error];
+            [PFObject saveAll:updatePFObjects error:&error];
             if(error){
                 NSLog(@"error saving updated:%@",error);
             }
-            if(!saved) NSLog(@"didn't save");
-            
             NSInteger index = 0;
             for (KPParseObject *object in updatedObjects) {
                 PFObject *savedPFObject = [updatePFObjects objectAtIndex:index];
@@ -171,24 +218,37 @@ static KPParseCoreData *sharedObject;
 -(void)update{
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
         NSDate *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"];
+        PFQuery *tagQuery = [PFQuery queryWithClassName:@"Tag"];
+        [tagQuery whereKey:@"owner" equalTo:kCurrent];
+        [tagQuery setLimit:1000];
+        if(lastUpdate) [tagQuery whereKey:@"updatedAt" greaterThanOrEqualTo:lastUpdate];
         PFQuery *taskQuery = [PFQuery queryWithClassName:@"ToDo"];
         [taskQuery whereKey:@"owner" equalTo:kCurrent];
         [taskQuery setLimit:1000];
         if(lastUpdate) [taskQuery whereKey:@"updatedAt" greaterThanOrEqualTo:lastUpdate];
         NSLog(@"lastUpdate:%@",lastUpdate);
         NSError *error;
+        NSArray *tags = [tagQuery findObjects:&error];
         NSArray *tasks = [taskQuery findObjects:&error];
+        NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
         if(error){
             NSLog(@"error query:%@",error);
+            return;
         }
-        return;
-        for(PFObject *object in tasks){
+        for(PFObject *object in allObjects){
             if(!lastUpdate) lastUpdate = object.updatedAt;
             else if([object.updatedAt isLaterThanDate:lastUpdate]) lastUpdate = object.updatedAt;
             Class class = NSClassFromString([KPParseCoreData classNameFromParseName:object.parseClassName]);
             if(class && [class isSubclassOfClass:[KPParseObject class]]){
-                KPParseObject *cdObject = [class getCDObjectFromObject:object context:localContext];
-                [cdObject updateWithObject:object context:localContext];
+                NSLog(@"updating object:%@",object.objectId);
+                BOOL shouldDelete = [[object objectForKey:@"deleted"] boolValue];
+                if(shouldDelete){
+                    NSLog(@"deleting object");
+                    [class deleteObjectById:object.objectId context:localContext];
+                }else{
+                    KPParseObject *cdObject = [class getCDObjectFromObject:object context:localContext];
+                    [cdObject updateWithObject:object context:localContext];
+                }
             }
         }
         if(lastUpdate) [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastUpdate"];
@@ -224,8 +284,9 @@ static KPParseCoreData *sharedObject;
                         @"work"
     ];
     for(NSString *tag in tagArray){
-        [TAGHANDLER addTag:tag];
+        [TAGHANDLER addTag:tag save:NO];
     }
+    [self saveInContext:nil];
     NSArray *toDoArray = @[
                            @"Tap to select me",
                            @"Swipe right to complete me",
@@ -237,11 +298,11 @@ static KPParseCoreData *sharedObject;
                        ];
     for(NSInteger i = toDoArray.count-1 ; i >= 0  ; i--){
         NSString *item = [toDoArray objectAtIndex:i];
-        KPToDo *toDo = [TODOHANDLER addItem:item];
-        if(i == 4)[TAGHANDLER updateTags:@[@"home"] remove:NO toDos:@[toDo]];
-        if(i == 5)[TAGHANDLER updateTags:@[@"work"] remove:NO toDos:@[toDo]];
+        KPToDo *toDo = [TODOHANDLER addItem:item save:NO];
+        if(i == 4)[TAGHANDLER updateTags:@[@"home"] remove:NO toDos:@[toDo] save:YES];
+        if(i == 5)[TAGHANDLER updateTags:@[@"work"] remove:NO toDos:@[toDo] save:YES];
     }
-    
+    [self saveInContext:nil];
     NSArray *todosForTagsArray = [KPToDo MR_findAll];
     todosForTagsArray = [todosForTagsArray subarrayWithRange:NSMakeRange(0, 3)];
     

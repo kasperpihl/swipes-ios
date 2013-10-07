@@ -67,7 +67,7 @@
     [[self currentViewController] update];
 }
 -(void)tagPanel:(KPAddTagPanel *)tagPanel createdTag:(NSString *)tag{
-    [TAGHANDLER addTag:tag];
+    [TAGHANDLER addTag:tag save:YES];
 }
 
 #pragma mark - KPTagDelegate
@@ -82,12 +82,12 @@
 }
 -(void)tagList:(KPTagList *)tagList selectedTag:(NSString *)tag{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
-    [TAGHANDLER updateTags:@[tag] remove:NO toDos:selectedItems];
+    [TAGHANDLER updateTags:@[tag] remove:NO toDos:selectedItems save:YES];
     [[self currentViewController] didUpdateItemHandler:nil];
 }
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString *)tag{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
-    [TAGHANDLER updateTags:@[tag] remove:YES toDos:selectedItems];
+    [TAGHANDLER updateTags:@[tag] remove:YES toDos:selectedItems save:YES];
     [[self currentViewController] didUpdateItemHandler:nil];
 }
 -(void)tagList:(KPTagList *)tagList deletedTag:(NSString *)tag{

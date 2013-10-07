@@ -117,7 +117,6 @@ DisplayPosition const kKPBlurryDefaultDisplayPosition = PositionCenter;
     if (error) {
         NSLog(@"error from convolution %ld", error);
     }
-    
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef ctx = CGBitmapContextCreate(outBuffer.data,
                                              outBuffer.width,

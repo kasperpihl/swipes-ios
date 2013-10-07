@@ -24,7 +24,7 @@
       @"notes": @"notes",
       @"repeatCount": @"numberOfRepeated",
       @"repeatDate": @"repeatedDate",
-      @"order": @"order"
+      @"order": @"order",
     };
 }
 #define checkStringWithKey(object, pfKey, cdKey) if(![[self valueForKey:cdKey] isEqualToString:[object objectForKey:pfKey]]) [self setValue:[object valueForKey:pfKey] forKey:cdKey]
@@ -67,9 +67,12 @@
         shouldUpdate = YES;
     }
     if(setAll || [changedAttributes containsObject:@"tags"]){
+        NSMutableArray *tagArray = [NSMutableArray arrayWithCapacity:self.tags.count];
         for(KPTag *tag in self.tags){
-            if(tag.objectId) [*object addUniqueObject:tag.objectId forKey:@"tags"];
+            [tagArray addObject:[tag emptyObjectForSaving]];
         }
+        [*object setObject:tagArray forKey:@"tags"];
+        shouldUpdate = YES;
     }
     return shouldUpdate;
 }

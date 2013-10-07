@@ -12,10 +12,10 @@
 #import "KPTag.h"
 @interface TagHandler : NSObject
 +(TagHandler*)sharedInstance;
--(void)addTag:(NSString *)tag;
+-(void)addTag:(NSString *)tag save:(BOOL)save;
 -(void)deleteTag:(NSString*)tag;
 -(NSArray *)allTags;
 //-(void)addTags:(NSArray*)addedTags andRemoveTags:(NSArray*)removedTags fromToDos:(NSArray*)toDos;
--(void)updateTags:(NSArray*)tags remove:(BOOL)remove toDos:(NSArray*)toDos;
+-(void)updateTags:(NSArray*)tags remove:(BOOL)remove toDos:(NSArray*)toDos save:(BOOL)save;
 -(NSArray *)selectedTagsForToDos:(NSArray*)toDos;
 @end

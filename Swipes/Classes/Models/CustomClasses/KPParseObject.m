@@ -4,11 +4,13 @@
 @interface KPParseObject ()
 @property (nonatomic,strong) NSMutableDictionary *downloadingKeys;
 @property (nonatomic,strong) NSMutableDictionary *downloadingBlocks;
+@property (nonatomic,strong) PFObject *pfObject;
 @end
 
 
 
 @implementation KPParseObject
+@synthesize pfObject = _pfObject;
 @synthesize downloadingKeys = _downloadingKeys;
 @synthesize downloadingBlocks = _downloadingBlocks;
 #pragma mark - Getters and Setters
@@ -25,6 +27,7 @@
 -(void)updateWithObject:(PFObject *)object context:(NSManagedObjectContext*)context{
     if(!context) context = [KPCORE context];
     [context performBlockAndWait:^{
+        self.pfObject = nil;
         if(!self.objectId){
             self.objectId = object.objectId;
             self.createdAt = object.createdAt;
@@ -43,7 +46,7 @@
     coreDataObject = [[self class] MR_createInContext:context];
     return coreDataObject;
 }
-+(KPParseObject *)getCDObjectFromObject:(PFObject*)object context:(NSManagedObjectContext*)context{
++(KPParseObject *)getCDObjectFromObject:(PFObject*)object context:(NSManagedObjectContext *)context{
     if(!context) context = [KPCORE context];
     __block KPParseObject *coreDataObject;
     coreDataObject = [self objectById:object.objectId context:context];
@@ -57,16 +60,32 @@
     KPParseObject *object = [[self class] MR_findFirstByAttribute:@"objectId" withValue:identifier inContext:context];
     return object;
 }
++(BOOL)deleteObjectById:(NSString *)identifier context:(NSManagedObjectContext *)context{
+    if(!context) context = [KPCORE context];
+    __block KPParseObject *coreDataObject;
+    coreDataObject = [self objectById:identifier context:context];
+    BOOL successful = YES;
+    if(coreDataObject) [coreDataObject MR_deleteInContext:context];
+    return successful;
+}
 #pragma mark - Save to server
+-(PFObject*)emptyObjectForSaving{
+    NSString *className = NSStringFromClass ([self class]);
+    NSString *parseClassName = [className substringFromIndex:2];
+    PFObject *objectToSave;
+    objectToSave = [PFObject objectWithClassName:parseClassName];
+    if(self.objectId) objectToSave = [PFObject objectWithoutDataWithClassName:parseClassName objectId:self.objectId];
+    if(self.pfObject) objectToSave = self.pfObject;
+    else self.pfObject = objectToSave;
+    
+    return objectToSave;
+}
 -(PFObject*)objectToSaveInContext:(NSManagedObjectContext *)context{
     if(!context) context = [KPCORE context];
     __block BOOL shouldUpdate = NO;
     __block PFObject *objectToSave;
     [context performBlockAndWait:^{
-        NSString *className = NSStringFromClass ([self class]);
-        NSString *parseClassName = [className substringFromIndex:2];
-        objectToSave = [PFObject objectWithClassName:parseClassName];
-        if(self.objectId) objectToSave = [PFObject objectWithoutDataWithClassName:parseClassName objectId:self.objectId];
+        objectToSave = [self emptyObjectForSaving];
         NSMutableSet *changeSet = [KPCORE.updateObjects objectForKey:self.objectId];
         NSArray *changedAttributes;
         if(changeSet) changedAttributes = [changeSet allObjects];
@@ -74,10 +93,12 @@
     }];
     if(shouldUpdate)return objectToSave;
     else return nil;
-    
 }
-
-
++(PFObject *)objectForDeletionWithClassName:(NSString *)className objectId:(NSString *)objectId{
+    PFObject *object = [PFObject objectWithoutDataWithClassName:className objectId:objectId];
+    [object setObject:@YES forKey:@"deleted"];
+    return object;
+}
 #pragma mark - Handle PFFile
 -(void)downloadFile:(PFFile*)file forKey:(NSString*)key withCompletion:(DataBlock)block{
     BOOL isAlreadyDownloading = [[self.downloadingKeys objectForKey:key] boolValue];

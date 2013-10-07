@@ -52,7 +52,7 @@
 }
 -(void)addItem:(NSString *)item{
     if(self.hasFilter || self.hasSearched) [self clearAll];
-    [TODOHANDLER addItem:item];
+    [TODOHANDLER addItem:item save:YES];
     [self reloadData];
 }
 -(void)reloadData{

@@ -18,19 +18,22 @@ static TagHandler *sharedObject;
     }
     return sharedObject;
 }
--(void)addTag:(NSString *)tag{
+-(void)addTag:(NSString *)tag save:(BOOL)save{
+    NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"title = %@",tag];
+    NSInteger counter = [KPTag MR_countOfEntitiesWithPredicate:tagPredicate];
+    if(counter > 0) return;
     KPTag *newTag = [KPTag newObjectInContext:nil];
     newTag.title = tag;
-    [self save];
+    if(save)[self save];
     [ANALYTICS incrementKey:NUMBER_OF_ADDED_TAGS_KEY withAmount:1];
 }
--(void)updateTags:(NSArray *)tags remove:(BOOL)remove toDos:(NSArray *)toDos{
+-(void)updateTags:(NSArray *)tags remove:(BOOL)remove toDos:(NSArray *)toDos save:(BOOL)save{
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
     NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
     for(KPToDo *toDo in toDos){
         [toDo updateTagSet:tagsSet withTags:tags remove:remove];
     }
-    [self save];
+    if(save) [self save];
     if(remove) [ANALYTICS incrementKey:NUMBER_OF_RESIGNED_TAGS_KEY withAmount:toDos.count];
     else [ANALYTICS incrementKey:NUMBER_OF_ASSIGNED_TAGS_KEY withAmount:toDos.count];
 }
@@ -50,7 +53,7 @@ static TagHandler *sharedObject;
     KPTag *tagObj = [KPTag MR_findFirstWithPredicate:tagPredicate];
     NSPredicate *toDoPredicate = [NSPredicate predicateWithFormat:@"ANY tags = %@",tagObj];
     NSArray *toDos = [KPToDo MR_findAllWithPredicate:toDoPredicate];
-    [self updateTags:@[tag] remove:YES toDos:toDos];
+    [self updateTags:@[tag] remove:YES toDos:toDos save:YES];
     [tagObj MR_deleteEntity];
     [self save];
 }

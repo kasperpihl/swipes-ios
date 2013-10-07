@@ -11,10 +11,17 @@
 #import <Parse/PFObject.h>
 #define KPCORE [KPParseCoreData sharedInstance]
 @class ParseObject;
+
+@protocol ParseCoreDataDelegate <NSObject>
+-(void)didUpdateParseCoreData:(KPParseObject*)parseCoreData;
+@end
+
+
 @interface KPParseCoreData : NSObject
 @property (nonatomic,assign) BOOL isSeeded;
 @property (nonatomic,strong) NSManagedObjectContext *context;
 @property (nonatomic) NSMutableDictionary *updateObjects;
+@property (nonatomic,weak) NSObject<ParseCoreDataDelegate> *delegate;
 +(KPParseCoreData *)sharedInstance;
 -(void)cleanUp;
 -(void)seedObjects;
