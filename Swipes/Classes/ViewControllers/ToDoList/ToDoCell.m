@@ -13,6 +13,7 @@
 #import "NSDate-Utilities.h"
 #import "UIColor+Utilities.h"
 #import "StyleHandler.h"
+#import "ClockTimeLabel.h"
 #define LAYER_VIEW_TAG 1
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
@@ -33,15 +34,15 @@
 
 #define kTimeLabelMarginRight 5
 
+#define kClockSize 26
 
-#define LABEL_X 42
 #define TITLE_DELTA_Y 2
 #define TITLE_Y (TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
 
 #define DOT_SIZE GLOBAL_DOT_SIZE
 #define DOT_OUTLINE_SIZE 4
 
-#define LABEL_WIDTH (320-(LABEL_X+(LABEL_X/3)))
+#define LABEL_WIDTH (320-(CELL_LABEL_X+(CELL_LABEL_X/3)))
 
 #define LABEL_SPACE 4
 
@@ -50,7 +51,7 @@
 
 #define ALARM_HACK 1
 #define ICON_SPACING 5
-#define ALARM_SPACING 3
+#define ALARM_SPACING 5
 
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *layerView;
@@ -59,7 +60,7 @@
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UIView *outlineView;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
-@property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
+@property (nonatomic,weak) IBOutlet ClockTimeLabel *alarmLabel;
 
 @property (nonatomic,strong) UIImageView *notesIcon;
 @end
@@ -69,12 +70,11 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.shouldRegret = YES;
-        self.contentView.layer.masksToBounds = YES;
+        //self.contentView.layer.masksToBounds = YES;
+        self.backgroundColor = tbackground(BackgroundColor);
+        self.contentView.backgroundColor = tbackground(BackgroundColor);
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.contentView.backgroundColor = tbackground(TaskCellBackground);
-        self.backgroundColor = tbackground(TaskCellBackground);
-        self.selectedBackgroundView.backgroundColor = tbackground(TaskCellBackground);
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X,TITLE_Y, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X,TITLE_Y, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
         titleLabel.tag = TITLE_LABEL_TAG;
         titleLabel.numberOfLines = 1;
         titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
@@ -84,12 +84,12 @@
         [self.contentView addSubview:titleLabel];
         self.titleLabel = (UILabel*)[self.contentView viewWithTag:TITLE_LABEL_TAG];
         
-        UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, titleLabel.frame.origin.y+titleLabel.frame.size.height+LABEL_SPACE, LABEL_WIDTH, TAGS_LABEL_HEIGHT)];
+        UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X, titleLabel.frame.origin.y+titleLabel.frame.size.height+LABEL_SPACE, LABEL_WIDTH, TAGS_LABEL_HEIGHT)];
         tagsLabel.tag = TAGS_LABEL_TAG;
         tagsLabel.numberOfLines = 1;
         tagsLabel.font = TAGS_LABEL_FONT;
         tagsLabel.backgroundColor = [UIColor clearColor];
-        tagsLabel.textColor = tcolor(TaskCellTagColor);
+        //tagsLabel.textColor = tcolor(TaskCellTagColor);
         [self.contentView addSubview:tagsLabel];
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
@@ -97,17 +97,19 @@
         overlayView.backgroundColor = tbackground(TaskCellBackground);
         self.selectedBackgroundView = overlayView;
         
-        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (LABEL_X/2), CELL_HEIGHT)];
+        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake((CELL_LABEL_X/2)-(LINE_SIZE/2), 0,LINE_SIZE, CELL_HEIGHT)];
         timelineLine.tag = TIMELINE_TAG;
         //timelineLine.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         timelineLine.backgroundColor = tcolor(TaskCellTimelineColor);
-        [self.contentView addSubview:timelineLine];
+        //[self.contentView addSubview:timelineLine];
         self.timelineView = [self.contentView viewWithTag:TIMELINE_TAG];
         
         CGFloat outlineWidth = DOT_SIZE+(2*DOT_OUTLINE_SIZE);
-        UIView *dotOutlineContainer = [[UIView alloc] initWithFrame:CGRectMake((LABEL_X-outlineWidth)/2, (CELL_HEIGHT-outlineWidth)/2, outlineWidth, outlineWidth)];
+        UIView *dotOutlineContainer = [[UIView alloc] initWithFrame:CGRectMake((CELL_LABEL_X-outlineWidth)/2, (CELL_HEIGHT-outlineWidth)/2, outlineWidth, outlineWidth)];
         dotOutlineContainer.tag = OUTLINE_TAG;
-        dotOutlineContainer.backgroundColor = tcolor(TaskCellTimelineColor);
+        //dotOutlineContainer.layer.borderWidth = LINE_SIZE;
+        dotOutlineContainer.layer.borderColor = tcolor(TasksColor).CGColor;
+        dotOutlineContainer.backgroundColor = tbackground(BackgroundColor);
         dotOutlineContainer.layer.cornerRadius = outlineWidth/2;
     
         
@@ -124,16 +126,15 @@
         self.notesIcon.hidden = YES;
         [self.contentView addSubview:self.notesIcon];
         
-        UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+        ClockTimeLabel *alarmLabel = [[ClockTimeLabel alloc] initWithFrame:CGRectMake(0, 0, kClockSize, kClockSize)];
         alarmLabel.tag = ALARM_LABEL_TAG;
         alarmLabel.font = CELL_ALARM_FONT;
-        alarmLabel.textColor = tbackground(TaskCellBackground);
-        alarmLabel.backgroundColor = tcolor(TaskCellTagColor);
-        alarmLabel.textAlignment = UITextAlignmentCenter;
-        self.alarmLabel.numberOfLines = 1;
+        alarmLabel.circleColor = tcolor(LaterColor);
+        
+        //self.alarmLabel.numberOfLines = 1;
         alarmLabel.hidden = YES;
         [self.contentView addSubview:alarmLabel];
-        self.alarmLabel = (UILabel*)[self.contentView viewWithTag:ALARM_LABEL_TAG];
+        self.alarmLabel = (ClockTimeLabel*)[self.contentView viewWithTag:ALARM_LABEL_TAG];
     }
     return self;
 }
@@ -141,7 +142,7 @@
     CGFloat titleY = showBottomLine ? TITLE_Y : ((CELL_HEIGHT - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
     CGRectSetY(self.tagsLabel, TITLE_Y+self.titleLabel.frame.size.height+LABEL_SPACE);
-    CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
+    //CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
 }
 -(void)hideContent:(BOOL)hide animated:(BOOL)animated{
@@ -184,22 +185,21 @@
         self.tagsLabel.font = TAGS_LABEL_FONT;
         self.tagsLabel.text = tagString;
     }
-    CGFloat deltaX = LABEL_X;
+    //CGFloat deltaX = CELL_LABEL_X;
     
     
     self.alarmLabel.hidden = YES;
     if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
         NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
         NSString *dateInString = [UtilityClass timeStringForDate:showDate];
-        self.alarmLabel.text = dateInString;
-        [self.alarmLabel sizeToFit];
-        CGRectSetWidth(self.alarmLabel, self.alarmLabel.frame.size.width+2*ALARM_SPACING);
-        self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, deltaX, self.tagsLabel.center.y-(self.alarmLabel.frame.size.height/2)-ALARM_HACK);
-        deltaX += self.alarmLabel.frame.size.width + ICON_SPACING;
+        self.alarmLabel.time = showDate;
+        //[self.alarmLabel sizeToFit];
+        //CGRectSetWidth(self.alarmLabel, self.alarmLabel.frame.size.width+2*ALARM_SPACING);
+        //CGRectSetHeight(self.alarmLabel, self.alarmLabel.frame.size.height+2*ALARM_SPACING);
+        self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, self.frame.size.width-self.alarmLabel.frame.size.width-kTimeLabelMarginRight, (CELL_HEIGHT-self.alarmLabel.frame.size.height)/2);
         self.alarmLabel.hidden = NO;
-        showBottomLine = YES;
     }
-    CGRectSetX(self.tagsLabel,deltaX);
+    //CGRectSetX(self.tagsLabel,deltaX);
     
     [self setTextLabels:showBottomLine];
 }
@@ -208,22 +208,26 @@
 }
 -(void)setDotColor:(CellType)cellType{
     UIColor *color = [StyleHandler colorForCellType:cellType];
-    if(![color isEqual:[StyleHandler colorForCellType:self.cellType]]){
-        self.timelineView.backgroundColor = color;
-        self.outlineView.backgroundColor = tbackground(TaskCellBackground);
-    }
-    else {
-        self.timelineView.backgroundColor = tcolor(TaskCellTimelineColor);
-        self.outlineView.backgroundColor = tcolor(TaskCellTimelineColor);
-    }
+    self.timelineView.backgroundColor = color;
+    self.outlineView.layer.borderColor = color.CGColor;
     self.dotView.backgroundColor = color;
+    self.alarmLabel.layer.borderColor = color.CGColor;
+    self.tagsLabel.textColor = color;
+    self.alarmLabel.circleColor = color;
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-    UIColor *backgroundColor = selected ? tcolor(TaskCellTimelineColor) : tbackground(TaskCellBackground);
-    //UIColor *timelineColor = selected ? tbackground(TaskCellBackground) : tcolor(TaskCellTimelineColor);
-    //self.timelineView.backgroundColor = timelineColor;
-    self.contentView.backgroundColor = backgroundColor;
+    if(selected){
+        NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleThick)};
+        self.titleLabel.attributedText = [[NSAttributedString alloc] initWithString:self.titleLabel.text
+                                                                 attributes:underlineAttribute];
+    }
+    else{
+        NSString *title = self.titleLabel.attributedText.string;
+        self.titleLabel.attributedText = nil;
+        self.titleLabel.text = title;
+    }
+    
 }
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){

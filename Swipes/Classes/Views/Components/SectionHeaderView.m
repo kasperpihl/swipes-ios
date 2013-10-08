@@ -7,9 +7,9 @@
 //
 #define kDefLeftCutSize 0.75
 #define kDefLeftPadding 4
-#define kDefRightPadding 6
-#define kDefTopPadding 2
-#define kDefBottomPadding 1
+#define kDefRightPadding 7
+#define kDefTopPadding 0
+#define kDefBottomPadding 2
 #import "SectionHeaderView.h"
 @interface SectionHeaderView ()
 @property (nonatomic) UIColor *color;
@@ -49,26 +49,35 @@
 }
 - (void)drawRect:(CGRect)rect
 {
+    [super drawRect:rect];
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    UIBezierPath *aPath = [UIBezierPath bezierPath];
- 
+    
     CGFloat leftCutPoint = self.bounds.size.height * kDefLeftCutSize;
-    // Set the starting point of the shape.
-    [aPath moveToPoint:CGPointMake(self.bounds.size.width, 0)];
-    // 86 x 16 74
-    // Draw the lines.
-    CGFloat startingY = 0;
     CGFloat targetY = self.bounds.size.height;
-    CGFloat startingX = self.bounds.size.width;
-    [aPath addLineToPoint:CGPointMake(startingX, startingY+targetY)];
-    [aPath addLineToPoint:CGPointMake(leftCutPoint, startingY+targetY)];
-    [aPath addLineToPoint:CGPointMake(0, startingY)];
-    [aPath addLineToPoint:CGPointMake(startingX, startingY)];
+    CGFloat targetX = self.bounds.size.width;
+    
+    /* Color the background */
+    
+    UIBezierPath *aPath = [UIBezierPath bezierPath];
+    [aPath moveToPoint:CGPointMake(0, 0)];
+    [aPath addLineToPoint:CGPointMake(targetX, 0)];
+    [aPath addLineToPoint:CGPointMake(targetX, targetY)];
+    [aPath addLineToPoint:CGPointMake(leftCutPoint, targetY)];
+    [aPath addLineToPoint:CGPointMake(0, 0)];
     [aPath closePath];
     CGContextAddPath(currentContext, aPath.CGPath);
-    CGContextSetFillColorWithColor(currentContext,self.color.CGColor);
+    CGContextSetFillColorWithColor(currentContext,tbackground(BackgroundColor).CGColor);
     CGContextFillPath(currentContext);
+    
+    /* Draw the colored stroke */
+    CGContextMoveToPoint(currentContext, 0, 0);
+    CGContextSetLineWidth(currentContext, LINE_SIZE);
+    CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
+    CGContextAddLineToPoint(currentContext, leftCutPoint, targetY);
+    CGContextAddLineToPoint(currentContext, targetX, targetY);
+    CGContextStrokePath(currentContext);
 }
+
 -(void)dealloc{
     self.titleLabel = nil;
 }

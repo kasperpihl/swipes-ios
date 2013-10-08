@@ -27,9 +27,9 @@
       @"order": @"order",
     };
 }
-#define checkStringWithKey(object, pfKey, cdKey) if(![[self valueForKey:cdKey] isEqualToString:[object objectForKey:pfKey]]) [self setValue:[object valueForKey:pfKey] forKey:cdKey]
-#define checkDateWithKey(object, pfKey, cdKey) if(![[self valueForKey:cdKey] isEqualToDate:[object objectForKey:pfKey]]) [self setValue:[object valueForKey:pfKey] forKey:cdKey]
-#define checkNumberWithKey(object, pfKey, cdKey) if(![[self valueForKey:cdKey] isEqualToNumber:[object objectForKey:pfKey]]) [self setValue:[object valueForKey:pfKey] forKey:cdKey]
+#define checkStringWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToString:pfValue]) [self setValue:pfValue forKey:cdKey]
+#define checkDateWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToDate:pfValue]) [self setValue:pfValue forKey:cdKey]
+#define checkNumberWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToNumber:pfValue]) [self setValue:pfValue forKey:cdKey]
 -(void)updateWithObject:(PFObject *)object context:(NSManagedObjectContext *)context{
     [super updateWithObject:object context:context];
     [context performBlockAndWait:^{
@@ -42,9 +42,14 @@
             NSString *cdKey = [keyMatch objectForKey:pfKey];
             if(cdKey){
                 id cdValue = [self valueForKey:cdKey];
-                if([cdValue isKindOfClass:[NSString class]]){ checkStringWithKey(object, pfKey, cdKey); }
-                else if([cdValue isKindOfClass:[NSDate class]]){ checkDateWithKey(object, pfKey, cdKey); }
-                else if([cdValue isKindOfClass:[NSNumber class]]){ checkNumberWithKey(object, pfKey, cdKey); }
+                id pfValue = [object objectForKey:pfKey];
+                if([cdValue isKindOfClass:[NSString class]] && [pfValue isKindOfClass:[NSString class]]){ checkStringWithKey(object, pfValue, cdKey, cdValue); }
+                else if([cdValue isKindOfClass:[NSDate class]] && [pfValue isKindOfClass:[NSDate class]]){ checkDateWithKey(object, pfValue, cdKey, cdValue); }
+                else if([cdValue isKindOfClass:[NSNumber class]] && [pfValue isKindOfClass:[NSNumber class]]){ checkNumberWithKey(object, pfValue, cdKey, cdValue); }
+                else if(pfValue != cdValue){
+                    if(pfValue == (id)[NSNull null]) pfValue = nil;
+                    [self setValue:pfValue forKey:cdKey];
+                }
             }
         }
     }];
@@ -235,7 +240,7 @@
     else if(cellType == CellTypeDone){
         NSDate *toDoDate = self.completionDate;
         NSString *dateString = [self readableTime:toDoDate showTime:NO];
-        title = [NSString stringWithFormat:@"Completed %@",dateString];
+        title = [NSString stringWithFormat:@"%@",dateString];
     }
     
     return [title capitalizedString];

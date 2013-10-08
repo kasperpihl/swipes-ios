@@ -14,10 +14,12 @@
 #define LATER_COLOR                     color(254,115,103,1)
 
 #define STRONG_TASKS_COLOR              color(228,192,21,1)
-#define STRONG_DONE_COLOR                color(58,195,160,1)
+#define STRONG_DONE_COLOR               color(58,195,160,1)
 #define STRONG_LATER_COLOR              color(255,96,69,1)
+#define TEXT_COLOR                      color(255,255,255,1)
 
 /* Backgrounds */
+#define BACKGROUND                      retColor(color(36,40,46,1),         color(255,255,255,1))
 #define MENU_BACKGROUND                 retColor(color(44,50,59,1),         inv(color(44,50,59,1)))
 #define MENU_SELECTED_BACKGROUND        retColor(color(80,90,104,1),        inv(color(80,90,104,1)))
 #define SEARCH_DRAWER_BACKGROUND        retColor(color(69,77,89,1),         inv(color(69,77,89,1)))
@@ -28,9 +30,11 @@
 #define TASK_CELL_TAG_COLOR             retColor(color(160,169,179,1),      inv(color(160,169,179,1)))
 #define TEXT_FIELD_COLOR                retColor(color(176,179,184,1),      inv(color(176,179,184,1)))
 typedef enum {
+    BCBackground,
     BCTasksColor,
     BCLaterColor,
     BCDoneColor,
+    BCTextColor,
     BCStrongTasksColor,
     BCStrongLaterColor,
     BCStrongDoneColor,
@@ -63,12 +67,16 @@ static ThemeHandler *sharedObject;
 }
 -(UIColor *)colorForBase:(BaseColors)baseColor{
     switch (baseColor) {
+        case BCBackground:
+            return BACKGROUND;
         case BCTasksColor:
             return TASKS_COLOR;
         case BCLaterColor:
             return LATER_COLOR;
         case BCDoneColor:
             return DONE_COLOR;
+        case BCTextColor:
+            return TEXT_COLOR;
         case BCStrongTasksColor:
             return STRONG_TASKS_COLOR;
         case BCStrongDoneColor:
@@ -99,6 +107,9 @@ static ThemeHandler *sharedObject;
 -(UIColor*)colorForBackground:(Background)background{
     BaseColors color;
     switch (background) {
+        case BackgroundColor:
+            color = BCBackground;
+            break;
         case MenuBackground:
         case ToolbarBackground:
         case AlertBackground:
@@ -140,6 +151,9 @@ static ThemeHandler *sharedObject;
 -(UIColor*)colorForItem:(ThemerItem)item{
     BaseColors color;
     switch (item) {
+        case TextColor:
+            color = BCTextColor;
+            break;
         case SeperatorColor:
             color = BCTaskTableGradientBackground;
             break;

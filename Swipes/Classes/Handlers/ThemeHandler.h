@@ -17,6 +17,7 @@ typedef enum {
 } Theme;
 
 typedef enum {
+    TextColor,
     TasksColor,
     LaterColor,
     DoneColor,
@@ -37,6 +38,7 @@ typedef enum {
 } ThemerItem;
 
 typedef enum {
+    BackgroundColor,
     MenuBackground,
     MenuSelectedBackground,
     SearchDrawerBackground,

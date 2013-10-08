@@ -96,7 +96,4 @@ static KPParseCommunicator *sharedObject;
         });
     });
 }
--(void)dealloc{
-    if(self.queue) dispatch_release(self.queue);
-}
 @end

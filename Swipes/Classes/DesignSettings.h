@@ -16,10 +16,12 @@
 /* GLOBALS */
 #define kGAnanlytics [[GAI sharedInstance] defaultTracker]
 
-#define GLOBAL_TOOLBAR_HEIGHT           50.0f
+
+#define LINE_SIZE                       1.0f
+#define GLOBAL_TOOLBAR_HEIGHT           70.0f
 #define GLOBAL_ANIMATION_DURATION       0.20f
 #define GLOBAL_TEXTFIELD_HEIGHT         55.0f
-#define GLOBAL_DOT_SIZE                 12.0f
+#define GLOBAL_DOT_SIZE                 10.0f
 #define GLOBAL_DOT_OUTLINE_SIZE         4.0f
 #define GLOBAL_CELL_HEIGHT              70.0f
 #define KEYBOARD_HEIGHT                 216.0f
@@ -58,7 +60,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 
 /* Table View */
 #define TABLE_EMPTY_BG_TEXT_HEIGHT      40
-#define CELL_ALARM_FONT                 KP_REGULAR(14)
+#define CELL_ALARM_FONT                 KP_REGULAR(11)
 
 /* Edit Task view */
 #define EDIT_TASK_TITLE_FONT            KP_LIGHT(18)
@@ -108,14 +110,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 
 
 #define BUTTON_FONT                     KP_COND_BOLD(20)
-#define TAGS_LABEL_BOLD_FONT            KP_BOLD(12)
+#define TAGS_LABEL_BOLD_FONT            KP_BOLD(11)
 #define TABLE_EMPTY_BG_FONT             KP_REGULAR(20)
 #define NO_TAG_FONT                     KP_LIGHT(18)
 #define TEXT_FIELD_FONT                 KP_LIGHT(18)
 #define NOTES_VIEW_FONT                 KP_REGULAR(17)
 #define SECTION_HEADER_FONT             KP_LIGHT(18)
-#define TITLE_LABEL_FONT                KP_LIGHT(19)
-#define TAGS_LABEL_FONT                 KP_LIGHT(13)
+#define TITLE_LABEL_FONT                KP_REGULAR(18)
+#define TAGS_LABEL_FONT                 KP_REGULAR(11)
 #define TAG_FONT                        KP_LIGHT(18)
 
 

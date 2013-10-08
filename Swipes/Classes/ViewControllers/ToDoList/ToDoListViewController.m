@@ -28,7 +28,7 @@
 #define COLORED_MENU_TEXT_TAG 507
 
 
-#define SECTION_HEADER_HEIGHT 6
+#define SECTION_HEADER_HEIGHT LINE_SIZE
 #define SECTION_EXTRA_DELTA_Y -3
 #define SECTION_HEADER_X 15
 #define CONTENT_INSET_BOTTOM 5// 100
@@ -174,13 +174,20 @@
     
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    UIColor *backgroundColor = [StyleHandler colorForCellType:self.cellType];
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, SECTION_HEADER_HEIGHT)];
-    UIFont *font = KP_SEMIBOLD(15);
-    NSString *title = [[self.itemHandler titleForSection:section] capitalizedString];
-    headerView.backgroundColor = backgroundColor;
+    NSString *title = [[self.itemHandler titleForSection:section] uppercaseString];
+    UIFont *font = KP_LIGHT(12);
     SectionHeaderView *extraView = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:self.cellType] font:font title:title];
-    if(self.cellType == CellTypeToday) extraView.textColor = color(44,50, 59, 1);
+    
+    
+    UIColor *backgroundColor = [StyleHandler colorForCellType:self.cellType];
+    CGFloat colorStartingX = 0;// CELL_LABEL_X/2-LINE_SIZE/2;
+    UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(colorStartingX, 0, tableView.bounds.size.width-colorStartingX-extraView.frame.size.width, SECTION_HEADER_HEIGHT)];
+    colorView.backgroundColor = backgroundColor;
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, SECTION_HEADER_HEIGHT)];
+    
+    [headerView addSubview:colorView];
+    
+    
     CGRectSetX(extraView, 320-extraView.frame.size.width);
     [headerView addSubview:extraView];
     return headerView;
@@ -548,13 +555,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = tbackground(TaskTableBackground);
-    UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    UIImage *backgroundImage = [UtilityClass radialGradientImage:backgroundView.bounds.size start:tbackground(TaskTableGradientBackground) end:tbackground(TaskTableBackground) centre:CGPointMake(0.5f, 0.25f) radius:1.0f];
-    
-    
-    backgroundView.image = backgroundImage;
-    [self.view addSubview:backgroundView];
+    self.view.backgroundColor = tbackground(BackgroundColor);
     // tbackground(TaskTableBackground);
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_white_background",self.state]]];
     if ([self.state isEqualToString:@"today"]) {

@@ -95,7 +95,7 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)initializer {
     _mode = MCSwipeTableViewCellModeSwitch;
-    self.noneColor = tbackground(TaskCellSelectedBackground);
+    self.noneColor = tbackground(BackgroundColor);
     self.bounceAmplitude = kMCBounceAmplitude;
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];

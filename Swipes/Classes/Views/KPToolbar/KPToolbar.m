@@ -7,9 +7,10 @@
 //
 #import "KPToolbar.h"
 #import "UtilityClass.h"
+#import <QuartzCore/QuartzCore.h>
 #define SEP_WIDTH 0.5
 #define kDEF_SEP_COLOR [UIColor whiteColor]
-#define kDEF_BACK_COLOR tbackground(ToolbarBackground)
+#define kDEF_BACK_COLOR CLEAR
 @interface KPToolbar ()
 @property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *barButtons;
 @property (nonatomic, strong) IBOutletCollection(UIView) NSArray *seperators;
@@ -94,6 +95,11 @@
         self.seperatorHeight = self.frame.size.height/2;
         self.seperatorColor = kDEF_SEP_COLOR;
         self.backgroundColor = kDEF_BACK_COLOR;
+        CAGradientLayer *gradient = [CAGradientLayer layer];
+        gradient.frame = self.bounds;
+        gradient.colors = @[(id)alpha(tbackground(BackgroundColor),0.0f).CGColor,(id)alpha(tbackground(BackgroundColor),0.8f).CGColor,(id)tbackground(BackgroundColor).CGColor];
+        gradient.locations = @[@0.0,@0.3,@1.0];
+        [self.layer insertSublayer:gradient atIndex:0];
     }
     return self;
 }

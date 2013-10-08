@@ -33,9 +33,10 @@
 #define SEGMENT_BORDER_RADIUS 0
 #define TODAY_EXTRA_INSET 3
 #define SEGMENT_BORDER_WIDTH 0
-#define SEGMENT_HEIGHT (44+TOP_HEIGHT)
-#define TOP_HEIGHT ((OSVER >= 7) ? 20 : 0)
-#define INTERESTED_SEGMENT_RECT CGRectMake(0,TOP_HEIGHT,(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),SEGMENT_HEIGHT-TOP_HEIGHT)
+#define SEGMENT_HEIGHT 52
+#define TOP_Y ((OSVER >= 7) ? 20 : 0)
+#define TOP_HEIGHT ((OSVER >= 7) ? (TOP_Y+SEGMENT_HEIGHT) : SEGMENT_HEIGHT)
+#define INTERESTED_SEGMENT_RECT CGRectMake(0,TOP_Y,(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),SEGMENT_HEIGHT)
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
@@ -163,22 +164,11 @@
 }
 - (AKSegmentedControl *)segmentedControl {
 	if (!_segmentedControl) {
-		//_segmentedControl = [[UISegmentedControl alloc] initWithItems:self.titles];
         AKSegmentedControl *segmentedControl = [[AKSegmentedControl alloc] initWithFrame:INTERESTED_SEGMENT_RECT];
-        [segmentedControl setBackgroundImage:[tbackground(MenuSelectedBackground) image]];
         [segmentedControl setSelectedIndex: DEFAULT_SELECTED_INDEX];
-        segmentedControl.layer.cornerRadius = SEGMENT_BORDER_RADIUS;
-        segmentedControl.layer.masksToBounds = NO;
-        segmentedControl.layer.shadowOffset = CGSizeMake(0, 0);
-        segmentedControl.layer.shadowRadius = 5;
-        segmentedControl.layer.shadowOpacity = 0.5;
-        segmentedControl.layer.borderColor = tbackground(MenuSelectedBackground).CGColor;
-        segmentedControl.layer.borderWidth = SEGMENT_BORDER_WIDTH;
-        segmentedControl.layer.shadowPath = [UIBezierPath bezierPathWithRect:segmentedControl.bounds].CGPath;
         [segmentedControl addTarget:self action:@selector(changeViewController:) forControlEvents:UIControlEventValueChanged];
         [segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
         [segmentedControl setSegmentedControlMode:AKSegmentedControlModeSticky];
-        //[segmentedControl setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
         UIButton *buttonSchedule = [self buttonForSegment:KPSegmentButtonSchedule];
         UIButton *buttonToday = [self buttonForSegment:KPSegmentButtonToday];
         UIButton *buttonDone = [self buttonForSegment:KPSegmentButtonDone];
@@ -191,16 +181,11 @@
 -(UIButton*)buttonForSegment:(KPSegmentButtons)controlButton{
     UIButton *button = [[UIButton alloc] init];
     CGRectSetSize(button, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
-    [button setBackgroundImage:[tbackground(MenuBackground) image] forState:UIControlStateNormal];
-    [button setBackgroundImage:[tbackground(MenuSelectedBackground) image] forState:UIControlStateSelected];
-    [button setBackgroundImage:[tbackground(MenuSelectedBackground) image] forState:UIControlStateHighlighted | UIControlStateSelected];
-    //[button setBackgroundImage:[UtilityClass imageWithColor:tbackground(MenuSelectedBackground)] forState:UIControlStateHighlighted];
     button.adjustsImageWhenHighlighted = NO;
     NSString *imageString;
     UIColor *thisColor;
     switch (controlButton) {
         case KPSegmentButtonSchedule:
-            
             thisColor = tcolor(LaterColor);
             imageString = @"schedule";
             break;
@@ -251,10 +236,12 @@
 			}
 		}];
         self.view.layer.masksToBounds = YES;
-        [self.view addSubview:self.segmentedControl];
+        
         self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, TOP_HEIGHT)];
-        self.ios7BackgroundView.backgroundColor = [UIColor blackColor];
+        self.ios7BackgroundView.backgroundColor = tbackground(BackgroundColor);
+        [self.ios7BackgroundView addSubview:self.segmentedControl];
         [self.view addSubview:self.ios7BackgroundView];
+        
         //self.navigationItem.titleView = self.segmentedControl;
 	}
 	return self;
@@ -296,7 +283,7 @@
     [super viewWillAppear:animated];
 	if (!self.hasAppeared) {
         self.hasAppeared = YES;
-        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, SEGMENT_HEIGHT, 320, self.view.bounds.size.height-SEGMENT_HEIGHT)];
+        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, 320, self.view.bounds.size.height-TOP_HEIGHT)];
         self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         contentView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         contentView.tag = CONTENT_VIEW_TAG;

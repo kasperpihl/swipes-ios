@@ -15,22 +15,30 @@
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
 @interface MenuButton ()
-@property (nonatomic) UIImageView *iconImageView;
 @property (nonatomic) UIView *lampView;
 @end
 @implementation MenuButton
 -(void)highlightedButton:(UIButton *)sender{
-    self.iconImageView.highlighted = YES;
+    [UIView transitionWithView:self.iconImageView
+                      duration:0.5
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{ self.iconImageView.highlighted = YES; }
+                    completion:nil];
+    
 }
 -(void)deHighlightedButton:(UIButton *)sender{
-    self.iconImageView.highlighted = NO;
+    [UIView transitionWithView:self.iconImageView
+                      duration:0.5
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{ self.iconImageView.highlighted = NO; }
+                    completion:nil];
 }
 -(void)setLampColor:(UIColor*)lampColor{
     _lampColor = lampColor;
     self.lampView.hidden = (!lampColor);
     self.lampView.backgroundColor = lampColor;
 }
--(id)initWithFrame:(CGRect)frame title:(NSString*)title image:(UIImage*)image{
+-(id)initWithFrame:(CGRect)frame title:(NSString*)title image:(UIImage*)image highlightedImage:(UIImage *)highlightedImage{
     self = [super initWithFrame:frame];
     if (self) {
         UIColor *highlightedColor = tbackground(TaskCellBackground);
@@ -48,13 +56,13 @@
         [self setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
         
         [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [self setTitleColor:highlightedColor forState:UIControlStateHighlighted];
+        //[self setTitleColor:highlightedColor forState:UIControlStateHighlighted];
         
         
         
         self.iconImageView = [[UIImageView alloc] initWithImage:image];
-        self.iconImageView.highlightedImage = [UtilityClass image:image withColor:highlightedColor multiply:YES];
-        
+        if(!highlightedImage)self.iconImageView.highlightedImage = [UtilityClass image:image withColor:highlightedColor multiply:YES];
+        else self.iconImageView.highlightedImage = highlightedImage;
         CGFloat imageHeight = self.iconImageView.frame.size.height;
         CGFloat textHeight = sizeWithFont(@"Kasjper",SCHEDULE_BUTTON_FONT).height;
         NSInteger dividor = (SCHEDULE_IMAGE_CENTER_SPACING == 0) ? 3 : 2;

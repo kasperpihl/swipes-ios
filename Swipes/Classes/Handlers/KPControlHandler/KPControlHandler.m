@@ -16,6 +16,7 @@
 
 #import "KPControlHandler.h"
 #import "KPToolbar.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface KPControlHandler () <ToolbarDelegate>
 @property (nonatomic) KPControlHandlerState activeState;

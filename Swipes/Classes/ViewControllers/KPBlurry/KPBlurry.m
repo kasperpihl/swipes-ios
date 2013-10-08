@@ -13,7 +13,7 @@
 
 CGFloat const kKPBlurryDefaultDuration = .30f;
 CGFloat const kKPBlurryDefaultBlur = 1.0f;
-#define KPBlurryDefaultTopBlurry tbackground(PopupBackground)
+#define KPBlurryDefaultTopBlurry CLEAR//tbackground(PopupBackground)
 DisplayPosition const kKPBlurryDefaultDisplayPosition = PositionCenter;
 
 #pragma mark - Categories

@@ -308,7 +308,7 @@
 }
 
 -(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton{
-    MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton] image:[self imageForMenuButton:menuButton]];
+    MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton] image:[self imageForMenuButton:menuButton] highlightedImage:nil];
     if(menuButton == KPMenuButtonNotifications){
         BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
         UIColor *lampColor = hasNotificationsOn ? kLampOnColor : kLampOffColor;

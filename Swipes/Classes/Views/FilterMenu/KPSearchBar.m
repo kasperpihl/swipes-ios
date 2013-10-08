@@ -64,7 +64,7 @@
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = tbackground(SearchDrawerBackground);
+        self.backgroundColor = tbackground(BackgroundColor);
         self.searchField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, 0, self.frame.size.width-TEXT_FIELD_MARGIN_LEFT-self.frame.size.height, self.frame.size.height)];
         self.searchField.font = TEXT_FIELD_FONT;
         self.searchField.textColor = tcolor(SearchDrawerColor);

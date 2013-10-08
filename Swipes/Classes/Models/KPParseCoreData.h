@@ -10,10 +10,10 @@
 #import <Foundation/Foundation.h>
 #import <Parse/PFObject.h>
 #define KPCORE [KPParseCoreData sharedInstance]
-@class ParseObject;
+@class KPParseCoreData;
 
 @protocol ParseCoreDataDelegate <NSObject>
--(void)didUpdateParseCoreData:(KPParseObject*)parseCoreData;
+-(void)didUpdateParseCoreData:(KPParseCoreData*)parseCoreData;
 @end
 
 

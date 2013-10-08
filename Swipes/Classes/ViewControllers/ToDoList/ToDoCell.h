@@ -8,6 +8,7 @@
 
 #import "MCSwipeTableViewCell.h"
 #define CELL_HEIGHT 70
+#define CELL_LABEL_X 36
 @class KPToDo;
 @interface ToDoCell : MCSwipeTableViewCell
 @property (nonatomic) CellType cellType;

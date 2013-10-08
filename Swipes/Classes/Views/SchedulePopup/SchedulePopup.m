@@ -295,7 +295,7 @@ typedef enum {
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH)];
         contentView.center = self.center;
         
-        contentView.backgroundColor = tbackground(SearchDrawerBackground);//POPUP_BACKGROUND_COLOR color(254,115,103,1);//;
+        contentView.backgroundColor = CLEAR;//tbackground(SearchDrawerBackground);//POPUP_BACKGROUND_COLOR color(254,115,103,1);//;
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
         contentView.tag = CONTENT_VIEW_TAG;
@@ -443,18 +443,19 @@ typedef enum {
     return button+SCHEDULE_BUTTON_START_TAG;
 }
 -(UIButton*)buttonForScheduleButton:(KPScheduleButtons)scheduleButton title:(NSString *)title{
-    UIButton *button = [[MenuButton alloc] initWithFrame:[self frameForButtonNumber:scheduleButton] title:title image:[self imageForScheduleButton:scheduleButton]];
+    MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButtonNumber:scheduleButton] title:title image:[self imageForScheduleButton:scheduleButton highlighted:NO] highlightedImage:[self imageForScheduleButton:scheduleButton highlighted:YES]];
     button.tag = [self tagForButton:scheduleButton];
-    [button setBackgroundImage:[POPUP_SELECTED image] forState:UIControlStateHighlighted];
+    //[button setBackgroundImage:[POPUP_SELECTED image] forState:UIControlStateHighlighted];
     [button addTarget:self action:@selector(pressedScheduleButton:) forControlEvents:UIControlEventTouchUpInside];
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
     longPressGestureRecognizer.allowableMovement = 44.0f;
     longPressGestureRecognizer.delegate = self;
+    longPressGestureRecognizer.minimumPressDuration = 1.0f;
     [button addGestureRecognizer:longPressGestureRecognizer];
     [self.scheduleButtons addObject:button];
     return button;
 }
--(UIImage *)imageForScheduleButton:(KPScheduleButtons)scheduleButton{
+-(UIImage *)imageForScheduleButton:(KPScheduleButtons)scheduleButton highlighted:(BOOL)highlighted{
     NSString *imageString;
     switch (scheduleButton) {
         case KPScheduleButtonLaterToday:
@@ -487,6 +488,7 @@ typedef enum {
         default:
             break;
     }
+    if(highlighted) imageString = [imageString stringByAppendingString:@"-high"];
     return [UIImage imageNamed:imageString];
 }
 -(CGRect)frameForButtonNumber:(NSInteger)number{

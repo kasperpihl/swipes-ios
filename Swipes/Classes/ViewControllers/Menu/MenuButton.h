@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface MenuButton : UIButton
--(id)initWithFrame:(CGRect)frame title:(NSString*)title image:(UIImage*)image;
+-(id)initWithFrame:(CGRect)frame title:(NSString*)title image:(UIImage*)image highlightedImage:(UIImage*)highlightedImage;
 @property (nonatomic) UIColor *lampColor;
+@property (nonatomic) UIImageView *iconImageView;
 @end
