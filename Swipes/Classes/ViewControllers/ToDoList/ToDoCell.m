@@ -97,11 +97,12 @@
         overlayView.backgroundColor = tbackground(TaskCellBackground);
         self.selectedBackgroundView = overlayView;
         
-        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake((CELL_LABEL_X/2)-(LINE_SIZE/2), 0,LINE_SIZE, CELL_HEIGHT)];
+        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 4, CELL_HEIGHT)];
         timelineLine.tag = TIMELINE_TAG;
+        timelineLine.hidden = YES;
         //timelineLine.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-        timelineLine.backgroundColor = tcolor(TaskCellTimelineColor);
-        //[self.contentView addSubview:timelineLine];
+        
+        [self.contentView addSubview:timelineLine];
         self.timelineView = [self.contentView viewWithTag:TIMELINE_TAG];
         
         CGFloat outlineWidth = DOT_SIZE+(2*DOT_OUTLINE_SIZE);
@@ -189,9 +190,8 @@
     
     
     self.alarmLabel.hidden = YES;
-    if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
+    if((toDo.schedule) || toDo.completionDate){
         NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
-        NSString *dateInString = [UtilityClass timeStringForDate:showDate];
         self.alarmLabel.time = showDate;
         //[self.alarmLabel sizeToFit];
         //CGRectSetWidth(self.alarmLabel, self.alarmLabel.frame.size.width+2*ALARM_SPACING);
@@ -214,19 +214,15 @@
     self.alarmLabel.layer.borderColor = color.CGColor;
     self.tagsLabel.textColor = color;
     self.alarmLabel.circleColor = color;
+    self.timelineView.backgroundColor = color;
+}
+-(void)setSelected:(BOOL)selected{
+    [super setSelected:selected];
+    self.timelineView.hidden = !selected;
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-    if(selected){
-        NSDictionary *underlineAttribute = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleThick)};
-        self.titleLabel.attributedText = [[NSAttributedString alloc] initWithString:self.titleLabel.text
-                                                                 attributes:underlineAttribute];
-    }
-    else{
-        NSString *title = self.titleLabel.attributedText.string;
-        self.titleLabel.attributedText = nil;
-        self.titleLabel.text = title;
-    }
+    self.timelineView.hidden = !selected;
     
 }
 -(void)setCellType:(CellType)cellType{

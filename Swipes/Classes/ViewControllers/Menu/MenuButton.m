@@ -18,19 +18,11 @@
 @property (nonatomic) UIView *lampView;
 @end
 @implementation MenuButton
--(void)highlightedButton:(UIButton *)sender{
+-(void)setHighlighted:(BOOL)highlighted{
     [UIView transitionWithView:self.iconImageView
-                      duration:0.5
+                      duration:0.3
                        options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^{ self.iconImageView.highlighted = YES; }
-                    completion:nil];
-    
-}
--(void)deHighlightedButton:(UIButton *)sender{
-    [UIView transitionWithView:self.iconImageView
-                      duration:0.5
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^{ self.iconImageView.highlighted = NO; }
+                    animations:^{ self.iconImageView.highlighted = highlighted; [super setHighlighted:highlighted]; }
                     completion:nil];
 }
 -(void)setLampColor:(UIColor*)lampColor{
@@ -45,18 +37,11 @@
         self.titleLabel.font = SCHEDULE_BUTTON_FONT;
         [self setTitle:title forState:UIControlStateNormal];
         
-        
-        [self addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchUpInside];
-        [self addTarget:self action:@selector(highlightedButton:) forControlEvents:UIControlEventTouchDown];
-        [self addTarget:self action:@selector(highlightedButton:) forControlEvents:UIControlEventTouchDragInside];
-        [self addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchCancel];
-        [self addTarget:self action:@selector(deHighlightedButton:) forControlEvents:UIControlEventTouchDragOutside];
-        
         [self setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
         [self setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
         
         [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        //[self setTitleColor:highlightedColor forState:UIControlStateHighlighted];
+        [self setTitleColor:alpha(tcolor(TextColor),0.6) forState:UIControlStateHighlighted];
         
         
         

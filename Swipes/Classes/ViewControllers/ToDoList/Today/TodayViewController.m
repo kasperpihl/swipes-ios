@@ -87,7 +87,6 @@
     ToDoCell *cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [self readyCell:cell];
     [self tableView:self.tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
-    [cell showTimeline:NO];
 	return cell;
 }
 

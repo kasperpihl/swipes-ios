@@ -18,10 +18,10 @@
 
 
 #define LINE_SIZE                       1.0f
-#define GLOBAL_TOOLBAR_HEIGHT           70.0f
+#define GLOBAL_TOOLBAR_HEIGHT           60.0f
 #define GLOBAL_ANIMATION_DURATION       0.20f
 #define GLOBAL_TEXTFIELD_HEIGHT         55.0f
-#define GLOBAL_DOT_SIZE                 10.0f
+#define GLOBAL_DOT_SIZE                 8.0f
 #define GLOBAL_DOT_OUTLINE_SIZE         4.0f
 #define GLOBAL_CELL_HEIGHT              70.0f
 #define KEYBOARD_HEIGHT                 216.0f
@@ -145,7 +145,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #define W_CELL                  gray(230,1)
 
 #define W_TIMELINE_ACTIVATED    gray(128,1)
-#define W_CELL_ACTIVATED        gray(153,1)
+#define W_CELL_ACTIVATED        tbackground(BackgroundColor)
 
 #define W_TITLE_ACTIVATED       gray(255,1)
 

@@ -52,6 +52,12 @@
         KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[@"toolbar_edit_icon",@"toolbar_tag_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
         editToolbar.tag = EDIT_TOOLBAR_TAG;
         editToolbar.delegate = self;
+        CAGradientLayer *gradient = [CAGradientLayer layer];
+        gradient.frame = editToolbar.bounds;
+        gradient.colors = @[(id)alpha(tbackground(BackgroundColor),0.0f).CGColor,(id)alpha(tbackground(BackgroundColor),1.0f).CGColor,(id)tbackground(BackgroundColor).CGColor];
+        gradient.locations = @[@0.0,@0.2,@1.0];
+        [editToolbar.layer insertSublayer:gradient atIndex:0];
+        [editToolbar setTopInset:editToolbar.frame.size.height*0.15];
         [view addSubview:editToolbar];
         self.editToolbar = (KPToolbar*)[view viewWithTag:EDIT_TOOLBAR_TAG];
         

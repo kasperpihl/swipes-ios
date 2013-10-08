@@ -20,9 +20,6 @@
 
 @property (nonatomic,weak) NSObject<KPTimePickerDelegate> *delegate;
 @property (nonatomic) NSInteger wheelRadius;
-@property (nonatomic) UIColor *wheelColor;
-@property (nonatomic) UIColor *foregroundColor;
-@property (nonatomic) UIColor *wheelBackgroundColor;
 @property (nonatomic) NSInteger middleRadius;
 
 @property (nonatomic,strong) NSDate *pickingDate;

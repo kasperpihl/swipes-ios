@@ -12,10 +12,9 @@
 #define kMinutesInHalfDay 720
 
 #define kDefWheelRadius valForScreen(120,135)
-#define kExtraWheelRadius valForScreen(15,20)
 
 
-#define kSunImageDistance valForScreen(200, 230)
+#define kSunImageDistance valForScreen(180, 210)
 #define kLabelSpacing valForScreen(0,0)
 #define kClockLabelY valForScreen(0,0)
 #define kClockLabelFont KP_EXTRABOLD(valForScreen(46,52))
@@ -26,11 +25,8 @@
 #define kOpenedSunAngle valForScreen(70,60)
 #define kExtraAngleForIcons 5
 
-#define kDefWheelColor          [UIColor whiteColor]
-#define kDefForegroundColor     tbackground(MenuBackground) //tcolor(LaterColor)
-#define kDefWheelBackgroundColor tbackground(TimePickerWheelBackground)
-#define kDefLightColor          tbackground(TaskTableGradientBackground) //tcolor(SearchDrawerColor)
-#define kDefDarkColor           tbackground(SearchDrawerBackground)
+#define kDefLightColor          [tbackground(BackgroundColor) lighter] //tcolor(SearchDrawerColor)
+#define kDefDarkColor           tbackground(BackgroundColor)
 
 #define kEndAngle               (360-(90-kOpenedSunAngle/2) + kExtraAngleForIcons)
 #define kStartAngle             (kEndAngle- kOpenedSunAngle - 2*kExtraAngleForIcons)
@@ -54,65 +50,6 @@
 #import "UtilityClass.h"
 #import "UIColor+Utilities.h"
 @class KPTimePicker;
-@interface _KPTimePickerForeGroundView : UIView
-
-@property (nonatomic) KPTimePicker *timePicker;
--(id)initWithFrame:(CGRect)frame timePicker:(KPTimePicker *)timePicker;
-@end
-
-@implementation _KPTimePickerForeGroundView
--(id)initWithFrame:(CGRect)frame timePicker:(KPTimePicker *)timePicker{
-    self = [super initWithFrame:frame];
-    if(self){
-        self.backgroundColor = [UIColor clearColor];
-        self.timePicker = timePicker;
-    }
-    return self;
-}
--(CGFloat)calculateHeightForAngle:(CGFloat)angle{
-    CGFloat radians = radians(angle);
-    CGFloat newHeight = (self.bounds.size.width/2)/tanf(radians);
-    return newHeight;
-}
-- (void)drawRect:(CGRect)rect
-{
-    CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    
-    CGFloat backCircleSize = 2*self.timePicker.wheelRadius + 2*kExtraWheelRadius;
-    UIBezierPath *circlePath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.timePicker.centerPoint.x-backCircleSize/2, self.timePicker.centerPoint.y-backCircleSize/2, backCircleSize, backCircleSize)];
-    
-    CGContextAddPath(currentContext, circlePath.CGPath);
-    CGContextSetFillColorWithColor(currentContext,self.timePicker.wheelBackgroundColor.CGColor);
-    CGContextFillPath(currentContext);
-    
-    CGFloat angledYTopCoordinate = self.timePicker.centerPoint.y - [self calculateHeightForAngle:kOpenedSunAngle/2];
-    UIBezierPath *aPath = [UIBezierPath bezierPath];
-    [aPath moveToPoint:self.timePicker.centerPoint];
-    CGFloat width = self.bounds.size.width;
-    CGFloat height = self.bounds.size.height;
-    [aPath addLineToPoint:CGPointMake(0, angledYTopCoordinate)];
-    [aPath addLineToPoint:CGPointMake(0, height)];
-    [aPath addLineToPoint:CGPointMake(width, height)];
-    [aPath addLineToPoint:CGPointMake(width, angledYTopCoordinate)];
-    [aPath closePath];
-    CGContextAddPath(currentContext, aPath.CGPath);
-    CGContextSetFillColorWithColor(currentContext,self.timePicker.foregroundColor.CGColor);
-    CGContextFillPath(currentContext);
-    
-    UIBezierPath *wheelPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.timePicker.centerPoint.x-self.timePicker.wheelRadius, self.timePicker.centerPoint.y-self.timePicker.wheelRadius, 2*self.timePicker.wheelRadius, 2*self.timePicker.wheelRadius)];
-    
-    CGContextAddPath(currentContext, wheelPath.CGPath);
-    CGContextSetFillColorWithColor(currentContext,self.timePicker.wheelColor.CGColor);
-    CGContextFillPath(currentContext);
-    
-    UIBezierPath *confirmButtonPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.timePicker.centerPoint.x-self.timePicker.middleRadius, self.timePicker.centerPoint.y-self.timePicker.middleRadius, 2*self.timePicker.middleRadius, 2*self.timePicker.middleRadius)];
-    
-    CGContextAddPath(currentContext, confirmButtonPath.CGPath);
-    CGContextSetFillColorWithColor(currentContext,self.timePicker.foregroundColor.CGColor);
-    CGContextFillPath(currentContext);
-}
-
-@end
 
 
 @interface KPTimePicker () <UIGestureRecognizerDelegate>
@@ -127,7 +64,6 @@
 @property (nonatomic,strong) UIButton *backButton;
 @property (nonatomic,strong) UIImageView *sunImage;
 @property (nonatomic,strong) UIImageView *moonImage;
-@property (nonatomic,strong) _KPTimePickerForeGroundView *foregroundView;
 @property (nonatomic,strong) UILabel *dayLabel;
 @property (nonatomic,strong) UILabel *clockLabel;
 @end
@@ -141,7 +77,6 @@
         if(pickingDate) pickingDate = [pickingDate dateToNearest5Minutes];
         _pickingDate = pickingDate;
         [self updateForDate:pickingDate];
-        
     }
 }
 -(void)setIsInConfirmButton:(BOOL)isInConfirmButton{
@@ -171,7 +106,7 @@
 -(void)didWaitDelay{
     
     [UIView animateWithDuration:kGlowAnimationDuration animations:^{
-        self.confirmButton.backgroundColor = self.isInConfirmButton ? tcolor(DoneColor) : kDefForegroundColor;
+        self.confirmButton.backgroundColor = self.isInConfirmButton ? tcolor(DoneColor) : tcolor(TextColor);
     }];
 }
 #pragma mark Actions
@@ -328,10 +263,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.centerPoint = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/3*2);
-        self.foregroundColor = kDefForegroundColor;
-        self.wheelBackgroundColor = kDefWheelBackgroundColor;
         self.distanceForIcons = kSunImageDistance;
-        self.wheelColor = kDefWheelColor;
         self.wheelRadius = kDefWheelRadius;
         self.middleRadius = kDefMiddleButtonRadius;
         self.lightColor = kDefLightColor;
@@ -345,10 +277,6 @@
         self.sunImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"schedule_image_sun"]];
         self.sunImage.center = [self pointFromPoint:self.centerPoint withDistance:kSunImageDistance towardAngle:305];
         [self addSubview:self.sunImage];
-
-        
-        self.foregroundView = [[_KPTimePickerForeGroundView alloc] initWithFrame:self.bounds timePicker:self];
-        [self addSubview:self.foregroundView];
         
         self.confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.confirmButton.backgroundColor = [UIColor clearColor];
@@ -398,7 +326,7 @@
     [super layoutSubviews];
     if(!self.pickingDate) self.pickingDate = [NSDate date];
     else [self updateForDate:self.pickingDate];
-    CGFloat heightForContent = self.centerPoint.y - self.wheelRadius - kExtraWheelRadius;
+    CGFloat heightForContent = self.centerPoint.y - self.wheelRadius;
     
     
     CGFloat heightForDay = sizeWithFont(@"abcdefghADB",self.dayLabel.font).height;
@@ -411,7 +339,7 @@
     self.dayLabel.frame = CGRectMake(0, spacing, self.bounds.size.width, heightForDay);
     self.clockLabel.frame = CGRectMake(0, spacing+heightForDay+kLabelSpacing, self.bounds.size.width, heightForTime);
     
-    self.distanceForIcons = self.wheelRadius + kExtraWheelRadius + spacing*4 + iconHeigt/2;
+    self.distanceForIcons = self.wheelRadius + spacing*4 + iconHeigt/2;
 }
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return YES;
@@ -419,7 +347,6 @@
 -(void)dealloc{
     self.confirmButton = nil;
     self.backButton = nil;
-    self.foregroundView = nil;
     self.timeSlider = nil;
     self.sunImage = nil;
     self.moonImage = nil;

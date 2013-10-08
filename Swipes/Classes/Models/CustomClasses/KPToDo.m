@@ -166,8 +166,8 @@
         shouldFormat = YES;
     }
     else{
-        if([time isSameYearAsDate:[NSDate date]]) dateFormatter.dateFormat = @"d LLL";
-        else dateFormatter.dateFormat = @"d LLL  '´'yy";
+        if([time isSameYearAsDate:[NSDate date]]) dateFormatter.dateFormat = @"LLL d";
+        else dateFormatter.dateFormat = @"LLL d  '´'yy";
         shouldFormat = YES;
     }
     if(shouldFormat){

@@ -375,7 +375,7 @@
     	newDate = [self dateByAddingTimeInterval:-60*(remain)];
     }else{
     	// Add the remainder of time to the date to round it up evenly
-    	newDate = [self dateByAddingTimeInterval:60*(5-remain)];
+    	newDate = [self dateByAddingTimeInterval:60*(minutes-remain)];
     }
     NSDateComponents *comps = [[NSCalendar currentCalendar] components:unitFlags fromDate:newDate];
     [comps setSecond:0];

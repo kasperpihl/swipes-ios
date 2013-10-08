@@ -24,5 +24,6 @@ typedef enum {
 @property (nonatomic) UIColor *highlightedColor;
 @property (nonatomic) CGFloat seperatorHeight;
 @property (nonatomic) NSArray *items;
+@property (nonatomic) CGFloat topInset;
 -(id)initWithFrame:(CGRect)frame items:(NSArray*)items;
 @end

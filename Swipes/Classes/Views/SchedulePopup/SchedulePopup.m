@@ -28,7 +28,7 @@
 #define kSepHorTag 203
 #define kSepVerTag 204
 
-#define SEPERATOR_COLOR_LIGHT tbackground(TaskTableGradientBackground)//color(254,184,178,1)
+#define SEPERATOR_COLOR_LIGHT tcolor(TextColor) //tbackground(TaskTableGradientBackground)//color(254,184,178,1)
 #define SEPERATOR_MARGIN 0.05//0.02
 
 
@@ -450,7 +450,7 @@ typedef enum {
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
     longPressGestureRecognizer.allowableMovement = 44.0f;
     longPressGestureRecognizer.delegate = self;
-    longPressGestureRecognizer.minimumPressDuration = 1.0f;
+    longPressGestureRecognizer.minimumPressDuration = 0.6f;
     [button addGestureRecognizer:longPressGestureRecognizer];
     [self.scheduleButtons addObject:button];
     return button;

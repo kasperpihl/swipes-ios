@@ -16,7 +16,6 @@
 #import <QuartzCore/QuartzCore.h>
 @interface WalkthroughCell ()
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
-@property (nonatomic,weak) IBOutlet UIView *timelineView;
 @property (nonatomic,weak) IBOutlet UIView *dotView;
 @property (nonatomic,weak) IBOutlet UIView *outlineView;
 
@@ -30,7 +29,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.noneColor = W_TIMELINE_ACTIVATED;
+        self.noneColor = tbackground(BackgroundColor);
         CGFloat titleX = roundf(TABLE_WIDTH * LABEL_X);
         CGFloat dotOutlineSize = roundf(TABLE_WIDTH * DOT_OUTLINE_SIZE);
         CGFloat dotSize = roundf(TABLE_WIDTH * DOT_SIZE);
@@ -47,12 +46,12 @@
         [self.contentView addSubview:titleLabel];
         self.titleLabel = titleLabel;
         
-       UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (titleX/2), self.contentView.frame.size.height)];
+       /*UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (titleX/2), self.contentView.frame.size.height)];
         timelineLine.tag = TIMELINE_TAG;
         timelineLine.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         
         [self.contentView addSubview:timelineLine];
-        self.timelineView = [self.contentView viewWithTag:TIMELINE_TAG];
+        self.timelineView = [self.contentView viewWithTag:TIMELINE_TAG];*/
         
         
         CGFloat outlineWidth = dotSize+(2*dotOutlineSize);
@@ -61,7 +60,6 @@
         dotOutlineContainer.tag = OUTLINE_TAG;
         
         dotOutlineContainer.layer.cornerRadius = outlineWidth/2;
-        
         
         UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(dotOutlineSize, dotOutlineSize, dotSize,dotSize)];
         dotView.layer.cornerRadius = dotSize/2;
@@ -86,16 +84,12 @@
 }
 -(void)setDotColor:(UIColor*)color{
     BOOL isAnother = ![color isEqual:tcolor(TasksColor)];
-    self.timelineView.backgroundColor = isAnother ? color : W_TIMELINE_ACTIVATED;
-    self.outlineView.backgroundColor = isAnother ? W_CELL_ACTIVATED : W_TIMELINE_ACTIVATED;
     self.dotView.backgroundColor = color;
 }
 -(void)setActivated:(BOOL)activated animated:(BOOL)animated{
     _activated = activated;
     self.contentView.backgroundColor = activated ? W_CELL_ACTIVATED : W_CELL;
     self.titleLabel.textColor = activated ? W_TITLE_ACTIVATED : W_TIMELINE;
-    self.timelineView.backgroundColor = activated ? W_TIMELINE_ACTIVATED : W_TIMELINE;
-    self.outlineView.backgroundColor = activated ? W_TIMELINE_ACTIVATED : W_TIMELINE;
     self.dotView.backgroundColor = activated ? tcolor(TasksColor) : W_CELL;
 }
 /*

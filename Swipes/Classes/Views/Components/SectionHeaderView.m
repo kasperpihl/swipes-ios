@@ -9,7 +9,7 @@
 #define kDefLeftPadding 4
 #define kDefRightPadding 7
 #define kDefTopPadding 0
-#define kDefBottomPadding 2
+#define kDefBottomPadding 4
 #import "SectionHeaderView.h"
 @interface SectionHeaderView ()
 @property (nonatomic) UIColor *color;
@@ -27,7 +27,7 @@
         
         self.color = color;
         self.backgroundColor = CLEAR;
-        self.textColor = [UIColor whiteColor];
+        self.textColor = tcolor(TextColor);
         CGSize textSize = sizeWithFont(title, font);
         CGFloat actualHeight = textSize.height+kDefTopPadding+kDefBottomPadding;
         CGFloat leftPadding = (actualHeight*kDefLeftCutSize) + kDefLeftPadding;
@@ -70,10 +70,17 @@
     CGContextFillPath(currentContext);
     
     /* Draw the colored stroke */
+    CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
+    
+    
     CGContextMoveToPoint(currentContext, 0, 0);
     CGContextSetLineWidth(currentContext, LINE_SIZE);
-    CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
     CGContextAddLineToPoint(currentContext, leftCutPoint, targetY);
+    CGContextStrokePath(currentContext);
+    
+    CGContextMoveToPoint(currentContext, leftCutPoint, targetY);
+    //CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
+    CGContextSetLineWidth(currentContext, LINE_SIZE*2);
     CGContextAddLineToPoint(currentContext, targetX, targetY);
     CGContextStrokePath(currentContext);
 }

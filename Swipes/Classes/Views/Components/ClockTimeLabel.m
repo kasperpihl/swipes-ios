@@ -15,8 +15,9 @@
     [self setNeedsDisplay];
 }
 -(void)setTime:(NSDate *)time{
-    _time = time;
-    self.text = [NSString stringWithFormat:@"%i",time.hour];
+    _time = [time dateToNearest15Minutes];
+    
+    self.text = [NSString stringWithFormat:@"%i",_time.hour];
     
     NSLog(@"self.text:%@",self.text);
     [self setNeedsDisplay];
@@ -39,7 +40,7 @@
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextSetLineWidth(context, LINE_SIZE);
         CGContextSetStrokeColorWithColor(context, self.circleColor.CGColor);
-        NSInteger angle = 269;
+        NSInteger angle = -90;
         NSInteger minute = self.time.minute;
         if(minute >= 10 && minute <= 24) angle = 360;
         else if(minute >= 25 && minute <= 39) angle = 90;

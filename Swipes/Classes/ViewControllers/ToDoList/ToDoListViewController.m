@@ -175,12 +175,12 @@
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     NSString *title = [[self.itemHandler titleForSection:section] uppercaseString];
-    UIFont *font = KP_LIGHT(12);
+    UIFont *font = KP_REGULAR(12);
     SectionHeaderView *extraView = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:self.cellType] font:font title:title];
     
     
     UIColor *backgroundColor = [StyleHandler colorForCellType:self.cellType];
-    CGFloat colorStartingX = 0;// CELL_LABEL_X/2-LINE_SIZE/2;
+    CGFloat colorStartingX = 0; // CELL_LABEL_X/2-LINE_SIZE/2;
     UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(colorStartingX, 0, tableView.bounds.size.width-colorStartingX-extraView.frame.size.width, SECTION_HEADER_HEIGHT)];
     colorView.backgroundColor = backgroundColor;
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, SECTION_HEADER_HEIGHT)];
@@ -219,7 +219,6 @@
     //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     cell.cellType = [toDo cellTypeForTodo];
-    [cell showTimeline:YES];
     [cell setDotColor:self.cellType];
     [cell changeToDo:toDo withSelectedTags:self.itemHandler.selectedTags];
     if([toDo isEqual:self.parent.showingModel]){

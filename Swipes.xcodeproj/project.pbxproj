@@ -70,7 +70,6 @@
 		A72DDD8217AAA9C000A00454 /* toolbar_edit_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A72DDD8017AAA9C000A00454 /* toolbar_edit_icon.png */; };
 		A72DDD8317AAA9C000A00454 /* toolbar_edit_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A72DDD8117AAA9C000A00454 /* toolbar_edit_icon@2x.png */; };
 		A72DDD8617AAAFAF00A00454 /* KPTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A72DDD8517AAAFAE00A00454 /* KPTimePicker.m */; };
-		A72DDD8A17AB024900A00454 /* picker_wheel.png in Resources */ = {isa = PBXBuildFile; fileRef = A72DDD8817AB024900A00454 /* picker_wheel.png */; };
 		A72DDD8B17AB024900A00454 /* picker_wheel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A72DDD8917AB024900A00454 /* picker_wheel@2x.png */; };
 		A730D39217B5149C005E1510 /* upgrade_plus_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39017B5149C005E1510 /* upgrade_plus_logo.png */; };
 		A730D39317B5149C005E1510 /* upgrade_plus_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39117B5149C005E1510 /* upgrade_plus_logo@2x.png */; };
@@ -382,7 +381,6 @@
 		A72DDD8117AAA9C000A00454 /* toolbar_edit_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbar_edit_icon@2x.png"; sourceTree = "<group>"; };
 		A72DDD8417AAAFAD00A00454 /* KPTimePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPTimePicker.h; sourceTree = "<group>"; };
 		A72DDD8517AAAFAE00A00454 /* KPTimePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTimePicker.m; sourceTree = "<group>"; };
-		A72DDD8817AB024900A00454 /* picker_wheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = picker_wheel.png; sourceTree = "<group>"; };
 		A72DDD8917AB024900A00454 /* picker_wheel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "picker_wheel@2x.png"; sourceTree = "<group>"; };
 		A730D39017B5149C005E1510 /* upgrade_plus_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upgrade_plus_logo.png; sourceTree = "<group>"; };
 		A730D39117B5149C005E1510 /* upgrade_plus_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upgrade_plus_logo@2x.png"; sourceTree = "<group>"; };
@@ -859,7 +857,6 @@
 				A7E2D94217B3B176007BDE00 /* picker_wheel_ip4@2x.png */,
 				A776D0B617AD2B0A0027CA23 /* back_icon_white.png */,
 				A776D0B717AD2B0A0027CA23 /* back_icon_white@2x.png */,
-				A72DDD8817AB024900A00454 /* picker_wheel.png */,
 				A72DDD8917AB024900A00454 /* picker_wheel@2x.png */,
 			);
 			path = TimePicker;
@@ -1801,7 +1798,6 @@
 				A724B01F17A9397D00E0EF83 /* selected_circle@2x.png in Resources */,
 				A72DDD8217AAA9C000A00454 /* toolbar_edit_icon.png in Resources */,
 				A72DDD8317AAA9C000A00454 /* toolbar_edit_icon@2x.png in Resources */,
-				A72DDD8A17AB024900A00454 /* picker_wheel.png in Resources */,
 				A72DDD8B17AB024900A00454 /* picker_wheel@2x.png in Resources */,
 				A776D0B817AD2B0A0027CA23 /* back_icon_white.png in Resources */,
 				A776D0B917AD2B0A0027CA23 /* back_icon_white@2x.png in Resources */,
