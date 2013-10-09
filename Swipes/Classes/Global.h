@@ -11,4 +11,5 @@
 @interface Global : NSObject
 +(Global*)sharedInstance;
 + (NSInteger)OSVersion;
++(BOOL)is24Hour;
 @end

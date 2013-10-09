@@ -40,6 +40,7 @@
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextSetLineWidth(context, LINE_SIZE);
         CGContextSetStrokeColorWithColor(context, self.circleColor.CGColor);
+        
         NSInteger angle = -90;
         NSInteger minute = self.time.minute;
         if(minute >= 10 && minute <= 24) angle = 360;
@@ -47,6 +48,7 @@
         else if(minute >= 40 && minute <= 54) angle = 180;
         CGContextAddArc(context, width/2, height/2, width/2-LINE_SIZE, 270*M_PI/180, angle*M_PI/180, 0);
         CGContextStrokePath(context);
+        
     }
 }
 @end

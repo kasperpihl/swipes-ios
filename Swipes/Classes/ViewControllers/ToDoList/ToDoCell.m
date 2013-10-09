@@ -22,21 +22,14 @@
 #define OUTLINE_TAG 8
 #define ALARM_LABEL_TAG 9
 
-#define INDICATOR_X 40
-#define INDICATOR_HEIGHT 23
-#define INDICATOR_WIDTH 1
-
 #define kIconSpacing 5
-#define kIconSize 8
-#define kIndicatorHeight 4
-#define kIndicatorX 8
-#define kIndicatorHack 5
 
+#define kClockSize 24
 #define kTimeLabelMarginRight 5
 
-#define kClockSize 26
 
-#define TITLE_DELTA_Y 2
+
+#define TITLE_DELTA_Y 0
 #define TITLE_Y (TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
 
 #define DOT_SIZE GLOBAL_DOT_SIZE
@@ -44,14 +37,10 @@
 
 #define LABEL_WIDTH (320-(CELL_LABEL_X+(CELL_LABEL_X/3)))
 
-#define LABEL_SPACE 4
+#define LABEL_SPACE 2
 
 #define TITLE_LABEL_HEIGHT sizeWithFont(@"Tjgq",TITLE_LABEL_FONT).height
 #define TAGS_LABEL_HEIGHT sizeWithFont(@"Tg",TAGS_LABEL_FONT).height
-
-#define ALARM_HACK 1
-#define ICON_SPACING 5
-#define ALARM_SPACING 5
 
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *layerView;
@@ -63,6 +52,7 @@
 @property (nonatomic,weak) IBOutlet ClockTimeLabel *alarmLabel;
 
 @property (nonatomic,strong) UIImageView *notesIcon;
+@property (nonatomic,strong) UIImageView *recurringIcon;
 @end
 @implementation ToDoCell
 
@@ -87,6 +77,7 @@
         UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X, titleLabel.frame.origin.y+titleLabel.frame.size.height+LABEL_SPACE, LABEL_WIDTH, TAGS_LABEL_HEIGHT)];
         tagsLabel.tag = TAGS_LABEL_TAG;
         tagsLabel.numberOfLines = 1;
+        tagsLabel.textColor = gray(170, 1);
         tagsLabel.font = TAGS_LABEL_FONT;
         tagsLabel.backgroundColor = [UIColor clearColor];
         //tagsLabel.textColor = tcolor(TaskCellTagColor);
@@ -112,7 +103,6 @@
         dotOutlineContainer.layer.borderColor = tcolor(TasksColor).CGColor;
         dotOutlineContainer.backgroundColor = tbackground(BackgroundColor);
         dotOutlineContainer.layer.cornerRadius = outlineWidth/2;
-    
         
         UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(DOT_OUTLINE_SIZE, DOT_OUTLINE_SIZE, DOT_SIZE,DOT_SIZE)];
         dotView.layer.cornerRadius = DOT_SIZE/2;
@@ -121,16 +111,20 @@
         [self.contentView addSubview:dotOutlineContainer];
         self.dotView = [self.contentView viewWithTag:DOT_VIEW_TAG];
         self.outlineView = [self.contentView viewWithTag:OUTLINE_TAG];
+        self.outlineView.hidden = YES;
         
-        self.notesIcon = [[UIImageView alloc] init];
-        self.notesIcon.frame = CGRectMake(kIndicatorX, 0, self.timelineView.frame.size.width-kIndicatorX, kIndicatorHeight);
+        self.notesIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cell_notes_tasks"]];
         self.notesIcon.hidden = YES;
         [self.contentView addSubview:self.notesIcon];
+        
+        self.recurringIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cell_recurring_tasks"]];
+        self.recurringIcon.hidden = YES;
+        [self.contentView addSubview:self.recurringIcon];
         
         ClockTimeLabel *alarmLabel = [[ClockTimeLabel alloc] initWithFrame:CGRectMake(0, 0, kClockSize, kClockSize)];
         alarmLabel.tag = ALARM_LABEL_TAG;
         alarmLabel.font = CELL_ALARM_FONT;
-        alarmLabel.circleColor = tcolor(LaterColor);
+        alarmLabel.circleColor = gray(170, 1);
         
         //self.alarmLabel.numberOfLines = 1;
         alarmLabel.hidden = YES;
@@ -143,6 +137,8 @@
     CGFloat titleY = showBottomLine ? TITLE_Y : ((CELL_HEIGHT - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
     CGRectSetY(self.tagsLabel, TITLE_Y+self.titleLabel.frame.size.height+LABEL_SPACE);
+    CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y);
+    CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y);
     //CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
 }
@@ -186,20 +182,41 @@
         self.tagsLabel.font = TAGS_LABEL_FONT;
         self.tagsLabel.text = tagString;
     }
-    //CGFloat deltaX = CELL_LABEL_X;
-    
+    CGFloat deltaX = CELL_LABEL_X;
+    self.notesIcon.hidden = YES;
+    self.recurringIcon.hidden = YES;
     
     self.alarmLabel.hidden = YES;
     if((toDo.schedule) || toDo.completionDate){
         NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
         self.alarmLabel.time = showDate;
-        //[self.alarmLabel sizeToFit];
-        //CGRectSetWidth(self.alarmLabel, self.alarmLabel.frame.size.width+2*ALARM_SPACING);
-        //CGRectSetHeight(self.alarmLabel, self.alarmLabel.frame.size.height+2*ALARM_SPACING);
-        self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, self.frame.size.width-self.alarmLabel.frame.size.width-kTimeLabelMarginRight, (CELL_HEIGHT-self.alarmLabel.frame.size.height)/2);
-        self.alarmLabel.hidden = NO;
+        if(toDo.schedule && [toDo.schedule isInPast]){
+            self.alarmLabel.time = [[NSDate date] dateAtHours:8 minutes:0];
+            self.alarmLabel.text = @"";
+        }
+        self.alarmLabel.center = CGPointMake(CELL_LABEL_X/2, CELL_HEIGHT/2);
+        //self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, self.frame.size.width-self.alarmLabel.frame.size.width-kTimeLabelMarginRight, (CELL_HEIGHT-self.alarmLabel.frame.size.height)/2);
+        if(self.cellType != CellTypeToday) self.alarmLabel.hidden = NO;
     }
-    //CGRectSetX(self.tagsLabel,deltaX);
+    
+    
+    if(toDo.notes && toDo.notes.length > 0){
+        self.notesIcon.hidden = NO;
+        showBottomLine = YES;
+        CGRectSetX(self.notesIcon, deltaX);
+        deltaX += self.notesIcon.frame.size.width + kIconSpacing;
+    }
+    if(toDo.repeatOptionValue > RepeatNever){
+        self.recurringIcon.hidden = NO;
+        showBottomLine = YES;
+        CGRectSetX(self.recurringIcon, deltaX);
+        deltaX += self.recurringIcon.frame.size.width + kIconSpacing;
+    }
+    CGRectSetX(self.tagsLabel,deltaX);
+    //CGFloat deltaX = CELL_LABEL_X;
+    
+    
+    
     
     [self setTextLabels:showBottomLine];
 }
@@ -211,23 +228,35 @@
     self.timelineView.backgroundColor = color;
     self.outlineView.layer.borderColor = color.CGColor;
     self.dotView.backgroundColor = color;
-    self.alarmLabel.layer.borderColor = color.CGColor;
-    self.tagsLabel.textColor = color;
+    //self.tagsLabel.textColor = color;
     self.alarmLabel.circleColor = color;
     self.timelineView.backgroundColor = color;
+    
+    /* Icons on cell */
+    NSString *cellString = @"tasks";
+    if(cellType == CellTypeSchedule) cellString = @"later";
+    else if(cellType == CellTypeDone) cellString = @"done";
+    NSString *notesString = [NSString stringWithFormat:@"cell_notes_%@",cellString];
+    NSString *recurringString = [NSString stringWithFormat:@"cell_recurring_%@",cellString];
+    self.notesIcon.image = [UIImage imageNamed:notesString];
+    self.recurringIcon.image = [UIImage imageNamed:recurringString];
 }
 -(void)setSelected:(BOOL)selected{
-    [super setSelected:selected];
-    self.timelineView.hidden = !selected;
+    [self setSelected:selected animated:NO];
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     self.timelineView.hidden = !selected;
-    
 }
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){
         _cellType = cellType;
+        if(cellType == CellTypeToday){
+            self.outlineView.hidden = NO;
+        }
+        else {
+            self.outlineView.hidden = YES;
+        }
         self.selectedBackgroundView.backgroundColor = [StyleHandler colorForCellType:self.cellType];
         CellType firstCell = [StyleHandler cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
         CellType secondCell = [StyleHandler cellTypeForCell:cellType state:MCSwipeTableViewCellState2];

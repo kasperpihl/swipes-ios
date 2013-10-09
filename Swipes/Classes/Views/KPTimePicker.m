@@ -106,7 +106,7 @@
 -(void)didWaitDelay{
     
     [UIView animateWithDuration:kGlowAnimationDuration animations:^{
-        self.confirmButton.backgroundColor = self.isInConfirmButton ? tcolor(DoneColor) : tcolor(TextColor);
+        self.confirmButton.backgroundColor = self.isInConfirmButton ? tcolor(DoneColor) : CLEAR;
     }];
 }
 #pragma mark Actions

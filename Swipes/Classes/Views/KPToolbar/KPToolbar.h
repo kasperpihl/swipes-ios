@@ -20,9 +20,7 @@ typedef enum {
 @interface KPToolbar : UIView
 @property (nonatomic, readonly) IBOutletCollection(UIButton) NSArray *barButtons;
 @property (nonatomic,weak) NSObject<ToolbarDelegate> *delegate;
-@property (nonatomic) UIColor *seperatorColor;
 @property (nonatomic) UIColor *highlightedColor;
-@property (nonatomic) CGFloat seperatorHeight;
 @property (nonatomic) NSArray *items;
 @property (nonatomic) CGFloat topInset;
 -(id)initWithFrame:(CGRect)frame items:(NSArray*)items;
