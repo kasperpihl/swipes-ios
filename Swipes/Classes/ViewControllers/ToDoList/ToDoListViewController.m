@@ -180,7 +180,7 @@
     
     
     UIColor *backgroundColor = [StyleHandler colorForCellType:self.cellType];
-    CGFloat colorStartingX = 0; // CELL_LABEL_X/2-LINE_SIZE/2;
+    CGFloat colorStartingX = CELL_LABEL_X/2;//0;
     UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(colorStartingX, 0, tableView.bounds.size.width-colorStartingX-extraView.frame.size.width, SECTION_HEADER_HEIGHT)];
     colorView.backgroundColor = backgroundColor;
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, SECTION_HEADER_HEIGHT)];
@@ -221,6 +221,7 @@
     cell.cellType = [toDo cellTypeForTodo];
     [cell setDotColor:self.cellType];
     [cell changeToDo:toDo withSelectedTags:self.itemHandler.selectedTags];
+    
     if([toDo isEqual:self.parent.showingModel]){
         self.showingViewController.model = toDo;
         [self.showingViewController injectInCell:cell];
@@ -300,6 +301,7 @@
             }
         }
     }];
+    BLURRY.blurryTopColor = alpha(tcolor(LaterColor),0.8);
     BLURRY.blurLevel = 1.0f;
     [BLURRY showView:popup inViewController:self.parent];
 }

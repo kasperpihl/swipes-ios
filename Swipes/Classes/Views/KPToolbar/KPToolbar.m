@@ -50,6 +50,7 @@
             [self addSubview:button];
             buttonCounter++;
         }
+        self.barButtons = [barButtons copy];
         
     }
 }

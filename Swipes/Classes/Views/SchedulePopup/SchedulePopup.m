@@ -69,7 +69,6 @@ typedef enum {
 @property (nonatomic) KPScheduleButtons activeButton;
 @property (nonatomic,strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, weak) IBOutlet UIView *timeViewer;
-@property (nonatomic) BOOL openedTimePicker;
 
 @end
 @implementation SchedulePopup
@@ -364,8 +363,7 @@ typedef enum {
     [self openTimePickerWithButton:KPScheduleButtonSpecificTime andDate:self.calendarView.selectedDate];
 }
 -(void)openTimePickerWithButton:(KPScheduleButtons)button andDate:(NSDate*)date{
-    if(self.openedTimePicker) return;
-    self.openedTimePicker = YES;
+    if(self.timePicker) return;
     self.activeButton = button;
     self.timePicker = [[KPTimePicker alloc] initWithFrame:self.bounds];
     self.timePicker.delegate = self;
@@ -381,11 +379,7 @@ typedef enum {
         
     }];
 }
--(NSString *)timePicker:(KPTimePicker *)timePicker titleForDate:(NSDate *)date{
-    return nil;
-}
 -(void)timePicker:(KPTimePicker *)timePicker selectedDate:(NSDate *)date{
-    self.openedTimePicker = NO;
     [UIView animateWithDuration:kTimePickerDuration animations:^{
         timePicker.alpha = 0;
     } completion:^(BOOL finished) {
@@ -395,7 +389,6 @@ typedef enum {
             if(date) [self returnState:self.activeButton date:date];
         }
     }];
-    
 }
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
     if(!self.timePicker) return;

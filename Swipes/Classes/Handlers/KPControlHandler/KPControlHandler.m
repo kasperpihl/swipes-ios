@@ -55,9 +55,9 @@
         CAGradientLayer *gradient = [CAGradientLayer layer];
         gradient.frame = editToolbar.bounds;
         gradient.colors = @[(id)alpha(tbackground(BackgroundColor),0.0f).CGColor,(id)alpha(tbackground(BackgroundColor),1.0f).CGColor,(id)tbackground(BackgroundColor).CGColor];
-        gradient.locations = @[@0.0,@0.2,@1.0];
+        gradient.locations = @[@0.0,@0.3,@1.0];
         [editToolbar.layer insertSublayer:gradient atIndex:0];
-        [editToolbar setTopInset:editToolbar.frame.size.height*0.15];
+        [editToolbar setTopInset:editToolbar.frame.size.height*0.20];
         [view addSubview:editToolbar];
         self.editToolbar = (KPToolbar*)[view viewWithTag:EDIT_TOOLBAR_TAG];
         

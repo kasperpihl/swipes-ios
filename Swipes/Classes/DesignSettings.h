@@ -60,7 +60,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 
 /* Table View */
 #define TABLE_EMPTY_BG_TEXT_HEIGHT      40
-#define CELL_ALARM_FONT                 KP_REGULAR(12)
+#define CELL_ALARM_FONT                 KP_REGULAR(11)
 
 /* Edit Task view */
 #define EDIT_TASK_TITLE_FONT            KP_LIGHT(18)

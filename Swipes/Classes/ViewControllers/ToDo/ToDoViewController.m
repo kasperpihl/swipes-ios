@@ -42,6 +42,7 @@
 #import "KPRepeatPicker.h"
 #import "UIButton+PassTouch.h"
 #import "AppDelegate.h"
+#import "KPTimePicker.h"
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
     KPEditModeTitle,
@@ -51,7 +52,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNotes
 };
 
-@interface ToDoViewController () <HPGrowingTextViewDelegate,NotesViewDelegate,ToolbarDelegate,KPRepeatPickerDelegate>
+@interface ToDoViewController () <HPGrowingTextViewDelegate,NotesViewDelegate,ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
 
 
@@ -72,6 +73,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UILabel *repeatedLabel;
 
 @property (nonatomic) KPToolbar *toolbarEditView;
+
+@property (nonatomic,strong) KPTimePicker *timePicker;
+
 @end
 
 @implementation ToDoViewController
@@ -126,7 +130,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self setColorsFor:self.alarmLabel];
         self.alarmLabel.font = EDIT_TASK_TEXT_FONT;
         [self.alarmContainer addSubview:self.alarmLabel];
-        [self addClickButtonToView:self.alarmContainer action:@selector(pressedAlarm:)];
+        UIButton *alarmButton = [self addClickButtonToView:self.alarmContainer action:@selector(pressedAlarm:)];
+        UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
+        longPressGestureRecognizer.allowableMovement = 44.0f;
+        longPressGestureRecognizer.minimumPressDuration = 0.7f;
+        [alarmButton addGestureRecognizer:longPressGestureRecognizer];
         [self.scrollView addSubview:self.alarmContainer];
 
         self.repeatedContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
@@ -196,6 +204,41 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
     }
     return self;
+}
+-(void)longPressRecognized:(UIGestureRecognizer*)sender{
+    if(sender.state == UIGestureRecognizerStateBegan){
+        [self openTimePicker];
+    }
+}
+-(void)openTimePicker{
+    if(self.timePicker) return;
+    NSDate *date = self.model.schedule;
+    if(!date || [date isInPast]) return;
+    self.timePicker = [[KPTimePicker alloc] initWithFrame:self.segmentedViewController.view.bounds];
+    self.timePicker.delegate = self;
+    self.timePicker.pickingDate = date;
+    self.timePicker.minimumDate = [date dateAtStartOfDay];
+    if([date isToday]) self.timePicker.minimumDate = [[NSDate date] dateByAddingMinutes:5];
+    self.timePicker.maximumDate = [[[date dateByAddingDays:1] dateAtStartOfDay] dateBySubtractingMinutes:5];
+    self.timePicker.alpha = 0;
+    [self.segmentedViewController.view addSubview:self.timePicker];
+    [UIView animateWithDuration:0.2f animations:^{
+        self.timePicker.alpha = 1;
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+-(void)timePicker:(KPTimePicker *)timePicker selectedDate:(NSDate *)date{
+    [UIView animateWithDuration:0.2f animations:^{
+        timePicker.alpha = 0;
+    } completion:^(BOOL finished) {
+        if(finished){
+            [timePicker removeFromSuperview];
+            self.timePicker = nil;
+            if(date) [self.model scheduleForDate:date];
+        }
+    }];
+    
 }
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
     if(item == 0 && [self.delegate respondsToSelector:@selector(didPressCloseToDoViewController:)]){

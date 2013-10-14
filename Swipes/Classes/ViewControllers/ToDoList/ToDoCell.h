@@ -16,5 +16,4 @@
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags;
 //-(void)showTimeline:(BOOL)show;
 -(void)setDotColor:(CellType)cellType;
--(void)hideContent:(BOOL)hide animated:(BOOL)animated;
 @end

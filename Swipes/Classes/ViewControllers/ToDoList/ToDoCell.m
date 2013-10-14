@@ -14,17 +14,16 @@
 #import "UIColor+Utilities.h"
 #import "StyleHandler.h"
 #import "ClockTimeLabel.h"
-#define LAYER_VIEW_TAG 1
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
 #define DOT_VIEW_TAG 6
-#define TIMELINE_TAG 7
+#define SELECTION_TAG 7
 #define OUTLINE_TAG 8
 #define ALARM_LABEL_TAG 9
 
 #define kIconSpacing 5
 
-#define kClockSize 24
+#define kClockSize 22
 #define kTimeLabelMarginRight 5
 
 
@@ -39,12 +38,14 @@
 
 #define LABEL_SPACE 2
 
+#define kUnselectedFrame CGRectMake((CELL_LABEL_X/2),0, LINE_SIZE,CELL_HEIGHT)
+#define kSelectedFrame CGRectMake(0,0,(CELL_LABEL_X/2)+LINE_SIZE,CELL_HEIGHT)
+
 #define TITLE_LABEL_HEIGHT sizeWithFont(@"Tjgq",TITLE_LABEL_FONT).height
 #define TAGS_LABEL_HEIGHT sizeWithFont(@"Tg",TAGS_LABEL_FONT).height
 
 @interface ToDoCell ()
-@property (nonatomic,weak) IBOutlet UIView *layerView;
-@property (nonatomic,weak) IBOutlet UIView *timelineView;
+@property (nonatomic,weak) IBOutlet UIView *selectionView;
 @property (nonatomic,weak) IBOutlet UIView *dotView;
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UIView *outlineView;
@@ -88,13 +89,13 @@
         overlayView.backgroundColor = tbackground(TaskCellBackground);
         self.selectedBackgroundView = overlayView;
         
-        UIView *timelineLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 4, CELL_HEIGHT)];
-        timelineLine.tag = TIMELINE_TAG;
-        timelineLine.hidden = YES;
+        UIView *selectionView = [[UIView alloc] initWithFrame:CGRectMake((CELL_LABEL_X/2),0, LINE_SIZE,CELL_HEIGHT)]; //CGRectMake(0, 0, 4, CELL_HEIGHT)];
+        selectionView.tag = SELECTION_TAG;
+        //selectionView.hidden = YES;
         //timelineLine.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         
-        [self.contentView addSubview:timelineLine];
-        self.timelineView = [self.contentView viewWithTag:TIMELINE_TAG];
+        [self.contentView addSubview:selectionView];
+        self.selectionView = [self.contentView viewWithTag:SELECTION_TAG];
         
         CGFloat outlineWidth = DOT_SIZE+(2*DOT_OUTLINE_SIZE);
         UIView *dotOutlineContainer = [[UIView alloc] initWithFrame:CGRectMake((CELL_LABEL_X-outlineWidth)/2, (CELL_HEIGHT-outlineWidth)/2, outlineWidth, outlineWidth)];
@@ -123,7 +124,9 @@
         
         ClockTimeLabel *alarmLabel = [[ClockTimeLabel alloc] initWithFrame:CGRectMake(0, 0, kClockSize, kClockSize)];
         alarmLabel.tag = ALARM_LABEL_TAG;
+        //alarmLabel.layer.cornerRadius = kClockSize /2;
         alarmLabel.font = CELL_ALARM_FONT;
+        //alarmLabel.backgroundColor = tbackground(BackgroundColor);
         alarmLabel.circleColor = gray(170, 1);
         
         //self.alarmLabel.numberOfLines = 1;
@@ -141,31 +144,6 @@
     CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y);
     //CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
-}
--(void)hideContent:(BOOL)hide animated:(BOOL)animated{
-    voidBlock block = ^(void) {
-        if(hide){
-                self.outlineView.alpha = 0;
-                self.dotView.alpha = 0;
-                self.timelineView.alpha = 0;
-                self.tagsLabel.alpha = 0;
-                self.titleLabel.alpha = 0;
-        }
-        else {
-            self.outlineView.alpha = 1;
-            self.dotView.alpha = 1;
-            self.timelineView.alpha = 1;
-            self.tagsLabel.alpha = 1;
-            self.titleLabel.alpha = 1;
-        }
-    };
-    if(animated){
-        [UIView animateWithDuration:0.25f animations:block];
-    }
-    else block();
-}
--(void)showTimeline:(BOOL)show{
-    self.timelineView.hidden = !show;
 }
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags{
     BOOL showBottomLine = YES;
@@ -187,6 +165,7 @@
     self.recurringIcon.hidden = YES;
     
     self.alarmLabel.hidden = YES;
+    self.outlineView.hidden = YES;
     if((toDo.schedule) || toDo.completionDate){
         NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
         self.alarmLabel.time = showDate;
@@ -197,7 +176,9 @@
         self.alarmLabel.center = CGPointMake(CELL_LABEL_X/2, CELL_HEIGHT/2);
         //self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, self.frame.size.width-self.alarmLabel.frame.size.width-kTimeLabelMarginRight, (CELL_HEIGHT-self.alarmLabel.frame.size.height)/2);
         if(self.cellType != CellTypeToday) self.alarmLabel.hidden = NO;
+        else self.outlineView.hidden = NO;
     }
+    else self.outlineView.hidden = NO;
     
     
     if(toDo.notes && toDo.notes.length > 0){
@@ -220,43 +201,23 @@
     
     [self setTextLabels:showBottomLine];
 }
--(void)setIconsForToDo:(KPToDo*)toDo{
-    
-}
 -(void)setDotColor:(CellType)cellType{
     UIColor *color = [StyleHandler colorForCellType:cellType];
-    self.timelineView.backgroundColor = color;
+    self.selectionView.backgroundColor = color;
     self.outlineView.layer.borderColor = color.CGColor;
     self.dotView.backgroundColor = color;
-    //self.tagsLabel.textColor = color;
     self.alarmLabel.circleColor = color;
-    self.timelineView.backgroundColor = color;
-    
-    /* Icons on cell */
-    NSString *cellString = @"tasks";
-    if(cellType == CellTypeSchedule) cellString = @"later";
-    else if(cellType == CellTypeDone) cellString = @"done";
-    NSString *notesString = [NSString stringWithFormat:@"cell_notes_%@",cellString];
-    NSString *recurringString = [NSString stringWithFormat:@"cell_recurring_%@",cellString];
-    self.notesIcon.image = [UIImage imageNamed:notesString];
-    self.recurringIcon.image = [UIImage imageNamed:recurringString];
 }
 -(void)setSelected:(BOOL)selected{
     [self setSelected:selected animated:NO];
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-    self.timelineView.hidden = !selected;
+    self.selectionView.frame = selected ? kSelectedFrame : kUnselectedFrame;
 }
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){
         _cellType = cellType;
-        if(cellType == CellTypeToday){
-            self.outlineView.hidden = NO;
-        }
-        else {
-            self.outlineView.hidden = YES;
-        }
         self.selectedBackgroundView.backgroundColor = [StyleHandler colorForCellType:self.cellType];
         CellType firstCell = [StyleHandler cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
         CellType secondCell = [StyleHandler cellTypeForCell:cellType state:MCSwipeTableViewCellState2];

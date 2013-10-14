@@ -83,7 +83,7 @@
     [self setActivated:activated animated:NO];
 }
 -(void)setDotColor:(UIColor*)color{
-    BOOL isAnother = ![color isEqual:tcolor(TasksColor)];
+    //BOOL isAnother = ![color isEqual:tcolor(TasksColor)];
     self.dotView.backgroundColor = color;
 }
 -(void)setActivated:(BOOL)activated animated:(BOOL)animated{

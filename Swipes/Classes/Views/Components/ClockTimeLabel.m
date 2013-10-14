@@ -18,8 +18,6 @@
     _time = [time dateToNearest15Minutes];
     
     self.text = [NSString stringWithFormat:@"%i",_time.hour];
-    
-    NSLog(@"self.text:%@",self.text);
     [self setNeedsDisplay];
 }
 -(id)initWithFrame:(CGRect)frame{
@@ -28,16 +26,20 @@
         self.textColor = kDefTextColor;
         self.backgroundColor = CLEAR;
         self.textAlignment = UITextAlignmentCenter;
-        self.layer.masksToBounds = NO;
+        self.layer.masksToBounds = YES;
     }
     return self;
 }
 -(void)drawRect:(CGRect)rect{
-    [super drawRect:rect];
+    
     if(self.time && self.circleColor){
         CGFloat width = self.bounds.size.width;
         CGFloat height = self.bounds.size.height;
         CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextAddArc(context, width/2, height/2, width/2-LINE_SIZE, 0*M_PI/180, 360*M_PI/180, 0);
+        CGContextSetFillColorWithColor(context, tbackground(BackgroundColor).CGColor);
+        CGContextFillPath(context);
+        
         CGContextSetLineWidth(context, LINE_SIZE);
         CGContextSetStrokeColorWithColor(context, self.circleColor.CGColor);
         
@@ -49,6 +51,8 @@
         CGContextAddArc(context, width/2, height/2, width/2-LINE_SIZE, 270*M_PI/180, angle*M_PI/180, 0);
         CGContextStrokePath(context);
         
+        
     }
+    [super drawRect:rect];
 }
 @end

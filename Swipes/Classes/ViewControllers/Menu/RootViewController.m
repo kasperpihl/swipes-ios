@@ -250,14 +250,18 @@ static RootViewController *sharedObject;
 }
 -(void)openApp{
     [KPCORE synchronize];
-    if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
+    [[[self menuViewController] currentViewController] update];
+    [[[self menuViewController] currentViewController] deselectAllRows:self];
+    //[OVERLAY popAllViewsAnimated:NO];
+    //[self resetRoot];
+    /*if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
         [OVERLAY popAllViewsAnimated:NO];
         [self resetRoot];
     }
     else if(self.lastClose){
         [[[self menuViewController] currentViewController] update];
         [[[self menuViewController] currentViewController] deselectAllRows:self];
-    }
+    }*/
 }
 -(void)closeApp{
     self.lastClose = [NSDate date];
