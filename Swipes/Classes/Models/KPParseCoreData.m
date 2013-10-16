@@ -13,6 +13,8 @@
 #import "NSDate-Utilities.h"
 #import <Parse/PFQuery.h>
 #import <Parse/PFRelation.h>
+#import "TWStatus.h"
+
 #define kFetchLimit 0
 
 /*
@@ -23,6 +25,7 @@
 @property (nonatomic,assign) BOOL didLogout;
 @property (nonatomic) NSMutableDictionary *tmpUpdatingObjects;
 @property (nonatomic) NSMutableDictionary *deleteObjects;
+@property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 @property BOOL syncAgain;
 @property BOOL isSyncing;
 @property BOOL lockSaving;
@@ -106,6 +109,7 @@ static KPParseCoreData *sharedObject;
 }
 #pragma mark Core data stuff
 -(void)initialize{
+    self.backgroundTask = UIBackgroundTaskInvalid;
     [self loadDatabase];
 }
 -(void)loadDatabase{
@@ -152,8 +156,8 @@ static KPParseCoreData *sharedObject;
         return;
     }
     self.isSyncing = YES;
-
-    NSLog(@"synchronizing");
+    [TWStatus showLoadingWithStatus:@"Synchronizing"];
+    
     CGFloat startTime = CACurrentMediaTime();
     [self updateTMPObjects];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(objectId IN %@) OR (objectId = nil)",[self.updateObjects allKeys]];
@@ -163,7 +167,6 @@ static KPParseCoreData *sharedObject;
     if(kFetchLimit && changedObjects.count == kFetchLimit) self.syncAgain = YES;
     __block NSMutableArray *updatePFObjects = [NSMutableArray array];
     __block NSMutableArray *updatedObjects = [NSMutableArray array];
-    
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
         for(KPParseObject *oldContextObject in changedObjects){
             KPParseObject *object = [oldContextObject MR_inContext:localContext];
@@ -186,6 +189,7 @@ static KPParseCoreData *sharedObject;
             NSError *error;
             [PFObject saveAll:updatePFObjects error:&error];
             if(error){
+                self.syncAgain = YES;
                 NSLog(@"error saving updated:%@",error);
             }
             NSInteger index = 0;
@@ -233,6 +237,9 @@ static KPParseCoreData *sharedObject;
         NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
         if(error){
             NSLog(@"error query:%@",error);
+            //[self endBackgroundHandler];
+            [TWStatus showStatus:@"Sync failed"];
+            [TWStatus dismissAfter:5];
             return;
         }
         for(PFObject *object in allObjects){
@@ -255,12 +262,32 @@ static KPParseCoreData *sharedObject;
     } completion:^(BOOL success, NSError *error) {
         if(error) NSLog(@"error from update");
         self.isSyncing = NO;
+        //[self endBackgroundHandler];
+        [TWStatus showStatus:@"Sync completed"];
+        [TWStatus dismissAfter:5];
         if(self.syncAgain) {
             [self synchronize];
         }
+        
     }];
     
     
+}
+-(void)endBackgroundHandler{
+    
+    if (self.backgroundTask != UIBackgroundTaskInvalid)
+    {
+        NSLog(@"Background time remaining = %f seconds", [UIApplication sharedApplication].backgroundTimeRemaining);
+        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+        self.backgroundTask = UIBackgroundTaskInvalid;
+    }
+}
+-(void)startBackgroundHandler{
+    self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        NSLog(@"Background handler called. Not running background tasks anymore.");
+        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+        self.backgroundTask = UIBackgroundTaskInvalid;
+    }];
 }
 -(void)cleanUp{
     NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
@@ -272,6 +299,7 @@ static KPParseCoreData *sharedObject;
     }
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+    [self endBackgroundHandler];
 }
 -(void)dealloc{
     [MagicalRecord cleanUp];

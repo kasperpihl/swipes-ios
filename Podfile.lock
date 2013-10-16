@@ -5,7 +5,6 @@ PODS:
   - Mixpanel (2.0.2)
   - Parse (1.2.15):
     - Facebook-iOS-SDK (~> 3.7)
-  - TWStatus (0.0.1)
 
 DEPENDENCIES:
   - Appirater (~> 2.0.2)
@@ -13,7 +12,6 @@ DEPENDENCIES:
   - MagicalRecord (~> 2.2)
   - Mixpanel (~> 2.0.2)
   - Parse (~> 1.2.15)
-  - TWStatus (~> 0.0.1)
 
 SPEC CHECKSUMS:
   Appirater: 32fb9089615b5e542c7ad7b5749741a8aed55290
@@ -21,6 +19,5 @@ SPEC CHECKSUMS:
   MagicalRecord: b1fc46c99a9749fe7fe7e6f43a89b62ef5201933
   Mixpanel: 7829ba2cc58d251a4674520109e9bfead76acc98
   Parse: 200f5d714e38ed4c74e93d159e6fabaf2ab8d914
-  TWStatus: 7d6ba89640d45a9fcf45830d63f7f1d77720fce8
 
 COCOAPODS: 0.24.0

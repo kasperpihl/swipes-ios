@@ -286,6 +286,7 @@
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, 320, self.view.bounds.size.height-TOP_HEIGHT)];
         self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         contentView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+        contentView.layer.masksToBounds = YES;
         contentView.tag = CONTENT_VIEW_TAG;
         [self.view addSubview:contentView];
         self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
@@ -318,28 +319,18 @@
     if(selectedIndex == self.currentSelectedIndex){
         return;
     }
-    self.segmentedControl.userInteractionEnabled = NO;
+    //self.segmentedControl.userInteractionEnabled = NO;
 	[oldViewController willMoveToParentViewController:nil];
 	
 	ToDoListViewController *newViewController = (ToDoListViewController*)self.viewControllers[selectedIndex];
     newViewController.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(newViewController.tableView.tableHeaderView.bounds));
 	[self addChildViewController:newViewController];
-	newViewController.view.frame = CGRectSetPos(self.contentView.frame, delta, 0);
-    CGFloat duration = animated ?  0.0f : 0.0;
-    [self transitionFromViewController:oldViewController
-					  toViewController:newViewController
-							  duration:duration
-							   options:UIViewAnimationOptionCurveEaseOut
-							animations:^(void) {
-                                oldViewController.view.frame = CGRectMake(0 - delta, 0, width, height);
-                                newViewController.view.frame = CGRectMake(0, 0, width, height);
-                            }
-							completion:^(BOOL finished) {
-                                self.segmentedControl.userInteractionEnabled = YES;
-                                [newViewController didMoveToParentViewController:self];
-                                
-                                self.currentSelectedIndex = selectedIndex;
-							}];
+    if(!newViewController.view.superview) [self.contentView addSubview:newViewController.view];
+    oldViewController.view.frame = CGRectMake(0 - delta, 0, width, height);
+    [oldViewController removeFromParentViewController];
+    newViewController.view.frame = CGRectMake(0, 0, width, height);
+    [newViewController didMoveToParentViewController:self];
+    self.currentSelectedIndex = selectedIndex;
 }
 -(ToDoListViewController*)currentViewController{
     ToDoListViewController *currentViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
