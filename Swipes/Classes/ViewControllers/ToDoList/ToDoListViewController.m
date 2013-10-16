@@ -69,8 +69,6 @@
         _showingViewController.view.frame = CGRectMake(0, 0, 320, self.tableView.frame.size.height-SECTION_HEADER_HEIGHT);
     }
     return _showingViewController;
-    
-    
 }
 #pragma mark ItemHandlerDelegate
 -(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber oldNumber:(NSInteger)oldNumber{

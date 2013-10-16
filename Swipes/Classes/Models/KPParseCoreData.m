@@ -167,6 +167,7 @@ static KPParseCoreData *sharedObject;
     if(kFetchLimit && changedObjects.count == kFetchLimit) self.syncAgain = YES;
     __block NSMutableArray *updatePFObjects = [NSMutableArray array];
     __block NSMutableArray *updatedObjects = [NSMutableArray array];
+    [self startBackgroundHandler];
     [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
         for(KPParseObject *oldContextObject in changedObjects){
             KPParseObject *object = [oldContextObject MR_inContext:localContext];
@@ -237,9 +238,9 @@ static KPParseCoreData *sharedObject;
         NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
         if(error){
             NSLog(@"error query:%@",error);
-            //[self endBackgroundHandler];
+            [self endBackgroundHandler];
             [TWStatus showStatus:@"Sync failed"];
-            [TWStatus dismissAfter:5];
+            [TWStatus dismissAfter:2.5];
             return;
         }
         for(PFObject *object in allObjects){
@@ -247,11 +248,10 @@ static KPParseCoreData *sharedObject;
             else if([object.updatedAt isLaterThanDate:lastUpdate]) lastUpdate = object.updatedAt;
             Class class = NSClassFromString([KPParseCoreData classNameFromParseName:object.parseClassName]);
             if(class && [class isSubclassOfClass:[KPParseObject class]]){
-                NSLog(@"updating object:%@",object.objectId);
                 BOOL shouldDelete = [[object objectForKey:@"deleted"] boolValue];
                 if(shouldDelete){
-                    NSLog(@"deleting object");
                     [class deleteObjectById:object.objectId context:localContext];
+                    if([self.deleteObjects objectForKey:object.objectId])[self.deleteObjects removeObjectForKey:object.objectId];
                 }else{
                     KPParseObject *cdObject = [class getCDObjectFromObject:object context:localContext];
                     [cdObject updateWithObject:object context:localContext];
@@ -262,9 +262,9 @@ static KPParseCoreData *sharedObject;
     } completion:^(BOOL success, NSError *error) {
         if(error) NSLog(@"error from update");
         self.isSyncing = NO;
-        //[self endBackgroundHandler];
+        [self endBackgroundHandler];
         [TWStatus showStatus:@"Sync completed"];
-        [TWStatus dismissAfter:5];
+        [TWStatus dismissAfter:2.5];
         if(self.syncAgain) {
             [self synchronize];
         }

@@ -62,10 +62,12 @@
 }
 +(BOOL)deleteObjectById:(NSString *)identifier context:(NSManagedObjectContext *)context{
     if(!context) context = [KPCORE context];
-    __block KPParseObject *coreDataObject;
+    KPParseObject *coreDataObject;
     coreDataObject = [self objectById:identifier context:context];
+    NSLog(@"coredataObject:%@",coreDataObject);
     BOOL successful = YES;
-    if(coreDataObject) [coreDataObject MR_deleteInContext:context];
+    if(coreDataObject) successful = [coreDataObject MR_deleteInContext:context];
+    if(successful) NSLog(@"succesfully deleted");
     return successful;
 }
 #pragma mark - Save to server
