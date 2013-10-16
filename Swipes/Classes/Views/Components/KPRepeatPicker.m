@@ -89,7 +89,7 @@
             [self addSubview:dayButton];
             if(i < 6){
                 UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(buttonX+buttonWidth, (self.frame.size.height-sepHeight)/2, kSepWidth, sepHeight)];
-                [seperator setBackgroundColor:tbackground(TaskTableGradientBackground)];
+                [seperator setBackgroundColor:tbackground(BackgroundColor)];
                 [self addSubview:seperator];
             }
             [buttonArray addObject:dayButton];

@@ -41,7 +41,7 @@
     
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = tbackground(TaskTableBackground);
+        self.backgroundColor = tbackground(BackgroundColor);
         
         self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, 0/*self.frame.size.height-BUTTON_BAR_HEIGHT*/, 320, kTitleHeight) items:@[@"cross_button",@"",@"",@"",@"",@"toolbar_check_icon"]];
         

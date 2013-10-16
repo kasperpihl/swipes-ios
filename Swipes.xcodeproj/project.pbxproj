@@ -147,7 +147,6 @@
 		A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D28172C5EA800BCB2D9 /* _KPTag.m */; };
 		A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2B172C5EAF00BCB2D9 /* KPTag.m */; };
 		A7680D2F172C610B00BCB2D9 /* KPTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2E172C610B00BCB2D9 /* KPTagList.m */; };
-		A76ADC0A17EC7BC900F52F40 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A76ADC0917EC7BC900F52F40 /* Parse.framework */; };
 		A76ADC1017EC9B5700F52F40 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A76ADC0D17EC9B5700F52F40 /* HPGrowingTextView.m */; };
 		A76ADC1117EC9B5700F52F40 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A76ADC0F17EC9B5700F52F40 /* HPTextViewInternal.m */; };
 		A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A76ADC1217ECA7AB00F52F40 /* Images.xcassets */; };
@@ -487,7 +486,6 @@
 		A7680D2B172C5EAF00BCB2D9 /* KPTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTag.m; sourceTree = "<group>"; };
 		A7680D2D172C610B00BCB2D9 /* KPTagList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPTagList.h; sourceTree = "<group>"; };
 		A7680D2E172C610B00BCB2D9 /* KPTagList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTagList.m; sourceTree = "<group>"; };
-		A76ADC0917EC7BC900F52F40 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		A76ADC0C17EC9B5700F52F40 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
 		A76ADC0D17EC9B5700F52F40 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
 		A76ADC0E17EC9B5700F52F40 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
@@ -748,7 +746,6 @@
 				A761B5B916EB59710095A9A8 /* AdSupport.framework in Frameworks */,
 				A78F392E16F7DC1900A8C78D /* MessageUI.framework in Frameworks */,
 				A78F391416F7D5BA00A8C78D /* AddressBook.framework in Frameworks */,
-				A76ADC0A17EC7BC900F52F40 /* Parse.framework in Frameworks */,
 				A74F61BF16EBA5B8004927DA /* MediaPlayer.framework in Frameworks */,
 				A761B5AF16EB59550095A9A8 /* MobileCoreServices.framework in Frameworks */,
 				A74F61BD16EBA5A5004927DA /* AssetsLibrary.framework in Frameworks */,
@@ -1090,7 +1087,6 @@
 		A7778CCC16EB5884004D95E5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A76ADC0917EC7BC900F52F40 /* Parse.framework */,
 				A7ADCB3717DD352F00780F88 /* libz.dylib */,
 				A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */,
 				A75545DD179B481800CE2F4E /* Accelerate.framework */,

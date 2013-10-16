@@ -283,7 +283,7 @@ static RootViewController *sharedObject;
     
     BLURRY.delegate = self;
     self.sideMenu = kSideMenu;
-    self.sideMenu.backgroundImage = [tbackground(TaskTableGradientBackground) image];
+    self.sideMenu.backgroundImage = [tbackground(BackgroundColor) image];
     self.sideMenu.hideStatusBarArea = [Global OSVersion] < 7;
     self.settingsViewController = [[MenuViewController alloc] init];
     self.sideMenu.revealView = self.settingsViewController.view;

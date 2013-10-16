@@ -9,7 +9,7 @@
 #define kDefLeftPadding 4
 #define kDefRightPadding 7
 #define kDefTopPadding 0
-#define kDefBottomPadding 4
+#define kDefBottomPadding 3
 #import "SectionHeaderView.h"
 @interface SectionHeaderView ()
 @property (nonatomic) UIColor *color;

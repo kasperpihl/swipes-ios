@@ -186,7 +186,7 @@
 -(void)setWobling:(BOOL)wobling forView:(UIButton*)button{
     _wobling = wobling;
     if(wobling){
-        UIColor *woblingColor = tbackground(TaskTableGradientBackground);
+        UIColor *woblingColor = tbackground(BackgroundColor);
         [self animationKeyFramed:button.layer delegate:self forKey:@"wobbling"];
         [button setBackgroundImage:[woblingColor image] forState:UIControlStateHighlighted];
         [button setBackgroundImage:[woblingColor image] forState:UIControlStateSelected | UIControlStateHighlighted];
@@ -237,7 +237,7 @@
         if([self.tagDelegate respondsToSelector:@selector(tagList:selectedTag:)]) [self.tagDelegate tagList:self selectedTag:tag];
     }
 }
-- (void)longPressRecognized:(UIGestureRecognizer*)recognizer {
+/*- (void)longPressRecognized:(UIGestureRecognizer*)recognizer {
     if(self.wobling) return;
     if(recognizer.state == UIGestureRecognizerStateBegan){
         CGPoint touchLocation = [recognizer locationInView:self];
@@ -261,7 +261,7 @@
             }
         }
     }
-}
+}*/
 -(UIButton*)buttonWithTag:(NSString*)tag{
     CGSize sizeForTag = [self sizeForTagWithText:tag];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];

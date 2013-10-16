@@ -115,7 +115,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #define NO_TAG_FONT                     KP_LIGHT(18)
 #define TEXT_FIELD_FONT                 KP_LIGHT(18)
 #define NOTES_VIEW_FONT                 KP_REGULAR(17)
-#define SECTION_HEADER_FONT             KP_LIGHT(18)
+#define SECTION_HEADER_FONT             KP_BOLD(10.5)
 #define TITLE_LABEL_FONT                KP_REGULAR(18)
 #define TAGS_LABEL_FONT                 KP_REGULAR(12)
 #define TAG_FONT                        KP_LIGHT(18)

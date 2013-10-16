@@ -67,7 +67,7 @@
         self.backgroundColor = tbackground(BackgroundColor);
         self.searchField = [[UITextField alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, 0, self.frame.size.width-TEXT_FIELD_MARGIN_LEFT-self.frame.size.height, self.frame.size.height)];
         self.searchField.font = TEXT_FIELD_FONT;
-        self.searchField.textColor = tcolor(SearchDrawerColor);
+        self.searchField.textColor = tcolor(TextColor);
         self.searchField.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.searchField.returnKeyType = UIReturnKeyDone;
         self.searchField.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
@@ -76,7 +76,7 @@
         self.searchField.delegate = self;
         self.searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         @try {
-            [self.searchField setValue:tcolor(SearchDrawerColor) forKeyPath:@"_placeholderLabel.textColor"];
+            [self.searchField setValue:tcolor(TextColor) forKeyPath:@"_placeholderLabel.textColor"];
         }
         @catch (NSException *exception) {
             

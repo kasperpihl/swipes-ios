@@ -49,7 +49,7 @@
         contentView.center = self.center;
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
-        contentView.backgroundColor = tbackground(TaskTableGradientBackground);
+        contentView.backgroundColor = tbackground(BackgroundColor);
         UIView *colorTopOverlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT)];
         colorTopOverlay.backgroundColor = tbackground(SearchDrawerBackground);
         [contentView addSubview:colorTopOverlay];

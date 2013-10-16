@@ -100,8 +100,8 @@
         layer.shadowOpacity = 0.0;
         
         [self setupButton:self.logInView.logInButton];
-        [self.logInView.logInButton setBackgroundImage:[tbackground(TaskTableGradientBackground) image] forState:UIControlStateNormal];
-        [self.logInView.logInButton setBackgroundImage:[[tbackground(TaskTableGradientBackground) darker] image] forState:UIControlStateHighlighted];
+        [self.logInView.logInButton setBackgroundImage:[tbackground(BackgroundColor) image] forState:UIControlStateNormal];
+        [self.logInView.logInButton setBackgroundImage:[[tbackground(BackgroundColor) darker] image] forState:UIControlStateHighlighted];
         
         
         self.logInView.externalLogInLabel.font = LOGIN_LABEL_ABOVE_FONT;
@@ -115,8 +115,8 @@
         
         self.logInView.signUpLabel.hidden = YES;
         [self setupButton:self.logInView.signUpButton];
-        [self.logInView.signUpButton setBackgroundImage:[tbackground(TaskTableGradientBackground) image] forState:UIControlStateNormal];
-        [self.logInView.signUpButton setBackgroundImage:[[tbackground(TaskTableGradientBackground) darker] image] forState:UIControlStateHighlighted];
+        [self.logInView.signUpButton setBackgroundImage:[tbackground(BackgroundColor) image] forState:UIControlStateNormal];
+        [self.logInView.signUpButton setBackgroundImage:[[tbackground(BackgroundColor) darker] image] forState:UIControlStateHighlighted];
         [self.logInView.signUpButton setTitle:@"SIGN UP" forState:UIControlStateNormal];
         
         

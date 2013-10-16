@@ -25,14 +25,9 @@ typedef enum {
     StrongLaterColor,
     StrongDoneColor,
     
-    SeperatorColor,
-    
-    SearchDrawerColor,
     TextFieldColor,
-    TaskTableEmptyText,
     TaskCellTimelineColor,
     TaskCellTitle,
-    TaskCellTagColor,
     TagColor
     
 } ThemerItem;
@@ -42,21 +37,13 @@ typedef enum {
     MenuBackground,
     MenuSelectedBackground,
     SearchDrawerBackground,
-    TaskTableBackground,
-    TaskTableGradientBackground,
-    TaskCellBackground,
-    TaskCellSelectedBackground,
+    
     
     TagBackground,
-    ToolbarBackground,
     TagSelectedBackground,
-    EditTaskBackground,
-    EditTaskTitleBackground,
     AlertBackground,
     LoginBackground,
-    LoginButtonBackground,
-    PopupBackground,
-    TimePickerWheelBackground
+    LoginButtonBackground
 } Background;
 
 @interface ThemeHandler : NSObject

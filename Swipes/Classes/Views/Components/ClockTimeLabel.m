@@ -49,6 +49,7 @@
         else if(minute >= 25 && minute <= 39) angle = 90;
         else if(minute >= 40 && minute <= 54) angle = 180;
         CGContextAddArc(context, width/2, height/2, width/2-LINE_SIZE, 270*M_PI/180, angle*M_PI/180, 0);
+        
         CGContextStrokePath(context);
         
         

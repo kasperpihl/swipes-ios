@@ -77,7 +77,7 @@
     self.view.backgroundColor = [UIColor clearColor];
 	// Do any additional setup after loading the view.
     self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-kToolbarHeight, self.view.bounds.size.width, kToolbarHeight) items:@[@"menu_logout",@"menu_back"]];
-    [self.toolbar setBackgroundColor:tbackground(TaskTableBackground)];
+    [self.toolbar setBackgroundColor:tbackground(BackgroundColor)];
     self.toolbar.delegate = self;
     [self.view addSubview:self.toolbar];
     

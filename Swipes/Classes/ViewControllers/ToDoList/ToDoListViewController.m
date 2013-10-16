@@ -175,18 +175,18 @@
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     NSString *title = [[self.itemHandler titleForSection:section] uppercaseString];
-    UIFont *font = KP_REGULAR(12);
+    UIFont *font = SECTION_HEADER_FONT;
     SectionHeaderView *extraView = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:self.cellType] font:font title:title];
     
     
     UIColor *backgroundColor = [StyleHandler colorForCellType:self.cellType];
-    CGFloat colorStartingX = CELL_LABEL_X/2;//0;
+    CGFloat colorStartingX = 0; // CELL_LABEL_X/2;//0;
+    //
     UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(colorStartingX, 0, tableView.bounds.size.width-colorStartingX-extraView.frame.size.width, SECTION_HEADER_HEIGHT)];
     colorView.backgroundColor = backgroundColor;
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, SECTION_HEADER_HEIGHT)];
     
     [headerView addSubview:colorView];
-    
     
     CGRectSetX(extraView, 320-extraView.frame.size.width);
     [headerView addSubview:extraView];
@@ -585,7 +585,7 @@
     }
     menuText.text = text;
     menuText.textAlignment = UITextAlignmentCenter;
-    menuText.textColor = tcolor(TaskTableEmptyText);
+    menuText.textColor = tcolor(TextColor);
     menuText.tag = MENU_TEXT_TAG;
     [self.view addSubview:menuText];
     self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];

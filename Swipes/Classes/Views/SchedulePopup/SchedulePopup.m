@@ -20,7 +20,7 @@
 #import "MenuButton.h"
 #import "PlusAlertView.h"
 #import "AnalyticsHandler.h"
-#define POPUP_WIDTH 315
+#define POPUP_WIDTH 310
 #define CONTENT_VIEW_TAG 1
 
 
@@ -29,7 +29,7 @@
 #define kSepVerTag 204
 
 #define SEPERATOR_COLOR_LIGHT tcolor(TextColor) //tbackground(TaskTableGradientBackground)//color(254,184,178,1)
-#define SEPERATOR_MARGIN 0.05//0.02
+#define SEPERATOR_MARGIN 0.00//0.02
 
 
 #define SCHEUDLE_IMAGE_SIZE 36
@@ -41,7 +41,7 @@
 
 #define GRID_NUMBER 3
 #define BUTTON_PADDING 0
-#define CONTENT_VIEW_SIZE 315
+#define CONTENT_VIEW_SIZE 310
 
 #define kToolbarHeight 60
 
@@ -69,6 +69,7 @@ typedef enum {
 @property (nonatomic) KPScheduleButtons activeButton;
 @property (nonatomic,strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, weak) IBOutlet UIView *timeViewer;
+@property (nonatomic) BOOL didUseTimePicker;
 
 @end
 @implementation SchedulePopup
@@ -86,9 +87,60 @@ typedef enum {
     popup.block = block;
     return popup;
 }
+-(NSString *)stringForScheduleButton:(KPScheduleButtons)state{
+    NSString *returnString;
+    switch (state) {
+        case KPScheduleButtonLaterToday:
+            returnString = @"Later Today";
+            break;
+        case KPScheduleButtonThisEvening:
+            returnString = @"This Evening";
+            break;
+        case KPScheduleButtonTomorrow:
+            returnString = @"Tomorrow";
+            break;
+        case KPScheduleButtonIn2Days:
+            returnString = @"In 2 Days";
+            break;
+        case KPScheduleButtonThisWeekend:
+            returnString = @"This Weekend";
+            break;
+        case KPScheduleButtonNextWeek:
+            returnString = @"Next Week";
+            break;
+        case KPScheduleButtonUnscheduled:
+            returnString = @"Unspecified";
+            break;
+        case KPScheduleButtonSpecificTime:
+            returnString = @"Calendar";
+            break;
+            
+        default:
+            break;
+    }
+    return @"";
+}
 -(void)returnState:(KPScheduleButtons)state date:(NSDate*)date{
     if(self.hasReturned) return;
     self.hasReturned = YES;
+    /* ANALYTICS 
+        - Button pressed: string
+        - Time forward:
+        - Adjusted time: "Yes" / "No"
+    */
+    if(state != KPScheduleButtonCancel){
+        NSString *buttonUsed = [self stringForScheduleButton:state];
+        NSInteger numberOfDaysFromNow = [date daysAfterDate:[NSDate date]];
+        NSString *numberOfDaysInterval = @"56+";
+        if(numberOfDaysFromNow <= 6) numberOfDaysInterval = [NSString stringWithFormat:@"%i",numberOfDaysFromNow];
+        else if(numberOfDaysFromNow <= 14) numberOfDaysInterval = @"7-14";
+        else if(numberOfDaysFromNow <= 28) numberOfDaysInterval = @"15-28";
+        else if(numberOfDaysFromNow <= 42) numberOfDaysInterval = @"29-42";
+        else if(numberOfDaysFromNow <= 56) numberOfDaysInterval = @"43-56";
+        NSString *usedTimePicker = self.didUseTimePicker ? @"Yes" : @"No";
+        NSDictionary *options = @{@"Number of days ahead":numberOfDaysInterval,@"Button Pressed": buttonUsed,@"Used Time Picker": usedTimePicker};
+        [ANALYTICS tagEvent:@"Scheduled Tasks" options:options];
+    }
     if(self.block) self.block(state,date);
 }
 -(NSDate*)dateForButton:(KPScheduleButtons)button{
@@ -365,6 +417,7 @@ typedef enum {
 -(void)openTimePickerWithButton:(KPScheduleButtons)button andDate:(NSDate*)date{
     if(self.timePicker) return;
     self.activeButton = button;
+    self.didUseTimePicker = YES;
     self.timePicker = [[KPTimePicker alloc] initWithFrame:self.bounds];
     self.timePicker.delegate = self;
     self.timePicker.pickingDate = date;
@@ -383,11 +436,10 @@ typedef enum {
     [UIView animateWithDuration:kTimePickerDuration animations:^{
         timePicker.alpha = 0;
     } completion:^(BOOL finished) {
-        if(finished){
             [timePicker removeFromSuperview];
             self.timePicker = nil;
             if(date) [self returnState:self.activeButton date:date];
-        }
+            self.didUseTimePicker = NO;
     }];
 }
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{

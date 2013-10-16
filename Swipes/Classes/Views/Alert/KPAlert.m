@@ -61,7 +61,7 @@
         messageLabel.tag = MESSAGE_LABEL_TAG;
         messageLabel.textColor = tcolor(TagColor);
         messageLabel.numberOfLines = 0;
-        messageLabel.backgroundColor = tbackground(TaskTableGradientBackground);
+        messageLabel.backgroundColor = tbackground(BackgroundColor);
         messageLabel.textAlignment = UITextAlignmentCenter;
         [contentView addSubview:messageLabel];
         self.messageLabel = (UILabel*)[contentView viewWithTag:MESSAGE_LABEL_TAG];

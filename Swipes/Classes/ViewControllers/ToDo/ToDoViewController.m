@@ -83,13 +83,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self = [super init];
     if(self){
         self.view.tag = SHOW_ITEM_TAG;
-        self.view.backgroundColor = tbackground(EditTaskBackground);
+        self.view.backgroundColor = tbackground(BackgroundColor);
         UIView *contentView = [[UIView alloc] initWithFrame:self.view.bounds];
         contentView.tag = CONTENT_VIEW_TAG;
         contentView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
         
         self.titleContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, CONTAINER_INIT_HEIGHT)];
-        self.titleContainerView.backgroundColor = tbackground(EditTaskTitleBackground);
         self.titleContainerView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin);
         
         CGFloat buttonWidth = BUTTON_HEIGHT;
@@ -290,7 +289,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     UIView *seperatorView = [[UIView alloc] initWithFrame:CGRectMake(leftMargin, view.frame.size.height-seperatorHeight, view.frame.size.width-rightMargin-leftMargin, seperatorHeight)];
     seperatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     seperator2View.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
-    seperatorView.backgroundColor = seperator2View.backgroundColor = tbackground(TaskTableGradientBackground);//tbackground(EditTaskTitleBackground);
+    seperatorView.backgroundColor = seperator2View.backgroundColor = tbackground(BackgroundColor);//tbackground(EditTaskTitleBackground);
     [view addSubview:seperatorView];
     [view addSubview:seperator2View];
 }

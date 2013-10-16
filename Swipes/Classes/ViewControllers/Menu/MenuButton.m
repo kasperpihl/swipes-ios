@@ -33,7 +33,7 @@
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title image:(UIImage*)image highlightedImage:(UIImage *)highlightedImage{
     self = [super initWithFrame:frame];
     if (self) {
-        UIColor *highlightedColor = tbackground(TaskCellBackground);
+        UIColor *highlightedColor = alpha(tcolor(TextColor),0.5);
         self.titleLabel.font = SCHEDULE_BUTTON_FONT;
         [self setTitle:title forState:UIControlStateNormal];
         

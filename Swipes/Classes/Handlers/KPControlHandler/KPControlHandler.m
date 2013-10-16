@@ -43,9 +43,16 @@
     if (self) {
         self.view = view;
         
+        
         KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, ADD_TOOLBAR_HEIGHT) items:@[@"toolbar_plus_icon"]];
         addToolbar.tag = ADD_TOOLBAR_TAG;
         addToolbar.delegate = self;
+        CAGradientLayer *agradient = [CAGradientLayer layer];
+        agradient.frame = addToolbar.bounds;
+        agradient.colors = @[(id)alpha(tbackground(BackgroundColor),0.0f).CGColor,(id)alpha(tbackground(BackgroundColor),1.0f).CGColor,(id)tbackground(BackgroundColor).CGColor];
+        agradient.locations = @[@0.0,@0.5,@1.0];
+        [addToolbar setTopInset:addToolbar.frame.size.height*0.05];
+        [addToolbar.layer insertSublayer:agradient atIndex:0];
         [view addSubview:addToolbar];
         self.addToolbar = (KPToolbar*)[view viewWithTag:ADD_TOOLBAR_TAG];
         

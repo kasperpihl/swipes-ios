@@ -85,13 +85,10 @@
         [self.contentView addSubview:tagsLabel];
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
-        UIView *overlayView = [[UIView alloc] initWithFrame:self.bounds];
-        overlayView.backgroundColor = tbackground(TaskCellBackground);
-        self.selectedBackgroundView = overlayView;
         
-        UIView *selectionView = [[UIView alloc] initWithFrame:CGRectMake((CELL_LABEL_X/2),0, LINE_SIZE,CELL_HEIGHT)]; //CGRectMake(0, 0, 4, CELL_HEIGHT)];
+        UIView *selectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 4, CELL_HEIGHT)];//CGRectMake((CELL_LABEL_X/2),0, LINE_SIZE,CELL_HEIGHT)]; //];
         selectionView.tag = SELECTION_TAG;
-        //selectionView.hidden = YES;
+        selectionView.hidden = YES;
         //timelineLine.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         
         [self.contentView addSubview:selectionView];
@@ -100,7 +97,7 @@
         CGFloat outlineWidth = DOT_SIZE+(2*DOT_OUTLINE_SIZE);
         UIView *dotOutlineContainer = [[UIView alloc] initWithFrame:CGRectMake((CELL_LABEL_X-outlineWidth)/2, (CELL_HEIGHT-outlineWidth)/2, outlineWidth, outlineWidth)];
         dotOutlineContainer.tag = OUTLINE_TAG;
-        //dotOutlineContainer.layer.borderWidth = LINE_SIZE;
+        dotOutlineContainer.layer.borderWidth = LINE_SIZE;
         dotOutlineContainer.layer.borderColor = tcolor(TasksColor).CGColor;
         dotOutlineContainer.backgroundColor = tbackground(BackgroundColor);
         dotOutlineContainer.layer.cornerRadius = outlineWidth/2;
@@ -213,7 +210,8 @@
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-    self.selectionView.frame = selected ? kSelectedFrame : kUnselectedFrame;
+    self.selectionView.hidden = !selected;
+    //self.selectionView.frame = selected ? kSelectedFrame : kUnselectedFrame;
 }
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){

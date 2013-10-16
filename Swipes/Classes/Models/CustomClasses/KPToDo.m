@@ -227,7 +227,7 @@
     NSString *title;
     CellType cellType = [self cellTypeForTodo];
     
-    if(cellType == CellTypeToday) title = @"Tasks";
+    if(cellType == CellTypeToday) title = @"Current Tasks";
     else if(cellType == CellTypeSchedule){
         NSDate *toDoDate = self.schedule;
         if(!toDoDate) title = @"Unspecified";

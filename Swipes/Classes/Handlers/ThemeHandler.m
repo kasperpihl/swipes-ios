@@ -16,35 +16,36 @@
 #define STRONG_TASKS_COLOR              color(228,192,21,1)
 #define STRONG_DONE_COLOR               color(58,195,160,1)
 #define STRONG_LATER_COLOR              color(255,96,69,1)
+
 #define TEXT_COLOR                      color(255,255,255,1)
+#define SUB_TEXT_COLOR                  gray(170,1)
+#define BACKGROUND                      retColor(color(36,40,46,1),         color(255,255,255,1))
 
 /* Backgrounds */
-#define BACKGROUND                      retColor(color(36,40,46,1),         color(255,255,255,1))
+
 #define MENU_BACKGROUND                 retColor(color(44,50,59,1),         inv(color(44,50,59,1)))
 #define MENU_SELECTED_BACKGROUND        retColor(color(80,90,104,1),        inv(color(80,90,104,1)))
 #define SEARCH_DRAWER_BACKGROUND        retColor(color(69,77,89,1),         inv(color(69,77,89,1)))
 #define TASK_TABLE_BACKGROUND           retColor(color(106,117,131,1),      inv(color(106,117,131,1)))
 #define TASK_TABLE_GRADIENT_BACKGROUND  retColor(color(132,143,156,1),      inv(color(132,143,156,1)))
 /* Texts */
-#define SEARCH_DRAWER_COLOR             retColor(color(189,194,201,1),      inv(color(189,194,201,1)))
 #define TASK_CELL_TAG_COLOR             retColor(color(160,169,179,1),      inv(color(160,169,179,1)))
 #define TEXT_FIELD_COLOR                retColor(color(176,179,184,1),      inv(color(176,179,184,1)))
 typedef enum {
     BCBackground,
+    BCTextColor,
+    BCSubTextColor,
     BCTasksColor,
     BCLaterColor,
     BCDoneColor,
-    BCTextColor,
+    
     BCStrongTasksColor,
     BCStrongLaterColor,
     BCStrongDoneColor,
+    
     BCMenuBackground,
     BCMenuSelectedBackground,
     BCSearchDrawerBackground,
-    BCTaskTableBackground,
-    BCTaskTableGradientBackground,
-    BCSearchDrawerColor,
-    BCTaskCellTagColor,
     BCTextFieldColor,
     BCWhiteColor
 } BaseColors;
@@ -69,14 +70,17 @@ static ThemeHandler *sharedObject;
     switch (baseColor) {
         case BCBackground:
             return BACKGROUND;
+        case BCTextColor:
+            return TEXT_COLOR;
+        case BCSubTextColor:
+            return SUB_TEXT_COLOR;
         case BCTasksColor:
             return TASKS_COLOR;
         case BCLaterColor:
             return LATER_COLOR;
         case BCDoneColor:
             return DONE_COLOR;
-        case BCTextColor:
-            return TEXT_COLOR;
+        
         case BCStrongTasksColor:
             return STRONG_TASKS_COLOR;
         case BCStrongDoneColor:
@@ -89,14 +93,6 @@ static ThemeHandler *sharedObject;
             return MENU_SELECTED_BACKGROUND;
         case BCSearchDrawerBackground:
             return SEARCH_DRAWER_BACKGROUND;
-        case BCTaskTableBackground:
-            return TASK_TABLE_BACKGROUND;
-        case BCTaskTableGradientBackground:
-            return TASK_TABLE_GRADIENT_BACKGROUND;
-        case BCSearchDrawerColor:
-            return SEARCH_DRAWER_COLOR;
-        case BCTaskCellTagColor:
-            return TASK_CELL_TAG_COLOR;
         case BCTextFieldColor:
             return TEXT_FIELD_COLOR;
         case BCWhiteColor:
@@ -111,7 +107,6 @@ static ThemeHandler *sharedObject;
             color = BCBackground;
             break;
         case MenuBackground:
-        case ToolbarBackground:
         case AlertBackground:
         case LoginBackground:
             color = BCMenuBackground;
@@ -119,31 +114,16 @@ static ThemeHandler *sharedObject;
             
         case TagBackground:
         case MenuSelectedBackground:
-        case TaskCellBackground:
-        case EditTaskBackground:
         case LoginButtonBackground:
             color = BCMenuSelectedBackground;
             break;
             
-        case PopupBackground:
-            return alpha(bcolor(BCTaskTableBackground), 0.5);
-            break;
-            
         case SearchDrawerBackground:
-        case EditTaskTitleBackground:
-        case TaskTableBackground:
-        case TaskCellSelectedBackground:
             color = BCSearchDrawerBackground;
             break;
         
         case TagSelectedBackground:
             color = BCDoneColor;
-            break;
-        case TaskTableGradientBackground:
-            color = BCTaskTableGradientBackground;
-            break;
-        case TimePickerWheelBackground:
-            color = BCTaskCellTagColor;
             break;
     }
     return bcolor(color);
@@ -153,9 +133,6 @@ static ThemeHandler *sharedObject;
     switch (item) {
         case TextColor:
             color = BCTextColor;
-            break;
-        case SeperatorColor:
-            color = BCTaskTableGradientBackground;
             break;
         case TasksColor:
             color = BCTasksColor;
@@ -187,12 +164,6 @@ static ThemeHandler *sharedObject;
             
         case TextFieldColor:
             color = BCTextFieldColor;
-            break;
-            
-        case SearchDrawerColor:
-        case TaskTableEmptyText:
-        case TaskCellTagColor:
-            color = BCSearchDrawerColor;
             break;
         
         case TagColor:
