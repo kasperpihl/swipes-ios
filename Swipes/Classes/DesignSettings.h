@@ -101,7 +101,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #define POPUP_SELECTED                  gray(218,1)
 
 
-#define TAG_HEIGHT 38
+#define TAG_HEIGHT 32
 #define DEFAULT_SPACING 5
 #define BUTTON_HEIGHT 44
 #define SEARCH_BAR_DEFAULT_HEIGHT 55

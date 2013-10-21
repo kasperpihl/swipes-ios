@@ -238,31 +238,6 @@
         if([self.tagDelegate respondsToSelector:@selector(tagList:selectedTag:)]) [self.tagDelegate tagList:self selectedTag:tag];
     }
 }
-/*- (void)longPressRecognized:(UIGestureRecognizer*)recognizer {
-    if(self.wobling) return;
-    if(recognizer.state == UIGestureRecognizerStateBegan){
-        CGPoint touchLocation = [recognizer locationInView:self];
-        for(UIView *view in self.subviews){
-            if([view isKindOfClass:[UIButton class]]){
-                CGFloat x = view.frame.origin.x;
-                CGFloat endX = view.frame.origin.x+view.frame.size.width;
-                CGFloat y = view.frame.origin.y;
-                CGFloat endY = view.frame.origin.y + view.frame.size.height;
-                if(touchLocation.x > x && touchLocation.x < endX && touchLocation.y > y && touchLocation.y < endY){
-                    self.editingTag = [self.tags objectAtIndex:view.tag-TAG_BUTTON_TAG];
-                    QBPopupMenu *popupMenu = [[QBPopupMenu alloc] init];
-                    popupMenu.sidePadding = 5;
-                    popupMenu.unselectedColor = EDIT_TASK_GRAYED_OUT_TEXT;
-                    popupMenu.selectedColor = tbackground(MenuSelectedBackground);
-                    popupMenu.textColor = tbackground(TaskCellBackground);
-                    QBPopupMenuItem *item = [QBPopupMenuItem itemWithTitle:@"Delete" target:self action:@selector(delete:)];
-                    popupMenu.items = [NSArray arrayWithObjects:item, nil];
-                    [popupMenu showInView:self.superview.superview.superview.superview.superview atPoint:CGPointMake(x+((endX-x)/2),self.superview.superview.superview.frame.origin.y + self.superview.superview.frame.origin.y + self.superview.frame.origin.y+ self.frame.origin.y+y+5)];
-                }
-            }
-        }
-    }
-}*/
 -(UIButton*)buttonWithTag:(NSString*)tag{
     CGSize sizeForTag = [self sizeForTagWithText:tag];
     SlowHighlightIcon *button = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
