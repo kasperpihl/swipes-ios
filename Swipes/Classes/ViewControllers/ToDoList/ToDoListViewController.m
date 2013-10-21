@@ -299,8 +299,7 @@
             }
         }
     }];
-    BLURRY.blurryTopColor = alpha(tcolor(LaterColor),0.8);
-    BLURRY.blurLevel = 1.0f;
+    BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
     [BLURRY showView:popup inViewController:self.parent];
 }
 #pragma mark - UI Specific
@@ -309,7 +308,7 @@
     NSMutableArray *array = [NSMutableArray array];
     for(NSIndexPath *indexPath in self.selectedRows){
         KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
-        [array addObject:toDo];
+        if(toDo) [array addObject:toDo];
     }
     return array;
 }
@@ -402,7 +401,7 @@
                 }
                 self.isHandlingTrigger = NO;
             }];
-            BLURRY.blurLevel = 1.0f;
+            BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.4);
             [BLURRY showView:popup inViewController:self.parent];
             return;
         }
@@ -460,9 +459,14 @@
         [CATransaction setCompletionBlock: ^{
             [self cleanUpAfterMovingAnimated:YES];
         }];
-        [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
-        if(deletedSections && deletedSections.count > 0) [self.tableView deleteSections:deletedSections withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView endUpdates];
+        @try {
+            [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
+            if(deletedSections && deletedSections.count > 0) [self.tableView deleteSections:deletedSections withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView endUpdates];
+        }
+        @catch (NSException *exception) {
+            [self update];
+        }
         [CATransaction commit];
     }
 }

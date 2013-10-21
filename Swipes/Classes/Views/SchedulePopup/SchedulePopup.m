@@ -28,8 +28,8 @@
 #define kSepHorTag 203
 #define kSepVerTag 204
 
-#define SEPERATOR_COLOR_LIGHT tcolor(TextColor) //tbackground(TaskTableGradientBackground)//color(254,184,178,1)
-#define SEPERATOR_MARGIN 0.00//0.02
+#define SEPERATOR_COLOR_LIGHT alpha(tcolor(TextColor),0.5) //tbackground(TaskTableGradientBackground)//color(254,184,178,1)
+#define SEPERATOR_MARGIN 0.02//0.02
 
 
 #define SCHEUDLE_IMAGE_SIZE 36
@@ -346,7 +346,7 @@ typedef enum {
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH)];
         contentView.center = self.center;
         
-        contentView.backgroundColor = CLEAR;//tbackground(SearchDrawerBackground);//POPUP_BACKGROUND_COLOR color(254,115,103,1);//;
+        contentView.backgroundColor = tbackground(BackgroundColor);//CLEAR;//tbackground(SearchDrawerBackground);//POPUP_BACKGROUND_COLOR color(254,115,103,1);//;
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
         contentView.tag = CONTENT_VIEW_TAG;
@@ -468,8 +468,8 @@ typedef enum {
     self.calendarView.delegate = self;
     self.calendarView.backgroundColor = CLEAR;
     [self.calendarView selectDate:[NSDate date] makeVisible:YES];
-    self.calendarView.titleColor = [UIColor whiteColor];
-    self.calendarView.dayOfWeekTextColor = color(160,169,179,1);
+    self.calendarView.titleColor = tcolor(TextColor);
+    self.calendarView.dayOfWeekTextColor = tcolor(TextColor);
     self.calendarView.adaptHeightToNumberOfWeeksInMonth = YES;
     
     self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-kToolbarHeight, self.contentView.frame.size.width, kToolbarHeight) items:@[@"toolbar_back_icon",@"toolbar_check_icon"]];

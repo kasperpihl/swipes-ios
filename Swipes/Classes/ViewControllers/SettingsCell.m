@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 #define kDefTextColor [UIColor whiteColor]
-#define kDefSettingFont KP_REGULAR(19)
-#define kDefValueFont KP_SEMIBOLD(14)
-#define kRightLabelMargin 20
+#define kDefSettingFont KP_REGULAR(17)
+#define kDefValueFont KP_REGULAR(14)
+#define kRightLabelMargin 18
 
 #define kValueLabelSidePadding 10
 #define kValueLabelTopPadding 7
@@ -53,7 +53,8 @@
         self.valueLabel = [[UILabel alloc] init];
         self.valueLabel.backgroundColor = [UIColor clearColor];
         self.valueLabel.textAlignment = UITextAlignmentCenter;
-        self.valueLabel.layer.borderWidth = 2;
+        self.valueLabel.layer.borderWidth = LINE_SIZE;
+        self.valueLabel.layer.cornerRadius = 3;
         self.valueLabel.layer.borderColor = self.labelColor.CGColor;
         self.valueLabel.textColor = self.labelColor;
         self.valueLabel.font = self.valueFont;

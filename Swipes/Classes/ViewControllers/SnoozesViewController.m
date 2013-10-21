@@ -57,9 +57,9 @@
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    [self.tableView setSeparatorColor:tcolor(TextColor)];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    //[self.tableView setSeparatorColor:tcolor(TextColor)];
     [self.tableView setTableFooterView:[UIView new]];
-    NSLog(@"loaded snoozes");
     [self.view addSubview:self.tableView];
 	// Do any additional setup after loading the view.
 }

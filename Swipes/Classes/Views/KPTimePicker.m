@@ -25,7 +25,7 @@
 #define kOpenedSunAngle valForScreen(70,60)
 #define kExtraAngleForIcons 5
 
-#define kDefLightColor          [tbackground(BackgroundColor) lighter] //tcolor(SearchDrawerColor)
+#define kDefLightColor          color(69,82,104,1) //tcolor(SearchDrawerColor)
 #define kDefDarkColor           tbackground(BackgroundColor)
 
 #define kEndAngle               (360-(90-kOpenedSunAngle/2) + kExtraAngleForIcons)
@@ -49,6 +49,7 @@
 #import "NSDate-Utilities.h"
 #import "UtilityClass.h"
 #import "UIColor+Utilities.h"
+#import "SlowHighlightIcon.h"
 @class KPTimePicker;
 
 
@@ -98,16 +99,17 @@
 }
 -(void)didWaitInMiddle{
     if(self.isOutOfScope){
-        [UIView animateWithDuration:kGlowAnimationDuration animations:^{
-            self.confirmButton.backgroundColor = tcolor(DoneColor);
-        }];
+        self.confirmButton.highlighted = YES;
+        /*[UIView transitionWithView:self.confirmButton duration:kGlowAnimationDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            
+        } completion:nil];*/
     }
 }
 -(void)didWaitDelay{
-    
-    [UIView animateWithDuration:kGlowAnimationDuration animations:^{
-        self.confirmButton.backgroundColor = self.isInConfirmButton ? tcolor(DoneColor) : CLEAR;
-    }];
+    self.confirmButton.highlighted = self.isInConfirmButton;
+    /*[UIView transitionWithView:self.confirmButton duration:kGlowAnimationDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        
+    } completion:nil];*/
 }
 #pragma mark Actions
 -(void)pressedBackButton:(UIButton*)sender{
@@ -165,7 +167,7 @@
     if (sender.state == UIGestureRecognizerStateEnded) {
         self.lastPosition = CGPointZero;
         self.lastChangedAngle = 0;
-        self.confirmButton.backgroundColor = CLEAR;
+        self.confirmButton.highlighted = NO;
         if(self.isInConfirmButton){
             [self.delegate timePicker:self selectedDate:self.pickingDate];
         }
@@ -270,21 +272,26 @@
         self.darkColor = kDefDarkColor;
         
         
-        self.moonImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"schedule_image_moon"]];
+        self.moonImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"schedule_image_moon-high"]];
         self.moonImage.center = [self pointFromPoint:self.centerPoint withDistance:kSunImageDistance towardAngle:235];
         [self addSubview:self.moonImage];
         
-        self.sunImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"schedule_image_sun"]];
+        self.sunImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"schedule_image_sun-high"]];
         self.sunImage.center = [self pointFromPoint:self.centerPoint withDistance:kSunImageDistance towardAngle:305];
         [self addSubview:self.sunImage];
         
-        self.confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.confirmButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         self.confirmButton.backgroundColor = [UIColor clearColor];
         [self.confirmButton setBackgroundImage:[tcolor(DoneColor) image] forState:UIControlStateHighlighted];
         self.confirmButton.frame = CGRectMake(0, 0, 2*self.middleRadius, 2*self.middleRadius);
+        self.confirmButton.layer.cornerRadius = self.middleRadius;
+        self.confirmButton.layer.borderWidth = LINE_SIZE;
+        self.confirmButton.layer.borderColor = tcolor(TextColor).CGColor;
         self.confirmButton.center = self.centerPoint;
         [self.confirmButton addTarget:self action:@selector(pressedConfirmButton:) forControlEvents:UIControlEventTouchUpInside];
-        [self.confirmButton setImage:[UIImage imageNamed:@"done-selected"] forState:UIControlStateNormal];
+        [self.confirmButton setTitle:@"Set" forState:UIControlStateNormal];
+        [self.confirmButton setTitle:@"" forState:UIControlStateHighlighted];
+        //[self.confirmButton setImage:[UIImage imageNamed:@"done-selected"] forState:];
         [self.confirmButton setImage:[UIImage imageNamed:@"done-selected"] forState:UIControlStateHighlighted];
         self.confirmButton.layer.masksToBounds = YES;
         self.confirmButton.layer.cornerRadius = self.middleRadius;

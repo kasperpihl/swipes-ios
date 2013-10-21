@@ -14,6 +14,7 @@
 #import "UIColor+Utilities.h"
 #import "StyleHandler.h"
 #import "ClockTimeLabel.h"
+#import "DotView.h"
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
 #define DOT_VIEW_TAG 6
@@ -46,9 +47,8 @@
 
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *selectionView;
-@property (nonatomic,weak) IBOutlet UIView *dotView;
+@property (nonatomic,weak) IBOutlet DotView *dotView;
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
-@property (nonatomic,weak) IBOutlet UIView *outlineView;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
 @property (nonatomic,weak) IBOutlet ClockTimeLabel *alarmLabel;
 
@@ -94,23 +94,11 @@
         [self.contentView addSubview:selectionView];
         self.selectionView = [self.contentView viewWithTag:SELECTION_TAG];
         
-        CGFloat outlineWidth = DOT_SIZE+(2*DOT_OUTLINE_SIZE);
-        UIView *dotOutlineContainer = [[UIView alloc] initWithFrame:CGRectMake((CELL_LABEL_X-outlineWidth)/2, (CELL_HEIGHT-outlineWidth)/2, outlineWidth, outlineWidth)];
-        dotOutlineContainer.tag = OUTLINE_TAG;
-        dotOutlineContainer.layer.borderWidth = LINE_SIZE;
-        dotOutlineContainer.layer.borderColor = tcolor(TasksColor).CGColor;
-        dotOutlineContainer.backgroundColor = tbackground(BackgroundColor);
-        dotOutlineContainer.layer.cornerRadius = outlineWidth/2;
-        
-        UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(DOT_OUTLINE_SIZE, DOT_OUTLINE_SIZE, DOT_SIZE,DOT_SIZE)];
-        dotView.layer.cornerRadius = DOT_SIZE/2;
+        DotView *dotView = [[DotView alloc] init];
         dotView.tag = DOT_VIEW_TAG;
-        [dotOutlineContainer addSubview:dotView];
-        [self.contentView addSubview:dotOutlineContainer];
-        self.dotView = [self.contentView viewWithTag:DOT_VIEW_TAG];
-        self.outlineView = [self.contentView viewWithTag:OUTLINE_TAG];
-        self.outlineView.hidden = YES;
-        
+        [self.contentView addSubview:dotView];
+        self.dotView = (DotView*)[self.contentView viewWithTag:DOT_VIEW_TAG];
+        self.dotView.center = CGPointMake(CELL_LABEL_X/2, CELL_HEIGHT/2);
         self.notesIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cell_notes_tasks"]];
         self.notesIcon.hidden = YES;
         [self.contentView addSubview:self.notesIcon];
@@ -160,24 +148,6 @@
     CGFloat deltaX = CELL_LABEL_X;
     self.notesIcon.hidden = YES;
     self.recurringIcon.hidden = YES;
-    
-    self.alarmLabel.hidden = YES;
-    self.outlineView.hidden = YES;
-    if((toDo.schedule) || toDo.completionDate){
-        NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
-        self.alarmLabel.time = showDate;
-        if(toDo.schedule && [toDo.schedule isInPast]){
-            self.alarmLabel.time = [[NSDate date] dateAtHours:8 minutes:0];
-            self.alarmLabel.text = @"";
-        }
-        self.alarmLabel.center = CGPointMake(CELL_LABEL_X/2, CELL_HEIGHT/2);
-        //self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, self.frame.size.width-self.alarmLabel.frame.size.width-kTimeLabelMarginRight, (CELL_HEIGHT-self.alarmLabel.frame.size.height)/2);
-        if(self.cellType != CellTypeToday) self.alarmLabel.hidden = NO;
-        else self.outlineView.hidden = NO;
-    }
-    else self.outlineView.hidden = NO;
-    
-    
     if(toDo.notes && toDo.notes.length > 0){
         self.notesIcon.hidden = NO;
         showBottomLine = YES;
@@ -190,6 +160,24 @@
         CGRectSetX(self.recurringIcon, deltaX);
         deltaX += self.recurringIcon.frame.size.width + kIconSpacing;
     }
+    
+    
+    self.alarmLabel.hidden = YES;
+    if((toDo.schedule) || toDo.completionDate){
+        NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
+        self.alarmLabel.time = showDate;
+        if(toDo.schedule && [toDo.schedule isInPast]){
+            self.alarmLabel.time = [[NSDate date] dateAtHours:8 minutes:0];
+            self.alarmLabel.text = @"";
+        }
+        self.alarmLabel.center = CGPointMake(CELL_LABEL_X/2, CELL_HEIGHT/2);
+        //self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, self.frame.size.width-self.alarmLabel.frame.size.width-kTimeLabelMarginRight, (CELL_HEIGHT-self.alarmLabel.frame.size.height)/2);
+        //if(self.cellType != CellTypeToday) self.alarmLabel.hidden = NO;
+    }
+    //else self.outlineView.hidden = NO;
+    
+    
+    
     CGRectSetX(self.tagsLabel,deltaX);
     //CGFloat deltaX = CELL_LABEL_X;
     
@@ -201,8 +189,7 @@
 -(void)setDotColor:(CellType)cellType{
     UIColor *color = [StyleHandler colorForCellType:cellType];
     self.selectionView.backgroundColor = color;
-    self.outlineView.layer.borderColor = color.CGColor;
-    self.dotView.backgroundColor = color;
+    self.dotView.dotColor = color;
     self.alarmLabel.circleColor = color;
 }
 -(void)setSelected:(BOOL)selected{

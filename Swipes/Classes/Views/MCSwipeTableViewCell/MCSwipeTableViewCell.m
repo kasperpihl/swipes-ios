@@ -224,11 +224,14 @@ secondStateIconName:(NSString *)secondIconName
 
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    NSLog(@"should begin gesture");
     if ([gestureRecognizer class] == [UIPanGestureRecognizer class]) {
         UIPanGestureRecognizer *g = (UIPanGestureRecognizer *)gestureRecognizer;
         CGPoint point = [g velocityInView:self];
         //NSLog(@"%f,%f",point.x,point.y);
+        NSLog(@"fabs x: %f y: %f",fabsf(point.x),fabsf(point.y) );
         if (fabsf(point.x) > fabsf(point.y) ) {
+            NSLog(@"returned yes");
             return YES;
         }
     }

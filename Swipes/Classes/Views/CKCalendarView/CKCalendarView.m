@@ -21,7 +21,7 @@
 #import "CKCalendarView.h"
 #import "NSDate-Utilities.h"
 #import "UtilityClass.h"
-
+#import "SlowHighlightIcon.h"
 #define BUTTON_MARGIN 4
 #define TOP_HEIGHT 70
 #define MONTH_BUTTON_WIDTH 60
@@ -36,7 +36,7 @@
 
 
 
-@interface DateButton : UIButton
+@interface DateButton : SlowHighlightIcon
 
 @property (nonatomic, strong) NSDate *date;
 @property (nonatomic, strong) CKDateItem *dateItem;
@@ -61,9 +61,11 @@
 - (id)init {
     self = [super init];
     if (self) {
-        self.backgroundColor = gray(255,1);
-        self.textColor = color(106,117,131,1);
+        self.textColor = tcolor(TextColor);
+        self.unavailableColor = color(80,83,88,1);
         self.selectedTextColor = gray(255,1);
+        self.highlightedTextColor = gray(255, 1);
+        
     }
     return self;
 }
@@ -307,25 +309,17 @@
     UIImage *highlightedImage = [UIImage imageNamed:@"selected_circle"];//[UtilityClass imageWithName: scaledToSize:CGSizeMake(kSelectedImageSize, kSelectedImageSize)];
     item.titleFont = KP_REGULAR(20);
     if([date isTypicallyWeekend]) item.titleFont = KP_BOLD(20);
-    item.highlightedTextColor = gray(255, 1);
-    
     
     /* Days out of the current month */
     if (!self.onlyShowCurrentMonth && [self _compareByMonth:date toDate:self.monthShowing] != NSOrderedSame) {
-        item.backgroundColor = color(189,194,201,1);
-        item.textColor = color(160,169,179,1);
-        
-        //highlightedImage = [UIImage imageNamed:nil];
+        item.textColor = item.unavailableColor;
     }
     /* Days earlier than current */
     else if([date isEarlierThanDate:[[NSDate date] dateAtStartOfDay]]){
-        item.backgroundColor = [UIColor whiteColor];// color(189,194,201,1);
-        item.textColor = item.highlightedTextColor = color(189,194,201,1); //color(160,169,179,1);
-        item.titleFont = KP_LIGHT(20);
+        item.textColor = item.highlightedTextColor = item.unavailableColor; //color(160,169,179,1);
         highlightedImage = [UIImage imageNamed:nil];
         //item.textColor = gray(200, 1);
     }
-    
     /* If the day is the selected day */
     if (self.selectedDate && [self date:self.selectedDate isSameDayAsDate:date]) {
         item.textColor = item.selectedTextColor;
@@ -337,7 +331,7 @@
     [button setBackgroundImage:highlightedImage forState:UIControlStateSelected];
     [button setTitleColor:item.highlightedTextColor forState:UIControlStateHighlighted];
     [button.titleLabel setFont:item.titleFont];
-    button.backgroundColor = item.backgroundColor;
+    //button.backgroundColor = item.backgroundColor;
     return button;
 }
 - (void)_updateDayOfWeekLabels {

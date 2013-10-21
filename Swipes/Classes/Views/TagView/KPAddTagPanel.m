@@ -81,12 +81,12 @@
         scrollView.tag = SCROLL_VIEW_TAG;
         
         KPTagList *tagView = [KPTagList tagListWithWidth:self.frame.size.width andTags:tags];
-        tagView.marginLeft = TAG_VIEW_SIDE_MARGIN;
+        //tagView.marginLeft = TAG_VIEW_SIDE_MARGIN;
         tagView.sorted = YES;
-        tagView.marginRight = TAG_VIEW_SIDE_MARGIN;
+        //tagView.marginRight = TAG_VIEW_SIDE_MARGIN;
         tagView.emptyText = @"No tags - press the plus to add one";
         tagView.emptyLabelMarginHack = 10;
-        tagView.tagColor = tbackground(MenuBackground);
+        tagView.tagTitleColor = tbackground(MenuBackground);
         CGRectSetY(tagView, 0);
         tagView.resizeDelegate = self;
         tagView.deleteDelegate = self;

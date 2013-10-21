@@ -16,7 +16,7 @@
 #import "UIColor+Utilities.h"
 #import "UIButton+PassTouch.h"
 #import "NSDate-Utilities.h"
-#import "UIView+Utilities.h"
+//#import "UIView+Utilities.h"
 @interface KPRepeatPicker ()
 @property (nonatomic) IBOutletCollection(UILabel) NSArray *optionsButtons;
 @property (nonatomic) UIButton *selectedButton;
@@ -99,9 +99,6 @@
         self.selectedDate = date;
         self.currentOption = option;
         self.selectedColor = kDefSelectedColor;
-        UIButton *passthroughButton = [[UIButton alloc] initWithFrame:self.bounds];
-        [passthroughButton makeInsetShadowWithRadius:2 Color:alpha([UIColor blackColor],0.3) Directions:@[@"top",@"bottom"]];
-        [self addSubview:passthroughButton];
     }
     return self;
 }

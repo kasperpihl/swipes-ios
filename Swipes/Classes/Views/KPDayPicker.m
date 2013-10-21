@@ -6,15 +6,14 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 #define kDefSelectedColor tcolor(DoneColor)
-#define kDefBackgroundColor tbackground(SearchDrawerBackground)
-#define kDefFont KP_SEMIBOLD(13)
+#define kDefBackgroundColor CLEAR//tbackground(SearchDrawerBackground)
+#define kDefFont KP_REGULAR(13)
 #define kDefTextColor [UIColor whiteColor]
 #define kSepWidth 1
 #define kSepMargin 0.0
 
 #import "KPDayPicker.h"
 #import "UIColor+Utilities.h"
-#import "UIButton+PassTouch.h"
 #import "UIView+Utilities.h"
 @interface KPDayPicker ()
 @property (nonatomic) IBOutletCollection(UILabel) NSArray *dayButtons;
@@ -90,9 +89,9 @@
         self.font = kDefFont;
         self.selectedDay = selectedDay;
         self.selectedColor = kDefSelectedColor;
-        UIButton *passthroughButton = [[UIButton alloc] initWithFrame:self.bounds];
+        /*UIButton *passthroughButton = [[UIButton alloc] initWithFrame:self.bounds];
         [passthroughButton makeInsetShadowWithRadius:2 Color:alpha([UIColor blackColor],0.3) Directions:@[@"top",@"bottom"]];
-        [self addSubview:passthroughButton];
+        [self addSubview:passthroughButton];*/
         
     }
     return self;
@@ -109,7 +108,7 @@
         [dayButton setBackgroundImage:[self.selectedColor image] forState:UIControlStateSelected];
         [dayButton setBackgroundImage:[self.selectedColor image] forState:UIControlStateSelected|UIControlStateHighlighted];
         dayButton.tag = day;
-        [dayButton setTitle:[[weekdays objectAtIndex:day-1] uppercaseString] forState:UIControlStateNormal];
+        [dayButton setTitle:[[weekdays objectAtIndex:day-1] lowercaseString] forState:UIControlStateNormal];
         [dayButton setTitleColor:self.textColor forState:UIControlStateNormal];
         [dayButton.titleLabel setFont:self.font];
         if(day == self.selectedDay) self.selectedButton = dayButton;

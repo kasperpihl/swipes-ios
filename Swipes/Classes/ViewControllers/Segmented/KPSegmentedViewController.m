@@ -119,7 +119,6 @@
     [ROOT_CONTROLLER shareTasks];
     return;
     [ANALYTICS pushView:@"Sharing plus popup"];
-    
     [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Sharing"}];
     PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Sharing tasks is an upcoming feature in Swipes Plus. Check out the package." block:^(BOOL succeeded, NSError *error) {
         [ANALYTICS popView];
@@ -136,7 +135,9 @@
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     BLURRY.showPosition = PositionBottom;
+    BLURRY.blurryTopColor = alpha(tbackground(BackgroundColor),0.3);
     if(block) BLURRY.dismissAction = block;
+    
     [BLURRY showView:tagView inViewController:self];
 }
 -(void)pressedDelete:(id)sender{

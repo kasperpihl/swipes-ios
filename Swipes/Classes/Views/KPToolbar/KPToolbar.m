@@ -35,14 +35,25 @@
         NSInteger buttonCounter = 0;
         for(id item in items){
             UIImage *itemImage;
-            if([item isKindOfClass:[NSString class]]) itemImage = [UIImage imageNamed:(NSString*)item];
+            UIImage *highlightImage;
+            if([item isKindOfClass:[NSString class]]){
+                itemImage = [UIImage imageNamed:(NSString*)item];
+                highlightImage = [UIImage imageNamed:(NSString*)[item stringByAppendingString:@"-high"]];
+            }
             else if([item isKindOfClass:[UIImage class]]) itemImage = (UIImage*)item;
             else{
                 NSLog(@"only strings and uiimages as items");
                 return;
             }
+            CIImage *cim = [highlightImage CIImage];
+            CGImageRef cgref = [highlightImage CGImage];
+            
             SlowHighlightIcon *button = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
             [button setImage:itemImage forState:UIControlStateNormal];
+            if (cim != nil || cgref != NULL)
+            {
+                [button setImage:highlightImage forState:UIControlStateHighlighted];
+            }
             button.frame = [self frameForButtonNumber:buttonCounter];
             button.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
             [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];

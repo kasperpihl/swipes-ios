@@ -11,16 +11,15 @@
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+Utilities.h"
-#define VERTICAL_MARGIN 5
-#define HORIZONTAL_MARGIN 0
-#define TAG_HORIZONTAL_PADDING 15
+#import "SlowHighlightIcon.h"
+#define VERTICAL_MARGIN 3
+#define HORIZONTAL_MARGIN 15
+#define TAG_HORIZONTAL_PADDING 7
 #define TAG_BUTTON_TAG 123
-
+#define kDefaultSpacing 15
 
 #define SPACE_HACK 0
 
-
-#import "QBPopupMenu.h"
 
 @interface KPTagList () <UIGestureRecognizerDelegate>
 @property (nonatomic,strong) NSMutableArray *tags;
@@ -51,12 +50,14 @@
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
-        self.tagColor = tbackground(TagBackground);
+        self.tagTitleColor = tcolor(TextColor);
+        self.selectedTagBackgroundColor = tcolor(DoneColor);
+        self.tagBorderColor = tcolor(TextColor);
         self.bottomMargin = VERTICAL_MARGIN;
         self.marginTop = VERTICAL_MARGIN;
         self.marginLeft = HORIZONTAL_MARGIN;
         self.marginRight = HORIZONTAL_MARGIN;
-        self.spacing = DEFAULT_SPACING;
+        self.spacing = kDefaultSpacing;
         //self.backgroundColor = [UIColor whiteColor];
     }
     return self;
@@ -186,7 +187,7 @@
 -(void)setWobling:(BOOL)wobling forView:(UIButton*)button{
     _wobling = wobling;
     if(wobling){
-        UIColor *woblingColor = tbackground(BackgroundColor);
+        UIColor *woblingColor = tcolor(LaterColor);
         [self animationKeyFramed:button.layer delegate:self forKey:@"wobbling"];
         [button setBackgroundImage:[woblingColor image] forState:UIControlStateHighlighted];
         [button setBackgroundImage:[woblingColor image] forState:UIControlStateSelected | UIControlStateHighlighted];
@@ -194,7 +195,7 @@
     else{
         [button.layer removeAnimationForKey:@"wobbling"];
         [button setBackgroundImage:[tbackground(TagSelectedBackground) image] forState:UIControlStateHighlighted];
-        [button setBackgroundImage:[self.tagColor image] forState:UIControlStateSelected | UIControlStateHighlighted];
+        [button setBackgroundImage:[self.tagTitleColor image] forState:UIControlStateSelected | UIControlStateHighlighted];
     }
 }
 -(void)setWobling:(BOOL)wobling{
@@ -264,25 +265,18 @@
 }*/
 -(UIButton*)buttonWithTag:(NSString*)tag{
     CGSize sizeForTag = [self sizeForTagWithText:tag];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    if(self.enableEdit){
-        UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressRecognized:)];
-        longPressGestureRecognizer.delegate = self;
-        [button addGestureRecognizer:longPressGestureRecognizer];
-        longPressGestureRecognizer.allowableMovement = 15.0;
-    }
-    
+    SlowHighlightIcon *button = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
     [button setTitleColor:tcolor(TagColor) forState:UIControlStateNormal];
-    [button setBackgroundImage:[self.tagColor image] forState:UIControlStateNormal];
-    [button setBackgroundImage:[tbackground(TagSelectedBackground) image] forState:UIControlStateSelected];
-    [button setBackgroundImage:[tbackground(TagSelectedBackground) image] forState:UIControlStateHighlighted];
-    [button setBackgroundImage:[self.tagColor image] forState:UIControlStateSelected | UIControlStateHighlighted];
-    button.titleLabel.font = TAG_FONT;
+    [button setBackgroundImage:[self.selectedTagBackgroundColor image] forState:UIControlStateSelected];
+    [button setBackgroundImage:[self.selectedTagBackgroundColor image] forState:UIControlStateHighlighted];
+    button.titleLabel.font = KP_REGULAR(14);
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
-    button.layer.cornerRadius = 5;
+    button.layer.cornerRadius = 3;
+    button.layer.borderColor = self.tagBorderColor.CGColor;
+    button.layer.borderWidth = LINE_SIZE;
     button.layer.masksToBounds = YES;
     if(self.wobling) [self setWobling:YES forView:button];
     return button;

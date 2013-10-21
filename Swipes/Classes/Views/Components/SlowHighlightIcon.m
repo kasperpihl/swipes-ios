@@ -10,10 +10,12 @@
 
 @implementation SlowHighlightIcon
 -(void)setHighlighted:(BOOL)highlighted{
-    [UIView transitionWithView:self.imageView
+    if(highlighted != self.highlighted){
+        [UIView transitionWithView:self
                       duration:0.3
                        options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^{ [self.imageView setHighlighted:highlighted]; }
+                    animations:^{ [super setHighlighted:highlighted]; }
                     completion:nil];
+    }
 }
 @end

@@ -77,11 +77,11 @@
     self.view.backgroundColor = [UIColor clearColor];
 	// Do any additional setup after loading the view.
     self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-kToolbarHeight, self.view.bounds.size.width, kToolbarHeight) items:@[@"menu_logout",@"menu_back"]];
-    [self.toolbar setBackgroundColor:tbackground(BackgroundColor)];
+    //[self.toolbar setBackgroundColor:tbackground(BackgroundColor)];
     self.toolbar.delegate = self;
     [self.view addSubview:self.toolbar];
     
-    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.view.bounds.size.width-2*kGridMargin,self.view.bounds.size.height-(2*kGridMargin)-kToolbarHeight)];
+    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0,((OSVER >= 7)?20:0),self.view.bounds.size.width-2*kGridMargin,self.view.bounds.size.height-(2*kGridMargin)-kToolbarHeight)];
     
     
     CGFloat gridWidth = self.gridView.bounds.size.width;
@@ -105,14 +105,15 @@
     }
     /**/
     self.seperators = [seperatorArray copy];
-    for(NSInteger i = 1 ; i <= 6 ; i++){
+    UIButton *actualButton;
+    for(NSInteger i = 1 ; i <= numberOfButtons ; i++){
         KPMenuButtons button = i;
-        UIButton *actualButton = [self buttonForMenuButton:button];
+        actualButton = [self buttonForMenuButton:button];
         [self.gridView addSubview:actualButton];
     }
-    self.gridView.center = CGPointMake(self.view.center.x, self.view.center.y-kToolbarHeight);
+
     [self.view addSubview:self.gridView];
-    
+    self.gridView.center = CGPointMake(self.view.frame.size.width/2, (self.view.frame.size.height-kToolbarHeight)/2);
     self.menuPanning = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     
     UIView *panningView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-kGridMargin, 0, kGridMargin, self.view.bounds.size.height)];
@@ -244,6 +245,8 @@
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"http://swipesapp.com/privacypolicy.pdf"]];
                 }
             }];
+            BLURRY.blurryTopColor = alpha(tcolor(LaterColor),0.1);
+            BLURRY.blurLevel = 0.1;
             [BLURRY showView:alert inViewController:self];
             break;
         }
@@ -275,7 +278,7 @@
     }
     return title;
 }
--(UIImage *)imageForMenuButton:(KPMenuButtons)button{
+-(UIImage *)imageForMenuButton:(KPMenuButtons)button highlighted:(BOOL)highlighted{
     NSString *imageString;
     switch (button) {
         case KPMenuButtonNotifications:
@@ -297,6 +300,7 @@
             imageString = @"menu_policy";
             break;
     }
+    if(highlighted) imageString = [imageString stringByAppendingString:@"-high"];
     return [UIImage imageNamed:imageString];
 }
 -(CGRect)frameForButton:(KPMenuButtons)button{
@@ -308,7 +312,7 @@
 }
 
 -(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton{
-    MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton] image:[self imageForMenuButton:menuButton] highlightedImage:nil];
+    MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton] image:[self imageForMenuButton:menuButton highlighted:NO] highlightedImage:[self imageForMenuButton:menuButton highlighted:YES]];
     if(menuButton == KPMenuButtonNotifications){
         BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
         UIColor *lampColor = hasNotificationsOn ? kLampOnColor : kLampOffColor;

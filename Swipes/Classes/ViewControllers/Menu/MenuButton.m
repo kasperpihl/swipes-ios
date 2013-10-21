@@ -22,7 +22,7 @@
     [UIView transitionWithView:self.iconImageView
                       duration:0.3
                        options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^{ self.iconImageView.highlighted = highlighted; [super setHighlighted:highlighted]; }
+                    animations:^{ self.iconImageView.highlighted = highlighted; [super setHighlighted:highlighted];  }
                     completion:nil];
 }
 -(void)setLampColor:(UIColor*)lampColor{
@@ -42,7 +42,6 @@
         
         [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self setTitleColor:alpha(tcolor(TextColor),0.6) forState:UIControlStateHighlighted];
-        
         
         
         self.iconImageView = [[UIImageView alloc] initWithImage:image];

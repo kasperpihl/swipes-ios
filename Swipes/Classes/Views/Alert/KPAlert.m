@@ -46,7 +46,7 @@
         contentView.center = self.center;
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
-        contentView.backgroundColor = tbackground(SearchDrawerBackground);
+        contentView.backgroundColor = tbackground(BackgroundColor);
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT)];
         titleLabel.backgroundColor = CLEAR;
         titleLabel.tag = TITLE_LABEL_TAG;
@@ -61,14 +61,12 @@
         messageLabel.tag = MESSAGE_LABEL_TAG;
         messageLabel.textColor = tcolor(TagColor);
         messageLabel.numberOfLines = 0;
-        messageLabel.backgroundColor = tbackground(BackgroundColor);
         messageLabel.textAlignment = UITextAlignmentCenter;
         [contentView addSubview:messageLabel];
         self.messageLabel = (UILabel*)[contentView viewWithTag:MESSAGE_LABEL_TAG];
         
         KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT) items:@[@"toolbar_back_icon",@"toolbar_check_icon"]];
         toolbar.delegate = self;
-        toolbar.backgroundColor = CLEAR;
         [contentView addSubview:toolbar];
         [self addSubview:contentView];
     }
