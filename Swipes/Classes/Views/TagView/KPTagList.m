@@ -13,10 +13,10 @@
 #import "UIColor+Utilities.h"
 #import "SlowHighlightIcon.h"
 #define VERTICAL_MARGIN 3
-#define HORIZONTAL_MARGIN 15
+#define HORIZONTAL_MARGIN 10
 #define TAG_HORIZONTAL_PADDING 7
 #define TAG_BUTTON_TAG 123
-#define kDefaultSpacing 15
+#define kDefaultSpacing 10
 
 #define SPACE_HACK 0
 
@@ -51,14 +51,17 @@
     self = [super initWithFrame:frame];
     if(self){
         self.tagTitleColor = tcolor(TextColor);
-        self.selectedTagBackgroundColor = tcolor(DoneColor);
+        //self.selectedTagTitleColor = tcolor(TextColor);
+        self.tagBackgroundColor = CLEAR;
+        //self.selectedTagBackgroundColor = tcolor(DoneColor);
+        self.selectedTagBackgroundColor = alpha(tcolor(TextColor),0.9);
+        self.selectedTagTitleColor = tbackground(BackgroundColor);
         self.tagBorderColor = tcolor(TextColor);
         self.bottomMargin = VERTICAL_MARGIN;
         self.marginTop = VERTICAL_MARGIN;
         self.marginLeft = HORIZONTAL_MARGIN;
         self.marginRight = HORIZONTAL_MARGIN;
         self.spacing = kDefaultSpacing;
-        //self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -100,6 +103,7 @@
             tagLabel.tag = TAG_BUTTON_TAG + j;
             if([self.selectedTags containsObject:tag]){
                 [tagLabel setSelected:YES];
+                if(self.selectedTagBorderColor) tagLabel.layer.borderColor = self.selectedTagBorderColor.CGColor;
                 //[tagLabel.layer setBorderColor:[COLOR_WHITE CGColor]];
             }
             CGFloat difference = (targetWidth - self.marginRight) - currentWidth ;
@@ -145,7 +149,7 @@
         noTagLabel.font = NO_TAG_FONT;
         noTagLabel.textAlignment = UITextAlignmentLeft;
         noTagLabel.backgroundColor = [UIColor clearColor];
-        noTagLabel.textColor = [UIColor whiteColor];
+        noTagLabel.textColor = self.tagTitleColor;
         noTagLabel.text = self.emptyText ? self.emptyText : @"No tags";
         //[noTagLabel sizeToFit];
         //noTagLabel.frame = CGRectSetPos(noTagLabel.frame, ((self.frame.size.width-noTagLabel.frame.size.width)/2)+self.emptyLabelMarginHack, (totalHeight-noTagLabel.frame.size.height)/2);
@@ -243,7 +247,12 @@
     SlowHighlightIcon *button = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
     button.frame = CGRectMake(0, 0, sizeForTag.width, sizeForTag.height);
     [button setTitle:tag forState:UIControlStateNormal];
-    [button setTitleColor:tcolor(TagColor) forState:UIControlStateNormal];
+    [button setTitleColor:self.tagTitleColor forState:UIControlStateNormal];
+    [button setTitleColor:self.selectedTagTitleColor forState:UIControlStateHighlighted];
+    [button setTitleColor:self.selectedTagTitleColor forState:UIControlStateSelected];
+    [button setTitleColor:self.tagTitleColor forState:UIControlStateHighlighted | UIControlStateSelected];
+    [button setBackgroundImage:[self.tagBackgroundColor image] forState:UIControlStateNormal];
+    [button setBackgroundImage:[self.tagBackgroundColor image] forState:UIControlStateHighlighted | UIControlStateSelected];
     [button setBackgroundImage:[self.selectedTagBackgroundColor image] forState:UIControlStateSelected];
     [button setBackgroundImage:[self.selectedTagBackgroundColor image] forState:UIControlStateHighlighted];
     button.titleLabel.font = KP_REGULAR(14);

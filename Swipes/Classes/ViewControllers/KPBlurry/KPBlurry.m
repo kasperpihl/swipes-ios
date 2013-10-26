@@ -279,7 +279,6 @@ static KPBlurry *sharedObject;
 }
 
 #pragma mark - Animations
-
 - (void)showView:(UIView*)view inViewController:(UIViewController *)parentViewController{
     NSParameterAssert(parentViewController != nil);
     

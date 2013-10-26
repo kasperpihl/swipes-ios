@@ -86,7 +86,6 @@
         //tagView.marginRight = TAG_VIEW_SIDE_MARGIN;
         tagView.emptyText = @"No tags - press the plus to add one";
         tagView.emptyLabelMarginHack = 10;
-        tagView.tagTitleColor = tbackground(MenuBackground);
         CGRectSetY(tagView, 0);
         tagView.resizeDelegate = self;
         tagView.deleteDelegate = self;
@@ -103,7 +102,7 @@
         
         
         /* Initialize toolbar */
-        KPToolbar *tagToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TOOLBAR_HEIGHT, self.frame.size.width, TOOLBAR_HEIGHT) items:@[@"toolbar_back_icon",@"toolbar_trashcan_icon",@"toolbar_plus_icon"]];
+        KPToolbar *tagToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TOOLBAR_HEIGHT, self.frame.size.width, TOOLBAR_HEIGHT) items:@[@"backarrow_icon_white",@"toolbar_trashcan_icon",@"plus_icon_white"]];
         tagToolbar.delegate = self;
         tagToolbar.tag = TOOLBAR_TAG;
         [self addSubview:tagToolbar];
@@ -121,6 +120,15 @@
         self.addTagView = (KPAddView*)[self viewWithTag:ADD_VIEW_TAG];
         self.addTagView.hidden = YES;
         [self updateTrashButton];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillShow:)
+                                                     name:UIKeyboardWillShowNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillHide:)
+                                                     name:UIKeyboardWillHideNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -157,32 +165,46 @@
         
     }];
 }
+-(void)keyboardWillHide:(NSNotification*)notification{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDidStopSelector:@selector(completedHidingKeyboard)];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    self.scrollView.alpha = 1;
+    self.addTagView.alpha = 0;
+    CGRectSetY(self.addTagView,self.frame.size.height-self.addTagView.frame.size.height);
+    
+    [UIView commitAnimations];
+}
+-(void)completedHidingKeyboard{
+    self.addTagView.hidden = YES;
+    self.addTagView.alpha = 1;
+}
+-(void)keyboardWillShow:(NSNotification*)notification{
+    [UIView beginAnimations:nil context:NULL];
+    
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    self.scrollView.alpha = 0;
+    CGRectSetY(self.addTagView,self.frame.size.height-self.addTagView.frame.size.height-keyboardFrame.size.height);
+    
+    [UIView commitAnimations];
+}
 -(void)shiftToAddMode:(BOOL)addMode{
     if(addMode){
         self.isAdding = YES;
-        [self.addTagView.textField becomeFirstResponder];
         self.addTagView.hidden = NO;
+        self.addTagView.alpha = 1;
         CGRectSetY(self.addTagView,self.frame.size.height-self.addTagView.frame.size.height);
-        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-            self.scrollView.alpha = 0;
-            CGRectSetY(self.addTagView,self.frame.size.height-self.addTagView.frame.size.height-KEYBOARD_HEIGHT);
-        } completion:^(BOOL finished) {
-        }];
+        [self.addTagView.textField becomeFirstResponder];
     }
     else{
         [self updateTrashButton];
         self.isAdding = NO;
         [self.addTagView.textField resignFirstResponder];
-        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-            self.scrollView.alpha = 1;
-            self.addTagView.alpha = 0;
-            CGRectSetY(self.addTagView,self.frame.size.height-self.addTagView.frame.size.height);
-        } completion:^(BOOL finished) {
-            if(finished){
-                self.addTagView.hidden = YES;
-                self.addTagView.alpha = 1;
-            }
-        }];
     }
 }
 -(void)addView:(KPAddView *)addView enteredTrimmedText:(NSString *)trimmedText{
@@ -192,5 +214,8 @@
 }
 -(void)addViewPressedDoneButton:(KPAddView *)addView{
     [self shiftToAddMode:NO];
+}
+-(void)dealloc{
+    clearNotify();
 }
 @end

@@ -20,7 +20,7 @@
 #import "MenuButton.h"
 #import "PlusAlertView.h"
 #import "AnalyticsHandler.h"
-#define POPUP_WIDTH 310
+#define POPUP_WIDTH 315
 #define CONTENT_VIEW_TAG 1
 
 
@@ -43,7 +43,8 @@
 #define BUTTON_PADDING 0
 #define CONTENT_VIEW_SIZE 310
 
-#define kToolbarHeight 60
+#define kToolbarHeight 70
+#define kToolbarPadding 10
 
 #define kTimePickerDuration 0.20f
 
@@ -118,7 +119,7 @@ typedef enum {
         default:
             break;
     }
-    return @"";
+    return returnString;
 }
 -(void)returnState:(KPScheduleButtons)state date:(NSDate*)date{
     if(self.hasReturned) return;
@@ -472,7 +473,7 @@ typedef enum {
     self.calendarView.dayOfWeekTextColor = tcolor(TextColor);
     self.calendarView.adaptHeightToNumberOfWeeksInMonth = YES;
     
-    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-kToolbarHeight, self.contentView.frame.size.width, kToolbarHeight) items:@[@"toolbar_back_icon",@"toolbar_check_icon"]];
+    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-kToolbarHeight, self.contentView.frame.size.width, kToolbarHeight-kToolbarPadding) items:@[@"round_backarrow_big",@"round_checkmark_big"]];
     self.toolbar.hidden = YES;
     self.toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     self.toolbar.backgroundColor = CLEAR;

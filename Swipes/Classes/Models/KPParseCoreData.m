@@ -63,7 +63,7 @@
         }
     }];
     [context MR_saveToPersistentStoreAndWait];
-    [self synchronize];
+    //[self synchronize];
     return;
 }
 +(NSString *)classNameFromParseName:(NSString *)parseClassName{

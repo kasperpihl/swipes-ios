@@ -10,6 +10,7 @@
 
 #define DEFAULT_ALERTWIDTH 310
 #define DEFAULT_TITLE_HEIGHT 60
+#define kToolbarHack -20
 
 #import "KPAlert.h"
 #import <QuartzCore/QuartzCore.h>
@@ -65,8 +66,9 @@
         [contentView addSubview:messageLabel];
         self.messageLabel = (UILabel*)[contentView viewWithTag:MESSAGE_LABEL_TAG];
         
-        KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT) items:@[@"toolbar_back_icon",@"toolbar_check_icon"]];
+        KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT) items:@[@"round_backarrow_big",@"round_checkmark_big"]];
         toolbar.delegate = self;
+        [toolbar setTopInset:kToolbarHack];
         [contentView addSubview:toolbar];
         [self addSubview:contentView];
     }

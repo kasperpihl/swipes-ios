@@ -11,19 +11,22 @@
 #define kMinutesInDay 1440
 #define kMinutesInHalfDay 720
 
-#define kDefWheelRadius valForScreen(120,135)
+#define kDefWheelRadius valForScreen(115,125)
 
 
-#define kSunImageDistance valForScreen(180, 210)
+#define kSunImageDistance valForScreen(160, 100)
 #define kLabelSpacing valForScreen(0,0)
 #define kClockLabelY valForScreen(0,0)
 #define kClockLabelFont KP_EXTRABOLD(valForScreen(46,52))
 #define kDayLabelFont KP_REGULAR(valForScreen(16,19))
 #define kDefMiddleButtonRadius 60
+#define kDefActualSize 93
 #define kDefClearMiddle 45
 
+#define kBackMargin 10
+
 #define kOpenedSunAngle valForScreen(70,60)
-#define kExtraAngleForIcons 5
+#define kExtraAngleForIcons 22
 
 #define kDefLightColor          color(69,82,104,1) //tcolor(SearchDrawerColor)
 #define kDefDarkColor           tbackground(BackgroundColor)
@@ -100,16 +103,10 @@
 -(void)didWaitInMiddle{
     if(self.isOutOfScope){
         self.confirmButton.highlighted = YES;
-        /*[UIView transitionWithView:self.confirmButton duration:kGlowAnimationDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            
-        } completion:nil];*/
     }
 }
 -(void)didWaitDelay{
     self.confirmButton.highlighted = self.isInConfirmButton;
-    /*[UIView transitionWithView:self.confirmButton duration:kGlowAnimationDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        
-    } completion:nil];*/
 }
 #pragma mark Actions
 -(void)pressedBackButton:(UIButton*)sender{
@@ -283,29 +280,29 @@
         self.confirmButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         self.confirmButton.backgroundColor = [UIColor clearColor];
         [self.confirmButton setBackgroundImage:[tcolor(DoneColor) image] forState:UIControlStateHighlighted];
-        self.confirmButton.frame = CGRectMake(0, 0, 2*self.middleRadius, 2*self.middleRadius);
-        self.confirmButton.layer.cornerRadius = self.middleRadius;
-        self.confirmButton.layer.borderWidth = LINE_SIZE;
-        self.confirmButton.layer.borderColor = tcolor(TextColor).CGColor;
+        self.confirmButton.frame = CGRectMake(0, 0, 2*kDefActualSize, 2*kDefActualSize);
+        
+        //self.confirmButton.layer.borderWidth = LINE_SIZE;
+        //self.confirmButton.layer.borderColor = tcolor(TextColor).CGColor;
         self.confirmButton.center = self.centerPoint;
         [self.confirmButton addTarget:self action:@selector(pressedConfirmButton:) forControlEvents:UIControlEventTouchUpInside];
-        [self.confirmButton setTitle:@"Set" forState:UIControlStateNormal];
-        [self.confirmButton setTitle:@"" forState:UIControlStateHighlighted];
         //[self.confirmButton setImage:[UIImage imageNamed:@"done-selected"] forState:];
-        [self.confirmButton setImage:[UIImage imageNamed:@"done-selected"] forState:UIControlStateHighlighted];
+        [self.confirmButton setImage:[UIImage imageNamed:@"checkmark_icon_white"] forState:UIControlStateNormal];
+        [self.confirmButton setImage:[UIImage imageNamed:@"checkmark_icon_white"] forState:UIControlStateHighlighted];
         self.confirmButton.layer.masksToBounds = YES;
-        self.confirmButton.layer.cornerRadius = self.middleRadius;
+        self.confirmButton.layer.cornerRadius = kDefActualSize;
         [self addSubview:self.confirmButton];
         
         self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:valForScreen(@"picker_wheel_ip4",@"picker_wheel")]];
         self.timeSlider.center = self.centerPoint;
         [self addSubview:self.timeSlider];
         
-        self.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.backButton.frame = CGRectMake(0, self.bounds.size.height-kBackButtonSize, kBackButtonSize, kBackButtonSize);
+        self.backButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
+        self.backButton.frame = CGRectMake(kBackMargin, self.bounds.size.height-kBackButtonSize-kBackMargin, kBackButtonSize, kBackButtonSize);
         self.backButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin);
-        [self.backButton setImage:[UIImage imageNamed:@"back_icon_white"] forState:UIControlStateNormal];
-        self.backButton.imageEdgeInsets = UIEdgeInsetsMake(3, 0, 0, 0);
+        [self.backButton setImage:[UIImage imageNamed:@"round_backarrow_big"] forState:UIControlStateNormal];
+        [self.backButton setImage:[UIImage imageNamed:@"round_backarrow_big-high"] forState:UIControlStateHighlighted];
+        //self.backButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         [self.backButton addTarget:self action:@selector(pressedBackButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.backButton];
         
@@ -341,12 +338,12 @@
     CGFloat iconHeigt = self.sunImage.image.size.height;
     
     CGFloat overflowSpace = heightForContent - heightForDay - kLabelSpacing - heightForTime - iconHeigt;
-    CGFloat spacing = overflowSpace / 6;
+    CGFloat spacing = overflowSpace / 3;
     
     self.dayLabel.frame = CGRectMake(0, spacing, self.bounds.size.width, heightForDay);
     self.clockLabel.frame = CGRectMake(0, spacing+heightForDay+kLabelSpacing, self.bounds.size.width, heightForTime);
     
-    self.distanceForIcons = self.wheelRadius + spacing*4 + iconHeigt/2;
+    self.distanceForIcons = self.wheelRadius + spacing*1.5 + iconHeigt/2;
 }
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return YES;

@@ -31,7 +31,7 @@
     self = [super initWithFrame:frame];
     if(self){
         self.stampView = [[DateStampView alloc] initWithDate:[NSDate date]];
-        
+        self.stampView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         [self addSubview:self.stampView];
         
         self.youreDoneLabel = [[UILabel alloc] initWithFrame:self.bounds];
@@ -42,6 +42,7 @@
         self.youreDoneLabel.textColor = kColor;
         self.youreDoneLabel.textAlignment = UITextAlignmentCenter;
         [self.youreDoneLabel sizeToFit];
+        self.youreDoneLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         CGRectSetWidth(self.youreDoneLabel, self.frame.size.width);
         [self addSubview:self.youreDoneLabel];
         

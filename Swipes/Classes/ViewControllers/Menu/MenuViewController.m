@@ -76,7 +76,7 @@
     NSInteger numberOfRows = ceil(numberOfButtons/kVerticalGridNumber);
     self.view.backgroundColor = [UIColor clearColor];
 	// Do any additional setup after loading the view.
-    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-kToolbarHeight, self.view.bounds.size.width, kToolbarHeight) items:@[@"menu_logout",@"menu_back"]];
+    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-kToolbarHeight, self.view.bounds.size.width, kToolbarHeight) items:@[@"logout_icon_white",@"menu_back"]];
     //[self.toolbar setBackgroundColor:tbackground(BackgroundColor)];
     self.toolbar.delegate = self;
     [self.view addSubview:self.toolbar];
@@ -103,7 +103,6 @@
         horizontalSeperatorView.frame = CGRectSetPos(horizontalSeperatorView.frame,kSeperatorMargin, gridHeight/numberOfGrids*i);
         [self.gridView addSubview:horizontalSeperatorView];
     }
-    /**/
     self.seperators = [seperatorArray copy];
     UIButton *actualButton;
     for(NSInteger i = 1 ; i <= numberOfButtons ; i++){
@@ -147,7 +146,7 @@
         CGRectSetY(self.toolbar, self.view.bounds.size.height);
     } completion:^(BOOL finished) {
         showingView.alpha = 0;
-        if(level == 1) [self.toolbar setItems:@[@"menu_logout",@"menu_back"]];
+        if(level == 1) [self.toolbar setItems:@[@"logout_icon_white",@"menu_back"]];
         [UIView animateWithDuration:0.2 animations:^{
             CGRectSetY(self.toolbar, self.view.bounds.size.height-kToolbarHeight);
         } completion:^(BOOL finished) {
@@ -171,7 +170,7 @@
     } completion:^(BOOL finished) {
         viewController.view.alpha = 0;
         viewController.view.frame = self.view.bounds;
-        if(level == 0)[self.toolbar setItems:@[@"toolbar_back_icon",@""]];
+        if(level == 0)[self.toolbar setItems:@[@"backarrow_icon_white",@""]];
         CGRectSetHeight(viewController.view,viewController.view.bounds.size.height-kToolbarHeight);
         [self.view addSubview:viewController.view];
         [UIView animateWithDuration:0.2 animations:^{

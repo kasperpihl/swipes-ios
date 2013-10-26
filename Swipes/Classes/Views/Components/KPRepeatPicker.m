@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 #define kDefSelectedColor tcolor(DoneColor)
-#define kDefBackgroundColor tbackground(SearchDrawerBackground)
+#define kDefBackgroundColor CLEAR
 #define kDefFont KP_BOLD(13)
 #define kDefTextColor [UIColor whiteColor]
 #define kSepWidth 1
@@ -89,7 +89,7 @@
             [self addSubview:dayButton];
             if(i < 6){
                 UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(buttonX+buttonWidth, (self.frame.size.height-sepHeight)/2, kSepWidth, sepHeight)];
-                [seperator setBackgroundColor:tbackground(BackgroundColor)];
+                [seperator setBackgroundColor:self.textColor];
                 [self addSubview:seperator];
             }
             [buttonArray addObject:dayButton];

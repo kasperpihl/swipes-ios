@@ -32,9 +32,14 @@
 @property (nonatomic) NSInteger firstRowSpacingHack;
 @property (nonatomic) NSInteger spacing;
 @property (nonatomic) NSInteger emptyLabelMarginHack;
+
+@property (nonatomic) UIColor *tagBackgroundColor;
 @property (nonatomic) UIColor *tagTitleColor;
 @property (nonatomic) UIColor *tagBorderColor;
+
 @property (nonatomic) UIColor *selectedTagBackgroundColor;
+@property (nonatomic) UIColor *selectedTagTitleColor;
+@property (nonatomic) UIColor *selectedTagBorderColor;
 @property (nonatomic) BOOL sorted;
 @property (nonatomic) BOOL isEmptyList;
 @property (nonatomic) BOOL enableEdit;

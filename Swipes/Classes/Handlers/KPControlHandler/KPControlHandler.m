@@ -44,7 +44,7 @@
         self.view = view;
         
         
-        KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, ADD_TOOLBAR_HEIGHT) items:@[@"toolbar_plus_icon"]];
+        KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, ADD_TOOLBAR_HEIGHT) items:@[@"round_plus_big"]];
         addToolbar.tag = ADD_TOOLBAR_TAG;
         addToolbar.delegate = self;
         CAGradientLayer *agradient = [CAGradientLayer layer];

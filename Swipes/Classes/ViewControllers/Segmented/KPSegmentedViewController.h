@@ -14,11 +14,11 @@
 @property (nonatomic, readonly, strong) AKSegmentedControl *segmentedControl;
 @property (nonatomic) KPControlCurrentState currentState;
 @property (nonatomic) BOOL lock;
+@property (nonatomic) BOOL fullscreenMode;
 @property (nonatomic) KPToDo *showingModel;
 -(void)setLock:(BOOL)lock animated:(BOOL)animated;
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 -(void)highlightButton:(KPSegmentButtons)controlButton;
-
 -(void)show:(BOOL)show controlsAnimated:(BOOL)animated;
 -(void)receivedLocalNotification:(UILocalNotification*)notification;
 -(ToDoListViewController*)currentViewController;

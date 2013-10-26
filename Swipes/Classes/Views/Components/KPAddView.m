@@ -24,11 +24,12 @@
         CGFloat buttonSize = self.frame.size.height;
         CGFloat buttonWidth = buttonSize;
         self.doneEditingButton.frame = CGRectMake(self.frame.size.width-buttonWidth, 0, buttonWidth, buttonSize);
-        [self.doneEditingButton setImage:[UIImage imageNamed:@"hide_keyboard_arrow"] forState:UIControlStateNormal];
+        [self.doneEditingButton setImage:[UIImage imageNamed:@"backarrow_icon_white"] forState:UIControlStateNormal];
         [self.doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         
         self.doneEditingButton.imageView.clipsToBounds = NO;
         self.doneEditingButton.imageView.contentMode = UIViewContentModeCenter;
+        self.doneEditingButton.imageView.transform = CGAffineTransformMakeRotation(3*M_PI/2);
         [self addSubview:self.doneEditingButton];
         
         /*UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width-buttonWidth-SEPERATOR_WIDTH, kDEFAULT_SPACING, SEPERATOR_WIDTH, self.frame.size.height-(2*kDEFAULT_SPACING))];
@@ -93,11 +94,11 @@
 {
     [UIView beginAnimations:@"rotate" context:nil];
     [UIView setAnimationDuration:.25f];
-    if( CGAffineTransformEqualToTransform( self.doneEditingButton.imageView.transform, CGAffineTransformIdentity ) )
+    if( CGAffineTransformEqualToTransform( self.doneEditingButton.imageView.transform, CGAffineTransformMakeRotation(M_PI) ) )
     {
         self.doneEditingButton.imageView.transform = CGAffineTransformMakeRotation(3*M_PI/2);
     } else {
-        self.doneEditingButton.imageView.transform = CGAffineTransformIdentity;
+        self.doneEditingButton.imageView.transform = CGAffineTransformMakeRotation(M_PI);
     }
     [UIView commitAnimations];
 }

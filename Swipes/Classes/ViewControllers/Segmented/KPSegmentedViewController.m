@@ -152,6 +152,7 @@
             [self setCurrentState:KPControlCurrentStateAdd];
         }
     }];
+    BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
     [BLURRY showView:alert inViewController:self];
 }
 #pragma mark - AddPanelDelegate
@@ -266,6 +267,45 @@
 -(void)setLock:(BOOL)lock{
     [self setLock:lock animated:YES];
 }
+-(void)setFullscreenMode:(BOOL)fullscreenMode{
+    if(_fullscreenMode != fullscreenMode){
+        _fullscreenMode = fullscreenMode;
+        [self showNavbar:!fullscreenMode animated:NO];
+    }
+}
+-(void)showNavbar:(BOOL)show animated:(BOOL)animated{
+    if(!show){
+        //[self.view bringSubviewToFront:self.contentView];
+        CGFloat y = 0; //TOP_Y
+        //self.segmentedControl.alpha = 0;
+        
+        
+        CGRectSetHeight(self.contentView,self.view.frame.size.height-y);
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+        [UIView animateWithDuration:0.2 animations:^{
+            CGRectSetY(self.contentView, y);
+            self.segmentedControl.alpha = 0;
+        } completion:^(BOOL finished) {
+            if(finished){
+                self.segmentedControl.hidden = YES;
+            }
+        }];
+    }
+    else{
+        self.segmentedControl.hidden = NO;
+        CGRectSetY(self.contentView, self.ios7BackgroundView.frame.size.height);
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+        CGRectSetHeight(self.contentView, self.view.frame.size.height-self.ios7BackgroundView.frame.size.height);
+        
+        [UIView animateWithDuration:0.2 animations:^{
+            self.segmentedControl.alpha = 1;
+            
+            
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+}
 -(void)show:(BOOL)show controlsAnimated:(BOOL)animated{
     if(show){
         [self.controlHandler setState:[self handlerStateForCurrent:self.currentState] shrinkingView:[self currentViewController].tableView animated:animated];
@@ -284,6 +324,7 @@
     [super viewWillAppear:animated];
 	if (!self.hasAppeared) {
         self.hasAppeared = YES;
+        self.view.backgroundColor = tbackground(BackgroundColor);
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, 320, self.view.bounds.size.height-TOP_HEIGHT)];
         self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         contentView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
@@ -302,9 +343,6 @@
         currentViewController.view.frame = self.contentView.bounds;
         [self.contentView addSubview:currentViewController.view];
         [currentViewController didMoveToParentViewController:self];
-        if(OSVER >= 7){
-            [self.view bringSubviewToFront:self.ios7BackgroundView];
-        }
     }
 }
 -(void)changeToIndex:(NSInteger)index{

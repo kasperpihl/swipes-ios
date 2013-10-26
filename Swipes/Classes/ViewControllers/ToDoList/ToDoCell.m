@@ -13,7 +13,6 @@
 #import "NSDate-Utilities.h"
 #import "UIColor+Utilities.h"
 #import "StyleHandler.h"
-#import "ClockTimeLabel.h"
 #import "DotView.h"
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
@@ -50,7 +49,7 @@
 @property (nonatomic,weak) IBOutlet DotView *dotView;
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
-@property (nonatomic,weak) IBOutlet ClockTimeLabel *alarmLabel;
+@property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
 
 @property (nonatomic,strong) UIImageView *notesIcon;
 @property (nonatomic,strong) UIImageView *recurringIcon;
@@ -99,25 +98,25 @@
         [self.contentView addSubview:dotView];
         self.dotView = (DotView*)[self.contentView viewWithTag:DOT_VIEW_TAG];
         self.dotView.center = CGPointMake(CELL_LABEL_X/2, CELL_HEIGHT/2);
-        self.notesIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cell_notes_tasks"]];
+        self.notesIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"notes_icon_small_gray"]];
         self.notesIcon.hidden = YES;
         [self.contentView addSubview:self.notesIcon];
         
-        self.recurringIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cell_recurring_tasks"]];
+        self.recurringIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"repeat_icon_small_gray"]];
         self.recurringIcon.hidden = YES;
         [self.contentView addSubview:self.recurringIcon];
         
-        ClockTimeLabel *alarmLabel = [[ClockTimeLabel alloc] initWithFrame:CGRectMake(0, 0, kClockSize, kClockSize)];
+        UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kClockSize, kClockSize)];
         alarmLabel.tag = ALARM_LABEL_TAG;
         //alarmLabel.layer.cornerRadius = kClockSize /2;
-        alarmLabel.font = CELL_ALARM_FONT;
+        alarmLabel.font = TAGS_LABEL_FONT;
+        alarmLabel.textColor = gray(170, 1);
         //alarmLabel.backgroundColor = tbackground(BackgroundColor);
-        alarmLabel.circleColor = gray(170, 1);
         
         //self.alarmLabel.numberOfLines = 1;
         alarmLabel.hidden = YES;
         [self.contentView addSubview:alarmLabel];
-        self.alarmLabel = (ClockTimeLabel*)[self.contentView viewWithTag:ALARM_LABEL_TAG];
+        self.alarmLabel = (UILabel*)[self.contentView viewWithTag:ALARM_LABEL_TAG];
     }
     return self;
 }
@@ -165,9 +164,7 @@
     self.alarmLabel.hidden = YES;
     if((toDo.schedule) || toDo.completionDate){
         NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
-        self.alarmLabel.time = showDate;
         if(toDo.schedule && [toDo.schedule isInPast]){
-            self.alarmLabel.time = [[NSDate date] dateAtHours:8 minutes:0];
             self.alarmLabel.text = @"";
         }
         self.alarmLabel.center = CGPointMake(CELL_LABEL_X/2, CELL_HEIGHT/2);
@@ -190,7 +187,6 @@
     UIColor *color = [StyleHandler colorForCellType:cellType];
     self.selectionView.backgroundColor = color;
     self.dotView.dotColor = color;
-    self.alarmLabel.circleColor = color;
 }
 -(void)setSelected:(BOOL)selected{
     [self setSelected:selected animated:NO];

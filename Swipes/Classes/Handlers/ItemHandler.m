@@ -292,20 +292,17 @@
 -(NSIndexSet*)removeItems:(NSArray*)items{
     NSMutableIndexSet *deletedSections = [NSMutableIndexSet indexSet];
     NSMutableArray *newItemsMutable = [self.items mutableCopy];
+    NSArray *oldKeys = [self.titleArray copy];
     for(KPToDo *toDo in self.filteredItems){
         if([items containsObject:toDo]) [newItemsMutable removeObject:toDo];
     }
     self.items = [newItemsMutable copy];
     if(self.isSorted){
-        NSArray *oldKeys = [self.titleArray copy];
-        [self runSort];
         NSArray *newKeys = [self.titleArray copy];
-       
         for(int i = 0 ; i < oldKeys.count ; i++){
             NSString *oldKey = [oldKeys objectAtIndex:i];
             if(![newKeys containsObject:oldKey]) [deletedSections addIndex:i];
         }
-        
     }
     else{
         NSInteger counter = (self.hasFilter) ? self.itemCounterWithFilter : self.itemCounter;

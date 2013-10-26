@@ -19,6 +19,7 @@
 #import "KPBlurry.h"
 #import "AnalyticsHandler.h"
 #import "StyleHandler.h"
+#import "KPTagList.h"
 #define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
@@ -148,6 +149,9 @@
 }
 
 #pragma mark - KPSearchBarDelegate
+-(void)startedSearchBar:(KPSearchBar *)searchBar{
+    
+}
 -(void)searchBar:(KPSearchBar *)searchBar searchedForString:(NSString *)searchString{
     [self.itemHandler searchForString:searchString];
     [self deselectAllRows:self];
@@ -161,7 +165,7 @@
     [self deselectAllRows:self];
 }
 -(void)clearedAllFiltersForSearchBar:(KPSearchBar *)searchBar{
-    self.searchBar.currentMode = KPSearchBarModeNone;
+    //[self.parent showNavbar:YES];
     [self.itemHandler clearAll];
     [self deselectAllRows:self];
 }
@@ -175,8 +179,10 @@
     NSString *title = [[self.itemHandler titleForSection:section] uppercaseString];
     UIFont *font = SECTION_HEADER_FONT;
     SectionHeaderView *extraView = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:self.cellType] font:font title:title];
-    
-    
+    /*if(self.parent.fullscreenMode){
+        extraView.fullShape = YES;
+        extraView.textColor = gray(0, 1);
+    }*/
     UIColor *backgroundColor = [StyleHandler colorForCellType:self.cellType];
     CGFloat colorStartingX = 0; // CELL_LABEL_X/2;//0;
     //
@@ -255,6 +261,7 @@
 -(void)editIndexPath:(NSIndexPath *)indexPath{
     
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
+    self.parent.fullscreenMode = YES;
     self.parent.showingModel = toDo;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self deselectAllRows:self];
@@ -535,7 +542,7 @@
     tableView.dataSource = self.itemHandler;
     tableView.backgroundColor = [UIColor clearColor];
     tableView.layer.masksToBounds = NO;
-    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
+    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 0)];
     
     headerView.hidden = YES;
     headerView.backgroundColor = [UIColor redColor];
@@ -545,6 +552,7 @@
     KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,0, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
     searchBar.searchBarDelegate = self;
     searchBar.searchBarDataSource = self.itemHandler;
+    //searchBar.backgroundColor = CLEAR;
     searchBar.tag = SEARCH_BAR_TAG;
     [tableView addSubview:searchBar];
     self.searchBar = (KPSearchBar*)[tableView viewWithTag:SEARCH_BAR_TAG];
@@ -553,6 +561,30 @@
     doubleTap.numberOfTapsRequired = 2;
     doubleTap.numberOfTouchesRequired = 1;
     [tableView addGestureRecognizer:doubleTap];
+}
+-(void)refresh{
+    [self.tableView bringSubviewToFront:self.searchBar];
+    if(self.searchBar.currentMode == KPSearchBarModeNone){
+        //[self.refreshControl endRefreshing];
+        self.searchBar.currentMode = KPSearchBarModeReady;
+        
+        self.parent.fullscreenMode = YES;
+    }
+    else if(self.searchBar.currentMode == KPSearchBarModeReady){
+        self.searchBar.currentMode = KPSearchBarModeNone;
+        self.parent.fullscreenMode = NO;
+    }
+    else return;
+    /*[self.tableView beginUpdates];
+    [self.tableView reloadData];
+    [self.tableView endUpdates];*/
+    
+}
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    CGFloat requiredOffset = -44;
+    //NSLog(@"%f",scrollView.contentOffset.y);
+    if((scrollView.contentOffset.y+self.tableView.tableHeaderView.frame.size.height)<requiredOffset)
+        [self refresh];
 }
 #pragma mark - UIViewController stuff
 - (void)viewDidLoad

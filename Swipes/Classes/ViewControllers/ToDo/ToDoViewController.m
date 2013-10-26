@@ -123,7 +123,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             Alarm container and button!
         */
         self.alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
-        [self addAndGetImage:@"edit_alarm_icon" inView:self.alarmContainer];
+        [self addAndGetImage:@"edit_schedule_icon" inView:self.alarmContainer];
         self.alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.alarmContainer.frame.size.height)];
         self.alarmLabel.backgroundColor = CLEAR;
         [self setColorsFor:self.alarmLabel];
@@ -192,7 +192,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /* Adding scroll and content view */
         [contentView addSubview:self.scrollView];
         
-        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-TOOLBAR_HEIGHT, contentView.frame.size.width, TOOLBAR_HEIGHT) items:@[@"toolbar_back_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
+        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-TOOLBAR_HEIGHT, contentView.frame.size.width, TOOLBAR_HEIGHT) items:@[@"backarrow_icon_white",@"toolbar_trashcan_icon",@"share_icon_white"]];
         self.toolbarEditView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
         self.toolbarEditView.delegate = self;
         [contentView addSubview:self.toolbarEditView];

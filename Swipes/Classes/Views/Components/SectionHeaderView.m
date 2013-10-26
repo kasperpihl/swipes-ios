@@ -8,7 +8,7 @@
 #define kDefLeftCutSize 0.75
 #define kDefLeftPadding 4
 #define kDefRightPadding 7
-#define kDefTopPadding 0
+#define kDefTopPadding 1
 #define kDefBottomPadding 3
 #import "SectionHeaderView.h"
 @interface SectionHeaderView ()
@@ -43,7 +43,6 @@
         titleLabel.frame = CGRectSetPos(titleLabel.frame,leftPadding , kDefTopPadding);
         self.titleLabel = titleLabel;
         [self addSubview:self.titleLabel];
-        
     }
     return self;
 }
@@ -66,7 +65,8 @@
     [aPath addLineToPoint:CGPointMake(0, 0)];
     [aPath closePath];
     CGContextAddPath(currentContext, aPath.CGPath);
-    CGContextSetFillColorWithColor(currentContext,tbackground(BackgroundColor).CGColor);
+    UIColor *fillColor = self.fullShape ? self.color : tbackground(BackgroundColor);
+    CGContextSetFillColorWithColor(currentContext,fillColor.CGColor);
     CGContextFillPath(currentContext);
     
     /* Draw the colored stroke */

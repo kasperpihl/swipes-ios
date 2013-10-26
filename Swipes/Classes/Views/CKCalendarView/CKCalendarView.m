@@ -137,15 +137,18 @@
     [self addSubview:titleButton];
     self.titleButton = titleButton;
 
-    UIButton *prevButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [prevButton setImage:[UIImage imageNamed:@"left_arrow.png"] forState:UIControlStateNormal];
+    SlowHighlightIcon *prevButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
+    [prevButton setImage:[UIImage imageNamed:@"sitearrow_icon_white"] forState:UIControlStateNormal];
+    prevButton.imageView.transform = CGAffineTransformMakeRotation(2*M_PI/2);
+    [prevButton setImage:[UIImage imageNamed:@"sitearrow_icon_white-high"] forState:UIControlStateHighlighted];
     prevButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
     [prevButton addTarget:self action:@selector(_moveCalendarToPreviousMonth) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:prevButton];
     self.prevButton = prevButton;
 
-    UIButton *nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [nextButton setImage:[UIImage imageNamed:@"right_arrow.png"] forState:UIControlStateNormal];
+    SlowHighlightIcon *nextButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
+    [nextButton setImage:[UIImage imageNamed:@"sitearrow_icon_white"] forState:UIControlStateNormal];
+    [nextButton setImage:[UIImage imageNamed:@"sitearrow_icon_white-high"] forState:UIControlStateHighlighted];
     nextButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
     [nextButton addTarget:self action:@selector(_moveCalendarToNextMonth) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:nextButton];
@@ -488,8 +491,8 @@
 }
 
 - (void)setMonthButtonColor:(UIColor *)color {
-    [self.prevButton setImage:[CKCalendarView _imageNamed:@"left_arrow.png" withColor:color] forState:UIControlStateNormal];
-    [self.nextButton setImage:[CKCalendarView _imageNamed:@"right_arrow.png" withColor:color] forState:UIControlStateNormal];
+    [self.prevButton setImage:[CKCalendarView _imageNamed:@"sitearrow_icon_white" withColor:color] forState:UIControlStateNormal];
+    [self.nextButton setImage:[CKCalendarView _imageNamed:@"sitearrow_icon_white" withColor:color] forState:UIControlStateNormal];
 }
 
 - (void)setDayOfWeekFont:(UIFont *)font {
