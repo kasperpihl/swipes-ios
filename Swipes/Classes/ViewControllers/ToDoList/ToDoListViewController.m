@@ -77,6 +77,7 @@
     [self didUpdateCells];
     [self showBackgroundItems:(itemNumber == 0)];
     self.searchBar.hidden = (itemNumber == 0);
+    if(itemNumber == 0) self.parent.fullscreenMode = NO;
 }
 -(void)showBackgroundItems:(BOOL)show{
     self.menuText.hidden = !show;
@@ -626,6 +627,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     
     [self update];
+    if(self.cellType != CellTypeToday) self.parent.backgroundMode = NO;
+    else if(self.itemHandler.itemCounterWithFilter == 0) self.parent.backgroundMode = YES;
     [super viewWillAppear:animated];
 }
 -(void)viewDidAppear:(BOOL)animated{

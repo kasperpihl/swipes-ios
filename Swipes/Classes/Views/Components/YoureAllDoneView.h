@@ -10,7 +10,6 @@
 #import "DateStampView.h"
 @interface YoureAllDoneView : UIView
 @property (nonatomic) UILabel *shareItLabel;
-@property (nonatomic) UILabel *youreDoneLabel;
 @property (nonatomic) DateStampView *stampView;
 @property (nonatomic) UIImageView *signatureView;
 @property (nonatomic) UILabel *swipesReferLabel;

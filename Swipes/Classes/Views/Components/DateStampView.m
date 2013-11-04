@@ -10,8 +10,9 @@
 #define kLabelYHack -1
 #define kColor alpha([UIColor whiteColor],0.8)
 #define kFontColor kColor//tcolor(TaskCellTagColor)
-#define kNumberFont KP_BOLD(50)
-#define kMonthFont KP_BOLD(20)
+#define kNumberFont [UIFont fontWithName:@"OstrichSans-Bold" size:82]
+
+#define kMonthFont [UIFont fontWithName:@"OstrichSans-Medium" size:24]
 
 #import "DateStampView.h"
 #import <QuartzCore/QuartzCore.h>
@@ -25,12 +26,16 @@
 -(id)initWithDate:(NSDate *)date{
     self = [super init];
     if(self){
+
         
+        UIImageView *dateStampBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"date_stamp_background"]];
+        [self addSubview:dateStampBackground];
+        self.frame = dateStampBackground.bounds;
         self.backgroundColor = CLEAR;
-        self.frame = CGRectMake(0, 0, kStampSize, kStampSize);
-        self.layer.cornerRadius = kStampSize/2;
-        self.layer.borderWidth = kOuterStrokeSize;
-        self.layer.borderColor = kColor.CGColor;
+        //self.frame = CGRectMake(0, 0, kStampSize, kStampSize);
+        //self.layer.cornerRadius = kStampSize/2;
+        //self.layer.borderWidth = kOuterStrokeSize;
+        //self.layer.borderColor = kColor.CGColor;
         
         
         self.numberLabel = [[UILabel alloc] initWithFrame:self.bounds];
@@ -65,11 +70,12 @@
     self.monthLabel.text = [[formatter stringFromDate:date] uppercaseString];
     
     [self.numberLabel sizeToFit];
+    CGRectSetWidth(self.numberLabel, CGRectGetWidth(self.frame));
     [self.monthLabel sizeToFit];
+    CGRectSetWidth(self.monthLabel, CGRectGetWidth(self.frame));
     
-    CGFloat totalSize = self.numberLabel.bounds.size.height + kLabelSpacing + self.monthLabel.bounds.size.height;
-    self.numberLabel.frame = CGRectSetPos(self.numberLabel.frame, (kStampSize-self.numberLabel.frame.size.width)/2, (kStampSize-totalSize)/2 + kLabelYHack);
-    self.monthLabel.frame = CGRectSetPos(self.monthLabel.frame, (kStampSize-self.monthLabel.frame.size.width)/2, kStampSize-((kStampSize-totalSize)/2)-self.monthLabel.frame.size.height + kLabelYHack);
+    self.numberLabel.frame = CGRectSetPos(self.numberLabel.frame, 0, 35);
+    self.monthLabel.frame = CGRectSetPos(self.monthLabel.frame, 0, 103);
     
 }
 -(void)dealloc{

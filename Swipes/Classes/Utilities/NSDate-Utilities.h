@@ -82,6 +82,7 @@
 -(NSDate *)dateAtHours:(NSInteger)hours minutes:(NSInteger)minutes;
 -(NSDate *)dateAtWeekday:(NSInteger)weekday;
 // Decomposing dates
+@property (readonly) NSInteger dayOfYear;
 @property (readonly) NSInteger nearestHour;
 @property (readonly) NSInteger hour;
 @property (readonly) NSInteger minute;

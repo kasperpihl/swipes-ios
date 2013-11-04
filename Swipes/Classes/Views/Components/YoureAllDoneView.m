@@ -31,29 +31,18 @@
     self = [super initWithFrame:frame];
     if(self){
         self.stampView = [[DateStampView alloc] initWithDate:[NSDate date]];
-        self.stampView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        //self.stampView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         [self addSubview:self.stampView];
         
-        self.youreDoneLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.youreDoneLabel.numberOfLines = 0;
-        self.youreDoneLabel.backgroundColor = CLEAR;
-        self.youreDoneLabel.text = @"You're all done!";
-        self.youreDoneLabel.font = KP_BOLD(20);
-        self.youreDoneLabel.textColor = kColor;
-        self.youreDoneLabel.textAlignment = UITextAlignmentCenter;
-        [self.youreDoneLabel sizeToFit];
-        self.youreDoneLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-        CGRectSetWidth(self.youreDoneLabel, self.frame.size.width);
-        [self addSubview:self.youreDoneLabel];
         
         self.shareItLabel = [[UILabel alloc] initWithFrame:self.bounds];
         self.shareItLabel.numberOfLines = 0;
         self.shareItLabel.backgroundColor = CLEAR;
         self.shareItLabel.textColor = kColor;
         self.shareItLabel.textAlignment = UITextAlignmentCenter;
-        self.shareItLabel.text = @"Share it";
-        self.shareItLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        self.shareItLabel.text = @"Good job, let 'em know!";
         self.shareItLabel.font = KP_LIGHT(16);
+        //self.shareItLabel.hidden = YES;
         [self.shareItLabel sizeToFit];
         CGRectSetWidth(self.shareItLabel, self.frame.size.width);
         [self addSubview:self.shareItLabel];
@@ -80,16 +69,15 @@
 }
 -(void)layout{
     self.stampView.center = CGPointMake(self.frame.size.width/2, kStampViewY);
-    CGRectSetY(self.youreDoneLabel, CGRectGetMaxY(self.stampView.frame)+kStampViewSpacing);
-    self.signatureView.frame = CGRectSetPos(self.signatureView.frame, self.frame.size.width-self.signatureView.frame.size.width-kSignatureRightMargin, CGRectGetMaxY(self.youreDoneLabel.frame)+kSignatureSpacing);
+    self.signatureView.frame = CGRectSetPos(self.signatureView.frame, self.frame.size.width-self.signatureView.frame.size.width-kSignatureRightMargin, CGRectGetMaxY(self.stampView.frame)+kSignatureSpacing);
     self.swipesReferLabel.frame = CGRectSetPos(self.swipesReferLabel.frame, self.frame.size.width-kReferX-self.swipesReferLabel.frame.size.width, self.frame.size.height-kReferBottom);
-    CGRectSetY(self.shareItLabel, self.frame.size.height - kBottomTotal - self.shareItLabel.frame.size.height);
+    
+    CGRectSetY(self.shareItLabel, CGRectGetMaxY(self.stampView.frame) + kSignatureSpacing * 2);
 }
 
 -(void)dealloc{
     self.shareItLabel = nil;
     self.stampView = nil;
-    self.youreDoneLabel = nil;
     self.signatureView = nil;
     self.swipesReferLabel = nil;
 }

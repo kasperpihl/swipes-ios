@@ -5,7 +5,7 @@
 //  Created by Kasper Pihl Tornøe on 06/08/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define SCHEDULE_IMAGE_CENTER_SPACING 13
+#define SCHEDULE_IMAGE_CENTER_SPACING 8//13
 #define kLampSize 18
 #define kLampBorderRadius (kLampSize/2)
 #define kLampBorderWidth 1

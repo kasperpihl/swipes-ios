@@ -433,7 +433,10 @@
 
 
 #pragma mark Decomposing Dates
-
+-(NSInteger)dayOfYear{
+    return [CURRENT_CALENDAR ordinalityOfUnit:NSDayCalendarUnit
+                         inUnit:NSYearCalendarUnit forDate:self];
+}
 - (NSInteger) nearestHour
 {
 	NSTimeInterval aTimeInterval = [[NSDate date] timeIntervalSinceReferenceDate] + D_MINUTE * 30;

@@ -24,6 +24,8 @@
 @property (nonatomic,weak) UITableView *shrinkingView;
 @property (nonatomic,weak) KPToolbar *addToolbar;
 @property (nonatomic,weak) KPToolbar *editToolbar;
+@property (nonatomic) UIView *gradientView;
+@property (nonatomic) BOOL isShowingGradient;
 @end
 @implementation KPControlHandler
 +(KPControlHandler*)instanceInView:(UIView*)view{
@@ -44,27 +46,34 @@
         self.view = view;
         
         
+        UIView *gradientBackground = [[UIView alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT)];
+        CAGradientLayer *agradient = [CAGradientLayer layer];
+        agradient.frame = gradientBackground.bounds;
+        agradient.colors = @[(id)alpha(tbackground(BackgroundColor),0.0f).CGColor,(id)alpha(tbackground(BackgroundColor),1.0f).CGColor,(id)tbackground(BackgroundColor).CGColor];
+        agradient.locations = @[@0.0,@0.4,@1.0];
+        [gradientBackground.layer insertSublayer:agradient atIndex:0];
+        self.gradientView = gradientBackground;
+        [view addSubview:self.gradientView];
+        
+        
         KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, ADD_TOOLBAR_HEIGHT) items:@[@"round_plus_big"]];
         addToolbar.tag = ADD_TOOLBAR_TAG;
         addToolbar.delegate = self;
-        CAGradientLayer *agradient = [CAGradientLayer layer];
-        agradient.frame = addToolbar.bounds;
-        agradient.colors = @[(id)alpha(tbackground(BackgroundColor),0.0f).CGColor,(id)alpha(tbackground(BackgroundColor),1.0f).CGColor,(id)tbackground(BackgroundColor).CGColor];
-        agradient.locations = @[@0.0,@0.5,@1.0];
         [addToolbar setTopInset:addToolbar.frame.size.height*0.05];
-        [addToolbar.layer insertSublayer:agradient atIndex:0];
         [view addSubview:addToolbar];
         self.addToolbar = (KPToolbar*)[view viewWithTag:ADD_TOOLBAR_TAG];
+        
+        
         
         KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[@"toolbar_edit_icon",@"toolbar_tag_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
         editToolbar.tag = EDIT_TOOLBAR_TAG;
         editToolbar.delegate = self;
-        CAGradientLayer *gradient = [CAGradientLayer layer];
+        /*CAGradientLayer *gradient = [CAGradientLayer layer];
         gradient.frame = editToolbar.bounds;
         gradient.colors = @[(id)alpha(tbackground(BackgroundColor),0.0f).CGColor,(id)alpha(tbackground(BackgroundColor),1.0f).CGColor,(id)tbackground(BackgroundColor).CGColor];
         gradient.locations = @[@0.0,@0.3,@1.0];
-        [editToolbar.layer insertSublayer:gradient atIndex:0];
-        [editToolbar setTopInset:editToolbar.frame.size.height*0.20];
+        [editToolbar.layer insertSublayer:gradient atIndex:0];*/
+        [editToolbar setTopInset:editToolbar.frame.size.height*0.05];
         [view addSubview:editToolbar];
         self.editToolbar = (KPToolbar*)[view viewWithTag:EDIT_TOOLBAR_TAG];
         
@@ -72,16 +81,24 @@
     }
     return self;
 }
--(voidBlock)getClearBlockForState:(KPControlHandlerState)state{
+-(voidBlock)getClearBlockFromState:(KPControlHandlerState)state toState:(KPControlHandlerState)toState{
     CGFloat targetY = self.view.frame.size.height;
     voidBlock block = ^(void) {
         switch (state) {
             case KPControlHandlerStateNone:
                 break;
             case KPControlHandlerStateAdd:
+                if(self.isShowingGradient && toState == KPControlHandlerStateNone && !self.lockGradient){
+                    CGRectSetY(self.gradientView, targetY);
+                    self.isShowingGradient = NO;
+                }
                 CGRectSetY(self.addToolbar, targetY);
                 break;
             case KPControlHandlerStateEdit:
+                if(self.isShowingGradient && toState == KPControlHandlerStateNone && !self.lockGradient){
+                    CGRectSetY(self.gradientView, targetY);
+                    self.isShowingGradient = NO;
+                }
                 CGRectSetY(self.editToolbar, targetY);
                 break;
         }
@@ -97,6 +114,13 @@
 -(void)setLock:(BOOL)lock{
     [self setLock:lock animated:YES];
 }
+-(void)setLockGradient:(BOOL)lockGradient{
+    if(_lockGradient != lockGradient){
+        _lockGradient = lockGradient;
+        CGFloat targetY = lockGradient ? self.view.frame.size.height : [self getYForBigSize:YES];
+        CGRectSetY(self.gradientView, targetY);
+    }
+}
 -(void)forceHide{
     CGFloat targetY = self.view.frame.size.height;
     CGRectSetY(self.addToolbar, targetY);
@@ -110,9 +134,18 @@
             case KPControlHandlerStateNone:
                 break;
             case KPControlHandlerStateAdd:
+                if(!self.isShowingGradient && !self.lockGradient){
+                    CGRectSetY(self.gradientView, smallButtonY);
+                    self.isShowingGradient = YES;
+                }
                 CGRectSetY(self.addToolbar, smallButtonY);
+                
                 break;
             case KPControlHandlerStateEdit:
+                if(!self.isShowingGradient && !self.lockGradient){
+                    CGRectSetY(self.gradientView, smallButtonY);
+                    self.isShowingGradient = YES;
+                }
                 CGRectSetY(self.editToolbar, bigButtonY);
                 break;
         }
@@ -122,7 +155,7 @@
 -(void)setState:(KPControlHandlerState)state shrinkingView:(UITableView *)view animated:(BOOL)animated{
     if(state == self.activeState || self.lock) return;
     self.shrinkingView = view;
-    voidBlock clearBlock = [self getClearBlockForState:self.activeState];
+    voidBlock clearBlock = [self getClearBlockFromState:self.activeState toState:state];
     CGFloat clearDuration = (self.activeState == KPControlHandlerStateNone) ? 0 : ANIMATION_DURATION;
     CGFloat showDuration = (state == KPControlHandlerStateNone) ? 0 : ANIMATION_DURATION;
     UIViewAnimationOptions clearAnimationOption = UIViewAnimationOptionCurveEaseIn;

@@ -24,6 +24,7 @@
 #import "RootViewController.h"
 #import "AnalyticsHandler.h"
 #import "AppDelegate.h"
+#import "UIImage+Blur.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
@@ -51,6 +52,7 @@
 @property (nonatomic) UIView *ios7BackgroundView;
 @property (nonatomic) BOOL hasAppeared;
 @property (nonatomic) BOOL hidden;
+@property (nonatomic) UIImageView *backgroundImage;
 
 @end
 
@@ -273,6 +275,23 @@
         [self showNavbar:!fullscreenMode animated:NO];
     }
 }
+-(void)setBackgroundMode:(BOOL)backgroundMode{
+    if(_backgroundMode != backgroundMode){
+        _backgroundMode = backgroundMode;
+        [self.controlHandler setLockGradient:backgroundMode];
+        [self showBackground:backgroundMode animated:YES];
+    }
+}
+-(void)showBackground:(BOOL)show animated:(BOOL)animated{
+    CGFloat targetAlpha = show ? 1.0f : 0.0f;
+    CGFloat duration = show ? 2.5f : 0.25f;
+    [UIView animateWithDuration:duration animations:^{
+        self.backgroundImage.alpha = targetAlpha;
+    } completion:^(BOOL finished) {
+        if(finished){
+        }
+    }];
+}
 -(void)showNavbar:(BOOL)show animated:(BOOL)animated{
     if(!show){
         //[self.view bringSubviewToFront:self.contentView];
@@ -326,6 +345,17 @@
 	if (!self.hasAppeared) {
         self.hasAppeared = YES;
         self.view.backgroundColor = tbackground(BackgroundColor);
+        self.backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
+        self.backgroundImage.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+        [self.backgroundImage setImage:[[UIImage imageNamed:@"background-5.png"] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
+        self.backgroundImage.alpha = 0;
+        UIView *overlay = [[UIView alloc] initWithFrame:self.backgroundImage.bounds];
+        overlay.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+        overlay.backgroundColor = gray(0,0.5);
+        [self.backgroundImage addSubview:overlay];
+        [self.view addSubview:self.backgroundImage];
+    
+        
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, 320, self.view.bounds.size.height-TOP_HEIGHT)];
         self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         contentView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
@@ -344,6 +374,7 @@
         currentViewController.view.frame = self.contentView.bounds;
         [self.contentView addSubview:currentViewController.view];
         [currentViewController didMoveToParentViewController:self];
+        [self.view sendSubviewToBack:self.backgroundImage];
     }
 }
 -(void)changeToIndex:(NSInteger)index{
@@ -366,6 +397,7 @@
     newViewController.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(newViewController.tableView.tableHeaderView.bounds));
 	[self addChildViewController:newViewController];
 	newViewController.view.frame = CGRectSetPos(self.contentView.frame, 0, 0);
+    oldViewController.view.hidden = YES;
     CGFloat duration = animated ?  0.0f : 0.0;
     [self transitionFromViewController:oldViewController
 					  toViewController:newViewController
@@ -378,7 +410,7 @@
 							completion:^(BOOL finished) {
                                 self.segmentedControl.userInteractionEnabled = YES;
                                 [newViewController didMoveToParentViewController:self];
-                                
+                                oldViewController.view.hidden = NO;
                                 self.currentSelectedIndex = selectedIndex;
 							}];
 }

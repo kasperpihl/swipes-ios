@@ -15,6 +15,7 @@
 @property (nonatomic) KPControlCurrentState currentState;
 @property (nonatomic) BOOL lock;
 @property (nonatomic) BOOL fullscreenMode;
+@property (nonatomic) BOOL backgroundMode;
 @property (nonatomic) KPToDo *showingModel;
 -(void)setLock:(BOOL)lock animated:(BOOL)animated;
 - (id)initWithViewControllers:(NSArray *)viewControllers;
@@ -26,4 +27,5 @@
 -(void)pressedDelete:(id)sender;
 -(void)pressedShare:(id)sender;
 -(void)changeToIndex:(NSInteger)index;
+
 @end

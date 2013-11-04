@@ -69,6 +69,7 @@
     [super itemHandler:handler changedItemNumber:itemNumber oldNumber:oldNumber];
     [self.tableView setReorderingEnabled:(itemNumber > 1)];
     [self updateBackground];
+    self.parent.backgroundMode = (itemNumber == 0);
     [self setEmptyBack:(itemNumber == 0) animated:YES];
     if(itemNumber == 0 && oldNumber > 0){
         NSInteger servicesAvailable = 0;
@@ -112,7 +113,7 @@
 -(void)updateBackground{
     BOOL isFacebookAvailable = ([[UIDevice currentDevice].systemVersion floatValue] >= 6 && [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]);
     BOOL isTwitterAvailable = [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter];
-    CGFloat buttonsCenterY = self.view.frame.size.height - kBottomMargin - kShareButtonSize/2;
+    CGFloat buttonsCenterY = CGRectGetMaxY(self.youreAllDoneView.shareItLabel.frame) + kButtonSpacing/2+ kShareButtonSize/2;
     CGRectSetCenter(self.facebookButton, self.view.frame.size.width/2-kButtonSpacing/2-kShareButtonSize/2, buttonsCenterY);
     CGRectSetCenter(self.twitterButton, self.view.frame.size.width/2+kButtonSpacing/2+kShareButtonSize/2, buttonsCenterY);
     if(!(isTwitterAvailable && isFacebookAvailable)) self.facebookButton.center = self.twitterButton.center = CGPointMake(self.view.frame.size.width/2, buttonsCenterY);
