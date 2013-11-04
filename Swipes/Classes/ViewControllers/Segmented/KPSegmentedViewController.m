@@ -240,7 +240,7 @@
         self.view.layer.masksToBounds = YES;
         
         self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, TOP_HEIGHT)];
-        self.ios7BackgroundView.backgroundColor = tbackground(BackgroundColor);
+        self.ios7BackgroundView.backgroundColor = CLEAR;
         [self.ios7BackgroundView addSubview:self.segmentedControl];
         [self.view addSubview:self.ios7BackgroundView];
         
@@ -276,13 +276,13 @@
 -(void)showNavbar:(BOOL)show animated:(BOOL)animated{
     if(!show){
         //[self.view bringSubviewToFront:self.contentView];
-        CGFloat y = 0; //TOP_Y
+        CGFloat y = 3; //TOP_Y
         //self.segmentedControl.alpha = 0;
         
         
         CGRectSetHeight(self.contentView,self.view.frame.size.height-y);
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0.25f animations:^{
             CGRectSetY(self.contentView, y);
             self.segmentedControl.alpha = 0;
         } completion:^(BOOL finished) {
@@ -297,7 +297,8 @@
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
         CGRectSetHeight(self.contentView, self.view.frame.size.height-self.ios7BackgroundView.frame.size.height);
         
-        [UIView animateWithDuration:0.2 animations:^{
+        [UIView animateWithDuration:0.25f animations:^{
+            
             self.segmentedControl.alpha = 1;
             
             

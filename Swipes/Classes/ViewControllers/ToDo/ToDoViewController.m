@@ -72,6 +72,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UITextView *notesView;
 @property (nonatomic) UILabel *repeatedLabel;
 
+
 @property (nonatomic) KPToolbar *toolbarEditView;
 
 @property (nonatomic,strong) KPTimePicker *timePicker;
@@ -84,6 +85,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if(self){
         self.view.tag = SHOW_ITEM_TAG;
         self.view.backgroundColor = tbackground(BackgroundColor);
+        
         UIView *contentView = [[UIView alloc] initWithFrame:self.view.bounds];
         contentView.tag = CONTENT_VIEW_TAG;
         contentView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
@@ -199,7 +201,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         [self.view addSubview:contentView];
         self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
-        
         
     }
     return self;

@@ -223,6 +223,26 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 #pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
+    if (touch.view==self ) {
+        return YES;
+    }
+    else if ([self.subviews containsObject:touch.view]){
+        if(![touch.view isKindOfClass:[self class]])
+        {
+            return YES;
+        }
+    }else if(touch.view.superview == self || touch.view.superview.superview == self){
+        return YES;
+    }
+    UIView *superView = touch.view.superview;
+    for(NSInteger i = 0 ; i < 10 ; i++){
+        if(!superView) break;
+        if(superView == self) return YES;
+        else superView = superView.superview;
+    }
+    return NO;
+}
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     if ([gestureRecognizer class] == [UIPanGestureRecognizer class]) {
         UIPanGestureRecognizer *g = (UIPanGestureRecognizer *)gestureRecognizer;

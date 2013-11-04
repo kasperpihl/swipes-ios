@@ -14,7 +14,7 @@
 #import "SlowHighlightIcon.h"
 #define VERTICAL_MARGIN 3
 #define HORIZONTAL_MARGIN 10
-#define TAG_HORIZONTAL_PADDING 7
+#define TAG_HORIZONTAL_PADDING 3
 #define TAG_BUTTON_TAG 123
 #define kDefaultSpacing 10
 
@@ -258,7 +258,7 @@
     button.titleLabel.font = KP_REGULAR(14);
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
-    button.layer.cornerRadius = 3;
+    button.layer.cornerRadius = 2;
     button.layer.borderColor = self.tagBorderColor.CGColor;
     button.layer.borderWidth = LINE_SIZE;
     button.layer.masksToBounds = YES;

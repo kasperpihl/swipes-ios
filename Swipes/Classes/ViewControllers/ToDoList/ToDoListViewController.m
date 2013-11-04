@@ -76,6 +76,7 @@
 -(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber oldNumber:(NSInteger)oldNumber{
     [self didUpdateCells];
     [self showBackgroundItems:(itemNumber == 0)];
+    self.searchBar.hidden = (itemNumber == 0);
 }
 -(void)showBackgroundItems:(BOOL)show{
     self.menuText.hidden = !show;
@@ -91,6 +92,7 @@
     else if (_isShowingItem != isShowingItem){
         [[self parent] setLock:NO];
         [self.showingViewController.view removeFromSuperview];
+        if(self.searchBar.currentMode == KPSearchBarModeNone && !self.parent.showingModel) self.parent.fullscreenMode = NO;
     }
     _isShowingItem = isShowingItem;
 }
@@ -151,7 +153,7 @@
 
 #pragma mark - KPSearchBarDelegate
 -(void)startedSearchBar:(KPSearchBar *)searchBar{
-    
+    self.parent.fullscreenMode = YES;
 }
 -(void)searchBar:(KPSearchBar *)searchBar searchedForString:(NSString *)searchString{
     [self.itemHandler searchForString:searchString];
@@ -168,6 +170,7 @@
 -(void)clearedAllFiltersForSearchBar:(KPSearchBar *)searchBar{
     //[self.parent showNavbar:YES];
     [self.itemHandler clearAll];
+    self.parent.fullscreenMode = NO;
     [self deselectAllRows:self];
 }
 #pragma mark - UITableViewDelegate
@@ -273,6 +276,7 @@
     self.savedOffset = YES;
     [self.tableView setContentOffset:CGPointMake(0, cell.frame.origin.y-SECTION_HEADER_HEIGHT) animated:YES];
     
+    
 }
 -(void)pressedEdit{
     NSIndexPath *indexPath;
@@ -283,10 +287,12 @@
     
     NSIndexPath *indexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
     self.parent.showingModel = nil;
+    if(self.searchBar.currentMode == KPSearchBarModeNone) self.parent.fullscreenMode = NO;
     [self deselectAllRows:self];
     self.isShowingItem = NO;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     if(self.savedOffset){
+        if (CGPointEqualToPoint(self.savedContentOffset, CGPointZero)) self.savedContentOffset = CGPointMake(0,self.searchBar.frame.size.height);
         [self.tableView setContentOffset:self.savedContentOffset animated:YES];
         self.savedContentOffset = CGPointZero;
         self.savedOffset = NO;
@@ -545,7 +551,7 @@
     tableView.dataSource = self.itemHandler;
     tableView.backgroundColor = [UIColor clearColor];
     tableView.layer.masksToBounds = NO;
-    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 0)];
+    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
     
     headerView.hidden = YES;
     headerView.backgroundColor = [UIColor redColor];
@@ -565,35 +571,18 @@
     doubleTap.numberOfTouchesRequired = 1;
     [tableView addGestureRecognizer:doubleTap];
 }
--(void)refresh{
-    [self.tableView bringSubviewToFront:self.searchBar];
-    if(self.searchBar.currentMode == KPSearchBarModeNone){
-        //[self.refreshControl endRefreshing];
-        self.searchBar.currentMode = KPSearchBarModeReady;
-        
-        self.parent.fullscreenMode = YES;
-    }
-    else if(self.searchBar.currentMode == KPSearchBarModeReady){
-        self.searchBar.currentMode = KPSearchBarModeNone;
-        self.parent.fullscreenMode = NO;
-    }
-    else return;
-    /*[self.tableView beginUpdates];
-    [self.tableView reloadData];
-    [self.tableView endUpdates];*/
-    
-}
+
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    CGFloat requiredOffset = -44;
+    /*CGFloat requiredOffset = -44;
     //NSLog(@"%f",scrollView.contentOffset.y);
     if((scrollView.contentOffset.y+self.tableView.tableHeaderView.frame.size.height)<requiredOffset)
-        [self refresh];
+        [self refresh];*/
 }
 #pragma mark - UIViewController stuff
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = tbackground(BackgroundColor);
+    self.view.backgroundColor = CLEAR;//tbackground(BackgroundColor);
     // tbackground(TaskTableBackground);
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_white_background",self.state]]];
     if ([self.state isEqualToString:@"today"]) {

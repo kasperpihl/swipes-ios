@@ -147,7 +147,7 @@
         clearFilterButton.hidden = YES;
         self.clearButton = clearFilterButton;
 
-        CGRectSetHeight(self, 0);
+        //CGRectSetHeight(self, 0);
     }
     return self;
 }
@@ -158,7 +158,7 @@
     }
 }
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
-    self.currentMode = KPSearchBarModeReady;
+    self.currentMode = KPSearchBarModeNone;
     return YES;
 }
 -(void)textFieldChanged:(UITextField*)sender{
@@ -170,7 +170,7 @@
 }
 -(void)pressedClearFilter:(UIButton*)sender{
     if([self.searchBarDelegate respondsToSelector:@selector(clearedAllFiltersForSearchBar:)]) [self.searchBarDelegate clearedAllFiltersForSearchBar:self];
-    self.currentMode = KPSearchBarModeReady;
+    self.currentMode = KPSearchBarModeNone;
 }
 -(void)reframe{
     NSArray *totalTags = [self.selectedTags arrayByAddingObjectsFromArray:self.unselectedTags];
@@ -181,7 +181,7 @@
     CGRectSetSize(self.filterView, self.frame.size.width, tempHeight);
 }
 -(void)pressedFilter:(UIButton*)sender{
-    if(self.currentMode == KPSearchBarModeNone || self.currentMode == KPSearchBarModeReady){
+    if(self.currentMode == KPSearchBarModeNone){
         if([self.searchBarDelegate respondsToSelector:@selector(startedSearchBar:)]) [self.searchBarDelegate startedSearchBar:self];
         self.currentMode = KPSearchBarModeTags;
     }
@@ -191,9 +191,6 @@
         KPSearchBarMode oldMode = _currentMode;
         _currentMode = currentMode;
         switch (currentMode) {
-            case KPSearchBarModeReady:
-                [self readyToSearchFrom:oldMode];
-                break;
             case KPSearchBarModeTags:
                 [self reloadDataAndUpdate:NO];
                 [self reframeTags];
@@ -208,33 +205,29 @@
         }
     }
 }
--(void)readyToSearchFrom:(KPSearchBarMode)oldMode{
-    
-    if(oldMode == KPSearchBarModeSearch){
-        [self.searchField resignFirstResponder];
-        self.searchField.text = @"";
-    }
-    CGRectSetHeight(self,SEARCH_BAR_DEFAULT_HEIGHT);
-    
-    self.filterView.hidden = YES;
-    self.filterButton.hidden = NO;
-    self.searchField.hidden = NO;
-    self.clearButton.hidden = YES;
-    //if(superView) [superView setContentOffset:CGPointMake(0, 0)];
-    [self resizeTableHeader];
-}
+
 -(void)reframeToSearch{
     self.clearButton.hidden = NO;
     self.filterButton.hidden = YES;
 }
 -(void)reframeToNoneFrom:(KPSearchBarMode)oldMode{
-    CGFloat oldHeight = self.frame.size.height;
+    if(oldMode == KPSearchBarModeSearch){
+        [self.searchField resignFirstResponder];
+        self.searchField.text = @"";
+    }
+    //CGFloat oldHeight = self.frame.size.height;
     UITableView* superView = (UITableView*)self.superview;
-    [UIView animateWithDuration:.2f animations:^{
-        if(superView) [superView setContentOffset:CGPointMake(0, -oldHeight)];
+    self.filterView.hidden = YES;
+    self.filterButton.hidden = NO;
+    self.searchField.hidden = NO;
+    self.clearButton.hidden = YES;
+    CGRectSetHeight(self,SEARCH_BAR_DEFAULT_HEIGHT);
+    [self resizeTableHeader];
+    [UIView animateWithDuration:.4f animations:^{
+        if(superView) [superView setContentOffset:CGPointMake(0, SEARCH_BAR_DEFAULT_HEIGHT)];
     } completion:^(BOOL finished) {
-        CGRectSetHeight(self,0);
-        [self resizeTableHeader];
+        
+        
         //if(superView) [superView setContentOffset:CGPointMake(0, superView.contentOffset.y-oldHeight)];
         
     }];

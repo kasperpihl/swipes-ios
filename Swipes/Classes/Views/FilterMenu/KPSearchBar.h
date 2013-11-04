@@ -10,7 +10,6 @@
 @class KPSearchBar;
 typedef NS_ENUM(NSUInteger, KPSearchBarMode) {
     KPSearchBarModeNone,
-    KPSearchBarModeReady,
     KPSearchBarModeSearch,
     KPSearchBarModeTags
 };
