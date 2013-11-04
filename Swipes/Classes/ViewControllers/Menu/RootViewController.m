@@ -249,19 +249,19 @@ static RootViewController *sharedObject;
     [self.sideMenu panGestureRecognized:sender];
 }
 -(void)openApp{
-    [KPCORE synchronize];
-    [[[self menuViewController] currentViewController] update];
-    [[[self menuViewController] currentViewController] deselectAllRows:self];
+    //[KPCORE synchronize];
+    //[[[self menuViewController] currentViewController] update];
+    //[[[self menuViewController] currentViewController] deselectAllRows:self];
     //[OVERLAY popAllViewsAnimated:NO];
     //[self resetRoot];
-    /*if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
+    if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
         [OVERLAY popAllViewsAnimated:NO];
         [self resetRoot];
     }
     else if(self.lastClose){
         [[[self menuViewController] currentViewController] update];
         [[[self menuViewController] currentViewController] deselectAllRows:self];
-    }*/
+    }
 }
 -(void)closeApp{
     self.lastClose = [NSDate date];

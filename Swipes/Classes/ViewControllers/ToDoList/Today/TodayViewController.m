@@ -17,6 +17,7 @@
 #import <Social/Social.h>
 #import "UIView+Utilities.h"
 #import "AnalyticsHandler.h"
+#import "SlowHighlightIcon.h"
 @interface TodayViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 @property (nonatomic,weak) IBOutlet KPReorderTableView *tableView;
 @property (nonatomic) YoureAllDoneView *youreAllDoneView;
@@ -137,15 +138,17 @@
     self.tableView.indicatorDelegate = self;
 	// Do any additional setup after loading the view.
     
-    self.facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kShareButtonSize, kShareButtonSize)];
-    [self.facebookButton setImage:[UIImage imageNamed:@"share_facebook_button"] forState:UIControlStateNormal];
+    self.facebookButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, kShareButtonSize, kShareButtonSize)];
+    [self.facebookButton setImage:[UIImage imageNamed:@"round_facebook"] forState:UIControlStateNormal];
+    [self.facebookButton setImage:[UIImage imageNamed:@"round_facebook-high"] forState:UIControlStateHighlighted];
     [self.facebookButton addTarget:self action:@selector(pressedFacebook) forControlEvents:UIControlEventTouchUpInside];
     self.facebookButton.hidden = YES;
     [self.view addSubview:self.facebookButton];
     
     
-    self.twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kShareButtonSize, kShareButtonSize)];
-    [self.twitterButton setImage:[UIImage imageNamed:@"share_twitter_button"] forState:UIControlStateNormal];
+    self.twitterButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, kShareButtonSize, kShareButtonSize)];
+    [self.twitterButton setImage:[UIImage imageNamed:@"round_twitter"] forState:UIControlStateNormal];
+    [self.twitterButton setImage:[UIImage imageNamed:@"round_twitter-high"] forState:UIControlStateHighlighted];
     [self.twitterButton addTarget:self action:@selector(pressedTwitter) forControlEvents:UIControlEventTouchUpInside];
     self.twitterButton.hidden = YES;
     [self.view addSubview:self.twitterButton];

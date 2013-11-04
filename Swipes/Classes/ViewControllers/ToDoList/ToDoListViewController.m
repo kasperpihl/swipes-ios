@@ -49,6 +49,7 @@
 @property (nonatomic) BOOL isColored;
 @property (nonatomic) BOOL isHandlingTrigger;
 @property (nonatomic) BOOL isLonelyRider;
+@property (nonatomic) BOOL savedOffset;
 
 @property (nonatomic,strong) NSMutableDictionary *stateDictionary;
 @end
@@ -268,8 +269,9 @@
     self.isShowingItem = YES;
     
     ToDoCell *cell = (ToDoCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-    [self.tableView setContentOffset:CGPointMake(0, cell.frame.origin.y-SECTION_HEADER_HEIGHT) animated:YES];
     self.savedContentOffset = self.tableView.contentOffset;
+    self.savedOffset = YES;
+    [self.tableView setContentOffset:CGPointMake(0, cell.frame.origin.y-SECTION_HEADER_HEIGHT) animated:YES];
     
 }
 -(void)pressedEdit{
@@ -284,9 +286,10 @@
     [self deselectAllRows:self];
     self.isShowingItem = NO;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    if(!CGPointEqualToPoint(self.savedContentOffset,CGPointZero)){
+    if(self.savedOffset){
         [self.tableView setContentOffset:self.savedContentOffset animated:YES];
         self.savedContentOffset = CGPointZero;
+        self.savedOffset = NO;
     }
     [[self parent] show:YES controlsAnimated:YES];
 }
@@ -303,6 +306,7 @@
             }
             else{
                 [self.parent changeToIndex:0];
+                [self cleanUpAfterMovingAnimated:NO];
             }
         }
     }];
@@ -501,7 +505,6 @@
     self.swipingCell = nil;
     [self didUpdateCells];
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
-    
 }
 -(void)updateSearchBar{
     

@@ -17,7 +17,7 @@
 #define kSunImageDistance valForScreen(160, 100)
 #define kLabelSpacing valForScreen(0,0)
 #define kClockLabelY valForScreen(0,0)
-#define kClockLabelFont KP_EXTRABOLD(valForScreen(46,52))
+#define kClockLabelFont KP_EXTRABOLD(valForScreen(55,65))
 #define kDayLabelFont KP_REGULAR(valForScreen(16,19))
 #define kDefMiddleButtonRadius 60
 #define kDefActualSize 93
