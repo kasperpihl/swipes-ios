@@ -351,7 +351,7 @@ typedef enum {
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
         contentView.tag = CONTENT_VIEW_TAG;
-        NSMutableArray *seperatorArray = [NSMutableArray array];
+        /*NSMutableArray *seperatorArray = [NSMutableArray array];
         for(NSInteger i = 1 ; i < GRID_NUMBER ; i++){
             UIView *verticalSeperatorView = [self seperatorWithSize:CONTENT_VIEW_SIZE*(1-(SEPERATOR_MARGIN*2)) vertical:YES];
             verticalSeperatorView.tag = kSepVerTag;
@@ -364,7 +364,7 @@ typedef enum {
             [seperatorArray addObject:verticalSeperatorView];
             [seperatorArray addObject:horizontalSeperatorView];
         }
-        self.seperators = [seperatorArray copy];
+        self.seperators = [seperatorArray copy];*/
         /* Schedule buttons */
         UIButton *laterTodayButton = [self buttonForScheduleButton:KPScheduleButtonLaterToday title:@"Later Today"];
         [contentView addSubview:laterTodayButton];
