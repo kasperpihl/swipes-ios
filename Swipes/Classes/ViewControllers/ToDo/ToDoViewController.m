@@ -116,7 +116,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [contentView addSubview:self.titleContainerView];
         
         self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.titleContainerView.frame.size.height, 320, contentView.frame.size.height - self.titleContainerView.frame.size.height-TOOLBAR_HEIGHT)];
-        self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        //self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         self.scrollView.scrollEnabled = YES;
         self.scrollView.alwaysBounceVertical = YES;
         
@@ -194,7 +194,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /* Adding scroll and content view */
         [contentView addSubview:self.scrollView];
         
-        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-TOOLBAR_HEIGHT, contentView.frame.size.width, TOOLBAR_HEIGHT) items:@[@"backarrow_icon_white",@"toolbar_trashcan_icon",@"share_icon_white"]];
+        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-TOOLBAR_HEIGHT, contentView.frame.size.width, TOOLBAR_HEIGHT) items:@[@"backarrow_icon_white",@"trashcan_icon_white",@"share_icon_white"]];
         self.toolbarEditView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin);
         self.toolbarEditView.delegate = self;
         [contentView addSubview:self.toolbarEditView];
@@ -515,7 +515,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if([self.delegate respondsToSelector:@selector(scheduleToDoViewController:)]) [self.delegate scheduleToDoViewController:self];
 }
 -(void)pressedNotes:(id)sender{
-    CGFloat extra = (OSVER >= 7) ? 20 : 0;
+    CGFloat extra = (OSVER >= 7) ? 0 : 0;
     NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0+extra, 320, self.segmentedViewController.view.frame.size.height-extra)];
     [notesView setNotesText:self.model.notes title:self.model.title];
     notesView.delegate = self;
@@ -546,6 +546,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.repeatedContainer = nil;
     self.repeatedLabel = nil;
 }
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

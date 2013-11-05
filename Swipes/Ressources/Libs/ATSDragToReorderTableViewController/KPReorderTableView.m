@@ -3,8 +3,8 @@
 
 #define TAG_FOR_ABOVE_SHADOW_VIEW_WHEN_DRAGGING 100
 #define TAG_FOR_BELOW_SHADOW_VIEW_WHEN_DRAGGING 200
-#define CELL_WIDTH_SCALE 1.05
-#define CELL_HEIGHT_SCALE 1.09
+#define CELL_WIDTH_SCALE 1.08
+#define CELL_HEIGHT_SCALE 1.12
 #define CGRectSetGrowth(r) r = CGRectMake(r.origin.x - (CELL_GROW_WIDTH/2),r.origin.y - (CELL_GROW_HEIGHT/2),r.size.width + CELL_GROW_WIDTH,r.size.height + CELL_GROW_HEIGHT)
 @interface KPReorderTableView ()
 
@@ -234,7 +234,7 @@ typedef enum {
 		[self reloadRowsAtIndexPaths:@[indexPathOfSomeOtherRow] withRowAnimation:UITableViewRowAnimationNone];
 	self.draggedCell = [self cellPreparedToAnimateAroundAtIndexPath:indexPathOfRow];
 
-	[self.draggedCell setSelected:YES animated:NO];
+	//[self.draggedCell setSelected:NO animated:NO];
     
 	[UIView animateWithDuration:0.23 delay:0 options:(UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionCurveEaseInOut) animations:^{
         CGFloat widthScale = CELL_WIDTH_SCALE;

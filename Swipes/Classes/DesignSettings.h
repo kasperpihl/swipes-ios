@@ -59,7 +59,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 
 
 /* Table View */
-#define TABLE_EMPTY_BG_TEXT_HEIGHT      40
+#define TABLE_EMPTY_BG_TEXT_HEIGHT      20
 #define CELL_ALARM_FONT                 KP_REGULAR(11)
 
 /* Edit Task view */
@@ -109,15 +109,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #define DEFAULT_SPACE_FROM_SLIDE_UP_VIEW 60
 
 
-#define BUTTON_FONT                     KP_COND_BOLD(20)
 #define TAGS_LABEL_BOLD_FONT            KP_BOLD(11)
-#define TABLE_EMPTY_BG_FONT             KP_REGULAR(20)
+#define TABLE_EMPTY_BG_FONT             KP_LIGHT(16)
 #define NO_TAG_FONT                     KP_LIGHT(18)
 #define TEXT_FIELD_FONT                 KP_LIGHT(18)
 #define NOTES_VIEW_FONT                 KP_REGULAR(17)
-#define SECTION_HEADER_FONT             KP_LIGHT(12)
+#define SECTION_HEADER_FONT             KP_REGULAR(11)
 #define TITLE_LABEL_FONT                KP_REGULAR(18)
-#define TAGS_LABEL_FONT                 KP_REGULAR(12)
+#define TAGS_LABEL_FONT                 KP_REGULAR(11)
 #define TAG_FONT                        KP_LIGHT(18)
 
 
@@ -134,7 +133,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #define TEXT_FIELD_HEIGHT 30
 #define SEPERATOR_WIDTH .5
 
-#define SEGMENT_BUTTON_WIDTH 106
+#define SEGMENT_BUTTON_WIDTH 60//70//80//106
 #define SEGMENT_BUTTON_HEIGHT 44
 
 #define ALERT_BOX_BACKGROUND            gray(37,1)

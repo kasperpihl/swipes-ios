@@ -19,10 +19,11 @@
 @end
 @implementation MenuButton
 -(void)setHighlighted:(BOOL)highlighted{
+    [super setHighlighted:highlighted];
     [UIView transitionWithView:self.iconImageView
                       duration:0.3
                        options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^{ self.iconImageView.highlighted = highlighted; [super setHighlighted:highlighted];  }
+                    animations:^{ if(highlighted != self.iconImageView.highlighted) self.iconImageView.highlighted = highlighted; }
                     completion:nil];
 }
 -(void)setLampColor:(UIColor*)lampColor{
@@ -33,6 +34,7 @@
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title image:(UIImage*)image highlightedImage:(UIImage *)highlightedImage{
     self = [super initWithFrame:frame];
     if (self) {
+        self.adjustsImageWhenHighlighted = NO;
         UIColor *highlightedColor = alpha(tcolor(TextColor),0.5);
         self.titleLabel.font = SCHEDULE_BUTTON_FONT;
         [self setTitle:title forState:UIControlStateNormal];
@@ -41,7 +43,7 @@
         [self setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
         
         [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [self setTitleColor:alpha(tcolor(TextColor),0.6) forState:UIControlStateHighlighted];
+        //[self setTitleColor:alpha(tcolor(TextColor),0.6) forState:UIControlStateHighlighted];
         
         
         self.iconImageView = [[UIImageView alloc] initWithImage:image];

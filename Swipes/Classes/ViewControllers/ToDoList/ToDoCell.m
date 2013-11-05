@@ -25,7 +25,9 @@
 
 #define kClockSize 22
 #define kTimeLabelMarginRight 5
-
+#define ALARM_HACK 0
+#define ICON_SPACING 5
+#define ALARM_SPACING 3
 
 
 #define TITLE_DELTA_Y 0
@@ -107,14 +109,10 @@
         self.recurringIcon.hidden = YES;
         [self.contentView addSubview:self.recurringIcon];
         
-        UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kClockSize, kClockSize)];
+        UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
         alarmLabel.tag = ALARM_LABEL_TAG;
-        //alarmLabel.layer.cornerRadius = kClockSize /2;
         alarmLabel.font = TAGS_LABEL_FONT;
         alarmLabel.textColor = gray(170, 1);
-        //alarmLabel.backgroundColor = tbackground(BackgroundColor);
-        
-        //self.alarmLabel.numberOfLines = 1;
         alarmLabel.hidden = YES;
         [self.contentView addSubview:alarmLabel];
         self.alarmLabel = (UILabel*)[self.contentView viewWithTag:ALARM_LABEL_TAG];
@@ -127,24 +125,12 @@
     CGRectSetY(self.tagsLabel, TITLE_Y+self.titleLabel.frame.size.height+LABEL_SPACE);
     CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y);
     CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y);
-    //CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
+    CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
 }
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags{
-    BOOL showBottomLine = YES;
+    BOOL showBottomLine = NO;
     self.titleLabel.text = toDo.title;
-    
-    NSString *tagString = [toDo stringifyTags];
-    if(selectedTags && selectedTags.count > 0 && [self.tagsLabel respondsToSelector:@selector(setAttributedText:)] && tagString && tagString.length > 0){
-        [self.tagsLabel setAttributedText:[toDo stringForSelectedTags:selectedTags]];
-    }else{
-        if (!tagString || tagString.length == 0){
-            showBottomLine = NO;
-            tagString = @"";
-        }
-        self.tagsLabel.font = TAGS_LABEL_FONT;
-        self.tagsLabel.text = tagString;
-    }
     CGFloat deltaX = CELL_LABEL_X;
     self.notesIcon.hidden = YES;
     self.recurringIcon.hidden = YES;
@@ -163,24 +149,36 @@
     
     
     self.alarmLabel.hidden = YES;
-    if((toDo.schedule) || toDo.completionDate){
+    if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
         NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
-        if(toDo.schedule && [toDo.schedule isInPast]){
-            self.alarmLabel.text = @"";
-        }
-        self.alarmLabel.center = CGPointMake(CELL_LABEL_X/2, CELL_HEIGHT/2);
-        //self.alarmLabel.frame = CGRectSetPos(self.alarmLabel.frame, self.frame.size.width-self.alarmLabel.frame.size.width-kTimeLabelMarginRight, (CELL_HEIGHT-self.alarmLabel.frame.size.height)/2);
-        //if(self.cellType != CellTypeToday) self.alarmLabel.hidden = NO;
+        NSString *dateInString = [UtilityClass timeStringForDate:showDate];
+        self.alarmLabel.text = dateInString;
+        if(deltaX > CELL_LABEL_X) self.alarmLabel.text = [@"//  " stringByAppendingString:self.alarmLabel.text];
+        [self.alarmLabel sizeToFit];
+        //self.alarmLabel.textColor = [StyleHandler colorForCellType:self.cellType];
+        CGRectSetX(self.alarmLabel,deltaX);
+        deltaX += self.alarmLabel.frame.size.width + kIconSpacing;
+        self.alarmLabel.hidden = NO;
+        showBottomLine = YES;
     }
-    //else self.outlineView.hidden = NO;
     
-    
-    
+    CGRectSetWidth(self.tagsLabel, self.frame.size.width - deltaX - CELL_LABEL_X/2);
     CGRectSetX(self.tagsLabel,deltaX);
-    //CGFloat deltaX = CELL_LABEL_X;
     
-    
-    
+    NSString *tagString = [toDo stringifyTags];
+    if (tagString && tagString.length > 0){
+        showBottomLine = YES;
+    }
+    if(selectedTags && selectedTags.count > 0 && [self.tagsLabel respondsToSelector:@selector(setAttributedText:)] && tagString && tagString.length > 0){
+        NSMutableAttributedString *mutableAttributedString = [[toDo stringForSelectedTags:selectedTags] mutableCopy];
+        if(deltaX > CELL_LABEL_X) [mutableAttributedString insertAttributedString:[[NSAttributedString alloc] initWithString:@"//  " attributes:Nil] atIndex:0];
+        [self.tagsLabel setAttributedText:mutableAttributedString];
+        
+    }else{
+        self.tagsLabel.font = TAGS_LABEL_FONT;
+        self.tagsLabel.text = tagString;
+        if(deltaX > CELL_LABEL_X && self.tagsLabel.text.length > 0) self.tagsLabel.text = [@"//  " stringByAppendingString:self.tagsLabel.text];
+    }
     
     [self setTextLabels:showBottomLine];
 }

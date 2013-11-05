@@ -153,6 +153,7 @@ static RESideMenu *sharedObject;
                                                                   evaluationObject:[[ExponentialDecayEvaluator alloc] initWithCoefficient:6.0]
                                                                  interstitialSteps:INTERSTITIAL_STEPS];
     animation.removedOnCompletion = NO;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
     [view.layer addAnimation:animation forKey:path];
 }
 
@@ -244,22 +245,22 @@ static RESideMenu *sharedObject;
 #pragma mark Gestures
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender
 {
-    
+    CGFloat translationThreshold = 50.0f;
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     CGPoint translation = [sender translationInView:window];
     if (sender.state == UIGestureRecognizerStateBegan) {
         _initialX = _screenshotView.frame.origin.x;
     }
-    if(translation.x > 0) [self show];
+    if(translation.x > translationThreshold) [self show];
 	if(!self.isShowing) return;
     if (sender.state == UIGestureRecognizerStateChanged) {
         
-        CGFloat x = translation.x + _initialX;
+        CGFloat x = translation.x + _initialX - translationThreshold;
         CGFloat targetX = window.frame.size.width;
         if(x > targetX) x = targetX;
         if(x < 0) x = 0;
         
-        CGFloat startFadingInPlace = 0.25;
+        CGFloat startFadingInPlace = 0.15;
         CGFloat percentage = x/targetX;
         
         _screenshotView.frame = [self frameForPercentage:percentage];
@@ -271,7 +272,8 @@ static RESideMenu *sharedObject;
         _revealView.alpha = revealOpacity;
     }
     if (sender.state == UIGestureRecognizerStateEnded) {
-        if ([sender velocityInView:window].x < 0) {
+        
+        if ([sender velocityInView:window].x < 0 || _screenshotView.frame.origin.x < 20) {
             [self restoreFromRect:_screenshotView.frame];
         } else {
             [self minimizeFromRect:_screenshotView.frame];

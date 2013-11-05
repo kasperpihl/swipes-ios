@@ -76,7 +76,13 @@
     NSInteger numberOfRows = ceil(numberOfButtons/kVerticalGridNumber);
     self.view.backgroundColor = [UIColor clearColor];
 	// Do any additional setup after loading the view.
-    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-kToolbarHeight, self.view.bounds.size.width, kToolbarHeight) items:@[@"logout_icon_white",@"menu_back"]];
+    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-kToolbarHeight, self.view.bounds.size.width, kToolbarHeight) items:@[@"share_icon_white",@"backarrow_icon_white"]];
+    UIButton *logout = [self.toolbar.barButtons objectAtIndex:0];
+    CGRect frame = logout.frame;
+    logout.transform = CGAffineTransformMakeRotation(-M_PI/2);
+    logout.frame = frame;
+    UIButton *backArrow = [self.toolbar.barButtons objectAtIndex:1];
+    backArrow.transform = CGAffineTransformMakeRotation(M_PI);
     //[self.toolbar setBackgroundColor:tbackground(BackgroundColor)];
     self.toolbar.delegate = self;
     [self.view addSubview:self.toolbar];

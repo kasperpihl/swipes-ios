@@ -65,7 +65,7 @@
         
         
         
-        KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[@"toolbar_edit_icon",@"toolbar_tag_icon",@"toolbar_trashcan_icon",@"toolbar_share_icon"]];
+        KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[@"edit_icon_white",@"tag_icon_white",@"trashcan_icon_white",@"share_icon_white"]];
         editToolbar.tag = EDIT_TOOLBAR_TAG;
         editToolbar.delegate = self;
         /*CAGradientLayer *gradient = [CAGradientLayer layer];

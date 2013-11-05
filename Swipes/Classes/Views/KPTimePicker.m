@@ -5,14 +5,8 @@
 //  Created by Kasper Pihl Tornøe on 01/08/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define TIME_VIEWER_LABEL_TAG 9
-#define TIME_SLIDER_TAG 10
-#define TIME_VIEWER_TAG 8
 #define kMinutesInDay 1440
 #define kMinutesInHalfDay 720
-
-#define kDefWheelRadius valForScreen(115,125)
-
 
 #define kSunImageDistance valForScreen(160, 100)
 #define kLabelSpacing valForScreen(0,0)
@@ -44,7 +38,6 @@
 #define kMoonSetSpan            (kMoonSetMinutes)
 #define kGlowShowHack           0.4
 #define kGlowMiddleShowHack     0.12
-#define kGlowAnimationDuration  0.2f
 #define kBackButtonSize         52
 
 #import <QuartzCore/QuartzCore.h>
@@ -133,7 +126,7 @@
     }
     angleInterval = angleInterval*M_PI/180;
     CGFloat distanceToMiddle = distanceBetween(self.centerPoint, location);
-    self.isInConfirmButton = (distanceToMiddle < self.middleRadius);
+    self.isInConfirmButton = (distanceToMiddle < kDefMiddleButtonRadius);
     self.isOutOfScope = (distanceToMiddle < kDefClearMiddle);
     if (sender.state == UIGestureRecognizerStateChanged || sender.state == UIGestureRecognizerStateBegan) {
         if(!self.isOutOfScope){
@@ -263,8 +256,6 @@
     if (self) {
         self.centerPoint = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/3*2);
         self.distanceForIcons = kSunImageDistance;
-        self.wheelRadius = kDefWheelRadius;
-        self.middleRadius = kDefMiddleButtonRadius;
         self.lightColor = kDefLightColor;
         self.darkColor = kDefDarkColor;
         
@@ -302,7 +293,6 @@
         self.backButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin);
         [self.backButton setImage:[UIImage imageNamed:@"round_backarrow_big"] forState:UIControlStateNormal];
         [self.backButton setImage:[UIImage imageNamed:@"round_backarrow_big-high"] forState:UIControlStateHighlighted];
-        //self.backButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         [self.backButton addTarget:self action:@selector(pressedBackButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.backButton];
         
@@ -323,6 +313,7 @@
         self.clockLabel.font = kClockLabelFont;
         self.clockLabel.textAlignment = UITextAlignmentCenter;
         [self addSubview:self.clockLabel];
+        [self layoutSubviews];
     }
     return self;
 }
@@ -330,7 +321,7 @@
     [super layoutSubviews];
     if(!self.pickingDate) self.pickingDate = [NSDate date];
     else [self updateForDate:self.pickingDate];
-    CGFloat heightForContent = self.centerPoint.y - self.wheelRadius;
+    CGFloat heightForContent = self.centerPoint.y - self.timeSlider.frame.size.height/2;
     
     
     CGFloat heightForDay = sizeWithFont(@"abcdefghADB",self.dayLabel.font).height;
@@ -343,7 +334,7 @@
     self.dayLabel.frame = CGRectMake(0, spacing, self.bounds.size.width, heightForDay);
     self.clockLabel.frame = CGRectMake(0, spacing+heightForDay+kLabelSpacing, self.bounds.size.width, heightForTime);
     
-    self.distanceForIcons = self.wheelRadius + spacing*1.5 + iconHeigt/2;
+    self.distanceForIcons = self.timeSlider.frame.size.height/2 + spacing*1.5 + iconHeigt/2;
 }
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return YES;

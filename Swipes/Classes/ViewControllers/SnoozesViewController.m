@@ -116,6 +116,7 @@
             break;
         }
         case SnoozeLaterToday:{
+            [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
             [formatter setDateFormat:@"'+'H':'mm'h'"];
             break;
         }
@@ -144,6 +145,7 @@
 -(NSString *)timePicker:(KPTimePicker *)timePicker clockForDate:(NSDate *)time{
     if(self.activeSnooze == SnoozeLaterToday){
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
         [formatter setDateFormat:@"'+'H':'mm'h'"];
         return [formatter stringFromDate:time];
     }

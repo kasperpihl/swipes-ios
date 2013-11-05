@@ -19,8 +19,6 @@
 @interface KPTimePicker : UIView
 
 @property (nonatomic,weak) NSObject<KPTimePickerDelegate> *delegate;
-@property (nonatomic) NSInteger wheelRadius;
-@property (nonatomic) NSInteger middleRadius;
 
 @property (nonatomic,strong) NSDate *pickingDate;
 @property (nonatomic,strong) NSDate *minimumDate;

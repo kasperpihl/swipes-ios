@@ -595,7 +595,7 @@
     if (![self.state isEqualToString:@"today"]) [self.view addSubview:imageView];
     self.backgroundImage = (UIImageView*)[self.view viewWithTag:BACKGROUND_IMAGE_VIEW_TAG];
     
-    UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.center.y+70, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
+    UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.center.y+50, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
     menuText.backgroundColor = CLEAR;
     menuText.font = TABLE_EMPTY_BG_FONT;
     NSString *text;
@@ -604,7 +604,7 @@
             text = @"Done";
             break;
         case CellTypeSchedule:
-            text = @"Later";
+            text = @"Schedule";
             break;
         default:
             text = @"";
@@ -612,7 +612,7 @@
     }
     menuText.text = text;
     menuText.textAlignment = UITextAlignmentCenter;
-    menuText.textColor = tcolor(TextColor);
+    menuText.textColor = [StyleHandler colorForCellType:self.cellType];
     menuText.tag = MENU_TEXT_TAG;
     [self.view addSubview:menuText];
     self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];
