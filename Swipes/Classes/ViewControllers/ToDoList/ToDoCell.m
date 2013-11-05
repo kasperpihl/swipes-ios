@@ -52,6 +52,7 @@
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
 @property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
+@property (nonatomic) IBOutlet UILabel *alarmSeperator;
 
 @property (nonatomic,strong) UIImageView *notesIcon;
 @property (nonatomic,strong) UIImageView *recurringIcon;
@@ -114,6 +115,15 @@
         alarmLabel.font = TAGS_LABEL_FONT;
         alarmLabel.textColor = gray(170, 1);
         alarmLabel.hidden = YES;
+        
+        self.alarmSeperator = [[UILabel alloc] init];
+        self.alarmSeperator.font = TAGS_LABEL_FONT;
+        self.alarmSeperator.text = @"//";
+        self.alarmSeperator.hidden = YES;
+        [self.alarmSeperator sizeToFit];
+        CGRectSetHeight(self.alarmSeperator,TAGS_LABEL_HEIGHT);
+        self.alarmSeperator.textColor = gray(170,1);
+        [self.contentView addSubview:self.alarmSeperator];
         [self.contentView addSubview:alarmLabel];
         self.alarmLabel = (UILabel*)[self.contentView viewWithTag:ALARM_LABEL_TAG];
     }
@@ -126,21 +136,46 @@
     CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y);
     CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y);
     CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
+    CGRectSetCenterY(self.alarmSeperator, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
 }
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags{
     BOOL showBottomLine = NO;
     self.titleLabel.text = toDo.title;
-    CGFloat deltaX = CELL_LABEL_X;
+    __block CGFloat deltaX = CELL_LABEL_X;
+    self.alarmLabel.hidden = YES;
+    __block BOOL alarmLabel = NO;
+    if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
+        NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
+        NSString *dateInString = [UtilityClass timeStringForDate:showDate];
+        self.alarmLabel.text = dateInString;
+        //if(deltaX > CELL_LABEL_X) self.alarmLabel.text = [@"//  " stringByAppendingString:self.alarmLabel.text];
+        [self.alarmLabel sizeToFit];
+        //self.alarmLabel.textColor = [StyleHandler colorForCellType:self.cellType];
+        CGRectSetX(self.alarmLabel,deltaX);
+        deltaX += self.alarmLabel.frame.size.width + kIconSpacing;
+        self.alarmLabel.hidden = NO;
+        showBottomLine = YES;
+        alarmLabel = YES;
+    }
+    self.alarmSeperator.hidden = YES;
+    voidBlock block = ^(void) {
+        self.alarmSeperator.hidden = NO;
+        CGRectSetX(self.alarmSeperator, deltaX);
+        deltaX += self.alarmSeperator.frame.size.width + kIconSpacing;
+        alarmLabel = NO;
+    };
     self.notesIcon.hidden = YES;
     self.recurringIcon.hidden = YES;
     if(toDo.notes && toDo.notes.length > 0){
+        if(alarmLabel) block();
         self.notesIcon.hidden = NO;
         showBottomLine = YES;
         CGRectSetX(self.notesIcon, deltaX);
         deltaX += self.notesIcon.frame.size.width + kIconSpacing;
     }
     if(toDo.repeatOptionValue > RepeatNever){
+        if(alarmLabel) block();
         self.recurringIcon.hidden = NO;
         showBottomLine = YES;
         CGRectSetX(self.recurringIcon, deltaX);
@@ -148,19 +183,7 @@
     }
     //if(showBottomLine) deltaX += kIconSpacing;
     
-    self.alarmLabel.hidden = YES;
-    if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
-        NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
-        NSString *dateInString = [UtilityClass timeStringForDate:showDate];
-        self.alarmLabel.text = dateInString;
-        //if(deltaX > CELL_LABEL_X) self.alarmLabel.text = [@"//  " stringByAppendingString:self.alarmLabel.text];
-        [self.alarmLabel sizeToFit];
-        self.alarmLabel.textColor = [StyleHandler colorForCellType:self.cellType];
-        CGRectSetX(self.alarmLabel,deltaX);
-        deltaX += self.alarmLabel.frame.size.width + kIconSpacing;
-        self.alarmLabel.hidden = NO;
-        showBottomLine = YES;
-    }
+    
     
     CGRectSetWidth(self.tagsLabel, self.frame.size.width - deltaX - CELL_LABEL_X/2);
     CGRectSetX(self.tagsLabel,deltaX);
@@ -171,13 +194,13 @@
     }
     if(selectedTags && selectedTags.count > 0 && [self.tagsLabel respondsToSelector:@selector(setAttributedText:)] && tagString && tagString.length > 0){
         NSMutableAttributedString *mutableAttributedString = [[toDo stringForSelectedTags:selectedTags] mutableCopy];
-        //if(deltaX > CELL_LABEL_X) [mutableAttributedString insertAttributedString:[[NSAttributedString alloc] initWithString:@"//  " attributes:Nil] atIndex:0];
+        if(deltaX > CELL_LABEL_X) [mutableAttributedString insertAttributedString:[[NSAttributedString alloc] initWithString:@"//  " attributes:Nil] atIndex:0];
         [self.tagsLabel setAttributedText:mutableAttributedString];
         
     }else{
         self.tagsLabel.font = TAGS_LABEL_FONT;
         self.tagsLabel.text = tagString;
-        //if(deltaX > CELL_LABEL_X && self.tagsLabel.text.length > 0) self.tagsLabel.text = [@"//  " stringByAppendingString:self.tagsLabel.text];
+        if(deltaX > CELL_LABEL_X && self.tagsLabel.text.length > 0) self.tagsLabel.text = [@"//  " stringByAppendingString:self.tagsLabel.text];
     }
     
     [self setTextLabels:showBottomLine];
