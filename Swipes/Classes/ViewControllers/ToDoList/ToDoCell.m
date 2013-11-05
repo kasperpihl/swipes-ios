@@ -146,16 +146,16 @@
         CGRectSetX(self.recurringIcon, deltaX);
         deltaX += self.recurringIcon.frame.size.width + kIconSpacing;
     }
-    
+    //if(showBottomLine) deltaX += kIconSpacing;
     
     self.alarmLabel.hidden = YES;
     if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
         NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
         NSString *dateInString = [UtilityClass timeStringForDate:showDate];
         self.alarmLabel.text = dateInString;
-        if(deltaX > CELL_LABEL_X) self.alarmLabel.text = [@"//  " stringByAppendingString:self.alarmLabel.text];
+        //if(deltaX > CELL_LABEL_X) self.alarmLabel.text = [@"//  " stringByAppendingString:self.alarmLabel.text];
         [self.alarmLabel sizeToFit];
-        //self.alarmLabel.textColor = [StyleHandler colorForCellType:self.cellType];
+        self.alarmLabel.textColor = [StyleHandler colorForCellType:self.cellType];
         CGRectSetX(self.alarmLabel,deltaX);
         deltaX += self.alarmLabel.frame.size.width + kIconSpacing;
         self.alarmLabel.hidden = NO;
@@ -171,13 +171,13 @@
     }
     if(selectedTags && selectedTags.count > 0 && [self.tagsLabel respondsToSelector:@selector(setAttributedText:)] && tagString && tagString.length > 0){
         NSMutableAttributedString *mutableAttributedString = [[toDo stringForSelectedTags:selectedTags] mutableCopy];
-        if(deltaX > CELL_LABEL_X) [mutableAttributedString insertAttributedString:[[NSAttributedString alloc] initWithString:@"//  " attributes:Nil] atIndex:0];
+        //if(deltaX > CELL_LABEL_X) [mutableAttributedString insertAttributedString:[[NSAttributedString alloc] initWithString:@"//  " attributes:Nil] atIndex:0];
         [self.tagsLabel setAttributedText:mutableAttributedString];
         
     }else{
         self.tagsLabel.font = TAGS_LABEL_FONT;
         self.tagsLabel.text = tagString;
-        if(deltaX > CELL_LABEL_X && self.tagsLabel.text.length > 0) self.tagsLabel.text = [@"//  " stringByAppendingString:self.tagsLabel.text];
+        //if(deltaX > CELL_LABEL_X && self.tagsLabel.text.length > 0) self.tagsLabel.text = [@"//  " stringByAppendingString:self.tagsLabel.text];
     }
     
     [self setTextLabels:showBottomLine];
