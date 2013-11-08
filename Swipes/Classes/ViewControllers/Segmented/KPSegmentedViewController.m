@@ -350,7 +350,7 @@
         self.backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
         self.backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
         self.backgroundImage.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-        [self.backgroundImage setImage:[[UIImage imageNamed:@"background-5.jpg"] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
+        [self.backgroundImage setImage:[[UIImage imageNamed:@"background-6.png"] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
         self.backgroundImage.alpha = 0;
         UIView *overlay = [[UIView alloc] initWithFrame:self.backgroundImage.bounds];
         overlay.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);

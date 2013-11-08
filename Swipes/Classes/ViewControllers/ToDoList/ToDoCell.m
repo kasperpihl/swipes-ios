@@ -89,7 +89,6 @@
         
         // 4
         UIView *selectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 6, CELL_HEIGHT)];//CGRectMake((CELL_LABEL_X/2),0, LINE_SIZE,CELL_HEIGHT)]; //];
-        NSLog(@"%f",selectionView.frame.size.width);
         selectionView.tag = SELECTION_TAG;
         selectionView.hidden = YES;
         //timelineLine.autoresizingMask = (UIViewAutoresizingFlexibleHeight);

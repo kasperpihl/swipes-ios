@@ -35,14 +35,54 @@
     [context performBlockAndWait:^{
         NSDictionary *keyMatch = [self keyMatch];
         for(NSString *pfKey in [object allKeys]){
+            id pfValue = [object objectForKey:pfKey];
             if([pfKey isEqualToString:@"repeatOption"]){
-                if(![[self stringForRepeatOption:self.repeatOptionValue] isEqualToString:[object objectForKey:@"repeatOption"]]) self.repeatOptionValue = [self optionForRepeatString:[object objectForKey:@"repeatOption"]];
+                if(![[self stringForRepeatOption:self.repeatOptionValue] isEqualToString:pfValue]) self.repeatOptionValue = [self optionForRepeatString:pfValue];
+                continue;
+            }
+            if([pfKey isEqualToString:@"tags"]){
+                NSArray *tagsFromServer = (NSArray*)pfValue;
+                NSLog(@"tags:%@",tagsFromServer);
+                NSMutableArray *objectIDs = [NSMutableArray array];
+                
+                for(PFObject *tag in tagsFromServer){
+                    if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:tag.objectId];
+                }
+                if(objectIDs.count > 0){
+                    NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"objectId",objectIDs];
+                    NSArray *tagsObjects = [KPTag MR_findAllWithPredicate:tagPredicate inContext:context];
+                    NSLog(@"objIds:%@",objectIDs);
+                    NSMutableArray *tagStrings = [NSMutableArray array];
+                    NSInteger tagCount = tagsObjects.count;
+                    NSMutableArray *notSortedTags = [NSMutableArray array];
+                    for(NSInteger i = 0 ; i < tagCount ; i++) [tagStrings addObject:[NSNull null]];
+                    for(KPTag *tag in tagsObjects){
+                        NSInteger index = [objectIDs indexOfObject:tag.objectId];
+                        if(index != NSNotFound && index < tagCount) [tagStrings replaceObjectAtIndex:index withObject:tag.title];
+                        else{
+                            [notSortedTags addObject:tag.title];
+                        }
+                    }
+                    if(notSortedTags.count > 0){
+                        NSInteger counter = 0;
+                        for(NSInteger i = 0 ; i < tagCount ; i++){
+                            if([tagStrings objectAtIndex:i] == [NSNull null]) [tagStrings replaceObjectAtIndex:i withObject:[notSortedTags objectAtIndex:counter++]];
+                        }
+                    }
+                    self.tagString = [tagStrings componentsJoinedByString:@", "];
+                    self.tags = [NSSet setWithArray:tagsObjects];
+                    
+                }
+                else {
+                    self.tagString = @"";
+                    self.tags = [NSSet set];
+                }
                 continue;
             }
             NSString *cdKey = [keyMatch objectForKey:pfKey];
             if(cdKey){
                 id cdValue = [self valueForKey:cdKey];
-                id pfValue = [object objectForKey:pfKey];
+                
                 if([cdValue isKindOfClass:[NSString class]] && [pfValue isKindOfClass:[NSString class]]){ checkStringWithKey(object, pfValue, cdKey, cdValue); }
                 else if([cdValue isKindOfClass:[NSDate class]] && [pfValue isKindOfClass:[NSDate class]]){ checkDateWithKey(object, pfValue, cdKey, cdValue); }
                 else if([cdValue isKindOfClass:[NSNumber class]] && [pfValue isKindOfClass:[NSNumber class]]){ checkNumberWithKey(object, pfValue, cdKey, cdValue); }
@@ -72,10 +112,28 @@
         shouldUpdate = YES;
     }
     if(setAll || [changedAttributes containsObject:@"tags"]){
-        NSMutableArray *tagArray = [NSMutableArray arrayWithCapacity:self.tags.count];
+        NSInteger tagCount = self.tags.count;
+        NSMutableArray *tagArray = [NSMutableArray arrayWithCapacity:tagCount];
+        NSArray *tagsFromString = [self.tagString componentsSeparatedByString:@", "];
+        for (NSInteger i = 0; i < tagCount; ++i) [tagArray addObject:[NSNull null]];
+        NSMutableArray *emptyObjects = [NSMutableArray array];
+
         for(KPTag *tag in self.tags){
-            [tagArray addObject:[tag emptyObjectForSaving]];
+            NSInteger index = [tagsFromString indexOfObject:tag.title];
+            PFObject *objectToSave = [tag emptyObjectForSaving];
+            if(index != NSNotFound && index < tagCount) [tagArray replaceObjectAtIndex:index withObject:objectToSave];
+            else [emptyObjects addObject:objectToSave];
         }
+        
+        if(emptyObjects.count > 0){
+            NSInteger emptyCount = 0;
+            for(NSInteger i = 0 ; i < tagArray.count ; i++){
+                if([tagArray objectAtIndex:i] == [NSNull null]){
+                    [tagArray replaceObjectAtIndex:i withObject:[emptyObjects objectAtIndex:emptyCount++]];
+                }
+            }
+        }
+        NSLog(@"tag array to save:%@",tagArray);
         [*object setObject:tagArray forKey:@"tags"];
         shouldUpdate = YES;
     }
@@ -311,7 +369,6 @@
 }
 -(void)deleteToDoSave:(BOOL)save{
     [self MR_deleteEntity];
-#warning Handle deleted objects in synchronize
     if(save) [self save];
 }
 -(NSArray *)textTags{

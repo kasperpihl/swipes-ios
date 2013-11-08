@@ -152,7 +152,15 @@
         CGRectSetY(self.toolbar, self.view.bounds.size.height);
     } completion:^(BOOL finished) {
         showingView.alpha = 0;
-        if(level == 1) [self.toolbar setItems:@[@"logout_icon_white",@"menu_back"]];
+        if(level == 1){
+            [self.toolbar setItems:@[@"share_icon_white",@"backarrow_icon_white"]];
+            UIButton *logout = [self.toolbar.barButtons objectAtIndex:0];
+            CGRect frame = logout.frame;
+            logout.transform = CGAffineTransformMakeRotation(-M_PI/2);
+            logout.frame = frame;
+            UIButton *backArrow = [self.toolbar.barButtons objectAtIndex:1];
+            backArrow.transform = CGAffineTransformMakeRotation(M_PI);
+        }
         [UIView animateWithDuration:0.2 animations:^{
             CGRectSetY(self.toolbar, self.view.bounds.size.height-kToolbarHeight);
         } completion:^(BOOL finished) {

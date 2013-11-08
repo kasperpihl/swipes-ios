@@ -13,7 +13,7 @@
 #import "NSDate-Utilities.h"
 #import <Parse/PFQuery.h>
 #import <Parse/PFRelation.h>
-#import "TWStatus.h"
+#import "Reachability.h"
 
 #define kFetchLimit 0
 
@@ -23,9 +23,11 @@
 @interface KPParseCoreData ()
 @property (nonatomic,assign) BOOL isPerformingOperation;
 @property (nonatomic,assign) BOOL didLogout;
+@property (nonatomic) Reachability *reach;
 @property (nonatomic) NSMutableDictionary *tmpUpdatingObjects;
 @property (nonatomic) NSMutableDictionary *deleteObjects;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
+@property BOOL needSync;
 @property BOOL syncAgain;
 @property BOOL isSyncing;
 @property BOOL lockSaving;
@@ -63,7 +65,7 @@
         }
     }];
     [context MR_saveToPersistentStoreAndWait];
-    //[self synchronize];
+    [self synchronize];
     return;
 }
 +(NSString *)classNameFromParseName:(NSString *)parseClassName{
@@ -75,12 +77,21 @@ static KPParseCoreData *sharedObject;
     if(!sharedObject){
         sharedObject = [[KPParseCoreData allocWithZone:NULL] init];
         [sharedObject initialize];
+        
     }
     return sharedObject;
 }
 -(void)parseTest{
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"ToDo"];
+    [query whereKey:@"updatedAt" greaterThan:[[NSDate date] dateBySubtractingMinutes:1]];
+    NSArray *objects = [query findObjects];
+    for (PFObject *object in objects) {
+        NSLog(@"obj:%@",objects);
+    }
     return;
-    NSInteger testNumber = 1;
+    /*NSInteger testNumber = 1;
+    
     PFObject *class = [PFObject objectWithClassName:@"TestClass"];
     [class setObject:[@"testing-" stringByAppendingFormat:@"%i",testNumber] forKey:@"title"];
 
@@ -98,19 +109,29 @@ static KPParseCoreData *sharedObject;
         [object setObject:[@"Testing-" stringByAppendingFormat:@"%i",i] forKey:@"title"];
         [array addObject:object];
     }
-    /*PFRelation *relation = [class relationforKey:@"targetsRelation"];
+    PFRelation *relation = [class relationforKey:@"targetsRelation"];
     [relation addObject:target1];
-    [relation addObject:target2];*/
+    [relation addObject:target2];
     NSError *error;
     [PFObject saveAll:array error:&error];
     if(error){
         NSLog(@"error:%@",error);
-    }
+    }*/
 }
 #pragma mark Core data stuff
 -(void)initialize{
     self.backgroundTask = UIBackgroundTaskInvalid;
     [self loadDatabase];
+    sharedObject.reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    // Set the blocks
+    sharedObject.reach.reachableBlock = ^(Reachability*reach)
+    {
+        if(sharedObject.needSync) [sharedObject synchronize];
+    };
+    
+    // Start the notifier, which will cause the reachability object to retain itself!
+    [sharedObject.reach startNotifier];
+    [self parseTest];
 }
 -(void)loadDatabase{
     @try {
@@ -155,9 +176,15 @@ static KPParseCoreData *sharedObject;
         self.syncAgain = YES;
         return;
     }
-    self.isSyncing = YES;
-    [TWStatus showLoadingWithStatus:@"Synchronizing"];
     
+    /* Testing for network connection */
+    if(self.needSync) self.needSync = NO;
+    if(!self.reach.isReachable){
+        self.needSync = YES;
+        return;
+    }
+    
+    self.isSyncing = YES;
     CGFloat startTime = CACurrentMediaTime();
     [self updateTMPObjects];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(objectId IN %@) OR (objectId = nil)",[self.updateObjects allKeys]];
@@ -174,7 +201,7 @@ static KPParseCoreData *sharedObject;
             PFObject *pfObj = [object objectToSaveInContext:localContext];
             if(!pfObj){
                 NSLog(@"skipped object:%@",object.objectId);
-                [self.updateObjects removeObjectForKey:object.objectId];
+                if(object && object.objectId) [self.updateObjects removeObjectForKey:object.objectId];
                 continue;
             }
             [updatePFObjects addObject:pfObj];
@@ -239,8 +266,6 @@ static KPParseCoreData *sharedObject;
         if(error){
             NSLog(@"error query:%@",error);
             [self endBackgroundHandler];
-            [TWStatus showStatus:@"Sync failed"];
-            [TWStatus dismissAfter:2.5];
             return;
         }
         for(PFObject *object in allObjects){
@@ -263,8 +288,6 @@ static KPParseCoreData *sharedObject;
         if(error) NSLog(@"error from update");
         self.isSyncing = NO;
         [self endBackgroundHandler];
-        [TWStatus showStatus:@"Sync completed"];
-        [TWStatus dismissAfter:2.5];
         if(self.syncAgain) {
             [self synchronize];
         }

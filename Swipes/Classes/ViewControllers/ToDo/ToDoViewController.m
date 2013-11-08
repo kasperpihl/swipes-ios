@@ -346,7 +346,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetHeight(self.titleContainerView,titleHeight);
     CGRectSetY(self.scrollView, titleHeight);
     CGRectSetHeight(self.scrollView, self.contentView.frame.size.height-titleHeight-TOOLBAR_HEIGHT);
-    NSLog(@"textview growing");
 }
 #pragma mark NotesViewDelegate
 
