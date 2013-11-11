@@ -82,14 +82,14 @@ static KPParseCoreData *sharedObject;
     return sharedObject;
 }
 -(void)parseTest{
-    
+    return;
     PFQuery *query = [PFQuery queryWithClassName:@"ToDo"];
     [query whereKey:@"updatedAt" greaterThan:[[NSDate date] dateBySubtractingMinutes:1]];
     NSArray *objects = [query findObjects];
     for (PFObject *object in objects) {
         NSLog(@"obj:%@",objects);
     }
-    return;
+    
     /*NSInteger testNumber = 1;
     
     PFObject *class = [PFObject objectWithClassName:@"TestClass"];

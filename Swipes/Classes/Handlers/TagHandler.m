@@ -28,14 +28,16 @@ static TagHandler *sharedObject;
     [ANALYTICS incrementKey:NUMBER_OF_ADDED_TAGS_KEY withAmount:1];
 }
 -(void)updateTags:(NSArray *)tags remove:(BOOL)remove toDos:(NSArray *)toDos save:(BOOL)save{
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
-    NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
-    for(KPToDo *toDo in toDos){
-        [toDo updateTagSet:tagsSet withTags:tags remove:remove];
+    if(tags){
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
+        NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
+        for(KPToDo *toDo in toDos){
+            [toDo updateTagSet:tagsSet withTags:tags remove:remove];
+        }
+        if(save) [self save];
+        if(remove) [ANALYTICS incrementKey:NUMBER_OF_RESIGNED_TAGS_KEY withAmount:toDos.count];
+        else [ANALYTICS incrementKey:NUMBER_OF_ASSIGNED_TAGS_KEY withAmount:toDos.count];
     }
-    if(save) [self save];
-    if(remove) [ANALYTICS incrementKey:NUMBER_OF_RESIGNED_TAGS_KEY withAmount:toDos.count];
-    else [ANALYTICS incrementKey:NUMBER_OF_ASSIGNED_TAGS_KEY withAmount:toDos.count];
 }
 -(void)save{
     [KPCORE saveInContext:nil];

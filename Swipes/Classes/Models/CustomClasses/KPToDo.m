@@ -49,9 +49,10 @@
                     if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:tag.objectId];
                 }
                 if(objectIDs.count > 0){
-                    NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"objectId",objectIDs];
+                    NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"objectId",[objectIDs copy]];
+                    NSLog(@"self:%@ objIds:%@",self.objectId,objectIDs);
                     NSArray *tagsObjects = [KPTag MR_findAllWithPredicate:tagPredicate inContext:context];
-                    NSLog(@"objIds:%@",objectIDs);
+                    
                     NSMutableArray *tagStrings = [NSMutableArray array];
                     NSInteger tagCount = tagsObjects.count;
                     NSMutableArray *notSortedTags = [NSMutableArray array];

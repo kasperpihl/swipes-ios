@@ -150,7 +150,7 @@
         self.alarmLabel.text = dateInString;
         //if(deltaX > CELL_LABEL_X) self.alarmLabel.text = [@"//  " stringByAppendingString:self.alarmLabel.text];
         [self.alarmLabel sizeToFit];
-        //self.alarmLabel.textColor = [StyleHandler colorForCellType:self.cellType];
+        self.alarmLabel.textColor = [StyleHandler colorForCellType:self.cellType];
         CGRectSetX(self.alarmLabel,deltaX);
         deltaX += self.alarmLabel.frame.size.width + kIconSpacing;
         self.alarmLabel.hidden = NO;

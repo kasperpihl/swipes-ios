@@ -274,6 +274,14 @@ static RootViewController *sharedObject;
     if(!kCurrent) [self changeToMenu:KPMenuLogin animated:NO];
     else [self changeToMenu:KPMenuHome animated:NO];
 }
+-(void)addObserversForPurchase{
+    [PFPurchase addObserverForProduct:@"plusMonthlyTier1" block:^(SKPaymentTransaction *transaction) {
+        
+    }];
+    [PFPurchase addObserverForProduct:@"plusYearlyTier10" block:^(SKPaymentTransaction *transaction) {
+        
+    }];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -292,6 +300,8 @@ static RootViewController *sharedObject;
     [self setupAppearance];
     
 }
+
+
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
