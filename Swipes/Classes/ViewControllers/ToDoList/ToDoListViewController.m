@@ -379,7 +379,7 @@
     }
     else{
         self.isLonelyRider = YES;
-        [self.selectedRows addObject:indexPath];
+        if(indexPath) [self.selectedRows addObject:indexPath];
     }
 }
 -(BOOL)swipeTableViewCell:(MCSwipeTableViewCell *)cell shouldHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture{

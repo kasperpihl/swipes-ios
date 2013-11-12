@@ -42,17 +42,15 @@
             }
             if([pfKey isEqualToString:@"tags"]){
                 NSArray *tagsFromServer = (NSArray*)pfValue;
-                NSLog(@"tags:%@",tagsFromServer);
+                //NSLog(@"tags:%@",tagsFromServer);
                 NSMutableArray *objectIDs = [NSMutableArray array];
                 
                 for(PFObject *tag in tagsFromServer){
                     if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:tag.objectId];
                 }
                 if(objectIDs.count > 0){
-                    NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"objectId",[objectIDs copy]];
-                    NSLog(@"self:%@ objIds:%@",self.objectId,objectIDs);
+                    NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"%K IN %@",@"objectId",[objectIDs copy]];
                     NSArray *tagsObjects = [KPTag MR_findAllWithPredicate:tagPredicate inContext:context];
-                    
                     NSMutableArray *tagStrings = [NSMutableArray array];
                     NSInteger tagCount = tagsObjects.count;
                     NSMutableArray *notSortedTags = [NSMutableArray array];
