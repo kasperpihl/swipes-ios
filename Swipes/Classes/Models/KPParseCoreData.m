@@ -16,7 +16,7 @@
 #import "Reachability.h"
 
 #define kFetchLimit 0
-
+#define kSyncTime 5
 /*
 
 */
@@ -27,6 +27,7 @@
 @property (nonatomic) NSMutableDictionary *tmpUpdatingObjects;
 @property (nonatomic) NSMutableDictionary *deleteObjects;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
+@property (nonatomic) NSTimer *syncTimer;
 @property BOOL needSync;
 @property BOOL syncAgain;
 @property BOOL isSyncing;
@@ -65,7 +66,7 @@
         }
     }];
     [context MR_saveToPersistentStoreAndWait];
-    //[self synchronize];
+    [self synchronizeForce:NO];
     return;
 }
 +(NSString *)classNameFromParseName:(NSString *)parseClassName{
@@ -126,7 +127,7 @@ static KPParseCoreData *sharedObject;
     // Set the blocks
     sharedObject.reach.reachableBlock = ^(Reachability*reach)
     {
-        if(sharedObject.needSync) [sharedObject synchronize];
+        if(sharedObject.needSync) [sharedObject synchronizeForce:YES];
     };
     
     // Start the notifier, which will cause the reachability object to retain itself!
@@ -171,12 +172,19 @@ static KPParseCoreData *sharedObject;
     }
     return _updateObjects;
 }
--(void)synchronize{
+-(void)forceSync{
+    [self synchronizeForce:YES];
+}
+-(void)synchronizeForce:(BOOL)force{
     if(self.isSyncing){
         self.syncAgain = YES;
         return;
     }
-    
+    if(!force){
+        if(self.syncTimer && self.syncTimer.isValid) [self.syncTimer invalidate];
+        self.syncTimer = [NSTimer scheduledTimerWithTimeInterval:kSyncTime target:self selector:@selector(forceSync) userInfo:nil repeats:NO];
+        return;
+    }
     /* Testing for network connection */
     if(self.needSync) self.needSync = NO;
     if(!self.reach.isReachable){
@@ -239,7 +247,7 @@ static KPParseCoreData *sharedObject;
         if(self.syncAgain){
             self.isSyncing = NO;
             self.syncAgain = NO;
-            [self synchronize];
+            [self synchronizeForce:YES];
         }
         else{
             [self update];
@@ -289,7 +297,7 @@ static KPParseCoreData *sharedObject;
         self.isSyncing = NO;
         [self endBackgroundHandler];
         if(self.syncAgain) {
-            [self synchronize];
+            [self synchronizeForce:NO];
         }
         
     }];
@@ -340,8 +348,6 @@ static KPParseCoreData *sharedObject;
     [self saveInContext:nil];
     NSArray *toDoArray = @[
                            @"Tap to select me",
-                           @"Swipe right to complete me",
-                           @"Swipe left to schedule me",
                            @"Double-tap to edit me",
                            @"Hold to drag me up and down",
                            @"Pull down for search & filter",
