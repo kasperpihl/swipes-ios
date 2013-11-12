@@ -10,6 +10,7 @@
 #import "KPBlurry.h"
 #import "UtilityClass.h"
 #import "KPAddView.h"
+#import "DotView.h"
 #define ADD_VIEW_TAG 1
 #define BACKGROUND_VIEW_TAG 2
 #define PICKER_VIEW_TAG 3
@@ -25,6 +26,8 @@
 
 @interface AddPanelView () <AddViewDelegate,KPBlurryDelegate>
 @property (nonatomic,weak) IBOutlet KPAddView *addView;
+@property (nonatomic) UIButton *priorityButton;
+@property (nonatomic) DotView *dotView;
 @property (nonatomic) BOOL shouldRemove;
 @property (nonatomic) BOOL isRotated;
 @end
@@ -38,8 +41,8 @@
 }
 -(void)addView:(KPAddView *)addView enteredTrimmedText:(NSString *)trimmedText{
     NSLog(@"text:%@",trimmedText);
-    if(self.addDelegate && [self.addDelegate respondsToSelector:@selector(didAddItem:)])
-        [self.addDelegate didAddItem:trimmedText];
+    if(self.addDelegate && [self.addDelegate respondsToSelector:@selector(didAddItem:priority:)])
+        [self.addDelegate didAddItem:trimmedText priority:self.dotView.priority];
 }
 -(void)addViewPressedDoneButton:(KPAddView *)addView{
     [self.addDelegate closeAddPanel:self];
@@ -69,10 +72,13 @@
         CGRectSetY(self, self.frame.origin.y + deltaY);
         CGRectSetHeight(self, targetHeight);
     }
-    NSLog(@"notif:%@",notification);
     CGRectSetY(self.addView, self.frame.size.height-self.addView.frame.size.height-keyboardFrame.size.height);
     
-        [UIView commitAnimations];
+    [UIView commitAnimations];
+}
+-(void)pressedPriority{
+    self.dotView.priority = !self.dotView.priority;
+    NSLog(@"pressed");
 }
 - (id)initWithFrame:(CGRect)frame
 {
@@ -86,8 +92,17 @@
                                                  selector:@selector(keyboardWillHide:)
                                                      name:UIKeyboardWillHideNotification
                                                    object:nil];
-        KPAddView *addView = [[KPAddView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, ADD_VIEW_HEIGHT)];
-        
+        CGFloat dotWidth = 44;
+        DotView *dotView = [[DotView alloc] init];
+        dotView.dotColor = tcolor(TasksColor);
+        UIButton *priorityButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, dotWidth, ADD_VIEW_HEIGHT)];
+        [priorityButton addTarget:self action:@selector(pressedPriority) forControlEvents:UIControlEventTouchUpInside];
+        CGRectSetCenter(dotView, dotWidth/2, ADD_VIEW_HEIGHT/2);
+        KPAddView *addView = [[KPAddView alloc] initWithFrame:CGRectMake(dotWidth, 0, frame.size.width-dotWidth, ADD_VIEW_HEIGHT)];
+        [priorityButton addSubview:dotView];
+        [self addSubview:priorityButton];
+        self.priorityButton = priorityButton;
+        self.dotView = dotView;
         addView.tag = ADD_VIEW_TAG;
         addView.userInteractionEnabled = YES;
         addView.textField.placeholder = @"Add a new task";

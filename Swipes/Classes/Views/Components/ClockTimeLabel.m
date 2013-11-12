@@ -25,7 +25,7 @@
     if(self){
         self.textColor = kDefTextColor;
         self.backgroundColor = CLEAR;
-        self.textAlignment = UITextAlignmentCenter;
+        self.textAlignment = NSTextAlignmentCenter;
         self.layer.masksToBounds = YES;
     }
     return self;

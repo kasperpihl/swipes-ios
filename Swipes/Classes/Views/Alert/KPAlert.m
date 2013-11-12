@@ -52,7 +52,7 @@
         titleLabel.backgroundColor = CLEAR;
         titleLabel.tag = TITLE_LABEL_TAG;
         titleLabel.textColor = tcolor(TagColor);
-        titleLabel.textAlignment = UITextAlignmentCenter;
+        titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.font = KP_BOLD(20);
         [contentView addSubview:titleLabel];
         self.titleLabel = (UILabel*)[contentView viewWithTag:TITLE_LABEL_TAG];
@@ -62,7 +62,7 @@
         messageLabel.tag = MESSAGE_LABEL_TAG;
         messageLabel.textColor = tcolor(TagColor);
         messageLabel.numberOfLines = 0;
-        messageLabel.textAlignment = UITextAlignmentCenter;
+        messageLabel.textAlignment = NSTextAlignmentCenter;
         [contentView addSubview:messageLabel];
         self.messageLabel = (UILabel*)[contentView viewWithTag:MESSAGE_LABEL_TAG];
         

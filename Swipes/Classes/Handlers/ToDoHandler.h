@@ -10,7 +10,7 @@
 #import "KPToDo.h"
 @interface ToDoHandler : NSObject
 +(ToDoHandler*)sharedInstance;
--(KPToDo*)addItem:(NSString*)item save:(BOOL)save;
+-(KPToDo*)addItem:(NSString*)item priority:(BOOL)priority save:(BOOL)save;
 
 -(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date;
 -(NSArray*)completeToDos:(NSArray*)toDoArray;

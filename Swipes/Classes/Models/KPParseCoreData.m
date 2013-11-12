@@ -65,7 +65,7 @@
         }
     }];
     [context MR_saveToPersistentStoreAndWait];
-    [self synchronize];
+    //[self synchronize];
     return;
 }
 +(NSString *)classNameFromParseName:(NSString *)parseClassName{
@@ -349,7 +349,7 @@ static KPParseCoreData *sharedObject;
                        ];
     for(NSInteger i = toDoArray.count-1 ; i >= 0  ; i--){
         NSString *item = [toDoArray objectAtIndex:i];
-        KPToDo *toDo = [TODOHANDLER addItem:item save:NO];
+        KPToDo *toDo = [TODOHANDLER addItem:item priority:NO save:NO];
         if(i == 4)[TAGHANDLER updateTags:@[@"home"] remove:NO toDos:@[toDo] save:YES];
         if(i == 5)[TAGHANDLER updateTags:@[@"work"] remove:NO toDos:@[toDo] save:YES];
     }

@@ -18,7 +18,7 @@
         self.subtitleLabel = [[UILabel alloc] initWithFrame:self.bounds];
         CGRectSetHeight(self.subtitleLabel, self.bounds.size.height);
         self.subtitleLabel.backgroundColor = CLEAR;
-        self.subtitleLabel.textAlignment = UITextAlignmentCenter;
+        self.subtitleLabel.textAlignment = NSTextAlignmentCenter;
         self.subtitleLabel.textColor = [UIColor whiteColor];
         [self addSubview:self.subtitleLabel];
     }

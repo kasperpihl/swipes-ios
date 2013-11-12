@@ -35,14 +35,14 @@
         self.maxWidth = kDefMaxWidth;
         self.titleLabel = [[UILabel alloc] init];
         self.titleLabel.textColor = WALK_COLOR;
-        self.titleLabel.textAlignment = UITextAlignmentCenter;
+        self.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.titleLabel.backgroundColor = CLEAR;
         self.titleLabel.numberOfLines = 0;
         self.titleLabel.font = WALK_HEADER_FONT;
         [self addSubview:self.titleLabel];
         self.subtitleLabel = [[UILabel alloc] init];
         self.subtitleLabel.numberOfLines = 0;
-        self.subtitleLabel.textAlignment = UITextAlignmentCenter;
+        self.subtitleLabel.textAlignment = NSTextAlignmentCenter;
         self.subtitleLabel.backgroundColor = CLEAR;
         self.subtitleLabel.textColor = WALK_COLOR;
         self.subtitleLabel.font = WALK_SUBHEADER_FONT;

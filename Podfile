@@ -1,4 +1,4 @@
-platform :ios, '5.0'
+platform :ios, '6.0'
 pod 'Appirater', '~> 2.0.2'
 pod 'Parse', '~> 1.2.15'
 pod 'MagicalRecord', '~> 2.2'

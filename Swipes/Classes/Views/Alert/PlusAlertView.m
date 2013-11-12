@@ -73,7 +73,7 @@
         messageLabel.textColor = tcolor(TagColor);
         messageLabel.numberOfLines = 0;
         messageLabel.backgroundColor = CLEAR;
-        messageLabel.textAlignment = UITextAlignmentCenter;
+        messageLabel.textAlignment = NSTextAlignmentCenter;
         [contentView addSubview:messageLabel];
         self.messageLabel = messageLabel;
         

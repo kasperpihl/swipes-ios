@@ -11,7 +11,7 @@
 @protocol AddPanelDelegate
 -(void)closeAddPanel:(AddPanelView*)addPanel;
 @optional
--(void)didAddItem:(NSString*)item;
+-(void)didAddItem:(NSString*)item priority:(BOOL)priority;
 @end
 @interface AddPanelView : UIView
 @property (nonatomic,weak) NSObject<AddPanelDelegate> *addDelegate;

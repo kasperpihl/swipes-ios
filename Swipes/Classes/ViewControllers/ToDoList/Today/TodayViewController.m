@@ -198,7 +198,7 @@
                 break;
             }
         }
-        [self dismissModalViewControllerAnimated:YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
     };
     [shareVC addImage:[self screenshotForSharingService:serviceType]];
     NSArray *tweets = @[@"All tasks done for Today #productiveday @swipesapp",
@@ -228,7 +228,7 @@
     NSString *string = [targetArray objectAtIndex:randomIndex];
     self.shareText = string;
     [shareVC setInitialText:string];
-    [[self parent] presentModalViewController:shareVC animated:YES];
+    [[self parent] presentViewController:shareVC animated:YES completion:nil];
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSString *realServiceType;

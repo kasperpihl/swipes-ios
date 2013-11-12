@@ -74,7 +74,7 @@
     
     UILabel *preferLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.beforeView.frame.size.width-kBeforePreferWidth)/2, 0, kBeforePreferWidth, kSubButtonY)];
     preferLabel.backgroundColor = CLEAR;
-    preferLabel.textAlignment = UITextAlignmentCenter;
+    preferLabel.textAlignment = NSTextAlignmentCenter;
     preferLabel.numberOfLines = 0;
     preferLabel.textColor = [UIColor whiteColor];
     preferLabel.font = kBeforePreferFont;
@@ -116,7 +116,7 @@
     CGFloat yForFree = CGRectGetMaxY(yearButton.frame);
     UILabel *swipesFreeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, yForFree, self.beforeView.frame.size.width, self.beforeView.frame.size.height-yForFree)];
     swipesFreeLabel.backgroundColor = CLEAR;
-    swipesFreeLabel.textAlignment = UITextAlignmentCenter;
+    swipesFreeLabel.textAlignment = NSTextAlignmentCenter;
     swipesFreeLabel.font = kBeforeSwipesFreeFont;
     swipesFreeLabel.textColor = [UIColor whiteColor];
     swipesFreeLabel.text = @"Swipes Basic will be always free of charge.";
@@ -127,7 +127,7 @@
     self.afterView = [[UIView alloc] initWithFrame:bottomView.bounds];
     UILabel *feedbackLabel = [[UILabel alloc] initWithFrame:CGRectMake((bottomView.frame.size.width -kAfterViewWidth)/2, kAfterFeedbackY, kAfterViewWidth, kAfterFeedbackHeight)];
     feedbackLabel.backgroundColor = CLEAR;
-    feedbackLabel.textAlignment = UITextAlignmentCenter;
+    feedbackLabel.textAlignment = NSTextAlignmentCenter;
     feedbackLabel.textColor = [UIColor whiteColor];
     feedbackLabel.font = kAfterFeedbackFont;
     feedbackLabel.text = @"Thanks for your feedback!";
@@ -138,7 +138,7 @@
     UILabel *postedLabel = [[UILabel alloc] initWithFrame:CGRectMake((bottomView.frame.size.width-kAfterViewWidth)/2, CGRectGetMaxY(feedbackLabel.frame)+kAfterPostedSpacing, kAfterViewWidth, kAfterPostedHeight)];
     postedLabel.backgroundColor = CLEAR;
     postedLabel.textColor = [UIColor whiteColor];
-    postedLabel.textAlignment = UITextAlignmentCenter;
+    postedLabel.textAlignment = NSTextAlignmentCenter;
     postedLabel.font =kAfterPostedFont;
     postedLabel.numberOfLines = 0;
     postedLabel.text = @"We will keep you posted with the upcoming update.";

@@ -50,9 +50,9 @@
         _itemCounter = itemCounter;
     }
 }
--(void)addItem:(NSString *)item{
+-(void)addItem:(NSString *)item priority:(BOOL)priority{
     if(self.hasFilter || self.hasSearched) [self clearAll];
-    [TODOHANDLER addItem:item save:YES];
+    [TODOHANDLER addItem:item priority:priority save:YES];
     [self reloadData];
 }
 -(void)reloadData{

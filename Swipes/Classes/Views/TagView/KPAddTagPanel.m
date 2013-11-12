@@ -110,7 +110,7 @@
         
         
         /* Initialize addView */
-        KPAddView *addView = [[KPAddView alloc] initWithFrame:CGRectMake(0, self.bounds.size.height, self.bounds.size.width, ADD_VIEW_HEIGHT)];
+        KPAddView *addView = [[KPAddView alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, self.bounds.size.height, self.bounds.size.width-TEXT_FIELD_MARGIN_LEFT, ADD_VIEW_HEIGHT)];
         addView.tag = ADD_VIEW_TAG;
         addView.userInteractionEnabled = YES;
         addView.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;

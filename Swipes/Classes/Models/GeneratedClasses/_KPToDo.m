@@ -9,6 +9,7 @@ const struct KPToDoAttributes KPToDoAttributes = {
 	.notes = @"notes",
 	.numberOfRepeated = @"numberOfRepeated",
 	.order = @"order",
+	.priority = @"priority",
 	.repeatOption = @"repeatOption",
 	.repeatedDate = @"repeatedDate",
 	.schedule = @"schedule",
@@ -56,6 +57,11 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 	}
 	if ([key isEqualToString:@"orderValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"order"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"priorityValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"priority"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -138,6 +144,32 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 - (void)setPrimitiveOrderValue:(int32_t)value_ {
 	[self setPrimitiveOrder:[NSNumber numberWithInt:value_]];
+}
+
+
+
+
+
+@dynamic priority;
+
+
+
+- (int16_t)priorityValue {
+	NSNumber *result = [self priority];
+	return [result shortValue];
+}
+
+- (void)setPriorityValue:(int16_t)value_ {
+	[self setPriority:[NSNumber numberWithShort:value_]];
+}
+
+- (int16_t)primitivePriorityValue {
+	NSNumber *result = [self primitivePriority];
+	return [result shortValue];
+}
+
+- (void)setPrimitivePriorityValue:(int16_t)value_ {
+	[self setPrimitivePriority:[NSNumber numberWithShort:value_]];
 }
 
 

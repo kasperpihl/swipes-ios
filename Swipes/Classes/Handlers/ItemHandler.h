@@ -41,7 +41,7 @@
 -(NSInteger)totalNumberOfItemsBeforeItem:(KPToDo*)item;
 -(NSIndexPath*)indexPathForItem:(KPToDo*)item;
 -(KPToDo*)itemForIndexPath:(NSIndexPath*)indexPath;
--(void)addItem:(NSString *)item;
+-(void)addItem:(NSString *)item priority:(BOOL)priority;
 -(void)reloadData;
 -(void)refresh;
 -(NSIndexSet*)removeItems:(NSArray*)items;

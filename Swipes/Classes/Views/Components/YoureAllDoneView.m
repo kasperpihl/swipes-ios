@@ -39,7 +39,7 @@
         self.shareItLabel.numberOfLines = 0;
         self.shareItLabel.backgroundColor = CLEAR;
         self.shareItLabel.textColor = kColor;
-        self.shareItLabel.textAlignment = UITextAlignmentCenter;
+        self.shareItLabel.textAlignment = NSTextAlignmentCenter;
         self.shareItLabel.text = @"Good job, let 'em know!";
         self.shareItLabel.font = KP_LIGHT(16);
         //self.shareItLabel.hidden = YES;

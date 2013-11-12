@@ -8,12 +8,13 @@
 
 #import "MCSwipeTableViewCell.h"
 #define CELL_HEIGHT 70
-#define CELL_LABEL_X 42
+#define CELL_LABEL_X 44
 @class KPToDo;
 @interface ToDoCell : MCSwipeTableViewCell
 @property (nonatomic) CellType cellType;
-
+@property (nonatomic) BOOL priority;
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags;
 //-(void)showTimeline:(BOOL)show;
 -(void)setDotColor:(CellType)cellType;
+
 @end

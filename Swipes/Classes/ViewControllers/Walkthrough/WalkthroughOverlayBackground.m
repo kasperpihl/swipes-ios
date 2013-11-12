@@ -25,8 +25,8 @@
         self.punchedOutPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(kCircleSideCenterMargin - kCircleSize/2, y, kCircleSize, kCircleSize)];
         self.bottomColor = tcolor(StrongLaterColor);
         self.topColor = tcolor(LaterColor);
-        self.subtitleLabel.textAlignment = UITextAlignmentRight;
-        self.titleLabel.textAlignment = UITextAlignmentRight;
+        self.subtitleLabel.textAlignment = NSTextAlignmentRight;
+        self.titleLabel.textAlignment = NSTextAlignmentRight;
         CGRectSetX(self.subtitleLabel, self.popupView.frame.size.width - self.subtitleLabel.frame.size.width - kPopupSideMargin);
         CGRectSetX(self.continueButton, self.popupView.frame.size.width - self.continueButton.frame.size.width - kPopupSideMargin);
     }
@@ -35,8 +35,8 @@
         self.bottomColor = tcolor(StrongDoneColor);
         self.topColor = tcolor(DoneColor);
         CGRectSetX(self.subtitleLabel, kPopupSideMargin);
-        self.subtitleLabel.textAlignment = UITextAlignmentLeft;
-        self.titleLabel.textAlignment = UITextAlignmentLeft;
+        self.subtitleLabel.textAlignment = NSTextAlignmentLeft;
+        self.titleLabel.textAlignment = NSTextAlignmentLeft;
         CGRectSetX(self.continueButton, kPopupSideMargin);
     }
     [self setNeedsDisplay];

@@ -67,16 +67,6 @@ typedef enum {
 } DisplayPosition;
 
 typedef void (^voidBlock)(void);
-/* Insert below in pods target if it is logs */
-NS_INLINE void mainBlock(void (^block)(void))
-{
-    if(dispatch_get_current_queue() == dispatch_get_main_queue()){
-        block();
-    }
-    else {
-        dispatch_sync(dispatch_get_main_queue(), block);
-    }
-}
 #define kCurrent [PFUser currentUser]
 #define kCurrentAttr(attr) [kCurrent objectForKey:attr]
 #define kCurrentSetAttr(key,attr) [kCurrent setObject:attr forKey:key]

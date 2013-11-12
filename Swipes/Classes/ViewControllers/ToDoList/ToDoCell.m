@@ -70,7 +70,7 @@
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X,TITLE_Y, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
         titleLabel.tag = TITLE_LABEL_TAG;
         titleLabel.numberOfLines = 1;
-        titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
+        titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         titleLabel.font = TITLE_LABEL_FONT;
         titleLabel.textColor = tcolor(TaskCellTitle);
         titleLabel.backgroundColor = [UIColor clearColor];
@@ -128,6 +128,9 @@
     }
     return self;
 }
+-(void)setPriority:(BOOL)priority{
+    self.dotView.priority = priority;
+}
 -(void)setTextLabels:(BOOL)showBottomLine{
     CGFloat titleY = showBottomLine ? TITLE_Y : ((CELL_HEIGHT - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
@@ -144,6 +147,7 @@
     __block CGFloat deltaX = CELL_LABEL_X;
     self.alarmLabel.hidden = YES;
     __block BOOL alarmLabel = NO;
+    self.dotView.priority = (toDo.priorityValue == 1);
     if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
         NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
         NSString *dateInString = [UtilityClass timeStringForDate:showDate];

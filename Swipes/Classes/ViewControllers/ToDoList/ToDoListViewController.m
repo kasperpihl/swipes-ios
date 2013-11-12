@@ -230,7 +230,6 @@
     cell.cellType = [toDo cellTypeForTodo];
     [cell setDotColor:self.cellType];
     [cell changeToDo:toDo withSelectedTags:self.itemHandler.selectedTags];
-    
     if([toDo isEqual:self.parent.showingModel]){
         self.showingViewController.model = toDo;
         [self.showingViewController injectInCell:cell];
@@ -611,7 +610,7 @@
             break;
     }
     menuText.text = text;
-    menuText.textAlignment = UITextAlignmentCenter;
+    menuText.textAlignment = NSTextAlignmentCenter;
     menuText.textColor = [StyleHandler colorForCellType:self.cellType];
     menuText.tag = MENU_TEXT_TAG;
     [self.view addSubview:menuText];

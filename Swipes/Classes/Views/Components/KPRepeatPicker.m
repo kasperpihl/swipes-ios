@@ -85,7 +85,7 @@
             //dayButton.titleLabel.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
             //dayButton.transform = CGAffineTransformMakeRotation(-M_PI/2);
             dayButton.frame = CGRectMake(buttonX, 0, buttonWidth,self.frame.size.height);
-            dayButton.titleLabel.textAlignment = UITextAlignmentCenter;
+            dayButton.titleLabel.textAlignment = NSTextAlignmentCenter;
             [self addSubview:dayButton];
             if(i < 6){
                 UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(buttonX+buttonWidth, (self.frame.size.height-sepHeight)/2, kSepWidth, sepHeight)];

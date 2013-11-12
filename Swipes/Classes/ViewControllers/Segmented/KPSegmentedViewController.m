@@ -158,8 +158,8 @@
     [BLURRY showView:alert inViewController:self];
 }
 #pragma mark - AddPanelDelegate
--(void)didAddItem:(NSString *)item{
-    [[self currentViewController].itemHandler addItem:item];
+-(void)didAddItem:(NSString *)item priority:(BOOL)priority{
+    [[self currentViewController].itemHandler addItem:item priority:priority];
 }
 - (NSMutableArray *)viewControllers {
 	if (!_viewControllers)

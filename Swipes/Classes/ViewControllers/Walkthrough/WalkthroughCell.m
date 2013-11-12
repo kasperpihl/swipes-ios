@@ -39,7 +39,7 @@
         UIFont *titleFont = [UIFont fontWithName:defFont.fontName size:newSize];
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleX,0, 320-titleX-10, cellHeight)];
         titleLabel.numberOfLines = 1;
-        titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
+        titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         titleLabel.font = titleFont;
         titleLabel.text = @"Pick up laundry tonight";
         titleLabel.backgroundColor = [UIColor clearColor];

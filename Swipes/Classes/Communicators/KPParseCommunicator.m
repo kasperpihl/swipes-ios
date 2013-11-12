@@ -34,14 +34,13 @@ static KPParseCommunicator *sharedObject;
 }
 -(void)runCloudFunction:(NSString *)functionName withOptions:(NSDictionary *)options priority:(BOOL)priority block:(ResultBlock)block{
     dispatch_queue_t queue = priority ? self.priorityQueue : self.queue;
-    dispatch_queue_t currentQueue = dispatch_get_current_queue();
     dispatch_async(queue, ^{
         NSError *error;
         id result = [PFCloud callFunction:functionName withParameters:options error:&error];
         if(error){
             // Handling error
         }
-        dispatch_async(currentQueue, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             if(block) block(result,error);
         });
         
@@ -87,11 +86,10 @@ static KPParseCommunicator *sharedObject;
 }
 -(void)saveObject:(PFObject *)object priority:(BOOL)priority handler:(SuccessfulBlock)block{
     dispatch_queue_t queue = priority ? self.priorityQueue : self.queue;
-    dispatch_queue_t currentQueue = dispatch_get_current_queue();
     dispatch_async(queue, ^{
         NSError *error;
         BOOL saved = [object save:&error];
-        dispatch_async(currentQueue, ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             if(block) block(saved,error);
         });
     });

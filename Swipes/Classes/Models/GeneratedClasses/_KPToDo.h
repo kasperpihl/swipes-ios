@@ -10,6 +10,7 @@ extern const struct KPToDoAttributes {
 	__unsafe_unretained NSString *notes;
 	__unsafe_unretained NSString *numberOfRepeated;
 	__unsafe_unretained NSString *order;
+	__unsafe_unretained NSString *priority;
 	__unsafe_unretained NSString *repeatOption;
 	__unsafe_unretained NSString *repeatedDate;
 	__unsafe_unretained NSString *schedule;
@@ -25,6 +26,7 @@ extern const struct KPToDoFetchedProperties {
 } KPToDoFetchedProperties;
 
 @class KPTag;
+
 
 
 
@@ -103,6 +105,20 @@ extern const struct KPToDoFetchedProperties {
 - (void)setOrderValue:(int32_t)value_;
 
 //- (BOOL)validateOrder:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* priority;
+
+
+
+@property int16_t priorityValue;
+- (int16_t)priorityValue;
+- (void)setPriorityValue:(int16_t)value_;
+
+//- (BOOL)validatePriority:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -216,6 +232,15 @@ extern const struct KPToDoFetchedProperties {
 
 - (int32_t)primitiveOrderValue;
 - (void)setPrimitiveOrderValue:(int32_t)value_;
+
+
+
+
+- (NSNumber*)primitivePriority;
+- (void)setPrimitivePriority:(NSNumber*)value;
+
+- (int16_t)primitivePriorityValue;
+- (void)setPrimitivePriorityValue:(int16_t)value_;
 
 
 

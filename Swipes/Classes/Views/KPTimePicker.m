@@ -304,14 +304,14 @@
         self.dayLabel.backgroundColor = [UIColor clearColor];
         self.dayLabel.textColor = [UIColor whiteColor];
         self.dayLabel.font = kDayLabelFont;
-        self.dayLabel.textAlignment = UITextAlignmentCenter;
+        self.dayLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.dayLabel];
 
         self.clockLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kClockLabelY, self.bounds.size.width, 120)];
         self.clockLabel.backgroundColor = [UIColor clearColor];
         self.clockLabel.textColor = [UIColor whiteColor]; //self.foregroundColor;
         self.clockLabel.font = kClockLabelFont;
-        self.clockLabel.textAlignment = UITextAlignmentCenter;
+        self.clockLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.clockLabel];
         [self layoutSubviews];
     }

@@ -38,7 +38,7 @@ static FacebookCommunicator *sharedObject;
         if(image) [shareVC addImage:image];
         if(url) [shareVC addURL:[NSURL URLWithString:url]];
         
-        [viewController presentModalViewController:shareVC animated:YES];
+        [viewController presentViewController:shareVC animated:YES completion:nil];
     }
 }
 -(void)shareToFriend:(NSDictionary*)friend name:(NSString*)name caption:(NSString*)caption description:(NSString*)description imageURLString:(NSString*)imageString link:(NSString*)link block:(FacebookRequestBlock)block{

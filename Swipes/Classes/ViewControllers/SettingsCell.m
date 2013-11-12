@@ -44,7 +44,7 @@
         self.settingLabel = [[UILabel alloc] initWithFrame:self.contentView.bounds];
         CGRectSetHeight(self.settingLabel, kCellHeight);
         self.settingLabel.backgroundColor = [UIColor clearColor];
-        self.settingLabel.lineBreakMode = UILineBreakModeTailTruncation;
+        self.settingLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         //self.settingLabel.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         self.settingLabel.font = self.settingFont;
         self.settingLabel.textColor = self.labelColor;
@@ -52,7 +52,7 @@
         
         self.valueLabel = [[UILabel alloc] init];
         self.valueLabel.backgroundColor = [UIColor clearColor];
-        self.valueLabel.textAlignment = UITextAlignmentCenter;
+        self.valueLabel.textAlignment = NSTextAlignmentCenter;
         self.valueLabel.layer.borderWidth = LINE_SIZE;
         self.valueLabel.layer.cornerRadius = 3;
         self.valueLabel.layer.borderColor = self.labelColor.CGColor;

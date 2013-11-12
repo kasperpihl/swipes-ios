@@ -147,7 +147,7 @@
         self.isEmptyList = YES;
         UILabel *noTagLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.marginLeft+self.emptyLabelMarginHack, self.marginTop, self.frame.size.width-self.marginLeft-self.marginRight, TAG_HEIGHT)];
         noTagLabel.font = NO_TAG_FONT;
-        noTagLabel.textAlignment = UITextAlignmentLeft;
+        noTagLabel.textAlignment = NSTextAlignmentLeft;
         noTagLabel.backgroundColor = [UIColor clearColor];
         noTagLabel.textColor = self.tagTitleColor;
         noTagLabel.text = self.emptyText ? self.emptyText : @"No tags";

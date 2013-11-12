@@ -40,7 +40,7 @@
         
         self.numberLabel = [[UILabel alloc] initWithFrame:self.bounds];
         self.numberLabel.backgroundColor = CLEAR;
-        self.numberLabel.textAlignment = UITextAlignmentCenter;
+        self.numberLabel.textAlignment = NSTextAlignmentCenter;
         self.numberLabel.font = kNumberFont;
         self.numberLabel.textColor = kFontColor;
         
@@ -48,7 +48,7 @@
         self.monthLabel = [[UILabel alloc] initWithFrame:self.bounds];
         self.monthLabel.backgroundColor = CLEAR;
         self.monthLabel.textColor = kFontColor;
-        self.monthLabel.textAlignment = UITextAlignmentCenter;
+        self.monthLabel.textAlignment = NSTextAlignmentCenter;
         self.monthLabel.font = kMonthFont;
         
         [self addSubview:self.monthLabel];
