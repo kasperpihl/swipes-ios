@@ -138,8 +138,9 @@ typedef enum {
         else if(numberOfDaysFromNow <= 28) numberOfDaysInterval = @"15-28";
         else if(numberOfDaysFromNow <= 42) numberOfDaysInterval = @"29-42";
         else if(numberOfDaysFromNow <= 56) numberOfDaysInterval = @"43-56";
+        NSNumber *numberOfTasks = @(self.numberOfItems);
         NSString *usedTimePicker = self.didUseTimePicker ? @"Yes" : @"No";
-        NSDictionary *options = @{@"Number of days ahead":numberOfDaysInterval,@"Button Pressed": buttonUsed,@"Used Time Picker": usedTimePicker};
+        NSDictionary *options = @{@"Number of days ahead":numberOfDaysInterval,@"Button Pressed": buttonUsed,@"Used Time Picker": usedTimePicker,@"Number of Tasks":numberOfTasks};
         [ANALYTICS tagEvent:@"Scheduled Tasks" options:options];
     }
     if(self.block) self.block(state,date);
@@ -351,7 +352,7 @@ typedef enum {
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
         contentView.tag = CONTENT_VIEW_TAG;
-        /*NSMutableArray *seperatorArray = [NSMutableArray array];
+        NSMutableArray *seperatorArray = [NSMutableArray array];
         for(NSInteger i = 1 ; i < GRID_NUMBER ; i++){
             UIView *verticalSeperatorView = [self seperatorWithSize:CONTENT_VIEW_SIZE*(1-(SEPERATOR_MARGIN*2)) vertical:YES];
             verticalSeperatorView.tag = kSepVerTag;
@@ -364,7 +365,7 @@ typedef enum {
             [seperatorArray addObject:verticalSeperatorView];
             [seperatorArray addObject:horizontalSeperatorView];
         }
-        self.seperators = [seperatorArray copy];*/
+        self.seperators = [seperatorArray copy];
         /* Schedule buttons */
         UIButton *laterTodayButton = [self buttonForScheduleButton:KPScheduleButtonLaterToday title:@"Later Today"];
         [contentView addSubview:laterTodayButton];

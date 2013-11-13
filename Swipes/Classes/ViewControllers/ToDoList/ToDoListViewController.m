@@ -316,6 +316,7 @@
             }
         }
     }];
+    popup.numberOfItems = 1;
     BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
     [BLURRY showView:popup inViewController:self.parent];
 }
@@ -418,6 +419,7 @@
                 }
                 self.isHandlingTrigger = NO;
             }];
+            popup.numberOfItems = toDosArray.count;
             BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.4);
             [BLURRY showView:popup inViewController:self.parent];
             return;

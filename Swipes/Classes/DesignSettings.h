@@ -65,11 +65,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 /* Edit Task view */
 #define EDIT_TASK_TITLE_FONT            KP_LIGHT(18)
 #define EDIT_TASK_TEXT_FONT             KP_REGULAR(14)
-#define EDIT_TASK_TEXT_COLOR            BUTTON_COLOR
-#define EDIT_TASK_GRAYED_OUT_TEXT       gray(180,1)//EDIT_TASK_SEPERATOR_COLOR
-#define EDIT_TASK_SELECTED_OVERLAY      
-
-/* Login View */
 
 
 /* Walk through */
@@ -90,8 +85,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #define LOGIN_FIELDS_TEXT_COLOR         color(187,195,203,1)
 
 
-/* Add tag panel */
-#define MANAGE_TAGS_BACKGROUND          TEXTFIELD_BACKGROUND
 
 
 /* KPPopup */

@@ -1,6 +1,6 @@
 //
 //  CoreDataClass.m
-//  Shery
+//  Swipes
 //
 //  Created by Kasper Pihl Tornøe on 09/03/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
@@ -82,43 +82,6 @@ static KPParseCoreData *sharedObject;
     }
     return sharedObject;
 }
--(void)parseTest{
-    return;
-    PFQuery *query = [PFQuery queryWithClassName:@"ToDo"];
-    [query whereKey:@"updatedAt" greaterThan:[[NSDate date] dateBySubtractingMinutes:1]];
-    NSArray *objects = [query findObjects];
-    for (PFObject *object in objects) {
-        NSLog(@"obj:%@",objects);
-    }
-    
-    /*NSInteger testNumber = 1;
-    
-    PFObject *class = [PFObject objectWithClassName:@"TestClass"];
-    [class setObject:[@"testing-" stringByAppendingFormat:@"%i",testNumber] forKey:@"title"];
-
-    PFObject *target1 = [PFObject objectWithClassName:@"TestTarget"];
-    
-    [target1 setObject:[@"testing-1-" stringByAppendingFormat:@"%i",testNumber] forKey:@"title"];
-    PFObject *target2 = [PFObject objectWithClassName:@"TestTarget"];
-    [target2 setObject:[@"testing-2-" stringByAppendingFormat:@"%i",testNumber] forKey:@"title"];
-    
-    [class addUniqueObject:target1 forKey:@"targetArray"];
-    [class addUniqueObject:target2 forKey:@"targetArray"];
-    NSMutableArray *array = [NSMutableArray array];
-    for(NSInteger i = 0 ; i < 1300 ; i++){
-        PFObject *object = [PFObject objectWithClassName:@"TestTarget"];
-        [object setObject:[@"Testing-" stringByAppendingFormat:@"%i",i] forKey:@"title"];
-        [array addObject:object];
-    }
-    PFRelation *relation = [class relationforKey:@"targetsRelation"];
-    [relation addObject:target1];
-    [relation addObject:target2];
-    NSError *error;
-    [PFObject saveAll:array error:&error];
-    if(error){
-        NSLog(@"error:%@",error);
-    }*/
-}
 #pragma mark Core data stuff
 -(void)initialize{
     self.backgroundTask = UIBackgroundTaskInvalid;
@@ -132,7 +95,6 @@ static KPParseCoreData *sharedObject;
     
     // Start the notifier, which will cause the reachability object to retain itself!
     [sharedObject.reach startNotifier];
-    [self parseTest];
 }
 -(void)loadDatabase{
     @try {
@@ -202,105 +164,112 @@ static KPParseCoreData *sharedObject;
     if(kFetchLimit && changedObjects.count == kFetchLimit) self.syncAgain = YES;
     __block NSMutableArray *updatePFObjects = [NSMutableArray array];
     __block NSMutableArray *updatedObjects = [NSMutableArray array];
-    [self startBackgroundHandler];
-    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-    for(KPParseObject *oldContextObject in changedObjects){
-        KPParseObject *object = [oldContextObject MR_inContext:localContext];
-        PFObject *pfObj = [object objectToSaveInContext:localContext];
-        if(!pfObj){
-            NSLog(@"skipped object:%@",object.objectId);
-            if(object && object.objectId) [self.updateObjects removeObjectForKey:object.objectId];
-            continue;
-        }
-        [updatePFObjects addObject:pfObj];
-        [updatedObjects addObject:object];
-    }
-    for(NSString *objectIdKey in self.deleteObjects){
-        NSString *className = [self.deleteObjects objectForKey:objectIdKey];
-        PFObject *deleteObject = [KPParseObject objectForDeletionWithClassName:className objectId:objectIdKey];
-        [updatePFObjects addObject:deleteObject];
-    }
-    if(updatePFObjects.count > 0){
-        NSLog(@"saving %i objects",updatePFObjects.count);
-        NSError *error;
-        [PFObject saveAll:updatePFObjects error:&error];
-        if(error){
-            self.syncAgain = YES;
-            NSLog(@"error saving updated:%@",error);
-        }
-        NSInteger index = 0;
-        for (KPParseObject *object in updatedObjects) {
-            PFObject *savedPFObject = [updatePFObjects objectAtIndex:index];
-            if(savedPFObject.updatedAt){
-                [object updateWithObject:savedPFObject context:localContext];
-                [self.updateObjects removeObjectForKey:savedPFObject.objectId];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self startBackgroundHandler];
+        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+        for(KPParseObject *oldContextObject in changedObjects){
+            KPParseObject *object = [oldContextObject MR_inContext:localContext];
+            PFObject *pfObj = [object objectToSaveInContext:localContext];
+            if(!pfObj){
+                NSLog(@"skipped object:%@",object.objectId);
+                if(object && object.objectId) [self.updateObjects removeObjectForKey:object.objectId];
+                continue;
             }
-            index++;
+            [updatePFObjects addObject:pfObj];
+            [updatedObjects addObject:object];
         }
-    }
-    [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *localError) {
-        if(localError) NSLog(@"error happened in the first save:%@",localError);
-        [self saveUpdatingObjects];
-        CGFloat endTime = CACurrentMediaTime();
-        CGFloat takenTime = endTime - startTime;
-        NSLog(@"sync completed in seconds: %f",takenTime);
-        if(self.syncAgain){
-            self.isSyncing = NO;
-            self.syncAgain = NO;
-            [self synchronizeForce:YES];
+        for(NSString *objectIdKey in self.deleteObjects){
+            NSString *className = [self.deleteObjects objectForKey:objectIdKey];
+            PFObject *deleteObject = [KPParseObject objectForDeletionWithClassName:className objectId:objectIdKey];
+            [updatePFObjects addObject:deleteObject];
         }
-        else{
-            [self update];
+        if(updatePFObjects.count > 0){
+            NSLog(@"saving %i objects",updatePFObjects.count);
+            NSError *error;
+            [PFObject saveAll:updatePFObjects error:&error];
+            if(error){
+                self.syncAgain = YES;
+                NSLog(@"error saving updated:%@",error);
+            }
+            NSInteger index = 0;
+            for (KPParseObject *object in updatedObjects) {
+                PFObject *savedPFObject = [updatePFObjects objectAtIndex:index];
+                if(savedPFObject.updatedAt){
+                    [object updateWithObject:savedPFObject context:localContext];
+                    [self.updateObjects removeObjectForKey:savedPFObject.objectId];
+                }
+                index++;
+            }
         }
-    }];
+        [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *localError) {
+            if(localError) NSLog(@"error happened in the first save:%@",localError);
+            [self saveUpdatingObjects];
+            //[self endBackgroundHandler];
+            CGFloat endTime = CACurrentMediaTime();
+            CGFloat takenTime = endTime - startTime;
+            NSLog(@"sync completed in seconds: %f",takenTime);
+            if(self.syncAgain){
+                self.isSyncing = NO;
+                self.syncAgain = NO;
+                [self synchronizeForce:YES];
+            }
+            else{
+                [self update];
+            }
+        }];
+    });
         
 }
 -(void)update{
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-        NSDate *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"];
-        PFQuery *tagQuery = [PFQuery queryWithClassName:@"Tag"];
-        [tagQuery whereKey:@"owner" equalTo:kCurrent];
-        [tagQuery setLimit:1000];
-        if(lastUpdate) [tagQuery whereKey:@"updatedAt" greaterThanOrEqualTo:lastUpdate];
-        PFQuery *taskQuery = [PFQuery queryWithClassName:@"ToDo"];
-        [taskQuery whereKey:@"owner" equalTo:kCurrent];
-        [taskQuery setLimit:1000];
-        if(lastUpdate) [taskQuery whereKey:@"updatedAt" greaterThanOrEqualTo:lastUpdate];
-        NSLog(@"lastUpdate:%@",lastUpdate);
-        NSError *error;
-        NSArray *tags = [tagQuery findObjects:&error];
-        NSArray *tasks = [taskQuery findObjects:&error];
-        NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
-        if(error){
-            NSLog(@"error query:%@",error);
-            [self endBackgroundHandler];
-            return;
-        }
-        for(PFObject *object in allObjects){
-            if(!lastUpdate) lastUpdate = object.updatedAt;
-            else if([object.updatedAt isLaterThanDate:lastUpdate]) lastUpdate = object.updatedAt;
-            Class class = NSClassFromString([KPParseCoreData classNameFromParseName:object.parseClassName]);
-            if(class && [class isSubclassOfClass:[KPParseObject class]]){
-                BOOL shouldDelete = [[object objectForKey:@"deleted"] boolValue];
-                if(shouldDelete){
-                    [class deleteObjectById:object.objectId context:localContext];
-                    if([self.deleteObjects objectForKey:object.objectId])[self.deleteObjects removeObjectForKey:object.objectId];
-                }else{
-                    KPParseObject *cdObject = [class getCDObjectFromObject:object context:localContext];
-                    [cdObject updateWithObject:object context:localContext];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            NSDate *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"];
+            [PFQuery clearAllCachedResults];
+            PFQuery *tagQuery = [PFQuery queryWithClassName:@"Tag"];
+            [tagQuery whereKey:@"owner" equalTo:kCurrent];
+            [tagQuery setLimit:1000];
+            lastUpdate = nil;
+            if(lastUpdate) [tagQuery whereKey:@"updatedAt" greaterThanOrEqualTo:lastUpdate];
+            PFQuery *taskQuery = [PFQuery queryWithClassName:@"ToDo"];
+            [taskQuery whereKey:@"owner" equalTo:kCurrent];
+            [taskQuery setLimit:1000];
+            if(lastUpdate) [taskQuery whereKey:@"updatedAt" greaterThanOrEqualTo:lastUpdate];
+            NSLog(@"lastUpdate:%@",lastUpdate);
+            NSError *error;
+            NSArray *tags = [tagQuery findObjects:&error];
+            NSArray *tasks = [taskQuery findObjects:&error];
+            NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
+            if(error){
+                NSLog(@"error query:%@",error);
+                [self endBackgroundHandler];
+                return;
+            }
+            for(PFObject *object in allObjects){
+                if(!lastUpdate) lastUpdate = object.updatedAt;
+                else if([object.updatedAt isLaterThanDate:lastUpdate]) lastUpdate = object.updatedAt;
+                Class class = NSClassFromString([KPParseCoreData classNameFromParseName:object.parseClassName]);
+                if(class && [class isSubclassOfClass:[KPParseObject class]]){
+                    BOOL shouldDelete = [[object objectForKey:@"deleted"] boolValue];
+                    if(shouldDelete){
+                        [class deleteObjectById:object.objectId context:localContext];
+                        if([self.deleteObjects objectForKey:object.objectId])[self.deleteObjects removeObjectForKey:object.objectId];
+                    }else{
+                        KPParseObject *cdObject = [class getCDObjectFromObject:object context:localContext];
+                        [cdObject updateWithObject:object context:localContext];
+                    }
                 }
             }
-        }
-        if(lastUpdate) [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastUpdate"];
-    } completion:^(BOOL success, NSError *error) {
-        if(error) NSLog(@"error from update");
-        self.isSyncing = NO;
-        [self endBackgroundHandler];
-        if(self.syncAgain) {
-            [self synchronizeForce:NO];
-        }
+            [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+                if(lastUpdate) [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastUpdate"];
+                if(error) NSLog(@"error from update");
+                self.isSyncing = NO;
+                [self endBackgroundHandler];
+                if(self.syncAgain) {
+                    [self synchronizeForce:NO];
+                }
+            }];
         
-    }];
+    });
     
     
 }
