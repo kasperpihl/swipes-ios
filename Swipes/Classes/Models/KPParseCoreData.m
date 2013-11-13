@@ -159,9 +159,7 @@ static KPParseCoreData *sharedObject;
     [self updateTMPObjects];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(objectId IN %@) OR (objectId = nil)",[self.updateObjects allKeys]];
     NSFetchRequest *request = [KPParseObject MR_requestAllWithPredicate:predicate inContext:[self context]];
-    if(kFetchLimit) [request setFetchLimit:kFetchLimit];
     NSArray *changedObjects = [KPParseObject MR_executeFetchRequest:request inContext:[self context]];
-    if(kFetchLimit && changedObjects.count == kFetchLimit) self.syncAgain = YES;
     __block NSMutableArray *updatePFObjects = [NSMutableArray array];
     __block NSMutableArray *updatedObjects = [NSMutableArray array];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -268,6 +266,7 @@ static KPParseCoreData *sharedObject;
                     [self synchronizeForce:NO];
                 }
             }];
+
         
     });
     
