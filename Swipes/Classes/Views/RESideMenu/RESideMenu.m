@@ -74,7 +74,7 @@ static RESideMenu *sharedObject;
 }
 
 
-- (void)show
+- (void)showForce:(BOOL)force
 {
     if (_isShowing)
         return;
@@ -126,6 +126,7 @@ static RESideMenu *sharedObject;
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognized:)];
     [_screenshotView addGestureRecognizer:tapGestureRecognizer];
     [ANALYTICS pushView:@"Settings menu"];
+    if(force) [self minimizeFromRect:window.bounds];
 }
 
 - (void)hide
@@ -251,7 +252,7 @@ static RESideMenu *sharedObject;
     if (sender.state == UIGestureRecognizerStateBegan) {
         _initialX = _screenshotView.frame.origin.x;
     }
-    if(translation.x > translationThreshold) [self show];
+    if(translation.x > translationThreshold) [self showForce:NO];
 	if(!self.isShowing) return;
     if (sender.state == UIGestureRecognizerStateChanged) {
         

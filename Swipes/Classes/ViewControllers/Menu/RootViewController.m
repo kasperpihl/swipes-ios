@@ -23,7 +23,7 @@
 #import "FacebookCommunicator.h"
 #import "AnalyticsHandler.h"
 #import "AppDelegate.h"
-#import "RESideMenu.h"
+
 #import "MenuViewController.h"
 #import "KPBlurry.h"
 #import "WalkthroughViewController.h"
@@ -43,7 +43,7 @@
 #import <MessageUI/MessageUI.h>
 
 @interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate>
-@property (nonatomic,strong) RESideMenu *sideMenu;
+
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 @property (nonatomic) NSDate *lastClose;
 @property (nonatomic) KPMenu currentMenu;

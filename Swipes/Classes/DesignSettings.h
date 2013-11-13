@@ -133,8 +133,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #define TEXT_FIELD_HEIGHT 30
 #define SEPERATOR_WIDTH .5
 
-#define SEGMENT_BUTTON_WIDTH 60//70//80//106
-#define SEGMENT_BUTTON_HEIGHT 44
+//70//80//106
+//#define SEGMENT_BUTTON_HEIGHT 44
 
 #define ALERT_BOX_BACKGROUND            gray(37,1)
 

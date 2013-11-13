@@ -203,42 +203,42 @@ static KPParseCoreData *sharedObject;
     __block NSMutableArray *updatePFObjects = [NSMutableArray array];
     __block NSMutableArray *updatedObjects = [NSMutableArray array];
     [self startBackgroundHandler];
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext *localContext) {
-        for(KPParseObject *oldContextObject in changedObjects){
-            KPParseObject *object = [oldContextObject MR_inContext:localContext];
-            PFObject *pfObj = [object objectToSaveInContext:localContext];
-            if(!pfObj){
-                NSLog(@"skipped object:%@",object.objectId);
-                if(object && object.objectId) [self.updateObjects removeObjectForKey:object.objectId];
-                continue;
-            }
-            [updatePFObjects addObject:pfObj];
-            [updatedObjects addObject:object];
+    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+    for(KPParseObject *oldContextObject in changedObjects){
+        KPParseObject *object = [oldContextObject MR_inContext:localContext];
+        PFObject *pfObj = [object objectToSaveInContext:localContext];
+        if(!pfObj){
+            NSLog(@"skipped object:%@",object.objectId);
+            if(object && object.objectId) [self.updateObjects removeObjectForKey:object.objectId];
+            continue;
         }
-        for(NSString *objectIdKey in self.deleteObjects){
-            NSString *className = [self.deleteObjects objectForKey:objectIdKey];
-            PFObject *deleteObject = [KPParseObject objectForDeletionWithClassName:className objectId:objectIdKey];
-            [updatePFObjects addObject:deleteObject];
+        [updatePFObjects addObject:pfObj];
+        [updatedObjects addObject:object];
+    }
+    for(NSString *objectIdKey in self.deleteObjects){
+        NSString *className = [self.deleteObjects objectForKey:objectIdKey];
+        PFObject *deleteObject = [KPParseObject objectForDeletionWithClassName:className objectId:objectIdKey];
+        [updatePFObjects addObject:deleteObject];
+    }
+    if(updatePFObjects.count > 0){
+        NSLog(@"saving %i objects",updatePFObjects.count);
+        NSError *error;
+        [PFObject saveAll:updatePFObjects error:&error];
+        if(error){
+            self.syncAgain = YES;
+            NSLog(@"error saving updated:%@",error);
         }
-        if(updatePFObjects.count > 0){
-            NSLog(@"saving %i objects",updatePFObjects.count);
-            NSError *error;
-            [PFObject saveAll:updatePFObjects error:&error];
-            if(error){
-                self.syncAgain = YES;
-                NSLog(@"error saving updated:%@",error);
+        NSInteger index = 0;
+        for (KPParseObject *object in updatedObjects) {
+            PFObject *savedPFObject = [updatePFObjects objectAtIndex:index];
+            if(savedPFObject.updatedAt){
+                [object updateWithObject:savedPFObject context:localContext];
+                [self.updateObjects removeObjectForKey:savedPFObject.objectId];
             }
-            NSInteger index = 0;
-            for (KPParseObject *object in updatedObjects) {
-                PFObject *savedPFObject = [updatePFObjects objectAtIndex:index];
-                if(savedPFObject.updatedAt){
-                    [object updateWithObject:savedPFObject context:localContext];
-                    [self.updateObjects removeObjectForKey:savedPFObject.objectId];
-                }
-                index++;
-            }
+            index++;
         }
-    } completion:^(BOOL success, NSError *localError) {
+    }
+    [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *localError) {
         if(localError) NSLog(@"error happened in the first save:%@",localError);
         [self saveUpdatingObjects];
         CGFloat endTime = CACurrentMediaTime();

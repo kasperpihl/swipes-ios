@@ -56,7 +56,9 @@
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
-        CGRectSetY(self.addView, self.frame.size.height-self.addView.frame.size.height);
+        CGFloat yForAdd = self.frame.size.height-self.addView.frame.size.height;
+        CGRectSetY(self.addView, yForAdd);
+        CGRectSetCenterY(self.priorityButton, yForAdd+self.priorityButton.frame.size.height/2);
     [UIView commitAnimations];
 }
 -(void)keyboardWillShow:(NSNotification*)notification{
@@ -72,8 +74,9 @@
         CGRectSetY(self, self.frame.origin.y + deltaY);
         CGRectSetHeight(self, targetHeight);
     }
-    CGRectSetY(self.addView, self.frame.size.height-self.addView.frame.size.height-keyboardFrame.size.height);
-    
+    CGFloat yForAdd = self.frame.size.height-self.addView.frame.size.height-keyboardFrame.size.height;
+    CGRectSetY(self.addView, yForAdd);
+    CGRectSetCenterY(self.priorityButton, yForAdd+self.priorityButton.frame.size.height/2);
     [UIView commitAnimations];
 }
 -(void)pressedPriority{
@@ -114,7 +117,9 @@
         
         self.addView = (KPAddView*)[self viewWithTag:ADD_VIEW_TAG];
         CGRectSetHeight(self, KEYBOARD_HEIGHT+self.addView.frame.size.height);
-        CGRectSetY(self.addView, self.frame.size.height-self.addView.frame.size.height);
+        CGFloat yForAdd = self.frame.size.height-self.addView.frame.size.height;
+        CGRectSetY(self.addView, yForAdd);
+        CGRectSetCenterY(self.priorityButton, yForAdd+self.priorityButton.frame.size.height/2);
     }
     return self;
 }

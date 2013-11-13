@@ -38,7 +38,7 @@
 @property (nonatomic,strong) UIView *revealView;
 +(RESideMenu*)sharedInstance;
 - (void)addPanningToView:(UIView*)view;
-- (void)show;
+- (void)showForce:(BOOL)force;
 - (void)hide;
 - (void)setRootViewController:(UIViewController *)viewController;
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender;

@@ -33,8 +33,6 @@
 #define TITLE_DELTA_Y 0
 #define TITLE_Y (TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
 
-#define DOT_SIZE GLOBAL_DOT_SIZE
-#define DOT_OUTLINE_SIZE 4
 
 #define LABEL_WIDTH (320-(CELL_LABEL_X+(CELL_LABEL_X/3)))
 
@@ -49,6 +47,7 @@
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *selectionView;
 @property (nonatomic,weak) IBOutlet DotView *dotView;
+@property (nonatomic) KPToDo *toDo;
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
 @property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
@@ -125,8 +124,18 @@
         [self.contentView addSubview:self.alarmSeperator];
         [self.contentView addSubview:alarmLabel];
         self.alarmLabel = (UILabel*)[self.contentView viewWithTag:ALARM_LABEL_TAG];
+        
+        UIButton *priorityButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, CELL_LABEL_X, self.frame.size.height)];
+        priorityButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        [priorityButton addTarget:self action:@selector(pressedPriority) forControlEvents:UIControlEventTouchUpInside];
+        [self.contentView addSubview:priorityButton];
     }
     return self;
+}
+-(void)pressedPriority{
+    self.toDo.priorityValue = (self.toDo.priorityValue == 0) ? 1 : 0;
+    [self.toDo save];
+    [self setPriority:(self.toDo.priorityValue == 1)];
 }
 -(void)setPriority:(BOOL)priority{
     self.dotView.priority = priority;
@@ -142,6 +151,7 @@
     self.tagsLabel.hidden = !showBottomLine;
 }
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags{
+    self.toDo = toDo;
     BOOL showBottomLine = NO;
     self.titleLabel.text = toDo.title;
     __block CGFloat deltaX = CELL_LABEL_X;

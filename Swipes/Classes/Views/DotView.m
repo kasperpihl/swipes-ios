@@ -5,9 +5,13 @@
 //  Created by Kasper Pihl Tornøe on 20/10/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define kOutlineSize 4
-#define kDefaultDotSize (GLOBAL_DOT_SIZE)
-#define kDefaultSize (kDefaultDotSize+2*kOutlineSize)
+#define kDefaultDotSize 10.0f
+
+#define kPriorityDotSize 8.0f
+#define kOutlineSpace 3.5f
+#define kLineSize 1.5f
+
+#define kDefaultSize (kPriorityDotSize+2*kOutlineSpace+2*kLineSize)
 
 #import "DotView.h"
 #import <QuartzCore/QuartzCore.h>
@@ -32,13 +36,15 @@
 -(void)setSize:(CGFloat)size{
     CGRectSetSize(self, size, size);
     self.layer.cornerRadius = size/2;
+    [self adjustDot];
     
-    CGFloat dotSize = size-2*kOutlineSize;
-    CGRectSetSize(self.dotView, dotSize, dotSize);
-    self.dotView.layer.cornerRadius = dotSize/2;
-    
-    self.dotView.center = CGPointMake(size/2,size/2);
-    
+}
+-(void)adjustDot{
+    CGFloat size = self.priority ? kPriorityDotSize : kDefaultDotSize;
+    self.dotView.layer.cornerRadius = size/2;
+    CGRectSetSize(self.dotView, size, size);
+    CGRectSetCenter(self.dotView,self.frame.size.width/2, self.frame.size.height/2);
+    self.layer.borderWidth = self.priority ? kLineSize : 0;
 }
 -(void)setDotColor:(UIColor *)dotColor{
     if(_dotColor != dotColor){
@@ -51,7 +57,7 @@
 -(void)setPriority:(BOOL)priority{
     if(_priority != priority){
         _priority = priority;
-        self.layer.borderWidth = priority ? LINE_SIZE : 0;
+        [self adjustDot];
     }
     
 }

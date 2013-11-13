@@ -12,8 +12,7 @@
 #define TOOLBAR_HEIGHT GLOBAL_TOOLBAR_HEIGHT
 #define DEFAULT_ROW_HEIGHT 60
 #define SCHEDULE_ROW_HEIGHTS 46
-#define LABEL_X 52
-#define TITLE_LABEL_X 42
+#define LABEL_X CELL_LABEL_X
 
 #define TITLE_HEIGHT 44
 #define TITLE_TOP_MARGIN 15
@@ -40,9 +39,10 @@
 #import "KPBlurry.h"
 #import "UIColor+Utilities.h"
 #import "KPRepeatPicker.h"
-#import "UIButton+PassTouch.h"
+//#import "UIButton+PassTouch.h"
 #import "AppDelegate.h"
 #import "KPTimePicker.h"
+#import "DotView.h"
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
     KPEditModeTitle,
@@ -58,7 +58,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 @property (nonatomic) UIView *titleContainerView;
 @property (nonatomic) HPGrowingTextView *textView;
-@property (nonatomic) UIView *dotView;
 
 @property (nonatomic) UIScrollView *scrollView;
 @property (nonatomic) UIView *tagsContainerView;
@@ -74,6 +73,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 
 @property (nonatomic) KPToolbar *toolbarEditView;
+@property (nonatomic) DotView *dotView;
 
 @property (nonatomic,strong) KPTimePicker *timePicker;
 
@@ -95,8 +95,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         CGFloat buttonWidth = BUTTON_HEIGHT;
         
-        self.textView = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(0, TITLE_TOP_MARGIN, TITLE_WIDTH-buttonWidth, TITLE_HEIGHT)];
-        self.textView.contentInset = UIEdgeInsetsMake(0, TITLE_LABEL_X-8, 0, -8);
+        self.textView = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(CELL_LABEL_X, TITLE_TOP_MARGIN, TITLE_WIDTH-buttonWidth-CELL_LABEL_X, TITLE_HEIGHT)];
+        self.textView.contentInset = UIEdgeInsetsMake(0, -8, 0, -8);
         self.textView.minNumberOfLines = 1;
         self.textView.backgroundColor = CLEAR;
         self.textView.maxNumberOfLines = 6;
@@ -106,13 +106,20 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.textView.internalTextView.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);
         self.textView.textColor = tcolor(TaskCellTitle);
-        
-        self.dotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, GLOBAL_DOT_SIZE,GLOBAL_DOT_SIZE)];
-        self.dotView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin);
-        centerItemForSize(self.dotView, TITLE_LABEL_X, self.textView.frame.size.height);
-        self.dotView.layer.cornerRadius = GLOBAL_DOT_SIZE/2;
-        [self.textView addSubview:self.dotView];
         [self.titleContainerView addSubview:self.textView];
+        
+        CGFloat dotWidth = CELL_LABEL_X;
+        DotView *dotView = [[DotView alloc] init];
+        dotView.dotColor = tcolor(TasksColor);
+        UIButton *priorityButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, dotWidth, CONTAINER_INIT_HEIGHT)];
+        priorityButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        [priorityButton addTarget:self action:@selector(pressedPriority) forControlEvents:UIControlEventTouchUpInside];
+        CGRectSetCenter(dotView, dotWidth/2, self.textView.frame.size.height/2+TITLE_TOP_MARGIN);
+        dotView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin);
+        [priorityButton addSubview:dotView];
+        [self.titleContainerView addSubview:priorityButton];
+        self.dotView = dotView;
+        
         [contentView addSubview:self.titleContainerView];
         
         self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.titleContainerView.frame.size.height, 320, contentView.frame.size.height - self.titleContainerView.frame.size.height-TOOLBAR_HEIGHT)];
@@ -348,7 +355,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetHeight(self.scrollView, self.contentView.frame.size.height-titleHeight-TOOLBAR_HEIGHT);
 }
 #pragma mark NotesViewDelegate
-
+-(void)pressedPriority{
+    self.model.priorityValue = (self.model.priorityValue == 0) ? 1 : 0;
+    [self.model save];
+    [self updateDot];
+}
 -(void)savedNotesView:(NotesView *)notesView text:(NSString *)text{
     [BLURRY dismissAnimated:YES];
     [self.model updateNotes:text save:YES];
@@ -448,7 +459,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)updateDot{
     
-    self.dotView.backgroundColor = [StyleHandler colorForCellType:[self.model cellTypeForTodo]];
+    self.dotView.dotColor = [StyleHandler colorForCellType:[self.model cellTypeForTodo]];
+    self.dotView.priority = (self.model.priorityValue == 1);
 }
 -(void)updateSchedule{
     if(!self.model.schedule){// || [self.model.schedule isInPast]){

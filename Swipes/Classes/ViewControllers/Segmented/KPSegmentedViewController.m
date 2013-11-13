@@ -25,6 +25,7 @@
 #import "AnalyticsHandler.h"
 #import "AppDelegate.h"
 #import "UIImage+Blur.h"
+#import "SlowHighlightIcon.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
@@ -32,6 +33,7 @@
 #define CONTENT_VIEW_TAG 1000
 #define CONTROLS_VIEW_TAG 1001
 #define SEGMENT_BORDER_RADIUS 0
+#define SEGMENT_BUTTON_WIDTH 52
 #define TODAY_EXTRA_INSET 3
 #define SEGMENT_BORDER_WIDTH 0
 #define SEGMENT_HEIGHT 52
@@ -185,7 +187,7 @@
 	return _segmentedControl;
 }
 -(UIButton*)buttonForSegment:(KPSegmentButtons)controlButton{
-    UIButton *button = [[UIButton alloc] init];
+    UIButton *button = [[SlowHighlightIcon alloc] init];
     CGRectSetSize(button, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
     button.adjustsImageWhenHighlighted = NO;
     NSString *imageString;
@@ -229,7 +231,10 @@
 - (id)initWithViewControllers:(NSArray *)viewControllers {
 	return [self initWithViewControllers:viewControllers titles:[viewControllers valueForKeyPath:@"@unionOfObjects.title"]];
 }
-
+-(void)pressedSettings{
+    
+    [ROOT_CONTROLLER.sideMenu showForce:YES];
+}
 - (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles {
 	self = [super init];
 	
@@ -246,6 +251,12 @@
         self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, TOP_HEIGHT)];
         self.ios7BackgroundView.backgroundColor = CLEAR;
         [self.ios7BackgroundView addSubview:self.segmentedControl];
+        UIButton *settingsButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
+        //CGRectSetX(settingsButton, -settingsButton.frame.size.width/2);
+        [settingsButton setImage:[UIImage imageNamed:@"settings_icon_white"] forState:UIControlStateNormal];
+        [settingsButton setImage:[UIImage imageNamed:@"settings_icon_white-high"] forState:UIControlStateHighlighted];
+        [settingsButton addTarget:self action:@selector(pressedSettings) forControlEvents:UIControlEventTouchUpInside];
+        [self.ios7BackgroundView addSubview:settingsButton];
         [self.view addSubview:self.ios7BackgroundView];
         
         //self.navigationItem.titleView = self.segmentedControl;

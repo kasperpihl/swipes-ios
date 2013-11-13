@@ -9,6 +9,7 @@
 #define SIDE_MENU_WIDTH 250
 #import <UIKit/UIKit.h>
 #import "KPSegmentedViewController.h"
+#import "RESideMenu.h"
 typedef enum {
     KPMenuLogin = 1,
     KPMenuHome
@@ -23,6 +24,7 @@ typedef enum {
 -(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated;
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
 @property (nonatomic) BOOL lockSettings;
+@property (nonatomic,strong) RESideMenu *sideMenu;
 -(void)resetRoot;
 -(void)walkthrough;
 -(void)logOut;
