@@ -346,7 +346,6 @@
 		A7FE4406182828E1002AFB2E /* date_stamp_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FE4404182828E1002AFB2E /* date_stamp_background@2x.png */; };
 		A7FE440918282C5D002AFB2E /* ostrich-bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7FE440718282B04002AFB2E /* ostrich-bold.ttf */; };
 		A7FE440A18282C60002AFB2E /* ostrich-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7FE440818282B04002AFB2E /* ostrich-regular.ttf */; };
-		A7FE440C1828F7D3002AFB2E /* background-5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A7FE440B1828F7D3002AFB2E /* background-5.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -779,7 +778,6 @@
 		A7FE4404182828E1002AFB2E /* date_stamp_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "date_stamp_background@2x.png"; sourceTree = "<group>"; };
 		A7FE440718282B04002AFB2E /* ostrich-bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ostrich-bold.ttf"; path = "Font/ostrich-bold.ttf"; sourceTree = "<group>"; };
 		A7FE440818282B04002AFB2E /* ostrich-regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ostrich-regular.ttf"; path = "Font/ostrich-regular.ttf"; sourceTree = "<group>"; };
-		A7FE440B1828F7D3002AFB2E /* background-5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "background-5.jpg"; path = "../../../../../../Dropbox/Projekter/Swipes/Design/UI/elements/well-swiped/background-5.jpg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1726,7 +1724,6 @@
 				A7FE43F518282460002AFB2E /* background-2.png */,
 				A7FE43F618282460002AFB2E /* background-3.png */,
 				A7FE43F718282460002AFB2E /* background-4.png */,
-				A7FE440B1828F7D3002AFB2E /* background-5.jpg */,
 				A7FE43F818282460002AFB2E /* background-5.png */,
 				A7FE43F918282460002AFB2E /* background-6.png */,
 			);
@@ -1913,7 +1910,6 @@
 				A75236E717A335680030ED1E /* walkthrough_swipe_schedule@2x.png in Resources */,
 				A75236EC17A335680030ED1E /* wt_menu_expain.png in Resources */,
 				A7DAC6AE181A8D3C00B8C079 /* checkmark_icon_white@2x.png in Resources */,
-				A7FE440C1828F7D3002AFB2E /* background-5.jpg in Resources */,
 				A7FE43FD18282460002AFB2E /* background-4.png in Resources */,
 				A75236ED17A335680030ED1E /* wt_menu_expain@2x.png in Resources */,
 				A7FE43FE18282460002AFB2E /* background-5.png in Resources */,

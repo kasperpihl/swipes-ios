@@ -113,6 +113,7 @@
 }
 -(void)didLoginUser:(PFUser*)user{
     if(user.isNew) [[KPParseCoreData sharedInstance] seedObjects];
+    [KPCORE update];
     NSString *wasSignup = user.isNew ? @"yes" : @"no";
     [MIXPANEL track:@"Logged in" properties:@{@"Is signup":wasSignup}];
     if(user.isNew) {

@@ -335,7 +335,6 @@
         else if(!remove && !contained) [tagsStrings addObject:tag];
     }
     self.tagString = [tagsStrings componentsJoinedByString:@", "];
-    
 }
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags{
     NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:

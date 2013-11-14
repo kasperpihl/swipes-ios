@@ -28,4 +28,5 @@
 +(NSString*)classNameFromParseName:(NSString*)parseClassName;
 -(void)saveInContext:(NSManagedObjectContext*)context;
 -(void)synchronizeForce:(BOOL)force;
+-(void)update;
 @end
