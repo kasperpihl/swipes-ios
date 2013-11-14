@@ -387,7 +387,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
 }
 -(void)updateRepeated{
-    if(![self.repeatPicker.selectedDate isEqualToDate:self.model.repeatedDate] || self.repeatPicker.currentOption != self.model.repeatOptionValue)  [self.repeatPicker setSelectedDate:self.model.repeatedDate option:self.model.repeatOptionValue];
+    NSDate *repeatDate = self.model.repeatedDate;
+    if(!repeatDate) repeatDate = self.model.schedule;
+    if(repeatDate){
+        if(![self.repeatPicker.selectedDate isEqualToDate:repeatDate] || self.repeatPicker.currentOption != self.model.repeatOptionValue)  [self.repeatPicker setSelectedDate:repeatDate option:self.model.repeatOptionValue];
+    }
+    else return;
     NSString* labelText;
     NSString *timeInString = [UtilityClass timeStringForDate:self.model.repeatedDate];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

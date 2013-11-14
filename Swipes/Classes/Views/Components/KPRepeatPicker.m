@@ -37,7 +37,7 @@
 -(void)setSelectedDate:(NSDate *)selectedDate option:(RepeatOptions)option{
     self.currentOption = option;
     self.selectedDate = selectedDate;
-    [self setNeedsLayout];
+    [self layoutSubviews];
 }
 -(UIButton*)buttonForTouches:(NSSet*)touches{
     if (touches.count != 1) {
@@ -99,6 +99,7 @@
         self.selectedDate = date;
         self.currentOption = option;
         self.selectedColor = kDefSelectedColor;
+        [self layoutSubviews];
     }
     return self;
 }
