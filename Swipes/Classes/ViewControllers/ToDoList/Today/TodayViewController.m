@@ -249,6 +249,7 @@
     self.youreAllDoneView = nil;
     self.twitterButton = nil;
     self.facebookButton = nil;
+    clearNotify();
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];

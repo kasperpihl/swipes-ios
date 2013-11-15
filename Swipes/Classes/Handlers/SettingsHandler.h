@@ -20,4 +20,6 @@ typedef enum {
 +(SettingsHandler*)sharedInstance;
 -(id)valueForSetting:(KPSettings)setting;
 -(void)setValue:(id)value forSetting:(KPSettings)setting;
+-(void)refreshGlobalSettingsForce:(BOOL)force;
+-(UIImage*)getDailyImage;
 @end

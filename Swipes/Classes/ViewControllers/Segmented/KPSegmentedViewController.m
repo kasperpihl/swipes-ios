@@ -26,6 +26,7 @@
 #import "AppDelegate.h"
 #import "UIImage+Blur.h"
 #import "SlowHighlightIcon.h"
+#import "SettingsHandler.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
@@ -348,48 +349,57 @@
     }
     //[self.navigationController setNavigationBarHidden:!show animated:YES];
 }
+-(void)updatedDailyImage{
+    UIImage *newDailyImage = [[kSettings getDailyImage] rn_boxblurImageWithBlur:0.5f exclusionPath:nil];
+    if(self.backgroundImage.alpha == 0) [self.backgroundImage setImage:newDailyImage];
+    else{
+        [UIView transitionWithView:self.view duration:2.5f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            [self.backgroundImage setImage:newDailyImage];
+        } completion:nil];
+    }
+}
 -(void)viewDidLoad{
     [super viewDidLoad];
+    notify(@"updated daily image", updatedDailyImage);
+    self.view.backgroundColor = tbackground(BackgroundColor);
+    
+    /* Daily image background */
+    self.backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
+    self.backgroundImage.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+    [self.backgroundImage setImage:[[kSettings getDailyImage] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
+    self.backgroundImage.alpha = 0;
+    UIView *overlay = [[UIView alloc] initWithFrame:self.backgroundImage.bounds];
+    overlay.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+    overlay.backgroundColor = gray(0,0.5);
+    [self.backgroundImage addSubview:overlay];
+    [self.view addSubview:self.backgroundImage];
+    
+    /* Content view for ToDo list view controllers */
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, 320, self.view.bounds.size.height-TOP_HEIGHT)];
+    self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+    contentView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+    contentView.layer.masksToBounds = YES;
+    contentView.tag = CONTENT_VIEW_TAG;
+    [self.view addSubview:contentView];
+    self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
+    
+    /* Control handler - Bottom toolbar for add/edit */
+    self.controlHandler = [KPControlHandler instanceInView:self.view];
+    self.controlHandler.delegate = self;
+    
+    
+    [self.view bringSubviewToFront:self.segmentedControl];
+    UIViewController *currentViewController = self.viewControllers[DEFAULT_SELECTED_INDEX];
+    self.currentSelectedIndex = DEFAULT_SELECTED_INDEX;
+    [self addChildViewController:currentViewController];
+    
+    currentViewController.view.frame = self.contentView.bounds;
+    [self.contentView addSubview:currentViewController.view];
+    [currentViewController didMoveToParentViewController:self];
+    [self.view sendSubviewToBack:self.backgroundImage];
     //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
     //self.navigationItem.rightBarButtonItem = filter;
-}
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-	if (!self.hasAppeared) {
-        self.hasAppeared = YES;
-        self.view.backgroundColor = tbackground(BackgroundColor);
-        self.backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
-        self.backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
-        self.backgroundImage.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-        [self.backgroundImage setImage:[[UIImage imageNamed:@"background-6.png"] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
-        self.backgroundImage.alpha = 0;
-        UIView *overlay = [[UIView alloc] initWithFrame:self.backgroundImage.bounds];
-        overlay.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-        overlay.backgroundColor = gray(0,0.5);
-        [self.backgroundImage addSubview:overlay];
-        [self.view addSubview:self.backgroundImage];
-    
-        
-        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, 320, self.view.bounds.size.height-TOP_HEIGHT)];
-        self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-        contentView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-        contentView.layer.masksToBounds = YES;
-        contentView.tag = CONTENT_VIEW_TAG;
-        [self.view addSubview:contentView];
-        self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
-        self.controlHandler = [KPControlHandler instanceInView:self.view];
-        self.controlHandler.delegate = self;
-        
-        [self.view bringSubviewToFront:self.segmentedControl];
-        UIViewController *currentViewController = self.viewControllers[DEFAULT_SELECTED_INDEX];
-        self.currentSelectedIndex = DEFAULT_SELECTED_INDEX;
-        [self addChildViewController:currentViewController];
-        
-        currentViewController.view.frame = self.contentView.bounds;
-        [self.contentView addSubview:currentViewController.view];
-        [currentViewController didMoveToParentViewController:self];
-        [self.view sendSubviewToBack:self.backgroundImage];
-    }
 }
 -(void)changeToIndex:(NSInteger)index{
     [self.segmentedControl setSelectedIndex:index];
@@ -435,7 +445,8 @@
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl{
     self.showingModel = nil;
     [self changeViewControllerAnimated:YES];
-	
-	
+}
+-(void)dealloc{
+    clearNotify();
 }
 @end

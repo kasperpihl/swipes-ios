@@ -73,13 +73,19 @@ typedef enum {
 @property (nonatomic) BOOL didUseTimePicker;
 
 @end
+#import <Parse/Parse.h>
 @implementation SchedulePopup
 -(NSMutableArray *)scheduleButtons{
     if(!_scheduleButtons) _scheduleButtons = [NSMutableArray array];
     return _scheduleButtons;
 }
 -(void)setStartingTimeForDate:(NSDate**)date{
-    KPSettings setting = [*date isTypicallyWeekend] ? SettingWeekendStartTime : SettingWeekStartTime;
+    NSDate *weekendStartDay = (NSDate*)[kSettings valueForSetting:SettingWeekendStart];
+    KPSettings setting;
+    if([*date weekday] == weekendStartDay.weekday || [*date weekday] == weekendStartDay.weekday + 1) setting = SettingWeekendStartTime;
+    else if([*date weekday] == 1 && weekendStartDay.weekday == 7) setting = SettingWeekendStartTime;
+    else setting = SettingWeekStartTime;
+    //else if(*week.weekday == 0 && )
     NSDate *dateForSetting = (NSDate*)[kSettings valueForSetting:setting];
     *date = [*date dateAtHours:dateForSetting.hour minutes:dateForSetting.minute];
 }
@@ -171,14 +177,14 @@ typedef enum {
         }
         case KPScheduleButtonThisWeekend:{
             NSDate *thisWeekend = (NSDate*)[kSettings valueForSetting:SettingWeekendStart];
-            date = [NSDate dateThisOrNextWeekWithDay:thisWeekend.weekday hours:10 minutes:0];
-            [self setStartingTimeForDate:&date];
+            NSDate *weekendStartTime = (NSDate*)[kSettings valueForSetting:SettingWeekendStartTime];
+            date = [NSDate dateThisOrNextWeekWithDay:thisWeekend.weekday hours:weekendStartTime.hour minutes:weekendStartTime.minute];
             break;
         }
         case KPScheduleButtonNextWeek:{
             NSDate *nextWeek = (NSDate*)[kSettings valueForSetting:SettingWeekStart];
-            date = [NSDate dateThisOrNextWeekWithDay:nextWeek.weekday hours:9 minutes:0];
-            [self setStartingTimeForDate:&date];
+            NSDate *weekStartTime = (NSDate*)[kSettings valueForSetting:SettingWeekStartTime];
+            date = [NSDate dateThisOrNextWeekWithDay:nextWeek.weekday hours:weekStartTime.hour minutes:weekStartTime.minute];
             break;
         }
         case KPScheduleButtonUnscheduled:

@@ -36,6 +36,7 @@
 #import "KPRepeatPicker.h"
 #import "NSDate-Utilities.h"
 
+#import "SettingsHandler.h"
 #import "KPOverlay.h"
 
 #import "ToDoHandler.h"
@@ -255,6 +256,7 @@ static RootViewController *sharedObject;
     //[[[self menuViewController] currentViewController] deselectAllRows:self];
     //[OVERLAY popAllViewsAnimated:NO];
     //[self resetRoot];
+    [kSettings refreshGlobalSettingsForce:NO];
     if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
         [OVERLAY popAllViewsAnimated:NO];
         [self resetRoot];
@@ -274,14 +276,6 @@ static RootViewController *sharedObject;
     if(!sharedObject) sharedObject = self;
     if(!kCurrent) [self changeToMenu:KPMenuLogin animated:NO];
     else [self changeToMenu:KPMenuHome animated:NO];
-}
--(void)addObserversForPurchase{
-    [PFPurchase addObserverForProduct:@"plusMonthlyTier1" block:^(SKPaymentTransaction *transaction) {
-        
-    }];
-    [PFPurchase addObserverForProduct:@"plusYearlyTier10" block:^(SKPaymentTransaction *transaction) {
-        
-    }];
 }
 - (void)viewDidLoad
 {

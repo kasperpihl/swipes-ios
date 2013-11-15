@@ -12,6 +12,13 @@
 #import "SettingsHandler.h"
 #import "NSDate-Utilities.h"
 #import "NotificationHandler.h"
+#import <Parse/PFQuery.h>
+#import <Parse/PFFile.h>
+@interface SettingsHandler ()
+@property (nonatomic,copy) ImageBlock block;
+@property BOOL isFetchingSettings;
+@property BOOL isFetchingImage;
+@end
 @implementation SettingsHandler
 static SettingsHandler *sharedObject;
 +(SettingsHandler *)sharedInstance{
@@ -43,6 +50,52 @@ static SettingsHandler *sharedObject;
             index = @"SettingNotifications";
     }
     return index;
+}
+-(UIImage *)getDailyImage{
+    NSString *existingFileName = [[NSUserDefaults standardUserDefaults] stringForKey:@"dailyImageFileName"];
+    if(existingFileName){
+        NSString *fullPath = parseFileCachePath(existingFileName);
+        if ([[NSFileManager defaultManager] fileExistsAtPath:fullPath])
+        {
+            NSData *returnData =[NSData dataWithContentsOfFile:fullPath];
+            return [UIImage imageWithData:returnData];
+        }
+    }
+    else [self refreshDailyImage:YES];
+    return [UIImage imageNamed:@"default-background.jpg"];
+}
+-(void)refreshDailyImage:(BOOL)force{
+    if(self.isFetchingImage) return;
+    NSDate *now = [NSDate date];
+    NSInteger lastUpdatedDay = [[NSUserDefaults standardUserDefaults] integerForKey:@"lastUpdatedDailyImage"];
+    if(now.dayOfYear != lastUpdatedDay || force){
+        self.isFetchingImage = YES;
+        PFQuery *query = [PFQuery queryWithClassName:@"DailyImage"];
+        [query whereKey:@"device" equalTo:@"iphone"];
+        [query whereKey:@"dayOfYear" equalTo:@(now.dayOfYear)];
+        [query whereKey:@"year" equalTo:@(now.year)];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            if(error || !object){
+                if(!object) [[NSUserDefaults standardUserDefaults] setInteger:now.dayOfYear forKey:@"lastUpdatedDailyImage"];
+                self.isFetchingImage = NO;
+                return;
+            }
+            PFFile *file = [object objectForKey:@"image"];
+            if(!file){ self.isFetchingImage = NO; return; }
+            [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                self.isFetchingImage = NO;
+                if(data){
+                    [[NSUserDefaults standardUserDefaults] setObject:file.name forKey:@"dailyImageFileName"];
+                    [[NSUserDefaults standardUserDefaults] setInteger:now.dayOfYear forKey:@"lastUpdatedDailyImage"];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updated daily image" object:self];
+                }
+            }];
+        }];
+    }
+}
+-(void)refreshGlobalSettingsForce:(BOOL)force{
+    [self refreshDailyImage:force];
+    if(self.isFetchingSettings) return;
 }
 -(id)defaultValueForSettings:(KPSettings)setting{
     //NSLog(@"defaultval for:%i",setting);
