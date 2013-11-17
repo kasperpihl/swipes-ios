@@ -7,13 +7,14 @@
 +(BOOL)deleteObjectById:(NSString*)identifier context:(NSManagedObjectContext*)context;
 -(void)updateWithObject:(PFObject*)object context:(NSManagedObjectContext*)context;
 
-+(PFQuery*)query;
--(void)getDataforKey:(NSString*)key withCompletion:(DataBlock)downloadComplete;
--(void)setFile:(PFFile*)file forKey:(NSString*)key;
 /* To use saveWithHandler: overwrite setAttributesForSavingObject: in subclass to set all the attributes to save */
 -(PFObject*)objectToSaveInContext:(NSManagedObjectContext *)context;
 -(BOOL)setAttributesForSavingObject:(PFObject**)object changedAttributes:(NSArray*)changedAttributes;
 -(PFObject*)emptyObjectForSaving;
 +(PFObject*)objectForDeletionWithClassName:(NSString*)className objectId:(NSString*)objectId;
 /* Overwrite for completion handler after saving */
+
+/* File handling */
+-(void)getDataforKey:(NSString*)key withCompletion:(DataBlock)downloadComplete;
+-(void)setFile:(PFFile*)file forKey:(NSString*)key;
 @end

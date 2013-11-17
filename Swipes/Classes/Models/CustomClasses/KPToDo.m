@@ -22,7 +22,7 @@
       @"schedule": @"schedule",
       @"completionDate": @"completionDate",
       @"notes": @"notes",
-      @"repeatCount": @"numberOfRepeated",
+      @"repeatCount": @"numberOfRepeated",  
       @"repeatDate": @"repeatedDate",
       @"order": @"order",
       @"priority":@"priority"
