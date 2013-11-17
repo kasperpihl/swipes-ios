@@ -72,7 +72,7 @@ typedef void (^voidBlock)(void);
 #define kCurrentSetAttr(key,attr) [kCurrent setObject:attr forKey:key]
 
 #define sizeWithFont(string,font) ((OSVER >= 7) ? [string sizeWithAttributes:@{NSFontAttributeName:font}] : [string sizeWithFont:font])
-
+#define _ Underscore
 
 #define radians(degrees) (degrees * M_PI / 180)
 #define degrees(radians) (radians * 180 / M_PI)

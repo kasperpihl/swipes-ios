@@ -14,7 +14,6 @@
 #import "AppsFlyer.h"
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
-#import "GAI.h"
 #import "LocalyticsSession.h"
 #import "LocalyticsAmpSession.h"
 
@@ -53,13 +52,6 @@
     [Mixpanel sharedInstanceWithToken:mixpanelToken];
     
     [[LocalyticsSession shared] startSession:localyticsKey];
-    
-    // Optional: automatically send uncaught exceptions to Google Analytics.
-    [GAI sharedInstance].trackUncaughtExceptions = YES;
-    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
-    [GAI sharedInstance].dispatchInterval = 5;
-    
-    [[GAI sharedInstance] trackerWithTrackingId:@"UA-41592802-2"];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     

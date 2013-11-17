@@ -23,7 +23,6 @@
     return _downloadingKeys;
 }
 #pragma mark - Forward declarations
-+(PFQuery *)query{ return nil; }
 -(void)updateWithObject:(PFObject *)object context:(NSManagedObjectContext*)context{
     if(!context) context = [KPCORE context];
     [context performBlockAndWait:^{

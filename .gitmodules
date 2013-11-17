@@ -1,6 +1,0 @@
-[submodule "Submodules/UAModalPanel"]
-	path = Submodules/UAModalPanel
-	url = git://github.com/coneybeare/UAModalPanel.git
-[submodule "Shery/Ressources/Libs/UAModalPanel"]
-	path = Shery/Ressources/Libs/UAModalPanel
-	url = git://github.com/coneybeare/UAModalPanel.git

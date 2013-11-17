@@ -456,8 +456,6 @@ typedef enum {
 
 	CGRect rectForIndexPath = [self rectForRowAtIndexPath:self.indexPathBelowDraggedCell];
 
-	BOOL hideDragIndicator = YES;
-	if( [self.dragDelegate respondsToSelector:@selector(dragTableViewController:shouldHideDraggableIndicatorForDraggingToRow:)] )
         
 	[UIView animateWithDuration:0.25 delay:0 options:(UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionBeginFromCurrentState) animations:^{
 		//self.draggedCell.transform = CGAffineTransformMakeScale(1/CELL_WIDTH_SCALE, 1/CELL_HEIGHT_SCALE);
