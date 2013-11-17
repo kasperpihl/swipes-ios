@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "KPSearchBar.h"
-#import "ToDoHandler.h"
+#import "KPToDo.h"
 @class ItemHandler;
 @protocol ItemHandlerDelegate <NSObject>
 -(UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath;

@@ -143,7 +143,6 @@
 		A761B5BD16EB597B0095A9A8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */; };
 		A764F79617BBAFBC0036383B /* KPRepeatPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A764F79517BBAFBC0036383B /* KPRepeatPicker.m */; };
 		A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
-		A7680D26172C5E9100BCB2D9 /* TagHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D25172C5E9100BCB2D9 /* TagHandler.m */; };
 		A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D28172C5EA800BCB2D9 /* _KPTag.m */; };
 		A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2B172C5EAF00BCB2D9 /* KPTag.m */; };
 		A7680D2F172C610B00BCB2D9 /* KPTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2E172C610B00BCB2D9 /* KPTagList.m */; };
@@ -332,7 +331,6 @@
 		A7F4066B17296BF100DDE644 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066817296BF100DDE644 /* ToDoCell.m */; };
 		A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066A17296BF100DDE644 /* ToDoListViewController.m */; };
 		A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4067117296C0500DDE644 /* KPControlHandler.m */; };
-		A7F40676172A785C00DDE644 /* ToDoHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F40675172A785C00DDE644 /* ToDoHandler.m */; };
 		A7F43AA61798A6FF00DFC9AD /* CKCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F43AA51798A6FF00DFC9AD /* CKCalendarView.m */; };
 		A7F752F518045AC5002DF942 /* SlowHighlightIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F752F418045AC5002DF942 /* SlowHighlightIcon.m */; };
 		A7FA8B1D17AF094E00134ED0 /* SnoozesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FA8B1C17AF094D00134ED0 /* SnoozesViewController.m */; };
@@ -496,8 +494,6 @@
 		A764F79517BBAFBC0036383B /* KPRepeatPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPRepeatPicker.m; path = Components/KPRepeatPicker.m; sourceTree = "<group>"; };
 		A7680D1E172C0E1C00BCB2D9 /* NSDate-Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-Utilities.h"; sourceTree = "<group>"; };
 		A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-Utilities.m"; sourceTree = "<group>"; };
-		A7680D24172C5E9100BCB2D9 /* TagHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagHandler.h; sourceTree = "<group>"; };
-		A7680D25172C5E9100BCB2D9 /* TagHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagHandler.m; sourceTree = "<group>"; };
 		A7680D27172C5EA800BCB2D9 /* _KPTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _KPTag.h; sourceTree = "<group>"; };
 		A7680D28172C5EA800BCB2D9 /* _KPTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _KPTag.m; sourceTree = "<group>"; };
 		A7680D2A172C5EAF00BCB2D9 /* KPTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPTag.h; sourceTree = "<group>"; };
@@ -754,8 +750,6 @@
 		A7F4066A17296BF100DDE644 /* ToDoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoListViewController.m; sourceTree = "<group>"; };
 		A7F4067017296C0500DDE644 /* KPControlHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPControlHandler.h; sourceTree = "<group>"; };
 		A7F4067117296C0500DDE644 /* KPControlHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPControlHandler.m; sourceTree = "<group>"; };
-		A7F40674172A785C00DDE644 /* ToDoHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDoHandler.h; sourceTree = "<group>"; };
-		A7F40675172A785C00DDE644 /* ToDoHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoHandler.m; sourceTree = "<group>"; };
 		A7F43AA41798A6FF00DFC9AD /* CKCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKCalendarView.h; sourceTree = "<group>"; };
 		A7F43AA51798A6FF00DFC9AD /* CKCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCalendarView.m; sourceTree = "<group>"; };
 		A7F752F318045AC4002DF942 /* SlowHighlightIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlowHighlightIcon.h; path = Components/SlowHighlightIcon.h; sourceTree = "<group>"; };
@@ -1638,10 +1632,6 @@
 				A717BF1D17611162004791BF /* AnalyticsHandler.h */,
 				A717BF1E17611162004791BF /* AnalyticsHandler.m */,
 				A7F4066F17296C0500DDE644 /* KPControlHandler */,
-				A7F40674172A785C00DDE644 /* ToDoHandler.h */,
-				A7F40675172A785C00DDE644 /* ToDoHandler.m */,
-				A7680D24172C5E9100BCB2D9 /* TagHandler.h */,
-				A7680D25172C5E9100BCB2D9 /* TagHandler.m */,
 				A75DB20E173119FE00FA256B /* ItemHandler.h */,
 				A75DB20F173119FE00FA256B /* ItemHandler.m */,
 				A7B260911733D1FC000BADDE /* NotificationHandler.h */,
@@ -2042,14 +2032,12 @@
 				A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */,
 				A76ADC1117EC9B5700F52F40 /* HPTextViewInternal.m in Sources */,
 				A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */,
-				A7F40676172A785C00DDE644 /* ToDoHandler.m in Sources */,
 				A7933049172AB63700F1505E /* TodayViewController.m in Sources */,
 				A7933050172B251A00F1505E /* KPAddTagPanel.m in Sources */,
 				A7933056172B2BA100F1505E /* DoneViewController.m in Sources */,
 				A74EC03B180EBCC500F3FA37 /* TWStatus.m in Sources */,
 				A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */,
 				A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */,
-				A7680D26172C5E9100BCB2D9 /* TagHandler.m in Sources */,
 				A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */,
 				A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */,
 				A7680D2F172C610B00BCB2D9 /* KPTagList.m in Sources */,

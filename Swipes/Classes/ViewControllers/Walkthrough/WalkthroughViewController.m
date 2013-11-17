@@ -10,7 +10,7 @@
 #import "WalkthroughCell.h"
 #import "WalkthroughTitleView.h"
 #import "WalkthroughOverlayBackground.h"
-#import "ToDoHandler.h"
+#import "KPToDo.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
 #import "StyleHandler.h"

@@ -10,8 +10,8 @@
 #import "KPControlHandler.h"
 #import "AddPanelView.h"
 #import "ToDoListViewController.h"
-#import "ToDoHandler.h"
-#import "TagHandler.h"
+#import "KPToDo.h"
+#import "KPTag.h"
 #import "UtilityClass.h"
 #import "AKSegmentedControl.h"
 #import "KPAddTagPanel.h"
@@ -50,6 +50,7 @@
 @property (nonatomic, weak) IBOutlet UIView *contentView;
 @property (nonatomic,strong) KPControlHandler *controlHandler;
 @property (nonatomic,weak) IBOutlet UIView *presentedPanel;
+@property (nonatomic) UIButton *_settingsButton;
 @property (nonatomic) BOOL tableIsShrinked;
 @property (nonatomic) NSInteger currentSelectedIndex;
 @property (nonatomic) UIView *ios7BackgroundView;
@@ -73,32 +74,32 @@
     [[self currentViewController] update];
 }
 -(void)tagPanel:(KPAddTagPanel *)tagPanel createdTag:(NSString *)tag{
-    [TAGHANDLER addTag:tag save:YES];
+    [KPTag addTagWithString:tag save:YES];
 }
 
 #pragma mark - KPTagDelegate
 -(NSArray *)selectedTagsForTagList:(KPTagList *)tagList{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
-    NSArray *selectedTags = [TAGHANDLER selectedTagsForToDos:selectedItems];
+    NSArray *selectedTags = [KPToDo selectedTagsForToDos:selectedItems];
     return selectedTags;
 }
 -(NSArray *)tagsForTagList:(KPTagList *)tagList{
-    NSArray *allTags = [TAGHANDLER allTags];
+    NSArray *allTags = [KPTag allTagsAsStrings];
     return allTags;
 }
 -(void)tagList:(KPTagList *)tagList selectedTag:(NSString *)tag{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
-    [TAGHANDLER updateTags:@[tag] remove:NO toDos:selectedItems save:YES];
+    [KPToDo updateTags:@[tag] forToDos:selectedItems remove:NO save:YES];
     [[self currentViewController] didUpdateItemHandler:nil];
 }
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString *)tag{
     NSArray *selectedItems = [[self currentViewController] selectedItems];
-    [TAGHANDLER updateTags:@[tag] remove:YES toDos:selectedItems save:YES];
+    [KPToDo updateTags:@[tag] forToDos:selectedItems remove:YES save:YES];
     [[self currentViewController] didUpdateItemHandler:nil];
 }
 -(void)tagList:(KPTagList *)tagList deletedTag:(NSString *)tag{
     [[self currentViewController].itemHandler deselectTag:tag];
-    [TAGHANDLER deleteTag:tag];
+    [KPTag deleteTagWithString:tag save:YES];
     [[self currentViewController] didUpdateItemHandler:nil];
 }
 #pragma mark - KPControlHandlerDelegate
@@ -136,7 +137,7 @@
 }
 -(void)tagViewWithDismissAction:(voidBlock)block{
     //[self show:NO controlsAnimated:YES];
-    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.view.bounds andTags:[TAGHANDLER allTags]];
+    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.view.bounds andTags:[KPTag allTagsAsStrings]];
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     BLURRY.showPosition = PositionBottom;
@@ -192,18 +193,14 @@
     CGRectSetSize(button, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
     button.adjustsImageWhenHighlighted = NO;
     NSString *imageString;
-    UIColor *thisColor;
     switch (controlButton) {
         case KPSegmentButtonSchedule:
-            thisColor = tcolor(LaterColor);
             imageString = @"schedule";
             break;
         case KPSegmentButtonToday:
-            thisColor = tcolor(TasksColor);
             imageString = @"today";
             break;
         case KPSegmentButtonDone:
-            thisColor = tcolor(DoneColor);
             imageString = @"done";
             break;
     }
@@ -258,6 +255,7 @@
         [settingsButton setImage:[UIImage imageNamed:@"settings_icon_white-high"] forState:UIControlStateHighlighted];
         [settingsButton addTarget:self action:@selector(pressedSettings) forControlEvents:UIControlEventTouchUpInside];
         [self.ios7BackgroundView addSubview:settingsButton];
+        self._settingsButton = settingsButton;
         [self.view addSubview:self.ios7BackgroundView];
         
         //self.navigationItem.titleView = self.segmentedControl;
@@ -317,22 +315,21 @@
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
         [UIView animateWithDuration:0.25f animations:^{
             CGRectSetY(self.contentView, y);
-            self.segmentedControl.alpha = 0;
+            self.ios7BackgroundView.alpha = 0;
         } completion:^(BOOL finished) {
             if(finished){
-                self.segmentedControl.hidden = YES;
+                self.ios7BackgroundView.hidden = YES;
             }
         }];
     }
     else{
-        self.segmentedControl.hidden = NO;
+        self.ios7BackgroundView.hidden = NO;
         CGRectSetY(self.contentView, self.ios7BackgroundView.frame.size.height);
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
         CGRectSetHeight(self.contentView, self.view.frame.size.height-self.ios7BackgroundView.frame.size.height);
         
         [UIView animateWithDuration:0.25f animations:^{
-            
-            self.segmentedControl.alpha = 1;
+            self.ios7BackgroundView.alpha = 1;
             
             
         } completion:^(BOOL finished) {

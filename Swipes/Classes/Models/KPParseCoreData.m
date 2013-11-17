@@ -8,8 +8,8 @@
 
 #import "KPParseCoreData.h"
 #import "UtilityClass.h"
-#import "ToDoHandler.h"
-#import "TagHandler.h"
+#import "KPToDo.h"
+#import "KPTag.h"
 #import "NSDate-Utilities.h"
 #import <Parse/PFCloud.h>
 #import <Parse/PFRelation.h>
@@ -293,7 +293,7 @@ static KPParseCoreData *sharedObject;
                         @"work"
     ];
     for(NSString *tag in tagArray){
-        [TAGHANDLER addTag:tag save:NO];
+        [KPTag addTagWithString:tag save:NO];
     }
     [self saveInContext:nil];
     NSArray *toDoArray = @[
@@ -305,13 +305,13 @@ static KPParseCoreData *sharedObject;
                        ];
     for(NSInteger i = toDoArray.count-1 ; i >= 0  ; i--){
         NSString *item = [toDoArray objectAtIndex:i];
-        KPToDo *toDo = [TODOHANDLER addItem:item priority:NO save:NO];
-        if(i == 4)[TAGHANDLER updateTags:@[@"home"] remove:NO toDos:@[toDo] save:YES];
-        if(i == 5)[TAGHANDLER updateTags:@[@"work"] remove:NO toDos:@[toDo] save:YES];
+        KPToDo *toDo = [KPToDo addItem:item priority:NO save:NO];
+        if(i == 4)[KPToDo updateTags:@[@"home"] forToDos:@[toDo] remove:NO save:YES];
+        if(i == 5)[KPToDo updateTags:@[@"work"] forToDos:@[toDo] remove:NO save:YES];
     }
     [self saveInContext:nil];
-    NSArray *todosForTagsArray = [KPToDo MR_findAll];
-    todosForTagsArray = [todosForTagsArray subarrayWithRange:NSMakeRange(0, 3)];
+ //   NSArray *todosForTagsArray = [KPToDo MR_findAll];
+//    todosForTagsArray = [todosForTagsArray subarrayWithRange:NSMakeRange(0, 3)];
     
     [UTILITY.userDefaults setBool:YES forKey:@"seeded"];
 }

@@ -8,7 +8,7 @@
 
 #import "ToDoCell.h"
 #import "UtilityClass.h"
-#import "ToDoHandler.h"
+#import "KPToDo.h"
 #import <QuartzCore/QuartzCore.h>
 #import "NSDate-Utilities.h"
 #import "UIColor+Utilities.h"
@@ -201,7 +201,7 @@
     CGRectSetWidth(self.tagsLabel, self.frame.size.width - deltaX - CELL_LABEL_X/2);
     CGRectSetX(self.tagsLabel,deltaX);
     
-    NSString *tagString = [toDo stringifyTags];
+    NSString *tagString = toDo.tagString;
     if (tagString && tagString.length > 0){
         showBottomLine = YES;
     }

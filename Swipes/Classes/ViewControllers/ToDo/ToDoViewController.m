@@ -242,7 +242,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         if(finished){
             [timePicker removeFromSuperview];
             self.timePicker = nil;
-            if(date) [self.model scheduleForDate:date];
+            if(date) [KPToDo scheduleToDos:@[self.model] forDate:date save:YES];
         }
     }];
     
@@ -337,7 +337,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 - (void)growingTextViewDidEndEditing:(HPGrowingTextView *)growingTextView{
     growingTextView.text = [growingTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     if(growingTextView.text.length > 0){
-        [TODOHANDLER changeToDos:@[self.model] title:growingTextView.text save:YES];
+        self.model.title = growingTextView.text;
+        [self.model save];
     }
     else{
         growingTextView.text = self.model.title;
@@ -362,7 +363,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)savedNotesView:(NotesView *)notesView text:(NSString *)text{
     [BLURRY dismissAnimated:YES];
-    [self.model updateNotes:text save:YES];
+    self.model.notes = text;
+    [self.model save];
     [self updateNotes];
     [self layout];
 }
@@ -452,7 +454,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)updateTags{
     self.tagsLabel.frame = TAGS_LABEL_RECT;
-    NSString *tagsString = [self.model stringifyTags];
+    NSString *tagsString = self.model.tagString;
     if(!tagsString || tagsString.length == 0){
         tagsString = @"Set tags";
     }

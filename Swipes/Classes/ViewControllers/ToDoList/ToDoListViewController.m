@@ -9,7 +9,7 @@
 #import "ToDoListViewController.h"
 
 #import "UtilityClass.h"
-#import "ToDoHandler.h"
+#import "KPToDo.h"
 #import "SchedulePopup.h"
 #import "KPSearchBar.h"
 #import <QuartzCore/QuartzCore.h>
@@ -304,8 +304,8 @@
         [BLURRY dismissAnimated:YES];
         if(button != KPScheduleButtonCancel){
             if(!self.parent.showingModel) return;
-            [TODOHANDLER scheduleToDos:@[self.parent.showingModel] forDate:chosenDate];
-            [self.parent.showingModel updateRepeatedSave:YES];
+            [KPToDo scheduleToDos:@[self.parent.showingModel] forDate:chosenDate save:YES];
+            [self.parent.showingModel setRepeatOption:self.parent.showingModel.repeatOptionValue save:YES];
             if(self.cellType == CellTypeSchedule){
                 [self.showingViewController update];
                 [self update];
@@ -414,7 +414,7 @@
                 }
                 else{
                     if([chosenDate isEarlierThanDate:[NSDate date]]) targetCellType = CellTypeToday;
-                    NSArray *movedItems = [TODOHANDLER scheduleToDos:toDosArray forDate:chosenDate];
+                    NSArray *movedItems = [KPToDo scheduleToDos:toDosArray forDate:chosenDate save:YES];
                     [self moveItems:movedItems toCellType:targetCellType];
                 }
                 self.isHandlingTrigger = NO;
@@ -425,10 +425,10 @@
             return;
         }
         case CellTypeToday:
-            movedItems = [TODOHANDLER scheduleToDos:toDosArray forDate:[NSDate date]];
+            movedItems = [KPToDo scheduleToDos:toDosArray forDate:[NSDate date] save:YES];
             break;
         case CellTypeDone:
-            movedItems = [TODOHANDLER completeToDos:toDosArray];
+            movedItems = [KPToDo completeToDos:toDosArray save:YES];
             break;
         case CellTypeNone:
             [self returnSelectedRowsAndBounce:NO];
@@ -454,7 +454,7 @@
         [toDos addObject:[self.itemHandler itemForIndexPath:indexPath]];
         [indexSet addIndex:indexPath.row];
     }
-    [TODOHANDLER deleteToDos:toDos save:YES];
+    [KPToDo deleteToDos:toDos save:YES];
     [self removeItems:[self selectedItems]];
 }
 -(void)removeItems:(NSArray*)items{

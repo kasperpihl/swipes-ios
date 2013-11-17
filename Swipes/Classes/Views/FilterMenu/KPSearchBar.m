@@ -25,7 +25,7 @@
 #import "KPSearchBar.h"
 #import "KPTagList.h"
 #import "UtilityClass.h"
-#import "ToDoHandler.h"
+#import "KPToDo.h"
 #import "SlowHighlightIcon.h"
 #import "UIColor+Utilities.h"
 @interface KPSearchBar () <KPTagDelegate,UITextFieldDelegate>

@@ -5,7 +5,7 @@
 #import "UtilityClass.h"
 #import "NSDate-Utilities.h"
 #import "KPParseCoreData.h"
-
+#import "AnalyticsHandler.h"
 @interface KPToDo ()
 @property (nonatomic,strong) NSString *readableTags;
 // Private interface goes here.
@@ -31,6 +31,96 @@
 #define checkStringWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToString:pfValue]) [self setValue:pfValue forKey:cdKey]
 #define checkDateWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToDate:pfValue]) [self setValue:pfValue forKey:cdKey]
 #define checkNumberWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToNumber:pfValue]) [self setValue:pfValue forKey:cdKey]
+
++(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority save:(BOOL)save{
+    KPToDo *newToDo = [KPToDo newObjectInContext:nil];
+    newToDo.title = item;
+    newToDo.schedule = [NSDate date];
+    if(priority) newToDo.priorityValue = 1;
+    NSNumber *count = [KPToDo MR_numberOfEntities];
+    newToDo.order = count;
+    if(save) [newToDo save];
+    NSString *taskLength = @"50+";
+    if(item.length <= 10) taskLength = @"1-10";
+    else if(item.length <= 20) taskLength = @"11-20";
+    else if(item.length <= 30) taskLength = @"21-30";
+    else if(item.length <= 40) taskLength = @"31-40";
+    else if(item.length <= 50) taskLength = @"41-50";
+    [ANALYTICS tagEvent:@"Added Task" options:@{@"Length":taskLength}];
+    [ANALYTICS incrementKey:NUMBER_OF_ADDED_TASKS_KEY withAmount:1];
+    [NOTIHANDLER updateLocalNotifications];
+    return newToDo;
+}
++(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save{
+    NSMutableArray *movedToDos = [NSMutableArray array];
+    for(KPToDo *toDo in toDoArray){
+        BOOL movedToDo = [toDo scheduleForDate:date];
+        if(movedToDo) [movedToDos addObject:toDo];
+    }
+    if(save) [KPCORE saveInContext:nil];
+    [ANALYTICS incrementKey:NUMBER_OF_SCHEDULES_KEY withAmount:toDoArray.count];
+    if(!date) [ANALYTICS incrementKey:NUMBER_OF_UNSPECIFIED_TASKS_KEY withAmount:toDoArray.count];
+    [NOTIHANDLER updateLocalNotifications];
+    return [movedToDos copy];
+}
++(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save{
+    NSMutableArray *movedToDos = [NSMutableArray array];
+    for(KPToDo *toDo in toDoArray){
+        BOOL movedToDo = [toDo complete];
+        if(movedToDo) [movedToDos addObject:toDo];
+    }
+    if(save) [KPCORE saveInContext:nil];
+    NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
+    [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
+    [NOTIHANDLER updateLocalNotifications];
+    [ANALYTICS incrementKey:NUMBER_OF_COMPLETED_KEY withAmount:toDoArray.count];
+    return [movedToDos copy];
+}
+
++(void)deleteToDos:(NSArray*)toDos save:(BOOL)save{
+    BOOL shouldUpdateNotifications = NO;
+    for(KPToDo *toDo in toDos){
+        if(!toDo.completionDate) shouldUpdateNotifications = YES;
+        [toDo deleteToDoSave:NO];
+    }
+    if(save) [KPCORE saveInContext:nil];
+    [ANALYTICS incrementKey:NUMBER_OF_DELETED_TASKS_KEY withAmount:toDos.count];
+    if(shouldUpdateNotifications) [NOTIHANDLER updateLocalNotifications];
+}
++(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save{
+    if(tags){
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
+        NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
+        for(KPToDo *toDo in toDos){
+            [toDo updateTagSet:tagsSet withTags:tags remove:remove];
+        }
+        if(save) [KPCORE saveInContext:nil];
+        if(remove) [ANALYTICS incrementKey:NUMBER_OF_RESIGNED_TAGS_KEY withAmount:toDos.count];
+        else [ANALYTICS incrementKey:NUMBER_OF_ASSIGNED_TAGS_KEY withAmount:toDos.count];
+    }
+}
++(NSArray *)selectedTagsForToDos:(NSArray *)toDos{
+    NSMutableArray *commonTags = [NSMutableArray array];
+    NSMutableArray *common2Tags = [NSMutableArray array];
+    NSInteger counter = 0;
+    for(KPToDo *toDo in toDos){
+        if(counter > 1){
+            commonTags = common2Tags;
+            common2Tags = [NSMutableArray array];
+        }
+        for(KPTag *tag in toDo.tags){
+            if(counter == 0) [commonTags addObject:tag.title];
+            else{
+                if([commonTags containsObject:tag.title]) [common2Tags addObject:tag.title];
+            }
+        }
+        counter++;
+    }
+    if(counter > 1) commonTags = common2Tags;
+    return commonTags;
+}
+
+
 -(void)updateWithObject:(PFObject *)object context:(NSManagedObjectContext *)context{
     [super updateWithObject:object context:context];
     [context performBlockAndWait:^{
@@ -148,20 +238,11 @@
     }
     return CellTypeNone;
 }
--(void)updateNotes:(NSString *)notes save:(BOOL)save{
-    self.notes = notes;
-    if(save) [self save];
-}
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save{
     self.repeatOptionValue = option;
-    self.repeatedDate = self.schedule;
+    if(option != RepeatNever) self.repeatedDate = self.schedule;
+    else self.repeatedDate = nil;
     if(save) [self save];
-}
--(void)updateRepeatedSave:(BOOL)save{
-    if(self.repeatOptionValue > RepeatNever){
-        self.repeatedDate = self.schedule;
-        if(save) [self save];
-    }
 }
 -(RepeatOptions)optionForRepeatString:(NSString*)repeatString{
     RepeatOptions option = RepeatNever;
@@ -238,7 +319,7 @@
 }
 -(NSDate *)nextDateFrom:(NSDate*)date{
     NSDate *returnDate;
-    switch (self.repeatOption.integerValue) {
+    switch (self.repeatOptionValue) {
         case RepeatEveryDay:
             returnDate = [date dateByAddingDays:1];
             break;
@@ -372,11 +453,6 @@
 }
 -(NSArray *)textTags{
     return [self.tagString componentsSeparatedByString:@", "];
-}
--(NSString *)stringifyTags{
-    return self.tagString;
-    /*if(!self.readableTags) [self updateTagsString];
-    return self.readableTags;*/
 }
 -(void)completeRepeatedTask{
     if(self.repeatOptionValue == RepeatNever) return;

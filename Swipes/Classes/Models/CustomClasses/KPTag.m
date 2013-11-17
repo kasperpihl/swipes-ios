@@ -1,5 +1,7 @@
 #import "KPTag.h"
-
+#import "KPParseCoreData.h"
+#import "AnalyticsHandler.h"
+#import "KPToDo.h"
 @interface KPTag ()
 
 // Private interface goes here.
@@ -8,7 +10,33 @@
 
 
 @implementation KPTag
-
++(KPTag*)addTagWithString:(NSString *)string save:(BOOL)save{
+    NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"title = %@",string];
+    NSInteger counter = [KPTag MR_countOfEntitiesWithPredicate:tagPredicate];
+    if(counter > 0) return nil;
+    KPTag *newTag = [KPTag newObjectInContext:nil];
+    newTag.title = string;
+    if(save)[KPCORE saveInContext:nil];
+    [ANALYTICS incrementKey:NUMBER_OF_ADDED_TAGS_KEY withAmount:1];
+    return newTag;
+}
++(void)deleteTagWithString:(NSString *)string save:(BOOL)save{
+    NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",@[string]];
+    KPTag *tagObj = [KPTag MR_findFirstWithPredicate:tagPredicate];
+    NSPredicate *toDoPredicate = [NSPredicate predicateWithFormat:@"ANY tags = %@",tagObj];
+    NSArray *toDos = [KPToDo MR_findAllWithPredicate:toDoPredicate];
+    [KPToDo updateTags:@[string] forToDos:toDos remove:YES save:YES];
+    [tagObj MR_deleteEntity];
+    if(save)[KPCORE saveInContext:nil];
+}
++(NSArray *)allTagsAsStrings{
+    NSArray *tagObjs = [KPTag MR_findAll];
+    NSMutableArray *tags = [NSMutableArray array];
+    for(KPTag *tagObj in tagObjs){
+        [tags addObject:tagObj.title];
+    }
+    return tags;
+}
 -(BOOL)setAttributesForSavingObject:(PFObject *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
     BOOL setAll = NO;
     NSDictionary *keyMatch = @{

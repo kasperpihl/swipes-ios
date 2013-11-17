@@ -458,11 +458,7 @@ typedef enum {
 
 	BOOL hideDragIndicator = YES;
 	if( [self.dragDelegate respondsToSelector:@selector(dragTableViewController:shouldHideDraggableIndicatorForDraggingToRow:)] )
-		hideDragIndicator = [self.dragDelegate dragTableViewController:self shouldHideDraggableIndicatorForDraggingToRow:blankIndexPath];
-	//self.draggedCell.layer.shouldRasterize = NO;
-	/*if( hideDragIndicator )
-		[(UITableViewCell *)self.draggedCell setHighlighted:NO animated:YES];
-*/
+        
 	[UIView animateWithDuration:0.25 delay:0 options:(UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionBeginFromCurrentState) animations:^{
 		//self.draggedCell.transform = CGAffineTransformMakeScale(1/CELL_WIDTH_SCALE, 1/CELL_HEIGHT_SCALE);
         self.draggedCell.transform = CGAffineTransformIdentity;

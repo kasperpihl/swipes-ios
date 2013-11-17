@@ -7,7 +7,7 @@
 //
 
 #import "ItemHandler.h"
-#import "TagHandler.h"
+#import "KPTag.h"
 #import "AnalyticsHandler.h"
 
 @interface ItemHandler ()
@@ -52,7 +52,7 @@
 }
 -(void)addItem:(NSString *)item priority:(BOOL)priority{
     if(self.hasFilter || self.hasSearched) [self clearAll];
-    [TODOHANDLER addItem:item priority:priority save:YES];
+    [KPToDo addItem:item priority:priority save:YES];
     [self reloadData];
 }
 -(void)reloadData{
@@ -209,10 +209,8 @@
 #pragma mark Sort Handling
 -(NSArray*)extractTags{
     NSArray *tagArray;
-    NSSet *fuckME;
     NSMutableSet *tagSet = [NSMutableSet set];
     for(KPToDo *toDo in self.items){
-        fuckME = toDo.tags;
         [tagSet addObjectsFromArray:toDo.textTags];
     }
     tagArray = [[tagSet allObjects] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];

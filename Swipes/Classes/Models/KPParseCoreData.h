@@ -8,7 +8,7 @@
 
 @class NSManagedObject,NSManagedObjectContext;
 #import <Foundation/Foundation.h>
-#import <Parse/PFObject.h>
+//#import <Parse/PFObject.h>
 #define KPCORE [KPParseCoreData sharedInstance]
 @class KPParseCoreData;
 
@@ -25,7 +25,6 @@
 +(KPParseCoreData *)sharedInstance;
 -(void)cleanUp;
 -(void)seedObjects;
-+(NSString*)classNameFromParseName:(NSString*)parseClassName;
 -(void)saveInContext:(NSManagedObjectContext*)context;
 -(void)synchronizeForce:(BOOL)force;
 -(void)update;

@@ -39,7 +39,7 @@
 #import "SettingsHandler.h"
 #import "KPOverlay.h"
 
-#import "ToDoHandler.h"
+#import "KPToDo.h"
 #import "LocalyticsSession.h"
 #import <MessageUI/MessageUI.h>
 
