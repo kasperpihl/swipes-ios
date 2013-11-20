@@ -15,22 +15,18 @@
 #import <Parse/PFRelation.h>
 #import "Reachability.h"
 
-#define kFetchLimit 0
 #define kSyncTime 5
 /*
 
 */
 @interface KPParseCoreData ()
-@property (nonatomic,assign) BOOL isPerformingOperation;
-@property (nonatomic,assign) BOOL didLogout;
-@property (nonatomic) Reachability *reach;
+@property (nonatomic) Reachability *_reach;
 @property (nonatomic) NSMutableDictionary *tmpUpdatingObjects;
 @property (nonatomic) NSMutableDictionary *deleteObjects;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
-@property (nonatomic) NSTimer *syncTimer;
-@property BOOL needSync;
-@property BOOL isSyncing;
-@property BOOL lockSaving;
+@property (nonatomic) NSTimer *_syncTimer;
+@property BOOL _needSync;
+@property BOOL _isSyncing;
 @end
 @implementation KPParseCoreData
 -(NSManagedObjectContext *)context{
@@ -85,15 +81,15 @@ static KPParseCoreData *sharedObject;
 -(void)initialize{
     self.backgroundTask = UIBackgroundTaskInvalid;
     [self loadDatabase];
-    sharedObject.reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    sharedObject._reach = [Reachability reachabilityWithHostname:@"www.google.com"];
     // Set the blocks
-    sharedObject.reach.reachableBlock = ^(Reachability*reach)
+    sharedObject._reach.reachableBlock = ^(Reachability*reach)
     {
-        if(sharedObject.needSync) [sharedObject synchronizeForce:YES];
+        if(sharedObject._needSync) [sharedObject synchronizeForce:YES];
     };
     
     // Start the notifier, which will cause the reachability object to retain itself!
-    [sharedObject.reach startNotifier];
+    [sharedObject._reach startNotifier];
 }
 -(void)loadDatabase{
     @try {
@@ -137,24 +133,24 @@ static KPParseCoreData *sharedObject;
     [self synchronizeForce:YES];
 }
 -(void)synchronizeForce:(BOOL)force{
-    if(self.isSyncing){
-        self.needSync = YES;
+    if(self._isSyncing){
+        self._needSync = YES;
         return;
     }
     /* Testing for timing - if */
     if(!force){
-        if(self.syncTimer && self.syncTimer.isValid) [self.syncTimer invalidate];
-        self.syncTimer = [NSTimer scheduledTimerWithTimeInterval:kSyncTime target:self selector:@selector(forceSync) userInfo:nil repeats:NO];
+        if(self._syncTimer && self._syncTimer.isValid) [self._syncTimer invalidate];
+        self._syncTimer = [NSTimer scheduledTimerWithTimeInterval:kSyncTime target:self selector:@selector(forceSync) userInfo:nil repeats:NO];
         return;
     }
     /* Testing for network connection */
-    if(self.needSync) self.needSync = NO;
-    if(!self.reach.isReachable){
-        self.needSync = YES;
+    if(self._needSync) self._needSync = NO;
+    if(!self._reach.isReachable){
+        self._needSync = YES;
         return;
     }
     
-    self.isSyncing = YES;
+    self._isSyncing = YES;
     NSLog(@"syncing");
     [self updateTMPObjects];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -181,14 +177,32 @@ static KPParseCoreData *sharedObject;
         if(updatePFObjects.count > 0){
             NSError *error;
             [PFObject saveAll:updatePFObjects error:&error];
+            BOOL handleIndividuals = NO;
             if(error){
-                self.needSync = YES;
+                if(error.code == 101){
+                    handleIndividuals = YES;
+                }
+                
+            }
+            if(handleIndividuals){
+                for(PFObject *objectToSave in updatePFObjects){
+                    NSError *localError;
+                    [objectToSave save:&localError];
+                    if(localError){
+                        if(localError.code == 101){
+                            [objectToSave setObject:@YES forKey:@"deleted"];
+                            [self handleCDObject:nil withPFObject:objectToSave inContext:localContext];
+                        }
+                        localError = nil;
+                    }
+                }
             }
             NSInteger index = 0;
             for (KPParseObject *object in updatedObjects) {
+                
                 PFObject *savedPFObject = [updatePFObjects objectAtIndex:index];
                 if(savedPFObject.updatedAt){
-                    [object updateWithObject:savedPFObject context:localContext];
+                    [self handleCDObject:object withPFObject:savedPFObject inContext:localContext];
                     [self.updateObjects removeObjectForKey:savedPFObject.objectId];
                 }
                 index++;
@@ -203,6 +217,23 @@ static KPParseCoreData *sharedObject;
         else [self update];
     });
         
+}
+-(void)handleCDObject:(KPParseObject*)cdObject withPFObject:(PFObject*)pfObject inContext:(NSManagedObjectContext*)context{
+    BOOL shouldDelete = NO;
+    if([[pfObject allKeys] containsObject:@"deleted"]){
+        shouldDelete = [[pfObject objectForKey:@"deleted"] boolValue];
+        if(shouldDelete) NSLog(@"should delete");
+    }
+    Class class;
+    if(!cdObject) class = NSClassFromString([KPParseCoreData classNameFromParseName:pfObject.parseClassName]);
+    else class = [cdObject class];
+    if(shouldDelete){
+        [class deleteObject:pfObject context:context];
+        if([self.deleteObjects objectForKey:pfObject.objectId]) [self.deleteObjects removeObjectForKey:pfObject.objectId];
+    }else{
+        if(!cdObject) cdObject = [class getCDObjectFromObject:pfObject context:context];
+        [cdObject updateWithObject:pfObject context:context];
+    }
 }
 -(void)sendUpdateEvent{
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated" object:self userInfo:nil];
@@ -229,24 +260,14 @@ static KPParseCoreData *sharedObject;
         NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
         lastUpdate = [result objectForKey:@"updateTime"];
         for(PFObject *object in allObjects){
-            Class class = NSClassFromString([KPParseCoreData classNameFromParseName:object.parseClassName]);
-            if(class && [class isSubclassOfClass:[KPParseObject class]]){
-                BOOL shouldDelete = [[object objectForKey:@"deleted"] boolValue];
-                if(shouldDelete){
-                    [class deleteObjectById:object.objectId context:localContext];
-                    if([self.deleteObjects objectForKey:object.objectId])[self.deleteObjects removeObjectForKey:object.objectId];
-                }else{
-                    KPParseObject *cdObject = [class getCDObjectFromObject:object context:localContext];
-                    [cdObject updateWithObject:object context:localContext];
-                }
-            }
+            [self handleCDObject:nil withPFObject:object inContext:localContext];
         }
         [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
             if(lastUpdate) [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastUpdate"];
             if(error) NSLog(@"error from update");
-            self.isSyncing = NO;
+            self._isSyncing = NO;
             [self endBackgroundHandler];
-            if(self.needSync) {
+            if(self._needSync) {
                 [self synchronizeForce:NO];
             }
         }];
@@ -302,7 +323,7 @@ static KPParseCoreData *sharedObject;
                            @"Hold to drag me up and down",
                            @"Pull down for search & filter",
                            @"Swipe the menu for settings"
-                       ];
+                           ];
     for(NSInteger i = toDoArray.count-1 ; i >= 0  ; i--){
         NSString *item = [toDoArray objectAtIndex:i];
         KPToDo *toDo = [KPToDo addItem:item priority:NO save:NO];

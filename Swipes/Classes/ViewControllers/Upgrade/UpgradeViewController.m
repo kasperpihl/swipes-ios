@@ -12,7 +12,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "KPSubtitleButton.h"
 #import "AnalyticsHandler.h"
-#import "GAI.h"
 #define kCloseButtonSize 60
 #define kLogoTopMargin 35
 #define kSubscribeButtonWidth 140
@@ -196,10 +195,8 @@
     [super viewDidAppear:animated];
 }
 -(void)completeGoalWithValue:(NSInteger)value{
-    NSNumber *valObj = [NSNumber numberWithInteger:value];
     NSString *chosenString = (value == 30) ? @"Monthly" : @"Yearly";
     [ANALYTICS tagEvent:@"Chosen Preferred Plan" options:@{@"Plan":chosenString}];
-    [kGAnanlytics trackEventWithCategory:@"app_flow" withAction:@"preferred_model" withLabel:nil withValue:valObj];
 }
 -(void)pressedScrollToBottom:(UIButton*)sender{
     CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);

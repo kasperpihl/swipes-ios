@@ -59,10 +59,10 @@
     KPParseObject *object = [[self class] MR_findFirstByAttribute:@"objectId" withValue:identifier inContext:context];
     return object;
 }
-+(BOOL)deleteObjectById:(NSString *)identifier context:(NSManagedObjectContext *)context{
++(BOOL)deleteObject:(PFObject *)object context:(NSManagedObjectContext *)context{
     if(!context) context = [KPCORE context];
     KPParseObject *coreDataObject;
-    coreDataObject = [self objectById:identifier context:context];
+    coreDataObject = [self objectById:object.objectId context:context];
     BOOL successful = YES;
     if(coreDataObject) successful = [coreDataObject MR_deleteInContext:context];
     return successful;

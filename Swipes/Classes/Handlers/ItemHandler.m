@@ -260,8 +260,19 @@
     }
     else if(hasSearchString){
         self.hasSearched = YES;
-        NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:@"(title contains[cd] %@) OR (tagString contains[cd] %@)",self.searchString,self.searchString];
-        filteredItems = [[self.items filteredArrayUsingPredicate:searchPredicate] mutableCopy];
+        NSArray *searchArray = [self.searchString componentsSeparatedByString:@" "];
+        NSMutableString *mutPredicate = [NSMutableString stringWithFormat:@""];
+        NSInteger counter = 0;
+        for(NSString *string in searchArray){
+            if(!string || string.length == 0) continue;
+            [mutPredicate appendFormat:@"((title contains[cd] '%@') OR (tagString contains[cd] '%@') OR (notes contains[cd] '%@')) AND ",string,string,string];
+            counter++;
+        }
+        if(counter > 0){
+            NSString *predicate = [mutPredicate substringToIndex:[mutPredicate length] - 5];
+            NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:predicate];
+            filteredItems = [[self.items filteredArrayUsingPredicate:searchPredicate] mutableCopy];
+        }
     }
     else{
         self.remainingTags = self.allTags;

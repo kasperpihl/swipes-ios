@@ -4,7 +4,7 @@
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context;
 +(KPParseObject *)getCDObjectFromObject:(PFObject*)object context:(NSManagedObjectContext*)context;
 +(KPParseObject *)objectById:(NSString *)identifier context:(NSManagedObjectContext*)context;
-+(BOOL)deleteObjectById:(NSString*)identifier context:(NSManagedObjectContext*)context;
++(BOOL)deleteObject:(PFObject*)object context:(NSManagedObjectContext*)context;
 -(void)updateWithObject:(PFObject*)object context:(NSManagedObjectContext*)context;
 
 /* To use saveWithHandler: overwrite setAttributesForSavingObject: in subclass to set all the attributes to save */

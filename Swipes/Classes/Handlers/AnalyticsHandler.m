@@ -8,7 +8,6 @@
 
 #import "AnalyticsHandler.h"
 #import "NSDate-Utilities.h"
-#import "GAI.h"
 #import "LocalyticsSession.h"
 #import <Parse/PFUser.h>
 @interface AnalyticsHandler ()
@@ -61,7 +60,6 @@ static AnalyticsHandler *sharedObject;
     NSInteger viewsLeft = self.views.count;
     if(viewsLeft > 5) [self.views removeObjectAtIndex:0];
     [self.views addObject:view];
-    [kGAnanlytics sendView:view];
     [[LocalyticsSession shared] tagScreen:view];
 }
 -(void)popView{
@@ -69,7 +67,6 @@ static AnalyticsHandler *sharedObject;
     if(viewsLeft > 0) [self.views removeLastObject];
     if(viewsLeft > 1){
         [[LocalyticsSession shared] tagScreen:[self.views lastObject]];
-        [kGAnanlytics sendView:[self.views lastObject]];
     }
 }
 -(void)incrementKey:(NSString *)key withAmount:(NSInteger)amount{

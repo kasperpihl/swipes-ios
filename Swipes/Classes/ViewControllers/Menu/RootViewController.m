@@ -8,33 +8,24 @@
 
 
 #import "RootViewController.h"
-#import <Parse/Parse.h>
 #import "FacebookCommunicator.h"
 
-#import "ToDoListViewController.h"
+
 #import "ScheduleViewController.h"
 #import "TodayViewController.h"
 #import "DoneViewController.h"
-#import "UtilityClass.h"
 
 #import "LoginViewController.h"
-#import "SignupViewController.h"
-#import <Parse/PFFacebookUtils.h>
-#import "FacebookCommunicator.h"
+
 #import "AnalyticsHandler.h"
-#import "AppDelegate.h"
 
 #import "MenuViewController.h"
 #import "KPBlurry.h"
 #import "WalkthroughViewController.h"
 #import "UIColor+Utilities.h"
-#import "NotificationHandler.h"
 #import "PlusAlertView.h"
 #import "UpgradeViewController.h"
 #import "KPParseCoreData.h"
-#import "GAI.h"
-#import "KPRepeatPicker.h"
-#import "NSDate-Utilities.h"
 
 #import "SettingsHandler.h"
 #import "KPOverlay.h"
@@ -126,11 +117,6 @@
     
     [MIXPANEL identify:user.objectId];
     [[LocalyticsSession shared] setCustomerId:user.objectId];
-    NSString *action = user.isNew ? @"sign_up" : @"sign_in";
-    [kGAnanlytics sendEventWithCategory:@"app_flow"
-                        withAction:action
-                         withLabel:nil
-                         withValue:nil]; // First activity of new session.
     [ANALYTICS startSession];
     if([PFFacebookUtils isLinkedWithUser:user]){
         if(!user.email){
@@ -251,11 +237,6 @@ static RootViewController *sharedObject;
     [self.sideMenu panGestureRecognized:sender];
 }
 -(void)openApp{
-    //[KPCORE synchronize];
-    //[[[self menuViewController] currentViewController] update];
-    //[[[self menuViewController] currentViewController] deselectAllRows:self];
-    //[OVERLAY popAllViewsAnimated:NO];
-    //[self resetRoot];
     [kSettings refreshGlobalSettingsForce:NO];
     if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
         [OVERLAY popAllViewsAnimated:NO];
