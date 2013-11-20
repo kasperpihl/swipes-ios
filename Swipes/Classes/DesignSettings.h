@@ -26,7 +26,7 @@
 #define GLOBAL_CELL_HEIGHT              70.0f
 #define KEYBOARD_HEIGHT                 216.0f
 #define KEYBOARD_ANIMATION_DURATION     0.25f
-#define GLOBAL_WT_TABLE_WIDTH           234.0f
+#define GLOBAL_WT_TABLE_WIDTH           232.0f
 #define KP_LIGHT(fontSize)              [UIFont fontWithName:@"ProximaNova-Light" size:fontSize]
 #define KP_BLACK(fontSize)              [UIFont fontWithName:@"ProximaNova-Black" size:fontSize]
 #define KP_REGULAR(fontSize)            [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize]
@@ -132,8 +132,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #define ALERT_BOX_BACKGROUND            gray(37,1)
 
 
-
-#define W_TIMELINE              gray(204,1)
+#define kWalkthroughBackground              gray(255,1)
+#define kWalkthroughUnselectedTextColor     gray(204,1)
+#define kWalkthroughUnselectedBackground    gray(235,1)
 #define W_CELL                  gray(230,1)
 
 #define W_TIMELINE_ACTIVATED    gray(128,1)

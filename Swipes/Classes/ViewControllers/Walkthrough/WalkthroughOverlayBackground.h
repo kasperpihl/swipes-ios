@@ -7,10 +7,10 @@
 //
 #define kBottomHeight 20
 #define kBottomExtraSide 20
-#define kCircleSize 70
+#define kCircleSize 42
 #define kBottomToCircleLength 70
-#define kCircleSideCenterMargin (kBottomExtraSide + 40)
-#define kCircleBottomOfBarToCenter 16
+#define kCircleSideCenterMargin (kBottomExtraSide + 83)
+#define kCircleBottomOfBarToCenter 15
 #define kPopupTopMargin 30
 #define kPopupSideMargin 20
 #define kPopupSubtitleSpacing 10

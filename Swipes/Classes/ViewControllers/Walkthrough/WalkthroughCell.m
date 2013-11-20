@@ -88,9 +88,9 @@
 }
 -(void)setActivated:(BOOL)activated animated:(BOOL)animated{
     _activated = activated;
-    self.contentView.backgroundColor = activated ? W_CELL_ACTIVATED : W_CELL;
-    self.titleLabel.textColor = activated ? W_TITLE_ACTIVATED : W_TIMELINE;
-    self.dotView.backgroundColor = activated ? tcolor(TasksColor) : W_CELL;
+    self.contentView.backgroundColor = activated ? tbackground(BackgroundColor) : kWalkthroughUnselectedBackground;
+    self.titleLabel.textColor = activated ? tcolor(TextColor) : kWalkthroughUnselectedTextColor;
+    self.dotView.backgroundColor = activated ? tcolor(TasksColor) : kWalkthroughUnselectedTextColor;
 }
 /*
 // Only override drawRect: if you perform custom drawing.

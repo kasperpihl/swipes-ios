@@ -10,7 +10,7 @@
 #define inv(color) [ThemeHandler inverseColor:color]
 
 #define TASKS_COLOR                     color(255,227,64,1)
-#define DONE_COLOR                      color(63,186,141,1)
+#define DONE_COLOR                      color(69,217,132,1) //color(63,186,141,1)
 #define LATER_COLOR                     color(254,115,103,1)
 
 #define STRONG_TASKS_COLOR              color(228,192,21,1)

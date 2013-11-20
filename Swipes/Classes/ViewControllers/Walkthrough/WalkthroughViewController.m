@@ -15,8 +15,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "StyleHandler.h"
 #define TABLE_Y valForScreen(160,200)
-#define kPhoneTopToStartOfCells 116
-#define TABLE_FRAME CGRectMake(13,kPhoneTopToStartOfCells,TABLE_WIDTH,375)
+#define kPhoneTopToStartOfCells 120
+#define TABLE_FRAME CGRectMake(14,kPhoneTopToStartOfCells,TABLE_WIDTH,375)
 
 #define TEXT_COLOR  gray(128,1)
 
@@ -25,7 +25,7 @@
 #define ACTION_BUTTON_WIDTH 190
 #define ACTION_BUTTON_HEIGHT 44
 
-#define ACTIVE_ROW valForScreen(1,2)
+#define ACTIVE_ROW valForScreen(1,1)
 
 #define ACTION_BUTTON_CORNER_RADIUS 3
 #define kActionButtonBorderWidth 2
@@ -44,7 +44,7 @@
 #define kSchedulePopupSize valForScreen(180,220)
 #define kSchedulePopupY kPhoneTopToStartOfCells-20
 #define kSchedulePopupTransformSize 0.2
-#define kColoredPopupHeight valForScreen(250,300)
+#define kColoredPopupHeight valForScreen(250,250)
 
 #define kTableBottomSizeForFirst valForScreen(200,250)
 
@@ -169,8 +169,8 @@ typedef enum {
     switch (state) {
         case IntroductionPrepare:{
             block = ^{
-                for(WalkthroughCell *cell in self.tableView.visibleCells)
-                    [cell setActivated:YES animated:NO];
+                //for(WalkthroughCell *cell in self.tableView.visibleCells)
+                    //[cell setActivated:YES animated:NO];
             };
             break;
         }
@@ -555,24 +555,24 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = W_TIMELINE;
+    self.view.backgroundColor = kWalkthroughBackground;
     
     self.swipesLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wt_swipes_logo"]];
     self.swipesLogo.center = CGPointMake(self.view.center.x, self.swipesLogo.center.y+LOGO_Y);
     [self.view addSubview:self.swipesLogo];
     
     self.titleView = [[WalkthroughTitleView alloc] initWithFrame:CGRectMake(0, TITLE_Y, self.view.bounds.size.width, 0)];
-    [self.titleView setTitle:@"Welcome to Swipes" subtitle:@"With these 3 areas, you always keep your tasks perfectly organized."];
+    [self.titleView setTitle:@"Welcome to Swipes" subtitle:@"These zones will help you get things done."];
     
     [self.view addSubview:self.titleView];
     
-    self.scheduleButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"schedule-white" scaledToSize:CGSizeMake(25, 25)] color:tcolor(LaterColor)];
+    self.scheduleButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"schedule-selected" scaledToSize:CGSizeMake(22, 22)] color:tcolor(LaterColor)];
     CGRectSetCenterX(self.scheduleButton, kMenuButtonSideMargin);
     [self.view addSubview:self.scheduleButton];
-    self.tasksButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"tasks-white" scaledToSize:CGSizeMake(25, 25)] color:tcolor(TasksColor)];
+    self.tasksButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"today-selected" scaledToSize:CGSizeMake(22, 22)] color:tcolor(TasksColor)];
     CGRectSetCenterX(self.tasksButton, self.view.center.x);
     [self.view addSubview:self.tasksButton];
-    self.doneButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"done-white" scaledToSize:CGSizeMake(25, 25)] color:tcolor(DoneColor)];
+    self.doneButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"done-selected" scaledToSize:CGSizeMake(22, 22)] color:tcolor(DoneColor)];
     CGRectSetCenterX(self.doneButton, self.view.bounds.size.width-kMenuButtonSideMargin);
     [self.view addSubview:self.doneButton];
     
@@ -587,7 +587,7 @@ typedef enum {
     self.actionButton.layer.borderWidth = kActionButtonBorderWidth;
     self.actionButton.titleLabel.font = kActionButtonFont;
     [self.actionButton setTitleColor:TEXT_COLOR forState:UIControlStateNormal];
-    [self.actionButton setTitle:@"GET STARTED" forState:UIControlStateNormal];
+    [self.actionButton setTitle:@"START" forState:UIControlStateNormal];
     [self.actionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     [self.actionButton addTarget:self action:@selector(pressedActionButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.actionButton];
@@ -610,7 +610,7 @@ typedef enum {
     
     
     UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [closeButton setImage:[UtilityClass imageNamed:@"cross_button" withColor:gray(128, 1)] forState:UIControlStateNormal];
+    [closeButton setImage:[UtilityClass imageNamed:@"round_cross_small" withColor:gray(180, 1)] forState:UIControlStateNormal];
     closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, 0, kCloseButtonSize, kCloseButtonSize);
     [closeButton addTarget:self action:@selector(pressedCloseButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:closeButton];
