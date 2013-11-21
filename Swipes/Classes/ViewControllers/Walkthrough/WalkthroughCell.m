@@ -29,7 +29,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.noneColor = tbackground(BackgroundColor);
+        self.noneColor = kWalkthroughUnselectedBackground;
         CGFloat titleX = roundf(TABLE_WIDTH * LABEL_X);
         CGFloat dotOutlineSize = roundf(TABLE_WIDTH * DOT_OUTLINE_SIZE);
         CGFloat dotSize = roundf(TABLE_WIDTH * DOT_SIZE);
@@ -88,9 +88,9 @@
 }
 -(void)setActivated:(BOOL)activated animated:(BOOL)animated{
     _activated = activated;
-    self.contentView.backgroundColor = activated ? tbackground(BackgroundColor) : kWalkthroughUnselectedBackground;
-    self.titleLabel.textColor = activated ? tcolor(TextColor) : kWalkthroughUnselectedTextColor;
-    self.dotView.backgroundColor = activated ? tcolor(TasksColor) : kWalkthroughUnselectedTextColor;
+    self.contentView.backgroundColor = activated ? kWalkthroughUnselectedBackground : kWalkthroughUnselectedBackground;
+    self.titleLabel.textColor = activated ? kWalkthroughSelectedTextColor : kWalkthroughUnselectedTextColor;
+    self.dotView.backgroundColor = activated ? kWalkthroughSelectedTextColor : kWalkthroughUnselectedTextColor;
 }
 /*
 // Only override drawRect: if you perform custom drawing.

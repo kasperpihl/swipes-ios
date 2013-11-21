@@ -33,8 +33,9 @@
 #import "KPToDo.h"
 #import "LocalyticsSession.h"
 #import <MessageUI/MessageUI.h>
+#import <Parse/Parse.h>
 
-@interface RootViewController () <UINavigationControllerDelegate,PFLogInViewControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate>
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 @property (nonatomic) NSDate *lastClose;
@@ -65,7 +66,7 @@
 }
 #pragma mark - PFLogInViewControllerDelegate
 // Sent to the delegate to determine whether the log in request should be submitted to the server.
-- (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password {
+/*- (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password {
     // Check if both fields are completed
     if (username && password && username.length != 0 && password.length != 0) {
         return YES; // Begin login process
@@ -77,7 +78,7 @@
                       cancelButtonTitle:@"ok"
                       otherButtonTitles:nil] show];
     return NO; // Interrupt login process
-}
+}*/
 -(void)fetchDataFromFacebook{
     __block NSString *requestPath = @"me?fields=email,gender";
     FBRequest *request = [FBRequest requestForGraphPath:requestPath];
@@ -130,12 +131,8 @@
     
 }
 // Sent to the delegate when a PFUser is logged in.
-- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
+- (void)loginViewController:(LoginViewController *)logInController didLoginUser:(PFUser *)user {
     [self didLoginUser:user];
-}
-// Sent to the delegate when the log in attempt fails.
-- (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error {
-    NSLog(@"Failed to log in... %@",error);
 }
 -(void)walkthrough:(WalkthroughViewController *)walkthrough didFinishSuccesfully:(BOOL)successfully{
     [ANALYTICS popView];

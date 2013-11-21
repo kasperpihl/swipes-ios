@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import <Parse/Parse.h>
+#import <UIKit/UIKit.h>
 
-@interface LoginViewController : PFLogInViewController
+@interface LoginViewController : UIViewController
 
 @end

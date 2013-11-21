@@ -134,6 +134,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 
 #define kWalkthroughBackground              gray(255,1)
 #define kWalkthroughUnselectedTextColor     gray(204,1)
+#define kWalkthroughSelectedTextColor       gray(128,1)
 #define kWalkthroughUnselectedBackground    gray(235,1)
 #define W_CELL                  gray(230,1)
 

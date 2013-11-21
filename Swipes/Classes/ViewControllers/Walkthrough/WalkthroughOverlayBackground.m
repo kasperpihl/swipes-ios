@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 #import "WalkthroughOverlayBackground.h"
+#import "WalkthroughViewController.h"
 #import <QuartzCore/QuartzCore.h>
 @interface WalkthroughOverlayBackground ()
 @property (nonatomic) UIBezierPath *punchedOutPath;
@@ -21,25 +22,26 @@
     self.titleLabel.text = title;
     self.subtitleLabel.text = subtitle;
     [self.subtitleLabel sizeToFit];
+    CGRectSetCenterX(self.continueButton, self.frame.size.width/2);
     if(left){
         self.punchedOutPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(kCircleSideCenterMargin - kCircleSize/2, y, kCircleSize, kCircleSize)];
         self.bottomColor = tcolor(StrongLaterColor);
         self.topColor = tcolor(LaterColor);
-        self.subtitleLabel.textAlignment = NSTextAlignmentRight;
-        self.titleLabel.textAlignment = NSTextAlignmentRight;
-        CGRectSetX(self.subtitleLabel, self.popupView.frame.size.width - self.subtitleLabel.frame.size.width - kPopupSideMargin);
-        CGRectSetX(self.continueButton, self.popupView.frame.size.width - self.continueButton.frame.size.width - kPopupSideMargin);
+        //CGRectSetX(self.subtitleLabel, self.popupView.frame.size.width - self.subtitleLabel.frame.size.width - kPopupSideMargin);
     }
     else{
         self.punchedOutPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.bounds.size.width - kCircleSideCenterMargin - kCircleSize/2, y, kCircleSize, kCircleSize)];
         self.bottomColor = tcolor(StrongDoneColor);
         self.topColor = tcolor(DoneColor);
         CGRectSetX(self.subtitleLabel, kPopupSideMargin);
-        self.subtitleLabel.textAlignment = NSTextAlignmentLeft;
-        self.titleLabel.textAlignment = NSTextAlignmentLeft;
-        CGRectSetX(self.continueButton, kPopupSideMargin);
     }
     [self setNeedsDisplay];
+}
+-(void)setTopColor:(UIColor *)topColor{
+    if(_topColor != topColor){
+        _topColor = topColor;
+        self.continueButton.titleLabel.textColor = topColor;
+    }
 }
 -(void)pressedContinueButton:(UIButton*)sender{
     if(self.block) self.block(YES,nil);
@@ -63,24 +65,28 @@
         self.popupView.alpha = 0;
         self.popupView.layer.masksToBounds = YES;
         CGFloat continueButtonMargin = 20;
-        CGFloat continueButtonHeight = 35;
-        CGFloat continueButtonWidth = 120;
+        CGFloat continueButtonHeight = 44;
+        CGFloat continueButtonWidth = 190;
+
         self.continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.continueButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
       //  self.continueButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        self.continueButton.frame = CGRectMake(continueButtonMargin, self.popupView.frame.size.height - continueButtonHeight - kPopupSideMargin, continueButtonWidth, continueButtonHeight);
+        self.continueButton.frame = CGRectMake(continueButtonMargin, self.popupView.frame.size.height - continueButtonHeight - kPopupSideMargin*2, continueButtonWidth, continueButtonHeight);
         [self.continueButton addTarget:self action:@selector(pressedContinueButton:) forControlEvents:UIControlEventTouchUpInside];
         self.continueButton.layer.borderColor = kPopupTextColor.CGColor;
+        self.continueButton.titleLabel.textColor = self.topColor;
+        self.continueButton.backgroundColor = kPopupTextColor;
         self.continueButton.layer.borderWidth = 2;
         self.continueButton.layer.cornerRadius = 3;
-
+        self.continueButton.titleLabel.font = kActionButtonFont;
         [self.popupView addSubview:self.continueButton];
         
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(kPopupSideMargin, kPopupTopMargin, self.popupView.frame.size.width-2*kPopupSideMargin, 25)];
         self.titleLabel.backgroundColor = CLEAR;
         self.titleLabel.font = kPopupTitleFont;
         self.titleLabel.textColor = kPopupTextColor;
+        self.titleLabel.textAlignment = NSTextAlignmentCenter;
         [self.popupView addSubview:self.titleLabel];
         
         CGFloat subY = self.titleLabel.frame.origin.y + self.titleLabel.frame.size.height + kPopupSubtitleSpacing;
@@ -89,6 +95,8 @@
         self.subtitleLabel.backgroundColor = CLEAR;
         self.subtitleLabel.numberOfLines = 0;
         self.subtitleLabel.textColor = kPopupTextColor;
+        self.subtitleLabel.textAlignment = NSTextAlignmentCenter;
+        
         [self.popupView addSubview:self.subtitleLabel];
         
         [self addSubview:self.popupView];
@@ -126,12 +134,12 @@
     CGContextSetFillColorWithColor(currentContext,self.bottomColor.CGColor);
     CGContextFillPath(currentContext);
     
-    CGContextSetBlendMode(currentContext, kCGBlendModeDestinationOut);
+    //CGContextSetBlendMode(currentContext, kCGBlendModeDestinationOut);
     
     
-    [[self punchedOutPath] fill];
+    //[[self punchedOutPath] fill];
     
-    CGContextSetBlendMode(currentContext, kCGBlendModeNormal);
+    //CGContextSetBlendMode(currentContext, kCGBlendModeNormal);
 }
 -(void)dealloc{
     self.popupView = nil;

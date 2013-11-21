@@ -20,6 +20,7 @@
 #import "MenuButton.h"
 #import "PlusAlertView.h"
 #import "AnalyticsHandler.h"
+#import "UIView+Utilities.h"
 #define POPUP_WIDTH 315
 #define CONTENT_VIEW_TAG 1
 
@@ -239,7 +240,7 @@ typedef enum {
         CGFloat scaling = contentHeight/POPUP_WIDTH;
         self.calendarView.hidden = NO;
         self.calendarView.alpha = 1.0;
-        UIImage *screenShotOfCalendar = [UtilityClass screenshotOfView:self.calendarView];
+        UIImage *screenShotOfCalendar = [self.calendarView screenshot];
         self.calendarView.hidden = YES;
         
         UIImageView *calendarImageView = [[UIImageView alloc] initWithImage:screenShotOfCalendar];

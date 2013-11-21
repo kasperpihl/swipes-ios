@@ -13,10 +13,10 @@
 #define kCircleBottomOfBarToCenter 15
 #define kPopupTopMargin 30
 #define kPopupSideMargin 20
-#define kPopupSubtitleSpacing 10
+#define kPopupSubtitleSpacing 15
 
-#define kPopupTitleFont KP_BOLD(24)
-#define kPopupSubtitleFont KP_SEMIBOLD(16)
+#define kPopupTitleFont KP_SEMIBOLD(20)
+#define kPopupSubtitleFont KP_LIGHT(17)
 
 #import <UIKit/UIKit.h>
 #define kPopupTextColor [UIColor whiteColor]

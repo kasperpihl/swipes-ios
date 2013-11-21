@@ -319,6 +319,8 @@
 		A7E2D94417B3B176007BDE00 /* picker_wheel_ip4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E2D94217B3B176007BDE00 /* picker_wheel_ip4@2x.png */; };
 		A7E2D94717B3F258007BDE00 /* DayPickerSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */; };
 		A7E2D94A17B4FE0F007BDE00 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D94917B4FE0F007BDE00 /* UpgradeViewController.m */; };
+		A7E3E1E0183E396200E2D6D2 /* login_swipes_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E3E1DE183E396200E2D6D2 /* login_swipes_logo.png */; };
+		A7E3E1E1183E396200E2D6D2 /* login_swipes_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7E3E1DF183E396200E2D6D2 /* login_swipes_logo@2x.png */; };
 		A7ECD37F17C14C1200F9BCF0 /* edit_repeat_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ECD37D17C14C1200F9BCF0 /* edit_repeat_icon.png */; };
 		A7ECD38017C14C1200F9BCF0 /* edit_repeat_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ECD37E17C14C1200F9BCF0 /* edit_repeat_icon@2x.png */; };
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
@@ -719,6 +721,8 @@
 		A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DayPickerSettingsCell.m; sourceTree = "<group>"; };
 		A7E2D94817B4FE0F007BDE00 /* UpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UpgradeViewController.h; path = Upgrade/UpgradeViewController.h; sourceTree = "<group>"; };
 		A7E2D94917B4FE0F007BDE00 /* UpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UpgradeViewController.m; path = Upgrade/UpgradeViewController.m; sourceTree = "<group>"; };
+		A7E3E1DE183E396200E2D6D2 /* login_swipes_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_swipes_logo.png; sourceTree = "<group>"; };
+		A7E3E1DF183E396200E2D6D2 /* login_swipes_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_swipes_logo@2x.png"; sourceTree = "<group>"; };
 		A7E8FB001746276900CC2D26 /* DesignSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DesignSettings.h; sourceTree = "<group>"; };
 		A7ECD37D17C14C1200F9BCF0 /* edit_repeat_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_repeat_icon.png; sourceTree = "<group>"; };
 		A7ECD37E17C14C1200F9BCF0 /* edit_repeat_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit_repeat_icon@2x.png"; sourceTree = "<group>"; };
@@ -1024,6 +1028,8 @@
 		A75236CF17A335680030ED1E /* Walkthrough */ = {
 			isa = PBXGroup;
 			children = (
+				A7E3E1DE183E396200E2D6D2 /* login_swipes_logo.png */,
+				A7E3E1DF183E396200E2D6D2 /* login_swipes_logo@2x.png */,
 				A7C90E7417A712A100C5F9E2 /* wt_signature.png */,
 				A7C90E7517A712A100C5F9E2 /* wt_signature@2x.png */,
 				A7C90E6C17A70A2400C5F9E2 /* wt_background_shadow.png */,
@@ -1762,6 +1768,7 @@
 				A7DAC67F181A7CF800B8C079 /* share_icon_white-high.png in Resources */,
 				A70004331762A038008CB715 /* done_white_background.png in Resources */,
 				A7916A5E181BC7A500FA1974 /* round_facebook.png in Resources */,
+				A7E3E1E0183E396200E2D6D2 /* login_swipes_logo.png in Resources */,
 				A70004341762A038008CB715 /* schedule_white_background.png in Resources */,
 				A72C8B8C181574EA0078E516 /* menu_snoozes@2x.png in Resources */,
 				A7BA697618033FDF00F99654 /* schedule_image_notebook-high@2x.png in Resources */,
@@ -1827,6 +1834,7 @@
 				A72C8B88181574EA0078E516 /* menu_scheme@2x.png in Resources */,
 				A7DAC679181A7CF800B8C079 /* notes_icon_small_gray.png in Resources */,
 				A7C90E7617A712A100C5F9E2 /* wt_signature.png in Resources */,
+				A7E3E1E1183E396200E2D6D2 /* login_swipes_logo@2x.png in Resources */,
 				A7C90E7717A712A100C5F9E2 /* wt_signature@2x.png in Resources */,
 				A7DAC689181A7CF800B8C079 /* trashcan_icon_white.png in Resources */,
 				A7DAC6AD181A8D3C00B8C079 /* checkmark_icon_white.png in Resources */,

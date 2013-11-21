@@ -5,9 +5,9 @@
 //  Created by Kasper Pihl Tornøe on 27/07/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define WALK_HEADER_FONT KP_BOLD(23)
-#define WALK_SUBHEADER_FONT KP_SEMIBOLD(15)
-#define WALK_COLOR  W_TIMELINE_ACTIVATED
+#define WALK_HEADER_FONT KP_SEMIBOLD(20)
+#define WALK_SUBHEADER_FONT KP_LIGHT(16)
+#define WALK_COLOR  tbackground(BackgroundColor)
 #define kDefMaxWidth 260
 #define kDefTitleSpacing 13
 #import "WalkthroughTitleView.h"

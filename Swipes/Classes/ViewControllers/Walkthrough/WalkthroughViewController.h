@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#define kActionButtonFont KP_REGULAR(20)
+
 @class WalkthroughViewController;
 @protocol WalkthroughDelegate
 -(void)walkthrough:(WalkthroughViewController*)walkthrough didFinishSuccesfully:(BOOL)successfully;
