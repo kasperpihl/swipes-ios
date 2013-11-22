@@ -15,18 +15,16 @@
 //+ (UIImage *)imageWithColor:(UIColor *)color;
 +(UtilityClass*)instance;
 -(NSNumber*)versionNumber;
-+ (UIImage *)radialGradientImage:(CGSize)size start:(UIColor*)start end:(UIColor*)end centre:(CGPoint)centre radius:(float)radius;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block;
 +(NSString*)generateIdWithLength:(NSInteger)length;
-//UIImage* rotate(UIImage* src, NSInteger degrees);
++(void)sendError:(NSError *)error type:(NSString *)type screenshot:(BOOL)screenshot;
 + (BOOL) validateEmail: (NSString *) candidate;
 + (UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color;
 + (UIImage *)image:(UIImage *)image withColor:(UIColor *)color multiply:(BOOL)multiply;
 + (UIImage *)imageWithName:(NSString *)imageName scaledToSize:(CGSize)newSize;
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize;
-+(UIImage*)screenshotOfView:(UIView*)view;
-+(UIImage *)flippedImage:(UIImage*)flippingImage horizontal:(BOOL)horizontal;
 +(NSString*)dayStringForDate:(NSDate*)date;
 +(NSString*)timeStringForDate:(NSDate*)date;
 +(NSString*)dayOfMonthForDate:(NSDate*)date;
+
 @end

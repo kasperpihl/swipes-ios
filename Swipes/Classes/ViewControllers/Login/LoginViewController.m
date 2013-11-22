@@ -92,6 +92,7 @@
         self.emailField.delegate = self;
         //self.emailField.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.emailField.keyboardType = UIKeyboardTypeEmailAddress;
+        self.emailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.emailField.returnKeyType = UIReturnKeyNext;
         self.emailField.layer.cornerRadius = kCornerRadius;
         self.emailField.placeholder = @"email";
@@ -146,6 +147,7 @@
         [self.facebookButton setBackgroundImage:[color(57,159,219,1) image] forState:UIControlStateNormal];
         [self.facebookButton setBackgroundImage:[[color(57,159,219,1) darker] image] forState:UIControlStateHighlighted];
         [self.facebookButton setTitle:@"FACEBOOK" forState:UIControlStateNormal];
+        [self.facebookButton addTarget:self action:@selector(pressedFacebook:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:self.facebookButton];
         
         
@@ -179,7 +181,7 @@
     else if([self.passwordField isFirstResponder]) [self.passwordField resignFirstResponder];
 }
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
-    //[PFUser requestPasswordResetForEmailInBackground:@ block:<#^(BOOL succeeded, NSError *error)block#>]
+    
 }
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     if([textField isEqual:self.emailField]) return [self.passwordField becomeFirstResponder];
@@ -200,8 +202,8 @@
         return NO;
     }
     else if(password.length == 0){
-        [[[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                    message:@"Make sure you fill out all of the information!"
+        [[[UIAlertView alloc] initWithTitle:@"Missing password"
+                                    message:@"Make sure to enter your password!"
                                    delegate:nil
                           cancelButtonTitle:@"ok"
                           otherButtonTitles:nil] show];
@@ -209,13 +211,90 @@
     }
     return YES;
 }
+-(void)handleErrorFromLogin:(NSError*)error{
+    if(error.code == 101){
+        [[[UIAlertView alloc] initWithTitle:@"Wrong email or password."
+                                    message:@"Please check your informations and try again."
+                                   delegate:nil
+                          cancelButtonTitle:@"ok"
+                          otherButtonTitles:nil] show];
+        return;
+    }
+    [[[UIAlertView alloc] initWithTitle:@"Something went wrong."
+                                message:@"Please try again."
+                               delegate:nil
+                      cancelButtonTitle:@"ok"
+                      otherButtonTitles:nil] show];
+    [UtilityClass sendError:error type:@"Login" screenshot:YES];
+}
+-(void)pressedFacebook:(UIButton*)sender{
+    [self showIndicator:YES onElement:sender];
+    [PFFacebookUtils logInWithPermissions:@[@"email"] block:^(PFUser *user, NSError *error) {
+        if(error){
+            [self showIndicator:NO onElement:sender];
+            if([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"code"] integerValue] == 190){
+                if([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"error_subcode"] integerValue] == 458){
+                    [self pressedFacebook:sender];
+                    return;
+                }
+            }
+            if(error.code == 2){
+                [[[UIAlertView alloc] initWithTitle:@"Facebook settings"
+                                            message:@"Please make sure you've allowed Swipes in Settings -> Facebook"
+                                           delegate:nil
+                                  cancelButtonTitle:@"ok"
+                                  otherButtonTitles:nil] show];
+            }
+            else{
+                [self handleErrorFromLogin:error];
+            }
+        }
+        else{
+            [self showIndicator:NO onElement:sender];
+            [self.delegate loginViewController:self didLoginUser:user];
+        }
+    }];
+}
 -(void)pressedContinue:(UIButton*)sender{
     if(self.emailField.isFirstResponder && self.passwordField.text.length == 0) [self.passwordField becomeFirstResponder];
     else{
         if(![self validateFields]) return;
         [self resignFields];
-        [self showIndicator:YES];
-        [PFUser logInWithUsernameInBackground:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
+        [self showIndicator:YES onElement:sender];
+        [PFCloud callFunctionInBackground:@"checkEmail" withParameters:@{@"email":self.emailField.text} block:^(id object, NSError *error) {
+            if(error){
+                [self showIndicator:NO onElement:sender];
+                [self handleErrorFromLogin:error];
+            }
+            if([object isEqualToNumber:@1]){
+                [PFUser logInWithUsernameInBackground:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
+                    [self showIndicator:NO onElement:sender];
+                    if (error) {
+                        [self handleErrorFromLogin:error];
+                    } else {
+                        [self.delegate loginViewController:self didLoginUser:user];
+                    }
+                }];
+            }
+            else{
+                [UTILITY confirmBoxWithTitle:@"New user" andMessage:[NSString stringWithFormat:@"Do you want to register with: %@",self.emailField.text] block:^(BOOL succeeded, NSError *error) {
+                    if(succeeded){
+                        PFUser *user = [PFUser user];
+                        user.username = self.emailField.text;
+                        user.password = self.passwordField.text;
+                        user.email = self.emailField.text;
+                        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                            [self showIndicator:NO onElement:sender];
+                            if (!error) {
+                                [self.delegate loginViewController:self didLoginUser:user];
+                            } else {
+                                [self handleErrorFromLogin:error];
+                            }
+                        }];
+                    }
+                    else [self showIndicator:NO onElement:sender];
+                }];
+            }
         }];
     }
 }
@@ -246,37 +325,26 @@
     [UIView animateWithDuration:0.25f animations:^{
         CGRectSetY(self.view, 0);
     }];
+    
 }
 
--(void)showIndicator:(BOOL)show{
+-(void)showIndicator:(BOOL)show onElement:(UIView*)element{
     if(show){
-        UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+        UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         indicatorView.tag = SIGNUP_INDICATOR_TAG;
-        indicatorView.center = self.continueButton.center;
+        indicatorView.center = element.center;
         [self.view addSubview:indicatorView];
     
         self.signupIndicator = (UIActivityIndicatorView*)[self.view viewWithTag:SIGNUP_INDICATOR_TAG];
         [self.signupIndicator startAnimating];
-        self.continueButton.hidden = YES;
+        element.hidden = YES;
     }
     else{
         [self.signupIndicator removeFromSuperview];
-        self.continueButton.hidden = NO;
+        self.signupIndicator = nil;
+        element.hidden = NO;
     }
 }
-/*// Sent to the delegate when a PFUser is signed up.
-- (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user {
-    [self showIndicator:NO];
-    [self.delegate logInViewController:self didLogInUser:user];
-}
-
-// Sent to the delegate when the sign up attempt fails.
-- (void)signUpViewController:(PFSignUpViewController *)signUpController didFailToSignUpWithError:(NSError *)error {
-    NSLog(@"error:%@",error);
-    [self.signUpController.signUpView.usernameField becomeFirstResponder];
-    [self showIndicator:NO];
-}*/
-
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     CGFloat relativeStart = (self.view.frame.size.height-(FACEBOOK_BUTTON_Y+SIGNUP_BUTTONS_HEIGHT))/2-kExtraBottomSpacing;

@@ -23,13 +23,71 @@ static UtilityClass *sharedObject;
     if(sharedObject == nil) sharedObject = [[super allocWithZone:NULL] init];
     return sharedObject;
 }
-+(UIImage*)screenshotOfView:(UIView*)view{
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0f);
++(void)sendError:(NSError *)error type:(NSString *)type screenshot:(BOOL)screenshot{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSError *error;
+        PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
+        if([error description]) [errorObject setObject:[error description] forKey:@"error"];
+        if([error code]) [errorObject setObject:@([error code]) forKey:@"code"];
+        if(type) [errorObject setObject:type forKey:@"type"];
+        if(screenshot){
+            UIImage *screen = [self screenshot];
+            NSData *screenData = UIImagePNGRepresentation(screen);
+            PFFile *pictureFile = [PFFile fileWithData:screenData];
+            [pictureFile save:&error];
+            if(!error) [errorObject setObject:pictureFile forKey:@"screenshot"];
+        }
+        [errorObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if(!succeeded) [errorObject saveEventually];
+        }];
+        return;
+    });
+    
+}
++ (UIImage*)screenshot
+{
+    // Create a graphics context with the target size
+    // On iOS 4 and later, use UIGraphicsBeginImageContextWithOptions to take the scale into consideration
+    // On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
+    CGSize imageSize = [[UIScreen mainScreen] bounds].size;
+    if (NULL != UIGraphicsBeginImageContextWithOptions)
+        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0);
+    else
+        UIGraphicsBeginImageContext(imageSize);
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
-    [view.layer renderInContext:context];
-    UIImage *screenShot = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // Iterate over every window from back to front
+    for (UIWindow *window in [[UIApplication sharedApplication] windows])
+    {
+        if (![window respondsToSelector:@selector(screen)] || [window screen] == [UIScreen mainScreen])
+        {
+            // -renderInContext: renders in the coordinate space of the layer,
+            // so we must first apply the layer's geometry to the graphics context
+            CGContextSaveGState(context);
+            // Center the context around the window's anchor point
+            CGContextTranslateCTM(context, [window center].x, [window center].y);
+            // Apply the window's transform about the anchor point
+            CGContextConcatCTM(context, [window transform]);
+            // Offset by the portion of the bounds left of and above the anchor point
+            CGContextTranslateCTM(context,
+                                  -[window bounds].size.width * [[window layer] anchorPoint].x,
+                                  -[window bounds].size.height * [[window layer] anchorPoint].y);
+            
+            // Render the layer hierarchy to the current context
+            [[window layer] renderInContext:context];
+            
+            // Restore the context
+            CGContextRestoreGState(context);
+        }
+    }
+    
+    // Retrieve the screenshot image
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    
     UIGraphicsEndImageContext();
-    return screenShot;
+    
+    return image;
 }
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
     //UIGraphicsBeginImageContext(newSize);
@@ -41,51 +99,6 @@ static UtilityClass *sharedObject;
 }
 + (UIImage *)imageWithName:(NSString *)imageName scaledToSize:(CGSize)newSize {
     return [self imageWithImage:[UIImage imageNamed:imageName] scaledToSize:newSize];
-}
-+ (UIImage *)radialGradientImage:(CGSize)size start:(UIColor*)start end:(UIColor*)end centre:(CGPoint)centre radius:(float)radius {
-    // Render a radial background
-    // http://developer.apple.com/library/ios/#documentation/GraphicsImaging/Conceptual/drawingwithquartz2d/dq_shadings/dq_shadings.html
-    
-    // Initialise
-    UIGraphicsBeginImageContextWithOptions(size, YES, 1);
-    
-    const CGFloat *components1 = CGColorGetComponents(start.CGColor);
-    CGFloat startRed = components1[0];
-    CGFloat startGreen = components1[1];
-    CGFloat startBlue = components1[2];
-    CGFloat startAlpha = components1[3];
-    
-    const CGFloat *components2 = CGColorGetComponents(end.CGColor);
-    CGFloat endRed = components2[0];
-    CGFloat endGreen = components2[1];
-    CGFloat endBlue = components2[2];
-    CGFloat endAlpha = components2[3];
-    // Create the gradient's colours
-    size_t num_locations = 2;
-    CGFloat locations[2] = { 0.0, 1.0 };
-    CGFloat components[8] = { startRed,startGreen,startBlue, startAlpha,  // Start color
-        endRed,endGreen,endBlue, endAlpha }; // End color
-    
-    CGColorSpaceRef myColorspace = CGColorSpaceCreateDeviceRGB();
-    CGGradientRef myGradient = CGGradientCreateWithColorComponents (myColorspace, components, locations, num_locations);
-    
-    // Normalise the 0-1 ranged inputs to the width of the image
-    CGPoint myCentrePoint = CGPointMake(centre.x * size.width, centre.y * size.height);
-    float myRadius = MIN(size.width, size.height) * radius;
-    
-    // Draw it!
-    CGContextDrawRadialGradient (UIGraphicsGetCurrentContext(), myGradient, myCentrePoint,
-                                 0, myCentrePoint, myRadius,
-                                 kCGGradientDrawsAfterEndLocation);
-    
-    // Grab it as an autoreleased image
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    
-    // Clean up
-    CGColorSpaceRelease(myColorspace); // Necessary?
-    CGGradientRelease(myGradient); // Necessary?
-    UIGraphicsEndImageContext(); // Clean up
-    return image;
 }
 -(NSNumber *)versionNumber{
     NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
