@@ -181,7 +181,27 @@
     else if([self.passwordField isFirstResponder]) [self.passwordField resignFirstResponder];
 }
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
-    
+    NSLog(@"index:%i",buttonIndex);
+    if(buttonIndex == 1){
+        UITextField *textField = [alertView textFieldAtIndex:0];
+        if(textField.text.length > 0){
+            [self showIndicator:YES onElement:self.forgotButton];
+            [PFUser requestPasswordResetForEmailInBackground:textField.text block:^(BOOL succeeded, NSError *error) {
+                [self showIndicator:NO onElement:self.forgotButton];
+                if(succeeded){
+                    [[[UIAlertView alloc] initWithTitle:@"Email sent"
+                                                message:@"Follow the instructions in the email to reset your pass"
+                                               delegate:nil
+                                      cancelButtonTitle:@"ok"
+                                      otherButtonTitles:nil] show];
+                }
+                else{
+                    [self handleErrorFromLogin:error];
+                    
+                }
+            }];
+        }
+    }
 }
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     if([textField isEqual:self.emailField]) return [self.passwordField becomeFirstResponder];
@@ -218,6 +238,14 @@
                                    delegate:nil
                           cancelButtonTitle:@"ok"
                           otherButtonTitles:nil] show];
+        return;
+    }
+    else if(error.code == 205 || error.code == 125){
+        [[[UIAlertView alloc] initWithTitle:@"Email wasn't found."
+                                   message:@"We couldn't recognize the email."
+                                  delegate:nil
+                         cancelButtonTitle:@"ok"
+                         otherButtonTitles:nil] show];
         return;
     }
     [[[UIAlertView alloc] initWithTitle:@"Something went wrong."
