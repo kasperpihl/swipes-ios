@@ -111,6 +111,7 @@
         UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
         alarmLabel.tag = ALARM_LABEL_TAG;
         alarmLabel.font = TAGS_LABEL_FONT;
+        alarmLabel.backgroundColor = CLEAR;
         alarmLabel.textColor = gray(170, 1);
         alarmLabel.hidden = YES;
         

@@ -25,7 +25,7 @@
 #define ACTION_BUTTON_WIDTH 190
 #define ACTION_BUTTON_HEIGHT 44
 
-#define ACTIVE_ROW valForScreen(1,1)
+#define ACTIVE_ROW valForScreen(0,1)
 
 #define ACTION_BUTTON_CORNER_RADIUS 3
 #define kActionButtonBottomSpacing valForScreen(60,90)
