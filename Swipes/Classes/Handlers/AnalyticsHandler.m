@@ -89,7 +89,7 @@ static AnalyticsHandler *sharedObject;
         [closedAppProperties setObject:[NSNumber numberWithInteger:value] forKey:key];
     }
     [closedAppProperties setObject:[NSNumber numberWithInteger:numberOfSecondsInSession] forKey:@"Session length (seconds)"];
-    [MIXPANEL track:@"Session" properties:closedAppProperties];
+    //[MIXPANEL track:@"Session" properties:closedAppProperties];
     
     self.runningSession = NO;
     self.startDate = nil;

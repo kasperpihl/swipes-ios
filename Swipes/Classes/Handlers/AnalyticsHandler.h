@@ -17,10 +17,8 @@
 #define NUMBER_OF_ACTIONS_KEY           @"Number of actions"
 
 #import <Foundation/Foundation.h>
-#import "Mixpanel.h"
 
 
-#define MIXPANEL [Mixpanel sharedInstance]
 #define ANALYTICS [AnalyticsHandler sharedInstance]
 @interface AnalyticsHandler : NSObject
 @property (nonatomic) BOOL blockAnalytics;

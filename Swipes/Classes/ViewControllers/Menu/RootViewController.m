@@ -107,16 +107,12 @@
 -(void)didLoginUser:(PFUser*)user{
     if(user.isNew) [[KPParseCoreData sharedInstance] seedObjects];
     [KPCORE update];
-    NSString *wasSignup = user.isNew ? @"yes" : @"no";
-    [MIXPANEL track:@"Logged in" properties:@{@"Is signup":wasSignup}];
     if(user.isNew) {
         [ANALYTICS tagEvent:@"Signed Up" options:@{}];
     }
     else{
         [ANALYTICS tagEvent:@"Logged In" options:@{}];
     }
-    
-    [MIXPANEL identify:user.objectId];
     [[LocalyticsSession shared] setCustomerId:user.objectId];
     [ANALYTICS startSession];
     if([PFFacebookUtils isLinkedWithUser:user]){

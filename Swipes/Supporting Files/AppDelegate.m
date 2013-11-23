@@ -50,7 +50,6 @@
                   clientKey:parseClientKey];
     [PFFacebookUtils initializeFacebook];
     KPCORE;
-    [Mixpanel sharedInstanceWithToken:mixpanelToken];
     
     [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
     
@@ -164,8 +163,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     [AppsFlyer notifyAppID:@"657882159;TwJuYgpTKp9ENbxf6wMi8j"];
     NSString *isLoggedIn = (kCurrent) ? @"yes" : @"no";
-    if([isLoggedIn isEqualToString:@"yes"]) [ANALYTICS startSession];
-    else [MIXPANEL track:@"Opened app" properties:@{@"Is logged in":isLoggedIn}];
+    if(kCurrent) [ANALYTICS startSession];
     [ANALYTICS tagEvent:@"App Open" options:@{@"Is Logged in":isLoggedIn}];
     
     [[LocalyticsSession shared] resume];

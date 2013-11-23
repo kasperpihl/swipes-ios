@@ -214,6 +214,7 @@
 		A79DB42317358C33007A48E2 /* done_white_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB41D17358C33007A48E2 /* done_white_background@2x.png */; };
 		A79DB42517358C33007A48E2 /* schedule_white_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB41F17358C33007A48E2 /* schedule_white_background@2x.png */; };
 		A7A976E4184118CF001C0A51 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7A976E3184118CF001C0A51 /* Crashlytics.framework */; };
+		A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A976E6184119D6001C0A51 /* PaymentHandler.m */; };
 		A7ADCB2C17DD2B4000780F88 /* background_white_signate.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB2A17DD2B4000780F88 /* background_white_signate.png */; };
 		A7ADCB2D17DD2B4000780F88 /* background_white_signate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB2B17DD2B4000780F88 /* background_white_signate@2x.png */; };
 		A7ADCB3417DD350400780F88 /* iOSa_2.18.5.version in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB2F17DD350400780F88 /* iOSa_2.18.5.version */; };
@@ -605,6 +606,8 @@
 		A79DB41D17358C33007A48E2 /* done_white_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "done_white_background@2x.png"; sourceTree = "<group>"; };
 		A79DB41F17358C33007A48E2 /* schedule_white_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule_white_background@2x.png"; sourceTree = "<group>"; };
 		A7A976E3184118CF001C0A51 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Swipes/Ressources/Libs/Crashlytics.framework; sourceTree = "<group>"; };
+		A7A976E5184119D6001C0A51 /* PaymentHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentHandler.h; sourceTree = "<group>"; };
+		A7A976E6184119D6001C0A51 /* PaymentHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentHandler.m; sourceTree = "<group>"; };
 		A7ADCB2A17DD2B4000780F88 /* background_white_signate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background_white_signate.png; sourceTree = "<group>"; };
 		A7ADCB2B17DD2B4000780F88 /* background_white_signate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background_white_signate@2x.png"; sourceTree = "<group>"; };
 		A7ADCB2F17DD350400780F88 /* iOSa_2.18.5.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iOSa_2.18.5.version; sourceTree = "<group>"; };
@@ -1594,6 +1597,8 @@
 				A7D7D53217B1586A00FBC042 /* SettingsHandler.m */,
 				A7AF9B5517E210D000F9B26F /* StyleHandler.h */,
 				A7AF9B5617E210D000F9B26F /* StyleHandler.m */,
+				A7A976E5184119D6001C0A51 /* PaymentHandler.h */,
+				A7A976E6184119D6001C0A51 /* PaymentHandler.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -1997,6 +2002,7 @@
 				A76ADC1117EC9B5700F52F40 /* HPTextViewInternal.m in Sources */,
 				A703B1631838EB0E0047DCC9 /* UIButton+PassTouch.m in Sources */,
 				A703B1B51838EBF20047DCC9 /* SectionHeaderView.m in Sources */,
+				A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */,
 				A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */,
 				A703B1BF1838EBF20047DCC9 /* REBackgroundView.m in Sources */,
 				A7933049172AB63700F1505E /* TodayViewController.m in Sources */,
