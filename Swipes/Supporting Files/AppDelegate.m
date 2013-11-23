@@ -16,6 +16,7 @@
 #import "Appirater.h"
 #import "LocalyticsSession.h"
 #import "LocalyticsAmpSession.h"
+#import <Crashlytics/Crashlytics.h>
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -51,6 +52,8 @@
     KPCORE;
     [Mixpanel sharedInstanceWithToken:mixpanelToken];
     
+    [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
+    
     [[LocalyticsSession shared] startSession:localyticsKey];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -63,6 +66,7 @@
     for(UILocalNotification *lNoti in notifications){
         NSLog(@"t: %i - %@ - %@",lNoti.applicationIconBadgeNumber,lNoti.alertBody,lNoti.fireDate);
     }*/
+    
     [self tagLaunchSource:launchOptions];
     return YES;
 }

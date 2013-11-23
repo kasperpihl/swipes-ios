@@ -25,12 +25,24 @@
 @property (nonatomic) NSMutableDictionary *deleteObjects;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 @property (nonatomic) NSTimer *_syncTimer;
+
+@property (nonatomic) NSMutableSet *_deletedObjects;
+@property (nonatomic) NSMutableSet *_updatedObjects;
+
 @property BOOL _needSync;
 @property BOOL _isSyncing;
 @end
 @implementation KPParseCoreData
 -(NSManagedObjectContext *)context{
     return [NSManagedObjectContext MR_defaultContext];
+}
+-(NSMutableSet *)_deletedObjects{
+    if(!__deletedObjects) __deletedObjects = [NSMutableSet set];
+    return __deletedObjects;
+}
+-(NSMutableSet *)_updatedObjects{
+    if(!__updatedObjects) __updatedObjects = [NSMutableSet set];
+    return __updatedObjects;
 }
 -(NSMutableDictionary *)deleteObjects{
     if(!_deleteObjects){
@@ -73,9 +85,16 @@ static KPParseCoreData *sharedObject;
     if(!sharedObject){
         sharedObject = [[KPParseCoreData allocWithZone:NULL] init];
         [sharedObject initialize];
-        
+        [sharedObject testParse];
     }
     return sharedObject;
+}
+-(void)testParse{
+    /*PFObject *testObject = [PFObject objectWithClassName:@"Tag"];
+    [testObject setObject:@"testing" forKey:@"title"];
+    NSError *error;
+    [testObject save:&error];
+    if(error) NSLog(@"err:%@",error);*/
 }
 #pragma mark Core data stuff
 -(void)initialize{
@@ -210,6 +229,7 @@ static KPParseCoreData *sharedObject;
         }
         if([localContext hasChanges]){
             [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *localError) {
+                [self sendUpdateEvent];
                 [self saveUpdatingObjects];
                 [self update];
             }];
@@ -222,7 +242,6 @@ static KPParseCoreData *sharedObject;
     BOOL shouldDelete = NO;
     if([[pfObject allKeys] containsObject:@"deleted"]){
         shouldDelete = [[pfObject objectForKey:@"deleted"] boolValue];
-        if(shouldDelete) NSLog(@"should delete");
     }
     Class class;
     if(!cdObject) class = NSClassFromString([KPParseCoreData classNameFromParseName:pfObject.parseClassName]);
@@ -230,13 +249,18 @@ static KPParseCoreData *sharedObject;
     if(shouldDelete){
         [class deleteObject:pfObject context:context];
         if([self.deleteObjects objectForKey:pfObject.objectId]) [self.deleteObjects removeObjectForKey:pfObject.objectId];
+        [self._deletedObjects addObject:pfObject.objectId];
     }else{
+        [self._updatedObjects addObject:pfObject.objectId];
         if(!cdObject) cdObject = [class getCDObjectFromObject:pfObject context:context];
         [cdObject updateWithObject:pfObject context:context];
     }
 }
 -(void)sendUpdateEvent{
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"updated" object:self userInfo:nil];
+    NSDictionary *updatedEvents = @{@"deleted":[self._deletedObjects copy],@"updated":[self._updatedObjects copy]};
+    [self._deletedObjects removeAllObjects];
+    [self._updatedObjects removeAllObjects];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:self userInfo:updatedEvents];
 }
 -(void)saveDataToContext:(NSManagedObjectContext*)localContext{
     
@@ -263,6 +287,7 @@ static KPParseCoreData *sharedObject;
             [self handleCDObject:nil withPFObject:object inContext:localContext];
         }
         [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
+            [self sendUpdateEvent];
             if(lastUpdate) [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastUpdate"];
             if(error) NSLog(@"error from update");
             self._isSyncing = NO;
@@ -321,8 +346,7 @@ static KPParseCoreData *sharedObject;
                            @"Tap to select me",
                            @"Double-tap to edit me",
                            @"Hold to drag me up and down",
-                           @"Pull down for search & filter",
-                           @"Swipe the menu for settings"
+                           @"Pull down for search & filter"
                            ];
     for(NSInteger i = toDoArray.count-1 ; i >= 0  ; i--){
         NSString *item = [toDoArray objectAtIndex:i];

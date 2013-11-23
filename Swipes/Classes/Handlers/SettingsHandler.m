@@ -76,7 +76,7 @@ static SettingsHandler *sharedObject;
         [query whereKey:@"year" equalTo:@(now.year)];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if(error || !object){
-                if(!object) [[NSUserDefaults standardUserDefaults] setInteger:now.dayOfYear forKey:@"lastUpdatedDailyImage"];
+                if(!object && !error) [[NSUserDefaults standardUserDefaults] setInteger:now.dayOfYear forKey:@"lastUpdatedDailyImage"];
                 self.isFetchingImage = NO;
                 return;
             }

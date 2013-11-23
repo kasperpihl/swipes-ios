@@ -143,7 +143,6 @@
     BLURRY.showPosition = PositionBottom;
     BLURRY.blurryTopColor = alpha(tbackground(BackgroundColor),0.3);
     if(block) BLURRY.dismissAction = block;
-    
     [BLURRY showView:tagView inViewController:self];
 }
 -(void)pressedDelete:(id)sender{
@@ -355,9 +354,22 @@
         } completion:nil];
     }
 }
+- (void)updateFromSync:(NSNotification *)notification
+{
+    
+    NSDictionary *changeEvent = [notification userInfo];
+    //NSArray *updatedObjects = [changeEvent objectForKey:@"updated"];
+    NSArray *deletedObjects = [changeEvent objectForKey:@"deleted"];
+    if([deletedObjects containsObject:self.showingModel.objectId]){
+        self.showingModel = nil;
+    }
+    NSLog(@"updating viewcontroller");
+    [self.currentViewController update];
+}
 -(void)viewDidLoad{
     [super viewDidLoad];
     notify(@"updated daily image", updatedDailyImage);
+    notify(@"updated sync",updateFromSync:);
     self.view.backgroundColor = tbackground(BackgroundColor);
     
     /* Daily image background */

@@ -539,6 +539,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     notesView.delegate = self;
     BLURRY.showPosition = PositionBottom;
     [BLURRY showView:notesView inViewController:self.segmentedViewController];
+    
 }
 -(void)pressedTags:(id)sender{
     self.activeEditMode = KPEditModeTags;
