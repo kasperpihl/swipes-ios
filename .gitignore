@@ -17,4 +17,4 @@ ApptentiveConnect/build
 xcuserdata
 *.moved-aside
 Pods/*
-.Podfile_lock
+Podfile.lock
