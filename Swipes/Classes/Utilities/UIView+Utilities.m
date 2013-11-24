@@ -11,8 +11,25 @@
 
 #define kShadowViewTag 32329
 #define kValidDirections [NSArray arrayWithObjects: @"top", @"bottom", @"left", @"right",nil]
-
+#define kIndicatorTag 13337
 @implementation UIView (Utilities)
+-(void)showIndicator:(BOOL)show{
+    if(!self.superview) return;
+    for(UIView *subView in self.superview.subviews){
+        if([subView isKindOfClass:[UIActivityIndicatorView class]] && subView.tag == kIndicatorTag){ [subView removeFromSuperview];
+            break;
+        }
+    }
+    self.hidden = NO;
+    if(show){
+        UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        indicatorView.center = self.center;
+        indicatorView.tag = kIndicatorTag;
+        [self.superview addSubview:indicatorView];
+        [indicatorView startAnimating];
+        self.hidden = YES;
+    }
+}
 -(UIImage*)screenshot{
     UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, 0.0f);
     CGContextRef context = UIGraphicsGetCurrentContext();

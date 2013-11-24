@@ -18,7 +18,6 @@ static Global *sharedObject;
 }
 + (NSInteger)OSVersion
 {
-    
     static NSUInteger _deviceSystemMajorVersion = -1;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

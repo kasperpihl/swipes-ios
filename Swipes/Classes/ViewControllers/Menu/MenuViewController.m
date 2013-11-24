@@ -282,9 +282,11 @@
         case KPMenuButtonSnoozes:
             title = @"Snoozes";
             break;
-        case KPMenuButtonUpgrade:
+        case KPMenuButtonUpgrade:{
+            
             title = @"Upgrade";
             break;
+        }
         case KPMenuButtonPolicy:
             title= @"Policy";
             break;

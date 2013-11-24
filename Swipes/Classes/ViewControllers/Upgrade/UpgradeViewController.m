@@ -9,9 +9,11 @@
 #import "UpgradeViewController.h"
 #import "UtilityClass.h"
 #import "UIColor+Utilities.h"
+#import "UIView+Utilities.h"
 #import <QuartzCore/QuartzCore.h>
 #import "KPSubtitleButton.h"
 #import "AnalyticsHandler.h"
+#import "PaymentHandler.h"
 #define kCloseButtonSize 60
 #define kLogoTopMargin 35
 #define kSubscribeButtonWidth 140
@@ -19,15 +21,15 @@
 #define kSubButtonSubHeight 35
 #define kSubButtonBorderWidth 2
 #define kSubButtonCornerRadius 6
-#define kSubButtonFont KP_BOLD(32)
-#define kSubButtonSubFont KP_BOLD(13)
+#define kSubButtonFont KP_REGULAR(26)
+#define kSubButtonSubFont KP_REGULAR(16)
 #define kSubButtonTitleTopInset 20
 #define kSubButtonY 125
 
 
 #define kBeforePreferFont KP_BOLD(20)
 #define kBeforeSwipesFreeFont KP_REGULAR(12)
-#define kBeforePreferWidth 240  
+#define kBeforePreferWidth 280
 
 #define kAfterViewWidth 270
 #define kAfterFeedbackFont KP_EXTRABOLD(37)
@@ -45,6 +47,8 @@
 @property (nonatomic) UIView *beforeView;
 @property (nonatomic) UIView *afterView;
 @property (nonatomic) UIScrollView *scrollView;
+@property (nonatomic) KPSubtitleButton *monthlyButton;
+@property (nonatomic) KPSubtitleButton *yearlyButton;
 @property (nonatomic) BOOL hasPressed;
 @end
 
@@ -77,7 +81,7 @@
     preferLabel.numberOfLines = 0;
     preferLabel.textColor = [UIColor whiteColor];
     preferLabel.font = kBeforePreferFont;
-    preferLabel.text = @"Which subscription would you prefer?";
+    preferLabel.text = @"Choose your prefered plan:";
     [self.beforeView addSubview:preferLabel];
     
     CGFloat subButtonSpacing = ((bottomView.frame.size.width-(2*kSubscribeButtonWidth))/3);
@@ -93,8 +97,8 @@
     monthButton.subtitleLabel.text = @"per month";
     monthButton.layer.masksToBounds = YES;
     [monthButton addTarget:self action:@selector(pressedMonthButton:) forControlEvents:UIControlEventTouchUpInside];
-    [monthButton setTitle:@"$0.99" forState:UIControlStateNormal];
-
+    //[monthButton setTitle:@"$0.99" forState:UIControlStateNormal];
+    self.monthlyButton = monthButton;
     
     KPSubtitleButton *yearButton = [[KPSubtitleButton alloc] initWithFrame:CGRectMake(2*subButtonSpacing + kSubscribeButtonWidth, kSubButtonY, kSubscribeButtonWidth, kSubscribeButtonHeight)];
     yearButton.subtitleLabel.text = @"per year";
@@ -108,7 +112,8 @@
     yearButton.subtitleLabel.font = kSubButtonSubFont;
     [yearButton addTarget:self action:@selector(pressedYearButton:) forControlEvents:UIControlEventTouchUpInside];
     yearButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    [yearButton setTitle:@"$9.99" forState:UIControlStateNormal];
+    self.yearlyButton = yearButton;
+    //[yearButton setTitle:@"$9.99" forState:UIControlStateNormal];
     [self.beforeView addSubview:monthButton];
     [self.beforeView addSubview:yearButton];
     
@@ -163,20 +168,17 @@
     
     [self.view addSubview:scrollView];
     self.scrollView = scrollView;
-    /*
-    UIImageView *headerLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"upgrade_plus_logo"]];
-	headerLogo.center = CGPointMake(self.view.center.x,kLogoTopMargin+headerLogo.frame.size.height/2);
-    [self.view addSubview:headerLogo];
-    */
-    // Do any additional setup after loading the view.
+
     UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [closeButton setImage:[UIImage imageNamed:@"upgrade_plus_button"] forState:UIControlStateNormal];
-    //[closeButton setImage:[UtilityClass imageNamed:@"cross_button" withColor:gray(255, 1)] forState:UIControlStateNormal];
     closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, 0, kCloseButtonSize, kCloseButtonSize);
     [closeButton addTarget:self action:@selector(pressedCloseButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:closeButton];
     
-    
+    [[PaymentHandler sharedInstance] requestProductsWithBlock:^(SKProduct *plusMonthly, SKProduct *plusYearly, NSError *error) {
+        [self.monthlyButton setTitle:plusMonthly.localizedPrice forState:UIControlStateNormal];
+        [self.yearlyButton setTitle:plusYearly.localizedPrice forState:UIControlStateNormal];
+    }];
 }
 -(void)changeToAfterView{
     if(self.hasPressed) return;
@@ -194,21 +196,34 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
 }
--(void)completeGoalWithValue:(NSInteger)value{
-    NSString *chosenString = (value == 30) ? @"Monthly" : @"Yearly";
-    [ANALYTICS tagEvent:@"Chosen Preferred Plan" options:@{@"Plan":chosenString}];
-}
 -(void)pressedScrollToBottom:(UIButton*)sender{
     CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
     [self.scrollView setContentOffset:bottomOffset animated:YES];
 }
 -(void)pressedMonthButton:(UIButton*)sender{
-    [self completeGoalWithValue:30];
-    [self changeToAfterView];
+    [sender showIndicator:YES];
+    [[PaymentHandler sharedInstance] requestPlusMonthlyBlock:^(BOOL succeeded, NSError *error) {
+        [sender showIndicator:NO];
+        [self handlePaymentSucceeded:succeeded error:error];
+    }];
+    /*[self completeGoalWithValue:30];
+    [self changeToAfterView];*/
 }
 -(void)pressedYearButton:(UIButton*)sender{
-    [self completeGoalWithValue:365];
-    [self changeToAfterView];
+    [sender showIndicator:YES];
+    [[PaymentHandler sharedInstance] requestPlusYearlyBlock:^(BOOL succeeded, NSError *error) {
+        [sender showIndicator:NO];
+        [self handlePaymentSucceeded:succeeded error:error];
+    }];
+    /*[self completeGoalWithValue:365];
+    [self changeToAfterView];*/
+}
+-(void)handlePaymentSucceeded:(BOOL)succeeded error:(NSError*)error{
+    if(succeeded) NSLog(@"succeeded payment");
+    else {
+        NSLog(@"didn't succeed payment");
+        NSLog(@"err:%@",error);
+    }
 }
 -(void)pressedCloseButton:(UIButton*)sender{
     [self.delegate closedUpgradeViewController:self];

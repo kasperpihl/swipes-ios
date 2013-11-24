@@ -11,6 +11,5 @@
 
 @interface NotificationHandler : NSObject
 +(NotificationHandler*)sharedInstance;
-//-(void)scheduleDate:(NSDate *)date identifier:(NSString*)identifier title:(NSString *)title;
 -(void)updateLocalNotifications;
 @end

@@ -7,10 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <StoreKit/SKProduct.h>
+#import <StoreKit/StoreKit.h>
+typedef void (^PlusBlock)(SKProduct* plusMonthly, SKProduct *plusYearly, NSError *error);
+
 @interface SKProduct (LocalizedPrice)
 -(NSString*)localizedPrice;
 @end
 @interface PaymentHandler : NSObject
 +(PaymentHandler*)sharedInstance;
+-(void)requestProductsWithBlock:(PlusBlock)block;
+-(void)requestPlusYearlyBlock:(SuccessfulBlock)block;
+-(void)requestPlusMonthlyBlock:(SuccessfulBlock)block;
 @end

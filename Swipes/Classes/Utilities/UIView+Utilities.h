@@ -11,8 +11,8 @@
 
 @interface UIView (Utilities)
 -(UIImage*)screenshot;
+-(void)showIndicator:(BOOL)show;
 - (void) makeInsetShadow;
 - (void) makeInsetShadowWithRadius:(float)radius Alpha:(float)alpha;
 - (void) makeInsetShadowWithRadius:(float)radius Color:(UIColor *)color Directions:(NSArray *)directions;
-
 @end

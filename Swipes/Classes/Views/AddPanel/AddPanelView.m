@@ -81,7 +81,6 @@
 }
 -(void)pressedPriority{
     self.dotView.priority = !self.dotView.priority;
-    NSLog(@"pressed");
 }
 - (id)initWithFrame:(CGRect)frame
 {

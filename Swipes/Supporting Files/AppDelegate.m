@@ -18,6 +18,10 @@
 #import "LocalyticsAmpSession.h"
 #import <Crashlytics/Crashlytics.h>
 
+
+#import "RMStore.h"
+#import "PaymentHandler.h"
+
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -65,7 +69,7 @@
     for(UILocalNotification *lNoti in notifications){
         NSLog(@"t: %i - %@ - %@",lNoti.applicationIconBadgeNumber,lNoti.alertBody,lNoti.fireDate);
     }*/
-    
+    [PaymentHandler sharedInstance];
     [self tagLaunchSource:launchOptions];
     return YES;
 }
