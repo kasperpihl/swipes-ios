@@ -8,6 +8,7 @@ extern const struct KPParseObjectAttributes {
 	__unsafe_unretained NSString *createdAt;
 	__unsafe_unretained NSString *objectId;
 	__unsafe_unretained NSString *parseClassName;
+	__unsafe_unretained NSString *tempId;
 	__unsafe_unretained NSString *updatedAt;
 } KPParseObjectAttributes;
 
@@ -16,6 +17,7 @@ extern const struct KPParseObjectRelationships {
 
 extern const struct KPParseObjectFetchedProperties {
 } KPParseObjectFetchedProperties;
+
 
 
 
@@ -66,6 +68,16 @@ extern const struct KPParseObjectFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSString* tempId;
+
+
+
+//- (BOOL)validateTempId:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSDate* updatedAt;
 
 
@@ -100,6 +112,12 @@ extern const struct KPParseObjectFetchedProperties {
 
 - (NSString*)primitiveParseClassName;
 - (void)setPrimitiveParseClassName:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveTempId;
+- (void)setPrimitiveTempId:(NSString*)value;
 
 
 

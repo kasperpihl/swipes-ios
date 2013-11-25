@@ -7,6 +7,7 @@ const struct KPParseObjectAttributes KPParseObjectAttributes = {
 	.createdAt = @"createdAt",
 	.objectId = @"objectId",
 	.parseClassName = @"parseClassName",
+	.tempId = @"tempId",
 	.updatedAt = @"updatedAt",
 };
 
@@ -64,6 +65,13 @@ const struct KPParseObjectFetchedProperties KPParseObjectFetchedProperties = {
 
 
 @dynamic parseClassName;
+
+
+
+
+
+
+@dynamic tempId;
 
 
 

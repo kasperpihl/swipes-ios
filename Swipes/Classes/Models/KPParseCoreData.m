@@ -196,25 +196,11 @@ static KPParseCoreData *sharedObject;
         if(updatePFObjects.count > 0){
             NSError *error;
             [PFObject saveAll:updatePFObjects error:&error];
-            BOOL handleIndividuals = NO;
             if(error){
-                if(error.code == 101){
-                    handleIndividuals = YES;
-                }
+                if(error.code == 100 || error.code == 124){
                 
-            }
-            if(handleIndividuals){
-                for(PFObject *objectToSave in updatePFObjects){
-                    NSError *localError;
-                    [objectToSave save:&localError];
-                    if(localError){
-                        if(localError.code == 101){
-                            [objectToSave setObject:@YES forKey:@"deleted"];
-                            [self handleCDObject:nil withPFObject:objectToSave inContext:localContext];
-                        }
-                        localError = nil;
-                    }
                 }
+                else [UtilityClass sendError:error type:@"Synchronization send" screenshot:YES];
             }
             NSInteger index = 0;
             for (KPParseObject *object in updatedObjects) {
@@ -261,9 +247,6 @@ static KPParseCoreData *sharedObject;
     [self._deletedObjects removeAllObjects];
     [self._updatedObjects removeAllObjects];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:self userInfo:updatedEvents];
-}
--(void)saveDataToContext:(NSManagedObjectContext*)localContext{
-    
 }
 -(void)update{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

@@ -3,7 +3,6 @@
 @interface KPParseObject : _KPParseObject {}
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context;
 +(KPParseObject *)getCDObjectFromObject:(PFObject*)object context:(NSManagedObjectContext*)context;
-+(KPParseObject *)objectById:(NSString *)identifier context:(NSManagedObjectContext*)context;
 +(BOOL)deleteObject:(PFObject*)object context:(NSManagedObjectContext*)context;
 -(void)updateWithObject:(PFObject*)object context:(NSManagedObjectContext*)context;
 

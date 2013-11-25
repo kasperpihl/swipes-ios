@@ -1,6 +1,6 @@
 #import "KPParseObject.h"
 #import "KPParseCoreData.h"
-
+#import "UtilityClass.h"
 @interface KPParseObject ()
 @property (nonatomic,strong) NSMutableDictionary *downloadingKeys;
 @property (nonatomic,strong) NSMutableDictionary *downloadingBlocks;
@@ -28,6 +28,7 @@
     [context performBlockAndWait:^{
         self.pfObject = nil;
         if(!self.objectId){
+            self.tempId = nil;
             self.objectId = object.objectId;
             self.createdAt = object.createdAt;
             self.parseClassName = object.parseClassName;
@@ -48,21 +49,19 @@
 +(KPParseObject *)getCDObjectFromObject:(PFObject*)object context:(NSManagedObjectContext *)context{
     if(!context) context = [KPCORE context];
     __block KPParseObject *coreDataObject;
-    coreDataObject = [self objectById:object.objectId context:context];
-    if(!coreDataObject){
-        coreDataObject = [[self class] MR_createInContext:context];
-    }
+    coreDataObject = [self checkForObject:object context:context];
+    if(!coreDataObject) coreDataObject = [[self class] MR_createInContext:context];
     return coreDataObject;
 }
-+(KPParseObject *)objectById:(NSString *)identifier context:(NSManagedObjectContext*)context{
-    if(!context) context = [KPCORE context];
-    KPParseObject *object = [[self class] MR_findFirstByAttribute:@"objectId" withValue:identifier inContext:context];
-    return object;
++(KPParseObject*)checkForObject:(PFObject*)object context:(NSManagedObjectContext*)context{
+    KPParseObject *coreDataObject;
+    coreDataObject = [[self class] MR_findFirstByAttribute:@"objectId" withValue:object.objectId inContext:context];
+    if(!coreDataObject && [object objectForKey:@"tempId"]) coreDataObject = [[self class] MR_findFirstByAttribute:@"tempId" withValue:[object objectForKey:@"tempId"] inContext:context];
+    return coreDataObject;
 }
 +(BOOL)deleteObject:(PFObject *)object context:(NSManagedObjectContext *)context{
     if(!context) context = [KPCORE context];
-    KPParseObject *coreDataObject;
-    coreDataObject = [self objectById:object.objectId context:context];
+    KPParseObject *coreDataObject = [self checkForObject:object context:context];
     BOOL successful = YES;
     if(coreDataObject) successful = [coreDataObject MR_deleteInContext:context];
     return successful;
@@ -85,6 +84,10 @@
     __block PFObject *objectToSave;
     [context performBlockAndWait:^{
         objectToSave = [self emptyObjectForSaving];
+        if(!self.objectId){
+            if(!self.tempId) self.tempId = [UtilityClass generateIdWithLength:8];
+            [objectToSave setObject:self.tempId forKey:@"tempId"];
+        }
         NSMutableSet *changeSet = [KPCORE.updateObjects objectForKey:self.objectId];
         NSArray *changedAttributes;
         if(changeSet) changedAttributes = [changeSet allObjects];
@@ -98,6 +101,12 @@
     [object setObject:@YES forKey:@"deleted"];
     return object;
 }
+
+
+
+
+
+
 #pragma mark - Handle PFFile
 -(void)downloadFile:(PFFile*)file forKey:(NSString*)key withCompletion:(DataBlock)block{
     BOOL isAlreadyDownloading = [[self.downloadingKeys objectForKey:key] boolValue];
