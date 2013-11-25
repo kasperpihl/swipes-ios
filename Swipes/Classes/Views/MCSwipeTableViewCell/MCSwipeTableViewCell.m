@@ -7,7 +7,7 @@
 //
 
 #import "MCSwipeTableViewCell.h"
-
+#import "UIGestureRecognizer+UIBreak.h"
 static CGFloat const kMCStop1 = 0.20; // Percentage limit to trigger the first action
 static CGFloat const kMCStop2 = 0.75; // Percentage limit to trigger the second action
 static CGFloat const kMCBounceAmplitude = 20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
@@ -223,23 +223,15 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 #pragma mark - UIGestureRecognizerDelegate
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
-    if (touch.view==self ) {
-        return YES;
-    }
-    else if ([self.subviews containsObject:touch.view]){
-        if(![touch.view isKindOfClass:[self class]])
-        {
-            return YES;
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    if (gestureRecognizer == self.panGestureRecognizer){
+        if ([otherGestureRecognizer isMemberOfClass:[self.panGestureRecognizer class]]){
+            if ([self.panGestureRecognizer isGestureRecognizerInSuperviewHierarchy:otherGestureRecognizer]){
+                return YES;
+            } else if ([self.panGestureRecognizer isGestureRecognizerInSiblings:otherGestureRecognizer]){
+                return YES;
+            }
         }
-    }else if(touch.view.superview == self || touch.view.superview.superview == self){
-        return YES;
-    }
-    UIView *superView = touch.view.superview;
-    for(NSInteger i = 0 ; i < 10 ; i++){
-        if(!superView) break;
-        if(superView == self) return YES;
-        else superView = superView.superview;
     }
     return NO;
 }
