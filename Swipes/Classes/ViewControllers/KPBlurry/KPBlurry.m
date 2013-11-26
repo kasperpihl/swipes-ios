@@ -262,7 +262,6 @@ static KPBlurry *sharedObject;
     if (self.parentViewController != nil) {
         [self rn_removeFromParentViewControllerCallingAppearanceMethods:callAppearanceMethods];
     }
-    
     if (callAppearanceMethods) [self beginAppearanceTransition:YES animated:NO];
     [parentViewController addChildViewController:self];
     [parentViewController.view addSubview:self.view];

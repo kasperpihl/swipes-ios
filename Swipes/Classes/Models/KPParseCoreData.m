@@ -14,6 +14,7 @@
 #import <Parse/PFCloud.h>
 #import <Parse/PFRelation.h>
 #import "Reachability.h"
+#import "UserHandler.h"
 
 #define kSyncTime 5
 /*
@@ -100,6 +101,9 @@ static KPParseCoreData *sharedObject;
 -(void)initialize{
     self.backgroundTask = UIBackgroundTaskInvalid;
     [self loadDatabase];
+    notify(@"closing app", forceSync);
+    notify(@"opening app", update);
+    notify(@"logged in", update);
     sharedObject._reach = [Reachability reachabilityWithHostname:@"www.google.com"];
     // Set the blocks
     sharedObject._reach.reachableBlock = ^(Reachability*reach)
@@ -152,9 +156,15 @@ static KPParseCoreData *sharedObject;
     [self synchronizeForce:YES];
 }
 -(void)synchronizeForce:(BOOL)force{
+    if(!kCurrent) return;
     if(self._isSyncing){
         self._needSync = YES;
         return;
+    }
+    if(!kUserHandler.isPlus){
+        NSDate *now = [NSDate date];
+        NSDate *lastUpdatedDay = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSyncToServer"];
+        if(lastUpdatedDay && now.dayOfYear == lastUpdatedDay.dayOfYear) return;
     }
     /* Testing for timing - if */
     if(!force){
@@ -198,13 +208,12 @@ static KPParseCoreData *sharedObject;
             [PFObject saveAll:updatePFObjects error:&error];
             if(error){
                 if(error.code == 100 || error.code == 124){
-                
+                    // Timed out
                 }
                 else [UtilityClass sendError:error type:@"Synchronization send" screenshot:YES];
             }
             NSInteger index = 0;
             for (KPParseObject *object in updatedObjects) {
-                
                 PFObject *savedPFObject = [updatePFObjects objectAtIndex:index];
                 if(savedPFObject.updatedAt){
                     [self handleCDObject:object withPFObject:savedPFObject inContext:localContext];
@@ -215,14 +224,14 @@ static KPParseCoreData *sharedObject;
         }
         if([localContext hasChanges]){
             [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *localError) {
+                [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastSyncToServer"];
                 [self sendUpdateEvent];
                 [self saveUpdatingObjects];
-                [self update];
+                [self updateForce:YES];
             }];
         }
-        else [self update];
+        else [self updateForce:YES];
     });
-        
 }
 -(void)handleCDObject:(KPParseObject*)cdObject withPFObject:(PFObject*)pfObject inContext:(NSManagedObjectContext*)context{
     BOOL shouldDelete = NO;
@@ -249,6 +258,19 @@ static KPParseCoreData *sharedObject;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:self userInfo:updatedEvents];
 }
 -(void)update{
+    [self updateForce:NO];
+}
+-(void)updateForce:(BOOL)force{
+    NSLog(@"update");
+    if(!kCurrent) return;
+    if(self._isSyncing && !force){
+        return;
+    }
+    if(!kUserHandler.isPlus){
+        NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"]);
+        if([[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"]) return;
+    }
+    if(!self._isSyncing) self._isSyncing = YES;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
         [self startBackgroundHandler];
@@ -259,6 +281,7 @@ static KPParseCoreData *sharedObject;
         NSDictionary *result = [PFCloud callFunction:@"update" withParameters:options error:&error];
         if(error){
             NSLog(@"error query:%@",error);
+            self._isSyncing = NO;
             [self endBackgroundHandler];
             return;
         }
@@ -272,6 +295,7 @@ static KPParseCoreData *sharedObject;
         [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
             [self sendUpdateEvent];
             if(lastUpdate) [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastUpdate"];
+            
             if(error) NSLog(@"error from update");
             self._isSyncing = NO;
             [self endBackgroundHandler];
@@ -310,9 +334,14 @@ static KPParseCoreData *sharedObject;
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
     [self endBackgroundHandler];
+    self._isSyncing = NO;
+    self._needSync = NO;
+    self.tmpUpdatingObjects = nil;
+    self.deleteObjects = nil;
 }
 -(void)dealloc{
     [MagicalRecord cleanUp];
+    clearNotify();
 }
 
 -(void)seedObjects{

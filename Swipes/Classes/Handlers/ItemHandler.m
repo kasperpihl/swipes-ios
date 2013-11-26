@@ -90,7 +90,6 @@
         [self setItems:[newItems copy]];
         [self notifyUpdate];
     }
-    [ANALYTICS incrementKey:NUMBER_OF_REORDERED_TASKS_KEY withAmount:1];
 }
 -(void)selectTag:(NSString *)tag{
     if(![self.selectedTags containsObject:tag]){

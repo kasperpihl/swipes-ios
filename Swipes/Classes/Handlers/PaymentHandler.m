@@ -62,6 +62,7 @@ static PaymentHandler *sharedObject;
                     
                 }
             }];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"upgrade userlevel" object:self];
             block(YES,nil);
         }
         else block(NO,nil);
@@ -77,7 +78,6 @@ static PaymentHandler *sharedObject;
     [self requestPayment:plusMonthlyIdentifier block:block];
 }
 @end
-
 
 @implementation SKProduct (LocalizedPrice)
 

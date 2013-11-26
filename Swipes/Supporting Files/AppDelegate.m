@@ -146,7 +146,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 }
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    [ANALYTICS endSession];
     [ROOT_CONTROLLER closeApp];
     [[LocalyticsSession shared] close];
     [[LocalyticsSession shared] upload];
@@ -167,7 +166,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     [AppsFlyer notifyAppID:@"657882159;TwJuYgpTKp9ENbxf6wMi8j"];
     NSString *isLoggedIn = (kCurrent) ? @"yes" : @"no";
-    if(kCurrent) [ANALYTICS startSession];
     [ANALYTICS tagEvent:@"App Open" options:@{@"Is Logged in":isLoggedIn}];
     
     [[LocalyticsSession shared] resume];

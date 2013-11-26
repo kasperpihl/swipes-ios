@@ -106,7 +106,6 @@
 }
 -(void)didLoginUser:(PFUser*)user{
     if(user.isNew) [[KPParseCoreData sharedInstance] seedObjects];
-    [KPCORE update];
     if(user.isNew) {
         [ANALYTICS tagEvent:@"Signed Up" options:@{}];
     }
@@ -114,7 +113,6 @@
         [ANALYTICS tagEvent:@"Logged In" options:@{}];
     }
     [[LocalyticsSession shared] setCustomerId:user.objectId];
-    [ANALYTICS startSession];
     if([PFFacebookUtils isLinkedWithUser:user]){
         if(!user.email){
             [self fetchDataFromFacebook];
@@ -124,7 +122,7 @@
         [[LocalyticsSession shared] setCustomerEmail:user.email];
     }
     [self changeToMenu:KPMenuHome animated:YES];
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
 }
 // Sent to the delegate when a PFUser is logged in.
 - (void)loginViewController:(LoginViewController *)logInController didLoginUser:(PFUser *)user {
@@ -239,8 +237,10 @@ static RootViewController *sharedObject;
         [[[self menuViewController] currentViewController] update];
         [[[self menuViewController] currentViewController] deselectAllRows:self];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"opened app" object:self];
 }
 -(void)closeApp{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"closing app" object:self];
     self.lastClose = [NSDate date];
 }
 #pragma mark - Helping methods

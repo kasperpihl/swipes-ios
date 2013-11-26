@@ -17,7 +17,6 @@
     KPTag *newTag = [KPTag newObjectInContext:nil];
     newTag.title = string;
     if(save)[KPCORE saveInContext:nil];
-    [ANALYTICS incrementKey:NUMBER_OF_ADDED_TAGS_KEY withAmount:1];
     return newTag;
 }
 +(void)deleteTagWithString:(NSString *)string save:(BOOL)save{

@@ -105,10 +105,7 @@
     [self.selectedRows addObject:indexPath];
 }
 -(void)didUpdateItemHandler:(ItemHandler *)handler{
-    if(self.parent.showingModel && [self.itemHandler.filteredItems containsObject:self.parent.showingModel]){
-        self.isShowingItem = YES;
-    }else self.isShowingItem = NO;
-    if(self.parent.showingModel && !self.isShowingItem && [self.itemHandler.items containsObject:self.parent.showingModel]) self.parent.showingModel = nil;
+    [self willUpdateCells];
     [self.tableView reloadData];
     dispatch_async(dispatch_get_main_queue(), ^{
         if(self.isShowingItem){
@@ -119,6 +116,7 @@
             CGFloat contentY = self.tableView.tableHeaderView.frame.size.height + numberOfCellsBefore * CELL_HEIGHT + numberOfSections * SECTION_HEADER_HEIGHT;
             [self.tableView setContentOffset:CGPointMake(0,contentY) animated:NO];
         }
+        [self didUpdateCells];
     });
 }
 -(KPSegmentedViewController *)parent{
@@ -143,9 +141,16 @@
 -(void)update{
     [self.itemHandler reloadData];
 }
+-(void)willUpdateCells{
+    if(self.parent.showingModel && [self.itemHandler.filteredItems containsObject:self.parent.showingModel]){
+        self.isShowingItem = YES;
+    }else self.isShowingItem = NO;
+    if(self.parent.showingModel && !self.isShowingItem && [self.itemHandler.items containsObject:self.parent.showingModel]) self.parent.showingModel = nil;
+}
 -(void)didUpdateCells{
     [self.searchBar reloadDataAndUpdate:YES];
-    
+    if(self.parent.showingModel || self.searchBar.currentMode != KPSearchBarModeNone) self.parent.fullscreenMode = YES;
+    else self.parent.fullscreenMode = NO;
 }
 -(NSMutableArray *)selectedRows{
     if(!_selectedRows) _selectedRows = [NSMutableArray array];
@@ -479,6 +484,7 @@
             [self cleanUpAfterMovingAnimated:YES];
         }];
         @try {
+            [self willUpdateCells];
             [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
             if(deletedSections && deletedSections.count > 0) [self.tableView deleteSections:deletedSections withRowAnimation:UITableViewRowAnimationFade];
             [self.tableView endUpdates];
@@ -512,6 +518,7 @@
     self.isLonelyRider = NO;
     self.swipingCell = nil;
     [self didUpdateCells];
+    
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
 -(void)updateSearchBar{
@@ -628,8 +635,10 @@
 -(void)viewWillAppear:(BOOL)animated{
     
     [self update];
+    self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height);
     if(self.cellType != CellTypeToday) self.parent.backgroundMode = NO;
     else if(self.itemHandler.itemCounterWithFilter == 0) self.parent.backgroundMode = YES;
+    
     [super viewWillAppear:animated];
 }
 -(void)viewDidAppear:(BOOL)animated{

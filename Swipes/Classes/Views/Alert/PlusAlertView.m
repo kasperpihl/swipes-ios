@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 #define DEFAULT_ALERTWIDTH 310
-#define DEFAULT_TITLE_HEIGHT 60
+#define DEFAULT_TITLE_HEIGHT 70
 #define kTextPadding 16
-#define kMoreButtonHeight 40
-#define kMoreButtonWidth 110
-#define kMoreButtonFont KP_REGULAR(17)
+#define kMoreButtonHeight 44
+#define kMoreButtonWidth 190
+#define kMoreButtonFont KP_REGULAR(20)
 #define kCrossButtonSize 44
 #define kCrossButtonContentInset UIEdgeInsetsMake(0, 10, 10, 0)
 #import "PlusAlertView.h"
@@ -44,15 +44,12 @@
         UIButton *closeButton = [[UIButton alloc] initWithFrame:self.bounds];
         [closeButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
-        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 240)];
+        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
         //self.frame = contentView.bounds;
         contentView.center = self.center;
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
         contentView.backgroundColor = tbackground(BackgroundColor);
-        UIView *colorTopOverlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT)];
-        colorTopOverlay.backgroundColor = tbackground(SearchDrawerBackground);
-        [contentView addSubview:colorTopOverlay];
         
         UIButton *crossButton = [[UIButton alloc] initWithFrame:CGRectMake(contentView.frame.size.width-kCrossButtonSize, 0, kCrossButtonSize, kCrossButtonSize)];
         [crossButton setImage:[UIImage imageNamed:@"cross_button"] forState:UIControlStateNormal];
@@ -63,14 +60,15 @@
         UIImage *buttonImage = [UIImage imageNamed:@"upgrade_plus_logo"];
         UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height)];
         [topButton setImage:buttonImage forState:UIControlStateNormal];
-        topButton.center = CGPointMake(contentView.frame.size.width/2, DEFAULT_TITLE_HEIGHT/2);
+        CGRectSetY(topButton, DEFAULT_TITLE_HEIGHT-topButton.frame.size.height);
+        CGRectSetCenterX(topButton, contentView.frame.size.width/2);
         [topButton addTarget:self action:@selector(pressedPlus:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:topButton];
         
         
         UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(kTextPadding, DEFAULT_TITLE_HEIGHT, contentView.frame.size.width-2*kTextPadding, 2*DEFAULT_TITLE_HEIGHT)];
-        messageLabel.font = KP_LIGHT(20);
-        messageLabel.textColor = tcolor(TagColor);
+        messageLabel.font = KP_REGULAR(18);
+        messageLabel.textColor = tcolor(TextColor);
         messageLabel.numberOfLines = 0;
         messageLabel.backgroundColor = CLEAR;
         messageLabel.textAlignment = NSTextAlignmentCenter;
@@ -78,14 +76,12 @@
         self.messageLabel = messageLabel;
         
         UIButton *moreButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kMoreButtonWidth, kMoreButtonHeight)];
-        moreButton.layer.borderColor = [UIColor whiteColor].CGColor;
-        moreButton.layer.borderWidth = 2;
         [moreButton setBackgroundImage:[color(255, 96, 69, 1) image] forState:UIControlStateNormal];
         //[moreButton setBackgroundImage:[alpha(POPUP_BACKGROUND,0.5) image] forState:UIControlStateHighlighted];
         moreButton.layer.cornerRadius = 3;
         moreButton.layer.masksToBounds = YES;
         moreButton.titleLabel.font = kMoreButtonFont;
-        [moreButton setTitle:@"Learn more" forState:UIControlStateNormal];
+        [moreButton setTitle:@"LEARN MORE" forState:UIControlStateNormal];
         moreButton.center = CGPointMake(contentView.frame.size.width/2, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT/2);
         CGRectSetY(moreButton, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT);
         [moreButton addTarget:self action:@selector(pressedPlus:) forControlEvents:UIControlEventTouchUpInside];

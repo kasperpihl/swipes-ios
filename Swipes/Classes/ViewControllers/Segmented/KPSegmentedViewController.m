@@ -27,6 +27,8 @@
 #import "UIImage+Blur.h"
 #import "SlowHighlightIcon.h"
 #import "SettingsHandler.h"
+
+#import "UserHandler.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
@@ -122,11 +124,13 @@
     }];
 }
 -(void)pressedShare:(id)sender{
-    [ROOT_CONTROLLER shareTasks];
-    return;
+    if([kUserHandler isPlus]){
+        [ROOT_CONTROLLER shareTasks];
+        return;
+    }
     [ANALYTICS pushView:@"Sharing plus popup"];
     [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Sharing"}];
-    PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Sharing tasks is an upcoming feature in Swipes Plus. Check out the package." block:^(BOOL succeeded, NSError *error) {
+    PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Sharing tasks are only available in Swipes Plus. Check it out." block:^(BOOL succeeded, NSError *error) {
         [ANALYTICS popView];
         [BLURRY dismissAnimated:YES];
         if(succeeded){

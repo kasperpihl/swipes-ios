@@ -7,6 +7,7 @@
 extern const struct KPToDoAttributes {
 	__unsafe_unretained NSString *alarm;
 	__unsafe_unretained NSString *completionDate;
+	__unsafe_unretained NSString *location;
 	__unsafe_unretained NSString *notes;
 	__unsafe_unretained NSString *numberOfRepeated;
 	__unsafe_unretained NSString *order;
@@ -26,6 +27,7 @@ extern const struct KPToDoFetchedProperties {
 } KPToDoFetchedProperties;
 
 @class KPTag;
+
 
 
 
@@ -67,6 +69,16 @@ extern const struct KPToDoFetchedProperties {
 
 
 //- (BOOL)validateCompletionDate:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* location;
+
+
+
+//- (BOOL)validateLocation:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -208,6 +220,12 @@ extern const struct KPToDoFetchedProperties {
 
 - (NSDate*)primitiveCompletionDate;
 - (void)setPrimitiveCompletionDate:(NSDate*)value;
+
+
+
+
+- (NSString*)primitiveLocation;
+- (void)setPrimitiveLocation:(NSString*)value;
 
 
 

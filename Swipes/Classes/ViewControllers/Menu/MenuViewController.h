@@ -10,10 +10,12 @@
 typedef NS_ENUM(NSUInteger, KPMenuButtons){
     KPMenuButtonNotifications = 1,
     KPMenuButtonSnoozes = 2,
-    KPMenuButtonWalkthrough = 5 ,
-    KPMenuButtonFeedback = 4,
+    KPMenuButtonWalkthrough = 4 ,
+    KPMenuButtonFeedback = 5,
     KPMenuButtonUpgrade = 3,
-    KPMenuButtonPolicy = 6
+    KPMenuButtonPolicy = 6,
+    KPMenuButtonSync = 9,
+    KPMenuButtonLogout = 7
 };
 @interface MenuViewController : UIViewController
 

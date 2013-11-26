@@ -6,6 +6,7 @@
 const struct KPToDoAttributes KPToDoAttributes = {
 	.alarm = @"alarm",
 	.completionDate = @"completionDate",
+	.location = @"location",
 	.notes = @"notes",
 	.numberOfRepeated = @"numberOfRepeated",
 	.order = @"order",
@@ -85,6 +86,13 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 
 @dynamic completionDate;
+
+
+
+
+
+
+@dynamic location;
 
 
 

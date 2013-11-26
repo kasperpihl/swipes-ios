@@ -9,8 +9,8 @@
 #define kLampSize 18
 #define kLampBorderRadius (kLampSize/2)
 #define kLampBorderWidth 1
-#define kLampY 7
-#define kLampX 7
+#define kLampY 0
+#define kLampX 0
 #import "MenuButton.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>

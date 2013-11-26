@@ -19,21 +19,22 @@
 #import "SettingsHandler.h"
 #import "SnoozesViewController.h"
 #import "AnalyticsHandler.h"
+#import "UserHandler.h"
 #define kMenuButtonStartTag 4123
 #define kLampOnColor tcolor(DoneColor)
 #define kLampOffColor tbackground(MenuBackground)//tcolor(StrongLaterColor)
 
 #define kSeperatorMargin 0
-#define kGridMargin valForScreen(34,20)
-#define kVerticalGridNumber 2
+#define kGridMargin valForScreen(10,10)
+#define kVerticalGridNumber 3
+#define kHorizontalGridNumber 3
 #define kGridButtonPadding 0
-#define kToolbarHeight GLOBAL_TOOLBAR_HEIGHT
 @interface MenuViewController () <MFMailComposeViewControllerDelegate,ToolbarDelegate>
 @property (nonatomic) IBOutletCollection(UIView) NSArray *seperators;
 @property (nonatomic) IBOutletCollection(UIButton) NSMutableArray *menuButtons;
+@property (nonatomic) UIButton *backButton;
 @property (nonatomic) NSMutableArray *viewControllers;
 @property (nonatomic) UIView *gridView;
-@property (nonatomic) KPToolbar *toolbar;
 @property (nonatomic) UIPanGestureRecognizer *menuPanning;
 @end
 
@@ -53,42 +54,30 @@
 -(NSInteger)tagForButton:(KPMenuButtons)button{
     return kMenuButtonStartTag + button;
 }
--(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
-    if(item == 0){
-        if(self.viewControllers.count > 0){
-            [self popViewControllerAnimated:YES];
-            return;
-        }
-        KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Log out" message:@"Warning: All your data will be lost. We will introduce backup soon." block:^(BOOL succeeded, NSError *error) {
-            [BLURRY dismissAnimated:YES];
-            if(succeeded){
-                [ROOT_CONTROLLER logOut];
-            }
-        }];
-        [BLURRY showView:alert inViewController:self];
+-(void)pressedBack:(UIButton*)backButton{
+    if(self.viewControllers.count > 0){
+        [self popViewControllerAnimated:YES];
+        return;
     }
-    if(item == 1) [kSideMenu hide];
+    else [kSideMenu hide];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSInteger numberOfButtons = 6;
-    NSInteger numberOfRows = ceil(numberOfButtons/kVerticalGridNumber);
-    self.view.backgroundColor = [UIColor clearColor];
-	// Do any additional setup after loading the view.
-    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-kToolbarHeight, self.view.bounds.size.width, kToolbarHeight) items:@[@"share_icon_white",@"backarrow_icon_white"]];
-    UIButton *logout = [self.toolbar.barButtons objectAtIndex:0];
-    CGRect frame = logout.frame;
-    logout.transform = CGAffineTransformMakeRotation(-M_PI/2);
-    logout.frame = frame;
-    UIButton *backArrow = [self.toolbar.barButtons objectAtIndex:1];
-    backArrow.transform = CGAffineTransformMakeRotation(M_PI);
-    //[self.toolbar setBackgroundColor:tbackground(BackgroundColor)];
-    self.toolbar.delegate = self;
-    [self.view addSubview:self.toolbar];
-    
-    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0,((OSVER >= 7)?20:0),self.view.bounds.size.width-2*kGridMargin,self.view.bounds.size.height-(2*kGridMargin)-kToolbarHeight)];
-    
+    CGFloat numberOfButtons = kHorizontalGridNumber * kVerticalGridNumber;
+    NSInteger numberOfRows = kHorizontalGridNumber;
+    self.view.backgroundColor = tbackground(BackgroundColor);
+    NSInteger startY = (OSVER >= 7)?20:0;
+
+    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0,startY,self.view.bounds.size.width-2*kGridMargin,self.view.bounds.size.height-startY)];
+    CGFloat backSpacing = 8.f;
+    CGFloat buttonSize = 44.0f;
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-buttonSize-backSpacing,startY,buttonSize,buttonSize)];
+    [backButton setImage:[UIImage imageNamed:@"backarrow_icon_white"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
+    backButton.transform = CGAffineTransformMakeRotation(M_PI);
+    [self.view addSubview:backButton];
+    self.backButton = backButton;
     
     CGFloat gridWidth = self.gridView.bounds.size.width;
     CGFloat gridItemWidth = self.gridView.bounds.size.width/kVerticalGridNumber;
@@ -118,13 +107,13 @@
     }
 
     [self.view addSubview:self.gridView];
-    self.gridView.center = CGPointMake(self.view.frame.size.width/2, (self.view.frame.size.height-kToolbarHeight)/2);
+    self.gridView.center = CGPointMake(self.view.frame.size.width/2, (self.view.frame.size.height)/2);
     self.menuPanning = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     
     UIView *panningView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-kGridMargin, 0, kGridMargin, self.view.bounds.size.height)];
     [panningView addGestureRecognizer:self.menuPanning];
     [self.view addSubview:panningView];
-
+    notify(@"changed isPlus", changedIsPlus);
 }
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
     [kSideMenu panGestureRecognized:sender];
@@ -149,20 +138,12 @@
     UIView *showingView = (level == 1) ? self.gridView : [(UIViewController*)[self.viewControllers objectAtIndex:level-1] view];
     [UIView animateWithDuration:0.1 animations:^{
         poppingViewController.view.alpha = 0;
-        CGRectSetY(self.toolbar, self.view.bounds.size.height);
     } completion:^(BOOL finished) {
         showingView.alpha = 0;
         if(level == 1){
-            [self.toolbar setItems:@[@"share_icon_white",@"backarrow_icon_white"]];
-            UIButton *logout = [self.toolbar.barButtons objectAtIndex:0];
-            CGRect frame = logout.frame;
-            logout.transform = CGAffineTransformMakeRotation(-M_PI/2);
-            logout.frame = frame;
-            UIButton *backArrow = [self.toolbar.barButtons objectAtIndex:1];
-            backArrow.transform = CGAffineTransformMakeRotation(M_PI);
+            [self.backButton setImage:[UIImage imageNamed:@"backarrow_icon_white"] forState:UIControlStateNormal];
         }
         [UIView animateWithDuration:0.2 animations:^{
-            CGRectSetY(self.toolbar, self.view.bounds.size.height-kToolbarHeight);
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:0.1 animations:^{
                 showingView.alpha = 1;
@@ -180,15 +161,14 @@
     UIView *hidingView = (level == 0) ? self.gridView : [(UIViewController*)[self.viewControllers lastObject] view];
     [UIView animateWithDuration:0.1 animations:^{
         hidingView.alpha = 0;
-        CGRectSetY(self.toolbar, self.view.bounds.size.height);
+        if(level == 0) [self.backButton setImage:[UIImage imageNamed:@"round_cross_small"] forState:UIControlStateNormal];
     } completion:^(BOOL finished) {
         viewController.view.alpha = 0;
         viewController.view.frame = self.view.bounds;
-        if(level == 0)[self.toolbar setItems:@[@"backarrow_icon_white",@""]];
-        CGRectSetHeight(viewController.view,viewController.view.bounds.size.height-kToolbarHeight);
+        CGRectSetHeight(viewController.view,viewController.view.bounds.size.height-44);
+        CGRectSetY(viewController.view, 44);
         [self.view addSubview:viewController.view];
         [UIView animateWithDuration:0.2 animations:^{
-            CGRectSetY(self.toolbar, self.view.bounds.size.height-kToolbarHeight);
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:0.1 animations:^{
                 viewController.view.alpha = 1;
@@ -214,6 +194,7 @@
                         [sender setLampColor:lampColor];
                     }
                 }];
+                BLURRY.blurryTopColor = gray(230, 0.5);
                 [BLURRY showView:alert inViewController:self];
             }
             else{
@@ -246,10 +227,12 @@
             }
             break;
         }
-        case KPMenuButtonUpgrade:
+        case KPMenuButtonUpgrade:{
+            
             [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Settings"}];
             [ROOT_CONTROLLER upgrade];
             break;
+        }
         case KPMenuButtonPolicy:{
             
             KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Privacy Policy" message:@"Do you want to open our privacy policy?" block:^(BOOL succeeded, NSError *error) {
@@ -258,13 +241,30 @@
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"http://swipesapp.com/privacypolicy.pdf"]];
                 }
             }];
-            BLURRY.blurryTopColor = alpha(tcolor(LaterColor),0.1);
-            BLURRY.blurLevel = 0.1;
+            BLURRY.blurryTopColor = gray(230, 0.5);
+            [BLURRY showView:alert inViewController:self];
+            break;
+        }
+        case KPMenuButtonLogout:{
+            
+            KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Log out" message:@"Warning: All your data will be lost. We will introduce backup soon." block:^(BOOL succeeded, NSError *error) {
+                [BLURRY dismissAnimated:YES];
+                if(succeeded){
+                    [ROOT_CONTROLLER logOut];
+                }
+            }];
+            BLURRY.blurryTopColor = gray(230, 0.5);
             [BLURRY showView:alert inViewController:self];
             break;
         }
         default:
             break;
+    }
+}
+-(void)changedIsPlus{
+    UIButton *upgradeButton = (UIButton*)[self.gridView viewWithTag:[self tagForButton:KPMenuButtonUpgrade]];
+    if(upgradeButton){
+        [upgradeButton setTitle:[self titleForMenuButton:KPMenuButtonUpgrade] forState:UIControlStateNormal];
     }
 }
 -(NSString *)titleForMenuButton:(KPMenuButtons)button{
@@ -283,12 +283,17 @@
             title = @"Snoozes";
             break;
         case KPMenuButtonUpgrade:{
-            
-            title = @"Upgrade";
+            title = (kUserHandler.isPlus) ? @"Manage" : @"Upgrade";
             break;
         }
         case KPMenuButtonPolicy:
             title= @"Policy";
+            break;
+        case KPMenuButtonSync:
+            title = @"Sync";
+            break;
+        case KPMenuButtonLogout:
+            title = @"Logout";
             break;
     }
     return title;
@@ -314,8 +319,15 @@
         case KPMenuButtonPolicy:
             imageString = @"menu_policy";
             break;
+        case KPMenuButtonSync:
+            imageString = @"menu_sync";
+            break;
+        case KPMenuButtonLogout:
+            imageString = @"menu_logout";
+            break;
     }
     if(highlighted) imageString = [imageString stringByAppendingString:@"-high"];
+    //if(button == KPMenuButtonUpgrade && highlighted) imageString = @"menu_pro";
     return [UIImage imageNamed:imageString];
 }
 -(CGRect)frameForButton:(KPMenuButtons)button{
@@ -339,7 +351,9 @@
     return button;
 }
 
-
+-(void)dealloc{
+    clearNotify();
+}
 -(void)pressedTut{
     [ROOT_CONTROLLER walkthrough];
     //[THEMER changeTheme];

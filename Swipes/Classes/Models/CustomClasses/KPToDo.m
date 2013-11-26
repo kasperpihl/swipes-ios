@@ -47,7 +47,6 @@
     else if(item.length <= 40) taskLength = @"31-40";
     else if(item.length <= 50) taskLength = @"41-50";
     [ANALYTICS tagEvent:@"Added Task" options:@{@"Length":taskLength}];
-    [ANALYTICS incrementKey:NUMBER_OF_ADDED_TASKS_KEY withAmount:1];
     [NOTIHANDLER updateLocalNotifications];
     return newToDo;
 }
@@ -58,8 +57,6 @@
         if(movedToDo) [movedToDos addObject:toDo];
     }
     if(save) [KPCORE saveInContext:nil];
-    [ANALYTICS incrementKey:NUMBER_OF_SCHEDULES_KEY withAmount:toDoArray.count];
-    if(!date) [ANALYTICS incrementKey:NUMBER_OF_UNSPECIFIED_TASKS_KEY withAmount:toDoArray.count];
     [NOTIHANDLER updateLocalNotifications];
     return [movedToDos copy];
 }
@@ -73,7 +70,6 @@
     NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
     [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
     [NOTIHANDLER updateLocalNotifications];
-    [ANALYTICS incrementKey:NUMBER_OF_COMPLETED_KEY withAmount:toDoArray.count];
     return [movedToDos copy];
 }
 
@@ -84,7 +80,6 @@
         [toDo deleteToDoSave:NO];
     }
     if(save) [KPCORE saveInContext:nil];
-    [ANALYTICS incrementKey:NUMBER_OF_DELETED_TASKS_KEY withAmount:toDos.count];
     if(shouldUpdateNotifications) [NOTIHANDLER updateLocalNotifications];
 }
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save{
@@ -95,8 +90,6 @@
             [toDo updateTagSet:tagsSet withTags:tags remove:remove];
         }
         if(save) [KPCORE saveInContext:nil];
-        if(remove) [ANALYTICS incrementKey:NUMBER_OF_RESIGNED_TAGS_KEY withAmount:toDos.count];
-        else [ANALYTICS incrementKey:NUMBER_OF_ASSIGNED_TAGS_KEY withAmount:toDos.count];
     }
 }
 +(NSArray *)selectedTagsForToDos:(NSArray *)toDos{

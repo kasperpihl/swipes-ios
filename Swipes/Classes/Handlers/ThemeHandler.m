@@ -9,9 +9,9 @@
 #define retColor(DarkColor,LightColor) ((THEMER.currentTheme == ThemeDark) ? DarkColor : DarkColor)
 #define inv(color) [ThemeHandler inverseColor:color]
 
-#define TASKS_COLOR                     color(255,227,64,1)
-#define DONE_COLOR                      color(63,186,141,1) //color(69,217,132,1) //
-#define LATER_COLOR                     color(254,115,103,1)
+#define TASKS_COLOR                     color(228,202,92,1)
+#define DONE_COLOR                      color(63,186,141,1) //color(69,217,132,1)  //
+#define LATER_COLOR                     color(254,115,103,1) // color(234,97,80,1)
 
 #define STRONG_TASKS_COLOR              color(228,192,21,1)
 #define STRONG_DONE_COLOR               color(58,195,160,1)
