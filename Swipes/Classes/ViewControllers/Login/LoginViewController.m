@@ -94,6 +94,7 @@
         self.emailField.keyboardType = UIKeyboardTypeEmailAddress;
         self.emailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.emailField.returnKeyType = UIReturnKeyNext;
+        self.emailField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.emailField.layer.cornerRadius = kCornerRadius;
         self.emailField.placeholder = @"email";
         self.emailField.textColor = kDefTextColor;
@@ -105,6 +106,7 @@
         self.passwordField.delegate = self;
         self.passwordField.textAlignment = NSTextAlignmentCenter;
         self.passwordField.secureTextEntry = YES;
+        self.passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.passwordField.layer.cornerRadius = kCornerRadius;
         self.passwordField.font = KP_LIGHT(16);
         self.passwordField.textColor = kDefTextColor;

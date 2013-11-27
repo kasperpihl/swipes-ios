@@ -386,9 +386,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     else{
         self.notesView.text = self.model.notes;
     }
-    self.notesView.frame = CGRectSetSize(self.notesView, self.view.frame.size.width, 500);
+    self.notesView.frame = CGRectSetSize(self.notesView, self.view.frame.size.width-LABEL_X-10, 1500);
     //CGSize contentSize = [self.notesView sizeThatFits:CGSizeMake(self.notesView.frame.size.width, 500)];
     [self.notesView sizeToFit];
+    CGRectSetHeight(self.notesView,self.notesView.frame.size.height+20);
     CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
 }
 -(void)updateRepeated{

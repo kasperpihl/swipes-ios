@@ -360,16 +360,15 @@ static KPParseCoreData *sharedObject;
     }
     [self saveInContext:nil];
     NSArray *toDoArray = @[
-                           @"Tap to select me",
-                           @"Double-tap to edit me",
-                           @"Hold to drag me up and down",
-                           @"Pull down for search & filter"
+                           @"Swipe right to complete a task",
+                           @"Swipe left to schedule a task",
+                           @"Double-tap to edit a task"
                            ];
     for(NSInteger i = toDoArray.count-1 ; i >= 0  ; i--){
         NSString *item = [toDoArray objectAtIndex:i];
-        KPToDo *toDo = [KPToDo addItem:item priority:NO save:NO];
-        if(i == 4)[KPToDo updateTags:@[@"home"] forToDos:@[toDo] remove:NO save:YES];
-        if(i == 5)[KPToDo updateTags:@[@"work"] forToDos:@[toDo] remove:NO save:YES];
+        BOOL priority = (i == 0);
+        KPToDo *toDo = [KPToDo addItem:item priority:priority save:NO];
+        if(i <= 1)[KPToDo updateTags:@[@"work"] forToDos:@[toDo] remove:NO save:YES];
     }
     [self saveInContext:nil];
  //   NSArray *todosForTagsArray = [KPToDo MR_findAll];

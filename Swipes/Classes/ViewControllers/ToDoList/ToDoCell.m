@@ -118,6 +118,7 @@
         self.alarmSeperator = [[UILabel alloc] init];
         self.alarmSeperator.font = TAGS_LABEL_FONT;
         self.alarmSeperator.text = @"//";
+        self.alarmSeperator.backgroundColor = CLEAR;
         self.alarmSeperator.hidden = YES;
         [self.alarmSeperator sizeToFit];
         CGRectSetHeight(self.alarmSeperator,TAGS_LABEL_HEIGHT);

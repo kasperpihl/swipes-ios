@@ -224,7 +224,7 @@
             UIColor *lampColor = hasNotificationsOn ? kLampOffColor : kLampOnColor;
             NSNumber *newSettingValue = hasNotificationsOn ? @NO : @YES;
             if(hasNotificationsOn){
-                KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off notification" message:@"Warning: You will no longer receive alarms or reminders." block:^(BOOL succeeded, NSError *error) {
+                KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off notification" message:@"Are you sure you no longer want to receive alarms and reminders?" block:^(BOOL succeeded, NSError *error) {
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
                         [kSettings setValue:newSettingValue forSetting:SettingNotifications];

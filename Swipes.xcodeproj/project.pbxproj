@@ -434,8 +434,8 @@
 		A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Semibold.ttf"; path = "Font/ProximaNova-Semibold.ttf"; sourceTree = "<group>"; };
 		A717BF2A17611EDB004791BF /* ProximaNovaCond-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNovaCond-Semibold.ttf"; path = "Font/ProximaNovaCond-Semibold.ttf"; sourceTree = "<group>"; };
 		A71DE4AF1843C0010097394C /* settings_icon_white-high.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_icon_white-high.png"; sourceTree = "<group>"; };
-		A71DE4B11844069A0097394C /* UIGestureRecognizer+UIBreak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIGestureRecognizer+UIBreak.h"; path = "Swipes/Classes/Utilities/UIGestureRecognizer+UIBreak.h"; sourceTree = "<group>"; };
-		A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIGestureRecognizer+UIBreak.m"; path = "Swipes/Classes/Utilities/UIGestureRecognizer+UIBreak.m"; sourceTree = "<group>"; };
+		A71DE4B11844069A0097394C /* UIGestureRecognizer+UIBreak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+UIBreak.h"; sourceTree = "<group>"; };
+		A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+UIBreak.m"; sourceTree = "<group>"; };
 		A71DE4B41844DA660097394C /* menu_sync.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_sync.png; sourceTree = "<group>"; };
 		A71DE4B51844DA660097394C /* menu_sync@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_sync@2x.png"; sourceTree = "<group>"; };
 		A71DE4B81844E4BB0097394C /* menu_logout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_logout.png; sourceTree = "<group>"; };
@@ -1126,8 +1126,6 @@
 		A7778CC116EB5884004D95E5 = {
 			isa = PBXGroup;
 			children = (
-				A71DE4B11844069A0097394C /* UIGestureRecognizer+UIBreak.h */,
-				A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */,
 				A781283D17294C56002226C8 /* Swipes */,
 				A7778CCC16EB5884004D95E5 /* Frameworks */,
 				A7778CCB16EB5884004D95E5 /* Products */,
@@ -1264,6 +1262,8 @@
 		A781285A17294C56002226C8 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				A71DE4B11844069A0097394C /* UIGestureRecognizer+UIBreak.h */,
+				A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */,
 				A7FE4400182825A1002AFB2E /* UIImage+Blur.h */,
 				A7FE4401182825A1002AFB2E /* UIImage+Blur.m */,
 				A724B02017A96B8B00E0EF83 /* UIColor+Utilities.h */,
@@ -2158,8 +2158,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/kasper/Code/Swipes/app,
@@ -2167,7 +2167,10 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "ADHOC=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"ADHOC=1",
+					"RELEASE=1",
+				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -2215,8 +2218,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "57A0693F-604C-45B1-A9C6-E6228EB1DB69";
+				PROVISIONING_PROFILE = "B54CCBCD-6089-48FE-8AEC-4695CEC053E1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B54CCBCD-6089-48FE-8AEC-4695CEC053E1";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2366,8 +2369,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Kasper Pihl Tornoee";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kasper Pihl Tornoee";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/kasper/Code/Swipes/app,
@@ -2423,8 +2426,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "4AABBC6D-5348-4649-8599-BCF3B3D5A66E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4AABBC6D-5348-4649-8599-BCF3B3D5A66E";
+				PROVISIONING_PROFILE = "92BE8DBD-7BB9-4365-A2A0-9B30E049ED7A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "92BE8DBD-7BB9-4365-A2A0-9B30E049ED7A";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

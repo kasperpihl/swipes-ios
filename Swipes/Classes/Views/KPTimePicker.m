@@ -11,10 +11,11 @@
 #define kSunImageDistance valForScreen(160, 100)
 #define kLabelSpacing valForScreen(0,0)
 #define kClockLabelY valForScreen(0,0)
-#define kClockLabelFont KP_EXTRABOLD(valForScreen(55,65))
+#define kClockLabelFont [UIFont fontWithName:@"HelveticaNeue-Light" size:valForScreen(55,65)]
 #define kDayLabelFont KP_REGULAR(valForScreen(16,19))
 #define kDefMiddleButtonRadius 60
-#define kDefActualSize 93
+#define kDefActualSize valForScreen(85,93)
+
 #define kDefClearMiddle 45
 
 #define kBackMargin 10

@@ -318,7 +318,7 @@
         
         
         CGRectSetHeight(self.contentView,self.view.frame.size.height-y);
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+        if(OSVER >= 7) [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
         [UIView animateWithDuration:0.25f animations:^{
             CGRectSetY(self.contentView, y);
             self.ios7BackgroundView.alpha = 0;
@@ -331,7 +331,7 @@
     else{
         self.ios7BackgroundView.hidden = NO;
         CGRectSetY(self.contentView, self.ios7BackgroundView.frame.size.height);
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+        if(OSVER >= 7)[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
         CGRectSetHeight(self.contentView, self.view.frame.size.height-self.ios7BackgroundView.frame.size.height);
         
         [UIView animateWithDuration:0.25f animations:^{
