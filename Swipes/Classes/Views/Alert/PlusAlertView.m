@@ -12,7 +12,7 @@
 #define kMoreButtonWidth 190
 #define kMoreButtonFont KP_REGULAR(20)
 #define kCrossButtonSize 44
-#define kCrossButtonContentInset UIEdgeInsetsMake(0, 10, 10, 0)
+#define kCrossButtonContentInset UIEdgeInsetsMake(0, 0, 0, 0)
 #import "PlusAlertView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+Utilities.h"
@@ -52,7 +52,7 @@
         contentView.backgroundColor = tbackground(BackgroundColor);
         
         UIButton *crossButton = [[UIButton alloc] initWithFrame:CGRectMake(contentView.frame.size.width-kCrossButtonSize, 0, kCrossButtonSize, kCrossButtonSize)];
-        [crossButton setImage:[UIImage imageNamed:@"cross_button"] forState:UIControlStateNormal];
+        [crossButton setImage:[UIImage imageNamed:@"round_cross_small"] forState:UIControlStateNormal];
         [crossButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
         crossButton.imageEdgeInsets = kCrossButtonContentInset;
         [contentView addSubview:crossButton];
@@ -76,14 +76,14 @@
         self.messageLabel = messageLabel;
         
         UIButton *moreButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kMoreButtonWidth, kMoreButtonHeight)];
-        [moreButton setBackgroundImage:[color(255, 96, 69, 1) image] forState:UIControlStateNormal];
+        [moreButton setBackgroundImage:[color(235, 96, 80, 1) image] forState:UIControlStateNormal];
         //[moreButton setBackgroundImage:[alpha(POPUP_BACKGROUND,0.5) image] forState:UIControlStateHighlighted];
         moreButton.layer.cornerRadius = 3;
         moreButton.layer.masksToBounds = YES;
         moreButton.titleLabel.font = kMoreButtonFont;
         [moreButton setTitle:@"LEARN MORE" forState:UIControlStateNormal];
         moreButton.center = CGPointMake(contentView.frame.size.width/2, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT/2);
-        CGRectSetY(moreButton, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT);
+        CGRectSetY(moreButton, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT-20);
         [moreButton addTarget:self action:@selector(pressedPlus:) forControlEvents:UIControlEventTouchUpInside];
         [contentView addSubview:moreButton];
         

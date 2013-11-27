@@ -44,6 +44,40 @@ static UtilityClass *sharedObject;
     });
     
 }
++(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime{
+    if(!time) return nil;
+    NSString *timeString = [UtilityClass timeStringForDate:time];
+    
+    NSDate *beginningOfDate = [time dateAtStartOfDay];
+    NSInteger numberOfDaysAfterTodays = [beginningOfDate distanceInDaysToDate:[[NSDate date] dateAtStartOfDay]];
+    NSString *dateString;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    [dateFormatter setLocale:usLocale];
+    BOOL shouldFormat = NO;
+    if(numberOfDaysAfterTodays == 0){
+        dateString = @"Today";
+        if([time isLaterThanDate:[NSDate date]]) dateString = @"Today";
+    }
+    else if(numberOfDaysAfterTodays == -1) dateString = @"Tomorrow";
+    else if(numberOfDaysAfterTodays == 1) dateString = @"Yesterday";
+    else if(numberOfDaysAfterTodays < 7 && numberOfDaysAfterTodays > -7){
+        [dateFormatter setDateFormat:@"EEEE"];
+        shouldFormat = YES;
+    }
+    else{
+        if([time isSameYearAsDate:[NSDate date]]) dateFormatter.dateFormat = @"LLL d";
+        else dateFormatter.dateFormat = @"LLL d  '´'yy";
+        shouldFormat = YES;
+    }
+    if(shouldFormat){
+        dateString = [dateFormatter stringFromDate:time];
+    }
+    dateString = [dateString capitalizedString];
+    if(!showTime) return dateString;
+    return [NSString stringWithFormat:@"%@, %@",dateString,timeString];
+    
+}
 + (UIImage*)screenshot
 {
     // Create a graphics context with the target size
@@ -134,6 +168,7 @@ static UtilityClass *sharedObject;
 }
 +(UIImage *)image:(UIImage *)image withColor:(UIColor *)color multiply:(BOOL)multiply{
     UIImage *img = image;
+    if(!image) return nil;
     // begin a new image context, to draw our colored image onto
     UIGraphicsBeginImageContextWithOptions(img.size, NO, [UIScreen mainScreen].scale);
     

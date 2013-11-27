@@ -21,6 +21,9 @@
 #import "PlusAlertView.h"
 #import "AnalyticsHandler.h"
 #import "UIView+Utilities.h"
+
+#import "UserHandler.h"
+#import "KPLocationAlert.h"
 #define POPUP_WIDTH 315
 #define CONTENT_VIEW_TAG 1
 
@@ -49,6 +52,8 @@
 
 #define kTimePickerDuration 0.20f
 
+#define kHelpLevelDistance 8
+
 #define kSepExtraOut 5
 typedef enum {
     CustomPickerTypeDay = 0,
@@ -72,7 +77,7 @@ typedef enum {
 @property (nonatomic,strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, weak) IBOutlet UIView *timeViewer;
 @property (nonatomic) BOOL didUseTimePicker;
-
+@property (nonatomic) UILabel *helpLabel;
 @end
 #import <Parse/Parse.h>
 @implementation SchedulePopup
@@ -204,18 +209,28 @@ typedef enum {
     KPScheduleButtons thisButton = [self buttonForTag:sender.tag];
     if(thisButton == KPScheduleButtonSpecificTime) [self pressedSpecific:self];
     else if(thisButton == KPScheduleButtonLocation) {
-        
         UIWindow *window = [[UIApplication sharedApplication] keyWindow];
         self.contentView.hidden = YES;
+        self.helpLabel.hidden = YES;
         [ANALYTICS pushView:@"Location plus popup"];
-        [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location"}];
-        [PlusAlertView alertInView:window message:@"Location reminders is an upcoming feature in Swipes Plus. Check out the package." block:^(BOOL succeeded, NSError *error) {
-            [ANALYTICS popView];
-            self.contentView.hidden = NO;
-            if(succeeded){
-                [ROOT_CONTROLLER upgrade];
-            }
-        }];
+        if(kUserHandler.isPlus){
+            [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location"}];
+            [PlusAlertView alertInView:window message:@"Location reminders is an upcoming feature in Swipes Plus. Check out the whole package." block:^(BOOL succeeded, NSError *error) {
+                [ANALYTICS popView];
+                self.helpLabel.hidden = NO;
+                self.contentView.hidden = NO;
+                if(succeeded){
+                    [ROOT_CONTROLLER upgrade];
+                }
+            }];
+        }
+        else{
+            [KPLocationAlert alertInView:window message:@"Location reminders are coming soon. Keep swiping and we’ll ping you when they’re available. :)" block:^(BOOL succeeded, NSError *error) {
+                [ANALYTICS popView];
+                self.helpLabel.hidden = NO;
+                self.contentView.hidden = NO;
+            }];
+        }
     }
     else if(thisButton != KPScheduleButtonCancel){
         NSDate *date = [self dateForButton:thisButton];
@@ -343,6 +358,7 @@ typedef enum {
     UIGraphicsEndImageContext();
     return newImage;
 }
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -352,8 +368,20 @@ typedef enum {
         closeButton.frame = self.bounds;
         closeButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
         [self addSubview:closeButton];
+        
+        UILabel *helpLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
+        helpLabel.backgroundColor = CLEAR;
+        helpLabel.textColor = tbackground(BackgroundColor);
+        helpLabel.textAlignment = NSTextAlignmentCenter;
+        helpLabel.text = @"Hold down to adjust time";
+        helpLabel.font = KP_REGULAR(16);
+        self.helpLabel = helpLabel;
+        [self addSubview:helpLabel];
+        
+        
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH)];
         contentView.center = self.center;
+        CGRectSetY(self.helpLabel, CGRectGetMinY(contentView.frame)-CGRectGetHeight(helpLabel.frame)-kHelpLevelDistance);
         
         contentView.backgroundColor = tbackground(BackgroundColor);//CLEAR;//tbackground(SearchDrawerBackground);//POPUP_BACKGROUND_COLOR color(254,115,103,1);//;
         contentView.layer.cornerRadius = 10;

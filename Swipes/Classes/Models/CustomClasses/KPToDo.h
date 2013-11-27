@@ -20,7 +20,6 @@
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags;
 
 -(NSString*)readableTitleForStatus;
--(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime;
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save;
 -(NSArray*)nextNumberOfRepeatedDates:(NSInteger)numberOfDates;
 -(void)save;

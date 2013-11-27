@@ -45,7 +45,6 @@
         [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         //[self setTitleColor:alpha(tcolor(TextColor),0.6) forState:UIControlStateHighlighted];
         
-        
         self.iconImageView = [[UIImageView alloc] initWithImage:image];
         if(!highlightedImage)self.iconImageView.highlightedImage = [UtilityClass image:image withColor:highlightedColor multiply:YES];
         else self.iconImageView.highlightedImage = highlightedImage;

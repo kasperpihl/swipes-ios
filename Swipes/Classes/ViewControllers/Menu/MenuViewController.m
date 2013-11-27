@@ -20,6 +20,9 @@
 #import "SnoozesViewController.h"
 #import "AnalyticsHandler.h"
 #import "UserHandler.h"
+
+#import "KPParseCoreData.h"
+#import "PlusAlertView.h"
 #define kMenuButtonStartTag 4123
 #define kLampOnColor tcolor(DoneColor)
 #define kLampOffColor tbackground(MenuBackground)//tcolor(StrongLaterColor)
@@ -29,12 +32,14 @@
 #define kVerticalGridNumber 3
 #define kHorizontalGridNumber 3
 #define kGridButtonPadding 0
-@interface MenuViewController () <MFMailComposeViewControllerDelegate,ToolbarDelegate>
+@interface MenuViewController () <MFMailComposeViewControllerDelegate>
 @property (nonatomic) IBOutletCollection(UIView) NSArray *seperators;
 @property (nonatomic) IBOutletCollection(UIButton) NSMutableArray *menuButtons;
 @property (nonatomic) UIButton *backButton;
 @property (nonatomic) NSMutableArray *viewControllers;
+
 @property (nonatomic) UIView *gridView;
+@property (nonatomic) UILabel *syncLabel;
 @property (nonatomic) UIPanGestureRecognizer *menuPanning;
 @end
 
@@ -108,12 +113,44 @@
 
     [self.view addSubview:self.gridView];
     self.gridView.center = CGPointMake(self.view.frame.size.width/2, (self.view.frame.size.height)/2);
+    
+    self.syncLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.gridView.bounds)+ 10, self.gridView.frame.size.width, 20)];
+    self.syncLabel.textAlignment = NSTextAlignmentCenter;
+    self.syncLabel.backgroundColor = CLEAR;
+    self.syncLabel.textColor = tcolor(TextColor);
+    self.syncLabel.font = KP_REGULAR(16);
+    [self updateSyncLabel];
+    [self.gridView addSubview:self.syncLabel];
+    
     self.menuPanning = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
+    
+    
     
     UIView *panningView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-kGridMargin, 0, kGridMargin, self.view.bounds.size.height)];
     [panningView addGestureRecognizer:self.menuPanning];
     [self.view addSubview:panningView];
     notify(@"changed isPlus", changedIsPlus);
+    notify(@"updated sync",updateSyncLabel);
+}
+-(void)updateSyncLabel{
+    NSDate *lastSave = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSyncToServer"];
+    NSDate *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdatedFromServer"];
+    NSString *timeString = @"Never";
+    NSDate *dateForTime;
+    
+    if(kUserHandler.isPlus){
+        if(!lastSave) dateForTime = lastUpdate;
+        if(!lastUpdate) dateForTime = lastSave;
+        if(!dateForTime && lastUpdate && lastSave) dateForTime = [lastUpdate laterDate:lastSave];
+    }
+    else{
+        dateForTime = lastSave;
+    }
+    if(dateForTime){
+        timeString = [UtilityClass readableTime:dateForTime showTime:YES];
+    }
+    NSString *syncOrBackup = kUserHandler.isPlus ? @"sync" : @"backup";
+    self.syncLabel.text = [NSString stringWithFormat:@"Last %@: %@",syncOrBackup,timeString];
 }
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
     [kSideMenu panGestureRecognized:sender];
@@ -228,14 +265,25 @@
             break;
         }
         case KPMenuButtonUpgrade:{
-            
+            if(kUserHandler.isPlus){
+                KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Manage subscription" message:@"Open App Store to manage your subscription?" block:^(BOOL succeeded, NSError *error) {
+                    [BLURRY dismissAnimated:YES];
+                    if(succeeded){
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"]];
+                    }
+                }];
+                BLURRY.blurryTopColor = gray(230, 0.5);
+                [BLURRY showView:alert inViewController:self];
+                
+                return;
+            }
             [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Settings"}];
             [ROOT_CONTROLLER upgrade];
             break;
         }
         case KPMenuButtonPolicy:{
             
-            KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Privacy Policy" message:@"Do you want to open our privacy policy?" block:^(BOOL succeeded, NSError *error) {
+            KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Privacy Policy" message:@"Do you want to open our\r\nprivacy policy?" block:^(BOOL succeeded, NSError *error) {
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"http://swipesapp.com/privacypolicy.pdf"]];
@@ -247,7 +295,7 @@
         }
         case KPMenuButtonLogout:{
             
-            KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Log out" message:@"Warning: All your data will be lost. We will introduce backup soon." block:^(BOOL succeeded, NSError *error) {
+            KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Log out" message:@"Are you sure you want to log out of your account?" block:^(BOOL succeeded, NSError *error) {
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
                     [ROOT_CONTROLLER logOut];
@@ -255,6 +303,32 @@
             }];
             BLURRY.blurryTopColor = gray(230, 0.5);
             [BLURRY showView:alert inViewController:self];
+            break;
+        }
+        case KPMenuButtonSync:{
+            if(!kUserHandler.isPlus){
+                [ANALYTICS pushView:@"Sync plus popup"];
+                [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Sync in Settings"}];
+                PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Synchronization is a Swipes Plus feature. Keep your tasks in sync with an app for web and iPad." block:^(BOOL succeeded, NSError *error) {
+                    [ANALYTICS popView];
+                    [BLURRY dismissAnimated:YES];
+                    if(succeeded){
+                        [ROOT_CONTROLLER upgrade];
+                    }
+                }];
+                BLURRY.blurryTopColor = gray(230, 0.5);
+                [BLURRY showView:alert inViewController:self];
+            }
+            else{
+                CABasicAnimation *rotate =
+                [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+                rotate.byValue = @(M_PI*2); // Change to - angle for counter clockwise rotation
+                rotate.duration = 1.0;
+                
+                [sender.iconImageView.layer addAnimation:rotate
+                                        forKey:@"myRotationAnimation"];
+                [KPCORE synchronizeForce:YES];
+            }
             break;
         }
         default:

@@ -40,6 +40,7 @@
 #import "UIColor+Utilities.h"
 #import "KPRepeatPicker.h"
 //#import "UIButton+PassTouch.h"
+#import "RootViewController.h"
 #import "AppDelegate.h"
 #import "KPTimePicker.h"
 #import "DotView.h"
@@ -221,6 +222,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if(self.timePicker) return;
     NSDate *date = self.model.schedule;
     if(!date || [date isInPast]) return;
+    ROOT_CONTROLLER.lockSettings = YES;
     self.timePicker = [[KPTimePicker alloc] initWithFrame:self.segmentedViewController.view.bounds];
     self.timePicker.delegate = self;
     self.timePicker.pickingDate = date;
@@ -239,6 +241,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [UIView animateWithDuration:0.2f animations:^{
         timePicker.alpha = 0;
     } completion:^(BOOL finished) {
+        ROOT_CONTROLLER.lockSettings = NO;
         if(finished){
             [timePicker removeFromSuperview];
             self.timePicker = nil;
@@ -473,11 +476,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if(!self.model.schedule){// || [self.model.schedule isInPast]){
         self.alarmLabel.text = @"Unspecified";
         if(self.model.completionDate){
-            self.alarmLabel.text = [NSString stringWithFormat:@"Completed: %@",[self.model readableTime:self.model.completionDate showTime:YES]];
+            self.alarmLabel.text = [NSString stringWithFormat:@"Completed: %@",[UtilityClass readableTime:self.model.completionDate showTime:YES]];
         }
     }
     else{
-        self.alarmLabel.text = [NSString stringWithFormat:@"%@",[self.model readableTime:self.model.schedule showTime:YES]];
+        self.alarmLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:self.model.schedule showTime:YES]];
     }
 }
 -(void)update{

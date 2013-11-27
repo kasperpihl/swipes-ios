@@ -187,14 +187,14 @@ static RootViewController *sharedObject;
     if([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
         mailCont.mailComposeDelegate = self;
-        [mailCont setSubject:@"Tasks from Swipes"];
+        [mailCont setSubject:@"Tasks to complete"];
         
-        NSString *message = @"Tasks from Swipes: \r\n\r\n";
+        NSString *message = @"Tasks: \r\n";
         NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
         for(KPToDo *toDo in tasks){
             message = [message stringByAppendingFormat:@"◯ %@\r\n",toDo.title];
         }
-        
+        message = [message stringByAppendingString:@"\r\nSent from Swipes - http://swipesapp.com\r\n"];
         [mailCont setMessageBody:message isHTML:NO];
         [self presentViewController:mailCont animated:YES completion:nil];
     }

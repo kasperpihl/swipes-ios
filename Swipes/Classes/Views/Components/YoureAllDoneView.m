@@ -40,7 +40,7 @@
         self.shareItLabel.backgroundColor = CLEAR;
         self.shareItLabel.textColor = kColor;
         self.shareItLabel.textAlignment = NSTextAlignmentCenter;
-        self.shareItLabel.text = @"Good job, let 'em know!";
+        self.shareItLabel.text = @"Good job, let everyone know!";
         self.shareItLabel.font = KP_LIGHT(16);
         //self.shareItLabel.hidden = YES;
         [self.shareItLabel sizeToFit];

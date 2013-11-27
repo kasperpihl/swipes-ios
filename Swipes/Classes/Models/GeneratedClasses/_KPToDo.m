@@ -14,6 +14,7 @@ const struct KPToDoAttributes KPToDoAttributes = {
 	.repeatOption = @"repeatOption",
 	.repeatedDate = @"repeatedDate",
 	.schedule = @"schedule",
+	.state = @"state",
 	.tagString = @"tagString",
 	.title = @"title",
 };
@@ -218,6 +219,13 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 
 @dynamic schedule;
+
+
+
+
+
+
+@dynamic state;
 
 
 

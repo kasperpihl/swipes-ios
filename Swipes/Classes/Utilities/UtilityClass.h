@@ -26,5 +26,5 @@
 +(NSString*)dayStringForDate:(NSDate*)date;
 +(NSString*)timeStringForDate:(NSDate*)date;
 +(NSString*)dayOfMonthForDate:(NSDate*)date;
-
++(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime;
 @end

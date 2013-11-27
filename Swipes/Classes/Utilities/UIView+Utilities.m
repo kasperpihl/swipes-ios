@@ -22,7 +22,7 @@
     }
     self.hidden = NO;
     if(show){
-        UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         indicatorView.center = self.center;
         indicatorView.tag = kIndicatorTag;
         [self.superview addSubview:indicatorView];

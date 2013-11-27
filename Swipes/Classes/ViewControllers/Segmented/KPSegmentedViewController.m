@@ -130,13 +130,14 @@
     }
     [ANALYTICS pushView:@"Sharing plus popup"];
     [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Sharing"}];
-    PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Sharing tasks are only available in Swipes Plus. Check it out." block:^(BOOL succeeded, NSError *error) {
+    PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Sharing tasks is a feature in Swipes Plus. Wouldn’t it be great to send away some tasks?" block:^(BOOL succeeded, NSError *error) {
         [ANALYTICS popView];
         [BLURRY dismissAnimated:YES];
         if(succeeded){
             [ROOT_CONTROLLER upgrade];
         }
     }];
+    BLURRY.blurryTopColor = gray(230, 0.5);
     [BLURRY showView:alert inViewController:self];
 }
 -(void)tagViewWithDismissAction:(voidBlock)block{
@@ -153,7 +154,9 @@
     NSInteger numberOfTasks = [self currentViewController].selectedItems.count;
     NSString *endString = (numberOfTasks > 1) ? @"tasks" : @"task";
     NSString *titleString = [NSString stringWithFormat:@"Delete %i %@",numberOfTasks,endString];
-    KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:titleString message:@"This can't be undone" block:^(BOOL succeeded, NSError *error) {
+    endString = (numberOfTasks > 1) ? @"these tasks" : @"this task";
+    NSString *messageString = [NSString stringWithFormat:@"Are you sure you want to permanently delete %@?",endString];
+    KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:titleString message:messageString block:^(BOOL succeeded, NSError *error) {
         [BLURRY dismissAnimated:YES];
         if(succeeded){
             ToDoListViewController *viewController = [self currentViewController];

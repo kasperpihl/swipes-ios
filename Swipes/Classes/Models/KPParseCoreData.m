@@ -268,13 +268,17 @@ static KPParseCoreData *sharedObject;
     }
     if(!kUserHandler.isPlus){
         NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"]);
-        if([[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"]) return;
+        if([[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"]){
+            self._isSyncing = NO;
+            return;
+        }
     }
+    
     if(!self._isSyncing) self._isSyncing = YES;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
         [self startBackgroundHandler];
-        NSDate *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"];
+        NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"];
         NSError *error;
         NSMutableDictionary *options = [@{@"changesOnly":@YES} mutableCopy];
         if(lastUpdate) [options setObject:lastUpdate forKey:@"lastUpdate"];
@@ -288,14 +292,15 @@ static KPParseCoreData *sharedObject;
         NSArray *tags = [result objectForKey:@"Tag"];
         NSArray *tasks = [result objectForKey:@"ToDo"];
         NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
+        NSDate *now = [NSDate date];
         lastUpdate = [result objectForKey:@"updateTime"];
         for(PFObject *object in allObjects){
             [self handleCDObject:nil withPFObject:object inContext:localContext];
         }
         [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
-            [self sendUpdateEvent];
             if(lastUpdate) [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastUpdate"];
-            
+            if(now)[[NSUserDefaults standardUserDefaults] setObject:now forKey:@"lastUpdatedFromServer"];
+            [self sendUpdateEvent];
             if(error) NSLog(@"error from update");
             self._isSyncing = NO;
             [self endBackgroundHandler];

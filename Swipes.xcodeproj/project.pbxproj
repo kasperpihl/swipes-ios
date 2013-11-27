@@ -113,6 +113,9 @@
 		A730D39717B51C24005E1510 /* upgrade_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39517B51C24005E1510 /* upgrade_full@2x.png */; };
 		A730D39A17B54B17005E1510 /* upgrade_plus_button.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39817B54B17005E1510 /* upgrade_plus_button.png */; };
 		A730D39B17B54B17005E1510 /* upgrade_plus_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39917B54B17005E1510 /* upgrade_plus_button@2x.png */; };
+		A73FD8BE18462E980006C725 /* KPLocationAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A73FD8BD18462E980006C725 /* KPLocationAlert.m */; };
+		A73FD8C11846326C0006C725 /* location_popup_title.png in Resources */ = {isa = PBXBuildFile; fileRef = A73FD8BF1846326C0006C725 /* location_popup_title.png */; };
+		A73FD8C21846326C0006C725 /* location_popup_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A73FD8C01846326C0006C725 /* location_popup_title@2x.png */; };
 		A741EC4918326996000F9F93 /* settings_icon_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A741EC4718326996000F9F93 /* settings_icon_white@2x.png */; };
 		A741EC4C18328B57000F9F93 /* settings_icon_white-high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A741EC4A18328B57000F9F93 /* settings_icon_white-high@2x.png */; };
 		A741EC4F18354726000F9F93 /* default-background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A741EC4E18354726000F9F93 /* default-background.jpg */; };
@@ -476,6 +479,10 @@
 		A730D39517B51C24005E1510 /* upgrade_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upgrade_full@2x.png"; sourceTree = "<group>"; };
 		A730D39817B54B17005E1510 /* upgrade_plus_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upgrade_plus_button.png; sourceTree = "<group>"; };
 		A730D39917B54B17005E1510 /* upgrade_plus_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upgrade_plus_button@2x.png"; sourceTree = "<group>"; };
+		A73FD8BC18462E980006C725 /* KPLocationAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPLocationAlert.h; sourceTree = "<group>"; };
+		A73FD8BD18462E980006C725 /* KPLocationAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPLocationAlert.m; sourceTree = "<group>"; };
+		A73FD8BF1846326C0006C725 /* location_popup_title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location_popup_title.png; sourceTree = "<group>"; };
+		A73FD8C01846326C0006C725 /* location_popup_title@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "location_popup_title@2x.png"; sourceTree = "<group>"; };
 		A741EC4618326996000F9F93 /* settings_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_icon_white.png; sourceTree = "<group>"; };
 		A741EC4718326996000F9F93 /* settings_icon_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_icon_white@2x.png"; sourceTree = "<group>"; };
 		A741EC4A18328B57000F9F93 /* settings_icon_white-high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_icon_white-high@2x.png"; sourceTree = "<group>"; };
@@ -839,6 +846,8 @@
 				A703B16A1838EBF20047DCC9 /* KPAlert.m */,
 				A703B16B1838EBF20047DCC9 /* PlusAlertView.h */,
 				A703B16C1838EBF20047DCC9 /* PlusAlertView.m */,
+				A73FD8BC18462E980006C725 /* KPLocationAlert.h */,
+				A73FD8BD18462E980006C725 /* KPLocationAlert.m */,
 			);
 			path = Alert;
 			sourceTree = "<group>";
@@ -1418,6 +1427,8 @@
 		A79DB41B17358C33007A48E2 /* Backgrounds */ = {
 			isa = PBXGroup;
 			children = (
+				A73FD8BF1846326C0006C725 /* location_popup_title.png */,
+				A73FD8C01846326C0006C725 /* location_popup_title@2x.png */,
 				A7ADCB2A17DD2B4000780F88 /* background_white_signate.png */,
 				A7ADCB2B17DD2B4000780F88 /* background_white_signate@2x.png */,
 				A7FE4403182828E1002AFB2E /* date_stamp_background.png */,
@@ -1905,7 +1916,9 @@
 				A7DAC67E181A7CF800B8C079 /* repeat_icon_small_gray@2x.png in Resources */,
 				A730D39717B51C24005E1510 /* upgrade_full@2x.png in Resources */,
 				A7916A5C181BC7A500FA1974 /* round_facebook-high.png in Resources */,
+				A73FD8C11846326C0006C725 /* location_popup_title.png in Resources */,
 				A7DAC686181A7CF800B8C079 /* tag_icon_white@2x.png in Resources */,
+				A73FD8C21846326C0006C725 /* location_popup_title@2x.png in Resources */,
 				A730D39A17B54B17005E1510 /* upgrade_plus_button.png in Resources */,
 				A730D39B17B54B17005E1510 /* upgrade_plus_button@2x.png in Resources */,
 				A7ECD37F17C14C1200F9BCF0 /* edit_repeat_icon.png in Resources */,
@@ -2077,6 +2090,7 @@
 				A703B1C31838EBF20047DCC9 /* KPAddTagPanel.m in Sources */,
 				A789B3F917D79BFB00C25B73 /* KPOverlay.m in Sources */,
 				A703B1C01838EBF20047DCC9 /* RESideMenu.m in Sources */,
+				A73FD8BE18462E980006C725 /* KPLocationAlert.m in Sources */,
 				A703B1B81838EBF20047DCC9 /* KPSearchBar.m in Sources */,
 				A703B1C11838EBF20047DCC9 /* UIWindow+RESideMenuExtensions.m in Sources */,
 				A76ADC1017EC9B5700F52F40 /* HPGrowingTextView.m in Sources */,

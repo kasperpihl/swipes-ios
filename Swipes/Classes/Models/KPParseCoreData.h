@@ -17,4 +17,5 @@
 -(void)cleanUp;
 -(void)seedObjects;
 -(void)saveInContext:(NSManagedObjectContext*)context;
+-(void)synchronizeForce:(BOOL)force;
 @end

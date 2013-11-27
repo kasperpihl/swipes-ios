@@ -276,40 +276,6 @@
 -(void)save{
     [KPCORE saveInContext:nil];
 }
--(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime{
-    if(!time) return nil;
-    NSString *timeString = [UtilityClass timeStringForDate:time];
-    
-    NSDate *beginningOfDate = [time dateAtStartOfDay];
-    NSInteger numberOfDaysAfterTodays = [beginningOfDate distanceInDaysToDate:[[NSDate date] dateAtStartOfDay]];
-    NSString *dateString;
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-    [dateFormatter setLocale:usLocale];
-    BOOL shouldFormat = NO;
-    if(numberOfDaysAfterTodays == 0){
-        dateString = @"Today";
-        if([time isLaterThanDate:[NSDate date]]) dateString = @"Today";
-    }
-    else if(numberOfDaysAfterTodays == -1) dateString = @"Tomorrow";
-    else if(numberOfDaysAfterTodays == 1) dateString = @"Yesterday";
-    else if(numberOfDaysAfterTodays < 7 && numberOfDaysAfterTodays > -7){
-        [dateFormatter setDateFormat:@"EEEE"];
-        shouldFormat = YES;
-    }
-    else{
-        if([time isSameYearAsDate:[NSDate date]]) dateFormatter.dateFormat = @"LLL d";
-        else dateFormatter.dateFormat = @"LLL d  '´'yy";
-        shouldFormat = YES;
-    }
-    if(shouldFormat){
-        dateString = [dateFormatter stringFromDate:time];
-    }
-    dateString = [dateString capitalizedString];
-    if(!showTime) return dateString;
-    return [NSString stringWithFormat:@"%@, %@",dateString,timeString];
-    
-}
 -(NSDate *)nextDateFrom:(NSDate*)date{
     NSDate *returnDate;
     switch (self.repeatOptionValue) {
@@ -364,14 +330,14 @@
         NSDate *toDoDate = self.schedule;
         if(!toDoDate) title = @"Unspecified";
         else{
-            title = [self readableTime:toDoDate showTime:NO];
+            title = [UtilityClass readableTime:toDoDate showTime:NO];
             if([title isEqualToString:@"Today"]) title = @"Later Today";
             //title = [NSString stringWithFormat:@"Schedule %@",dateString];
         }
     }
     else if(cellType == CellTypeDone){
         NSDate *toDoDate = self.completionDate;
-        NSString *dateString = [self readableTime:toDoDate showTime:NO];
+        NSString *dateString = [UtilityClass readableTime:toDoDate showTime:NO];
         title = [NSString stringWithFormat:@"%@",dateString];
     }
     
