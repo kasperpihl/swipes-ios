@@ -81,7 +81,7 @@ static UserHandler *sharedObject;
         userLevel = [[kCurrent objectForKey:@"userLevel"] integerValue];
         [[NSUserDefaults standardUserDefaults] setInteger:userLevel forKey:@"isPlus"];
         self.userLevel = userLevel;
-        self.isPlus = (userLevel > UserLevelTrial);
+        self.isPlus = (userLevel > UserLevelStandard);
     }
 }
 -(void)dealloc{
