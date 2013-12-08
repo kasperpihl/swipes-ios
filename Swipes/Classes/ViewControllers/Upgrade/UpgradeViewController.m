@@ -14,16 +14,17 @@
 #import "KPSubtitleButton.h"
 #import "AnalyticsHandler.h"
 #import "PaymentHandler.h"
+#import "SlowHighlightIcon.h"
 #define kCloseButtonSize 60
 #define kLogoTopMargin 35
 #define kSubscribeButtonWidth 120
 #define kSubscribeButtonHeight 60
 #define kSubButtonSubHeight 35
 #define kSubButtonCornerRadius 6
-#define kSubButtonFont KP_REGULAR(24)
+#define kSubButtonFont KP_REGULAR(21)
 #define kSubButtonSubFont KP_REGULAR(14)
 #define kSubButtonTitleTopInset 18
-#define kSubButtonY 630
+#define kSubButtonY 600
 
 
 
@@ -32,6 +33,7 @@
 @property (nonatomic) KPSubtitleButton *monthlyButton;
 @property (nonatomic) KPSubtitleButton *yearlyButton;
 @property (nonatomic) BOOL hasPressed;
+@property (nonatomic) UIButton *restoreButton;
 @end
 
 @implementation UpgradeViewController
@@ -80,9 +82,24 @@
     [yearButton addTarget:self action:@selector(pressedYearButton:) forControlEvents:UIControlEventTouchUpInside];
     self.yearlyButton = yearButton;
     //[yearButton setTitle:@"$9.99" forState:UIControlStateNormal];
+    
+    self.restoreButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 200, 38)];
+    [self.restoreButton setTitle:@"Restore transactions" forState:UIControlStateNormal];
+    self.restoreButton.layer.cornerRadius = kSubButtonCornerRadius;
+    self.restoreButton.backgroundColor = tcolor(TextColor);
+    [self.restoreButton setBackgroundImage:[gray(230, 1) image] forState:UIControlStateHighlighted];
+    self.restoreButton.titleLabel.font = KP_REGULAR(16);
+    [self.restoreButton setTitleColor:tbackground(BackgroundColor) forState:UIControlStateNormal];
+    self.restoreButton.layer.masksToBounds = YES;
+    [self.restoreButton addTarget:self action:@selector(pressedRestoreButton:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    CGRectSetY(self.restoreButton, CGRectGetMaxY(self.yearlyButton.frame) + 20);
+    CGRectSetCenterX(self.restoreButton, salesImage.frame.size.width/2);
+    
     [salesImage addSubview:monthButton];
     [salesImage addSubview:yearButton];
-    
+    [salesImage addSubview:self.restoreButton];
     
     
     scrollView.contentSize = CGSizeMake(320, salesImage.frame.size.height);
@@ -98,8 +115,8 @@
     [self.view addSubview:closeButton];
     
     [[PaymentHandler sharedInstance] requestProductsWithBlock:^(SKProduct *plusMonthly, SKProduct *plusYearly, NSError *error) {
-        [self.monthlyButton setTitle:plusMonthly.localizedPrice forState:UIControlStateNormal];
-        [self.yearlyButton setTitle:plusYearly.localizedPrice forState:UIControlStateNormal];
+        if(plusMonthly) [self.monthlyButton setTitle:plusMonthly.localizedPrice forState:UIControlStateNormal];
+        if(plusYearly) [self.yearlyButton setTitle:plusYearly.localizedPrice forState:UIControlStateNormal];
     }];
 }
 -(void)viewDidAppear:(BOOL)animated{
@@ -110,19 +127,43 @@
     [self.scrollView setContentOffset:bottomOffset animated:YES];
 }
 -(void)pressedMonthButton:(UIButton*)sender{
+    if(self.hasPressed) return;
+    self.hasPressed = YES;
     [sender showIndicator:YES];
     [[PaymentHandler sharedInstance] requestPlusMonthlyBlock:^(BOOL succeeded, NSError *error) {
+        self.hasPressed = NO;
         [sender showIndicator:NO];
         if(succeeded) [ANALYTICS tagEvent:@"Upgraded" options:@{@"Subscription":@"Monthly",@"Package":@"Plus"}];
         [self handlePaymentSucceeded:succeeded error:error];
     }];
 }
 -(void)pressedYearButton:(UIButton*)sender{
+    if(self.hasPressed) return;
+    self.hasPressed = YES;
     [sender showIndicator:YES];
     [[PaymentHandler sharedInstance] requestPlusYearlyBlock:^(BOOL succeeded, NSError *error) {
+        self.hasPressed = NO;
         [sender showIndicator:NO];
         if(succeeded)[ANALYTICS tagEvent:@"Upgraded" options:@{@"Subscription":@"Yearly",@"Package":@"Plus"}];
         [self handlePaymentSucceeded:succeeded error:error];
+    }];
+}
+-(void)pressedRestoreButton:(UIButton*)sender{
+    if(self.hasPressed) return;
+    self.hasPressed = YES;
+    [sender showIndicator:YES];
+    [[PaymentHandler sharedInstance] restoreWithBlock:^(NSError *error) {
+        self.hasPressed = NO;
+        [sender showIndicator:NO];
+        if(!error){
+            [self.delegate closedUpgradeViewController:self];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Purchase restored" message:@"Your purchase has been restored. Welcome back!" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+            [alert show];
+        }
+        else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"An error occured" message:@"No purchases could be restored. Contact support@swipesapp.com for help." delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+            [alert show];
+        }
     }];
 }
 -(void)handlePaymentSucceeded:(BOOL)succeeded error:(NSError*)error{
@@ -131,8 +172,8 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Congratulations!" message:@"You’ve joined the Swipes Plus community. We’re so happy to have you on board. Go to swipesapp.com/plus to get started." delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
         [alert show];
     }else {
-        NSLog(@"didn't succeed payment");
-        NSLog(@"err:%@",error);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"An error occured" message:@"Please try again, or contact support@swipesapp.com for help" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+        [alert show];
     }
 }
 -(void)pressedCloseButton:(UIButton*)sender{

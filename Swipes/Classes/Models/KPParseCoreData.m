@@ -156,7 +156,9 @@ static KPParseCoreData *sharedObject;
     [self synchronizeForce:YES];
 }
 -(void)synchronizeForce:(BOOL)force{
-    if(!kCurrent) return;
+    if(!kCurrent){
+        return;
+    }
     if(self._isSyncing){
         self._needSync = YES;
         return;

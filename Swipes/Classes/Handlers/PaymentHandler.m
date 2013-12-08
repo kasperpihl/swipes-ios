@@ -46,7 +46,7 @@ static PaymentHandler *sharedObject;
     // we will release the request object in the delegate callback
 }
 -(void)requestPayment:(NSString*)identifier block:(SuccessfulBlock)block{
-    [[RMStore defaultStore] addPayment:identifier success:^(SKPaymentTransaction *transaction) {
+    [[RMStore defaultStore] addPayment:identifier user:kCurrent.objectId success:^(SKPaymentTransaction *transaction) {
         NSLog(@"reciept:%@",[transaction.transactionReceipt base64Encoding]);
         if(transaction.transactionReceipt){
             PFObject *purchase = [PFObject objectWithClassName:@"Payment"];
@@ -76,6 +76,14 @@ static PaymentHandler *sharedObject;
 }
 -(void)requestPlusMonthlyBlock:(SuccessfulBlock)block{
     [self requestPayment:plusMonthlyIdentifier block:block];
+}
+-(void)restoreWithBlock:(void (^)(NSError *))errorBlock{
+    [[RMStore defaultStore] restoreTransactionsOfUser:kCurrent.objectId onSuccess:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"upgrade userlevel" object:self];
+        errorBlock(nil);
+    } failure:^(NSError *error) {
+        errorBlock(error);
+    }];
 }
 @end
 
