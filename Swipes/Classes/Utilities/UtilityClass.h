@@ -17,7 +17,7 @@
 -(NSNumber*)versionNumber;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block;
 +(NSString*)generateIdWithLength:(NSInteger)length;
-+(void)sendError:(NSError *)error type:(NSString *)type screenshot:(BOOL)screenshot;
++(void)sendError:(NSError *)error type:(NSString *)type;
 + (BOOL) validateEmail: (NSString *) candidate;
 + (UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color;
 + (UIImage *)image:(UIImage *)image withColor:(UIColor *)color multiply:(BOOL)multiply;

@@ -23,20 +23,12 @@ static UtilityClass *sharedObject;
     if(sharedObject == nil) sharedObject = [[super allocWithZone:NULL] init];
     return sharedObject;
 }
-+(void)sendError:(NSError *)error type:(NSString *)type screenshot:(BOOL)screenshot{
++(void)sendError:(NSError *)error type:(NSString *)type{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
         if([error description]) [errorObject setObject:[error description] forKey:@"error"];
         if([error code]) [errorObject setObject:@([error code]) forKey:@"code"];
         if(type) [errorObject setObject:type forKey:@"type"];
-        if(screenshot){
-            UIImage *screen = [self screenshot];
-            NSData *screenData = UIImagePNGRepresentation(screen);
-            PFFile *pictureFile = [PFFile fileWithName:@"screen.png" data:screenData];
-            NSError *localError;
-            [pictureFile save:&localError];
-            if(!localError) [errorObject setObject:pictureFile forKey:@"screenshot"];
-        }
         [errorObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if(!succeeded) [errorObject saveEventually];
         }];

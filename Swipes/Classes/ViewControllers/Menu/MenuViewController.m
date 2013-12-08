@@ -281,12 +281,15 @@
             [ROOT_CONTROLLER upgrade];
             break;
         }
+        case KPMenuButtonTerms:
         case KPMenuButtonPolicy:{
-            
-            KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Privacy Policy" message:@"Do you want to open our\r\nprivacy policy?" block:^(BOOL succeeded, NSError *error) {
+            NSString *title = (button == KPMenuButtonTerms) ? @"Terms of use" : @"Privacy Policy";
+            NSString *message = (button == KPMenuButtonTerms) ? @"Do you want to open our\r\nterms of use?" : @"Do you want to open our\r\nprivacy policy?";
+            NSString *url = (button == KPMenuButtonTerms) ? @"http://swipesapp.com/termsofuse.pdf" : @"http://swipesapp.com/privacypolicy.pdf";
+            KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:title message:message block:^(BOOL succeeded, NSError *error) {
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"http://swipesapp.com/privacypolicy.pdf"]];
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: url]];
                 }
             }];
             BLURRY.blurryTopColor = gray(230, 0.5);
@@ -360,6 +363,9 @@
             title = (kUserHandler.isPlus) ? @"Manage" : @"Upgrade";
             break;
         }
+        case KPMenuButtonTerms:
+            title = @"Terms";
+            break;
         case KPMenuButtonPolicy:
             title= @"Policy";
             break;
@@ -390,6 +396,7 @@
         case KPMenuButtonUpgrade:
             imageString = @"menu_pro";
             break;
+        case KPMenuButtonTerms:
         case KPMenuButtonPolicy:
             imageString = @"menu_policy";
             break;

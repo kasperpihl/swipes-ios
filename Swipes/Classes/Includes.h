@@ -82,7 +82,7 @@ typedef void (^voidBlock)(void);
 
 #define CLEAR [UIColor clearColor]
 #define color(r,g,b,a) [UIColor colorWithRed: r/255.0 green: g/255.0 blue: b/255.0 alpha:a]
-#define gray(l,a) [UIColor colorWithRed: l/255.0 green: l/255.0 blue: l/255.0 alpha:a]
+#define gray(l,a) [UIColor colorWithWhite:l/255.0 alpha:a]
 #define alpha(c,a) [c colorWithAlphaComponent:a]
 #define trim(s) [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
 #define CGRectSetPos( r, x, y ) CGRectMake( x, y, r.size.width, r.size.height )

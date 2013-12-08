@@ -210,7 +210,7 @@ static KPParseCoreData *sharedObject;
                 if(error.code == 100 || error.code == 124){
                     // Timed out
                 }
-                else [UtilityClass sendError:error type:@"Synchronization send" screenshot:YES];
+                else [UtilityClass sendError:error type:@"Synchronization send"];
             }
             NSInteger index = 0;
             for (KPParseObject *object in updatedObjects) {

@@ -255,7 +255,7 @@
                                delegate:nil
                       cancelButtonTitle:@"ok"
                       otherButtonTitles:nil] show];
-    [UtilityClass sendError:error type:@"Login" screenshot:YES];
+    [UtilityClass sendError:error type:@"Login"];
 }
 -(void)pressedFacebook:(UIButton*)sender{
     [self showIndicator:YES onElement:sender];
