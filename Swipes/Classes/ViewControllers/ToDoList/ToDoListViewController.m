@@ -77,7 +77,10 @@
     [self didUpdateCells];
     [self showBackgroundItems:(itemNumber == 0)];
     self.searchBar.hidden = (itemNumber == 0);
+    if(self.searchBar.currentMode == KPSearchBarModeNone && !self.parent.showingModel) self.parent.fullscreenMode = NO;
+    NSLog(@"search:%i model: %@",self.searchBar.currentMode,self.parent.showingModel);
     if(itemNumber == 0) self.parent.fullscreenMode = NO;
+    
 }
 -(void)showBackgroundItems:(BOOL)show{
     self.menuText.hidden = !show;
@@ -93,6 +96,7 @@
     else if (_isShowingItem != isShowingItem){
         [[self parent] setLock:NO];
         [self.showingViewController.view removeFromSuperview];
+        NSLog(@"set this");
         if(self.searchBar.currentMode == KPSearchBarModeNone && !self.parent.showingModel) self.parent.fullscreenMode = NO;
     }
     _isShowingItem = isShowingItem;
@@ -475,6 +479,7 @@
         if(self.isShowingItem) self.parent.showingModel = nil;
         [self update];
         [self cleanUpAfterMovingAnimated:YES];
+        
     }
     else{
         [self.tableView beginUpdates];
@@ -484,6 +489,7 @@
             [self cleanUpAfterMovingAnimated:YES];
         }];
         @try {
+            if(self.isShowingItem) self.parent.showingModel = nil;
             [self willUpdateCells];
             [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
             if(deletedSections && deletedSections.count > 0) [self.tableView deleteSections:deletedSections withRowAnimation:UITableViewRowAnimationFade];
@@ -633,7 +639,6 @@
     self.tableView = (UITableView*)[self.view viewWithTag:TABLEVIEW_TAG];
 }
 -(void)viewWillAppear:(BOOL)animated{
-    
     [self update];
     self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height);
     if(self.cellType != CellTypeToday) self.parent.backgroundMode = NO;
