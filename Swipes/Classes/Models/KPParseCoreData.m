@@ -272,6 +272,7 @@ static KPParseCoreData *sharedObject;
         NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"]);
         if([[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"]){
             self._isSyncing = NO;
+            [self endBackgroundHandler];
             return;
         }
     }
