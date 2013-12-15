@@ -77,8 +77,7 @@
     [self didUpdateCells];
     [self showBackgroundItems:(itemNumber == 0)];
     self.searchBar.hidden = (itemNumber == 0);
-    if(self.searchBar.currentMode == KPSearchBarModeNone && !self.parent.showingModel) self.parent.fullscreenMode = NO;
-    NSLog(@"search:%i model: %@",self.searchBar.currentMode,self.parent.showingModel);
+    if(!self.parent.showingModel) self.parent.fullscreenMode = NO;
     if(itemNumber == 0) self.parent.fullscreenMode = NO;
     
 }
@@ -96,8 +95,7 @@
     else if (_isShowingItem != isShowingItem){
         [[self parent] setLock:NO];
         [self.showingViewController.view removeFromSuperview];
-        NSLog(@"set this");
-        if(self.searchBar.currentMode == KPSearchBarModeNone && !self.parent.showingModel) self.parent.fullscreenMode = NO;
+        if(!self.parent.showingModel) self.parent.fullscreenMode = NO;
     }
     _isShowingItem = isShowingItem;
 }
@@ -153,7 +151,8 @@
 }
 -(void)didUpdateCells{
     [self.searchBar reloadDataAndUpdate:YES];
-    if(self.parent.showingModel || self.searchBar.currentMode != KPSearchBarModeNone) self.parent.fullscreenMode = YES;
+    //|| self.searchBar.currentMode != KPSearchBarModeNone
+    if(self.parent.showingModel) self.parent.fullscreenMode = YES;
     else self.parent.fullscreenMode = NO;
 }
 -(NSMutableArray *)selectedRows{
@@ -163,7 +162,7 @@
 
 #pragma mark - KPSearchBarDelegate
 -(void)startedSearchBar:(KPSearchBar *)searchBar{
-    self.parent.fullscreenMode = YES;
+    //self.parent.fullscreenMode = YES;
 }
 -(void)searchBar:(KPSearchBar *)searchBar searchedForString:(NSString *)searchString{
     [self.itemHandler searchForString:searchString];
@@ -180,7 +179,7 @@
 -(void)clearedAllFiltersForSearchBar:(KPSearchBar *)searchBar{
     //[self.parent showNavbar:YES];
     [self.itemHandler clearAll];
-    self.parent.fullscreenMode = NO;
+    //self.parent.fullscreenMode = NO;
     [self deselectAllRows:self];
 }
 #pragma mark - UITableViewDelegate
@@ -275,6 +274,7 @@
     
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     self.parent.fullscreenMode = YES;
+    [self.searchBar resignSearchField];
     self.parent.showingModel = toDo;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self deselectAllRows:self];
@@ -296,7 +296,8 @@
     
     NSIndexPath *indexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
     self.parent.showingModel = nil;
-    if(self.searchBar.currentMode == KPSearchBarModeNone) self.parent.fullscreenMode = NO;
+    //if(self.searchBar.currentMode == KPSearchBarModeNone)
+    self.parent.fullscreenMode = NO;
     [self deselectAllRows:self];
     self.isShowingItem = NO;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -381,6 +382,7 @@
     [[self parent] show:NO controlsAnimated:YES];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
+    [self.searchBar resignSearchField];
     if(self.selectedRows.count > 0){
         if(indexPath && ![self.selectedRows containsObject:indexPath]){
             [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];

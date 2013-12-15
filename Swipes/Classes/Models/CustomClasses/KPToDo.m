@@ -15,7 +15,6 @@
 @implementation KPToDo
 @synthesize readableTags = _readableTags;
 @synthesize textTags = _textTags;
-@synthesize tagString = _tagString;
 -(NSDictionary*)keyMatch{
     return @{
       @"title": @"title",
@@ -358,10 +357,6 @@
     }
     
     [self save];
-}
--(void)setTagString:(NSString *)tagString{
-    if(tagString.length == 0) _tagString = nil;
-    else _tagString = tagString;
 }
 -(void)updateTagSet:(NSSet*)tagsSet withTags:(NSArray*)tags remove:(BOOL)remove{
     

@@ -313,7 +313,7 @@
         }
     }
     else{
-        NSInteger counter = (self.hasFilter) ? self.itemCounterWithFilter : self.itemCounter;
+        NSInteger counter = (self.hasFilter || self.hasSearched) ? self.itemCounterWithFilter : self.itemCounter;
         if(counter == 0) [deletedSections addIndex:0];
     }
     return deletedSections;

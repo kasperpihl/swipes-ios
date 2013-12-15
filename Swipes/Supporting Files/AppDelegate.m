@@ -17,7 +17,7 @@
 #import "LocalyticsSession.h"
 #import "LocalyticsAmpSession.h"
 #import <Crashlytics/Crashlytics.h>
-
+#import <FacebookSDK/FBAppCall.h>
 
 #import "RMStore.h"
 #import "PaymentHandler.h"
@@ -130,12 +130,11 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     if([[LocalyticsAmpSession shared] handleURL:url])
         return YES;
-    return [PFFacebookUtils handleOpenURL:url];
+    else return NO;
 }
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-
-    return [PFFacebookUtils handleOpenURL:url];
+    return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session]];
 }
 - (void)applicationWillResignActive:(UIApplication *)application
 {

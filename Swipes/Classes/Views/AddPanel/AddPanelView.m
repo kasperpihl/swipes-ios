@@ -40,7 +40,6 @@
     
 }
 -(void)addView:(KPAddView *)addView enteredTrimmedText:(NSString *)trimmedText{
-    NSLog(@"text:%@",trimmedText);
     if(self.addDelegate && [self.addDelegate respondsToSelector:@selector(didAddItem:priority:)])
         [self.addDelegate didAddItem:trimmedText priority:self.dotView.priority];
 }

@@ -158,7 +158,8 @@
     }
 }
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
-    self.currentMode = KPSearchBarModeNone;
+    [self resignSearchField];
+    //self.currentMode = KPSearchBarModeNone;
     return YES;
 }
 -(void)textFieldChanged:(UITextField*)sender{
@@ -192,7 +193,7 @@
         _currentMode = currentMode;
         switch (currentMode) {
             case KPSearchBarModeTags:
-                [self reloadDataAndUpdate:NO];
+                [self reloadDataAndUpdate:YES];
                 [self reframeTags];
                 //[self reframeToTags];
                 break;
