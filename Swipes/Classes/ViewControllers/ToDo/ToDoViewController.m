@@ -365,6 +365,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self updateDot];
 }
 -(void)savedNotesView:(NotesView *)notesView text:(NSString *)text{
+    self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
     self.model.notes = text;
     [self.model save];
@@ -372,6 +373,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self layout];
 }
 -(void)pressedCancelNotesView:(NotesView *)notesView{
+    self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
 }
 
@@ -537,6 +539,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if([self.delegate respondsToSelector:@selector(scheduleToDoViewController:)]) [self.delegate scheduleToDoViewController:self];
 }
 -(void)pressedNotes:(id)sender{
+    self.activeEditMode = KPEditModeNotes;
     CGFloat extra = (OSVER >= 7) ? 0 : 0;
     NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0+extra, 320, self.segmentedViewController.view.frame.size.height-extra)];
     [notesView setNotesText:self.model.notes title:self.model.title];
