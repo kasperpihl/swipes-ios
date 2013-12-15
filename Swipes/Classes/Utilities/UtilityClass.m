@@ -28,6 +28,7 @@ static UtilityClass *sharedObject;
         PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
         if([error description]) [errorObject setObject:[error description] forKey:@"error"];
         if([error code]) [errorObject setObject:@([error code]) forKey:@"code"];
+        if(kCurrent) [errorObject setObject:kCurrent forKey:@"user"];
         if(type) [errorObject setObject:type forKey:@"type"];
         [errorObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if(!succeeded) [errorObject saveEventually];

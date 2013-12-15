@@ -11,6 +11,7 @@
 #import "RMStore.h"
 #import "MF_Base64Additions.h"
 #import <Parse/Parse.h>
+#import "UtilityClass.h"
 
 
 @interface PaymentHandler ()
@@ -47,26 +48,23 @@ static PaymentHandler *sharedObject;
 }
 -(void)requestPayment:(NSString*)identifier block:(SuccessfulBlock)block{
     [[RMStore defaultStore] addPayment:identifier user:kCurrent.objectId success:^(SKPaymentTransaction *transaction) {
-        NSLog(@"reciept:%@",[transaction.transactionReceipt base64Encoding]);
-        if(transaction.transactionReceipt){
-            PFObject *purchase = [PFObject objectWithClassName:@"Payment"];
-            purchase[@"type"] = @"ios";
-            purchase[@"productIdentifier"] = identifier;
-            purchase[@"transactionIdentifier"] = transaction.transactionIdentifier;
-            purchase[@"transactionReceipt"] = [transaction.transactionReceipt base64Encoding];
-            [purchase saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if(!succeeded){
-                    [purchase saveEventually];
-                }
-                else{
-                    
-                }
-            }];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"upgrade userlevel" object:self];
-            block(YES,nil);
-        }
-        else block(NO,nil);
+        PFObject *purchase = [PFObject objectWithClassName:@"Payment"];
+        purchase[@"type"] = @"ios";
+        purchase[@"productIdentifier"] = identifier;
+        purchase[@"transactionIdentifier"] = transaction.transactionIdentifier;
+        if(transaction.transactionReceipt) purchase[@"transactionReceipt"] = [transaction.transactionReceipt base64Encoding];
+        [purchase saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if(error){
+                [UtilityClass sendError:error type:@"Purchase success error"];
+            }
+            if(!succeeded){
+                [purchase saveEventually];
+            }
+        }];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"upgrade userlevel" object:self];
+        block(YES,nil);
     } failure:^(SKPaymentTransaction *transaction, NSError *error) {
+        [UtilityClass sendError:error type:@"Purchase actual error"];
         block(NO,error);
     }];
 
