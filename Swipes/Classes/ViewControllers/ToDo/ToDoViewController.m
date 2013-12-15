@@ -507,6 +507,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     tempHeight += self.alarmContainer.frame.size.height;
     
     self.repeatedContainer.hidden = !self.model.schedule;
+    if(self.model.completionDate) self.repeatedContainer.hidden = YES;
     if(!self.repeatedContainer.hidden){
         CGFloat repeatHeight = (self.activeEditMode == KPEditModeRepeat) ? SCHEDULE_ROW_HEIGHTS+kRepeatPickerHeight : SCHEDULE_ROW_HEIGHTS;
         CGRectSetHeight(self.repeatedContainer, repeatHeight);
