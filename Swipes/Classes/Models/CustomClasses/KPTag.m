@@ -11,6 +11,8 @@
 
 @implementation KPTag
 +(KPTag*)addTagWithString:(NSString *)string save:(BOOL)save{
+    string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if(string.length == 0) return nil;
     NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"title = %@",string];
     NSInteger counter = [KPTag MR_countOfEntitiesWithPredicate:tagPredicate];
     if(counter > 0) return nil;
@@ -32,7 +34,8 @@
     NSArray *tagObjs = [KPTag MR_findAll];
     NSMutableArray *tags = [NSMutableArray array];
     for(KPTag *tagObj in tagObjs){
-        [tags addObject:tagObj.title];
+        if(tagObj.title && tagObj.title.length > 0)
+            [tags addObject:tagObj.title];
     }
     return tags;
 }
