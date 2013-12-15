@@ -188,7 +188,7 @@
         UITextField *textField = [alertView textFieldAtIndex:0];
         if(textField.text.length > 0){
             [self showIndicator:YES onElement:self.forgotButton];
-            [PFUser requestPasswordResetForEmailInBackground:textField.text block:^(BOOL succeeded, NSError *error) {
+            [PFUser requestPasswordResetForEmailInBackground:[textField.text lowercaseString] block:^(BOOL succeeded, NSError *error) {
                 [self showIndicator:NO onElement:self.forgotButton];
                 if(succeeded){
                     [[[UIAlertView alloc] initWithTitle:@"Email sent"
@@ -291,13 +291,14 @@
         if(![self validateFields]) return;
         [self resignFields];
         [self showIndicator:YES onElement:sender];
-        [PFCloud callFunctionInBackground:@"checkEmail" withParameters:@{@"email":self.emailField.text} block:^(id object, NSError *error) {
+        NSString *email = [self.emailField.text lowercaseString];
+        [PFCloud callFunctionInBackground:@"checkEmail" withParameters:@{@"email":email} block:^(id object, NSError *error) {
             if(error){
                 [self showIndicator:NO onElement:sender];
                 [self handleErrorFromLogin:error];
             }
             if([object isEqualToNumber:@1]){
-                [PFUser logInWithUsernameInBackground:self.emailField.text password:self.passwordField.text block:^(PFUser *user, NSError *error) {
+                [PFUser logInWithUsernameInBackground:email password:self.passwordField.text block:^(PFUser *user, NSError *error) {
                     [self showIndicator:NO onElement:sender];
                     if (error) {
                         [self handleErrorFromLogin:error];
@@ -307,12 +308,12 @@
                 }];
             }
             else{
-                [UTILITY confirmBoxWithTitle:@"New user" andMessage:[NSString stringWithFormat:@"Do you want to register with: %@",self.emailField.text] block:^(BOOL succeeded, NSError *error) {
+                [UTILITY confirmBoxWithTitle:@"New user" andMessage:[NSString stringWithFormat:@"Do you want to register with: %@",email] block:^(BOOL succeeded, NSError *error) {
                     if(succeeded){
                         PFUser *user = [PFUser user];
-                        user.username = self.emailField.text;
+                        user.username = email;
                         user.password = self.passwordField.text;
-                        user.email = self.emailField.text;
+                        user.email = email;
                         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                             [self showIndicator:NO onElement:sender];
                             if (!error) {
