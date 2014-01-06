@@ -453,7 +453,8 @@
     if(save) [KPToDo save];
 }
 -(NSArray *)textTags{
-    return [self.tagString componentsSeparatedByString:@", "];
+    return Underscore.array([self.tagString componentsSeparatedByString:@", "]).filter(Underscore.isString).reject(^BOOL (NSString *tag){ return (tag.length == 0); }).unwrap;
+
 }
 -(void)completeRepeatedTask{
     if(self.repeatOptionValue == RepeatNever) return;
