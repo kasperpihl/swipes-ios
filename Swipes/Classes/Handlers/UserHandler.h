@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 typedef NS_ENUM(NSUInteger, UserLevel) {
-    UserLevelStandard,
-    UserLevelTrial,
-    UserLevelPlusMonthly,
-    UserLevelPlusYearly
+    UserLevelStandard = 0,
+    UserLevelTrial = 1,
+    UserLevelPlusMonthly = 2,
+    UserLevelPlusYearly = 3
 };
 #import <Foundation/Foundation.h>
 #define kUserHandler [UserHandler sharedInstance]

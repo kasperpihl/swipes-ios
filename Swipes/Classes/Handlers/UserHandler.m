@@ -57,7 +57,7 @@ static UserHandler *sharedObject;
 }
 -(void)initialize{
     self.userLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"isPlus"];
-    self.isPlus = (self.userLevel > UserLevelTrial);
+    self.isPlus = (self.userLevel > UserLevelStandard);
     notify(@"upgrade userlevel", didUpgradeUser);
     notify(@"opened app", didOpenApp);
     notify(@"logged in", didLoginUser);
