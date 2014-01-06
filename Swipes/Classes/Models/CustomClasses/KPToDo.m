@@ -5,7 +5,11 @@
 #import "UtilityClass.h"
 #import "NSDate-Utilities.h"
 #import "KPParseCoreData.h"
+#import "Underscore.h"
 #import "AnalyticsHandler.h"
+
+#define kDefOrderVal -1
+
 @interface KPToDo ()
 @property (nonatomic,strong) NSString *readableTags;
 // Private interface goes here.
@@ -36,9 +40,8 @@
     newToDo.title = item;
     newToDo.schedule = [NSDate date];
     if(priority) newToDo.priorityValue = 1;
-    NSNumber *count = [KPToDo MR_numberOfEntities];
-    newToDo.order = count;
-    if(save) [newToDo save];
+    newToDo.orderValue = kDefOrderVal;
+    if(save) [KPToDo save];
     NSString *taskLength = @"50+";
     if(item.length <= 10) taskLength = @"1-10";
     else if(item.length <= 20) taskLength = @"11-20";
@@ -234,7 +237,7 @@
     self.repeatOptionValue = option;
     if(option != RepeatNever) self.repeatedDate = self.schedule;
     else self.repeatedDate = nil;
-    if(save) [self save];
+    if(save) [KPToDo save];
 }
 -(RepeatOptions)optionForRepeatString:(NSString*)repeatString{
     RepeatOptions option = RepeatNever;
@@ -272,7 +275,7 @@
     return repeatString;
 }
 
--(void)save{
++(void)save{
     [KPCORE saveInContext:nil];
 }
 -(NSDate *)nextDateFrom:(NSDate*)date{
@@ -342,21 +345,65 @@
     
     return [title capitalizedString];
 }
--(void)changeToOrder:(NSInteger)newOrder{
++(NSArray*)sortOrderForItems:(NSArray*)items save:(BOOL)save{
+    NSPredicate *orderedItemsPredicate = [NSPredicate predicateWithFormat:@"(order > %i)",kDefOrderVal];
+    NSPredicate *unorderedItemsPredicate = [NSPredicate predicateWithFormat:@"!(order > %i)",kDefOrderVal];
+    NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
+    NSSortDescriptor *unorderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"schedule" ascending:YES];
+    NSArray *orderedItems = [[items filteredArrayUsingPredicate:orderedItemsPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
+    NSArray *unorderedItems = [[items filteredArrayUsingPredicate:unorderedItemsPredicate] sortedArrayUsingDescriptors:@[unorderedItemsSortDescriptor]];
+    NSInteger counter = kDefOrderVal + 1;
+    NSArray *sortedItems = [orderedItems arrayByAddingObjectsFromArray:unorderedItems];
+    NSInteger numberOfChanges = 0;
+    for(KPToDo *toDo in sortedItems){
+        
+        if(toDo.orderValue != counter){
+            toDo.orderValue = counter;
+            numberOfChanges++;
+        }
+        NSLog(@"%i - %@",toDo.orderValue,toDo.title);
+        counter++;
+    }
+    NSLog(@"number of changes:%i",numberOfChanges);
+    if(save && numberOfChanges > 0){
+        [KPToDo save];
+    }
+    /*
+     Ordered items = items where order > 0
+     itemsWithoutOrder = items where !order or order == 0
+     Sorted by schedule date ascending
+     i = 1
+     foreach ordered Item:
+     item.order = i
+     i++
+     foreach unordered Item:
+     item.order = i
+     i++
+     save
+    */
+    NSArray* reversedArray = [[sortedItems reverseObjectEnumerator] allObjects];
+    return reversedArray;
+    
+}
+
+-(void)changeToOrder:(NSInteger)newOrder withItems:(NSArray *)items{
     if(newOrder == self.orderValue) return;
     BOOL decrease = (newOrder > self.orderValue);
-    NSString *predicateRawString = (newOrder > self.orderValue) ? @"(order > %i) AND (order =< %i) AND completionDate != nil" : @"(order < %i) AND (order >= %i) AND completionDate != nil";
+    NSString *predicateRawString = (newOrder > self.orderValue) ? @"(order > %i) AND (order =< %i)" : @"(order < %i) AND (order >= %i)";
     
     NSPredicate *betweenPredicate = [NSPredicate predicateWithFormat: predicateRawString, self.orderValue, newOrder];
-    NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:YES withPredicate:betweenPredicate];
+    NSArray *results = [[items filteredArrayUsingPredicate:betweenPredicate] sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES]]];
+    NSLog(@"items: %@ res:%@",items,results);
     self.orderValue = newOrder;
     for (int i = 0 ; i < results.count; i++) {
         KPToDo *toDo = [results objectAtIndex:i];
+       
         if(decrease) toDo.orderValue--;
         else toDo.orderValue++;
+        NSLog(@"r %i - %@",toDo.orderValue,toDo.title);
     }
     
-    [self save];
+    [KPToDo save];
 }
 -(void)updateTagSet:(NSSet*)tagsSet withTags:(NSArray*)tags remove:(BOOL)remove{
     
@@ -403,7 +450,7 @@
 }
 -(void)deleteToDoSave:(BOOL)save{
     [self MR_deleteEntity];
-    if(save) [self save];
+    if(save) [KPToDo save];
 }
 -(NSArray *)textTags{
     return [self.tagString componentsSeparatedByString:@", "];
@@ -432,18 +479,21 @@
     }
     else{
         self.schedule = nil;
+        self.orderValue = kDefOrderVal;
         self.completionDate = [NSDate date];
         return YES;
     }
 }
 -(BOOL)scheduleForDate:(NSDate*)date{
     if(!date){
+        self.orderValue = kDefOrderVal;
         self.repeatedDate = nil;
         self.repeatOptionValue = RepeatNever;
     }
     CellType oldCell = [self cellTypeForTodo];
     self.completionDate = nil;
     self.schedule = date;
+    if([self.schedule isInFuture]) self.orderValue = kDefOrderVal;
     CellType newCell = [self cellTypeForTodo];
     return (oldCell != newCell);
 }

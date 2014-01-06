@@ -317,7 +317,7 @@ static KPParseCoreData *sharedObject;
     
     if (self.backgroundTask != UIBackgroundTaskInvalid)
     {
-        NSLog(@"Background time remaining = %f seconds", [UIApplication sharedApplication].backgroundTimeRemaining);
+        //NSLog(@"Background time remaining = %f seconds", [UIApplication sharedApplication].backgroundTimeRemaining);
         [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
         self.backgroundTask = UIBackgroundTaskInvalid;
     }

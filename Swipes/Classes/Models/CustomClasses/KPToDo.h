@@ -15,12 +15,14 @@
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;
 
--(void)changeToOrder:(NSInteger)newOrder;
++(NSArray*)sortOrderForItems:(NSArray*)items save:(BOOL)save;
+
+-(void)changeToOrder:(NSInteger)newOrder withItems:(NSArray*)items;
 -(CellType)cellTypeForTodo;
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags;
 
 -(NSString*)readableTitleForStatus;
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save;
 -(NSArray*)nextNumberOfRepeatedDates:(NSInteger)numberOfDates;
--(void)save;
++(void)save;
 @end
