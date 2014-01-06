@@ -361,10 +361,9 @@
             toDo.orderValue = counter;
             numberOfChanges++;
         }
-        NSLog(@"%i - %@",toDo.orderValue,toDo.title);
+        //NSLog(@"%i - %@",toDo.orderValue,toDo.title);
         counter++;
     }
-    NSLog(@"number of changes:%i",numberOfChanges);
     if(save && numberOfChanges > 0){
         [KPToDo save];
     }
@@ -393,14 +392,13 @@
     
     NSPredicate *betweenPredicate = [NSPredicate predicateWithFormat: predicateRawString, self.orderValue, newOrder];
     NSArray *results = [[items filteredArrayUsingPredicate:betweenPredicate] sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES]]];
-    NSLog(@"items: %@ res:%@",items,results);
     self.orderValue = newOrder;
     for (int i = 0 ; i < results.count; i++) {
         KPToDo *toDo = [results objectAtIndex:i];
        
         if(decrease) toDo.orderValue--;
         else toDo.orderValue++;
-        NSLog(@"r %i - %@",toDo.orderValue,toDo.title);
+        //NSLog(@"r %i - %@",toDo.orderValue,toDo.title);
     }
     
     [KPToDo save];
@@ -480,21 +478,19 @@
     }
     else{
         self.schedule = nil;
-        self.orderValue = kDefOrderVal;
         self.completionDate = [NSDate date];
         return YES;
     }
 }
 -(BOOL)scheduleForDate:(NSDate*)date{
     if(!date){
-        self.orderValue = kDefOrderVal;
         self.repeatedDate = nil;
         self.repeatOptionValue = RepeatNever;
     }
     CellType oldCell = [self cellTypeForTodo];
     self.completionDate = nil;
     self.schedule = date;
-    if([self.schedule isInFuture]) self.orderValue = kDefOrderVal;
+    self.orderValue = kDefOrderVal;
     CellType newCell = [self cellTypeForTodo];
     return (oldCell != newCell);
 }

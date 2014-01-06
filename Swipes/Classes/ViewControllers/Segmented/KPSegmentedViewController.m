@@ -370,7 +370,6 @@
     if([deletedObjects containsObject:self.showingModel.objectId]){
         self.showingModel = nil;
     }
-    NSLog(@"updating viewcontroller");
     [self.currentViewController update];
 }
 -(void)viewDidLoad{

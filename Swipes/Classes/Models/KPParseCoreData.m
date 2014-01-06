@@ -263,7 +263,6 @@ static KPParseCoreData *sharedObject;
     [self updateForce:NO];
 }
 -(void)updateForce:(BOOL)force{
-    NSLog(@"update");
     if(!kCurrent) return;
     if(self._isSyncing && !force){
         return;
