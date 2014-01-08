@@ -156,6 +156,7 @@
 		A7608925178E04C900C8735D /* schedule_image_cloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7608921178E04C800C8735D /* schedule_image_cloud@2x.png */; };
 		A7608926178E04C900C8735D /* schedule_image_glasses.png in Resources */ = {isa = PBXBuildFile; fileRef = A7608922178E04C800C8735D /* schedule_image_glasses.png */; };
 		A7608927178E04C900C8735D /* schedule_image_glasses@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7608923178E04C800C8735D /* schedule_image_glasses@2x.png */; };
+		A76182E1187D37AB00914A05 /* KitLocate.Framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A76182E0187D37AB00914A05 /* KitLocate.Framework */; };
 		A761B5A316EB59320095A9A8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A216EB59320095A9A8 /* CoreData.framework */; };
 		A761B5A516EB59370095A9A8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A416EB59370095A9A8 /* SystemConfiguration.framework */; };
 		A761B5A716EB593C0095A9A8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A616EB593C0095A9A8 /* StoreKit.framework */; };
@@ -531,6 +532,7 @@
 		A7608921178E04C800C8735D /* schedule_image_cloud@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule_image_cloud@2x.png"; sourceTree = "<group>"; };
 		A7608922178E04C800C8735D /* schedule_image_glasses.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = schedule_image_glasses.png; sourceTree = "<group>"; };
 		A7608923178E04C800C8735D /* schedule_image_glasses@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule_image_glasses@2x.png"; sourceTree = "<group>"; };
+		A76182E0187D37AB00914A05 /* KitLocate.Framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KitLocate.Framework; path = Swipes/Ressources/Libs/KitLocate.Framework; sourceTree = "<group>"; };
 		A761B5A216EB59320095A9A8 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A761B5A416EB59370095A9A8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		A761B5A616EB593C0095A9A8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -794,6 +796,7 @@
 				A761B5B116EB595B0095A9A8 /* libz.1.1.3.dylib in Frameworks */,
 				A761B5AD16EB594E0095A9A8 /* QuartzCore.framework in Frameworks */,
 				A761B5AB16EB59480095A9A8 /* Security.framework in Frameworks */,
+				A76182E1187D37AB00914A05 /* KitLocate.Framework in Frameworks */,
 				A761B5A916EB59420095A9A8 /* Social.framework in Frameworks */,
 				A761B5A716EB593C0095A9A8 /* StoreKit.framework in Frameworks */,
 				A761B5A516EB59370095A9A8 /* SystemConfiguration.framework in Frameworks */,
@@ -1144,6 +1147,7 @@
 		A7778CCC16EB5884004D95E5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A76182E0187D37AB00914A05 /* KitLocate.Framework */,
 				A7A976E3184118CF001C0A51 /* Crashlytics.framework */,
 				A7ADCB3717DD352F00780F88 /* libz.dylib */,
 				A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */,

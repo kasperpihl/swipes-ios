@@ -21,6 +21,7 @@
 
 #import "RMStore.h"
 #import "PaymentHandler.h"
+#import "NotificationHandler.h"
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -29,6 +30,7 @@
     NSString *parseClientKey;
     NSString *mixpanelToken;
     NSString *localyticsKey;
+    NSString *kitLocateKey = @"ebeea91e-563e-4b32-acf3-6505d9857789";
 #ifdef RELEASE
     parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
@@ -60,6 +62,8 @@
     [[LocalyticsSession shared] startSession:localyticsKey];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    [KitLocate initKitLocateWithDelegate:NOTIHANDLER APIKey:kitLocateKey];
     
     [Appirater appLaunched:YES];
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
