@@ -9,7 +9,6 @@
 #import "AnalyticsHandler.h"
 
 #define kDefOrderVal -1
-
 @interface KPToDo ()
 @property (nonatomic,strong) NSString *readableTags;
 // Private interface goes here.
@@ -23,6 +22,7 @@
     return @{
       @"title": @"title",
       @"schedule": @"schedule",
+      @"location": @"location",
       @"completionDate": @"completionDate",
       @"notes": @"notes",
       @"repeatCount": @"numberOfRepeated",  
@@ -449,6 +449,31 @@
 -(void)deleteToDoSave:(BOOL)save{
     [self MR_deleteEntity];
     if(save) [KPToDo save];
+}
+-(void)notifyOnLatitude:(float)latitude longitude:(float)longitude type:(GeoFenceType)type save:(BOOL)save{
+    /*
+        Location ID -
+    */
+    NSString *locationId;
+    if(self.location){
+        NSArray *existingLocation = [self.location componentsSeparatedByString:kLocationSplitStr];
+        locationId = [existingLocation objectAtIndex:0];
+    }
+    if(!locationId) locationId = [UtilityClass generateIdWithLength:5];
+    NSString *typeString = @"IN";
+    if(type == GeoFenceOnLeave) typeString = @"OUT";
+    
+    NSArray *location = @[locationId,@(latitude),@(longitude),typeString];
+    
+    NSString *locationString = [location componentsJoinedByString:kLocationSplitStr];
+    self.location = locationString;
+    if(save) [KPToDo save];
+    [NOTIHANDLER updateLocationUpdates];
+}
+-(void)stopNotifyingLocationSave:(BOOL)save{
+    self.location = nil;
+    if(save) [KPToDo save];
+    [NOTIHANDLER updateLocationUpdates];
 }
 -(NSArray *)textTags{
     return Underscore.array([self.tagString componentsSeparatedByString:@", "]).filter(Underscore.isString).reject(^BOOL (NSString *tag){ return (tag.length == 0); }).unwrap;

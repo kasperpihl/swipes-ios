@@ -7,9 +7,12 @@
 //
 #define NOTIHANDLER [NotificationHandler sharedInstance]
 #import <Foundation/Foundation.h>
+#import <KitLocate/KitLocate.h>
+#define kLocationSplitStr @"_-_"
+#define kLocationPushRadius 250
 
-
-@interface NotificationHandler : NSObject
+@interface NotificationHandler : NSObject <KitLocateDelegate>
 +(NotificationHandler*)sharedInstance;
 -(void)updateLocalNotifications;
+-(void)updateLocationUpdates;
 @end

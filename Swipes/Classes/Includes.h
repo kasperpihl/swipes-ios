@@ -50,6 +50,13 @@ typedef NS_ENUM(NSUInteger, CellType) {
     CellTypeToday,
     CellTypeDone
 };
+
+typedef enum {
+    GeoFenceNone = 0,
+    GeoFenceOnArrive = 1,
+    GeoFenceOnLeave = 2
+} GeoFenceType;
+
 typedef enum {
     RepeatNever = 0,
     RepeatEveryDay,
