@@ -81,6 +81,10 @@
     [self.deleteObjects setObject:object.parseClassName forKey:object.objectId];
 }
 
+-(NSArray*)lookupChangedAttributesForObject:(NSString*)objectId{
+    return [self.tmpUpdatingObjects objectForKey:objectId];
+}
+
 - (void)saveInContext:(NSManagedObjectContext*)context
 {
     if (!context)
@@ -176,7 +180,9 @@ static KPParseCoreData *sharedObject;
     @finally {
     }
 }
-
+/*
+ 
+*/
 - (void)updateTMPObjects
 {
     for (NSString *identifier in self.tmpUpdatingObjects) {

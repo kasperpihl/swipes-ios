@@ -19,6 +19,7 @@
 
 -(void)cleanUp;
 -(void)seedObjects;
+-(NSArray*)lookupChangedAttributesForObject:(NSString*)objectId;
 -(void)saveInContext:(NSManagedObjectContext*)context;
 - (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async;
 

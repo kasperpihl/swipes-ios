@@ -124,7 +124,12 @@
     [super updateWithObject:object context:context];
     [context performBlockAndWait:^{
         NSDictionary *keyMatch = [self keyMatch];
+        NSArray *localChanges = [KPCORE lookupChangedAttributesForObject:object.objectId];
         for(NSString *pfKey in [object allKeys]){
+            
+            if([localChanges containsObject:pfKey])
+                continue;
+            
             id pfValue = [object objectForKey:pfKey];
             if([pfKey isEqualToString:@"repeatOption"]){
                 if(![[self stringForRepeatOption:self.repeatOptionValue] isEqualToString:pfValue]) self.repeatOptionValue = [self optionForRepeatString:pfValue];
