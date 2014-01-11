@@ -98,7 +98,7 @@
                                              outBuffer.height,
                                              8,
                                              outBuffer.rowBytes,
-                                             colorSpace,kCGImageAlphaNoneSkipLast);
+                                             colorSpace,(CGBitmapInfo)kCGImageAlphaNoneSkipLast);
     CGImageRef imageRef = CGBitmapContextCreateImage(ctx);
     UIImage *returnImage = [UIImage imageWithCGImage:imageRef];
     
