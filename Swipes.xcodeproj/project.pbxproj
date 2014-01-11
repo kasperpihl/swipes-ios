@@ -222,7 +222,6 @@
 		A79DB41A1735892C007A48E2 /* today@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB4061735892C007A48E2 /* today@2x.png */; };
 		A79DB42317358C33007A48E2 /* done_white_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB41D17358C33007A48E2 /* done_white_background@2x.png */; };
 		A79DB42517358C33007A48E2 /* schedule_white_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB41F17358C33007A48E2 /* schedule_white_background@2x.png */; };
-		A7A976E4184118CF001C0A51 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7A976E3184118CF001C0A51 /* Crashlytics.framework */; };
 		A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A976E6184119D6001C0A51 /* PaymentHandler.m */; };
 		A7ADCB2C17DD2B4000780F88 /* background_white_signate.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB2A17DD2B4000780F88 /* background_white_signate.png */; };
 		A7ADCB2D17DD2B4000780F88 /* background_white_signate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB2B17DD2B4000780F88 /* background_white_signate@2x.png */; };
@@ -345,6 +344,7 @@
 		A7FE4406182828E1002AFB2E /* date_stamp_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FE4404182828E1002AFB2E /* date_stamp_background@2x.png */; };
 		A7FE440918282C5D002AFB2E /* ostrich-bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7FE440718282B04002AFB2E /* ostrich-bold.ttf */; };
 		A7FE440A18282C60002AFB2E /* ostrich-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7FE440818282B04002AFB2E /* ostrich-regular.ttf */; };
+		DAFB7B971853508C0006A706 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAFB7B961853508C0006A706 /* Crashlytics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -627,7 +627,6 @@
 		A79DB4061735892C007A48E2 /* today@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today@2x.png"; sourceTree = "<group>"; };
 		A79DB41D17358C33007A48E2 /* done_white_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "done_white_background@2x.png"; sourceTree = "<group>"; };
 		A79DB41F17358C33007A48E2 /* schedule_white_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule_white_background@2x.png"; sourceTree = "<group>"; };
-		A7A976E3184118CF001C0A51 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Swipes/Ressources/Libs/Crashlytics.framework; sourceTree = "<group>"; };
 		A7A976E5184119D6001C0A51 /* PaymentHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentHandler.h; sourceTree = "<group>"; };
 		A7A976E6184119D6001C0A51 /* PaymentHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentHandler.m; sourceTree = "<group>"; };
 		A7ADCB2A17DD2B4000780F88 /* background_white_signate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background_white_signate.png; sourceTree = "<group>"; };
@@ -771,6 +770,7 @@
 		A7FE4404182828E1002AFB2E /* date_stamp_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "date_stamp_background@2x.png"; sourceTree = "<group>"; };
 		A7FE440718282B04002AFB2E /* ostrich-bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ostrich-bold.ttf"; path = "Font/ostrich-bold.ttf"; sourceTree = "<group>"; };
 		A7FE440818282B04002AFB2E /* ostrich-regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ostrich-regular.ttf"; path = "Font/ostrich-regular.ttf"; sourceTree = "<group>"; };
+		DAFB7B961853508C0006A706 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Swipes/Ressources/Libs/Crashlytics.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -784,7 +784,7 @@
 				A78F391416F7D5BA00A8C78D /* AddressBook.framework in Frameworks */,
 				A74F61BF16EBA5B8004927DA /* MediaPlayer.framework in Frameworks */,
 				A74F61BD16EBA5A5004927DA /* AssetsLibrary.framework in Frameworks */,
-				A7A976E4184118CF001C0A51 /* Crashlytics.framework in Frameworks */,
+				DAFB7B971853508C0006A706 /* Crashlytics.framework in Frameworks */,
 				A74F61BB16EBA595004927DA /* AVFoundation.framework in Frameworks */,
 				A74F61B916EBA58B004927DA /* CoreMedia.framework in Frameworks */,
 				A74F61B616EB77B3004927DA /* MapKit.framework in Frameworks */,
@@ -1321,8 +1321,8 @@
 		A781286A17294C56002226C8 /* Segmented */ = {
 			isa = PBXGroup;
 			children = (
-				A781286B17294C56002226C8 /* KPSegmentedViewController.h */,
 				A781286C17294C56002226C8 /* KPSegmentedViewController.m */,
+				A781286B17294C56002226C8 /* KPSegmentedViewController.h */,
 			);
 			path = Segmented;
 			sourceTree = "<group>";
@@ -1715,6 +1715,11 @@
 				TargetAttributes = {
 					A7778CC916EB5884004D95E5 = {
 						DevelopmentTeam = 85LTPM52WY;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -1998,7 +2003,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Swipes/Ressources/Libs/Crashlytics.framework/run 17aee5fa869f24b705e00dba6d43c51becf5c7e4";
+			shellScript = "#./Swipes/Ressources/Libs/Crashlytics.framework/run 17aee5fa869f24b705e00dba6d43c51becf5c7e4";
 		};
 		A7F0B9BB1700BA51003BBDD1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2166,8 +2171,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/kasper/Code/Swipes/app,
-					/Users/kasper/Code/Swipes/app/Swipes/Ressources/Libs,
+					Swipes/Ressources/Libs,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
@@ -2305,8 +2309,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/kasper/Code/Swipes/app,
-					/Users/kasper/Code/Swipes/app/Swipes/Ressources/Libs,
+					Swipes/Ressources/Libs,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
@@ -2374,8 +2377,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/kasper/Code/Swipes/app,
-					/Users/kasper/Code/Swipes/app/Swipes/Ressources/Libs,
+					Swipes/Ressources/Libs,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";

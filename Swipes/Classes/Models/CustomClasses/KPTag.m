@@ -62,4 +62,10 @@
         if(![self.title isEqualToString:[object objectForKey:@"title"]]) self.title = [object objectForKey:@"title"];
     }];
 }
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"KPTag -> title: %@", self.title];
+}
+
 @end

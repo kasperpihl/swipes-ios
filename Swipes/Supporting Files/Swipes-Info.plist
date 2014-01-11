@@ -67,6 +67,10 @@
 		<string>ProximaNovaCond-Semibold.ttf</string>
 		<string>ProximaNova-ExtraBold.ttf</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard</string>
 	<key>UIPrerenderedIcon</key>

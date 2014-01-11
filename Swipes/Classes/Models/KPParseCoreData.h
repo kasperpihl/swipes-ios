@@ -11,11 +11,19 @@
 #define KPCORE [KPParseCoreData sharedInstance]
 
 @interface KPParseCoreData : NSObject
+
++(KPParseCoreData *)sharedInstance;
+
 @property (nonatomic,strong) NSManagedObjectContext *context;
 @property (nonatomic) NSMutableDictionary *updateObjects;
-+(KPParseCoreData *)sharedInstance;
+
 -(void)cleanUp;
 -(void)seedObjects;
 -(void)saveInContext:(NSManagedObjectContext*)context;
--(void)synchronizeForce:(BOOL)force;
+- (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async;
+
+#ifdef DEBUG
+- (void)dumpLocalDb;
+#endif
+
 @end

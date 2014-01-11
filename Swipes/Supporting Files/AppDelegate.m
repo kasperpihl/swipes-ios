@@ -75,6 +75,11 @@
     }*/
     [PaymentHandler sharedInstance];
     [self tagLaunchSource:launchOptions];
+    
+    if (OSVER >= 7) {
+        [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    }
+    
     return YES;
 }
 - (void)tagLaunchSource:(NSDictionary *)launchOptions
@@ -116,8 +121,8 @@
     }
     [ANALYTICS tagEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism }];
 }
-- (void)application:(UIApplication *)application
-didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     // Store the deviceToken in the current Installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
@@ -125,21 +130,27 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     [currentInstallation saveInBackground];
     
 }
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [PFPush handlePush:userInfo];
 }
+
 -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
     [ROOT_CONTROLLER.menuViewController receivedLocalNotification:notification];
 }
+
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     if([[LocalyticsAmpSession shared] handleURL:url])
         return YES;
-    else return NO;
+    else
+        return NO;
 }
+
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session]];
 }
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     [[LocalyticsSession shared] close];
@@ -147,6 +158,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
+
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [ROOT_CONTROLLER closeApp];
@@ -181,6 +193,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     [[LocalyticsSession shared] close];
     [[LocalyticsSession shared] upload];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    UIBackgroundFetchResult result = [KPCORE synchronizeForce:YES async:NO];
+    completionHandler(result);
 }
 
 @end

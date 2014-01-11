@@ -330,7 +330,7 @@
                 
                 [sender.iconImageView.layer addAnimation:rotate
                                         forKey:@"myRotationAnimation"];
-                [KPCORE synchronizeForce:YES];
+                [KPCORE synchronizeForce:YES async:YES];
             }
             break;
         }

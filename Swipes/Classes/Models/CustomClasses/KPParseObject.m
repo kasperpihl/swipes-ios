@@ -196,4 +196,10 @@
     }
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"KPParseObject -> createdAt: %@, objectId: %@, parseClassName: %@, tempId: %@, updatedAt: %@",
+            self.createdAt, self.objectId, self.parseClassName, self.tempId, self.updatedAt];
+}
+
 @end

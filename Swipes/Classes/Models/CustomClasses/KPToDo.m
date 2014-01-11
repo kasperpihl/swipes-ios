@@ -36,12 +36,16 @@
 #define checkNumberWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToNumber:pfValue]) [self setValue:pfValue forKey:cdKey]
 
 +(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority save:(BOOL)save{
+    [KPCORE dumpLocalDb];
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
+    [KPCORE dumpLocalDb];
     newToDo.title = item;
     newToDo.schedule = [NSDate date];
     if(priority) newToDo.priorityValue = 1;
     newToDo.orderValue = kDefOrderVal;
+    [KPCORE dumpLocalDb];
     if(save) [KPToDo save];
+    [KPCORE dumpLocalDb];
     NSString *taskLength = @"50+";
     if(item.length <= 10) taskLength = @"1-10";
     else if(item.length <= 20) taskLength = @"11-20";
@@ -403,19 +407,27 @@
     
     [KPToDo save];
 }
+
 -(void)updateTagSet:(NSSet*)tagsSet withTags:(NSArray*)tags remove:(BOOL)remove{
     
     NSMutableArray *tagsStrings = [NSMutableArray array];
-    if(self.tagString.length > 0) tagsStrings = [[self.tagString componentsSeparatedByString:@", "] mutableCopy];
-    if(remove) [self removeTags:tagsSet];
-    else [self addTags:tagsSet];
+    if(self.tagString.length > 0)
+        tagsStrings = [[self.tagString componentsSeparatedByString:@", "] mutableCopy];
+    
+    if (remove)
+        [self removeTags:tagsSet];
+    else
+        [self addTags:tagsSet];
+    
     for(NSString *tag in tags){
         BOOL contained = [tagsStrings containsObject:tag];
-        if(remove && contained) [tagsStrings removeObject:tag];
+        if(remove && contained)
+            [tagsStrings removeObject:tag];
         else if(!remove && !contained) [tagsStrings addObject:tag];
     }
     self.tagString = [tagsStrings componentsJoinedByString:@", "];
 }
+
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags{
     NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
                            TAGS_LABEL_FONT, NSFontAttributeName,
@@ -519,4 +531,10 @@
     CellType newCell = [self cellTypeForTodo];
     return (oldCell != newCell);
 }
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, super: %@", self.title, self.order, [super description]];
+}
+
 @end
