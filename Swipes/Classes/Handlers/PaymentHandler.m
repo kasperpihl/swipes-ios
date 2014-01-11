@@ -24,15 +24,11 @@ static PaymentHandler *sharedObject;
 +(PaymentHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[PaymentHandler allocWithZone:NULL] init];
-        [sharedObject requestProductsWithBlock:nil];
+        [sharedObject refreshProductsWithBlock:nil];
     }
     return sharedObject;
 }
--(void)requestProductsWithBlock:(PlusBlock)block{
-    if(self._plusMonthly && self._plusYearly){
-        if(block) block(self._plusMonthly,self._plusYearly,nil);
-        return;
-    }
+-(void)refreshProductsWithBlock:(PlusBlock)block{
     NSSet *products = [NSSet setWithArray:@[plusMonthlyIdentifier, plusYearlyIdentifier]];
     [[RMStore defaultStore] requestProducts:products success:^(NSArray *products, NSArray *invalidProductIdentifiers) {
         for(SKProduct *product in products){
@@ -43,7 +39,13 @@ static PaymentHandler *sharedObject;
     } failure:^(NSError *error) {
         if(block) block(nil,nil,error);
     }];
-    
+}
+-(void)requestProductsWithBlock:(PlusBlock)block{
+    if(self._plusMonthly && self._plusYearly){
+        if(block) block(self._plusMonthly,self._plusYearly,nil);
+        return;
+    }
+    [self refreshProductsWithBlock:block];
     // we will release the request object in the delegate callback
 }
 -(void)requestPayment:(NSString*)identifier block:(SuccessfulBlock)block{

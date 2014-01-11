@@ -18,5 +18,6 @@ typedef void (^PlusBlock)(SKProduct* plusMonthly, SKProduct *plusYearly, NSError
 -(void)requestProductsWithBlock:(PlusBlock)block;
 -(void)requestPlusYearlyBlock:(SuccessfulBlock)block;
 -(void)requestPlusMonthlyBlock:(SuccessfulBlock)block;
+-(void)refreshProductsWithBlock:(PlusBlock)block;
 -(void)restoreWithBlock:(void (^)(NSError *error))errorBlock;
 @end
