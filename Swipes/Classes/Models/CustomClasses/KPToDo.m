@@ -358,11 +358,11 @@
     NSPredicate *orderedItemsPredicate = [NSPredicate predicateWithFormat:@"(order > %i)",kDefOrderVal];
     NSPredicate *unorderedItemsPredicate = [NSPredicate predicateWithFormat:@"!(order > %i)",kDefOrderVal];
     NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
-    NSSortDescriptor *unorderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"schedule" ascending:YES];
+    NSSortDescriptor *unorderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"schedule" ascending:NO];
     NSArray *orderedItems = [[items filteredArrayUsingPredicate:orderedItemsPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
     NSArray *unorderedItems = [[items filteredArrayUsingPredicate:unorderedItemsPredicate] sortedArrayUsingDescriptors:@[unorderedItemsSortDescriptor]];
     NSInteger counter = kDefOrderVal + 1;
-    NSArray *sortedItems = [orderedItems arrayByAddingObjectsFromArray:unorderedItems];
+    NSArray *sortedItems = [unorderedItems arrayByAddingObjectsFromArray:orderedItems];
     NSInteger numberOfChanges = 0;
     for(KPToDo *toDo in sortedItems){
         
@@ -389,8 +389,7 @@
      i++
      save
     */
-    NSArray* reversedArray = [[sortedItems reverseObjectEnumerator] allObjects];
-    return reversedArray;
+    return sortedItems;
     
 }
 
