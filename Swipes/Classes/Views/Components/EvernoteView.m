@@ -13,7 +13,7 @@
 #define kContentSpacingLeft 0
 #define kContentSpacingRight 0
 #define kSearchBarHeight 44
-#define kSearchTimerInterval 2.0
+#define kSearchTimerInterval 1.0
 
 @interface EvernoteView () <UITableViewDataSource, UITableViewDelegate, EvernoteViewerViewDelegate, UISearchBarDelegate>
 
@@ -81,6 +81,7 @@
 {
     EvernoteSession *session = [EvernoteSession sharedSession];
     if (session.isAuthenticated) {
+        DLog(@"running search");
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         
         EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
@@ -99,7 +100,8 @@
         
         EDAMNoteFilter* filter = [EDAMNoteFilter new];
         //filter.words = @"photo";
-        filter.words = _searchBar.text;
+        // I added a better working search term: http://dev.evernote.com/doc/articles/search_grammar.php
+        filter.words = [NSString stringWithFormat:@"any: %@*",_searchBar.text];
         __block BOOL noteViewed = NO;
         [noteStore findNotesWithFilter:filter offset:0 maxNotes:10 success:^(EDAMNoteList *list) {
                 for (EDAMNote* note in list.notes) {
