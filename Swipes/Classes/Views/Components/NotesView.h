@@ -13,6 +13,6 @@
 -(void)savedNotesView:(NotesView*)notesView text:(NSString*)text;
 @end
 @interface NotesView : UIView
-@property (nonatomic,weak) NSObject<NotesViewDelegate> *delegate;
+@property (nonatomic,weak) id<NotesViewDelegate> delegate;
 -(void)setNotesText:(NSString*)notesText title:(NSString*)title;
 @end
