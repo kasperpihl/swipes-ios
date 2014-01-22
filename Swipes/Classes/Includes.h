@@ -122,3 +122,13 @@ typedef void (^FBReqIndexBlock)(FBReturnType status, NSInteger index, id result,
 #define FACEBOOK_WRITE_PERMISSIONS [NSArray arrayWithObjects:@"publish_stream", nil]
 #define FB_ERROR_CODE [error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"code"] integerValue]
 #define FB_ERROR_MESSAGE error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"message"]
+
+#ifdef DEBUG
+#    define DLog(__FORMAT__, ...) NSLog((@"%s [Line %d]\n" __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#else
+#    define DLog(...) /* */
+#endif
+#define ALog(...) NSLog(__VA_ARGS__)
+
+#define RoundRectMake(x, y, width, height) CGRectMake(roundf(x), roundf(y), roundf(width), roundf(height))
+

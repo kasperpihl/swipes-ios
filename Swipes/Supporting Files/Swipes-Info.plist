@@ -48,6 +48,12 @@
 				<string>fb531435630236702</string>
 			</array>
 		</dict>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>en-c7ed7298b3666bc4</string>
+            </array>
+        </dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>38</string>
