@@ -19,7 +19,7 @@
 #define kSyncTime 5
 
 #ifdef DEBUG
-#define DUMPDB [self dumpLocalDb];
+#define DUMPDB //[self dumpLocalDb];
 #else
 #define DUMPDB
 #endif
@@ -56,7 +56,6 @@
     
     return __deletedObjects;
 }
-
 - (NSMutableSet *)_updatedObjects
 {
     if (!__updatedObjects)
@@ -64,7 +63,15 @@
     
     return __updatedObjects;
 }
-
+-(NSMutableDictionary*)updateObjects
+{
+    if (!_updateObjects) {
+        _updateObjects = [[NSUserDefaults standardUserDefaults] objectForKey:@"updateObjects"];
+        if(!_updateObjects)
+            _updateObjects = [NSMutableDictionary dictionary];
+    }
+    return _updateObjects;
+}
 - (NSMutableDictionary *)deleteObjects
 {
     if (!_deleteObjects) {
@@ -72,20 +79,18 @@
         if (!_deleteObjects)
             _deleteObjects = [NSMutableDictionary dictionary];
     }
-    
     return _deleteObjects;
 }
 
-- (void)deleteObject:(KPParseObject*)object
-{
-    [self.deleteObjects setObject:object.parseClassName forKey:object.objectId];
-}
 
 -(NSArray*)lookupChangedAttributesForObject:(NSString*)objectId{
     return [self.tmpUpdatingObjects objectForKey:objectId];
 }
-
-- (void)saveInContext:(NSManagedObjectContext*)context
+/*
+    This save should be called if data should be synced
+ 
+*/
+- (void)saveContextForSynchronization:(NSManagedObjectContext*)context
 {
     if (!context)
         context = [self context];
@@ -96,10 +101,12 @@
         //NSSet *insertedObjects = [context insertedObjects];
         NSSet *updatedObjects = [context updatedObjects];
         NSSet *deletedObjects = [context deletedObjects];
+        /* Iterate all updated objects and add their changed attributes to tmpUpdating */
         for(KPParseObject *object in updatedObjects){
+            /* If the object doesn't have an objectId - it's not saved on the server and will automatically include all keys */
             if(!object.objectId)
                 continue;
-
+            
             NSArray *attributeArray = [self.tmpUpdatingObjects objectForKey:object.objectId];
             
             NSMutableSet *attributeSet = [NSMutableSet set];
@@ -110,10 +117,10 @@
             
             [self.tmpUpdatingObjects setObject:[attributeSet allObjects] forKey:object.objectId];
         }
-        
+        /* Add all deleted objects with objectId to be deleted*/
         for(KPParseObject *object in deletedObjects){
             if(object.objectId)
-                [self deleteObject:object];
+                [self.deleteObjects setObject:object.parseClassName forKey:object.objectId];
         }
     }];
     [context MR_saveToPersistentStoreAndWait];
@@ -135,18 +142,8 @@ static KPParseCoreData *sharedObject;
     if (!sharedObject) {
         sharedObject = [[KPParseCoreData allocWithZone:NULL] init];
         [sharedObject initialize];
-        [sharedObject testParse];
     }
     return sharedObject;
-}
-
-- (void)testParse
-{
-    /*PFObject *testObject = [PFObject objectWithClassName:@"Tag"];
-    [testObject setObject:@"testing" forKey:@"title"];
-    NSError *error;
-    [testObject save:&error];
-    if(error) NSLog(@"err:%@",error);*/
 }
 
 #pragma mark Core data stuff
@@ -156,8 +153,8 @@ static KPParseCoreData *sharedObject;
     self.backgroundTask = UIBackgroundTaskInvalid;
     [self loadDatabase];
     notify(@"closing app", forceSync);
-    notify(@"opening app", update);
-    notify(@"logged in", update);
+    notify(@"opening app", forceSync);
+    notify(@"logged in", forceSync);
     sharedObject._reach = [Reachability reachabilityWithHostname:@"www.google.com"];
     // Set the blocks
     sharedObject._reach.reachableBlock = ^(Reachability*reach) {
@@ -183,7 +180,7 @@ static KPParseCoreData *sharedObject;
 /*
  
 */
-- (void)updateTMPObjects
+- (void)prepareUpdatingObjects
 {
     for (NSString *identifier in self.tmpUpdatingObjects) {
         NSArray *attributeArray = [self.updateObjects objectForKey:identifier];
@@ -199,7 +196,7 @@ static KPParseCoreData *sharedObject;
         [self.updateObjects setObject:[newAttributeSet allObjects] forKey:identifier];
     }
     [self saveUpdatingObjects];
-    self.tmpUpdatingObjects = nil;
+    [self.tmpUpdatingObjects removeAllObjects];
 }
 
 -(NSMutableDictionary *)tmpUpdatingObjects
@@ -215,88 +212,18 @@ static KPParseCoreData *sharedObject;
     [[NSUserDefaults standardUserDefaults] setObject:self.deleteObjects forKey:@"deleteObjects"];
 }
 
--(NSMutableDictionary*)updateObjects
-{
-    if (!_updateObjects) {
-        _updateObjects = [[NSUserDefaults standardUserDefaults] objectForKey:@"updateObjects"];
-        if(!_updateObjects)
-            _updateObjects = [NSMutableDictionary dictionary];
-    }
-    return _updateObjects;
-}
+
 
 - (void)forceSync
 {
     [self synchronizeForce:YES async:YES];
 }
-
-- (BOOL)synchronizeWithParseAsync:(BOOL)async
-{
-    if (async)
-        [self startBackgroundHandler];
-    
-    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(objectId IN %@) OR (objectId = nil)",[self.updateObjects allKeys]];
-    NSArray *changedObjects = [KPParseObject MR_findAllWithPredicate:predicate inContext:localContext];
-    __block NSMutableArray *updatePFObjects = [NSMutableArray array];
-    __block NSMutableArray *updatedObjects = [NSMutableArray array];
-    for (KPParseObject *object in changedObjects) {
-        PFObject *pfObj = [object objectToSaveInContext:localContext];
-        if (!pfObj) {
-            if (object && object.objectId) {
-                [self.updateObjects removeObjectForKey:object.objectId];
-            }
-            continue;
-        }
-        [updatePFObjects addObject:pfObj];
-        [updatedObjects addObject:object];
-    }
-    
-    for (NSString *objectIdKey in self.deleteObjects){
-        NSString *className = [self.deleteObjects objectForKey:objectIdKey];
-        PFObject *deleteObject = [KPParseObject objectForDeletionWithClassName:className objectId:objectIdKey];
-        [updatePFObjects addObject:deleteObject];
-    }
-    
-    if (updatePFObjects.count > 0){
-        NSError *error;
-        [PFObject saveAll:updatePFObjects error:&error];
-        if (error) {
-            if(error.code == 100 || error.code == 124) {
-                // Timed out
-            }
-            else {
-                [UtilityClass sendError:error type:@"Synchronization send"];
-            }
-        }
-        NSInteger index = 0;
-        for (KPParseObject *object in updatedObjects) {
-            PFObject *savedPFObject = [updatePFObjects objectAtIndex:index];
-            if (savedPFObject.updatedAt){
-                [self handleCDObject:object withPFObject:savedPFObject inContext:localContext];
-                [self.updateObjects removeObjectForKey:savedPFObject.objectId];
-            }
-            index++;
-        }
-    }
-    
-    if ([localContext hasChanges]) {
-        [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *localError) {
-            [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastSyncToServer"];
-            [self sendUpdateEvent];
-            [self saveUpdatingObjects];
-            [self updateForce:YES async:async];
-        }];
-    }
-    else {
-        [self updateForce:YES async:async];
-    }
-    
-    DUMPDB;
-
-    return (0 < changedObjects);
+- (void)addObject:(NSDictionary*)object toClass:(NSString*)className inCollection:(NSMutableDictionary**)collection{
+    if(!collection || !className || !object) return;
+    NSMutableArray *classArray = [*collection objectForKey:className];
+    if(!classArray) [*collection setObject:[NSMutableArray arrayWithObject:object] forKey:className];
+    else [classArray addObject:object];
 }
-
 - (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async
 {
     if (!kCurrent) {
@@ -308,12 +235,12 @@ static KPParseCoreData *sharedObject;
         return UIBackgroundFetchResultNoData;
     }
     
-    if (!kUserHandler.isPlus) {
-        NSDate *now = [NSDate date];
-        NSDate *lastUpdatedDay = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSyncToServer"];
-        if (lastUpdatedDay && now.dayOfYear == lastUpdatedDay.dayOfYear)
-            return UIBackgroundFetchResultNoData;
-    }
+    /*if (!kUserHandler.isPlus) {
+     NSDate *now = [NSDate date];
+     NSDate *lastUpdatedDay = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSync"];
+     if (lastUpdatedDay && now.dayOfYear == lastUpdatedDay.dayOfYear)
+     return UIBackgroundFetchResultNoData;
+     }*/
     
     // Testing for timing
     if (!force) {
@@ -334,9 +261,7 @@ static KPParseCoreData *sharedObject;
     
     DUMPDB;
     
-    self._isSyncing = YES;
-    NSLog(@"syncing");
-    [self updateTMPObjects];
+    
     
     // when we are using async synchronization the return type doen't matter
     if (async) {
@@ -349,6 +274,81 @@ static KPParseCoreData *sharedObject;
         return [self synchronizeWithParseAsync:async];
     }
 }
+- (BOOL)synchronizeWithParseAsync:(BOOL)async
+{
+    self._isSyncing = YES;
+    [self prepareUpdatingObjects];
+    if (async)
+        [self startBackgroundHandler];
+    
+    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(objectId IN %@) OR (objectId = nil)",[self.updateObjects allKeys]];
+    NSArray *changedObjects = [KPParseObject MR_findAllWithPredicate:predicate inContext:localContext];
+    NSMutableDictionary *syncData = [NSMutableDictionary dictionary];
+    NSMutableDictionary *updateObjectsToServer = [NSMutableDictionary dictionary];
+    for (KPParseObject *object in changedObjects) {
+        NSDictionary *pfObject = [object objectToSaveInContext:localContext];
+        /* It will return nil if no changes should be made - */
+        if (!pfObject) {
+            if (object && object.objectId) {
+                [self.updateObjects removeObjectForKey:object.objectId];
+            }
+            continue;
+        }
+        [self addObject:pfObject toClass:object.getParseClassName inCollection:&updateObjectsToServer];
+    }
+    /* This will consist of tempId's to objects that did not have one already */
+    if([localContext hasChanges]) [localContext MR_saveToPersistentStoreAndWait];
+    /* The last update time - saved and received from the sync response */
+    NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSync"];
+    if (lastUpdate)
+        [syncData setObject:lastUpdate forKey:@"lastUpdate"];
+    
+    /* Indicates that it will only receive and response with changes since lastUpdate */
+    [syncData setObject:@YES forKey:@"changesOnly"];
+    
+    /* Batch the sync with new, updated and deleted objects */
+    for(NSString *objectId in self.deleteObjects) [self addObject:@{@"deleted":@YES,@"objectId":objectId} toClass:[self.deleteObjects objectForKey:objectId] inCollection:&updateObjectsToServer];
+    
+    [syncData setObject:updateObjectsToServer forKey:@"objects"];
+    
+    NSError *error;
+    NSLog(@"right before send:%@",syncData);
+    id result = [PFCloud callFunction:@"sync" withParameters:syncData error:&error];
+    NSLog(@"result:%@ error:%@",result,error);
+    /*if (error) {
+        if(error.code == 100 || error.code == 124) {
+            // Timed out
+        }
+        else {
+            [UtilityClass sendError:error type:@"Synchronization error"];
+        }
+    }*/
+    NSArray *tags = [result objectForKey:@"Tag"] ? [result objectForKey:@"Tag"] : @[];
+    NSArray *tasks = [result objectForKey:@"ToDo"] ? [result objectForKey:@"ToDo"] : @[];
+    NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
+    
+    lastUpdate = [result objectForKey:@"updateTime"];
+    [result objectForKey:@"serverTime"];
+    for(PFObject *object in allObjects){
+        [self handleCDObject:nil withPFObject:object inContext:localContext];
+    }
+    
+    [localContext MR_saveToPersistentStoreAndWait];
+    
+    
+    self._isSyncing = NO;
+    [self endBackgroundHandler];
+    [self.updateObjects removeAllObjects];
+    [self saveUpdatingObjects];
+    [self sendUpdateEvent];
+    if (lastUpdate)
+        [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastSync"];
+    DUMPDB;
+    return (0 < changedObjects);
+}
+
+
 
 - (void)handleCDObject:(KPParseObject*)cdObject withPFObject:(PFObject*)pfObject inContext:(NSManagedObjectContext*)context
 {
@@ -383,95 +383,6 @@ static KPParseCoreData *sharedObject;
     [self._deletedObjects removeAllObjects];
     [self._updatedObjects removeAllObjects];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:self userInfo:updatedEvents];
-}
-
-- (void)update
-{
-    [self updateForce:NO async:YES];
-}
-
-- (void)synchronizeLocal
-{
-    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-    [self startBackgroundHandler];
-    NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"];
-    
-    NSMutableDictionary *options = [@{@"changesOnly" : @YES} mutableCopy];
-    if (lastUpdate)
-        [options setObject:lastUpdate forKey:@"lastUpdate"];
-    
-    NSError *error;
-    NSDictionary *result = [PFCloud callFunction:@"update" withParameters:options error:&error];
-    if (error){
-        NSLog(@"error query:%@",error);
-        self._isSyncing = NO;
-        [self endBackgroundHandler];
-        return;
-    }
-    
-    NSArray *tags = [result objectForKey:@"Tag"];
-    NSArray *tasks = [result objectForKey:@"ToDo"];
-    NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
-    NSDate *now = [NSDate date];
-    lastUpdate = [result objectForKey:@"updateTime"];
-    [result objectForKey:@"serverTime"];
-    for(PFObject *object in allObjects){
-        [self handleCDObject:nil withPFObject:object inContext:localContext];
-    }
-    
-    [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
-//    [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
-        if (lastUpdate)
-            [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastUpdate"];
-        if (now)
-            [[NSUserDefaults standardUserDefaults] setObject:now forKey:@"lastUpdatedFromServer"];
-        
-        [self sendUpdateEvent];
-        if (error)
-            NSLog(@"error from update");
-        self._isSyncing = NO;
-        [self endBackgroundHandler];
-        if (self._needSync) {
-            [self synchronizeForce:NO async:YES];
-        }
-    }];
-    DUMPDB;
-}
-
-- (void)updateForce:(BOOL)force async:(BOOL)async
-{
-    NSLog(@"update");
-
-    if (!kCurrent) {
-         return;
-    }
-    
-    if (self._isSyncing && !force) {
-        return;
-    }
-    
-    if(!kUserHandler.isPlus){
-        NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"]);
-        if([[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdate"]){
-            self._isSyncing = NO;
-            [self endBackgroundHandler];
-            return;
-        }
-    }
-    
-    DUMPDB;
-
-    if (!self._isSyncing)
-        self._isSyncing = YES;
-
-    if (async) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self synchronizeLocal];
-        });
-    }
-    else {
-        [self synchronizeLocal];
-    }
 }
 
 - (void)endBackgroundHandler
@@ -529,8 +440,7 @@ static KPParseCoreData *sharedObject;
     for(NSString *tag in tagArray){
         [KPTag addTagWithString:tag save:NO];
     }
-    
-    [self saveInContext:nil];
+    [self saveContextForSynchronization:nil];
     NSArray *toDoArray = @[
                                @"Swipe right to complete a task",
                                @"Swipe left to schedule a task",
@@ -544,7 +454,7 @@ static KPParseCoreData *sharedObject;
         if(i <= 1)[KPToDo updateTags:@[@"work"] forToDos:@[toDo] remove:NO save:YES];
     }
 
-    [self saveInContext:nil];
+    [self saveContextForSynchronization:nil];
 //   NSArray *todosForTagsArray = [KPToDo MR_findAll];
 //    todosForTagsArray = [todosForTagsArray subarrayWithRange:NSMakeRange(0, 3)];
     

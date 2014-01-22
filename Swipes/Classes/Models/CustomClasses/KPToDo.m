@@ -62,7 +62,7 @@
         BOOL movedToDo = [toDo scheduleForDate:date];
         if(movedToDo) [movedToDos addObject:toDo];
     }
-    if(save) [KPCORE saveInContext:nil];
+    if(save) [KPCORE saveContextForSynchronization:nil];
     [NOTIHANDLER updateLocalNotifications];
     return [movedToDos copy];
 }
@@ -72,7 +72,7 @@
         BOOL movedToDo = [toDo complete];
         if(movedToDo) [movedToDos addObject:toDo];
     }
-    if(save) [KPCORE saveInContext:nil];
+    if(save) [KPCORE saveContextForSynchronization:nil];
     NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
     [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
     [NOTIHANDLER updateLocalNotifications];
@@ -85,7 +85,7 @@
         if(!toDo.completionDate) shouldUpdateNotifications = YES;
         [toDo deleteToDoSave:NO];
     }
-    if(save) [KPCORE saveInContext:nil];
+    if(save) [KPCORE saveContextForSynchronization:nil];
     if(shouldUpdateNotifications) [NOTIHANDLER updateLocalNotifications];
 }
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save{
@@ -95,7 +95,7 @@
         for(KPToDo *toDo in toDos){
             [toDo updateTagSet:tagsSet withTags:tags remove:remove];
         }
-        if(save) [KPCORE saveInContext:nil];
+        if(save) [KPCORE saveContextForSynchronization:nil];
     }
 }
 +(NSArray *)selectedTagsForToDos:(NSArray *)toDos{
@@ -188,35 +188,38 @@
         }
     }];
 }
--(BOOL)setAttributesForSavingObject:(PFObject *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
-    BOOL setAll = NO;
+-(BOOL)setAttributesForSavingObject:(NSMutableDictionary *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
     NSDictionary *keyMatch = [self keyMatch];
-    if(!self.objectId) setAll = YES;
+    BOOL isNewObject = (!self.objectId);
     BOOL shouldUpdate = NO;
     for(NSString *pfKey in keyMatch){
         NSString *cdKey = [keyMatch objectForKey:pfKey];
-        if(setAll || [changedAttributes containsObject:cdKey]){
+        if(isNewObject || [changedAttributes containsObject:cdKey]){
             if([self valueForKey:cdKey]) [*object setObject:[self valueForKey:cdKey] forKey:pfKey];
             else([*object setObject:[NSNull null] forKey:pfKey]);
             shouldUpdate = YES;
         }
     }
-    if(setAll || [changedAttributes containsObject:@"repeatOption"]){
+    if(isNewObject || [changedAttributes containsObject:@"repeatOption"]){
         [*object setObject:[self stringForRepeatOption:self.repeatOptionValue] forKey:@"repeatOption"];
         shouldUpdate = YES;
     }
-    if(setAll || [changedAttributes containsObject:@"tags"]){
+    if(isNewObject || [changedAttributes containsObject:@"tags"]){
         NSInteger tagCount = self.tags.count;
         NSMutableArray *tagArray = [NSMutableArray arrayWithCapacity:tagCount];
         NSArray *tagsFromString = [self.tagString componentsSeparatedByString:@", "];
         for (NSInteger i = 0; i < tagCount; ++i) [tagArray addObject:[NSNull null]];
         NSMutableArray *emptyObjects = [NSMutableArray array];
-
+        /* Prepare the tag objects pointers for saving - include tempId + objectId if exist */
         for(KPTag *tag in self.tags){
+            
+            NSMutableDictionary *tagObj = [NSMutableDictionary dictionaryWithObject:[tag getTempId] forKey:@"tempId"];
+            [tagObj setObject:@"Tag" forKey:@"className"];
+            if(tag.objectId) [tagObj setObject:tag.objectId forKey:@"objectId"];
+            
             NSInteger index = [tagsFromString indexOfObject:tag.title];
-            PFObject *objectToSave = [tag emptyObjectForSaving];
-            if(index != NSNotFound && index < tagCount) [tagArray replaceObjectAtIndex:index withObject:objectToSave];
-            else [emptyObjects addObject:objectToSave];
+            if(index != NSNotFound && index < tagCount) [tagArray replaceObjectAtIndex:index withObject:tagObj];
+            else [emptyObjects addObject:tagObj];
         }
         
         if(emptyObjects.count > 0){
@@ -227,9 +230,11 @@
                 }
             }
         }
-        NSLog(@"tag array to save:%@",tagArray);
-        [*object setObject:tagArray forKey:@"tags"];
-        shouldUpdate = YES;
+        if(isNewObject && tagCount == 0){}
+        else{
+            [*object setObject:tagArray forKey:@"tags"];
+            shouldUpdate = YES;
+        }
     }
     return shouldUpdate;
 }
@@ -285,7 +290,7 @@
 }
 
 +(void)save{
-    [KPCORE saveInContext:nil];
+    [KPCORE saveContextForSynchronization:nil];
 }
 -(NSDate *)nextDateFrom:(NSDate*)date{
     NSDate *returnDate;

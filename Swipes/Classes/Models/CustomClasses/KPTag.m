@@ -18,7 +18,7 @@
     if(counter > 0) return nil;
     KPTag *newTag = [KPTag newObjectInContext:nil];
     newTag.title = string;
-    if(save)[KPCORE saveInContext:nil];
+    if(save)[KPCORE saveContextForSynchronization:nil];
     return newTag;
 }
 +(void)deleteTagWithString:(NSString *)string save:(BOOL)save{
@@ -28,7 +28,7 @@
     NSArray *toDos = [KPToDo MR_findAllWithPredicate:toDoPredicate];
     [KPToDo updateTags:@[string] forToDos:toDos remove:YES save:YES];
     [tagObj MR_deleteEntity];
-    if(save)[KPCORE saveInContext:nil];
+    if(save)[KPCORE saveContextForSynchronization:nil];
 }
 +(NSArray *)allTagsAsStrings{
     NSArray *tagObjs = [KPTag MR_findAll];
@@ -39,7 +39,7 @@
     }
     return tags;
 }
--(BOOL)setAttributesForSavingObject:(PFObject *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
+-(BOOL)setAttributesForSavingObject:(NSMutableDictionary *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
     BOOL setAll = NO;
     NSDictionary *keyMatch = @{
                                @"title": @"title"
