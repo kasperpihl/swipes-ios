@@ -56,7 +56,7 @@
     }
     return shouldUpdate;
 }
--(void)updateWithObject:(PFObject *)object context:(NSManagedObjectContext *)context{
+-(void)updateWithObject:(NSDictionary *)object context:(NSManagedObjectContext *)context{
     [super updateWithObject:object context:context];
     [context performBlockAndWait:^{
         if(![self.title isEqualToString:[object objectForKey:@"title"]]) self.title = [object objectForKey:@"title"];

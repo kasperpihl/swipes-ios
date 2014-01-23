@@ -23,16 +23,18 @@
     return self.tempId;
 }
 #pragma mark - Handling of changes
--(void)updateWithObject:(PFObject *)object context:(NSManagedObjectContext*)context{
+-(void)updateWithObject:(NSDictionary *)object context:(NSManagedObjectContext*)context{
     if(!context) context = [KPCORE context];
     [context performBlockAndWait:^{
         self.savingObject = nil;
+        NSDateFormatter *dateFormatter = [Global isoDateFormatter];
         if(!self.objectId){
-            self.objectId = object.objectId;
-            self.createdAt = object.createdAt;
-            self.parseClassName = object.parseClassName;
+            self.objectId = [object objectForKey:@"objectId"];
+            self.createdAt = [dateFormatter dateFromString:[object objectForKey:@"createdAt"]];
         }
-        self.updatedAt = object.updatedAt;
+        NSLog(@"%@",[object objectForKey:@"updatedAt"]);
+        self.updatedAt = [dateFormatter dateFromString:[object objectForKey:@"updatedAt"]];
+        NSLog(@"c %@ u %@",self.createdAt,[dateFormatter dateFromString:[object objectForKey:@"updatedAt"]]);
     }];
 }
 #pragma mark - Instantiate object
@@ -43,20 +45,20 @@
     [coreDataObject getTempId];
     return coreDataObject;
 }
-+(KPParseObject *)getCDObjectFromObject:(PFObject*)object context:(NSManagedObjectContext *)context{
++(KPParseObject *)getCDObjectFromObject:(NSDictionary*)object context:(NSManagedObjectContext *)context{
     if(!context) context = [KPCORE context];
     __block KPParseObject *coreDataObject;
     coreDataObject = [self checkForObject:object context:context];
     if(!coreDataObject) coreDataObject = [[self class] MR_createInContext:context];
     return coreDataObject;
 }
-+(KPParseObject*)checkForObject:(PFObject*)object context:(NSManagedObjectContext*)context{
++(KPParseObject*)checkForObject:(NSDictionary*)object context:(NSManagedObjectContext*)context{
     KPParseObject *coreDataObject;
-    coreDataObject = [[self class] MR_findFirstByAttribute:@"objectId" withValue:object.objectId inContext:context];
+    coreDataObject = [[self class] MR_findFirstByAttribute:@"objectId" withValue:[object objectForKey:@"objectId"] inContext:context];
     if(!coreDataObject && [object objectForKey:@"tempId"]) coreDataObject = [[self class] MR_findFirstByAttribute:@"tempId" withValue:[object objectForKey:@"tempId"] inContext:context];
     return coreDataObject;
 }
-+(BOOL)deleteObject:(PFObject *)object context:(NSManagedObjectContext *)context{
++(BOOL)deleteObject:(NSDictionary *)object context:(NSManagedObjectContext *)context{
     if(!context) context = [KPCORE context];
     KPParseObject *coreDataObject = [self checkForObject:object context:context];
     BOOL successful = YES;
@@ -76,7 +78,6 @@
         else{
             [objectToSave setObject:[self getTempId] forKey:@"tempId"];
         }
-        
         /*
          Loading changed attributes from the sync handler
          and calls the subclass (KPToDo/KPTag) to set them proberly on the object

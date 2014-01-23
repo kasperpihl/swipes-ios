@@ -120,11 +120,11 @@
 }
 
 
--(void)updateWithObject:(PFObject *)object context:(NSManagedObjectContext *)context{
+-(void)updateWithObject:(NSDictionary *)object context:(NSManagedObjectContext *)context{
     [super updateWithObject:object context:context];
     [context performBlockAndWait:^{
         NSDictionary *keyMatch = [self keyMatch];
-        NSArray *localChanges = [KPCORE lookupChangedAttributesForObject:object.objectId];
+        NSArray *localChanges = [KPCORE lookupChangedAttributesForObject:[object objectForKey:@"objectId"]];
         for(NSString *pfKey in [object allKeys]){
             
             if([localChanges containsObject:pfKey])
@@ -175,8 +175,12 @@
             }
             NSString *cdKey = [keyMatch objectForKey:pfKey];
             if(cdKey){
-                id cdValue = [self valueForKey:cdKey];
                 
+                id cdValue = [self valueForKey:cdKey];
+                if([pfValue isKindOfClass:[NSDictionary class]] && [[pfValue objectForKey:@"__type"] isEqualToString:@"Date"]){
+                    NSDateFormatter *dateFormatter = [Global isoDateFormatter];
+                    pfValue = [dateFormatter dateFromString:[pfValue objectForKey:@"iso"]];
+                }
                 if([cdValue isKindOfClass:[NSString class]] && [pfValue isKindOfClass:[NSString class]]){ checkStringWithKey(object, pfValue, cdKey, cdValue); }
                 else if([cdValue isKindOfClass:[NSDate class]] && [pfValue isKindOfClass:[NSDate class]]){ checkDateWithKey(object, pfValue, cdKey, cdValue); }
                 else if([cdValue isKindOfClass:[NSNumber class]] && [pfValue isKindOfClass:[NSNumber class]]){ checkNumberWithKey(object, pfValue, cdKey, cdValue); }
@@ -195,7 +199,12 @@
     for(NSString *pfKey in keyMatch){
         NSString *cdKey = [keyMatch objectForKey:pfKey];
         if(isNewObject || [changedAttributes containsObject:cdKey]){
-            if([self valueForKey:cdKey]) [*object setObject:[self valueForKey:cdKey] forKey:pfKey];
+            if([[self valueForKey:cdKey] isKindOfClass:[NSDate class]]){
+                NSDateFormatter *dateFormatter = [Global isoDateFormatter];
+                NSString *isoString = [dateFormatter stringFromDate:[self valueForKey:cdKey]];
+                [*object setObject:@{@"__type":@"Date",@"iso":isoString} forKey:pfKey];
+            }
+            else if([self valueForKey:cdKey]) [*object setObject:[self valueForKey:cdKey] forKey:pfKey];
             else([*object setObject:[NSNull null] forKey:pfKey]);
             shouldUpdate = YES;
         }

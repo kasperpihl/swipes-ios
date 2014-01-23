@@ -12,4 +12,5 @@
 +(Global*)sharedInstance;
 + (NSInteger)OSVersion;
 +(BOOL)is24Hour;
++(NSDateFormatter*)isoDateFormatter;
 @end

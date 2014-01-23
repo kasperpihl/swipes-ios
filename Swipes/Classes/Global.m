@@ -16,6 +16,12 @@ static Global *sharedObject;
     }
     return sharedObject;
 }
++(NSDateFormatter *)isoDateFormatter{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
+    return dateFormatter;
+}
 + (NSInteger)OSVersion
 {
     static NSUInteger _deviceSystemMajorVersion = -1;

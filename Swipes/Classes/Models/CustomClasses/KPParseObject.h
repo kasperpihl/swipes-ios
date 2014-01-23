@@ -2,9 +2,9 @@
 #import "KPParseCommunicator.h"
 @interface KPParseObject : _KPParseObject {}
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context;
-+(KPParseObject *)getCDObjectFromObject:(PFObject*)object context:(NSManagedObjectContext*)context;
-+(BOOL)deleteObject:(PFObject*)object context:(NSManagedObjectContext*)context;
--(void)updateWithObject:(PFObject*)object context:(NSManagedObjectContext*)context;
++(KPParseObject *)getCDObjectFromObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
++(BOOL)deleteObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
+-(void)updateWithObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
 -(NSString*)getParseClassName;
 -(NSString*)getTempId;
 /* To use saveWithHandler: overwrite setAttributesForSavingObject: in subclass to set all the attributes to save */

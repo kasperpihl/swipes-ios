@@ -304,6 +304,7 @@ static KPParseCoreData *sharedObject;
     if (lastUpdate)
         [syncData setObject:lastUpdate forKey:@"lastUpdate"];
     
+    [syncData setObject:[kCurrent sessionToken] forKey:@"sessionToken"];
     /* Indicates that it will only receive and response with changes since lastUpdate */
     [syncData setObject:@YES forKey:@"changesOnly"];
     
@@ -313,24 +314,32 @@ static KPParseCoreData *sharedObject;
     [syncData setObject:updateObjectsToServer forKey:@"objects"];
     
     NSError *error;
-    NSLog(@"right before send:%@",syncData);
-    id result = [PFCloud callFunction:@"sync" withParameters:syncData error:&error];
-    NSLog(@"result:%@ error:%@",result,error);
-    /*if (error) {
-        if(error.code == 100 || error.code == 124) {
-            // Timed out
-        }
-        else {
-            [UtilityClass sendError:error type:@"Synchronization error"];
-        }
-    }*/
+    NSLog(@"before:%@",syncData);
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://api.swipesapp.com/sync"]];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
+                                                       options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
+                                                         error:&error];
+    if(error){
+        NSLog(@"error:%@",error);
+        return NO;
+    }
+    [request setHTTPBody:jsonData];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    NSURLResponse *response;
+    
+    NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
+    NSLog(@"respo:%@ error:%@",result,error);
+    
     NSArray *tags = [result objectForKey:@"Tag"] ? [result objectForKey:@"Tag"] : @[];
     NSArray *tasks = [result objectForKey:@"ToDo"] ? [result objectForKey:@"ToDo"] : @[];
     NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
     
     lastUpdate = [result objectForKey:@"updateTime"];
     [result objectForKey:@"serverTime"];
-    for(PFObject *object in allObjects){
+    for(NSDictionary *object in allObjects){
         [self handleCDObject:nil withPFObject:object inContext:localContext];
     }
     
@@ -350,7 +359,7 @@ static KPParseCoreData *sharedObject;
 
 
 
-- (void)handleCDObject:(KPParseObject*)cdObject withPFObject:(PFObject*)pfObject inContext:(NSManagedObjectContext*)context
+- (void)handleCDObject:(KPParseObject*)cdObject withPFObject:(NSDictionary*)pfObject inContext:(NSManagedObjectContext*)context
 {
     BOOL shouldDelete = NO;
     if([[pfObject allKeys] containsObject:@"deleted"]){
@@ -359,18 +368,18 @@ static KPParseCoreData *sharedObject;
     
     Class class;
     if (!cdObject)
-        class = NSClassFromString([KPParseCoreData classNameFromParseName:pfObject.parseClassName]);
+        class = NSClassFromString([KPParseCoreData classNameFromParseName:[pfObject objectForKey:@"parseClassName"]]);
     else
         class = [cdObject class];
     
     if (shouldDelete) {
         [class deleteObject:pfObject context:context];
-        if ([self.deleteObjects objectForKey:pfObject.objectId])
-            [self.deleteObjects removeObjectForKey:pfObject.objectId];
-        [self._deletedObjects addObject:pfObject.objectId];
+        if ([self.deleteObjects objectForKey:[pfObject objectForKey:@"objectId"]])
+            [self.deleteObjects removeObjectForKey:[pfObject objectForKey:@"objectId"]];
+        [self._deletedObjects addObject:[pfObject objectForKey:@"objectId"]];
     }
     else{
-        [self._updatedObjects addObject:pfObject.objectId];
+        [self._updatedObjects addObject:[pfObject objectForKey:@"objectId"]];
         if (!cdObject)
             cdObject = [class getCDObjectFromObject:pfObject context:context];
         [cdObject updateWithObject:pfObject context:context];
