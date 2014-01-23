@@ -44,6 +44,9 @@
     parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
     mixpanelToken = @"c2d2126bfce5e54436fa131cfe6085ad";
     localyticsKey = @"f2f927e0eafc7d3c36835fe-c0a84d84-18d8-11e3-3b24-00a426b17dd8";
+    #define EVERNOTE_HOST BootstrapServerBaseURLStringSandbox
+    NSString* const CONSUMER_KEY = @"sulio22";
+    NSString* const CONSUMER_SECRET = @"c7ed7298b3666bc4"; // when set to release also fix in Swipes-Info.plist file !
 #endif
     
     [Appirater setAppId:@"657882159"];
@@ -67,7 +70,8 @@
     
     [Appirater appLaunched:YES];
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-    if (notification) [self application:application didReceiveLocalNotification:notification];
+    if (notification)
+        [self application:application didReceiveLocalNotification:notification];
     
     /*NSArray *notifications = [application scheduledLocalNotifications];
     for(UILocalNotification *lNoti in notifications){
@@ -79,6 +83,8 @@
     if (OSVER >= 7) {
         [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     }
+    
+    [EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
     
     return YES;
 }
@@ -147,8 +153,15 @@
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session]];
+            sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    BOOL canHandle = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session]];
+    if (!canHandle) {
+        if ([[NSString stringWithFormat:@"en-%@", [[EvernoteSession sharedSession] consumerKey]] isEqualToString:[url scheme]] == YES) {
+            canHandle = [[EvernoteSession sharedSession] canHandleOpenURL:url];
+        }
+    }
+    return canHandle;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		41DF0824188ECD5A0074DDFB /* EvernoteViewerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41DF0823188ECD5A0074DDFB /* EvernoteViewerView.m */; };
 		A2C9157AB40E430C8F5DD47F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A136D6C864AF43788D47AB2C /* libPods.a */; };
 		A700042D1762A02A008CB715 /* edit_notes_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A700042A1762A02A008CB715 /* edit_notes_icon.png */; };
 		A700042E1762A02A008CB715 /* edit_tags_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A700042B1762A02A008CB715 /* edit_tags_icon.png */; };
@@ -344,11 +345,16 @@
 		A7FE4406182828E1002AFB2E /* date_stamp_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FE4404182828E1002AFB2E /* date_stamp_background@2x.png */; };
 		A7FE440918282C5D002AFB2E /* ostrich-bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7FE440718282B04002AFB2E /* ostrich-bold.ttf */; };
 		A7FE440A18282C60002AFB2E /* ostrich-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7FE440818282B04002AFB2E /* ostrich-regular.ttf */; };
+		DA310FA7188F3F26003C8FA4 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = DA310FA6188F3F26003C8FA4 /* Assets */; };
+		DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0B8F188CB4750094F866 /* EvernoteView.m */; };
+		DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
 		DAFB7B971853508C0006A706 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAFB7B961853508C0006A706 /* Crashlytics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		41DF0822188ECD5A0074DDFB /* EvernoteViewerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvernoteViewerView.h; sourceTree = "<group>"; };
+		41DF0823188ECD5A0074DDFB /* EvernoteViewerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvernoteViewerView.m; sourceTree = "<group>"; };
 		A136D6C864AF43788D47AB2C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A700042A1762A02A008CB715 /* edit_notes_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_notes_icon.png; sourceTree = "<group>"; };
 		A700042B1762A02A008CB715 /* edit_tags_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_tags_icon.png; sourceTree = "<group>"; };
@@ -770,6 +776,10 @@
 		A7FE4404182828E1002AFB2E /* date_stamp_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "date_stamp_background@2x.png"; sourceTree = "<group>"; };
 		A7FE440718282B04002AFB2E /* ostrich-bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ostrich-bold.ttf"; path = "Font/ostrich-bold.ttf"; sourceTree = "<group>"; };
 		A7FE440818282B04002AFB2E /* ostrich-regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ostrich-regular.ttf"; path = "Font/ostrich-regular.ttf"; sourceTree = "<group>"; };
+		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
+		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvernoteView.h; sourceTree = "<group>"; };
+		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvernoteView.m; sourceTree = "<group>"; };
+		DAEBBE62188B2BB8002655CB /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		DAFB7B961853508C0006A706 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Swipes/Ressources/Libs/Crashlytics.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -778,6 +788,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */,
 				A7ADCB3817DD352F00780F88 /* libz.dylib in Frameworks */,
 				A75545DE179B481800CE2F4E /* Accelerate.framework in Frameworks */,
 				A78F392E16F7DC1900A8C78D /* MessageUI.framework in Frameworks */,
@@ -891,6 +902,10 @@
 				A703B1861838EBF20047DCC9 /* SlowHighlightIcon.m */,
 				A703B1871838EBF20047DCC9 /* YoureAllDoneView.h */,
 				A703B1881838EBF20047DCC9 /* YoureAllDoneView.m */,
+				DA3F0B8E188CB4750094F866 /* EvernoteView.h */,
+				DA3F0B8F188CB4750094F866 /* EvernoteView.m */,
+				41DF0822188ECD5A0074DDFB /* EvernoteViewerView.h */,
+				41DF0823188ECD5A0074DDFB /* EvernoteViewerView.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1147,8 +1162,8 @@
 		A7778CCC16EB5884004D95E5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DAEBBE62188B2BB8002655CB /* libxml2.dylib */,
 				A76182E0187D37AB00914A05 /* KitLocate.Framework */,
-				A7A976E3184118CF001C0A51 /* Crashlytics.framework */,
 				A7ADCB3717DD352F00780F88 /* libz.dylib */,
 				A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */,
 				A75545DD179B481800CE2F4E /* Accelerate.framework */,
@@ -1330,6 +1345,7 @@
 		A781288117294C56002226C8 /* Ressources */ = {
 			isa = PBXGroup;
 			children = (
+				DA310FA6188F3F26003C8FA4 /* Assets */,
 				A7680D30172D219800BCB2D9 /* Font */,
 				A781288217294C56002226C8 /* Images */,
 				A78128AB17294C56002226C8 /* Libs */,
@@ -1798,6 +1814,7 @@
 				A741EC4918326996000F9F93 /* settings_icon_white@2x.png in Resources */,
 				A7DAC697181A7CF800B8C079 /* round_plus_big-high.png in Resources */,
 				A7BA697418033FDF00F99654 /* schedule_image_moon-high@2x.png in Resources */,
+				DA310FA7188F3F26003C8FA4 /* Assets in Resources */,
 				A72C8B89181574EA0078E516 /* menu_snoozes-high.png in Resources */,
 				A717BF15175F5E7B004791BF /* edit_notes_icon@2x.png in Resources */,
 				A7DAC681181A7CF800B8C079 /* share_icon_white.png in Resources */,
@@ -2085,10 +2102,12 @@
 				A703B1BA1838EBF20047DCC9 /* KPTimePicker.m in Sources */,
 				A703B1A91838EBF20047DCC9 /* KPAlert.m in Sources */,
 				A7D7D53317B1586A00FBC042 /* SettingsHandler.m in Sources */,
+				DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */,
 				A7D7D53917B1A56C00FBC042 /* MenuButton.m in Sources */,
 				A7E2D93C17B2C5A4007BDE00 /* SettingsCell.m in Sources */,
 				A703B1AE1838EBF20047DCC9 /* DotView.m in Sources */,
 				A703B1C41838EBF20047DCC9 /* KPTagList.m in Sources */,
+				41DF0824188ECD5A0074DDFB /* EvernoteViewerView.m in Sources */,
 				A703B1B61838EBF20047DCC9 /* SlowHighlightIcon.m in Sources */,
 				A703B1B31838EBF20047DCC9 /* KPToolbar.m in Sources */,
 				A7E2D94717B3F258007BDE00 /* DayPickerSettingsCell.m in Sources */,

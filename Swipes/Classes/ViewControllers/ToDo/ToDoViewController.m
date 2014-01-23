@@ -44,16 +44,19 @@
 #import "AppDelegate.h"
 #import "KPTimePicker.h"
 #import "DotView.h"
+#import "EvernoteView.h"
+
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
     KPEditModeTitle,
     KPEditModeRepeat,
     KPEditModeTags,
     KPEditModeAlarm,
-    KPEditModeNotes
+    KPEditModeNotes,
+    KPEditModeEvernote
 };
 
-@interface ToDoViewController () <HPGrowingTextViewDelegate,NotesViewDelegate,ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate>
+@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
 
 
@@ -65,13 +68,14 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UIView *alarmContainer;
 @property (nonatomic) UIView *notesContainer;
 @property (nonatomic) UIView *repeatedContainer;
+@property (nonatomic) UIView *evernoteContainer;
 @property (nonatomic) KPRepeatPicker *repeatPicker;
 
 @property (nonatomic) UILabel *alarmLabel;
 @property (nonatomic) UILabel *tagsLabel;
 @property (nonatomic) UITextView *notesView;
 @property (nonatomic) UILabel *repeatedLabel;
-
+@property (nonatomic) UILabel *evernoteLabel;
 
 @property (nonatomic) KPToolbar *toolbarEditView;
 @property (nonatomic) DotView *dotView;
@@ -164,6 +168,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         UIButton *clickButton = [self addClickButtonToView:self.repeatedContainer action:@selector(pressedRepeat:)];
         clickButton.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
         [self.scrollView addSubview:self.repeatedContainer];
+        
         /*
             Tags Container with button!
         */
@@ -181,6 +186,22 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self addClickButtonToView:self.tagsContainerView action:@selector(pressedTags:)];
         
         [self.scrollView addSubview:self.tagsContainerView];
+        
+        /*
+            Evernote Container with button!
+        */
+        self.evernoteContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
+        [self addAndGetImage:@"edit_notes_icon" inView:self.evernoteContainer];
+        
+        self.evernoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.evernoteContainer.frame.size.height)];
+        self.evernoteLabel.font = EDIT_TASK_TEXT_FONT;
+        self.evernoteLabel.backgroundColor = CLEAR;
+        [self setColorsFor:self.evernoteLabel];
+        [self.evernoteContainer addSubview:self.evernoteLabel];
+        
+        [self addClickButtonToView:self.evernoteContainer action:@selector(pressedEvernote:)];
+        
+        [self.scrollView addSubview:self.evernoteContainer];
         
         /*
          Notes view
@@ -324,6 +345,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         case KPEditModeTags:
         case KPEditModeAlarm:
         case KPEditModeNotes:
+        case KPEditModeEvernote:
         case KPEditModeNone:
             break;
     }
@@ -358,7 +380,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetY(self.scrollView, titleHeight);
     CGRectSetHeight(self.scrollView, self.contentView.frame.size.height-titleHeight-TOOLBAR_HEIGHT);
 }
-#pragma mark NotesViewDelegate
+
+#pragma mark - NotesViewDelegate
+
 -(void)pressedPriority{
     self.model.priorityValue = (self.model.priorityValue == 0) ? 1 : 0;
     [KPToDo save];
@@ -377,10 +401,23 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [BLURRY dismissAnimated:YES];
 }
 
+#pragma mark - EvernoteViewDelegate
+
+- (void)selectedEvernoteInView:(EvernoteView *)EvernoteView guid:(NSString *)guid title:(NSString *)title
+{
+    self.activeEditMode = KPEditModeNone;
+    [BLURRY dismissAnimated:YES];
+//    self.model.notes = text;
+//    [KPToDo save];
+    [self updateNotes];
+    [self layout];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 }
+
 -(void)updateNotes{
     if(!self.model.notes || self.model.notes.length == 0){
         self.notesView.text = @"Add notes";
@@ -394,21 +431,27 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetHeight(self.notesView,self.notesView.frame.size.height+20);
     CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
 }
+
 -(void)updateRepeated{
     NSDate *repeatDate = self.model.repeatedDate;
-    if(!repeatDate) repeatDate = self.model.schedule;
-    if(repeatDate){
+    if (!repeatDate)
+        repeatDate = self.model.schedule;
+
+    if (repeatDate){
         if(![self.repeatPicker.selectedDate isEqualToDate:repeatDate] || self.repeatPicker.currentOption != self.model.repeatOptionValue)  [self.repeatPicker setSelectedDate:repeatDate option:self.model.repeatOptionValue];
     }
-    else return;
+    else
+        return;
+    
     NSString* labelText;
     NSString *timeInString = [UtilityClass timeStringForDate:self.model.repeatedDate];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
     BOOL addTime = YES;
-    if(self.activeEditMode == KPEditModeRepeat){
+    if (self.activeEditMode == KPEditModeRepeat) {
         labelText = @"Repeat every...";
-    }else{
+    }
+    else {
         switch (self.model.repeatOptionValue) {
             case RepeatEveryDay:{
                 labelText = @"Every day";
@@ -446,6 +489,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
     self.repeatedLabel.text = labelText;
 }
+
 -(void)layoutWithHeight:(CGFloat)height{
     CGRectSetHeight(self.view, height);
     CGRectSetY(self.scrollView, self.titleContainerView.frame.size.height);
@@ -453,11 +497,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetY(self.toolbarEditView, self.contentView.frame.size.height - TOOLBAR_HEIGHT);
     self.toolbarEditView.autoresizingMask = UIViewAutoresizingNone;
 }
+
 -(void)injectInCell:(UITableViewCell *)cell{
     if(self.view.superview)[self.view removeFromSuperview];
     [self layoutWithHeight:cell.frame.size.height];
     [cell.contentView addSubview:self.view];
 }
+
 -(void)updateTags{
     self.tagsLabel.frame = TAGS_LABEL_RECT;
     NSString *tagsString = self.model.tagString;
@@ -475,6 +521,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.dotView.dotColor = [StyleHandler colorForCellType:[self.model cellTypeForTodo]];
     self.dotView.priority = (self.model.priorityValue == 1);
 }
+
 -(void)updateSchedule{
     if(!self.model.schedule){// || [self.model.schedule isInPast]){
         self.alarmLabel.text = @"Unspecified";
@@ -486,21 +533,31 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.alarmLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:self.model.schedule showTime:YES]];
     }
 }
--(void)update{
+
+- (void)updateEvernote
+{
+    self.evernoteLabel.text = @"Attach Evernote note";
+}
+
+-(void)update
+{
     self.textView.text = self.model.title;
     [self updateTags];
     [self updateSchedule];
     [self updateNotes];
     [self updateDot];
     [self updateRepeated];
+    [self updateEvernote];
     [self layout];
 }
+
 -(void)setModel:(KPToDo *)model{
     if(_model != model){
         _model = model;
     }
     [self update];
 }
+
 -(void)layout{
     CGFloat tempHeight = 0;
     CGRectSetY(self.alarmContainer, tempHeight);
@@ -517,12 +574,17 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetY(self.tagsContainerView, tempHeight);
     tempHeight += self.tagsContainerView.frame.size.height;
     
+    CGRectSetY(self.evernoteContainer, tempHeight);
+    tempHeight += self.evernoteContainer.frame.size.height;
+    
     CGRectSetY(self.notesContainer, tempHeight);
     tempHeight += self.notesContainer.frame.size.height;
     
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width,tempHeight);
 }
--(void)pressedRepeat:(id)sender{
+
+-(void)pressedRepeat:(id)sender
+{
     if(self.activeEditMode == KPEditModeRepeat){
         self.activeEditMode = KPEditModeNone;
     }
@@ -532,14 +594,20 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self updateRepeated];
     [self layout];
 }
--(void)pressedDone:(id)sender{
+
+-(void)pressedDone:(id)sender
+{
     [self.delegate didPressCloseToDoViewController:self];
 }
--(void)pressedAlarm:(id)sender{
+
+-(void)pressedAlarm:(id)sender
+{
     self.activeEditMode = KPEditModeAlarm;
     if([self.delegate respondsToSelector:@selector(scheduleToDoViewController:)]) [self.delegate scheduleToDoViewController:self];
 }
--(void)pressedNotes:(id)sender{
+
+-(void)pressedNotes:(id)sender
+{
     self.activeEditMode = KPEditModeNotes;
     CGFloat extra = (OSVER >= 7) ? 0 : 0;
     NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0+extra, 320, self.segmentedViewController.view.frame.size.height-extra)];
@@ -549,7 +617,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [BLURRY showView:notesView inViewController:self.segmentedViewController];
     
 }
--(void)pressedTags:(id)sender{
+
+-(void)pressedTags:(id)sender
+{
     self.activeEditMode = KPEditModeTags;
     [self.segmentedViewController tagViewWithDismissAction:^{
         self.activeEditMode = KPEditModeNone;
@@ -557,7 +627,19 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self layout];
     }];
 }
--(void)dealloc{
+
+-(void)pressedEvernote:(id)sender
+{
+    self.activeEditMode = KPEditModeEvernote;
+    EvernoteView *evernoteView = [[EvernoteView alloc] initWithFrame:CGRectMake(0, 0, 320, self.segmentedViewController.view.frame.size.height)];
+    evernoteView.delegate = self;
+    evernoteView.caller = self.segmentedViewController;
+    BLURRY.showPosition = PositionBottom;
+    [BLURRY showView:evernoteView inViewController:self.segmentedViewController];
+}
+
+-(void)dealloc
+{
     self.scrollView = nil;
     self.alarmContainer = nil;
     self.tagsContainerView = nil;
@@ -569,6 +651,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.notesView = nil;
     self.dotView = nil;
     self.textView = nil;
+    self.evernoteLabel = nil;
+    self.evernoteContainer = nil;
     
     self.repeatedContainer = nil;
     self.repeatedLabel = nil;
