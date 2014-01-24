@@ -552,7 +552,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, super: %@", self.title, self.order, [super description]];
+    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, priority: %@", self.title, self.order, self.priority];
 }
 
 @end

@@ -117,15 +117,18 @@
             
             [self.tmpUpdatingObjects setObject:[attributeSet allObjects] forKey:object.objectId];
         }
+        NSLog(@"upd:%@",self.tmpUpdatingObjects);
         /* Add all deleted objects with objectId to be deleted*/
         for(KPParseObject *object in deletedObjects){
             if(object.objectId)
                 [self.deleteObjects setObject:object.parseClassName forKey:object.objectId];
         }
     }];
-    [context MR_saveToPersistentStoreAndWait];
-    DUMPDB;
-    [self synchronizeForce:NO async:YES];
+    [context MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
+        DUMPDB;
+        [self synchronizeForce:NO async:YES];
+    }];
+    
 }
 
 + (NSString *)classNameFromParseName:(NSString *)parseClassName
@@ -277,17 +280,20 @@ static KPParseCoreData *sharedObject;
 - (BOOL)synchronizeWithParseAsync:(BOOL)async
 {
     self._isSyncing = YES;
+    NSLog(@"bef:%@",self.tmpUpdatingObjects);
     [self prepareUpdatingObjects];
+    
     if (async)
         [self startBackgroundHandler];
     
-    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+    
+    NSManagedObjectContext *context = [KPCORE context];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(objectId IN %@) OR (objectId = nil)",[self.updateObjects allKeys]];
-    NSArray *changedObjects = [KPParseObject MR_findAllWithPredicate:predicate inContext:localContext];
+    NSArray *changedObjects = [KPParseObject MR_findAllWithPredicate:predicate inContext:context];
     NSMutableDictionary *syncData = [NSMutableDictionary dictionary];
     NSMutableDictionary *updateObjectsToServer = [NSMutableDictionary dictionary];
     for (KPParseObject *object in changedObjects) {
-        NSDictionary *pfObject = [object objectToSaveInContext:localContext];
+        NSDictionary *pfObject = [object objectToSaveInContext:context];
         /* It will return nil if no changes should be made - */
         if (!pfObject) {
             if (object && object.objectId) {
@@ -298,7 +304,7 @@ static KPParseCoreData *sharedObject;
         [self addObject:pfObject toClass:object.getParseClassName inCollection:&updateObjectsToServer];
     }
     /* This will consist of tempId's to objects that did not have one already */
-    if([localContext hasChanges]) [localContext MR_saveToPersistentStoreAndWait];
+    if([context hasChanges]) [context MR_saveOnlySelfAndWait];
     /* The last update time - saved and received from the sync response */
     NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSync"];
     if (lastUpdate)
@@ -322,6 +328,7 @@ static KPParseCoreData *sharedObject;
                                                          error:&error];
     if(error){
         NSLog(@"error:%@",error);
+        self._isSyncing = NO;
         return NO;
     }
     [request setHTTPBody:jsonData];
@@ -332,28 +339,34 @@ static KPParseCoreData *sharedObject;
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     NSLog(@"respo:%@ error:%@",result,error);
-    
+    if(error){
+        self._isSyncing = NO;
+        return NO;
+    }
     NSArray *tags = [result objectForKey:@"Tag"] ? [result objectForKey:@"Tag"] : @[];
     NSArray *tasks = [result objectForKey:@"ToDo"] ? [result objectForKey:@"ToDo"] : @[];
     NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
     
     lastUpdate = [result objectForKey:@"updateTime"];
     [result objectForKey:@"serverTime"];
+    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
     for(NSDictionary *object in allObjects){
         [self handleCDObject:nil withPFObject:object inContext:localContext];
     }
     
-    [localContext MR_saveToPersistentStoreAndWait];
+    [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
+        self._isSyncing = NO;
+        [self endBackgroundHandler];
+        [self.updateObjects removeAllObjects];
+        [self saveUpdatingObjects];
+        [self sendUpdateEvent];
+        if (lastUpdate)
+            [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastSync"];
+        DUMPDB;
+        NSLog(@"aft: %@",self.tmpUpdatingObjects);
+        if(self._needSync) [self synchronizeForce:NO async:async];
+    }];
     
-    
-    self._isSyncing = NO;
-    [self endBackgroundHandler];
-    [self.updateObjects removeAllObjects];
-    [self saveUpdatingObjects];
-    [self sendUpdateEvent];
-    if (lastUpdate)
-        [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastSync"];
-    DUMPDB;
     return (0 < changedObjects);
 }
 
