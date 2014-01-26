@@ -15,6 +15,8 @@
 #define kSearchBarHeight 44
 #define kSearchTimerInterval 1.0
 
+#define kSearchLimit 10     // when _limitSearch is YES this is the limit
+
 @interface EvernoteView () <UITableViewDataSource, UITableViewDelegate, EvernoteViewerViewDelegate, UISearchBarDelegate>
 
 @property (nonatomic, strong) UITableView* tableView;
@@ -28,6 +30,7 @@
 
 @implementation EvernoteView {
     NSTimer* _timer;
+    BOOL _limitSearch;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -102,8 +105,16 @@
         //filter.words = @"photo";
         // I added a better working search term: http://dev.evernote.com/doc/articles/search_grammar.php
         filter.words = [NSString stringWithFormat:@"any: %@*",_searchBar.text];
+        
+        // setup additional flags
+        if (0 == _searchBar.text.length) { // remove this check if you want order to be always by UPDATED
+            filter.order = NoteSortOrder_UPDATED;
+            filter.ascending = NO;
+        }
+        
         __block BOOL noteViewed = NO;
-        [noteStore findNotesWithFilter:filter offset:0 maxNotes:10 success:^(EDAMNoteList *list) {
+        [noteStore findNotesWithFilter:filter offset:0 maxNotes:10
+            success:^(EDAMNoteList *list) {
                 for (EDAMNote* note in list.notes) {
                     DLog(@"Note title: %@, guid: %@", note.title, note.guid);
                     if (!noteViewed) {
@@ -112,6 +123,7 @@
                     }
                 }
                 _noteList = list;
+                _limitSearch = (filter.order == NoteSortOrder_UPDATED);
                 [_tableView reloadData];
                 
                 //DLog(@"notebooks: %@", list);
@@ -144,7 +156,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _noteList.notes.count;
+    NSInteger result = _noteList.notes.count;
+    if (_limitSearch) {
+        return result > kSearchLimit ? kSearchLimit : result;
+    }
+    return result;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
