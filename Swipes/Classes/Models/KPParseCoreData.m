@@ -104,6 +104,7 @@
         /* Iterate all updated objects and add their changed attributes to tmpUpdating */
         for(KPParseObject *object in updatedObjects){
             /* If the object doesn't have an objectId - it's not saved on the server and will automatically include all keys */
+#warning If a object didn't have an objectId and currently is being saved - the new changes won't be registered (Maybe check on tempId as well)
             if(!object.objectId)
                 continue;
             
@@ -117,7 +118,6 @@
             
             [self.tmpUpdatingObjects setObject:[attributeSet allObjects] forKey:object.objectId];
         }
-        NSLog(@"upd:%@",self.tmpUpdatingObjects);
         /* Add all deleted objects with objectId to be deleted*/
         for(KPParseObject *object in deletedObjects){
             if(object.objectId)
@@ -173,6 +173,7 @@ static KPParseCoreData *sharedObject;
 {
     @try {
         [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
+        //[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(loadTest) userInfo:nil repeats:NO];
     }
     @catch (NSException *exception) {
         NSLog(@"%@",exception);
@@ -237,13 +238,16 @@ static KPParseCoreData *sharedObject;
         self._needSync = YES;
         return UIBackgroundFetchResultNoData;
     }
-    
-    /*if (!kUserHandler.isPlus) {
-     NSDate *now = [NSDate date];
-     NSDate *lastUpdatedDay = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSync"];
-     if (lastUpdatedDay && now.dayOfYear == lastUpdatedDay.dayOfYear)
-     return UIBackgroundFetchResultNoData;
-     }*/
+#warning Test out if this is working properly
+    if (!kUserHandler.isPlus) {
+        NSDate *now = [NSDate date];
+        NSDateFormatter *dateFormatter = [Global isoDateFormatter];
+        NSString *lastUpdatedString = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSync"];
+        NSDate *lastUpdatedDay;
+        if(lastUpdatedString) lastUpdatedDay = [dateFormatter dateFromString:lastUpdatedString];
+        if (lastUpdatedDay && now.dayOfYear == lastUpdatedDay.dayOfYear)
+            return UIBackgroundFetchResultNoData;
+    }
     
     // Testing for timing
     if (!force) {
@@ -280,7 +284,7 @@ static KPParseCoreData *sharedObject;
 - (BOOL)synchronizeWithParseAsync:(BOOL)async
 {
     self._isSyncing = YES;
-    NSLog(@"bef:%@",self.tmpUpdatingObjects);
+    /* Move all the updated objects */
     [self prepareUpdatingObjects];
     
     if (async)
@@ -305,11 +309,14 @@ static KPParseCoreData *sharedObject;
     }
     /* This will consist of tempId's to objects that did not have one already */
     if([context hasChanges]) [context MR_saveOnlySelfAndWait];
+    
     /* The last update time - saved and received from the sync response */
     NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSync"];
     if (lastUpdate)
         [syncData setObject:lastUpdate forKey:@"lastUpdate"];
+
     
+    /* Sending the user session to verify on the server */
     [syncData setObject:[kCurrent sessionToken] forKey:@"sessionToken"];
     /* Indicates that it will only receive and response with changes since lastUpdate */
     [syncData setObject:@YES forKey:@"changesOnly"];
@@ -323,6 +330,7 @@ static KPParseCoreData *sharedObject;
     NSLog(@"before:%@",syncData);
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://api.swipesapp.com/sync"]];
+    [request setTimeoutInterval:120];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
                                                        options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
                                                          error:&error];
@@ -337,6 +345,13 @@ static KPParseCoreData *sharedObject;
     NSURLResponse *response;
     
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSLog(@"response");
+    if(error || !resData){
+        NSLog(@"didn't return");
+        self._isSyncing = NO;
+        return NO;
+    }
+#warning test what happens on corrupted data
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     NSLog(@"respo:%@ error:%@",result,error);
     if(error){
@@ -346,12 +361,11 @@ static KPParseCoreData *sharedObject;
     NSArray *tags = [result objectForKey:@"Tag"] ? [result objectForKey:@"Tag"] : @[];
     NSArray *tasks = [result objectForKey:@"ToDo"] ? [result objectForKey:@"ToDo"] : @[];
     NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
-    
     lastUpdate = [result objectForKey:@"updateTime"];
     [result objectForKey:@"serverTime"];
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
     for(NSDictionary *object in allObjects){
-        [self handleCDObject:nil withPFObject:object inContext:localContext];
+        [self handleCDObject:nil withObject:object inContext:localContext];
     }
     
     [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
@@ -363,7 +377,6 @@ static KPParseCoreData *sharedObject;
         if (lastUpdate)
             [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastSync"];
         DUMPDB;
-        NSLog(@"aft: %@",self.tmpUpdatingObjects);
         if(self._needSync) [self synchronizeForce:NO async:async];
     }];
     
@@ -372,33 +385,32 @@ static KPParseCoreData *sharedObject;
 
 
 
-- (void)handleCDObject:(KPParseObject*)cdObject withPFObject:(NSDictionary*)pfObject inContext:(NSManagedObjectContext*)context
+- (void)handleCDObject:(KPParseObject*)cdObject withObject:(NSDictionary*)object inContext:(NSManagedObjectContext*)context
 {
     BOOL shouldDelete = NO;
-    if([[pfObject allKeys] containsObject:@"deleted"]){
-        shouldDelete = [[pfObject objectForKey:@"deleted"] boolValue];
+    if([[object allKeys] containsObject:@"deleted"]){
+        shouldDelete = [[object objectForKey:@"deleted"] boolValue];
     }
     
     Class class;
     if (!cdObject)
-        class = NSClassFromString([KPParseCoreData classNameFromParseName:[pfObject objectForKey:@"parseClassName"]]);
+        class = NSClassFromString([KPParseCoreData classNameFromParseName:[object objectForKey:@"parseClassName"]]);
     else
         class = [cdObject class];
     
     if (shouldDelete) {
-        [class deleteObject:pfObject context:context];
-        if ([self.deleteObjects objectForKey:[pfObject objectForKey:@"objectId"]])
-            [self.deleteObjects removeObjectForKey:[pfObject objectForKey:@"objectId"]];
-        [self._deletedObjects addObject:[pfObject objectForKey:@"objectId"]];
+        [class deleteObject:object context:context];
+        if ([self.deleteObjects objectForKey:[object objectForKey:@"objectId"]])
+            [self.deleteObjects removeObjectForKey:[object objectForKey:@"objectId"]];
+        [self._deletedObjects addObject:[object objectForKey:@"objectId"]];
     }
     else{
-        [self._updatedObjects addObject:[pfObject objectForKey:@"objectId"]];
+        [self._updatedObjects addObject:[object objectForKey:@"objectId"]];
         if (!cdObject)
-            cdObject = [class getCDObjectFromObject:pfObject context:context];
-        [cdObject updateWithObject:pfObject context:context];
+            cdObject = [class getCDObjectFromObject:object context:context];
+        [cdObject updateWithObject:object context:context];
     }
 }
-
 -(void)sendUpdateEvent
 {
     NSDictionary *updatedEvents = @{@"deleted":[self._deletedObjects copy],@"updated":[self._updatedObjects copy]};
@@ -427,6 +439,26 @@ static KPParseCoreData *sharedObject;
     }
 }
 
+-(void)loadTest{
+    NSArray *tagArray = @[
+                          @"home",
+                          @"shopping",
+                          @"work"
+                          ];
+    
+    for(NSString *tag in tagArray){
+        [KPTag addTagWithString:tag save:NO];
+    }
+    [self saveContextForSynchronization:nil];
+    NSInteger i = 0;
+    do {
+        [KPToDo addItem:[NSString stringWithFormat:@"Testing %i",i] priority:NO save:NO];
+        i++;
+    } while (i < 500);
+    [self saveContextForSynchronization:nil];
+}
+
+
 - (void)cleanUp
 {
     NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
@@ -451,7 +483,7 @@ static KPParseCoreData *sharedObject;
     clearNotify();
 }
 
-- (void)seedObjects
+- (void)seedObjectsSave:(BOOL)save
 {
     NSArray *tagArray = @[
                             @"home",

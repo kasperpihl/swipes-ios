@@ -36,16 +36,12 @@
 #define checkNumberWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToNumber:pfValue]) [self setValue:pfValue forKey:cdKey]
 
 +(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority save:(BOOL)save{
-    [KPCORE dumpLocalDb];
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
-    [KPCORE dumpLocalDb];
     newToDo.title = item;
     newToDo.schedule = [NSDate date];
     if(priority) newToDo.priorityValue = 1;
     newToDo.orderValue = kDefOrderVal;
-    [KPCORE dumpLocalDb];
     if(save) [KPToDo save];
-    [KPCORE dumpLocalDb];
     NSString *taskLength = @"50+";
     if(item.length <= 10) taskLength = @"1-10";
     else if(item.length <= 20) taskLength = @"11-20";
@@ -108,6 +104,8 @@
             common2Tags = [NSMutableArray array];
         }
         for(KPTag *tag in toDo.tags){
+            NSLog(@"tag:%@",tag);
+            if(!tag || !tag.title) continue;
             if(counter == 0) [commonTags addObject:tag.title];
             else{
                 if([commonTags containsObject:tag.title]) [common2Tags addObject:tag.title];
@@ -119,9 +117,9 @@
     return commonTags;
 }
 
-
 -(void)updateWithObject:(NSDictionary *)object context:(NSManagedObjectContext *)context{
     [super updateWithObject:object context:context];
+    
     [context performBlockAndWait:^{
         NSDictionary *keyMatch = [self keyMatch];
         NSArray *localChanges = [KPCORE lookupChangedAttributesForObject:[object objectForKey:@"objectId"]];
@@ -140,8 +138,8 @@
                 //NSLog(@"tags:%@",tagsFromServer);
                 NSMutableArray *objectIDs = [NSMutableArray array];
                 
-                for(PFObject *tag in tagsFromServer){
-                    if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:tag.objectId];
+                for(NSDictionary *tag in tagsFromServer){
+                    if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:[tag objectForKey:@"objectId"]];
                 }
                 if(objectIDs.count > 0){
                     NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"%K IN %@",@"objectId",[objectIDs copy]];
@@ -151,6 +149,10 @@
                     NSMutableArray *notSortedTags = [NSMutableArray array];
                     for(NSInteger i = 0 ; i < tagCount ; i++) [tagStrings addObject:[NSNull null]];
                     for(KPTag *tag in tagsObjects){
+                        if(!tag || tag == (id)[NSNull null] || tag.title.length == 0){
+#warning set this object to be synced again if changes happens on this sync part
+                            continue;
+                        }
                         NSInteger index = [objectIDs indexOfObject:tag.objectId];
                         if(index != NSNotFound && index < tagCount) [tagStrings replaceObjectAtIndex:index withObject:tag.title];
                         else{
@@ -160,9 +162,13 @@
                     if(notSortedTags.count > 0){
                         NSInteger counter = 0;
                         for(NSInteger i = 0 ; i < tagCount ; i++){
-                            if([tagStrings objectAtIndex:i] == [NSNull null]) [tagStrings replaceObjectAtIndex:i withObject:[notSortedTags objectAtIndex:counter++]];
+                            if([tagStrings objectAtIndex:i] == [NSNull null]){
+                                counter++;
+                                if(notSortedTags.count < counter) [tagStrings replaceObjectAtIndex:i withObject:[notSortedTags objectAtIndex:counter]];
+                            }
                         }
                     }
+                    [tagStrings removeObjectIdenticalTo:[NSNull null]];
                     self.tagString = [tagStrings componentsJoinedByString:@", "];
                     self.tags = [NSSet setWithArray:tagsObjects];
                     
@@ -378,8 +384,8 @@
     NSInteger counter = kDefOrderVal + 1;
     NSArray *sortedItems = [unorderedItems arrayByAddingObjectsFromArray:orderedItems];
     NSInteger numberOfChanges = 0;
+    if(!unorderedItems || unorderedItems.count == 0) return sortedItems;
     for(KPToDo *toDo in sortedItems){
-        
         if(toDo.orderValue != counter){
             toDo.orderValue = counter;
             numberOfChanges++;
@@ -543,9 +549,10 @@
         self.repeatOptionValue = RepeatNever;
     }
     CellType oldCell = [self cellTypeForTodo];
-    self.completionDate = nil;
     self.schedule = date;
-    self.orderValue = kDefOrderVal;
+    /* If this task was completed less than 15 minutes ago - don't put at the top of the stack but in it's old place */
+    if(self.completionDate && [self.completionDate minutesBeforeDate:[NSDate date]] > 15) self.orderValue = kDefOrderVal;
+    self.completionDate = nil;
     CellType newCell = [self cellTypeForTodo];
     return (oldCell != newCell);
 }

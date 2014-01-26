@@ -32,9 +32,7 @@
             self.objectId = [object objectForKey:@"objectId"];
             self.createdAt = [dateFormatter dateFromString:[object objectForKey:@"createdAt"]];
         }
-        NSLog(@"%@",[object objectForKey:@"updatedAt"]);
         self.updatedAt = [dateFormatter dateFromString:[object objectForKey:@"updatedAt"]];
-        NSLog(@"c %@ u %@",self.createdAt,[dateFormatter dateFromString:[object objectForKey:@"updatedAt"]]);
     }];
 }
 #pragma mark - Instantiate object

@@ -18,7 +18,7 @@
 @property (nonatomic) NSMutableDictionary *updateObjects;
 
 -(void)cleanUp;
--(void)seedObjects;
+-(void)seedObjectsSave:(BOOL)save;
 -(NSArray*)lookupChangedAttributesForObject:(NSString*)objectId;
 -(void)saveContextForSynchronization:(NSManagedObjectContext*)context;
 - (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async;
