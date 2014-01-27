@@ -59,6 +59,7 @@
 @property (nonatomic) BOOL hasAppeared;
 @property (nonatomic) BOOL hidden;
 @property (nonatomic) UIImageView *backgroundImage;
+@property (nonatomic) NSArray *selectedItems;
 
 @end
 
@@ -81,8 +82,7 @@
 
 #pragma mark - KPTagDelegate
 -(NSArray *)selectedTagsForTagList:(KPTagList *)tagList{
-    NSArray *selectedItems = [[self currentViewController] selectedItems];
-    NSArray *selectedTags = [KPToDo selectedTagsForToDos:selectedItems];
+    NSArray *selectedTags = [KPToDo selectedTagsForToDos:self.selectedItems];
     return selectedTags;
 }
 -(NSArray *)tagsForTagList:(KPTagList *)tagList{
@@ -90,13 +90,11 @@
     return allTags;
 }
 -(void)tagList:(KPTagList *)tagList selectedTag:(NSString *)tag{
-    NSArray *selectedItems = [[self currentViewController] selectedItems];
-    [KPToDo updateTags:@[tag] forToDos:selectedItems remove:NO save:YES];
+    [KPToDo updateTags:@[tag] forToDos:self.selectedItems remove:NO save:YES];
     [[self currentViewController] didUpdateItemHandler:nil];
 }
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString *)tag{
-    NSArray *selectedItems = [[self currentViewController] selectedItems];
-    [KPToDo updateTags:@[tag] forToDos:selectedItems remove:YES save:YES];
+    [KPToDo updateTags:@[tag] forToDos:self.selectedItems remove:YES save:YES];
     [[self currentViewController] didUpdateItemHandler:nil];
 }
 -(void)tagList:(KPTagList *)tagList deletedTag:(NSString *)tag{
@@ -119,7 +117,7 @@
     [[self currentViewController] pressedEdit];
 }
 -(void)pressedTag:(id)sender{
-    [self tagViewWithDismissAction:^{
+    [self tagItems:[[self currentViewController] selectedItems] inViewController:self withDismissAction:^{
         [[self currentViewController] deselectAllRows:self];
     }];
 }
@@ -140,32 +138,41 @@
     BLURRY.blurryTopColor = gray(230, 0.5);
     [BLURRY showView:alert inViewController:self];
 }
--(void)tagViewWithDismissAction:(voidBlock)block{
+-(void)tagItems:(NSArray *)items inViewController:(UIViewController*)viewController withDismissAction:(voidBlock)block{
+    self.selectedItems = items;
     //[self show:NO controlsAnimated:YES];
-    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:self.view.bounds andTags:[KPTag allTagsAsStrings]];
+    KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:viewController.view.bounds andTags:[KPTag allTagsAsStrings]];
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     BLURRY.showPosition = PositionBottom;
     BLURRY.blurryTopColor = alpha(tbackground(BackgroundColor),0.3);
-    if(block) BLURRY.dismissAction = block;
-    [BLURRY showView:tagView inViewController:self];
+    if(block) BLURRY.dismissAction = ^{
+        self.selectedItems = nil;
+        block();
+    };
+    [BLURRY showView:tagView inViewController:viewController];
+}
+-(void)deleteNumberOfItems:(NSInteger)numberOfItems inView:(UIViewController*)viewController completion:(SuccessfulBlock)block{
+    NSString *endString = (numberOfItems > 1) ? @"tasks" : @"task";
+    NSString *titleString = [NSString stringWithFormat:@"Delete %i %@",numberOfItems,endString];
+    NSString *thisTheseString = (numberOfItems > 1) ? @"these" : @"this";
+    NSString *messageString = [NSString stringWithFormat:@"Are you sure you want to permanently delete %@ %@?",thisTheseString,endString];
+    KPAlert *alert = [KPAlert alertWithFrame:viewController.view.bounds title:titleString message:messageString block:^(BOOL succeeded, NSError *error) {
+        [BLURRY dismissAnimated:YES];
+        block(succeeded,error);
+    }];
+    BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
+    [BLURRY showView:alert inViewController:viewController];
 }
 -(void)pressedDelete:(id)sender{
     NSInteger numberOfTasks = [self currentViewController].selectedItems.count;
-    NSString *endString = (numberOfTasks > 1) ? @"tasks" : @"task";
-    NSString *titleString = [NSString stringWithFormat:@"Delete %i %@",numberOfTasks,endString];
-    endString = (numberOfTasks > 1) ? @"these tasks" : @"this task";
-    NSString *messageString = [NSString stringWithFormat:@"Are you sure you want to permanently delete %@?",endString];
-    KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:titleString message:messageString block:^(BOOL succeeded, NSError *error) {
-        [BLURRY dismissAnimated:YES];
+    [self deleteNumberOfItems:numberOfTasks inView:self completion:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             ToDoListViewController *viewController = [self currentViewController];
             [viewController deleteSelectedItems:self];
             [self setCurrentState:KPControlCurrentStateAdd];
         }
     }];
-    BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
-    [BLURRY showView:alert inViewController:self];
 }
 #pragma mark - AddPanelDelegate
 -(void)didAddItem:(NSString *)item priority:(BOOL)priority{
@@ -211,7 +218,7 @@
             break;
     }
     UIImage *normalImage = [UIImage imageNamed:imageString];
-    UIImage *selectedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-selected"]];
+    UIImage *selectedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-high"]];
     UIImage *highlightedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-highlighted"]];;
     [button setImage:normalImage forState:UIControlStateNormal];
     [button setImage:selectedImage forState:UIControlStateSelected];
@@ -236,7 +243,6 @@
 	return [self initWithViewControllers:viewControllers titles:[viewControllers valueForKeyPath:@"@unionOfObjects.title"]];
 }
 -(void)pressedSettings{
-    
     [ROOT_CONTROLLER.sideMenu showForce:YES];
 }
 - (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles {
@@ -287,12 +293,6 @@
 -(void)setLock:(BOOL)lock{
     [self setLock:lock animated:YES];
 }
--(void)setFullscreenMode:(BOOL)fullscreenMode{
-    if(_fullscreenMode != fullscreenMode){
-        _fullscreenMode = fullscreenMode;
-        [self showNavbar:!fullscreenMode animated:NO];
-    }
-}
 -(void)setBackgroundMode:(BOOL)backgroundMode{
     if(_backgroundMode != backgroundMode){
         _backgroundMode = backgroundMode;
@@ -309,39 +309,6 @@
         if(finished){
         }
     }];
-}
--(void)showNavbar:(BOOL)show animated:(BOOL)animated{
-    if(!show){
-        //[self.view bringSubviewToFront:self.contentView];
-        CGFloat y = 3; //TOP_Y
-        //self.segmentedControl.alpha = 0;
-        
-        
-        CGRectSetHeight(self.contentView,self.view.frame.size.height-y);
-        if(OSVER >= 7) [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-        [UIView animateWithDuration:0.25f animations:^{
-            CGRectSetY(self.contentView, y);
-            self.ios7BackgroundView.alpha = 0;
-        } completion:^(BOOL finished) {
-            if(finished){
-                self.ios7BackgroundView.hidden = YES;
-            }
-        }];
-    }
-    else{
-        self.ios7BackgroundView.hidden = NO;
-        CGRectSetY(self.contentView, self.ios7BackgroundView.frame.size.height);
-        if(OSVER >= 7)[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-        CGRectSetHeight(self.contentView, self.view.frame.size.height-self.ios7BackgroundView.frame.size.height);
-        
-        [UIView animateWithDuration:0.25f animations:^{
-            self.ios7BackgroundView.alpha = 1;
-            
-            
-        } completion:^(BOOL finished) {
-            
-        }];
-    }
 }
 -(void)show:(BOOL)show controlsAnimated:(BOOL)animated{
     if(show){
@@ -364,12 +331,9 @@
 - (void)updateFromSync:(NSNotification *)notification
 {
     
-    NSDictionary *changeEvent = [notification userInfo];
+    //NSDictionary *changeEvent = [notification userInfo];
     //NSArray *updatedObjects = [changeEvent objectForKey:@"updated"];
-    NSArray *deletedObjects = [changeEvent objectForKey:@"deleted"];
-    if([deletedObjects containsObject:self.showingModel.objectId]){
-        self.showingModel = nil;
-    }
+    //NSArray *deletedObjects = [changeEvent objectForKey:@"deleted"];
     [self.currentViewController update];
 }
 -(void)viewDidLoad{
@@ -458,7 +422,6 @@
     return currentViewController;
 }
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl{
-    self.showingModel = nil;
     [self changeViewControllerAnimated:YES];
 }
 -(void)dealloc{

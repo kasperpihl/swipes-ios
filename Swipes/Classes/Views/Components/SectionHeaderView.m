@@ -11,15 +11,61 @@
 #define kDefTopPadding 1
 #define kDefBottomPadding 3
 #import "SectionHeaderView.h"
-@interface SectionHeaderView ()
-@property (nonatomic) UIColor *color;
+
+/*  */
+@interface _SectionHeaderViewText : UIView
+-(id)initWithColor:(UIColor *)color font:(UIFont*)font title:(NSString*)title;
+-(void)setText:(NSString*)text;
 @property (nonatomic) IBOutlet UILabel *titleLabel;
+@property (nonatomic) UIColor *color;
+@property (nonatomic) UIColor *fillColor;
+
+@end
+
+
+@interface SectionHeaderView ()
+
+@property (nonatomic) _SectionHeaderViewText *sectionHeader;
 @end
 @implementation SectionHeaderView
--(void)setTextColor:(UIColor *)textColor{
-    _textColor = textColor;
-    self.titleLabel.textColor = textColor;
+-(id)initWithColor:(UIColor *)color font:(UIFont *)font title:(NSString *)title{
+    self = [super init];
+    if (self) {
+        CGRectSetSize(self, 320, LINE_SIZE);
+        self.backgroundColor = color;
+        self.sectionHeader = [[_SectionHeaderViewText alloc] initWithColor:color font:font title:title];
+        NSLog(@"%f - %f",CGRectGetWidth(self.frame),CGRectGetWidth(self.sectionHeader.frame));
+        CGRectSetX(self.sectionHeader, CGRectGetWidth(self.frame) - CGRectGetWidth(self.sectionHeader.frame));
+        [self addSubview:self.sectionHeader];
+        self.color = color;
+        
+    }
+    return self;
 }
+
+-(void)setColor:(UIColor *)color{
+    self.backgroundColor = color;
+    self.sectionHeader.color = color;
+    [self.sectionHeader setNeedsDisplay];
+}
+-(void)setFillColor:(UIColor *)fillColor{
+    self.sectionHeader.fillColor = fillColor;
+    [self.sectionHeader setNeedsDisplay];
+}
+-(void)setFont:(UIFont *)font{
+    self.sectionHeader.titleLabel.font = font;
+    [self.sectionHeader setNeedsDisplay];
+}
+-(void)setTextColor:(UIColor *)textColor{
+    self.sectionHeader.titleLabel.textColor = textColor;
+}
+-(void)setTitle:(NSString *)title{
+    [self.sectionHeader setText:title];
+    [self.sectionHeader setNeedsDisplay];
+}
+@end
+
+@implementation _SectionHeaderViewText
 -(id)initWithColor:(UIColor *)color font:(UIFont*)font title:(NSString*)title{
     self = [super init];
     if (self) {
@@ -27,24 +73,33 @@
         
         self.color = color;
         self.backgroundColor = CLEAR;
-        self.textColor = tcolor(TextColor);
-        CGSize textSize = sizeWithFont(title, font);
-        CGFloat actualHeight = textSize.height+kDefTopPadding+kDefBottomPadding;
-        CGFloat leftPadding = (actualHeight*kDefLeftCutSize) + kDefLeftPadding;
-        CGFloat actualWidth = textSize.width + leftPadding + kDefRightPadding ;
+        self.fillColor = tbackground(BackgroundColor);
         
-        CGRectSetSize(self, actualWidth, actualHeight);
+        
+        
+        
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:self.bounds];
         titleLabel.font = font;
-        titleLabel.textColor = self.textColor;
-        titleLabel.text = title;
-        [titleLabel sizeToFit];
+        titleLabel.textColor = tcolor(TextColor);
+        
         titleLabel.backgroundColor = CLEAR;
-        titleLabel.frame = CGRectSetPos(titleLabel.frame,leftPadding , kDefTopPadding);
+        
         self.titleLabel = titleLabel;
         [self addSubview:self.titleLabel];
+        if(title) [self setText:title];
     }
     return self;
+}
+-(void)setText:(NSString*)text{
+    self.titleLabel.text = text;
+    [self.titleLabel sizeToFit];
+    CGSize textSize = sizeWithFont(text, self.titleLabel.font);
+    CGFloat actualHeight = textSize.height+kDefTopPadding+kDefBottomPadding;
+    CGFloat leftPadding = (actualHeight*kDefLeftCutSize) + kDefLeftPadding;
+    CGFloat actualWidth = textSize.width + leftPadding + kDefRightPadding;
+    self.titleLabel.frame = CGRectSetPos(self.titleLabel.frame,leftPadding , kDefTopPadding);
+    CGRectSetSize(self, ceilf(actualWidth), ceilf(actualHeight));
+    CGRectSetX(self, 320-self.frame.size.width);
 }
 - (void)drawRect:(CGRect)rect
 {
@@ -65,7 +120,7 @@
     [aPath addLineToPoint:CGPointMake(0, 0)];
     [aPath closePath];
     CGContextAddPath(currentContext, aPath.CGPath);
-    UIColor *fillColor = self.fullShape ? self.color : tbackground(BackgroundColor);
+    UIColor *fillColor = self.fillColor;
     CGContextSetFillColorWithColor(currentContext,fillColor.CGColor);
     CGContextFillPath(currentContext);
     
@@ -84,7 +139,6 @@
     CGContextAddLineToPoint(currentContext, targetX, targetY);
     CGContextStrokePath(currentContext);
 }
-
 -(void)dealloc{
     self.titleLabel = nil;
 }

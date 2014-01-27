@@ -16,7 +16,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection){
 };
 
 typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
-    MCSwipeTableViewCellModeExit = 0,
+    MCSwipeTableViewCellModeNone = 0,
+    MCSwipeTableViewCellModeExit,
     MCSwipeTableViewCellModeSwitch
 };
 
@@ -44,6 +45,19 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
 @property(nonatomic, strong) UIColor *thirdColor;
 @property(nonatomic, strong) UIColor *fourthColor;
 @property(nonatomic, strong) UIColor *noneColor;
+
+
+/** 1st `MCSwipeTableViewCellMode` of the state triggered during a Left -> Right swipe. */
+@property (nonatomic, assign, readwrite) MCSwipeTableViewCellMode modeForState1;
+
+/** 2nd `MCSwipeTableViewCellMode` of the state triggered during a Left -> Right swipe. */
+@property (nonatomic, assign, readwrite) MCSwipeTableViewCellMode modeForState2;
+
+/** 1st `MCSwipeTableViewCellMode` of the state triggered during a Right -> Left swipe. */
+@property (nonatomic, assign, readwrite) MCSwipeTableViewCellMode modeForState3;
+
+/** 2nd `MCSwipeTableViewCellMode` of the state triggered during a Right -> Left swipe. */
+@property (nonatomic, assign, readwrite) MCSwipeTableViewCellMode modeForState4;
 
 @property(nonatomic, assign) MCSwipeTableViewCellActivatedDirection activatedDirection;
 @property(nonatomic, assign) MCSwipeTableViewCellMode mode;

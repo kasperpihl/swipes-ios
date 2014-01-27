@@ -121,7 +121,7 @@
         /* Add all deleted objects with objectId to be deleted*/
         for(KPParseObject *object in deletedObjects){
             if(object.objectId)
-                [self.deleteObjects setObject:object.parseClassName forKey:object.objectId];
+                [self.deleteObjects setObject:[object getParseClassName] forKey:object.objectId];
         }
     }];
     [context MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {

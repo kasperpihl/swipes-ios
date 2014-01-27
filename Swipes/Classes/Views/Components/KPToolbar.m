@@ -19,9 +19,10 @@
 @property (nonatomic) NSInteger numberOfButtons;
 @end
 @implementation KPToolbar
--(id)initWithFrame:(CGRect)frame items:(NSArray *)items{
+-(id)initWithFrame:(CGRect)frame items:(NSArray *)items delegate:(NSObject<ToolbarDelegate> *)delegate{
     self = [self initWithFrame:frame];
     if(self){
+        if(delegate) self.delegate = delegate;
         self.items = items;
     }
     return self;
@@ -48,7 +49,7 @@
             CIImage *cim = [highlightImage CIImage];
             CGImageRef cgref = [highlightImage CGImage];
             
-            SlowHighlightIcon *button = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
+            UIButton *button = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
             [button setImage:itemImage forState:UIControlStateNormal];
             if (cim != nil || cgref != NULL)
             {
@@ -57,6 +58,9 @@
             button.frame = [self frameForButtonNumber:buttonCounter];
             button.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
             [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
+            if([self.delegate respondsToSelector:@selector(toolbar:editButton:forItem:)]){
+                [self.delegate toolbar:self editButton:&button forItem:buttonCounter];
+            }
             [barButtons addObject:button];
             [self addSubview:button];
             buttonCounter++;

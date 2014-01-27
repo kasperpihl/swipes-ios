@@ -10,6 +10,9 @@
 
 @interface SectionHeaderView : UIView
 -(id)initWithColor:(UIColor *)color font:(UIFont*)font title:(NSString*)title;
+@property (nonatomic) UIColor *color;
 @property (nonatomic) UIColor *textColor;
-@property (nonatomic) BOOL fullShape;
+@property (nonatomic) UIColor *fillColor;
+@property (nonatomic) UIFont *font;
+@property (nonatomic) NSString *title;
 @end

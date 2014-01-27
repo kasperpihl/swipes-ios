@@ -20,6 +20,9 @@
 #import "AnalyticsHandler.h"
 #import "StyleHandler.h"
 #import "KPTagList.h"
+
+
+#import "RootViewController.h"
 #define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
@@ -42,8 +45,6 @@
 @property (nonatomic) CellType cellType;
 @property (nonatomic,strong) KPSearchBar *searchBar;
 @property (nonatomic) NSMutableArray *selectedRows;
-@property (nonatomic) CGPoint lastOffset;
-@property (nonatomic) NSTimeInterval lastOffsetCapture;
 @property (nonatomic,weak) IBOutlet UIView *menuText;
 @property (nonatomic,weak) UIView *fakeHeaderView;
 @property (nonatomic) BOOL isColored;
@@ -77,49 +78,15 @@
     [self didUpdateCells];
     [self showBackgroundItems:(itemNumber == 0)];
     self.searchBar.hidden = (itemNumber == 0);
-    if(!self.parent.showingModel) self.parent.fullscreenMode = NO;
-    if(itemNumber == 0) self.parent.fullscreenMode = NO;
     
 }
 -(void)showBackgroundItems:(BOOL)show{
     self.menuText.hidden = !show;
     self.backgroundImage.hidden = !show;
 }
--(void)setIsShowingItem:(BOOL)isShowingItem{
-    
-    self.tableView.scrollEnabled = !isShowingItem;
-    if(isShowingItem){
-        [[self parent] setLock:isShowingItem animated:NO];
-        [self selectShowingItem];
-    }
-    else if (_isShowingItem != isShowingItem){
-        [[self parent] setLock:NO];
-        [self.showingViewController.view removeFromSuperview];
-        if(!self.parent.showingModel) self.parent.fullscreenMode = NO;
-    }
-    _isShowingItem = isShowingItem;
-}
--(void)selectShowingItem{
-    NSIndexPath *indexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
-    if(!indexPath) return;
-    [self deselectAllRows:self];
-    [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-    [self.selectedRows addObject:indexPath];
-}
 -(void)didUpdateItemHandler:(ItemHandler *)handler{
     [self willUpdateCells];
     [self.tableView reloadData];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if(self.isShowingItem){
-            [self selectShowingItem];
-            NSIndexPath *cellIndexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
-            NSInteger numberOfCellsBefore = [self.itemHandler totalNumberOfItemsBeforeItem:self.parent.showingModel];
-            NSInteger numberOfSections = cellIndexPath.section;
-            CGFloat contentY = self.tableView.tableHeaderView.frame.size.height + numberOfCellsBefore * CELL_HEIGHT + numberOfSections * SECTION_HEADER_HEIGHT;
-            [self.tableView setContentOffset:CGPointMake(0,contentY) animated:NO];
-        }
-        [self didUpdateCells];
-    });
 }
 -(KPSegmentedViewController *)parent{
     KPSegmentedViewController *parent = (KPSegmentedViewController*)[self parentViewController];
@@ -144,16 +111,10 @@
     [self.itemHandler reloadData];
 }
 -(void)willUpdateCells{
-    if(self.parent.showingModel && [self.itemHandler.filteredItems containsObject:self.parent.showingModel]){
-        self.isShowingItem = YES;
-    }else self.isShowingItem = NO;
-    if(self.parent.showingModel && !self.isShowingItem && [self.itemHandler.items containsObject:self.parent.showingModel]) self.parent.showingModel = nil;
+    
 }
 -(void)didUpdateCells{
     [self.searchBar reloadDataAndUpdate:YES];
-    //|| self.searchBar.currentMode != KPSearchBarModeNone
-    if(self.parent.showingModel) self.parent.fullscreenMode = YES;
-    else self.parent.fullscreenMode = NO;
 }
 -(NSMutableArray *)selectedRows{
     if(!_selectedRows) _selectedRows = [NSMutableArray array];
@@ -191,31 +152,11 @@
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     NSString *title = [[self.itemHandler titleForSection:section] uppercaseString];
     UIFont *font = SECTION_HEADER_FONT;
-    SectionHeaderView *extraView = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:self.cellType] font:font title:title];
-    /*if(self.parent.fullscreenMode){
-        extraView.fullShape = YES;
-        extraView.textColor = gray(0, 1);
-    }*/
-    UIColor *backgroundColor = [StyleHandler colorForCellType:self.cellType];
-    CGFloat colorStartingX = 0; // CELL_LABEL_X/2;//0;
-    //
-    UIView *colorView = [[UIView alloc] initWithFrame:CGRectMake(colorStartingX, 0, tableView.bounds.size.width-colorStartingX-extraView.frame.size.width, SECTION_HEADER_HEIGHT)];
-    colorView.backgroundColor = backgroundColor;
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, SECTION_HEADER_HEIGHT)];
-    
-    [headerView addSubview:colorView];
-    
-    CGRectSetX(extraView, 320-extraView.frame.size.width);
-    [headerView addSubview:extraView];
-    return headerView;
+    SectionHeaderView *sectionHeader = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:self.cellType] font:font title:title];
+    return sectionHeader;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if(self.parent.showingModel && [[self.itemHandler itemForIndexPath:indexPath] isEqual:self.parent.showingModel]){
-        return self.tableView.frame.size.height-SECTION_HEADER_HEIGHT;
-    }
-    else{
-        return CELL_HEIGHT;
-    }
+    return CELL_HEIGHT;
 }
 -(ToDoCell*)readyCell:(ToDoCell*)cell{
     [cell setMode:MCSwipeTableViewCellModeExit];
@@ -238,10 +179,6 @@
     cell.cellType = [toDo cellTypeForTodo];
     [cell setDotColor:self.cellType];
     [cell changeToDo:toDo withSelectedTags:self.itemHandler.selectedTags];
-    if([toDo isEqual:self.parent.showingModel]){
-        self.showingViewController.model = toDo;
-        [self.showingViewController injectInCell:cell];
-    }
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.selectedRows removeObject:indexPath];
@@ -249,6 +186,8 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
+    NSLog(@"%@",toDo);
     if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
     [self parent].currentState = KPControlCurrentStateEdit;
 }
@@ -266,26 +205,14 @@
         CGPoint p = [tap locationInView:tap.view];
         NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
         if(!indexPath) return;
-        if(self.parent.showingModel && [[self.itemHandler itemForIndexPath:indexPath] isEqual:self.parent.showingModel]) [self didPressCloseToDoViewController:self.showingViewController];
-        else [self editIndexPath:indexPath];
+        [self editIndexPath:indexPath];
     }
 }
 -(void)editIndexPath:(NSIndexPath *)indexPath{
     
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
-    self.parent.fullscreenMode = YES;
-    [self.searchBar resignSearchField];
-    self.parent.showingModel = toDo;
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self deselectAllRows:self];
-    self.isShowingItem = YES;
-    
-    ToDoCell *cell = (ToDoCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-    self.savedContentOffset = self.tableView.contentOffset;
-    self.savedOffset = YES;
-    [self.tableView setContentOffset:CGPointMake(0, cell.frame.origin.y-SECTION_HEADER_HEIGHT) animated:YES];
-    
-    
+    self.showingViewController.model = toDo;
+    [ROOT_CONTROLLER pushViewController:self.showingViewController animated:YES];
 }
 -(void)pressedEdit{
     NSIndexPath *indexPath;
@@ -293,46 +220,13 @@
     if(indexPath) [self editIndexPath:indexPath];
 }
 -(void)didPressCloseToDoViewController:(ToDoViewController *)viewController{
-    
-    NSIndexPath *indexPath = [self.itemHandler indexPathForItem:self.parent.showingModel];
-    self.parent.showingModel = nil;
-    //if(self.searchBar.currentMode == KPSearchBarModeNone)
-    self.parent.fullscreenMode = NO;
-    [self deselectAllRows:self];
-    self.isShowingItem = NO;
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    if(self.savedOffset){
-        if (CGPointEqualToPoint(self.savedContentOffset, CGPointZero)) self.savedContentOffset = CGPointMake(0,self.searchBar.frame.size.height);
-        [self.tableView setContentOffset:self.savedContentOffset animated:YES];
-        self.savedContentOffset = CGPointZero;
-        self.savedOffset = NO;
-    }
-    [[self parent] show:YES controlsAnimated:YES];
+    [ROOT_CONTROLLER popViewControllerAnimated:YES];
 }
 -(void)scheduleToDoViewController:(ToDoViewController *)viewController{
-    SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate) {
-        [BLURRY dismissAnimated:YES];
-        if(button != KPScheduleButtonCancel){
-            if(!self.parent.showingModel) return;
-            [KPToDo scheduleToDos:@[self.parent.showingModel] forDate:chosenDate save:YES];
-            [self.parent.showingModel setRepeatOption:self.parent.showingModel.repeatOptionValue save:YES];
-            if(self.cellType == CellTypeSchedule){
-                [self.showingViewController update];
-                [self update];
-            }
-            else{
-                [self.parent changeToIndex:0];
-                [self cleanUpAfterMovingAnimated:NO];
-            }
-        }
-    }];
-    popup.numberOfItems = 1;
-    BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
-    [BLURRY showView:popup inViewController:self.parent];
+    
 }
 #pragma mark - UI Specific
 -(NSArray *)selectedItems{
-    if(self.isShowingItem) return @[self.parent.showingModel];
     NSMutableArray *array = [NSMutableArray array];
     for(NSIndexPath *indexPath in self.selectedRows){
         KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
@@ -344,23 +238,6 @@
 
 #pragma mark - ScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    CGPoint currentOffset = self.tableView.contentOffset;
-    NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
-    NSTimeInterval timeDiff = currentTime - self.lastOffsetCapture;
-    if(timeDiff > 0.1) {
-        CGFloat distance = currentOffset.y - self.lastOffset.y;
-        //The multiply by 10, / 1000 isn't really necessary.......
-        CGFloat scrollSpeedNotAbs = (distance * 10) / 1000; //in pixels per millisecond
-        if (scrollSpeedNotAbs > 0.5 && currentOffset.y > 0) {
-            if(self.searchBar.currentMode == KPSearchBarModeSearch) [self.searchBar resignSearchField];
-            [[self parent] show:NO controlsAnimated:YES];
-        }
-        else if(scrollSpeedNotAbs < -0.5){
-            if((self.tableView.frame.size.height > self.tableView.contentSize.height && currentOffset.y < 0) || (currentOffset.y+self.tableView.frame.size.height) < self.tableView.contentSize.height+CONTENT_INSET_BOTTOM) [[self parent] show:YES controlsAnimated:YES];
-        }
-        self.lastOffset = currentOffset;
-        self.lastOffsetCapture = currentTime;
-    }
     if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
         if (scrollView.contentOffset.y < self.searchBar.frame.size.height) {
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, 0, 0);
@@ -478,7 +355,6 @@
     }
     NSIndexSet *deletedSections = [self.itemHandler removeItems:items];
     if(self.selectedRows.count != indexPaths.count){
-        if(self.isShowingItem) self.parent.showingModel = nil;
         [self update];
         [self cleanUpAfterMovingAnimated:YES];
         
@@ -491,7 +367,6 @@
             [self cleanUpAfterMovingAnimated:YES];
         }];
         @try {
-            if(self.isShowingItem) self.parent.showingModel = nil;
             [self willUpdateCells];
             [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
             if(deletedSections && deletedSections.count > 0) [self.tableView deleteSections:deletedSections withRowAnimation:UITableViewRowAnimationFade];
@@ -522,7 +397,6 @@
 }
 -(void)cleanUpAfterMovingAnimated:(BOOL)animated{
     [self.selectedRows removeAllObjects];
-    self.isShowingItem = NO;
     self.isLonelyRider = NO;
     self.swipingCell = nil;
     [self didUpdateCells];

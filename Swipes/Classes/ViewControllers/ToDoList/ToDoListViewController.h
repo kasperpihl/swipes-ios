@@ -19,7 +19,6 @@
 @property (nonatomic,strong) ItemHandler *itemHandler;
 @property (nonatomic,strong) NSString *state;
 @property (nonatomic,weak) IBOutlet UITableView *tableView;
-@property (nonatomic) BOOL isShowingItem;
 -(KPSegmentedViewController *)parent;
 -(ToDoCell*)readyCell:(ToDoCell*)cell;
 -(void)deselectAllRows:(id)sender;

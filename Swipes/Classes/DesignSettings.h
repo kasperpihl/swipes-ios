@@ -27,6 +27,8 @@
 #define KEYBOARD_HEIGHT                 216.0f
 #define KEYBOARD_ANIMATION_DURATION     0.25f
 #define GLOBAL_WT_TABLE_WIDTH           232.0f
+#define CELL_LABEL_X 44
+
 #define KP_LIGHT(fontSize)              [UIFont fontWithName:@"ProximaNova-Light" size:fontSize]
 #define KP_BLACK(fontSize)              [UIFont fontWithName:@"ProximaNova-Black" size:fontSize]
 #define KP_REGULAR(fontSize)            [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize]

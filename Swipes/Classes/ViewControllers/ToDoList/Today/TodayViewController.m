@@ -105,10 +105,6 @@
     [self parent].lock = NO;
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
--(void)setIsShowingItem:(BOOL)isShowingItem{
-    [super setIsShowingItem:isShowingItem];
-    [self.tableView setReorderingEnabled:!isShowingItem];
-}
 #pragma mark - UIViewControllerClasses
 -(void)updateBackground{
     BOOL isFacebookAvailable = ([[UIDevice currentDevice].systemVersion floatValue] >= 6 && [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]);

@@ -105,7 +105,7 @@
     }];
 }
 -(void)didLoginUser:(PFUser*)user{
-    if(user.isNew) [[KPParseCoreData sharedInstance] seedObjects];
+    if(user.isNew) [[KPParseCoreData sharedInstance] seedObjectsSave:YES];
     if(user.isNew) {
         [ANALYTICS tagEvent:@"Signed Up" options:@{}];
     }

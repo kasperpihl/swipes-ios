@@ -162,11 +162,21 @@ secondStateIconName:(NSString *)secondIconName
         _currentImageName = [self imageNameWithPercentage:percentage];
         _currentPercentage = percentage;
         MCSwipeTableViewCellState cellState= [self stateWithPercentage:percentage];
-        // TODO: Build in forced moving
-        if (_mode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState])
+        MCSwipeTableViewCellMode cellMode = self.mode;
+        if(cellState == MCSwipeTableViewCellState1 && _modeForState1)
+            cellMode = _modeForState1;
+        else if(cellState == MCSwipeTableViewCellState2 && _modeForState2)
+            cellMode = _modeForState2;
+        else if(cellState == MCSwipeTableViewCellState3 && _modeForState3)
+            cellMode = _modeForState3;
+        else if(cellState == MCSwipeTableViewCellState4 && _modeForState4)
+            cellMode = _modeForState4;
+        
+        if (cellMode == MCSwipeTableViewCellModeExit && _direction != MCSwipeTableViewCellDirectionCenter && [self validateState:cellState])
             [self moveWithDuration:animationDuration andDirection:_direction];
-        else
-            [self bounceToOrigin];
+        else{
+            [self bounceToOriginAndNotifity:YES];
+        }
     }
 }
 -(void)switchToState:(MCSwipeTableViewCellState)state{
@@ -500,10 +510,12 @@ secondStateIconName:(NSString *)secondIconName
                          [self notifyDelegate];
                      }];
 }
-
-- (void)bounceToOrigin {
+-(void)bounceToOrigin{
+    [self bounceToOriginAndNotifity:NO ];
+}
+- (void)bounceToOriginAndNotifity:(BOOL)notify{
     CGFloat bounceDistance = self.bounceAmplitude * _currentPercentage;
-    if(self.mode != MCSwipeTableViewCellModeSwitch) self.didRegret = YES;
+    self.didRegret = YES;
     [UIView animateWithDuration:kMCBounceDuration1
                           delay:0
                         options:(UIViewAnimationOptionCurveEaseOut)
@@ -525,7 +537,7 @@ secondStateIconName:(NSString *)secondIconName
                                               [self.contentView setFrame:frame];
                                           }
                                           completion:^(BOOL finished2) {
-                                              [self notifyDelegate];
+                                              if(notify)[self notifyDelegate];
                                               self.didRegret = NO;
                                           }];
                      }];

@@ -509,11 +509,10 @@ typedef enum {
     self.calendarView.dayOfWeekTextColor = tcolor(TextColor);
     self.calendarView.adaptHeightToNumberOfWeeksInMonth = YES;
     
-    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-kToolbarHeight, self.contentView.frame.size.width, kToolbarHeight-kToolbarPadding) items:@[@"round_backarrow_big",@"round_checkmark_big"]];
+    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-kToolbarHeight, self.contentView.frame.size.width, kToolbarHeight-kToolbarPadding) items:@[@"round_backarrow_big",@"round_checkmark_big"] delegate:self];
     self.toolbar.hidden = YES;
     self.toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     self.toolbar.backgroundColor = CLEAR;
-    self.toolbar.delegate = self;
 
     [self.contentView addSubview:self.toolbar];
     [self.contentView addSubview:self.calendarView];

@@ -14,18 +14,20 @@
 @property (nonatomic, readonly, strong) AKSegmentedControl *segmentedControl;
 @property (nonatomic) KPControlCurrentState currentState;
 @property (nonatomic) BOOL lock;
-@property (nonatomic) BOOL fullscreenMode;
 @property (nonatomic) BOOL backgroundMode;
-@property (nonatomic) KPToDo *showingModel;
 -(void)setLock:(BOOL)lock animated:(BOOL)animated;
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 -(void)highlightButton:(KPSegmentButtons)controlButton;
 -(void)show:(BOOL)show controlsAnimated:(BOOL)animated;
 -(void)receivedLocalNotification:(UILocalNotification*)notification;
 -(ToDoListViewController*)currentViewController;
--(void)tagViewWithDismissAction:(voidBlock)block;
 -(void)pressedDelete:(id)sender;
 -(void)pressedShare:(id)sender;
 -(void)changeToIndex:(NSInteger)index;
+
+
+-(void)tagItems:(NSArray *)items inViewController:(UIViewController*)viewController withDismissAction:(voidBlock)block;
+-(void)deleteNumberOfItems:(NSInteger)numberOfItems inView:(UIViewController*)viewController completion:(SuccessfulBlock)block;
+
 
 @end

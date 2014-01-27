@@ -56,18 +56,16 @@
         [view addSubview:self.gradientView];
         
         
-        KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, ADD_TOOLBAR_HEIGHT) items:@[@"round_plus_big"]];
+        KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, ADD_TOOLBAR_HEIGHT) items:@[@"round_plus_big"] delegate:self];
         addToolbar.tag = ADD_TOOLBAR_TAG;
-        addToolbar.delegate = self;
         [addToolbar setTopInset:-addToolbar.frame.size.height*0.05];
         [view addSubview:addToolbar];
         self.addToolbar = (KPToolbar*)[view viewWithTag:ADD_TOOLBAR_TAG];
         
         
         
-        KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[@"edit_icon_white",@"tag_icon_white",@"trashcan_icon_white",@"share_icon_white"]];
+        KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[@"edit_icon_white",@"tag_icon_white",@"trashcan_icon_white",@"share_icon_white"] delegate:self];
         editToolbar.tag = EDIT_TOOLBAR_TAG;
-        editToolbar.delegate = self;
         /*CAGradientLayer *gradient = [CAGradientLayer layer];
         gradient.frame = editToolbar.bounds;
         gradient.colors = @[(id)alpha(tbackground(BackgroundColor),0.0f).CGColor,(id)alpha(tbackground(BackgroundColor),1.0f).CGColor,(id)tbackground(BackgroundColor).CGColor];
