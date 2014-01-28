@@ -699,7 +699,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)pressedNotes:(id)sender
 {
     self.activeEditMode = KPEditModeNotes;
-    CGFloat extra = (OSVER >= 7) ? 0 : 0;
+    CGFloat extra = (OSVER >= 7) ? 20 : 0;
     NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0+extra, 320, self.segmentedViewController.view.frame.size.height-extra)];
     [notesView setNotesText:self.model.notes title:self.model.title];
     notesView.delegate = self;

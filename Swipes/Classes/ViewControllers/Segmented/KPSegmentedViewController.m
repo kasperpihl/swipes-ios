@@ -284,15 +284,6 @@
     }
     [self show:YES controlsAnimated:YES];
 }
--(void)setLock:(BOOL)lock animated:(BOOL)animated{
-    if(_lock != lock){
-        _lock = lock;
-        [self.controlHandler setLock:lock animated:animated];
-    }
-}
--(void)setLock:(BOOL)lock{
-    [self setLock:lock animated:YES];
-}
 -(void)setBackgroundMode:(BOOL)backgroundMode{
     if(_backgroundMode != backgroundMode){
         _backgroundMode = backgroundMode;
@@ -315,7 +306,7 @@
         [self.controlHandler setState:[self handlerStateForCurrent:self.currentState] shrinkingView:[self currentViewController].tableView animated:animated];
     }
     else{
-        [self.controlHandler setState:KPControlHandlerStateNone shrinkingView:[self currentViewController].tableView animated:animated];
+        //[self.controlHandler setState:KPControlHandlerStateNone shrinkingView:[self currentViewController].tableView animated:animated];
     }
     //[self.navigationController setNavigationBarHidden:!show animated:YES];
 }

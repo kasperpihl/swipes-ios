@@ -10,7 +10,6 @@
 #define ANIMATION_DURATION GLOBAL_ANIMATION_DURATION
 
 typedef NS_ENUM(NSUInteger, KPControlHandlerState){
-    KPControlHandlerStateNone = 0,
     KPControlHandlerStateAdd,
     KPControlHandlerStateEdit
 };
@@ -26,9 +25,7 @@ typedef NS_ENUM(NSUInteger, KPControlHandlerState){
 @interface KPControlHandler : NSObject
 @property (nonatomic,readonly) KPControlHandlerState activeState;
 @property (nonatomic,weak) NSObject<KPControlHandlerDelegate> *delegate;
-@property (nonatomic) BOOL lock;
 @property (nonatomic) BOOL lockGradient;
--(void)setLock:(BOOL)lock animated:(BOOL)animated;
 +(KPControlHandler*)instanceInView:(UIView*)view;
 -(void)setState:(KPControlHandlerState)state shrinkingView:(UITableView*)view animated:(BOOL)animated;
 @end

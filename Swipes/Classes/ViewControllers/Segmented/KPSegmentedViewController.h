@@ -15,7 +15,7 @@
 @property (nonatomic) KPControlCurrentState currentState;
 @property (nonatomic) BOOL lock;
 @property (nonatomic) BOOL backgroundMode;
--(void)setLock:(BOOL)lock animated:(BOOL)animated;
+
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 -(void)highlightButton:(KPSegmentButtons)controlButton;
 -(void)show:(BOOL)show controlsAnimated:(BOOL)animated;
