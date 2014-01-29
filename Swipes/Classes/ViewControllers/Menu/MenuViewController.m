@@ -133,21 +133,10 @@
     notify(@"updated sync",updateSyncLabel);
 }
 -(void)updateSyncLabel{
-    NSDate *lastSave = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSyncToServer"];
-    NSDate *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastUpdatedFromServer"];
+    NSDate *lastSync = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSyncLocalDate"];
     NSString *timeString = @"Never";
-    NSDate *dateForTime;
-    
-    if(kUserHandler.isPlus){
-        if(!lastSave) dateForTime = lastUpdate;
-        if(!lastUpdate) dateForTime = lastSave;
-        if(!dateForTime && lastUpdate && lastSave) dateForTime = [lastUpdate laterDate:lastSave];
-    }
-    else{
-        dateForTime = lastSave;
-    }
-    if(dateForTime){
-        timeString = [UtilityClass readableTime:dateForTime showTime:YES];
+    if(lastSync){
+        timeString = [UtilityClass readableTime:lastSync showTime:YES];
     }
     NSString *syncOrBackup = kUserHandler.isPlus ? @"sync" : @"backup";
     self.syncLabel.text = [NSString stringWithFormat:@"Last %@: %@",syncOrBackup,timeString];

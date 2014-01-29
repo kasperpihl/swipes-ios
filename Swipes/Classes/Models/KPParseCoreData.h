@@ -19,8 +19,16 @@
 
 -(void)cleanUp;
 -(void)seedObjectsSave:(BOOL)save;
+
+
+-(void)sync:(BOOL)sync attribute:(NSString*)attribute forObject:(NSString*)objectId;
+-(NSArray*)lookupChangedAttributesForTempId:(NSString *)tempId;
 -(NSArray*)lookupChangedAttributesForObject:(NSString*)objectId;
+
+
+
 -(void)saveContextForSynchronization:(NSManagedObjectContext*)context;
+
 - (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async;
 
 #ifdef DEBUG

@@ -11,8 +11,6 @@
 #import "KPToDo.h"
 #import "KPTag.h"
 #import "NSDate-Utilities.h"
-#import <Parse/PFCloud.h>
-#import <Parse/PFRelation.h>
 #import "Reachability.h"
 #import "UserHandler.h"
 
@@ -30,12 +28,13 @@
 
 @property (nonatomic) Reachability *_reach;
 @property (nonatomic) NSMutableDictionary *tmpUpdatingObjects;
+@property (nonatomic) NSMutableDictionary *tmpNotSavedObjects;
 @property (nonatomic) NSMutableDictionary *deleteObjects;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 @property (nonatomic) NSTimer *_syncTimer;
 
-@property (nonatomic) NSMutableSet *_deletedObjects;
-@property (nonatomic) NSMutableSet *_updatedObjects;
+@property (nonatomic) NSMutableSet *_deletedObjectsForSyncNotification;
+@property (nonatomic) NSMutableSet *_updatedObjectsForSyncNotification;
 
 @property BOOL _needSync;
 @property BOOL _isSyncing;
@@ -43,25 +42,25 @@
 @end
 
 @implementation KPParseCoreData
-
+#pragma mark Getters and Setters
 - (NSManagedObjectContext *)context
 {
     return [NSManagedObjectContext MR_defaultContext];
 }
 
-- (NSMutableSet *)_deletedObjects
+- (NSMutableSet *)_deletedObjectsForSyncNotification
 {
-    if (!__deletedObjects)
-        __deletedObjects = [NSMutableSet set];
+    if (!__deletedObjectsForSyncNotification)
+        __deletedObjectsForSyncNotification = [NSMutableSet set];
     
-    return __deletedObjects;
+    return __deletedObjectsForSyncNotification;
 }
-- (NSMutableSet *)_updatedObjects
+- (NSMutableSet *)_updatedObjectsForSyncNotification
 {
-    if (!__updatedObjects)
-        __updatedObjects = [NSMutableSet set];
+    if (!__updatedObjectsForSyncNotification)
+        __updatedObjectsForSyncNotification = [NSMutableSet set];
     
-    return __updatedObjects;
+    return __updatedObjectsForSyncNotification;
 }
 -(NSMutableDictionary*)updateObjects
 {
@@ -81,10 +80,33 @@
     }
     return _deleteObjects;
 }
+-(NSMutableDictionary *)tmpUpdatingObjects
+{
+    if (!_tmpUpdatingObjects)
+        _tmpUpdatingObjects = [NSMutableDictionary dictionary];
+    return _tmpUpdatingObjects;
+}
+-(NSMutableDictionary *)tmpNotSavedObjects{
+    if(!_tmpNotSavedObjects)
+        _tmpNotSavedObjects = [NSMutableDictionary dictionary];
+    return _tmpNotSavedObjects;
+}
 
 
+-(NSArray*)lookupChangedAttributesForTempId:(NSString *)tempId{
+    return [self.tmpNotSavedObjects objectForKey:tempId];
+}
 -(NSArray*)lookupChangedAttributesForObject:(NSString*)objectId{
     return [self.tmpUpdatingObjects objectForKey:objectId];
+}
+-(void)sync:(BOOL)sync attribute:(NSString*)attribute forObject:(NSString*)objectId{
+    NSArray *attributeArray = [self.tmpUpdatingObjects objectForKey:objectId];
+    NSMutableSet *attributeSet = [NSMutableSet set];
+    if(attributeArray)
+        [attributeSet addObjectsFromArray:attributeArray];
+    [attributeSet addObject:attribute];
+    [self.tmpUpdatingObjects setObject:[attributeSet allObjects] forKey:objectId];
+    if(sync) [self synchronizeForce:NO async:YES];
 }
 /*
     This save should be called if data should be synced
@@ -104,19 +126,18 @@
         /* Iterate all updated objects and add their changed attributes to tmpUpdating */
         for(KPParseObject *object in updatedObjects){
             /* If the object doesn't have an objectId - it's not saved on the server and will automatically include all keys */
-#warning If a object didn't have an objectId and currently is being saved - the new changes won't be registered (Maybe check on tempId as well)
-            if(!object.objectId)
+            if(!object.objectId && !self._isSyncing)
                 continue;
-            
-            NSArray *attributeArray = [self.tmpUpdatingObjects objectForKey:object.objectId];
+            NSMutableDictionary *targetDictionary = object.objectId ? self.tmpUpdatingObjects : self.tmpNotSavedObjects;
+            NSString *targetKey = object.objectId ? object.objectId : object.tempId;
+            NSArray *attributeArray = [targetDictionary objectForKey:targetKey];
             
             NSMutableSet *attributeSet = [NSMutableSet set];
             if(attributeArray)
                 [attributeSet addObjectsFromArray:attributeArray];
             if(object.changedValues)
                 [attributeSet addObjectsFromArray:[object.changedValues allKeys]];
-            
-            [self.tmpUpdatingObjects setObject:[attributeSet allObjects] forKey:object.objectId];
+            [targetDictionary setObject:[attributeSet allObjects] forKey:targetKey];
         }
         /* Add all deleted objects with objectId to be deleted*/
         for(KPParseObject *object in deletedObjects){
@@ -201,13 +222,6 @@ static KPParseCoreData *sharedObject;
     }
     [self saveUpdatingObjects];
     [self.tmpUpdatingObjects removeAllObjects];
-}
-
--(NSMutableDictionary *)tmpUpdatingObjects
-{
-    if (!_tmpUpdatingObjects)
-        _tmpUpdatingObjects = [NSMutableDictionary dictionary];
-    return _tmpUpdatingObjects;
 }
 
 -(void)saveUpdatingObjects
@@ -373,10 +387,12 @@ static KPParseCoreData *sharedObject;
         self._isSyncing = NO;
         [self endBackgroundHandler];
         [self.updateObjects removeAllObjects];
+        [self.tmpNotSavedObjects removeAllObjects];
         [self saveUpdatingObjects];
-        [self sendUpdateEvent];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastSyncLocalDate"];
         if (lastUpdate)
             [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastSync"];
+        [self sendUpdateEvent];
         DUMPDB;
         if(self._needSync) [self synchronizeForce:NO async:async];
     }];
@@ -403,10 +419,10 @@ static KPParseCoreData *sharedObject;
         [class deleteObject:object context:context];
         if ([self.deleteObjects objectForKey:[object objectForKey:@"objectId"]])
             [self.deleteObjects removeObjectForKey:[object objectForKey:@"objectId"]];
-        [self._deletedObjects addObject:[object objectForKey:@"objectId"]];
+        [self._deletedObjectsForSyncNotification addObject:[object objectForKey:@"objectId"]];
     }
     else{
-        [self._updatedObjects addObject:[object objectForKey:@"objectId"]];
+        [self._updatedObjectsForSyncNotification addObject:[object objectForKey:@"objectId"]];
         if (!cdObject)
             cdObject = [class getCDObjectFromObject:object context:context];
         [cdObject updateWithObject:object context:context];
@@ -414,9 +430,9 @@ static KPParseCoreData *sharedObject;
 }
 -(void)sendUpdateEvent
 {
-    NSDictionary *updatedEvents = @{@"deleted":[self._deletedObjects copy],@"updated":[self._updatedObjects copy]};
-    [self._deletedObjects removeAllObjects];
-    [self._updatedObjects removeAllObjects];
+    NSDictionary *updatedEvents = @{@"deleted":[self._deletedObjectsForSyncNotification copy],@"updated":[self._updatedObjectsForSyncNotification copy]};
+    [self._deletedObjectsForSyncNotification removeAllObjects];
+    [self._updatedObjectsForSyncNotification removeAllObjects];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:self userInfo:updatedEvents];
 }
 
