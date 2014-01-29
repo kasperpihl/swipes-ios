@@ -21,11 +21,11 @@
 @interface KPControlHandler () <ToolbarDelegate>
 @property (nonatomic) KPControlHandlerState activeState;
 @property (nonatomic,weak) UIView* view;
-@property (nonatomic,weak) UITableView *shrinkingView;
 @property (nonatomic,weak) KPToolbar *addToolbar;
 @property (nonatomic,weak) KPToolbar *editToolbar;
 @property (nonatomic) UIView *gradientView;
 @property (nonatomic) BOOL isShowingGradient;
+@property (nonatomic) BOOL hasStarted;
 @end
 @implementation KPControlHandler
 +(KPControlHandler*)instanceInView:(UIView*)view{
@@ -69,7 +69,7 @@
         [view addSubview:editToolbar];
         self.editToolbar = (KPToolbar*)[view viewWithTag:EDIT_TOOLBAR_TAG];
         
-        [self setState:KPControlHandlerStateAdd shrinkingView:self.shrinkingView animated:NO];
+        [self setState:KPControlHandlerStateAdd animated:NO];
     }
     return self;
 }
@@ -119,13 +119,15 @@
     };
     return block;
 }
--(void)finishedChange{
-    KPControlHandlerState stateToClear = (self.activeState == KPControlHandlerStateAdd) ? KPControlHandlerStateEdit : KPControlHandlerStateAdd;
-    [self getClearBlockFromState:stateToClear toState:self.activeState];
+-(void)finishedChangeForState:(KPControlHandlerState)state{
+    /*KPControlHandlerState stateToClear = (self.activeState == KPControlHandlerStateAdd) ? KPControlHandlerStateEdit : KPControlHandlerStateAdd;
+    [self getClearBlockFromState:stateToClear toState:self.activeState];*/
+    self.activeState = state;
 }
--(void)setState:(KPControlHandlerState)state shrinkingView:(UITableView *)view animated:(BOOL)animated{
-    if(state == self.activeState) return;
-    self.shrinkingView = view;
+-(void)setState:(KPControlHandlerState)state animated:(BOOL)animated{
+    if(state == self.activeState && self.hasStarted) return;
+    
+    if(!self.hasStarted) self.hasStarted = YES;
     voidBlock clearBlock = [self getClearBlockFromState:self.activeState toState:state];
     CGFloat clearDuration = ANIMATION_DURATION;
     CGFloat showDuration = ANIMATION_DURATION;
@@ -144,10 +146,10 @@
             if(finished && showBlock){
                 if(showDuration == 0){
                     showBlock();
-                    [self finishedChange];
+                    [self finishedChangeForState:state];
                 }
                 else [UIView animateWithDuration:showDuration delay:0 options:showAnimationOption animations:showBlock completion:^(BOOL finished) {
-                    [self finishedChange];
+                    [self finishedChangeForState:state];
                 }];
             }
         }];
@@ -155,10 +157,10 @@
     else{
         clearBlock();
         showBlock();
-        [self finishedChange];
+        [self finishedChangeForState:state];
         //if(self.lock) [self forceHide];
     }
-    self.activeState = state;
+    
 }
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
     if(toolbar.tag == ADD_TOOLBAR_TAG){

@@ -303,7 +303,7 @@
 }
 -(void)show:(BOOL)show controlsAnimated:(BOOL)animated{
     if(show){
-        [self.controlHandler setState:[self handlerStateForCurrent:self.currentState] shrinkingView:[self currentViewController].tableView animated:animated];
+        [self.controlHandler setState:[self handlerStateForCurrent:self.currentState] animated:animated];
     }
     else{
         //[self.controlHandler setState:KPControlHandlerStateNone shrinkingView:[self currentViewController].tableView animated:animated];
@@ -370,6 +370,7 @@
     [self.view sendSubviewToBack:self.backgroundImage];
     //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
     //self.navigationItem.rightBarButtonItem = filter;
+    
 }
 -(void)changeToIndex:(NSInteger)index{
     [self.segmentedControl setSelectedIndex:index];

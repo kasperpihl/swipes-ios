@@ -87,10 +87,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UITextView *notesView;
 @property (nonatomic) UILabel *repeatedLabel;
 @property (nonatomic) UILabel *evernoteLabel;
-
 @property (nonatomic) KPToolbar *toolbarEditView;
 @property (nonatomic) DotView *dotView;
 
+
+@property (nonatomic) NSString *objectId;
 @property (nonatomic,strong) KPTimePicker *timePicker;
 
 @end
@@ -274,9 +275,20 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[UIColor greenColor] font:SECTION_HEADER_FONT title:@"Test"];
         CGRectSetY(self.sectionHeader, CGRectGetMaxY(self.toolbarEditView.frame));
         [self.view addSubview:self.sectionHeader];
-        
+        notify(@"updated sync",updateFromSync:);
     }
     return self;
+}
+- (void)updateFromSync:(NSNotification *)notification
+{
+    
+    NSDictionary *changeEvent = [notification userInfo];
+    NSLog(@"changeEvent:%@",changeEvent);
+    NSSet *updatedObjects = [changeEvent objectForKey:@"updated"];
+    NSSet *deletedObjects = [changeEvent objectForKey:@"deleted"];
+    if([deletedObjects containsObject:self.objectId]){
+        [self pressedBack:nil];
+    }else if([updatedObjects containsObject:self.model.objectId]) [self update];
 }
 -(void)longPressRecognized:(UIGestureRecognizer*)sender{
     if(sender.state == UIGestureRecognizerStateBegan){
@@ -316,6 +328,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
 }
 -(void)pressedBack:(UIButton*)sender{
+    if(self.activeEditMode == KPEditModeTitle){
+        [self.textView resignFirstResponder];
+    }
+    [BLURRY dismissAnimated:YES];
+    self.activeEditMode = KPEditModeNone;
     if([self.delegate respondsToSelector:@selector(didPressCloseToDoViewController:)]){
         [self.delegate didPressCloseToDoViewController:self];
     }
@@ -598,9 +615,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)update
 {
+    if(self.model.objectId) self.objectId = self.model.objectId;
     self.textView.text = self.model.title;
     self.cellType = [self.model cellTypeForTodo];
-    NSLog(@"cell:%i",self.cellType);
     [self updateTags];
     [self updateSchedule];
     [self updateNotes];
@@ -700,7 +717,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 {
     self.activeEditMode = KPEditModeNotes;
     CGFloat extra = (OSVER >= 7) ? 20 : 0;
-    NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0+extra, 320, self.segmentedViewController.view.frame.size.height-extra)];
+    NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0+extra, 320, self.view.frame.size.height-extra)];
     [notesView setNotesText:self.model.notes title:self.model.title];
     notesView.delegate = self;
     BLURRY.showPosition = PositionBottom;
@@ -721,15 +738,16 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)pressedEvernote:(id)sender
 {
     self.activeEditMode = KPEditModeEvernote;
-    EvernoteView *evernoteView = [[EvernoteView alloc] initWithFrame:CGRectMake(0, 0, 320, self.segmentedViewController.view.frame.size.height)];
+    EvernoteView *evernoteView = [[EvernoteView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
     evernoteView.delegate = self;
     evernoteView.caller = self.segmentedViewController;
     BLURRY.showPosition = PositionBottom;
-    [BLURRY showView:evernoteView inViewController:self.segmentedViewController];
+    [BLURRY showView:evernoteView inViewController:self];
 }
 
 -(void)dealloc
 {
+    self.cell = nil;
     self.scrollView = nil;
     self.alarmContainer = nil;
     self.tagsContainerView = nil;
@@ -746,6 +764,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
     self.repeatedContainer = nil;
     self.repeatedLabel = nil;
+    clearNotify();
 }
 
 -(void)setCellType:(CellType)cellType{

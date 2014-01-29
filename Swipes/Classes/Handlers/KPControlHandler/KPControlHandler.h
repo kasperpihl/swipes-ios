@@ -27,5 +27,5 @@ typedef NS_ENUM(NSUInteger, KPControlHandlerState){
 @property (nonatomic,weak) NSObject<KPControlHandlerDelegate> *delegate;
 @property (nonatomic) BOOL lockGradient;
 +(KPControlHandler*)instanceInView:(UIView*)view;
--(void)setState:(KPControlHandlerState)state shrinkingView:(UITableView*)view animated:(BOOL)animated;
+-(void)setState:(KPControlHandlerState)state animated:(BOOL)animated;
 @end

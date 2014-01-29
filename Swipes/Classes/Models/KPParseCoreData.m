@@ -328,8 +328,8 @@ static KPParseCoreData *sharedObject;
     
     NSError *error;
     NSLog(@"before:%@",syncData);
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://api.swipesapp.com/sync"]];
+#warning Make sure to check the URL out before submission
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://swipes.herokuapp.com/sync"]];
     [request setTimeoutInterval:120];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
                                                        options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
@@ -346,6 +346,7 @@ static KPParseCoreData *sharedObject;
     
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     NSLog(@"response");
+#warning how should server error be handled?
     if(error || !resData){
         NSLog(@"didn't return");
         self._isSyncing = NO;

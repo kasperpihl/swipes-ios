@@ -86,7 +86,18 @@
 }
 -(void)didUpdateItemHandler:(ItemHandler *)handler{
     [self willUpdateCells];
+    NSArray *selectedItems = [self selectedItems];
+    [self.selectedRows removeAllObjects];
     [self.tableView reloadData];
+    for(KPToDo *item in selectedItems){
+        NSIndexPath *indexPath = [handler indexPathForItem:item];
+        if(indexPath){
+            [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+            [self.selectedRows addObject:indexPath];
+        }
+    }
+    
+    [self didUpdateCells];
 }
 -(KPSegmentedViewController *)parent{
     KPSegmentedViewController *parent = (KPSegmentedViewController*)[self parentViewController];
@@ -115,6 +126,7 @@
 }
 -(void)didUpdateCells{
     [self.searchBar reloadDataAndUpdate:YES];
+    [self handleShowingToolbar];
 }
 -(NSMutableArray *)selectedRows{
     if(!_selectedRows) _selectedRows = [NSMutableArray array];
@@ -182,14 +194,12 @@
 }
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
     [self.selectedRows removeObject:indexPath];
-    if(self.selectedRows.count == 0) [[self parent] setCurrentState:KPControlCurrentStateAdd];
+    [self handleShowingToolbar];
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
-    NSLog(@"%@",toDo);
     if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
-    [self parent].currentState = KPControlCurrentStateEdit;
+    [self handleShowingToolbar];
 }
 
 // Override to support conditional rearranging of the table view.
@@ -400,8 +410,6 @@
     self.isLonelyRider = NO;
     self.swipingCell = nil;
     [self didUpdateCells];
-    
-    [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
 -(void)updateSearchBar{
     
@@ -412,7 +420,7 @@
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
     [self.selectedRows removeAllObjects];
-    [[self parent] setCurrentState:KPControlCurrentStateAdd];
+    [self handleShowingToolbar];
 }
 -(void)returnSelectedRowsAndBounce:(BOOL)bounce{
     NSArray *visibleCells = [self.tableView visibleCells];
@@ -519,7 +527,6 @@
     self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height);
     if(self.cellType != CellTypeToday) self.parent.backgroundMode = NO;
     else if(self.itemHandler.itemCounterWithFilter == 0) self.parent.backgroundMode = YES;
-    
     [super viewWillAppear:animated];
 }
 -(void)viewDidAppear:(BOOL)animated{
@@ -537,10 +544,18 @@
             break;
     }
     [ANALYTICS pushView:activeView];
+    NSLog(@"view shows");
+    [self handleShowingToolbar];
+}
+-(void)handleShowingToolbar{
+    if(self.selectedRows.count > 0){
+        [[self parent] setCurrentState:KPControlCurrentStateEdit];
+    }
+    else [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [[self parent] setCurrentState:KPControlCurrentStateAdd];
+    
 }
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];

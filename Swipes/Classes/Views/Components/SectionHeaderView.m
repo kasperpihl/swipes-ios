@@ -34,7 +34,6 @@
         CGRectSetSize(self, 320, LINE_SIZE);
         self.backgroundColor = color;
         self.sectionHeader = [[_SectionHeaderViewText alloc] initWithColor:color font:font title:title];
-        NSLog(@"%f - %f",CGRectGetWidth(self.frame),CGRectGetWidth(self.sectionHeader.frame));
         CGRectSetX(self.sectionHeader, CGRectGetWidth(self.frame) - CGRectGetWidth(self.sectionHeader.frame));
         [self addSubview:self.sectionHeader];
         self.color = color;
