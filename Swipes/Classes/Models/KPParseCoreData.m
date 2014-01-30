@@ -15,6 +15,8 @@
 #import "UserHandler.h"
 
 #define kSyncTime 5
+#define kUpdateLimit 100
+
 
 #ifdef DEBUG
 #define DUMPDB //[self dumpLocalDb];
@@ -144,6 +146,7 @@
             if(object.objectId)
                 [self.deleteObjects setObject:[object getParseClassName] forKey:object.objectId];
         }
+        [self saveUpdatingObjects];
     }];
     [context MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
         DUMPDB;
@@ -207,7 +210,12 @@ static KPParseCoreData *sharedObject;
 */
 - (void)prepareUpdatingObjects
 {
+    NSInteger counter = 0;
+    NSMutableArray *keysToRemove = [NSMutableArray array];
     for (NSString *identifier in self.tmpUpdatingObjects) {
+        counter++;
+        if(counter == kUpdateLimit) break;
+        [keysToRemove addObject:identifier];
         NSArray *attributeArray = [self.updateObjects objectForKey:identifier];
         NSArray *newAttributeArray = [self.tmpUpdatingObjects objectForKey:identifier];
         NSMutableSet *newAttributeSet = [NSMutableSet set];
@@ -219,9 +227,10 @@ static KPParseCoreData *sharedObject;
             [newAttributeSet addObjectsFromArray:newAttributeArray];
         
         [self.updateObjects setObject:[newAttributeSet allObjects] forKey:identifier];
+        
     }
+    if(keysToRemove.count > 0) [self.tmpUpdatingObjects removeObjectsForKeys:keysToRemove];
     [self saveUpdatingObjects];
-    [self.tmpUpdatingObjects removeAllObjects];
 }
 
 -(void)saveUpdatingObjects
@@ -306,8 +315,9 @@ static KPParseCoreData *sharedObject;
     
     
     NSManagedObjectContext *context = [KPCORE context];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(objectId IN %@) OR (objectId = nil)",[self.updateObjects allKeys]];
-    NSArray *changedObjects = [KPParseObject MR_findAllWithPredicate:predicate inContext:context];
+    NSPredicate *newObjectsPredicate = [NSPredicate predicateWithFormat:@"(objectId = nil)"];
+    NSPredicate *updatedObjectsPredicate = [NSPredicate predicateWithFormat:@"(objectId IN %@) OR (objectId = nil)",[self.updateObjects allKeys]];
+    NSArray *changedObjects = [KPParseObject MR_findAllWithPredicate:updatedObjectsPredicate inContext:context];
     NSMutableDictionary *syncData = [NSMutableDictionary dictionary];
     NSMutableDictionary *updateObjectsToServer = [NSMutableDictionary dictionary];
     for (KPParseObject *object in changedObjects) {
@@ -339,10 +349,12 @@ static KPParseCoreData *sharedObject;
     for(NSString *objectId in self.deleteObjects) [self addObject:@{@"deleted":@YES,@"objectId":objectId} toClass:[self.deleteObjects objectForKey:objectId] inCollection:&updateObjectsToServer];
     
     [syncData setObject:updateObjectsToServer forKey:@"objects"];
+    [syncData setObject:@7 forKey:@"recurring"];
     
     NSError *error;
     NSLog(@"before:%@",syncData);
 #warning Make sure to check the URL out before submission
+#warning remember server side handling of timeout
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://swipes.herokuapp.com/sync"]];
     [request setTimeoutInterval:120];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
@@ -357,7 +369,6 @@ static KPParseCoreData *sharedObject;
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     NSURLResponse *response;
-    
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     NSLog(@"response");
 #warning how should server error be handled?
@@ -416,6 +427,7 @@ static KPParseCoreData *sharedObject;
         class = [cdObject class];
     
     if (shouldDelete) {
+        NSLog(@"deleting");
         [class deleteObject:object context:context];
         if ([self.deleteObjects objectForKey:[object objectForKey:@"objectId"]])
             [self.deleteObjects removeObjectForKey:[object objectForKey:@"objectId"]];

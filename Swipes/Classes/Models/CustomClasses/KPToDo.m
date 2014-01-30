@@ -122,7 +122,10 @@
     
     [context performBlockAndWait:^{
         NSDictionary *keyMatch = [self keyMatch];
-        NSArray *localChanges = [KPCORE lookupChangedAttributesForObject:[object objectForKey:@"objectId"]];
+        // Get changes since start of the sync - not to overwrite recent changes
+        NSArray *localChanges = [KPCORE lookupChangedAttributesForObject:self.objectId];
+        // If the object saved was new - the changes will be for it's tempId not objectId
+        if(!localChanges) localChanges = [KPCORE lookupChangedAttributesForTempId:self.tempId];
         for(NSString *pfKey in [object allKeys]){
             
             if([localChanges containsObject:pfKey])
@@ -140,6 +143,7 @@
                 
                 for(NSDictionary *tag in tagsFromServer){
                     if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:[tag objectForKey:@"objectId"]];
+                    else [KPCORE sync:NO attribute:@"tags" forObject:self.objectId];
                 }
                 if(objectIDs.count > 0){
                     NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"%K IN %@",@"objectId",[objectIDs copy]];
@@ -150,7 +154,7 @@
                     for(NSInteger i = 0 ; i < tagCount ; i++) [tagStrings addObject:[NSNull null]];
                     for(KPTag *tag in tagsObjects){
                         if(!tag || tag == (id)[NSNull null] || tag.title.length == 0){
-#warning set this object to be synced again if changes happens on this sync part
+                            [KPCORE sync:NO attribute:@"tags" forObject:self.objectId];
                             continue;
                         }
                         NSInteger index = [objectIDs indexOfObject:tag.objectId];
