@@ -41,7 +41,7 @@
     newToDo.schedule = [NSDate date];
     if(priority) newToDo.priorityValue = 1;
     newToDo.orderValue = kDefOrderVal;
-    if(save) [KPToDo save];
+    if(save) [KPToDo saveToSync];
     NSString *taskLength = @"50+";
     if(item.length <= 10) taskLength = @"1-10";
     else if(item.length <= 20) taskLength = @"11-20";
@@ -49,7 +49,9 @@
     else if(item.length <= 40) taskLength = @"31-40";
     else if(item.length <= 50) taskLength = @"41-50";
     [ANALYTICS tagEvent:@"Added Task" options:@{@"Length":taskLength}];
+    [ANALYTICS heartbeat];
     [NOTIHANDLER updateLocalNotifications];
+    
     return newToDo;
 }
 +(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save{
@@ -60,6 +62,7 @@
     }
     if(save) [KPCORE saveContextForSynchronization:nil];
     [NOTIHANDLER updateLocalNotifications];
+    [ANALYTICS heartbeat];
     return [movedToDos copy];
 }
 +(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save{
@@ -71,6 +74,7 @@
     if(save) [KPCORE saveContextForSynchronization:nil];
     NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
     [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
+    [ANALYTICS heartbeat];
     [NOTIHANDLER updateLocalNotifications];
     return [movedToDos copy];
 }
@@ -83,6 +87,7 @@
     }
     if(save) [KPCORE saveContextForSynchronization:nil];
     if(shouldUpdateNotifications) [NOTIHANDLER updateLocalNotifications];
+    [ANALYTICS heartbeat];
 }
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save{
     if(tags){
@@ -92,6 +97,7 @@
             [toDo updateTagSet:tagsSet withTags:tags remove:remove];
         }
         if(save) [KPCORE saveContextForSynchronization:nil];
+        [ANALYTICS heartbeat];
     }
 }
 +(NSArray *)selectedTagsForToDos:(NSArray *)toDos{
@@ -275,7 +281,7 @@
     self.repeatOptionValue = option;
     if(option != RepeatNever) self.repeatedDate = self.schedule;
     else self.repeatedDate = nil;
-    if(save) [KPToDo save];
+    if(save) [KPToDo saveToSync];
 }
 -(RepeatOptions)optionForRepeatString:(NSString*)repeatString{
     RepeatOptions option = RepeatNever;
@@ -313,7 +319,7 @@
     return repeatString;
 }
 
-+(void)save{
++(void)saveToSync{
     [KPCORE saveContextForSynchronization:nil];
 }
 -(NSDate *)nextDateFrom:(NSDate*)date{
@@ -403,7 +409,7 @@
         counter++;
     }
     if(save && numberOfChanges > 0){
-        [KPToDo save];
+        [KPToDo saveToSync];
     }
     /*
      Ordered items = items where order > 0
@@ -438,7 +444,8 @@
         //NSLog(@"r %i - %@",toDo.orderValue,toDo.title);
     }
     
-    [KPToDo save];
+    [KPToDo saveToSync];
+    [ANALYTICS heartbeat];
 }
 
 -(void)updateTagSet:(NSSet*)tagsSet withTags:(NSArray*)tags remove:(BOOL)remove{
@@ -493,7 +500,7 @@
 }
 -(void)deleteToDoSave:(BOOL)save{
     [self MR_deleteEntity];
-    if(save) [KPToDo save];
+    if(save) [KPToDo saveToSync];
 }
 -(void)notifyOnLatitude:(float)latitude longitude:(float)longitude type:(GeoFenceType)type save:(BOOL)save{
     /*
@@ -512,12 +519,12 @@
     
     NSString *locationString = [location componentsJoinedByString:kLocationSplitStr];
     self.location = locationString;
-    if(save) [KPToDo save];
+    if(save) [KPToDo saveToSync];
     [NOTIHANDLER updateLocationUpdates];
 }
 -(void)stopNotifyingLocationSave:(BOOL)save{
     self.location = nil;
-    if(save) [KPToDo save];
+    if(save) [KPToDo saveToSync];
     [NOTIHANDLER updateLocationUpdates];
 }
 -(NSArray *)textTags{

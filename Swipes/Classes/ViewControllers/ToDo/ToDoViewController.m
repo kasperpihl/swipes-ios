@@ -296,7 +296,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     growingTextView.text = [growingTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     if(growingTextView.text.length > 0){
         self.model.title = growingTextView.text;
-        [KPToDo save];
+        [KPToDo saveToSync];
     }
     else{
         growingTextView.text = self.model.title;
@@ -321,7 +321,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
     self.model.notes = text;
-    [KPToDo save];
+    [KPToDo saveToSync];
     [self updateNotes];
     [self layout];
 }
@@ -544,7 +544,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 -(void)pressedPriority{
     self.model.priorityValue = (self.model.priorityValue == 0) ? 1 : 0;
-    [KPToDo save];
+    [KPToDo saveToSync];
     [self updateDot];
 }
 

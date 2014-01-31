@@ -136,7 +136,7 @@
 }
 -(void)pressedPriority{
     self.toDo.priorityValue = (self.toDo.priorityValue == 0) ? 1 : 0;
-    [KPToDo save];
+    [KPToDo saveToSync];
     [self setPriority:(self.toDo.priorityValue == 1)];
 }
 -(void)setPriority:(BOOL)priority{

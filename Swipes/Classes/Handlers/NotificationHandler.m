@@ -154,7 +154,7 @@ static NotificationHandler *sharedObject;
             [KLLocation deleteGeofenceWithUserID:[fence getIDUser]];
         }
     }
-    [KPToDo save];
+    [KPToDo saveToSync];
     [self updateLocalNotifications];
 }
 - (void)geofencesIn:(NSArray*)arrGeofenceList{

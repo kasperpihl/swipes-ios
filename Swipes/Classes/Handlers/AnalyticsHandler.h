@@ -18,4 +18,5 @@
 -(void)popView;
 -(NSString*)customDimension:(NSInteger)dimension;
 -(void)setCustomDimension:(NSInteger)dimension value:(NSString*)value;
+-(void)heartbeat;
 @end
