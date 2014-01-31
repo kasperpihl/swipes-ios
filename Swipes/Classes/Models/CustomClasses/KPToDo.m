@@ -117,15 +117,15 @@
     return commonTags;
 }
 
--(void)updateWithObject:(NSDictionary *)object context:(NSManagedObjectContext *)context{
+-(BOOL)updateWithObject:(NSDictionary *)object context:(NSManagedObjectContext *)context{
     [super updateWithObject:object context:context];
-    
+    __block BOOL hasChanged = NO;
     [context performBlockAndWait:^{
         NSDictionary *keyMatch = [self keyMatch];
         // Get changes since start of the sync - not to overwrite recent changes
-        NSArray *localChanges = [KPCORE lookupChangedAttributesForObject:self.objectId];
+        NSArray *localChanges = [KPCORE lookupTemporaryChangedAttributesForObject:self.objectId];
         // If the object saved was new - the changes will be for it's tempId not objectId
-        if(!localChanges) localChanges = [KPCORE lookupChangedAttributesForTempId:self.tempId];
+        if(!localChanges) localChanges = [KPCORE lookupTemporaryChangedAttributesForTempId:self.tempId];
         for(NSString *pfKey in [object allKeys]){
             
             if([localChanges containsObject:pfKey])
@@ -143,7 +143,10 @@
                 
                 for(NSDictionary *tag in tagsFromServer){
                     if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:[tag objectForKey:@"objectId"]];
-                    else [KPCORE sync:NO attribute:@"tags" forObject:self.objectId];
+                    else {
+                        hasChanged = YES;
+                        [KPCORE sync:NO attributes:@[@"tags"] forIdentifier:self.objectId isTemp:NO];
+                    }
                 }
                 if(objectIDs.count > 0){
                     NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"%K IN %@",@"objectId",[objectIDs copy]];
@@ -154,7 +157,8 @@
                     for(NSInteger i = 0 ; i < tagCount ; i++) [tagStrings addObject:[NSNull null]];
                     for(KPTag *tag in tagsObjects){
                         if(!tag || tag == (id)[NSNull null] || tag.title.length == 0){
-                            [KPCORE sync:NO attribute:@"tags" forObject:self.objectId];
+                            hasChanged = YES;
+                            [KPCORE sync:NO attributes:@[@"tags"] forIdentifier:self.objectId isTemp:NO];
                             continue;
                         }
                         NSInteger index = [objectIDs indexOfObject:tag.objectId];
@@ -201,6 +205,7 @@
             }
         }
     }];
+    return hasChanged;
 }
 -(BOOL)setAttributesForSavingObject:(NSMutableDictionary *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
     NSDictionary *keyMatch = [self keyMatch];

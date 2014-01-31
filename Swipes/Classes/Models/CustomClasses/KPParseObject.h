@@ -4,7 +4,12 @@
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context;
 +(KPParseObject *)getCDObjectFromObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
 +(BOOL)deleteObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
--(void)updateWithObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
+
+/* 
+ update called on sync - overwritten in subclass
+ return YES if it changed anything and needs sync
+*/
+-(BOOL)updateWithObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
 -(NSString*)getParseClassName;
 -(NSString*)getTempId;
 /* To use saveWithHandler: overwrite setAttributesForSavingObject: in subclass to set all the attributes to save */

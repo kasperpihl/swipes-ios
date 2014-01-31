@@ -15,16 +15,19 @@
 +(KPParseCoreData *)sharedInstance;
 
 @property (nonatomic,strong) NSManagedObjectContext *context;
-@property (nonatomic) NSMutableDictionary *updateObjects;
 
--(void)cleanUp;
+
+-(void)logOutAndDeleteData;
 -(void)seedObjectsSave:(BOOL)save;
 
 
--(void)sync:(BOOL)sync attribute:(NSString*)attribute forObject:(NSString*)objectId;
--(NSArray*)lookupChangedAttributesForTempId:(NSString *)tempId;
--(NSArray*)lookupChangedAttributesForObject:(NSString*)objectId;
+-(void)sync:(BOOL)sync attributes:(NSArray*)attributes forIdentifier:(NSString*)identifier isTemp:(BOOL)isTemp;
 
+-(NSArray*)lookupChangedAttributesToSaveForObject:(NSString*)objectId;
+
+-(NSArray*)lookupTemporaryChangedAttributesForTempId:(NSString *)tempId;
+-(NSArray*)lookupTemporaryChangedAttributesForObject:(NSString*)objectId;
+-(void)tempId:(NSString*)tempId gotObjectId:(NSString*)objectId;
 
 
 -(void)saveContextForSynchronization:(NSManagedObjectContext*)context;

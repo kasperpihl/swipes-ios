@@ -56,11 +56,12 @@
     }
     return shouldUpdate;
 }
--(void)updateWithObject:(NSDictionary *)object context:(NSManagedObjectContext *)context{
+-(BOOL)updateWithObject:(NSDictionary *)object context:(NSManagedObjectContext *)context{
     [super updateWithObject:object context:context];
     [context performBlockAndWait:^{
         if(![self.title isEqualToString:[object objectForKey:@"title"]]) self.title = [object objectForKey:@"title"];
     }];
+    return NO;
 }
 
 - (NSString *)description

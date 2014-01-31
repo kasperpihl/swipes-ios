@@ -23,17 +23,19 @@
     return self.tempId;
 }
 #pragma mark - Handling of changes
--(void)updateWithObject:(NSDictionary *)object context:(NSManagedObjectContext*)context{
+-(BOOL)updateWithObject:(NSDictionary *)object context:(NSManagedObjectContext*)context{
     if(!context) context = [KPCORE context];
     [context performBlockAndWait:^{
         self.savingObject = nil;
         NSDateFormatter *dateFormatter = [Global isoDateFormatter];
         if(!self.objectId){
             self.objectId = [object objectForKey:@"objectId"];
+            [KPCORE tempId:self.tempId gotObjectId:self.objectId];
             self.createdAt = [dateFormatter dateFromString:[object objectForKey:@"createdAt"]];
         }
         self.updatedAt = [dateFormatter dateFromString:[object objectForKey:@"updatedAt"]];
     }];
+    return NO;
 }
 #pragma mark - Instantiate object
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context{
@@ -80,8 +82,9 @@
          Loading changed attributes from the sync handler
          and calls the subclass (KPToDo/KPTag) to set them proberly on the object
         */
-        NSMutableSet *changeSet = [KPCORE.updateObjects objectForKey:self.objectId];
-        NSArray *changedAttributes = changeSet ? [changeSet allObjects] : nil;
+        NSArray *changedAttributes;
+        if(self.objectId)
+            changedAttributes = [KPCORE lookupChangedAttributesToSaveForObject:self.objectId];
 
         shouldUpdate = [self setAttributesForSavingObject:&objectToSave changedAttributes:changedAttributes];
     }];
