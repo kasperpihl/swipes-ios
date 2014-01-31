@@ -14,7 +14,7 @@
 
 - (void) makeApiCall: (NSString*)url method:(NSString*)method params: (NSDictionary*)params {
     NSURL *veroUrl              = [NSURL URLWithString:url];
-    ASIHTTPRequest *request     = [ASIHTTPRequest requestWithURL:veroUrl];
+    /*ASIHTTPRequest *request     = [ASIHTTPRequest requestWithURL:veroUrl];
     NSString *jsonString        = [params JSONString];
     NSLog(@"%@ %@ %@", method, url, jsonString);
     
@@ -25,7 +25,7 @@
     [request setRequestMethod:method];
     [request setPostBody:requestBody];
     
-    [request startAsynchronous];
+    [request startAsynchronous];*/
 }
 
 // Events
