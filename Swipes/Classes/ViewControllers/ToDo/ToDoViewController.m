@@ -158,16 +158,16 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)openTimePicker{
     if(self.timePicker) return;
     NSDate *date = self.model.schedule;
-    if(!date || [date isInPast]) return;
+    if(!date) return;
     ROOT_CONTROLLER.lockSettings = YES;
-    self.timePicker = [[KPTimePicker alloc] initWithFrame:self.segmentedViewController.view.bounds];
+    self.timePicker = [[KPTimePicker alloc] initWithFrame:self.view.bounds];
     self.timePicker.delegate = self;
     self.timePicker.pickingDate = date;
     self.timePicker.minimumDate = [date dateAtStartOfDay];
-    if([date isToday]) self.timePicker.minimumDate = [[NSDate date] dateByAddingMinutes:5];
+    //if([date isToday]) self.timePicker.minimumDate = [[NSDate date] dateByAddingMinutes:5];
     self.timePicker.maximumDate = [[[date dateByAddingDays:1] dateAtStartOfDay] dateBySubtractingMinutes:5];
     self.timePicker.alpha = 0;
-    [self.segmentedViewController.view addSubview:self.timePicker];
+    [self.view addSubview:self.timePicker];
     [UIView animateWithDuration:0.2f animations:^{
         self.timePicker.alpha = 1;
     } completion:^(BOOL finished) {
@@ -190,6 +190,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             [timePicker removeFromSuperview];
             self.timePicker = nil;
             if(date) [KPToDo scheduleToDos:@[self.model] forDate:date save:YES];
+            [self update];
         }
     }];
 }

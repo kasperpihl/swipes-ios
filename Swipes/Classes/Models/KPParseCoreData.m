@@ -171,6 +171,9 @@
         }
         [self addObject:pfObject toClass:object.getParseClassName inCollection:&updateObjectsToServer];
     }
+    
+    
+    
     /* This will consist of tempId's to objects that did not have one already */
     if([context hasChanges]) [context MR_saveOnlySelfAndWait];
     
@@ -310,7 +313,7 @@
 -(void)cleanUpAfterSync{
     [self endBackgroundHandler];
     [self._objectAttributesToUpdateOnServer removeAllObjects];
-    [self saveUpdatingObjects];
+    
     
     /* Cleaning up temporary system to make sure new objects that change attributes get saved */
     for(NSString *tempId in self._tempIdsThatGotObjectIds){
@@ -322,6 +325,7 @@
     [self._tempIdsThatGotObjectIds removeAllObjects];
     [self._attributeChangesOnNewObjectsWhileSyncing removeAllObjects];
     
+    [self saveUpdatingObjects];
     /* Send update notification */
     NSDictionary *updatedEvents = @{@"deleted":[self._deletedObjectsForSyncNotification copy],@"updated":[self._updatedObjectsForSyncNotification copy]};
     [self._deletedObjectsForSyncNotification removeAllObjects];
@@ -402,8 +406,10 @@
 }
 -(NSMutableDictionary *)_attributeChangesOnObjects
 {
-    if (!__attributeChangesOnObjects)
-        __attributeChangesOnObjects = [NSMutableDictionary dictionary];
+    if (!__attributeChangesOnObjects){
+        __attributeChangesOnObjects = [[NSUserDefaults standardUserDefaults] objectForKey:@"tmpUpdateObjects"];
+        if(!__attributeChangesOnObjects) __attributeChangesOnObjects = [NSMutableDictionary dictionary];
+    }
     return __attributeChangesOnObjects;
 }
 -(NSMutableDictionary *)_attributeChangesOnNewObjectsWhileSyncing{
@@ -423,6 +429,8 @@
 {
     [[NSUserDefaults standardUserDefaults] setObject:self._objectAttributesToUpdateOnServer forKey:@"updateObjects"];
     [[NSUserDefaults standardUserDefaults] setObject:self._objectsToDeleteOnServer forKey:@"deleteObjects"];
+    [[NSUserDefaults standardUserDefaults] setObject:self._attributeChangesOnObjects forKey:@"tmpUpdateObjects"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 

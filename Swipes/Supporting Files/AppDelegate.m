@@ -84,9 +84,9 @@
         [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     }
     
-    [EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
+    //[EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
     
-    NSLog(@"%@",[kCurrent sessionToken]);
+    NSLog(@"%@",[kCurrent objectId]);
     return YES;
 }
 - (void)tagLaunchSource:(NSDictionary *)launchOptions

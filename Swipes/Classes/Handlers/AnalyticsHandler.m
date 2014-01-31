@@ -52,7 +52,9 @@ static AnalyticsHandler *sharedObject;
     NSString *email = kCurrent.email;
     if(!email) email = kCurrent.username;
     if(![UtilityClass validateEmail:email]) return;
-    NSDictionary *identity = @{@"id":kCurrent.objectId,@"email":email,@"userlevel":[kCurrent objectForKey:@"userLevel"]};
+    NSNumber *userLevel = [kCurrent objectForKey:@"userLevel"];
+    if(!userLevel) userLevel = [NSNumber numberWithInteger:0];
+    NSDictionary *identity = @{@"id":kCurrent.objectId,@"email":email,@"userlevel":userLevel};
     [self.vero eventsTrack:event identity:identity data:data completionHandler:^(id result, NSError *error) {
         if([event isEqualToString:@"Heartbeat"] && error) [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastHeartBeat"];
     }];

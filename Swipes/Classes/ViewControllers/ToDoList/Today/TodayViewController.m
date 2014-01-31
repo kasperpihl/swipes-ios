@@ -71,6 +71,7 @@
     [self updateBackground];
     self.parent.backgroundMode = (itemNumber == 0);
     [self setEmptyBack:(itemNumber == 0) animated:YES];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:itemNumber];
     if(itemNumber == 0 && oldNumber > 0){
         NSInteger servicesAvailable = 0;
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) servicesAvailable++;
@@ -78,6 +79,7 @@
         NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable]};
         [ANALYTICS tagEvent:@"Cleared Tasks" options:dict];
     }
+    
 }
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     NSDate *endDate = [NSDate date];

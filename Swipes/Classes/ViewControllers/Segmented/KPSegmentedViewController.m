@@ -28,6 +28,8 @@
 #import "SlowHighlightIcon.h"
 #import "SettingsHandler.h"
 
+#import "NotificationHandler.h"
+
 #import "UserHandler.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
@@ -325,6 +327,7 @@
     //NSDictionary *changeEvent = [notification userInfo];
     //NSArray *updatedObjects = [changeEvent objectForKey:@"updated"];
     //NSArray *deletedObjects = [changeEvent objectForKey:@"deleted"];
+    [NOTIHANDLER updateLocalNotifications];
     [self.currentViewController update];
 }
 -(void)viewDidLoad{
