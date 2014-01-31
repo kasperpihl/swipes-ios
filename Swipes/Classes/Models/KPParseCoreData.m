@@ -15,7 +15,7 @@
 #import "UserHandler.h"
 
 #define kSyncTime 5
-#define kUpdateLimit 100
+#define kUpdateLimit 200
 
 
 #ifdef DEBUG
@@ -147,8 +147,7 @@
 - (BOOL)synchronizeWithParseAsync:(BOOL)async
 {
     self._isSyncing = YES;
-    /* Move all the updated objects */
-    [self prepareUpdatedObjectsToBeSavedOnServer];
+    
     
     if (async)
         [self startBackgroundHandler];
@@ -156,23 +155,51 @@
     
     NSManagedObjectContext *context = [KPCORE context];
     NSPredicate *newObjectsPredicate = [NSPredicate predicateWithFormat:@"(objectId = nil)"];
-    NSPredicate *updatedObjectsPredicate = [NSPredicate predicateWithFormat:@"(objectId IN %@) OR (objectId = nil)",[self._objectAttributesToUpdateOnServer allKeys]];
-    NSArray *changedObjects = [KPParseObject MR_findAllWithPredicate:updatedObjectsPredicate inContext:context];
-    NSMutableDictionary *syncData = [NSMutableDictionary dictionary];
-    NSMutableDictionary *updateObjectsToServer = [NSMutableDictionary dictionary];
-    for (KPParseObject *object in changedObjects) {
+    NSArray *newObjects = [KPParseObject MR_findAllWithPredicate:newObjectsPredicate inContext:context];
+    NSInteger numberOfNewObjects = newObjects.count;
+    NSInteger totalNumberOfObjectsToSave = numberOfNewObjects;
+    
+    __block NSMutableDictionary *updateObjectsToServer = [NSMutableDictionary dictionary];
+    BOOL (^handleObject)(KPParseObject *object) = ^BOOL (KPParseObject *object){
         NSDictionary *pfObject = [object objectToSaveInContext:context];
         /* It will return nil if no changes should be made - */
         if (!pfObject) {
             if (object && object.objectId) {
                 [self._objectAttributesToUpdateOnServer removeObjectForKey:object.objectId];
             }
-            continue;
+            return NO;
         }
         [self addObject:pfObject toClass:object.getParseClassName inCollection:&updateObjectsToServer];
+        return YES;
+    };
+    for(KPParseObject *object in newObjects) handleObject(object);
+    
+    NSInteger remainingObjectsInBatch = kUpdateLimit - numberOfNewObjects;
+    if(remainingObjectsInBatch <= 0){
+        
+        NSMutableArray *newTags = [updateObjectsToServer objectForKey:@"Tag"];
+        NSMutableArray *newToDos = [updateObjectsToServer objectForKey:@"ToDo"];
+        
+        NSInteger limitForTodos = kUpdateLimit - newTags.count;
+        if(newToDos.count > limitForTodos)
+            [newToDos removeObjectsInRange:NSMakeRange(limitForTodos, newToDos.count-limitForTodos)];
+        totalNumberOfObjectsToSave = newToDos.count + newTags.count;
+        self._needSync = YES;
+    }
+    else{
+        /* Move all the updated objects */
+        [self prepareUpdatedObjectsToBeSavedOnServerWithLimit:remainingObjectsInBatch];
+        NSPredicate *updatedObjectsPredicate = [NSPredicate predicateWithFormat:@"(objectId IN %@)",[self._objectAttributesToUpdateOnServer allKeys]];
+        NSArray *changedObjects = [KPParseObject MR_findAllWithPredicate:updatedObjectsPredicate inContext:context];
+        totalNumberOfObjectsToSave += changedObjects.count;
+        for (KPParseObject *object in changedObjects) {
+            handleObject(object);
+        }
     }
     
     
+    
+    NSMutableDictionary *syncData = [NSMutableDictionary dictionary];
     
     /* This will consist of tempId's to objects that did not have one already */
     if([context hasChanges]) [context MR_saveOnlySelfAndWait];
@@ -193,8 +220,8 @@
     
     [syncData setObject:updateObjectsToServer forKey:@"objects"];
     
+    /* Preparing request */
     NSError *error;
-    NSLog(@"before:%@",syncData);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://api.swipesapp.com/sync"]];
     [request setTimeoutInterval:50];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
@@ -208,9 +235,12 @@
     [request setHTTPBody:jsonData];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    
+    /* Performing request */
     NSURLResponse *response;
+    //NSLog(@"sending %i objects",totalNumberOfObjectsToSave);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    NSLog(@"response");
 #warning how should server error be handled?
     if(error || !resData){
         [UtilityClass sendError:error type:@"Sync request error"];
@@ -218,12 +248,16 @@
         return NO;
     }
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
-    NSLog(@"respo:%@ error:%@",result,error);
+    //NSLog(@"respo:%@ error:%@",result,error);
     if(error){
         [UtilityClass sendError:error type:@"Sync JSON handle parse"];
         self._isSyncing = NO;
         return NO;
     }
+    
+    
+    
+    /* Handling response - Tags first due to relation */
     NSArray *tags = [result objectForKey:@"Tag"] ? [result objectForKey:@"Tag"] : @[];
     NSArray *tasks = [result objectForKey:@"ToDo"] ? [result objectForKey:@"ToDo"] : @[];
     NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
@@ -242,19 +276,27 @@
             [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastSync"];
         [self cleanUpAfterSync];
         DUMPDB;
-        if(self._needSync) [self synchronizeForce:NO async:async];
+        if(self._needSync) [self synchronizeForce:YES async:async];
     }];
     
-    return (0 < changedObjects);
+    return (0 < totalNumberOfObjectsToSave);
 }
 #pragma mark Sync flow helpers
-- (void)prepareUpdatedObjectsToBeSavedOnServer
+- (void)prepareUpdatedObjectsToBeSavedOnServerWithLimit:(NSInteger)limit
 {
     NSInteger counter = 0;
+    NSArray *tagArray = [self._objectAttributesToUpdateOnServer objectForKey:@"Tag"];
+    if(tagArray.count > 0) counter += tagArray.count;
+    NSArray *toDoArray = [self._objectAttributesToUpdateOnServer objectForKey:@"ToDo"];
+    if(toDoArray.count > 0) counter += toDoArray.count;
+    
     NSMutableArray *keysToRemove = [NSMutableArray array];
     for (NSString *identifier in self._attributeChangesOnObjects) {
         counter++;
-        if(counter == kUpdateLimit) break;
+        if(counter >= limit){
+            self._needSync = YES;
+            break;
+        }
         [keysToRemove addObject:identifier];
         NSArray *attributeArray = [self._objectAttributesToUpdateOnServer objectForKey:identifier];
         NSArray *newAttributeArray = [self._attributeChangesOnObjects objectForKey:identifier];

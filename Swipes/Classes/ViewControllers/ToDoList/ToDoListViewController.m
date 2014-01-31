@@ -544,7 +544,6 @@
             break;
     }
     [ANALYTICS pushView:activeView];
-    NSLog(@"view shows");
     [self handleShowingToolbar];
 }
 -(void)handleShowingToolbar{
