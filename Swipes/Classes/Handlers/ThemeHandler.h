@@ -29,7 +29,6 @@ typedef enum {
     TaskCellTimelineColor,
     TaskCellTitle,
     TagColor
-    
 } ThemerItem;
 
 typedef enum {

@@ -13,29 +13,33 @@
 #import <Parse/Parse.h>
 #import "RootViewController.h"
 #import "UIColor+Utilities.h"
+#import "UIImage+Blur.h"
 #define SIGNUP_INDICATOR_TAG 15530
 
 
-#define kLoginOrSignupSubtraction 25
+#define kLoginOrSignupSubtraction 20
 #define LOGIN_FIELDS_HEIGHT 104
 
 
 #define LOGIN_BUTTON_Y     (15      +LOGIN_FIELDS_Y+LOGIN_FIELDS_HEIGHT)
-#define FACEBOOK_BUTTON_Y  (valForScreen(60,80)      +(LOGIN_BUTTON_Y+SIGNUP_BUTTONS_HEIGHT))
+#define FACEBOOK_BUTTON_Y  (valForScreen(80,100)      +(LOGIN_BUTTON_Y+SIGNUP_BUTTONS_HEIGHT))
 #define BUTTON_LABEL_SUBTRACTION 20
 #define kExtraBottomSpacing valForScreen(10,10)
 #define kScrollupButtonsVal valForScreen(80,30)
+#define kLabelAddition 0
+#define kContinueButtonJump 25
 
-#define LOGIN_LOGO_Y            40
-#define LOGIN_FIELDS_Y          valForScreen(130,130)
 
-#define SIGNUP_BUTTONS_HEIGHT   50
+#define LOGIN_LOGO_Y            valForScreen(40,60)
+#define LOGIN_FIELDS_Y          valForScreen(80,100)
+
+#define SIGNUP_BUTTONS_HEIGHT   44
 
 #define kButtonBorderWidth 0
 #define kContinueButtonColor kDefTextColor
 #define kCornerRadius 2
 
-#define kDefTextColor tbackground(BackgroundColor)//color(179, 180, 182, 1)
+#define kDefTextColor tcolor(TextColor)//color(179, 180, 182, 1)
 #define kDefLoginButtonsFont KP_REGULAR(20)
 
 @interface LoginViewController () <UIAlertViewDelegate, UITextFieldDelegate>
@@ -49,6 +53,8 @@
 @property (nonatomic,strong) UIButton *facebookButton;
 @property (nonatomic,strong) UIButton *privacyPolicyButton;
 @property (nonatomic,strong) UIButton *forgotButton;
+@property (nonatomic,strong) UIButton *changeButton;
+@property (nonatomic) BOOL loginState;
 @end
 
 @implementation LoginViewController
@@ -59,32 +65,43 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
         [self.view setBackgroundColor:kWalkthroughBackground];
         
+        
         UIButton *resignButton = [[UIButton alloc] initWithFrame:self.view.bounds];
         resignButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
         [resignButton addTarget:self action:@selector(resignFields) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:resignButton];
         
+        UIImageView *background = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"default-background.jpg"] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
+        background.frame = self.view.bounds;
+        background.contentMode = (UIViewContentModeScaleAspectFill);// UIViewContentModeScaleAspectFill;
+        background.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+        [self.view addSubview:background];
+        UIView *overlay = [[UIView alloc] initWithFrame:background.bounds];
+        overlay.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+        overlay.backgroundColor = gray(0,0.1);
+        [self.view addSubview:overlay];
         /*self.facebookPermissions = @[@"email"];
         self.logInView.externalLogInLabel.text = @"You can also sign up with facebook";
         */
         
-        self.logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_swipes_logo"]];
+        self.logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:valForScreen(@"wt_swipes_logo",@"swipes_logo_white")]];
         CGRectSetCenterX(self.logoView, self.view.frame.size.width/2);
         [self.view addSubview:self.logoView];
         
-        self.loginOrSignupLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+        /*self.loginOrSignupLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
         self.loginOrSignupLabel.textAlignment = NSTextAlignmentCenter;
-        self.loginOrSignupLabel.textColor = kDefTextColor;
-        self.loginOrSignupLabel.font = KP_LIGHT(17);
+        self.loginOrSignupLabel.textColor = tbackground(BackgroundColor);
+        self.loginOrSignupLabel.font = KP_LIGHT(13);
+        self.loginOrSignupLabel.backgroundColor = CLEAR;
         self.loginOrSignupLabel.text = @"Login or Register";
         [self.loginOrSignupLabel sizeToFit];
         CGRectSetWidth(self.loginOrSignupLabel, 320);
-        [self.view addSubview:self.loginOrSignupLabel];
+        [self.view addSubview:self.loginOrSignupLabel];*/
         
         CGFloat fieldWidth = 252.0;
         CGFloat fieldHeight = 44.0;
         CGFloat buttonWidth = 196.0f;
-        CGFloat buttonHeight = 50;
+        CGFloat buttonHeight = SIGNUP_BUTTONS_HEIGHT;
         
         self.emailField = [[UITextField alloc] initWithFrame:CGRectMake((320-fieldWidth)/2, 0, fieldWidth, fieldHeight)];
         self.emailField.font = KP_LIGHT(16);
@@ -98,7 +115,8 @@
         self.emailField.layer.cornerRadius = kCornerRadius;
         self.emailField.placeholder = @"email";
         self.emailField.textColor = kDefTextColor;
-        self.emailField.backgroundColor = alpha(kContinueButtonColor,0.3);
+        UIColor *color = gray(100, 0.3);
+        self.emailField.backgroundColor = color;
         
         
         self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake((320-fieldWidth)/2, 0, fieldWidth, fieldHeight)];
@@ -110,7 +128,7 @@
         self.passwordField.layer.cornerRadius = kCornerRadius;
         self.passwordField.font = KP_LIGHT(16);
         self.passwordField.textColor = kDefTextColor;
-        self.passwordField.backgroundColor = alpha(kContinueButtonColor,0.3);
+        self.passwordField.backgroundColor = color;
         self.passwordField.placeholder = @"password";
         
         @try {
@@ -126,7 +144,7 @@
         [self.view addSubview:self.passwordField];
         
         self.continueButton = [[UIButton alloc] initWithFrame:CGRectMake((320-buttonWidth)/2, 0, buttonWidth, buttonHeight)];
-        [self.continueButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
+        [self.continueButton setTitle:@"SIGN UP" forState:UIControlStateNormal];
         self.continueButton.backgroundColor = tcolor(DoneColor);//kDefTextColor;
         [self.continueButton addTarget:self action:@selector(pressedContinue:) forControlEvents:UIControlEventTouchUpInside];
         [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -138,7 +156,8 @@
         self.facebookLabel.textColor = kDefTextColor;
         self.facebookLabel.textAlignment = NSTextAlignmentCenter;
         
-        self.facebookLabel.text = @"You can also log in with:";
+        self.facebookLabel.text = @"You can also sign up with:";
+        self.facebookLabel.backgroundColor = CLEAR;
         [self.facebookLabel sizeToFit];
         CGRectSetWidth(self.facebookLabel, 320);
         [self.view addSubview:self.facebookLabel];
@@ -173,7 +192,21 @@
         [self.forgotButton setTitle:@"Forgot password?" forState:UIControlStateNormal];
         [self.forgotButton addTarget:self action:@selector(pressedForgot:) forControlEvents:UIControlEventTouchUpInside];
         self.forgotButton.frame = CGRectSetPos(self.forgotButton.frame, self.view.frame.size.width-self.forgotButton.frame.size.width, self.view.frame.size.height-self.forgotButton.frame.size.height);
+        self.forgotButton.hidden = YES;
         [self.view addSubview:self.forgotButton];
+        
+        self.changeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        NSInteger margin = 10;
+        self.changeButton.frame = CGRectMake(0, 0, sizeWithFont(@"Sign up" ,LOGIN_FIELDS_FONT).width+20, fieldHeight-margin);
+        self.changeButton.titleLabel.font = LOGIN_FIELDS_FONT;
+        self.changeButton.layer.borderColor = kDefTextColor.CGColor;
+        self.changeButton.layer.cornerRadius = 3;
+        self.changeButton.layer.borderWidth = 1;
+        [self.changeButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
+        [self.changeButton setTitle:@"Log in" forState:UIControlStateNormal];
+        [self.changeButton addTarget:self action:@selector(pressedChange:) forControlEvents:UIControlEventTouchUpInside];
+        self.changeButton.frame = CGRectSetPos(self.changeButton.frame, self.view.frame.size.width-self.changeButton.frame.size.width-margin/2, self.view.frame.size.height-self.changeButton.frame.size.height-margin/2);
+        [self.view addSubview:self.changeButton];
         
     }
     return self;
@@ -257,6 +290,25 @@
                       otherButtonTitles:nil] show];
     [UtilityClass sendError:error type:@"Login"];
 }
+-(void)pressedChange:(UIButton*)sender{
+    if(!self.loginState){
+        [self.changeButton setTitle:@"Sign up" forState:UIControlStateNormal];
+        
+        self.forgotButton.hidden = NO;
+        [self.continueButton setTitle:@"LOG IN" forState:UIControlStateNormal];
+        self.facebookLabel.text = @"You can also log in with:";
+        CGRectSetY(self.continueButton, self.continueButton.frame.origin.y + kContinueButtonJump);
+    }
+    else {
+        [self.changeButton setTitle:@"Log in" forState:UIControlStateNormal];
+        
+        self.forgotButton.hidden = YES;
+        [self.continueButton setTitle:@"SIGN UP" forState:UIControlStateNormal];
+        self.facebookLabel.text = @"You can also sign up with:";
+        CGRectSetY(self.continueButton, self.continueButton.frame.origin.y - kContinueButtonJump);
+    }
+    self.loginState = !self.loginState;
+}
 -(void)pressedFacebook:(UIButton*)sender{
     [self showIndicator:YES onElement:sender];
     [PFFacebookUtils logInWithPermissions:@[@"email"] block:^(PFUser *user, NSError *error) {
@@ -298,30 +350,46 @@
                 [self handleErrorFromLogin:error];
             }
             if([object isEqualToNumber:@1]){
-                [PFUser logInWithUsernameInBackground:email password:self.passwordField.text block:^(PFUser *user, NSError *error) {
-                    [self showIndicator:NO onElement:sender];
-                    if (error) {
-                        [self handleErrorFromLogin:error];
-                    } else {
-                        [self.delegate loginViewController:self didLoginUser:user];
-                    }
-                }];
+                voidBlock loginBlock = ^{
+                    [PFUser logInWithUsernameInBackground:email password:self.passwordField.text block:^(PFUser *user, NSError *error) {
+                        [self showIndicator:NO onElement:sender];
+                        if (error) {
+                            [self handleErrorFromLogin:error];
+                        } else {
+                            [self.delegate loginViewController:self didLoginUser:user];
+                        }
+                    }];
+                };
+                if(!self.loginState){
+                    [UTILITY confirmBoxWithTitle:@"User exists" andMessage:@"Do you want to login instead?" block:^(BOOL succeeded, NSError *error) {
+                        if(succeeded){
+                            loginBlock();
+                        }
+                        else [self showIndicator:NO onElement:sender];
+                    }];
+                }
+                else loginBlock();
             }
             else{
-                [UTILITY confirmBoxWithTitle:@"New user" andMessage:[NSString stringWithFormat:@"Do you want to register with: %@",email] block:^(BOOL succeeded, NSError *error) {
+                voidBlock signUpBlock = ^{
+                    PFUser *user = [PFUser user];
+                    user.username = email;
+                    user.password = self.passwordField.text;
+                    user.email = email;
+                    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        [self showIndicator:NO onElement:sender];
+                        if (!error) {
+                            [self.delegate loginViewController:self didLoginUser:user];
+                        } else {
+                            [self handleErrorFromLogin:error];
+                        }
+                    }];
+                };
+                NSString *title = self.loginState ? @"User doesn't exist" : @"New user";
+                NSString *message = self.loginState ? @"Do you want to sign up instead?" : [NSString stringWithFormat:@"Do you want to sign up with: %@",email];
+                [UTILITY confirmBoxWithTitle:title andMessage:message block:^(BOOL succeeded, NSError *error) {
                     if(succeeded){
-                        PFUser *user = [PFUser user];
-                        user.username = email;
-                        user.password = self.passwordField.text;
-                        user.email = email;
-                        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                            [self showIndicator:NO onElement:sender];
-                            if (!error) {
-                                [self.delegate loginViewController:self didLoginUser:user];
-                            } else {
-                                [self handleErrorFromLogin:error];
-                            }
-                        }];
+                        signUpBlock();
                     }
                     else [self showIndicator:NO onElement:sender];
                 }];
@@ -387,8 +455,11 @@
 
     CGRectSetY(self.emailField, LOGIN_FIELDS_Y+(fieldHeight-self.emailField.frame.size.height)/2+relativeStart);
     CGRectSetY(self.passwordField, LOGIN_FIELDS_Y+(LOGIN_FIELDS_HEIGHT/2)+(fieldHeight-self.passwordField.frame.size.height)/2+relativeStart);
-    CGRectSetY(self.loginOrSignupLabel, self.emailField.frame.origin.y-kLoginOrSignupSubtraction);
-    CGRectSetY(self.continueButton, LOGIN_BUTTON_Y+relativeStart);
+    //CGRectSetY(self.loginOrSignupLabel, self.emailField.frame.origin.y-kLoginOrSignupSubtraction);
+    CGRectSetX(self.forgotButton, CGRectGetMaxX(self.passwordField.frame)-self.forgotButton.frame.size.width);
+    CGRectSetY(self.forgotButton, CGRectGetMaxY(self.passwordField.frame) + kLabelAddition);
+    NSInteger loginY = self.loginState ? LOGIN_BUTTON_Y + kContinueButtonJump : LOGIN_BUTTON_Y;
+    CGRectSetY(self.continueButton, loginY+relativeStart);
     CGRectSetY(self.facebookLabel,FACEBOOK_BUTTON_Y-BUTTON_LABEL_SUBTRACTION+relativeStart);
     CGRectSetY(self.facebookButton,FACEBOOK_BUTTON_Y+relativeStart);
     

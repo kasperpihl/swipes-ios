@@ -35,6 +35,8 @@
 #import <MessageUI/MessageUI.h>
 #import <Parse/Parse.h>
 
+#import "KPAlert.h"
+
 @interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate>
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
@@ -162,7 +164,7 @@ static RootViewController *sharedObject;
 }
 -(void)logOut{
     [PFUser logOut];
-    [[KPParseCoreData sharedInstance] cleanUp];
+    [[KPParseCoreData sharedInstance] logOutAndDeleteData];
     [self resetRoot];
     
 }

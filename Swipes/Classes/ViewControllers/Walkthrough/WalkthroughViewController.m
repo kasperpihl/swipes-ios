@@ -71,8 +71,6 @@ typedef enum {
     ScheduleTaskCompleted2,
     PressedContinueFromSchedule,
     ClosedSchedulePopup,
-    PushDownGreenBackground,
-    BounceGreenBackground,
     ShowLastTexts,
     Finish
 } WalkthroughState;
@@ -99,9 +97,11 @@ typedef enum {
 @property (nonatomic,strong) UIButton *schedulePopupButton;
 
 @property (nonatomic,strong) UIImageView *greenBackground;
-@property (nonatomic,strong) UIImageView *shadowBackground;
 @property (nonatomic,strong) UIImageView *signatureImage;
 
+@property (nonatomic) UIButton *closeButton;
+
+@property (nonatomic) BOOL fastForward;
 @end
 
 
@@ -151,8 +151,15 @@ typedef enum {
     CGFloat delay = [self delayForState:state];
     CGFloat duration = [self durationForState:state];
     UIViewAnimationOptions options = [self optionsForState:state];
-    if(preBlock) preBlock();
-    [UIView animateWithDuration:duration delay:delay options:options animations:showBlock completion:^(BOOL finished) { if(completionBlock) completionBlock(); }];
+    if(!self.fastForward){
+        if(preBlock) preBlock();
+        [UIView animateWithDuration:duration delay:delay options:options animations:showBlock completion:^(BOOL finished) { if(completionBlock) completionBlock(); }];
+    }
+    else {
+        preBlock();
+        showBlock();
+        completionBlock();
+    }
 }
 -(UIViewAnimationOptions)optionsForState:(WalkthroughState)state{
     UIViewAnimationOptions options = UIViewAnimationOptionCurveEaseInOut;
@@ -252,28 +259,25 @@ typedef enum {
             };
             break;
         }
-        case PushDownGreenBackground:{
-            block = ^{
-                
-                self.greenBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wt_green_background"]];
-                self.shadowBackground = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"wt_background_shadow"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 0, 0, 0)]];
-                self.shadowBackground.contentMode = UIViewContentModeScaleToFill;
-                CGRectSetHeight(self.shadowBackground, self.greenBackground.frame.size.height+kShadowBackExtraHeight);
-                CGRectSetY(self.shadowBackground, -kShadowBackExtraHeight);
-                [self.view addSubview:self.greenBackground];
-                [self.view addSubview:self.shadowBackground];
-            };
-            break;
-        }
         case ShowLastTexts:{
             block = ^{
+                self.swipesLogo.hidden = YES;
+                self.menuExplainer.hidden = YES;
+                self.tasksButton.hidden = YES;
+                self.scheduleButton.hidden = YES;
+                self.doneButton.hidden = YES;
+                self.phoneBackground.hidden = YES;
+                
+                self.greenBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_swipes_logo"]];
+                CGRectSetCenter(self.greenBackground, self.view.frame.size.width/2, self.greenBackground.frame.size.height+20);
+                [self.view addSubview:self.greenBackground];
                 self.signatureImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wt_signature"]];
                 self.signatureImage.alpha = 0;
                 CGRectSetY(self.actionButton, self.view.bounds.size.height-kActionButtonBottomSpacing - self.actionButton.frame.size.height);
-                [self.titleView setTitle:@"Start swiping" subtitle:@"Thanks for choosing Swipes. We are really happy to have you on board!\n\n     Love,"];
-                CGFloat span = self.actionButton.frame.origin.y - CGRectGetMaxY(self.shadowBackground.frame);
+                [self.titleView setTitle:@"Welcome on board!" subtitle:@"Register an account to get started. Your tasks will be backed up every 24h.\n\nTake the leap. Swipe!"];
+                CGFloat span = self.actionButton.frame.origin.y - CGRectGetMaxY(self.greenBackground.frame);
                 CGFloat actualHeight = self.titleView.frame.size.height + self.signatureImage.frame.size.height + kSignatureSpacing;
-                CGFloat titleY = CGRectGetMaxY(self.shadowBackground.frame) + (span-actualHeight)/2;
+                CGFloat titleY = CGRectGetMaxY(self.greenBackground.frame) + (span-actualHeight)/2;
                 CGRectSetY(self.titleView, titleY);
                 CGRectSetX(self.signatureImage, kSignatureX);
                 CGRectSetY(self.signatureImage, CGRectGetMaxY(self.titleView.frame) + kSignatureSpacing);
@@ -407,21 +411,10 @@ typedef enum {
             };
             break;
         }
-        case PushDownGreenBackground:{
-            block = ^{
-                self.shadowBackground.frame = CGRectMake(0, self.greenBackground.frame.size.height-kShadowBackExtraHeight+kShadowBounce, self.shadowBackground.frame.size.width, kShadowBackExtraHeight);
-            };
-            break;
-        }
-        case BounceGreenBackground:{
-            block = ^{
-                CGRectSetY(self.shadowBackground, self.greenBackground.frame.size.height-kShadowBackExtraHeight);
-            };
-            break;
-        }
         case ShowLastTexts:{
             block = ^{
                 self.actionButton.alpha = 1;
+                self.closeButton.alpha = 0;
                 self.titleView.alpha = 1;
                 self.signatureImage.alpha = 1;
             };
@@ -439,8 +432,6 @@ typedef enum {
         case SendThePhoneToTop:
         case AnimateUpDonePopup:
         case AnimatedPopupDownFromCompleted:
-        case PushDownGreenBackground:
-        case BounceGreenBackground:
         case ScheduleTaskCompleted:
         {
             block = ^{ 
@@ -488,7 +479,7 @@ typedef enum {
         case SwipedToTheLeft:
         case FadeInDonePopupTexts:
         case PressedSchedulePopup:
-        case BounceGreenBackground:
+       // case BounceGreenBackground:
         case ScheduleTaskCompleted2:
             duration = 0.18f;
             break;
@@ -515,7 +506,7 @@ typedef enum {
     if(self.currentState == Waiting || self.currentState == FocusOnTheTasksAtHand || self.currentState == ShowLastTexts) [self next];
 }
 -(void)pressedCloseButton:(UIButton*)sender{
-    [self.delegate walkthrough:self didFinishSuccesfully:NO];
+    self.currentState = ShowLastTexts;
 }
 #pragma mark UITableViewDataSource
 -(void)tableView:(UITableView *)tableView willDisplayCell:(WalkthroughCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -559,7 +550,7 @@ typedef enum {
     [super viewDidLoad];
     self.view.backgroundColor = kWalkthroughBackground;
     
-    self.swipesLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wt_swipes_logo"]];
+    self.swipesLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_swipes_logo"]];
     self.swipesLogo.center = CGPointMake(self.view.center.x, self.swipesLogo.center.y+LOGO_Y);
     [self.view addSubview:self.swipesLogo];
     
@@ -613,10 +604,14 @@ typedef enum {
     
     
     UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [closeButton setImage:[UIImage imageNamed:@"round_cross_small_black"] forState:UIControlStateNormal];
-    closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, 0, kCloseButtonSize, kCloseButtonSize);
+    [closeButton setTitle:@"Skip" forState:UIControlStateNormal];
+    closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, (OSVER >= 7 ? 10 : 0), kCloseButtonSize, 54);
+    [closeButton.titleLabel setFont:KP_REGULAR(13)];
+    [closeButton setTitleColor:alpha(tbackground(BackgroundColor),0.5) forState:UIControlStateNormal];
+    closeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 15, 0);
     [closeButton addTarget:self action:@selector(pressedCloseButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:closeButton];
+    self.closeButton = closeButton;
+    [self.view addSubview:self.closeButton];
     
     
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panning:)];
@@ -647,14 +642,25 @@ typedef enum {
 }
 -(void)viewDidUnload{
     [super viewDidUnload];
+    self.swipesLogo = nil;
+    self.menuExplainer = nil;
+    self.actionButton = nil;
+    self.titleView = nil;
+    
+    self.scheduleButton = nil;
+    self.tasksButton = nil;
+    self.doneButton = nil;
+    
     self.scrollView = nil;
     self.phoneBackground = nil;
     self.tableView = nil;
-    self.titleView = nil;
-    self.swipesLogo = nil;
-    self.actionButton = nil;
+    self.backgroundOverlay = nil;
+    self.schedulePopupButton = nil;
+    
     self.greenBackground = nil;
-    self.shadowBackground = nil;
+    self.signatureImage = nil;
+    self.closeButton = nil;
+    //self.shadowBackground = nil;
 }
 - (void)didReceiveMemoryWarning
 {

@@ -57,7 +57,8 @@
         [contentView addSubview:titleLabel];
         self.titleLabel = (UILabel*)[contentView viewWithTag:TITLE_LABEL_TAG];
         
-        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, DEFAULT_TITLE_HEIGHT, contentView.frame.size.width, 2*DEFAULT_TITLE_HEIGHT)];
+        NSInteger spacing = 10;
+        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(spacing, DEFAULT_TITLE_HEIGHT, contentView.frame.size.width-2*spacing, 2*DEFAULT_TITLE_HEIGHT)];
         messageLabel.font = KP_LIGHT(20);
         messageLabel.tag = MESSAGE_LABEL_TAG;
         messageLabel.textColor = tcolor(TagColor);

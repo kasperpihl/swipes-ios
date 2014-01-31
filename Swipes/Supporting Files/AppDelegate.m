@@ -66,7 +66,7 @@
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
-    [KitLocate initKitLocateWithDelegate:NOTIHANDLER APIKey:kitLocateKey];
+    //[KitLocate initKitLocateWithDelegate:NOTIHANDLER APIKey:kitLocateKey];
     
     [Appirater appLaunched:YES];
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
