@@ -38,7 +38,7 @@ static NotificationHandler *sharedObject;
     if(title.length > 80) title = [title substringToIndex:80];
     localNotif.alertBody = title;
     localNotif.applicationIconBadgeNumber = badgeCount;
-    localNotif.soundName = UILocalNotificationDefaultSoundName;
+    localNotif.soundName = @"swipes-notification.aif";
     localNotif.userInfo = userInfo;
     return localNotif;
 }

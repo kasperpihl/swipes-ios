@@ -103,13 +103,9 @@
         self._needSync = YES;
         return UIBackgroundFetchResultNoData;
     }
-#warning Test out if this is working properly
     if (!kUserHandler.isPlus) {
         NSDate *now = [NSDate date];
-        NSDateFormatter *dateFormatter = [Global isoDateFormatter];
-        NSString *lastUpdatedString = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSync"];
-        NSDate *lastUpdatedDay;
-        if(lastUpdatedString) lastUpdatedDay = [dateFormatter dateFromString:lastUpdatedString];
+        NSDate *lastUpdatedDay = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSyncLocalDate"];
         if (lastUpdatedDay && now.dayOfYear == lastUpdatedDay.dayOfYear)
             return UIBackgroundFetchResultNoData;
     }
