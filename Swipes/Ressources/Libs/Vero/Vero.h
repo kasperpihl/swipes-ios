@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ASIHTTPRequest.h"
-#import "JSONKit.h"
+//#import "ASIHTTPRequest.h"
+//#import "JSONKit.h"
 
 @interface Vero : NSObject
 
