@@ -42,6 +42,7 @@
 @property (nonatomic) NSMutableSet *_deletedObjectsForSyncNotification;
 @property (nonatomic) NSMutableSet *_updatedObjectsForSyncNotification;
 
+@property BOOL outdated;
 @property BOOL _needSync;
 @property BOOL _isSyncing;
 
@@ -95,6 +96,11 @@
 }
 - (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async
 {
+    if(self.outdated){
+        if(async && force) [[[UIAlertView alloc] initWithTitle:@"New version required" message:@"For sync to work - please update Swipes from the App Store" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil] show];
+        return UIBackgroundFetchResultNoData;
+    }
+    
     if (!kCurrent) {
         return UIBackgroundFetchResultNoData;
     }
@@ -220,6 +226,11 @@
     
     [syncData setObject:updateObjectsToServer forKey:@"objects"];
     
+    
+    /* Include information around platform and what app version */
+    [syncData setObject:@"ios" forKey:@"platform"];
+    [syncData setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"version"];
+    
     /* Preparing request */
     NSError *error;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://api.swipesapp.com/sync"]];
@@ -249,12 +260,23 @@
     }
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     //NSLog(@"respo:%@ error:%@",result,error);
-    if(error){
-        [UtilityClass sendError:error type:@"Sync JSON handle parse"];
+    
+    if(error || [result objectForKey:@"code"] || ![result objectForKey:@"serverTime"]){
+        if(!error){
+            NSString *message = [result objectForKey:@"message"] ? [result objectForKey:@"message"] : @"Uncaught error";
+            NSInteger code = [result objectForKey:@"code"] ? [[result objectForKey:@"code"] integerValue] : 500;
+            if([message isEqualToString:@"update required"]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[[UIAlertView alloc] initWithTitle:@"New version required" message:@"For sync to work - please update Swipes from the App Store" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil] show];
+                    self.outdated = YES;
+                });
+            }
+            error = [NSError errorWithDomain:message code:code userInfo:result];
+        }
+        [UtilityClass sendError:error type:@"Sync Server Error"];
         self._isSyncing = NO;
         return NO;
     }
-    
     
     
     /* Handling response - Tags first due to relation */
@@ -293,7 +315,7 @@
     NSMutableArray *keysToRemove = [NSMutableArray array];
     for (NSString *identifier in self._attributeChangesOnObjects) {
         counter++;
-        if(counter >= limit){
+        if(counter > limit){
             self._needSync = YES;
             break;
         }
