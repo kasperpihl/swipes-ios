@@ -18,6 +18,7 @@
 #import "LocalyticsAmpSession.h"
 #import <Crashlytics/Crashlytics.h>
 #import <FacebookSDK/FBAppCall.h>
+#import <DropboxSDK/DropboxSDK.h>
 
 #import "RMStore.h"
 #import "PaymentHandler.h"
@@ -160,6 +161,17 @@
     if (!canHandle) {
         if ([[NSString stringWithFormat:@"en-%@", [[EvernoteSession sharedSession] consumerKey]] isEqualToString:[url scheme]] == YES) {
             canHandle = [[EvernoteSession sharedSession] canHandleOpenURL:url];
+        }
+    }
+    if (!canHandle) {
+        if ([[DBSession sharedSession] handleOpenURL:url]) {
+            if ([[DBSession sharedSession] isLinked]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"dropboxLinked" object:nil userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"linked"]];
+            }
+            else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"dropboxLinked" object:nil userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:@"linked"]];
+            }
+            canHandle = YES;
         }
     }
     return canHandle;

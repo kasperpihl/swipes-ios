@@ -44,6 +44,7 @@
 #import "KPTimePicker.h"
 #import "DotView.h"
 #import "EvernoteView.h"
+#import "DropboxView.h"
 #import "MCSwipeTableViewCell.h"
 
 #import "SectionHeaderView.h"
@@ -58,10 +59,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeTags,
     KPEditModeAlarm,
     KPEditModeNotes,
-    KPEditModeEvernote
+    KPEditModeEvernote,
+    KPEditModeDropbox
 };
 
-@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate>
+@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
 @property (nonatomic) CellType cellType;
 @property (nonatomic) NSString *objectId;
@@ -87,6 +89,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UIView *notesContainer;
 @property (nonatomic) UIView *repeatedContainer;
 @property (nonatomic) UIView *evernoteContainer;
+@property (nonatomic) UIView *dropboxContainer;
 
 @property (nonatomic) KPRepeatPicker *repeatPicker;
 @property (nonatomic) UILabel *alarmLabel;
@@ -94,6 +97,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UITextView *notesView;
 @property (nonatomic) UILabel *repeatedLabel;
 @property (nonatomic) UILabel *evernoteLabel;
+@property (nonatomic) UILabel *dropboxLabel;
 
 
 @end
@@ -225,13 +229,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         case KPEditModeAlarm:
         case KPEditModeNotes:
         case KPEditModeEvernote:
+        case KPEditModeDropbox:
         case KPEditModeNone:
             break;
     }
 }
-
-
-
 
 
 
@@ -344,7 +346,24 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self layout];
 }
 
+#pragma mark - DropboxViewDelegate
 
+- (void)selectedFileInView:(DropboxView *)DropboxView path:(NSString *)path
+{
+    DLog(@"selected dropbox file with path: %@", path);
+    self.activeEditMode = KPEditModeNone;
+    [BLURRY dismissAnimated:YES];
+    //    self.model.notes = text;
+    //    [KPToDo save];
+    [self updateNotes];
+    [self layout];
+}
+
+- (void)closeDropboxView:(DropboxView *)DropboxView
+{
+    self.activeEditMode = KPEditModeNone;
+    [BLURRY dismissAnimated:YES];
+}
 
 #pragma mark - Update UI for model
 -(void)update
@@ -359,6 +378,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self updateDot];
     [self updateRepeated];
     [self updateEvernote];
+    [self updateDropbox];
     [self updateSectionHeader];
     [self layout];
     
@@ -472,6 +492,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.evernoteLabel.text = @"Attach Evernote note";
 }
 
+- (void)updateDropbox
+{
+    self.dropboxLabel.text = @"Attach Dropbox file";
+}
+
 -(void)updateSectionHeader{
     [self.sectionHeader setTitle:[[self.model readableTitleForStatus] uppercaseString]];
     [self.sectionHeader setColor:[StyleHandler colorForCellType:self.cellType]];
@@ -506,6 +531,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     /*CGRectSetY(self.evernoteContainer, tempHeight);
     tempHeight += self.evernoteContainer.frame.size.height;
     */
+    
+    CGRectSetY(self.dropboxContainer, tempHeight);
+    tempHeight += self.dropboxContainer.frame.size.height;
     
     
     CGRectSetY(self.notesContainer, tempHeight);
@@ -615,6 +643,17 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     evernoteView.caller = self.segmentedViewController;
     BLURRY.showPosition = PositionBottom;
     [BLURRY showView:evernoteView inViewController:self];
+}
+
+-(void)pressedDropbox:(id)sender
+{
+    self.activeEditMode = KPEditModeDropbox;
+    DropboxView *view = [[DropboxView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
+    view.delegate = self;
+    view.caller = self.segmentedViewController;
+    view.useThumbnails = YES;
+    BLURRY.showPosition = PositionBottom;
+    [BLURRY showView:view inViewController:self];
 }
 
 #pragma mark - UIViewController stuff
@@ -760,6 +799,25 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          
          [self.scrollView addSubview:self.evernoteContainer];
          */
+        
+        /*
+         Dropbox Container with button!
+         */
+         self.dropboxContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
+         [self addAndGetImage:@"edit_notes_icon" inView:self.dropboxContainer];
+         
+         self.dropboxLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.dropboxContainer.frame.size.height)];
+         self.dropboxLabel.font = EDIT_TASK_TEXT_FONT;
+         self.dropboxLabel.backgroundColor = CLEAR;
+         [self setColorsFor:self.dropboxLabel];
+         [self.dropboxContainer addSubview:self.dropboxLabel];
+         
+         [self addClickButtonToView:self.dropboxContainer action:@selector(pressedDropbox:)];
+         
+         [self.scrollView addSubview:self.dropboxContainer];
+        
+        
+        
         /*
          Notes view
          */
@@ -818,6 +876,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.textView = nil;
     self.evernoteLabel = nil;
     self.evernoteContainer = nil;
+    self.dropboxLabel = nil;
+    self.dropboxContainer = nil;
     
     self.repeatedContainer = nil;
     self.repeatedLabel = nil;
