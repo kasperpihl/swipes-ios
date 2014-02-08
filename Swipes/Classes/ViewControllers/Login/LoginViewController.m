@@ -311,6 +311,7 @@
 }
 -(void)pressedFacebook:(UIButton*)sender{
     [self showIndicator:YES onElement:sender];
+    
     [PFFacebookUtils logInWithPermissions:@[@"email"] block:^(PFUser *user, NSError *error) {
         if(error){
             [self showIndicator:NO onElement:sender];
