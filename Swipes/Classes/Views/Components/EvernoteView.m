@@ -39,12 +39,14 @@
     if (self) {
         //self.backgroundColor = tbackground(BackgroundColor);
         
-        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(kContentSpacingLeft, 0, 320-kContentSpacingLeft-kContentSpacingRight, kSearchBarHeight)];
+        CGFloat top = (OSVER >= 7) ? [Global statusBarHeight] : 0.f;
+        
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(kContentSpacingLeft, top, 320-kContentSpacingLeft-kContentSpacingRight, kSearchBarHeight)];
         _searchBar.delegate = self;
         _searchBar.placeholder = @"Search in Evernote notes";
         [self addSubview:_searchBar];
 
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, kSearchBarHeight, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height - kSearchBarHeight) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, kSearchBarHeight + top, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height - kSearchBarHeight) style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         [self addSubview:_tableView];

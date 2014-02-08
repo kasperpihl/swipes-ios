@@ -50,6 +50,12 @@
 				<string>en-c7ed7298b3666bc4</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>db-qe70emp12gapr4c</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>40</string>

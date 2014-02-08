@@ -46,4 +46,15 @@ static Global *sharedObject;
     });
     return _is24hour;
 }
+
++ (CGFloat)statusBarHeight
+{
+    if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+        return [UIApplication sharedApplication].statusBarFrame.size.height;
+    }
+    else {
+        return [UIApplication sharedApplication].statusBarFrame.size.width;
+    }
+}
+
 @end

@@ -7,10 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #define OSVER [Global OSVersion]
+
 @interface Global : NSObject
-+(Global*)sharedInstance;
+
++ (Global *)sharedInstance;
 + (NSInteger)OSVersion;
-+(BOOL)is24Hour;
-+(NSDateFormatter*)isoDateFormatter;
++ (BOOL)is24Hour;
++ (NSDateFormatter *)isoDateFormatter;
++ (CGFloat)statusBarHeight;
+
 @end

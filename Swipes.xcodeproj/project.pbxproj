@@ -350,6 +350,42 @@
 		A7FE440A18282C60002AFB2E /* ostrich-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7FE440818282B04002AFB2E /* ostrich-regular.ttf */; };
 		DA310FA7188F3F26003C8FA4 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = DA310FA6188F3F26003C8FA4 /* Assets */; };
 		DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0B8F188CB4750094F866 /* EvernoteView.m */; };
+		DACD541918A19FB000C378DF /* DropboxView.m in Sources */ = {isa = PBXBuildFile; fileRef = DACD541818A19FB000C378DF /* DropboxView.m */; };
+		DACD541F18A1A46F00C378DF /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DACD541E18A1A46F00C378DF /* DropboxSDK.framework */; };
+		DACD544318A1ACFC00C378DF /* excel.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542118A1ACFC00C378DF /* excel.png */; };
+		DACD544418A1ACFC00C378DF /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542218A1ACFC00C378DF /* folder.png */; };
+		DACD544518A1ACFC00C378DF /* folder_app.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542318A1ACFC00C378DF /* folder_app.png */; };
+		DACD544618A1ACFC00C378DF /* folder_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542418A1ACFC00C378DF /* folder_camera.png */; };
+		DACD544718A1ACFC00C378DF /* folder_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542518A1ACFC00C378DF /* folder_gray.png */; };
+		DACD544818A1ACFC00C378DF /* folder_public.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542618A1ACFC00C378DF /* folder_public.png */; };
+		DACD544918A1ACFC00C378DF /* folder_star.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542718A1ACFC00C378DF /* folder_star.png */; };
+		DACD544A18A1ACFC00C378DF /* folder_user.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542818A1ACFC00C378DF /* folder_user.png */; };
+		DACD544B18A1ACFC00C378DF /* folder_user_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542918A1ACFC00C378DF /* folder_user_gray.png */; };
+		DACD544C18A1ACFC00C378DF /* music.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542A18A1ACFC00C378DF /* music.png */; };
+		DACD544D18A1ACFC00C378DF /* package.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542B18A1ACFC00C378DF /* package.png */; };
+		DACD544E18A1ACFC00C378DF /* page_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542C18A1ACFC00C378DF /* page_white.png */; };
+		DACD544F18A1ACFC00C378DF /* page_white_acrobat.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542D18A1ACFC00C378DF /* page_white_acrobat.png */; };
+		DACD545018A1ACFC00C378DF /* page_white_actionscript.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542E18A1ACFC00C378DF /* page_white_actionscript.png */; };
+		DACD545118A1ACFC00C378DF /* page_white_c.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542F18A1ACFC00C378DF /* page_white_c.png */; };
+		DACD545218A1ACFC00C378DF /* page_white_code.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543018A1ACFC00C378DF /* page_white_code.png */; };
+		DACD545318A1ACFC00C378DF /* page_white_cplusplus.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543118A1ACFC00C378DF /* page_white_cplusplus.png */; };
+		DACD545418A1ACFC00C378DF /* page_white_csharp.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543218A1ACFC00C378DF /* page_white_csharp.png */; };
+		DACD545518A1ACFC00C378DF /* page_white_cup.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543318A1ACFC00C378DF /* page_white_cup.png */; };
+		DACD545618A1ACFC00C378DF /* page_white_dvd.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543418A1ACFC00C378DF /* page_white_dvd.png */; };
+		DACD545718A1ACFC00C378DF /* page_white_flash.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543518A1ACFC00C378DF /* page_white_flash.png */; };
+		DACD545818A1ACFC00C378DF /* page_white_gear.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543618A1ACFC00C378DF /* page_white_gear.png */; };
+		DACD545918A1ACFC00C378DF /* page_white_h.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543718A1ACFC00C378DF /* page_white_h.png */; };
+		DACD545A18A1ACFC00C378DF /* page_white_paint.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543818A1ACFC00C378DF /* page_white_paint.png */; };
+		DACD545B18A1ACFC00C378DF /* page_white_php.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543918A1ACFC00C378DF /* page_white_php.png */; };
+		DACD545C18A1ACFC00C378DF /* page_white_picture.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543A18A1ACFC00C378DF /* page_white_picture.png */; };
+		DACD545D18A1ACFC00C378DF /* page_white_ruby.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543B18A1ACFC00C378DF /* page_white_ruby.png */; };
+		DACD545E18A1ACFC00C378DF /* page_white_text.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543C18A1ACFC00C378DF /* page_white_text.png */; };
+		DACD545F18A1ACFC00C378DF /* page_white_tux.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543D18A1ACFC00C378DF /* page_white_tux.png */; };
+		DACD546018A1ACFC00C378DF /* page_white_vector.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543E18A1ACFC00C378DF /* page_white_vector.png */; };
+		DACD546118A1ACFC00C378DF /* page_white_visualstudio.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543F18A1ACFC00C378DF /* page_white_visualstudio.png */; };
+		DACD546218A1ACFC00C378DF /* page_white_zip.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544018A1ACFC00C378DF /* page_white_zip.png */; };
+		DACD546318A1ACFC00C378DF /* powerpoint.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544118A1ACFC00C378DF /* powerpoint.png */; };
+		DACD546418A1ACFC00C378DF /* word.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544218A1ACFC00C378DF /* word.png */; };
 		DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
 		DAFB7B971853508C0006A706 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAFB7B961853508C0006A706 /* Crashlytics.framework */; };
 /* End PBXBuildFile section */
@@ -787,6 +823,43 @@
 		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvernoteView.h; sourceTree = "<group>"; };
 		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvernoteView.m; sourceTree = "<group>"; };
+		DACD541718A19FB000C378DF /* DropboxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxView.h; sourceTree = "<group>"; };
+		DACD541818A19FB000C378DF /* DropboxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxView.m; sourceTree = "<group>"; };
+		DACD541E18A1A46F00C378DF /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = "Pods/Dropbox-iOS-SDK/dropbox-ios-sdk-1.3.9/DropboxSDK.framework"; sourceTree = "<group>"; };
+		DACD542118A1ACFC00C378DF /* excel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = excel.png; sourceTree = "<group>"; };
+		DACD542218A1ACFC00C378DF /* folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder.png; sourceTree = "<group>"; };
+		DACD542318A1ACFC00C378DF /* folder_app.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder_app.png; sourceTree = "<group>"; };
+		DACD542418A1ACFC00C378DF /* folder_camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder_camera.png; sourceTree = "<group>"; };
+		DACD542518A1ACFC00C378DF /* folder_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder_gray.png; sourceTree = "<group>"; };
+		DACD542618A1ACFC00C378DF /* folder_public.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder_public.png; sourceTree = "<group>"; };
+		DACD542718A1ACFC00C378DF /* folder_star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder_star.png; sourceTree = "<group>"; };
+		DACD542818A1ACFC00C378DF /* folder_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder_user.png; sourceTree = "<group>"; };
+		DACD542918A1ACFC00C378DF /* folder_user_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder_user_gray.png; sourceTree = "<group>"; };
+		DACD542A18A1ACFC00C378DF /* music.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = music.png; sourceTree = "<group>"; };
+		DACD542B18A1ACFC00C378DF /* package.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = package.png; sourceTree = "<group>"; };
+		DACD542C18A1ACFC00C378DF /* page_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white.png; sourceTree = "<group>"; };
+		DACD542D18A1ACFC00C378DF /* page_white_acrobat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_acrobat.png; sourceTree = "<group>"; };
+		DACD542E18A1ACFC00C378DF /* page_white_actionscript.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_actionscript.png; sourceTree = "<group>"; };
+		DACD542F18A1ACFC00C378DF /* page_white_c.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_c.png; sourceTree = "<group>"; };
+		DACD543018A1ACFC00C378DF /* page_white_code.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_code.png; sourceTree = "<group>"; };
+		DACD543118A1ACFC00C378DF /* page_white_cplusplus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_cplusplus.png; sourceTree = "<group>"; };
+		DACD543218A1ACFC00C378DF /* page_white_csharp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_csharp.png; sourceTree = "<group>"; };
+		DACD543318A1ACFC00C378DF /* page_white_cup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_cup.png; sourceTree = "<group>"; };
+		DACD543418A1ACFC00C378DF /* page_white_dvd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_dvd.png; sourceTree = "<group>"; };
+		DACD543518A1ACFC00C378DF /* page_white_flash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_flash.png; sourceTree = "<group>"; };
+		DACD543618A1ACFC00C378DF /* page_white_gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_gear.png; sourceTree = "<group>"; };
+		DACD543718A1ACFC00C378DF /* page_white_h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_h.png; sourceTree = "<group>"; };
+		DACD543818A1ACFC00C378DF /* page_white_paint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_paint.png; sourceTree = "<group>"; };
+		DACD543918A1ACFC00C378DF /* page_white_php.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_php.png; sourceTree = "<group>"; };
+		DACD543A18A1ACFC00C378DF /* page_white_picture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_picture.png; sourceTree = "<group>"; };
+		DACD543B18A1ACFC00C378DF /* page_white_ruby.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_ruby.png; sourceTree = "<group>"; };
+		DACD543C18A1ACFC00C378DF /* page_white_text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_text.png; sourceTree = "<group>"; };
+		DACD543D18A1ACFC00C378DF /* page_white_tux.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_tux.png; sourceTree = "<group>"; };
+		DACD543E18A1ACFC00C378DF /* page_white_vector.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_vector.png; sourceTree = "<group>"; };
+		DACD543F18A1ACFC00C378DF /* page_white_visualstudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_visualstudio.png; sourceTree = "<group>"; };
+		DACD544018A1ACFC00C378DF /* page_white_zip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_zip.png; sourceTree = "<group>"; };
+		DACD544118A1ACFC00C378DF /* powerpoint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = powerpoint.png; sourceTree = "<group>"; };
+		DACD544218A1ACFC00C378DF /* word.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = word.png; sourceTree = "<group>"; };
 		DAEBBE62188B2BB8002655CB /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		DAFB7B961853508C0006A706 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Swipes/Ressources/Libs/Crashlytics.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -802,6 +875,7 @@
 				A78F392E16F7DC1900A8C78D /* MessageUI.framework in Frameworks */,
 				A78F391416F7D5BA00A8C78D /* AddressBook.framework in Frameworks */,
 				A74F61BF16EBA5B8004927DA /* MediaPlayer.framework in Frameworks */,
+				DACD541F18A1A46F00C378DF /* DropboxSDK.framework in Frameworks */,
 				A74F61BD16EBA5A5004927DA /* AssetsLibrary.framework in Frameworks */,
 				DAFB7B971853508C0006A706 /* Crashlytics.framework in Frameworks */,
 				A74F61BB16EBA595004927DA /* AVFoundation.framework in Frameworks */,
@@ -914,6 +988,8 @@
 				DA3F0B8F188CB4750094F866 /* EvernoteView.m */,
 				41DF0822188ECD5A0074DDFB /* EvernoteViewerView.h */,
 				41DF0823188ECD5A0074DDFB /* EvernoteViewerView.m */,
+				DACD541718A19FB000C378DF /* DropboxView.h */,
+				DACD541818A19FB000C378DF /* DropboxView.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1180,6 +1256,7 @@
 			isa = PBXGroup;
 			children = (
 				DAEBBE62188B2BB8002655CB /* libxml2.dylib */,
+				DACD541E18A1A46F00C378DF /* DropboxSDK.framework */,
 				A76182E0187D37AB00914A05 /* KitLocate.Framework */,
 				A7ADCB3717DD352F00780F88 /* libz.dylib */,
 				A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */,
@@ -1384,6 +1461,7 @@
 				A79DB41B17358C33007A48E2 /* Backgrounds */,
 				A79DB3F21735892C007A48E2 /* Navbar */,
 				A7BDD4AF17369A6900C1A97E /* SchedulePopup */,
+				DACD542018A1ACFC00C378DF /* Dropbox */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -1726,6 +1804,47 @@
 			path = MenuButtons;
 			sourceTree = "<group>";
 		};
+		DACD542018A1ACFC00C378DF /* Dropbox */ = {
+			isa = PBXGroup;
+			children = (
+				DACD542118A1ACFC00C378DF /* excel.png */,
+				DACD542218A1ACFC00C378DF /* folder.png */,
+				DACD542318A1ACFC00C378DF /* folder_app.png */,
+				DACD542418A1ACFC00C378DF /* folder_camera.png */,
+				DACD542518A1ACFC00C378DF /* folder_gray.png */,
+				DACD542618A1ACFC00C378DF /* folder_public.png */,
+				DACD542718A1ACFC00C378DF /* folder_star.png */,
+				DACD542818A1ACFC00C378DF /* folder_user.png */,
+				DACD542918A1ACFC00C378DF /* folder_user_gray.png */,
+				DACD542A18A1ACFC00C378DF /* music.png */,
+				DACD542B18A1ACFC00C378DF /* package.png */,
+				DACD542C18A1ACFC00C378DF /* page_white.png */,
+				DACD542D18A1ACFC00C378DF /* page_white_acrobat.png */,
+				DACD542E18A1ACFC00C378DF /* page_white_actionscript.png */,
+				DACD542F18A1ACFC00C378DF /* page_white_c.png */,
+				DACD543018A1ACFC00C378DF /* page_white_code.png */,
+				DACD543118A1ACFC00C378DF /* page_white_cplusplus.png */,
+				DACD543218A1ACFC00C378DF /* page_white_csharp.png */,
+				DACD543318A1ACFC00C378DF /* page_white_cup.png */,
+				DACD543418A1ACFC00C378DF /* page_white_dvd.png */,
+				DACD543518A1ACFC00C378DF /* page_white_flash.png */,
+				DACD543618A1ACFC00C378DF /* page_white_gear.png */,
+				DACD543718A1ACFC00C378DF /* page_white_h.png */,
+				DACD543818A1ACFC00C378DF /* page_white_paint.png */,
+				DACD543918A1ACFC00C378DF /* page_white_php.png */,
+				DACD543A18A1ACFC00C378DF /* page_white_picture.png */,
+				DACD543B18A1ACFC00C378DF /* page_white_ruby.png */,
+				DACD543C18A1ACFC00C378DF /* page_white_text.png */,
+				DACD543D18A1ACFC00C378DF /* page_white_tux.png */,
+				DACD543E18A1ACFC00C378DF /* page_white_vector.png */,
+				DACD543F18A1ACFC00C378DF /* page_white_visualstudio.png */,
+				DACD544018A1ACFC00C378DF /* page_white_zip.png */,
+				DACD544118A1ACFC00C378DF /* powerpoint.png */,
+				DACD544218A1ACFC00C378DF /* word.png */,
+			);
+			path = Dropbox;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1792,8 +1911,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A71DE4BA1844E4BB0097394C /* menu_logout.png in Resources */,
+				DACD544718A1ACFC00C378DF /* folder_gray.png in Resources */,
 				A72C8B7C181574EA0078E516 /* menu_notifications-high@2x.png in Resources */,
 				A78128D217294C56002226C8 /* InfoPlist.strings in Resources */,
+				DACD544518A1ACFC00C378DF /* folder_app.png in Resources */,
 				A78128D317294C56002226C8 /* MainStoryboard.storyboard in Resources */,
 				A7BA696C18033FDF00F99654 /* schedule_image_cloud-high@2x.png in Resources */,
 				A79DB4071735892C007A48E2 /* done-highlighted.png in Resources */,
@@ -1818,11 +1939,14 @@
 				A7DAC67B181A7CF800B8C079 /* plus_icon_white.png in Resources */,
 				A7DAC67A181A7CF800B8C079 /* notes_icon_small_gray@2x.png in Resources */,
 				A7916A62181BC7A500FA1974 /* round_twitter.png in Resources */,
+				DACD544C18A1ACFC00C378DF /* music.png in Resources */,
 				A79DB42317358C33007A48E2 /* done_white_background@2x.png in Resources */,
 				A7DAC69F181A7E8C00B8C079 /* edit_location_icon.png in Resources */,
+				DACD544D18A1ACFC00C378DF /* package.png in Resources */,
 				A72C8B7F181574EA0078E516 /* menu_policy-high.png in Resources */,
 				A79DB42517358C33007A48E2 /* schedule_white_background@2x.png in Resources */,
 				A7DAC68B181A7CF800B8C079 /* round_backarrow_big-high.png in Resources */,
+				DACD545118A1ACFC00C378DF /* page_white_c.png in Resources */,
 				A7DAC693181A7CF800B8C079 /* round_cross_small-high.png in Resources */,
 				A72C8B80181574EA0078E516 /* menu_policy-high@2x.png in Resources */,
 				A7BDD4BC17369A6900C1A97E /* schedule_image_calender.png in Resources */,
@@ -1838,6 +1962,7 @@
 				A7BDD4C617369A6900C1A97E /* schedule_image_sun.png in Resources */,
 				A7BDD4C717369A6900C1A97E /* schedule_image_sun@2x.png in Resources */,
 				A7582503189BA9DE00B904BC /* swipes_logo_white@2x.png in Resources */,
+				DACD546218A1ACFC00C378DF /* page_white_zip.png in Resources */,
 				A72C8B7E181574EA0078E516 /* menu_notifications@2x.png in Resources */,
 				A7DAC69A181A7CF800B8C079 /* round_plus_big@2x.png in Resources */,
 				A72C8B84181574EA0078E516 /* menu_pro-high@2x.png in Resources */,
@@ -1849,6 +1974,7 @@
 				A717BF15175F5E7B004791BF /* edit_notes_icon@2x.png in Resources */,
 				A7DAC681181A7CF800B8C079 /* share_icon_white.png in Resources */,
 				A72C8B81181574EA0078E516 /* menu_policy.png in Resources */,
+				DACD544918A1ACFC00C378DF /* folder_star.png in Resources */,
 				A7DAC6A8181A805E00B8C079 /* sitearrow_icon_white-high@2x.png in Resources */,
 				A717BF17175F5E7B004791BF /* edit_tags_icon@2x.png in Resources */,
 				A72C8B8A181574EA0078E516 /* menu_snoozes-high@2x.png in Resources */,
@@ -1858,25 +1984,33 @@
 				A7916A60181BC7A500FA1974 /* round_twitter-high.png in Resources */,
 				A7DAC687181A7CF800B8C079 /* trashcan_icon_white-high.png in Resources */,
 				A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */,
+				DACD545B18A1ACFC00C378DF /* page_white_php.png in Resources */,
 				A717BF26176115CD004791BF /* ProximaNova-Light.ttf in Resources */,
+				DACD545E18A1ACFC00C378DF /* page_white_text.png in Resources */,
+				DACD545318A1ACFC00C378DF /* page_white_cplusplus.png in Resources */,
 				A717BF27176115CD004791BF /* ProximaNova-Regular.ttf in Resources */,
 				A7DAC670181A7CF800B8C079 /* edit_icon_white-high@2x.png in Resources */,
 				A7DAC68A181A7CF800B8C079 /* trashcan_icon_white@2x.png in Resources */,
+				DACD545218A1ACFC00C378DF /* page_white_code.png in Resources */,
 				A72C8B93181574EA0078E516 /* menu_walkthrough.png in Resources */,
 				A717BF2917611D2D004791BF /* ProximaNova-Semibold.ttf in Resources */,
 				A72C8B7B181574EA0078E516 /* menu_notifications-high.png in Resources */,
 				A717BF2B17611EDB004791BF /* ProximaNovaCond-Semibold.ttf in Resources */,
 				A700042D1762A02A008CB715 /* edit_notes_icon.png in Resources */,
+				DACD545718A1ACFC00C378DF /* page_white_flash.png in Resources */,
 				A72C8B94181574EA0078E516 /* menu_walkthrough@2x.png in Resources */,
 				A700042E1762A02A008CB715 /* edit_tags_icon.png in Resources */,
 				A7DAC67F181A7CF800B8C079 /* share_icon_white-high.png in Resources */,
+				DACD544E18A1ACFC00C378DF /* page_white.png in Resources */,
 				A7E3E1E4183E46F500E2D6D2 /* round_cross_small_black.png in Resources */,
 				A70004331762A038008CB715 /* done_white_background.png in Resources */,
 				A7916A5E181BC7A500FA1974 /* round_facebook.png in Resources */,
+				DACD546118A1ACFC00C378DF /* page_white_visualstudio.png in Resources */,
 				A7E3E1E0183E396200E2D6D2 /* login_swipes_logo.png in Resources */,
 				A70004341762A038008CB715 /* schedule_white_background.png in Resources */,
 				A72C8B8C181574EA0078E516 /* menu_snoozes@2x.png in Resources */,
 				A7BA697618033FDF00F99654 /* schedule_image_notebook-high@2x.png in Resources */,
+				DACD545C18A1ACFC00C378DF /* page_white_picture.png in Resources */,
 				A760891A178CE55900C8735D /* schedule_image_coffee.png in Resources */,
 				A72C8B83181574EA0078E516 /* menu_pro-high.png in Resources */,
 				A7DAC6A7181A805E00B8C079 /* sitearrow_icon_white-high.png in Resources */,
@@ -1886,6 +2020,7 @@
 				A7DAC685181A7CF800B8C079 /* tag_icon_white.png in Resources */,
 				A760891E178CE56100C8735D /* schedule_image_moon.png in Resources */,
 				A760891F178CE56100C8735D /* schedule_image_moon@2x.png in Resources */,
+				DACD544A18A1ACFC00C378DF /* folder_user.png in Resources */,
 				A7DAC694181A7CF800B8C079 /* round_cross_small-high@2x.png in Resources */,
 				A7DAC673181A7CF800B8C079 /* location_icon_small_gray.png in Resources */,
 				A7608924178E04C900C8735D /* schedule_image_cloud.png in Resources */,
@@ -1894,6 +2029,7 @@
 				A7608926178E04C900C8735D /* schedule_image_glasses.png in Resources */,
 				A7DAC66D181A7CF800B8C079 /* backarrow_icon_white.png in Resources */,
 				A7608927178E04C900C8735D /* schedule_image_glasses@2x.png in Resources */,
+				DACD546418A1ACFC00C378DF /* word.png in Resources */,
 				A741EC4C18328B57000F9F93 /* settings_icon_white-high@2x.png in Resources */,
 				A7BB65CB189BF19600BE7183 /* swipes-notification.aif in Resources */,
 				A7582502189BA9DE00B904BC /* swipes_logo_white.png in Resources */,
@@ -1901,6 +2037,7 @@
 				A72C8B8E181574EA0078E516 /* menu_support-high@2x.png in Resources */,
 				A7DAC690181A7CF800B8C079 /* round_checkmark_big-high@2x.png in Resources */,
 				A75545D7179B3D2F00CE2F4E /* done-high.png in Resources */,
+				DACD545518A1ACFC00C378DF /* page_white_cup.png in Resources */,
 				A75545D8179B3D2F00CE2F4E /* done-high@2x.png in Resources */,
 				A7DAC67D181A7CF800B8C079 /* repeat_icon_small_gray.png in Resources */,
 				A75545D9179B3D2F00CE2F4E /* schedule-high.png in Resources */,
@@ -1912,12 +2049,16 @@
 				A75236E417A335680030ED1E /* walkthrough_swipe_done.png in Resources */,
 				A7DAC68F181A7CF800B8C079 /* round_checkmark_big-high.png in Resources */,
 				A7916A61181BC7A500FA1974 /* round_twitter-high@2x.png in Resources */,
+				DACD545818A1ACFC00C378DF /* page_white_gear.png in Resources */,
 				A75236E517A335680030ED1E /* walkthrough_swipe_done@2x.png in Resources */,
 				A71DE4BB1844E4BB0097394C /* menu_logout@2x.png in Resources */,
 				A75236E617A335680030ED1E /* walkthrough_swipe_schedule.png in Resources */,
+				DACD545618A1ACFC00C378DF /* page_white_dvd.png in Resources */,
 				A75236E717A335680030ED1E /* walkthrough_swipe_schedule@2x.png in Resources */,
 				A75236EC17A335680030ED1E /* wt_menu_expain.png in Resources */,
+				DACD546018A1ACFC00C378DF /* page_white_vector.png in Resources */,
 				A7DAC6AE181A8D3C00B8C079 /* checkmark_icon_white@2x.png in Resources */,
+				DACD545D18A1ACFC00C378DF /* page_white_ruby.png in Resources */,
 				A741EC4F18354726000F9F93 /* default-background.jpg in Resources */,
 				A75236ED17A335680030ED1E /* wt_menu_expain@2x.png in Resources */,
 				A7916A5F181BC7A500FA1974 /* round_facebook@2x.png in Resources */,
@@ -1928,6 +2069,7 @@
 				A7DAC6A1181A7E8C00B8C079 /* edit_schedule_icon.png in Resources */,
 				A75236FD17A349340030ED1E /* walkthrough_phone_background.png in Resources */,
 				A7DAC67C181A7CF800B8C079 /* plus_icon_white@2x.png in Resources */,
+				DACD544618A1ACFC00C378DF /* folder_camera.png in Resources */,
 				A75236FE17A349340030ED1E /* walkthrough_phone_background@2x.png in Resources */,
 				A72C8B8B181574EA0078E516 /* menu_snoozes.png in Resources */,
 				A7DAC682181A7CF800B8C079 /* share_icon_white@2x.png in Resources */,
@@ -1942,6 +2084,7 @@
 				A7E3E1E1183E396200E2D6D2 /* login_swipes_logo@2x.png in Resources */,
 				A7C90E7717A712A100C5F9E2 /* wt_signature@2x.png in Resources */,
 				A7DAC689181A7CF800B8C079 /* trashcan_icon_white.png in Resources */,
+				DACD544818A1ACFC00C378DF /* folder_public.png in Resources */,
 				A7DAC6AD181A8D3C00B8C079 /* checkmark_icon_white.png in Resources */,
 				A724B01E17A9397D00E0EF83 /* selected_circle.png in Resources */,
 				A7DAC6A0181A7E8C00B8C079 /* edit_location_icon@2x.png in Resources */,
@@ -1953,6 +2096,7 @@
 				A7DAC695181A7CF800B8C079 /* round_cross_small.png in Resources */,
 				A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */,
 				A7BA696818033FDF00F99654 /* schedule_image_calender-high@2x.png in Resources */,
+				DACD545918A1ACFC00C378DF /* page_white_h.png in Resources */,
 				A72C8B8D181574EA0078E516 /* menu_support-high.png in Resources */,
 				A7DAC680181A7CF800B8C079 /* share_icon_white-high@2x.png in Resources */,
 				A7E2D93F17B2E3B0007BDE00 /* schedule_image_location.png in Resources */,
@@ -1964,6 +2108,7 @@
 				A7E2D94417B3B176007BDE00 /* picker_wheel_ip4@2x.png in Resources */,
 				A730D39217B5149C005E1510 /* upgrade_plus_logo.png in Resources */,
 				A730D39317B5149C005E1510 /* upgrade_plus_logo@2x.png in Resources */,
+				DACD544F18A1ACFC00C378DF /* page_white_acrobat.png in Resources */,
 				A72C8B86181574EA0078E516 /* menu_pro@2x.png in Resources */,
 				A72C8B7D181574EA0078E516 /* menu_notifications.png in Resources */,
 				A730D39617B51C24005E1510 /* upgrade_full.png in Resources */,
@@ -1982,6 +2127,7 @@
 				A7DAC692181A7CF800B8C079 /* round_checkmark_big@2x.png in Resources */,
 				A7DAC688181A7CF800B8C079 /* trashcan_icon_white-high@2x.png in Resources */,
 				A7DAC68E181A7CF800B8C079 /* round_backarrow_big@2x.png in Resources */,
+				DACD544B18A1ACFC00C378DF /* folder_user_gray.png in Resources */,
 				A7DAC6AA181A805E00B8C079 /* sitearrow_icon_white@2x.png in Resources */,
 				A7BA696D18033FDF00F99654 /* schedule_image_coffee-high.png in Resources */,
 				A7ECD38017C14C1200F9BCF0 /* edit_repeat_icon@2x.png in Resources */,
@@ -1989,6 +2135,8 @@
 				A7BA696E18033FDF00F99654 /* schedule_image_coffee-high@2x.png in Resources */,
 				A7BA696918033FDF00F99654 /* schedule_image_circle-high.png in Resources */,
 				A7DAC691181A7CF800B8C079 /* round_checkmark_big.png in Resources */,
+				DACD545F18A1ACFC00C378DF /* page_white_tux.png in Resources */,
+				DACD545018A1ACFC00C378DF /* page_white_actionscript.png in Resources */,
 				A7DAC674181A7CF800B8C079 /* location_icon_small_gray@2x.png in Resources */,
 				A7DAC699181A7CF800B8C079 /* round_plus_big.png in Resources */,
 				A7FE440918282C5D002AFB2E /* ostrich-bold.ttf in Resources */,
@@ -1996,13 +2144,18 @@
 				A7ADCB2C17DD2B4000780F88 /* background_white_signate.png in Resources */,
 				A768D3A01896F2CB003E2DD6 /* backarrow_small_icon_white.png in Resources */,
 				A7BA696F18033FDF00F99654 /* schedule_image_glasses-high.png in Resources */,
+				DACD545A18A1ACFC00C378DF /* page_white_paint.png in Resources */,
 				A7BA696A18033FDF00F99654 /* schedule_image_circle-high@2x.png in Resources */,
+				DACD545418A1ACFC00C378DF /* page_white_csharp.png in Resources */,
 				A71DE4B61844DA660097394C /* menu_sync.png in Resources */,
 				A71DE4B01843C0010097394C /* settings_icon_white-high.png in Resources */,
 				A7ADCB2D17DD2B4000780F88 /* background_white_signate@2x.png in Resources */,
+				DACD544418A1ACFC00C378DF /* folder.png in Resources */,
 				A7DAC66E181A7CF800B8C079 /* backarrow_icon_white@2x.png in Resources */,
+				DACD546318A1ACFC00C378DF /* powerpoint.png in Resources */,
 				A7ADCB3417DD350400780F88 /* iOSa_2.18.5.version in Resources */,
 				A7DAC6A9181A805E00B8C079 /* sitearrow_icon_white.png in Resources */,
+				DACD544318A1ACFC00C378DF /* excel.png in Resources */,
 				A71DE4B71844DA660097394C /* menu_sync@2x.png in Resources */,
 				A7ADCB3617DD350400780F88 /* LICENSE in Resources */,
 			);
@@ -2089,6 +2242,7 @@
 				A78128FC17294C56002226C8 /* AppDelegate.m in Sources */,
 				A781290217294C56002226C8 /* main.m in Sources */,
 				A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */,
+				DACD541918A19FB000C378DF /* DropboxView.m in Sources */,
 				A703B1AF1838EBF20047DCC9 /* KPAddView.m in Sources */,
 				A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */,
 				A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */,
@@ -2223,6 +2377,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
+					"/Users/demosten/work/iPhone/swipes-ios/Pods/Dropbox-iOS-SDK/dropbox-ios-sdk-1.3.9",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
@@ -2361,6 +2516,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
+					"/Users/demosten/work/iPhone/swipes-ios/Pods/Dropbox-iOS-SDK/dropbox-ios-sdk-1.3.9",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
@@ -2434,6 +2590,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
+					"/Users/demosten/work/iPhone/swipes-ios/Pods/Dropbox-iOS-SDK/dropbox-ios-sdk-1.3.9",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
