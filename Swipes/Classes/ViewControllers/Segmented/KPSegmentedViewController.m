@@ -124,21 +124,7 @@
     }];
 }
 -(void)pressedShare:(id)sender{
-    if([kUserHandler isPlus]){
-        [ROOT_CONTROLLER shareTasks];
-        return;
-    }
-    [ANALYTICS pushView:@"Sharing plus popup"];
-    [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Sharing"}];
-    PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Sharing tasks is a feature in Swipes Plus. Wouldn’t it be great to send away some tasks?" block:^(BOOL succeeded, NSError *error) {
-        [ANALYTICS popView];
-        [BLURRY dismissAnimated:YES];
-        if(succeeded){
-            [ROOT_CONTROLLER upgrade];
-        }
-    }];
-    BLURRY.blurryTopColor = gray(230, 0.5);
-    [BLURRY showView:alert inViewController:self];
+    [ROOT_CONTROLLER shareTasks];
 }
 -(void)tagItems:(NSArray *)items inViewController:(UIViewController*)viewController withDismissAction:(voidBlock)block{
     self.selectedItems = items;

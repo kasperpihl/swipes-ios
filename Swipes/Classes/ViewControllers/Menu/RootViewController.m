@@ -199,6 +199,7 @@ static RootViewController *sharedObject;
         message = [message stringByAppendingString:@"\r\nSent from Swipes - http://swipesapp.com\r\n"];
         [mailCont setMessageBody:message isHTML:NO];
         [self presentViewController:mailCont animated:YES completion:nil];
+        [ANALYTICS tagEvent:@"Share tasks" options:@{@"Number of Tasks":@(tasks.count)}];
     }
     else{
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Mail was not setup" message:@"You can send us feedback to support@swipesapp.com. Thanks" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
