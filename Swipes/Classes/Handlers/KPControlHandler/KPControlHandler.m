@@ -20,6 +20,7 @@
 
 @interface KPControlHandler () <ToolbarDelegate>
 @property (nonatomic) KPControlHandlerState activeState;
+@property (nonatomic) KPControlHandlerState lastChosen;
 @property (nonatomic,weak) UIView* view;
 @property (nonatomic,weak) KPToolbar *addToolbar;
 @property (nonatomic,weak) KPToolbar *editToolbar;
@@ -83,6 +84,8 @@
             case KPControlHandlerStateEdit:
                 CGRectSetY(self.editToolbar, targetY);
                 break;
+            default:
+                break;
         }
     };
     return block;
@@ -115,6 +118,8 @@
                 }
                 CGRectSetY(self.editToolbar, bigButtonY);
                 break;
+            default:
+                break;
         }
     };
     return block;
@@ -123,8 +128,10 @@
     /*KPControlHandlerState stateToClear = (self.activeState == KPControlHandlerStateAdd) ? KPControlHandlerStateEdit : KPControlHandlerStateAdd;
     [self getClearBlockFromState:stateToClear toState:self.activeState];*/
     self.activeState = state;
+    if(self.lastChosen != self.activeState) [self setState:self.lastChosen animated:YES];
 }
 -(void)setState:(KPControlHandlerState)state animated:(BOOL)animated{
+    self.lastChosen = state;
     if(state == self.activeState && self.hasStarted) return;
     
     if(!self.hasStarted) self.hasStarted = YES;

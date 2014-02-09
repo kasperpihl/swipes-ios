@@ -10,7 +10,8 @@
 #define ANIMATION_DURATION GLOBAL_ANIMATION_DURATION
 
 typedef NS_ENUM(NSUInteger, KPControlHandlerState){
-    KPControlHandlerStateAdd,
+    KPControlHandlerStateNone = 0,
+    KPControlHandlerStateAdd = 1,
     KPControlHandlerStateEdit
 };
 @protocol KPControlHandlerDelegate <NSObject>

@@ -18,7 +18,7 @@
 
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 -(void)highlightButton:(KPSegmentButtons)controlButton;
--(void)show:(BOOL)show controlsAnimated:(BOOL)animated;
+//-(void)show:(BOOL)show controlsAnimated:(BOOL)animated;
 -(void)receivedLocalNotification:(UILocalNotification*)notification;
 -(ToDoListViewController*)currentViewController;
 -(void)pressedDelete:(id)sender;

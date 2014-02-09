@@ -73,7 +73,6 @@
 #pragma mark - KPAddTagDelegate
 -(void)closeAddPanel:(AddPanelView *)addPanel{
     [BLURRY dismissAnimated:YES];
-    [self show:YES controlsAnimated:YES];
 }
 -(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
     [[self currentViewController] update];
@@ -106,7 +105,6 @@
 }
 #pragma mark - KPControlHandlerDelegate
 -(void)pressedAdd:(id)sender{
-    [self show:NO controlsAnimated:YES];
     [self changeToIndex:1];
     //[[self currentViewController].itemHandler clearAll];
     
@@ -270,7 +268,7 @@
     if(currentState != _currentState){
         _currentState = currentState;
     }
-    [self show:YES controlsAnimated:YES];
+    [self.controlHandler setState:[self handlerStateForCurrent:currentState] animated:YES];
 }
 -(void)setBackgroundMode:(BOOL)backgroundMode{
     if(_backgroundMode != backgroundMode){
@@ -288,15 +286,6 @@
         if(finished){
         }
     }];
-}
--(void)show:(BOOL)show controlsAnimated:(BOOL)animated{
-    if(show){
-        [self.controlHandler setState:[self handlerStateForCurrent:self.currentState] animated:animated];
-    }
-    else{
-        //[self.controlHandler setState:KPControlHandlerStateNone shrinkingView:[self currentViewController].tableView animated:animated];
-    }
-    //[self.navigationController setNavigationBarHidden:!show animated:YES];
 }
 -(void)updatedDailyImage{
     UIImage *newDailyImage = [[kSettings getDailyImage] rn_boxblurImageWithBlur:0.5f exclusionPath:nil];

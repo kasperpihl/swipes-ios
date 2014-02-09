@@ -75,7 +75,7 @@
 }
 #pragma mark ItemHandlerDelegate
 -(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber oldNumber:(NSInteger)oldNumber{
-    [self didUpdateCells];
+    //[self didUpdateCells];
     [self showBackgroundItems:(itemNumber == 0)];
     self.searchBar.hidden = (itemNumber == 0);
     
@@ -266,7 +266,6 @@
 
 #pragma mark - SwipeTableCell
 -(void)swipeTableViewCell:(ToDoCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
-    [[self parent] show:NO controlsAnimated:YES];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
     [self.searchBar resignSearchField];
@@ -356,7 +355,6 @@
     [self removeItems:[self selectedItems]];
 }
 -(void)removeItems:(NSArray*)items{
-    [self runBeforeMoving];
     //if(items.count == 0) return;
     NSMutableArray *indexPaths = [NSMutableArray array];
     for(KPToDo *toDo in items){
@@ -367,7 +365,6 @@
     if(self.selectedRows.count != indexPaths.count){
         [self update];
         [self cleanUpAfterMovingAnimated:YES];
-        
     }
     else{
         [self.tableView beginUpdates];
@@ -400,20 +397,13 @@
     }
     
 }
--(void)runBeforeMoving{
-    if(self.showingViewController){
-        //self.showingViewController.injectedIndexPath = nil;
-    }
-}
 -(void)cleanUpAfterMovingAnimated:(BOOL)animated{
     [self.selectedRows removeAllObjects];
     self.isLonelyRider = NO;
     self.swipingCell = nil;
     [self didUpdateCells];
 }
--(void)updateSearchBar{
-    
-}
+
 -(void)deselectAllRows:(id)sender{
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
     for(NSIndexPath *indexPath in selectedIndexPaths){
@@ -436,7 +426,7 @@
         self.isLonelyRider = NO;
     }
     self.swipingCell = nil;
-    [[self parent] show:YES controlsAnimated:YES];
+    [self handleShowingToolbar];
 }
 -(void)prepareTableView:(UITableView *)tableView{
     tableView.allowsMultipleSelection = YES;
@@ -471,12 +461,6 @@
     [tableView addGestureRecognizer:doubleTap];
 }
 
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    /*CGFloat requiredOffset = -44;
-    //NSLog(@"%f",scrollView.contentOffset.y);
-    if((scrollView.contentOffset.y+self.tableView.tableHeaderView.frame.size.height)<requiredOffset)
-        [self refresh];*/
-}
 #pragma mark - UIViewController stuff
 - (void)viewDidLoad
 {
