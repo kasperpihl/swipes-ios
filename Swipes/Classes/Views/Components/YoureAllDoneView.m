@@ -67,6 +67,21 @@
     }
     return self;
 }
+-(void)setText:(NSString*)text{
+    NSInteger strLength = [text length];
+    NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:text];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setLineSpacing:10];
+    [style setAlignment:NSTextAlignmentCenter];
+    [attString addAttribute:NSParagraphStyleAttributeName
+                      value:style
+                      range:NSMakeRange(0, strLength)];
+    [self.shareItLabel setAttributedText:attString];
+    CGRectSetWidth(self.shareItLabel, 290);
+    [self.shareItLabel sizeToFit];
+    CGRectSetCenterX(self.shareItLabel, [self.shareItLabel superview].center.x);
+    CGRectSetHeight(self, CGRectGetMaxY(self.shareItLabel.frame));
+}
 -(void)layout{
     self.stampView.center = CGPointMake(self.frame.size.width/2, kStampViewY);
     self.signatureView.frame = CGRectSetPos(self.signatureView.frame, self.frame.size.width-self.signatureView.frame.size.width-kSignatureRightMargin, CGRectGetMaxY(self.stampView.frame)+kSignatureSpacing);

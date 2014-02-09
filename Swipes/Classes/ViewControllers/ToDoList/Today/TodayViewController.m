@@ -111,12 +111,39 @@
 -(void)updateBackground{
     BOOL isFacebookAvailable = ([[UIDevice currentDevice].systemVersion floatValue] >= 6 && [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]);
     BOOL isTwitterAvailable = [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter];
-    CGFloat buttonsCenterY = CGRectGetMaxY(self.youreAllDoneView.shareItLabel.frame) + kButtonSpacing/2+ kShareButtonSize/2;
+    self.shareText = [self randomText];
+    [self.youreAllDoneView setText:self.shareText];
+    CGFloat buttonsCenterY = CGRectGetMaxY(self.youreAllDoneView.shareItLabel.frame) + kButtonSpacing+ kShareButtonSize/2;
     CGRectSetCenter(self.facebookButton, self.view.frame.size.width/2-kButtonSpacing/2-kShareButtonSize/2, buttonsCenterY);
     CGRectSetCenter(self.twitterButton, self.view.frame.size.width/2+kButtonSpacing/2+kShareButtonSize/2, buttonsCenterY);
     if(!(isTwitterAvailable && isFacebookAvailable)) self.facebookButton.center = self.twitterButton.center = CGPointMake(self.view.frame.size.width/2, buttonsCenterY);
-    self.youreAllDoneView.shareItLabel.hidden = (!isTwitterAvailable && !isFacebookAvailable);
+    //self.youreAllDoneView.shareItLabel.hidden = (!isTwitterAvailable && !isFacebookAvailable);
     [self.youreAllDoneView.stampView setDate:[NSDate date]];
+}
+-(NSString*)randomText{
+    NSArray *facebooks = @[@"Nothing beats going to bed with a complete to-do list! #ProductiveDay",
+                           @"To-do list complete, gonna sleep well tonight! #ProductiveDay",
+                           @"Bed just feels better after a #ProductiveDay",
+                           @"To-do list complete - take that procrastination! #ProductiveDay",
+                           @"To-do list: complete. Procrastination: owned. #ProductiveDay",
+                           @"My phone just told me my tasks are done for the day! I love technology. #ProductiveDay",
+                           @"Today’s to-do list is complete, time to relax #ProductiveDay",
+                           @"Hooray! All tasks swiped away, time to relax #ProductiveDay",
+                           @"Beer just tastes better after a #ProductiveDay",
+                           @"To-do list complete. Boom, done. #ProductiveDay",
+                           @"To-do list: complete. Couch time: earned. #ProductiveDay",
+                           @"To-do list complete. Feeling like a boss. #ProductiveDay",
+                           @"Procrastination can’t touch me. To-do list, done. #ProductiveDay",
+                           @"Finish to-do list: check. Night out: in progress. #ProductiveDay",
+                           @"Finish to-do list: check. Much needed couch time: in progress. #ProductiveDay",
+                           @"Kickin’ my shoes off because today’s to-do list is complete! #ProductiveDay",
+                           @"Procrastination? What’s that? #ProductiveDay",
+                           @"Complete to-do list? Nailed it. #ProductiveDay",
+                           @"Don’t hate me ‘cause you ain’t me. To-do list: owned. #ProductiveDay",
+                           @"Long to-do list: stressful. Complete to-do list: priceless. #ProductiveDay"];
+    NSUInteger randomIndex = arc4random() % [facebooks count];
+    NSString *string = [facebooks objectAtIndex:randomIndex];
+    return string;
 }
 - (void)viewDidLoad
 {
@@ -199,62 +226,17 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     };
     [shareVC addImage:[self screenshotForSharingService:serviceType]];
-    NSArray *tweets = @[@"@SwipesApp just told me my to-do list is complete. #ProductiveDay",
-                         @"@SwipesApp made it easier for me to have a #ProductiveDay To-do list complete!",
-                         @"Nothing beats going to bed with a complete to-do list! #ProductiveDay @swipesapp",
-                         @"To-do list complete, gonna sleep well tonight! #ProductiveDay @swipesapp",
-                         @"Bed just feels better after a #ProductiveDay @swipesapp",
-                         @"To-do list complete - take that procrastination! #ProductiveDay @swipesapp",
-                         @"To-do list: complete. Procrastination: owned. #ProductiveDay @swipesapp",
-                         @"My @swipesapp just told me my tasks are done for the day! I love technology. #ProductiveDay",
-                         @"Today’s to-do list is complete, time to relax #ProductiveDay @swipesapp",
-                         @"Hooray! All tasks swiped away, time to relax #ProductiveDay @swipesapp",
-                         @"Beer just tastes better after a #ProductiveDay @swipesapp",
-                         @"To-do list complete. Boom, done. #ProductiveDay @swipesapp",
-                         @"To-do list: complete. Couch time: earned. #ProductiveDay @swipesapp",
-                         @"To-do list complete. Feeling like a boss. #ProductiveDay @swipesapp",
-                         @"Procrastination can’t touch me. To-do list, done. #ProductiveDay @swipesapp",
-                         @"Finish to-do list: check. Night out: in progress. #ProductiveDay @swipesapp",
-                         @"Finish to-do list: check. Much needed couch time: in progress. #ProductiveDay @swipesapp",
-                         @"Kickin’ my shoes off because today’s to-do list is complete! #ProductiveDay @swipesapp",
-                         @"Procrastination? What’s that? #ProductiveDay @swipesapp",
-                         @"Complete to-do list? Nailed it. #ProductiveDay @swipesapp",
-                         @"Don’t hate me ‘cause you ain’t me. To-do list: owned. #ProductiveDay @swipesapp",
-                         @"Long to-do list: stressful. Complete to-do list: priceless. #ProductiveDay @swipesapp"];
+    if(!self.shareText) self.shareText = [self randomText];
+    NSString *string = self.shareText;
+    if([serviceType isEqualToString:SLServiceTypeTwitter]) string = [string stringByAppendingString:@" @swipesapp"];
     
-    NSArray *facebooks = @[@"Nothing beats going to bed with a complete to-do list! #ProductiveDay",
-                           @"To-do list complete, gonna sleep well tonight! #ProductiveDay",
-                           @"Bed just feels better after a #ProductiveDay",
-                           @"To-do list complete - take that procrastination! #ProductiveDay",
-                           @"To-do list: complete. Procrastination: owned. #ProductiveDay",
-                           @"My phone just told me my tasks are done for the day! I love technology. #ProductiveDay",
-                           @"Today’s to-do list is complete, time to relax #ProductiveDay",
-                           @"Hooray! All tasks swiped away, time to relax #ProductiveDay",
-                           @"Beer just tastes better after a #ProductiveDay",
-                           @"To-do list complete. Boom, done. #ProductiveDay",
-                           @"To-do list: complete. Couch time: earned. #ProductiveDay",
-                           @"To-do list complete. Feeling like a boss. #ProductiveDay",
-                           @"Procrastination can’t touch me. To-do list, done. #ProductiveDay",
-                           @"Finish to-do list: check. Night out: in progress. #ProductiveDay",
-                           @"Finish to-do list: check. Much needed couch time: in progress. #ProductiveDay",
-                           @"Kickin’ my shoes off because today’s to-do list is complete! #ProductiveDay",
-                           @"Procrastination? What’s that? #ProductiveDay",
-                           @"Complete to-do list? Nailed it. #ProductiveDay",
-                           @"Don’t hate me ‘cause you ain’t me. To-do list: owned. #ProductiveDay",
-                           @"Long to-do list: stressful. Complete to-do list: priceless. #ProductiveDay"
-    ];
-    
-    NSArray *targetArray = [serviceType isEqualToString:SLServiceTypeFacebook] ? facebooks : tweets;
-    NSUInteger randomIndex = arc4random() % [targetArray count];
-    NSString *string = [targetArray objectAtIndex:randomIndex];
-    self.shareText = string;
     [shareVC setInitialText:string];
     [[self parent] presentViewController:shareVC animated:YES completion:nil];
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSString *realServiceType;
     
-    [dict setObject:string forKey:@"Share string"];
+    [dict setObject:self.shareText forKey:@"Share string"];
     if([serviceType isEqualToString:SLServiceTypeFacebook]) realServiceType = @"Facebook";
     else if([serviceType isEqualToString:SLServiceTypeTwitter]) realServiceType = @"Twitter";
     if(realServiceType) [dict setObject:realServiceType forKey:@"Service"];

@@ -13,4 +13,5 @@
 @property (nonatomic) DateStampView *stampView;
 @property (nonatomic) UIImageView *signatureView;
 @property (nonatomic) UILabel *swipesReferLabel;
+-(void)setText:(NSString*)text;
 @end
