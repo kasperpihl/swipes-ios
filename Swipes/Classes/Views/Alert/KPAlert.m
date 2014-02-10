@@ -47,11 +47,11 @@
         contentView.center = self.center;
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
-        contentView.backgroundColor = tbackground(BackgroundColor);
+        contentView.backgroundColor = tcolor(BackgroundColor);
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT)];
         titleLabel.backgroundColor = CLEAR;
         titleLabel.tag = TITLE_LABEL_TAG;
-        titleLabel.textColor = tcolor(TagColor);
+        titleLabel.textColor = tcolor(TextColor);
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.font = KP_BOLD(20);
         [contentView addSubview:titleLabel];
@@ -61,7 +61,7 @@
         UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(spacing, DEFAULT_TITLE_HEIGHT, contentView.frame.size.width-2*spacing, 2*DEFAULT_TITLE_HEIGHT)];
         messageLabel.font = KP_LIGHT(20);
         messageLabel.tag = MESSAGE_LABEL_TAG;
-        messageLabel.textColor = tcolor(TagColor);
+        messageLabel.textColor = tcolor(TextColor);
         messageLabel.numberOfLines = 0;
         messageLabel.backgroundColor = CLEAR;
         messageLabel.textAlignment = NSTextAlignmentCenter;

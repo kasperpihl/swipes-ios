@@ -56,7 +56,7 @@ static NSUInteger g_thumbnailCounter = 0;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        //self.backgroundColor = tbackground(BackgroundColor);
+        //self.backgroundColor = tcolor(BackgroundColor);
         
         CGFloat top = (OSVER >= 7) ? [Global statusBarHeight] : 0.f;
         

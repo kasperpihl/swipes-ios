@@ -13,7 +13,7 @@
 #import "UIImage+Blur.h"
 CGFloat const kKPBlurryDefaultDuration = .30f;
 CGFloat const kKPBlurryDefaultBlur = 1.0f;
-#define KPBlurryDefaultTopBlurry CLEAR//tbackground(PopupBackground)
+#define KPBlurryDefaultTopBlurry CLEAR
 DisplayPosition const kKPBlurryDefaultDisplayPosition = PositionCenter;
 
 #pragma mark - Categories

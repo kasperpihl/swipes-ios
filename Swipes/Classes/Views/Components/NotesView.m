@@ -33,14 +33,14 @@
     
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = tbackground(BackgroundColor);
+        self.backgroundColor = tcolor(BackgroundColor);
         
         
         UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, 0, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height)];
         notesView.backgroundColor = CLEAR;
         notesView.font = NOTES_VIEW_FONT;
         notesView.keyboardAppearance = UIKeyboardAppearanceAlert;
-        notesView.textColor = tcolor(TagColor);
+        notesView.textColor = tcolor(TextColor);
         notesView.delegate = self;
         [self addSubview:notesView];
         self.notesView = notesView;
@@ -50,7 +50,7 @@
         [backbutton setImage:[UIImage imageNamed:@"backarrow_icon_white"] forState:UIControlStateNormal];
         backbutton.transform = CGAffineTransformMakeRotation(M_PI);
         [backbutton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
-        //self.toolbar.backgroundColor = tbackground(MenuBackground);
+        //self.toolbar.backgroundColor = tcolor(MenuBackground);
         self.backbutton = backbutton;
         [self addSubview:self.backbutton];
         

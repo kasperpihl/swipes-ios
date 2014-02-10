@@ -465,8 +465,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = CLEAR;//tbackground(BackgroundColor);
-    // tbackground(TaskTableBackground);
+    self.view.backgroundColor = CLEAR;
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_white_background",self.state]]];
     if ([self.state isEqualToString:@"today"]) {
         imageView.hidden = YES;

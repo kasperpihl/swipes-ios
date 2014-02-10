@@ -576,7 +576,7 @@ typedef enum {
     self.actionButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.actionButton.frame = CGRectMake((self.view.bounds.size.width-ACTION_BUTTON_WIDTH)/2, self.view.bounds.size.height-ACTION_BUTTON_HEIGHT-kActionButtonBottomSpacing, ACTION_BUTTON_WIDTH, ACTION_BUTTON_HEIGHT);
     self.actionButton.layer.cornerRadius = ACTION_BUTTON_CORNER_RADIUS;
-    self.actionButton.layer.borderColor = tbackground(BackgroundColor).CGColor;
+    self.actionButton.layer.borderColor = tcolor(BackgroundColor).CGColor;
     self.actionButton.layer.borderWidth = 0;//kActionButtonBorderWidth;
     self.actionButton.backgroundColor = tcolor(DoneColor);
     self.actionButton.titleLabel.font = kActionButtonFont;
@@ -607,7 +607,7 @@ typedef enum {
     [closeButton setTitle:@"Skip" forState:UIControlStateNormal];
     closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, (OSVER >= 7 ? 10 : 0), kCloseButtonSize, 54);
     [closeButton.titleLabel setFont:KP_REGULAR(13)];
-    [closeButton setTitleColor:alpha(tbackground(BackgroundColor),0.5) forState:UIControlStateNormal];
+    [closeButton setTitleColor:alpha(tcolor(BackgroundColor),0.5) forState:UIControlStateNormal];
     closeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 15, 0);
     [closeButton addTarget:self action:@selector(pressedCloseButton:) forControlEvents:UIControlEventTouchUpInside];
     self.closeButton = closeButton;

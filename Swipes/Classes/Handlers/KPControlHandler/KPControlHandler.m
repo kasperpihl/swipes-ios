@@ -50,7 +50,7 @@
         UIView *gradientBackground = [[UIView alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT)];
         CAGradientLayer *agradient = [CAGradientLayer layer];
         agradient.frame = gradientBackground.bounds;
-        agradient.colors = @[(id)alpha(tbackground(BackgroundColor),0.0f).CGColor,(id)alpha(tbackground(BackgroundColor),1.0f).CGColor,(id)tbackground(BackgroundColor).CGColor];
+        agradient.colors = @[(id)alpha(tcolor(BackgroundColor),0.0f).CGColor,(id)alpha(tcolor(BackgroundColor),1.0f).CGColor,(id)tcolor(BackgroundColor).CGColor];
         agradient.locations = @[@0.0,@0.4,@1.0];
         [gradientBackground.layer insertSublayer:agradient atIndex:0];
         self.gradientView = gradientBackground;

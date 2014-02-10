@@ -662,7 +662,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self = [super init];
     if(self){
         self.view.tag = SHOW_ITEM_TAG;
-        self.view.backgroundColor = tbackground(BackgroundColor);
+        self.view.backgroundColor = tcolor(BackgroundColor);
         
         
         NSInteger startY = (OSVER >= 7) ? 20 : 0;
@@ -687,7 +687,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.cell.bounceAmplitude = 0;
         self.cell.mode = MCSwipeTableViewCellModeExit;
         UIView *contentView = [[UIView alloc] initWithFrame:self.cell.bounds];
-        contentView.backgroundColor = tbackground(BackgroundColor);
+        contentView.backgroundColor = tcolor(BackgroundColor);
         contentView.tag = CONTENT_VIEW_TAG;
         
         self.titleContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, CONTAINER_INIT_HEIGHT)];
@@ -705,7 +705,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.textView.delegate = self;
         self.textView.internalTextView.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);
-        self.textView.textColor = tcolor(TaskCellTitle);
+        self.textView.textColor = tcolor(TextColor);
         [self.titleContainerView addSubview:self.textView];
         
         CGFloat dotWidth = CELL_LABEL_X;
@@ -827,7 +827,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.notesView.font = EDIT_TASK_TEXT_FONT;
         self.notesView.contentInset = UIEdgeInsetsMake(0,-5,0,0);
         self.notesView.editable = NO;
-        self.notesView.textColor = tcolor(TagColor);
+        self.notesView.textColor = tcolor(TextColor);
         self.notesView.backgroundColor = CLEAR;
         [self.notesContainer addSubview:self.notesView];
         
@@ -850,7 +850,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     return self;
 }
 -(void)setColorsFor:(id)object{
-    if([object respondsToSelector:@selector(setTextColor:)]) [object setTextColor:tcolor(TagColor)];
+    if([object respondsToSelector:@selector(setTextColor:)]) [object setTextColor:tcolor(TextColor)];
     //if([object respondsToSelector:@selector(setHighlightedTextColor:)]) [object setHighlightedTextColor:EDIT_TASK_GRAYED_OUT_TEXT];
 }
 

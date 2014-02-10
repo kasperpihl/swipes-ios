@@ -72,7 +72,7 @@
         
         self.color = color;
         self.backgroundColor = CLEAR;
-        self.fillColor = tbackground(BackgroundColor);
+        self.fillColor = tcolor(BackgroundColor);
         
         
         

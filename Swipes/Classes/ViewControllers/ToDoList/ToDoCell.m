@@ -63,15 +63,15 @@
     if (self) {
         self.shouldRegret = YES;
         //self.contentView.layer.masksToBounds = YES;
-        self.backgroundColor = tbackground(BackgroundColor);
-        self.contentView.backgroundColor = tbackground(BackgroundColor);
+        self.backgroundColor = tcolor(BackgroundColor);
+        self.contentView.backgroundColor = tcolor(BackgroundColor);
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X,TITLE_Y, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
         titleLabel.tag = TITLE_LABEL_TAG;
         titleLabel.numberOfLines = 1;
         titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         titleLabel.font = TITLE_LABEL_FONT;
-        titleLabel.textColor = tcolor(TaskCellTitle);
+        titleLabel.textColor = tcolor(TextColor);
         titleLabel.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:titleLabel];
         self.titleLabel = (UILabel*)[self.contentView viewWithTag:TITLE_LABEL_TAG];
@@ -79,7 +79,7 @@
         UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X, titleLabel.frame.origin.y+titleLabel.frame.size.height+LABEL_SPACE, LABEL_WIDTH, TAGS_LABEL_HEIGHT)];
         tagsLabel.tag = TAGS_LABEL_TAG;
         tagsLabel.numberOfLines = 1;
-        tagsLabel.textColor = gray(170, 1);
+        tagsLabel.textColor = tcolor(SubTextColor);
         tagsLabel.font = TAGS_LABEL_FONT;
         tagsLabel.backgroundColor = [UIColor clearColor];
         //tagsLabel.textColor = tcolor(TaskCellTagColor);

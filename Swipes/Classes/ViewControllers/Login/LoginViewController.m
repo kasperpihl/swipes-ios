@@ -90,7 +90,7 @@
         
         /*self.loginOrSignupLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
         self.loginOrSignupLabel.textAlignment = NSTextAlignmentCenter;
-        self.loginOrSignupLabel.textColor = tbackground(BackgroundColor);
+        self.loginOrSignupLabel.textColor = tcolor(BackgroundColor);
         self.loginOrSignupLabel.font = KP_LIGHT(13);
         self.loginOrSignupLabel.backgroundColor = CLEAR;
         self.loginOrSignupLabel.text = @"Login or Register";

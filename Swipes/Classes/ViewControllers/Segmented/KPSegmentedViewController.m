@@ -131,7 +131,7 @@
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     BLURRY.showPosition = PositionBottom;
-    BLURRY.blurryTopColor = alpha(tbackground(BackgroundColor),0.3);
+    BLURRY.blurryTopColor = alpha(tcolor(BackgroundColor),0.3);
     if(block) BLURRY.dismissAction = ^{
         self.selectedItems = nil;
         block();
@@ -309,7 +309,7 @@
     [super viewDidLoad];
     notify(@"updated daily image", updatedDailyImage);
     notify(@"updated sync",updateFromSync:);
-    self.view.backgroundColor = tbackground(BackgroundColor);
+    self.view.backgroundColor = tcolor(BackgroundColor);
     
     /* Daily image background */
     self.backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
