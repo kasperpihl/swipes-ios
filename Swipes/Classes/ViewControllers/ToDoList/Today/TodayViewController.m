@@ -120,13 +120,14 @@
     //self.youreAllDoneView.shareItLabel.hidden = (!isTwitterAvailable && !isFacebookAvailable);
     [self.youreAllDoneView.stampView setDate:[NSDate date]];
 }
+
 -(NSString*)randomText{
     NSArray *facebooks = @[@"Nothing beats going to bed with a complete to-do list! #ProductiveDay",
                            @"To-do list complete, gonna sleep well tonight! #ProductiveDay",
                            @"Bed just feels better after a #ProductiveDay",
                            @"To-do list complete - take that procrastination! #ProductiveDay",
                            @"To-do list: complete. Procrastination: owned. #ProductiveDay",
-                           @"My phone just told me my tasks are done for the day! I love technology. #ProductiveDay",
+                           @"My phone just told me my tasks are done for the day! #ProductiveDay",
                            @"Today’s to-do list is complete, time to relax #ProductiveDay",
                            @"Hooray! All tasks swiped away, time to relax #ProductiveDay",
                            @"Beer just tastes better after a #ProductiveDay",
@@ -135,7 +136,7 @@
                            @"To-do list complete. Feeling like a boss. #ProductiveDay",
                            @"Procrastination can’t touch me. To-do list, done. #ProductiveDay",
                            @"Finish to-do list: check. Night out: in progress. #ProductiveDay",
-                           @"Finish to-do list: check. Much needed couch time: in progress. #ProductiveDay",
+                           @"Finish to-do list: check. Needed couch time: in progress. #ProductiveDay",
                            @"Kickin’ my shoes off because today’s to-do list is complete! #ProductiveDay",
                            @"Procrastination? What’s that? #ProductiveDay",
                            @"Complete to-do list? Nailed it. #ProductiveDay",
@@ -143,6 +144,7 @@
                            @"Long to-do list: stressful. Complete to-do list: priceless. #ProductiveDay"];
     NSUInteger randomIndex = arc4random() % [facebooks count];
     NSString *string = [facebooks objectAtIndex:randomIndex];
+    string = @"Kickin’ my shoes off because today’s to-do list is complete! #ProductiveDay";
     return string;
 }
 - (void)viewDidLoad
@@ -184,13 +186,12 @@
 -(UIImage*)screenshotForSharingService:(NSString*)sharingService{
     BOOL oldFaceHidden = self.facebookButton.hidden;
     BOOL oldTwitterHidden = self.twitterButton.hidden;
-    BOOL oldShareHidden = self.youreAllDoneView.shareItLabel.hidden;
     CGPoint oldOffset = self.tableView.contentOffset;
     
     self.facebookButton.hidden = YES;
     self.twitterButton.hidden = YES;
-    self.youreAllDoneView.shareItLabel.hidden = YES;
-    if([sharingService isEqualToString:SLServiceTypeTwitter]) self.youreAllDoneView.signatureView.hidden = NO;
+    if([sharingService isEqualToString:SLServiceTypeTwitter]){ self.youreAllDoneView.signatureView.hidden = NO;
+    }
     if([sharingService isEqualToString:SLServiceTypeFacebook]) self.youreAllDoneView.swipesReferLabel.hidden = NO;
     self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height);
     
@@ -201,7 +202,7 @@
     self.youreAllDoneView.swipesReferLabel.hidden = YES;
     self.facebookButton.hidden = oldFaceHidden;
     self.twitterButton.hidden = oldTwitterHidden;
-    self.youreAllDoneView.shareItLabel.hidden = oldShareHidden;
+    //self.youreAllDoneView.shareItLabel.hidden = oldShareHidden;
     
     return returnImage;
 }
@@ -228,7 +229,7 @@
     [shareVC addImage:[self screenshotForSharingService:serviceType]];
     if(!self.shareText) self.shareText = [self randomText];
     NSString *string = self.shareText;
-    if([serviceType isEqualToString:SLServiceTypeTwitter]) string = [string stringByAppendingString:@" @swipesapp"];
+    if([serviceType isEqualToString:SLServiceTypeTwitter]) string = [string stringByAppendingString:@" http://swipesapp.com/download"];
     
     [shareVC setInitialText:string];
     [[self parent] presentViewController:shareVC animated:YES completion:nil];

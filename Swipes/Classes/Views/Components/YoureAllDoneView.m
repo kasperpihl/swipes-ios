@@ -23,7 +23,6 @@
 #import "YoureAllDoneView.h"
 
 
-
 @interface YoureAllDoneView ()
 @end
 @implementation YoureAllDoneView
@@ -81,10 +80,11 @@
     [self.shareItLabel sizeToFit];
     CGRectSetCenterX(self.shareItLabel, [self.shareItLabel superview].center.x);
     CGRectSetHeight(self, CGRectGetMaxY(self.shareItLabel.frame));
+    CGRectSetY(self.signatureView,CGRectGetMaxY(self.shareItLabel.frame)+kSignatureSpacing);
 }
 -(void)layout{
     self.stampView.center = CGPointMake(self.frame.size.width/2, kStampViewY);
-    self.signatureView.frame = CGRectSetPos(self.signatureView.frame, self.frame.size.width-self.signatureView.frame.size.width-kSignatureRightMargin, CGRectGetMaxY(self.stampView.frame)+kSignatureSpacing);
+    self.signatureView.frame = CGRectSetPos(self.signatureView.frame, self.frame.size.width-self.signatureView.frame.size.width-kSignatureRightMargin, CGRectGetMaxY(self.shareItLabel.frame)+kSignatureSpacing);
     self.swipesReferLabel.frame = CGRectSetPos(self.swipesReferLabel.frame, self.frame.size.width-kReferX-self.swipesReferLabel.frame.size.width, self.frame.size.height-kReferBottom);
     
     CGRectSetY(self.shareItLabel, CGRectGetMaxY(self.stampView.frame) + kSignatureSpacing * 2);
