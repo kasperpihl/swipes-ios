@@ -62,7 +62,11 @@ static ThemeHandler *sharedObject;
     }
     return nil;
 }
-
+-(UIImage *)imageInThemeForString:(NSString *)imageName{
+    NSString *imageEnding = (self.currentTheme == ThemeDark) ? @"_darktheme" : @"_lighttheme";
+    NSString *imageString = [imageName stringByAppendingString:imageEnding];
+    return [UIImage imageNamed:imageString];
+}
 -(UIFont *)fontForItem:(ThemerItem)item{
     return nil;
 }

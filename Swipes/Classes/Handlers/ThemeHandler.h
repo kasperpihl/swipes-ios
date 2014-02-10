@@ -36,4 +36,5 @@ typedef enum {
 -(UIColor*)colorForItem:(ThemerItem)item;
 -(UIFont *)fontForItem:(ThemerItem)item;
 -(void)changeTheme;
+-(UIImage*)imageInThemeForString:(NSString*)imageName;
 @end
