@@ -18,6 +18,9 @@
 #import "KPToolbar.h"
 #import <QuartzCore/QuartzCore.h>
 
+#import "UIImage+Utilities.h"
+
+
 @interface KPControlHandler () <ToolbarDelegate>
 @property (nonatomic) KPControlHandlerState activeState;
 @property (nonatomic) KPControlHandlerState lastChosen;

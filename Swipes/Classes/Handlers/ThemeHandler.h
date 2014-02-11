@@ -9,10 +9,13 @@
 #import <Foundation/Foundation.h>
 #define THEMER [ThemeHandler sharedInstance]
 #define tfont(ThemerItem) [THEMER fontForItem:ThemerItem]
-#define tcolor(ThemerItem) [THEMER colorForItem:ThemerItem]
+#define tcolor(ThemerItem) [THEMER colorForItem:ThemerItem forceTheme:ThemeNone]
+#define tcolorF(ThemerItem) [THEMER colorForItem:ThemerItem force:YES]
+#define timageString(ImageString,DarkEnding,LightEnding) [THEMER imageString:ImageString darkEnding:DarkEnding lightEnding:LightEnding]
 typedef enum {
-    ThemeDark = 0,
-    ThemeLight = 1
+    ThemeNone = 0,
+    ThemeDark = 1,
+    ThemeLight = 2
 } Theme;
 
 typedef enum {
@@ -33,8 +36,8 @@ typedef enum {
 @interface ThemeHandler : NSObject
 @property (nonatomic) Theme currentTheme;
 +(ThemeHandler*)sharedInstance;
--(UIColor*)colorForItem:(ThemerItem)item;
+-(UIColor*)colorForItem:(ThemerItem)item forceTheme:(Theme)theme;
 -(UIFont *)fontForItem:(ThemerItem)item;
 -(void)changeTheme;
--(UIImage*)imageInThemeForString:(NSString*)imageName;
+-(UIImage*)imageStringForBase:(NSString*)imageBase darkEnding:(NSString*)darkEnding lightEnding:(NSString*)lightEnding;
 @end

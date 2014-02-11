@@ -111,6 +111,7 @@
     AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.view.bounds];
     addPanel.addDelegate = self;
     BLURRY.showPosition = PositionBottom;
+    BLURRY.blurryTopColor = gray(255, 0.3);
     [BLURRY showView:addPanel inViewController:self];
 }
 -(void)pressedEdit:(id)sender{

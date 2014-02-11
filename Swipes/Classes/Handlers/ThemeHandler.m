@@ -31,12 +31,17 @@ static ThemeHandler *sharedObject;
     }
     return sharedObject;
 }
+-(void)setCurrentTheme:(Theme)currentTheme{
+    if(currentTheme != ThemeLight && currentTheme != ThemeDark) currentTheme = ThemeDark;
+    _currentTheme = currentTheme;
+    [[NSUserDefaults standardUserDefaults] setInteger:currentTheme forKey:@"theme"];
+}
 -(void)changeTheme{
     Theme newTheme = (self.currentTheme == ThemeDark) ? ThemeLight : ThemeDark;
     [[NSUserDefaults standardUserDefaults] setInteger:newTheme forKey:@"theme"];
     self.currentTheme = newTheme;
 }
--(UIColor*)colorForItem:(ThemerItem)item{
+-(UIColor*)colorForItem:(ThemerItem)item force:(BOOL)force{
     switch (item) {
         case BackgroundColor:
             return BACKGROUND;
@@ -62,7 +67,7 @@ static ThemeHandler *sharedObject;
     }
     return nil;
 }
--(UIImage *)imageInThemeForString:(NSString *)imageName{
+-(UIImage *)imageStringForBase:(NSString *)imageBase darkEnding:(NSString *)darkEnding lightEnding:(NSString *)lightEnding{
     NSString *imageEnding = (self.currentTheme == ThemeDark) ? @"_darktheme" : @"_lighttheme";
     NSString *imageString = [imageName stringByAppendingString:imageEnding];
     return [UIImage imageNamed:imageString];
