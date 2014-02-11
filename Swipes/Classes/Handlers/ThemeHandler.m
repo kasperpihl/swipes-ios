@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 /* Main colors */
-#define retColor(DarkColor,LightColor) ((THEMER.currentTheme == ThemeDark) ? LightColor : LightColor)
+#define retColor(DarkColor,LightColor) ((THEMER.currentTheme == ThemeDark) ? DarkColor : LightColor)
 #define inv(color) [ThemeHandler inverseColor:color]
 
 #define TASKS_COLOR                     color(228,202,92,1)
@@ -32,6 +32,7 @@ static ThemeHandler *sharedObject;
     return sharedObject;
 }
 -(void)setCurrentTheme:(Theme)currentTheme{
+    NSLog(@"theme:%i",currentTheme);
     if(currentTheme != ThemeLight && currentTheme != ThemeDark) currentTheme = ThemeDark;
     _currentTheme = currentTheme;
     [[NSUserDefaults standardUserDefaults] setInteger:currentTheme forKey:@"theme"];
@@ -41,7 +42,7 @@ static ThemeHandler *sharedObject;
     [[NSUserDefaults standardUserDefaults] setInteger:newTheme forKey:@"theme"];
     self.currentTheme = newTheme;
 }
--(UIColor*)colorForItem:(ThemerItem)item force:(BOOL)force{
+-(UIColor*)colorForItem:(ThemerItem)item forceTheme:(Theme)theme{
     switch (item) {
         case BackgroundColor:
             return BACKGROUND;
@@ -67,10 +68,10 @@ static ThemeHandler *sharedObject;
     }
     return nil;
 }
--(UIImage *)imageStringForBase:(NSString *)imageBase darkEnding:(NSString *)darkEnding lightEnding:(NSString *)lightEnding{
-    NSString *imageEnding = (self.currentTheme == ThemeDark) ? @"_darktheme" : @"_lighttheme";
-    NSString *imageString = [imageName stringByAppendingString:imageEnding];
-    return [UIImage imageNamed:imageString];
+-(NSString *)imageStringForBase:(NSString *)imageBase darkEnding:(NSString *)darkEnding lightEnding:(NSString *)lightEnding forceTheme:(Theme)theme{
+    NSString *imageEnding = (self.currentTheme == ThemeDark) ? darkEnding : lightEnding;
+    NSString *imageString = [imageBase stringByAppendingFormat:@"_%@",imageEnding];
+    return imageString;
 }
 -(UIFont *)fontForItem:(ThemerItem)item{
     return nil;
