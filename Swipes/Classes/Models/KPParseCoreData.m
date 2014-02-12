@@ -154,7 +154,7 @@
 {
     self._isSyncing = YES;
     
-    
+    NSLog(@"running");
     if (async)
         [self startBackgroundHandler];
     /* Prepare all the objects to be send */
@@ -259,7 +259,7 @@
         return NO;
     }
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
-    //NSLog(@"respo:%@ error:%@",result,error);
+    NSLog(@"respo:%@ error:%@",result,error);
     
     if(error || [result objectForKey:@"code"] || ![result objectForKey:@"serverTime"]){
         if(!error){
@@ -289,8 +289,9 @@
     for(NSDictionary *object in allObjects){
         [self handleCDObject:nil withObject:object inContext:localContext];
     }
-    
+    if(![localContext hasChanges]) NSLog(@"no changes");
     [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
+        NSLog(@"saved");
         self._isSyncing = NO;
         /* Save the sync to server */
         [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastSyncLocalDate"];

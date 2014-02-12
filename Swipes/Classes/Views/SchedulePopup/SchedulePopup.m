@@ -79,7 +79,6 @@ typedef enum {
 @property (nonatomic) BOOL didUseTimePicker;
 @property (nonatomic) UILabel *helpLabel;
 @end
-#import <Parse/Parse.h>
 @implementation SchedulePopup
 -(NSMutableArray *)scheduleButtons{
     if(!_scheduleButtons) _scheduleButtons = [NSMutableArray array];
@@ -247,6 +246,9 @@ typedef enum {
     
     if(button >= 7 && button <= 9) y = self.contentView.frame.size.height + scheduleButton.frame.size.height + kSepExtraOut;
     return CGRectMake(x, y, scheduleButton.frame.size.width, scheduleButton.frame.size.height);
+}
+-(void)pressedLocation:(id)sender{
+    
 }
 -(void)pressedSpecific:(id)sender{
     if(!self.isPickingDate){
