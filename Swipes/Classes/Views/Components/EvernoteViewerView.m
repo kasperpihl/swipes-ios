@@ -25,7 +25,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = tbackground(BackgroundColor);
+        self.backgroundColor = tcolor(BackgroundColor);
 
         // prepare webview
         _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 320, frame.size.height - kContentSpacingBottom)];

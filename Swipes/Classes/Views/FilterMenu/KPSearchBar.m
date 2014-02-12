@@ -79,7 +79,7 @@
         self.searchField.delegate = self;
         self.searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         @try {
-            self.backgroundColor = tbackground(BackgroundColor);
+            self.backgroundColor = tcolor(BackgroundColor);
             [self.searchField setValue:tcolor(TextColor) forKeyPath:@"_placeholderLabel.textColor"];
         }
         @catch (NSException *exception) {

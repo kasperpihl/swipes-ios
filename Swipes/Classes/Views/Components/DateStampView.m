@@ -9,7 +9,7 @@
 #define kLabelSpacing 0
 #define kLabelYHack -1
 #define kColor alpha([UIColor whiteColor],0.8)
-#define kFontColor kColor//tcolor(TaskCellTagColor)
+#define kFontColor kColor
 #define kNumberFont [UIFont fontWithName:@"OstrichSans-Bold" size:82]
 
 #define kMonthFont [UIFont fontWithName:@"OstrichSans-Medium" size:24]

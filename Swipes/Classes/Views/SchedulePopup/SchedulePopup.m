@@ -32,7 +32,7 @@
 #define kSepHorTag 203
 #define kSepVerTag 204
 
-#define SEPERATOR_COLOR_LIGHT alpha(tcolor(TextColor),0.5) //tbackground(TaskTableGradientBackground)//color(254,184,178,1)
+#define SEPERATOR_COLOR_LIGHT alpha(tcolor(TextColor),0.5)
 #define SEPERATOR_MARGIN 0.02//0.02
 
 
@@ -373,7 +373,7 @@ typedef enum {
         
         UILabel *helpLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
         helpLabel.backgroundColor = CLEAR;
-        helpLabel.textColor = tbackground(BackgroundColor);
+        helpLabel.textColor = tcolor(BackgroundColor);
         helpLabel.textAlignment = NSTextAlignmentCenter;
         helpLabel.text = @"Hold down to adjust time";
         helpLabel.font = KP_REGULAR(16);
@@ -385,7 +385,7 @@ typedef enum {
         contentView.center = self.center;
         CGRectSetY(self.helpLabel, CGRectGetMinY(contentView.frame)-CGRectGetHeight(helpLabel.frame)-kHelpLevelDistance);
         
-        contentView.backgroundColor = tbackground(BackgroundColor);//CLEAR;//tbackground(SearchDrawerBackground);//POPUP_BACKGROUND_COLOR color(254,115,103,1);//;
+        contentView.backgroundColor = tcolor(BackgroundColor);
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
         contentView.tag = CONTENT_VIEW_TAG;
@@ -500,7 +500,7 @@ typedef enum {
     
 }
 -(void)addPickerView{
-    //UIColor *weekdayColor = [[tbackground(SearchDrawerBackground) getColorSaturatedWithPercentage:-0.5] getColorBrightenedWithPercentage:0.5];
+    //UIColor *weekdayColor = [[tcolor(SearchDrawerBackground) getColorSaturatedWithPercentage:-0.5] getColorBrightenedWithPercentage:0.5];
     self.calendarView = [[CKCalendarView alloc] initWithFrame:CGRectMake(0, 0, 315, 315)];
     self.calendarView.onlyShowCurrentMonth = NO;
     self.calendarView.hidden = YES;

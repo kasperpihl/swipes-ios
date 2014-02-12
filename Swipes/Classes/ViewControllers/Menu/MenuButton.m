@@ -42,7 +42,7 @@
         [self setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
         [self setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
         
-        [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         //[self setTitleColor:alpha(tcolor(TextColor),0.6) forState:UIControlStateHighlighted];
         
         self.iconImageView = [[UIImageView alloc] initWithImage:image];

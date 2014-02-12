@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 #define kDefSelectedColor tcolor(DoneColor)
-#define kDefBackgroundColor CLEAR//tbackground(SearchDrawerBackground)
+#define kDefBackgroundColor CLEAR
 #define kDefFont KP_REGULAR(13)
 #define kDefTextColor [UIColor whiteColor]
 #define kSepWidth 1

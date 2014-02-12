@@ -9,47 +9,36 @@
 #import <Foundation/Foundation.h>
 #define THEMER [ThemeHandler sharedInstance]
 #define tfont(ThemerItem) [THEMER fontForItem:ThemerItem]
-#define tcolor(ThemerItem) [THEMER colorForItem:ThemerItem]
-#define tbackground(background) [THEMER colorForBackground:background]
+#define tcolor(ThemerItem) tcolorF(ThemerItem,ThemeNone)
+#define tcolorF(ThemerItem,Theme) [THEMER colorForItem:ThemerItem forceTheme:Theme]
+#define timageString(ImageBase,DarkEnding,LightEnding) timageStringF(ImageBase,DarkEnding,LightEnding,ThemeNone)
+#define timageStringF(ImageBase,DarkEnding,LightEnding,Theme) [THEMER imageStringForBase:ImageBase darkEnding:DarkEnding lightEnding:LightEnding forceTheme:Theme]
 typedef enum {
-    ThemeDark = 0,
-    ThemeLight = 1
+    ThemeNone = 0,
+    ThemeDark = 1,
+    ThemeLight = 2
 } Theme;
 
 typedef enum {
+    BackgroundColor,
     TextColor,
+    SubTextColor,
+    
     TasksColor,
     LaterColor,
     DoneColor,
+    
     StrongTasksColor,
     StrongLaterColor,
     StrongDoneColor,
     
-    TextFieldColor,
-    TaskCellTimelineColor,
-    TaskCellTitle,
-    TagColor
 } ThemerItem;
-
-typedef enum {
-    BackgroundColor,
-    MenuBackground,
-    MenuSelectedBackground,
-    SearchDrawerBackground,
-    
-    
-    TagBackground,
-    TagSelectedBackground,
-    AlertBackground,
-    LoginBackground,
-    LoginButtonBackground
-} Background;
 
 @interface ThemeHandler : NSObject
 @property (nonatomic) Theme currentTheme;
 +(ThemeHandler*)sharedInstance;
--(UIColor*)colorForBackground:(Background)background;
--(UIColor*)colorForItem:(ThemerItem)item;
+-(UIColor*)colorForItem:(ThemerItem)item forceTheme:(Theme)theme;
 -(UIFont *)fontForItem:(ThemerItem)item;
 -(void)changeTheme;
+-(NSString*)imageStringForBase:(NSString*)imageBase darkEnding:(NSString*)darkEnding lightEnding:(NSString*)lightEnding forceTheme:(Theme)theme;
 @end

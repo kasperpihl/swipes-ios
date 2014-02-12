@@ -89,7 +89,7 @@
     self.restoreButton.backgroundColor = tcolor(TextColor);
     [self.restoreButton setBackgroundImage:[gray(230, 1) image] forState:UIControlStateHighlighted];
     self.restoreButton.titleLabel.font = KP_REGULAR(16);
-    [self.restoreButton setTitleColor:tbackground(BackgroundColor) forState:UIControlStateNormal];
+    [self.restoreButton setTitleColor:tcolor(BackgroundColor) forState:UIControlStateNormal];
     self.restoreButton.layer.masksToBounds = YES;
     [self.restoreButton addTarget:self action:@selector(pressedRestoreButton:) forControlEvents:UIControlEventTouchUpInside];
     

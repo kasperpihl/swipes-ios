@@ -36,7 +36,7 @@
     UIView *seperatorView = [[UIView alloc] initWithFrame:CGRectMake(leftMargin, view.frame.size.height-seperatorHeight, view.frame.size.width-rightMargin-leftMargin, seperatorHeight)];
     seperatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     seperator2View.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
-    seperatorView.backgroundColor = seperator2View.backgroundColor = tbackground(BackgroundColor);//tbackground(EditTaskTitleBackground);
+    seperatorView.backgroundColor = seperator2View.backgroundColor = tcolor(BackgroundColor);
     [view addSubview:seperatorView];
     [view addSubview:seperator2View];
 }

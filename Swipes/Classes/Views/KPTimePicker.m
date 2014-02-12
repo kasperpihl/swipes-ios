@@ -23,8 +23,8 @@
 #define kOpenedSunAngle valForScreen(70,60)
 #define kExtraAngleForIcons 22
 
-#define kDefLightColor          color(69,82,104,1) //tcolor(SearchDrawerColor)
-#define kDefDarkColor           tbackground(BackgroundColor)
+#define kDefLightColor          color(69,82,104,1)
+#define kDefDarkColor           tcolor(BackgroundColor)
 
 #define kEndAngle               (360-(90-kOpenedSunAngle/2) + kExtraAngleForIcons)
 #define kStartAngle             (kEndAngle- kOpenedSunAngle - 2*kExtraAngleForIcons)

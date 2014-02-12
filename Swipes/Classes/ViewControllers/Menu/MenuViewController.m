@@ -25,7 +25,7 @@
 #import "PlusAlertView.h"
 #define kMenuButtonStartTag 4123
 #define kLampOnColor tcolor(DoneColor)
-#define kLampOffColor tbackground(MenuBackground)//tcolor(StrongLaterColor)
+#define kLampOffColor tcolor(BackgroundColor)
 
 #define kSeperatorMargin 0
 #define kGridMargin valForScreen(10,10)
@@ -71,7 +71,7 @@
     [super viewDidLoad];
     CGFloat numberOfButtons = kHorizontalGridNumber * kVerticalGridNumber;
     NSInteger numberOfRows = kHorizontalGridNumber;
-    self.view.backgroundColor = tbackground(BackgroundColor);
+    self.view.backgroundColor = tcolor(BackgroundColor);
     NSInteger startY = (OSVER >= 7)?20:0;
 
     self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0,startY,self.view.bounds.size.width-2*kGridMargin,self.view.bounds.size.height-startY)];

@@ -55,7 +55,7 @@
         self.tagBackgroundColor = CLEAR;
         //self.selectedTagBackgroundColor = tcolor(DoneColor);
         self.selectedTagBackgroundColor = alpha(tcolor(TextColor),0.9);
-        self.selectedTagTitleColor = tbackground(BackgroundColor);
+        self.selectedTagTitleColor = tcolor(BackgroundColor);
         self.tagBorderColor = tcolor(TextColor);
         self.bottomMargin = VERTICAL_MARGIN;
         self.marginTop = VERTICAL_MARGIN;
@@ -198,7 +198,7 @@
     }
     else{
         [button.layer removeAnimationForKey:@"wobbling"];
-        [button setBackgroundImage:[tbackground(TagSelectedBackground) image] forState:UIControlStateHighlighted];
+        [button setBackgroundImage:[self.selectedTagBackgroundColor image] forState:UIControlStateHighlighted];
         [button setBackgroundImage:[self.tagTitleColor image] forState:UIControlStateSelected | UIControlStateHighlighted];
     }
 }

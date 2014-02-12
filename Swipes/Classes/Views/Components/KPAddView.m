@@ -40,7 +40,7 @@
         self.textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width-buttonWidth, self.frame.size.height)];
         self.textField.font = KP_REGULAR(18);
         self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        self.textField.textColor = tcolor(TagColor);
+        self.textField.textColor = tcolor(TextColor);
         self.textField.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.textField.returnKeyType = UIReturnKeyNext;
         self.textField.borderStyle = UITextBorderStyleNone;
@@ -48,7 +48,7 @@
         self.textField.placeholder = @"Add a new task";
         self.textField.userInteractionEnabled = YES;
         @try {
-            [self.textField setValue:tcolor(TagColor) forKeyPath:@"_placeholderLabel.textColor"];
+            [self.textField setValue:tcolor(TextColor) forKeyPath:@"_placeholderLabel.textColor"];
         }
         @catch (NSException *exception) {
             NSLog(@"excepton:%@",exception);

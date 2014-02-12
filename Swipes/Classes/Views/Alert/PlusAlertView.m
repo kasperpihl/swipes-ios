@@ -49,7 +49,7 @@
         contentView.center = self.center;
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
-        contentView.backgroundColor = tbackground(BackgroundColor);
+        contentView.backgroundColor = tcolor(BackgroundColor);
         
         UIButton *crossButton = [[UIButton alloc] initWithFrame:CGRectMake(contentView.frame.size.width-kCrossButtonSize, 0, kCrossButtonSize, kCrossButtonSize)];
         [crossButton setImage:[UIImage imageNamed:@"round_cross_small"] forState:UIControlStateNormal];

@@ -233,7 +233,12 @@
     
     /* Preparing request */
     NSError *error;
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://api.swipesapp.com/sync"]];
+#ifdef RELEASE
+    NSString *url = @"http://api.swipesapp.com/sync";
+#else
+    NSString *url = @"http://swipes-test.herokuapp.com/sync";
+#endif
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setTimeoutInterval:50];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
                                                        options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string

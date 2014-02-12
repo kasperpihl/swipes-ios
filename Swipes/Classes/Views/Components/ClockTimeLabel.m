@@ -37,7 +37,7 @@
         CGFloat height = self.bounds.size.height;
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextAddArc(context, width/2, height/2, width/2-LINE_SIZE, 0*M_PI/180, 360*M_PI/180, 0);
-        CGContextSetFillColorWithColor(context, tbackground(BackgroundColor).CGColor);
+        CGContextSetFillColorWithColor(context, tcolor(BackgroundColor).CGColor);
         CGContextFillPath(context);
         
         CGContextSetLineWidth(context, LINE_SIZE);
