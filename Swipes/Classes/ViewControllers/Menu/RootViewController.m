@@ -172,6 +172,7 @@ static RootViewController *sharedObject;
     self.menuViewController = nil;
     [self setupAppearance];
     [self.sideMenu hide];
+    
 }
 -(void)proWithMessage:(NSString*)message{
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];

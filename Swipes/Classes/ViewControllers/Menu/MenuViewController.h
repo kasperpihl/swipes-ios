@@ -9,14 +9,16 @@
 #import <UIKit/UIKit.h>
 typedef NS_ENUM(NSUInteger, KPMenuButtons){
     KPMenuButtonNotifications = 1,
-    KPMenuButtonSnoozes = 2,
+    KPMenuButtonLocation = 2,
     KPMenuButtonUpgrade = 3,
-    KPMenuButtonWalkthrough = 4 ,
-    KPMenuButtonTerms = 5,
-    KPMenuButtonPolicy = 6,
-    KPMenuButtonLogout = 7,
-    KPMenuButtonFeedback = 8,
-    KPMenuButtonSync = 9,
+    KPMenuButtonSnoozes = 4,
+    KPMenuButtonWalkthrough = 5 ,
+    KPMenuButtonTerms = 6,
+    KPMenuButtonPolicy = 7,
+    KPMenuButtonLogout = 8,
+    KPMenuButtonFeedback = 9,
+    KPMenuButtonSync = 10,
+    KPMenuButtonScheme = 11,
 
 };
 @interface MenuViewController : UIViewController

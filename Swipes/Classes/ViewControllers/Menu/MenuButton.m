@@ -9,8 +9,8 @@
 #define kLampSize 18
 #define kLampBorderRadius (kLampSize/2)
 #define kLampBorderWidth 1
-#define kLampY 0
-#define kLampX 0
+#define kLampY 3
+#define kLampX 5
 #import "MenuButton.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
@@ -60,7 +60,7 @@
         self.lampView = [[UIView alloc] initWithFrame:CGRectMake(kLampX, kLampY, kLampSize, kLampSize)];
         self.lampView.hidden = YES;
         self.lampView.layer.borderWidth = kLampBorderWidth;
-        self.lampView.layer.borderColor = [UIColor whiteColor].CGColor;
+        self.lampView.layer.borderColor = tcolor(TextColor).CGColor;
         self.lampView.layer.masksToBounds = YES;
         self.lampView.layer.cornerRadius = kLampBorderRadius;
         [self addSubview:self.lampView];
