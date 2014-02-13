@@ -24,6 +24,10 @@
 
 #import "UserHandler.h"
 #import "KPLocationAlert.h"
+
+
+#import "LocationSearchView.h"
+
 #define POPUP_WIDTH 315
 #define CONTENT_VIEW_TAG 1
 
@@ -62,15 +66,17 @@ typedef enum {
     CustomPickerTypeAMPM
 } CustomPickerTypes;
 
-@interface SchedulePopup () <KPBlurryDelegate,CKCalendarDelegate,ToolbarDelegate,KPTimePickerDelegate, UIGestureRecognizerDelegate>
+@interface SchedulePopup () <KPBlurryDelegate,CKCalendarDelegate,ToolbarDelegate,KPTimePickerDelegate, UIGestureRecognizerDelegate,LocationSearchDelegate>
 @property (nonatomic,copy) SchedulePopupBlock block;
 @property (nonatomic,weak) IBOutlet UIView *contentView;
 @property (nonatomic) BOOL isPickingDate;
+@property (nonatomic) BOOL isChoosingLocation;
 @property (nonatomic) BOOL hasReturned;
 @property (nonatomic) NSDate *pickingDate;
 @property (nonatomic) IBOutletCollection(UIView) NSArray *seperators;
 @property (nonatomic) IBOutletCollection(UIButton) NSMutableArray *scheduleButtons;
 @property (nonatomic,strong) CKCalendarView *calendarView;
+@property (nonatomic,strong) LocationSearchView *locationView;
 @property (nonatomic,strong) KPToolbar *toolbar;
 @property (nonatomic,strong) KPTimePicker *timePicker;
 @property (nonatomic) KPScheduleButtons activeButton;
@@ -156,6 +162,9 @@ typedef enum {
     }
     if(self.block) self.block(state,date);
 }
+
+
+
 -(NSDate*)dateForButton:(KPScheduleButtons)button{
     NSDate *date;
     switch (button) {
@@ -209,10 +218,10 @@ typedef enum {
     if(thisButton == KPScheduleButtonSpecificTime) [self pressedSpecific:self];
     else if(thisButton == KPScheduleButtonLocation) {
         UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-        self.contentView.hidden = YES;
         self.helpLabel.hidden = YES;
-        [ANALYTICS pushView:@"Location plus popup"];
         if(!kUserHandler.isPlus){
+            [ANALYTICS pushView:@"Location plus popup"];
+            self.contentView.hidden = YES;
             [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location"}];
             [PlusAlertView alertInView:window message:@"Location reminders is an upcoming feature in Swipes Plus. Check out the whole package." block:^(BOOL succeeded, NSError *error) {
                 [ANALYTICS popView];
@@ -224,6 +233,8 @@ typedef enum {
             }];
         }
         else{
+            [self pressedLocation:self];
+            return;
             [KPLocationAlert alertInView:window message:@"Location reminders are coming soon. Keep swiping and we’ll ping you when they’re available. :)" block:^(BOOL succeeded, NSError *error) {
                 [ANALYTICS popView];
                 self.helpLabel.hidden = NO;
@@ -248,7 +259,19 @@ typedef enum {
     return CGRectMake(x, y, scheduleButton.frame.size.width, scheduleButton.frame.size.height);
 }
 -(void)pressedLocation:(id)sender{
-    
+    if(!self.isChoosingLocation){
+        self.isChoosingLocation = YES;
+        [self animateScheduleButtonsShow:NO duration:0.1];
+        self.locationView.hidden = NO;
+        self.toolbar.hidden = NO;
+    }
+    else{
+        if([self.locationView.searchField isFirstResponder]) [self.locationView.searchField resignFirstResponder];
+        self.isChoosingLocation = NO;
+        [self animateScheduleButtonsShow:YES duration:0.1];
+        self.locationView.hidden = YES;
+        self.toolbar.hidden = YES;
+    }
 }
 -(void)pressedSpecific:(id)sender{
     if(!self.isPickingDate){
@@ -272,14 +295,7 @@ typedef enum {
         CGFloat scaleDuration = 0.2;
         CGFloat calendarDuration = 0.1;
         CGFloat delay = buttonDuration;
-        [UIView animateWithDuration:buttonDuration animations:^{
-            for (UIButton *button in self.scheduleButtons) {
-                button.alpha = 0;
-            }
-            for(UIView *seperator in self.seperators){
-                seperator.alpha = 0;
-            }
-        }];
+        [self animateScheduleButtonsShow:NO duration:buttonDuration];
         [UIView animateWithDuration:scaleDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
             self.contentView.transform = CGAffineTransformMakeScale(1.0, scaling);
         } completion:^(BOOL finished) {
@@ -319,16 +335,19 @@ typedef enum {
             self.contentView.transform = CGAffineTransformIdentity;
             CGRectSetHeight(self.contentView, POPUP_WIDTH);
             self.contentView.center = self.center;
-            [UIView animateWithDuration:buttonDuration animations:^{
-                for (UIButton *button in self.scheduleButtons) {
-                    button.alpha = 1;
-                }
-                for(UIView *seperator in self.seperators){
-                    seperator.alpha = 1;
-                }
-            }];
+            [self animateScheduleButtonsShow:YES duration:buttonDuration];
         }];
     }
+}
+-(void)animateScheduleButtonsShow:(BOOL)show duration:(CGFloat)duration{
+    [UIView animateWithDuration:duration animations:^{
+        for (UIButton *button in self.scheduleButtons) {
+            button.alpha = show ? 1 : 0;
+        }
+        for(UIView *seperator in self.seperators){
+            seperator.alpha = show ? 1 : 0;
+        }
+    }];
 }
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     if([otherGestureRecognizer isEqual:self.panRecognizer] && !self.timePicker) return NO;
@@ -342,7 +361,10 @@ typedef enum {
     }
 }
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
-    if(item == 0) [self pressedSpecific:self];
+    if(item == 0){
+        if(self.isPickingDate) [self pressedSpecific:self];
+        else if(self.isChoosingLocation) [self pressedLocation:self];
+    }
     if(item == 1) [self returnState:KPScheduleButtonSpecificTime date:self.calendarView.selectedDate];
 }
 -(UIView*)seperatorWithSize:(CGFloat)size vertical:(BOOL)vertical{
@@ -440,9 +462,25 @@ typedef enum {
         [self addSubview:contentView];
         self.contentView = [self viewWithTag:CONTENT_VIEW_TAG];
         [self addPickerView];
+        [self addLocationView];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillShow:)
+                                                     name:UIKeyboardWillShowNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillHide:)
+                                                     name:UIKeyboardWillHideNotification
+                                                   object:nil];
+        
     }
     return self;
 }
+
+-(void)locationSearchView:(LocationSearchView *)locationSearchView selectedLocation:(CLPlacemark *)location{
+    NSLog(@"place: %@",location);
+}
+
 -(void)calendar:(CKCalendarView *)calendar updateTimeForDate:(NSDate *__autoreleasing *)date{
     [self setStartingTimeForDate:&*date];
     if([*date isToday] && [*date isEarlierThanDate:[NSDate date]]) *date = [[[NSDate date] dateByAddingMinutes:5] dateToNearest5Minutes];
@@ -498,6 +536,12 @@ typedef enum {
         [self openTimePickerWithButton:button andDate:dateForButton];
     }
     
+}
+-(void)addLocationView{
+    self.locationView = [[LocationSearchView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.bounds.size.width, self.contentView.bounds.size.height-kToolbarHeight)];
+    self.locationView.hidden = YES;
+    self.locationView.delegate = self;
+    [self.contentView addSubview:self.locationView];
 }
 -(void)addPickerView{
     //UIColor *weekdayColor = [[tcolor(SearchDrawerBackground) getColorSaturatedWithPercentage:-0.5] getColorBrightenedWithPercentage:0.5];
@@ -574,6 +618,38 @@ typedef enum {
     if(highlighted) imageString = [imageString stringByAppendingString:@"-high"];
     return [UIImage imageNamed:imageString];
 }
+
+-(void)keyboardWillHide:(NSNotification*)notification{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    CGRectSetCenterY(self.contentView, self.bounds.size.height/2);
+    /*CGFloat yForAdd = self.frame.size.height-self.addView.frame.size.height;
+    CGRectSetY(self.addView, yForAdd);
+    CGRectSetCenterY(self.priorityButton, yForAdd+self.priorityButton.frame.size.height/2);*/
+    [UIView commitAnimations];
+}
+-(void)keyboardWillShow:(NSNotification*)notification{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    CGRectSetY(self.contentView,20);
+    /*CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    //CGFloat targetHeight = keyboardFrame.size.height + self.addView.frame.size.height;
+    CGFloat currentHeight = self.frame.size.height;*/
+    /*if(targetHeight != currentHeight){
+        CGFloat deltaY = currentHeight - targetHeight;
+        CGRectSetY(self, self.frame.origin.y + deltaY);
+        CGRectSetHeight(self, targetHeight);
+    }
+    CGFloat yForAdd = self.frame.size.height-self.addView.frame.size.height-keyboardFrame.size.height;
+    CGRectSetY(self.addView, yForAdd);
+    CGRectSetCenterY(self.priorityButton, yForAdd+self.priorityButton.frame.size.height/2);*/
+    [UIView commitAnimations];
+}
+
 -(CGRect)frameForButtonNumber:(NSInteger)number{
     CGFloat width = CONTENT_VIEW_SIZE/GRID_NUMBER-(2*BUTTON_PADDING);
     CGFloat height = CONTENT_VIEW_SIZE/GRID_NUMBER-(2*BUTTON_PADDING);
@@ -586,6 +662,8 @@ typedef enum {
 
 
 -(void)dealloc{
+    clearNotify();
     self.calendarView = nil;
+    self.locationView = nil;
 }
 @end

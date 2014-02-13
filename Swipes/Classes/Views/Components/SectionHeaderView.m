@@ -62,6 +62,10 @@
     [self.sectionHeader setText:title];
     [self.sectionHeader setNeedsDisplay];
 }
+-(void)setNeedsDisplay{
+    [super setNeedsDisplay];
+    [self.sectionHeader setNeedsDisplay];
+}
 @end
 
 @implementation _SectionHeaderViewText
@@ -98,7 +102,7 @@
     CGFloat actualWidth = textSize.width + leftPadding + kDefRightPadding;
     self.titleLabel.frame = CGRectSetPos(self.titleLabel.frame,leftPadding , kDefTopPadding);
     CGRectSetSize(self, ceilf(actualWidth), ceilf(actualHeight));
-    CGRectSetX(self, 320-self.frame.size.width);
+    CGRectSetX(self, [self superview].bounds.size.width-self.frame.size.width);
 }
 - (void)drawRect:(CGRect)rect
 {

@@ -83,6 +83,8 @@
     
     if (OSVER >= 7) {
         [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+        [[UITextField appearance] setTintColor:[UIColor whiteColor]];
+
     }
     
     //[EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];

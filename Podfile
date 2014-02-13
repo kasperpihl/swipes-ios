@@ -9,6 +9,7 @@ pod 'RMStore', '~> 0.4.2'
 pod 'Base64', '~> 1.0.1'
 pod 'Evernote-SDK-iOS', '~> 1.3.1'
 pod 'Dropbox-iOS-SDK', '~> 1.3.9'
+pod 'ASCScreenBrightnessDetector'
 
 #pod 'TWStatus', '~> 0.0.1'
 

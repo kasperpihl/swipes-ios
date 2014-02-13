@@ -9,7 +9,7 @@
 #define retColor(DarkColor,LightColor) ((THEMER.currentTheme == ThemeDark) ? DarkColor : LightColor)
 #define inv(color) [ThemeHandler inverseColor:color]
 
-#define TASKS_COLOR                     color(228,202,92,1)
+#define TASKS_COLOR                     retColor(color(228,202,92,1),   color(244,203,28,1))
 #define DONE_COLOR                      color(69,217,132,1)  //color(63,186,141,1) //
 #define LATER_COLOR                     color(254,115,103,1) // color(234,97,80,1)
 
@@ -19,17 +19,43 @@
 
 #define TEXT_COLOR                      retColor(color(255,255,255,1),      gray(0,1))
 #define SUB_TEXT_COLOR                  retColor(gray(170,1),               inv(gray(170,1)))
-#define BACKGROUND                      retColor(color(36,40,46,1),         inv(color(36,40,46,1)))
+#define BACKGROUND                      retColor(color(36,40,46,1),         gray(255,1))
 
 #import "ThemeHandler.h"
+#import "RootViewController.h"
+#import <ASCScreenBrightnessDetector/ASCScreenBrightnessDetector.h>
+@interface ThemeHandler () <ASCScreenBrightnessDetectorDelegate>
+@property (nonatomic) ASCScreenBrightnessDetector *brightnessDetector;
+@end
+
 @implementation ThemeHandler
 static ThemeHandler *sharedObject;
 +(ThemeHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[ThemeHandler allocWithZone:NULL] init];
         sharedObject.currentTheme = [[NSUserDefaults standardUserDefaults] integerForKey:@"theme"];
+        [sharedObject brightnessDetector];
     }
     return sharedObject;
+}
+-(ASCScreenBrightnessDetector *)brightnessDetector{
+    if(!_brightnessDetector){
+        _brightnessDetector = [ASCScreenBrightnessDetector new];
+        _brightnessDetector.delegate = self;
+        _brightnessDetector.threshold = 0.3;
+    }
+    return _brightnessDetector;
+}
+
+- (void)screenBrightnessStyleDidChange:(ASCScreenBrightnessStyle)style
+{
+    /*NSLog(@"The new style is: %u", style);
+    if((self.currentTheme == ThemeDark && style == ASCScreenBrightnessStyleLight) || (self.currentTheme == ThemeLight && style == ASCScreenBrightnessStyleDark)){
+        [UIView animateWithDuration:0.3 animations:^{
+            [self changeTheme];
+            [ROOT_CONTROLLER resetRoot];
+        }];
+    }*/
 }
 -(void)setCurrentTheme:(Theme)currentTheme{
     NSLog(@"theme:%i",currentTheme);

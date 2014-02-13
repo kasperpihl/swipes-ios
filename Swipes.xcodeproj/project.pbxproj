@@ -247,6 +247,8 @@
 		A7916A61181BC7A500FA1974 /* round_twitter-high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7916A59181BC7A500FA1974 /* round_twitter-high@2x.png */; };
 		A7916A62181BC7A500FA1974 /* round_twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = A7916A5A181BC7A500FA1974 /* round_twitter.png */; };
 		A7916A63181BC7A500FA1974 /* round_twitter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7916A5B181BC7A500FA1974 /* round_twitter@2x.png */; };
+		A792BB8818ABEDB4000573E4 /* LocationSearchView.m in Sources */ = {isa = PBXBuildFile; fileRef = A792BB8718ABEDB4000573E4 /* LocationSearchView.m */; };
+		A792BB8B18AC3A5E000573E4 /* LocationResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A792BB8A18AC3A5E000573E4 /* LocationResultCell.m */; };
 		A7933049172AB63700F1505E /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933048172AB63700F1505E /* TodayViewController.m */; };
 		A7933056172B2BA100F1505E /* DoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933055172B2BA100F1505E /* DoneViewController.m */; };
 		A79DB4071735892C007A48E2 /* done-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = A79DB3F31735892C007A48E2 /* done-highlighted.png */; };
@@ -696,6 +698,10 @@
 		A7916A59181BC7A500FA1974 /* round_twitter-high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "round_twitter-high@2x.png"; sourceTree = "<group>"; };
 		A7916A5A181BC7A500FA1974 /* round_twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = round_twitter.png; sourceTree = "<group>"; };
 		A7916A5B181BC7A500FA1974 /* round_twitter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "round_twitter@2x.png"; sourceTree = "<group>"; };
+		A792BB8618ABEDB4000573E4 /* LocationSearchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationSearchView.h; path = LocationSearch/LocationSearchView.h; sourceTree = "<group>"; };
+		A792BB8718ABEDB4000573E4 /* LocationSearchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationSearchView.m; path = LocationSearch/LocationSearchView.m; sourceTree = "<group>"; };
+		A792BB8918AC3A5E000573E4 /* LocationResultCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationResultCell.h; path = LocationSearch/LocationResultCell.h; sourceTree = "<group>"; };
+		A792BB8A18AC3A5E000573E4 /* LocationResultCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationResultCell.m; path = LocationSearch/LocationResultCell.m; sourceTree = "<group>"; };
 		A7933047172AB63700F1505E /* TodayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TodayViewController.h; path = Today/TodayViewController.h; sourceTree = "<group>"; };
 		A7933048172AB63700F1505E /* TodayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TodayViewController.m; path = Today/TodayViewController.m; sourceTree = "<group>"; };
 		A7933054172B2BA100F1505E /* DoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DoneViewController.h; path = Done/DoneViewController.h; sourceTree = "<group>"; };
@@ -909,6 +915,7 @@
 		A703B1641838EBF20047DCC9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A792BB8518ABED97000573E4 /* LocationSearch */,
 				A703B1651838EBF20047DCC9 /* AddPanel */,
 				A703B1681838EBF20047DCC9 /* Alert */,
 				A703B16D1838EBF20047DCC9 /* CKCalendarView */,
@@ -1489,6 +1496,17 @@
 				A78128BC17294C56002226C8 /* Swipes-Prefix.pch */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A792BB8518ABED97000573E4 /* LocationSearch */ = {
+			isa = PBXGroup;
+			children = (
+				A792BB8618ABEDB4000573E4 /* LocationSearchView.h */,
+				A792BB8718ABEDB4000573E4 /* LocationSearchView.m */,
+				A792BB8918AC3A5E000573E4 /* LocationResultCell.h */,
+				A792BB8A18AC3A5E000573E4 /* LocationResultCell.m */,
+			);
+			name = LocationSearch;
 			sourceTree = "<group>";
 		};
 		A7933044172AB5AA00F1505E /* Schedule */ = {
@@ -2225,6 +2243,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A703B1BC1838EBF20047DCC9 /* AccelerationAnimation.m in Sources */,
+				A792BB8818ABEDB4000573E4 /* LocationSearchView.m in Sources */,
 				A78128BD17294C56002226C8 /* FacebookCommunicator.m in Sources */,
 				A703B1B71838EBF20047DCC9 /* YoureAllDoneView.m in Sources */,
 				A78128BE17294C56002226C8 /* KPParseCommunicator.m in Sources */,
@@ -2234,6 +2253,7 @@
 				A703B1B11838EBF20047DCC9 /* KPRepeatPicker.m in Sources */,
 				A703B1B41838EBF20047DCC9 /* NotesView.m in Sources */,
 				A78128C317294C56002226C8 /* _KPToDo.m in Sources */,
+				A792BB8B18AC3A5E000573E4 /* LocationResultCell.m in Sources */,
 				A78128C417294C56002226C8 /* KPParseCoreData.m in Sources */,
 				A703B1B01838EBF20047DCC9 /* KPDayPicker.m in Sources */,
 				A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */,
