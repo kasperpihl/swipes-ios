@@ -28,16 +28,15 @@ static const NSInteger g_maxRetries = 5;
 
 static NSUInteger g_thumbnailCounter = 0;
 
-@interface DropboxView () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, DBRestClientDelegate, UIAlertViewDelegate>
+@interface DropboxView () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, DBRestClientDelegate, DBNetworkRequestDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITableView* tableView;
-@property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) UISearchBar* searchBar;
+@property (nonatomic, strong) DBRestClient* restClient;
 
 @end
 
 @implementation DropboxView {
-    DBRestClient* _restClient;
-    
     DBMetadata* _metadata;
     NSArray* _sortedMetadata;
     NSArray* _searchResults;
@@ -89,12 +88,20 @@ static NSUInteger g_thumbnailCounter = 0;
         DBSession* dbSession = [[DBSession alloc] initWithAppKey:DROPBOX_APP_KEY appSecret:DROPBOX_APP_SECRET root:kDBRootDropbox];
         [DBSession setSharedSession:dbSession];
         
-        _restClient = [[DBRestClient alloc] initWithSession:dbSession];
-        _restClient.delegate = self;
+        [DBRequest setNetworkRequestDelegate:self];
         
         [self performSelectorOnMainThread:@selector(authenticateWithDropbox) withObject:nil waitUntilDone:NO];
     }
     return self;
+}
+
+- (DBRestClient *)restClient
+{
+    if (nil == _restClient) {
+        _restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
+        _restClient.delegate = self;
+    }
+    return _restClient;
 }
 
 -(void)blurryWillShow:(KPBlurry *)blurry
@@ -154,7 +161,8 @@ static NSUInteger g_thumbnailCounter = 0;
 
 - (void)getFilesForPath:(NSString *)path
 {
-    [_restClient loadMetadata:path];
+    NSString* hash = (nil != _metadata) ? _metadata.hash : nil;
+    [self.restClient loadMetadata:path withHash:hash];
 }
 
 - (CGSize)getBoundedSize:(CGSize)originalSize forWidth:(NSInteger)width height:(NSInteger)height
@@ -195,7 +203,7 @@ static NSUInteger g_thumbnailCounter = 0;
             
             [_pathToTempThumbnails setObject:[NSMutableDictionary dictionaryWithDictionary:@{KEY_THUMBNAIL_READY : @(NO), KEY_THUMBNAIL_PATH : path}] forKey:item.path];
             [_tempToPathThumbnails setObject:item.path forKey:path];
-            [_restClient loadThumbnail:item.path ofSize:@"iphone_bestfit" intoPath:path];
+            [self.restClient loadThumbnail:item.path ofSize:@"iphone_bestfit" intoPath:path];
         }
         else {
             if ([[data valueForKey:KEY_THUMBNAIL_READY] boolValue]) {
@@ -299,6 +307,25 @@ static NSUInteger g_thumbnailCounter = 0;
 {
 }
 
+
+#pragma mark - DBNetworkRequestDelegate methods
+
+static int outstandingRequests;
+
+- (void)networkRequestStarted {
+	outstandingRequests++;
+	if (outstandingRequests == 1) {
+		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+	}
+}
+
+- (void)networkRequestStopped {
+	outstandingRequests--;
+	if (outstandingRequests == 0) {
+		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	}
+}
+
 #pragma mark - Search related stuff
 
 - (void)restClient:(DBRestClient*)restClient loadedSearchResults:(NSArray*)results
@@ -334,7 +361,7 @@ static NSUInteger g_thumbnailCounter = 0;
 - (void)searchDropbox:(id)sender
 {
     if (0 < _searchBar.text.length) {
-        [_restClient searchPath:_metadata.path forKeyword:_searchBar.text];
+        [self.restClient searchPath:_metadata.path forKeyword:_searchBar.text];
     }
     else {
         _searchResults = nil;
@@ -423,11 +450,11 @@ static NSUInteger g_thumbnailCounter = 0;
 {
     [_pathToTempThumbnails removeAllObjects];
     [_tempToPathThumbnails removeAllObjects];
-    _restClient.delegate = nil;
+    self.restClient.delegate = nil;
     _metadata = nil;
     _searchResults = nil;
-    [_restClient cancelAllRequests];
-    _restClient = nil;
+    [self.restClient cancelAllRequests];
+    self.restClient = nil;
     
     _tableView.delegate = nil;
     _tableView.dataSource = nil;

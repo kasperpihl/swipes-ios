@@ -484,8 +484,8 @@
 		A7FE440A18282C60002AFB2E /* ostrich-regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7FE440818282B04002AFB2E /* ostrich-regular.ttf */; };
 		DA310FA7188F3F26003C8FA4 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = DA310FA6188F3F26003C8FA4 /* Assets */; };
 		DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0B8F188CB4750094F866 /* EvernoteView.m */; };
+		DA67301418A99C7100CA4C1A /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA67301318A99C7100CA4C1A /* DropboxSDK.framework */; };
 		DACD541918A19FB000C378DF /* DropboxView.m in Sources */ = {isa = PBXBuildFile; fileRef = DACD541818A19FB000C378DF /* DropboxView.m */; };
-		DACD541F18A1A46F00C378DF /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DACD541E18A1A46F00C378DF /* DropboxSDK.framework */; };
 		DACD544318A1ACFC00C378DF /* excel.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542118A1ACFC00C378DF /* excel.png */; };
 		DACD544418A1ACFC00C378DF /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542218A1ACFC00C378DF /* folder.png */; };
 		DACD544518A1ACFC00C378DF /* folder_app.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542318A1ACFC00C378DF /* folder_app.png */; };
@@ -1093,9 +1093,9 @@
 		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvernoteView.h; sourceTree = "<group>"; };
 		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvernoteView.m; sourceTree = "<group>"; };
+		DA67301318A99C7100CA4C1A /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = Swipes/Ressources/Libs/DropboxSDK.framework; sourceTree = "<group>"; };
 		DACD541718A19FB000C378DF /* DropboxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxView.h; sourceTree = "<group>"; };
 		DACD541818A19FB000C378DF /* DropboxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxView.m; sourceTree = "<group>"; };
-		DACD541E18A1A46F00C378DF /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = "Pods/Dropbox-iOS-SDK/dropbox-ios-sdk-1.3.9/DropboxSDK.framework"; sourceTree = "<group>"; };
 		DACD542118A1ACFC00C378DF /* excel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = excel.png; sourceTree = "<group>"; };
 		DACD542218A1ACFC00C378DF /* folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder.png; sourceTree = "<group>"; };
 		DACD542318A1ACFC00C378DF /* folder_app.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder_app.png; sourceTree = "<group>"; };
@@ -1145,7 +1145,7 @@
 				A78F392E16F7DC1900A8C78D /* MessageUI.framework in Frameworks */,
 				A78F391416F7D5BA00A8C78D /* AddressBook.framework in Frameworks */,
 				A74F61BF16EBA5B8004927DA /* MediaPlayer.framework in Frameworks */,
-				DACD541F18A1A46F00C378DF /* DropboxSDK.framework in Frameworks */,
+				DA67301418A99C7100CA4C1A /* DropboxSDK.framework in Frameworks */,
 				A74F61BD16EBA5A5004927DA /* AssetsLibrary.framework in Frameworks */,
 				DAFB7B971853508C0006A706 /* Crashlytics.framework in Frameworks */,
 				A74F61BB16EBA595004927DA /* AVFoundation.framework in Frameworks */,
@@ -1536,8 +1536,8 @@
 		A7778CCC16EB5884004D95E5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA67301318A99C7100CA4C1A /* DropboxSDK.framework */,
 				DAEBBE62188B2BB8002655CB /* libxml2.dylib */,
-				DACD541E18A1A46F00C378DF /* DropboxSDK.framework */,
 				A76182E0187D37AB00914A05 /* KitLocate.Framework */,
 				A7ADCB3717DD352F00780F88 /* libz.dylib */,
 				A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */,
@@ -2925,7 +2925,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
-					"Pods/Dropbox-iOS-SDK/dropbox-ios-sdk-1.3.9",
+					"/Users/demosten/work/iPhone/swipes-ios/Swipes/Ressources/Libs",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
@@ -3064,7 +3064,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
-					"Pods/Dropbox-iOS-SDK/dropbox-ios-sdk-1.3.9",
+					"/Users/demosten/work/iPhone/swipes-ios/Swipes/Ressources/Libs",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
@@ -3137,7 +3137,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
-					"Pods/Dropbox-iOS-SDK/dropbox-ios-sdk-1.3.9",
+					"/Users/demosten/work/iPhone/swipes-ios/Swipes/Ressources/Libs",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
