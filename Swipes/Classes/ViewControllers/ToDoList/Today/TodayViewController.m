@@ -154,6 +154,7 @@
     
     self.youreAllDoneView = [[YoureAllDoneView alloc] initWithFrame:self.view.bounds];
     self.youreAllDoneView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    
     [self.view addSubview:self.youreAllDoneView];
     
     [self.tableView removeFromSuperview];
@@ -167,16 +168,16 @@
 	// Do any additional setup after loading the view.
     
     self.facebookButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, kShareButtonSize, kShareButtonSize)];
-    [self.facebookButton setImage:[UIImage imageNamed:@"round_facebook"] forState:UIControlStateNormal];
-    [self.facebookButton setImage:[UIImage imageNamed:@"round_facebook-high"] forState:UIControlStateHighlighted];
+    [self.facebookButton setImage:[UIImage imageNamed:@"round_facebook_white"] forState:UIControlStateNormal];
+    [self.facebookButton setImage:[UIImage imageNamed:@"round_facebook_white-high"] forState:UIControlStateHighlighted];
     [self.facebookButton addTarget:self action:@selector(pressedFacebook) forControlEvents:UIControlEventTouchUpInside];
     self.facebookButton.hidden = YES;
     [self.view addSubview:self.facebookButton];
     
     
     self.twitterButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, kShareButtonSize, kShareButtonSize)];
-    [self.twitterButton setImage:[UIImage imageNamed:@"round_twitter"] forState:UIControlStateNormal];
-    [self.twitterButton setImage:[UIImage imageNamed:@"round_twitter-high"] forState:UIControlStateHighlighted];
+    [self.twitterButton setImage:[UIImage imageNamed:@"round_twitter_white"] forState:UIControlStateNormal];
+    [self.twitterButton setImage:[UIImage imageNamed:@"round_twitter_white-high"] forState:UIControlStateHighlighted];
     [self.twitterButton addTarget:self action:@selector(pressedTwitter) forControlEvents:UIControlEventTouchUpInside];
     self.twitterButton.hidden = YES;
     [self.view addSubview:self.twitterButton];

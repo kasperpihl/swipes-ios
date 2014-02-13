@@ -24,7 +24,7 @@
         CGFloat buttonSize = self.frame.size.height;
         CGFloat buttonWidth = 44;
         self.doneEditingButton.frame = CGRectMake(self.frame.size.width-buttonWidth, 0, buttonWidth, buttonSize);
-        [self.doneEditingButton setImage:[UIImage imageNamed:@"backarrow_icon_white"] forState:UIControlStateNormal];
+        [self.doneEditingButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         [self.doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         
         self.doneEditingButton.imageView.clipsToBounds = NO;

@@ -267,7 +267,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                 }
             }];
             popup.numberOfItems = 1;
-            BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.4);
+            BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
             BLURRY.dismissAction = ^{
                 [cell bounceToOrigin];
             };
@@ -667,14 +667,15 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         NSInteger startY = (OSVER >= 7) ? 20 : 0;
         NSInteger toolbarWidth = 120;
-        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(320-toolbarWidth, startY, toolbarWidth, TOOLBAR_HEIGHT) items:@[@"share_icon_white",@"trashcan_icon_white"] delegate:self];
+        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(320-toolbarWidth, startY, toolbarWidth, TOOLBAR_HEIGHT) items:@[timageStringBW(@"share_icon"),timageStringBW(@"trashcan_icon")] delegate:self];
         [self.view addSubview:self.toolbarEditView];
         UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, startY, 160, TOOLBAR_HEIGHT)];
         [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
         [backButton setTitle:@"Schedule" forState:UIControlStateNormal];
         backButton.titleLabel.font = KP_LIGHT(16);
+        [backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [backButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-        [backButton setImage:[UIImage imageNamed:@"backarrow_small_icon_white"] forState:UIControlStateNormal];
+        [backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_small_icon")] forState:UIControlStateNormal];
         [backButton setImageEdgeInsets:UIEdgeInsetsMake(0, 16, 0, 0)];
         [backButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 0)];
         [self.view addSubview:backButton];
@@ -733,7 +734,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          Alarm container and button!
          */
         self.alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
-        [self addAndGetImage:@"edit_schedule_icon" inView:self.alarmContainer];
+        [self addAndGetImage:timageStringBW(@"edit_schedule_icon")  inView:self.alarmContainer];
         self.alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.alarmContainer.frame.size.height)];
         self.alarmLabel.backgroundColor = CLEAR;
         [self setColorsFor:self.alarmLabel];
@@ -756,7 +757,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         CGRectSetY(self.repeatPicker, self.repeatedContainer.frame.size.height);
         [self.repeatedContainer addSubview:self.repeatPicker];
         
-        [self addAndGetImage:@"edit_repeat_icon" inView:self.repeatedContainer];
+        [self addAndGetImage:timageStringBW(@"edit_repeat_icon") inView:self.repeatedContainer];
         self.repeatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.repeatedContainer.frame.size.height)];
         self.repeatedLabel.backgroundColor = CLEAR;
         [self setColorsFor:self.repeatedLabel];
@@ -771,7 +772,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          */
         self.tagsContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
         //[self addSeperatorToView:self.tagsContainerView];
-        [self addAndGetImage:@"edit_tags_icon" inView:self.tagsContainerView];
+        [self addAndGetImage:timageStringBW(@"edit_tags_icon") inView:self.tagsContainerView];
         
         self.tagsLabel = [[UILabel alloc] initWithFrame:TAGS_LABEL_RECT];
         self.tagsLabel.numberOfLines = 0;
@@ -804,7 +805,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          Dropbox Container with button!
          */
          self.dropboxContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
-         [self addAndGetImage:@"edit_notes_icon" inView:self.dropboxContainer];
+         [self addAndGetImage:timageString(@"edit_notes_icon", @"_white", @"_black") inView:self.dropboxContainer];
          
          self.dropboxLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.dropboxContainer.frame.size.height)];
          self.dropboxLabel.font = EDIT_TASK_TEXT_FONT;
@@ -822,7 +823,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          Notes view
          */
         self.notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
-        [self addAndGetImage:@"edit_notes_icon" inView:self.notesContainer];
+        [self addAndGetImage:timageString(@"edit_notes_icon", @"_white", @"_black") inView:self.notesContainer];
         self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, 320-LABEL_X-10, 500)];
         self.notesView.font = EDIT_TASK_TEXT_FONT;
         self.notesView.contentInset = UIEdgeInsetsMake(0,-5,0,0);

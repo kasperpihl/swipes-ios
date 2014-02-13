@@ -34,7 +34,7 @@
         // prepare back button
         _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _backButton.frame = CGRectMake(0, self.frame.size.height - 44, 44, 44);
-        [_backButton setImage:[UIImage imageNamed:@"backarrow_icon_white"] forState:UIControlStateNormal];
+        [_backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         [_backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_backButton];
         

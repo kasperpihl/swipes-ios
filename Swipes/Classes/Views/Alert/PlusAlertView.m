@@ -52,7 +52,7 @@
         contentView.backgroundColor = tcolor(BackgroundColor);
         
         UIButton *crossButton = [[UIButton alloc] initWithFrame:CGRectMake(contentView.frame.size.width-kCrossButtonSize, 0, kCrossButtonSize, kCrossButtonSize)];
-        [crossButton setImage:[UIImage imageNamed:@"round_cross_small"] forState:UIControlStateNormal];
+        [crossButton setImage:[UIImage imageNamed:timageStringBW(@"round_cross")] forState:UIControlStateNormal];
         [crossButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
         crossButton.imageEdgeInsets = kCrossButtonContentInset;
         [contentView addSubview:crossButton];

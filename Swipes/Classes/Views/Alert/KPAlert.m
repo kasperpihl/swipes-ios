@@ -68,7 +68,7 @@
         [contentView addSubview:messageLabel];
         self.messageLabel = (UILabel*)[contentView viewWithTag:MESSAGE_LABEL_TAG];
         
-        KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT) items:@[@"round_backarrow_big",@"round_checkmark_big"] delegate:self];
+        KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT) items:@[timageStringBW(@"round_backarrow"),timageStringBW(@"round_checkmark")] delegate:self];
         [toolbar setTopInset:kToolbarHack];
         [contentView addSubview:toolbar];
         [self addSubview:contentView];

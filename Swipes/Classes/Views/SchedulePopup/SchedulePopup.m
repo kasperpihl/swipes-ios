@@ -557,7 +557,7 @@ typedef enum {
     self.calendarView.dayOfWeekTextColor = tcolor(TextColor);
     self.calendarView.adaptHeightToNumberOfWeeksInMonth = YES;
     
-    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-kToolbarHeight, self.contentView.frame.size.width, kToolbarHeight-kToolbarPadding) items:@[@"round_backarrow_big",@"round_checkmark_big"] delegate:self];
+    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-kToolbarHeight, self.contentView.frame.size.width, kToolbarHeight-kToolbarPadding) items:@[timageStringBW(@"round_backarrow"),timageStringBW(@"round_checkmark")] delegate:self];
     self.toolbar.hidden = YES;
     self.toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     self.toolbar.backgroundColor = CLEAR;
@@ -588,31 +588,31 @@ typedef enum {
     NSString *imageString;
     switch (scheduleButton) {
         case KPScheduleButtonLaterToday:
-            imageString = @"schedule_image_coffee";
+            imageString = timageStringBW(@"schedule_image_coffee");
             break;
         case KPScheduleButtonThisEvening:
-            imageString = @"schedule_image_moon";
+            imageString = timageStringBW(@"schedule_image_moon");
             break;
         case KPScheduleButtonTomorrow:
-            imageString = @"schedule_image_sun";
+            imageString = timageStringBW(@"schedule_image_sun");
             break;
         case KPScheduleButtonIn2Days:
-            imageString = @"schedule_image_notebook";
+            imageString = timageStringBW(@"schedule_image_notebook");
             break;
         case KPScheduleButtonThisWeekend:
-            imageString = @"schedule_image_glasses";
+            imageString = timageStringBW(@"schedule_image_glasses");
             break;
         case KPScheduleButtonNextWeek:
-            imageString = @"schedule_image_circle";
+            imageString = timageStringBW(@"schedule_image_circle");
             break;
         case KPScheduleButtonUnscheduled:
-            imageString = @"schedule_image_cloud";
+            imageString = timageStringBW(@"schedule_image_cloud");
             break;
         case KPScheduleButtonLocation:
-            imageString = @"schedule_image_location";
+            imageString = timageStringBW(@"schedule_image_location");
             break;
         case KPScheduleButtonSpecificTime:
-            imageString = @"schedule_image_calender";
+            imageString = timageStringBW(@"schedule_image_calender");
             break;
         default:
             break;

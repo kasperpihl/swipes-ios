@@ -32,7 +32,7 @@
         self.resultLabel.font = KP_REGULAR(15);
         [self.contentView addSubview:self.resultLabel];
         
-        UIImageView *locationIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"edit_location_icon"]];
+        UIImageView *locationIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:timageStringBW(@"edit_location_icon")]];
         locationIcon.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
         CGRectSetCenterY(locationIcon, self.bounds.size.height/2);
         CGRectSetCenterX(locationIcon, kTextX/2+kIconHack);

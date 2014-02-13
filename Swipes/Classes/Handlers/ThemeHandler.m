@@ -6,23 +6,23 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 /* Main colors */
-#define retColor(DarkColor,LightColor) ((THEMER.currentTheme == ThemeDark) ? DarkColor : LightColor)
+
 #define inv(color) [ThemeHandler inverseColor:color]
 
-#define TASKS_COLOR                     retColor(color(228,202,92,1),   color(244,203,28,1))
+#define TASKS_COLOR                     color(244,203,28,1) //retColor(color(228,202,92,1),   color(244,203,28,1))
 #define DONE_COLOR                      color(69,217,132,1)  //color(63,186,141,1) //
-#define LATER_COLOR                     color(254,115,103,1) // color(234,97,80,1)
+#define LATER_COLOR                     color(252,97,75,1) // color(234,97,80,1)
 
 #define STRONG_TASKS_COLOR              color(228,192,21,1)
 #define STRONG_DONE_COLOR               color(58,195,160,1)
 #define STRONG_LATER_COLOR              color(255,96,69,1)
 
-#define TEXT_COLOR                      retColor(color(255,255,255,1),      gray(0,1))
-#define SUB_TEXT_COLOR                  retColor(gray(170,1),               inv(gray(170,1)))
-#define BACKGROUND                      retColor(color(36,40,46,1),         gray(255,1))
+#define TEXT_COLOR(Theme)                      retColorF(color(255,255,255,1),      gray(0,1),Theme)
+#define SUB_TEXT_COLOR                  gray(170,1) //retColor(gray(170,1),               inv(gray(170,1)))
+#define BACKGROUND(Theme)               retColorF(color(36,40,46,1),         gray(255,1),Theme)
 
 #import "ThemeHandler.h"
-#import "RootViewController.h"
+//#import "RootViewController.h"
 #import <ASCScreenBrightnessDetector/ASCScreenBrightnessDetector.h>
 @interface ThemeHandler () <ASCScreenBrightnessDetectorDelegate>
 @property (nonatomic) ASCScreenBrightnessDetector *brightnessDetector;
@@ -35,6 +35,7 @@ static ThemeHandler *sharedObject;
         sharedObject = [[ThemeHandler allocWithZone:NULL] init];
         sharedObject.currentTheme = [[NSUserDefaults standardUserDefaults] integerForKey:@"theme"];
         [sharedObject brightnessDetector];
+        //[sharedObject changeTheme];
     }
     return sharedObject;
 }
@@ -49,8 +50,8 @@ static ThemeHandler *sharedObject;
 
 - (void)screenBrightnessStyleDidChange:(ASCScreenBrightnessStyle)style
 {
-    /*NSLog(@"The new style is: %u", style);
-    if((self.currentTheme == ThemeDark && style == ASCScreenBrightnessStyleLight) || (self.currentTheme == ThemeLight && style == ASCScreenBrightnessStyleDark)){
+    NSLog(@"The new style is: %u", style);
+    /*if((self.currentTheme == ThemeDark && style == ASCScreenBrightnessStyleLight) || (self.currentTheme == ThemeLight && style == ASCScreenBrightnessStyleDark)){
         [UIView animateWithDuration:0.3 animations:^{
             [self changeTheme];
             [ROOT_CONTROLLER resetRoot];
@@ -62,6 +63,8 @@ static ThemeHandler *sharedObject;
     if(currentTheme != ThemeLight && currentTheme != ThemeDark) currentTheme = ThemeDark;
     _currentTheme = currentTheme;
     [[NSUserDefaults standardUserDefaults] setInteger:currentTheme forKey:@"theme"];
+    if(OSVER >= 7) [[UITextField appearance] setTintColor:tcolor(TextColor)];
+    
 }
 -(void)changeTheme{
     Theme newTheme = (self.currentTheme == ThemeDark) ? ThemeLight : ThemeDark;
@@ -71,9 +74,9 @@ static ThemeHandler *sharedObject;
 -(UIColor*)colorForItem:(ThemerItem)item forceTheme:(Theme)theme{
     switch (item) {
         case BackgroundColor:
-            return BACKGROUND;
+            return BACKGROUND(theme);
         case TextColor:
-            return TEXT_COLOR;
+            return TEXT_COLOR(theme);
         case SubTextColor:
             return SUB_TEXT_COLOR;
             
@@ -96,7 +99,7 @@ static ThemeHandler *sharedObject;
 }
 -(NSString *)imageStringForBase:(NSString *)imageBase darkEnding:(NSString *)darkEnding lightEnding:(NSString *)lightEnding forceTheme:(Theme)theme{
     NSString *imageEnding = (self.currentTheme == ThemeDark) ? darkEnding : lightEnding;
-    NSString *imageString = [imageBase stringByAppendingFormat:@"_%@",imageEnding];
+    NSString *imageString = [imageBase stringByAppendingFormat:@"%@",imageEnding];
     return imageString;
 }
 -(UIFont *)fontForItem:(ThemerItem)item{

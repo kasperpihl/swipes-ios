@@ -128,8 +128,8 @@
         CGFloat buttonSize = self.frame.size.height;
         SlowHighlightIcon *filterButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         [filterButton addTarget:self action:@selector(pressedFilter:) forControlEvents:UIControlEventTouchUpInside];
-        [filterButton setImage:[UIImage imageNamed:@"tag_icon_white"] forState:UIControlStateNormal];
-        [filterButton setImage:[UIImage imageNamed:@"tag_icon_white-high"] forState:UIControlStateHighlighted];
+        [filterButton setImage:[UIImage imageNamed:timageStringBW(@"tag_icon")] forState:UIControlStateNormal];
+        [filterButton setImage:[UIImage imageNamed:timageString(@"tag_icon",@"_white-high",@"_black-high")] forState:UIControlStateHighlighted];
         filterButton.tag = FILTER_BUTTON_TAG;
         filterButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         filterButton.frame = CGRectMake(self.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
@@ -140,8 +140,8 @@
         UIButton *clearFilterButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         clearFilterButton.frame = CGRectMake(self.frame.size.width-buttonSize,0,buttonSize,buttonSize);
         //[clearFilterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_COLOR] forState:UIControlStateNormal];
-        [clearFilterButton setImage:[UIImage imageNamed:@"round_cross_small"] forState:UIControlStateNormal];
-        [clearFilterButton setImage:[UIImage imageNamed:@"round_cross_small-high"] forState:UIControlStateHighlighted];
+        [clearFilterButton setImage:[UIImage imageNamed:timageStringBW(@"round_cross")] forState:UIControlStateNormal];
+        [clearFilterButton setImage:[UIImage imageNamed:timageString(@"round_cross",@"_white-high",@"_black-high")] forState:UIControlStateHighlighted];
         [clearFilterButton addTarget:self action:@selector(pressedClearFilter:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:clearFilterButton];
         clearFilterButton.hidden = YES;

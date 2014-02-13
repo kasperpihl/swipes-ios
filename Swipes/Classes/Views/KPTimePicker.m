@@ -23,8 +23,8 @@
 #define kOpenedSunAngle valForScreen(70,60)
 #define kExtraAngleForIcons 22
 
-#define kDefLightColor          color(69,82,104,1)
-#define kDefDarkColor           tcolor(BackgroundColor)
+#define kDefLightColor          retColor(color(69,82,104,1),color(69,82,104,1))
+#define kDefDarkColor           retColor(tcolor(BackgroundColor),tcolorF(BackgroundColor,ThemeDark))
 
 #define kEndAngle               (360-(90-kOpenedSunAngle/2) + kExtraAngleForIcons)
 #define kStartAngle             (kEndAngle- kOpenedSunAngle - 2*kExtraAngleForIcons)
@@ -261,11 +261,11 @@
         self.darkColor = kDefDarkColor;
         
         
-        self.moonImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"schedule_image_moon-high"]];
+        self.moonImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:timageString(@"schedule_image_moon",@"_white-high",@"_white-high")]];
         self.moonImage.center = [self pointFromPoint:self.centerPoint withDistance:kSunImageDistance towardAngle:235];
         [self addSubview:self.moonImage];
         
-        self.sunImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"schedule_image_sun-high"]];
+        self.sunImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:timageString(@"schedule_image_sun",@"_white-high",@"_white-high")]];
         self.sunImage.center = [self pointFromPoint:self.centerPoint withDistance:kSunImageDistance towardAngle:305];
         [self addSubview:self.sunImage];
         
@@ -285,15 +285,15 @@
         self.confirmButton.layer.cornerRadius = kDefActualSize;
         [self addSubview:self.confirmButton];
         
-        self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:valForScreen(@"picker_wheel_ip4",@"picker_wheel")]];
+        self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:valForScreen(@"picker_wheel_ip4_white",@"picker_wheel_white")]];
         self.timeSlider.center = self.centerPoint;
         [self addSubview:self.timeSlider];
         
         self.backButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         self.backButton.frame = CGRectMake(kBackMargin, self.bounds.size.height-kBackButtonSize-kBackMargin, kBackButtonSize, kBackButtonSize);
         self.backButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin);
-        [self.backButton setImage:[UIImage imageNamed:@"round_backarrow_big"] forState:UIControlStateNormal];
-        [self.backButton setImage:[UIImage imageNamed:@"round_backarrow_big-high"] forState:UIControlStateHighlighted];
+        [self.backButton setImage:[UIImage imageNamed:@"round_backarrow_white"] forState:UIControlStateNormal];
+        [self.backButton setImage:[UIImage imageNamed:@"round_backarrow_white-high"] forState:UIControlStateHighlighted];
         [self.backButton addTarget:self action:@selector(pressedBackButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.backButton];
         
@@ -303,14 +303,14 @@
         
         self.dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 120)];
         self.dayLabel.backgroundColor = [UIColor clearColor];
-        self.dayLabel.textColor = [UIColor whiteColor];
+        self.dayLabel.textColor = tcolorF(TextColor,ThemeDark);
         self.dayLabel.font = kDayLabelFont;
         self.dayLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.dayLabel];
 
         self.clockLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kClockLabelY, self.bounds.size.width, 120)];
         self.clockLabel.backgroundColor = [UIColor clearColor];
-        self.clockLabel.textColor = [UIColor whiteColor]; //self.foregroundColor;
+        self.clockLabel.textColor = tcolorF(TextColor,ThemeDark); //self.foregroundColor;
         self.clockLabel.font = kClockLabelFont;
         self.clockLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.clockLabel];

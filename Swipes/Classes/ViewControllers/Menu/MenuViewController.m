@@ -23,6 +23,8 @@
 
 #import "KPParseCoreData.h"
 #import "PlusAlertView.h"
+
+#define kSettingsBlurColor retColor(gray(230, 0.5),gray(50, 0.4))
 #define kMenuButtonStartTag 4123
 #define kLampOnColor tcolor(DoneColor)
 #define kLampOffColor tcolor(BackgroundColor)
@@ -78,7 +80,7 @@
     CGFloat backSpacing = 8.f;
     CGFloat buttonSize = 44.0f;
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-buttonSize-backSpacing,startY,buttonSize,buttonSize)];
-    [backButton setImage:[UIImage imageNamed:@"backarrow_icon_white"] forState:UIControlStateNormal];
+    [backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
     backButton.transform = CGAffineTransformMakeRotation(M_PI);
     [self.view addSubview:backButton];
@@ -148,7 +150,7 @@
     CGFloat width = (vertical) ? SEPERATOR_WIDTH : size;
     CGFloat height = (vertical) ? size : SEPERATOR_WIDTH;
     UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
-    seperator.backgroundColor = [UIColor whiteColor];
+    seperator.backgroundColor = tcolor(TextColor);
     return seperator;
 }
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
@@ -167,7 +169,7 @@
     } completion:^(BOOL finished) {
         showingView.alpha = 0;
         if(level == 1){
-            [self.backButton setImage:[UIImage imageNamed:@"backarrow_icon_white"] forState:UIControlStateNormal];
+            [self.backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         }
         [UIView animateWithDuration:0.2 animations:^{
         } completion:^(BOOL finished) {
@@ -187,7 +189,7 @@
     UIView *hidingView = (level == 0) ? self.gridView : [(UIViewController*)[self.viewControllers lastObject] view];
     [UIView animateWithDuration:0.1 animations:^{
         hidingView.alpha = 0;
-        if(level == 0) [self.backButton setImage:[UIImage imageNamed:@"round_cross_small"] forState:UIControlStateNormal];
+        if(level == 0) [self.backButton setImage:[UIImage imageNamed:timageStringBW(@"round_cross")] forState:UIControlStateNormal];
     } completion:^(BOOL finished) {
         viewController.view.alpha = 0;
         viewController.view.frame = self.view.bounds;
@@ -220,7 +222,7 @@
                         [sender setLampColor:lampColor];
                     }
                 }];
-                BLURRY.blurryTopColor = gray(230, 0.5);
+                BLURRY.blurryTopColor = kSettingsBlurColor;
                 [BLURRY showView:alert inViewController:self];
             }
             else{
@@ -261,7 +263,7 @@
                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"]];
                     }
                 }];
-                BLURRY.blurryTopColor = gray(230, 0.5);
+                BLURRY.blurryTopColor = kSettingsBlurColor;
                 [BLURRY showView:alert inViewController:self];
                 
                 return;
@@ -281,7 +283,7 @@
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: url]];
                 }
             }];
-            BLURRY.blurryTopColor = gray(230, 0.5);
+            BLURRY.blurryTopColor = kSettingsBlurColor;
             [BLURRY showView:alert inViewController:self];
             break;
         }
@@ -293,7 +295,7 @@
                     [ROOT_CONTROLLER logOut];
                 }
             }];
-            BLURRY.blurryTopColor = gray(230, 0.5);
+            BLURRY.blurryTopColor = kSettingsBlurColor;
             [BLURRY showView:alert inViewController:self];
             break;
         }
@@ -308,7 +310,7 @@
                         [ROOT_CONTROLLER upgrade];
                     }
                 }];
-                BLURRY.blurryTopColor = gray(230, 0.5);
+                BLURRY.blurryTopColor = kSettingsBlurColor;
                 [BLURRY showView:alert inViewController:self];
             }
             else{
@@ -371,29 +373,29 @@
     NSString *imageString;
     switch (button) {
         case KPMenuButtonNotifications:
-            imageString = @"menu_notifications";
+            imageString = timageStringBW(@"menu_notifications");
             break;
         case KPMenuButtonWalkthrough:
-            imageString = @"menu_walkthrough";
+            imageString = timageStringBW(@"menu_walkthrough");
             break;
         case KPMenuButtonFeedback:
-            imageString = @"menu_support";
+            imageString = timageStringBW(@"menu_support");
             break;
         case KPMenuButtonSnoozes:
-            imageString = @"menu_snoozes";
+            imageString = timageStringBW(@"menu_snoozes");
             break;
         case KPMenuButtonUpgrade:
             imageString = @"menu_pro";
             break;
         case KPMenuButtonTerms:
         case KPMenuButtonPolicy:
-            imageString = @"menu_policy";
+            imageString = timageStringBW(@"menu_policy");
             break;
         case KPMenuButtonSync:
-            imageString = @"menu_sync";
+            imageString = timageStringBW(@"menu_sync");
             break;
         case KPMenuButtonLogout:
-            imageString = @"menu_logout";
+            imageString = timageStringBW(@"menu_logout");
             break;
     }
     if(highlighted) imageString = [imageString stringByAppendingString:@"-high"];

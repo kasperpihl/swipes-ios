@@ -8,7 +8,8 @@
 #define kDefSelectedColor tcolor(DoneColor)
 #define kDefBackgroundColor CLEAR
 #define kDefFont KP_REGULAR(13)
-#define kDefTextColor [UIColor whiteColor]
+#define kDefTextColor tcolor(TextColor)
+#define kDefSelTextColor tcolorF(TextColor,ThemeDark)
 #define kSepWidth 1
 #define kSepMargin 0.0
 
@@ -110,6 +111,9 @@
         dayButton.tag = day;
         [dayButton setTitle:[[weekdays objectAtIndex:day-1] lowercaseString] forState:UIControlStateNormal];
         [dayButton setTitleColor:self.textColor forState:UIControlStateNormal];
+        [dayButton setTitleColor:kDefSelTextColor forState:UIControlStateSelected];
+        [dayButton setTitleColor:kDefSelTextColor forState:UIControlStateHighlighted];
+        [dayButton setTitleColor:kDefSelTextColor forState:UIControlStateHighlighted|UIControlStateSelected];
         [dayButton.titleLabel setFont:self.font];
         if(day == self.selectedDay) self.selectedButton = dayButton;
         

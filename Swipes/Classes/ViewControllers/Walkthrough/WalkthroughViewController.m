@@ -559,13 +559,13 @@ typedef enum {
     
     [self.view addSubview:self.titleView];
     
-    self.scheduleButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"schedule-selected" scaledToSize:CGSizeMake(22, 22)] color:tcolor(LaterColor)];
+    self.scheduleButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"schedule-white-high" scaledToSize:CGSizeMake(22, 22)] color:tcolor(LaterColor)];
     CGRectSetCenterX(self.scheduleButton, kMenuButtonSideMargin);
     [self.view addSubview:self.scheduleButton];
-    self.tasksButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"today-selected" scaledToSize:CGSizeMake(22, 22)] color:tcolor(TasksColor)];
+    self.tasksButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"today-white-high" scaledToSize:CGSizeMake(22, 22)] color:tcolor(TasksColor)];
     CGRectSetCenterX(self.tasksButton, self.view.center.x);
     [self.view addSubview:self.tasksButton];
-    self.doneButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"done-selected" scaledToSize:CGSizeMake(22, 22)] color:tcolor(DoneColor)];
+    self.doneButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"done-white-high" scaledToSize:CGSizeMake(22, 22)] color:tcolor(DoneColor)];
     CGRectSetCenterX(self.doneButton, self.view.bounds.size.width-kMenuButtonSideMargin);
     [self.view addSubview:self.doneButton];
     
@@ -576,11 +576,11 @@ typedef enum {
     self.actionButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.actionButton.frame = CGRectMake((self.view.bounds.size.width-ACTION_BUTTON_WIDTH)/2, self.view.bounds.size.height-ACTION_BUTTON_HEIGHT-kActionButtonBottomSpacing, ACTION_BUTTON_WIDTH, ACTION_BUTTON_HEIGHT);
     self.actionButton.layer.cornerRadius = ACTION_BUTTON_CORNER_RADIUS;
-    self.actionButton.layer.borderColor = tcolor(BackgroundColor).CGColor;
+    self.actionButton.layer.borderColor = tcolorF(BackgroundColor,ThemeDark).CGColor;
     self.actionButton.layer.borderWidth = 0;//kActionButtonBorderWidth;
     self.actionButton.backgroundColor = tcolor(DoneColor);
     self.actionButton.titleLabel.font = kActionButtonFont;
-    [self.actionButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [self.actionButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
     [self.actionButton setTitle:@"START" forState:UIControlStateNormal];
     [self.actionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     [self.actionButton addTarget:self action:@selector(pressedActionButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -607,7 +607,7 @@ typedef enum {
     [closeButton setTitle:@"Skip" forState:UIControlStateNormal];
     closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, (OSVER >= 7 ? 10 : 0), kCloseButtonSize, 54);
     [closeButton.titleLabel setFont:KP_REGULAR(13)];
-    [closeButton setTitleColor:alpha(tcolor(BackgroundColor),0.5) forState:UIControlStateNormal];
+    [closeButton setTitleColor:alpha(tcolorF(BackgroundColor,ThemeDark),0.5) forState:UIControlStateNormal];
     closeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 15, 0);
     [closeButton addTarget:self action:@selector(pressedCloseButton:) forControlEvents:UIControlEventTouchUpInside];
     self.closeButton = closeButton;

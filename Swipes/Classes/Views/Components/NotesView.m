@@ -47,7 +47,7 @@
         
         UIButton *backbutton = [UIButton buttonWithType:UIButtonTypeCustom];
         backbutton.frame = CGRectMake(self.frame.size.width-44, self.frame.size.height-44, 44, 44);
-        [backbutton setImage:[UIImage imageNamed:@"backarrow_icon_white"] forState:UIControlStateNormal];
+        [backbutton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         backbutton.transform = CGAffineTransformMakeRotation(M_PI);
         [backbutton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
         //self.toolbar.backgroundColor = tcolor(MenuBackground);

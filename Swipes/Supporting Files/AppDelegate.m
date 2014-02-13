@@ -65,8 +65,6 @@
     
     [[LocalyticsSession shared] startSession:localyticsKey];
     
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
     //[KitLocate initKitLocateWithDelegate:NOTIHANDLER APIKey:kitLocateKey];
     
     [Appirater appLaunched:YES];
@@ -78,12 +76,17 @@
     for(UILocalNotification *lNoti in notifications){
         NSLog(@"t: %i - %@ - %@",lNoti.applicationIconBadgeNumber,lNoti.alertBody,lNoti.fireDate);
     }*/
+    
+    
+    UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleBlackOpaque;
+    NSLog(@"status %i - %i",statusBarStyle,UIStatusBarStyleBlackOpaque);
+    [[UIApplication sharedApplication] setStatusBarStyle: statusBarStyle];
     [PaymentHandler sharedInstance];
     [self tagLaunchSource:launchOptions];
     
     if (OSVER >= 7) {
         [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-        [[UITextField appearance] setTintColor:[UIColor whiteColor]];
+        [[UITextField appearance] setTintColor:tcolor(TextColor)];
 
     }
     

@@ -138,17 +138,17 @@
     self.titleButton = titleButton;
 
     SlowHighlightIcon *prevButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-    [prevButton setImage:[UIImage imageNamed:@"sitearrow_icon_white"] forState:UIControlStateNormal];
+    [prevButton setImage:[UIImage imageNamed:timageStringBW(@"sitearrow_icon")] forState:UIControlStateNormal];
     prevButton.imageView.transform = CGAffineTransformMakeRotation(2*M_PI/2);
-    [prevButton setImage:[UIImage imageNamed:@"sitearrow_icon_white-high"] forState:UIControlStateHighlighted];
+    [prevButton setImage:[UIImage imageNamed:timageString(@"sitearrow_icon",@"_white-high",@"_black-high")] forState:UIControlStateHighlighted];
     prevButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
     [prevButton addTarget:self action:@selector(_moveCalendarToPreviousMonth) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:prevButton];
     self.prevButton = prevButton;
 
     SlowHighlightIcon *nextButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-    [nextButton setImage:[UIImage imageNamed:@"sitearrow_icon_white"] forState:UIControlStateNormal];
-    [nextButton setImage:[UIImage imageNamed:@"sitearrow_icon_white-high"] forState:UIControlStateHighlighted];
+    [nextButton setImage:[UIImage imageNamed:timageStringBW(@"sitearrow_icon")] forState:UIControlStateNormal];
+    [nextButton setImage:[UIImage imageNamed:timageString(@"sitearrow_icon",@"_white-high",@"_black-high")] forState:UIControlStateHighlighted];
     nextButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
     [nextButton addTarget:self action:@selector(_moveCalendarToNextMonth) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:nextButton];

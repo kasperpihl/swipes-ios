@@ -111,7 +111,7 @@
     AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.view.bounds];
     addPanel.addDelegate = self;
     BLURRY.showPosition = PositionBottom;
-    BLURRY.blurryTopColor = gray(255, 0.3);
+    BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark), 0.3);
     [BLURRY showView:addPanel inViewController:self];
 }
 -(void)pressedEdit:(id)sender{
@@ -132,7 +132,7 @@
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     BLURRY.showPosition = PositionBottom;
-    BLURRY.blurryTopColor = alpha(tcolor(BackgroundColor),0.3);
+    BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark), 0.3);
     if(block) BLURRY.dismissAction = ^{
         self.selectedItems = nil;
         block();
@@ -193,20 +193,23 @@
     CGRectSetSize(button, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
     button.adjustsImageWhenHighlighted = NO;
     NSString *imageString;
+    NSString *baseString;
     switch (controlButton) {
         case KPSegmentButtonSchedule:
-            imageString = @"schedule";
+            baseString = @"schedule";
+            
             break;
         case KPSegmentButtonToday:
-            imageString = @"today";
+            baseString = @"today";
             break;
         case KPSegmentButtonDone:
-            imageString = @"done";
+            baseString = @"done";
             break;
     }
+    imageString = timageString(baseString, @"-white", @"-black");
     UIImage *normalImage = [UIImage imageNamed:imageString];
     UIImage *selectedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-high"]];
-    UIImage *highlightedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-highlighted"]];;
+    UIImage *highlightedImage = [UIImage imageNamed:[baseString stringByAppendingString:@"-highlighted"]];;
     [button setImage:normalImage forState:UIControlStateNormal];
     [button setImage:selectedImage forState:UIControlStateSelected];
     [button setImage:selectedImage forState:UIControlStateSelected | UIControlStateHighlighted];
@@ -250,8 +253,8 @@
         [self.ios7BackgroundView addSubview:self.segmentedControl];
         UIButton *settingsButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
         //CGRectSetX(settingsButton, -settingsButton.frame.size.width/2);
-        [settingsButton setImage:[UIImage imageNamed:@"settings_icon_white"] forState:UIControlStateNormal];
-        [settingsButton setImage:[UIImage imageNamed:@"settings_icon_white-high"] forState:UIControlStateHighlighted];
+        [settingsButton setImage:[UIImage imageNamed:timageStringBW(@"settings_icon")] forState:UIControlStateNormal];
+        [settingsButton setImage:[UIImage imageNamed:timageString(@"settings_icon",@"_white-high",@"_black-high")] forState:UIControlStateHighlighted];
         [settingsButton addTarget:self action:@selector(pressedSettings) forControlEvents:UIControlEventTouchUpInside];
         [self.ios7BackgroundView addSubview:settingsButton];
         self._settingsButton = settingsButton;
@@ -320,7 +323,7 @@
     self.backgroundImage.alpha = 0;
     UIView *overlay = [[UIView alloc] initWithFrame:self.backgroundImage.bounds];
     overlay.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-    overlay.backgroundColor = gray(0,0.5);
+    overlay.backgroundColor = gray(0,0.2);
     [self.backgroundImage addSubview:overlay];
     [self.view addSubview:self.backgroundImage];
     

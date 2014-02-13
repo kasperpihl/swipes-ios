@@ -7,7 +7,7 @@
 //
 #define WALK_HEADER_FONT KP_SEMIBOLD(20)
 #define WALK_SUBHEADER_FONT KP_LIGHT(16)
-#define WALK_COLOR  tcolor(BackgroundColor)
+#define WALK_COLOR  tcolorF(BackgroundColor,ThemeDark)
 #define kDefMaxWidth 260
 #define kDefTitleSpacing 13
 #import "WalkthroughTitleView.h"

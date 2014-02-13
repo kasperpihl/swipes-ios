@@ -102,7 +102,7 @@
         
         
         /* Initialize toolbar */
-        KPToolbar *tagToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TOOLBAR_HEIGHT, self.frame.size.width, TOOLBAR_HEIGHT) items:@[@"backarrow_icon_white",@"trashcan_icon_white",@"plus_icon_white"] delegate:self];
+        KPToolbar *tagToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TOOLBAR_HEIGHT, self.frame.size.width, TOOLBAR_HEIGHT) items:@[timageStringBW(@"backarrow_icon"),timageStringBW(@"trashcan_icon"),timageStringBW(@"plus_icon")] delegate:self];
         tagToolbar.tag = TOOLBAR_TAG;
         [self addSubview:tagToolbar];
         self.toolbar = (KPToolbar*)[self viewWithTag:TOOLBAR_TAG];

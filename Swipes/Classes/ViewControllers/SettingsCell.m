@@ -5,7 +5,7 @@
 //  Created by Kasper Pihl Tornøe on 07/08/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define kDefTextColor [UIColor whiteColor]
+#define kDefTextColor tcolor(TextColor)
 #define kDefSettingFont KP_REGULAR(17)
 #define kDefValueFont KP_REGULAR(14)
 #define kRightLabelMargin 18
