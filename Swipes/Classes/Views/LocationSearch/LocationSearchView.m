@@ -5,6 +5,7 @@
 //  Created by Kasper Pihl Tornøe on 12/02/14.
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
+#define kUserDefKey @"LocationRecentHistory"
 #define SearchHeight 60
 #import "LocationSearchView.h"
 #import "LocationResultCell.h"
@@ -17,6 +18,7 @@
 @end
 
 @implementation LocationSearchView
+@synthesize historyResults = _historyResults;
 #pragma mark Getters & Setters
 -(CLGeocoder *)geoCoder{
     if(!_geoCoder)
@@ -29,11 +31,27 @@
     return _searchResults;
 }
 -(NSArray *)historyResults{
-    if(!_historyResults)
-        _historyResults = [NSArray array];
+    if(!_historyResults){
+        NSData *dataFromUserDef = [[NSUserDefaults standardUserDefaults] dataForKey:kUserDefKey];
+        if(dataFromUserDef) _historyResults = [NSKeyedUnarchiver unarchiveObjectWithData:dataFromUserDef];
+        if(!_historyResults) _historyResults = [NSArray array];
+    }
     return _historyResults;
 }
 
+
+-(void)addPlaceToHistory:(CLPlacemark*)place{
+    NSMutableArray *newHistory = [NSMutableArray arrayWithObject:place];
+    for(CLPlacemark *histPM in self.historyResults){
+        CLLocationDistance distance = [place.location distanceFromLocation:histPM.location];
+        if(distance < 50) continue;
+        else [newHistory addObject:histPM];
+    }
+    self.historyResults = [newHistory copy];
+    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self.historyResults];
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:kUserDefKey];
+    [self.tableView reloadData];
+}
 
 +(NSString *)formattedAddressForPlace:(CLPlacemark *)place{
     NSArray *lines = place.addressDictionary[ @"FormattedAddressLines"];
@@ -55,19 +73,22 @@
     }
 	return cell;
 }
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    CLPlacemark *place = [self.searchResults objectAtIndex:indexPath.row];
-    [cell.textLabel setText:[LocationSearchView formattedAddressForPlace:place]];
+#pragma mark UITableViewDelegate
+-(void)tableView:(UITableView *)tableView willDisplayCell:(LocationResultCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSArray *locationArray = self.isSearching ? self.searchResults : self.historyResults;
+    CLPlacemark *place = [locationArray objectAtIndex:indexPath.row];
+    [cell setResultText:[LocationSearchView formattedAddressForPlace:place]];
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSArray *locationArray = self.isSearching ? self.searchResults : self.historyResults;
     CLPlacemark *selectedPlace;
     if(locationArray.count > indexPath.row)
         selectedPlace = [locationArray objectAtIndex:indexPath.row];
-    
-
-    if(selectedPlace && [self.delegate respondsToSelector:@selector(locationSearchView:selectedLocation:)])
-        [self.delegate locationSearchView:self selectedLocation:selectedPlace];
+    if(selectedPlace){
+        [self addPlaceToHistory:selectedPlace];
+        if([self.delegate respondsToSelector:@selector(locationSearchView:selectedLocation:)])
+            [self.delegate locationSearchView:self selectedLocation:selectedPlace];
+    }
 }
 #pragma mark UITextFieldDelegate
 -(void)textFieldDidChange:(UITextField*)textField{

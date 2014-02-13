@@ -541,6 +541,8 @@ typedef enum {
     self.locationView = [[LocationSearchView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.bounds.size.width, self.contentView.bounds.size.height-kToolbarHeight)];
     self.locationView.hidden = YES;
     self.locationView.delegate = self;
+    self.locationView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+    
     [self.contentView addSubview:self.locationView];
 }
 -(void)addPickerView{
