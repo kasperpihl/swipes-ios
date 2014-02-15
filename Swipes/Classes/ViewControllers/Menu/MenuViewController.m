@@ -39,7 +39,7 @@
 @property (nonatomic) IBOutletCollection(UIButton) NSArray *menuButtons;
 @property (nonatomic) UIButton *backButton;
 @property (nonatomic) NSMutableArray *viewControllers;
-
+@property (nonatomic) MenuButton *schemeButton;
 @property (nonatomic) UIView *gridView;
 @property (nonatomic) UILabel *syncLabel;
 @property (nonatomic) UIPanGestureRecognizer *menuPanning;
@@ -118,6 +118,7 @@
     for(NSInteger i = 1 ; i <= numberOfButtons ; i++){
         KPMenuButtons button = i;
         actualButton = [self buttonForMenuButton:button];
+        if(button == KPMenuButtonScheme) self.schemeButton = (MenuButton*)actualButton;
         [self.gridView addSubview:actualButton];
         [menuButtons addObject:actualButton];
     }
@@ -127,7 +128,14 @@
     self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds)+ 10, self.gridView.frame.size.width, 20);
     self.syncLabel.textColor = tcolor(TextColor);
     [self.gridView addSubview:self.syncLabel];
-
+    [self updateSchemeButton];
+}
+-(void)updateSchemeButton{
+    //BOOL isDarkTheme = (THEMER.currentTheme == ThemeDark);
+    UIImage *normalImage = [self imageForMenuButton:KPMenuButtonScheme highlighted:YES];
+    UIImage *highlightImage = [self imageForMenuButton:KPMenuButtonScheme highlighted:NO];
+    [self.schemeButton.iconImageView setImage:normalImage];
+    [self.schemeButton.iconImageView setHighlightedImage:highlightImage];
 }
 - (void)viewDidLoad
 {
@@ -428,7 +436,7 @@
             imageString = timageStringBW(@"menu_logout");
             break;
         case KPMenuButtonScheme:
-            imageString = timageStringBW(@"menu_support");
+            imageString = timageStringBW(@"menu_scheme");
             break;
     }
     if(highlighted) imageString = [imageString stringByAppendingString:@"-high"];

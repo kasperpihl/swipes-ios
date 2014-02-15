@@ -51,7 +51,7 @@
 #define BUTTON_PADDING 0
 #define CONTENT_VIEW_SIZE 310
 
-#define kToolbarHeight 70
+#define kToolbarHeight valForScreen(50,60)
 #define kToolbarPadding 10
 
 #define kTimePickerDuration 0.20f
@@ -257,16 +257,68 @@ typedef enum {
     if(!self.isChoosingLocation){
         self.isChoosingLocation = YES;
         [self animateScheduleButtonsShow:NO duration:0.1];
-        self.locationView.hidden = NO;
+        
+        self.toolbar.alpha = 0;
+        CGRectSetWidth(self.toolbar, self.contentView.frame.size.width/2);
+        self.toolbar.items = @[timageStringBW(@"round_backarrow")];
         self.toolbar.hidden = NO;
-        if([self.locationView numberOfHistoryPlaces] == 0) [self.locationView.searchField becomeFirstResponder];
+        self.locationView.hidden = NO;
+        self.locationView.alpha = 0;
+        
+        
+        CGFloat contentHeight = POPUP_WIDTH + 60;
+        CGFloat scaling = contentHeight/POPUP_WIDTH;
+        
+        CGFloat buttonDuration = 0.1;
+        CGFloat scaleDuration = 0.2;
+        CGFloat calendarDuration = 0.1;
+        CGFloat delay = buttonDuration;
+        [self animateScheduleButtonsShow:NO duration:buttonDuration];
+        [UIView animateWithDuration:scaleDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.contentView.transform = CGAffineTransformMakeScale(1.0, scaling);
+        } completion:^(BOOL finished) {
+            self.contentView.transform = CGAffineTransformIdentity;
+            CGRectSetHeight(self.contentView, contentHeight);
+            self.contentView.center = self.center;
+            [UIView animateWithDuration:calendarDuration animations:^{
+                
+                self.locationView.alpha = 1;
+                self.toolbar.alpha = 1;
+            } completion:^(BOOL finished) {
+                if([self.locationView numberOfHistoryPlaces] == 0) [self.locationView.searchField becomeFirstResponder];
+            }];
+        }];
+        
+        
     }
     else{
         if([self.locationView.searchField isFirstResponder]) [self.locationView.searchField resignFirstResponder];
         self.isChoosingLocation = NO;
-        [self animateScheduleButtonsShow:YES duration:0.1];
-        self.locationView.hidden = YES;
-        self.toolbar.hidden = YES;
+        CGFloat contentHeight = self.locationView.frame.size.height + kToolbarHeight;
+        CGFloat scaling = POPUP_WIDTH/contentHeight;
+        
+        self.toolbar.alpha = 0;
+        self.toolbar.hidden = NO;
+        CGFloat buttonDuration = 0.1;
+        CGFloat scaleDuration = 0.2;
+        CGFloat calendarDuration = 0.1;
+        CGFloat delay = calendarDuration;
+        [UIView animateWithDuration:calendarDuration animations:^{
+            self.locationView.alpha = 0;
+            self.toolbar.alpha = 0;
+        } completion:^(BOOL finished) {
+            self.locationView.hidden = YES;
+            self.toolbar.hidden = YES;
+            self.toolbar.alpha = 1;
+        }];
+        [UIView animateWithDuration:scaleDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.contentView.transform = CGAffineTransformMakeScale(1.0, scaling);
+        } completion:^(BOOL finished) {
+            self.contentView.transform = CGAffineTransformIdentity;
+            CGRectSetHeight(self.contentView, POPUP_WIDTH);
+            self.contentView.center = self.center;
+            [self animateScheduleButtonsShow:YES duration:buttonDuration];
+        }];
     }
 }
 -(void)pressedSpecific:(id)sender{
@@ -281,11 +333,12 @@ typedef enum {
         
         UIImageView *calendarImageView = [[UIImageView alloc] initWithImage:screenShotOfCalendar];
         
-        
         calendarImageView.center = self.calendarView.center;
         calendarImageView.alpha = 0;
         [self.contentView addSubview:calendarImageView];
         self.toolbar.alpha = 0;
+        CGRectSetWidth(self.toolbar, self.contentView.frame.size.width);
+        self.toolbar.items = @[timageStringBW(@"round_backarrow"),timageStringBW(@"round_checkmark")];
         self.toolbar.hidden = NO;
         CGFloat buttonDuration = 0.1;
         CGFloat scaleDuration = 0.2;
@@ -324,6 +377,7 @@ typedef enum {
         } completion:^(BOOL finished) {
             self.calendarView.hidden = YES;
             self.toolbar.hidden = YES;
+            self.toolbar.alpha = 1;
         }];
         [UIView animateWithDuration:scaleDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
             self.contentView.transform = CGAffineTransformMakeScale(1.0, scaling);
@@ -465,7 +519,11 @@ typedef enum {
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
-    CGRectSetY(self.contentView,20);
+    CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGFloat keyboardHeight = keyboardFrame.size.height;
+    NSInteger startPoint = (OSVER >= 7) ? 30 : 10;
+    CGRectSetY(self.contentView,startPoint);
+    CGRectSetHeight(self.contentView, self.frame.size.height - keyboardHeight - startPoint);
     [UIView commitAnimations];
 }
 
