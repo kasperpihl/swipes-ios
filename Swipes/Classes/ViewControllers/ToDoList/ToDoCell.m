@@ -55,6 +55,7 @@
 
 @property (nonatomic,strong) UIImageView *notesIcon;
 @property (nonatomic,strong) UIImageView *recurringIcon;
+@property (nonatomic,strong) UIImageView *locationIcon;
 @end
 @implementation ToDoCell
 
@@ -100,6 +101,11 @@
         [self.contentView addSubview:dotView];
         self.dotView = (DotView*)[self.contentView viewWithTag:DOT_VIEW_TAG];
         self.dotView.center = CGPointMake(CELL_LABEL_X/2, CELL_HEIGHT/2);
+        
+        self.locationIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"location_icon_small_gray"]];
+        self.locationIcon.hidden = YES;
+        [self.contentView addSubview:self.locationIcon];
+        
         self.notesIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"notes_icon_small_gray"]];
         self.notesIcon.hidden = YES;
         [self.contentView addSubview:self.notesIcon];
@@ -146,6 +152,7 @@
     CGFloat titleY = showBottomLine ? TITLE_Y : ((CELL_HEIGHT - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
     CGRectSetY(self.tagsLabel, TITLE_Y+self.titleLabel.frame.size.height+LABEL_SPACE);
+    CGRectSetCenterY(self.locationIcon, self.tagsLabel.center.y);
     CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y);
     CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y);
     CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
@@ -153,13 +160,19 @@
     self.tagsLabel.hidden = !showBottomLine;
 }
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags{
+    
     self.toDo = toDo;
-    BOOL showBottomLine = NO;
-    self.titleLabel.text = toDo.title;
-    __block CGFloat deltaX = CELL_LABEL_X;
-    self.alarmLabel.hidden = YES;
-    __block BOOL alarmLabel = NO;
     self.dotView.priority = (toDo.priorityValue == 1);
+    
+    self.titleLabel.text = toDo.title;
+    
+    
+    __block BOOL showBottomLine = NO;
+    __block CGFloat deltaX = CELL_LABEL_X;
+    __block BOOL alarmLabel = NO;
+    
+    
+    self.alarmLabel.hidden = YES;
     if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
         NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
         NSString *dateInString = [UtilityClass timeStringForDate:showDate];
@@ -174,27 +187,35 @@
         alarmLabel = YES;
     }
     self.alarmSeperator.hidden = YES;
-    voidBlock block = ^(void) {
-        self.alarmSeperator.hidden = NO;
-        CGRectSetX(self.alarmSeperator, deltaX);
-        deltaX += self.alarmSeperator.frame.size.width + kIconSpacing;
-        alarmLabel = NO;
-    };
+
+    
+    self.locationIcon.hidden = YES;
     self.notesIcon.hidden = YES;
     self.recurringIcon.hidden = YES;
-    if(toDo.notes && toDo.notes.length > 0){
-        if(alarmLabel) block();
-        self.notesIcon.hidden = NO;
+    
+    viewBlock blockForIcon = ^(UIView *view) {
+        if(alarmLabel){
+            self.alarmSeperator.hidden = NO;
+            CGRectSetX(self.alarmSeperator, deltaX);
+            deltaX += self.alarmSeperator.frame.size.width + kIconSpacing;
+            alarmLabel = NO;
+        }
+        view.hidden = NO;
         showBottomLine = YES;
-        CGRectSetX(self.notesIcon, deltaX);
-        deltaX += self.notesIcon.frame.size.width + kIconSpacing;
+        CGRectSetX(view, deltaX);
+        deltaX += view.frame.size.width + kIconSpacing;
+    };
+    
+    if(toDo.location && toDo.location.length > 0){
+        blockForIcon(self.locationIcon);
     }
+    
+    if(toDo.notes && toDo.notes.length > 0){
+        blockForIcon(self.notesIcon);
+    }
+    
     if(toDo.repeatOptionValue > RepeatNever){
-        if(alarmLabel) block();
-        self.recurringIcon.hidden = NO;
-        showBottomLine = YES;
-        CGRectSetX(self.recurringIcon, deltaX);
-        deltaX += self.recurringIcon.frame.size.width + kIconSpacing;
+        blockForIcon(self.recurringIcon);
     }
     //if(showBottomLine) deltaX += kIconSpacing;
     

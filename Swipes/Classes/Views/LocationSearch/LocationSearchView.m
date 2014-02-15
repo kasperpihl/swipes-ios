@@ -38,7 +38,9 @@
     }
     return _historyResults;
 }
-
+-(NSInteger)numberOfHistoryPlaces{
+    return [self.historyResults count];
+}
 
 -(void)addPlaceToHistory:(CLPlacemark*)place{
     NSMutableArray *newHistory = [NSMutableArray arrayWithObject:place];

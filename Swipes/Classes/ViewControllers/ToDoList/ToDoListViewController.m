@@ -304,7 +304,7 @@
     switch (targetCellType) {
         case CellTypeSchedule:{
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-            SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate) {
+            SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation) {
                 [BLURRY dismissAnimated:YES];
                 if(button == KPScheduleButtonCancel){
                     [self returnSelectedRowsAndBounce:YES];

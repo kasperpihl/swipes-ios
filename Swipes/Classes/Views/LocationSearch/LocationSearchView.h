@@ -19,4 +19,5 @@
 @property (nonatomic,weak) NSObject<LocationSearchDelegate> *delegate;
 @property SectionHeaderView *headerView;
 @property (nonatomic) UITextField *searchField;
+-(NSInteger)numberOfHistoryPlaces;
 @end

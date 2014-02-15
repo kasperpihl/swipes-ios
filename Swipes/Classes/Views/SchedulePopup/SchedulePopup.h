@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import <CoreLocation/CoreLocation.h>
 typedef NS_ENUM(NSUInteger, KPScheduleButtons){
     KPScheduleButtonCancel = 0,
     KPScheduleButtonLaterToday = 1,
@@ -20,7 +20,7 @@ typedef NS_ENUM(NSUInteger, KPScheduleButtons){
     KPScheduleButtonLocation = 8,
     KPScheduleButtonSpecificTime = 9
 };
-typedef void (^SchedulePopupBlock)(KPScheduleButtons button, NSDate *chosenDate);
+typedef void (^SchedulePopupBlock)(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation);
 @interface SchedulePopup : UIView
 /* Used for analytics reasons */
 @property (nonatomic) NSInteger numberOfItems;

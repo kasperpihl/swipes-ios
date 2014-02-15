@@ -257,7 +257,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     switch (targetCellType) {
         case CellTypeSchedule:{
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-            SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate) {
+            SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation) {
                 [BLURRY dismissAnimated:YES];
                 if(button == KPScheduleButtonCancel){
                 }
@@ -597,7 +597,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)pressedSchedule:(id)sender
 {
     self.activeEditMode = KPEditModeAlarm;
-    SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate) {
+    SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation) {
         [BLURRY dismissAnimated:YES];
         if(button != KPScheduleButtonCancel){
             // TODO: Fix the edit mode
