@@ -23,7 +23,6 @@
 #import "UIView+Utilities.h"
 
 #import "UserHandler.h"
-#import "KPLocationAlert.h"
 
 
 #import "LocationSearchView.h"
@@ -146,19 +145,29 @@ typedef enum {
         - Time forward:
         - Adjusted time: "Yes" / "No"
     */
-    if(state != KPScheduleButtonCancel && state != KPScheduleButtonLocation){
-        NSString *buttonUsed = [self stringForScheduleButton:state];
-        NSInteger numberOfDaysFromNow = [date daysAfterDate:[NSDate date]];
-        NSString *numberOfDaysInterval = @"56+";
-        if(numberOfDaysFromNow <= 6) numberOfDaysInterval = [NSString stringWithFormat:@"%i",numberOfDaysFromNow];
-        else if(numberOfDaysFromNow <= 14) numberOfDaysInterval = @"7-14";
-        else if(numberOfDaysFromNow <= 28) numberOfDaysInterval = @"15-28";
-        else if(numberOfDaysFromNow <= 42) numberOfDaysInterval = @"29-42";
-        else if(numberOfDaysFromNow <= 56) numberOfDaysInterval = @"43-56";
+    if(state != KPScheduleButtonCancel){
+        NSDictionary *options;
+        NSString *event;
         NSNumber *numberOfTasks = @(self.numberOfItems);
-        NSString *usedTimePicker = self.didUseTimePicker ? @"Yes" : @"No";
-        NSDictionary *options = @{@"Number of days ahead":numberOfDaysInterval,@"Button Pressed": buttonUsed,@"Used Time Picker": usedTimePicker,@"Number of Tasks":numberOfTasks};
-        [ANALYTICS tagEvent:@"Scheduled Tasks" options:options];
+        if(state == KPScheduleButtonLocation){
+            event = @"Locationed Tasks";
+            options = @{@"Number of Tasks":numberOfTasks};
+        }
+        else{
+            NSString *buttonUsed = [self stringForScheduleButton:state];
+            NSInteger numberOfDaysFromNow = [date daysAfterDate:[NSDate date]];
+            NSString *numberOfDaysInterval = @"56+";
+            if(numberOfDaysFromNow <= 6) numberOfDaysInterval = [NSString stringWithFormat:@"%i",numberOfDaysFromNow];
+            else if(numberOfDaysFromNow <= 14) numberOfDaysInterval = @"7-14";
+            else if(numberOfDaysFromNow <= 28) numberOfDaysInterval = @"15-28";
+            else if(numberOfDaysFromNow <= 42) numberOfDaysInterval = @"29-42";
+            else if(numberOfDaysFromNow <= 56) numberOfDaysInterval = @"43-56";
+            
+            NSString *usedTimePicker = self.didUseTimePicker ? @"Yes" : @"No";
+            options = @{@"Number of days ahead":numberOfDaysInterval,@"Button Pressed": buttonUsed,@"Used Time Picker": usedTimePicker,@"Number of Tasks":numberOfTasks};
+            event = @"Scheduled Tasks";
+        }
+        [ANALYTICS tagEvent:event options:options];
     }
     if(self.block) self.block(state,date,location);
 }

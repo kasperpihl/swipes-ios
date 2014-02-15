@@ -102,15 +102,15 @@
         self.dotView = (DotView*)[self.contentView viewWithTag:DOT_VIEW_TAG];
         self.dotView.center = CGPointMake(CELL_LABEL_X/2, CELL_HEIGHT/2);
         
-        self.locationIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"location_icon_small_gray"]];
+        self.locationIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:timageString(@"location_icon_small", @"_gray", @"_darkgray")]];
         self.locationIcon.hidden = YES;
         [self.contentView addSubview:self.locationIcon];
         
-        self.notesIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"notes_icon_small_gray"]];
+        self.notesIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:timageString(@"notes_icon_small", @"_gray", @"_darkgray")]];
         self.notesIcon.hidden = YES;
         [self.contentView addSubview:self.notesIcon];
         
-        self.recurringIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"repeat_icon_small_gray"]];
+        self.recurringIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:timageString(@"repeat_icon_small", @"_gray", @"_darkgray")]];
         self.recurringIcon.hidden = YES;
         [self.contentView addSubview:self.recurringIcon];
         
@@ -118,7 +118,7 @@
         alarmLabel.tag = ALARM_LABEL_TAG;
         alarmLabel.font = TAGS_LABEL_FONT;
         alarmLabel.backgroundColor = CLEAR;
-        alarmLabel.textColor = gray(170, 1);
+        alarmLabel.textColor = tcolor(SubTextColor);
         alarmLabel.hidden = YES;
         
         self.alarmSeperator = [[UILabel alloc] init];
@@ -128,7 +128,7 @@
         self.alarmSeperator.hidden = YES;
         [self.alarmSeperator sizeToFit];
         CGRectSetHeight(self.alarmSeperator,TAGS_LABEL_HEIGHT);
-        self.alarmSeperator.textColor = gray(170,1);
+        self.alarmSeperator.textColor = tcolor(SubTextColor);
         [self.contentView addSubview:self.alarmSeperator];
         [self.contentView addSubview:alarmLabel];
         self.alarmLabel = (UILabel*)[self.contentView viewWithTag:ALARM_LABEL_TAG];
