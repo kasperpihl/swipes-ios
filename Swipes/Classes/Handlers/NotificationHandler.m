@@ -120,9 +120,9 @@ static NotificationHandler *sharedObject;
         for(KPToDo *toDo in tasksWithLocation){
             NSArray *location = [toDo.location componentsSeparatedByString:kLocationSplitStr];
             NSString *identifier = [location objectAtIndex:0];
-            float latitude = [[location objectAtIndex:1] floatValue];
-            float longitude = [[location objectAtIndex:2] floatValue];
-            NSString *typeString = [location objectAtIndex:3];
+            float latitude = [[location objectAtIndex:2] floatValue];
+            float longitude = [[location objectAtIndex:3] floatValue];
+            NSString *typeString = [location objectAtIndex:4];
             klGeofenceType type = KL_GEOFENCE_TYPE_IN;
             if([typeString isEqualToString:@"OUT"]) type = KL_GEOFENCE_TYPE_OUT;
             KLGeofence *geoFence = [KLGeofence createNewGeofenceWithLatitude:latitude Longitude:longitude PushRadius:kLocationPushRadius Type:type];

@@ -12,6 +12,9 @@
 +(void)deleteToDos:(NSArray*)toDos save:(BOOL)save;
 /* Update Tags for ToDo's */
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save;
+/* Start watching for Location */
+-(void)notifyOnLocationName:(NSString*)locationName latitude:(float)latitude longitude:(float)longitude type:(GeoFenceType)type save:(BOOL)save;
+
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;
 

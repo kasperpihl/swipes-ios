@@ -502,7 +502,7 @@
     [self MR_deleteEntity];
     if(save) [KPToDo saveToSync];
 }
--(void)notifyOnLatitude:(float)latitude longitude:(float)longitude type:(GeoFenceType)type save:(BOOL)save{
+-(void)notifyOnLocationName:(NSString*)locationName latitude:(float)latitude longitude:(float)longitude type:(GeoFenceType)type save:(BOOL)save{
     /*
         Location ID -
     */
@@ -515,10 +515,11 @@
     NSString *typeString = @"IN";
     if(type == GeoFenceOnLeave) typeString = @"OUT";
     
-    NSArray *location = @[locationId,@(latitude),@(longitude),typeString];
+    NSArray *location = @[locationId,locationName,@(latitude),@(longitude),typeString];
     
     NSString *locationString = [location componentsJoinedByString:kLocationSplitStr];
     self.location = locationString;
+    self.schedule = nil;
     if(save) [KPToDo saveToSync];
     [NOTIHANDLER updateLocationUpdates];
 }
@@ -547,6 +548,7 @@
     self.numberOfRepeated = [NSNumber numberWithInteger:numberOfRepeated];
 }
 -(BOOL)complete{
+    if(self.location) self.location = nil;
     if(self.repeatOptionValue > RepeatNever){
         CellType oldCell = [self cellTypeForTodo];
         [self completeRepeatedTask];
@@ -560,6 +562,7 @@
     }
 }
 -(BOOL)scheduleForDate:(NSDate*)date{
+    if(self.location) self.location = nil;
     if(!date){
         self.repeatedDate = nil;
         self.repeatOptionValue = RepeatNever;

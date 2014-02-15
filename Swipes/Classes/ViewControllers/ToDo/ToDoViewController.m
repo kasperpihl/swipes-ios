@@ -99,6 +99,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UILabel *evernoteLabel;
 @property (nonatomic) UILabel *dropboxLabel;
 
+@property (nonatomic) UIImageView *scheduleImageView;
 
 @end
 
@@ -251,15 +252,16 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 #pragma mark MCSwipeTableViewCellDelegate
 -(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
-    NSLog(@"triggered:%i",mode);
     __block CellType targetCellType = [StyleHandler cellTypeForCell:self.cellType state:state];
-    NSLog(@"target:%i",targetCellType);
     switch (targetCellType) {
         case CellTypeSchedule:{
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
             SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation) {
                 [BLURRY dismissAnimated:YES];
                 if(button == KPScheduleButtonCancel){
+                }
+                else if(button == KPScheduleButtonLocation){
+                    [self.model notifyOnLocationName:@"" latitude:chosenLocation.location.coordinate.latitude longitude:chosenLocation.location.coordinate.longitude type:GeoFenceOnArrive save:YES];
                 }
                 else{
                     [KPToDo scheduleToDos:@[self.model] forDate:chosenDate save:YES];
@@ -398,15 +400,25 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 
 -(void)updateSchedule{
+    BOOL isLocation = NO;
     if(!self.model.schedule){// || [self.model.schedule isInPast]){
-        self.alarmLabel.text = @"Unspecified";
-        if(self.model.completionDate){
-            self.alarmLabel.text = [NSString stringWithFormat:@"Completed: %@",[UtilityClass readableTime:self.model.completionDate showTime:YES]];
+        if(self.model.location){
+            isLocation = YES;
+            NSArray *location = [self.model.location componentsSeparatedByString:kLocationSplitStr];
+            NSString *name = [location objectAtIndex:1];
+            self.alarmLabel.text = name;
+        }
+        else{
+            self.alarmLabel.text = @"Unspecified";
+            if(self.model.completionDate){
+                self.alarmLabel.text = [NSString stringWithFormat:@"Completed: %@",[UtilityClass readableTime:self.model.completionDate showTime:YES]];
+            }
         }
     }
     else{
         self.alarmLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:self.model.schedule showTime:YES]];
     }
+    [self.scheduleImageView setImage:[UIImage imageNamed:(isLocation ? timageStringBW(@"edit_location_icon") : timageStringBW(@"edit_schedule_icon"))]];
 }
 
 -(void)updateNotes{
@@ -599,7 +611,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.activeEditMode = KPEditModeAlarm;
     SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation) {
         [BLURRY dismissAnimated:YES];
-        if(button != KPScheduleButtonCancel){
+        if(button == KPScheduleButtonCancel) return;
+        else if(button == KPScheduleButtonLocation && chosenLocation){
+            [self.model notifyOnLocationName:@"" latitude:chosenLocation.location.coordinate.latitude longitude:chosenLocation.location.coordinate.longitude type:GeoFenceOnArrive save:YES];
+        }
+        else{
             // TODO: Fix the edit mode
             [KPToDo scheduleToDos:@[self.model] forDate:chosenDate save:YES];
             //[KPToDo scheduleToDos:@[self.parent.showingModel] forDate:chosenDate save:YES];
@@ -734,7 +750,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          Alarm container and button!
          */
         self.alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
-        [self addAndGetImage:timageStringBW(@"edit_schedule_icon")  inView:self.alarmContainer];
+        self.scheduleImageView = [self addAndGetImage:timageStringBW(@"edit_schedule_icon")  inView:self.alarmContainer];
         self.alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.alarmContainer.frame.size.height)];
         self.alarmLabel.backgroundColor = CLEAR;
         [self setColorsFor:self.alarmLabel];
@@ -879,7 +895,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.evernoteContainer = nil;
     self.dropboxLabel = nil;
     self.dropboxContainer = nil;
-    
+    self.scheduleImageView = nil;
     self.repeatedContainer = nil;
     self.repeatedLabel = nil;
     clearNotify();

@@ -393,6 +393,7 @@
 }
 -(void)changedTheme{
     [self setNeedsStatusBarAppearanceUpdate];
+    [self.currentViewController setNeedsStatusBarAppearanceUpdate];
 }
 -(UIStatusBarStyle)preferredStatusBarStyle{
     return THEMER.currentTheme == ThemeDark ? UIStatusBarStyleLightContent : UIStatusBarStyleBlackOpaque;

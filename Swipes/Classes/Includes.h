@@ -75,6 +75,8 @@ typedef enum {
 
 typedef void (^voidBlock)(void);
 typedef void (^viewBlock)(UIView* view);
+
+#define kLocationSplitStr @"_-_"
 #define kCurrent [PFUser currentUser]
 #define kCurrentAttr(attr) [kCurrent objectForKey:attr]
 #define kCurrentSetAttr(key,attr) [kCurrent setObject:attr forKey:key]

@@ -545,6 +545,9 @@
     self.searchBar.currentMode = KPSearchBarModeNone;
     [self.itemHandler clearAll];
 }
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return THEMER.currentTheme == ThemeDark ? UIStatusBarStyleLightContent : UIStatusBarStyleBlackOpaque;
+}
 -(void)dealloc{
     self.searchBar = nil;
 }
