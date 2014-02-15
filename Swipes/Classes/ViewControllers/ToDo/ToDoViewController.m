@@ -261,12 +261,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                 if(button == KPScheduleButtonCancel){
                 }
                 else if(button == KPScheduleButtonLocation){
-                    [self.model notifyOnLocationName:@"" latitude:chosenLocation.location.coordinate.latitude longitude:chosenLocation.location.coordinate.longitude type:GeoFenceOnArrive save:YES];
+                    [KPToDo notifyToDos:@[self.model] onLocation:chosenLocation type:GeoFenceOnArrive save:YES];
                 }
                 else{
                     [KPToDo scheduleToDos:@[self.model] forDate:chosenDate save:YES];
-                    [self update];
                 }
+                [self update];
             }];
             popup.numberOfItems = 1;
             BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
@@ -613,15 +613,15 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [BLURRY dismissAnimated:YES];
         if(button == KPScheduleButtonCancel) return;
         else if(button == KPScheduleButtonLocation && chosenLocation){
-            [self.model notifyOnLocationName:@"" latitude:chosenLocation.location.coordinate.latitude longitude:chosenLocation.location.coordinate.longitude type:GeoFenceOnArrive save:YES];
+            [KPToDo notifyToDos:@[self.model] onLocation:chosenLocation type:GeoFenceOnArrive save:YES];
         }
         else{
             // TODO: Fix the edit mode
             [KPToDo scheduleToDos:@[self.model] forDate:chosenDate save:YES];
             //[KPToDo scheduleToDos:@[self.parent.showingModel] forDate:chosenDate save:YES];
             [self.model setRepeatOption:self.model.repeatOptionValue save:YES];
-            [self update];
         }
+        [self update];
     }];
     popup.numberOfItems = 1;
     BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);

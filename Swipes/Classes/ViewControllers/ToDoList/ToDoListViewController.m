@@ -309,6 +309,9 @@
                 if(button == KPScheduleButtonCancel){
                     [self returnSelectedRowsAndBounce:YES];
                 }
+                else if(button == KPScheduleButtonLocation){
+                    [KPToDo notifyToDos:toDosArray onLocation:chosenLocation type:GeoFenceOnArrive save:YES];
+                }
                 else{
                     if([chosenDate isEarlierThanDate:[NSDate date]]) targetCellType = CellTypeToday;
                     NSArray *movedItems = [KPToDo scheduleToDos:toDosArray forDate:chosenDate save:YES];

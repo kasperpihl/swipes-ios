@@ -1,5 +1,5 @@
 #import "_KPToDo.h"
-
+@class CLPlacemark;
 @interface KPToDo : _KPToDo {}
 @property (nonatomic,strong) NSArray *textTags;
 /* Add a new ToDo */
@@ -11,9 +11,9 @@
 /* Delete ToDo's */
 +(void)deleteToDos:(NSArray*)toDos save:(BOOL)save;
 /* Update Tags for ToDo's */
-+(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save;
++(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDosArray remove:(BOOL)remove save:(BOOL)save;
 /* Start watching for Location */
--(void)notifyOnLocationName:(NSString*)locationName latitude:(float)latitude longitude:(float)longitude type:(GeoFenceType)type save:(BOOL)save;
++(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save;
 
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;

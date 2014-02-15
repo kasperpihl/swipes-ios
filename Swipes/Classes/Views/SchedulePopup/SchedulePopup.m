@@ -146,7 +146,7 @@ typedef enum {
         - Time forward:
         - Adjusted time: "Yes" / "No"
     */
-    if(state != KPScheduleButtonCancel){
+    if(state != KPScheduleButtonCancel && state != KPScheduleButtonLocation){
         NSString *buttonUsed = [self stringForScheduleButton:state];
         NSInteger numberOfDaysFromNow = [date daysAfterDate:[NSDate date]];
         NSString *numberOfDaysInterval = @"56+";

@@ -7,7 +7,7 @@
 #import "KPParseCoreData.h"
 #import "Underscore.h"
 #import "AnalyticsHandler.h"
-
+#import <CoreLocation/CoreLocation.h>
 #define kDefOrderVal -1
 @interface KPToDo ()
 @property (nonatomic,strong) NSString *readableTags;
@@ -76,6 +76,18 @@
     [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
     [ANALYTICS heartbeat];
     [NOTIHANDLER updateLocalNotifications];
+    return [movedToDos copy];
+}
+
++(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save{
+    NSMutableArray *movedToDos = [NSMutableArray array];
+    for(KPToDo *toDo in toDoArray){
+        BOOL movedToDo = [toDo notifyOnLocation:location type:type];
+        if(movedToDo) [movedToDos addObject:toDo];
+    }
+    if(save) [KPToDo saveToSync];
+    [NOTIHANDLER updateLocationUpdates];
+    [ANALYTICS heartbeat];
     return [movedToDos copy];
 }
 
@@ -502,10 +514,17 @@
     [self MR_deleteEntity];
     if(save) [KPToDo saveToSync];
 }
--(void)notifyOnLocationName:(NSString*)locationName latitude:(float)latitude longitude:(float)longitude type:(GeoFenceType)type save:(BOOL)save{
+
+-(BOOL)notifyOnLocation:(CLPlacemark*)location type:(GeoFenceType)type{
     /*
         Location ID -
     */
+    CellType oldCell = [self cellTypeForTodo];
+    
+    CGFloat latitude = location.location.coordinate.latitude;
+    CGFloat longitude = location.location.coordinate.longitude;
+    NSArray *lines = location.addressDictionary[ @"FormattedAddressLines"];
+    NSString *locationName = [lines componentsJoinedByString:@", "];
     NSString *locationId;
     if(self.location){
         NSArray *existingLocation = [self.location componentsSeparatedByString:kLocationSplitStr];
@@ -515,13 +534,14 @@
     NSString *typeString = @"IN";
     if(type == GeoFenceOnLeave) typeString = @"OUT";
     
-    NSArray *location = @[locationId,locationName,@(latitude),@(longitude),typeString];
+    NSArray *locationArray = @[locationId,locationName,@(latitude),@(longitude),typeString];
     
-    NSString *locationString = [location componentsJoinedByString:kLocationSplitStr];
+    NSString *locationString = [locationArray componentsJoinedByString:kLocationSplitStr];
     self.location = locationString;
     self.schedule = nil;
-    if(save) [KPToDo saveToSync];
-    [NOTIHANDLER updateLocationUpdates];
+    
+    CellType newCell = [self cellTypeForTodo];
+    return (oldCell != newCell);
 }
 -(void)stopNotifyingLocationSave:(BOOL)save{
     self.location = nil;
