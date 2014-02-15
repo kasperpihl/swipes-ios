@@ -260,6 +260,7 @@ static RootViewController *sharedObject;
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
     
+    notify(@"changed theme", changedTheme);
     
     
     BLURRY.delegate = self;
@@ -273,7 +274,12 @@ static RootViewController *sharedObject;
     [self setupAppearance];
     
 }
-
+-(void)changedTheme{
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return THEMER.currentTheme == ThemeDark ? UIStatusBarStyleLightContent : UIStatusBarStyleBlackOpaque;
+}
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];

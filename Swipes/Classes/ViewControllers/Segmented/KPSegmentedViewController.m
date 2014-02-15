@@ -352,7 +352,7 @@
     [self.view sendSubviewToBack:self.backgroundImage];
     //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
     //self.navigationItem.rightBarButtonItem = filter;
-    
+    notify(@"changed theme", changedTheme);
 }
 -(void)changeToIndex:(NSInteger)index{
     [self.segmentedControl setSelectedIndex:index];
@@ -390,6 +390,12 @@
                                 oldViewController.view.hidden = NO;
                                 self.currentSelectedIndex = selectedIndex;
 							}];
+}
+-(void)changedTheme{
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return THEMER.currentTheme == ThemeDark ? UIStatusBarStyleLightContent : UIStatusBarStyleBlackOpaque;
 }
 -(ToDoListViewController*)currentViewController{
     ToDoListViewController *currentViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];

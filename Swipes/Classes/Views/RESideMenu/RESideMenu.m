@@ -235,7 +235,6 @@ static RESideMenu *sharedObject;
 }
 - (void)restoreView
 {
-    //[[UIApplication sharedApplication] setStatusBarHidden:_appIsHidingStatusBar withAnimation:UIStatusBarAnimationNone];
     [ANALYTICS popView];
     [_revealView removeFromSuperview];
     [_backgroundView removeFromSuperview];

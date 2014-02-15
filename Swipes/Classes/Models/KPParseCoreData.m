@@ -302,6 +302,7 @@
         [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastSyncLocalDate"];
         if (lastUpdate)
             [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastSync"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         [self cleanUpAfterSync];
         DUMPDB;
         if(self._needSync) [self synchronizeForce:YES async:async];

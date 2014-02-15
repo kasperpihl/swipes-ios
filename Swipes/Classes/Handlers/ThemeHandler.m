@@ -63,12 +63,12 @@ static ThemeHandler *sharedObject;
     if(currentTheme != ThemeLight && currentTheme != ThemeDark) currentTheme = ThemeDark;
     _currentTheme = currentTheme;
     [[NSUserDefaults standardUserDefaults] setInteger:currentTheme forKey:@"theme"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     if(OSVER >= 7) [[UITextField appearance] setTintColor:tcolor(TextColor)];
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"changed theme" object:nil];
 }
 -(void)changeTheme{
     Theme newTheme = (self.currentTheme == ThemeDark) ? ThemeLight : ThemeDark;
-    [[NSUserDefaults standardUserDefaults] setInteger:newTheme forKey:@"theme"];
     self.currentTheme = newTheme;
 }
 -(UIColor*)colorForItem:(ThemerItem)item forceTheme:(Theme)theme{
