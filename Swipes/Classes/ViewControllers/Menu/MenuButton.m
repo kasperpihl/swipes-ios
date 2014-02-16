@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 #define SCHEDULE_IMAGE_CENTER_SPACING 8//13
-#define kLampSize 18
+#define kLampSize 14
 #define kLampBorderRadius (kLampSize/2)
 #define kLampBorderWidth 1
 #define kLampY 3

@@ -128,15 +128,15 @@
     self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds)+ 10, self.gridView.frame.size.width, 20);
     self.syncLabel.textColor = tcolor(TextColor);
     [self.gridView addSubview:self.syncLabel];
-    [self updateSchemeButton];
+    //[self updateSchemeButton];
 }
--(void)updateSchemeButton{
+/*-(void)updateSchemeButton{
     //BOOL isDarkTheme = (THEMER.currentTheme == ThemeDark);
     UIImage *normalImage = [self imageForMenuButton:KPMenuButtonScheme highlighted:YES];
     UIImage *highlightImage = [self imageForMenuButton:KPMenuButtonScheme highlighted:NO];
     [self.schemeButton.iconImageView setImage:normalImage];
     [self.schemeButton.iconImageView setHighlightedImage:highlightImage];
-}
+}*/
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -295,11 +295,10 @@
             [ROOT_CONTROLLER upgrade];
             break;
         }
-        case KPMenuButtonTerms:
-        case KPMenuButtonPolicy:{
-            NSString *title = (button == KPMenuButtonTerms) ? @"Terms of use" : @"Privacy Policy";
-            NSString *message = (button == KPMenuButtonTerms) ? @"Do you want to open our\r\nterms of use?" : @"Do you want to open our\r\nprivacy policy?";
-            NSString *url = (button == KPMenuButtonTerms) ? @"http://swipesapp.com/termsofuse.pdf" : @"http://swipesapp.com/privacypolicy.pdf";
+        case KPMenuButtonPolicies:{
+            NSString *title = @"Policies";
+            NSString *message = @"Do you want to open our\r\npolicies for Swipes?";
+            NSString *url = @"http://swipesapp.com/privacypolicy.pdf";
             KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:title message:message block:^(BOOL succeeded, NSError *error) {
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
@@ -386,11 +385,8 @@
             title = (kUserHandler.isPlus) ? @"Manage" : @"Upgrade";
             break;
         }
-        case KPMenuButtonTerms:
-            title = @"Terms";
-            break;
-        case KPMenuButtonPolicy:
-            title= @"Policy";
+        case KPMenuButtonPolicies:
+            title= @"Policies";
             break;
         case KPMenuButtonSync:
             title = @"Sync";
@@ -425,8 +421,7 @@
         case KPMenuButtonUpgrade:
             imageString = @"menu_pro";
             break;
-        case KPMenuButtonTerms:
-        case KPMenuButtonPolicy:
+        case KPMenuButtonPolicies:
             imageString = timageStringBW(@"menu_policy");
             break;
         case KPMenuButtonSync:
