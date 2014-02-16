@@ -268,7 +268,7 @@ typedef enum {
         [self animateScheduleButtonsShow:NO duration:0.1];
         
         self.toolbar.alpha = 0;
-        CGRectSetWidth(self.toolbar, self.contentView.frame.size.width/2);
+        CGRectSetWidth(self.toolbar, self.contentView.frame.size.width/3);
         self.toolbar.items = @[timageStringBW(@"round_backarrow")];
         self.toolbar.hidden = NO;
         self.locationView.hidden = NO;
@@ -530,9 +530,10 @@ typedef enum {
     [UIView setAnimationBeginsFromCurrentState:YES];
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGFloat keyboardHeight = keyboardFrame.size.height;
-    NSInteger startPoint = (OSVER >= 7) ? 30 : 10;
+    NSInteger spacing = 3;
+    NSInteger startPoint = (OSVER >= 7) ? (20 + spacing) : spacing;
     CGRectSetY(self.contentView,startPoint);
-    CGRectSetHeight(self.contentView, self.frame.size.height - keyboardHeight - startPoint);
+    CGRectSetHeight(self.contentView, self.frame.size.height - keyboardHeight - startPoint- spacing);
     [UIView commitAnimations];
 }
 
@@ -647,7 +648,7 @@ typedef enum {
         
         UILabel *helpLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
         helpLabel.backgroundColor = CLEAR;
-        helpLabel.textColor = tcolor(BackgroundColor);
+        helpLabel.textColor = tcolorF(BackgroundColor,ThemeDark);
         helpLabel.textAlignment = NSTextAlignmentCenter;
         helpLabel.text = @"Hold down to adjust time";
         helpLabel.font = KP_REGULAR(16);
@@ -658,7 +659,6 @@ typedef enum {
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH)];
         contentView.center = self.center;
         CGRectSetY(self.helpLabel, CGRectGetMinY(contentView.frame)-CGRectGetHeight(helpLabel.frame)-kHelpLevelDistance);
-        
         contentView.backgroundColor = tcolor(BackgroundColor);
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;

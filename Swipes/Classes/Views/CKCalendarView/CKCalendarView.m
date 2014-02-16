@@ -62,7 +62,7 @@
     self = [super init];
     if (self) {
         self.textColor = tcolor(TextColor);
-        self.unavailableColor = color(80,83,88,1);
+        self.unavailableColor = retColor(color(80,83,88,1),color(170,173,178,1));
         self.selectedTextColor = gray(255,1);
         self.highlightedTextColor = gray(255, 1);
         

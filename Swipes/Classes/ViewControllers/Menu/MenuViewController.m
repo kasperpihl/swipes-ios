@@ -478,7 +478,4 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
--(UIStatusBarStyle)preferredStatusBarStyle{
-    return THEMER.currentTheme == ThemeDark ? UIStatusBarStyleLightContent : UIStatusBarStyleBlackOpaque;
-}
 @end

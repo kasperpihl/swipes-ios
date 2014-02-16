@@ -211,8 +211,8 @@
     UIImage *selectedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-high"]];
     UIImage *highlightedImage = [UIImage imageNamed:[baseString stringByAppendingString:@"-highlighted"]];;
     [button setImage:normalImage forState:UIControlStateNormal];
-    [button setImage:selectedImage forState:UIControlStateSelected];
-    [button setImage:selectedImage forState:UIControlStateSelected | UIControlStateHighlighted];
+    [button setImage:highlightedImage forState:UIControlStateSelected];
+    [button setImage:highlightedImage forState:UIControlStateSelected | UIControlStateHighlighted];
     [button setImage:selectedImage forState:UIControlStateHighlighted];
     button.imageView.animationImages = @[highlightedImage];
     button.imageView.animationDuration = 0.8;    
@@ -392,11 +392,7 @@
 							}];
 }
 -(void)changedTheme{
-    [self setNeedsStatusBarAppearanceUpdate];
-    [self.currentViewController setNeedsStatusBarAppearanceUpdate];
-}
--(UIStatusBarStyle)preferredStatusBarStyle{
-    return THEMER.currentTheme == ThemeDark ? UIStatusBarStyleLightContent : UIStatusBarStyleBlackOpaque;
+    
 }
 -(ToDoListViewController*)currentViewController{
     ToDoListViewController *currentViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];

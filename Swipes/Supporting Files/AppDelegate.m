@@ -78,9 +78,6 @@
     }*/
     
     
-    UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleBlackOpaque;
-    NSLog(@"status %i - %i",statusBarStyle,UIStatusBarStyleBlackOpaque);
-//[[UIApplication sharedApplication] setStatusBarStyle: statusBarStyle];
     [PaymentHandler sharedInstance];
     [self tagLaunchSource:launchOptions];
     

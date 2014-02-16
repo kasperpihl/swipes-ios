@@ -17,12 +17,12 @@
 #define STRONG_DONE_COLOR               color(58,195,160,1)
 #define STRONG_LATER_COLOR              color(255,96,69,1)
 
-#define TEXT_COLOR(Theme)               retColorF(color(255,255,255,1),      gray(0,1),Theme)
+#define TEXT_COLOR(Theme)               retColorF(color(255,255,255,1),     color(36,40,46,1),Theme)
 #define SUB_TEXT_COLOR                  retColor(gray(170,1),               gray(85,1))
-#define BACKGROUND(Theme)               retColorF(color(36,40,46,1),         gray(255,1),Theme)
+#define BACKGROUND(Theme)               retColorF(color(36,40,46,1),     gray(255,1),Theme)                //color(226,231,233,1)
 
 #import "ThemeHandler.h"
-//#import "RootViewController.h"
+#import "RootViewController.h"
 #import <ASCScreenBrightnessDetector/ASCScreenBrightnessDetector.h>
 @interface ThemeHandler () <ASCScreenBrightnessDetectorDelegate>
 @property (nonatomic) ASCScreenBrightnessDetector *brightnessDetector;
@@ -50,8 +50,8 @@ static ThemeHandler *sharedObject;
 
 - (void)screenBrightnessStyleDidChange:(ASCScreenBrightnessStyle)style
 {
-    NSLog(@"The new style is: %u", style);
-    /*if((self.currentTheme == ThemeDark && style == ASCScreenBrightnessStyleLight) || (self.currentTheme == ThemeLight && style == ASCScreenBrightnessStyleDark)){
+    /*NSLog(@"The new style is: %u", style);
+    if((self.currentTheme == ThemeDark && style == ASCScreenBrightnessStyleLight) || (self.currentTheme == ThemeLight && style == ASCScreenBrightnessStyleDark)){
         [UIView animateWithDuration:0.3 animations:^{
             [self changeTheme];
             [ROOT_CONTROLLER resetRoot];
@@ -66,6 +66,8 @@ static ThemeHandler *sharedObject;
     [[NSUserDefaults standardUserDefaults] synchronize];
     if(OSVER >= 7) [[UITextField appearance] setTintColor:tcolor(TextColor)];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"changed theme" object:nil];
+    UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
+    [[UIApplication sharedApplication] setStatusBarStyle: statusBarStyle];
 }
 -(void)changeTheme{
     Theme newTheme = (self.currentTheme == ThemeDark) ? ThemeLight : ThemeDark;

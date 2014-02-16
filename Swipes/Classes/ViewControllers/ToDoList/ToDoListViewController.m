@@ -320,6 +320,7 @@
                 self.isHandlingTrigger = NO;
             }];
             popup.numberOfItems = toDosArray.count;
+            //BLURRY.blurryTopColor = alpha(tcolor(LaterColor), 0.95);
             BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
             [BLURRY showView:popup inViewController:self.parent];
             return;
@@ -547,9 +548,6 @@
     [self cleanUpAfterMovingAnimated:NO];
     self.searchBar.currentMode = KPSearchBarModeNone;
     [self.itemHandler clearAll];
-}
--(UIStatusBarStyle)preferredStatusBarStyle{
-    return THEMER.currentTheme == ThemeDark ? UIStatusBarStyleLightContent : UIStatusBarStyleBlackOpaque;
 }
 -(void)dealloc{
     self.searchBar = nil;

@@ -7,7 +7,7 @@
 //
 #define kDefSelectedColor tcolor(DoneColor)
 #define kDefBackgroundColor CLEAR
-#define kDefFont KP_BOLD(13)
+#define kDefFont KP_REGULAR(13)
 #define kDefTextColor tcolor(TextColor)
 #define kDefSelTextColor tcolorF(TextColor,ThemeDark)
 #define kSepWidth 1

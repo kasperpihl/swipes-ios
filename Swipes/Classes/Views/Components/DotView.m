@@ -5,11 +5,11 @@
 //  Created by Kasper Pihl Tornøe on 20/10/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define kDefaultDotSize 10.0f
+#define kDefaultDotSize 11.0f
 
-#define kPriorityDotSize 8.0f
+#define kPriorityDotSize 9.0f
 #define kOutlineSpace 3.5f
-#define kLineSize 1.5f
+#define kLineSize 2.0f
 
 #define kDefaultSize (kPriorityDotSize+2*kOutlineSpace+2*kLineSize)
 

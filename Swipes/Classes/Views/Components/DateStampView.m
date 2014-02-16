@@ -5,7 +5,6 @@
 //  Created by Kasper Pihl Tornøe on 05/09/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define kOuterStrokeSize LINE_SIZE
 #define kLabelSpacing 0
 #define kLabelYHack -1
 #define kColor alpha([UIColor whiteColor],0.8)

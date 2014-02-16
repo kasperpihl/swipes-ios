@@ -275,11 +275,8 @@ static RootViewController *sharedObject;
     
 }
 -(void)changedTheme{
-    [self setNeedsStatusBarAppearanceUpdate];
+   // [self setNeedsStatusBarAppearanceUpdate];
 
-}
--(UIStatusBarStyle)preferredStatusBarStyle{
-    return THEMER.currentTheme == ThemeDark ? UIStatusBarStyleLightContent : UIStatusBarStyleBlackOpaque;
 }
 
 -(void)viewDidAppear:(BOOL)animated{

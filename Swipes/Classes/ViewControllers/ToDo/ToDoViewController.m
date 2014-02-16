@@ -871,10 +871,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     //if([object respondsToSelector:@selector(setHighlightedTextColor:)]) [object setHighlightedTextColor:EDIT_TASK_GRAYED_OUT_TEXT];
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 }
+
 
 -(void)dealloc
 {

@@ -133,6 +133,7 @@
         searchField.textColor = tcolor(TextColor);
         searchField.font = KP_LIGHT(16);
         searchField.placeholder = @"Type in location";
+        searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         @try {
             [searchField setValue:tcolor(TextColor) forKeyPath:@"_placeholderLabel.textColor"];
         }
