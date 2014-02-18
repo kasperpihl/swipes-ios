@@ -9,7 +9,7 @@
 
 #define inv(color) [ThemeHandler inverseColor:color]
 
-#define TASKS_COLOR                     color(244,203,28,1) //retColor(color(228,202,92,1),   color(244,203,28,1))
+#define TASKS_COLOR                    color(244,203,28,1) //color(237,194,0,1) //retColor(color(228,202,92,1),   color(244,203,28,1))
 #define DONE_COLOR                      color(69,217,132,1)  //color(63,186,141,1) //
 #define LATER_COLOR                     color(252,97,75,1) // color(234,97,80,1)
 
@@ -50,8 +50,8 @@ static ThemeHandler *sharedObject;
 
 - (void)screenBrightnessStyleDidChange:(ASCScreenBrightnessStyle)style
 {
-    /*NSLog(@"The new style is: %u", style);
-    if((self.currentTheme == ThemeDark && style == ASCScreenBrightnessStyleLight) || (self.currentTheme == ThemeLight && style == ASCScreenBrightnessStyleDark)){
+    NSLog(@"The new style is: %u", style);
+    /*if((self.currentTheme == ThemeDark && style == ASCScreenBrightnessStyleLight) || (self.currentTheme == ThemeLight && style == ASCScreenBrightnessStyleDark)){
         [UIView animateWithDuration:0.3 animations:^{
             [self changeTheme];
             [ROOT_CONTROLLER resetRoot];

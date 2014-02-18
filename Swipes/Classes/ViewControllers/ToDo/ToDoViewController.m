@@ -544,8 +544,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     tempHeight += self.evernoteContainer.frame.size.height;
     */
     
-    CGRectSetY(self.dropboxContainer, tempHeight);
-    tempHeight += self.dropboxContainer.frame.size.height;
+    /*CGRectSetY(self.dropboxContainer, tempHeight);
+    tempHeight += self.dropboxContainer.frame.size.height;*/
     
     
     CGRectSetY(self.notesContainer, tempHeight);
@@ -820,7 +820,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
          Dropbox Container with button!
          */
-         self.dropboxContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
+         /*self.dropboxContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
          [self addAndGetImage:timageString(@"edit_notes_icon", @"_white", @"_black") inView:self.dropboxContainer];
          
          self.dropboxLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.dropboxContainer.frame.size.height)];
@@ -831,7 +831,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          
          [self addClickButtonToView:self.dropboxContainer action:@selector(pressedDropbox:)];
          
-         [self.scrollView addSubview:self.dropboxContainer];
+         [self.scrollView addSubview:self.dropboxContainer];*/
         
         
         

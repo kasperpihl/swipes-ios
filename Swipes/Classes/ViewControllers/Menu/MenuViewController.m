@@ -128,15 +128,15 @@
     self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds)+ 10, self.gridView.frame.size.width, 20);
     self.syncLabel.textColor = tcolor(TextColor);
     [self.gridView addSubview:self.syncLabel];
-    //[self updateSchemeButton];
+    [self updateSchemeButton];
 }
-/*-(void)updateSchemeButton{
+-(void)updateSchemeButton{
     //BOOL isDarkTheme = (THEMER.currentTheme == ThemeDark);
     UIImage *normalImage = [self imageForMenuButton:KPMenuButtonScheme highlighted:YES];
     UIImage *highlightImage = [self imageForMenuButton:KPMenuButtonScheme highlighted:NO];
     [self.schemeButton.iconImageView setImage:normalImage];
     [self.schemeButton.iconImageView setHighlightedImage:highlightImage];
-}*/
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];

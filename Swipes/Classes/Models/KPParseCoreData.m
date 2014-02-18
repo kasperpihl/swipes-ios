@@ -15,7 +15,7 @@
 #import "UserHandler.h"
 
 #define kSyncTime 5
-#define kUpdateLimit 200
+#define kUpdateLimit 150
 
 
 #ifdef DEBUG
@@ -208,7 +208,8 @@
     NSMutableDictionary *syncData = [NSMutableDictionary dictionary];
     
     /* This will consist of tempId's to objects that did not have one already */
-    if([context hasChanges]) [context MR_saveOnlySelfAndWait];
+    if([context hasChanges])
+        [context MR_saveOnlySelfAndWait];
     
     /* The last update time - saved and received from the sync response */
     NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSync"];
@@ -222,7 +223,8 @@
     [syncData setObject:@YES forKey:@"changesOnly"];
     
     /* Include all deleted objects to be saved */
-    for(NSString *objectId in self._objectsToDeleteOnServer) [self addObject:@{@"deleted":@YES,@"objectId":objectId} toClass:[self._objectsToDeleteOnServer objectForKey:objectId] inCollection:&updateObjectsToServer];
+    for(NSString *objectId in self._objectsToDeleteOnServer)
+        [self addObject:@{@"deleted":@YES,@"objectId":objectId} toClass:[self._objectsToDeleteOnServer objectForKey:objectId] inCollection:&updateObjectsToServer];
     
     [syncData setObject:updateObjectsToServer forKey:@"objects"];
     
