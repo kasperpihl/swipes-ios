@@ -14,6 +14,7 @@
 #define kContentSpacingRight 0
 #define kContentSpacingTop 20
 #define kSearchBarHeight 44
+#define kButtonWidth 44
 #define kSearchTimerInterval 1.0
 
 // dropbox creedentials
@@ -32,6 +33,7 @@ static NSUInteger g_thumbnailCounter = 0;
 
 @property (nonatomic, strong) UITableView* tableView;
 @property (nonatomic, strong) UISearchBar* searchBar;
+@property (nonatomic, strong) UIButton* backButton;
 @property (nonatomic, strong) DBRestClient* restClient;
 
 @end
@@ -59,7 +61,14 @@ static NSUInteger g_thumbnailCounter = 0;
         
         CGFloat top = (OSVER >= 7) ? [Global statusBarHeight] : 0.f;
         
-        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(kContentSpacingLeft, top, 320-kContentSpacingLeft-kContentSpacingRight, kSearchBarHeight)];
+        // initialize controls
+        _backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        _backButton.frame = CGRectMake(kContentSpacingLeft, top, kButtonWidth, kSearchBarHeight);
+        [_backButton setTitle:@" < " forState:UIControlStateNormal];
+        [_backButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:_backButton];
+        
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(kContentSpacingLeft + kButtonWidth, top, 320 -kButtonWidth - kContentSpacingLeft -kContentSpacingRight, kSearchBarHeight)];
         _searchBar.delegate = self;
         _searchBar.placeholder = @"Search in Dropbox";
         [self addSubview:_searchBar];
@@ -113,6 +122,11 @@ static NSUInteger g_thumbnailCounter = 0;
 {
     if ([_searchBar isFirstResponder])
         [_searchBar resignFirstResponder];
+}
+
+- (void)cancel:(id)sender
+{
+    [_delegate closeDropboxView:self];
 }
 
 #pragma mark - Authentication
@@ -442,8 +456,9 @@ static int outstandingRequests;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if ([_searchBar isFirstResponder])
-        [_searchBar resignFirstResponder];
+    if ([_searchBar isFirstResponder]) {
+         [_searchBar resignFirstResponder];
+    }
 }
 
 -(void)dealloc

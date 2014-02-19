@@ -13,6 +13,7 @@
 #define kContentSpacingLeft 0
 #define kContentSpacingRight 0
 #define kSearchBarHeight 44
+#define kButtonWidth 44
 #define kSearchTimerInterval 1.0
 
 #define kSearchLimit 10     // when _limitSearch is YES this is the limit
@@ -20,7 +21,8 @@
 @interface EvernoteView () <UITableViewDataSource, UITableViewDelegate, EvernoteViewerViewDelegate, UISearchBarDelegate>
 
 @property (nonatomic, strong) UITableView* tableView;
-@property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) UISearchBar* searchBar;
+@property (nonatomic, strong) UIButton* backButton;
 
 @property (nonatomic, strong) EDAMNoteList* noteList;
 
@@ -31,6 +33,7 @@
 @implementation EvernoteView {
     NSTimer* _timer;
     BOOL _limitSearch;
+    EDAMNote* _selectedNote;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -41,7 +44,15 @@
         
         CGFloat top = (OSVER >= 7) ? [Global statusBarHeight] : 0.f;
         
-        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(kContentSpacingLeft, top, 320-kContentSpacingLeft-kContentSpacingRight, kSearchBarHeight)];
+        // initialize controls
+        _backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        _backButton.frame = CGRectMake(kContentSpacingLeft, top, kButtonWidth, kSearchBarHeight);
+        [_backButton setTitle:@" < " forState:UIControlStateNormal];
+        [_backButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:_backButton];
+
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(kContentSpacingLeft + kButtonWidth, top,
+                320 - kButtonWidth - kContentSpacingLeft - kContentSpacingRight, kSearchBarHeight)];
         _searchBar.delegate = self;
         _searchBar.placeholder = @"Search in Evernote notes";
         [self addSubview:_searchBar];
@@ -66,6 +77,11 @@
 {
     if ([_searchBar isFirstResponder])
         [_searchBar resignFirstResponder];
+}
+
+- (void)cancel:(id)sender
+{
+    [_delegate closeEvernoteView:self];
 }
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
@@ -197,17 +213,17 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    EDAMNote* note = _noteList.notes[indexPath.row];
-    if ([[EvernoteSession sharedSession] isEvernoteInstalled]) {
-        [[EvernoteNoteStore noteStore] viewNoteInEvernote:note];
-    }
-    else {
+    _selectedNote = _noteList.notes[indexPath.row];
+//    if ([[EvernoteSession sharedSession] isEvernoteInstalled]) {
+//        [[EvernoteNoteStore noteStore] viewNoteInEvernote:_selectedNote];
+//    }
+//    else {
         if ([_searchBar isFirstResponder])
             [_searchBar resignFirstResponder];
-        _viewer = [[EvernoteViewerView alloc] initWithFrame:self.frame andGuid:note.guid];
+        _viewer = [[EvernoteViewerView alloc] initWithFrame:self.frame andGuid:_selectedNote.guid];
         _viewer.delegate = self;
         [self addSubview:_viewer];
-    }
+//    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -227,10 +243,19 @@
     _searchBar = nil;
 }
 
+#pragma mark - Evernote Viewer protocol implementation
+
 - (void)onGetBack
 {
     [_viewer removeFromSuperview];
     _viewer = nil;
+}
+
+- (void)onAttach
+{
+    [_viewer removeFromSuperview];
+    _viewer = nil;
+    [_delegate selectedEvernoteInView:self guid:_selectedNote.guid title:_selectedNote.title];
 }
 
 @end

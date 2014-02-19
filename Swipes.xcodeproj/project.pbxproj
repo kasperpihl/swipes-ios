@@ -1114,6 +1114,7 @@
 		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvernoteView.h; sourceTree = "<group>"; };
 		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvernoteView.m; sourceTree = "<group>"; };
+		DA5B522718B117FF00740026 /* Datamodel 1.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Datamodel 1.2.xcdatamodel"; sourceTree = "<group>"; };
 		DA67301318A99C7100CA4C1A /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = Swipes/Ressources/Libs/DropboxSDK.framework; sourceTree = "<group>"; };
 		DACD541718A19FB000C378DF /* DropboxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxView.h; sourceTree = "<group>"; };
 		DACD541818A19FB000C378DF /* DropboxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxView.m; sourceTree = "<group>"; };
@@ -3290,9 +3291,10 @@
 			children = (
 				A7AF9B5917E2244F00F9B26F /* Datamodel 1.0.3.xcdatamodel */,
 				A7AF9B5A17E2244F00F9B26F /* Datamodel 1.1.xcdatamodel */,
+				DA5B522718B117FF00740026 /* Datamodel 1.2.xcdatamodel */,
 				A7AF9B5B17E2244F00F9B26F /* Datamodel.xcdatamodel */,
 			);
-			currentVersion = A7AF9B5A17E2244F00F9B26F /* Datamodel 1.1.xcdatamodel */;
+			currentVersion = DA5B522718B117FF00740026 /* Datamodel 1.2.xcdatamodel */;
 			path = Datamodel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

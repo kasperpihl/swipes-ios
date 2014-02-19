@@ -46,8 +46,8 @@
     mixpanelToken = @"c2d2126bfce5e54436fa131cfe6085ad";
     localyticsKey = @"f2f927e0eafc7d3c36835fe-c0a84d84-18d8-11e3-3b24-00a426b17dd8";
     #define EVERNOTE_HOST BootstrapServerBaseURLStringSandbox
-    //NSString* const CONSUMER_KEY = @"sulio22";
-    //NSString* const CONSUMER_SECRET = @"c7ed7298b3666bc4"; // when set to release also fix in Swipes-Info.plist file !
+    NSString* const CONSUMER_KEY = @"sulio22";
+    NSString* const CONSUMER_SECRET = @"c7ed7298b3666bc4"; // when set to release also fix in Swipes-Info.plist file !
 #endif
     
     [Appirater setAppId:@"657882159"];
@@ -87,7 +87,7 @@
 
     }
     
-    //[EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
+    [EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
     
     NSLog(@"%@",[kCurrent sessionToken]);
     return YES;

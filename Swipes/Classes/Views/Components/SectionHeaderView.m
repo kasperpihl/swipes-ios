@@ -108,7 +108,6 @@
 {
     [super drawRect:rect];
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    
     CGFloat leftCutPoint = self.bounds.size.height * kDefLeftCutSize;
     CGFloat targetY = self.bounds.size.height;
     CGFloat targetX = self.bounds.size.width;

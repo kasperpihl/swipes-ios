@@ -15,7 +15,8 @@
 @interface EvernoteViewerView ()
 
 @property (nonatomic, strong) UIWebView* webView;
-@property (nonatomic,strong) UIButton *backButton;
+@property (nonatomic,strong) UIButton* backButton;
+@property (nonatomic,strong) UIButton* attachButton;
 
 @end
 
@@ -27,8 +28,10 @@
     if (self) {
         self.backgroundColor = tcolor(BackgroundColor);
 
+        CGFloat top = (OSVER >= 7) ? [Global statusBarHeight] : 0.f;
+        
         // prepare webview
-        _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 320, frame.size.height - kContentSpacingBottom)];
+        _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, top, 320, frame.size.height - top - kContentSpacingBottom)];
         [self addSubview:_webView];
 
         // prepare back button
@@ -37,6 +40,13 @@
         [_backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         [_backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_backButton];
+        
+        // prepare attach button
+        _attachButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _attachButton.frame = CGRectMake(44, self.frame.size.height - 44, 44, 44);
+        [_attachButton setImage:[UIImage imageNamed:timageStringBW(@"checkmark_icon")] forState:UIControlStateNormal];
+        [_attachButton addTarget:self action:@selector(pressedAttach:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:_attachButton];
         
         // load the note
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -67,6 +77,11 @@
 -(void)pressedBack:(UIButton*)backButton
 {
     [self.delegate onGetBack];
+}
+
+-(void)pressedAttach:(UIButton*)backButton
+{
+    [self.delegate onAttach];
 }
 
 -(void)dealloc

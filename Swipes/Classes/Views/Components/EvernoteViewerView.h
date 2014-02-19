@@ -11,7 +11,10 @@
 @class EvernoteViewerView;
 
 @protocol EvernoteViewerViewDelegate <NSObject>
+
 - (void)onGetBack;
+- (void)onAttach;
+
 @end
 
 @interface EvernoteViewerView : UIView

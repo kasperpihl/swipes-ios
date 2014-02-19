@@ -63,7 +63,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeDropbox
 };
 
-@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate>
+@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate, EvernoteViewDelegate, ToolbarDelegate,
+        KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
 @property (nonatomic) CellType cellType;
 @property (nonatomic) NSString *objectId;
@@ -320,8 +321,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     //CGRectSetHeight(self.scrollView, self.contentView.frame.size.height-CGRectGetMaxY(self.titleContainerView.frame)-TOOLBAR_HEIGHT);
 }
 
-
 #pragma mark - NotesViewDelegate
+
 -(void)savedNotesView:(NotesView *)notesView text:(NSString *)text{
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
@@ -330,6 +331,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self updateNotes];
     [self layout];
 }
+
 -(void)pressedCancelNotesView:(NotesView *)notesView{
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
@@ -345,6 +347,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 //    self.model.notes = text;
 //    [KPToDo save];
     [self updateNotes];
+    [self layout];
+}
+
+- (void)closeEvernoteView:(EvernoteView *)evernoteView
+{
+    self.activeEditMode = KPEditModeNone;
+    [BLURRY dismissAnimated:YES];
     [self layout];
 }
 
@@ -368,10 +377,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 
 #pragma mark - Update UI for model
--(void)update
+
+- (void)update
 {
     // Save objectId - if deleted from sync we know it here
-    if(self.model.objectId) self.objectId = self.model.objectId;
+    if (self.model.objectId)
+        self.objectId = self.model.objectId;
     self.textView.text = self.model.title;
     self.cellType = [self.model cellTypeForTodo];
     [self updateTags];
@@ -386,7 +397,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
 }
 
--(void)updateTags{
+- (void)updateTags
+{
     self.tagsLabel.frame = TAGS_LABEL_RECT;
     NSString *tagsString = self.model.tagString;
     if(!tagsString || tagsString.length == 0){
@@ -399,29 +411,31 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetHeight(self.tagsContainerView, containerHeight);
 }
 
--(void)updateSchedule{
+- (void)updateSchedule
+{
     BOOL isLocation = NO;
-    if(!self.model.schedule){// || [self.model.schedule isInPast]){
-        if(self.model.location){
+    if (!self.model.schedule) { // || [self.model.schedule isInPast]){
+        if (self.model.location) {
             isLocation = YES;
             NSArray *location = [self.model.location componentsSeparatedByString:kLocationSplitStr];
             NSString *name = [location objectAtIndex:1];
             self.alarmLabel.text = name;
         }
-        else{
+        else {
             self.alarmLabel.text = @"Unspecified";
-            if(self.model.completionDate){
+            if (self.model.completionDate) {
                 self.alarmLabel.text = [NSString stringWithFormat:@"Completed: %@",[UtilityClass readableTime:self.model.completionDate showTime:YES]];
             }
         }
     }
-    else{
+    else {
         self.alarmLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:self.model.schedule showTime:YES]];
     }
     [self.scheduleImageView setImage:[UIImage imageNamed:(isLocation ? timageStringBW(@"edit_location_icon") : timageStringBW(@"edit_schedule_icon"))]];
 }
 
--(void)updateNotes{
+- (void)updateNotes
+{
     if(!self.model.notes || self.model.notes.length == 0){
         self.notesView.text = @"Add notes";
     }
@@ -540,9 +554,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     tempHeight += self.tagsContainerView.frame.size.height;
     
     
-    /*CGRectSetY(self.evernoteContainer, tempHeight);
+    CGRectSetY(self.evernoteContainer, tempHeight);
     tempHeight += self.evernoteContainer.frame.size.height;
-    */
+    
     
     CGRectSetY(self.dropboxContainer, tempHeight);
     tempHeight += self.dropboxContainer.frame.size.height;
@@ -803,6 +817,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         /*
          Evernote Container with button!
+         */
          self.evernoteContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
          [self addAndGetImage:@"edit_notes_icon" inView:self.evernoteContainer];
          
@@ -815,7 +830,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          [self addClickButtonToView:self.evernoteContainer action:@selector(pressedEvernote:)];
          
          [self.scrollView addSubview:self.evernoteContainer];
-         */
+        
         
         /*
          Dropbox Container with button!
