@@ -339,7 +339,7 @@
         case KPMenuButtonPolicies:{
             NSString *title = @"Policies";
             NSString *message = @"Do you want to open our\r\npolicies for Swipes?";
-            NSString *url = @"http://swipesapp.com/privacypolicy.pdf";
+            NSString *url = @"http://swipesapp.com/policies.pdf";
             KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:title message:message block:^(BOOL succeeded, NSError *error) {
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
