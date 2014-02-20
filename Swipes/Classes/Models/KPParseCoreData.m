@@ -592,6 +592,10 @@ static KPParseCoreData *sharedObject;
 - (void)initialize
 {
     self.backgroundTask = UIBackgroundTaskInvalid;
+    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
+    if(![[NSFileManager defaultManager] fileExistsAtPath:storeURL.path])
+        [[NSUserDefaults standardUserDefaults] setInteger:ThemeLight forKey:@"theme"];
+    
     [self loadDatabase];
     notify(@"closing app", forceSync);
     notify(@"opening app", forceSync);
@@ -611,6 +615,7 @@ static KPParseCoreData *sharedObject;
 {
     @try {
         [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
+        
         //[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(loadTest) userInfo:nil repeats:NO];
     }
     @catch (NSException *exception) {

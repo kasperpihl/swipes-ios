@@ -23,6 +23,7 @@
 
 #import "KPParseCoreData.h"
 #import "PlusAlertView.h"
+#import "NotificationHandler.h"
 
 #define kSettingsBlurColor retColor(gray(230, 0.5),gray(50, 0.4))
 #define kMenuButtonStartTag 4123
@@ -255,6 +256,46 @@
             
             break;
         }
+        case KPMenuButtonLocation:{
+            BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
+            if(!hasLocationOn && ![kUserHandler isPlus]){
+                [ANALYTICS pushView:@"Location plus popup"];
+                [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location in Settings"}];
+                PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." block:^(BOOL succeeded, NSError *error) {
+                    [ANALYTICS popView];
+                    [BLURRY dismissAnimated:YES];
+                    if(succeeded){
+                        [ROOT_CONTROLLER upgrade];
+                    }
+                }];
+                BLURRY.blurryTopColor = kSettingsBlurColor;
+                [BLURRY showView:alert inViewController:self];
+            }
+            else{
+                UIColor *lampColor = hasLocationOn ? kLampOffColor : kLampOnColor;
+                NSNumber *newSettingValue = hasLocationOn ? @NO : @YES;
+                if(hasLocationOn){
+                    KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off location" message:@"Location reminders won't be working." block:^(BOOL succeeded, NSError *error) {
+                        [BLURRY dismissAnimated:YES];
+                        if(succeeded){
+                            [NOTIHANDLER stopLocationServices];
+                            [kSettings setValue:newSettingValue forSetting:SettingLocation];
+                            [sender setLampColor:lampColor];
+                        }
+                    }];
+                    BLURRY.blurryTopColor = kSettingsBlurColor;
+                    [BLURRY showView:alert inViewController:self];
+                }
+                else{
+                    StartLocationResult result = [NOTIHANDLER startLocationServices];
+                    if(result == LocationStarted){
+                        [kSettings setValue:newSettingValue forSetting:SettingLocation];
+                        [sender setLampColor:lampColor];
+                    }
+                }
+            }
+            break;
+        }
         case KPMenuButtonSnoozes:{
             SnoozesViewController *snoozeVC = [[SnoozesViewController alloc] init];
             [self pushViewController:snoozeVC animated:YES];
@@ -353,6 +394,7 @@
             [self renderSubviews];
             break;
         }
+        
         default:
             break;
     }
@@ -449,7 +491,8 @@
 -(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton{
     MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton] image:[self imageForMenuButton:menuButton highlighted:NO] highlightedImage:[self imageForMenuButton:menuButton highlighted:YES]];
     if(menuButton == KPMenuButtonNotifications || menuButton == KPMenuButtonLocation){
-        BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
+        KPSettings setting = (menuButton == KPMenuButtonNotifications) ? SettingNotifications : SettingLocation;
+        BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:setting] boolValue];
         UIColor *lampColor = hasNotificationsOn ? kLampOnColor : kLampOffColor;
         [button setLampColor:lampColor];
     }

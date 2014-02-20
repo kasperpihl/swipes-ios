@@ -237,7 +237,7 @@ typedef enum {
             [ANALYTICS pushView:@"Location plus popup"];
             self.contentView.hidden = YES;
             [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location"}];
-            [PlusAlertView alertInView:window message:@"Location reminders is an upcoming feature in Swipes Plus. Check out the whole package." block:^(BOOL succeeded, NSError *error) {
+            [PlusAlertView alertInView:window message:@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." block:^(BOOL succeeded, NSError *error) {
                 [ANALYTICS popView];
                 self.helpLabel.hidden = NO;
                 self.contentView.hidden = NO;

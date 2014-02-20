@@ -42,9 +42,9 @@ static NotificationHandler *sharedObject;
 }
 -(void)setFencing:(BOOL)fencing{
     if(_fencing != fencing){
+        if(fencing && !self.startedLocationServices) [self startLocationServices];
         if(!fencing) [KLLocation unregisterGeofencing];
         else [KLLocation registerGeofencing];
-        if(fencing) NSLog(@"fencing");
         _fencing = fencing;
     }
 }
@@ -76,7 +76,7 @@ static NotificationHandler *sharedObject;
         if(startedLocationServices){
             NSString *kitLocateKey = @"ebeea91e-563e-4b32-acf3-6505d9857789";
             [KitLocate initKitLocateWithDelegate:NOTIHANDLER APIKey:kitLocateKey];
-            //[KLLocation startSingleLocationWithDelegate:self andParams:@{KL_SP_INT_MAX_SECONDS_WAIT:@(4)}];
+            [KLLocation startSingleLocationWithDelegate:self andParams:@{KL_SP_INT_MAX_SECONDS_WAIT:@(4)}];
         }
         else [KitLocate shutKitLocate];
     }
@@ -94,13 +94,14 @@ static NotificationHandler *sharedObject;
     return localNotif;
 }
 -(void)updateLocalNotifications{
-    
+    /* Check for settings */
     BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
+    [self updateLocationUpdates];
     UIApplication *app = [UIApplication sharedApplication];
-    
     NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
+    
     if(!hasNotificationsOn){
         [app cancelAllLocalNotifications];
         return;
@@ -164,6 +165,8 @@ static NotificationHandler *sharedObject;
     }
 }
 -(void)updateLocationUpdates{
+    BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
+    if(!hasLocationOn) [self stopLocationServices];
     [KLLocation deleteAllGeofences];
     NSPredicate *locationPredicate = [NSPredicate predicateWithFormat:@"(location != nil)"];
     NSArray *tasksWithLocation = [KPToDo MR_findAllWithPredicate:locationPredicate];

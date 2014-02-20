@@ -34,7 +34,7 @@ static ThemeHandler *sharedObject;
     if(!sharedObject){
         sharedObject = [[ThemeHandler allocWithZone:NULL] init];
         sharedObject.currentTheme = [[NSUserDefaults standardUserDefaults] integerForKey:@"theme"];
-        [sharedObject brightnessDetector];
+        //[sharedObject brightnessDetector];
         //[sharedObject changeTheme];
     }
     return sharedObject;
@@ -66,6 +66,7 @@ static ThemeHandler *sharedObject;
     _currentTheme = currentTheme;
     [[NSUserDefaults standardUserDefaults] setInteger:currentTheme forKey:@"theme"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
     if(OSVER >= 7) [[UITextField appearance] setTintColor:tcolor(TextColor)];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"changed theme" object:nil];
     UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
