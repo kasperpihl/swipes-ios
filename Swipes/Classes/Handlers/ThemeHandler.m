@@ -47,7 +47,9 @@ static ThemeHandler *sharedObject;
     }
     return _brightnessDetector;
 }
-
+-(Theme)oppositTheme{
+    return (self.currentTheme == ThemeDark) ? ThemeLight : ThemeDark;
+}
 - (void)screenBrightnessStyleDidChange:(ASCScreenBrightnessStyle)style
 {
     NSLog(@"The new style is: %u", style);

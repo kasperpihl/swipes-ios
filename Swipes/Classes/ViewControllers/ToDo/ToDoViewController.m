@@ -256,12 +256,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     switch (targetCellType) {
         case CellTypeSchedule:{
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-            SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation) {
+            SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type) {
                 [BLURRY dismissAnimated:YES];
                 if(button == KPScheduleButtonCancel){
                 }
                 else if(button == KPScheduleButtonLocation){
-                    [KPToDo notifyToDos:@[self.model] onLocation:chosenLocation type:GeoFenceOnArrive save:YES];
+                    [KPToDo notifyToDos:@[self.model] onLocation:chosenLocation type:type save:YES];
                 }
                 else{
                     [KPToDo scheduleToDos:@[self.model] forDate:chosenDate save:YES];
@@ -609,11 +609,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)pressedSchedule:(id)sender
 {
     self.activeEditMode = KPEditModeAlarm;
-    SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation) {
+    SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type) {
         [BLURRY dismissAnimated:YES];
         if(button == KPScheduleButtonCancel) return;
         else if(button == KPScheduleButtonLocation && chosenLocation){
-            [KPToDo notifyToDos:@[self.model] onLocation:chosenLocation type:GeoFenceOnArrive save:YES];
+            [KPToDo notifyToDos:@[self.model] onLocation:chosenLocation type:type save:YES];
         }
         else{
             // TODO: Fix the edit mode

@@ -6,9 +6,12 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 #define kUserDefKey @"LocationRecentHistory"
-#define SearchHeight 60
+#define SearchHeight valForScreen(45,50)
 #import "LocationSearchView.h"
 #import "LocationResultCell.h"
+
+#import "NotificationHandler.h"
+
 @interface LocationSearchView () <UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 @property (nonatomic) UITableView *tableView;
 @property (nonatomic) NSArray *searchResults;
@@ -99,7 +102,9 @@
         [self.tableView reloadData];
     }
     else{
-        [self.geoCoder geocodeAddressString:textField.text inRegion:nil completionHandler:^(NSArray *placemarks, NSError *error) {
+        CLRegion *region;
+        if(NOTIHANDLER.latestLocation) region = [[CLRegion alloc] initCircularRegionWithCenter:NOTIHANDLER.latestLocation.coordinate radius:1000 identifier:@"myregion"];
+        [self.geoCoder geocodeAddressString:textField.text inRegion:region completionHandler:^(NSArray *placemarks, NSError *error) {
             if(self.searchField.text.length > 0){
                 self.searchResults = placemarks;
                 self.isSearching = (self.searchField.text > 0);
@@ -149,7 +154,7 @@
         UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SearchHeight, self.bounds.size.width, self.bounds.size.height-SearchHeight)];
         tableView.backgroundColor = CLEAR;
         tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        tableView.autoresizesSubviews = (UIViewAutoresizingFlexibleHeight);
+        tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         tableView.delegate = self;
         tableView.dataSource = self;
         [self addSubview:tableView];

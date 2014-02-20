@@ -419,7 +419,7 @@
             imageString = timageStringBW(@"menu_snoozes");
             break;
         case KPMenuButtonUpgrade:
-            imageString = @"menu_pro";
+            imageString = @"menu_pro_white";
             break;
         case KPMenuButtonPolicies:
             imageString = timageStringBW(@"menu_policy");
