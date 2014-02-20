@@ -197,7 +197,7 @@ static RootViewController *sharedObject;
         for(KPToDo *toDo in tasks){
             message = [message stringByAppendingFormat:@"◯ %@\r\n",toDo.title];
         }
-        message = [message stringByAppendingString:@"\r\nSent from Swipes - http://swipesapp.com\r\n"];
+        message = [message stringByAppendingString:@"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com"];
         [mailCont setMessageBody:message isHTML:NO];
         [self presentViewController:mailCont animated:YES completion:nil];
         [ANALYTICS tagEvent:@"Share tasks" options:@{@"Number of Tasks":@(tasks.count)}];
