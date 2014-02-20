@@ -5,12 +5,13 @@
 //  Created by Kasper Pihl Tornøe on 07/08/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define kDefSelectedColor tcolor(DoneColor)
+#define kDefSelectedColor tcolor(TasksColor)
 #define kDefBackgroundColor CLEAR
 #define kDefFont KP_REGULAR(13)
 #define kDefTextColor tcolor(TextColor)
-#define kDefSelTextColor tcolorF(TextColor,ThemeDark)
+#define kDefSelTextColor tcolorF(TextColor,ThemeLight)
 #define kSepWidth 1
+#define kDefSeperatorColor color(161,163,165,1)
 #define kSepMargin 0.0
 
 #import "KPRepeatPicker.h"
@@ -20,6 +21,7 @@
 //#import "UIView+Utilities.h"
 @interface KPRepeatPicker ()
 @property (nonatomic) IBOutletCollection(UILabel) NSArray *optionsButtons;
+@property (nonatomic) IBOutletCollection(UIView) NSArray *seperators;
 @property (nonatomic) UIButton *selectedButton;
 @property (nonatomic) NSInteger numberOfOptions;
 @end
@@ -32,6 +34,7 @@
         [selectedButton setNeedsLayout];
         _selectedButton = selectedButton;
         self.currentOption = selectedButton.tag;
+        [self layoutSubviews];
         //self.selectedDay = selectedButton.tag;
     }
 }
@@ -65,7 +68,7 @@
     [self handleTouches:touches];
 }
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    [self handleTouches:touches];   
+    [self handleTouches:touches];
     [self.delegate repeatPicker:self selectedOption:self.selectedButton.tag];
 }
 -(id)initWithHeight:(CGFloat)height selectedDate:(NSDate *)date option:(RepeatOptions)option{
@@ -77,6 +80,7 @@
         self.backgroundColor = kDefBackgroundColor;
         CGFloat buttonWidth = floorf(self.frame.size.width/self.numberOfOptions);
         NSMutableArray *buttonArray = [NSMutableArray array];
+        NSMutableArray *seperatorArray = [NSMutableArray array];
         CGFloat sepHeight = self.frame.size.height-(self.frame.size.height*kSepMargin);
         for(NSInteger i = 0 ; i < self.numberOfOptions ; i++){
             CGFloat buttonX = i*buttonWidth + i*kSepWidth;
@@ -90,12 +94,14 @@
             [self addSubview:dayButton];
             if(i < 6){
                 UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(buttonX+buttonWidth, (self.frame.size.height-sepHeight)/2, kSepWidth, sepHeight)];
-                [seperator setBackgroundColor:self.textColor];
+                [seperator setBackgroundColor:kDefSeperatorColor];
                 [self addSubview:seperator];
+                [seperatorArray addObject:seperator];
             }
             [buttonArray addObject:dayButton];
         }
         self.optionsButtons = [buttonArray copy];
+        self.seperators = [seperatorArray copy];
         self.font = kDefFont;
         self.selectedDate = date;
         self.currentOption = option;
@@ -143,7 +149,19 @@
         [dayButton setTitleColor:kDefSelTextColor forState:UIControlStateHighlighted];
         [dayButton setTitleColor:kDefSelTextColor forState:UIControlStateHighlighted|UIControlStateSelected];
         [dayButton.titleLabel setFont:self.font];
-        if(i == self.currentOption) [self setSelectedButton:dayButton];
+        NSInteger sep1index = i-1;
+        NSInteger sep2index = i;
+        UIView *sep1, *sep2;
+        if(sep1index >= 0 && sep1index < self.seperators.count)
+            sep1 = [self.seperators objectAtIndex:sep1index];
+        if(sep2index >= 0 && sep2index < self.seperators.count)
+            sep2 = [self.seperators objectAtIndex:sep2index];
+        sep2.hidden = NO;
+        if(i == self.currentOption){
+            [self setSelectedButton:dayButton];
+            sep1.hidden = YES;
+            sep2.hidden = YES;
+        }
     }
 }
 @end

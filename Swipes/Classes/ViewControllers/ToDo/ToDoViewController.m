@@ -21,9 +21,8 @@
 #define CONTAINER_INIT_HEIGHT (TITLE_HEIGHT + TITLE_TOP_MARGIN + TITLE_BOTTOM_MARGIN)
 
 
-#define TAGS_LABEL_RECT CGRectMake(LABEL_X,TAGS_LABEL_PADDING,320-LABEL_X-10,500)
+#define TAGS_LABEL_RECT CGRectMake(LABEL_X,0,320-LABEL_X-10,500)
 
-#define TAGS_LABEL_PADDING 18.5
 #define NOTES_PADDING 13.5
 #define kRepeatPickerHeight 70
 #import "StyleHandler.h"
@@ -135,16 +134,16 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         NSString *backLabel;
         switch ([model cellTypeForTodo]) {
             case CellTypeSchedule:
-                backLabel = @"Schedule";
+                backLabel = @"SCHEDULE";
                 break;
             case CellTypeToday:
-                backLabel = @"Tasks";
+                backLabel = @"TASKS";
                 break;
             case CellTypeDone:
-                backLabel = @"Done";
+                backLabel = @"DONE";
                 break;
             default:
-                backLabel = @"Back";
+                backLabel = @"BACK";
                 break;
         }
         [self.backButton setTitle:backLabel forState:UIControlStateNormal];
@@ -392,11 +391,14 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if(!tagsString || tagsString.length == 0){
         tagsString = @"Set tags";
     }
+    CGSize basicSize = sizeWithFont(tagsString,self.tagsLabel.font);
+    CGFloat padding = (SCHEDULE_ROW_HEIGHTS - basicSize.height)/2;
     self.tagsLabel.text = tagsString;
     [self.tagsLabel sizeToFit];
     
-    CGFloat containerHeight = self.tagsLabel.frame.size.height + 2*TAGS_LABEL_PADDING;
+    CGFloat containerHeight = self.tagsLabel.frame.size.height + 2*padding;
     CGRectSetHeight(self.tagsContainerView, containerHeight);
+    CGRectSetCenterY(self.tagsLabel,containerHeight/2);
 }
 
 -(void)updateSchedule{
@@ -682,18 +684,19 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         
         NSInteger startY = (OSVER >= 7) ? 20 : 0;
-        NSInteger toolbarWidth = 120;
-        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(320-toolbarWidth, startY, toolbarWidth, TOOLBAR_HEIGHT) items:@[timageStringBW(@"share_icon"),timageStringBW(@"trashcan_icon")] delegate:self];
+        NSInteger toolbarWidth = 90;
+        NSInteger leftPadding = 45;
+        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(320-toolbarWidth-leftPadding, startY, toolbarWidth, TOOLBAR_HEIGHT) items:@[timageStringBW(@"share_icon"),timageStringBW(@"trashcan_icon")] delegate:self];
         [self.view addSubview:self.toolbarEditView];
         UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, startY, 160, TOOLBAR_HEIGHT)];
         [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
         [backButton setTitle:@"Schedule" forState:UIControlStateNormal];
-        backButton.titleLabel.font = KP_LIGHT(16);
+        backButton.titleLabel.font = SECTION_HEADER_FONT;
         [backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [backButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-        [backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_small_icon")] forState:UIControlStateNormal];
-        [backButton setImageEdgeInsets:UIEdgeInsetsMake(0, 16, 0, 0)];
-        [backButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 0)];
+        [backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
+        [backButton setImageEdgeInsets:UIEdgeInsetsMake(0, 14, 0, 0)];
+        [backButton setTitleEdgeInsets:UIEdgeInsetsMake(2, 28, 0, 0)];
         [self.view addSubview:backButton];
         self.backButton = backButton;
         
@@ -768,9 +771,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.repeatedContainer.userInteractionEnabled = YES;
         self.repeatedContainer.layer.masksToBounds = YES;
         
-        self.repeatPicker = [[KPRepeatPicker alloc] initWithHeight:70 selectedDate:[NSDate date] option:RepeatNever];
+        self.repeatPicker = [[KPRepeatPicker alloc] initWithHeight:50 selectedDate:[NSDate date] option:RepeatNever];
         self.repeatPicker.delegate = self;
-        CGRectSetY(self.repeatPicker, self.repeatedContainer.frame.size.height);
+        CGRectSetY(self.repeatPicker, self.repeatedContainer.frame.size.height + (kRepeatPickerHeight-50)/2);
         [self.repeatedContainer addSubview:self.repeatPicker];
         
         [self addAndGetImage:timageStringBW(@"edit_repeat_icon") inView:self.repeatedContainer];
@@ -786,7 +789,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
          Tags Container with button!
          */
-        self.tagsContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
+        self.tagsContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
         //[self addSeperatorToView:self.tagsContainerView];
         [self addAndGetImage:timageStringBW(@"edit_tags_icon") inView:self.tagsContainerView];
         
