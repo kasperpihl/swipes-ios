@@ -89,6 +89,17 @@
 }
 -(void)shareForServiceType:(NSString*)serviceType{
     self.shareText = @"Sharing";
+    
+    NSString *realServiceType;
+    
+    if([serviceType isEqualToString:SLServiceTypeFacebook]){
+        realServiceType = @"Facebook";
+        self.shareText = @"Ready, Set, Go! For a #ProductiveDay with my Swipes App http://swipesapp.com/download";
+    }
+    else if([serviceType isEqualToString:SLServiceTypeTwitter]){
+        self.shareText = @"Ready, Set, Go! For a #ProductiveDay with my @swipesapp http://swipesapp.com/download";
+        realServiceType = @"Twitter";
+    }
     SLComposeViewController *shareVC = [SLComposeViewController composeViewControllerForServiceType:serviceType];
     shareVC.completionHandler = ^(SLComposeViewControllerResult result) {
         NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -107,15 +118,12 @@
         }
         [ROOT_CONTROLLER dismissViewControllerAnimated:YES completion:nil];
     };
-    [shareVC addImage:[UIImage imageNamed:@"share_image_light_scheme"]];
+    [shareVC addImage:[UIImage imageNamed:@"share_image_light_scheme.jpg"]];
     [shareVC setInitialText:self.shareText];
     [ROOT_CONTROLLER presentViewController:shareVC animated:YES completion:nil];
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    NSString *realServiceType;
     
-    if([serviceType isEqualToString:SLServiceTypeFacebook]) realServiceType = @"Facebook";
-    else if([serviceType isEqualToString:SLServiceTypeTwitter]) realServiceType = @"Twitter";
     if(realServiceType) [dict setObject:realServiceType forKey:@"Service"];
     [ANALYTICS tagEvent:@"Sharing Opened" options:dict];
 }

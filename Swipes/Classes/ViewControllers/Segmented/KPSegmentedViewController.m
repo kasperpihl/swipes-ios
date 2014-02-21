@@ -128,7 +128,7 @@
     [ROOT_CONTROLLER shareTasks];
 }
 -(void)lightschemeAlert{
-    //if([[NSUserDefaults standardUserDefaults] boolForKey:@"hasSeenLightScheme"]) return;
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"hasSeenLightScheme"]) return;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasSeenLightScheme"];
     LightSchemeAlert *alert = [[LightSchemeAlert alloc] initWithDismissAction:^(BOOL succeeded, NSError *error) {
         if(succeeded){
@@ -415,7 +415,6 @@
 }
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl{
     [self changeViewControllerAnimated:YES];
-    [self lightschemeAlert];
 }
 -(void)dealloc{
     clearNotify();
