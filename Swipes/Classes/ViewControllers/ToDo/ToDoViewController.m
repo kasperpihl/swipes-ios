@@ -107,7 +107,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 #pragma mark - Getters and Setters
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){
-        NSLog(@"setting cell");
         _cellType = cellType;
         CellType firstCell = [StyleHandler cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
         self.cell.modeForState1 = (firstCell == CellTypeSchedule) ? MCSwipeTableViewCellModeExit : MCSwipeTableViewCellModeNone;
@@ -205,7 +204,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 {
     
     NSDictionary *changeEvent = [notification userInfo];
-    NSLog(@"changeEvent:%@",changeEvent);
     NSSet *updatedObjects = [changeEvent objectForKey:@"updated"];
     NSSet *deletedObjects = [changeEvent objectForKey:@"deleted"];
     if([deletedObjects containsObject:self.objectId]){

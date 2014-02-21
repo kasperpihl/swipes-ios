@@ -184,6 +184,10 @@ static RootViewController *sharedObject;
 }
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
     //handle any error
+    NSString *event = @"Share tasks failed";
+    if(result == MFMailComposeResultSent) event = @"Share tasks sent";
+    NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
+    [ANALYTICS tagEvent:event options:@{@"Number of Tasks":@(tasks.count)}];
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
 -(void)shareTasks{
@@ -205,6 +209,7 @@ static RootViewController *sharedObject;
     else{
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Mail was not setup" message:@"You can send us feedback to support@swipesapp.com. Thanks" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
         [alert show];
+        [ANALYTICS tagEvent:@"Mail not available" options:nil];
     }
 }
 -(void)upgrade{

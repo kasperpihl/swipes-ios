@@ -539,6 +539,7 @@
     NSString *locationString = [locationArray componentsJoinedByString:kLocationSplitStr];
     self.location = locationString;
     self.schedule = nil;
+    self.completionDate = nil;
     
     CellType newCell = [self cellTypeForTodo];
     return (oldCell != newCell);

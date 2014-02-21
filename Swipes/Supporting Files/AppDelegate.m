@@ -76,7 +76,6 @@
         NSLog(@"t: %i - %@ - %@",lNoti.applicationIconBadgeNumber,lNoti.alertBody,lNoti.fireDate);
     }*/
     
-    NSLog(@"%@",[UIFont fontWithName:@"NexaHeavy" size:16]);
     
     [PaymentHandler sharedInstance];
     [self tagLaunchSource:launchOptions];
@@ -89,7 +88,7 @@
     
     //[EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
     
-    NSLog(@"%@",[kCurrent sessionToken]);
+    //NSLog(@"%@",[kCurrent sessionToken]);
     return YES;
 }
 - (void)tagLaunchSource:(NSDictionary *)launchOptions

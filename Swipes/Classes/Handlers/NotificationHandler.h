@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <KitLocate/KitLocate.h>
 
-#define kLocationPushRadius 250
+#define kLocationPushRadius 150
 
 typedef enum {
     LocationNotAuthorized = 0,
