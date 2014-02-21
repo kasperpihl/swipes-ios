@@ -53,12 +53,12 @@ static ThemeHandler *sharedObject;
 - (void)screenBrightnessStyleDidChange:(ASCScreenBrightnessStyle)style
 {
     NSLog(@"The new style is: %u", style);
-    /*if((self.currentTheme == ThemeDark && style == ASCScreenBrightnessStyleLight) || (self.currentTheme == ThemeLight && style == ASCScreenBrightnessStyleDark)){
+    if((self.currentTheme == ThemeDark && style == ASCScreenBrightnessStyleLight) || (self.currentTheme == ThemeLight && style == ASCScreenBrightnessStyleDark)){
         [UIView animateWithDuration:0.3 animations:^{
             [self changeTheme];
             [ROOT_CONTROLLER resetRoot];
         }];
-    }*/
+    }
 }
 -(void)setCurrentTheme:(Theme)currentTheme{
     if(currentTheme != ThemeLight && currentTheme != ThemeDark) currentTheme = ThemeDark;

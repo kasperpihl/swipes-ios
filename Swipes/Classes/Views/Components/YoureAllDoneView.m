@@ -17,7 +17,7 @@
 #define kSignatureRightMargin 40
 #define kStampViewY valForScreen(110,130)
 
-#define kReferBottom 74
+#define kReferBottom 30
 #define kReferX 10
 #define kShareLabelWidth 230
 
@@ -80,7 +80,7 @@
     CGRectSetWidth(self.shareItLabel, kShareLabelWidth);
     [self.shareItLabel sizeToFit];
     CGRectSetCenterX(self.shareItLabel, [self.shareItLabel superview].center.x);
-    CGRectSetHeight(self, CGRectGetMaxY(self.shareItLabel.frame));
+    //CGRectSetHeight(self, CGRectGetMaxY(self.shareItLabel.frame));
     CGRectSetY(self.signatureView,CGRectGetMaxY(self.shareItLabel.frame)+kSignatureSpacing);
 }
 -(void)layout{
