@@ -88,10 +88,10 @@
     self.restoreButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 200, 38)];
     [self.restoreButton setTitle:@"Restore transactions" forState:UIControlStateNormal];
     self.restoreButton.layer.cornerRadius = kSubButtonCornerRadius;
-    self.restoreButton.backgroundColor = tcolor(TextColor);
+    self.restoreButton.backgroundColor = tcolorF(TextColor,ThemeDark);
     [self.restoreButton setBackgroundImage:[gray(230, 1) image] forState:UIControlStateHighlighted];
     self.restoreButton.titleLabel.font = KP_REGULAR(16);
-    [self.restoreButton setTitleColor:tcolor(BackgroundColor) forState:UIControlStateNormal];
+    [self.restoreButton setTitleColor:tcolorF(BackgroundColor,ThemeDark) forState:UIControlStateNormal];
     self.restoreButton.layer.masksToBounds = YES;
     [self.restoreButton addTarget:self action:@selector(pressedRestoreButton:) forControlEvents:UIControlEventTouchUpInside];
     

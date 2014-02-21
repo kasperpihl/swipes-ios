@@ -590,8 +590,11 @@ static KPParseCoreData *sharedObject;
 {
     self.backgroundTask = UIBackgroundTaskInvalid;
     NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
-    if(![[NSFileManager defaultManager] fileExistsAtPath:storeURL.path])
+    if(![[NSFileManager defaultManager] fileExistsAtPath:storeURL.path]){
         [[NSUserDefaults standardUserDefaults] setInteger:ThemeLight forKey:@"theme"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasSeenLightScheme"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     
     [self loadDatabase];
     notify(@"closing app", forceSync);

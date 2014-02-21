@@ -157,6 +157,7 @@
     [self.view addSubview:panningView];
     notify(@"changed isPlus", changedIsPlus);
     notify(@"updated sync",updateSyncLabel);
+    notify(@"changed theme", changedTheme);
 }
 -(void)updateSyncLabel{
     NSDate *lastSync = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSyncLocalDate"];
@@ -391,13 +392,16 @@
         case KPMenuButtonScheme:{
             [THEMER changeTheme];
             [ROOT_CONTROLLER resetRoot];
-            [self renderSubviews];
+        
             break;
         }
         
         default:
             break;
     }
+}
+-(void)changedTheme{
+    [self renderSubviews];
 }
 -(void)changedIsPlus{
     UIButton *upgradeButton = (UIButton*)[self.gridView viewWithTag:[self tagForButton:KPMenuButtonUpgrade]];

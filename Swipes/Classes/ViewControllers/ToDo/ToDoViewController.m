@@ -406,8 +406,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             isLocation = YES;
             NSArray *location = [self.model.location componentsSeparatedByString:kLocationSplitStr];
             NSString *name = [location objectAtIndex:1];
-            NSString *prestring = [[location objectAtIndex:4] isEqualToString:@"OUT"] ? @"Leave: " : @"Arrive: ";
-            self.alarmLabel.text = [prestring stringByAppendingString:name];
+            //NSString *prestring = [[location objectAtIndex:4] isEqualToString:@"OUT"] ? @"Leave: " : @"Arrive: ";
+            //self.alarmLabel.text = [prestring stringByAppendingString:name];
+            self.alarmLabel.text = name;
         }
         else{
             self.alarmLabel.text = @"Unspecified";

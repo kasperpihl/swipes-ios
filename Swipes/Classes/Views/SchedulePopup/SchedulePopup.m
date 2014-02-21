@@ -275,7 +275,7 @@ typedef enum {
         [self animateScheduleButtonsShow:NO duration:0.1];
         
         self.toolbar.alpha = 0;
-        CGRectSetWidth(self.toolbar, self.contentView.frame.size.width/4);
+        CGRectSetWidth(self.toolbar, self.contentView.frame.size.width/3);
         self.toolbar.items = @[timageStringBW(@"round_backarrow")];
         self.toolbar.hidden = NO;
         self.locationView.hidden = NO;
@@ -624,7 +624,7 @@ typedef enum {
     self.locationView.delegate = self;
     self.locationView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     [self.contentView addSubview:self.locationView];
-    UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Arrive",@"Leave"]];
+    /*UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Arrive",@"Leave"]];
     [[UISegmentedControl appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:KP_LIGHT(15), UITextAttributeFont, nil] forState:UIControlStateNormal];
     [segmentedControl setSelectedSegmentIndex:0];
     if(OSVER < 7){
@@ -656,7 +656,7 @@ typedef enum {
     segmentedControl.center = CGPointMake(self.contentView.frame.size.width-segmentedControl.frame.size.width/2-padding, self.contentView.frame.size.height-kToolbarHeight/2-kToolbarPadding/2);
     segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     self.leaveOrArrive = segmentedControl;
-    [self.contentView addSubview:self.leaveOrArrive];
+    [self.contentView addSubview:self.leaveOrArrive];*/
     
 }
 

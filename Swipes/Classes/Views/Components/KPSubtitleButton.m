@@ -19,7 +19,7 @@
         CGRectSetHeight(self.subtitleLabel, self.bounds.size.height);
         self.subtitleLabel.backgroundColor = CLEAR;
         self.subtitleLabel.textAlignment = NSTextAlignmentCenter;
-        self.subtitleLabel.textColor = [UIColor whiteColor];
+        self.subtitleLabel.textColor = tcolorF(TextColor,ThemeDark);
         [self addSubview:self.subtitleLabel];
     }
     return self;
