@@ -19,6 +19,7 @@
 
 #define kReferBottom 74
 #define kReferX 10
+#define kShareLabelWidth 230
 
 #import "YoureAllDoneView.h"
 
@@ -40,7 +41,7 @@
         self.shareItLabel.textColor = kColor;
         self.shareItLabel.textAlignment = NSTextAlignmentCenter;
         self.shareItLabel.text = @"Good job, let everyone know!";
-        self.shareItLabel.font = KP_LIGHT(16);
+        self.shareItLabel.font = KP_REGULAR(13);
         //self.shareItLabel.hidden = YES;
         [self.shareItLabel sizeToFit];
         CGRectSetWidth(self.shareItLabel, self.frame.size.width);
@@ -76,7 +77,7 @@
                       value:style
                       range:NSMakeRange(0, strLength)];
     [self.shareItLabel setAttributedText:attString];
-    CGRectSetWidth(self.shareItLabel, 290);
+    CGRectSetWidth(self.shareItLabel, kShareLabelWidth);
     [self.shareItLabel sizeToFit];
     CGRectSetCenterX(self.shareItLabel, [self.shareItLabel superview].center.x);
     CGRectSetHeight(self, CGRectGetMaxY(self.shareItLabel.frame));
@@ -87,7 +88,7 @@
     self.signatureView.frame = CGRectSetPos(self.signatureView.frame, self.frame.size.width-self.signatureView.frame.size.width-kSignatureRightMargin, CGRectGetMaxY(self.shareItLabel.frame)+kSignatureSpacing);
     self.swipesReferLabel.frame = CGRectSetPos(self.swipesReferLabel.frame, self.frame.size.width-kReferX-self.swipesReferLabel.frame.size.width, self.frame.size.height-kReferBottom);
     
-    CGRectSetY(self.shareItLabel, CGRectGetMaxY(self.stampView.frame) + kSignatureSpacing * 2);
+    CGRectSetY(self.shareItLabel, CGRectGetMaxY(self.stampView.frame) + kSignatureSpacing);
 }
 
 -(void)dealloc{

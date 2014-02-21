@@ -9,27 +9,31 @@
 #define kLabelYHack -1
 #define kColor alpha([UIColor whiteColor],0.8)
 #define kFontColor kColor
-#define kNumberFont [UIFont fontWithName:@"OstrichSans-Bold" size:82]
+#define kAllDoneFont [UIFont fontWithName:@"NexaHeavy" size:22]
 
-#define kMonthFont [UIFont fontWithName:@"OstrichSans-Medium" size:24]
+#define kMonthFont [UIFont fontWithName:@"NexaHeavy" size:13]
+
+#define kAllDoneSpacing 20
+#define kMonthSpacing 10
 
 #import "DateStampView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "NSDate-Utilities.h"
 @interface DateStampView ()
 
-@property (nonatomic) UILabel *numberLabel;
+@property (nonatomic) UILabel *allDoneLabel;
 @property (nonatomic) UILabel *monthLabel;
 @end
 @implementation DateStampView
 -(id)initWithDate:(NSDate *)date{
     self = [super init];
     if(self){
-
-        
+        CGFloat width = 320;
+        CGRectSetWidth(self, width);
         UIImageView *dateStampBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"date_stamp_background"]];
         [self addSubview:dateStampBackground];
-        self.frame = dateStampBackground.bounds;
+        CGRectSetCenterX(dateStampBackground, width/2);
+        //self.frame = dateStampBackground.bounds;
         self.backgroundColor = CLEAR;
         //self.frame = CGRectMake(0, 0, kStampSize, kStampSize);
         //self.layer.cornerRadius = kStampSize/2;
@@ -37,48 +41,52 @@
         //self.layer.borderColor = kColor.CGColor;
         
         
-        self.numberLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.numberLabel.backgroundColor = CLEAR;
-        self.numberLabel.textAlignment = NSTextAlignmentCenter;
-        self.numberLabel.font = kNumberFont;
-        self.numberLabel.textColor = kFontColor;
+        self.allDoneLabel = [[UILabel alloc] initWithFrame:self.bounds];
+        self.allDoneLabel.backgroundColor = CLEAR;
+        self.allDoneLabel.text = @"ALL DONE FOR NOW";
+        self.allDoneLabel.textAlignment = NSTextAlignmentCenter;
+        self.allDoneLabel.font = kAllDoneFont;
+        self.allDoneLabel.textColor = kFontColor;
+        [self.allDoneLabel sizeToFit];
+        [self addSubview:self.allDoneLabel];
+        CGRectSetY(self.allDoneLabel, CGRectGetMaxY(dateStampBackground.frame) + kAllDoneSpacing);
+        CGRectSetCenterX(self.allDoneLabel, width/2);
         
         
         self.monthLabel = [[UILabel alloc] initWithFrame:self.bounds];
+        self.monthLabel.text = @"- may 19 -";
         self.monthLabel.backgroundColor = CLEAR;
         self.monthLabel.textColor = kFontColor;
         self.monthLabel.textAlignment = NSTextAlignmentCenter;
         self.monthLabel.font = kMonthFont;
-        
+        [self.monthLabel sizeToFit];
         [self addSubview:self.monthLabel];
-        [self addSubview:self.numberLabel];
+        CGRectSetWidth(self.monthLabel,width);
+        CGRectSetY(self.monthLabel, CGRectGetMaxY(self.allDoneLabel.frame) + kMonthSpacing);
+        
+        
+        
         
         self.date = date;
+        CGRectSetHeight(self, CGRectGetMaxY(self.monthLabel.frame));
     }
     return self;
 }
 -(void)setDate:(NSDate *)date{
     _date = date;
-    self.numberLabel.frame = self.bounds;
-    self.monthLabel.frame = self.bounds;
-    self.numberLabel.text = [NSString stringWithFormat:@"%i",date.day];
+    //self.allDoneLabel.frame = self.bounds;
+    //self.monthLabel.frame = self.bounds;
+    
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     formatter.dateFormat = @"MMM";
-    self.monthLabel.text = [[formatter stringFromDate:date] uppercaseString];
     
-    [self.numberLabel sizeToFit];
-    CGRectSetWidth(self.numberLabel, CGRectGetWidth(self.frame));
-    [self.monthLabel sizeToFit];
-    CGRectSetWidth(self.monthLabel, CGRectGetWidth(self.frame));
-    
-    self.numberLabel.frame = CGRectSetPos(self.numberLabel.frame, 0, 35);
-    self.monthLabel.frame = CGRectSetPos(self.monthLabel.frame, 0, 103);
+    self.monthLabel.text = [NSString stringWithFormat:@"- %@ %i -",[[formatter stringFromDate:date] lowercaseString],date.day];
     
 }
 -(void)dealloc{
-    self.numberLabel = nil;
+    self.allDoneLabel = nil;
     self.monthLabel = nil;
 }
 @end

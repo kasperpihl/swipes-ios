@@ -76,6 +76,7 @@
         NSLog(@"t: %i - %@ - %@",lNoti.applicationIconBadgeNumber,lNoti.alertBody,lNoti.fireDate);
     }*/
     
+    NSLog(@"%@",[UIFont fontWithName:@"NexaHeavy" size:16]);
     
     [PaymentHandler sharedInstance];
     [self tagLaunchSource:launchOptions];

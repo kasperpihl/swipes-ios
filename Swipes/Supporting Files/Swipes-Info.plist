@@ -65,8 +65,7 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>ostrich-bold.ttf</string>
-		<string>ostrich-regular.ttf</string>
+		<string>NexaHeavy.ttf</string>
 		<string>ProximaNova-Black.ttf</string>
 		<string>ProximaNova-Light.ttf</string>
 		<string>ProximaNova-Bold.ttf</string>
