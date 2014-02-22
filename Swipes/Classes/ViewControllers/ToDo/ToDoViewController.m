@@ -20,11 +20,16 @@
 #define TITLE_BOTTOM_MARGIN (10)
 #define CONTAINER_INIT_HEIGHT (TITLE_HEIGHT + TITLE_TOP_MARGIN + TITLE_BOTTOM_MARGIN)
 
-
 #define TAGS_LABEL_RECT CGRectMake(LABEL_X,0,320-LABEL_X-10,500)
 
 #define NOTES_PADDING 13.5
 #define kRepeatPickerHeight 70
+
+#define kTopSubtaskTarget 130
+#define kBottomSubtaskExtraHeight 150
+#define kBottomSubtaskHeight (kDragableHeight+kBottomSubtaskExtraHeight)
+
+
 #import "StyleHandler.h"
 
 #import "ToDoListViewController.h"
@@ -51,6 +56,9 @@
 #import "SchedulePopup.h"
 #import "ToDoViewController+ViewHelpers.h"
 
+#import "SubtasksViewController.h"
+#import "UIGestureRecognizer+UIBreak.h"
+
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
     KPEditModeTitle,
@@ -62,7 +70,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeDropbox
 };
 
-@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate>
+@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate,UIGestureRecognizerDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
 @property (nonatomic) CellType cellType;
 @property (nonatomic) NSString *objectId;
@@ -100,6 +108,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 @property (nonatomic) UIImageView *scheduleImageView;
 
+@property (nonatomic) SubtasksViewController *subtasksController;
+@property (nonatomic) UIView *subtaskOverlay;
+@property (nonatomic) CGPoint startPoint;
 @end
 
 @implementation ToDoViewController
@@ -382,6 +393,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self layout];
     
 }
+
+
+
 
 -(void)updateTags{
     self.tagsLabel.frame = TAGS_LABEL_RECT;
@@ -865,10 +879,95 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[UIColor greenColor] font:SECTION_HEADER_FONT title:@"Test"];
         CGRectSetY(self.sectionHeader, CGRectGetMaxY(self.toolbarEditView.frame));
         [self.view addSubview:self.sectionHeader];
+        
+        SubtasksViewController *subtasks = [[SubtasksViewController alloc] init];
+        UIPanGestureRecognizer *subtaskRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+        subtaskRecognizer.delegate = self;
+        [subtasks.view addGestureRecognizer:subtaskRecognizer];
+        NSLog(@"drag:%@",subtasks.dragableTop);
+        self.subtasksController = subtasks;
+        CGRectSetY(subtasks.view, self.view.frame.size.height-kBottomSubtaskHeight);
+        
+        self.subtaskOverlay = [[UIView alloc] initWithFrame:self.view.bounds];
+        self.subtaskOverlay.backgroundColor = gray(27, 0.8);
+        self.subtaskOverlay.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
+        self.subtaskOverlay.hidden = YES;
+        [self.view addSubview:self.subtaskOverlay];
+        
+        [self.view addSubview:subtasks.view];
+        
+        
         notify(@"updated sync",updateFromSync:);
     }
     return self;
 }
+#warning Percentage aint working proper
+-(CGFloat)percentageForY:(CGFloat)y{
+    y = y- kTopSubtaskTarget;
+    if(y < 0) y = 0;
+    CGFloat bottom = self.view.frame.size.height-kDragableHeight;
+    return 1-(y/(bottom-kTopSubtaskTarget));
+}
+- (void)handleGesture:(UIPanGestureRecognizer *)gestureRecognizer{
+    
+    CGPoint translation = [gestureRecognizer translationInView:self.view];
+    CGPoint velocity = [gestureRecognizer velocityInView:self.view];
+    UIGestureRecognizerState state = [gestureRecognizer state];
+    if(state == UIGestureRecognizerStateBegan){
+        self.startPoint = self.subtasksController.view.frame.origin;
+        self.subtaskOverlay.hidden = NO;
+        self.subtaskOverlay.alpha = [self percentageForY:self.startPoint.y];
+    }
+    else if(state == UIGestureRecognizerStateChanged){
+        CGFloat newY = self.startPoint.y + translation.y;
+        NSLog(@"%f",[self percentageForY:newY]);
+        self.subtaskOverlay.alpha = [self percentageForY:newY];
+        CGRectSetY(self.subtasksController.view,newY);
+        
+    }
+    else if(state == UIGestureRecognizerStateEnded){
+        
+            [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                CGFloat targetY = (velocity.y <= 0) ? kTopSubtaskTarget : self.view.frame.size.height - kDragableHeight;
+                self.subtaskOverlay.alpha = [self percentageForY:targetY];
+                CGRectSetY(self.subtasksController.view, targetY);
+
+            } completion:^(BOOL finished) {
+                
+            }];
+        
+    }
+    //NSLog(@"gesture %f - %f",velocity.x,velocity.y);
+    
+    
+}
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+        if ([otherGestureRecognizer isMemberOfClass:[gestureRecognizer class]]){
+            if ([gestureRecognizer isGestureRecognizerInSuperviewHierarchy:otherGestureRecognizer]){
+                return YES;
+            } else if ([gestureRecognizer isGestureRecognizerInSiblings:otherGestureRecognizer]){
+                return YES;
+            }
+        }
+    return NO;
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    CGRectSetY(self.subtasksController.view, self.view.frame.size.height-kBottomSubtaskHeight);
+    self.subtasksController.notification.hidden = NO;
+    self.subtasksController.notification.alpha = 0;
+}
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [UIView animateWithDuration:0.5 delay:0.2 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        CGRectSetY(self.subtasksController.view, self.view.frame.size.height-kDragableHeight);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.subtasksController.notification.alpha = 1;
+        }];
+    }];
+}
+
 -(void)setColorsFor:(id)object{
     if([object respondsToSelector:@selector(setTextColor:)]) [object setTextColor:tcolor(TextColor)];
     //if([object respondsToSelector:@selector(setHighlightedTextColor:)]) [object setHighlightedTextColor:EDIT_TASK_GRAYED_OUT_TEXT];
@@ -903,6 +1002,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.scheduleImageView = nil;
     self.repeatedContainer = nil;
     self.repeatedLabel = nil;
+    
+    self.subtaskOverlay = nil;
     clearNotify();
 }
 - (void)didReceiveMemoryWarning

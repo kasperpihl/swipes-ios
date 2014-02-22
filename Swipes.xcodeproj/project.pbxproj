@@ -79,6 +79,12 @@
 		A717DD2718B7C68900EE359C /* light_scheme_unlocked.png in Resources */ = {isa = PBXBuildFile; fileRef = A717DD2518B7C68900EE359C /* light_scheme_unlocked.png */; };
 		A717DD2818B7C68900EE359C /* light_scheme_unlocked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717DD2618B7C68900EE359C /* light_scheme_unlocked@2x.png */; };
 		A717DD2A18B7DC0800EE359C /* share_image_light_scheme.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A717DD2918B7DC0800EE359C /* share_image_light_scheme.jpg */; };
+		A717DD2E18B7E12300EE359C /* SubtasksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A717DD2D18B7E12300EE359C /* SubtasksViewController.m */; };
+		A717DD3218B7E56D00EE359C /* dragable_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A717DD3018B7E56D00EE359C /* dragable_icon.png */; };
+		A717DD3318B7E56D00EE359C /* dragable_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717DD3118B7E56D00EE359C /* dragable_icon@2x.png */; };
+		A717DD3618B8A2C800EE359C /* SubtaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A717DD3518B8A2C800EE359C /* SubtaskCell.m */; };
+		A717DD3818B8DB0700EE359C /* subtask_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717DD3718B8DB0700EE359C /* subtask_arrow@2x.png */; };
+		A717DD3A18B8DF6400EE359C /* subtasks_plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717DD3918B8DF6400EE359C /* subtasks_plus@2x.png */; };
 		A71DE4B31844069A0097394C /* UIGestureRecognizer+UIBreak.m in Sources */ = {isa = PBXBuildFile; fileRef = A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */; };
 		A724B02217A96B8B00E0EF83 /* UIColor+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */; };
 		A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A72EFFFE18425B6A008333AA /* UserHandler.m */; };
@@ -640,6 +646,14 @@
 		A717DD2518B7C68900EE359C /* light_scheme_unlocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = light_scheme_unlocked.png; sourceTree = "<group>"; };
 		A717DD2618B7C68900EE359C /* light_scheme_unlocked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "light_scheme_unlocked@2x.png"; sourceTree = "<group>"; };
 		A717DD2918B7DC0800EE359C /* share_image_light_scheme.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = share_image_light_scheme.jpg; sourceTree = "<group>"; };
+		A717DD2C18B7E12300EE359C /* SubtasksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SubtasksViewController.h; path = Subtasks/SubtasksViewController.h; sourceTree = "<group>"; };
+		A717DD2D18B7E12300EE359C /* SubtasksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SubtasksViewController.m; path = Subtasks/SubtasksViewController.m; sourceTree = "<group>"; };
+		A717DD3018B7E56D00EE359C /* dragable_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dragable_icon.png; sourceTree = "<group>"; };
+		A717DD3118B7E56D00EE359C /* dragable_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dragable_icon@2x.png"; sourceTree = "<group>"; };
+		A717DD3418B8A2C800EE359C /* SubtaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SubtaskCell.h; path = Subtasks/SubtaskCell.h; sourceTree = "<group>"; };
+		A717DD3518B8A2C800EE359C /* SubtaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SubtaskCell.m; path = Subtasks/SubtaskCell.m; sourceTree = "<group>"; };
+		A717DD3718B8DB0700EE359C /* subtask_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "subtask_arrow@2x.png"; sourceTree = "<group>"; };
+		A717DD3918B8DF6400EE359C /* subtasks_plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "subtasks_plus@2x.png"; path = "../../../../../../../Dropbox/Swipes Hackathon/subtasks_plus@2x.png"; sourceTree = "<group>"; };
 		A71DE4B11844069A0097394C /* UIGestureRecognizer+UIBreak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+UIBreak.h"; sourceTree = "<group>"; };
 		A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+UIBreak.m"; sourceTree = "<group>"; };
 		A724B02017A96B8B00E0EF83 /* UIColor+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utilities.h"; sourceTree = "<group>"; };
@@ -1429,6 +1443,28 @@
 			path = EditMode;
 			sourceTree = "<group>";
 		};
+		A717DD2B18B7E10C00EE359C /* Subtasks */ = {
+			isa = PBXGroup;
+			children = (
+				A717DD2C18B7E12300EE359C /* SubtasksViewController.h */,
+				A717DD2D18B7E12300EE359C /* SubtasksViewController.m */,
+				A717DD3418B8A2C800EE359C /* SubtaskCell.h */,
+				A717DD3518B8A2C800EE359C /* SubtaskCell.m */,
+			);
+			name = Subtasks;
+			sourceTree = "<group>";
+		};
+		A717DD2F18B7E56D00EE359C /* Subtasks */ = {
+			isa = PBXGroup;
+			children = (
+				A717DD3918B8DF6400EE359C /* subtasks_plus@2x.png */,
+				A717DD3718B8DB0700EE359C /* subtask_arrow@2x.png */,
+				A717DD3018B7E56D00EE359C /* dragable_icon.png */,
+				A717DD3118B7E56D00EE359C /* dragable_icon@2x.png */,
+			);
+			path = Subtasks;
+			sourceTree = "<group>";
+		};
 		A72DDD8717AB024900A00454 /* TimePicker */ = {
 			isa = PBXGroup;
 			children = (
@@ -1718,6 +1754,7 @@
 		A781285D17294C56002226C8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A717DD2B18B7E10C00EE359C /* Subtasks */,
 				A7E2D94B17B4FE16007BDE00 /* Upgrade */,
 				A7E2D94517B3F258007BDE00 /* DayPickerSettingsCell.h */,
 				A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */,
@@ -1773,6 +1810,7 @@
 		A781288217294C56002226C8 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A717DD2F18B7E56D00EE359C /* Subtasks */,
 				A7DAC63C181A7CF700B8C079 /* Buttons */,
 				A730D38F17B5149C005E1510 /* Upgrade */,
 				A72DDD8717AB024900A00454 /* TimePicker */,
@@ -2467,6 +2505,7 @@
 				DACD545B18A1ACFC00C378DF /* page_white_php.png in Resources */,
 				A792BD3618AD4915000573E4 /* schedule_image_coffee_white-high.png in Resources */,
 				A792BC1518AD361E000573E4 /* round_backarrow_black-high@2x.png in Resources */,
+				A717DD3818B8DB0700EE359C /* subtask_arrow@2x.png in Resources */,
 				A717DD1718B645E100EE359C /* upgrade_plus_logo_white.png in Resources */,
 				A792BBA418AD2E4B000573E4 /* edit_notes_icon_black.png in Resources */,
 				A717BF26176115CD004791BF /* ProximaNova-Light.ttf in Resources */,
@@ -2509,6 +2548,7 @@
 				A717DD1C18B6523E00EE359C /* btn-plus-background@2x.png in Resources */,
 				A792BC4218AD361E000573E4 /* round_twitter_white.png in Resources */,
 				A792BDB618AD6E07000573E4 /* menu_policy_white-high.png in Resources */,
+				A717DD3318B7E56D00EE359C /* dragable_icon@2x.png in Resources */,
 				A792BD4C18AD4915000573E4 /* schedule_image_moon_black.png in Resources */,
 				DACD544E18A1ACFC00C378DF /* page_white.png in Resources */,
 				A792BD4418AD4915000573E4 /* schedule_image_location_black.png in Resources */,
@@ -2655,6 +2695,7 @@
 				A7C90E7617A712A100C5F9E2 /* wt_signature.png in Resources */,
 				A7E3E1E1183E396200E2D6D2 /* login_swipes_logo@2x.png in Resources */,
 				A792BCA518AD3B41000573E4 /* plus_icon_white@2x.png in Resources */,
+				A717DD3218B7E56D00EE359C /* dragable_icon.png in Resources */,
 				A792BCB118AD3B41000573E4 /* share_icon_black-high@2x.png in Resources */,
 				A792BD1E18AD4915000573E4 /* schedule_image_calender_white-high.png in Resources */,
 				A792BC9A18AD3B41000573E4 /* edit_icon_white-high.png in Resources */,
@@ -2701,6 +2742,7 @@
 				A792BBB218AD2E4B000573E4 /* edit_tags_icon_white.png in Resources */,
 				A792BDC618AD6E07000573E4 /* menu_snoozes_white.png in Resources */,
 				A792BD5818AD4915000573E4 /* schedule_image_notebook_white.png in Resources */,
+				A717DD3A18B8DF6400EE359C /* subtasks_plus@2x.png in Resources */,
 				A717DD2A18B7DC0800EE359C /* share_image_light_scheme.jpg in Resources */,
 				A792BD5118AD4915000573E4 /* schedule_image_moon_white@2x.png in Resources */,
 				A717DD2118B6775B00EE359C /* NexaHeavy.ttf in Resources */,
@@ -2886,6 +2928,7 @@
 				A703B1AC1838EBF20047DCC9 /* ClockTimeLabel.m in Sources */,
 				A75207FA1730F5F700F1B4F7 /* ToDoViewController.m in Sources */,
 				A75DB210173119FE00FA256B /* ItemHandler.m in Sources */,
+				A717DD3618B8A2C800EE359C /* SubtaskCell.m in Sources */,
 				A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */,
 				A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */,
 				A703B1AB1838EBF20047DCC9 /* CKCalendarView.m in Sources */,
@@ -2921,6 +2964,7 @@
 				A7E2D94717B3F258007BDE00 /* DayPickerSettingsCell.m in Sources */,
 				A7E2D94A17B4FE0F007BDE00 /* UpgradeViewController.m in Sources */,
 				A703B1B21838EBF20047DCC9 /* KPSubtitleButton.m in Sources */,
+				A717DD2E18B7E12300EE359C /* SubtasksViewController.m in Sources */,
 				A71DE4B31844069A0097394C /* UIGestureRecognizer+UIBreak.m in Sources */,
 				A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */,
 				A703B1C31838EBF20047DCC9 /* KPAddTagPanel.m in Sources */,
