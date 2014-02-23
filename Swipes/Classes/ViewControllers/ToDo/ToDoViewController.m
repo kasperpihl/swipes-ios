@@ -837,7 +837,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          Evernote Container with button!
          */
          self.evernoteContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
-         [self addAndGetImage:@"edit_notes_icon" inView:self.evernoteContainer];
+         [self addAndGetImage:timageStringBW(@"edit_notes_icon") inView:self.evernoteContainer];
          
          self.evernoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.evernoteContainer.frame.size.height)];
          self.evernoteLabel.font = EDIT_TASK_TEXT_FONT;
@@ -866,13 +866,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          
          [self.scrollView addSubview:self.dropboxContainer];*/
         
-        
-        
         /*
          Notes view
          */
         self.notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
-        [self addAndGetImage:timageString(@"edit_notes_icon", @"_white", @"_black") inView:self.notesContainer];
+        [self addAndGetImage:timageStringBW(@"edit_notes_icon") inView:self.notesContainer];
         self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, 320-LABEL_X-10, 500)];
         self.notesView.font = EDIT_TASK_TEXT_FONT;
         self.notesView.contentInset = UIEdgeInsetsMake(0,-5,0,0);
@@ -912,7 +910,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         [self.view addSubview:subtasks.view];
         
-        
         notify(@"updated sync",updateFromSync:);
     }
     return self;
@@ -936,7 +933,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
     else if(state == UIGestureRecognizerStateChanged){
         CGFloat newY = self.startPoint.y + translation.y;
-        NSLog(@"%f",[self percentageForY:newY]);
         self.subtaskOverlay.alpha = [self percentageForY:newY];
         CGRectSetY(self.subtasksController.view,newY);
         

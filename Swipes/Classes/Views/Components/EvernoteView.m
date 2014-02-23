@@ -14,7 +14,7 @@
 #define kContentSpacingRight 0
 #define kSearchBarHeight 44
 #define kButtonWidth 44
-#define kSearchTimerInterval 1.0
+#define kSearchTimerInterval 0.6
 
 #define kSearchLimit 10     // when _limitSearch is YES this is the limit
 
@@ -122,7 +122,20 @@
         EDAMNoteFilter* filter = [EDAMNoteFilter new];
         //filter.words = @"photo";
         // I added a better working search term: http://dev.evernote.com/doc/articles/search_grammar.php
-        filter.words = [NSString stringWithFormat:@"any: %@*",_searchBar.text];
+        if (_searchBar.text.length > 0){
+            NSArray *words = [_searchBar.text componentsSeparatedByString:@" "];
+            NSMutableString *searchTerm = [[NSMutableString alloc] init];
+            for (NSString *word in words){
+                NSString *trimmedString = [word stringByTrimmingCharactersInSet:
+                                           [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                if (trimmedString.length > 0)
+                    [searchTerm appendFormat:@"%@* ",trimmedString];
+            }
+            if (searchTerm.length > 0)
+                filter.words = [searchTerm copy];
+        }
+        
+        NSLog(@"filter:%@",filter.words);
         
         // setup additional flags
         if (0 == _searchBar.text.length) { // remove this check if you want order to be always by UPDATED
@@ -135,10 +148,10 @@
             success:^(EDAMNoteList *list) {
                 for (EDAMNote* note in list.notes) {
                     DLog(@"Note title: %@, guid: %@", note.title, note.guid);
-                    if (!noteViewed) {
+                    /*if (!noteViewed) {
                         noteViewed = YES;
                         [[EvernoteNoteStore noteStore] viewNoteInEvernote:note];
-                    }
+                    }*/
                 }
                 _noteList = list;
                 _limitSearch = (filter.order == NoteSortOrder_UPDATED);
