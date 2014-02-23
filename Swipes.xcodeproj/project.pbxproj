@@ -84,7 +84,6 @@
 		A717DD3318B7E56D00EE359C /* dragable_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717DD3118B7E56D00EE359C /* dragable_icon@2x.png */; };
 		A717DD3618B8A2C800EE359C /* SubtaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A717DD3518B8A2C800EE359C /* SubtaskCell.m */; };
 		A717DD3818B8DB0700EE359C /* subtask_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717DD3718B8DB0700EE359C /* subtask_arrow@2x.png */; };
-		A717DD3A18B8DF6400EE359C /* subtasks_plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717DD3918B8DF6400EE359C /* subtasks_plus@2x.png */; };
 		A71DE4B31844069A0097394C /* UIGestureRecognizer+UIBreak.m in Sources */ = {isa = PBXBuildFile; fileRef = A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */; };
 		A724B02217A96B8B00E0EF83 /* UIColor+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */; };
 		A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A72EFFFE18425B6A008333AA /* UserHandler.m */; };
@@ -655,7 +654,6 @@
 		A717DD3418B8A2C800EE359C /* SubtaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SubtaskCell.h; path = Subtasks/SubtaskCell.h; sourceTree = "<group>"; };
 		A717DD3518B8A2C800EE359C /* SubtaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SubtaskCell.m; path = Subtasks/SubtaskCell.m; sourceTree = "<group>"; };
 		A717DD3718B8DB0700EE359C /* subtask_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "subtask_arrow@2x.png"; sourceTree = "<group>"; };
-		A717DD3918B8DF6400EE359C /* subtasks_plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "subtasks_plus@2x.png"; path = "../../../../../../../Dropbox/Swipes Hackathon/subtasks_plus@2x.png"; sourceTree = "<group>"; };
 		A71DE4B11844069A0097394C /* UIGestureRecognizer+UIBreak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+UIBreak.h"; sourceTree = "<group>"; };
 		A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+UIBreak.m"; sourceTree = "<group>"; };
 		A724B02017A96B8B00E0EF83 /* UIColor+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utilities.h"; sourceTree = "<group>"; };
@@ -1464,7 +1462,6 @@
 		A717DD2F18B7E56D00EE359C /* Subtasks */ = {
 			isa = PBXGroup;
 			children = (
-				A717DD3918B8DF6400EE359C /* subtasks_plus@2x.png */,
 				A717DD3718B8DB0700EE359C /* subtask_arrow@2x.png */,
 				A717DD3018B7E56D00EE359C /* dragable_icon.png */,
 				A717DD3118B7E56D00EE359C /* dragable_icon@2x.png */,
@@ -2753,7 +2750,6 @@
 				A792BBB218AD2E4B000573E4 /* edit_tags_icon_white.png in Resources */,
 				A792BDC618AD6E07000573E4 /* menu_snoozes_white.png in Resources */,
 				A792BD5818AD4915000573E4 /* schedule_image_notebook_white.png in Resources */,
-				A717DD3A18B8DF6400EE359C /* subtasks_plus@2x.png in Resources */,
 				A717DD2A18B7DC0800EE359C /* share_image_light_scheme.jpg in Resources */,
 				A792BD5118AD4915000573E4 /* schedule_image_moon_white@2x.png in Resources */,
 				A717DD2118B6775B00EE359C /* NexaHeavy.ttf in Resources */,
@@ -2874,7 +2870,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Swipes/Ressources/Libs/Crashlytics.framework/run 17aee5fa869f24b705e00dba6d43c51becf5c7e4 18503ba4a511e5ff371707e57ef3f51edb669c35ae9206253a6edcdf35c1fa7c";
+			shellScript = "#./Swipes/Ressources/Libs/Crashlytics.framework/run 17aee5fa869f24b705e00dba6d43c51becf5c7e4 18503ba4a511e5ff371707e57ef3f51edb669c35ae9206253a6edcdf35c1fa7c";
 		};
 		A7F0B9BB1700BA51003BBDD1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
