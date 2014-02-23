@@ -65,18 +65,20 @@
         NSSet *updatedObjects = [context updatedObjects];
         NSSet *deletedObjects = [context deletedObjects];
         /* Iterate all updated objects and add their changed attributes to tmpUpdating */
-        for(KPParseObject *object in updatedObjects){
+        for (KPParseObject *object in updatedObjects) {
             /* If the object doesn't have an objectId - it's not saved on the server and will automatically include all keys */
-            if(!object.objectId && !self._isSyncing)
+            if (![object isKindOfClass:KPParseObject.class] || (!object.objectId && !self._isSyncing))
                 continue;
+            
             NSString *targetKey = object.objectId ? object.objectId : object.tempId;
             BOOL isTemp = object.objectId ? NO : YES;
-            if(object.changedValues) [self sync:NO attributes:[object.changedValues allKeys] forIdentifier:targetKey isTemp:isTemp];
+            if (object.changedValues)
+                [self sync:NO attributes:[object.changedValues allKeys] forIdentifier:targetKey isTemp:isTemp];
             
         }
         /* Add all deleted objects with objectId to be deleted*/
-        for(KPParseObject *object in deletedObjects){
-            if(object.objectId)
+        for (KPParseObject *object in deletedObjects){
+            if (object.objectId)
                 [self._objectsToDeleteOnServer setObject:[object getParseClassName] forKey:object.objectId];
         }
         [self saveUpdatingObjects];

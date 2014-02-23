@@ -58,6 +58,7 @@
 
 #import "SubtasksViewController.h"
 #import "UIGestureRecognizer+UIBreak.h"
+#import "KPAttachment.h"
 
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
@@ -353,9 +354,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 {
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
-//    self.model.notes = text;
-//    [KPToDo save];
-    [self updateNotes];
+    [self.model attachService:EVERNOTE_SERVICE title:title identifier:guid];
+    [KPToDo saveToSync];
+    [self updateEvernote];
     [self layout];
 }
 
@@ -373,9 +374,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     DLog(@"selected dropbox file with path: %@", path);
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
-    //    self.model.notes = text;
-    //    [KPToDo save];
-    [self updateNotes];
+    [self.model attachService:DROPBOX_SERVICE title:[path lastPathComponent] identifier:path];
+    [KPToDo saveToSync];
+    [self updateDropbox];
     [self layout];
 }
 
@@ -532,15 +533,18 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 - (void)updateEvernote
 {
-    self.evernoteLabel.text = @"Attach Evernote note";
+    KPAttachment* attachment = [self.model firstAttachmentForServiceType:EVERNOTE_SERVICE];
+    self.evernoteLabel.text = (nil != attachment) ? attachment.title : @"Attach Evernote note";
 }
 
 - (void)updateDropbox
 {
-    self.dropboxLabel.text = @"Attach Dropbox file";
+    KPAttachment* attachment = [self.model firstAttachmentForServiceType:DROPBOX_SERVICE];
+    self.dropboxLabel.text = (nil != attachment) ? attachment.title : @"Attach Dropbox file";
 }
 
--(void)updateSectionHeader{
+-(void)updateSectionHeader
+{
     [self.sectionHeader setTitle:[[self.model readableTitleForStatus] uppercaseString]];
     [self.sectionHeader setColor:[StyleHandler colorForCellType:self.cellType]];
 }
@@ -575,8 +579,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     tempHeight += self.evernoteContainer.frame.size.height;
     
     
-    /*CGRectSetY(self.dropboxContainer, tempHeight);
-    tempHeight += self.dropboxContainer.frame.size.height;*/
+    CGRectSetY(self.dropboxContainer, tempHeight);
+    tempHeight += self.dropboxContainer.frame.size.height;
     
     
     CGRectSetY(self.notesContainer, tempHeight);
@@ -853,18 +857,19 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
          Dropbox Container with button!
          */
-         /*self.dropboxContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
+         self.dropboxContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
          [self addAndGetImage:timageString(@"edit_notes_icon", @"_white", @"_black") inView:self.dropboxContainer];
          
          self.dropboxLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.dropboxContainer.frame.size.height)];
          self.dropboxLabel.font = EDIT_TASK_TEXT_FONT;
+         self.dropboxLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
          self.dropboxLabel.backgroundColor = CLEAR;
          [self setColorsFor:self.dropboxLabel];
          [self.dropboxContainer addSubview:self.dropboxLabel];
          
          [self addClickButtonToView:self.dropboxContainer action:@selector(pressedDropbox:)];
          
-         [self.scrollView addSubview:self.dropboxContainer];*/
+         [self.scrollView addSubview:self.dropboxContainer];
         
         
         
