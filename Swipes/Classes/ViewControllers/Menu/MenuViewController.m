@@ -23,6 +23,7 @@
 
 #import "KPParseCoreData.h"
 #import "PlusAlertView.h"
+#import "NotificationHandler.h"
 
 #define kSettingsBlurColor retColor(gray(230, 0.5),gray(50, 0.4))
 #define kMenuButtonStartTag 4123
@@ -128,15 +129,15 @@
     self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds)+ 10, self.gridView.frame.size.width, 20);
     self.syncLabel.textColor = tcolor(TextColor);
     [self.gridView addSubview:self.syncLabel];
-    //[self updateSchemeButton];
+    [self updateSchemeButton];
 }
-/*-(void)updateSchemeButton{
+-(void)updateSchemeButton{
     //BOOL isDarkTheme = (THEMER.currentTheme == ThemeDark);
     UIImage *normalImage = [self imageForMenuButton:KPMenuButtonScheme highlighted:YES];
     UIImage *highlightImage = [self imageForMenuButton:KPMenuButtonScheme highlighted:NO];
     [self.schemeButton.iconImageView setImage:normalImage];
     [self.schemeButton.iconImageView setHighlightedImage:highlightImage];
-}*/
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -156,6 +157,7 @@
     [self.view addSubview:panningView];
     notify(@"changed isPlus", changedIsPlus);
     notify(@"updated sync",updateSyncLabel);
+    notify(@"changed theme", changedTheme);
 }
 -(void)updateSyncLabel{
     NSDate *lastSync = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSyncLocalDate"];
@@ -255,6 +257,46 @@
             
             break;
         }
+        case KPMenuButtonLocation:{
+            BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
+            if(!hasLocationOn && ![kUserHandler isPlus]){
+                [ANALYTICS pushView:@"Location plus popup"];
+                [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location in Settings"}];
+                PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." block:^(BOOL succeeded, NSError *error) {
+                    [ANALYTICS popView];
+                    [BLURRY dismissAnimated:YES];
+                    if(succeeded){
+                        [ROOT_CONTROLLER upgrade];
+                    }
+                }];
+                BLURRY.blurryTopColor = kSettingsBlurColor;
+                [BLURRY showView:alert inViewController:self];
+            }
+            else{
+                UIColor *lampColor = hasLocationOn ? kLampOffColor : kLampOnColor;
+                NSNumber *newSettingValue = hasLocationOn ? @NO : @YES;
+                if(hasLocationOn){
+                    KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off location" message:@"Location reminders won't be working." block:^(BOOL succeeded, NSError *error) {
+                        [BLURRY dismissAnimated:YES];
+                        if(succeeded){
+                            [NOTIHANDLER stopLocationServices];
+                            [kSettings setValue:newSettingValue forSetting:SettingLocation];
+                            [sender setLampColor:lampColor];
+                        }
+                    }];
+                    BLURRY.blurryTopColor = kSettingsBlurColor;
+                    [BLURRY showView:alert inViewController:self];
+                }
+                else{
+                    StartLocationResult result = [NOTIHANDLER startLocationServices];
+                    if(result == LocationStarted){
+                        [kSettings setValue:newSettingValue forSetting:SettingLocation];
+                        [sender setLampColor:lampColor];
+                    }
+                }
+            }
+            break;
+        }
         case KPMenuButtonSnoozes:{
             SnoozesViewController *snoozeVC = [[SnoozesViewController alloc] init];
             [self pushViewController:snoozeVC animated:YES];
@@ -298,7 +340,7 @@
         case KPMenuButtonPolicies:{
             NSString *title = @"Policies";
             NSString *message = @"Do you want to open our\r\npolicies for Swipes?";
-            NSString *url = @"http://swipesapp.com/privacypolicy.pdf";
+            NSString *url = @"http://swipesapp.com/policies.pdf";
             KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:title message:message block:^(BOOL succeeded, NSError *error) {
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
@@ -350,12 +392,16 @@
         case KPMenuButtonScheme:{
             [THEMER changeTheme];
             [ROOT_CONTROLLER resetRoot];
-            [self renderSubviews];
+        
             break;
         }
+        
         default:
             break;
     }
+}
+-(void)changedTheme{
+    [self renderSubviews];
 }
 -(void)changedIsPlus{
     UIButton *upgradeButton = (UIButton*)[self.gridView viewWithTag:[self tagForButton:KPMenuButtonUpgrade]];
@@ -419,7 +465,7 @@
             imageString = timageStringBW(@"menu_snoozes");
             break;
         case KPMenuButtonUpgrade:
-            imageString = @"menu_pro";
+            imageString = @"menu_pro_white";
             break;
         case KPMenuButtonPolicies:
             imageString = timageStringBW(@"menu_policy");
@@ -449,7 +495,8 @@
 -(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton{
     MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton] image:[self imageForMenuButton:menuButton highlighted:NO] highlightedImage:[self imageForMenuButton:menuButton highlighted:YES]];
     if(menuButton == KPMenuButtonNotifications || menuButton == KPMenuButtonLocation){
-        BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
+        KPSettings setting = (menuButton == KPMenuButtonNotifications) ? SettingNotifications : SettingLocation;
+        BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:setting] boolValue];
         UIColor *lampColor = hasNotificationsOn ? kLampOnColor : kLampOffColor;
         [button setLampColor:lampColor];
     }

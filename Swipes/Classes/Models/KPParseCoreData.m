@@ -15,7 +15,7 @@
 #import "UserHandler.h"
 
 #define kSyncTime 5
-#define kUpdateLimit 200
+#define kUpdateLimit 150
 
 
 #ifdef DEBUG
@@ -154,7 +154,6 @@
 {
     self._isSyncing = YES;
     
-    NSLog(@"running");
     if (async)
         [self startBackgroundHandler];
     /* Prepare all the objects to be send */
@@ -208,7 +207,8 @@
     NSMutableDictionary *syncData = [NSMutableDictionary dictionary];
     
     /* This will consist of tempId's to objects that did not have one already */
-    if([context hasChanges]) [context MR_saveOnlySelfAndWait];
+    if([context hasChanges])
+        [context MR_saveOnlySelfAndWait];
     
     /* The last update time - saved and received from the sync response */
     NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSync"];
@@ -222,7 +222,8 @@
     [syncData setObject:@YES forKey:@"changesOnly"];
     
     /* Include all deleted objects to be saved */
-    for(NSString *objectId in self._objectsToDeleteOnServer) [self addObject:@{@"deleted":@YES,@"objectId":objectId} toClass:[self._objectsToDeleteOnServer objectForKey:objectId] inCollection:&updateObjectsToServer];
+    for(NSString *objectId in self._objectsToDeleteOnServer)
+        [self addObject:@{@"deleted":@YES,@"objectId":objectId} toClass:[self._objectsToDeleteOnServer objectForKey:objectId] inCollection:&updateObjectsToServer];
     
     [syncData setObject:updateObjectsToServer forKey:@"objects"];
     
@@ -264,7 +265,7 @@
         return NO;
     }
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
-    NSLog(@"respo:%@ error:%@",result,error);
+    //NSLog(@"respo:%@ error:%@",result,error);
     
     if(error || [result objectForKey:@"code"] || ![result objectForKey:@"serverTime"]){
         if(!error){
@@ -294,9 +295,7 @@
     for(NSDictionary *object in allObjects){
         [self handleCDObject:nil withObject:object inContext:localContext];
     }
-    if(![localContext hasChanges]) NSLog(@"no changes");
     [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
-        NSLog(@"saved");
         self._isSyncing = NO;
         /* Save the sync to server */
         [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastSyncLocalDate"];
@@ -590,6 +589,13 @@ static KPParseCoreData *sharedObject;
 - (void)initialize
 {
     self.backgroundTask = UIBackgroundTaskInvalid;
+    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
+    if(![[NSFileManager defaultManager] fileExistsAtPath:storeURL.path]){
+        [[NSUserDefaults standardUserDefaults] setInteger:ThemeLight forKey:@"theme"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasSeenLightScheme"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
     [self loadDatabase];
     notify(@"closing app", forceSync);
     notify(@"opening app", forceSync);
@@ -609,6 +615,7 @@ static KPParseCoreData *sharedObject;
 {
     @try {
         [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
+        
         //[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(loadTest) userInfo:nil repeats:NO];
     }
     @catch (NSException *exception) {

@@ -304,13 +304,14 @@
     switch (targetCellType) {
         case CellTypeSchedule:{
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-            SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation) {
+            SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type) {
                 [BLURRY dismissAnimated:YES];
                 if(button == KPScheduleButtonCancel){
                     [self returnSelectedRowsAndBounce:YES];
                 }
                 else if(button == KPScheduleButtonLocation){
-                    [KPToDo notifyToDos:toDosArray onLocation:chosenLocation type:GeoFenceOnArrive save:YES];
+                    NSArray *movedItems = [KPToDo notifyToDos:toDosArray onLocation:chosenLocation type:type save:YES];
+                    [self moveItems:movedItems toCellType:targetCellType];
                 }
                 else{
                     if([chosenDate isEarlierThanDate:[NSDate date]]) targetCellType = CellTypeToday;

@@ -15,7 +15,6 @@
 -(NSString*)timePicker:(KPTimePicker*)timePicker clockForDate:(NSDate *)time;
 @end
 
-
 @interface KPTimePicker : UIView
 
 @property (nonatomic,weak) NSObject<KPTimePickerDelegate> *delegate;

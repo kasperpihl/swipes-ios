@@ -12,7 +12,8 @@ typedef enum {
     SettingWeekStart,
     SettingWeekendStart,
     SettingLaterToday,
-    SettingNotifications
+    SettingNotifications,
+    SettingLocation,
 } KPSettings;
 #import <Foundation/Foundation.h>
 #define kSettings [SettingsHandler sharedInstance]

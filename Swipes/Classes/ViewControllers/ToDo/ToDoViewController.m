@@ -20,12 +20,16 @@
 #define TITLE_BOTTOM_MARGIN (10)
 #define CONTAINER_INIT_HEIGHT (TITLE_HEIGHT + TITLE_TOP_MARGIN + TITLE_BOTTOM_MARGIN)
 
+#define TAGS_LABEL_RECT CGRectMake(LABEL_X,0,320-LABEL_X-10,500)
 
-#define TAGS_LABEL_RECT CGRectMake(LABEL_X,TAGS_LABEL_PADDING,320-LABEL_X-10,500)
-
-#define TAGS_LABEL_PADDING 18.5
 #define NOTES_PADDING 13.5
 #define kRepeatPickerHeight 70
+
+#define kTopSubtaskTarget 130
+#define kBottomSubtaskExtraHeight 150
+#define kBottomSubtaskHeight (kDragableHeight+kBottomSubtaskExtraHeight)
+
+
 #import "StyleHandler.h"
 
 #import "ToDoListViewController.h"
@@ -52,6 +56,9 @@
 #import "SchedulePopup.h"
 #import "ToDoViewController+ViewHelpers.h"
 
+#import "SubtasksViewController.h"
+#import "UIGestureRecognizer+UIBreak.h"
+
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
     KPEditModeTitle,
@@ -63,8 +70,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeDropbox
 };
 
-@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate, EvernoteViewDelegate, ToolbarDelegate,
-        KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate>
+
+
+@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate,UIGestureRecognizerDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
 @property (nonatomic) CellType cellType;
 @property (nonatomic) NSString *objectId;
@@ -102,6 +110,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 @property (nonatomic) UIImageView *scheduleImageView;
 
+@property (nonatomic) SubtasksViewController *subtasksController;
+@property (nonatomic) UIView *subtaskOverlay;
+@property (nonatomic) CGPoint startPoint;
 @end
 
 @implementation ToDoViewController
@@ -109,7 +120,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 #pragma mark - Getters and Setters
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){
-        NSLog(@"setting cell");
         _cellType = cellType;
         CellType firstCell = [StyleHandler cellTypeForCell:cellType state:MCSwipeTableViewCellState1];
         self.cell.modeForState1 = (firstCell == CellTypeSchedule) ? MCSwipeTableViewCellModeExit : MCSwipeTableViewCellModeNone;
@@ -136,16 +146,16 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         NSString *backLabel;
         switch ([model cellTypeForTodo]) {
             case CellTypeSchedule:
-                backLabel = @"Schedule";
+                backLabel = @"SCHEDULE";
                 break;
             case CellTypeToday:
-                backLabel = @"Tasks";
+                backLabel = @"TASKS";
                 break;
             case CellTypeDone:
-                backLabel = @"Done";
+                backLabel = @"DONE";
                 break;
             default:
-                backLabel = @"Back";
+                backLabel = @"BACK";
                 break;
         }
         [self.backButton setTitle:backLabel forState:UIControlStateNormal];
@@ -207,7 +217,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 {
     
     NSDictionary *changeEvent = [notification userInfo];
-    NSLog(@"changeEvent:%@",changeEvent);
     NSSet *updatedObjects = [changeEvent objectForKey:@"updated"];
     NSSet *deletedObjects = [changeEvent objectForKey:@"deleted"];
     if([deletedObjects containsObject:self.objectId]){
@@ -257,12 +266,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     switch (targetCellType) {
         case CellTypeSchedule:{
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-            SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation) {
+            SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type) {
                 [BLURRY dismissAnimated:YES];
                 if(button == KPScheduleButtonCancel){
                 }
                 else if(button == KPScheduleButtonLocation){
-                    [KPToDo notifyToDos:@[self.model] onLocation:chosenLocation type:GeoFenceOnArrive save:YES];
+                    [KPToDo notifyToDos:@[self.model] onLocation:chosenLocation type:type save:YES];
                 }
                 else{
                     [KPToDo scheduleToDos:@[self.model] forDate:chosenDate save:YES];
@@ -397,18 +406,24 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
 }
 
-- (void)updateTags
-{
+
+
+
+
+-(void)updateTags{
     self.tagsLabel.frame = TAGS_LABEL_RECT;
     NSString *tagsString = self.model.tagString;
     if(!tagsString || tagsString.length == 0){
         tagsString = @"Set tags";
     }
+    CGSize basicSize = sizeWithFont(tagsString,self.tagsLabel.font);
+    CGFloat padding = (SCHEDULE_ROW_HEIGHTS - basicSize.height)/2;
     self.tagsLabel.text = tagsString;
     [self.tagsLabel sizeToFit];
     
-    CGFloat containerHeight = self.tagsLabel.frame.size.height + 2*TAGS_LABEL_PADDING;
+    CGFloat containerHeight = self.tagsLabel.frame.size.height + 2*padding;
     CGRectSetHeight(self.tagsContainerView, containerHeight);
+    CGRectSetCenterY(self.tagsLabel,containerHeight/2);
 }
 
 - (void)updateSchedule
@@ -419,6 +434,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             isLocation = YES;
             NSArray *location = [self.model.location componentsSeparatedByString:kLocationSplitStr];
             NSString *name = [location objectAtIndex:1];
+            //NSString *prestring = [[location objectAtIndex:4] isEqualToString:@"OUT"] ? @"Leave: " : @"Arrive: ";
+            //self.alarmLabel.text = [prestring stringByAppendingString:name];
             self.alarmLabel.text = name;
         }
         else {
@@ -558,8 +575,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     tempHeight += self.evernoteContainer.frame.size.height;
     
     
-    CGRectSetY(self.dropboxContainer, tempHeight);
-    tempHeight += self.dropboxContainer.frame.size.height;
+    /*CGRectSetY(self.dropboxContainer, tempHeight);
+    tempHeight += self.dropboxContainer.frame.size.height;*/
     
     
     CGRectSetY(self.notesContainer, tempHeight);
@@ -623,11 +640,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)pressedSchedule:(id)sender
 {
     self.activeEditMode = KPEditModeAlarm;
-    SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation) {
+    SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type) {
         [BLURRY dismissAnimated:YES];
         if(button == KPScheduleButtonCancel) return;
         else if(button == KPScheduleButtonLocation && chosenLocation){
-            [KPToDo notifyToDos:@[self.model] onLocation:chosenLocation type:GeoFenceOnArrive save:YES];
+            [KPToDo notifyToDos:@[self.model] onLocation:chosenLocation type:type save:YES];
         }
         else{
             // TODO: Fix the edit mode
@@ -696,18 +713,19 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         
         NSInteger startY = (OSVER >= 7) ? 20 : 0;
-        NSInteger toolbarWidth = 120;
-        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(320-toolbarWidth, startY, toolbarWidth, TOOLBAR_HEIGHT) items:@[timageStringBW(@"share_icon"),timageStringBW(@"trashcan_icon")] delegate:self];
+        NSInteger toolbarWidth = 90;
+        NSInteger leftPadding = 45;
+        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(320-toolbarWidth-leftPadding, startY, toolbarWidth, TOOLBAR_HEIGHT) items:@[timageStringBW(@"share_icon"),timageStringBW(@"trashcan_icon")] delegate:self];
         [self.view addSubview:self.toolbarEditView];
         UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, startY, 160, TOOLBAR_HEIGHT)];
         [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
         [backButton setTitle:@"Schedule" forState:UIControlStateNormal];
-        backButton.titleLabel.font = KP_LIGHT(16);
+        backButton.titleLabel.font = SECTION_HEADER_FONT;
         [backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [backButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-        [backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_small_icon")] forState:UIControlStateNormal];
-        [backButton setImageEdgeInsets:UIEdgeInsetsMake(0, 16, 0, 0)];
-        [backButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 30, 0, 0)];
+        [backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
+        [backButton setImageEdgeInsets:UIEdgeInsetsMake(0, 14, 0, 0)];
+        [backButton setTitleEdgeInsets:UIEdgeInsetsMake(2, 28, 0, 0)];
         [self.view addSubview:backButton];
         self.backButton = backButton;
         
@@ -782,9 +800,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.repeatedContainer.userInteractionEnabled = YES;
         self.repeatedContainer.layer.masksToBounds = YES;
         
-        self.repeatPicker = [[KPRepeatPicker alloc] initWithHeight:70 selectedDate:[NSDate date] option:RepeatNever];
+        self.repeatPicker = [[KPRepeatPicker alloc] initWithHeight:50 selectedDate:[NSDate date] option:RepeatNever];
         self.repeatPicker.delegate = self;
-        CGRectSetY(self.repeatPicker, self.repeatedContainer.frame.size.height);
+        CGRectSetY(self.repeatPicker, self.repeatedContainer.frame.size.height + (kRepeatPickerHeight-50)/2);
         [self.repeatedContainer addSubview:self.repeatPicker];
         
         [self addAndGetImage:timageStringBW(@"edit_repeat_icon") inView:self.repeatedContainer];
@@ -800,7 +818,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
          Tags Container with button!
          */
-        self.tagsContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
+        self.tagsContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
         //[self addSeperatorToView:self.tagsContainerView];
         [self addAndGetImage:timageStringBW(@"edit_tags_icon") inView:self.tagsContainerView];
         
@@ -835,7 +853,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
          Dropbox Container with button!
          */
-         self.dropboxContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
+         /*self.dropboxContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
          [self addAndGetImage:timageString(@"edit_notes_icon", @"_white", @"_black") inView:self.dropboxContainer];
          
          self.dropboxLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.dropboxContainer.frame.size.height)];
@@ -846,7 +864,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          
          [self addClickButtonToView:self.dropboxContainer action:@selector(pressedDropbox:)];
          
-         [self.scrollView addSubview:self.dropboxContainer];
+         [self.scrollView addSubview:self.dropboxContainer];*/
         
         
         
@@ -877,10 +895,96 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[UIColor greenColor] font:SECTION_HEADER_FONT title:@"Test"];
         CGRectSetY(self.sectionHeader, CGRectGetMaxY(self.toolbarEditView.frame));
         [self.view addSubview:self.sectionHeader];
+        
+        SubtasksViewController *subtasks = [[SubtasksViewController alloc] init];
+        UIPanGestureRecognizer *subtaskRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+        subtaskRecognizer.delegate = self;
+        [subtasks.view addGestureRecognizer:subtaskRecognizer];
+        NSLog(@"drag:%@",subtasks.dragableTop);
+        self.subtasksController = subtasks;
+        CGRectSetY(subtasks.view, self.view.frame.size.height-kBottomSubtaskHeight);
+        
+        self.subtaskOverlay = [[UIView alloc] initWithFrame:self.view.bounds];
+        self.subtaskOverlay.backgroundColor = gray(27, 0.8);
+        self.subtaskOverlay.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
+        self.subtaskOverlay.hidden = YES;
+        [self.view addSubview:self.subtaskOverlay];
+        
+        [self.view addSubview:subtasks.view];
+        
+        
         notify(@"updated sync",updateFromSync:);
     }
     return self;
 }
+-(CGFloat)percentageForY:(CGFloat)y{
+    y = y- kTopSubtaskTarget;
+    if(y < 0) y = 0;
+    CGFloat bottom = self.view.frame.size.height-kDragableHeight;
+    return 1-(y/(bottom-kTopSubtaskTarget));
+}
+- (void)handleGesture:(UIPanGestureRecognizer *)gestureRecognizer{
+    
+    CGPoint translation = [gestureRecognizer translationInView:self.view];
+    CGPoint velocity = [gestureRecognizer velocityInView:self.view];
+    UIGestureRecognizerState state = [gestureRecognizer state];
+    if(state == UIGestureRecognizerStateBegan){
+        [self.subtasksController startedSliding];
+        self.startPoint = self.subtasksController.view.frame.origin;
+        self.subtaskOverlay.hidden = NO;
+        self.subtaskOverlay.alpha = [self percentageForY:self.startPoint.y];
+    }
+    else if(state == UIGestureRecognizerStateChanged){
+        CGFloat newY = self.startPoint.y + translation.y;
+        NSLog(@"%f",[self percentageForY:newY]);
+        self.subtaskOverlay.alpha = [self percentageForY:newY];
+        CGRectSetY(self.subtasksController.view,newY);
+        
+    }
+    else if(state == UIGestureRecognizerStateEnded){
+        BOOL opened = (velocity.y <= 0);
+        [self.subtasksController willStartOpening:opened];
+            [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                CGFloat targetY = opened ? kTopSubtaskTarget : self.view.frame.size.height - kDragableHeight;
+                self.subtaskOverlay.alpha = [self percentageForY:targetY];
+                CGRectSetY(self.subtasksController.view, targetY);
+
+            } completion:^(BOOL finished) {
+                [self.subtasksController finishedOpening:opened];
+            }];
+        
+    }
+    //NSLog(@"gesture %f - %f",velocity.x,velocity.y);
+    
+    
+}
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+        if ([otherGestureRecognizer isMemberOfClass:[gestureRecognizer class]]){
+            if ([gestureRecognizer isGestureRecognizerInSuperviewHierarchy:otherGestureRecognizer]){
+                return YES;
+            } else if ([gestureRecognizer isGestureRecognizerInSiblings:otherGestureRecognizer]){
+                return YES;
+            }
+        }
+    return NO;
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    CGRectSetY(self.subtasksController.view, self.view.frame.size.height-kBottomSubtaskHeight);
+    self.subtasksController.notification.hidden = NO;
+    self.subtasksController.notification.alpha = 0;
+}
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [UIView animateWithDuration:0.5 delay:0.2 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        CGRectSetY(self.subtasksController.view, self.view.frame.size.height-kDragableHeight);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.subtasksController.notification.alpha = 1;
+        }];
+    }];
+}
+
 -(void)setColorsFor:(id)object{
     if([object respondsToSelector:@selector(setTextColor:)]) [object setTextColor:tcolor(TextColor)];
     //if([object respondsToSelector:@selector(setHighlightedTextColor:)]) [object setHighlightedTextColor:EDIT_TASK_GRAYED_OUT_TEXT];
@@ -915,6 +1019,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.scheduleImageView = nil;
     self.repeatedContainer = nil;
     self.repeatedLabel = nil;
+    
+    self.subtaskOverlay = nil;
     clearNotify();
 }
 - (void)didReceiveMemoryWarning

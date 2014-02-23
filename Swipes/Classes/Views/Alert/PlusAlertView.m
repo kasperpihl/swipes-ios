@@ -57,7 +57,7 @@
         crossButton.imageEdgeInsets = kCrossButtonContentInset;
         [contentView addSubview:crossButton];
         
-        UIImage *buttonImage = [UIImage imageNamed:@"upgrade_plus_logo"];
+        UIImage *buttonImage = [UIImage imageNamed:timageStringBW(@"upgrade_plus_logo")];
         UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height)];
         [topButton setImage:buttonImage forState:UIControlStateNormal];
         CGRectSetY(topButton, DEFAULT_TITLE_HEIGHT-topButton.frame.size.height);
@@ -75,10 +75,10 @@
         [contentView addSubview:messageLabel];
         self.messageLabel = messageLabel;
         
+         UIImage *buttonBackground = [[UIImage imageNamed:@"btn-plus-background"] resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
         UIButton *moreButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kMoreButtonWidth, kMoreButtonHeight)];
-        [moreButton setBackgroundImage:[color(235, 96, 80, 1) image] forState:UIControlStateNormal];
+        [moreButton setBackgroundImage:buttonBackground forState:UIControlStateNormal];
         //[moreButton setBackgroundImage:[alpha(POPUP_BACKGROUND,0.5) image] forState:UIControlStateHighlighted];
-        moreButton.layer.cornerRadius = 3;
         moreButton.layer.masksToBounds = YES;
         moreButton.titleLabel.font = kMoreButtonFont;
         [moreButton setTitle:@"LEARN MORE" forState:UIControlStateNormal];

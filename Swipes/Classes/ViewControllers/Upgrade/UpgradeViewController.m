@@ -17,15 +17,15 @@
 #import "SlowHighlightIcon.h"
 #define kCloseButtonSize 60
 #define kLogoTopMargin 35
-#define kSubscribeButtonWidth 120
+#define kSubscribeButtonWidth 123
 #define kSubscribeButtonHeight 60
 #define kSubButtonSubHeight 35
-#define kSubButtonCornerRadius 6
-#define kSubButtonFont KP_REGULAR(21)
+#define kSubButtonCornerRadius 1
+#define kSubButtonFont KP_REGULAR(19)
 #define kSubButtonSubFont KP_REGULAR(14)
 #define kSubButtonTitleTopInset 18
-#define kSubButtonY 600
-
+#define kSubButtonY 700
+#define kRestoreSpacing 30
 
 
 @interface UpgradeViewController ()
@@ -56,11 +56,13 @@
     
     
     
+    UIImage *buttonBackground = [[UIImage imageNamed:@"btn-plus-background"] resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
+    
     CGFloat subButtonSpacing = ((scrollView.frame.size.width-(2*kSubscribeButtonWidth))/3);
     KPSubtitleButton *monthButton = [[KPSubtitleButton alloc] initWithFrame:CGRectMake(subButtonSpacing, kSubButtonY, kSubscribeButtonWidth, kSubscribeButtonHeight)];
     CGRectSetHeight(monthButton.subtitleLabel, kSubButtonSubHeight);
-    [monthButton setBackgroundImage:[color(235, 96, 80, 1) image] forState:UIControlStateNormal];
-    monthButton.layer.cornerRadius = kSubButtonCornerRadius;
+    [monthButton setBackgroundImage:buttonBackground forState:UIControlStateNormal];
+    //monthButton.layer.cornerRadius = kSubButtonCornerRadius;
     monthButton.titleLabel.font = kSubButtonFont;
     monthButton.subtitleLabel.font = kSubButtonSubFont;
     monthButton.titleEdgeInsets = UIEdgeInsetsMake(kSubButtonTitleTopInset, 0, 0, 0);
@@ -73,8 +75,8 @@
     KPSubtitleButton *yearButton = [[KPSubtitleButton alloc] initWithFrame:CGRectMake(2*subButtonSpacing + kSubscribeButtonWidth, kSubButtonY, kSubscribeButtonWidth, kSubscribeButtonHeight)];
     yearButton.subtitleLabel.text = @"yearly";
     CGRectSetHeight(yearButton.subtitleLabel, kSubButtonSubHeight);
-    [yearButton setBackgroundImage:[color(235, 96, 80, 1) image] forState:UIControlStateNormal];
-    yearButton.layer.cornerRadius = kSubButtonCornerRadius;
+    [yearButton setBackgroundImage:buttonBackground forState:UIControlStateNormal];
+    //yearButton.layer.cornerRadius = kSubButtonCornerRadius;
     yearButton.titleEdgeInsets = UIEdgeInsetsMake(kSubButtonTitleTopInset, 0, 0, 0);
     yearButton.layer.masksToBounds = YES;
     yearButton.titleLabel.font = kSubButtonFont;
@@ -86,15 +88,15 @@
     self.restoreButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 200, 38)];
     [self.restoreButton setTitle:@"Restore transactions" forState:UIControlStateNormal];
     self.restoreButton.layer.cornerRadius = kSubButtonCornerRadius;
-    self.restoreButton.backgroundColor = tcolor(TextColor);
+    self.restoreButton.backgroundColor = tcolorF(TextColor,ThemeDark);
     [self.restoreButton setBackgroundImage:[gray(230, 1) image] forState:UIControlStateHighlighted];
     self.restoreButton.titleLabel.font = KP_REGULAR(16);
-    [self.restoreButton setTitleColor:tcolor(BackgroundColor) forState:UIControlStateNormal];
+    [self.restoreButton setTitleColor:tcolorF(BackgroundColor,ThemeDark) forState:UIControlStateNormal];
     self.restoreButton.layer.masksToBounds = YES;
     [self.restoreButton addTarget:self action:@selector(pressedRestoreButton:) forControlEvents:UIControlEventTouchUpInside];
     
     
-    CGRectSetY(self.restoreButton, CGRectGetMaxY(self.yearlyButton.frame) + 20);
+    CGRectSetY(self.restoreButton, CGRectGetMaxY(self.yearlyButton.frame) + kRestoreSpacing);
     CGRectSetCenterX(self.restoreButton, salesImage.frame.size.width/2);
     
     [salesImage addSubview:monthButton];
@@ -109,7 +111,7 @@
     self.scrollView = scrollView;
 
     UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [closeButton setImage:[UIImage imageNamed:timageStringBW(@"round_cross")] forState:UIControlStateNormal];
+    [closeButton setImage:[UIImage imageNamed:@"round_cross_white"] forState:UIControlStateNormal];
     closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, (OSVER >= 7 ? 20 : 0), kCloseButtonSize, kCloseButtonSize);
     [closeButton addTarget:self action:@selector(pressedCloseButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:closeButton];

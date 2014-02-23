@@ -30,6 +30,8 @@
 
 #import "NotificationHandler.h"
 
+
+#import "LightSchemeAlert.h"
 #import "UserHandler.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
@@ -125,6 +127,19 @@
 -(void)pressedShare:(id)sender{
     [ROOT_CONTROLLER shareTasks];
 }
+-(void)lightschemeAlert{
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"hasSeenLightScheme"]) return;
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasSeenLightScheme"];
+    LightSchemeAlert *alert = [[LightSchemeAlert alloc] initWithDismissAction:^(BOOL succeeded, NSError *error) {
+        if(succeeded){
+            [THEMER changeTheme];
+            [ROOT_CONTROLLER resetRoot];
+        }
+        else [BLURRY dismissAnimated:YES];
+    }];
+    BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
+    [BLURRY showView:alert inViewController:self];
+}
 -(void)tagItems:(NSArray *)items inViewController:(UIViewController*)viewController withDismissAction:(voidBlock)block{
     self.selectedItems = items;
     //[self show:NO controlsAnimated:YES];
@@ -132,7 +147,7 @@
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     BLURRY.showPosition = PositionBottom;
-    BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark), 0.3);
+    BLURRY.blurryTopColor = alpha(tcolor(BackgroundColor), 0.3);
     if(block) BLURRY.dismissAction = ^{
         self.selectedItems = nil;
         block();
@@ -309,6 +324,10 @@
     [NOTIHANDLER updateLocalNotifications];
     [self.currentViewController update];
 }
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(lightschemeAlert) userInfo:nil repeats:NO];
+}
 -(void)viewDidLoad{
     [super viewDidLoad];
     notify(@"updated daily image", updatedDailyImage);
@@ -352,7 +371,6 @@
     [self.view sendSubviewToBack:self.backgroundImage];
     //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
     //self.navigationItem.rightBarButtonItem = filter;
-    notify(@"changed theme", changedTheme);
 }
 -(void)changeToIndex:(NSInteger)index{
     [self.segmentedControl setSelectedIndex:index];
@@ -390,9 +408,6 @@
                                 oldViewController.view.hidden = NO;
                                 self.currentSelectedIndex = selectedIndex;
 							}];
-}
--(void)changedTheme{
-    
 }
 -(ToDoListViewController*)currentViewController{
     ToDoListViewController *currentViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];

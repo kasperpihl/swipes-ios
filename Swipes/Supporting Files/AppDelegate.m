@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  Shery
+//  Swipes
 //
 //  Created by Kasper Pihl Tornøe on 09/03/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
@@ -31,7 +31,6 @@
     NSString *parseClientKey;
     NSString *mixpanelToken;
     NSString *localyticsKey;
-    //NSString *kitLocateKey = @"ebeea91e-563e-4b32-acf3-6505d9857789";
 #ifdef RELEASE
     parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
@@ -65,7 +64,7 @@
     
     [[LocalyticsSession shared] startSession:localyticsKey];
     
-    //[KitLocate initKitLocateWithDelegate:NOTIHANDLER APIKey:kitLocateKey];
+    
     
     [Appirater appLaunched:YES];
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
@@ -89,7 +88,7 @@
     
     [EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
     
-    NSLog(@"%@",[kCurrent sessionToken]);
+    //NSLog(@"%@",[kCurrent sessionToken]);
     return YES;
 }
 - (void)tagLaunchSource:(NSDictionary *)launchOptions

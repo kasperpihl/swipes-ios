@@ -20,7 +20,7 @@ typedef NS_ENUM(NSUInteger, KPScheduleButtons){
     KPScheduleButtonLocation = 8,
     KPScheduleButtonSpecificTime = 9
 };
-typedef void (^SchedulePopupBlock)(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation);
+typedef void (^SchedulePopupBlock)(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type);
 @interface SchedulePopup : UIView
 /* Used for analytics reasons */
 @property (nonatomic) NSInteger numberOfItems;

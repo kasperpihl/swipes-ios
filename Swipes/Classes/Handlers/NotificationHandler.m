@@ -12,22 +12,73 @@
 #import "KPToDo.h"
 #import "SettingsHandler.h"
 #define kMaxNotifications 25
-@interface NotificationHandler ()
+@interface NotificationHandler () <KitLocateSingleDelegate>
 @property (nonatomic) BOOL fencing;
+@property (nonatomic) BOOL startedLocationServices;
 @end
 @implementation NotificationHandler
+@synthesize latestLocation = _latestLocation;
 static NotificationHandler *sharedObject;
 +(NotificationHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[super allocWithZone:NULL] init];
+        //[sharedObject setStartedLocationServices:YES];
     }
     return sharedObject;
 }
+-(CLLocation *)latestLocation{
+    if(!_latestLocation){
+        CGFloat latitude = [[NSUserDefaults standardUserDefaults] floatForKey:@"latestLocationLatitude"];
+        CGFloat longitude = [[NSUserDefaults standardUserDefaults] floatForKey:@"latestLocationLongitude"];
+        if(latitude && longitude) _latestLocation = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
+    }
+    return _latestLocation;
+}
+-(void)setLatestLocation:(CLLocation *)latestLocation{
+    _latestLocation = latestLocation;
+    [[NSUserDefaults standardUserDefaults] setFloat:latestLocation.coordinate.latitude forKey:@"latestLocationLatitude"];
+    [[NSUserDefaults standardUserDefaults] setFloat:latestLocation.coordinate.longitude forKey:@"latestLocationLongitude"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 -(void)setFencing:(BOOL)fencing{
     if(_fencing != fencing){
+        if(fencing && !self.startedLocationServices) [self startLocationServices];
         if(!fencing) [KLLocation unregisterGeofencing];
         else [KLLocation registerGeofencing];
         _fencing = fencing;
+    }
+}
+-(StartLocationResult)startLocationServices{
+    if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined){
+        [self setStartedLocationServices:YES];
+        return LocationNeededPermission;
+    }
+    else if([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Permissions" message:@"You need to turn on location permissions for Swipes in Settings > Privacy" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+        [alert show];
+        return LocationNotAuthorized;
+    }
+    else if(self.startedLocationServices) return LocationStarted;
+    else{
+        [self setStartedLocationServices:YES];
+        return LocationStarted;
+    }
+}
+-(void)stopLocationServices{
+    self.startedLocationServices = NO;
+}
+- (void)gotSingleLocation:(KLLocationValue*)location{
+    self.latestLocation = [[CLLocation alloc] initWithLatitude:[location fLatitude] longitude:[location fLongitude]];
+}
+-(void)setStartedLocationServices:(BOOL)startedLocationServices{
+    if(_startedLocationServices != startedLocationServices){
+        _startedLocationServices = startedLocationServices;
+        if(startedLocationServices){
+            NSString *kitLocateKey = @"ebeea91e-563e-4b32-acf3-6505d9857789";
+            [KitLocate initKitLocateWithDelegate:NOTIHANDLER APIKey:kitLocateKey];
+            [KLLocation startSingleLocationWithDelegate:self andParams:@{KL_SP_INT_MAX_SECONDS_WAIT:@(4)}];
+        }
+        else [KitLocate shutKitLocate];
     }
 }
 -(UILocalNotification*)notificationForDate:(NSDate *)date badgeCounter:(NSInteger)badgeCount title:(NSString *)title userInfo:(NSDictionary*)userInfo{
@@ -43,13 +94,14 @@ static NotificationHandler *sharedObject;
     return localNotif;
 }
 -(void)updateLocalNotifications{
-    
+    /* Check for settings */
     BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
+    [self updateLocationUpdates];
     UIApplication *app = [UIApplication sharedApplication];
-    
     NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
+    
     if(!hasNotificationsOn){
         [app cancelAllLocalNotifications];
         return;
@@ -113,6 +165,8 @@ static NotificationHandler *sharedObject;
     }
 }
 -(void)updateLocationUpdates{
+    BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
+    if(!hasLocationOn) [self stopLocationServices];
     [KLLocation deleteAllGeofences];
     NSPredicate *locationPredicate = [NSPredicate predicateWithFormat:@"(location != nil)"];
     NSArray *tasksWithLocation = [KPToDo MR_findAllWithPredicate:locationPredicate];
@@ -137,7 +191,7 @@ static NotificationHandler *sharedObject;
     UIApplication *app = [UIApplication sharedApplication];
     NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
-    
+    NSLog(@"got location :%@",arrGeofenceList);
     for(KLGeofence *fence in arrGeofenceList){
         
         NSString *identifier = [[fence getIDUser] stringByAppendingString:kLocationSplitStr];
@@ -145,12 +199,18 @@ static NotificationHandler *sharedObject;
         KPToDo *toDo = [KPToDo MR_findFirstWithPredicate:taskPredicate];
         if(toDo){
             NSDictionary *userInfo = @{@"type": @"location",@"identifier": [[toDo.objectID URIRepresentation] absoluteString]};
-            NSDate *fireDate = [NSDate date];
+            NSDate *fireDate = [NSDate dateWithTimeIntervalSinceNow:3];
             UILocalNotification *notification = [self notificationForDate:fireDate badgeCounter:++todayCount title:toDo.title userInfo:userInfo];
             toDo.schedule = fireDate;
             toDo.location = nil;
-            
-            [app scheduleLocalNotification:notification];
+            if([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive){
+                [app scheduleLocalNotification:notification];
+            }
+            else{
+                NSString *title = (fence.getTypeGeofence == KL_GEOFENCE_TYPE_IN) ? @"Arrived at Location" : @"Left Location";
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:toDo.title delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+                [alert show];
+            }
             [KLLocation deleteGeofenceWithUserID:[fence getIDUser]];
         }
     }

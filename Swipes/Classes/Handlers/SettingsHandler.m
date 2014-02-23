@@ -48,6 +48,9 @@ static SettingsHandler *sharedObject;
             break;
         case SettingNotifications:
             index = @"SettingNotifications";
+            break;
+        case SettingLocation:
+            index = @"SettingLocation";
     }
     return index;
 }
@@ -114,6 +117,8 @@ static SettingsHandler *sharedObject;
             return [[NSDate date] dateAtHours:kDefWeekendStartTime minutes:0];
         case SettingNotifications:
             return @YES;
+        case SettingLocation:
+            return @NO;
     }
 }
 -(id)valueForSetting:(KPSettings)setting{

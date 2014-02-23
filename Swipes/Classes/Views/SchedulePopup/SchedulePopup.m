@@ -23,7 +23,7 @@
 #import "UIView+Utilities.h"
 
 #import "UserHandler.h"
-
+#import "NotificationHandler.h"
 
 #import "LocationSearchView.h"
 
@@ -83,6 +83,7 @@ typedef enum {
 @property (nonatomic, weak) IBOutlet UIView *timeViewer;
 @property (nonatomic) BOOL didUseTimePicker;
 @property (nonatomic) UILabel *helpLabel;
+@property (nonatomic) UISegmentedControl *leaveOrArrive;
 @end
 @implementation SchedulePopup
 -(NSMutableArray *)scheduleButtons{
@@ -145,13 +146,17 @@ typedef enum {
         - Time forward:
         - Adjusted time: "Yes" / "No"
     */
+    GeoFenceType type = GeoFenceNone;
     if(state != KPScheduleButtonCancel){
         NSDictionary *options;
         NSString *event;
         NSNumber *numberOfTasks = @(self.numberOfItems);
         if(state == KPScheduleButtonLocation){
+            type = self.leaveOrArrive.selectedSegmentIndex+1;
+            if(type != GeoFenceOnLeave) type = GeoFenceOnArrive;
+            NSString *fenceType = (type == GeoFenceOnLeave) ? @"Leave" : @"Arrive";
             event = @"Locationed Tasks";
-            options = @{@"Number of Tasks":numberOfTasks};
+            options = @{@"Number of Tasks":numberOfTasks,@"GeoFence":fenceType};
         }
         else{
             NSString *buttonUsed = [self stringForScheduleButton:state];
@@ -169,7 +174,7 @@ typedef enum {
         }
         [ANALYTICS tagEvent:event options:options];
     }
-    if(self.block) self.block(state,date,location);
+    if(self.block) self.block(state,date,location,type);
 }
 
 
@@ -232,7 +237,7 @@ typedef enum {
             [ANALYTICS pushView:@"Location plus popup"];
             self.contentView.hidden = YES;
             [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location"}];
-            [PlusAlertView alertInView:window message:@"Location reminders is an upcoming feature in Swipes Plus. Check out the whole package." block:^(BOOL succeeded, NSError *error) {
+            [PlusAlertView alertInView:window message:@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." block:^(BOOL succeeded, NSError *error) {
                 [ANALYTICS popView];
                 self.helpLabel.hidden = NO;
                 self.contentView.hidden = NO;
@@ -264,6 +269,8 @@ typedef enum {
 }
 -(void)pressedLocation:(id)sender{
     if(!self.isChoosingLocation){
+        StartLocationResult result = [NOTIHANDLER startLocationServices];
+        if(result != LocationStarted) return;
         self.isChoosingLocation = YES;
         [self animateScheduleButtonsShow:NO duration:0.1];
         
@@ -273,6 +280,9 @@ typedef enum {
         self.toolbar.hidden = NO;
         self.locationView.hidden = NO;
         self.locationView.alpha = 0;
+        
+        self.leaveOrArrive.hidden = NO;
+        self.leaveOrArrive.alpha = 0;
         
         
         CGFloat contentHeight = POPUP_WIDTH + 60;
@@ -293,6 +303,7 @@ typedef enum {
                 
                 self.locationView.alpha = 1;
                 self.toolbar.alpha = 1;
+                self.leaveOrArrive.alpha = 1;
             } completion:^(BOOL finished) {
                 if([self.locationView numberOfHistoryPlaces] == 0) [self.locationView.searchField becomeFirstResponder];
             }];
@@ -305,9 +316,8 @@ typedef enum {
         self.isChoosingLocation = NO;
         CGFloat contentHeight = self.locationView.frame.size.height + kToolbarHeight;
         CGFloat scaling = POPUP_WIDTH/contentHeight;
+
         
-        self.toolbar.alpha = 0;
-        self.toolbar.hidden = NO;
         CGFloat buttonDuration = 0.1;
         CGFloat scaleDuration = 0.2;
         CGFloat calendarDuration = 0.1;
@@ -315,9 +325,11 @@ typedef enum {
         [UIView animateWithDuration:calendarDuration animations:^{
             self.locationView.alpha = 0;
             self.toolbar.alpha = 0;
+            self.leaveOrArrive.alpha = 0;
         } completion:^(BOOL finished) {
             self.locationView.hidden = YES;
             self.toolbar.hidden = YES;
+            self.leaveOrArrive.hidden = YES;
             self.toolbar.alpha = 1;
         }];
         [UIView animateWithDuration:scaleDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
@@ -607,12 +619,45 @@ typedef enum {
 }
 
 -(void)addLocationView{
-    self.locationView = [[LocationSearchView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.bounds.size.width, self.contentView.bounds.size.height-kToolbarHeight)];
+    self.locationView = [[LocationSearchView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.bounds.size.width, self.contentView.bounds.size.height-kToolbarHeight-kToolbarPadding)];
     self.locationView.hidden = YES;
     self.locationView.delegate = self;
     self.locationView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-    
     [self.contentView addSubview:self.locationView];
+    /*UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Arrive",@"Leave"]];
+    [[UISegmentedControl appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:KP_LIGHT(15), UITextAttributeFont, nil] forState:UIControlStateNormal];
+    [segmentedControl setSelectedSegmentIndex:0];
+    if(OSVER < 7){
+        NSDictionary *attributes = @{UITextAttributeTextColor:tcolor(TextColor),UITextAttributeTextShadowOffset:[NSValue valueWithUIOffset:UIOffsetMake(0, 0)]};
+        [segmentedControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
+        NSDictionary *highlightedAttributes = @{UITextAttributeTextColor:tcolor(TextColor),UITextAttributeTextShadowOffset:[NSValue valueWithUIOffset:UIOffsetMake(0, 0)]};
+        [segmentedControl setTitleTextAttributes:highlightedAttributes forState:UIControlStateHighlighted];
+        
+        // Change color of selected segment
+        
+        segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
+        segmentedControl.backgroundColor = CLEAR;
+        segmentedControl.tintColor = tcolor(BackgroundColor);
+
+        // Add rounded yellow corner to segmented controll view
+        [segmentedControl.layer setCornerRadius:4.0f];
+        [segmentedControl.layer setBorderColor:tcolor(TextColor).CGColor];
+        [segmentedControl.layer setBorderWidth:0.f];
+        [segmentedControl.layer setShadowColor:CLEAR.CGColor];
+        [segmentedControl.layer setShadowOpacity:0];
+        [segmentedControl.layer setShadowRadius:0];
+        [segmentedControl.layer setShadowOffset:CGSizeMake(0, 0)];
+    }
+    else [segmentedControl setTintColor:tcolor(TextColor)];
+    segmentedControl.hidden = YES;
+    CGFloat padding = (self.contentView.frame.size.width/4-41)/2;
+    CGRectSetHeight(segmentedControl, 41);
+    CGRectSetWidth(segmentedControl, 150);
+    segmentedControl.center = CGPointMake(self.contentView.frame.size.width-segmentedControl.frame.size.width/2-padding, self.contentView.frame.size.height-kToolbarHeight/2-kToolbarPadding/2);
+    segmentedControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    self.leaveOrArrive = segmentedControl;
+    [self.contentView addSubview:self.leaveOrArrive];*/
+    
 }
 
 -(void)addPickerView{
@@ -657,6 +702,7 @@ typedef enum {
         
         
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH)];
+        contentView.autoresizesSubviews = YES;
         contentView.center = self.center;
         CGRectSetY(self.helpLabel, CGRectGetMinY(contentView.frame)-CGRectGetHeight(helpLabel.frame)-kHelpLevelDistance);
         contentView.backgroundColor = tcolor(BackgroundColor);
