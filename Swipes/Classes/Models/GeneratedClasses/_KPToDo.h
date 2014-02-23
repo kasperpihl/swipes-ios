@@ -21,12 +21,18 @@ extern const struct KPToDoAttributes {
 } KPToDoAttributes;
 
 extern const struct KPToDoRelationships {
+	__unsafe_unretained NSString *attachments;
+	__unsafe_unretained NSString *parent;
+	__unsafe_unretained NSString *subtasks;
 	__unsafe_unretained NSString *tags;
 } KPToDoRelationships;
 
 extern const struct KPToDoFetchedProperties {
 } KPToDoFetchedProperties;
 
+@class KPAttachment;
+@class KPToDo;
+@class KPToDo;
 @class KPTag;
 
 
@@ -202,6 +208,27 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSSet *attachments;
+
+- (NSMutableSet*)attachmentsSet;
+
+
+
+
+@property (nonatomic, strong) KPToDo *parent;
+
+//- (BOOL)validateParent:(id*)value_ error:(NSError**)error_;
+
+
+
+
+@property (nonatomic, strong) NSSet *subtasks;
+
+- (NSMutableSet*)subtasksSet;
+
+
+
+
 @property (nonatomic, strong) NSSet *tags;
 
 - (NSMutableSet*)tagsSet;
@@ -213,6 +240,16 @@ extern const struct KPToDoFetchedProperties {
 @end
 
 @interface _KPToDo (CoreDataGeneratedAccessors)
+
+- (void)addAttachments:(NSSet*)value_;
+- (void)removeAttachments:(NSSet*)value_;
+- (void)addAttachmentsObject:(KPAttachment*)value_;
+- (void)removeAttachmentsObject:(KPAttachment*)value_;
+
+- (void)addSubtasks:(NSSet*)value_;
+- (void)removeSubtasks:(NSSet*)value_;
+- (void)addSubtasksObject:(KPToDo*)value_;
+- (void)removeSubtasksObject:(KPToDo*)value_;
 
 - (void)addTags:(NSSet*)value_;
 - (void)removeTags:(NSSet*)value_;
@@ -312,6 +349,21 @@ extern const struct KPToDoFetchedProperties {
 - (void)setPrimitiveTitle:(NSString*)value;
 
 
+
+
+
+- (NSMutableSet*)primitiveAttachments;
+- (void)setPrimitiveAttachments:(NSMutableSet*)value;
+
+
+
+- (KPToDo*)primitiveParent;
+- (void)setPrimitiveParent:(KPToDo*)value;
+
+
+
+- (NSMutableSet*)primitiveSubtasks;
+- (void)setPrimitiveSubtasks:(NSMutableSet*)value;
 
 
 

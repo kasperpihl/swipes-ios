@@ -15,6 +15,8 @@
 /* Start watching for Location */
 +(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save;
 
+- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier;
+
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;
 

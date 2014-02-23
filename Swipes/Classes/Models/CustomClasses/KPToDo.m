@@ -295,14 +295,23 @@
     else self.repeatedDate = nil;
     if(save) [KPToDo saveToSync];
 }
--(RepeatOptions)optionForRepeatString:(NSString*)repeatString{
+
+- (RepeatOptions)optionForRepeatString:(NSString *)repeatString {
     RepeatOptions option = RepeatNever;
-    if([repeatString isEqualToString:@"every day"]) option = RepeatEveryDay;
-    else if([repeatString isEqualToString:@"mon-fri or sat+sun"]) option = RepeatEveryMonFriOrSatSun;
-    else if([repeatString isEqualToString:@"every week"]) option = RepeatEveryWeek;
-    else if([repeatString isEqualToString:@"every month"]) option = RepeatEveryMonth;
-    else if([repeatString isEqualToString:@"every year"]) option = RepeatEveryYear;
+    
+    if([repeatString isEqualToString:@"every day"])
+        option = RepeatEveryDay;
+    else if([repeatString isEqualToString:@"mon-fri or sat+sun"])
+        option = RepeatEveryMonFriOrSatSun;
+    else if([repeatString isEqualToString:@"every week"])
+        option = RepeatEveryWeek;
+    else if([repeatString isEqualToString:@"every month"])
+        option = RepeatEveryMonth;
+    else if([repeatString isEqualToString:@"every year"])
+        option = RepeatEveryYear;
+
     return option;
+
 }
 -(NSString*)stringForRepeatOption:(RepeatOptions)option{
     NSString *repeatString;

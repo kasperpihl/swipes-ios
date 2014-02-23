@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A603" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B42" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Attachment" representedClassName="KPAttachment" syncable="YES">
+        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="service" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="todo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ToDo" inverseName="attachments" inverseEntity="ToDo" syncable="YES"/>
+    </entity>
     <entity name="ParseObject" representedClassName="KPParseObject" isAbstract="YES" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
@@ -25,9 +31,13 @@
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tagString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Attachment" inverseName="todo" inverseEntity="Attachment" syncable="YES"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ToDo" inverseName="subtasks" inverseEntity="ToDo" syncable="YES"/>
+        <relationship name="subtasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ToDo" inverseName="parent" inverseEntity="ToDo" syncable="YES"/>
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="todos" inverseEntity="Tag" syncable="YES"/>
     </entity>
     <elements>
+        <element name="Attachment" positionX="0" positionY="0" width="0" height="0"/>
         <element name="ParseObject" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Tag" positionX="0" positionY="0" width="0" height="0"/>
         <element name="ToDo" positionX="0" positionY="0" width="0" height="0"/>

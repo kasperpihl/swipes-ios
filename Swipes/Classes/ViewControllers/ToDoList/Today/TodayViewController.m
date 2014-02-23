@@ -83,7 +83,7 @@
 }
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     NSDate *endDate = [NSDate date];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)",endDate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endDate];
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
     return [KPToDo sortOrderForItems:results save:YES];
 }

@@ -20,6 +20,9 @@ const struct KPToDoAttributes KPToDoAttributes = {
 };
 
 const struct KPToDoRelationships KPToDoRelationships = {
+	.attachments = @"attachments",
+	.parent = @"parent",
+	.subtasks = @"subtasks",
 	.tags = @"tags",
 };
 
@@ -245,6 +248,36 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 
 
+
+@dynamic attachments;
+
+	
+- (NSMutableSet*)attachmentsSet {
+	[self willAccessValueForKey:@"attachments"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"attachments"];
+  
+	[self didAccessValueForKey:@"attachments"];
+	return result;
+}
+	
+
+@dynamic parent;
+
+	
+
+@dynamic subtasks;
+
+	
+- (NSMutableSet*)subtasksSet {
+	[self willAccessValueForKey:@"subtasks"];
+  
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"subtasks"];
+  
+	[self didAccessValueForKey:@"subtasks"];
+	return result;
+}
+	
 
 @dynamic tags;
 
