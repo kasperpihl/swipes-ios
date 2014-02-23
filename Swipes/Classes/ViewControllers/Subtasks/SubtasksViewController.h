@@ -11,4 +11,7 @@
 @interface SubtasksViewController : UIViewController
 @property (nonatomic) UIView *dragableTop;
 @property (nonatomic) UILabel *notification;
+-(void)startedSliding;
+-(void)willStartOpening:(BOOL)opening;
+-(void)finishedOpening:(BOOL)opened;
 @end

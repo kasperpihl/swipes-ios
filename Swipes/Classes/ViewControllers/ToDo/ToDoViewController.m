@@ -914,6 +914,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGPoint velocity = [gestureRecognizer velocityInView:self.view];
     UIGestureRecognizerState state = [gestureRecognizer state];
     if(state == UIGestureRecognizerStateBegan){
+        [self.subtasksController startedSliding];
         self.startPoint = self.subtasksController.view.frame.origin;
         self.subtaskOverlay.hidden = NO;
         self.subtaskOverlay.alpha = [self percentageForY:self.startPoint.y];
@@ -926,14 +927,15 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
     }
     else if(state == UIGestureRecognizerStateEnded){
-        
+        BOOL opened = (velocity.y <= 0);
+        [self.subtasksController willStartOpening:opened];
             [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                CGFloat targetY = (velocity.y <= 0) ? kTopSubtaskTarget : self.view.frame.size.height - kDragableHeight;
+                CGFloat targetY = opened ? kTopSubtaskTarget : self.view.frame.size.height - kDragableHeight;
                 self.subtaskOverlay.alpha = [self percentageForY:targetY];
                 CGRectSetY(self.subtasksController.view, targetY);
 
             } completion:^(BOOL finished) {
-                
+                [self.subtasksController finishedOpening:opened];
             }];
         
     }

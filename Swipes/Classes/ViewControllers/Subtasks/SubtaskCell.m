@@ -50,11 +50,8 @@
         };
     }
     else{
-        
         aniblock1 = ^{
             self.dotView.transform = CGAffineTransformMakeScale(0.5, 0.5);
-            
-            self.dotView.imageView.alpha = 0;
             if(animated) self.titleField.text = @"";
         };
         comp1 = ^{
@@ -88,19 +85,30 @@
         }];
     }
 }
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    if(self.titleField.isFirstResponder) [self.titleField resignFirstResponder];
+}
 -(void)textFieldDidReturn:(UITextField *)textField{
-    [self.titleField resignFirstResponder];
+    if(self.titleField.isFirstResponder) [self.titleField resignFirstResponder];
     if(textField.text.length == 0){
         [self setAddMode:YES animated:YES];
+    }
+    else{
+        [self.subtaskDelegate addedSubtask:textField.text];
+        [self setAddMode:YES animated:NO];
     }
 }
 -(void)pressedAdd{
     [self setAddMode:NO animated:YES];
     [self.titleField becomeFirstResponder];
 }
+-(void)setDotColor:(UIColor *)color{
+    self.dotView.layer.borderColor = color.CGColor;
+}
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self){
+        self.contentView.backgroundColor = tcolor(BackgroundColor);
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.dotView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kSubDotSize, kSubDotSize)];
         self.dotView.backgroundColor = CLEAR;
