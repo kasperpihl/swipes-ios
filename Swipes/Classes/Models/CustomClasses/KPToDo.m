@@ -1,4 +1,3 @@
-#import "KPToDo.h"
 
 #import "NotificationHandler.h"
 #import "KPTag.h"
@@ -8,6 +7,8 @@
 #import "Underscore.h"
 #import "AnalyticsHandler.h"
 #import <CoreLocation/CoreLocation.h>
+#import "KPAttachment.h"
+#import "KPToDo.h"
 #define kDefOrderVal -1
 @interface KPToDo ()
 @property (nonatomic,strong) NSString *readableTags;
@@ -567,7 +568,7 @@
     NSDate *next = [self nextDateFrom:self.repeatedDate];
     
     NSInteger numberOfRepeated = self.numberOfRepeatedValue;
-    while ([next isInPast]){
+    while ([next isInPast]) {
         next = [self nextDateFrom:next];
     }
     KPToDo *toDoCopy = [self deepCopy];
@@ -577,6 +578,7 @@
     self.repeatedDate = next;
     self.numberOfRepeated = [NSNumber numberWithInteger:numberOfRepeated];
 }
+
 -(BOOL)complete{
     if(self.location) self.location = nil;
     if(self.repeatOptionValue > RepeatNever){
@@ -591,9 +593,13 @@
         return YES;
     }
 }
--(BOOL)scheduleForDate:(NSDate*)date{
-    if(self.location) self.location = nil;
-    if(!date){
+
+-(BOOL)scheduleForDate:(NSDate*)date
+{
+    if (self.location)
+        self.location = nil;
+    
+    if (!date) {
         self.repeatedDate = nil;
         self.repeatOptionValue = RepeatNever;
     }
@@ -604,6 +610,42 @@
     self.completionDate = nil;
     CellType newCell = [self cellTypeForTodo];
     return (oldCell != newCell);
+}
+
+#pragma mark - Attachments
+
+- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier
+{
+    // remove all present attachments for this service
+    [self removeAllAttachmentsForService:service];
+    
+    // create the attachment
+    KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier];
+    
+    // add the new attachment
+    [self addAttachments:[NSSet setWithObject:attachment]];
+}
+
+- (void)removeAllAttachmentsForService:(NSString *)service
+{
+    NSMutableSet* attachmentSet = [NSMutableSet set];
+    for (KPAttachment* att in self.attachments) {
+        if ([att.service isEqualToString:service]) {
+            [attachmentSet addObject:att];
+        }
+    }
+    if (0 < attachmentSet.count) {
+        [self removeAttachments:attachmentSet];
+    }
+}
+
+- (KPAttachment *)firstAttachmentForServiceType:(NSString *)service
+{
+    for (KPAttachment* attachment in self.attachments) {
+        if ([attachment.service isEqualToString:service])
+            return attachment;
+    }
+    return nil;
 }
 
 - (NSString *)description

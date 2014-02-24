@@ -15,12 +15,12 @@
 /* Start watching for Location */
 +(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save;
 
-- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier;
-
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;
 
 +(NSArray*)sortOrderForItems:(NSArray*)items save:(BOOL)save;
+
++(void)saveToSync;
 
 -(void)changeToOrder:(NSInteger)newOrder withItems:(NSArray*)items;
 -(CellType)cellTypeForTodo;
@@ -29,5 +29,8 @@
 -(NSString*)readableTitleForStatus;
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save;
 -(NSArray*)nextNumberOfRepeatedDates:(NSInteger)numberOfDates;
-+(void)saveToSync;
+- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier;
+- (void)removeAllAttachmentsForService:(NSString *)service;
+- (KPAttachment *)firstAttachmentForServiceType:(NSString *)service;
+
 @end
