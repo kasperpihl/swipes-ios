@@ -12,6 +12,9 @@
 #import "StyleHandler.h"
 #import "AKSegmentedControl.h"
 #import "SlowHighlightIcon.h"
+
+#import "KPReorderTableView.h"
+
 #define kExtraDragable 10
 #
 #define kNotificationHeight 18
@@ -20,12 +23,13 @@
 #define SEGMENT_BUTTON_WIDTH 52
 #define INTERESTED_SEGMENT_RECT CGRectMake(0,0,(2*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),kDragableHeight-kExtraDragable)
 
-@interface SubtasksViewController () <UITableViewDataSource,UITableViewDelegate,SubtaskCellDelegate,MCSwipeTableViewCellDelegate>
-@property (nonatomic) UITableView *tableView;
+@interface SubtasksViewController () <UITableViewDataSource,UITableViewDelegate,SubtaskCellDelegate,MCSwipeTableViewCellDelegate,ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
+@property (nonatomic) KPReorderTableView *tableView;
 @property (nonatomic) NSArray *titles;
 @property (nonatomic) BOOL isMenu;
 @property (nonatomic) UIImageView *dragIcon;
 @property (nonatomic) AKSegmentedControl *segmentedControl;
+@property (nonatomic) NSIndexPath *draggingRow;
 @end
 
 @implementation SubtasksViewController
@@ -80,8 +84,10 @@
         
         [self.view addSubview:self.dragableTop];
         
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.dragableTop.frame), 320, self.view.frame.size.height-CGRectGetMaxY(self.dragableTop.frame)) style:UITableViewStylePlain];
+        self.tableView = [[KPReorderTableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.dragableTop.frame), 320, self.view.frame.size.height-CGRectGetMaxY(self.dragableTop.frame)) style:UITableViewStylePlain];
         self.tableView.dataSource = self;
+        self.tableView.dragDelegate = self;
+        self.tableView.indicatorDelegate = self;
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.delegate = self;
         UIView *tableHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
@@ -130,6 +136,31 @@
 -(void)addedSubtask:(NSString *)subtask{
     self.titles = [@[subtask] arrayByAddingObjectsFromArray:self.titles];
     [self animateInAddTask];
+}
+
+- (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
+    SubtaskCell *cell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    [self tableView:self.tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
+	return cell;
+}
+- (void)dragTableViewController:(KPReorderTableView *)dragTableViewController didBeginDraggingAtRow:(NSIndexPath *)dragRow{
+    self.draggingRow = dragRow;
+}
+-(void)dragTableViewController:(KPReorderTableView *)dragTableViewController didEndDraggingToRow:(NSIndexPath *)destinationIndexPath{
+    if(destinationIndexPath.row == self.draggingRow.row){
+        self.draggingRow = nil;
+        return;
+    }
+    NSMutableArray *titles = [self.titles mutableCopy];
+    NSString *title = [self.titles objectAtIndex:self.draggingRow.row];
+    [titles removeObjectAtIndex:self.draggingRow.row];
+    NSInteger newIndex = (destinationIndexPath.row > self.draggingRow.row) ? destinationIndexPath.row : destinationIndexPath.row;
+    [titles insertObject:title atIndex:newIndex];
+    self.titles = [titles copy];
+    [self reload];
+}
+-(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
+    NSLog(@"move from %i to %i",sourceIndexPath.row,destinationIndexPath.row);
 }
 
 -(void)switchToMenu:(BOOL)menu animated:(BOOL)animated{

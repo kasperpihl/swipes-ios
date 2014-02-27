@@ -31,7 +31,7 @@
     voidBlock aniblock1;
     voidBlock comp1;
     voidBlock aniblock2;
-    self.overlayAddbutton.hidden = !addMode;
+    //self.overlayAddbutton.hidden = !addMode;
     if(addMode){
         aniblock1 = ^{
             self.dotView.transform = CGAffineTransformMakeScale(2, 2);
@@ -112,6 +112,7 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.dotView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kSubDotSize, kSubDotSize)];
         self.dotView.backgroundColor = CLEAR;
+        self.dotView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
         self.dotView.layer.cornerRadius = kSubDotSize/2;
         self.dotView.layer.borderWidth = kLineSize;
         
@@ -135,7 +136,7 @@
         self.overlayAddbutton.backgroundColor = CLEAR;
         [self.overlayAddbutton addTarget:self action:@selector(pressedAdd) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:self.overlayAddbutton];
-        self.overlayAddbutton.hidden = YES;
+        //self.overlayAddbutton.hidden = YES;
     }
     return self;
 }

@@ -66,7 +66,9 @@ static ThemeHandler *sharedObject;
     [[NSUserDefaults standardUserDefaults] setInteger:currentTheme forKey:@"theme"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    if(OSVER >= 7) [[UITextField appearance] setTintColor:tcolor(TextColor)];
+    if(OSVER >= 7){
+        [[UITextField appearance] setTintColor:tcolor(TextColor)];
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"changed theme" object:nil];
     UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
     [[UIApplication sharedApplication] setStatusBarStyle: statusBarStyle];

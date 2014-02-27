@@ -945,7 +945,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     else if(state == UIGestureRecognizerStateEnded){
         BOOL opened = (velocity.y <= 0);
         [self.subtasksController willStartOpening:opened];
-            [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
                 CGFloat targetY = opened ? kTopSubtaskTarget : self.view.frame.size.height - kDragableHeight;
                 self.subtaskOverlay.alpha = [self percentageForY:targetY];
                 CGRectSetY(self.subtasksController.view, targetY);
@@ -977,7 +977,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [UIView animateWithDuration:0.5 delay:0.2 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.3f delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^{
         CGRectSetY(self.subtasksController.view, self.view.frame.size.height-kDragableHeight);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.5 animations:^{

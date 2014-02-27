@@ -12,7 +12,7 @@
 
 #define kContentSpacingLeft 0
 #define kContentSpacingRight 0
-#define kSearchBarHeight 44
+#define kSearchBarHeight 52
 #define kButtonWidth 44
 #define kSearchTimerInterval 0.6
 
@@ -32,7 +32,6 @@
 
 @implementation EvernoteView {
     NSTimer* _timer;
-    BOOL _limitSearch;
     EDAMNote* _selectedNote;
 }
 
@@ -40,26 +39,54 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        //self.backgroundColor = tcolor(BackgroundColor);
+        self.backgroundColor = tcolor(BackgroundColor);
         
         CGFloat top = (OSVER >= 7) ? [Global statusBarHeight] : 0.f;
-        
         // initialize controls
-        _backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _backButton.frame = CGRectMake(kContentSpacingLeft, top, kButtonWidth, kSearchBarHeight);
-        [_backButton setTitle:@" < " forState:UIControlStateNormal];
+        [_backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         [_backButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_backButton];
 
         _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(kContentSpacingLeft + kButtonWidth, top,
                 320 - kButtonWidth - kContentSpacingLeft - kContentSpacingRight, kSearchBarHeight)];
         _searchBar.delegate = self;
+        _searchBar.backgroundColor = CLEAR;
+        //_searchBar.barTintColor = tcolor(BackgroundColor);
         _searchBar.placeholder = @"Search in Evernote notes";
+        if(OSVER >= 7){
+            //[[_searchBar.subviews objectAtIndex:0] removeFromSuperview];
+            _searchBar.searchBarStyle = UISearchBarStyleMinimal;
+            for (UIView *view in _searchBar.subviews)
+            {
+                
+                for(UITextField *img in view.subviews){
+                    if ([img isKindOfClass:NSClassFromString(@"UITextField")])
+                    {
+                        [img setTextColor:tcolor(TextColor)];
+                    }
+                }
+                
+            }
+        }
+        else{
+            for (id img in _searchBar.subviews)
+            {
+                if ([img isKindOfClass:NSClassFromString(@"UISearchBarBackground")])
+                {
+                    [img removeFromSuperview];
+                }
+            }
+        }
         [self addSubview:_searchBar];
+        
 
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, kSearchBarHeight + top, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height - kSearchBarHeight) style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.backgroundColor = tcolor(BackgroundColor);
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [self addSubview:_tableView];
         
         // initiate the start lookup
@@ -106,22 +133,10 @@
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         
         EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
-/*        [noteStore listNotebooksWithSuccess:^(NSArray *notebooks) {
-                            // success... so do something with the returned objects
-                            NSLog(@"notebooks: %@", notebooks);
-                        }
-                        failure:^(NSError *error) {
-                            // failure... show error notification, etc
-                            if([EvernoteSession isTokenExpiredWithError:error]) {
-                                // trigger auth again
-                                // auth code is shown in the Authenticate section
-                            }
-                            NSLog(@"error %@", error);
-                        }];*/
         
         EDAMNoteFilter* filter = [EDAMNoteFilter new];
-        //filter.words = @"photo";
-        // I added a better working search term: http://dev.evernote.com/doc/articles/search_grammar.php
+
+        // Added a better working search term: http://dev.evernote.com/doc/articles/search_grammar.php
         if (_searchBar.text.length > 0){
             NSArray *words = [_searchBar.text componentsSeparatedByString:@" "];
             NSMutableString *searchTerm = [[NSMutableString alloc] init];
@@ -135,16 +150,13 @@
                 filter.words = [searchTerm copy];
         }
         
-        NSLog(@"filter:%@",filter.words);
-        
         // setup additional flags
         if (0 == _searchBar.text.length) { // remove this check if you want order to be always by UPDATED
             filter.order = NoteSortOrder_UPDATED;
             filter.ascending = NO;
         }
         
-        __block BOOL noteViewed = NO;
-        [noteStore findNotesWithFilter:filter offset:0 maxNotes:10
+        [noteStore findNotesWithFilter:filter offset:0 maxNotes:kSearchLimit
             success:^(EDAMNoteList *list) {
                 for (EDAMNote* note in list.notes) {
                     DLog(@"Note title: %@, guid: %@", note.title, note.guid);
@@ -154,7 +166,7 @@
                     }*/
                 }
                 _noteList = list;
-                _limitSearch = (filter.order == NoteSortOrder_UPDATED);
+                //_limitSearch = (filter.order == NoteSortOrder_UPDATED);
                 [_tableView reloadData];
                 
                 //DLog(@"notebooks: %@", list);
@@ -185,24 +197,17 @@
     _timer = [NSTimer scheduledTimerWithTimeInterval:kSearchTimerInterval target:self selector:@selector(searchNoteStore:) userInfo:nil repeats:NO];
 }
 
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger result = _noteList.notes.count;
-    if (_limitSearch) {
-        return result > kSearchLimit ? kSearchLimit : result;
-    }
     return result;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	static NSString *kCellID =@"evernote_cell";
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellID];
-    if (nil == cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellID];
-        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-    }
-    
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    cell.contentView.backgroundColor = tcolor(BackgroundColor);
+    cell.backgroundColor = tcolor(BackgroundColor);
+    cell.textLabel.textColor = tcolor(TextColor);
     EDAMNote* note = _noteList.notes[indexPath.row];
     if (note.titleIsSet) {
         cell.textLabel.text = note.title;
@@ -213,31 +218,50 @@
     else {
         cell.textLabel.text = @"Untitled";
     }
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	static NSString *kCellID =@"evernote_cell";
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellID];
+    if (nil == cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellID];
+        cell.textLabel.font = KP_REGULAR(15);
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        UIButton *accessory = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kButtonWidth, kButtonWidth)];
+        [accessory addTarget:self action:@selector(pressedAccessory:) forControlEvents:UIControlEventTouchUpInside];
+       
+        cell.accessoryView = accessory;
+        
+    }
+    cell.accessoryView.tag = indexPath.row;
+    [(UIButton*)cell.accessoryView setImage:[UIImage imageNamed:timageStringBW(@"checkmark_icon")] forState:UIControlStateNormal];
     
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    EDAMNote* note = _noteList.notes[indexPath.row];
+-(void)pressedAccessory:(UIButton*)button{
+    NSInteger index = button.tag;
+    EDAMNote* note = _noteList.notes[index];
     NSLog(@"selected note with title: %@", note.title);
     [_delegate selectedEvernoteInView:self guid:note.guid title:note.title];
+    
 }
 
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-    _selectedNote = _noteList.notes[indexPath.row];
-//    if ([[EvernoteSession sharedSession] isEvernoteInstalled]) {
-//        [[EvernoteNoteStore noteStore] viewNoteInEvernote:_selectedNote];
-//    }
-//    else {
-        if ([_searchBar isFirstResponder])
-            [_searchBar resignFirstResponder];
-        _viewer = [[EvernoteViewerView alloc] initWithFrame:self.frame andGuid:_selectedNote.guid];
-        _viewer.delegate = self;
-        [self addSubview:_viewer];
-//    }
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 55;
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger index = indexPath.row;
+    _selectedNote = _noteList.notes[index];
+    if ([_searchBar isFirstResponder])
+        [_searchBar resignFirstResponder];
+    _viewer = [[EvernoteViewerView alloc] initWithFrame:self.frame andGuid:_selectedNote.guid];
+    _viewer.delegate = self;
+    [self addSubview:_viewer];}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {

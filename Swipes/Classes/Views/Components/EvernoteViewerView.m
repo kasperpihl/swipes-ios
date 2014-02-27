@@ -10,7 +10,7 @@
 #import "KPBlurry.h"
 #import "EvernoteViewerView.h"
 
-#define kContentSpacingBottom 44
+#define kButtonHeight 52
 
 @interface EvernoteViewerView ()
 
@@ -30,23 +30,26 @@
 
         CGFloat top = (OSVER >= 7) ? [Global statusBarHeight] : 0.f;
         
-        // prepare webview
-        _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, top, 320, frame.size.height - top - kContentSpacingBottom)];
-        [self addSubview:_webView];
-
         // prepare back button
         _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _backButton.frame = CGRectMake(0, self.frame.size.height - 44, 44, 44);
+        _backButton.frame = CGRectMake(0, top, kButtonHeight, kButtonHeight);
         [_backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         [_backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_backButton];
         
         // prepare attach button
         _attachButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _attachButton.frame = CGRectMake(44, self.frame.size.height - 44, 44, 44);
+        _attachButton.frame = CGRectMake(kButtonHeight,top,kButtonHeight,kButtonHeight );
         [_attachButton setImage:[UIImage imageNamed:timageStringBW(@"checkmark_icon")] forState:UIControlStateNormal];
         [_attachButton addTarget:self action:@selector(pressedAttach:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_attachButton];
+        
+        
+        // prepare webview
+        _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, top+kButtonHeight, 320, frame.size.height - top - kButtonHeight)];
+        [self addSubview:_webView];
+
+        
         
         // load the note
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -57,7 +60,7 @@
                         NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Assets/"];
                         NSURL* dirUrl = [NSURL fileURLWithPath:path isDirectory:YES];
                         
-                        NSString* fullHTML = [NSString stringWithFormat:@"<html><head><link type=\"text/css\" rel=\"stylesheet\" href=\"css/style.css\"></head>%@</html>", html];
+                        NSString* fullHTML = [NSString stringWithFormat:@"<html><head><meta name=\"viewport\" content=\"width=device-width, user-scalable=no\"><link type=\"text/css\" rel=\"stylesheet\" href=\"css/style.css\"></head><h1>%@</h1>%@</html>",note.title, html];
                         //NSString* fullHTML = html;
                         //DLog(@"HTML:\n%@", fullHTML);
                         [_webView loadHTMLString:fullHTML baseURL:dirUrl];
