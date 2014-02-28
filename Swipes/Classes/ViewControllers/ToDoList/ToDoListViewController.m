@@ -454,6 +454,7 @@
     tableView.contentInset = UIEdgeInsetsMake(0, 0, GLOBAL_TOOLBAR_HEIGHT, 0);
     KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,0, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
     searchBar.searchBarDelegate = self;
+    searchBar.backgroundColor = CLEAR;
     searchBar.searchBarDataSource = self.itemHandler;
     //searchBar.backgroundColor = CLEAR;
     searchBar.tag = SEARCH_BAR_TAG;

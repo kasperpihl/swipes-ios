@@ -40,10 +40,9 @@
         // prepare attach button
         _attachButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _attachButton.frame = CGRectMake(kButtonHeight,top,kButtonHeight,kButtonHeight );
-        [_attachButton setImage:[UIImage imageNamed:timageStringBW(@"checkmark_icon")] forState:UIControlStateNormal];
+        [_attachButton setImage:[UIImage imageNamed:timageStringBW(@"attach_icon")] forState:UIControlStateNormal];
         [_attachButton addTarget:self action:@selector(pressedAttach:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_attachButton];
-        
         
         // prepare webview
         _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, top+kButtonHeight, 320, frame.size.height - top - kButtonHeight)];

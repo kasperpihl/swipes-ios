@@ -35,7 +35,6 @@
 #define checkStringWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToString:pfValue]) [self setValue:pfValue forKey:cdKey]
 #define checkDateWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToDate:pfValue]) [self setValue:pfValue forKey:cdKey]
 #define checkNumberWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToNumber:pfValue]) [self setValue:pfValue forKey:cdKey]
-
 +(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority save:(BOOL)save{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
     newToDo.title = item;
@@ -54,6 +53,13 @@
     [NOTIHANDLER updateLocalNotifications];
     
     return newToDo;
+}
+-(void)addSubtask:(NSString *)title save:(BOOL)save{
+    KPToDo *subTask = [KPToDo newObjectInContext:nil];
+    subTask.title = title;
+    subTask.orderValue = kDefOrderVal;
+    subTask.parent = self;
+    if(save) [KPToDo saveToSync];
 }
 +(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save{
     NSMutableArray *movedToDos = [NSMutableArray array];
@@ -411,6 +417,10 @@
     
     return [title capitalizedString];
 }
+-(BOOL)isSubtask{
+    return (self.parent) ? YES : NO;
+}
+
 +(NSArray*)sortOrderForItems:(NSArray*)items save:(BOOL)save{
     NSPredicate *orderedItemsPredicate = [NSPredicate predicateWithFormat:@"(order > %i)",kDefOrderVal];
     NSPredicate *unorderedItemsPredicate = [NSPredicate predicateWithFormat:@"!(order > %i)",kDefOrderVal];

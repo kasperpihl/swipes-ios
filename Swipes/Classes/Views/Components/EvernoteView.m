@@ -236,7 +236,7 @@
         
     }
     cell.accessoryView.tag = indexPath.row;
-    [(UIButton*)cell.accessoryView setImage:[UIImage imageNamed:timageStringBW(@"checkmark_icon")] forState:UIControlStateNormal];
+    [(UIButton*)cell.accessoryView setImage:[UIImage imageNamed:timageStringBW(@"attach_icon")] forState:UIControlStateNormal];
     
     return cell;
 }

@@ -7,6 +7,7 @@
 //
 
 #import "SubtaskCell.h"
+#import "KPToDo.h"
 #import <QuartzCore/QuartzCore.h>
 #define kSubDotSize 12
 #define kAddSize (kSubDotSize*2)
@@ -20,12 +21,23 @@
 @end
 
 @implementation SubtaskCell
+-(void)setAddMode:(BOOL)addMode{
+    if(_addMode != addMode){
+        _addMode = addMode;
+    }
+    [self setAddMode:addMode animated:NO];
+}
+
+-(void)setModel:(KPToDo *)model{
+    if(_model != model){
+        _model = model;
+        
+    }
+}
+
 
 -(void)setTitle:(NSString *)title{
     self.titleField.text = title;
-}
--(void)force{
-    [self setAddMode:NO animated:YES];
 }
 -(void)setAddMode:(BOOL)addMode animated:(BOOL)animated{
     voidBlock aniblock1;
@@ -85,21 +97,31 @@
         }];
     }
 }
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    if(self.addMode){
+        if(textField.text.length == 0){
+            [self setAddMode:YES animated:YES];
+            return YES;
+        }
+        else{
+            [self.subtaskDelegate addedSubtask:textField.text];
+            self.titleField.text = @"";
+            //[self setAddMode:YES animated:NO];
+        }
+        return NO;
+    }
+    return YES;
+}
 -(void)textFieldDidEndEditing:(UITextField *)textField{
-    if(self.titleField.isFirstResponder) [self.titleField resignFirstResponder];
+    //if(self.titleField.isFirstResponder) [self.titleField resignFirstResponder];
 }
 -(void)textFieldDidReturn:(UITextField *)textField{
-    if(self.titleField.isFirstResponder) [self.titleField resignFirstResponder];
-    if(textField.text.length == 0){
-        [self setAddMode:YES animated:YES];
-    }
-    else{
-        [self.subtaskDelegate addedSubtask:textField.text];
-        [self setAddMode:YES animated:NO];
-    }
+    //if(self.titleField.isFirstResponder) [self.titleField resignFirstResponder];
+    
+    if(!self.addMode) [self.subtaskDelegate subtaskCell:self editedSubtask:textField.text];
 }
 -(void)pressedAdd{
-    [self setAddMode:NO animated:YES];
+    if(self.addMode) [self setAddMode:NO animated:YES];
     [self.titleField becomeFirstResponder];
 }
 -(void)setDotColor:(UIColor *)color{

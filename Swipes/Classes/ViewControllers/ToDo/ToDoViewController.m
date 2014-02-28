@@ -25,8 +25,9 @@
 #define NOTES_PADDING 13.5
 #define kRepeatPickerHeight 70
 
-#define kTopSubtaskTarget 130
+#define kTopSubtaskTarget 140
 #define kBottomSubtaskExtraHeight 150
+
 #define kBottomSubtaskHeight (kDragableHeight+kBottomSubtaskExtraHeight)
 
 
@@ -58,6 +59,8 @@
 
 #import "SubtasksViewController.h"
 #import "UIGestureRecognizer+UIBreak.h"
+#import "UIView+Utilities.h"
+#import "UIImage+Blur.h"
 #import "KPAttachment.h"
 
 typedef NS_ENUM(NSUInteger, KPEditMode){
@@ -112,8 +115,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UIImageView *scheduleImageView;
 
 @property (nonatomic) SubtasksViewController *subtasksController;
-@property (nonatomic) UIView *subtaskOverlay;
+@property (nonatomic) UIImageView *subtaskOverlay;
 @property (nonatomic) CGPoint startPoint;
+@property (nonatomic) UIImage *screenshot;
 @end
 
 @implementation ToDoViewController
@@ -144,6 +148,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)setModel:(KPToDo *)model{
     if(_model != model){
         _model = model;
+        [self.subtasksController setModel:model];
         NSString *backLabel;
         switch ([model cellTypeForTodo]) {
             case CellTypeSchedule:
@@ -900,6 +905,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.view addSubview:self.sectionHeader];
         
         SubtasksViewController *subtasks = [[SubtasksViewController alloc] init];
+        [subtasks setContentInset:UIEdgeInsetsMake(0, 0, kTopSubtaskTarget, 0)];
+        //CGRectSetHeight(subtasks.view,self.view.bounds.size.height-kTopSubtaskTarget);
         UIPanGestureRecognizer *subtaskRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
         subtaskRecognizer.delegate = self;
         [subtasks.view addGestureRecognizer:subtaskRecognizer];
@@ -907,14 +914,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.subtasksController = subtasks;
         CGRectSetY(subtasks.view, self.view.frame.size.height-kBottomSubtaskHeight);
         
-        self.subtaskOverlay = [[UIView alloc] initWithFrame:self.view.bounds];
-        self.subtaskOverlay.backgroundColor = gray(27, 0.8);
+        self.subtaskOverlay = [[UIImageView alloc] initWithFrame:self.view.bounds];
+        //self.subtaskOverlay.backgroundColor = gray(27, 0.9);
         self.subtaskOverlay.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
         self.subtaskOverlay.hidden = YES;
         [self.view addSubview:self.subtaskOverlay];
         
         [self.view addSubview:subtasks.view];
-        
         notify(@"updated sync",updateFromSync:);
     }
     return self;
@@ -931,9 +937,25 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGPoint velocity = [gestureRecognizer velocityInView:self.view];
     UIGestureRecognizerState state = [gestureRecognizer state];
     if(state == UIGestureRecognizerStateBegan){
+        UIGraphicsBeginImageContext(self.view.bounds.size);
+        self.subtasksController.view.hidden = YES;
+        [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+        self.subtasksController.view.hidden = NO;
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        // helps w/ our colors when blurring
+        // feel free to adjust jpeg quality (lower = higher perf)
+        NSData *imageData = UIImageJPEGRepresentation(image, 0.75);
+        image = [UIImage imageWithData:imageData];
+        
+        image = [image rn_boxblurImageWithBlur:0.2f exclusionPath:nil];
+        [self.subtaskOverlay setImage:self.screenshot];
+       
         [self.subtasksController startedSliding];
         self.startPoint = self.subtasksController.view.frame.origin;
         self.subtaskOverlay.hidden = NO;
+        
         self.subtaskOverlay.alpha = [self percentageForY:self.startPoint.y];
     }
     else if(state == UIGestureRecognizerStateChanged){
@@ -983,6 +1005,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [UIView animateWithDuration:0.5 animations:^{
             self.subtasksController.notification.alpha = 1;
         }];
+        
     }];
 }
 

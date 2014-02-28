@@ -15,6 +15,9 @@
 /* Start watching for Location */
 +(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save;
 
+-(void)addSubtask:(NSString*)title save:(BOOL)save;
+
+
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;
 
@@ -25,6 +28,9 @@
 -(void)changeToOrder:(NSInteger)newOrder withItems:(NSArray*)items;
 -(CellType)cellTypeForTodo;
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags;
+
+
+-(BOOL)isSubtask;
 
 -(NSString*)readableTitleForStatus;
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save;

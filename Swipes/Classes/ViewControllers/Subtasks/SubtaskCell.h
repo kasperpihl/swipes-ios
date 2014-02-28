@@ -7,12 +7,17 @@
 //
 
 #import "MCSwipeTableViewCell.h"
+@class SubtaskCell;
 @protocol SubtaskCellDelegate <NSObject>
 -(void)addedSubtask:(NSString*)subtask;
+-(void)subtaskCell:(SubtaskCell*)cell editedSubtask:(NSString*)subtask;
 @end
+@class KPToDo;
 @interface SubtaskCell : MCSwipeTableViewCell
 @property (nonatomic,weak) NSObject<SubtaskCellDelegate> *subtaskDelegate;
+@property (nonatomic) KPToDo *model;
+@property (nonatomic) BOOL addMode;
 -(void)setTitle:(NSString*)title;
--(void)setAddMode:(BOOL)addMode animated:(BOOL)animated;
+
 -(void)setDotColor:(UIColor*)color;
 @end

@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
+#import "KPToDo.h"
 #import "SubtasksViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SubtaskCell.h"
@@ -25,15 +26,46 @@
 
 @interface SubtasksViewController () <UITableViewDataSource,UITableViewDelegate,SubtaskCellDelegate,MCSwipeTableViewCellDelegate,ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 @property (nonatomic) KPReorderTableView *tableView;
-@property (nonatomic) NSArray *titles;
+@property (nonatomic) NSArray *subtasks;
 @property (nonatomic) BOOL isMenu;
 @property (nonatomic) UIImageView *dragIcon;
 @property (nonatomic) AKSegmentedControl *segmentedControl;
 @property (nonatomic) NSIndexPath *draggingRow;
+
 @end
 
 @implementation SubtasksViewController
-
+-(void)setContentInset:(UIEdgeInsets)insets{
+    self.tableView.contentInset = insets;
+}
+-(void)setModel:(KPToDo *)model{
+    if(_model != model){
+        _model = model;
+        [self loadData];
+    }
+}
+-(void)loadData{
+    BOOL isCompletedMenu = ([[self.segmentedControl selectedIndexes] firstIndex] == 1);
+    NSString *predString = isCompletedMenu ? @"completionDate != nil" : @"completionDate = nil";
+    NSSet *filteredSet = [self.model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:predString]];
+    
+    NSString *sortKey = isCompletedMenu ? @"completionDate" : @"order";
+    NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:NO];
+    
+    NSArray *sortedObjects = [filteredSet sortedArrayUsingDescriptors:@[descriptor]];
+    
+    if(!isCompletedMenu){
+        sortedObjects = [KPToDo sortOrderForItems:sortedObjects save:YES];
+    }
+    
+    self.subtasks = sortedObjects;
+    /* 
+     Filter down to completed or undone
+     If undone - sort for order and make new numbers if needed
+     reload tableview
+     
+     */
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -43,7 +75,6 @@
 -(id)init{
     self = [super init];
     if(self){
-        self.titles = @[@"Do laundy for tonight",@"Test the newest version",@"Execute on the side"];
         self.view.backgroundColor = tcolor(BackgroundColor);
         self.dragableTop = [[UIView alloc] initWithFrame:CGRectMake(-1, 0, 322, kDragableHeight-kExtraDragable)];
         self.dragableTop.backgroundColor = tcolor(BackgroundColor);
@@ -63,6 +94,7 @@
         [segmentedControl setSegmentedControlMode:AKSegmentedControlModeSticky];
         UIButton *buttonSchedule = [self buttonForSegment:KPSegmentButtonSchedule];
         UIButton *buttonToday = [self buttonForSegment:KPSegmentButtonToday];
+        
         UIButton *buttonDone = [self buttonForSegment:KPSegmentButtonDone];
         [segmentedControl setButtonsArray:@[buttonToday, buttonDone]];
         
@@ -79,13 +111,14 @@
         self.notification.backgroundColor = tcolor(LaterColor);
         self.notification.layer.masksToBounds = YES;
         [self.dragableTop addSubview:self.notification];
-        CGRectSetCenterX(self.notification, CGRectGetMaxX(dragIcon.frame));
-        CGRectSetCenterY(self.notification, CGRectGetMinY(dragIcon.frame));
+        CGRectSetCenterX(self.notification, CGRectGetMaxX(self.dragIcon.frame));
+        CGRectSetCenterY(self.notification, CGRectGetMinY(self.dragIcon.frame));
         
         [self.view addSubview:self.dragableTop];
         
         self.tableView = [[KPReorderTableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.dragableTop.frame), 320, self.view.frame.size.height-CGRectGetMaxY(self.dragableTop.frame)) style:UITableViewStylePlain];
         self.tableView.dataSource = self;
+        self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         self.tableView.dragDelegate = self;
         self.tableView.indicatorDelegate = self;
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -94,7 +127,7 @@
         SubtaskCell *addCell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SubtaskTitleHeader"];
         addCell.subtaskDelegate = self;
         CGRectSetSize(addCell,320,50);
-        [addCell setAddMode:YES animated:NO];
+        [addCell setAddMode:YES];
         [tableHeader addSubview:addCell];
         [self.tableView setTableHeaderView:tableHeader];
         self.tableView.contentOffset = CGPointMake(0,self.tableView.tableHeaderView.frame.size.height);
@@ -133,8 +166,18 @@
     button.imageView.animationDuration = 0.8;
     return button;
 }
+
+-(void)subtaskCell:(SubtaskCell *)cell editedSubtask:(NSString *)subtask{
+    NSString *editedText = [subtask stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    if(editedText.length > 0)
+        [cell.model setTitle:subtask];
+    
+    [KPToDo saveToSync];
+}
 -(void)addedSubtask:(NSString *)subtask{
-    self.titles = [@[subtask] arrayByAddingObjectsFromArray:self.titles];
+    [self.model addSubtask:subtask save:YES];
+    [self loadData];
+    //self.titles = [@[subtask] arrayByAddingObjectsFromArray:self.titles];
     [self animateInAddTask];
 }
 
@@ -151,12 +194,12 @@
         self.draggingRow = nil;
         return;
     }
-    NSMutableArray *titles = [self.titles mutableCopy];
-    NSString *title = [self.titles objectAtIndex:self.draggingRow.row];
+    /*NSMutableArray *titles = [self.subtasks mutableCopy];
+    NSString *title = [self.subtasks objectAtIndex:self.draggingRow.row];
     [titles removeObjectAtIndex:self.draggingRow.row];
     NSInteger newIndex = (destinationIndexPath.row > self.draggingRow.row) ? destinationIndexPath.row : destinationIndexPath.row;
     [titles insertObject:title atIndex:newIndex];
-    self.titles = [titles copy];
+    self. = [titles copy];*/
     [self reload];
 }
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
@@ -185,6 +228,18 @@
         }
         else self.segmentedControl.alpha = 0;
     };
+    voidBlock middleBlock = ^{
+        NSInteger iconHeight = 22;
+        if(menu){
+            
+            CGRectSetCenterX(self.notification, self.dragableTop.frame.size.width/2 - self.segmentedControl.frame.size.width/4 + iconHeight/2);
+            CGRectSetCenterY(self.notification, self.dragableTop.frame.size.height/2-iconHeight/2);
+        }
+        else{
+            CGRectSetCenterX(self.notification, CGRectGetMaxX(self.dragIcon.frame));
+            CGRectSetCenterY(self.notification, CGRectGetMinY(self.dragIcon.frame));
+        }
+    };
     voidBlock showBlock = ^{
         self.notification.alpha = 1;
         if(!menu) self.dragIcon.alpha = 1;
@@ -194,6 +249,7 @@
     [UIView animateWithDuration:duration animations:^{
         hideBlock();
     } completion:^(BOOL finished) {
+        middleBlock();
         [UIView animateWithDuration:duration animations:^{
             showBlock();
         }];
@@ -219,7 +275,7 @@
 }
 -(void)reload{
     [self.tableView reloadData];
-    self.notification.text = [NSString stringWithFormat:@"%i",self.titles.count];
+    self.notification.text = [NSString stringWithFormat:@"%i",self.subtasks.count];
 }
 -(void)animateInAddTask{
     [self reload];
@@ -238,13 +294,13 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     NSLog(@"triggered:%i",indexPath.row);
     if(indexPath){
-        NSMutableArray *mutCopy = [self.titles mutableCopy];
+        /*NSMutableArray *mutCopy = [self.titles mutableCopy];
         [mutCopy removeObjectAtIndex:indexPath.row];
         self.titles = [mutCopy copy];
         [self.tableView beginUpdates];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView endUpdates];
-        self.notification.text = [NSString stringWithFormat:@"%i",self.titles.count];
+        self.notification.text = [NSString stringWithFormat:@"%i",self.titles.count];*/
     }
 }
 -(void)swipeTableViewCell:(SubtaskCell *)cell slidedIntoState:(MCSwipeTableViewCellState)state{
@@ -263,6 +319,8 @@
 
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl{
 #warning TODO: fix data to be loaded proper
+    [self loadData];
+    [self reload];
 }
 
 
@@ -271,7 +329,7 @@
     return 50;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.titles.count;
+    return self.subtasks.count;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"SubtaskCell";
@@ -283,7 +341,9 @@
 	return cell;
 }
 -(void)tableView:(UITableView *)tableView willDisplayCell:(SubtaskCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    [cell setTitle:[self.titles objectAtIndex:indexPath.row]];
+    KPToDo *subtask = (KPToDo*)[self.subtasks objectAtIndex:indexPath.row];
+    [cell setTitle:subtask.title];
+    cell.model = subtask;
     [cell setFirstColor:[StyleHandler colorForCellType:CellTypeDone]];
     [cell setThirdColor:[UIColor redColor]];
     [cell setFirstIconName:[StyleHandler iconNameForCellType:CellTypeDone]];
@@ -292,7 +352,7 @@
     cell.shouldRegret = YES;
     cell.mode = MCSwipeTableViewCellModeExit;
     cell.bounceAmplitude = 0;
-    [cell setAddMode:NO animated:NO];
+    [cell setAddMode:NO];
     /*if(indexPath.row == 0) [cell setAddMode:YES animated:NO];
     else*/
 }

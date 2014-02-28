@@ -14,7 +14,7 @@
 @implementation DoneViewController
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     NSPredicate *predicate;
-    predicate = [NSPredicate predicateWithFormat:@"(completionDate != nil)"];
+    predicate = [NSPredicate predicateWithFormat:@"(completionDate != nil) AND parent = nil"];
     return [KPToDo MR_findAllSortedBy:@"completionDate" ascending:NO withPredicate:predicate];
 }
 -(NSString *)itemHandler:(ItemHandler *)handler titleForItem:(KPToDo *)item{
