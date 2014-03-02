@@ -117,7 +117,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) SubtasksViewController *subtasksController;
 @property (nonatomic) UIImageView *subtaskOverlay;
 @property (nonatomic) CGPoint startPoint;
-@property (nonatomic) UIImage *screenshot;
 @end
 
 @implementation ToDoViewController
@@ -146,9 +145,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
 }
 -(void)setModel:(KPToDo *)model{
+    [self.subtasksController setModel:model];
     if(_model != model){
         _model = model;
-        [self.subtasksController setModel:model];
         NSString *backLabel;
         switch ([model cellTypeForTodo]) {
             case CellTypeSchedule:
@@ -909,15 +908,22 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         //CGRectSetHeight(subtasks.view,self.view.bounds.size.height-kTopSubtaskTarget);
         UIPanGestureRecognizer *subtaskRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
         subtaskRecognizer.delegate = self;
-        [subtasks.view addGestureRecognizer:subtaskRecognizer];
+        subtasks.view.userInteractionEnabled = YES;
+        [subtasks.dragableTop addTarget:self action:@selector(pressedSubtasks:) forControlEvents:UIControlEventTouchUpInside];
+        [subtasks.dragableTop addGestureRecognizer:subtaskRecognizer];
         NSLog(@"drag:%@",subtasks.dragableTop);
         self.subtasksController = subtasks;
         CGRectSetY(subtasks.view, self.view.frame.size.height-kBottomSubtaskHeight);
         
         self.subtaskOverlay = [[UIImageView alloc] initWithFrame:self.view.bounds];
+        self.subtaskOverlay.userInteractionEnabled = YES;
         //self.subtaskOverlay.backgroundColor = gray(27, 0.9);
         self.subtaskOverlay.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
         self.subtaskOverlay.hidden = YES;
+        UIButton *overlay = [[UIButton alloc] initWithFrame:self.subtaskOverlay.bounds];
+        overlay.backgroundColor = alpha(tcolor(TextColor), 0.2);
+        [overlay addTarget:self action:@selector(pressedOverlay:) forControlEvents:UIControlEventTouchUpInside];
+        [self.subtaskOverlay addSubview:overlay];
         [self.view addSubview:self.subtaskOverlay];
         
         [self.view addSubview:subtasks.view];
@@ -925,11 +931,37 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
     return self;
 }
+-(void)pressedSubtasks:(UIButton*)sender{
+    [self prepareForOpening];
+    [self openHideSubtasks:!self.subtasksController.opened];
+}
+-(void)pressedOverlay:(UIButton*)sender{
+    [self prepareForOpening];
+    [self openHideSubtasks:NO];
+}
 -(CGFloat)percentageForY:(CGFloat)y{
     y = y- kTopSubtaskTarget;
     if(y < 0) y = 0;
     CGFloat bottom = self.view.frame.size.height-kDragableHeight;
     return 1-(y/(bottom-kTopSubtaskTarget));
+}
+-(void)openHideSubtasks:(BOOL)opened{
+    [self.subtasksController willStartOpening:opened];
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        CGFloat targetY = opened ? kTopSubtaskTarget : self.view.frame.size.height - kDragableHeight;
+        self.subtaskOverlay.alpha = [self percentageForY:targetY];
+        CGRectSetY(self.subtasksController.view, targetY);
+        
+    } completion:^(BOOL finished) {
+        [self.subtasksController finishedOpening:opened];
+    }];
+}
+-(void)prepareForOpening{
+    [self.subtasksController startedSliding];
+    self.startPoint = self.subtasksController.view.frame.origin;
+    self.subtaskOverlay.hidden = NO;
+    
+    self.subtaskOverlay.alpha = [self percentageForY:self.startPoint.y];
 }
 - (void)handleGesture:(UIPanGestureRecognizer *)gestureRecognizer{
     
@@ -937,26 +969,24 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGPoint velocity = [gestureRecognizer velocityInView:self.view];
     UIGestureRecognizerState state = [gestureRecognizer state];
     if(state == UIGestureRecognizerStateBegan){
-        UIGraphicsBeginImageContext(self.view.bounds.size);
-        self.subtasksController.view.hidden = YES;
-        [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
-        self.subtasksController.view.hidden = NO;
-        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+        if(!self.subtasksController.opened){
+            UIGraphicsBeginImageContext(self.view.bounds.size);
+            self.subtasksController.view.hidden = YES;
+            [self.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+            self.subtasksController.view.hidden = NO;
+            UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            // helps w/ our colors when blurring
+            // feel free to adjust jpeg quality (lower = higher perf)
+            NSData *imageData = UIImageJPEGRepresentation(image, 0.75);
+            image = [UIImage imageWithData:imageData];
+            
+            image = [image rn_boxblurImageWithBlur:0.2f exclusionPath:nil];
+            [self.subtaskOverlay setImage:image];
+        }
+        [self prepareForOpening];
         
-        // helps w/ our colors when blurring
-        // feel free to adjust jpeg quality (lower = higher perf)
-        NSData *imageData = UIImageJPEGRepresentation(image, 0.75);
-        image = [UIImage imageWithData:imageData];
-        
-        image = [image rn_boxblurImageWithBlur:0.2f exclusionPath:nil];
-        [self.subtaskOverlay setImage:self.screenshot];
-       
-        [self.subtasksController startedSliding];
-        self.startPoint = self.subtasksController.view.frame.origin;
-        self.subtaskOverlay.hidden = NO;
-        
-        self.subtaskOverlay.alpha = [self percentageForY:self.startPoint.y];
     }
     else if(state == UIGestureRecognizerStateChanged){
         CGFloat newY = self.startPoint.y + translation.y;
@@ -966,15 +996,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
     else if(state == UIGestureRecognizerStateEnded){
         BOOL opened = (velocity.y <= 0);
-        [self.subtasksController willStartOpening:opened];
-            [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                CGFloat targetY = opened ? kTopSubtaskTarget : self.view.frame.size.height - kDragableHeight;
-                self.subtaskOverlay.alpha = [self percentageForY:targetY];
-                CGRectSetY(self.subtasksController.view, targetY);
-
-            } completion:^(BOOL finished) {
-                [self.subtasksController finishedOpening:opened];
-            }];
+        [self openHideSubtasks:opened];
         
     }
     //NSLog(@"gesture %f - %f",velocity.x,velocity.y);

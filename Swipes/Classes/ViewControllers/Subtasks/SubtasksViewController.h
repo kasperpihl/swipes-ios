@@ -11,9 +11,11 @@
 #define kDragableHeight 60
 @interface SubtasksViewController : UIViewController
 
-@property (nonatomic) UIView *dragableTop;
+@property (nonatomic) UIButton *dragableTop;
 @property (nonatomic) UILabel *notification;
 @property (nonatomic) KPToDo *model;
+@property (nonatomic) BOOL opened;
+
 -(void)setContentInset:(UIEdgeInsets)insets;
 -(void)startedSliding;
 -(void)willStartOpening:(BOOL)opening;

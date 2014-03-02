@@ -41,8 +41,10 @@
 -(void)setModel:(KPToDo *)model{
     if(_model != model){
         _model = model;
-        [self loadData];
     }
+    [self loadData];
+    [self reload];
+    self.tableView.contentOffset = CGPointMake(0,self.tableView.tableHeaderView.frame.size.height);
 }
 -(void)loadData{
     BOOL isCompletedMenu = ([[self.segmentedControl selectedIndexes] firstIndex] == 1);
@@ -76,7 +78,7 @@
     self = [super init];
     if(self){
         self.view.backgroundColor = tcolor(BackgroundColor);
-        self.dragableTop = [[UIView alloc] initWithFrame:CGRectMake(-1, 0, 322, kDragableHeight-kExtraDragable)];
+        self.dragableTop = [[UIButton alloc] initWithFrame:CGRectMake(-1, 0, 322, kDragableHeight-kExtraDragable)];
         self.dragableTop.backgroundColor = tcolor(BackgroundColor);
         UIImageView *dragIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dragable_icon"]];
         self.dragIcon = dragIcon;
@@ -92,7 +94,7 @@
         segmentedControl.hidden = YES;
         [segmentedControl setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
         [segmentedControl setSegmentedControlMode:AKSegmentedControlModeSticky];
-        UIButton *buttonSchedule = [self buttonForSegment:KPSegmentButtonSchedule];
+        //UIButton *buttonSchedule = [self buttonForSegment:KPSegmentButtonSchedule];
         UIButton *buttonToday = [self buttonForSegment:KPSegmentButtonToday];
         
         UIButton *buttonDone = [self buttonForSegment:KPSegmentButtonDone];
@@ -156,12 +158,12 @@
     }
     imageString = timageString(baseString, @"-white", @"-black");
     UIImage *normalImage = [UIImage imageNamed:imageString];
-    UIImage *selectedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-high"]];
+    //UIImage *selectedImage = [UIImage imageNamed:[baseString stringByAppendingString:@"-highlighted"]];
     UIImage *highlightedImage = [UIImage imageNamed:[baseString stringByAppendingString:@"-highlighted"]];;
     [button setImage:normalImage forState:UIControlStateNormal];
     [button setImage:highlightedImage forState:UIControlStateSelected];
     [button setImage:highlightedImage forState:UIControlStateSelected | UIControlStateHighlighted];
-    [button setImage:selectedImage forState:UIControlStateHighlighted];
+    [button setImage:highlightedImage forState:UIControlStateHighlighted];
     button.imageView.animationImages = @[highlightedImage];
     button.imageView.animationDuration = 0.8;
     return button;
@@ -207,7 +209,7 @@
 }
 
 -(void)switchToMenu:(BOOL)menu animated:(BOOL)animated{
-    CGFloat duration = 0.25;
+    CGFloat duration = 0.4;
     if(menu == self.isMenu) return;
     self.isMenu = menu;
     voidBlock preBlock = ^{
@@ -218,20 +220,11 @@
         else {
             self.dragIcon.hidden = NO;
             self.dragIcon.alpha = 0;
-            self.notification.alpha = 0;
         }
     };
-    voidBlock hideBlock = ^{
-        if(menu){
-            self.dragIcon.alpha = 0;
-            self.notification.alpha = 0;
-        }
-        else self.segmentedControl.alpha = 0;
-    };
-    voidBlock middleBlock = ^{
+    voidBlock showBlock = ^{
         NSInteger iconHeight = 22;
         if(menu){
-            
             CGRectSetCenterX(self.notification, self.dragableTop.frame.size.width/2 - self.segmentedControl.frame.size.width/4 + iconHeight/2);
             CGRectSetCenterY(self.notification, self.dragableTop.frame.size.height/2-iconHeight/2);
         }
@@ -239,39 +232,37 @@
             CGRectSetCenterX(self.notification, CGRectGetMaxX(self.dragIcon.frame));
             CGRectSetCenterY(self.notification, CGRectGetMinY(self.dragIcon.frame));
         }
-    };
-    voidBlock showBlock = ^{
-        self.notification.alpha = 1;
-        if(!menu) self.dragIcon.alpha = 1;
-        else self.segmentedControl.alpha = 1;
+        self.dragIcon.alpha = menu ? 0 : 1;
+        self.segmentedControl.alpha = menu ? 1 : 0;
     };
     preBlock();
     [UIView animateWithDuration:duration animations:^{
-        hideBlock();
+        showBlock();
     } completion:^(BOOL finished) {
-        middleBlock();
+       
         [UIView animateWithDuration:duration animations:^{
-            showBlock();
+            //showBlock();
         }];
     }];
 }
 
 
 -(void)startedSliding{
-    [self switchToMenu:NO animated:YES];
+    //[self switchToMenu:NO animated:YES];
+    
 }
 -(void)willStartOpening:(BOOL)opening{
-    if(opening){
-        [self switchToMenu:YES animated:YES];
-    }
+    [self switchToMenu:opening animated:YES];
 }
 -(void)finishedOpening:(BOOL)opened{
+    
     if(opened){
-        [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(animateInAddTask) userInfo:nil repeats:NO];
+        if(!self.opened) [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(animateInAddTask) userInfo:nil repeats:NO];
     }
     else{
         self.tableView.contentOffset = CGPointMake(0,self.tableView.tableHeaderView.frame.size.height);
     }
+    self.opened = opened;
 }
 -(void)reload{
     [self.tableView reloadData];

@@ -223,12 +223,12 @@
     }
     imageString = timageString(baseString, @"-white", @"-black");
     UIImage *normalImage = [UIImage imageNamed:imageString];
-    UIImage *selectedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-high"]];
+    //UIImage *selectedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-high"]];
     UIImage *highlightedImage = [UIImage imageNamed:[baseString stringByAppendingString:@"-highlighted"]];;
     [button setImage:normalImage forState:UIControlStateNormal];
     [button setImage:highlightedImage forState:UIControlStateSelected];
     [button setImage:highlightedImage forState:UIControlStateSelected | UIControlStateHighlighted];
-    [button setImage:selectedImage forState:UIControlStateHighlighted];
+    [button setImage:highlightedImage forState:UIControlStateHighlighted];
     button.imageView.animationImages = @[highlightedImage];
     button.imageView.animationDuration = 0.8;    
     return button;
