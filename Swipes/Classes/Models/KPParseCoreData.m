@@ -46,6 +46,9 @@
 @property BOOL _needSync;
 @property BOOL _isSyncing;
 
+@property (nonatomic) NSDate *lastTry;
+@property (nonatomic) NSInteger tryCounter;
+
 @end
 
 @implementation KPParseCoreData
@@ -146,9 +149,24 @@
         return [self synchronizeWithParseAsync:async];
     }
 }
+
+#warning Test out this counter mechanism
+-(void)finalizeSync{
+    self._isSyncing = NO;
+    if(self._needSync){
+        NSDate *now = [NSDate date];
+        if(!self.lastTry || [now timeIntervalSinceDate:self.lastTry] > 60){
+            self.lastTry = now;
+            self.tryCounter = 0;
+        }
+        if(self.tryCounter > 5) return;
+        self.tryCounter++;
+        [self synchronizeForce:YES async:YES];
+    }
+}
+
 /*
- 
- */
+*/
 
 - (BOOL)synchronizeWithParseAsync:(BOOL)async
 {
@@ -238,15 +256,16 @@
     NSString *url = @"http://api.swipesapp.com/sync";
 #else
     NSString *url = @"http://swipes-test.herokuapp.com/sync";
+    url = @"http://127.0.0.1:5000/sync";
 #endif
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
-    [request setTimeoutInterval:50];
+    [request setTimeoutInterval:35];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
                                                        options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
                                                         error:&error];
     if(error){
         [UtilityClass sendError:error type:@"Sync JSON prepare parse"];
-        self._isSyncing = NO;
+        [self finalizeSync];
         return NO;
     }
     [request setHTTPBody:jsonData];
@@ -255,18 +274,24 @@
     
     
     /* Performing request */
-    NSURLResponse *response;
-    //NSLog(@"sending %i objects",totalNumberOfObjectsToSave);
+    NSHTTPURLResponse *response;
+    //NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,syncData);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-#warning how should server error be handled?
-    if(error || !resData){
-        [UtilityClass sendError:error type:@"Sync request error"];
-        self._isSyncing = NO;
+    //NSLog(@"response:%i %@",response.statusCode,response.allHeaderFields);
+    if(response.statusCode != 200){
+        if(error) [UtilityClass sendError:error type:@"Sync request error 1"];
+        if(response.statusCode == 503) self._needSync = YES;
+        else{
+            NSString *myString = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+            error = [NSError errorWithDomain:myString code:response.statusCode userInfo:nil];
+            NSLog(@"error:%@",error.description);
+            [UtilityClass sendError:error type:@"Sync request error 2"];
+        }
+        [self finalizeSync];
         return NO;
     }
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
-    //NSLog(@"respo:%@ error:%@",result,error);
-    
+
     if(error || [result objectForKey:@"code"] || ![result objectForKey:@"serverTime"]){
         if(!error){
             NSString *message = [result objectForKey:@"message"] ? [result objectForKey:@"message"] : @"Uncaught error";
@@ -279,8 +304,8 @@
             }
             error = [NSError errorWithDomain:message code:code userInfo:result];
         }
-        [UtilityClass sendError:error type:@"Sync Server Error"];
-        self._isSyncing = NO;
+        [UtilityClass sendError:error type:@"Sync Json Parse Error"];
+        [self finalizeSync];
         return NO;
     }
     
@@ -296,7 +321,6 @@
         [self handleCDObject:nil withObject:object inContext:localContext];
     }
     [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
-        self._isSyncing = NO;
         /* Save the sync to server */
         [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastSyncLocalDate"];
         if (lastUpdate)
@@ -304,7 +328,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self cleanUpAfterSync];
         DUMPDB;
-        if(self._needSync) [self synchronizeForce:YES async:async];
+        [self finalizeSync];
     }];
     
     return (0 < totalNumberOfObjectsToSave);
