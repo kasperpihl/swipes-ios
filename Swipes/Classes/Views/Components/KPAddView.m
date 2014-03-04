@@ -9,7 +9,6 @@
 
 #import "KPAddView.h"
 @interface KPAddView () <UITextFieldDelegate>
-@property (nonatomic) IBOutlet UIButton *doneEditingButton;
 @property (nonatomic) BOOL isRotated;
 @end
 @implementation KPAddView

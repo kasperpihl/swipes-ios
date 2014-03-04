@@ -17,6 +17,7 @@
 @interface SubtaskCell () <UITextFieldDelegate>
 @property (nonatomic) UIButton *dotView;
 @property (nonatomic) UITextField *titleField;
+@property (nonatomic) UIButton *addCloseButton;
 @property (nonatomic) UIButton *overlayAddbutton;
 @end
 
@@ -158,6 +159,11 @@
         self.overlayAddbutton.backgroundColor = CLEAR;
         [self.overlayAddbutton addTarget:self action:@selector(pressedAdd) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:self.overlayAddbutton];
+        /*
+        CGFloat closeButtonSize = self.bounds.size.height;
+        self.addCloseButton = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width-closeButtonSize, 0, closeButtonSize, closeButtonSize)];
+        [self.addCloseButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];*/
+        
         //self.overlayAddbutton.hidden = YES;
     }
     return self;
