@@ -32,6 +32,7 @@
 
 -(void)saveContextForSynchronization:(NSManagedObjectContext*)context;
 
+-(void)hardSync;
 - (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async;
 
 #ifdef DEBUG

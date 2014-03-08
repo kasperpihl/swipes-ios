@@ -380,8 +380,8 @@
             else{
                 CABasicAnimation *rotate =
                 [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
-                rotate.byValue = @(M_PI*2); // Change to - angle for counter clockwise rotation
-                rotate.duration = 1.0;
+                rotate.byValue = @(M_PI*6); // Change to - angle for counter clockwise rotation
+                rotate.duration = 3.0;
                 
                 [sender.iconImageView.layer addAnimation:rotate
                                         forKey:@"myRotationAnimation"];
@@ -484,6 +484,14 @@
     //if(button == KPMenuButtonUpgrade && highlighted) imageString = @"menu_pro";
     return [UIImage imageNamed:imageString];
 }
+-(void)longPress:(UILongPressGestureRecognizer*)recognizer{
+    if(recognizer.state == UIGestureRecognizerStateBegan){
+        [UTILITY confirmBoxWithTitle:@"Hard sync" andMessage:@"This will send all data and can take some time" block:^(BOOL succeeded, NSError *error) {
+            if(succeeded)
+                [KPCORE hardSync];
+        }];
+    }
+}
 -(CGRect)frameForButton:(KPMenuButtons)button{
     CGFloat width = self.gridView.frame.size.width/kVerticalGridNumber-(2*kGridButtonPadding);
     CGFloat x = ((button-1) % kVerticalGridNumber) * self.gridView.frame.size.width/kVerticalGridNumber + kGridButtonPadding;
@@ -494,6 +502,10 @@
 
 -(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton{
     MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton] image:[self imageForMenuButton:menuButton highlighted:NO] highlightedImage:[self imageForMenuButton:menuButton highlighted:YES]];
+    if(menuButton == KPMenuButtonSync){
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
+        [button addGestureRecognizer:longPress];
+    }
     if(menuButton == KPMenuButtonNotifications || menuButton == KPMenuButtonLocation){
         KPSettings setting = (menuButton == KPMenuButtonNotifications) ? SettingNotifications : SettingLocation;
         BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:setting] boolValue];

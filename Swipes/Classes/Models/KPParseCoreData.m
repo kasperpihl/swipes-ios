@@ -80,7 +80,15 @@
     if(sync) [self synchronizeForce:NO async:YES];
 }
 
+-(void)hardSync{
+    NSArray* objects = [KPParseObject MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"objectId != nil"] inContext:[self context]];
+    for (KPParseObject* obj in objects) {
+        [self sync:NO attributes:@[@"all"] forIdentifier:obj.objectId isTemp:NO];
+    }
+    [self saveUpdatingObjects];
+    [self synchronizeForce:YES async:YES];
 
+}
 /*
     This save should be called if data should be synced
 */
@@ -178,7 +186,6 @@
     }
 }
 
-#warning Test out this counter mechanism
 -(void)finalizeSync{
     self._isSyncing = NO;
     if(self._needSync){
@@ -300,14 +307,11 @@
     
     /* Performing request */
     NSHTTPURLResponse *response;
-    //NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,syncData);
+    NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,syncData);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
     
-    
-    
-    //NSLog(@"response:%i %@",response.statusCode,response.allHeaderFields);
-    if(response.statusCode != 200){
+    if(response.statusCode != 200 || error){
         if(error) [UtilityClass sendError:error type:@"Sync request error 1"];
         if(response.statusCode == 503) self._needSync = YES;
         else{
@@ -316,11 +320,13 @@
             NSLog(@"error:%@",error.description);
             [UtilityClass sendError:error type:@"Sync request error 2"];
         }
+        self._needSync = YES;
         [self finalizeSync];
         return NO;
     }
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
+    NSLog(@"res:%@ err: %@",result,error);
     
     if(error || [result objectForKey:@"code"] || ![result objectForKey:@"serverTime"]){
         if(!error){
@@ -621,12 +627,6 @@ static KPParseCoreData *sharedObject;
 - (void)initialize
 {
     self.backgroundTask = UIBackgroundTaskInvalid;
-    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
-    if(![[NSFileManager defaultManager] fileExistsAtPath:storeURL.path]){
-        [[NSUserDefaults standardUserDefaults] setInteger:ThemeLight forKey:@"theme"];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasSeenLightScheme"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
     
     [self loadDatabase];
     notify(@"closing app", forceSync);

@@ -228,6 +228,7 @@
 -(BOOL)setAttributesForSavingObject:(NSMutableDictionary *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
     NSDictionary *keyMatch = [self keyMatch];
     BOOL isNewObject = (!self.objectId);
+    if(changedAttributes && [changedAttributes containsObject:@"all"]) isNewObject = YES;
     BOOL shouldUpdate = NO;
     for(NSString *pfKey in keyMatch){
         NSString *cdKey = [keyMatch objectForKey:pfKey];
