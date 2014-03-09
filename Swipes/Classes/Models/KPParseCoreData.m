@@ -39,6 +39,8 @@
 @property (nonatomic) NSMutableDictionary *_objectsToDeleteOnServer;
 @property (nonatomic) NSMutableDictionary *_objectAttributesToUpdateOnServer;
 
+
+
 @property (nonatomic) NSMutableSet *_deletedObjectsForSyncNotification;
 @property (nonatomic) NSMutableSet *_updatedObjectsForSyncNotification;
 
@@ -46,10 +48,47 @@
 @property BOOL _needSync;
 @property BOOL _isSyncing;
 
+@property (nonatomic) NSDate *lastTry;
+@property (nonatomic) NSInteger tryCounter;
+
 @end
 
 @implementation KPParseCoreData
 
+#pragma mark - public handlers of changes
+-(void)tempId:(NSString *)tempId gotObjectId:(NSString *)objectId{
+    if(!tempId || !objectId) return;
+    [self._tempIdsThatGotObjectIds setObject:objectId forKey:tempId];
+}
+-(NSArray *)lookupChangedAttributesToSaveForObject:(NSString *)objectId{
+    return [self._objectAttributesToUpdateOnServer objectForKey:objectId];
+}
+-(NSArray*)lookupTemporaryChangedAttributesForTempId:(NSString *)tempId{
+    return [self._attributeChangesOnNewObjectsWhileSyncing objectForKey:tempId];
+}
+-(NSArray*)lookupTemporaryChangedAttributesForObject:(NSString*)objectId{
+    return [self._attributeChangesOnObjects objectForKey:objectId];
+}
+-(void)sync:(BOOL)sync attributes:(NSArray*)attributes forIdentifier:(NSString*)identifier isTemp:(BOOL)isTemp{
+    NSMutableDictionary *targetDictionary = isTemp ? self._attributeChangesOnNewObjectsWhileSyncing : self._attributeChangesOnObjects;
+    NSArray *attributeArray = [targetDictionary objectForKey:identifier];
+    NSMutableSet *attributeSet = [NSMutableSet set];
+    if(attributeArray)
+        [attributeSet addObjectsFromArray:attributeArray];
+    [attributeSet addObjectsFromArray:attributes];
+    [targetDictionary setObject:[attributeSet allObjects] forKey:identifier];
+    if(sync) [self synchronizeForce:NO async:YES];
+}
+
+-(void)hardSync{
+    NSArray* objects = [KPParseObject MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"objectId != nil"] inContext:[self context]];
+    for (KPParseObject* obj in objects) {
+        [self sync:NO attributes:@[@"all"] forIdentifier:obj.objectId isTemp:NO];
+    }
+    [self saveUpdatingObjects];
+    [self synchronizeForce:YES async:YES];
+
+}
 /*
     This save should be called if data should be synced
 */
@@ -59,7 +98,6 @@
         context = [self context];
     
     DUMPDB;
-    
     [context performBlockAndWait:^{
         //NSSet *insertedObjects = [context insertedObjects];
         NSSet *updatedObjects = [context updatedObjects];
@@ -83,6 +121,7 @@
         }
         [self saveUpdatingObjects];
     }];
+    
     [context MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
         DUMPDB;
         [self synchronizeForce:NO async:YES];
@@ -148,9 +187,23 @@
         return [self synchronizeWithParseAsync:async];
     }
 }
+
+-(void)finalizeSync{
+    self._isSyncing = NO;
+    if(self._needSync){
+        NSDate *now = [NSDate date];
+        if(!self.lastTry || [now timeIntervalSinceDate:self.lastTry] > 60){
+            self.lastTry = now;
+            self.tryCounter = 0;
+        }
+        if(self.tryCounter > 5) return;
+        self.tryCounter++;
+        [self synchronizeForce:YES async:YES];
+    }
+}
+
 /*
- 
- */
+*/
 
 - (BOOL)synchronizeWithParseAsync:(BOOL)async
 {
@@ -203,25 +256,25 @@
             handleObject(object);
         }
     }
-    
-    
-    
-    NSMutableDictionary *syncData = [NSMutableDictionary dictionary];
-    
     /* This will consist of tempId's to objects that did not have one already */
     if([context hasChanges])
         [context MR_saveOnlySelfAndWait];
+    
+
+    
+    NSMutableDictionary *syncData = [@{
+                                       @"changesOnly" : @YES,
+                                       @"sessionToken": [kCurrent sessionToken],
+                                       @"platform" : @"ios",
+                                       @"version": [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]}
+                                     mutableCopy];
+
     
     /* The last update time - saved and received from the sync response */
     NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSync"];
     if (lastUpdate)
         [syncData setObject:lastUpdate forKey:@"lastUpdate"];
     
-    /* Sending the user session to verify on the server */
-    [syncData setObject:[kCurrent sessionToken] forKey:@"sessionToken"];
-    
-    /* Indicates that it will only receive and response with changes since lastUpdate */
-    [syncData setObject:@YES forKey:@"changesOnly"];
     
     /* Include all deleted objects to be saved */
     for(NSString *objectId in self._objectsToDeleteOnServer)
@@ -230,25 +283,23 @@
     [syncData setObject:updateObjectsToServer forKey:@"objects"];
     
     
-    /* Include information around platform and what app version */
-    [syncData setObject:@"ios" forKey:@"platform"];
-    [syncData setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"version"];
-    
     /* Preparing request */
     NSError *error;
 #ifdef RELEASE
     NSString *url = @"http://api.swipesapp.com/sync";
 #else
     NSString *url = @"http://swipes-test.herokuapp.com/sync";
+    //url = @"http://127.0.0.1:5000/sync";
+    
 #endif
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
-    [request setTimeoutInterval:50];
+    [request setTimeoutInterval:35];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
                                                        options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
                                                         error:&error];
     if(error){
         [UtilityClass sendError:error type:@"Sync JSON prepare parse"];
-        self._isSyncing = NO;
+        [self finalizeSync];
         return NO;
     }
     [request setHTTPBody:jsonData];
@@ -257,17 +308,27 @@
     
     
     /* Performing request */
-    NSURLResponse *response;
-    //NSLog(@"sending %i objects",totalNumberOfObjectsToSave);
+    NSHTTPURLResponse *response;
+    NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,syncData);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-#warning how should server error be handled?
-    if(error || !resData){
-        [UtilityClass sendError:error type:@"Sync request error"];
-        self._isSyncing = NO;
+    
+    
+    if(response.statusCode != 200 || error){
+        if(error) [UtilityClass sendError:error type:@"Sync request error 1"];
+        if(response.statusCode == 503) self._needSync = YES;
+        else{
+            NSString *myString = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+            error = [NSError errorWithDomain:myString code:response.statusCode userInfo:nil];
+            NSLog(@"error:%@",error.description);
+            [UtilityClass sendError:error type:@"Sync request error 2"];
+        }
+        self._needSync = YES;
+        [self finalizeSync];
         return NO;
     }
+    
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
-    //NSLog(@"respo:%@ error:%@",result,error);
+    NSLog(@"res:%@ err: %@",result,error);
     
     if(error || [result objectForKey:@"code"] || ![result objectForKey:@"serverTime"]){
         if(!error){
@@ -281,10 +342,13 @@
             }
             error = [NSError errorWithDomain:message code:code userInfo:result];
         }
-        [UtilityClass sendError:error type:@"Sync Server Error"];
-        self._isSyncing = NO;
+        [UtilityClass sendError:error type:@"Sync Json Parse Error"];
+        [self finalizeSync];
         return NO;
     }
+    
+    
+    
     
     
     /* Handling response - Tags first due to relation */
@@ -298,7 +362,6 @@
         [self handleCDObject:nil withObject:object inContext:localContext];
     }
     [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
-        self._isSyncing = NO;
         /* Save the sync to server */
         [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastSyncLocalDate"];
         if (lastUpdate)
@@ -306,7 +369,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self cleanUpAfterSync];
         DUMPDB;
-        if(self._needSync) [self synchronizeForce:YES async:async];
+        [self finalizeSync];
     }];
     
     return (0 < totalNumberOfObjectsToSave);
@@ -383,7 +446,6 @@
 
 
 -(void)cleanUpAfterSync{
-    [self endBackgroundHandler];
     [self._objectAttributesToUpdateOnServer removeAllObjects];
     
     
@@ -406,30 +468,6 @@
 }
 
 
-#pragma mark - public handlers of changes
--(void)tempId:(NSString *)tempId gotObjectId:(NSString *)objectId{
-    if(!tempId || !objectId) return;
-    [self._tempIdsThatGotObjectIds setObject:objectId forKey:tempId];
-}
--(NSArray *)lookupChangedAttributesToSaveForObject:(NSString *)objectId{
-    return [self._objectAttributesToUpdateOnServer objectForKey:objectId];
-}
--(NSArray*)lookupTemporaryChangedAttributesForTempId:(NSString *)tempId{
-    return [self._attributeChangesOnNewObjectsWhileSyncing objectForKey:tempId];
-}
--(NSArray*)lookupTemporaryChangedAttributesForObject:(NSString*)objectId{
-    return [self._attributeChangesOnObjects objectForKey:objectId];
-}
--(void)sync:(BOOL)sync attributes:(NSArray*)attributes forIdentifier:(NSString*)identifier isTemp:(BOOL)isTemp{
-    NSMutableDictionary *targetDictionary = isTemp ? self._attributeChangesOnNewObjectsWhileSyncing : self._attributeChangesOnObjects;
-    NSArray *attributeArray = [targetDictionary objectForKey:identifier];
-    NSMutableSet *attributeSet = [NSMutableSet set];
-    if(attributeArray)
-        [attributeSet addObjectsFromArray:attributeArray];
-    [attributeSet addObjectsFromArray:attributes];
-    [targetDictionary setObject:[attributeSet allObjects] forKey:identifier];
-    if(sync) [self synchronizeForce:NO async:YES];
-}
 
 
 
@@ -591,16 +629,10 @@ static KPParseCoreData *sharedObject;
 - (void)initialize
 {
     self.backgroundTask = UIBackgroundTaskInvalid;
-    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
-    if(![[NSFileManager defaultManager] fileExistsAtPath:storeURL.path]){
-        [[NSUserDefaults standardUserDefaults] setInteger:ThemeLight forKey:@"theme"];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasSeenLightScheme"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
     
     [self loadDatabase];
     notify(@"closing app", forceSync);
-    notify(@"opening app", forceSync);
+    notify(@"opened app", forceSync);
     notify(@"logged in", forceSync);
     sharedObject._reach = [Reachability reachabilityWithHostname:@"www.google.com"];
     // Set the blocks

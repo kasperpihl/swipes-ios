@@ -61,7 +61,7 @@ static ThemeHandler *sharedObject;
     }
 }
 -(void)setCurrentTheme:(Theme)currentTheme{
-    if(currentTheme != ThemeLight && currentTheme != ThemeDark) currentTheme = ThemeDark;
+    if(currentTheme != ThemeLight && currentTheme != ThemeDark) currentTheme = ThemeLight;
     _currentTheme = currentTheme;
     [[NSUserDefaults standardUserDefaults] setInteger:currentTheme forKey:@"theme"];
     [[NSUserDefaults standardUserDefaults] synchronize];

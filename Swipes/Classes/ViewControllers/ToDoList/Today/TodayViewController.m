@@ -144,7 +144,6 @@
                            @"Long to-do list: stressful. Complete to-do list: priceless. #ProductiveDay"];
     NSUInteger randomIndex = arc4random() % [facebooks count];
     NSString *string = [facebooks objectAtIndex:randomIndex];
-    string = @"Kickin’ my shoes off because today’s to-do list is complete! #ProductiveDay";
     return string;
 }
 - (void)viewDidLoad
