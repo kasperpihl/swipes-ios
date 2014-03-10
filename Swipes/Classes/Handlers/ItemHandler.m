@@ -74,20 +74,8 @@
     if(!self.isSorted){
         KPToDo *movingToDoObject = [self itemForIndexPath:fromIndexPath];
         KPToDo *replacingToDoObject = [self itemForIndexPath:toIndexPath];
-        [movingToDoObject changeToOrder:replacingToDoObject.orderValue withItems:self.items];
-        NSMutableArray *newItems = [NSMutableArray array];
-        for(NSInteger i = 0 ; i < self.items.count ; i++){
-            KPToDo *item = [self.items objectAtIndex:i];
-            if(i == fromIndexPath.row) continue;
-            
-            if(i == toIndexPath.row){
-                if(toIndexPath.row > fromIndexPath.row) [newItems addObject:item];
-                [newItems addObject:movingToDoObject];
-                if(toIndexPath.row < fromIndexPath.row) [newItems addObject:item];
-            }
-            else [newItems addObject:item];
-        }
-        [self setItems:[newItems copy]];
+        NSArray *newItems = [movingToDoObject changeToOrder:replacingToDoObject.orderValue withItems:self.items];
+        [self setItems:newItems];
         [self notifyUpdate];
     }
 }

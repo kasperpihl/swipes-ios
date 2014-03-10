@@ -441,8 +441,9 @@
     
 }
 
--(void)changeToOrder:(NSInteger)newOrder withItems:(NSArray *)items{
-    if(newOrder == self.orderValue) return;
+-(NSArray*)changeToOrder:(NSInteger)newOrder withItems:(NSArray *)items{
+    if(newOrder == self.orderValue) return nil;
+    NSLog(@"change:%i - %i",self.orderValue,newOrder);
     BOOL decrease = (newOrder > self.orderValue);
     NSString *predicateRawString = (newOrder > self.orderValue) ? @"(order > %i) AND (order =< %i)" : @"(order < %i) AND (order >= %i)";
     
@@ -458,7 +459,10 @@
     }
     
     [KPToDo saveToSync];
+    
     [ANALYTICS heartbeat];
+    NSArray *newOrderItems = [items sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES]]];
+    return newOrderItems;
 }
 
 -(void)updateTagSet:(NSSet*)tagsSet withTags:(NSArray*)tags remove:(BOOL)remove{
