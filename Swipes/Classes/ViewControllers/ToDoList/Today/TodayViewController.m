@@ -18,6 +18,8 @@
 #import "UIView+Utilities.h"
 #import "AnalyticsHandler.h"
 #import "SlowHighlightIcon.h"
+#import "StyleHandler.h"
+#import "SectionHeaderView.h"
 @interface TodayViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 @property (nonatomic,weak) IBOutlet KPReorderTableView *tableView;
 @property (nonatomic) YoureAllDoneView *youreAllDoneView;
@@ -28,6 +30,7 @@
 @property (nonatomic) UIButton *facebookButton;
 @property (nonatomic) UIButton *twitterButton;
 @property (nonatomic) NSString *shareText;
+@property (nonatomic) SectionHeaderView *sectionHeader;
 @end
 @implementation TodayViewController
 #pragma mark - Dragable delegate
@@ -72,6 +75,8 @@
     self.parent.backgroundMode = (itemNumber == 0);
     [self setEmptyBack:(itemNumber == 0) animated:YES];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:itemNumber];
+    [self updateSectionHeader];
+    self.sectionHeader.fillColor = (itemNumber == 0) ? CLEAR : tcolor(BackgroundColor);
     if(itemNumber == 0 && oldNumber > 0){
         NSInteger servicesAvailable = 0;
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) servicesAvailable++;
@@ -107,6 +112,36 @@
     [self parent].lock = NO;
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 6;
+}
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    UIFont *font = SECTION_HEADER_FONT;
+    self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:CellTypeToday] font:font title:@""];
+    self.sectionHeader.fillColor = (self.itemHandler.itemCounterWithFilter == 0) ? CLEAR : tcolor(BackgroundColor);
+    self.sectionHeader.progress = YES;
+    
+    [self updateSectionHeader];
+    return self.sectionHeader;
+}
+-(void)updateSectionHeader{
+    NSDate *endOfToday = [[NSDate dateTomorrow] dateAtStartOfDay];
+    NSDate *startOfToday = [[NSDate date] dateAtStartOfDay];
+    NSPredicate *inprogressPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)",endOfToday];
+    NSPredicate *completedPredicate = [NSPredicate predicateWithFormat:@"(completionDate > %@)",startOfToday];
+    NSInteger numberInProgress = [KPToDo MR_countOfEntitiesWithPredicate:inprogressPredicate];
+    NSInteger numberOfDone = [KPToDo MR_countOfEntitiesWithPredicate:completedPredicate];
+    NSInteger total = numberInProgress+numberOfDone;
+    //NSInteger percentage = ceilf((CGFloat)numberOfDone/total*100);
+    
+    self.sectionHeader.title = [NSString stringWithFormat:@"%i / %i Today",numberOfDone,total];
+    if(total == 0) total = 1;
+    //[NSString stringWithFormat:@"%i%%",percentage];//
+    self.sectionHeader.progressPercentage = (CGFloat)numberOfDone/total;
+}
+
+
 #pragma mark - UIViewControllerClasses
 -(void)updateBackground{
     BOOL isFacebookAvailable = ([[UIDevice currentDevice].systemVersion floatValue] >= 6 && [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]);
@@ -182,6 +217,7 @@
     [self.view addSubview:self.twitterButton];
     self.twitterButton.autoresizingMask = self.facebookButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
 }
+
 
 -(UIImage*)screenshotForSharingService:(NSString*)sharingService{
     BOOL oldFaceHidden = self.facebookButton.hidden;
