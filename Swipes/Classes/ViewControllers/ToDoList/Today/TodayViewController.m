@@ -113,7 +113,7 @@
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 6;
+    return 5;
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     

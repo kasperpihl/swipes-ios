@@ -119,7 +119,8 @@
     if(self.progress){
         NSLog(@"progress");
         CGFloat progressY = self.bounds.size.height;
-        targetX += 5;
+        CGFloat extraCut = progressY * kDefLeftCutSize;
+        targetX += extraCut;
         CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
         CGContextMoveToPoint(currentContext, 0, progressY);
         CGContextSetLineWidth(currentContext, LINE_SIZE*2);
