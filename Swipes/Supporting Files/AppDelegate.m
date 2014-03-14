@@ -24,6 +24,9 @@
 #import "PaymentHandler.h"
 #import "NotificationHandler.h"
 
+
+
+
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -89,6 +92,13 @@
     //[EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
     
     //NSLog(@"%@",[kCurrent sessionToken]);
+    
+    
+    
+    
+    
+    
+    
     return YES;
 }
 - (void)tagLaunchSource:(NSDictionary *)launchOptions
