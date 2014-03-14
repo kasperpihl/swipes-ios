@@ -34,7 +34,7 @@
 #define TITLE_Y (TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
 
 
-#define LABEL_WIDTH (320-(CELL_LABEL_X+(CELL_LABEL_X/3)))
+#define LABEL_WIDTH (self.frame.size.width - (CELL_LABEL_X + (CELL_LABEL_X / 3)))
 
 #define LABEL_SPACE 2
 
@@ -65,15 +65,16 @@
         self.shouldRegret = YES;
         //self.contentView.layer.masksToBounds = YES;
         self.backgroundColor = tcolor(BackgroundColor);
-        self.contentView.backgroundColor = tcolor(BackgroundColor);
+        self.contentView.backgroundColor = [UIColor redColor]; //tcolor(BackgroundColor);
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X,TITLE_Y, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X, TITLE_Y, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
         titleLabel.tag = TITLE_LABEL_TAG;
         titleLabel.numberOfLines = 1;
         titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         titleLabel.font = TITLE_LABEL_FONT;
         titleLabel.textColor = tcolor(TextColor);
         titleLabel.backgroundColor = [UIColor clearColor];
+        titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:titleLabel];
         self.titleLabel = (UILabel*)[self.contentView viewWithTag:TITLE_LABEL_TAG];
         
@@ -140,18 +141,21 @@
     }
     return self;
 }
+
 -(void)pressedPriority{
     self.toDo.priorityValue = (self.toDo.priorityValue == 0) ? 1 : 0;
     [KPToDo saveToSync];
     [self setPriority:(self.toDo.priorityValue == 1)];
 }
--(void)setPriority:(BOOL)priority{
+
+- (void)setPriority:(BOOL)priority {
     self.dotView.priority = priority;
 }
--(void)setTextLabels:(BOOL)showBottomLine{
+
+- (void)setTextLabels:(BOOL)showBottomLine {
     CGFloat titleY = showBottomLine ? TITLE_Y : ((CELL_HEIGHT - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
-    CGRectSetY(self.tagsLabel, TITLE_Y+self.titleLabel.frame.size.height+LABEL_SPACE);
+    CGRectSetY(self.tagsLabel, TITLE_Y + self.titleLabel.frame.size.height + LABEL_SPACE);
     CGRectSetCenterY(self.locationIcon, self.tagsLabel.center.y);
     CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y);
     CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y);
@@ -159,7 +163,8 @@
     CGRectSetCenterY(self.alarmSeperator, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
 }
--(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags{
+
+- (void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags {
     
     self.toDo = toDo;
     self.dotView.priority = (toDo.priorityValue == 1);
@@ -241,19 +246,23 @@
     
     [self setTextLabels:showBottomLine];
 }
+
 -(void)setDotColor:(CellType)cellType{
     UIColor *color = [StyleHandler colorForCellType:cellType];
     self.selectionView.backgroundColor = color;
     self.dotView.dotColor = color;
 }
+
 -(void)setSelected:(BOOL)selected{
     [self setSelected:selected animated:NO];
 }
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     self.selectionView.hidden = !selected;
     //self.selectionView.frame = selected ? kSelectedFrame : kUnselectedFrame;
 }
+
 -(void)setCellType:(CellType)cellType{
     if(_cellType != cellType){
         _cellType = cellType;
@@ -273,4 +282,5 @@
         self.activatedDirection = [StyleHandler directionForCellType:cellType];
     }
 }
+
 @end

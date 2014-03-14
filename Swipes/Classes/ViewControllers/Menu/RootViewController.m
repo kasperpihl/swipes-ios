@@ -52,7 +52,7 @@
         ScheduleViewController *vc1 = [[ScheduleViewController alloc] init];
         TodayViewController *vc2 = [[TodayViewController alloc] init];
         DoneViewController *vc3 = [[DoneViewController alloc] init];
-        vc1.view.autoresizingMask = vc2.view.autoresizingMask = vc3.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+        vc1.view.autoresizingMask = vc2.view.autoresizingMask = vc3.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
         KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3]];
         _menuViewController = menuViewController;
     }

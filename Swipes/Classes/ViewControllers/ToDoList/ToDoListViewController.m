@@ -20,7 +20,7 @@
 #import "AnalyticsHandler.h"
 #import "StyleHandler.h"
 #import "KPTagList.h"
-
+#import "UIView+Utilities.h"
 
 #import "RootViewController.h"
 #define TABLEVIEW_TAG 500
@@ -57,6 +57,7 @@
 
 @implementation ToDoListViewController
 @synthesize showingViewController = _showingViewController;
+
 -(ItemHandler *)itemHandler{
     if(!_itemHandler){
         _itemHandler = [[ItemHandler alloc] init];
@@ -64,27 +65,31 @@
     }
     return _itemHandler;
 }
+
 -(ToDoViewController *)showingViewController{
     if(!_showingViewController){
         _showingViewController = [[ToDoViewController alloc] init];
         _showingViewController.delegate = self;
         _showingViewController.segmentedViewController = [self parent];
-        _showingViewController.view.frame = CGRectMake(0, 0, 320, self.tableView.frame.size.height-SECTION_HEADER_HEIGHT);
+        _showingViewController.view.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.tableView.frame.size.height - SECTION_HEADER_HEIGHT);
     }
     return _showingViewController;
 }
-#pragma mark ItemHandlerDelegate
--(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber oldNumber:(NSInteger)oldNumber{
+
+#pragma mark - ItemHandlerDelegate
+
+- (void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber oldNumber:(NSInteger)oldNumber {
     //[self didUpdateCells];
     [self showBackgroundItems:(itemNumber == 0)];
     self.searchBar.hidden = (itemNumber == 0);
-    
 }
--(void)showBackgroundItems:(BOOL)show{
+
+- (void)showBackgroundItems:(BOOL)show {
     self.menuText.hidden = !show;
     self.backgroundImage.hidden = !show;
 }
--(void)didUpdateItemHandler:(ItemHandler *)handler{
+
+- (void)didUpdateItemHandler:(ItemHandler *)handler {
     [self willUpdateCells];
     NSArray *selectedItems = [self selectedItems];
     [self.selectedRows removeAllObjects];
@@ -99,83 +104,107 @@
     
     [self didUpdateCells];
 }
--(KPSegmentedViewController *)parent{
+
+- (KPSegmentedViewController *)parent {
     KPSegmentedViewController *parent = (KPSegmentedViewController*)[self parentViewController];
     return parent;
 }
--(NSMutableDictionary *)stateDictionary{
-    if(!_stateDictionary) _stateDictionary = [NSMutableDictionary dictionary];
+
+- (NSMutableDictionary *)stateDictionary {
+    if (!_stateDictionary)
+        _stateDictionary = [NSMutableDictionary dictionary];
     return _stateDictionary;
 }
--(CellType)determineCellTypeFromState:(NSString*)state{
+
+- (CellType)determineCellTypeFromState:(NSString*)state {
     CellType cellType;
-    if([state isEqualToString:@"today"]) cellType = CellTypeToday;
-    else if([state isEqualToString:@"schedule"]) cellType = CellTypeSchedule;
-    else cellType = CellTypeDone;
+    if ([state isEqualToString:@"today"])
+        cellType = CellTypeToday;
+    else if ([state isEqualToString:@"schedule"])
+        cellType = CellTypeSchedule;
+    else
+        cellType = CellTypeDone;
     return cellType;
 }
--(void)setState:(NSString *)state{
+
+- (void)setState:(NSString *)state {
     _state = state;
     self.cellType = [self determineCellTypeFromState:state];
 }
--(void)update{
+
+- (void)update {
     [self.itemHandler reloadData];
 }
--(void)willUpdateCells{
+
+- (void)willUpdateCells {
     
 }
--(void)didUpdateCells{
+
+- (void)didUpdateCells {
     [self.searchBar reloadDataAndUpdate:YES];
     [self handleShowingToolbar];
 }
--(NSMutableArray *)selectedRows{
-    if(!_selectedRows) _selectedRows = [NSMutableArray array];
+
+- (NSMutableArray *)selectedRows {
+    if(!_selectedRows)
+        _selectedRows = [NSMutableArray array];
     return _selectedRows;
 }
 
 #pragma mark - KPSearchBarDelegate
--(void)startedSearchBar:(KPSearchBar *)searchBar{
+
+- (void)startedSearchBar:(KPSearchBar *)searchBar {
     //self.parent.fullscreenMode = YES;
 }
--(void)searchBar:(KPSearchBar *)searchBar searchedForString:(NSString *)searchString{
+
+- (void)searchBar:(KPSearchBar *)searchBar searchedForString:(NSString *)searchString {
     [self.itemHandler searchForString:searchString];
     [self deselectAllRows:self];
 }
--(void)searchBar:(KPSearchBar *)searchBar deselectedTag:(NSString *)tag{
+
+- (void)searchBar:(KPSearchBar *)searchBar deselectedTag:(NSString *)tag {
     [self.itemHandler deselectTag:tag];
     [self deselectAllRows:self];
 }
+
 -(void)searchBar:(KPSearchBar *)searchBar selectedTag:(NSString *)tag{
     [self.itemHandler selectTag:tag];
     [self deselectAllRows:self];
 }
+
 -(void)clearedAllFiltersForSearchBar:(KPSearchBar *)searchBar{
     //[self.parent showNavbar:YES];
     [self.itemHandler clearAll];
     //self.parent.fullscreenMode = NO;
     [self deselectAllRows:self];
 }
+
 #pragma mark - UITableViewDelegate
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if(!self.itemHandler.isSorted && self.itemHandler.itemCounterWithFilter == 0) return 0;
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (!self.itemHandler.isSorted && self.itemHandler.itemCounterWithFilter == 0)
+        return 0;
     return SECTION_HEADER_HEIGHT;
-    
 }
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *title = [[self.itemHandler titleForSection:section] uppercaseString];
     UIFont *font = SECTION_HEADER_FONT;
     SectionHeaderView *sectionHeader = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:self.cellType] font:font title:title];
     return sectionHeader;
 }
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return CELL_HEIGHT;
 }
--(ToDoCell*)readyCell:(ToDoCell*)cell{
+
+- (ToDoCell*)readyCell:(ToDoCell*)cell {
     [cell setMode:MCSwipeTableViewCellModeExit];
     cell.delegate = self;
     //cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
+
 - (UITableViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *cellIdentifier = [NSString stringWithFormat:@"%@cell",self.state];
     ToDoCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -185,58 +214,70 @@
     }
 	return cell;
 }
--(void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     cell.cellType = [toDo cellTypeForTodo];
     [cell setDotColor:self.cellType];
     [cell changeToDo:toDo withSelectedTags:self.itemHandler.selectedTags];
 }
--(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.selectedRows removeObject:indexPath];
     [self handleShowingToolbar];
 }
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (![self.selectedRows containsObject:indexPath])
+        [self.selectedRows addObject:indexPath];
     [self handleShowingToolbar];
 }
 
 // Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
--(void)doubleTap:(UISwipeGestureRecognizer*)tap
-{
-    if (UIGestureRecognizerStateEnded == tap.state)
-    {
+- (void)doubleTap:(UISwipeGestureRecognizer*)tap {
+    if (UIGestureRecognizerStateEnded == tap.state) {
+        [self.view explainSubviews];
         CGPoint p = [tap locationInView:tap.view];
         NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
-        if(!indexPath) return;
+        if (!indexPath)
+            return;
+        UITableViewCell* cell = [_tableView cellForRowAtIndexPath:indexPath];
+        [cell.contentView explainSubviews];
+        DLogFrame(cell);
         [self editIndexPath:indexPath];
     }
 }
--(void)editIndexPath:(NSIndexPath *)indexPath{
-    
+
+- (void)editIndexPath:(NSIndexPath *)indexPath {
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     self.showingViewController.model = toDo;
     [ROOT_CONTROLLER pushViewController:self.showingViewController animated:YES];
 }
--(void)pressedEdit{
+
+- (void)pressedEdit {
     NSIndexPath *indexPath;
-    if(self.selectedRows.count > 0) indexPath = [self.selectedRows lastObject];
-    if(indexPath) [self editIndexPath:indexPath];
+    if (self.selectedRows.count > 0)
+        indexPath = [self.selectedRows lastObject];
+    if (indexPath)
+        [self editIndexPath:indexPath];
 }
--(void)didPressCloseToDoViewController:(ToDoViewController *)viewController{
+
+- (void)didPressCloseToDoViewController:(ToDoViewController *)viewController {
     [ROOT_CONTROLLER popViewControllerAnimated:YES];
 }
--(void)scheduleToDoViewController:(ToDoViewController *)viewController{
+
+-(void)scheduleToDoViewController:(ToDoViewController *)viewController {
     
 }
+
 #pragma mark - UI Specific
--(NSArray *)selectedItems{
+
+- (NSArray *)selectedItems {
     NSMutableArray *array = [NSMutableArray array];
     for(NSIndexPath *indexPath in self.selectedRows){
         KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
@@ -245,17 +286,17 @@
     return array;
 }
 
-
 #pragma mark - ScrollViewDelegate
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
         if (scrollView.contentOffset.y < self.searchBar.frame.size.height) {
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, 0, 0);
-        } else {
-            
+        }
+        else {
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         }
-        if(scrollView.contentOffset.y <= 0){
+        if (scrollView.contentOffset.y <= 0) {
             CGRectSetHeight(self.searchBar, self.tableView.tableHeaderView.frame.size.height-scrollView.contentOffset.y);
             CGRect searchBarFrame = self.searchBar.frame;
             searchBarFrame.origin.y = scrollView.contentOffset.y;
@@ -265,7 +306,8 @@
 }
 
 #pragma mark - SwipeTableCell
--(void)swipeTableViewCell:(ToDoCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
+
+- (void)swipeTableViewCell:(ToDoCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
     [self.searchBar resignSearchField];
@@ -280,23 +322,31 @@
         if(indexPath) [self.selectedRows addObject:indexPath];
     }
 }
--(BOOL)swipeTableViewCell:(MCSwipeTableViewCell *)cell shouldHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture{
-    if(self.swipingCell && cell != self.swipingCell) return NO;
-    else return YES;
+
+- (BOOL)swipeTableViewCell:(MCSwipeTableViewCell *)cell shouldHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture {
+    if (self.swipingCell && cell != self.swipingCell)
+        return NO;
+    else
+        return YES;
 }
--(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation{
-    if(cell != self.swipingCell) return;
+
+- (void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation {
+    if (cell != self.swipingCell)
+        return;
     NSArray *visibleCells = [self.tableView visibleCells];
-    for(MCSwipeTableViewCell *localCell in visibleCells){
+    for (MCSwipeTableViewCell *localCell in visibleCells) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
-        if(localCell != cell && [self.selectedRows containsObject:indexPath]){
+        if (localCell != cell && [self.selectedRows containsObject:indexPath]) {
             [localCell publicHandlePanGestureRecognizer:gesture withTranslation:translation];
         }
     }
 }
--(void)swipeTableViewCell:(ToDoCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
-    if(cell != self.swipingCell) return;
-    if(self.isHandlingTrigger) return;
+
+- (void)swipeTableViewCell:(ToDoCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode {
+    if (cell != self.swipingCell)
+        return;
+    if (self.isHandlingTrigger)
+        return;
     self.isHandlingTrigger = YES;
     NSArray *toDosArray = [self selectedItems];
     NSArray *movedItems;
@@ -309,11 +359,11 @@
                 if(button == KPScheduleButtonCancel){
                     [self returnSelectedRowsAndBounce:YES];
                 }
-                else if(button == KPScheduleButtonLocation){
+                else if(button == KPScheduleButtonLocation) {
                     NSArray *movedItems = [KPToDo notifyToDos:toDosArray onLocation:chosenLocation type:type save:YES];
                     [self moveItems:movedItems toCellType:targetCellType];
                 }
-                else{
+                else {
                     if([chosenDate isEarlierThanDate:[NSDate date]]) targetCellType = CellTypeToday;
                     NSArray *movedItems = [KPToDo scheduleToDos:toDosArray forDate:chosenDate save:YES];
                     [self moveItems:movedItems toCellType:targetCellType];
@@ -340,7 +390,8 @@
     [self moveItems:movedItems toCellType:targetCellType];
     self.isHandlingTrigger = NO;
 }
--(void)swipeTableViewCell:(ToDoCell *)cell slidedIntoState:(MCSwipeTableViewCellState)state{
+
+- (void)swipeTableViewCell:(ToDoCell *)cell slidedIntoState:(MCSwipeTableViewCellState)state {
     CellType targetType = self.cellType;
     if(state != MCSwipeTableViewCellStateNone){
         targetType = [StyleHandler cellTypeForCell:self.cellType state:state];
@@ -348,7 +399,7 @@
     [cell setDotColor:targetType];
 }
 /*  */
--(void)deleteSelectedItems:(id)sender{
+- (void)deleteSelectedItems:(id)sender {
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
     NSMutableArray *toDos = [NSMutableArray array];
@@ -359,7 +410,8 @@
     [KPToDo deleteToDos:toDos save:YES];
     [self removeItems:[self selectedItems]];
 }
--(void)removeItems:(NSArray*)items{
+
+- (void)removeItems:(NSArray*)items {
     //if(items.count == 0) return;
     NSMutableArray *indexPaths = [NSMutableArray array];
     for(KPToDo *toDo in items){
@@ -390,36 +442,38 @@
         [CATransaction commit];
     }
 }
--(void)moveItems:(NSArray*)items toCellType:(CellType)cellType{
+
+- (void)moveItems:(NSArray*)items toCellType:(CellType)cellType {
     [[self parent] highlightButton:(KPSegmentButtons)cellType-1];
-    if(self.cellType != cellType){
+    if (self.cellType != cellType) {
         [self removeItems:items];
     }
-    else{
+    else {
         [self returnSelectedRowsAndBounce:YES];
         [self deselectAllRows:self];
         [self update];
     }
-    
 }
--(void)cleanUpAfterMovingAnimated:(BOOL)animated{
+
+- (void)cleanUpAfterMovingAnimated:(BOOL)animated {
     [self.selectedRows removeAllObjects];
     self.isLonelyRider = NO;
     self.swipingCell = nil;
     [self didUpdateCells];
 }
 
--(void)deselectAllRows:(id)sender{
+- (void)deselectAllRows:(id)sender {
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
-    for(NSIndexPath *indexPath in selectedIndexPaths){
+    for (NSIndexPath *indexPath in selectedIndexPaths) {
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
     [self.selectedRows removeAllObjects];
     [self handleShowingToolbar];
 }
--(void)returnSelectedRowsAndBounce:(BOOL)bounce{
+
+- (void)returnSelectedRowsAndBounce:(BOOL)bounce {
     NSArray *visibleCells = [self.tableView visibleCells];
-    for(ToDoCell *localCell in visibleCells){
+    for (ToDoCell *localCell in visibleCells) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
         if([self.selectedRows containsObject:indexPath]){
             [localCell setDotColor:self.cellType];
@@ -433,7 +487,8 @@
     self.swipingCell = nil;
     [self handleShowingToolbar];
 }
--(void)prepareTableView:(UITableView *)tableView{
+
+- (void)prepareTableView:(UITableView *)tableView {
     tableView.allowsMultipleSelection = YES;
     [tableView setTableFooterView:[UIView new]];
     
@@ -445,14 +500,14 @@
     tableView.dataSource = self.itemHandler;
     tableView.backgroundColor = [UIColor clearColor];
     tableView.layer.masksToBounds = NO;
-    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
+    UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, SEARCH_BAR_DEFAULT_HEIGHT)];
     
     headerView.hidden = YES;
     headerView.backgroundColor = [UIColor redColor];
     tableView.tableHeaderView = headerView;
     tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     tableView.contentInset = UIEdgeInsetsMake(0, 0, GLOBAL_TOOLBAR_HEIGHT, 0);
-    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0,0, 320, SEARCH_BAR_DEFAULT_HEIGHT)];
+    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, SEARCH_BAR_DEFAULT_HEIGHT)];
     searchBar.searchBarDelegate = self;
     searchBar.searchBarDataSource = self.itemHandler;
     //searchBar.backgroundColor = CLEAR;
@@ -467,6 +522,7 @@
 }
 
 #pragma mark - UIViewController stuff
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -475,11 +531,12 @@
     if ([self.state isEqualToString:@"today"]) {
         imageView.hidden = YES;
     }
-    imageView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/4);
+    imageView.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 4);
     //imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
     imageView.tag = BACKGROUND_IMAGE_VIEW_TAG;
-    if (![self.state isEqualToString:@"today"]) [self.view addSubview:imageView];
-    self.backgroundImage = (UIImageView*)[self.view viewWithTag:BACKGROUND_IMAGE_VIEW_TAG];
+    if (![self.state isEqualToString:@"today"])
+        [self.view addSubview:imageView];
+    self.backgroundImage = (UIImageView *)[self.view viewWithTag:BACKGROUND_IMAGE_VIEW_TAG];
     
     UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.center.y+50, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
     menuText.backgroundColor = CLEAR;
@@ -502,7 +559,6 @@
     menuText.tag = MENU_TEXT_TAG;
     [self.view addSubview:menuText];
     self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];
-    
 
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     tableView.tag = TABLEVIEW_TAG;
@@ -510,14 +566,18 @@
     [self.view addSubview:tableView];
     self.tableView = (UITableView*)[self.view viewWithTag:TABLEVIEW_TAG];
 }
--(void)viewWillAppear:(BOOL)animated{
+
+- (void)viewWillAppear:(BOOL)animated {
     [self update];
     self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height);
-    if(self.cellType != CellTypeToday) self.parent.backgroundMode = NO;
-    else if(self.itemHandler.itemCounterWithFilter == 0) self.parent.backgroundMode = YES;
+    if (self.cellType != CellTypeToday)
+        self.parent.backgroundMode = NO;
+    else if(self.itemHandler.itemCounterWithFilter == 0)
+        self.parent.backgroundMode = YES;
     [super viewWillAppear:animated];
 }
--(void)viewDidAppear:(BOOL)animated{
+
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     NSString *activeView;
     switch (self.cellType) {
@@ -534,27 +594,31 @@
     [ANALYTICS pushView:activeView];
     [self handleShowingToolbar];
 }
--(void)handleShowingToolbar{
+
+- (void)handleShowingToolbar {
     if(self.selectedRows.count > 0){
         [[self parent] setCurrentState:KPControlCurrentStateEdit];
     }
-    else [[self parent] setCurrentState:KPControlCurrentStateAdd];
+    else
+        [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
--(void)viewWillDisappear:(BOOL)animated{
+
+- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
 }
--(void)viewDidDisappear:(BOOL)animated{
+
+- (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self cleanUpAfterMovingAnimated:NO];
     self.searchBar.currentMode = KPSearchBarModeNone;
     [self.itemHandler clearAll];
 }
--(void)dealloc{
+
+- (void)dealloc {
     self.searchBar = nil;
 }
-- (void)didReceiveMemoryWarning
-{
+
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }

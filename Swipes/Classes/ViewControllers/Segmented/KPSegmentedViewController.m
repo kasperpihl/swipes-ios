@@ -263,7 +263,7 @@
 		}];
         self.view.layer.masksToBounds = YES;
         
-        self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, TOP_HEIGHT)];
+        self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, TOP_HEIGHT)];
         self.ios7BackgroundView.backgroundColor = CLEAR;
         [self.ios7BackgroundView addSubview:self.segmentedControl];
         UIButton *settingsButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
@@ -347,9 +347,9 @@
     [self.view addSubview:self.backgroundImage];
     
     /* Content view for ToDo list view controllers */
-    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, 320, self.view.bounds.size.height-TOP_HEIGHT)];
-    self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-    contentView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height-TOP_HEIGHT)];
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     contentView.layer.masksToBounds = YES;
     contentView.tag = CONTENT_VIEW_TAG;
     [self.view addSubview:contentView];

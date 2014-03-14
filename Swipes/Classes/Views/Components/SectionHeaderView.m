@@ -22,13 +22,15 @@
 
 @end
 
-
 @interface SectionHeaderView ()
 
 @property (nonatomic) _SectionHeaderViewText *sectionHeader;
+
 @end
+
 @implementation SectionHeaderView
--(id)initWithColor:(UIColor *)color font:(UIFont *)font title:(NSString *)title{
+
+- (id)initWithColor:(UIColor *)color font:(UIFont *)font title:(NSString *)title {
     self = [super init];
     if (self) {
         CGRectSetSize(self, 320, LINE_SIZE);
@@ -37,39 +39,54 @@
         CGRectSetX(self.sectionHeader, CGRectGetWidth(self.frame) - CGRectGetWidth(self.sectionHeader.frame));
         [self addSubview:self.sectionHeader];
         self.color = color;
-        
     }
     return self;
 }
 
--(void)setColor:(UIColor *)color{
+- (void)setColor:(UIColor *)color {
     self.backgroundColor = color;
     self.sectionHeader.color = color;
     [self.sectionHeader setNeedsDisplay];
 }
--(void)setFillColor:(UIColor *)fillColor{
+
+- (void)setFillColor:(UIColor *)fillColor {
     self.sectionHeader.fillColor = fillColor;
     [self.sectionHeader setNeedsDisplay];
 }
--(void)setFont:(UIFont *)font{
+
+- (void)setFont:(UIFont *)font {
     self.sectionHeader.titleLabel.font = font;
     [self.sectionHeader setNeedsDisplay];
 }
--(void)setTextColor:(UIColor *)textColor{
+
+- (void)setTextColor:(UIColor *)textColor {
     self.sectionHeader.titleLabel.textColor = textColor;
 }
--(void)setTitle:(NSString *)title{
+
+-(void)setTitle:(NSString *)title {
     [self.sectionHeader setText:title];
     [self.sectionHeader setNeedsDisplay];
 }
--(void)setNeedsDisplay{
+
+-(void)setNeedsDisplay {
     [super setNeedsDisplay];
     [self.sectionHeader setNeedsDisplay];
 }
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    DLogFrame(self);
+    DLogFrame(self.sectionHeader);
+//    CGRectSetX(self.sectionHeader, CGRectGetWidth(self.frame) - CGRectGetWidth(self.sectionHeader.frame));
+//    DLogFrame(self.sectionHeader);
+}
+
 @end
 
 @implementation _SectionHeaderViewText
--(id)initWithColor:(UIColor *)color font:(UIFont*)font title:(NSString*)title{
+
+- (id)initWithColor:(UIColor *)color font:(UIFont*)font title:(NSString*)title {
     self = [super init];
     if (self) {
         // Initialization code
@@ -77,8 +94,6 @@
         self.color = color;
         self.backgroundColor = CLEAR;
         self.fillColor = tcolor(BackgroundColor);
-        
-        
         
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:self.bounds];
@@ -93,17 +108,19 @@
     }
     return self;
 }
--(void)setText:(NSString*)text{
+
+- (void)setText:(NSString*)text {
     self.titleLabel.text = text;
     [self.titleLabel sizeToFit];
     CGSize textSize = sizeWithFont(text, self.titleLabel.font);
-    CGFloat actualHeight = textSize.height+kDefTopPadding+kDefBottomPadding;
-    CGFloat leftPadding = (actualHeight*kDefLeftCutSize) + kDefLeftPadding;
+    CGFloat actualHeight = textSize.height + kDefTopPadding+kDefBottomPadding;
+    CGFloat leftPadding = (actualHeight * kDefLeftCutSize) + kDefLeftPadding;
     CGFloat actualWidth = textSize.width + leftPadding + kDefRightPadding;
-    self.titleLabel.frame = CGRectSetPos(self.titleLabel.frame,leftPadding , kDefTopPadding);
+    self.titleLabel.frame = CGRectSetPos(self.titleLabel.frame,leftPadding, kDefTopPadding);
     CGRectSetSize(self, ceilf(actualWidth), ceilf(actualHeight));
     CGRectSetX(self, [self superview].bounds.size.width-self.frame.size.width);
 }
+
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
@@ -142,7 +159,9 @@
     CGContextAddLineToPoint(currentContext, targetX, targetY);
     CGContextStrokePath(currentContext);
 }
+
 -(void)dealloc{
     self.titleLabel = nil;
 }
+
 @end

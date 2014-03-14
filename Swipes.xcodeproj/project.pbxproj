@@ -2821,7 +2821,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Swipes/Ressources/Libs/Crashlytics.framework/run 17aee5fa869f24b705e00dba6d43c51becf5c7e4 18503ba4a511e5ff371707e57ef3f51edb669c35ae9206253a6edcdf35c1fa7c";
+			shellScript = "#./Swipes/Ressources/Libs/Crashlytics.framework/run 17aee5fa869f24b705e00dba6d43c51becf5c7e4 18503ba4a511e5ff371707e57ef3f51edb669c35ae9206253a6edcdf35c1fa7c";
 		};
 		A7F0B9BB1700BA51003BBDD1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3053,7 +3053,7 @@
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "B54CCBCD-6089-48FE-8AEC-4695CEC053E1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B54CCBCD-6089-48FE-8AEC-4695CEC053E1";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = AdHoc;
@@ -3197,7 +3197,7 @@
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "603AA3C8-9AFA-42CF-AD32-245D9E88FC07";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "603AA3C8-9AFA-42CF-AD32-245D9E88FC07";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -3267,7 +3267,7 @@
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "92BE8DBD-7BB9-4365-A2A0-9B30E049ED7A";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "92BE8DBD-7BB9-4365-A2A0-9B30E049ED7A";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
