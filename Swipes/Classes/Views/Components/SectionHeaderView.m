@@ -46,12 +46,21 @@
         [self addSubview:self.sectionHeader];
         
         self.progressView = [[UIView alloc] initWithFrame:self.bounds];
+        
+        self.color = color;
+        
         self.progressView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        
+        self.progressEndingView = [[_ProgressEndingView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.progressView.frame), 0, 12, self.progressView.frame.size.height)];
+        self.progressEndingView.headerView = self;
+        self.progressEndingView.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin);
+        self.progressEndingView.backgroundColor = CLEAR;
+        [self.progressView addSubview:self.progressEndingView];
         CGRectSetWidth(self.progressView, 0);
         [self addSubview:self.progressView];
         
         
-        self.color = color;
+        
         self.layer.masksToBounds = NO;
         
     }
@@ -124,6 +133,10 @@
 @end
 
 @implementation _ProgressEndingView
+-(void)setFrame:(CGRect)frame{
+    [super setFrame:frame];
+    NSLog(@"fram:%f",frame.size.height);
+}
 -(void)drawRect:(CGRect)rect{
     [super drawRect:rect];
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
@@ -138,10 +151,10 @@
     [aPath addLineToPoint:CGPointMake(0, 0)];
     [aPath closePath];
     CGContextAddPath(currentContext, aPath.CGPath);
-    UIColor *fillColor = self.headerView.fillColor;
+    UIColor *fillColor = self.headerView.color;
     CGContextSetFillColorWithColor(currentContext,fillColor.CGColor);
     CGContextFillPath(currentContext);
-    
+    //CGRectSetWidth(self, leftCutPoint);
 }
 
 
