@@ -190,14 +190,13 @@ static RootViewController *sharedObject;
     [ANALYTICS tagEvent:event options:@{@"Number of Tasks":@(tasks.count)}];
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
--(void)shareTasks{
+-(void)shareTasks:(NSArray*)tasks{
     if([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
         mailCont.mailComposeDelegate = self;
         [mailCont setSubject:@"Tasks to complete"];
         
         NSString *message = @"Tasks: \r\n";
-        NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
         for(KPToDo *toDo in tasks){
             message = [message stringByAppendingFormat:@"◯ %@\r\n",toDo.title];
         }

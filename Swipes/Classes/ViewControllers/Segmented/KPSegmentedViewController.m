@@ -123,7 +123,7 @@
     }];
 }
 -(void)pressedShare:(id)sender{
-    [ROOT_CONTROLLER shareTasks];
+    [ROOT_CONTROLLER shareTasks:[[self currentViewController] selectedItems]];
 }
 -(void)tagItems:(NSArray *)items inViewController:(UIViewController*)viewController withDismissAction:(voidBlock)block{
     self.selectedItems = items;
