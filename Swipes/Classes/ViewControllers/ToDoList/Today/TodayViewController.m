@@ -19,9 +19,9 @@
 #import "AnalyticsHandler.h"
 #import "SlowHighlightIcon.h"
 @interface TodayViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
-@property (nonatomic,weak) IBOutlet KPReorderTableView *tableView;
+@property (nonatomic, strong) IBOutlet KPReorderTableView *tableView;
 @property (nonatomic) YoureAllDoneView *youreAllDoneView;
-@property (nonatomic,strong) NSIndexPath *dragRow;
+@property (nonatomic, strong) NSIndexPath *dragRow;
 @property (nonatomic) BOOL emptyBack;
 
 @property (nonatomic) NSString *sharingService;

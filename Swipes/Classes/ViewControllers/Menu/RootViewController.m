@@ -255,10 +255,13 @@ static RootViewController *sharedObject;
 #pragma mark - Helping methods
 #pragma mark - ViewController methods
 -(void)setupAppearance{
-    self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-    if(!sharedObject) sharedObject = self;
-    if(!kCurrent) [self changeToMenu:KPMenuLogin animated:NO];
-    else [self changeToMenu:KPMenuHome animated:NO];
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    if (!sharedObject)
+        sharedObject = self;
+    if (!kCurrent)
+        [self changeToMenu:KPMenuLogin animated:NO];
+    else
+        [self changeToMenu:KPMenuHome animated:NO];
 }
 - (void)viewDidLoad
 {
@@ -288,9 +291,11 @@ static RootViewController *sharedObject;
     [super viewDidAppear:animated];
     
 }
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     clearNotify();
 }
+
 @end

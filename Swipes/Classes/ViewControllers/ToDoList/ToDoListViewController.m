@@ -505,11 +505,12 @@
     headerView.hidden = YES;
     headerView.backgroundColor = [UIColor redColor];
     tableView.tableHeaderView = headerView;
-    tableView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+    tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     tableView.contentInset = UIEdgeInsetsMake(0, 0, GLOBAL_TOOLBAR_HEIGHT, 0);
     KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, SEARCH_BAR_DEFAULT_HEIGHT)];
     searchBar.searchBarDelegate = self;
     searchBar.searchBarDataSource = self.itemHandler;
+    searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     //searchBar.backgroundColor = CLEAR;
     searchBar.tag = SEARCH_BAR_TAG;
     [tableView addSubview:searchBar];
@@ -595,8 +596,18 @@
     [self handleShowingToolbar];
 }
 
-- (void)handleShowingToolbar {
-    if(self.selectedRows.count > 0){
+// NEWCODE
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    self.backgroundImage.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 4);
+    self.menuText.frame = CGRectMake(0, self.backgroundImage.center.y + 50, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT);
+    DLogFrame(self.searchBar);
+}
+
+- (void)handleShowingToolbar
+{
+    if (self.selectedRows.count > 0) {
         [[self parent] setCurrentState:KPControlCurrentStateEdit];
     }
     else

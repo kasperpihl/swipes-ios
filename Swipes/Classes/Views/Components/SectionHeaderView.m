@@ -34,6 +34,7 @@
     self = [super init];
     if (self) {
         CGRectSetSize(self, 320, LINE_SIZE);
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.backgroundColor = color;
         self.sectionHeader = [[_SectionHeaderViewText alloc] initWithColor:color font:font title:title];
         CGRectSetX(self.sectionHeader, CGRectGetWidth(self.frame) - CGRectGetWidth(self.sectionHeader.frame));
@@ -73,13 +74,11 @@
     [self.sectionHeader setNeedsDisplay];
 }
 
+// NEWCODE
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    DLogFrame(self);
-    DLogFrame(self.sectionHeader);
-//    CGRectSetX(self.sectionHeader, CGRectGetWidth(self.frame) - CGRectGetWidth(self.sectionHeader.frame));
-//    DLogFrame(self.sectionHeader);
+    CGRectSetX(self.sectionHeader, CGRectGetWidth(self.frame) - CGRectGetWidth(self.sectionHeader.frame));
 }
 
 @end

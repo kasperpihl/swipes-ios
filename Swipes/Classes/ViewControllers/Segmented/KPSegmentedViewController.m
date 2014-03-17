@@ -419,4 +419,12 @@
 -(void)dealloc{
     clearNotify();
 }
+
+// NEWCODE
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    CGRectSetCenterX(self.segmentedControl, self.view.frame.size.width / 2);
+}
+
 @end
