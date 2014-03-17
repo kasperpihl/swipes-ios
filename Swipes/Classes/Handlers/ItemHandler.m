@@ -188,7 +188,7 @@
 }
 -(NSString *)titleForSection:(NSInteger)section{
     if(self.isSorted) return [self.titleArray objectAtIndex:section];
-    else{
+    else{   
         return @"Tasks";
         /*NSString *s = self.itemCounter > 1 ? @"s":@"";
         return [NSString stringWithFormat:@"%i Task%@",self.itemCounter,s];*/
