@@ -107,6 +107,7 @@
 		A741EC4F18354726000F9F93 /* default-background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A741EC4E18354726000F9F93 /* default-background.jpg */; };
 		A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */; };
 		A74646B918D38660003911DC /* ContactHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A74646B818D38660003911DC /* ContactHandler.m */; };
+		A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FC218D75B250056D124 /* ShareViewController.m */; };
 		A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */; };
 		A74F61B616EB77B3004927DA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B516EB77B3004927DA /* MapKit.framework */; };
 		A74F61B916EBA58B004927DA /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B816EBA58B004927DA /* CoreMedia.framework */; };
@@ -674,6 +675,8 @@
 		A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkthroughOverlayBackground.m; path = Walkthrough/WalkthroughOverlayBackground.m; sourceTree = "<group>"; };
 		A74646B718D38660003911DC /* ContactHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactHandler.h; sourceTree = "<group>"; };
 		A74646B818D38660003911DC /* ContactHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactHandler.m; sourceTree = "<group>"; };
+		A74D3FC118D75B250056D124 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareViewController.h; path = Share/ShareViewController.h; sourceTree = "<group>"; };
+		A74D3FC218D75B250056D124 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShareViewController.m; path = Share/ShareViewController.m; sourceTree = "<group>"; };
 		A74DCCAA18AA684C004E32FA /* UIImage+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utilities.h"; sourceTree = "<group>"; };
 		A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utilities.m"; sourceTree = "<group>"; };
 		A74F61B516EB77B3004927DA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -1459,6 +1462,15 @@
 			path = Upgrade;
 			sourceTree = "<group>";
 		};
+		A74D3FC018D75B0D0056D124 /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				A74D3FC118D75B250056D124 /* ShareViewController.h */,
+				A74D3FC218D75B250056D124 /* ShareViewController.m */,
+			);
+			name = Share;
+			sourceTree = "<group>";
+		};
 		A75207F71730F5E000F1B4F7 /* ToDo */ = {
 			isa = PBXGroup;
 			children = (
@@ -1721,6 +1733,7 @@
 		A781285D17294C56002226C8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A74D3FC018D75B0D0056D124 /* Share */,
 				A7E2D94B17B4FE16007BDE00 /* Upgrade */,
 				A7E2D94517B3F258007BDE00 /* DayPickerSettingsCell.h */,
 				A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */,
@@ -2897,6 +2910,7 @@
 				A717BEE5175DF5AF004791BF /* SignupViewController.m in Sources */,
 				A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */,
 				A78D7A8817F4B27200AD38B1 /* Global.m in Sources */,
+				A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */,
 				A7FE4402182825A1002AFB2E /* UIImage+Blur.m in Sources */,
 				A7DEA1891790BD2D00EB1549 /* MenuViewController.m in Sources */,
 				A703B1B91838EBF20047DCC9 /* AKSegmentedControl.m in Sources */,

@@ -37,6 +37,9 @@
 
 #import "KPAlert.h"
 
+
+#import "ShareViewController.h"
+
 @interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate>
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
@@ -274,8 +277,8 @@ static RootViewController *sharedObject;
     self.sideMenu.hideStatusBarArea = [Global OSVersion] < 7;
     self.settingsViewController = [[MenuViewController alloc] init];
     self.sideMenu.revealView = self.settingsViewController.view;
-    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
-    [self.view addGestureRecognizer:panGestureRecognizer];
+    //UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
+    //[self.view addGestureRecognizer:panGestureRecognizer];
     [self setupAppearance];
     
 }
@@ -286,6 +289,8 @@ static RootViewController *sharedObject;
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    //ShareViewController *shareVC = [[ShareViewController alloc] init];
+    //[self pushViewController:shareVC animated:YES];
     
 }
 - (void)viewDidUnload

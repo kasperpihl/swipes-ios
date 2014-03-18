@@ -8,10 +8,11 @@ pod 'Underscore.m', '~> 0.2.1'
 pod 'RMStore', '~> 0.4.2'
 pod 'Base64', '~> 1.0.1'
 pod 'Evernote-SDK-iOS', '~> 1.3.1'
+pod 'APAddressBook', '~> 0.0.6'
+pod 'Analytics'
+
 #pod 'Dropbox-iOS-SDK', '~> 1.3.9'
-pod 'ASCScreenBrightnessDetector'
-
-
+#pod 'ASCScreenBrightnessDetector'
 #pod 'TWStatus', '~> 0.0.1'
 
 post_install do |installer|
