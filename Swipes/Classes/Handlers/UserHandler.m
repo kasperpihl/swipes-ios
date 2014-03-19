@@ -9,6 +9,7 @@
 #import "UserHandler.h"
 #import <Parse/PFUser.h>
 #import "AnalyticsHandler.h"
+
 @interface UserHandler ()
 @property (nonatomic) BOOL needRefresh;
 @property (nonatomic) UserLevel userLevel;
@@ -19,6 +20,7 @@ static UserHandler *sharedObject;
     if(!sharedObject){
         sharedObject = [[UserHandler allocWithZone:NULL] init];
         [sharedObject initialize];
+        [sharedObject handleUser:kCurrent];
     }
     return sharedObject;
 }
@@ -50,10 +52,6 @@ static UserHandler *sharedObject;
     if(_userLevel != userLevel){
         _userLevel = userLevel;
     }
-    NSString *userLevelString = [self stringForUserLevel:userLevel];
-    if(![[ANALYTICS customDimension:kCusDimUserLevel] isEqualToString:userLevelString]){
-        [ANALYTICS setCustomDimension:kCusDimUserLevel value:userLevelString];
-    }
 }
 -(void)initialize{
     self.userLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"isPlus"];
@@ -82,6 +80,7 @@ static UserHandler *sharedObject;
         [[NSUserDefaults standardUserDefaults] setInteger:userLevel forKey:@"isPlus"];
         self.userLevel = userLevel;
         self.isPlus = (userLevel > UserLevelStandard);
+        [[Analytics sharedAnalytics] identify:kCurrent.objectId traits:@{@"email":kCurrent.email,@"userLevel":[self stringForUserLevel:self.userLevel]}];
     }
 }
 -(void)dealloc{

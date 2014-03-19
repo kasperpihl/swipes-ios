@@ -31,7 +31,6 @@
 #import "KPOverlay.h"
 
 #import "KPToDo.h"
-#import "LocalyticsSession.h"
 #import <MessageUI/MessageUI.h>
 #import <Parse/Parse.h>
 
@@ -98,7 +97,6 @@
             
             if(email){
                 [user setObject:email forKey:@"email"];
-                [[LocalyticsSession shared] setCustomerEmail:email];
             }
             NSString *gender = [userData objectForKey:@"gender"];
             if(gender) [user setObject:gender forKey:@"gender"];
@@ -117,14 +115,12 @@
     else{
         [ANALYTICS tagEvent:@"Logged In" options:@{}];
     }
-    [[LocalyticsSession shared] setCustomerId:user.objectId];
     if([PFFacebookUtils isLinkedWithUser:user]){
         if(!user.email){
             [self fetchDataFromFacebook];
         }
     }
     else{
-        [[LocalyticsSession shared] setCustomerEmail:user.email];
     }
     [self changeToMenu:KPMenuHome animated:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];

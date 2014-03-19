@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Analytics/Analytics.h"
 
 #define kCusDimUserLevel 0
 

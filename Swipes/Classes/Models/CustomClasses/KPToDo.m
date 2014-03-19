@@ -409,7 +409,7 @@
     NSSortDescriptor *unorderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"schedule" ascending:NO];
     NSArray *orderedItems = [[items filteredArrayUsingPredicate:orderedItemsPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
     NSArray *unorderedItems = [[items filteredArrayUsingPredicate:unorderedItemsPredicate] sortedArrayUsingDescriptors:@[unorderedItemsSortDescriptor]];
-    NSInteger counter = kDefOrderVal + 1;
+    int counter = kDefOrderVal + 1;
     NSArray *sortedItems = [unorderedItems arrayByAddingObjectsFromArray:orderedItems];
     NSInteger numberOfChanges = 0;
     if(!unorderedItems || unorderedItems.count == 0) return sortedItems;
@@ -441,7 +441,7 @@
     
 }
 
--(void)changeToOrder:(NSInteger)newOrder withItems:(NSArray *)items{
+-(void)changeToOrder:(int)newOrder withItems:(NSArray *)items{
     if(newOrder == self.orderValue) return;
     BOOL decrease = (newOrder > self.orderValue);
     NSString *predicateRawString = (newOrder > self.orderValue) ? @"(order > %i) AND (order =< %i)" : @"(order < %i) AND (order >= %i)";

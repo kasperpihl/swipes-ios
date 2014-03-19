@@ -20,7 +20,7 @@
 
 +(NSArray*)sortOrderForItems:(NSArray*)items save:(BOOL)save;
 
--(void)changeToOrder:(NSInteger)newOrder withItems:(NSArray*)items;
+-(void)changeToOrder:(int)newOrder withItems:(NSArray*)items;
 -(CellType)cellTypeForTodo;
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags;
 

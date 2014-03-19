@@ -59,7 +59,6 @@
 		A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1CA1838EC570047DCC9 /* ToDoCell.m */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
 		A717BEE5175DF5AF004791BF /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BEE4175DF5AF004791BF /* SignupViewController.m */; };
-		A717BEF0175E83A0004791BF /* libAppsFlyerLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A717BEEF175E83A0004791BF /* libAppsFlyerLib.a */; };
 		A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
 		A717BF24176115CD004791BF /* ProximaNova-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF20176115CD004791BF /* ProximaNova-Black.ttf */; };
 		A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */; };
@@ -108,6 +107,9 @@
 		A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */; };
 		A74646B918D38660003911DC /* ContactHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A74646B818D38660003911DC /* ContactHandler.m */; };
 		A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FC218D75B250056D124 /* ShareViewController.m */; };
+		A74D3FC518D9A10E0056D124 /* Analytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74D3FC418D9A10E0056D124 /* Analytics.framework */; };
+		A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A717BEEB175E6857004791BF /* CoreTelephony.framework */; };
+		A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B816EB59710095A9A8 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */; };
 		A74F61B616EB77B3004927DA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B516EB77B3004927DA /* MapKit.framework */; };
 		A74F61B916EBA58B004927DA /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B816EBA58B004927DA /* CoreMedia.framework */; };
@@ -475,9 +477,6 @@
 		A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A976E6184119D6001C0A51 /* PaymentHandler.m */; };
 		A7ADCB2C17DD2B4000780F88 /* background_white_signate.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB2A17DD2B4000780F88 /* background_white_signate.png */; };
 		A7ADCB2D17DD2B4000780F88 /* background_white_signate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB2B17DD2B4000780F88 /* background_white_signate@2x.png */; };
-		A7ADCB3417DD350400780F88 /* iOSa_2.18.5.version in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB2F17DD350400780F88 /* iOSa_2.18.5.version */; };
-		A7ADCB3517DD350400780F88 /* libLocalyticsAMP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7ADCB3017DD350400780F88 /* libLocalyticsAMP.a */; };
-		A7ADCB3617DD350400780F88 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB3117DD350400780F88 /* LICENSE */; };
 		A7ADCB3817DD352F00780F88 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A7ADCB3717DD352F00780F88 /* libz.dylib */; };
 		A7AF9B5717E210D000F9B26F /* StyleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5617E210D000F9B26F /* StyleHandler.m */; };
 		A7AF9B5C17E2244F00F9B26F /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
@@ -619,8 +618,6 @@
 		A717BEE3175DF5AF004791BF /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SignupViewController.h; path = Login/SignupViewController.h; sourceTree = "<group>"; };
 		A717BEE4175DF5AF004791BF /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SignupViewController.m; path = Login/SignupViewController.m; sourceTree = "<group>"; };
 		A717BEEB175E6857004791BF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		A717BEEE175E83A0004791BF /* AppsFlyer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppsFlyer.h; sourceTree = "<group>"; };
-		A717BEEF175E83A0004791BF /* libAppsFlyerLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppsFlyerLib.a; sourceTree = "<group>"; };
 		A717BF1D17611162004791BF /* AnalyticsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsHandler.h; sourceTree = "<group>"; };
 		A717BF1E17611162004791BF /* AnalyticsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsHandler.m; sourceTree = "<group>"; };
 		A717BF20176115CD004791BF /* ProximaNova-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Black.ttf"; path = "Font/ProximaNova-Black.ttf"; sourceTree = "<group>"; };
@@ -677,6 +674,7 @@
 		A74646B818D38660003911DC /* ContactHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactHandler.m; sourceTree = "<group>"; };
 		A74D3FC118D75B250056D124 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareViewController.h; path = Share/ShareViewController.h; sourceTree = "<group>"; };
 		A74D3FC218D75B250056D124 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShareViewController.m; path = Share/ShareViewController.m; sourceTree = "<group>"; };
+		A74D3FC418D9A10E0056D124 /* Analytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Analytics.framework; sourceTree = "<group>"; };
 		A74DCCAA18AA684C004E32FA /* UIImage+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utilities.h"; sourceTree = "<group>"; };
 		A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utilities.m"; sourceTree = "<group>"; };
 		A74F61B516EB77B3004927DA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -1085,11 +1083,6 @@
 		A7A976E6184119D6001C0A51 /* PaymentHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentHandler.m; sourceTree = "<group>"; };
 		A7ADCB2A17DD2B4000780F88 /* background_white_signate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background_white_signate.png; sourceTree = "<group>"; };
 		A7ADCB2B17DD2B4000780F88 /* background_white_signate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background_white_signate@2x.png"; sourceTree = "<group>"; };
-		A7ADCB2F17DD350400780F88 /* iOSa_2.18.5.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iOSa_2.18.5.version; sourceTree = "<group>"; };
-		A7ADCB3017DD350400780F88 /* libLocalyticsAMP.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLocalyticsAMP.a; sourceTree = "<group>"; };
-		A7ADCB3117DD350400780F88 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		A7ADCB3217DD350400780F88 /* LocalyticsAmpSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsAmpSession.h; sourceTree = "<group>"; };
-		A7ADCB3317DD350400780F88 /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
 		A7ADCB3717DD352F00780F88 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		A7AF9B5517E210D000F9B26F /* StyleHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleHandler.h; sourceTree = "<group>"; };
 		A7AF9B5617E210D000F9B26F /* StyleHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleHandler.m; sourceTree = "<group>"; };
@@ -1181,6 +1174,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */,
+				A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */,
 				A717DD1018B6440A00EE359C /* Crashlytics.framework in Frameworks */,
 				DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */,
 				A7ADCB3817DD352F00780F88 /* libz.dylib in Frameworks */,
@@ -1204,14 +1199,13 @@
 				A76182E1187D37AB00914A05 /* KitLocate.Framework in Frameworks */,
 				A761B5A916EB59420095A9A8 /* Social.framework in Frameworks */,
 				A761B5A716EB593C0095A9A8 /* StoreKit.framework in Frameworks */,
+				A74D3FC518D9A10E0056D124 /* Analytics.framework in Frameworks */,
 				A761B5A516EB59370095A9A8 /* SystemConfiguration.framework in Frameworks */,
 				A761B5A316EB59320095A9A8 /* CoreData.framework in Frameworks */,
 				A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */,
 				A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */,
 				A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */,
 				A2C9157AB40E430C8F5DD47F /* libPods.a in Frameworks */,
-				A717BEF0175E83A0004791BF /* libAppsFlyerLib.a in Frameworks */,
-				A7ADCB3517DD350400780F88 /* libLocalyticsAMP.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1397,15 +1391,6 @@
 			children = (
 			);
 			path = Login;
-			sourceTree = "<group>";
-		};
-		A717BEED175E83A0004791BF /* AppsFlyer */ = {
-			isa = PBXGroup;
-			children = (
-				A717BEEE175E83A0004791BF /* AppsFlyer.h */,
-				A717BEEF175E83A0004791BF /* libAppsFlyerLib.a */,
-			);
-			path = AppsFlyer;
 			sourceTree = "<group>";
 		};
 		A717BF0C175F5E7B004791BF /* EditMode */ = {
@@ -1807,10 +1792,9 @@
 		A78128AB17294C56002226C8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				A74D3FC418D9A10E0056D124 /* Analytics.framework */,
 				A717DD0F18B6440A00EE359C /* Crashlytics.framework */,
 				A7582507189BC35B00B904BC /* Vero */,
-				A7ADCB2E17DD350400780F88 /* Localytics SDK */,
-				A717BEED175E83A0004791BF /* AppsFlyer */,
 				A76ADC0B17EC9B5700F52F40 /* GrowingTextView */,
 			);
 			path = Libs;
@@ -1916,18 +1900,6 @@
 				A79DB41F17358C33007A48E2 /* schedule_white_background@2x.png */,
 			);
 			path = Backgrounds;
-			sourceTree = "<group>";
-		};
-		A7ADCB2E17DD350400780F88 /* Localytics SDK */ = {
-			isa = PBXGroup;
-			children = (
-				A7ADCB2F17DD350400780F88 /* iOSa_2.18.5.version */,
-				A7ADCB3017DD350400780F88 /* libLocalyticsAMP.a */,
-				A7ADCB3117DD350400780F88 /* LICENSE */,
-				A7ADCB3217DD350400780F88 /* LocalyticsAmpSession.h */,
-				A7ADCB3317DD350400780F88 /* LocalyticsSession.h */,
-			);
-			path = "Localytics SDK";
 			sourceTree = "<group>";
 		};
 		A7BB65C9189BF19600BE7183 /* Sounds */ = {
@@ -2779,7 +2751,6 @@
 				DACD546318A1ACFC00C378DF /* powerpoint.png in Resources */,
 				A792BDBA18AD6E07000573E4 /* menu_pro_white-high.png in Resources */,
 				A792BD6018AD4915000573E4 /* schedule_image_sun_white.png in Resources */,
-				A7ADCB3417DD350400780F88 /* iOSa_2.18.5.version in Resources */,
 				A792BBAA18AD2E4B000573E4 /* edit_repeat_icon_white.png in Resources */,
 				A792BCB318AD3B41000573E4 /* share_icon_black@2x.png in Resources */,
 				A792BDC118AD6E07000573E4 /* menu_snoozes_black-high@2x.png in Resources */,
@@ -2793,7 +2764,6 @@
 				A792BBE018AD301C000573E4 /* today-white-high.png in Resources */,
 				A792BBB318AD2E4B000573E4 /* edit_tags_icon_white@2x.png in Resources */,
 				A792BCAB18AD3B41000573E4 /* settings_icon_black@2x.png in Resources */,
-				A7ADCB3617DD350400780F88 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3020,17 +2990,15 @@
 					"$(inherited)",
 					Swipes/Ressources/Libs,
 					/Users/kasper/Code/Swipes/ios/Swipes/Ressources/Libs,
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "ADHOC=1";
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/Swipes/Ressources/Libs/AppsFlyer\"",
-					"\"$(SRCROOT)/Swipes/Ressources/Libs/Localytics SDK\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				"OTHER_CPLUSPLUSFLAGS[arch=*]" = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lsqlite3",
@@ -3161,6 +3129,7 @@
 					"$(inherited)",
 					Swipes/Ressources/Libs,
 					/Users/kasper/Code/Swipes/ios/Swipes/Ressources/Libs,
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
@@ -3170,11 +3139,8 @@
 				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/Swipes/Ressources/Libs/AppsFlyer\"",
-					"\"$(SRCROOT)/Swipes/Ressources/Libs/Localytics SDK\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lsqlite3",
@@ -3234,17 +3200,14 @@
 					"$(inherited)",
 					Swipes/Ressources/Libs,
 					/Users/kasper/Code/Swipes/ios/Swipes/Ressources/Libs,
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/Swipes/Ressources/Libs/AppsFlyer\"",
-					"\"$(SRCROOT)/Swipes/Ressources/Libs/Localytics SDK\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lsqlite3",

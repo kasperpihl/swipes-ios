@@ -8,7 +8,7 @@
 
 #import "AnalyticsHandler.h"
 #import "NSDate-Utilities.h"
-#import "LocalyticsSession.h"
+
 #import <Parse/PFUser.h>
 #import "Vero.h"
 #import "UtilityClass.h"
@@ -22,10 +22,8 @@ static AnalyticsHandler *sharedObject;
 +(AnalyticsHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[AnalyticsHandler allocWithZone:NULL] init];
-        if(kCurrent){
-            [[LocalyticsSession shared] setCustomerId:kCurrent.objectId];
-            if(kCurrent.email) [[LocalyticsSession shared] setCustomerEmail:kCurrent.email];
-        }
+        if(kCurrent) [[Analytics sharedAnalytics] identify:kCurrent.objectId traits:@{@"email":kCurrent.email}];
+        
     }
     return sharedObject;
 }
@@ -64,26 +62,26 @@ static AnalyticsHandler *sharedObject;
     return _views;
 }
 -(void)tagEvent:(NSString *)event options:(NSDictionary *)options{
-    [[LocalyticsSession shared] tagEvent:event attributes:options];
+    [[Analytics sharedAnalytics] track:event properties:options];
 }
 -(NSString *)customDimension:(NSInteger)dimension{
-    return [[LocalyticsSession shared] customDimension:dimension];
+    //return [[LocalyticsSession shared] customDimension:dimension];
 }
 -(void)setCustomDimension:(NSInteger)dimension value:(NSString *)value{
-    [[LocalyticsSession shared] setCustomDimension:dimension value:value];
+    //[[LocalyticsSession shared] setCustomDimension:dimension value:value];
 }
 
 -(void)pushView:(NSString *)view{
     NSInteger viewsLeft = self.views.count;
     if(viewsLeft > 5) [self.views removeObjectAtIndex:0];
     [self.views addObject:view];
-    [[LocalyticsSession shared] tagScreen:view];
+    //[[LocalyticsSession shared] tagScreen:view];
 }
 -(void)popView{
     NSInteger viewsLeft = self.views.count;
     if(viewsLeft > 0) [self.views removeLastObject];
     if(viewsLeft > 1){
-        [[LocalyticsSession shared] tagScreen:[self.views lastObject]];
+        //[[LocalyticsSession shared] tagScreen:[self.views lastObject]];
     }
 }
 @end

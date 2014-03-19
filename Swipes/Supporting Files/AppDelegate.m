@@ -11,11 +11,10 @@
 #import "RootViewController.h"
 #import "KPParseCoreData.h"
 #import "AnalyticsHandler.h"
-#import "AppsFlyer.h"
+#import "AppsFlyerTracker.h"
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
-#import "LocalyticsSession.h"
-#import "LocalyticsAmpSession.h"
+
 #import <Crashlytics/Crashlytics.h>
 #import <FacebookSDK/FBAppCall.h>
 #import <DropboxSDK/DropboxSDK.h>
@@ -31,21 +30,18 @@
 {
     NSString *parseApplicationKey;
     NSString *parseClientKey;
-    NSString *mixpanelToken;
-    NSString *localyticsKey;
+    NSString *analyticsKey;
 #ifdef RELEASE
     parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
-    mixpanelToken = @"376b7b4c4c42cbdf5294ade7d15db3c4";
-    localyticsKey = @"0c159f237171213e5206f21-6bd270e2-076d-11e3-11ec-004a77f8b47f";
+    analyticsKey = @"twdwnk4ywb";
     
 #else
     //parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     //parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
     parseApplicationKey = @"0qD3LLZIOwLOPRwbwLia9GJXTEUnEsSlBCufqDvr";
     parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
-    mixpanelToken = @"c2d2126bfce5e54436fa131cfe6085ad";
-    localyticsKey = @"f2f927e0eafc7d3c36835fe-c0a84d84-18d8-11e3-3b24-00a426b17dd8";
+    analyticsKey = @"ncm4wfr7qc";
     #define EVERNOTE_HOST BootstrapServerBaseURLStringSandbox
     //NSString* const CONSUMER_KEY = @"sulio22";
     //NSString* const CONSUMER_SECRET = @"c7ed7298b3666bc4"; // when set to release also fix in Swipes-Info.plist file !
@@ -64,8 +60,12 @@
     
     [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
     
-    [[LocalyticsSession shared] startSession:localyticsKey];
+    [Analytics debug:YES];
     
+    
+    // Initialize the Analytics instance with the
+    // write key for username/acme-co
+    [Analytics initializeWithSecret:@"YOUR_WRITE_KEY"];
     
     
     [Appirater appLaunched:YES];
@@ -77,7 +77,8 @@
     for(UILocalNotification *lNoti in notifications){
         NSLog(@"t: %i - %@ - %@",lNoti.applicationIconBadgeNumber,lNoti.alertBody,lNoti.fireDate);
     }*/
-    
+    [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"TwJuYgpTKp9ENbxf6wMi8j";
+    [AppsFlyerTracker sharedTracker].appleAppID = @"657882159";
     
     [PaymentHandler sharedInstance];
     [self tagLaunchSource:launchOptions];
@@ -136,7 +137,9 @@
             break;
         }
     }
-    [ANALYTICS tagEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism }];
+    NSString *isLoggedIn = (kCurrent) ? @"yes" : @"no";
+    
+    [ANALYTICS tagEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism , @"Is Logged in" : isLoggedIn }];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -156,12 +159,6 @@
     [ROOT_CONTROLLER.menuViewController receivedLocalNotification:notification];
 }
 
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    if([[LocalyticsAmpSession shared] handleURL:url])
-        return YES;
-    else
-        return NO;
-}
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
             sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -188,8 +185,7 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    [[LocalyticsSession shared] close];
-    [[LocalyticsSession shared] upload];
+    
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
@@ -197,8 +193,6 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [ROOT_CONTROLLER closeApp];
-    [[LocalyticsSession shared] close];
-    [[LocalyticsSession shared] upload];
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -207,27 +201,20 @@
 {
     [Appirater appEnteredForeground:YES];
     [ROOT_CONTROLLER openApp];
-    [[LocalyticsSession shared] resume];
-    [[LocalyticsSession shared] upload];
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [AppsFlyer notifyAppID:@"657882159;TwJuYgpTKp9ENbxf6wMi8j"];
-    NSString *isLoggedIn = (kCurrent) ? @"yes" : @"no";
-    [ANALYTICS tagEvent:@"App Open" options:@{@"Is Logged in":isLoggedIn}];
+    [[AppsFlyerTracker sharedTracker] trackAppLaunch];
     
-    [[LocalyticsSession shared] resume];
-    [[LocalyticsSession shared] upload];
+    
     [[PaymentHandler sharedInstance] refreshProductsWithBlock:nil];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    [[LocalyticsSession shared] close];
-    [[LocalyticsSession shared] upload];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
