@@ -22,8 +22,6 @@ static AnalyticsHandler *sharedObject;
 +(AnalyticsHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[AnalyticsHandler allocWithZone:NULL] init];
-        if(kCurrent) [[Analytics sharedAnalytics] identify:kCurrent.objectId traits:@{@"email":kCurrent.email}];
-        
     }
     return sharedObject;
 }
@@ -63,12 +61,6 @@ static AnalyticsHandler *sharedObject;
 }
 -(void)tagEvent:(NSString *)event options:(NSDictionary *)options{
     [[Analytics sharedAnalytics] track:event properties:options];
-}
--(NSString *)customDimension:(NSInteger)dimension{
-    //return [[LocalyticsSession shared] customDimension:dimension];
-}
--(void)setCustomDimension:(NSInteger)dimension value:(NSString *)value{
-    //[[LocalyticsSession shared] setCustomDimension:dimension value:value];
 }
 
 -(void)pushView:(NSString *)view{

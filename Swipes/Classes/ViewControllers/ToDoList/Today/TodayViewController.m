@@ -20,6 +20,9 @@
 #import "SlowHighlightIcon.h"
 #import "StyleHandler.h"
 #import "SectionHeaderView.h"
+
+#import "KPParseCoreData.h"
+#import "UtilityClass.h"
 @interface TodayViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 @property (nonatomic,weak) IBOutlet KPReorderTableView *tableView;
 @property (nonatomic) YoureAllDoneView *youreAllDoneView;
@@ -31,9 +34,11 @@
 @property (nonatomic) UIButton *twitterButton;
 @property (nonatomic) NSString *shareText;
 @property (nonatomic) SectionHeaderView *sectionHeader;
+
 @end
 @implementation TodayViewController
 #pragma mark - Dragable delegate
+
 -(void)setEmptyBack:(BOOL)emptyBack{
     [self setEmptyBack:emptyBack animated:NO];
 }
@@ -130,15 +135,52 @@
     NSDate *startOfToday = [[NSDate date] dateAtStartOfDay];
     NSPredicate *inprogressPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)",endOfToday];
     NSPredicate *completedPredicate = [NSPredicate predicateWithFormat:@"(completionDate > %@)",startOfToday];
-    NSInteger numberInProgress = [KPToDo MR_countOfEntitiesWithPredicate:inprogressPredicate];
-    NSInteger numberOfDone = [KPToDo MR_countOfEntitiesWithPredicate:completedPredicate];
+    NSInteger numberInProgress = [KPToDo MR_countOfEntitiesWithPredicate:inprogressPredicate inContext:[KPCORE context]];
+    NSInteger numberOfDone = [KPToDo MR_countOfEntitiesWithPredicate:completedPredicate inContext:[KPCORE context]];
     NSInteger total = numberInProgress+numberOfDone;
     //NSInteger percentage = ceilf((CGFloat)numberOfDone/total*100);
     
+    
     self.sectionHeader.title = [NSString stringWithFormat:@"%i / %i Today",numberOfDone,total];
-    if(total == 0) total = 1;
     //[NSString stringWithFormat:@"%i%%",percentage];//
-    self.sectionHeader.progressPercentage = (CGFloat)numberOfDone/total;
+    
+    if(total > 0)
+        self.sectionHeader.progressPercentage = (CGFloat)numberOfDone/total;
+    else
+        self.sectionHeader.progressPercentage = 0;
+    
+    if(self.itemHandler.itemCounter <= 0){
+        
+        if(numberInProgress == 0){
+            self.youreAllDoneView.stampView.allDoneLabel.text = @"ALL DONE FOR TODAY";
+            NSInteger currentNumber = [[NSUserDefaults standardUserDefaults] integerForKey:@"numberOfDaysOnStreak"];
+            
+            if(!currentNumber)
+                currentNumber = 1;
+            
+            NSDate *lastStreak = (NSDate*)[[NSUserDefaults standardUserDefaults] objectForKey:@"lastStreakDate"];
+            
+            if(lastStreak){
+                
+                if([lastStreak isYesterday])
+                    currentNumber++;
+                else if(![lastStreak isToday])
+                    currentNumber = 0;
+                [[NSUserDefaults standardUserDefaults] setInteger:currentNumber forKey:@"numberOfDaysOnStreak"];
+            }
+            [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastStreakDate"];
+            
+            NSString *startString = (currentNumber <= 1) ? @"First day" : [NSString stringWithFormat:@"%i days",currentNumber];
+            self.youreAllDoneView.stampView.monthLabel.text = [NSString stringWithFormat:@"%@ on a streak!",startString];
+        }
+        else{
+            NSPredicate *nextScheduleTaskPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil)",[NSDate date]];
+            KPToDo *nextItem = [KPToDo MR_findFirstWithPredicate:nextScheduleTaskPredicate sortedBy:@"schedule" ascending:YES inContext:[KPCORE context]];
+            self.youreAllDoneView.stampView.allDoneLabel.text = @"ALL DONE FOR NOW";
+            self.youreAllDoneView.stampView.monthLabel.text = [NSString stringWithFormat:@"Next task  @  %@",[UtilityClass timeStringForDate:nextItem.schedule]];
+        }
+    }
+    
 }
 
 
@@ -293,6 +335,7 @@
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    [self updateSectionHeader];
 }
 - (void)didReceiveMemoryWarning
 {

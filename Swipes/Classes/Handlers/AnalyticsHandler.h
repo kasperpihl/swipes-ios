@@ -17,7 +17,5 @@
 -(void)tagEvent:(NSString*)event options:(NSDictionary*)options;
 -(void)pushView:(NSString*)view;
 -(void)popView;
--(NSString*)customDimension:(NSInteger)dimension;
--(void)setCustomDimension:(NSInteger)dimension value:(NSString*)value;
 -(void)heartbeat;
 @end

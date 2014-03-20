@@ -44,10 +44,9 @@
 }
 -(void)setItemCounter:(NSInteger)itemCounter{
     if(itemCounter != _itemCounter){
-        
+        _itemCounter = itemCounter;
         if([self.delegate respondsToSelector:@selector(itemHandler:changedItemNumber:oldNumber:)])
             [self.delegate itemHandler:self changedItemNumber:itemCounter oldNumber:_itemCounter];
-        _itemCounter = itemCounter;
     }
 }
 -(void)addItem:(NSString *)item priority:(BOOL)priority{

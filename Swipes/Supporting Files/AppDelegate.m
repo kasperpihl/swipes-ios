@@ -65,7 +65,7 @@
     
     // Initialize the Analytics instance with the
     // write key for username/acme-co
-    [Analytics initializeWithSecret:@"YOUR_WRITE_KEY"];
+    [Analytics initializeWithSecret:analyticsKey];
     
     
     [Appirater appLaunched:YES];

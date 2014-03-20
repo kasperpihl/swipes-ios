@@ -136,7 +136,6 @@
 @implementation _ProgressEndingView
 -(void)setFrame:(CGRect)frame{
     [super setFrame:frame];
-    NSLog(@"fram:%f",frame.size.height);
 }
 -(void)drawRect:(CGRect)rect{
     [super drawRect:rect];
