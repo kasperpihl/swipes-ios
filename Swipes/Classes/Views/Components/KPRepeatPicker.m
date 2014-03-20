@@ -71,9 +71,10 @@
     [self handleTouches:touches];
     [self.delegate repeatPicker:self selectedOption:self.selectedButton.tag];
 }
--(id)initWithHeight:(CGFloat)height selectedDate:(NSDate *)date option:(RepeatOptions)option{
-    self = [super initWithFrame:CGRectMake(0, 0, 320, height)];
+-(id)initWithWidth:(CGFloat)width height:(CGFloat)height selectedDate:(NSDate *)date option:(RepeatOptions)option{
+    self = [super initWithFrame:CGRectMake(0, 0, width, height)];
     if(self){
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.numberOfOptions = RepeatOptionsTotal;
         self.userInteractionEnabled = YES;
         self.textColor = kDefTextColor;
@@ -84,7 +85,7 @@
         CGFloat sepHeight = self.frame.size.height-(self.frame.size.height*kSepMargin);
         for(NSInteger i = 0 ; i < self.numberOfOptions ; i++){
             CGFloat buttonX = i*buttonWidth + i*kSepWidth;
-            UIButton *dayButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonX,0,buttonWidth,self.frame.size.height)];
+            UIButton *dayButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonX, 0 , buttonWidth,self.frame.size.height)];
             dayButton.titleLabel.numberOfLines = 0;
             //dayButton.titleLabel.frame = dayButton.bounds;
             //dayButton.titleLabel.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);

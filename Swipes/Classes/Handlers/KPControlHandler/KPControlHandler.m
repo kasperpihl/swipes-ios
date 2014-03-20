@@ -61,6 +61,7 @@
         
         
         KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, ADD_TOOLBAR_HEIGHT) items:@[timageStringBW(@"round_plus")] delegate:self];
+        addToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         addToolbar.tag = ADD_TOOLBAR_TAG;
         [addToolbar setTopInset:-addToolbar.frame.size.height*0.05];
         [view addSubview:addToolbar];
@@ -68,6 +69,7 @@
         
         
         KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[timageStringBW(@"edit_icon"),timageStringBW(@"tag_icon"),timageStringBW(@"trashcan_icon"),timageStringBW(@"share_icon")] delegate:self];
+        editToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         editToolbar.tag = EDIT_TOOLBAR_TAG;
         [editToolbar setTopInset:editToolbar.frame.size.height*0.05];
         [view addSubview:editToolbar];

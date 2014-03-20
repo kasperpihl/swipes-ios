@@ -19,6 +19,6 @@
 @property (nonatomic) UIColor *selectedColor;
 @property (nonatomic) UIFont *font;
 @property (nonatomic,weak) NSObject<KPRepeatPickerDelegate> *delegate;
--(id)initWithHeight:(CGFloat)height selectedDate:(NSDate*)date option:(RepeatOptions)option;
+-(id)initWithWidth:(CGFloat)width height:(CGFloat)height selectedDate:(NSDate *)date option:(RepeatOptions)option;
 -(void)setSelectedDate:(NSDate *)selectedDate option:(RepeatOptions)option;
 @end

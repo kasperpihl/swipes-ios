@@ -36,7 +36,8 @@
         self.backgroundColor = tcolor(BackgroundColor);
         
         
-        UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, 0, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height)];
+        UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, 0, self.frame.size.width - kContentSpacingLeft - kContentSpacingRight, self.bounds.size.height)];
+        notesView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         notesView.backgroundColor = CLEAR;
         notesView.font = NOTES_VIEW_FONT;
         notesView.keyboardAppearance = UIKeyboardAppearanceAlert;
@@ -46,7 +47,8 @@
         self.notesView = notesView;
         
         UIButton *backbutton = [UIButton buttonWithType:UIButtonTypeCustom];
-        backbutton.frame = CGRectMake(self.frame.size.width-44, self.frame.size.height-44, 44, 44);
+        backbutton.frame = CGRectMake(self.frame.size.width - 44, self.frame.size.height - 44, 44, 44);
+        backbutton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
         [backbutton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         backbutton.transform = CGAffineTransformMakeRotation(M_PI);
         [backbutton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
