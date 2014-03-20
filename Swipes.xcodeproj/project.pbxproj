@@ -110,6 +110,9 @@
 		A74D3FC518D9A10E0056D124 /* Analytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74D3FC418D9A10E0056D124 /* Analytics.framework */; };
 		A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A717BEEB175E6857004791BF /* CoreTelephony.framework */; };
 		A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B816EB59710095A9A8 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A74D3FCB18D9E76F0056D124 /* libAppsFlyerLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */; };
+		A74D3FD118D9E7AC0056D124 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */; };
+		A74D3FD218D9E7AC0056D124 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */; };
 		A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */; };
 		A74F61B616EB77B3004927DA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B516EB77B3004927DA /* MapKit.framework */; };
 		A74F61B916EBA58B004927DA /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B816EBA58B004927DA /* CoreMedia.framework */; };
@@ -153,8 +156,6 @@
 		A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D28172C5EA800BCB2D9 /* _KPTag.m */; };
 		A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2B172C5EAF00BCB2D9 /* KPTag.m */; };
 		A768D39D1896C812003E2DD6 /* ToDoViewController+ViewHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A768D39C1896C812003E2DD6 /* ToDoViewController+ViewHelpers.m */; };
-		A76ADC1017EC9B5700F52F40 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A76ADC0D17EC9B5700F52F40 /* HPGrowingTextView.m */; };
-		A76ADC1117EC9B5700F52F40 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A76ADC0F17EC9B5700F52F40 /* HPTextViewInternal.m */; };
 		A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A76ADC1217ECA7AB00F52F40 /* Images.xcassets */; };
 		A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76B2386172C06CC00F742C2 /* ScheduleViewController.m */; };
 		A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A771356E17BABB5A0090BE89 /* UIView+Utilities.m */; };
@@ -675,6 +676,12 @@
 		A74D3FC118D75B250056D124 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareViewController.h; path = Share/ShareViewController.h; sourceTree = "<group>"; };
 		A74D3FC218D75B250056D124 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShareViewController.m; path = Share/ShareViewController.m; sourceTree = "<group>"; };
 		A74D3FC418D9A10E0056D124 /* Analytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Analytics.framework; sourceTree = "<group>"; };
+		A74D3FC918D9E76F0056D124 /* AppsFlyerTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppsFlyerTracker.h; sourceTree = "<group>"; };
+		A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppsFlyerLib.a; sourceTree = "<group>"; };
+		A74D3FCD18D9E7AC0056D124 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
+		A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
+		A74D3FCF18D9E7AC0056D124 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
+		A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
 		A74DCCAA18AA684C004E32FA /* UIImage+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utilities.h"; sourceTree = "<group>"; };
 		A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utilities.m"; sourceTree = "<group>"; };
 		A74F61B516EB77B3004927DA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -732,10 +739,6 @@
 		A7680D2B172C5EAF00BCB2D9 /* KPTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTag.m; sourceTree = "<group>"; };
 		A768D39B1896C812003E2DD6 /* ToDoViewController+ViewHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ToDoViewController+ViewHelpers.h"; path = "ToDo/ToDoViewController+ViewHelpers.h"; sourceTree = "<group>"; };
 		A768D39C1896C812003E2DD6 /* ToDoViewController+ViewHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ToDoViewController+ViewHelpers.m"; path = "ToDo/ToDoViewController+ViewHelpers.m"; sourceTree = "<group>"; };
-		A76ADC0C17EC9B5700F52F40 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
-		A76ADC0D17EC9B5700F52F40 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
-		A76ADC0E17EC9B5700F52F40 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
-		A76ADC0F17EC9B5700F52F40 /* HPTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
 		A76ADC1217ECA7AB00F52F40 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A76B2385172C06CC00F742C2 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScheduleViewController.h; path = Schedule/ScheduleViewController.h; sourceTree = "<group>"; };
 		A76B2386172C06CC00F742C2 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScheduleViewController.m; path = Schedule/ScheduleViewController.m; sourceTree = "<group>"; };
@@ -1204,6 +1207,7 @@
 				A761B5A316EB59320095A9A8 /* CoreData.framework in Frameworks */,
 				A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */,
 				A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */,
+				A74D3FCB18D9E76F0056D124 /* libAppsFlyerLib.a in Frameworks */,
 				A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */,
 				A2C9157AB40E430C8F5DD47F /* libPods.a in Frameworks */,
 			);
@@ -1456,6 +1460,26 @@
 			name = Share;
 			sourceTree = "<group>";
 		};
+		A74D3FC818D9E76F0056D124 /* AppsFlyer */ = {
+			isa = PBXGroup;
+			children = (
+				A74D3FC918D9E76F0056D124 /* AppsFlyerTracker.h */,
+				A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */,
+			);
+			path = AppsFlyer;
+			sourceTree = "<group>";
+		};
+		A74D3FCC18D9E7AC0056D124 /* GrowingTextView */ = {
+			isa = PBXGroup;
+			children = (
+				A74D3FCD18D9E7AC0056D124 /* HPGrowingTextView.h */,
+				A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */,
+				A74D3FCF18D9E7AC0056D124 /* HPTextViewInternal.h */,
+				A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */,
+			);
+			path = GrowingTextView;
+			sourceTree = "<group>";
+		};
 		A75207F71730F5E000F1B4F7 /* ToDo */ = {
 			isa = PBXGroup;
 			children = (
@@ -1540,18 +1564,6 @@
 				A717BF2A17611EDB004791BF /* ProximaNovaCond-Semibold.ttf */,
 			);
 			name = Font;
-			sourceTree = "<group>";
-		};
-		A76ADC0B17EC9B5700F52F40 /* GrowingTextView */ = {
-			isa = PBXGroup;
-			children = (
-				A76ADC0C17EC9B5700F52F40 /* HPGrowingTextView.h */,
-				A76ADC0D17EC9B5700F52F40 /* HPGrowingTextView.m */,
-				A76ADC0E17EC9B5700F52F40 /* HPTextViewInternal.h */,
-				A76ADC0F17EC9B5700F52F40 /* HPTextViewInternal.m */,
-			);
-			name = GrowingTextView;
-			path = AppsFlyer/GrowingTextView;
 			sourceTree = "<group>";
 		};
 		A7778CC116EB5884004D95E5 = {
@@ -1792,10 +1804,11 @@
 		A78128AB17294C56002226C8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				A74D3FC818D9E76F0056D124 /* AppsFlyer */,
 				A74D3FC418D9A10E0056D124 /* Analytics.framework */,
 				A717DD0F18B6440A00EE359C /* Crashlytics.framework */,
+				A74D3FCC18D9E7AC0056D124 /* GrowingTextView */,
 				A7582507189BC35B00B904BC /* Vero */,
-				A76ADC0B17EC9B5700F52F40 /* GrowingTextView */,
 			);
 			path = Libs;
 			sourceTree = "<group>";
@@ -2855,7 +2868,6 @@
 				A703B1AF1838EBF20047DCC9 /* KPAddView.m in Sources */,
 				A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */,
 				A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */,
-				A76ADC1117EC9B5700F52F40 /* HPTextViewInternal.m in Sources */,
 				A703B1631838EB0E0047DCC9 /* UIButton+PassTouch.m in Sources */,
 				A703B1B51838EBF20047DCC9 /* SectionHeaderView.m in Sources */,
 				A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */,
@@ -2865,6 +2877,7 @@
 				A7933056172B2BA100F1505E /* DoneViewController.m in Sources */,
 				A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */,
 				A703B1C21838EBF20047DCC9 /* SchedulePopup.m in Sources */,
+				A74D3FD218D9E7AC0056D124 /* HPTextViewInternal.m in Sources */,
 				A703B1AD1838EBF20047DCC9 /* DateStampView.m in Sources */,
 				A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */,
 				A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */,
@@ -2891,6 +2904,7 @@
 				A703B1BE1838EBF20047DCC9 /* Evaluate.m in Sources */,
 				A75236CA17A2EE6F0030ED1E /* WalkthroughCell.m in Sources */,
 				A75236FA17A3361A0030ED1E /* WalkthroughTitleView.m in Sources */,
+				A74D3FD118D9E7AC0056D124 /* HPGrowingTextView.m in Sources */,
 				A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */,
 				A724B02217A96B8B00E0EF83 /* UIColor+Utilities.m in Sources */,
 				A7FA8B1D17AF094E00134ED0 /* SnoozesViewController.m in Sources */,
@@ -2918,7 +2932,6 @@
 				A703B1B81838EBF20047DCC9 /* KPSearchBar.m in Sources */,
 				A703B1C11838EBF20047DCC9 /* UIWindow+RESideMenuExtensions.m in Sources */,
 				A74646B918D38660003911DC /* ContactHandler.m in Sources */,
-				A76ADC1017EC9B5700F52F40 /* HPGrowingTextView.m in Sources */,
 				A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */,
 				A703B1A81838EBF20047DCC9 /* AddPanelView.m in Sources */,
 				A703B1AA1838EBF20047DCC9 /* PlusAlertView.m in Sources */,
@@ -2982,6 +2995,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
@@ -2997,7 +3011,10 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "ADHOC=1";
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
+				);
 				"OTHER_CPLUSPLUSFLAGS[arch=*]" = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -3121,6 +3138,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
@@ -3139,7 +3157,10 @@
 				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -3192,6 +3213,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
@@ -3207,7 +3229,10 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lsqlite3",
