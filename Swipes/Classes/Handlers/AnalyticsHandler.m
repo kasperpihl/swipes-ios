@@ -8,11 +8,12 @@
 
 #import "AnalyticsHandler.h"
 #import "NSDate-Utilities.h"
-
+#import "LocalyticsSession.h"
 #import <Parse/PFUser.h>
 #import "Vero.h"
 #import "UtilityClass.h"
-
+#import "UserHandler.h"
+#import "KeenClient.h"
 @interface AnalyticsHandler ()
 @property (nonatomic) NSMutableArray *views;
 @property (nonatomic) Vero* vero;
@@ -22,6 +23,7 @@ static AnalyticsHandler *sharedObject;
 +(AnalyticsHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[AnalyticsHandler allocWithZone:NULL] init];
+        [sharedObject updateIdentity];
     }
     return sharedObject;
 }
@@ -60,20 +62,54 @@ static AnalyticsHandler *sharedObject;
     return _views;
 }
 -(void)tagEvent:(NSString *)event options:(NSDictionary *)options{
-    [[Analytics sharedAnalytics] track:event properties:options];
+    [[LocalyticsSession shared] tagEvent:event attributes:options];
+    [[KeenClient sharedClient] addEvent:options toEventCollection:event error:nil];
 }
+-(NSString *)customDimension:(NSInteger)dimension{
+    return [[LocalyticsSession shared] customDimension:dimension];
+}
+-(void)setCustomDimension:(NSInteger)dimension value:(NSString *)value{
+    [[LocalyticsSession shared] setCustomDimension:dimension value:value];
+}
+-(void)updateIdentity{
+    NSLog(@"updating identity");
+    if(kCurrent){
+        [[LocalyticsSession shared] setCustomerId:kCurrent.objectId];
+        [[LocalyticsSession shared] setCustomerEmail:kCurrent.email];
+    }
+    NSString *userLevelString = [kUserHandler getUserLevelString];
+    if(![[self customDimension:kCusDimUserLevel] isEqualToString:userLevelString]){
+        [self setCustomDimension:kCusDimUserLevel value:userLevelString];
+    }
 
+    
+    KeenClient *client = [KeenClient sharedClient];
+
+    NSMutableDictionary *probs = [@{
+        @"Platform": @"iOS",
+        @"OS Version": [[UIDevice currentDevice] systemVersion],
+        @"App Version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
+        @"Language": [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:[[NSLocale currentLocale] identifier]],
+        @"Country": [[NSLocale currentLocale] displayNameForKey:NSLocaleCountryCode value:[[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]],
+        @"Device": [[UIDevice currentDevice] model]
+    } mutableCopy];
+    if(kCurrent.objectId) [probs setObject:kCurrent.objectId forKey:@"userId"];
+    if(kCurrent.email) [probs setObject:kCurrent.email forKey:@"email"];
+    if(kCurrent) [probs setObject:[kUserHandler getUserLevelString] forKey:@"userLevel"];
+    else [probs setObject:@"Not logged in" forKey:@"userLevel"];
+    client.globalPropertiesDictionary = [probs copy];
+}
 -(void)pushView:(NSString *)view{
     NSInteger viewsLeft = self.views.count;
     if(viewsLeft > 5) [self.views removeObjectAtIndex:0];
     [self.views addObject:view];
-    //[[LocalyticsSession shared] tagScreen:view];
+    [[LocalyticsSession shared] tagScreen:view];
 }
 -(void)popView{
     NSInteger viewsLeft = self.views.count;
     if(viewsLeft > 0) [self.views removeLastObject];
     if(viewsLeft > 1){
-        //[[LocalyticsSession shared] tagScreen:[self.views lastObject]];
+        [[LocalyticsSession shared] tagScreen:[self.views lastObject]];
     }
 }
 @end

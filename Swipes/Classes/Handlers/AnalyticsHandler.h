@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Analytics/Analytics.h"
+
 
 #define kCusDimUserLevel 0
 
@@ -18,4 +18,5 @@
 -(void)pushView:(NSString*)view;
 -(void)popView;
 -(void)heartbeat;
+-(void)updateIdentity;
 @end

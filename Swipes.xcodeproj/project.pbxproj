@@ -107,7 +107,6 @@
 		A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */; };
 		A74646B918D38660003911DC /* ContactHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A74646B818D38660003911DC /* ContactHandler.m */; };
 		A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FC218D75B250056D124 /* ShareViewController.m */; };
-		A74D3FC518D9A10E0056D124 /* Analytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74D3FC418D9A10E0056D124 /* Analytics.framework */; };
 		A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A717BEEB175E6857004791BF /* CoreTelephony.framework */; };
 		A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B816EB59710095A9A8 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		A74D3FCB18D9E76F0056D124 /* libAppsFlyerLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */; };
@@ -483,6 +482,7 @@
 		A7AF9B5C17E2244F00F9B26F /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B260921733D1FD000BADDE /* NotificationHandler.m */; };
 		A7BB65CB189BF19600BE7183 /* swipes-notification.aif in Resources */ = {isa = PBXBuildFile; fileRef = A7BB65CA189BF19600BE7183 /* swipes-notification.aif */; };
+		A7C0340F18DC9AEA00A252BB /* libLocalyticsAMP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7C0340C18DC9AEA00A252BB /* libLocalyticsAMP.a */; };
 		A7C90E6A17A6ABF700C5F9E2 /* wt_schedule_popup.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */; };
 		A7C90E6B17A6ABF700C5F9E2 /* wt_schedule_popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */; };
 		A7C90E7617A712A100C5F9E2 /* wt_signature.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E7417A712A100C5F9E2 /* wt_signature.png */; };
@@ -675,7 +675,6 @@
 		A74646B818D38660003911DC /* ContactHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactHandler.m; sourceTree = "<group>"; };
 		A74D3FC118D75B250056D124 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareViewController.h; path = Share/ShareViewController.h; sourceTree = "<group>"; };
 		A74D3FC218D75B250056D124 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShareViewController.m; path = Share/ShareViewController.m; sourceTree = "<group>"; };
-		A74D3FC418D9A10E0056D124 /* Analytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Analytics.framework; sourceTree = "<group>"; };
 		A74D3FC918D9E76F0056D124 /* AppsFlyerTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppsFlyerTracker.h; sourceTree = "<group>"; };
 		A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppsFlyerLib.a; sourceTree = "<group>"; };
 		A74D3FCD18D9E7AC0056D124 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
@@ -1095,6 +1094,9 @@
 		A7B260911733D1FC000BADDE /* NotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationHandler.h; sourceTree = "<group>"; };
 		A7B260921733D1FD000BADDE /* NotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationHandler.m; sourceTree = "<group>"; };
 		A7BB65CA189BF19600BE7183 /* swipes-notification.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "swipes-notification.aif"; sourceTree = "<group>"; };
+		A7C0340C18DC9AEA00A252BB /* libLocalyticsAMP.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLocalyticsAMP.a; sourceTree = "<group>"; };
+		A7C0340D18DC9AEA00A252BB /* LocalyticsAmpSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsAmpSession.h; sourceTree = "<group>"; };
+		A7C0340E18DC9AEA00A252BB /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
 		A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wt_schedule_popup.png; sourceTree = "<group>"; };
 		A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wt_schedule_popup@2x.png"; sourceTree = "<group>"; };
@@ -1202,12 +1204,12 @@
 				A76182E1187D37AB00914A05 /* KitLocate.Framework in Frameworks */,
 				A761B5A916EB59420095A9A8 /* Social.framework in Frameworks */,
 				A761B5A716EB593C0095A9A8 /* StoreKit.framework in Frameworks */,
-				A74D3FC518D9A10E0056D124 /* Analytics.framework in Frameworks */,
 				A761B5A516EB59370095A9A8 /* SystemConfiguration.framework in Frameworks */,
 				A761B5A316EB59320095A9A8 /* CoreData.framework in Frameworks */,
 				A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */,
 				A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */,
 				A74D3FCB18D9E76F0056D124 /* libAppsFlyerLib.a in Frameworks */,
+				A7C0340F18DC9AEA00A252BB /* libLocalyticsAMP.a in Frameworks */,
 				A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */,
 				A2C9157AB40E430C8F5DD47F /* libPods.a in Frameworks */,
 			);
@@ -1804,8 +1806,8 @@
 		A78128AB17294C56002226C8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				A7C0340B18DC9AEA00A252BB /* Localytics */,
 				A74D3FC818D9E76F0056D124 /* AppsFlyer */,
-				A74D3FC418D9A10E0056D124 /* Analytics.framework */,
 				A717DD0F18B6440A00EE359C /* Crashlytics.framework */,
 				A74D3FCC18D9E7AC0056D124 /* GrowingTextView */,
 				A7582507189BC35B00B904BC /* Vero */,
@@ -2002,6 +2004,16 @@
 				A792BD1918AD4915000573E4 /* selected_circle@2x.png */,
 			);
 			path = SchedulePopup;
+			sourceTree = "<group>";
+		};
+		A7C0340B18DC9AEA00A252BB /* Localytics */ = {
+			isa = PBXGroup;
+			children = (
+				A7C0340C18DC9AEA00A252BB /* libLocalyticsAMP.a */,
+				A7C0340D18DC9AEA00A252BB /* LocalyticsAmpSession.h */,
+				A7C0340E18DC9AEA00A252BB /* LocalyticsSession.h */,
+			);
+			path = Localytics;
 			sourceTree = "<group>";
 		};
 		A7DAC63C181A7CF700B8C079 /* Buttons */ = {
@@ -3014,6 +3026,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
 				);
 				"OTHER_CPLUSPLUSFLAGS[arch=*]" = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = (
@@ -3160,6 +3173,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -3232,6 +3246,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",

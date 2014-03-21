@@ -17,6 +17,9 @@
 #define kSyncTime 5
 #define kUpdateLimit 150
 
+#define kSaveAttributeChanges [[NSUserDefaults standardUserDefaults] setObject:self._attributeChangesOnObjects forKey:@"tmpUpdateObjects"]
+
+
 
 #ifdef DEBUG
 #define DUMPDB //[self dumpLocalDb];
@@ -254,11 +257,6 @@
             handleObject(object);
         }
     }
-    /* This will consist of tempId's to objects that did not have one already */
-    if([context hasChanges])
-        [context MR_saveOnlySelfAndWait];
-    
-
     
     NSMutableDictionary *syncData = [@{
                                        @"changesOnly" : @YES,

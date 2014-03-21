@@ -63,11 +63,17 @@ static UserHandler *sharedObject;
 -(void)didLoginUser{
     [self handleUser:kCurrent];
 }
+-(NSString*)getUserLevelString{
+    return [self stringForUserLevel:self.userLevel];
+}
 -(void)didOpenApp{
+    NSLog(@"refreshing");
     [kCurrent refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        NSLog(@"response:%@",object);
         if(!error){
             [self handleUser:(PFUser*)object];
         }
+        NSLog(@"%@",error);
     }];
 }
 -(void)didUpgradeUser{
@@ -80,7 +86,7 @@ static UserHandler *sharedObject;
         [[NSUserDefaults standardUserDefaults] setInteger:userLevel forKey:@"isPlus"];
         self.userLevel = userLevel;
         self.isPlus = (userLevel > UserLevelStandard);
-        [[Analytics sharedAnalytics] identify:kCurrent.objectId traits:@{@"email":kCurrent.email,@"userLevel":[self stringForUserLevel:self.userLevel]}];
+        [ANALYTICS updateIdentity];
     }
 }
 -(void)dealloc{

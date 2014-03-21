@@ -15,6 +15,9 @@
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
 
+#import "LocalyticsSession.h"
+#import "LocalyticsAmpSession.h"
+
 #import <Crashlytics/Crashlytics.h>
 #import <FacebookSDK/FBAppCall.h>
 #import <DropboxSDK/DropboxSDK.h>
@@ -22,6 +25,8 @@
 #import "RMStore.h"
 #import "PaymentHandler.h"
 #import "NotificationHandler.h"
+
+#import "KeenClient.h"
 
 #import "ContactHandler.h"
 
@@ -31,20 +36,28 @@
     NSString *parseApplicationKey;
     NSString *parseClientKey;
     NSString *analyticsKey;
+    NSString *localyticsKey;
 #ifdef RELEASE
     parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
     analyticsKey = @"twdwnk4ywb";
-    
+    localyticsKey = @"0c159f237171213e5206f21-6bd270e2-076d-11e3-11ec-004a77f8b47f";
+    [KeenClient sharedClientWithProjectId:@"532c5e1dce5e43655200001c"
+                              andWriteKey:@"f4ef66f15dd3877aa2d9976e1d14c67423e1c2ef4b724bbf51552297774532fec6af3e2ef1e84750da7eb76de8666c44492551bcf43278b68ffd9258d4b1b6dea6a1e518da25077fca1fff54a11d33f71dfb6a1ea2a781fcff169bd2acef57883119764b15a4d5235ecd9aab8df530b3"
+                               andReadKey:@"45602fcc1a76041b8efcc90dca112086955bd1186bfde28270e16c90b3fbbcae1671a16c97e6b357fbaa84cb7635b5b09debb1954efa1e80b126e35ad0ec4fc138c450f230f6ac017c3e083f5ea9a74cbab0e9d093ed9696a7e812dd995b35603fa80b68d40dbf17210a0bf65f8a6e2d"];
 #else
     //parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     //parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
     parseApplicationKey = @"0qD3LLZIOwLOPRwbwLia9GJXTEUnEsSlBCufqDvr";
     parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
     analyticsKey = @"ncm4wfr7qc";
+    localyticsKey = @"f2f927e0eafc7d3c36835fe-c0a84d84-18d8-11e3-3b24-00a426b17dd8";
     #define EVERNOTE_HOST BootstrapServerBaseURLStringSandbox
     //NSString* const CONSUMER_KEY = @"sulio22";
     //NSString* const CONSUMER_SECRET = @"c7ed7298b3666bc4"; // when set to release also fix in Swipes-Info.plist file !
+    [KeenClient sharedClientWithProjectId:@"532aec56ce5e436553000007"
+                              andWriteKey:@"2626ed170332186795c0c8c850b7c0eb6c48474466d84d2578ec2b139708fb57f9adba3a96adf2df91032aa3c48282263a291ef58ea1d607990f8281e4a1d1b4aa939cb9a305f1c47964bf18ba94ba660529f0a3ad7431c6d034fba62b01308637f413966a769c609d79478a691e3ed6"
+                               andReadKey:@"bdbd2501231a656524ddc66985685d704f154f2cec61698914c5c1839565be0c15e4203c896ee7fedbeaf2a587fcae0e1353c796209bfa474c5844e4c831ab7a8bac00a92c9d8f572705e51b96ffc621e35b27bb4640b990cc29300b4134de0779a971ab9285564a0d6e552d2dd0e5f5"];
 #endif
     
     [Appirater setAppId:@"657882159"];
@@ -59,13 +72,8 @@
     KPCORE;
     
     [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
-    
-    [Analytics debug:YES];
-    
-    
-    // Initialize the Analytics instance with the
-    // write key for username/acme-co
-    [Analytics initializeWithSecret:analyticsKey];
+    [[LocalyticsSession shared] startSession:localyticsKey];
+
     
     
     [Appirater appLaunched:YES];
@@ -92,10 +100,6 @@
     //[EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
     
     //NSLog(@"%@",[kCurrent sessionToken]);
-    
-    
-    
-    
     
     
     return YES;
@@ -159,6 +163,12 @@
     [ROOT_CONTROLLER.menuViewController receivedLocalNotification:notification];
 }
 
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    if([[LocalyticsAmpSession shared] handleURL:url])
+        return YES;
+    else
+        return NO;
+}
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
             sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -185,7 +195,8 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    
+    [[LocalyticsSession shared] close];
+    [[LocalyticsSession shared] upload];
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
@@ -193,6 +204,8 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [ROOT_CONTROLLER closeApp];
+    [[LocalyticsSession shared] close];
+    [[LocalyticsSession shared] upload];
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -201,6 +214,8 @@
 {
     [Appirater appEnteredForeground:YES];
     [ROOT_CONTROLLER openApp];
+    [[LocalyticsSession shared] resume];
+    [[LocalyticsSession shared] upload];
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
@@ -208,13 +223,16 @@
 {
     [[AppsFlyerTracker sharedTracker] trackAppLaunch];
     
-    
+    [[LocalyticsSession shared] resume];
+    [[LocalyticsSession shared] upload];
     [[PaymentHandler sharedInstance] refreshProductsWithBlock:nil];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+    [[LocalyticsSession shared] close];
+    [[LocalyticsSession shared] upload];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 

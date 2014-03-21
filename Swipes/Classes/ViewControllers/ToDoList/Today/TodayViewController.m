@@ -34,6 +34,7 @@
 @property (nonatomic) UIButton *twitterButton;
 @property (nonatomic) NSString *shareText;
 @property (nonatomic) SectionHeaderView *sectionHeader;
+@property BOOL allDoneForToday;
 
 @end
 @implementation TodayViewController
@@ -76,17 +77,22 @@
 -(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber oldNumber:(NSInteger)oldNumber{
     [super itemHandler:handler changedItemNumber:itemNumber oldNumber:oldNumber];
     [self.tableView setReorderingEnabled:(itemNumber > 1)];
+    NSLog(@"from %i to %i",oldNumber,itemNumber);
+    [self updateSectionHeader];
+    if(itemNumber == 0 && oldNumber != 0)
+        self.shareText = [self randomTextAllDoneForToday:self.allDoneForToday];
     [self updateBackground];
+    
     self.parent.backgroundMode = (itemNumber == 0);
     [self setEmptyBack:(itemNumber == 0) animated:YES];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:itemNumber];
-    [self updateSectionHeader];
     self.sectionHeader.fillColor = (itemNumber == 0) ? CLEAR : tcolor(BackgroundColor);
     if(itemNumber == 0 && oldNumber > 0){
         NSInteger servicesAvailable = 0;
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) servicesAvailable++;
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) servicesAvailable++;
-        NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable]};
+        NSInteger streak = [[NSUserDefaults standardUserDefaults] integerForKey:@"numberOfDaysOnStreak"];
+        NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable],@"All done for today":@(self.allDoneForToday),@"Streak":@(streak)};
         [ANALYTICS tagEvent:@"Cleared Tasks" options:dict];
     }
     
@@ -140,6 +146,7 @@
     NSInteger total = numberInProgress+numberOfDone;
     //NSInteger percentage = ceilf((CGFloat)numberOfDone/total*100);
     
+    self.allDoneForToday = (numberInProgress == 0);
     
     self.sectionHeader.title = [NSString stringWithFormat:@"%i / %i Today",numberOfDone,total];
     //[NSString stringWithFormat:@"%i%%",percentage];//
@@ -151,7 +158,7 @@
     
     if(self.itemHandler.itemCounter <= 0){
         
-        if(numberInProgress == 0){
+        if(self.allDoneForToday){
             self.youreAllDoneView.stampView.allDoneLabel.text = @"ALL DONE FOR TODAY";
             NSInteger currentNumber = [[NSUserDefaults standardUserDefaults] integerForKey:@"numberOfDaysOnStreak"];
             
@@ -188,7 +195,7 @@
 -(void)updateBackground{
     BOOL isFacebookAvailable = ([[UIDevice currentDevice].systemVersion floatValue] >= 6 && [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]);
     BOOL isTwitterAvailable = [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter];
-    self.shareText = [self randomText];
+    if(!self.shareText) self.shareText = [self randomTextAllDoneForToday:self.allDoneForToday];
     [self.youreAllDoneView setText:self.shareText];
     CGFloat buttonsCenterY = CGRectGetMaxY(self.youreAllDoneView.shareItLabel.frame) + kButtonSpacing+ kShareButtonSize/2;
     CGRectSetCenter(self.facebookButton, self.view.frame.size.width/2-kButtonSpacing/2-kShareButtonSize/2, buttonsCenterY);
@@ -198,8 +205,8 @@
     [self.youreAllDoneView.stampView setDate:[NSDate date]];
 }
 
--(NSString*)randomText{
-    NSArray *facebooks = @[@"Nothing beats going to bed with a complete to-do list! #ProductiveDay",
+-(NSString*)randomTextAllDoneForToday:(BOOL)doneForToday{
+    NSArray *doneForTodays = @[@"Nothing beats going to bed with a complete to-do list! #ProductiveDay",
                            @"To-do list complete, gonna sleep well tonight! #ProductiveDay",
                            @"Bed just feels better after a #ProductiveDay",
                            @"To-do list complete - take that procrastination! #ProductiveDay",
@@ -219,8 +226,15 @@
                            @"Complete to-do list? Nailed it. #ProductiveDay",
                            @"Don’t hate me ‘cause you ain’t me. To-do list: owned. #ProductiveDay",
                            @"Long to-do list: stressful. Complete to-do list: priceless. #ProductiveDay"];
-    NSUInteger randomIndex = arc4random() % [facebooks count];
-    NSString *string = [facebooks objectAtIndex:randomIndex];
+    
+    NSArray *doneForNows = @[
+        @"Awesome! I’m ahead of schedule #ProductiveDay",
+        @"Time for a break! I’ve been swiping tasks like a boss. #ProductiveDay",
+        @"Let’s grab a coffee! It’s already been a #ProductiveDay"
+    ];
+    NSArray *actualArray = doneForToday ? doneForTodays : doneForNows;
+    NSUInteger randomIndex = arc4random() % [actualArray count];
+    NSString *string = [actualArray objectAtIndex:randomIndex];
     return string;
 }
 - (void)viewDidLoad
@@ -295,6 +309,7 @@
             case SLComposeViewControllerResultDone:{
                 NSString *realServiceType;
                 [dict setObject:self.shareText forKey:@"Share string"];
+                [dict setObject:@(self.allDoneForToday) forKey:@"All done for today"];
                 if([self.sharingService isEqualToString:SLServiceTypeFacebook]) realServiceType = @"Facebook";
                 else if([self.sharingService isEqualToString:SLServiceTypeTwitter]) realServiceType = @"Twitter";
                 if(realServiceType) [dict setObject:realServiceType forKey:@"Service"];
@@ -305,9 +320,13 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     };
     [shareVC addImage:[self screenshotForSharingService:serviceType]];
-    if(!self.shareText) self.shareText = [self randomText];
+    if(!self.shareText) self.shareText = [self randomTextAllDoneForToday:self.allDoneForToday];
     NSString *string = self.shareText;
-    if([serviceType isEqualToString:SLServiceTypeTwitter]) string = [string stringByAppendingString:@" http://swipesapp.com/download"];
+    
+    if([serviceType isEqualToString:SLServiceTypeTwitter])
+        string = [string stringByAppendingString:@" http://swipesapp.com/download"];
+    else
+        [shareVC addURL:[NSURL URLWithString:@"http://swipesapp.com/download"]];
     
     [shareVC setInitialText:string];
     [[self parent] presentViewController:shareVC animated:YES completion:nil];
@@ -316,6 +335,7 @@
     NSString *realServiceType;
     
     [dict setObject:self.shareText forKey:@"Share string"];
+    [dict setObject:@(self.allDoneForToday) forKey:@"All done for today"];
     if([serviceType isEqualToString:SLServiceTypeFacebook]) realServiceType = @"Facebook";
     else if([serviceType isEqualToString:SLServiceTypeTwitter]) realServiceType = @"Twitter";
     if(realServiceType) [dict setObject:realServiceType forKey:@"Service"];

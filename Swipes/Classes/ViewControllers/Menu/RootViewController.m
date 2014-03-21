@@ -103,6 +103,7 @@
             [user saveEventually];
             if(email) [user setObject:email forKey:@"username"];
             [user saveEventually];
+            [ANALYTICS updateIdentity];
         }
         return NO;
     }];
@@ -122,6 +123,7 @@
     }
     else{
     }
+    [ANALYTICS updateIdentity];
     [self changeToMenu:KPMenuHome animated:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
 }
