@@ -84,7 +84,6 @@ static AnalyticsHandler *sharedObject;
 
     
     KeenClient *client = [KeenClient sharedClient];
-
     NSMutableDictionary *probs = [@{
         @"Platform": @"iOS",
         @"OS Version": [[UIDevice currentDevice] systemVersion],
