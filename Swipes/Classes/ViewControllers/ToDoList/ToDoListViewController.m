@@ -223,6 +223,7 @@
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     self.showingViewController.model = toDo;
     [ROOT_CONTROLLER pushViewController:self.showingViewController animated:YES];
+    [ANALYTICS pushView:@"Edit view"];
 }
 -(void)pressedEdit{
     NSIndexPath *indexPath;
@@ -231,6 +232,7 @@
 }
 -(void)didPressCloseToDoViewController:(ToDoViewController *)viewController{
     [ROOT_CONTROLLER popViewControllerAnimated:YES];
+    [ANALYTICS popView];
 }
 -(void)scheduleToDoViewController:(ToDoViewController *)viewController{
     

@@ -117,7 +117,6 @@
     CGContextStrokePath(currentContext);
     
     if(self.progress){
-        NSLog(@"progress");
         CGFloat progressY = self.bounds.size.height;
         CGFloat extraCut = progressY * kDefLeftCutSize;
         targetX += extraCut;

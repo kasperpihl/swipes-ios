@@ -72,7 +72,6 @@ static AnalyticsHandler *sharedObject;
     [[LocalyticsSession shared] setCustomDimension:dimension value:value];
 }
 -(void)updateIdentity{
-    NSLog(@"updating identity");
     if(kCurrent){
         [[LocalyticsSession shared] setCustomerId:kCurrent.objectId];
         [[LocalyticsSession shared] setCustomerEmail:kCurrent.email];

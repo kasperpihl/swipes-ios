@@ -77,7 +77,6 @@
 -(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber oldNumber:(NSInteger)oldNumber{
     [super itemHandler:handler changedItemNumber:itemNumber oldNumber:oldNumber];
     [self.tableView setReorderingEnabled:(itemNumber > 1)];
-    NSLog(@"from %i to %i",oldNumber,itemNumber);
     [self updateSectionHeader];
     if(itemNumber == 0 && oldNumber != 0)
         self.shareText = [self randomTextAllDoneForToday:self.allDoneForToday];
