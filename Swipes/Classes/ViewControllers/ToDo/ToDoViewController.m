@@ -46,6 +46,7 @@
 #import "SectionHeaderView.h"
 
 #import "SchedulePopup.h"
+#import "UIView+Utilities.h"
 #import "ToDoViewController+ViewHelpers.h"
 
 typedef NS_ENUM(NSUInteger, KPEditMode){
@@ -430,6 +431,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.notesView.frame = CGRectSetSize(self.notesView, self.view.frame.size.width-LABEL_X-10, 1500);
     //CGSize contentSize = [self.notesView sizeThatFits:CGSizeMake(self.notesView.frame.size.width, 500)];
     [self.notesView sizeToFit];
+//    DLogFrame(self.notesView);
+
     CGRectSetHeight(self.notesView,self.notesView.frame.size.height+20);
     CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
 }
@@ -856,7 +859,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_ROW_HEIGHT)];
         self.notesContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self addAndGetImage:timageString(@"edit_notes_icon", @"_white", @"_black") inView:self.notesContainer];
-        self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, self.view.frame.size.width - LABEL_X - 10, 500)];
+        self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, self.view.frame.size.width - LABEL_X - 200, 500)];
         self.notesView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.notesView.font = EDIT_TASK_TEXT_FONT;
         self.notesView.contentInset = UIEdgeInsetsMake(0,-5,0,0);
@@ -926,4 +929,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     // Dispose of any resources that can be recreated.
 }
 
+// NEWCODE
+//- (void)viewDidLayoutSubviews
+//{
+//    [super viewDidLayoutSubviews];
+//    [self.view explainSubviews];
+//}
+//
 @end

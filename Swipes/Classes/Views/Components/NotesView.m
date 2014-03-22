@@ -91,7 +91,7 @@
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
-    CGRectSetY(self.backbutton, self.frame.size.height-self.backbutton.frame.size.height);
+    CGRectSetY(self.backbutton, self.frame.size.height - self.backbutton.frame.size.height);
     [UIView commitAnimations];
 }
 -(void)keyboardWillShow:(NSNotification*)notification{
@@ -100,9 +100,10 @@
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGFloat kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     NSLog(@"notif:%@",notification);
-    CGRectSetY(self.backbutton, self.frame.size.height-self.backbutton.frame.size.height-keyboardFrame.size.height);
-    CGRectSetHeight(self.notesView, self.frame.size.height-keyboardFrame.size.height-kTextBottomPadding);
+    CGRectSetY(self.backbutton, self.frame.size.height - self.backbutton.frame.size.height - kbdHeight);
+    CGRectSetHeight(self.notesView, self.frame.size.height - kbdHeight - kTextBottomPadding);
     [UIView commitAnimations];
 }
 

@@ -144,6 +144,7 @@
     self.selectedItems = items;
     //[self show:NO controlsAnimated:YES];
     KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:viewController.view.bounds andTags:[KPTag allTagsAsStrings]];
+    tagView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     BLURRY.showPosition = PositionBottom;

@@ -10,6 +10,7 @@
 #import "KPBlurry.h"
 #import "KPToolbar.h"
 #import "KPAddView.h"
+#import "UIView+Utilities.h"
 #import "KPAlert.h"
 #define BACKGROUND_VIEW_TAG 2
 #define TAG_VIEW_TAG 3
@@ -77,10 +78,12 @@
         closeButton.frame = self.bounds;
         [closeButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
-        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height-TOOLBAR_HEIGHT)];
+        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - TOOLBAR_HEIGHT)];
         scrollView.tag = SCROLL_VIEW_TAG;
+        scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         KPTagList *tagView = [KPTagList tagListWithWidth:self.frame.size.width andTags:tags];
+        tagView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         //tagView.marginLeft = TAG_VIEW_SIDE_MARGIN;
         tagView.sorted = YES;
         //tagView.marginRight = TAG_VIEW_SIDE_MARGIN;
@@ -103,6 +106,7 @@
         
         /* Initialize toolbar */
         KPToolbar *tagToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TOOLBAR_HEIGHT, self.frame.size.width, TOOLBAR_HEIGHT) items:@[timageStringBW(@"backarrow_icon"),timageStringBW(@"trashcan_icon"),timageStringBW(@"plus_icon")] delegate:self];
+        tagToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         tagToolbar.tag = TOOLBAR_TAG;
         [self addSubview:tagToolbar];
         self.toolbar = (KPToolbar*)[self viewWithTag:TOOLBAR_TAG];
@@ -110,6 +114,7 @@
         
         /* Initialize addView */
         KPAddView *addView = [[KPAddView alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, self.bounds.size.height, self.bounds.size.width-TEXT_FIELD_MARGIN_LEFT, ADD_VIEW_HEIGHT)];
+        addView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         addView.tag = ADD_VIEW_TAG;
         addView.userInteractionEnabled = YES;
         addView.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -172,7 +177,7 @@
     [UIView setAnimationBeginsFromCurrentState:YES];
     self.scrollView.alpha = 1;
     self.addTagView.alpha = 0;
-    CGRectSetY(self.addTagView,self.frame.size.height-self.addTagView.frame.size.height);
+    CGRectSetY(self.addTagView, self.frame.size.height - self.addTagView.frame.size.height);
     
     [UIView commitAnimations];
 }
@@ -187,8 +192,9 @@
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGFloat kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     self.scrollView.alpha = 0;
-    CGRectSetY(self.addTagView,self.frame.size.height-self.addTagView.frame.size.height-keyboardFrame.size.height);
+    CGRectSetY(self.addTagView, self.frame.size.height - self.addTagView.frame.size.height - kbdHeight);
     
     [UIView commitAnimations];
 }
@@ -207,7 +213,7 @@
     }
 }
 -(void)addView:(KPAddView *)addView enteredTrimmedText:(NSString *)trimmedText{
-    if(self.delegate && [self.delegate respondsToSelector:@selector(tagPanel:createdTag:)])
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tagPanel:createdTag:)])
         [self.delegate tagPanel:self createdTag:trimmedText];
     [self.tagView addTag:trimmedText selected:YES];
 }
@@ -217,4 +223,12 @@
 -(void)dealloc{
     clearNotify();
 }
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self explainSubviews];
+}
+
+
 @end
