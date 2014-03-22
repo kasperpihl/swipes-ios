@@ -7,13 +7,15 @@
 
 /* 
  update called on sync - overwritten in subclass
- return YES if it changed anything and needs sync
+ return Array with affected changed attributes that needs sync after update
+ return nil if no
 */
--(BOOL)updateWithObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
+-(NSArray*)updateWithObjectFromServer:(NSDictionary*)object context:(NSManagedObjectContext*)context;
 -(NSString*)getParseClassName;
 -(NSString*)getTempId;
+
 /* To use saveWithHandler: overwrite setAttributesForSavingObject: in subclass to set all the attributes to save */
--(NSDictionary*)objectToSaveInContext:(NSManagedObjectContext *)context;
+-(NSDictionary*)objectToSaveInContext:(NSManagedObjectContext *)context changedAttributes:(NSArray*)attributes;
 
 /* 
  Method to overwrite in subclass (KPToDo/KPTag)
