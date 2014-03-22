@@ -31,11 +31,13 @@
 #import "KPOverlay.h"
 
 #import "KPToDo.h"
-#import "LocalyticsSession.h"
 #import <MessageUI/MessageUI.h>
 #import <Parse/Parse.h>
 
 #import "KPAlert.h"
+
+
+#import "ShareViewController.h"
 
 @interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate>
 
@@ -95,13 +97,13 @@
             
             if(email){
                 [user setObject:email forKey:@"email"];
-                [[LocalyticsSession shared] setCustomerEmail:email];
             }
             NSString *gender = [userData objectForKey:@"gender"];
             if(gender) [user setObject:gender forKey:@"gender"];
             [user saveEventually];
             if(email) [user setObject:email forKey:@"username"];
             [user saveEventually];
+            [ANALYTICS updateIdentity];
         }
         return NO;
     }];
@@ -114,15 +116,14 @@
     else{
         [ANALYTICS tagEvent:@"Logged In" options:@{}];
     }
-    [[LocalyticsSession shared] setCustomerId:user.objectId];
     if([PFFacebookUtils isLinkedWithUser:user]){
         if(!user.email){
             [self fetchDataFromFacebook];
         }
     }
     else{
-        [[LocalyticsSession shared] setCustomerEmail:user.email];
     }
+    [ANALYTICS updateIdentity];
     [self changeToMenu:KPMenuHome animated:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
 }
@@ -190,14 +191,13 @@ static RootViewController *sharedObject;
     [ANALYTICS tagEvent:event options:@{@"Number of Tasks":@(tasks.count)}];
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
--(void)shareTasks{
+-(void)shareTasks:(NSArray*)tasks{
     if([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
         mailCont.mailComposeDelegate = self;
         [mailCont setSubject:@"Tasks to complete"];
         
         NSString *message = @"Tasks: \r\n";
-        NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
         for(KPToDo *toDo in tasks){
             message = [message stringByAppendingFormat:@"◯ %@\r\n",toDo.title];
         }
@@ -274,8 +274,8 @@ static RootViewController *sharedObject;
     self.sideMenu.hideStatusBarArea = [Global OSVersion] < 7;
     self.settingsViewController = [[MenuViewController alloc] init];
     self.sideMenu.revealView = self.settingsViewController.view;
-    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
-    [self.view addGestureRecognizer:panGestureRecognizer];
+    //UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
+    //[self.view addGestureRecognizer:panGestureRecognizer];
     [self setupAppearance];
     
 }
@@ -286,6 +286,8 @@ static RootViewController *sharedObject;
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    //ShareViewController *shareVC = [[ShareViewController alloc] init];
+    //[self pushViewController:shareVC animated:YES];
     
 }
 - (void)viewDidUnload

@@ -616,7 +616,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         }];
     }
     else if(item == 0){
-        [self.segmentedViewController pressedShare:self];
+        [ROOT_CONTROLLER shareTasks:@[self.model]];
+         /*NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
+        [self.segmentedViewController pressedShare:self];*/
     }
 }
 

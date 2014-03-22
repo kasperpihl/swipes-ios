@@ -23,9 +23,11 @@
 
 +(NSArray*)sortOrderForItems:(NSArray*)items save:(BOOL)save;
 
+
 +(void)saveToSync;
 
 -(NSArray*)changeToOrder:(NSInteger)newOrder withItems:(NSArray*)items;
+
 -(CellType)cellTypeForTodo;
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags;
 

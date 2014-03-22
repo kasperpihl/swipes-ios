@@ -23,7 +23,7 @@
     return self.tempId;
 }
 #pragma mark - Handling of changes
--(BOOL)updateWithObject:(NSDictionary *)object context:(NSManagedObjectContext*)context{
+-(NSArray*)updateWithObjectFromServer:(NSDictionary *)object context:(NSManagedObjectContext*)context{
     if(!context) context = [KPCORE context];
     [context performBlockAndWait:^{
         self.savingObject = nil;
@@ -35,7 +35,7 @@
         }
         self.updatedAt = [dateFormatter dateFromString:[object objectForKey:@"updatedAt"]];
     }];
-    return NO;
+    return nil;
 }
 #pragma mark - Instantiate object
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context{
@@ -66,7 +66,7 @@
     return successful;
 }
 #pragma mark - Save to server
--(NSDictionary*)objectToSaveInContext:(NSManagedObjectContext *)context{
+-(NSDictionary*)objectToSaveInContext:(NSManagedObjectContext *)context changedAttributes:(NSArray *)attributes{
     if(!context) context = [KPCORE context];
     
     __block BOOL shouldUpdate = NO;
@@ -78,15 +78,14 @@
         else{
             [objectToSave setObject:[self getTempId] forKey:@"tempId"];
         }
+        
         /*
          Loading changed attributes from the sync handler
          and calls the subclass (KPToDo/KPTag) to set them proberly on the object
         */
-        NSArray *changedAttributes;
-        if(self.objectId)
-            changedAttributes = [KPCORE lookupChangedAttributesToSaveForObject:self.objectId];
-
-        shouldUpdate = [self setAttributesForSavingObject:&objectToSave changedAttributes:changedAttributes];
+        shouldUpdate = [self setAttributesForSavingObject:&objectToSave changedAttributes:attributes];
+        
+        
     }];
     if(shouldUpdate) return objectToSave;
     else return nil;

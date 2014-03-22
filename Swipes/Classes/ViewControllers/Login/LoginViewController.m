@@ -110,6 +110,7 @@
         //self.emailField.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.emailField.keyboardType = UIKeyboardTypeEmailAddress;
         self.emailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        self.emailField.autocorrectionType = UITextAutocorrectionTypeNo;
         self.emailField.returnKeyType = UIReturnKeyNext;
         self.emailField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.emailField.layer.cornerRadius = kCornerRadius;
@@ -350,7 +351,7 @@
                 [self showIndicator:NO onElement:sender];
                 [self handleErrorFromLogin:error];
             }
-            if([object isEqualToNumber:@1]){
+            else if([object isEqualToNumber:@1]){
                 voidBlock loginBlock = ^{
                     [PFUser logInWithUsernameInBackground:email password:self.passwordField.text block:^(PFUser *user, NSError *error) {
                         [self showIndicator:NO onElement:sender];

@@ -11,7 +11,7 @@
 #define kFontColor kColor
 #define kAllDoneFont [UIFont fontWithName:@"NexaHeavy" size:22]
 
-#define kMonthFont [UIFont fontWithName:@"NexaHeavy" size:13]
+#define kMonthFont [UIFont fontWithName:@"NexaHeavy" size:15]
 
 #define kAllDoneSpacing 20
 #define kMonthSpacing 10
@@ -21,8 +21,6 @@
 #import "NSDate-Utilities.h"
 @interface DateStampView ()
 
-@property (nonatomic) UILabel *allDoneLabel;
-@property (nonatomic) UILabel *monthLabel;
 @end
 @implementation DateStampView
 -(id)initWithDate:(NSDate *)date{
@@ -43,18 +41,19 @@
         
         self.allDoneLabel = [[UILabel alloc] initWithFrame:self.bounds];
         self.allDoneLabel.backgroundColor = CLEAR;
-        self.allDoneLabel.text = @"ALL DONE FOR NOW";
+        self.allDoneLabel.text = @" ALL DONE FOR TODAY ";
         self.allDoneLabel.textAlignment = NSTextAlignmentCenter;
         self.allDoneLabel.font = kAllDoneFont;
         self.allDoneLabel.textColor = kFontColor;
         [self.allDoneLabel sizeToFit];
         [self addSubview:self.allDoneLabel];
+        CGRectSetWidth(self.allDoneLabel,width);
         CGRectSetY(self.allDoneLabel, CGRectGetMaxY(dateStampBackground.frame) + kAllDoneSpacing);
         CGRectSetCenterX(self.allDoneLabel, width/2);
         
         
         self.monthLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.monthLabel.text = @"- may 19 -";
+        self.monthLabel.text = @"Next task @ 16:30        ";
         self.monthLabel.backgroundColor = CLEAR;
         self.monthLabel.textColor = kFontColor;
         self.monthLabel.textAlignment = NSTextAlignmentCenter;
@@ -82,7 +81,7 @@
     formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     formatter.dateFormat = @"MMM";
     
-    self.monthLabel.text = [NSString stringWithFormat:@"- %@ %i -",[[formatter stringFromDate:date] lowercaseString],date.day];
+    //self.monthLabel.text = [NSString stringWithFormat:@"- %@ %i -",[[formatter stringFromDate:date] lowercaseString],date.day];
     
 }
 -(void)dealloc{

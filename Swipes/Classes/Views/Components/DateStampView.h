@@ -11,4 +11,8 @@
 @interface DateStampView : UIView
 -(id)initWithDate:(NSDate*)date;
 @property (nonatomic) NSDate *date;
+
+@property (nonatomic) UILabel *allDoneLabel;
+@property (nonatomic) UILabel *monthLabel;
+
 @end

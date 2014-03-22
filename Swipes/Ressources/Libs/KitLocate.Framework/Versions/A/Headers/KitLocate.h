@@ -1,13 +1,6 @@
-//
-//  KitLocate.h
-//  SDKsimple
-//
-//  Created by Ron Miller on 10/20/12.
-//
-//
 
 //-------------------------
-#define KL_APP_VERSION 4.12
+#define KL_APP_VERSION 4.26
 //-------------------------
 
 
@@ -18,9 +11,6 @@
 #import <UIKit/UIKit.h>
 
 #import <KitLocate/KLPlace.h>
-
-//#warning debug delete!
-//#import "KLRestClient.h"
 
 @interface KitLocate : NSObject
 
@@ -55,6 +45,29 @@
  */
 +(void)setUniqueUserID:(NSString *)strID;
 
+/*! Set your app's push token
+ * \param deviceToken The token
+ */
++(void)setPushNotificationToken:(NSData *)deviceToken;
+
+/*! Set your app's push token
+ * \param deviceToken The token
+ */
++(void)setPushNotificationTokenString:(NSString *)deviceToken;
+
+/*! If you use registerForRemotePush, call this method in your appDelegate, in the implementation of (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+ * \param deviceToken The token got from the delegate
+ */
++(void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
+
+/*! If you use registerForRemotePush, call this method in your appDelegate, in the implementation of (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+ * \param error The NSError object got from the delegate
+ */
++(void)didFailToRegisterForRemoteNotificationsWithError:(NSError *)error;
+
+/*! Register for remote push nofitication through KitLocate. If you call this funcion you should also implement didRegisterForRemoteNotificationsWithDeviceToken and didFailToRegisterForRemoteNotificationsWithError in your appDelegate. In each one of them you should call  KitLocate's appropriate function (For example: [KitLocate didRegisterForRemoteNotificationsWithDeviceToken:deviceToken])
+ */
++(void)registerForRemotePush;
 
 // LOG
 
@@ -66,6 +79,7 @@
 +(NSString *)getLogString;
 
 //#endif
+
 
 extern bool bDidInitTookMainThread;
 

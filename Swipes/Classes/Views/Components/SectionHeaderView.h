@@ -15,4 +15,7 @@
 @property (nonatomic) UIColor *fillColor;
 @property (nonatomic) UIFont *font;
 @property (nonatomic) NSString *title;
+
+@property (nonatomic) BOOL progress;
+@property (nonatomic) CGFloat progressPercentage;
 @end
