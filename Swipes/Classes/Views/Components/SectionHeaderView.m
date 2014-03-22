@@ -11,8 +11,13 @@
 #define kDefTopPadding 1
 #define kDefBottomPadding 3
 #import "SectionHeaderView.h"
-
+#import <QuartzCore/QuartzCore.h>
 /*  */
+
+@interface _ProgressEndingView : UIView
+@property (nonatomic) SectionHeaderView *headerView;
+@end
+
 @interface _SectionHeaderViewText : UIView
 -(id)initWithColor:(UIColor *)color font:(UIFont*)font title:(NSString*)title;
 -(void)setText:(NSString*)text;
@@ -26,46 +31,133 @@
 @interface SectionHeaderView ()
 
 @property (nonatomic) _SectionHeaderViewText *sectionHeader;
+@property (nonatomic) _ProgressEndingView *progressEndingView;
+@property (nonatomic) UIView *progressView;
+
 @end
 @implementation SectionHeaderView
 -(id)initWithColor:(UIColor *)color font:(UIFont *)font title:(NSString *)title{
     self = [super init];
     if (self) {
         CGRectSetSize(self, 320, LINE_SIZE);
-        self.backgroundColor = color;
+        self.backgroundColor = CLEAR;
         self.sectionHeader = [[_SectionHeaderViewText alloc] initWithColor:color font:font title:title];
         CGRectSetX(self.sectionHeader, CGRectGetWidth(self.frame) - CGRectGetWidth(self.sectionHeader.frame));
         [self addSubview:self.sectionHeader];
+        
+        self.progressView = [[UIView alloc] initWithFrame:self.bounds];
+        
         self.color = color;
+        
+        self.progressView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        
+        self.progressEndingView = [[_ProgressEndingView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.progressView.frame), 0, 12, self.progressView.frame.size.height)];
+        self.progressEndingView.headerView = self;
+        self.progressEndingView.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin);
+        self.progressEndingView.backgroundColor = CLEAR;
+        [self.progressView addSubview:self.progressEndingView];
+        CGRectSetWidth(self.progressView, 0);
+        [self addSubview:self.progressView];
+        
+        
+        
+        self.layer.masksToBounds = NO;
         
     }
     return self;
 }
-
+-(void)setProgressPercentage:(CGFloat)progressPercentage{
+    CGFloat targetX = self.bounds.size.width - CGRectGetWidth(self.sectionHeader.frame);
+    [UIView animateWithDuration:0.2f delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        CGRectSetWidth(self.progressView,targetX*progressPercentage);
+    } completion:nil];
+    
+    _progressPercentage = progressPercentage;
+    
+}
 -(void)setColor:(UIColor *)color{
-    self.backgroundColor = color;
+    _color = color;
+    //self.backgroundColor = color;
+    self.progressView.backgroundColor = color;
     self.sectionHeader.color = color;
-    [self.sectionHeader setNeedsDisplay];
+    [self setNeedsDisplay];
 }
 -(void)setFillColor:(UIColor *)fillColor{
     self.sectionHeader.fillColor = fillColor;
-    [self.sectionHeader setNeedsDisplay];
+    [self setNeedsDisplay];
 }
 -(void)setFont:(UIFont *)font{
     self.sectionHeader.titleLabel.font = font;
-    [self.sectionHeader setNeedsDisplay];
+    [self setNeedsDisplay];
 }
 -(void)setTextColor:(UIColor *)textColor{
     self.sectionHeader.titleLabel.textColor = textColor;
 }
 -(void)setTitle:(NSString *)title{
     [self.sectionHeader setText:title];
-    [self.sectionHeader setNeedsDisplay];
+    [self setNeedsDisplay];
 }
 -(void)setNeedsDisplay{
     [super setNeedsDisplay];
     [self.sectionHeader setNeedsDisplay];
 }
+- (void)drawRect:(CGRect)rect
+{
+    [super drawRect:rect];
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    CGFloat targetX = self.bounds.size.width - CGRectGetWidth(self.sectionHeader.frame);
+    
+    /* Draw the colored stroke */
+    CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
+    
+    
+    CGContextMoveToPoint(currentContext, 0, 0);
+    CGContextSetLineWidth(currentContext, LINE_SIZE*2);
+    CGContextAddLineToPoint(currentContext, targetX, 0);
+    CGContextStrokePath(currentContext);
+    
+    if(self.progress){
+        NSLog(@"progress");
+        CGFloat progressY = self.bounds.size.height;
+        CGFloat extraCut = progressY * kDefLeftCutSize;
+        targetX += extraCut;
+        CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
+        CGContextMoveToPoint(currentContext, 0, progressY);
+        CGContextSetLineWidth(currentContext, LINE_SIZE*2);
+        CGContextAddLineToPoint(currentContext, targetX, progressY);
+        CGContextStrokePath(currentContext);
+        
+    }
+}
+
+
+@end
+
+@implementation _ProgressEndingView
+-(void)setFrame:(CGRect)frame{
+    [super setFrame:frame];
+}
+-(void)drawRect:(CGRect)rect{
+    [super drawRect:rect];
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    
+    CGFloat targetY = self.bounds.size.height;
+    CGFloat leftCutPoint = self.bounds.size.height * kDefLeftCutSize;
+    
+    UIBezierPath *aPath = [UIBezierPath bezierPath];
+    [aPath moveToPoint:CGPointMake(0, 0)];
+    [aPath addLineToPoint:CGPointMake(leftCutPoint, targetY)];
+    [aPath addLineToPoint:CGPointMake(0, targetY)];
+    [aPath addLineToPoint:CGPointMake(0, 0)];
+    [aPath closePath];
+    CGContextAddPath(currentContext, aPath.CGPath);
+    UIColor *fillColor = self.headerView.color;
+    CGContextSetFillColorWithColor(currentContext,fillColor.CGColor);
+    CGContextFillPath(currentContext);
+    //CGRectSetWidth(self, leftCutPoint);
+}
+
+
 @end
 
 @implementation _SectionHeaderViewText
@@ -114,19 +206,19 @@
     CGFloat targetX = self.bounds.size.width;
     
     /* Color the background */
-    
-    UIBezierPath *aPath = [UIBezierPath bezierPath];
-    [aPath moveToPoint:CGPointMake(0, 0)];
-    [aPath addLineToPoint:CGPointMake(targetX, 0)];
-    [aPath addLineToPoint:CGPointMake(targetX, targetY)];
-    [aPath addLineToPoint:CGPointMake(leftCutPoint, targetY)];
-    [aPath addLineToPoint:CGPointMake(0, 0)];
-    [aPath closePath];
-    CGContextAddPath(currentContext, aPath.CGPath);
-    UIColor *fillColor = self.fillColor;
-    CGContextSetFillColorWithColor(currentContext,fillColor.CGColor);
-    CGContextFillPath(currentContext);
-    
+    if(self.fillColor){
+        UIBezierPath *aPath = [UIBezierPath bezierPath];
+        [aPath moveToPoint:CGPointMake(0, 0)];
+        [aPath addLineToPoint:CGPointMake(targetX, 0)];
+        [aPath addLineToPoint:CGPointMake(targetX, targetY)];
+        [aPath addLineToPoint:CGPointMake(leftCutPoint, targetY)];
+        [aPath addLineToPoint:CGPointMake(0, 0)];
+        [aPath closePath];
+        CGContextAddPath(currentContext, aPath.CGPath);
+        UIColor *fillColor = self.fillColor;
+        CGContextSetFillColorWithColor(currentContext,fillColor.CGColor);
+        CGContextFillPath(currentContext);
+    }
     /* Draw the colored stroke */
     CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
     

@@ -25,34 +25,21 @@
  */
 + (void)logEvent:(NSString*)eventName withParams:(NSArray *)arrParams;
 
-//+ (void)CreateLocalNotification:(NSString*)NotificationText;
-
-//Maybe export:
-/*
- + (void)GetPOIsFromServer;
- + (void)SendStatisticsToServer;
+/*! Allows you add events at chosen places in your code. You can later watch it on KitLocate's dashboard
+ * \param eventName Name of the event. Must containts charecters
+ * \param Param String param with additional information. can be @"". for multi-parameter message use the overloaded function
+ * \param shouldSendNow Set true if you want to send this event immediately to the server. default is 'false'. WARNING: calling logEvent many times with this param as 'true' may affect battery performance. It's recommended to set this parameter to 'true' only when it's crucial.
  */
++ (void)logEvent:(NSString*)eventName withParam:(NSString*)Param sendNow:(bool)shouldSendNow;
 
-//Variables to set: (bool)AllowPush, (int)IntervalToConsiderPushOpen,
+/*! Allows you add events at chosen places in your code. You can later watch it on KitLocate's dashboard
+ * \param eventName Name of the event. Must containts charecters
+ * \param arrParams Array of string params
+ * \param shouldSendNow Set true if you want to send this event immediately to the server. default is 'false'. WARNING: calling logEvent many times with this param as 'true' may affect battery performance. It's recommended to set this parameter to 'true' only when it's crucial.
+ */
++ (void)logEvent:(NSString*)eventName withParams:(NSArray *)arrParams sendNow:(bool)shouldSendNow;
 
-//
-//// Local Push creation
-//
-//+(void) createPushWithText:(NSString*) strPushText ImageName:(NSString *)strImage IconBadge:(int)nBadge SoundName:(NSString *)strSound;
-//+(void) createPushWithText:(NSString*) strPushText ImageName:(NSString *)strImage IconBadge:(int)nBadge SoundName:(NSString *)strSound UserInfo:(NSDictionary *)dicUserInfo TimeIntervalSinceNowInSeconds:(NSTimeInterval)timeInterval;
-//+(void) createPushWithText: (NSString*) strPushText ImageName:(NSString *)strImage IconBadge:(int)nBadge SoundName:(NSString *)strSound UserInfo:(NSDictionary *)dicUserInfo TimeIntervalSinceNowInSeconds:(NSTimeInterval)timeInterval withAlertTitle:(NSString *)strAlertTitile AlertButtonTitle:(NSString *)strAlertButtonTitle AlertCancelButtonTitle:(NSString *)strAlertCancelButton AlertDelegate:(id)delegate;
-//
-//// Push Managment Approval
-//
-//+(NSArray *)requestPushManagementApprovalWithGeofences:(NSArray *)arrGeofences; //#
-//+(NSArray *)requestDebugManagementWithStringParametersArray:(NSArray *)arrStringParams; //#
-//
-//+(NSArray *)getLastPushManagementApprovalWithGeofences;
-//
-//// APP STATE
-//
-//+ (bool)isOnBackground;
-//
+
 
 
 

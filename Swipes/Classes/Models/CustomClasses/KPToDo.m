@@ -135,10 +135,11 @@
     return commonTags;
 }
 
--(BOOL)updateWithObject:(NSDictionary *)object context:(NSManagedObjectContext *)context{
-    [super updateWithObject:object context:context];
-    __block BOOL hasChanged = NO;
+-(NSArray*)updateWithObjectFromServer:(NSDictionary *)object context:(NSManagedObjectContext *)context{
+    [super updateWithObjectFromServer:object context:context];
+    __block NSMutableSet *changedAttributesSet = [NSMutableSet set];
     [context performBlockAndWait:^{
+        
         NSDictionary *keyMatch = [self keyMatch];
         // Get changes since start of the sync - not to overwrite recent changes
         NSArray *localChanges = [KPCORE lookupTemporaryChangedAttributesForObject:self.objectId];
@@ -162,8 +163,7 @@
                 for(NSDictionary *tag in tagsFromServer){
                     if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:[tag objectForKey:@"objectId"]];
                     else {
-                        hasChanged = YES;
-                        [KPCORE sync:NO attributes:@[@"tags"] forIdentifier:self.objectId isTemp:NO];
+                        [changedAttributesSet addObject:@"tags"];
                     }
                 }
                 if(objectIDs.count > 0){
@@ -175,8 +175,7 @@
                     for(NSInteger i = 0 ; i < tagCount ; i++) [tagStrings addObject:[NSNull null]];
                     for(KPTag *tag in tagsObjects){
                         if(!tag || tag == (id)[NSNull null] || tag.title.length == 0){
-                            hasChanged = YES;
-                            [KPCORE sync:NO attributes:@[@"tags"] forIdentifier:self.objectId isTemp:NO];
+                            [changedAttributesSet addObject:@"tags"];
                             continue;
                         }
                         NSInteger index = [objectIDs indexOfObject:tag.objectId];
@@ -223,9 +222,11 @@
             }
         }
     }];
-    return hasChanged;
+    if(changedAttributesSet.count > 0) return [changedAttributesSet allObjects];
+    else return nil;
 }
 -(BOOL)setAttributesForSavingObject:(NSMutableDictionary *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
+   
     NSDictionary *keyMatch = [self keyMatch];
     BOOL isNewObject = (!self.objectId);
     if(changedAttributes && [changedAttributes containsObject:@"all"]) isNewObject = YES;
@@ -409,7 +410,7 @@
     NSSortDescriptor *unorderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"schedule" ascending:NO];
     NSArray *orderedItems = [[items filteredArrayUsingPredicate:orderedItemsPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
     NSArray *unorderedItems = [[items filteredArrayUsingPredicate:unorderedItemsPredicate] sortedArrayUsingDescriptors:@[unorderedItemsSortDescriptor]];
-    NSInteger counter = kDefOrderVal + 1;
+    int counter = kDefOrderVal + 1;
     NSArray *sortedItems = [unorderedItems arrayByAddingObjectsFromArray:orderedItems];
     NSInteger numberOfChanges = 0;
     if(!unorderedItems || unorderedItems.count == 0) return sortedItems;

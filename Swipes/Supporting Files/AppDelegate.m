@@ -11,11 +11,13 @@
 #import "RootViewController.h"
 #import "KPParseCoreData.h"
 #import "AnalyticsHandler.h"
-#import "AppsFlyer.h"
+#import "AppsFlyerTracker.h"
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
+
 #import "LocalyticsSession.h"
 #import "LocalyticsAmpSession.h"
+
 #import <Crashlytics/Crashlytics.h>
 #import <FacebookSDK/FBAppCall.h>
 #import <DropboxSDK/DropboxSDK.h>
@@ -24,29 +26,41 @@
 #import "PaymentHandler.h"
 #import "NotificationHandler.h"
 
+#import "KeenClient.h"
+
+#import "ContactHandler.h"
+
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSString *parseApplicationKey;
     NSString *parseClientKey;
-    NSString *mixpanelToken;
+    NSString *analyticsKey;
     NSString *localyticsKey;
+    [KeenClient disableGeoLocation];
+    
 #ifdef RELEASE
     parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
-    mixpanelToken = @"376b7b4c4c42cbdf5294ade7d15db3c4";
+    analyticsKey = @"twdwnk4ywb";
     localyticsKey = @"0c159f237171213e5206f21-6bd270e2-076d-11e3-11ec-004a77f8b47f";
-    
+    [KeenClient sharedClientWithProjectId:@"532c5e1dce5e43655200001c"
+                              andWriteKey:@"f4ef66f15dd3877aa2d9976e1d14c67423e1c2ef4b724bbf51552297774532fec6af3e2ef1e84750da7eb76de8666c44492551bcf43278b68ffd9258d4b1b6dea6a1e518da25077fca1fff54a11d33f71dfb6a1ea2a781fcff169bd2acef57883119764b15a4d5235ecd9aab8df530b3"
+                               andReadKey:@"45602fcc1a76041b8efcc90dca112086955bd1186bfde28270e16c90b3fbbcae1671a16c97e6b357fbaa84cb7635b5b09debb1954efa1e80b126e35ad0ec4fc138c450f230f6ac017c3e083f5ea9a74cbab0e9d093ed9696a7e812dd995b35603fa80b68d40dbf17210a0bf65f8a6e2d"];
 #else
     //parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     //parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
     parseApplicationKey = @"0qD3LLZIOwLOPRwbwLia9GJXTEUnEsSlBCufqDvr";
     parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
-    mixpanelToken = @"c2d2126bfce5e54436fa131cfe6085ad";
+    analyticsKey = @"ncm4wfr7qc";
     localyticsKey = @"f2f927e0eafc7d3c36835fe-c0a84d84-18d8-11e3-3b24-00a426b17dd8";
     #define EVERNOTE_HOST BootstrapServerBaseURLStringSandbox
     //NSString* const CONSUMER_KEY = @"sulio22";
     //NSString* const CONSUMER_SECRET = @"c7ed7298b3666bc4"; // when set to release also fix in Swipes-Info.plist file !
+    [KeenClient enableLogging];
+    [KeenClient sharedClientWithProjectId:@"532aec56ce5e436553000007"
+                              andWriteKey:@"2626ed170332186795c0c8c850b7c0eb6c48474466d84d2578ec2b139708fb57f9adba3a96adf2df91032aa3c48282263a291ef58ea1d607990f8281e4a1d1b4aa939cb9a305f1c47964bf18ba94ba660529f0a3ad7431c6d034fba62b01308637f413966a769c609d79478a691e3ed6"
+                               andReadKey:@"bdbd2501231a656524ddc66985685d704f154f2cec61698914c5c1839565be0c15e4203c896ee7fedbeaf2a587fcae0e1353c796209bfa474c5844e4c831ab7a8bac00a92c9d8f572705e51b96ffc621e35b27bb4640b990cc29300b4134de0779a971ab9285564a0d6e552d2dd0e5f5"];
 #endif
     
     [Appirater setAppId:@"657882159"];
@@ -61,9 +75,8 @@
     KPCORE;
     
     [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
-    
     [[LocalyticsSession shared] startSession:localyticsKey];
-    
+
     
     
     [Appirater appLaunched:YES];
@@ -75,7 +88,8 @@
     for(UILocalNotification *lNoti in notifications){
         NSLog(@"t: %i - %@ - %@",lNoti.applicationIconBadgeNumber,lNoti.alertBody,lNoti.fireDate);
     }*/
-    
+    [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"TwJuYgpTKp9ENbxf6wMi8j";
+    [AppsFlyerTracker sharedTracker].appleAppID = @"657882159";
     
     [PaymentHandler sharedInstance];
     [self tagLaunchSource:launchOptions];
@@ -89,6 +103,8 @@
     //[EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
     
     //NSLog(@"%@",[kCurrent sessionToken]);
+    
+    
     return YES;
 }
 - (void)tagLaunchSource:(NSDictionary *)launchOptions
@@ -128,7 +144,9 @@
             break;
         }
     }
-    [ANALYTICS tagEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism }];
+    NSString *isLoggedIn = (kCurrent) ? @"yes" : @"no";
+    
+    [ANALYTICS tagEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism , @"Is Logged in" : isLoggedIn }];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -191,6 +209,13 @@
     [ROOT_CONTROLLER closeApp];
     [[LocalyticsSession shared] close];
     [[LocalyticsSession shared] upload];
+    UIBackgroundTaskIdentifier taskId = [application beginBackgroundTaskWithExpirationHandler:^(void) {
+        NSLog(@"Background task is being expired.");
+    }];
+    
+    [[KeenClient sharedClient] uploadWithFinishedBlock:^(void) {
+        [application endBackgroundTask:taskId];
+    }];
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -206,9 +231,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [AppsFlyer notifyAppID:@"657882159;TwJuYgpTKp9ENbxf6wMi8j"];
-    NSString *isLoggedIn = (kCurrent) ? @"yes" : @"no";
-    [ANALYTICS tagEvent:@"App Open" options:@{@"Is Logged in":isLoggedIn}];
+    [[AppsFlyerTracker sharedTracker] trackAppLaunch];
     
     [[LocalyticsSession shared] resume];
     [[LocalyticsSession shared] upload];

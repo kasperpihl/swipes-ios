@@ -17,6 +17,8 @@
 #define kSyncTime 5
 #define kUpdateLimit 150
 
+#define kDeleteObjectsKey @"deleteObjects"
+
 
 #ifdef DEBUG
 #define DUMPDB //[self dumpLocalDb];
@@ -30,27 +32,30 @@
 
 @property (nonatomic) Reachability *_reach;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
-@property (nonatomic) NSTimer *_syncTimer;
+
+
 
 @property (nonatomic) NSMutableDictionary *_attributeChangesOnObjects;
 @property (nonatomic) NSMutableDictionary *_attributeChangesOnNewObjectsWhileSyncing;
+
 @property (nonatomic) NSMutableDictionary *_tempIdsThatGotObjectIds;
 
-@property (nonatomic) NSMutableDictionary *_objectsToDeleteOnServer;
-@property (nonatomic) NSMutableDictionary *_objectAttributesToUpdateOnServer;
-
-
-
-@property (nonatomic) NSMutableSet *_deletedObjectsForSyncNotification;
-@property (nonatomic) NSMutableSet *_updatedObjectsForSyncNotification;
 
 @property BOOL outdated;
 @property BOOL _needSync;
 @property BOOL _isSyncing;
 
-@property (nonatomic) NSDate *lastTry;
-@property (nonatomic) NSInteger tryCounter;
+@property (nonatomic) dispatch_queue_t isolationQueue;
 
+@property NSTimer *_syncTimer;
+@property NSDate *lastTry;
+@property NSInteger tryCounter;
+
+
+
+
+@property (nonatomic) NSMutableSet *_deletedObjectsForSyncNotification;
+@property (nonatomic) NSMutableSet *_updatedObjectsForSyncNotification;
 @end
 
 @implementation KPParseCoreData
@@ -60,70 +65,119 @@
     if(!tempId || !objectId) return;
     [self._tempIdsThatGotObjectIds setObject:objectId forKey:tempId];
 }
--(NSArray *)lookupChangedAttributesToSaveForObject:(NSString *)objectId{
-    return [self._objectAttributesToUpdateOnServer objectForKey:objectId];
+
+/* 
+ Thread safe handling of attribute changes
+*/
+-(NSMutableDictionary*)copyChangesAndFlushForTemp:(BOOL)isTemp{
+    __block NSMutableDictionary *copyOfChanges;
+    __block BOOL blockIsTemp = isTemp;
+    dispatch_sync(self.isolationQueue, ^(){
+        NSMutableDictionary *target = blockIsTemp ? self._attributeChangesOnNewObjectsWhileSyncing : self._attributeChangesOnObjects;
+        copyOfChanges = [target mutableCopy];
+        [target removeAllObjects];
+    });
+    return copyOfChanges;
 }
 -(NSArray*)lookupTemporaryChangedAttributesForTempId:(NSString *)tempId{
-    return [self._attributeChangesOnNewObjectsWhileSyncing objectForKey:tempId];
+    __block NSArray *attributeArray;
+    dispatch_sync(self.isolationQueue, ^(){
+        attributeArray = self._attributeChangesOnNewObjectsWhileSyncing[tempId];
+    });
+    return attributeArray;
 }
 -(NSArray*)lookupTemporaryChangedAttributesForObject:(NSString*)objectId{
-    return [self._attributeChangesOnObjects objectForKey:objectId];
+    __block NSArray *attributeArray;
+    dispatch_sync(self.isolationQueue, ^(){
+        attributeArray = self._attributeChangesOnObjects[objectId];
+    });
+    return attributeArray;
 }
--(void)sync:(BOOL)sync attributes:(NSArray*)attributes forIdentifier:(NSString*)identifier isTemp:(BOOL)isTemp{
-    NSMutableDictionary *targetDictionary = isTemp ? self._attributeChangesOnNewObjectsWhileSyncing : self._attributeChangesOnObjects;
-    NSArray *attributeArray = [targetDictionary objectForKey:identifier];
-    NSMutableSet *attributeSet = [NSMutableSet set];
-    if(attributeArray)
-        [attributeSet addObjectsFromArray:attributeArray];
-    [attributeSet addObjectsFromArray:attributes];
-    [targetDictionary setObject:[attributeSet allObjects] forKey:identifier];
-    if(sync) [self synchronizeForce:NO async:YES];
+
+
+/* Loops through a dictionary of changes to */
+-(void)commitAttributeChanges:(NSDictionary *)changes toTemp:(BOOL)toTemp{
+    changes = [changes copy];
+    __block BOOL blockToTemp = toTemp;
+    dispatch_barrier_async(self.isolationQueue, ^(){
+        NSMutableDictionary *target = blockToTemp ? self._attributeChangesOnNewObjectsWhileSyncing : self._attributeChangesOnObjects;
+        [changes enumerateKeysAndObjectsUsingBlock:^(NSString *objectId, NSArray *changedAttributes, BOOL *stop) {
+            NSArray *existingAttributes = [target objectForKey:objectId];
+            if(!existingAttributes)
+                [target setObject:changedAttributes forKey:objectId];
+            else{
+                NSMutableSet *attributeSet = [NSMutableSet setWithArray:existingAttributes];
+                [attributeSet addObjectsFromArray:changedAttributes];
+                [target setObject:[attributeSet allObjects] forKey:objectId];
+            }
+        }];
+        if(!blockToTemp){
+            [[NSUserDefaults standardUserDefaults] setObject:self._attributeChangesOnObjects forKey:@"tmpUpdateObjects"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    });
 }
+
 
 -(void)hardSync{
     NSArray* objects = [KPParseObject MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"objectId != nil"] inContext:[self context]];
+    NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
     for (KPParseObject* obj in objects) {
-        [self sync:NO attributes:@[@"all"] forIdentifier:obj.objectId isTemp:NO];
+        [changesToCommit setObject:@[@"all"] forKey:obj.objectId];
     }
-    [self saveUpdatingObjects];
+    [self commitAttributeChanges:changesToCommit toTemp:NO];
     [self synchronizeForce:YES async:YES];
 
 }
 /*
     This save should be called if data should be synced
 */
+
 - (void)saveContextForSynchronization:(NSManagedObjectContext*)context
 {
     if (!context)
         context = [self context];
-    
-    DUMPDB;
-    [context performBlockAndWait:^{
-        //NSSet *insertedObjects = [context insertedObjects];
-        NSSet *updatedObjects = [context updatedObjects];
-        NSSet *deletedObjects = [context deletedObjects];
-        /* Iterate all updated objects and add their changed attributes to tmpUpdating */
-        for(KPParseObject *object in updatedObjects){
-            /* If the object doesn't have an objectId - it's not saved on the server and will automatically include all keys */
-            if(!object.objectId && !self._isSyncing)
-                continue;
-            NSString *targetKey = object.objectId ? object.objectId : object.tempId;
-            BOOL isTemp = object.objectId ? NO : YES;
-            if(object.changedValues) [self sync:NO attributes:[object.changedValues allKeys] forIdentifier:targetKey isTemp:isTemp];
-            
-        }
-        /* Add all deleted objects with objectId to be deleted*/
-        for(KPParseObject *object in deletedObjects){
-            if(object.objectId)
-                [self._objectsToDeleteOnServer setObject:[object getParseClassName] forKey:object.objectId];
-        }
-        [self saveUpdatingObjects];
-    }];
-    
-    [context MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
+    @synchronized(self){
         DUMPDB;
-        [self synchronizeForce:NO async:YES];
-    }];
+        [context performBlockAndWait:^{
+            //NSSet *insertedObjects = [context insertedObjects];
+            NSSet *updatedObjects = [context updatedObjects];
+            NSSet *deletedObjects = [context deletedObjects];
+            /* Iterate all updated objects and add their changed attributes to tmpUpdating */
+            NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
+            NSMutableDictionary *tempChangesToCommit = [NSMutableDictionary dictionary];
+            for(KPParseObject *object in updatedObjects){
+                /* If the object doesn't have an objectId - it's not saved on the server and will automatically include all keys */
+                if(!object.objectId && !self._isSyncing)
+                    continue;
+                
+                NSString *targetKey = object.objectId ? object.objectId : object.tempId;
+                NSMutableDictionary *collection = object.objectId ? changesToCommit : tempChangesToCommit;
+                if(object.changedValues)
+                    [collection setObject:[object.changedValues allKeys] forKey:targetKey];
+                
+            }
+            /* Add all deleted objects with objectId to be deleted*/
+            NSMutableArray *deleteObjects = [NSMutableArray array];
+            for(KPParseObject *object in deletedObjects){
+                if(object.objectId)
+                    [deleteObjects addObject:@{@"className":[object getParseClassName],@"objectId":object.objectId}];
+            }
+            if(deleteObjects.count > 0)
+                [changesToCommit setObject:deleteObjects forKey:kDeleteObjectsKey];
+            
+            if(changesToCommit.allKeys.count > 0)
+                [self commitAttributeChanges:changesToCommit toTemp:NO];
+            if(tempChangesToCommit.allKeys.count > 0)
+                [self commitAttributeChanges:tempChangesToCommit toTemp:YES];
+
+        }];
+        
+        [context MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
+            DUMPDB;
+            [self synchronizeForce:NO async:YES];
+        }];
+    }
     
 }
 
@@ -218,19 +272,15 @@
     NSInteger totalNumberOfObjectsToSave = numberOfNewObjects;
     
     __block NSMutableDictionary *updateObjectsToServer = [NSMutableDictionary dictionary];
-    BOOL (^handleObject)(KPParseObject *object) = ^BOOL (KPParseObject *object){
-        NSDictionary *pfObject = [object objectToSaveInContext:context];
-        /* It will return nil if no changes should be made - */
-        if (!pfObject) {
-            if (object && object.objectId) {
-                [self._objectAttributesToUpdateOnServer removeObjectForKey:object.objectId];
-            }
+    BOOL (^handleObject)(KPParseObject *object, NSArray *changedAttributes) = ^BOOL (KPParseObject *object, NSArray *changedAttributes){
+        NSDictionary *pfObject = [object objectToSaveInContext:context changedAttributes:changedAttributes];
+        /* It will return nil if no changes should be made to the server - */
+        if (!pfObject)
             return NO;
-        }
         [self addObject:pfObject toClass:object.getParseClassName inCollection:&updateObjectsToServer];
         return YES;
     };
-    for(KPParseObject *object in newObjects) handleObject(object);
+    for(KPParseObject *object in newObjects) handleObject(object, nil);
     
     NSInteger remainingObjectsInBatch = kUpdateLimit - numberOfNewObjects;
     if(remainingObjectsInBatch <= 0){
@@ -246,19 +296,18 @@
     }
     else{
         /* Move all the updated objects */
-        [self prepareUpdatedObjectsToBeSavedOnServerWithLimit:remainingObjectsInBatch];
-        NSPredicate *updatedObjectsPredicate = [NSPredicate predicateWithFormat:@"(objectId IN %@)",[self._objectAttributesToUpdateOnServer allKeys]];
+        NSDictionary *objectAttributesToUpdateOnServer = [self prepareUpdatedObjectsToBeSavedOnServerWithLimit:remainingObjectsInBatch];
+        NSArray *objectsToDelete = [objectAttributesToUpdateOnServer objectForKey:kDeleteObjectsKey];
+        /* Include all deleted objects to be saved */
+        for(NSDictionary *deleteObject in objectsToDelete)
+            [self addObject:@{@"deleted":@YES,@"objectId":[deleteObject objectForKey:@"objectId"]} toClass:[deleteObject objectForKey:@"className"] inCollection:&updateObjectsToServer];
+        NSPredicate *updatedObjectsPredicate = [NSPredicate predicateWithFormat:@"(objectId IN %@)",[objectAttributesToUpdateOnServer allKeys]];
         NSArray *changedObjects = [KPParseObject MR_findAllWithPredicate:updatedObjectsPredicate inContext:context];
         totalNumberOfObjectsToSave += changedObjects.count;
         for (KPParseObject *object in changedObjects) {
-            handleObject(object);
+            handleObject(object,[objectAttributesToUpdateOnServer objectForKey:object.objectId]);
         }
     }
-    /* This will consist of tempId's to objects that did not have one already */
-    if([context hasChanges])
-        [context MR_saveOnlySelfAndWait];
-    
-
     
     NSMutableDictionary *syncData = [@{
                                        @"changesOnly" : @YES,
@@ -274,9 +323,7 @@
         [syncData setObject:lastUpdate forKey:@"lastUpdate"];
     
     
-    /* Include all deleted objects to be saved */
-    for(NSString *objectId in self._objectsToDeleteOnServer)
-        [self addObject:@{@"deleted":@YES,@"objectId":objectId} toClass:[self._objectsToDeleteOnServer objectForKey:objectId] inCollection:&updateObjectsToServer];
+    
     
     [syncData setObject:updateObjectsToServer forKey:@"objects"];
     
@@ -356,8 +403,13 @@
     lastUpdate = [result objectForKey:@"updateTime"];
     [result objectForKey:@"serverTime"];
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
     for(NSDictionary *object in allObjects){
-        [self handleCDObject:nil withObject:object inContext:localContext];
+        [self handleCDObject:nil withObject:object affectedChangedAttributes:&changesToCommit inContext:localContext];
+    }
+    if(changesToCommit.count > 0){
+        [self commitAttributeChanges:changesToCommit toTemp:NO];
+        self._needSync = YES;
     }
     [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
         /* Save the sync to server */
@@ -373,37 +425,57 @@
     return (0 < totalNumberOfObjectsToSave);
 }
 #pragma mark Sync flow helpers
-- (void)prepareUpdatedObjectsToBeSavedOnServerWithLimit:(NSInteger)limit
+- (NSDictionary*)prepareUpdatedObjectsToBeSavedOnServerWithLimit:(NSInteger)limit
 {
     NSInteger counter = 0;
-    NSArray *tagArray = [self._objectAttributesToUpdateOnServer objectForKey:@"Tag"];
-    if(tagArray.count > 0) counter += tagArray.count;
-    NSArray *toDoArray = [self._objectAttributesToUpdateOnServer objectForKey:@"ToDo"];
-    if(toDoArray.count > 0) counter += toDoArray.count;
+    NSMutableDictionary *copyOfNewAttributeChanges = [self copyChangesAndFlushForTemp:NO];
+    NSMutableDictionary *objectsToUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"updateObjects"];
+    if(!objectsToUpdate) objectsToUpdate = [NSMutableDictionary dictionary];
+    else objectsToUpdate = [objectsToUpdate mutableCopy];
+    counter += objectsToUpdate.count;
     
-    NSMutableArray *keysToRemove = [NSMutableArray array];
-    for (NSString *identifier in self._attributeChangesOnObjects) {
+    NSMutableArray *keysToRemoveInAttributeChanges = [NSMutableArray array];
+    
+    
+    /* Handle move deleted objects from temp to server array */
+    NSArray *existingObjectsToDeleteOnServer = [objectsToUpdate objectForKey:kDeleteObjectsKey];
+    NSArray *newObjectsToDeleteOnServer = [copyOfNewAttributeChanges objectForKey:kDeleteObjectsKey];
+    
+    if(newObjectsToDeleteOnServer && newObjectsToDeleteOnServer.count > 0){
+        if(existingObjectsToDeleteOnServer) newObjectsToDeleteOnServer = [newObjectsToDeleteOnServer arrayByAddingObjectsFromArray:existingObjectsToDeleteOnServer];
+        [objectsToUpdate setObject:newObjectsToDeleteOnServer forKey:kDeleteObjectsKey];
+        [keysToRemoveInAttributeChanges addObject:kDeleteObjectsKey];
+    }
+    if(newObjectsToDeleteOnServer) counter += newObjectsToDeleteOnServer.count;
+    
+    
+    for (NSString *identifier in copyOfNewAttributeChanges) {
+        if([identifier isEqualToString:kDeleteObjectsKey]) continue;
         counter++;
         if(counter > limit){
             self._needSync = YES;
             break;
         }
-        [keysToRemove addObject:identifier];
-        NSArray *attributeArray = [self._objectAttributesToUpdateOnServer objectForKey:identifier];
-        NSArray *newAttributeArray = [self._attributeChangesOnObjects objectForKey:identifier];
+        [keysToRemoveInAttributeChanges addObject:identifier];
+        NSArray *existingAttributesChangesToServer = [objectsToUpdate objectForKey:identifier];
+        NSArray *newAttributeArray = [copyOfNewAttributeChanges objectForKey:identifier];
         NSMutableSet *newAttributeSet = [NSMutableSet set];
         
-        if(attributeArray)
-            [newAttributeSet addObjectsFromArray:attributeArray];
+        if(existingAttributesChangesToServer)
+            [newAttributeSet addObjectsFromArray:existingAttributesChangesToServer];
         
         if(newAttributeArray)
             [newAttributeSet addObjectsFromArray:newAttributeArray];
         
-        [self._objectAttributesToUpdateOnServer setObject:[newAttributeSet allObjects] forKey:identifier];
-        
+        [objectsToUpdate setObject:[newAttributeSet allObjects] forKey:identifier];
     }
-    if(keysToRemove.count > 0) [self._attributeChangesOnObjects removeObjectsForKeys:keysToRemove];
-    [self saveUpdatingObjects];
+    if(keysToRemoveInAttributeChanges.count > 0)
+        [copyOfNewAttributeChanges removeObjectsForKeys:keysToRemoveInAttributeChanges];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:objectsToUpdate forKey:@"updateObjects"];
+    [self commitAttributeChanges:copyOfNewAttributeChanges toTemp:NO];
+    
+    return objectsToUpdate;
 }
 
 - (void)addObject:(NSDictionary*)object toClass:(NSString*)className inCollection:(NSMutableDictionary**)collection{
@@ -414,7 +486,7 @@
 }
 
 
-- (void)handleCDObject:(KPParseObject*)cdObject withObject:(NSDictionary*)object inContext:(NSManagedObjectContext*)context
+- (void)handleCDObject:(KPParseObject*)cdObject withObject:(NSDictionary*)object affectedChangedAttributes:(NSMutableDictionary **)affectedChangedAttributes inContext:(NSManagedObjectContext*)context
 {
     BOOL shouldDelete = NO;
     if([[object allKeys] containsObject:@"deleted"]){
@@ -428,36 +500,38 @@
         class = [cdObject class];
     
     if (shouldDelete) {
-        NSLog(@"deleting");
         [class deleteObject:object context:context];
-        if ([self._objectsToDeleteOnServer objectForKey:[object objectForKey:@"objectId"]])
-            [self._objectsToDeleteOnServer removeObjectForKey:[object objectForKey:@"objectId"]];
         [self._deletedObjectsForSyncNotification addObject:[object objectForKey:@"objectId"]];
     }
     else{
         [self._updatedObjectsForSyncNotification addObject:[object objectForKey:@"objectId"]];
         if (!cdObject)
             cdObject = [class getCDObjectFromObject:object context:context];
-        [cdObject updateWithObject:object context:context];
+        NSArray *affectedChanges = [cdObject updateWithObjectFromServer:object context:context];
+        if(affectedChanges)
+            [*affectedChangedAttributes setObject:affectedChanges forKey:cdObject.objectId];
     }
 }
 
 
 -(void)cleanUpAfterSync{
-    [self._objectAttributesToUpdateOnServer removeAllObjects];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSMutableDictionary dictionary] forKey:@"updateObjects"];
     
+    NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
     
     /* Cleaning up temporary system to make sure new objects that change attributes get saved */
+    NSMutableDictionary *tempChanges = [self copyChangesAndFlushForTemp:YES];
     for(NSString *tempId in self._tempIdsThatGotObjectIds){
         NSString *objectId = [self._tempIdsThatGotObjectIds objectForKey:tempId];
-        NSArray *tempAttributesSaved = [self._attributeChangesOnNewObjectsWhileSyncing objectForKey:tempId];
+        NSArray *tempAttributesSaved = [tempChanges objectForKey:tempId];
         if(tempAttributesSaved && tempAttributesSaved.count > 0)
-            [self sync:NO attributes:tempAttributesSaved forIdentifier:objectId isTemp:NO];
+            [changesToCommit setObject:tempAttributesSaved forKey:objectId];
     }
     [self._tempIdsThatGotObjectIds removeAllObjects];
-    [self._attributeChangesOnNewObjectsWhileSyncing removeAllObjects];
+    [self commitAttributeChanges:changesToCommit toTemp:NO];
     
-    [self saveUpdatingObjects];
+    
+    
     /* Send update notification */
     NSDictionary *updatedEvents = @{@"deleted":[self._deletedObjectsForSyncNotification copy],@"updated":[self._updatedObjectsForSyncNotification copy]};
     [self._deletedObjectsForSyncNotification removeAllObjects];
@@ -489,24 +563,7 @@
     
     return __updatedObjectsForSyncNotification;
 }
--(NSMutableDictionary*)_objectAttributesToUpdateOnServer
-{
-    if (!__objectAttributesToUpdateOnServer) {
-        __objectAttributesToUpdateOnServer = [[NSUserDefaults standardUserDefaults] objectForKey:@"updateObjects"];
-        if(!__objectAttributesToUpdateOnServer)
-            __objectAttributesToUpdateOnServer = [NSMutableDictionary dictionary];
-    }
-    return __objectAttributesToUpdateOnServer;
-}
-- (NSMutableDictionary *)_objectsToDeleteOnServer
-{
-    if (!__objectsToDeleteOnServer) {
-        __objectsToDeleteOnServer = [[NSUserDefaults standardUserDefaults] objectForKey:@"deleteObjects"];
-        if (!__objectsToDeleteOnServer)
-            __objectsToDeleteOnServer = [NSMutableDictionary dictionary];
-    }
-    return __objectsToDeleteOnServer;
-}
+
 -(NSMutableDictionary *)_tempIdsThatGotObjectIds{
     if(__tempIdsThatGotObjectIds)
         __tempIdsThatGotObjectIds = [NSMutableDictionary dictionary];
@@ -533,13 +590,6 @@
     return [NSString stringWithFormat:@"KP%@",parseClassName];
 }
 
--(void)saveUpdatingObjects
-{
-    [[NSUserDefaults standardUserDefaults] setObject:self._objectAttributesToUpdateOnServer forKey:@"updateObjects"];
-    [[NSUserDefaults standardUserDefaults] setObject:self._objectsToDeleteOnServer forKey:@"deleteObjects"];
-    [[NSUserDefaults standardUserDefaults] setObject:self._attributeChangesOnObjects forKey:@"tmpUpdateObjects"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
 
 
 - (void)endBackgroundHandler
@@ -601,8 +651,6 @@
     self._tempIdsThatGotObjectIds = nil;
     self._attributeChangesOnNewObjectsWhileSyncing = nil;
     
-    self._objectsToDeleteOnServer = nil;
-    self._objectAttributesToUpdateOnServer = nil;
     
     self._updatedObjectsForSyncNotification = nil;
     self._deletedObjectsForSyncNotification = nil;
@@ -638,7 +686,7 @@ static KPParseCoreData *sharedObject;
         if (sharedObject._needSync)
             [sharedObject synchronizeForce:YES async:YES];
     };
-    
+    self.isolationQueue = dispatch_queue_create([@"SyncAttributeQueue" UTF8String], DISPATCH_QUEUE_CONCURRENT);
     // Start the notifier, which will cause the reachability object to retain itself!
     [sharedObject._reach startNotifier];
 }
