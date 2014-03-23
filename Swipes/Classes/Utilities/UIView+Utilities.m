@@ -117,7 +117,8 @@
 
 - (void)explainSubiews:(NSString *)prefix
 {
-    NSLog(@"%@class: %@, tag: %d, frame: %@, (%u)", prefix, NSStringFromClass(self.class), self.tag, NSStringFromCGRect(self.frame), self.subviews.count);
+    NSLog(@"%@class: %@, tag: %d, frame: %@, (%u) %@", prefix, NSStringFromClass(self.class), self.tag,
+          NSStringFromCGRect(self.frame), self.subviews.count, self.hidden ? @"HIDDEN" : @"");
     for (UIView* v in self.subviews) {
         [v explainSubiews:[prefix stringByAppendingString:@"  "]];
     }

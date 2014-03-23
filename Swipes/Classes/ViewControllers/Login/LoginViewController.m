@@ -60,24 +60,25 @@
 @implementation LoginViewController
 -(id)init{
     self = [super init];
-    if(self){
+    if (self){
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
         [self.view setBackgroundColor:kWalkthroughBackground];
         
         
         UIButton *resignButton = [[UIButton alloc] initWithFrame:self.view.bounds];
-        resignButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+        resignButton.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         [resignButton addTarget:self action:@selector(resignFields) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:resignButton];
         
         UIImageView *background = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"default-background.jpg"] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
         background.frame = self.view.bounds;
         background.contentMode = (UIViewContentModeScaleAspectFill);// UIViewContentModeScaleAspectFill;
-        background.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+        background.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:background];
+        
         UIView *overlay = [[UIView alloc] initWithFrame:background.bounds];
-        overlay.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+        overlay.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         overlay.backgroundColor = gray(0,0.1);
         [self.view addSubview:overlay];
         /*self.facebookPermissions = @[@"email"];
@@ -85,7 +86,9 @@
         */
         
         self.logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:valForScreen(@"wt_swipes_logo",@"swipes_logo_white")]];
-        CGRectSetCenterX(self.logoView, self.view.frame.size.width/2);
+        CGRectSetCenterX(self.logoView, self.view.frame.size.width / 2);
+        self.logoView.contentMode = UIViewContentModeCenter;
+        self.logoView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:self.logoView];
         
         /*self.loginOrSignupLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
@@ -99,11 +102,14 @@
         [self.view addSubview:self.loginOrSignupLabel];*/
         
         CGFloat fieldWidth = 252.0;
+        CGFloat fieldMargin = (320 - fieldWidth) / 2;
         CGFloat fieldHeight = 44.0;
         CGFloat buttonWidth = 196.0f;
+        CGFloat buttonMargin = (320 - buttonWidth) / 2;
         CGFloat buttonHeight = SIGNUP_BUTTONS_HEIGHT;
         
-        self.emailField = [[UITextField alloc] initWithFrame:CGRectMake((320-fieldWidth)/2, 0, fieldWidth, fieldHeight)];
+        self.emailField = [[UITextField alloc] initWithFrame:CGRectMake(fieldMargin, 0, self.view.frame.size.width - fieldMargin * 2, fieldHeight)];
+        self.emailField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.emailField.font = KP_LIGHT(16);
         self.emailField.textAlignment = NSTextAlignmentCenter;
         self.emailField.delegate = self;
@@ -119,8 +125,9 @@
         self.emailField.backgroundColor = color;
         
         
-        self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake((320-fieldWidth)/2, 0, fieldWidth, fieldHeight)];
+        self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(fieldMargin, 0, self.view.frame.size.width - fieldMargin * 2, fieldHeight)];
         //self.passwordField.keyboardAppearance = UIKeyboardAppearanceAlert;
+        self.passwordField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.passwordField.delegate = self;
         self.passwordField.textAlignment = NSTextAlignmentCenter;
         self.passwordField.secureTextEntry = YES;
@@ -143,12 +150,13 @@
         [self.view addSubview:self.emailField];
         [self.view addSubview:self.passwordField];
         
-        self.continueButton = [[UIButton alloc] initWithFrame:CGRectMake((320-buttonWidth)/2, 0, buttonWidth, buttonHeight)];
+        self.continueButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonMargin, 0, self.view.frame.size.width - buttonMargin * 2, buttonHeight)];
         [self.continueButton setTitle:@"SIGN UP" forState:UIControlStateNormal];
         self.continueButton.backgroundColor = tcolor(DoneColor);//kDefTextColor;
         [self.continueButton addTarget:self action:@selector(pressedContinue:) forControlEvents:UIControlEventTouchUpInside];
         [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self setupButton:self.continueButton];
+        self.continueButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:self.continueButton];
         
         self.facebookLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
@@ -159,11 +167,13 @@
         self.facebookLabel.text = @"You can also sign up with:";
         self.facebookLabel.backgroundColor = CLEAR;
         [self.facebookLabel sizeToFit];
-        CGRectSetWidth(self.facebookLabel, 320);
+        CGRectSetWidth(self.facebookLabel, self.view.frame.size.width);
+        self.facebookLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:self.facebookLabel];
         
-        self.facebookButton = [[UIButton alloc] initWithFrame:CGRectMake((320-buttonWidth)/2, 0, buttonWidth, buttonHeight)];
+        self.facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonMargin, 0, self.view.frame.size.width - buttonMargin * 2, buttonHeight)];
         [self setupButton:self.facebookButton];
+        self.facebookButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.facebookButton.layer.borderWidth = 0;
         [self.facebookButton setBackgroundImage:[color(57,159,219,1) image] forState:UIControlStateNormal];
         [self.facebookButton setBackgroundImage:[[color(57,159,219,1) darker] image] forState:UIControlStateHighlighted];
@@ -175,7 +185,8 @@
         
         
         self.privacyPolicyButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.privacyPolicyButton.frame = CGRectMake(0, 0, sizeWithFont(@"Privacy policy" ,LOGIN_FIELDS_FONT).width+20, fieldHeight);
+        self.privacyPolicyButton.frame = CGRectMake(0, 0, sizeWithFont(@"Privacy policy" ,LOGIN_FIELDS_FONT).width + 20, fieldHeight);
+        self.privacyPolicyButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
         self.privacyPolicyButton.titleLabel.font = LOGIN_FIELDS_FONT;
         [self.privacyPolicyButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
         [self.privacyPolicyButton setTitle:@"Privacy policy" forState:UIControlStateNormal];
@@ -197,7 +208,7 @@
         
         self.changeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         NSInteger margin = 10;
-        self.changeButton.frame = CGRectMake(0, 0, sizeWithFont(@"Sign up" ,LOGIN_FIELDS_FONT).width+20, fieldHeight-margin);
+        self.changeButton.frame = CGRectMake(0, 0, sizeWithFont(@"Sign up" ,LOGIN_FIELDS_FONT).width+20, fieldHeight - margin);
         self.changeButton.titleLabel.font = LOGIN_FIELDS_FONT;
         self.changeButton.layer.borderColor = kDefTextColor.CGColor;
         self.changeButton.layer.cornerRadius = 3;
@@ -205,7 +216,9 @@
         [self.changeButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
         [self.changeButton setTitle:@"Log in" forState:UIControlStateNormal];
         [self.changeButton addTarget:self action:@selector(pressedChange:) forControlEvents:UIControlEventTouchUpInside];
-        self.changeButton.frame = CGRectSetPos(self.changeButton.frame, self.view.frame.size.width-self.changeButton.frame.size.width-margin/2, self.view.frame.size.height-self.changeButton.frame.size.height-margin/2);
+        self.changeButton.frame = CGRectSetPos(self.changeButton.frame, self.view.frame.size.width - self.changeButton.frame.size.width - margin / 2,
+                                               self.view.frame.size.height - self.changeButton.frame.size.height - margin / 2);
+        self.changeButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
         [self.view addSubview:self.changeButton];
         
     }
@@ -448,7 +461,8 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     CGFloat relativeStart = (self.view.frame.size.height-(FACEBOOK_BUTTON_Y+SIGNUP_BUTTONS_HEIGHT))/2-kExtraBottomSpacing;
-    if(relativeStart < 30) relativeStart = 20;
+    if (relativeStart < 30)
+        relativeStart = 20;
 
     CGRectSetY(self.logoView, LOGIN_LOGO_Y);
 

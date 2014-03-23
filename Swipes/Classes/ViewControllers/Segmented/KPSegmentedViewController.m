@@ -111,6 +111,7 @@
     //[[self currentViewController].itemHandler clearAll];
     
     AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.view.bounds];
+    addPanel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     addPanel.addDelegate = self;
     BLURRY.showPosition = PositionBottom;
     BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark), 0.3);

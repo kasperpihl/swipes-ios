@@ -296,7 +296,7 @@
         else {
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         }
-        if (scrollView.contentOffset.y <= 0) {
+        if (scrollView.contentOffset.y < 0) {
             CGRectSetHeight(self.searchBar, self.tableView.tableHeaderView.frame.size.height-scrollView.contentOffset.y);
             CGRect searchBarFrame = self.searchBar.frame;
             searchBarFrame.origin.y = scrollView.contentOffset.y;
@@ -503,7 +503,7 @@
     UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, SEARCH_BAR_DEFAULT_HEIGHT)];
     
     headerView.hidden = YES;
-    headerView.backgroundColor = [UIColor redColor];
+    //headerView.backgroundColor = [UIColor redColor];
     tableView.tableHeaderView = headerView;
     tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     tableView.contentInset = UIEdgeInsetsMake(0, 0, GLOBAL_TOOLBAR_HEIGHT, 0);
@@ -596,15 +596,6 @@
     [self handleShowingToolbar];
 }
 
-// NEWCODE
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    self.backgroundImage.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 4);
-    self.menuText.frame = CGRectMake(0, self.backgroundImage.center.y + 50, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT);
-    DLogFrame(self.searchBar);
-}
-
 - (void)handleShowingToolbar
 {
     if (self.selectedRows.count > 0) {
@@ -632,6 +623,15 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+// NEWCODE
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    self.backgroundImage.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 4);
+    self.menuText.frame = CGRectMake(0, self.backgroundImage.center.y + 50, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT);
+    self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height);
 }
 
 @end

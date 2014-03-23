@@ -65,7 +65,7 @@
         self.shouldRegret = YES;
         //self.contentView.layer.masksToBounds = YES;
         self.backgroundColor = tcolor(BackgroundColor);
-        self.contentView.backgroundColor = [UIColor redColor]; //tcolor(BackgroundColor);
+        self.contentView.backgroundColor = tcolor(BackgroundColor);
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X, TITLE_Y, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
         titleLabel.tag = TITLE_LABEL_TAG;

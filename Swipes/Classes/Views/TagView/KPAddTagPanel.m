@@ -59,7 +59,8 @@
         if(self.deleteMode){
             self.deleteMode = NO;
         }
-        else [self shiftToAddMode:YES];
+        else
+            [self shiftToAddMode:YES];
     }
 }
 -(void)blurryWillHide:(KPBlurry *)blurry{
@@ -101,11 +102,13 @@
         
         [self addSubview:scrollView];
         self.scrollView = (UIScrollView*)[self viewWithTag:SCROLL_VIEW_TAG];
-        [self tagList:tagView changedSize:CGSizeMake(self.frame.size.width, tagView.frame.size.height)];
+        [self tagList:tagView changedSize:self.frame.size];
         
         
         /* Initialize toolbar */
-        KPToolbar *tagToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TOOLBAR_HEIGHT, self.frame.size.width, TOOLBAR_HEIGHT) items:@[timageStringBW(@"backarrow_icon"),timageStringBW(@"trashcan_icon"),timageStringBW(@"plus_icon")] delegate:self];
+        KPToolbar *tagToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.frame.size.height - TOOLBAR_HEIGHT, self.frame.size.width, TOOLBAR_HEIGHT)
+                                                           items:@[timageStringBW(@"backarrow_icon"),timageStringBW(@"trashcan_icon"),timageStringBW(@"plus_icon")]
+                                                        delegate:self];
         tagToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         tagToolbar.tag = TOOLBAR_TAG;
         [self addSubview:tagToolbar];
@@ -113,7 +116,8 @@
         
         
         /* Initialize addView */
-        KPAddView *addView = [[KPAddView alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, self.bounds.size.height, self.bounds.size.width-TEXT_FIELD_MARGIN_LEFT, ADD_VIEW_HEIGHT)];
+        KPAddView *addView = [[KPAddView alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, self.bounds.size.height,
+                                                                         self.bounds.size.width - TEXT_FIELD_MARGIN_LEFT, ADD_VIEW_HEIGHT)];
         addView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         addView.tag = ADD_VIEW_TAG;
         addView.userInteractionEnabled = YES;
@@ -157,7 +161,10 @@
     CGFloat maxHeight = (self.bounds.size.height-2*TOOLBAR_HEIGHT);
     CGFloat height = (size.height > maxHeight) ? maxHeight : size.height;
     CGRectSetHeight(self.scrollView, height);
-    CGRectSetY(self.scrollView, self.frame.size.height - TOOLBAR_HEIGHT - self.scrollView.frame.size.height - TAG_VIEW_BOTTOM_MARGIN);
+    // OLDCODE
+    //CGRectSetY(self.scrollView, self.frame.size.height - TOOLBAR_HEIGHT - self.scrollView.frame.size.height - TAG_VIEW_BOTTOM_MARGIN);
+    // NEWCODE
+    CGRectSetY(self.scrollView, TOOLBAR_HEIGHT);
 }
 -(void)shiftToDeleteMode:(BOOL)deleteMode{
     UIButton *plusButton = [self.toolbar.barButtons lastObject];
@@ -224,10 +231,13 @@
     clearNotify();
 }
 
+// NEWCODE
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [self explainSubviews];
+    // it is really complicated to recalc the new keyboard frame
+    // FIXME: maybe someday we should do it anyway
+    [self.addTagView.textField resignFirstResponder];
 }
 
 

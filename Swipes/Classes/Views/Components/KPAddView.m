@@ -23,7 +23,8 @@
         
         CGFloat buttonSize = self.frame.size.height;
         CGFloat buttonWidth = 44;
-        self.doneEditingButton.frame = CGRectMake(self.frame.size.width-buttonWidth, 0, buttonWidth, buttonSize);
+        self.doneEditingButton.frame = CGRectMake(self.frame.size.width - buttonWidth, 0, buttonWidth, buttonSize);
+        self.doneEditingButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
         [self.doneEditingButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         [self.doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -37,7 +38,8 @@
         [self addSubview:seperator];
         */
         
-        self.textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width-buttonWidth, self.frame.size.height)];
+        self.textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - buttonWidth, self.frame.size.height)];
+        self.textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.textField.font = KP_REGULAR(18);
         self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.textField.textColor = tcolor(TextColor);

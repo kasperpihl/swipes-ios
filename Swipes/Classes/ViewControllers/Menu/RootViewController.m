@@ -106,16 +106,19 @@
         return NO;
     }];
 }
--(void)didLoginUser:(PFUser*)user{
-    if(user.isNew) [[KPParseCoreData sharedInstance] seedObjectsSave:YES];
-    if(user.isNew) {
+
+-(void)didLoginUser:(PFUser*)user
+{
+    if (user.isNew)
+        [[KPParseCoreData sharedInstance] seedObjectsSave:YES];
+    if (user.isNew) {
         [ANALYTICS tagEvent:@"Signed Up" options:@{}];
     }
-    else{
+    else {
         [ANALYTICS tagEvent:@"Logged In" options:@{}];
     }
     [[LocalyticsSession shared] setCustomerId:user.objectId];
-    if([PFFacebookUtils isLinkedWithUser:user]){
+    if ([PFFacebookUtils isLinkedWithUser:user]){
         if(!user.email){
             [self fetchDataFromFacebook];
         }
@@ -126,17 +129,23 @@
     [self changeToMenu:KPMenuHome animated:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
 }
+
 // Sent to the delegate when a PFUser is logged in.
-- (void)loginViewController:(LoginViewController *)logInController didLoginUser:(PFUser *)user {
+- (void)loginViewController:(LoginViewController *)logInController didLoginUser:(PFUser *)user
+{
     [self didLoginUser:user];
 }
--(void)walkthrough:(WalkthroughViewController *)walkthrough didFinishSuccesfully:(BOOL)successfully{
+
+-(void)walkthrough:(WalkthroughViewController *)walkthrough didFinishSuccesfully:(BOOL)successfully
+{
     [ANALYTICS popView];
     [walkthrough removeFromParentViewController];
     [OVERLAY popViewAnimated:YES];
 }
+
 #pragma mark - Public API
--(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated{
+-(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated
+{
     UIViewController *viewController;
     switch(menu) {
         case KPMenuLogin:{
@@ -155,6 +164,7 @@
     CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
     self.viewControllers = @[viewController];
 }
+
 static RootViewController *sharedObject;
 +(RootViewController *)sharedInstance{
     if(!sharedObject){
@@ -162,19 +172,25 @@ static RootViewController *sharedObject;
     }
     return sharedObject;
 }
--(void)logOut{
+
+-(void)logOut
+{
     [PFUser logOut];
     [[KPParseCoreData sharedInstance] logOutAndDeleteData];
     [self resetRoot];
     
 }
--(void)resetRoot{
+
+-(void)resetRoot
+{
     self.menuViewController = nil;
     [self setupAppearance];
     [self.sideMenu hide];
     
 }
--(void)proWithMessage:(NSString*)message{
+
+-(void)proWithMessage:(NSString*)message
+{
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     [PlusAlertView alertInView:window message:message block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
@@ -182,14 +198,17 @@ static RootViewController *sharedObject;
         }
     }];
 }
+
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
     //handle any error
     NSString *event = @"Share tasks failed";
-    if(result == MFMailComposeResultSent) event = @"Share tasks sent";
+    if (result == MFMailComposeResultSent)
+        event = @"Share tasks sent";
     NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
     [ANALYTICS tagEvent:event options:@{@"Number of Tasks":@(tasks.count)}];
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
+
 -(void)shareTasks{
     if([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
@@ -212,7 +231,9 @@ static RootViewController *sharedObject;
         [ANALYTICS tagEvent:@"Mail not available" options:nil];
     }
 }
--(void)upgrade{
+
+-(void)upgrade
+{
     UpgradeViewController *viewController = [[UpgradeViewController alloc]init];
     viewController.delegate = self;
     [self addChildViewController:viewController];
@@ -220,23 +241,31 @@ static RootViewController *sharedObject;
     [ANALYTICS tagEvent:@"Upgrade to Plus" options:nil];
     [ANALYTICS pushView:@"Upgrade to Plus"];
 }
--(void)walkthrough{
+
+-(void)walkthrough
+{
     WalkthroughViewController *viewController = [[WalkthroughViewController alloc]init];
     viewController.delegate = self;
     [self addChildViewController:viewController];
     [OVERLAY pushView:viewController.view animated:YES];
     [ANALYTICS pushView:@"Walkthrough"];
 }
--(void)closedUpgradeViewController:(UpgradeViewController *)viewController{
+
+-(void)closedUpgradeViewController:(UpgradeViewController *)viewController
+{
     [ANALYTICS popView];
     [viewController removeFromParentViewController];
     [OVERLAY popViewAnimated:YES];
 }
--(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
+
+-(void)panGestureRecognized:(UIPanGestureRecognizer*)sender
+{
     if(self.lockSettings) return;
     [self.sideMenu panGestureRecognized:sender];
 }
--(void)openApp{
+
+-(void)openApp
+{
     [kSettings refreshGlobalSettingsForce:NO];
     if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
         [OVERLAY popAllViewsAnimated:NO];
@@ -248,13 +277,17 @@ static RootViewController *sharedObject;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"opened app" object:self];
 }
--(void)closeApp{
+
+-(void)closeApp
+{
     [[NSNotificationCenter defaultCenter] postNotificationName:@"closing app" object:self];
     self.lastClose = [NSDate date];
 }
+
 #pragma mark - Helping methods
 #pragma mark - ViewController methods
--(void)setupAppearance{
+-(void)setupAppearance
+{
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     if (!sharedObject)
         sharedObject = self;
@@ -263,6 +296,7 @@ static RootViewController *sharedObject;
     else
         [self changeToMenu:KPMenuHome animated:NO];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
