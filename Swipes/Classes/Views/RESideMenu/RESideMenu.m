@@ -50,9 +50,13 @@ const int INTERSTITIAL_STEPS = 99;
 @end
 
 @implementation RESideMenu
+
 static RESideMenu *sharedObject;
-+(RESideMenu *)sharedInstance{
-    if(!sharedObject) sharedObject = [[RESideMenu allocWithZone:NULL] init];
+
++(RESideMenu *)sharedInstance
+{
+    if (!sharedObject)
+        sharedObject = [[RESideMenu allocWithZone:NULL] init];
     return sharedObject;
 }
 - (id)init
@@ -72,7 +76,6 @@ static RESideMenu *sharedObject;
 -(void)addPanningToView:(UIView *)view{
     [view addGestureRecognizer:self.panningRecognizer];
 }
-
 
 - (void)showForce:(BOOL)force
 {
@@ -101,7 +104,7 @@ static RESideMenu *sharedObject;
     _backgroundView.backgroundImage = _backgroundImage;
     [window addSubview:_backgroundView];
     
-    if(self.revealView){
+    if (self.revealView) {
         _revealView.hidden = YES;
         _revealView.alpha = 0;
         [window addSubview:_revealView];
@@ -138,7 +141,8 @@ static RESideMenu *sharedObject;
 
 - (void)setRootViewController:(UIViewController *)viewController
 {
-    if (_isShowing) [self hide];
+    if (_isShowing)
+        [self hide];
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     window.rootViewController = viewController;
     _screenshotView.image = [window re_snapshotWithStatusBar:!self.hideStatusBarArea];
@@ -164,14 +168,17 @@ static RESideMenu *sharedObject;
     CGFloat fullHeight = _originalSize.height;
     return CGRectMake(percentage*fullWidth, 0, fullWidth, fullHeight);
 }
+
 - (void)minimizeFromRect:(CGRect)rect
 {
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     CGFloat targetX = window.frame.size.width;
     CGFloat sliderWidth = _slidebackView.frame.size.width;
     CGFloat x = rect.origin.x;
-    if(x > targetX) x = targetX;
-    if(x < 0) x = 0;
+    if (x > targetX)
+        x = targetX;
+    if (x < 0)
+        x = 0;
     CGFloat percentage = 1-(x/targetX);
     CGFloat duration = 0.7*percentage;
     if(duration<0.2) duration = 0.2;
@@ -190,13 +197,14 @@ static RESideMenu *sharedObject;
         _revealView.alpha = 1;
     }];
 }
+
 - (void)restoreFromRect:(CGRect)rect
 {
-    
     _slidebackView.userInteractionEnabled = NO;
     while (_slidebackView.gestureRecognizers.count) {
         [_slidebackView removeGestureRecognizer:[_slidebackView.gestureRecognizers objectAtIndex:0]];
     }
+
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     // Take a snapshot
     //
@@ -210,11 +218,14 @@ static RESideMenu *sharedObject;
     
     CGFloat x = rect.origin.x;
     CGFloat targetX = window.frame.size.width;
-    if(x > targetX) x = targetX;
-    if(x < 0) x = 0;
+    if (x > targetX)
+        x = targetX;
+    if (x < 0)
+        x = 0;
     CGFloat percentage = (x/targetX);
     CGFloat duration = 0.7*percentage;
-    if(duration<0.1) duration = 0.1;
+    if (duration<0.1)
+        duration = 0.1;
     
     
     [CATransaction begin];
@@ -233,6 +244,7 @@ static RESideMenu *sharedObject;
     
     _isShowing = NO;
 }
+
 - (void)restoreView
 {
     [ANALYTICS popView];
@@ -251,8 +263,13 @@ static RESideMenu *sharedObject;
     if (sender.state == UIGestureRecognizerStateBegan) {
         _initialX = _screenshotView.frame.origin.x;
     }
-    if(translation.x > translationThreshold) [self showForce:NO];
-	if(!self.isShowing) return;
+    
+    if (translation.x > translationThreshold)
+        [self showForce:NO];
+	
+    if (!self.isShowing)
+        return;
+    
     if (sender.state == UIGestureRecognizerStateChanged) {
         
         CGFloat x = translation.x + _initialX - translationThreshold;
@@ -271,8 +288,8 @@ static RESideMenu *sharedObject;
         }
         _revealView.alpha = revealOpacity;
     }
+    
     if (sender.state == UIGestureRecognizerStateEnded) {
-        
         if ([sender velocityInView:window].x < 0 || _screenshotView.frame.origin.x < 20) {
             [self restoreFromRect:_screenshotView.frame];
         } else {
@@ -280,11 +297,10 @@ static RESideMenu *sharedObject;
         }
     }
 }
+
 - (void)tapGestureRecognized:(UITapGestureRecognizer *)sender
 {
     [self restoreFromRect:_screenshotView.frame];
 }
-
-#pragma mark - Table view data source
 
 @end

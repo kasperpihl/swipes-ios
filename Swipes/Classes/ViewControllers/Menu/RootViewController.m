@@ -260,7 +260,8 @@ static RootViewController *sharedObject;
 
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender
 {
-    if(self.lockSettings) return;
+    if (self.lockSettings)
+        return;
     [self.sideMenu panGestureRecognized:sender];
 }
 
@@ -271,7 +272,7 @@ static RootViewController *sharedObject;
         [OVERLAY popAllViewsAnimated:NO];
         [self resetRoot];
     }
-    else if(self.lastClose){
+    else if(self.lastClose) {
         [[[self menuViewController] currentViewController] update];
         [[[self menuViewController] currentViewController] deselectAllRows:self];
     }

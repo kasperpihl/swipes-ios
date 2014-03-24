@@ -16,9 +16,11 @@
 @property (nonatomic) BOOL fencing;
 @property (nonatomic) BOOL startedLocationServices;
 @end
+
 @implementation NotificationHandler
 @synthesize latestLocation = _latestLocation;
 static NotificationHandler *sharedObject;
+
 +(NotificationHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[super allocWithZone:NULL] init];
@@ -26,30 +28,40 @@ static NotificationHandler *sharedObject;
     }
     return sharedObject;
 }
--(CLLocation *)latestLocation{
-    if(!_latestLocation){
+
+-(CLLocation *)latestLocation
+{
+    if (!_latestLocation) {
         CGFloat latitude = [[NSUserDefaults standardUserDefaults] floatForKey:@"latestLocationLatitude"];
         CGFloat longitude = [[NSUserDefaults standardUserDefaults] floatForKey:@"latestLocationLongitude"];
-        if(latitude && longitude) _latestLocation = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
+        if (latitude && longitude)
+            _latestLocation = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
     }
     return _latestLocation;
 }
--(void)setLatestLocation:(CLLocation *)latestLocation{
+
+-(void)setLatestLocation:(CLLocation *)latestLocation
+{
     _latestLocation = latestLocation;
     [[NSUserDefaults standardUserDefaults] setFloat:latestLocation.coordinate.latitude forKey:@"latestLocationLatitude"];
     [[NSUserDefaults standardUserDefaults] setFloat:latestLocation.coordinate.longitude forKey:@"latestLocationLongitude"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
--(void)setFencing:(BOOL)fencing{
+
+-(void)setFencing:(BOOL)fencing
+{
     if(_fencing != fencing){
-        if(fencing && !self.startedLocationServices) [self startLocationServices];
-        if(!fencing) [KLLocation unregisterGeofencing];
-        else [KLLocation registerGeofencing];
+        if(fencing && !self.startedLocationServices)
+            [self startLocationServices];
+        if (!fencing)
+            [KLLocation unregisterGeofencing];
+        else
+            [KLLocation registerGeofencing];
         _fencing = fencing;
     }
 }
 -(StartLocationResult)startLocationServices{
-    if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined){
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
         [self setStartedLocationServices:YES];
         return LocationNeededPermission;
     }
@@ -58,22 +70,29 @@ static NotificationHandler *sharedObject;
         [alert show];
         return LocationNotAuthorized;
     }
-    else if(self.startedLocationServices) return LocationStarted;
-    else{
+    else if(self.startedLocationServices)
+        return LocationStarted;
+    else {
         [self setStartedLocationServices:YES];
         return LocationStarted;
     }
 }
--(void)stopLocationServices{
+
+-(void)stopLocationServices
+{
     self.startedLocationServices = NO;
 }
-- (void)gotSingleLocation:(KLLocationValue*)location{
+
+- (void)gotSingleLocation:(KLLocationValue*)location
+{
     self.latestLocation = [[CLLocation alloc] initWithLatitude:[location fLatitude] longitude:[location fLongitude]];
 }
--(void)setStartedLocationServices:(BOOL)startedLocationServices{
-    if(_startedLocationServices != startedLocationServices){
+
+-(void)setStartedLocationServices:(BOOL)startedLocationServices
+{
+    if (_startedLocationServices != startedLocationServices) {
         _startedLocationServices = startedLocationServices;
-        if(startedLocationServices){
+        if (startedLocationServices) {
             NSString *kitLocateKey = @"ebeea91e-563e-4b32-acf3-6505d9857789";
             [KitLocate initKitLocateWithDelegate:NOTIHANDLER APIKey:kitLocateKey];
             [KLLocation startSingleLocationWithDelegate:self andParams:@{KL_SP_INT_MAX_SECONDS_WAIT:@(4)}];
@@ -116,13 +135,15 @@ static NotificationHandler *sharedObject;
     NSInteger numberOfNotificationsForDate = 0;
     KPToDo *lastTodo;
     NSMutableArray *notificationsArray = [NSMutableArray array];
-    for(NSInteger i = 0 ; i < scheduleCount ; i++){
+    for (NSInteger i = 0 ; i < scheduleCount ; i++) {
         KPToDo *toDo = [scheduleArray objectAtIndex:i];
         
         BOOL isLastObject = (i == scheduleCount-1);
-        if(!currentDate) currentDate = toDo.schedule;
+        if (!currentDate)
+            currentDate = toDo.schedule;
         NSInteger numberOfNotificationsToAdd = [toDo.schedule isEqualToDate:currentDate] ? 0 : 1;
-        if(isLastObject) numberOfNotificationsToAdd++;
+        if (isLastObject)
+            numberOfNotificationsToAdd++;
         
         while (numberOfNotificationsToAdd > 0){
             if(numberOfNotificationsToAdd == 1 && isLastObject){
@@ -133,11 +154,11 @@ static NotificationHandler *sharedObject;
             }
             NSString *title;
             NSDictionary *userInfo;
-            if(numberOfNotificationsForDate == 1){
+            if (numberOfNotificationsForDate == 1) {
                 title = lastTodo.title;
                 userInfo = @{@"type": @"schedule",@"identifier": [[lastTodo.objectID URIRepresentation] absoluteString]};
             }
-            else{
+            else {
                 title = [NSString stringWithFormat:@"You have %i new tasks.",numberOfNotificationsForDate];
                 userInfo = @{@"type": @"schedule"};
             }
@@ -152,7 +173,9 @@ static NotificationHandler *sharedObject;
             numberOfDates++;
             numberOfNotificationsToAdd--;
         }
-        if(numberOfDates > kMaxNotifications) break;
+        
+        if(numberOfDates > kMaxNotifications)
+            break;
         
         totalBadgeCount++;
         numberOfNotificationsForDate++;
@@ -164,35 +187,41 @@ static NotificationHandler *sharedObject;
         [app scheduleLocalNotification:notification];
     }
 }
--(void)updateLocationUpdates{
+- (void)updateLocationUpdates
+{
     BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
-    if(!hasLocationOn) [self stopLocationServices];
+    if (!hasLocationOn)
+        [self stopLocationServices];
     [KLLocation deleteAllGeofences];
     NSPredicate *locationPredicate = [NSPredicate predicateWithFormat:@"(location != nil)"];
     NSArray *tasksWithLocation = [KPToDo MR_findAllWithPredicate:locationPredicate];
-    if(tasksWithLocation && tasksWithLocation.count > 0){
-        for(KPToDo *toDo in tasksWithLocation){
+    if (tasksWithLocation && tasksWithLocation.count > 0) {
+        for (KPToDo *toDo in tasksWithLocation) {
             NSArray *location = [toDo.location componentsSeparatedByString:kLocationSplitStr];
             NSString *identifier = [location objectAtIndex:0];
             float latitude = [[location objectAtIndex:2] floatValue];
             float longitude = [[location objectAtIndex:3] floatValue];
             NSString *typeString = [location objectAtIndex:4];
             klGeofenceType type = KL_GEOFENCE_TYPE_IN;
-            if([typeString isEqualToString:@"OUT"]) type = KL_GEOFENCE_TYPE_OUT;
+            if ([typeString isEqualToString:@"OUT"])
+                type = KL_GEOFENCE_TYPE_OUT;
             KLGeofence *geoFence = [KLGeofence createNewGeofenceWithLatitude:latitude Longitude:longitude PushRadius:kLocationPushRadius Type:type];
             [geoFence setIDUser:identifier];
             [KLLocation addGeofence:geoFence];
         }
         self.fencing = YES;
     }
-    else self.fencing = NO;
+    else
+        self.fencing = NO;
 }
--(void)handleGeofences:(NSArray*)arrGeofenceList{
+
+-(void)handleGeofences:(NSArray*)arrGeofenceList
+{
     UIApplication *app = [UIApplication sharedApplication];
     NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
     NSLog(@"got location :%@",arrGeofenceList);
-    for(KLGeofence *fence in arrGeofenceList){
+    for (KLGeofence *fence in arrGeofenceList) {
         
         NSString *identifier = [[fence getIDUser] stringByAppendingString:kLocationSplitStr];
         NSPredicate *taskPredicate = [NSPredicate predicateWithFormat:@"ANY location BEGINSWITH[c] %@",identifier];
@@ -217,10 +246,15 @@ static NotificationHandler *sharedObject;
     [KPToDo saveToSync];
     [self updateLocalNotifications];
 }
-- (void)geofencesIn:(NSArray*)arrGeofenceList{
+
+- (void)geofencesIn:(NSArray*)arrGeofenceList
+{
     [self handleGeofences:arrGeofenceList];
 }
-- (void)geofencesOut:(NSArray*)arrGeofenceList{
+
+- (void)geofencesOut:(NSArray*)arrGeofenceList
+{
     [self handleGeofences:arrGeofenceList];
 }
+
 @end
