@@ -120,12 +120,12 @@
     if(self.progress){
         CGFloat progressY = self.bounds.size.height;
         CGFloat extraCut = progressY * kDefLeftCutSize;
-        
+        CGFloat extraX = targetX + extraCut;
         
         UIBezierPath *aPath = [UIBezierPath bezierPath];
         [aPath moveToPoint:CGPointMake(0, LINE_SIZE)];
         [aPath addLineToPoint:CGPointMake(targetX, LINE_SIZE)];
-        [aPath addLineToPoint:CGPointMake(targetX, progressY)];
+        [aPath addLineToPoint:CGPointMake(extraX, progressY)];
         [aPath addLineToPoint:CGPointMake(0, progressY)];
         [aPath closePath];
         CGContextAddPath(currentContext, aPath.CGPath);
@@ -135,11 +135,10 @@
         
         
         
-        targetX += extraCut;
         CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
         CGContextMoveToPoint(currentContext, 0, progressY);
         CGContextSetLineWidth(currentContext, LINE_SIZE*2);
-        CGContextAddLineToPoint(currentContext, targetX, progressY);
+        CGContextAddLineToPoint(currentContext, extraX, progressY);
         CGContextStrokePath(currentContext);
         
     }
