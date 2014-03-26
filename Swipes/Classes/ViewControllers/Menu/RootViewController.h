@@ -9,7 +9,7 @@
 #define SIDE_MENU_WIDTH 250
 #import <UIKit/UIKit.h>
 #import "KPSegmentedViewController.h"
-#import "RESideMenu.h"
+#import "MMDrawerController.h"
 typedef enum {
     KPMenuLogin = 1,
     KPMenuHome
@@ -23,8 +23,8 @@ typedef enum {
 +(RootViewController*)sharedInstance;
 -(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated;
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
+@property (nonatomic,strong) MMDrawerController *drawerViewController;
 @property (nonatomic) BOOL lockSettings;
-@property (nonatomic,strong) RESideMenu *sideMenu;
 -(void)resetRoot;
 -(void)walkthrough;
 -(void)logOut;
