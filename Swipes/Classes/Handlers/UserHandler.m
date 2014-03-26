@@ -9,6 +9,7 @@
 #import "UserHandler.h"
 #import <Parse/PFUser.h>
 #import "AnalyticsHandler.h"
+
 @interface UserHandler ()
 @property (nonatomic) BOOL needRefresh;
 @property (nonatomic) UserLevel userLevel;
@@ -19,6 +20,7 @@ static UserHandler *sharedObject;
     if(!sharedObject){
         sharedObject = [[UserHandler allocWithZone:NULL] init];
         [sharedObject initialize];
+        [sharedObject handleUser:kCurrent];
     }
     return sharedObject;
 }
@@ -50,10 +52,6 @@ static UserHandler *sharedObject;
     if(_userLevel != userLevel){
         _userLevel = userLevel;
     }
-    NSString *userLevelString = [self stringForUserLevel:userLevel];
-    if(![[ANALYTICS customDimension:kCusDimUserLevel] isEqualToString:userLevelString]){
-        [ANALYTICS setCustomDimension:kCusDimUserLevel value:userLevelString];
-    }
 }
 -(void)initialize{
     self.userLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"isPlus"];
@@ -65,11 +63,17 @@ static UserHandler *sharedObject;
 -(void)didLoginUser{
     [self handleUser:kCurrent];
 }
+-(NSString*)getUserLevelString{
+    return [self stringForUserLevel:self.userLevel];
+}
 -(void)didOpenApp{
+    NSLog(@"refreshing");
     [kCurrent refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        NSLog(@"response:%@",object);
         if(!error){
             [self handleUser:(PFUser*)object];
         }
+        NSLog(@"%@",error);
     }];
 }
 -(void)didUpgradeUser{
@@ -82,6 +86,7 @@ static UserHandler *sharedObject;
         [[NSUserDefaults standardUserDefaults] setInteger:userLevel forKey:@"isPlus"];
         self.userLevel = userLevel;
         self.isPlus = (userLevel > UserLevelStandard);
+        [ANALYTICS updateIdentity];
     }
 }
 -(void)dealloc{

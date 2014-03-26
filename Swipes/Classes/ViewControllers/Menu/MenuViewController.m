@@ -11,7 +11,6 @@
 #import "KPToolbar.h"
 #import "UtilityClass.h"
 #import "KPAlert.h"
-#import "RESideMenu.h"
 #import "KPBlurry.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -74,8 +73,9 @@
         [self popViewControllerAnimated:YES];
         return;
     }
-    else
-        [kSideMenu hide];
+    else [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:^(BOOL finished) {
+        
+    }];
 }
 
 - (void)renderSubviews
@@ -194,7 +194,10 @@
 }
 
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
-    [kSideMenu panGestureRecognized:sender];
+    //[kSideMenu panGestureRecognized:sender];
+    if([sender translationInView:sender.view].x < -10){
+        [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
+    }
 }
 
 -(UIView*)seperatorWithSize:(CGFloat)size vertical:(BOOL)vertical
@@ -413,8 +416,8 @@
             else{
                 CABasicAnimation *rotate =
                 [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
-                rotate.byValue = @(M_PI*2); // Change to - angle for counter clockwise rotation
-                rotate.duration = 1.0;
+                rotate.byValue = @(M_PI*6); // Change to - angle for counter clockwise rotation
+                rotate.duration = 3.0;
                 
                 [sender.iconImageView.layer addAnimation:rotate
                                         forKey:@"myRotationAnimation"];
@@ -529,12 +532,24 @@
     CGFloat y = floor((button - 1) / kVerticalGridNumber) * self.gridView.frame.size.width / kVerticalGridNumber + kGridButtonPadding;
     return CGRectMake(x, y, width, width);
 }
+-(void)longPress:(UILongPressGestureRecognizer*)recognizer{
+    if(recognizer.state == UIGestureRecognizerStateBegan){
+        [UTILITY confirmBoxWithTitle:@"Hard sync" andMessage:@"This will send all data and can take some time" block:^(BOOL succeeded, NSError *error) {
+            if(succeeded)
+                [KPCORE hardSync];
+        }];
+    }
+}
+
 
 - (UIButton *)buttonForMenuButton:(KPMenuButtons)menuButton
 {
     MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton] image:[self imageForMenuButton:menuButton highlighted:NO] highlightedImage:[self imageForMenuButton:menuButton highlighted:YES]];
-
-    if (menuButton == KPMenuButtonNotifications || menuButton == KPMenuButtonLocation) {
+    if(menuButton == KPMenuButtonSync){
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
+        [button addGestureRecognizer:longPress];
+    }
+    if(menuButton == KPMenuButtonNotifications || menuButton == KPMenuButtonLocation){
         KPSettings setting = (menuButton == KPMenuButtonNotifications) ? SettingNotifications : SettingLocation;
         BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:setting] boolValue];
         UIColor *lampColor = hasNotificationsOn ? kLampOnColor : kLampOffColor;

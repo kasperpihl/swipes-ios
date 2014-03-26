@@ -21,10 +21,6 @@
 -(void)seedObjectsSave:(BOOL)save;
 
 
--(void)sync:(BOOL)sync attributes:(NSArray*)attributes forIdentifier:(NSString*)identifier isTemp:(BOOL)isTemp;
-
--(NSArray*)lookupChangedAttributesToSaveForObject:(NSString*)objectId;
-
 -(NSArray*)lookupTemporaryChangedAttributesForTempId:(NSString *)tempId;
 -(NSArray*)lookupTemporaryChangedAttributesForObject:(NSString*)objectId;
 -(void)tempId:(NSString*)tempId gotObjectId:(NSString*)objectId;
@@ -32,6 +28,7 @@
 
 -(void)saveContextForSynchronization:(NSManagedObjectContext*)context;
 
+-(void)hardSync;
 - (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async;
 
 #ifdef DEBUG

@@ -32,6 +32,6 @@ static KPOverlay *sharedObject;
     [self.views removeObject:lastView];
 }
 -(void)popAllViewsAnimated:(BOOL)animated{
-    for(UIView *view in self.views) [self popViewAnimated:animated];
+    for(NSInteger i = 0 ; i < self.views.count ; i++) [self popViewAnimated:animated];
 }
 @end

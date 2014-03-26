@@ -44,10 +44,10 @@
 }
 -(void)setItemCounter:(NSInteger)itemCounter{
     if(itemCounter != _itemCounter){
-        
-        if([self.delegate respondsToSelector:@selector(itemHandler:changedItemNumber:oldNumber:)])
-            [self.delegate itemHandler:self changedItemNumber:itemCounter oldNumber:_itemCounter];
+        NSInteger oldNumber = _itemCounter;
         _itemCounter = itemCounter;
+        if([self.delegate respondsToSelector:@selector(itemHandler:changedItemNumber:oldNumber:)])
+            [self.delegate itemHandler:self changedItemNumber:itemCounter oldNumber:oldNumber];
     }
 }
 -(void)addItem:(NSString *)item priority:(BOOL)priority{
@@ -74,20 +74,8 @@
     if(!self.isSorted){
         KPToDo *movingToDoObject = [self itemForIndexPath:fromIndexPath];
         KPToDo *replacingToDoObject = [self itemForIndexPath:toIndexPath];
-        [movingToDoObject changeToOrder:replacingToDoObject.orderValue withItems:self.items];
-        NSMutableArray *newItems = [NSMutableArray array];
-        for(NSInteger i = 0 ; i < self.items.count ; i++){
-            KPToDo *item = [self.items objectAtIndex:i];
-            if(i == fromIndexPath.row) continue;
-            
-            if(i == toIndexPath.row){
-                if(toIndexPath.row > fromIndexPath.row) [newItems addObject:item];
-                [newItems addObject:movingToDoObject];
-                if(toIndexPath.row < fromIndexPath.row) [newItems addObject:item];
-            }
-            else [newItems addObject:item];
-        }
-        [self setItems:[newItems copy]];
+        NSArray *newItems = [movingToDoObject changeToOrder:replacingToDoObject.orderValue withItems:self.items];
+        [self setItems:newItems];
         [self notifyUpdate];
     }
 }
@@ -188,7 +176,7 @@
 }
 -(NSString *)titleForSection:(NSInteger)section{
     if(self.isSorted) return [self.titleArray objectAtIndex:section];
-    else{
+    else{   
         return @"Tasks";
         /*NSString *s = self.itemCounter > 1 ? @"s":@"";
         return [NSString stringWithFormat:@"%i Task%@",self.itemCounter,s];*/

@@ -15,5 +15,6 @@ typedef NS_ENUM(NSUInteger, UserLevel) {
 #define kUserHandler [UserHandler sharedInstance]
 @interface UserHandler : NSObject
 +(UserHandler*)sharedInstance;
+-(NSString*)getUserLevelString;
 @property (nonatomic) BOOL isPlus;
 @end

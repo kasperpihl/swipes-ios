@@ -30,8 +30,6 @@
 
 #import "NotificationHandler.h"
 
-
-#import "LightSchemeAlert.h"
 #import "UserHandler.h"
 #define DEFAULT_SELECTED_INDEX 1
 #define ADD_BUTTON_TAG 1337
@@ -126,20 +124,7 @@
     }];
 }
 -(void)pressedShare:(id)sender{
-    [ROOT_CONTROLLER shareTasks];
-}
--(void)lightschemeAlert{
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"hasSeenLightScheme"]) return;
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasSeenLightScheme"];
-    LightSchemeAlert *alert = [[LightSchemeAlert alloc] initWithDismissAction:^(BOOL succeeded, NSError *error) {
-        if(succeeded){
-            [THEMER changeTheme];
-            [ROOT_CONTROLLER resetRoot];
-        }
-        else [BLURRY dismissAnimated:YES];
-    }];
-    BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
-    [BLURRY showView:alert inViewController:self];
+    [ROOT_CONTROLLER shareTasks:[[self currentViewController] selectedItems]];
 }
 -(void)tagItems:(NSArray *)items inViewController:(UIViewController*)viewController withDismissAction:(voidBlock)block{
     self.selectedItems = items;
@@ -250,7 +235,9 @@
 	return [self initWithViewControllers:viewControllers titles:[viewControllers valueForKeyPath:@"@unionOfObjects.title"]];
 }
 -(void)pressedSettings{
-    [ROOT_CONTROLLER.sideMenu showForce:YES];
+    [ROOT_CONTROLLER.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
+        
+    }];
 }
 - (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles {
 	self = [super init];
@@ -328,7 +315,6 @@
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(lightschemeAlert) userInfo:nil repeats:NO];
 }
 -(void)viewDidLoad{
     [super viewDidLoad];

@@ -46,12 +46,6 @@
 		A703B1B91838EBF20047DCC9 /* AKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B18E1838EBF20047DCC9 /* AKSegmentedControl.m */; };
 		A703B1BA1838EBF20047DCC9 /* KPTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1901838EBF20047DCC9 /* KPTimePicker.m */; };
 		A703B1BB1838EBF20047DCC9 /* MCSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1931838EBF20047DCC9 /* MCSwipeTableViewCell.m */; };
-		A703B1BC1838EBF20047DCC9 /* AccelerationAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1961838EBF20047DCC9 /* AccelerationAnimation.m */; };
-		A703B1BD1838EBF20047DCC9 /* backbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A703B1971838EBF20047DCC9 /* backbutton.png */; };
-		A703B1BE1838EBF20047DCC9 /* Evaluate.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1991838EBF20047DCC9 /* Evaluate.m */; };
-		A703B1BF1838EBF20047DCC9 /* REBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B19B1838EBF20047DCC9 /* REBackgroundView.m */; };
-		A703B1C01838EBF20047DCC9 /* RESideMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B19D1838EBF20047DCC9 /* RESideMenu.m */; };
-		A703B1C11838EBF20047DCC9 /* UIWindow+RESideMenuExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B19F1838EBF20047DCC9 /* UIWindow+RESideMenuExtensions.m */; };
 		A703B1C21838EBF20047DCC9 /* SchedulePopup.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1A21838EBF20047DCC9 /* SchedulePopup.m */; };
 		A703B1C31838EBF20047DCC9 /* KPAddTagPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1A51838EBF20047DCC9 /* KPAddTagPanel.m */; };
 		A703B1C41838EBF20047DCC9 /* KPTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1A71838EBF20047DCC9 /* KPTagList.m */; };
@@ -59,7 +53,6 @@
 		A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1CA1838EC570047DCC9 /* ToDoCell.m */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
 		A717BEE5175DF5AF004791BF /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BEE4175DF5AF004791BF /* SignupViewController.m */; };
-		A717BEF0175E83A0004791BF /* libAppsFlyerLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A717BEEF175E83A0004791BF /* libAppsFlyerLib.a */; };
 		A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
 		A717BF24176115CD004791BF /* ProximaNova-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF20176115CD004791BF /* ProximaNova-Black.ttf */; };
 		A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */; };
@@ -106,6 +99,13 @@
 		A73FD8C21846326C0006C725 /* location_popup_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A73FD8C01846326C0006C725 /* location_popup_title@2x.png */; };
 		A741EC4F18354726000F9F93 /* default-background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A741EC4E18354726000F9F93 /* default-background.jpg */; };
 		A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */; };
+		A74646B918D38660003911DC /* ContactHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A74646B818D38660003911DC /* ContactHandler.m */; };
+		A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FC218D75B250056D124 /* ShareViewController.m */; };
+		A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A717BEEB175E6857004791BF /* CoreTelephony.framework */; };
+		A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B816EB59710095A9A8 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A74D3FCB18D9E76F0056D124 /* libAppsFlyerLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */; };
+		A74D3FD118D9E7AC0056D124 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */; };
+		A74D3FD218D9E7AC0056D124 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */; };
 		A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */; };
 		A74F61B616EB77B3004927DA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B516EB77B3004927DA /* MapKit.framework */; };
 		A74F61B916EBA58B004927DA /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B816EBA58B004927DA /* CoreMedia.framework */; };
@@ -149,8 +149,6 @@
 		A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D28172C5EA800BCB2D9 /* _KPTag.m */; };
 		A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2B172C5EAF00BCB2D9 /* KPTag.m */; };
 		A768D39D1896C812003E2DD6 /* ToDoViewController+ViewHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A768D39C1896C812003E2DD6 /* ToDoViewController+ViewHelpers.m */; };
-		A76ADC1017EC9B5700F52F40 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A76ADC0D17EC9B5700F52F40 /* HPGrowingTextView.m */; };
-		A76ADC1117EC9B5700F52F40 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A76ADC0F17EC9B5700F52F40 /* HPTextViewInternal.m */; };
 		A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A76ADC1217ECA7AB00F52F40 /* Images.xcassets */; };
 		A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76B2386172C06CC00F742C2 /* ScheduleViewController.m */; };
 		A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A771356E17BABB5A0090BE89 /* UIView+Utilities.m */; };
@@ -473,14 +471,12 @@
 		A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A976E6184119D6001C0A51 /* PaymentHandler.m */; };
 		A7ADCB2C17DD2B4000780F88 /* background_white_signate.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB2A17DD2B4000780F88 /* background_white_signate.png */; };
 		A7ADCB2D17DD2B4000780F88 /* background_white_signate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB2B17DD2B4000780F88 /* background_white_signate@2x.png */; };
-		A7ADCB3417DD350400780F88 /* iOSa_2.18.5.version in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB2F17DD350400780F88 /* iOSa_2.18.5.version */; };
-		A7ADCB3517DD350400780F88 /* libLocalyticsAMP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7ADCB3017DD350400780F88 /* libLocalyticsAMP.a */; };
-		A7ADCB3617DD350400780F88 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A7ADCB3117DD350400780F88 /* LICENSE */; };
 		A7ADCB3817DD352F00780F88 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A7ADCB3717DD352F00780F88 /* libz.dylib */; };
 		A7AF9B5717E210D000F9B26F /* StyleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5617E210D000F9B26F /* StyleHandler.m */; };
 		A7AF9B5C17E2244F00F9B26F /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B260921733D1FD000BADDE /* NotificationHandler.m */; };
 		A7BB65CB189BF19600BE7183 /* swipes-notification.aif in Resources */ = {isa = PBXBuildFile; fileRef = A7BB65CA189BF19600BE7183 /* swipes-notification.aif */; };
+		A7C0340F18DC9AEA00A252BB /* libLocalyticsAMP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7C0340C18DC9AEA00A252BB /* libLocalyticsAMP.a */; };
 		A7C90E6A17A6ABF700C5F9E2 /* wt_schedule_popup.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */; };
 		A7C90E6B17A6ABF700C5F9E2 /* wt_schedule_popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */; };
 		A7C90E7617A712A100C5F9E2 /* wt_signature.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E7417A712A100C5F9E2 /* wt_signature.png */; };
@@ -591,17 +587,6 @@
 		A703B1901838EBF20047DCC9 /* KPTimePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTimePicker.m; sourceTree = "<group>"; };
 		A703B1921838EBF20047DCC9 /* MCSwipeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSwipeTableViewCell.h; sourceTree = "<group>"; };
 		A703B1931838EBF20047DCC9 /* MCSwipeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCSwipeTableViewCell.m; sourceTree = "<group>"; };
-		A703B1951838EBF20047DCC9 /* AccelerationAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerationAnimation.h; sourceTree = "<group>"; };
-		A703B1961838EBF20047DCC9 /* AccelerationAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerationAnimation.m; sourceTree = "<group>"; };
-		A703B1971838EBF20047DCC9 /* backbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backbutton.png; sourceTree = "<group>"; };
-		A703B1981838EBF20047DCC9 /* Evaluate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Evaluate.h; sourceTree = "<group>"; };
-		A703B1991838EBF20047DCC9 /* Evaluate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Evaluate.m; sourceTree = "<group>"; };
-		A703B19A1838EBF20047DCC9 /* REBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REBackgroundView.h; sourceTree = "<group>"; };
-		A703B19B1838EBF20047DCC9 /* REBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REBackgroundView.m; sourceTree = "<group>"; };
-		A703B19C1838EBF20047DCC9 /* RESideMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RESideMenu.h; sourceTree = "<group>"; };
-		A703B19D1838EBF20047DCC9 /* RESideMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RESideMenu.m; sourceTree = "<group>"; };
-		A703B19E1838EBF20047DCC9 /* UIWindow+RESideMenuExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+RESideMenuExtensions.h"; sourceTree = "<group>"; };
-		A703B19F1838EBF20047DCC9 /* UIWindow+RESideMenuExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+RESideMenuExtensions.m"; sourceTree = "<group>"; };
 		A703B1A11838EBF20047DCC9 /* SchedulePopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchedulePopup.h; sourceTree = "<group>"; };
 		A703B1A21838EBF20047DCC9 /* SchedulePopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchedulePopup.m; sourceTree = "<group>"; };
 		A703B1A41838EBF20047DCC9 /* KPAddTagPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPAddTagPanel.h; sourceTree = "<group>"; };
@@ -617,8 +602,6 @@
 		A717BEE3175DF5AF004791BF /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SignupViewController.h; path = Login/SignupViewController.h; sourceTree = "<group>"; };
 		A717BEE4175DF5AF004791BF /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SignupViewController.m; path = Login/SignupViewController.m; sourceTree = "<group>"; };
 		A717BEEB175E6857004791BF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		A717BEEE175E83A0004791BF /* AppsFlyer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppsFlyer.h; sourceTree = "<group>"; };
-		A717BEEF175E83A0004791BF /* libAppsFlyerLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppsFlyerLib.a; sourceTree = "<group>"; };
 		A717BF1D17611162004791BF /* AnalyticsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsHandler.h; sourceTree = "<group>"; };
 		A717BF1E17611162004791BF /* AnalyticsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsHandler.m; sourceTree = "<group>"; };
 		A717BF20176115CD004791BF /* ProximaNova-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Black.ttf"; path = "Font/ProximaNova-Black.ttf"; sourceTree = "<group>"; };
@@ -671,6 +654,16 @@
 		A741EC4E18354726000F9F93 /* default-background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "default-background.jpg"; sourceTree = "<group>"; };
 		A742415E17A5BFB2009C9735 /* WalkthroughOverlayBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkthroughOverlayBackground.h; path = Walkthrough/WalkthroughOverlayBackground.h; sourceTree = "<group>"; };
 		A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkthroughOverlayBackground.m; path = Walkthrough/WalkthroughOverlayBackground.m; sourceTree = "<group>"; };
+		A74646B718D38660003911DC /* ContactHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactHandler.h; sourceTree = "<group>"; };
+		A74646B818D38660003911DC /* ContactHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactHandler.m; sourceTree = "<group>"; };
+		A74D3FC118D75B250056D124 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareViewController.h; path = Share/ShareViewController.h; sourceTree = "<group>"; };
+		A74D3FC218D75B250056D124 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShareViewController.m; path = Share/ShareViewController.m; sourceTree = "<group>"; };
+		A74D3FC918D9E76F0056D124 /* AppsFlyerTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppsFlyerTracker.h; sourceTree = "<group>"; };
+		A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppsFlyerLib.a; sourceTree = "<group>"; };
+		A74D3FCD18D9E7AC0056D124 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
+		A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
+		A74D3FCF18D9E7AC0056D124 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
+		A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
 		A74DCCAA18AA684C004E32FA /* UIImage+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utilities.h"; sourceTree = "<group>"; };
 		A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utilities.m"; sourceTree = "<group>"; };
 		A74F61B516EB77B3004927DA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -728,10 +721,6 @@
 		A7680D2B172C5EAF00BCB2D9 /* KPTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPTag.m; sourceTree = "<group>"; };
 		A768D39B1896C812003E2DD6 /* ToDoViewController+ViewHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ToDoViewController+ViewHelpers.h"; path = "ToDo/ToDoViewController+ViewHelpers.h"; sourceTree = "<group>"; };
 		A768D39C1896C812003E2DD6 /* ToDoViewController+ViewHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ToDoViewController+ViewHelpers.m"; path = "ToDo/ToDoViewController+ViewHelpers.m"; sourceTree = "<group>"; };
-		A76ADC0C17EC9B5700F52F40 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
-		A76ADC0D17EC9B5700F52F40 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
-		A76ADC0E17EC9B5700F52F40 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
-		A76ADC0F17EC9B5700F52F40 /* HPTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
 		A76ADC1217ECA7AB00F52F40 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A76B2385172C06CC00F742C2 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScheduleViewController.h; path = Schedule/ScheduleViewController.h; sourceTree = "<group>"; };
 		A76B2386172C06CC00F742C2 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScheduleViewController.m; path = Schedule/ScheduleViewController.m; sourceTree = "<group>"; };
@@ -1079,11 +1068,6 @@
 		A7A976E6184119D6001C0A51 /* PaymentHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentHandler.m; sourceTree = "<group>"; };
 		A7ADCB2A17DD2B4000780F88 /* background_white_signate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background_white_signate.png; sourceTree = "<group>"; };
 		A7ADCB2B17DD2B4000780F88 /* background_white_signate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background_white_signate@2x.png"; sourceTree = "<group>"; };
-		A7ADCB2F17DD350400780F88 /* iOSa_2.18.5.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = iOSa_2.18.5.version; sourceTree = "<group>"; };
-		A7ADCB3017DD350400780F88 /* libLocalyticsAMP.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLocalyticsAMP.a; sourceTree = "<group>"; };
-		A7ADCB3117DD350400780F88 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		A7ADCB3217DD350400780F88 /* LocalyticsAmpSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsAmpSession.h; sourceTree = "<group>"; };
-		A7ADCB3317DD350400780F88 /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
 		A7ADCB3717DD352F00780F88 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		A7AF9B5517E210D000F9B26F /* StyleHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleHandler.h; sourceTree = "<group>"; };
 		A7AF9B5617E210D000F9B26F /* StyleHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleHandler.m; sourceTree = "<group>"; };
@@ -1093,6 +1077,9 @@
 		A7B260911733D1FC000BADDE /* NotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationHandler.h; sourceTree = "<group>"; };
 		A7B260921733D1FD000BADDE /* NotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationHandler.m; sourceTree = "<group>"; };
 		A7BB65CA189BF19600BE7183 /* swipes-notification.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "swipes-notification.aif"; sourceTree = "<group>"; };
+		A7C0340C18DC9AEA00A252BB /* libLocalyticsAMP.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLocalyticsAMP.a; sourceTree = "<group>"; };
+		A7C0340D18DC9AEA00A252BB /* LocalyticsAmpSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsAmpSession.h; sourceTree = "<group>"; };
+		A7C0340E18DC9AEA00A252BB /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
 		A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wt_schedule_popup.png; sourceTree = "<group>"; };
 		A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wt_schedule_popup@2x.png"; sourceTree = "<group>"; };
@@ -1175,6 +1162,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */,
+				A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */,
 				A717DD1018B6440A00EE359C /* Crashlytics.framework in Frameworks */,
 				DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */,
 				A7ADCB3817DD352F00780F88 /* libz.dylib in Frameworks */,
@@ -1202,10 +1191,10 @@
 				A761B5A316EB59320095A9A8 /* CoreData.framework in Frameworks */,
 				A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */,
 				A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */,
+				A74D3FCB18D9E76F0056D124 /* libAppsFlyerLib.a in Frameworks */,
+				A7C0340F18DC9AEA00A252BB /* libLocalyticsAMP.a in Frameworks */,
 				A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */,
 				A2C9157AB40E430C8F5DD47F /* libPods.a in Frameworks */,
-				A717BEF0175E83A0004791BF /* libAppsFlyerLib.a in Frameworks */,
-				A7ADCB3517DD350400780F88 /* libLocalyticsAMP.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1226,7 +1215,6 @@
 				A703B1901838EBF20047DCC9 /* KPTimePicker.m */,
 				A703B1C51838EC240047DCC9 /* KPReorderTableView */,
 				A703B1911838EBF20047DCC9 /* MCSwipeTableViewCell */,
-				A703B1941838EBF20047DCC9 /* RESideMenu */,
 				A703B1A01838EBF20047DCC9 /* SchedulePopup */,
 				A703B1A31838EBF20047DCC9 /* TagView */,
 			);
@@ -1328,24 +1316,6 @@
 			path = MCSwipeTableViewCell;
 			sourceTree = "<group>";
 		};
-		A703B1941838EBF20047DCC9 /* RESideMenu */ = {
-			isa = PBXGroup;
-			children = (
-				A703B1951838EBF20047DCC9 /* AccelerationAnimation.h */,
-				A703B1961838EBF20047DCC9 /* AccelerationAnimation.m */,
-				A703B1971838EBF20047DCC9 /* backbutton.png */,
-				A703B1981838EBF20047DCC9 /* Evaluate.h */,
-				A703B1991838EBF20047DCC9 /* Evaluate.m */,
-				A703B19A1838EBF20047DCC9 /* REBackgroundView.h */,
-				A703B19B1838EBF20047DCC9 /* REBackgroundView.m */,
-				A703B19C1838EBF20047DCC9 /* RESideMenu.h */,
-				A703B19D1838EBF20047DCC9 /* RESideMenu.m */,
-				A703B19E1838EBF20047DCC9 /* UIWindow+RESideMenuExtensions.h */,
-				A703B19F1838EBF20047DCC9 /* UIWindow+RESideMenuExtensions.m */,
-			);
-			path = RESideMenu;
-			sourceTree = "<group>";
-		};
 		A703B1A01838EBF20047DCC9 /* SchedulePopup */ = {
 			isa = PBXGroup;
 			children = (
@@ -1391,15 +1361,6 @@
 			children = (
 			);
 			path = Login;
-			sourceTree = "<group>";
-		};
-		A717BEED175E83A0004791BF /* AppsFlyer */ = {
-			isa = PBXGroup;
-			children = (
-				A717BEEE175E83A0004791BF /* AppsFlyer.h */,
-				A717BEEF175E83A0004791BF /* libAppsFlyerLib.a */,
-			);
-			path = AppsFlyer;
 			sourceTree = "<group>";
 		};
 		A717BF0C175F5E7B004791BF /* EditMode */ = {
@@ -1454,6 +1415,35 @@
 				A730D39517B51C24005E1510 /* upgrade_full@2x.png */,
 			);
 			path = Upgrade;
+			sourceTree = "<group>";
+		};
+		A74D3FC018D75B0D0056D124 /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				A74D3FC118D75B250056D124 /* ShareViewController.h */,
+				A74D3FC218D75B250056D124 /* ShareViewController.m */,
+			);
+			name = Share;
+			sourceTree = "<group>";
+		};
+		A74D3FC818D9E76F0056D124 /* AppsFlyer */ = {
+			isa = PBXGroup;
+			children = (
+				A74D3FC918D9E76F0056D124 /* AppsFlyerTracker.h */,
+				A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */,
+			);
+			path = AppsFlyer;
+			sourceTree = "<group>";
+		};
+		A74D3FCC18D9E7AC0056D124 /* GrowingTextView */ = {
+			isa = PBXGroup;
+			children = (
+				A74D3FCD18D9E7AC0056D124 /* HPGrowingTextView.h */,
+				A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */,
+				A74D3FCF18D9E7AC0056D124 /* HPTextViewInternal.h */,
+				A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */,
+			);
+			path = GrowingTextView;
 			sourceTree = "<group>";
 		};
 		A75207F71730F5E000F1B4F7 /* ToDo */ = {
@@ -1540,18 +1530,6 @@
 				A717BF2A17611EDB004791BF /* ProximaNovaCond-Semibold.ttf */,
 			);
 			name = Font;
-			sourceTree = "<group>";
-		};
-		A76ADC0B17EC9B5700F52F40 /* GrowingTextView */ = {
-			isa = PBXGroup;
-			children = (
-				A76ADC0C17EC9B5700F52F40 /* HPGrowingTextView.h */,
-				A76ADC0D17EC9B5700F52F40 /* HPGrowingTextView.m */,
-				A76ADC0E17EC9B5700F52F40 /* HPTextViewInternal.h */,
-				A76ADC0F17EC9B5700F52F40 /* HPTextViewInternal.m */,
-			);
-			name = GrowingTextView;
-			path = AppsFlyer/GrowingTextView;
 			sourceTree = "<group>";
 		};
 		A7778CC116EB5884004D95E5 = {
@@ -1718,6 +1696,7 @@
 		A781285D17294C56002226C8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A74D3FC018D75B0D0056D124 /* Share */,
 				A7E2D94B17B4FE16007BDE00 /* Upgrade */,
 				A7E2D94517B3F258007BDE00 /* DayPickerSettingsCell.h */,
 				A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */,
@@ -1791,11 +1770,11 @@
 		A78128AB17294C56002226C8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				A7C0340B18DC9AEA00A252BB /* Localytics */,
+				A74D3FC818D9E76F0056D124 /* AppsFlyer */,
 				A717DD0F18B6440A00EE359C /* Crashlytics.framework */,
+				A74D3FCC18D9E7AC0056D124 /* GrowingTextView */,
 				A7582507189BC35B00B904BC /* Vero */,
-				A7ADCB2E17DD350400780F88 /* Localytics SDK */,
-				A717BEED175E83A0004791BF /* AppsFlyer */,
-				A76ADC0B17EC9B5700F52F40 /* GrowingTextView */,
 			);
 			path = Libs;
 			sourceTree = "<group>";
@@ -1902,18 +1881,6 @@
 			path = Backgrounds;
 			sourceTree = "<group>";
 		};
-		A7ADCB2E17DD350400780F88 /* Localytics SDK */ = {
-			isa = PBXGroup;
-			children = (
-				A7ADCB2F17DD350400780F88 /* iOSa_2.18.5.version */,
-				A7ADCB3017DD350400780F88 /* libLocalyticsAMP.a */,
-				A7ADCB3117DD350400780F88 /* LICENSE */,
-				A7ADCB3217DD350400780F88 /* LocalyticsAmpSession.h */,
-				A7ADCB3317DD350400780F88 /* LocalyticsSession.h */,
-			);
-			path = "Localytics SDK";
-			sourceTree = "<group>";
-		};
 		A7BB65C9189BF19600BE7183 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -2001,6 +1968,16 @@
 				A792BD1918AD4915000573E4 /* selected_circle@2x.png */,
 			);
 			path = SchedulePopup;
+			sourceTree = "<group>";
+		};
+		A7C0340B18DC9AEA00A252BB /* Localytics */ = {
+			isa = PBXGroup;
+			children = (
+				A7C0340C18DC9AEA00A252BB /* libLocalyticsAMP.a */,
+				A7C0340D18DC9AEA00A252BB /* LocalyticsAmpSession.h */,
+				A7C0340E18DC9AEA00A252BB /* LocalyticsSession.h */,
+			);
+			path = Localytics;
 			sourceTree = "<group>";
 		};
 		A7DAC63C181A7CF700B8C079 /* Buttons */ = {
@@ -2193,6 +2170,8 @@
 				A7A976E6184119D6001C0A51 /* PaymentHandler.m */,
 				A72EFFFD18425B6A008333AA /* UserHandler.h */,
 				A72EFFFE18425B6A008333AA /* UserHandler.m */,
+				A74646B718D38660003911DC /* ContactHandler.h */,
+				A74646B818D38660003911DC /* ContactHandler.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -2541,7 +2520,6 @@
 				A792BDB118AD6E07000573E4 /* menu_notifications_white@2x.png in Resources */,
 				A7FE4405182828E1002AFB2E /* date_stamp_background.png in Resources */,
 				A73E748618AFEA98007275AA /* notes_icon_small_darkgray.png in Resources */,
-				A703B1BD1838EBF20047DCC9 /* backbutton.png in Resources */,
 				A73E748718AFEA98007275AA /* notes_icon_small_darkgray@2x.png in Resources */,
 				A792BC2418AD361E000573E4 /* round_cross_black-high.png in Resources */,
 				A792BD5E18AD4915000573E4 /* schedule_image_sun_white-high.png in Resources */,
@@ -2761,7 +2739,6 @@
 				DACD546318A1ACFC00C378DF /* powerpoint.png in Resources */,
 				A792BDBA18AD6E07000573E4 /* menu_pro_white-high.png in Resources */,
 				A792BD6018AD4915000573E4 /* schedule_image_sun_white.png in Resources */,
-				A7ADCB3417DD350400780F88 /* iOSa_2.18.5.version in Resources */,
 				A792BBAA18AD2E4B000573E4 /* edit_repeat_icon_white.png in Resources */,
 				A792BCB318AD3B41000573E4 /* share_icon_black@2x.png in Resources */,
 				A792BDC118AD6E07000573E4 /* menu_snoozes_black-high@2x.png in Resources */,
@@ -2775,7 +2752,6 @@
 				A792BBE018AD301C000573E4 /* today-white-high.png in Resources */,
 				A792BBB318AD2E4B000573E4 /* edit_tags_icon_white@2x.png in Resources */,
 				A792BCAB18AD3B41000573E4 /* settings_icon_black@2x.png in Resources */,
-				A7ADCB3617DD350400780F88 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2843,7 +2819,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A703B1BC1838EBF20047DCC9 /* AccelerationAnimation.m in Sources */,
 				A792BB8818ABEDB4000573E4 /* LocationSearchView.m in Sources */,
 				A78128BD17294C56002226C8 /* FacebookCommunicator.m in Sources */,
 				A703B1B71838EBF20047DCC9 /* YoureAllDoneView.m in Sources */,
@@ -2867,16 +2842,15 @@
 				A703B1AF1838EBF20047DCC9 /* KPAddView.m in Sources */,
 				A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */,
 				A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */,
-				A76ADC1117EC9B5700F52F40 /* HPTextViewInternal.m in Sources */,
 				A703B1631838EB0E0047DCC9 /* UIButton+PassTouch.m in Sources */,
 				A703B1B51838EBF20047DCC9 /* SectionHeaderView.m in Sources */,
 				A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */,
 				A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */,
-				A703B1BF1838EBF20047DCC9 /* REBackgroundView.m in Sources */,
 				A7933049172AB63700F1505E /* TodayViewController.m in Sources */,
 				A7933056172B2BA100F1505E /* DoneViewController.m in Sources */,
 				A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */,
 				A703B1C21838EBF20047DCC9 /* SchedulePopup.m in Sources */,
+				A74D3FD218D9E7AC0056D124 /* HPTextViewInternal.m in Sources */,
 				A703B1AD1838EBF20047DCC9 /* DateStampView.m in Sources */,
 				A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */,
 				A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */,
@@ -2892,6 +2866,7 @@
 				A717BEE5175DF5AF004791BF /* SignupViewController.m in Sources */,
 				A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */,
 				A78D7A8817F4B27200AD38B1 /* Global.m in Sources */,
+				A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */,
 				A7FE4402182825A1002AFB2E /* UIImage+Blur.m in Sources */,
 				A7DEA1891790BD2D00EB1549 /* MenuViewController.m in Sources */,
 				A703B1B91838EBF20047DCC9 /* AKSegmentedControl.m in Sources */,
@@ -2899,9 +2874,9 @@
 				A75545E3179B519200CE2F4E /* KPBlurry.m in Sources */,
 				A703B1BB1838EBF20047DCC9 /* MCSwipeTableViewCell.m in Sources */,
 				A75236C617A2EC5E0030ED1E /* WalkthroughViewController.m in Sources */,
-				A703B1BE1838EBF20047DCC9 /* Evaluate.m in Sources */,
 				A75236CA17A2EE6F0030ED1E /* WalkthroughCell.m in Sources */,
 				A75236FA17A3361A0030ED1E /* WalkthroughTitleView.m in Sources */,
+				A74D3FD118D9E7AC0056D124 /* HPGrowingTextView.m in Sources */,
 				A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */,
 				A724B02217A96B8B00E0EF83 /* UIColor+Utilities.m in Sources */,
 				A7FA8B1D17AF094E00134ED0 /* SnoozesViewController.m in Sources */,
@@ -2925,10 +2900,8 @@
 				A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */,
 				A703B1C31838EBF20047DCC9 /* KPAddTagPanel.m in Sources */,
 				A789B3F917D79BFB00C25B73 /* KPOverlay.m in Sources */,
-				A703B1C01838EBF20047DCC9 /* RESideMenu.m in Sources */,
 				A703B1B81838EBF20047DCC9 /* KPSearchBar.m in Sources */,
-				A703B1C11838EBF20047DCC9 /* UIWindow+RESideMenuExtensions.m in Sources */,
-				A76ADC1017EC9B5700F52F40 /* HPGrowingTextView.m in Sources */,
+				A74646B918D38660003911DC /* ContactHandler.m in Sources */,
 				A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */,
 				A703B1A81838EBF20047DCC9 /* AddPanelView.m in Sources */,
 				A703B1AA1838EBF20047DCC9 /* PlusAlertView.m in Sources */,
@@ -2992,6 +2965,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
@@ -3000,6 +2974,7 @@
 					"$(inherited)",
 					Swipes/Ressources/Libs,
 					/Users/kasper/Code/Swipes/ios/Swipes/Ressources/Libs,
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
@@ -3008,9 +2983,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Swipes/Ressources/Libs/AppsFlyer\"",
-					"\"$(SRCROOT)/Swipes/Ressources/Libs/Localytics SDK\"",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
 				);
+				"OTHER_CPLUSPLUSFLAGS[arch=*]" = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lsqlite3",
@@ -3133,6 +3109,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
@@ -3141,6 +3118,7 @@
 					"$(inherited)",
 					Swipes/Ressources/Libs,
 					/Users/kasper/Code/Swipes/ios/Swipes/Ressources/Libs,
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
@@ -3152,9 +3130,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Swipes/Ressources/Libs/AppsFlyer\"",
-					"\"$(SRCROOT)/Swipes/Ressources/Libs/Localytics SDK\"",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lsqlite3",
@@ -3206,6 +3185,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
@@ -3214,6 +3194,7 @@
 					"$(inherited)",
 					Swipes/Ressources/Libs,
 					/Users/kasper/Code/Swipes/ios/Swipes/Ressources/Libs,
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
@@ -3222,8 +3203,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Swipes/Ressources/Libs/AppsFlyer\"",
-					"\"$(SRCROOT)/Swipes/Ressources/Libs/Localytics SDK\"",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",

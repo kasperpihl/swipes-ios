@@ -23,9 +23,8 @@
 
 #import "ThemeHandler.h"
 #import "RootViewController.h"
-#import <ASCScreenBrightnessDetector/ASCScreenBrightnessDetector.h>
-@interface ThemeHandler () <ASCScreenBrightnessDetectorDelegate>
-@property (nonatomic) ASCScreenBrightnessDetector *brightnessDetector;
+@interface ThemeHandler ()
+//@property (nonatomic) ASCScreenBrightnessDetector *brightnessDetector;
 @end
 
 @implementation ThemeHandler
@@ -39,18 +38,18 @@ static ThemeHandler *sharedObject;
     }
     return sharedObject;
 }
--(ASCScreenBrightnessDetector *)brightnessDetector{
+/*-(ASCScreenBrightnessDetector *)brightnessDetector{
     if(!_brightnessDetector){
         _brightnessDetector = [ASCScreenBrightnessDetector new];
         _brightnessDetector.delegate = self;
         _brightnessDetector.threshold = 0.3;
     }
     return _brightnessDetector;
-}
+}*/
 -(Theme)oppositTheme{
     return (self.currentTheme == ThemeDark) ? ThemeLight : ThemeDark;
 }
-- (void)screenBrightnessStyleDidChange:(ASCScreenBrightnessStyle)style
+/*- (void)screenBrightnessStyleDidChange:(ASCScreenBrightnessStyle)style
 {
     NSLog(@"The new style is: %u", style);
     if((self.currentTheme == ThemeDark && style == ASCScreenBrightnessStyleLight) || (self.currentTheme == ThemeLight && style == ASCScreenBrightnessStyleDark)){
@@ -59,9 +58,9 @@ static ThemeHandler *sharedObject;
             [ROOT_CONTROLLER resetRoot];
         }];
     }
-}
+}*/
 -(void)setCurrentTheme:(Theme)currentTheme{
-    if(currentTheme != ThemeLight && currentTheme != ThemeDark) currentTheme = ThemeDark;
+    if(currentTheme != ThemeLight && currentTheme != ThemeDark) currentTheme = ThemeLight;
     _currentTheme = currentTheme;
     [[NSUserDefaults standardUserDefaults] setInteger:currentTheme forKey:@"theme"];
     [[NSUserDefaults standardUserDefaults] synchronize];

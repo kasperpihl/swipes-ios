@@ -45,15 +45,12 @@
 //unused #define KL_PARKING_START                            @"ActualStart"
 //unused #define KL_PARKING_STOP                             @"ActualStop"
 
-
 // Place Recognition
 
 #define KL_START_PARAM_INT_PLACE_RECOGNIZE_MIN_SECONDS       @"PlaceRecognizeMinTime"
-#define KL_START_PARAM_INT_PLACE_RECOGNIZE_MIN_SAMPLES        @"PlaceRecognizeMinSamples"
+#define KL_START_PARAM_INT_PLACE_RECOGNIZE_MIN_SAMPLES       @"PlaceRecognizeMinSamples"
 #define KL_START_PARAM_INT_PLACE_RECOGNIZE_RADIUS            @"PlaceRecognizeRadius"
 #define KL_START_PARAM_FLOAT_PLACE_RECOGNIZE_ACCURACY_FACTOR @"PlaceRecognizeAccuracyFactor"
-
-
 
 ///////////////////////////////////
 // Exported Events Nofitications //
@@ -89,6 +86,12 @@ typedef enum klDesiredAccuracyType : NSInteger {
 
 @protocol KitLocateDelegate <NSObject>
 @optional
+
+- (void)didSuccessInitKitLocate:(int)status;
+- (void)didFailInitKitLocate:(int)error;
+
+- (void)onChangeKitLocateUserID:(NSString*)userId;
+
 - (void)gotPeriodicLocation:(KLLocationValue*)location;
 - (void)geofencesIn:(NSArray*)arrGeofenceList;
 - (void)geofencesOut:(NSArray*)arrGeofenceList;
@@ -111,12 +114,19 @@ typedef enum klDesiredAccuracyType : NSInteger {
  * \param The geofence that was added
  */
 - (void)didSuccessAddGeofence:(KLGeofence*)geofence;
+
 @end
 
 
 @protocol KitLocateSingleDelegate <NSObject>
 @optional
 - (void)gotSingleLocation:(KLLocationValue*)location;
+@end
+
+
+@protocol KitLocateForegroundDelegate <NSObject>
+@optional
+- (void)gotForegroundLocation:(KLLocationValue*)location;
 @end
 
 @interface KLLocation : NSObject
@@ -172,8 +182,9 @@ typedef enum klDesiredAccuracyType : NSInteger {
 + (void)unregisterDrivingDetection;
 
 
-+ (void)startParkingWithParams:(NSDictionary*)dctParams;
-+ (void)stopParking;
++ (void)registerParking:(NSDictionary*)params;
++ (void)unregisterParking;
++ (bool)isParkingLogicRunning;
 
 /*
  NOTICE! This feature can't work under Regions Provider in the current design!
@@ -225,7 +236,10 @@ typedef enum klDesiredAccuracyType : NSInteger {
  */
 + (KLGeofence*)returnGeofenceByPrimaryID:(long)lGeofenceID;
 
-
++(void)startForegroundLocationWithDelegate:(id<KitLocateForegroundDelegate>)delegate;
++(void)setForegroundLocationTimeInSeconds:(int)nTime;
++(KLLocationValue *)getForegroundLocation;
++(void)stopForegroundLocation;
 
 
 // For debug

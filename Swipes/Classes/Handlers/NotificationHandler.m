@@ -190,13 +190,12 @@ static NotificationHandler *sharedObject;
 - (void)updateLocationUpdates
 {
     BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
-    if (!hasLocationOn)
-        [self stopLocationServices];
-    [KLLocation deleteAllGeofences];
+    if(!hasLocationOn) [self stopLocationServices];
     NSPredicate *locationPredicate = [NSPredicate predicateWithFormat:@"(location != nil)"];
     NSArray *tasksWithLocation = [KPToDo MR_findAllWithPredicate:locationPredicate];
-    if (tasksWithLocation && tasksWithLocation.count > 0) {
-        for (KPToDo *toDo in tasksWithLocation) {
+    if(tasksWithLocation && tasksWithLocation.count > 0){
+        [KLLocation deleteAllGeofences];
+        for(KPToDo *toDo in tasksWithLocation){
             NSArray *location = [toDo.location componentsSeparatedByString:kLocationSplitStr];
             NSString *identifier = [location objectAtIndex:0];
             float latitude = [[location objectAtIndex:2] floatValue];

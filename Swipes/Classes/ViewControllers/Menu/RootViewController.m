@@ -31,15 +31,19 @@
 #import "KPOverlay.h"
 
 #import "KPToDo.h"
-#import "LocalyticsSession.h"
 #import <MessageUI/MessageUI.h>
 #import <Parse/Parse.h>
 
 #import "KPAlert.h"
 
+#import "MMDrawerVisualState.h"
+
+#import "ShareViewController.h"
+
 @interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate>
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
+
 @property (nonatomic) NSDate *lastClose;
 @property (nonatomic) KPMenu currentMenu;
 @end
@@ -61,26 +65,12 @@
 
 -(void)blurryWillShow:(KPBlurry *)blurry{
     self.lockSettings = YES;
-    
 }
 -(void)blurryDidHide:(KPBlurry *)blurry{
     if(self.currentMenu != KPMenuLogin) self.lockSettings = NO;
 }
-#pragma mark - PFLogInViewControllerDelegate
-// Sent to the delegate to determine whether the log in request should be submitted to the server.
-/*- (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password {
-    // Check if both fields are completed
-    if (username && password && username.length != 0 && password.length != 0) {
-        return YES; // Begin login process
-    }
-    
-    [[[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                message:@"Make sure you fill out all of the information!"
-                               delegate:nil
-                      cancelButtonTitle:@"ok"
-                      otherButtonTitles:nil] show];
-    return NO; // Interrupt login process
-}*/
+
+
 -(void)fetchDataFromFacebook{
     __block NSString *requestPath = @"me?fields=email,gender";
     FBRequest *request = [FBRequest requestForGraphPath:requestPath];
@@ -95,13 +85,13 @@
             
             if(email){
                 [user setObject:email forKey:@"email"];
-                [[LocalyticsSession shared] setCustomerEmail:email];
             }
             NSString *gender = [userData objectForKey:@"gender"];
             if(gender) [user setObject:gender forKey:@"gender"];
             [user saveEventually];
             if(email) [user setObject:email forKey:@"username"];
             [user saveEventually];
+            [ANALYTICS updateIdentity];
         }
         return NO;
     }];
@@ -117,15 +107,14 @@
     else {
         [ANALYTICS tagEvent:@"Logged In" options:@{}];
     }
-    [[LocalyticsSession shared] setCustomerId:user.objectId];
-    if ([PFFacebookUtils isLinkedWithUser:user]){
+    if([PFFacebookUtils isLinkedWithUser:user]){
         if(!user.email){
             [self fetchDataFromFacebook];
         }
     }
     else{
-        [[LocalyticsSession shared] setCustomerEmail:user.email];
     }
+    [ANALYTICS updateIdentity];
     [self changeToMenu:KPMenuHome animated:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
 }
@@ -161,8 +150,9 @@
             break;
     }
     self.currentMenu = menu;
-    CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
-    self.viewControllers = @[viewController];
+    //CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
+    //CGRectSetHeight(self.drawerViewController.view,viewController.view.frame.size.height-100);
+    [self.drawerViewController setCenterViewController:viewController];
 }
 
 static RootViewController *sharedObject;
@@ -185,7 +175,7 @@ static RootViewController *sharedObject;
 {
     self.menuViewController = nil;
     [self setupAppearance];
-    [self.sideMenu hide];
+    //[self.sideMenu hide];
     
 }
 
@@ -208,15 +198,13 @@ static RootViewController *sharedObject;
     [ANALYTICS tagEvent:event options:@{@"Number of Tasks":@(tasks.count)}];
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
-
--(void)shareTasks{
+-(void)shareTasks:(NSArray*)tasks{
     if([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
         mailCont.mailComposeDelegate = self;
         [mailCont setSubject:@"Tasks to complete"];
         
         NSString *message = @"Tasks: \r\n";
-        NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
         for(KPToDo *toDo in tasks){
             message = [message stringByAppendingFormat:@"◯ %@\r\n",toDo.title];
         }
@@ -256,13 +244,6 @@ static RootViewController *sharedObject;
     [ANALYTICS popView];
     [viewController removeFromParentViewController];
     [OVERLAY popViewAnimated:YES];
-}
-
--(void)panGestureRecognized:(UIPanGestureRecognizer*)sender
-{
-    if (self.lockSettings)
-        return;
-    [self.sideMenu panGestureRecognized:sender];
 }
 
 -(void)openApp
@@ -307,13 +288,26 @@ static RootViewController *sharedObject;
     
     
     BLURRY.delegate = self;
-    self.sideMenu = kSideMenu;
-    self.sideMenu.backgroundImage = [color(18,20,23,1) image];
-    self.sideMenu.hideStatusBarArea = [Global OSVersion] < 7;
     self.settingsViewController = [[MenuViewController alloc] init];
-    self.sideMenu.revealView = self.settingsViewController.view;
-    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
-    [self.view addGestureRecognizer:panGestureRecognizer];
+    self.drawerViewController = [[MMDrawerController alloc] initWithCenterViewController:self.menuViewController leftDrawerViewController:self.settingsViewController];
+#warning Stanimir I used 320 here :D sorry
+    [self.drawerViewController setMaximumLeftDrawerWidth:320];
+    [self.drawerViewController setDrawerVisualStateBlock:^(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible) {
+        UIViewController * sideDrawerViewController;
+        if(drawerSide == MMDrawerSideLeft){
+            sideDrawerViewController = drawerController.leftDrawerViewController;
+        }
+        else if(drawerSide == MMDrawerSideRight){
+            sideDrawerViewController = drawerController.rightDrawerViewController;
+        }
+        [sideDrawerViewController.view setAlpha:percentVisible];
+    }];
+    
+    [self.drawerViewController setShowsShadow:NO];
+    [self.drawerViewController setShouldStretchDrawer:YES];
+    [self.drawerViewController setAnimationVelocity:1240];
+    self.viewControllers = @[self.drawerViewController];
+    
     [self setupAppearance];
     
 }
