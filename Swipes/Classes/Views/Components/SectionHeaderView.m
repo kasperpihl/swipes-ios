@@ -50,28 +50,22 @@
         self.progressView = [[UIView alloc] initWithFrame:self.bounds];
         
         self.color = color;
+        
+        self.progressView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        
+        self.progressEndingView = [[_ProgressEndingView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.progressView.frame), 0, 12, self.progressView.frame.size.height)];
+        self.progressEndingView.headerView = self;
+        self.progressEndingView.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin);
+        self.progressEndingView.backgroundColor = CLEAR;
+        [self.progressView addSubview:self.progressEndingView];
+        CGRectSetWidth(self.progressView, 0);
+        [self addSubview:self.progressView];
+        
+        
+        
+        self.layer.masksToBounds = NO;
     }
     return self;
-}
-
-- (void)setColor:(UIColor *)color {
-    self.backgroundColor = color;
-    
-    self.progressView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    
-    self.progressEndingView = [[_ProgressEndingView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.progressView.frame), 0, 12, self.progressView.frame.size.height)];
-    self.progressEndingView.headerView = self;
-    self.progressEndingView.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin);
-    self.progressEndingView.backgroundColor = CLEAR;
-    [self.progressView addSubview:self.progressEndingView];
-    CGRectSetWidth(self.progressView, 0);
-    [self addSubview:self.progressView];
-    
-    
-    
-    self.layer.masksToBounds = NO;
-    self.sectionHeader.color = color;
-    [self setNeedsDisplay];
 }
 -(void)setProgressPercentage:(CGFloat)progressPercentage{
     CGFloat targetX = self.bounds.size.width - CGRectGetWidth(self.sectionHeader.frame);
@@ -83,6 +77,13 @@
     
 }
 
+- (void)setColor:(UIColor *)color {
+    _color = color;
+    //self.backgroundColor = color;
+    self.progressView.backgroundColor = color;
+    self.sectionHeader.color = color;
+    [self setNeedsDisplay];
+}
 - (void)setFillColor:(UIColor *)fillColor {
     self.sectionHeader.fillColor = fillColor;
     [self setNeedsDisplay];
