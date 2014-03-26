@@ -157,6 +157,8 @@
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
 		A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CD116EB5884004D95E5 /* CoreGraphics.framework */; };
 		A77D34C818E098C800095F1E /* HintHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34C718E098C800095F1E /* HintHandler.m */; };
+		A77D34D018E31E1200095F1E /* EMHint.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34CB18E31E1200095F1E /* EMHint.m */; };
+		A77D34D118E31E1200095F1E /* EMHintsView.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34CD18E31E1200095F1E /* EMHintsView.m */; };
 		A78128BD17294C56002226C8 /* FacebookCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284117294C56002226C8 /* FacebookCommunicator.m */; };
 		A78128BE17294C56002226C8 /* KPParseCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284417294C56002226C8 /* KPParseCommunicator.m */; };
 		A78128BF17294C56002226C8 /* KPParseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284917294C56002226C8 /* KPParseObject.m */; };
@@ -735,6 +737,10 @@
 		A7778CF116EB5884004D95E5 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		A77D34C618E098C800095F1E /* HintHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HintHandler.h; sourceTree = "<group>"; };
 		A77D34C718E098C800095F1E /* HintHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HintHandler.m; sourceTree = "<group>"; };
+		A77D34CA18E31E1200095F1E /* EMHint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMHint.h; sourceTree = "<group>"; };
+		A77D34CB18E31E1200095F1E /* EMHint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMHint.m; sourceTree = "<group>"; };
+		A77D34CC18E31E1200095F1E /* EMHintsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMHintsView.h; sourceTree = "<group>"; };
+		A77D34CD18E31E1200095F1E /* EMHintsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMHintsView.m; sourceTree = "<group>"; };
 		A781284017294C56002226C8 /* FacebookCommunicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookCommunicator.h; sourceTree = "<group>"; };
 		A781284117294C56002226C8 /* FacebookCommunicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookCommunicator.m; sourceTree = "<group>"; };
 		A781284217294C56002226C8 /* FacebookCommunicatorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookCommunicatorDelegate.h; sourceTree = "<group>"; };
@@ -1211,6 +1217,7 @@
 				A703B1651838EBF20047DCC9 /* AddPanel */,
 				A703B1681838EBF20047DCC9 /* Alert */,
 				A703B16D1838EBF20047DCC9 /* CKCalendarView */,
+				A77D34C918E31E1200095F1E /* EMHint */,
 				A703B1701838EBF20047DCC9 /* Components */,
 				A703B1891838EBF20047DCC9 /* FilterMenu */,
 				A703B18C1838EBF20047DCC9 /* KPSegmentedControl */,
@@ -1591,6 +1598,17 @@
 				A136D6C864AF43788D47AB2C /* libPods.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A77D34C918E31E1200095F1E /* EMHint */ = {
+			isa = PBXGroup;
+			children = (
+				A77D34CA18E31E1200095F1E /* EMHint.h */,
+				A77D34CB18E31E1200095F1E /* EMHint.m */,
+				A77D34CC18E31E1200095F1E /* EMHintsView.h */,
+				A77D34CD18E31E1200095F1E /* EMHintsView.m */,
+			);
+			path = EMHint;
 			sourceTree = "<group>";
 		};
 		A781283D17294C56002226C8 /* Swipes */ = {
@@ -2838,6 +2856,7 @@
 				A78128C417294C56002226C8 /* KPParseCoreData.m in Sources */,
 				A703B1B01838EBF20047DCC9 /* KPDayPicker.m in Sources */,
 				A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */,
+				A77D34D018E31E1200095F1E /* EMHint.m in Sources */,
 				A78128C717294C56002226C8 /* UtilityClass.m in Sources */,
 				A78128CC17294C56002226C8 /* KPSegmentedViewController.m in Sources */,
 				A78128FC17294C56002226C8 /* AppDelegate.m in Sources */,
@@ -2879,6 +2898,7 @@
 				A7DEA18C17954C7400EB1549 /* ThemeHandler.m in Sources */,
 				A75545E3179B519200CE2F4E /* KPBlurry.m in Sources */,
 				A703B1BB1838EBF20047DCC9 /* MCSwipeTableViewCell.m in Sources */,
+				A77D34D118E31E1200095F1E /* EMHintsView.m in Sources */,
 				A75236C617A2EC5E0030ED1E /* WalkthroughViewController.m in Sources */,
 				A75236CA17A2EE6F0030ED1E /* WalkthroughCell.m in Sources */,
 				A75236FA17A3361A0030ED1E /* WalkthroughTitleView.m in Sources */,

@@ -208,7 +208,6 @@
     }
     imageString = timageString(baseString, @"-white", @"-black");
     UIImage *normalImage = [UIImage imageNamed:imageString];
-    UIImage *selectedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-high"]];
     UIImage *highlightedImage = [UIImage imageNamed:[baseString stringByAppendingString:@"-highlighted"]];;
     [button setImage:normalImage forState:UIControlStateNormal];
     [button setImage:highlightedImage forState:UIControlStateSelected];

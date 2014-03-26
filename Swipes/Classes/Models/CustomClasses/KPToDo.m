@@ -7,6 +7,7 @@
 #import "KPParseCoreData.h"
 #import "Underscore.h"
 #import "AnalyticsHandler.h"
+#import "HintHandler.h"
 #import <CoreLocation/CoreLocation.h>
 #define kDefOrderVal -1
 @interface KPToDo ()
@@ -75,6 +76,7 @@
     NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
     [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
     [ANALYTICS heartbeat];
+    [kHints triggerHint:HintCompleted];
     [NOTIHANDLER updateLocalNotifications];
     return [movedToDos copy];
 }

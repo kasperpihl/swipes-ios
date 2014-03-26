@@ -9,8 +9,12 @@
 
 #import "SettingsHandler.h"
 #import "HintHandler.h"
-@interface HintHandler ()
+#import "EMHint.h"
+#import "RootViewController.h"
+
+@interface HintHandler () <EMHintDelegate>
 @property NSMutableDictionary *hints;
+@property EMHint *emHint;
 @property BOOL hintsIsOff;
 @end
 
@@ -65,9 +69,11 @@ static HintHandler *sharedObject;
 */
 -(BOOL)triggerHint:(Hints)hint{
     BOOL completedHint = [self completeHint:hint];
+    completedHint = YES;
     if(completedHint){
         if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
             [self.delegate hintHandler:self triggeredHint:hint];
+        [self.emHint presentModalMessage:@"Just completed the first task" where:ROOT_CONTROLLER.view];
     }
     return completedHint;
 }
@@ -76,9 +82,23 @@ static HintHandler *sharedObject;
     BOOL hasAlreadyCompletedHint = [[self.hints objectForKey:key] boolValue];
     return hasAlreadyCompletedHint;
 }
+
+-(NSArray*)hintStateRectsToHint:(id)hintState
+{
+    CGFloat ht = 40.0;
+    CGFloat statusBarHt = 2.0;
+    NSArray* rectArray = nil;
+    CGRect rect = CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2+55 ,
+                            (statusBarHt + 44),ht,ht);
+    return @[[NSValue valueWithCGRect:rect]];
+}
+
+
 -(void)initialize{
     self.hints = [[NSUserDefaults standardUserDefaults] objectForKey:kHintDictionaryKey];
     if(!self.hints)
         self.hints = [NSMutableDictionary dictionary];
+    self.emHint = [[EMHint alloc] init];
+    self.emHint.hintDelegate = self;
 }
 @end
