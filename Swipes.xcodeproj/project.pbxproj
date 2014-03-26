@@ -162,6 +162,7 @@
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
 		A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CD116EB5884004D95E5 /* CoreGraphics.framework */; };
+		A77D34C818E098C800095F1E /* HintHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34C718E098C800095F1E /* HintHandler.m */; };
 		A78128BD17294C56002226C8 /* FacebookCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284117294C56002226C8 /* FacebookCommunicator.m */; };
 		A78128BE17294C56002226C8 /* KPParseCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284417294C56002226C8 /* KPParseCommunicator.m */; };
 		A78128BF17294C56002226C8 /* KPParseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284917294C56002226C8 /* KPParseObject.m */; };
@@ -749,6 +750,8 @@
 		A7778CCF16EB5884004D95E5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A7778CD116EB5884004D95E5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A7778CF116EB5884004D95E5 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		A77D34C618E098C800095F1E /* HintHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HintHandler.h; sourceTree = "<group>"; };
+		A77D34C718E098C800095F1E /* HintHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HintHandler.m; sourceTree = "<group>"; };
 		A781284017294C56002226C8 /* FacebookCommunicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookCommunicator.h; sourceTree = "<group>"; };
 		A781284117294C56002226C8 /* FacebookCommunicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookCommunicator.m; sourceTree = "<group>"; };
 		A781284217294C56002226C8 /* FacebookCommunicatorDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookCommunicatorDelegate.h; sourceTree = "<group>"; };
@@ -2208,6 +2211,8 @@
 				A72EFFFE18425B6A008333AA /* UserHandler.m */,
 				A74646B718D38660003911DC /* ContactHandler.h */,
 				A74646B818D38660003911DC /* ContactHandler.m */,
+				A77D34C618E098C800095F1E /* HintHandler.h */,
+				A77D34C718E098C800095F1E /* HintHandler.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -2887,6 +2892,7 @@
 				A703B1BF1838EBF20047DCC9 /* REBackgroundView.m in Sources */,
 				A7933049172AB63700F1505E /* TodayViewController.m in Sources */,
 				A7933056172B2BA100F1505E /* DoneViewController.m in Sources */,
+				A77D34C818E098C800095F1E /* HintHandler.m in Sources */,
 				A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */,
 				A703B1C21838EBF20047DCC9 /* SchedulePopup.m in Sources */,
 				A74D3FD218D9E7AC0056D124 /* HPTextViewInternal.m in Sources */,

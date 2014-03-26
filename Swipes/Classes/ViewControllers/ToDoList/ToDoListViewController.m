@@ -22,6 +22,8 @@
 #import "KPTagList.h"
 
 
+#import "HintHandler.h"
+
 #import "RootViewController.h"
 #define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 504
@@ -200,6 +202,7 @@
 {
     if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
     [self handleShowingToolbar];
+    [kHints triggerHint:HintSelected];
 }
 
 // Override to support conditional rearranging of the table view.

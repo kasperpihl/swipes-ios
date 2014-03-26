@@ -19,8 +19,13 @@ typedef enum {
 #define kSettings [SettingsHandler sharedInstance]
 @interface SettingsHandler : NSObject
 +(SettingsHandler*)sharedInstance;
+
 -(id)valueForSetting:(KPSettings)setting;
 -(void)setValue:(id)value forSetting:(KPSettings)setting;
 -(void)refreshGlobalSettingsForce:(BOOL)force;
 -(UIImage*)getDailyImage;
+
+/* Boolean settings in ns user defaults */
+-(BOOL)settingForKey:(NSString*)key;
+-(void)setSetting:(BOOL)setting forKey:(NSString*)key;
 @end

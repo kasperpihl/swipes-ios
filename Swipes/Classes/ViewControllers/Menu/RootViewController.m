@@ -36,7 +36,7 @@
 
 #import "KPAlert.h"
 
-
+#import "HintHandler.h"
 #import "ShareViewController.h"
 
 @interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate>
@@ -257,8 +257,14 @@ static RootViewController *sharedObject;
 -(void)setupAppearance{
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
-    if(!kCurrent) [self changeToMenu:KPMenuLogin animated:NO];
-    else [self changeToMenu:KPMenuHome animated:NO];
+    if(!kCurrent){
+        if(![kHints hasCompletedHint:HintWelcome]){
+            [KPCORE logOutAndDeleteData];
+            [KPCORE seedObjectsSave:YES];
+            [kHints triggerHint:HintWelcome];
+        }
+    }
+    [self changeToMenu:KPMenuHome animated:NO];
 }
 - (void)viewDidLoad
 {
