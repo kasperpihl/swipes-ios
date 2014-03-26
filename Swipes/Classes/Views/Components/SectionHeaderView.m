@@ -83,6 +83,7 @@
     [self setNeedsDisplay];
 }
 -(void)setFillColor:(UIColor *)fillColor{
+    _fillColor = fillColor;
     self.sectionHeader.fillColor = fillColor;
     [self setNeedsDisplay];
 }
@@ -119,6 +120,21 @@
     if(self.progress){
         CGFloat progressY = self.bounds.size.height;
         CGFloat extraCut = progressY * kDefLeftCutSize;
+        
+        
+        UIBezierPath *aPath = [UIBezierPath bezierPath];
+        [aPath moveToPoint:CGPointMake(0, LINE_SIZE)];
+        [aPath addLineToPoint:CGPointMake(targetX, LINE_SIZE)];
+        [aPath addLineToPoint:CGPointMake(targetX, progressY)];
+        [aPath addLineToPoint:CGPointMake(0, progressY)];
+        [aPath closePath];
+        CGContextAddPath(currentContext, aPath.CGPath);
+        UIColor *fillColor = self.fillColor;
+        CGContextSetFillColorWithColor(currentContext,fillColor.CGColor);
+        CGContextFillPath(currentContext);
+        
+        
+        
         targetX += extraCut;
         CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
         CGContextMoveToPoint(currentContext, 0, progressY);
