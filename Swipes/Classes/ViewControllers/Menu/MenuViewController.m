@@ -11,7 +11,6 @@
 #import "KPToolbar.h"
 #import "UtilityClass.h"
 #import "KPAlert.h"
-#import "RESideMenu.h"
 #import "KPBlurry.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -62,7 +61,9 @@
         [self popViewControllerAnimated:YES];
         return;
     }
-    else [kSideMenu hide];
+    else [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:^(BOOL finished) {
+        
+    }];
 }
 -(void)renderSubviews{
     [self.backButton removeFromSuperview];
@@ -169,7 +170,10 @@
     self.syncLabel.text = [NSString stringWithFormat:@"Last %@: %@",syncOrBackup,timeString];
 }
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
-    [kSideMenu panGestureRecognized:sender];
+    //[kSideMenu panGestureRecognized:sender];
+    if([sender translationInView:sender.view].x < -10){
+        [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
+    }
 }
 -(UIView*)seperatorWithSize:(CGFloat)size vertical:(BOOL)vertical{
     CGFloat width = (vertical) ? SEPERATOR_WIDTH : size;
