@@ -129,10 +129,10 @@
     [self synchronizeForce:YES async:YES];
 
 }
-/*
-    This save should be called if data should be synced
-*/
 
+/*
+    This is called everytime data is saved and will make sure it gets synced.
+*/
 - (void)saveContextForSynchronization:(NSManagedObjectContext*)context
 {
     if (!context)
@@ -248,7 +248,7 @@
             self.lastTry = now;
             self.tryCounter = 0;
         }
-        if(self.tryCounter > 5) return;
+        if(self.tryCounter >= 5) return;
         self.tryCounter++;
         [self synchronizeForce:YES async:YES];
     }
@@ -359,9 +359,11 @@
     
     
     if(response.statusCode != 200 || error){
-        if(error) [UtilityClass sendError:error type:@"Sync request error 1"];
-        if(response.statusCode == 503) self._needSync = YES;
-        else{
+        if(error)
+            [UtilityClass sendError:error type:@"Sync request error 1"];
+        else if(response.statusCode == 503)
+            self._needSync = YES;
+        else if(!error){
             NSString *myString = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
             error = [NSError errorWithDomain:myString code:response.statusCode userInfo:nil];
             NSLog(@"error:%@",error.description);

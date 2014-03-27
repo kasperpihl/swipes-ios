@@ -87,7 +87,6 @@ static HintHandler *sharedObject;
 {
     CGFloat ht = 40.0;
     CGFloat statusBarHt = 2.0;
-    NSArray* rectArray = nil;
     CGRect rect = CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2+55 ,
                             (statusBarHt + 44),ht,ht);
     return @[[NSValue valueWithCGRect:rect]];
