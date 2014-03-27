@@ -86,9 +86,10 @@ static HintHandler *sharedObject;
 -(NSArray*)hintStateRectsToHint:(id)hintState
 {
     CGFloat ht = 40.0;
-    CGFloat statusBarHt = 2.0;
-    CGRect rect = CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2+55 ,
-                            (statusBarHt + 44),ht,ht);
+    CGFloat statusBarHt = 20.0;
+    //ROOT_CONTROLLER.view.frame.size.width/2+55
+    CGRect rect = CGRectMake(216 ,
+                            (statusBarHt + 26),ht,ht);
     return @[[NSValue valueWithCGRect:rect]];
 }
 

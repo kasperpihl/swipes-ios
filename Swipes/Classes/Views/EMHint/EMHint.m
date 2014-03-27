@@ -84,7 +84,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     
     if (_modalView==nil)
         _modalView = [[EMHintsView alloc] initWithFrame:presentationPlace.frame];
-    
+    _modalView.alpha = 0;
     [_modalView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
     [presentationPlace addSubview:_modalView];
     
@@ -128,7 +128,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     {
         [self _addTap];
     }
-   
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseOut
+                     animations:^(){
+                         [_modalView setAlpha:1.0];
+                     }
+                     completion:^(BOOL finished){
+                         
+                     }];
                                    
 }
 #pragma mark ---------------------------------->> 

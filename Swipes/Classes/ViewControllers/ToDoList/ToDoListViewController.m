@@ -308,6 +308,7 @@
     __block CellType targetCellType = [StyleHandler cellTypeForCell:cell.cellType state:state];
     switch (targetCellType) {
         case CellTypeSchedule:{
+            [kHints triggerHint:HintSwipedLeft];
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
             SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type) {
                 [BLURRY dismissAnimated:YES];
@@ -323,6 +324,8 @@
                     NSArray *movedItems = [KPToDo scheduleToDos:toDosArray forDate:chosenDate save:YES];
                     [self moveItems:movedItems toCellType:targetCellType];
                 }
+                if(button != KPScheduleButtonCancel)
+                    [kHints triggerHint:HintScheduled];
                 self.isHandlingTrigger = NO;
             }];
             popup.numberOfItems = toDosArray.count;

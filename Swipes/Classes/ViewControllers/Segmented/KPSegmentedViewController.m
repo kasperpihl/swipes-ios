@@ -312,6 +312,7 @@
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    NSLog(@"showing");
 }
 -(void)viewDidLoad{
     [super viewDidLoad];

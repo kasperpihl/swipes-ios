@@ -144,7 +144,7 @@
     self.currentMenu = menu;
     //CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
     //CGRectSetHeight(self.drawerViewController.view,viewController.view.frame.size.height-100);
-    [self.drawerViewController setCenterViewController:viewController];
+    //[self.drawerViewController setCenterViewController:viewController];
 }
 static RootViewController *sharedObject;
 +(RootViewController *)sharedInstance{
@@ -262,7 +262,11 @@ static RootViewController *sharedObject;
     
     BLURRY.delegate = self;
     self.settingsViewController = [[MenuViewController alloc] init];
-    self.drawerViewController = [[MMDrawerController alloc] initWithCenterViewController:self.menuViewController leftDrawerViewController:self.settingsViewController];
+
+    self.drawerViewController = [[MMDrawerController alloc] init];
+    [self.drawerViewController setCenterViewController:self.menuViewController];
+    [self.drawerViewController setLeftDrawerViewController:self.settingsViewController];
+    
 #warning Stanimir I used 320 here :D sorry
     [self.drawerViewController setMaximumLeftDrawerWidth:320];
     [self.drawerViewController setDrawerVisualStateBlock:^(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible) {
@@ -279,7 +283,7 @@ static RootViewController *sharedObject;
     [self.drawerViewController setShowsShadow:NO];
     [self.drawerViewController setShouldStretchDrawer:YES];
     [self.drawerViewController setAnimationVelocity:1240];
-    self.viewControllers = @[self.drawerViewController];
+    [self pushViewController:self.drawerViewController animated:NO];
     
     [self setupAppearance];
     
@@ -291,7 +295,6 @@ static RootViewController *sharedObject;
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    
 }
 - (void)viewDidUnload
 {
