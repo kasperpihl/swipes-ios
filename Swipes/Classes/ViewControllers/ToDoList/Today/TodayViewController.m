@@ -128,7 +128,8 @@
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
     UIFont *font = SECTION_HEADER_FONT;
-    self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:CellTypeToday] font:font title:@""];
+    self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:CellTypeToday]
+                                                             font:font title:@"" width:tableView.frame.size.width];
     self.sectionHeader.fillColor = (self.itemHandler.itemCounterWithFilter == 0) ? CLEAR : tcolor(BackgroundColor);
     self.sectionHeader.progress = YES;
     
@@ -242,7 +243,7 @@
     [super viewDidLoad];
     
     self.youreAllDoneView = [[YoureAllDoneView alloc] initWithFrame:self.view.bounds];
-    self.youreAllDoneView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    self.youreAllDoneView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
     [self.view addSubview:self.youreAllDoneView];
     
@@ -309,9 +310,12 @@
                 NSString *realServiceType;
                 [dict setObject:self.shareText forKey:@"Share string"];
                 [dict setObject:@(self.allDoneForToday) forKey:@"All done for today"];
-                if([self.sharingService isEqualToString:SLServiceTypeFacebook]) realServiceType = @"Facebook";
-                else if([self.sharingService isEqualToString:SLServiceTypeTwitter]) realServiceType = @"Twitter";
-                if(realServiceType) [dict setObject:realServiceType forKey:@"Service"];
+                if ([self.sharingService isEqualToString:SLServiceTypeFacebook])
+                    realServiceType = @"Facebook";
+                else if([self.sharingService isEqualToString:SLServiceTypeTwitter])
+                    realServiceType = @"Twitter";
+                if (realServiceType)
+                    [dict setObject:realServiceType forKey:@"Service"];
                 [ANALYTICS tagEvent:@"Sharing Successful" options:dict];
                 break;
             }
@@ -319,7 +323,9 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     };
     [shareVC addImage:[self screenshotForSharingService:serviceType]];
-    if(!self.shareText) self.shareText = [self randomTextAllDoneForToday:self.allDoneForToday];
+    if (!self.shareText) {
+        self.shareText = [self randomTextAllDoneForToday:self.allDoneForToday];
+    }
     NSString *string = self.shareText;
     
     if([serviceType isEqualToString:SLServiceTypeTwitter])
@@ -335,9 +341,12 @@
     
     [dict setObject:self.shareText forKey:@"Share string"];
     [dict setObject:@(self.allDoneForToday) forKey:@"All done for today"];
-    if([serviceType isEqualToString:SLServiceTypeFacebook]) realServiceType = @"Facebook";
-    else if([serviceType isEqualToString:SLServiceTypeTwitter]) realServiceType = @"Twitter";
-    if(realServiceType) [dict setObject:realServiceType forKey:@"Service"];
+    if ([serviceType isEqualToString:SLServiceTypeFacebook])
+        realServiceType = @"Facebook";
+    else if([serviceType isEqualToString:SLServiceTypeTwitter])
+        realServiceType = @"Twitter";
+    if (realServiceType)
+        [dict setObject:realServiceType forKey:@"Service"];
     [ANALYTICS tagEvent:@"Sharing Opened" options:dict];
 }
 -(void)pressedFacebook{

@@ -11,11 +11,12 @@
 #define kDefTopPadding 1
 #define kDefBottomPadding 3
 #import "SectionHeaderView.h"
+#import "UIView+Utilities.h"
 #import <QuartzCore/QuartzCore.h>
 /*  */
 
 @interface _ProgressEndingView : UIView
-@property (nonatomic) SectionHeaderView *headerView;
+@property (nonatomic, weak) SectionHeaderView *headerView;
 @end
 
 @interface _SectionHeaderViewText : UIView
@@ -37,21 +38,21 @@
 
 @implementation SectionHeaderView
 
-- (id)initWithColor:(UIColor *)color font:(UIFont *)font title:(NSString *)title {
+- (id)initWithColor:(UIColor *)color font:(UIFont *)font title:(NSString *)title width:(CGFloat)width {
     self = [super init];
     if (self) {
-        CGRectSetSize(self, 320, LINE_SIZE);
+        CGRectSetSize(self, width, LINE_SIZE);
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.backgroundColor = CLEAR;
         self.sectionHeader = [[_SectionHeaderViewText alloc] initWithColor:color font:font title:title];
         CGRectSetX(self.sectionHeader, CGRectGetWidth(self.frame) - CGRectGetWidth(self.sectionHeader.frame));
         [self addSubview:self.sectionHeader];
         
-        self.progressView = [[UIView alloc] initWithFrame:self.bounds];
-        
         self.color = color;
-        
+
+        self.progressView = [[UIView alloc] initWithFrame:self.bounds];
         self.progressView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        self.progressView.backgroundColor = color;
         
         self.progressEndingView = [[_ProgressEndingView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.progressView.frame), 0, 12, self.progressView.frame.size.height)];
         self.progressEndingView.headerView = self;
@@ -61,54 +62,64 @@
         CGRectSetWidth(self.progressView, 0);
         [self addSubview:self.progressView];
         
-        
+//        [self explainSubviews];
         
         self.layer.masksToBounds = NO;
     }
     return self;
 }
--(void)setProgressPercentage:(CGFloat)progressPercentage{
-    CGFloat targetX = self.bounds.size.width - CGRectGetWidth(self.sectionHeader.frame);
+
+-(void)setProgressPercentage:(CGFloat)progressPercentage
+{
+//    [self explainSubviews];
     [UIView animateWithDuration:0.2f delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        CGRectSetWidth(self.progressView,targetX*progressPercentage);
-    } completion:nil];
+        CGFloat targetX = self.frame.size.width - CGRectGetWidth(self.sectionHeader.frame);
+        CGRectSetWidth(self.progressView, targetX * progressPercentage);
+    } completion:^(BOOL finished) {
+//        [self explainSubviews];
+    }];
     
     _progressPercentage = progressPercentage;
-    
 }
 
-- (void)setColor:(UIColor *)color {
+- (void)setColor:(UIColor *)color
+{
     _color = color;
     //self.backgroundColor = color;
     self.progressView.backgroundColor = color;
     self.sectionHeader.color = color;
     [self setNeedsDisplay];
 }
-- (void)setFillColor:(UIColor *)fillColor {
+
+- (void)setFillColor:(UIColor *)fillColor
+{
     self.sectionHeader.fillColor = fillColor;
     [self setNeedsDisplay];
 }
 
-- (void)setFont:(UIFont *)font {
+- (void)setFont:(UIFont *)font
+{
     self.sectionHeader.titleLabel.font = font;
     [self setNeedsDisplay];
 }
 
-- (void)setTextColor:(UIColor *)textColor {
+- (void)setTextColor:(UIColor *)textColor
+{
     self.sectionHeader.titleLabel.textColor = textColor;
 }
 
--(void)setTitle:(NSString *)title {
+-(void)setTitle:(NSString *)title
+{
     [self.sectionHeader setText:title];
     [self setNeedsDisplay];
 }
 
--(void)setNeedsDisplay {
+-(void)setNeedsDisplay
+{
     [super setNeedsDisplay];
     [self.sectionHeader setNeedsDisplay];
 }
 
-// NEWCODE
 - (void)layoutSubviews
 {
     [super layoutSubviews];
@@ -126,15 +137,15 @@
     
     
     CGContextMoveToPoint(currentContext, 0, 0);
-    CGContextSetLineWidth(currentContext, LINE_SIZE*2);
+    CGContextSetLineWidth(currentContext, LINE_SIZE * 2);
     CGContextAddLineToPoint(currentContext, targetX, 0);
     CGContextStrokePath(currentContext);
     
-    if(self.progress){
+    if (self.progress) {
         CGFloat progressY = self.bounds.size.height;
         CGFloat extraCut = progressY * kDefLeftCutSize;
         targetX += extraCut;
-        CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
+        CGContextSetStrokeColorWithColor(currentContext, self.color.CGColor);
         CGContextMoveToPoint(currentContext, 0, progressY);
         CGContextSetLineWidth(currentContext, LINE_SIZE*2);
         CGContextAddLineToPoint(currentContext, targetX, progressY);
@@ -147,9 +158,11 @@
 @end
 
 @implementation _ProgressEndingView
+
 -(void)setFrame:(CGRect)frame{
     [super setFrame:frame];
 }
+
 -(void)drawRect:(CGRect)rect{
     [super drawRect:rect];
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
@@ -169,7 +182,6 @@
     CGContextFillPath(currentContext);
     //CGRectSetWidth(self, leftCutPoint);
 }
-
 
 @end
 

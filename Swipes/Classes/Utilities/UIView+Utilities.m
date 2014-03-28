@@ -79,8 +79,7 @@
     
     for (NSString *direction in directionDict) {
         // Ignore invalid direction
-        if ([kValidDirections containsObject:direction])
-        {
+        if ([kValidDirections containsObject:direction]) {
             CAGradientLayer *shadow = [CAGradientLayer layer];
             
             if ([direction isEqualToString:@"top"]) {
@@ -88,18 +87,17 @@
                 [shadow setEndPoint:CGPointMake(0.5, 1.0)];
                 shadow.frame = CGRectMake(0, 0, self.bounds.size.width, radius);
             }
-            else if ([direction isEqualToString:@"bottom"])
-            {
+            else if ([direction isEqualToString:@"bottom"]) {
                 [shadow setStartPoint:CGPointMake(0.5, 1.0)];
                 [shadow setEndPoint:CGPointMake(0.5, 0.0)];
                 shadow.frame = CGRectMake(0, self.bounds.size.height - radius, self.bounds.size.width, radius);
-            } else if ([direction isEqualToString:@"left"])
-            {
+            }
+            else if ([direction isEqualToString:@"left"]) {
                 shadow.frame = CGRectMake(0, 0, radius, self.bounds.size.height);
                 [shadow setStartPoint:CGPointMake(0.0, 0.5)];
                 [shadow setEndPoint:CGPointMake(1.0, 0.5)];
-            } else if ([direction isEqualToString:@"right"])
-            {
+            }
+            else if ([direction isEqualToString:@"right"])  {
                 shadow.frame = CGRectMake(self.bounds.size.width - radius, 0, radius, self.bounds.size.height);
                 [shadow setStartPoint:CGPointMake(1.0, 0.5)];
                 [shadow setEndPoint:CGPointMake(0.0, 0.5)];
@@ -117,8 +115,9 @@
 
 - (void)explainSubiews:(NSString *)prefix
 {
-    NSLog(@"%@class: %@, tag: %d, frame: %@, (%u) %@", prefix, NSStringFromClass(self.class), self.tag,
-          NSStringFromCGRect(self.frame), self.subviews.count, self.hidden ? @"HIDDEN" : @"");
+//    NSLog(@"%@class: %@, tag: %d, frame: %@, (%u) %@", prefix, NSStringFromClass(self.class), self.tag,
+//          NSStringFromCGRect(self.frame), self.subviews.count, self.hidden ? @"HIDDEN" : @"");
+    NSLog(@"%@%@ %@", prefix, [self description], [self isKindOfClass:UILabel.class] ? ((UILabel *)self).text : @"");
     for (UIView* v in self.subviews) {
         [v explainSubiews:[prefix stringByAppendingString:@"  "]];
     }

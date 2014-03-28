@@ -38,7 +38,7 @@
 
 @interface MenuViewController () <MFMailComposeViewControllerDelegate>
 
-@property (nonatomic) IBOutletCollection(UIView) NSArray *seperators;
+@property (nonatomic, strong) IBOutletCollection(UIView) NSMutableArray *seperators;
 @property (nonatomic) IBOutletCollection(UIButton) NSArray *menuButtons;
 @property (nonatomic) UIButton *backButton;
 @property (nonatomic) NSMutableArray *viewControllers;
@@ -93,33 +93,31 @@
     self.view.backgroundColor = tcolor(BackgroundColor);
     NSInteger startY = (OSVER >= 7) ? 20 : 0;
     
-    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0, startY,
-                            self.view.bounds.size.width - 2 * kGridMargin, self.view.bounds.size.height - startY)];
+    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 294, 392)];
     
     CGFloat gridWidth = self.gridView.bounds.size.width;
-    CGFloat gridItemWidth = self.gridView.bounds.size.width / kVerticalGridNumber;
-    CGRectSetHeight(self.gridView, numberOfRows * gridItemWidth);
+    CGFloat gridItemWidth = gridWidth / kVerticalGridNumber;
+//    CGRectSetHeight(self.gridView, numberOfRows * gridItemWidth);
     
     CGFloat gridHeight = self.gridView.bounds.size.height;
     CGFloat numberOfGrids = gridHeight / gridItemWidth;
     
-    NSMutableArray *seperatorArray = [NSMutableArray array];
+    self.seperators = [NSMutableArray array];
     
     for (NSInteger i = 1; i < kVerticalGridNumber; i++) {
-        UIView *verticalSeperatorView = [self seperatorWithSize:gridHeight-(kSeperatorMargin*2) vertical:YES];
-        verticalSeperatorView.frame = CGRectSetPos(verticalSeperatorView.frame, self.gridView.bounds.size.width/kVerticalGridNumber*i,kSeperatorMargin);
+        UIView *verticalSeperatorView = [self seperatorWithSize:gridHeight - (kSeperatorMargin * 2) vertical:YES];
+        verticalSeperatorView.frame = CGRectSetPos(verticalSeperatorView.frame, gridItemWidth * i, kSeperatorMargin);
         [self.gridView addSubview:verticalSeperatorView];
-        [seperatorArray addObject:verticalSeperatorView];
+        [self.seperators addObject:verticalSeperatorView];
     }
     
     for (NSInteger i = 1; i < numberOfRows; i++) {
-        UIView *horizontalSeperatorView = [self seperatorWithSize:gridWidth-(kSeperatorMargin*2) vertical:NO];
+        UIView *horizontalSeperatorView = [self seperatorWithSize:gridWidth - (kSeperatorMargin * 2) vertical:NO];
         horizontalSeperatorView.frame = CGRectSetPos(horizontalSeperatorView.frame,kSeperatorMargin, gridHeight/numberOfGrids*i);
         [self.gridView addSubview:horizontalSeperatorView];
-        [seperatorArray addObject:horizontalSeperatorView];
+        [self.seperators addObject:horizontalSeperatorView];
     }
     
-    self.seperators = [seperatorArray copy];
     UIButton *actualButton;
     NSMutableArray *menuButtons = [NSMutableArray array];
     
@@ -134,15 +132,22 @@
     
     self.menuButtons = [menuButtons copy];
     [self.view addSubview:self.gridView];
-    self.gridView.center = CGPointMake(self.view.frame.size.width / 2, (self.view.frame.size.height) / 2);
-    self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds) + 10, self.gridView.frame.size.width, 20);
+    CGSize s = [UIScreen mainScreen].bounds.size; // real width, the view frame is modified by slide out menu size
+    if (UIDeviceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+        // swap height and width main screen is only potrait
+        CGFloat temp = s.height;
+        s.height = s.width;
+        s.width = temp;
+    }
+    self.gridView.center = CGPointMake(s.width / 2, s.height / 2 - valForScreen(0, 20));
+    self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds) + 10, gridWidth, 20);
     self.syncLabel.textColor = tcolor(TextColor);
     [self.gridView addSubview:self.syncLabel];
     [self updateSchemeButton];
 
     CGFloat backSpacing = 8.f;
     CGFloat buttonSize = 44.0f;
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - buttonSize - backSpacing, startY, buttonSize, buttonSize)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(s.width - buttonSize - backSpacing, startY, buttonSize, buttonSize)];
     [backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
     backButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
@@ -578,6 +583,13 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    [self renderSubviews];
+//    [self.view explainSubviews];
 }
 
 @end

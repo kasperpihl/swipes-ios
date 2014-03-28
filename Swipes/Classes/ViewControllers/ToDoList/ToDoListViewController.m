@@ -190,7 +190,8 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *title = [[self.itemHandler titleForSection:section] uppercaseString];
     UIFont *font = SECTION_HEADER_FONT;
-    SectionHeaderView *sectionHeader = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:self.cellType] font:font title:title];
+    SectionHeaderView *sectionHeader = [[SectionHeaderView alloc] initWithColor:[StyleHandler colorForCellType:self.cellType]
+                                                                           font:font title:title width:tableView.frame.size.width];
     return sectionHeader;
 }
 

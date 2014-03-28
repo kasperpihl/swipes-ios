@@ -881,9 +881,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.view addSubview:self.cell];
         self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
         
-        self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[UIColor greenColor] font:SECTION_HEADER_FONT title:@"Test"];
+        self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[UIColor greenColor] font:SECTION_HEADER_FONT title:@"Test" width:self.view.frame.size.width];
         CGRectSetY(self.sectionHeader, CGRectGetMaxY(self.toolbarEditView.frame));
-        CGRectSetWidth(self.sectionHeader, self.view.frame.size.width);
         [self.view addSubview:self.sectionHeader];
         notify(@"updated sync",updateFromSync:);
     }

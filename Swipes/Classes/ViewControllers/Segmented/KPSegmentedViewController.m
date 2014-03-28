@@ -27,6 +27,7 @@
 #import "UIImage+Blur.h"
 #import "SlowHighlightIcon.h"
 #import "SettingsHandler.h"
+#import "UIView+Utilities.h"
 
 #import "NotificationHandler.h"
 
@@ -235,6 +236,12 @@
 	return [self initWithViewControllers:viewControllers titles:[viewControllers valueForKeyPath:@"@unionOfObjects.title"]];
 }
 -(void)pressedSettings{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [ROOT_CONTROLLER.drawerViewController setMaximumLeftDrawerWidth:MAX(self.view.frame.size.width, self.view.frame.size.height)];
+    }
+    else {
+        [ROOT_CONTROLLER.drawerViewController setMaximumLeftDrawerWidth:self.view.frame.size.width];
+    }
     [ROOT_CONTROLLER.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
         
     }];
@@ -285,7 +292,8 @@
         [self showBackground:backgroundMode animated:YES];
     }
 }
--(void)showBackground:(BOOL)show animated:(BOOL)animated{
+-(void)showBackground:(BOOL)show animated:(BOOL)animated
+{
     CGFloat targetAlpha = show ? 1.0f : 0.0f;
     CGFloat duration = show ? 2.5f : 0.25f;
     [UIView animateWithDuration:duration animations:^{
@@ -295,15 +303,20 @@
         }
     }];
 }
--(void)updatedDailyImage{
+
+-(void)updatedDailyImage
+{
     UIImage *newDailyImage = [[kSettings getDailyImage] rn_boxblurImageWithBlur:0.5f exclusionPath:nil];
-    if(self.backgroundImage.alpha == 0) [self.backgroundImage setImage:newDailyImage];
+    if (self.backgroundImage.alpha == 0) {
+        [self.backgroundImage setImage:newDailyImage];
+    }
     else{
         [UIView transitionWithView:self.view duration:2.5f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             [self.backgroundImage setImage:newDailyImage];
         } completion:nil];
     }
 }
+
 - (void)updateFromSync:(NSNotification *)notification
 {
     
@@ -313,10 +326,14 @@
     [NOTIHANDLER updateLocalNotifications];
     [self.currentViewController update];
 }
--(void)viewDidAppear:(BOOL)animated{
+
+-(void)viewDidAppear:(BOOL)animated
+{
     [super viewDidAppear:animated];
 }
--(void)viewDidLoad{
+
+-(void)viewDidLoad
+{
     [super viewDidLoad];
     notify(@"updated daily image", updatedDailyImage);
     notify(@"updated sync",updateFromSync:);

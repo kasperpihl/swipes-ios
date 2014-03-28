@@ -290,8 +290,7 @@ static RootViewController *sharedObject;
     BLURRY.delegate = self;
     self.settingsViewController = [[MenuViewController alloc] init];
     self.drawerViewController = [[MMDrawerController alloc] initWithCenterViewController:self.menuViewController leftDrawerViewController:self.settingsViewController];
-#warning Stanimir I used 320 here :D sorry
-    [self.drawerViewController setMaximumLeftDrawerWidth:320];
+    [self.drawerViewController setMaximumLeftDrawerWidth:1024];
     [self.drawerViewController setDrawerVisualStateBlock:^(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible) {
         UIViewController * sideDrawerViewController;
         if(drawerSide == MMDrawerSideLeft){
