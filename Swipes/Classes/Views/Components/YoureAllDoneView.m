@@ -83,7 +83,7 @@
     [self.shareItLabel sizeToFit];
     CGRectSetCenterX(self.shareItLabel, self.center.x);
     //CGRectSetHeight(self, CGRectGetMaxY(self.shareItLabel.frame));
-    CGRectSetY(self.signatureView,CGRectGetMaxY(self.shareItLabel.frame)+kSignatureSpacing);
+    CGRectSetY(self.signatureView,CGRectGetMaxY(self.shareItLabel.frame) + kSignatureSpacing);
 }
 
 - (void)layoutSubviews
@@ -94,6 +94,7 @@
     self.swipesReferLabel.frame = CGRectSetPos(self.swipesReferLabel.frame, self.frame.size.width-kReferX-self.swipesReferLabel.frame.size.width, self.frame.size.height-kReferBottom);
     
     CGRectSetY(self.shareItLabel, CGRectGetMaxY(self.stampView.frame) + kSignatureSpacing);
+    CGRectSetCenterX(self.shareItLabel, self.center.x);
 }
 
 -(void)dealloc{
