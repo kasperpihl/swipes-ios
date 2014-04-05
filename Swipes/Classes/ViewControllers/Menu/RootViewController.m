@@ -244,6 +244,7 @@ static RootViewController *sharedObject;
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
     if(!kCurrent){
+        [kHints triggerHint:HintWelcome];
         if(![kHints hasCompletedHint:HintWelcome]){
             [KPCORE logOutAndDeleteData];
             [KPCORE seedObjectsSave:YES];
