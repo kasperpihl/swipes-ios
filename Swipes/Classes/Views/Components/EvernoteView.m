@@ -9,6 +9,7 @@
 #import "KPBlurry.h"
 #import "EvernoteViewerView.h"
 #import "EvernoteView.h"
+#import "UtilityClass.h"
 
 #define kContentSpacingLeft 0
 #define kContentSpacingRight 0
@@ -159,6 +160,7 @@
         [noteStore findNotesWithFilter:filter offset:0 maxNotes:kSearchLimit
             success:^(EDAMNoteList *list) {
                 for (EDAMNote* note in list.notes) {
+                    DLog(@"Last update: %@",[NSDate dateWithTimeIntervalSince1970:note.updated/1000]);
                     DLog(@"Note title: %@, guid: %@", note.title, note.guid);
                     /*if (!noteViewed) {
                         noteViewed = YES;
@@ -208,6 +210,7 @@
     cell.contentView.backgroundColor = tcolor(BackgroundColor);
     cell.backgroundColor = tcolor(BackgroundColor);
     cell.textLabel.textColor = tcolor(TextColor);
+    cell.detailTextLabel.textColor = tcolor(TextColor);
     EDAMNote* note = _noteList.notes[indexPath.row];
     if (note.titleIsSet) {
         cell.textLabel.text = note.title;
@@ -218,6 +221,8 @@
     else {
         cell.textLabel.text = @"Untitled";
     }
+    NSDate *updatedAt = [NSDate dateWithTimeIntervalSince1970:note.updated/1000];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:updatedAt showTime:YES]];
 }
 
 
@@ -226,13 +231,15 @@
 	static NSString *kCellID =@"evernote_cell";
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellID];
     if (nil == cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellID];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kCellID];
         cell.textLabel.font = KP_REGULAR(15);
+        cell.detailTextLabel.font = KP_REGULAR(11);
+        cell.detailTextLabel.textColor = tcolor(SubTextColor);
         cell.accessoryType = UITableViewCellAccessoryNone;
-        UIButton *accessory = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kButtonWidth, kButtonWidth)];
-        [accessory addTarget:self action:@selector(pressedAccessory:) forControlEvents:UIControlEventTouchUpInside];
+        //UIButton *accessory = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kButtonWidth, kButtonWidth)];
+        //[accessory addTarget:self action:@selector(pressedAccessory:) forControlEvents:UIControlEventTouchUpInside];
        
-        cell.accessoryView = accessory;
+        //cell.accessoryView = accessory;
         
     }
     cell.accessoryView.tag = indexPath.row;
@@ -255,13 +262,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     NSInteger index = indexPath.row;
     _selectedNote = _noteList.notes[index];
     if ([_searchBar isFirstResponder])
         [_searchBar resignFirstResponder];
     _viewer = [[EvernoteViewerView alloc] initWithFrame:self.frame andGuid:_selectedNote.guid];
     _viewer.delegate = self;
-    [self addSubview:_viewer];}
+    [self addSubview:_viewer];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {

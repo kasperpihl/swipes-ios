@@ -538,7 +538,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 - (void)updateEvernote
 {
     KPAttachment* attachment = [self.model firstAttachmentForServiceType:EVERNOTE_SERVICE];
-    self.evernoteLabel.text = (nil != attachment) ? attachment.title : @"Attach Evernote note";
+    self.evernoteLabel.text = (nil != attachment) ? attachment.title : @"Attach Evernote";
 }
 
 - (void)updateDropbox
@@ -862,7 +862,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         /*
          Dropbox Container with button!
-         */
+         
          self.dropboxContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
          [self addAndGetImage:timageString(@"edit_notes_icon", @"_white", @"_black") inView:self.dropboxContainer];
          
@@ -876,10 +876,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          [self addClickButtonToView:self.dropboxContainer action:@selector(pressedDropbox:)];
          
          [self.scrollView addSubview:self.dropboxContainer];
-        
+        */
         /*
          Notes view
-         */
+         
         self.notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
         [self addAndGetImage:timageStringBW(@"edit_notes_icon") inView:self.notesContainer];
         self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, 320-LABEL_X-10, 500)];
@@ -892,7 +892,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         [self addClickButtonToView:self.notesContainer action:@selector(pressedNotes:)];
         [self.scrollView addSubview:self.notesContainer];
-        
+        */
         /* Adding scroll and content view */
         [contentView addSubview:self.scrollView];
         
@@ -905,6 +905,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         CGRectSetY(self.sectionHeader, CGRectGetMaxY(self.toolbarEditView.frame));
         [self.view addSubview:self.sectionHeader];
         
+        
+        /*
         SubtasksViewController *subtasks = [[SubtasksViewController alloc] init];
         [subtasks setContentInset:UIEdgeInsetsMake(0, 0, kTopSubtaskTarget, 0)];
         //CGRectSetHeight(subtasks.view,self.view.bounds.size.height-kTopSubtaskTarget);
@@ -929,6 +931,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.view addSubview:self.subtaskOverlay];
         
         [self.view addSubview:subtasks.view];
+         
+         */
+        
         notify(@"updated sync",updateFromSync:);
     }
     return self;
