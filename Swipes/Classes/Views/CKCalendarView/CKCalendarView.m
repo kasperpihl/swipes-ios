@@ -197,7 +197,7 @@
     self.monthShowing = [NSDate date];
     [self _setDefaultStyle];
     
-    [self layoutSubviews]; // TODO: this is a hack to get the first month to show properly
+    [self setNeedsLayout]; // TODO: this is a hack to get the first month to show properly
 }
 -(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
     return YES;

@@ -49,11 +49,14 @@
 
 @end
 
-@implementation MenuViewController
+@implementation MenuViewController {
+    BOOL _forbidLayout;
+}
 
 -(NSMutableArray *)viewControllers
 {
-    if(!_viewControllers) _viewControllers = [NSMutableArray array];
+    if (!_viewControllers)
+        _viewControllers = [NSMutableArray array];
     return _viewControllers;
 }
 
@@ -280,8 +283,9 @@
             BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
             UIColor *lampColor = hasNotificationsOn ? kLampOffColor : kLampOnColor;
             NSNumber *newSettingValue = hasNotificationsOn ? @NO : @YES;
-            if(hasNotificationsOn){
+            if (hasNotificationsOn) {
                 KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off notification" message:@"Are you sure you no longer want to receive alarms and reminders?" block:^(BOOL succeeded, NSError *error) {
+                    _forbidLayout = NO;
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
                         [kSettings setValue:newSettingValue forSetting:SettingNotifications];
@@ -289,6 +293,7 @@
                     }
                 }];
                 BLURRY.blurryTopColor = kSettingsBlurColor;
+                _forbidLayout = YES;
                 [BLURRY showView:alert inViewController:self];
             }
             else{
@@ -304,6 +309,7 @@
                 [ANALYTICS pushView:@"Location plus popup"];
                 [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location in Settings"}];
                 PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." block:^(BOOL succeeded, NSError *error) {
+                    _forbidLayout = NO;
                     [ANALYTICS popView];
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
@@ -311,6 +317,7 @@
                     }
                 }];
                 BLURRY.blurryTopColor = kSettingsBlurColor;
+                _forbidLayout = YES;
                 [BLURRY showView:alert inViewController:self];
             }
             else{
@@ -318,6 +325,7 @@
                 NSNumber *newSettingValue = hasLocationOn ? @NO : @YES;
                 if(hasLocationOn){
                     KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off location" message:@"Location reminders won't be working." block:^(BOOL succeeded, NSError *error) {
+                        _forbidLayout = NO;
                         [BLURRY dismissAnimated:YES];
                         if(succeeded){
                             [NOTIHANDLER stopLocationServices];
@@ -326,6 +334,7 @@
                         }
                     }];
                     BLURRY.blurryTopColor = kSettingsBlurColor;
+                    _forbidLayout = YES;
                     [BLURRY showView:alert inViewController:self];
                 }
                 else{
@@ -364,12 +373,14 @@
         case KPMenuButtonUpgrade:{
             if(kUserHandler.isPlus){
                 KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Manage subscription" message:@"Open App Store to manage your subscription?" block:^(BOOL succeeded, NSError *error) {
+                    _forbidLayout = NO;
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"]];
                     }
                 }];
                 BLURRY.blurryTopColor = kSettingsBlurColor;
+                _forbidLayout = YES;
                 [BLURRY showView:alert inViewController:self];
                 
                 return;
@@ -383,24 +394,28 @@
             NSString *message = @"Do you want to open our\r\npolicies for Swipes?";
             NSString *url = @"http://swipesapp.com/policies.pdf";
             KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:title message:message block:^(BOOL succeeded, NSError *error) {
+                _forbidLayout = NO;
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: url]];
                 }
             }];
             BLURRY.blurryTopColor = kSettingsBlurColor;
+            _forbidLayout = YES;
             [BLURRY showView:alert inViewController:self];
             break;
         }
         case KPMenuButtonLogout:{
 
             KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Log out" message:@"Are you sure you want to log out of your account?" block:^(BOOL succeeded, NSError *error) {
+                _forbidLayout = NO;
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
                     [ROOT_CONTROLLER logOut];
                 }
             }];
             BLURRY.blurryTopColor = kSettingsBlurColor;
+            _forbidLayout = YES;
             [BLURRY showView:alert inViewController:self];
             break;
         }
@@ -409,6 +424,7 @@
                 [ANALYTICS pushView:@"Sync plus popup"];
                 [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Sync in Settings"}];
                 PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Synchronization is a Swipes Plus feature. Keep your tasks in sync with an app for web and iPad." block:^(BOOL succeeded, NSError *error) {
+                    _forbidLayout = NO;
                     [ANALYTICS popView];
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
@@ -416,6 +432,7 @@
                     }
                 }];
                 BLURRY.blurryTopColor = kSettingsBlurColor;
+                _forbidLayout = YES;
                 [BLURRY showView:alert inViewController:self];
             }
             else{
@@ -588,7 +605,8 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    [self renderSubviews];
+    if (!_forbidLayout)
+        [self renderSubviews];
 //    [self.view explainSubviews];
 }
 

@@ -497,7 +497,7 @@
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [ROOT_CONTROLLER walkthrough];
+//    [ROOT_CONTROLLER walkthrough]; // removed (cannot be removed correctly)
 }
 - (void)didReceiveMemoryWarning
 {

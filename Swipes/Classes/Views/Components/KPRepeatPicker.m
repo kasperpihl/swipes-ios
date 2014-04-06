@@ -34,14 +34,14 @@
         [selectedButton setNeedsLayout];
         _selectedButton = selectedButton;
         self.currentOption = selectedButton.tag;
-        [self layoutSubviews];
+        [self setNeedsLayout];
         //self.selectedDay = selectedButton.tag;
     }
 }
 -(void)setSelectedDate:(NSDate *)selectedDate option:(RepeatOptions)option{
     self.currentOption = option;
     self.selectedDate = selectedDate;
-    [self layoutSubviews];
+    [self setNeedsLayout];
 }
 -(UIButton*)buttonForTouches:(NSSet*)touches{
     if (touches.count != 1) {
@@ -51,8 +51,10 @@
     CGPoint location = [touch locationInView:self];
     NSInteger lastIndex = self.numberOfOptions - 1;
     NSInteger buttonIndex = (NSInteger)floorf(location.x/(self.frame.size.width/self.numberOfOptions));
-    if(buttonIndex < 0) buttonIndex = 0;
-    if(buttonIndex > lastIndex) buttonIndex = lastIndex;
+    if (buttonIndex < 0)
+        buttonIndex = 0;
+    if (buttonIndex > lastIndex)
+        buttonIndex = lastIndex;
     return [self.optionsButtons objectAtIndex:buttonIndex];
 }
 -(void)handleTouches:(NSSet*)touches{
@@ -74,7 +76,7 @@
 -(id)initWithWidth:(CGFloat)width height:(CGFloat)height selectedDate:(NSDate *)date option:(RepeatOptions)option{
     self = [super initWithFrame:CGRectMake(0, 0, width, height)];
     if(self){
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+//        self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.numberOfOptions = RepeatOptionsTotal;
         self.userInteractionEnabled = YES;
         self.textColor = kDefTextColor;
@@ -107,7 +109,7 @@
         self.selectedDate = date;
         self.currentOption = option;
         self.selectedColor = kDefSelectedColor;
-        [self layoutSubviews];
+//        [self layoutSubviews];
     }
     return self;
 }
@@ -139,8 +141,18 @@
     return buttonString;
 }
 -(void)layoutSubviews{
+    CGFloat buttonWidth = floorf(self.frame.size.width/self.numberOfOptions);
+    CGFloat sepHeight = self.frame.size.height-(self.frame.size.height*kSepMargin);
     for(NSInteger i = 0 ; i < self.numberOfOptions ; i++){
         UIButton *dayButton = [self.optionsButtons objectAtIndex:i];
+        
+        CGFloat buttonX = i*buttonWidth + i*kSepWidth;
+        dayButton.frame = CGRectMake(buttonX, 0 , buttonWidth,self.frame.size.height);
+        if (i < 6){
+            UIView *seperator = self.seperators[i];
+            seperator.frame = CGRectMake(buttonX + buttonWidth, (self.frame.size.height-sepHeight) / 2, kSepWidth, sepHeight);
+        }
+        
         [dayButton setBackgroundImage:[self.selectedColor image] forState:UIControlStateSelected];
         [dayButton setBackgroundImage:[self.selectedColor image] forState:UIControlStateSelected|UIControlStateHighlighted];
         dayButton.tag = i;

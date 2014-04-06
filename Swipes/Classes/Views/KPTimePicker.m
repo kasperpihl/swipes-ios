@@ -314,7 +314,7 @@
         self.clockLabel.font = kClockLabelFont;
         self.clockLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.clockLabel];
-        [self layoutSubviews];
+        [self setNeedsLayout];
     }
     return self;
 }

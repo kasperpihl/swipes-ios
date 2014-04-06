@@ -777,9 +777,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         longPressGestureRecognizer.allowableMovement = 44.0f;
         longPressGestureRecognizer.minimumPressDuration = 0.7f;
         [alarmButton addGestureRecognizer:longPressGestureRecognizer];
-        
         [self.scrollView addSubview:self.alarmContainer];
         
+        /*
+         Repeats!
+         */
         self.repeatedContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
         self.repeatedContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.repeatedContainer.userInteractionEnabled = YES;
@@ -889,7 +891,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     return self;
 }
 -(void)setColorsFor:(id)object{
-    if([object respondsToSelector:@selector(setTextColor:)]) [object setTextColor:tcolor(TextColor)];
+    if([object respondsToSelector:@selector(setTextColor:)])
+        [object setTextColor:tcolor(TextColor)];
     //if([object respondsToSelector:@selector(setHighlightedTextColor:)]) [object setHighlightedTextColor:EDIT_TASK_GRAYED_OUT_TEXT];
 }
 
@@ -931,10 +934,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 
 // NEWCODE
-//- (void)viewDidLayoutSubviews
-//{
-//    [super viewDidLayoutSubviews];
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    CGFloat width = MIN(self.view.bounds.size.width, self.view.bounds.size.height);
+//    CGRectSetWidth(self.repeatedContainer, width);
+    CGRectSetWidth(self.repeatPicker, width);
 //    [self.view explainSubviews];
-//}
-//
+}
+
 @end

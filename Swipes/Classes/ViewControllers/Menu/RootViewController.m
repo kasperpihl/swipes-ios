@@ -290,7 +290,7 @@ static RootViewController *sharedObject;
     BLURRY.delegate = self;
     self.settingsViewController = [[MenuViewController alloc] init];
     self.drawerViewController = [[MMDrawerController alloc] initWithCenterViewController:self.menuViewController leftDrawerViewController:self.settingsViewController];
-    [self.drawerViewController setMaximumLeftDrawerWidth:1024];
+    [self updateDrawerWidth];
     [self.drawerViewController setDrawerVisualStateBlock:^(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible) {
         UIViewController * sideDrawerViewController;
         if(drawerSide == MMDrawerSideLeft){
@@ -304,7 +304,7 @@ static RootViewController *sharedObject;
     
     [self.drawerViewController setShowsShadow:NO];
     [self.drawerViewController setShouldStretchDrawer:YES];
-    [self.drawerViewController setAnimationVelocity:1240];
+    [self.drawerViewController setAnimationVelocity:self.drawerViewController.maximumLeftDrawerWidth * 3];
     self.viewControllers = @[self.drawerViewController];
     
     [self setupAppearance];
@@ -313,6 +313,16 @@ static RootViewController *sharedObject;
 -(void)changedTheme{
    // [self setNeedsStatusBarAppearanceUpdate];
 
+}
+
+- (void)updateDrawerWidth
+{
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        self.drawerViewController.maximumLeftDrawerWidth = MAX(self.view.bounds.size.height, self.view.bounds.size.width);
+    }
+    else {
+        self.drawerViewController.maximumLeftDrawerWidth = self.view.bounds.size.width;
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{

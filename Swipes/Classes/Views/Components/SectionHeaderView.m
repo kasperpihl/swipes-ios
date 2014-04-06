@@ -124,6 +124,8 @@
 {
     [super layoutSubviews];
     CGRectSetX(self.sectionHeader, CGRectGetWidth(self.frame) - CGRectGetWidth(self.sectionHeader.frame));
+    CGFloat targetX = self.frame.size.width - CGRectGetWidth(self.sectionHeader.frame);
+    CGRectSetWidth(self.progressView, targetX * _progressPercentage);
 }
 
 - (void)drawRect:(CGRect)rect

@@ -85,9 +85,13 @@ static KPBlurry *sharedObject;
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    
-    CGRect bounds = self.view.bounds;
-    self.blurView.frame = bounds;
+    self.blurView.frame = self.view.bounds;
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    [self updateMenuPosition];
 }
 
 - (BOOL)shouldAutorotate {
@@ -163,17 +167,8 @@ static KPBlurry *sharedObject;
     }
 }
 
-#pragma mark - Animations
-- (void)showView:(UIView*)view inViewController:(UIViewController *)parentViewController{
-    NSParameterAssert(parentViewController != nil);
-    
-    if (rn_visibleGridMenu != nil) {
-        [rn_visibleGridMenu dismissAnimated:NO];
-    }
-    _menuView = view;
-    [self rn_addToParentViewController:parentViewController callingAppearanceMethods:YES];
-    // [self.view convertPoint:center toView:self.view];
-    self.view.frame = parentViewController.view.bounds;
+- (void)updateMenuPosition
+{
     switch (self.showPosition) {
         case PositionTop:
             self.menuView.center = CGPointMake(self.view.center.x, self.menuView.frame.size.height/2);
@@ -185,6 +180,20 @@ static KPBlurry *sharedObject;
             self.menuView.center = CGPointMake(self.view.center.x, self.view.frame.size.height-(self.menuView.frame.size.height/2));
             break;
     }
+}
+
+#pragma mark - Animations
+- (void)showView:(UIView*)view inViewController:(UIViewController *)parentViewController{
+    NSParameterAssert(parentViewController != nil);
+    
+    if (rn_visibleGridMenu != nil) {
+        [rn_visibleGridMenu dismissAnimated:NO];
+    }
+    _menuView = view;
+    [self rn_addToParentViewController:parentViewController callingAppearanceMethods:YES];
+    // [self.view convertPoint:center toView:self.view];
+    self.view.frame = parentViewController.view.bounds;
+    [self updateMenuPosition];
     [self showAnimated:YES];
 }
 

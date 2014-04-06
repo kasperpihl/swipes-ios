@@ -135,9 +135,11 @@ typedef enum {
     return (WalkthroughCell*)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForItem:ACTIVE_ROW inSection:0]];
 }
 -(void)setCurrentState:(WalkthroughState)currentState{
-    if(_currentState != currentState){
-        if(currentState == Finish) return [self.delegate walkthrough:self didFinishSuccesfully:YES];
-        else{
+    if (_currentState != currentState) {
+        if (currentState == Finish) {
+            return [self.delegate walkthrough:self didFinishSuccesfully:YES];
+        }
+        else {
             [self changeToState:currentState];
         }
         _currentState = currentState;
