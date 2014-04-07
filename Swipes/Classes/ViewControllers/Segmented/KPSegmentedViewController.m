@@ -236,12 +236,7 @@
 	return [self initWithViewControllers:viewControllers titles:[viewControllers valueForKeyPath:@"@unionOfObjects.title"]];
 }
 -(void)pressedSettings{
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [ROOT_CONTROLLER.drawerViewController setMaximumLeftDrawerWidth:MAX(self.view.frame.size.width, self.view.frame.size.height)];
-    }
-    else {
-        [ROOT_CONTROLLER.drawerViewController setMaximumLeftDrawerWidth:self.view.frame.size.width];
-    }
+//    [ROOT_CONTROLLER.drawerViewController setMaximumLeftDrawerWidth:self.view.frame.size.width];
     [ROOT_CONTROLLER.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
         
     }];

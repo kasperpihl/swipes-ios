@@ -10,7 +10,7 @@ pod 'Base64', '~> 1.0.1'
 pod 'Evernote-SDK-iOS', '~> 1.3.1'
 pod 'APAddressBook', '~> 0.0.6'
 pod 'KeenClient', '~> 3.2'
-pod 'MMDrawerController', '~> 0.5.3'
+#pod 'MMDrawerController', '~> 0.5.3' - now part of libs as it was modified
 
 #pod 'Localytics-AMP', '~> 2.23'
 #pod 'Analytics', '~> 0.10.2'

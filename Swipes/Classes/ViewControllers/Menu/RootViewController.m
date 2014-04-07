@@ -168,7 +168,6 @@ static RootViewController *sharedObject;
     [PFUser logOut];
     [[KPParseCoreData sharedInstance] logOutAndDeleteData];
     [self resetRoot];
-    
 }
 
 -(void)resetRoot
@@ -290,7 +289,7 @@ static RootViewController *sharedObject;
     BLURRY.delegate = self;
     self.settingsViewController = [[MenuViewController alloc] init];
     self.drawerViewController = [[MMDrawerController alloc] initWithCenterViewController:self.menuViewController leftDrawerViewController:self.settingsViewController];
-    [self updateDrawerWidth];
+    self.drawerViewController.maximumLeftDrawerWidth = self.view.bounds.size.width;
     [self.drawerViewController setDrawerVisualStateBlock:^(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible) {
         UIViewController * sideDrawerViewController;
         if(drawerSide == MMDrawerSideLeft){
@@ -313,16 +312,6 @@ static RootViewController *sharedObject;
 -(void)changedTheme{
    // [self setNeedsStatusBarAppearanceUpdate];
 
-}
-
-- (void)updateDrawerWidth
-{
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        self.drawerViewController.maximumLeftDrawerWidth = MAX(self.view.bounds.size.height, self.view.bounds.size.width);
-    }
-    else {
-        self.drawerViewController.maximumLeftDrawerWidth = self.view.bounds.size.width;
-    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{

@@ -135,13 +135,7 @@
     
     self.menuButtons = [menuButtons copy];
     [self.view addSubview:self.gridView];
-    CGSize s = [UIScreen mainScreen].bounds.size; // real width, the view frame is modified by slide out menu size
-    if (UIDeviceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
-        // swap height and width main screen is only potrait
-        CGFloat temp = s.height;
-        s.height = s.width;
-        s.width = temp;
-    }
+    CGSize s = self.view.frame.size;
     self.gridView.center = CGPointMake(s.width / 2, s.height / 2 - valForScreen(0, 20));
     self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds) + 10, gridWidth, 20);
     self.syncLabel.textColor = tcolor(TextColor);
@@ -245,9 +239,13 @@
         }];
     }];
     [self.viewControllers removeLastObject];
+    _forbidLayout = NO;
+    [self.view setNeedsLayout];
 }
 
--(void)pushViewController:(UIViewController*)viewController animated:(BOOL)animated{
+-(void)pushViewController:(UIViewController*)viewController animated:(BOOL)animated
+{
+    _forbidLayout = YES;
     NSInteger level = self.viewControllers.count;
     
     [self addChildViewController:viewController];
