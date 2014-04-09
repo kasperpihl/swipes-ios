@@ -38,7 +38,8 @@
 
 @interface MenuViewController () <MFMailComposeViewControllerDelegate>
 
-@property (nonatomic, strong) IBOutletCollection(UIView) NSMutableArray *seperators;
+@property (nonatomic, strong) IBOutletCollection(UIView) NSMutableArray *seperatorsH;
+@property (nonatomic, strong) IBOutletCollection(UIView) NSMutableArray *seperatorsV;
 @property (nonatomic) IBOutletCollection(UIButton) NSArray *menuButtons;
 @property (nonatomic) UIButton *backButton;
 @property (nonatomic) NSMutableArray *viewControllers;
@@ -49,9 +50,7 @@
 
 @end
 
-@implementation MenuViewController {
-    BOOL _forbidLayout;
-}
+@implementation MenuViewController
 
 -(NSMutableArray *)viewControllers
 {
@@ -76,19 +75,22 @@
         [self popViewControllerAnimated:YES];
         return;
     }
-    else [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:^(BOOL finished) {
-        
-    }];
+    else {
+        [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
+    }
 }
 
 - (void)renderSubviews
 {
     [self.backButton removeFromSuperview];
     
-    for(UIView *view in self.menuButtons)
+    for (UIView *view in self.menuButtons)
         [view removeFromSuperview];
     
-    for(UIView *view in self.seperators)
+    for (UIView *view in self.seperatorsH)
+        [view removeFromSuperview];
+    
+    for (UIView *view in self.seperatorsV)
         [view removeFromSuperview];
     
     CGFloat numberOfButtons = kHorizontalGridNumber * kVerticalGridNumber;
@@ -105,20 +107,20 @@
     CGFloat gridHeight = self.gridView.bounds.size.height;
     CGFloat numberOfGrids = gridHeight / gridItemWidth;
     
-    self.seperators = [NSMutableArray array];
-    
+    self.seperatorsV = [NSMutableArray array];
     for (NSInteger i = 1; i < kVerticalGridNumber; i++) {
         UIView *verticalSeperatorView = [self seperatorWithSize:gridHeight - (kSeperatorMargin * 2) vertical:YES];
         verticalSeperatorView.frame = CGRectSetPos(verticalSeperatorView.frame, gridItemWidth * i, kSeperatorMargin);
         [self.gridView addSubview:verticalSeperatorView];
-        [self.seperators addObject:verticalSeperatorView];
+        [self.seperatorsV addObject:verticalSeperatorView];
     }
     
+    self.seperatorsH = [NSMutableArray array];
     for (NSInteger i = 1; i < numberOfRows; i++) {
         UIView *horizontalSeperatorView = [self seperatorWithSize:gridWidth - (kSeperatorMargin * 2) vertical:NO];
         horizontalSeperatorView.frame = CGRectSetPos(horizontalSeperatorView.frame,kSeperatorMargin, gridHeight/numberOfGrids*i);
         [self.gridView addSubview:horizontalSeperatorView];
-        [self.seperators addObject:horizontalSeperatorView];
+        [self.seperatorsH addObject:horizontalSeperatorView];
     }
     
     UIButton *actualButton;
@@ -239,13 +241,11 @@
         }];
     }];
     [self.viewControllers removeLastObject];
-    _forbidLayout = NO;
     [self.view setNeedsLayout];
 }
 
 -(void)pushViewController:(UIViewController*)viewController animated:(BOOL)animated
 {
-    _forbidLayout = YES;
     NSInteger level = self.viewControllers.count;
     
     [self addChildViewController:viewController];
@@ -283,7 +283,6 @@
             NSNumber *newSettingValue = hasNotificationsOn ? @NO : @YES;
             if (hasNotificationsOn) {
                 KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off notification" message:@"Are you sure you no longer want to receive alarms and reminders?" block:^(BOOL succeeded, NSError *error) {
-                    _forbidLayout = NO;
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
                         [kSettings setValue:newSettingValue forSetting:SettingNotifications];
@@ -291,7 +290,6 @@
                     }
                 }];
                 BLURRY.blurryTopColor = kSettingsBlurColor;
-                _forbidLayout = YES;
                 [BLURRY showView:alert inViewController:self];
             }
             else{
@@ -307,7 +305,6 @@
                 [ANALYTICS pushView:@"Location plus popup"];
                 [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location in Settings"}];
                 PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." block:^(BOOL succeeded, NSError *error) {
-                    _forbidLayout = NO;
                     [ANALYTICS popView];
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
@@ -315,7 +312,6 @@
                     }
                 }];
                 BLURRY.blurryTopColor = kSettingsBlurColor;
-                _forbidLayout = YES;
                 [BLURRY showView:alert inViewController:self];
             }
             else{
@@ -323,7 +319,6 @@
                 NSNumber *newSettingValue = hasLocationOn ? @NO : @YES;
                 if(hasLocationOn){
                     KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off location" message:@"Location reminders won't be working." block:^(BOOL succeeded, NSError *error) {
-                        _forbidLayout = NO;
                         [BLURRY dismissAnimated:YES];
                         if(succeeded){
                             [NOTIHANDLER stopLocationServices];
@@ -332,7 +327,6 @@
                         }
                     }];
                     BLURRY.blurryTopColor = kSettingsBlurColor;
-                    _forbidLayout = YES;
                     [BLURRY showView:alert inViewController:self];
                 }
                 else{
@@ -371,14 +365,12 @@
         case KPMenuButtonUpgrade:{
             if(kUserHandler.isPlus){
                 KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Manage subscription" message:@"Open App Store to manage your subscription?" block:^(BOOL succeeded, NSError *error) {
-                    _forbidLayout = NO;
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"]];
                     }
                 }];
                 BLURRY.blurryTopColor = kSettingsBlurColor;
-                _forbidLayout = YES;
                 [BLURRY showView:alert inViewController:self];
                 
                 return;
@@ -392,28 +384,25 @@
             NSString *message = @"Do you want to open our\r\npolicies for Swipes?";
             NSString *url = @"http://swipesapp.com/policies.pdf";
             KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:title message:message block:^(BOOL succeeded, NSError *error) {
-                _forbidLayout = NO;
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: url]];
                 }
             }];
             BLURRY.blurryTopColor = kSettingsBlurColor;
-            _forbidLayout = YES;
             [BLURRY showView:alert inViewController:self];
             break;
         }
         case KPMenuButtonLogout:{
 
             KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Log out" message:@"Are you sure you want to log out of your account?" block:^(BOOL succeeded, NSError *error) {
-                _forbidLayout = NO;
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
                     [ROOT_CONTROLLER logOut];
+                    [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
                 }
             }];
             BLURRY.blurryTopColor = kSettingsBlurColor;
-            _forbidLayout = YES;
             [BLURRY showView:alert inViewController:self];
             break;
         }
@@ -422,7 +411,6 @@
                 [ANALYTICS pushView:@"Sync plus popup"];
                 [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Sync in Settings"}];
                 PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Synchronization is a Swipes Plus feature. Keep your tasks in sync with an app for web and iPad." block:^(BOOL succeeded, NSError *error) {
-                    _forbidLayout = NO;
                     [ANALYTICS popView];
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
@@ -430,7 +418,6 @@
                     }
                 }];
                 BLURRY.blurryTopColor = kSettingsBlurColor;
-                _forbidLayout = YES;
                 [BLURRY showView:alert inViewController:self];
             }
             else{
@@ -603,9 +590,48 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    if (!_forbidLayout)
-        [self renderSubviews];
+//    if (!_forbidLayout)
+//        [self renderSubviews];
 //    [self.view explainSubviews];
+    
+    CGFloat numberOfButtons = kHorizontalGridNumber * kVerticalGridNumber;
+    NSInteger numberOfRows = kHorizontalGridNumber;
+    self.view.backgroundColor = tcolor(BackgroundColor);
+    NSInteger startY = (OSVER >= 7) ? 20 : 0;
+    
+    CGFloat gridWidth = self.gridView.bounds.size.width;
+    CGFloat gridItemWidth = gridWidth / kVerticalGridNumber;
+    
+    CGFloat gridHeight = self.gridView.bounds.size.height;
+    CGFloat numberOfGrids = gridHeight / gridItemWidth;
+    
+    if (_seperatorsV && (_seperatorsV.count > kVerticalGridNumber - 2)) {
+        for (NSInteger i = 1; i < kVerticalGridNumber; i++) {
+            UIView *verticalSeperatorView = _seperatorsV[i - 1];
+            verticalSeperatorView.frame = CGRectMake(gridItemWidth * i, kSeperatorMargin, SEPERATOR_WIDTH, gridHeight - (kSeperatorMargin * 2));
+        }
+    }
+    
+    if (_seperatorsH && (_seperatorsH.count > numberOfRows - 2)) {
+        for (NSInteger i = 1; i < numberOfRows; i++) {
+            UIView *horizontalSeperatorView = _seperatorsH[i - 1];
+            horizontalSeperatorView.frame = CGRectMake(kSeperatorMargin, gridHeight/numberOfGrids*i, gridWidth - (kSeperatorMargin * 2), SEPERATOR_WIDTH);
+        }
+    }
+    
+    if (_menuButtons && (_menuButtons.count > numberOfButtons - 1)) {
+        for (NSInteger i = 1; i <= numberOfButtons; i++) {
+            ((UIButton *)_menuButtons[i - 1]).frame = [self frameForButton:i];
+        }
+    }
+    
+    CGSize s = self.view.frame.size;
+    self.gridView.center = CGPointMake(s.width / 2, s.height / 2 - valForScreen(0, 20));
+    self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds) + 10, gridWidth, 20);
+    
+    CGFloat backSpacing = 8.f;
+    CGFloat buttonSize = 44.0f;
+    self.backButton.frame = CGRectMake(s.width - buttonSize - backSpacing, startY, buttonSize, buttonSize);
 }
 
 @end
