@@ -16,7 +16,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #import "EMHintsView.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define BACKGROUND_ALPHA 0.9
+#define BACKGROUND_ALPHA 0.85
 
 @implementation EMHintsView
 
@@ -100,11 +100,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     
     CGFloat components[8] = {
         
-        white[0],white[1],white[2],white[3],        
-        black[0],black[1],black[2],black[3],
+        white[0],white[1],white[2],white[3],
+        black[0],black[1],black[2],black[3]
     };
     
-    CGFloat colorLocations[2] = {0.25,0.5};
+    CGFloat colorLocations[2] = {0.3,0.5};
     
     // draw spotlights
     int spotlightCount = _positionArray.count;
@@ -118,7 +118,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         CGMutablePathRef path = CGPathCreateMutable();
         //
         //draw a rect around view
-        CGPathAddRect(path, NULL, CGRectMake(c.x - radius, c.y -radius,100,100));
+        CGPathAddRect(path, NULL, CGRectMake(c.x - radius, c.y -radius,radius*2,radius*2));
         CGPathAddLineToPoint(path, NULL, c.x + radius, c.y - radius);
         CGPathAddLineToPoint(path, NULL, c.x + radius, c.y + radius);
         CGPathAddLineToPoint(path, NULL, c.x - radius, c.y + radius);

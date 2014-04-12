@@ -120,10 +120,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     {
         //label
         UIFont *ft = KP_REGULAR(18);
-        CGSize sz = [message sizeWithFont:ft constrainedToSize:CGSizeMake(250, 1000)];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(floorf(presentationPlace.center.x - sz.width/2),
-                                                                   floorf(presentationPlace.center.y - sz.height/2),
-                                                                   floorf(sz.width),
+        CGFloat labelWidth = 280;
+        CGSize sz = [message sizeWithFont:ft constrainedToSize:CGSizeMake(labelWidth, 1000)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((presentationPlace.frame.size.width-labelWidth)/2,
+                                                                   floorf(presentationPlace.center.y - sz.height/2 - 15),
+                                                                   labelWidth,
                                                                    floorf(sz.height +10
                                                                           ))];
         

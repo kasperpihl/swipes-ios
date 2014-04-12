@@ -84,19 +84,19 @@ static HintHandler *sharedObject;
         NSString *hintText;
         switch (hint) {
             case HintWelcome:
-                hintText = @"Welcome to Swipes";
+                hintText = @"Keep your current tasks here.\n\nSnooze or complete the rest!";
                 break;
             case HintCompleted:
-                hintText = @"You've completed a task - check out your completion log in the menu above";
+                hintText = @"You've completed a task";
                 break;
             case HintSwipedLeft:
 
                 break;
             case HintScheduled:
-                hintText = @"You've scheduled a task - check out the schedule in the menu above";
+                hintText = @"You've snoozed a task";
                 break;
             case HintSelected:
-                hintText = @"You selected a task. Check the actionbar below";
+                hintText = @"You selected a task.\n\nYou can select more and take an action below.";
                 break;
             case HintPriority:
                 break;
@@ -113,7 +113,7 @@ static HintHandler *sharedObject;
 
 -(NSArray*)hintStateRectsToHint:(id)hintState
 {
-    CGFloat ht = 40.0;
+    CGFloat ht = 32.0;
     CGFloat statusBarHt = 20.0;
     //
     NSArray *rectArray;
@@ -152,6 +152,7 @@ static HintHandler *sharedObject;
         case HintWelcome:
             rect = CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2, (statusBarHt + 26), ht, ht);
             rectArray = @[[NSValue valueWithCGRect:rect]];
+            //,[NSValue valueWithCGRect:CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2, ROOT_CONTROLLER.view.frame.size.height - (32), ht+10, ht+10)]
             //,[NSValue valueWithCGRect:CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2-54,(statusBarHt + 26),ht,ht)],[NSValue valueWithCGRect:CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2+54 ,(statusBarHt + 26),ht,ht)]
             break;
         default:
@@ -173,14 +174,14 @@ static HintHandler *sharedObject;
             title = @"Completed log";
             break;
         case HintSwipedLeft:{
-
+            title = @"Select an icon";
             break;
         }
         case HintScheduled:
             title = @"Schedule";
             break;
         case HintWelcome:
-            
+            title = @"Focus area";
             break;
         default:
             break;

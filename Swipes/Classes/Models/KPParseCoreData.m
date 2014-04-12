@@ -720,9 +720,8 @@ static KPParseCoreData *sharedObject;
     }
     [self saveContextForSynchronization:nil];
     NSArray *toDoArray = @[
-                               @"Swipe right to complete a task",
-                               @"Swipe left to schedule a task",
-                               @"Double-tap to edit a task"
+                               @"Swipe right to complete",
+                               @"Swipe left to snooze for later"
                           ];
     
     for(NSInteger i = toDoArray.count-1 ; i >= 0  ; i--){

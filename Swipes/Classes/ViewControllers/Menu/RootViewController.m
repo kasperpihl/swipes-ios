@@ -244,14 +244,17 @@ static RootViewController *sharedObject;
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject) sharedObject = self;
     if(!kCurrent){
-        [kHints triggerHint:HintWelcome];
+        //[NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
         if(![kHints hasCompletedHint:HintWelcome]){
             [KPCORE logOutAndDeleteData];
             [KPCORE seedObjectsSave:YES];
-            [kHints triggerHint:HintWelcome];
+            [NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
         }
     }
     [self changeToMenu:KPMenuHome animated:NO];
+}
+-(void)triggerWelcome{
+    [kHints triggerHint:HintWelcome];
 }
 - (void)viewDidLoad
 {
