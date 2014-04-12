@@ -16,7 +16,7 @@
 #import "DoneViewController.h"
 
 #import "LoginViewController.h"
-
+#import "WelcomeViewController.h"
 #import "AnalyticsHandler.h"
 
 #import "MenuViewController.h"
@@ -129,6 +129,11 @@
 -(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated{
     UIViewController *viewController;
     switch(menu) {
+        case KPMenuWelcome:{
+            WelcomeViewController *welcomeVC = [[WelcomeViewController alloc] init];
+            viewController = welcomeVC;
+            break;
+        }
         case KPMenuLogin:{
             LoginViewController *loginVC = [[LoginViewController alloc] init];
             loginVC.delegate = self;
@@ -144,7 +149,7 @@
     self.currentMenu = menu;
     //CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
     //CGRectSetHeight(self.drawerViewController.view,viewController.view.frame.size.height-100);
-    //[self.drawerViewController setCenterViewController:viewController];
+    [self.drawerViewController setCenterViewController:viewController];
 }
 static RootViewController *sharedObject;
 +(RootViewController *)sharedInstance{
@@ -242,17 +247,40 @@ static RootViewController *sharedObject;
 #pragma mark - ViewController methods
 -(void)setupAppearance{
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-    if(!sharedObject) sharedObject = self;
+    if(!sharedObject)
+        sharedObject = self;
+#warning Forcing welcome screen
+    [self changeToMenu:KPMenuWelcome animated:NO];
+    return;
+    
     if(!kCurrent){
-        //[NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
-        if(![kHints hasCompletedHint:HintWelcome]){
-            [KPCORE logOutAndDeleteData];
-            [KPCORE seedObjectsSave:YES];
-            [NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
+        if([[NSUserDefaults standardUserDefaults] objectForKey:@"isTryingOutSwipes"]){
+            [self changeToMenu:KPMenuHome animated:NO];
+        }
+        else{
+            [self changeToMenu:KPMenuWelcome animated:NO];
         }
     }
-    [self changeToMenu:KPMenuHome animated:NO];
+    else
+        [self changeToMenu:KPMenuWelcome animated:NO];
+    
 }
+
+
+
+-(void)tryoutapp{
+    if(![[NSUserDefaults standardUserDefaults] objectForKey:@"isTryingOutSwipes"]){
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isTryingOutSwipes"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [KPCORE seedObjectsSave:YES];
+        [NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
+    }
+    
+    [self changeToMenu:KPMenuHome animated:YES];
+    
+}
+
+
 -(void)triggerWelcome{
     [kHints triggerHint:HintWelcome];
 }

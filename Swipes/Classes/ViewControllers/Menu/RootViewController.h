@@ -11,7 +11,8 @@
 #import "KPSegmentedViewController.h"
 #import "MMDrawerController.h"
 typedef enum {
-    KPMenuLogin = 1,
+    KPMenuWelcome = 1,
+    KPMenuLogin,
     KPMenuHome
 } KPMenu;
 #define ROOT_CONTROLLER [RootViewController sharedInstance]
@@ -33,4 +34,5 @@ typedef enum {
 -(void)upgrade;
 -(void)proWithMessage:(NSString*)message;
 -(void)shareTasks:(NSArray*)tasks;
+-(void)tryoutapp;
 @end

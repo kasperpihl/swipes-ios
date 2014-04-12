@@ -52,7 +52,6 @@
 		A703B1C81838EC240047DCC9 /* KPReorderTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1C71838EC240047DCC9 /* KPReorderTableView.m */; };
 		A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1CA1838EC570047DCC9 /* ToDoCell.m */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
-		A717BEE5175DF5AF004791BF /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BEE4175DF5AF004791BF /* SignupViewController.m */; };
 		A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
 		A717BF24176115CD004791BF /* ProximaNova-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF20176115CD004791BF /* ProximaNova-Black.ttf */; };
 		A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */; };
@@ -145,6 +144,7 @@
 		A761B5B716EB596B0095A9A8 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B616EB596B0095A9A8 /* CFNetwork.framework */; };
 		A761B5BB16EB59760095A9A8 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BA16EB59760095A9A8 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		A761B5BD16EB597B0095A9A8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */; };
+		A763289218F94FCE0001BCD8 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A763289118F94FCE0001BCD8 /* WelcomeViewController.m */; };
 		A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
 		A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D28172C5EA800BCB2D9 /* _KPTag.m */; };
 		A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2B172C5EAF00BCB2D9 /* KPTag.m */; };
@@ -602,8 +602,6 @@
 		A703B1CA1838EC570047DCC9 /* ToDoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoCell.m; sourceTree = "<group>"; };
 		A7090B6E175DF3F900728A3A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = Login/LoginViewController.h; sourceTree = "<group>"; };
 		A7090B6F175DF3F900728A3A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Login/LoginViewController.m; sourceTree = "<group>"; };
-		A717BEE3175DF5AF004791BF /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SignupViewController.h; path = Login/SignupViewController.h; sourceTree = "<group>"; };
-		A717BEE4175DF5AF004791BF /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SignupViewController.m; path = Login/SignupViewController.m; sourceTree = "<group>"; };
 		A717BEEB175E6857004791BF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		A717BF1D17611162004791BF /* AnalyticsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsHandler.h; sourceTree = "<group>"; };
 		A717BF1E17611162004791BF /* AnalyticsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsHandler.m; sourceTree = "<group>"; };
@@ -716,6 +714,8 @@
 		A761B5B816EB59710095A9A8 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A761B5BA16EB59760095A9A8 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		A763289018F94FCE0001BCD8 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WelcomeViewController.h; path = Login/WelcomeViewController.h; sourceTree = "<group>"; };
+		A763289118F94FCE0001BCD8 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WelcomeViewController.m; path = Login/WelcomeViewController.m; sourceTree = "<group>"; };
 		A7680D1E172C0E1C00BCB2D9 /* NSDate-Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-Utilities.h"; sourceTree = "<group>"; };
 		A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-Utilities.m"; sourceTree = "<group>"; };
 		A7680D27172C5EA800BCB2D9 /* _KPTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _KPTag.h; sourceTree = "<group>"; };
@@ -1358,10 +1358,10 @@
 		A7090B6A175DF28100728A3A /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				A763289018F94FCE0001BCD8 /* WelcomeViewController.h */,
+				A763289118F94FCE0001BCD8 /* WelcomeViewController.m */,
 				A7090B6E175DF3F900728A3A /* LoginViewController.h */,
 				A7090B6F175DF3F900728A3A /* LoginViewController.m */,
-				A717BEE3175DF5AF004791BF /* SignupViewController.h */,
-				A717BEE4175DF5AF004791BF /* SignupViewController.m */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -1507,7 +1507,7 @@
 			path = Walkthrough;
 			sourceTree = "<group>";
 		};
-		A75545E0179B516500CE2F4E /* KPBlurry */ = {
+		A75545E0179B516500CE2F4E /* Overlays */ = {
 			isa = PBXGroup;
 			children = (
 				A789B3F717D79BFB00C25B73 /* KPOverlay.h */,
@@ -1515,7 +1515,7 @@
 				A75545E1179B519200CE2F4E /* KPBlurry.h */,
 				A75545E2179B519200CE2F4E /* KPBlurry.m */,
 			);
-			name = KPBlurry;
+			name = Overlays;
 			sourceTree = "<group>";
 		};
 		A7582507189BC35B00B904BC /* Vero */ = {
@@ -1724,7 +1724,7 @@
 				A7FA8B1B17AF094D00134ED0 /* SnoozesViewController.h */,
 				A7FA8B1C17AF094D00134ED0 /* SnoozesViewController.m */,
 				A75236C717A2EC6B0030ED1E /* Walkthrough */,
-				A75545E0179B516500CE2F4E /* KPBlurry */,
+				A75545E0179B516500CE2F4E /* Overlays */,
 				A7090B6A175DF28100728A3A /* Login */,
 				A7F4066617296BF100DDE644 /* ToDoList */,
 				A75207F71730F5E000F1B4F7 /* ToDo */,
@@ -2871,6 +2871,7 @@
 				A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */,
 				A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */,
 				A7933049172AB63700F1505E /* TodayViewController.m in Sources */,
+				A763289218F94FCE0001BCD8 /* WelcomeViewController.m in Sources */,
 				A7933056172B2BA100F1505E /* DoneViewController.m in Sources */,
 				A77D34C818E098C800095F1E /* HintHandler.m in Sources */,
 				A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */,
@@ -2888,7 +2889,6 @@
 				A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */,
 				A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */,
 				A703B1AB1838EBF20047DCC9 /* CKCalendarView.m in Sources */,
-				A717BEE5175DF5AF004791BF /* SignupViewController.m in Sources */,
 				A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */,
 				A78D7A8817F4B27200AD38B1 /* Global.m in Sources */,
 				A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */,
