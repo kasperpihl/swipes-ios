@@ -84,6 +84,7 @@ static HintHandler *sharedObject;
         NSString *hintText;
         switch (hint) {
             case HintWelcome:
+                hintText = @"Welcome to Swipes";
                 break;
             case HintCompleted:
                 hintText = @"You've completed a task - check out your completion log in the menu above";
@@ -95,7 +96,7 @@ static HintHandler *sharedObject;
                 hintText = @"You've scheduled a task - check out the schedule in the menu above";
                 break;
             case HintSelected:
-                hintText = @"You selected a task.\n\r Double-tap to edit a task";
+                hintText = @"You selected a task. Check the actionbar below";
                 break;
             case HintPriority:
                 break;
@@ -119,7 +120,6 @@ static HintHandler *sharedObject;
     CGRect rect;
     switch (self.currentHint) {
         case HintSelected:{
-            
             NSMutableArray *mutRect = [NSMutableArray array];
             CGFloat oneFourth = ROOT_CONTROLLER.view.frame.size.width / 4;
             for(NSInteger i = 1 ; i <= 4 ; i++){
@@ -152,13 +152,41 @@ static HintHandler *sharedObject;
         case HintWelcome:
             rect = CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2, (statusBarHt + 26), ht, ht);
             rectArray = @[[NSValue valueWithCGRect:rect]];
+            //,[NSValue valueWithCGRect:CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2-54,(statusBarHt + 26),ht,ht)],[NSValue valueWithCGRect:CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2+54 ,(statusBarHt + 26),ht,ht)]
             break;
         default:
             break;
     }
     return rectArray;
 }
+-(NSString *)titleForRect:(CGRect)rect index:(NSInteger)index{
+    NSString *title;
+    switch (self.currentHint) {
+        case HintSelected:{
+            if(index == 0) title = @"Edit";
+            else if(index == 1) title = @"Tag";
+            else if(index == 2) title = @"Delete";
+            else if(index == 3) title = @"Share";
+            break;
+        }
+        case HintCompleted:
+            title = @"Completed log";
+            break;
+        case HintSwipedLeft:{
 
+            break;
+        }
+        case HintScheduled:
+            title = @"Schedule";
+            break;
+        case HintWelcome:
+            
+            break;
+        default:
+            break;
+    }
+    return title;
+}
 
 -(void)initialize{
     self.hints = [[NSUserDefaults standardUserDefaults] objectForKey:kHintDictionaryKey];

@@ -30,7 +30,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     if ([self.hintDelegate respondsToSelector:@selector(hintStateWillClose:)]) {
         [self.hintDelegate hintStateWillClose:self];
     }
-    
     [UIView animateWithDuration:0.6 delay:0.0 options:UIViewAnimationOptionCurveEaseOut 
                      animations:^(){
                          [_modalView setAlpha:0.0];
@@ -78,8 +77,31 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     
     if ([self.hintDelegate respondsToSelector:@selector(hintStateRectsToHint:)]) {
         NSArray* rectArray = [self.hintDelegate hintStateRectsToHint:self];
-        if (rectArray != nil)
+        if (rectArray != nil){
             _modalView = [[EMHintsView alloc] initWithFrame:presentationPlace.frame withRects:rectArray];
+            if([self.hintDelegate respondsToSelector:@selector(titleForRect:index:)]){
+                for (NSInteger i = 0 ; i < rectArray.count ; i++)
+                {
+                    NSValue *theRectObj = [rectArray objectAtIndex:i];
+                    CGRect theRect = [theRectObj CGRectValue];
+                    NSString *title = [self.hintDelegate titleForRect:theRect index:i];
+                    UILabel *titleLabel = [[UILabel alloc] initWithFrame:_modalView.bounds];
+                    titleLabel.text = title;
+                    titleLabel.textColor = tcolorF(TextColor,ThemeDark);
+                    titleLabel.backgroundColor = CLEAR;
+                    titleLabel.font = KP_REGULAR(15);
+                    [titleLabel sizeToFit];
+                    BOOL above = (theRect.origin.y > (_modalView.frame.size.height/2));
+                    CGFloat y;
+                    if(above) y = theRect.origin.y - theRect.size.width - titleLabel.frame.size.height/2;
+                    else y = theRect.origin.y + theRect.size.width + titleLabel.frame.size.height/2;
+                    CGRectSetCenter(titleLabel, theRect.origin.x , y);
+                    [_modalView addSubview:titleLabel];
+                    
+                    
+                }
+            }
+        }
     }
     
     if (_modalView==nil)
@@ -97,7 +119,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     if(v==nil)//no custom subview
     {
         //label
-        UIFont *ft = [UIFont fontWithName:@"Helvetica" size:17.0];
+        UIFont *ft = KP_REGULAR(18);
         CGSize sz = [message sizeWithFont:ft constrainedToSize:CGSizeMake(250, 1000)];
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(floorf(presentationPlace.center.x - sz.width/2),
                                                                    floorf(presentationPlace.center.y - sz.height/2),
@@ -112,6 +134,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                                     )];
         [label setBackgroundColor:[UIColor clearColor]];
         [label setFont:ft];
+        label.textAlignment = NSTextAlignmentCenter;
         [label setText:message];
         [label setTextColor:[UIColor whiteColor]];
         [label setNumberOfLines:0];

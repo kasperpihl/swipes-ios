@@ -48,6 +48,11 @@ typedef enum
 -(NSArray*)hintStateRectsToHint:(id)hintState;
 
 /*
+
+*/
+-(NSString*)titleForRect:(CGRect)rect index:(NSInteger)index;
+
+/*
  // return NO, if you plan to daisy chain hints, or do someother action
  // return YES, to fad out modal hint view
  */

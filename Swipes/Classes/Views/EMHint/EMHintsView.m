@@ -16,7 +16,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #import "EMHintsView.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define BACKGROUND_ALPHA 0.85
+#define BACKGROUND_ALPHA 0.9
 
 @implementation EMHintsView
 
