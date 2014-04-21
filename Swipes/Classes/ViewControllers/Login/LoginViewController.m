@@ -39,7 +39,7 @@
 #define kContinueButtonColor kDefTextColor
 #define kCornerRadius 2
 
-#define kDefTextColor tcolor(TextColor)//color(179, 180, 182, 1)
+#define kDefTextColor tcolorF(TextColor,ThemeDark)//color(179, 180, 182, 1)
 #define kDefLoginButtonsFont KP_REGULAR(20)
 
 @interface LoginViewController () <UIAlertViewDelegate, UITextFieldDelegate>
@@ -71,7 +71,7 @@
         [resignButton addTarget:self action:@selector(resignFields) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:resignButton];
         
-        UIImageView *background = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"default-background.jpg"] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
+        UIImageView *background = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"MASTER_00021.jpg"] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
         background.frame = self.view.bounds;
         background.contentMode = (UIViewContentModeScaleAspectFill);// UIViewContentModeScaleAspectFill;
         background.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
@@ -483,7 +483,7 @@
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [ROOT_CONTROLLER walkthrough];
+    //[ROOT_CONTROLLER walkthrough];
 }
 - (void)didReceiveMemoryWarning
 {

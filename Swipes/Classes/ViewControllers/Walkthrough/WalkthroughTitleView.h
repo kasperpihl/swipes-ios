@@ -10,5 +10,7 @@
 
 @interface WalkthroughTitleView : UIView
 @property (nonatomic) CGFloat maxWidth;
+@property (nonatomic,strong) UILabel *titleLabel;
+@property (nonatomic,strong) UILabel *subtitleLabel;
 -(void)setTitle:(NSString*)title subtitle:(NSString*)subtitle;
 @end

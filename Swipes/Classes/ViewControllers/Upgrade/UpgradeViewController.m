@@ -15,7 +15,7 @@
 #import "AnalyticsHandler.h"
 #import "PaymentHandler.h"
 #import "SlowHighlightIcon.h"
-#define kCloseButtonSize 60
+#define kCloseButtonSize 44
 #define kLogoTopMargin 35
 #define kSubscribeButtonWidth 123
 #define kSubscribeButtonHeight 60
@@ -110,8 +110,11 @@
     [self.view addSubview:scrollView];
     self.scrollView = scrollView;
 
-    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [closeButton setImage:[UIImage imageNamed:@"round_cross_white"] forState:UIControlStateNormal];
+    UIButton *closeButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
+    closeButton.titleLabel.font = iconFont(23);
+    [closeButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
+    [closeButton setTitle:@"roundClose" forState:UIControlStateNormal];
+    [closeButton setTitle:@"roundCloseFull" forState:UIControlStateHighlighted];
     closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, (OSVER >= 7 ? 20 : 0), kCloseButtonSize, kCloseButtonSize);
     [closeButton addTarget:self action:@selector(pressedCloseButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:closeButton];

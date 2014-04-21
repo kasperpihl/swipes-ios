@@ -138,17 +138,22 @@
     self.titleButton = titleButton;
 
     SlowHighlightIcon *prevButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-    [prevButton setImage:[UIImage imageNamed:timageStringBW(@"sitearrow_icon")] forState:UIControlStateNormal];
-    prevButton.imageView.transform = CGAffineTransformMakeRotation(2*M_PI/2);
-    [prevButton setImage:[UIImage imageNamed:timageString(@"sitearrow_icon",@"_white-high",@"_black-high")] forState:UIControlStateHighlighted];
+    prevButton.titleLabel.font = iconFont(17);
+    [prevButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [prevButton setTitleColor:alpha(tcolor(TextColor), .2) forState:UIControlStateDisabled];
+    [prevButton setTitle:@"rightArrow" forState:UIControlStateNormal];
+    [prevButton setTitle:@"rightArrowFull" forState:UIControlStateHighlighted];
+    prevButton.transform = CGAffineTransformMakeRotation(2*M_PI/2);
     prevButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
     [prevButton addTarget:self action:@selector(_moveCalendarToPreviousMonth) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:prevButton];
     self.prevButton = prevButton;
 
     SlowHighlightIcon *nextButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-    [nextButton setImage:[UIImage imageNamed:timageStringBW(@"sitearrow_icon")] forState:UIControlStateNormal];
-    [nextButton setImage:[UIImage imageNamed:timageString(@"sitearrow_icon",@"_white-high",@"_black-high")] forState:UIControlStateHighlighted];
+    nextButton.titleLabel.font = iconFont(17);
+    [nextButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [nextButton setTitle:@"rightArrow" forState:UIControlStateNormal];
+    [nextButton setTitle:@"rightArrowFull" forState:UIControlStateHighlighted];
     nextButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
     [nextButton addTarget:self action:@selector(_moveCalendarToNextMonth) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:nextButton];
@@ -491,8 +496,8 @@
 }
 
 - (void)setMonthButtonColor:(UIColor *)color {
-    [self.prevButton setImage:[CKCalendarView _imageNamed:@"sitearrow_icon_white" withColor:color] forState:UIControlStateNormal];
-    [self.nextButton setImage:[CKCalendarView _imageNamed:@"sitearrow_icon_white" withColor:color] forState:UIControlStateNormal];
+    [self.prevButton setTitleColor:color forState:UIControlStateNormal];
+    [self.nextButton setTitleColor:color forState:UIControlStateNormal];
 }
 
 - (void)setDayOfWeekFont:(UIFont *)font {

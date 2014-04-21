@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 
 #define OSVER [Global OSVersion]
-
+#define iconLabel(key,iconHeight) [Global iconLabelWithString:key height:iconHeight]
+#define iconFont(fontSize) [UIFont fontWithName:@"swipes" size:fontSize]
 @interface Global : NSObject
 
 + (Global *)sharedInstance;
@@ -17,5 +18,5 @@
 + (BOOL)is24Hour;
 + (NSDateFormatter *)isoDateFormatter;
 + (CGFloat)statusBarHeight;
-
++ (UILabel*)iconLabelWithString:(NSString*)iconString height:(CGFloat)height;
 @end

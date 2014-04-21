@@ -24,12 +24,15 @@
         CGFloat buttonSize = self.frame.size.height;
         CGFloat buttonWidth = 44;
         self.doneEditingButton.frame = CGRectMake(self.frame.size.width-buttonWidth, 0, buttonWidth, buttonSize);
-        [self.doneEditingButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
+        self.doneEditingButton.titleLabel.font = iconFont(23);
+        //[self.doneEditingButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
+        [self.doneEditingButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [self.doneEditingButton setTitle:@"back" forState:UIControlStateNormal];
         [self.doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         
-        self.doneEditingButton.imageView.clipsToBounds = NO;
-        self.doneEditingButton.imageView.contentMode = UIViewContentModeCenter;
-        self.doneEditingButton.imageView.transform = CGAffineTransformMakeRotation(3*M_PI/2);
+        self.doneEditingButton.clipsToBounds = NO;
+        self.doneEditingButton.contentMode = UIViewContentModeCenter;
+        self.doneEditingButton.transform = CGAffineTransformMakeRotation(3*M_PI/2);
         [self addSubview:self.doneEditingButton];
         
         /*UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width-buttonWidth-SEPERATOR_WIDTH, kDEFAULT_SPACING, SEPERATOR_WIDTH, self.frame.size.height-(2*kDEFAULT_SPACING))];
@@ -94,11 +97,11 @@
 {
     [UIView beginAnimations:@"rotate" context:nil];
     [UIView setAnimationDuration:.25f];
-    if( CGAffineTransformEqualToTransform( self.doneEditingButton.imageView.transform, CGAffineTransformMakeRotation(M_PI) ) )
+    if( CGAffineTransformEqualToTransform( self.doneEditingButton.transform, CGAffineTransformMakeRotation(M_PI) ) )
     {
-        self.doneEditingButton.imageView.transform = CGAffineTransformMakeRotation(3*M_PI/2);
+        self.doneEditingButton.transform = CGAffineTransformMakeRotation(3*M_PI/2);
     } else {
-        self.doneEditingButton.imageView.transform = CGAffineTransformMakeRotation(M_PI);
+        self.doneEditingButton.transform = CGAffineTransformMakeRotation(M_PI);
     }
     [UIView commitAnimations];
 }

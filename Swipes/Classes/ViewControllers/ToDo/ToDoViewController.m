@@ -98,7 +98,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UILabel *evernoteLabel;
 @property (nonatomic) UILabel *dropboxLabel;
 
-@property (nonatomic) UIImageView *scheduleImageView;
+@property (nonatomic) UILabel *scheduleImageIcon;
 
 @end
 
@@ -420,7 +420,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     else{
         self.alarmLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:self.model.schedule showTime:YES]];
     }
-    [self.scheduleImageView setImage:[UIImage imageNamed:(isLocation ? timageStringBW(@"edit_location_icon") : timageStringBW(@"edit_schedule_icon"))]];
+    [self.scheduleImageIcon setText:isLocation ? @"editLocation" : @"editSchedule"];
 }
 
 -(void)updateNotes{
@@ -688,7 +688,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         NSInteger startY = (OSVER >= 7) ? 20 : 0;
         NSInteger toolbarWidth = 90;
         NSInteger leftPadding = 45;
-        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(320-toolbarWidth-leftPadding, startY, toolbarWidth, TOOLBAR_HEIGHT) items:@[timageStringBW(@"share_icon"),timageStringBW(@"trashcan_icon")] delegate:self];
+        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(320-toolbarWidth-leftPadding, startY, toolbarWidth, TOOLBAR_HEIGHT) items:nil delegate:self];
+        self.toolbarEditView.font = iconFont(23);
+        self.toolbarEditView.titleColor = tcolor(TextColor);
+        self.toolbarEditView.titleHighlightString = @"Full";
+        self.toolbarEditView.items = @[@"actionShare",@"actionDelete"];
         [self.view addSubview:self.toolbarEditView];
         UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, startY, 160, TOOLBAR_HEIGHT)];
         [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
@@ -755,7 +759,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          Alarm container and button!
          */
         self.alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
-        self.scheduleImageView = [self addAndGetImage:timageStringBW(@"edit_schedule_icon")  inView:self.alarmContainer];
+        self.scheduleImageIcon = [self addAndGetImage:@"editSchedule"  inView:self.alarmContainer];
         self.alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.alarmContainer.frame.size.height)];
         self.alarmLabel.backgroundColor = CLEAR;
         [self setColorsFor:self.alarmLabel];
@@ -778,7 +782,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         CGRectSetY(self.repeatPicker, self.repeatedContainer.frame.size.height + (kRepeatPickerHeight-50)/2);
         [self.repeatedContainer addSubview:self.repeatPicker];
         
-        [self addAndGetImage:timageStringBW(@"edit_repeat_icon") inView:self.repeatedContainer];
+        [self addAndGetImage:@"editRepeat" inView:self.repeatedContainer];
         self.repeatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.repeatedContainer.frame.size.height)];
         self.repeatedLabel.backgroundColor = CLEAR;
         [self setColorsFor:self.repeatedLabel];
@@ -793,7 +797,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          */
         self.tagsContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
         //[self addSeperatorToView:self.tagsContainerView];
-        [self addAndGetImage:timageStringBW(@"edit_tags_icon") inView:self.tagsContainerView];
+        [self addAndGetImage:@"editTags" inView:self.tagsContainerView];
         
         self.tagsLabel = [[UILabel alloc] initWithFrame:TAGS_LABEL_RECT];
         self.tagsLabel.numberOfLines = 0;
@@ -844,7 +848,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          Notes view
          */
         self.notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
-        [self addAndGetImage:timageString(@"edit_notes_icon", @"_white", @"_black") inView:self.notesContainer];
+        [self addAndGetImage:@"editNotes" inView:self.notesContainer];
         self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, 320-LABEL_X-10, 500)];
         self.notesView.font = EDIT_TASK_TEXT_FONT;
         self.notesView.contentInset = UIEdgeInsetsMake(0,-5,0,0);
@@ -902,7 +906,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.evernoteContainer = nil;
     self.dropboxLabel = nil;
     self.dropboxContainer = nil;
-    self.scheduleImageView = nil;
+    self.scheduleImageIcon = nil;
     self.repeatedContainer = nil;
     self.repeatedLabel = nil;
     clearNotify();

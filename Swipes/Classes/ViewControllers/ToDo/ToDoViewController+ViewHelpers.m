@@ -9,14 +9,14 @@
 #import "ToDoViewController+ViewHelpers.h"
 #import "UIColor+Utilities.h"
 @implementation ToDoViewController (ViewHelpers)
--(UIImageView *)addAndGetImage:(NSString*)imageName inView:(UIView*)view{
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-    imageView.image = [UIImage imageNamed:imageName];//[UtilityClass imageNamed: withColor:EDIT_TASK_GRAYED_OUT_TEXT];
-    imageView.frame = CGRectSetPos(imageView.frame,(LABEL_X-imageView.frame.size.width)/2, (view.frame.size.height-imageView.frame.size.height)/2);
-    imageView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
-    //imageView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
-    [view addSubview:imageView];
-    return imageView;
+-(UILabel *)addAndGetImage:(NSString*)imageName inView:(UIView*)view{
+    UILabel *icon = iconLabel(imageName, 15);
+    
+    [icon setTextColor:tcolor(TextColor)];
+    icon.frame = CGRectSetPos(icon.frame,(LABEL_X-icon.frame.size.width)/2, (view.frame.size.height-icon.frame.size.height)/2);
+    icon.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
+    [view addSubview:icon];
+    return icon;
 }
 -(UIButton*)addClickButtonToView:(UIView*)view action:(SEL)action{
     UIButton *clickedButton = [[UIButton alloc] initWithFrame:view.bounds];

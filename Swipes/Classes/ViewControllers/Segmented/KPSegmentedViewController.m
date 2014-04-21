@@ -192,40 +192,46 @@
     UIButton *button = [[SlowHighlightIcon alloc] init];
     CGRectSetSize(button, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
     button.adjustsImageWhenHighlighted = NO;
-    NSString *imageString;
-    NSString *baseString;
+    NSString *textString;
+    UIColor *highlightColor;
     switch (controlButton) {
         case KPSegmentButtonSchedule:
-            baseString = @"schedule";
-            
+            textString = @"later";
+            highlightColor = tcolor(LaterColor);
             break;
         case KPSegmentButtonToday:
-            baseString = @"today";
+            textString = @"today";
+            highlightColor = tcolor(TasksColor);
             break;
         case KPSegmentButtonDone:
-            baseString = @"done";
+            textString = @"done";
+            highlightColor = tcolor(DoneColor);
             break;
     }
-    imageString = timageString(baseString, @"-white", @"-black");
-    UIImage *normalImage = [UIImage imageNamed:imageString];
-    UIImage *highlightedImage = [UIImage imageNamed:[baseString stringByAppendingString:@"-highlighted"]];;
-    [button setImage:normalImage forState:UIControlStateNormal];
-    [button setImage:highlightedImage forState:UIControlStateSelected];
-    [button setImage:highlightedImage forState:UIControlStateSelected | UIControlStateHighlighted];
-    [button setImage:highlightedImage forState:UIControlStateHighlighted];
-    button.imageView.animationImages = @[highlightedImage];
-    button.imageView.animationDuration = 0.8;    
+
+    button.titleLabel.font = iconFont(23);
+    [button setTitle:textString forState:UIControlStateNormal];
+    [button setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [button setTitleColor:highlightColor forState:UIControlStateHighlighted];
+    [button setTitleColor:highlightColor forState:UIControlStateSelected];
+    [button setTitleColor:highlightColor forState:UIControlStateSelected | UIControlStateHighlighted];
     return button;
 }
 -(void)timerFired:(NSTimer*)sender{
     NSDictionary *userInfo = [sender userInfo];
     NSInteger index = [[userInfo objectForKey:@"button"] integerValue];
     UIButton *button = [[self.segmentedControl buttonsArray] objectAtIndex:index];
-    [button.imageView stopAnimating];
+    [button setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
 }
 -(void)highlightButton:(KPSegmentButtons)controlButton{
+    UIColor *highlightColor = tcolor(TasksColor);
+    if(controlButton == KPSegmentButtonDone)
+        highlightColor = tcolor(DoneColor);
+    else if(controlButton == KPSegmentButtonSchedule)
+        highlightColor = tcolor(LaterColor);
+    
     UIButton *button = [[self.segmentedControl buttonsArray] objectAtIndex:controlButton];
-    [button.imageView startAnimating];
+    [button setTitleColor:highlightColor forState:UIControlStateNormal];
     [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(timerFired:) userInfo:@{@"button": [NSNumber numberWithInteger:controlButton]} repeats:NO];
 }
 - (id)initWithViewControllers:(NSArray *)viewControllers {
@@ -253,9 +259,11 @@
         self.ios7BackgroundView.backgroundColor = CLEAR;
         [self.ios7BackgroundView addSubview:self.segmentedControl];
         UIButton *settingsButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
+        settingsButton.titleLabel.font = iconFont(23);
+        [settingsButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         //CGRectSetX(settingsButton, -settingsButton.frame.size.width/2);
-        [settingsButton setImage:[UIImage imageNamed:timageStringBW(@"settings_icon")] forState:UIControlStateNormal];
-        [settingsButton setImage:[UIImage imageNamed:timageString(@"settings_icon",@"_white-high",@"_black-high")] forState:UIControlStateHighlighted];
+        [settingsButton setTitle:@"settings" forState:UIControlStateNormal];
+        [settingsButton setTitle:@"settingsFull" forState:UIControlStateHighlighted];
         [settingsButton addTarget:self action:@selector(pressedSettings) forControlEvents:UIControlEventTouchUpInside];
         [self.ios7BackgroundView addSubview:settingsButton];
         self._settingsButton = settingsButton;

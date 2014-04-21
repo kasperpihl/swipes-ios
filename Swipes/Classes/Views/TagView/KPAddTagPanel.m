@@ -102,7 +102,10 @@
         
         
         /* Initialize toolbar */
-        KPToolbar *tagToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TOOLBAR_HEIGHT, self.frame.size.width, TOOLBAR_HEIGHT) items:@[timageStringBW(@"backarrow_icon"),timageStringBW(@"trashcan_icon"),timageStringBW(@"plus_icon")] delegate:self];
+        KPToolbar *tagToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.frame.size.height-TOOLBAR_HEIGHT, self.frame.size.width, TOOLBAR_HEIGHT) items:nil delegate:self];
+        tagToolbar.font = iconFont(23);
+        tagToolbar.titleColor = tcolor(TextColor);
+        tagToolbar.items = @[@"back",@"actionDelete",@"plus"];
         tagToolbar.tag = TOOLBAR_TAG;
         [self addSubview:tagToolbar];
         self.toolbar = (KPToolbar*)[self viewWithTag:TOOLBAR_TAG];
@@ -130,6 +133,11 @@
                                                    object:nil];
     }
     return self;
+}
+-(void)toolbar:(KPToolbar *)toolbar editButton:(UIButton *__autoreleasing *)button forItem:(NSInteger)item{
+    if(item == 1){
+        [*button setTitle:@"actionDeleteFull" forState:UIControlStateHighlighted];
+    }
 }
 -(void)updateTrashButton{
     UIButton* trashButton = (UIButton*)[self.toolbar.barButtons objectAtIndex:1];

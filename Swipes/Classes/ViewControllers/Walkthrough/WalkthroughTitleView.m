@@ -12,8 +12,7 @@
 #define kDefTitleSpacing 13
 #import "WalkthroughTitleView.h"
 @interface WalkthroughTitleView ()
-@property (nonatomic,strong) UILabel *titleLabel;
-@property (nonatomic,strong) UILabel *subtitleLabel;
+
 @end
 @implementation WalkthroughTitleView
 -(void)setTitle:(NSString *)title subtitle:(NSString *)subtitle{

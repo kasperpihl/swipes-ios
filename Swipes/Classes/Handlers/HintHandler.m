@@ -75,6 +75,10 @@ static HintHandler *sharedObject;
  
 */
 -(BOOL)triggerHint:(Hints)hint{
+#warning Forced trigger to stop
+    return NO;
+    
+    
     BOOL completedHint = [self completeHint:hint];
     completedHint = YES;
     if(completedHint){

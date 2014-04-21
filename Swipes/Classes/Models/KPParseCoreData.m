@@ -359,12 +359,14 @@
     
     
     if(response.statusCode != 200 || error){
+        NSLog(@"status code: %i error %@",response.statusCode,error);
         if(error)
             [UtilityClass sendError:error type:@"Sync request error 1"];
         else if(response.statusCode == 503)
             self._needSync = YES;
         else if(!error){
             NSString *myString = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+            NSLog(@"err %@",myString);
             error = [NSError errorWithDomain:myString code:response.statusCode userInfo:nil];
             NSLog(@"error:%@",error.description);
             [UtilityClass sendError:error type:@"Sync request error 2"];

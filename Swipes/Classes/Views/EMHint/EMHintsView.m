@@ -19,7 +19,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define BACKGROUND_ALPHA 0.85
 
 @implementation EMHintsView
-
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];

@@ -65,6 +65,7 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
+		<string>swipes.ttf</string>
 		<string>NexaHeavy.ttf</string>
 		<string>ProximaNova-Black.ttf</string>
 		<string>ProximaNova-Light.ttf</string>

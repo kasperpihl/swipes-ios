@@ -26,6 +26,7 @@
     self = [super initWithFrame:frame];
     if(self){
         self.backgroundColor = CLEAR;
+        self.userInteractionEnabled = NO;
         self.dotView = [[UIView alloc] init];
         [self addSubview:self.dotView];
         [self setSize:kDefaultSize];

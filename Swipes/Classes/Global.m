@@ -56,5 +56,12 @@ static Global *sharedObject;
         return [UIApplication sharedApplication].statusBarFrame.size.width;
     }
 }
-
++(UILabel *)iconLabelWithString:(NSString *)iconString height:(CGFloat)height{
+    UILabel *label = [[UILabel alloc] init];
+    label.font = iconFont(height);
+    label.textAlignment = NSTextAlignmentCenter;
+    [label setText:iconString];
+    [label sizeToFit];
+    return label;
+}
 @end

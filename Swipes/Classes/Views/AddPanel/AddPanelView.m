@@ -33,6 +33,8 @@
 @end
 @implementation AddPanelView
 -(void)blurryWillShow:(KPBlurry *)blurry{
+    NSLog(@"fired this");
+    NSLog(@"self.add %@",self.addView.textField);
     [self.addView.textField becomeFirstResponder];
 }
 -(void)blurryWillHide:(KPBlurry *)blurry{

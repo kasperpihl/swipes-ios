@@ -276,7 +276,7 @@ typedef enum {
         
         self.toolbar.alpha = 0;
         CGRectSetWidth(self.toolbar, self.contentView.frame.size.width/3);
-        self.toolbar.items = @[timageStringBW(@"round_backarrow")];
+        self.toolbar.items = @[@"roundBack"];
         self.toolbar.hidden = NO;
         self.locationView.hidden = NO;
         self.locationView.alpha = 0;
@@ -359,7 +359,7 @@ typedef enum {
         [self.contentView addSubview:calendarImageView];
         self.toolbar.alpha = 0;
         CGRectSetWidth(self.toolbar, self.contentView.frame.size.width);
-        self.toolbar.items = @[timageStringBW(@"round_backarrow"),timageStringBW(@"round_checkmark")];
+        self.toolbar.items = @[@"roundBack",@"roundConfirm"];
         self.toolbar.hidden = NO;
         CGFloat buttonDuration = 0.1;
         CGFloat scaleDuration = 0.2;
@@ -568,7 +568,12 @@ typedef enum {
 }
 
 -(UIButton*)buttonForScheduleButton:(KPScheduleButtons)scheduleButton title:(NSString *)title{
-    MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButtonNumber:scheduleButton] title:title image:[self imageForScheduleButton:scheduleButton highlighted:NO] highlightedImage:[self imageForScheduleButton:scheduleButton highlighted:YES]];
+    MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButtonNumber:scheduleButton] title:title];
+    button.iconLabel.titleLabel.font = iconFont(50);
+    [button.iconLabel setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [button.iconLabel setTitle:[self iconStringForScheduleButton:scheduleButton highlighted:NO] forState:UIControlStateNormal];
+    [button.iconLabel setTitle:[self iconStringForScheduleButton:scheduleButton highlighted:YES] forState:UIControlStateHighlighted];
+    
     button.tag = [self tagForButton:scheduleButton];
     //[button setBackgroundImage:[POPUP_SELECTED image] forState:UIControlStateHighlighted];
     [button addTarget:self action:@selector(pressedScheduleButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -581,41 +586,41 @@ typedef enum {
     return button;
 }
 
--(UIImage *)imageForScheduleButton:(KPScheduleButtons)scheduleButton highlighted:(BOOL)highlighted{
+-(NSString *)iconStringForScheduleButton:(KPScheduleButtons)scheduleButton highlighted:(BOOL)highlighted{
     NSString *imageString;
     switch (scheduleButton) {
         case KPScheduleButtonLaterToday:
-            imageString = timageStringBW(@"schedule_image_coffee");
+            imageString = @"scheduleCoffee";
             break;
         case KPScheduleButtonThisEvening:
-            imageString = timageStringBW(@"schedule_image_moon");
+            imageString = @"scheduleMoon";
             break;
         case KPScheduleButtonTomorrow:
-            imageString = timageStringBW(@"schedule_image_sun");
+            imageString = @"scheduleSun";
             break;
         case KPScheduleButtonIn2Days:
-            imageString = timageStringBW(@"schedule_image_notebook");
+            imageString = @"scheduleLogbook";
             break;
         case KPScheduleButtonThisWeekend:
-            imageString = timageStringBW(@"schedule_image_glasses");
+            imageString = @"scheduleGlass";
             break;
         case KPScheduleButtonNextWeek:
-            imageString = timageStringBW(@"schedule_image_circle");
+            imageString = @"scheduleCircle";
             break;
         case KPScheduleButtonUnscheduled:
-            imageString = timageStringBW(@"schedule_image_cloud");
+            imageString = @"scheduleCloud";
             break;
         case KPScheduleButtonLocation:
-            imageString = timageStringBW(@"schedule_image_location");
+            imageString = @"scheduleLocation";
             break;
         case KPScheduleButtonSpecificTime:
-            imageString = timageStringBW(@"schedule_image_calender");
+            imageString = @"scheduleCalendar";
             break;
         default:
             break;
     }
-    if(highlighted) imageString = [imageString stringByAppendingString:@"-high"];
-    return [UIImage imageNamed:imageString];
+    if(highlighted) imageString = [imageString stringByAppendingString:@"Full"];
+    return imageString;
 }
 
 -(void)addLocationView{
@@ -672,8 +677,12 @@ typedef enum {
     self.calendarView.dayOfWeekTextColor = tcolor(TextColor);
     self.calendarView.adaptHeightToNumberOfWeeksInMonth = YES;
     
-    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-kToolbarHeight, self.contentView.frame.size.width, kToolbarHeight-kToolbarPadding) items:@[timageStringBW(@"round_backarrow"),timageStringBW(@"round_checkmark")] delegate:self];
+    self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-kToolbarHeight, self.contentView.frame.size.width, kToolbarHeight-kToolbarPadding) items:nil delegate:self];
     self.toolbar.hidden = YES;
+    self.toolbar.font = iconFont(41);
+    self.toolbar.titleColor = tcolor(TextColor);
+    self.toolbar.titleHighlightString = @"Full";
+    self.toolbar.items = @[@"roundBack",@"roundConfirm"];
     self.toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     self.toolbar.backgroundColor = CLEAR;
     
