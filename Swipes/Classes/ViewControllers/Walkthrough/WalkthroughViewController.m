@@ -534,12 +534,13 @@ typedef enum {
     }
 	return cell;
 }
--(UIButton*)menuButtonWithImage:(UIImage *)image color:(UIColor*)color{
+-(UIButton*)menuButtonWithIcon:(NSString*)iconName color:(UIColor*)color{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.titleLabel.font = iconFont(22);
+    [button setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
+    [button setTitle:iconName forState:UIControlStateNormal];
     button.frame = CGRectMake(0, kMenuButtonY, kMenuButtonSize, kMenuButtonSize);
     button.layer.cornerRadius = kMenuButtonSize/2;
-    [button setImage:image forState:UIControlStateNormal];
-    [button setImage:image forState:UIControlStateHighlighted];
     [button setBackgroundColor:color];
     button.showsTouchWhenHighlighted = NO;
     return button;
@@ -559,13 +560,13 @@ typedef enum {
     
     [self.view addSubview:self.titleView];
     
-    self.scheduleButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"schedule-white-high" scaledToSize:CGSizeMake(22, 22)] color:tcolor(LaterColor)];
+    self.scheduleButton = [self menuButtonWithIcon:@"laterFull" color:tcolor(LaterColor)];
     CGRectSetCenterX(self.scheduleButton, kMenuButtonSideMargin);
     [self.view addSubview:self.scheduleButton];
-    self.tasksButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"today-white-high" scaledToSize:CGSizeMake(22, 22)] color:tcolor(TasksColor)];
+    self.tasksButton = [self menuButtonWithIcon:@"todayFull" color:tcolor(TasksColor)];
     CGRectSetCenterX(self.tasksButton, self.view.center.x);
     [self.view addSubview:self.tasksButton];
-    self.doneButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"done-white-high" scaledToSize:CGSizeMake(22, 22)] color:tcolor(DoneColor)];
+    self.doneButton = [self menuButtonWithIcon:@"doneFull" color:tcolor(DoneColor)];
     CGRectSetCenterX(self.doneButton, self.view.bounds.size.width-kMenuButtonSideMargin);
     [self.view addSubview:self.doneButton];
     

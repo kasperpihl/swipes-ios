@@ -52,9 +52,12 @@
         contentView.backgroundColor = tcolor(BackgroundColor);
         
         UIButton *crossButton = [[UIButton alloc] initWithFrame:CGRectMake(contentView.frame.size.width-kCrossButtonSize, 0, kCrossButtonSize, kCrossButtonSize)];
-        [crossButton setImage:[UIImage imageNamed:timageStringBW(@"round_cross")] forState:UIControlStateNormal];
+        crossButton.titleLabel.font = iconFont(23);
+        [crossButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [crossButton setTitle:@"roundClose" forState:UIControlStateNormal];
+        [crossButton setTitle:@"roundCloseFull" forState:UIControlStateHighlighted];
         [crossButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
-        crossButton.imageEdgeInsets = kCrossButtonContentInset;
+        //crossButton.imageEdgeInsets = kCrossButtonContentInset;
         [contentView addSubview:crossButton];
         
         UIImage *buttonImage = [UIImage imageNamed:timageStringBW(@"upgrade_plus_logo")];

@@ -113,18 +113,6 @@
 		A74FB8FC18FFBCB200F25157 /* MASTER_0008.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A74FB8F218FFBCB200F25157 /* MASTER_0008.jpg */; };
 		A74FB8FD18FFBCB200F25157 /* MASTER_0009.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A74FB8F318FFBCB200F25157 /* MASTER_0009.jpg */; };
 		A74FB90018FFF47800F25157 /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A74FB8FF18FFF2FA00F25157 /* swipes.ttf */; };
-		A74FB90D190008AC00F25157 /* done-black-high.png in Resources */ = {isa = PBXBuildFile; fileRef = A74FB901190008AC00F25157 /* done-black-high.png */; };
-		A74FB90E190008AC00F25157 /* done-black-high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A74FB902190008AC00F25157 /* done-black-high@2x.png */; };
-		A74FB90F190008AC00F25157 /* done-white-high.png in Resources */ = {isa = PBXBuildFile; fileRef = A74FB903190008AC00F25157 /* done-white-high.png */; };
-		A74FB910190008AC00F25157 /* done-white-high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A74FB904190008AC00F25157 /* done-white-high@2x.png */; };
-		A74FB911190008AC00F25157 /* schedule-black-high.png in Resources */ = {isa = PBXBuildFile; fileRef = A74FB905190008AC00F25157 /* schedule-black-high.png */; };
-		A74FB912190008AC00F25157 /* schedule-black-high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A74FB906190008AC00F25157 /* schedule-black-high@2x.png */; };
-		A74FB913190008AC00F25157 /* schedule-white-high.png in Resources */ = {isa = PBXBuildFile; fileRef = A74FB907190008AC00F25157 /* schedule-white-high.png */; };
-		A74FB914190008AC00F25157 /* schedule-white-high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A74FB908190008AC00F25157 /* schedule-white-high@2x.png */; };
-		A74FB915190008AC00F25157 /* today-black-high.png in Resources */ = {isa = PBXBuildFile; fileRef = A74FB909190008AC00F25157 /* today-black-high.png */; };
-		A74FB916190008AC00F25157 /* today-black-high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A74FB90A190008AC00F25157 /* today-black-high@2x.png */; };
-		A74FB917190008AC00F25157 /* today-white-high.png in Resources */ = {isa = PBXBuildFile; fileRef = A74FB90B190008AC00F25157 /* today-white-high.png */; };
-		A74FB918190008AC00F25157 /* today-white-high@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A74FB90C190008AC00F25157 /* today-white-high@2x.png */; };
 		A75207FA1730F5F700F1B4F7 /* ToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A75207F91730F5F700F1B4F7 /* ToDoViewController.m */; };
 		A75236C617A2EC5E0030ED1E /* WalkthroughViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A75236C517A2EC5E0030ED1E /* WalkthroughViewController.m */; };
 		A75236CA17A2EE6F0030ED1E /* WalkthroughCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A75236C917A2EE6F0030ED1E /* WalkthroughCell.m */; };
@@ -408,18 +396,6 @@
 		A74FB8F218FFBCB200F25157 /* MASTER_0008.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = MASTER_0008.jpg; sourceTree = "<group>"; };
 		A74FB8F318FFBCB200F25157 /* MASTER_0009.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = MASTER_0009.jpg; sourceTree = "<group>"; };
 		A74FB8FF18FFF2FA00F25157 /* swipes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = swipes.ttf; path = Font/swipes.ttf; sourceTree = "<group>"; };
-		A74FB901190008AC00F25157 /* done-black-high.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "done-black-high.png"; sourceTree = "<group>"; };
-		A74FB902190008AC00F25157 /* done-black-high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "done-black-high@2x.png"; sourceTree = "<group>"; };
-		A74FB903190008AC00F25157 /* done-white-high.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "done-white-high.png"; sourceTree = "<group>"; };
-		A74FB904190008AC00F25157 /* done-white-high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "done-white-high@2x.png"; sourceTree = "<group>"; };
-		A74FB905190008AC00F25157 /* schedule-black-high.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule-black-high.png"; sourceTree = "<group>"; };
-		A74FB906190008AC00F25157 /* schedule-black-high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule-black-high@2x.png"; sourceTree = "<group>"; };
-		A74FB907190008AC00F25157 /* schedule-white-high.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule-white-high.png"; sourceTree = "<group>"; };
-		A74FB908190008AC00F25157 /* schedule-white-high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule-white-high@2x.png"; sourceTree = "<group>"; };
-		A74FB909190008AC00F25157 /* today-black-high.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today-black-high.png"; sourceTree = "<group>"; };
-		A74FB90A190008AC00F25157 /* today-black-high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today-black-high@2x.png"; sourceTree = "<group>"; };
-		A74FB90B190008AC00F25157 /* today-white-high.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today-white-high.png"; sourceTree = "<group>"; };
-		A74FB90C190008AC00F25157 /* today-white-high@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today-white-high@2x.png"; sourceTree = "<group>"; };
 		A75207F81730F5F700F1B4F7 /* ToDoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToDoViewController.h; path = ToDo/ToDoViewController.h; sourceTree = "<group>"; };
 		A75207F91730F5F700F1B4F7 /* ToDoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ToDoViewController.m; path = ToDo/ToDoViewController.m; sourceTree = "<group>"; };
 		A75236C417A2EC5E0030ED1E /* WalkthroughViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkthroughViewController.h; path = Swipes/Classes/ViewControllers/Walkthrough/WalkthroughViewController.h; sourceTree = SOURCE_ROOT; };
@@ -1249,7 +1225,6 @@
 				A75236CF17A335680030ED1E /* Walkthrough */,
 				A717BEE6175E086B004791BF /* Login */,
 				A79DB41B17358C33007A48E2 /* Backgrounds */,
-				A79DB3F21735892C007A48E2 /* Navbar */,
 				DACD542018A1ACFC00C378DF /* Dropbox */,
 			);
 			path = Images;
@@ -1315,25 +1290,6 @@
 				A7933055172B2BA100F1505E /* DoneViewController.m */,
 			);
 			name = Done;
-			sourceTree = "<group>";
-		};
-		A79DB3F21735892C007A48E2 /* Navbar */ = {
-			isa = PBXGroup;
-			children = (
-				A74FB901190008AC00F25157 /* done-black-high.png */,
-				A74FB902190008AC00F25157 /* done-black-high@2x.png */,
-				A74FB903190008AC00F25157 /* done-white-high.png */,
-				A74FB904190008AC00F25157 /* done-white-high@2x.png */,
-				A74FB905190008AC00F25157 /* schedule-black-high.png */,
-				A74FB906190008AC00F25157 /* schedule-black-high@2x.png */,
-				A74FB907190008AC00F25157 /* schedule-white-high.png */,
-				A74FB908190008AC00F25157 /* schedule-white-high@2x.png */,
-				A74FB909190008AC00F25157 /* today-black-high.png */,
-				A74FB90A190008AC00F25157 /* today-black-high@2x.png */,
-				A74FB90B190008AC00F25157 /* today-white-high.png */,
-				A74FB90C190008AC00F25157 /* today-white-high@2x.png */,
-			);
-			path = Navbar;
 			sourceTree = "<group>";
 		};
 		A79DB41B17358C33007A48E2 /* Backgrounds */ = {
@@ -1569,17 +1525,14 @@
 				A79DB42517358C33007A48E2 /* schedule_white_background@2x.png in Resources */,
 				DACD545118A1ACFC00C378DF /* page_white_c.png in Resources */,
 				A74FB8F518FFBCB200F25157 /* MASTER_0001.jpg in Resources */,
-				A74FB917190008AC00F25157 /* today-white-high.png in Resources */,
 				A7FE4406182828E1002AFB2E /* date_stamp_background@2x.png in Resources */,
 				A7582503189BA9DE00B904BC /* swipes_logo_white@2x.png in Resources */,
 				A7D0D3C01904FD1000ABA1FF /* selected_circle@2x.png in Resources */,
 				DACD546218A1ACFC00C378DF /* page_white_zip.png in Resources */,
 				DA310FA7188F3F26003C8FA4 /* Assets in Resources */,
-				A74FB90F190008AC00F25157 /* done-white-high.png in Resources */,
 				A792BC8C18AD3B41000573E4 /* backarrow_icon_white.png in Resources */,
 				DACD544918A1ACFC00C378DF /* folder_star.png in Resources */,
 				A717BF24176115CD004791BF /* ProximaNova-Black.ttf in Resources */,
-				A74FB918190008AC00F25157 /* today-white-high@2x.png in Resources */,
 				A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */,
 				DACD545B18A1ACFC00C378DF /* page_white_php.png in Resources */,
 				A74FB8F918FFBCB200F25157 /* MASTER_0005.jpg in Resources */,
@@ -1591,7 +1544,6 @@
 				DACD545E18A1ACFC00C378DF /* page_white_text.png in Resources */,
 				DACD545318A1ACFC00C378DF /* page_white_cplusplus.png in Resources */,
 				A717BF27176115CD004791BF /* ProximaNova-Regular.ttf in Resources */,
-				A74FB916190008AC00F25157 /* today-black-high@2x.png in Resources */,
 				DACD545218A1ACFC00C378DF /* page_white_code.png in Resources */,
 				A717BF2917611D2D004791BF /* ProximaNova-Semibold.ttf in Resources */,
 				A74FB8B318FFBC4D00F25157 /* MASTER_00015.jpg in Resources */,
@@ -1599,8 +1551,6 @@
 				A74FB8B118FFBC4D00F25157 /* MASTER_00013.jpg in Resources */,
 				DACD545718A1ACFC00C378DF /* page_white_flash.png in Resources */,
 				A717DD1C18B6523E00EE359C /* btn-plus-background@2x.png in Resources */,
-				A74FB910190008AC00F25157 /* done-white-high@2x.png in Resources */,
-				A74FB914190008AC00F25157 /* schedule-white-high@2x.png in Resources */,
 				A74FB90018FFF47800F25157 /* swipes.ttf in Resources */,
 				A74FB8AE18FFBC4D00F25157 /* MASTER_00010.jpg in Resources */,
 				DACD544E18A1ACFC00C378DF /* page_white.png in Resources */,
@@ -1615,14 +1565,11 @@
 				DACD545C18A1ACFC00C378DF /* page_white_picture.png in Resources */,
 				A7FE4405182828E1002AFB2E /* date_stamp_background.png in Resources */,
 				DACD544A18A1ACFC00C378DF /* folder_user.png in Resources */,
-				A74FB911190008AC00F25157 /* schedule-black-high.png in Resources */,
 				DACD546418A1ACFC00C378DF /* word.png in Resources */,
 				A7BB65CB189BF19600BE7183 /* swipes-notification.aif in Resources */,
 				A7582502189BA9DE00B904BC /* swipes_logo_white.png in Resources */,
 				DACD545518A1ACFC00C378DF /* page_white_cup.png in Resources */,
 				A717DD1818B645E100EE359C /* upgrade_plus_logo_white@2x.png in Resources */,
-				A74FB90E190008AC00F25157 /* done-black-high@2x.png in Resources */,
-				A74FB913190008AC00F25157 /* schedule-white-high.png in Resources */,
 				A75236E417A335680030ED1E /* walkthrough_swipe_done.png in Resources */,
 				DACD545818A1ACFC00C378DF /* page_white_gear.png in Resources */,
 				A75236E517A335680030ED1E /* walkthrough_swipe_done@2x.png in Resources */,
@@ -1638,14 +1585,12 @@
 				A75236ED17A335680030ED1E /* wt_menu_expain@2x.png in Resources */,
 				A717DD1618B645E100EE359C /* upgrade_plus_logo_black@2x.png in Resources */,
 				A75236F217A335680030ED1E /* wt_swipes_logo.png in Resources */,
-				A74FB915190008AC00F25157 /* today-black-high.png in Resources */,
 				A792BD6D18AD4AFA000573E4 /* picker_wheel_ip4_white.png in Resources */,
 				A75236F317A335680030ED1E /* wt_swipes_logo@2x.png in Resources */,
 				A75236FD17A349340030ED1E /* walkthrough_phone_background.png in Resources */,
 				DACD544618A1ACFC00C378DF /* folder_camera.png in Resources */,
 				A75236FE17A349340030ED1E /* walkthrough_phone_background@2x.png in Resources */,
 				A7C90E6A17A6ABF700C5F9E2 /* wt_schedule_popup.png in Resources */,
-				A74FB912190008AC00F25157 /* schedule-black-high@2x.png in Resources */,
 				A7C90E6B17A6ABF700C5F9E2 /* wt_schedule_popup@2x.png in Resources */,
 				A74FB8B018FFBC4D00F25157 /* MASTER_00012.jpg in Resources */,
 				A7C90E7617A712A100C5F9E2 /* wt_signature.png in Resources */,
@@ -1669,7 +1614,6 @@
 				A73FD8C11846326C0006C725 /* location_popup_title.png in Resources */,
 				A73FD8C21846326C0006C725 /* location_popup_title@2x.png in Resources */,
 				A717DD1B18B6523E00EE359C /* btn-plus-background.png in Resources */,
-				A74FB90D190008AC00F25157 /* done-black-high.png in Resources */,
 				DACD544B18A1ACFC00C378DF /* folder_user_gray.png in Resources */,
 				A74FB8F818FFBCB200F25157 /* MASTER_0004.jpg in Resources */,
 				DACD545F18A1ACFC00C378DF /* page_white_tux.png in Resources */,

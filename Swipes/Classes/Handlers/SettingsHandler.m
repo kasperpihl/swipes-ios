@@ -71,7 +71,7 @@ static SettingsHandler *sharedObject;
         }
     }
     else [self refreshDailyImage:YES];
-    return [UIImage imageNamed:@"MASTER_00021.jpg"];
+    return [UIImage imageNamed:@"default-background.jpg"];
 }
 -(void)refreshDailyImage:(BOOL)force{
     if(self.isFetchingImage) return;
