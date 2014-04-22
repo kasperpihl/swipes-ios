@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#define kColor alpha([UIColor whiteColor],0.8)
+#define kColor alpha(tcolorF(TextColor,ThemeDark),0.8)
 
 #define kAnimationTime 0.5
 #define kStampViewSpacing 30
@@ -47,7 +47,9 @@
         CGRectSetWidth(self.shareItLabel, self.frame.size.width);
         [self addSubview:self.shareItLabel];
         
-        self.signatureView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background_white_signate"]];
+        self.signatureView = iconLabel(@"signature", 46);
+        [self.signatureView setTextColor:kColor];
+        
         self.signatureView.hidden = YES;
         [self addSubview:self.signatureView];
         

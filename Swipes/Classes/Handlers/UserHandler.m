@@ -24,6 +24,9 @@ static UserHandler *sharedObject;
     }
     return sharedObject;
 }
+-(BOOL)isLoggedIn{
+    return (kCurrent) ? YES : NO;
+}
 -(void)setIsPlus:(BOOL)isPlus{
     if(_isPlus != isPlus){
         _isPlus = isPlus;

@@ -7,7 +7,7 @@
 //
 #define kLabelSpacing 0
 #define kLabelYHack -1
-#define kColor alpha([UIColor whiteColor],0.8)
+#define kColor alpha(tcolorF(TextColor, ThemeDark),0.8)
 #define kFontColor kColor
 #define kAllDoneFont [UIFont fontWithName:@"NexaHeavy" size:22]
 
@@ -28,9 +28,10 @@
     if(self){
         CGFloat width = 320;
         CGRectSetWidth(self, width);
-        UIImageView *dateStampBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"date_stamp_background"]];
-        [self addSubview:dateStampBackground];
-        CGRectSetCenterX(dateStampBackground, width/2);
+        UILabel *stampBackground = iconLabel(@"trompet", 100);
+        [stampBackground setTextColor:kFontColor];
+        [self addSubview:stampBackground];
+        CGRectSetCenterX(stampBackground, width/2);
         //self.frame = dateStampBackground.bounds;
         self.backgroundColor = CLEAR;
         //self.frame = CGRectMake(0, 0, kStampSize, kStampSize);
@@ -48,7 +49,7 @@
         [self.allDoneLabel sizeToFit];
         [self addSubview:self.allDoneLabel];
         CGRectSetWidth(self.allDoneLabel,width);
-        CGRectSetY(self.allDoneLabel, CGRectGetMaxY(dateStampBackground.frame) + kAllDoneSpacing);
+        CGRectSetY(self.allDoneLabel, CGRectGetMaxY(stampBackground.frame) + kAllDoneSpacing);
         CGRectSetCenterX(self.allDoneLabel, width/2);
         
         

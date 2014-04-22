@@ -84,7 +84,7 @@
 }
 -(void)showBackgroundItems:(BOOL)show{
     self.menuText.hidden = !show;
-    self.backgroundImage.hidden = !show;
+    self.backgroundIcon.hidden = !show;
 }
 -(void)didUpdateItemHandler:(ItemHandler *)handler{
     [self willUpdateCells];
@@ -479,37 +479,39 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = CLEAR;
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_white_background",self.state]]];
-    if ([self.state isEqualToString:@"today"]) {
-        imageView.hidden = YES;
-    }
-    imageView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/4);
-    //imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
-    imageView.tag = BACKGROUND_IMAGE_VIEW_TAG;
-    if (![self.state isEqualToString:@"today"]) [self.view addSubview:imageView];
-    self.backgroundImage = (UIImageView*)[self.view viewWithTag:BACKGROUND_IMAGE_VIEW_TAG];
     
-    UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.center.y+50, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
-    menuText.backgroundColor = CLEAR;
-    menuText.font = TABLE_EMPTY_BG_FONT;
-    NSString *text;
-    switch (self.cellType) {
-        case CellTypeDone:
-            text = @"Done";
-            break;
-        case CellTypeSchedule:
-            text = @"Schedule";
-            break;
-        default:
-            text = @"";
-            break;
+    if (![self.state isEqualToString:@"today"]) {
+        NSString *iconString = ([self.state isEqualToString:@"schedule"]) ? @"later" : @"done";
+        UILabel *backgroundIcon = iconLabel(iconString, 61);
+        backgroundIcon.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/4);
+        [backgroundIcon setTextColor:[StyleHandler colorForCellType:self.cellType]];
+        //imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
+        backgroundIcon.tag = BACKGROUND_IMAGE_VIEW_TAG;
+        [self.view addSubview:backgroundIcon];
+        self.backgroundIcon = (UILabel*)[self.view viewWithTag:BACKGROUND_IMAGE_VIEW_TAG];
+        UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, self.backgroundIcon.center.y+50, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
+        menuText.backgroundColor = CLEAR;
+        menuText.font = TABLE_EMPTY_BG_FONT;
+        NSString *text;
+        switch (self.cellType) {
+            case CellTypeDone:
+                text = @"Done";
+                break;
+            case CellTypeSchedule:
+                text = @"Schedule";
+                break;
+            default:
+                text = @"";
+                break;
+        }
+        menuText.text = text;
+        menuText.textAlignment = NSTextAlignmentCenter;
+        menuText.textColor = [StyleHandler colorForCellType:self.cellType];
+        menuText.tag = MENU_TEXT_TAG;
+        [self.view addSubview:menuText];
+        self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];
     }
-    menuText.text = text;
-    menuText.textAlignment = NSTextAlignmentCenter;
-    menuText.textColor = [StyleHandler colorForCellType:self.cellType];
-    menuText.tag = MENU_TEXT_TAG;
-    [self.view addSubview:menuText];
-    self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];
+    
     
 
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];

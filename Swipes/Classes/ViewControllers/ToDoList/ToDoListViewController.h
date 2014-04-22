@@ -14,7 +14,7 @@
 #import "ItemHandler.h"
 
 @interface ToDoListViewController : UIViewController <UITableViewDelegate,ItemHandlerDelegate>
-@property (nonatomic,weak) IBOutlet UIImageView *backgroundImage;
+@property (nonatomic,weak) IBOutlet UILabel *backgroundIcon;
 @property (nonatomic,weak) IBOutlet UILabel *backgroundLabel;
 @property (nonatomic,strong) ItemHandler *itemHandler;
 @property (nonatomic,strong) NSString *state;

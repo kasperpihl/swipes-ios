@@ -54,8 +54,8 @@
         UIButton *crossButton = [[UIButton alloc] initWithFrame:CGRectMake(contentView.frame.size.width-kCrossButtonSize, 0, kCrossButtonSize, kCrossButtonSize)];
         crossButton.titleLabel.font = iconFont(23);
         [crossButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        [crossButton setTitle:@"roundClose" forState:UIControlStateNormal];
-        [crossButton setTitle:@"roundCloseFull" forState:UIControlStateHighlighted];
+        [crossButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
+        [crossButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
         [crossButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
         //crossButton.imageEdgeInsets = kCrossButtonContentInset;
         [contentView addSubview:crossButton];

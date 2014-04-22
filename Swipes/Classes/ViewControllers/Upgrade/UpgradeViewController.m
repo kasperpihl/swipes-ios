@@ -113,8 +113,8 @@
     UIButton *closeButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
     closeButton.titleLabel.font = iconFont(23);
     [closeButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
-    [closeButton setTitle:@"roundClose" forState:UIControlStateNormal];
-    [closeButton setTitle:@"roundCloseFull" forState:UIControlStateHighlighted];
+    [closeButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
+    [closeButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
     closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, (OSVER >= 7 ? 20 : 0), kCloseButtonSize, kCloseButtonSize);
     [closeButton addTarget:self action:@selector(pressedCloseButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:closeButton];

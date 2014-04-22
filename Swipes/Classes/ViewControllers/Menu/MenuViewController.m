@@ -365,7 +365,11 @@
             break;
         }
         case KPMenuButtonLogout:{
-
+            if(!kUserHandler.isLoggedIn){
+                [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
+                [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
+                return;
+            }
             KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Log out" message:@"Are you sure you want to log out of your account?" block:^(BOOL succeeded, NSError *error) {
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
@@ -414,7 +418,7 @@
     }
 }
 -(void)changedTheme{
-    [self renderSubviews];
+    //[self renderSubviews];
 }
 -(void)changedIsPlus{
     UIButton *upgradeButton = (UIButton*)[self.gridView viewWithTag:[self tagForButton:KPMenuButtonUpgrade]];
@@ -451,7 +455,7 @@
             title = @"Sync";
             break;
         case KPMenuButtonLogout:
-            title = @"Logout";
+            title = (kUserHandler.isLoggedIn) ? @"Logout" : @"Account";
             break;
         case KPMenuButtonScheme:
             title = @"Theme";
@@ -475,7 +479,7 @@
             imageString = @"settingsFeedback";
             break;
         case KPMenuButtonSnoozes:
-            imageString = @"settingsSnoozes";
+            imageString = @"later";
             break;
         case KPMenuButtonUpgrade:
             imageString = @"settingsPlusFull";
@@ -487,7 +491,7 @@
             imageString = @"settingsSync";
             break;
         case KPMenuButtonLogout:
-            imageString = @"settingsLogout";
+            imageString = (kUserHandler.isLoggedIn) ? @"settingsLogout" : @"settings";
             break;
         case KPMenuButtonScheme:
             imageString = @"settingsTheme";

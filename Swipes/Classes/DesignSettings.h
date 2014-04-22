@@ -100,7 +100,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 
 
 #define TAGS_LABEL_BOLD_FONT            KP_BOLD(11)
-#define TABLE_EMPTY_BG_FONT             KP_LIGHT(16)
+#define TABLE_EMPTY_BG_FONT             KP_REGULAR(16)
 #define NO_TAG_FONT                     KP_LIGHT(18)
 #define TEXT_FIELD_FONT                 KP_LIGHT(18)
 #define NOTES_VIEW_FONT                 KP_REGULAR(17)

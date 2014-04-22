@@ -97,6 +97,7 @@
     }];
 }
 -(void)didLoginUser:(PFUser*)user{
+    [self.settingsViewController renderSubviews];
     voidBlock block = ^{
         if(user.isNew) {
             [ANALYTICS tagEvent:@"Signed Up" options:@{}];
@@ -168,11 +169,13 @@ static RootViewController *sharedObject;
     [PFUser logOut];
     [[KPParseCoreData sharedInstance] clearAndDeleteData];
     [self resetRoot];
+    [self.drawerViewController closeDrawerAnimated:YES completion:nil];
     
 }
 -(void)resetRoot{
     self.menuViewController = nil;
     [self setupAppearance];
+    [self.settingsViewController renderSubviews];
     //[self.sideMenu hide];
     
 }
@@ -255,9 +258,6 @@ static RootViewController *sharedObject;
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
     if(!sharedObject)
         sharedObject = self;
-#warning Forcing welcome screen
-    [self changeToMenu:KPMenuLogin animated:NO];
-    return;
     
     if(!kCurrent){
         if([[NSUserDefaults standardUserDefaults] objectForKey:isTryingString]){

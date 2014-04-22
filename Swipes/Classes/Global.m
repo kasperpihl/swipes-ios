@@ -51,7 +51,6 @@ static Global *sharedObject;
     iconCompare(@"settingsPolicy",              @"\ue616");
     iconCompare(@"settingsFeedback",            @"\ue618");
     iconCompare(@"settingsWalkthrough",         @"\ue619");
-    iconCompare(@"settingsSnoozes",             @"\ue61a");
     iconCompare(@"settingsNotification",        @"\ue61b");
     
     /* Menu icons full */
@@ -61,7 +60,6 @@ static Global *sharedObject;
     iconCompare(@"settingsPolicyFull",          @"\ue61f");
     iconCompare(@"settingsFeedbackFull",        @"\ue621");
     iconCompare(@"settingsWalkthroughFull",     @"\ue622");
-    iconCompare(@"settingsSnoozesFull",         @"\ue623");
     iconCompare(@"settingsNotificationFull",    @"\ue624");
     
     
@@ -111,6 +109,9 @@ static Global *sharedObject;
     iconCompare(@"scheduleCoffeeFull",          @"\ue64e");
     
     iconCompare(@"logo",                        @"\ue600");
+    iconCompare(@"signature",                   @"\ue61a");
+    iconCompare(@"trompet",                     @"\ue623");
+    iconCompare(@"pickerWheel",                 @"\ue627");
     return iconString;
 }
 +(NSDateFormatter *)isoDateFormatter{

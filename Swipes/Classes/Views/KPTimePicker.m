@@ -57,7 +57,7 @@
 @property (nonatomic) BOOL isInConfirmButton;
 @property (nonatomic) BOOL isOutOfScope;
 
-@property (nonatomic,strong) UIImageView *timeSlider;
+@property (nonatomic,strong) UILabel *timeSlider;
 @property (nonatomic,strong) UIButton *confirmButton;
 @property (nonatomic,strong) UIButton *backButton;
 @property (nonatomic,strong) UILabel *sunImage;
@@ -287,7 +287,9 @@
         self.confirmButton.layer.cornerRadius = kDefActualSize;
         [self addSubview:self.confirmButton];
         
-        self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:valForScreen(@"picker_wheel_ip4_white",@"picker_wheel_white")]];
+        
+        self.timeSlider = iconLabel(@"pickerWheel", valForScreen(230, 250));
+        [self.timeSlider setTextColor:color(213,216,220,1)];
         self.timeSlider.center = self.centerPoint;
         [self addSubview:self.timeSlider];
         

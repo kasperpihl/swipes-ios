@@ -78,7 +78,7 @@ typedef enum {
 @property (nonatomic) WalkthroughState currentState;
 
 /* First view */
-@property (nonatomic,strong) UIImageView *swipesLogo;
+@property (nonatomic,strong) UILabel *swipesLogo;
 @property (nonatomic,strong) UIImageView *menuExplainer;
 @property (nonatomic,strong) UIButton *actionButton;
 @property (nonatomic,strong) WalkthroughTitleView *titleView;
@@ -96,8 +96,8 @@ typedef enum {
 @property (nonatomic,strong) WalkthroughOverlayBackground *backgroundOverlay;
 @property (nonatomic,strong) UIButton *schedulePopupButton;
 
-@property (nonatomic,strong) UIImageView *greenBackground;
-@property (nonatomic,strong) UIImageView *signatureImage;
+@property (nonatomic,strong) UILabel *greenBackground;
+@property (nonatomic,strong) UILabel *signatureImage;
 
 @property (nonatomic) UIButton *closeButton;
 
@@ -268,10 +268,12 @@ typedef enum {
                 self.doneButton.hidden = YES;
                 self.phoneBackground.hidden = YES;
                 
-                self.greenBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_swipes_logo"]];
+                self.greenBackground = iconLabel(@"logo", 61);
+                [self.greenBackground setTextColor:tcolor(DoneColor)];
                 CGRectSetCenter(self.greenBackground, self.view.frame.size.width/2, self.greenBackground.frame.size.height+20);
                 [self.view addSubview:self.greenBackground];
-                self.signatureImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wt_signature"]];
+                self.signatureImage = iconLabel(@"signature", 46);
+                [self.signatureImage setTextColor:alpha(tcolorF(TextColor, ThemeLight), 0.6)];
                 self.signatureImage.alpha = 0;
                 CGRectSetY(self.actionButton, self.view.bounds.size.height-kActionButtonBottomSpacing - self.actionButton.frame.size.height);
                 [self.titleView setTitle:@"Welcome on board!" subtitle:@"Register an account to get started. Your tasks will be backed up every 24h.\n\nTake the leap. Swipe!"];
@@ -550,8 +552,8 @@ typedef enum {
 {
     [super viewDidLoad];
     self.view.backgroundColor = kWalkthroughBackground;
-    
-    self.swipesLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_swipes_logo"]];
+    self.swipesLogo = iconLabel(@"logo", 61);
+    [self.swipesLogo setTextColor:tcolor(DoneColor)];
     self.swipesLogo.center = CGPointMake(self.view.center.x, self.swipesLogo.center.y+LOGO_Y);
     [self.view addSubview:self.swipesLogo];
     
