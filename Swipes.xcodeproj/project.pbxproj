@@ -53,12 +53,10 @@
 		A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1CA1838EC570047DCC9 /* ToDoCell.m */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
 		A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
-		A717BF24176115CD004791BF /* ProximaNova-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF20176115CD004791BF /* ProximaNova-Black.ttf */; };
 		A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */; };
 		A717BF26176115CD004791BF /* ProximaNova-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF22176115CD004791BF /* ProximaNova-Light.ttf */; };
 		A717BF27176115CD004791BF /* ProximaNova-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */; };
 		A717BF2917611D2D004791BF /* ProximaNova-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */; };
-		A717BF2B17611EDB004791BF /* ProximaNovaCond-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF2A17611EDB004791BF /* ProximaNovaCond-Semibold.ttf */; };
 		A717DD1018B6440A00EE359C /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A717DD0F18B6440A00EE359C /* Crashlytics.framework */; };
 		A717DD1518B645E100EE359C /* upgrade_plus_logo_black.png in Resources */ = {isa = PBXBuildFile; fileRef = A717DD1118B645E100EE359C /* upgrade_plus_logo_black.png */; };
 		A717DD1618B645E100EE359C /* upgrade_plus_logo_black@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A717DD1218B645E100EE359C /* upgrade_plus_logo_black@2x.png */; };
@@ -73,8 +71,6 @@
 		A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A72EFFFE18425B6A008333AA /* UserHandler.m */; };
 		A730D39617B51C24005E1510 /* upgrade_full.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39417B51C24005E1510 /* upgrade_full.png */; };
 		A730D39717B51C24005E1510 /* upgrade_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39517B51C24005E1510 /* upgrade_full@2x.png */; };
-		A73FD8C11846326C0006C725 /* location_popup_title.png in Resources */ = {isa = PBXBuildFile; fileRef = A73FD8BF1846326C0006C725 /* location_popup_title.png */; };
-		A73FD8C21846326C0006C725 /* location_popup_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A73FD8C01846326C0006C725 /* location_popup_title@2x.png */; };
 		A741EC4F18354726000F9F93 /* default-background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A741EC4E18354726000F9F93 /* default-background.jpg */; };
 		A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */; };
 		A74646B918D38660003911DC /* ContactHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A74646B818D38660003911DC /* ContactHandler.m */; };
@@ -146,7 +142,6 @@
 		A761B5B716EB596B0095A9A8 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B616EB596B0095A9A8 /* CFNetwork.framework */; };
 		A761B5BB16EB59760095A9A8 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BA16EB59760095A9A8 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		A761B5BD16EB597B0095A9A8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */; };
-		A763289218F94FCE0001BCD8 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A763289118F94FCE0001BCD8 /* WelcomeViewController.m */; };
 		A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
 		A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D28172C5EA800BCB2D9 /* _KPTag.m */; };
 		A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2B172C5EAF00BCB2D9 /* KPTag.m */; };
@@ -154,7 +149,6 @@
 		A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A76ADC1217ECA7AB00F52F40 /* Images.xcassets */; };
 		A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76B2386172C06CC00F742C2 /* ScheduleViewController.m */; };
 		A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A771356E17BABB5A0090BE89 /* UIView+Utilities.m */; };
-		A776D0BB17AD39E30027CA23 /* ProximaNova-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A776D0BA17AD39E30027CA23 /* ProximaNova-ExtraBold.ttf */; };
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
 		A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CD116EB5884004D95E5 /* CoreGraphics.framework */; };
@@ -206,6 +200,8 @@
 		A7C90E7717A712A100C5F9E2 /* wt_signature@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E7517A712A100C5F9E2 /* wt_signature@2x.png */; };
 		A7D0D3BF1904FD1000ABA1FF /* selected_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3BD1904FD1000ABA1FF /* selected_circle.png */; };
 		A7D0D3C01904FD1000ABA1FF /* selected_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3BE1904FD1000ABA1FF /* selected_circle@2x.png */; };
+		A7D0D3C319051BA000ABA1FF /* Nexa-Black-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3C119051BA000ABA1FF /* Nexa-Black-Italic.ttf */; };
+		A7D0D3C419051BA000ABA1FF /* Nexa-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3C219051BA000ABA1FF /* Nexa-Bold.ttf */; };
 		A7D7D53317B1586A00FBC042 /* SettingsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53217B1586A00FBC042 /* SettingsHandler.m */; };
 		A7D7D53917B1A56C00FBC042 /* MenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53817B1A56B00FBC042 /* MenuButton.m */; };
 		A7DEA1891790BD2D00EB1549 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA1881790BD2D00EB1549 /* MenuViewController.m */; };
@@ -327,12 +323,10 @@
 		A717BEEB175E6857004791BF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		A717BF1D17611162004791BF /* AnalyticsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsHandler.h; sourceTree = "<group>"; };
 		A717BF1E17611162004791BF /* AnalyticsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsHandler.m; sourceTree = "<group>"; };
-		A717BF20176115CD004791BF /* ProximaNova-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Black.ttf"; path = "Font/ProximaNova-Black.ttf"; sourceTree = "<group>"; };
 		A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Bold.ttf"; path = "Font/ProximaNova-Bold.ttf"; sourceTree = "<group>"; };
 		A717BF22176115CD004791BF /* ProximaNova-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Light.ttf"; path = "Font/ProximaNova-Light.ttf"; sourceTree = "<group>"; };
 		A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Regular.ttf"; path = "Font/ProximaNova-Regular.ttf"; sourceTree = "<group>"; };
 		A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Semibold.ttf"; path = "Font/ProximaNova-Semibold.ttf"; sourceTree = "<group>"; };
-		A717BF2A17611EDB004791BF /* ProximaNovaCond-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNovaCond-Semibold.ttf"; path = "Font/ProximaNovaCond-Semibold.ttf"; sourceTree = "<group>"; };
 		A717DD0F18B6440A00EE359C /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		A717DD1118B645E100EE359C /* upgrade_plus_logo_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upgrade_plus_logo_black.png; sourceTree = "<group>"; };
 		A717DD1218B645E100EE359C /* upgrade_plus_logo_black@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upgrade_plus_logo_black@2x.png"; sourceTree = "<group>"; };
@@ -351,8 +345,6 @@
 		A72EFFFE18425B6A008333AA /* UserHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserHandler.m; sourceTree = "<group>"; };
 		A730D39417B51C24005E1510 /* upgrade_full.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upgrade_full.png; sourceTree = "<group>"; };
 		A730D39517B51C24005E1510 /* upgrade_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "upgrade_full@2x.png"; sourceTree = "<group>"; };
-		A73FD8BF1846326C0006C725 /* location_popup_title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location_popup_title.png; sourceTree = "<group>"; };
-		A73FD8C01846326C0006C725 /* location_popup_title@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "location_popup_title@2x.png"; sourceTree = "<group>"; };
 		A741EC4E18354726000F9F93 /* default-background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "default-background.jpg"; sourceTree = "<group>"; };
 		A742415E17A5BFB2009C9735 /* WalkthroughOverlayBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkthroughOverlayBackground.h; path = Walkthrough/WalkthroughOverlayBackground.h; sourceTree = "<group>"; };
 		A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkthroughOverlayBackground.m; path = Walkthrough/WalkthroughOverlayBackground.m; sourceTree = "<group>"; };
@@ -438,8 +430,6 @@
 		A761B5B816EB59710095A9A8 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A761B5BA16EB59760095A9A8 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		A763289018F94FCE0001BCD8 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WelcomeViewController.h; path = Login/WelcomeViewController.h; sourceTree = "<group>"; };
-		A763289118F94FCE0001BCD8 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WelcomeViewController.m; path = Login/WelcomeViewController.m; sourceTree = "<group>"; };
 		A7680D1E172C0E1C00BCB2D9 /* NSDate-Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-Utilities.h"; sourceTree = "<group>"; };
 		A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-Utilities.m"; sourceTree = "<group>"; };
 		A7680D27172C5EA800BCB2D9 /* _KPTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _KPTag.h; sourceTree = "<group>"; };
@@ -453,7 +443,6 @@
 		A76B2386172C06CC00F742C2 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScheduleViewController.m; path = Schedule/ScheduleViewController.m; sourceTree = "<group>"; };
 		A771356D17BABB5A0090BE89 /* UIView+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Utilities.h"; sourceTree = "<group>"; };
 		A771356E17BABB5A0090BE89 /* UIView+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Utilities.m"; sourceTree = "<group>"; };
-		A776D0BA17AD39E30027CA23 /* ProximaNova-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-ExtraBold.ttf"; path = "Font/ProximaNova-ExtraBold.ttf"; sourceTree = "<group>"; };
 		A7778CCA16EB5884004D95E5 /* Swipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7778CCD16EB5884004D95E5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A7778CCF16EB5884004D95E5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -538,6 +527,8 @@
 		A7C90E7517A712A100C5F9E2 /* wt_signature@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wt_signature@2x.png"; sourceTree = "<group>"; };
 		A7D0D3BD1904FD1000ABA1FF /* selected_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = selected_circle.png; sourceTree = "<group>"; };
 		A7D0D3BE1904FD1000ABA1FF /* selected_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected_circle@2x.png"; sourceTree = "<group>"; };
+		A7D0D3C119051BA000ABA1FF /* Nexa-Black-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nexa-Black-Italic.ttf"; path = "Font/Nexa-Black-Italic.ttf"; sourceTree = "<group>"; };
+		A7D0D3C219051BA000ABA1FF /* Nexa-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nexa-Bold.ttf"; path = "Font/Nexa-Bold.ttf"; sourceTree = "<group>"; };
 		A7D7D53117B1586A00FBC042 /* SettingsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHandler.h; sourceTree = "<group>"; };
 		A7D7D53217B1586A00FBC042 /* SettingsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsHandler.m; sourceTree = "<group>"; };
 		A7D7D53717B1A56B00FBC042 /* MenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuButton.h; sourceTree = "<group>"; };
@@ -802,8 +793,6 @@
 		A7090B6A175DF28100728A3A /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				A763289018F94FCE0001BCD8 /* WelcomeViewController.h */,
-				A763289118F94FCE0001BCD8 /* WelcomeViewController.m */,
 				A7090B6E175DF3F900728A3A /* LoginViewController.h */,
 				A7090B6F175DF3F900728A3A /* LoginViewController.m */,
 			);
@@ -975,14 +964,13 @@
 			isa = PBXGroup;
 			children = (
 				A74FB8FF18FFF2FA00F25157 /* swipes.ttf */,
+				A7D0D3C119051BA000ABA1FF /* Nexa-Black-Italic.ttf */,
+				A7D0D3C219051BA000ABA1FF /* Nexa-Bold.ttf */,
 				A717DD2018B6775800EE359C /* NexaHeavy.ttf */,
-				A776D0BA17AD39E30027CA23 /* ProximaNova-ExtraBold.ttf */,
-				A717BF20176115CD004791BF /* ProximaNova-Black.ttf */,
 				A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */,
 				A717BF22176115CD004791BF /* ProximaNova-Light.ttf */,
 				A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */,
 				A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */,
-				A717BF2A17611EDB004791BF /* ProximaNovaCond-Semibold.ttf */,
 			);
 			name = Font;
 			sourceTree = "<group>";
@@ -1295,8 +1283,6 @@
 		A79DB41B17358C33007A48E2 /* Backgrounds */ = {
 			isa = PBXGroup;
 			children = (
-				A73FD8BF1846326C0006C725 /* location_popup_title.png */,
-				A73FD8C01846326C0006C725 /* location_popup_title@2x.png */,
 				A7ADCB2A17DD2B4000780F88 /* background_white_signate.png */,
 				A7ADCB2B17DD2B4000780F88 /* background_white_signate@2x.png */,
 				A7FE4403182828E1002AFB2E /* date_stamp_background.png */,
@@ -1518,6 +1504,7 @@
 				DACD544718A1ACFC00C378DF /* folder_gray.png in Resources */,
 				A78128D217294C56002226C8 /* InfoPlist.strings in Resources */,
 				DACD544518A1ACFC00C378DF /* folder_app.png in Resources */,
+				A7D0D3C319051BA000ABA1FF /* Nexa-Black-Italic.ttf in Resources */,
 				A78128D317294C56002226C8 /* MainStoryboard.storyboard in Resources */,
 				DACD544C18A1ACFC00C378DF /* music.png in Resources */,
 				A79DB42317358C33007A48E2 /* done_white_background@2x.png in Resources */,
@@ -1525,6 +1512,7 @@
 				A79DB42517358C33007A48E2 /* schedule_white_background@2x.png in Resources */,
 				DACD545118A1ACFC00C378DF /* page_white_c.png in Resources */,
 				A74FB8F518FFBCB200F25157 /* MASTER_0001.jpg in Resources */,
+				A7D0D3C419051BA000ABA1FF /* Nexa-Bold.ttf in Resources */,
 				A7FE4406182828E1002AFB2E /* date_stamp_background@2x.png in Resources */,
 				A7582503189BA9DE00B904BC /* swipes_logo_white@2x.png in Resources */,
 				A7D0D3C01904FD1000ABA1FF /* selected_circle@2x.png in Resources */,
@@ -1532,7 +1520,6 @@
 				DA310FA7188F3F26003C8FA4 /* Assets in Resources */,
 				A792BC8C18AD3B41000573E4 /* backarrow_icon_white.png in Resources */,
 				DACD544918A1ACFC00C378DF /* folder_star.png in Resources */,
-				A717BF24176115CD004791BF /* ProximaNova-Black.ttf in Resources */,
 				A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */,
 				DACD545B18A1ACFC00C378DF /* page_white_php.png in Resources */,
 				A74FB8F918FFBCB200F25157 /* MASTER_0005.jpg in Resources */,
@@ -1547,7 +1534,6 @@
 				DACD545218A1ACFC00C378DF /* page_white_code.png in Resources */,
 				A717BF2917611D2D004791BF /* ProximaNova-Semibold.ttf in Resources */,
 				A74FB8B318FFBC4D00F25157 /* MASTER_00015.jpg in Resources */,
-				A717BF2B17611EDB004791BF /* ProximaNovaCond-Semibold.ttf in Resources */,
 				A74FB8B118FFBC4D00F25157 /* MASTER_00013.jpg in Resources */,
 				DACD545718A1ACFC00C378DF /* page_white_flash.png in Resources */,
 				A717DD1C18B6523E00EE359C /* btn-plus-background@2x.png in Resources */,
@@ -1602,7 +1588,6 @@
 				A74FB8B418FFBC4D00F25157 /* MASTER_00016.jpg in Resources */,
 				A792BC8A18AD3B41000573E4 /* backarrow_icon_black.png in Resources */,
 				DACD544818A1ACFC00C378DF /* folder_public.png in Resources */,
-				A776D0BB17AD39E30027CA23 /* ProximaNova-ExtraBold.ttf in Resources */,
 				A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */,
 				A792BD6E18AD4AFA000573E4 /* picker_wheel_ip4_white@2x.png in Resources */,
 				DACD545918A1ACFC00C378DF /* page_white_h.png in Resources */,
@@ -1611,8 +1596,6 @@
 				DACD544F18A1ACFC00C378DF /* page_white_acrobat.png in Resources */,
 				A730D39617B51C24005E1510 /* upgrade_full.png in Resources */,
 				A730D39717B51C24005E1510 /* upgrade_full@2x.png in Resources */,
-				A73FD8C11846326C0006C725 /* location_popup_title.png in Resources */,
-				A73FD8C21846326C0006C725 /* location_popup_title@2x.png in Resources */,
 				A717DD1B18B6523E00EE359C /* btn-plus-background.png in Resources */,
 				DACD544B18A1ACFC00C378DF /* folder_user_gray.png in Resources */,
 				A74FB8F818FFBCB200F25157 /* MASTER_0004.jpg in Resources */,
@@ -1727,7 +1710,6 @@
 				A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */,
 				A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */,
 				A7933049172AB63700F1505E /* TodayViewController.m in Sources */,
-				A763289218F94FCE0001BCD8 /* WelcomeViewController.m in Sources */,
 				A7933056172B2BA100F1505E /* DoneViewController.m in Sources */,
 				A77D34C818E098C800095F1E /* HintHandler.m in Sources */,
 				A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */,

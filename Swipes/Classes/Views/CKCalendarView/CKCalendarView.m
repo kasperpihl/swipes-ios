@@ -141,8 +141,8 @@
     prevButton.titleLabel.font = iconFont(17);
     [prevButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     [prevButton setTitleColor:alpha(tcolor(TextColor), .2) forState:UIControlStateDisabled];
-    [prevButton setTitle:@"rightArrow" forState:UIControlStateNormal];
-    [prevButton setTitle:@"rightArrowFull" forState:UIControlStateHighlighted];
+    [prevButton setTitle:iconString(@"rightArrow") forState:UIControlStateNormal];
+    [prevButton setTitle:iconString(@"rightArrowFull") forState:UIControlStateHighlighted];
     prevButton.transform = CGAffineTransformMakeRotation(2*M_PI/2);
     prevButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
     [prevButton addTarget:self action:@selector(_moveCalendarToPreviousMonth) forControlEvents:UIControlEventTouchUpInside];
@@ -152,8 +152,8 @@
     SlowHighlightIcon *nextButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
     nextButton.titleLabel.font = iconFont(17);
     [nextButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-    [nextButton setTitle:@"rightArrow" forState:UIControlStateNormal];
-    [nextButton setTitle:@"rightArrowFull" forState:UIControlStateHighlighted];
+    [nextButton setTitle:iconString(@"rightArrow") forState:UIControlStateNormal];
+    [nextButton setTitle:iconString(@"rightArrowFull") forState:UIControlStateHighlighted];
     nextButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
     [nextButton addTarget:self action:@selector(_moveCalendarToNextMonth) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:nextButton];

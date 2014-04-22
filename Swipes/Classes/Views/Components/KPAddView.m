@@ -27,7 +27,7 @@
         self.doneEditingButton.titleLabel.font = iconFont(23);
         //[self.doneEditingButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         [self.doneEditingButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        [self.doneEditingButton setTitle:@"back" forState:UIControlStateNormal];
+        [self.doneEditingButton setTitle:iconString(@"back") forState:UIControlStateNormal];
         [self.doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];
         
         self.doneEditingButton.clipsToBounds = NO;

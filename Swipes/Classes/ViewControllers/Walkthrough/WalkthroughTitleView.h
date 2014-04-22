@@ -13,4 +13,5 @@
 @property (nonatomic,strong) UILabel *titleLabel;
 @property (nonatomic,strong) UILabel *subtitleLabel;
 -(void)setTitle:(NSString*)title subtitle:(NSString*)subtitle;
+@property (nonatomic) CGFloat spacing;
 @end

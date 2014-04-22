@@ -99,7 +99,7 @@
         [[UITextField appearance] setTintColor:tcolor(TextColor)];
 
     }
-    
+    NSLog(@"%@",[UIFont fontNamesForFamilyName:@"Nexa Bold"]);
     //[EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
     //NSLog(@"%@",[kCurrent sessionToken]);
     

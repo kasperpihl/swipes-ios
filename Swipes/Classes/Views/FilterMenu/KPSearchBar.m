@@ -129,8 +129,8 @@
         SlowHighlightIcon *filterButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         filterButton.titleLabel.font = iconFont(23);
         [filterButton addTarget:self action:@selector(pressedFilter:) forControlEvents:UIControlEventTouchUpInside];
-        [filterButton setTitle:@"actionTag" forState:UIControlStateNormal];
-        [filterButton setTitle:@"actionTagFull" forState:UIControlStateHighlighted];
+        [filterButton setTitle:iconString(@"actionTag") forState:UIControlStateNormal];
+        [filterButton setTitle:iconString(@"actionTagFull") forState:UIControlStateHighlighted];
         [filterButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         filterButton.tag = FILTER_BUTTON_TAG;
         filterButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
@@ -143,8 +143,8 @@
         clearFilterButton.frame = CGRectMake(self.frame.size.width-buttonSize,0,buttonSize,buttonSize);
         clearFilterButton.titleLabel.font = iconFont(23);
         //[clearFilterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_COLOR] forState:UIControlStateNormal];
-        [clearFilterButton setTitle:@"roundClose" forState:UIControlStateNormal];
-        [clearFilterButton setTitle:@"roundCloseFull" forState:UIControlStateHighlighted];
+        [clearFilterButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
+        [clearFilterButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
         [clearFilterButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [clearFilterButton addTarget:self action:@selector(pressedClearFilter:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:clearFilterButton];

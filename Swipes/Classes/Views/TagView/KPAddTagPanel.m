@@ -136,7 +136,7 @@
 }
 -(void)toolbar:(KPToolbar *)toolbar editButton:(UIButton *__autoreleasing *)button forItem:(NSInteger)item{
     if(item == 1){
-        [*button setTitle:@"actionDeleteFull" forState:UIControlStateHighlighted];
+        [*button setTitle:iconString(@"actionDeleteFull") forState:UIControlStateHighlighted];
     }
 }
 -(void)updateTrashButton{

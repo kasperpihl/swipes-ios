@@ -64,9 +64,11 @@
             else{
                 
                 button.titleLabel.font = self.font;
-                [button setTitle:itemString forState:UIControlStateNormal];
-                if(self.titleHighlightString)
-                    [button setTitle:[NSString stringWithFormat:@"%@%@",itemString,self.titleHighlightString] forState:UIControlStateHighlighted];
+                [button setTitle:iconString(itemString) forState:UIControlStateNormal];
+                if(self.titleHighlightString){
+                    NSString *highItemString = [NSString stringWithFormat:@"%@%@",itemString,self.titleHighlightString];
+                    [button setTitle:iconString(highItemString) forState:UIControlStateHighlighted];
+                }
                 if(self.titleColor)
                     [button setTitleColor:self.titleColor forState:UIControlStateNormal];
                 

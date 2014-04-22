@@ -620,7 +620,7 @@ typedef enum {
             break;
     }
     if(highlighted) imageString = [imageString stringByAppendingString:@"Full"];
-    return imageString;
+    return iconString(imageString);
 }
 
 -(void)addLocationView{

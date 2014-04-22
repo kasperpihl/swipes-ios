@@ -7,7 +7,7 @@
 //
 
 #import "Global.h"
-
+#define iconCompare(target,result) if([iconString isEqualToString:target]) return result
 @implementation Global
 static Global *sharedObject;
 +(Global *)sharedInstance{
@@ -15,6 +15,103 @@ static Global *sharedObject;
         sharedObject = [[Global allocWithZone:NULL] init];
     }
     return sharedObject;
+}
++(NSString *)iconStringForString:(NSString *)iconString{
+    if(OSVER >= 7)
+        return iconString;
+    
+    /* Nav bar */
+    iconCompare(@"settings",                    @"\ue601");
+    iconCompare(@"done",                        @"\ue602");
+    iconCompare(@"today",                       @"\ue603");
+    iconCompare(@"later",                       @"\ue604");
+    iconCompare(@"settingsFull",                @"\ue605");
+    iconCompare(@"doneFull",                    @"\ue606");
+    iconCompare(@"todayFull",                   @"\ue607");
+    iconCompare(@"laterFull",                   @"\ue608");
+    
+    /* Edit mode */
+    iconCompare(@"editNotes",                   @"\ue609");
+    iconCompare(@"editRepeat",                  @"\ue60a");
+    iconCompare(@"editTags",                    @"\ue60b");
+    iconCompare(@"editSchedule",                @"\ue60c");
+    iconCompare(@"editLocation",                @"\ue60d");
+    
+    /* Social icons */
+    iconCompare(@"twitter",                     @"\ue60e");
+    iconCompare(@"facebook",                    @"\ue60f");
+    iconCompare(@"twitterFull",                 @"\ue610");
+    iconCompare(@"facebookFull",                @"\ue611");
+    
+    /* Menu icons */
+    iconCompare(@"settingsPlus",                @"\ue613");
+    iconCompare(@"settingsSync",                @"\ue632");
+    iconCompare(@"settingsLogout",              @"\ue617");
+    iconCompare(@"settingsTheme",               @"\ue615");
+    iconCompare(@"settingsPolicy",              @"\ue616");
+    iconCompare(@"settingsFeedback",            @"\ue618");
+    iconCompare(@"settingsWalkthrough",         @"\ue619");
+    iconCompare(@"settingsSnoozes",             @"\ue61a");
+    iconCompare(@"settingsNotification",        @"\ue61b");
+    
+    /* Menu icons full */
+    iconCompare(@"settingsThemeFull",           @"\ue61d");
+    iconCompare(@"settingsLogoutFull",          @"\ue620");
+    iconCompare(@"settingsPlusFull",            @"\ue61e");
+    iconCompare(@"settingsPolicyFull",          @"\ue61f");
+    iconCompare(@"settingsFeedbackFull",        @"\ue621");
+    iconCompare(@"settingsWalkthroughFull",     @"\ue622");
+    iconCompare(@"settingsSnoozesFull",         @"\ue623");
+    iconCompare(@"settingsNotificationFull",    @"\ue624");
+    
+    
+    iconCompare(@"checkmark",                   @"\ue625");
+    iconCompare(@"plus",                        @"\ue626");
+    iconCompare(@"back",                        @"\ue63f");
+    iconCompare(@"rightArrow",                  @"\ue628");
+    iconCompare(@"roundClose",                  @"\ue629");
+    iconCompare(@"roundAdd",                    @"\ue62a");
+    iconCompare(@"roundBack",                   @"\ue62b");
+    iconCompare(@"roundConfirm",                @"\ue62c");
+    iconCompare(@"rightArrowFull",              @"\ue62d");
+    iconCompare(@"roundCloseFull",              @"\ue62e");
+    iconCompare(@"roundAddFull",                @"\ue62f");
+    iconCompare(@"roundBackFull",               @"\ue630");
+    iconCompare(@"roundConfirmFull",            @"\ue631");
+    iconCompare(@"actionShare",                 @"\ue633");
+    iconCompare(@"actionTag",                   @"\ue634");
+    iconCompare(@"actionDelete",                @"\ue635");
+    iconCompare(@"actionEdit",                  @"\ue636");
+    iconCompare(@"actionAttach",                @"\ue637");
+    iconCompare(@"actionShareFull",             @"\ue639");
+    iconCompare(@"actionTagFull",               @"\ue63a");
+    iconCompare(@"actionDeleteFull",            @"\ue63b");
+    iconCompare(@"actionEditFull",              @"\ue63c");
+    
+    /* Schedule */
+    iconCompare(@"scheduleCalendar",            @"\ue63d");
+    iconCompare(@"scheduleLocation",            @"\ue63e");
+    iconCompare(@"scheduleCloud",               @"\ue612");
+    iconCompare(@"scheduleCircle",              @"\ue640");
+    iconCompare(@"scheduleGlass",               @"\ue641");
+    iconCompare(@"scheduleLogbook",             @"\ue642");
+    iconCompare(@"scheduleSun",                 @"\ue643");
+    iconCompare(@"scheduleMoon",                @"\ue638");
+    iconCompare(@"scheduleCoffee",              @"\ue645");
+    
+    /* Schedule full*/
+    iconCompare(@"scheduleCalendarFull",        @"\ue646");
+    iconCompare(@"scheduleLocationFull",        @"\ue647");
+    iconCompare(@"scheduleCloudFull",           @"\ue614");
+    iconCompare(@"scheduleCircleFull",          @"\ue649");
+    iconCompare(@"scheduleGlassFull",           @"\ue64a");
+    iconCompare(@"scheduleLogbookFull",         @"\ue64b");
+    iconCompare(@"scheduleSunFull",             @"\ue64c");
+    iconCompare(@"scheduleMoonFull",            @"\ue61c");
+    iconCompare(@"scheduleCoffeeFull",          @"\ue64e");
+    
+    iconCompare(@"logo",                        @"\ue600");
+    return iconString;
 }
 +(NSDateFormatter *)isoDateFormatter{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -59,9 +156,11 @@ static Global *sharedObject;
 +(UILabel *)iconLabelWithString:(NSString *)iconString height:(CGFloat)height{
     UILabel *label = [[UILabel alloc] init];
     label.font = iconFont(height);
+    label.backgroundColor = CLEAR;
     label.textAlignment = NSTextAlignmentCenter;
-    [label setText:iconString];
+    [label setText:iconString(iconString)];
     [label sizeToFit];
     return label;
 }
+
 @end

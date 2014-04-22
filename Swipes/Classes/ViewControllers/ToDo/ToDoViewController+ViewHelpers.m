@@ -11,7 +11,6 @@
 @implementation ToDoViewController (ViewHelpers)
 -(UILabel *)addAndGetImage:(NSString*)imageName inView:(UIView*)view{
     UILabel *icon = iconLabel(imageName, 15);
-    
     [icon setTextColor:tcolor(TextColor)];
     icon.frame = CGRectSetPos(icon.frame,(LABEL_X-icon.frame.size.width)/2, (view.frame.size.height-icon.frame.size.height)/2);
     icon.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;

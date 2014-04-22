@@ -48,7 +48,7 @@
         UIButton *backbutton = [UIButton buttonWithType:UIButtonTypeCustom];
         backbutton.frame = CGRectMake(self.frame.size.width-44, self.frame.size.height-44, 44, 44);
         backbutton.titleLabel.font = iconFont(23);
-        [backbutton setTitle:@"back" forState:UIControlStateNormal];
+        [backbutton setTitle:iconString(@"back") forState:UIControlStateNormal];
         [backbutton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         //[backbutton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         backbutton.transform = CGAffineTransformMakeRotation(M_PI);

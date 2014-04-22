@@ -84,7 +84,7 @@
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-buttonSize-backSpacing,startY,buttonSize,buttonSize)];
     [backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     backButton.titleLabel.font = iconFont(23);
-    [backButton setTitle:@"back" forState:UIControlStateNormal];
+    [backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
     
     [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
     backButton.transform = CGAffineTransformMakeRotation(M_PI);
@@ -203,8 +203,8 @@
     } completion:^(BOOL finished) {
         showingView.alpha = 0;
         if(level == 1){
-            [self.backButton setTitle:@"back" forState:UIControlStateNormal];
-            [self.backButton setTitle:@"back" forState:UIControlStateHighlighted];
+            [self.backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
+            [self.backButton setTitle:iconString(@"back") forState:UIControlStateHighlighted];
         }
         [UIView animateWithDuration:0.2 animations:^{
         } completion:^(BOOL finished) {
@@ -225,8 +225,8 @@
     [UIView animateWithDuration:0.1 animations:^{
         hidingView.alpha = 0;
         if(level == 0){
-            [self.backButton setTitle:@"roundClose" forState:UIControlStateNormal];
-            [self.backButton setTitle:@"roundCloseFull" forState:UIControlStateHighlighted];
+            [self.backButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
+            [self.backButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
         }
         } completion:^(BOOL finished) {
         viewController.view.alpha = 0;
@@ -495,7 +495,7 @@
     }
     if(highlighted) imageString = [imageString stringByAppendingString:@"Full"];
     if(button == KPMenuButtonUpgrade && highlighted) imageString = @"settingsPlus";
-    return imageString;
+    return iconString(imageString);
 }
 -(void)longPress:(UILongPressGestureRecognizer*)recognizer{
     if(recognizer.state == UIGestureRecognizerStateBegan){

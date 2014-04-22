@@ -16,7 +16,6 @@
 #import "DoneViewController.h"
 
 #import "LoginViewController.h"
-#import "WelcomeViewController.h"
 #import "AnalyticsHandler.h"
 
 #import "MenuViewController.h"
@@ -129,11 +128,6 @@
 -(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated{
     UIViewController *viewController;
     switch(menu) {
-        case KPMenuWelcome:{
-            WelcomeViewController *welcomeVC = [[WelcomeViewController alloc] init];
-            viewController = welcomeVC;
-            break;
-        }
         case KPMenuLogin:{
             LoginViewController *loginVC = [[LoginViewController alloc] init];
             loginVC.delegate = self;
@@ -250,7 +244,7 @@ static RootViewController *sharedObject;
     if(!sharedObject)
         sharedObject = self;
 #warning Forcing welcome screen
-    [self changeToMenu:KPMenuWelcome animated:NO];
+    [self changeToMenu:KPMenuLogin animated:NO];
     return;
     
     if(!kCurrent){
@@ -258,11 +252,11 @@ static RootViewController *sharedObject;
             [self changeToMenu:KPMenuHome animated:NO];
         }
         else{
-            [self changeToMenu:KPMenuWelcome animated:NO];
+            [self changeToMenu:KPMenuLogin animated:NO];
         }
     }
     else
-        [self changeToMenu:KPMenuWelcome animated:NO];
+        [self changeToMenu:KPMenuLogin animated:NO];
     
 }
 

@@ -196,15 +196,15 @@
     UIColor *highlightColor;
     switch (controlButton) {
         case KPSegmentButtonSchedule:
-            textString = @"later";
+            textString = iconString(@"later");
             highlightColor = tcolor(LaterColor);
             break;
         case KPSegmentButtonToday:
-            textString = @"today";
+            textString = iconString(@"today");
             highlightColor = tcolor(TasksColor);
             break;
         case KPSegmentButtonDone:
-            textString = @"done";
+            textString = iconString(@"done");
             highlightColor = tcolor(DoneColor);
             break;
     }
@@ -262,8 +262,8 @@
         settingsButton.titleLabel.font = iconFont(23);
         [settingsButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         //CGRectSetX(settingsButton, -settingsButton.frame.size.width/2);
-        [settingsButton setTitle:@"settings" forState:UIControlStateNormal];
-        [settingsButton setTitle:@"settingsFull" forState:UIControlStateHighlighted];
+        [settingsButton setTitle:iconString(@"settings") forState:UIControlStateNormal];
+        [settingsButton setTitle:iconString(@"settingsFull") forState:UIControlStateHighlighted];
         [settingsButton addTarget:self action:@selector(pressedSettings) forControlEvents:UIControlEventTouchUpInside];
         [self.ios7BackgroundView addSubview:settingsButton];
         self._settingsButton = settingsButton;

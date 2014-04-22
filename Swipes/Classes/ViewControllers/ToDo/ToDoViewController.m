@@ -420,7 +420,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     else{
         self.alarmLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:self.model.schedule showTime:YES]];
     }
-    [self.scheduleImageIcon setText:isLocation ? @"editLocation" : @"editSchedule"];
+    [self.scheduleImageIcon setText:isLocation ? iconString(@"editLocation") : iconString(@"editSchedule")];
 }
 
 -(void)updateNotes{

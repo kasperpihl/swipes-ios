@@ -282,7 +282,7 @@
         [self.confirmButton addTarget:self action:@selector(pressedConfirmButton:) forControlEvents:UIControlEventTouchUpInside];
         self.confirmButton.titleLabel.font = iconFont(23);
         [self.confirmButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
-        [self.confirmButton setTitle:@"checkmark" forState:UIControlStateNormal];
+        [self.confirmButton setTitle:iconString(@"checkmark") forState:UIControlStateNormal];
         self.confirmButton.layer.masksToBounds = YES;
         self.confirmButton.layer.cornerRadius = kDefActualSize;
         [self addSubview:self.confirmButton];
@@ -296,8 +296,8 @@
         self.backButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin);
         self.backButton.titleLabel.font = iconFont(41);
         [self.backButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
-        [self.backButton setTitle:@"roundBack" forState:UIControlStateNormal];
-        [self.backButton setTitle:@"roundBackFull" forState:UIControlStateHighlighted];
+        [self.backButton setTitle:iconString(@"roundBack") forState:UIControlStateNormal];
+        [self.backButton setTitle:iconString(@"roundBackFull") forState:UIControlStateHighlighted];
         [self.backButton addTarget:self action:@selector(pressedBackButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.backButton];
         
