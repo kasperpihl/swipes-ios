@@ -154,6 +154,8 @@
             break;
     }
     self.currentMenu = menu;
+    if(self.drawerViewController.openSide == MMDrawerSideLeft)
+        [self.drawerViewController closeDrawerAnimated:YES completion:nil];
     //CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
     //CGRectSetHeight(self.drawerViewController.view,viewController.view.frame.size.height-100);
     [self.drawerViewController setCenterViewController:viewController];
@@ -169,7 +171,7 @@ static RootViewController *sharedObject;
     [PFUser logOut];
     [[KPParseCoreData sharedInstance] clearAndDeleteData];
     [self resetRoot];
-    [self.drawerViewController closeDrawerAnimated:YES completion:nil];
+    //[self.drawerViewController closeDrawerAnimated:YES completion:nil];
     
 }
 -(void)resetRoot{

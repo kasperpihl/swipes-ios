@@ -179,6 +179,8 @@
 		A7AF9B5717E210D000F9B26F /* StyleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5617E210D000F9B26F /* StyleHandler.m */; };
 		A7AF9B5C17E2244F00F9B26F /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B260921733D1FD000BADDE /* NotificationHandler.m */; };
+		A7B9D39019066251001E1109 /* KPAccountAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B9D38F19066251001E1109 /* KPAccountAlert.m */; };
+		A7B9D39319066299001E1109 /* KPModal.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B9D39219066299001E1109 /* KPModal.m */; };
 		A7BB65CB189BF19600BE7183 /* swipes-notification.aif in Resources */ = {isa = PBXBuildFile; fileRef = A7BB65CA189BF19600BE7183 /* swipes-notification.aif */; };
 		A7C0340F18DC9AEA00A252BB /* libLocalyticsAMP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7C0340C18DC9AEA00A252BB /* libLocalyticsAMP.a */; };
 		A7C90E6A17A6ABF700C5F9E2 /* wt_schedule_popup.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */; };
@@ -484,6 +486,10 @@
 		A7AF9B5B17E2244F00F9B26F /* Datamodel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Datamodel.xcdatamodel; sourceTree = "<group>"; };
 		A7B260911733D1FC000BADDE /* NotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationHandler.h; sourceTree = "<group>"; };
 		A7B260921733D1FD000BADDE /* NotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationHandler.m; sourceTree = "<group>"; };
+		A7B9D38E19066251001E1109 /* KPAccountAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPAccountAlert.h; sourceTree = "<group>"; };
+		A7B9D38F19066251001E1109 /* KPAccountAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPAccountAlert.m; sourceTree = "<group>"; };
+		A7B9D39119066299001E1109 /* KPModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPModal.h; sourceTree = "<group>"; };
+		A7B9D39219066299001E1109 /* KPModal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPModal.m; sourceTree = "<group>"; };
 		A7BB65CA189BF19600BE7183 /* swipes-notification.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "swipes-notification.aif"; sourceTree = "<group>"; };
 		A7C0340C18DC9AEA00A252BB /* libLocalyticsAMP.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLocalyticsAMP.a; sourceTree = "<group>"; };
 		A7C0340D18DC9AEA00A252BB /* LocalyticsAmpSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsAmpSession.h; sourceTree = "<group>"; };
@@ -646,6 +652,10 @@
 				A703B16C1838EBF20047DCC9 /* PlusAlertView.m */,
 				A717DD2218B7C3F700EE359C /* LightSchemeAlert.h */,
 				A717DD2318B7C3F700EE359C /* LightSchemeAlert.m */,
+				A7B9D38E19066251001E1109 /* KPAccountAlert.h */,
+				A7B9D38F19066251001E1109 /* KPAccountAlert.m */,
+				A7B9D39119066299001E1109 /* KPModal.h */,
+				A7B9D39219066299001E1109 /* KPModal.m */,
 			);
 			path = Alert;
 			sourceTree = "<group>";
@@ -1605,6 +1615,7 @@
 				A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */,
 				A77D34D018E31E1200095F1E /* EMHint.m in Sources */,
 				A78128C717294C56002226C8 /* UtilityClass.m in Sources */,
+				A7B9D39319066299001E1109 /* KPModal.m in Sources */,
 				A78128CC17294C56002226C8 /* KPSegmentedViewController.m in Sources */,
 				A78128FC17294C56002226C8 /* AppDelegate.m in Sources */,
 				A781290217294C56002226C8 /* main.m in Sources */,
@@ -1613,6 +1624,7 @@
 				A703B1AF1838EBF20047DCC9 /* KPAddView.m in Sources */,
 				A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */,
 				A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */,
+				A7B9D39019066251001E1109 /* KPAccountAlert.m in Sources */,
 				A703B1631838EB0E0047DCC9 /* UIButton+PassTouch.m in Sources */,
 				A703B1B51838EBF20047DCC9 /* SectionHeaderView.m in Sources */,
 				A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */,

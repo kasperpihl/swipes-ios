@@ -48,14 +48,17 @@ static Global *sharedObject;
     iconCompare(@"settingsSync",                @"\ue632");
     iconCompare(@"settingsLogout",              @"\ue617");
     iconCompare(@"settingsTheme",               @"\ue615");
+    iconCompare(@"settingsAccount",             @"\ue644");
     iconCompare(@"settingsPolicy",              @"\ue616");
     iconCompare(@"settingsFeedback",            @"\ue618");
     iconCompare(@"settingsWalkthrough",         @"\ue619");
     iconCompare(@"settingsNotification",        @"\ue61b");
     
+    
     /* Menu icons full */
-    iconCompare(@"settingsThemeFull",           @"\ue61d");
     iconCompare(@"settingsLogoutFull",          @"\ue620");
+    iconCompare(@"settingsThemeFull",           @"\ue61d");
+    iconCompare(@"settingsAccountFull",         @"\ue648");
     iconCompare(@"settingsPlusFull",            @"\ue61e");
     iconCompare(@"settingsPolicyFull",          @"\ue61f");
     iconCompare(@"settingsFeedbackFull",        @"\ue621");

@@ -1,38 +1,35 @@
 //
-//  PlusAlertView.m
+//  KPAccountAlert.m
 //  Swipes
 //
-//  Created by Kasper Pihl Tornøe on 09/08/13.
-//  Copyright (c) 2013 Pihl IT. All rights reserved.
+//  Created by Kasper Pihl Tornøe on 22/04/14.
+//  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
-#define DEFAULT_ALERTWIDTH 310
+
+#import "KPAccountAlert.h"
 #define DEFAULT_TITLE_HEIGHT 70
+#define kMoreButtonFont KP_REGULAR(20)
+#define kCrossButtonSize 44
 #define kTextPadding 16
 #define kMoreButtonHeight 44
 #define kMoreButtonWidth 190
-#define kMoreButtonFont KP_REGULAR(20)
-#define kCrossButtonSize 44
-#define kCrossButtonContentInset UIEdgeInsetsMake(0, 0, 0, 0)
-#import "PlusAlertView.h"
-#import <QuartzCore/QuartzCore.h>
-#import "UIColor+Utilities.h"
-@interface PlusAlertView ()
-@property (nonatomic) UIButton *titleButton;
+
+
+@interface KPAccountAlert ()
 @property (nonatomic) UILabel *messageLabel;
 @property (nonatomic,copy) SuccessfulBlock block;
 @property (nonatomic) BOOL shouldRemove;
 @end
-
-@implementation PlusAlertView
+@implementation KPAccountAlert
 +(void)alertInView:(UIView *)view message:(NSString *)message block:(SuccessfulBlock)block{
-    PlusAlertView *alertView = [[PlusAlertView alloc] initWithFrame:view.bounds];
+    KPAccountAlert *alertView = [[KPAccountAlert alloc] initWithFrame:view.bounds];
     alertView.block = block;
     alertView.messageLabel.text = message;
     alertView.shouldRemove = YES;
     [view addSubview:alertView];
 }
-+(PlusAlertView*)alertWithFrame:(CGRect)frame message:(NSString *)message block:(SuccessfulBlock)block{
-    PlusAlertView *alertView = [[PlusAlertView alloc] initWithFrame:frame];
++(KPAccountAlert*)alertWithFrame:(CGRect)frame message:(NSString *)message block:(SuccessfulBlock)block{
+    KPAccountAlert *alertView = [[KPAccountAlert alloc] initWithFrame:frame];
     alertView.block = block;
     alertView.messageLabel.text = message;
     return alertView;
@@ -45,7 +42,7 @@
         [closeButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
         self.contentView.backgroundColor = tcolor(BackgroundColor);
-        [self setContentSize:CGSizeMake(300, 300)];
+        [self setContentSize:CGSizeMake(300, 240)];
         UIButton *crossButton = [[UIButton alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width-kCrossButtonSize, 0, kCrossButtonSize, kCrossButtonSize)];
         crossButton.titleLabel.font = iconFont(23);
         [crossButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
@@ -55,16 +52,17 @@
         //crossButton.imageEdgeInsets = kCrossButtonContentInset;
         [self.contentView addSubview:crossButton];
         
-        UIImage *buttonImage = [UIImage imageNamed:timageStringBW(@"upgrade_plus_logo")];
-        UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height)];
-        [topButton setImage:buttonImage forState:UIControlStateNormal];
+        UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 50)];
+        topButton.titleLabel.font = iconFont(50);
+        [topButton setTitle:@"settingsAccount" forState:UIControlStateNormal];
+        [topButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         CGRectSetY(topButton, DEFAULT_TITLE_HEIGHT-topButton.frame.size.height);
         CGRectSetCenterX(topButton, self.contentView.frame.size.width/2);
-        [topButton addTarget:self action:@selector(pressedPlus:) forControlEvents:UIControlEventTouchUpInside];
+        [topButton addTarget:self action:@selector(pressedAccount:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:topButton];
         
         
-        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(kTextPadding, DEFAULT_TITLE_HEIGHT, self.contentView.frame.size.width-2*kTextPadding, 2*DEFAULT_TITLE_HEIGHT)];
+        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(kTextPadding, 50, self.contentView.frame.size.width-2*kTextPadding, 2*DEFAULT_TITLE_HEIGHT)];
         messageLabel.font = KP_REGULAR(18);
         messageLabel.textColor = tcolor(TextColor);
         messageLabel.numberOfLines = 0;
@@ -73,16 +71,16 @@
         [self.contentView addSubview:messageLabel];
         self.messageLabel = messageLabel;
         
-         UIImage *buttonBackground = [[UIImage imageNamed:@"btn-plus-background"] resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
+        UIImage *buttonBackground = [[UIImage imageNamed:@"btn-plus-background"] resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
         UIButton *moreButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kMoreButtonWidth, kMoreButtonHeight)];
         [moreButton setBackgroundImage:buttonBackground forState:UIControlStateNormal];
         //[moreButton setBackgroundImage:[alpha(POPUP_BACKGROUND,0.5) image] forState:UIControlStateHighlighted];
         moreButton.layer.masksToBounds = YES;
         moreButton.titleLabel.font = kMoreButtonFont;
-        [moreButton setTitle:@"LEARN MORE" forState:UIControlStateNormal];
+        [moreButton setTitle:@"GET STARTED" forState:UIControlStateNormal];
         moreButton.center = CGPointMake(self.contentView.frame.size.width/2, self.contentView.frame.size.height-DEFAULT_TITLE_HEIGHT/2);
-        CGRectSetY(moreButton, self.contentView.frame.size.height-DEFAULT_TITLE_HEIGHT-20);
-        [moreButton addTarget:self action:@selector(pressedPlus:) forControlEvents:UIControlEventTouchUpInside];
+        CGRectSetY(moreButton, self.contentView.frame.size.height-DEFAULT_TITLE_HEIGHT);
+        [moreButton addTarget:self action:@selector(pressedAccount:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:moreButton];
         
         [self addSubview:self.contentView];
@@ -93,12 +91,9 @@
     if(self.block) self.block(NO,nil);
     if(self.shouldRemove) [self removeFromSuperview];
 }
--(void)pressedPlus:(UIButton*)sender{
+-(void)pressedAccount:(UIButton*)sender{
     if(self.block) self.block(YES,nil);
     if(self.shouldRemove) [self removeFromSuperview];
-}
--(void)dealloc{
-    self.messageLabel = nil;
 }
 /*
 // Only override drawRect: if you perform custom drawing.

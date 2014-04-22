@@ -55,6 +55,7 @@
 @property (nonatomic,strong) KPControlHandler *controlHandler;
 @property (nonatomic,weak) IBOutlet UIView *presentedPanel;
 @property (nonatomic) UIButton *_settingsButton;
+@property (nonatomic) UIButton *_accountButton;
 @property (nonatomic) BOOL tableIsShrinked;
 @property (nonatomic) NSInteger currentSelectedIndex;
 @property (nonatomic) UIView *ios7BackgroundView;
@@ -238,9 +239,10 @@
 	return [self initWithViewControllers:viewControllers titles:[viewControllers valueForKeyPath:@"@unionOfObjects.title"]];
 }
 -(void)pressedSettings{
-    [ROOT_CONTROLLER.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
-        
-    }];
+    [ROOT_CONTROLLER.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
+}
+-(void)pressedAccount{
+    [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
 }
 - (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles {
 	self = [super init];
@@ -258,10 +260,18 @@
         self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, TOP_HEIGHT)];
         self.ios7BackgroundView.backgroundColor = CLEAR;
         [self.ios7BackgroundView addSubview:self.segmentedControl];
+        UIButton *accountButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.view.frame.size.width-CELL_LABEL_X, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
+        accountButton.titleLabel.font = iconFont(23);
+        [accountButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [accountButton setTitle:iconString(@"settingsAccount") forState:UIControlStateNormal];
+        [accountButton setTitle:iconString(@"settingsAccountFull") forState:UIControlStateHighlighted];
+        [accountButton addTarget:self action:@selector(pressedAccount) forControlEvents:UIControlEventTouchUpInside];
+        [self.ios7BackgroundView addSubview:accountButton];
+        self._accountButton = accountButton;
+        
         UIButton *settingsButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
         settingsButton.titleLabel.font = iconFont(23);
         [settingsButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        //CGRectSetX(settingsButton, -settingsButton.frame.size.width/2);
         [settingsButton setTitle:iconString(@"settings") forState:UIControlStateNormal];
         [settingsButton setTitle:iconString(@"settingsFull") forState:UIControlStateHighlighted];
         [settingsButton addTarget:self action:@selector(pressedSettings) forControlEvents:UIControlEventTouchUpInside];
@@ -317,6 +327,10 @@
     //NSArray *deletedObjects = [changeEvent objectForKey:@"deleted"];
     [NOTIHANDLER updateLocalNotifications];
     [self.currentViewController update];
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self._accountButton.hidden = kUserHandler.isLoggedIn;
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];

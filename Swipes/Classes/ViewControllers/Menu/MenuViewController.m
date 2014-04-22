@@ -19,6 +19,7 @@
 #import "SnoozesViewController.h"
 #import "AnalyticsHandler.h"
 #import "UserHandler.h"
+#import "KPAccountAlert.h"
 
 #import "KPParseCoreData.h"
 #import "PlusAlertView.h"
@@ -334,7 +335,19 @@
             break;
         }
         case KPMenuButtonUpgrade:{
-            if(kUserHandler.isPlus){
+            if(!kUserHandler.isLoggedIn){
+                KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:@"Register for Swipes to safely back up your data and get Swipes Plus" block:^(BOOL succeeded, NSError *error) {
+                    [BLURRY dismissAnimated:YES];
+                    if(succeeded){
+                        [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
+                    }
+                    
+                }];
+                BLURRY.blurryTopColor = kSettingsBlurColor;
+                [BLURRY showView:alert inViewController:self];
+                return;
+            }
+            else if(kUserHandler.isPlus){
                 KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Manage subscription" message:@"Open App Store to manage your subscription?" block:^(BOOL succeeded, NSError *error) {
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
@@ -346,8 +359,10 @@
                 
                 return;
             }
-            [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Settings"}];
-            [ROOT_CONTROLLER upgrade];
+            else{
+                [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Settings"}];
+                [ROOT_CONTROLLER upgrade];
+            }
             break;
         }
         case KPMenuButtonPolicies:{
@@ -367,7 +382,6 @@
         case KPMenuButtonLogout:{
             if(!kUserHandler.isLoggedIn){
                 [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
-                [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
                 return;
             }
             KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Log out" message:@"Are you sure you want to log out of your account?" block:^(BOOL succeeded, NSError *error) {
@@ -491,7 +505,7 @@
             imageString = @"settingsSync";
             break;
         case KPMenuButtonLogout:
-            imageString = (kUserHandler.isLoggedIn) ? @"settingsLogout" : @"settings";
+            imageString = (kUserHandler.isLoggedIn) ? @"settingsLogout" : @"settingsAccount";
             break;
         case KPMenuButtonScheme:
             imageString = @"settingsTheme";

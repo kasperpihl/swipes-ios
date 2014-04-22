@@ -42,40 +42,35 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 240)];
-        //self.frame = contentView.bounds;
-        contentView.center = self.center;
-        contentView.layer.cornerRadius = 10;
-        contentView.layer.masksToBounds = YES;
-        contentView.backgroundColor = tcolor(BackgroundColor);
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT)];
+        self.contentView.backgroundColor = tcolor(BackgroundColor);
+        
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, DEFAULT_TITLE_HEIGHT)];
         titleLabel.backgroundColor = CLEAR;
         titleLabel.tag = TITLE_LABEL_TAG;
         titleLabel.textColor = tcolor(TextColor);
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.font = KP_BOLD(20);
-        [contentView addSubview:titleLabel];
-        self.titleLabel = (UILabel*)[contentView viewWithTag:TITLE_LABEL_TAG];
+        [self.contentView addSubview:titleLabel];
+        self.titleLabel = (UILabel*)[self.contentView viewWithTag:TITLE_LABEL_TAG];
         
         NSInteger spacing = 10;
-        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(spacing, DEFAULT_TITLE_HEIGHT, contentView.frame.size.width-2*spacing, 2*DEFAULT_TITLE_HEIGHT)];
+        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(spacing, DEFAULT_TITLE_HEIGHT, self.contentView.frame.size.width-2*spacing, 2*DEFAULT_TITLE_HEIGHT)];
         messageLabel.font = KP_LIGHT(20);
         messageLabel.tag = MESSAGE_LABEL_TAG;
         messageLabel.textColor = tcolor(TextColor);
         messageLabel.numberOfLines = 0;
         messageLabel.backgroundColor = CLEAR;
         messageLabel.textAlignment = NSTextAlignmentCenter;
-        [contentView addSubview:messageLabel];
-        self.messageLabel = (UILabel*)[contentView viewWithTag:MESSAGE_LABEL_TAG];
+        [self.contentView addSubview:messageLabel];
+        self.messageLabel = (UILabel*)[self.contentView viewWithTag:MESSAGE_LABEL_TAG];
         
-        KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT, contentView.frame.size.width, DEFAULT_TITLE_HEIGHT) items:nil delegate:self];
+        KPToolbar *toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-DEFAULT_TITLE_HEIGHT, self.contentView.frame.size.width, DEFAULT_TITLE_HEIGHT) items:nil delegate:self];
         toolbar.font = iconFont(41);
         toolbar.titleColor = tcolor(TextColor);
         toolbar.titleHighlightString = @"Full";
         toolbar.items = @[@"roundBack",@"roundConfirm"];
         [toolbar setTopInset:kToolbarHack];
-        [contentView addSubview:toolbar];
-        [self addSubview:contentView];
+        [self.contentView addSubview:toolbar];
     }
     return self;
 }

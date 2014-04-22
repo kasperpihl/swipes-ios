@@ -209,7 +209,8 @@ typedef enum {
         self.tryButton.layer.masksToBounds = YES;
         self.tryButton.titleLabel.font = kDefLoginButtonsFont;
         [self.tryButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
-        [self.tryButton setTitle:@"TRY OUT" forState:UIControlStateNormal];
+        NSString *title = [[NSUserDefaults standardUserDefaults] boolForKey:isTryingString] ? @"KEEP TRYING SWIPES" : @"TRY OUT";
+        [self.tryButton setTitle:title forState:UIControlStateNormal];
         [self.tryButton setTitleColor:tcolorF(TextColor, ThemeLight) forState:UIControlStateHighlighted];
         [self.tryButton setBackgroundImage:[tryColor image] forState:UIControlStateHighlighted];
         [self.tryButton addTarget:self action:@selector(pressedTryButton:) forControlEvents:UIControlEventTouchUpInside];
