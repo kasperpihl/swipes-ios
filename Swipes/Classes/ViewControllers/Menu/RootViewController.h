@@ -14,6 +14,9 @@ typedef enum {
     KPMenuLogin = 1,
     KPMenuHome
 } KPMenu;
+
+#define isTryingString @"isTryingOutSwipes"
+
 #define ROOT_CONTROLLER [RootViewController sharedInstance]
 #define ERROR_MESSAGE [[error userInfo] objectForKey:@"error"]
 #define FB_ERROR_CODE [error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"code"] integerValue]

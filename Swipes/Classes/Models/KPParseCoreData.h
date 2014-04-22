@@ -17,7 +17,7 @@
 @property (nonatomic,strong) NSManagedObjectContext *context;
 
 
--(void)logOutAndDeleteData;
+-(void)clearAndDeleteData;
 -(void)seedObjectsSave:(BOOL)save;
 
 

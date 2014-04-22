@@ -636,7 +636,7 @@
 }
 
 
-- (void)logOutAndDeleteData
+- (void)clearAndDeleteData
 {
     NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
     NSError *error;

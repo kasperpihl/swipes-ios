@@ -34,7 +34,7 @@
 #import <Parse/Parse.h>
 
 #import "KPAlert.h"
-
+#import "UtilityClass.h"
 #import "HintHandler.h"
 #import "MMDrawerVisualState.h"
 
@@ -97,23 +97,35 @@
     }];
 }
 -(void)didLoginUser:(PFUser*)user{
-    if(user.isNew) [[KPParseCoreData sharedInstance] seedObjectsSave:YES];
-    if(user.isNew) {
-        [ANALYTICS tagEvent:@"Signed Up" options:@{}];
-    }
-    else{
-        [ANALYTICS tagEvent:@"Logged In" options:@{}];
-    }
-    if([PFFacebookUtils isLinkedWithUser:user]){
-        if(!user.email){
-            [self fetchDataFromFacebook];
+    voidBlock block = ^{
+        if(user.isNew) {
+            [ANALYTICS tagEvent:@"Signed Up" options:@{}];
         }
+        else{
+            [ANALYTICS tagEvent:@"Logged In" options:@{}];
+        }
+        if([PFFacebookUtils isLinkedWithUser:user]){
+            if(!user.email){
+                [self fetchDataFromFacebook];
+            }
+        }
+        else{
+        }
+        [ANALYTICS updateIdentity];
+        [self changeToMenu:KPMenuHome animated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
+    };
+    if([[NSUserDefaults standardUserDefaults] boolForKey:isTryingString]){
+        [UTILITY confirmBoxWithTitle:@"Keep data" andMessage:@"Do you want to keep the data from the test period?" block:^(BOOL succeeded, NSError *error) {
+            if(!succeeded) [KPCORE clearAndDeleteData];
+            block();
+        }];
     }
     else{
+        if(user.isNew) [[KPParseCoreData sharedInstance] seedObjectsSave:YES];
+        block();
     }
-    [ANALYTICS updateIdentity];
-    [self changeToMenu:KPMenuHome animated:YES];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
+    
 }
 // Sent to the delegate when a PFUser is logged in.
 - (void)loginViewController:(LoginViewController *)logInController didLoginUser:(PFUser *)user {
@@ -154,7 +166,7 @@ static RootViewController *sharedObject;
 }
 -(void)logOut{
     [PFUser logOut];
-    [[KPParseCoreData sharedInstance] logOutAndDeleteData];
+    [[KPParseCoreData sharedInstance] clearAndDeleteData];
     [self resetRoot];
     
 }
@@ -248,7 +260,7 @@ static RootViewController *sharedObject;
     return;
     
     if(!kCurrent){
-        if([[NSUserDefaults standardUserDefaults] objectForKey:@"isTryingOutSwipes"]){
+        if([[NSUserDefaults standardUserDefaults] objectForKey:isTryingString]){
             [self changeToMenu:KPMenuHome animated:NO];
         }
         else{
@@ -263,8 +275,8 @@ static RootViewController *sharedObject;
 
 
 -(void)tryoutapp{
-    if(![[NSUserDefaults standardUserDefaults] objectForKey:@"isTryingOutSwipes"]){
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isTryingOutSwipes"];
+    if(![[NSUserDefaults standardUserDefaults] objectForKey:isTryingString]){
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:isTryingString];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [KPCORE seedObjectsSave:YES];
         [NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
