@@ -43,7 +43,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                          }
 
                      }];
-    
+}
+-(void)pressedTurnOff:(UIButton*)sender{
+    [self _onTap:nil];
+    if([self.hintDelegate respondsToSelector:@selector(hintTurnedOff)])
+        [self.hintDelegate hintTurnedOff];
 }
 
 -(void)_addTap
@@ -72,13 +76,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     if ([self.hintDelegate respondsToSelector:@selector(hintStateViewsToHint:)]) {
         NSArray *viewArray = [self.hintDelegate hintStateViewsToHint:self];
         if(viewArray!=nil)
-            _modalView = [[EMHintsView alloc] initWithFrame:presentationPlace.frame forViews:viewArray];
+            _modalView = [[EMHintsView alloc] initWithFrame:presentationPlace.bounds forViews:viewArray];
     }
     
     if ([self.hintDelegate respondsToSelector:@selector(hintStateRectsToHint:)]) {
         NSArray* rectArray = [self.hintDelegate hintStateRectsToHint:self];
         if (rectArray != nil){
-            _modalView = [[EMHintsView alloc] initWithFrame:presentationPlace.frame withRects:rectArray];
+            _modalView = [[EMHintsView alloc] initWithFrame:presentationPlace.bounds withRects:rectArray];
             if([self.hintDelegate respondsToSelector:@selector(titleForRect:index:)]){
                 for (NSInteger i = 0 ; i < rectArray.count ; i++)
                 {
@@ -103,9 +107,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             }
         }
     }
-    
     if (_modalView==nil)
-        _modalView = [[EMHintsView alloc] initWithFrame:presentationPlace.frame];
+        _modalView = [[EMHintsView alloc] initWithFrame:presentationPlace.bounds];
+    
+    if([self.hintDelegate respondsToSelector:@selector(turnOffButtonForHint:)]){
+        UIButton *turnOffButton = [self.hintDelegate turnOffButtonForHint:presentationPlace.bounds];
+        if(turnOffButton){
+            [turnOffButton addTarget:self action:@selector(pressedTurnOff:) forControlEvents:UIControlEventTouchUpInside];
+            [_modalView addSubview:turnOffButton];
+        }
+    }
+    
     _modalView.alpha = 0;
     [_modalView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
     [presentationPlace addSubview:_modalView];

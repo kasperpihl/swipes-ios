@@ -28,7 +28,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         _radiusArray = [[NSMutableArray alloc] init];
         
         // set background color
-        [self setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:BACKGROUND_ALPHA]];
+        [self initializer];
     }
     return self;
 }
@@ -49,7 +49,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             [_positionArray addObject:[NSValue valueWithCGPoint:pos]];
             [_radiusArray addObject:[NSNumber numberWithFloat:radius]];
         }
-        [self setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:BACKGROUND_ALPHA]];
+        [self initializer];
     }
     return self;
 }
@@ -70,12 +70,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             [_positionArray addObject:[NSValue valueWithCGPoint:pos]];
             [_radiusArray addObject:[NSNumber numberWithFloat:radius]];
         }
-        
-        [self setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:BACKGROUND_ALPHA]];
+        [self initializer];
     }
     return self;
 }
-
+-(void)initializer{
+    [self setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:BACKGROUND_ALPHA]];
+}
 -(void)_background:(CGRect)rect
 {
     // context for drawing

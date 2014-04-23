@@ -68,9 +68,9 @@ typedef enum
  */
 -(void) hintStateDidClose:(id)hintState ;
 
+-(UIButton *)turnOffButtonForHint:(CGRect)hintBounds;
 
-
-
+-(void)hintTurnedOff;
 
 /*
  // Default hint is a round spotlight effect,

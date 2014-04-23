@@ -27,7 +27,7 @@
 #import "UIImage+Blur.h"
 #import "SlowHighlightIcon.h"
 #import "SettingsHandler.h"
-
+#import "HintHandler.h"
 #import "NotificationHandler.h"
 
 #import "UserHandler.h"
@@ -74,6 +74,9 @@
 #pragma mark - KPAddTagDelegate
 -(void)closeAddPanel:(AddPanelView *)addPanel{
     [BLURRY dismissAnimated:YES];
+    if(!kUserHandler.isLoggedIn){
+        [kHints triggerHint:HintAccount];
+    }
 }
 -(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
     [[self currentViewController] update];

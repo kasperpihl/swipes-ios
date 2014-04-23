@@ -16,6 +16,7 @@
 +(UtilityClass*)instance;
 -(NSNumber*)versionNumber;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block;
+-(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message cancel:(NSString*)cancel confirm:(NSString*)confirm block:(SuccessfulBlock)block;
 +(NSString*)generateIdWithLength:(NSInteger)length;
 +(void)sendError:(NSError *)error type:(NSString *)type;
 + (BOOL) validateEmail: (NSString *) candidate;

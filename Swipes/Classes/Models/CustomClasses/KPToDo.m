@@ -161,11 +161,12 @@
                 NSArray *tagsFromServer = (NSArray*)pfValue;
                 //NSLog(@"tags:%@",tagsFromServer);
                 NSMutableArray *objectIDs = [NSMutableArray array];
-                
-                for(NSDictionary *tag in tagsFromServer){
-                    if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:[tag objectForKey:@"objectId"]];
-                    else {
-                        [changedAttributesSet addObject:@"tags"];
+                if(tagsFromServer && [tagsFromServer isKindOfClass:[NSArray class]]){
+                    for(NSDictionary *tag in tagsFromServer){
+                        if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:[tag objectForKey:@"objectId"]];
+                        else {
+                            [changedAttributesSet addObject:@"tags"];
+                        }
                     }
                 }
                 if(objectIDs.count > 0){
@@ -228,7 +229,6 @@
     else return nil;
 }
 -(BOOL)setAttributesForSavingObject:(NSMutableDictionary *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
-   
     NSDictionary *keyMatch = [self keyMatch];
     BOOL isNewObject = (!self.objectId);
     if(changedAttributes && [changedAttributes containsObject:@"all"]) isNewObject = YES;

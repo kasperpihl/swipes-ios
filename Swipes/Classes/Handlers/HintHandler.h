@@ -10,6 +10,7 @@
 #define kHints [HintHandler sharedInstance]
 typedef enum {
     HintWelcome = 1,
+    HintAccount,
     HintSelected,
     HintCompleted,
     HintSwipedLeft,

@@ -6,11 +6,16 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 #define kHintDictionaryKey @"HintsDictionary"
+#define kHintsOffKey @"HintsTurnedOff"
+
 
 #import "SettingsHandler.h"
 #import "HintHandler.h"
 #import "EMHint.h"
+#import "SlowHighlightIcon.h"
+#import "UtilityClass.h"
 #import "RootViewController.h"
+#import "UIColor+Utilities.h"
 
 @interface HintHandler () <EMHintDelegate>
 @property NSMutableDictionary *hints;
@@ -20,19 +25,71 @@
 @end
 
 @implementation HintHandler
+-(BOOL)triggerHint:(Hints)hint{
+    if(self.hintsIsOff)
+        return NO;
+    
+    BOOL completedHint = [self completeHint:hint];
+    if(completedHint){
+        self.currentHint = hint;
+        if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
+            [self.delegate hintHandler:self triggeredHint:hint];
+        NSString *hintText;
+        switch (hint) {
+            case HintWelcome:
+                hintText = @"Keep your current tasks here.\n\nSnooze or complete the rest!";
+                break;
+            case HintAccount:
+                hintText = @"Register an account to safely back up your data";
+                break;
+            case HintCompleted:
+                hintText = @"You've completed a task";
+                break;
+            case HintSwipedLeft:
+                
+                break;
+            case HintScheduled:
+                hintText = @"You've snoozed a task";
+                break;
+            case HintSelected:
+                hintText = @"You selected a task.\n\nYou can select more and take an action below.";
+                break;
+            case HintPriority:
+                break;
+        }
+        [self.emHint presentModalMessage:hintText where:ROOT_CONTROLLER.view];
+    }
+    return completedHint;
+}
+-(BOOL)hasCompletedHint:(Hints)hint{
+    NSString *key = [self keyForHint:hint];
+    BOOL hasAlreadyCompletedHint = [[self.hints objectForKey:key] boolValue];
+    return hasAlreadyCompletedHint;
+}
+
+
+
 static HintHandler *sharedObject;
 +(HintHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[HintHandler allocWithZone:NULL] init];
         [sharedObject initialize];
+        sharedObject.hintsIsOff = [kSettings settingForKey:kHintsOffKey];
     }
     return sharedObject;
+}
+-(void)turnOffHints{
+    [kSettings setSetting:YES forKey:kHintsOffKey];
+    self.hintsIsOff = YES;
 }
 -(NSString*)keyForHint:(Hints)hint{
     NSString *key;
     switch (hint) {
         case HintWelcome:
             key = @"Welcome";
+            break;
+        case HintAccount:
+            key = @"Account";
             break;
         case HintSelected:
             key = @"Selected";
@@ -74,46 +131,7 @@ static HintHandler *sharedObject;
 /*
  
 */
--(BOOL)triggerHint:(Hints)hint{
-#warning Forced trigger to stop
-    return NO;
-    
-    
-    BOOL completedHint = [self completeHint:hint];
-    completedHint = YES;
-    if(completedHint){
-        self.currentHint = hint;
-        if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
-            [self.delegate hintHandler:self triggeredHint:hint];
-        NSString *hintText;
-        switch (hint) {
-            case HintWelcome:
-                hintText = @"Keep your current tasks here.\n\nSnooze or complete the rest!";
-                break;
-            case HintCompleted:
-                hintText = @"You've completed a task";
-                break;
-            case HintSwipedLeft:
 
-                break;
-            case HintScheduled:
-                hintText = @"You've snoozed a task";
-                break;
-            case HintSelected:
-                hintText = @"You selected a task.\n\nYou can select more and take an action below.";
-                break;
-            case HintPriority:
-                break;
-        }
-        [self.emHint presentModalMessage:hintText where:ROOT_CONTROLLER.view];
-    }
-    return completedHint;
-}
--(BOOL)hasCompletedHint:(Hints)hint{
-    NSString *key = [self keyForHint:hint];
-    BOOL hasAlreadyCompletedHint = [[self.hints objectForKey:key] boolValue];
-    return hasAlreadyCompletedHint;
-}
 
 -(NSArray*)hintStateRectsToHint:(id)hintState
 {
@@ -123,6 +141,11 @@ static HintHandler *sharedObject;
     NSArray *rectArray;
     CGRect rect;
     switch (self.currentHint) {
+        case HintAccount:{
+            rect = CGRectMake(ROOT_CONTROLLER.view.frame.size.width-CELL_LABEL_X/2, (statusBarHt + 26), ht, ht);
+            rectArray = @[[NSValue valueWithCGRect:rect]];
+            break;
+        }
         case HintSelected:{
             NSMutableArray *mutRect = [NSMutableArray array];
             CGFloat oneFourth = ROOT_CONTROLLER.view.frame.size.width / 4;
@@ -191,6 +214,47 @@ static HintHandler *sharedObject;
             break;
     }
     return title;
+}
+
+-(UIButton *)turnOffButtonForHint:(CGRect)hintBounds{
+    NSLog(@"turnoff button");
+    CGFloat closeHeight = 32;
+    CGFloat closeWidth = 60;
+    CGFloat closeSpacing = 5;
+    
+    UIColor *buttonColor = alpha(tcolorF(TextColor,ThemeDark),0.7);
+    UIButton *closeButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, closeWidth, closeHeight)];
+    closeButton.layer.cornerRadius = 4;
+    //closeButton.layer.borderWidth = 1;
+    closeButton.layer.masksToBounds = YES;
+    closeButton.titleLabel.font = KP_LIGHT(14);
+    //closeButton.layer.borderColor = buttonColor.CGColor;
+    
+    [closeButton setTitle:@"Turn off" forState:UIControlStateNormal];
+    [closeButton setTitleColor:tcolorF(TextColor, ThemeLight) forState:UIControlStateHighlighted];
+    [closeButton setBackgroundImage:[buttonColor image] forState:UIControlStateHighlighted];
+    
+    
+    CGPoint originForButton = CGPointMake(closeSpacing, hintBounds.size.height-closeHeight-closeSpacing);
+    switch (self.currentHint) {
+        case HintSelected:
+            originForButton = CGPointMake(hintBounds.size.width - closeWidth - closeSpacing, (OSVER >= 7 ? 20 : 0));
+            break;
+        default:
+            
+            break;
+    }
+    CGRectSetX(closeButton, originForButton.x);
+    CGRectSetY(closeButton, originForButton.y);
+    return closeButton;
+    //[self addSubview:closeButton];
+}
+
+-(void)hintTurnedOff{
+    [UTILITY confirmBoxWithTitle:@"Hints" andMessage:@"Hints only show once and will guide you through the main functions." cancel:@"Keep on" confirm:@"Turn off" block:^(BOOL succeeded, NSError *error) {
+        if(succeeded)
+            [self turnOffHints];
+    }];
 }
 
 -(void)initialize{

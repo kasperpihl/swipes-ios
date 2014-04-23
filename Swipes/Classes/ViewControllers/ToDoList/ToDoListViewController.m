@@ -54,6 +54,8 @@
 @property (nonatomic) BOOL isLonelyRider;
 @property (nonatomic) BOOL savedOffset;
 
+@property (nonatomic) BOOL hasStartedEditing;
+
 @property (nonatomic,strong) NSMutableDictionary *stateDictionary;
 @end
 
@@ -223,6 +225,9 @@
 }
 -(void)editIndexPath:(NSIndexPath *)indexPath{
     
+    if(self.hasStartedEditing)
+        return;
+    self.hasStartedEditing = YES;
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     self.showingViewController.model = toDo;
     [ROOT_CONTROLLER pushViewController:self.showingViewController animated:YES];
@@ -235,6 +240,7 @@
 }
 -(void)didPressCloseToDoViewController:(ToDoViewController *)viewController{
     [ROOT_CONTROLLER popViewControllerAnimated:YES];
+    self.hasStartedEditing = NO;
     [ANALYTICS popView];
 }
 -(void)scheduleToDoViewController:(ToDoViewController *)viewController{
@@ -533,6 +539,7 @@
     if(self.cellType != CellTypeToday) self.parent.backgroundMode = NO;
     else if(self.itemHandler.itemCounterWithFilter == 0) self.parent.backgroundMode = YES;
     [super viewWillAppear:animated];
+    self.hasStartedEditing = NO;
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];

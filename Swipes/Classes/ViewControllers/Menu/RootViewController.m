@@ -150,6 +150,7 @@
             break;
         }
         case KPMenuHome:
+            [NSTimer scheduledTimerWithTimeInterval:1.4 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
             self.lockSettings = NO;
             viewController = self.menuViewController;
             break;
@@ -219,17 +220,20 @@ static RootViewController *sharedObject;
         [ANALYTICS tagEvent:@"Mail not available" options:nil];
     }
 }
+-(void)accountAlert{
+    KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:@"Register for Swipes to safely back up your data and get Swipes Plus" block:^(BOOL succeeded, NSError *error) {
+        [BLURRY dismissAnimated:YES];
+        if(succeeded){
+            [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
+        }
+        
+    }];
+    BLURRY.blurryTopColor = kSettingsBlurColor;
+    [BLURRY showView:alert inViewController:self];
+}
 -(void)upgrade{
     if(!kUserHandler.isLoggedIn){
-        KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:@"Register for Swipes to safely back up your data and get Swipes Plus" block:^(BOOL succeeded, NSError *error) {
-            [BLURRY dismissAnimated:YES];
-            if(succeeded){
-                [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
-            }
-            
-        }];
-        BLURRY.blurryTopColor = kSettingsBlurColor;
-        [BLURRY showView:alert inViewController:self];
+        [self accountAlert];
         return;
     }
     UpgradeViewController *viewController = [[UpgradeViewController alloc]init];
@@ -294,7 +298,6 @@ static RootViewController *sharedObject;
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:isTryingString];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [KPCORE seedObjectsSave:YES];
-        [NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
     }
     
     [self changeToMenu:KPMenuHome animated:YES];
