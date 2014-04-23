@@ -310,7 +310,9 @@
         case CellTypeSchedule:{
             [kHints triggerHint:HintSwipedLeft];
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+            __block BOOL hasReturned = NO;
             SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type) {
+                hasReturned = YES;
                 [BLURRY dismissAnimated:YES];
                 if(button == KPScheduleButtonCancel){
                     [self returnSelectedRowsAndBounce:YES];
@@ -329,6 +331,11 @@
                 self.isHandlingTrigger = NO;
             }];
             popup.numberOfItems = toDosArray.count;
+            BLURRY.dismissAction = ^{
+                self.isHandlingTrigger = NO;
+                if(!hasReturned)
+                    [self returnSelectedRowsAndBounce:YES];
+            };
             //BLURRY.blurryTopColor = alpha(tcolor(LaterColor), 0.95);
             BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
             [BLURRY showView:popup inViewController:self.parent];
@@ -552,7 +559,6 @@
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
 }
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];

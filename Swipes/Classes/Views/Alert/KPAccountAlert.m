@@ -88,12 +88,18 @@
     return self;
 }
 -(void)pressedClose:(UIButton*)sender{
-    if(self.block) self.block(NO,nil);
-    if(self.shouldRemove) [self removeFromSuperview];
+    if(self.shouldRemove)
+        [self removeFromSuperview];
+    if(self.block)
+        self.block(NO,nil);
+    
 }
 -(void)pressedAccount:(UIButton*)sender{
-    if(self.block) self.block(YES,nil);
-    if(self.shouldRemove) [self removeFromSuperview];
+    if(self.shouldRemove)
+        [self removeFromSuperview];
+    if(self.block)
+        self.block(YES,nil);
+    
 }
 /*
 // Only override drawRect: if you perform custom drawing.

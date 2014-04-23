@@ -20,7 +20,6 @@
 @property (nonatomic) UIButton *titleButton;
 @property (nonatomic) UILabel *messageLabel;
 @property (nonatomic,copy) SuccessfulBlock block;
-@property (nonatomic) BOOL shouldRemove;
 @end
 
 @implementation PlusAlertView
@@ -90,12 +89,16 @@
     return self;
 }
 -(void)pressedClose:(UIButton*)sender{
-    if(self.block) self.block(NO,nil);
-    if(self.shouldRemove) [self removeFromSuperview];
+    if(self.shouldRemove)
+        [self removeFromSuperview];
+    if(self.block)
+        self.block(NO,nil);
 }
 -(void)pressedPlus:(UIButton*)sender{
-    if(self.block) self.block(YES,nil);
-    if(self.shouldRemove) [self removeFromSuperview];
+    if(self.shouldRemove)
+        [self removeFromSuperview];
+    if(self.block)
+        self.block(YES,nil);
 }
 -(void)dealloc{
     self.messageLabel = nil;

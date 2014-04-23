@@ -37,7 +37,8 @@
 #import "UtilityClass.h"
 #import "HintHandler.h"
 #import "MMDrawerVisualState.h"
-
+#import "KPAccountAlert.h"
+#import "UserHandler.h"
 #import "ShareViewController.h"
 
 @interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate>
@@ -219,6 +220,18 @@ static RootViewController *sharedObject;
     }
 }
 -(void)upgrade{
+    if(!kUserHandler.isLoggedIn){
+        KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:@"Register for Swipes to safely back up your data and get Swipes Plus" block:^(BOOL succeeded, NSError *error) {
+            [BLURRY dismissAnimated:YES];
+            if(succeeded){
+                [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
+            }
+            
+        }];
+        BLURRY.blurryTopColor = kSettingsBlurColor;
+        [BLURRY showView:alert inViewController:self];
+        return;
+    }
     UpgradeViewController *viewController = [[UpgradeViewController alloc]init];
     viewController.delegate = self;
     [self addChildViewController:viewController];

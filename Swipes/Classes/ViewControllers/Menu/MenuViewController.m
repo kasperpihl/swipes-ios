@@ -25,7 +25,7 @@
 #import "PlusAlertView.h"
 #import "NotificationHandler.h"
 
-#define kSettingsBlurColor retColor(gray(230, 0.5),gray(50, 0.4))
+
 #define kMenuButtonStartTag 4123
 #define kLampOnColor tcolor(DoneColor)
 #define kLampOffColor tcolor(BackgroundColor)
@@ -278,11 +278,12 @@
                 [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location in Settings"}];
                 PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." block:^(BOOL succeeded, NSError *error) {
                     [ANALYTICS popView];
-                    [BLURRY dismissAnimated:YES];
+                    [BLURRY dismissAnimated:!succeeded];
                     if(succeeded){
                         [ROOT_CONTROLLER upgrade];
                     }
                 }];
+                alert.shouldRemove = NO;
                 BLURRY.blurryTopColor = kSettingsBlurColor;
                 [BLURRY showView:alert inViewController:self];
             }
@@ -400,13 +401,14 @@
                 [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Sync in Settings"}];
                 PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Synchronization is a Swipes Plus feature. Keep your tasks in sync with an app for web and iPad." block:^(BOOL succeeded, NSError *error) {
                     [ANALYTICS popView];
-                    [BLURRY dismissAnimated:YES];
+                    [BLURRY dismissAnimated:!succeeded];
                     if(succeeded){
                         [ROOT_CONTROLLER upgrade];
                     }
                 }];
+                alert.shouldRemove = NO;
                 BLURRY.blurryTopColor = kSettingsBlurColor;
-                [BLURRY showView:alert inViewController:self];
+                [BLURRY showView:alert inViewController:ROOT_CONTROLLER];
             }
             else{
                 CABasicAnimation *rotate =

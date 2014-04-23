@@ -11,4 +11,5 @@
 @interface PlusAlertView : KPModal
 +(void)alertInView:(UIView*)view message:(NSString*)message block:(SuccessfulBlock)block;
 +(PlusAlertView*)alertWithFrame:(CGRect)frame message:(NSString *)message block:(SuccessfulBlock)block;
+@property (nonatomic) BOOL shouldRemove;
 @end

@@ -17,8 +17,12 @@
 #define kSyncTime 5
 #define kUpdateLimit 150
 
-#define kDeleteObjectsKey @"deleteObjects"
+#define kTMPUpdateObjects @"tmpUpdateObjects"
+#define kUpdateObjects @"updateObjects"
+#define kLastSyncLocalDate @"lastSyncLocalDate"
+#define kLastSyncServerString @"lastSync"
 
+#define kDeleteObjectsKey @"deleteObjects"
 
 #ifdef DEBUG
 #define DUMPDB //[self dumpLocalDb];
@@ -112,7 +116,7 @@
             }
         }];
         if(!blockToTemp){
-            [[NSUserDefaults standardUserDefaults] setObject:self._attributeChangesOnObjects forKey:@"tmpUpdateObjects"];
+            [[NSUserDefaults standardUserDefaults] setObject:self._attributeChangesOnObjects forKey:kTMPUpdateObjects];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
     });
@@ -204,7 +208,7 @@
     }
     if (!kUserHandler.isPlus) {
         NSDate *now = [NSDate date];
-        NSDate *lastUpdatedDay = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSyncLocalDate"];
+        NSDate *lastUpdatedDay = [[NSUserDefaults standardUserDefaults] objectForKey:kLastSyncLocalDate];
         if (lastUpdatedDay && now.dayOfYear == lastUpdatedDay.dayOfYear)
             return UIBackgroundFetchResultNoData;
     }
@@ -318,7 +322,7 @@
 
     
     /* The last update time - saved and received from the sync response */
-    NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSync"];
+    NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastSyncServerString];
     if (lastUpdate)
         [syncData setObject:lastUpdate forKey:@"lastUpdate"];
     
@@ -417,9 +421,9 @@
     }
     [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
         /* Save the sync to server */
-        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastSyncLocalDate"];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastSyncLocalDate];
         if (lastUpdate)
-            [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastSync"];
+            [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:kLastSyncServerString];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self cleanUpAfterSync];
         DUMPDB;
@@ -433,7 +437,7 @@
 {
     NSInteger counter = 0;
     NSMutableDictionary *copyOfNewAttributeChanges = [self copyChangesAndFlushForTemp:NO];
-    NSMutableDictionary *objectsToUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"updateObjects"];
+    NSMutableDictionary *objectsToUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:kUpdateObjects];
     if(!objectsToUpdate) objectsToUpdate = [NSMutableDictionary dictionary];
     else objectsToUpdate = [objectsToUpdate mutableCopy];
     counter += objectsToUpdate.count;
@@ -476,7 +480,7 @@
     if(keysToRemoveInAttributeChanges.count > 0)
         [copyOfNewAttributeChanges removeObjectsForKeys:keysToRemoveInAttributeChanges];
     
-    [[NSUserDefaults standardUserDefaults] setObject:objectsToUpdate forKey:@"updateObjects"];
+    [[NSUserDefaults standardUserDefaults] setObject:objectsToUpdate forKey:kUpdateObjects];
     [self commitAttributeChanges:copyOfNewAttributeChanges toTemp:NO];
     
     return objectsToUpdate;
@@ -519,7 +523,7 @@
 
 
 -(void)cleanUpAfterSync{
-    [[NSUserDefaults standardUserDefaults] setObject:[NSMutableDictionary dictionary] forKey:@"updateObjects"];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSMutableDictionary dictionary] forKey:kUpdateObjects];
     
     NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
     
@@ -576,7 +580,7 @@
 -(NSMutableDictionary *)_attributeChangesOnObjects
 {
     if (!__attributeChangesOnObjects){
-        __attributeChangesOnObjects = [[NSUserDefaults standardUserDefaults] objectForKey:@"tmpUpdateObjects"];
+        __attributeChangesOnObjects = [[NSUserDefaults standardUserDefaults] objectForKey:kTMPUpdateObjects];
         if(!__attributeChangesOnObjects) __attributeChangesOnObjects = [NSMutableDictionary dictionary];
     }
     return __attributeChangesOnObjects;
