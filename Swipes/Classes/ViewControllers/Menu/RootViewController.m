@@ -316,9 +316,11 @@ static RootViewController *sharedObject;
         case SyncStatusSuccess:
             [self.notification displayNotificationWithMessage:@"Sync completed" forDuration:1.5];
             break;
-        case SyncStatusError:
-            [self.notification displayNotificationWithMessage:@"Error syncing" forDuration:3];
+        case SyncStatusError:{
+            
+            [self.notification displayNotificationWithMessage:@"Error syncing" forDuration:3.5];
             break;
+        }
         default:
             break;
     }

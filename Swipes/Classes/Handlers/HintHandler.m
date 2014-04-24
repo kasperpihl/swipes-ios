@@ -30,6 +30,8 @@
         return NO;
     
     BOOL completedHint = [self completeHint:hint];
+//#warning Forced hints to show
+    //completedHint = YES;
     if(completedHint){
         self.currentHint = hint;
         if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
@@ -46,10 +48,10 @@
                 hintText = @"You've completed a task";
                 break;
             case HintSwipedLeft:
-                
+                hintText = @"Snooze for later or pick a date";
                 break;
             case HintScheduled:
-                hintText = @"You've snoozed a task";
+                hintText = @"You've snoozed a task - it'll return to the focus area on time";
                 break;
             case HintSelected:
                 hintText = @"You selected a task.\n\nYou can select more and take an action below.";
@@ -114,7 +116,6 @@ static HintHandler *sharedObject;
 -(BOOL)completeHint:(Hints)hint{
     NSString *key = [self keyForHint:hint];
     BOOL hasAlreadyCompletedHint = [[self.hints objectForKey:key] boolValue];
-    
     if(!hasAlreadyCompletedHint){
         NSLog(@"completed hint %@",key);
         [self.hints setObject:@YES forKey:key];
@@ -167,8 +168,18 @@ static HintHandler *sharedObject;
         case HintSwipedLeft:{
             CGFloat width = ROOT_CONTROLLER.view.frame.size.width;
             CGFloat height = ROOT_CONTROLLER.view.frame.size.height;
-            rect = CGRectMake(width/2, height/2, width/4, width/4);
-            rectArray = @[[NSValue valueWithCGRect:rect]];
+            CGFloat popupSize = 315;
+            CGFloat buttonSize = popupSize/3;
+            
+            CGFloat spotlightRadius = buttonSize/2+10;
+            
+            CGFloat popupY = (height-popupSize)/2;
+            CGFloat popupX = (width-popupSize)/2;
+            
+            rect = CGRectMake(popupX + buttonSize/2 - 3 , popupY + buttonSize/2 - 2, spotlightRadius,spotlightRadius);
+            
+            
+            rectArray = @[[NSValue valueWithCGRect:rect],[NSValue valueWithCGRect:CGRectMake(popupX + popupSize - spotlightRadius+ 5, popupY + popupSize - spotlightRadius+ 5  , spotlightRadius, spotlightRadius)]];
             break;
         }
         case HintScheduled:
@@ -201,7 +212,7 @@ static HintHandler *sharedObject;
             title = @"Completed log";
             break;
         case HintSwipedLeft:{
-            title = @"Select an icon";
+            //title = @"Select an icon";
             break;
         }
         case HintScheduled:
@@ -217,7 +228,6 @@ static HintHandler *sharedObject;
 }
 
 -(UIButton *)turnOffButtonForHint:(CGRect)hintBounds{
-    NSLog(@"turnoff button");
     CGFloat closeHeight = 32;
     CGFloat closeWidth = 60;
     CGFloat closeSpacing = 5;

@@ -381,8 +381,10 @@
         NSLog(@"status code: %i error %@",response.statusCode,error);
         if(error)
             [UtilityClass sendError:error type:@"Sync request error 1"];
-        else if(response.statusCode == 503)
+        else if(response.statusCode == 503){
+            error = [NSError errorWithDomain:@"Request timed out" code:503 userInfo:nil];
             self._needSync = YES;
+        }
         else if(!error){
             NSString *myString = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
             NSLog(@"err %@",myString);

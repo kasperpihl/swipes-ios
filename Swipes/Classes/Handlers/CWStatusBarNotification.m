@@ -395,6 +395,7 @@ static void cancel_delayed_block(CWDelayedBlockHandle delayedHandle)
         }];
     }
     else{
+        cancel_delayed_block(self.dismissHandle);
         self.notificationLabel.text = message;
         [completion invoke];
     }
