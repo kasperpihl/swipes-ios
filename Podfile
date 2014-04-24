@@ -16,7 +16,7 @@ pod 'MMDrawerController', '~> 0.5.3'
 #pod 'Analytics', '~> 0.10.2'
 #pod 'Dropbox-iOS-SDK', '~> 1.3.9'
 #pod 'ASCScreenBrightnessDetector'
-#pod 'TWStatus', '~> 0.0.1'
+pod 'TWStatus', '~> 0.0.1'
 
 post_install do |installer|
   installer.project.targets.each do |target|

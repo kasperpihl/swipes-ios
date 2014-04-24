@@ -34,6 +34,9 @@
     
     return tagList;
 }
+-(NSArray *)getSelectedTags{
+    return (self.selectedTags.count > 0) ? self.selectedTags : nil;
+}
 -(NSMutableArray *)tags{
     if(!_tags) _tags = [NSMutableArray array];
     return _tags;

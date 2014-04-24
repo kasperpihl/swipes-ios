@@ -633,7 +633,7 @@
     [self saveContextForSynchronization:nil];
     NSInteger i = 0;
     do {
-        [KPToDo addItem:[NSString stringWithFormat:@"Testing %i",i] priority:NO save:NO];
+        [KPToDo addItem:[NSString stringWithFormat:@"Testing %i",i] priority:NO tags:nil save:NO];
         i++;
     } while (i < 500);
     [self saveContextForSynchronization:nil];
@@ -733,7 +733,7 @@ static KPParseCoreData *sharedObject;
     for(NSInteger i = toDoArray.count-1 ; i >= 0  ; i--){
         NSString *item = [toDoArray objectAtIndex:i];
         BOOL priority = (i == 0);
-        KPToDo *toDo = [KPToDo addItem:item priority:priority save:NO];
+        KPToDo *toDo = [KPToDo addItem:item priority:priority tags:nil save:NO];
         if(i <= 1)[KPToDo updateTags:@[@"work"] forToDos:@[toDo] remove:NO save:YES];
     }
 

@@ -72,6 +72,10 @@
     }
     return NO;
 }
+-(void)setText:(NSString *)text{
+    self.textField.text = text;
+    [self textFieldDidChange:self.textField];
+}
 -(void)textFieldDidChange:(UITextField*)textField{
     NSString *string = textField.text;
     NSString *trimmedString = [string stringByTrimmingCharactersInSet:

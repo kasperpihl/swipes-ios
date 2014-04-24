@@ -114,6 +114,7 @@
     
     AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.view.bounds];
     addPanel.addDelegate = self;
+    addPanel.tags = [KPTag allTagsAsStrings];
     BLURRY.showPosition = PositionBottom;
     BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark), 0.3);
     [BLURRY showView:addPanel inViewController:self];
@@ -166,8 +167,8 @@
     }];
 }
 #pragma mark - AddPanelDelegate
--(void)didAddItem:(NSString *)item priority:(BOOL)priority{
-    [[self currentViewController].itemHandler addItem:item priority:priority];
+-(void)didAddItem:(NSString *)item priority:(BOOL)priority tags:(NSArray *)tags{
+    [[self currentViewController].itemHandler addItem:item priority:priority tags:tags];
 }
 - (NSMutableArray *)viewControllers {
 	if (!_viewControllers)

@@ -15,4 +15,5 @@
 @interface KPAddView : UIView
 @property (nonatomic,weak) NSObject<AddViewDelegate> *delegate;
 @property (nonatomic) IBOutlet UITextField *textField;
+-(void)setText:(NSString*)text;
 @end

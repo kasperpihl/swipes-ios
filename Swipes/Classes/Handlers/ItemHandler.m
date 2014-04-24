@@ -50,9 +50,9 @@
             [self.delegate itemHandler:self changedItemNumber:itemCounter oldNumber:oldNumber];
     }
 }
--(void)addItem:(NSString *)item priority:(BOOL)priority{
+-(void)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray*)tags{
     if(self.hasFilter || self.hasSearched) [self clearAll];
-    [KPToDo addItem:item priority:priority save:YES];
+    [KPToDo addItem:item priority:priority tags:tags save:YES];
     [self reloadData];
 }
 -(void)reloadData{

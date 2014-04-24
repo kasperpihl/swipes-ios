@@ -36,12 +36,14 @@
 #define checkDateWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToDate:pfValue]) [self setValue:pfValue forKey:cdKey]
 #define checkNumberWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToNumber:pfValue]) [self setValue:pfValue forKey:cdKey]
 
-+(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority save:(BOOL)save{
++(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray *)tags save:(BOOL)save{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
     newToDo.title = item;
     newToDo.schedule = [NSDate date];
     if(priority) newToDo.priorityValue = 1;
     newToDo.orderValue = kDefOrderVal;
+    if(tags && tags.count > 0)
+        [self updateTags:tags forToDos:@[newToDo] remove:NO save:NO];
     if(save) [KPToDo saveToSync];
     NSString *taskLength = @"50+";
     if(item.length <= 10) taskLength = @"1-10";
