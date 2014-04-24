@@ -14,8 +14,8 @@
 #import "Reachability.h"
 #import "UserHandler.h"
 
-#define kSyncTime 5
-#define kUpdateLimit 150
+#define kSyncTime 3
+#define kUpdateLimit 50
 
 #define kTMPUpdateObjects @"tmpUpdateObjects"
 #define kUpdateObjects @"updateObjects"
@@ -134,8 +134,15 @@
 
 }
 
+-(void)sendStatus:(SyncStatus)status userInfo:(NSDictionary*)userInfo error:(NSError*)error{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if([self.delegate respondsToSelector:@selector(syncHandler:status:userInfo:error:)])
+            [self.delegate syncHandler:self status:status userInfo:userInfo error:error];
+    });
+    
+}
 /*
-    This is called everytime data is saved and will make sure it gets synced.
+    This is called everytime data is saved and will persist all the changed attributes for syncing.
 */
 - (void)saveContextForSynchronization:(NSManagedObjectContext*)context
 {
@@ -191,6 +198,8 @@
 {
     [self synchronizeForce:YES async:YES];
 }
+
+
 - (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async
 {
     if(self.outdated){
@@ -244,8 +253,14 @@
     }
 }
 
--(void)finalizeSync{
+-(void)finalizeSyncWithUserInfo:(NSDictionary*)userInfo error:(NSError*)error{
     self._isSyncing = NO;
+    
+    if(error)
+        [self sendStatus:SyncStatusError userInfo:userInfo error:error];
+    else
+        [self sendStatus:SyncStatusSuccess userInfo:userInfo error:nil];
+    
     if(self._needSync){
         NSDate *now = [NSDate date];
         if(!self.lastTry || [now timeIntervalSinceDate:self.lastTry] > 60){
@@ -268,7 +283,7 @@
     if (async)
         [self startBackgroundHandler];
     /* Prepare all the objects to be send */
-    
+    [self sendStatus:SyncStatusStarted userInfo:nil error:nil];
     NSManagedObjectContext *context = [KPCORE context];
     NSPredicate *newObjectsPredicate = [NSPredicate predicateWithFormat:@"(objectId = nil)"];
     NSArray *newObjects = [KPParseObject MR_findAllWithPredicate:newObjectsPredicate inContext:context];
@@ -348,7 +363,7 @@
                                                         error:&error];
     if(error){
         [UtilityClass sendError:error type:@"Sync JSON prepare parse"];
-        [self finalizeSync];
+        [self finalizeSyncWithUserInfo:nil error:error];
         return NO;
     }
     [request setHTTPBody:jsonData];
@@ -376,7 +391,7 @@
             [UtilityClass sendError:error type:@"Sync request error 2"];
         }
         self._needSync = YES;
-        [self finalizeSync];
+        [self finalizeSyncWithUserInfo:nil error:error];
         return NO;
     }
     
@@ -396,7 +411,7 @@
             error = [NSError errorWithDomain:message code:code userInfo:result];
         }
         [UtilityClass sendError:error type:@"Sync Json Parse Error"];
-        [self finalizeSync];
+        [self finalizeSyncWithUserInfo:result error:error];
         return NO;
     }
     
@@ -427,7 +442,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self cleanUpAfterSync];
         DUMPDB;
-        [self finalizeSync];
+        [self finalizeSyncWithUserInfo:nil error:nil];
     }];
     
     return (0 < totalNumberOfObjectsToSave);

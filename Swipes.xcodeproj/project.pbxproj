@@ -66,6 +66,7 @@
 		A717DD2418B7C3F700EE359C /* LightSchemeAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A717DD2318B7C3F700EE359C /* LightSchemeAlert.m */; };
 		A71DE4B31844069A0097394C /* UIGestureRecognizer+UIBreak.m in Sources */ = {isa = PBXBuildFile; fileRef = A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */; };
 		A724B02217A96B8B00E0EF83 /* UIColor+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */; };
+		A72C33501908F65C00767456 /* CWStatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = A72C334F1908F65C00767456 /* CWStatusBarNotification.m */; };
 		A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A72EFFFE18425B6A008333AA /* UserHandler.m */; };
 		A730D39617B51C24005E1510 /* upgrade_full.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39417B51C24005E1510 /* upgrade_full.png */; };
 		A730D39717B51C24005E1510 /* upgrade_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A730D39517B51C24005E1510 /* upgrade_full@2x.png */; };
@@ -322,6 +323,8 @@
 		A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+UIBreak.m"; sourceTree = "<group>"; };
 		A724B02017A96B8B00E0EF83 /* UIColor+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utilities.h"; sourceTree = "<group>"; };
 		A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Utilities.m"; sourceTree = "<group>"; };
+		A72C334E1908F65C00767456 /* CWStatusBarNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWStatusBarNotification.h; sourceTree = "<group>"; };
+		A72C334F1908F65C00767456 /* CWStatusBarNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWStatusBarNotification.m; sourceTree = "<group>"; };
 		A72EFFFD18425B6A008333AA /* UserHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserHandler.h; sourceTree = "<group>"; };
 		A72EFFFE18425B6A008333AA /* UserHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserHandler.m; sourceTree = "<group>"; };
 		A730D39417B51C24005E1510 /* upgrade_full.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upgrade_full.png; sourceTree = "<group>"; };
@@ -1298,6 +1301,8 @@
 		A7F4066E17296C0500DDE644 /* Handlers */ = {
 			isa = PBXGroup;
 			children = (
+				A72C334E1908F65C00767456 /* CWStatusBarNotification.h */,
+				A72C334F1908F65C00767456 /* CWStatusBarNotification.m */,
 				A717BF1D17611162004791BF /* AnalyticsHandler.h */,
 				A717BF1E17611162004791BF /* AnalyticsHandler.m */,
 				A7F4066F17296C0500DDE644 /* KPControlHandler */,
@@ -1668,6 +1673,7 @@
 				A703B1BA1838EBF20047DCC9 /* KPTimePicker.m in Sources */,
 				A703B1A91838EBF20047DCC9 /* KPAlert.m in Sources */,
 				A7D7D53317B1586A00FBC042 /* SettingsHandler.m in Sources */,
+				A72C33501908F65C00767456 /* CWStatusBarNotification.m in Sources */,
 				A717DD2418B7C3F700EE359C /* LightSchemeAlert.m in Sources */,
 				DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */,
 				A7D7D53917B1A56C00FBC042 /* MenuButton.m in Sources */,

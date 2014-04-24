@@ -567,7 +567,6 @@ typedef enum {
 
     CGRectSetY(self.logoView, LOGIN_LOGO_Y);
     CGRectSetY(self.titleView, CGRectGetMaxY(self.logoView.frame) + 50);
-    NSLog(@"height:%f",self.titleView.frame.size.height);
     CGFloat fieldHeight = LOGIN_FIELDS_HEIGHT/2;
 
     CGRectSetY(self.emailField, LOGIN_FIELDS_Y+(fieldHeight-self.emailField.frame.size.height)/2+relativeStart);

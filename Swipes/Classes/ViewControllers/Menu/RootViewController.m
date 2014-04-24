@@ -33,6 +33,9 @@
 #import <MessageUI/MessageUI.h>
 #import <Parse/Parse.h>
 
+#import "CWStatusBarNotification.h"
+
+
 #import "KPAlert.h"
 #import "UtilityClass.h"
 #import "HintHandler.h"
@@ -41,12 +44,13 @@
 #import "UserHandler.h"
 #import "ShareViewController.h"
 
-@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate,SyncDelegate>
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 
 @property (nonatomic) NSDate *lastClose;
 @property (nonatomic) KPMenu currentMenu;
+@property (nonatomic) CWStatusBarNotification *notification;
 @end
 
 @implementation RootViewController
@@ -291,7 +295,34 @@ static RootViewController *sharedObject;
     
 }
 
-
+-(void)syncHandler:(KPParseCoreData *)handler status:(SyncStatus)status userInfo:(NSDictionary *)userInfo error:(NSError *)error{
+    if(OSVER < 7) return;
+    NSLog(@"delegate");
+    if(!self.notification){
+        self.notification = [CWStatusBarNotification new];
+        self.notification.notificationTappedBlock = nil;
+        self.notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+        self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+    }
+    self.notification.notificationLabelBackgroundColor = tcolor(BackgroundColor);
+    self.notification.notificationLabelTextColor = tcolor(TextColor);
+    switch (status) {
+        case SyncStatusStarted:
+            [self.notification displayNotificationWithMessage:@"Synchronizing..." completion:nil];
+            NSLog(@"send status");
+            break;
+        case SyncStatusProgress:
+            break;
+        case SyncStatusSuccess:
+            [self.notification displayNotificationWithMessage:@"Sync completed" forDuration:1.5];
+            break;
+        case SyncStatusError:
+            [self.notification displayNotificationWithMessage:@"Error syncing" forDuration:3];
+            break;
+        default:
+            break;
+    }
+}
 
 -(void)tryoutapp{
     if(![[NSUserDefaults standardUserDefaults] objectForKey:isTryingString]){
@@ -312,7 +343,7 @@ static RootViewController *sharedObject;
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
-    
+    KPCORE.delegate = self;
     notify(@"changed theme", changedTheme);
     
     
