@@ -29,4 +29,5 @@ typedef enum {
 +(HintHandler*)sharedInstance;
 -(BOOL)triggerHint:(Hints)hint;
 -(BOOL)hasCompletedHint:(Hints)hint;
+-(void)reset;
 @end

@@ -588,8 +588,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 #pragma mark - Click handlers
 
 -(void)pressedPriority{
-    self.model.priorityValue = (self.model.priorityValue == 0) ? 1 : 0;
-    [KPToDo saveToSync];
+    [self.model switchPriority];
     [self updateDot];
 }
 

@@ -15,11 +15,12 @@
 /* Start watching for Location */
 +(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save;
 
+-(void)switchPriority;
+
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;
 
 +(NSArray*)sortOrderForItems:(NSArray*)items save:(BOOL)save;
-
 
 -(NSArray*)changeToOrder:(NSInteger)newOrder withItems:(NSArray*)items;
 

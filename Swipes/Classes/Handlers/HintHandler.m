@@ -9,6 +9,9 @@
 #define kHintsOffKey @"HintsTurnedOff"
 
 
+#import "DotView.h"
+
+
 #import "SettingsHandler.h"
 #import "HintHandler.h"
 #import "EMHint.h"
@@ -25,13 +28,16 @@
 @end
 
 @implementation HintHandler
+-(void)reset{
+    self.hints = [NSMutableDictionary dictionary];
+}
 -(BOOL)triggerHint:(Hints)hint{
     if(self.hintsIsOff)
         return NO;
     
     BOOL completedHint = [self completeHint:hint];
-//#warning Forced hints to show
-    //completedHint = YES;
+#warning Forced hints to show
+    completedHint = YES;
     if(completedHint){
         self.currentHint = hint;
         if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
@@ -57,6 +63,7 @@
                 hintText = @"You selected a task.\n\nYou can select more and take an action below.";
                 break;
             case HintPriority:
+                hintText = @"You marked a task as priority\n\nThis shows it's importance";
                 break;
         }
         [self.emHint presentModalMessage:hintText where:ROOT_CONTROLLER.view];
@@ -132,7 +139,22 @@ static HintHandler *sharedObject;
 /*
  
 */
-
+-(UIView *)hintStateViewForDialog:(id)hintState inBounds:(CGSize)bounds{
+    if(self.currentHint == HintPriority){
+        CGFloat viewWidth = 260;
+        CGFloat viewHeight = 120;
+        CGFloat yHack = 100;
+        UIView *priorityHint = [[UIView alloc] initWithFrame:CGRectMake(0, 0, viewWidth, viewHeight)];
+        DotView *dotView = [[DotView alloc] init];
+        [dotView setScale:3];
+        [dotView setDotColor:tcolor(TasksColor)];
+        dotView.priority = YES;
+        [priorityHint addSubview:dotView];
+        CGRectSetCenter(dotView, bounds.width/2, bounds.height/2-yHack);
+        return priorityHint;
+    }
+    return nil;
+}
 
 -(NSArray*)hintStateRectsToHint:(id)hintState
 {

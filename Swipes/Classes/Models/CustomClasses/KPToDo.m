@@ -525,6 +525,13 @@
     if(save) [KPToDo saveToSync];
 }
 
+-(void)switchPriority{
+    self.priorityValue = (self.priorityValue == 0) ? 1 : 0;
+    [KPToDo saveToSync];
+    if(self.priorityValue == 1)
+        [kHints triggerHint:HintPriority];
+}
+
 -(BOOL)notifyOnLocation:(CLPlacemark*)location type:(GeoFenceType)type{
     /*
         Location ID -

@@ -176,6 +176,7 @@ static RootViewController *sharedObject;
 -(void)logOut{
     [PFUser logOut];
     [[KPParseCoreData sharedInstance] clearAndDeleteData];
+    [kHints reset];
     [self resetRoot];
     //[self.drawerViewController closeDrawerAnimated:YES completion:nil];
     

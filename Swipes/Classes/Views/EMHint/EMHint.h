@@ -39,7 +39,7 @@ typedef enum
  // the default hint space is a label with white helvetica text dynamically centered,
  // one can return a custom view here to override that label
  */
--(UIView*)hintStateViewForDialog:(id)hintState;
+-(UIView*)hintStateViewForDialog:(id)hintState inBounds:(CGSize)bounds;
 
 /*
  // return an array of rects (NSValue objs) for where spotlights should shine.

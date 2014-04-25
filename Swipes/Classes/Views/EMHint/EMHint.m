@@ -122,13 +122,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     [_modalView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
     [presentationPlace addSubview:_modalView];
     
-    UIView *v = nil;
-    if ([[self hintDelegate] respondsToSelector:@selector(hintStateViewForDialog:)]) {
-        v = [self.hintDelegate hintStateViewForDialog:self];
-        [_modalView addSubview:v];
-    }
     
-    if(v==nil)//no custom subview
+    
+    if(message)//no custom subview
     {
         //label
         UIFont *ft = KP_SEMIBOLD(18);
@@ -153,6 +149,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         [label setNumberOfLines:0];
         [label setLineBreakMode:NSLineBreakByWordWrapping];
         [_modalView addSubview:label];
+    }
+    
+    UIView *v = nil;
+    if ([[self hintDelegate] respondsToSelector:@selector(hintStateViewForDialog:inBounds:)]) {
+        v = [self.hintDelegate hintStateViewForDialog:self inBounds:presentationPlace.bounds.size];
+        if(v)
+            [_modalView addSubview:v];
     }
     
     if ([[self hintDelegate] respondsToSelector:@selector(hintStateHasDefaultTapGestureRecognizer:)]) {

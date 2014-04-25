@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface DotView : UIView
-@property (nonatomic) CGFloat size;
 @property (nonatomic) UIColor *dotColor;
 @property (nonatomic) BOOL priority;
+@property (nonatomic) CGFloat scale;
 @end
