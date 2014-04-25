@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 #define kHintDictionaryKey @"HintsDictionary"
-#define kHintsOffKey @"HintsTurnedOff"
+#define kHintsOnKey @"HintsTurnedOn"
 
 
 #import "DotView.h"
@@ -25,20 +25,21 @@
 @property NSMutableDictionary *hints;
 @property EMHint *emHint;
 @property Hints currentHint;
-@property BOOL hintsIsOff;
+@property BOOL hintsIsOn;
 @end
 
 @implementation HintHandler
 -(void)reset{
     self.hints = [NSMutableDictionary dictionary];
+    self.hintsIsOn = YES;
 }
 -(BOOL)triggerHint:(Hints)hint{
-    if(self.hintsIsOff)
+    if(!self.hintsIsOn)
         return NO;
     
     BOOL completedHint = [self completeHint:hint];
-#warning Forced hints to show
-    completedHint = YES;
+//#warning Forced hints to show
+    //completedHint = YES;
     if(completedHint){
         self.currentHint = hint;
         if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
@@ -84,13 +85,13 @@ static HintHandler *sharedObject;
     if(!sharedObject){
         sharedObject = [[HintHandler allocWithZone:NULL] init];
         [sharedObject initialize];
-        sharedObject.hintsIsOff = [kSettings settingForKey:kHintsOffKey];
+        sharedObject.hintsIsOn = [kSettings settingForKey:kHintsOnKey];
     }
     return sharedObject;
 }
--(void)turnOffHints{
-    [kSettings setSetting:YES forKey:kHintsOffKey];
-    self.hintsIsOff = YES;
+-(void)turnHintsOn:(BOOL)hintsOn{
+    [kSettings setSetting:hintsOn forKey:kHintsOnKey];
+    self.hintsIsOn = hintsOn;
 }
 -(NSString*)keyForHint:(Hints)hint{
     NSString *key;
@@ -293,7 +294,7 @@ static HintHandler *sharedObject;
 -(void)hintTurnedOff{
     [UTILITY confirmBoxWithTitle:@"Hints" andMessage:@"Hints only show once and will guide you through the main functions." cancel:@"Keep on" confirm:@"Turn off" block:^(BOOL succeeded, NSError *error) {
         if(succeeded)
-            [self turnOffHints];
+            [self turnHintsOn:NO];
     }];
 }
 

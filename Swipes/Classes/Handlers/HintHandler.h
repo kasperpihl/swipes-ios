@@ -30,4 +30,5 @@ typedef enum {
 -(BOOL)triggerHint:(Hints)hint;
 -(BOOL)hasCompletedHint:(Hints)hint;
 -(void)reset;
+-(void)turnHintsOn:(BOOL)hintsOn;
 @end

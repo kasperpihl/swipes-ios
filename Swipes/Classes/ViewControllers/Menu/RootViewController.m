@@ -104,11 +104,13 @@
 -(void)didLoginUser:(PFUser*)user{
     [self.settingsViewController renderSubviews];
     voidBlock block = ^{
+        NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
+        NSDictionary *options = @{@"Time since real install" : [NSString stringWithFormat:@"%i days",[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]};
         if(user.isNew) {
-            [ANALYTICS tagEvent:@"Signed Up" options:@{}];
+            [ANALYTICS tagEvent:@"Signed Up" options:options];
         }
         else{
-            [ANALYTICS tagEvent:@"Logged In" options:@{}];
+            [ANALYTICS tagEvent:@"Logged In" options:options];
         }
         if([PFFacebookUtils isLinkedWithUser:user]){
             if(!user.email){
@@ -154,7 +156,7 @@
             break;
         }
         case KPMenuHome:
-            [NSTimer scheduledTimerWithTimeInterval:1.4 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
+            [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
             self.lockSettings = NO;
             viewController = self.menuViewController;
             break;
@@ -288,11 +290,12 @@ static RootViewController *sharedObject;
             [self changeToMenu:KPMenuHome animated:NO];
         }
         else{
+            [kHints turnHintsOn:YES];
             [self changeToMenu:KPMenuLogin animated:NO];
         }
     }
     else
-        [self changeToMenu:KPMenuLogin animated:NO];
+        [self changeToMenu:KPMenuHome animated:NO];
     
 }
 
@@ -332,6 +335,9 @@ static RootViewController *sharedObject;
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:isTryingString];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [KPCORE seedObjectsSave:YES];
+        NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
+        NSDictionary *options = @{@"Time since real install" : [NSString stringWithFormat:@"%i days",[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]};
+        [ANALYTICS tagEvent:@"Trying out app" options:options];
     }
     
     [self changeToMenu:KPMenuHome animated:YES];
@@ -380,7 +386,6 @@ static RootViewController *sharedObject;
 }
 -(void)changedTheme{
    // [self setNeedsStatusBarAppearanceUpdate];
-
 }
 
 -(void)viewDidAppear:(BOOL)animated{
