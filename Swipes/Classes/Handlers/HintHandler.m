@@ -18,6 +18,7 @@
 #import "SlowHighlightIcon.h"
 #import "UtilityClass.h"
 #import "RootViewController.h"
+#import "ToDoListViewController.h"
 #import "UIColor+Utilities.h"
 
 @interface HintHandler () <EMHintDelegate>
@@ -147,7 +148,14 @@ static HintHandler *sharedObject;
         UIView *priorityHint = [[UIView alloc] initWithFrame:CGRectMake(0, 0, viewWidth, viewHeight)];
         DotView *dotView = [[DotView alloc] init];
         [dotView setScale:3];
-        [dotView setDotColor:tcolor(TasksColor)];
+        NSString *currentScreenState = ROOT_CONTROLLER.menuViewController.currentViewController.state;
+        UIColor *dotColor = tcolor(TasksColor);
+        if([currentScreenState isEqualToString:@"schedule"])
+            dotColor = tcolor(LaterColor);
+        else if([currentScreenState isEqualToString:@"done"])
+            dotColor = tcolor(DoneColor);
+        
+        [dotView setDotColor:dotColor];
         dotView.priority = YES;
         [priorityHint addSubview:dotView];
         CGRectSetCenter(dotView, bounds.width/2, bounds.height/2-yHack);
