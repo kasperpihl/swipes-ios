@@ -906,7 +906,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.view addSubview:self.sectionHeader];
         
         
-        /*
+        
         SubtasksViewController *subtasks = [[SubtasksViewController alloc] init];
         [subtasks setContentInset:UIEdgeInsetsMake(0, 0, kTopSubtaskTarget, 0)];
         //CGRectSetHeight(subtasks.view,self.view.bounds.size.height-kTopSubtaskTarget);
@@ -932,7 +932,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         [self.view addSubview:subtasks.view];
          
-         */
+         
         
         notify(@"updated sync",updateFromSync:);
     }
