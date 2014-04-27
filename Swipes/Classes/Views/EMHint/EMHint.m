@@ -127,8 +127,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     if(message)//no custom subview
     {
         //label
-        UIFont *ft = KP_SEMIBOLD(18);
-        CGFloat labelWidth = 280;
+        UIFont *ft = KP_SEMIBOLD(20);
+        CGFloat labelWidth = 300;
         CGSize sz = [message sizeWithFont:ft constrainedToSize:CGSizeMake(labelWidth, 1000)];
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((presentationPlace.frame.size.width-labelWidth)/2,
                                                                    floorf(presentationPlace.center.y - sz.height/2 - 15),

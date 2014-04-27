@@ -380,17 +380,17 @@
     
     if(response.statusCode != 200 || error){
         NSLog(@"status code: %i error %@",response.statusCode,error);
-        if(error)
-            [UtilityClass sendError:error type:@"Sync request error 1"];
+        if(error){
+            if(!(error.code == -1001 || error.code == -1003 || error.code == -1005 || error.code == -1009))
+                [UtilityClass sendError:error type:@"Sync request error 1"];
+        }
         else if(response.statusCode == 503){
             error = [NSError errorWithDomain:@"Request timed out" code:503 userInfo:nil];
             self._needSync = YES;
         }
         else if(!error){
             NSString *myString = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-            NSLog(@"err %@",myString);
             error = [NSError errorWithDomain:myString code:response.statusCode userInfo:nil];
-            NSLog(@"error:%@",error.description);
             [UtilityClass sendError:error type:@"Sync request error 2"];
         }
         self._needSync = YES;
@@ -399,7 +399,7 @@
     }
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
-    NSLog(@"res:%@ err: %@",result,error);
+    //NSLog(@"res:%@ err: %@",result,error);
     
     if(error || [result objectForKey:@"code"] || ![result objectForKey:@"serverTime"]){
         if(!error){

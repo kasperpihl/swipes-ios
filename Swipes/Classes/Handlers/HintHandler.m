@@ -31,15 +31,12 @@
 @implementation HintHandler
 -(void)reset{
     self.hints = [NSMutableDictionary dictionary];
-    self.hintsIsOn = YES;
+    [self turnHintsOn:YES];
 }
 -(BOOL)triggerHint:(Hints)hint{
     if(!self.hintsIsOn)
         return NO;
-    
     BOOL completedHint = [self completeHint:hint];
-//#warning Forced hints to show
-    //completedHint = YES;
     if(completedHint){
         self.currentHint = hint;
         if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
@@ -47,31 +44,32 @@
         NSString *hintText;
         switch (hint) {
             case HintWelcome:
-                hintText = @"Keep your current tasks here.\n\nSnooze or complete the rest!";
+                hintText = @"Keep your current tasks here\n\nSnooze or complete the rest!";
                 break;
             case HintAccount:
                 hintText = @"Register an account to safely back up your data";
                 break;
             case HintCompleted:
-                hintText = @"You've completed a task";
+                hintText = @"Hooray! You've completed a task";
                 break;
             case HintSwipedLeft:
                 hintText = @"Snooze for later or pick a date";
                 break;
             case HintScheduled:
-                hintText = @"You've snoozed a task - it'll return to the focus area on time";
+                hintText = @"You've snoozed a task\n\nYou'll be reminded on time";
                 break;
             case HintSelected:
-                hintText = @"You selected a task.\n\nYou can select more and take an action below.";
+                hintText = @"You selected a task\n\nYou can select more and take an action below";
                 break;
             case HintPriority:
-                hintText = @"You marked a task as priority\n\nThis shows it's importance";
+                hintText = @"You marked a task as priority\n\nThis shows its importance";
                 break;
         }
         [self.emHint presentModalMessage:hintText where:ROOT_CONTROLLER.view];
     }
     return completedHint;
 }
+
 -(BOOL)hasCompletedHint:(Hints)hint{
     NSString *key = [self keyForHint:hint];
     BOOL hasAlreadyCompletedHint = [[self.hints objectForKey:key] boolValue];

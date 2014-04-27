@@ -139,7 +139,8 @@ static SettingsHandler *sharedObject;
     if(!index) return;
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:index];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    if(setting == SettingNotifications) [NOTIHANDLER updateLocalNotifications];
+    if(setting == SettingNotifications)
+        [NOTIHANDLER updateLocalNotifications];
 }
 
 -(BOOL)settingForKey:(NSString *)key{
@@ -148,7 +149,7 @@ static SettingsHandler *sharedObject;
 }
 -(void)setSetting:(BOOL)setting forKey:(NSString *)key{
     [self.settings setObject:@(setting) forKey:key];
-    [[NSUserDefaults standardUserDefaults] setObject:self.settings forKey:key];
+    [[NSUserDefaults standardUserDefaults] setObject:self.settings forKey:kSettingsDictionaryKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -156,5 +157,6 @@ static SettingsHandler *sharedObject;
     self.settings = [[NSUserDefaults standardUserDefaults] objectForKey:kSettingsDictionaryKey];
     if(!self.settings)
         self.settings = [NSMutableDictionary dictionary];
+    NSLog(@"settings %@",self.settings);
 }
 @end

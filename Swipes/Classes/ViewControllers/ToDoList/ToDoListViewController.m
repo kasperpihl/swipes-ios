@@ -228,6 +228,7 @@
     if(self.hasStartedEditing)
         return;
     self.hasStartedEditing = YES;
+    self.savedContentOffset = self.tableView.contentOffset;
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     self.showingViewController.model = toDo;
     [ROOT_CONTROLLER pushViewController:self.showingViewController animated:YES];
@@ -536,6 +537,10 @@
 -(void)viewWillAppear:(BOOL)animated{
     [self update];
     self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height);
+    if(!CGPointEqualToPoint(self.savedContentOffset, CGPointZero)){
+        [self.tableView setContentOffset:self.savedContentOffset];
+        self.savedContentOffset = CGPointZero;
+    }
     if(self.cellType != CellTypeToday) self.parent.backgroundMode = NO;
     else if(self.itemHandler.itemCounterWithFilter == 0) self.parent.backgroundMode = YES;
     [super viewWillAppear:animated];

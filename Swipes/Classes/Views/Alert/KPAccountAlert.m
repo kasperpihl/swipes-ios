@@ -54,7 +54,7 @@
         
         UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 50)];
         topButton.titleLabel.font = iconFont(50);
-        [topButton setTitle:@"settingsAccount" forState:UIControlStateNormal];
+        [topButton setTitle:iconString(@"settingsAccount") forState:UIControlStateNormal];
         [topButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         CGRectSetY(topButton, DEFAULT_TITLE_HEIGHT-topButton.frame.size.height);
         CGRectSetCenterX(topButton, self.contentView.frame.size.width/2);
