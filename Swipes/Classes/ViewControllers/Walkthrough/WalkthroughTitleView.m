@@ -12,8 +12,7 @@
 #define kDefTitleSpacing 13
 #import "WalkthroughTitleView.h"
 @interface WalkthroughTitleView ()
-@property (nonatomic,strong) UILabel *titleLabel;
-@property (nonatomic,strong) UILabel *subtitleLabel;
+
 @end
 @implementation WalkthroughTitleView
 -(void)setTitle:(NSString *)title subtitle:(NSString *)subtitle{
@@ -23,15 +22,14 @@
     self.subtitleLabel.text = subtitle;
     [self.titleLabel sizeToFit];
     [self.subtitleLabel sizeToFit];
-    self.titleLabel.frame = CGRectSetPos(self.titleLabel.frame, (self.frame.size.width-self.titleLabel.frame.size.width)/2, 0);
-    self.subtitleLabel.frame = CGRectSetPos(self.subtitleLabel.frame, (self.frame.size.width-self.subtitleLabel.frame.size.width)/2, self.titleLabel.frame.size.height + kDefTitleSpacing);
+    [self layoutSubviews];
     
-    CGRectSetHeight(self, self.subtitleLabel.frame.origin.y + self.subtitleLabel.frame.size.height);
 }
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.spacing = kDefTitleSpacing;
         self.maxWidth = kDefMaxWidth;
         self.titleLabel = [[UILabel alloc] init];
         self.titleLabel.textColor = WALK_COLOR;
@@ -50,10 +48,17 @@
     }
     return self;
 }
+-(void)layoutSubviews{
+    self.titleLabel.frame = CGRectSetPos(self.titleLabel.frame, (self.frame.size.width-self.titleLabel.frame.size.width)/2, 0);
+    self.subtitleLabel.frame = CGRectSetPos(self.subtitleLabel.frame, (self.frame.size.width-self.subtitleLabel.frame.size.width)/2, self.titleLabel.frame.size.height + self.spacing);
+    
+    CGRectSetHeight(self, self.subtitleLabel.frame.origin.y + self.subtitleLabel.frame.size.height);
+}
 -(void)dealloc{
     self.titleLabel = nil;
     self.subtitleLabel = nil;
 }
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

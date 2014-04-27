@@ -16,7 +16,6 @@
 #import "DoneViewController.h"
 
 #import "LoginViewController.h"
-
 #import "AnalyticsHandler.h"
 
 #import "MenuViewController.h"
@@ -34,16 +33,24 @@
 #import <MessageUI/MessageUI.h>
 #import <Parse/Parse.h>
 
+#import "CWStatusBarNotification.h"
+
+
 #import "KPAlert.h"
-
-
+#import "UtilityClass.h"
+#import "HintHandler.h"
+#import "MMDrawerVisualState.h"
+#import "KPAccountAlert.h"
+#import "UserHandler.h"
 #import "ShareViewController.h"
 
-@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate,SyncDelegate>
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
+
 @property (nonatomic) NSDate *lastClose;
 @property (nonatomic) KPMenu currentMenu;
+@property (nonatomic) CWStatusBarNotification *notification;
 @end
 
 @implementation RootViewController
@@ -63,30 +70,17 @@
 
 -(void)blurryWillShow:(KPBlurry *)blurry{
     self.lockSettings = YES;
-    
 }
 -(void)blurryDidHide:(KPBlurry *)blurry{
     if(self.currentMenu != KPMenuLogin) self.lockSettings = NO;
 }
-#pragma mark - PFLogInViewControllerDelegate
-// Sent to the delegate to determine whether the log in request should be submitted to the server.
-/*- (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password {
-    // Check if both fields are completed
-    if (username && password && username.length != 0 && password.length != 0) {
-        return YES; // Begin login process
-    }
-    
-    [[[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                message:@"Make sure you fill out all of the information!"
-                               delegate:nil
-                      cancelButtonTitle:@"ok"
-                      otherButtonTitles:nil] show];
-    return NO; // Interrupt login process
-}*/
+
+
 -(void)fetchDataFromFacebook{
     __block NSString *requestPath = @"me?fields=email,gender";
     FBRequest *request = [FBRequest requestForGraphPath:requestPath];
     [FBC addRequest:request write:NO permissions:nil block:^BOOL(FBReturnType status, id result, NSError *error) {
+        NSLog(@"fetched");
         PFUser *user = kCurrent;
         if(error) {
             return NO;
@@ -109,23 +103,39 @@
     }];
 }
 -(void)didLoginUser:(PFUser*)user{
-    if(user.isNew) [[KPParseCoreData sharedInstance] seedObjectsSave:YES];
-    if(user.isNew) {
-        [ANALYTICS tagEvent:@"Signed Up" options:@{}];
-    }
-    else{
-        [ANALYTICS tagEvent:@"Logged In" options:@{}];
-    }
-    if([PFFacebookUtils isLinkedWithUser:user]){
-        if(!user.email){
-            [self fetchDataFromFacebook];
+    [self.settingsViewController renderSubviews];
+    voidBlock block = ^{
+        NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
+        NSDictionary *options = @{@"Time since real install" : [NSString stringWithFormat:@"%i days",[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]};
+        if(user.isNew) {
+            [ANALYTICS tagEvent:@"Signed Up" options:options];
         }
+        else{
+            [ANALYTICS tagEvent:@"Logged In" options:options];
+        }
+        if([PFFacebookUtils isLinkedWithUser:user]){
+            if(!user.email){
+                NSLog(@"fetching");
+                [self fetchDataFromFacebook];
+            }
+        }
+        else{
+        }
+        [ANALYTICS updateIdentity];
+        [self changeToMenu:KPMenuHome animated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
+    };
+    if([[NSUserDefaults standardUserDefaults] boolForKey:isTryingString]){
+        [UTILITY confirmBoxWithTitle:@"Keep data" andMessage:@"Do you want to keep the data from the test period?" block:^(BOOL succeeded, NSError *error) {
+            if(!succeeded) [KPCORE clearAndDeleteData];
+            block();
+        }];
     }
     else{
+        if(user.isNew) [[KPParseCoreData sharedInstance] seedObjectsSave:YES];
+        block();
     }
-    [ANALYTICS updateIdentity];
-    [self changeToMenu:KPMenuHome animated:YES];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
+    
 }
 // Sent to the delegate when a PFUser is logged in.
 - (void)loginViewController:(LoginViewController *)logInController didLoginUser:(PFUser *)user {
@@ -148,13 +158,17 @@
             break;
         }
         case KPMenuHome:
+            [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
             self.lockSettings = NO;
             viewController = self.menuViewController;
             break;
     }
     self.currentMenu = menu;
-    CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
-    self.viewControllers = @[viewController];
+    if(self.drawerViewController.openSide == MMDrawerSideLeft)
+        [self.drawerViewController closeDrawerAnimated:YES completion:nil];
+    //CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
+    //CGRectSetHeight(self.drawerViewController.view,viewController.view.frame.size.height-100);
+    [self.drawerViewController setCenterViewController:viewController];
 }
 static RootViewController *sharedObject;
 +(RootViewController *)sharedInstance{
@@ -165,14 +179,17 @@ static RootViewController *sharedObject;
 }
 -(void)logOut{
     [PFUser logOut];
-    [[KPParseCoreData sharedInstance] logOutAndDeleteData];
+    [[KPParseCoreData sharedInstance] clearAndDeleteData];
+    [kHints reset];
     [self resetRoot];
+    //[self.drawerViewController closeDrawerAnimated:YES completion:nil];
     
 }
 -(void)resetRoot{
     self.menuViewController = nil;
     [self setupAppearance];
-    [self.sideMenu hide];
+    [self.settingsViewController renderSubviews];
+    //[self.sideMenu hide];
     
 }
 -(void)proWithMessage:(NSString*)message{
@@ -212,7 +229,22 @@ static RootViewController *sharedObject;
         [ANALYTICS tagEvent:@"Mail not available" options:nil];
     }
 }
+-(void)accountAlert{
+    KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:@"Register for Swipes to safely back up your data and get Swipes Plus" block:^(BOOL succeeded, NSError *error) {
+        [BLURRY dismissAnimated:YES];
+        if(succeeded){
+            [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
+        }
+        
+    }];
+    BLURRY.blurryTopColor = kSettingsBlurColor;
+    [BLURRY showView:alert inViewController:self];
+}
 -(void)upgrade{
+    if(!kUserHandler.isLoggedIn){
+        [self accountAlert];
+        return;
+    }
     UpgradeViewController *viewController = [[UpgradeViewController alloc]init];
     viewController.delegate = self;
     [self addChildViewController:viewController];
@@ -231,10 +263,6 @@ static RootViewController *sharedObject;
     [ANALYTICS popView];
     [viewController removeFromParentViewController];
     [OVERLAY popViewAnimated:YES];
-}
--(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
-    if(self.lockSettings) return;
-    [self.sideMenu panGestureRecognized:sender];
 }
 -(void)openApp{
     [kSettings refreshGlobalSettingsForce:NO];
@@ -256,39 +284,114 @@ static RootViewController *sharedObject;
 #pragma mark - ViewController methods
 -(void)setupAppearance{
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-    if(!sharedObject) sharedObject = self;
-    if(!kCurrent) [self changeToMenu:KPMenuLogin animated:NO];
-    else [self changeToMenu:KPMenuHome animated:NO];
+    if(!sharedObject)
+        sharedObject = self;
+    
+    if(!kCurrent){
+        if([[NSUserDefaults standardUserDefaults] objectForKey:isTryingString]){
+            [self changeToMenu:KPMenuHome animated:NO];
+        }
+        else{
+            [kHints turnHintsOn:YES];
+            [self changeToMenu:KPMenuLogin animated:NO];
+        }
+    }
+    else
+        [self changeToMenu:KPMenuHome animated:NO];
+    
+}
+
+-(void)syncHandler:(KPParseCoreData *)handler status:(SyncStatus)status userInfo:(NSDictionary *)userInfo error:(NSError *)error{
+    if(OSVER < 7) return;
+    NSLog(@"delegate");
+    if(!self.notification){
+        self.notification = [CWStatusBarNotification new];
+        self.notification.notificationTappedBlock = nil;
+        self.notification.notificationAnimationType = CWNotificationAnimationTypeOverlay;
+        self.notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+        self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+    }
+    self.notification.notificationLabelBackgroundColor = tcolor(BackgroundColor);
+    self.notification.notificationLabelTextColor = tcolor(TextColor);
+    switch (status) {
+        case SyncStatusStarted:
+            [self.notification displayNotificationWithMessage:@"Synchronizing..." completion:nil];
+            break;
+        case SyncStatusProgress:
+            break;
+        case SyncStatusSuccess:
+            [self.notification displayNotificationWithMessage:@"Sync completed" forDuration:1.5];
+            break;
+        case SyncStatusError:{
+            
+            [self.notification displayNotificationWithMessage:@"Error syncing" forDuration:3.5];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+-(void)tryoutapp{
+    if(![[NSUserDefaults standardUserDefaults] objectForKey:isTryingString]){
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:isTryingString];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [KPCORE seedObjectsSave:YES];
+        NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
+        NSDictionary *options = @{@"Time since real install" : [NSString stringWithFormat:@"%i days",[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]};
+        [ANALYTICS tagEvent:@"Trying out app" options:options];
+    }
+    
+    [self changeToMenu:KPMenuHome animated:YES];
+    
+}
+
+
+-(void)triggerWelcome{
+    [kHints triggerHint:HintWelcome];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setNavigationBarHidden:YES];
-    
+    KPCORE.delegate = self;
     notify(@"changed theme", changedTheme);
     
     
     BLURRY.delegate = self;
-    self.sideMenu = kSideMenu;
-    self.sideMenu.backgroundImage = [color(18,20,23,1) image];
-    self.sideMenu.hideStatusBarArea = [Global OSVersion] < 7;
     self.settingsViewController = [[MenuViewController alloc] init];
-    self.sideMenu.revealView = self.settingsViewController.view;
-    //UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
-    //[self.view addGestureRecognizer:panGestureRecognizer];
+
+    self.drawerViewController = [[MMDrawerController alloc] init];
+    [self.drawerViewController setCenterViewController:self.menuViewController];
+    [self.drawerViewController setLeftDrawerViewController:self.settingsViewController];
+    
+#warning Stanimir I used 320 here :D sorry
+    [self.drawerViewController setMaximumLeftDrawerWidth:320];
+    [self.drawerViewController setDrawerVisualStateBlock:^(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible) {
+        UIViewController * sideDrawerViewController;
+        if(drawerSide == MMDrawerSideLeft){
+            sideDrawerViewController = drawerController.leftDrawerViewController;
+        }
+        else if(drawerSide == MMDrawerSideRight){
+            sideDrawerViewController = drawerController.rightDrawerViewController;
+        }
+        [sideDrawerViewController.view setAlpha:percentVisible];
+    }];
+    
+    [self.drawerViewController setShowsShadow:NO];
+    [self.drawerViewController setShouldStretchDrawer:YES];
+    [self.drawerViewController setAnimationVelocity:1240];
+    [self pushViewController:self.drawerViewController animated:NO];
+    
     [self setupAppearance];
     
 }
 -(void)changedTheme{
    // [self setNeedsStatusBarAppearanceUpdate];
-
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    //ShareViewController *shareVC = [[ShareViewController alloc] init];
-    //[self pushViewController:shareVC animated:YES];
-    
 }
 - (void)viewDidUnload
 {

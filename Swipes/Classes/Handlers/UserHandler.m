@@ -24,6 +24,9 @@ static UserHandler *sharedObject;
     }
     return sharedObject;
 }
+-(BOOL)isLoggedIn{
+    return (kCurrent) ? YES : NO;
+}
 -(void)setIsPlus:(BOOL)isPlus{
     if(_isPlus != isPlus){
         _isPlus = isPlus;
@@ -44,6 +47,12 @@ static UserHandler *sharedObject;
             break;
         case UserLevelPlusYearly:
             string = @"Plus Yearly";
+            break;
+        case UserLevelAdmin:
+            string = @"Admin";
+            break;
+        default:
+            string = @"Unknown";
             break;
     }
     return string;

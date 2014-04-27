@@ -9,11 +9,14 @@
 #define SIDE_MENU_WIDTH 250
 #import <UIKit/UIKit.h>
 #import "KPSegmentedViewController.h"
-#import "RESideMenu.h"
+#import "MMDrawerController.h"
 typedef enum {
     KPMenuLogin = 1,
     KPMenuHome
 } KPMenu;
+
+#define isTryingString @"isTryingOutSwipes"
+
 #define ROOT_CONTROLLER [RootViewController sharedInstance]
 #define ERROR_MESSAGE [[error userInfo] objectForKey:@"error"]
 #define FB_ERROR_CODE [error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"code"] integerValue]
@@ -23,14 +26,16 @@ typedef enum {
 +(RootViewController*)sharedInstance;
 -(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated;
 @property (nonatomic,strong) KPSegmentedViewController *menuViewController;
+@property (nonatomic,strong) MMDrawerController *drawerViewController;
 @property (nonatomic) BOOL lockSettings;
-@property (nonatomic,strong) RESideMenu *sideMenu;
 -(void)resetRoot;
 -(void)walkthrough;
 -(void)logOut;
 -(void)closeApp;
 -(void)openApp;
 -(void)upgrade;
+-(void)accountAlert;
 -(void)proWithMessage:(NSString*)message;
 -(void)shareTasks:(NSArray*)tasks;
+-(void)tryoutapp;
 @end

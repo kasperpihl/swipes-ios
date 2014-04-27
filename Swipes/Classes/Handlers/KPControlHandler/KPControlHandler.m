@@ -60,15 +60,24 @@
         [view addSubview:self.gradientView];
         
         
-        KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, ADD_TOOLBAR_HEIGHT) items:@[timageStringBW(@"round_plus")] delegate:self];
+        KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, ADD_TOOLBAR_HEIGHT) items:nil delegate:self];
+        addToolbar.font = iconFont(41);
+        addToolbar.titleColor = tcolor(TextColor);
+        addToolbar.titleHighlightString = @"Full";
+        addToolbar.items = @[@"roundAdd"];
         addToolbar.tag = ADD_TOOLBAR_TAG;
         [addToolbar setTopInset:-addToolbar.frame.size.height*0.05];
+        
         [view addSubview:addToolbar];
         self.addToolbar = (KPToolbar*)[view viewWithTag:ADD_TOOLBAR_TAG];
         
         
-        KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:@[timageStringBW(@"edit_icon"),timageStringBW(@"tag_icon"),timageStringBW(@"trashcan_icon"),timageStringBW(@"share_icon")] delegate:self];
+        KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:nil delegate:self];
         editToolbar.tag = EDIT_TOOLBAR_TAG;
+        editToolbar.font = iconFont(23);
+        editToolbar.titleColor = tcolor(TextColor);
+        editToolbar.titleHighlightString = @"Full";
+        editToolbar.items = @[@"actionEdit",@"actionTag",@"actionDelete",@"actionShare"];
         [editToolbar setTopInset:editToolbar.frame.size.height*0.05];
         [view addSubview:editToolbar];
         self.editToolbar = (KPToolbar*)[view viewWithTag:EDIT_TOOLBAR_TAG];
@@ -76,6 +85,9 @@
         [self setState:KPControlHandlerStateAdd animated:NO];
     }
     return self;
+}
+-(void)toolbar:(KPToolbar *)toolbar editButton:(UIButton *__autoreleasing *)button forItem:(NSInteger)item{
+    
 }
 -(voidBlock)getClearBlockFromState:(KPControlHandlerState)state toState:(KPControlHandlerState)toState{
     CGFloat targetY = self.view.frame.size.height;

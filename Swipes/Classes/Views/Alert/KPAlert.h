@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "KPModal.h"
 
-@interface KPAlert : UIView
+@interface KPAlert : KPModal
 +(void)alertInView:(UIView*)view title:(NSString*)title message:(NSString*)message block:(SuccessfulBlock)block;
 +(KPAlert*)alertWithFrame:(CGRect)frame title:(NSString *)title message:(NSString *)message block:(SuccessfulBlock)block;
 @end

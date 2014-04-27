@@ -6,6 +6,7 @@
 #import "KPParseCoreData.h"
 #import "Underscore.h"
 #import "AnalyticsHandler.h"
+#import "HintHandler.h"
 #import <CoreLocation/CoreLocation.h>
 #import "KPAttachment.h"
 #import "KPToDo.h"
@@ -35,12 +36,14 @@
 #define checkStringWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToString:pfValue]) [self setValue:pfValue forKey:cdKey]
 #define checkDateWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToDate:pfValue]) [self setValue:pfValue forKey:cdKey]
 #define checkNumberWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToNumber:pfValue]) [self setValue:pfValue forKey:cdKey]
-+(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority save:(BOOL)save{
++(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray *)tags save:(BOOL)save{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
     newToDo.title = item;
     newToDo.schedule = [NSDate date];
     if(priority) newToDo.priorityValue = 1;
     newToDo.orderValue = kDefOrderVal;
+    if(tags && tags.count > 0)
+        [self updateTags:tags forToDos:@[newToDo] remove:NO save:NO];
     if(save) [KPToDo saveToSync];
     NSString *taskLength = @"50+";
     if(item.length <= 10) taskLength = @"1-10";
@@ -82,6 +85,7 @@
     NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
     [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
     [ANALYTICS heartbeat];
+    [kHints triggerHint:HintCompleted];
     [NOTIHANDLER updateLocalNotifications];
     return [movedToDos copy];
 }
@@ -166,11 +170,12 @@
                 NSArray *tagsFromServer = (NSArray*)pfValue;
                 //NSLog(@"tags:%@",tagsFromServer);
                 NSMutableArray *objectIDs = [NSMutableArray array];
-                
-                for(NSDictionary *tag in tagsFromServer){
-                    if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:[tag objectForKey:@"objectId"]];
-                    else {
-                        [changedAttributesSet addObject:@"tags"];
+                if(tagsFromServer && [tagsFromServer isKindOfClass:[NSArray class]]){
+                    for(NSDictionary *tag in tagsFromServer){
+                        if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:[tag objectForKey:@"objectId"]];
+                        else {
+                            [changedAttributesSet addObject:@"tags"];
+                        }
                     }
                 }
                 if(objectIDs.count > 0){
@@ -233,7 +238,6 @@
     else return nil;
 }
 -(BOOL)setAttributesForSavingObject:(NSMutableDictionary *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
-   
     NSDictionary *keyMatch = [self keyMatch];
     BOOL isNewObject = (!self.objectId);
     if(changedAttributes && [changedAttributes containsObject:@"all"]) isNewObject = YES;
@@ -539,6 +543,13 @@
 -(void)deleteToDoSave:(BOOL)save{
     [self MR_deleteEntity];
     if(save) [KPToDo saveToSync];
+}
+
+-(void)switchPriority{
+    self.priorityValue = (self.priorityValue == 0) ? 1 : 0;
+    [KPToDo saveToSync];
+    if(self.priorityValue == 1)
+        [kHints triggerHint:HintPriority];
 }
 
 -(BOOL)notifyOnLocation:(CLPlacemark*)location type:(GeoFenceType)type{

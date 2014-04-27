@@ -58,21 +58,21 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>48</string>
+	<string>49</string>
 	<key>FacebookAppID</key>
 	<string>531435630236702</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
+		<string>swipes.ttf</string>
 		<string>NexaHeavy.ttf</string>
-		<string>ProximaNova-Black.ttf</string>
+		<string>Nexa-Black-Italic.ttf</string>
+		<string>Nexa-Bold.ttf</string>
 		<string>ProximaNova-Light.ttf</string>
 		<string>ProximaNova-Bold.ttf</string>
 		<string>ProximaNova-Regular.ttf</string>
 		<string>ProximaNova-Semibold.ttf</string>
-		<string>ProximaNovaCond-Semibold.ttf</string>
-		<string>ProximaNova-ExtraBold.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

@@ -9,7 +9,7 @@
 #import "ToDoViewController.h"
 
 @interface ToDoViewController (ViewHelpers)
--(UIImageView *)addAndGetImage:(NSString*)imageName inView:(UIView*)view;
+-(UILabel *)addAndGetImage:(NSString*)imageName inView:(UIView*)view;
 -(UIButton*)addClickButtonToView:(UIView*)view action:(SEL)action;
 -(void)addSeperatorToView:(UIView*)view;
 @end

@@ -35,25 +35,43 @@
         NSMutableArray *barButtons = [NSMutableArray arrayWithCapacity:self.numberOfButtons];
         NSInteger buttonCounter = 0;
         for(id item in items){
+            NSString *itemString;
             UIImage *itemImage;
             UIImage *highlightImage;
             if([item isKindOfClass:[NSString class]]){
-                itemImage = [UIImage imageNamed:(NSString*)item];
-                highlightImage = [UIImage imageNamed:(NSString*)[item stringByAppendingString:@"-high"]];
+                if(!self.font){
+                    itemImage = [UIImage imageNamed:(NSString*)item];
+                    highlightImage = [UIImage imageNamed:(NSString*)[item stringByAppendingString:@"-high"]];
+                }
+                else itemString = item;
             }
-            else if([item isKindOfClass:[UIImage class]]) itemImage = (UIImage*)item;
+            else if([item isKindOfClass:[UIImage class]] && !self.font)
+                itemImage = (UIImage*)item;
             else{
                 NSLog(@"only strings and uiimages as items");
                 return;
             }
-            CIImage *cim = [highlightImage CIImage];
-            CGImageRef cgref = [highlightImage CGImage];
-            
             UIButton *button = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-            [button setImage:itemImage forState:UIControlStateNormal];
-            if (cim != nil || cgref != NULL)
-            {
-                [button setImage:highlightImage forState:UIControlStateHighlighted];
+            if(!self.font){
+                CIImage *cim = [highlightImage CIImage];
+                CGImageRef cgref = [highlightImage CGImage];
+                [button setImage:itemImage forState:UIControlStateNormal];
+                if (cim != nil || cgref != NULL)
+                {
+                    [button setImage:highlightImage forState:UIControlStateHighlighted];
+                }
+            }
+            else{
+                
+                button.titleLabel.font = self.font;
+                [button setTitle:iconString(itemString) forState:UIControlStateNormal];
+                if(self.titleHighlightString){
+                    NSString *highItemString = [NSString stringWithFormat:@"%@%@",itemString,self.titleHighlightString];
+                    [button setTitle:iconString(highItemString) forState:UIControlStateHighlighted];
+                }
+                if(self.titleColor)
+                    [button setTitleColor:self.titleColor forState:UIControlStateNormal];
+                
             }
             button.frame = [self frameForButtonNumber:buttonCounter];
             button.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);

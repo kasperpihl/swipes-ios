@@ -30,14 +30,9 @@
 #define CELL_LABEL_X 44
 
 #define KP_LIGHT(fontSize)              [UIFont fontWithName:@"ProximaNova-Light" size:fontSize]
-#define KP_BLACK(fontSize)              [UIFont fontWithName:@"ProximaNova-Black" size:fontSize]
 #define KP_REGULAR(fontSize)            [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize]
 #define KP_BOLD(fontSize)               [UIFont fontWithName:@"ProximaNova-Bold" size:fontSize]
 #define KP_SEMIBOLD(fontSize)           [UIFont fontWithName:@"ProximaNova-Semibold" size:fontSize]
-#define KP_EXTRABOLD(fontSize)          [UIFont fontWithName:@"ProximaNova-Extrabld" size:fontSize]
-#define KP_COND_BOLD(fontSize)          [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:fontSize]
-#define KP_COND_SEMIBOLD(fontSize)      [UIFont fontWithName:@"ProximaNovaCond-Semibold" size:fontSize]
-#define KP_BEBAS(fontSize)              [UIFont fontWithName:@"BebasNeue" size:fontSize]
 
 
 #define SCHEDULE_BUTTON_FONT            KP_SEMIBOLD(14)
@@ -105,7 +100,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 
 
 #define TAGS_LABEL_BOLD_FONT            KP_BOLD(11)
-#define TABLE_EMPTY_BG_FONT             KP_LIGHT(16)
+#define TABLE_EMPTY_BG_FONT             KP_REGULAR(16)
 #define NO_TAG_FONT                     KP_LIGHT(18)
 #define TEXT_FIELD_FONT                 KP_LIGHT(18)
 #define NOTES_VIEW_FONT                 KP_REGULAR(17)

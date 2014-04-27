@@ -6,9 +6,10 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "KPModal.h"
 
-@interface PlusAlertView : UIView
+@interface PlusAlertView : KPModal
 +(void)alertInView:(UIView*)view message:(NSString*)message block:(SuccessfulBlock)block;
 +(PlusAlertView*)alertWithFrame:(CGRect)frame message:(NSString *)message block:(SuccessfulBlock)block;
+@property (nonatomic) BOOL shouldRemove;
 @end

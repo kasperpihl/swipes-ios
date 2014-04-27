@@ -25,13 +25,19 @@
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
+        self.scale = 1;
         self.backgroundColor = CLEAR;
+        self.userInteractionEnabled = NO;
         self.dotView = [[UIView alloc] init];
         [self addSubview:self.dotView];
         [self setSize:kDefaultSize];
         
     }
     return self;
+}
+-(void)setScale:(CGFloat)scale{
+    _scale = scale;
+    [self setSize:kDefaultSize * scale];
 }
 -(void)setSize:(CGFloat)size{
     CGRectSetSize(self, size, size);
@@ -40,11 +46,11 @@
     
 }
 -(void)adjustDot{
-    CGFloat size = self.priority ? kPriorityDotSize : kDefaultDotSize;
+    CGFloat size = self.priority ? kPriorityDotSize * self.scale : kDefaultDotSize * self.scale;
     self.dotView.layer.cornerRadius = size/2;
     CGRectSetSize(self.dotView, size, size);
     CGRectSetCenter(self.dotView,self.frame.size.width/2, self.frame.size.height/2);
-    self.layer.borderWidth = self.priority ? kLineSize : 0;
+    self.layer.borderWidth = self.priority ? kLineSize*self.scale : 0;
 }
 -(void)setDotColor:(UIColor *)dotColor{
     if(_dotColor != dotColor){

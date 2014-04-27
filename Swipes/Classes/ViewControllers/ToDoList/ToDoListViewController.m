@@ -22,6 +22,8 @@
 #import "KPTagList.h"
 
 
+#import "HintHandler.h"
+
 #import "RootViewController.h"
 #define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 504
@@ -51,6 +53,8 @@
 @property (nonatomic) BOOL isHandlingTrigger;
 @property (nonatomic) BOOL isLonelyRider;
 @property (nonatomic) BOOL savedOffset;
+
+@property (nonatomic) BOOL hasStartedEditing;
 
 @property (nonatomic,strong) NSMutableDictionary *stateDictionary;
 @end
@@ -82,7 +86,7 @@
 }
 -(void)showBackgroundItems:(BOOL)show{
     self.menuText.hidden = !show;
-    self.backgroundImage.hidden = !show;
+    self.backgroundIcon.hidden = !show;
 }
 -(void)didUpdateItemHandler:(ItemHandler *)handler{
     [self willUpdateCells];
@@ -200,6 +204,7 @@
 {
     if(![self.selectedRows containsObject:indexPath]) [self.selectedRows addObject:indexPath];
     [self handleShowingToolbar];
+    [kHints triggerHint:HintSelected];
 }
 
 // Override to support conditional rearranging of the table view.
@@ -220,6 +225,10 @@
 }
 -(void)editIndexPath:(NSIndexPath *)indexPath{
     
+    if(self.hasStartedEditing)
+        return;
+    self.hasStartedEditing = YES;
+    self.savedContentOffset = self.tableView.contentOffset;
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     self.showingViewController.model = toDo;
     [ROOT_CONTROLLER pushViewController:self.showingViewController animated:YES];
@@ -232,6 +241,7 @@
 }
 -(void)didPressCloseToDoViewController:(ToDoViewController *)viewController{
     [ROOT_CONTROLLER popViewControllerAnimated:YES];
+    self.hasStartedEditing = NO;
     [ANALYTICS popView];
 }
 -(void)scheduleToDoViewController:(ToDoViewController *)viewController{
@@ -305,8 +315,11 @@
     __block CellType targetCellType = [StyleHandler cellTypeForCell:cell.cellType state:state];
     switch (targetCellType) {
         case CellTypeSchedule:{
+            [kHints triggerHint:HintSwipedLeft];
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+            __block BOOL hasReturned = NO;
             SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type) {
+                hasReturned = YES;
                 [BLURRY dismissAnimated:YES];
                 if(button == KPScheduleButtonCancel){
                     [self returnSelectedRowsAndBounce:YES];
@@ -320,9 +333,16 @@
                     NSArray *movedItems = [KPToDo scheduleToDos:toDosArray forDate:chosenDate save:YES];
                     [self moveItems:movedItems toCellType:targetCellType];
                 }
+                if(button != KPScheduleButtonCancel)
+                    [kHints triggerHint:HintScheduled];
                 self.isHandlingTrigger = NO;
             }];
             popup.numberOfItems = toDosArray.count;
+            BLURRY.dismissAction = ^{
+                self.isHandlingTrigger = NO;
+                if(!hasReturned)
+                    [self returnSelectedRowsAndBounce:YES];
+            };
             //BLURRY.blurryTopColor = alpha(tcolor(LaterColor), 0.95);
             BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
             [BLURRY showView:popup inViewController:self.parent];
@@ -474,37 +494,39 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = CLEAR;
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_white_background",self.state]]];
-    if ([self.state isEqualToString:@"today"]) {
-        imageView.hidden = YES;
-    }
-    imageView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/4);
-    //imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
-    imageView.tag = BACKGROUND_IMAGE_VIEW_TAG;
-    if (![self.state isEqualToString:@"today"]) [self.view addSubview:imageView];
-    self.backgroundImage = (UIImageView*)[self.view viewWithTag:BACKGROUND_IMAGE_VIEW_TAG];
     
-    UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, imageView.center.y+50, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
-    menuText.backgroundColor = CLEAR;
-    menuText.font = TABLE_EMPTY_BG_FONT;
-    NSString *text;
-    switch (self.cellType) {
-        case CellTypeDone:
-            text = @"Done";
-            break;
-        case CellTypeSchedule:
-            text = @"Schedule";
-            break;
-        default:
-            text = @"";
-            break;
+    if (![self.state isEqualToString:@"today"]) {
+        NSString *iconString = ([self.state isEqualToString:@"schedule"]) ? @"later" : @"done";
+        UILabel *backgroundIcon = iconLabel(iconString, 61);
+        backgroundIcon.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/4);
+        [backgroundIcon setTextColor:[StyleHandler colorForCellType:self.cellType]];
+        //imageView.frame = CGRectSetPos(imageView.frame, (self.view.bounds.size.width-imageView.frame.size.width)/2, 80);
+        backgroundIcon.tag = BACKGROUND_IMAGE_VIEW_TAG;
+        [self.view addSubview:backgroundIcon];
+        self.backgroundIcon = (UILabel*)[self.view viewWithTag:BACKGROUND_IMAGE_VIEW_TAG];
+        UILabel *menuText = [[UILabel alloc] initWithFrame:CGRectMake(0, self.backgroundIcon.center.y+50, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT)];
+        menuText.backgroundColor = CLEAR;
+        menuText.font = TABLE_EMPTY_BG_FONT;
+        NSString *text;
+        switch (self.cellType) {
+            case CellTypeDone:
+                text = @"Done";
+                break;
+            case CellTypeSchedule:
+                text = @"Schedule";
+                break;
+            default:
+                text = @"";
+                break;
+        }
+        menuText.text = text;
+        menuText.textAlignment = NSTextAlignmentCenter;
+        menuText.textColor = [StyleHandler colorForCellType:self.cellType];
+        menuText.tag = MENU_TEXT_TAG;
+        [self.view addSubview:menuText];
+        self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];
     }
-    menuText.text = text;
-    menuText.textAlignment = NSTextAlignmentCenter;
-    menuText.textColor = [StyleHandler colorForCellType:self.cellType];
-    menuText.tag = MENU_TEXT_TAG;
-    [self.view addSubview:menuText];
-    self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];
+    
     
 
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
@@ -516,9 +538,14 @@
 -(void)viewWillAppear:(BOOL)animated{
     [self update];
     self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height);
+    if(!CGPointEqualToPoint(self.savedContentOffset, CGPointZero)){
+        [self.tableView setContentOffset:self.savedContentOffset];
+        self.savedContentOffset = CGPointZero;
+    }
     if(self.cellType != CellTypeToday) self.parent.backgroundMode = NO;
     else if(self.itemHandler.itemCounterWithFilter == 0) self.parent.backgroundMode = YES;
     [super viewWillAppear:animated];
+    self.hasStartedEditing = NO;
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
@@ -545,7 +572,6 @@
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
 }
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];

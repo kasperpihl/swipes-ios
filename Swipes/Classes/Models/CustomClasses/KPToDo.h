@@ -3,7 +3,7 @@
 @interface KPToDo : _KPToDo {}
 @property (nonatomic,strong) NSArray *textTags;
 /* Add a new ToDo */
-+(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority save:(BOOL)save;
++(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray*)tags save:(BOOL)save;
 /* Schedule ToDo's - The array contains the items that changed state */
 +(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save;
 /* Complete ToDo's - The array contains the items that changed state */
@@ -17,12 +17,12 @@
 
 -(void)addSubtask:(NSString*)title save:(BOOL)save;
 
+-(void)switchPriority;
 
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;
 
 +(NSArray*)sortOrderForItems:(NSArray*)items save:(BOOL)save;
-
 
 +(void)saveToSync;
 

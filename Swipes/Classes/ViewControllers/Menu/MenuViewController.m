@@ -11,7 +11,6 @@
 #import "KPToolbar.h"
 #import "UtilityClass.h"
 #import "KPAlert.h"
-#import "RESideMenu.h"
 #import "KPBlurry.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -20,12 +19,13 @@
 #import "SnoozesViewController.h"
 #import "AnalyticsHandler.h"
 #import "UserHandler.h"
+#import "KPAccountAlert.h"
 
 #import "KPParseCoreData.h"
 #import "PlusAlertView.h"
 #import "NotificationHandler.h"
 
-#define kSettingsBlurColor retColor(gray(230, 0.5),gray(50, 0.4))
+
 #define kMenuButtonStartTag 4123
 #define kLampOnColor tcolor(DoneColor)
 #define kLampOffColor tcolor(BackgroundColor)
@@ -62,7 +62,9 @@
         [self popViewControllerAnimated:YES];
         return;
     }
-    else [kSideMenu hide];
+    else [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:^(BOOL finished) {
+        
+    }];
 }
 -(void)renderSubviews{
     [self.backButton removeFromSuperview];
@@ -81,7 +83,10 @@
     
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-buttonSize-backSpacing,startY,buttonSize,buttonSize)];
-    [backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
+    [backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    backButton.titleLabel.font = iconFont(23);
+    [backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
+    
     [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
     backButton.transform = CGAffineTransformMakeRotation(M_PI);
     [self.view addSubview:backButton];
@@ -119,7 +124,8 @@
     for(NSInteger i = 1 ; i <= numberOfButtons ; i++){
         KPMenuButtons button = i;
         actualButton = [self buttonForMenuButton:button];
-        if(button == KPMenuButtonScheme) self.schemeButton = (MenuButton*)actualButton;
+        if(button == KPMenuButtonScheme)
+            self.schemeButton = (MenuButton*)actualButton;
         [self.gridView addSubview:actualButton];
         [menuButtons addObject:actualButton];
     }
@@ -133,10 +139,11 @@
 }
 -(void)updateSchemeButton{
     //BOOL isDarkTheme = (THEMER.currentTheme == ThemeDark);
-    UIImage *normalImage = [self imageForMenuButton:KPMenuButtonScheme highlighted:YES];
-    UIImage *highlightImage = [self imageForMenuButton:KPMenuButtonScheme highlighted:NO];
-    [self.schemeButton.iconImageView setImage:normalImage];
-    [self.schemeButton.iconImageView setHighlightedImage:highlightImage];
+    NSString *normalTitle = [self stringForMenuButton:KPMenuButtonScheme highlighted:YES];
+    NSString *highlightTitle = [self stringForMenuButton:KPMenuButtonScheme highlighted:NO];
+    [self.schemeButton.iconLabel setTitle:normalTitle forState:UIControlStateNormal];
+    
+    [self.schemeButton.iconLabel setTitle:highlightTitle forState:UIControlStateHighlighted];
 }
 - (void)viewDidLoad
 {
@@ -169,7 +176,10 @@
     self.syncLabel.text = [NSString stringWithFormat:@"Last %@: %@",syncOrBackup,timeString];
 }
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
-    [kSideMenu panGestureRecognized:sender];
+    //[kSideMenu panGestureRecognized:sender];
+    if([sender translationInView:sender.view].x < -10){
+        [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
+    }
 }
 -(UIView*)seperatorWithSize:(CGFloat)size vertical:(BOOL)vertical{
     CGFloat width = (vertical) ? SEPERATOR_WIDTH : size;
@@ -194,7 +204,8 @@
     } completion:^(BOOL finished) {
         showingView.alpha = 0;
         if(level == 1){
-            [self.backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
+            [self.backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
+            [self.backButton setTitle:iconString(@"back") forState:UIControlStateHighlighted];
         }
         [UIView animateWithDuration:0.2 animations:^{
         } completion:^(BOOL finished) {
@@ -214,8 +225,11 @@
     UIView *hidingView = (level == 0) ? self.gridView : [(UIViewController*)[self.viewControllers lastObject] view];
     [UIView animateWithDuration:0.1 animations:^{
         hidingView.alpha = 0;
-        if(level == 0) [self.backButton setImage:[UIImage imageNamed:timageStringBW(@"round_cross")] forState:UIControlStateNormal];
-    } completion:^(BOOL finished) {
+        if(level == 0){
+            [self.backButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
+            [self.backButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
+        }
+        } completion:^(BOOL finished) {
         viewController.view.alpha = 0;
         viewController.view.frame = self.view.bounds;
         CGRectSetHeight(viewController.view,viewController.view.bounds.size.height-44);
@@ -264,11 +278,12 @@
                 [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location in Settings"}];
                 PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." block:^(BOOL succeeded, NSError *error) {
                     [ANALYTICS popView];
-                    [BLURRY dismissAnimated:YES];
+                    [BLURRY dismissAnimated:!succeeded];
                     if(succeeded){
                         [ROOT_CONTROLLER upgrade];
                     }
                 }];
+                alert.shouldRemove = NO;
                 BLURRY.blurryTopColor = kSettingsBlurColor;
                 [BLURRY showView:alert inViewController:self];
             }
@@ -321,7 +336,19 @@
             break;
         }
         case KPMenuButtonUpgrade:{
-            if(kUserHandler.isPlus){
+            if(!kUserHandler.isLoggedIn){
+                KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:@"Register for Swipes to safely back up your data and get Swipes Plus" block:^(BOOL succeeded, NSError *error) {
+                    [BLURRY dismissAnimated:YES];
+                    if(succeeded){
+                        [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
+                    }
+                    
+                }];
+                BLURRY.blurryTopColor = kSettingsBlurColor;
+                [BLURRY showView:alert inViewController:self];
+                return;
+            }
+            else if(kUserHandler.isPlus){
                 KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Manage subscription" message:@"Open App Store to manage your subscription?" block:^(BOOL succeeded, NSError *error) {
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
@@ -333,8 +360,10 @@
                 
                 return;
             }
-            [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Settings"}];
-            [ROOT_CONTROLLER upgrade];
+            else{
+                [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Settings"}];
+                [ROOT_CONTROLLER upgrade];
+            }
             break;
         }
         case KPMenuButtonPolicies:{
@@ -352,7 +381,10 @@
             break;
         }
         case KPMenuButtonLogout:{
-
+            if(!kUserHandler.isLoggedIn){
+                [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
+                return;
+            }
             KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Log out" message:@"Are you sure you want to log out of your account?" block:^(BOOL succeeded, NSError *error) {
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
@@ -369,13 +401,14 @@
                 [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Sync in Settings"}];
                 PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Synchronization is a Swipes Plus feature. Keep your tasks in sync with an app for web and iPad." block:^(BOOL succeeded, NSError *error) {
                     [ANALYTICS popView];
-                    [BLURRY dismissAnimated:YES];
+                    [BLURRY dismissAnimated:!succeeded];
                     if(succeeded){
                         [ROOT_CONTROLLER upgrade];
                     }
                 }];
+                alert.shouldRemove = NO;
                 BLURRY.blurryTopColor = kSettingsBlurColor;
-                [BLURRY showView:alert inViewController:self];
+                [BLURRY showView:alert inViewController:ROOT_CONTROLLER];
             }
             else{
                 CABasicAnimation *rotate =
@@ -383,7 +416,7 @@
                 rotate.byValue = @(M_PI*6); // Change to - angle for counter clockwise rotation
                 rotate.duration = 3.0;
                 
-                [sender.iconImageView.layer addAnimation:rotate
+                [sender.iconLabel.layer addAnimation:rotate
                                         forKey:@"myRotationAnimation"];
                 [KPCORE synchronizeForce:YES async:YES];
             }
@@ -401,7 +434,7 @@
     }
 }
 -(void)changedTheme{
-    [self renderSubviews];
+    //[self renderSubviews];
 }
 -(void)changedIsPlus{
     UIButton *upgradeButton = (UIButton*)[self.gridView viewWithTag:[self tagForButton:KPMenuButtonUpgrade]];
@@ -438,7 +471,7 @@
             title = @"Sync";
             break;
         case KPMenuButtonLogout:
-            title = @"Logout";
+            title = (kUserHandler.isLoggedIn) ? @"Logout" : @"Account";
             break;
         case KPMenuButtonScheme:
             title = @"Theme";
@@ -446,43 +479,43 @@
     }
     return title;
 }
--(UIImage *)imageForMenuButton:(KPMenuButtons)button highlighted:(BOOL)highlighted{
+-(NSString *)stringForMenuButton:(KPMenuButtons)button highlighted:(BOOL)highlighted{
     NSString *imageString;
     switch (button) {
         case KPMenuButtonNotifications:
-            imageString = timageStringBW(@"menu_notifications");
+            imageString = @"settingsNotification";
             break;
         case KPMenuButtonLocation:
-            imageString = timageStringBW(@"schedule_image_location");
+            imageString = @"scheduleLocation";
             break;
         case KPMenuButtonWalkthrough:
-            imageString = timageStringBW(@"menu_walkthrough");
+            imageString = @"settingsWalkthrough";
             break;
         case KPMenuButtonFeedback:
-            imageString = timageStringBW(@"menu_support");
+            imageString = @"settingsFeedback";
             break;
         case KPMenuButtonSnoozes:
-            imageString = timageStringBW(@"menu_snoozes");
+            imageString = @"later";
             break;
         case KPMenuButtonUpgrade:
-            imageString = @"menu_pro_white";
+            imageString = @"settingsPlusFull";
             break;
         case KPMenuButtonPolicies:
-            imageString = timageStringBW(@"menu_policy");
+            imageString = @"settingsPolicy";
             break;
         case KPMenuButtonSync:
-            imageString = timageStringBW(@"menu_sync");
+            imageString = @"settingsSync";
             break;
         case KPMenuButtonLogout:
-            imageString = timageStringBW(@"menu_logout");
+            imageString = (kUserHandler.isLoggedIn) ? @"settingsLogout" : @"settingsAccount";
             break;
         case KPMenuButtonScheme:
-            imageString = timageStringBW(@"menu_scheme");
+            imageString = @"settingsTheme";
             break;
     }
-    if(highlighted) imageString = [imageString stringByAppendingString:@"-high"];
-    //if(button == KPMenuButtonUpgrade && highlighted) imageString = @"menu_pro";
-    return [UIImage imageNamed:imageString];
+    if(highlighted) imageString = [imageString stringByAppendingString:@"Full"];
+    if(button == KPMenuButtonUpgrade && highlighted) imageString = @"settingsPlus";
+    return iconString(imageString);
 }
 -(void)longPress:(UILongPressGestureRecognizer*)recognizer{
     if(recognizer.state == UIGestureRecognizerStateBegan){
@@ -501,7 +534,16 @@
 }
 
 -(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton{
-    MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton] image:[self imageForMenuButton:menuButton highlighted:NO] highlightedImage:[self imageForMenuButton:menuButton highlighted:YES]];
+    MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton]];
+    button.iconLabel.titleLabel.font = iconFont(50);
+    [button.iconLabel setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [button.iconLabel setTitleColor:tcolor(TextColor) forState:UIControlStateHighlighted];
+    [button.iconLabel setTitle:[self stringForMenuButton:menuButton highlighted:NO] forState:UIControlStateNormal];
+    [button.iconLabel setTitle:[self stringForMenuButton:menuButton highlighted:YES] forState:UIControlStateHighlighted];
+    if(menuButton == KPMenuButtonUpgrade){
+        [button.iconLabel setTitleColor:tcolor(LaterColor) forState:UIControlStateNormal];
+        [button.iconLabel setTitleColor:tcolor(TextColor) forState:UIControlStateHighlighted];
+    }
     if(menuButton == KPMenuButtonSync){
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
         [button addGestureRecognizer:longPress];

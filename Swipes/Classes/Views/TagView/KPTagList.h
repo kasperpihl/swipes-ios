@@ -54,4 +54,5 @@
 -(void)addTag:(NSString*)tag selected:(BOOL)selected;
 -(void)setWobling:(BOOL)wobling;
 -(void)deleteTag:(NSString*)tag;
+-(NSArray*)getSelectedTags;
 @end

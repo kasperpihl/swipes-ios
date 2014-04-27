@@ -14,11 +14,15 @@
 #import "Reachability.h"
 #import "UserHandler.h"
 
-#define kSyncTime 5
-#define kUpdateLimit 150
+#define kSyncTime 3
+#define kUpdateLimit 50
+
+#define kTMPUpdateObjects @"tmpUpdateObjects"
+#define kUpdateObjects @"updateObjects"
+#define kLastSyncLocalDate @"lastSyncLocalDate"
+#define kLastSyncServerString @"lastSync"
 
 #define kDeleteObjectsKey @"deleteObjects"
-
 
 #ifdef DEBUG
 #define DUMPDB //[self dumpLocalDb];
@@ -112,7 +116,7 @@
             }
         }];
         if(!blockToTemp){
-            [[NSUserDefaults standardUserDefaults] setObject:self._attributeChangesOnObjects forKey:@"tmpUpdateObjects"];
+            [[NSUserDefaults standardUserDefaults] setObject:self._attributeChangesOnObjects forKey:kTMPUpdateObjects];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
     });
@@ -129,10 +133,17 @@
     [self synchronizeForce:YES async:YES];
 
 }
-/*
-    This save should be called if data should be synced
-*/
 
+-(void)sendStatus:(SyncStatus)status userInfo:(NSDictionary*)userInfo error:(NSError*)error{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if([self.delegate respondsToSelector:@selector(syncHandler:status:userInfo:error:)])
+            [self.delegate syncHandler:self status:status userInfo:userInfo error:error];
+    });
+    
+}
+/*
+    This is called everytime data is saved and will persist all the changed attributes for syncing.
+*/
 - (void)saveContextForSynchronization:(NSManagedObjectContext*)context
 {
     if (!context)
@@ -188,6 +199,8 @@
 {
     [self synchronizeForce:YES async:YES];
 }
+
+
 - (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async
 {
     if(self.outdated){
@@ -205,7 +218,7 @@
     }
     if (!kUserHandler.isPlus) {
         NSDate *now = [NSDate date];
-        NSDate *lastUpdatedDay = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSyncLocalDate"];
+        NSDate *lastUpdatedDay = [[NSUserDefaults standardUserDefaults] objectForKey:kLastSyncLocalDate];
         if (lastUpdatedDay && now.dayOfYear == lastUpdatedDay.dayOfYear)
             return UIBackgroundFetchResultNoData;
     }
@@ -241,15 +254,21 @@
     }
 }
 
--(void)finalizeSync{
+-(void)finalizeSyncWithUserInfo:(NSDictionary*)userInfo error:(NSError*)error{
     self._isSyncing = NO;
+    
+    if(error)
+        [self sendStatus:SyncStatusError userInfo:userInfo error:error];
+    else
+        [self sendStatus:SyncStatusSuccess userInfo:userInfo error:nil];
+    
     if(self._needSync){
         NSDate *now = [NSDate date];
         if(!self.lastTry || [now timeIntervalSinceDate:self.lastTry] > 60){
             self.lastTry = now;
             self.tryCounter = 0;
         }
-        if(self.tryCounter > 5) return;
+        if(self.tryCounter >= 5) return;
         self.tryCounter++;
         [self synchronizeForce:YES async:YES];
     }
@@ -265,7 +284,7 @@
     if (async)
         [self startBackgroundHandler];
     /* Prepare all the objects to be send */
-    
+    [self sendStatus:SyncStatusStarted userInfo:nil error:nil];
     NSManagedObjectContext *context = [KPCORE context];
     NSPredicate *newObjectsPredicate = [NSPredicate predicateWithFormat:@"(objectId = nil)"];
     NSArray *newObjects = [KPParseObject MR_findAllWithPredicate:newObjectsPredicate inContext:context];
@@ -319,7 +338,7 @@
 
     
     /* The last update time - saved and received from the sync response */
-    NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSync"];
+    NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastSyncServerString];
     if (lastUpdate)
         [syncData setObject:lastUpdate forKey:@"lastUpdate"];
     
@@ -345,7 +364,7 @@
                                                         error:&error];
     if(error){
         [UtilityClass sendError:error type:@"Sync JSON prepare parse"];
-        [self finalizeSync];
+        [self finalizeSyncWithUserInfo:nil error:error];
         return NO;
     }
     [request setHTTPBody:jsonData];
@@ -356,25 +375,32 @@
     /* Performing request */
     NSHTTPURLResponse *response;
     NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,syncData);
+    
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
     
     if(response.statusCode != 200 || error){
-        if(error) [UtilityClass sendError:error type:@"Sync request error 1"];
-        if(response.statusCode == 503) self._needSync = YES;
-        else{
+        NSLog(@"status code: %i error %@",response.statusCode,error);
+        if(error){
+            if(!(error.code == -1001 || error.code == -1003 || error.code == -1005 || error.code == -1009))
+                [UtilityClass sendError:error type:@"Sync request error 1"];
+        }
+        else if(response.statusCode == 503){
+            error = [NSError errorWithDomain:@"Request timed out" code:503 userInfo:nil];
+            self._needSync = YES;
+        }
+        else if(!error){
             NSString *myString = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
             error = [NSError errorWithDomain:myString code:response.statusCode userInfo:nil];
-            NSLog(@"error:%@",error.description);
             [UtilityClass sendError:error type:@"Sync request error 2"];
         }
         self._needSync = YES;
-        [self finalizeSync];
+        [self finalizeSyncWithUserInfo:nil error:error];
         return NO;
     }
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
-    NSLog(@"res:%@ err: %@",result,error);
+    //NSLog(@"res:%@ err: %@",result,error);
     
     if(error || [result objectForKey:@"code"] || ![result objectForKey:@"serverTime"]){
         if(!error){
@@ -389,11 +415,9 @@
             error = [NSError errorWithDomain:message code:code userInfo:result];
         }
         [UtilityClass sendError:error type:@"Sync Json Parse Error"];
-        [self finalizeSync];
+        [self finalizeSyncWithUserInfo:result error:error];
         return NO;
     }
-    
-    
     
     
     
@@ -414,13 +438,13 @@
     }
     [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
         /* Save the sync to server */
-        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastSyncLocalDate"];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastSyncLocalDate];
         if (lastUpdate)
-            [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:@"lastSync"];
+            [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:kLastSyncServerString];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self cleanUpAfterSync];
         DUMPDB;
-        [self finalizeSync];
+        [self finalizeSyncWithUserInfo:nil error:nil];
     }];
     
     return (0 < totalNumberOfObjectsToSave);
@@ -430,7 +454,7 @@
 {
     NSInteger counter = 0;
     NSMutableDictionary *copyOfNewAttributeChanges = [self copyChangesAndFlushForTemp:NO];
-    NSMutableDictionary *objectsToUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:@"updateObjects"];
+    NSMutableDictionary *objectsToUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:kUpdateObjects];
     if(!objectsToUpdate) objectsToUpdate = [NSMutableDictionary dictionary];
     else objectsToUpdate = [objectsToUpdate mutableCopy];
     counter += objectsToUpdate.count;
@@ -473,7 +497,7 @@
     if(keysToRemoveInAttributeChanges.count > 0)
         [copyOfNewAttributeChanges removeObjectsForKeys:keysToRemoveInAttributeChanges];
     
-    [[NSUserDefaults standardUserDefaults] setObject:objectsToUpdate forKey:@"updateObjects"];
+    [[NSUserDefaults standardUserDefaults] setObject:objectsToUpdate forKey:kUpdateObjects];
     [self commitAttributeChanges:copyOfNewAttributeChanges toTemp:NO];
     
     return objectsToUpdate;
@@ -516,7 +540,7 @@
 
 
 -(void)cleanUpAfterSync{
-    [[NSUserDefaults standardUserDefaults] setObject:[NSMutableDictionary dictionary] forKey:@"updateObjects"];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSMutableDictionary dictionary] forKey:kUpdateObjects];
     
     NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
     
@@ -573,7 +597,7 @@
 -(NSMutableDictionary *)_attributeChangesOnObjects
 {
     if (!__attributeChangesOnObjects){
-        __attributeChangesOnObjects = [[NSUserDefaults standardUserDefaults] objectForKey:@"tmpUpdateObjects"];
+        __attributeChangesOnObjects = [[NSUserDefaults standardUserDefaults] objectForKey:kTMPUpdateObjects];
         if(!__attributeChangesOnObjects) __attributeChangesOnObjects = [NSMutableDictionary dictionary];
     }
     return __attributeChangesOnObjects;
@@ -626,14 +650,14 @@
     [self saveContextForSynchronization:nil];
     NSInteger i = 0;
     do {
-        [KPToDo addItem:[NSString stringWithFormat:@"Testing %i",i] priority:NO save:NO];
+        [KPToDo addItem:[NSString stringWithFormat:@"Testing %i",i] priority:NO tags:nil save:NO];
         i++;
     } while (i < 500);
     [self saveContextForSynchronization:nil];
 }
 
 
-- (void)logOutAndDeleteData
+- (void)clearAndDeleteData
 {
     NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
     NSError *error;
@@ -719,15 +743,14 @@ static KPParseCoreData *sharedObject;
     }
     [self saveContextForSynchronization:nil];
     NSArray *toDoArray = @[
-                               @"Swipe right to complete a task",
-                               @"Swipe left to schedule a task",
-                               @"Double-tap to edit a task"
+                               @"Swipe right to complete",
+                               @"Swipe left to snooze for later"
                           ];
     
     for(NSInteger i = toDoArray.count-1 ; i >= 0  ; i--){
         NSString *item = [toDoArray objectAtIndex:i];
         BOOL priority = (i == 0);
-        KPToDo *toDo = [KPToDo addItem:item priority:priority save:NO];
+        KPToDo *toDo = [KPToDo addItem:item priority:priority tags:nil save:NO];
         if(i <= 1)[KPToDo updateTags:@[@"work"] forToDos:@[toDo] remove:NO save:YES];
     }
 

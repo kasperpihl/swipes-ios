@@ -32,7 +32,6 @@ static AnalyticsHandler *sharedObject;
         _vero = [Vero shared];
         [_vero setAuthToken:@"YmU3ZGNlMTBhOTAzZTJlMjRhMTJkZjFjODYyODE2YzZmZWFkMmRmNzphZmZiNjI1YWQ4YzY3YTU1NDA3Nzk4ZTZjMWY4OWZjNTAyZjU1NTQ4"];
         [_vero setDevelopmentMode:YES];
-        [_vero setLogging:YES];
 #ifdef RELEASE
         [_vero setDevelopmentMode:NO];
 #endif
@@ -62,8 +61,13 @@ static AnalyticsHandler *sharedObject;
     return _views;
 }
 -(void)tagEvent:(NSString *)event options:(NSDictionary *)options{
+    NSLog(@"event:%@ with probs: %@",event,options);
     [[LocalyticsSession shared] tagEvent:event attributes:options];
-    [[KeenClient sharedClient] addEvent:options toEventCollection:event error:nil];
+    NSError* error;
+    [[KeenClient sharedClient] addEvent:options toEventCollection:event error:&error];
+    if(error){
+        NSLog(@"%@",error);
+    }
 }
 -(NSString *)customDimension:(NSInteger)dimension{
     return [[LocalyticsSession shared] customDimension:dimension];
@@ -91,21 +95,33 @@ static AnalyticsHandler *sharedObject;
         @"Country": [[NSLocale currentLocale] displayNameForKey:NSLocaleCountryCode value:[[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]],
         @"Device": [[UIDevice currentDevice] model]
     } mutableCopy];
-    if(kCurrent.objectId) [probs setObject:kCurrent.objectId forKey:@"userId"];
-    if(kCurrent.email) [probs setObject:kCurrent.email forKey:@"email"];
-    if(kCurrent) [probs setObject:[kUserHandler getUserLevelString] forKey:@"userLevel"];
-    else [probs setObject:@"Not logged in" forKey:@"userLevel"];
+    
+    if(kCurrent){
+        [probs setObject:[kUserHandler getUserLevelString] forKey:@"userLevel"];
+        if(kCurrent.objectId)
+            [probs setObject:kCurrent.objectId forKey:@"userId"];
+        if(kCurrent.email)
+            [probs setObject:kCurrent.email forKey:@"email"];
+    }
+    else{
+        if([[NSUserDefaults standardUserDefaults] boolForKey:@"isTryingOutSwipes"])
+            [probs setObject:@"Is trying out" forKey:@"userLevel"];
+        else
+            [probs setObject:@"Not logged in" forKey:@"userLevel"];
+    }
     client.globalPropertiesDictionary = [probs copy];
 }
 -(void)pushView:(NSString *)view{
     NSInteger viewsLeft = self.views.count;
-    if(viewsLeft > 5) [self.views removeObjectAtIndex:0];
+    if(viewsLeft > 5)
+        [self.views removeObjectAtIndex:0];
     [self.views addObject:view];
     [[LocalyticsSession shared] tagScreen:view];
 }
 -(void)popView{
     NSInteger viewsLeft = self.views.count;
-    if(viewsLeft > 0) [self.views removeLastObject];
+    if(viewsLeft > 0)
+        [self.views removeLastObject];
     if(viewsLeft > 1){
         [[LocalyticsSession shared] tagScreen:[self.views lastObject]];
     }

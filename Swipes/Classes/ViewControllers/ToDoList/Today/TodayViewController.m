@@ -257,16 +257,20 @@
 	// Do any additional setup after loading the view.
     
     self.facebookButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, kShareButtonSize, kShareButtonSize)];
-    [self.facebookButton setImage:[UIImage imageNamed:@"round_facebook_white"] forState:UIControlStateNormal];
-    [self.facebookButton setImage:[UIImage imageNamed:@"round_facebook_white-high"] forState:UIControlStateHighlighted];
+    self.facebookButton.titleLabel.font = iconFont(36);
+    [self.facebookButton setTitle:@"facebook" forState:UIControlStateNormal];
+    [self.facebookButton setTitle:@"facebookFull" forState:UIControlStateHighlighted];
+    [self.facebookButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
     [self.facebookButton addTarget:self action:@selector(pressedFacebook) forControlEvents:UIControlEventTouchUpInside];
     self.facebookButton.hidden = YES;
     [self.view addSubview:self.facebookButton];
     
     
     self.twitterButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, kShareButtonSize, kShareButtonSize)];
-    [self.twitterButton setImage:[UIImage imageNamed:@"round_twitter_white"] forState:UIControlStateNormal];
-    [self.twitterButton setImage:[UIImage imageNamed:@"round_twitter_white-high"] forState:UIControlStateHighlighted];
+    self.twitterButton.titleLabel.font = iconFont(36);
+    [self.twitterButton setTitle:@"twitter" forState:UIControlStateNormal];
+    [self.twitterButton setTitle:@"twitterFull" forState:UIControlStateHighlighted];
+    [self.twitterButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
     [self.twitterButton addTarget:self action:@selector(pressedTwitter) forControlEvents:UIControlEventTouchUpInside];
     self.twitterButton.hidden = YES;
     [self.view addSubview:self.twitterButton];

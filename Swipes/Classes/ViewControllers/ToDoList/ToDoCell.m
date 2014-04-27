@@ -53,9 +53,9 @@
 @property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
 @property (nonatomic) IBOutlet UILabel *alarmSeperator;
 
-@property (nonatomic,strong) UIImageView *notesIcon;
-@property (nonatomic,strong) UIImageView *recurringIcon;
-@property (nonatomic,strong) UIImageView *locationIcon;
+@property (nonatomic,strong) UILabel *notesIcon;
+@property (nonatomic,strong) UILabel *recurringIcon;
+@property (nonatomic,strong) UILabel *locationIcon;
 @end
 @implementation ToDoCell
 
@@ -101,16 +101,19 @@
         [self.contentView addSubview:dotView];
         self.dotView = (DotView*)[self.contentView viewWithTag:DOT_VIEW_TAG];
         self.dotView.center = CGPointMake(CELL_LABEL_X/2, CELL_HEIGHT/2);
-        
-        self.locationIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:timageString(@"location_icon_small", @"_gray", @"_darkgray")]];
+        NSInteger iconHeight = 9;
+        self.locationIcon = iconLabel(@"editLocation", iconHeight);
+        [self.locationIcon setTextColor:tcolor(SubTextColor)];
         self.locationIcon.hidden = YES;
         [self.contentView addSubview:self.locationIcon];
         
-        self.notesIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:timageString(@"notes_icon_small", @"_gray", @"_darkgray")]];
+        self.notesIcon = iconLabel(@"editNotes", iconHeight);
+        [self.notesIcon setTextColor:tcolor(SubTextColor)];
         self.notesIcon.hidden = YES;
         [self.contentView addSubview:self.notesIcon];
         
-        self.recurringIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:timageString(@"repeat_icon_small", @"_gray", @"_darkgray")]];
+        self.recurringIcon = iconLabel(@"editRepeat", iconHeight);
+        [self.recurringIcon setTextColor:tcolor(SubTextColor)];
         self.recurringIcon.hidden = YES;
         [self.contentView addSubview:self.recurringIcon];
         
@@ -141,8 +144,7 @@
     return self;
 }
 -(void)pressedPriority{
-    self.toDo.priorityValue = (self.toDo.priorityValue == 0) ? 1 : 0;
-    [KPToDo saveToSync];
+    [self.toDo switchPriority];
     [self setPriority:(self.toDo.priorityValue == 1)];
 }
 -(void)setPriority:(BOOL)priority{
@@ -152,9 +154,10 @@
     CGFloat titleY = showBottomLine ? TITLE_Y : ((CELL_HEIGHT - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
     CGRectSetY(self.tagsLabel, TITLE_Y+self.titleLabel.frame.size.height+LABEL_SPACE);
-    CGRectSetCenterY(self.locationIcon, self.tagsLabel.center.y);
-    CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y);
-    CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y);
+    CGFloat iconHack = 0.5;
+    CGRectSetCenterY(self.locationIcon, self.tagsLabel.center.y - iconHack);
+    CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y - iconHack);
+    CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
     CGRectSetCenterY(self.alarmSeperator, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;

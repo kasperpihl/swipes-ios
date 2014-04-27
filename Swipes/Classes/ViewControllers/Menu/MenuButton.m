@@ -20,10 +20,10 @@
 @implementation MenuButton
 -(void)setHighlighted:(BOOL)highlighted{
     [super setHighlighted:highlighted];
-    [UIView transitionWithView:self.iconImageView
+    [UIView transitionWithView:self.iconLabel
                       duration:0.3
                        options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^{ if(highlighted != self.iconImageView.highlighted) self.iconImageView.highlighted = highlighted; }
+                    animations:^{ if(highlighted != self.iconLabel.highlighted) self.iconLabel.highlighted = highlighted; }
                     completion:nil];
 }
 -(void)setLampColor:(UIColor*)lampColor{
@@ -31,11 +31,10 @@
     self.lampView.hidden = (!lampColor);
     self.lampView.backgroundColor = lampColor;
 }
--(id)initWithFrame:(CGRect)frame title:(NSString*)title image:(UIImage*)image highlightedImage:(UIImage *)highlightedImage{
+-(id)initWithFrame:(CGRect)frame title:(NSString*)title{
     self = [super initWithFrame:frame];
     if (self) {
         self.adjustsImageWhenHighlighted = NO;
-        UIColor *highlightedColor = alpha(tcolor(TextColor),0.5);
         self.titleLabel.font = SCHEDULE_BUTTON_FONT;
         [self setTitle:title forState:UIControlStateNormal];
         
@@ -45,17 +44,16 @@
         [self setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         //[self setTitleColor:alpha(tcolor(TextColor),0.6) forState:UIControlStateHighlighted];
         
-        self.iconImageView = [[UIImageView alloc] initWithImage:image];
-        if(!highlightedImage)self.iconImageView.highlightedImage = [UtilityClass image:image withColor:highlightedColor multiply:YES];
-        else self.iconImageView.highlightedImage = highlightedImage;
-        CGFloat imageHeight = self.iconImageView.frame.size.height;
+        self.iconLabel = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+        self.iconLabel.userInteractionEnabled = NO;
+        CGFloat imageHeight = self.iconLabel.frame.size.height;
         CGFloat textHeight = sizeWithFont(@"Kasjper",SCHEDULE_BUTTON_FONT).height;
         NSInteger dividor = (SCHEDULE_IMAGE_CENTER_SPACING == 0) ? 3 : 2;
         CGFloat spacing = (self.frame.size.height-imageHeight-textHeight-SCHEDULE_IMAGE_CENTER_SPACING)/dividor;
         
-        self.iconImageView.frame = CGRectSetPos(self.iconImageView.frame, (self.frame.size.width-image.size.width)/2,spacing);
+        self.iconLabel.frame = CGRectSetPos(self.iconLabel.frame, (self.frame.size.width-self.iconLabel.frame.size.width)/2,spacing);
         self.titleEdgeInsets = UIEdgeInsetsMake(0, 0, spacing, 0);
-        [self addSubview:self.iconImageView];
+        [self addSubview:self.iconLabel];
         
         self.lampView = [[UIView alloc] initWithFrame:CGRectMake(kLampX, kLampY, kLampSize, kLampSize)];
         self.lampView.hidden = YES;
@@ -68,7 +66,7 @@
     return self;
 }
 -(void)dealloc{
-    self.iconImageView = nil;
+    self.iconLabel = nil;
 }
 /*
 // Only override drawRect: if you perform custom drawing.

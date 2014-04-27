@@ -20,7 +20,6 @@
 @property (nonatomic) UIButton *titleButton;
 @property (nonatomic) UILabel *messageLabel;
 @property (nonatomic,copy) SuccessfulBlock block;
-@property (nonatomic) BOOL shouldRemove;
 @end
 
 @implementation PlusAlertView
@@ -44,35 +43,33 @@
         UIButton *closeButton = [[UIButton alloc] initWithFrame:self.bounds];
         [closeButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
-        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-        //self.frame = contentView.bounds;
-        contentView.center = self.center;
-        contentView.layer.cornerRadius = 10;
-        contentView.layer.masksToBounds = YES;
-        contentView.backgroundColor = tcolor(BackgroundColor);
-        
-        UIButton *crossButton = [[UIButton alloc] initWithFrame:CGRectMake(contentView.frame.size.width-kCrossButtonSize, 0, kCrossButtonSize, kCrossButtonSize)];
-        [crossButton setImage:[UIImage imageNamed:timageStringBW(@"round_cross")] forState:UIControlStateNormal];
+        self.contentView.backgroundColor = tcolor(BackgroundColor);
+        [self setContentSize:CGSizeMake(300, 300)];
+        UIButton *crossButton = [[UIButton alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width-kCrossButtonSize, 0, kCrossButtonSize, kCrossButtonSize)];
+        crossButton.titleLabel.font = iconFont(23);
+        [crossButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [crossButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
+        [crossButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
         [crossButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
-        crossButton.imageEdgeInsets = kCrossButtonContentInset;
-        [contentView addSubview:crossButton];
+        //crossButton.imageEdgeInsets = kCrossButtonContentInset;
+        [self.contentView addSubview:crossButton];
         
         UIImage *buttonImage = [UIImage imageNamed:timageStringBW(@"upgrade_plus_logo")];
         UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, buttonImage.size.width, buttonImage.size.height)];
         [topButton setImage:buttonImage forState:UIControlStateNormal];
         CGRectSetY(topButton, DEFAULT_TITLE_HEIGHT-topButton.frame.size.height);
-        CGRectSetCenterX(topButton, contentView.frame.size.width/2);
+        CGRectSetCenterX(topButton, self.contentView.frame.size.width/2);
         [topButton addTarget:self action:@selector(pressedPlus:) forControlEvents:UIControlEventTouchUpInside];
-        [contentView addSubview:topButton];
+        [self.contentView addSubview:topButton];
         
         
-        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(kTextPadding, DEFAULT_TITLE_HEIGHT, contentView.frame.size.width-2*kTextPadding, 2*DEFAULT_TITLE_HEIGHT)];
+        UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(kTextPadding, DEFAULT_TITLE_HEIGHT, self.contentView.frame.size.width-2*kTextPadding, 2*DEFAULT_TITLE_HEIGHT)];
         messageLabel.font = KP_REGULAR(18);
         messageLabel.textColor = tcolor(TextColor);
         messageLabel.numberOfLines = 0;
         messageLabel.backgroundColor = CLEAR;
         messageLabel.textAlignment = NSTextAlignmentCenter;
-        [contentView addSubview:messageLabel];
+        [self.contentView addSubview:messageLabel];
         self.messageLabel = messageLabel;
         
          UIImage *buttonBackground = [[UIImage imageNamed:@"btn-plus-background"] resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
@@ -82,22 +79,26 @@
         moreButton.layer.masksToBounds = YES;
         moreButton.titleLabel.font = kMoreButtonFont;
         [moreButton setTitle:@"LEARN MORE" forState:UIControlStateNormal];
-        moreButton.center = CGPointMake(contentView.frame.size.width/2, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT/2);
-        CGRectSetY(moreButton, contentView.frame.size.height-DEFAULT_TITLE_HEIGHT-20);
+        moreButton.center = CGPointMake(self.contentView.frame.size.width/2, self.contentView.frame.size.height-DEFAULT_TITLE_HEIGHT/2);
+        CGRectSetY(moreButton, self.contentView.frame.size.height-DEFAULT_TITLE_HEIGHT-20);
         [moreButton addTarget:self action:@selector(pressedPlus:) forControlEvents:UIControlEventTouchUpInside];
-        [contentView addSubview:moreButton];
+        [self.contentView addSubview:moreButton];
         
-        [self addSubview:contentView];
+        [self addSubview:self.contentView];
     }
     return self;
 }
 -(void)pressedClose:(UIButton*)sender{
-    if(self.block) self.block(NO,nil);
-    if(self.shouldRemove) [self removeFromSuperview];
+    if(self.shouldRemove)
+        [self removeFromSuperview];
+    if(self.block)
+        self.block(NO,nil);
 }
 -(void)pressedPlus:(UIButton*)sender{
-    if(self.block) self.block(YES,nil);
-    if(self.shouldRemove) [self removeFromSuperview];
+    if(self.shouldRemove)
+        [self removeFromSuperview];
+    if(self.block)
+        self.block(YES,nil);
 }
 -(void)dealloc{
     self.messageLabel = nil;

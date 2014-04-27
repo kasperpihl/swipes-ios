@@ -9,7 +9,8 @@ typedef NS_ENUM(NSUInteger, UserLevel) {
     UserLevelStandard = 0,
     UserLevelTrial = 1,
     UserLevelPlusMonthly = 2,
-    UserLevelPlusYearly = 3
+    UserLevelPlusYearly = 3,
+    UserLevelAdmin = 5
 };
 #import <Foundation/Foundation.h>
 #define kUserHandler [UserHandler sharedInstance]
@@ -17,4 +18,5 @@ typedef NS_ENUM(NSUInteger, UserLevel) {
 +(UserHandler*)sharedInstance;
 -(NSString*)getUserLevelString;
 @property (nonatomic) BOOL isPlus;
+@property (nonatomic) BOOL isLoggedIn;
 @end

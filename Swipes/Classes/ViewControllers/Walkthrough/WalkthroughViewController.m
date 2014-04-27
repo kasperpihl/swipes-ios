@@ -78,7 +78,7 @@ typedef enum {
 @property (nonatomic) WalkthroughState currentState;
 
 /* First view */
-@property (nonatomic,strong) UIImageView *swipesLogo;
+@property (nonatomic,strong) UILabel *swipesLogo;
 @property (nonatomic,strong) UIImageView *menuExplainer;
 @property (nonatomic,strong) UIButton *actionButton;
 @property (nonatomic,strong) WalkthroughTitleView *titleView;
@@ -96,8 +96,8 @@ typedef enum {
 @property (nonatomic,strong) WalkthroughOverlayBackground *backgroundOverlay;
 @property (nonatomic,strong) UIButton *schedulePopupButton;
 
-@property (nonatomic,strong) UIImageView *greenBackground;
-@property (nonatomic,strong) UIImageView *signatureImage;
+@property (nonatomic,strong) UILabel *greenBackground;
+@property (nonatomic,strong) UILabel *signatureImage;
 
 @property (nonatomic) UIButton *closeButton;
 
@@ -268,10 +268,12 @@ typedef enum {
                 self.doneButton.hidden = YES;
                 self.phoneBackground.hidden = YES;
                 
-                self.greenBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_swipes_logo"]];
+                self.greenBackground = iconLabel(@"logo", 61);
+                [self.greenBackground setTextColor:tcolor(DoneColor)];
                 CGRectSetCenter(self.greenBackground, self.view.frame.size.width/2, self.greenBackground.frame.size.height+20);
                 [self.view addSubview:self.greenBackground];
-                self.signatureImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wt_signature"]];
+                self.signatureImage = iconLabel(@"signature", 46);
+                [self.signatureImage setTextColor:alpha(tcolorF(TextColor, ThemeLight), 0.6)];
                 self.signatureImage.alpha = 0;
                 CGRectSetY(self.actionButton, self.view.bounds.size.height-kActionButtonBottomSpacing - self.actionButton.frame.size.height);
                 [self.titleView setTitle:@"Welcome on board!" subtitle:@"Register an account to get started. Your tasks will be backed up every 24h.\n\nTake the leap. Swipe!"];
@@ -534,12 +536,13 @@ typedef enum {
     }
 	return cell;
 }
--(UIButton*)menuButtonWithImage:(UIImage *)image color:(UIColor*)color{
+-(UIButton*)menuButtonWithIcon:(NSString*)iconName color:(UIColor*)color{
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.titleLabel.font = iconFont(22);
+    [button setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
+    [button setTitle:iconName forState:UIControlStateNormal];
     button.frame = CGRectMake(0, kMenuButtonY, kMenuButtonSize, kMenuButtonSize);
     button.layer.cornerRadius = kMenuButtonSize/2;
-    [button setImage:image forState:UIControlStateNormal];
-    [button setImage:image forState:UIControlStateHighlighted];
     [button setBackgroundColor:color];
     button.showsTouchWhenHighlighted = NO;
     return button;
@@ -549,8 +552,8 @@ typedef enum {
 {
     [super viewDidLoad];
     self.view.backgroundColor = kWalkthroughBackground;
-    
-    self.swipesLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_swipes_logo"]];
+    self.swipesLogo = iconLabel(@"logo", 61);
+    [self.swipesLogo setTextColor:tcolor(DoneColor)];
     self.swipesLogo.center = CGPointMake(self.view.center.x, self.swipesLogo.center.y+LOGO_Y);
     [self.view addSubview:self.swipesLogo];
     
@@ -559,13 +562,13 @@ typedef enum {
     
     [self.view addSubview:self.titleView];
     
-    self.scheduleButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"schedule-white-high" scaledToSize:CGSizeMake(22, 22)] color:tcolor(LaterColor)];
+    self.scheduleButton = [self menuButtonWithIcon:iconString(@"laterFull") color:tcolor(LaterColor)];
     CGRectSetCenterX(self.scheduleButton, kMenuButtonSideMargin);
     [self.view addSubview:self.scheduleButton];
-    self.tasksButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"today-white-high" scaledToSize:CGSizeMake(22, 22)] color:tcolor(TasksColor)];
+    self.tasksButton = [self menuButtonWithIcon:iconString(@"todayFull") color:tcolor(TasksColor)];
     CGRectSetCenterX(self.tasksButton, self.view.center.x);
     [self.view addSubview:self.tasksButton];
-    self.doneButton = [self menuButtonWithImage:[UtilityClass imageWithName:@"done-white-high" scaledToSize:CGSizeMake(22, 22)] color:tcolor(DoneColor)];
+    self.doneButton = [self menuButtonWithIcon:iconString(@"doneFull") color:tcolor(DoneColor)];
     CGRectSetCenterX(self.doneButton, self.view.bounds.size.width-kMenuButtonSideMargin);
     [self.view addSubview:self.doneButton];
     

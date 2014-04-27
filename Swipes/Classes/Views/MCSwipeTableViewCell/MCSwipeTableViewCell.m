@@ -25,7 +25,7 @@ static NSTimeInterval const kMCDurationHightLimit = 0.1; // Highest duration whe
 @property(nonatomic, assign) CGFloat currentPercentage;
 
 @property(nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
-@property(nonatomic, strong) UIImageView *slidingImageView;
+@property(nonatomic, strong) UILabel *slidingImageIcon;
 @property(nonatomic, strong) NSString *currentImageName;
 @property(nonatomic, strong) UIView *colorIndicatorView;
 @property (nonatomic) MCSwipeTableViewCellState currentState;
@@ -102,9 +102,11 @@ secondStateIconName:(NSString *)secondIconName
     [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
     [self insertSubview:_colorIndicatorView atIndex:0];
 
-    _slidingImageView = [[UIImageView alloc] init];
-    [_slidingImageView setContentMode:UIViewContentModeCenter];
-    [_colorIndicatorView addSubview:_slidingImageView];
+    _slidingImageIcon = iconLabel(@"todayFull", 20);
+    _slidingImageIcon.text = @"";
+    [_slidingImageIcon setTextColor:tcolorF(TextColor, ThemeDark)];
+    [_slidingImageIcon setContentMode:UIViewContentModeCenter];
+    [_colorIndicatorView addSubview:_slidingImageIcon];
 
     _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
     [self addGestureRecognizer:_panGestureRecognizer];
@@ -203,8 +205,8 @@ secondStateIconName:(NSString *)secondIconName
     _currentImageName = [self imageNameWithPercentage:percentage];
     NSString *imageName = [self imageNameWithPercentage:percentage];
     if (imageName != nil) {
-        [_slidingImageView setImage:[UIImage imageNamed:imageName]];
-        [_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
+        [_slidingImageIcon setText:imageName];
+        [_slidingImageIcon setAlpha:[self imageAlphaWithPercentage:percentage]];
     }
     [self slideImageWithPercentage:percentage imageName:imageName isDragging:NO];
     
@@ -415,11 +417,11 @@ secondStateIconName:(NSString *)secondIconName
 
     // Image Name
     NSString *imageName = [self imageNameWithPercentage:percentage];
-    if(self.didRegret && self.shouldRegret) [_slidingImageView setImage:[UIImage imageNamed:nil]];
+    if(self.didRegret && self.shouldRegret) [_slidingImageIcon setText:nil];
     // Image Position
     if (imageName != nil) {
-        if(!self.didRegret || !self.shouldRegret)[_slidingImageView setImage:[UIImage imageNamed:imageName]];
-        [_slidingImageView setAlpha:[self imageAlphaWithPercentage:percentage]];
+        if(!self.didRegret || !self.shouldRegret)[_slidingImageIcon setText:imageName];
+        [_slidingImageIcon setAlpha:[self imageAlphaWithPercentage:percentage]];
     }
     [self slideImageWithPercentage:percentage imageName:imageName isDragging:YES];
 
@@ -432,8 +434,8 @@ secondStateIconName:(NSString *)secondIconName
 
 
 - (void)slideImageWithPercentage:(CGFloat)percentage imageName:(NSString *)imageName isDragging:(BOOL)isDragging {
-    UIImage *slidingImage = [UIImage imageNamed:imageName];
-    CGSize slidingImageSize = slidingImage.size;
+    //UIImage *slidingImage = [UIImage imageNamed:imageName];
+    CGSize slidingImageSize = _slidingImageIcon.frame.size;
     CGRect slidingImageRect;
     CGPoint position = CGPointZero;
     position.y = CGRectGetHeight(self.bounds) / 2.0;
@@ -471,7 +473,7 @@ secondStateIconName:(NSString *)secondIconName
             slidingImageSize.height);
 
     slidingImageRect = CGRectIntegral(slidingImageRect);
-    [_slidingImageView setFrame:slidingImageRect];
+    [_slidingImageIcon setFrame:slidingImageRect];
 }
 
 
@@ -495,7 +497,7 @@ secondStateIconName:(NSString *)secondIconName
 
     // Image
     if (_currentImageName != nil) {
-        [_slidingImageView setImage:[UIImage imageNamed:_currentImageName]];
+        [_slidingImageIcon setText:_currentImageName];
     }
 
     [UIView animateWithDuration:duration
@@ -503,7 +505,7 @@ secondStateIconName:(NSString *)secondIconName
                         options:(UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction)
                      animations:^{
                          [self.contentView setFrame:rect];
-                         [_slidingImageView setAlpha:0];
+                         [_slidingImageIcon setAlpha:0];
                          [self slideImageWithPercentage:percentage imageName:_currentImageName isDragging:NO];
                      }
                      completion:^(BOOL finished) {
@@ -523,7 +525,7 @@ secondStateIconName:(NSString *)secondIconName
                          CGRect frame = self.contentView.frame;
                          frame.origin.x = -bounceDistance;
                          [self.contentView setFrame:frame];
-                         [_slidingImageView setAlpha:0.0];
+                         [_slidingImageIcon setAlpha:0.0];
                          [self slideImageWithPercentage:0 imageName:_currentImageName isDragging:NO];
                      }
                      completion:^(BOOL finished1) {

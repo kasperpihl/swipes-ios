@@ -69,13 +69,13 @@
     NSString *iconName;
     switch (type) {
         case CellTypeSchedule:
-            iconName = @"schedule-white-high";
+            iconName = iconString(@"laterFull");
             break;
         case CellTypeToday:
-            iconName = @"today-white-high";
+            iconName = iconString(@"todayFull");
             break;
         case CellTypeDone:
-            iconName = @"done-white-high";
+            iconName = iconString(@"doneFull");
             break;
         default:
             break;

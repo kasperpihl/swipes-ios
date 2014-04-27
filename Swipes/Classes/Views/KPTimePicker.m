@@ -57,11 +57,11 @@
 @property (nonatomic) BOOL isInConfirmButton;
 @property (nonatomic) BOOL isOutOfScope;
 
-@property (nonatomic,strong) UIImageView *timeSlider;
+@property (nonatomic,strong) UILabel *timeSlider;
 @property (nonatomic,strong) UIButton *confirmButton;
 @property (nonatomic,strong) UIButton *backButton;
-@property (nonatomic,strong) UIImageView *sunImage;
-@property (nonatomic,strong) UIImageView *moonImage;
+@property (nonatomic,strong) UILabel *sunImage;
+@property (nonatomic,strong) UILabel *moonImage;
 @property (nonatomic,strong) UILabel *dayLabel;
 @property (nonatomic,strong) UILabel *clockLabel;
 @end
@@ -261,11 +261,13 @@
         self.darkColor = kDefDarkColor;
         
         
-        self.moonImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:timageString(@"schedule_image_moon",@"_white-high",@"_white-high")]];
+        self.moonImage = iconLabel(@"scheduleMoonFull", 45);
+        self.moonImage.textColor = tcolorF(TextColor, ThemeDark);
         self.moonImage.center = [self pointFromPoint:self.centerPoint withDistance:kSunImageDistance towardAngle:235];
         [self addSubview:self.moonImage];
         
-        self.sunImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:timageString(@"schedule_image_sun",@"_white-high",@"_white-high")]];
+        self.sunImage = iconLabel(@"scheduleSunFull", 45);
+        self.sunImage.textColor = tcolorF(TextColor, ThemeDark);
         self.sunImage.center = [self pointFromPoint:self.centerPoint withDistance:kSunImageDistance towardAngle:305];
         [self addSubview:self.sunImage];
         
@@ -278,22 +280,26 @@
         //self.confirmButton.layer.borderColor = tcolor(TextColor).CGColor;
         self.confirmButton.center = self.centerPoint;
         [self.confirmButton addTarget:self action:@selector(pressedConfirmButton:) forControlEvents:UIControlEventTouchUpInside];
-        //[self.confirmButton setImage:[UIImage imageNamed:@"done-selected"] forState:];
-        [self.confirmButton setImage:[UIImage imageNamed:@"checkmark_icon_white"] forState:UIControlStateNormal];
-        [self.confirmButton setImage:[UIImage imageNamed:@"checkmark_icon_white"] forState:UIControlStateHighlighted];
+        self.confirmButton.titleLabel.font = iconFont(23);
+        [self.confirmButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
+        [self.confirmButton setTitle:iconString(@"checkmark") forState:UIControlStateNormal];
         self.confirmButton.layer.masksToBounds = YES;
         self.confirmButton.layer.cornerRadius = kDefActualSize;
         [self addSubview:self.confirmButton];
         
-        self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:valForScreen(@"picker_wheel_ip4_white",@"picker_wheel_white")]];
+        
+        self.timeSlider = iconLabel(@"pickerWheel", valForScreen(230, 250));
+        [self.timeSlider setTextColor:color(213,216,220,1)];
         self.timeSlider.center = self.centerPoint;
         [self addSubview:self.timeSlider];
         
         self.backButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         self.backButton.frame = CGRectMake(kBackMargin, self.bounds.size.height-kBackButtonSize-kBackMargin, kBackButtonSize, kBackButtonSize);
         self.backButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin);
-        [self.backButton setImage:[UIImage imageNamed:@"round_backarrow_white"] forState:UIControlStateNormal];
-        [self.backButton setImage:[UIImage imageNamed:@"round_backarrow_white-high"] forState:UIControlStateHighlighted];
+        self.backButton.titleLabel.font = iconFont(41);
+        [self.backButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
+        [self.backButton setTitle:iconString(@"roundBack") forState:UIControlStateNormal];
+        [self.backButton setTitle:iconString(@"roundBackFull") forState:UIControlStateHighlighted];
         [self.backButton addTarget:self action:@selector(pressedBackButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.backButton];
         
@@ -327,7 +333,7 @@
     
     CGFloat heightForDay = sizeWithFont(@"abcdefghADB",self.dayLabel.font).height;
     CGFloat heightForTime = sizeWithFont(@"08:00pm",self.clockLabel.font).height;
-    CGFloat iconHeigt = self.sunImage.image.size.height;
+    CGFloat iconHeigt = self.sunImage.frame.size.height;
     
     CGFloat overflowSpace = heightForContent - heightForDay - kLabelSpacing - heightForTime - iconHeigt;
     CGFloat spacing = overflowSpace / 3;

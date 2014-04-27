@@ -25,5 +25,8 @@ typedef enum {
 @property (nonatomic) UIColor *highlightedColor;
 @property (nonatomic) NSArray *items;
 @property (nonatomic) CGFloat topInset;
+@property (nonatomic) UIFont *font;
+@property (nonatomic) UIColor *titleColor;
+@property (nonatomic) NSString *titleHighlightString;
 -(id)initWithFrame:(CGRect)frame items:(NSArray*)items delegate:(NSObject<ToolbarDelegate>*)delegate;
 @end

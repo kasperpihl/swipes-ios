@@ -89,9 +89,10 @@
     for(UILocalNotification *lNoti in notifications){
         NSLog(@"t: %i - %@ - %@",lNoti.applicationIconBadgeNumber,lNoti.alertBody,lNoti.fireDate);
     }*/
+    
     [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"TwJuYgpTKp9ENbxf6wMi8j";
     [AppsFlyerTracker sharedTracker].appleAppID = @"657882159";
-    
+    [AppsFlyerTracker sharedTracker].isDebug = NO;
     [PaymentHandler sharedInstance];
     [self tagLaunchSource:launchOptions];
     
@@ -105,7 +106,6 @@
     [EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
     
     //NSLog(@"%@",[kCurrent sessionToken]);
-    
     
     return YES;
 }
@@ -147,8 +147,15 @@
         }
     }
     NSString *isLoggedIn = (kCurrent) ? @"yes" : @"no";
-    
     [ANALYTICS tagEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism , @"Is Logged in" : isLoggedIn }];
+    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]){
+        NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
+        if(!kCurrent)
+            [ANALYTICS tagEvent:@"Installation" options:@{ @"Mechanism" : launchMechanism,@"Time since real install" : [NSString stringWithFormat:@"%i days",[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]}];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
+        
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken

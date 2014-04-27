@@ -27,7 +27,7 @@
 #import "UIImage+Blur.h"
 #import "SlowHighlightIcon.h"
 #import "SettingsHandler.h"
-
+#import "HintHandler.h"
 #import "NotificationHandler.h"
 
 #import "UserHandler.h"
@@ -55,6 +55,7 @@
 @property (nonatomic,strong) KPControlHandler *controlHandler;
 @property (nonatomic,weak) IBOutlet UIView *presentedPanel;
 @property (nonatomic) UIButton *_settingsButton;
+@property (nonatomic) UIButton *_accountButton;
 @property (nonatomic) BOOL tableIsShrinked;
 @property (nonatomic) NSInteger currentSelectedIndex;
 @property (nonatomic) UIView *ios7BackgroundView;
@@ -73,6 +74,9 @@
 #pragma mark - KPAddTagDelegate
 -(void)closeAddPanel:(AddPanelView *)addPanel{
     [BLURRY dismissAnimated:YES];
+    if(!kUserHandler.isLoggedIn){
+        [kHints triggerHint:HintAccount];
+    }
 }
 -(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
     [[self currentViewController] update];
@@ -110,6 +114,7 @@
     
     AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.view.bounds];
     addPanel.addDelegate = self;
+    addPanel.tags = [KPTag allTagsAsStrings];
     BLURRY.showPosition = PositionBottom;
     BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark), 0.3);
     [BLURRY showView:addPanel inViewController:self];
@@ -162,8 +167,8 @@
     }];
 }
 #pragma mark - AddPanelDelegate
--(void)didAddItem:(NSString *)item priority:(BOOL)priority{
-    [[self currentViewController].itemHandler addItem:item priority:priority];
+-(void)didAddItem:(NSString *)item priority:(BOOL)priority tags:(NSArray *)tags{
+    [[self currentViewController].itemHandler addItem:item priority:priority tags:tags];
 }
 - (NSMutableArray *)viewControllers {
 	if (!_viewControllers)
@@ -192,48 +197,56 @@
     UIButton *button = [[SlowHighlightIcon alloc] init];
     CGRectSetSize(button, SEGMENT_BUTTON_WIDTH, SEGMENT_HEIGHT);
     button.adjustsImageWhenHighlighted = NO;
-    NSString *imageString;
-    NSString *baseString;
+    NSString *textString;
+    UIColor *highlightColor;
     switch (controlButton) {
         case KPSegmentButtonSchedule:
-            baseString = @"schedule";
-            
+            textString = iconString(@"later");
+            highlightColor = tcolor(LaterColor);
             break;
         case KPSegmentButtonToday:
-            baseString = @"today";
+            textString = iconString(@"today");
+            highlightColor = tcolor(TasksColor);
             break;
         case KPSegmentButtonDone:
-            baseString = @"done";
+            textString = iconString(@"done");
+            highlightColor = tcolor(DoneColor);
             break;
     }
-    imageString = timageString(baseString, @"-white", @"-black");
-    UIImage *normalImage = [UIImage imageNamed:imageString];
-    //UIImage *selectedImage = [UIImage imageNamed:[imageString stringByAppendingString:@"-high"]];
-    UIImage *highlightedImage = [UIImage imageNamed:[baseString stringByAppendingString:@"-highlighted"]];;
-    [button setImage:normalImage forState:UIControlStateNormal];
-    [button setImage:highlightedImage forState:UIControlStateSelected];
-    [button setImage:highlightedImage forState:UIControlStateSelected | UIControlStateHighlighted];
-    [button setImage:highlightedImage forState:UIControlStateHighlighted];
-    button.imageView.animationImages = @[highlightedImage];
-    button.imageView.animationDuration = 0.8;    
+
+    button.titleLabel.font = iconFont(23);
+    [button setTitle:textString forState:UIControlStateNormal];
+    [button setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [button setTitleColor:highlightColor forState:UIControlStateHighlighted];
+    [button setTitleColor:highlightColor forState:UIControlStateSelected];
+    [button setTitleColor:highlightColor forState:UIControlStateSelected | UIControlStateHighlighted];
     return button;
 }
 -(void)timerFired:(NSTimer*)sender{
     NSDictionary *userInfo = [sender userInfo];
     NSInteger index = [[userInfo objectForKey:@"button"] integerValue];
     UIButton *button = [[self.segmentedControl buttonsArray] objectAtIndex:index];
-    [button.imageView stopAnimating];
+    [button setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
 }
 -(void)highlightButton:(KPSegmentButtons)controlButton{
+    UIColor *highlightColor = tcolor(TasksColor);
+    if(controlButton == KPSegmentButtonDone)
+        highlightColor = tcolor(DoneColor);
+    else if(controlButton == KPSegmentButtonSchedule)
+        highlightColor = tcolor(LaterColor);
+    
     UIButton *button = [[self.segmentedControl buttonsArray] objectAtIndex:controlButton];
-    [button.imageView startAnimating];
+    [button setTitleColor:highlightColor forState:UIControlStateNormal];
     [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(timerFired:) userInfo:@{@"button": [NSNumber numberWithInteger:controlButton]} repeats:NO];
 }
 - (id)initWithViewControllers:(NSArray *)viewControllers {
 	return [self initWithViewControllers:viewControllers titles:[viewControllers valueForKeyPath:@"@unionOfObjects.title"]];
 }
 -(void)pressedSettings{
-    [ROOT_CONTROLLER.sideMenu showForce:YES];
+    [ROOT_CONTROLLER.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
+}
+-(void)pressedAccount{
+    [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
 }
 - (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles {
 	self = [super init];
@@ -251,10 +264,20 @@
         self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, TOP_HEIGHT)];
         self.ios7BackgroundView.backgroundColor = CLEAR;
         [self.ios7BackgroundView addSubview:self.segmentedControl];
+        UIButton *accountButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.view.frame.size.width-CELL_LABEL_X, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
+        accountButton.titleLabel.font = iconFont(23);
+        [accountButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [accountButton setTitle:iconString(@"settingsAccount") forState:UIControlStateNormal];
+        [accountButton setTitle:iconString(@"settingsAccountFull") forState:UIControlStateHighlighted];
+        [accountButton addTarget:self action:@selector(pressedAccount) forControlEvents:UIControlEventTouchUpInside];
+        [self.ios7BackgroundView addSubview:accountButton];
+        self._accountButton = accountButton;
+        
         UIButton *settingsButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
-        //CGRectSetX(settingsButton, -settingsButton.frame.size.width/2);
-        [settingsButton setImage:[UIImage imageNamed:timageStringBW(@"settings_icon")] forState:UIControlStateNormal];
-        [settingsButton setImage:[UIImage imageNamed:timageString(@"settings_icon",@"_white-high",@"_black-high")] forState:UIControlStateHighlighted];
+        settingsButton.titleLabel.font = iconFont(23);
+        [settingsButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [settingsButton setTitle:iconString(@"settings") forState:UIControlStateNormal];
+        [settingsButton setTitle:iconString(@"settingsFull") forState:UIControlStateHighlighted];
         [settingsButton addTarget:self action:@selector(pressedSettings) forControlEvents:UIControlEventTouchUpInside];
         [self.ios7BackgroundView addSubview:settingsButton];
         self._settingsButton = settingsButton;
@@ -308,6 +331,10 @@
     //NSArray *deletedObjects = [changeEvent objectForKey:@"deleted"];
     [NOTIHANDLER updateLocalNotifications];
     [self.currentViewController update];
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self._accountButton.hidden = kUserHandler.isLoggedIn;
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];

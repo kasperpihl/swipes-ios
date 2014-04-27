@@ -9,6 +9,8 @@
 #define kDefWeekendStartTime 10
 #define kDefEveningStartTime 19
 
+#define kSettingsDictionaryKey @"SettingsDictionary"
+
 #import "SettingsHandler.h"
 #import "NSDate-Utilities.h"
 #import "NotificationHandler.h"
@@ -18,11 +20,15 @@
 @property (nonatomic,copy) ImageBlock block;
 @property BOOL isFetchingSettings;
 @property BOOL isFetchingImage;
+@property NSMutableDictionary *settings;
 @end
 @implementation SettingsHandler
 static SettingsHandler *sharedObject;
 +(SettingsHandler *)sharedInstance{
-    if(!sharedObject) sharedObject = [[self allocWithZone:NULL] init];
+    if(!sharedObject){
+        sharedObject = [[self allocWithZone:NULL] init];
+        [sharedObject initialize];
+    }
     return sharedObject;
 }
 -(NSString*)indexForSettings:(KPSettings)setting{
@@ -133,6 +139,24 @@ static SettingsHandler *sharedObject;
     if(!index) return;
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:index];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    if(setting == SettingNotifications) [NOTIHANDLER updateLocalNotifications];
+    if(setting == SettingNotifications)
+        [NOTIHANDLER updateLocalNotifications];
+}
+
+-(BOOL)settingForKey:(NSString *)key{
+    BOOL hasAlreadyCompletedHint = [[self.settings objectForKey:key] boolValue];
+    return hasAlreadyCompletedHint;
+}
+-(void)setSetting:(BOOL)setting forKey:(NSString *)key{
+    [self.settings setObject:@(setting) forKey:key];
+    [[NSUserDefaults standardUserDefaults] setObject:self.settings forKey:kSettingsDictionaryKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)initialize{
+    self.settings = [[NSUserDefaults standardUserDefaults] objectForKey:kSettingsDictionaryKey];
+    if(!self.settings)
+        self.settings = [NSMutableDictionary dictionary];
+    NSLog(@"settings %@",self.settings);
 }
 @end
