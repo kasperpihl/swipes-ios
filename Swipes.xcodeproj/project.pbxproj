@@ -75,7 +75,8 @@
 		A741EC4F18354726000F9F93 /* default-background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A741EC4E18354726000F9F93 /* default-background.jpg */; };
 		A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */; };
 		A74646B918D38660003911DC /* ContactHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A74646B818D38660003911DC /* ContactHandler.m */; };
-		A748C876190D999D00514DB3 /* Subtasks in Resources */ = {isa = PBXBuildFile; fileRef = A748C875190D999D00514DB3 /* Subtasks */; };
+		A748C87C190D9A0800514DB3 /* SubtaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A748C879190D9A0800514DB3 /* SubtaskCell.m */; };
+		A748C87D190D9A0800514DB3 /* SubtasksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A748C87B190D9A0800514DB3 /* SubtasksViewController.m */; };
 		A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FC218D75B250056D124 /* ShareViewController.m */; };
 		A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A717BEEB175E6857004791BF /* CoreTelephony.framework */; };
 		A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B816EB59710095A9A8 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -339,7 +340,10 @@
 		A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkthroughOverlayBackground.m; path = Walkthrough/WalkthroughOverlayBackground.m; sourceTree = "<group>"; };
 		A74646B718D38660003911DC /* ContactHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactHandler.h; sourceTree = "<group>"; };
 		A74646B818D38660003911DC /* ContactHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactHandler.m; sourceTree = "<group>"; };
-		A748C875190D999D00514DB3 /* Subtasks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Subtasks; sourceTree = "<group>"; };
+		A748C878190D9A0800514DB3 /* SubtaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubtaskCell.h; sourceTree = "<group>"; };
+		A748C879190D9A0800514DB3 /* SubtaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtaskCell.m; sourceTree = "<group>"; };
+		A748C87A190D9A0800514DB3 /* SubtasksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubtasksViewController.h; sourceTree = "<group>"; };
+		A748C87B190D9A0800514DB3 /* SubtasksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtasksViewController.m; sourceTree = "<group>"; };
 		A74D3FC118D75B250056D124 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareViewController.h; path = Share/ShareViewController.h; sourceTree = "<group>"; };
 		A74D3FC218D75B250056D124 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShareViewController.m; path = Share/ShareViewController.m; sourceTree = "<group>"; };
 		A74D3FC918D9E76F0056D124 /* AppsFlyerTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppsFlyerTracker.h; sourceTree = "<group>"; };
@@ -800,6 +804,17 @@
 			path = Upgrade;
 			sourceTree = "<group>";
 		};
+		A748C877190D9A0800514DB3 /* Subtasks */ = {
+			isa = PBXGroup;
+			children = (
+				A748C878190D9A0800514DB3 /* SubtaskCell.h */,
+				A748C879190D9A0800514DB3 /* SubtaskCell.m */,
+				A748C87A190D9A0800514DB3 /* SubtasksViewController.h */,
+				A748C87B190D9A0800514DB3 /* SubtasksViewController.m */,
+			);
+			path = Subtasks;
+			sourceTree = "<group>";
+		};
 		A74D3FC018D75B0D0056D124 /* Share */ = {
 			isa = PBXGroup;
 			children = (
@@ -1115,7 +1130,7 @@
 		A781285D17294C56002226C8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				A748C875190D999D00514DB3 /* Subtasks */,
+				A748C877190D9A0800514DB3 /* Subtasks */,
 				A74D3FC018D75B0D0056D124 /* Share */,
 				A7E2D94B17B4FE16007BDE00 /* Upgrade */,
 				A7E2D94517B3F258007BDE00 /* DayPickerSettingsCell.h */,
@@ -1498,7 +1513,6 @@
 				DACD546118A1ACFC00C378DF /* page_white_visualstudio.png in Resources */,
 				A74FB8FC18FFBCB200F25157 /* MASTER_0008.jpg in Resources */,
 				A7D0D3BF1904FD1000ABA1FF /* selected_circle.png in Resources */,
-				A748C876190D999D00514DB3 /* Subtasks in Resources */,
 				A74FB8F618FFBCB200F25157 /* MASTER_0002.jpg in Resources */,
 				DACD545C18A1ACFC00C378DF /* page_white_picture.png in Resources */,
 				DACD544A18A1ACFC00C378DF /* folder_user.png in Resources */,
@@ -1667,6 +1681,7 @@
 				A703B1AC1838EBF20047DCC9 /* ClockTimeLabel.m in Sources */,
 				A75207FA1730F5F700F1B4F7 /* ToDoViewController.m in Sources */,
 				A75DB210173119FE00FA256B /* ItemHandler.m in Sources */,
+				A748C87D190D9A0800514DB3 /* SubtasksViewController.m in Sources */,
 				A717DD3618B8A2C800EE359C /* (null) in Sources */,
 				A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */,
 				A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */,
@@ -1708,6 +1723,7 @@
 				A703B1B21838EBF20047DCC9 /* KPSubtitleButton.m in Sources */,
 				A717DD2E18B7E12300EE359C /* (null) in Sources */,
 				A71DE4B31844069A0097394C /* UIGestureRecognizer+UIBreak.m in Sources */,
+				A748C87C190D9A0800514DB3 /* SubtaskCell.m in Sources */,
 				A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */,
 				A703B1C31838EBF20047DCC9 /* KPAddTagPanel.m in Sources */,
 				A789B3F917D79BFB00C25B73 /* KPOverlay.m in Sources */,
