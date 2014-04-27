@@ -374,6 +374,7 @@
     /* Performing request */
     NSHTTPURLResponse *response;
     NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,syncData);
+    
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
     
@@ -416,8 +417,6 @@
         [self finalizeSyncWithUserInfo:result error:error];
         return NO;
     }
-    
-    
     
     
     

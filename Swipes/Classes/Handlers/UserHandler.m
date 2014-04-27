@@ -48,6 +48,12 @@ static UserHandler *sharedObject;
         case UserLevelPlusYearly:
             string = @"Plus Yearly";
             break;
+        case UserLevelAdmin:
+            string = @"Admin";
+            break;
+        default:
+            string = @"Unknown";
+            break;
     }
     return string;
 }

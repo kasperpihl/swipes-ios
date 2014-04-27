@@ -80,6 +80,7 @@
     __block NSString *requestPath = @"me?fields=email,gender";
     FBRequest *request = [FBRequest requestForGraphPath:requestPath];
     [FBC addRequest:request write:NO permissions:nil block:^BOOL(FBReturnType status, id result, NSError *error) {
+        NSLog(@"fetched");
         PFUser *user = kCurrent;
         if(error) {
             return NO;
@@ -114,6 +115,7 @@
         }
         if([PFFacebookUtils isLinkedWithUser:user]){
             if(!user.email){
+                NSLog(@"fetching");
                 [self fetchDataFromFacebook];
             }
         }
@@ -305,6 +307,7 @@ static RootViewController *sharedObject;
     if(!self.notification){
         self.notification = [CWStatusBarNotification new];
         self.notification.notificationTappedBlock = nil;
+        self.notification.notificationAnimationType = CWNotificationAnimationTypeOverlay;
         self.notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
         self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
     }
@@ -313,7 +316,6 @@ static RootViewController *sharedObject;
     switch (status) {
         case SyncStatusStarted:
             [self.notification displayNotificationWithMessage:@"Synchronizing..." completion:nil];
-            NSLog(@"send status");
             break;
         case SyncStatusProgress:
             break;

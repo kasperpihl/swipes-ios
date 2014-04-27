@@ -407,11 +407,11 @@ static void cancel_delayed_block(CWDelayedBlockHandle delayedHandle)
         cancel_delayed_block(self.dismissHandle);
         self.notificationIsDismissing = YES;
         [self secondFrameChange];
-        self.notificationLabel.backgroundColor = self.notificationLabelBackgroundColor;
-        [UIApplication sharedApplication].statusBarHidden = NO;
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
         [UIView animateWithDuration:STATUS_BAR_ANIMATION_LENGTH animations:^{
             [self thirdFrameChange];
         } completion:^(BOOL finished) {
+            
             [self.notificationLabel removeFromSuperview];
             [self.statusBarView removeFromSuperview];
             self.notificationWindow = nil;
