@@ -447,26 +447,15 @@ typedef enum {
                 [self handleErrorFromLogin:error];
             }
             else if([object isEqualToNumber:@1]){
-                voidBlock loginBlock = ^{
-                    [PFUser logInWithUsernameInBackground:email password:self.passwordField.text block:^(PFUser *user, NSError *error) {
-                        [self showIndicator:NO onElement:sender];
-                        if (error) {
-                            [self handleErrorFromLogin:error];
-                        } else {
-                            [self resignFields];
-                            [self.delegate loginViewController:self didLoginUser:user];
-                        }
-                    }];
-                };
-                if(self.currentState == LoginStateSignup){
-                    [UTILITY confirmBoxWithTitle:@"User exists" andMessage:@"Do you want to login instead?" block:^(BOOL succeeded, NSError *error) {
-                        if(succeeded){
-                            loginBlock();
-                        }
-                        else [self showIndicator:NO onElement:sender];
-                    }];
-                }
-                else loginBlock();
+                [PFUser logInWithUsernameInBackground:email password:self.passwordField.text block:^(PFUser *user, NSError *error) {
+                    [self showIndicator:NO onElement:sender];
+                    if (error) {
+                        [self handleErrorFromLogin:error];
+                    } else {
+                        [self resignFields];
+                        [self.delegate loginViewController:self didLoginUser:user];
+                    }
+                }];
             }
             else{
                 voidBlock signUpBlock = ^{
