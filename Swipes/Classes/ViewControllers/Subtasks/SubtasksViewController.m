@@ -142,30 +142,29 @@
     UIButton *button = [[SlowHighlightIcon alloc] init];
     CGRectSetSize(button, SEGMENT_BUTTON_WIDTH, self.segmentedControl.frame.size.height);
     button.adjustsImageWhenHighlighted = NO;
-    NSString *imageString;
-    NSString *baseString;
+    NSString *textString;
+    UIColor *highlightColor;
     switch (controlButton) {
         case KPSegmentButtonSchedule:
-            baseString = @"schedule";
-            
+            textString = iconString(@"later");
+            highlightColor = tcolor(LaterColor);
             break;
         case KPSegmentButtonToday:
-            baseString = @"today";
+            textString = iconString(@"today");
+            highlightColor = tcolor(TasksColor);
             break;
         case KPSegmentButtonDone:
-            baseString = @"done";
+            textString = iconString(@"done");
+            highlightColor = tcolor(DoneColor);
             break;
     }
-    imageString = timageString(baseString, @"-white", @"-black");
-    UIImage *normalImage = [UIImage imageNamed:imageString];
-    //UIImage *selectedImage = [UIImage imageNamed:[baseString stringByAppendingString:@"-highlighted"]];
-    UIImage *highlightedImage = [UIImage imageNamed:[baseString stringByAppendingString:@"-highlighted"]];;
-    [button setImage:normalImage forState:UIControlStateNormal];
-    [button setImage:highlightedImage forState:UIControlStateSelected];
-    [button setImage:highlightedImage forState:UIControlStateSelected | UIControlStateHighlighted];
-    [button setImage:highlightedImage forState:UIControlStateHighlighted];
-    button.imageView.animationImages = @[highlightedImage];
-    button.imageView.animationDuration = 0.8;
+    
+    button.titleLabel.font = iconFont(23);
+    [button setTitle:textString forState:UIControlStateNormal];
+    [button setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [button setTitleColor:highlightColor forState:UIControlStateHighlighted];
+    [button setTitleColor:highlightColor forState:UIControlStateSelected];
+    [button setTitleColor:highlightColor forState:UIControlStateSelected | UIControlStateHighlighted];
     return button;
 }
 
@@ -338,7 +337,7 @@
     [cell setFirstColor:[StyleHandler colorForCellType:CellTypeDone]];
     [cell setThirdColor:[UIColor redColor]];
     [cell setFirstIconName:[StyleHandler iconNameForCellType:CellTypeDone]];
-    [cell setThirdIconName:@"trashcan_icon_white-high"];
+    [cell setThirdIconName:iconString(@"actionDelete")];
     //cell.activatedDirection = MCSwipeTableViewCellActivatedDirectionRight;
     cell.shouldRegret = YES;
     cell.mode = MCSwipeTableViewCellModeExit;

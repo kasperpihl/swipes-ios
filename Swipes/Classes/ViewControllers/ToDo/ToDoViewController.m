@@ -551,6 +551,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 {
     [self.sectionHeader setTitle:[[self.model readableTitleForStatus] uppercaseString]];
     [self.sectionHeader setColor:[StyleHandler colorForCellType:self.cellType]];
+    
+    [self.sectionHeader setProgressPercentage:0.5];
 }
 
 -(void)layout{
@@ -850,7 +852,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          Evernote Container with button!
          */
          self.evernoteContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
-         [self addAndGetImage:timageStringBW(@"edit_notes_icon") inView:self.evernoteContainer];
+         [self addAndGetImage:@"editNotes" inView:self.evernoteContainer];
          
          self.evernoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.evernoteContainer.frame.size.height)];
          self.evernoteLabel.font = EDIT_TASK_TEXT_FONT;
@@ -906,8 +908,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
         
         self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[UIColor greenColor] font:SECTION_HEADER_FONT title:@"Test"];
+        CGRectSetHeight(self.sectionHeader, 5);
+        self.sectionHeader.fillColor = tcolor(BackgroundColor);
         CGRectSetY(self.sectionHeader, CGRectGetMaxY(self.toolbarEditView.frame));
         [self.view addSubview:self.sectionHeader];
+        self.sectionHeader.progress = YES;
+        self.sectionHeader.progressPercentage = 0.3;
         
         
         
@@ -935,8 +941,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.view addSubview:self.subtaskOverlay];
         
         [self.view addSubview:subtasks.view];
-         
-         
+        
         
         notify(@"updated sync",updateFromSync:);
     }

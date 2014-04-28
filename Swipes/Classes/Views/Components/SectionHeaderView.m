@@ -101,6 +101,7 @@
 -(void)setNeedsDisplay{
     [super setNeedsDisplay];
     [self.sectionHeader setNeedsDisplay];
+    [self.progressEndingView setNeedsDisplay];
 }
 - (void)drawRect:(CGRect)rect
 {
