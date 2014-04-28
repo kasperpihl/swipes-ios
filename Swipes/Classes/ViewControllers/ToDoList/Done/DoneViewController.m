@@ -57,7 +57,7 @@
         [self.tableView setTableFooterView:nil];
     }
     else{
-        CGFloat footerHeight = 100;
+        CGFloat footerHeight = 60;
         CGFloat buttonY = 10;
         CGFloat buttonPaddingFromMiddle = 10;
         
@@ -107,20 +107,14 @@
     self.state = @"done";
     [super viewDidLoad];
 }
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     self.hasAskedForMore = NO;
     [self update];
 }
 -(void)update{
     [super update];
     [self updateTableFooter];
-}
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    if(!self.hasAskedForMore){
-        
-    }
 }
 - (void)didReceiveMemoryWarning
 {

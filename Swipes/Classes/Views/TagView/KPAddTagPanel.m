@@ -39,7 +39,9 @@
 @property (nonatomic) BOOL isRotated;
 @property (nonatomic) BOOL deleteMode;
 @end
-@implementation KPAddTagPanel
+@implementation KPAddTagPanel{
+    BOOL _justShown;
+}
 -(void)setDeleteMode:(BOOL)deleteMode{
     if(_deleteMode != deleteMode){
         [self shiftToDeleteMode:deleteMode];
@@ -62,6 +64,9 @@
         else
             [self shiftToAddMode:YES];
     }
+}
+-(void)blurryWillShow:(KPBlurry *)blurry{
+    _justShown = YES;
 }
 -(void)blurryWillHide:(KPBlurry *)blurry{
     if(self.isAdding) [self shiftToAddMode:NO];
@@ -99,10 +104,10 @@
         //CGRectSetSize(self.frame, self.frame.size.width, self.tagView.frame.size.height+ADD_VIEW_HEIGHT);//
         scrollView.contentSize = CGSizeMake(tagView.frame.size.width, tagView.frame.size.height);
         scrollView.scrollEnabled = YES;
-        
+        scrollView.backgroundColor = tcolor(LaterColor);
         [self addSubview:scrollView];
         self.scrollView = (UIScrollView*)[self viewWithTag:SCROLL_VIEW_TAG];
-        [self tagList:tagView changedSize:self.frame.size];
+
         
         
         /* Initialize toolbar */
@@ -132,6 +137,8 @@
         self.addTagView = (KPAddView*)[self viewWithTag:ADD_VIEW_TAG];
         self.addTagView.hidden = YES;
         [self updateTrashButton];
+        
+        [self tagList:tagView changedSize:self.tagView.frame.size];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(keyboardWillShow:)
@@ -173,7 +180,8 @@
     // OLDCODE
     //CGRectSetY(self.scrollView, self.frame.size.height - TOOLBAR_HEIGHT - self.scrollView.frame.size.height - TAG_VIEW_BOTTOM_MARGIN);
     // NEWCODE
-    CGRectSetY(self.scrollView, TOOLBAR_HEIGHT);
+    NSLog(@"%f - %f",CGRectGetMinY(self.toolbar.frame),CGRectGetHeight(self.scrollView.frame));
+    CGRectSetY(self.scrollView, CGRectGetMinY(self.toolbar.frame) - CGRectGetHeight(self.scrollView.frame));
 }
 -(void)shiftToDeleteMode:(BOOL)deleteMode{
     UIButton *plusButton = [self.toolbar.barButtons lastObject];
@@ -246,7 +254,11 @@
     [super layoutSubviews];
     // it is really complicated to recalc the new keyboard frame
     // FIXME: maybe someday we should do it anyway
-    [self.addTagView.textField resignFirstResponder];
+    if ( _justShown ){
+        _justShown = NO;
+    }
+    else
+        [self toolbar:self.toolbar pressedItem:0];
 }
 
 

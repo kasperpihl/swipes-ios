@@ -98,12 +98,14 @@
     NSInteger numberOfRows = kHorizontalGridNumber;
     self.view.backgroundColor = tcolor(BackgroundColor);
     NSInteger startY = (OSVER >= 7)?20:0;
+    CGSize s = self.view.frame.size;
     CGFloat backSpacing = 8.f;
     CGFloat buttonSize = 44.0f;
     
     
-    
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-buttonSize-backSpacing,startY,buttonSize,buttonSize)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(s.width - buttonSize - backSpacing, startY, buttonSize, buttonSize)];
+    //UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-buttonSize-backSpacing,startY,buttonSize,buttonSize)];
+    backButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     [backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     backButton.titleLabel.font = iconFont(23);
     [backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
@@ -156,22 +158,14 @@
     
     self.menuButtons = [menuButtons copy];
     [self.view addSubview:self.gridView];
-    CGSize s = self.view.frame.size;
+    
     self.gridView.center = CGPointMake(s.width / 2, s.height / 2 - valForScreen(0, 20));
     self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds) + 10, gridWidth, 20);
     self.syncLabel.textColor = tcolor(TextColor);
     [self.gridView addSubview:self.syncLabel];
     [self updateSchemeButton];
 
-    CGFloat backSpacing = 8.f;
-    CGFloat buttonSize = 44.0f;
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(s.width - buttonSize - backSpacing, startY, buttonSize, buttonSize)];
-    [backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
-    backButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-    backButton.transform = CGAffineTransformMakeRotation(M_PI);
-    [self.view addSubview:backButton];
-    self.backButton = backButton;
+
 }
 
 -(void)updateSchemeButton

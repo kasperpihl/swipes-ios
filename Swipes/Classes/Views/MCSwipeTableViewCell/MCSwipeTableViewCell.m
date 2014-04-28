@@ -125,7 +125,7 @@ secondStateIconName:(NSString *)secondIconName
     }
     UIGestureRecognizerState state = [gesture state];
     CGPoint velocity = [gesture velocityInView:self];
-    CGFloat percentage = [self percentageWithOffset:CGRectGetMinX(self.contentView.frame) relativeToWidth:CGRectGetWidth(self.bounds)];
+    CGFloat percentage = [self percentageWithOffset:CGRectGetMinX(self.contentView.frame) relativeToWidth:320];//CGRectGetWidth(self.bounds)];
     
     NSTimeInterval animationDuration = [self animationDurationWithVelocity:velocity];
     if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionLeft && percentage > 0) percentage = 0;
@@ -414,19 +414,19 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)animateWithOffset:(CGFloat)offset {
     CGFloat percentage = [self percentageWithOffset:offset relativeToWidth:CGRectGetWidth(self.bounds)];
-
+    CGFloat percentage320 = [self percentageWithOffset:offset relativeToWidth:320];
     // Image Name
-    NSString *imageName = [self imageNameWithPercentage:percentage];
+    NSString *imageName = [self imageNameWithPercentage:percentage320];
     if(self.didRegret && self.shouldRegret) [_slidingImageIcon setText:nil];
     // Image Position
     if (imageName != nil) {
         if(!self.didRegret || !self.shouldRegret)[_slidingImageIcon setText:imageName];
-        [_slidingImageIcon setAlpha:[self imageAlphaWithPercentage:percentage]];
+        [_slidingImageIcon setAlpha:[self imageAlphaWithPercentage:percentage320]];
     }
     [self slideImageWithPercentage:percentage imageName:imageName isDragging:YES];
 
     // Color
-    UIColor *color = [self colorWithPercentage:percentage];
+    UIColor *color = [self colorWithPercentage:percentage320];
     if (color != nil) {
         [_colorIndicatorView setBackgroundColor:color];
     }
@@ -444,24 +444,23 @@ secondStateIconName:(NSString *)secondIconName
             position.x = [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
             NSLog(@"x:%f",position.x);
         }*/
-
         if (percentage >= 0) {
-            position.x = [self offsetWithPercentage:percentage - (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = [self offsetWithPercentage:percentage relativeToWidth:CGRectGetWidth(self.bounds)] - 32;
         }
        /* else if (percentage < 0 && percentage >= -kMCStop1) {
             position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }*/
 
         else if (percentage < 0) {
-            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage relativeToWidth:CGRectGetWidth(self.bounds)] + 32;
         }
     }
     else {
         if (_direction == MCSwipeTableViewCellDirectionRight) {
-            position.x = [self offsetWithPercentage:percentage - (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = [self offsetWithPercentage:percentage relativeToWidth:CGRectGetWidth(self.bounds)] - 32;
         }
         else if (_direction == MCSwipeTableViewCellDirectionLeft) {
-            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage + (kMCStop1 / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
+            position.x = CGRectGetWidth(self.bounds) + [self offsetWithPercentage:percentage relativeToWidth:CGRectGetWidth(self.bounds)] + 32;
         }
         else {
             return;

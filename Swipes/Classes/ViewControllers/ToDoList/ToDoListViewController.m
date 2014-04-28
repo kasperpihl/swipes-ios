@@ -658,8 +658,8 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    self.backgroundImage.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 4);
-    self.menuText.frame = CGRectMake(0, self.backgroundImage.center.y + 50, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT);
+    self.backgroundIcon.center = CGPointMake(self.view.bounds.size.width / 2, self.view.bounds.size.height / 4);
+    self.menuText.frame = CGRectMake(0, self.backgroundIcon.center.y + 50, self.view.frame.size.width, TABLE_EMPTY_BG_TEXT_HEIGHT);
     self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height);
 }
 

@@ -135,7 +135,7 @@
         [filterButton setTitle:iconString(@"actionTagFull") forState:UIControlStateHighlighted];
         [filterButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         filterButton.tag = FILTER_BUTTON_TAG;
-        filterButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        filterButton.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight);
         filterButton.frame = CGRectMake(self.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
         //[filterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_COLOR] forState:UIControlStateNormal];
         [self addSubview:filterButton];

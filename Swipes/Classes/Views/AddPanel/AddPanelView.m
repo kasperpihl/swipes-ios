@@ -209,7 +209,7 @@
         _justShown = NO;
     }
     else {
-        [self.addView.textField resignFirstResponder];
+        [self pressedClose];
     }
 }
 
