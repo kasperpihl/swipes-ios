@@ -134,4 +134,4 @@ typedef void (^FBReqIndexBlock)(FBReturnType status, NSInteger index, id result,
 #define ALog(...) NSLog(__VA_ARGS__)
 
 #define RoundRectMake(x, y, width, height) CGRectMake(roundf(x), roundf(y), roundf(width), roundf(height))
-
+#define DLogFrame(view) DLog(@"class: %@, frame: %@", NSStringFromClass(view.class), NSStringFromCGRect(view.frame))

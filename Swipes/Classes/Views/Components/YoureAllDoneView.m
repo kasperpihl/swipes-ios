@@ -21,6 +21,7 @@
 #define kReferX 10
 #define kShareLabelWidth 230
 
+#import "UIView+Utilities.h"
 #import "YoureAllDoneView.h"
 
 
@@ -65,10 +66,11 @@
         [self addSubview:self.swipesReferLabel];
         
         self.alpha = 0;
-        [self layout];
+        [self setNeedsLayout];
     }
     return self;
 }
+
 -(void)setText:(NSString*)text{
     NSInteger strLength = [text length];
     NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:text];
@@ -81,16 +83,20 @@
     [self.shareItLabel setAttributedText:attString];
     CGRectSetWidth(self.shareItLabel, kShareLabelWidth);
     [self.shareItLabel sizeToFit];
-    CGRectSetCenterX(self.shareItLabel, [self.shareItLabel superview].center.x);
+    CGRectSetCenterX(self.shareItLabel, self.center.x);
     //CGRectSetHeight(self, CGRectGetMaxY(self.shareItLabel.frame));
-    CGRectSetY(self.signatureView,CGRectGetMaxY(self.shareItLabel.frame)+kSignatureSpacing);
+    CGRectSetY(self.signatureView,CGRectGetMaxY(self.shareItLabel.frame) + kSignatureSpacing);
 }
--(void)layout{
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
     self.stampView.center = CGPointMake(self.frame.size.width/2, kStampViewY);
     self.signatureView.frame = CGRectSetPos(self.signatureView.frame, self.frame.size.width-self.signatureView.frame.size.width-kSignatureRightMargin, CGRectGetMaxY(self.shareItLabel.frame)+kSignatureSpacing);
     self.swipesReferLabel.frame = CGRectSetPos(self.swipesReferLabel.frame, self.frame.size.width-kReferX-self.swipesReferLabel.frame.size.width, self.frame.size.height-kReferBottom);
     
     CGRectSetY(self.shareItLabel, CGRectGetMaxY(self.stampView.frame) + kSignatureSpacing);
+    CGRectSetCenterX(self.shareItLabel, self.center.x);
 }
 
 -(void)dealloc{

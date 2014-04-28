@@ -36,7 +36,8 @@
         self.backgroundColor = tcolor(BackgroundColor);
         
         
-        UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, 0, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height)];
+        UITextView *notesView = [[UITextView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, 0, self.frame.size.width - kContentSpacingLeft - kContentSpacingRight, self.bounds.size.height)];
+        notesView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         notesView.backgroundColor = CLEAR;
         notesView.font = NOTES_VIEW_FONT;
         notesView.keyboardAppearance = UIKeyboardAppearanceAlert;
@@ -46,11 +47,14 @@
         self.notesView = notesView;
         
         UIButton *backbutton = [UIButton buttonWithType:UIButtonTypeCustom];
-        backbutton.frame = CGRectMake(self.frame.size.width-44, self.frame.size.height-44, 44, 44);
+        backbutton.frame = CGRectMake(self.frame.size.width - 44, self.frame.size.height - 44, 44, 44);
+        backbutton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
         backbutton.titleLabel.font = iconFont(23);
         [backbutton setTitle:iconString(@"back") forState:UIControlStateNormal];
         [backbutton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         //[backbutton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
+        
+        [backbutton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         backbutton.transform = CGAffineTransformMakeRotation(M_PI);
         [backbutton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
         //self.toolbar.backgroundColor = tcolor(MenuBackground);
@@ -92,7 +96,7 @@
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
-    CGRectSetY(self.backbutton, self.frame.size.height-self.backbutton.frame.size.height);
+    CGRectSetY(self.backbutton, self.frame.size.height - self.backbutton.frame.size.height);
     [UIView commitAnimations];
 }
 -(void)keyboardWillShow:(NSNotification*)notification{
@@ -101,9 +105,10 @@
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGFloat kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     NSLog(@"notif:%@",notification);
-    CGRectSetY(self.backbutton, self.frame.size.height-self.backbutton.frame.size.height-keyboardFrame.size.height);
-    CGRectSetHeight(self.notesView, self.frame.size.height-keyboardFrame.size.height-kTextBottomPadding);
+    CGRectSetY(self.backbutton, self.frame.size.height - self.backbutton.frame.size.height - kbdHeight);
+    CGRectSetHeight(self.notesView, self.frame.size.height - kbdHeight - kTextBottomPadding);
     [UIView commitAnimations];
 }
 

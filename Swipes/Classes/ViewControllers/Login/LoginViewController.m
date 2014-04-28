@@ -79,7 +79,7 @@ typedef enum {
 @implementation LoginViewController
 -(id)init{
     self = [super init];
-    if(self){
+    if (self){
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
         
@@ -99,7 +99,7 @@ typedef enum {
 
         
         UIButton *resignButton = [[UIButton alloc] initWithFrame:self.view.bounds];
-        resignButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+        resignButton.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         [resignButton addTarget:self action:@selector(resignFields) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:resignButton];
         
@@ -111,8 +111,10 @@ typedef enum {
         [self.view addSubview:self.backButton];
         
         self.logoView = iconLabel(@"logo", 60);
-        [self.logoView setTextColor:tcolorF(TextColor,ThemeDark)];
         self.logoView.center = CGPointMake(self.view.center.x, self.logoView.center.y);
+        self.logoView.contentMode = UIViewContentModeCenter;
+        self.logoView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        [self.logoView setTextColor:tcolorF(TextColor,ThemeDark)];
         [self.view addSubview:self.logoView];
         
         self.titleView = [[WalkthroughTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0)];
@@ -135,12 +137,16 @@ typedef enum {
         [self.view addSubview:self.loginOrSignupLabel];
         
         CGFloat fieldWidth = 252.0;
+        CGFloat fieldMargin = (320 - fieldWidth) / 2;
         CGFloat fieldHeight = 44.0;
         CGFloat buttonWidth = 196.0f;
+        CGFloat buttonMargin = (320 - buttonWidth) / 2;
         CGFloat buttonHeight = SIGNUP_BUTTONS_HEIGHT;
-        
-        self.emailField = [[UITextField alloc] initWithFrame:CGRectMake((320-fieldWidth)/2, 0, fieldWidth, fieldHeight)];
+
+        self.emailField = [[UITextField alloc] initWithFrame:CGRectMake(fieldMargin, 0, self.view.frame.size.width - fieldMargin * 2, fieldHeight)];
+        self.emailField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.emailField.font = KP_REGULAR(16);
+
         self.emailField.textAlignment = NSTextAlignmentCenter;
         self.emailField.delegate = self;
         //self.emailField.keyboardAppearance = UIKeyboardAppearanceAlert;
@@ -156,8 +162,9 @@ typedef enum {
         self.emailField.backgroundColor = color;
         
         
-        self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake((320-fieldWidth)/2, 0, fieldWidth, fieldHeight)];
+        self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(fieldMargin, 0, self.view.frame.size.width - fieldMargin * 2, fieldHeight)];
         //self.passwordField.keyboardAppearance = UIKeyboardAppearanceAlert;
+        self.passwordField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.passwordField.delegate = self;
         self.passwordField.textAlignment = NSTextAlignmentCenter;
         self.passwordField.secureTextEntry = YES;
@@ -183,7 +190,7 @@ typedef enum {
         
         UIColor *conColor = color(255, 190, 97, 1);//color(24, 188, 241, 1);
         self.continueButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-        self.continueButton.frame = CGRectMake((320-buttonWidth)/2, 0, buttonWidth, buttonHeight);
+        self.continueButton.frame = CGRectMake(buttonMargin, 0, self.view.frame.size.width - buttonMargin * 2, buttonHeight);
         self.continueButton.layer.cornerRadius = kCornerRadius;
         self.continueButton.layer.borderColor = conColor.CGColor;
         self.continueButton.layer.borderWidth = kButtonBorderWidth;
@@ -196,12 +203,14 @@ typedef enum {
         [self.continueButton  setBackgroundImage:[alpha(conColor, 0) image] forState:UIControlStateHighlighted];
         [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
         [self.continueButton addTarget:self action:@selector(pressedContinue:) forControlEvents:UIControlEventTouchUpInside];
+        self.continueButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:self.continueButton];
         
         
         UIColor *tryColor = tcolorF(TextColor, ThemeDark); //color(255, 190, 97, 1)
         self.tryButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-        self.tryButton.frame = CGRectMake((320-buttonWidth)/2, 0, buttonWidth, buttonHeight);
+        self.tryButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.tryButton.frame = CGRectMake(buttonMargin, 0, self.view.frame.size.width - buttonMargin * 2, buttonHeight);
         self.tryButton.layer.cornerRadius = kCornerRadius;
         self.tryButton.layer.borderColor = tryColor.CGColor;
         self.tryButton.layer.borderWidth = kButtonBorderWidth;
@@ -223,6 +232,7 @@ typedef enum {
         [self.continueButton addTarget:self action:@selector(pressedContinue:) forControlEvents:UIControlEventTouchUpInside];
         [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self setupButton:self.continueButton];*/
+
         
         self.facebookLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
         self.facebookLabel.font = KP_REGULAR(16);
@@ -232,11 +242,13 @@ typedef enum {
         self.facebookLabel.text = @"Or with Facebook";
         self.facebookLabel.backgroundColor = CLEAR;
         [self.facebookLabel sizeToFit];
-        CGRectSetWidth(self.facebookLabel, 320);
+        CGRectSetWidth(self.facebookLabel, self.view.frame.size.width);
+        self.facebookLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:self.facebookLabel];
         
-        self.facebookButton = [[UIButton alloc] initWithFrame:CGRectMake((320-buttonWidth)/2, 0, buttonWidth, buttonHeight)];
+        self.facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonMargin, 0, self.view.frame.size.width - buttonMargin * 2, buttonHeight)];
         [self setupButton:self.facebookButton];
+        self.facebookButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.facebookButton.layer.borderWidth = 0;
         [self.facebookButton setBackgroundImage:[color(57,159,219,1) image] forState:UIControlStateNormal];
         [self.facebookButton setBackgroundImage:[[color(57,159,219,1) darker] image] forState:UIControlStateHighlighted];
@@ -248,7 +260,8 @@ typedef enum {
         
         
         self.privacyPolicyButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.privacyPolicyButton.frame = CGRectMake(0, 0, sizeWithFont(@"Privacy policy" ,LOGIN_FIELDS_FONT).width+20, fieldHeight);
+        self.privacyPolicyButton.frame = CGRectMake(0, 0, sizeWithFont(@"Privacy policy" ,LOGIN_FIELDS_FONT).width + 20, fieldHeight);
+        self.privacyPolicyButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
         self.privacyPolicyButton.titleLabel.font = LOGIN_FIELDS_FONT;
         [self.privacyPolicyButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
         [self.privacyPolicyButton setTitle:@"Privacy policy" forState:UIControlStateNormal];
@@ -270,13 +283,14 @@ typedef enum {
         
         self.loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
         NSInteger margin = 10;
-        self.loginButton.frame = CGRectMake(0, 0, sizeWithFont(@"Sign up" ,LOGIN_FIELDS_FONT).width+20, fieldHeight-margin);
+        self.loginButton.frame = CGRectMake(0, 0, sizeWithFont(@"Sign up" ,LOGIN_FIELDS_FONT).width+20, fieldHeight - margin);
         self.loginButton.titleLabel.font = LOGIN_FIELDS_FONT;
         [self.loginButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
         [self.loginButton setTitle:@"Log in" forState:UIControlStateNormal];
         [self.loginButton addTarget:self action:@selector(pressedChange:) forControlEvents:UIControlEventTouchUpInside];
         self.loginButton.frame = CGRectSetPos(self.loginButton.frame, self.view.frame.size.width-self.loginButton.frame.size.width-margin/2, self.view.frame.size.height-self.loginButton.frame.size.height-margin/2);
         [self.view addSubview:self.loginButton];
+        self.loginButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
         [self setCurrentState:LoginStateWelcome animated:NO];
     }
     return self;
@@ -552,7 +566,8 @@ typedef enum {
     [super viewDidLayoutSubviews];
     
     CGFloat relativeStart = (self.view.frame.size.height-(FACEBOOK_BUTTON_Y+SIGNUP_BUTTONS_HEIGHT))/2-kExtraBottomSpacing;
-    if(relativeStart < 30) relativeStart = 20;
+    if (relativeStart < 30)
+        relativeStart = 20;
 
     CGRectSetY(self.logoView, LOGIN_LOGO_Y);
     CGRectSetY(self.titleView, CGRectGetMaxY(self.logoView.frame) + 50);
@@ -599,7 +614,6 @@ typedef enum {
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    //[ROOT_CONTROLLER walkthrough];
 }
 - (void)didReceiveMemoryWarning
 {

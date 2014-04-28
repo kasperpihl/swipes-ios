@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface SectionHeaderView : UIView
--(id)initWithColor:(UIColor *)color font:(UIFont*)font title:(NSString*)title;
+
+- (id)initWithColor:(UIColor *)color font:(UIFont *)font title:(NSString *)title width:(CGFloat)width;
+
 @property (nonatomic) UIColor *color;
 @property (nonatomic) UIColor *textColor;
 @property (nonatomic) UIColor *fillColor;
@@ -18,4 +20,5 @@
 
 @property (nonatomic) BOOL progress;
 @property (nonatomic) CGFloat progressPercentage;
+
 @end

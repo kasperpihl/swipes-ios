@@ -5,6 +5,9 @@
 //  Created by Kasper Pihl Tornøe on 07/08/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
+#import <QuartzCore/QuartzCore.h>
+#import "SettingsCell.h"
+
 #define kDefTextColor tcolor(TextColor)
 #define kDefSettingFont KP_REGULAR(17)
 #define kDefValueFont KP_REGULAR(14)
@@ -15,22 +18,25 @@
 
 #define kSettingRightMargin 5
 #define kValBorderWidth 2
-#import "SettingsCell.h"
-#import <QuartzCore/QuartzCore.h>
+
 @interface SettingsCell ()
+
 @property (nonatomic) UILabel *settingLabel;
 @property (nonatomic) UILabel *valueLabel;
+
 @end
+
 @implementation SettingsCell
--(void)setSetting:(NSString *)setting value:(NSString *)value{
+
+-(void)setSetting:(NSString *)setting value:(NSString *)value
+{
     self.settingLabel.text = setting;
     self.valueLabel.text = value;
     CGSize textSize = sizeWithFont(value, self.valueFont);
     CGRectSetSize(self.valueLabel,textSize.width+2*kValueLabelSidePadding,textSize.height + 2*kValueLabelTopPadding);
-    self.valueLabel.center = CGPointMake(self.bounds.size.width-kRightLabelMargin-(self.valueLabel.frame.size.width/2), kCellHeight/2);
-    CGRectSetX(self.settingLabel, kRightLabelMargin);
-    CGRectSetWidth(self.settingLabel, self.valueLabel.frame.origin.x-kRightLabelMargin-kSettingRightMargin);
+    [self setNeedsLayout];
 }
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -68,6 +74,14 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.valueLabel.center = CGPointMake(self.bounds.size.width-kRightLabelMargin-(self.valueLabel.frame.size.width/2), kCellHeight/2);
+    CGRectSetX(self.settingLabel, kRightLabelMargin);
+    CGRectSetWidth(self.settingLabel, self.valueLabel.frame.origin.x-kRightLabelMargin-kSettingRightMargin);
 }
 
 @end

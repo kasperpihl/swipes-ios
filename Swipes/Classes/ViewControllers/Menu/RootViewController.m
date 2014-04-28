@@ -61,7 +61,7 @@
         ScheduleViewController *vc1 = [[ScheduleViewController alloc] init];
         TodayViewController *vc2 = [[TodayViewController alloc] init];
         DoneViewController *vc3 = [[DoneViewController alloc] init];
-        vc1.view.autoresizingMask = vc2.view.autoresizingMask = vc3.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+        vc1.view.autoresizingMask = vc2.view.autoresizingMask = vc3.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
         KPSegmentedViewController *menuViewController = [[KPSegmentedViewController alloc] initWithViewControllers:@[vc1,vc2,vc3]];
         _menuViewController = menuViewController;
     }
@@ -113,13 +113,14 @@
         else{
             [ANALYTICS tagEvent:@"Logged In" options:options];
         }
-        if([PFFacebookUtils isLinkedWithUser:user]){
-            if(!user.email){
+        if ([PFFacebookUtils isLinkedWithUser:user]){
+            if (!user.email){
                 NSLog(@"fetching");
                 [self fetchDataFromFacebook];
             }
         }
         else{
+            
         }
         [ANALYTICS updateIdentity];
         [self changeToMenu:KPMenuHome animated:YES];
@@ -137,17 +138,23 @@
     }
     
 }
+
 // Sent to the delegate when a PFUser is logged in.
-- (void)loginViewController:(LoginViewController *)logInController didLoginUser:(PFUser *)user {
+- (void)loginViewController:(LoginViewController *)logInController didLoginUser:(PFUser *)user
+{
     [self didLoginUser:user];
 }
--(void)walkthrough:(WalkthroughViewController *)walkthrough didFinishSuccesfully:(BOOL)successfully{
+
+-(void)walkthrough:(WalkthroughViewController *)walkthrough didFinishSuccesfully:(BOOL)successfully
+{
     [ANALYTICS popView];
     [walkthrough removeFromParentViewController];
     [OVERLAY popViewAnimated:YES];
 }
+
 #pragma mark - Public API
--(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated{
+-(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated
+{
     UIViewController *viewController;
     switch(menu) {
         case KPMenuLogin:{
@@ -170,6 +177,7 @@
     //CGRectSetHeight(self.drawerViewController.view,viewController.view.frame.size.height-100);
     [self.drawerViewController setCenterViewController:viewController];
 }
+
 static RootViewController *sharedObject;
 +(RootViewController *)sharedInstance{
     if(!sharedObject){
@@ -177,22 +185,27 @@ static RootViewController *sharedObject;
     }
     return sharedObject;
 }
--(void)logOut{
+
+-(void)logOut
+{
     [PFUser logOut];
     [[KPParseCoreData sharedInstance] clearAndDeleteData];
     [kHints reset];
     [self resetRoot];
-    //[self.drawerViewController closeDrawerAnimated:YES completion:nil];
-    
+
 }
--(void)resetRoot{
+
+-(void)resetRoot
+{
     self.menuViewController = nil;
     [self setupAppearance];
     [self.settingsViewController renderSubviews];
     //[self.sideMenu hide];
     
 }
--(void)proWithMessage:(NSString*)message{
+
+-(void)proWithMessage:(NSString*)message
+{
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     [PlusAlertView alertInView:window message:message block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
@@ -200,10 +213,12 @@ static RootViewController *sharedObject;
         }
     }];
 }
+
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
     //handle any error
     NSString *event = @"Share tasks failed";
-    if(result == MFMailComposeResultSent) event = @"Share tasks sent";
+    if (result == MFMailComposeResultSent)
+        event = @"Share tasks sent";
     NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
     [ANALYTICS tagEvent:event options:@{@"Number of Tasks":@(tasks.count)}];
     [controller dismissViewControllerAnimated:YES completion:nil];
@@ -229,6 +244,7 @@ static RootViewController *sharedObject;
         [ANALYTICS tagEvent:@"Mail not available" options:nil];
     }
 }
+
 -(void)accountAlert{
     KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:@"Register for Swipes to safely back up your data and get Swipes Plus" block:^(BOOL succeeded, NSError *error) {
         [BLURRY dismissAnimated:YES];
@@ -245,6 +261,7 @@ static RootViewController *sharedObject;
         [self accountAlert];
         return;
     }
+
     UpgradeViewController *viewController = [[UpgradeViewController alloc]init];
     viewController.delegate = self;
     [self addChildViewController:viewController];
@@ -252,38 +269,48 @@ static RootViewController *sharedObject;
     [ANALYTICS tagEvent:@"Upgrade to Plus" options:nil];
     [ANALYTICS pushView:@"Upgrade to Plus"];
 }
--(void)walkthrough{
+
+-(void)walkthrough
+{
     WalkthroughViewController *viewController = [[WalkthroughViewController alloc]init];
     viewController.delegate = self;
     [self addChildViewController:viewController];
     [OVERLAY pushView:viewController.view animated:YES];
     [ANALYTICS pushView:@"Walkthrough"];
 }
--(void)closedUpgradeViewController:(UpgradeViewController *)viewController{
+
+-(void)closedUpgradeViewController:(UpgradeViewController *)viewController
+{
     [ANALYTICS popView];
     [viewController removeFromParentViewController];
     [OVERLAY popViewAnimated:YES];
 }
--(void)openApp{
+
+-(void)openApp
+{
     [kSettings refreshGlobalSettingsForce:NO];
     if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
         [OVERLAY popAllViewsAnimated:NO];
         [self resetRoot];
     }
-    else if(self.lastClose){
+    else if(self.lastClose) {
         [[[self menuViewController] currentViewController] update];
         [[[self menuViewController] currentViewController] deselectAllRows:self];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"opened app" object:self];
 }
--(void)closeApp{
+
+-(void)closeApp
+{
     [[NSNotificationCenter defaultCenter] postNotificationName:@"closing app" object:self];
     self.lastClose = [NSDate date];
 }
+
 #pragma mark - Helping methods
 #pragma mark - ViewController methods
+
 -(void)setupAppearance{
-    self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     if(!sharedObject)
         sharedObject = self;
     
@@ -350,6 +377,7 @@ static RootViewController *sharedObject;
 -(void)triggerWelcome{
     [kHints triggerHint:HintWelcome];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -360,13 +388,9 @@ static RootViewController *sharedObject;
     
     BLURRY.delegate = self;
     self.settingsViewController = [[MenuViewController alloc] init];
+    self.drawerViewController = [[MMDrawerController alloc] initWithCenterViewController:self.menuViewController leftDrawerViewController:self.settingsViewController];
+    self.drawerViewController.maximumLeftDrawerWidth = self.view.bounds.size.width;
 
-    self.drawerViewController = [[MMDrawerController alloc] init];
-    [self.drawerViewController setCenterViewController:self.menuViewController];
-    [self.drawerViewController setLeftDrawerViewController:self.settingsViewController];
-    
-#warning Stanimir I used 320 here :D sorry
-    [self.drawerViewController setMaximumLeftDrawerWidth:320];
     [self.drawerViewController setDrawerVisualStateBlock:^(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible) {
         UIViewController * sideDrawerViewController;
         if(drawerSide == MMDrawerSideLeft){
@@ -380,8 +404,9 @@ static RootViewController *sharedObject;
     
     [self.drawerViewController setShowsShadow:NO];
     [self.drawerViewController setShouldStretchDrawer:YES];
-    [self.drawerViewController setAnimationVelocity:1240];
+    [self.drawerViewController setAnimationVelocity:self.drawerViewController.maximumLeftDrawerWidth * 3];
     [self pushViewController:self.drawerViewController animated:NO];
+    
     
     [self setupAppearance];
     
@@ -393,9 +418,11 @@ static RootViewController *sharedObject;
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
 }
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     clearNotify();
 }
+
 @end

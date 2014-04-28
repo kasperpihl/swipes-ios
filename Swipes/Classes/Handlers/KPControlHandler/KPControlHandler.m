@@ -61,10 +61,12 @@
         
         
         KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, ADD_TOOLBAR_HEIGHT) items:nil delegate:self];
+        addToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         addToolbar.font = iconFont(41);
         addToolbar.titleColor = tcolor(TextColor);
         addToolbar.titleHighlightString = @"Full";
         addToolbar.items = @[@"roundAdd"];
+
         addToolbar.tag = ADD_TOOLBAR_TAG;
         [addToolbar setTopInset:-addToolbar.frame.size.height*0.05];
         
@@ -73,6 +75,7 @@
         
         
         KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:nil delegate:self];
+        editToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         editToolbar.tag = EDIT_TOOLBAR_TAG;
         editToolbar.font = iconFont(23);
         editToolbar.titleColor = tcolor(TextColor);

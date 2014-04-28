@@ -27,7 +27,10 @@
 #import "UIImage+Blur.h"
 #import "SlowHighlightIcon.h"
 #import "SettingsHandler.h"
+
 #import "HintHandler.h"
+#import "UIView+Utilities.h"
+
 #import "NotificationHandler.h"
 
 #import "UserHandler.h"
@@ -113,6 +116,7 @@
     //[[self currentViewController].itemHandler clearAll];
     
     AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.view.bounds];
+    addPanel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     addPanel.addDelegate = self;
     addPanel.tags = [KPTag allTagsAsStrings];
     BLURRY.showPosition = PositionBottom;
@@ -134,6 +138,7 @@
     self.selectedItems = items;
     //[self show:NO controlsAnimated:YES];
     KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:viewController.view.bounds andTags:[KPTag allTagsAsStrings]];
+    tagView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     tagView.delegate = self;
     tagView.tagView.tagDelegate = self;
     BLURRY.showPosition = PositionBottom;
@@ -261,7 +266,7 @@
 		}];
         self.view.layer.masksToBounds = YES;
         
-        self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, TOP_HEIGHT)];
+        self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, TOP_HEIGHT)];
         self.ios7BackgroundView.backgroundColor = CLEAR;
         [self.ios7BackgroundView addSubview:self.segmentedControl];
         UIButton *accountButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.view.frame.size.width-CELL_LABEL_X, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
@@ -304,7 +309,8 @@
         [self showBackground:backgroundMode animated:YES];
     }
 }
--(void)showBackground:(BOOL)show animated:(BOOL)animated{
+-(void)showBackground:(BOOL)show animated:(BOOL)animated
+{
     CGFloat targetAlpha = show ? 1.0f : 0.0f;
     CGFloat duration = show ? 2.5f : 0.25f;
     [UIView animateWithDuration:duration animations:^{
@@ -314,15 +320,20 @@
         }
     }];
 }
--(void)updatedDailyImage{
+
+-(void)updatedDailyImage
+{
     UIImage *newDailyImage = [[kSettings getDailyImage] rn_boxblurImageWithBlur:0.5f exclusionPath:nil];
-    if(self.backgroundImage.alpha == 0) [self.backgroundImage setImage:newDailyImage];
+    if (self.backgroundImage.alpha == 0) {
+        [self.backgroundImage setImage:newDailyImage];
+    }
     else{
         [UIView transitionWithView:self.view duration:2.5f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             [self.backgroundImage setImage:newDailyImage];
         } completion:nil];
     }
 }
+
 - (void)updateFromSync:(NSNotification *)notification
 {
     
@@ -339,7 +350,9 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
 }
--(void)viewDidLoad{
+
+-(void)viewDidLoad
+{
     [super viewDidLoad];
     notify(@"updated daily image", updatedDailyImage);
     notify(@"updated sync",updateFromSync:);
@@ -358,9 +371,9 @@
     [self.view addSubview:self.backgroundImage];
     
     /* Content view for ToDo list view controllers */
-    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, 320, self.view.bounds.size.height-TOP_HEIGHT)];
-    self.view.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-    contentView.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height-TOP_HEIGHT)];
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     contentView.layer.masksToBounds = YES;
     contentView.tag = CONTENT_VIEW_TAG;
     [self.view addSubview:contentView];
@@ -430,4 +443,12 @@
 -(void)dealloc{
     clearNotify();
 }
+
+// NEWCODE
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    CGRectSetCenterX(self.segmentedControl, self.view.frame.size.width / 2);
+}
+
 @end

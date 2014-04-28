@@ -16,11 +16,9 @@
 
 #define TITLE_HEIGHT 44
 #define TITLE_TOP_MARGIN 18
-#define TITLE_WIDTH (320)
 #define TITLE_BOTTOM_MARGIN (10)
 #define CONTAINER_INIT_HEIGHT (TITLE_HEIGHT + TITLE_TOP_MARGIN + TITLE_BOTTOM_MARGIN)
 
-#define TAGS_LABEL_RECT CGRectMake(LABEL_X,0,320-LABEL_X-10,500)
 
 #define NOTES_PADDING 13.5
 #define kRepeatPickerHeight 70
@@ -55,6 +53,7 @@
 #import "SectionHeaderView.h"
 
 #import "SchedulePopup.h"
+#import "UIView+Utilities.h"
 #import "ToDoViewController+ViewHelpers.h"
 
 #import "SubtasksViewController.h"
@@ -416,7 +415,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 
 -(void)updateTags{
-    self.tagsLabel.frame = TAGS_LABEL_RECT;
+    self.tagsLabel.frame = CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X - 10, 500);
     NSString *tagsString = self.model.tagString;
     if(!tagsString || tagsString.length == 0){
         tagsString = @"Set tags";
@@ -467,6 +466,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.notesView.frame = CGRectSetSize(self.notesView, self.view.frame.size.width-LABEL_X-10, 1500);
     //CGSize contentSize = [self.notesView sizeThatFits:CGSizeMake(self.notesView.frame.size.width, 500)];
     [self.notesView sizeToFit];
+//    DLogFrame(self.notesView);
+
     CGRectSetHeight(self.notesView,self.notesView.frame.size.height+20);
     CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
 }
@@ -568,8 +569,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
     
     self.repeatedContainer.hidden = !self.model.schedule;
-    if(self.model.completionDate) self.repeatedContainer.hidden = YES;
-    if(!self.repeatedContainer.hidden){
+    if (self.model.completionDate)
+        self.repeatedContainer.hidden = YES;
+    
+    if (!self.repeatedContainer.hidden){
         CGFloat repeatHeight = (self.activeEditMode == KPEditModeRepeat) ? SCHEDULE_ROW_HEIGHTS+kRepeatPickerHeight : SCHEDULE_ROW_HEIGHTS;
         CGRectSetHeight(self.repeatedContainer, repeatHeight);
         CGRectSetY(self.repeatedContainer, tempHeight);
@@ -653,11 +656,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.activeEditMode = KPEditModeAlarm;
     SchedulePopup *popup = [SchedulePopup popupWithFrame:self.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type) {
         [BLURRY dismissAnimated:YES];
-        if(button == KPScheduleButtonCancel) return;
+        if (button == KPScheduleButtonCancel)
+            return;
         else if(button == KPScheduleButtonLocation && chosenLocation){
             [KPToDo notifyToDos:@[self.model] onLocation:chosenLocation type:type save:YES];
         }
-        else{
+        else {
             // TODO: Fix the edit mode
             [KPToDo scheduleToDos:@[self.model] forDate:chosenDate save:YES];
             //[KPToDo scheduleToDos:@[self.parent.showingModel] forDate:chosenDate save:YES];
@@ -675,7 +679,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 {
     self.activeEditMode = KPEditModeNotes;
     CGFloat extra = (OSVER >= 7) ? 20 : 0;
-    NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, 0+extra, 320, self.view.frame.size.height-extra)];
+    NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, extra, self.view.frame.size.width, self.view.frame.size.height - extra)];
+    notesView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [notesView setNotesText:self.model.notes title:self.model.title];
     notesView.delegate = self;
     BLURRY.showPosition = PositionBottom;
@@ -718,7 +723,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 -(id)init{
     self = [super init];
-    if(self){
+    if (self){
         self.view.tag = SHOW_ITEM_TAG;
         self.view.backgroundColor = tcolor(BackgroundColor);
         
@@ -726,7 +731,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         NSInteger startY = (OSVER >= 7) ? 20 : 0;
         NSInteger toolbarWidth = 90;
         NSInteger leftPadding = 45;
-        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(320-toolbarWidth-leftPadding, startY, toolbarWidth, TOOLBAR_HEIGHT) items:nil delegate:self];
+        self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(self.view.frame.size.width - toolbarWidth - leftPadding, startY, toolbarWidth, TOOLBAR_HEIGHT) items:nil delegate:self];
+        self.toolbarEditView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         self.toolbarEditView.font = iconFont(23);
         self.toolbarEditView.titleColor = tcolor(TextColor);
         self.toolbarEditView.titleHighlightString = @"Full";
@@ -745,21 +751,24 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.backButton = backButton;
         
         self.cell = [[MCSwipeTableViewCell alloc] init];
-        self.cell.frame = CGRectMake(0, CGRectGetMaxY(self.toolbarEditView.frame), 320, self.view.bounds.size.height-CGRectGetMaxY(self.toolbarEditView.frame));
+        self.cell.frame = CGRectMake(0, CGRectGetMaxY(self.toolbarEditView.frame), self.view.frame.size.width,
+                                     self.view.bounds.size.height - CGRectGetMaxY(self.toolbarEditView.frame));
         self.cell.shouldRegret = YES;
         self.cell.delegate = self;
         self.cell.bounceAmplitude = 0;
         self.cell.mode = MCSwipeTableViewCellModeExit;
         UIView *contentView = [[UIView alloc] initWithFrame:self.cell.bounds];
+        contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         contentView.backgroundColor = tcolor(BackgroundColor);
         contentView.tag = CONTENT_VIEW_TAG;
         
         self.titleContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, CONTAINER_INIT_HEIGHT)];
-        self.titleContainerView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin);
+        self.titleContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         
         CGFloat buttonWidth = BUTTON_HEIGHT;
         
-        self.textView = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(CELL_LABEL_X,  TITLE_TOP_MARGIN, TITLE_WIDTH-buttonWidth-CELL_LABEL_X, TITLE_HEIGHT)];
+        self.textView = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(CELL_LABEL_X, TITLE_TOP_MARGIN, self.view.frame.size.width - buttonWidth - CELL_LABEL_X, TITLE_HEIGHT)];
+        self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.textView.contentInset = UIEdgeInsetsMake(0, -8, 0, -8);
         self.textView.minNumberOfLines = 1;
         self.textView.backgroundColor = CLEAR;
@@ -778,7 +787,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         UIButton *priorityButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, dotWidth, CONTAINER_INIT_HEIGHT)];
         priorityButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         [priorityButton addTarget:self action:@selector(pressedPriority) forControlEvents:UIControlEventTouchUpInside];
-        CGRectSetCenter(dotView, dotWidth/2, self.textView.frame.size.height/2+TITLE_TOP_MARGIN);
+        CGRectSetCenter(dotView, dotWidth/2, self.textView.frame.size.height / 2 + TITLE_TOP_MARGIN);
         dotView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin);
         [priorityButton addSubview:dotView];
         [self.titleContainerView addSubview:priorityButton];
@@ -787,8 +796,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         
         
-        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, contentView.frame.size.height)];
-        self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, contentView.frame.size.height)];
+        self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         self.scrollView.scrollEnabled = YES;
         self.scrollView.alwaysBounceVertical = YES;
         
@@ -796,9 +805,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
          Alarm container and button!
          */
-        self.alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
+        self.alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
+        self.alarmContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.scheduleImageIcon = [self addAndGetImage:@"editSchedule"  inView:self.alarmContainer];
-        self.alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.alarmContainer.frame.size.height)];
+        self.alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X, self.alarmContainer.frame.size.height)];
+        self.alarmLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.alarmLabel.backgroundColor = CLEAR;
         [self setColorsFor:self.alarmLabel];
         self.alarmLabel.font = EDIT_TASK_TEXT_FONT;
@@ -808,36 +819,43 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         longPressGestureRecognizer.allowableMovement = 44.0f;
         longPressGestureRecognizer.minimumPressDuration = 0.7f;
         [alarmButton addGestureRecognizer:longPressGestureRecognizer];
-        
         [self.scrollView addSubview:self.alarmContainer];
         
-        self.repeatedContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
+        /*
+         Repeats!
+         */
+        self.repeatedContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
+        self.repeatedContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.repeatedContainer.userInteractionEnabled = YES;
         self.repeatedContainer.layer.masksToBounds = YES;
         
-        self.repeatPicker = [[KPRepeatPicker alloc] initWithHeight:50 selectedDate:[NSDate date] option:RepeatNever];
+        self.repeatPicker = [[KPRepeatPicker alloc] initWithWidth:self.view.frame.size.width height:50 selectedDate:[NSDate date] option:RepeatNever];
         self.repeatPicker.delegate = self;
-        CGRectSetY(self.repeatPicker, self.repeatedContainer.frame.size.height + (kRepeatPickerHeight-50)/2);
+        CGRectSetY(self.repeatPicker, self.repeatedContainer.frame.size.height + (kRepeatPickerHeight - 50) / 2);
         [self.repeatedContainer addSubview:self.repeatPicker];
         
+
         [self addAndGetImage:@"editRepeat" inView:self.repeatedContainer];
-        self.repeatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.repeatedContainer.frame.size.height)];
+        self.repeatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X, self.repeatedContainer.frame.size.height)];
+        self.repeatedLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.repeatedLabel.backgroundColor = CLEAR;
         [self setColorsFor:self.repeatedLabel];
         self.repeatedLabel.font = EDIT_TASK_TEXT_FONT;
         [self.repeatedContainer addSubview:self.repeatedLabel];
         UIButton *clickButton = [self addClickButtonToView:self.repeatedContainer action:@selector(pressedRepeat:)];
-        clickButton.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
+        clickButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.scrollView addSubview:self.repeatedContainer];
         
         /*
          Tags Container with button!
          */
-        self.tagsContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, SCHEDULE_ROW_HEIGHTS)];
+        self.tagsContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
+        self.tagsContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         //[self addSeperatorToView:self.tagsContainerView];
         [self addAndGetImage:@"editTags" inView:self.tagsContainerView];
         
-        self.tagsLabel = [[UILabel alloc] initWithFrame:TAGS_LABEL_RECT];
+        self.tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X - 10, 500)];
+        self.tagsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.tagsLabel.numberOfLines = 0;
         self.tagsLabel.font = EDIT_TASK_TEXT_FONT;
         self.tagsLabel.backgroundColor = [UIColor clearColor];
@@ -851,10 +869,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
          Evernote Container with button!
          */
-         self.evernoteContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
+         self.evernoteContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_ROW_HEIGHT)];
          [self addAndGetImage:@"editNotes" inView:self.evernoteContainer];
          
-         self.evernoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.evernoteContainer.frame.size.height)];
+         self.evernoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X, self.evernoteContainer.frame.size.height)];
          self.evernoteLabel.font = EDIT_TASK_TEXT_FONT;
          self.evernoteLabel.backgroundColor = CLEAR;
          [self setColorsFor:self.evernoteLabel];
@@ -868,10 +886,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
          Dropbox Container with button!
          
-         self.dropboxContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
+         self.dropboxContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_ROW_HEIGHT)];
          [self addAndGetImage:timageString(@"edit_notes_icon", @"_white", @"_black") inView:self.dropboxContainer];
          
-         self.dropboxLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, 320-LABEL_X, self.dropboxContainer.frame.size.height)];
+         self.dropboxLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X, self.dropboxContainer.frame.size.height)];
          self.dropboxLabel.font = EDIT_TASK_TEXT_FONT;
          self.dropboxLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
          self.dropboxLabel.backgroundColor = CLEAR;
@@ -885,10 +903,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
          Notes view
          
-        self.notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, DEFAULT_ROW_HEIGHT)];
-        [self addAndGetImage:timageStringBW(@"edit_notes_icon") inView:self.notesContainer];
+         self.notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_ROW_HEIGHT)];
+         self.notesContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self addAndGetImage:@"editNotes" inView:self.notesContainer];
-        self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, 320-LABEL_X-10, 500)];
+         self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, self.view.frame.size.width - LABEL_X - 200, 500)];
+         self.notesView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.notesView.font = EDIT_TASK_TEXT_FONT;
         self.notesView.contentInset = UIEdgeInsetsMake(0,-5,0,0);
         self.notesView.editable = NO;
@@ -906,8 +925,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.cell.contentView addSubview:contentView];
         [self.view addSubview:self.cell];
         self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
-        
-        self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[UIColor greenColor] font:SECTION_HEADER_FONT title:@"Test"];
+
+        self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[UIColor greenColor] font:SECTION_HEADER_FONT title:@"Test" width:self.view.frame.size.width];
         CGRectSetHeight(self.sectionHeader, 5);
         self.sectionHeader.fillColor = tcolor(BackgroundColor);
         CGRectSetY(self.sectionHeader, CGRectGetMaxY(self.toolbarEditView.frame));
@@ -1048,7 +1067,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 
 -(void)setColorsFor:(id)object{
-    if([object respondsToSelector:@selector(setTextColor:)]) [object setTextColor:tcolor(TextColor)];
+    if([object respondsToSelector:@selector(setTextColor:)])
+        [object setTextColor:tcolor(TextColor)];
     //if([object respondsToSelector:@selector(setHighlightedTextColor:)]) [object setHighlightedTextColor:EDIT_TASK_GRAYED_OUT_TEXT];
 }
 
@@ -1089,6 +1109,16 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+// NEWCODE
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    CGFloat width = MIN(self.view.bounds.size.width, self.view.bounds.size.height);
+//    CGRectSetWidth(self.repeatedContainer, width);
+    CGRectSetWidth(self.repeatPicker, width);
+//    [self.view explainSubviews];
 }
 
 @end

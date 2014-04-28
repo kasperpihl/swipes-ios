@@ -10,9 +10,11 @@
 #import "KPBlurry.h"
 #import "UtilityClass.h"
 #import "KPAddView.h"
+
 #import "NSDate-Utilities.h"
 #import "KPTagList.h"
 
+#import "UIView+Utilities.h"
 #import "DotView.h"
 #define ADD_VIEW_TAG 1
 #define BACKGROUND_VIEW_TAG 2
@@ -41,8 +43,11 @@
 @property (nonatomic) BOOL shouldRemove;
 @property (nonatomic) BOOL isRotated;
 @end
-@implementation AddPanelView
+@implementation AddPanelView {
+    BOOL _justShown;
+}
 -(void)blurryWillShow:(KPBlurry *)blurry{
+    _justShown = YES;
     [self.addView.textField becomeFirstResponder];
 }
 -(void)blurryWillHide:(KPBlurry *)blurry{
@@ -85,7 +90,8 @@
 }
 -(void)keyboardWillShow:(NSNotification*)notification{
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGFloat targetHeight = keyboardFrame.size.height + self.addView.frame.size.height;
+    CGFloat kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
+    CGFloat targetHeight = kbdHeight + self.addView.frame.size.height;
     CGFloat currentHeight = self.frame.size.height;
     
     CGRectSetSize(self.scrollView, self.tagList.frame.size.width, MIN(self.tagList.frame.size.height, currentHeight-targetHeight-SEPERATOR_SPACING-(OSVER >= 7 ? 20 : 0)) );
@@ -94,10 +100,7 @@
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
-    
-    
-    
-    
+
     if(targetHeight != currentHeight){
         CGRectSetY(self.scrollView, currentHeight-targetHeight-self.scrollView.frame.size.height-SEPERATOR_SPACING);
         //CGFloat deltaY = currentHeight - targetHeight;
@@ -105,10 +108,9 @@
         //CGRectSetHeight(self, targetHeight);
     }
     
-    CGFloat yForAdd = self.frame.size.height-self.addView.frame.size.height-keyboardFrame.size.height;
+    CGFloat yForAdd = self.frame.size.height - self.addView.frame.size.height - kbdHeight;
     CGRectSetY(self.addView, yForAdd);
-    CGRectSetCenterY(self.priorityButton, yForAdd+self.priorityButton.frame.size.height/2);
-    
+    CGRectSetCenterY(self.priorityButton, yForAdd + self.priorityButton.frame.size.height / 2);
     [UIView commitAnimations];
 }
 -(void)pressedPriority{
@@ -155,6 +157,7 @@
         DotView *dotView = [[DotView alloc] init];
         dotView.dotColor = tcolor(TasksColor);
         UIButton *priorityButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, dotWidth, ADD_VIEW_HEIGHT)];
+        priorityButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         [priorityButton addTarget:self action:@selector(pressedPriority) forControlEvents:UIControlEventTouchUpInside];
         CGRectSetCenter(dotView, dotWidth/2, ADD_VIEW_HEIGHT/2);
         
@@ -162,8 +165,9 @@
         [self addSubview:priorityButton];
         self.priorityButton = priorityButton;
         self.dotView = dotView;
-        
-        KPAddView *addView = [[KPAddView alloc] initWithFrame:CGRectMake(dotWidth, 0, frame.size.width-dotWidth, ADD_VIEW_HEIGHT)];
+
+        KPAddView *addView = [[KPAddView alloc] initWithFrame:CGRectMake(dotWidth, frame.size.height - ADD_VIEW_HEIGHT, frame.size.width - dotWidth, ADD_VIEW_HEIGHT)];
+        addView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         addView.tag = ADD_VIEW_TAG;
         addView.userInteractionEnabled = YES;
         addView.textField.placeholder = @"Add a new task";
@@ -175,9 +179,10 @@
         
         self.addView = (KPAddView*)[self viewWithTag:ADD_VIEW_TAG];
         //CGRectSetHeight(self, KEYBOARD_HEIGHT+self.addView.frame.size.height);
-        CGFloat yForAdd = self.frame.size.height-self.addView.frame.size.height;
+
+        CGFloat yForAdd = self.frame.size.height - self.addView.frame.size.height;
         CGRectSetY(self.addView, yForAdd);
-        CGRectSetCenterY(self.priorityButton, yForAdd+self.priorityButton.frame.size.height/2);
+        CGRectSetCenterY(self.priorityButton, yForAdd + self.priorityButton.frame.size.height / 2);
         
         NSDate *lastAdd = (NSDate *)[[NSUserDefaults standardUserDefaults] objectForKey:kAddTextTimestampKey];
         if(lastAdd && [lastAdd minutesBeforeDate:[NSDate date]] < 15){
@@ -185,10 +190,27 @@
             if(lastTask)
                 [self.addView setText:lastTask];
         }
+
     }
     return self;
 }
+
 -(void)dealloc{
     clearNotify();
 }
+
+// NEWCODE
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    // it is really complicated to recalc the new keyboard frame
+    // FIXME: maybe someday we should do it anyway
+    if (_justShown) {
+        _justShown = NO;
+    }
+    else {
+        [self.addView.textField resignFirstResponder];
+    }
+}
+
 @end

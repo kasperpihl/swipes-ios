@@ -73,7 +73,7 @@
         self.searchField.textColor = tcolor(TextColor);
         self.searchField.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.searchField.returnKeyType = UIReturnKeyDone;
-        self.searchField.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+        self.searchField.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
         self.searchField.placeholder = @"Search";
         self.searchField.borderStyle = UITextBorderStyleNone;
         self.searchField.delegate = self;
@@ -97,12 +97,14 @@
         
         /* Instantiate filter view */
         UIView *filterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 10)];
+        filterView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         filterView.tag = FILTER_VIEW_TAG;
         filterView.hidden = YES;
         
         
         KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
         tagList.emptyText = @"No tags assigned";
+        tagList.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         //UIColor *tagColor = gray(0,1);
         //tagList.tagBackgroundColor = CLEAR;
         //tagList.selectedTagBackgroundColor = tagColor;
@@ -133,7 +135,7 @@
         [filterButton setTitle:iconString(@"actionTagFull") forState:UIControlStateHighlighted];
         [filterButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         filterButton.tag = FILTER_BUTTON_TAG;
-        filterButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+        filterButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         filterButton.frame = CGRectMake(self.frame.size.width-buttonSize, 0, buttonSize, buttonSize);
         //[filterButton setBackgroundImage:[UtilityClass imageWithColor:SWIPES_COLOR] forState:UIControlStateNormal];
         [self addSubview:filterButton];
@@ -147,6 +149,7 @@
         [clearFilterButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
         [clearFilterButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [clearFilterButton addTarget:self action:@selector(pressedClearFilter:) forControlEvents:UIControlEventTouchUpInside];
+        clearFilterButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [self addSubview:clearFilterButton];
         clearFilterButton.hidden = YES;
         self.clearButton = clearFilterButton;

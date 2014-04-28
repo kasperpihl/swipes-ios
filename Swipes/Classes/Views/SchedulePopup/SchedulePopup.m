@@ -700,7 +700,8 @@ typedef enum {
         closeButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
         [self addSubview:closeButton];
         
-        UILabel *helpLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
+        UILabel *helpLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 20)];
+        helpLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         helpLabel.backgroundColor = CLEAR;
         helpLabel.textColor = tcolorF(BackgroundColor,ThemeDark);
         helpLabel.textAlignment = NSTextAlignmentCenter;

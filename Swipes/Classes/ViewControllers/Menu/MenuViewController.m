@@ -20,6 +20,7 @@
 #import "AnalyticsHandler.h"
 #import "UserHandler.h"
 #import "KPAccountAlert.h"
+#import "UIView+Utilities.h"
 
 #import "KPParseCoreData.h"
 #import "PlusAlertView.h"
@@ -35,8 +36,11 @@
 #define kVerticalGridNumber 3
 #define kHorizontalGridNumber 4
 #define kGridButtonPadding 0
+
 @interface MenuViewController () <MFMailComposeViewControllerDelegate>
-@property (nonatomic) IBOutletCollection(UIView) NSArray *seperators;
+
+@property (nonatomic, strong) IBOutletCollection(UIView) NSMutableArray *seperatorsH;
+@property (nonatomic, strong) IBOutletCollection(UIView) NSMutableArray *seperatorsV;
 @property (nonatomic) IBOutletCollection(UIButton) NSArray *menuButtons;
 @property (nonatomic) UIButton *backButton;
 @property (nonatomic) NSMutableArray *viewControllers;
@@ -44,33 +48,50 @@
 @property (nonatomic) UIView *gridView;
 @property (nonatomic) UILabel *syncLabel;
 @property (nonatomic) UIPanGestureRecognizer *menuPanning;
+
 @end
 
 @implementation MenuViewController
--(NSMutableArray *)viewControllers{
-    if(!_viewControllers) _viewControllers = [NSMutableArray array];
+
+-(NSMutableArray *)viewControllers
+{
+    if (!_viewControllers)
+        _viewControllers = [NSMutableArray array];
     return _viewControllers;
 }
--(KPMenuButtons)buttonForTag:(NSInteger)tag{
+
+-(KPMenuButtons)buttonForTag:(NSInteger)tag
+{
     return tag - kMenuButtonStartTag;
 }
--(NSInteger)tagForButton:(KPMenuButtons)button{
+
+-(NSInteger)tagForButton:(KPMenuButtons)button
+{
     return kMenuButtonStartTag + button;
 }
--(void)pressedBack:(UIButton*)backButton{
-    if(self.viewControllers.count > 0){
+
+-(void)pressedBack:(UIButton*)backButton
+{
+    if (self.viewControllers.count > 0) {
         [self popViewControllerAnimated:YES];
         return;
     }
-    else [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:^(BOOL finished) {
-        
-    }];
+    else {
+        [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
+    }
 }
--(void)renderSubviews{
+
+- (void)renderSubviews
+{
     [self.backButton removeFromSuperview];
-    for(UIView *view in self.menuButtons)
+    
+    for (UIView *view in self.menuButtons)
         [view removeFromSuperview];
-    for(UIView *view in self.seperators)
+    
+    for (UIView *view in self.seperatorsH)
+        [view removeFromSuperview];
+    
+    for (UIView *view in self.seperatorsV)
         [view removeFromSuperview];
     
     CGFloat numberOfButtons = kHorizontalGridNumber * kVerticalGridNumber;
@@ -96,48 +117,65 @@
     
     self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0,startY,self.view.bounds.size.width-2*kGridMargin,self.view.bounds.size.height-startY)];
     
+    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 294, 392)];
     
     CGFloat gridWidth = self.gridView.bounds.size.width;
-    CGFloat gridItemWidth = self.gridView.bounds.size.width/kVerticalGridNumber;
-    CGRectSetHeight(self.gridView, numberOfRows*gridItemWidth);
+    CGFloat gridItemWidth = gridWidth / kVerticalGridNumber;
+//    CGRectSetHeight(self.gridView, numberOfRows * gridItemWidth);
     
     CGFloat gridHeight = self.gridView.bounds.size.height;
     CGFloat numberOfGrids = gridHeight / gridItemWidth;
     
-    NSMutableArray *seperatorArray = [NSMutableArray array];
-    
-    for(NSInteger i = 1 ; i < kVerticalGridNumber ; i++){
-        UIView *verticalSeperatorView = [self seperatorWithSize:gridHeight-(kSeperatorMargin*2) vertical:YES];
-        verticalSeperatorView.frame = CGRectSetPos(verticalSeperatorView.frame, self.gridView.bounds.size.width/kVerticalGridNumber*i,kSeperatorMargin);
+    self.seperatorsV = [NSMutableArray array];
+    for (NSInteger i = 1; i < kVerticalGridNumber; i++) {
+        UIView *verticalSeperatorView = [self seperatorWithSize:gridHeight - (kSeperatorMargin * 2) vertical:YES];
+        verticalSeperatorView.frame = CGRectSetPos(verticalSeperatorView.frame, gridItemWidth * i, kSeperatorMargin);
         [self.gridView addSubview:verticalSeperatorView];
-        [seperatorArray addObject:verticalSeperatorView];
+        [self.seperatorsV addObject:verticalSeperatorView];
     }
-    for(NSInteger i = 1 ; i < numberOfRows ; i++){
-        UIView *horizontalSeperatorView = [self seperatorWithSize:gridWidth-(kSeperatorMargin*2) vertical:NO];
+    
+    self.seperatorsH = [NSMutableArray array];
+    for (NSInteger i = 1; i < numberOfRows; i++) {
+        UIView *horizontalSeperatorView = [self seperatorWithSize:gridWidth - (kSeperatorMargin * 2) vertical:NO];
         horizontalSeperatorView.frame = CGRectSetPos(horizontalSeperatorView.frame,kSeperatorMargin, gridHeight/numberOfGrids*i);
         [self.gridView addSubview:horizontalSeperatorView];
-        [seperatorArray addObject:horizontalSeperatorView];
+        [self.seperatorsH addObject:horizontalSeperatorView];
     }
-    self.seperators = [seperatorArray copy];
+    
     UIButton *actualButton;
     NSMutableArray *menuButtons = [NSMutableArray array];
-    for(NSInteger i = 1 ; i <= numberOfButtons ; i++){
+    
+    for (NSInteger i = 1; i <= numberOfButtons; i++) {
         KPMenuButtons button = i;
         actualButton = [self buttonForMenuButton:button];
-        if(button == KPMenuButtonScheme)
+        if (button == KPMenuButtonScheme)
             self.schemeButton = (MenuButton*)actualButton;
         [self.gridView addSubview:actualButton];
         [menuButtons addObject:actualButton];
     }
+    
     self.menuButtons = [menuButtons copy];
     [self.view addSubview:self.gridView];
-    self.gridView.center = CGPointMake(self.view.frame.size.width/2, (self.view.frame.size.height)/2);
-    self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds)+ 10, self.gridView.frame.size.width, 20);
+    CGSize s = self.view.frame.size;
+    self.gridView.center = CGPointMake(s.width / 2, s.height / 2 - valForScreen(0, 20));
+    self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds) + 10, gridWidth, 20);
     self.syncLabel.textColor = tcolor(TextColor);
     [self.gridView addSubview:self.syncLabel];
     [self updateSchemeButton];
+
+    CGFloat backSpacing = 8.f;
+    CGFloat buttonSize = 44.0f;
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(s.width - buttonSize - backSpacing, startY, buttonSize, buttonSize)];
+    [backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
+    backButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    backButton.transform = CGAffineTransformMakeRotation(M_PI);
+    [self.view addSubview:backButton];
+    self.backButton = backButton;
 }
--(void)updateSchemeButton{
+
+-(void)updateSchemeButton
+{
     //BOOL isDarkTheme = (THEMER.currentTheme == ThemeDark);
     NSString *normalTitle = [self stringForMenuButton:KPMenuButtonScheme highlighted:YES];
     NSString *highlightTitle = [self stringForMenuButton:KPMenuButtonScheme highlighted:NO];
@@ -145,11 +183,12 @@
     
     [self.schemeButton.iconLabel setTitle:highlightTitle forState:UIControlStateHighlighted];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.syncLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.gridView.bounds)+ 10, self.gridView.frame.size.width, 20)];
+    self.syncLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.syncLabel.textAlignment = NSTextAlignmentCenter;
     self.syncLabel.backgroundColor = CLEAR;
     self.syncLabel.font = KP_REGULAR(16);
@@ -159,39 +198,46 @@
     
     self.menuPanning = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
 
-    UIView *panningView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-kGridMargin, 0, kGridMargin, self.view.bounds.size.height)];
+    UIView *panningView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - kGridMargin, 0, kGridMargin, self.view.bounds.size.height)];
     [panningView addGestureRecognizer:self.menuPanning];
     [self.view addSubview:panningView];
     notify(@"changed isPlus", changedIsPlus);
     notify(@"updated sync",updateSyncLabel);
     notify(@"changed theme", changedTheme);
 }
--(void)updateSyncLabel{
+
+-(void)updateSyncLabel
+{
     NSDate *lastSync = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSyncLocalDate"];
     NSString *timeString = @"Never";
-    if(lastSync){
+    if (lastSync) {
         timeString = [UtilityClass readableTime:lastSync showTime:YES];
     }
     NSString *syncOrBackup = kUserHandler.isPlus ? @"sync" : @"backup";
     self.syncLabel.text = [NSString stringWithFormat:@"Last %@: %@",syncOrBackup,timeString];
 }
+
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
     //[kSideMenu panGestureRecognized:sender];
     if([sender translationInView:sender.view].x < -10){
         [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
     }
 }
--(UIView*)seperatorWithSize:(CGFloat)size vertical:(BOOL)vertical{
+
+-(UIView*)seperatorWithSize:(CGFloat)size vertical:(BOOL)vertical
+{
     CGFloat width = (vertical) ? SEPERATOR_WIDTH : size;
     CGFloat height = (vertical) ? size : SEPERATOR_WIDTH;
     UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     seperator.backgroundColor = tcolor(TextColor);
     return seperator;
 }
+
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
     //handle any error
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
+
 -(void)popViewControllerAnimated:(BOOL)animated{
     NSInteger level = self.viewControllers.count;
     UIViewController *poppingViewController = [self.viewControllers lastObject];
@@ -216,9 +262,11 @@
         }];
     }];
     [self.viewControllers removeLastObject];
+    [self.view setNeedsLayout];
 }
 
--(void)pushViewController:(UIViewController*)viewController animated:(BOOL)animated{
+-(void)pushViewController:(UIViewController*)viewController animated:(BOOL)animated
+{
     NSInteger level = self.viewControllers.count;
     
     [self addChildViewController:viewController];
@@ -236,7 +284,9 @@
         CGRectSetY(viewController.view, 44);
         [self.view addSubview:viewController.view];
         [UIView animateWithDuration:0.2 animations:^{
-        } completion:^(BOOL finished) {
+        
+        }
+        completion:^(BOOL finished) {
             [UIView animateWithDuration:0.1 animations:^{
                 viewController.view.alpha = 1;
             }];
@@ -244,6 +294,7 @@
     }];
     [self.viewControllers addObject:viewController];
 }
+
 -(void)pressedMenuButton:(MenuButton*)sender{
     
     KPMenuButtons button = [self buttonForTag:sender.tag];
@@ -253,7 +304,7 @@
             BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
             UIColor *lampColor = hasNotificationsOn ? kLampOffColor : kLampOnColor;
             NSNumber *newSettingValue = hasNotificationsOn ? @NO : @YES;
-            if(hasNotificationsOn){
+            if (hasNotificationsOn) {
                 KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off notification" message:@"Are you sure you no longer want to receive alarms and reminders?" block:^(BOOL succeeded, NSError *error) {
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
@@ -389,6 +440,7 @@
                 [BLURRY dismissAnimated:YES];
                 if(succeeded){
                     [ROOT_CONTROLLER logOut];
+                    [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
                 }
             }];
             BLURRY.blurryTopColor = kSettingsBlurColor;
@@ -433,15 +485,18 @@
             break;
     }
 }
+
 -(void)changedTheme{
     //[self renderSubviews];
 }
+
 -(void)changedIsPlus{
     UIButton *upgradeButton = (UIButton*)[self.gridView viewWithTag:[self tagForButton:KPMenuButtonUpgrade]];
     if(upgradeButton){
         [upgradeButton setTitle:[self titleForMenuButton:KPMenuButtonUpgrade] forState:UIControlStateNormal];
     }
 }
+
 -(NSString *)titleForMenuButton:(KPMenuButtons)button{
     NSString *title;
     switch (button) {
@@ -513,9 +568,19 @@
             imageString = @"settingsTheme";
             break;
     }
-    if(highlighted) imageString = [imageString stringByAppendingString:@"Full"];
-    if(button == KPMenuButtonUpgrade && highlighted) imageString = @"settingsPlus";
+    if (highlighted)
+        imageString = [imageString stringByAppendingString:@"Full"];
+    if (button == KPMenuButtonUpgrade && highlighted)
+        imageString = @"settingsPlus";
     return iconString(imageString);
+}
+
+- (CGRect) frameForButton:(KPMenuButtons)button
+{
+    CGFloat width = self.gridView.frame.size.width / kVerticalGridNumber - (2 * kGridButtonPadding);
+    CGFloat x = ((button - 1) % kVerticalGridNumber) * self.gridView.frame.size.width / kVerticalGridNumber + kGridButtonPadding;
+    CGFloat y = floor((button - 1) / kVerticalGridNumber) * self.gridView.frame.size.width / kVerticalGridNumber + kGridButtonPadding;
+    return CGRectMake(x, y, width, width);
 }
 -(void)longPress:(UILongPressGestureRecognizer*)recognizer{
     if(recognizer.state == UIGestureRecognizerStateBegan){
@@ -524,13 +589,6 @@
                 [KPCORE hardSync];
         }];
     }
-}
--(CGRect)frameForButton:(KPMenuButtons)button{
-    CGFloat width = self.gridView.frame.size.width/kVerticalGridNumber-(2*kGridButtonPadding);
-    CGFloat x = ((button-1) % kVerticalGridNumber) * self.gridView.frame.size.width/kVerticalGridNumber + kGridButtonPadding;
-    
-    CGFloat y = floor((button-1) / kVerticalGridNumber) * self.gridView.frame.size.width/kVerticalGridNumber + kGridButtonPadding;
-    return CGRectMake(x, y, width, width);
 }
 
 -(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton{
@@ -558,20 +616,72 @@
     [button addTarget:self action:@selector(pressedMenuButton:) forControlEvents:UIControlEventTouchUpInside];
     return button;
 }
+
 -(void)repaint{
     self.syncLabel.textColor = tcolor(TextColor);
 }
+
 -(void)dealloc{
     clearNotify();
 }
+
 -(void)pressedTut{
     [ROOT_CONTROLLER walkthrough];
     //[THEMER changeTheme];
     //[ROOT_CONTROLLER resetRoot];
 }
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+//    if (!_forbidLayout)
+//        [self renderSubviews];
+//    [self.view explainSubviews];
+    
+    CGFloat numberOfButtons = kHorizontalGridNumber * kVerticalGridNumber;
+    NSInteger numberOfRows = kHorizontalGridNumber;
+    self.view.backgroundColor = tcolor(BackgroundColor);
+    NSInteger startY = (OSVER >= 7) ? 20 : 0;
+    
+    CGFloat gridWidth = self.gridView.bounds.size.width;
+    CGFloat gridItemWidth = gridWidth / kVerticalGridNumber;
+    
+    CGFloat gridHeight = self.gridView.bounds.size.height;
+    CGFloat numberOfGrids = gridHeight / gridItemWidth;
+    
+    if (_seperatorsV && (_seperatorsV.count > kVerticalGridNumber - 2)) {
+        for (NSInteger i = 1; i < kVerticalGridNumber; i++) {
+            UIView *verticalSeperatorView = _seperatorsV[i - 1];
+            verticalSeperatorView.frame = CGRectMake(gridItemWidth * i, kSeperatorMargin, SEPERATOR_WIDTH, gridHeight - (kSeperatorMargin * 2));
+        }
+    }
+    
+    if (_seperatorsH && (_seperatorsH.count > numberOfRows - 2)) {
+        for (NSInteger i = 1; i < numberOfRows; i++) {
+            UIView *horizontalSeperatorView = _seperatorsH[i - 1];
+            horizontalSeperatorView.frame = CGRectMake(kSeperatorMargin, gridHeight/numberOfGrids*i, gridWidth - (kSeperatorMargin * 2), SEPERATOR_WIDTH);
+        }
+    }
+    
+    if (_menuButtons && (_menuButtons.count > numberOfButtons - 1)) {
+        for (NSInteger i = 1; i <= numberOfButtons; i++) {
+            ((UIButton *)_menuButtons[i - 1]).frame = [self frameForButton:i];
+        }
+    }
+    
+    CGSize s = self.view.frame.size;
+    self.gridView.center = CGPointMake(s.width / 2, s.height / 2 - valForScreen(0, 20));
+    self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds) + 10, gridWidth, 20);
+    
+    CGFloat backSpacing = 8.f;
+    CGFloat buttonSize = 44.0f;
+    self.backButton.frame = CGRectMake(s.width - buttonSize - backSpacing, startY, buttonSize, buttonSize);
+}
+
 @end

@@ -160,7 +160,7 @@
         [self addSubview:tableView];
         self.tableView = tableView;
         
-        self.headerView = [[SectionHeaderView alloc] initWithColor:tcolor(TextColor) font:SECTION_HEADER_FONT title:@"RECENT "];
+        self.headerView = [[SectionHeaderView alloc] initWithColor:tcolor(TextColor) font:SECTION_HEADER_FONT title:@"RECENT " width:frame.size.width];
         CGRectSetWidth(self.headerView, self.bounds.size.width);
         [self.headerView setNeedsDisplay];
         CGRectSetY(self.headerView, SearchHeight);

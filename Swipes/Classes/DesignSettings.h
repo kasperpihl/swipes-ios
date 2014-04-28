@@ -24,7 +24,6 @@
 #define GLOBAL_DOT_SIZE                 10.0f
 #define GLOBAL_DOT_OUTLINE_SIZE         4.0f
 #define GLOBAL_CELL_HEIGHT              70.0f
-#define KEYBOARD_HEIGHT                 216.0f
 #define KEYBOARD_ANIMATION_DURATION     0.25f
 #define GLOBAL_WT_TABLE_WIDTH           232.0f
 #define CELL_LABEL_X 44

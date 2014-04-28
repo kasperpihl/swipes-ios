@@ -18,6 +18,7 @@
 @end
 
 @implementation SnoozesViewController
+
 -(NSString*)settingForSnooze:(SnoozeSettings)snooze{
     NSString *setting;
     switch (snooze) {
@@ -43,6 +44,7 @@
     }
     return setting;
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -56,13 +58,14 @@
     self.tableView.delegate = self;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
-    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     //[self.tableView setSeparatorColor:tcolor(TextColor)];
     [self.tableView setTableFooterView:[UIView new]];
     [self.view addSubview:self.tableView];
 	// Do any additional setup after loading the view.
 }
+
 -(KPSettings)settingValForSnooze:(SnoozeSettings)snooze{
     switch (snooze) {
         case SnoozeWeekStartTime:
@@ -125,14 +128,18 @@
     valueString = [formatter stringFromDate:settingDate];
     [cell setSetting:[self settingForSnooze:indexPath.row] value:valueString];
 }
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     SnoozeSettings snooze = indexPath.row;
     if(snooze == self.activeSnooze){
         if(snooze == SnoozeWeekendStart || snooze == SnoozeWeekStart) return 2*kCellHeight;
     }
     return kCellHeight;
 }
--(void)timePicker:(KPTimePicker *)timePicker selectedDate:(NSDate *)date{
+
+-(void)timePicker:(KPTimePicker *)timePicker selectedDate:(NSDate *)date
+{
     if(date) [kSettings setValue:date forSetting:[self settingValForSnooze:self.activeSnooze]];
     [UIView animateWithDuration:0.1 animations:^{
         timePicker.alpha = 0;
@@ -142,7 +149,9 @@
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.activeSnooze inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     self.activeSnooze = SnoozeNone;
 }
--(NSString *)timePicker:(KPTimePicker *)timePicker clockForDate:(NSDate *)time{
+
+-(NSString *)timePicker:(KPTimePicker *)timePicker clockForDate:(NSDate *)time
+{
     if(self.activeSnooze == SnoozeLaterToday){
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
@@ -151,10 +160,14 @@
     }
     else return nil;
 }
--(NSString *)timePicker:(KPTimePicker *)timePicker titleForDate:(NSDate *)time{
+
+-(NSString *)timePicker:(KPTimePicker *)timePicker titleForDate:(NSDate *)time
+{
     return [self settingForSnooze:self.activeSnooze];
 }
--(void)dayPickerCell:(DayPickerSettingsCell *)cell pickedWeekDay:(NSInteger)weekday{
+
+-(void)dayPickerCell:(DayPickerSettingsCell *)cell pickedWeekDay:(NSInteger)weekday
+{
     KPSettings setting = [self settingValForSnooze:self.activeSnooze];
     NSDate *weekdayDate = (NSDate*)[kSettings valueForSetting:setting];
     NSLog(@"old:%i new:%i",weekdayDate.weekday,weekday);
@@ -168,6 +181,7 @@
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:snooze inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView endUpdates];
 }
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     SnoozeSettings snooze = indexPath.row;
     if(self.activeSnooze == snooze && (self.activeSnooze == SnoozeWeekendStart || self.activeSnooze == SnoozeWeekStart)){
