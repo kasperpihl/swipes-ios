@@ -17,6 +17,7 @@
 @property (nonatomic,weak) NSObject<SubtaskCellDelegate> *subtaskDelegate;
 @property (nonatomic) KPToDo *model;
 @property (nonatomic) BOOL addMode;
+@property (nonatomic) UITextField *titleField;
 -(void)setTitle:(NSString*)title;
 
 -(void)setDotColor:(UIColor*)color;

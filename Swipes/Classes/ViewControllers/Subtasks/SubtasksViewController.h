@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KPReorderTableView.h"
 @class KPToDo;
 #define kDragableHeight 60
 @interface SubtasksViewController : UIViewController
@@ -16,6 +17,7 @@
 @property (nonatomic) KPToDo *model;
 @property (nonatomic) BOOL opened;
 
+@property (nonatomic) KPReorderTableView *tableView;
 -(void)setContentInset:(UIEdgeInsets)insets;
 -(void)startedSliding;
 -(void)willStartOpening:(BOOL)opening;

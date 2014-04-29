@@ -49,6 +49,7 @@
 		A703B1C41838EBF20047DCC9 /* KPTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1A71838EBF20047DCC9 /* KPTagList.m */; };
 		A703B1C81838EC240047DCC9 /* KPReorderTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1C71838EC240047DCC9 /* KPReorderTableView.m */; };
 		A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1CA1838EC570047DCC9 /* ToDoCell.m */; };
+		A7063BCC190F8BEE003D3690 /* SubtaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7063BCB190F8BEE003D3690 /* SubtaskController.m */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
 		A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
 		A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */; };
@@ -312,6 +313,8 @@
 		A703B1C71838EC240047DCC9 /* KPReorderTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPReorderTableView.m; sourceTree = "<group>"; };
 		A703B1C91838EC570047DCC9 /* ToDoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDoCell.h; sourceTree = "<group>"; };
 		A703B1CA1838EC570047DCC9 /* ToDoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoCell.m; sourceTree = "<group>"; };
+		A7063BCA190F8BEE003D3690 /* SubtaskController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubtaskController.h; sourceTree = "<group>"; };
+		A7063BCB190F8BEE003D3690 /* SubtaskController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtaskController.m; sourceTree = "<group>"; };
 		A7090B6E175DF3F900728A3A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = Login/LoginViewController.h; sourceTree = "<group>"; };
 		A7090B6F175DF3F900728A3A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Login/LoginViewController.m; sourceTree = "<group>"; };
 		A717BEEB175E6857004791BF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -824,6 +827,8 @@
 		A748C877190D9A0800514DB3 /* Subtasks */ = {
 			isa = PBXGroup;
 			children = (
+				A7063BCA190F8BEE003D3690 /* SubtaskController.h */,
+				A7063BCB190F8BEE003D3690 /* SubtaskController.m */,
 				A748C878190D9A0800514DB3 /* SubtaskCell.h */,
 				A748C879190D9A0800514DB3 /* SubtaskCell.m */,
 				A748C87A190D9A0800514DB3 /* SubtasksViewController.h */,
@@ -1696,6 +1701,7 @@
 				A703B1B01838EBF20047DCC9 /* KPDayPicker.m in Sources */,
 				A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */,
 				A77D34D018E31E1200095F1E /* EMHint.m in Sources */,
+				A7063BCC190F8BEE003D3690 /* SubtaskController.m in Sources */,
 				A78128C717294C56002226C8 /* UtilityClass.m in Sources */,
 				A7B9D39319066299001E1109 /* KPModal.m in Sources */,
 				A78128CC17294C56002226C8 /* KPSegmentedViewController.m in Sources */,

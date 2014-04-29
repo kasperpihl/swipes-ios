@@ -14,7 +14,7 @@
 #import "AKSegmentedControl.h"
 #import "SlowHighlightIcon.h"
 
-#import "KPReorderTableView.h"
+
 
 #define kExtraDragable 10
 #
@@ -25,7 +25,6 @@
 #define INTERESTED_SEGMENT_RECT CGRectMake(0,0,(2*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),kDragableHeight-kExtraDragable)
 
 @interface SubtasksViewController () <UITableViewDataSource,UITableViewDelegate,SubtaskCellDelegate,MCSwipeTableViewCellDelegate,ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
-@property (nonatomic) KPReorderTableView *tableView;
 @property (nonatomic) NSArray *subtasks;
 @property (nonatomic) BOOL isMenu;
 @property (nonatomic) UIImageView *dragIcon;
@@ -131,7 +130,7 @@
         CGRectSetSize(addCell,320,50);
         [addCell setAddMode:YES];
         [tableHeader addSubview:addCell];
-        [self.tableView setTableHeaderView:tableHeader];
+        //[self.tableView setTableHeaderView:tableHeader];
         self.tableView.contentOffset = CGPointMake(0,self.tableView.tableHeaderView.frame.size.height);
         
         [self.view addSubview:self.tableView];
@@ -279,10 +278,20 @@
 }
 
 -(void)swipeTableViewCell:(SubtaskCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
-    if(state == MCSwipeTableViewCellStateNone) return;
+    if(state == MCSwipeTableViewCellStateNone)
+        return;
    
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     NSLog(@"triggered:%i",indexPath.row);
+    if(state == MCSwipeTableViewCellState1){
+        NSDictionary* attributes = @{
+                                     NSStrikethroughStyleAttributeName: [NSNumber numberWithInt:NSUnderlineStyleSingle]
+                                     };
+        
+        NSAttributedString* attrText = [[NSAttributedString alloc] initWithString:cell.titleField.text attributes:attributes];
+        cell.titleField.attributedText = attrText;
+        NSLog(@"ran");
+    }
     if(indexPath){
         /*NSMutableArray *mutCopy = [self.titles mutableCopy];
         [mutCopy removeObjectAtIndex:indexPath.row];
@@ -301,7 +310,7 @@
         [cell setDotColor:tcolor(DoneColor)];
     }
     if(state == MCSwipeTableViewCellState3){
-        [cell setDotColor:[UIColor redColor]];
+        [cell setDotColor:tcolor(TasksColor)];
     }
     
 }
@@ -314,9 +323,8 @@
 }
 
 
-
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 50;
+    return 36;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.subtasks.count;
@@ -338,7 +346,7 @@
     [cell setThirdColor:[UIColor redColor]];
     [cell setFirstIconName:[StyleHandler iconNameForCellType:CellTypeDone]];
     [cell setThirdIconName:iconString(@"actionDelete")];
-    //cell.activatedDirection = MCSwipeTableViewCellActivatedDirectionRight;
+    cell.activatedDirection = MCSwipeTableViewCellActivatedDirectionRight;
     cell.shouldRegret = YES;
     cell.mode = MCSwipeTableViewCellModeExit;
     cell.bounceAmplitude = 0;

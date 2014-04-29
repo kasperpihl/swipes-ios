@@ -9,14 +9,13 @@
 #import "SubtaskCell.h"
 #import "KPToDo.h"
 #import <QuartzCore/QuartzCore.h>
-#define kSubDotSize 12
+#define kSubDotSize 8
 #define kAddSize (kSubDotSize*2)
 #define kLineSize 2
 #define kTitleX 46
 
 @interface SubtaskCell () <UITextFieldDelegate>
 @property (nonatomic) UIButton *dotView;
-@property (nonatomic) UITextField *titleField;
 @property (nonatomic) UIButton *addCloseButton;
 @property (nonatomic) UIButton *overlayAddbutton;
 @end
@@ -27,12 +26,12 @@
         _addMode = addMode;
     }
     [self setAddMode:addMode animated:NO];
+    
 }
 
 -(void)setModel:(KPToDo *)model{
     if(_model != model){
         _model = model;
-        
     }
 }
 
@@ -70,13 +69,14 @@
         comp1 = ^{
             [self.dotView setImage:nil forState:UIControlStateNormal];
             self.dotView.transform = CGAffineTransformIdentity;
-            self.dotView.layer.cornerRadius = kSubDotSize/2;
+            //self.dotView.layer.cornerRadius = kSubDotSize/2;
             CGRectSetSize(self.dotView, kSubDotSize, kSubDotSize);
             CGRectSetCenter(self.dotView,kTitleX/2,self.bounds.size.height/2);
         };
         aniblock2 = ^{
             self.dotView.layer.borderWidth = kLineSize;
             self.dotView.layer.borderColor = tcolor(TasksColor).CGColor;
+            self.dotView.backgroundColor = tcolor(TasksColor);
         };
         
         
@@ -106,7 +106,7 @@
         }
         else{
             [self.subtaskDelegate addedSubtask:textField.text];
-            self.titleField.text = @"";
+            textField.text = @"";
             //[self setAddMode:YES animated:NO];
         }
         return NO;
@@ -119,14 +119,17 @@
 -(void)textFieldDidReturn:(UITextField *)textField{
     //if(self.titleField.isFirstResponder) [self.titleField resignFirstResponder];
     
-    if(!self.addMode) [self.subtaskDelegate subtaskCell:self editedSubtask:textField.text];
+    if(!self.addMode)
+        [self.subtaskDelegate subtaskCell:self editedSubtask:textField.text];
 }
 -(void)pressedAdd{
-    if(self.addMode) [self setAddMode:NO animated:YES];
+    if(self.addMode)
+        [self setAddMode:NO animated:YES];
     [self.titleField becomeFirstResponder];
 }
 -(void)setDotColor:(UIColor *)color{
     self.dotView.layer.borderColor = color.CGColor;
+    self.dotView.backgroundColor = color;
 }
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -135,9 +138,9 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.dotView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kSubDotSize, kSubDotSize)];
         self.dotView.backgroundColor = CLEAR;
-        self.dotView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
-        self.dotView.layer.cornerRadius = kSubDotSize/2;
-        self.dotView.layer.borderWidth = kLineSize;
+        //self.dotView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
+        //self.dotView.layer.cornerRadius = kSubDotSize/2;
+        //self.dotView.layer.borderWidth = kLineSize;
         
         //self.dotView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin);
         CGRectSetCenter(self.dotView,kTitleX/2,self.bounds.size.height/2);
