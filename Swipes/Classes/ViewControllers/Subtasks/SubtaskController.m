@@ -22,9 +22,12 @@
         _model = model;
     }
     [self loadSubtasks];
-    [self reload];
+    [self reloadAndNotify:NO];
 }
-
+-(void)fullReload{
+    [self loadSubtasks];
+    [self reloadAndNotify:YES];
+}
 
 -(void)loadSubtasks{
     /*BOOL isCompletedMenu = ([[self.segmentedControl selectedIndexes] firstIndex] == 1);
@@ -35,7 +38,7 @@
     NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:NO];
     
     NSArray *sortedObjects = [self.model.subtasks sortedArrayUsingDescriptors:@[descriptor]];
-    sortedObjects = [KPToDo sortOrderForItems:sortedObjects save:YES];
+    sortedObjects = [KPToDo sortOrderForItems:sortedObjects newItemsOnTop:NO save:YES];
     self.subtasks = sortedObjects;
     /*
      Filter down to completed or undone
@@ -45,12 +48,17 @@
      */
 }
 
-- (void)reload{
+- (void)reloadAndNotify:(BOOL)notify{
     [self.tableView reloadData];
-    NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:self.subtasks.count-1 inSection:0];
-    CGRect lastRowRect= [self.tableView rectForRowAtIndexPath:lastIndexPath];
-    CGFloat contentHeight = lastRowRect.origin.y + lastRowRect.size.height;
+    CGFloat contentHeight = 0;
+    if(self.subtasks.count > 0){
+        NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:self.subtasks.count-1 inSection:0];
+        CGRect lastRowRect= [self.tableView rectForRowAtIndexPath:lastIndexPath];
+        contentHeight = lastRowRect.origin.y + lastRowRect.size.height;
+    }
     CGRectSetHeight(self.tableView,contentHeight + self.tableView.tableFooterView.frame.size.height);
+    if(notify && [self.delegate respondsToSelector:@selector(subtaskController:changedToSize:)])
+        [self.delegate subtaskController:self changedToSize:self.tableView.frame.size];
 }
 
 
@@ -69,9 +77,11 @@
         UIView *tableFooter = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kSubtaskHeight)];
         tableFooter.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         SubtaskCell *addCell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SubtaskTitleHeader"];
+        addCell.activatedDirection = MCSwipeTableViewCellActivatedDirectionNone;
         CGRectSetHeight(addCell, kSubtaskHeight);
         addCell.subtaskDelegate = self;
-        [addCell setAddMode:YES];
+        
+        [addCell setAddModeForCell:YES];
         [tableFooter addSubview:addCell];
         self.tableView.tableFooterView = tableFooter;
     }
@@ -81,6 +91,7 @@
 #pragma mark SubtaskCellDelegate
 - (void)addedSubtask: ( NSString* )subtask{
     [self.model addSubtask:subtask save:YES];
+    [self fullReload];
     //[self loadData];
     //self.titles = [@[subtask] arrayByAddingObjectsFromArray:self.titles];
     //[self animateInAddTask];
@@ -96,6 +107,51 @@
     [KPToDo saveToSync];
 }
 
+
+#pragma mark MCSwipeTableViewCellDelegate
+-(void)swipeTableViewCell:(SubtaskCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
+    if(state == MCSwipeTableViewCellStateNone)
+        return;
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if(indexPath){
+        KPToDo *subtask = [self.subtasks objectAtIndex:indexPath.row];
+        BOOL isDone = subtask.completionDate ? YES : NO;
+        if(state == MCSwipeTableViewCellState1){
+            [cell setStrikeThrough:YES];
+            if(!isDone){
+                [KPToDo completeToDos:@[subtask] save:YES];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            }
+            else{
+                [KPToDo deleteToDos:@[subtask] save:YES];
+                [self fullReload];
+            }
+        }
+        else if(state == MCSwipeTableViewCellState3){
+            [cell setStrikeThrough:NO];
+            [KPToDo scheduleToDos:@[subtask] forDate:nil save:YES];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
+}
+-(void)swipeTableViewCell:(SubtaskCell *)cell slidedIntoState:(MCSwipeTableViewCellState)state{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    KPToDo *subtask = [self.subtasks objectAtIndex:indexPath.row];
+    BOOL isDone = subtask.completionDate ? YES : NO;
+    if(state == MCSwipeTableViewCellModeNone){
+        [cell setDotColor:isDone ? tcolor(DoneColor) : tcolor(TasksColor)];
+        if(!isDone) [cell setStrikeThrough:NO];
+    }
+    if(state == MCSwipeTableViewCellState1){
+        [cell setDotColor:isDone ? [UIColor redColor] : tcolor(DoneColor)];
+        [cell setStrikeThrough:YES];
+    }
+    if(state == MCSwipeTableViewCellState3){
+        [cell setStrikeThrough:NO];
+    }
+    
+}
 
 
 #pragma mark UITableViewDataSource
@@ -116,34 +172,40 @@
     if (cell == nil) {
         cell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.delegate = self;
+        cell.shouldRegret = YES;
+        cell.mode = MCSwipeTableViewCellModeSwitch;
+        //cell.bounceAmplitude = 0;
+        [cell setAddModeForCell:NO];
     }
 	return cell;
 }
 
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(SubtaskCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView: ( UITableView *)tableView willDisplayCell: (SubtaskCell *)cell forRowAtIndexPath: (NSIndexPath *)indexPath{
     KPToDo *subtask = (KPToDo*)[self.subtasks objectAtIndex:indexPath.row];
     BOOL isDone = subtask.completionDate ? YES : NO;
+    NSLog(@"%@",subtask);
     
     [cell setTitle:subtask.title];
     cell.model = subtask;
-    if(!isDone){
-        [cell setFirstColor:isDone ? [UIColor redColor] : [StyleHandler colorForCellType:CellTypeDone]];
-        [cell setFirstIconName:isDone ? iconString(@"actionDelete") : [StyleHandler iconNameForCellType:CellTypeDone]];
-    }
+    [cell setStrikeThrough:isDone];
+    [cell setFirstColor:isDone ? [UIColor redColor] : [StyleHandler colorForCellType:CellTypeDone]];
+    [cell setFirstIconName:isDone ? iconString(@"actionDeleteFull") : [StyleHandler iconNameForCellType:CellTypeDone]];
+    [cell setThirdIconName:[StyleHandler iconNameForCellType:CellTypeToday]];
+    [cell setThirdColor:[StyleHandler colorForCellType:CellTypeToday]];
     
-    //[cell setThirdIconName:iconString(@"actionDelete")];
-    cell.activatedDirection = MCSwipeTableViewCellActivatedDirectionRight;
-    cell.shouldRegret = YES;
-    cell.mode = MCSwipeTableViewCellModeSwitch;
-    cell.bounceAmplitude = 0;
-    [cell setAddMode:NO];
-    /*if(indexPath.row == 0) [cell setAddMode:YES animated:NO];
-     else*/
+    [cell setDotColor:isDone ? tcolor(DoneColor) : tcolor(TasksColor)];
+    cell.activatedDirection = isDone ? MCSwipeTableViewCellActivatedDirectionBoth : MCSwipeTableViewCellActivatedDirectionRight;
+    
 }
 
 
 #pragma mark ATSDragableTableViewDelegate
+- (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
+    SubtaskCell *cell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    [self tableView:self.tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
+	return cell;
+}
 - (void)dragTableViewController: ( KPReorderTableView *) dragTableViewController didBeginDraggingAtRow: ( NSIndexPath *) dragRow{
     
     self.draggingRow = dragRow;

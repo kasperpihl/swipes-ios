@@ -427,7 +427,7 @@
     return (self.parent) ? YES : NO;
 }
 
-+(NSArray*)sortOrderForItems:(NSArray*)items save:(BOOL)save{
++(NSArray*)sortOrderForItems:(NSArray*)items newItemsOnTop:(BOOL)newOnTop save:(BOOL)save{
     NSPredicate *orderedItemsPredicate = [NSPredicate predicateWithFormat:@"(order > %i)",kDefOrderVal];
     NSPredicate *unorderedItemsPredicate = [NSPredicate predicateWithFormat:@"!(order > %i)",kDefOrderVal];
     NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
@@ -435,7 +435,12 @@
     NSArray *orderedItems = [[items filteredArrayUsingPredicate:orderedItemsPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
     NSArray *unorderedItems = [[items filteredArrayUsingPredicate:unorderedItemsPredicate] sortedArrayUsingDescriptors:@[unorderedItemsSortDescriptor]];
     int counter = kDefOrderVal + 1;
-    NSArray *sortedItems = [unorderedItems arrayByAddingObjectsFromArray:orderedItems];
+    NSArray *sortedItems;
+    if(newOnTop)
+        sortedItems= [unorderedItems arrayByAddingObjectsFromArray:orderedItems];
+    else
+        sortedItems = [orderedItems arrayByAddingObjectsFromArray:unorderedItems];
+    
     NSInteger numberOfChanges = 0;
     if(!unorderedItems || unorderedItems.count == 0) return sortedItems;
     for(KPToDo *toDo in sortedItems){

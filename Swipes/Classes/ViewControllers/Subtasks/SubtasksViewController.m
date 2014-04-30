@@ -56,7 +56,7 @@
     NSArray *sortedObjects = [filteredSet sortedArrayUsingDescriptors:@[descriptor]];
     
     if(!isCompletedMenu){
-        sortedObjects = [KPToDo sortOrderForItems:sortedObjects save:YES];
+        sortedObjects = [KPToDo sortOrderForItems:sortedObjects newItemsOnTop:YES save:YES];
     }
     
     self.subtasks = sortedObjects;
@@ -128,7 +128,7 @@
         SubtaskCell *addCell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SubtaskTitleHeader"];
         addCell.subtaskDelegate = self;
         CGRectSetSize(addCell,320,50);
-        [addCell setAddMode:YES];
+        [addCell setAddModeForCell:YES];
         [tableHeader addSubview:addCell];
         //[self.tableView setTableHeaderView:tableHeader];
         self.tableView.contentOffset = CGPointMake(0,self.tableView.tableHeaderView.frame.size.height);
@@ -350,7 +350,7 @@
     cell.shouldRegret = YES;
     cell.mode = MCSwipeTableViewCellModeExit;
     cell.bounceAmplitude = 0;
-    [cell setAddMode:NO];
+    [cell setAddModeForCell:NO];
     /*if(indexPath.row == 0) [cell setAddMode:YES animated:NO];
     else*/
 }

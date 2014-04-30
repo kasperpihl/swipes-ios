@@ -9,8 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "KPToDo.h"
 #import "KPReorderTableView.h"
-#define kSubtaskHeight 36
+#define kSubtaskHeight 42
+@class SubtaskController;
+@protocol SubtaskControllerDelegate <NSObject>
+- (void)subtaskController: (SubtaskController *)controller changedToSize: ( CGSize )size;
+@end
+
 @interface SubtaskController : NSObject
+@property (nonatomic,weak) NSObject<SubtaskControllerDelegate> *delegate;
 @property (nonatomic) KPToDo *model;
 @property KPReorderTableView *tableView;
 @end

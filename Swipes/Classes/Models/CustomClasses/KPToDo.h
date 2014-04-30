@@ -22,7 +22,7 @@
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;
 
-+(NSArray*)sortOrderForItems:(NSArray*)items save:(BOOL)save;
++(NSArray*)sortOrderForItems:(NSArray*)items newItemsOnTop:(BOOL)newOnTop save:(BOOL)save;
 
 +(void)saveToSync;
 

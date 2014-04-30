@@ -515,7 +515,8 @@ secondStateIconName:(NSString *)secondIconName
     [self bounceToOriginAndNotifity:NO ];
 }
 - (void)bounceToOriginAndNotifity:(BOOL)notify{
-    CGFloat bounceDistance = self.bounceAmplitude * _currentPercentage;
+    __block MCSwipeTableViewCellState state = [self stateWithPercentage:_currentPercentage];
+    CGFloat bounceDistance = (_mode == MCSwipeTableViewCellModeSwitch ? 0 : self.bounceAmplitude) * _currentPercentage;
     self.didRegret = YES;
     [UIView animateWithDuration:kMCBounceDuration1
                           delay:0
@@ -538,7 +539,8 @@ secondStateIconName:(NSString *)secondIconName
                                               [self.contentView setFrame:frame];
                                           }
                                           completion:^(BOOL finished2) {
-                                              if(notify)[self notifyDelegate];
+                                              if(notify)
+                                                  [self notifyDelegateWithState:state];
                                               self.didRegret = NO;
                                           }];
                      }];
@@ -548,6 +550,10 @@ secondStateIconName:(NSString *)secondIconName
 
 - (void)notifyDelegate {
     MCSwipeTableViewCellState state = [self stateWithPercentage:_currentPercentage];
+    [self notifyDelegateWithState:state];
+    
+}
+- (void)notifyDelegateWithState: ( MCSwipeTableViewCellState )state{
     if (_delegate != nil && [_delegate respondsToSelector:@selector(swipeTableViewCell:didTriggerState:withMode:)]) {
         [_delegate swipeTableViewCell:self didTriggerState:state withMode:_mode];
     }

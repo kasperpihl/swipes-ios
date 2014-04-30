@@ -16,9 +16,10 @@
 @interface SubtaskCell : MCSwipeTableViewCell
 @property (nonatomic,weak) NSObject<SubtaskCellDelegate> *subtaskDelegate;
 @property (nonatomic) KPToDo *model;
-@property (nonatomic) BOOL addMode;
+@property (nonatomic) BOOL addModeForCell;
 @property (nonatomic) UITextField *titleField;
--(void)setTitle:(NSString*)title;
+@property (nonatomic) BOOL strikeThrough;
+@property (nonatomic) NSString *title;
 
 -(void)setDotColor:(UIColor*)color;
 @end

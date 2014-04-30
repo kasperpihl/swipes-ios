@@ -75,7 +75,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 
 
-@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate>
+@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate, SubtaskControllerDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
 @property (nonatomic) CellType cellType;
 @property (nonatomic) NSString *objectId;
@@ -810,22 +810,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.scrollView addSubview:self.titleContainerView];
         
         /*
-         Subtasks container
-         */
-        /*self.subtasksContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
-        self.subtasksContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        [self addAndGetImage:@"plus" inView:self.subtasksContainer];
-        [self.scrollView addSubview:self.subtasksContainer];
-        self.subtaskLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X, self.subtasksContainer.frame.size.height)];
-        self.subtaskLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.subtaskLabel.text = @"Add subtasks";
-        [self setColorsFor:self.subtaskLabel];
-        self.subtaskLabel.backgroundColor = CLEAR;
-        self.subtaskLabel.font = EDIT_TASK_TEXT_FONT;
-        [self addClickButtonToView:self.subtasksContainer action:@selector(pressedSubtasks:)];
-        [self.subtasksContainer addSubview:self.subtaskLabel];
-        */
-        /*
          Alarm container and button!
          */
         self.alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
@@ -964,6 +948,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         //[self.view addSubview:subtasks.view];
         self.subtasksController = [[SubtaskController alloc] init];
+        self.subtasksController.delegate = self;
         CGRectSetWidth(self.subtasksController.tableView, self.view.frame.size.width);
         self.subtasksController.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.subtasksContainer = self.subtasksController.tableView;
@@ -972,6 +957,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         notify(@"updated sync",updateFromSync:);
     }
     return self;
+}
+
+-(void)subtaskController:(SubtaskController *)controller changedToSize:(CGSize)size{
+    [self layout];
 }
 
 
