@@ -101,10 +101,25 @@
     
     NSString *editedText = [subtask stringByTrimmingCharactersInSet:
                             [NSCharacterSet newlineCharacterSet]];
-    if ( editedText.length > 0 )
+    NSLog(@"edited subtask: %@",subtask);
+    if ( editedText.length > 0 ){
         [cell.model setTitle:subtask];
+        [KPToDo saveToSync];
+    }
+    else {
+        [cell.titleField setText:cell.model.title];
+    }
     
-    [KPToDo saveToSync];
+}
+
+-(void)startedEditingSubtaskCell:(SubtaskCell *)cell{
+    if([self.delegate respondsToSelector:@selector(subtaskController:editingCellWithFrame:)])
+        [self.delegate subtaskController:self editingCellWithFrame:cell.frame];
+}
+-(void)startedAddingSubtaskInCell:(SubtaskCell *)cell{
+    if([self.delegate respondsToSelector:@selector(subtaskController:editingCellWithFrame:)]){
+        [self.delegate subtaskController:self editingCellWithFrame:self.tableView.tableFooterView.frame];
+    }
 }
 
 
@@ -172,6 +187,7 @@
     if (cell == nil) {
         cell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.delegate = self;
+        cell.subtaskDelegate = self;
         cell.shouldRegret = YES;
         cell.mode = MCSwipeTableViewCellModeSwitch;
         //cell.bounceAmplitude = 0;
@@ -184,7 +200,6 @@
 - (void)tableView: ( UITableView *)tableView willDisplayCell: (SubtaskCell *)cell forRowAtIndexPath: (NSIndexPath *)indexPath{
     KPToDo *subtask = (KPToDo*)[self.subtasks objectAtIndex:indexPath.row];
     BOOL isDone = subtask.completionDate ? YES : NO;
-    NSLog(@"%@",subtask);
     
     [cell setTitle:subtask.title];
     cell.model = subtask;

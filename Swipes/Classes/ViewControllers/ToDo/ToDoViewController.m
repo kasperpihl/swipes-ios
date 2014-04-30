@@ -79,6 +79,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) KPEditMode activeEditMode;
 @property (nonatomic) CellType cellType;
 @property (nonatomic) NSString *objectId;
+@property (nonatomic) CGFloat kbdHeight;
 @property (nonatomic,strong) KPTimePicker *timePicker;
 
 
@@ -118,6 +119,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) SubtaskController *subtasksController;
 @property (nonatomic) UIImageView *subtaskOverlay;
 @property (nonatomic) CGPoint startPoint;
+
+
+@property (nonatomic) CGRect editingFrame;
+
 @end
 
 @implementation ToDoViewController
@@ -566,7 +571,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     tempHeight += self.titleContainerView.frame.size.height;
     
     
-    NSLog(@"height: %f",self.subtasksContainer.frame.size.height);
     CGRectSetY(self.subtasksContainer, tempHeight);
     tempHeight += self.subtasksContainer.frame.size.height;
     
@@ -603,6 +607,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
     
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width,tempHeight);
+    CGRectSetHeight(self.cell,self.view.bounds.size.height-self.cell.frame.origin.y);
 }
 
 #pragma mark - Toolbar button handlers
@@ -732,6 +737,15 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if (self){
         self.view.tag = SHOW_ITEM_TAG;
         self.view.backgroundColor = tcolor(BackgroundColor);
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillShow:)
+                                                     name:UIKeyboardWillShowNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillHide:)
+                                                     name:UIKeyboardWillHideNotification
+                                                   object:nil];
         
         
         NSInteger startY = (OSVER >= 7) ? 20 : 0;
@@ -759,6 +773,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.cell = [[MCSwipeTableViewCell alloc] init];
         self.cell.frame = CGRectMake(0, CGRectGetMaxY(self.toolbarEditView.frame), self.view.frame.size.width,
                                      self.view.bounds.size.height - CGRectGetMaxY(self.toolbarEditView.frame));
+        self.cell.autoresizingMask = (UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight);
         self.cell.shouldRegret = YES;
         self.cell.delegate = self;
         self.cell.bounceAmplitude = 0;
@@ -803,7 +818,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         
         self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, contentView.frame.size.height)];
-        self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        //self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         self.scrollView.scrollEnabled = YES;
         self.scrollView.alwaysBounceVertical = YES;
         
@@ -961,8 +976,56 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 -(void)subtaskController:(SubtaskController *)controller changedToSize:(CGSize)size{
     [self layout];
+    //NSLog(@"%f + %f + %f = %f",self.subtasksContainer.frame.size.height, self.subtasksContainer.frame.origin.y, self.cell.frame.origin.y, superFrame.origin.y);
+    if(self.kbdHeight){
+        CGRect newEdit = self.editingFrame;
+        newEdit.origin.y = self.cell.frame.origin.y + self.subtasksContainer.frame.origin.y + size.height - self.editingFrame.size.height;
+        self.editingFrame = newEdit;
+        
+        CGFloat visibleHeight = self.view.bounds.size.height - self.kbdHeight;
+        CGFloat newY = visibleHeight - CGRectGetMaxY(self.editingFrame);
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.1];
+        [UIView setAnimationBeginsFromCurrentState:YES];
+        
+        CGRectSetY(self.view,newY);
+        [UIView commitAnimations];
+    }
+}
+-(void)subtaskController:(SubtaskController *)controller editingCellWithFrame:(CGRect)frame{
+    CGRect superFrame = frame;
+    superFrame.origin.y = frame.origin.y + self.subtasksContainer.frame.origin.y + self.cell.frame.origin.y;
+    self.editingFrame = superFrame;
 }
 
+-(void)keyboardWillShow:(NSNotification*)notification{
+    CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGFloat kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
+    self.kbdHeight = kbdHeight;
+    
+    
+    CGFloat visibleHeight = self.view.bounds.size.height - self.kbdHeight;
+    CGFloat newY = visibleHeight - CGRectGetMaxY(self.editingFrame);
+    if(newY >= 0)
+        newY = 0;
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+    CGRectSetY(self.view,newY);
+    [UIView commitAnimations];
+}
+-(void)keyboardWillHide:(NSNotification*)notification{
+    self.editingFrame = CGRectZero;
+    self.kbdHeight = 0;
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    CGRectSetY(self.view, 0);
+    [UIView commitAnimations];
+}
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -976,6 +1039,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [object setTextColor:tcolor(TextColor)];
     //if([object respondsToSelector:@selector(setHighlightedTextColor:)]) [object setHighlightedTextColor:EDIT_TASK_GRAYED_OUT_TEXT];
 }
+
+
+
 
 
 - (void)viewDidLoad

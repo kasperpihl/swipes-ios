@@ -9,23 +9,22 @@
 #import "SubtaskCell.h"
 #import "KPToDo.h"
 #import <QuartzCore/QuartzCore.h>
-#define kSubDotSize 8
+#define kSubDotSize 14
 #define kAddSize (kSubDotSize*2)
-#define kLineSize 2
+#define kLineSize 3
 #define kTitleX CELL_LABEL_X
 
 @interface SubtaskCell () <UITextFieldDelegate>
 @property (nonatomic) UIButton *dotView;
 @property (nonatomic) UIButton *addCloseButton;
 @property (nonatomic) UIButton *overlayAddbutton;
+@property (nonatomic) UIView *seperator;
 @property BOOL inEditMode;
 @end
 
 @implementation SubtaskCell
 -(void)setAddModeForCell:(BOOL)addModeForCell{
-    if(_addModeForCell != addModeForCell){
-        _addModeForCell = addModeForCell;
-    }
+    _addModeForCell = addModeForCell;
     [self switchBetweenAddAndEdit:addModeForCell animated:NO];
     
 }
@@ -64,8 +63,9 @@
         aniblock1 = ^{
             self.dotView.backgroundColor = tcolor(TextColor);
             self.titleField.text = @"Add action step";
-            self.titleField.font = KP_REGULAR(12);
+            self.titleField.font = EDIT_TASK_TEXT_FONT;
             self.inEditMode = YES;
+            CGRectSetHeight(self.seperator, self.bounds.size.height/2);
         };
     }
     else{
@@ -110,19 +110,27 @@
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     //if(self.titleField.isFirstResponder) [self.titleField resignFirstResponder];
+    NSLog(@"ended editing");
     if (self.addModeForCell) {
         [self switchBetweenAddAndEdit:YES animated:YES];
     }
-}
--(void)textFieldDidReturn:(UITextField *)textField{
-    //if(self.titleField.isFirstResponder) [self.titleField resignFirstResponder];
-    
-    if(!self.addModeForCell)
+    else
         [self.subtaskDelegate subtaskCell:self editedSubtask:textField.text];
 }
+-(void)textFieldDidReturn:(UITextField *)textField{
+    
+}
+
 -(void)pressedAdd{
     if(self.addModeForCell && self.inEditMode)
         [self switchBetweenAddAndEdit:NO animated:YES];
+    
+    
+    if(self.addModeForCell && [self.subtaskDelegate respondsToSelector:@selector(startedAddingSubtaskInCell:)])
+        [self.subtaskDelegate startedAddingSubtaskInCell:self];
+    else if(!self.addModeForCell && [self.subtaskDelegate respondsToSelector:@selector(startedEditingSubtaskCell:)])
+        [self.subtaskDelegate startedEditingSubtaskCell:self];
+    
     [self.titleField becomeFirstResponder];
 }
 -(void)setDotColor:(UIColor *)color{
@@ -135,11 +143,20 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.dotView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kSubDotSize, kSubDotSize)];
         self.dotView.backgroundColor = CLEAR;
+        self.dotView.layer.borderWidth = kLineSize;
+        self.dotView.layer.borderColor = tcolor(BackgroundColor).CGColor;
         self.dotView.titleLabel.font = iconFont(kAddSize);
         self.dotView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
         //[self.dotView setTitle:@"plus" forState:UIControlStateNormal];
         //[self.dotView setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
 
+        
+        CGFloat sepWidth = 1;
+        UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(kTitleX/2-sepWidth/2, 0, sepWidth, self.bounds.size.height)];
+        seperator.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        seperator.backgroundColor = alpha(tcolor(TextColor),0.5);
+        [self.contentView addSubview:seperator];
+        self.seperator = seperator;
         
         CGRectSetCenter(self.dotView,kTitleX/2,self.bounds.size.height/2);
         [self.contentView addSubview:self.dotView];

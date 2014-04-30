@@ -247,13 +247,11 @@
 
 - (void)doubleTap:(UISwipeGestureRecognizer*)tap {
     if (UIGestureRecognizerStateEnded == tap.state) {
-        [self.view explainSubviews];
         CGPoint p = [tap locationInView:tap.view];
         NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
         if (!indexPath)
             return;
         UITableViewCell* cell = [_tableView cellForRowAtIndexPath:indexPath];
-        [cell.contentView explainSubviews];
         DLogFrame(cell);
         [self editIndexPath:indexPath];
     }

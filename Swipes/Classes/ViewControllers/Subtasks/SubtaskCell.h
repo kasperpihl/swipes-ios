@@ -9,8 +9,10 @@
 #import "MCSwipeTableViewCell.h"
 @class SubtaskCell;
 @protocol SubtaskCellDelegate <NSObject>
--(void)addedSubtask:(NSString*)subtask;
--(void)subtaskCell:(SubtaskCell*)cell editedSubtask:(NSString*)subtask;
+- ( void )addedSubtask: (NSString *)subtask;
+- ( void )subtaskCell: (SubtaskCell *)cell editedSubtask: (NSString *)subtask;
+- ( void )startedEditingSubtaskCell: (SubtaskCell *)cell;
+- ( void )startedAddingSubtaskInCell: (SubtaskCell *)cell;
 @end
 @class KPToDo;
 @interface SubtaskCell : MCSwipeTableViewCell
