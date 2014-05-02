@@ -8,10 +8,12 @@
 #import "SubtaskCell.h"
 #import "StyleHandler.h"
 #import "SubtaskController.h"
+#import "UIColor+Utilities.h"
 @interface SubtaskController () <UITableViewDataSource,UITableViewDelegate,ATSDragToReorderTableViewControllerDelegate, MCSwipeTableViewCellDelegate,SubtaskCellDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 
 @property (nonatomic) NSIndexPath *draggingRow;
 @property (nonatomic) NSArray *subtasks;
+@property BOOL shouldShowAll;
 @end
 
 @implementation SubtaskController
@@ -20,6 +22,11 @@
 -(void)setModel:(KPToDo *)model{
     if(_model != model){
         _model = model;
+        self.shouldShowAll = YES;
+        
+        NSInteger numberOfUncompleted = [model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]].count;
+        if(numberOfUncompleted > 0 && model.subtasks.count > 3)
+            self.shouldShowAll = NO;
     }
     [self loadSubtasks];
     [self reloadAndNotify:NO];
@@ -33,12 +40,21 @@
     /*BOOL isCompletedMenu = ([[self.segmentedControl selectedIndexes] firstIndex] == 1);
     NSString *predString = isCompletedMenu ? @"completionDate != nil" : @"completionDate = nil";
     NSSet *filteredSet = [self.model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:predString]];
+     NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:NO];
+     NSString *sortKey = @"order";
+     
+     NSArray *sortedObjects = [self.model.subtasks sortedArrayUsingDescriptors:@[descriptor]];
     */
-    NSString *sortKey = @"order";
-    NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:NO];
+
+    NSSet *subtasks = self.model.subtasks;
+    if(!self.shouldShowAll){
+        subtasks = [self.model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
+    }
     
-    NSArray *sortedObjects = [self.model.subtasks sortedArrayUsingDescriptors:@[descriptor]];
-    sortedObjects = [KPToDo sortOrderForItems:sortedObjects newItemsOnTop:NO save:YES];
+    NSArray *sortedObjects = [KPToDo sortOrderForItems:[subtasks allObjects] newItemsOnTop:NO save:YES];
+    if(!self.shouldShowAll)
+        sortedObjects = [sortedObjects subarrayWithRange:NSMakeRange(0, 1)];
+    
     self.subtasks = sortedObjects;
     /*
      Filter down to completed or undone
@@ -50,6 +66,9 @@
 
 - (void)reloadAndNotify:(BOOL)notify{
     [self.tableView reloadData];
+    [self setHeightAndNotify:notify];
+}
+-(void)setHeightAndNotify:(BOOL)notify{
     CGFloat contentHeight = 0;
     if(self.subtasks.count > 0){
         NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:self.subtasks.count-1 inSection:0];
@@ -76,6 +95,24 @@
         self.tableView.delegate = self;
         UIView *tableFooter = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kSubtaskHeight)];
         tableFooter.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        
+        NSInteger dotViewSize = 8;
+        UIColor *dotColor = tcolor(TextColor);
+        CGPoint centerPoint = CGPointMake(CELL_LABEL_X/2, kSubtaskHeight/2);
+        for(NSInteger i = 1 ; i >= 0  ; i--){
+            
+            UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, dotViewSize, dotViewSize)];
+            UIColor *thisColor = dotColor;
+            /*for(NSInteger j = 0 ; j < i ; j++){
+                NSLog(@"%i - %i",i,j);
+                thisColor = [thisColor brightenedWithPercentage:-0.2];
+            }*/
+            dotView.backgroundColor = thisColor;
+            CGFloat extraMultiplier = 2;
+            dotView.center = CGPointMake(centerPoint.x + i * extraMultiplier, centerPoint.y + i * extraMultiplier);
+            dotView.layer.masksToBounds = YES;
+            [tableFooter addSubview:dotView];
+        }
         SubtaskCell *addCell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SubtaskTitleHeader"];
         addCell.activatedDirection = MCSwipeTableViewCellActivatedDirectionNone;
         CGRectSetHeight(addCell, kSubtaskHeight);
@@ -140,7 +177,17 @@
             }
             else{
                 [KPToDo deleteToDos:@[subtask] save:YES];
-                [self fullReload];
+                NSMutableArray *mutableSubtasks = [self.subtasks mutableCopy];
+                [mutableSubtasks removeObjectAtIndex:indexPath.row];
+                self.subtasks = [mutableSubtasks copy];
+                [CATransaction begin];
+                [CATransaction setCompletionBlock: ^{
+                    [self setHeightAndNotify:YES];
+                }];
+                [self.tableView beginUpdates];
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView endUpdates];
+                [CATransaction commit];
             }
             if([self.delegate respondsToSelector:@selector(didChangeSubtaskController:)])
                 [self.delegate didChangeSubtaskController:self];
