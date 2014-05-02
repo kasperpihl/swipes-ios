@@ -20,14 +20,13 @@
 
 
 -(void)setModel:(KPToDo *)model{
-    if(_model != model){
         _model = model;
         self.shouldShowAll = YES;
         
         NSInteger numberOfUncompleted = [model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]].count;
         if(numberOfUncompleted > 0 && model.subtasks.count > 3)
             self.shouldShowAll = NO;
-    }
+        [self updateTableFooter];
     [self loadSubtasks];
     [self reloadAndNotify:NO];
 }
@@ -37,15 +36,6 @@
 }
 
 -(void)loadSubtasks{
-    /*BOOL isCompletedMenu = ([[self.segmentedControl selectedIndexes] firstIndex] == 1);
-    NSString *predString = isCompletedMenu ? @"completionDate != nil" : @"completionDate = nil";
-    NSSet *filteredSet = [self.model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:predString]];
-     NSSortDescriptor *descriptor = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:NO];
-     NSString *sortKey = @"order";
-     
-     NSArray *sortedObjects = [self.model.subtasks sortedArrayUsingDescriptors:@[descriptor]];
-    */
-
     NSSet *subtasks = self.model.subtasks;
     if(!self.shouldShowAll){
         subtasks = [self.model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
@@ -56,12 +46,56 @@
         sortedObjects = [sortedObjects subarrayWithRange:NSMakeRange(0, 1)];
     
     self.subtasks = sortedObjects;
-    /*
-     Filter down to completed or undone
-     If undone - sort for order and make new numbers if needed
-     reload tableview
-     
-     */
+}
+
+-(void)pressedShowAll{
+    if(!self.shouldShowAll){
+        self.shouldShowAll = YES;
+        [self fullReload];
+        [self updateTableFooter];
+    }
+}
+
+-(void)updateTableFooter{
+    UIView *tableFooter = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kSubtaskHeight)];
+    tableFooter.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    if(!self.shouldShowAll){
+        UIButton *unpackButton = [[UIButton alloc] initWithFrame:tableFooter.bounds];
+        [unpackButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        unpackButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        unpackButton.titleEdgeInsets = UIEdgeInsetsMake(0, CELL_LABEL_X, 0, 0);
+        unpackButton.titleLabel.font = EDIT_TASK_TEXT_FONT;
+        [unpackButton addTarget:self action:@selector(pressedShowAll) forControlEvents:UIControlEventTouchUpInside];
+        [unpackButton setTitle:@"Show all steps" forState:UIControlStateNormal];
+        NSInteger dotViewSize = 8;
+        UIColor *dotColor = tcolor(TextColor);
+        CGPoint centerPoint = CGPointMake(CELL_LABEL_X/2, kSubtaskHeight/2);
+        for(NSInteger i = 1 ; i >= 0  ; i--){
+            
+            UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, dotViewSize, dotViewSize)];
+            UIColor *thisColor = dotColor;
+            /*for(NSInteger j = 0 ; j < i ; j++){
+             NSLog(@"%i - %i",i,j);
+             thisColor = [thisColor brightenedWithPercentage:-0.2];
+             }*/
+            dotView.backgroundColor = thisColor;
+            CGFloat extraMultiplier = 2;
+            dotView.center = CGPointMake(centerPoint.x + i * extraMultiplier, centerPoint.y + i * extraMultiplier);
+            dotView.layer.masksToBounds = YES;
+            [unpackButton addSubview:dotView];
+        }
+        [tableFooter addSubview:unpackButton];
+    }
+    else{
+        SubtaskCell *addCell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SubtaskTitleHeader"];
+        addCell.activatedDirection = MCSwipeTableViewCellActivatedDirectionNone;
+        CGRectSetHeight(addCell, kSubtaskHeight);
+        addCell.subtaskDelegate = self;
+        
+        [addCell setAddModeForCell:YES];
+        [tableFooter addSubview:addCell];
+    }
+    self.tableView.tableFooterView = tableFooter;
 }
 
 - (void)reloadAndNotify:(BOOL)notify{
@@ -93,34 +127,6 @@
         self.tableView.indicatorDelegate = self;
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.delegate = self;
-        UIView *tableFooter = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kSubtaskHeight)];
-        tableFooter.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        
-        NSInteger dotViewSize = 8;
-        UIColor *dotColor = tcolor(TextColor);
-        CGPoint centerPoint = CGPointMake(CELL_LABEL_X/2, kSubtaskHeight/2);
-        for(NSInteger i = 1 ; i >= 0  ; i--){
-            
-            UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, dotViewSize, dotViewSize)];
-            UIColor *thisColor = dotColor;
-            /*for(NSInteger j = 0 ; j < i ; j++){
-                NSLog(@"%i - %i",i,j);
-                thisColor = [thisColor brightenedWithPercentage:-0.2];
-            }*/
-            dotView.backgroundColor = thisColor;
-            CGFloat extraMultiplier = 2;
-            dotView.center = CGPointMake(centerPoint.x + i * extraMultiplier, centerPoint.y + i * extraMultiplier);
-            dotView.layer.masksToBounds = YES;
-            [tableFooter addSubview:dotView];
-        }
-        SubtaskCell *addCell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SubtaskTitleHeader"];
-        addCell.activatedDirection = MCSwipeTableViewCellActivatedDirectionNone;
-        CGRectSetHeight(addCell, kSubtaskHeight);
-        addCell.subtaskDelegate = self;
-        
-        [addCell setAddModeForCell:YES];
-        [tableFooter addSubview:addCell];
-        self.tableView.tableFooterView = tableFooter;
     }
     return self;
 }
