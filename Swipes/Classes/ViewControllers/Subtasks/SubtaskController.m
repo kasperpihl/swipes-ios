@@ -142,11 +142,15 @@
                 [KPToDo deleteToDos:@[subtask] save:YES];
                 [self fullReload];
             }
+            if([self.delegate respondsToSelector:@selector(didChangeSubtaskController:)])
+                [self.delegate didChangeSubtaskController:self];
         }
         else if(state == MCSwipeTableViewCellState3){
             [cell setStrikeThrough:NO];
             [KPToDo scheduleToDos:@[subtask] forDate:nil save:YES];
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            if([self.delegate respondsToSelector:@selector(didChangeSubtaskController:)])
+                [self.delegate didChangeSubtaskController:self];
         }
     }
 }
@@ -171,7 +175,7 @@
 
 #pragma mark UITableViewDataSource
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
-
+    //self.draggingRow = destinationIndexPath;
     NSLog(@"move from %i to %i",sourceIndexPath.row,destinationIndexPath.row);
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -197,6 +201,7 @@
 }
 
 
+#pragma mark UITableViewDelegate
 - (void)tableView: ( UITableView *)tableView willDisplayCell: (SubtaskCell *)cell forRowAtIndexPath: (NSIndexPath *)indexPath{
     KPToDo *subtask = (KPToDo*)[self.subtasks objectAtIndex:indexPath.row];
     BOOL isDone = subtask.completionDate ? YES : NO;
@@ -211,7 +216,17 @@
     
     [cell setDotColor:isDone ? tcolor(DoneColor) : tcolor(TasksColor)];
     cell.activatedDirection = isDone ? MCSwipeTableViewCellActivatedDirectionBoth : MCSwipeTableViewCellActivatedDirectionRight;
+    cell.modeForState1 = isDone ? MCSwipeTableViewCellModeExit : MCSwipeTableViewCellModeSwitch;
     
+}
+-(void)moveItem:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
+    if(toIndexPath.row == fromIndexPath.row)
+        return;
+    KPToDo *movingToDoObject = [self.subtasks objectAtIndex:fromIndexPath.row];
+    KPToDo *replacingToDoObject = [self.subtasks objectAtIndex:toIndexPath.row];
+    NSArray *newItems = [movingToDoObject changeToOrder:replacingToDoObject.orderValue withItems:self.subtasks];
+    self.subtasks = newItems;
+    [self fullReload];
 }
 
 
@@ -232,6 +247,7 @@
         self.draggingRow = nil;
         return;
     }
+    [self moveItem:self.draggingRow toIndexPath:destinationIndexPath];
     /*NSMutableArray *titles = [self.subtasks mutableCopy];
      NSString *title = [self.subtasks objectAtIndex:self.draggingRow.row];
      [titles removeObjectAtIndex:self.draggingRow.row];

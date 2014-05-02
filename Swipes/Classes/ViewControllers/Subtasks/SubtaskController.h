@@ -12,8 +12,10 @@
 #define kSubtaskHeight 38
 @class SubtaskController;
 @protocol SubtaskControllerDelegate <NSObject>
+@optional
 - (void)subtaskController: (SubtaskController *)controller changedToSize: ( CGSize )size;
 - (void)subtaskController: (SubtaskController *)controller editingCellWithFrame:( CGRect )frame;
+- (void)didChangeSubtaskController:(SubtaskController *)controller;
 @end
 
 @interface SubtaskController : NSObject

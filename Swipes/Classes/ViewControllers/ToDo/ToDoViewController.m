@@ -232,7 +232,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     NSSet *deletedObjects = [changeEvent objectForKey:@"deleted"];
     if([deletedObjects containsObject:self.objectId]){
         [self pressedBack:nil];
-    }else if([updatedObjects containsObject:self.model.objectId]) [self update];
+    }else if([updatedObjects containsObject:self.model.objectId])
+        [self update];
 }
 
 
@@ -557,10 +558,20 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 -(void)updateSectionHeader
 {
-    [self.sectionHeader setTitle:[[self.model readableTitleForStatus] uppercaseString]];
-    [self.sectionHeader setColor:[StyleHandler colorForCellType:self.cellType]];
     
-    [self.sectionHeader setProgressPercentage:0.5];
+    [self.sectionHeader setColor:[StyleHandler colorForCellType:self.cellType]];
+    NSInteger numberOfSubtasks = self.model.subtasks.count;
+    self.sectionHeader.progress = (numberOfSubtasks > 0);
+    if(numberOfSubtasks > 0){
+        NSPredicate *completedPredicate = [NSPredicate predicateWithFormat:@"completionDate != nil"];
+        NSInteger numberOfCompletedSubtasks = [self.model.subtasks filteredSetUsingPredicate:completedPredicate].count;
+        CGFloat percentage = (CGFloat)numberOfCompletedSubtasks / numberOfSubtasks;
+        self.sectionHeader.progressPercentage = percentage;
+        [self.sectionHeader setTitle:[NSString stringWithFormat:@"%i / %i Steps",numberOfCompletedSubtasks,numberOfSubtasks]];
+    }
+    else{
+        [self.sectionHeader setTitle:[[self.model readableTitleForStatus] uppercaseString]];
+    }
 }
 
 -(void)layout{
@@ -953,8 +964,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.sectionHeader.fillColor = tcolor(BackgroundColor);
         CGRectSetY(self.sectionHeader, CGRectGetMaxY(self.toolbarEditView.frame));
         [self.view addSubview:self.sectionHeader];
-        self.sectionHeader.progress = YES;
-        self.sectionHeader.progressPercentage = 0.3;
+        //self.sectionHeader.progress = YES;
+        //self.sectionHeader.progressPercentage = 0.3;
         
         
         
@@ -979,24 +990,31 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     //NSLog(@"%f + %f + %f = %f",self.subtasksContainer.frame.size.height, self.subtasksContainer.frame.origin.y, self.cell.frame.origin.y, superFrame.origin.y);
     if(self.kbdHeight){
         CGRect newEdit = self.editingFrame;
-        newEdit.origin.y = self.cell.frame.origin.y + self.subtasksContainer.frame.origin.y + size.height - self.editingFrame.size.height;
+        newEdit.origin.y =  self.subtasksContainer.frame.origin.y + size.height - self.editingFrame.size.height;
         self.editingFrame = newEdit;
         
-        CGFloat visibleHeight = self.view.bounds.size.height - self.kbdHeight;
-        CGFloat newY = visibleHeight - CGRectGetMaxY(self.editingFrame);
+        CGFloat visibleHeight = self.view.bounds.size.height - self.kbdHeight - self.cell.frame.origin.y;
+        CGFloat newY = CGRectGetMaxY(self.editingFrame) - visibleHeight;
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.1];
         [UIView setAnimationBeginsFromCurrentState:YES];
         
-        CGRectSetY(self.view,newY);
+        if(newY >= 0)
+            self.scrollView.contentOffset = CGPointMake(0, newY);
+        
         [UIView commitAnimations];
     }
+    [self updateSectionHeader];
+}
+-(void)didChangeSubtaskController:(SubtaskController *)controller{
+    [self updateSectionHeader];
 }
 -(void)subtaskController:(SubtaskController *)controller editingCellWithFrame:(CGRect)frame{
     CGRect superFrame = frame;
-    superFrame.origin.y = frame.origin.y + self.subtasksContainer.frame.origin.y + self.cell.frame.origin.y;
+    superFrame.origin.y = frame.origin.y + self.subtasksContainer.frame.origin.y;
     self.editingFrame = superFrame;
 }
+
 
 -(void)keyboardWillShow:(NSNotification*)notification{
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -1004,26 +1022,31 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.kbdHeight = kbdHeight;
     
     
-    CGFloat visibleHeight = self.view.bounds.size.height - self.kbdHeight;
-    CGFloat newY = visibleHeight - CGRectGetMaxY(self.editingFrame);
-    if(newY >= 0)
-        newY = 0;
+    CGFloat visibleHeight = self.view.bounds.size.height - self.kbdHeight - self.cell.frame.origin.y;
+    CGFloat newY = CGRectGetMaxY(self.editingFrame) - visibleHeight + 5;
+    self.scrollView.contentInset = UIEdgeInsetsMake(0, 0, self.kbdHeight, 0);
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
-    
-    CGRectSetY(self.view,newY);
+    if(newY >= 0)
+        self.scrollView.contentOffset = CGPointMake(0, newY);
     [UIView commitAnimations];
 }
 -(void)keyboardWillHide:(NSNotification*)notification{
     self.editingFrame = CGRectZero;
+    CGPoint currentOffset = self.scrollView.contentOffset;
+    currentOffset.y -= self.kbdHeight;
+    if(currentOffset.y < 0)
+        currentOffset.y = 0;
     self.kbdHeight = 0;
+
+    self.scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
-    CGRectSetY(self.view, 0);
+    self.scrollView.contentOffset = currentOffset;
     [UIView commitAnimations];
 }
 
