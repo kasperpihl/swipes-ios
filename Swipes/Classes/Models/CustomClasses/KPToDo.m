@@ -105,11 +105,17 @@
 +(void)deleteToDos:(NSArray*)toDos save:(BOOL)save{
     BOOL shouldUpdateNotifications = NO;
     for(KPToDo *toDo in toDos){
-        if(!toDo.completionDate) shouldUpdateNotifications = YES;
+        if(!toDo.completionDate && !toDo.parent)
+            shouldUpdateNotifications = YES;
+        if(toDo.subtasks.count > 0){
+            [KPToDo deleteToDos:[toDo.subtasks allObjects] save:NO];
+        }
         [toDo deleteToDoSave:NO];
     }
-    if(save) [KPCORE saveContextForSynchronization:nil];
-    if(shouldUpdateNotifications) [NOTIHANDLER updateLocalNotifications];
+    if (save)
+             [KPCORE saveContextForSynchronization:nil];
+    if (shouldUpdateNotifications)
+             [NOTIHANDLER updateLocalNotifications];
     [ANALYTICS heartbeat];
 }
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save{
