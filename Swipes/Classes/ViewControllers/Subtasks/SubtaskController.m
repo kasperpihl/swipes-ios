@@ -66,7 +66,7 @@
         unpackButton.titleEdgeInsets = UIEdgeInsetsMake(0, CELL_LABEL_X, 0, 0);
         unpackButton.titleLabel.font = EDIT_TASK_TEXT_FONT;
         [unpackButton addTarget:self action:@selector(pressedShowAll) forControlEvents:UIControlEventTouchUpInside];
-        [unpackButton setTitle:@"Show all steps" forState:UIControlStateNormal];
+        [unpackButton setTitle:[NSString stringWithFormat:@"Show all %i steps",self.model.subtasks.count] forState:UIControlStateNormal];
         NSInteger dotViewSize = 8;
         UIColor *dotColor = tcolor(TextColor);
         CGPoint centerPoint = CGPointMake(CELL_LABEL_X/2, kSubtaskHeight/2);
