@@ -23,8 +23,8 @@
         _model = model;
         self.shouldShowAll = YES;
         
-        NSInteger numberOfUncompleted = [model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]].count;
-        if(numberOfUncompleted > 0 && model.subtasks.count > 3)
+        //NSInteger numberOfUncompleted = [model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]].count;
+        if(model.subtasks.count > 3)
             self.shouldShowAll = NO;
         [self updateTableFooter];
     [self loadSubtasks];
@@ -37,13 +37,25 @@
 
 -(void)loadSubtasks{
     NSSet *subtasks = self.model.subtasks;
+    if(subtasks.count == 0)
+        self.shouldShowAll = YES;
+    BOOL hasUncompletedTasks = YES;
     if(!self.shouldShowAll){
         subtasks = [self.model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
+        if(!subtasks.count){
+            //subtasks = self.model.subtasks;
+            hasUncompletedTasks = NO;
+        }
+        
     }
     
     NSArray *sortedObjects = [KPToDo sortOrderForItems:[subtasks allObjects] newItemsOnTop:NO save:YES];
-    if(!self.shouldShowAll)
-        sortedObjects = [sortedObjects subarrayWithRange:NSMakeRange(0, 1)];
+    if(!self.shouldShowAll && sortedObjects.count > 0){
+        if(hasUncompletedTasks)
+            sortedObjects = [sortedObjects subarrayWithRange:NSMakeRange(0, 1)];
+        else
+            sortedObjects = @[[sortedObjects lastObject]];
+    }
     
     self.subtasks = sortedObjects;
 }
@@ -165,7 +177,6 @@
     }
 }
 
-
 #pragma mark MCSwipeTableViewCellDelegate
 -(void)swipeTableViewCell:(SubtaskCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
     if(state == MCSwipeTableViewCellStateNone)
@@ -189,11 +200,15 @@
                 [CATransaction begin];
                 [CATransaction setCompletionBlock: ^{
                     [self setHeightAndNotify:YES];
+                    [self updateTableFooter];
                 }];
                 [self.tableView beginUpdates];
                 [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 [self.tableView endUpdates];
                 [CATransaction commit];
+            }
+            if(!self.shouldShowAll){
+                [self fullReload];
             }
             if([self.delegate respondsToSelector:@selector(didChangeSubtaskController:)])
                 [self.delegate didChangeSubtaskController:self];
