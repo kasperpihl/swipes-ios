@@ -107,9 +107,6 @@
     for(KPToDo *toDo in toDos){
         if(!toDo.completionDate && !toDo.parent)
             shouldUpdateNotifications = YES;
-        if(toDo.subtasks.count > 0){
-            [KPToDo deleteToDos:[toDo.subtasks allObjects] save:NO];
-        }
         [toDo deleteToDoSave:NO];
     }
     if (save)
@@ -552,8 +549,14 @@
     
 }
 -(void)deleteToDoSave:(BOOL)save{
+    [self beforeDelete];
     [self MR_deleteEntity];
     if(save) [KPToDo saveToSync];
+}
+-(void)beforeDelete{
+    if(self.subtasks.count > 0){
+        [KPToDo deleteToDos:[self.subtasks allObjects] save:NO];
+    }
 }
 
 -(void)switchPriority{

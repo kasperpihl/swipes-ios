@@ -15,7 +15,7 @@
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     NSDate *startDate = [NSDate date];
     NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil AND parent = nil)", startDate];
-    NSPredicate *unspecifiedPredicate = [NSPredicate predicateWithFormat:@"(schedule = nil AND completionDate = nil AND parent = nil)"];
+    NSPredicate *unspecifiedPredicate = [NSPredicate predicateWithFormat:@"(schedule = nil AND completionDate = nil)"];
     NSArray *scheduleArray = [KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:schedulePredicate];
     NSArray *unspecifiedArray = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:unspecifiedPredicate];
     NSArray *totalArray = [scheduleArray arrayByAddingObjectsFromArray:unspecifiedArray];

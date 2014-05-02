@@ -11,6 +11,8 @@
 @synthesize savingObject = _savingObject;
 #pragma mark - Forward declarations
 -(BOOL)setAttributesForSavingObject:(NSMutableDictionary**)object changedAttributes:(NSArray *)changedAttributes{ return NO; }
+-(void)beforeDelete{ }
+
 -(NSString *)getParseClassName{
     NSString *className = NSStringFromClass ([self class]);
     NSString *parseClassName = [className substringFromIndex:2];
@@ -62,7 +64,10 @@
     if(!context) context = [KPCORE context];
     KPParseObject *coreDataObject = [self checkForObject:object context:context];
     BOOL successful = YES;
-    if(coreDataObject) successful = [coreDataObject MR_deleteInContext:context];
+    if(coreDataObject){
+        [coreDataObject beforeDelete];
+        successful = [coreDataObject MR_deleteInContext:context];
+    }
     return successful;
 }
 #pragma mark - Save to server
