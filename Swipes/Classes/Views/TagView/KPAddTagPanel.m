@@ -104,7 +104,7 @@
         //CGRectSetSize(self.frame, self.frame.size.width, self.tagView.frame.size.height+ADD_VIEW_HEIGHT);//
         scrollView.contentSize = CGSizeMake(tagView.frame.size.width, tagView.frame.size.height);
         scrollView.scrollEnabled = YES;
-        scrollView.backgroundColor = tcolor(LaterColor);
+        scrollView.backgroundColor = CLEAR;
         [self addSubview:scrollView];
         self.scrollView = (UIScrollView*)[self viewWithTag:SCROLL_VIEW_TAG];
 

@@ -65,6 +65,7 @@
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
     KPEditModeTitle,
+    KPEditModeActionSteps,
     KPEditModeRepeat,
     KPEditModeTags,
     KPEditModeAlarm,
@@ -177,7 +178,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if(activeEditMode != _activeEditMode){
         KPEditMode oldState = _activeEditMode;
         _activeEditMode = activeEditMode;
-        if(activeEditMode != KPEditModeNone) [self clearActiveEditMode:oldState];
+        if(activeEditMode != KPEditModeNone)
+            [self clearActiveEditMode:oldState];
     }
 }
 
@@ -242,6 +244,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     switch (state) {
         case KPEditModeTitle:{
             [self.textView resignFirstResponder];
+            break;
+        }
+        case KPEditModeActionSteps:{
+            [self.subtasksController resign];
             break;
         }
         case KPEditModeRepeat:
@@ -1027,6 +1033,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self updateSectionHeader];
 }
 -(void)subtaskController:(SubtaskController *)controller editingCellWithFrame:(CGRect)frame{
+    self.activeEditMode = KPEditModeActionSteps;
     CGRect superFrame = frame;
     superFrame.origin.y = frame.origin.y + self.subtasksContainer.frame.origin.y;
     self.editingFrame = superFrame;

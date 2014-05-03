@@ -569,11 +569,11 @@ typedef enum {
 
 -(UIButton*)buttonForScheduleButton:(KPScheduleButtons)scheduleButton title:(NSString *)title{
     MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButtonNumber:scheduleButton] title:title];
-    button.iconLabel.titleLabel.font = iconFont(50);
+    button.iconLabel.titleLabel.font = iconFont(43);
     [button.iconLabel setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     [button.iconLabel setTitle:[self iconStringForScheduleButton:scheduleButton highlighted:NO] forState:UIControlStateNormal];
     [button.iconLabel setTitle:[self iconStringForScheduleButton:scheduleButton highlighted:YES] forState:UIControlStateHighlighted];
-    
+    [button setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     button.tag = [self tagForButton:scheduleButton];
     //[button setBackgroundImage:[POPUP_SELECTED image] forState:UIControlStateHighlighted];
     [button addTarget:self action:@selector(pressedScheduleButton:) forControlEvents:UIControlEventTouchUpInside];

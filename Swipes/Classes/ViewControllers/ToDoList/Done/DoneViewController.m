@@ -43,7 +43,6 @@
 -(void)didPressDeleteAll:(id)sender{
     [UTILITY confirmBoxWithTitle:@"Are you sure?" andMessage:@"Deleting old completed tasks can't be undone" cancel:@"Cancel" confirm:@"Delete them" block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
-#warning On implementing subtasks make sure to check this
             NSDate *startDate = [[NSDate date] dateAtStartOfDay];
             NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@ && parent = nil)",startDate];
             NSArray *oldCompletedTasks = [KPToDo MR_findAllWithPredicate:remainingPred];

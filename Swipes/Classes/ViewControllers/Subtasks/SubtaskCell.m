@@ -164,6 +164,7 @@
         self.titleField = [[UITextField alloc] initWithFrame:CGRectMake(kTitleX, 0, self.frame.size.width-kTitleX, self.bounds.size.height)];
         self.titleField.backgroundColor = CLEAR;
         self.titleField.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
+        self.titleField.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.titleField.font = KP_LIGHT(16);
         self.titleField.textColor = tcolor(TextColor);
         self.titleField.delegate = self;

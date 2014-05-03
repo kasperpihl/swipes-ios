@@ -22,4 +22,5 @@
 @property (nonatomic,weak) NSObject<SubtaskControllerDelegate> *delegate;
 @property (nonatomic) KPToDo *model;
 @property KPReorderTableView *tableView;
+-(void)resign;
 @end

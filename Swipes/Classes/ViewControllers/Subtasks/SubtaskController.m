@@ -13,6 +13,7 @@
 
 @property (nonatomic) NSIndexPath *draggingRow;
 @property (nonatomic) NSArray *subtasks;
+@property (nonatomic) SubtaskCell *editingCell;
 @property BOOL shouldShowAll;
 @end
 
@@ -166,12 +167,16 @@
     }
     
 }
-
+-(void)resign{
+    [self.editingCell.titleField resignFirstResponder];
+}
 -(void)startedEditingSubtaskCell:(SubtaskCell *)cell{
+    self.editingCell = cell;
     if([self.delegate respondsToSelector:@selector(subtaskController:editingCellWithFrame:)])
         [self.delegate subtaskController:self editingCellWithFrame:cell.frame];
 }
 -(void)startedAddingSubtaskInCell:(SubtaskCell *)cell{
+    self.editingCell = cell;
     if([self.delegate respondsToSelector:@selector(subtaskController:editingCellWithFrame:)]){
         [self.delegate subtaskController:self editingCellWithFrame:self.tableView.tableFooterView.frame];
     }

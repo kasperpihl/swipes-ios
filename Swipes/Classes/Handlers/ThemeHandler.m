@@ -13,13 +13,14 @@
 #define DONE_COLOR                      color(69,217,132,1)  //color(63,186,141,1) //
 #define LATER_COLOR                     color(252,97,75,1) // color(234,97,80,1)
 
-#define STRONG_TASKS_COLOR              color(228,192,21,1)
+#define STRONG_TASKS_COLOR              color(255,195,88,1)
 #define STRONG_DONE_COLOR               color(58,195,160,1)
 #define STRONG_LATER_COLOR              color(255,96,69,1)
 
 #define TEXT_COLOR(Theme)               retColorF(color(255,255,255,1), color(36,40,46,1), Theme)
 #define SUB_TEXT_COLOR                  retColor(gray(170,1),               gray(85,1))
-#define BACKGROUND(Theme)               retColorF(color(36,40,46,1),     gray(255,1),Theme)                //color(226,231,233,1)
+#define BACKGROUND(Theme)               retColorF(color(36,40,46,1),     gray(255,1),Theme)
+//color(226,231,233,1)
 
 #import "ThemeHandler.h"
 #import "RootViewController.h"
