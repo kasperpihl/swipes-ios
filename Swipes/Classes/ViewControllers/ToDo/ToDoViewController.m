@@ -985,7 +985,19 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.subtasksContainer = self.subtasksController.tableView;
         //CGRectSetX(self.subtasksContainer, 10);
         [self.scrollView addSubview:self.subtasksContainer];
+        
+        
+        
+        UIPanGestureRecognizer *panning = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
+        
+        UIView *panningView = [[UIView alloc] initWithFrame:CGRectMake(0,0, 10, self.view.bounds.size.height)];
+        panningView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        [panningView addGestureRecognizer:panning];
+        [self.view addSubview:panningView];
+        
         notify(@"updated sync",updateFromSync:);
+        
+        
     }
     return self;
 }
@@ -1054,6 +1066,15 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.scrollView.contentOffset = currentOffset;
     [UIView commitAnimations];
 }
+
+-(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
+    //[kSideMenu panGestureRecognized:sender];
+    if([sender translationInView:sender.view].x > 25){
+        [self pressedBack:nil];
+    }
+}
+
+
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
