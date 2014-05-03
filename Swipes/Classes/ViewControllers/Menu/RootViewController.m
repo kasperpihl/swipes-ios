@@ -314,6 +314,8 @@ static RootViewController *sharedObject;
     if(!sharedObject)
         sharedObject = self;
     
+    self.viewControllers = @[self.drawerViewController];
+    
     if(!kCurrent){
         if([[NSUserDefaults standardUserDefaults] objectForKey:isTryingString]){
             [self changeToMenu:KPMenuHome animated:NO];
