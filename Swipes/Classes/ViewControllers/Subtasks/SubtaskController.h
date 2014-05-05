@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "KPToDo.h"
 #import "KPReorderTableView.h"
-#define kSubtaskHeight 38
+#define kSubtaskHeight 40
 @class SubtaskController;
 @protocol SubtaskControllerDelegate <NSObject>
 @optional

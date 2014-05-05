@@ -65,6 +65,7 @@
             self.dotView.transform = CGAffineTransformMakeScale(kDotMultiplier, kDotMultiplier);
             CGRectSetCenter(self.dotView, kTitleX/2, self.bounds.size.height/2);
             self.titleField.text = @"Add action step";
+            //self.titleField.textColor = tcolor(SubTextColor);
             self.dotView.layer.borderWidth = kLineSize/kDotMultiplier;
             self.titleField.font = EDIT_TASK_TEXT_FONT;
             self.inEditMode = YES;
@@ -92,7 +93,7 @@
             self.dotView.layer.borderWidth = kLineSize;
             self.dotView.layer.borderColor = tcolor(TasksColor).CGColor;
             //self.dotView.transform = CGAffineTransformMakeScale(0.5, 0.5);
-            
+            //self.titleField.textColor = tcolor(TextColor);
             if(animated)
                 self.titleField.text = @"";
             self.titleField.font = KP_LIGHT(16);
@@ -166,6 +167,7 @@
 }
 -(void)setDotColor:(UIColor *)color{
     self.dotView.layer.borderColor = color.CGColor;
+    //self.dotView.backgroundColor = [color isEqual:tcolor(TasksColor)] ? tcolor(BackgroundColor) : color;
 }
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -185,7 +187,7 @@
         CGFloat sepWidth = 1;
         UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(kTitleX/2-sepWidth/2, 0, sepWidth, self.bounds.size.height)];
         seperator.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        seperator.backgroundColor = alpha(tcolor(TextColor),0.5);
+        seperator.backgroundColor = alpha(tcolor(TasksColor),0.35);
         [self.contentView addSubview:seperator];
         self.seperator = seperator;
         

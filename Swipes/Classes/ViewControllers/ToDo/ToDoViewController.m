@@ -817,7 +817,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.textView.backgroundColor = CLEAR;
         self.textView.maxNumberOfLines = 6;
         self.textView.returnKeyType = UIReturnKeyDone; //just as an example
-        self.textView.font = EDIT_TASK_TITLE_FONT;
+        self.textView.font = TITLE_LABEL_FONT;
         self.textView.delegate = self;
         self.textView.internalTextView.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.textView.internalTextView.scrollIndicatorInsets = UIEdgeInsetsMake(5, 0, 5, 0);

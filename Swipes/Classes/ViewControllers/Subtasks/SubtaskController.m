@@ -14,6 +14,8 @@
 @property (nonatomic) NSIndexPath *draggingRow;
 @property (nonatomic) NSArray *subtasks;
 @property (nonatomic) SubtaskCell *editingCell;
+@property (nonatomic) BOOL allTasksCompleted;
+@property (nonatomic) UIColor *lineColor;
 @property BOOL shouldShowAll;
 @end
 
@@ -30,10 +32,12 @@
         [self updateTableFooter];
     [self loadSubtasks];
     [self reloadAndNotify:NO];
+    [self updateLine];
 }
 -(void)fullReload{
     [self loadSubtasks];
     [self reloadAndNotify:YES];
+    [self updateLine];
 }
 
 -(void)loadSubtasks{
@@ -59,6 +63,13 @@
     }
     
     self.subtasks = sortedObjects;
+}
+
+-(void)updateLine{
+    self.lineColor = alpha([StyleHandler colorForCellType:[self.model cellTypeForTodo]],0.35);
+    for(SubtaskCell *cell in [self.tableView visibleCells]){
+        //cell.seperator.backgroundColor = self.lineColor;
+    }
 }
 
 -(void)pressedShowAll{
@@ -183,7 +194,17 @@
 }
 
 #pragma mark MCSwipeTableViewCellDelegate
+-(void)swipeTableViewCell:(SubtaskCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
+    [UIView animateWithDuration:0.2 animations:^{
+        cell.seperator.transform = CGAffineTransformMakeScale(1, 0.05);
+        //cell.seperator.alpha = 0;
+    }];
+}
 -(void)swipeTableViewCell:(SubtaskCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
+    [UIView animateWithDuration:0.2 animations:^{
+        cell.seperator.transform = CGAffineTransformIdentity;
+        cell.seperator.alpha = 1;
+    }];
     if(state == MCSwipeTableViewCellStateNone)
         return;
     
@@ -282,6 +303,7 @@
     [cell setTitle:subtask.title];
     cell.model = subtask;
     [cell setStrikeThrough:isDone];
+    //cell.seperator.backgroundColor = self.lineColor;
     [cell setFirstColor:isDone ? [UIColor redColor] : [StyleHandler colorForCellType:CellTypeDone]];
     [cell setFirstIconName:isDone ? iconString(@"actionDeleteFull") : [StyleHandler iconNameForCellType:CellTypeDone]];
     [cell setThirdIconName:[StyleHandler iconNameForCellType:CellTypeToday]];
@@ -306,6 +328,7 @@
 #pragma mark ATSDragableTableViewDelegate
 - (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
     SubtaskCell *cell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    
     [self tableView:self.tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
 	return cell;
 }
