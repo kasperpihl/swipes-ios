@@ -354,7 +354,7 @@
     NSString *url = @"http://api.swipesapp.com/sync";
 #else
     NSString *url = @"http://swipes-test.herokuapp.com/sync";
-    //url = @"http://127.0.0.1:5000/sync";
+    url = @"http://127.0.0.1:5000/sync";
     
 #endif
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
