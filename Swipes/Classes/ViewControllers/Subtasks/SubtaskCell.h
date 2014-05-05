@@ -19,6 +19,7 @@
 @property (nonatomic,weak) NSObject<SubtaskCellDelegate> *subtaskDelegate;
 @property (nonatomic) KPToDo *model;
 @property (nonatomic) BOOL addModeForCell;
+@property (nonatomic) UIView *seperator;
 @property (nonatomic) UITextField *titleField;
 @property (nonatomic) BOOL strikeThrough;
 @property (nonatomic) NSString *title;

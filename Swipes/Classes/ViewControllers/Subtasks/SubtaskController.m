@@ -102,10 +102,10 @@
     else{
         SubtaskCell *addCell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SubtaskTitleHeader"];
         addCell.activatedDirection = MCSwipeTableViewCellActivatedDirectionNone;
-        CGRectSetHeight(addCell, kSubtaskHeight);
-        addCell.subtaskDelegate = self;
         
+        addCell.subtaskDelegate = self;
         [addCell setAddModeForCell:YES];
+        CGRectSetHeight(addCell, kSubtaskHeight);
         [tableFooter addSubview:addCell];
     }
     self.tableView.tableFooterView = tableFooter;
