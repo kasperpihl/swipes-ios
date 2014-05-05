@@ -9,9 +9,9 @@
 #import "SubtaskCell.h"
 #import "KPToDo.h"
 #import <QuartzCore/QuartzCore.h>
-#define kSubDotSize 14
+#define kSubDotSize 10
 #define kAddSize (kSubDotSize*2)
-#define kLineSize 3
+#define kLineSize 1.5
 #define kTitleX CELL_LABEL_X
 
 @interface SubtaskCell () <UITextFieldDelegate>
@@ -61,7 +61,7 @@
     //self.overlayAddbutton.hidden = !addMode;
     if(adding){
         aniblock1 = ^{
-            self.dotView.backgroundColor = tcolor(TextColor);
+            self.dotView.layer.borderColor = tcolor(TextColor).CGColor;
             self.titleField.text = @"Add action step";
             self.titleField.font = EDIT_TASK_TEXT_FONT;
             self.inEditMode = YES;
@@ -70,7 +70,7 @@
     }
     else{
         aniblock1 = ^{
-            self.dotView.backgroundColor = tcolor(TasksColor);
+            self.dotView.layer.borderColor = tcolor(TasksColor).CGColor;
             //self.dotView.transform = CGAffineTransformMakeScale(0.5, 0.5);
             if(animated)
                 self.titleField.text = @"";
@@ -134,7 +134,7 @@
     [self.titleField becomeFirstResponder];
 }
 -(void)setDotColor:(UIColor *)color{
-    self.dotView.backgroundColor = color;
+    self.dotView.layer.borderColor = color.CGColor;
 }
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -142,7 +142,8 @@
         self.contentView.backgroundColor = tcolor(BackgroundColor);
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.dotView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kSubDotSize, kSubDotSize)];
-        self.dotView.backgroundColor = CLEAR;
+        self.dotView.backgroundColor = tcolor(BackgroundColor);
+        self.dotView.layer.cornerRadius = kSubDotSize/2;
         self.dotView.layer.borderWidth = kLineSize;
         self.dotView.layer.borderColor = tcolor(BackgroundColor).CGColor;
         self.dotView.titleLabel.font = iconFont(kAddSize);

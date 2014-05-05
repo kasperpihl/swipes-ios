@@ -36,6 +36,9 @@ static Global *sharedObject;
     iconCompare(@"editTags",                    @"\ue60b");
     iconCompare(@"editSchedule",                @"\ue60c");
     iconCompare(@"editLocation",                @"\ue60d");
+    iconCompare(@"editEvernote",                @"\ue65c");
+    iconCompare(@"editActionRoundedArrow",      @"\ue65d");
+    iconCompare(@"editActionRoundedPlus",       @"\ue65e");
     
     /* Social icons */
     iconCompare(@"twitter",                     @"\ue60e");
@@ -47,10 +50,10 @@ static Global *sharedObject;
     iconCompare(@"settingsPlus",                @"\ue613");
     iconCompare(@"settingsSync",                @"\ue632");
     iconCompare(@"settingsLogout",              @"\ue617");
-    iconCompare(@"settingsTheme",               @"\ue615");
+    iconCompare(@"settingsTheme",               @"\ue618");
     iconCompare(@"settingsAccount",             @"\ue644");
     iconCompare(@"settingsPolicy",              @"\ue616");
-    iconCompare(@"settingsFeedback",            @"\ue618");
+    iconCompare(@"settingsFeedback",            @"\ue619");
     iconCompare(@"settingsWalkthrough",         @"\ue619");
     iconCompare(@"settingsNotification",        @"\ue61b");
     
@@ -95,7 +98,7 @@ static Global *sharedObject;
     iconCompare(@"scheduleCloud",               @"\ue612");
     iconCompare(@"scheduleCircle",              @"\ue640");
     iconCompare(@"scheduleGlass",               @"\ue641");
-    iconCompare(@"scheduleLogbook",             @"\ue642");
+    iconCompare(@"scheduleLogbook",             @"\ue652");
     iconCompare(@"scheduleSun",                 @"\ue643");
     iconCompare(@"scheduleMoon",                @"\ue638");
     iconCompare(@"scheduleCoffee",              @"\ue645");
