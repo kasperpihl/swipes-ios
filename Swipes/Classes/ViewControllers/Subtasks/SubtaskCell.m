@@ -13,10 +13,20 @@
 #define kDotMultiplier 1.5
 #define kAddSize (kSubDotSize*kDotMultiplier)
 #define kLineSize 1.5
+
+
+/* The white space from the dot and out on subtasks */
+#define kSubOutlineSpacing 2
+/* The length to cut the line at the top and bottom of each cell */
+#define kSubTopHack 5
+
+#define kLineAlpha 0.35
+
 #define kTitleX CELL_LABEL_X
 
 @interface SubtaskCell () <UITextFieldDelegate>
 @property (nonatomic) UIButton *dotView;
+@property (nonatomic) UIView *dotContainer;
 @property (nonatomic) UIButton *addCloseButton;
 @property (nonatomic) UIButton *overlayAddbutton;
 
@@ -36,6 +46,9 @@
 }
 -(void)updateTitle{
     NSDictionary* attributes;
+    self.titleField.textColor = self.strikeThrough ? color(161, 163, 165, 0.7) : tcolor(TextColor);
+    self.titleField.text = self.title;
+    return;
     if(self.strikeThrough){
         attributes = @{
                        NSStrikethroughStyleAttributeName: [NSNumber numberWithInt:NSUnderlineStyleSingle]
@@ -62,8 +75,8 @@
     //self.overlayAddbutton.hidden = !addMode;
     if(adding){
         aniblock1 = ^{
-            self.dotView.transform = CGAffineTransformMakeScale(kDotMultiplier, kDotMultiplier);
-            CGRectSetCenter(self.dotView, kTitleX/2, self.bounds.size.height/2);
+            self.dotContainer.transform = CGAffineTransformMakeScale(kDotMultiplier, kDotMultiplier);
+            CGRectSetCenter(self.dotContainer, kTitleX/2, self.bounds.size.height/2);
             self.titleField.text = @"Add action step";
             //self.titleField.textColor = tcolor(SubTextColor);
             self.dotView.layer.borderWidth = kLineSize/kDotMultiplier;
@@ -76,10 +89,11 @@
         comp1 = ^{
             [self.dotView setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
             self.dotView.layer.borderWidth = 0;
-            self.dotView.transform = CGAffineTransformIdentity;
+            self.dotContainer.transform = CGAffineTransformIdentity;
             //self.dotView.autoresizingMask = UIViewAutoresizingNone;
-            CGRectSetSize(self.dotView, kAddSize, kAddSize);
-            CGRectSetCenter(self.dotView, kTitleX/2, self.bounds.size.height/2);
+            CGRectSetSize(self.dotContainer, kAddSize+2*kSubOutlineSpacing, kAddSize+2*kSubOutlineSpacing);
+            CGRectSetCenter(self.dotContainer, kTitleX/2, self.bounds.size.height/2);
+            self.dotContainer.layer.cornerRadius = kAddSize/2+kSubOutlineSpacing;
             //self.dotView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
             self.dotView.layer.cornerRadius = kAddSize/2;
             [self.dotView setTitle:@"editActionRoundedPlus" forState:UIControlStateNormal];
@@ -89,7 +103,7 @@
     else{
         aniblock1 = ^{
             [self.dotView setTitleColor:tcolor(TasksColor) forState:UIControlStateNormal];
-            self.dotView.transform = CGAffineTransformMakeScale(kDotMultiplier/2, kDotMultiplier/2);
+            self.dotContainer.transform = CGAffineTransformMakeScale(kDotMultiplier/2, kDotMultiplier/2);
             self.dotView.layer.borderWidth = kLineSize;
             self.dotView.layer.borderColor = tcolor(TasksColor).CGColor;
             //self.dotView.transform = CGAffineTransformMakeScale(0.5, 0.5);
@@ -102,10 +116,11 @@
         comp1 = ^{
             
             [self.dotView setTitle:@"" forState:UIControlStateNormal];
-            self.dotView.transform = CGAffineTransformIdentity;
-            CGRectSetSize(self.dotView, kSubDotSize, kSubDotSize);
+            self.dotContainer.transform = CGAffineTransformIdentity;
+            CGRectSetSize(self.dotContainer, kSubDotSize+2*kSubOutlineSpacing, kSubDotSize+2*kSubOutlineSpacing);
             self.dotView.layer.cornerRadius = kSubDotSize/2;
-            CGRectSetCenter(self.dotView, kTitleX/2, self.bounds.size.height/2);
+            self.dotContainer.layer.cornerRadius = kSubDotSize/2+kSubOutlineSpacing;
+            CGRectSetCenter(self.dotContainer, kTitleX/2, self.bounds.size.height/2);
         };
     }
     if(!animated){
@@ -167,6 +182,7 @@
 }
 -(void)setDotColor:(UIColor *)color{
     self.dotView.layer.borderColor = color.CGColor;
+    self.seperator.backgroundColor = alpha(color,kLineAlpha);
     //self.dotView.backgroundColor = [color isEqual:tcolor(TasksColor)] ? tcolor(BackgroundColor) : color;
 }
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
@@ -174,25 +190,29 @@
     if(self){
         self.contentView.backgroundColor = tcolor(BackgroundColor);
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.dotView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kSubDotSize, kSubDotSize)];
+        self.dotContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSubDotSize+2*kSubOutlineSpacing, kSubDotSize+2*kSubOutlineSpacing)];
+        self.dotContainer.backgroundColor = tcolor(BackgroundColor);
+        self.dotContainer.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
+        self.dotContainer.autoresizesSubviews = YES;
+        self.dotView = [[UIButton alloc] initWithFrame:CGRectMake(kSubOutlineSpacing, kSubOutlineSpacing, kSubDotSize, kSubDotSize)];
         self.dotView.backgroundColor = tcolor(BackgroundColor);
         self.dotView.layer.cornerRadius = kSubDotSize/2;
         self.dotView.layer.borderWidth = kLineSize;
         self.dotView.layer.borderColor = tcolor(BackgroundColor).CGColor;
         self.dotView.titleLabel.font = iconFont(kAddSize);
-        self.dotView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
+        self.dotView.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight);
         [self.dotView setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-
+        [self.dotContainer addSubview:self.dotView];
         
         CGFloat sepWidth = 1;
-        UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(kTitleX/2-sepWidth/2, 0, sepWidth, self.bounds.size.height)];
+        UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(kTitleX/2-sepWidth/2, 0 + kSubTopHack, sepWidth, self.bounds.size.height - 2 *kSubTopHack)];
         seperator.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        seperator.backgroundColor = alpha(tcolor(TasksColor),0.35);
+        seperator.backgroundColor = alpha(tcolor(TasksColor),kLineAlpha);
         [self.contentView addSubview:seperator];
         self.seperator = seperator;
         
-        CGRectSetCenter(self.dotView,kTitleX/2,self.bounds.size.height/2);
-        [self.contentView addSubview:self.dotView];
+        [self.contentView addSubview:self.dotContainer];
+        CGRectSetCenter(self.dotContainer,kTitleX/2,self.bounds.size.height/2);
         
         self.titleField = [[UITextField alloc] initWithFrame:CGRectMake(kTitleX, 0, self.frame.size.width-kTitleX, self.bounds.size.height)];
         self.titleField.backgroundColor = CLEAR;

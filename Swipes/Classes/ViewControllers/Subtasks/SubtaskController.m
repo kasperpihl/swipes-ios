@@ -16,19 +16,24 @@
 @property (nonatomic) SubtaskCell *editingCell;
 @property (nonatomic) BOOL allTasksCompleted;
 @property (nonatomic) UIColor *lineColor;
-@property BOOL shouldShowAll;
+@property (nonatomic) BOOL expanded;
 @end
 
 @implementation SubtaskController
-
+-(void)setExpanded:(BOOL)expanded{
+    [self setExpanded:expanded animated:NO];
+}
+-(void)setExpanded:(BOOL)expanded animated:(BOOL)animated{
+    _expanded = expanded;
+}
 
 -(void)setModel:(KPToDo *)model{
         _model = model;
-        self.shouldShowAll = YES;
+        self.expanded = YES;
         
         //NSInteger numberOfUncompleted = [model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]].count;
         if(model.subtasks.count > 3)
-            self.shouldShowAll = NO;
+            self.expanded = NO;
         [self updateTableFooter];
     [self loadSubtasks];
     [self reloadAndNotify:NO];
@@ -43,9 +48,9 @@
 -(void)loadSubtasks{
     NSSet *subtasks = self.model.subtasks;
     if(subtasks.count == 0)
-        self.shouldShowAll = YES;
+        self.expanded = YES;
     BOOL hasUncompletedTasks = YES;
-    if(!self.shouldShowAll){
+    if(!self.expanded){
         subtasks = [self.model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
         if(!subtasks.count){
             //subtasks = self.model.subtasks;
@@ -55,7 +60,7 @@
     }
     
     NSArray *sortedObjects = [KPToDo sortOrderForItems:[subtasks allObjects] newItemsOnTop:NO save:YES];
-    if(!self.shouldShowAll && sortedObjects.count > 0){
+    if(!self.expanded && sortedObjects.count > 0){
         if(hasUncompletedTasks)
             sortedObjects = [sortedObjects subarrayWithRange:NSMakeRange(0, 1)];
         else
@@ -73,8 +78,8 @@
 }
 
 -(void)pressedShowAll{
-    if(!self.shouldShowAll){
-        self.shouldShowAll = YES;
+    if(!self.expanded){
+        self.expanded = YES;
         [self fullReload];
         [self updateTableFooter];
     }
@@ -83,7 +88,7 @@
 -(void)updateTableFooter{
     UIView *tableFooter = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kSubtaskHeight)];
     tableFooter.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    if(!self.shouldShowAll){
+    if(!self.expanded){
         UIButton *unpackButton = [[UIButton alloc] initWithFrame:tableFooter.bounds];
         [unpackButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         unpackButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -203,7 +208,7 @@
 -(void)swipeTableViewCell:(SubtaskCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
     [UIView animateWithDuration:0.2 animations:^{
         cell.seperator.transform = CGAffineTransformIdentity;
-        cell.seperator.alpha = 1;
+        //cell.seperator.alpha = 1;
     }];
     if(state == MCSwipeTableViewCellStateNone)
         return;
@@ -233,7 +238,7 @@
                 [self.tableView endUpdates];
                 [CATransaction commit];
             }
-            if(!self.shouldShowAll){
+            if(!self.expanded){
                 [self fullReload];
             }
             if([self.delegate respondsToSelector:@selector(didChangeSubtaskController:)])
@@ -254,7 +259,8 @@
     BOOL isDone = subtask.completionDate ? YES : NO;
     if(state == MCSwipeTableViewCellModeNone){
         [cell setDotColor:isDone ? tcolor(DoneColor) : tcolor(TasksColor)];
-        if(!isDone) [cell setStrikeThrough:NO];
+        if(!isDone)
+            [cell setStrikeThrough:NO];
     }
     if(state == MCSwipeTableViewCellState1){
         [cell setDotColor:isDone ? [UIColor redColor] : tcolor(DoneColor)];
