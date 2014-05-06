@@ -21,7 +21,9 @@
 @interface SubtaskController : NSObject
 @property (nonatomic,weak) NSObject<SubtaskControllerDelegate> *delegate;
 @property (nonatomic) KPToDo *model;
+@property (nonatomic) BOOL expanded;
 @property KPReorderTableView *tableView;
+
 -(void)setExpanded:(BOOL)expanded animated:(BOOL)animated;
 -(void)resign;
 @end

@@ -126,17 +126,14 @@
         };
     }
     if(!animated){
-        NSLog(@"ran not animated");
         aniblock1();
         if(comp1)
             comp1();
     }
     else{
-        NSLog(@"running animations");
         [UIView animateWithDuration:0.25f
                          animations:aniblock1
          completion:^(BOOL finished) {
-            NSLog(@"done animating");
             if(comp1)
                 comp1();
         }];
@@ -159,7 +156,6 @@
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     //if(self.titleField.isFirstResponder) [self.titleField resignFirstResponder];
-    NSLog(@"ended editing");
     if (self.addModeForCell) {
         [self switchBetweenAddAndEdit:YES animated:YES];
     }

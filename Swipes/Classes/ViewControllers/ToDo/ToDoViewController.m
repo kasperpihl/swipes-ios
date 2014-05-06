@@ -95,6 +95,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 
 @property (nonatomic) UIView *titleContainerView;
+@property (nonatomic) UIButton *expandButton;
 @property (nonatomic) DotView *dotView;
 @property (nonatomic) HPGrowingTextView *textView;
 
@@ -252,7 +253,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         }
         case KPEditModeRepeat:
             [self updateRepeated];
-            [self layout];
+            [self layoutWithDuration:0];
             break;
         case KPEditModeTags:
         case KPEditModeAlarm:
@@ -274,7 +275,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.model setRepeatOption:option save:YES];
     }
     [self updateRepeated];
-    [self layout];
+    [self layoutWithDuration:0];
 }
 
 
@@ -343,7 +344,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 - (void)growingTextView:(HPGrowingTextView *)growingTextView willChangeHeight:(float)height{
     CGFloat titleHeight = height+TITLE_TOP_MARGIN+TITLE_BOTTOM_MARGIN;
     CGRectSetHeight(self.titleContainerView,titleHeight);
-    [self layout];
+    [self layoutWithDuration:0];
     //CGRectSetY(self.scrollView, CGRectGetMaxY(self.titleContainerView.frame));
     //CGRectSetHeight(self.scrollView, self.contentView.frame.size.height-CGRectGetMaxY(self.titleContainerView.frame)-TOOLBAR_HEIGHT);
 }
@@ -356,7 +357,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.model.notes = text;
     [KPToDo saveToSync];
     [self updateNotes];
-    [self layout];
+    [self layoutWithDuration:0];
 }
 
 -(void)pressedCancelNotesView:(NotesView *)notesView{
@@ -374,14 +375,14 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self.model attachService:EVERNOTE_SERVICE title:title identifier:guid];
     [KPToDo saveToSync];
     [self updateEvernote];
-    [self layout];
+    [self layoutWithDuration:0];
 }
 
 - (void)closeEvernoteView:(EvernoteView *)evernoteView
 {
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
-    [self layout];
+    [self layoutWithDuration:0];
 }
 
 #pragma mark - DropboxViewDelegate
@@ -394,7 +395,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self.model attachService:DROPBOX_SERVICE title:[path lastPathComponent] identifier:path];
     [KPToDo saveToSync];
     [self updateDropbox];
-    [self layout];
+    [self layoutWithDuration:0];
 }
 
 - (void)closeDropboxView:(DropboxView *)DropboxView
@@ -420,7 +421,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self updateEvernote];
     [self updateDropbox];
     [self updateSectionHeader];
-    [self layout];
+    [self layoutWithDuration:0];
     
 }
 
@@ -585,7 +586,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
 }
 
--(void)layout{
+-(void)layoutWithDuration:(CGFloat)duration{
+    if(duration > 0){
+        [UIView beginAnimations:@"rotate" context:nil];
+        [UIView setAnimationDuration:duration];
+    }
     CGFloat tempHeight = 0;
     
     
@@ -596,6 +601,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetY(self.subtasksContainer, tempHeight);
     tempHeight += self.subtasksContainer.frame.size.height;
     
+    CGFloat targetAlpha = self.subtasksController.expanded ? 0 : 1;
+    self.alarmContainer.alpha = self.repeatedContainer.alpha = self.tagsContainerView.alpha = self.evernoteContainer.alpha = self.dropboxContainer.alpha = self.notesContainer.alpha = targetAlpha;
+    CGFloat heightWithSubtasks = tempHeight;
+    
+    if(!self.subtasksController.expanded){
     CGRectSetY(self.alarmContainer, tempHeight);
     tempHeight += self.alarmContainer.frame.size.height;
     
@@ -626,10 +636,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
     CGRectSetY(self.notesContainer, tempHeight);
     tempHeight += self.notesContainer.frame.size.height;
-    
-    
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width,tempHeight);
+    }
+    CGFloat targetHeight = self.subtasksController.expanded ? heightWithSubtasks : tempHeight;
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width,targetHeight);
     CGRectSetHeight(self.cell,self.view.bounds.size.height-self.cell.frame.origin.y);
+    if(duration > 0){
+        [UIView commitAnimations];
+    }
 }
 
 #pragma mark - Toolbar button handlers
@@ -676,7 +689,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.activeEditMode = KPEditModeRepeat;
     }
     [self updateRepeated];
-    [self layout];
+    [self layoutWithDuration:0];
 }
 
 -(void)pressedDone:(id)sender
@@ -727,7 +740,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self.segmentedViewController tagItems:@[self.model] inViewController:self withDismissAction:^{
         self.activeEditMode = KPEditModeNone;
         [self updateTags];
-        [self layout];
+        [self layoutWithDuration:0];
     }];
 }
 
@@ -750,6 +763,14 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     view.useThumbnails = YES;
     BLURRY.showPosition = PositionBottom;
     [BLURRY showView:view inViewController:self];
+}
+
+- ( void )pressedExpand: ( UIButton* )sender{
+    [self.subtasksController setExpanded:!self.subtasksController.expanded animated:YES];
+    [UIView beginAnimations:@"rotate" context:nil];
+    [UIView setAnimationDuration:.25f];
+    sender.transform = self.subtasksController.expanded ? CGAffineTransformMakeRotation(M_PI) : CGAffineTransformMakeRotation(0);
+    [UIView commitAnimations];
 }
 
 #pragma mark - UIViewController stuff
@@ -836,7 +857,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.titleContainerView addSubview:priorityButton];
         self.dotView = dotView;
         
-        
+        self.expandButton = [[UIButton alloc] initWithFrame:CGRectMake(self.titleContainerView.frame.size.width-44, TITLE_TOP_MARGIN-5, 44, 44)];
+        self.expandButton.titleLabel.font = iconFont(20);
+        [self.expandButton setTitle:@"editActionRoundedArrow" forState:UIControlStateNormal];
+        [self.expandButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [self.expandButton addTarget:self action:@selector(pressedExpand:) forControlEvents:UIControlEventTouchUpInside];
+        [self.titleContainerView addSubview:self.expandButton];
         
         
         self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, contentView.frame.size.height)];
@@ -1009,7 +1035,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 
 -(void)subtaskController:(SubtaskController *)controller changedToSize:(CGSize)size{
-    [self layout];
+    [self layoutWithDuration:0.25f];
     //NSLog(@"%f + %f + %f = %f",self.subtasksContainer.frame.size.height, self.subtasksContainer.frame.origin.y, self.cell.frame.origin.y, superFrame.origin.y);
     if(self.kbdHeight){
         CGRect newEdit = self.editingFrame;
@@ -1019,7 +1045,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         CGFloat visibleHeight = self.view.bounds.size.height - self.kbdHeight - self.cell.frame.origin.y;
         CGFloat newY = CGRectGetMaxY(self.editingFrame) - visibleHeight;
         [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.1];
+        [UIView setAnimationDuration:0.25f];
         [UIView setAnimationBeginsFromCurrentState:YES];
         
         if(newY >= 0)

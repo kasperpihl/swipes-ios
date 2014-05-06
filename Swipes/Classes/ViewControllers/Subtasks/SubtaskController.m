@@ -16,15 +16,25 @@
 @property (nonatomic) SubtaskCell *editingCell;
 @property (nonatomic) BOOL allTasksCompleted;
 @property (nonatomic) UIColor *lineColor;
-@property (nonatomic) BOOL expanded;
+
 @end
 
 @implementation SubtaskController
 -(void)setExpanded:(BOOL)expanded{
-    [self setExpanded:expanded animated:NO];
+    if(_expanded != expanded){
+        [self setExpanded:expanded animated:NO];
+    }
 }
 -(void)setExpanded:(BOOL)expanded animated:(BOOL)animated{
     _expanded = expanded;
+    if(!animated)
+        [self fullReload];
+    else{
+        [self loadSubtasks];
+        //[self reloadAndNotify:NO];
+        [self.tableView reloadData];
+        [self setHeightAndNotify:YES animated:YES];
+    }
 }
 
 -(void)setModel:(KPToDo *)model{
@@ -34,7 +44,6 @@
         //NSInteger numberOfUncompleted = [model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]].count;
         if(model.subtasks.count > 3)
             self.expanded = NO;
-        [self updateTableFooter];
     [self loadSubtasks];
     [self reloadAndNotify:NO];
     [self updateLine];
@@ -77,45 +86,10 @@
     }
 }
 
--(void)pressedShowAll{
-    if(!self.expanded){
-        self.expanded = YES;
-        [self fullReload];
-        [self updateTableFooter];
-    }
-}
 
 -(void)updateTableFooter{
     UIView *tableFooter = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kSubtaskHeight)];
     tableFooter.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    if(!self.expanded){
-        UIButton *unpackButton = [[UIButton alloc] initWithFrame:tableFooter.bounds];
-        [unpackButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        unpackButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        unpackButton.titleEdgeInsets = UIEdgeInsetsMake(0, CELL_LABEL_X, 0, 0);
-        unpackButton.titleLabel.font = EDIT_TASK_TEXT_FONT;
-        [unpackButton addTarget:self action:@selector(pressedShowAll) forControlEvents:UIControlEventTouchUpInside];
-        [unpackButton setTitle:[NSString stringWithFormat:@"Show all %i steps",self.model.subtasks.count] forState:UIControlStateNormal];
-        NSInteger dotViewSize = 8;
-        UIColor *dotColor = tcolor(TextColor);
-        CGPoint centerPoint = CGPointMake(CELL_LABEL_X/2, kSubtaskHeight/2);
-        for(NSInteger i = 1 ; i >= 0  ; i--){
-            
-            UIView *dotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, dotViewSize, dotViewSize)];
-            UIColor *thisColor = dotColor;
-            /*for(NSInteger j = 0 ; j < i ; j++){
-             NSLog(@"%i - %i",i,j);
-             thisColor = [thisColor brightenedWithPercentage:-0.2];
-             }*/
-            dotView.backgroundColor = thisColor;
-            CGFloat extraMultiplier = 2;
-            dotView.center = CGPointMake(centerPoint.x + i * extraMultiplier, centerPoint.y + i * extraMultiplier);
-            dotView.layer.masksToBounds = YES;
-            [unpackButton addSubview:dotView];
-        }
-        [tableFooter addSubview:unpackButton];
-    }
-    else{
         SubtaskCell *addCell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SubtaskTitleHeader"];
         addCell.activatedDirection = MCSwipeTableViewCellActivatedDirectionNone;
         
@@ -123,32 +97,40 @@
         [addCell setAddModeForCell:YES];
         CGRectSetHeight(addCell, kSubtaskHeight);
         [tableFooter addSubview:addCell];
-    }
     self.tableView.tableFooterView = tableFooter;
 }
 
 - (void)reloadAndNotify:(BOOL)notify{
     [self.tableView reloadData];
-    [self setHeightAndNotify:notify];
+    [self setHeightAndNotify:notify animated:NO];
 }
--(void)setHeightAndNotify:(BOOL)notify{
+-(void)setHeightAndNotify:(BOOL)notify animated:(BOOL)animated{
     CGFloat contentHeight = 0;
     if(self.subtasks.count > 0){
         NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:self.subtasks.count-1 inSection:0];
         CGRect lastRowRect= [self.tableView rectForRowAtIndexPath:lastIndexPath];
         contentHeight = lastRowRect.origin.y + lastRowRect.size.height;
     }
+    NSLog(@"contentHeight:%f",contentHeight);
+    
+    if(animated){
+        [UIView beginAnimations:@"expand" context:nil];
+        [UIView setAnimationDuration:0.25f];
+    }
     CGRectSetHeight(self.tableView,contentHeight + self.tableView.tableFooterView.frame.size.height);
     if(notify && [self.delegate respondsToSelector:@selector(subtaskController:changedToSize:)])
-        [self.delegate subtaskController:self changedToSize:self.tableView.frame.size];
+        [self.delegate subtaskController:self changedToSize:CGSizeMake(self.tableView.frame.size.width, contentHeight + self.tableView.tableFooterView.frame.size.height)];
+    if(animated){
+        [UIView commitAnimations];
+    }
 }
-
 
 -(id)init{
     self = [super init];
     if(self){
         self.tableView = [[KPReorderTableView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) style:UITableViewStylePlain];
         self.tableView.dataSource = self;
+        self.tableView.layer.masksToBounds = YES;
         self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
         self.tableView.dragDelegate = self;
         self.tableView.scrollEnabled = NO;
@@ -156,6 +138,7 @@
         self.tableView.indicatorDelegate = self;
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.delegate = self;
+        [self updateTableFooter];
     }
     return self;
 }
@@ -221,7 +204,18 @@
             [cell setStrikeThrough:YES];
             if(!isDone){
                 [KPToDo completeToDos:@[subtask] save:YES];
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                if(self.expanded){
+                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
+                else{
+                    [CATransaction begin];
+                    [CATransaction setCompletionBlock: ^{
+                    }];
+                    [self.tableView beginUpdates];
+                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+                    [self.tableView endUpdates];
+                    [CATransaction commit];
+                }
             }
             else{
                 [KPToDo deleteToDos:@[subtask] save:YES];
@@ -230,8 +224,7 @@
                 self.subtasks = [mutableSubtasks copy];
                 [CATransaction begin];
                 [CATransaction setCompletionBlock: ^{
-                    [self setHeightAndNotify:YES];
-                    [self updateTableFooter];
+                    [self setHeightAndNotify:YES animated:NO];
                 }];
                 [self.tableView beginUpdates];
                 [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
