@@ -16,9 +16,9 @@
 
 
 /* The white space from the dot and out on subtasks */
-#define kSubOutlineSpacing 2
+#define kSubOutlineSpacing 4
 /* The length to cut the line at the top and bottom of each cell */
-#define kSubTopHack 5
+#define kSubTopHack 0
 
 #define kLineAlpha 0.35
 
@@ -83,6 +83,7 @@
             self.titleField.font = EDIT_TASK_TEXT_FONT;
             self.inEditMode = YES;
             CGRectSetHeight(self.seperator, self.bounds.size.height/2);
+            CGRectSetY(self.seperator, 0);
             
             
         };
@@ -104,6 +105,7 @@
         aniblock1 = ^{
             [self.dotView setTitleColor:tcolor(TasksColor) forState:UIControlStateNormal];
             self.dotContainer.transform = CGAffineTransformMakeScale(kDotMultiplier/2, kDotMultiplier/2);
+            CGRectSetY(self.seperator, kSubTopHack);
             self.dotView.layer.borderWidth = kLineSize;
             self.dotView.layer.borderColor = tcolor(TasksColor).CGColor;
             //self.dotView.transform = CGAffineTransformMakeScale(0.5, 0.5);
@@ -182,7 +184,8 @@
 }
 -(void)setDotColor:(UIColor *)color{
     self.dotView.layer.borderColor = color.CGColor;
-    self.seperator.backgroundColor = alpha(color,kLineAlpha);
+    //self.seperator.backgroundColor = alpha(color,kLineAlpha);
+    self.seperator.backgroundColor = color(161, 163, 165, 0.7);
     //self.dotView.backgroundColor = [color isEqual:tcolor(TasksColor)] ? tcolor(BackgroundColor) : color;
 }
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
