@@ -587,7 +587,7 @@
 
 -(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton{
     MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton]];
-    button.iconLabel.titleLabel.font = iconFont(50);
+    button.iconLabel.titleLabel.font = iconFont(41);
     [button.iconLabel setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     [button.iconLabel setTitleColor:tcolor(TextColor) forState:UIControlStateHighlighted];
     [button.iconLabel setTitle:[self stringForMenuButton:menuButton highlighted:NO] forState:UIControlStateNormal];
