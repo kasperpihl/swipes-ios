@@ -164,9 +164,15 @@
         //[self.titleField becomeFirstResponder];
     }
 }
--(void)textFieldDidReturn:(UITextField *)textField{
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
     
 }
+
+-(void)textFieldDidReturn:(UITextField *)textField{
+
+}
+
 
 -(void)pressedAdd{
     if([self.subtaskDelegate respondsToSelector:@selector(shouldStartEditingSubtaskCell:)]){

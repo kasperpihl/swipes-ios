@@ -880,7 +880,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.expandButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [self.expandButton addTarget:self action:@selector(pressedExpand:) forControlEvents:UIControlEventTouchUpInside];
         [self.titleContainerView addSubview:self.expandButton];
-        
+        //self.expandButton.hidden = YES;
+        //self.expandButton = nil;
         
         self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, contentView.frame.size.height)];
         //self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -1088,7 +1089,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGFloat kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     self.kbdHeight = kbdHeight;
-    
+    self.subtasksController.tableView.reorderingEnabled = NO;
     
     CGFloat visibleHeight = self.view.bounds.size.height - self.kbdHeight - self.cell.frame.origin.y;
     CGFloat newY = CGRectGetMaxY(self.editingFrame) - visibleHeight + 5;
@@ -1103,6 +1104,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)keyboardWillHide:(NSNotification*)notification{
     self.editingFrame = CGRectZero;
+    self.subtasksController.tableView.reorderingEnabled = YES;
     CGPoint currentOffset = self.scrollView.contentOffset;
     currentOffset.y -= self.kbdHeight;
     if(currentOffset.y < 0)

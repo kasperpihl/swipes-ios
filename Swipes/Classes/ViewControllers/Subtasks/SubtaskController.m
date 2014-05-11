@@ -11,7 +11,7 @@
 #import "SlowHighlightIcon.h"
 #import "UIColor+Utilities.h"
 
-#define kCloseButtonHeight 40
+#define kCloseButtonHeight 50
 
 @interface SubtaskController () <UITableViewDataSource,UITableViewDelegate,ATSDragToReorderTableViewControllerDelegate, MCSwipeTableViewCellDelegate,SubtaskCellDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 
@@ -19,6 +19,7 @@
 @property (nonatomic) SubtaskCell *editingCell;
 @property (nonatomic) BOOL allTasksCompleted;
 @property (nonatomic) UIColor *lineColor;
+@property (nonatomic) UIButton *closeButton;
 
 @end
 
@@ -88,7 +89,7 @@
     BOOL hasCloseButton = self.expanded;
     CGFloat footerHeight = hasCloseButton ? kSubtaskHeight+kCloseButtonHeight : kSubtaskHeight;
     CGRectSetHeight(self.tableView.tableFooterView,footerHeight);
-    
+    //self.closeButton.transform = CGAffineTransformMakeRotation(self.expanded ? M_PI : 0);
 }
 
 - ( void )pressedCloseSubtasks{
@@ -100,7 +101,7 @@
         
     }
     else
-        [self setExpanded:NO animated:YES];
+        [self setExpanded:!self.expanded animated:YES];
 }
 
 - (void)reloadAndNotify:(BOOL)notify{
@@ -152,7 +153,7 @@
         [tableFooter addSubview:addCell];
         
         UIButton *closeButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2-kCloseButtonHeight/2, kSubtaskHeight, kCloseButtonHeight, kCloseButtonHeight)];
-        closeButton.titleLabel.font = iconFont(30);
+        closeButton.titleLabel.font = iconFont(28);
         closeButton.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin);
         //closeButton.backgroundColor = tcolor(LaterColor);
         closeButton.transform = CGAffineTransformMakeRotation(M_PI);
@@ -161,6 +162,7 @@
         [closeButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [closeButton addTarget:self action:@selector(pressedCloseSubtasks) forControlEvents:UIControlEventTouchUpInside];
         [tableFooter addSubview:closeButton];
+        self.closeButton = closeButton;
         
         self.tableView.tableFooterView = tableFooter;
         [self updateTableFooter];
