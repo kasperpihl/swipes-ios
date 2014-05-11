@@ -32,6 +32,9 @@
     _expanded = expanded;
     if([self.delegate respondsToSelector:@selector(subtaskController:changedExpanded:)])
         [self.delegate subtaskController:self changedExpanded:expanded];
+    if(!expanded){
+        [self resign];
+    }
     if(!animated)
         [self fullReload];
     else{
