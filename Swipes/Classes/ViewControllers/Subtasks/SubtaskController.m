@@ -92,7 +92,15 @@
 }
 
 - ( void )pressedCloseSubtasks{
-    [self setExpanded:NO animated:YES];
+    if(self.editingCell && self.editingCell.addModeForCell){
+        /*if(self.editingCell.titleField.text.length == 0)
+            [self setExpanded:NO animated:YES];
+        else*/
+        [self resign];
+        
+    }
+    else
+        [self setExpanded:NO animated:YES];
 }
 
 - (void)reloadAndNotify:(BOOL)notify{
@@ -185,6 +193,7 @@
 }
 -(void)resign{
     [self.editingCell.titleField resignFirstResponder];
+    self.editingCell = nil;
 }
 -(void)startedEditingSubtaskCell:(SubtaskCell *)cell{
     self.editingCell = cell;
@@ -198,6 +207,18 @@
     if([self.delegate respondsToSelector:@selector(subtaskController:editingCellWithFrame:)]){
         [self.delegate subtaskController:self editingCellWithFrame:self.tableView.tableFooterView.frame];
     }
+}
+-(BOOL)shouldStartEditingSubtaskCell:(SubtaskCell *)cell{
+    if(!self.expanded && !cell.addModeForCell && self.model.subtasks.count > 1){
+        [self setExpanded:YES animated:YES];
+        return NO;
+    }
+    return YES;
+}
+-(void)endedEditingCell:(SubtaskCell *)cell{
+    self.editingCell = nil;
+    if (self.expanded && cell.addModeForCell && self.subtasks.count <= 1)
+        [self setExpanded:NO animated:YES];
 }
 
 #pragma mark MCSwipeTableViewCellDelegate

@@ -74,6 +74,7 @@
     voidBlock comp1;
     //self.overlayAddbutton.hidden = !addMode;
     if(adding){
+        self.titleField.returnKeyType = UIReturnKeyDone;
         aniblock1 = ^{
             self.dotContainer.transform = CGAffineTransformMakeScale(kDotMultiplier, kDotMultiplier);
             CGRectSetCenter(self.dotContainer, kTitleX/2, self.bounds.size.height/2);
@@ -102,6 +103,7 @@
         };
     }
     else{
+        self.titleField.returnKeyType = UIReturnKeyDone;
         aniblock1 = ^{
             [self.dotView setTitleColor:tcolor(TasksColor) forState:UIControlStateNormal];
             self.dotContainer.transform = CGAffineTransformMakeScale(kDotMultiplier/2, kDotMultiplier/2);
@@ -156,17 +158,35 @@
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     //if(self.titleField.isFirstResponder) [self.titleField resignFirstResponder];
+    if([self.subtaskDelegate respondsToSelector:@selector(endedEditingCell:)])
+        [self.subtaskDelegate endedEditingCell:self];
     if (self.addModeForCell) {
         [self switchBetweenAddAndEdit:YES animated:YES];
     }
     else
         [self.subtaskDelegate subtaskCell:self editedSubtask:textField.text];
 }
+- ( void )textFieldDidChange: (UITextField *)textField{
+    NSString *text = textField.text;
+    if(self.addModeForCell){
+        NSLog(@"change");
+        self.titleField.returnKeyType = (text.length > 0) ? UIReturnKeyNext : UIReturnKeyDone;
+        //[self.titleField resignFirstResponder];
+        //[self.titleField becomeFirstResponder];
+    }
+}
 -(void)textFieldDidReturn:(UITextField *)textField{
     
 }
 
 -(void)pressedAdd{
+    if([self.subtaskDelegate respondsToSelector:@selector(shouldStartEditingSubtaskCell:)]){
+        BOOL shouldEdit = [self.subtaskDelegate shouldStartEditingSubtaskCell:self];
+        if(!shouldEdit)
+            return;
+    }
+        
+    
     if(self.addModeForCell && self.inEditMode)
         [self switchBetweenAddAndEdit:NO animated:YES];
     
@@ -221,6 +241,9 @@
         self.titleField.font = KP_LIGHT(16);
         self.titleField.textColor = tcolor(TextColor);
         self.titleField.delegate = self;
+        [self.titleField addTarget:self
+                      action:@selector(textFieldDidChange:)
+            forControlEvents:UIControlEventEditingChanged];
         [self.titleField addTarget:self
                       action:@selector(textFieldDidReturn:)
             forControlEvents:UIControlEventEditingDidEndOnExit];

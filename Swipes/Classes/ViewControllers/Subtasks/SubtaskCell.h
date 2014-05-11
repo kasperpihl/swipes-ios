@@ -13,6 +13,8 @@
 - ( void )subtaskCell: (SubtaskCell *)cell editedSubtask: (NSString *)subtask;
 - ( void )startedEditingSubtaskCell: (SubtaskCell *)cell;
 - ( void )startedAddingSubtaskInCell: (SubtaskCell *)cell;
+- ( BOOL )shouldStartEditingSubtaskCell:(SubtaskCell *)cell;
+- ( void )endedEditingCell: ( SubtaskCell* )cell;
 @end
 @class KPToDo;
 @interface SubtaskCell : MCSwipeTableViewCell

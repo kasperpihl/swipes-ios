@@ -771,7 +771,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)subtaskController:(SubtaskController *)controller changedExpanded:(BOOL)expanded{
     [UIView beginAnimations:@"rotate" context:nil];
     [UIView setAnimationDuration:.25f];
-    self.expandButton.transform = expanded ? CGAffineTransformMakeRotation(M_PI) : CGAffineTransformMakeRotation(0);
+    self.expandButton.alpha = expanded ? 0 : 1;
+    //self.expandButton.transform = expanded ? CGAffineTransformMakeRotation(M_PI) : CGAffineTransformMakeRotation(0);
     [UIView commitAnimations];
 }
 
@@ -1115,6 +1116,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.expandButton.transform = CGAffineTransformMakeRotation(0);
+    self.expandButton.hidden = (self.model.subtasks.count <= 1);
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
