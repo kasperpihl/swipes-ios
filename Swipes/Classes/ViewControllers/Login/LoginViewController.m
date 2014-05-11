@@ -207,22 +207,18 @@ typedef enum {
         [self.view addSubview:self.continueButton];
         
         
-        UIColor *tryColor = tcolorF(TextColor, ThemeDark); //color(255, 190, 97, 1)
-        self.tryButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-        self.tryButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.tryButton.frame = CGRectMake(buttonMargin, 0, self.view.frame.size.width - buttonMargin * 2, buttonHeight);
-        self.tryButton.layer.cornerRadius = kCornerRadius;
-        self.tryButton.layer.borderColor = tryColor.CGColor;
-        self.tryButton.layer.borderWidth = kButtonBorderWidth;
+        //UIColor *tryColor = tcolorF(TextColor, ThemeDark); //color(255, 190, 97, 1)
+        self.tryButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.tryButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
         self.tryButton.backgroundColor = CLEAR;
-        self.tryButton.layer.masksToBounds = YES;
-        self.tryButton.titleLabel.font = kDefLoginButtonsFont;
+        self.tryButton.titleLabel.font = LOGIN_FIELDS_FONT;
+        
         [self.tryButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
-        NSString *title = [[NSUserDefaults standardUserDefaults] boolForKey:isTryingString] ? @"KEEP TRYING SWIPES" : @"TRY OUT";
+        NSString *title = [[NSUserDefaults standardUserDefaults] boolForKey:isTryingString] ? @"Keep trying Swipes" : @"Try out";
         [self.tryButton setTitle:title forState:UIControlStateNormal];
-        [self.tryButton setTitleColor:tcolorF(TextColor, ThemeLight) forState:UIControlStateHighlighted];
-        [self.tryButton setBackgroundImage:[tryColor image] forState:UIControlStateHighlighted];
         [self.tryButton addTarget:self action:@selector(pressedTryButton:) forControlEvents:UIControlEventTouchUpInside];
+        self.tryButton.frame = CGRectMake(0, 0, sizeWithFont(title ,LOGIN_FIELDS_FONT).width + 36, fieldHeight);
+        self.tryButton.frame = CGRectSetPos(self.tryButton.frame, 0, self.view.frame.size.height-self.tryButton.frame.size.height);
         [self.view addSubview:self.tryButton];
         
         /*
@@ -582,10 +578,10 @@ typedef enum {
     if(self.currentState == LoginStateWelcome){
         CGFloat titleMaxY = CGRectGetMaxY(self.titleView.frame);
         //CGFloat remainingSpace = self.view.frame.size.height - titleMaxY - 10*kExtraBottomSpacing;
-        CGFloat spacingBetween = 30;
+        //CGFloat spacingBetween = 30;
         CGFloat firstY = titleMaxY + 50;
         CGRectSetY(self.continueButton, firstY);
-        CGRectSetY(self.tryButton,CGRectGetMaxY(self.continueButton.frame) + spacingBetween);
+        //CGRectSetY(self.tryButton,CGRectGetMaxY(self.continueButton.frame) + spacingBetween);
     }
     else CGRectSetY(self.continueButton, loginY+relativeStart);
     
