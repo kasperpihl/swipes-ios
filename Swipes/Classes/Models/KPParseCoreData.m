@@ -374,8 +374,8 @@
     
     /* Performing request */
     NSHTTPURLResponse *response;
-    NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,syncData);
-    
+    NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,[syncData objectForKey:@"lastUpdate"]);
+    NSLog(@"sync:%@",syncData);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
     
@@ -400,7 +400,7 @@
     }
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
-    //NSLog(@"res:%@ err: %@",result,error);
+    NSLog(@"res:%@ err: %@",result,error);
     
     if(error || [result objectForKey:@"code"] || ![result objectForKey:@"serverTime"]){
         if(!error){

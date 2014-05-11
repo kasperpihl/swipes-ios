@@ -599,7 +599,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
     
     CGRectSetY(self.subtasksContainer, tempHeight);
-    tempHeight += self.subtasksContainer.frame.size.height;
+    tempHeight += self.subtasksContainer.frame.size.height + 20;
     
     CGFloat targetAlpha = self.subtasksController.expanded ? 0 : 1;
     self.alarmContainer.alpha = self.repeatedContainer.alpha = self.tagsContainerView.alpha = self.evernoteContainer.alpha = self.dropboxContainer.alpha = self.notesContainer.alpha = targetAlpha;
@@ -767,9 +767,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 - ( void )pressedExpand: ( UIButton* )sender{
     [self.subtasksController setExpanded:!self.subtasksController.expanded animated:YES];
+}
+-(void)subtaskController:(SubtaskController *)controller changedExpanded:(BOOL)expanded{
     [UIView beginAnimations:@"rotate" context:nil];
     [UIView setAnimationDuration:.25f];
-    sender.transform = self.subtasksController.expanded ? CGAffineTransformMakeRotation(M_PI) : CGAffineTransformMakeRotation(0);
+    self.expandButton.transform = expanded ? CGAffineTransformMakeRotation(M_PI) : CGAffineTransformMakeRotation(0);
     [UIView commitAnimations];
 }
 
@@ -1035,6 +1037,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 
 -(void)subtaskController:(SubtaskController *)controller changedToSize:(CGSize)size{
+    self.expandButton.hidden = (self.model.subtasks.count <= 1);
     [self layoutWithDuration:0.25f];
     //NSLog(@"%f + %f + %f = %f",self.subtasksContainer.frame.size.height, self.subtasksContainer.frame.origin.y, self.cell.frame.origin.y, superFrame.origin.y);
     if(self.kbdHeight){
@@ -1111,6 +1114,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.expandButton.transform = CGAffineTransformMakeRotation(0);
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];

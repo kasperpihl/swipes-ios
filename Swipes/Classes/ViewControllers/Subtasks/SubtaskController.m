@@ -8,11 +8,14 @@
 #import "SubtaskCell.h"
 #import "StyleHandler.h"
 #import "SubtaskController.h"
+#import "SlowHighlightIcon.h"
 #import "UIColor+Utilities.h"
+
+#define kCloseButtonHeight 40
+
 @interface SubtaskController () <UITableViewDataSource,UITableViewDelegate,ATSDragToReorderTableViewControllerDelegate, MCSwipeTableViewCellDelegate,SubtaskCellDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 
 @property (nonatomic) NSIndexPath *draggingRow;
-@property (nonatomic) NSArray *subtasks;
 @property (nonatomic) SubtaskCell *editingCell;
 @property (nonatomic) BOOL allTasksCompleted;
 @property (nonatomic) UIColor *lineColor;
@@ -27,37 +30,35 @@
 }
 -(void)setExpanded:(BOOL)expanded animated:(BOOL)animated{
     _expanded = expanded;
+    if([self.delegate respondsToSelector:@selector(subtaskController:changedExpanded:)])
+        [self.delegate subtaskController:self changedExpanded:expanded];
     if(!animated)
         [self fullReload];
     else{
         [self loadSubtasks];
+        [self updateTableFooter];
         //[self reloadAndNotify:NO];
         [self.tableView reloadData];
         [self setHeightAndNotify:YES animated:YES];
+        
     }
 }
 
 -(void)setModel:(KPToDo *)model{
-        _model = model;
-        self.expanded = YES;
-        
+    _model = model;
         //NSInteger numberOfUncompleted = [model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]].count;
-        if(model.subtasks.count > 3)
-            self.expanded = NO;
+    self.expanded = NO;
     [self loadSubtasks];
     [self reloadAndNotify:NO];
-    [self updateLine];
 }
 -(void)fullReload{
     [self loadSubtasks];
     [self reloadAndNotify:YES];
-    [self updateLine];
+    [self updateTableFooter];
 }
 
 -(void)loadSubtasks{
     NSSet *subtasks = self.model.subtasks;
-    if(subtasks.count == 0)
-        self.expanded = YES;
     BOOL hasUncompletedTasks = YES;
     if(!self.expanded){
         subtasks = [self.model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
@@ -79,25 +80,16 @@
     self.subtasks = sortedObjects;
 }
 
--(void)updateLine{
-    self.lineColor = alpha([StyleHandler colorForCellType:[self.model cellTypeForTodo]],0.35);
-    for(SubtaskCell *cell in [self.tableView visibleCells]){
-        //cell.seperator.backgroundColor = self.lineColor;
-    }
-}
-
 
 -(void)updateTableFooter{
-    UIView *tableFooter = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kSubtaskHeight)];
-    tableFooter.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        SubtaskCell *addCell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SubtaskTitleHeader"];
-        addCell.activatedDirection = MCSwipeTableViewCellActivatedDirectionNone;
-        
-        addCell.subtaskDelegate = self;
-        [addCell setAddModeForCell:YES];
-        CGRectSetHeight(addCell, kSubtaskHeight);
-        [tableFooter addSubview:addCell];
-    self.tableView.tableFooterView = tableFooter;
+    BOOL hasCloseButton = self.expanded;
+    CGFloat footerHeight = hasCloseButton ? kSubtaskHeight+kCloseButtonHeight : kSubtaskHeight;
+    CGRectSetHeight(self.tableView.tableFooterView,footerHeight);
+    
+}
+
+- ( void )pressedCloseSubtasks{
+    [self setExpanded:NO animated:YES];
 }
 
 - (void)reloadAndNotify:(BOOL)notify{
@@ -138,6 +130,28 @@
         self.tableView.indicatorDelegate = self;
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.delegate = self;
+        UIView *tableFooter = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kSubtaskHeight)];
+        tableFooter.layer.masksToBounds = YES;
+        tableFooter.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        SubtaskCell *addCell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SubtaskTitleHeader"];
+        addCell.activatedDirection = MCSwipeTableViewCellActivatedDirectionNone;
+        addCell.subtaskDelegate = self;
+        [addCell setAddModeForCell:YES];
+        CGRectSetHeight(addCell, kSubtaskHeight);
+        [tableFooter addSubview:addCell];
+        
+        UIButton *closeButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2-kCloseButtonHeight/2, kSubtaskHeight, kCloseButtonHeight, kCloseButtonHeight)];
+        closeButton.titleLabel.font = iconFont(30);
+        closeButton.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin);
+        //closeButton.backgroundColor = tcolor(LaterColor);
+        closeButton.transform = CGAffineTransformMakeRotation(M_PI);
+        [closeButton setTitle:@"editActionRoundedArrow" forState:UIControlStateNormal];
+        //[closeButton setTitle:@"roundBackFull" forState:UIControlStateHighlighted];
+        [closeButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [closeButton addTarget:self action:@selector(pressedCloseSubtasks) forControlEvents:UIControlEventTouchUpInside];
+        [tableFooter addSubview:closeButton];
+        
+        self.tableView.tableFooterView = tableFooter;
         [self updateTableFooter];
     }
     return self;
@@ -175,6 +189,8 @@
         [self.delegate subtaskController:self editingCellWithFrame:cell.frame];
 }
 -(void)startedAddingSubtaskInCell:(SubtaskCell *)cell{
+    if(!self.expanded)
+        [self setExpanded:YES animated:YES];
     self.editingCell = cell;
     if([self.delegate respondsToSelector:@selector(subtaskController:editingCellWithFrame:)]){
         [self.delegate subtaskController:self editingCellWithFrame:self.tableView.tableFooterView.frame];

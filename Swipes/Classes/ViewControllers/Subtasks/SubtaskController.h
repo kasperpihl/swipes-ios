@@ -16,6 +16,7 @@
 - (void)subtaskController: (SubtaskController *)controller changedToSize: ( CGSize )size;
 - (void)subtaskController: (SubtaskController *)controller editingCellWithFrame:( CGRect )frame;
 - (void)didChangeSubtaskController:(SubtaskController *)controller;
+- (void)subtaskController: (SubtaskController *)controller changedExpanded:(BOOL)expanded;
 @end
 
 @interface SubtaskController : NSObject
@@ -23,6 +24,7 @@
 @property (nonatomic) KPToDo *model;
 @property (nonatomic) BOOL expanded;
 @property KPReorderTableView *tableView;
+@property (nonatomic) NSArray *subtasks;
 
 -(void)setExpanded:(BOOL)expanded animated:(BOOL)animated;
 -(void)resign;

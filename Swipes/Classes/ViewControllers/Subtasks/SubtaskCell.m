@@ -18,7 +18,7 @@
 /* The white space from the dot and out on subtasks */
 #define kSubOutlineSpacing 4
 /* The length to cut the line at the top and bottom of each cell */
-#define kSubTopHack 0
+#define kSubTopHack 3
 
 #define kLineAlpha 0.35
 
@@ -180,8 +180,8 @@
 }
 -(void)setDotColor:(UIColor *)color{
     self.dotView.layer.borderColor = color.CGColor;
-    //self.seperator.backgroundColor = alpha(color,kLineAlpha);
-    self.seperator.backgroundColor = color(161, 163, 165, 0.7);
+    self.seperator.backgroundColor = alpha(color,kLineAlpha);
+    //self.seperator.backgroundColor = color(161, 163, 165, 0.7);
     //self.dotView.backgroundColor = [color isEqual:tcolor(TasksColor)] ? tcolor(BackgroundColor) : color;
 }
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
