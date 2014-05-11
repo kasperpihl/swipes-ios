@@ -97,6 +97,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UIView *titleContainerView;
 @property (nonatomic) UIButton *expandButton;
 @property (nonatomic) DotView *dotView;
+@property (nonatomic) UIView *dotSeperator;
 @property (nonatomic) HPGrowingTextView *textView;
 
 @property (nonatomic) UIView *subtasksContainer;
@@ -488,9 +489,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 
 -(void)updateDot{
-    
-    self.dotView.dotColor = [StyleHandler colorForCellType:[self.model cellTypeForTodo]];
+    UIColor *newDotColor = [StyleHandler colorForCellType:[self.model cellTypeForTodo]];
+    self.dotView.dotColor = newDotColor;
     self.dotView.priority = (self.model.priorityValue == 1);
+    self.dotSeperator.backgroundColor = alpha(newDotColor,kLineAlpha);
 }
 
 -(void)updateRepeated{
@@ -848,6 +850,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.textView.textColor = tcolor(TextColor);
         [self.titleContainerView addSubview:self.textView];
         
+        
         CGFloat dotWidth = CELL_LABEL_X;
         DotView *dotView = [[DotView alloc] init];
         dotView.dotColor = tcolor(TasksColor);
@@ -859,6 +862,17 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [priorityButton addSubview:dotView];
         [self.titleContainerView addSubview:priorityButton];
         self.dotView = dotView;
+        
+        
+        CGFloat sepHeight = CGRectGetHeight(priorityButton.frame) - CGRectGetMaxY(self.dotView.frame) - 2;
+        
+        CGFloat sepWidth = 1;
+        UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(CELL_LABEL_X/2-sepWidth/2, priorityButton.frame.size.height-sepHeight, sepWidth, sepHeight)];
+        seperator.backgroundColor = alpha(tcolor(TasksColor),kLineAlpha);
+        seperator.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
+        [self.titleContainerView addSubview:seperator];
+        self.dotSeperator = seperator;
+
         
         self.expandButton = [[UIButton alloc] initWithFrame:CGRectMake(self.titleContainerView.frame.size.width-44, TITLE_TOP_MARGIN-5, 44, 44)];
         self.expandButton.titleLabel.font = iconFont(20);

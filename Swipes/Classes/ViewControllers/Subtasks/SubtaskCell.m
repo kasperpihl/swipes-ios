@@ -9,18 +9,7 @@
 #import "SubtaskCell.h"
 #import "KPToDo.h"
 #import <QuartzCore/QuartzCore.h>
-#define kSubDotSize 10
-#define kDotMultiplier 1.5
-#define kAddSize (kSubDotSize*kDotMultiplier)
-#define kLineSize 1.5
 
-
-/* The white space from the dot and out on subtasks */
-#define kSubOutlineSpacing 4
-/* The length to cut the line at the top and bottom of each cell */
-#define kSubTopHack 3
-
-#define kLineAlpha 0.35
 
 #define kTitleX CELL_LABEL_X
 

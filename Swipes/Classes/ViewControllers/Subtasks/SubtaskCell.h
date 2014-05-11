@@ -6,6 +6,19 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
+#define kSubDotSize 10
+#define kDotMultiplier 1.5
+#define kAddSize (kSubDotSize*kDotMultiplier)
+#define kLineSize 1.5
+
+
+/* The white space from the dot and out on subtasks */
+#define kSubOutlineSpacing 4
+/* The length to cut the line at the top and bottom of each cell */
+#define kSubTopHack 3
+
+#define kLineAlpha 0.35
+
 #import "MCSwipeTableViewCell.h"
 @class SubtaskCell;
 @protocol SubtaskCellDelegate <NSObject>

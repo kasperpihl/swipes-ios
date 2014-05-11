@@ -12,4 +12,5 @@
 @property (nonatomic) UIColor *dotColor;
 @property (nonatomic) BOOL priority;
 @property (nonatomic) CGFloat scale;
+-(CGFloat)maxHeight;
 @end

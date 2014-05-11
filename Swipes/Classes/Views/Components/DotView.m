@@ -45,6 +45,10 @@
     [self adjustDot];
     
 }
+-(CGFloat)maxHeight{
+    CGFloat size = kPriorityDotSize * self.scale;
+    return size;
+}
 -(void)adjustDot{
     CGFloat size = self.priority ? kPriorityDotSize * self.scale : kDefaultDotSize * self.scale;
     self.dotView.layer.cornerRadius = size/2;
