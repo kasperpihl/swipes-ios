@@ -231,7 +231,7 @@
                     [CATransaction setCompletionBlock: ^{
                     }];
                     [self.tableView beginUpdates];
-                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+                    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                     [self.tableView endUpdates];
                     [CATransaction commit];
                 }
