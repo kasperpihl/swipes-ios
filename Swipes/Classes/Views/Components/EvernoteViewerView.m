@@ -60,6 +60,7 @@
                         NSURL* dirUrl = [NSURL fileURLWithPath:path isDirectory:YES];
                         
                         NSString* fullHTML = [NSString stringWithFormat:@"<html><head><meta name=\"viewport\" content=\"width=device-width, user-scalable=no\"><link type=\"text/css\" rel=\"stylesheet\" href=\"css/style.css\"></head><h1>%@</h1>%@</html>",note.title, html];
+                        NSLog(@"%@",fullHTML);
                         //NSString* fullHTML = html;
                         //DLog(@"HTML:\n%@", fullHTML);
                         [_webView loadHTMLString:fullHTML baseURL:dirUrl];

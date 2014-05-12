@@ -9,6 +9,7 @@
 #import "KPBlurry.h"
 #import "EvernoteViewerView.h"
 #import "EvernoteView.h"
+#import "UIColor+Utilities.h"
 #import "UtilityClass.h"
 
 #define kContentSpacingLeft 0
@@ -16,7 +17,8 @@
 #define kSearchBarHeight 52
 #define kButtonWidth 44
 #define kSearchTimerInterval 0.6
-
+#define POPUP_WIDTH 315
+#define kEvernoteColor color(95,179,54,1)
 #define kSearchLimit 10     // when _limitSearch is YES this is the limit
 
 @interface EvernoteView () <UITableViewDataSource, UITableViewDelegate, EvernoteViewerViewDelegate, UISearchBarDelegate>
@@ -40,32 +42,60 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = tcolor(BackgroundColor);
+        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [closeButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
+        closeButton.frame = self.bounds;
+        closeButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+        [self addSubview:closeButton];
+        self.backgroundColor = CLEAR;
+        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH)];
+        contentView.autoresizesSubviews = YES;
+        contentView.center = self.center;
+        contentView.backgroundColor = kEvernoteColor;
+        contentView.layer.cornerRadius = 10;
+        contentView.layer.masksToBounds = YES;
         
         CGFloat top = (OSVER >= 7) ? [Global statusBarHeight] : 0.f;
-        // initialize controls
+        /*// initialize controls
         _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _backButton.frame = CGRectMake(kContentSpacingLeft, top, kButtonWidth, kSearchBarHeight);
         [_backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         [_backButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:_backButton];
+        [contentView addSubview:_backButton];*/
 
-        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(kContentSpacingLeft + kButtonWidth, top,
-                320 - kButtonWidth - kContentSpacingLeft - kContentSpacingRight, kSearchBarHeight)];
+        _searchBar = [[UISearchBar alloc] init];
+        //[_searchBar setSearchFieldBackgroundImage:[kEvernoteColor image] forState:UIControlStateNormal];
+        _searchBar.frame = CGRectMake(kContentSpacingLeft, top,
+                                      320 - kButtonWidth - kContentSpacingLeft - kContentSpacingRight, kSearchBarHeight);
         _searchBar.delegate = self;
         _searchBar.backgroundColor = CLEAR;
-        //_searchBar.barTintColor = tcolor(BackgroundColor);
-        _searchBar.placeholder = @"Search in Evernote notes";
+        _searchBar.tintColor = CLEAR;
+        _searchBar.barTintColor = [UIColor clearColor];
+        NSString *placeholderText = @"Search";
+        _searchBar.placeholder = placeholderText;
+        _searchBar.translucent = NO;
+        _searchBar.backgroundImage = [kEvernoteColor image];
+        _searchBar.scopeBarBackgroundImage = [kEvernoteColor image];
         if(OSVER >= 7){
             //[[_searchBar.subviews objectAtIndex:0] removeFromSuperview];
-            _searchBar.searchBarStyle = UISearchBarStyleMinimal;
+            _searchBar.searchBarStyle = UISearchBarStyleProminent;
+            
+            //_searchBar.tintColor = tcolorF(TextColor,ThemeDark);
             for (UIView *view in _searchBar.subviews)
             {
-                
                 for(UITextField *img in view.subviews){
                     if ([img isKindOfClass:NSClassFromString(@"UITextField")])
                     {
+                        img.backgroundColor = CLEAR;
                         [img setTextColor:tcolor(TextColor)];
+                        if ([img respondsToSelector:@selector(setAttributedPlaceholder:)]) {
+                            UIColor *color = tcolorF(TextColor, ThemeDark);
+                            
+                            img.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholderText attributes:@{NSForegroundColorAttributeName: color}];
+                        } else {
+                            NSLog(@"Cannot set placeholder text's color, because deployment target is earlier than iOS 6.0");
+                            // TODO: Add fall-back code to set placeholder color.
+                        }
                     }
                 }
                 
@@ -80,25 +110,26 @@
                 }
             }
         }
-        [self addSubview:_searchBar];
+        [contentView addSubview:_searchBar];
         
 
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, kSearchBarHeight + top, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height - kSearchBarHeight) style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.backgroundColor = tcolor(BackgroundColor);
+        _tableView.backgroundColor = CLEAR;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        [self addSubview:_tableView];
+        [contentView addSubview:_tableView];
         
         // initiate the start lookup
         [self searchBar:_searchBar textDidChange:nil];
+        [self addSubview:contentView];
     }
     return self;
 }
 
 -(void)blurryWillShow:(KPBlurry *)blurry
 {
-    [_searchBar becomeFirstResponder];
+    //[_searchBar becomeFirstResponder];
 }
 
 -(void)blurryWillHide:(KPBlurry *)blurry
@@ -207,8 +238,8 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    cell.contentView.backgroundColor = tcolor(BackgroundColor);
-    cell.backgroundColor = tcolor(BackgroundColor);
+    cell.backgroundColor = kEvernoteColor;
+    cell.contentView.backgroundColor = kEvernoteColor;
     cell.textLabel.textColor = tcolor(TextColor);
     cell.detailTextLabel.textColor = tcolor(TextColor);
     EDAMNote* note = _noteList.notes[indexPath.row];
@@ -233,6 +264,7 @@
     if (nil == cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kCellID];
         cell.textLabel.font = KP_REGULAR(15);
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.detailTextLabel.font = KP_REGULAR(11);
         cell.detailTextLabel.textColor = tcolor(SubTextColor);
         cell.accessoryType = UITableViewCellAccessoryNone;

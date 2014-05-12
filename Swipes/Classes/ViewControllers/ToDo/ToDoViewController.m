@@ -657,7 +657,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.segmentedViewController pressedShare:self];*/
     }
     else if (item == 0 ){
-    
+        [self pressedEvernote:self];
     }
 }
 
