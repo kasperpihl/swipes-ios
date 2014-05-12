@@ -660,7 +660,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
 }
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
-    if(item == 1){
+    if(item == 2){
         [self.segmentedViewController deleteNumberOfItems:1 inView:self completion:^(BOOL succeeded, NSError *error) {
             if(succeeded){
                 [KPToDo deleteToDos:@[self.model] save:YES];
@@ -668,10 +668,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             }
         }];
     }
-    else if(item == 0){
+    else if(item == 1){
         [ROOT_CONTROLLER shareTasks:@[self.model]];
          /*NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
         [self.segmentedViewController pressedShare:self];*/
+    }
+    else if (item == 0 ){
+    
     }
 }
 
@@ -797,14 +800,14 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         
         NSInteger startY = (OSVER >= 7) ? 20 : 0;
-        NSInteger toolbarWidth = 90;
+        NSInteger toolbarWidth = 135;
         NSInteger leftPadding = 45;
         self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(self.view.frame.size.width - toolbarWidth - leftPadding, startY, toolbarWidth, TOOLBAR_HEIGHT) items:nil delegate:self];
         self.toolbarEditView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         self.toolbarEditView.font = iconFont(23);
         self.toolbarEditView.titleColor = tcolor(TextColor);
         self.toolbarEditView.titleHighlightString = @"Full";
-        self.toolbarEditView.items = @[@"actionShare",@"actionDelete"];
+        self.toolbarEditView.items = @[@"actionAttach",@"actionShare",@"actionDelete"];
         [self.view addSubview:self.toolbarEditView];
         UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, startY, 160, TOOLBAR_HEIGHT)];
         [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];

@@ -141,6 +141,7 @@
 		A761B5B716EB596B0095A9A8 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B616EB596B0095A9A8 /* CFNetwork.framework */; };
 		A761B5BB16EB59760095A9A8 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BA16EB59760095A9A8 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		A761B5BD16EB597B0095A9A8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */; };
+		A763C93D19208E58005041D7 /* AttachmentPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = A763C93C19208E58005041D7 /* AttachmentPopup.m */; };
 		A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
 		A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D28172C5EA800BCB2D9 /* _KPTag.m */; };
 		A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2B172C5EAF00BCB2D9 /* KPTag.m */; };
@@ -257,8 +258,8 @@
 
 /* Begin PBXFileReference section */
 		2AEC8E2DF99D443DAEF3911C /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
-		41DF0822188ECD5A0074DDFB /* EvernoteViewerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvernoteViewerView.h; sourceTree = "<group>"; };
-		41DF0823188ECD5A0074DDFB /* EvernoteViewerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvernoteViewerView.m; sourceTree = "<group>"; };
+		41DF0822188ECD5A0074DDFB /* EvernoteViewerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteViewerView.h; path = Components/EvernoteViewerView.h; sourceTree = "<group>"; };
+		41DF0823188ECD5A0074DDFB /* EvernoteViewerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteViewerView.m; path = Components/EvernoteViewerView.m; sourceTree = "<group>"; };
 		A136D6C864AF43788D47AB2C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A703B1611838EB0E0047DCC9 /* UIButton+PassTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+PassTouch.h"; sourceTree = "<group>"; };
 		A703B1621838EB0E0047DCC9 /* UIButton+PassTouch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+PassTouch.m"; sourceTree = "<group>"; };
@@ -426,6 +427,8 @@
 		A761B5B816EB59710095A9A8 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		A761B5BA16EB59760095A9A8 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		A763C93B19208E58005041D7 /* AttachmentPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AttachmentPopup.h; path = "Attachment Services/AttachmentPopup.h"; sourceTree = "<group>"; };
+		A763C93C19208E58005041D7 /* AttachmentPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AttachmentPopup.m; path = "Attachment Services/AttachmentPopup.m"; sourceTree = "<group>"; };
 		A7680D1E172C0E1C00BCB2D9 /* NSDate-Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-Utilities.h"; sourceTree = "<group>"; };
 		A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-Utilities.m"; sourceTree = "<group>"; };
 		A7680D27172C5EA800BCB2D9 /* _KPTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _KPTag.h; sourceTree = "<group>"; };
@@ -561,12 +564,12 @@
 		A7FE4400182825A1002AFB2E /* UIImage+Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Blur.h"; sourceTree = "<group>"; };
 		A7FE4401182825A1002AFB2E /* UIImage+Blur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Blur.m"; sourceTree = "<group>"; };
 		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
-		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvernoteView.h; sourceTree = "<group>"; };
-		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvernoteView.m; sourceTree = "<group>"; };
+		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteView.h; path = Components/EvernoteView.h; sourceTree = "<group>"; };
+		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteView.m; path = Components/EvernoteView.m; sourceTree = "<group>"; };
 		DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.0.xcdatamodel"; sourceTree = "<group>"; };
 		DA67301318A99C7100CA4C1A /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = Swipes/Ressources/Libs/DropboxSDK.framework; sourceTree = "<group>"; };
-		DACD541718A19FB000C378DF /* DropboxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxView.h; sourceTree = "<group>"; };
-		DACD541818A19FB000C378DF /* DropboxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxView.m; sourceTree = "<group>"; };
+		DACD541718A19FB000C378DF /* DropboxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropboxView.h; path = Components/DropboxView.h; sourceTree = "<group>"; };
+		DACD541818A19FB000C378DF /* DropboxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropboxView.m; path = Components/DropboxView.m; sourceTree = "<group>"; };
 		DACD542118A1ACFC00C378DF /* excel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = excel.png; sourceTree = "<group>"; };
 		DACD542218A1ACFC00C378DF /* folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder.png; sourceTree = "<group>"; };
 		DACD542318A1ACFC00C378DF /* folder_app.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder_app.png; sourceTree = "<group>"; };
@@ -651,6 +654,7 @@
 		A703B1641838EBF20047DCC9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A763C93E19208E72005041D7 /* Attachments */,
 				A792BB8518ABED97000573E4 /* LocationSearch */,
 				A703B1651838EBF20047DCC9 /* AddPanel */,
 				A703B1681838EBF20047DCC9 /* Alert */,
@@ -731,12 +735,6 @@
 				A703B1861838EBF20047DCC9 /* SlowHighlightIcon.m */,
 				A703B1871838EBF20047DCC9 /* YoureAllDoneView.h */,
 				A703B1881838EBF20047DCC9 /* YoureAllDoneView.m */,
-				DA3F0B8E188CB4750094F866 /* EvernoteView.h */,
-				DA3F0B8F188CB4750094F866 /* EvernoteView.m */,
-				41DF0822188ECD5A0074DDFB /* EvernoteViewerView.h */,
-				41DF0823188ECD5A0074DDFB /* EvernoteViewerView.m */,
-				DACD541718A19FB000C378DF /* DropboxView.h */,
-				DACD541818A19FB000C378DF /* DropboxView.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -951,6 +949,21 @@
 				A7582505189BC35600B904BC /* Vero.m */,
 			);
 			name = Vero;
+			sourceTree = "<group>";
+		};
+		A763C93E19208E72005041D7 /* Attachments */ = {
+			isa = PBXGroup;
+			children = (
+				DA3F0B8E188CB4750094F866 /* EvernoteView.h */,
+				DA3F0B8F188CB4750094F866 /* EvernoteView.m */,
+				41DF0822188ECD5A0074DDFB /* EvernoteViewerView.h */,
+				41DF0823188ECD5A0074DDFB /* EvernoteViewerView.m */,
+				DACD541718A19FB000C378DF /* DropboxView.h */,
+				DACD541818A19FB000C378DF /* DropboxView.m */,
+				A763C93B19208E58005041D7 /* AttachmentPopup.h */,
+				A763C93C19208E58005041D7 /* AttachmentPopup.m */,
+			);
+			name = Attachments;
 			sourceTree = "<group>";
 		};
 		A7680D30172D219800BCB2D9 /* Font */ = {
@@ -1706,6 +1719,7 @@
 				A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */,
 				DACD541918A19FB000C378DF /* DropboxView.m in Sources */,
 				A703B1AF1838EBF20047DCC9 /* KPAddView.m in Sources */,
+				A763C93D19208E58005041D7 /* AttachmentPopup.m in Sources */,
 				A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */,
 				A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */,
 				A7B9D39019066251001E1109 /* KPAccountAlert.m in Sources */,
