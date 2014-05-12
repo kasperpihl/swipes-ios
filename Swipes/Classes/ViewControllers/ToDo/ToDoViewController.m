@@ -84,7 +84,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic,strong) KPTimePicker *timePicker;
 
 
-@property (nonatomic) UIButton *backButton;
 @property (nonatomic) KPToolbar *toolbarEditView;
 @property (nonatomic) SectionHeaderView *sectionHeader;
 
@@ -157,22 +156,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self.subtasksController setModel:model];
     if(_model != model){
         _model = model;
-        NSString *backLabel;
-        switch ([model cellTypeForTodo]) {
-            case CellTypeSchedule:
-                backLabel = @"SCHEDULE";
-                break;
-            case CellTypeToday:
-                backLabel = @"TASKS";
-                break;
-            case CellTypeDone:
-                backLabel = @"DONE";
-                break;
-            default:
-                backLabel = @"BACK";
-                break;
-        }
-        [self.backButton setTitle:backLabel forState:UIControlStateNormal];
     }
     [self update];
 }
@@ -809,17 +792,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.toolbarEditView.titleHighlightString = @"Full";
         self.toolbarEditView.items = @[@"actionAttach",@"actionShare",@"actionDelete"];
         [self.view addSubview:self.toolbarEditView];
-        UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, startY, 160, TOOLBAR_HEIGHT)];
+        UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, startY, TOOLBAR_HEIGHT, TOOLBAR_HEIGHT)];
         [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
-        [backButton setTitle:@"Schedule" forState:UIControlStateNormal];
-        backButton.titleLabel.font = SECTION_HEADER_FONT;
+        [backButton setTitle:@"back" forState:UIControlStateNormal];
+        backButton.titleLabel.font = iconFont(23);
         [backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        [backButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-        [backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
-        [backButton setImageEdgeInsets:UIEdgeInsetsMake(0, 14, 0, 0)];
-        [backButton setTitleEdgeInsets:UIEdgeInsetsMake(2, 28, 0, 0)];
         [self.view addSubview:backButton];
-        self.backButton = backButton;
         
         self.cell = [[MCSwipeTableViewCell alloc] init];
         self.cell.frame = CGRectMake(0, CGRectGetMaxY(self.toolbarEditView.frame), self.view.frame.size.width,

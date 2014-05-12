@@ -9,12 +9,18 @@
 #import "AttachmentPopup.h"
 
 @implementation AttachmentPopup
++(AttachmentPopup *)popupWithFrame:(CGRect)frame block:(AttachmentPopupBlock)block{
 
+}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [closeButton addTarget:self action:@selector(cancelled) forControlEvents:UIControlEventTouchUpInside];
+        closeButton.frame = self.bounds;
+        closeButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+        [self addSubview:closeButton];
     }
     return self;
 }
