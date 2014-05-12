@@ -23,7 +23,7 @@
     NSDate *startDate = [[NSDate date] dateAtStartOfDay];
     if(!self.hasAskedForMore){
         predicate = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate >= %@ && parent = nil)",startDate];
-        NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@)",startDate];
+        NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@ && parent = nil)",startDate];
         self.remainingTasks = [KPToDo MR_countOfEntitiesWithPredicate:remainingPred];
     }
     else{
