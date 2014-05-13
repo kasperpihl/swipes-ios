@@ -154,6 +154,7 @@
     }
     else
         [self.subtaskDelegate subtaskCell:self editedSubtask:textField.text];
+    self.overlayAddbutton.hidden = NO;
 }
 - ( void )textFieldDidChange: (UITextField *)textField{
     NSString *text = textField.text;
@@ -166,7 +167,7 @@
 }
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
-    
+    self.overlayAddbutton.hidden = YES;
 }
 
 -(void)textFieldDidReturn:(UITextField *)textField{
