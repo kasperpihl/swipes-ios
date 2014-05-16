@@ -40,15 +40,17 @@
     return tags;
 }
 -(BOOL)setAttributesForSavingObject:(NSMutableDictionary *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
-    BOOL setAll = NO;
+    BOOL isNewObject = ( !self.objectId );
+    if ( changedAttributes && [changedAttributes containsObject:@"all"] )
+        isNewObject = YES;
     NSDictionary *keyMatch = @{
                                @"title": @"title"
                                };
-    if(!self.objectId) setAll = YES;
+    
     BOOL shouldUpdate = NO;
     for(NSString *cdKey in keyMatch){
         NSString *pfKey = [keyMatch objectForKey:cdKey];
-        if(setAll || [changedAttributes containsObject:cdKey]){
+        if(isNewObject || [changedAttributes containsObject:cdKey]){
             if([self valueForKey:cdKey]) [*object setObject:[self valueForKey:cdKey] forKey:pfKey];
             else([*object setObject:[NSNull null] forKey:pfKey]);
             shouldUpdate = YES;
