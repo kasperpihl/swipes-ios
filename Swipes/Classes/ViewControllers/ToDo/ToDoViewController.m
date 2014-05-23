@@ -790,7 +790,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.toolbarEditView.font = iconFont(23);
         self.toolbarEditView.titleColor = tcolor(TextColor);
         self.toolbarEditView.titleHighlightString = @"Full";
-        self.toolbarEditView.items = @[@"actionAttach",@"actionShare",@"actionDelete"];
+        self.toolbarEditView.items = @[@"editEvernote",@"actionShare",@"actionDelete"];
         [self.view addSubview:self.toolbarEditView];
         UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, startY, TOOLBAR_HEIGHT, TOOLBAR_HEIGHT)];
         [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];

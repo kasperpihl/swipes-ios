@@ -262,6 +262,18 @@
         [*object setObject:[self stringForRepeatOption:self.repeatOptionValue] forKey:@"repeatOption"];
         shouldUpdate = YES;
     }
+    if ( (isNewObject || [changedAttributes containsObject:@"parent"]) && self.parent ){
+        NSString *parentId = self.parent.objectId;
+        if ( !parentId )
+            parentId = self.parent.tempId;
+        if( parentId ){
+            [*object setObject:parentId forKey:@"parentLocalId"];
+            shouldUpdate = YES;
+        }
+    }
+    if( isNewObject || [changedAttributes containsObject:@"attachments"] ){
+        
+    }
     if(isNewObject || [changedAttributes containsObject:@"tags"]){
         NSInteger tagCount = self.tags.count;
         NSMutableArray *tagArray = [NSMutableArray arrayWithCapacity:tagCount];
@@ -288,7 +300,9 @@
                 }
             }
         }
-        if(isNewObject && tagCount == 0){}
+        if(isNewObject && tagCount == 0){
+            // Don't send 0 tags if new object
+        }
         else{
             [*object setObject:tagArray forKey:@"tags"];
             shouldUpdate = YES;
