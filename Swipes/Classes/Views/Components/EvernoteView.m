@@ -86,7 +86,7 @@
         
         self.searchBar = [[UITextField alloc] initWithFrame:CGRectMake(searchX, 0, searchWidth, kSearchBarHeight)];
         self.searchBar.font = KP_LIGHT(16);
-        self.searchBar.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{NSForegroundColorAttributeName: tcolorF(TextColor, ThemeDark)}];
+        self.searchBar.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{NSFontAttributeName: KP_LIGHT(16) , NSForegroundColorAttributeName: tcolorF(TextColor, ThemeDark)}];
         [contentView addSubview:self.searchBar];
         self.searchBar.delegate = self;
         self.searchBar.keyboardAppearance = UIKeyboardAppearanceAlert;
@@ -301,7 +301,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kCellID];
         cell.textLabel.font = KP_REGULAR(15);
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.detailTextLabel.font = KP_REGULAR(11);
+        cell.detailTextLabel.font = KP_REGULAR(10);
         cell.detailTextLabel.textColor = tcolor(SubTextColor);
         cell.accessoryType = UITableViewCellAccessoryNone;
         //UIButton *accessory = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kButtonWidth, kButtonWidth)];
