@@ -10,6 +10,9 @@
 #define kDefRightPadding 7
 #define kDefTopPadding 1
 #define kDefBottomPadding 3
+
+#define kDefaultLineSize LINE_SIZE;
+
 #import "SectionHeaderView.h"
 #import "UIView+Utilities.h"
 #import <QuartzCore/QuartzCore.h>
@@ -22,6 +25,7 @@
 @interface _SectionHeaderViewText : UIView
 -(id)initWithColor:(UIColor *)color font:(UIFont*)font title:(NSString*)title;
 -(void)setText:(NSString*)text;
+@property (nonatomic, weak) SectionHeaderView *headerView;
 @property (nonatomic) IBOutlet UILabel *titleLabel;
 @property (nonatomic) UIColor *color;
 @property (nonatomic) UIColor *fillColor;
@@ -41,11 +45,13 @@
 - (id)initWithColor:(UIColor *)color font:(UIFont *)font title:(NSString *)title width:(CGFloat)width {
     self = [super init];
     if (self) {
-        CGRectSetSize(self, width, LINE_SIZE);
+        self.lineThickness = kDefaultLineSize;
+        CGRectSetSize(self, width, self.lineThickness);
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.backgroundColor = CLEAR;
         self.sectionHeader = [[_SectionHeaderViewText alloc] initWithColor:color font:font title:title];
         CGRectSetX(self.sectionHeader, CGRectGetWidth(self.frame) - CGRectGetWidth(self.sectionHeader.frame));
+        self.sectionHeader.headerView = self;
         [self addSubview:self.sectionHeader];
         
         self.color = color;
@@ -67,6 +73,12 @@
         self.layer.masksToBounds = NO;
     }
     return self;
+}
+
+-(void)setLineThickness:(CGFloat)lineThickness{
+    _lineThickness = lineThickness;
+    CGRectSetHeight(self, lineThickness);
+    [self setNeedsDisplay];
 }
 
 -(void)setProgressPercentage:(CGFloat)progressPercentage
@@ -139,7 +151,7 @@
     
     
     CGContextMoveToPoint(currentContext, 0, 0);
-    CGContextSetLineWidth(currentContext, LINE_SIZE * 2);
+    CGContextSetLineWidth(currentContext, self.lineThickness * 2);
     CGContextAddLineToPoint(currentContext, targetX, 0);
     CGContextStrokePath(currentContext);
     
@@ -149,8 +161,8 @@
         CGFloat extraX = targetX + extraCut;
         
         UIBezierPath *aPath = [UIBezierPath bezierPath];
-        [aPath moveToPoint:CGPointMake(0, LINE_SIZE)];
-        [aPath addLineToPoint:CGPointMake(targetX, LINE_SIZE)];
+        [aPath moveToPoint:CGPointMake(0, self.lineThickness)];
+        [aPath addLineToPoint:CGPointMake(targetX, self.lineThickness)];
         [aPath addLineToPoint:CGPointMake(extraX, progressY)];
         [aPath addLineToPoint:CGPointMake(0, progressY)];
         [aPath closePath];
@@ -163,7 +175,7 @@
         
         CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
         CGContextMoveToPoint(currentContext, 0, progressY);
-        CGContextSetLineWidth(currentContext, LINE_SIZE*2);
+        CGContextSetLineWidth(currentContext, self.lineThickness*2);
         CGContextAddLineToPoint(currentContext, extraX, progressY);
         CGContextStrokePath(currentContext);
         
@@ -265,13 +277,13 @@
     
     
     CGContextMoveToPoint(currentContext, 0, 0);
-    CGContextSetLineWidth(currentContext, LINE_SIZE);
+    CGContextSetLineWidth(currentContext, self.headerView.lineThickness);
     CGContextAddLineToPoint(currentContext, leftCutPoint, targetY);
     CGContextStrokePath(currentContext);
     
     CGContextMoveToPoint(currentContext, leftCutPoint, targetY);
     //CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
-    CGContextSetLineWidth(currentContext, LINE_SIZE*2);
+    CGContextSetLineWidth(currentContext, self.headerView.lineThickness*2);
     CGContextAddLineToPoint(currentContext, targetX, targetY);
     CGContextStrokePath(currentContext);
 }

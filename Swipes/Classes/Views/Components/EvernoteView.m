@@ -10,21 +10,24 @@
 #import "EvernoteViewerView.h"
 #import "EvernoteView.h"
 #import "UIColor+Utilities.h"
+#import "SectionHeaderView.h"
 #import "UtilityClass.h"
 
-#define kContentSpacingLeft 0
-#define kContentSpacingRight 0
-#define kSearchBarHeight 52
+#define kContentSpacingLeft 10
+#define kContentSpacingRight 10
+#define kContentTopBottomSpacing 70
+#define kSearchBarHeight 46
 #define kButtonWidth 44
 #define kSearchTimerInterval 0.6
 #define POPUP_WIDTH 315
 #define kEvernoteColor color(95,179,54,1)
 #define kSearchLimit 10     // when _limitSearch is YES this is the limit
 
-@interface EvernoteView () <UITableViewDataSource, UITableViewDelegate, EvernoteViewerViewDelegate, UISearchBarDelegate>
+@interface EvernoteView () <UITableViewDataSource, UITableViewDelegate, EvernoteViewerViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) UITableView* tableView;
-@property (nonatomic, strong) UISearchBar* searchBar;
+@property (nonatomic) UIView *contentView;
+@property (nonatomic, strong) UITextField* searchBar;
 @property (nonatomic, strong) UIButton* backButton;
 
 @property (nonatomic, strong) EDAMNoteList* noteList;
@@ -48,81 +51,84 @@
         closeButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
         [self addSubview:closeButton];
         self.backgroundColor = CLEAR;
-        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH)];
+        
+        CGFloat top = (OSVER >= 7) ? 20 : 0;
+        
+        
+        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, self.frame.size.height - top - 2*kContentTopBottomSpacing )];
         contentView.autoresizesSubviews = YES;
+        contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         contentView.center = self.center;
         contentView.backgroundColor = kEvernoteColor;
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
         
-        CGFloat top = (OSVER >= 7) ? [Global statusBarHeight] : 0.f;
-        /*// initialize controls
-        _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _backButton.frame = CGRectMake(kContentSpacingLeft, top, kButtonWidth, kSearchBarHeight);
-        [_backButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
-        [_backButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
-        [contentView addSubview:_backButton];*/
-
-        _searchBar = [[UISearchBar alloc] init];
-        //[_searchBar setSearchFieldBackgroundImage:[kEvernoteColor image] forState:UIControlStateNormal];
-        _searchBar.frame = CGRectMake(kContentSpacingLeft, top,
-                                      320 - kButtonWidth - kContentSpacingLeft - kContentSpacingRight, kSearchBarHeight);
-        _searchBar.delegate = self;
-        _searchBar.backgroundColor = CLEAR;
-        _searchBar.tintColor = CLEAR;
-        _searchBar.barTintColor = [UIColor clearColor];
-        NSString *placeholderText = @"Search";
-        _searchBar.placeholder = placeholderText;
-        _searchBar.translucent = NO;
-        _searchBar.backgroundImage = [kEvernoteColor image];
-        _searchBar.scopeBarBackgroundImage = [kEvernoteColor image];
-        if(OSVER >= 7){
-            //[[_searchBar.subviews objectAtIndex:0] removeFromSuperview];
-            _searchBar.searchBarStyle = UISearchBarStyleProminent;
-            
-            //_searchBar.tintColor = tcolorF(TextColor,ThemeDark);
-            for (UIView *view in _searchBar.subviews)
-            {
-                for(UITextField *img in view.subviews){
-                    if ([img isKindOfClass:NSClassFromString(@"UITextField")])
-                    {
-                        img.backgroundColor = CLEAR;
-                        [img setTextColor:tcolor(TextColor)];
-                        if ([img respondsToSelector:@selector(setAttributedPlaceholder:)]) {
-                            UIColor *color = tcolorF(TextColor, ThemeDark);
-                            
-                            img.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholderText attributes:@{NSForegroundColorAttributeName: color}];
-                        } else {
-                            NSLog(@"Cannot set placeholder text's color, because deployment target is earlier than iOS 6.0");
-                            // TODO: Add fall-back code to set placeholder color.
-                        }
-                    }
-                }
-                
-            }
-        }
-        else{
-            for (id img in _searchBar.subviews)
-            {
-                if ([img isKindOfClass:NSClassFromString(@"UISearchBarBackground")])
-                {
-                    [img removeFromSuperview];
-                }
-            }
-        }
-        [contentView addSubview:_searchBar];
         
+        CGFloat startX = 10;
+        
+        UIButton *loopButton = [[UIButton alloc] initWithFrame:CGRectMake(startX, 0, kSearchBarHeight, kSearchBarHeight)];
+        loopButton.titleLabel.font = iconFont(23);
+        [loopButton setTitle:@"actionSearch" forState:UIControlStateNormal];
+        loopButton.backgroundColor = CLEAR;
+        [loopButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
+        [contentView addSubview:loopButton];
+        
+        UILabel *evernoteLabel = iconLabel(@"editEvernote", 20);
+        evernoteLabel.textColor = tcolorF(TextColor, ThemeDark);
+        CGFloat evernoteWidth = 50;
+        CGFloat evernoteTopHack = 6;
+        CGRectSetCenter(evernoteLabel, contentView.frame.size.width-evernoteWidth/2, kSearchBarHeight/2 + evernoteTopHack);
+        
+        [contentView addSubview:evernoteLabel];
+        
+        CGFloat searchX = CGRectGetMaxX(loopButton.frame);
+        CGFloat searchWidth = CGRectGetMinX(evernoteLabel.frame) -searchX;
+        
+        self.searchBar = [[UITextField alloc] initWithFrame:CGRectMake(searchX, 0, searchWidth, kSearchBarHeight)];
+        self.searchBar.font = KP_LIGHT(16);
+        self.searchBar.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{NSForegroundColorAttributeName: tcolorF(TextColor, ThemeDark)}];
+        [contentView addSubview:self.searchBar];
+        self.searchBar.delegate = self;
+        self.searchBar.keyboardAppearance = UIKeyboardAppearanceAlert;
+        self.searchBar.returnKeyType = UIReturnKeyDone;
+        [self.searchBar addTarget:self action:@selector(searchBar:textDidChange:) forControlEvents:UIControlEventEditingChanged];
+        self.searchBar.textColor = tcolorF(TextColor, ThemeDark);
+        [self.searchBar addTarget:self
+                            action:@selector(searchBarDidReturn:)
+                  forControlEvents:UIControlEventEditingDidEndOnExit];
 
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, kSearchBarHeight + top, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height - kSearchBarHeight) style:UITableViewStylePlain];
-        _tableView.delegate = self;
-        _tableView.dataSource = self;
-        _tableView.backgroundColor = CLEAR;
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        [contentView addSubview:_tableView];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, kSearchBarHeight, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height - kSearchBarHeight) style:UITableViewStylePlain];
+        self.tableView.delegate = self;
+        self.tableView.dataSource = self;
+        self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
+        self.tableView.backgroundColor = CLEAR;
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        [contentView addSubview:self.tableView];
+        
+        [self searchBar:_searchBar textDidChange:nil];
+        
+        SectionHeaderView *sectionHeader = [[SectionHeaderView alloc] initWithColor:alpha(tcolorF(TextColor, ThemeDark),0.6) font:KP_LIGHT(12) title:@"         " width:contentView.frame.size.width];
+        CGRectSetY(sectionHeader, kSearchBarHeight);
+        sectionHeader.fillColor = kEvernoteColor;
+        sectionHeader.lineThickness = 2;
+        [contentView addSubview:sectionHeader];
+        
         
         // initiate the start lookup
-        [self searchBar:_searchBar textDidChange:nil];
         [self addSubview:contentView];
+        self.contentView = contentView;
+        
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillShow:)
+                                                     name:UIKeyboardWillShowNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillHide:)
+                                                     name:UIKeyboardWillHideNotification
+                                                   object:nil];
+        
     }
     return self;
 }
@@ -137,6 +143,36 @@
     if ([_searchBar isFirstResponder])
         [_searchBar resignFirstResponder];
 }
+
+-(void)searchBarDidReturn:(UITextField*)searchBar{
+    [searchBar resignFirstResponder];
+}
+
+-(void)keyboardWillHide:(NSNotification*)notification{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    NSInteger startPoint = (OSVER >= 7) ? 20 : 0;
+    CGRectSetHeight(self.contentView, self.frame.size.height - startPoint - 2*kContentTopBottomSpacing);
+    CGRectSetCenterY(self.contentView, self.bounds.size.height/2);
+    [UIView commitAnimations];
+}
+-(void)keyboardWillShow:(NSNotification*)notification{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGFloat keyboardHeight = keyboardFrame.size.height;
+    NSInteger spacing = 3;
+    NSInteger startPoint = (OSVER >= 7) ? (20 + spacing) : spacing;
+    CGRectSetY(self.contentView,startPoint);
+    CGRectSetHeight(self.contentView, self.frame.size.height - keyboardHeight - startPoint- spacing);
+    [UIView commitAnimations];
+}
+
+
 
 - (void)cancel:(id)sender
 {
@@ -222,7 +258,7 @@
     }
 }
 
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText1
+- (void)searchBar:(UITextField *)searchBar textDidChange:(NSString *)searchText1
 {
     if (nil != _timer) {
         [_timer invalidate];
@@ -240,8 +276,8 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     cell.backgroundColor = kEvernoteColor;
     cell.contentView.backgroundColor = kEvernoteColor;
-    cell.textLabel.textColor = tcolor(TextColor);
-    cell.detailTextLabel.textColor = tcolor(TextColor);
+    cell.textLabel.textColor = tcolorF(TextColor,ThemeDark);
+    cell.detailTextLabel.textColor = tcolorF(TextColor,ThemeDark);
     EDAMNote* note = _noteList.notes[indexPath.row];
     if (note.titleIsSet) {
         cell.textLabel.text = note.title;
@@ -289,7 +325,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 55;
+    return 46;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
