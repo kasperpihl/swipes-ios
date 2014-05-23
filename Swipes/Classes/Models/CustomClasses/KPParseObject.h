@@ -4,6 +4,7 @@
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context;
 +(KPParseObject *)getCDObjectFromObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
 +(BOOL)deleteObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
+-(void)moveObjectIdToTemp;
 -(void)beforeDelete;
 /* 
  update called on sync - overwritten in subclass

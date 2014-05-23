@@ -10,6 +10,12 @@
 
 
 @implementation KPTag
+-(void)moveObjectIdToTemp{
+    if ( self.objectId ){
+        self.tempId = self.objectId;
+        self.objectId = nil;
+    }
+}
 +(KPTag*)addTagWithString:(NSString *)string save:(BOOL)save{
     string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if(string.length == 0) return nil;

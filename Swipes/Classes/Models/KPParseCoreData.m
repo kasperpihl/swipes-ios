@@ -15,7 +15,8 @@
 #import "UserHandler.h"
 
 #define kSyncTime 3
-#define kUpdateLimit 50
+#define kUpdateLimit 200
+#define kBatchSize 50
 
 #define kTMPUpdateObjects @"tmpUpdateObjects"
 #define kUpdateObjects @"updateObjects"
@@ -48,6 +49,7 @@
 @property BOOL outdated;
 @property BOOL _needSync;
 @property BOOL _isSyncing;
+@property BOOL _didHardSync;
 
 @property (nonatomic) dispatch_queue_t isolationQueue;
 
@@ -126,9 +128,16 @@
 -(void)hardSync{
     NSArray* objects = [KPParseObject MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"objectId != nil"] inContext:[self context]];
     NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
+    self._didHardSync = YES;
     for (KPParseObject* obj in objects) {
-        [changesToCommit setObject:@[@"all"] forKey:obj.objectId];
+        if ( [obj isKindOfClass:[KPTag class]])
+            [obj moveObjectIdToTemp];
+        else
+            [changesToCommit setObject:@[@"all"] forKey:obj.objectId];
+        
     }
+
+    [self.context MR_saveOnlySelfAndWait];
     [self commitAttributeChanges:changesToCommit toTemp:NO];
     [self synchronizeForce:YES async:YES];
 
@@ -216,12 +225,12 @@
         self._needSync = YES;
         return UIBackgroundFetchResultNoData;
     }
-    if (!kUserHandler.isPlus) {
+    /*if (!kUserHandler.isPlus) {
         NSDate *now = [NSDate date];
         NSDate *lastUpdatedDay = [[NSUserDefaults standardUserDefaults] objectForKey:kLastSyncLocalDate];
         if (lastUpdatedDay && now.dayOfYear == lastUpdatedDay.dayOfYear)
             return UIBackgroundFetchResultNoData;
-    }
+    }*/
     
     // Testing for timing
     if (!force) {
@@ -234,11 +243,11 @@
     // Testing for network connection
     if (self._needSync)
         self._needSync = NO;
-    
-    if (!self._reach.isReachable) {
+#warning Removed no internet case
+   /* if (!self._reach.isReachable) {
         self._needSync = YES;
         return UIBackgroundFetchResultFailed;
-    }
+    }*/
     
     DUMPDB;
     
@@ -262,14 +271,19 @@
     else
         [self sendStatus:SyncStatusSuccess userInfo:userInfo error:nil];
     
-    if(self._needSync){
+    if ( error ){
         NSDate *now = [NSDate date];
         if(!self.lastTry || [now timeIntervalSinceDate:self.lastTry] > 60){
             self.lastTry = now;
             self.tryCounter = 0;
         }
-        if(self.tryCounter >= 5) return;
         self.tryCounter++;
+        if( self.tryCounter > 5 )
+            return;
+    }
+    
+    if(self._needSync){
+        
         [self synchronizeForce:YES async:YES];
     }
 }
@@ -300,10 +314,11 @@
         [self addObject:pfObject toClass:object.getParseClassName inCollection:&updateObjectsToServer];
         return YES;
     };
-    for(KPParseObject *object in newObjects) handleObject(object, nil);
+    for ( KPParseObject *object in newObjects )
+        handleObject(object, nil);
     
     NSInteger remainingObjectsInBatch = kUpdateLimit - numberOfNewObjects;
-    if(remainingObjectsInBatch <= 0){
+    if (remainingObjectsInBatch <= 0 ){
         
         NSMutableArray *newTags = [updateObjectsToServer objectForKey:@"Tag"];
         NSMutableArray *newToDos = [updateObjectsToServer objectForKey:@"ToDo"];
@@ -333,6 +348,9 @@
                                        @"changesOnly" : @YES,
                                        @"sessionToken": [kCurrent sessionToken],
                                        @"platform" : @"ios",
+                                       @"hasMoreToSave": @(self._needSync),
+                                       @"sendLogs": @(YES),
+                                       @"batchSize": @(kBatchSize),
                                        @"version": [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]}
                                      mutableCopy];
 
@@ -354,28 +372,33 @@
     NSString *url = @"http://api.swipesapp.com/sync";
 #else
     NSString *url = @"http://swipes-test.herokuapp.com/sync";
-    url = @"http://127.0.0.1:5000/sync";
+    url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
+    url = @"http://127.0.0.1:5000/v1/sync";
     
 #endif
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setTimeoutInterval:35];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
-                                                       options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
+                                                       options:0 // Pass 0 if you don't care about the readability of the generated string
                                                         error:&error];
     if(error){
         [UtilityClass sendError:error type:@"Sync JSON prepare parse"];
         [self finalizeSyncWithUserInfo:nil error:error];
         return NO;
     }
-    [request setHTTPBody:jsonData];
+    
+    
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
+    [request setHTTPBody:jsonData];
+
     
     /* Performing request */
     NSHTTPURLResponse *response;
     NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,[syncData objectForKey:@"lastUpdate"]);
-    NSLog(@"sync:%@",syncData);
+    //NSLog(@"sync:%@",syncData);
+    NSLog(@"need: %@", [syncData objectForKey:@"hasMoreToSave"]);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
     
@@ -400,7 +423,9 @@
     }
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
-    NSLog(@"res:%@ err: %@",result,error);
+    //NSLog(@"resulted err:%@",error);
+#warning Remove this log
+    NSLog(@"%@ res:%@ err: %@",result[@"message"],result[@"logs"],error);
     
     if(error || [result objectForKey:@"code"] || ![result objectForKey:@"serverTime"]){
         if(!error){
@@ -452,11 +477,19 @@
 #pragma mark Sync flow helpers
 - (NSDictionary*)prepareUpdatedObjectsToBeSavedOnServerWithLimit:(NSInteger)limit
 {
+    if ( self._didHardSync ){
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUpdateObjects];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        self._didHardSync = NO;
+    }
     NSInteger counter = 0;
     NSMutableDictionary *copyOfNewAttributeChanges = [self copyChangesAndFlushForTemp:NO];
     NSMutableDictionary *objectsToUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:kUpdateObjects];
-    if(!objectsToUpdate) objectsToUpdate = [NSMutableDictionary dictionary];
-    else objectsToUpdate = [objectsToUpdate mutableCopy];
+    
+    if(!objectsToUpdate)
+        objectsToUpdate = [NSMutableDictionary dictionary];
+    else
+        objectsToUpdate = [objectsToUpdate mutableCopy];
     counter += objectsToUpdate.count;
     
     NSMutableArray *keysToRemoveInAttributeChanges = [NSMutableArray array];
@@ -644,15 +677,16 @@
                           @"work"
                           ];
     
-    for(NSString *tag in tagArray){
+    /*for(NSString *tag in tagArray){
         [KPTag addTagWithString:tag save:NO];
     }
-    [self saveContextForSynchronization:nil];
+    [self saveContextForSynchronization:nil];*/
     NSInteger i = 0;
     do {
         [KPToDo addItem:[NSString stringWithFormat:@"Testing %i",i] priority:NO tags:nil save:NO];
         i++;
     } while (i < 500);
+    NSLog(@"saving");
     [self saveContextForSynchronization:nil];
 }
 
@@ -691,6 +725,7 @@ static KPParseCoreData *sharedObject;
     if (!sharedObject) {
         sharedObject = [[KPParseCoreData allocWithZone:NULL] init];
         [sharedObject initialize];
+        //[sharedObject loadTest];
     }
     return sharedObject;
 }

@@ -24,6 +24,12 @@
     }
     return self.tempId;
 }
+-(void)moveObjectIdToTemp{
+    if ( self.objectId ){
+        self.tempId = self.objectId;
+        self.objectId = nil;
+    }
+}
 #pragma mark - Handling of changes
 -(NSArray*)updateWithObjectFromServer:(NSDictionary *)object context:(NSManagedObjectContext*)context{
     if(!context) context = [KPCORE context];
