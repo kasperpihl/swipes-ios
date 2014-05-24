@@ -246,10 +246,10 @@
     if (self._needSync)
         self._needSync = NO;
 #warning Removed no internet case
-   /* if (!self._reach.isReachable) {
+    if (!self._reach.isReachable) {
         self._needSync = YES;
         return UIBackgroundFetchResultFailed;
-    }*/
+    }
     
     DUMPDB;
     

@@ -70,7 +70,8 @@
         BOOL movedToDo = [toDo scheduleForDate:date];
         if(movedToDo) [movedToDos addObject:toDo];
     }
-    if(save) [KPCORE saveContextForSynchronization:nil];
+    if(save)
+        [KPToDo saveToSync];
     [NOTIHANDLER updateLocalNotifications];
     [ANALYTICS heartbeat];
     return [movedToDos copy];
@@ -81,7 +82,8 @@
         BOOL movedToDo = [toDo complete];
         if(movedToDo) [movedToDos addObject:toDo];
     }
-    if(save) [KPCORE saveContextForSynchronization:nil];
+    if(save)
+        [KPToDo saveToSync];
     NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
     [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
     [ANALYTICS heartbeat];
@@ -110,7 +112,7 @@
         [toDo deleteToDoSave:NO];
     }
     if (save)
-             [KPCORE saveContextForSynchronization:nil];
+             [KPToDo saveToSync];
     if (shouldUpdateNotifications)
              [NOTIHANDLER updateLocalNotifications];
     [ANALYTICS heartbeat];
@@ -122,7 +124,8 @@
         for(KPToDo *toDo in toDos){
             [toDo updateTagSet:tagsSet withTags:tags remove:remove];
         }
-        if(save) [KPCORE saveContextForSynchronization:nil];
+        if(save)
+            [KPToDo saveToSync];
         [ANALYTICS heartbeat];
     }
 }

@@ -354,6 +354,7 @@
     _searchBar.delegate = nil;
     [_tableView removeFromSuperview];
     [_searchBar removeFromSuperview];
+    clearNotify();
     _tableView = nil;
     _searchBar = nil;
 }
