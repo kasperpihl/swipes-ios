@@ -28,9 +28,9 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
     return ([EVERNOTE_SERVICE isEqualToString:service] || [DROPBOX_SERVICE isEqualToString:service]);
 }
 
--(NSString *)jsonForSaving
+-(NSDictionary *)jsonForSaving
 {
-    return nil;
+    return @{ @"service": self.service, @"identifier": self.identifier, @"title": self.title };
 }
 
 - (NSString *)description

@@ -271,14 +271,23 @@
             shouldUpdate = YES;
         }
     }
-    if( isNewObject || [changedAttributes containsObject:@"attachments"] ){
+    
+    if( (isNewObject || [changedAttributes containsObject:@"attachments"]) ){
+        NSMutableArray *attachmentArray = [NSMutableArray array];
         
+        for ( KPAttachment *attachment in self.attachments ){
+            [attachmentArray addObject:[attachment jsonForSaving]];
+        }
+        if ( !( isNewObject && attachmentArray.count == 0 ) )
+            [*object setObject:[attachmentArray copy] forKey:@"attachments"];
     }
+    
     if(isNewObject || [changedAttributes containsObject:@"tags"]){
         NSInteger tagCount = self.tags.count;
         NSMutableArray *tagArray = [NSMutableArray arrayWithCapacity:tagCount];
         NSArray *tagsFromString = [self.tagString componentsSeparatedByString:@", "];
-        for (NSInteger i = 0; i < tagCount; ++i) [tagArray addObject:[NSNull null]];
+        for (NSInteger i = 0; i < tagCount; ++i)
+            [tagArray addObject:[NSNull null]];
         NSMutableArray *emptyObjects = [NSMutableArray array];
         /* Prepare the tag objects pointers for saving - include tempId + objectId if exist */
         for(KPTag *tag in self.tags){
@@ -300,14 +309,13 @@
                 }
             }
         }
-        if(isNewObject && tagCount == 0){
+        if( !( isNewObject && tagCount == 0 ) ){
             // Don't send 0 tags if new object
-        }
-        else{
             [*object setObject:tagArray forKey:@"tags"];
             shouldUpdate = YES;
         }
     }
+    NSLog(@"upd %@", *object);
     return shouldUpdate;
 }
 -(CellType)cellTypeForTodo{

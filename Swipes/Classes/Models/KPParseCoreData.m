@@ -168,6 +168,8 @@
             NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
             NSMutableDictionary *tempChangesToCommit = [NSMutableDictionary dictionary];
             for(KPParseObject *object in updatedObjects){
+                if( ![object isKindOfClass:[KPParseObject class]] )
+                    continue;
                 /* If the object doesn't have an objectId - it's not saved on the server and will automatically include all keys */
                 if(!object.objectId && !self._isSyncing)
                     continue;
