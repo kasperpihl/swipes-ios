@@ -938,8 +938,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
          Evernote Container with button!
          */
-         self.evernoteContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_ROW_HEIGHT)];
-         [self addAndGetImage:@"editNotes" inView:self.evernoteContainer];
+         self.evernoteContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
+         [self addAndGetImage:@"editEvernote" inView:self.evernoteContainer];
          
          self.evernoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X, self.evernoteContainer.frame.size.height)];
          self.evernoteLabel.font = EDIT_TASK_TEXT_FONT;
@@ -969,8 +969,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          
          [self.scrollView addSubview:self.dropboxContainer];
         */
-        /*
-         Notes view
+        
+         //Notes view
          
          self.notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_ROW_HEIGHT)];
          self.notesContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -986,7 +986,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         [self addClickButtonToView:self.notesContainer action:@selector(pressedNotes:)];
         [self.scrollView addSubview:self.notesContainer];
-        */
+        
         /* Adding scroll and content view */
         [contentView addSubview:self.scrollView];
         

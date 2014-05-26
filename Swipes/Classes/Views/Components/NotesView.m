@@ -54,7 +54,6 @@
         [backbutton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         //[backbutton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         
-        [backbutton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         backbutton.transform = CGAffineTransformMakeRotation(M_PI);
         [backbutton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
         //self.toolbar.backgroundColor = tcolor(MenuBackground);
