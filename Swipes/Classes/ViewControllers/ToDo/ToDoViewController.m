@@ -422,6 +422,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGFloat padding = (SCHEDULE_ROW_HEIGHTS - basicSize.height)/2;
     self.tagsLabel.text = tagsString;
     [self.tagsLabel sizeToFit];
+    CGRectSetWidth(self.tagsLabel, self.view.frame.size.width - LABEL_X - 10);
     
     CGFloat containerHeight = self.tagsLabel.frame.size.height + 2*padding;
     CGRectSetHeight(self.tagsContainerView, containerHeight);
@@ -464,6 +465,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.notesView.frame = CGRectSetSize(self.notesView, self.view.frame.size.width-LABEL_X-10, 1500);
     //CGSize contentSize = [self.notesView sizeThatFits:CGSizeMake(self.notesView.frame.size.width, 500)];
     [self.notesView sizeToFit];
+    CGRectSetWidth(self.notesView, self.view.frame.size.width-LABEL_X-10);
 //    DLogFrame(self.notesView);
 
     CGRectSetHeight(self.notesView,self.notesView.frame.size.height+20);
@@ -936,7 +938,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.tagsLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.tagsLabel.numberOfLines = 0;
         self.tagsLabel.font = EDIT_TASK_TEXT_FONT;
+        
         self.tagsLabel.backgroundColor = [UIColor clearColor];
+        
         [self setColorsFor:self.tagsLabel];
         [self.tagsContainerView addSubview:self.tagsLabel];
         
@@ -1196,6 +1200,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetWidth(self.repeatPicker, self.view.frame.size.width);
     CGRectSetWidth(self.scrollView, self.view.frame.size.width);
     CGRectSetHeight(self.scrollView, self.cell.frame.size.height);
+    CGRectSetWidth(self.notesView, self.view.frame.size.width-LABEL_X-10);
 //    [self.view explainSubviews];
 }
 
