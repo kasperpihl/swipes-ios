@@ -89,7 +89,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 
 @property (nonatomic) MCSwipeTableViewCell *cell;
-@property (nonatomic,weak) IBOutlet UIView *contentView;
 @property (nonatomic) UIScrollView *scrollView;
 
 
@@ -623,7 +622,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     tempHeight += self.notesContainer.frame.size.height;
     }
     CGFloat targetHeight = self.subtasksController.expanded ? heightWithSubtasks : tempHeight;
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width,targetHeight);
+    BOOL isPortrait = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
+    CGFloat width = isPortrait ? self.scrollView.frame.size.width : self.scrollView.frame.size.height;
+    self.scrollView.contentSize = CGSizeMake(width,targetHeight);
+    
     CGRectSetHeight(self.cell,self.view.bounds.size.height-self.cell.frame.origin.y);
     if(duration > 0){
         [UIView commitAnimations];
@@ -781,6 +783,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                                                      name:UIKeyboardWillHideNotification
                                                    object:nil];
         
+        [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:UIDeviceOrientationDidChangeNotification  object:nil];
         
         NSInteger startY = (OSVER >= 7) ? 20 : 0;
         NSInteger toolbarWidth = 135;
@@ -800,24 +803,28 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.view addSubview:backButton];
         
         self.cell = [[MCSwipeTableViewCell alloc] init];
+        self.cell.contentView.backgroundColor = tcolor(TasksColor);
         self.cell.frame = CGRectMake(0, CGRectGetMaxY(self.toolbarEditView.frame), self.view.frame.size.width,
                                      self.view.bounds.size.height - CGRectGetMaxY(self.toolbarEditView.frame));
         self.cell.autoresizingMask = (UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight);
+        self.cell.contentView.autoresizingMask = (UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight);
         self.cell.shouldRegret = YES;
         self.cell.delegate = self;
         self.cell.bounceAmplitude = 0;
         self.cell.mode = MCSwipeTableViewCellModeExit;
-        UIView *contentView = [[UIView alloc] initWithFrame:self.cell.bounds];
+        UIView *contentView = self.cell.contentView;
+        /*
         contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        contentView.backgroundColor = tcolor(BackgroundColor);
-        contentView.tag = CONTENT_VIEW_TAG;
+        contentView.backgroundColor = tcolor(DoneColor);
+        contentView.tag = CONTENT_VIEW_TAG;*/
         
-        self.titleContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, CONTAINER_INIT_HEIGHT)];
-        self.titleContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.titleContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.cell.frame.size.width, CONTAINER_INIT_HEIGHT)];
+        self.titleContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+        self.titleContainerView.backgroundColor = tcolor(BackgroundColor);
         
         CGFloat buttonWidth = BUTTON_HEIGHT;
         
-        self.textView = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(CELL_LABEL_X, TITLE_TOP_MARGIN, self.view.frame.size.width - buttonWidth - CELL_LABEL_X, TITLE_HEIGHT)];
+        self.textView = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(CELL_LABEL_X, TITLE_TOP_MARGIN, self.titleContainerView.frame.size.width - buttonWidth - CELL_LABEL_X, TITLE_HEIGHT)];
         self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.textView.contentInset = UIEdgeInsetsMake(0, -8, 0, -8);
         self.textView.minNumberOfLines = 1;
@@ -860,13 +867,15 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.expandButton setTitle:@"editActionRoundedArrow" forState:UIControlStateNormal];
         [self.expandButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [self.expandButton addTarget:self action:@selector(pressedExpand:) forControlEvents:UIControlEventTouchUpInside];
+        self.expandButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
         [self.titleContainerView addSubview:self.expandButton];
         //self.expandButton.hidden = YES;
         //self.expandButton = nil;
         
         self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, contentView.frame.size.height)];
-        //self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        self.scrollView.autoresizingMask = 0;// UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         self.scrollView.scrollEnabled = YES;
+        self.scrollView.backgroundColor = tcolor(BackgroundColor);
         self.scrollView.alwaysBounceVertical = YES;
         
         [self.scrollView addSubview:self.titleContainerView];
@@ -990,11 +999,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /* Adding scroll and content view */
         [contentView addSubview:self.scrollView];
         
-        
-        [self.cell.contentView addSubview:contentView];
-        [self.view addSubview:self.cell];
-        self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
 
+        [self.view addSubview:self.cell];
+        
         self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[UIColor greenColor] font:SECTION_HEADER_FONT title:@"Test" width:self.view.frame.size.width];
         CGRectSetHeight(self.sectionHeader, 5);
         self.sectionHeader.fillColor = tcolor(BackgroundColor);
@@ -1011,8 +1018,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         //[self.view addSubview:subtasks.view];
         self.subtasksController = [[SubtaskController alloc] init];
         self.subtasksController.delegate = self;
-        CGRectSetWidth(self.subtasksController.tableView, self.view.frame.size.width);
+        
         self.subtasksController.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        CGRectSetWidth(self.subtasksController.tableView, self.view.frame.size.width);
         self.subtasksContainer = self.subtasksController.tableView;
         //CGRectSetX(self.subtasksContainer, 10);
         [self.scrollView addSubview:self.subtasksContainer];
@@ -1108,6 +1116,16 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
 }
 
+- (void)orientationChanged:(NSNotification *)notification{
+    [self.sectionHeader setNeedsDisplay];
+    [self layoutWithDuration:0];
+    /*BOOL isPortrait = !UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
+    CGFloat width = isPortrait ? self.cell.frame.size.width : self.cell.frame.size.height;
+    CGFloat height = isPortrait ?  self.cell.frame.size.height : self.cell.frame.size.width;
+    //CGRectSetHeight(self.scrollView, height);
+    CGRectSetWidth(self.scrollView, width);*/
+}
+
 
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -1117,8 +1135,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
 }
-
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    
+}
 -(void)setColorsFor:(id)object{
     if([object respondsToSelector:@selector(setTextColor:)])
         [object setTextColor:tcolor(TextColor)];
@@ -1171,9 +1193,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    CGFloat width = MIN(self.view.bounds.size.width, self.view.bounds.size.height);
-//    CGRectSetWidth(self.repeatedContainer, width);
-    CGRectSetWidth(self.repeatPicker, width);
+    CGRectSetWidth(self.repeatPicker, self.view.frame.size.width);
+    CGRectSetWidth(self.scrollView, self.view.frame.size.width);
+    CGRectSetHeight(self.scrollView, self.cell.frame.size.height);
 //    [self.view explainSubviews];
 }
 

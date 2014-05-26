@@ -146,6 +146,8 @@
         tableFooter.layer.masksToBounds = YES;
         tableFooter.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         SubtaskCell *addCell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SubtaskTitleHeader"];
+        CGRectSetWidth(addCell, CGRectGetWidth(tableFooter.frame));
+        addCell.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         addCell.activatedDirection = MCSwipeTableViewCellActivatedDirectionNone;
         addCell.subtaskDelegate = self;
         [addCell setAddModeForCell:YES];

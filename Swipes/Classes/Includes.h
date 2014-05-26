@@ -88,6 +88,8 @@ typedef void (^viewBlock)(UIView* view);
 #define degrees(radians) (radians * 180 / M_PI)
 
 #define kIsIphone5Size (fabs((double)[[UIScreen mainScreen] bounds].size.height - (double) 568) < DBL_EPSILON)
+#define kIsIpad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define valForIpad(iPad, iPhone) (kIsIpad ? iPad : iPhone)
 #define valForScreen(iphone4, iphone5) (kIsIphone5Size ? iphone5 : iphone4)
 
 #define CLEAR [UIColor clearColor]
