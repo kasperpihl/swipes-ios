@@ -176,6 +176,7 @@
 
 
 -(void)pressedAdd{
+    NSLog(@"pressed Add");
     if([self.subtaskDelegate respondsToSelector:@selector(shouldStartEditingSubtaskCell:)]){
         BOOL shouldEdit = [self.subtaskDelegate shouldStartEditingSubtaskCell:self];
         if(!shouldEdit)

@@ -591,6 +591,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGFloat heightWithSubtasks = tempHeight;
     
     if(!self.subtasksController.expanded){
+        
+    CGRectSetY(self.evernoteContainer, tempHeight);
+    tempHeight += self.evernoteContainer.frame.size.height;
+    
     CGRectSetY(self.alarmContainer, tempHeight);
     tempHeight += self.alarmContainer.frame.size.height;
     
@@ -609,10 +613,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
     CGRectSetY(self.tagsContainerView, tempHeight);
     tempHeight += self.tagsContainerView.frame.size.height;
-    
-    
-    CGRectSetY(self.evernoteContainer, tempHeight);
-    tempHeight += self.evernoteContainer.frame.size.height;
     
     
     CGRectSetY(self.dropboxContainer, tempHeight);
