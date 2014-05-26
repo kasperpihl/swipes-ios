@@ -11,8 +11,8 @@
 #define kSunImageDistance valForScreen(160, 100)
 #define kLabelSpacing valForScreen(0,0)
 #define kClockLabelY valForScreen(0,0)
-#define kClockLabelFont [UIFont fontWithName:@"HelveticaNeue-Light" size:valForScreen(55,65)]
-#define kDayLabelFont KP_REGULAR(valForScreen(16,19))
+#define kClockLabelFont [UIFont fontWithName:@"HelveticaNeue-Light" size:valForIpad(75,valForScreen(55,65))]
+#define kDayLabelFont KP_REGULAR(valForIpad(25,valForScreen(16,19)))
 #define kDefMiddleButtonRadius 60
 #define kDefActualSize valForScreen(85,93)
 
@@ -255,18 +255,21 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        
+        self.autoresizesSubviews = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+        
         self.centerPoint = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/3*2);
         self.distanceForIcons = kSunImageDistance;
         self.lightColor = kDefLightColor;
         self.darkColor = kDefDarkColor;
         
         
-        self.moonImage = iconLabel(@"scheduleMoonFull", 45);
+        self.moonImage = iconLabel(@"scheduleMoonFull", valForIpad(80, 45));
         self.moonImage.textColor = tcolorF(TextColor, ThemeDark);
         self.moonImage.center = [self pointFromPoint:self.centerPoint withDistance:kSunImageDistance towardAngle:235];
         [self addSubview:self.moonImage];
         
-        self.sunImage = iconLabel(@"scheduleSunFull", 45);
+        self.sunImage = iconLabel(@"scheduleSunFull", valForIpad(80, 45));
         self.sunImage.textColor = tcolorF(TextColor, ThemeDark);
         self.sunImage.center = [self pointFromPoint:self.centerPoint withDistance:kSunImageDistance towardAngle:305];
         [self addSubview:self.sunImage];
@@ -288,7 +291,7 @@
         [self addSubview:self.confirmButton];
         
         
-        self.timeSlider = iconLabel(@"pickerWheel", valForScreen(230, 250));
+        self.timeSlider = iconLabel(@"pickerWheel", valForIpad(300,valForScreen(230, 250)) );
         [self.timeSlider setTextColor:color(213,216,220,1)];
         self.timeSlider.center = self.centerPoint;
         [self addSubview:self.timeSlider];
@@ -321,6 +324,9 @@
         self.clockLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.clockLabel];
         [self setNeedsLayout];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:UIDeviceOrientationDidChangeNotification  object:nil];
+        
     }
     return self;
 }
@@ -346,6 +352,9 @@
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return YES;
 }
+- (void)orientationChanged:(NSNotification *)notification{
+    [self pressedBackButton:self.backButton];
+}
 -(void)dealloc{
     self.confirmButton = nil;
     self.backButton = nil;
@@ -353,6 +362,7 @@
     self.sunImage = nil;
     self.moonImage = nil;
     self.clockLabel = nil;
+    clearNotify();
 }
 
 @end

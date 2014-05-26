@@ -42,15 +42,18 @@
 @property (nonatomic) DotView *dotView;
 @property (nonatomic) BOOL shouldRemove;
 @property (nonatomic) BOOL isRotated;
+@property (nonatomic) BOOL hasClosed;
 @end
 @implementation AddPanelView {
     BOOL _justShown;
 }
 -(void)blurryWillShow:(KPBlurry *)blurry{
     _justShown = YES;
+    self.hasClosed = NO;
     [self.addView.textField becomeFirstResponder];
 }
 -(void)blurryWillHide:(KPBlurry *)blurry{
+    self.hasClosed = YES;
     [[NSUserDefaults standardUserDefaults] setObject:self.addView.textField.text forKey:kAddTextStringKey];
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kAddTextTimestampKey];
     [self.addView.textField resignFirstResponder];
@@ -78,6 +81,8 @@
     return NO;
 }
 -(void)keyboardWillHide:(NSNotification*)notification{
+    if ( !self.hasClosed )
+        [self pressedClose];
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
@@ -209,7 +214,7 @@
         _justShown = NO;
     }
     else {
-        [self pressedClose];
+        //[self pressedClose];
     }
 }
 

@@ -821,7 +821,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         contentView.tag = CONTENT_VIEW_TAG;*/
         
         self.titleContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.cell.frame.size.width, CONTAINER_INIT_HEIGHT)];
-        self.titleContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
+        self.titleContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.titleContainerView.backgroundColor = tcolor(BackgroundColor);
         
         CGFloat buttonWidth = BUTTON_HEIGHT;
@@ -869,7 +869,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.expandButton setTitle:@"editActionRoundedArrow" forState:UIControlStateNormal];
         [self.expandButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [self.expandButton addTarget:self action:@selector(pressedExpand:) forControlEvents:UIControlEventTouchUpInside];
-        self.expandButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
+        self.expandButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [self.titleContainerView addSubview:self.expandButton];
         //self.expandButton.hidden = YES;
         //self.expandButton = nil;
@@ -1122,7 +1122,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 - (void)orientationChanged:(NSNotification *)notification{
     [self.sectionHeader setNeedsDisplay];
-    [self layoutWithDuration:0];
+    [self update];
     /*BOOL isPortrait = !UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
     CGFloat width = isPortrait ? self.cell.frame.size.width : self.cell.frame.size.height;
     CGFloat height = isPortrait ?  self.cell.frame.size.height : self.cell.frame.size.width;

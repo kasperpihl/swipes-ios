@@ -105,7 +105,6 @@
     [UIView setAnimationBeginsFromCurrentState:YES];
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGFloat kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
-    NSLog(@"notif:%@",notification);
     CGRectSetY(self.backbutton, self.frame.size.height - self.backbutton.frame.size.height - kbdHeight);
     CGRectSetHeight(self.notesView, self.frame.size.height - kbdHeight - kTextBottomPadding);
     [UIView commitAnimations];

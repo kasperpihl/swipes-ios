@@ -69,7 +69,8 @@
     _justShown = YES;
 }
 -(void)blurryWillHide:(KPBlurry *)blurry{
-    if(self.isAdding) [self shiftToAddMode:NO];
+    if(self.isAdding)
+        [self shiftToAddMode:NO];
 }
 -(void)pressedClose:(id)sender{
     [self toolbar:self.toolbar pressedItem:0];
