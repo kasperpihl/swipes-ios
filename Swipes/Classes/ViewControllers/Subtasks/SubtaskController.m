@@ -187,6 +187,7 @@
     if ( editedText.length > 0 ){
         [cell.model setTitle:subtask];
         [KPToDo saveToSync];
+        cell.title = subtask;
     }
     else {
         [cell.titleField setText:cell.model.title];
