@@ -115,7 +115,6 @@
         CGRect lastRowRect= [self.tableView rectForRowAtIndexPath:lastIndexPath];
         contentHeight = lastRowRect.origin.y + lastRowRect.size.height;
     }
-    NSLog(@"contentHeight:%f",contentHeight);
     
     if(animated){
         [UIView beginAnimations:@"expand" context:nil];

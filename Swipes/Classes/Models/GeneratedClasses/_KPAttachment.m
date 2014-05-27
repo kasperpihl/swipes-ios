@@ -6,6 +6,7 @@
 const struct KPAttachmentAttributes KPAttachmentAttributes = {
 	.identifier = @"identifier",
 	.service = @"service",
+	.sync = @"sync",
 	.title = @"title",
 };
 
@@ -42,6 +43,11 @@ const struct KPAttachmentFetchedProperties KPAttachmentFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
+	if ([key isEqualToString:@"syncValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"sync"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
 
 	return keyPaths;
 }
@@ -58,6 +64,32 @@ const struct KPAttachmentFetchedProperties KPAttachmentFetchedProperties = {
 
 @dynamic service;
 
+
+
+
+
+
+@dynamic sync;
+
+
+
+- (BOOL)syncValue {
+	NSNumber *result = [self sync];
+	return [result boolValue];
+}
+
+- (void)setSyncValue:(BOOL)value_ {
+	[self setSync:[NSNumber numberWithBool:value_]];
+}
+
+- (BOOL)primitiveSyncValue {
+	NSNumber *result = [self primitiveSync];
+	return [result boolValue];
+}
+
+- (void)setPrimitiveSyncValue:(BOOL)value_ {
+	[self setPrimitiveSync:[NSNumber numberWithBool:value_]];
+}
 
 
 

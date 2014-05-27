@@ -1,5 +1,6 @@
 platform :ios, '6.0'
 pod 'Appirater', '~> 2.0.2'
+pod 'Bolts', :inhibit_warnings => true
 pod 'Facebook-iOS-SDK', :inhibit_warnings => true
 pod 'Parse', :inhibit_warnings => true
 pod 'MagicalRecord', '~> 2.2', :inhibit_warnings => true

@@ -51,6 +51,7 @@
 		A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1CA1838EC570047DCC9 /* ToDoCell.m */; };
 		A7063BCC190F8BEE003D3690 /* SubtaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7063BCB190F8BEE003D3690 /* SubtaskController.m */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
+		A714369019346823009AC8A4 /* SyncLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A714368F19346823009AC8A4 /* SyncLabel.m */; };
 		A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
 		A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */; };
 		A717BF26176115CD004791BF /* ProximaNova-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF22176115CD004791BF /* ProximaNova-Light.ttf */; };
@@ -317,6 +318,8 @@
 		A7063BCB190F8BEE003D3690 /* SubtaskController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtaskController.m; sourceTree = "<group>"; };
 		A7090B6E175DF3F900728A3A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = Login/LoginViewController.h; sourceTree = "<group>"; };
 		A7090B6F175DF3F900728A3A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Login/LoginViewController.m; sourceTree = "<group>"; };
+		A714368E19346823009AC8A4 /* SyncLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncLabel.h; sourceTree = "<group>"; };
+		A714368F19346823009AC8A4 /* SyncLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncLabel.m; sourceTree = "<group>"; };
 		A717BEEB175E6857004791BF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		A717BF1D17611162004791BF /* AnalyticsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsHandler.h; sourceTree = "<group>"; };
 		A717BF1E17611162004791BF /* AnalyticsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsHandler.m; sourceTree = "<group>"; };
@@ -735,6 +738,8 @@
 				A703B1861838EBF20047DCC9 /* SlowHighlightIcon.m */,
 				A703B1871838EBF20047DCC9 /* YoureAllDoneView.h */,
 				A703B1881838EBF20047DCC9 /* YoureAllDoneView.m */,
+				A714368E19346823009AC8A4 /* SyncLabel.h */,
+				A714368F19346823009AC8A4 /* SyncLabel.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1718,6 +1723,7 @@
 				A781290217294C56002226C8 /* main.m in Sources */,
 				A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */,
 				DACD541918A19FB000C378DF /* DropboxView.m in Sources */,
+				A714369019346823009AC8A4 /* SyncLabel.m in Sources */,
 				A703B1AF1838EBF20047DCC9 /* KPAddView.m in Sources */,
 				A763C93D19208E58005041D7 /* AttachmentPopup.m in Sources */,
 				A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */,

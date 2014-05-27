@@ -159,7 +159,6 @@
 - ( void )textFieldDidChange: (UITextField *)textField{
     NSString *text = textField.text;
     if(self.addModeForCell){
-        NSLog(@"change");
         self.titleField.returnKeyType = (text.length > 0) ? UIReturnKeyNext : UIReturnKeyDone;
         //[self.titleField resignFirstResponder];
         //[self.titleField becomeFirstResponder];
@@ -176,7 +175,6 @@
 
 
 -(void)pressedAdd{
-    NSLog(@"pressed Add");
     if([self.subtaskDelegate respondsToSelector:@selector(shouldStartEditingSubtaskCell:)]){
         BOOL shouldEdit = [self.subtaskDelegate shouldStartEditingSubtaskCell:self];
         if(!shouldEdit)

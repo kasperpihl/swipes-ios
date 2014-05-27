@@ -7,6 +7,7 @@
 extern const struct KPAttachmentAttributes {
 	__unsafe_unretained NSString *identifier;
 	__unsafe_unretained NSString *service;
+	__unsafe_unretained NSString *sync;
 	__unsafe_unretained NSString *title;
 } KPAttachmentAttributes;
 
@@ -18,6 +19,7 @@ extern const struct KPAttachmentFetchedProperties {
 } KPAttachmentFetchedProperties;
 
 @class KPToDo;
+
 
 
 
@@ -51,6 +53,20 @@ extern const struct KPAttachmentFetchedProperties {
 
 
 //- (BOOL)validateService:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSNumber* sync;
+
+
+
+@property BOOL syncValue;
+- (BOOL)syncValue;
+- (void)setSyncValue:(BOOL)value_;
+
+//- (BOOL)validateSync:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -91,6 +107,15 @@ extern const struct KPAttachmentFetchedProperties {
 
 - (NSString*)primitiveService;
 - (void)setPrimitiveService:(NSString*)value;
+
+
+
+
+- (NSNumber*)primitiveSync;
+- (void)setPrimitiveSync:(NSNumber*)value;
+
+- (BOOL)primitiveSyncValue;
+- (void)setPrimitiveSyncValue:(BOOL)value_;
 
 
 

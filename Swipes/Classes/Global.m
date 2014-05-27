@@ -39,6 +39,7 @@ static Global *sharedObject;
     iconCompare(@"editEvernote",                @"\ue65c");
     iconCompare(@"editActionRoundedArrow",      @"\ue65d");
     iconCompare(@"editActionRoundedPlus",       @"\ue65e");
+    iconCompare(@"editSyncIcon",                @"\ue615");
     
     /* Social icons */
     iconCompare(@"twitter",                     @"\ue60e");

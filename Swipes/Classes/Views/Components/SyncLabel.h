@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface SyncLabel : UIButton
-
+@property (nonatomic) NSString *title;
 @end

@@ -30,7 +30,7 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
 
 -(NSDictionary *)jsonForSaving
 {
-    return @{ @"service": self.service, @"identifier": self.identifier, @"title": self.title };
+    return @{ @"service": self.service, @"identifier": self.identifier, @"title": self.title, @"sync": self.sync };
 }
 
 - (NSString *)description

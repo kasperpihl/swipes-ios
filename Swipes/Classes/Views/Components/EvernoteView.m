@@ -19,7 +19,8 @@
 #define kSearchBarHeight 46
 #define kButtonWidth 44
 #define kSearchTimerInterval 0.6
-#define POPUP_WIDTH 315
+#define POPUP_WIDTH 300
+#define MAX_HEIGHT 500
 #define kEvernoteColor color(95,179,54,1)
 #define kSearchLimit 10     // when _limitSearch is YES this is the limit
 
@@ -55,7 +56,9 @@
         CGFloat top = (OSVER >= 7) ? 20 : 0;
         
         
-        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, self.frame.size.height - top - 2*kContentTopBottomSpacing )];
+        CGFloat height = MIN(self.frame.size.height - top - 2*kContentTopBottomSpacing, MAX_HEIGHT);
+        
+        UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, height)];
         contentView.autoresizesSubviews = YES;
         contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         contentView.center = self.center;
@@ -128,6 +131,7 @@
                                                  selector:@selector(keyboardWillHide:)
                                                      name:UIKeyboardWillHideNotification
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:UIDeviceOrientationDidChangeNotification  object:nil];
         
     }
     return self;
@@ -154,7 +158,8 @@
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
     NSInteger startPoint = (OSVER >= 7) ? 20 : 0;
-    CGRectSetHeight(self.contentView, self.frame.size.height - startPoint - 2*kContentTopBottomSpacing);
+    CGFloat height = MIN(self.frame.size.height - startPoint - 2*kContentTopBottomSpacing, MAX_HEIGHT);
+    CGRectSetHeight(self.contentView, height);
     CGRectSetCenterY(self.contentView, self.bounds.size.height/2);
     [UIView commitAnimations];
 }
@@ -167,8 +172,11 @@
     CGFloat keyboardHeight = keyboardFrame.size.height;
     NSInteger spacing = 3;
     NSInteger startPoint = (OSVER >= 7) ? (20 + spacing) : spacing;
-    CGRectSetY(self.contentView,startPoint);
-    CGRectSetHeight(self.contentView, self.frame.size.height - keyboardHeight - startPoint- spacing);
+    CGFloat height = MIN(self.frame.size.height - keyboardHeight - startPoint- spacing, MAX_HEIGHT);
+    CGRectSetHeight(self.contentView, height);
+    CGFloat visibleSpace = self.frame.size.height - keyboardHeight - startPoint;
+    CGRectSetCenterY(self.contentView,startPoint + visibleSpace / 2);
+    
     [UIView commitAnimations];
 }
 
@@ -357,6 +365,10 @@
     clearNotify();
     _tableView = nil;
     _searchBar = nil;
+}
+
+- (void)orientationChanged:(NSNotification *)notification{
+    [self cancel:self];
 }
 
 #pragma mark - Evernote Viewer protocol implementation

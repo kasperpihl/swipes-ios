@@ -20,7 +20,7 @@
 #define CONTAINER_INIT_HEIGHT (TITLE_HEIGHT + TITLE_TOP_MARGIN + TITLE_BOTTOM_MARGIN)
 
 
-#define NOTES_PADDING 13.5
+#define NOTES_PADDING 8
 #define kRepeatPickerHeight 70
 
 #define kTopSubtaskTarget 140
@@ -48,7 +48,7 @@
 #import "DotView.h"
 #import "EvernoteView.h"
 #import "DropboxView.h"
-#import "MCSwipeTableViewCell.h"
+//#import "MCSwipeTableViewCell.h"
 
 #import "SectionHeaderView.h"
 
@@ -61,6 +61,8 @@
 #import "UIView+Utilities.h"
 #import "UIImage+Blur.h"
 #import "KPAttachment.h"
+
+#import "SyncLabel.h"
 
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
@@ -113,6 +115,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UITextView *notesView;
 @property (nonatomic) UILabel *repeatedLabel;
 @property (nonatomic) UILabel *evernoteLabel;
+@property (nonatomic) SyncLabel *syncLabel;
 @property (nonatomic) UILabel *dropboxLabel;
 
 @property (nonatomic) UILabel *scheduleImageIcon;
@@ -462,13 +465,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     else{
         self.notesView.text = self.model.notes;
     }
-    self.notesView.frame = CGRectSetSize(self.notesView, self.view.frame.size.width-LABEL_X-10, 1500);
+    CGRectSetSize(self.notesView, self.view.frame.size.width-LABEL_X-10, 1500);
     //CGSize contentSize = [self.notesView sizeThatFits:CGSizeMake(self.notesView.frame.size.width, 500)];
     [self.notesView sizeToFit];
     CGRectSetWidth(self.notesView, self.view.frame.size.width-LABEL_X-10);
-//    DLogFrame(self.notesView);
-
-    CGRectSetHeight(self.notesView,self.notesView.frame.size.height+20);
+    //    DLogFrame(self.notesView);
+    
+    CGRectSetHeight(self.notesView,self.notesView.frame.size.height);
     CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
 }
 
@@ -483,7 +486,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     NSDate *repeatDate = self.model.repeatedDate;
     if (!repeatDate)
         repeatDate = self.model.schedule;
-
+    
     if (repeatDate){
         if(![self.repeatPicker.selectedDate isEqualToDate:repeatDate] || self.repeatPicker.currentOption != self.model.repeatOptionValue)  [self.repeatPicker setSelectedDate:repeatDate option:self.model.repeatOptionValue];
     }
@@ -540,7 +543,15 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 - (void)updateEvernote
 {
     KPAttachment* attachment = [self.model firstAttachmentForServiceType:EVERNOTE_SERVICE];
-    self.evernoteLabel.text = (nil != attachment) ? attachment.title : @"Attach Evernote";
+    if ( !attachment ){
+        CGRectSetHeight(self.evernoteContainer, 0);
+        return;
+    }
+    BOOL isSyncing = ![attachment.sync boolValue];
+    CGRectSetHeight(self.evernoteContainer, (isSyncing ? SCHEDULE_ROW_HEIGHTS + 10 : SCHEDULE_ROW_HEIGHTS));
+    self.syncLabel.hidden = !isSyncing;
+    
+    self.evernoteLabel.text = attachment.title;
 }
 
 - (void)updateDropbox
@@ -551,7 +562,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 -(void)updateSectionHeader
 {
-    
     [self.sectionHeader setColor:[StyleHandler colorForCellType:self.cellType]];
     NSInteger numberOfSubtasks = self.model.subtasks.count;
     self.sectionHeader.progress = (numberOfSubtasks > 0);
@@ -563,7 +573,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.sectionHeader.progressPercentage = percentage;
         
         NSString *title = (numberOfCompletedSubtasks != numberOfSubtasks) ? [NSString stringWithFormat:@"%i / %i Steps",numberOfCompletedSubtasks,numberOfSubtasks] : @"ALL DONE";
-            
+        
         [self.sectionHeader setTitle:title];
     }
     else{
@@ -593,35 +603,35 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
     if(!self.subtasksController.expanded){
         
-    CGRectSetY(self.evernoteContainer, tempHeight);
-    tempHeight += self.evernoteContainer.frame.size.height;
-    
-    CGRectSetY(self.alarmContainer, tempHeight);
-    tempHeight += self.alarmContainer.frame.size.height;
-    
-    
-    self.repeatedContainer.hidden = !self.model.schedule;
-    if (self.model.completionDate)
-        self.repeatedContainer.hidden = YES;
-    
-    if (!self.repeatedContainer.hidden){
-        CGFloat repeatHeight = (self.activeEditMode == KPEditModeRepeat) ? SCHEDULE_ROW_HEIGHTS+kRepeatPickerHeight : SCHEDULE_ROW_HEIGHTS;
-        CGRectSetHeight(self.repeatedContainer, repeatHeight);
-        CGRectSetY(self.repeatedContainer, tempHeight);
-        tempHeight += self.repeatedContainer.frame.size.height;
-    }
-    
-    
-    CGRectSetY(self.tagsContainerView, tempHeight);
-    tempHeight += self.tagsContainerView.frame.size.height;
-    
-    
-    CGRectSetY(self.dropboxContainer, tempHeight);
-    tempHeight += self.dropboxContainer.frame.size.height;
-    
-    
-    CGRectSetY(self.notesContainer, tempHeight);
-    tempHeight += self.notesContainer.frame.size.height;
+        
+        CGRectSetY(self.alarmContainer, tempHeight);
+        tempHeight += self.alarmContainer.frame.size.height;
+        
+        
+        self.repeatedContainer.hidden = !self.model.schedule;
+        if (self.model.completionDate)
+            self.repeatedContainer.hidden = YES;
+        
+        if (!self.repeatedContainer.hidden){
+            CGFloat repeatHeight = (self.activeEditMode == KPEditModeRepeat) ? SCHEDULE_ROW_HEIGHTS+kRepeatPickerHeight : SCHEDULE_ROW_HEIGHTS;
+            CGRectSetHeight(self.repeatedContainer, repeatHeight);
+            CGRectSetY(self.repeatedContainer, tempHeight);
+            tempHeight += self.repeatedContainer.frame.size.height;
+        }
+        
+        
+        CGRectSetY(self.tagsContainerView, tempHeight);
+        tempHeight += self.tagsContainerView.frame.size.height;
+        
+        CGRectSetY(self.evernoteContainer, tempHeight);
+        tempHeight += self.evernoteContainer.frame.size.height;
+        
+        CGRectSetY(self.dropboxContainer, tempHeight);
+        tempHeight += self.dropboxContainer.frame.size.height;
+        
+        
+        CGRectSetY(self.notesContainer, tempHeight);
+        tempHeight += self.notesContainer.frame.size.height;
     }
     CGFloat targetHeight = self.subtasksController.expanded ? heightWithSubtasks : tempHeight;
     BOOL isPortrait = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
@@ -657,8 +667,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
     else if(item == 1){
         [ROOT_CONTROLLER shareTasks:@[self.model]];
-         /*NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
-        [self.segmentedViewController pressedShare:self];*/
+        /*NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
+         [self.segmentedViewController pressedShare:self];*/
     }
     else if (item == 0 ){
         [self pressedEvernote:self];
@@ -816,9 +826,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.cell.mode = MCSwipeTableViewCellModeExit;
         UIView *contentView = self.cell.contentView;
         /*
-        contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        contentView.backgroundColor = tcolor(DoneColor);
-        contentView.tag = CONTENT_VIEW_TAG;*/
+         contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+         contentView.backgroundColor = tcolor(DoneColor);
+         contentView.tag = CONTENT_VIEW_TAG;*/
         
         self.titleContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.cell.frame.size.width, CONTAINER_INIT_HEIGHT)];
         self.titleContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -862,7 +872,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         seperator.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         [self.titleContainerView addSubview:seperator];
         self.dotSeperator = seperator;
-
+        
         
         self.expandButton = [[UIButton alloc] initWithFrame:CGRectMake(self.titleContainerView.frame.size.width-44, TITLE_TOP_MARGIN-5, 44, 44)];
         self.expandButton.titleLabel.font = iconFont(20);
@@ -914,7 +924,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         CGRectSetY(self.repeatPicker, self.repeatedContainer.frame.size.height + (kRepeatPickerHeight - 50) / 2);
         [self.repeatedContainer addSubview:self.repeatPicker];
         
-
+        
         [self addAndGetImage:@"editRepeat" inView:self.repeatedContainer];
         self.repeatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X, self.repeatedContainer.frame.size.height)];
         self.repeatedLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -951,18 +961,26 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /*
          Evernote Container with button!
          */
-         self.evernoteContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
-         [self addAndGetImage:@"editEvernote" inView:self.evernoteContainer];
-         
-         self.evernoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X, self.evernoteContainer.frame.size.height)];
-         self.evernoteLabel.font = EDIT_TASK_TEXT_FONT;
-         self.evernoteLabel.backgroundColor = CLEAR;
-         [self setColorsFor:self.evernoteLabel];
-         [self.evernoteContainer addSubview:self.evernoteLabel];
-         
-         [self addClickButtonToView:self.evernoteContainer action:@selector(pressedEvernote:)];
-         
-         [self.scrollView addSubview:self.evernoteContainer];
+        self.evernoteContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
+        [self addAndGetImage:@"editEvernote" inView:self.evernoteContainer];
+        self.evernoteContainer.layer.masksToBounds = YES;
+        
+        self.evernoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X, self.evernoteContainer.frame.size.height)];
+        self.evernoteLabel.font = EDIT_TASK_TEXT_FONT;
+        self.evernoteLabel.backgroundColor = CLEAR;
+        [self setColorsFor:self.evernoteLabel];
+        
+        [self.evernoteContainer addSubview:self.evernoteLabel];
+        
+        self.syncLabel = [[SyncLabel alloc] init];
+        [self.syncLabel setTitle:@"SYNCED"];
+        self.syncLabel.backgroundColor = tcolorF(BackgroundColor,ThemeDark);
+        [self.evernoteContainer addSubview:self.syncLabel];
+        self.syncLabel.frame = CGRectSetPos(self.syncLabel.frame, LABEL_X, CGRectGetMidY(self.evernoteLabel.frame)+10);
+        
+        [self addClickButtonToView:self.evernoteContainer action:@selector(pressedEvernote:)];
+        
+        [self.scrollView addSubview:self.evernoteContainer];
         
         
         /*
@@ -981,15 +999,15 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          [self addClickButtonToView:self.dropboxContainer action:@selector(pressedDropbox:)];
          
          [self.scrollView addSubview:self.dropboxContainer];
-        */
+         */
         
-         //Notes view
-         
-         self.notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_ROW_HEIGHT)];
-         self.notesContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        //Notes view
+        
+        self.notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
+        self.notesContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self addAndGetImage:@"editNotes" inView:self.notesContainer];
-         self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, self.view.frame.size.width - LABEL_X - 200, 500)];
-         self.notesView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, self.view.frame.size.width - LABEL_X - 200, 500)];
+        self.notesView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.notesView.font = EDIT_TASK_TEXT_FONT;
         self.notesView.contentInset = UIEdgeInsetsMake(0,-5,0,0);
         self.notesView.editable = NO;
@@ -1003,7 +1021,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         /* Adding scroll and content view */
         [contentView addSubview:self.scrollView];
         
-
+        
         [self.view addSubview:self.cell];
         
         self.sectionHeader = [[SectionHeaderView alloc] initWithColor:[UIColor greenColor] font:SECTION_HEADER_FONT title:@"Test" width:self.view.frame.size.width];
@@ -1103,7 +1121,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if(currentOffset.y < 0)
         currentOffset.y = 0;
     self.kbdHeight = 0;
-
+    
     self.scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
@@ -1124,10 +1142,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self.sectionHeader setNeedsDisplay];
     [self update];
     /*BOOL isPortrait = !UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
-    CGFloat width = isPortrait ? self.cell.frame.size.width : self.cell.frame.size.height;
-    CGFloat height = isPortrait ?  self.cell.frame.size.height : self.cell.frame.size.width;
-    //CGRectSetHeight(self.scrollView, height);
-    CGRectSetWidth(self.scrollView, width);*/
+     CGFloat width = isPortrait ? self.cell.frame.size.width : self.cell.frame.size.height;
+     CGFloat height = isPortrait ?  self.cell.frame.size.height : self.cell.frame.size.width;
+     //CGRectSetHeight(self.scrollView, height);
+     CGRectSetWidth(self.scrollView, width);*/
 }
 
 
@@ -1201,7 +1219,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRectSetWidth(self.scrollView, self.view.frame.size.width);
     CGRectSetHeight(self.scrollView, self.cell.frame.size.height);
     CGRectSetWidth(self.notesView, self.view.frame.size.width-LABEL_X-10);
-//    [self.view explainSubviews];
+    //    [self.view explainSubviews];
 }
 
 @end

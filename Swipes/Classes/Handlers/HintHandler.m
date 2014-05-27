@@ -124,12 +124,10 @@ static HintHandler *sharedObject;
     NSString *key = [self keyForHint:hint];
     BOOL hasAlreadyCompletedHint = [[self.hints objectForKey:key] boolValue];
     if(!hasAlreadyCompletedHint){
-        NSLog(@"completed hint %@",key);
         [self.hints setObject:@YES forKey:key];
         [[NSUserDefaults standardUserDefaults] setObject:self.hints forKey:kHintDictionaryKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    else NSLog(@"hint already completed %@",key);
     
     return !hasAlreadyCompletedHint;
 }

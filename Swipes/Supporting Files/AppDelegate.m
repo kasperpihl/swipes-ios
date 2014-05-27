@@ -58,7 +58,7 @@
 
     NSString* const CONSUMER_KEY = @"sulio22";
     NSString* const CONSUMER_SECRET = @"c7ed7298b3666bc4"; // when set to release also fix in Swipes-Info.plist file !
-    [KeenClient enableLogging];
+    //[KeenClient enableLogging];
     [KeenClient sharedClientWithProjectId:@"532aec56ce5e436553000007"
                               andWriteKey:@"2626ed170332186795c0c8c850b7c0eb6c48474466d84d2578ec2b139708fb57f9adba3a96adf2df91032aa3c48282263a291ef58ea1d607990f8281e4a1d1b4aa939cb9a305f1c47964bf18ba94ba660529f0a3ad7431c6d034fba62b01308637f413966a769c609d79478a691e3ed6"
                                andReadKey:@"bdbd2501231a656524ddc66985685d704f154f2cec61698914c5c1839565be0c15e4203c896ee7fedbeaf2a587fcae0e1353c796209bfa474c5844e4c831ab7a8bac00a92c9d8f572705e51b96ffc621e35b27bb4640b990cc29300b4134de0779a971ab9285564a0d6e552d2dd0e5f5"];

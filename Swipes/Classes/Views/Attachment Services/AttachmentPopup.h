@@ -14,5 +14,5 @@ typedef NS_ENUM(NSUInteger, KPAttachmentButtons){
 };
 typedef void (^AttachmentPopupBlock)(KPAttachmentButtons button, NSString *title, NSString *identifier);
 @interface AttachmentPopup : UIView
-+(AttachmentPopup*)popupWithFrame:(CGRect)frame block:(AttachmentPopupBlock)block;
+
 @end

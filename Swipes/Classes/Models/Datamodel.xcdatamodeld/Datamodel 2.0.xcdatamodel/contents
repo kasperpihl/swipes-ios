@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Attachment" representedClassName="KPAttachment" syncable="YES">
         <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="service" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sync" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="todo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ToDo" inverseName="attachments" inverseEntity="ToDo" syncable="YES"/>
     </entity>
@@ -37,7 +38,7 @@
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="todos" inverseEntity="Tag" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Attachment" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="Attachment" positionX="0" positionY="0" width="128" height="120"/>
         <element name="ParseObject" positionX="0" positionY="0" width="128" height="120"/>
         <element name="Tag" positionX="0" positionY="0" width="128" height="73"/>
         <element name="ToDo" positionX="0" positionY="0" width="128" height="300"/>

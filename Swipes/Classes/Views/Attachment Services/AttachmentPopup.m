@@ -9,9 +9,6 @@
 #import "AttachmentPopup.h"
 
 @implementation AttachmentPopup
-+(AttachmentPopup *)popupWithFrame:(CGRect)frame block:(AttachmentPopupBlock)block{
-
-}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
