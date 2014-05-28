@@ -37,7 +37,7 @@
 -(NSString*)readableTitleForStatus;
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save;
 -(NSArray*)nextNumberOfRepeatedDates:(NSInteger)numberOfDates;
-- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier;
+- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync;
 - (void)removeAllAttachmentsForService:(NSString *)service;
 - (KPAttachment *)firstAttachmentForServiceType:(NSString *)service;
 

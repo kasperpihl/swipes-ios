@@ -11,7 +11,7 @@
 @class EvernoteView;
 
 @protocol EvernoteViewDelegate <NSObject>
-- (void)selectedEvernoteInView:(EvernoteView *)evernoteView guid:(NSString*)guid title:(NSString *)title;
+- (void)selectedEvernoteInView:(EvernoteView *)evernoteView guid:(NSString*)guid title:(NSString *)title sync:(BOOL)sync;
 - (void)closeEvernoteView:(EvernoteView *)evernoteView;
 @end
 

@@ -681,13 +681,13 @@
 
 #pragma mark - Attachments
 
-- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier
+- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync
 {
     // remove all present attachments for this service
     [self removeAllAttachmentsForService:service];
     
     // create the attachment
-    KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier];
+    KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync];
     
     // add the new attachment
     [self addAttachments:[NSSet setWithObject:attachment]];

@@ -12,12 +12,16 @@
 #import "UIColor+Utilities.h"
 #import "SectionHeaderView.h"
 #import "UtilityClass.h"
+#import "CheckmarkButton.h"
 
 #define kContentSpacingLeft 10
 #define kContentSpacingRight 10
 #define kContentTopBottomSpacing 70
 #define kSearchBarHeight 46
+
 #define kButtonWidth 44
+#define kBottomBarHeight 60
+#define kCheckmarkSize 44
 #define kSearchTimerInterval 0.6
 #define POPUP_WIDTH 300
 #define MAX_HEIGHT 500
@@ -34,6 +38,7 @@
 @property (nonatomic, strong) EDAMNoteList* noteList;
 
 @property (nonatomic, strong) EvernoteViewerView* viewer;
+@property (nonatomic) CheckmarkButton *checkmark;
 
 @end
 
@@ -100,7 +105,7 @@
                             action:@selector(searchBarDidReturn:)
                   forControlEvents:UIControlEventEditingDidEndOnExit];
 
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, kSearchBarHeight, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height - kSearchBarHeight) style:UITableViewStylePlain];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, kSearchBarHeight, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height - 2 * kSearchBarHeight ) style:UITableViewStylePlain];
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
         self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
@@ -117,6 +122,23 @@
         sectionHeader.lineThickness = 2;
         [contentView addSubview:sectionHeader];
         
+        
+        CheckmarkButton *checkmarkButton = [[CheckmarkButton alloc] initWithFrame:CGRectMake(startX, 0, kSearchBarHeight, kSearchBarHeight)];
+        checkmarkButton.backgroundColor = kEvernoteColor;
+        checkmarkButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        checkmarkButton.selected = YES;
+        CGRectSetY(checkmarkButton, CGRectGetHeight(contentView.frame) - kSearchBarHeight);
+        
+        [contentView addSubview:checkmarkButton];
+        self.checkmark = checkmarkButton;
+        
+        UILabel *syncTasksLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(checkmarkButton.frame), CGRectGetMinY(checkmarkButton.frame), CGRectGetWidth(contentView.frame) - CGRectGetMaxX(checkmarkButton.frame)-kContentSpacingRight, kSearchBarHeight)];
+        syncTasksLabel.backgroundColor = kEvernoteColor;
+        syncTasksLabel.text = @"Sync tasks from Evernote";
+        syncTasksLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        syncTasksLabel.textColor = tcolorF(TextColor, ThemeDark);
+        syncTasksLabel.font = KP_REGULAR(16);
+        [contentView addSubview:syncTasksLabel];
         
         // initiate the start lookup
         [self addSubview:contentView];
@@ -312,10 +334,6 @@
         cell.detailTextLabel.font = KP_REGULAR(10);
         cell.detailTextLabel.textColor = tcolor(SubTextColor);
         cell.accessoryType = UITableViewCellAccessoryNone;
-        //UIButton *accessory = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kButtonWidth, kButtonWidth)];
-        //[accessory addTarget:self action:@selector(pressedAccessory:) forControlEvents:UIControlEventTouchUpInside];
-       
-        //cell.accessoryView = accessory;
         
     }
     cell.accessoryView.tag = indexPath.row;
@@ -324,13 +342,6 @@
     return cell;
 }
 
--(void)pressedAccessory:(UIButton*)button{
-    NSInteger index = button.tag;
-    EDAMNote* note = _noteList.notes[index];
-    NSLog(@"selected note with title: %@", note.title);
-    [_delegate selectedEvernoteInView:self guid:note.guid title:note.title];
-    
-}
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 46;
@@ -343,10 +354,10 @@
     _selectedNote = _noteList.notes[index];
     if ([_searchBar isFirstResponder])
         [_searchBar resignFirstResponder];
-    _viewer = [[EvernoteViewerView alloc] initWithFrame:self.frame andGuid:_selectedNote.guid];
-    _viewer.delegate = self;
-    [self addSubview:_viewer];
+    
+    [_delegate selectedEvernoteInView:self guid:_selectedNote.guid title:_selectedNote.title sync:self.checkmark.selected];
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -383,7 +394,7 @@
 {
     [_viewer removeFromSuperview];
     _viewer = nil;
-    [_delegate selectedEvernoteInView:self guid:_selectedNote.guid title:_selectedNote.title];
+    [_delegate selectedEvernoteInView:self guid:_selectedNote.guid title:_selectedNote.title sync:self.checkmark.selected];
 }
 
 @end

@@ -354,11 +354,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 #pragma mark - EvernoteViewDelegate
 
-- (void)selectedEvernoteInView:(EvernoteView *)EvernoteView guid:(NSString *)guid title:(NSString *)title
+- (void)selectedEvernoteInView:(EvernoteView *)EvernoteView guid:(NSString *)guid title:(NSString *)title sync:(BOOL)sync
 {
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
-    [self.model attachService:EVERNOTE_SERVICE title:title identifier:guid];
+    [self.model attachService:EVERNOTE_SERVICE title:title identifier:guid sync:sync];
     [KPToDo saveToSync];
     [self updateEvernote];
     [self layoutWithDuration:0];
@@ -378,7 +378,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     DLog(@"selected dropbox file with path: %@", path);
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
-    [self.model attachService:DROPBOX_SERVICE title:[path lastPathComponent] identifier:path];
+    [self.model attachService:DROPBOX_SERVICE title:[path lastPathComponent] identifier:path sync:NO];
     [KPToDo saveToSync];
     [self updateDropbox];
     [self layoutWithDuration:0];
@@ -547,7 +547,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         CGRectSetHeight(self.evernoteContainer, 0);
         return;
     }
-    BOOL isSyncing = ![attachment.sync boolValue];
+    BOOL isSyncing = [attachment.sync boolValue];
     CGRectSetHeight(self.evernoteContainer, (isSyncing ? SCHEDULE_ROW_HEIGHTS + 10 : SCHEDULE_ROW_HEIGHTS));
     self.syncLabel.hidden = !isSyncing;
     

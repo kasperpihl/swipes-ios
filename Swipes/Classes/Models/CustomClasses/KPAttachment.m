@@ -12,13 +12,14 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
 
 @implementation KPAttachment
 
-+ (instancetype)attachmentForService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier
++ (instancetype)attachmentForService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync
 {
     NSAssert([KPAttachment supportsService:service], @"Called with unsupported service: %@", service);
     KPAttachment* attachment = [KPAttachment MR_createInContext:KPCORE.context];
     attachment.identifier = identifier;
     attachment.title = title;
     attachment.service = service;
+    attachment.sync = @(sync);
     return attachment;
 }
 
