@@ -87,7 +87,7 @@
             self.dotContainer.layer.cornerRadius = kAddSize/2+kSubOutlineSpacing;
             //self.dotView.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
             self.dotView.layer.cornerRadius = kAddSize/2;
-            [self.dotView setTitle:@"editActionRoundedPlus" forState:UIControlStateNormal];
+            [self.dotView setTitle:iconString(@"editActionRoundedPlus") forState:UIControlStateNormal];
             
         };
     }

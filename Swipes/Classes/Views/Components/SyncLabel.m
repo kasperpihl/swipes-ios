@@ -8,7 +8,7 @@
 #import "SyncLabel.h"
 #import <QuartzCore/QuartzCore.h>
 #define kLeftSpacingIcon 5
-#define kTopSpacing -2
+#define kTopSpacing (OSVER >= 7 ? -2 : 2)
 #define kIconSize 10
 #define kCornerRadius 3
 

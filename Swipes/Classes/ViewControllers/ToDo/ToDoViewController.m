@@ -809,7 +809,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.view addSubview:self.toolbarEditView];
         UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, startY, TOOLBAR_HEIGHT, TOOLBAR_HEIGHT)];
         [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
-        [backButton setTitle:@"back" forState:UIControlStateNormal];
+        [backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
         backButton.titleLabel.font = iconFont(23);
         [backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [self.view addSubview:backButton];
@@ -876,7 +876,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         self.expandButton = [[UIButton alloc] initWithFrame:CGRectMake(self.titleContainerView.frame.size.width-44, TITLE_TOP_MARGIN-5, 44, 44)];
         self.expandButton.titleLabel.font = iconFont(20);
-        [self.expandButton setTitle:@"editActionRoundedArrow" forState:UIControlStateNormal];
+        [self.expandButton setTitle:iconString(@"editActionRoundedArrow") forState:UIControlStateNormal];
         [self.expandButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [self.expandButton addTarget:self action:@selector(pressedExpand:) forControlEvents:UIControlEventTouchUpInside];
         self.expandButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;

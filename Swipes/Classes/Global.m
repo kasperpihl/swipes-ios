@@ -92,6 +92,7 @@ static Global *sharedObject;
     iconCompare(@"actionTagFull",               @"\ue63a");
     iconCompare(@"actionDeleteFull",            @"\ue63b");
     iconCompare(@"actionEditFull",              @"\ue63c");
+    iconCompare(@"actionSearch",                @"\ue654");
     
     /* Schedule */
     iconCompare(@"scheduleCalendar",            @"\ue63d");
@@ -116,9 +117,9 @@ static Global *sharedObject;
     iconCompare(@"scheduleCoffeeFull",          @"\ue64e");
     
     iconCompare(@"logo",                        @"\ue600");
-    iconCompare(@"signature",                   @"\ue61a");
-    iconCompare(@"trompet",                     @"\ue623");
-    iconCompare(@"pickerWheel",                 @"\ue627");
+    iconCompare(@"signature",                   @"\ue623");
+    iconCompare(@"trompet",                     @"\ue627");
+    iconCompare(@"pickerWheel",                 @"\ue659");
     return iconString;
 }
 +(NSDateFormatter *)isoDateFormatter{

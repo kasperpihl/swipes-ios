@@ -76,7 +76,7 @@
         
         UIButton *loopButton = [[UIButton alloc] initWithFrame:CGRectMake(startX, 0, kSearchBarHeight, kSearchBarHeight)];
         loopButton.titleLabel.font = iconFont(23);
-        [loopButton setTitle:@"actionSearch" forState:UIControlStateNormal];
+        [loopButton setTitle:iconString(@"actionSearch") forState:UIControlStateNormal];
         loopButton.backgroundColor = CLEAR;
         [loopButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
         [contentView addSubview:loopButton];
@@ -94,6 +94,7 @@
         
         self.searchBar = [[UITextField alloc] initWithFrame:CGRectMake(searchX, 0, searchWidth, kSearchBarHeight)];
         self.searchBar.font = KP_LIGHT(16);
+        self.searchBar.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.searchBar.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{NSFontAttributeName: KP_LIGHT(16) , NSForegroundColorAttributeName: tcolorF(TextColor, ThemeDark)}];
         [contentView addSubview:self.searchBar];
         self.searchBar.delegate = self;
@@ -137,7 +138,7 @@
         syncTasksLabel.text = @"Sync tasks from Evernote";
         syncTasksLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         syncTasksLabel.textColor = tcolorF(TextColor, ThemeDark);
-        syncTasksLabel.font = KP_REGULAR(16);
+        syncTasksLabel.font = KP_BOLD(14);
         [contentView addSubview:syncTasksLabel];
         
         // initiate the start lookup
@@ -173,6 +174,7 @@
 -(void)searchBarDidReturn:(UITextField*)searchBar{
     [searchBar resignFirstResponder];
 }
+
 
 -(void)keyboardWillHide:(NSNotification*)notification{
     [UIView beginAnimations:nil context:NULL];

@@ -158,7 +158,7 @@
         closeButton.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin);
         //closeButton.backgroundColor = tcolor(LaterColor);
         closeButton.transform = CGAffineTransformMakeRotation(M_PI);
-        [closeButton setTitle:@"editActionRoundedArrow" forState:UIControlStateNormal];
+        [closeButton setTitle:iconString(@"editActionRoundedArrow") forState:UIControlStateNormal];
         //[closeButton setTitle:@"roundBackFull" forState:UIControlStateHighlighted];
         [closeButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [closeButton addTarget:self action:@selector(pressedCloseSubtasks) forControlEvents:UIControlEventTouchUpInside];
