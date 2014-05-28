@@ -81,7 +81,7 @@
         [loopButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
         [contentView addSubview:loopButton];
         
-        UILabel *evernoteLabel = iconLabel(@"editEvernote", 20);
+        UILabel *evernoteLabel = iconLabel(@"integrationEvernote", 25);
         evernoteLabel.textColor = tcolorF(TextColor, ThemeDark);
         CGFloat evernoteWidth = 50;
         CGFloat evernoteTopHack = 6;
@@ -138,7 +138,7 @@
         syncTasksLabel.text = @"Sync tasks from Evernote";
         syncTasksLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         syncTasksLabel.textColor = tcolorF(TextColor, ThemeDark);
-        syncTasksLabel.font = KP_BOLD(14);
+        syncTasksLabel.font = KP_REGULAR(14);
         [contentView addSubview:syncTasksLabel];
         
         // initiate the start lookup

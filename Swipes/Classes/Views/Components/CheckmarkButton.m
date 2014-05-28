@@ -7,7 +7,8 @@
 //
 
 #import "CheckmarkButton.h"
-#define kDefaultSquareSize 20
+#define kDefaultSquareSize 25
+#define kCornerRadius 3
 @interface CheckmarkButton ()
 @property (nonatomic) UIView *squareView;
 @end
@@ -26,6 +27,7 @@
         self.squareView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.squareSize, self.squareSize)];
         self.squareView.layer.borderColor = tcolorF(TextColor,ThemeDark).CGColor;
         self.squareView.layer.borderWidth = LINE_SIZE;
+        self.squareView.layer.cornerRadius = kCornerRadius;
         [self addSubview:self.squareView];
         CGRectSetCenter(self.squareView, CGRectGetWidth(self.frame)/2, CGRectGetHeight(self.frame)/2);
         [self sendSubviewToBack:self.squareView];

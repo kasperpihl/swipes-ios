@@ -116,6 +116,12 @@ static Global *sharedObject;
     iconCompare(@"scheduleMoonFull",            @"\ue61c");
     iconCompare(@"scheduleCoffeeFull",          @"\ue64e");
     
+    /* Integrations */
+    iconCompare(@"integrationEvernote",         @"\ue642");
+    
+    /* Integrations full */
+    iconCompare(@"integrationEvernoteFull",     @"\ue64d");
+    
     iconCompare(@"logo",                        @"\ue600");
     iconCompare(@"signature",                   @"\ue623");
     iconCompare(@"trompet",                     @"\ue627");

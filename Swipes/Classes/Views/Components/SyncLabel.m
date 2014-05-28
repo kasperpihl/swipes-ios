@@ -31,7 +31,7 @@
     self.titleLabel.font = KP_SEMIBOLD(kIconSize);
     self.layer.cornerRadius = kCornerRadius;
     self.syncIcon = iconLabel(@"editSyncIcon", kIconSize);
-    self.titleLabel.textColor = tcolor(BackgroundColor);
+    [self setTitleColor:tcolor(BackgroundColor) forState:UIControlStateNormal];
     self.backgroundColor = tcolor(TextColor);
     self.syncIcon.textColor = tcolor(BackgroundColor);
     self.titleEdgeInsets = UIEdgeInsetsMake(kTopSpacing, kIconSize + 2*kLeftSpacingIcon, kTopSpacing, kLeftSpacingIcon);
