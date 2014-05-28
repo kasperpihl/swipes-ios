@@ -8,7 +8,7 @@
 
 #import "CheckmarkButton.h"
 #define kDefaultSquareSize 25
-#define kCornerRadius 3
+#define kCornerRadius 5
 @interface CheckmarkButton ()
 @property (nonatomic) UIView *squareView;
 @end
@@ -33,10 +33,10 @@
         [self sendSubviewToBack:self.squareView];
         self.squareView.userInteractionEnabled = NO;
 
-        self.titleLabel.font = iconFont(25);
-        [self setTitle:iconString(@"checkmark") forState:UIControlStateHighlighted];
+        self.titleLabel.font = iconFont(12);
+        [self setTitle:iconString(@"checkmarkThick") forState:UIControlStateHighlighted];
         [self setTitle:@"" forState:UIControlStateNormal];
-        [self setTitle:iconString(@"checkmark") forState:UIControlStateSelected];
+        [self setTitle:iconString(@"checkmarkThick") forState:UIControlStateSelected];
         [self setTitle:@"" forState:UIControlStateSelected | UIControlStateHighlighted];
         [self addTarget:self action:@selector(pressedCheck:) forControlEvents:UIControlEventTouchUpInside];
         // Initialization code

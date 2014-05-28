@@ -71,6 +71,7 @@ static Global *sharedObject;
     
     
     iconCompare(@"checkmark",                   @"\ue625");
+    iconCompare(@"checkmarkThick",              @"\ue64f");
     iconCompare(@"plus",                        @"\ue626");
     iconCompare(@"back",                        @"\ue63f");
     iconCompare(@"rightArrow",                  @"\ue628");
