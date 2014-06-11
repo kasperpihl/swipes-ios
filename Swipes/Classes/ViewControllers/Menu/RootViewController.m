@@ -331,7 +331,8 @@ static RootViewController *sharedObject;
 }
 
 -(void)syncHandler:(KPParseCoreData *)handler status:(SyncStatus)status userInfo:(NSDictionary *)userInfo error:(NSError *)error{
-    if(OSVER < 7) return;
+#warning should be < 7
+    if(OSVER <= 7) return;
     if(!self.notification){
         self.notification = [CWStatusBarNotification new];
         self.notification.notificationTappedBlock = nil;

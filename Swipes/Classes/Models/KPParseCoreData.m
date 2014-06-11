@@ -366,7 +366,7 @@
     
     
     [syncData setObject:updateObjectsToServer forKey:@"objects"];
-    
+    NSLog(@"sync:%@",updateObjectsToServer);
     
     /* Preparing request */
     NSError *error;
@@ -375,7 +375,7 @@
 #else
     NSString *url = @"http://swipes-test.herokuapp.com/sync";
     url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
-    url = @"http://127.0.0.1:5000/v1/sync";
+    //url = @"http://127.0.0.1:5000/v1/sync";
     
 #endif
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];

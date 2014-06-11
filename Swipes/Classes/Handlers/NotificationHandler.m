@@ -119,7 +119,16 @@ static NotificationHandler *sharedObject;
     UIApplication *app = [UIApplication sharedApplication];
     NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
+#warning iOS 8 remove
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
+    /**
+    UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil];
+    if ( notificationSettings.types == UIUserNotificationTypeBadge )
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
+    else
+        [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+    */
+    
     
     if(!hasNotificationsOn){
         [app cancelAllLocalNotifications];

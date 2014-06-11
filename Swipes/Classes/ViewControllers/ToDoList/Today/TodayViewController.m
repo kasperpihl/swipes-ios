@@ -84,7 +84,6 @@
     
     self.parent.backgroundMode = (itemNumber == 0);
     [self setEmptyBack:(itemNumber == 0) animated:YES];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:itemNumber];
     self.sectionHeader.fillColor = (itemNumber == 0) ? CLEAR : tcolor(BackgroundColor);
     if(itemNumber == 0 && oldNumber > 0){
         NSInteger servicesAvailable = 0;
