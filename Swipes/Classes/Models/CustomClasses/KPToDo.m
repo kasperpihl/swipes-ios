@@ -222,6 +222,22 @@
                 }
                 continue;
             }
+            
+            if([pfKey isEqualToString:@"attachments"]){
+                NSArray *attachments = (NSArray*)pfValue;
+                [self removeAllAttachmentsForService:@"all"];
+                for( NSDictionary *attachmentObj in attachments){
+                    NSString *title = [attachmentObj objectForKey:@"title"];
+                    NSString *identifier = [attachmentObj objectForKey:@"identifier"];
+                    NSString *service = [attachmentObj objectForKey:@"service"];
+                    BOOL sync = [[attachmentObj objectForKey:@"sync"] boolValue];
+                    KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync inContext:context];
+                    // add the new attachment
+                    [self addAttachments:[NSSet setWithObject:attachment]];
+                }
+                continue;
+            }
+            
             NSString *cdKey = [keyMatch objectForKey:pfKey];
             if(cdKey){
                 
@@ -281,8 +297,10 @@
         for ( KPAttachment *attachment in self.attachments ){
             [attachmentArray addObject:[attachment jsonForSaving]];
         }
-        if ( !( isNewObject && attachmentArray.count == 0 ) )
+        if ( !( isNewObject && attachmentArray.count == 0 ) ){
             [*object setObject:[attachmentArray copy] forKey:@"attachments"];
+            shouldUpdate = YES;
+        }
     }
     
     if(isNewObject || [changedAttributes containsObject:@"tags"]){
@@ -680,7 +698,10 @@
 }
 
 #pragma mark - Attachments
-
+- (void)updateAttachmentFromObjects:(NSArray*)attachments{
+    
+   
+}
 - (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync
 {
     // remove all present attachments for this service
@@ -697,7 +718,7 @@
 {
     NSMutableSet* attachmentSet = [NSMutableSet set];
     for (KPAttachment* att in self.attachments) {
-        if ([att.service isEqualToString:service]) {
+        if ([att.service isEqualToString:service] || [service isEqualToString:@"all"]) {
             [attachmentSet addObject:att];
         }
     }

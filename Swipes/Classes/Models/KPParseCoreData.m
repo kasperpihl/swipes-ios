@@ -375,7 +375,7 @@
 #else
     NSString *url = @"http://swipes-test.herokuapp.com/sync";
     url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
-    //url = @"http://127.0.0.1:5000/v1/sync";
+    url = @"http://127.0.0.1:5000/v1/sync";
     
 #endif
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
@@ -399,7 +399,7 @@
     /* Performing request */
     NSHTTPURLResponse *response;
     NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,[syncData objectForKey:@"lastUpdate"]);
-    //NSLog(@"sync:%@",syncData);
+    NSLog(@"sync:%@",syncData);
     NSLog(@"need: %@", [syncData objectForKey:@"hasMoreToSave"]);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
@@ -445,7 +445,6 @@
         [self finalizeSyncWithUserInfo:result error:error];
         return NO;
     }
-    
     
     
     /* Handling response - Tags first due to relation */
