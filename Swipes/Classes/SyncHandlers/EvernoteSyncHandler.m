@@ -51,11 +51,11 @@
     for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
         
         // Adding a subtask - use save NO for saving all in the end
-        [todoWithEvernote addSubtask:@"subtask title" save:NO];
+        //[todoWithEvernote addSubtask:@"subtask title" save:NO];
         
         // How to delete a subtask - use save NO for saving in end
         for ( KPToDo *subtask in todoWithEvernote.subtasks ){
-            [KPToDo deleteToDos:@[subtask] save:NO];
+            //[KPToDo deleteToDos:@[subtask] save:NO];
         }
         
     }
