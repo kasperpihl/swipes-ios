@@ -818,12 +818,20 @@ static CoreSyncHandler *sharedObject;
     @try {
         [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
         
-        //[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(loadTest) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(performTestForSyncing) userInfo:nil repeats:NO];
     }
     @catch (NSException *exception) {
         NSLog(@"%@",exception);
     }
     @finally {
+    }
+}
+-(void)performTestForSyncing{
+    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"hasSwitchedToNewAPI"]){
+        [self hardSync];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasSwitchedToNewAPI"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
