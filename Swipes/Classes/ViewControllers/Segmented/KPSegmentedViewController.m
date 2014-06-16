@@ -269,12 +269,14 @@
         self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, TOP_HEIGHT)];
         self.ios7BackgroundView.backgroundColor = CLEAR;
         [self.ios7BackgroundView addSubview:self.segmentedControl];
+        self.ios7BackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         UIButton *accountButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.view.frame.size.width-CELL_LABEL_X, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
         accountButton.titleLabel.font = iconFont(23);
         [accountButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [accountButton setTitle:iconString(@"settingsAccount") forState:UIControlStateNormal];
         [accountButton setTitle:iconString(@"settingsAccountFull") forState:UIControlStateHighlighted];
         [accountButton addTarget:self action:@selector(pressedAccount) forControlEvents:UIControlEventTouchUpInside];
+        accountButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [self.ios7BackgroundView addSubview:accountButton];
         self._accountButton = accountButton;
         

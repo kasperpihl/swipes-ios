@@ -25,6 +25,9 @@
 #define LOGIN_FIELDS_HEIGHT 104
 
 
+#define LOGIN_LOGO_Y            0
+#define LOGIN_FIELDS_Y          (LOGIN_LOGO_Y + valForIpad(110, 110))
+
 #define LOGIN_BUTTON_Y     (15      +LOGIN_FIELDS_Y+LOGIN_FIELDS_HEIGHT)
 #define FACEBOOK_BUTTON_Y  (15 +(LOGIN_BUTTON_Y+SIGNUP_BUTTONS_HEIGHT))
 #define BUTTON_LABEL_SUBTRACTION 21
@@ -34,8 +37,6 @@
 #define kContinueButtonJump 25
 
 
-#define LOGIN_LOGO_Y            valForScreen(40,60)
-#define LOGIN_FIELDS_Y          valForScreen(80,100)
 
 #define SIGNUP_BUTTONS_HEIGHT   44
 
@@ -86,6 +87,7 @@ typedef enum {
         
         self.backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@%i.jpg",launchImageName,0]]];
         [self.backgroundImage setFrame:self.view.bounds];
+        self.backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
         NSMutableArray *animationImages = [NSMutableArray array];
         for(NSInteger i = 0 ; i < launchImageNumber ; i++){
             [animationImages addObject:[UIImage imageNamed:[NSString stringWithFormat:@"%@%i.jpg",launchImageName,i]]];
@@ -93,6 +95,7 @@ typedef enum {
         NSArray *reversedImages = [[animationImages reverseObjectEnumerator] allObjects];
         [animationImages addObjectsFromArray:reversedImages];
         self.backgroundImage.animationImages = animationImages;
+        self.backgroundImage.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         [self.backgroundImage setAnimationDuration:4.5];
         [self.backgroundImage startAnimating];
         [self.view addSubview:self.backgroundImage];
@@ -119,6 +122,7 @@ typedef enum {
         
         self.titleView = [[WalkthroughTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0)];
         self.titleView.spacing = 5;
+        self.titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.titleView.titleLabel.font = [UIFont fontWithName:@"Nexa-Black-Italic" size:17];
         self.titleView.subtitleLabel.font = [UIFont fontWithName:@"Nexa-Bold" size:16];
         self.titleView.titleLabel.textColor = tcolorF(TextColor,ThemeDark);
@@ -133,18 +137,19 @@ typedef enum {
         self.loginOrSignupLabel.backgroundColor = CLEAR;
         self.loginOrSignupLabel.text = @"You can register with email";
         [self.loginOrSignupLabel sizeToFit];
-        CGRectSetWidth(self.loginOrSignupLabel, 320);
+        CGRectSetWidth(self.loginOrSignupLabel, self.view.frame.size.width);
+        self.loginOrSignupLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.view addSubview:self.loginOrSignupLabel];
         
         CGFloat fieldWidth = 252.0;
-        CGFloat fieldMargin = (320 - fieldWidth) / 2;
+        CGFloat fieldMargin = (self.view.frame.size.width - fieldWidth) / 2;
         CGFloat fieldHeight = 44.0;
         CGFloat buttonWidth = 196.0f;
-        CGFloat buttonMargin = (320 - buttonWidth) / 2;
+        CGFloat buttonMargin = (self.view.frame.size.width - buttonWidth) / 2;
         CGFloat buttonHeight = SIGNUP_BUTTONS_HEIGHT;
 
         self.emailField = [[UITextField alloc] initWithFrame:CGRectMake(fieldMargin, 0, self.view.frame.size.width - fieldMargin * 2, fieldHeight)];
-        self.emailField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.emailField.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
         self.emailField.font = KP_REGULAR(16);
 
         self.emailField.textAlignment = NSTextAlignmentCenter;
@@ -164,7 +169,7 @@ typedef enum {
         
         self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(fieldMargin, 0, self.view.frame.size.width - fieldMargin * 2, fieldHeight)];
         //self.passwordField.keyboardAppearance = UIKeyboardAppearanceAlert;
-        self.passwordField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.passwordField.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
         self.passwordField.delegate = self;
         self.passwordField.textAlignment = NSTextAlignmentCenter;
         self.passwordField.secureTextEntry = YES;
@@ -203,7 +208,7 @@ typedef enum {
         [self.continueButton  setBackgroundImage:[alpha(conColor, 0) image] forState:UIControlStateHighlighted];
         [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
         [self.continueButton addTarget:self action:@selector(pressedContinue:) forControlEvents:UIControlEventTouchUpInside];
-        self.continueButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.continueButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
         [self.view addSubview:self.continueButton];
         
         
@@ -244,7 +249,7 @@ typedef enum {
         
         self.facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonMargin, 0, self.view.frame.size.width - buttonMargin * 2, buttonHeight)];
         [self setupButton:self.facebookButton];
-        self.facebookButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.facebookButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
         self.facebookButton.layer.borderWidth = 0;
         [self.facebookButton setBackgroundImage:[color(57,159,219,1) image] forState:UIControlStateNormal];
         [self.facebookButton setBackgroundImage:[[color(57,159,219,1) darker] image] forState:UIControlStateHighlighted];
@@ -565,7 +570,7 @@ typedef enum {
     if (relativeStart < 30)
         relativeStart = 20;
 
-    CGRectSetY(self.logoView, LOGIN_LOGO_Y);
+    CGRectSetY(self.logoView, relativeStart );
     CGRectSetY(self.titleView, CGRectGetMaxY(self.logoView.frame) + 50);
     CGFloat fieldHeight = LOGIN_FIELDS_HEIGHT/2;
 
