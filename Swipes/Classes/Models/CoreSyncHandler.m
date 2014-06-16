@@ -432,7 +432,7 @@
     /* Preparing request */
     NSError *error;
 #ifdef RELEASE
-    NSString *url = @"http://api.swipesapp.com/sync";
+    NSString *url = @"http://api.swipesapp.com/v1/sync";
 #else
     NSString *url = @"http://swipes-test.herokuapp.com/sync";
     url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
