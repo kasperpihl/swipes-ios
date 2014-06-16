@@ -22,7 +22,7 @@
 #import "KPAccountAlert.h"
 #import "UIView+Utilities.h"
 
-#import "KPParseCoreData.h"
+#import "CoreSyncHandler.h"
 #import "PlusAlertView.h"
 #import "NotificationHandler.h"
 

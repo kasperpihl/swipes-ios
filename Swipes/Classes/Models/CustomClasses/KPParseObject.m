@@ -1,5 +1,5 @@
 #import "KPParseObject.h"
-#import "KPParseCoreData.h"
+#import "CoreSyncHandler.h"
 #import "UtilityClass.h"
 @interface KPParseObject ()
 @property NSMutableDictionary *savingObject;

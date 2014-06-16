@@ -3,7 +3,7 @@
 #import "KPTag.h"
 #import "UtilityClass.h"
 #import "NSDate-Utilities.h"
-#import "KPParseCoreData.h"
+#import "CoreSyncHandler.h"
 #import "Underscore.h"
 #import "AnalyticsHandler.h"
 #import "HintHandler.h"
@@ -162,8 +162,20 @@
         NSArray *localChanges = [KPCORE lookupTemporaryChangedAttributesForObject:self.objectId];
         // If the object saved was new - the changes will be for it's tempId not objectId
         if(!localChanges) localChanges = [KPCORE lookupTemporaryChangedAttributesForTempId:self.tempId];
-        for(NSString *pfKey in [object allKeys]){
+        NSString *parentId = [object objectForKey:@"pparentLocalId"];
+        if(!self.parent && parentId && parentId != (id)[NSNull null]){
+            NSLog(@"had parent %@",parentId);
+            KPToDo *parent = [KPToDo MR_findFirstByAttribute:@"objectId" withValue:parentId inContext:context];
+            if( parent ){
+                NSLog(@"found parent");
+                self.parent = parent;
+            }
+            else{
+                NSLog(@"didn't find parent for: %@",object);
+            }
+        }
             
+        for(NSString *pfKey in [object allKeys]){
             if([localChanges containsObject:pfKey])
                 continue;
             

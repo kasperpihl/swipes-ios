@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
 #import "RootViewController.h"
-#import "KPParseCoreData.h"
+#import "CoreSyncHandler.h"
 #import "AnalyticsHandler.h"
 #import "AppsFlyerTracker.h"
 #import "NSDate-Utilities.h"
@@ -47,6 +47,10 @@
     [KeenClient sharedClientWithProjectId:@"532c5e1dce5e43655200001c"
                               andWriteKey:@"f4ef66f15dd3877aa2d9976e1d14c67423e1c2ef4b724bbf51552297774532fec6af3e2ef1e84750da7eb76de8666c44492551bcf43278b68ffd9258d4b1b6dea6a1e518da25077fca1fff54a11d33f71dfb6a1ea2a781fcff169bd2acef57883119764b15a4d5235ecd9aab8df530b3"
                                andReadKey:@"45602fcc1a76041b8efcc90dca112086955bd1186bfde28270e16c90b3fbbcae1671a16c97e6b357fbaa84cb7635b5b09debb1954efa1e80b126e35ad0ec4fc138c450f230f6ac017c3e083f5ea9a74cbab0e9d093ed9696a7e812dd995b35603fa80b68d40dbf17210a0bf65f8a6e2d"];
+    #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
+    NSString* const CONSUMER_KEY = @"swipes";
+    NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6"; // when set to release also fix in Swipes-Info.plist file !
+
 #else
     //parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     //parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
@@ -74,6 +78,7 @@
                   clientKey:parseClientKey];
     [PFFacebookUtils initializeFacebook];
     KPCORE;
+    NOTIHANDLER;
     
     [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
     [[LocalyticsSession shared] startSession:localyticsKey];

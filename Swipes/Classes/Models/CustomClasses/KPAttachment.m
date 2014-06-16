@@ -1,5 +1,5 @@
 
-#import "KPParseCoreData.h"
+#import "CoreSyncHandler.h"
 #import "KPAttachment.h"
 
 NSString* const EVERNOTE_SERVICE = @"evernote";

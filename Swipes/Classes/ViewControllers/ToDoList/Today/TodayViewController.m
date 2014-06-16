@@ -21,7 +21,7 @@
 #import "StyleHandler.h"
 #import "SectionHeaderView.h"
 
-#import "KPParseCoreData.h"
+#import "CoreSyncHandler.h"
 #import "UtilityClass.h"
 @interface TodayViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 @property (nonatomic, strong) IBOutlet KPReorderTableView *tableView;

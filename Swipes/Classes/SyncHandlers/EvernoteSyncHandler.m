@@ -1,0 +1,57 @@
+//
+//  EvernoteSyncHandler.m
+//  Swipes
+//
+//  Created by Kasper Pihl Tornøe on 15/06/14.
+//  Copyright (c) 2014 Pihl IT. All rights reserved.
+//
+#import "KPToDo.h"
+#import "KPAttachment.h"
+#import "EvernoteSyncHandler.h"
+@interface EvernoteSyncHandler ()
+@property (nonatomic,copy) SyncBlock block;
+@property NSArray *objectsWithEvernote;
+@end
+@implementation EvernoteSyncHandler
+
+-(NSArray*)getObjectsSyncedWithEvernote{
+    
+    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"ANY attachments.service like %@ AND ANY attachments.sync == 1",EVERNOTE_SERVICE];
+    NSArray *todosWithEvernote = [KPToDo MR_findAllWithPredicate:predicateForTodosWithEvernote];
+    
+    return todosWithEvernote;
+
+}
+
+
+
+-(void)synchronizeWithBlock:(SyncBlock)block{
+    self.block = block;
+    self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
+    
+    // If no objects has attachments - send a success back to caller
+    if (self.objectsWithEvernote.count == 0){
+        return self.block(SyncStatusSuccess, nil, nil);
+    }
+    
+    // Tell caller that Evernote will be syncing
+    self.block(SyncStatusStarted, nil, nil);
+    
+    
+    /* Perform the magic syncing here */
+    for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
+        NSLog(@"%@",todoWithEvernote);
+    }
+    
+    
+    
+    
+    // Call this upon successful evernote sync
+    self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
+
+    // Call this upon error evernote sync
+    NSError *error;
+    self.block(SyncStatusError, nil, error);
+    
+}
+@end

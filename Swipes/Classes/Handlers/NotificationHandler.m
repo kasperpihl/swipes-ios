@@ -11,10 +11,14 @@
 #import "NSDate-Utilities.h"
 #import "KPToDo.h"
 #import "SettingsHandler.h"
+
+#import "CWStatusBarNotification.h"
+
 #define kMaxNotifications 25
 @interface NotificationHandler () <KitLocateSingleDelegate>
 @property (nonatomic) BOOL fencing;
 @property (nonatomic) BOOL startedLocationServices;
+@property (nonatomic) CWStatusBarNotification *notification;
 @end
 
 @implementation NotificationHandler
@@ -25,9 +29,37 @@ static NotificationHandler *sharedObject;
     if(!sharedObject){
         sharedObject = [[super allocWithZone:NULL] init];
         //[sharedObject setStartedLocationServices:YES];
+        [sharedObject initialize];
     }
     return sharedObject;
 }
+-(void)initialize{
+    NSLog(@"initializing");
+    notify(@"showNotification", sendNotification:);
+}
+
+-(void)sendNotification:(NSNotification*)notification{
+    if(OSVER < 7) return;
+    if(!self.notification){
+        self.notification = [CWStatusBarNotification new];
+        self.notification.notificationTappedBlock = nil;
+        self.notification.notificationAnimationType = CWNotificationAnimationTypeOverlay;
+        self.notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
+        self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
+    }
+    self.notification.notificationLabelBackgroundColor = tcolor(BackgroundColor);
+    self.notification.notificationLabelTextColor = tcolor(TextColor);
+    NSLog(@"notif %@",notification.userInfo);
+    NSDictionary *userInfo = notification.userInfo;
+    NSString *title = [userInfo objectForKey:@"title"];
+    CGFloat duration = [[userInfo objectForKey:@"duration"] floatValue];
+    if( duration ){
+        [self.notification displayNotificationWithMessage:title forDuration:duration];
+        NSLog(@"had duration: %f", duration);
+    }else
+        [self.notification displayNotificationWithMessage:title completion:nil];
+}
+
 
 -(CLLocation *)latestLocation
 {
@@ -196,6 +228,7 @@ static NotificationHandler *sharedObject;
         [app scheduleLocalNotification:notification];
     }
 }
+
 - (void)updateLocationUpdates
 {
     BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
@@ -263,6 +296,10 @@ static NotificationHandler *sharedObject;
 - (void)geofencesOut:(NSArray*)arrGeofenceList
 {
     [self handleGeofences:arrGeofenceList];
+}
+
+-(void)dealloc{
+    clearNotify();
 }
 
 @end

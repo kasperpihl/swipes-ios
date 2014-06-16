@@ -1,5 +1,5 @@
 #import "KPTag.h"
-#import "KPParseCoreData.h"
+#import "CoreSyncHandler.h"
 #import "AnalyticsHandler.h"
 #import "KPToDo.h"
 @interface KPTag ()

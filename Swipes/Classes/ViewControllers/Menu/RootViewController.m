@@ -24,7 +24,7 @@
 #import "UIColor+Utilities.h"
 #import "PlusAlertView.h"
 #import "UpgradeViewController.h"
-#import "KPParseCoreData.h"
+#import "CoreSyncHandler.h"
 
 #import "SettingsHandler.h"
 #import "KPOverlay.h"
@@ -33,7 +33,7 @@
 #import <MessageUI/MessageUI.h>
 #import <Parse/Parse.h>
 
-#import "CWStatusBarNotification.h"
+
 
 
 #import "KPAlert.h"
@@ -50,7 +50,7 @@
 
 @property (nonatomic) NSDate *lastClose;
 @property (nonatomic) KPMenu currentMenu;
-@property (nonatomic) CWStatusBarNotification *notification;
+
 @end
 
 @implementation RootViewController
@@ -133,7 +133,7 @@
         }];
     }
     else{
-        if(user.isNew) [[KPParseCoreData sharedInstance] seedObjectsSave:YES];
+        if(user.isNew) [[CoreSyncHandler sharedInstance] seedObjectsSave:YES];
         block();
     }
     
@@ -189,7 +189,7 @@ static RootViewController *sharedObject;
 -(void)logOut
 {
     [PFUser logOut];
-    [[KPParseCoreData sharedInstance] clearAndDeleteData];
+    [[CoreSyncHandler sharedInstance] clearAndDeleteData];
     [kHints reset];
     [self resetRoot];
 
@@ -330,19 +330,8 @@ static RootViewController *sharedObject;
     
 }
 
--(void)syncHandler:(KPParseCoreData *)handler status:(SyncStatus)status userInfo:(NSDictionary *)userInfo error:(NSError *)error{
-#warning should be < 7
-    if(OSVER <= 7) return;
-    if(!self.notification){
-        self.notification = [CWStatusBarNotification new];
-        self.notification.notificationTappedBlock = nil;
-        self.notification.notificationAnimationType = CWNotificationAnimationTypeOverlay;
-        self.notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
-        self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
-    }
-    self.notification.notificationLabelBackgroundColor = tcolor(BackgroundColor);
-    self.notification.notificationLabelTextColor = tcolor(TextColor);
-    switch (status) {
+-(void)syncHandler:(CoreSyncHandler *)handler status:(SyncStatus)status userInfo:(NSDictionary *)userInfo error:(NSError *)error{
+    /*switch (status) {
         case SyncStatusStarted:
             [self.notification displayNotificationWithMessage:@"Synchronizing..." completion:nil];
             break;
@@ -358,7 +347,7 @@ static RootViewController *sharedObject;
         }
         default:
             break;
-    }
+    }*/
 }
 
 -(void)tryoutapp{

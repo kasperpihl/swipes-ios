@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "KPParseCoreData.h"
+#import "CoreSyncHandler.h"
 #import "UtilityClass.h"
 #import "KPToDo.h"
 #import "KPTag.h"
@@ -14,6 +14,7 @@
 #import "Reachability.h"
 #import "UserHandler.h"
 
+#import "EvernoteSyncHandler.h"
 #define kSyncTime 3
 #define kUpdateLimit 200
 #define kBatchSize 50
@@ -33,7 +34,7 @@
 /*
 
 */
-@interface KPParseCoreData ()
+@interface CoreSyncHandler ()
 
 @property (nonatomic) Reachability *_reach;
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
@@ -57,14 +58,19 @@
 @property NSDate *lastTry;
 @property NSInteger tryCounter;
 
-
-
+@property (nonatomic) EvernoteSyncHandler *evernoteSyncHandler;
 
 @property (nonatomic) NSMutableSet *_deletedObjectsForSyncNotification;
 @property (nonatomic) NSMutableSet *_updatedObjectsForSyncNotification;
 @end
 
-@implementation KPParseCoreData
+@implementation CoreSyncHandler
+
+-(EvernoteSyncHandler *)evernoteSyncHandler{
+    if (!_evernoteSyncHandler)
+        _evernoteSyncHandler = [[EvernoteSyncHandler allocWithZone:NULL] init];
+    return _evernoteSyncHandler;
+}
 
 #pragma mark - public handlers of changes
 -(void)tempId:(NSString *)tempId gotObjectId:(NSString *)objectId{
@@ -142,9 +148,50 @@
     [self synchronizeForce:YES async:YES];
 
 }
-
+-(CGFloat)durationForStatus:(SyncStatus)status{
+    CGFloat duration = 0;
+    switch (status) {
+        case SyncStatusSuccess:
+            duration = 1.5;
+            break;
+        case SyncStatusError:{
+            duration = 3.5;
+            break;
+        }
+        default:
+            break;
+    }
+    return duration;
+}
+-(NSString*)titleForStatus:(SyncStatus)status{
+    NSString *title;
+    switch (status) {
+        case SyncStatusStarted:
+            title = @"Synchronizing...";
+            break;
+        case SyncStatusSuccess:
+            title = @"Sync completed";
+            break;
+        case SyncStatusError:{
+            title = @"Error syncing";
+            break;
+        }
+        default:
+            break;
+    }
+    return title;
+}
 -(void)sendStatus:(SyncStatus)status userInfo:(NSDictionary*)userInfo error:(NSError*)error{
+    NSLog(@"sync: %i",status);
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *title = [self titleForStatus:status];
+        CGFloat duration = [self durationForStatus:status];
+        if( title ){
+            NSDictionary *userInfoToNotification = @{ @"title": title, @"duration": @( duration ) };
+            NSLog(@"userinf %@",userInfoToNotification);
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:userInfoToNotification];
+        }
+        
         if([self.delegate respondsToSelector:@selector(syncHandler:status:userInfo:error:)])
             [self.delegate syncHandler:self status:status userInfo:userInfo error:error];
     });
@@ -245,7 +292,6 @@
     // Testing for network connection
     if (self._needSync)
         self._needSync = NO;
-#warning Removed no internet case
     if (!self._reach.isReachable) {
         self._needSync = YES;
         return UIBackgroundFetchResultFailed;
@@ -265,15 +311,10 @@
     }
 }
 
--(void)finalizeSyncWithUserInfo:(NSDictionary*)userInfo error:(NSError*)error{
-    self._isSyncing = NO;
-    
-    if(error)
-        [self sendStatus:SyncStatusError userInfo:userInfo error:error];
-    else
-        [self sendStatus:SyncStatusSuccess userInfo:userInfo error:nil];
-    
+-(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error{
     if ( error ){
+        self._isSyncing = NO;
+        [self sendStatus:SyncStatusError userInfo:coreUserInfo error:error];
         NSDate *now = [NSDate date];
         if(!self.lastTry || [now timeIntervalSinceDate:self.lastTry] > 60){
             self.lastTry = now;
@@ -283,10 +324,24 @@
         if( self.tryCounter > 5 )
             return;
     }
-    
     if(self._needSync){
-        
+        self._isSyncing = NO;
         [self synchronizeForce:YES async:YES];
+    }
+    else{
+        [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
+            self._isSyncing = NO;
+            if (status == SyncStatusSuccess){
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:@{ @"title": @"Synchronizing Evernote", @"duration": @(0) } ];
+            }
+            else if (status == SyncStatusSuccess){
+                [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+            }
+            else if( status == SyncStatusError ){
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
+            }
+        }];
+        
     }
 }
 
@@ -366,7 +421,6 @@
     
     
     [syncData setObject:updateObjectsToServer forKey:@"objects"];
-    NSLog(@"sync:%@",updateObjectsToServer);
     
     /* Preparing request */
     NSError *error;
@@ -375,7 +429,7 @@
 #else
     NSString *url = @"http://swipes-test.herokuapp.com/sync";
     url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
-    url = @"http://127.0.0.1:5000/v1/sync";
+//url = @"http://127.0.0.1:5000/v1/sync";
     
 #endif
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
@@ -398,9 +452,8 @@
     
     /* Performing request */
     NSHTTPURLResponse *response;
-    NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,[syncData objectForKey:@"lastUpdate"]);
-    NSLog(@"sync:%@",syncData);
-    NSLog(@"need: %@", [syncData objectForKey:@"hasMoreToSave"]);
+    //NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,[syncData objectForKey:@"lastUpdate"]);
+    //NSLog(@"need: %@", [syncData objectForKey:@"hasMoreToSave"]);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
     
@@ -426,8 +479,9 @@
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     //NSLog(@"resulted err:%@",error);
-#warning Remove this log
-    NSLog(@"%@ res:%@ err: %@",result[@"message"],result[@"logs"],error);
+    //NSLog(@"%@ res:%@ err: %@",result[@"message"],result[@"logs"],error);
+    if([result objectForKey:@"hardSync"])
+        [self hardSync];
     
     if(error || [result objectForKey:@"code"] || ![result objectForKey:@"serverTime"]){
         if(!error){
@@ -445,7 +499,7 @@
         [self finalizeSyncWithUserInfo:result error:error];
         return NO;
     }
-    
+    //NSLog(@"objects:%@",result[@"ToDo"]);
     
     /* Handling response - Tags first due to relation */
     NSArray *tags = [result objectForKey:@"Tag"] ? [result objectForKey:@"Tag"] : @[];
@@ -554,7 +608,7 @@
     
     Class class;
     if (!cdObject)
-        class = NSClassFromString([KPParseCoreData classNameFromParseName:[object objectForKey:@"parseClassName"]]);
+        class = NSClassFromString([CoreSyncHandler classNameFromParseName:[object objectForKey:@"parseClassName"]]);
     else
         class = [cdObject class];
     
@@ -672,12 +726,12 @@
 }
 
 -(void)loadTest{
-    NSArray *tagArray = @[
+    /*NSArray *tagArray = @[
                           @"home",
                           @"shopping",
                           @"work"
                           ];
-    
+    */
     /*for(NSString *tag in tagArray){
         [KPTag addTagWithString:tag save:NO];
     }
@@ -719,12 +773,12 @@
 
 #pragma mark Instantiation
 
-static KPParseCoreData *sharedObject;
+static CoreSyncHandler *sharedObject;
 
-+ (KPParseCoreData *)sharedInstance
++ (CoreSyncHandler *)sharedInstance
 {
     if (!sharedObject) {
-        sharedObject = [[KPParseCoreData allocWithZone:NULL] init];
+        sharedObject = [[CoreSyncHandler allocWithZone:NULL] init];
         [sharedObject initialize];
         //[sharedObject loadTest];
     }
