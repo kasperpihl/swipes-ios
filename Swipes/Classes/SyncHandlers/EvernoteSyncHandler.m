@@ -16,14 +16,18 @@
 
 -(NSArray*)getObjectsSyncedWithEvernote{
     
+    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
+    
     NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"ANY attachments.service like %@ AND ANY attachments.sync == 1",EVERNOTE_SERVICE];
-    NSArray *todosWithEvernote = [KPToDo MR_findAllWithPredicate:predicateForTodosWithEvernote];
+    NSArray *todosWithEvernote = [KPToDo MR_findAllWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
     
     return todosWithEvernote;
 
 }
 
-
+-(void)didDelay{
+    self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
+}
 
 -(void)synchronizeWithBlock:(SyncBlock)block{
     self.block = block;
@@ -37,21 +41,18 @@
     // Tell caller that Evernote will be syncing
     self.block(SyncStatusStarted, nil, nil);
     
-    
+    NSLog(@"performing magic");
     /* Perform the magic syncing here */
-    for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
-        NSLog(@"%@",todoWithEvernote);
-    }
-    
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(didDelay) userInfo:nil repeats:NO];
     
     
     
     // Call this upon successful evernote sync
-    self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
+    //self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
 
     // Call this upon error evernote sync
-    NSError *error;
-    self.block(SyncStatusError, nil, error);
+   // NSError *error;
+   // self.block(SyncStatusError, nil, error);
     
 }
 @end

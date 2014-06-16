@@ -313,6 +313,7 @@
 
 -(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error{
     if ( error ){
+        NSLog(@"error:%@",error);
         self._isSyncing = NO;
         [self sendStatus:SyncStatusError userInfo:coreUserInfo error:error];
         NSDate *now = [NSDate date];
@@ -330,16 +331,22 @@
     }
     else{
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
-            self._isSyncing = NO;
+            if( status == SyncStatusStarted )
+                NSLog(@"startedEvernote");
             if (status == SyncStatusSuccess){
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:@{ @"title": @"Synchronizing Evernote", @"duration": @(0) } ];
-            }
-            else if (status == SyncStatusSuccess){
+                self._isSyncing = NO;
                 [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
             }
-            else if( status == SyncStatusError ){
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (status == SyncStatusStarted){
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Synchronizing Evernote...", @"duration": @(2.5) } ];
+                }
+                else if( status == SyncStatusError ){
+                    self._isSyncing = NO;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
+                }
+            });
         }];
         
     }
