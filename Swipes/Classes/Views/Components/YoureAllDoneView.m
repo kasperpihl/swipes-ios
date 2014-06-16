@@ -15,7 +15,7 @@
 
 #define kSignatureSpacing 20
 #define kSignatureRightMargin 40
-#define kStampViewY valForScreen(110,130)
+#define kStampViewY valForIpad(250,valForScreen(110,130))
 
 #define kReferBottom 30
 #define kReferX 10
