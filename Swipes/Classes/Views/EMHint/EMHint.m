@@ -69,6 +69,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 }
 -(void)presentModalMessage:(NSString*)message where:(UIView*)presentationPlace
 {
+    UIApplication *application = [UIApplication sharedApplication];
+    BOOL landscape = UIInterfaceOrientationIsLandscape(application.statusBarOrientation);
+    CGFloat height = landscape ? presentationPlace.frame.size.width : presentationPlace.frame.size.height;
+    CGFloat width = landscape ? presentationPlace.frame.size.height : presentationPlace.frame.size.width;
+    
     //incase we have many in a row
     if(_modalView!=nil)
         [self clear];
@@ -130,12 +135,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         UIFont *ft = KP_SEMIBOLD(20);
         CGFloat labelWidth = 300;
         CGSize sz = [message sizeWithFont:ft constrainedToSize:CGSizeMake(labelWidth, 1000)];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((presentationPlace.frame.size.width-labelWidth)/2,
-                                                                   floorf(presentationPlace.center.y - sz.height/2 - 15),
+        CGFloat centerY = landscape ? presentationPlace.center.x : presentationPlace.center.y;
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width-labelWidth)/2,
+                                                                   floorf(centerY - sz.height/2 - 15),
                                                                    labelWidth,
                                                                    floorf(sz.height +10
                                                                           ))];
-        
         [label setAutoresizingMask:(UIViewAutoresizingFlexibleTopMargin
                                     | UIViewAutoresizingFlexibleRightMargin
                                     | UIViewAutoresizingFlexibleLeftMargin

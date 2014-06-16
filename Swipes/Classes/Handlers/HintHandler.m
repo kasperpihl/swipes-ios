@@ -84,6 +84,7 @@ static HintHandler *sharedObject;
         sharedObject = [[HintHandler allocWithZone:NULL] init];
         [sharedObject initialize];
         sharedObject.hintsIsOn = [kSettings settingForKey:kHintsOnKey];
+        
     }
     return sharedObject;
 }
@@ -163,24 +164,30 @@ static HintHandler *sharedObject;
 
 -(NSArray*)hintStateRectsToHint:(id)hintState
 {
+    
+    UIApplication *application = [UIApplication sharedApplication];
+    BOOL landscape = UIInterfaceOrientationIsLandscape(application.statusBarOrientation);
+    CGFloat height = landscape ? ROOT_CONTROLLER.view.frame.size.width : ROOT_CONTROLLER.view.frame.size.height;
+    CGFloat width = landscape ? ROOT_CONTROLLER.view.frame.size.height : ROOT_CONTROLLER.view.frame.size.width;
     CGFloat ht = 32.0;
     CGFloat statusBarHt = 20.0;
     //
     NSArray *rectArray;
     CGRect rect;
     switch (self.currentHint) {
+            
         case HintAccount:{
-            rect = CGRectMake(ROOT_CONTROLLER.view.frame.size.width-CELL_LABEL_X/2, (statusBarHt + 26), ht, ht);
+            rect = CGRectMake(width-CELL_LABEL_X/2, (statusBarHt + 26), ht, ht);
             rectArray = @[[NSValue valueWithCGRect:rect]];
             break;
         }
         case HintSelected:{
             NSMutableArray *mutRect = [NSMutableArray array];
-            CGFloat oneFourth = ROOT_CONTROLLER.view.frame.size.width / 4;
+            CGFloat oneFourth = width / 4;
             for(NSInteger i = 1 ; i <= 4 ; i++){
                 CGFloat x = oneFourth * i - oneFourth/2;
                 NSLog(@"x %f",x);
-                CGRect tmpRect = CGRectMake(x, ROOT_CONTROLLER.view.frame.size.height - 28.5, ht, ht);
+                CGRect tmpRect = CGRectMake(x, height - 28.5, ht, ht);
                 [mutRect addObject:[NSValue valueWithCGRect:tmpRect]];
             }
             rectArray = [mutRect copy];
@@ -188,13 +195,11 @@ static HintHandler *sharedObject;
         }
         case HintCompleted:
         
-            rect = CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2+54 ,
+            rect = CGRectMake(width/2+54 ,
                        (statusBarHt + 26),ht,ht);
             rectArray = @[[NSValue valueWithCGRect:rect]];
             break;
         case HintSwipedLeft:{
-            CGFloat width = ROOT_CONTROLLER.view.frame.size.width;
-            CGFloat height = ROOT_CONTROLLER.view.frame.size.height;
             CGFloat popupSize = 315;
             CGFloat buttonSize = popupSize/3;
             
@@ -210,12 +215,12 @@ static HintHandler *sharedObject;
             break;
         }
         case HintScheduled:
-            rect = CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2-54 ,
+            rect = CGRectMake(width/2-54 ,
                               (statusBarHt + 26),ht,ht);
             rectArray = @[[NSValue valueWithCGRect:rect]];
             break;
         case HintWelcome:
-            rect = CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2, (statusBarHt + 26), ht, ht);
+            rect = CGRectMake(width/2, (statusBarHt + 26), ht, ht);
             rectArray = @[[NSValue valueWithCGRect:rect]];
             //,[NSValue valueWithCGRect:CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2, ROOT_CONTROLLER.view.frame.size.height - (32), ht+10, ht+10)]
             //,[NSValue valueWithCGRect:CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2-54,(statusBarHt + 26),ht,ht)],[NSValue valueWithCGRect:CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2+54 ,(statusBarHt + 26),ht,ht)]
@@ -293,12 +298,18 @@ static HintHandler *sharedObject;
             [self turnHintsOn:NO];
     }];
 }
-
+- (void)orientationChanged:(NSNotification *)notification{
+    [self.emHint clear];
+}
 -(void)initialize{
     self.hints = [[NSUserDefaults standardUserDefaults] objectForKey:kHintDictionaryKey];
     if(!self.hints)
         self.hints = [NSMutableDictionary dictionary];
     self.emHint = [[EMHint alloc] init];
     self.emHint.hintDelegate = self;
+    [[NSNotificationCenter defaultCenter] addObserver:sharedObject  selector:@selector(orientationChanged:)  name:UIDeviceOrientationDidChangeNotification  object:nil];
+}
+-(void)dealloc{
+    clearNotify();
 }
 @end
