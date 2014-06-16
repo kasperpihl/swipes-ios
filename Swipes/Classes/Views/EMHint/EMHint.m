@@ -71,7 +71,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 {
     UIApplication *application = [UIApplication sharedApplication];
     BOOL landscape = UIInterfaceOrientationIsLandscape(application.statusBarOrientation);
-    CGFloat height = landscape ? presentationPlace.frame.size.width : presentationPlace.frame.size.height;
+    //CGFloat height = landscape ? presentationPlace.frame.size.width : presentationPlace.frame.size.height;
     CGFloat width = landscape ? presentationPlace.frame.size.height : presentationPlace.frame.size.width;
     
     //incase we have many in a row

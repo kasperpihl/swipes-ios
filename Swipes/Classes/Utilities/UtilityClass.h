@@ -17,6 +17,7 @@
 -(NSNumber*)versionNumber;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message cancel:(NSString*)cancel confirm:(NSString*)confirm block:(SuccessfulBlock)block;
+-(void)popupWithTitle:(NSString*)title andMessage:(NSString*)message buttonTitles:(NSArray*)buttonTitles block:(NumberBlock)block;
 +(NSString*)generateIdWithLength:(NSInteger)length;
 +(void)sendError:(NSError *)error type:(NSString *)type;
 + (BOOL) validateEmail: (NSString *) candidate;

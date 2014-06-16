@@ -14,6 +14,7 @@
 #define trgb(num) (num/255.0)
 @interface UtilityClass () <UIAlertViewDelegate>
 @property (copy) SuccessfulBlock block;
+@property (copy) NumberBlock numberBlock;
 @end
 
 @implementation UtilityClass
@@ -142,8 +143,21 @@ static UtilityClass *sharedObject;
     self.block = block;
     [alertView show];
 }
+-(void)popupWithTitle:(NSString *)title andMessage:(NSString *)message buttonTitles:(NSArray *)buttonTitles block:(NumberBlock)block{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
+    for( NSString *buttonTitle in buttonTitles ){
+        [alertView addButtonWithTitle:buttonTitle];
+    }
+    self.numberBlock = block;
+    [alertView show];
+}
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if( self.numberBlock ){
+        self.numberBlock( buttonIndex, nil );
+        self.numberBlock = nil;
+        return;
+    }
     switch (buttonIndex) {
         case 0:
         {

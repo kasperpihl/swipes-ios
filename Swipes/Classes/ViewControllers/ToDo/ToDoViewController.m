@@ -7,6 +7,7 @@
 //
 #define CONTENT_VIEW_TAG 9
 #define SHOW_ITEM_TAG 5432
+#define EVERNOTE_ITEM_BUTTON_TAG 5433
 
 
 #define TOOLBAR_HEIGHT 52
@@ -671,7 +672,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          [self.segmentedViewController pressedShare:self];*/
     }
     else if (item == 0 ){
-        [self pressedEvernote:self];
+        [self pressedEvernote:toolbar];
     }
 }
 
@@ -746,14 +747,43 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }];
 }
 
--(void)pressedEvernote:(id)sender
+-(void)pressedEvernote:(UIView*)sender
 {
-    self.activeEditMode = KPEditModeEvernote;
-    EvernoteView *evernoteView = [[EvernoteView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
-    evernoteView.delegate = self;
-    evernoteView.caller = self.segmentedViewController;
-    BLURRY.showPosition = PositionBottom;
-    [BLURRY showView:evernoteView inViewController:self];
+    voidBlock setNewEvernote = ^{
+        self.activeEditMode = KPEditModeEvernote;
+        EvernoteView *evernoteView = [[EvernoteView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
+        evernoteView.delegate = self;
+        evernoteView.caller = self.segmentedViewController;
+        BLURRY.showPosition = PositionBottom;
+        [BLURRY showView:evernoteView inViewController:self];
+    };
+    
+    if(sender.tag == EVERNOTE_ITEM_BUTTON_TAG){
+        NSArray *buttons = @[@"Cancel", @"Remove note"];
+        if( [[EvernoteSession sharedSession] isEvernoteInstalled] )
+            buttons = @[@"Cancel",@"Remove note",@"Open note"];
+        [UTILITY popupWithTitle:@"Evernote" andMessage:@"What to do?" buttonTitles:buttons block:^(NSInteger number, NSError *error) {
+            NSLog(@"%i",number);
+            if(number == 1){
+                [self.model removeAllAttachmentsForService:EVERNOTE_SERVICE];
+                [self update];
+            }
+            else if(number == 2){
+                if([[EvernoteSession sharedSession] isEvernoteInstalled]){
+                    KPAttachment *attachment = [self.model firstAttachmentForServiceType:EVERNOTE_SERVICE];
+                    NSLog(@"attachment %@",attachment.identifier);
+                    EDAMNote *note = [[EDAMNote alloc] init];
+                    note.guid = attachment.identifier;
+                    [[EvernoteNoteStore noteStore] viewNoteInEvernote:note];
+                }
+                else{
+                    
+                }
+            }
+        }];
+    }
+    else
+        setNewEvernote();
 }
 
 -(void)pressedDropbox:(id)sender
@@ -978,8 +1008,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.evernoteContainer addSubview:self.syncLabel];
         self.syncLabel.frame = CGRectSetPos(self.syncLabel.frame, LABEL_X, CGRectGetMidY(self.evernoteLabel.frame)+10);
         
-        [self addClickButtonToView:self.evernoteContainer action:@selector(pressedEvernote:)];
-        
+        UIButton *clickButtonForEvernote = [self addClickButtonToView:self.evernoteContainer action:@selector(pressedEvernote:)];
+        clickButtonForEvernote.tag = EVERNOTE_ITEM_BUTTON_TAG;
         [self.scrollView addSubview:self.evernoteContainer];
         
         
