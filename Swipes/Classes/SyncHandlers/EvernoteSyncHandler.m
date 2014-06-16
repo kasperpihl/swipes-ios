@@ -5,6 +5,9 @@
 //  Created by Kasper Pihl Tornøe on 15/06/14.
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
+
+#import "Underscore.h"
+
 #import "KPToDo.h"
 #import "KPAttachment.h"
 #import "EvernoteSyncHandler.h"
@@ -25,6 +28,7 @@
 
 }
 
+// Just testing
 -(void)didDelay{
     self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
 }
@@ -43,6 +47,12 @@
     
     NSLog(@"performing magic");
     /* Perform the magic syncing here */
+    
+    for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
+        
+    }
+    
+    // Just testing the top notification
     [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(didDelay) userInfo:nil repeats:NO];
     
     
