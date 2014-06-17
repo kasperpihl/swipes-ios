@@ -96,7 +96,7 @@
     if(save)
         [KPToDo saveToSync];
     NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
-    [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
+    [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks, @"Is Action Steps": @( isSubtasks )}];
     [ANALYTICS heartbeat];
     if( !isSubtasks )
         [kHints triggerHint:HintCompleted];
