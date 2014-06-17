@@ -727,9 +727,12 @@
     
     // create the attachment
     KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync];
-    
     // add the new attachment
     [self addAttachments:[NSSet setWithObject:attachment]];
+    
+    NSDictionary *options = @{ @"service": service, @"sync": @(sync) };
+    
+    [ANALYTICS tagEvent:@"Attachment" options:options];
 }
 
 - (void)removeAllAttachmentsForService:(NSString *)service
