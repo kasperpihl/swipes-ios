@@ -128,6 +128,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 
 @property (nonatomic) CGRect editingFrame;
+@property (nonatomic) BOOL fireHint;
 
 @end
 
@@ -1191,12 +1192,17 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
 }
 -(void)delayedTriggerEvernote{
-    [kHints triggerHint:HintEvernote];
+    if( self.fireHint )
+        [kHints triggerHint:HintEvernote];
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(delayedTriggerEvernote) userInfo:nil repeats:NO];
-    
+    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(delayedTriggerEvernote) userInfo:nil repeats:NO];
+    self.fireHint = YES;
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    self.fireHint = NO;
 }
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
