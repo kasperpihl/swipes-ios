@@ -35,8 +35,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                          [_modalView setAlpha:0.0];
                      } 
                      completion:^(BOOL finished){
-                         [_modalView removeFromSuperview];
-                         _modalView = nil;
+                         [self clear];
                          if ([self.hintDelegate respondsToSelector:@selector(hintStateDidClose:)])
                          {
                              [self.hintDelegate hintStateDidClose:self];
@@ -62,6 +61,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 {
     [_modalView removeFromSuperview];
     _modalView = nil;
+    self.isShowingHint = NO;
 }
 -(UIView*)modalView
 {
@@ -69,6 +69,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 }
 -(void)presentModalMessage:(NSString*)message where:(UIView*)presentationPlace
 {
+    self.isShowingHint = YES;
     UIApplication *application = [UIApplication sharedApplication];
     BOOL landscape = UIInterfaceOrientationIsLandscape(application.statusBarOrientation);
     //CGFloat height = landscape ? presentationPlace.frame.size.width : presentationPlace.frame.size.height;
