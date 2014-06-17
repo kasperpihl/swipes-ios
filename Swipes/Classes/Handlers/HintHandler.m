@@ -34,13 +34,11 @@
     [self turnHintsOn:YES];
 }
 -(BOOL)triggerHint:(Hints)hint{
-    //if(!self.hintsIsOn)
-        //return NO;
+    if(!self.hintsIsOn)
+        return NO;
     if([self.emHint isShowingHint])
         return NO;
     BOOL completedHint = [self completeHint:hint];
-    
-    completedHint = YES;
     
     if(completedHint){
         self.currentHint = hint;
