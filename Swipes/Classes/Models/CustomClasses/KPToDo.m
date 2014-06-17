@@ -86,7 +86,10 @@
 }
 +(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save{
     NSMutableArray *movedToDos = [NSMutableArray array];
+    BOOL isSubtasks = NO;
     for(KPToDo *toDo in toDoArray){
+        if ( toDo.parent )
+            isSubtasks = YES;
         BOOL movedToDo = [toDo complete];
         if(movedToDo) [movedToDos addObject:toDo];
     }
@@ -95,7 +98,8 @@
     NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
     [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
     [ANALYTICS heartbeat];
-    [kHints triggerHint:HintCompleted];
+    if( !isSubtasks )
+        [kHints triggerHint:HintCompleted];
     [NOTIHANDLER updateLocalNotifications];
     return [movedToDos copy];
 }
