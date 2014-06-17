@@ -15,7 +15,8 @@ typedef enum {
     HintCompleted,
     HintSwipedLeft,
     HintScheduled,
-    HintPriority
+    HintPriority,
+    HintEvernote
     
 } Hints;
 

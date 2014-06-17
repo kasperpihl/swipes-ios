@@ -34,9 +34,12 @@
     [self turnHintsOn:YES];
 }
 -(BOOL)triggerHint:(Hints)hint{
-    if(!self.hintsIsOn)
-        return NO;
+    //if(!self.hintsIsOn)
+        //return NO;
     BOOL completedHint = [self completeHint:hint];
+    
+    completedHint = YES;
+    
     if(completedHint){
         self.currentHint = hint;
         if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
@@ -63,6 +66,9 @@
                 break;
             case HintPriority:
                 hintText = @"You marked a task as priority\n\nThis shows its importance";
+                break;
+            case HintEvernote:
+                hintText = @"We've integrated with Evernote\n\nKeep your tasks in sync";
                 break;
         }
         [self.emHint presentModalMessage:hintText where:ROOT_CONTROLLER.view];
@@ -115,6 +121,9 @@ static HintHandler *sharedObject;
             break;
         case HintPriority:
             key = @"Priority";
+            break;
+        case HintEvernote:
+            key = @"Evernote";
             break;
     }
     return key;
@@ -222,9 +231,15 @@ static HintHandler *sharedObject;
         case HintWelcome:
             rect = CGRectMake(width/2, (statusBarHt + 26), ht, ht);
             rectArray = @[[NSValue valueWithCGRect:rect]];
-            //,[NSValue valueWithCGRect:CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2, ROOT_CONTROLLER.view.frame.size.height - (32), ht+10, ht+10)]
-            //,[NSValue valueWithCGRect:CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2-54,(statusBarHt + 26),ht,ht)],[NSValue valueWithCGRect:CGRectMake(ROOT_CONTROLLER.view.frame.size.width/2+54 ,(statusBarHt + 26),ht,ht)]
             break;
+        case HintEvernote:{
+            NSInteger toolbarWidth = 135;
+            NSInteger toolbarItem = toolbarWidth/3;
+            NSInteger padding = 45;
+            rect = CGRectMake(width-padding- toolbarWidth + toolbarItem/2, (statusBarHt + 26), ht, ht);
+            rectArray = @[[NSValue valueWithCGRect:rect]];
+            break;
+        }
         default:
             break;
     }
@@ -252,6 +267,9 @@ static HintHandler *sharedObject;
             break;
         case HintWelcome:
             title = @"Focus area";
+            break;
+        case HintEvernote:
+            title = @"Attach Evernote";
             break;
         default:
             break;

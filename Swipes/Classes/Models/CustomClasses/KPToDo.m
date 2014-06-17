@@ -63,6 +63,14 @@
     subTask.orderValue = kDefOrderVal;
     subTask.parent = self;
     if(save) [KPToDo saveToSync];
+    NSString *taskLength = @"50+";
+    if(title.length <= 10) taskLength = @"1-10";
+    else if(title.length <= 20) taskLength = @"11-20";
+    else if(title.length <= 30) taskLength = @"21-30";
+    else if(title.length <= 40) taskLength = @"31-40";
+    else if(title.length <= 50) taskLength = @"41-50";
+    NSInteger numberOfActionSteps = self.subtasks.count;
+    [ANALYTICS tagEvent:@"Added Action Step" options:@{@"Length":taskLength, @"Total Action Steps on Task": @(numberOfActionSteps)}];
 }
 +(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save{
     NSMutableArray *movedToDos = [NSMutableArray array];
@@ -164,14 +172,9 @@
         if(!localChanges) localChanges = [KPCORE lookupTemporaryChangedAttributesForTempId:self.tempId];
         NSString *parentId = [object objectForKey:@"pparentLocalId"];
         if(!self.parent && parentId && parentId != (id)[NSNull null]){
-            NSLog(@"had parent %@",parentId);
             KPToDo *parent = [KPToDo MR_findFirstByAttribute:@"objectId" withValue:parentId inContext:context];
             if( parent ){
-                NSLog(@"found parent");
                 self.parent = parent;
-            }
-            else{
-                NSLog(@"didn't find parent for: %@",object);
             }
         }
             
@@ -348,7 +351,6 @@
             shouldUpdate = YES;
         }
     }
-    NSLog(@"upd %@", *object);
     return shouldUpdate;
 }
 -(CellType)cellTypeForTodo{

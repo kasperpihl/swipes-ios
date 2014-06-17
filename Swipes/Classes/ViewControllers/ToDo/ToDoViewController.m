@@ -42,6 +42,7 @@
 #import "KPToolbar.h"
 #import "KPBlurry.h"
 #import "KPRepeatPicker.h"
+#import "HintHandler.h"
 //#import "UIButton+PassTouch.h"
 #import "RootViewController.h"
 
@@ -1189,8 +1190,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.expandOnShow = NO;
     }
 }
+-(void)delayedTriggerEvernote{
+    [kHints triggerHint:HintEvernote];
+}
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(delayedTriggerEvernote) userInfo:nil repeats:NO];
     
 }
 -(void)viewDidDisappear:(BOOL)animated{
