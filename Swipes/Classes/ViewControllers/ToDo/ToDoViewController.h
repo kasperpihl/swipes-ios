@@ -19,4 +19,5 @@
 @property (nonatomic,strong) KPToDo *model;
 @property (nonatomic,weak) KPSegmentedViewController *segmentedViewController;
 -(void)update;
+@property (nonatomic) BOOL expandOnShow;
 @end

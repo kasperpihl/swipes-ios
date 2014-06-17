@@ -38,7 +38,7 @@
 #define SECTION_EXTRA_DELTA_Y -3
 #define SECTION_HEADER_X 15
 #define CONTENT_INSET_BOTTOM 5// 100
-@interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate,ToDoVCDelegate>
+@interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate,ToDoVCDelegate, ToDoCellDelegate>
 
 @property (nonatomic,strong) MCSwipeTableViewCell *swipingCell;
 
@@ -206,6 +206,7 @@
 - (ToDoCell*)readyCell:(ToDoCell*)cell {
     [cell setMode:MCSwipeTableViewCellModeExit];
     cell.delegate = self;
+    cell.actionDelegate = self;
     //cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
@@ -243,6 +244,14 @@
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
+}
+
+-(void)pressedActionStepsButtonCell:(ToDoCell *)cell{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if( !indexPath )
+        return;
+    self.showingViewController.expandOnShow = YES;
+    [self editIndexPath:indexPath];
 }
 
 - (void)doubleTap:(UISwipeGestureRecognizer*)tap {

@@ -36,12 +36,11 @@
     if(!expanded){
         [self resign];
     }
-    if(!animated)
+    if(!animated){
         [self fullReload];
-    else{
+    }else{
         [self loadSubtasks];
         [self updateTableFooter];
-        //[self reloadAndNotify:NO];
         [self.tableView reloadData];
         [self setHeightAndNotify:YES animated:YES];
         

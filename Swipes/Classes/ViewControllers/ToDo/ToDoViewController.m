@@ -1184,6 +1184,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [super viewWillAppear:animated];
     self.expandButton.transform = CGAffineTransformMakeRotation(0);
     self.expandButton.hidden = (self.model.subtasks.count <= 1);
+    if( self.expandOnShow ){
+        [self.subtasksController setExpanded:YES animated:YES];
+        self.expandOnShow = NO;
+    }
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];

@@ -8,9 +8,17 @@
 
 #import "MCSwipeTableViewCell.h"
 #define CELL_HEIGHT 60
-@class KPToDo;
+@class KPToDo, ToDoCell;
+
+@protocol ToDoCellDelegate <NSObject>
+
+-(void)pressedActionStepsButtonCell:(ToDoCell*)cell;
+
+@end
+
 @interface ToDoCell : MCSwipeTableViewCell
 @property (nonatomic) CellType cellType;
+@property (nonatomic, weak) NSObject<ToDoCellDelegate> *actionDelegate;
 @property (nonatomic) BOOL priority;
 -(void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags;
 //-(void)showTimeline:(BOOL)show;

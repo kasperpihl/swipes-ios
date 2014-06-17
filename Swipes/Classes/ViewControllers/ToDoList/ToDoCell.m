@@ -34,7 +34,7 @@
 #define TITLE_Y (TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
 
 
-#define LABEL_WIDTH (self.frame.size.width - (CELL_LABEL_X + (CELL_LABEL_X / 3)))
+#define LABEL_WIDTH (self.frame.size.width - (CELL_LABEL_X + (CELL_LABEL_X / 1)))
 
 #define LABEL_SPACE 2
 
@@ -56,6 +56,10 @@
 @property (nonatomic,strong) UILabel *notesIcon;
 @property (nonatomic,strong) UILabel *recurringIcon;
 @property (nonatomic,strong) UILabel *locationIcon;
+
+@property (nonatomic, strong) UIButton *actionStepsButton;
+@property (nonatomic, strong) UILabel *actionStepsLabel;
+
 @end
 @implementation ToDoCell
 
@@ -141,8 +145,32 @@
         priorityButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         [priorityButton addTarget:self action:@selector(pressedPriority) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:priorityButton];
+        
+        self.actionStepsButton = [[UIButton alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width-CELL_LABEL_X, 0, CELL_LABEL_X, self.frame.size.height)];
+        //self.actionStepsButton.backgroundColor = tcolor(TextColor);
+        //self.actionStepsButton.titleLabel.backgroundColor = tcolor(DoneColor);
+        self.actionStepsLabel = [[UILabel alloc] init];
+        self.actionStepsLabel.font = KP_REGULAR(11);
+        self.actionStepsLabel.textColor = tcolor(TextColor);
+        self.actionStepsLabel.layer.borderColor = tcolor(TextColor).CGColor;
+        self.actionStepsLabel.layer.cornerRadius = 3;
+        self.actionStepsLabel.layer.borderWidth = 1;
+        self.actionStepsLabel.textAlignment = NSTextAlignmentCenter;
+        
+        [self.actionStepsButton addSubview:self.actionStepsLabel];
+        self.actionStepsLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+        
+        self.actionStepsButton.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
+        [self.actionStepsButton addTarget:self action:@selector(pressedActionSteps) forControlEvents:UIControlEventTouchUpInside];
+        [self.contentView addSubview:self.actionStepsButton];
+        
     }
     return self;
+}
+-(void)pressedActionSteps{
+    if ( [self.actionDelegate respondsToSelector:@selector(pressedActionStepsButtonCell:)])
+        [self.actionDelegate pressedActionStepsButtonCell:self];
+        
 }
 
 -(void)pressedPriority{
@@ -152,6 +180,18 @@
 
 - (void)setPriority:(BOOL)priority {
     self.dotView.priority = priority;
+}
+
+-(void)updateActionSteps{
+    NSSet *filteredSubtasks = [self.toDo.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
+    if( filteredSubtasks && filteredSubtasks.count > 0){
+        self.actionStepsButton.hidden = NO;
+        self.actionStepsLabel.text = [NSString stringWithFormat:@"%i",filteredSubtasks.count];
+        [self.actionStepsLabel sizeToFit];
+        CGRectSetSize(self.actionStepsLabel, CGRectGetWidth(self.actionStepsLabel.frame)+12, CGRectGetHeight(self.actionStepsLabel.frame)+5);
+        CGRectSetCenter(self.actionStepsLabel, CGRectGetWidth(self.actionStepsButton.frame)/2, CGRectGetHeight(self.actionStepsButton.frame)/2);
+    }
+    else self.actionStepsButton.hidden = YES;
 }
 
 - (void)setTextLabels:(BOOL)showBottomLine {
@@ -175,6 +215,7 @@
     
     self.titleLabel.text = toDo.title;
     
+    [self updateActionSteps];
     
     __block BOOL showBottomLine = NO;
     __block CGFloat deltaX = CELL_LABEL_X;
@@ -249,12 +290,14 @@
     }
     
     [self setTextLabels:showBottomLine];
+
 }
 
 -(void)setDotColor:(CellType)cellType{
     UIColor *color = [StyleHandler colorForCellType:cellType];
     self.selectionView.backgroundColor = color;
     self.dotView.dotColor = color;
+    self.actionStepsLabel.layer.borderColor = color.CGColor;
 }
 
 -(void)setSelected:(BOOL)selected{
