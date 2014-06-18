@@ -210,8 +210,7 @@
 }
 
 - (void)setTextLabels:(BOOL)showBottomLine {
-    CGFloat titleY = showBottomLine ? kOuterSpace : ((self.frame.size.height - self.titleLabel.frame.size.height)/2);
-    CGRectSetY(self.titleLabel,titleY);
+    
     
     CGFloat targetWidth = self.frame.size.width - 2*CELL_LABEL_X;
     if( self.toDo.subtasks.count == 0 )
@@ -219,6 +218,11 @@
     CGRectSetWidth(self.titleLabel, targetWidth);
     [self.titleLabel sizeToFit];
     CGRectSetWidth(self.titleLabel, targetWidth);
+    
+    CGFloat titleY = showBottomLine ? kOuterSpace : ((self.frame.size.height - self.titleLabel.frame.size.height)/2);
+    CGRectSetY(self.titleLabel,titleY);
+    
+    
     CGRectSetY(self.tagsLabel, CGRectGetMaxY(self.titleLabel.frame) + LABEL_SPACE);
     CGFloat iconHack = 0.5;
     CGRectSetCenterY(self.locationIcon, self.tagsLabel.center.y - iconHack);
