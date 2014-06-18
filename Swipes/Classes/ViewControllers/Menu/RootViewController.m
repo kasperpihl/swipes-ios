@@ -266,6 +266,7 @@ static RootViewController *sharedObject;
     viewController.delegate = self;
     [self addChildViewController:viewController];
     [OVERLAY pushView:viewController.view animated:YES];
+    [viewController viewDidAppear:NO];
     [ANALYTICS tagEvent:@"Upgrade to Plus" options:nil];
     [ANALYTICS pushView:@"Upgrade to Plus"];
 }

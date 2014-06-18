@@ -47,7 +47,7 @@
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     scrollView.scrollEnabled = YES;
     scrollView.bounces = NO;
-    
+    scrollView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
     [scrollView addSubview:salesImage];
     
     UIButton *scrollToBottomButton = [[UIButton alloc] initWithFrame:CGRectMake(76, 59, 170, 49)];
@@ -126,6 +126,9 @@
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    [self.scrollView flashScrollIndicators];
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self.scrollView selector:@selector(flashScrollIndicators) userInfo:nil repeats:NO];
+    //[self.scrollView flashScrollIndicators];
 }
 -(void)pressedScrollToBottom:(UIButton*)sender{
     CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
