@@ -70,6 +70,8 @@
 		A717DD2E18B7E12300EE359C /* (null) in Sources */ = {isa = PBXBuildFile; };
 		A717DD3618B8A2C800EE359C /* (null) in Sources */ = {isa = PBXBuildFile; };
 		A71DE4B31844069A0097394C /* UIGestureRecognizer+UIBreak.m in Sources */ = {isa = PBXBuildFile; fileRef = A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */; };
+		A71E9FC21951CD6F00FC9B0B /* EvernoteToDoProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = A71E9FC11951CD6F00FC9B0B /* EvernoteToDoProcessor.m */; };
+		A71E9FC51951CE4B00FC9B0B /* NSString+Levenshtein.m in Sources */ = {isa = PBXBuildFile; fileRef = A71E9FC41951CE4B00FC9B0B /* NSString+Levenshtein.m */; };
 		A724B02217A96B8B00E0EF83 /* UIColor+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */; };
 		A72C33501908F65C00767456 /* CWStatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = A72C334F1908F65C00767456 /* CWStatusBarNotification.m */; };
 		A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A72EFFFE18425B6A008333AA /* UserHandler.m */; };
@@ -345,6 +347,10 @@
 		A717DD2318B7C3F700EE359C /* LightSchemeAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LightSchemeAlert.m; sourceTree = "<group>"; };
 		A71DE4B11844069A0097394C /* UIGestureRecognizer+UIBreak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+UIBreak.h"; sourceTree = "<group>"; };
 		A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+UIBreak.m"; sourceTree = "<group>"; };
+		A71E9FC01951CD6F00FC9B0B /* EvernoteToDoProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvernoteToDoProcessor.h; sourceTree = "<group>"; };
+		A71E9FC11951CD6F00FC9B0B /* EvernoteToDoProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvernoteToDoProcessor.m; sourceTree = "<group>"; };
+		A71E9FC31951CE4B00FC9B0B /* NSString+Levenshtein.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Levenshtein.h"; sourceTree = "<group>"; };
+		A71E9FC41951CE4B00FC9B0B /* NSString+Levenshtein.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Levenshtein.m"; sourceTree = "<group>"; };
 		A724B02017A96B8B00E0EF83 /* UIColor+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utilities.h"; sourceTree = "<group>"; };
 		A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Utilities.m"; sourceTree = "<group>"; };
 		A72C334E1908F65C00767456 /* CWStatusBarNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWStatusBarNotification.h; sourceTree = "<group>"; };
@@ -823,6 +829,16 @@
 			name = Login;
 			sourceTree = "<group>";
 		};
+		A71E9FBF1951CD6F00FC9B0B /* Processors */ = {
+			isa = PBXGroup;
+			children = (
+				A71E9FC01951CD6F00FC9B0B /* EvernoteToDoProcessor.h */,
+				A71E9FC11951CD6F00FC9B0B /* EvernoteToDoProcessor.m */,
+			);
+			name = Processors;
+			path = SyncHandlers/Processors;
+			sourceTree = "<group>";
+		};
 		A730D38F17B5149C005E1510 /* Upgrade */ = {
 			isa = PBXGroup;
 			children = (
@@ -1171,6 +1187,8 @@
 				A703B1621838EB0E0047DCC9 /* UIButton+PassTouch.m */,
 				A74DCCAA18AA684C004E32FA /* UIImage+Utilities.h */,
 				A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */,
+				A71E9FC31951CE4B00FC9B0B /* NSString+Levenshtein.h */,
+				A71E9FC41951CE4B00FC9B0B /* NSString+Levenshtein.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1319,6 +1337,7 @@
 		A7AA7961194E0593003DAB3B /* SyncClasses */ = {
 			isa = PBXGroup;
 			children = (
+				A71E9FBF1951CD6F00FC9B0B /* Processors */,
 				A781285317294C56002226C8 /* CoreSyncHandler.h */,
 				A781285417294C56002226C8 /* CoreSyncHandler.m */,
 				A7AA7962194E0665003DAB3B /* ParentSyncHandler.h */,
@@ -1745,6 +1764,7 @@
 				A7063BCC190F8BEE003D3690 /* SubtaskController.m in Sources */,
 				A78128C717294C56002226C8 /* UtilityClass.m in Sources */,
 				A714369319349EB3009AC8A4 /* CheckmarkButton.m in Sources */,
+				A71E9FC51951CE4B00FC9B0B /* NSString+Levenshtein.m in Sources */,
 				A7B9D39319066299001E1109 /* KPModal.m in Sources */,
 				A78128CC17294C56002226C8 /* KPSegmentedViewController.m in Sources */,
 				A7D06869190E654C00699B4E /* MMDrawerController.m in Sources */,
@@ -1753,6 +1773,7 @@
 				A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */,
 				DACD541918A19FB000C378DF /* DropboxView.m in Sources */,
 				A714369019346823009AC8A4 /* SyncLabel.m in Sources */,
+				A71E9FC21951CD6F00FC9B0B /* EvernoteToDoProcessor.m in Sources */,
 				A703B1AF1838EBF20047DCC9 /* KPAddView.m in Sources */,
 				A763C93D19208E58005041D7 /* AttachmentPopup.m in Sources */,
 				A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */,

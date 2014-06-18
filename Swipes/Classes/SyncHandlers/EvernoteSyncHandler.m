@@ -10,7 +10,10 @@
 
 #import "KPToDo.h"
 #import "KPAttachment.h"
+#import "EvernoteToDoProcessor.h"
+
 #import "EvernoteSyncHandler.h"
+
 @interface EvernoteSyncHandler ()
 @property (nonatomic,copy) SyncBlock block;
 @property NSArray *objectsWithEvernote;
@@ -49,6 +52,11 @@
     /* Perform the magic syncing here */
     
     for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
+        KPAttachment *evernoteAttachment = [todoWithEvernote firstAttachmentForServiceType:EVERNOTE_SERVICE];
+        NSString *guid = evernoteAttachment.identifier;
+        [EvernoteToDoProcessor processorWithGuid:guid block:^(EvernoteToDoProcessor *processor, NSError *error) {
+            NSLog(@"processor:%@",processor.toDoItems);
+        }];
         
         // Adding a subtask - use save NO for saving all in the end
         //[todoWithEvernote addSubtask:@"subtask title" save:NO];

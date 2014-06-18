@@ -54,7 +54,6 @@ static NotificationHandler *sharedObject;
     CGFloat duration = [[userInfo objectForKey:@"duration"] floatValue];
     if( duration ){
         [self.notification displayNotificationWithMessage:title forDuration:duration];
-        NSLog(@"had duration: %f", duration);
     }else
         [self.notification displayNotificationWithMessage:title completion:nil];
 }

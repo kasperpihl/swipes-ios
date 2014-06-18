@@ -339,7 +339,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == SyncStatusStarted){
                     
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Synchronizing Evernote...", @"duration": @(2.5) } ];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Synchronizing Evernote...", @"duration": @(0) } ];
                 }
                 else if( status == SyncStatusError ){
                     self._isSyncing = NO;
@@ -356,7 +356,6 @@
 
 - (BOOL)synchronizeWithParseAsync:(BOOL)async
 {
-    return NO;
     self._isSyncing = YES;
     
     if (async)
