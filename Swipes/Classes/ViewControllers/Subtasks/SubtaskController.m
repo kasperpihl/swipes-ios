@@ -314,7 +314,7 @@
 #pragma mark UITableViewDataSource
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
     //self.draggingRow = destinationIndexPath;
-    NSLog(@"move from %i to %i",sourceIndexPath.row,destinationIndexPath.row);
+    //NSLog(@"move from %i to %i",sourceIndexPath.row,destinationIndexPath.row);
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     //KPToDo *subtask = [self.subtasks objectAtIndex:indexPath.row];

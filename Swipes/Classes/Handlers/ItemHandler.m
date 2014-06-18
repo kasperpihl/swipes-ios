@@ -74,12 +74,6 @@
     if(!self.isSorted){
         KPToDo *movingToDoObject = [self itemForIndexPath:fromIndexPath];
         KPToDo *replacingToDoObject = [self itemForIndexPath:toIndexPath];
-        NSLog(@"from %i-%i to %i-%i",fromIndexPath.row, movingToDoObject.orderValue, toIndexPath.row, replacingToDoObject.orderValue);
-        NSMutableArray *orders = [NSMutableArray array];
-        for( KPToDo *todo in self.items){
-            [orders addObject:todo.order];
-        }
-        NSLog(@"%@",orders);
         NSArray *newItems = [movingToDoObject changeToOrder:replacingToDoObject.orderValue withItems:self.items];
         [self setItems:newItems];
         [self notifyUpdate];

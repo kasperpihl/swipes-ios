@@ -506,11 +506,8 @@
         sortedItems = [orderedItems arrayByAddingObjectsFromArray:unorderedItems];
     
     NSInteger numberOfChanges = 0;
-    /*if(!unorderedItems || unorderedItems.count == 0)
-        return sortedItems;*/
     for(KPToDo *toDo in sortedItems){
         if(toDo.orderValue != counter){
-            NSLog(@"changed to: %i",counter);
             toDo.orderValue = counter;
             numberOfChanges++;
         }
@@ -712,7 +709,8 @@
     CellType oldCell = [self cellTypeForTodo];
     self.schedule = date;
     /* If this task was completed less than 15 minutes ago - don't put at the top of the stack but in it's old place */
-    if(self.completionDate && [self.completionDate minutesBeforeDate:[NSDate date]] > 15) self.orderValue = kDefOrderVal;
+    if(!(self.completionDate && [self.completionDate minutesBeforeDate:[NSDate date]] < 15))
+        self.orderValue = kDefOrderVal;
     self.completionDate = nil;
     CellType newCell = [self cellTypeForTodo];
     return (oldCell != newCell);
