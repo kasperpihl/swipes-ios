@@ -132,6 +132,7 @@
     if(self){
         self.tableView = [[KPReorderTableView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) style:UITableViewStylePlain];
         self.tableView.dataSource = self;
+        self.tableView.backgroundColor = tcolor(BackgroundColor);
         self.tableView.layer.masksToBounds = YES;
         self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
         self.tableView.dragDelegate = self;
@@ -141,6 +142,7 @@
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.delegate = self;
         UIView *tableFooter = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kSubtaskHeight)];
+        tableFooter.backgroundColor = tcolor(BackgroundColor);
         tableFooter.layer.masksToBounds = YES;
         tableFooter.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         SubtaskCell *addCell = [[SubtaskCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SubtaskTitleHeader"];

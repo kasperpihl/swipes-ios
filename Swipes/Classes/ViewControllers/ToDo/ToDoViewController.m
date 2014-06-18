@@ -1186,7 +1186,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [super viewWillAppear:animated];
     self.expandButton.transform = CGAffineTransformMakeRotation(0);
     self.expandButton.hidden = (self.model.subtasks.count <= 1);
-    if( self.expandOnShow ){
+    if( self.expandOnShow){
         [self.subtasksController setExpanded:YES animated:YES];
         self.expandOnShow = NO;
     }
@@ -1197,8 +1197,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(delayedTriggerEvernote) userInfo:nil repeats:NO];
-    self.fireHint = YES;
+    if([[EvernoteSession sharedSession] isEvernoteInstalled]){
+        [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(delayedTriggerEvernote) userInfo:nil repeats:NO];
+        self.fireHint = YES;
+    }
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];

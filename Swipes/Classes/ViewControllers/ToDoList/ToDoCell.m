@@ -38,9 +38,6 @@
 
 #define LABEL_SPACE 2
 
-#define kUnselectedFrame CGRectMake((CELL_LABEL_X/2),0, LINE_SIZE,CELL_HEIGHT)
-#define kSelectedFrame CGRectMake(0,0,(CELL_LABEL_X/2)+LINE_SIZE,CELL_HEIGHT)
-
 #define TITLE_LABEL_HEIGHT sizeWithFont(@"Tjgq",TITLE_LABEL_FONT).height
 #define TAGS_LABEL_HEIGHT sizeWithFont(@"Tg",TAGS_LABEL_FONT).height
 
@@ -93,8 +90,9 @@
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
         // 4
-        UIView *selectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 6, CELL_HEIGHT)];//CGRectMake((CELL_LABEL_X/2),0, LINE_SIZE,CELL_HEIGHT)]; //];
+        UIView *selectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 6, self.frame.size.height)];//CGRectMake((CELL_LABEL_X/2),0, LINE_SIZE,CELL_HEIGHT)]; //];
         selectionView.tag = SELECTION_TAG;
+        selectionView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         selectionView.hidden = YES;
         //timelineLine.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
         
@@ -105,8 +103,10 @@
         dotView.tag = DOT_VIEW_TAG;
         [self.contentView addSubview:dotView];
         self.dotView = (DotView*)[self.contentView viewWithTag:DOT_VIEW_TAG];
-        self.dotView.center = CGPointMake(CELL_LABEL_X/2, CELL_HEIGHT/2);
+        self.dotView.center = CGPointMake(CELL_LABEL_X/2, self.frame.size.height/2);
+        self.dotView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
         NSInteger iconHeight = 9;
+        
         self.locationIcon = iconLabel(@"editLocation", iconHeight);
         [self.locationIcon setTextColor:tcolor(SubTextColor)];
         self.locationIcon.hidden = YES;
@@ -195,7 +195,7 @@
 }
 
 - (void)setTextLabels:(BOOL)showBottomLine {
-    CGFloat titleY = showBottomLine ? TITLE_Y : ((CELL_HEIGHT - self.titleLabel.frame.size.height)/2);
+    CGFloat titleY = showBottomLine ? TITLE_Y : ((self.frame.size.height - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
 
     CGRectSetY(self.tagsLabel, TITLE_Y + self.titleLabel.frame.size.height + LABEL_SPACE);
@@ -307,7 +307,6 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     self.selectionView.hidden = !selected;
-    //self.selectionView.frame = selected ? kSelectedFrame : kUnselectedFrame;
 }
 
 -(void)setCellType:(CellType)cellType{
