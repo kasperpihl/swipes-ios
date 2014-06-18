@@ -13,7 +13,6 @@
 #import "NSDate-Utilities.h"
 #import "UIColor+Utilities.h"
 #import "StyleHandler.h"
-#import "DotView.h"
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
 #define DOT_VIEW_TAG 6
@@ -37,13 +36,14 @@
 #define LABEL_WIDTH (self.frame.size.width - (CELL_LABEL_X + (CELL_LABEL_X / 1)))
 
 #define LABEL_SPACE 2
+#define kOuterSpace 10
 
 #define TITLE_LABEL_HEIGHT sizeWithFont(@"Tjgq",TITLE_LABEL_FONT).height
 #define TAGS_LABEL_HEIGHT sizeWithFont(@"Tg",TAGS_LABEL_FONT).height
 
 @interface ToDoCell ()
 @property (nonatomic,weak) IBOutlet UIView *selectionView;
-@property (nonatomic,weak) IBOutlet DotView *dotView;
+
 @property (nonatomic) KPToDo *toDo;
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
@@ -54,12 +54,27 @@
 @property (nonatomic,strong) UILabel *recurringIcon;
 @property (nonatomic,strong) UILabel *locationIcon;
 
-@property (nonatomic, strong) UIButton *actionStepsButton;
 @property (nonatomic, strong) UILabel *actionStepsLabel;
 
 @end
 @implementation ToDoCell
-
++(CGFloat)heightWithText:(NSString *)text hasSubtask:(BOOL)hasSubtask{
+    UIApplication *application = [UIApplication sharedApplication];
+    BOOL landscape = UIInterfaceOrientationIsLandscape(application.statusBarOrientation);
+    CGSize size = [UIScreen mainScreen].bounds.size;
+    //CGFloat height = landscape ? presentationPlace.frame.size.width : presentationPlace.frame.size.height;
+    CGFloat width = landscape ? size.height : size.width;
+    width = width - 2*CELL_LABEL_X;
+    if( !hasSubtask )
+        width = width + CELL_LABEL_X/1.5;
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, TITLE_LABEL_HEIGHT)];
+    titleLabel.numberOfLines = 2;
+    titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    titleLabel.font = TITLE_LABEL_FONT;
+    [titleLabel setText:text];
+    [titleLabel sizeToFit];
+    return titleLabel.frame.size.height + LABEL_SPACE + 2*kOuterSpace + TAGS_LABEL_HEIGHT;
+}
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -70,7 +85,7 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X, TITLE_Y, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
         titleLabel.tag = TITLE_LABEL_TAG;
-        titleLabel.numberOfLines = 1;
+        titleLabel.numberOfLines = 2;
         titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         titleLabel.font = TITLE_LABEL_FONT;
         titleLabel.textColor = tcolor(TextColor);
@@ -195,10 +210,16 @@
 }
 
 - (void)setTextLabels:(BOOL)showBottomLine {
-    CGFloat titleY = showBottomLine ? TITLE_Y : ((self.frame.size.height - self.titleLabel.frame.size.height)/2);
+    CGFloat titleY = showBottomLine ? kOuterSpace : ((self.frame.size.height - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
-
-    CGRectSetY(self.tagsLabel, TITLE_Y + self.titleLabel.frame.size.height + LABEL_SPACE);
+    
+    CGFloat targetWidth = self.frame.size.width - 2*CELL_LABEL_X;
+    if( self.toDo.subtasks.count == 0 )
+        targetWidth += CELL_LABEL_X/1.5;
+    CGRectSetWidth(self.titleLabel, targetWidth);
+    [self.titleLabel sizeToFit];
+    CGRectSetWidth(self.titleLabel, targetWidth);
+    CGRectSetY(self.tagsLabel, CGRectGetMaxY(self.titleLabel.frame) + LABEL_SPACE);
     CGFloat iconHack = 0.5;
     CGRectSetCenterY(self.locationIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y - iconHack);

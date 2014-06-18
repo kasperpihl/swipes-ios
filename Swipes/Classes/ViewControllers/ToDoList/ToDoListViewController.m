@@ -200,7 +200,9 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return CELL_HEIGHT;
+    KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
+    //NSLog(@"height:%f",);
+    return [ToDoCell heightWithText:toDo.title hasSubtask:(toDo.subtasks.count > 0)]; // CELL_HEIGHT;
 }
 
 - (ToDoCell*)readyCell:(ToDoCell*)cell {
@@ -222,6 +224,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"will displ %i",indexPath.row);
     //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     cell.cellType = [toDo cellTypeForTodo];
@@ -519,6 +522,7 @@
 }
 
 - (void)prepareTableView:(UITableView *)tableView {
+    
     tableView.allowsMultipleSelection = YES;
     [tableView setTableFooterView:[UIView new]];
     

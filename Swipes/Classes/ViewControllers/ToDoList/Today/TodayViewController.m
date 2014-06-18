@@ -103,6 +103,11 @@
 }
 - (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
     ToDoCell *cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    [UIView animateWithDuration:0.3 animations:^{
+        cell.dotView.alpha = 0;
+        cell.actionStepsButton.alpha = 0;
+
+    }];
     [self readyCell:cell];
     [self tableView:self.tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
 	return cell;

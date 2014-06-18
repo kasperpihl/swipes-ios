@@ -9,7 +9,7 @@
 #define kDefLeftPadding 4
 #define kDefRightPadding 7
 #define kDefTopPadding 1
-#define kDefBottomPadding 3
+#define kDefBottomPadding 1
 
 #define kDefaultLineSize LINE_SIZE;
 
