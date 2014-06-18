@@ -224,8 +224,6 @@
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"will displ %i",indexPath.row);
-    //[self cell:(ToDoCell*)cell forRowAtIndexPath:indexPath];
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     cell.cellType = [toDo cellTypeForTodo];
     [cell setDotColor:self.cellType];

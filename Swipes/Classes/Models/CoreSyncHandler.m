@@ -188,7 +188,6 @@
         CGFloat duration = [self durationForStatus:status];
         if( title ){
             NSDictionary *userInfoToNotification = @{ @"title": title, @"duration": @( duration ) };
-            NSLog(@"userinf %@",userInfoToNotification);
             [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:userInfoToNotification];
         }
         
@@ -357,6 +356,7 @@
 
 - (BOOL)synchronizeWithParseAsync:(BOOL)async
 {
+    return NO;
     self._isSyncing = YES;
     
     if (async)
@@ -460,7 +460,7 @@
     /* Performing request */
     NSHTTPURLResponse *response;
     NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,[syncData objectForKey:@"lastUpdate"]);
-    NSLog(@"need: %@", [syncData objectForKey:@"hasMoreToSave"]);
+    //NSLog(@"need: %@", [syncData objectForKey:@"hasMoreToSave"]);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
     

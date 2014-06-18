@@ -49,7 +49,6 @@ static NotificationHandler *sharedObject;
     }
     self.notification.notificationLabelBackgroundColor = tcolor(BackgroundColor);
     self.notification.notificationLabelTextColor = tcolor(TextColor);
-    NSLog(@"notif %@",notification.userInfo);
     NSDictionary *userInfo = notification.userInfo;
     NSString *title = [userInfo objectForKey:@"title"];
     CGFloat duration = [[userInfo objectForKey:@"duration"] floatValue];

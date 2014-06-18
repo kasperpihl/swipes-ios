@@ -506,9 +506,11 @@
         sortedItems = [orderedItems arrayByAddingObjectsFromArray:unorderedItems];
     
     NSInteger numberOfChanges = 0;
-    if(!unorderedItems || unorderedItems.count == 0) return sortedItems;
+    /*if(!unorderedItems || unorderedItems.count == 0)
+        return sortedItems;*/
     for(KPToDo *toDo in sortedItems){
         if(toDo.orderValue != counter){
+            NSLog(@"changed to: %i",counter);
             toDo.orderValue = counter;
             numberOfChanges++;
         }
@@ -537,7 +539,7 @@
 
 -(NSArray*)changeToOrder:(NSInteger)newOrder withItems:(NSArray *)items{
     if(newOrder == self.orderValue) return nil;
-    NSLog(@"change:%i - %i",self.orderValue,newOrder);
+    //NSLog(@"change:%i - %i",self.orderValue,newOrder);
     BOOL decrease = (newOrder > self.orderValue);
     NSString *predicateRawString = (newOrder > self.orderValue) ? @"(order > %i) AND (order =< %i)" : @"(order < %i) AND (order >= %i)";
     
@@ -552,10 +554,11 @@
         //NSLog(@"r %i - %@",toDo.orderValue,toDo.title);
     }
     
-    [KPToDo saveToSync];
     
+    [KPToDo saveToSync];
     [ANALYTICS heartbeat];
     NSArray *newOrderItems = [items sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES]]];
+    /*newOrderItems = [KPToDo sortOrderForItems:newOrderItems newItemsOnTop:NO save:<#(BOOL)#>]*/
     return newOrderItems;
 }
 
