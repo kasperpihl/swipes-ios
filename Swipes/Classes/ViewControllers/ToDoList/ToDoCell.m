@@ -29,16 +29,13 @@
 #define ALARM_SPACING 3
 
 
-#define TITLE_DELTA_Y 0
-#define TITLE_Y (TITLE_DELTA_Y + (CELL_HEIGHT-TITLE_LABEL_HEIGHT-TAGS_LABEL_HEIGHT-LABEL_SPACE)/2)
+#define kMaxNumberOfTitleRows 2
 
 
-#define LABEL_WIDTH (self.frame.size.width - (CELL_LABEL_X + (CELL_LABEL_X / 1)))
+#define kSpaceBetweenLabels 2
+#define kOuterSpaceBetweenTasks 12
 
-#define LABEL_SPACE 2
-#define kOuterSpace 10
-
-#define TITLE_LABEL_HEIGHT sizeWithFont(@"Tjgq",TITLE_LABEL_FONT).height
+//#define TITLE_LABEL_HEIGHT sizeWithFont(@"Tjgq",TITLE_LABEL_FONT).height
 #define TAGS_LABEL_HEIGHT sizeWithFont(@"Tg",TAGS_LABEL_FONT).height
 
 @interface ToDoCell ()
@@ -67,13 +64,13 @@
     width = width - 2*CELL_LABEL_X;
     if( !hasSubtask )
         width = width + CELL_LABEL_X/1.5;
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, TITLE_LABEL_HEIGHT)];
-    titleLabel.numberOfLines = 2;
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, 100)];
+    titleLabel.numberOfLines = kMaxNumberOfTitleRows;
     titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     titleLabel.font = TITLE_LABEL_FONT;
     [titleLabel setText:text];
     [titleLabel sizeToFit];
-    return titleLabel.frame.size.height + LABEL_SPACE + 2*kOuterSpace + TAGS_LABEL_HEIGHT;
+    return titleLabel.frame.size.height + kSpaceBetweenLabels + 2*kOuterSpaceBetweenTasks + TAGS_LABEL_HEIGHT;
 }
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -83,9 +80,9 @@
         self.backgroundColor = tcolor(BackgroundColor);
         self.contentView.backgroundColor = tcolor(BackgroundColor);
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X, TITLE_Y, LABEL_WIDTH, TITLE_LABEL_HEIGHT)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X, 0, 0, 100)];
         titleLabel.tag = TITLE_LABEL_TAG;
-        titleLabel.numberOfLines = 2;
+        titleLabel.numberOfLines = kMaxNumberOfTitleRows;
         titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         titleLabel.font = TITLE_LABEL_FONT;
         titleLabel.textColor = tcolor(TextColor);
@@ -94,7 +91,7 @@
         [self.contentView addSubview:titleLabel];
         self.titleLabel = (UILabel*)[self.contentView viewWithTag:TITLE_LABEL_TAG];
         
-        UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X, titleLabel.frame.origin.y+titleLabel.frame.size.height+LABEL_SPACE, LABEL_WIDTH, TAGS_LABEL_HEIGHT)];
+        UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(CELL_LABEL_X, 0, 0, TAGS_LABEL_HEIGHT)];
         tagsLabel.tag = TAGS_LABEL_TAG;
         tagsLabel.numberOfLines = 1;
         tagsLabel.textColor = tcolor(SubTextColor);
@@ -219,11 +216,11 @@
     [self.titleLabel sizeToFit];
     CGRectSetWidth(self.titleLabel, targetWidth);
     
-    CGFloat titleY = showBottomLine ? kOuterSpace : ((self.frame.size.height - self.titleLabel.frame.size.height)/2);
+    CGFloat titleY = showBottomLine ? kOuterSpaceBetweenTasks : ((self.frame.size.height - self.titleLabel.frame.size.height)/2);
     CGRectSetY(self.titleLabel,titleY);
     
     
-    CGRectSetY(self.tagsLabel, CGRectGetMaxY(self.titleLabel.frame) + LABEL_SPACE);
+    CGRectSetY(self.tagsLabel, CGRectGetMaxY(self.titleLabel.frame) + kSpaceBetweenLabels);
     CGFloat iconHack = 0.5;
     CGRectSetCenterY(self.locationIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y - iconHack);
