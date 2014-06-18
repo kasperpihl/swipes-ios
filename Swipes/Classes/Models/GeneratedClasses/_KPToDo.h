@@ -7,10 +7,12 @@
 extern const struct KPToDoAttributes {
 	__unsafe_unretained NSString *alarm;
 	__unsafe_unretained NSString *completionDate;
+	__unsafe_unretained NSString *deleted;
 	__unsafe_unretained NSString *location;
 	__unsafe_unretained NSString *notes;
 	__unsafe_unretained NSString *numberOfRepeated;
 	__unsafe_unretained NSString *order;
+	__unsafe_unretained NSString *origin;
 	__unsafe_unretained NSString *priority;
 	__unsafe_unretained NSString *repeatOption;
 	__unsafe_unretained NSString *repeatedDate;
@@ -34,6 +36,8 @@ extern const struct KPToDoFetchedProperties {
 @class KPToDo;
 @class KPToDo;
 @class KPTag;
+
+
 
 
 
@@ -82,6 +86,20 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+@property (nonatomic, strong) NSNumber* deleted;
+
+
+
+@property BOOL deletedValue;
+- (BOOL)deletedValue;
+- (void)setDeletedValue:(BOOL)value_;
+
+//- (BOOL)validateDeleted:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
 @property (nonatomic, strong) NSString* location;
 
 
@@ -125,6 +143,16 @@ extern const struct KPToDoFetchedProperties {
 - (void)setOrderValue:(int32_t)value_;
 
 //- (BOOL)validateOrder:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* origin;
+
+
+
+//- (BOOL)validateOrigin:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -273,6 +301,15 @@ extern const struct KPToDoFetchedProperties {
 
 
 
+- (NSNumber*)primitiveDeleted;
+- (void)setPrimitiveDeleted:(NSNumber*)value;
+
+- (BOOL)primitiveDeletedValue;
+- (void)setPrimitiveDeletedValue:(BOOL)value_;
+
+
+
+
 - (NSString*)primitiveLocation;
 - (void)setPrimitiveLocation:(NSString*)value;
 
@@ -299,6 +336,12 @@ extern const struct KPToDoFetchedProperties {
 
 - (int32_t)primitiveOrderValue;
 - (void)setPrimitiveOrderValue:(int32_t)value_;
+
+
+
+
+- (NSString*)primitiveOrigin;
+- (void)setPrimitiveOrigin:(NSString*)value;
 
 
 

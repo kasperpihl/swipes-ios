@@ -1530,7 +1530,7 @@
 				A7778CC716EB5884004D95E5 /* Frameworks */,
 				A7778CC816EB5884004D95E5 /* Resources */,
 				14A4BEEC691D48EDAF59F6F0 /* Copy Pods Resources */,
-				A7A976DC18410F56001C0A51 /* ShellScript */,
+				A7A976DC18410F56001C0A51 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -1713,13 +1713,14 @@
 			shellPath = /bin/sh;
 			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
 		};
-		A7A976DC18410F56001C0A51 /* ShellScript */ = {
+		A7A976DC18410F56001C0A51 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

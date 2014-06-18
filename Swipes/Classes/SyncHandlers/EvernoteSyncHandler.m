@@ -12,6 +12,8 @@
 #import "KPAttachment.h"
 #import "EvernoteToDoProcessor.h"
 
+#import "NSString+Levenshtein.h"
+
 #import "EvernoteSyncHandler.h"
 
 @interface EvernoteSyncHandler ()
@@ -36,6 +38,41 @@
     self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
 }
 
+
+-(void)handleEvernoteToDo:(EvernoteToDo*)evernoteToDo withMatchingSubtask:(KPToDo*)subtask inNoteProcessor:(EvernoteToDoProcessor*)processor{
+    
+}
+-(KPToDo*)findMatchInSubtasks:(NSArray*)subtasks fromEvernoteToDo:(EvernoteToDo*)evernoteToDo{
+    // search for our TODO (comparing only title)
+    KPToDo* matchingSubtask = nil;
+    for (KPToDo* todo in subtasks) {
+        if ([todo.title isEqualToString:evernoteToDo.title]) {
+            matchingSubtask = todo;
+            break;
+        }
+    }
+    
+    
+    // try to score it with Levenshtein
+    if (nil == matchingSubtask) {
+        CGFloat bestScore = 0;
+        KPToDo* bestMatch = nil;
+        for (KPToDo *todo in subtasks) {
+            CGFloat match = fabsf([todo.title compareWithWord:evernoteToDo.title matchGain:10 missingCost:1]);
+            if (match > bestScore) {
+                bestScore = match;
+                bestMatch = todo;
+            }
+        }
+        if (bestMatch) {
+            if( bestScore > 120 )
+                matchingSubtask = bestMatch;
+            NSLog(@"best Levenshtein score: %f (%@ to %@)", bestScore, evernoteToDo.title, bestMatch.title);
+        }
+    }
+    return matchingSubtask;
+}
+
 -(void)synchronizeWithBlock:(SyncBlock)block{
     self.block = block;
     self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
@@ -52,9 +89,24 @@
     /* Perform the magic syncing here */
     
     for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
+        NSPredicate *subtaskPredicate = [NSPredicate predicateWithFormat:@"origin == %@",EVERNOTE_SERVICE];
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:NO];
+        NSArray *evernoteSubtasks = [[todoWithEvernote.subtasks filteredSetUsingPredicate:subtaskPredicate] sortedArrayUsingDescriptors:@[ sortDescriptor ]];
+        
         KPAttachment *evernoteAttachment = [todoWithEvernote firstAttachmentForServiceType:EVERNOTE_SERVICE];
         NSString *guid = evernoteAttachment.identifier;
         [EvernoteToDoProcessor processorWithGuid:guid block:^(EvernoteToDoProcessor *processor, NSError *error) {
+            if( processor ){
+                for (EvernoteToDo *evernoteToDo in [[processor.toDoItems reverseObjectEnumerator] allObjects]){
+                    KPToDo *matchingSubtask = [self findMatchInSubtasks:evernoteSubtasks fromEvernoteToDo:evernoteToDo];
+                    if( !matchingSubtask ){
+                        matchingSubtask = [todoWithEvernote addSubtask:evernoteToDo.title save:NO];
+                        matchingSubtask.origin = EVERNOTE_SERVICE;
+                        //[KPToDo sortOrderForItems:[matchingSubtask.subtasks allObjects] newItemsOnTop:YES save:NO];
+                    }
+                }
+                [KPToDo saveToSync];
+            }
             NSLog(@"processor:%@",processor.toDoItems);
         }];
         

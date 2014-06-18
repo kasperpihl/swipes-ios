@@ -6,7 +6,7 @@
 //
 
 #import <Evernote-SDK-iOS/EvernoteSDK.h>
-#import "NSString+Levenshtein.h"
+
 #import "EvernoteToDoProcessor.h"
 
 ///////////////////////////////////////////////////////////////
@@ -135,49 +135,11 @@ static NSSet* g_startEndElements;
     }
 }
 
-- (EvernoteToDo *)updatedVersionOfToDo:(EvernoteToDo *)todo
-{
-    // reload the note
-    [self loadNoteWithGuid:_note.guid block:^(BOOL succeeded, NSError *error) {
-        
-    }];
-    
-    // extract new TODOs
-    NSArray* newToDos = [self toDoItems];
-    
-    // search for our TODO (comparing only title)
-    EvernoteToDo* foundNew = nil;
-    for (EvernoteToDo* td in newToDos) {
-        if ([td.title isEqualToString:todo.title]) {
-            foundNew = td;
-            break;
-        }
-    }
-    
-
-    // try to score it with Levenshtein
-    if (nil == foundNew) {
-        CGFloat bestScore = 0;
-        EvernoteToDo* bestMatch = nil;
-        for (EvernoteToDo* td in newToDos) {
-            CGFloat match = fabsf([todo.title compareWithWord:td.title matchGain:10 missingCost:1]);
-            if (match > bestScore) {
-                bestScore = match;
-                bestMatch = td;
-            }
-        }
-        if (bestMatch) {
-            NSLog(@"best Levenshtein score: %f (%@ to %@)", bestScore, todo.title, bestMatch.title);
-        }
-    }
-    
-    return foundNew;
-}
 
 - (BOOL)updateToDo:(EvernoteToDo *)todo checked:(BOOL)checked
 {
     NSLog(@"searching for TODO: %@", todo);
-    EvernoteToDo* updatedToDo = [self updatedVersionOfToDo:todo];
+    EvernoteToDo* updatedToDo; // = [self updatedVersionOfToDo:todo];
     if ((nil != updatedToDo) && (updatedToDo.checked != checked)) {
         NSLog(@"now we can update our TODO: %@", updatedToDo);
         

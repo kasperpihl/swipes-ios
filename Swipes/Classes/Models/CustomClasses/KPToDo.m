@@ -57,12 +57,15 @@
     
     return newToDo;
 }
--(void)addSubtask:(NSString *)title save:(BOOL)save{
+-(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save{
     KPToDo *subTask = [KPToDo newObjectInContext:nil];
     subTask.title = title;
     subTask.orderValue = kDefOrderVal;
+    subTask.schedule = [NSDate date];
     subTask.parent = self;
-    if(save) [KPToDo saveToSync];
+    if( save )
+        [KPToDo saveToSync];
+    
     NSString *taskLength = @"50+";
     if(title.length <= 10) taskLength = @"1-10";
     else if(title.length <= 20) taskLength = @"11-20";
@@ -71,6 +74,9 @@
     else if(title.length <= 50) taskLength = @"41-50";
     NSInteger numberOfActionSteps = self.subtasks.count;
     [ANALYTICS tagEvent:@"Added Action Step" options:@{@"Length":taskLength, @"Total Action Steps on Task": @(numberOfActionSteps)}];
+    
+    
+    return subTask;
 }
 +(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save{
     NSMutableArray *movedToDos = [NSMutableArray array];
@@ -510,6 +516,7 @@
         if(toDo.orderValue != counter){
             toDo.orderValue = counter;
             numberOfChanges++;
+            NSLog(@"changed %i",counter);
         }
         //NSLog(@"%i - %@",toDo.orderValue,toDo.title);
         counter++;
