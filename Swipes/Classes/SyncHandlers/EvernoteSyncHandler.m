@@ -110,7 +110,7 @@
     // search for our TODO (comparing only title)
     NSArray *subtasks = [self filterSubtasks:parentToDo.subtasks];
     
-    // Creating helper arrays for determining
+    // Creating helper arrays for determining which ones has already been matched
     NSMutableArray *subtasksLeftToBeFound = [subtasks mutableCopy];
     NSMutableArray *evernoteToDosLeftToBeFound = [evernoteToDos mutableCopy];
     
@@ -210,7 +210,6 @@
             
             NSLog(@"guid:%@",guid);
             if( processor ){
-                
                 returnCount++;
                 NSLog(@"processing:%@",processor.toDoItems);
                 NSArray *evernoteToDos = [[processor.toDoItems reverseObjectEnumerator] allObjects];
@@ -218,14 +217,17 @@
                 
             }
             else{
+#warning add some Errorhandling here
                 returnCount++;
             }
             if(returnCount == targetCount){
                 NSLog(@"hit the target");
                 
+                // If changes to Core Data - make sure it gets synced to our server.
                 if([[KPCORE context] hasChanges])
                     [KPToDo saveToSync];
                 [self setUpdatedAt:date];
+                
                 self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
             }
             
