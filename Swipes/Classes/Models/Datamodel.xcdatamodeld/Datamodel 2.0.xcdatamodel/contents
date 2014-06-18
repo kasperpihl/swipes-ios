@@ -27,6 +27,7 @@
         <attribute name="numberOfRepeated" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="origin" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="originIdentifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="priority" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="repeatedDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="repeatOption" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -43,6 +44,6 @@
         <element name="Attachment" positionX="0" positionY="0" width="128" height="120"/>
         <element name="ParseObject" positionX="0" positionY="0" width="128" height="120"/>
         <element name="Tag" positionX="0" positionY="0" width="128" height="73"/>
-        <element name="ToDo" positionX="0" positionY="0" width="128" height="330"/>
+        <element name="ToDo" positionX="0" positionY="0" width="128" height="345"/>
     </elements>
 </model>

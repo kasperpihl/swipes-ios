@@ -182,7 +182,6 @@
     return title;
 }
 -(void)sendStatus:(SyncStatus)status userInfo:(NSDictionary*)userInfo error:(NSError*)error{
-    NSLog(@"sync: %i",status);
     dispatch_async(dispatch_get_main_queue(), ^{
         NSString *title = [self titleForStatus:status];
         CGFloat duration = [self durationForStatus:status];
@@ -333,6 +332,7 @@
             if( status == SyncStatusStarted )
                 NSLog(@"startedEvernote");
             if (status == SyncStatusSuccess){
+                NSLog(@"successfully ended");
                 self._isSyncing = NO;
                 [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
             }
@@ -618,6 +618,11 @@
     else
         class = [cdObject class];
     
+    // If object has parent - send update notification
+    if([object objectForKey:@"parentLocalId"]){
+        [self._updatedObjectsForSyncNotification addObject:[object objectForKey:@"parentLocalId"]];
+    }
+    
     if (shouldDelete) {
         [class deleteObject:object context:context];
         [self._deletedObjectsForSyncNotification addObject:[object objectForKey:@"objectId"]];
@@ -626,6 +631,7 @@
         [self._updatedObjectsForSyncNotification addObject:[object objectForKey:@"objectId"]];
         if (!cdObject)
             cdObject = [class getCDObjectFromObject:object context:context];
+        
         NSArray *affectedChanges = [cdObject updateWithObjectFromServer:object context:context];
         if(affectedChanges)
             [*affectedChangedAttributes setObject:affectedChanges forKey:cdObject.objectId];

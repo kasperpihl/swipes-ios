@@ -12,6 +12,7 @@ const struct KPToDoAttributes KPToDoAttributes = {
 	.numberOfRepeated = @"numberOfRepeated",
 	.order = @"order",
 	.origin = @"origin",
+	.originIdentifier = @"originIdentifier",
 	.priority = @"priority",
 	.repeatOption = @"repeatOption",
 	.repeatedDate = @"repeatedDate",
@@ -196,6 +197,13 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 
 @dynamic origin;
+
+
+
+
+
+
+@dynamic originIdentifier;
 
 
 

@@ -13,6 +13,7 @@ extern const struct KPToDoAttributes {
 	__unsafe_unretained NSString *numberOfRepeated;
 	__unsafe_unretained NSString *order;
 	__unsafe_unretained NSString *origin;
+	__unsafe_unretained NSString *originIdentifier;
 	__unsafe_unretained NSString *priority;
 	__unsafe_unretained NSString *repeatOption;
 	__unsafe_unretained NSString *repeatedDate;
@@ -36,6 +37,7 @@ extern const struct KPToDoFetchedProperties {
 @class KPToDo;
 @class KPToDo;
 @class KPTag;
+
 
 
 
@@ -153,6 +155,16 @@ extern const struct KPToDoFetchedProperties {
 
 
 //- (BOOL)validateOrigin:(id*)value_ error:(NSError**)error_;
+
+
+
+
+
+@property (nonatomic, strong) NSString* originIdentifier;
+
+
+
+//- (BOOL)validateOriginIdentifier:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -342,6 +354,12 @@ extern const struct KPToDoFetchedProperties {
 
 - (NSString*)primitiveOrigin;
 - (void)setPrimitiveOrigin:(NSString*)value;
+
+
+
+
+- (NSString*)primitiveOriginIdentifier;
+- (void)setPrimitiveOriginIdentifier:(NSString*)value;
 
 
 

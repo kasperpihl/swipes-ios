@@ -75,6 +75,7 @@ static NSSet* g_startEndElements;
 {
     self = [super init];
     if (self) {
+        self.guid = guid;
         [self loadNoteWithGuid:guid block:block];
     }
     return self;
@@ -136,10 +137,8 @@ static NSSet* g_startEndElements;
 }
 
 
-- (BOOL)updateToDo:(EvernoteToDo *)todo checked:(BOOL)checked
+- (BOOL)updateToDo:(EvernoteToDo *)updatedToDo checked:(BOOL)checked
 {
-    NSLog(@"searching for TODO: %@", todo);
-    EvernoteToDo* updatedToDo; // = [self updatedVersionOfToDo:todo];
     if ((nil != updatedToDo) && (updatedToDo.checked != checked)) {
         NSLog(@"now we can update our TODO: %@", updatedToDo);
         
@@ -177,7 +176,7 @@ static NSSet* g_startEndElements;
         return YES;
     }
     else {
-        NSLog(@"Cannot find TODO: %@ (or found but already with the same status)", todo);
+        NSLog(@"Cannot find TODO: %@ (or found but already with the same status)", updatedToDo);
     }
     return NO;
 }
