@@ -224,10 +224,12 @@
                 NSLog(@"hit the target");
                 
                 // If changes to Core Data - make sure it gets synced to our server.
-                if([[KPCORE context] hasChanges])
+                if([[KPCORE context] hasChanges]){
                     [KPToDo saveToSync];
+#warning send an update event for screen to know it's updating
+                }
                 [self setUpdatedAt:date];
-                
+
                 self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
             }
             
