@@ -218,14 +218,16 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 #pragma mark Notification
 - (void)updateFromSync:(NSNotification *)notification
 {
-    
+    NSLog(@"update event %@",notification.userInfo);
     NSDictionary *changeEvent = [notification userInfo];
     NSSet *updatedObjects = [changeEvent objectForKey:@"updated"];
     NSSet *deletedObjects = [changeEvent objectForKey:@"deleted"];
     if([deletedObjects containsObject:self.objectId]){
         [self pressedBack:nil];
-    }else if([updatedObjects containsObject:self.model.objectId])
+    }else if([updatedObjects containsObject:self.model.objectId]){
+        NSLog(@"included todo");
         [self update];
+    }
 }
 
 

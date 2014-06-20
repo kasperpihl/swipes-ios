@@ -72,7 +72,6 @@
     if ( [subtask.deleted boolValue] && !evernoteToDo.checked ){
         NSLog(@"completing evernote - subtask was deleted");
         [processor updateToDo:evernoteToDo checked:YES];
-        updated = YES;
     }
     
     BOOL subtaskIsCompleted = ( subtask.completionDate ? YES : NO);
@@ -92,6 +91,7 @@
             else{
                 NSLog(@"uncompleting subtask");
                 [KPToDo scheduleToDos:@[subtask] forDate:nil save:NO];
+                updated = YES;
             }
         }
         // If task is completed in Evernote, but not in Swipes
@@ -106,6 +106,7 @@
             else{
                 NSLog(@"completing subtask");
                 [KPToDo completeToDos:@[ subtask ] save:NO];
+                updated = YES;
             }
         }
     }

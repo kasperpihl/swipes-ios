@@ -334,6 +334,7 @@
                     NSArray *updatedToDos = [userInfo objectForKey:@"updated"];
                     if( updatedToDos && updatedToDos.count > 0 ){
                         dispatch_async(dispatch_get_main_queue(), ^{
+                            NSLog(@"shooting notification from Evernote");
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:@{ @"updated" : updatedToDos }];
                         });
                     }

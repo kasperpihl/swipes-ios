@@ -619,15 +619,18 @@
     
 }
 -(void)deleteToDoSave:(BOOL)save{
-    [self beforeDelete];
-    [self MR_deleteEntity];
+    BOOL shouldDelete = [self shouldDelete];
+    if( shouldDelete ){
+        [self MR_deleteEntity];
+    }
     if(save)
         [KPToDo saveToSync];
 }
--(void)beforeDelete{
+-(BOOL)shouldDelete{
     if(self.subtasks.count > 0){
         [KPToDo deleteToDos:[self.subtasks allObjects] save:NO];
     }
+    return YES;
 }
 
 -(void)switchPriority{
