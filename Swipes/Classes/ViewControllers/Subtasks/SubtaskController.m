@@ -54,6 +54,7 @@
     [self loadSubtasks];
     [self reloadAndNotify:NO];
 }
+
 -(void)fullReload{
     [self loadSubtasks];
     [self reloadAndNotify:YES];

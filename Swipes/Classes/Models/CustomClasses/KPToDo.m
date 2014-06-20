@@ -180,7 +180,7 @@
         NSArray *localChanges = [KPCORE lookupTemporaryChangedAttributesForObject:self.objectId];
         // If the object saved was new - the changes will be for it's tempId not objectId
         if(!localChanges) localChanges = [KPCORE lookupTemporaryChangedAttributesForTempId:self.tempId];
-        NSString *parentId = [object objectForKey:@"pparentLocalId"];
+        NSString *parentId = [object objectForKey:@"parentLocalId"];
         if(!self.parent && parentId && parentId != (id)[NSNull null]){
             KPToDo *parent = [KPToDo MR_findFirstByAttribute:@"objectId" withValue:parentId inContext:context];
             if( parent ){

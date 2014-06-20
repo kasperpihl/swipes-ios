@@ -143,8 +143,8 @@
 -(void)updateSectionHeader{
     NSDate *endOfToday = [[NSDate dateTomorrow] dateAtStartOfDay];
     NSDate *startOfToday = [[NSDate date] dateAtStartOfDay];
-    NSPredicate *inprogressPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)",endOfToday];
-    NSPredicate *completedPredicate = [NSPredicate predicateWithFormat:@"(completionDate > %@)",startOfToday];
+    NSPredicate *inprogressPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endOfToday];
+    NSPredicate *completedPredicate = [NSPredicate predicateWithFormat:@"(completionDate > %@ AND parent = nil)",startOfToday];
     NSInteger numberInProgress = [KPToDo MR_countOfEntitiesWithPredicate:inprogressPredicate inContext:[KPCORE context]];
     NSInteger numberOfDone = [KPToDo MR_countOfEntitiesWithPredicate:completedPredicate inContext:[KPCORE context]];
     NSInteger total = numberInProgress+numberOfDone;

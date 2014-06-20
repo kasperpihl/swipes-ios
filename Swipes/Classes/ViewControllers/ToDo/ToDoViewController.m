@@ -410,6 +410,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self updateEvernote];
     [self updateDropbox];
     [self updateSectionHeader];
+    [self.subtasksController fullReload];
     [self layoutWithDuration:0];
     
 }

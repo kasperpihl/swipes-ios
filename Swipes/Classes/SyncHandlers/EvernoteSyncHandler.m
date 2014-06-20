@@ -25,8 +25,15 @@
 @property (nonatomic,copy) SyncBlock block;
 @property NSArray *objectsWithEvernote;
 @property NSDate *lastUpdated;
+@property (nonatomic) NSMutableArray *_updatedTasks;
 @end
 @implementation EvernoteSyncHandler
+
+-(NSMutableArray *)_updatedTasks{
+    if( !__updatedTasks )
+        __updatedTasks = [NSMutableArray array];
+    return __updatedTasks;
+}
 
 -(NSArray*)getObjectsSyncedWithEvernote{
     
@@ -58,7 +65,7 @@
     return evernoteSubtasks;
 }
 
--(BOOL)handleEvernoteToDo:(EvernoteToDo*)evernoteToDo withMatchingSubtask:(KPToDo*)subtask inNoteProcessor:(EvernoteToDoProcessor*)processor{
+-(BOOL)handleEvernoteToDo:(EvernoteToDo*)evernoteToDo withMatchingSubtask:(KPToDo*)subtask inNoteProcessor:(EvernoteToDoProcessor*)processor isNew:(BOOL)isNew{
     BOOL updated = NO;
 #warning handle newly added todos specially?
     // If subtask is deleted from Swipes - mark completed in Evernote
@@ -73,7 +80,7 @@
     // difference in completion
     if ( subtaskIsCompleted != evernoteToDo.checked ){
         
-        
+#warning if self.lastUpdated does not exist - meaning the very first sync with evernote - expected behaviour?
         // If subtask is completed in Swipes and not in Evernote
         if( subtaskIsCompleted){
             // If subtask was completed in Swipes after last sync override evernote
@@ -91,7 +98,7 @@
         else{
             // If subtask is updated later than last sync override Evernote
             // There could be an error margin here, but I don't see a better solution at the moment
-            if ( [self.lastUpdated isEarlierThanDate:subtask.updatedAt] ){
+            if ( !isNew && [self.lastUpdated isEarlierThanDate:subtask.updatedAt] ){
                 NSLog(@"uncompleting evernote");
                 [processor updateToDo:evernoteToDo checked:subtaskIsCompleted];
             }
@@ -114,7 +121,7 @@
     NSMutableArray *subtasksLeftToBeFound = [subtasks mutableCopy];
     NSMutableArray *evernoteToDosLeftToBeFound = [evernoteToDos mutableCopy];
     
-    
+    BOOL updated = NO;
     /* Match and clean all direct matches */
     for ( EvernoteToDo *evernoteToDo in evernoteToDos ){
         
@@ -126,7 +133,8 @@
                 [subtasksLeftToBeFound removeObject:subtask];
                 [evernoteToDosLeftToBeFound removeObject:evernoteToDo];
                 
-                [self handleEvernoteToDo:evernoteToDo withMatchingSubtask:subtask inNoteProcessor:processor];
+                if( [self handleEvernoteToDo:evernoteToDo withMatchingSubtask:subtask inNoteProcessor:processor isNew:NO] )
+                    updated = YES;
                 break;
             }
         }
@@ -151,6 +159,7 @@
                 bestMatch = subtask;
             }
         }
+        BOOL isNew = NO;
         NSLog(@"bestScore:%f",bestScore);
         NSLog(@"best Levenshtein score: %f (%@ to %@)", bestScore, evernoteToDo.title, bestMatch.originIdentifier);
         if( bestScore >= 120 ){
@@ -162,19 +171,27 @@
             matchingSubtask = [parentToDo addSubtask:evernoteToDo.title save:NO];
             matchingSubtask.origin = EVERNOTE_SERVICE;
             matchingSubtask.originIdentifier = evernoteToDo.title;
+            updated = YES;
+            isNew = YES;
         }
         
         [subtasksLeftToBeFound removeObject:matchingSubtask];
         [evernoteToDosLeftToBeFound removeObject:evernoteToDo];
         
-        [self handleEvernoteToDo:evernoteToDo withMatchingSubtask:matchingSubtask inNoteProcessor:processor];
+        BOOL didUpdateSubtask = [self handleEvernoteToDo:evernoteToDo withMatchingSubtask:matchingSubtask inNoteProcessor:processor isNew:isNew];
+        if( didUpdateSubtask )
+            updated = YES;
         
     }
     
     subtasks = [subtasksLeftToBeFound copy];
-    if ( subtasks && subtasks.count > 0 )
+    if ( subtasks && subtasks.count > 0 ){
+        updated = YES;
         [KPToDo deleteToDos:subtasks save:NO];
+    }
 
+    if( updated )
+        [self._updatedTasks addObject:parentToDo.objectId];
     
     return nil;
 }
@@ -217,7 +234,8 @@
                 
             }
             else{
-#warning add some Errorhandling here
+#warning add some Errorhandling here + if user is not authorized!!
+                
                 returnCount++;
             }
             if(returnCount == targetCount){
@@ -227,10 +245,14 @@
                 if([[KPCORE context] hasChanges]){
                     [KPToDo saveToSync];
 #warning send an update event for screen to know it's updating
+                    NSDictionary *updatedEvents = @{@"deleted":@[],@"updated":[self._updatedTasks copy]};
+                    
+
                 }
                 [self setUpdatedAt:date];
 
-                self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
+                self.block(SyncStatusSuccess, @{@"updated": [self._updatedTasks copy]}, nil);
+                [self._updatedTasks removeAllObjects];
             }
             
         }];

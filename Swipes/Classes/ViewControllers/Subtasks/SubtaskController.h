@@ -26,6 +26,7 @@
 @property KPReorderTableView *tableView;
 @property (nonatomic) NSArray *subtasks;
 
+-(void)fullReload;
 -(void)setExpanded:(BOOL)expanded animated:(BOOL)animated;
 -(void)resign;
 @end

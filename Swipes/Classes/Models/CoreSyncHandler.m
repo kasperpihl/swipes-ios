@@ -142,7 +142,7 @@
             [changesToCommit setObject:@[@"all"] forKey:obj.objectId];
         
     }
-
+    NSLog(@"hard syncing");
     [self.context MR_saveOnlySelfAndWait];
     [self commitAttributeChanges:changesToCommit toTemp:NO];
     [self synchronizeForce:YES async:YES];
@@ -329,16 +329,21 @@
     }
     else{
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
-            if( status == SyncStatusStarted )
-                NSLog(@"startedEvernote");
             if (status == SyncStatusSuccess){
+                if( userInfo ){
+                    NSArray *updatedToDos = [userInfo objectForKey:@"updated"];
+                    if( updatedToDos && updatedToDos.count > 0 ){
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:@{ @"updated" : updatedToDos }];
+                        });
+                    }
+                }
                 NSLog(@"successfully ended");
                 self._isSyncing = NO;
                 [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == SyncStatusStarted){
-                    
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Synchronizing Evernote...", @"duration": @(0) } ];
                 }
                 else if( status == SyncStatusError ){
@@ -459,6 +464,7 @@
     /* Performing request */
     NSHTTPURLResponse *response;
     NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,[syncData objectForKey:@"lastUpdate"]);
+    NSLog(@"objects :%@",syncData);
     //NSLog(@"need: %@", [syncData objectForKey:@"hasMoreToSave"]);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
@@ -485,7 +491,7 @@
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     //NSLog(@"resulted err:%@",error);
-    NSLog(@"%@ res:%@ err: %@",result[@"message"],result[@"logs"],error);
+    //NSLog(@"%@ res:%@ err: %@",result[@"message"],result[@"logs"],error);
     if([result objectForKey:@"hardSync"])
         [self hardSync];
     
@@ -505,7 +511,7 @@
         [self finalizeSyncWithUserInfo:result error:error];
         return NO;
     }
-    NSLog(@"objects:%@",result[@"ToDo"]);
+    NSLog(@"objects:%@",result);
     
     /* Handling response - Tags first due to relation */
     NSArray *tags = [result objectForKey:@"Tag"] ? [result objectForKey:@"Tag"] : @[];
@@ -513,6 +519,7 @@
     NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
     lastUpdate = [result objectForKey:@"updateTime"];
     [result objectForKey:@"serverTime"];
+    
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
     NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
     for(NSDictionary *object in allObjects){
@@ -539,6 +546,7 @@
 - (NSDictionary*)prepareUpdatedObjectsToBeSavedOnServerWithLimit:(NSInteger)limit
 {
     if ( self._didHardSync ){
+        NSLog(@"did the hard sync");
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUpdateObjects];
         [[NSUserDefaults standardUserDefaults] synchronize];
         self._didHardSync = NO;
@@ -546,7 +554,6 @@
     NSInteger counter = 0;
     NSMutableDictionary *copyOfNewAttributeChanges = [self copyChangesAndFlushForTemp:NO];
     NSMutableDictionary *objectsToUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:kUpdateObjects];
-    
     if(!objectsToUpdate)
         objectsToUpdate = [NSMutableDictionary dictionary];
     else
