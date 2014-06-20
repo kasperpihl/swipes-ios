@@ -229,9 +229,19 @@
             if( processor ){
                 returnCount++;
                 NSLog(@"processing:%@",processor.toDoItems);
+                
                 NSArray *evernoteToDos = [[processor.toDoItems reverseObjectEnumerator] allObjects];
                 [self findAndHandleMatchesForToDo:todoWithEvernote withEvernoteToDos:evernoteToDos inNoteProcessor:processor];
-                
+                if( processor.needUpdate ){
+                    [processor saveToEvernote:^(BOOL succeeded, NSError *error) {
+                        if (succeeded) {
+                            NSLog(@"succeeded save");
+                        }
+                        else{
+                            NSLog(@"error saving to Evernote");
+                        }
+                    }];
+                }
             }
             else{
 #warning add some Errorhandling here + if user is not authorized!!
@@ -245,7 +255,6 @@
                 if([[KPCORE context] hasChanges]){
                     [KPToDo saveToSync];
 #warning send an update event for screen to know it's updating
-                    NSDictionary *updatedEvents = @{@"deleted":@[],@"updated":[self._updatedTasks copy]};
                     
 
                 }
