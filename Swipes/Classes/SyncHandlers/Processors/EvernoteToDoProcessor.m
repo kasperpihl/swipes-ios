@@ -19,7 +19,9 @@
 @end
 
 @implementation EvernoteToDo
-
+-(void)setChecked:(BOOL)checked{
+    _checked = checked;
+}
 - (instancetype)initWithTitle:(NSString *)title checked:(BOOL)checked position:(NSInteger)position
 {
     self = [super init];
@@ -47,6 +49,7 @@ static NSSet* g_startEndElements;
 @interface EvernoteToDoProcessor () <NSXMLParserDelegate>
 
 @property (nonatomic, strong) EDAMNote* note;
+@property (nonatomic, strong) NSString *updatedContent;
 
 @end
 
@@ -136,13 +139,33 @@ static NSSet* g_startEndElements;
     }
 }
 
+-(void)saveToEvernote:(SuccessfulBlock)block{
+    if( !self.updatedContent )
+        return block ? block(NO,nil) : nil;
+    EDAMNote* update = [[EDAMNote alloc] init];
+    update.guid = _note.guid;
+    update.title = _note.title;
+    update.content = self.updatedContent;
+    [[EvernoteNoteStore noteStore] updateNote:update success:^(EDAMNote *note) {
+        NSLog(@"note update success !!!");
+        if( block )
+            block( YES, nil );
+    } failure:^(NSError *error) {
+        if( block)
+            block( NO,error);
+        NSLog(@"note update failed: %@", [error localizedDescription]);
+    }];
+}
 
 - (BOOL)updateToDo:(EvernoteToDo *)updatedToDo checked:(BOOL)checked
 {
     if ((nil != updatedToDo) && (updatedToDo.checked != checked)) {
         NSLog(@"now we can update our TODO: %@", updatedToDo);
         
-        NSScanner* scanner = [NSScanner scannerWithString:_note.content];
+        if (!self.updatedContent)
+            self.updatedContent = _note.content;
+        
+        NSScanner* scanner = [NSScanner scannerWithString:self.updatedContent];
         for (NSInteger i = 0; i <= updatedToDo.position; i++) {
             if (![scanner scanUpToString:@"<en-todo" intoString:nil]) {
                 return NO;
@@ -152,27 +175,15 @@ static NSSet* g_startEndElements;
         }
         
         NSUInteger startLocation = scanner.scanLocation;
-        if (('>' != [_note.content characterAtIndex:startLocation]) && (![scanner scanUpToString:@">" intoString:nil])) {
+        if (('>' != [self.updatedContent characterAtIndex:startLocation]) && (![scanner scanUpToString:@">" intoString:nil])) {
             return NO;
         }
         NSUInteger endLocation = scanner.scanLocation;
         
         NSRange range = NSMakeRange(startLocation, endLocation - startLocation);
         NSString* replaceString = [NSString stringWithFormat:@" checked=\"%@\"", checked ? @"true" : @"false"];
-        NSString* result = [_note.content stringByReplacingCharactersInRange:range withString:replaceString];
-        
-//        NSLog(@"result: %@", result);
-        
-        EDAMNote* update = [[EDAMNote alloc] init];
-        update.guid = _note.guid;
-        update.title = _note.title;
-        update.content = result;
-        [[EvernoteNoteStore noteStore] updateNote:update success:^(EDAMNote *note) {
-            NSLog(@"note update success !!!");
-        } failure:^(NSError *error) {
-            NSLog(@"note update failed: %@", [error localizedDescription]);
-        }];
-        
+        self.updatedContent = [self.updatedContent stringByReplacingCharactersInRange:range withString:replaceString];
+        self.needUpdate = YES;
         return YES;
     }
     else {
