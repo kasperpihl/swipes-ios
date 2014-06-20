@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Attachment" representedClassName="KPAttachment" syncable="YES">
-        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="service" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="service" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="sync" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="todo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ToDo" inverseName="attachments" inverseEntity="ToDo" syncable="YES"/>
@@ -12,7 +12,7 @@
         <attribute name="objectId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="parseClassName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tempId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
-        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
     </entity>
     <entity name="Tag" representedClassName="KPTag" parentEntity="ParseObject" syncable="YES">
         <attribute name="title" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
@@ -21,12 +21,12 @@
     <entity name="ToDo" representedClassName="KPToDo" parentEntity="ParseObject" syncable="YES">
         <attribute name="alarm" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="completionDate" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
-        <attribute name="deleted" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="deleted" optional="YES" attributeType="Boolean" indexed="YES" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="numberOfRepeated" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
-        <attribute name="origin" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="origin" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="originIdentifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="priority" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="repeatedDate" optional="YES" attributeType="Date" syncable="YES"/>
@@ -42,8 +42,8 @@
     </entity>
     <elements>
         <element name="Attachment" positionX="0" positionY="0" width="128" height="120"/>
-        <element name="ParseObject" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="ParseObject" positionX="0" positionY="0" width="128" height="118"/>
         <element name="Tag" positionX="0" positionY="0" width="128" height="73"/>
-        <element name="ToDo" positionX="0" positionY="0" width="128" height="345"/>
+        <element name="ToDo" positionX="0" positionY="0" width="128" height="343"/>
     </elements>
 </model>
