@@ -30,6 +30,8 @@
       @"repeatCount": @"numberOfRepeated",  
       @"repeatDate": @"repeatedDate",
       @"order": @"order",
+      @"origin": @"origin",
+      @"originIdentifier": @"originIdentifier",
       @"priority":@"priority"
     };
 }
