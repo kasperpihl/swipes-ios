@@ -202,7 +202,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     //NSLog(@"height:%f",);
-    return [ToDoCell heightWithText:toDo.title hasSubtask:(toDo.subtasks.count > 0)]; // CELL_HEIGHT;
+    return [ToDoCell heightWithText:toDo.title hasSubtask:([toDo getSubtasks].count > 0)]; // CELL_HEIGHT;
 }
 
 - (ToDoCell*)readyCell:(ToDoCell*)cell {

@@ -31,7 +31,7 @@
 -(CellType)cellTypeForTodo;
 -(NSMutableAttributedString*)stringForSelectedTags:(NSArray*)selectedTags;
 
-
+-(NSSet*)getSubtasks;
 -(BOOL)isSubtask;
 
 -(NSString*)readableTitleForStatus;

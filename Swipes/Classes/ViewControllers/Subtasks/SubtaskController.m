@@ -49,7 +49,6 @@
 
 -(void)setModel:(KPToDo *)model{
     _model = model;
-        //NSInteger numberOfUncompleted = [model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]].count;
     self.expanded = NO;
     [self loadSubtasks];
     [self reloadAndNotify:NO];
@@ -62,12 +61,11 @@
 }
 
 -(void)loadSubtasks{
-    NSSet *subtasks = self.model.subtasks;
+    NSSet *subtasks = [self.model getSubtasks];
     BOOL hasUncompletedTasks = YES;
     if(!self.expanded){
-        subtasks = [self.model.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
+        subtasks = [subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
         if(!subtasks.count){
-            //subtasks = self.model.subtasks;
             hasUncompletedTasks = NO;
         }
         
@@ -215,7 +213,7 @@
     }
 }
 -(BOOL)shouldStartEditingSubtaskCell:(SubtaskCell *)cell{
-    if(!self.expanded && !cell.addModeForCell && self.model.subtasks.count > 1){
+    if(!self.expanded && !cell.addModeForCell && [self.model getSubtasks].count > 1){
         [self setExpanded:YES animated:YES];
         return NO;
     }

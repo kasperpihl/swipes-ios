@@ -195,7 +195,7 @@
 }
 
 -(void)updateActionSteps{
-    NSSet *filteredSubtasks = [self.toDo.subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
+    NSSet *filteredSubtasks = [[self.toDo getSubtasks] filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
     if( filteredSubtasks && filteredSubtasks.count > 0){
         self.actionStepsButton.hidden = NO;
         self.actionStepsLabel.text = [NSString stringWithFormat:@"%i",filteredSubtasks.count];
@@ -210,7 +210,7 @@
     
     
     CGFloat targetWidth = self.frame.size.width - 2*CELL_LABEL_X;
-    if( self.toDo.subtasks.count == 0 )
+    if( [self.toDo getSubtasks].count == 0 )
         targetWidth += CELL_LABEL_X/1.5;
     CGRectSetWidth(self.titleLabel, targetWidth);
     [self.titleLabel sizeToFit];

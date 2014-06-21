@@ -495,6 +495,9 @@
     
     return [title capitalizedString];
 }
+-(NSSet *)getSubtasks{
+    return [[self subtasks] filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"deleted != 1"]];
+}
 -(BOOL)isSubtask{
     return (self.parent) ? YES : NO;
 }

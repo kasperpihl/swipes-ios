@@ -569,12 +569,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)updateSectionHeader
 {
     [self.sectionHeader setColor:[StyleHandler colorForCellType:self.cellType]];
-    NSInteger numberOfSubtasks = self.model.subtasks.count;
+    NSInteger numberOfSubtasks = [self.model getSubtasks].count;
     self.sectionHeader.progress = (numberOfSubtasks > 0);
     if(numberOfSubtasks > 0){
         CGRectSetHeight(self.sectionHeader, 5);
         NSPredicate *completedPredicate = [NSPredicate predicateWithFormat:@"completionDate != nil"];
-        NSInteger numberOfCompletedSubtasks = [self.model.subtasks filteredSetUsingPredicate:completedPredicate].count;
+        NSInteger numberOfCompletedSubtasks = [[self.model getSubtasks] filteredSetUsingPredicate:completedPredicate].count;
         CGFloat percentage = (CGFloat)numberOfCompletedSubtasks / numberOfSubtasks;
         self.sectionHeader.progressPercentage = percentage;
         
@@ -1099,7 +1099,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 
 -(void)subtaskController:(SubtaskController *)controller changedToSize:(CGSize)size{
-    self.expandButton.hidden = (self.model.subtasks.count <= 1);
+    self.expandButton.hidden = ([self.model getSubtasks].count <= 1);
     [self layoutWithDuration:0.25f];
     //NSLog(@"%f + %f + %f = %f",self.subtasksContainer.frame.size.height, self.subtasksContainer.frame.origin.y, self.cell.frame.origin.y, superFrame.origin.y);
     if(self.kbdHeight){
@@ -1188,7 +1188,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.expandButton.transform = CGAffineTransformMakeRotation(0);
-    self.expandButton.hidden = (self.model.subtasks.count <= 1);
+    self.expandButton.hidden = ([self.model getSubtasks].count <= 1);
     if( self.expandOnShow){
         [self.subtasksController setExpanded:YES animated:YES];
         self.expandOnShow = NO;
