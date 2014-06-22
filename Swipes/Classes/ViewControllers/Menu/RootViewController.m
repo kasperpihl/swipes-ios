@@ -33,7 +33,7 @@
 #import <MessageUI/MessageUI.h>
 #import <Parse/Parse.h>
 
-
+#import "PaymentHandler.h"
 
 
 #import "KPAlert.h"
@@ -192,7 +192,7 @@ static RootViewController *sharedObject;
 {
     [PFUser logOut];
     [[CoreSyncHandler sharedInstance] clearAndDeleteData];
-    
+    [kUserHandler didLogout];
     [kHints reset];
     [self resetRoot];
 
@@ -266,7 +266,22 @@ static RootViewController *sharedObject;
         [self accountAlertWithMessage:nil];
         return;
     }
-
+    
+    [UTILITY popupWithTitle:@"" andMessage:@"" buttonTitles:@[@"Cancel",@"Restore Purchases"] block:^(NSInteger number, NSError *error) {
+        if(number == 1){
+            [[PaymentHandler sharedInstance] restoreWithBlock:^(NSError *error) {
+                if(!error){
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Purchase restored" message:@"Your purchase has been restored. Welcome back!" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+                    [alert show];
+                }
+                else {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"An error occured" message:@"No purchases could be restored. Contact support@swipesapp.com for help." delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+                    [alert show];
+                }
+            }];
+        }
+    }];
+    return;
     UpgradeViewController *viewController = [[UpgradeViewController alloc]init];
     viewController.delegate = self;
     [self addChildViewController:viewController];

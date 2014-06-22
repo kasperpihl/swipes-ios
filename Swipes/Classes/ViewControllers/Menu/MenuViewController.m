@@ -381,19 +381,7 @@
             break;
         }
         case KPMenuButtonUpgrade:{
-            if(!kUserHandler.isLoggedIn){
-                KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:@"Register for Swipes to safely back up your data and get Swipes Plus" block:^(BOOL succeeded, NSError *error) {
-                    [BLURRY dismissAnimated:YES];
-                    if(succeeded){
-                        [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
-                    }
-                    
-                }];
-                BLURRY.blurryTopColor = kSettingsBlurColor;
-                [BLURRY showView:alert inViewController:self];
-                return;
-            }
-            else if(kUserHandler.isPlus){
+            if(kUserHandler.isPlus){
                 KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Manage subscription" message:@"Open App Store to manage your subscription?" block:^(BOOL succeeded, NSError *error) {
                     [BLURRY dismissAnimated:YES];
                     if(succeeded){
@@ -406,7 +394,7 @@
                 return;
             }
             else{
-                [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Settings"}];
+                [ANALYTICS tagEvent:@"Pressed Upgrade" options:@{@"Reference From":@"Settings"}];
                 [ROOT_CONTROLLER upgrade];
             }
             break;

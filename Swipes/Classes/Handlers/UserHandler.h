@@ -17,6 +17,7 @@ typedef NS_ENUM(NSUInteger, UserLevel) {
 @interface UserHandler : NSObject
 +(UserHandler*)sharedInstance;
 -(NSString*)getUserLevelString;
+-(void)didLogout;
 @property (nonatomic) BOOL isPlus;
 @property (nonatomic) BOOL isLoggedIn;
 @end

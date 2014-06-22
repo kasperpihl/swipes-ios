@@ -72,11 +72,18 @@ static UserHandler *sharedObject;
 -(void)didLoginUser{
     [self handleUser:kCurrent];
 }
+-(void)didLogout{
+    self.isPlus = NO;
+    self.userLevel = 0;
+    self.isLoggedIn = NO;
+    self.needRefresh = NO;
+}
 -(NSString*)getUserLevelString{
     return [self stringForUserLevel:self.userLevel];
 }
 -(void)didOpenApp{
-    NSLog(@"refreshing");
+    if(!kCurrent)
+        return;
     [kCurrent refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         NSLog(@"response:%@",object);
         if(!error){
