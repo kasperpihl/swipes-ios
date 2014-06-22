@@ -261,14 +261,31 @@ static RootViewController *sharedObject;
     BLURRY.blurryTopColor = kSettingsBlurColor;
     [BLURRY showView:alert inViewController:self];
 }
+-(void)feedback{
+    if([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
+        mailCont.mailComposeDelegate = self;
+        [mailCont setToRecipients:@[@"support@swipesapp.com"]];
+        [mailCont setSubject:@"Feedback for Swipes"];
+        [mailCont setMessageBody:@"" isHTML:NO];
+        [self presentViewController:mailCont animated:YES completion:nil];
+    }
+    else{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Mail was not setup" message:@"You can send us feedback to support@swipesapp.com. Thanks" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+}
 -(void)upgrade{
     if(!kUserHandler.isLoggedIn){
         [self accountAlertWithMessage:nil];
         return;
     }
     
-    [UTILITY popupWithTitle:@"" andMessage:@"" buttonTitles:@[@"Cancel",@"Restore Purchases"] block:^(NSInteger number, NSError *error) {
-        if(number == 1){
+    [UTILITY popupWithTitle:@"Can't upgrade to Swipes Plus" andMessage:@"We're remaking our Plus version. Please send us your suggestions while waiting." buttonTitles:@[@"Cancel",@"Send suggestions",@"Restore Purchases"] block:^(NSInteger number, NSError *error) {
+        if( number == 1){
+            [ROOT_CONTROLLER feedback];
+        }
+        else if(number == 2){
             [[PaymentHandler sharedInstance] restoreWithBlock:^(NSError *error) {
                 if(!error){
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Purchase restored" message:@"Your purchase has been restored. Welcome back!" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
@@ -282,13 +299,6 @@ static RootViewController *sharedObject;
         }
     }];
     return;
-    UpgradeViewController *viewController = [[UpgradeViewController alloc]init];
-    viewController.delegate = self;
-    [self addChildViewController:viewController];
-    [OVERLAY pushView:viewController.view animated:YES];
-    [viewController viewDidAppear:NO];
-    [ANALYTICS tagEvent:@"Upgrade to Plus" options:nil];
-    [ANALYTICS pushView:@"Upgrade to Plus"];
 }
 
 -(void)walkthrough

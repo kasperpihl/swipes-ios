@@ -366,18 +366,7 @@
             [ROOT_CONTROLLER walkthrough];
             break;
         case KPMenuButtonFeedback:{
-            if([MFMailComposeViewController canSendMail]) {
-                MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
-                mailCont.mailComposeDelegate = self;
-                [mailCont setToRecipients:@[@"support@swipesapp.com"]];
-                [mailCont setSubject:@"Feedback for Swipes"];
-                [mailCont setMessageBody:@"" isHTML:NO];
-                [self presentViewController:mailCont animated:YES completion:nil];
-            }
-            else{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Mail was not setup" message:@"You can send us feedback to support@swipesapp.com. Thanks" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
-                [alert show];
-            }
+            [ROOT_CONTROLLER feedback];
             break;
         }
         case KPMenuButtonUpgrade:{

@@ -33,6 +33,7 @@ typedef enum {
 -(void)logOut;
 -(void)closeApp;
 -(void)openApp;
+-(void)feedback;
 -(void)upgrade;
 -(void)accountAlertWithMessage:(NSString*)message;
 -(void)proWithMessage:(NSString*)message;
