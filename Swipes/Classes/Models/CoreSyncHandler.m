@@ -14,6 +14,8 @@
 #import "Reachability.h"
 #import "UserHandler.h"
 
+#import "RootViewController.h"
+
 #import "EvernoteSyncHandler.h"
 #define kSyncTime 3
 #define kUpdateLimit 200
@@ -349,12 +351,32 @@
                 }
                 else if( status == SyncStatusError ){
                     self._isSyncing = NO;
+                    EvernoteSession *session = [EvernoteSession sharedSession];
+                    if (!session.isAuthenticated || [EvernoteSession isTokenExpiredWithError:error]) {
+                        // trigger auth again
+                        NSLog(@"expired token");
+                        [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+                    }
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
                 }
             });
         }];
         
     }
+}
+
+- (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
+{
+    EvernoteSession *session = [EvernoteSession sharedSession];
+    [session authenticateWithViewController:ROOT_CONTROLLER completionHandler:^(NSError *error) {
+        if (error || !session.isAuthenticated) {
+            // TODO show message to the user
+            NSLog(@"Session authentication failed: %@", [error localizedDescription]);
+        }
+        else {
+            [self performSelectorOnMainThread:selector withObject:object waitUntilDone:NO];
+        }
+    }];
 }
 
 /*
@@ -625,6 +647,7 @@
         class = NSClassFromString([CoreSyncHandler classNameFromParseName:[object objectForKey:@"parseClassName"]]);
     else
         class = [cdObject class];
+    
     
     // If object has parent - send update notification
     if([object objectForKey:@"parentLocalId"]){

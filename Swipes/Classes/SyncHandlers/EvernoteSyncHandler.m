@@ -14,6 +14,7 @@
 #import "NSDate-Utilities.h"
 #import "NSString+Levenshtein.h"
 
+
 #import "CoreSyncHandler.h"
 
 #import "EvernoteSyncHandler.h"
@@ -212,17 +213,19 @@
         return self.block(SyncStatusSuccess, nil, nil);
     }
     
+    
+    
     // Tell caller that Evernote will be syncing
     self.block(SyncStatusStarted, nil, nil);
     
     NSDate *date = [NSDate date];
     __block NSInteger returnCount = 0;
     __block NSInteger targetCount = self.objectsWithEvernote.count;
+    __block NSError *runningError;
     for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
         
         KPAttachment *evernoteAttachment = [todoWithEvernote firstAttachmentForServiceType:EVERNOTE_SERVICE];
         NSString *guid = evernoteAttachment.identifier;
-        
         [EvernoteToDoProcessor processorWithGuid:guid block:^(EvernoteToDoProcessor *processor, NSError *error) {
             
             NSLog(@"guid:%@",guid);
@@ -244,17 +247,21 @@
                 }
             }
             else{
-#warning add some Errorhandling here + if user is not authorized!!
-                
+                if(!runningError){
+                    runningError = error;
+                }
                 returnCount++;
             }
             if(returnCount == targetCount){
                 NSLog(@"hit the target");
-                
+                if(runningError){
+                    self.block(SyncStatusError, nil, runningError);
+                    
+                    return;
+                }
                 // If changes to Core Data - make sure it gets synced to our server.
                 if([[KPCORE context] hasChanges]){
                     [KPToDo saveToSync];
-
                 }
                 [self setUpdatedAt:date];
 
@@ -267,4 +274,6 @@
     }
     
 }
+
+
 @end

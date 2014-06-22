@@ -91,17 +91,17 @@
             [objectToSave setObject:[self getTempId] forKey:@"tempId"];
         }
         
-        if(self.deleted){
+        /*if(self.deleted){
             [objectToSave setObject:@(YES) forKey:@"deleted"];
             shouldUpdate = YES;
-        }
+        }*/
         /*
          Loading changed attributes from the sync handler
          and calls the subclass (KPToDo/KPTag) to set them proberly on the object
-        */
-        else{
-            shouldUpdate = [self setAttributesForSavingObject:&objectToSave changedAttributes:attributes];
-        }
+        
+        else{*/
+        shouldUpdate = [self setAttributesForSavingObject:&objectToSave changedAttributes:attributes];
+        //}
         
     }];
     if(shouldUpdate) return objectToSave;
