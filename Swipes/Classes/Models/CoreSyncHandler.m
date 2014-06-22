@@ -59,6 +59,7 @@
 @property NSTimer *_syncTimer;
 @property NSDate *lastTry;
 @property NSInteger tryCounter;
+@property BOOL isAuthingEvernote;
 
 @property (nonatomic) EvernoteSyncHandler *evernoteSyncHandler;
 
@@ -367,8 +368,12 @@
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
+    if(self.isAuthingEvernote)
+        return;
+    self.isAuthingEvernote = YES;
     EvernoteSession *session = [EvernoteSession sharedSession];
     [session authenticateWithViewController:ROOT_CONTROLLER completionHandler:^(NSError *error) {
+        self.isAuthingEvernote = NO;
         if (error || !session.isAuthenticated) {
             // TODO show message to the user
             NSLog(@"Session authentication failed: %@", [error localizedDescription]);
