@@ -11,7 +11,7 @@
 @synthesize savingObject = _savingObject;
 #pragma mark - Forward declarations
 -(BOOL)setAttributesForSavingObject:(NSMutableDictionary**)object changedAttributes:(NSArray *)changedAttributes{ return NO; }
--(BOOL)shouldDelete{ return YES; }
+-(BOOL)shouldDeleteForce:(BOOL)force{ return YES; }
 
 -(NSString *)getParseClassName{
     NSString *className = NSStringFromClass ([self class]);
@@ -71,7 +71,7 @@
     KPParseObject *coreDataObject = [self checkForObject:object context:context];
     BOOL successful = YES;
     if(coreDataObject){
-        BOOL shouldDelete = [coreDataObject shouldDelete];
+        BOOL shouldDelete = [coreDataObject shouldDeleteForce:NO];
         if( shouldDelete )
             successful = [coreDataObject MR_deleteInContext:context];
     }
@@ -91,12 +91,17 @@
             [objectToSave setObject:[self getTempId] forKey:@"tempId"];
         }
         
+        if(self.deleted){
+            [objectToSave setObject:@(YES) forKey:@"deleted"];
+            shouldUpdate = YES;
+        }
         /*
          Loading changed attributes from the sync handler
          and calls the subclass (KPToDo/KPTag) to set them proberly on the object
         */
-        shouldUpdate = [self setAttributesForSavingObject:&objectToSave changedAttributes:attributes];
-        
+        else{
+            shouldUpdate = [self setAttributesForSavingObject:&objectToSave changedAttributes:attributes];
+        }
         
     }];
     if(shouldUpdate) return objectToSave;

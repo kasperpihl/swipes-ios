@@ -124,12 +124,12 @@
     return [movedToDos copy];
 }
 
-+(void)deleteToDos:(NSArray*)toDos save:(BOOL)save{
++(void)deleteToDos:(NSArray*)toDos save:(BOOL)save force:(BOOL)force{
     BOOL shouldUpdateNotifications = NO;
     for(KPToDo *toDo in toDos){
         if(!toDo.completionDate && !toDo.parent)
             shouldUpdateNotifications = YES;
-        [toDo deleteToDoSave:NO];
+        [toDo deleteToDoSave:NO force:force];
     }
     if (save)
              [KPToDo saveToSync];
@@ -496,7 +496,13 @@
     return [title capitalizedString];
 }
 -(NSSet *)getSubtasks{
-    return [[self subtasks] filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"deleted != 1"]];
+    NSArray *allSubtasks = [[self subtasks] allObjects];
+    NSMutableSet *notDeletedSubtasks = [NSMutableSet set];
+    for( KPToDo *subtask in allSubtasks ){
+        if( ![subtask.deleted boolValue] )
+            [notDeletedSubtasks addObject:subtask];
+    }
+    return [notDeletedSubtasks copy];
 }
 -(BOOL)isSubtask{
     return (self.parent) ? YES : NO;
@@ -621,17 +627,22 @@
     return attributedText;
     
 }
--(void)deleteToDoSave:(BOOL)save{
-    BOOL shouldDelete = [self shouldDelete];
+-(void)deleteToDoSave:(BOOL)save force:(BOOL)force{
+    BOOL shouldDelete = [self shouldDeleteForce:force];
     if( shouldDelete ){
         [self MR_deleteEntity];
     }
     if(save)
         [KPToDo saveToSync];
 }
--(BOOL)shouldDelete{
+-(BOOL)shouldDeleteForce:(BOOL)force{
     if(self.subtasks.count > 0){
-        [KPToDo deleteToDos:[self.subtasks allObjects] save:NO];
+        [KPToDo deleteToDos:[self.subtasks allObjects] save:NO force:YES];
+    }
+    else if( self.parent && !force && [self.origin isEqualToString:EVERNOTE_SERVICE]){
+        self.deleted = @(YES);
+        NSLog(@"deleted subtask from Evernote");
+        return NO;
     }
     return YES;
 }
@@ -734,7 +745,6 @@
 #pragma mark - Attachments
 - (void)updateAttachmentFromObjects:(NSArray*)attachments{
     
-   
 }
 - (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync
 {
@@ -775,7 +785,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, priority: %@", self.title, self.order, self.priority];
+    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, priority: %@ deleted: %@", self.title, self.order, self.priority, self.deleted];
 }
 
 @end

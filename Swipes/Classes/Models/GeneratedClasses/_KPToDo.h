@@ -7,7 +7,6 @@
 extern const struct KPToDoAttributes {
 	__unsafe_unretained NSString *alarm;
 	__unsafe_unretained NSString *completionDate;
-	__unsafe_unretained NSString *deleted;
 	__unsafe_unretained NSString *location;
 	__unsafe_unretained NSString *notes;
 	__unsafe_unretained NSString *numberOfRepeated;
@@ -54,7 +53,6 @@ extern const struct KPToDoFetchedProperties {
 
 
 
-
 @interface KPToDoID : NSManagedObjectID {}
 @end
 
@@ -83,20 +81,6 @@ extern const struct KPToDoFetchedProperties {
 
 
 //- (BOOL)validateCompletionDate:(id*)value_ error:(NSError**)error_;
-
-
-
-
-
-@property (nonatomic, strong) NSNumber* deleted;
-
-
-
-@property BOOL deletedValue;
-- (BOOL)deletedValue;
-- (void)setDeletedValue:(BOOL)value_;
-
-//- (BOOL)validateDeleted:(id*)value_ error:(NSError**)error_;
 
 
 
@@ -309,15 +293,6 @@ extern const struct KPToDoFetchedProperties {
 
 - (NSDate*)primitiveCompletionDate;
 - (void)setPrimitiveCompletionDate:(NSDate*)value;
-
-
-
-
-- (NSNumber*)primitiveDeleted;
-- (void)setPrimitiveDeleted:(NSNumber*)value;
-
-- (BOOL)primitiveDeletedValue;
-- (void)setPrimitiveDeletedValue:(BOOL)value_;
 
 
 

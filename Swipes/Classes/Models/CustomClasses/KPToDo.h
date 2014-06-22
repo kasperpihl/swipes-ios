@@ -9,7 +9,7 @@
 /* Complete ToDo's - The array contains the items that changed state */
 +(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save;
 /* Delete ToDo's */
-+(void)deleteToDos:(NSArray*)toDos save:(BOOL)save;
++(void)deleteToDos:(NSArray*)toDos save:(BOOL)save force:(BOOL)force;
 /* Update Tags for ToDo's */
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDosArray remove:(BOOL)remove save:(BOOL)save;
 /* Start watching for Location */

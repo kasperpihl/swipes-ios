@@ -46,7 +46,7 @@
             NSDate *startDate = [[NSDate date] dateAtStartOfDay];
             NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@ && parent = nil)",startDate];
             NSArray *oldCompletedTasks = [KPToDo MR_findAllWithPredicate:remainingPred];
-            [KPToDo deleteToDos:oldCompletedTasks save:YES];
+            [KPToDo deleteToDos:oldCompletedTasks save:YES force:NO];
             [self update];
         }
     }];

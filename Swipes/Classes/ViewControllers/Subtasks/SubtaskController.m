@@ -62,6 +62,7 @@
 
 -(void)loadSubtasks{
     NSSet *subtasks = [self.model getSubtasks];
+    NSLog(@"subtask count: %i",subtasks.count);
     BOOL hasUncompletedTasks = YES;
     if(!self.expanded){
         subtasks = [subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
@@ -185,7 +186,6 @@
     
     NSString *editedText = [subtask stringByTrimmingCharactersInSet:
                             [NSCharacterSet newlineCharacterSet]];
-    NSLog(@"edited subtask: %@",subtask);
     if ( editedText.length > 0 ){
         [cell.model setTitle:subtask];
         [KPToDo saveToSync];
@@ -263,7 +263,7 @@
                 }
             }
             else{
-                [KPToDo deleteToDos:@[subtask] save:YES];
+                [KPToDo deleteToDos:@[subtask] save:YES force:NO];
                 NSMutableArray *mutableSubtasks = [self.subtasks mutableCopy];
                 [mutableSubtasks removeObjectAtIndex:indexPath.row];
                 self.subtasks = [mutableSubtasks copy];

@@ -6,7 +6,6 @@
 const struct KPToDoAttributes KPToDoAttributes = {
 	.alarm = @"alarm",
 	.completionDate = @"completionDate",
-	.deleted = @"deleted",
 	.location = @"location",
 	.notes = @"notes",
 	.numberOfRepeated = @"numberOfRepeated",
@@ -58,11 +57,6 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 	
-	if ([key isEqualToString:@"deletedValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"deleted"];
-		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
-		return keyPaths;
-	}
 	if ([key isEqualToString:@"numberOfRepeatedValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"numberOfRepeated"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -99,32 +93,6 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 @dynamic completionDate;
 
-
-
-
-
-
-@dynamic deleted;
-
-
-
-- (BOOL)deletedValue {
-	NSNumber *result = [self deleted];
-	return [result boolValue];
-}
-
-- (void)setDeletedValue:(BOOL)value_ {
-	[self setDeleted:[NSNumber numberWithBool:value_]];
-}
-
-- (BOOL)primitiveDeletedValue {
-	NSNumber *result = [self primitiveDeleted];
-	return [result boolValue];
-}
-
-- (void)setPrimitiveDeletedValue:(BOOL)value_ {
-	[self setPrimitiveDeleted:[NSNumber numberWithBool:value_]];
-}
 
 
 

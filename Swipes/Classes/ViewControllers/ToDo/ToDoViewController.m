@@ -667,7 +667,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if(item == 2){
         [self.segmentedViewController deleteNumberOfItems:1 inView:self completion:^(BOOL succeeded, NSError *error) {
             if(succeeded){
-                [KPToDo deleteToDos:@[self.model] save:YES];
+                [KPToDo deleteToDos:@[self.model] save:YES force:NO];
                 [self pressedBack:nil];
             }
         }];

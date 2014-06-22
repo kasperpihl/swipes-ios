@@ -9,6 +9,7 @@
     </entity>
     <entity name="ParseObject" representedClassName="KPParseObject" isAbstract="YES" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="deleted" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="parseClassName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tempId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
@@ -21,7 +22,6 @@
     <entity name="ToDo" representedClassName="KPToDo" parentEntity="ParseObject" syncable="YES">
         <attribute name="alarm" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="completionDate" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
-        <attribute name="deleted" optional="YES" attributeType="Boolean" indexed="YES" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="numberOfRepeated" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -42,8 +42,8 @@
     </entity>
     <elements>
         <element name="Attachment" positionX="0" positionY="0" width="128" height="120"/>
-        <element name="ParseObject" positionX="0" positionY="0" width="128" height="118"/>
+        <element name="ParseObject" positionX="0" positionY="0" width="128" height="133"/>
         <element name="Tag" positionX="0" positionY="0" width="128" height="73"/>
-        <element name="ToDo" positionX="0" positionY="0" width="128" height="343"/>
+        <element name="ToDo" positionX="0" positionY="0" width="128" height="330"/>
     </elements>
 </model>

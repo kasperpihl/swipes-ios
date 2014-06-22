@@ -5,7 +5,7 @@
 +(KPParseObject *)getCDObjectFromObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
 +(BOOL)deleteObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
 -(void)moveObjectIdToTemp;
--(BOOL)shouldDelete;
+-(BOOL)shouldDeleteForce:(BOOL)force;
 /* 
  update called on sync - overwritten in subclass
  return Array with affected changed attributes that needs sync after update

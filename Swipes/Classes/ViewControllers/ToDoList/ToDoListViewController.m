@@ -438,7 +438,7 @@
         [toDos addObject:[self.itemHandler itemForIndexPath:indexPath]];
         [indexSet addIndex:indexPath.row];
     }
-    [KPToDo deleteToDos:toDos save:YES];
+    [KPToDo deleteToDos:toDos save:YES force:NO];
     [self removeItems:[self selectedItems]];
 }
 

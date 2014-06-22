@@ -67,11 +67,11 @@
 
 -(BOOL)handleEvernoteToDo:(EvernoteToDo*)evernoteToDo withMatchingSubtask:(KPToDo*)subtask inNoteProcessor:(EvernoteToDoProcessor*)processor isNew:(BOOL)isNew{
     BOOL updated = NO;
-#warning handle newly added todos specially?
     // If subtask is deleted from Swipes - mark completed in Evernote
     if ( [subtask.deleted boolValue] && !evernoteToDo.checked ){
         NSLog(@"completing evernote - subtask was deleted");
         [processor updateToDo:evernoteToDo checked:YES];
+        return NO;
     }
     
     BOOL subtaskIsCompleted = ( subtask.completionDate ? YES : NO);
@@ -79,7 +79,6 @@
     // difference in completion
     if ( subtaskIsCompleted != evernoteToDo.checked ){
         
-#warning if self.lastUpdated does not exist - meaning the very first sync with evernote - expected behaviour?
         // If subtask is completed in Swipes and not in Evernote
         if( subtaskIsCompleted){
             // If subtask was completed in Swipes after last sync override evernote
@@ -188,7 +187,7 @@
     subtasks = [subtasksLeftToBeFound copy];
     if ( subtasks && subtasks.count > 0 ){
         updated = YES;
-        [KPToDo deleteToDos:subtasks save:NO];
+        [KPToDo deleteToDos:subtasks save:NO force:NO];
     }
 
     if( updated )
@@ -255,8 +254,6 @@
                 // If changes to Core Data - make sure it gets synced to our server.
                 if([[KPCORE context] hasChanges]){
                     [KPToDo saveToSync];
-#warning send an update event for screen to know it's updating
-                    
 
                 }
                 [self setUpdatedAt:date];
