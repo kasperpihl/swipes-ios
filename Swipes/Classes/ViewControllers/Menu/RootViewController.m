@@ -192,6 +192,7 @@ static RootViewController *sharedObject;
 {
     [PFUser logOut];
     [[CoreSyncHandler sharedInstance] clearAndDeleteData];
+    
     [kHints reset];
     [self resetRoot];
 

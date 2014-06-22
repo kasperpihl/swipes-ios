@@ -811,6 +811,8 @@
     
     self._updatedObjectsForSyncNotification = nil;
     self._deletedObjectsForSyncNotification = nil;
+    if([[EvernoteSession sharedSession] isAuthenticated])
+        [[EvernoteSession sharedSession] logout];
     
 }
 
