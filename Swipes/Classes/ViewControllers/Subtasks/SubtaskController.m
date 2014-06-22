@@ -118,6 +118,7 @@
         [UIView beginAnimations:@"expand" context:nil];
         [UIView setAnimationDuration:0.25f];
     }
+    
     CGRectSetHeight(self.tableView,contentHeight + self.tableView.tableFooterView.frame.size.height);
     if(notify && [self.delegate respondsToSelector:@selector(subtaskController:changedToSize:)])
         [self.delegate subtaskController:self changedToSize:CGSizeMake(self.tableView.frame.size.width, contentHeight + self.tableView.tableFooterView.frame.size.height)];

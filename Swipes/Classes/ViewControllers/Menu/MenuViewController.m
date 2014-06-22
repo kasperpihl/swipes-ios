@@ -149,6 +149,8 @@
     
     for (NSInteger i = 1; i <= numberOfButtons; i++) {
         KPMenuButtons button = i;
+        if( (button == KPMenuButtonLocation || button == KPMenuButtonUpgrade) && ![kUserHandler isPlus] )
+            continue;
         actualButton = [self buttonForMenuButton:button];
         if (button == KPMenuButtonScheme)
             self.schemeButton = (MenuButton*)actualButton;
@@ -207,8 +209,7 @@
     if (lastSync) {
         timeString = [UtilityClass readableTime:lastSync showTime:YES];
     }
-    NSString *syncOrBackup = kUserHandler.isPlus ? @"sync" : @"backup";
-    self.syncLabel.text = [NSString stringWithFormat:@"Last %@: %@",syncOrBackup,timeString];
+    self.syncLabel.text = [NSString stringWithFormat:@"Last sync: %@",timeString];
 }
 
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
@@ -442,30 +443,14 @@
             break;
         }
         case KPMenuButtonSync:{
-            if(!kUserHandler.isPlus){
-                [ANALYTICS pushView:@"Sync plus popup"];
-                [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Sync in Settings"}];
-                PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Synchronization is a Swipes Plus feature. Keep your tasks in sync with an app for web and iPad." block:^(BOOL succeeded, NSError *error) {
-                    [ANALYTICS popView];
-                    [BLURRY dismissAnimated:!succeeded];
-                    if(succeeded){
-                        [ROOT_CONTROLLER upgrade];
-                    }
-                }];
-                alert.shouldRemove = NO;
-                BLURRY.blurryTopColor = kSettingsBlurColor;
-                [BLURRY showView:alert inViewController:ROOT_CONTROLLER];
-            }
-            else{
-                CABasicAnimation *rotate =
-                [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
-                rotate.byValue = @(M_PI*6); // Change to - angle for counter clockwise rotation
-                rotate.duration = 3.0;
-                
-                [sender.iconLabel.layer addAnimation:rotate
-                                        forKey:@"myRotationAnimation"];
-                [KPCORE synchronizeForce:YES async:YES];
-            }
+            CABasicAnimation *rotate =
+            [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+            rotate.byValue = @(M_PI*2); // Change to - angle for counter clockwise rotation
+            rotate.duration = 0.5;
+            
+            [sender.iconLabel.layer addAnimation:rotate
+                                          forKey:@"myRotationAnimation"];
+            [KPCORE synchronizeForce:YES async:YES];
             break;
         }
         case KPMenuButtonScheme:{

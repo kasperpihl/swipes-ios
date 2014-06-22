@@ -758,7 +758,8 @@ typedef enum {
         UIButton *specificTimeButton = [self buttonForScheduleButton:KPScheduleButtonSpecificTime title:@"Pick A Date"];
         [contentView addSubview:specificTimeButton];
         UIButton *locationButton = [self buttonForScheduleButton:KPScheduleButtonLocation title:@"At Location"];
-        [contentView addSubview:locationButton];
+        if( [kUserHandler isPlus] )
+            [contentView addSubview:locationButton];
         
         UIButton *unspecifiedButton = [self buttonForScheduleButton:KPScheduleButtonUnscheduled title:@"Unspecified"];
         [contentView addSubview:unspecifiedButton];
