@@ -149,8 +149,6 @@
     
     for (NSInteger i = 1; i <= numberOfButtons; i++) {
         KPMenuButtons button = i;
-        if( (button == KPMenuButtonLocation || button == KPMenuButtonUpgrade) && ![kUserHandler isPlus] )
-            continue;
         actualButton = [self buttonForMenuButton:button];
         if (button == KPMenuButtonScheme)
             self.schemeButton = (MenuButton*)actualButton;
@@ -166,7 +164,7 @@
     self.syncLabel.textColor = tcolor(TextColor);
     [self.gridView addSubview:self.syncLabel];
     [self updateSchemeButton];
-
+    [self changedIsPlus];
 
 }
 
@@ -200,6 +198,7 @@
     notify(@"changed isPlus", changedIsPlus);
     notify(@"updated sync",updateSyncLabel);
     notify(@"changed theme", changedTheme);
+    
 }
 
 -(void)updateSyncLabel
@@ -471,6 +470,11 @@
 
 -(void)changedIsPlus{
     UIButton *upgradeButton = (UIButton*)[self.gridView viewWithTag:[self tagForButton:KPMenuButtonUpgrade]];
+    UIButton *locationButton = (UIButton *)[self.gridView viewWithTag:[self tagForButton:KPMenuButtonLocation]];
+    if(locationButton){
+        locationButton.hidden = !kUserHandler.isPlus;
+    }
+    
     if(upgradeButton){
         [upgradeButton setTitle:[self titleForMenuButton:KPMenuButtonUpgrade] forState:UIControlStateNormal];
     }
