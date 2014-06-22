@@ -34,8 +34,9 @@ typedef enum {
 -(void)closeApp;
 -(void)openApp;
 -(void)upgrade;
--(void)accountAlert;
+-(void)accountAlertWithMessage:(NSString*)message;
 -(void)proWithMessage:(NSString*)message;
+
 -(void)shareTasks:(NSArray*)tasks;
 -(void)tryoutapp;
 @end

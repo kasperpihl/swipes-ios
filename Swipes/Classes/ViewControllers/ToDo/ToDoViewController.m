@@ -44,6 +44,7 @@
 #import "KPRepeatPicker.h"
 #import "HintHandler.h"
 //#import "UIButton+PassTouch.h"
+#import "UserHandler.h"
 #import "RootViewController.h"
 
 #import "KPTimePicker.h"
@@ -754,6 +755,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 -(void)pressedEvernote:(UIView*)sender
 {
+    if(!kUserHandler.isLoggedIn){
+        [ROOT_CONTROLLER accountAlertWithMessage:@"Register an account to backup your data and keep your Evernotes in sync with Swipes"];
+        return;
+    }
     voidBlock setNewEvernote = ^{
         self.activeEditMode = KPEditModeEvernote;
         EvernoteView *evernoteView = [[EvernoteView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];

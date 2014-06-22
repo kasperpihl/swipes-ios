@@ -170,9 +170,11 @@
             viewController = self.menuViewController;
             break;
     }
+    self.viewControllers = @[self.drawerViewController];
     self.currentMenu = menu;
     if(self.drawerViewController.openSide == MMDrawerSideLeft)
         [self.drawerViewController closeDrawerAnimated:YES completion:nil];
+    
     //CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
     //CGRectSetHeight(self.drawerViewController.view,viewController.view.frame.size.height-100);
     [self.drawerViewController setCenterViewController:viewController];
@@ -245,8 +247,10 @@ static RootViewController *sharedObject;
     }
 }
 
--(void)accountAlert{
-    KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:@"Register for Swipes to safely back up your data and get Swipes Plus" block:^(BOOL succeeded, NSError *error) {
+-(void)accountAlertWithMessage:(NSString *)message{
+    if( !message )
+        message = @"Register for Swipes to safely back up your data and get Swipes Plus";
+    KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:message block:^(BOOL succeeded, NSError *error) {
         [BLURRY dismissAnimated:YES];
         if(succeeded){
             [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
@@ -258,7 +262,7 @@ static RootViewController *sharedObject;
 }
 -(void)upgrade{
     if(!kUserHandler.isLoggedIn){
-        [self accountAlert];
+        [self accountAlertWithMessage:nil];
         return;
     }
 

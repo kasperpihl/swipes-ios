@@ -231,25 +231,8 @@ typedef enum {
     KPScheduleButtons thisButton = [self buttonForTag:sender.tag];
     if(thisButton == KPScheduleButtonSpecificTime) [self pressedSpecific:self];
     else if(thisButton == KPScheduleButtonLocation) {
-        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
         self.helpLabel.hidden = YES;
-        if(!kUserHandler.isPlus){
-            [ANALYTICS pushView:@"Location plus popup"];
-            self.contentView.hidden = YES;
-            [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location"}];
-            [PlusAlertView alertInView:window message:@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." block:^(BOOL succeeded, NSError *error) {
-                [ANALYTICS popView];
-                self.helpLabel.hidden = NO;
-                self.contentView.hidden = NO;
-                if(succeeded){
-                    [ROOT_CONTROLLER upgrade];
-                }
-            }];
-        }
-        else{
-            [self pressedLocation:self];
-            return;
-        }
+        [self pressedLocation:self];
     }
     else if(thisButton != KPScheduleButtonCancel){
         NSDate *date = [self dateForButton:thisButton];
