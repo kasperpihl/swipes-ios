@@ -94,7 +94,7 @@ static NSSet* g_startEndElements;
             block( YES , nil );
         
     } failure:^(NSError *error) {
-        NSLog(@"Failed to get note : %@",error);
+        //NSLog(@"Failed to get note : %@",error);
         if( block )
             block( NO , error );
     }];
@@ -147,20 +147,20 @@ static NSSet* g_startEndElements;
     update.title = _note.title;
     update.content = self.updatedContent;
     [[EvernoteNoteStore noteStore] updateNote:update success:^(EDAMNote *note) {
-        NSLog(@"note update success !!!");
+        //NSLog(@"note update success !!!");
         if( block )
             block( YES, nil );
     } failure:^(NSError *error) {
         if( block)
             block( NO,error);
-        NSLog(@"note update failed: %@", [error localizedDescription]);
+        //NSLog(@"note update failed: %@", [error localizedDescription]);
     }];
 }
 
 - (BOOL)updateToDo:(EvernoteToDo *)updatedToDo checked:(BOOL)checked
 {
     if ((nil != updatedToDo) && (updatedToDo.checked != checked)) {
-        NSLog(@"now we can update our TODO: %@", updatedToDo);
+        //NSLog(@"now we can update our TODO: %@", updatedToDo);
         
         if (!self.updatedContent)
             self.updatedContent = _note.content;

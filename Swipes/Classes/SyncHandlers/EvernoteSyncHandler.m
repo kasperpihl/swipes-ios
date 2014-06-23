@@ -228,20 +228,20 @@
         NSString *guid = evernoteAttachment.identifier;
         [EvernoteToDoProcessor processorWithGuid:guid block:^(EvernoteToDoProcessor *processor, NSError *error) {
             
-            NSLog(@"guid:%@",guid);
+            //NSLog(@"guid:%@",guid);
             if( processor ){
                 returnCount++;
-                NSLog(@"processing:%@",processor.toDoItems);
+                //NSLog(@"processing:%@",processor.toDoItems);
                 
                 NSArray *evernoteToDos = [[processor.toDoItems reverseObjectEnumerator] allObjects];
                 [self findAndHandleMatchesForToDo:todoWithEvernote withEvernoteToDos:evernoteToDos inNoteProcessor:processor];
                 if( processor.needUpdate ){
                     [processor saveToEvernote:^(BOOL succeeded, NSError *error) {
                         if (succeeded) {
-                            NSLog(@"succeeded save");
+                            //NSLog(@"succeeded save");
                         }
                         else{
-                            NSLog(@"error saving to Evernote");
+                            //NSLog(@"error saving to Evernote");
                         }
                     }];
                 }
@@ -253,7 +253,7 @@
                 returnCount++;
             }
             if(returnCount == targetCount){
-                NSLog(@"hit the target");
+                //NSLog(@"hit the target");
                 if(runningError){
                     self.block(SyncStatusError, nil, runningError);
                     

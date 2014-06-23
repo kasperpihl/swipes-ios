@@ -62,7 +62,6 @@
 
 -(void)loadSubtasks{
     NSSet *subtasks = [self.model getSubtasks];
-    NSLog(@"subtask count: %i",subtasks.count);
     BOOL hasUncompletedTasks = YES;
     if(!self.expanded){
         subtasks = [subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];

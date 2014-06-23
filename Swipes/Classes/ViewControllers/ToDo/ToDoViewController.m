@@ -219,14 +219,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 #pragma mark Notification
 - (void)updateFromSync:(NSNotification *)notification
 {
-    NSLog(@"update event %@",notification.userInfo);
     NSDictionary *changeEvent = [notification userInfo];
     NSSet *updatedObjects = [changeEvent objectForKey:@"updated"];
     NSSet *deletedObjects = [changeEvent objectForKey:@"deleted"];
     if([deletedObjects containsObject:self.objectId]){
         [self pressedBack:nil];
     }else if([updatedObjects containsObject:self.model.objectId]){
-        NSLog(@"included todo");
         [self update];
     }
 }
@@ -290,7 +288,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                 [self update];
             }];
             popup.numberOfItems = 1;
-            BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
+            BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.5);
             BLURRY.dismissAction = ^{
                 [cell bounceToOrigin];
             };
@@ -725,7 +723,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self update];
     }];
     popup.numberOfItems = 1;
-    BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
+    BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.5);
     [BLURRY showView:popup inViewController:self];
     /*if([self.delegate respondsToSelector:@selector(scheduleToDoViewController:)]) [self.delegate scheduleToDoViewController:self];*/
 }

@@ -110,6 +110,8 @@
     }];
     [self readyCell:cell];
     [self tableView:self.tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
+    KPToDo *model = [self.itemHandler itemForIndexPath:indexPath];
+    CGRectSetHeight(cell, [ToDoCell heightWithText:model.title hasSubtask:([model getSubtasks].count > 0)]*2);
 	return cell;
 }
 

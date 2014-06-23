@@ -33,7 +33,7 @@
 
 
 #define kSpaceBetweenLabels 2
-#define kOuterSpaceBetweenTasks 12
+#define kOuterSpaceBetweenTasks valForIpad(18, 12)
 
 //#define TITLE_LABEL_HEIGHT sizeWithFont(@"Tjgq",TITLE_LABEL_FONT).height
 #define TAGS_LABEL_HEIGHT sizeWithFont(@"Tg",TAGS_LABEL_FONT).height
@@ -231,7 +231,6 @@
 }
 
 - (void)changeToDo:(KPToDo *)toDo withSelectedTags:(NSArray*)selectedTags {
-    
     self.toDo = toDo;
     self.dotView.priority = (toDo.priorityValue == 1);
     

@@ -29,7 +29,7 @@
 #define kDeleteObjectsKey @"deleteObjects"
 
 #ifdef DEBUG
-#define DUMPDB [self dumpLocalDb];
+#define DUMPDB //[self dumpLocalDb];
 #else
 #define DUMPDB
 #endif
@@ -145,7 +145,6 @@
             [changesToCommit setObject:@[@"all"] forKey:obj.objectId];
         
     }
-    NSLog(@"hard syncing");
     [self.context MR_saveOnlySelfAndWait];
     [self commitAttributeChanges:changesToCommit toTemp:NO];
     [self synchronizeForce:YES async:YES];
@@ -314,7 +313,7 @@
 
 -(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error{
     if ( error ){
-        NSLog(@"error:%@",error);
+        //NSLog(@"error:%@",error);
         self._isSyncing = NO;
         [self sendStatus:SyncStatusError userInfo:coreUserInfo error:error];
         NSDate *now = [NSDate date];
@@ -337,12 +336,12 @@
                     NSArray *updatedToDos = [userInfo objectForKey:@"updated"];
                     if( updatedToDos && updatedToDos.count > 0 ){
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            NSLog(@"shooting notification from Evernote");
+                            //NSLog(@"shooting notification from Evernote");
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:@{ @"updated" : updatedToDos }];
                         });
                     }
                 }
-                NSLog(@"successfully ended");
+                //NSLog(@"successfully ended");
                 self._isSyncing = NO;
                 [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
             }
@@ -354,8 +353,6 @@
                     self._isSyncing = NO;
                     EvernoteSession *session = [EvernoteSession sharedSession];
                     if (!session.isAuthenticated || [EvernoteSession isTokenExpiredWithError:error]) {
-                        // trigger auth again
-                        NSLog(@"expired token");
                         [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                     }
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
@@ -376,7 +373,7 @@
         self.isAuthingEvernote = NO;
         if (error || !session.isAuthenticated) {
             // TODO show message to the user
-            NSLog(@"Session authentication failed: %@", [error localizedDescription]);
+            //NSLog(@"Session authentication failed: %@", [error localizedDescription]);
         }
         else {
             [self performSelectorOnMainThread:selector withObject:object waitUntilDone:NO];
@@ -491,14 +488,14 @@
     
     /* Performing request */
     NSHTTPURLResponse *response;
-    NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,[syncData objectForKey:@"lastUpdate"]);
-    NSLog(@"objects :%@",syncData);
+    //NSLog(@"sending %i objects %@",totalNumberOfObjectsToSave,[syncData objectForKey:@"lastUpdate"]);
+    //NSLog(@"objects :%@",syncData);
     //NSLog(@"need: %@", [syncData objectForKey:@"hasMoreToSave"]);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
     
     if(response.statusCode != 200 || error){
-        NSLog(@"status code: %i error %@",response.statusCode,error);
+        //NSLog(@"status code: %i error %@",response.statusCode,error);
         if(error){
             if(!(error.code == -1001 || error.code == -1003 || error.code == -1005 || error.code == -1009))
                 [UtilityClass sendError:error type:@"Sync request error 1"];
@@ -539,7 +536,7 @@
         [self finalizeSyncWithUserInfo:result error:error];
         return NO;
     }
-    NSLog(@"objects:%@",result);
+    //NSLog(@"objects:%@",result);
     
     /* Handling response - Tags first due to relation */
     NSArray *tags = [result objectForKey:@"Tag"] ? [result objectForKey:@"Tag"] : @[];
@@ -574,7 +571,7 @@
 - (NSDictionary*)prepareUpdatedObjectsToBeSavedOnServerWithLimit:(NSInteger)limit
 {
     if ( self._didHardSync ){
-        NSLog(@"did the hard sync");
+        //NSLog(@"did the hard sync");
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUpdateObjects];
         [[NSUserDefaults standardUserDefaults] synchronize];
         self._didHardSync = NO;
@@ -766,7 +763,7 @@
 {
     if (self.backgroundTask == UIBackgroundTaskInvalid) {
         self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            NSLog(@"Background handler called. Not running background tasks anymore.");
+            //NSLog(@"Background handler called. Not running background tasks anymore.");
             [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
             self.backgroundTask = UIBackgroundTaskInvalid;
         }];
@@ -789,7 +786,7 @@
         [KPToDo addItem:[NSString stringWithFormat:@"Testing %i",i] priority:NO tags:nil save:NO];
         i++;
     } while (i < 500);
-    NSLog(@"saving");
+    //NSLog(@"saving");
     [self saveContextForSynchronization:nil];
 }
 

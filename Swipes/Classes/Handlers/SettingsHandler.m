@@ -157,6 +157,5 @@ static SettingsHandler *sharedObject;
     self.settings = [[NSUserDefaults standardUserDefaults] objectForKey:kSettingsDictionaryKey];
     if(!self.settings)
         self.settings = [NSMutableDictionary dictionary];
-    NSLog(@"settings %@",self.settings);
 }
 @end
