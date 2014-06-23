@@ -47,7 +47,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>en-c7ed7298b3666bc4</string>
+				<string>en-e862f0d879e2c2b6</string>
 			</array>
 		</dict>
 		<dict>
@@ -58,7 +58,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>53</string>
+	<string>54</string>
 	<key>FacebookAppID</key>
 	<string>531435630236702</string>
 	<key>LSRequiresIPhoneOS</key>
