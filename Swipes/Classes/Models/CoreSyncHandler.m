@@ -460,13 +460,15 @@
     
     /* Preparing request */
     NSError *error;
+#warning Remove this url for live
 #ifdef RELEASE
     NSString *url = @"http://api.swipesapp.com/v1/sync";
+    url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
 #else
     NSString *url = @"http://swipes-test.herokuapp.com/sync";
-    url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
-    url = @"http://127.0.0.1:5000/v1/sync";
-    
+    //url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
+    //url = @"http://127.0.0.1:5000/v1/sync";
+    url = @"http://api.swipesapp.com/v1/sync";
 #endif
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setTimeoutInterval:35];
@@ -516,7 +518,7 @@
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     //NSLog(@"resulted err:%@",error);
-    //NSLog(@"%@ res:%@ err: %@",result[@"message"],result[@"logs"],error);
+    NSLog(@"%@ res:%@ err: %@",result[@"message"],result[@"logs"],error);
     if([result objectForKey:@"hardSync"])
         [self hardSync];
     
@@ -536,7 +538,7 @@
         [self finalizeSyncWithUserInfo:result error:error];
         return NO;
     }
-    //NSLog(@"objects:%@",result);
+    NSLog(@"objects:%@",result);
     
     /* Handling response - Tags first due to relation */
     NSArray *tags = [result objectForKey:@"Tag"] ? [result objectForKey:@"Tag"] : @[];
