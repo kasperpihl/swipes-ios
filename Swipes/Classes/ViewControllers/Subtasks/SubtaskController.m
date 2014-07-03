@@ -20,14 +20,13 @@
 @property (nonatomic) BOOL allTasksCompleted;
 @property (nonatomic) UIColor *lineColor;
 @property (nonatomic) UIButton *closeButton;
+@property (nonatomic) UIButton *closeLabelButton;
 
 @end
 
 @implementation SubtaskController
 -(void)setExpanded:(BOOL)expanded{
-    if(_expanded != expanded){
-        [self setExpanded:expanded animated:NO];
-    }
+    [self setExpanded:expanded animated:NO];
 }
 -(void)setExpanded:(BOOL)expanded animated:(BOOL)animated{
     _expanded = expanded;
@@ -44,6 +43,32 @@
         [self.tableView reloadData];
         [self setHeightAndNotify:YES animated:YES];
         
+    }
+    [self updateExpandButton:expanded animated:animated];
+}
+
+-(void)updateExpandButton:(BOOL)expanded animated:(BOOL)animated{
+    
+    [self.closeLabelButton setTitle:[NSString stringWithFormat:@"See all %i actions",[self.model getSubtasks].count] forState:UIControlStateNormal];
+    [self.closeLabelButton sizeToFit];
+    self.closeLabelButton.alpha = expanded ? 1 : 0;
+    CGFloat extraHack = 15;
+    CGFloat hackY = 1;
+    CGFloat totalWidth = self.closeLabelButton.frame.size.width;
+        CGRectSetX(self.closeLabelButton, self.tableView.frame.size.width/2 - totalWidth/2 + extraHack );
+        CGRectSetCenterY( self.closeLabelButton, self.closeButton.center.y + hackY );
+    voidBlock showBlock = ^{
+        self.closeLabelButton.alpha = expanded ? 0 : 1;
+        self.closeButton.transform = expanded ? CGAffineTransformMakeRotation(M_PI) : CGAffineTransformIdentity;
+        CGRectSetX(self.closeButton, (expanded ? self.tableView.frame.size.width/2-self.closeButton.frame.size.width/2 : ( extraHack + self.tableView.frame.size.width/2-totalWidth/2-self.closeButton.frame.size.width) ) );
+    };
+    if(animated){
+        [UIView animateWithDuration:0.5 animations:showBlock completion:^(BOOL finished) {
+            
+        }];
+    }
+    else{
+        showBlock();
     }
 }
 
@@ -86,9 +111,7 @@
 
 -(void)updateTableFooter{
     BOOL hasCloseButton = ([self.model getSubtasks].count > 1);
-    NSLog(@"count:%i",[self.model getSubtasks].count);
     CGFloat footerHeight = hasCloseButton ? kSubtaskHeight+kCloseButtonHeight : kSubtaskHeight;
-    NSLog(@"footer height %f",footerHeight);
     CGRectSetHeight(self.tableView.tableFooterView,footerHeight);
     //self.closeButton.transform = CGAffineTransformMakeRotation(self.expanded ? M_PI : 0);
 }
@@ -157,6 +180,14 @@
         CGRectSetHeight(addCell, kSubtaskHeight);
         [tableFooter addSubview:addCell];
         
+        self.closeLabelButton = [[UIButton alloc] init];
+        self.closeLabelButton.titleLabel.numberOfLines = 1;
+        self.closeLabelButton.titleLabel.font = KP_REGULAR(15);
+        self.closeLabelButton.backgroundColor = CLEAR;
+        [self.closeLabelButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [self.closeLabelButton addTarget:self action:@selector(pressedCloseSubtasks) forControlEvents:UIControlEventTouchUpInside];
+        [tableFooter addSubview:self.closeLabelButton];
+        
         UIButton *closeButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2-kCloseButtonHeight/2, kSubtaskHeight, kCloseButtonHeight, kCloseButtonHeight)];
         closeButton.titleLabel.font = iconFont(28);
         closeButton.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin);
@@ -168,6 +199,8 @@
         [closeButton addTarget:self action:@selector(pressedCloseSubtasks) forControlEvents:UIControlEventTouchUpInside];
         [tableFooter addSubview:closeButton];
         self.closeButton = closeButton;
+        
+        
         
         self.tableView.tableFooterView = tableFooter;
         [self updateTableFooter];
