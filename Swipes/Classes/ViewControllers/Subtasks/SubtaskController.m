@@ -56,8 +56,9 @@
 
 -(void)fullReload{
     [self loadSubtasks];
-    [self reloadAndNotify:YES];
     [self updateTableFooter];
+    [self reloadAndNotify:YES];
+    
 }
 
 -(void)loadSubtasks{
@@ -84,8 +85,10 @@
 
 
 -(void)updateTableFooter{
-    BOOL hasCloseButton = self.expanded;
+    BOOL hasCloseButton = ([self.model getSubtasks].count > 1);
+    NSLog(@"count:%i",[self.model getSubtasks].count);
     CGFloat footerHeight = hasCloseButton ? kSubtaskHeight+kCloseButtonHeight : kSubtaskHeight;
+    NSLog(@"footer height %f",footerHeight);
     CGRectSetHeight(self.tableView.tableFooterView,footerHeight);
     //self.closeButton.transform = CGAffineTransformMakeRotation(self.expanded ? M_PI : 0);
 }

@@ -98,7 +98,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 
 @property (nonatomic) UIView *titleContainerView;
-@property (nonatomic) UIButton *expandButton;
 @property (nonatomic) DotView *dotView;
 @property (nonatomic) UIView *dotSeperator;
 @property (nonatomic) HPGrowingTextView *textView;
@@ -811,7 +810,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)subtaskController:(SubtaskController *)controller changedExpanded:(BOOL)expanded{
     [UIView beginAnimations:@"rotate" context:nil];
     [UIView setAnimationDuration:.25f];
-    self.expandButton.alpha = expanded ? 0 : 1;
+    //self.expandButton.alpha = expanded ? 0 : 1;
     //self.expandButton.transform = expanded ? CGAffineTransformMakeRotation(M_PI) : CGAffineTransformMakeRotation(0);
     [UIView commitAnimations];
 }
@@ -911,16 +910,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.titleContainerView addSubview:seperator];
         self.dotSeperator = seperator;
         
-        
-        self.expandButton = [[UIButton alloc] initWithFrame:CGRectMake(self.titleContainerView.frame.size.width-44, TITLE_TOP_MARGIN-5, 44, 44)];
-        self.expandButton.titleLabel.font = iconFont(20);
-        [self.expandButton setTitle:iconString(@"editActionRoundedArrow") forState:UIControlStateNormal];
-        [self.expandButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        [self.expandButton addTarget:self action:@selector(pressedExpand:) forControlEvents:UIControlEventTouchUpInside];
-        self.expandButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        [self.titleContainerView addSubview:self.expandButton];
-        //self.expandButton.hidden = YES;
-        //self.expandButton = nil;
+    
         
         self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, contentView.frame.size.height)];
         self.scrollView.autoresizingMask = 0;// UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -1102,7 +1092,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 
 -(void)subtaskController:(SubtaskController *)controller changedToSize:(CGSize)size{
-    self.expandButton.hidden = ([self.model getSubtasks].count <= 1);
+    //self.expandButton.hidden = ([self.model getSubtasks].count <= 1);
     [self layoutWithDuration:0.25f];
     //NSLog(@"%f + %f + %f = %f",self.subtasksContainer.frame.size.height, self.subtasksContainer.frame.origin.y, self.cell.frame.origin.y, superFrame.origin.y);
     if(self.kbdHeight){
@@ -1190,8 +1180,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.expandButton.transform = CGAffineTransformMakeRotation(0);
-    self.expandButton.hidden = ([self.model getSubtasks].count <= 1);
     if( self.expandOnShow){
         [self.subtasksController setExpanded:YES animated:YES];
         self.expandOnShow = NO;
