@@ -94,7 +94,7 @@ static NSSet* g_startEndElements;
             block( YES , nil );
         
     } failure:^(NSError *error) {
-        //NSLog(@"Failed to get note : %@",error);
+        NSLog(@"Failed to get note : %@",error);
         if( block )
             block( NO , error );
     }];
@@ -146,14 +146,16 @@ static NSSet* g_startEndElements;
     update.guid = _note.guid;
     update.title = _note.title;
     update.content = self.updatedContent;
+    NSLog(@"%@",_note.content);
+    NSLog(@"%@",self.updatedContent);
     [[EvernoteNoteStore noteStore] updateNote:update success:^(EDAMNote *note) {
-        //NSLog(@"note update success !!!");
+        NSLog(@"note update success !!!");
         if( block )
             block( YES, nil );
     } failure:^(NSError *error) {
         if( block)
             block( NO,error);
-        //NSLog(@"note update failed: %@", [error localizedDescription]);
+        NSLog(@"note update failed: %@", [error localizedDescription]);
     }];
 }
 
@@ -181,9 +183,10 @@ static NSSet* g_startEndElements;
         NSUInteger endLocation = scanner.scanLocation;
         
         NSRange range = NSMakeRange(startLocation, endLocation - startLocation);
-        NSString* replaceString = [NSString stringWithFormat:@" checked=\"%@\"", checked ? @"true" : @"false"];
+        NSString* replaceString = [NSString stringWithFormat:@" checked=\"%@\"/", checked ? @"true" : @"false"];
         self.updatedContent = [self.updatedContent stringByReplacingCharactersInRange:range withString:replaceString];
         self.needUpdate = YES;
+        NSLog(@"successfully went through updating content local");
         return YES;
     }
     else {

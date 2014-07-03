@@ -58,10 +58,14 @@
     parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
     analyticsKey = @"ncm4wfr7qc";
     localyticsKey = @"f2f927e0eafc7d3c36835fe-c0a84d84-18d8-11e3-3b24-00a426b17dd8";
-    #define EVERNOTE_HOST BootstrapServerBaseURLStringSandbox
-
+#warning Put back dev keys
+#define EVERNOTE_HOST BootstrapServerBaseURLStringUS
+    NSString* const CONSUMER_KEY = @"swipes";
+    NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6";
+/*#define EVERNOTE_HOST BootstrapServerBaseURLStringSandbox
+    
     NSString* const CONSUMER_KEY = @"sulio22";
-    NSString* const CONSUMER_SECRET = @"c7ed7298b3666bc4"; // when set to release also fix in Swipes-Info.plist file !
+    NSString* const CONSUMER_SECRET = @"c7ed7298b3666bc4"; // when set to release also fix in Swipes-Info.plist file !*/
     //[KeenClient enableLogging];
     [KeenClient sharedClientWithProjectId:@"532aec56ce5e436553000007"
                               andWriteKey:@"2626ed170332186795c0c8c850b7c0eb6c48474466d84d2578ec2b139708fb57f9adba3a96adf2df91032aa3c48282263a291ef58ea1d607990f8281e4a1d1b4aa939cb9a305f1c47964bf18ba94ba660529f0a3ad7431c6d034fba62b01308637f413966a769c609d79478a691e3ed6"

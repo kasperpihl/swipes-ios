@@ -460,15 +460,13 @@
     
     /* Preparing request */
     NSError *error;
-#warning Remove this url for live
 #ifdef RELEASE
     NSString *url = @"http://api.swipesapp.com/v1/sync";
-    url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
 #else
     NSString *url = @"http://swipes-test.herokuapp.com/sync";
     //url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
-    //url = @"http://127.0.0.1:5000/v1/sync";
-    url = @"http://api.swipesapp.com/v1/sync";
+    url = @"http://127.0.0.1:5000/v1/sync";
+    //url = @"http://api.swipesapp.com/v1/sync";
 #endif
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setTimeoutInterval:35];
@@ -529,6 +527,7 @@
             if([message isEqualToString:@"update required"]){
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[[UIAlertView alloc] initWithTitle:@"New version required" message:@"For sync to work - please update Swipes from the App Store" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil] show];
+                    NSLog(@"adding here");
                     self.outdated = YES;
                 });
             }
