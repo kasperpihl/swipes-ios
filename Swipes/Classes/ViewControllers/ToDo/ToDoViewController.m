@@ -1198,6 +1198,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    [self.subtasksController resign];
     self.fireHint = NO;
 }
 -(void)viewDidDisappear:(BOOL)animated{

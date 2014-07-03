@@ -17,6 +17,7 @@
 
 @property (nonatomic) NSIndexPath *draggingRow;
 @property (nonatomic) SubtaskCell *editingCell;
+@property (nonatomic) SubtaskCell *addCell;
 @property (nonatomic) BOOL allTasksCompleted;
 @property (nonatomic) UIColor *lineColor;
 @property (nonatomic) UIButton *closeButton;
@@ -55,12 +56,12 @@
     CGFloat extraHack = 15;
     CGFloat hackY = 1;
     CGFloat totalWidth = self.closeLabelButton.frame.size.width;
-        CGRectSetX(self.closeLabelButton, self.tableView.frame.size.width/2 - totalWidth/2 + extraHack );
+        CGRectSetX(self.closeLabelButton, 320/2 - totalWidth/2 + extraHack );
         CGRectSetCenterY( self.closeLabelButton, self.closeButton.center.y + hackY );
     voidBlock showBlock = ^{
         self.closeLabelButton.alpha = expanded ? 0 : 1;
         self.closeButton.transform = expanded ? CGAffineTransformMakeRotation(M_PI) : CGAffineTransformIdentity;
-        CGRectSetX(self.closeButton, (expanded ? self.tableView.frame.size.width/2-self.closeButton.frame.size.width/2 : ( extraHack + self.tableView.frame.size.width/2-totalWidth/2-self.closeButton.frame.size.width) ) );
+        CGRectSetX(self.closeButton, (expanded ? 320/2-self.closeButton.frame.size.width/2 : ( extraHack + 320/2-totalWidth/2-self.closeButton.frame.size.width) ) );
     };
     if(animated){
         [UIView animateWithDuration:0.5 animations:showBlock completion:^(BOOL finished) {
@@ -74,6 +75,8 @@
 
 -(void)setModel:(KPToDo *)model{
     _model = model;
+    [self.editingCell.titleField resignFirstResponder];
+    [self.addCell.titleField resignFirstResponder];
     self.expanded = NO;
     [self loadSubtasks];
     [self reloadAndNotify:NO];
@@ -179,10 +182,12 @@
         [addCell setAddModeForCell:YES];
         CGRectSetHeight(addCell, kSubtaskHeight);
         [tableFooter addSubview:addCell];
+        self.addCell = addCell;
         
         self.closeLabelButton = [[UIButton alloc] init];
         self.closeLabelButton.titleLabel.numberOfLines = 1;
         self.closeLabelButton.titleLabel.font = KP_REGULAR(15);
+        self.closeLabelButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
         self.closeLabelButton.backgroundColor = CLEAR;
         [self.closeLabelButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [self.closeLabelButton addTarget:self action:@selector(pressedCloseSubtasks) forControlEvents:UIControlEventTouchUpInside];
@@ -190,7 +195,7 @@
         
         UIButton *closeButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2-kCloseButtonHeight/2, kSubtaskHeight, kCloseButtonHeight, kCloseButtonHeight)];
         closeButton.titleLabel.font = iconFont(28);
-        closeButton.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin);
+        closeButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin);
         //closeButton.backgroundColor = tcolor(LaterColor);
         closeButton.transform = CGAffineTransformMakeRotation(M_PI);
         [closeButton setTitle:iconString(@"editActionRoundedArrow") forState:UIControlStateNormal];
@@ -233,6 +238,7 @@
 }
 -(void)resign{
     [self.editingCell.titleField resignFirstResponder];
+    [self.addCell.titleField resignFirstResponder];
     self.editingCell = nil;
 }
 -(void)startedEditingSubtaskCell:(SubtaskCell *)cell{

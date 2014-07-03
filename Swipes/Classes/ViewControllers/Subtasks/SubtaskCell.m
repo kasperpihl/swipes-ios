@@ -190,7 +190,6 @@
         [self.subtaskDelegate startedAddingSubtaskInCell:self];
     else if(!self.addModeForCell && [self.subtaskDelegate respondsToSelector:@selector(startedEditingSubtaskCell:)])
         [self.subtaskDelegate startedEditingSubtaskCell:self];
-    
     [self.titleField becomeFirstResponder];
 }
 -(void)setDotColor:(UIColor *)color{
