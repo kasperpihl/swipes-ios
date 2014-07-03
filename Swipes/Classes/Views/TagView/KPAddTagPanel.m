@@ -12,6 +12,7 @@
 #import "KPAddView.h"
 #import "UIView+Utilities.h"
 #import "KPAlert.h"
+#import "UtilityClass.h"
 #define BACKGROUND_VIEW_TAG 2
 #define TAG_VIEW_TAG 3
 #define TOOLBAR_TAG 4
@@ -162,16 +163,16 @@
     trashButton.enabled = !(self.tagView.numberOfTags == 0);
 }
 -(void)tagList:(KPTagList *)tagList triedToDeleteTag:(NSString *)tag{
+    NSLog(@"tried to delete");
+
     NSString *titleString = [NSString stringWithFormat:@"Delete tag: %@",tag];
-    __block KPAlert *alert = [KPAlert alertWithFrame:self.bounds title:titleString message:@"This can't be undone" block:^(BOOL succeeded, NSError *error) {
-        [alert removeFromSuperview];
+    [UTILITY confirmBoxWithTitle:titleString andMessage:@"This can't be undone" block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             [self.tagView deleteTag:tag];
             if(self.tagView.numberOfTags == 0) self.deleteMode = NO;
             [self updateTrashButton];
         }
     }];
-    [self addSubview:alert];
 }
 -(void)tagList:(KPTagList *)tagList changedSize:(CGSize)size{
     self.scrollView.contentSize = size;
