@@ -17,9 +17,9 @@ typedef NS_ENUM(NSUInteger, KPMenuButtons){
     KPMenuButtonPolicies = 6,
     KPMenuButtonLogout = 7,
     KPMenuButtonFeedback = 8,
+    KPMenuButtonScheme = 9,
     KPMenuButtonSync = 11,
-    KPMenuButtonScheme = 9
-
+    KPMenuButtonIntegrations = 12
 };
 @interface MenuViewController : UIViewController
 -(void)renderSubviews;

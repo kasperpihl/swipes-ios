@@ -16,6 +16,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "MenuButton.h"
 #import "SettingsHandler.h"
+#import "IntegrationsViewController.h"
 #import "SnoozesViewController.h"
 #import "AnalyticsHandler.h"
 #import "UserHandler.h"
@@ -274,8 +275,9 @@
         } completion:^(BOOL finished) {
         viewController.view.alpha = 0;
         viewController.view.frame = self.view.bounds;
-        CGRectSetHeight(viewController.view,viewController.view.bounds.size.height-44);
-        CGRectSetY(viewController.view, 44);
+        CGFloat startHeight = (OSVER >= 7) ? (20+44) : 44;
+        CGRectSetHeight(viewController.view,viewController.view.bounds.size.height-startHeight);
+        CGRectSetY(viewController.view, startHeight);
         [self.view addSubview:viewController.view];
         [UIView animateWithDuration:0.2 animations:^{
         
@@ -360,6 +362,11 @@
         case KPMenuButtonSnoozes:{
             SnoozesViewController *snoozeVC = [[SnoozesViewController alloc] init];
             [self pushViewController:snoozeVC animated:YES];
+            break;
+        }
+        case KPMenuButtonIntegrations:{
+            IntegrationsViewController *integrationVC = [[IntegrationsViewController alloc] init];
+            [self pushViewController:integrationVC animated:YES];
             break;
         }
         case KPMenuButtonWalkthrough:
@@ -491,6 +498,8 @@
         case KPMenuButtonScheme:
             title = @"Theme";
             break;
+        case KPMenuButtonIntegrations:
+            title = @"Integrations";
     }
     return title;
 }
@@ -527,6 +536,8 @@
         case KPMenuButtonScheme:
             imageString = @"settingsTheme";
             break;
+        case KPMenuButtonIntegrations:
+            imageString = @"settings";
     }
     if (highlighted)
         imageString = [imageString stringByAppendingString:@"Full"];

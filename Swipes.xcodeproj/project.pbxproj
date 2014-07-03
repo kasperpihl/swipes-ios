@@ -208,6 +208,7 @@
 		A7D0D3C01904FD1000ABA1FF /* selected_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3BE1904FD1000ABA1FF /* selected_circle@2x.png */; };
 		A7D0D3C319051BA000ABA1FF /* Nexa-Black-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3C119051BA000ABA1FF /* Nexa-Black-Italic.ttf */; };
 		A7D0D3C419051BA000ABA1FF /* Nexa-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3C219051BA000ABA1FF /* Nexa-Bold.ttf */; };
+		A7D189C61965F47000AA7CD9 /* IntegrationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D189C51965F47000AA7CD9 /* IntegrationsViewController.m */; };
 		A7D7D53317B1586A00FBC042 /* SettingsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53217B1586A00FBC042 /* SettingsHandler.m */; };
 		A7D7D53917B1A56C00FBC042 /* MenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53817B1A56B00FBC042 /* MenuButton.m */; };
 		A7DEA1891790BD2D00EB1549 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA1881790BD2D00EB1549 /* MenuViewController.m */; };
@@ -555,6 +556,8 @@
 		A7D0D3BE1904FD1000ABA1FF /* selected_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected_circle@2x.png"; sourceTree = "<group>"; };
 		A7D0D3C119051BA000ABA1FF /* Nexa-Black-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nexa-Black-Italic.ttf"; path = "Font/Nexa-Black-Italic.ttf"; sourceTree = "<group>"; };
 		A7D0D3C219051BA000ABA1FF /* Nexa-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nexa-Bold.ttf"; path = "Font/Nexa-Bold.ttf"; sourceTree = "<group>"; };
+		A7D189C41965F47000AA7CD9 /* IntegrationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationsViewController.h; path = Settings/IntegrationsViewController.h; sourceTree = "<group>"; };
+		A7D189C51965F47000AA7CD9 /* IntegrationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationsViewController.m; path = Settings/IntegrationsViewController.m; sourceTree = "<group>"; };
 		A7D7D53117B1586A00FBC042 /* SettingsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHandler.h; sourceTree = "<group>"; };
 		A7D7D53217B1586A00FBC042 /* SettingsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsHandler.m; sourceTree = "<group>"; };
 		A7D7D53717B1A56B00FBC042 /* MenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuButton.h; sourceTree = "<group>"; };
@@ -1196,6 +1199,7 @@
 		A781285D17294C56002226C8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A7D189C31965F45300AA7CD9 /* Settings */,
 				A748C877190D9A0800514DB3 /* Subtasks */,
 				A74D3FC018D75B0D0056D124 /* Share */,
 				A7E2D94B17B4FE16007BDE00 /* Upgrade */,
@@ -1392,6 +1396,15 @@
 				A7D06865190E654C00699B4E /* UIViewController+MMDrawerController.m */,
 			);
 			path = MMDrawerController;
+			sourceTree = "<group>";
+		};
+		A7D189C31965F45300AA7CD9 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A7D189C41965F47000AA7CD9 /* IntegrationsViewController.h */,
+				A7D189C51965F47000AA7CD9 /* IntegrationsViewController.m */,
+			);
+			name = Settings;
 			sourceTree = "<group>";
 		};
 		A7DAC63C181A7CF700B8C079 /* Buttons */ = {
@@ -1792,6 +1805,7 @@
 				A7F9D79618BA2E73003D8833 /* _KPAttachment.m in Sources */,
 				A703B1C21838EBF20047DCC9 /* SchedulePopup.m in Sources */,
 				A74D3FD218D9E7AC0056D124 /* HPTextViewInternal.m in Sources */,
+				A7D189C61965F47000AA7CD9 /* IntegrationsViewController.m in Sources */,
 				A703B1AD1838EBF20047DCC9 /* DateStampView.m in Sources */,
 				A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */,
 				A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */,

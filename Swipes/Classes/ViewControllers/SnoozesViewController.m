@@ -51,10 +51,6 @@
     self.activeSnooze = SnoozeNone;
     self.view.backgroundColor = CLEAR;
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
-    if(OSVER >= 7){
-        CGRectSetY(self.tableView, 20);
-        CGRectSetHeight(self.tableView, self.view.bounds.size.height-20);
-    }
     self.tableView.delegate = self;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
