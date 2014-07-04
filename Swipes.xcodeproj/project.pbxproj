@@ -51,6 +51,7 @@
 		A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1CA1838EC570047DCC9 /* ToDoCell.m */; };
 		A7063BCC190F8BEE003D3690 /* SubtaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7063BCB190F8BEE003D3690 /* SubtaskController.m */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
+		A70D12DA1966D11500A95C50 /* EvernoteIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A70D12D91966D11500A95C50 /* EvernoteIntegration.m */; };
 		A714369019346823009AC8A4 /* SyncLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A714368F19346823009AC8A4 /* SyncLabel.m */; };
 		A714369319349EB3009AC8A4 /* CheckmarkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A714369219349EB3009AC8A4 /* CheckmarkButton.m */; };
 		A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
@@ -325,6 +326,8 @@
 		A7063BCB190F8BEE003D3690 /* SubtaskController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtaskController.m; sourceTree = "<group>"; };
 		A7090B6E175DF3F900728A3A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = Login/LoginViewController.h; sourceTree = "<group>"; };
 		A7090B6F175DF3F900728A3A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Login/LoginViewController.m; sourceTree = "<group>"; };
+		A70D12D81966D11500A95C50 /* EvernoteIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteIntegration.h; path = Integrations/EvernoteIntegration.h; sourceTree = "<group>"; };
+		A70D12D91966D11500A95C50 /* EvernoteIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteIntegration.m; path = Integrations/EvernoteIntegration.m; sourceTree = "<group>"; };
 		A714368E19346823009AC8A4 /* SyncLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncLabel.h; sourceTree = "<group>"; };
 		A714368F19346823009AC8A4 /* SyncLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncLabel.m; sourceTree = "<group>"; };
 		A714369119349EB3009AC8A4 /* CheckmarkButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckmarkButton.h; sourceTree = "<group>"; };
@@ -832,6 +835,15 @@
 			name = Login;
 			sourceTree = "<group>";
 		};
+		A70D12D71966D09A00A95C50 /* Integrations */ = {
+			isa = PBXGroup;
+			children = (
+				A70D12D81966D11500A95C50 /* EvernoteIntegration.h */,
+				A70D12D91966D11500A95C50 /* EvernoteIntegration.m */,
+			);
+			name = Integrations;
+			sourceTree = "<group>";
+		};
 		A71E9FBF1951CD6F00FC9B0B /* Processors */ = {
 			isa = PBXGroup;
 			children = (
@@ -1104,6 +1116,7 @@
 		A781283E17294C56002226C8 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A70D12D71966D09A00A95C50 /* Integrations */,
 				A7AA7961194E0593003DAB3B /* SyncClasses */,
 				A78D7A8617F4B27200AD38B1 /* Global.h */,
 				A78D7A8717F4B27200AD38B1 /* Global.m */,
@@ -1793,6 +1806,7 @@
 				A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */,
 				A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */,
 				A7B9D39019066251001E1109 /* KPAccountAlert.m in Sources */,
+				A70D12DA1966D11500A95C50 /* EvernoteIntegration.m in Sources */,
 				A703B1631838EB0E0047DCC9 /* UIButton+PassTouch.m in Sources */,
 				A703B1B51838EBF20047DCC9 /* SectionHeaderView.m in Sources */,
 				A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */,

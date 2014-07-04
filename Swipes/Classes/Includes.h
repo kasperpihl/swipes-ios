@@ -119,6 +119,7 @@ typedef void (^ImageBlock)(UIImage *image, NSError *error);
 typedef void (^DataBlock)(KPDLResult result, NSData *data, NSError* error);
 typedef void (^NumberBlock) (NSInteger number, NSError *error);
 typedef void (^ArrayBlock)(NSArray *objects, NSError *error);
+typedef void (^ErrorBlock)(NSError *error);
 typedef void (^SuccessfulBlock)(BOOL succeeded, NSError *error);
 typedef BOOL (^FacebookRequestBlock)(FBReturnType status, id result, NSError *error);
 typedef void (^FBReqIndexBlock)(FBReturnType status, NSInteger index, id result, NSError *error);

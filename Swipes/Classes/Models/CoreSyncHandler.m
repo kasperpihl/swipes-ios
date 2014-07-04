@@ -15,7 +15,7 @@
 #import "UserHandler.h"
 
 #import "RootViewController.h"
-
+#import "EvernoteIntegration.h"
 #import "EvernoteSyncHandler.h"
 #define kSyncTime 3
 #define kUpdateLimit 200
@@ -368,10 +368,10 @@
     if(self.isAuthingEvernote)
         return;
     self.isAuthingEvernote = YES;
-    EvernoteSession *session = [EvernoteSession sharedSession];
-    [session authenticateWithViewController:ROOT_CONTROLLER completionHandler:^(NSError *error) {
-        self.isAuthingEvernote = NO;
-        if (error || !session.isAuthenticated) {
+    
+    self.isAuthingEvernote = NO;
+    [kEnInt authenticateEvernoteInViewController:ROOT_CONTROLLER withBlock:^(NSError *error) {
+        if (error || !kEnInt.isAuthenticated) {
             // TODO show message to the user
             //NSLog(@"Session authentication failed: %@", [error localizedDescription]);
         }

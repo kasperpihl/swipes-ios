@@ -8,6 +8,7 @@
 
 #import "KPBlurry.h"
 #import "EvernoteViewerView.h"
+#import "EvernoteIntegration.h"
 #import "EvernoteView.h"
 #import "UIColor+Utilities.h"
 #import "SectionHeaderView.h"
@@ -213,9 +214,8 @@
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
-    EvernoteSession *session = [EvernoteSession sharedSession];
-    [session authenticateWithViewController:_caller completionHandler:^(NSError *error) {
-        if (error || !session.isAuthenticated) {
+    [kEnInt authenticateEvernoteInViewController:_caller withBlock:^(NSError *error) {
+        if (error || !kEnInt.isAuthenticated) {
             // TODO show message to the user
             NSLog(@"Session authentication failed: %@", [error localizedDescription]);
         }

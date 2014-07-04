@@ -8,7 +8,7 @@
 #import "SettingsCell.h"
 
 #import "UtilityClass.h"
-
+#import "EvernoteIntegration.h"
 #import "IntegrationsViewController.h"
 
 @interface IntegrationsViewController () <UITableViewDataSource,UITableViewDelegate>
@@ -143,9 +143,8 @@
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
-    EvernoteSession *session = [EvernoteSession sharedSession];
-    [session authenticateWithViewController:self completionHandler:^(NSError *error) {
-        if (error || !session.isAuthenticated) {
+    [kEnInt authenticateEvernoteInViewController:self withBlock:^(NSError *error) {
+        if (error || !kEnInt.isAuthenticated) {
             // TODO show message to the user
             //NSLog(@"Session authentication failed: %@", [error localizedDescription]);
         }

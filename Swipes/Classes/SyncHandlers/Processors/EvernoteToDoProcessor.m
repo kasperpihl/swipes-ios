@@ -87,17 +87,24 @@ static NSSet* g_startEndElements;
 - (void)loadNoteWithGuid:(NSString *)guid block:(SuccessfulBlock)block
 {
     _note = nil;
-    [[EvernoteNoteStore noteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
-        _note = note;
-        [self parseAndLoadTodos];
-        if( block )
-            block( YES , nil );
+    @try {
+        [[EvernoteNoteStore noteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
+            _note = note;
+            [self parseAndLoadTodos];
+            if( block )
+                block( YES , nil );
+            
+        } failure:^(NSError *error) {
+            NSLog(@"Failed to get note : %@",error);
+            if( block )
+                block( NO , error );
+        }];
+    }
+    @catch (NSException *exception) {
         
-    } failure:^(NSError *error) {
-        NSLog(@"Failed to get note : %@",error);
-        if( block )
-            block( NO , error );
-    }];
+    }
+
+    
 }
 
 -(void)parseAndLoadTodos{
@@ -148,15 +155,22 @@ static NSSet* g_startEndElements;
     update.content = self.updatedContent;
     NSLog(@"%@",_note.content);
     NSLog(@"%@",self.updatedContent);
-    [[EvernoteNoteStore noteStore] updateNote:update success:^(EDAMNote *note) {
-        NSLog(@"note update success !!!");
-        if( block )
-            block( YES, nil );
-    } failure:^(NSError *error) {
-        if( block)
-            block( NO,error);
-        NSLog(@"note update failed: %@", [error localizedDescription]);
-    }];
+    @try {
+        [[EvernoteNoteStore noteStore] updateNote:update success:^(EDAMNote *note) {
+            NSLog(@"note update success !!!");
+            if( block )
+                block( YES, nil );
+        } failure:^(NSError *error) {
+            if( block)
+                block( NO,error);
+            NSLog(@"note update failed: %@", [error localizedDescription]);
+        }];
+    }
+    @catch (NSException *exception) {
+        
+    }
+
+    
 }
 
 - (BOOL)updateToDo:(EvernoteToDo *)updatedToDo checked:(BOOL)checked
