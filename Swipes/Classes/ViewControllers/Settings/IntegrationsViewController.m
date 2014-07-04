@@ -55,30 +55,40 @@
     tutorialView.textColor = tcolor(TextColor);
     
     //tutorialView.text = @"Swipes Evernote integration enables you to attach a note in Swipes, and sync all checkmarks from Evernote directly into Swipes as Action Steps and back.\r\n\r\n1. Add a task in Swipes\r\n2. Open it and press the Elephant\r\n3. Select the note you want to sync\r\n4. Now all checkmarks will be synced back and forth";
-    
+    NSString *evernoteIconString = @"editEvernote";
     NSMutableAttributedString *mutableAttributed = [[NSMutableAttributedString alloc] init];
     NSArray *lines = @[
-                       @"Get started:\r\n",
-                       @"1. Add a task in Swipes\r\n",
-                       @"2. Open it and press the Elephant\r\n",
+                       @"This integration lets you sync notes and checkmarks from Evernote into Swipes.",
+                       @"",
+                       @"Get started:",
+                       @"",
+                       @"1. Create a task in Swipes\r\n",
+                       [NSString stringWithFormat:@"2. Double tab to open it > press the %@",evernoteIconString],
+                       @"",
                        @"3. Select the note you want to sync",
                        @"",
-                       @"Keep your checkmarks in sync with Swipes"
+                       @"Checkmarks now sync as action steps in Swipes. Complete them and they’ll sync back."
                        ];
     NSInteger counter = 0;
     for( NSString *line in lines){
         counter++;
+        NSInteger length = line.length;
         NSMutableAttributedString *attributedLine = [[NSMutableAttributedString alloc] initWithString:line];
         [attributedLine appendAttributedString:[[NSAttributedString alloc] initWithString:@"\r\n"]];
         NSDictionary *attributes;
-        if(counter >= 1 && counter <= 4){
+        if(counter >= 5 && counter <= 9){
             NSInteger fontSize = 16;
             attributes = @{ NSFontAttributeName: KP_SEMIBOLD(fontSize), NSForegroundColorAttributeName: tcolor(TextColor)};
+            if(counter == 6){
+                length -= evernoteIconString.length;
+                [attributedLine addAttributes:@{ NSFontAttributeName: iconFont(18), NSForegroundColorAttributeName: tcolor(TextColor) } range:NSMakeRange(length, evernoteIconString.length)];
+                
+            }
             
         }
         else
             attributes = @{ NSFontAttributeName: KP_REGULAR(18), NSForegroundColorAttributeName: tcolor(TextColor)};
-        [attributedLine addAttributes:attributes range:NSMakeRange(0, line.length)];
+        [attributedLine addAttributes:attributes range:NSMakeRange(0, length)];
         [mutableAttributed appendAttributedString:attributedLine];
     }
     tutorialView.attributedText = mutableAttributed;
