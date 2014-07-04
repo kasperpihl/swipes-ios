@@ -25,7 +25,6 @@
         self.doneEditingButton.frame = CGRectMake(self.frame.size.width-buttonWidth, 0, buttonWidth, buttonSize);
         self.doneEditingButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
         self.doneEditingButton.titleLabel.font = iconFont(23);
-        //[self.doneEditingButton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         [self.doneEditingButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [self.doneEditingButton setTitle:iconString(@"back") forState:UIControlStateNormal];
         [self.doneEditingButton addTarget:self action:@selector(pressedDoneEditing:) forControlEvents:UIControlEventTouchUpInside];

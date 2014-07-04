@@ -345,7 +345,6 @@
         
     }
     cell.accessoryView.tag = indexPath.row;
-    [(UIButton*)cell.accessoryView setImage:[UIImage imageNamed:timageStringBW(@"attach_icon")] forState:UIControlStateNormal];
     
     return cell;
 }

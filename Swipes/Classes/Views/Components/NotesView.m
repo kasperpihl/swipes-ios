@@ -52,7 +52,6 @@
         backbutton.titleLabel.font = iconFont(23);
         [backbutton setTitle:iconString(@"back") forState:UIControlStateNormal];
         [backbutton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        //[backbutton setImage:[UIImage imageNamed:timageStringBW(@"backarrow_icon")] forState:UIControlStateNormal];
         
         backbutton.transform = CGAffineTransformMakeRotation(M_PI);
         [backbutton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
