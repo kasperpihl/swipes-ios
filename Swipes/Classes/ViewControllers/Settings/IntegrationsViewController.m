@@ -50,6 +50,7 @@
     tutorialView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     tutorialView.backgroundColor = CLEAR;
     tutorialView.editable = NO;
+    tutorialView.scrollEnabled = NO;
     tutorialView.font = KP_REGULAR(18);
     tutorialView.textColor = tcolor(TextColor);
     
@@ -57,13 +58,12 @@
     
     NSMutableAttributedString *mutableAttributed = [[NSMutableAttributedString alloc] init];
     NSArray *lines = @[
-                       @"This integration lets you sync all checkmarks from an Evernote directly into Swipes as Action Steps and back.",
-                       @"",
+                       @"Get started:\r\n",
                        @"1. Add a task in Swipes\r\n",
                        @"2. Open it and press the Elephant\r\n",
                        @"3. Select the note you want to sync",
                        @"",
-                       @"Now all checkmarks will be synced back and forth"
+                       @"Keep your checkmarks in sync with Swipes"
                        ];
     NSInteger counter = 0;
     for( NSString *line in lines){
@@ -71,18 +71,26 @@
         NSMutableAttributedString *attributedLine = [[NSMutableAttributedString alloc] initWithString:line];
         [attributedLine appendAttributedString:[[NSAttributedString alloc] initWithString:@"\r\n"]];
         NSDictionary *attributes;
-        if(counter >= 3 && counter <= 5){
+        if(counter >= 1 && counter <= 4){
             NSInteger fontSize = 16;
-            attributes = @{ NSFontAttributeName: KP_SEMIBOLD(fontSize)};
+            attributes = @{ NSFontAttributeName: KP_SEMIBOLD(fontSize), NSForegroundColorAttributeName: tcolor(TextColor)};
             
         }
         else
-            attributes = @{ NSFontAttributeName: KP_REGULAR(18)};
+            attributes = @{ NSFontAttributeName: KP_REGULAR(18), NSForegroundColorAttributeName: tcolor(TextColor)};
         [attributedLine addAttributes:attributes range:NSMakeRange(0, line.length)];
         [mutableAttributed appendAttributedString:attributedLine];
     }
     tutorialView.attributedText = mutableAttributed;
+    [tutorialView sizeToFit];
+    CGRectSetCenterX(tutorialView, tableFooter.frame.size.width/2);
     [tableFooter addSubview:tutorialView];
+    
+    UIImageView *integrationImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"swipesandevernote"]];
+    CGRectSetY(integrationImage, CGRectGetMaxY(tutorialView.frame));
+    CGRectSetCenterX(integrationImage, tableFooter.frame.size.width/2);
+    [tableFooter addSubview:integrationImage];
+    CGRectSetHeight(tableFooter, CGRectGetMaxY(integrationImage.frame));
     
     [self.tableView setTableFooterView:tableFooter];
     
@@ -98,6 +106,7 @@
     if (cell == nil) {
         cell = [[SettingsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.settingFont = KP_SEMIBOLD(18);
+        cell.valueFont = KP_SEMIBOLD(16);
     }
 	return cell;
 }
@@ -126,7 +135,7 @@
                 valueString = @"Unlink";
             }
             else
-                valueString = @"Link";
+                valueString = @"Link account";
             break;
         default:break;
     }

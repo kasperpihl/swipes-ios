@@ -30,7 +30,7 @@
 #define kDeleteObjectsKey @"deleteObjects"
 
 #ifdef DEBUG
-#define DUMPDB [self dumpLocalDb];
+#define DUMPDB //[self dumpLocalDb];
 #else
 #define DUMPDB
 #endif
@@ -519,7 +519,7 @@
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     //NSLog(@"resulted err:%@",error);
-    NSLog(@"%@ res:%@ err: %@",result[@"message"],result[@"logs"],error);
+    //NSLog(@"%@ res:%@ err: %@",result[@"message"],result[@"logs"],error);
     if([result objectForKey:@"hardSync"])
         [self hardSync];
     
@@ -540,7 +540,7 @@
         [self finalizeSyncWithUserInfo:result error:error];
         return NO;
     }
-    NSLog(@"objects:%@",result);
+    //NSLog(@"objects:%@",result);
     
     /* Handling response - Tags first due to relation */
     NSArray *tags = [result objectForKey:@"Tag"] ? [result objectForKey:@"Tag"] : @[];

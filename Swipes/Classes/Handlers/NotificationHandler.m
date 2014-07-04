@@ -34,7 +34,6 @@ static NotificationHandler *sharedObject;
     return sharedObject;
 }
 -(void)initialize{
-    NSLog(@"initializing");
     notify(@"showNotification", sendNotification:);
 }
 

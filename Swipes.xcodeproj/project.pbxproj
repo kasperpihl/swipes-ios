@@ -146,6 +146,8 @@
 		A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A76ADC1217ECA7AB00F52F40 /* Images.xcassets */; };
 		A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76B2386172C06CC00F742C2 /* ScheduleViewController.m */; };
 		A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A771356E17BABB5A0090BE89 /* UIView+Utilities.m */; };
+		A772B14119671D9F00C07909 /* swipesandevernote.png in Resources */ = {isa = PBXBuildFile; fileRef = A772B13F19671D9F00C07909 /* swipesandevernote.png */; };
+		A772B14219671D9F00C07909 /* swipesandevernote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A772B14019671D9F00C07909 /* swipesandevernote@2x.png */; };
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
 		A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CD116EB5884004D95E5 /* CoreGraphics.framework */; };
@@ -441,6 +443,8 @@
 		A76B2386172C06CC00F742C2 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScheduleViewController.m; path = Schedule/ScheduleViewController.m; sourceTree = "<group>"; };
 		A771356D17BABB5A0090BE89 /* UIView+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Utilities.h"; sourceTree = "<group>"; };
 		A771356E17BABB5A0090BE89 /* UIView+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Utilities.m"; sourceTree = "<group>"; };
+		A772B13F19671D9F00C07909 /* swipesandevernote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = swipesandevernote.png; sourceTree = "<group>"; };
+		A772B14019671D9F00C07909 /* swipesandevernote@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipesandevernote@2x.png"; sourceTree = "<group>"; };
 		A7778CCA16EB5884004D95E5 /* Swipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7778CCD16EB5884004D95E5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A7778CCF16EB5884004D95E5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1306,6 +1310,8 @@
 		A79DB41B17358C33007A48E2 /* Backgrounds */ = {
 			isa = PBXGroup;
 			children = (
+				A772B13F19671D9F00C07909 /* swipesandevernote.png */,
+				A772B14019671D9F00C07909 /* swipesandevernote@2x.png */,
 				A741EC4E18354726000F9F93 /* default-background.jpg */,
 			);
 			path = Backgrounds;
@@ -1568,6 +1574,7 @@
 				A74FB8F518FFBCB200F25157 /* MASTER_0001.jpg in Resources */,
 				A7D0D3C419051BA000ABA1FF /* Nexa-Bold.ttf in Resources */,
 				A7D0D3C01904FD1000ABA1FF /* selected_circle@2x.png in Resources */,
+				A772B14219671D9F00C07909 /* swipesandevernote@2x.png in Resources */,
 				DACD546218A1ACFC00C378DF /* page_white_zip.png in Resources */,
 				DA310FA7188F3F26003C8FA4 /* Assets in Resources */,
 				DACD544918A1ACFC00C378DF /* folder_star.png in Resources */,
@@ -1605,6 +1612,7 @@
 				A7D06867190E654C00699B4E /* LICENSE in Resources */,
 				A74FB8F418FFBCB200F25157 /* MASTER_0000.jpg in Resources */,
 				A75236E617A335680030ED1E /* walkthrough_swipe_schedule.png in Resources */,
+				A772B14119671D9F00C07909 /* swipesandevernote.png in Resources */,
 				DACD545618A1ACFC00C378DF /* page_white_dvd.png in Resources */,
 				A7D0686C190E654C00699B4E /* README.md in Resources */,
 				A75236E717A335680030ED1E /* walkthrough_swipe_schedule@2x.png in Resources */,
@@ -1687,7 +1695,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#./Swipes/Ressources/Libs/Crashlytics.framework/run 17aee5fa869f24b705e00dba6d43c51becf5c7e4 18503ba4a511e5ff371707e57ef3f51edb669c35ae9206253a6edcdf35c1fa7c";
+			shellScript = "./Swipes/Ressources/Libs/Crashlytics.framework/run 17aee5fa869f24b705e00dba6d43c51becf5c7e4 18503ba4a511e5ff371707e57ef3f51edb669c35ae9206253a6edcdf35c1fa7c";
 		};
 		A7F0B9BB1700BA51003BBDD1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
