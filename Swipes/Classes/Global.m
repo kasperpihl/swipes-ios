@@ -57,7 +57,7 @@ static Global *sharedObject;
     iconCompare(@"settingsFeedback",            @"\ue619");
     iconCompare(@"settingsWalkthrough",         @"\ue619");
     iconCompare(@"settingsNotification",        @"\ue61b");
-    
+    iconCompare(@"settingsIntegrations",        @"\ue659");
     
     /* Menu icons full */
     iconCompare(@"settingsLogoutFull",          @"\ue620");

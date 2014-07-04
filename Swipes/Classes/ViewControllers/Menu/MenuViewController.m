@@ -537,7 +537,7 @@
             imageString = @"settingsTheme";
             break;
         case KPMenuButtonIntegrations:
-            imageString = @"settings";
+            imageString = @"settingsIntegrations";
     }
     if (highlighted)
         imageString = [imageString stringByAppendingString:@"Full"];
