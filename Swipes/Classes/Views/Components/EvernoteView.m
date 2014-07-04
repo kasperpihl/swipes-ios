@@ -227,8 +227,7 @@
 
 - (IBAction)searchNoteStore:(id)sender
 {
-    EvernoteSession *session = [EvernoteSession sharedSession];
-    if (session.isAuthenticated) {
+    if (kEnInt.isAuthenticated) {
         DLog(@"running search");
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         
@@ -249,41 +248,47 @@
             if (searchTerm.length > 0)
                 filter.words = [searchTerm copy];
         }
-        
+        filter.order = NoteSortOrder_UPDATED;
+        filter.ascending = NO;
         // setup additional flags
         if (0 == _searchBar.text.length) { // remove this check if you want order to be always by UPDATED
-            //filter.words = @"todo:*";
-            filter.order = NoteSortOrder_UPDATED;
-            filter.ascending = NO;
+            filter.words = @"todo:*";
+            
         }
+        @try {
+            [noteStore findNotesWithFilter:filter offset:0 maxNotes:kSearchLimit
+                                   success:^(EDAMNoteList *list) {
+                                       for (EDAMNote* note in list.notes) {
+                                           DLog(@"Last update: %@",[NSDate dateWithTimeIntervalSince1970:note.updated/1000]);
+                                           DLog(@"Note title: %@, guid: %@", note.title, note.guid);
+                                           /*if (!noteViewed) {
+                                            noteViewed = YES;
+                                            [[EvernoteNoteStore noteStore] viewNoteInEvernote:note];
+                                            }*/
+                                       }
+                                       _noteList = list;
+                                       //_limitSearch = (filter.order == NoteSortOrder_UPDATED);
+                                       [_tableView reloadData];
+                                       
+                                       //DLog(@"notebooks: %@", list);
+                                       [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                                   }
+                                   failure:^(NSError *error) {
+                                       NSLog(@"error %@", error);
+                                       [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                                       // failure... show error notification, etc
+                                       if ([EvernoteSession isTokenExpiredWithError:error]) {
+                                           // trigger auth again
+                                           [self evernoteAuthenticateUsingSelector:@selector(searchNoteStore:) withObject:nil];
+                                       }
+                                   }
+             ];
+        }
+        @catch (NSException *exception) {
+            
+        }
+
         
-        [noteStore findNotesWithFilter:filter offset:0 maxNotes:kSearchLimit
-            success:^(EDAMNoteList *list) {
-                for (EDAMNote* note in list.notes) {
-                    DLog(@"Last update: %@",[NSDate dateWithTimeIntervalSince1970:note.updated/1000]);
-                    DLog(@"Note title: %@, guid: %@", note.title, note.guid);
-                    /*if (!noteViewed) {
-                        noteViewed = YES;
-                        [[EvernoteNoteStore noteStore] viewNoteInEvernote:note];
-                    }*/
-                }
-                _noteList = list;
-                //_limitSearch = (filter.order == NoteSortOrder_UPDATED);
-                [_tableView reloadData];
-                
-                //DLog(@"notebooks: %@", list);
-                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            }
-            failure:^(NSError *error) {
-                NSLog(@"error %@", error);
-                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                // failure... show error notification, etc
-                if ([EvernoteSession isTokenExpiredWithError:error]) {
-                    // trigger auth again
-                    [self evernoteAuthenticateUsingSelector:@selector(searchNoteStore:) withObject:nil];
-                }
-            }
-         ];
     }
     else {
         NSLog(@"Session not authenticated");

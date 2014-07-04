@@ -161,7 +161,7 @@
     Integrations integration = indexPath.row;
     switch (integration) {
         case IntegrationEvernote:{
-            if([[EvernoteSession sharedSession] isAuthenticated]){
+            if(kEnInt.isAuthenticated){
                 [UTILITY confirmBoxWithTitle:@"Unlink Evernote" andMessage:@"Are you sure?" block:^(BOOL succeeded, NSError *error) {
                     if(succeeded){
                         [[EvernoteSession sharedSession] logout];
