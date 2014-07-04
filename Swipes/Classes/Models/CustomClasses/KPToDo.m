@@ -773,7 +773,24 @@
         [self removeAttachments:attachmentSet];
     }
 }
-
++(void)removeAllAttachmentsForAllToDosWithService:(NSString *)service inContext:(NSManagedObjectContext *)context save:(BOOL)save{
+    if(!context)
+        context = KPCORE.context;
+    NSArray *attachments = [KPAttachment MR_findByAttribute:@"service" withValue:EVERNOTE_SERVICE inContext:context];
+    NSArray *tasks = [KPToDo MR_findByAttribute:@"origin" withValue:EVERNOTE_SERVICE];
+    [context performBlockAndWait:^{
+        for( KPAttachment *attachment in attachments ){
+            [attachment MR_deleteInContext:context];
+        }
+        for ( KPToDo *todo in tasks ){
+            todo.originIdentifier = nil;
+            todo.origin = nil;
+        }
+    }];
+    if(save)
+        [KPCORE saveContextForSynchronization:context];
+    
+}
 - (KPAttachment *)firstAttachmentForServiceType:(NSString *)service
 {
     for (KPAttachment* attachment in self.attachments) {
@@ -785,7 +802,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, priority: %@ deleted: %@", self.title, self.order, self.priority, self.deleted];
+    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, origin: %@ - %@", self.title, self.order, self.origin, self.originIdentifier];
 }
 
 @end

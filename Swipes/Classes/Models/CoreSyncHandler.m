@@ -9,6 +9,7 @@
 #import "CoreSyncHandler.h"
 #import "UtilityClass.h"
 #import "KPToDo.h"
+#import "KPAttachment.h"
 #import "KPTag.h"
 #import "NSDate-Utilities.h"
 #import "Reachability.h"
@@ -29,7 +30,7 @@
 #define kDeleteObjectsKey @"deleteObjects"
 
 #ifdef DEBUG
-#define DUMPDB //[self dumpLocalDb];
+#define DUMPDB [self dumpLocalDb];
 #else
 #define DUMPDB
 #endif
@@ -230,6 +231,8 @@
             /* Add all deleted objects with objectId to be deleted*/
             NSMutableArray *deleteObjects = [NSMutableArray array];
             for(KPParseObject *object in deletedObjects){
+                if(![object isKindOfClass:[KPParseObject class]])
+                    continue;
                 if(object.objectId)
                     [deleteObjects addObject:@{@"className":[object getParseClassName],@"objectId":object.objectId}];
             }
@@ -862,7 +865,7 @@ static CoreSyncHandler *sharedObject;
         [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(performTestForSyncing) userInfo:nil repeats:NO];
     }
     @catch (NSException *exception) {
-        NSLog(@"%@",exception);
+        [UtilityClass sendException:exception type:@"Load Database Exception"];
     }
     @finally {
     }
@@ -921,10 +924,10 @@ static CoreSyncHandler *sharedObject;
 - (void)dumpLocalDb
 {
     NSLog(@"==== Dumping local DB");
-    NSArray* objects = [KPParseObject MR_findAll];
+    NSArray* objects;/* = [KPParseObject MR_findAll];
     for (KPParseObject* obj in objects) {
         NSLog(@"KPParseObject: %@", obj);
-    }
+    }*/
 
     objects = [KPTag MR_findAll];
     for (KPTag* obj in objects) {
@@ -936,6 +939,10 @@ static CoreSyncHandler *sharedObject;
         NSLog(@"KPToDo: %@", obj);
     }
     
+    objects = [KPAttachment MR_findAll];
+    for(KPAttachment *obj in objects){
+        NSLog(@"KPAttachment: %@",obj);
+    }
     NSLog(@"==== Dumping local DB end");
 }
 

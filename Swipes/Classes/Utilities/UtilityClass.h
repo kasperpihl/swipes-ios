@@ -20,6 +20,7 @@
 -(void)popupWithTitle:(NSString*)title andMessage:(NSString*)message buttonTitles:(NSArray*)buttonTitles block:(NumberBlock)block;
 +(NSString*)generateIdWithLength:(NSInteger)length;
 +(void)sendError:(NSError *)error type:(NSString *)type;
++(void)sendException:(NSException*)exception type:(NSString*)type;
 + (BOOL) validateEmail: (NSString *) candidate;
 + (UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color;
 + (UIImage *)image:(UIImage *)image withColor:(UIColor *)color multiply:(BOOL)multiply;
@@ -29,4 +30,5 @@
 +(NSString*)timeStringForDate:(NSDate*)date;
 +(NSString*)dayOfMonthForDate:(NSDate*)date;
 +(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime;
+
 @end

@@ -71,10 +71,15 @@
     KPParseObject *coreDataObject = [self checkForObject:object context:context];
     BOOL successful = YES;
     if(coreDataObject){
-        BOOL shouldDelete = [coreDataObject shouldDeleteForce:NO];
-        if( shouldDelete )
-            successful = [coreDataObject MR_deleteInContext:context];
+        successful = [coreDataObject deleteInContext:context];
     }
+    return successful;
+}
+-(BOOL)deleteInContext:(NSManagedObjectContext *)context{
+    BOOL shouldDelete = [self shouldDeleteForce:NO];
+    BOOL successful = YES;
+    if(shouldDelete)
+        successful = [self MR_deleteInContext:context];
     return successful;
 }
 #pragma mark - Save to server

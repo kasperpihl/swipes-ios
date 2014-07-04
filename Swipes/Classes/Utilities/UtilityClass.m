@@ -38,6 +38,19 @@ static UtilityClass *sharedObject;
     });
     
 }
++(void)sendException:(NSException*)exception type:(NSString*)type{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
+        if([exception description]) [errorObject setObject:[exception description] forKey:@"error"];
+        [errorObject setObject:@(1337) forKey:@"code"];
+        if(kCurrent) [errorObject setObject:kCurrent forKey:@"user"];
+        if(type) [errorObject setObject:type forKey:@"type"];
+        [errorObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if(!succeeded) [errorObject saveEventually];
+        }];
+        return;
+    });
+}
 +(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime{
     if(!time) return nil;
     NSString *timeString = [UtilityClass timeStringForDate:time];

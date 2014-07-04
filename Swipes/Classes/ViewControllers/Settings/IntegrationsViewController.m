@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 #import "SettingsCell.h"
-
+#import "KPAttachment.h"
+#import "KPToDo.h"
 #import "UtilityClass.h"
+#import "CoreSyncHandler.h"
 #import "EvernoteIntegration.h"
 #import "IntegrationsViewController.h"
 
@@ -162,9 +164,12 @@
     switch (integration) {
         case IntegrationEvernote:{
             if(kEnInt.isAuthenticated){
-                [UTILITY confirmBoxWithTitle:@"Unlink Evernote" andMessage:@"Are you sure?" block:^(BOOL succeeded, NSError *error) {
+                [UTILITY confirmBoxWithTitle:@"Unlink Evernote" andMessage:@"All tasks will be unlinked, are you sure?" block:^(BOOL succeeded, NSError *error) {
                     if(succeeded){
                         [[EvernoteSession sharedSession] logout];
+                        NSManagedObjectContext *context = [NSManagedObjectContext MR_contextForCurrentThread];
+                        
+                        [KPToDo removeAllAttachmentsForAllToDosWithService:EVERNOTE_SERVICE inContext:context save:YES];
                         [self reload];
                     }
                 }];

@@ -274,7 +274,7 @@
                                        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                                    }
                                    failure:^(NSError *error) {
-                                       NSLog(@"error %@", error);
+                                       [UtilityClass sendError:error type:@"Evernote Filter Error"];
                                        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                                        // failure... show error notification, etc
                                        if ([EvernoteSession isTokenExpiredWithError:error]) {
@@ -285,7 +285,7 @@
              ];
         }
         @catch (NSException *exception) {
-            
+            [UtilityClass sendException:exception type:@"Evernote Filter Exception"];
         }
 
         

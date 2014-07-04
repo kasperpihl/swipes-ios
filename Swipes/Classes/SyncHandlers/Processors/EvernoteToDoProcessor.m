@@ -5,8 +5,7 @@
 //  Created by demosten on 2/24/14.
 //
 
-#import <Evernote-SDK-iOS/EvernoteSDK.h>
-
+#import "UtilityClass.h"
 #import "EvernoteToDoProcessor.h"
 
 ///////////////////////////////////////////////////////////////
@@ -95,13 +94,13 @@ static NSSet* g_startEndElements;
                 block( YES , nil );
             
         } failure:^(NSError *error) {
-            NSLog(@"Failed to get note : %@",error);
+            [UtilityClass sendError:error type:@"Evernote Get Note Error"];
             if( block )
                 block( NO , error );
         }];
     }
     @catch (NSException *exception) {
-        
+        [UtilityClass sendException:exception type:@"Evernote Get Note Exception"];
     }
 
     
@@ -153,21 +152,20 @@ static NSSet* g_startEndElements;
     update.guid = _note.guid;
     update.title = _note.title;
     update.content = self.updatedContent;
-    NSLog(@"%@",_note.content);
-    NSLog(@"%@",self.updatedContent);
     @try {
         [[EvernoteNoteStore noteStore] updateNote:update success:^(EDAMNote *note) {
-            NSLog(@"note update success !!!");
+            DLog(@"note update success !!!");
             if( block )
                 block( YES, nil );
         } failure:^(NSError *error) {
+            [UtilityClass sendError:error type:@"Evernote Update Note Error"];
             if( block)
                 block( NO,error);
-            NSLog(@"note update failed: %@", [error localizedDescription]);
+            DLog(@"note update failed: %@", [error localizedDescription]);
         }];
     }
     @catch (NSException *exception) {
-        
+        [UtilityClass sendException:exception type:@"Evernote Update Note Exception"];
     }
 
     

@@ -40,5 +40,5 @@
 - (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync;
 - (void)removeAllAttachmentsForService:(NSString *)service;
 - (KPAttachment *)firstAttachmentForServiceType:(NSString *)service;
-
++(void)removeAllAttachmentsForAllToDosWithService:(NSString *)service inContext:(NSManagedObjectContext *)context save:(BOOL)save;
 @end

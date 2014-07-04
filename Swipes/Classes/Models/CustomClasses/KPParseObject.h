@@ -4,6 +4,7 @@
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context;
 +(KPParseObject *)getCDObjectFromObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
 +(BOOL)deleteObject:(NSDictionary*)object context:(NSManagedObjectContext*)context;
+-(BOOL)deleteInContext:(NSManagedObjectContext *)context;
 -(void)moveObjectIdToTemp;
 -(BOOL)shouldDeleteForce:(BOOL)force;
 /* 
