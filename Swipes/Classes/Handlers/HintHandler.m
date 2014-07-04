@@ -249,7 +249,7 @@ static HintHandler *sharedObject;
     NSString *title;
     switch (self.currentHint) {
         case HintSelected:{
-            if(index == 0) title = @"Edit";
+            if(index == 0) title = @"Open/Edit";
             else if(index == 1) title = @"Tag";
             else if(index == 2) title = @"Delete";
             else if(index == 3) title = @"Share";
