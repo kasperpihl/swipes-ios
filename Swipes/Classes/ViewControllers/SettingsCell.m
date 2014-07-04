@@ -31,7 +31,9 @@
 -(void)setSetting:(NSString *)setting value:(NSString *)value
 {
     self.settingLabel.text = setting;
+    self.settingLabel.font = self.settingFont;
     self.valueLabel.text = value;
+    self.valueLabel.font = self.valueFont;
     CGSize textSize = sizeWithFont(value, self.valueFont);
     CGRectSetSize(self.valueLabel,textSize.width+2*kValueLabelSidePadding,textSize.height + 2*kValueLabelTopPadding);
     [self setNeedsLayout];
