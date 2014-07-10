@@ -154,7 +154,7 @@
     
     self.allDoneForToday = (numberInProgress == 0);
     
-    self.sectionHeader.title = [NSString stringWithFormat:@"%i / %i Today",numberOfDone,total];
+    self.sectionHeader.title = [NSString stringWithFormat:@"%li / %li Today",(long)numberOfDone,(long)total];
     //[NSString stringWithFormat:@"%i%%",percentage];//
     
     if(total > 0)
@@ -183,7 +183,7 @@
             }
             [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastStreakDate"];
             
-            NSString *startString = (currentNumber <= 1) ? @"First day" : [NSString stringWithFormat:@"%i days",currentNumber];
+            NSString *startString = (currentNumber <= 1) ? @"First day" : [NSString stringWithFormat:@"%li days",(long)currentNumber];
             self.youreAllDoneView.stampView.monthLabel.text = [NSString stringWithFormat:@"%@ on a streak!",startString];
         }
         else{

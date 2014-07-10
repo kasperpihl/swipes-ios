@@ -552,7 +552,7 @@
     
 }
 
--(NSArray*)changeToOrder:(NSInteger)newOrder withItems:(NSArray *)items{
+-(NSArray*)changeToOrder:(int32_t)newOrder withItems:(NSArray *)items{
     if(newOrder == self.orderValue) return nil;
     //NSLog(@"change:%i - %i",self.orderValue,newOrder);
     BOOL decrease = (newOrder > self.orderValue);
@@ -696,7 +696,7 @@
     if(self.repeatOptionValue == RepeatNever) return;
     NSDate *next = [self nextDateFrom:self.repeatedDate];
     
-    NSInteger numberOfRepeated = self.numberOfRepeatedValue;
+    int32_t numberOfRepeated = self.numberOfRepeatedValue;
     while ([next isInPast]) {
         next = [self nextDateFrom:next];
     }

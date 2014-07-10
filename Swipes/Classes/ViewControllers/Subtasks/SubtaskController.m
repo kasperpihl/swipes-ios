@@ -50,7 +50,7 @@
 
 -(void)updateExpandButton:(BOOL)expanded animated:(BOOL)animated{
     
-    [self.closeLabelButton setTitle:[NSString stringWithFormat:@"See all %i actions",[self.model getSubtasks].count] forState:UIControlStateNormal];
+    [self.closeLabelButton setTitle:[NSString stringWithFormat:@"See all %lu actions",(unsigned long)[self.model getSubtasks].count] forState:UIControlStateNormal];
     [self.closeLabelButton sizeToFit];
     self.closeLabelButton.alpha = expanded ? 1 : 0;
     CGFloat extraHack = 15;

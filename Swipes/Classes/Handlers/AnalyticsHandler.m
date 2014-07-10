@@ -69,10 +69,10 @@ static AnalyticsHandler *sharedObject;
     }
 }
 -(NSString *)customDimension:(NSInteger)dimension{
-    return [[LocalyticsSession shared] customDimension:dimension];
+    return [[LocalyticsSession shared] customDimension:(int)dimension];
 }
 -(void)setCustomDimension:(NSInteger)dimension value:(NSString *)value{
-    [[LocalyticsSession shared] setCustomDimension:dimension value:value];
+    [[LocalyticsSession shared] setCustomDimension:(int)dimension value:value];
 }
 -(void)updateIdentity{
     if(kCurrent){

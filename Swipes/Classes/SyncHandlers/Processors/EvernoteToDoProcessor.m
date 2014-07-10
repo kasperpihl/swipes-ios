@@ -34,7 +34,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"EvernoteToDo -> title: %@, checked: %@, position: %d", _title, _checked ? @"YES" : @"NO", _position];
+    return [NSString stringWithFormat:@"EvernoteToDo -> title: %@, checked: %@, position: %ld", _title, _checked ? @"YES" : @"NO", (long)_position];
 }
 
 @end
@@ -129,7 +129,7 @@ static NSSet* g_startEndElements;
         // we have a TODO
         NSString* todoText = [_tempToDoText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if (0 == todoText.length) {
-            todoText = [NSString stringWithFormat:@"Untitled %u", _untitledCount++];
+            todoText = [NSString stringWithFormat:@"Untitled %lu", (unsigned long)_untitledCount++];
         }
 //        NSLog(@"Found TODO: %@", todoText);
         [_todos addObject:[[EvernoteToDo alloc] initWithTitle:todoText checked:_checked position:_todos.count]];

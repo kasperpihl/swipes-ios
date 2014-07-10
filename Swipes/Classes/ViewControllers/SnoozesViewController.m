@@ -166,7 +166,7 @@
 {
     KPSettings setting = [self settingValForSnooze:self.activeSnooze];
     NSDate *weekdayDate = (NSDate*)[kSettings valueForSetting:setting];
-    NSLog(@"old:%i new:%i",weekdayDate.weekday,weekday);
+    NSLog(@"old:%li new:%li",(long)weekdayDate.weekday,(long)weekday);
     if(weekday != weekdayDate.weekday){
         weekdayDate = [NSDate dateThisOrNextWeekWithDay:weekday hours:8 minutes:0];
         [kSettings setValue:weekdayDate forSetting:setting];

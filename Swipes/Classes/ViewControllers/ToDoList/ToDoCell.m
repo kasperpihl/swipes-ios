@@ -198,7 +198,7 @@
     NSSet *filteredSubtasks = [[self.toDo getSubtasks] filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
     if( filteredSubtasks && filteredSubtasks.count > 0){
         self.actionStepsButton.hidden = NO;
-        self.actionStepsLabel.text = [NSString stringWithFormat:@"%i",filteredSubtasks.count];
+        self.actionStepsLabel.text = [NSString stringWithFormat:@"%lu",(unsigned long)filteredSubtasks.count];
         [self.actionStepsLabel sizeToFit];
         CGRectSetSize(self.actionStepsLabel, CGRectGetWidth(self.actionStepsLabel.frame)+12, CGRectGetHeight(self.actionStepsLabel.frame)+5);
         CGRectSetCenter(self.actionStepsLabel, CGRectGetWidth(self.actionStepsButton.frame)/2, CGRectGetHeight(self.actionStepsButton.frame)/2);

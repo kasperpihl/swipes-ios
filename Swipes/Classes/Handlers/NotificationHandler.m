@@ -197,7 +197,7 @@ static NotificationHandler *sharedObject;
                 userInfo = @{@"type": @"schedule",@"identifier": [[lastTodo.objectID URIRepresentation] absoluteString]};
             }
             else {
-                title = [NSString stringWithFormat:@"You have %i new tasks.",numberOfNotificationsForDate];
+                title = [NSString stringWithFormat:@"You have %li new tasks.",(long)numberOfNotificationsForDate];
                 userInfo = @{@"type": @"schedule"};
             }
             UILocalNotification *notification = [self notificationForDate:currentDate badgeCounter:totalBadgeCount title:title userInfo:userInfo];

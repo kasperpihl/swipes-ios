@@ -17,7 +17,7 @@
 -(void)setTime:(NSDate *)time{
     _time = [time dateToNearest15Minutes];
     
-    self.text = [NSString stringWithFormat:@"%i",_time.hour];
+    self.text = [NSString stringWithFormat:@"%li",(long)_time.hour];
     [self setNeedsDisplay];
 }
 -(id)initWithFrame:(CGRect)frame{

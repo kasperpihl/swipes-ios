@@ -576,7 +576,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         CGFloat percentage = (CGFloat)numberOfCompletedSubtasks / numberOfSubtasks;
         self.sectionHeader.progressPercentage = percentage;
         
-        NSString *title = (numberOfCompletedSubtasks != numberOfSubtasks) ? [NSString stringWithFormat:@"%i / %i Steps",numberOfCompletedSubtasks,numberOfSubtasks] : @"ALL DONE";
+        NSString *title = (numberOfCompletedSubtasks != numberOfSubtasks) ? [NSString stringWithFormat:@"%li / %li Steps",(long)numberOfCompletedSubtasks,(long)numberOfSubtasks] : @"ALL DONE";
         
         [self.sectionHeader setTitle:title];
     }
@@ -770,7 +770,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         if( [[EvernoteSession sharedSession] isEvernoteInstalled] )
             buttons = @[@"Cancel",@"Remove note",@"Open note"];
         [UTILITY popupWithTitle:@"Evernote" andMessage:@"What to do?" buttonTitles:buttons block:^(NSInteger number, NSError *error) {
-            NSLog(@"%i",number);
+            NSLog(@"%li",(long)number);
             if(number == 1){
                 [self.model removeAllAttachmentsForService:EVERNOTE_SERVICE];
                 [self update];

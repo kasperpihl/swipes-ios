@@ -115,7 +115,7 @@ static ThemeHandler *sharedObject;
     
     CGColorRef oldCGColor = color.CGColor;
     
-    int numberOfComponents = CGColorGetNumberOfComponents(oldCGColor);
+    NSInteger numberOfComponents = CGColorGetNumberOfComponents(oldCGColor);
     
     // can not invert - the only component is the alpha
     // e.g. self == [UIColor groupTableViewBackgroundColor]
@@ -126,7 +126,7 @@ static ThemeHandler *sharedObject;
     const CGFloat *oldComponentColors = CGColorGetComponents(oldCGColor);
     CGFloat newComponentColors[numberOfComponents];
     
-    int i = numberOfComponents - 1;
+    NSInteger i = numberOfComponents - 1;
     newComponentColors[i] = oldComponentColors[i]; // alpha
     while (--i >= 0) {
         newComponentColors[i] = 1 - oldComponentColors[i];

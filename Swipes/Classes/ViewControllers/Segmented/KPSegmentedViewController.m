@@ -151,7 +151,7 @@
 }
 -(void)deleteNumberOfItems:(NSInteger)numberOfItems inView:(UIViewController*)viewController completion:(SuccessfulBlock)block{
     NSString *endString = (numberOfItems > 1) ? @"tasks" : @"task";
-    NSString *titleString = [NSString stringWithFormat:@"Delete %i %@",numberOfItems,endString];
+    NSString *titleString = [NSString stringWithFormat:@"Delete %li %@",(long)numberOfItems,endString];
     NSString *thisTheseString = (numberOfItems > 1) ? @"these" : @"this";
     NSString *messageString = [NSString stringWithFormat:@"Are you sure you want to permanently delete %@ %@?",thisTheseString,endString];
     KPAlert *alert = [KPAlert alertWithFrame:viewController.view.bounds title:titleString message:messageString block:^(BOOL succeeded, NSError *error) {

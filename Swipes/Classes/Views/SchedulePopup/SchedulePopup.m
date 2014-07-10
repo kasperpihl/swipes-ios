@@ -162,7 +162,7 @@ typedef enum {
             NSString *buttonUsed = [self stringForScheduleButton:state];
             NSInteger numberOfDaysFromNow = [date daysAfterDate:[NSDate date]];
             NSString *numberOfDaysInterval = @"56+";
-            if(numberOfDaysFromNow <= 6) numberOfDaysInterval = [NSString stringWithFormat:@"%i",numberOfDaysFromNow];
+            if(numberOfDaysFromNow <= 6) numberOfDaysInterval = [NSString stringWithFormat:@"%li",(long)numberOfDaysFromNow];
             else if(numberOfDaysFromNow <= 14) numberOfDaysInterval = @"7-14";
             else if(numberOfDaysFromNow <= 28) numberOfDaysInterval = @"15-28";
             else if(numberOfDaysFromNow <= 42) numberOfDaysInterval = @"29-42";

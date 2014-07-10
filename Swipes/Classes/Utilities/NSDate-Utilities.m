@@ -287,7 +287,7 @@
     NSInteger numberOfDaysInMonth = [CURRENT_CALENDAR rangeOfUnit:NSDayCalendarUnit
                                                            inUnit:NSMonthCalendarUnit
                                                           forDate:retDate].length;
-    NSLog(@"numberOfDays:%i",numberOfDaysInMonth);
+    NSLog(@"numberOfDays:%li",(long)numberOfDaysInMonth);
     if(retDate.day >= 28 && retDate.day < numberOfDaysInMonth){ 
         offsetComponents = [[NSDateComponents alloc] init];
         [offsetComponents setDay:numberOfDaysInMonth-retDate.day];
@@ -367,7 +367,7 @@
     NSDateComponents *time = [[NSCalendar currentCalendar] components:unitFlags fromDate:self];
     NSInteger thisMin = [time minute];
     NSDate *newDate;
-    int remain = thisMin % minutes;
+    NSInteger remain = thisMin % minutes;
     // if less then 3 then round down
     NSInteger dividor = ceil(minutes/2);
     if (remain<dividor){

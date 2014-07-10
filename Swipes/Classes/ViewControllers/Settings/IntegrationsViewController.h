@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-typedef enum {
+typedef NS_ENUM(NSUInteger, Integrations) {
     IntegrationEvernote
-} Integrations;
+};
+
 @interface IntegrationsViewController : UIViewController
 
 @end

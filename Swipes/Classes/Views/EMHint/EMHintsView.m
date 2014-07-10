@@ -109,7 +109,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     CGFloat colorLocations[2] = {0.3,0.5};
     
     // draw spotlights
-    int spotlightCount = _positionArray.count;
+    NSUInteger spotlightCount = _positionArray.count;
     for (int i=0; i<spotlightCount; ++i)
     {
         // center and radius of spotlight

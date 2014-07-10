@@ -15,5 +15,5 @@
 -(UIColor *)darker;
 -(UIColor *)lighter;
 -(UIImage*)image;
--(UIColor *)colorToColor:(UIColor *)toColor percent:(float)percent;
+-(UIColor *)colorToColor:(UIColor *)toColor percent:(CGFloat)percent;
 @end

@@ -51,13 +51,13 @@ typedef NS_ENUM(NSUInteger, CellType) {
     CellTypeDone
 };
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, GeoFenceType) {
     GeoFenceNone = 0,
     GeoFenceOnArrive = 1,
     GeoFenceOnLeave = 2
-} GeoFenceType;
+};
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, RepeatOptions) {
     RepeatNever = 0,
     RepeatEveryDay,
     RepeatEveryMonFriOrSatSun,
@@ -65,7 +65,7 @@ typedef enum {
     RepeatEveryMonth,
     RepeatEveryYear,
     RepeatOptionsTotal
-} RepeatOptions;
+};
 
 typedef enum {
     PositionCenter,

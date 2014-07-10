@@ -90,7 +90,7 @@ typedef enum {
         self.backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
         NSMutableArray *animationImages = [NSMutableArray array];
         for(NSInteger i = 0 ; i < launchImageNumber ; i++){
-            [animationImages addObject:[UIImage imageNamed:[NSString stringWithFormat:@"%@%i.jpg",launchImageName,i]]];
+            [animationImages addObject:[UIImage imageNamed:[NSString stringWithFormat:@"%@%li.jpg",launchImageName,(long)i]]];
         }
         NSArray *reversedImages = [[animationImages reverseObjectEnumerator] allObjects];
         [animationImages addObjectsFromArray:reversedImages];
@@ -301,7 +301,7 @@ typedef enum {
     else if([self.passwordField isFirstResponder]) [self.passwordField resignFirstResponder];
 }
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
-    NSLog(@"index:%i",buttonIndex);
+    NSLog(@"index:%li",(long)buttonIndex);
     if(buttonIndex == 1){
         UITextField *textField = [alertView textFieldAtIndex:0];
         if(textField.text.length > 0){

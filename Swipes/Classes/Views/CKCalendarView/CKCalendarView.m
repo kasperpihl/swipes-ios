@@ -50,7 +50,7 @@
     _date = date;
     if(date != nil){
         NSDateComponents *comps = [self.calendar components:NSDayCalendarUnit|NSMonthCalendarUnit fromDate:date];
-        [self setTitle:[NSString stringWithFormat:@"%d", comps.day] forState:UIControlStateNormal];
+        [self setTitle:[NSString stringWithFormat:@"%ld", (long)comps.day] forState:UIControlStateNormal];
         
     }
 }
@@ -111,7 +111,7 @@
 - (void)_init {
     CKCalendarStartDay firstDay;
     self.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    firstDay = [[NSCalendar currentCalendar] firstWeekday];
+    firstDay = (CKCalendarStartDay)[[NSCalendar currentCalendar] firstWeekday];
     [self.calendar setLocale:[NSLocale currentLocale]];
     self.userInteractionEnabled = YES;
     self.cellWidth = self.bounds.size.width/7;

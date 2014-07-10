@@ -1896,7 +1896,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
-					/Users/kasper/Documents/Code/Swipes/ios/Swipes/Ressources/Libs,
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2041,7 +2040,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
-					/Users/kasper/Documents/Code/Swipes/ios/Swipes/Ressources/Libs,
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2117,7 +2115,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
-					/Users/kasper/Documents/Code/Swipes/ios/Swipes/Ressources/Libs,
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

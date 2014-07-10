@@ -208,7 +208,7 @@ static NSUInteger g_thumbnailCounter = 0;
         if (nil == data) { // do not repeat requests
             // Create file name. Another option would be to URL encode path and use it as a file name.
             // however this might be risky because we could hit some file system path length limitation
-            NSString *pathComponent = [NSString stringWithFormat:@"dbox_thumb%u", g_thumbnailCounter++];
+            NSString *pathComponent = [NSString stringWithFormat:@"dbox_thumb%lu", (unsigned long)g_thumbnailCounter++];
             if (g_thumbnailCounter > 10000) {
                 // reset the counter to save space
                 g_thumbnailCounter = 0;

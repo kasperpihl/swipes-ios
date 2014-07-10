@@ -16,13 +16,13 @@
 #define timageString(ImageBase,DarkEnding,LightEnding) timageStringF(ImageBase,DarkEnding,LightEnding,ThemeNone)
 #define timageStringBW(ImageBase) timageStringF(ImageBase,@"_white",@"_black",ThemeNone)
 #define timageStringF(ImageBase,DarkEnding,LightEnding,Theme) [THEMER imageStringForBase:ImageBase darkEnding:DarkEnding lightEnding:LightEnding forceTheme:Theme]
-typedef enum {
+typedef NS_ENUM(NSUInteger, Theme) {
     ThemeNone = 0,
     ThemeDark = 1,
     ThemeLight = 2
-} Theme;
+};
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, ThemerItem) {
     BackgroundColor,
     TextColor,
     SubTextColor,
@@ -35,7 +35,7 @@ typedef enum {
     StrongLaterColor,
     StrongDoneColor,
     
-} ThemerItem;
+};
 
 @interface ThemeHandler : NSObject
 @property (nonatomic) Theme currentTheme;

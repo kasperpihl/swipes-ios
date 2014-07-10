@@ -787,7 +787,7 @@
     [self saveContextForSynchronization:nil];*/
     NSInteger i = 0;
     do {
-        [KPToDo addItem:[NSString stringWithFormat:@"Testing %i",i] priority:NO tags:nil save:NO];
+        [KPToDo addItem:[NSString stringWithFormat:@"Testing %li",(long)i] priority:NO tags:nil save:NO];
         i++;
     } while (i < 500);
     //NSLog(@"saving");

@@ -160,7 +160,7 @@
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]){
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
         if(!kCurrent)
-            [ANALYTICS tagEvent:@"Installation" options:@{ @"Mechanism" : launchMechanism,@"Time since real install" : [NSString stringWithFormat:@"%i days",[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]}];
+            [ANALYTICS tagEvent:@"Installation" options:@{ @"Mechanism" : launchMechanism,@"Time since real install" : [NSString stringWithFormat:@"%li days",(long)[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]}];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
         
         [[NSUserDefaults standardUserDefaults] synchronize];

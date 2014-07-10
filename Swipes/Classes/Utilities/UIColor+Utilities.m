@@ -11,14 +11,14 @@
 @implementation UIColor (Utilities)
 -(UIColor*)saturatedWithPercentage:(CGFloat)percentage{
     CGFloat dividor = 1 + percentage;
-    float h, s, b, a;
+    CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h saturation:s * dividor brightness:b alpha:a];
     return nil;
 }
 -(UIColor*)brightenedWithPercentage:(CGFloat)percentage{
     CGFloat dividor = 1 + percentage;
-    float h, s, b, a;
+    CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h saturation:s brightness:b * dividor alpha:a];
     return nil;
@@ -27,7 +27,7 @@
     
     CGColorRef oldCGColor = self.CGColor;
     
-    int numberOfComponents = CGColorGetNumberOfComponents(oldCGColor);
+    NSInteger numberOfComponents = CGColorGetNumberOfComponents(oldCGColor);
     
     // can not invert - the only component is the alpha
     // e.g. self == [UIColor groupTableViewBackgroundColor]
@@ -38,7 +38,7 @@
     const CGFloat *oldComponentColors = CGColorGetComponents(oldCGColor);
     CGFloat newComponentColors[numberOfComponents];
     
-    int i = numberOfComponents - 1;
+    NSInteger i = numberOfComponents - 1;
     newComponentColors[i] = oldComponentColors[i]; // alpha
     while (--i >= 0) {
         newComponentColors[i] = 1 - oldComponentColors[i];
@@ -50,7 +50,7 @@
     
     return newColor;
 }
-- (UIColor *)colorToColor:(UIColor *)toColor percent:(float)percent
+- (UIColor *)colorToColor:(UIColor *)toColor percent:(CGFloat)percent
 {
     float dec = percent / 100.f;
     CGFloat fRed, fBlue, fGreen, fAlpha;
@@ -97,7 +97,7 @@
 
 -(UIColor *)lighter
 {
-    float h, s, b, a;
+    CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
                           saturation:s
@@ -108,7 +108,7 @@
 
 - (UIColor *)darker
 {
-    float h, s, b, a;
+    CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
                           saturation:s

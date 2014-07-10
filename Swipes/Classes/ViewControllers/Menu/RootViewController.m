@@ -106,7 +106,7 @@
     [self.settingsViewController renderSubviews];
     voidBlock block = ^{
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
-        NSDictionary *options = @{@"Time since real install" : [NSString stringWithFormat:@"%i days",[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]};
+        NSDictionary *options = @{@"Time since real install" : [NSString stringWithFormat:@"%li days",(long)[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]};
         if(user.isNew) {
             [ANALYTICS tagEvent:@"Signed Up" options:options];
         }
@@ -387,7 +387,7 @@ static RootViewController *sharedObject;
         [[NSUserDefaults standardUserDefaults] synchronize];
         [KPCORE seedObjectsSave:YES];
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
-        NSDictionary *options = @{@"Time since real install" : [NSString stringWithFormat:@"%i days",[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]};
+        NSDictionary *options = @{@"Time since real install" : [NSString stringWithFormat:@"%li days",(long)[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]};
         [ANALYTICS tagEvent:@"Trying out app" options:options];
     }
     
