@@ -1,16 +1,17 @@
 platform :ios, '6.0'
-pod 'Appirater', '~> 2.0.2'
+pod 'Appirater', :inhibit_warnings => true
 pod 'Bolts', :inhibit_warnings => true
 pod 'Facebook-iOS-SDK', :inhibit_warnings => true
 pod 'Parse', :inhibit_warnings => true
-pod 'MagicalRecord', '~> 2.2', :inhibit_warnings => true
-pod 'Reachability', '~> 3.1.1'
-pod 'Underscore.m', '~> 0.2.1'
-pod 'RMStore', '~> 0.4.2'
-pod 'Base64', '~> 1.0.1'
-pod 'Evernote-SDK-iOS', '~> 1.3.1'
-pod 'APAddressBook', '~> 0.0.6'
-pod 'KeenClient', '~> 3.2'
+pod 'MagicalRecord', :inhibit_warnings => true
+pod 'Reachability'
+pod 'Underscore.m'
+pod 'RMStore', '~> 0.4.2', :inhibit_warnings => true
+pod 'Base64'
+pod 'Evernote-SDK-iOS', :inhibit_warnings => true
+pod 'APAddressBook'
+# there is a problem with version 3.2.10 that breaks Facebook build
+pod 'KeenClient', '<= 3.2.9'
 #pod 'MMDrawerController', '~> 0.5.3' - now part of libs as it was modified
 
 #pod 'Localytics-AMP', '~> 2.23'
@@ -21,7 +22,7 @@ pod 'KeenClient', '~> 3.2'
 post_install do |installer|
   installer.project.targets.each do |target|
     target.build_configurations.each do |config|
-      target.build_settings(config.name)['ARCHS'] = '$(ARCHS_STANDARD_32_BIT)'
+        #      target.build_settings(config.name)['ARCHS'] = '$(ARCHS_STANDARD_32_BIT)'
       s = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS']
     if s==nil then s = [ '$(inherited)' ] end
     s.push('MR_ENABLE_ACTIVE_RECORD_LOGGING=0');
