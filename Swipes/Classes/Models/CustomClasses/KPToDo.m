@@ -60,7 +60,7 @@
     return newToDo;
 }
 -(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save{
-    KPToDo *subTask = [KPToDo newObjectInContext:nil];
+    KPToDo *subTask = [KPToDo newObjectInContext:[self managedObjectContext]];
     subTask.title = title;
     subTask.orderValue = kDefOrderVal;
     subTask.schedule = [NSDate date];

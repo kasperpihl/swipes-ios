@@ -103,8 +103,11 @@
     [AppsFlyerTracker sharedTracker].appleAppID = @"657882159";
     [AppsFlyerTracker sharedTracker].isDebug = NO;
     [PaymentHandler sharedInstance];
-    [self tagLaunchSource:launchOptions];
-    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // this call blocks when there is an internet connection but no real data passes through
+        [self tagLaunchSource:launchOptions];
+    });
+
     if (OSVER >= 7) {
         [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:tcolor(TextColor)];
         [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];

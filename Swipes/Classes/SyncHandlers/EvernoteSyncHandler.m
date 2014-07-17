@@ -161,15 +161,15 @@
             }
         }
         BOOL isNew = NO;
-        NSLog(@"bestScore:%f",bestScore);
-        NSLog(@"best Levenshtein score: %f (%@ to %@)", bestScore, evernoteToDo.title, bestMatch.originIdentifier);
+        //DLog(@"bestScore:%f",bestScore);
+        //DLog(@"best Levenshtein score: %f (%@ to %@)", bestScore, evernoteToDo.title, bestMatch ? bestMatch.originIdentifier : @"null");
         if( bestScore >= 120 ){
             matchingSubtask = bestMatch;
         }
         
         if ( !matchingSubtask ){
-            NSLog(@"creating subtask from Evernote");
-            matchingSubtask = [parentToDo addSubtask:evernoteToDo.title save:NO];
+            //NSLog(@"creating subtask from Evernote");
+            matchingSubtask = [parentToDo addSubtask:evernoteToDo.title save:YES];
             matchingSubtask.origin = EVERNOTE_SERVICE;
             matchingSubtask.originIdentifier = evernoteToDo.title;
             updated = YES;
@@ -191,8 +191,9 @@
         [KPToDo deleteToDos:subtasks save:NO force:NO];
     }
 
-    if( updated )
+    if( updated && parentToDo.objectId) {
         [self._updatedTasks addObject:parentToDo.objectId];
+    }
     
     return nil;
 }

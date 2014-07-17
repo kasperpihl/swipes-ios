@@ -25,6 +25,7 @@ static UtilityClass *sharedObject;
     return sharedObject;
 }
 +(void)sendError:(NSError *)error type:(NSString *)type{
+    DLog(@"Sending error: '%@' of type: '%@'", error, type);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
         if([error description]) [errorObject setObject:[error description] forKey:@"error"];
@@ -39,6 +40,7 @@ static UtilityClass *sharedObject;
     
 }
 +(void)sendException:(NSException*)exception type:(NSString*)type{
+    DLog(@"Sending exception: '%@' of type: '%@'", exception, type);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
         if([exception description]) [errorObject setObject:[exception description] forKey:@"error"];
