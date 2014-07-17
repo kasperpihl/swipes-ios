@@ -195,10 +195,10 @@ static NSSet* g_startEndElements;
         NSUInteger endLocation = scanner.scanLocation;
         
         NSRange range = NSMakeRange(startLocation, endLocation - startLocation);
-        NSString* replaceString = [NSString stringWithFormat:@" checked=\"%@\"/", checked ? @"true" : @"false"];
+        NSString* replaceString = [NSString stringWithFormat:@" checked=\"%@\"", checked ? @"true" : @"false"];
         self.updatedContent = [self.updatedContent stringByReplacingCharactersInRange:range withString:replaceString];
         self.needUpdate = YES;
-        NSLog(@"successfully went through updating content local");
+        DLog(@"successfully went through updating content local");
         return YES;
     }
     else {
