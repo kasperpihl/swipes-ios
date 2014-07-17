@@ -113,7 +113,6 @@
     
     [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
     backButton.transform = CGAffineTransformMakeRotation(M_PI);
-    [self.view addSubview:backButton];
     self.backButton = backButton;
     
     
@@ -167,6 +166,7 @@
     [self updateSchemeButton];
     [self changedIsPlus];
 
+    [self.view addSubview:backButton]; // shoud be on top of grid
 }
 
 -(void)updateSchemeButton
