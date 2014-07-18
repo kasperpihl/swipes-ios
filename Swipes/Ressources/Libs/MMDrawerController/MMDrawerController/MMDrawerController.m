@@ -21,6 +21,7 @@
 
 #import "MMDrawerController.h"
 #import "UIViewController+MMDrawerController.h"
+#import "UtilityClass.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -182,7 +183,14 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    [self setMaximumLeftDrawerWidth:self.view.frame.size.width];
+    // this an attemtp to fix the problem with table view not properly resizing
+    @try {
+        [self setMaximumLeftDrawerWidth:self.view.frame.size.width];
+    }
+    @catch (NSException *exception) {
+        [UtilityClass sendException:exception type:@"MMDrawerController layout exception"];
+        DLog(@"Error setting drawer width to %@", NSStringFromCGRect(self.view.frame));
+    }
 }
 
 -(void)commonSetup{
