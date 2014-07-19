@@ -301,13 +301,13 @@ secondStateIconName:(NSString *)secondIconName
 - (NSString *)imageNameWithPercentage:(CGFloat)percentage {
     NSString *imageName;
         // Image
-        if (percentage >= 0 && percentage < kMCStop2)
+        if (percentage >= 0 && _firstIconName )
             imageName = _firstIconName;
-        else if (percentage >= kMCStop2)
+        if (percentage >= kMCStop2 && _secondIconName )
             imageName = _secondIconName;
-        else if (percentage < 0 && percentage > -kMCStop2)
+        if ( percentage < 0 && _thirdIconName )
             imageName = _thirdIconName;
-        else if (percentage <= -kMCStop2)
+        if (percentage <= -kMCStop2 && _fourthIconName)
             imageName = _fourthIconName;
     return imageName;
 }
@@ -328,7 +328,20 @@ secondStateIconName:(NSString *)secondIconName
 }
 
 - (UIColor *)colorWithPercentage:(CGFloat)percentage {
-    UIColor *color = self.noneColor; 
+    UIColor *color = self.noneColor;
+    if (percentage >= kMCStop1 && _firstColor)
+        color = _firstColor;
+    if (percentage >= kMCStop2 && _secondColor)
+        color = _secondColor;
+    if (percentage < -kMCStop1 && _thirdColor)
+        color = _thirdColor;
+    if (percentage <= -kMCStop2 && _fourthColor)
+        color = _fourthColor;
+    
+    if(self.didRegret)
+        color = alpha(color,0.3);
+    
+    /*UIColor *color = self.noneColor;
     if(!self.didRegret || !self.shouldRegret){
         // Background Color
         if (percentage >= kMCStop1 && percentage < kMCStop2)
@@ -339,7 +352,7 @@ secondStateIconName:(NSString *)secondIconName
             color = _thirdColor;
         else if (percentage <= -kMCStop2)
             color = _fourthColor;
-    }
+    }*/
     self.currentState = [self stateWithPercentage:percentage];
     return color;
 }
@@ -427,8 +440,11 @@ secondStateIconName:(NSString *)secondIconName
 
     // Color
     UIColor *color = [self colorWithPercentage:percentage320];
-    if (color != nil) {
-        [_colorIndicatorView setBackgroundColor:color];
+    if (color != nil && ![color isEqual:_colorIndicatorView.backgroundColor]) {
+        [UIView animateWithDuration:0.1f animations:^{
+            [_colorIndicatorView setBackgroundColor:color];
+        }];
+        
     }
 }
 
@@ -554,6 +570,8 @@ secondStateIconName:(NSString *)secondIconName
     
 }
 - (void)notifyDelegateWithState: ( MCSwipeTableViewCellState )state{
+    if(state == MCSwipeTableViewCellStateNone)
+        _colorIndicatorView.backgroundColor = self.noneColor;
     if (_delegate != nil && [_delegate respondsToSelector:@selector(swipeTableViewCell:didTriggerState:withMode:)]) {
         [_delegate swipeTableViewCell:self didTriggerState:state withMode:_mode];
     }
