@@ -37,7 +37,7 @@
         [self resign];
     }
     if(!animated){
-        [self fullReload];
+        //[self fullReload];
     }else{
         [self loadSubtasks];
         [self updateTableFooter];
@@ -74,12 +74,13 @@
 }
 
 -(void)setModel:(KPToDo *)model{
+    //NSLog(@"set model");
     _model = model;
     [self.editingCell.titleField resignFirstResponder];
     [self.addCell.titleField resignFirstResponder];
     self.expanded = NO;
-    [self loadSubtasks];
-    [self reloadAndNotify:NO];
+    //[self loadSubtasks];
+    //[self reloadAndNotify:NO];
 }
 
 -(void)fullReload{
@@ -92,15 +93,17 @@
 -(void)loadSubtasks{
     NSSet *subtasks = [self.model getSubtasks];
     BOOL hasUncompletedTasks = YES;
+    NSArray *sortedObjects = [KPToDo sortOrderForItems:[subtasks allObjects] newItemsOnTop:NO save:YES];
     if(!self.expanded){
-        subtasks = [subtasks filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
-        if(!subtasks.count){
+        sortedObjects = [sortedObjects filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
+        if(!sortedObjects.count){
             hasUncompletedTasks = NO;
         }
         
     }
+    //NSLog(@"length %i",subtasks.count);
     
-    NSArray *sortedObjects = [KPToDo sortOrderForItems:[subtasks allObjects] newItemsOnTop:NO save:YES];
+    
     if(!self.expanded && sortedObjects.count > 0){
         if(hasUncompletedTasks)
             sortedObjects = [sortedObjects subarrayWithRange:NSMakeRange(0, 1)];

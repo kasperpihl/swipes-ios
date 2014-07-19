@@ -509,6 +509,14 @@
 }
 
 +(NSArray*)sortOrderForItems:(NSArray*)items newItemsOnTop:(BOOL)newOnTop save:(BOOL)save{
+    NSMutableArray *existingOrders = [NSMutableArray array];
+
+    for( KPToDo *todo in items ){
+        [existingOrders addObject:todo.order];
+    }
+    //if(!newOnTop)
+        //NSLog(@"%@",[[existingOrders reverseObjectEnumerator] allObjects]);
+    
     NSPredicate *orderedItemsPredicate = [NSPredicate predicateWithFormat:@"(order > %i)",kDefOrderVal];
     NSPredicate *unorderedItemsPredicate = [NSPredicate predicateWithFormat:@"!(order > %i)",kDefOrderVal];
     NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
@@ -527,7 +535,7 @@
         if(toDo.orderValue != counter){
             toDo.orderValue = counter;
             numberOfChanges++;
-            NSLog(@"changed %i",counter);
+            //NSLog(@"changed %i",counter);
         }
         //NSLog(@"%i - %@",toDo.orderValue,toDo.title);
         counter++;
@@ -535,6 +543,7 @@
     if(save && numberOfChanges > 0){
         [KPToDo saveToSync];
     }
+    
     /*
      Ordered items = items where order > 0
      itemsWithoutOrder = items where !order or order == 0
