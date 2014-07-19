@@ -202,6 +202,7 @@
     BOOL isFacebookAvailable = ([[UIDevice currentDevice].systemVersion floatValue] >= 6 && [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]);
     BOOL isTwitterAvailable = [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter];
     if(!self.shareText) self.shareText = [self randomTextAllDoneForToday:self.allDoneForToday];
+    
     [self.youreAllDoneView setText:self.shareText];
     CGFloat buttonsCenterY = CGRectGetMaxY(self.youreAllDoneView.shareItLabel.frame) + kButtonSpacing+ kShareButtonSize/2;
     CGRectSetCenter(self.facebookButton, self.view.frame.size.width/2-kButtonSpacing/2-kShareButtonSize/2, buttonsCenterY);
@@ -210,6 +211,7 @@
     //self.youreAllDoneView.shareItLabel.hidden = (!isTwitterAvailable && !isFacebookAvailable);
     [self.youreAllDoneView.stampView setDate:[NSDate date]];
 }
+
 
 -(NSString*)randomTextAllDoneForToday:(BOOL)doneForToday{
     NSArray *doneForTodays = @[@"Nothing beats going to bed with a complete to-do list! #ProductiveDay",
@@ -374,6 +376,7 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self updateSectionHeader];
+    [self updateBackground];
 }
 - (void)didReceiveMemoryWarning
 {
