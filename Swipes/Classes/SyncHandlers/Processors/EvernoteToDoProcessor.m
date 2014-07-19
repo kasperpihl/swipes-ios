@@ -168,7 +168,6 @@ static NSSet* g_startEndElements;
         [UtilityClass sendException:exception type:@"Evernote Update Note Exception"];
     }
 
-    
 }
 
 - (BOOL)updateToDo:(EvernoteToDo *)updatedToDo checked:(BOOL)checked

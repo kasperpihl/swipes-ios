@@ -63,7 +63,7 @@
                        @"Get started:",
                        @"",
                        @"1. Create a task in Swipes\r\n",
-                       [NSString stringWithFormat:@"2. Double tab to open it > press the %@",evernoteIconString],
+                       [NSString stringWithFormat:@"2. Double tap to open it > press the %@",evernoteIconString],
                        @"",
                        @"3. Select the note you want to sync",
                        @"",

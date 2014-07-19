@@ -253,7 +253,6 @@
         // setup additional flags
         if (0 == _searchBar.text.length) { // remove this check if you want order to be always by UPDATED
             filter.words = @"todo:*";
-            
         }
         @try {
             [noteStore findNotesWithFilter:filter offset:0 maxNotes:kSearchLimit
