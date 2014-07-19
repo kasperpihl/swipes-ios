@@ -509,7 +509,10 @@
         }
         else if(!error){
             NSString *myString = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
-            error = [NSError errorWithDomain:myString code:response.statusCode userInfo:nil];
+            if (myString)
+                error = [NSError errorWithDomain:myString code:response.statusCode userInfo:nil];
+            else
+                error = [NSError errorWithDomain:@"(missing data)" code:response.statusCode userInfo:nil];
             [UtilityClass sendError:error type:@"Sync request error 2"];
         }
         self._needSync = YES;
