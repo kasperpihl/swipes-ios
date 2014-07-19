@@ -353,7 +353,11 @@
     return YES;
 }
 - (void)orientationChanged:(NSNotification *)notification{
-    [self pressedBackButton:self.backButton];
+    
+    UIDevice *device = (UIDevice*)[notification object];
+    
+    if([Global supportsOrientation:[device orientation]] && kIsIpad)
+        [self pressedBackButton:self.backButton];
 }
 -(void)dealloc{
     self.confirmButton = nil;

@@ -1168,8 +1168,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 
 - (void)orientationChanged:(NSNotification *)notification{
-    [self.sectionHeader setNeedsDisplay];
-    [self update];
+    if(kIsIpad){
+        [self.sectionHeader setNeedsDisplay];
+        [self update];
+    }
     /*BOOL isPortrait = !UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
      CGFloat width = isPortrait ? self.cell.frame.size.width : self.cell.frame.size.height;
      CGFloat height = isPortrait ?  self.cell.frame.size.height : self.cell.frame.size.width;

@@ -385,7 +385,8 @@
 }
 
 - (void)orientationChanged:(NSNotification *)notification{
-    [self cancel:self];
+    if(kIsIpad)
+        [self cancel:self];
 }
 
 #pragma mark - Evernote Viewer protocol implementation

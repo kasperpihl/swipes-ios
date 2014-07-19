@@ -317,7 +317,8 @@ static HintHandler *sharedObject;
     }];
 }
 - (void)orientationChanged:(NSNotification *)notification{
-    [self.emHint clear];
+    if(kIsIpad)
+        [self.emHint clear];
 }
 -(void)initialize{
     self.hints = [[NSUserDefaults standardUserDefaults] objectForKey:kHintDictionaryKey];

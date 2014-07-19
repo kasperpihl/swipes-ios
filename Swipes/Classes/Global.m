@@ -178,5 +178,25 @@ static Global *sharedObject;
     [label sizeToFit];
     return label;
 }
-
++(BOOL)supportsOrientation:(UIDeviceOrientation)orientation{
+    NSArray *supportedOrientations = [[[NSBundle mainBundle] infoDictionary]     objectForKey:@"UISupportedInterfaceOrientations"];
+    NSString *orientationString;
+    switch (orientation) {
+        case UIDeviceOrientationPortrait:
+            orientationString = @"UIInterfaceOrientationPortrait";
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            orientationString = @"UIInterfaceOrientationPortraitUpsideDown";
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+            orientationString = @"UIInterfaceOrientationLandscapeLeft";
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            orientationString = @"UIInterfaceOrientationLandscapeRight";
+            break;
+        default:
+            orientationString = @"Invalid Interface Orientation";
+    }
+    return [supportedOrientations containsObject:orientationString];
+}
 @end
