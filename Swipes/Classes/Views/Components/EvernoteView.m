@@ -110,7 +110,6 @@
         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, kSearchBarHeight, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height - 2 * kSearchBarHeight ) style:UITableViewStylePlain];
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
-        self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
         self.tableView.backgroundColor = CLEAR;
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -185,6 +184,7 @@
     NSInteger startPoint = (OSVER >= 7) ? 20 : 0;
     CGFloat height = MIN(self.frame.size.height - startPoint - 2*kContentTopBottomSpacing, MAX_HEIGHT);
     CGRectSetHeight(self.contentView, height);
+    CGRectSetHeight(self.tableView, height - 2 * kSearchBarHeight);
     CGRectSetCenterY(self.contentView, self.bounds.size.height/2);
     [UIView commitAnimations];
 }
@@ -199,6 +199,7 @@
     NSInteger startPoint = (OSVER >= 7) ? (20 + spacing) : spacing;
     CGFloat height = MIN(self.frame.size.height - keyboardHeight - startPoint- spacing, MAX_HEIGHT);
     CGRectSetHeight(self.contentView, height);
+    CGRectSetHeight(self.tableView, height - 2 * kSearchBarHeight);
     CGFloat visibleSpace = self.frame.size.height - keyboardHeight - startPoint;
     CGRectSetCenterY(self.contentView,startPoint + visibleSpace / 2);
     
