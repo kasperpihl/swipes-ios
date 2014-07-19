@@ -701,6 +701,23 @@
     return Underscore.array([self.tagString componentsSeparatedByString:@", "]).filter(Underscore.isString).reject(^BOOL (NSString *tag){ return (tag.length == 0); }).unwrap;
 
 }
+
+
+-(void)copyActionStepsToCopy:(KPToDo*)copy inContext:(NSManagedObjectContext *)context{
+    for( KPToDo *actionStep in self.subtasks ){
+        KPToDo *newToDo = [KPToDo newObjectInContext:context];
+        newToDo.completionDate = actionStep.completionDate;
+        newToDo.order = actionStep.order;
+        newToDo.schedule = actionStep.schedule;
+        newToDo.parent = copy;
+        newToDo.title = actionStep.title;
+        
+        if(actionStep.completionDate)
+            [actionStep scheduleForDate:nil];
+    }
+    
+}
+
 -(void)completeRepeatedTask{
     if(self.repeatOptionValue == RepeatNever) return;
     NSDate *next = [self nextDateFrom:self.repeatedDate];
@@ -710,6 +727,7 @@
         next = [self nextDateFrom:next];
     }
     KPToDo *toDoCopy = [self deepCopy];
+    [self copyActionStepsToCopy:toDoCopy inContext:nil];
     toDoCopy.numberOfRepeatedValue = ++numberOfRepeated;
     [toDoCopy complete];
     [self scheduleForDate:next];
