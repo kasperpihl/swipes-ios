@@ -329,17 +329,26 @@ secondStateIconName:(NSString *)secondIconName
 
 - (UIColor *)colorWithPercentage:(CGFloat)percentage {
     UIColor *color = self.noneColor;
-    if (percentage >= kMCStop1 && _firstColor)
+    BOOL makeOpaque = NO;
+    if (percentage >= 0 && _firstColor){
+        if(percentage < kMCStop1)
+            makeOpaque = YES;
         color = _firstColor;
+    }
     if (percentage >= kMCStop2 && _secondColor)
         color = _secondColor;
-    if (percentage < -kMCStop1 && _thirdColor)
+    if (percentage < 0 && _thirdColor){
+        if (percentage > -kMCStop1)
+            makeOpaque = YES;
         color = _thirdColor;
+    }
     if (percentage <= -kMCStop2 && _fourthColor)
         color = _fourthColor;
     
-    if(self.didRegret)
-        color = alpha(color,0.3);
+    if(!makeOpaque && self.didRegret)
+        color = alpha(color,0.2);
+    else if( makeOpaque )
+        color = alpha(color,0.1);
     
     /*UIColor *color = self.noneColor;
     if(!self.didRegret || !self.shouldRegret){
@@ -430,11 +439,13 @@ secondStateIconName:(NSString *)secondIconName
     CGFloat percentage320 = [self percentageWithOffset:offset relativeToWidth:320];
     // Image Name
     NSString *imageName = [self imageNameWithPercentage:percentage320];
-    if(self.didRegret && self.shouldRegret) [_slidingImageIcon setText:nil];
+    //if(self.didRegret && self.shouldRegret) [_slidingImageIcon setText:nil];
     // Image Position
     if (imageName != nil) {
-        if(!self.didRegret || !self.shouldRegret)[_slidingImageIcon setText:imageName];
-        [_slidingImageIcon setAlpha:[self imageAlphaWithPercentage:percentage320]];
+        //if(!self.didRegret || !self.shouldRegret)
+        [_slidingImageIcon setText:imageName];
+        CGFloat imageAlpha = [self imageAlphaWithPercentage:percentage320];
+        [_slidingImageIcon setAlpha:imageAlpha];
     }
     [self slideImageWithPercentage:percentage imageName:imageName isDragging:YES];
 
