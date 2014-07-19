@@ -194,7 +194,7 @@
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGFloat keyboardHeight = keyboardFrame.size.height;
+    CGFloat keyboardHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     NSInteger spacing = 3;
     NSInteger startPoint = (OSVER >= 7) ? (20 + spacing) : spacing;
     CGFloat height = MIN(self.frame.size.height - keyboardHeight - startPoint- spacing, MAX_HEIGHT);
