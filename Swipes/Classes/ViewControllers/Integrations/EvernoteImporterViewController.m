@@ -10,6 +10,7 @@
 #import "KPAttachment.h"
 #import "EvernoteSyncHandler.h"
 #import "EvernoteImporterViewController.h"
+#import "DejalActivityView.h"
 #define kPaginator 100
 
 #define kTitleColor tcolorF(TextColor, ThemeDark)
@@ -46,11 +47,11 @@
             self.noteList = list;
             [self.tableView reloadData];
         } failure:^(NSError *error) {
-            
+            DLog(@"%@",error);
         }];
     }
     @catch (NSException *exception) {
-        
+        DLog(@"%@",exception);
     }
 
     
@@ -203,8 +204,9 @@
         EDAMNote *note = [_noteList.notes objectAtIndex:indexPath.row];
         [notesToImport addObject:note];
     }
+    [DejalBezelActivityView activityViewForView:self.view withLabel:@"Importing..."];
     [EvernoteSyncHandler addAndSyncNewTasksFromNotes:notesToImport];
-#warning Implement functionality for importing notes
+    [DejalBezelActivityView removeViewAnimated:YES];
 }
 
 

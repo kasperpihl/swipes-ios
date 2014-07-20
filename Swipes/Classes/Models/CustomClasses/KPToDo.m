@@ -645,6 +645,7 @@
         [KPToDo saveToSync];
 }
 -(BOOL)shouldDeleteForce:(BOOL)force{
+    [self removeAllAttachmentsForService:@"all"];
     if(self.subtasks.count > 0){
         [KPToDo deleteToDos:[self.subtasks allObjects] save:NO force:YES];
     }

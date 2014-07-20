@@ -30,7 +30,7 @@
 #define kDeleteObjectsKey @"deleteObjects"
 
 #ifdef DEBUG
-#define DUMPDB [self dumpLocalDb];
+#define DUMPDB //[self dumpLocalDb];
 #else
 #define DUMPDB
 #endif
