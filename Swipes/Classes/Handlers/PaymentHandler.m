@@ -24,7 +24,7 @@ static PaymentHandler *sharedObject;
 +(PaymentHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[PaymentHandler allocWithZone:NULL] init];
-        [sharedObject refreshProductsWithBlock:nil];
+        //[sharedObject refreshProductsWithBlock:nil];
     }
     return sharedObject;
 }

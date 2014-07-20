@@ -85,11 +85,11 @@ static UserHandler *sharedObject;
     if(!kCurrent)
         return;
     [kCurrent refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        NSLog(@"response:%@",object);
+        NSLog(@"settings:%@",[object objectForKey:@"settings"]);
         if(!error){
             [self handleUser:(PFUser*)object];
         }
-        NSLog(@"%@",error);
+        else NSLog(@"t%@",error);
     }];
 }
 -(void)didUpgradeUser{
