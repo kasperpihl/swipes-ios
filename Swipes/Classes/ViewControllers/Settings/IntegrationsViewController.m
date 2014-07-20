@@ -10,6 +10,7 @@
 #import "KPToDo.h"
 #import "UtilityClass.h"
 #import "CoreSyncHandler.h"
+#import "EvernoteImporterViewController.h"
 #import "EvernoteIntegration.h"
 #import "IntegrationsViewController.h"
 
@@ -200,6 +201,12 @@
             break;
         }
     }
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [self presentViewController:[[EvernoteImporterViewController alloc] init] animated:YES completion:^{
+        
+    }];
 }
 
 /*

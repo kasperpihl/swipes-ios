@@ -11,7 +11,12 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
 
 
 @implementation KPAttachment
-
++( NSArray *)findAttachmentsForService:(NSString*)service identifier:(NSString*)identifier context:(NSManagedObjectContext *)context{
+    if(!context)
+        context = KPCORE.context;
+    NSPredicate *findPredicate = [NSPredicate predicateWithFormat:@"service = %@ AND identifier = %@",service,identifier];
+    return [KPAttachment MR_findAllWithPredicate:findPredicate inContext:context];
+}
 + (instancetype)attachmentForService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync
 {
     return [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync inContext:KPCORE.context];

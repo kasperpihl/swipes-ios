@@ -121,6 +121,7 @@
 		A75236FA17A3361A0030ED1E /* WalkthroughTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A75236F917A3361A0030ED1E /* WalkthroughTitleView.m */; };
 		A75236FD17A349340030ED1E /* walkthrough_phone_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A75236FB17A349340030ED1E /* walkthrough_phone_background.png */; };
 		A75236FE17A349340030ED1E /* walkthrough_phone_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A75236FC17A349340030ED1E /* walkthrough_phone_background@2x.png */; };
+		A754DB62197BBD0B00308DBC /* EvernoteImporterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A754DB61197BBD0B00308DBC /* EvernoteImporterViewController.m */; };
 		A75545DE179B481800CE2F4E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A75545DD179B481800CE2F4E /* Accelerate.framework */; };
 		A75545E3179B519200CE2F4E /* KPBlurry.m in Sources */ = {isa = PBXBuildFile; fileRef = A75545E2179B519200CE2F4E /* KPBlurry.m */; };
 		A7582506189BC35600B904BC /* Vero.m in Sources */ = {isa = PBXBuildFile; fileRef = A7582505189BC35600B904BC /* Vero.m */; };
@@ -406,6 +407,8 @@
 		A75236F917A3361A0030ED1E /* WalkthroughTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkthroughTitleView.m; path = Walkthrough/WalkthroughTitleView.m; sourceTree = "<group>"; };
 		A75236FB17A349340030ED1E /* walkthrough_phone_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthrough_phone_background.png; sourceTree = "<group>"; };
 		A75236FC17A349340030ED1E /* walkthrough_phone_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "walkthrough_phone_background@2x.png"; sourceTree = "<group>"; };
+		A754DB60197BBD0B00308DBC /* EvernoteImporterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteImporterViewController.h; path = Integrations/EvernoteImporterViewController.h; sourceTree = "<group>"; };
+		A754DB61197BBD0B00308DBC /* EvernoteImporterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteImporterViewController.m; path = Integrations/EvernoteImporterViewController.m; sourceTree = "<group>"; };
 		A75545DD179B481800CE2F4E /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		A75545E1179B519200CE2F4E /* KPBlurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPBlurry.h; path = KPBlurry/KPBlurry.h; sourceTree = "<group>"; };
 		A75545E2179B519200CE2F4E /* KPBlurry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPBlurry.m; path = KPBlurry/KPBlurry.m; sourceTree = "<group>"; };
@@ -946,6 +949,15 @@
 			path = Walkthrough;
 			sourceTree = "<group>";
 		};
+		A754DB5F197BBCF500308DBC /* Integrations */ = {
+			isa = PBXGroup;
+			children = (
+				A754DB60197BBD0B00308DBC /* EvernoteImporterViewController.h */,
+				A754DB61197BBD0B00308DBC /* EvernoteImporterViewController.m */,
+			);
+			name = Integrations;
+			sourceTree = "<group>";
+		};
 		A75545E0179B516500CE2F4E /* Overlays */ = {
 			isa = PBXGroup;
 			children = (
@@ -1177,6 +1189,7 @@
 		A781285D17294C56002226C8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A754DB5F197BBCF500308DBC /* Integrations */,
 				A7D189C31965F45300AA7CD9 /* Settings */,
 				A748C877190D9A0800514DB3 /* Subtasks */,
 				A74D3FC018D75B0D0056D124 /* Share */,
@@ -1822,6 +1835,7 @@
 				A748C87C190D9A0800514DB3 /* SubtaskCell.m in Sources */,
 				A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */,
 				A703B1C31838EBF20047DCC9 /* KPAddTagPanel.m in Sources */,
+				A754DB62197BBD0B00308DBC /* EvernoteImporterViewController.m in Sources */,
 				A789B3F917D79BFB00C25B73 /* KPOverlay.m in Sources */,
 				A703B1B81838EBF20047DCC9 /* KPSearchBar.m in Sources */,
 				A74646B918D38660003911DC /* ContactHandler.m in Sources */,

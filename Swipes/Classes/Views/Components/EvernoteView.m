@@ -26,7 +26,7 @@
 #define kSearchTimerInterval 0.6
 #define POPUP_WIDTH 300
 #define MAX_HEIGHT 500
-#define kEvernoteColor color(95,179,54,1)
+
 #define kSearchLimit 10     // when _limitSearch is YES this is the limit
 
 @interface EvernoteView () <UITableViewDataSource, UITableViewDelegate, EvernoteViewerViewDelegate, UITextFieldDelegate>
