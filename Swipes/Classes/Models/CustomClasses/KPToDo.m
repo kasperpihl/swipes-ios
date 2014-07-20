@@ -798,6 +798,9 @@
     }
     if (0 < attachmentSet.count) {
         [self removeAttachments:attachmentSet];
+        for(KPAttachment *att in attachmentSet ){
+            [att MR_deleteEntity];
+        }
     }
 }
 +(void)removeAllAttachmentsForAllToDosWithService:(NSString *)service inContext:(NSManagedObjectContext *)context save:(BOOL)save{

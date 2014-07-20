@@ -112,27 +112,47 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = tcolorF(BackgroundColor, ThemeDark);
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 100)];
-    titleLabel.text = @"Find notes with checkmarks to import";
+    self.view.backgroundColor = kEvernoteColor;
+    CGFloat top = OSVER >= 7 ? 20 : 0;
+    
+    UILabel *iconLabel = iconLabel(@"integrationEvernoteFull", kTopHeight/1.8);
+    CGRectSetCenter(iconLabel, self.view.bounds.size.width/2, top + kTopHeight/2);
+    iconLabel.textColor = alpha(tcolorF(TextColor, ThemeLight),0.5);
+    [self.view addSubview:iconLabel];
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, top, self.view.bounds.size.width, kTopHeight)];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.text = @"EVERNOTE            IMPORTER";
     titleLabel.numberOfLines = 0;
     titleLabel.font = KP_REGULAR(16);
     titleLabel.backgroundColor = CLEAR;
-    titleLabel.textColor = tcolorF(TextColor,ThemeDark);
-    [titleLabel sizeToFit];
+    titleLabel.textColor = alpha(tcolorF(TextColor, ThemeLight),0.5);
+    //[titleLabel sizeToFit];
+    //CGRectSetWidth(titleLabel, self.view.bounds.size.width);
     [self.view addSubview:titleLabel];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, kTopHeight, self.view.bounds.size.width, self.view.bounds.size.height - 2*kTopHeight ) style:UITableViewStylePlain];
+    
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, kTopHeight+top, self.view.bounds.size.width, self.view.bounds.size.height - 2*kTopHeight - top ) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
-    self.tableView.backgroundColor = kEvernoteColor;
+    self.tableView.backgroundColor = CLEAR;
     self.tableView.allowsMultipleSelection = YES;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
     
     UIView *bottomToolbar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-kTopHeight, self.view.bounds.size.width, kTopHeight)];
     bottomToolbar.backgroundColor = tcolorF(BackgroundColor,ThemeDark);
+    bottomToolbar.layer.masksToBounds = YES;
+    
+    UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kTopHeight, kTopHeight)];
+    closeButton.titleLabel.font = iconFont(23);
+    [closeButton setTitle:iconString(@"plus") forState:UIControlStateNormal];
+    closeButton.transform = CGAffineTransformMakeRotation(M_PI/4);
+    closeButton.backgroundColor = CLEAR;
+    [closeButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
+    [bottomToolbar addSubview:closeButton];
     
     UIButton *importButton = [UIButton buttonWithType:UIButtonTypeCustom];
     importButton.layer.cornerRadius = 5;
@@ -140,6 +160,7 @@
     importButton.titleLabel.font = KP_REGULAR(14);
     importButton.layer.borderColor = tcolorF(TextColor, ThemeDark).CGColor;
     [importButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
+    [importButton addTarget:self action:@selector(pressedImport:) forControlEvents:UIControlEventTouchUpInside];
     importButton.backgroundColor = CLEAR;
     CGFloat spacing = 8;
     CGFloat buttonWidth = bottomToolbar.frame.size.width/2 - 2*spacing;
@@ -154,12 +175,27 @@
     
     // Do any additional setup after loading the view.
 }
+
+-(void)pressedClose:(UIButton*)button{
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+}
+-(void)pressedImport:(UIButton*)button{
+    NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
+    if(selectedIndexPaths.count == 0)
+        return;
+#warning Implement functionality for importing notes
+}
+
+
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if([cell.textLabel.textColor isEqual:kExistingTitleColor]){
         [UTILITY confirmBoxWithTitle:@"This note is already in sync with a task" andMessage:@"Do you want to import it anyway? (Creates a duplicate)" block:^(BOOL succeeded, NSError *error) {
             if(succeeded){
                 [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+                [self updateButtons];
             }
         }];
         return nil;
