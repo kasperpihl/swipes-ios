@@ -91,7 +91,6 @@
     EDAMNoteFilter* filter = [EDAMNoteFilter new];
     NSMutableString *mutWords = [NSMutableString stringWithFormat:@"tag:%@",tag];
     if(self.lastUpdated){
-
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         [dateFormatter setDateFormat:@"yyyyMMdd'T'HHmmss'Z'"];
@@ -108,6 +107,14 @@
         [noteStore findNotesWithFilter:filter offset:0 maxNotes:100 success:^(EDAMNoteList *list) {
             
             DLog(@"%@",list);
+            NSMutableArray *newNotes = [NSMutableArray array];
+            for( EDAMNote *note in list.notes ){
+                NSArray *existingTasks = [KPAttachment findAttachmentsForService:EVERNOTE_SERVICE identifier:note.guid context:nil];
+                if(existingTasks.count == 0){
+                    [newNotes addObject:note];
+                }
+            }
+            [EvernoteSyncHandler addAndSyncNewTasksFromNotes:newNotes];
         } failure:^(NSError *error) {
             DLog(@"%@",error);
         }];
