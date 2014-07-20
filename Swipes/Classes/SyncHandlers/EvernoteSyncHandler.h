@@ -9,5 +9,5 @@
 #import "ParentSyncHandler.h"
 
 @interface EvernoteSyncHandler : ParentSyncHandler
-
++(NSArray*)addAndSyncNewTasksFromNotes:(NSArray*)notes;
 @end

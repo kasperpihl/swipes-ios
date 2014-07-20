@@ -8,6 +8,7 @@
 
 #import "UtilityClass.h"
 #import "KPAttachment.h"
+#import "EvernoteSyncHandler.h"
 #import "EvernoteImporterViewController.h"
 #define kPaginator 100
 
@@ -82,7 +83,7 @@
         cell.textLabel.text = note.content;
     }
     else {
-        cell.textLabel.text = @"Untitled";
+        cell.textLabel.text = @"Untitled note";
     }
     NSDate *updatedAt = [NSDate dateWithTimeIntervalSince1970:note.updated/1000];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:updatedAt showTime:YES]];
@@ -197,6 +198,12 @@
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
     if(selectedIndexPaths.count == 0)
         return;
+    NSMutableArray *notesToImport = [NSMutableArray array];
+    for( NSIndexPath *indexPath in selectedIndexPaths ){
+        EDAMNote *note = [_noteList.notes objectAtIndex:indexPath.row];
+        [notesToImport addObject:note];
+    }
+    [EvernoteSyncHandler addAndSyncNewTasksFromNotes:notesToImport];
 #warning Implement functionality for importing notes
 }
 

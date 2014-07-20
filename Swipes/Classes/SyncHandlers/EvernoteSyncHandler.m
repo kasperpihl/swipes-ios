@@ -46,6 +46,29 @@
     return todosWithEvernote;
 
 }
+
++(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes{
+    for( EDAMNote *note in notes ){
+        
+        NSString *title;
+        if (note.titleIsSet) {
+            title = note.title;
+        }
+        else if (note.contentIsSet) {
+            title = note.content;
+        }
+        else {
+            title = @"Untitled note";
+        }
+        if(title.length > 256)
+            title = [title substringToIndex:255];
+        KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO];
+        [newToDo attachService:EVERNOTE_SERVICE title:title identifier:note.guid sync:YES];
+    }
+    [KPCORE saveContextForSynchronization:nil];
+    return nil;
+}
+
 -(id)init{
     self = [super init];
     if( self ){
