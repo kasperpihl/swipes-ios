@@ -14,7 +14,7 @@
 #import "NSDate-Utilities.h"
 #import "NSString+Levenshtein.h"
 
-
+#import "NSDate+EDAMAdditions.h"
 #import "CoreSyncHandler.h"
 
 #import "EvernoteSyncHandler.h"
@@ -85,6 +85,38 @@
     }
 }
 
+-(void)findUpdatedNotesWithTag:(NSString*)tag{
+    EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
+    
+    EDAMNoteFilter* filter = [EDAMNoteFilter new];
+    NSMutableString *mutWords = [NSMutableString stringWithFormat:@"tag:%@",tag];
+    if(self.lastUpdated){
+
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        [dateFormatter setDateFormat:@"yyyyMMdd'T'HHmmss'Z'"];
+        NSString *isoString = [dateFormatter stringFromDate:self.lastUpdated];
+        [mutWords appendFormat:@" updated:%@",isoString];
+    }
+
+    filter.words = [mutWords copy];
+    
+    filter.order = NoteSortOrder_UPDATED;
+    filter.ascending = NO;
+    
+    @try {
+        [noteStore findNotesWithFilter:filter offset:0 maxNotes:100 success:^(EDAMNoteList *list) {
+            
+            DLog(@"%@",list);
+        } failure:^(NSError *error) {
+            DLog(@"%@",error);
+        }];
+    }
+    @catch (NSException *exception) {
+        DLog(@"%@",exception);
+    }
+}
+
 +(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes{
     for( EDAMNote *note in notes ){
         
@@ -145,12 +177,12 @@
         if( subtaskIsCompleted){
             // If subtask was completed in Swipes after last sync override evernote
             if([self.lastUpdated isEarlierThanDate:subtask.completionDate]){
-                NSLog(@"completing evernote");
+                DLog(@"completing evernote");
                 [processor updateToDo:evernoteToDo checked:subtaskIsCompleted];
             }
             // If not, uncomplete in Swipes
             else{
-                NSLog(@"uncompleting subtask");
+                DLog(@"uncompleting subtask");
                 [KPToDo scheduleToDos:@[subtask] forDate:nil save:NO];
                 updated = YES;
             }
@@ -160,12 +192,12 @@
             // If subtask is updated later than last sync override Evernote
             // There could be an error margin here, but I don't see a better solution at the moment
             if ( !isNew && [self.lastUpdated isEarlierThanDate:subtask.updatedAt] ){
-                NSLog(@"uncompleting evernote");
+                DLog(@"uncompleting evernote");
                 [processor updateToDo:evernoteToDo checked:subtaskIsCompleted];
             }
             // If not, override in Swipes
             else{
-                NSLog(@"completing subtask");
+                DLog(@"completing subtask");
                 [KPToDo completeToDos:@[ subtask ] save:NO];
                 updated = YES;
             }
@@ -274,7 +306,7 @@
     if (self.objectsWithEvernote.count == 0){
         return self.block(SyncStatusSuccess, nil, nil);
     }
-    
+    [self findUpdatedNotesWithTag:@"swipes"];
     
     
     // Tell caller that Evernote will be syncing
