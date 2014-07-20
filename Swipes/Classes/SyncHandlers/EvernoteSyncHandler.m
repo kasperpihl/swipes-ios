@@ -20,7 +20,7 @@
 #import "EvernoteSyncHandler.h"
 
 #define kEvernoteUpdatedAtKey @"EvernoteUpdatedAt"
-
+#define kSwipesTagName @"swipes"
 
 @interface EvernoteSyncHandler ()
 @property (nonatomic,copy) SyncBlock block;
@@ -45,6 +45,44 @@
     
     return todosWithEvernote;
 
+}
+
+-(void)getSwipesTagGuidBlock:(StringBlock)block{
+    @try {
+        __block NSString *swipesTagGuid;
+        [[EvernoteNoteStore noteStore] listTagsWithSuccess:^(NSArray *tags) {
+            for( EDAMTag *tag in tags ){
+                if([tag.name isEqualToString:kSwipesTagName]){
+                    swipesTagGuid = tag.guid;
+                }
+            }
+            if(!swipesTagGuid){
+                [self createSwipesTagBlock:block];
+            }
+            else block(swipesTagGuid, nil);
+        } failure:^(NSError *error) {
+            block(nil, error);
+        }];
+    }
+    @catch (NSException *exception) {
+        DLog(@"%@",exception);
+        //[UtilityClass sendException:exception type:@"Evernote Update Note Exception"];
+    }
+}
+-(void)createSwipesTagBlock:(StringBlock)block{
+    @try {
+        EDAMTag *swipesTag = [[EDAMTag alloc] init];
+        swipesTag.name = kSwipesTagName;
+        [[EvernoteNoteStore noteStore] createTag:swipesTag success:^(EDAMTag *tag) {
+            block(swipesTag.guid, nil);
+        } failure:^(NSError *error) {
+            block(nil, error);
+        }];
+    }
+    @catch (NSException *exception) {
+        DLog(@"%@",exception);
+        //[UtilityClass sendException:exception type:@"Evernote Update Note Exception"];
+    }
 }
 
 +(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes{

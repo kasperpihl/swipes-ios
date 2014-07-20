@@ -117,6 +117,7 @@ typedef void (^viewBlock)(UIView* view);
 #define parseFileCachePath(name) [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingFormat:@"/Parse/PFFileCache/%@",name]
 typedef void (^ResultBlock)(id result, NSError *error);
 typedef void (^ImageBlock)(UIImage *image, NSError *error);
+typedef void (^StringBlock)(NSString *string, NSError *error);
 typedef void (^DataBlock)(KPDLResult result, NSData *data, NSError* error);
 typedef void (^NumberBlock) (NSInteger number, NSError *error);
 typedef void (^ArrayBlock)(NSArray *objects, NSError *error);

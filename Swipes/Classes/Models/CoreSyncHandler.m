@@ -844,7 +844,6 @@ static CoreSyncHandler *sharedObject;
 - (void)initialize
 {
     self.backgroundTask = UIBackgroundTaskInvalid;
-    
     [self loadDatabase];
     notify(@"closing app", forceSync);
     notify(@"opened app", forceSync);
@@ -858,6 +857,7 @@ static CoreSyncHandler *sharedObject;
     self.isolationQueue = dispatch_queue_create([@"SyncAttributeQueue" UTF8String], DISPATCH_QUEUE_CONCURRENT);
     // Start the notifier, which will cause the reachability object to retain itself!
     [sharedObject._reach startNotifier];
+    
 }
 
 - (void)loadDatabase
@@ -874,6 +874,10 @@ static CoreSyncHandler *sharedObject;
     }
 }
 -(void)performTestForSyncing{
+    [self.evernoteSyncHandler getSwipesTagGuidBlock:^(NSString *string, NSError *error) {
+        DLog(@"%@",string);
+        DLog(@"%@",error);
+    }];
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"hasSwitchedToNewAPI"]){
         [self hardSync];
         
