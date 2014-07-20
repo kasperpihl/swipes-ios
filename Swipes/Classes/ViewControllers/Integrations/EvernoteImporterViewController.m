@@ -207,6 +207,8 @@
     [DejalBezelActivityView activityViewForView:self.view withLabel:@"Importing..."];
     [EvernoteSyncHandler addAndSyncNewTasksFromNotes:notesToImport];
     [DejalBezelActivityView removeViewAnimated:YES];
+    [[[UIAlertView alloc] initWithTitle:@"Your notes was successfully imported" message:@"Check them out in today's list" delegate:nil cancelButtonTitle:@"Great!" otherButtonTitles: nil] show];
+    [self pressedClose:nil];
 }
 
 
