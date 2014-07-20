@@ -104,6 +104,10 @@
         cell.textLabel.textColor = tcolorF(TextColor,ThemeDark);
         cell.detailTextLabel.textColor = tcolorF(TextColor,ThemeDark);
         
+        UIView *selectedView = [[UIView alloc] initWithFrame:cell.bounds];
+        selectedView.backgroundColor = alpha(tcolorF(BackgroundColor, ThemeDark),0.2);
+        cell.selectedBackgroundView = selectedView;
+        
     }
     
     return cell;
