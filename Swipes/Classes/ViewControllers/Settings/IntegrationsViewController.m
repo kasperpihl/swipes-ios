@@ -109,7 +109,7 @@
     // Do any additional setup after loading the view.
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return IntegrationEvernote + 1;
+    return kEvernoteIntegration + 1;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = @"SettingCell";
@@ -125,7 +125,7 @@
 -(NSString*)nameForIntegration:(Integrations)integration{
     NSString *name;
     switch (integration) {
-        case IntegrationEvernote:
+        case kEvernoteIntegration:
             name = @"Evernote";
             break;
             
@@ -140,7 +140,7 @@
     NSString *name = [self nameForIntegration:integration];
     NSString *valueString;
     switch (integration) {
-        case IntegrationEvernote:
+        case kEvernoteIntegration:
             if([[EvernoteSession sharedSession] isAuthenticated]){
                 name = [name stringByAppendingString:@" (Connected)"];
                 valueString = @"Unlink";
@@ -182,7 +182,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     Integrations integration = indexPath.row;
     switch (integration) {
-        case IntegrationEvernote:{
+        case kEvernoteIntegration:{
             if(kEnInt.isAuthenticated){
                 [UTILITY confirmBoxWithTitle:@"Unlink Evernote" andMessage:@"All tasks will be unlinked, are you sure?" block:^(BOOL succeeded, NSError *error) {
                     if(succeeded){

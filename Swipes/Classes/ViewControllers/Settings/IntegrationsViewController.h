@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 typedef NS_ENUM(NSUInteger, Integrations) {
-    IntegrationEvernote
+    kEvernoteIntegration
 };
 
 @interface IntegrationsViewController : UIViewController

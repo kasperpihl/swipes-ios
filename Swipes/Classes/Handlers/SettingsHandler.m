@@ -144,8 +144,8 @@ static SettingsHandler *sharedObject;
 }
 
 -(BOOL)settingForKey:(NSString *)key{
-    BOOL hasAlreadyCompletedHint = [[self.settings objectForKey:key] boolValue];
-    return hasAlreadyCompletedHint;
+    BOOL setting = [[self.settings objectForKey:key] boolValue];
+    return setting;
 }
 -(void)setSetting:(BOOL)setting forKey:(NSString *)key{
     [self.settings setObject:@(setting) forKey:key];

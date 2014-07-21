@@ -14,6 +14,9 @@ typedef enum {
     SettingLaterToday,
     SettingNotifications,
     SettingLocation,
+    SettingEvernoteSync,
+    
+    IntegrationEvernote
 } KPSettings;
 #import <Foundation/Foundation.h>
 #define kSettings [SettingsHandler sharedInstance]

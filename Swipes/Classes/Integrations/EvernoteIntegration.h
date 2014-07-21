@@ -9,7 +9,12 @@
 #import <Foundation/Foundation.h>
 #define kEnInt [EvernoteIntegration sharedInstance]
 @interface EvernoteIntegration : NSObject
+@property BOOL enableSync;
+@property NSString *tagGuid;
+@property NSString *tagName;
+
 @property (nonatomic) BOOL isAuthenticated;
+-(void)loadEvernoteIntegrationObject:(NSDictionary*)object;
 +(EvernoteIntegration*)sharedInstance;
 -(void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
 @end

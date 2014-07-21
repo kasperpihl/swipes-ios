@@ -18,6 +18,10 @@ static EvernoteIntegration *sharedObject;
     }
     return sharedObject;
 }
+-(void)loadEvernoteIntegrationObject:(NSDictionary *)object{
+    self.tagName = [object objectForKey:@"tagName"];
+    self.tagGuid = [object objectForKey:@"tagGuid"];
+}
 -(BOOL)isAuthenticated{
     return [[EvernoteSession sharedSession] isAuthenticated];
 }

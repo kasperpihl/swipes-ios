@@ -20,5 +20,6 @@ typedef enum {
 typedef void (^SyncBlock) (SyncStatus status, NSDictionary *userInfo, NSError *error);
 
 @interface ParentSyncHandler : NSObject
+@property BOOL syncIsEnabled;
 -(void)synchronizeWithBlock:(SyncBlock)block;
 @end

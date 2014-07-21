@@ -86,7 +86,6 @@ static UserHandler *sharedObject;
         return;
     [kCurrent refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         NSLog(@"settings:%@",[object objectForKey:@"settings"]);
-        [self save];
         if(!error){
             [self handleUser:(PFUser*)object];
         }
