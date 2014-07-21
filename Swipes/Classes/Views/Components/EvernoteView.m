@@ -255,38 +255,32 @@
         if (0 == _searchBar.text.length) { // remove this check if you want order to be always by UPDATED
             filter.words = @"todo:*";
         }
-        @try {
-            [noteStore findNotesWithFilter:filter offset:0 maxNotes:kSearchLimit
-                                   success:^(EDAMNoteList *list) {
-                                       for (EDAMNote* note in list.notes) {
-                                           DLog(@"Last update: %@",[NSDate dateWithTimeIntervalSince1970:note.updated/1000]);
-                                           DLog(@"Note title: %@, guid: %@", note.title, note.guid);
-                                           /*if (!noteViewed) {
-                                            noteViewed = YES;
-                                            [[EvernoteNoteStore noteStore] viewNoteInEvernote:note];
-                                            }*/
-                                       }
-                                       _noteList = list;
-                                       //_limitSearch = (filter.order == NoteSortOrder_UPDATED);
-                                       [_tableView reloadData];
-                                       
-                                       //DLog(@"notebooks: %@", list);
-                                       [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                                   }
-                                   failure:^(NSError *error) {
-                                       [UtilityClass sendError:error type:@"Evernote Filter Error"];
-                                       [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                                       // failure... show error notification, etc
-                                       if ([EvernoteSession isTokenExpiredWithError:error]) {
-                                           // trigger auth again
-                                           [self evernoteAuthenticateUsingSelector:@selector(searchNoteStore:) withObject:nil];
-                                       }
-                                   }
-             ];
-        }
-        @catch (NSException *exception) {
-            [UtilityClass sendException:exception type:@"Evernote Filter Exception"];
-        }
+        [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kSearchLimit block:^(EDAMNoteList *list, NSError *error) {
+            if( list ){
+                for (EDAMNote* note in list.notes) {
+                    DLog(@"Last update: %@",[NSDate dateWithTimeIntervalSince1970:note.updated/1000]);
+                    DLog(@"Note title: %@, guid: %@", note.title, note.guid);
+                    /*if (!noteViewed) {
+                     noteViewed = YES;
+                     [[EvernoteNoteStore noteStore] viewNoteInEvernote:note];
+                     }*/
+                }
+                _noteList = list;
+                //_limitSearch = (filter.order == NoteSortOrder_UPDATED);
+                [_tableView reloadData];
+                
+                //DLog(@"notebooks: %@", list);
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            }
+            else{
+                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                // failure... show error notification, etc
+                if ([EvernoteSession isTokenExpiredWithError:error]) {
+                    // trigger auth again
+                    [self evernoteAuthenticateUsingSelector:@selector(searchNoteStore:) withObject:nil];
+                }
+            }
+        }];
 
         
     }

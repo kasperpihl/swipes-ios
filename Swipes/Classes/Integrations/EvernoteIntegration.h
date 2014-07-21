@@ -23,6 +23,6 @@ typedef void (^NoteBlock)(EDAMNote *note, NSError *error);
 
 -(void)saveNote:(EDAMNote*)note block:(NoteBlock)block;
 - (void)fetchNoteWithGuid:(NSString *)guid block:(NoteBlock)block;
--(void)fetchNotesWithCheckmarks:(NoteListBlock)block;
+-(void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block;
 
 @end

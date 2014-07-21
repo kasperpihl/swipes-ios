@@ -92,10 +92,7 @@ static EvernoteIntegration *sharedObject;
 -(void)fetchNotesWithCheckmarks:(NoteListBlock)block{
     
     
-    EDAMNoteFilter* filter = [EDAMNoteFilter new];
-    filter.words = @"todo:*";
-    filter.order = NoteSortOrder_UPDATED;
-    filter.ascending = NO;
+    
     
     
 }

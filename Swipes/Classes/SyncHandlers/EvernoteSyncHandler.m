@@ -256,7 +256,6 @@
 
 
 -(void)findUpdatedNotesWithTag:(NSString*)tag block:(SyncBlock)block{
-    EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
     
     EDAMNoteFilter* filter = [EDAMNoteFilter new];
     NSMutableString *mutWords = [NSMutableString stringWithFormat:@"tag:%@",tag];
@@ -273,9 +272,8 @@
     filter.order = NoteSortOrder_UPDATED;
     filter.ascending = NO;
     
-    @try {
-        [noteStore findNotesWithFilter:filter offset:0 maxNotes:100 success:^(EDAMNoteList *list) {
-            
+    [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:100 block:^(EDAMNoteList *list, NSError *error) {
+        if(list){
             DLog(@"%@",list);
             NSMutableArray *newNotes = [NSMutableArray array];
             for( EDAMNote *note in list.notes ){
@@ -285,13 +283,8 @@
                 }
             }
             [EvernoteSyncHandler addAndSyncNewTasksFromNotes:newNotes];
-        } failure:^(NSError *error) {
-            DLog(@"%@",error);
-        }];
-    }
-    @catch (NSException *exception) {
-        DLog(@"%@",exception);
-    }
+        }
+    }];
 }
 
 -(void)syncEvernoteWithBlock:(SyncBlock)block{

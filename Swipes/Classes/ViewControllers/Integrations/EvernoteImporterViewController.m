@@ -227,7 +227,11 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [kEnInt fetchNotesWithCheckmarks:^(EDAMNoteList *list, NSError *error) {
+    EDAMNoteFilter* filter = [EDAMNoteFilter new];
+    filter.words = @"todo:*";
+    filter.order = NoteSortOrder_UPDATED;
+    filter.ascending = NO;
+    [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kPaginator block:^(EDAMNoteList *list, NSError *error) {
         if(list){
             self.noteList = list;
             [self.tableView reloadData];
