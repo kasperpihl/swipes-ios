@@ -187,6 +187,7 @@
 		A7B9D39019066251001E1109 /* KPAccountAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B9D38F19066251001E1109 /* KPAccountAlert.m */; };
 		A7B9D39319066299001E1109 /* KPModal.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B9D39219066299001E1109 /* KPModal.m */; };
 		A7BB65CB189BF19600BE7183 /* swipes-notification.aif in Resources */ = {isa = PBXBuildFile; fileRef = A7BB65CA189BF19600BE7183 /* swipes-notification.aif */; };
+		A7C258FE197CE5A200290198 /* IntegrationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C258FD197CE5A200290198 /* IntegrationHandler.m */; };
 		A7C90E6A17A6ABF700C5F9E2 /* wt_schedule_popup.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */; };
 		A7C90E6B17A6ABF700C5F9E2 /* wt_schedule_popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */; };
 		A7D06867190E654C00699B4E /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A7D0685B190E654C00699B4E /* LICENSE */; };
@@ -521,6 +522,8 @@
 		A7B9D39119066299001E1109 /* KPModal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPModal.h; sourceTree = "<group>"; };
 		A7B9D39219066299001E1109 /* KPModal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPModal.m; sourceTree = "<group>"; };
 		A7BB65CA189BF19600BE7183 /* swipes-notification.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "swipes-notification.aif"; sourceTree = "<group>"; };
+		A7C258FC197CE5A200290198 /* IntegrationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationHandler.h; path = Integrations/IntegrationHandler.h; sourceTree = "<group>"; };
+		A7C258FD197CE5A200290198 /* IntegrationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationHandler.m; path = Integrations/IntegrationHandler.m; sourceTree = "<group>"; };
 		A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wt_schedule_popup.png; sourceTree = "<group>"; };
 		A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wt_schedule_popup@2x.png"; sourceTree = "<group>"; };
@@ -823,6 +826,8 @@
 			children = (
 				A70D12D81966D11500A95C50 /* EvernoteIntegration.h */,
 				A70D12D91966D11500A95C50 /* EvernoteIntegration.m */,
+				A7C258FC197CE5A200290198 /* IntegrationHandler.h */,
+				A7C258FD197CE5A200290198 /* IntegrationHandler.m */,
 			);
 			name = Integrations;
 			sourceTree = "<group>";
@@ -1843,6 +1848,7 @@
 				A703B1A81838EBF20047DCC9 /* AddPanelView.m in Sources */,
 				A703B1AA1838EBF20047DCC9 /* PlusAlertView.m in Sources */,
 				A7AF9B5717E210D000F9B26F /* StyleHandler.m in Sources */,
+				A7C258FE197CE5A200290198 /* IntegrationHandler.m in Sources */,
 				A7AF9B5C17E2244F00F9B26F /* Datamodel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

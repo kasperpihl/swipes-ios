@@ -9,7 +9,7 @@
 #import "UserHandler.h"
 #import <Parse/PFUser.h>
 #import "AnalyticsHandler.h"
-
+#import "IntegrationHandler.h"
 @interface UserHandler ()
 @property (nonatomic) BOOL needRefresh;
 @property (nonatomic) UserLevel userLevel;
@@ -86,12 +86,21 @@ static UserHandler *sharedObject;
         return;
     [kCurrent refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         NSLog(@"settings:%@",[object objectForKey:@"settings"]);
+        [self save];
         if(!error){
             [self handleUser:(PFUser*)object];
         }
         else NSLog(@"t%@",error);
     }];
 }
+
+-(void)save{
+    [kCurrent setObject:[kIntHandle getAllIntegrations] forKey:@"integrations"];
+    [kCurrent saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        DLog(@"save error: %@",error);
+    }];
+}
+
 -(void)didUpgradeUser{
     self.isPlus = YES;
 }
