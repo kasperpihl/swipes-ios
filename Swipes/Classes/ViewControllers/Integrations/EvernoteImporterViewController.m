@@ -8,6 +8,7 @@
 
 #import "UtilityClass.h"
 #import "KPAttachment.h"
+#import "SlowHighlightIcon.h"
 #import "EvernoteSyncHandler.h"
 #import "EvernoteImporterViewController.h"
 #import "DejalActivityView.h"
@@ -157,11 +158,12 @@
     bottomToolbar.autoresizingMask = (UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin);
     bottomToolbar.layer.masksToBounds = YES;
     
-    UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(0, top, kTopHeight, kTopHeight)];
+    UIButton *closeButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, top, kTopHeight, kTopHeight)];
     closeButton.titleLabel.font = iconFont(23);
     [closeButton setTitleColor:tcolorF(TextColor, ThemeLight) forState:UIControlStateNormal];
-    [closeButton setTitle:iconString(@"plus") forState:UIControlStateNormal];
-    closeButton.transform = CGAffineTransformMakeRotation(M_PI/4);
+    [closeButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
+    [closeButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
+    //closeButton.transform = CGAffineTransformMakeRotation(M_PI/4);
     closeButton.backgroundColor = CLEAR;
     [closeButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:closeButton];

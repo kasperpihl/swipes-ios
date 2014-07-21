@@ -102,4 +102,11 @@ static EvernoteIntegration *sharedObject;
     }
 }
 
+-(BOOL)handleError:(NSError*)error{
+    if(error.code == 19){
+        DLog(@"%@",[error.userInfo objectForKey:@"rateLimitDuration"]);
+    }
+    return NO;
+}
+
 @end
