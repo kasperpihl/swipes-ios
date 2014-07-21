@@ -57,6 +57,14 @@ static SettingsHandler *sharedObject;
             break;
         case SettingLocation:
             index = @"SettingLocation";
+            break;
+        case SettingEvernoteSync:
+            index = @"SettingEvernoteSync";
+            break;
+        case IntegrationEvernote:
+            index = @"IntegrationEvernote";
+            break;
+
     }
     return index;
 }
@@ -125,6 +133,10 @@ static SettingsHandler *sharedObject;
             return @YES;
         case SettingLocation:
             return @NO;
+        case SettingEvernoteSync:
+            return @YES;
+        case IntegrationEvernote:
+            return @{};
     }
 }
 -(id)valueForSetting:(KPSettings)setting{

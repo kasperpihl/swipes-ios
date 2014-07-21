@@ -333,6 +333,10 @@
         [self synchronizeForce:YES async:YES];
     }
     else{
+        /*
+         1. 
+         
+         */
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             if (status == SyncStatusSuccess){
                 if( userInfo ){
@@ -874,10 +878,10 @@ static CoreSyncHandler *sharedObject;
     }
 }
 -(void)performTestForSyncing{
-    [self.evernoteSyncHandler getSwipesTagGuidBlock:^(NSString *string, NSError *error) {
+    /*[self.evernoteSyncHandler getSwipesTagGuidBlock:^(NSString *string, NSError *error) {
         DLog(@"%@",string);
         DLog(@"%@",error);
-    }];
+    }];*/
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"hasSwitchedToNewAPI"]){
         [self hardSync];
         

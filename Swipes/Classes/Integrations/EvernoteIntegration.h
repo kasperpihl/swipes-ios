@@ -12,6 +12,7 @@
 @property BOOL enableSync;
 @property NSString *tagGuid;
 @property NSString *tagName;
+@property BOOL autoFindFromTag;
 
 @property (nonatomic) BOOL isAuthenticated;
 -(void)loadEvernoteIntegrationObject:(NSDictionary*)object;

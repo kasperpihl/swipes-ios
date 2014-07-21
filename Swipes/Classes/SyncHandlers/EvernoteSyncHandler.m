@@ -17,10 +17,12 @@
 #import "NSDate+EDAMAdditions.h"
 #import "CoreSyncHandler.h"
 
+#import "EvernoteIntegration.h"
+
 #import "EvernoteSyncHandler.h"
 
 #define kEvernoteUpdatedAtKey @"EvernoteUpdatedAt"
-#define kSwipesTagName @"swipes"
+
 
 @interface EvernoteSyncHandler ()
 @property (nonatomic,copy) SyncBlock block;
@@ -47,82 +49,9 @@
 
 }
 
--(void)getSwipesTagGuidBlock:(StringBlock)block{
-    @try {
-        __block NSString *swipesTagGuid;
-        [[EvernoteNoteStore noteStore] listTagsWithSuccess:^(NSArray *tags) {
-            for( EDAMTag *tag in tags ){
-                if([tag.name isEqualToString:kSwipesTagName]){
-                    swipesTagGuid = tag.guid;
-                }
-            }
-            if(!swipesTagGuid){
-                [self createSwipesTagBlock:block];
-            }
-            else block(swipesTagGuid, nil);
-        } failure:^(NSError *error) {
-            block(nil, error);
-        }];
-    }
-    @catch (NSException *exception) {
-        DLog(@"%@",exception);
-        //[UtilityClass sendException:exception type:@"Evernote Update Note Exception"];
-    }
-}
--(void)createSwipesTagBlock:(StringBlock)block{
-    @try {
-        EDAMTag *swipesTag = [[EDAMTag alloc] init];
-        swipesTag.name = kSwipesTagName;
-        [[EvernoteNoteStore noteStore] createTag:swipesTag success:^(EDAMTag *tag) {
-            block(swipesTag.guid, nil);
-        } failure:^(NSError *error) {
-            block(nil, error);
-        }];
-    }
-    @catch (NSException *exception) {
-        DLog(@"%@",exception);
-        //[UtilityClass sendException:exception type:@"Evernote Update Note Exception"];
-    }
-}
 
--(void)findUpdatedNotesWithTag:(NSString*)tag{
-    EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
-    
-    EDAMNoteFilter* filter = [EDAMNoteFilter new];
-    NSMutableString *mutWords = [NSMutableString stringWithFormat:@"tag:%@",tag];
-    if(self.lastUpdated){
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-        [dateFormatter setDateFormat:@"yyyyMMdd'T'HHmmss'Z'"];
-        NSString *isoString = [dateFormatter stringFromDate:self.lastUpdated];
-        [mutWords appendFormat:@" updated:%@",isoString];
-    }
 
-    filter.words = [mutWords copy];
-    
-    filter.order = NoteSortOrder_UPDATED;
-    filter.ascending = NO;
-    
-    @try {
-        [noteStore findNotesWithFilter:filter offset:0 maxNotes:100 success:^(EDAMNoteList *list) {
-            
-            DLog(@"%@",list);
-            NSMutableArray *newNotes = [NSMutableArray array];
-            for( EDAMNote *note in list.notes ){
-                NSArray *existingTasks = [KPAttachment findAttachmentsForService:EVERNOTE_SERVICE identifier:note.guid context:nil];
-                if(existingTasks.count == 0){
-                    [newNotes addObject:note];
-                }
-            }
-            [EvernoteSyncHandler addAndSyncNewTasksFromNotes:newNotes];
-        } failure:^(NSError *error) {
-            DLog(@"%@",error);
-        }];
-    }
-    @catch (NSException *exception) {
-        DLog(@"%@",exception);
-    }
-}
+
 
 +(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes{
     for( EDAMNote *note in notes ){
@@ -304,20 +233,77 @@
     self.lastUpdated = updatedAt;
 }
 
-
 -(void)synchronizeWithBlock:(SyncBlock)block{
     self.block = block;
+    
+    self.block(SyncStatusStarted, nil, nil);
+    if( kEnInt.autoFindFromTag ){
+        [self findUpdatedNotesWithTag:@"swipes" block:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
+            if(error){
+                block(SyncStatusError, nil, error);
+            }
+            else{
+                [self syncEvernoteWithBlock:block];
+            }
+        }];
+    }
+    else{
+        [self syncEvernoteWithBlock:block];
+    }
+    
+    
+}
+
+
+-(void)findUpdatedNotesWithTag:(NSString*)tag block:(SyncBlock)block{
+    EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
+    
+    EDAMNoteFilter* filter = [EDAMNoteFilter new];
+    NSMutableString *mutWords = [NSMutableString stringWithFormat:@"tag:%@",tag];
+    if(self.lastUpdated){
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        [dateFormatter setDateFormat:@"yyyyMMdd'T'HHmmss'Z'"];
+        NSString *isoString = [dateFormatter stringFromDate:self.lastUpdated];
+        [mutWords appendFormat:@" updated:%@",isoString];
+    }
+    
+    filter.words = [mutWords copy];
+    
+    filter.order = NoteSortOrder_UPDATED;
+    filter.ascending = NO;
+    
+    @try {
+        [noteStore findNotesWithFilter:filter offset:0 maxNotes:100 success:^(EDAMNoteList *list) {
+            
+            DLog(@"%@",list);
+            NSMutableArray *newNotes = [NSMutableArray array];
+            for( EDAMNote *note in list.notes ){
+                NSArray *existingTasks = [KPAttachment findAttachmentsForService:EVERNOTE_SERVICE identifier:note.guid context:nil];
+                if(existingTasks.count == 0){
+                    [newNotes addObject:note];
+                }
+            }
+            [EvernoteSyncHandler addAndSyncNewTasksFromNotes:newNotes];
+        } failure:^(NSError *error) {
+            DLog(@"%@",error);
+        }];
+    }
+    @catch (NSException *exception) {
+        DLog(@"%@",exception);
+    }
+}
+
+-(void)syncEvernoteWithBlock:(SyncBlock)block{
     self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
     
     // If no objects has attachments - send a success back to caller
     if (self.objectsWithEvernote.count == 0){
         return self.block(SyncStatusSuccess, nil, nil);
     }
-    [self findUpdatedNotesWithTag:@"swipes"];
-    
-    
+
     // Tell caller that Evernote will be syncing
-    self.block(SyncStatusStarted, nil, nil);
+    
     
     NSDate *date = [NSDate date];
     __block NSInteger returnCount = 0;
@@ -365,7 +351,7 @@
                     [KPToDo saveToSync];
                 }
                 [self setUpdatedAt:date];
-
+                
                 self.block(SyncStatusSuccess, @{@"updated": [self._updatedTasks copy]}, nil);
                 [self._updatedTasks removeAllObjects];
             }
@@ -373,8 +359,10 @@
         }];
         
     }
-    
 }
+
+
+
 
 
 @end
