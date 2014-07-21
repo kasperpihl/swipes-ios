@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 typedef void (^NoteListBlock)(EDAMNoteList *list, NSError *error);
+typedef void (^NoteBlock)(EDAMNote *note, NSError *error);
 #define kEnInt [EvernoteIntegration sharedInstance]
 @interface EvernoteIntegration : NSObject
 @property BOOL enableSync;
@@ -20,6 +21,8 @@ typedef void (^NoteListBlock)(EDAMNoteList *list, NSError *error);
 +(EvernoteIntegration*)sharedInstance;
 -(void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
 
--(void)fetchEvernoteWithCheckmarks:(NoteListBlock)block;
+-(void)saveNote:(EDAMNote*)note block:(NoteBlock)block;
+- (void)fetchNoteWithGuid:(NSString *)guid block:(NoteBlock)block;
+-(void)fetchNotesWithCheckmarks:(NoteListBlock)block;
 
 @end

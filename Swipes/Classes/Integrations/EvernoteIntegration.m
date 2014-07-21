@@ -9,7 +9,7 @@
 #import "SettingsHandler.h"
 #import "EvernoteIntegration.h"
 #define kSwipesTagName @"swipes"
-
+#define kPaginator 100
 
 
 @interface EvernoteIntegration ()
@@ -36,6 +36,71 @@ static EvernoteIntegration *sharedObject;
 }
 
 
+-(void)saveNote:(EDAMNote*)note block:(NoteBlock)block{
+    @try {
+        [[EvernoteNoteStore noteStore] updateNote:note success:^(EDAMNote *note) {
+            if( block )
+                block( note, nil );
+        } failure:^(NSError *error) {
+            [self handleError:error withType:@"Evernote Update Note Error"];
+            if( block)
+                block( note , error);
+        }];
+    }
+    @catch (NSException *exception) {
+        [UtilityClass sendException:exception type:@"Evernote Update Note Exception"];
+    }
+}
+
+
+- (void)fetchNoteWithGuid:(NSString *)guid block:(NoteBlock)block
+{
+    @try {
+        [[EvernoteNoteStore noteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
+            
+            if( block )
+                block( note , nil );
+            
+        } failure:^(NSError *error) {
+            [self handleError:error withType:@"Evernote Get Note Error"];
+            if( block )
+                block( nil , error );
+        }];
+    }
+    @catch (NSException *exception) {
+        [UtilityClass sendException:exception type:@"Evernote Get Note Exception"];
+    }
+    
+    
+}
+
+-(void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block{
+    EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
+    @try {
+        [noteStore findNotesWithFilter:filter offset:0 maxNotes:kPaginator success:^(EDAMNoteList *list) {
+            block(list, nil);
+        } failure:^(NSError *error) {
+            [self handleError:error withType:@"Evernote Fetch Notes with Checkmarks Error"];
+            block(nil,error);
+        }];
+    }
+    @catch (NSException *exception) {
+        DLog(@"%@",exception);
+    }
+}
+
+-(void)fetchNotesWithCheckmarks:(NoteListBlock)block{
+    
+    
+    EDAMNoteFilter* filter = [EDAMNoteFilter new];
+    filter.words = @"todo:*";
+    filter.order = NoteSortOrder_UPDATED;
+    filter.ascending = NO;
+    
+    
+}
+
+
 
 -(BOOL)isAuthenticated{
     return [[EvernoteSession sharedSession] isAuthenticated];
@@ -45,7 +110,7 @@ static EvernoteIntegration *sharedObject;
         EvernoteSession *session = [EvernoteSession sharedSession];
         [session authenticateWithViewController:viewController completionHandler:^(NSError *error) {
             if(error)
-                [UtilityClass sendError:error type:@"Evernote Auth Error"];
+                [self handleError:error withType:@"Evernote Auth Error"];
             block(error);
         }];
     }
@@ -72,7 +137,7 @@ static EvernoteIntegration *sharedObject;
             else block(swipesTagGuid, nil);
         } failure:^(NSError *error) {
             if(error)
-                [UtilityClass sendError:error type:@"Evernote Get Tags Error"];
+                [self handleError:error withType:@"Evernote Get Tags Error"];
             block(nil, error);
         }];
     }
@@ -92,7 +157,7 @@ static EvernoteIntegration *sharedObject;
             block(swipesTag.guid, nil);
         } failure:^(NSError *error) {
             if(error)
-                [UtilityClass sendError:error type:@"Evernote Create Tag Error"];
+                [self handleError:error withType:@"Evernote Create Tag Error"];
             block(nil, error);
         }];
     }
@@ -102,10 +167,15 @@ static EvernoteIntegration *sharedObject;
     }
 }
 
--(BOOL)handleError:(NSError*)error{
+-(BOOL)handleError:(NSError*)error withType:(NSString*)type{
     if(error.code == 19){
+        NSTimeInterval rateLimit = [[error.userInfo objectForKey:@"rateLimitDuration"] floatValue];
+        if(rateLimit > 0){
+            self.rateLimit = [NSDate dateWithTimeIntervalSinceNow:rateLimit+10];
+        }
         DLog(@"%@",[error.userInfo objectForKey:@"rateLimitDuration"]);
     }
+    [UtilityClass sendError:error type:type];
     return NO;
 }
 

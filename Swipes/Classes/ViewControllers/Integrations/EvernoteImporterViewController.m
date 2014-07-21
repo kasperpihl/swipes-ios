@@ -10,6 +10,7 @@
 #import "KPAttachment.h"
 #import "SlowHighlightIcon.h"
 #import "EvernoteSyncHandler.h"
+#import "EvernoteIntegration.h"
 #import "EvernoteImporterViewController.h"
 #import "DejalActivityView.h"
 #define kPaginator 100
@@ -35,28 +36,6 @@
     return self;
 }
 
--(void)loadEvernoteWithCheckmarks{
-    EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
-    
-    EDAMNoteFilter* filter = [EDAMNoteFilter new];
-    filter.words = @"todo:*";
-    filter.order = NoteSortOrder_UPDATED;
-    filter.ascending = NO;
-    
-    @try {
-        [noteStore findNotesWithFilter:filter offset:0 maxNotes:kPaginator success:^(EDAMNoteList *list) {
-            self.noteList = list;
-            [self.tableView reloadData];
-        } failure:^(NSError *error) {
-            DLog(@"%@",error);
-        }];
-    }
-    @catch (NSException *exception) {
-        DLog(@"%@",exception);
-    }
-
-    
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -248,7 +227,12 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self loadEvernoteWithCheckmarks];
+    [kEnInt fetchNotesWithCheckmarks:^(EDAMNoteList *list, NSError *error) {
+        if(list){
+            self.noteList = list;
+            [self.tableView reloadData];
+        }
+    }];
     [self updateButtons];
 }
 

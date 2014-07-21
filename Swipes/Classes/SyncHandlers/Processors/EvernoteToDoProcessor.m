@@ -6,6 +6,7 @@
 //
 
 #import "UtilityClass.h"
+#import "EvernoteIntegration.h"
 #import "EvernoteToDoProcessor.h"
 
 ///////////////////////////////////////////////////////////////
@@ -78,33 +79,22 @@ static NSSet* g_startEndElements;
     self = [super init];
     if (self) {
         self.guid = guid;
-        [self loadNoteWithGuid:guid block:block];
+        _note = nil;
+        [kEnInt fetchNoteWithGuid:guid block:^(EDAMNote *note, NSError *error) {
+            if(note){
+                _note = note;
+                [self parseAndLoadTodos];
+                if(block)
+                    block(YES,nil);
+            }
+            else if(block)
+                block(NO,error);
+        }];
     }
     return self;
 }
 
-- (void)loadNoteWithGuid:(NSString *)guid block:(SuccessfulBlock)block
-{
-    _note = nil;
-    @try {
-        [[EvernoteNoteStore noteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
-            _note = note;
-            [self parseAndLoadTodos];
-            if( block )
-                block( YES , nil );
-            
-        } failure:^(NSError *error) {
-            [UtilityClass sendError:error type:@"Evernote Get Note Error"];
-            if( block )
-                block( NO , error );
-        }];
-    }
-    @catch (NSException *exception) {
-        [UtilityClass sendException:exception type:@"Evernote Get Note Exception"];
-    }
 
-    
-}
 
 -(void)parseAndLoadTodos{
     // parse
@@ -152,23 +142,20 @@ static NSSet* g_startEndElements;
     update.guid = _note.guid;
     update.title = _note.title;
     update.content = self.updatedContent;
-    @try {
-        [[EvernoteNoteStore noteStore] updateNote:update success:^(EDAMNote *note) {
-            DLog(@"note update success !!!");
-            if( block )
-                block( YES, nil );
-        } failure:^(NSError *error) {
-            [UtilityClass sendError:error type:@"Evernote Update Note Error"];
+    [kEnInt saveNote:update block:^(EDAMNote *note, NSError *error) {
+        if(error){
             DLog(@"%@",_note.content);
             DLog(@"%@",self.updatedContent);
             if( block)
                 block( NO,error);
             DLog(@"note update failed: %@", [error localizedDescription]);
-        }];
-    }
-    @catch (NSException *exception) {
-        [UtilityClass sendException:exception type:@"Evernote Update Note Exception"];
-    }
+        }
+        else{
+            DLog(@"note update success !!!");
+            if( block )
+                block( YES, nil );
+        }
+    }];
 
 }
 
