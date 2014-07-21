@@ -107,8 +107,9 @@
                             action:@selector(searchBarDidReturn:)
                   forControlEvents:UIControlEventEditingDidEndOnExit];
 
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, kSearchBarHeight, 320-kContentSpacingLeft-kContentSpacingRight, self.bounds.size.height - 2 * kSearchBarHeight ) style:UITableViewStylePlain];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(kContentSpacingLeft, kSearchBarHeight, 320-kContentSpacingLeft-kContentSpacingRight, contentView.frame.size.height - 2 * kSearchBarHeight ) style:UITableViewStylePlain];
         self.tableView.delegate = self;
+        self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         self.tableView.dataSource = self;
         self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
         self.tableView.backgroundColor = CLEAR;
@@ -232,7 +233,6 @@
         DLog(@"running search");
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         
-        EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
         
         EDAMNoteFilter* filter = [EDAMNoteFilter new];
 
