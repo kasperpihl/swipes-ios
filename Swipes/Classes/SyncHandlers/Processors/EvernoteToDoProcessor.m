@@ -159,6 +159,8 @@ static NSSet* g_startEndElements;
                 block( YES, nil );
         } failure:^(NSError *error) {
             [UtilityClass sendError:error type:@"Evernote Update Note Error"];
+            DLog(@"%@",_note.content);
+            DLog(@"%@",self.updatedContent);
             if( block)
                 block( NO,error);
             DLog(@"note update failed: %@", [error localizedDescription]);
