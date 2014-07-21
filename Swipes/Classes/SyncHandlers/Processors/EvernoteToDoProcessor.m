@@ -190,10 +190,14 @@ static NSSet* g_startEndElements;
         }
         
         NSUInteger startLocation = scanner.scanLocation;
-        if (('>' != [self.updatedContent characterAtIndex:startLocation]) && (![scanner scanUpToString:@">" intoString:nil])) {
-            return NO;
+        
+        // get to the next '/' or '>'
+        NSUInteger endLocation = startLocation;
+        while (('>' != [self.updatedContent characterAtIndex:endLocation]) && ('/' != [self.updatedContent characterAtIndex:endLocation])) {
+            endLocation++;
+            if (endLocation >= self.updatedContent.length)
+                return NO;
         }
-        NSUInteger endLocation = scanner.scanLocation;
         
         NSRange range = NSMakeRange(startLocation, endLocation - startLocation);
         NSString* replaceString = [NSString stringWithFormat:@" checked=\"%@\"", checked ? @"true" : @"false"];
