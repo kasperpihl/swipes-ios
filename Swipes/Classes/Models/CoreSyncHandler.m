@@ -328,15 +328,11 @@
         if( self.tryCounter > 5 )
             return;
     }
-    if(self._needSync){
+    if (self._needSync) {
         self._isSyncing = NO;
         [self synchronizeForce:YES async:YES];
     }
-    else{
-        /*
-         1. 
-         
-         */
+    else {
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             if (status == SyncStatusSuccess){
                 if( userInfo ){
@@ -360,9 +356,12 @@
                     self._isSyncing = NO;
                     EvernoteSession *session = [EvernoteSession sharedSession];
                     if (!session.isAuthenticated || [EvernoteSession isTokenExpiredWithError:error]) {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Evernote authentication", @"duration": @(5) } ];
                         [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                     }
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
+                    else {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
+                    }
                 }
             });
         }];
