@@ -109,7 +109,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     if ( subtaskIsCompleted != evernoteToDo.checked ){
         
         // If subtask is completed in Swipes and not in Evernote
-        if( subtaskIsCompleted){
+        if( subtaskIsCompleted ){
             // If subtask was completed in Swipes after last sync override evernote
             if([self.lastUpdated isEarlierThanDate:subtask.completionDate]){
                 DLog(@"completing evernote");

@@ -802,6 +802,12 @@
         for(KPAttachment *att in attachmentSet ){
             [att MR_deleteEntity];
         }
+        for ( KPToDo *todo in self.subtasks ){
+            if([todo.origin isEqualToString:service]){
+                todo.originIdentifier = nil;
+                todo.origin = nil;
+            }
+        }
     }
 }
 +(void)removeAllAttachmentsForAllToDosWithService:(NSString *)service inContext:(NSManagedObjectContext *)context save:(BOOL)save{
