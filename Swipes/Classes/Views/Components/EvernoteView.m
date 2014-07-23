@@ -231,6 +231,11 @@
 {
     if (kEnInt.isAuthenticated) {
         DLog(@"running search");
+        
+        if ([EvernoteIntegration isAPILimitReached]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": [EvernoteIntegration APILimitReachedMessage], @"duration": @(3.5) } ];
+        }
+        
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         
         
@@ -256,6 +261,9 @@
             filter.words = @"todo:*";
         }
         [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kSearchLimit block:^(EDAMNoteList *list, NSError *error) {
+            if (error) {
+                [EvernoteIntegration updateAPILimitIfNeeded:error];
+            }
             if( list ){
                 for (EDAMNote* note in list.notes) {
                     DLog(@"Last update: %@",[NSDate dateWithTimeIntervalSince1970:note.updated/1000]);

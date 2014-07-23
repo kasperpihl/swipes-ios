@@ -173,7 +173,7 @@ static NSSet* g_startEndElements;
                 return NO;
             }
             scanner.scanLocation += 8;
-//            NSLog(@"pos: %d", scanner.scanLocation);
+//            DLog(@"pos: %d", scanner.scanLocation);
         }
         
         NSUInteger startLocation = scanner.scanLocation;
@@ -199,11 +199,122 @@ static NSSet* g_startEndElements;
     return NO;
 }
 
+- (BOOL)updateToDo:(EvernoteToDo *)updatedToDo title:(NSString *)title
+{
+    if ((nil != updatedToDo) && (![updatedToDo.title isEqualToString:title])) {
+        //NSLog(@"now we can update our TODO: %@", updatedToDo);
+        
+        if (!self.updatedContent)
+            self.updatedContent = _note.content;
+        
+        NSScanner* scanner = [NSScanner scannerWithString:self.updatedContent];
+        for (NSInteger i = 0; i <= updatedToDo.position; i++) {
+            if (![scanner scanUpToString:@"<en-todo" intoString:nil]) {
+                return NO;
+            }
+            scanner.scanLocation += 8;
+//            DLog(@"pos: %d", scanner.scanLocation);
+        }
+        
+        NSString* escapedOldTitle = [self xmlEscape:updatedToDo.title];
+        if (![scanner scanUpToString:escapedOldTitle intoString:nil]) {
+            return NO;
+        }
+        
+        NSUInteger startLocation = scanner.scanLocation;
+        
+        NSRange range = NSMakeRange(startLocation, escapedOldTitle.length);
+        self.updatedContent = [self.updatedContent stringByReplacingCharactersInRange:range withString:[self xmlEscape:title]];
+        self.needUpdate = YES;
+        NSLog(@"successfully went through updating content local (title)");
+        
+        return YES;
+    }
+    else {
+        NSLog(@"Cannot find TODO: %@ (or found but already with the same status)", updatedToDo);
+    }
+    return NO;
+}
+
+- (NSUInteger)newToDoPosAtTheBeginning
+{
+    NSRange div = [self.updatedContent rangeOfString:@"<div>"];
+    if (NSNotFound == div.location) {
+        return [self.updatedContent rangeOfString:@"</en-note>"].location;
+    }
+    return div.location;
+}
+
+- (NSUInteger)newToDoPos
+{
+    if (_todos.count) {
+        EvernoteToDo* todo = _todos[_todos.count - 1];
+        NSScanner* scanner = [NSScanner scannerWithString:self.updatedContent];
+        for (NSInteger i = 0; i <= todo.position; i++) {
+            if (![scanner scanUpToString:@"<en-todo" intoString:nil]) {
+                return [self newToDoPosAtTheBeginning];
+            }
+            scanner.scanLocation += 8;
+        }
+        
+        NSString* escapedTitle = [self xmlEscape:todo.title];
+        
+        if (![scanner scanUpToString:escapedTitle intoString:nil]) {
+            return [self newToDoPosAtTheBeginning];
+        }
+        
+        NSUInteger tempResult = scanner.scanLocation + escapedTitle.length;
+        if ([scanner scanUpToString:@"</div>" intoString:nil]) {
+            return scanner.scanLocation + 6; // 6 is the length of @"</div>"
+        }
+        
+        return tempResult;
+    }
+    else {
+        return [self newToDoPosAtTheBeginning];
+    }
+}
+
+- (NSString *)xmlEscape:(NSString *)s
+{
+    NSMutableString* str = s.mutableCopy;
+    
+    [str replaceOccurrencesOfString:@"&"  withString:@"&amp;"  options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+    [str replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+    [str replaceOccurrencesOfString:@"'"  withString:@"&#x27;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+    [str replaceOccurrencesOfString:@">"  withString:@"&gt;"   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+    [str replaceOccurrencesOfString:@"<"  withString:@"&lt;"   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+    
+    return str;
+}
+
+- (BOOL)addToDoWithTitle:(NSString *)title
+{
+    if (!self.updatedContent)
+        self.updatedContent = _note.content;
+    
+    NSUInteger startPos = [self newToDoPos];
+    
+    if (startPos >= self.updatedContent.length) {
+        // FIXME log error
+        NSLog(@"Evernote error: found position is uncorrect");
+    }
+    
+    if (NSNotFound != startPos) {
+        self.updatedContent = [self.updatedContent stringByReplacingCharactersInRange:NSMakeRange(startPos, 0)
+                                                                           withString:[NSString stringWithFormat:@"<div><en-todo/>%@<br/></div>", [self xmlEscape:title]]];
+        self.needUpdate = YES;
+        return YES;
+    }
+    
+    return NO;
+}
+
 #pragma mark - NSXmlParserDelegate
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {
-    //NSLog(@"didStartElement: %@ at line: %d:%d", elementName, parser.lineNumber, parser.columnNumber);
+    //DLog(@"didStartElement: %@ at line: %d:%d", elementName, parser.lineNumber, parser.columnNumber);
     if ([elementName isEqualToString:@"en-todo"]) {
         [self finishCurrentToDo];
         _tempToDoText = [NSMutableString string];
@@ -217,7 +328,7 @@ static NSSet* g_startEndElements;
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
-    //NSLog(@"didEndElement: %@", elementName);
+    //DLog(@"didEndElement: %@", elementName);
     if (nil != _tempToDoText) {
         [self finishIfNeededForElement:elementName];
     }
@@ -225,7 +336,7 @@ static NSSet* g_startEndElements;
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-    //NSLog(@"found characters: %@", string);
+    //DLog(@"found characters: %@", string);
     if (nil != _tempToDoText) {
         [_tempToDoText appendString:string];
     }

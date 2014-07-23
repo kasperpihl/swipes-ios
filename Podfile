@@ -10,10 +10,9 @@ pod 'RMStore', '~> 0.4.2', :inhibit_warnings => true
 pod 'Base64'
 pod 'Evernote-SDK-iOS', :inhibit_warnings => true
 pod 'APAddressBook'
-pod 'DejalActivityView', '~> 1.2'
+pod 'DejalActivityView'
+pod 'KeenClient', :inhibit_warnings => true
 
-# there is a problem with version 3.2.10 that breaks Facebook build
-pod 'KeenClient', '<= 3.2.9'
 #pod 'MMDrawerController', '~> 0.5.3' - now part of libs as it was modified
 
 #pod 'Localytics-AMP', '~> 2.23'

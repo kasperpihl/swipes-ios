@@ -21,8 +21,7 @@
 
 #import "EvernoteSyncHandler.h"
 
-#define kEvernoteUpdatedAtKey @"EvernoteUpdatedAt"
-
+NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 
 @interface EvernoteSyncHandler ()
 @property (nonatomic,copy) SyncBlock block;
@@ -295,6 +294,13 @@
         return self.block(SyncStatusSuccess, nil, nil);
     }
 
+    // ensure evernote authentication
+    NSError* error = [NSError errorWithDomain:@"Evernote not authenticated" code:601 userInfo:nil];
+    EvernoteSession *session = [EvernoteSession sharedSession];
+    if (!session.isAuthenticated || [EvernoteSession isTokenExpiredWithError:error]) {
+        return self.block(SyncStatusError, nil, error);
+    }
+    
     // Tell caller that Evernote will be syncing
     
     
