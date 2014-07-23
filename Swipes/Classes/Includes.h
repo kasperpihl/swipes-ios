@@ -76,7 +76,7 @@ typedef enum {
 typedef void (^voidBlock)(void);
 typedef void (^viewBlock)(UIView* view);
 
-#define kEvernoteColor color(95,179,54,1)
+#define kEvernoteColor color(32,192,92,1)
 #define kLocationSplitStr @"_-_"
 #define kCurrent [PFUser currentUser]
 #define kCurrentAttr(attr) [kCurrent objectForKey:attr]

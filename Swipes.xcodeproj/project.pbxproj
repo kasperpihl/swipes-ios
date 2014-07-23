@@ -211,6 +211,9 @@
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
 		A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066A17296BF100DDE644 /* ToDoListViewController.m */; };
 		A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4067117296C0500DDE644 /* KPControlHandler.m */; };
+		A7F522A9197D73CE008B6147 /* EvernoteHelperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F522A8197D73CE008B6147 /* EvernoteHelperViewController.m */; };
+		A7F522AC197D7C76008B6147 /* swipesevernotetag.png in Resources */ = {isa = PBXBuildFile; fileRef = A7F522AA197D7C76008B6147 /* swipesevernotetag.png */; };
+		A7F522AD197D7C76008B6147 /* swipesevernotetag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7F522AB197D7C76008B6147 /* swipesevernotetag@2x.png */; };
 		A7F9D79618BA2E73003D8833 /* _KPAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F9D79518BA2E73003D8833 /* _KPAttachment.m */; };
 		A7F9D79918BA2E7A003D8833 /* KPAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F9D79818BA2E7A003D8833 /* KPAttachment.m */; };
 		A7FA8B1D17AF094E00134ED0 /* SnoozesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FA8B1C17AF094D00134ED0 /* SnoozesViewController.m */; };
@@ -565,6 +568,10 @@
 		A7F4066A17296BF100DDE644 /* ToDoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoListViewController.m; sourceTree = "<group>"; };
 		A7F4067017296C0500DDE644 /* KPControlHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPControlHandler.h; sourceTree = "<group>"; };
 		A7F4067117296C0500DDE644 /* KPControlHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPControlHandler.m; sourceTree = "<group>"; };
+		A7F522A7197D73CE008B6147 /* EvernoteHelperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteHelperViewController.h; path = Integrations/EvernoteHelperViewController.h; sourceTree = "<group>"; };
+		A7F522A8197D73CE008B6147 /* EvernoteHelperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteHelperViewController.m; path = Integrations/EvernoteHelperViewController.m; sourceTree = "<group>"; };
+		A7F522AA197D7C76008B6147 /* swipesevernotetag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = swipesevernotetag.png; sourceTree = "<group>"; };
+		A7F522AB197D7C76008B6147 /* swipesevernotetag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipesevernotetag@2x.png"; sourceTree = "<group>"; };
 		A7F9D79418BA2E73003D8833 /* _KPAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _KPAttachment.h; sourceTree = "<group>"; };
 		A7F9D79518BA2E73003D8833 /* _KPAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _KPAttachment.m; sourceTree = "<group>"; };
 		A7F9D79718BA2E7A003D8833 /* KPAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPAttachment.h; sourceTree = "<group>"; };
@@ -959,6 +966,8 @@
 			children = (
 				A754DB60197BBD0B00308DBC /* EvernoteImporterViewController.h */,
 				A754DB61197BBD0B00308DBC /* EvernoteImporterViewController.m */,
+				A7F522A7197D73CE008B6147 /* EvernoteHelperViewController.h */,
+				A7F522A8197D73CE008B6147 /* EvernoteHelperViewController.m */,
 			);
 			name = Integrations;
 			sourceTree = "<group>";
@@ -1328,6 +1337,8 @@
 		A79DB41B17358C33007A48E2 /* Backgrounds */ = {
 			isa = PBXGroup;
 			children = (
+				A7F522AA197D7C76008B6147 /* swipesevernotetag.png */,
+				A7F522AB197D7C76008B6147 /* swipesevernotetag@2x.png */,
 				A772B13F19671D9F00C07909 /* swipesandevernote.png */,
 				A772B14019671D9F00C07909 /* swipesandevernote@2x.png */,
 				A741EC4E18354726000F9F93 /* default-background.jpg */,
@@ -1616,6 +1627,7 @@
 				DACD544E18A1ACFC00C378DF /* page_white.png in Resources */,
 				A74FB8AF18FFBC4D00F25157 /* MASTER_00011.jpg in Resources */,
 				DACD546118A1ACFC00C378DF /* page_white_visualstudio.png in Resources */,
+				A7F522AC197D7C76008B6147 /* swipesevernotetag.png in Resources */,
 				A74FB8FC18FFBCB200F25157 /* MASTER_0008.jpg in Resources */,
 				A7D0D3BF1904FD1000ABA1FF /* selected_circle.png in Resources */,
 				A74FB8F618FFBCB200F25157 /* MASTER_0002.jpg in Resources */,
@@ -1624,6 +1636,7 @@
 				DACD546418A1ACFC00C378DF /* word.png in Resources */,
 				A7BB65CB189BF19600BE7183 /* swipes-notification.aif in Resources */,
 				DACD545518A1ACFC00C378DF /* page_white_cup.png in Resources */,
+				A7F522AD197D7C76008B6147 /* swipesevernotetag@2x.png in Resources */,
 				A75236E417A335680030ED1E /* walkthrough_swipe_done.png in Resources */,
 				DACD545818A1ACFC00C378DF /* page_white_gear.png in Resources */,
 				A75236E517A335680030ED1E /* walkthrough_swipe_done@2x.png in Resources */,
@@ -1839,6 +1852,7 @@
 				A71DE4B31844069A0097394C /* UIGestureRecognizer+UIBreak.m in Sources */,
 				A748C87C190D9A0800514DB3 /* SubtaskCell.m in Sources */,
 				A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */,
+				A7F522A9197D73CE008B6147 /* EvernoteHelperViewController.m in Sources */,
 				A703B1C31838EBF20047DCC9 /* KPAddTagPanel.m in Sources */,
 				A754DB62197BBD0B00308DBC /* EvernoteImporterViewController.m in Sources */,
 				A789B3F917D79BFB00C25B73 /* KPOverlay.m in Sources */,

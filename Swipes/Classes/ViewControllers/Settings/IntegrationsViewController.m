@@ -10,6 +10,7 @@
 #import "KPToDo.h"
 #import "UtilityClass.h"
 #import "CoreSyncHandler.h"
+#import "EvernoteHelperViewController.h"
 #import "EvernoteImporterViewController.h"
 #import "EvernoteIntegration.h"
 #import "IntegrationsViewController.h"
@@ -34,6 +35,7 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = CLEAR;
+    
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
     self.tableView.delegate = self;
     self.tableView.backgroundColor = [UIColor clearColor];
@@ -56,14 +58,14 @@
     tutorialView.textColor = tcolor(TextColor);
     
     //tutorialView.text = @"Swipes Evernote integration enables you to attach a note in Swipes, and sync all checkmarks from Evernote directly into Swipes as Action Steps and back.\r\n\r\n1. Add a task in Swipes\r\n2. Open it and press the Elephant\r\n3. Select the note you want to sync\r\n4. Now all checkmarks will be synced back and forth";
-    NSString *evernoteIconString = @"editEvernote";
+    NSString *evernoteIconString = iconString( @"editEvernote" );
     NSMutableAttributedString *mutableAttributed = [[NSMutableAttributedString alloc] init];
     NSArray *lines = @[
-                       @"This integration lets you sync notes and checkmarks from Evernote into Swipes.",
+                       @"Sync your checkmarks from Evernote into Swipes.",
                        @"",
                        @"Get started:",
                        @"",
-                       @"1. Create a task in Swipes\r\n",
+                       @"1. Assign the \"swipes\"-tag to an Evernote\r\n",
                        [NSString stringWithFormat:@"2. Double tap to open it > press the %@",evernoteIconString],
                        @"",
                        @"3. Select the note you want to sync",
@@ -204,7 +206,7 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    [self presentViewController:[[EvernoteImporterViewController alloc] init] animated:YES completion:^{
+    [self presentViewController:[[EvernoteHelperViewController alloc] init] animated:YES completion:^{
         
     }];
 }
