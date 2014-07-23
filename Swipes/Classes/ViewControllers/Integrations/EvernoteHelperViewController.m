@@ -108,7 +108,7 @@
     
     
     SlowHighlightIcon *getStartedButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
-    [
+    
     
     [self.view addSubview:scrollView];
     scrollView.scrollEnabled = YES;
