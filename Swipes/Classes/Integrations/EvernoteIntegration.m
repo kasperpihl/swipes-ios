@@ -8,15 +8,19 @@
 #import "UtilityClass.h"
 #import "SettingsHandler.h"
 #import "EvernoteIntegration.h"
-#define kSwipesTagName @"swipes"
-#define kPaginator 100
 
+#define kPaginator 100 // FIXME
+NSString * const kSwipesTagName = @"swipes";
+NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
 
 @interface EvernoteIntegration ()
 @property BOOL isAuthing;
 @end
 @implementation EvernoteIntegration
+
 static EvernoteIntegration *sharedObject;
+
+// FIXME do this properly
 +(EvernoteIntegration *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[EvernoteIntegration allocWithZone:NULL] init];
@@ -24,11 +28,61 @@ static EvernoteIntegration *sharedObject;
     }
     return sharedObject;
 }
--(void)initialize{
+
++ (void)updateAPILimitIfNeeded:(NSError *)error
+{
+    if (19 == error.code) {
+        NSUInteger seconds = [((NSNumber *)error.userInfo[@"rateLimitDuration"]) unsignedIntegerValue];
+        NSDate* willResetAt = [NSDate dateWithTimeIntervalSinceNow:seconds + 1];
+        NSLog(@"will reset at: %@", willResetAt);
+        [[NSUserDefaults standardUserDefaults] setObject:willResetAt forKey:kEvernoteUpdateWaitUntilKey];
+    }
+}
+
++ (BOOL)isAPILimitReached
+{
+    NSDate* limitDate = [[NSUserDefaults standardUserDefaults] objectForKey:kEvernoteUpdateWaitUntilKey];
+    if (nil == limitDate) {
+        return NO;
+    }
+    BOOL result = [limitDate timeIntervalSinceNow] > 0;
+    if (!result) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kEvernoteUpdateWaitUntilKey];
+    }
+    return result;
+}
+
++ (NSUInteger)minutesUntilAPILimitReset
+{
+    if (![self.class isAPILimitReached]) {
+        return 0;
+    }
+    NSDate* limitDate = [[NSUserDefaults standardUserDefaults] objectForKey:kEvernoteUpdateWaitUntilKey];
+    if (nil == limitDate) {
+        return 0;
+    }
+    return fabs([limitDate timeIntervalSinceNow] / 60);;
+}
+
++ (NSString *)APILimitReachedMessage
+{
+    NSUInteger minutes = [self.class minutesUntilAPILimitReset];
+    NSString* message;
+    if (2 > minutes) {
+        message = @"Evernote usage limit reached! Try again in a minute.";
+    }
+    else {
+        message = [NSString stringWithFormat:@"Evernote usage limit reached! Try again in %d minutes", minutes];
+    }
+    return message;
+}
+
+- (void)initialize{
     NSDictionary *currentIntegration = (NSDictionary*)[kSettings valueForSetting:IntegrationEvernote];
     [self loadEvernoteIntegrationObject:currentIntegration];
 }
--(void)loadEvernoteIntegrationObject:(NSDictionary *)object{
+
+- (void)loadEvernoteIntegrationObject:(NSDictionary *)object{
     self.tagName = [object objectForKey:@"tagName"];
     self.tagGuid = [object objectForKey:@"tagGuid"];
     if(self.tagName || self.tagGuid)
@@ -36,7 +90,7 @@ static EvernoteIntegration *sharedObject;
 }
 
 
--(void)saveNote:(EDAMNote*)note block:(NoteBlock)block{
+- (void)saveNote:(EDAMNote*)note block:(NoteBlock)block{
     @try {
         [[EvernoteNoteStore noteStore] updateNote:note success:^(EDAMNote *note) {
             if( block )

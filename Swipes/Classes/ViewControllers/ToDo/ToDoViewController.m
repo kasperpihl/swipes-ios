@@ -34,7 +34,6 @@
 
 #import "ToDoListViewController.h"
 #import "KPSegmentedViewController.h"
-#import "ToDoViewController.h"
 #import "HPGrowingTextView.h"
 #import "NotesView.h"
 #import "UtilityClass.h"
@@ -66,6 +65,9 @@
 #import "KPAttachment.h"
 
 #import "SyncLabel.h"
+#import "EvernoteIntegration.h"
+
+#import "ToDoViewController.h"
 
 typedef NS_ENUM(NSUInteger, KPEditMode){
     KPEditModeNone = 0,
@@ -758,12 +760,17 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         return;
     }
     voidBlock setNewEvernote = ^{
-        self.activeEditMode = KPEditModeEvernote;
-        EvernoteView *evernoteView = [[EvernoteView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
-        evernoteView.delegate = self;
-        evernoteView.caller = self.segmentedViewController;
-        BLURRY.showPosition = PositionBottom;
-        [BLURRY showView:evernoteView inViewController:self];
+        if ([EvernoteIntegration isAPILimitReached]) {
+            [[[UIAlertView alloc] initWithTitle:nil message:[EvernoteIntegration APILimitReachedMessage] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        }
+        else {
+            self.activeEditMode = KPEditModeEvernote;
+            EvernoteView *evernoteView = [[EvernoteView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
+            evernoteView.delegate = self;
+            evernoteView.caller = self.segmentedViewController;
+            BLURRY.showPosition = PositionBottom;
+            [BLURRY showView:evernoteView inViewController:self];
+        }
     };
     
     if(sender.tag == EVERNOTE_ITEM_BUTTON_TAG){

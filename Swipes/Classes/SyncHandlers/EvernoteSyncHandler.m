@@ -21,8 +21,7 @@
 
 #import "EvernoteSyncHandler.h"
 
-#define kEvernoteUpdatedAtKey @"EvernoteUpdatedAt"
-
+NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 
 @interface EvernoteSyncHandler ()
 @property (nonatomic,copy) SyncBlock block;

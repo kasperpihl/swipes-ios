@@ -332,8 +332,11 @@
         self._isSyncing = NO;
         [self synchronizeForce:YES async:YES];
     }
-    else {
+    else if (![EvernoteIntegration isAPILimitReached]) {
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
+            if (error) {
+                [EvernoteIntegration updateAPILimitIfNeeded:error];
+            }
             if (status == SyncStatusSuccess){
                 if( userInfo ){
                     NSArray *updatedToDos = [userInfo objectForKey:@"updated"];
@@ -365,7 +368,9 @@
                 }
             });
         }];
-        
+    }
+    else {
+        [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
     }
 }
 
