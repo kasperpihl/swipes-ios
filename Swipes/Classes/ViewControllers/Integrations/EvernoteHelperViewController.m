@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 #import "SlowHighlightIcon.h"
+#import "UIColor+Utilities.h"
 #import "WalkthroughTitleView.h"
 #import "EvernoteHelperViewController.h"
 #define kTopHeight 50
@@ -108,11 +109,24 @@
     
     
     SlowHighlightIcon *getStartedButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
-    
+    [getStartedButton setTitle:@"GET STARTED" forState:UIControlStateNormal];
+    getStartedButton.layer.cornerRadius = 5;
+    getStartedButton.titleLabel.font = KP_LIGHT(18);
+    getStartedButton.layer.masksToBounds = YES;
+    [getStartedButton setBackgroundImage:[alpha(tcolor(LaterColor), 0.5) image] forState:UIControlStateHighlighted];
+    [getStartedButton setBackgroundImage:[tcolor(LaterColor) image] forState:UIControlStateNormal];
+    [getStartedButton addTarget:self action:@selector(pressedGetStarted:) forControlEvents:UIControlEventTouchUpInside];
+    //getStartedButton.backgroundColor = tcolor(LaterColor);
+    CGRectSetCenter(getStartedButton, scrollView.frame.size.width/2, CGRectGetMaxY(secondImage.frame) + kTitleTopSpacing + getStartedButton.frame.size.height/2);
+    [scrollView addSubview:getStartedButton];
     
     [self.view addSubview:scrollView];
     scrollView.scrollEnabled = YES;
-    scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGRectGetMaxY(secondImage.frame)+kTitleTopSpacing);
+    scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGRectGetMaxY(getStartedButton.frame)+kTitleTopSpacing);
+}
+
+-(void)pressedGetStarted:(UIButton*)sender{
+    [self pressedClose:sender];
 }
 
 -(void)pressedClose:(UIButton*)button{
