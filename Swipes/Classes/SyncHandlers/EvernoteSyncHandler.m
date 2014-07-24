@@ -87,11 +87,16 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
 }
 
--(NSArray*)filterSubtasks:(NSSet*)subtasks{
+-(NSArray*)filterSubtasksWithEvernote:(NSSet*)subtasks{
     NSPredicate *subtaskPredicate = [NSPredicate predicateWithFormat:@"origin == %@",EVERNOTE_SERVICE];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:NO];
-    NSArray *evernoteSubtasks = [[subtasks filteredSetUsingPredicate:subtaskPredicate] sortedArrayUsingDescriptors:@[ sortDescriptor ]];
-    return evernoteSubtasks;
+    return [[subtasks filteredSetUsingPredicate:subtaskPredicate] sortedArrayUsingDescriptors:@[ sortDescriptor ]];
+}
+
+-(NSArray*)filterSubtasksWithoutOrigin:(NSSet*)subtasks{
+    NSPredicate *subtaskPredicate = [NSPredicate predicateWithFormat:@"origin = nil"];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:NO];
+    return [[subtasks filteredSetUsingPredicate:subtaskPredicate] sortedArrayUsingDescriptors:@[ sortDescriptor ]];
 }
 
 -(BOOL)handleEvernoteToDo:(EvernoteToDo*)evernoteToDo withMatchingSubtask:(KPToDo*)subtask inNoteProcessor:(EvernoteToDoProcessor*)processor isNew:(BOOL)isNew{
@@ -153,7 +158,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 
 -(KPToDo*)findAndHandleMatchesForToDo:(KPToDo*)parentToDo withEvernoteToDos:(NSArray *)evernoteToDos inNoteProcessor:(EvernoteToDoProcessor*)processor{
     // search for our TODO (comparing only title)
-    NSArray *subtasks = [self filterSubtasks:parentToDo.subtasks];
+    NSArray *subtasks = [self filterSubtasksWithEvernote:parentToDo.subtasks];
     
     // Creating helper arrays for determining which ones has already been matched
     NSMutableArray *subtasksLeftToBeFound = [subtasks mutableCopy];
@@ -222,10 +227,21 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         
     }
     
+    // remove evernote subtasks not found in the evernote from our task
     subtasks = [subtasksLeftToBeFound copy];
     if ( subtasks && subtasks.count > 0 ){
         updated = YES;
         [KPToDo deleteToDos:subtasks save:NO force:NO];
+    }
+    
+    // add newly added tasks to evernote
+    subtasks = [self filterSubtasksWithoutOrigin:parentToDo.subtasks];
+    for ( KPToDo* subtask in subtasks ) {
+        if ([processor addToDoWithTitle:subtask.title]) {
+            subtask.originIdentifier = subtask.title;
+            subtask.origin = EVERNOTE_SERVICE;
+            updated = YES;
+        }
     }
 
     if( updated && parentToDo.objectId) {
