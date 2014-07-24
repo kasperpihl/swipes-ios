@@ -138,6 +138,15 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
             }
         }
     }
+    
+    // difference in name
+    if (![subtask.title isEqualToString:subtask.originIdentifier]) {
+        if ([processor updateToDo:evernoteToDo title:subtask.title]) {
+            subtask.originIdentifier = subtask.title;
+            updated = YES;
+        }
+    }
+    
     return updated;
 }
 
