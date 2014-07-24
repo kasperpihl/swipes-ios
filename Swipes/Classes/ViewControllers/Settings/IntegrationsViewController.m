@@ -58,8 +58,8 @@
     tableFooter.backgroundColor = CLEAR;
     
     
-    
-    UIButton *learnMoreButton = [[UIButton alloc] initWithFrame:CGRectMake((tableFooter.frame.size.width-kLearnMoreButtonWidth)/2, kLearnMoreHeight-kLearnMoreButtonHeight, kLearnMoreButtonWidth, kLearnMoreButtonHeight)];
+    UIButton *learnMoreButton = [[UIButton alloc] initWithFrame:CGRectMake((320-kLearnMoreButtonWidth)/2, kLearnMoreHeight-kLearnMoreButtonHeight, kLearnMoreButtonWidth, kLearnMoreButtonHeight)];
+    //learnMoreButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [learnMoreButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
     [learnMoreButton setBackgroundImage:[kEvernoteColor image] forState:UIControlStateNormal];
     [learnMoreButton setBackgroundImage:[alpha(kEvernoteColor, 0.5) image] forState:UIControlStateHighlighted];
@@ -151,7 +151,7 @@
     if(indexPath.row > 0){
         UISwitch *aSwitch = (UISwitch*)[cell viewWithTag:kSwitchTag];
         if(indexPath.row == 1){
-            cell.textLabel.text = @"Evernote sync on this device";
+            cell.textLabel.text = @"Sync with Evernote on this device";
             
             aSwitch.on = YES;
         }
