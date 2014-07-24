@@ -114,7 +114,12 @@
 -(void)switchChanged:(UISwitch*)sender{
     UITableViewCell *cell = (UITableViewCell*)sender.superview.superview.superview;
     NSIndexPath *switchHandled = [self.tableView indexPathForCell:cell];
-    NSLog(@"%i",switchHandled.row);
+    if(switchHandled.row == 1){
+        [kEnInt setEnableSync:sender.on];
+    }
+    if(switchHandled.row == 2){
+        [kEnInt setAutoFindFromTag:sender.on];
+    }
 }
 
 -(NSString*)nameForIntegration:(Integrations)integration{
@@ -152,10 +157,10 @@
         UISwitch *aSwitch = (UISwitch*)[cell viewWithTag:kSwitchTag];
         if(indexPath.row == 1){
             cell.textLabel.text = @"Sync with Evernote on this device";
-            
-            aSwitch.on = YES;
+            aSwitch.on = kEnInt.enableSync;
         }
         if(indexPath.row == 2){
+            aSwitch.on = kEnInt.autoFindFromTag;
             cell.textLabel.text = @"Auto import notes with \"swipes\"-tag";
         }
     }
