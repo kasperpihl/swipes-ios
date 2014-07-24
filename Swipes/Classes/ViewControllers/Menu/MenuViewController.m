@@ -97,7 +97,7 @@
     
     CGFloat numberOfButtons = kHorizontalGridNumber * kVerticalGridNumber;
     NSInteger numberOfRows = kHorizontalGridNumber;
-    self.view.backgroundColor = tcolor(BackgroundColor);
+    self.view.backgroundColor = gray(224,1);//tcolor(BackgroundColor);
     NSInteger startY = (OSVER >= 7)?20:0;
     CGSize s = self.view.frame.size;
     CGFloat backSpacing = 8.f;

@@ -45,83 +45,40 @@
     //[self.tableView setSeparatorColor:tcolor(TextColor)];
     
     
-    UIView *tableFooter = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 300)];
-    tableFooter.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    tableFooter.backgroundColor = CLEAR;
-    CGFloat padding = 10;
-    UITextView *tutorialView = [[UITextView alloc] initWithFrame:CGRectMake(padding, 0, tableFooter.frame.size.width- 2*padding, tableFooter.frame.size.height)];
-    tutorialView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    tutorialView.backgroundColor = CLEAR;
-    tutorialView.editable = NO;
-    tutorialView.scrollEnabled = NO;
-    tutorialView.font = KP_REGULAR(18);
-    tutorialView.textColor = tcolor(TextColor);
-    
-    //tutorialView.text = @"Swipes Evernote integration enables you to attach a note in Swipes, and sync all checkmarks from Evernote directly into Swipes as Action Steps and back.\r\n\r\n1. Add a task in Swipes\r\n2. Open it and press the Elephant\r\n3. Select the note you want to sync\r\n4. Now all checkmarks will be synced back and forth";
-    NSString *evernoteIconString = iconString( @"editEvernote" );
-    NSMutableAttributedString *mutableAttributed = [[NSMutableAttributedString alloc] init];
-    NSArray *lines = @[
-                       @"Sync your checkmarks from Evernote into Swipes.",
-                       @"",
-                       @"Get started:",
-                       @"",
-                       @"1. Assign the \"swipes\"-tag to an Evernote\r\n",
-                       [NSString stringWithFormat:@"2. Double tap to open it > press the %@",evernoteIconString],
-                       @"",
-                       @"3. Select the note you want to sync",
-                       @"",
-                       @"Checkmarks now sync as action steps in Swipes. Complete them and they’ll sync back."
-                       ];
-    NSInteger counter = 0;
-    for( NSString *line in lines){
-        counter++;
-        NSInteger length = line.length;
-        NSMutableAttributedString *attributedLine = [[NSMutableAttributedString alloc] initWithString:line];
-        [attributedLine appendAttributedString:[[NSAttributedString alloc] initWithString:@"\r\n"]];
-        NSDictionary *attributes;
-        if(counter >= 5 && counter <= 9){
-            NSInteger fontSize = 16;
-            attributes = @{ NSFontAttributeName: KP_SEMIBOLD(fontSize), NSForegroundColorAttributeName: tcolor(TextColor)};
-            if(counter == 6){
-                length -= evernoteIconString.length;
-                [attributedLine addAttributes:@{ NSFontAttributeName: iconFont(18), NSForegroundColorAttributeName: tcolor(TextColor) } range:NSMakeRange(length, evernoteIconString.length)];
-                
-            }
-            
-        }
-        else
-            attributes = @{ NSFontAttributeName: KP_REGULAR(18), NSForegroundColorAttributeName: tcolor(TextColor)};
-        [attributedLine addAttributes:attributes range:NSMakeRange(0, length)];
-        [mutableAttributed appendAttributedString:attributedLine];
-    }
-    tutorialView.attributedText = mutableAttributed;
-    [tutorialView sizeToFit];
-    CGRectSetCenterX(tutorialView, tableFooter.frame.size.width/2);
-    [tableFooter addSubview:tutorialView];
-    
-    UIImageView *integrationImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"swipesandevernote"]];
-    CGRectSetY(integrationImage, CGRectGetMaxY(tutorialView.frame));
-    CGRectSetCenterX(integrationImage, tableFooter.frame.size.width/2);
-    [tableFooter addSubview:integrationImage];
-    CGRectSetHeight(tableFooter, CGRectGetMaxY(integrationImage.frame));
-    
-    [self.tableView setTableFooterView:tableFooter];
     
     [self.view addSubview:self.tableView];
     // Do any additional setup after loading the view.
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return kEvernoteIntegration + 1;
+    return kEvernoteIntegration + 3;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *cellIdentifier = @"SettingCell";
-    SettingsCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        cell = [[SettingsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.settingFont = KP_SEMIBOLD(18);
-        cell.valueFont = KP_SEMIBOLD(16);
+    NSString *cellIdentifier = indexPath.row > 0 ? @"SwitchCell" : @"SettingCell";
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil && indexPath.row == 0) {
+        SettingsCell *localCell = [[SettingsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        localCell.settingFont = KP_SEMIBOLD(18);
+        localCell.valueFont = KP_SEMIBOLD(16);
+        // Configure the cell...
+        cell = localCell;
+    }
+    else if ( cell == nil ){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.contentView.backgroundColor = CLEAR;
+        cell.backgroundColor = CLEAR;
+        UISwitch *aSwitch = [[UISwitch alloc] init];
+        aSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        CGRectSetCenter(aSwitch, cell.frame.size.width-aSwitch.frame.size.width, kCellHeight/2);
+        [aSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+        cell.textLabel.font = KP_REGULAR(16);
+        [cell.contentView addSubview:aSwitch];
+        
     }
 	return cell;
+}
+
+-(void)switchChanged:(UISwitch*)sender{
+    
 }
 
 -(NSString*)nameForIntegration:(Integrations)integration{
@@ -138,6 +95,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(SettingsCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     Integrations integration = indexPath.row;
     NSString *name = [self nameForIntegration:integration];
     NSString *valueString;
@@ -152,7 +110,15 @@
             break;
         default:break;
     }
-    [cell setSetting:name value:valueString];
+    if(indexPath.row == 0)
+        [cell setSetting:name value:valueString];
+    if(indexPath.row > 0){
+        if(indexPath.row == 1){
+            cell.textLabel.text = @"Enable Evernote Sync";
+        }
+        if(indexPath.row == 2)
+            cell.textLabel.text = @"Auto import with \"swipes\"-tag";
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
