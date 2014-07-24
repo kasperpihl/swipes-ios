@@ -337,6 +337,13 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
                     runningError = error;
                 }
                 returnCount++;
+                
+                // it is strange that evernote returns this code (1) when the note is removed
+                // to remove a note first delete it and then remove it from trash too!
+                // this will still give you sync error once (because there is an error after all)
+                if (error && (1 == error.code)) {
+                    [todoWithEvernote removeAllAttachmentsForService:EVERNOTE_SERVICE];
+                }
             }
             if(returnCount == targetCount){
                 //NSLog(@"hit the target");
