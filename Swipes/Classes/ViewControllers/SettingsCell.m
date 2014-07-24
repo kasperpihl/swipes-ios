@@ -21,8 +21,7 @@
 
 @interface SettingsCell ()
 
-@property (nonatomic) UILabel *settingLabel;
-@property (nonatomic) UILabel *valueLabel;
+
 
 @end
 
@@ -43,6 +42,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.leftPadding = kRightLabelMargin;
         self.backgroundColor = CLEAR;
         self.contentView.backgroundColor = CLEAR;
         self.labelColor = kDefTextColor;
@@ -82,8 +82,8 @@
 {
     [super layoutSubviews];
     self.valueLabel.center = CGPointMake(self.bounds.size.width-kRightLabelMargin-(self.valueLabel.frame.size.width/2), kCellHeight/2);
-    CGRectSetX(self.settingLabel, kRightLabelMargin);
-    CGRectSetWidth(self.settingLabel, self.valueLabel.frame.origin.x-kRightLabelMargin-kSettingRightMargin);
+    CGRectSetX(self.settingLabel, self.leftPadding);
+    CGRectSetWidth(self.settingLabel, self.valueLabel.frame.origin.x-self.leftPadding-kSettingRightMargin);
 }
 
 @end

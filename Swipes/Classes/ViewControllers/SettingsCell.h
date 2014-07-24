@@ -12,5 +12,8 @@
 @property (nonatomic) UIColor *labelColor;
 @property (nonatomic) UIFont *settingFont;
 @property (nonatomic) UIFont *valueFont;
+@property (nonatomic) UILabel *settingLabel;
+@property (nonatomic) UILabel *valueLabel;
+@property (nonatomic) NSInteger leftPadding;
 -(void)setSetting:(NSString*)setting value:(NSString*)value;
 @end
