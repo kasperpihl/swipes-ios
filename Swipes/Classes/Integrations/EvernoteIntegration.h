@@ -14,10 +14,10 @@ typedef void (^NoteBlock)(EDAMNote *note, NSError *error);
 
 @interface EvernoteIntegration : NSObject
 
-@property BOOL enableSync;
+@property (nonatomic) BOOL enableSync;
 @property NSString *tagGuid;
 @property NSString *tagName;
-@property BOOL autoFindFromTag;
+@property (nonatomic) BOOL autoFindFromTag;
 @property NSDate *rateLimit;
 @property (nonatomic) BOOL isAuthenticated;
 

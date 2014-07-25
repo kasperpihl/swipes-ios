@@ -16,7 +16,8 @@ typedef enum {
     SettingLocation,
     SettingEvernoteSync,
     
-    IntegrationEvernote
+    IntegrationEvernoteEnableSync,
+    IntegrationEvernoteSwipesTag
 } KPSettings;
 #import <Foundation/Foundation.h>
 #define kSettings [SettingsHandler sharedInstance]

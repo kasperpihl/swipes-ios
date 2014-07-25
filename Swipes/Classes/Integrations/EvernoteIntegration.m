@@ -20,14 +20,22 @@ NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
 
 static EvernoteIntegration *sharedObject;
 
+-(void)setEnableSync:(BOOL)enableSync{
+    _enableSync = enableSync;
+    [kSettings setValue:@(enableSync) forSetting:IntegrationEvernoteEnableSync];
+}
 
 -(void)setAutoFindFromTag:(BOOL)autoFindFromTag{
     _autoFindFromTag = autoFindFromTag;
     if(autoFindFromTag){
         [self getSwipesTagGuidBlock:^(NSString *string, NSError *error) {
-            
+            if( string ){
+                self.tagGuid = string;
+                self.tagName = @"swipes";
+            }
         }];
     }
+    [kSettings setValue:@(autoFindFromTag) forSetting:IntegrationEvernoteSwipesTag];
 }
 
 // FIXME do this properly
@@ -88,16 +96,19 @@ static EvernoteIntegration *sharedObject;
 }
 
 - (void)initialize{
-    NSDictionary *currentIntegration = (NSDictionary*)[kSettings valueForSetting:IntegrationEvernote];
-    [self loadEvernoteIntegrationObject:currentIntegration];
+    self.autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
+    self.enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
+    //NSDictionary *currentIntegration = (NSDictionary*)[kSettings valueForSetting:IntegrationEvernote];
+    //[self loadEvernoteIntegrationObject:currentIntegration];
 }
 
 - (void)loadEvernoteIntegrationObject:(NSDictionary *)object{
-    self.tagName = [object objectForKey:@"tagName"];
+    /*self.tagName = [object objectForKey:@"tagName"];
     self.tagGuid = [object objectForKey:@"tagGuid"];
     if(self.tagName || self.tagGuid)
-        self.autoFindFromTag = YES;
+        self.autoFindFromTag = YES;*/
 }
+
 
 
 - (void)saveNote:(EDAMNote*)note block:(NoteBlock)block{
@@ -164,6 +175,10 @@ static EvernoteIntegration *sharedObject;
         [session authenticateWithViewController:viewController completionHandler:^(NSError *error) {
             if(error)
                 [self handleError:error withType:@"Evernote Auth Error"];
+            else{
+                [kSettings setValue:@YES forSetting:IntegrationEvernoteEnableSync];
+                [kSettings setValue:@YES forSetting:IntegrationEvernoteSwipesTag];
+            }
             block(error);
         }];
     }
