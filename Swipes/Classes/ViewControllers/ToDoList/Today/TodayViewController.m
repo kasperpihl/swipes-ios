@@ -18,9 +18,9 @@
 #import "UIView+Utilities.h"
 #import "AnalyticsHandler.h"
 #import "SlowHighlightIcon.h"
+#import "RootViewController.h"
 #import "StyleHandler.h"
 #import "SectionHeaderView.h"
-
 #import "CoreSyncHandler.h"
 #import "UtilityClass.h"
 @interface TodayViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
@@ -373,10 +373,16 @@
     self.facebookButton = nil;
     clearNotify();
 }
+
+-(void)triggerEvernote{
+    [ROOT_CONTROLLER triggerEvernoteEvent];
+}
+
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self updateSectionHeader];
     [self updateBackground];
+    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(triggerEvernote) userInfo:nil repeats:NO];
 }
 - (void)didReceiveMemoryWarning
 {

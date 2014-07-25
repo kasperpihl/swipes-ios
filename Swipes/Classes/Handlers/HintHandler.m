@@ -41,7 +41,7 @@
     BOOL completedHint = [self completeHint:hint];
     
     if(completedHint){
-        self.currentHint = hint;
+        
         if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
             [self.delegate hintHandler:self triggeredHint:hint];
         NSString *hintText;
@@ -67,10 +67,11 @@
             case HintPriority:
                 hintText = @"You marked a task as priority\n\nThis shows its importance";
                 break;
-            case HintEvernote:
-                hintText = @"We've integrated with Evernote\n\nKeep your tasks in sync";
-                break;
+            case HintEvernote:{
+                return YES;
+            }
         }
+        self.currentHint = hint;
         [self.emHint presentModalMessage:hintText where:ROOT_CONTROLLER.view];
     }
     return completedHint;

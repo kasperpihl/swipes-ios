@@ -44,7 +44,7 @@
 #import "UserHandler.h"
 #import "ShareViewController.h"
 
-@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate,SyncDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate,SyncDelegate, HintHandlerDelegate>
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 
@@ -370,6 +370,23 @@ static RootViewController *sharedObject;
     
 }
 
+-(void)triggerEvernoteEvent{
+    if(self.currentMenu == KPMenuHome){
+        [kHints triggerHint:HintEvernote];
+    }
+}
+
+-(void)hintHandler:(HintHandler *)hintHandler triggeredHint:(Hints)hint{
+    if(hint == HintEvernote){
+        [UTILITY popupWithTitle:@"Evernote Integration" andMessage:@"We've made a powerful integration with Evernote!" buttonTitles:@[@"Not now", @"Learn more"] block:^(NSInteger number, NSError *error) {
+            if( number == 1){
+                [self openIntegrationsWithHelper];
+            }
+        }];
+        
+    }
+}
+
 -(void)syncHandler:(CoreSyncHandler *)handler status:(SyncStatus)status userInfo:(NSDictionary *)userInfo error:(NSError *)error{
     /*switch (status) {
         case SyncStatusStarted:
@@ -415,7 +432,7 @@ static RootViewController *sharedObject;
     [self setNavigationBarHidden:YES];
     KPCORE.delegate = self;
     notify(@"changed theme", changedTheme);
-    
+    kHints.delegate = self;
     
     BLURRY.delegate = self;
     self.settingsViewController = [[MenuViewController alloc] init];

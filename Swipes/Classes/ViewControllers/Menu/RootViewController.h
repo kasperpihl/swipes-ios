@@ -38,6 +38,8 @@ typedef enum {
 -(void)accountAlertWithMessage:(NSString*)message;
 -(void)proWithMessage:(NSString*)message;
 
+-(void)triggerEvernoteEvent;
+
 -(void)shareTasks:(NSArray*)tasks;
 -(void)tryoutapp;
 @end
