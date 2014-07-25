@@ -203,7 +203,7 @@
 -(void)authenticated{
     [UTILITY popupWithTitle:@"Import your notes" andMessage:@"We've made an importer so you quickly can get started" buttonTitles:@[@"Not now",@"Open Importer"] block:^(NSInteger number, NSError *error) {
         if(number == 1){
-            [self showEvernoteImporter];
+            [self showEvernoteImporterAnimated:YES];
         }
     }];
     [self reload];
@@ -232,16 +232,25 @@
         }
     }
     if(indexPath.row == 3){
-        [self showEvernoteImporter];
+        [self showEvernoteImporterAnimated:YES];
     }
 }
--(void)showEvernoteImporter{
-    [self presentViewController:[[EvernoteImporterViewController alloc] init] animated:YES completion:^{
+
+-(void)openHelperForIntegration:(Integrations)integration{
+    switch (integration) {
+        case kEvernoteIntegration:
+            [self showEvernoteHelperAnimated:NO];
+            break;
+    }
+}
+
+-(void)showEvernoteImporterAnimated:(BOOL)animated{
+    [self presentViewController:[[EvernoteImporterViewController alloc] init] animated:animated completion:^{
         
     }];
 }
--(void)showEvernoteHelper{
-    [self presentViewController:[[EvernoteHelperViewController alloc] init] animated:YES completion:^{
+-(void)showEvernoteHelperAnimated:(BOOL)animated{
+    [self presentViewController:[[EvernoteHelperViewController alloc] init] animated:animated completion:^{
         
     }];
 }

@@ -23,4 +23,5 @@ typedef NS_ENUM(NSUInteger, KPMenuButtons){
 };
 @interface MenuViewController : UIViewController
 -(void)renderSubviews;
+-(void)resetAndOpenIntegrations;
 @end

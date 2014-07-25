@@ -452,6 +452,18 @@
     //[self renderSubviews];
 }
 
+-(void)resetAndOpenIntegrations{
+    NSInteger numberOfVCs = self.viewControllers.count;
+    for( NSInteger i = 0 ; i < numberOfVCs ; i++){
+        [self popViewControllerAnimated:NO];
+    }
+    IntegrationsViewController *integrationVC = [[IntegrationsViewController alloc] init];
+    
+    [self pushViewController:integrationVC animated:NO];
+    [integrationVC openHelperForIntegration:kEvernoteIntegration];
+    
+}
+
 -(void)changedIsPlus{
     UIButton *upgradeButton = (UIButton*)[self.gridView viewWithTag:[self tagForButton:KPMenuButtonUpgrade]];
     UIButton *locationButton = (UIButton *)[self.gridView viewWithTag:[self tagForButton:KPMenuButtonLocation]];

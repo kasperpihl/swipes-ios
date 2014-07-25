@@ -358,6 +358,15 @@ static RootViewController *sharedObject;
     }
     else
         [self changeToMenu:KPMenuHome animated:NO];
+}
+
+-(void)openIntegrationsWithHelper{
+    [self.settingsViewController resetAndOpenIntegrations];
+    if(self.drawerViewController.openSide != MMDrawerSideLeft){
+        [self.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
+            
+        }];
+    }
     
 }
 

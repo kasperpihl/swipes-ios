@@ -12,5 +12,5 @@ typedef NS_ENUM(NSUInteger, Integrations) {
 };
 
 @interface IntegrationsViewController : UIViewController
-
+-(void)openHelperForIntegration:(Integrations)integration;
 @end
