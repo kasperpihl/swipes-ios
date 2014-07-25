@@ -372,12 +372,12 @@ static RootViewController *sharedObject;
 
 -(void)triggerEvernoteEvent{
     if(self.currentMenu == KPMenuHome){
-        [kHints triggerHint:HintEvernote];
+        [kHints triggerHint:HintEvernoteIntegration];
     }
 }
 
 -(void)hintHandler:(HintHandler *)hintHandler triggeredHint:(Hints)hint{
-    if(hint == HintEvernote){
+    if(hint == HintEvernoteIntegration){
         [UTILITY popupWithTitle:@"Evernote Integration" andMessage:@"We've made a powerful integration with Evernote!" buttonTitles:@[@"Not now", @"Learn more"] block:^(NSInteger number, NSError *error) {
             if( number == 1){
                 [self openIntegrationsWithHelper];

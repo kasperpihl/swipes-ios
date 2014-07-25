@@ -1196,8 +1196,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
 }
 -(void)delayedTriggerEvernote{
-    if( self.fireHint )
-        [kHints triggerHint:HintEvernote];
+    /*if( self.fireHint )
+        [kHints triggerHint:HintEvernote];*/
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];

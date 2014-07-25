@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@protocol EvernoteHelperDelegate <NSObject>
+-(void)endedEvernoteHelperSuccessfully:(BOOL)success;
+@end
 @interface EvernoteHelperViewController : UIViewController
-
+@property (nonatomic, weak) NSObject<EvernoteHelperDelegate> *delegate;
 @end

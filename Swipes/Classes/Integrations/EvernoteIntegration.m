@@ -20,6 +20,16 @@ NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
 
 static EvernoteIntegration *sharedObject;
 
+
+-(void)setAutoFindFromTag:(BOOL)autoFindFromTag{
+    _autoFindFromTag = autoFindFromTag;
+    if(autoFindFromTag){
+        [self getSwipesTagGuidBlock:^(NSString *string, NSError *error) {
+            
+        }];
+    }
+}
+
 // FIXME do this properly
 +(EvernoteIntegration *)sharedInstance{
     if(!sharedObject){
@@ -141,14 +151,6 @@ static EvernoteIntegration *sharedObject;
     @catch (NSException *exception) {
         DLog(@"%@",exception);
     }
-}
-
--(void)fetchNotesWithCheckmarks:(NoteListBlock)block{
-    
-    
-    
-    
-    
 }
 
 

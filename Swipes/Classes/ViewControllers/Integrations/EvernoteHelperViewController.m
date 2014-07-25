@@ -16,6 +16,7 @@
 #define kImageTopSpacing 20
 @interface EvernoteHelperViewController ()
 @property (nonatomic) UIScrollView *scrollView;
+@property BOOL success;
 @end
 
 @implementation EvernoteHelperViewController
@@ -133,12 +134,14 @@
 }
 
 -(void)pressedGetStarted:(UIButton*)sender{
+    self.success = YES;
     [self pressedClose:sender];
 }
 
 -(void)pressedClose:(UIButton*)button{
     [self dismissViewControllerAnimated:YES completion:^{
-        
+        if([self.delegate respondsToSelector:@selector(endedEvernoteHelperSuccessfully:)])
+            [self.delegate endedEvernoteHelperSuccessfully:self.success];
     }];
 }
 

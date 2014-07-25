@@ -67,7 +67,7 @@
             case HintPriority:
                 hintText = @"You marked a task as priority\n\nThis shows its importance";
                 break;
-            case HintEvernote:{
+            case HintEvernoteIntegration:{
                 return YES;
             }
         }
@@ -123,8 +123,8 @@ static HintHandler *sharedObject;
         case HintPriority:
             key = @"Priority";
             break;
-        case HintEvernote:
-            key = @"Evernote";
+        case HintEvernoteIntegration:
+            key = @"EvernoteIntegration";
             break;
     }
     return key;
@@ -233,14 +233,6 @@ static HintHandler *sharedObject;
             rect = CGRectMake(width/2, (statusBarHt + 26), ht, ht);
             rectArray = @[[NSValue valueWithCGRect:rect]];
             break;
-        case HintEvernote:{
-            NSInteger toolbarWidth = 135;
-            NSInteger toolbarItem = toolbarWidth/3;
-            NSInteger padding = 45;
-            rect = CGRectMake(width-padding- toolbarWidth + toolbarItem/2, (statusBarHt + 26), ht, ht);
-            rectArray = @[[NSValue valueWithCGRect:rect]];
-            break;
-        }
         default:
             break;
     }
@@ -268,9 +260,6 @@ static HintHandler *sharedObject;
             break;
         case HintWelcome:
             title = @"Focus area";
-            break;
-        case HintEvernote:
-            title = @"Attach Evernote";
             break;
         default:
             break;

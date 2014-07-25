@@ -12,6 +12,7 @@
 #import "CoreSyncHandler.h"
 #import "UIColor+Utilities.h"
 #import "EvernoteHelperViewController.h"
+#import "DejalActivityView.h"
 #import "EvernoteImporterViewController.h"
 #import "EvernoteIntegration.h"
 #import "IntegrationsViewController.h"
@@ -24,7 +25,7 @@
 #define kLearnMoreButtonWidth 160
 #define kLearnMoreButtonHeight 44
 
-@interface IntegrationsViewController () <UITableViewDataSource,UITableViewDelegate>
+@interface IntegrationsViewController () <UITableViewDataSource,UITableViewDelegate, EvernoteHelperDelegate>
 @property (nonatomic) UITableView *tableView;
 
 @end
@@ -185,7 +186,9 @@
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
+    [DejalBezelActivityView activityViewForView:self.parentViewController.view withLabel:@"Opening Evernote.."];
     [kEnInt authenticateEvernoteInViewController:self withBlock:^(NSError *error) {
+        [DejalBezelActivityView removeViewAnimated:YES];
         if (error || !kEnInt.isAuthenticated) {
             // TODO show message to the user
             //NSLog(@"Session authentication failed: %@", [error localizedDescription]);
@@ -236,6 +239,12 @@
     }
 }
 
+-(void)endedEvernoteHelperSuccessfully:(BOOL)success{
+    if(success && !kEnInt.isAuthenticated){
+        [self evernoteAuthenticateUsingSelector:@selector(authenticated) withObject:nil];
+    }
+}
+
 -(void)openHelperForIntegration:(Integrations)integration{
     switch (integration) {
         case kEvernoteIntegration:
@@ -250,7 +259,9 @@
     }];
 }
 -(void)showEvernoteHelperAnimated:(BOOL)animated{
-    [self presentViewController:[[EvernoteHelperViewController alloc] init] animated:animated completion:^{
+    EvernoteHelperViewController *helper = [[EvernoteHelperViewController alloc] init];
+    helper.delegate = self;
+    [self presentViewController:helper animated:animated completion:^{
         
     }];
 }

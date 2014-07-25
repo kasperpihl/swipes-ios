@@ -16,7 +16,7 @@ typedef enum {
     HintSwipedLeft,
     HintScheduled,
     HintPriority,
-    HintEvernote
+    HintEvernoteIntegration
     
 } Hints;
 
