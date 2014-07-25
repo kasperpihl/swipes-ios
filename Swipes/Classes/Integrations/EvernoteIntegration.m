@@ -165,7 +165,7 @@ static EvernoteIntegration *sharedObject;
         [noteStore findNotesWithFilter:filter offset:0 maxNotes:kPaginator success:^(EDAMNoteList *list) {
             block(list, nil);
         } failure:^(NSError *error) {
-            [self handleError:error withType:@"Evernote Fetch Notes with Checkmarks Error"];
+            [self handleError:error withType:@"Evernote Fetch Notes with Filter Error"];
             block(nil,error);
         }];
     }

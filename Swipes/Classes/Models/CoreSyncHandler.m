@@ -359,8 +359,14 @@
                     self._isSyncing = NO;
                     EvernoteSession *session = [EvernoteSession sharedSession];
                     if (!session.isAuthenticated || [EvernoteSession isTokenExpiredWithError:error]) {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Evernote authentication", @"duration": @(5) } ];
-                        [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+                        kEnInt.enableSync = NO;
+                        [UTILITY popupWithTitle:@"Evernote Authorization" andMessage:@"" buttonTitles:@[@"Don't sync this device",@"Authorize now"] block:^(NSInteger number, NSError *error) {
+                            if(number == 1){
+                                //[[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Evernote authentication", @"duration": @(5) } ];
+                                [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+                            }
+                        }];
+                        
                     }
                     else {
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
@@ -370,6 +376,7 @@
         }];
     }
     else {
+        self._isSyncing = YES;
         [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
     }
 }
