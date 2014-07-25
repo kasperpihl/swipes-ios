@@ -104,7 +104,7 @@
     UILabel *iconLabel = iconLabel(@"integrationEvernoteFull", kTopHeight/1.8);
     CGRectSetCenter(iconLabel, self.view.bounds.size.width/2, top + kTopHeight/2);
     iconLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
-    iconLabel.textColor = alpha(tcolorF(TextColor, ThemeLight),0.5);
+    iconLabel.textColor = alpha(tcolorF(TextColor, ThemeLight),0.8);
     [self.view addSubview:iconLabel];
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, top, self.view.bounds.size.width, kTopHeight)];
@@ -112,9 +112,9 @@
     titleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     titleLabel.text = @"EVERNOTE            IMPORTER";
     titleLabel.numberOfLines = 0;
-    titleLabel.font = KP_REGULAR(16);
+    titleLabel.font = KP_SEMIBOLD(15);
     titleLabel.backgroundColor = CLEAR;
-    titleLabel.textColor = alpha(tcolorF(TextColor, ThemeLight),0.5);
+    titleLabel.textColor = alpha(tcolorF(TextColor, ThemeLight),0.8);
     //[titleLabel sizeToFit];
     //CGRectSetWidth(titleLabel, self.view.bounds.size.width);
     [self.view addSubview:titleLabel];
