@@ -80,7 +80,7 @@
     // Do any additional setup after loading the view.
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSInteger extraIfConnected = [kEnInt isAuthenticated] ? 2 : 0;
+    NSInteger extraIfConnected = [kEnInt isAuthenticated] ? 3 : 0;
     return kEvernoteIntegration + 1 + extraIfConnected;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -99,14 +99,20 @@
         cell.contentView.backgroundColor = CLEAR;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = CLEAR;
-        UISwitch *aSwitch = [[UISwitch alloc] init];
-        aSwitch.tag = kSwitchTag;
-        aSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        CGRectSetCenter(aSwitch, cell.frame.size.width-aSwitch.frame.size.width + 5, kLocalCellHeight/2);
-        [aSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
         cell.textLabel.font = KP_REGULAR(14);
-        [cell.contentView addSubview:aSwitch];
-        
+        if(indexPath.row < 3){
+            
+            UISwitch *aSwitch = [[UISwitch alloc] init];
+            aSwitch.tag = kSwitchTag;
+            aSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+            CGRectSetCenter(aSwitch, cell.frame.size.width-aSwitch.frame.size.width + 5, kLocalCellHeight/2);
+            [aSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+            
+            [cell.contentView addSubview:aSwitch];
+        }
+        else{
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
     }
 	return cell;
 }
@@ -163,6 +169,9 @@
             aSwitch.on = kEnInt.autoFindFromTag;
             cell.textLabel.text = @"Auto import notes with \"swipes\"-tag";
         }
+        if(indexPath.row == 3){
+            cell.textLabel.text = @"Open Evernote Importer";
+        }
     }
 }
 
@@ -215,8 +224,15 @@
             break;
         }
     }
+    if(indexPath.row == 3){
+        [self showEvernoteImporter];
+    }
 }
-
+-(void)showEvernoteImporter{
+    [self presentViewController:[[EvernoteImporterViewController alloc] init] animated:YES completion:^{
+        
+    }];
+}
 -(void)showEvernoteHelper{
     [self presentViewController:[[EvernoteHelperViewController alloc] init] animated:YES completion:^{
         
