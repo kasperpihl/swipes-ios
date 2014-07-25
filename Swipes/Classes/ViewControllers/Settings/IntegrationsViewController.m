@@ -70,8 +70,6 @@
     
     
     
-    
-    
     [tableFooter addSubview:learnMoreButton];
     
     [self.tableView setTableFooterView:tableFooter];
@@ -202,6 +200,11 @@
     [self.tableView reloadData];
 }
 
+-(void)authenticated{
+    [self showEvernoteImporter];
+    [self reload];
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     Integrations integration = indexPath.row;
     switch (integration) {
@@ -219,7 +222,7 @@
                 
             }
             else{
-                [self evernoteAuthenticateUsingSelector:@selector(reload) withObject:nil];
+                [self evernoteAuthenticateUsingSelector:@selector(authenticated) withObject:nil];
             }
             break;
         }

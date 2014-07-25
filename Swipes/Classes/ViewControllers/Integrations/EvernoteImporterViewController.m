@@ -10,11 +10,14 @@
 #import "KPAttachment.h"
 #import "SlowHighlightIcon.h"
 #import "EvernoteSyncHandler.h"
+#import "SectionHeaderView.h"
 #import "EvernoteIntegration.h"
 #import "EvernoteImporterViewController.h"
 #import "DejalActivityView.h"
 #define kPaginator 100
 
+
+#define kTopDarkColor alpha(tcolorF(TextColor, ThemeLight),0.8)
 #define kTitleColor tcolorF(TextColor, ThemeDark)
 #define kExistingTitleColor alpha(tcolorF(TextColor,ThemeLight),0.5)
 #define kTopHeight 50
@@ -104,7 +107,7 @@
     UILabel *iconLabel = iconLabel(@"integrationEvernoteFull", kTopHeight/1.8);
     CGRectSetCenter(iconLabel, self.view.bounds.size.width/2, top + kTopHeight/2);
     iconLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
-    iconLabel.textColor = alpha(tcolorF(TextColor, ThemeLight),0.8);
+    iconLabel.textColor = kTopDarkColor;
     [self.view addSubview:iconLabel];
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, top, self.view.bounds.size.width, kTopHeight)];
@@ -114,7 +117,7 @@
     titleLabel.numberOfLines = 0;
     titleLabel.font = KP_SEMIBOLD(15);
     titleLabel.backgroundColor = CLEAR;
-    titleLabel.textColor = alpha(tcolorF(TextColor, ThemeLight),0.8);
+    titleLabel.textColor = kTopDarkColor;
     //[titleLabel sizeToFit];
     //CGRectSetWidth(titleLabel, self.view.bounds.size.width);
     [self.view addSubview:titleLabel];
@@ -125,12 +128,29 @@
     self.tableView.delegate = self;
     
     self.tableView.dataSource = self;
-    self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
+    //self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
     self.tableView.backgroundColor = CLEAR;
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     self.tableView.allowsMultipleSelection = YES;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
+    
+    /*UIView *tableHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 50)];
+    tableHeader.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    tableHeader.backgroundColor = CLEAR;
+    
+    UILabel *getStartedLabel = [[UILabel alloc] initWithFrame:tableHeader.bounds];
+    getStartedLabel.textAlignment = NSTextAlignmentCenter;
+    getStartedLabel.backgroundColor = CLEAR;
+    getStartedLabel.textColor = tcolorF(TextColor, ThemeLight);
+    getStartedLabel.font = KP_REGULAR(14);
+    getStartedLabel.numberOfLines = 0;
+    
+    getStartedLabel.text = @"Quickly get started - import your notes";
+    
+    [tableHeader addSubview:getStartedLabel];
+    [self.tableView setTableHeaderView:tableHeader];*/
+    
     
     UIView *bottomToolbar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height-kTopHeight, self.view.bounds.size.width, kTopHeight)];
     bottomToolbar.backgroundColor = tcolorF(BackgroundColor,ThemeDark);
@@ -206,6 +226,20 @@
     }
     return indexPath;
 }
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    NSString *title = @"NOTES WITH CHECKMARKS";
+    UIFont *font = SECTION_HEADER_FONT;
+    SectionHeaderView *sectionHeader = [[SectionHeaderView alloc] initWithColor:kTopDarkColor
+                                                                           font:font title:title width:tableView.frame.size.width];
+    sectionHeader.fillColor = kEvernoteColor;
+    sectionHeader.textColor = kTopDarkColor;
+    return sectionHeader;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 1;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self updateButtons];
