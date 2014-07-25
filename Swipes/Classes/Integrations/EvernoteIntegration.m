@@ -9,7 +9,8 @@
 #import "SettingsHandler.h"
 #import "EvernoteIntegration.h"
 
-#define kPaginator 100 // FIXME
+int32_t const kPaginator = 100;
+NSInteger const kApiLimitReachedErrorCode = 19;
 NSString * const kSwipesTagName = @"swipes";
 NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
 
@@ -20,36 +21,19 @@ NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
 
 static EvernoteIntegration *sharedObject;
 
--(void)setEnableSync:(BOOL)enableSync{
-    _enableSync = enableSync;
-    [kSettings setValue:@(enableSync) forSetting:IntegrationEvernoteEnableSync];
-}
-
--(void)setAutoFindFromTag:(BOOL)autoFindFromTag{
-    _autoFindFromTag = autoFindFromTag;
-    if(autoFindFromTag){
-        [self getSwipesTagGuidBlock:^(NSString *string, NSError *error) {
-            if( string ){
-                self.tagGuid = string;
-                self.tagName = @"swipes";
-            }
-        }];
-    }
-    [kSettings setValue:@(autoFindFromTag) forSetting:IntegrationEvernoteSwipesTag];
-}
-
-// FIXME do this properly
-+(EvernoteIntegration *)sharedInstance{
-    if(!sharedObject){
-        sharedObject = [[EvernoteIntegration allocWithZone:NULL] init];
-        [sharedObject initialize];
-    }
-    return sharedObject;
++ (instancetype)sharedInstance
+{
+    static dispatch_once_t once;
+    static id sharedInstance;
+    dispatch_once(&once, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
 }
 
 + (void)updateAPILimitIfNeeded:(NSError *)error
 {
-    if (19 == error.code) {
+    if (kApiLimitReachedErrorCode == error.code) {
         NSUInteger seconds = [((NSNumber *)error.userInfo[@"rateLimitDuration"]) unsignedIntegerValue];
         NSDate* willResetAt = [NSDate dateWithTimeIntervalSinceNow:seconds + 1];
         NSLog(@"will reset at: %@", willResetAt);
@@ -90,19 +74,45 @@ static EvernoteIntegration *sharedObject;
         message = @"Evernote usage limit reached! Try again in a minute.";
     }
     else {
-        message = [NSString stringWithFormat:@"Evernote usage limit reached! Try again in %d minutes", minutes];
+        message = [NSString stringWithFormat:@"Evernote usage limit reached! Try again in %lu minutes.", (unsigned long)minutes];
     }
     return message;
 }
 
-- (void)initialize{
-    self.autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
-    self.enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
-    //NSDictionary *currentIntegration = (NSDictionary*)[kSettings valueForSetting:IntegrationEvernote];
-    //[self loadEvernoteIntegrationObject:currentIntegration];
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+         self.autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
+         self.enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
+         //NSDictionary *currentIntegration = (NSDictionary*)[kSettings valueForSetting:IntegrationEvernote];
+         //[self loadEvernoteIntegrationObject:currentIntegration];
+    }
+    return self;
 }
 
-- (void)loadEvernoteIntegrationObject:(NSDictionary *)object{
+- (void)setEnableSync:(BOOL)enableSync
+{
+    _enableSync = enableSync;
+    [kSettings setValue:@(enableSync) forSetting:IntegrationEvernoteEnableSync];
+}
+
+- (void)setAutoFindFromTag:(BOOL)autoFindFromTag
+{
+    _autoFindFromTag = autoFindFromTag;
+    if(autoFindFromTag){
+        [self getSwipesTagGuidBlock:^(NSString *string, NSError *error) {
+            if( string ){
+                self.tagGuid = string;
+                self.tagName = @"swipes";
+            }
+        }];
+    }
+    [kSettings setValue:@(autoFindFromTag) forSetting:IntegrationEvernoteSwipesTag];
+}
+
+- (void)loadEvernoteIntegrationObject:(NSDictionary *)object
+{
     /*self.tagName = [object objectForKey:@"tagName"];
     self.tagGuid = [object objectForKey:@"tagGuid"];
     if(self.tagName || self.tagGuid)
@@ -110,8 +120,8 @@ static EvernoteIntegration *sharedObject;
 }
 
 
-
-- (void)saveNote:(EDAMNote*)note block:(NoteBlock)block{
+- (void)saveNote:(EDAMNote*)note block:(NoteBlock)block
+{
     @try {
         [[EvernoteNoteStore noteStore] updateNote:note success:^(EDAMNote *note) {
             if( block )
@@ -149,7 +159,7 @@ static EvernoteIntegration *sharedObject;
     
 }
 
--(void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block{
+- (void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block {
     EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
     @try {
         [noteStore findNotesWithFilter:filter offset:0 maxNotes:kPaginator success:^(EDAMNoteList *list) {
@@ -164,12 +174,12 @@ static EvernoteIntegration *sharedObject;
     }
 }
 
-
-
--(BOOL)isAuthenticated{
+- (BOOL)isAuthenticated
+{
     return [[EvernoteSession sharedSession] isAuthenticated];
 }
--(void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block{
+
+- (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block{
     @try {
         EvernoteSession *session = [EvernoteSession sharedSession];
         [session authenticateWithViewController:viewController completionHandler:^(NSError *error) {
@@ -188,9 +198,13 @@ static EvernoteIntegration *sharedObject;
     
 }
 
+- (void)logout
+{
+    [[EvernoteSession sharedSession] logout];
+}
 
-
--(void)getSwipesTagGuidBlock:(StringBlock)block{
+- (void)getSwipesTagGuidBlock:(StringBlock)block
+{
     @try {
         __block NSString *swipesTagGuid;
         [[EvernoteNoteStore noteStore] listTagsWithSuccess:^(NSArray *tags) {
@@ -217,7 +231,8 @@ static EvernoteIntegration *sharedObject;
 }
 
 
--(void)createSwipesTagBlock:(StringBlock)block{
+- (void)createSwipesTagBlock:(StringBlock)block
+{
     @try {
         EDAMTag *swipesTag = [[EDAMTag alloc] init];
         swipesTag.name = kSwipesTagName;
@@ -235,11 +250,12 @@ static EvernoteIntegration *sharedObject;
     }
 }
 
--(BOOL)handleError:(NSError*)error withType:(NSString*)type{
-    if(error.code == 19){
+- (BOOL)handleError:(NSError*)error withType:(NSString*)type
+{
+    if (kApiLimitReachedErrorCode == error.code) {
         NSTimeInterval rateLimit = [[error.userInfo objectForKey:@"rateLimitDuration"] floatValue];
-        if(rateLimit > 0){
-            self.rateLimit = [NSDate dateWithTimeIntervalSinceNow:rateLimit+10];
+        if (0 < rateLimit){
+            self.rateLimit = [NSDate dateWithTimeIntervalSinceNow:rateLimit + 10];
         }
         DLog(@"%@",[error.userInfo objectForKey:@"rateLimitDuration"]);
     }

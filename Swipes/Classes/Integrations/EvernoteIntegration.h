@@ -21,7 +21,7 @@ typedef void (^NoteBlock)(EDAMNote *note, NSError *error);
 @property NSDate *rateLimit;
 @property (nonatomic) BOOL isAuthenticated;
 
-+ (EvernoteIntegration*)sharedInstance;
++ (instancetype)sharedInstance;
 + (void)updateAPILimitIfNeeded:(NSError *)error;
 + (BOOL)isAPILimitReached;
 + (NSUInteger)minutesUntilAPILimitReset;
@@ -34,5 +34,7 @@ typedef void (^NoteBlock)(EDAMNote *note, NSError *error);
 - (void)saveNote:(EDAMNote*)note block:(NoteBlock)block;
 - (void)fetchNoteWithGuid:(NSString *)guid block:(NoteBlock)block;
 - (void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block;
+
+- (void)logout;
 
 @end
