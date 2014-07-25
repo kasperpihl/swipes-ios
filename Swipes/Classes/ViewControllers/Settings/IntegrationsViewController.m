@@ -218,8 +218,8 @@
         case kEvernoteIntegration:{
             if(kEnInt.isAuthenticated){
                 [UTILITY confirmBoxWithTitle:@"Unlink Evernote" andMessage:@"All tasks will be unlinked, are you sure?" block:^(BOOL succeeded, NSError *error) {
-                    if(succeeded){
-                        [[EvernoteSession sharedSession] logout];
+                    if (succeeded) {
+                        [kEnInt logout];
                         NSManagedObjectContext *context = [NSManagedObjectContext MR_contextForCurrentThread];
                         
                         [KPToDo removeAllAttachmentsForAllToDosWithService:EVERNOTE_SERVICE inContext:context save:YES];
