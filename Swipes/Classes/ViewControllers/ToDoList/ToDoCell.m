@@ -9,6 +9,7 @@
 #import "ToDoCell.h"
 #import "UtilityClass.h"
 #import "KPToDo.h"
+#import "KPAttachment.h"
 #import <QuartzCore/QuartzCore.h>
 #import "NSDate-Utilities.h"
 #import "UIColor+Utilities.h"
@@ -47,6 +48,7 @@
 @property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
 @property (nonatomic) IBOutlet UILabel *alarmSeperator;
 
+@property (nonatomic, strong) UILabel *evernoteIcon;
 @property (nonatomic,strong) UILabel *notesIcon;
 @property (nonatomic,strong) UILabel *recurringIcon;
 @property (nonatomic,strong) UILabel *locationIcon;
@@ -119,19 +121,20 @@
         self.dotView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
         NSInteger iconHeight = 9;
         
+        self.evernoteIcon = iconLabel(@"editEvernote", iconHeight);
+        [self.evernoteIcon setTextColor:tcolor(SubTextColor)];
+        [self.contentView addSubview:self.evernoteIcon];
+        
         self.locationIcon = iconLabel(@"editLocation", iconHeight);
         [self.locationIcon setTextColor:tcolor(SubTextColor)];
-        self.locationIcon.hidden = YES;
         [self.contentView addSubview:self.locationIcon];
         
         self.notesIcon = iconLabel(@"editNotes", iconHeight);
         [self.notesIcon setTextColor:tcolor(SubTextColor)];
-        self.notesIcon.hidden = YES;
         [self.contentView addSubview:self.notesIcon];
         
         self.recurringIcon = iconLabel(@"editRepeat", iconHeight);
         [self.recurringIcon setTextColor:tcolor(SubTextColor)];
-        self.recurringIcon.hidden = YES;
         [self.contentView addSubview:self.recurringIcon];
         
         UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
@@ -224,6 +227,7 @@
     CGFloat iconHack = 0.5;
     CGRectSetCenterY(self.locationIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y - iconHack);
+    CGRectSetCenterY(self.evernoteIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
     CGRectSetCenterY(self.alarmSeperator, self.tagsLabel.center.y);
@@ -259,7 +263,7 @@
     }
     self.alarmSeperator.hidden = YES;
 
-    
+    self.evernoteIcon.hidden = YES;
     self.locationIcon.hidden = YES;
     self.notesIcon.hidden = YES;
     self.recurringIcon.hidden = YES;
@@ -276,6 +280,11 @@
         CGRectSetX(view, deltaX);
         deltaX += view.frame.size.width + kIconSpacing;
     };
+    
+    KPAttachment *evernoteAttachment = [toDo firstAttachmentForServiceType:EVERNOTE_SERVICE];
+    if(evernoteAttachment){
+        blockForIcon(self.evernoteIcon);
+    }
     
     if(toDo.location && toDo.location.length > 0){
         blockForIcon(self.locationIcon);
