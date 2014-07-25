@@ -65,7 +65,7 @@
     [learnMoreButton setBackgroundImage:[alpha(kEvernoteColor, 0.5) image] forState:UIControlStateHighlighted];
     learnMoreButton.layer.cornerRadius = 5;
     learnMoreButton.layer.masksToBounds = YES;
-    [learnMoreButton addTarget:self action:@selector(showEvernoteHelper) forControlEvents:UIControlEventTouchUpInside];
+    [learnMoreButton addTarget:self action:@selector(showEvernoteHelperAnimated:) forControlEvents:UIControlEventTouchUpInside];
     [learnMoreButton setTitle:@"LEARN MORE" forState:UIControlStateNormal];
     
     
