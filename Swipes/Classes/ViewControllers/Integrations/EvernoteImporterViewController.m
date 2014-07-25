@@ -227,7 +227,8 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    
+    [super viewDidAppear:animated];
+    [[[UIAlertView alloc] initWithTitle:@"We've found your notes with checkmarks" message:@"Select them to quickly import them into Swipes" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil] show];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
