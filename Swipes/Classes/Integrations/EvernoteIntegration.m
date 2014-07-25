@@ -170,6 +170,7 @@ static EvernoteIntegration *sharedObject;
         }];
     }
     @catch (NSException *exception) {
+        [UtilityClass sendException:exception type:@"Evernote Fetch Notes with Filter Exception"];
         DLog(@"%@",exception);
     }
 }

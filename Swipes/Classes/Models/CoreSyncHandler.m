@@ -376,7 +376,7 @@
         }];
     }
     else {
-        self._isSyncing = YES;
+        self._isSyncing = NO;
         [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
     }
 }

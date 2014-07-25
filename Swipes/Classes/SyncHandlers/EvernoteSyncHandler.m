@@ -308,6 +308,9 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
             }
             [EvernoteSyncHandler addAndSyncNewTasksFromNotes:newNotes];
         }
+        else if(error){
+            block(SyncStatusError, nil ,error);
+        }
     }];
 }
 
