@@ -332,7 +332,7 @@
         self._isSyncing = NO;
         [self synchronizeForce:YES async:YES];
     }
-    else if (![EvernoteIntegration isAPILimitReached]) {
+    else if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached]) {
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             if (error) {
                 [EvernoteIntegration updateAPILimitIfNeeded:error];
@@ -360,7 +360,7 @@
                     EvernoteSession *session = [EvernoteSession sharedSession];
                     if (!session.isAuthenticated || [EvernoteSession isTokenExpiredWithError:error]) {
                         kEnInt.enableSync = NO;
-                        [UTILITY popupWithTitle:@"Evernote Authorization" andMessage:@"" buttonTitles:@[@"Don't sync this device",@"Authorize now"] block:^(NSInteger number, NSError *error) {
+                        [UTILITY popupWithTitle:@"Evernote Authorization" andMessage:@"To sync with Evernote on this device, please authorize" buttonTitles:@[@"Don't sync this device",@"Authorize now"] block:^(NSInteger number, NSError *error) {
                             if(number == 1){
                                 //[[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Evernote authentication", @"duration": @(5) } ];
                                 [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
