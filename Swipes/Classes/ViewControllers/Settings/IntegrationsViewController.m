@@ -201,7 +201,11 @@
 }
 
 -(void)authenticated{
-    [self showEvernoteImporter];
+    [UTILITY popupWithTitle:@"Import your notes" andMessage:@"We've made an importer so you quickly can get started" buttonTitles:@[@"Not now",@"Open Importer"] block:^(NSInteger number, NSError *error) {
+        if(number == 1){
+            [self showEvernoteImporter];
+        }
+    }];
     [self reload];
 }
 
