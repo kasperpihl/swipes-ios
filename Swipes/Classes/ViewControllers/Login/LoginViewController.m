@@ -42,11 +42,12 @@
 
 #define kButtonBorderWidth 1
 #define kContinueButtonColor kDefTextColor
-#define kCornerRadius 3
+#define kCornerRadius 7
 
-#define kDefTextColor tcolor(LaterColor)//color(179, 180, 182, 1)
+#define kIconColor tcolor(LaterColor)//color(179, 180, 182, 1)
 #define kDefFieldColor tcolorF(TextColor,ThemeDark)
-#define kDefLoginButtonsFont KP_REGULAR(16)
+#define kDefTextColor tcolorF(TextColor, ThemeLight)
+#define kDefLoginButtonsFont KP_REGULAR(14)
 
 typedef enum {
     LoginStateWelcome,
@@ -118,14 +119,14 @@ typedef enum {
         self.logoView.center = CGPointMake(self.view.center.x, self.logoView.center.y);
         self.logoView.contentMode = UIViewContentModeCenter;
         self.logoView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        [self.logoView setTextColor:kDefTextColor];
+        [self.logoView setTextColor:kIconColor];
         [self.view addSubview:self.logoView];
         
         self.titleView = [[WalkthroughTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0)];
         self.titleView.spacing = 5;
         self.titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.titleView.titleLabel.font = [UIFont fontWithName:@"Nexa-Black-Italic" size:17];
-        self.titleView.subtitleLabel.font = [UIFont fontWithName:@"Nexa-Bold" size:16];
+        self.titleView.subtitleLabel.font = [UIFont fontWithName:@"Nexa-Bold" size:12];
         self.titleView.titleLabel.textColor = kDefTextColor;
         self.titleView.subtitleLabel.textColor = kDefTextColor;
         [self.titleView setTitle:@"Focus. Swipe. Achieve." subtitle:@"Task list made for High Achievers"];
@@ -145,7 +146,7 @@ typedef enum {
         CGFloat fieldWidth = 252.0;
         CGFloat fieldMargin = (self.view.frame.size.width - fieldWidth) / 2;
         CGFloat fieldHeight = 44.0;
-        CGFloat buttonWidth = 196.0f;
+        CGFloat buttonWidth = 160.0f;
         CGFloat buttonMargin = (self.view.frame.size.width - buttonWidth) / 2;
         CGFloat buttonHeight = SIGNUP_BUTTONS_HEIGHT;
 
@@ -194,7 +195,7 @@ typedef enum {
         [self.view addSubview:self.passwordField];
         
         
-        UIColor *conColor = kDefTextColor;//  color(255, 190, 97, 1);//color(24, 188, 241, 1);
+        UIColor *conColor = kIconColor;//  color(255, 190, 97, 1);//color(24, 188, 241, 1);
         self.continueButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         self.continueButton.frame = CGRectMake(buttonMargin, 0, self.view.frame.size.width - buttonMargin * 2, buttonHeight);
         self.continueButton.layer.cornerRadius = kCornerRadius;
