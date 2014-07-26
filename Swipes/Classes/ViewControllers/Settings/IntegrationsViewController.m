@@ -204,7 +204,7 @@
 }
 
 -(void)authenticated{
-    [UTILITY popupWithTitle:@"Import your notes" andMessage:@"We've made an importer so you quickly can get started" buttonTitles:@[@"Not now",@"Open Importer"] block:^(NSInteger number, NSError *error) {
+    [UTILITY popupWithTitle:@"Get started" andMessage:@"Import a few notes right away." buttonTitles:@[@"Not now",@"Choose notes"] block:^(NSInteger number, NSError *error) {
         if(number == 1){
             [self showEvernoteImporterAnimated:YES];
         }
@@ -268,6 +268,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
 }
 
 /*

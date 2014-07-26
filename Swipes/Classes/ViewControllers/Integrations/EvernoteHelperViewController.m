@@ -85,7 +85,7 @@
     firstTitleView.subtitleLabel.font = KP_LIGHT(14);
     firstTitleView.spacing = kTextSpacing;
     firstTitleView.maxWidth = 250;
-    [firstTitleView setTitle:@"HOW SYNC WORKS" subtitle:@"All your Evernote Checkmarks are synced across your Swipes Action Steps."];
+    [firstTitleView setTitle:@"WHAT IT IS" subtitle:@"This integration lets you sync notes with checkmarks from Evernote into Swipes."];
     CGRectSetY(firstTitleView, kTitleTopSpacing);
     [scrollView addSubview:firstTitleView];
     
@@ -104,7 +104,7 @@
     secondTitleView.subtitleLabel.font = KP_LIGHT(14);
     secondTitleView.spacing = kTextSpacing;
     secondTitleView.maxWidth = 250;
-    [secondTitleView setTitle:@"IMPORT NOTES" subtitle:@"Automatically from your Evernote. Simply attach the \"swipes\" tag."];
+    [secondTitleView setTitle:@"HOW IT WORKS" subtitle:@"Assign the \"swipes\" tag to a note in Evernote. We'll add it as a task in Swipes and sync all its checkmarks."];
     CGRectSetY(secondTitleView, CGRectGetMaxY(firstImage.frame)+kTitleTopSpacing);
     [scrollView addSubview:secondTitleView];
     

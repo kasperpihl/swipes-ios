@@ -208,7 +208,7 @@
     [DejalBezelActivityView activityViewForView:self.view withLabel:@"Importing..."];
     [EvernoteSyncHandler addAndSyncNewTasksFromNotes:notesToImport];
     [DejalBezelActivityView removeViewAnimated:YES];
-    [[[UIAlertView alloc] initWithTitle:@"Your notes was successfully imported" message:@"Check them out in today's list" delegate:nil cancelButtonTitle:@"Great!" otherButtonTitles: nil] show];
+    [[[UIAlertView alloc] initWithTitle:@"Successfully imported." message:@"Next time, assign the \"swipes\"-tag in Evernote and we'll import the notes automatically." delegate:nil cancelButtonTitle:@"Great! I got it." otherButtonTitles: nil] show];
     [self pressedClose:nil];
 }
 
@@ -216,7 +216,7 @@
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if([cell.textLabel.textColor isEqual:kExistingTitleColor]){
-        [UTILITY confirmBoxWithTitle:@"This note is already in sync with a task" andMessage:@"Do you want to import it anyway? (Creates a duplicate)" block:^(BOOL succeeded, NSError *error) {
+        [UTILITY confirmBoxWithTitle:@"This note has already been imported." andMessage:@"Do you want to duplicate it?" block:^(BOOL succeeded, NSError *error) {
             if(succeeded){
                 [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
                 [self updateButtons];

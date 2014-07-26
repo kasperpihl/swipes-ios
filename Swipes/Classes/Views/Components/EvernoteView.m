@@ -258,7 +258,7 @@
         filter.ascending = NO;
         // setup additional flags
         if (0 == _searchBar.text.length) { // remove this check if you want order to be always by UPDATED
-            filter.words = @"todo:*";
+            filter.words = @"";
         }
         [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kSearchLimit block:^(EDAMNoteList *list, NSError *error) {
             if (error) {
