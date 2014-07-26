@@ -531,7 +531,7 @@
             imageString = @"settingsFeedback";
             break;
         case KPMenuButtonSnoozes:
-            imageString = @"later";
+            imageString = @"settingsSchedule";
             break;
         case KPMenuButtonUpgrade:
             imageString = @"settingsPlusFull";

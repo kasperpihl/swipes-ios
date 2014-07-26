@@ -51,6 +51,7 @@ static Global *sharedObject;
     iconCompare(@"settingsPlus",                @"\ue613");
     iconCompare(@"settingsSync",                @"\ue632");
     iconCompare(@"settingsLogout",              @"\ue617");
+    iconCompare(@"settingsSchedule",            @"\ue653");
     iconCompare(@"settingsTheme",               @"\ue618");
     iconCompare(@"settingsAccount",             @"\ue644");
     iconCompare(@"settingsPolicy",              @"\ue616");
