@@ -44,7 +44,8 @@
 #define kContinueButtonColor kDefTextColor
 #define kCornerRadius 3
 
-#define kDefTextColor tcolorF(TextColor,ThemeDark)//color(179, 180, 182, 1)
+#define kDefTextColor tcolor(LaterColor)//color(179, 180, 182, 1)
+#define kDefFieldColor tcolorF(TextColor,ThemeDark)
 #define kDefLoginButtonsFont KP_REGULAR(16)
 
 typedef enum {
@@ -88,13 +89,13 @@ typedef enum {
         self.backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@%i.jpg",launchImageName,0]]];
         [self.backgroundImage setFrame:self.view.bounds];
         self.backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
-        NSMutableArray *animationImages = [NSMutableArray array];
+        /*NSMutableArray *animationImages = [NSMutableArray array];
         for(NSInteger i = 0 ; i < launchImageNumber ; i++){
             [animationImages addObject:[UIImage imageNamed:[NSString stringWithFormat:@"%@%li.jpg",launchImageName,(long)i]]];
         }
         NSArray *reversedImages = [[animationImages reverseObjectEnumerator] allObjects];
         [animationImages addObjectsFromArray:reversedImages];
-        self.backgroundImage.animationImages = animationImages;
+        self.backgroundImage.animationImages = animationImages;*/
         self.backgroundImage.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         [self.backgroundImage setAnimationDuration:4.5];
         [self.backgroundImage startAnimating];
@@ -109,7 +110,7 @@ typedef enum {
         self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, SIGNUP_BUTTONS_HEIGHT, SIGNUP_BUTTONS_HEIGHT)];
         self.backButton.titleLabel.font = iconFont(23);
         [self.backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
-        [self.backButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
+        [self.backButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
         [self.backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:self.backButton];
         
@@ -117,7 +118,7 @@ typedef enum {
         self.logoView.center = CGPointMake(self.view.center.x, self.logoView.center.y);
         self.logoView.contentMode = UIViewContentModeCenter;
         self.logoView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        [self.logoView setTextColor:tcolorF(TextColor,ThemeDark)];
+        [self.logoView setTextColor:kDefTextColor];
         [self.view addSubview:self.logoView];
         
         self.titleView = [[WalkthroughTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0)];
@@ -125,14 +126,14 @@ typedef enum {
         self.titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.titleView.titleLabel.font = [UIFont fontWithName:@"Nexa-Black-Italic" size:17];
         self.titleView.subtitleLabel.font = [UIFont fontWithName:@"Nexa-Bold" size:16];
-        self.titleView.titleLabel.textColor = tcolorF(TextColor,ThemeDark);
-        self.titleView.subtitleLabel.textColor = tcolorF(TextColor,ThemeDark);
+        self.titleView.titleLabel.textColor = kDefTextColor;
+        self.titleView.subtitleLabel.textColor = kDefTextColor;
         [self.titleView setTitle:@"Focus. Swipe. Achieve." subtitle:@"Task list made for High Achievers"];
         [self.view addSubview:self.titleView];
         
         self.loginOrSignupLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
         self.loginOrSignupLabel.textAlignment = NSTextAlignmentCenter;
-        self.loginOrSignupLabel.textColor = tcolorF(TextColor, ThemeDark);
+        self.loginOrSignupLabel.textColor = kDefTextColor;
         self.loginOrSignupLabel.font = KP_REGULAR(16);
         self.loginOrSignupLabel.backgroundColor = CLEAR;
         self.loginOrSignupLabel.text = @"You can register with email";
@@ -162,7 +163,7 @@ typedef enum {
         self.emailField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.emailField.layer.cornerRadius = kCornerRadius;
         self.emailField.placeholder = @"email";
-        self.emailField.textColor = kDefTextColor;
+        self.emailField.textColor = kDefFieldColor;
         UIColor *color = gray(55, 0.5);
         self.emailField.backgroundColor = color;
         
@@ -176,14 +177,14 @@ typedef enum {
         self.passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.passwordField.layer.cornerRadius = kCornerRadius;
         self.passwordField.font = KP_REGULAR(16);
-        self.passwordField.textColor = kDefTextColor;
+        self.passwordField.textColor = kDefFieldColor;
         self.passwordField.backgroundColor = color;
         self.passwordField.placeholder = @"password";
         
         @try {
-            [self.emailField setValue:kDefTextColor
+            [self.emailField setValue:kDefFieldColor
                             forKeyPath:@"_placeholderLabel.textColor"];
-            [self.passwordField setValue:kDefTextColor
+            [self.passwordField setValue:kDefFieldColor
                                         forKeyPath:@"_placeholderLabel.textColor"];
         }
         @catch (NSException *exception) {
@@ -193,7 +194,7 @@ typedef enum {
         [self.view addSubview:self.passwordField];
         
         
-        UIColor *conColor = color(255, 190, 97, 1);//color(24, 188, 241, 1);
+        UIColor *conColor = kDefTextColor;//  color(255, 190, 97, 1);//color(24, 188, 241, 1);
         self.continueButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         self.continueButton.frame = CGRectMake(buttonMargin, 0, self.view.frame.size.width - buttonMargin * 2, buttonHeight);
         self.continueButton.layer.cornerRadius = kCornerRadius;
@@ -206,7 +207,7 @@ typedef enum {
         [self.continueButton setTitle:@"CREATE ACCOUNT" forState:UIControlStateNormal];
         [self.continueButton  setBackgroundImage:[conColor image] forState:UIControlStateNormal];
         [self.continueButton  setBackgroundImage:[alpha(conColor, 0) image] forState:UIControlStateHighlighted];
-        [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+        [self.continueButton setTitleColor:conColor forState:UIControlStateHighlighted];
         [self.continueButton addTarget:self action:@selector(pressedContinue:) forControlEvents:UIControlEventTouchUpInside];
         self.continueButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
         [self.view addSubview:self.continueButton];
@@ -218,7 +219,7 @@ typedef enum {
         self.tryButton.backgroundColor = CLEAR;
         self.tryButton.titleLabel.font = LOGIN_FIELDS_FONT;
         
-        [self.tryButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
+        [self.tryButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
         NSString *title = [[NSUserDefaults standardUserDefaults] boolForKey:isTryingString] ? @"Keep trying Swipes" : @"Try out";
         [self.tryButton setTitle:title forState:UIControlStateNormal];
         [self.tryButton addTarget:self action:@selector(pressedTryButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -284,8 +285,9 @@ typedef enum {
         
         self.loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
         NSInteger margin = 10;
-        self.loginButton.frame = CGRectMake(0, 0, sizeWithFont(@"Sign up" ,LOGIN_FIELDS_FONT).width+20, fieldHeight - margin);
-        self.loginButton.titleLabel.font = LOGIN_FIELDS_FONT;
+        UIFont *loginFont = KP_BOLD(16);
+        self.loginButton.frame = CGRectMake(0, 0, sizeWithFont(@"Sign up" ,loginFont).width+20, fieldHeight - margin);
+        self.loginButton.titleLabel.font = loginFont;
         [self.loginButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
         [self.loginButton setTitle:@"Log in" forState:UIControlStateNormal];
         [self.loginButton addTarget:self action:@selector(pressedChange:) forControlEvents:UIControlEventTouchUpInside];

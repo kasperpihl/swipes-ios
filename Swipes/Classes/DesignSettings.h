@@ -76,7 +76,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #define LOGIN_FIELDS_BACKGROUND         color(97,105,113,1)
 #define LOGIN_FIELDS_SEPERATOR_COLOR    color(187,195,203,1)
 #define SIGNUP_BUTTON_FONT              KP_LIGHT(18)
-#define LOGIN_FIELDS_FONT               KP_LIGHT(14)
+#define LOGIN_FIELDS_FONT               KP_REGULAR(14)
 #define LOGIN_LABEL_ABOVE_FONT          KP_LIGHT(13)
 #define LOGIN_FIELDS_TEXT_COLOR         color(187,195,203,1)
 
