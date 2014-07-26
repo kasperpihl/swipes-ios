@@ -237,7 +237,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     if ( subtasks && subtasks.count > 0 ){
         updated = YES;
         NSLog(@"delete: %@",subtasks);
-        [KPToDo deleteToDos:subtasks save:NO force:NO];
+        [KPToDo deleteToDos:subtasks save:NO force:YES];
     }
     
     // add newly added tasks to evernote
