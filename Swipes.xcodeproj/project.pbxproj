@@ -131,6 +131,8 @@
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
 		A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CD116EB5884004D95E5 /* CoreGraphics.framework */; };
+		A777CEAF1983A8740034B977 /* en-monoline.png in Resources */ = {isa = PBXBuildFile; fileRef = A777CEAD1983A8740034B977 /* en-monoline.png */; };
+		A777CEB01983A8740034B977 /* en-monoline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A777CEAE1983A8740034B977 /* en-monoline@2x.png */; };
 		A77D34C818E098C800095F1E /* HintHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34C718E098C800095F1E /* HintHandler.m */; };
 		A77D34D018E31E1200095F1E /* EMHint.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34CB18E31E1200095F1E /* EMHint.m */; };
 		A77D34D118E31E1200095F1E /* EMHintsView.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34CD18E31E1200095F1E /* EMHintsView.m */; };
@@ -415,6 +417,8 @@
 		A7778CCF16EB5884004D95E5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A7778CD116EB5884004D95E5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A7778CF116EB5884004D95E5 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		A777CEAD1983A8740034B977 /* en-monoline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "en-monoline.png"; sourceTree = "<group>"; };
+		A777CEAE1983A8740034B977 /* en-monoline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "en-monoline@2x.png"; sourceTree = "<group>"; };
 		A77D34C618E098C800095F1E /* HintHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HintHandler.h; sourceTree = "<group>"; };
 		A77D34C718E098C800095F1E /* HintHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HintHandler.m; sourceTree = "<group>"; };
 		A77D34CA18E31E1200095F1E /* EMHint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMHint.h; sourceTree = "<group>"; };
@@ -1355,6 +1359,8 @@
 		A7DAC63C181A7CF700B8C079 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				A777CEAD1983A8740034B977 /* en-monoline.png */,
+				A777CEAE1983A8740034B977 /* en-monoline@2x.png */,
 				A7D0D3BD1904FD1000ABA1FF /* selected_circle.png */,
 				A7D0D3BE1904FD1000ABA1FF /* selected_circle@2x.png */,
 			);
@@ -1558,6 +1564,7 @@
 				A7F522AC197D7C76008B6147 /* swipesevernotetag.png in Resources */,
 				A7D0D3BF1904FD1000ABA1FF /* selected_circle.png in Resources */,
 				DACD545C18A1ACFC00C378DF /* page_white_picture.png in Resources */,
+				A777CEB01983A8740034B977 /* en-monoline@2x.png in Resources */,
 				DACD544A18A1ACFC00C378DF /* folder_user.png in Resources */,
 				DACD546418A1ACFC00C378DF /* word.png in Resources */,
 				A7BB65CB189BF19600BE7183 /* swipes-notification.aif in Resources */,
@@ -1576,6 +1583,7 @@
 				A75236EC17A335680030ED1E /* wt_menu_expain.png in Resources */,
 				DACD546018A1ACFC00C378DF /* page_white_vector.png in Resources */,
 				DACD545D18A1ACFC00C378DF /* page_white_ruby.png in Resources */,
+				A777CEAF1983A8740034B977 /* en-monoline.png in Resources */,
 				A741EC4F18354726000F9F93 /* default-background.jpg in Resources */,
 				A75236ED17A335680030ED1E /* wt_menu_expain@2x.png in Resources */,
 				A75236FD17A349340030ED1E /* walkthrough_phone_background.png in Resources */,
