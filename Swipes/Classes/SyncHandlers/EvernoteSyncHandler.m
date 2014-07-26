@@ -172,8 +172,10 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         
         for ( KPToDo* subtask in subtasks ) {
             if ( [subtask.originIdentifier isEqualToString: evernoteToDo.title] ) {
+                
                 matchingSubtask = subtask;
                 [subtasksLeftToBeFound removeObject:subtask];
+                subtasks = [subtasksLeftToBeFound copy];
                 [evernoteToDosLeftToBeFound removeObject:evernoteToDo];
                 
                 if( [self handleEvernoteToDo:evernoteToDo withMatchingSubtask:subtask inNoteProcessor:processor isNew:NO] )
@@ -219,6 +221,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         }
         
         [subtasksLeftToBeFound removeObject:matchingSubtask];
+        subtasks = [subtasksLeftToBeFound copy];
         [evernoteToDosLeftToBeFound removeObject:evernoteToDo];
         
         BOOL didUpdateSubtask = [self handleEvernoteToDo:evernoteToDo withMatchingSubtask:matchingSubtask inNoteProcessor:processor isNew:isNew];
@@ -231,6 +234,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     subtasks = [subtasksLeftToBeFound copy];
     if ( subtasks && subtasks.count > 0 ){
         updated = YES;
+        NSLog(@"delete: %@",subtasks);
         [KPToDo deleteToDos:subtasks save:NO force:NO];
     }
     
