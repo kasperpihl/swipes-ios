@@ -236,7 +236,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     subtasks = [subtasksLeftToBeFound copy];
     if ( subtasks && subtasks.count > 0 ){
         updated = YES;
-        NSLog(@"delete: %@",subtasks);
+        DLog(@"delete: %@",subtasks);
         [KPToDo deleteToDos:subtasks save:NO force:YES];
     }
     

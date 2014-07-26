@@ -205,8 +205,8 @@ static EvernoteIntegration *sharedObject;
             if(error)
                 [self handleError:error withType:@"Evernote Auth Error"];
             else{
-                [kSettings setValue:@YES forSetting:IntegrationEvernoteEnableSync];
-                [kSettings setValue:@YES forSetting:IntegrationEvernoteSwipesTag];
+                [self setEnableSync:YES];
+                [self setAutoFindFromTag:YES];
             }
             block(error);
         }];
