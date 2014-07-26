@@ -13,6 +13,18 @@ int32_t const kPaginator = 100;
 NSInteger const kApiLimitReachedErrorCode = 19;
 NSString * const kSwipesTagName = @"swipes";
 NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
+NSString* const MONExceptionHandlerDomain = @"Exception";
+const int MONNSExceptionEncounteredErrorCode = 119;
+NSError * NewNSErrorFromException(NSException * exc) {
+    NSMutableDictionary * info = [NSMutableDictionary dictionary];
+    [info setValue:exc.name forKey:@"MONExceptionName"];
+    [info setValue:exc.reason forKey:@"MONExceptionReason"];
+    [info setValue:exc.callStackReturnAddresses forKey:@"MONExceptionCallStackReturnAddresses"];
+    [info setValue:exc.callStackSymbols forKey:@"MONExceptionCallStackSymbols"];
+    [info setValue:exc.userInfo forKey:@"MONExceptionUserInfo"];
+    
+    return [[NSError alloc] initWithDomain:MONExceptionHandlerDomain code:MONNSExceptionEncounteredErrorCode userInfo:info];
+}
 
 @interface EvernoteIntegration ()
 @property BOOL isAuthing;
@@ -20,6 +32,7 @@ NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
 @implementation EvernoteIntegration
 
 static EvernoteIntegration *sharedObject;
+
 
 + (instancetype)sharedInstance
 {
@@ -133,6 +146,8 @@ static EvernoteIntegration *sharedObject;
         }];
     }
     @catch (NSException *exception) {
+        NSError *error = NewNSErrorFromException(exception);
+        block(nil, error);
         [UtilityClass sendException:exception type:@"Evernote Update Note Exception"];
     }
 }
@@ -153,6 +168,8 @@ static EvernoteIntegration *sharedObject;
         }];
     }
     @catch (NSException *exception) {
+        NSError *error = NewNSErrorFromException(exception);
+        block(nil, error);
         [UtilityClass sendException:exception type:@"Evernote Get Note Exception"];
     }
     
@@ -170,8 +187,9 @@ static EvernoteIntegration *sharedObject;
         }];
     }
     @catch (NSException *exception) {
+        NSError *error = NewNSErrorFromException(exception);
+        block(nil, error);
         [UtilityClass sendException:exception type:@"Evernote Fetch Notes with Filter Exception"];
-        DLog(@"%@",exception);
     }
 }
 
@@ -194,6 +212,8 @@ static EvernoteIntegration *sharedObject;
         }];
     }
     @catch (NSException *exception) {
+        NSError *error = NewNSErrorFromException(exception);
+        block(error);
         [UtilityClass sendException:exception type:@"Evernote Auth Exception"];
     }
     
@@ -225,7 +245,8 @@ static EvernoteIntegration *sharedObject;
         }];
     }
     @catch (NSException *exception) {
-        DLog(@"%@",exception);
+        NSError *error = NewNSErrorFromException(exception);
+        block(nil, error);
         [UtilityClass sendException:exception type:@"Evernote Get Tags Exception"];
         //[UtilityClass sendException:exception type:@"Evernote Update Note Exception"];
     }
@@ -246,7 +267,8 @@ static EvernoteIntegration *sharedObject;
         }];
     }
     @catch (NSException *exception) {
-        DLog(@"%@",exception);
+        NSError *error = NewNSErrorFromException(exception);
+        block(nil, error);
         [UtilityClass sendException:exception type:@"Evernote Create Tag Exception"];
     }
 }
@@ -263,5 +285,7 @@ static EvernoteIntegration *sharedObject;
     [UtilityClass sendError:error type:type];
     return NO;
 }
+
+
 
 @end

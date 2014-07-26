@@ -11,6 +11,8 @@
 typedef void (^NoteListBlock)(EDAMNoteList *list, NSError *error);
 typedef void (^NoteBlock)(EDAMNote *note, NSError *error);
 #define kEnInt [EvernoteIntegration sharedInstance]
+extern NSString* const MONExceptionHandlerDomain;
+extern const int MONNSExceptionEncounteredErrorCode;
 
 @interface EvernoteIntegration : NSObject
 
