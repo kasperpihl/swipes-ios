@@ -70,7 +70,8 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO];
         [newToDo attachService:EVERNOTE_SERVICE title:title identifier:note.guid sync:YES];
     }
-    [KPCORE saveContextForSynchronization:nil];
+    if(notes.count > 0)
+        [KPCORE saveContextForSynchronization:nil];
     return nil;
 }
 
@@ -147,6 +148,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     // difference in name
     if (![subtask.title isEqualToString:subtask.originIdentifier]) {
         if ([processor updateToDo:evernoteToDo title:subtask.title]) {
+            DLog(@"renamed evernote");
             subtask.originIdentifier = subtask.title;
             updated = YES;
         }
@@ -342,7 +344,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     __block NSInteger targetCount = self.objectsWithEvernote.count;
     __block NSError *runningError;
     for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
-        
+        DLog(@"running sync");
         KPAttachment *evernoteAttachment = [todoWithEvernote firstAttachmentForServiceType:EVERNOTE_SERVICE];
         NSString *guid = evernoteAttachment.identifier;
         [EvernoteToDoProcessor processorWithGuid:guid block:^(EvernoteToDoProcessor *processor, NSError *error) {
