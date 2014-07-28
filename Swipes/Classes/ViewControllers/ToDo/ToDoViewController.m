@@ -778,7 +778,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         if( [[EvernoteSession sharedSession] isEvernoteInstalled] )
             buttons = @[@"Cancel",@"Remove note",@"Open note"];
         [UTILITY popupWithTitle:@"Evernote" andMessage:@"What to do?" buttonTitles:buttons block:^(NSInteger number, NSError *error) {
-            NSLog(@"%li",(long)number);
+            DLog(@"%li",(long)number);
             if(number == 1){
                 [self.model removeAllAttachmentsForService:EVERNOTE_SERVICE];
                 [self update];

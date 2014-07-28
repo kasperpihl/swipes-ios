@@ -222,6 +222,10 @@ static NSSet* g_startEndElements;
         }
         
         NSUInteger startLocation = scanner.scanLocation;
+        if (startLocation + escapedOldTitle.length > self.updatedContent.length) {
+            NSLog(@"Cannot find title: '%@' to replace it with: '%@'", updatedToDo.title, title);
+            return NO;
+        }
         
         NSRange range = NSMakeRange(startLocation, escapedOldTitle.length);
         self.updatedContent = [self.updatedContent stringByReplacingCharactersInRange:range withString:[self xmlEscape:title]];
@@ -231,7 +235,7 @@ static NSSet* g_startEndElements;
         return YES;
     }
     else {
-        NSLog(@"Cannot find TODO: %@ (or found but already with the same status)", updatedToDo);
+        NSLog(@"Cannot find TODO: %@", updatedToDo);
     }
     return NO;
 }

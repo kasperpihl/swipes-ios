@@ -99,7 +99,8 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = CLEAR;
         cell.textLabel.font = KP_REGULAR(14);
-        if(indexPath.row < 3){
+        cell.textLabel.textColor = tcolor(TextColor);
+        if (indexPath.row < 3) {
             
             UISwitch *aSwitch = [[UISwitch alloc] init];
             aSwitch.tag = kSwitchTag;
