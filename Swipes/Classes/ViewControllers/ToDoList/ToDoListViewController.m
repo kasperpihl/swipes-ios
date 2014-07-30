@@ -662,7 +662,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-// NEWCODE
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];

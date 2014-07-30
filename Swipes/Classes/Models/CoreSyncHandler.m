@@ -366,7 +366,7 @@
                                 [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                             }
                         }];
-                        
+                        [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
                     }
                     else {
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];

@@ -19,6 +19,8 @@
 
 -(void)switchPriority;
 
++(NSArray *)findByTitle:(NSString *)title;
+
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;
 
