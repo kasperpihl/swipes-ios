@@ -194,7 +194,13 @@ typedef enum {
             break;
         }
         case KPScheduleButtonTomorrow:{
-            date = [NSDate dateTomorrow];
+            NSDate *startTime = [NSDate date];
+            [self setStartingTimeForDate:&startTime];
+            NSDate *now = [NSDate date];
+            if([startTime isLaterThanDate:now])
+                date = now;
+            else
+                date = [NSDate dateTomorrow];
             [self setStartingTimeForDate:&date];
             break;
         }
