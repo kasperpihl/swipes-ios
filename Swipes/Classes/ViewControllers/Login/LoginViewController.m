@@ -456,6 +456,7 @@ typedef enum {
         return [self setCurrentState:LoginStateSignup animated:NO];
     if(self.emailField.isFirstResponder && self.passwordField.text.length == 0) [self.passwordField becomeFirstResponder];
     else{
+        self.emailField.text = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if(![self validateFields]) return;
         [self showIndicator:YES onElement:sender];
         NSString *email = [self.emailField.text lowercaseString];
