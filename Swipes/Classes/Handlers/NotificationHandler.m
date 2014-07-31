@@ -145,6 +145,9 @@ static NotificationHandler *sharedObject;
 
 -(void)updateUpcomingNotifications{
     NSLog(@"update upcoming");
+    BOOL weeklyReminders = [[kSettings valueForSetting:SettingWeeklyReminders] boolValue];
+    BOOL dailyReminders = [[kSettings valueForSetting:SettingDailyReminders] boolValue];
+    
     UIApplication *app = [UIApplication sharedApplication];
     
     for( UILocalNotification *notification in [app scheduledLocalNotifications]){
@@ -153,6 +156,10 @@ static NotificationHandler *sharedObject;
             [app cancelLocalNotification:notification];
         }
     }
+    
+    if(!weeklyReminders && !dailyReminders)
+        return;
+    
     
     __block NSMutableArray *localNotifications = [NSMutableArray array];
     void (^addLocalNotificationBlock)(NSString*, NSDate*, NSString*) = ^void (NSString *title, NSDate *fireDate, NSString *identifier)
@@ -190,7 +197,7 @@ static NotificationHandler *sharedObject;
         
         
         // Check if time is before the evening starts
-        if(numberOfTasksLeftNow > 0 && numberOfTasksLeftNow == numberOfTasksLeftToday){
+        if( dailyReminders && numberOfTasksLeftNow > 0 && numberOfTasksLeftNow == numberOfTasksLeftToday){
             addLocalNotificationBlock(@"You still have tasks left for today. Open Swipes to snooze or complete them.",[NSDate dateThisOrTheNextDayWithHours:eveningStart.hour minutes:eveningStart.minute],@"remind-remaining-tasks");
         }
         
@@ -204,13 +211,13 @@ static NotificationHandler *sharedObject;
             numberToCheckForMorning = numberOfTasksLeftToday;
         }
         // Check how many tasks is schedule for the next morning and see if it's a weekday
-        if(  numberToCheckForMorning <= 1 && dateToCheckForMorning.isTypicallyWorkday){
+        if( dailyReminders && numberToCheckForMorning <= 1 && dateToCheckForMorning.isTypicallyWorkday){
             // Notify to make a plan from the morning
             addLocalNotificationBlock(@"The most productive way to start the day is with a plan. Make it now.",[dateToCheckForMorning dateAtHours:dayStart.hour minutes:dayStart.minute],@"make-a-plan-for-the-day");
         }
         
         // Check
-        if( numberOfTasksForMonday <= 1 ){
+        if( weeklyReminders && numberOfTasksForMonday <= 1 ){
             addLocalNotificationBlock(@"Plan your week tonight.", sundayEvening, @"weekly-plan-reminder");
         }
         
