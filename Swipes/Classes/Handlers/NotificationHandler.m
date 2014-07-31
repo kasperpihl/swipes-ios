@@ -157,7 +157,6 @@ static NotificationHandler *sharedObject;
     __block NSMutableArray *localNotifications = [NSMutableArray array];
     void (^addLocalNotificationBlock)(NSString*, NSDate*, NSString*) = ^void (NSString *title, NSDate *fireDate, NSString *identifier)
     {
-        
         UILocalNotification *notification = [self notificationForDate:fireDate badgeCounter:0 title:title userInfo:@{@"type":@"upcoming",@"identifier": identifier}];
         [localNotifications addObject:notification];
     };
@@ -220,7 +219,7 @@ static NotificationHandler *sharedObject;
     
     
     for( UILocalNotification *notification in localNotifications ){
-        NSLog(@"%@ - %@",notification.fireDate, notification.alertBody);
+        DLog(@"%@ - %@",notification.fireDate, notification.alertBody);
         [app scheduleLocalNotification:notification];
     }
     
