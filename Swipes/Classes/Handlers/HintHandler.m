@@ -196,7 +196,6 @@ static HintHandler *sharedObject;
             CGFloat oneFourth = width / 4;
             for(NSInteger i = 1 ; i <= 4 ; i++){
                 CGFloat x = oneFourth * i - oneFourth/2;
-                NSLog(@"x %f",x);
                 CGRect tmpRect = CGRectMake(x, height - 28.5, ht, ht);
                 [mutRect addObject:[NSValue valueWithCGRect:tmpRect]];
             }

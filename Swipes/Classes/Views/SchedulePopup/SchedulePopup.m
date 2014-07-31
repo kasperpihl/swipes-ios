@@ -108,9 +108,10 @@ typedef enum {
 -(NSString *)stringForScheduleButton:(KPScheduleButtons)state{
     NSString *returnString;
     switch (state) {
-        case KPScheduleButtonLaterToday:
+        case KPScheduleButtonLaterToday:{
             returnString = @"Later Today";
             break;
+        }
         case KPScheduleButtonThisEvening:
             returnString = @"This Evening";
             break;
@@ -723,7 +724,9 @@ typedef enum {
         }
         self.seperators = [seperatorArray copy];
         /* Schedule buttons */
-        UIButton *laterTodayButton = [self buttonForScheduleButton:KPScheduleButtonLaterToday title:@"Later Today"];
+        NSDate *laterToday = (NSDate*)[kSettings valueForSetting:SettingLaterToday];
+        NSString *title = [NSString stringWithFormat:@"Later  +%luh",(long)laterToday.hour];
+        UIButton *laterTodayButton = [self buttonForScheduleButton:KPScheduleButtonLaterToday title:title];
         [contentView addSubview:laterTodayButton];
         NSDate *eveningStartTimeDate = (NSDate*)[kSettings valueForSetting:SettingEveningStartTime];
         NSDate *thisEveningTime = [[NSDate date] dateAtHours:eveningStartTimeDate.hour minutes:eveningStartTimeDate.minute];
