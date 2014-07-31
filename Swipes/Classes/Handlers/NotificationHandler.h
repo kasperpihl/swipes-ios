@@ -20,6 +20,7 @@ typedef enum {
 @interface NotificationHandler : NSObject <KitLocateDelegate>
 @property (nonatomic) CLLocation *latestLocation;
 +(NotificationHandler*)sharedInstance;
+-(void)updateUpcomingNotifications;
 -(void)updateLocalNotifications;
 -(void)updateLocationUpdates;
 -(StartLocationResult)startLocationServices;

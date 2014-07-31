@@ -78,6 +78,8 @@ typedef void (^viewBlock)(UIView* view);
 
 #define kEvernoteColor color(32,192,92,1)
 #define kLocationSplitStr @"_-_"
+#define isTryingString @"isTryingOutSwipes"
+
 #define kCurrent [PFUser currentUser]
 #define kCurrentAttr(attr) [kCurrent objectForKey:attr]
 #define kCurrentSetAttr(key,attr) [kCurrent setObject:attr forKey:key]

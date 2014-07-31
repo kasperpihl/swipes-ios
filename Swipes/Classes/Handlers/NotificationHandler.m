@@ -11,7 +11,7 @@
 #import "NSDate-Utilities.h"
 #import "KPToDo.h"
 #import "SettingsHandler.h"
-
+#import "UserHandler.h"
 #import "CWStatusBarNotification.h"
 
 #define kMaxNotifications 25
@@ -136,11 +136,96 @@ static NotificationHandler *sharedObject;
     localNotif.alertAction = NSLocalizedString(@"Open Swipes", nil);
     if(title.length > 80) title = [title substringToIndex:80];
     localNotif.alertBody = title;
-    localNotif.applicationIconBadgeNumber = badgeCount;
+    if(badgeCount > 0)
+        localNotif.applicationIconBadgeNumber = badgeCount;
     localNotif.soundName = @"swipes-notification.aif";
     localNotif.userInfo = userInfo;
     return localNotif;
 }
+
+-(void)updateUpcomingNotifications{
+    NSLog(@"update upcoming");
+    UIApplication *app = [UIApplication sharedApplication];
+    
+    for( UILocalNotification *notification in [app scheduledLocalNotifications]){
+        NSDictionary *userInfo = notification.userInfo;
+        if( [[userInfo objectForKey:@"type"] isEqualToString:@"upcoming"] ){
+            [app cancelLocalNotification:notification];
+        }
+    }
+    
+    __block NSMutableArray *localNotifications = [NSMutableArray array];
+    void (^addLocalNotificationBlock)(NSString*, NSDate*, NSString*) = ^void (NSString *title, NSDate *fireDate, NSString *identifier)
+    {
+        
+        UILocalNotification *notification = [self notificationForDate:fireDate badgeCounter:0 title:title userInfo:@{@"type":@"upcoming",@"identifier": identifier}];
+        [localNotifications addObject:notification];
+    };
+    
+    // If a user is neither logged in nor trying out
+    if(!kUserHandler.isLoggedIn && !kUserHandler.isTryingOutApp){
+        addLocalNotificationBlock(@"Try Swipes without creating an account. Get started now",[NSDate dateWithHoursFromNow:24],@"pre-account");
+    }
+    else{
+        NSDate *now = [NSDate date];
+        
+        NSDate *dayStart = (NSDate*)[kSettings valueForSetting:SettingWeekendStartTime];
+        NSDate *eveningStart = (NSDate*)[kSettings valueForSetting:SettingEveningStartTime];
+        NSDate *weekStart = (NSDate *)[kSettings valueForSetting:SettingWeekStart];
+        
+        NSInteger lastDayBeforeStartOfWeek = (weekStart.day - 1) == 0 ? 7 : weekStart.day-1;
+        NSDate *sundayEvening = [NSDate dateThisOrNextWeekWithDay:lastDayBeforeStartOfWeek hours:eveningStart.hour minutes:eveningStart.minute];
+        NSDate *mondayStart = [[sundayEvening dateByAddingDays:1] dateAtStartOfDay];
+        NSDate *mondayEnd = [[mondayStart dateByAddingDays:1] dateAtStartOfDay];
+        
+        NSPredicate *leftForNowPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [NSDate date] ];
+        NSPredicate *leftForTodayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [[NSDate dateTomorrow] dateAtStartOfDay]];
+        NSPredicate *tomorrowPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil)", [[NSDate dateTomorrow] dateAtStartOfDay],[[[NSDate dateTomorrow] dateByAddingDays:1] dateAtStartOfDay]];
+        NSPredicate *mondayPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil)", mondayStart, mondayEnd];
+        
+        NSInteger numberOfTasksLeftNow = [KPToDo MR_countOfEntitiesWithPredicate:leftForNowPredicate];
+        NSInteger numberOfTasksLeftToday = [KPToDo MR_countOfEntitiesWithPredicate:leftForTodayPredicate];
+        NSInteger numberOfTasksForTomorrow = [KPToDo MR_countOfEntitiesWithPredicate:tomorrowPredicate];
+        NSInteger numberOfTasksForMonday = [KPToDo MR_countOfEntitiesWithPredicate:mondayPredicate];
+        
+        
+        
+        // Check if time is before the evening starts
+        if(numberOfTasksLeftNow > 0 && numberOfTasksLeftNow == numberOfTasksLeftToday){
+            addLocalNotificationBlock(@"You still have tasks left for today. Open Swipes to snooze or complete them.",[NSDate dateThisOrTheNextDayWithHours:eveningStart.hour minutes:eveningStart.minute],@"remind-remaining-tasks");
+        }
+        
+        // Check whether or not the next morning event is today or tomorrow
+        NSDate *dateToCheckForMorning = [NSDate dateTomorrow];
+        NSInteger numberToCheckForMorning = numberOfTasksForTomorrow;
+        
+        // Check whether or not the next morning event is today or tomorrow
+        if ( now.hour < dayStart.hour || ( now.hour == dayStart.hour && now.minute < dayStart.minute ) ){
+            dateToCheckForMorning = [NSDate date];
+            numberToCheckForMorning = numberOfTasksLeftToday;
+        }
+        // Check how many tasks is schedule for the next morning and see if it's a weekday
+        if(  numberToCheckForMorning <= 1 && dateToCheckForMorning.isTypicallyWorkday){
+            // Notify to make a plan from the morning
+            addLocalNotificationBlock(@"The most productive way to start the day is with a plan. Make it now.",[dateToCheckForMorning dateAtHours:dayStart.hour minutes:dayStart.minute],@"make-a-plan-for-the-day");
+        }
+        
+        // Check
+        if( numberOfTasksForMonday <= 1 ){
+            addLocalNotificationBlock(@"Plan your week tonight.", sundayEvening, @"weekly-plan-reminder");
+        }
+        
+        
+    }
+    
+    
+    for( UILocalNotification *notification in localNotifications ){
+        NSLog(@"%@ - %@",notification.fireDate, notification.alertBody);
+        [app scheduleLocalNotification:notification];
+    }
+    
+}
+
 -(void)updateLocalNotifications{
     /* Check for settings */
     BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];

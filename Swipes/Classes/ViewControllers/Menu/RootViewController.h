@@ -15,7 +15,6 @@ typedef enum {
     KPMenuHome
 } KPMenu;
 
-#define isTryingString @"isTryingOutSwipes"
 
 #define ROOT_CONTROLLER [RootViewController sharedInstance]
 #define ERROR_MESSAGE [[error userInfo] objectForKey:@"error"]

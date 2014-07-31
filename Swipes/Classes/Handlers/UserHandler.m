@@ -10,6 +10,7 @@
 #import <Parse/PFUser.h>
 #import "AnalyticsHandler.h"
 #import "IntegrationHandler.h"
+
 @interface UserHandler ()
 @property (nonatomic) BOOL needRefresh;
 @property (nonatomic) UserLevel userLevel;
@@ -32,6 +33,9 @@ static UserHandler *sharedObject;
         _isPlus = isPlus;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"changed isPlus" object:self];
     }
+}
+-(BOOL)isTryingOutApp{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:isTryingString];
 }
 -(NSString *)stringForUserLevel:(UserLevel)userLevel{
     NSString *string;
