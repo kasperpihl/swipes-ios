@@ -226,17 +226,20 @@ NSError * NewNSErrorFromException(NSException * exc) {
     @try {
         __block NSString *swipesTagGuid;
         [[EvernoteNoteStore noteStore] listTagsWithSuccess:^(NSArray *tags) {
-            for( EDAMTag *tag in tags ){
-                if([tag.name isEqualToString:kSwipesTagName]){
+            for ( EDAMTag *tag in tags ) {
+                if (NSOrderedSame == [tag.name caseInsensitiveCompare:kSwipesTagName]){
                     swipesTagGuid = tag.guid;
+                    break;
                 }
             }
-            if(!swipesTagGuid){
+            
+            if (!swipesTagGuid){
                 [self createSwipesTagBlock:block];
             }
-            else block(swipesTagGuid, nil);
+            else
+                block(swipesTagGuid, nil);
         } failure:^(NSError *error) {
-            if(error)
+            if (error)
                 [self handleError:error withType:@"Evernote Get Tags Error"];
             block(nil, error);
         }];
@@ -245,7 +248,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
         NSError *error = NewNSErrorFromException(exception);
         block(nil, error);
         [UtilityClass sendException:exception type:@"Evernote Get Tags Exception"];
-        //[UtilityClass sendException:exception type:@"Evernote Update Note Exception"];
     }
 }
 
