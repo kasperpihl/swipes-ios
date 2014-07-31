@@ -242,7 +242,7 @@ static NSSet* g_startEndElements;
 
 - (NSUInteger)newToDoPosAtTheBeginning
 {
-    NSRange div = [self.updatedContent rangeOfString:@"<div>"];
+    NSRange div = [self.updatedContent rangeOfString:@"<div"];
     if (NSNotFound == div.location) {
         return [self.updatedContent rangeOfString:@"</en-note>"].location;
     }

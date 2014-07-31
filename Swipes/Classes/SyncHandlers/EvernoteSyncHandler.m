@@ -16,6 +16,7 @@
 
 #import "NSDate+EDAMAdditions.h"
 #import "CoreSyncHandler.h"
+#import "UtilityClass.h"
 
 #import "EvernoteIntegration.h"
 
@@ -361,8 +362,8 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
                         if (succeeded) {
                             //NSLog(@"succeeded save");
                         }
-                        else{
-                            //NSLog(@"error saving to Evernote");
+                        else {
+                            [UtilityClass sendError:error type:@"Evernote save error"];
                         }
                     }];
                 }
