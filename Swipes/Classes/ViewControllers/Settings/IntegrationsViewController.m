@@ -99,7 +99,6 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = CLEAR;
         cell.textLabel.font = KP_REGULAR(14);
-        cell.textLabel.textColor = tcolor(TextColor);
         if (indexPath.row < 3) {
             
             UISwitch *aSwitch = [[UISwitch alloc] init];
@@ -160,6 +159,7 @@
     if(indexPath.row == 0)
         [cell setSetting:name value:valueString];
     if(indexPath.row > 0){
+        cell.textLabel.textColor = tcolor(TextColor);
         UISwitch *aSwitch = (UISwitch*)[cell viewWithTag:kSwitchTag];
         if(indexPath.row == 1){
             cell.textLabel.text = @"Sync with Evernote on this device";
