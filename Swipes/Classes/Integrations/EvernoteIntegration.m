@@ -31,9 +31,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
 @end
 @implementation EvernoteIntegration
 
-static EvernoteIntegration *sharedObject;
-
-
 + (instancetype)sharedInstance
 {
     static dispatch_once_t once;

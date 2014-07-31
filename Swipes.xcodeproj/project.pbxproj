@@ -201,6 +201,7 @@
 		A7FE4402182825A1002AFB2E /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FE4401182825A1002AFB2E /* UIImage+Blur.m */; };
 		DA310FA7188F3F26003C8FA4 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = DA310FA6188F3F26003C8FA4 /* Assets */; };
 		DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0B8F188CB4750094F866 /* EvernoteView.m */; };
+		DA5422CE1986C7A50006A1E6 /* URLHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5422CD1986C7A50006A1E6 /* URLHandler.m */; };
 		DA67301418A99C7100CA4C1A /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA67301318A99C7100CA4C1A /* DropboxSDK.framework */; };
 		DA94A2C1196EEA8B008F8A3B /* libLocalyticsAMP_x64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA94A2BE196EEA8B008F8A3B /* libLocalyticsAMP_x64.a */; };
 		DACD541918A19FB000C378DF /* DropboxView.m in Sources */ = {isa = PBXBuildFile; fileRef = DACD541818A19FB000C378DF /* DropboxView.m */; };
@@ -545,6 +546,8 @@
 		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteView.h; path = Components/EvernoteView.h; sourceTree = "<group>"; };
 		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteView.m; path = Components/EvernoteView.m; sourceTree = "<group>"; };
+		DA5422CC1986C7A50006A1E6 /* URLHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLHandler.h; sourceTree = "<group>"; };
+		DA5422CD1986C7A50006A1E6 /* URLHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLHandler.m; sourceTree = "<group>"; };
 		DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.0.xcdatamodel"; sourceTree = "<group>"; };
 		DA67301318A99C7100CA4C1A /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = Swipes/Ressources/Libs/DropboxSDK.framework; sourceTree = "<group>"; };
 		DA94A2BE196EEA8B008F8A3B /* libLocalyticsAMP_x64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLocalyticsAMP_x64.a; sourceTree = "<group>"; };
@@ -1416,6 +1419,8 @@
 				A74646B818D38660003911DC /* ContactHandler.m */,
 				A77D34C618E098C800095F1E /* HintHandler.h */,
 				A77D34C718E098C800095F1E /* HintHandler.m */,
+				DA5422CC1986C7A50006A1E6 /* URLHandler.h */,
+				DA5422CD1986C7A50006A1E6 /* URLHandler.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -1740,6 +1745,7 @@
 				A7FE4402182825A1002AFB2E /* UIImage+Blur.m in Sources */,
 				A7AA796B194E06AA003DAB3B /* SyncQueue.m in Sources */,
 				A7DEA1891790BD2D00EB1549 /* MenuViewController.m in Sources */,
+				DA5422CE1986C7A50006A1E6 /* URLHandler.m in Sources */,
 				A703B1B91838EBF20047DCC9 /* AKSegmentedControl.m in Sources */,
 				A7DEA18C17954C7400EB1549 /* ThemeHandler.m in Sources */,
 				A75545E3179B519200CE2F4E /* KPBlurry.m in Sources */,

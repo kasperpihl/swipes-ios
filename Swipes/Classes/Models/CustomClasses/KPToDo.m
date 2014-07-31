@@ -137,6 +137,7 @@
              [NOTIHANDLER updateLocalNotifications];
     [ANALYTICS heartbeat];
 }
+
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save{
     if(tags){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
@@ -149,6 +150,20 @@
         [ANALYTICS heartbeat];
     }
 }
+
++(NSArray *)findByTitle:(NSString *)title
+{
+    if (title) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title = %@", title];
+        NSArray* result = [KPToDo MR_findAllWithPredicate:predicate];
+        [ANALYTICS heartbeat];
+        if (result && (0 == result.count))
+            return nil;
+        return result;
+    }
+    return nil;
+}
+
 +(NSArray *)selectedTagsForToDos:(NSArray *)toDos{
     NSMutableArray *commonTags = [NSMutableArray array];
     NSMutableArray *common2Tags = [NSMutableArray array];

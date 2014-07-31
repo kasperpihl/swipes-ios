@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "AppDelegate.h"
 #import <Parse/Parse.h>
-#import "RootViewController.h"
-#import "CoreSyncHandler.h"
-#import "AnalyticsHandler.h"
+#import <Crashlytics/Crashlytics.h>
+#import <FacebookSDK/FBAppCall.h>
+#import <DropboxSDK/DropboxSDK.h>
+
 #import "AppsFlyerTracker.h"
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
@@ -18,17 +18,19 @@
 #import "LocalyticsSession.h"
 #import "LocalyticsAmpSession.h"
 
-#import <Crashlytics/Crashlytics.h>
-#import <FacebookSDK/FBAppCall.h>
-#import <DropboxSDK/DropboxSDK.h>
-
 #import "RMStore.h"
-#import "PaymentHandler.h"
 #import "NotificationHandler.h"
-
 #import "KeenClient.h"
 
 #import "ContactHandler.h"
+#import "PaymentHandler.h"
+#import "CoreSyncHandler.h"
+#import "AnalyticsHandler.h"
+#import "URLHandler.h"
+
+#import "RootViewController.h"
+
+#import "AppDelegate.h"
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -121,6 +123,7 @@
     
     return YES;
 }
+
 - (void)tagLaunchSource:(NSDictionary *)launchOptions
 {
     /*
@@ -213,6 +216,9 @@
             }
             canHandle = YES;
         }
+    }
+    if (!canHandle) {
+        canHandle = [[URLHandler sharedInstance] handleURL:url];
     }
     return canHandle;
 }
