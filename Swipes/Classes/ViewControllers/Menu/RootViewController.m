@@ -235,6 +235,17 @@ static RootViewController *sharedObject;
         NSString *message = @"Tasks: \r\n";
         for(KPToDo *toDo in tasks){
             message = [message stringByAppendingFormat:@"◯ %@\r\n",toDo.title];
+            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
+            NSArray *subtasks = [[toDo getSubtasks] sortedArrayUsingDescriptors:@[sortDescriptor]];
+            BOOL addedSubtasks = NO;
+            for( KPToDo *subtask in subtasks){
+                if(!subtask.completionDate){
+                    message = [message stringByAppendingFormat:@"   ◯ %@\r\n",subtask.title];
+                    addedSubtasks = YES;
+                }
+            }
+            if(addedSubtasks)
+                message = [message stringByAppendingString:@"\r\n"];
         }
         message = [message stringByAppendingString:@"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com"];
         [mailCont setMessageBody:message isHTML:NO];
