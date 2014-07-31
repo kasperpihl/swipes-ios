@@ -55,6 +55,12 @@ static SettingsHandler *sharedObject;
         case SettingNotifications:
             index = @"SettingNotifications";
             break;
+        case SettingDailyReminders:
+            index = @"SettingDailyReminders";
+            break;
+        case SettingWeeklyReminders:
+            index = @"SettingWeeklyReminders";
+            break;
         case SettingLocation:
             index = @"SettingLocation";
             break;
@@ -133,6 +139,10 @@ static SettingsHandler *sharedObject;
         case SettingWeekendStartTime:
             return [[NSDate date] dateAtHours:kDefWeekendStartTime minutes:0];
         case SettingNotifications:
+            return @YES;
+        case SettingDailyReminders:
+            return @YES;
+        case SettingWeeklyReminders:
             return @YES;
         case SettingLocation:
             return @NO;

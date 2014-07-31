@@ -111,6 +111,22 @@
     return shadowView;
 }
 
+- (UIView *)firstSuperviewMatchingPredicate:(NSPredicate *)predicate
+{
+    if ([predicate evaluateWithObject:self])
+    {
+        return self;
+    }
+    return [self.superview firstSuperviewMatchingPredicate:predicate];
+}
+
+- (UIView *)firstSuperviewOfClass:(Class)viewClass
+{
+    return [self firstSuperviewMatchingPredicate:[NSPredicate predicateWithBlock:^BOOL(UIView *superview, __unused id bindings) {
+        return [superview isKindOfClass:viewClass];
+    }]];
+}
+
 #ifdef DEBUG
 
 - (void)explainSubiews:(NSString *)prefix

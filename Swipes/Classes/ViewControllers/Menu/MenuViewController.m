@@ -16,6 +16,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "MenuButton.h"
 #import "SettingsHandler.h"
+#import "NotificationsViewController.h"
 #import "IntegrationsViewController.h"
 #import "SnoozesViewController.h"
 #import "AnalyticsHandler.h"
@@ -296,7 +297,9 @@
     KPMenuButtons button = [self buttonForTag:sender.tag];
     switch (button) {
         case KPMenuButtonNotifications:{
-            
+            NotificationsViewController *notifVC = [[NotificationsViewController alloc] init];
+            [self pushViewController:notifVC animated:YES];
+            break;
             BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
             UIColor *lampColor = hasNotificationsOn ? kLampOffColor : kLampOnColor;
             NSNumber *newSettingValue = hasNotificationsOn ? @NO : @YES;
@@ -589,8 +592,8 @@
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
         [button addGestureRecognizer:longPress];
     }
-    if(menuButton == KPMenuButtonNotifications || menuButton == KPMenuButtonLocation){
-        KPSettings setting = (menuButton == KPMenuButtonNotifications) ? SettingNotifications : SettingLocation;
+    if(menuButton == KPMenuButtonLocation){
+        KPSettings setting = SettingLocation;
         BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:setting] boolValue];
         UIColor *lampColor = hasNotificationsOn ? kLampOnColor : kLampOffColor;
         [button setLampColor:lampColor];

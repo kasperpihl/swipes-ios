@@ -13,6 +13,8 @@ typedef enum {
     SettingWeekendStart,
     SettingLaterToday,
     SettingNotifications,
+    SettingDailyReminders,
+    SettingWeeklyReminders,
     SettingLocation,
     SettingEvernoteSync,
     

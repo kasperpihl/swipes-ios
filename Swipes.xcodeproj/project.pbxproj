@@ -157,6 +157,7 @@
 		A792BB8B18AC3A5E000573E4 /* LocationResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A792BB8A18AC3A5E000573E4 /* LocationResultCell.m */; };
 		A7933049172AB63700F1505E /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933048172AB63700F1505E /* TodayViewController.m */; };
 		A7933056172B2BA100F1505E /* DoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933055172B2BA100F1505E /* DoneViewController.m */; };
+		A7A560B8198A9A3600C3D213 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A560B7198A9A3600C3D213 /* NotificationsViewController.m */; };
 		A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A976E6184119D6001C0A51 /* PaymentHandler.m */; };
 		A7AA7964194E0665003DAB3B /* ParentSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AA7963194E0665003DAB3B /* ParentSyncHandler.m */; };
 		A7AA7968194E067C003DAB3B /* EvernoteSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AA7967194E067C003DAB3B /* EvernoteSyncHandler.m */; };
@@ -467,6 +468,8 @@
 		A7933048172AB63700F1505E /* TodayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TodayViewController.m; path = Today/TodayViewController.m; sourceTree = "<group>"; };
 		A7933054172B2BA100F1505E /* DoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DoneViewController.h; path = Done/DoneViewController.h; sourceTree = "<group>"; };
 		A7933055172B2BA100F1505E /* DoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DoneViewController.m; path = Done/DoneViewController.m; sourceTree = "<group>"; };
+		A7A560B6198A9A3600C3D213 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationsViewController.h; path = Settings/NotificationsViewController.h; sourceTree = "<group>"; };
+		A7A560B7198A9A3600C3D213 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationsViewController.m; path = Settings/NotificationsViewController.m; sourceTree = "<group>"; };
 		A7A976E5184119D6001C0A51 /* PaymentHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentHandler.h; sourceTree = "<group>"; };
 		A7A976E6184119D6001C0A51 /* PaymentHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentHandler.m; sourceTree = "<group>"; };
 		A7AA7962194E0665003DAB3B /* ParentSyncHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParentSyncHandler.h; path = SyncHandlers/ParentSyncHandler.h; sourceTree = "<group>"; };
@@ -1154,8 +1157,6 @@
 				A7E2D94B17B4FE16007BDE00 /* Upgrade */,
 				A7E2D94517B3F258007BDE00 /* DayPickerSettingsCell.h */,
 				A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */,
-				A7FA8B1B17AF094D00134ED0 /* SnoozesViewController.h */,
-				A7FA8B1C17AF094D00134ED0 /* SnoozesViewController.m */,
 				A75236C717A2EC6B0030ED1E /* Walkthrough */,
 				A75545E0179B516500CE2F4E /* Overlays */,
 				A7090B6A175DF28100728A3A /* Login */,
@@ -1353,8 +1354,12 @@
 		A7D189C31965F45300AA7CD9 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				A7FA8B1B17AF094D00134ED0 /* SnoozesViewController.h */,
+				A7FA8B1C17AF094D00134ED0 /* SnoozesViewController.m */,
 				A7D189C41965F47000AA7CD9 /* IntegrationsViewController.h */,
 				A7D189C51965F47000AA7CD9 /* IntegrationsViewController.m */,
+				A7A560B6198A9A3600C3D213 /* NotificationsViewController.h */,
+				A7A560B7198A9A3600C3D213 /* NotificationsViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1698,6 +1703,7 @@
 				A71E9FC51951CE4B00FC9B0B /* NSString+Levenshtein.m in Sources */,
 				A7B9D39319066299001E1109 /* KPModal.m in Sources */,
 				A78128CC17294C56002226C8 /* KPSegmentedViewController.m in Sources */,
+				A7A560B8198A9A3600C3D213 /* NotificationsViewController.m in Sources */,
 				A7D06869190E654C00699B4E /* MMDrawerController.m in Sources */,
 				A78128FC17294C56002226C8 /* AppDelegate.m in Sources */,
 				A781290217294C56002226C8 /* main.m in Sources */,

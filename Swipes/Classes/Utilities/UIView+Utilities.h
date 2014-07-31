@@ -15,5 +15,8 @@
 - (void)makeInsetShadow;
 - (void)makeInsetShadowWithRadius:(float)radius Alpha:(float)alpha;
 - (void)makeInsetShadowWithRadius:(float)radius Color:(UIColor *)color Directions:(NSArray *)directions;
+- (UIView *)firstSuperviewOfClass:(Class)viewClass;
+#ifdef DEBUG
 - (void)explainSubviews;
+#endif
 @end
