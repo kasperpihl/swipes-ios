@@ -270,6 +270,9 @@
     filter.ascending = NO;
     [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kPaginator block:^(EDAMNoteList *list, NSError *error) {
         if(list){
+            if(list.notes.count == 0){
+                [[[UIAlertView alloc] initWithTitle:@"Couldn't find any notes with Checkmarks" message:@"Add them manually under each tasks instead" delegate:nil cancelButtonTitle:@"Got it!" otherButtonTitles: nil] show];
+            }
             self.noteList = list;
             [self.tableView reloadData];
         }

@@ -24,7 +24,6 @@ pod 'NSURL+QueryDictionary'
 post_install do |installer|
   installer.project.targets.each do |target|
     target.build_configurations.each do |config|
-        #      target.build_settings(config.name)['ARCHS'] = '$(ARCHS_STANDARD_32_BIT)'
       s = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS']
     if s==nil then s = [ '$(inherited)' ] end
     s.push('MR_ENABLE_ACTIVE_RECORD_LOGGING=0');
