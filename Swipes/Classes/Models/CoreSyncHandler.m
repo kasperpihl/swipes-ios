@@ -915,7 +915,8 @@ static CoreSyncHandler *sharedObject;
     [self saveContextForSynchronization:nil];
     NSArray *toDoArray = @[
                                @"Swipe right to complete",
-                               @"Swipe left to snooze for later"
+                               @"Swipe left to snooze for later",
+                               @"Access your tasks on web.swipesapp.com"
                           ];
     if([[EvernoteSession sharedSession] isEvernoteInstalled]){
         toDoArray = [toDoArray arrayByAddingObject:@"Open task to attach an Evernote"];
@@ -926,6 +927,9 @@ static CoreSyncHandler *sharedObject;
         BOOL priority = (i == 0);
         KPToDo *toDo = [KPToDo addItem:item priority:priority tags:nil save:NO];
         if(i <= 1)[KPToDo updateTags:@[@"work"] forToDos:@[toDo] remove:NO save:YES];
+        if ( i == 2 ) {
+            [KPToDo scheduleToDos:@[toDo] forDate:[[NSDate date] dateByAddingDays:1] save:NO];
+        }
     }
 
     [self saveContextForSynchronization:nil];
