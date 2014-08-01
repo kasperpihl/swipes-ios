@@ -23,6 +23,7 @@
 #import "UserHandler.h"
 #import "KPAccountAlert.h"
 #import "UIView+Utilities.h"
+#import "EvernoteIntegration.h"
 
 #import "CoreSyncHandler.h"
 #import "PlusAlertView.h"
@@ -429,14 +430,15 @@
             break;
         }
         case KPMenuButtonSync:{
-            CABasicAnimation *rotate =
-            [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
-            rotate.byValue = @(M_PI*2); // Change to - angle for counter clockwise rotation
+            CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+            rotate.byValue = @(M_PI * 2); // Change to - angle for counter clockwise rotation
             rotate.duration = 0.5;
+            [sender.iconLabel.layer addAnimation:rotate forKey:@"myRotationAnimation"];
             
-            [sender.iconLabel.layer addAnimation:rotate
-                                          forKey:@"myRotationAnimation"];
+            [[EvernoteIntegration sharedInstance] clearCaches]; // make sure Evernote caches are empty 
+            
             [KPCORE synchronizeForce:YES async:YES];
+            
             break;
         }
         case KPMenuButtonScheme:{
@@ -479,7 +481,8 @@
     }
 }
 
--(NSString *)titleForMenuButton:(KPMenuButtons)button{
+-(NSString *)titleForMenuButton:(KPMenuButtons)button
+{
     NSString *title;
     switch (button) {
         case KPMenuButtonNotifications:
@@ -518,7 +521,9 @@
     }
     return title;
 }
--(NSString *)stringForMenuButton:(KPMenuButtons)button highlighted:(BOOL)highlighted{
+
+-(NSString *)stringForMenuButton:(KPMenuButtons)button highlighted:(BOOL)highlighted
+{
     NSString *imageString;
     switch (button) {
         case KPMenuButtonNotifications:
@@ -568,8 +573,10 @@
     CGFloat y = floor((button - 1) / kVerticalGridNumber) * self.gridView.frame.size.width / kVerticalGridNumber + kGridButtonPadding;
     return CGRectMake(x, y, width, width);
 }
--(void)longPress:(UILongPressGestureRecognizer*)recognizer{
-    if(recognizer.state == UIGestureRecognizerStateBegan){
+
+-(void)longPress:(UILongPressGestureRecognizer*)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
         [UTILITY confirmBoxWithTitle:@"Hard sync" andMessage:@"This will send all data and can take some time" block:^(BOOL succeeded, NSError *error) {
             if(succeeded)
                 [KPCORE hardSync];
@@ -577,7 +584,8 @@
     }
 }
 
--(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton{
+-(UIButton*)buttonForMenuButton:(KPMenuButtons)menuButton
+{
     MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButton:menuButton] title:[self titleForMenuButton:menuButton]];
     button.iconLabel.titleLabel.font = iconFont(41);
     [button.iconLabel setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
@@ -626,10 +634,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-//    if (!_forbidLayout)
-//        [self renderSubviews];
-//    [self.view explainSubviews];
-    
+   
     CGFloat numberOfButtons = kHorizontalGridNumber * kVerticalGridNumber;
     NSInteger numberOfRows = kHorizontalGridNumber;
     self.view.backgroundColor = tcolor(BackgroundColor);

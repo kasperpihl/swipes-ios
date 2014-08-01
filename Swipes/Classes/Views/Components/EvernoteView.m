@@ -156,7 +156,6 @@
                                                      name:UIKeyboardWillHideNotification
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:UIDeviceOrientationDidChangeNotification  object:nil];
-        
     }
     return self;
 }
@@ -189,6 +188,7 @@
     CGRectSetCenterY(self.contentView, self.bounds.size.height/2);
     [UIView commitAnimations];
 }
+
 -(void)keyboardWillShow:(NSNotification*)notification{
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
@@ -227,10 +227,12 @@
     }];
 }
 
-- (IBAction)searchNoteStore:(id)sender
+- (void)searchNoteStore:(id)sender
 {
     if (kEnInt.isAuthenticated) {
         DLog(@"running search");
+        
+        __block NSString* searchBarText = _searchBar.text;
         
         if ([EvernoteIntegration isAPILimitReached]) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": [EvernoteIntegration APILimitReachedMessage], @"duration": @(3.5) } ];
@@ -242,8 +244,8 @@
         EDAMNoteFilter* filter = [EDAMNoteFilter new];
 
         // Added a better working search term: http://dev.evernote.com/doc/articles/search_grammar.php
-        if (_searchBar.text.length > 0){
-            NSArray *words = [_searchBar.text componentsSeparatedByString:@" "];
+        if (searchBarText.length > 0){
+            NSArray *words = [searchBarText componentsSeparatedByString:@" "];
             NSMutableString *searchTerm = [[NSMutableString alloc] init];
             for (NSString *word in words){
                 NSString *trimmedString = [word stringByTrimmingCharactersInSet:
@@ -257,7 +259,7 @@
         filter.order = NoteSortOrder_UPDATED;
         filter.ascending = NO;
         // setup additional flags
-        if (0 == _searchBar.text.length) { // remove this check if you want order to be always by UPDATED
+        if (0 == searchBarText.length) { // remove this check if you want order to be always by UPDATED
             filter.words = @"";
         }
         [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kSearchLimit block:^(EDAMNoteList *list, NSError *error) {
@@ -265,14 +267,10 @@
                 [EvernoteIntegration updateAPILimitIfNeeded:error];
             }
             if( list ){
-                for (EDAMNote* note in list.notes) {
-                    DLog(@"Last update: %@",[NSDate dateWithTimeIntervalSince1970:note.updated/1000]);
-                    DLog(@"Note title: %@, guid: %@", note.title, note.guid);
-                    /*if (!noteViewed) {
-                     noteViewed = YES;
-                     [[EvernoteNoteStore noteStore] viewNoteInEvernote:note];
-                     }*/
-                }
+//                for (EDAMNote* note in list.notes) {
+//                    DLog(@"Last update: %@",[NSDate dateWithTimeIntervalSince1970:note.updated/1000]);
+//                    DLog(@"Note title: %@, guid: %@", note.title, note.guid);
+//                }
                 _noteList = list;
                 //_limitSearch = (filter.order == NoteSortOrder_UPDATED);
                 [_tableView reloadData];

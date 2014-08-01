@@ -9,6 +9,12 @@
 #import "SettingsHandler.h"
 #import "EvernoteIntegration.h"
 
+// caches
+NSString* const kKeyData = @"data";
+NSString* const kKeyDate = @"date";
+NSTimeInterval const kSearchTimeout = 120;
+NSTimeInterval const kNoteTimeout = 120;
+
 int32_t const kPaginator = 100;
 NSInteger const kApiLimitReachedErrorCode = 19;
 NSString * const kSwipesTagName = @"swipes";
@@ -27,9 +33,15 @@ NSError * NewNSErrorFromException(NSException * exc) {
 }
 
 @interface EvernoteIntegration ()
+
 @property BOOL isAuthing;
+
 @end
-@implementation EvernoteIntegration
+
+@implementation EvernoteIntegration {
+    NSMutableDictionary* _searchCache;
+    NSMutableDictionary* _noteCache;
+}
 
 + (instancetype)sharedInstance
 {
@@ -93,10 +105,13 @@ NSError * NewNSErrorFromException(NSException * exc) {
 {
     self = [super init];
     if (self) {
-         self.autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
-         self.enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
-         //NSDictionary *currentIntegration = (NSDictionary*)[kSettings valueForSetting:IntegrationEvernote];
-         //[self loadEvernoteIntegrationObject:currentIntegration];
+        _searchCache = [NSMutableDictionary new];
+        _noteCache = [NSMutableDictionary new];
+        self.autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
+        self.enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
+
+        //NSDictionary *currentIntegration = (NSDictionary*)[kSettings valueForSetting:IntegrationEvernote];
+        //[self loadEvernoteIntegrationObject:currentIntegration];
     }
     return self;
 }
@@ -136,6 +151,8 @@ NSError * NewNSErrorFromException(NSException * exc) {
         [[EvernoteNoteStore noteStore] updateNote:note success:^(EDAMNote *note) {
             if( block )
                 block( note, nil );
+            if (note.guidIsSet)
+                [self addNote:note forGuid:note.guid];
         } failure:^(NSError *error) {
             [self handleError:error withType:@"Evernote Update Note Error"];
             if( block)
@@ -152,11 +169,22 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (void)fetchNoteWithGuid:(NSString *)guid block:(NoteBlock)block
 {
+    // try to get it from cache
+    __block EDAMNote *cachedNote = [self noteForGuid:guid];
+    if (cachedNote) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            block(cachedNote, nil);
+        });
+        return;
+    }
+    
     @try {
         [[EvernoteNoteStore noteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
             
             if( block )
                 block( note , nil );
+            
+            [self addNote:note forGuid:guid];
             
         } failure:^(NSError *error) {
             [self handleError:error withType:@"Evernote Get Note Error"];
@@ -174,9 +202,20 @@ NSError * NewNSErrorFromException(NSException * exc) {
 }
 
 - (void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block {
+    
+    // try to get it from cache
+    __block EDAMNoteList *cachedList = [self searchListForText:filter.words ? filter.words : @""];
+    if (cachedList) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            block(cachedList, nil);
+        });
+        return;
+    }
+    
     EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
     @try {
         [noteStore findNotesWithFilter:filter offset:0 maxNotes:kPaginator success:^(EDAMNoteList *list) {
+            [self addSearchList:list forText:filter.words ? filter.words : @""];
             block(list, nil);
         } failure:^(NSError *error) {
             [self handleError:error withType:@"Evernote Fetch Notes with Filter Error"];
@@ -219,6 +258,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)logout
 {
     [[EvernoteSession sharedSession] logout];
+    [self clearCaches];
 }
 
 - (void)getSwipesTagGuidBlock:(StringBlock)block
@@ -285,6 +325,55 @@ NSError * NewNSErrorFromException(NSException * exc) {
     return NO;
 }
 
+#pragma mark - Caches
 
+- (void)clearCaches
+{
+    [_searchCache removeAllObjects];
+    [_noteCache removeAllObjects];
+}
+
+- (EDAMNoteList *)searchListForText:(NSString *)text
+{
+    // purge old entries
+    NSDate* now = [NSDate date];
+    for (NSString* key in [_searchCache allKeys]) {
+        NSDictionary* data = _searchCache[key];
+        if (0 < [now timeIntervalSinceDate:data[kKeyDate]]) {
+            [_searchCache removeObjectForKey:key];
+        }
+    }
+    
+    return _searchCache[text][kKeyData];
+}
+
+- (void)addSearchList:(EDAMNoteList *)list forText:(NSString *)text
+{
+    _searchCache[text] = @{kKeyData: list, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kSearchTimeout]};
+}
+
+- (EDAMNote *)noteForGuid:(NSString *)guid
+{
+    // purge old entries
+    NSDate* now = [NSDate date];
+    for (NSString* key in [_noteCache allKeys]) {
+        NSDictionary* data = _noteCache[key];
+        if (0 < [now timeIntervalSinceDate:data[kKeyDate]]) {
+            [_noteCache removeObjectForKey:key];
+        }
+    }
+    
+    return _noteCache[guid][kKeyData];
+}
+
+- (void)addNote:(EDAMNote *)note forGuid:(NSString *)guid
+{
+    _noteCache[guid] = @{kKeyData: note, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kNoteTimeout]};
+}
+
+- (void)removeNoteForGuid:(NSString *)guid
+{
+    [_noteCache removeObjectForKey:guid];
+}
 
 @end

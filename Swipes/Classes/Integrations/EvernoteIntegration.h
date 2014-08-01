@@ -38,5 +38,6 @@ extern const int MONNSExceptionEncounteredErrorCode;
 - (void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block;
 
 - (void)logout;
+- (void)clearCaches;
 
 @end
