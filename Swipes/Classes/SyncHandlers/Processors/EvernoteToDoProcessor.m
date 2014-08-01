@@ -240,11 +240,25 @@ static NSSet* g_startEndElements;
     return NO;
 }
 
+- (NSString *)xmlEscape:(NSString *)s
+{
+    NSMutableString* str = s.mutableCopy;
+    
+    [str replaceOccurrencesOfString:@"&"  withString:@"&amp;"  options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+    [str replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+    [str replaceOccurrencesOfString:@"'"  withString:@"&#x27;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+    [str replaceOccurrencesOfString:@">"  withString:@"&gt;"   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+    [str replaceOccurrencesOfString:@"<"  withString:@"&lt;"   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+    
+    return str;
+}
+
 - (NSUInteger)newToDoPosAtTheBeginning
 {
-    NSRange div = [self.updatedContent rangeOfString:@"<div"];
-    if (NSNotFound == div.location) {
-        return [self.updatedContent rangeOfString:@"</en-note>"].location;
+    NSRange div = [self.updatedContent rangeOfString:@"<en-note"];
+    if (NSNotFound != div.location) {
+        NSUInteger loc = [self.updatedContent rangeOfString:@">" options:NSLiteralSearch range:NSMakeRange(div.location, self.updatedContent.length - div.location - 1)].location;
+        return (NSNotFound != loc) ? loc + 1 : loc;
     }
     return div.location;
 }
@@ -277,19 +291,6 @@ static NSSet* g_startEndElements;
     else {
         return [self newToDoPosAtTheBeginning];
     }
-}
-
-- (NSString *)xmlEscape:(NSString *)s
-{
-    NSMutableString* str = s.mutableCopy;
-    
-    [str replaceOccurrencesOfString:@"&"  withString:@"&amp;"  options:NSLiteralSearch range:NSMakeRange(0, [str length])];
-    [str replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
-    [str replaceOccurrencesOfString:@"'"  withString:@"&#x27;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
-    [str replaceOccurrencesOfString:@">"  withString:@"&gt;"   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
-    [str replaceOccurrencesOfString:@"<"  withString:@"&lt;"   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
-    
-    return str;
 }
 
 - (BOOL)addToDoWithTitle:(NSString *)title
