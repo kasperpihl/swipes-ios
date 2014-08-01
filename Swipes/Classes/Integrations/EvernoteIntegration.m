@@ -234,13 +234,15 @@ NSError * NewNSErrorFromException(NSException * exc) {
     return [[EvernoteSession sharedSession] isAuthenticated];
 }
 
-- (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block{
+- (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block
+{
     @try {
         EvernoteSession *session = [EvernoteSession sharedSession];
         [session authenticateWithViewController:viewController completionHandler:^(NSError *error) {
-            if(error)
+            if(error) {
                 [self handleError:error withType:@"Evernote Auth Error"];
-            else{
+            }
+            else {
                 [self setEnableSync:YES];
                 [self setAutoFindFromTag:YES];
             }
@@ -263,6 +265,11 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (void)getSwipesTagGuidBlock:(StringBlock)block
 {
+    if (!self.isAuthenticated) {
+        block(nil, [NSError errorWithDomain:@"Evernote not authenticated" code:602 userInfo:nil]);
+        return;
+    }
+    
     @try {
         __block NSString *swipesTagGuid;
         [[EvernoteNoteStore noteStore] listTagsWithSuccess:^(NSArray *tags) {
