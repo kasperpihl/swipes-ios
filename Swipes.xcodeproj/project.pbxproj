@@ -177,8 +177,6 @@
 		A7D0686A190E654C00699B4E /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D06863190E654C00699B4E /* MMDrawerVisualState.m */; };
 		A7D0686B190E654C00699B4E /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D06865190E654C00699B4E /* UIViewController+MMDrawerController.m */; };
 		A7D0686C190E654C00699B4E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A7D06866190E654C00699B4E /* README.md */; };
-		A7D0D3BF1904FD1000ABA1FF /* selected_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3BD1904FD1000ABA1FF /* selected_circle.png */; };
-		A7D0D3C01904FD1000ABA1FF /* selected_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3BE1904FD1000ABA1FF /* selected_circle@2x.png */; };
 		A7D0D3C319051BA000ABA1FF /* Nexa-Black-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3C119051BA000ABA1FF /* Nexa-Black-Italic.ttf */; };
 		A7D0D3C419051BA000ABA1FF /* Nexa-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3C219051BA000ABA1FF /* Nexa-Bold.ttf */; };
 		A7D189C61965F47000AA7CD9 /* IntegrationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D189C51965F47000AA7CD9 /* IntegrationsViewController.m */; };
@@ -505,8 +503,6 @@
 		A7D06864190E654C00699B4E /* UIViewController+MMDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MMDrawerController.h"; sourceTree = "<group>"; };
 		A7D06865190E654C00699B4E /* UIViewController+MMDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+MMDrawerController.m"; sourceTree = "<group>"; };
 		A7D06866190E654C00699B4E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		A7D0D3BD1904FD1000ABA1FF /* selected_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = selected_circle.png; sourceTree = "<group>"; };
-		A7D0D3BE1904FD1000ABA1FF /* selected_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected_circle@2x.png"; sourceTree = "<group>"; };
 		A7D0D3C119051BA000ABA1FF /* Nexa-Black-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nexa-Black-Italic.ttf"; path = "Font/Nexa-Black-Italic.ttf"; sourceTree = "<group>"; };
 		A7D0D3C219051BA000ABA1FF /* Nexa-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nexa-Bold.ttf"; path = "Font/Nexa-Bold.ttf"; sourceTree = "<group>"; };
 		A7D189C41965F47000AA7CD9 /* IntegrationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationsViewController.h; path = Settings/IntegrationsViewController.h; sourceTree = "<group>"; };
@@ -1207,7 +1203,6 @@
 			isa = PBXGroup;
 			children = (
 				A74FB85D18FFBC4D00F25157 /* launch-screen */,
-				A7DAC63C181A7CF700B8C079 /* Buttons */,
 				A75236CF17A335680030ED1E /* Walkthrough */,
 				A79DB41B17358C33007A48E2 /* Backgrounds */,
 				DACD542018A1ACFC00C378DF /* Dropbox */,
@@ -1361,15 +1356,6 @@
 				A7A560B7198A9A3600C3D213 /* NotificationsViewController.m */,
 			);
 			name = Settings;
-			sourceTree = "<group>";
-		};
-		A7DAC63C181A7CF700B8C079 /* Buttons */ = {
-			isa = PBXGroup;
-			children = (
-				A7D0D3BD1904FD1000ABA1FF /* selected_circle.png */,
-				A7D0D3BE1904FD1000ABA1FF /* selected_circle@2x.png */,
-			);
-			path = Buttons;
 			sourceTree = "<group>";
 		};
 		A7E2D94B17B4FE16007BDE00 /* Upgrade */ = {
@@ -1551,7 +1537,6 @@
 				DACD544D18A1ACFC00C378DF /* package.png in Resources */,
 				DACD545118A1ACFC00C378DF /* page_white_c.png in Resources */,
 				A7D0D3C419051BA000ABA1FF /* Nexa-Bold.ttf in Resources */,
-				A7D0D3C01904FD1000ABA1FF /* selected_circle@2x.png in Resources */,
 				A772B14219671D9F00C07909 /* swipesandevernote@2x.png in Resources */,
 				A7897D3D198C15A40047F9D9 /* VarelaRound-Regular.ttf in Resources */,
 				DACD546218A1ACFC00C378DF /* page_white_zip.png in Resources */,
@@ -1570,7 +1555,6 @@
 				DACD544E18A1ACFC00C378DF /* page_white.png in Resources */,
 				DACD546118A1ACFC00C378DF /* page_white_visualstudio.png in Resources */,
 				A7F522AC197D7C76008B6147 /* swipesevernotetag.png in Resources */,
-				A7D0D3BF1904FD1000ABA1FF /* selected_circle.png in Resources */,
 				DACD545C18A1ACFC00C378DF /* page_white_picture.png in Resources */,
 				DACD544A18A1ACFC00C378DF /* folder_user.png in Resources */,
 				DACD546418A1ACFC00C378DF /* word.png in Resources */,
