@@ -131,8 +131,6 @@
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
 		A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CD116EB5884004D95E5 /* CoreGraphics.framework */; };
-		A777CEAF1983A8740034B977 /* en-monoline.png in Resources */ = {isa = PBXBuildFile; fileRef = A777CEAD1983A8740034B977 /* en-monoline.png */; };
-		A777CEB01983A8740034B977 /* en-monoline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A777CEAE1983A8740034B977 /* en-monoline@2x.png */; };
 		A77D34C818E098C800095F1E /* HintHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34C718E098C800095F1E /* HintHandler.m */; };
 		A77D34D018E31E1200095F1E /* EMHint.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34CB18E31E1200095F1E /* EMHint.m */; };
 		A77D34D118E31E1200095F1E /* EMHintsView.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34CD18E31E1200095F1E /* EMHintsView.m */; };
@@ -149,6 +147,7 @@
 		A78128D317294C56002226C8 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A781287F17294C56002226C8 /* MainStoryboard.storyboard */; };
 		A78128FC17294C56002226C8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A78128B417294C56002226C8 /* AppDelegate.m */; };
 		A781290217294C56002226C8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A78128BA17294C56002226C8 /* main.m */; };
+		A7897D3D198C15A40047F9D9 /* VarelaRound-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7897D3C198C15A40047F9D9 /* VarelaRound-Regular.ttf */; };
 		A789B3F917D79BFB00C25B73 /* KPOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = A789B3F817D79BFB00C25B73 /* KPOverlay.m */; };
 		A78D7A8817F4B27200AD38B1 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = A78D7A8717F4B27200AD38B1 /* Global.m */; };
 		A78F391416F7D5BA00A8C78D /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78F391316F7D5BA00A8C78D /* AddressBook.framework */; };
@@ -419,8 +418,6 @@
 		A7778CCF16EB5884004D95E5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A7778CD116EB5884004D95E5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A7778CF116EB5884004D95E5 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		A777CEAD1983A8740034B977 /* en-monoline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "en-monoline.png"; sourceTree = "<group>"; };
-		A777CEAE1983A8740034B977 /* en-monoline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "en-monoline@2x.png"; sourceTree = "<group>"; };
 		A77D34C618E098C800095F1E /* HintHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HintHandler.h; sourceTree = "<group>"; };
 		A77D34C718E098C800095F1E /* HintHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HintHandler.m; sourceTree = "<group>"; };
 		A77D34CA18E31E1200095F1E /* EMHint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMHint.h; sourceTree = "<group>"; };
@@ -454,6 +451,7 @@
 		A78128BA17294C56002226C8 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A78128BB17294C56002226C8 /* Swipes-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Swipes-Info.plist"; sourceTree = "<group>"; };
 		A78128BC17294C56002226C8 /* Swipes-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Swipes-Prefix.pch"; sourceTree = "<group>"; };
+		A7897D3C198C15A40047F9D9 /* VarelaRound-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "VarelaRound-Regular.ttf"; path = "Font/VarelaRound-Regular.ttf"; sourceTree = "<group>"; };
 		A789B3F717D79BFB00C25B73 /* KPOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPOverlay.h; path = KPBlurry/KPOverlay.h; sourceTree = "<group>"; };
 		A789B3F817D79BFB00C25B73 /* KPOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPOverlay.m; path = KPBlurry/KPOverlay.m; sourceTree = "<group>"; };
 		A78D7A8617F4B27200AD38B1 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
@@ -965,6 +963,7 @@
 				A717BF22176115CD004791BF /* ProximaNova-Light.ttf */,
 				A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */,
 				A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */,
+				A7897D3C198C15A40047F9D9 /* VarelaRound-Regular.ttf */,
 			);
 			name = Font;
 			sourceTree = "<group>";
@@ -1367,8 +1366,6 @@
 		A7DAC63C181A7CF700B8C079 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
-				A777CEAD1983A8740034B977 /* en-monoline.png */,
-				A777CEAE1983A8740034B977 /* en-monoline@2x.png */,
 				A7D0D3BD1904FD1000ABA1FF /* selected_circle.png */,
 				A7D0D3BE1904FD1000ABA1FF /* selected_circle@2x.png */,
 			);
@@ -1556,6 +1553,7 @@
 				A7D0D3C419051BA000ABA1FF /* Nexa-Bold.ttf in Resources */,
 				A7D0D3C01904FD1000ABA1FF /* selected_circle@2x.png in Resources */,
 				A772B14219671D9F00C07909 /* swipesandevernote@2x.png in Resources */,
+				A7897D3D198C15A40047F9D9 /* VarelaRound-Regular.ttf in Resources */,
 				DACD546218A1ACFC00C378DF /* page_white_zip.png in Resources */,
 				DA310FA7188F3F26003C8FA4 /* Assets in Resources */,
 				DACD544918A1ACFC00C378DF /* folder_star.png in Resources */,
@@ -1574,7 +1572,6 @@
 				A7F522AC197D7C76008B6147 /* swipesevernotetag.png in Resources */,
 				A7D0D3BF1904FD1000ABA1FF /* selected_circle.png in Resources */,
 				DACD545C18A1ACFC00C378DF /* page_white_picture.png in Resources */,
-				A777CEB01983A8740034B977 /* en-monoline@2x.png in Resources */,
 				DACD544A18A1ACFC00C378DF /* folder_user.png in Resources */,
 				DACD546418A1ACFC00C378DF /* word.png in Resources */,
 				A7BB65CB189BF19600BE7183 /* swipes-notification.aif in Resources */,
@@ -1593,7 +1590,6 @@
 				A75236EC17A335680030ED1E /* wt_menu_expain.png in Resources */,
 				DACD546018A1ACFC00C378DF /* page_white_vector.png in Resources */,
 				DACD545D18A1ACFC00C378DF /* page_white_ruby.png in Resources */,
-				A777CEAF1983A8740034B977 /* en-monoline.png in Resources */,
 				A741EC4F18354726000F9F93 /* default-background.jpg in Resources */,
 				A75236ED17A335680030ED1E /* wt_menu_expain@2x.png in Resources */,
 				A75236FD17A349340030ED1E /* walkthrough_phone_background.png in Resources */,

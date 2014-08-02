@@ -20,13 +20,14 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CKCalendarView.h"
 #import "NSDate-Utilities.h"
+#import "UIColor+Utilities.h"
 #import "UtilityClass.h"
 #import "SlowHighlightIcon.h"
 #define BUTTON_MARGIN 4
 #define TOP_HEIGHT 70
 #define MONTH_BUTTON_WIDTH 60
 #define DAYS_HEADER_HEIGHT 20
-#define DEFAULT_CELL_WIDTH 45
+#define DEFAULT_CELL_WIDTH 43
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -61,8 +62,8 @@
 - (id)init {
     self = [super init];
     if (self) {
-        self.textColor = tcolor(TextColor);
-        self.unavailableColor = retColor(color(80,83,88,1),color(170,173,178,1));
+        self.textColor = tcolorF(TextColor,ThemeDark);
+        self.unavailableColor = color(80,83,88,1); //,color(170,173,178,1)
         self.selectedTextColor = gray(255,1);
         self.highlightedTextColor = gray(255, 1);
         
@@ -137,10 +138,11 @@
     [self addSubview:titleButton];
     self.titleButton = titleButton;
 
+    UIColor *buttonColor = tcolor(LaterColor);
     SlowHighlightIcon *prevButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
     prevButton.titleLabel.font = iconFont(17);
-    [prevButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-    [prevButton setTitleColor:alpha(tcolor(TextColor), .2) forState:UIControlStateDisabled];
+    [prevButton setTitleColor:buttonColor forState:UIControlStateNormal];
+    [prevButton setTitleColor:alpha(buttonColor, .2) forState:UIControlStateDisabled];
     [prevButton setTitle:iconString(@"rightArrow") forState:UIControlStateNormal];
     [prevButton setTitle:iconString(@"rightArrowFull") forState:UIControlStateHighlighted];
     prevButton.transform = CGAffineTransformMakeRotation(2*M_PI/2);
@@ -151,7 +153,7 @@
 
     SlowHighlightIcon *nextButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
     nextButton.titleLabel.font = iconFont(17);
-    [nextButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [nextButton setTitleColor:buttonColor forState:UIControlStateNormal];
     [nextButton setTitle:iconString(@"rightArrow") forState:UIControlStateNormal];
     [nextButton setTitle:iconString(@"rightArrowFull") forState:UIControlStateHighlighted];
     nextButton.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
@@ -314,7 +316,10 @@
     NSDate *date = button.date;
     button.enabled = YES;
     button.selected = NO;
-    UIImage *highlightedImage = [UIImage imageNamed:@"selected_circle"];//[UtilityClass imageWithName: scaledToSize:CGSizeMake(kSelectedImageSize, kSelectedImageSize)];
+    NSInteger cornerRadius = self.cellWidth/2;
+    button.layer.cornerRadius = cornerRadius;
+    button.layer.masksToBounds = YES;
+    UIImage *highlightedImage = [tcolor(LaterColor) image];//[UIImage imageNamed:@"selected_circle"];//[UtilityClass imageWithName: scaledToSize:CGSizeMake(kSelectedImageSize, kSelectedImageSize)];
     item.titleFont = KP_REGULAR(20);
     if([date isTypicallyWeekend]) item.titleFont = KP_BOLD(20);
     

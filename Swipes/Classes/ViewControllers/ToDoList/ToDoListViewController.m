@@ -402,7 +402,7 @@
                 if(!hasReturned)
                     [self returnSelectedRowsAndBounce:YES];
             };
-            BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.5);
+            BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark),0.1);
             [BLURRY showView:popup inViewController:self.parent];
             return;
         }

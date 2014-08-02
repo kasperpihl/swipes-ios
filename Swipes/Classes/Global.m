@@ -16,6 +16,11 @@ static Global *sharedObject;
     }
     return sharedObject;
 }
+-(CGFloat)fontMultiplier{
+    if( !_fontMultiplier )
+        _fontMultiplier = 1;
+    return _fontMultiplier;
+}
 +(NSString *)iconStringForString:(NSString *)iconString{
     if(OSVER >= 7)
         return iconString;

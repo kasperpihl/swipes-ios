@@ -13,7 +13,7 @@
 #define iconLabel(key,iconHeight) [Global iconLabelWithString:key height:iconHeight]
 #define iconFont(fontSize) [UIFont fontWithName:@"swipes" size:fontSize]
 @interface Global : NSObject
-
+@property (nonatomic) CGFloat fontMultiplier;
 + (Global *)sharedInstance;
 + (NSInteger)OSVersion;
 + (BOOL)is24Hour;

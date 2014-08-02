@@ -27,7 +27,7 @@
 
 #import "LocationSearchView.h"
 
-#define POPUP_WIDTH 315
+#define POPUP_WIDTH 308 
 #define CONTENT_VIEW_TAG 1
 
 
@@ -35,8 +35,6 @@
 #define kSepHorTag 203
 #define kSepVerTag 204
 
-#define SEPERATOR_COLOR_LIGHT alpha(tcolor(TextColor),0.5)
-#define SEPERATOR_MARGIN 0.02//0.02
 
 
 #define SCHEUDLE_IMAGE_SIZE 36
@@ -48,14 +46,14 @@
 
 #define GRID_NUMBER 3
 #define BUTTON_PADDING 0
-#define CONTENT_VIEW_SIZE 310
+#define CONTENT_VIEW_SIZE POPUP_WIDTH
 
 #define kToolbarHeight valForScreen(50,60)
 #define kToolbarPadding 10
 
 #define kTimePickerDuration 0.20f
 
-#define kHelpLevelDistance 8
+#define kHelpLevelDistance 28
 
 #define kSepExtraOut 5
 typedef enum {
@@ -72,7 +70,6 @@ typedef enum {
 @property (nonatomic) BOOL isChoosingLocation;
 @property (nonatomic) BOOL hasReturned;
 @property (nonatomic) NSDate *pickingDate;
-@property (nonatomic) IBOutletCollection(UIView) NSArray *seperators;
 @property (nonatomic) IBOutletCollection(UIButton) NSMutableArray *scheduleButtons;
 @property (nonatomic,strong) CKCalendarView *calendarView;
 @property (nonatomic,strong) LocationSearchView *locationView;
@@ -238,7 +235,6 @@ typedef enum {
     KPScheduleButtons thisButton = [self buttonForTag:sender.tag];
     if(thisButton == KPScheduleButtonSpecificTime) [self pressedSpecific:self];
     else if(thisButton == KPScheduleButtonLocation) {
-        self.helpLabel.hidden = YES;
         [self pressedLocation:self];
     }
     else if(thisButton != KPScheduleButtonCancel){
@@ -257,6 +253,11 @@ typedef enum {
     if(button >= 7 && button <= 9) y = self.contentView.frame.size.height + scheduleButton.frame.size.height + kSepExtraOut;
     return CGRectMake(x, y, scheduleButton.frame.size.width, scheduleButton.frame.size.height);
 }
+
+-(void)positionHelpLabelForHeight:(CGFloat)height{
+    CGRectSetCenterY(self.helpLabel, self.center.y + height/2 + kHelpLevelDistance);
+}
+
 -(void)pressedLocation:(id)sender{
     if(!self.isChoosingLocation){
         StartLocationResult result = [NOTIHANDLER startLocationServices];
@@ -284,6 +285,7 @@ typedef enum {
         CGFloat delay = buttonDuration;
         [self animateScheduleButtonsShow:NO duration:buttonDuration];
         [UIView animateWithDuration:scaleDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.helpLabel.alpha = 0;
             self.contentView.transform = CGAffineTransformMakeScale(1.0, scaling);
         } completion:^(BOOL finished) {
             self.contentView.transform = CGAffineTransformIdentity;
@@ -324,6 +326,7 @@ typedef enum {
         }];
         [UIView animateWithDuration:scaleDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
             self.contentView.transform = CGAffineTransformMakeScale(1.0, scaling);
+            self.helpLabel.alpha = 1;
         } completion:^(BOOL finished) {
             self.contentView.transform = CGAffineTransformIdentity;
             CGRectSetHeight(self.contentView, POPUP_WIDTH);
@@ -357,12 +360,14 @@ typedef enum {
         CGFloat delay = buttonDuration;
         [self animateScheduleButtonsShow:NO duration:buttonDuration];
         [UIView animateWithDuration:scaleDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
+            [self positionHelpLabelForHeight:contentHeight];
             self.contentView.transform = CGAffineTransformMakeScale(1.0, scaling);
         } completion:^(BOOL finished) {
             self.contentView.transform = CGAffineTransformIdentity;
             CGRectSetHeight(self.contentView, contentHeight);
             self.contentView.center = self.center;
             [UIView animateWithDuration:calendarDuration animations:^{
+                
                 calendarImageView.alpha = 1;
                 self.toolbar.alpha = 1;
             } completion:^(BOOL finished) {
@@ -391,6 +396,7 @@ typedef enum {
             self.toolbar.alpha = 1;
         }];
         [UIView animateWithDuration:scaleDuration delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
+            [self positionHelpLabelForHeight:POPUP_WIDTH];
             self.contentView.transform = CGAffineTransformMakeScale(1.0, scaling);
         } completion:^(BOOL finished) {
             self.contentView.transform = CGAffineTransformIdentity;
@@ -405,9 +411,6 @@ typedef enum {
         for (UIButton *button in self.scheduleButtons) {
             button.alpha = show ? 1 : 0;
         }
-        for(UIView *seperator in self.seperators){
-            seperator.alpha = show ? 1 : 0;
-        }
     }];
 }
 
@@ -420,6 +423,7 @@ typedef enum {
     
     if(self.isPickingDate){
         CGRectSetHeight(self.contentView, frame.size.height + kToolbarHeight);
+        [self positionHelpLabelForHeight:self.contentView.frame.size.height];
         //self.contentView.center = self.center;
     }
 }
@@ -430,14 +434,6 @@ typedef enum {
         else if(self.isChoosingLocation) [self pressedLocation:self];
     }
     if(item == 1) [self returnState:KPScheduleButtonSpecificTime date:self.calendarView.selectedDate location:nil];
-}
-
--(UIView*)seperatorWithSize:(CGFloat)size vertical:(BOOL)vertical{
-    CGFloat width = (vertical) ? SEPERATOR_WIDTH : size;
-    CGFloat height = (vertical) ? size : SEPERATOR_WIDTH;
-    UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
-    seperator.backgroundColor = SEPERATOR_COLOR_LIGHT;
-    return seperator;
 }
 
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
@@ -559,11 +555,12 @@ typedef enum {
 
 -(UIButton*)buttonForScheduleButton:(KPScheduleButtons)scheduleButton title:(NSString *)title{
     MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButtonNumber:scheduleButton] title:title];
-    button.iconLabel.titleLabel.font = iconFont(43);
-    [button.iconLabel setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    button.iconLabel.titleLabel.font = iconFont(41);
+    //tcolor(TextColor)
+    [button.iconLabel setTitleColor:tcolor(LaterColor) forState:UIControlStateNormal];
     [button.iconLabel setTitle:[self iconStringForScheduleButton:scheduleButton highlighted:NO] forState:UIControlStateNormal];
     [button.iconLabel setTitle:[self iconStringForScheduleButton:scheduleButton highlighted:YES] forState:UIControlStateHighlighted];
-    [button setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [button setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
     button.tag = [self tagForButton:scheduleButton];
     //[button setBackgroundImage:[POPUP_SELECTED image] forState:UIControlStateHighlighted];
     [button addTarget:self action:@selector(pressedScheduleButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -657,20 +654,20 @@ typedef enum {
 
 -(void)addPickerView{
     //UIColor *weekdayColor = [[tcolor(SearchDrawerBackground) getColorSaturatedWithPercentage:-0.5] getColorBrightenedWithPercentage:0.5];
-    self.calendarView = [[CKCalendarView alloc] initWithFrame:CGRectMake(0, 0, 315, 315)];
+    self.calendarView = [[CKCalendarView alloc] initWithFrame:CGRectMake(0, 0, CONTENT_VIEW_SIZE, CONTENT_VIEW_SIZE)];
     self.calendarView.onlyShowCurrentMonth = NO;
     self.calendarView.hidden = YES;
     self.calendarView.delegate = self;
     self.calendarView.backgroundColor = CLEAR;
     [self.calendarView selectDate:[NSDate date] makeVisible:YES];
-    self.calendarView.titleColor = tcolor(TextColor);
-    self.calendarView.dayOfWeekTextColor = tcolor(TextColor);
+    self.calendarView.titleColor = tcolorF(TextColor,ThemeDark);
+    self.calendarView.dayOfWeekTextColor = tcolor(LaterColor);//tcolorF(TextColor,ThemeDark);
     self.calendarView.adaptHeightToNumberOfWeeksInMonth = YES;
     
     self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-kToolbarHeight, self.contentView.frame.size.width, kToolbarHeight-kToolbarPadding) items:nil delegate:self];
     self.toolbar.hidden = YES;
     self.toolbar.font = iconFont(41);
-    self.toolbar.titleColor = tcolor(TextColor);
+    self.toolbar.titleColor = tcolor(LaterColor); //tcolorF(TextColor,ThemeDark);
     self.toolbar.titleHighlightString = @"Full";
     self.toolbar.items = @[@"roundBack",@"roundConfirm"];
     self.toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
@@ -693,7 +690,7 @@ typedef enum {
         UILabel *helpLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 20)];
         helpLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         helpLabel.backgroundColor = CLEAR;
-        helpLabel.textColor = tcolorF(BackgroundColor,ThemeDark);
+        helpLabel.textColor = alpha(tcolorF(SubTextColor,ThemeLight),0.8);
         helpLabel.textAlignment = NSTextAlignmentCenter;
         helpLabel.text = @"Hold down to adjust time";
         helpLabel.font = KP_REGULAR(16);
@@ -704,25 +701,11 @@ typedef enum {
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH)];
         contentView.autoresizesSubviews = YES;
         contentView.center = self.center;
-        CGRectSetY(self.helpLabel, CGRectGetMinY(contentView.frame)-CGRectGetHeight(helpLabel.frame)-kHelpLevelDistance);
-        contentView.backgroundColor = tcolor(BackgroundColor);
+        
+        contentView.backgroundColor = tcolorF(BackgroundColor,ThemeDark);
         contentView.layer.cornerRadius = 10;
         contentView.layer.masksToBounds = YES;
         contentView.tag = CONTENT_VIEW_TAG;
-        NSMutableArray *seperatorArray = [NSMutableArray array];
-        for(NSInteger i = 1 ; i < GRID_NUMBER ; i++){
-            UIView *verticalSeperatorView = [self seperatorWithSize:CONTENT_VIEW_SIZE*(1-(SEPERATOR_MARGIN*2)) vertical:YES];
-            verticalSeperatorView.tag = kSepVerTag;
-            UIView *horizontalSeperatorView = [self seperatorWithSize:CONTENT_VIEW_SIZE*(1-(SEPERATOR_MARGIN*2)) vertical:NO];
-            horizontalSeperatorView.tag = kSepHorTag;
-            verticalSeperatorView.frame = CGRectSetPos(verticalSeperatorView.frame, CONTENT_VIEW_SIZE/GRID_NUMBER*i,CONTENT_VIEW_SIZE*SEPERATOR_MARGIN);
-            horizontalSeperatorView.frame = CGRectSetPos(horizontalSeperatorView.frame,CONTENT_VIEW_SIZE*SEPERATOR_MARGIN, CONTENT_VIEW_SIZE/GRID_NUMBER*i);
-            [contentView addSubview:verticalSeperatorView];
-            [contentView addSubview:horizontalSeperatorView];
-            [seperatorArray addObject:verticalSeperatorView];
-            [seperatorArray addObject:horizontalSeperatorView];
-        }
-        self.seperators = [seperatorArray copy];
         /* Schedule buttons */
         NSDate *laterToday = (NSDate*)[kSettings valueForSetting:SettingLaterToday];
         NSString *title = [NSString stringWithFormat:@"Later  +%luh",(long)laterToday.hour];
@@ -762,6 +745,7 @@ typedef enum {
         
         [self addSubview:contentView];
         self.contentView = [self viewWithTag:CONTENT_VIEW_TAG];
+        [self positionHelpLabelForHeight:CGRectGetHeight(self.contentView.frame)];
         [self addPickerView];
         [self addLocationView];
         

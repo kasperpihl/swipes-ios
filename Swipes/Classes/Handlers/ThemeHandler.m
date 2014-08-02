@@ -9,17 +9,17 @@
 
 #define inv(color) [ThemeHandler inverseColor:color]
 
-#define TASKS_COLOR                    color(244,203,28,1) //color(237,194,0,1) //retColor(color(228,202,92,1),   color(244,203,28,1))
-#define DONE_COLOR                      color(69,217,132,1)  //color(63,186,141,1) //
-#define LATER_COLOR                     color(252,97,75,1) // color(234,97,80,1)
+#define TASKS_COLOR                    color(255,200,94,1) //color(244,203,28,1) //color(237,194,0,1)
+#define DONE_COLOR                     color(134,211,110,1) // color(69,217,132,1)  //color(63,186,141,1) //
+#define LATER_COLOR                     color(255,86,55,1) //color(252,97,75,1) // color(234,97,80,1)
 
 #define STRONG_TASKS_COLOR              color(255,195,88,1)
 #define STRONG_DONE_COLOR               color(58,195,160,1)
 #define STRONG_LATER_COLOR              color(255,96,69,1)
 
-#define TEXT_COLOR(Theme)               retColorF(color(255,255,255,1), color(36,40,46,1), Theme)
-#define SUB_TEXT_COLOR                  retColor(gray(170,1),               gray(85,1))
-#define BACKGROUND(Theme)               retColorF(color(36,40,46,1),     gray(255,1),Theme)
+#define TEXT_COLOR(Theme)               retColorF(color(248,248,249,1), color(27,30,35,1), Theme)
+#define SUB_TEXT_COLOR                  retColor(color(189,191,193,1),               color(95,97,99,1))
+#define BACKGROUND(Theme)               retColorF(color(27,30,35,1),     color(248,248,249,1),Theme) //retColorF(color(36,40,46,1),     gray(255,1),Theme)
 //color(226,231,233,1)
 
 #import "ThemeHandler.h"

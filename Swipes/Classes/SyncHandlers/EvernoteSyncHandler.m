@@ -345,7 +345,6 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     __block NSInteger targetCount = self.objectsWithEvernote.count;
     __block NSError *runningError;
     for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
-        DLog(@"running sync");
         KPAttachment *evernoteAttachment = [todoWithEvernote firstAttachmentForServiceType:EVERNOTE_SERVICE];
         NSString *guid = evernoteAttachment.identifier;
         [EvernoteToDoProcessor processorWithGuid:guid block:^(EvernoteToDoProcessor *processor, NSError *error) {

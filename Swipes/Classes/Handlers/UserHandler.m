@@ -86,6 +86,7 @@ static UserHandler *sharedObject;
     return [self stringForUserLevel:self.userLevel];
 }
 -(void)didOpenApp{
+    NSLog(@"did open");
     if(!kCurrent)
         return;
     [kCurrent refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {

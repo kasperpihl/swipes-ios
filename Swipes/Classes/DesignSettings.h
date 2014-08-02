@@ -28,10 +28,12 @@
 #define GLOBAL_WT_TABLE_WIDTH           232.0f
 #define CELL_LABEL_X 44
 
-#define KP_LIGHT(fontSize)              [UIFont fontWithName:@"ProximaNova-Light" size:fontSize]
-#define KP_REGULAR(fontSize)            [UIFont fontWithName:@"ProximaNova-Regular" size:fontSize]
-#define KP_BOLD(fontSize)               [UIFont fontWithName:@"ProximaNova-Bold" size:fontSize]
-#define KP_SEMIBOLD(fontSize)           [UIFont fontWithName:@"ProximaNova-Semibold" size:fontSize]
+#define KP_FONT(fontName, fontSize) [UIFont fontWithName:fontName size:fontSize * [Global sharedInstance].fontMultiplier]
+
+#define KP_LIGHT(fontSize)              KP_FONT(@"ProximaNova-Light",fontSize)
+#define KP_REGULAR(fontSize)            KP_FONT(@"ProximaNova-Regular", fontSize)//[UIFont fontWithName:@"VarelaRound-Regular" size:fontSize]
+#define KP_BOLD(fontSize)               KP_FONT(@"ProximaNova-Bold",fontSize)
+#define KP_SEMIBOLD(fontSize)           KP_FONT(@"ProximaNova-Semibold", fontSize)
 
 
 #define SCHEDULE_BUTTON_FONT            KP_SEMIBOLD(14)

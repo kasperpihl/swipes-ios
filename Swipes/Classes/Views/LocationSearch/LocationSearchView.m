@@ -135,12 +135,12 @@
         CGRectSetWidth(searchField,self.bounds.size.width-2*padding);
         CGRectSetX(searchField, padding);
         searchField.delegate = self;
-        searchField.textColor = tcolor(TextColor);
+        searchField.textColor = tcolorF(TextColor,ThemeDark);
         searchField.font = KP_LIGHT(16);
         searchField.placeholder = @"Type in location";
         searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         @try {
-            [searchField setValue:tcolor(TextColor) forKeyPath:@"_placeholderLabel.textColor"];
+            [searchField setValue:tcolorF(TextColor,ThemeDark) forKeyPath:@"_placeholderLabel.textColor"];
         }
         @catch (NSException *exception) {
             
@@ -160,7 +160,8 @@
         [self addSubview:tableView];
         self.tableView = tableView;
         
-        self.headerView = [[SectionHeaderView alloc] initWithColor:tcolor(TextColor) font:SECTION_HEADER_FONT title:@"RECENT " width:frame.size.width];
+        self.headerView = [[SectionHeaderView alloc] initWithColor:tcolor(LaterColor) font:SECTION_HEADER_FONT title:@"RECENT " width:frame.size.width];
+        self.headerView.fillColor = tcolorF(BackgroundColor, ThemeDark);
         CGRectSetWidth(self.headerView, self.bounds.size.width);
         [self.headerView setNeedsDisplay];
         CGRectSetY(self.headerView, SearchHeight);
