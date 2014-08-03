@@ -380,6 +380,17 @@
     }
     return shouldUpdate;
 }
+
+-(BOOL)hasChangesSinceDate:(NSDate *)date{
+    if([self.updatedAt isLaterThanDate:date])
+        return YES;
+    for( KPToDo *subtask in self.subtasks ){
+        if( [subtask.updatedAt isLaterThanDate:date] )
+            return YES;
+    }
+    return NO;
+}
+
 -(CellType)cellTypeForTodo{
     NSDate *now = [NSDate date];
     if(self.completionDate) return CellTypeDone;

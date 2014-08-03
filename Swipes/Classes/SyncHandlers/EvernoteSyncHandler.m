@@ -28,6 +28,9 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 @property (nonatomic,copy) SyncBlock block;
 @property NSArray *objectsWithEvernote;
 @property NSDate *lastUpdated;
+@property BOOL updateNeededFromEvernote;
+@property NSInteger currentEvernoteUpdateCount;
+@property NSInteger expectedEvernoteCount;
 @property (nonatomic) NSMutableArray *_updatedTasks;
 @end
 @implementation EvernoteSyncHandler
@@ -50,7 +53,13 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 }
 
 
-
+-(void)updateEvernoteCount:(NSInteger)newUpdateCount{
+    if( newUpdateCount > self.expectedEvernoteCount ){
+        self.updateNeededFromEvernote = YES;
+    }
+    self.currentEvernoteUpdateCount = newUpdateCount;
+    self.expectedEvernoteCount = newUpdateCount;
+}
 
 
 +(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes{
@@ -268,20 +277,15 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     self.block = block;
     
     self.block(SyncStatusStarted, nil, nil);
-    if( kEnInt.autoFindFromTag ){
-        [self findUpdatedNotesWithTag:@"swipes" block:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
-            if(error){
-                block(SyncStatusError, nil, error);
-            }
-            else{
-                [self syncEvernoteWithBlock:block];
-            }
-        }];
-    }
-    else{
-        [self syncEvernoteWithBlock:block];
-    }
     
+    [self findUpdatedNotesWithTag:@"swipes" block:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
+        if(error){
+            block(SyncStatusError, nil, error);
+        }
+        else{
+            [self syncEvernoteWithBlock:block];
+        }
+    }];
     
 }
 
@@ -305,15 +309,18 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     
     [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:100 block:^(EDAMNoteList *list, NSError *error) {
         if(list){
-            DLog(@"%@",list);
-            NSMutableArray *newNotes = [NSMutableArray array];
-            for( EDAMNote *note in list.notes ){
-                NSArray *existingTasks = [KPAttachment findAttachmentsForService:EVERNOTE_SERVICE identifier:note.guid context:nil];
-                if(existingTasks.count == 0){
-                    [newNotes addObject:note];
+            DLog(@"%lu",(long)list.updateCount);
+            [self updateEvernoteCount:list.updateCount];
+            if( kEnInt.autoFindFromTag ){
+                NSMutableArray *newNotes = [NSMutableArray array];
+                for( EDAMNote *note in list.notes ){
+                    NSArray *existingTasks = [KPAttachment findAttachmentsForService:EVERNOTE_SERVICE identifier:note.guid context:nil];
+                    if(existingTasks.count == 0){
+                        [newNotes addObject:note];
+                    }
                 }
+                [EvernoteSyncHandler addAndSyncNewTasksFromNotes:newNotes];
             }
-            [EvernoteSyncHandler addAndSyncNewTasksFromNotes:newNotes];
             [self syncEvernoteWithBlock:block];
         }
         else if(error){
@@ -345,6 +352,10 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     __block NSInteger targetCount = self.objectsWithEvernote.count;
     __block NSError *runningError;
     for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
+        BOOL hasLocalChanges = [todoWithEvernote hasChangesSinceDate:self.lastUpdated];
+        if( !hasLocalChanges && !self.updateNeededFromEvernote )
+            return self.block(SyncStatusSuccess, nil, nil);
+        NSLog(@"running the sync");
         KPAttachment *evernoteAttachment = [todoWithEvernote firstAttachmentForServiceType:EVERNOTE_SERVICE];
         NSString *guid = evernoteAttachment.identifier;
         [EvernoteToDoProcessor processorWithGuid:guid block:^(EvernoteToDoProcessor *processor, NSError *error) {
@@ -359,6 +370,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
                 if( processor.needUpdate ){
                     [processor saveToEvernote:^(BOOL succeeded, NSError *error) {
                         if (succeeded) {
+                            self.expectedEvernoteCount++;
                             //NSLog(@"succeeded save");
                         }
                         else {
@@ -392,7 +404,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
                     [KPToDo saveToSync];
                 }
                 [self setUpdatedAt:date];
-                
+                self.updateNeededFromEvernote = NO;
                 self.block(SyncStatusSuccess, @{@"updated": [self._updatedTasks copy]}, nil);
                 [self._updatedTasks removeAllObjects];
             }

@@ -170,13 +170,13 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)fetchNoteWithGuid:(NSString *)guid block:(NoteBlock)block
 {
     // try to get it from cache
-    __block EDAMNote *cachedNote = [self noteForGuid:guid];
+    /*__block EDAMNote *cachedNote = [self noteForGuid:guid];
     if (cachedNote) {
         dispatch_async(dispatch_get_main_queue(), ^{
             block(cachedNote, nil);
         });
         return;
-    }
+    }*/
     
     @try {
         [[EvernoteNoteStore noteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
@@ -204,13 +204,14 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block {
     
     // try to get it from cache
+    /*
     __block EDAMNoteList *cachedList = [self searchListForText:filter.words ? filter.words : @""];
     if (cachedList) {
         dispatch_async(dispatch_get_main_queue(), ^{
             block(cachedList, nil);
         });
         return;
-    }
+    }*/
     
     EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
     @try {

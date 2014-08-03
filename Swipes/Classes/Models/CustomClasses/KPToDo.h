@@ -35,6 +35,7 @@
 
 -(NSSet*)getSubtasks;
 -(BOOL)isSubtask;
+-(BOOL)hasChangesSinceDate:(NSDate*)date;
 
 -(NSString*)readableTitleForStatus;
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save;
