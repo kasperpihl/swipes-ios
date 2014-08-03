@@ -358,6 +358,7 @@
                 else if( status == SyncStatusError ){
                     self._isSyncing = NO;
                     EvernoteSession *session = [EvernoteSession sharedSession];
+#warning Evernote permission issue is probably due to isTokenExpiredWithError:
                     if (!session.isAuthenticated || [EvernoteSession isTokenExpiredWithError:error]) {
                         kEnInt.enableSync = NO;
                         [UTILITY popupWithTitle:@"Evernote Authorization" andMessage:@"To sync with Evernote on this device, please authorize" buttonTitles:@[@"Don't sync this device",@"Authorize now"] block:^(NSInteger number, NSError *error) {
