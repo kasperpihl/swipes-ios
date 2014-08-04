@@ -109,7 +109,7 @@ NSString* const kSwipesParamGiud = @"guid";
     if (nil != query[firstQuery]) {
         NSMutableArray* result = [NSMutableArray array];
         for (NSUInteger i = 1; i < 255; i++) {
-            NSString* data = query[[NSString stringWithFormat:@"%@%d", prefix, i]];
+            NSString* data = query[[NSString stringWithFormat:@"%@%lu", prefix, (long)i]];
             if (nil != data) {
                 [result addObject:data];
             }
