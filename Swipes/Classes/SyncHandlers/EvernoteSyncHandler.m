@@ -382,6 +382,8 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         }
     }];
 }
+
+
 -(BOOL)hasChangedFromEvernoteGuid:(NSString*)guid{
     for( EDAMNote *note in self.changedNotes ){
         if( [guid isEqualToString:note.guid] )
@@ -389,6 +391,9 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     }
     return NO;
 }
+
+
+
 -(void)syncEvernoteWithBlock:(SyncBlock)block{
     self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
     DLog(@"performing sync with Evernote");
@@ -414,9 +419,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     
     __block voidBlock finalizeBlock = ^{
         returnCount++;
-        DLog(@"running finalize %lu - %lu",(long)returnCount, (long)targetCount);
         if(returnCount == targetCount){
-            //NSLog(@"hit the target");
             DLog(@"requests used for Evernote sync: %lu",(long)kEnInt.requestCounter);
             if(runningError){
                 self.block(SyncStatusError, nil, runningError);

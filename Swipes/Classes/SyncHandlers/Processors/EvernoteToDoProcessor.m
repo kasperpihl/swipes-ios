@@ -48,7 +48,7 @@ static NSSet* g_startEndElements;
 
 @interface EvernoteToDoProcessor () <NSXMLParserDelegate>
 
-@property (nonatomic, strong) EDAMNote* note;
+
 @property (nonatomic, strong) NSString *updatedContent;
 
 @end

@@ -13,7 +13,7 @@
 NSString* const kKeyData = @"data";
 NSString* const kKeyDate = @"date";
 NSTimeInterval const kSearchTimeout = 120;
-NSTimeInterval const kNoteTimeout = 120;
+NSTimeInterval const kNoteTimeout = (3600*24);
 
 int32_t const kPaginator = 100;
 NSInteger const kApiLimitReachedErrorCode = 19;
@@ -144,7 +144,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
         self.autoFindFromTag = YES;*/
 }
 
-
 - (void)saveNote:(EDAMNote*)note block:(NoteBlock)block
 {
     @try {
@@ -214,7 +213,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
         });
         return;
     }*/
-    
     EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
     @try {
         self.requestCounter++;
@@ -332,7 +330,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
         if (0 < rateLimit){
             self.rateLimit = [NSDate dateWithTimeIntervalSinceNow:rateLimit + 10];
         }
-        DLog(@"%@",[error.userInfo objectForKey:@"rateLimitDuration"]);
+        DLog(@"rate limit seconds: %@",[error.userInfo objectForKey:@"rateLimitDuration"]);
     }
     [UtilityClass sendError:error type:type];
     return NO;
@@ -381,6 +379,8 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (void)addNote:(EDAMNote *)note forGuid:(NSString *)guid
 {
+    if(!note.content || note.content.length == 0)
+        return [self removeNoteForGuid:guid];
     _noteCache[guid] = @{kKeyData: note, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kNoteTimeout]};
 }
 
