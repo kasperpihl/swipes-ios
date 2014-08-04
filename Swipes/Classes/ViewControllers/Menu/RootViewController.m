@@ -202,7 +202,7 @@ static RootViewController *sharedObject;
 {
     self.menuViewController = nil;
     [self setupAppearance];
-    [self.settingsViewController renderSubviews];
+    [self.settingsViewController reset];
     //[self.sideMenu hide];
     
 }
