@@ -148,6 +148,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)saveNote:(EDAMNote*)note block:(NoteBlock)block
 {
     @try {
+        self.requestCounter++;
         [[EvernoteNoteStore noteStore] updateNote:note success:^(EDAMNote *note) {
             if( block )
                 block( note, nil );
@@ -170,15 +171,16 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)fetchNoteWithGuid:(NSString *)guid block:(NoteBlock)block
 {
     // try to get it from cache
-    /*__block EDAMNote *cachedNote = [self noteForGuid:guid];
+    __block EDAMNote *cachedNote = [self noteForGuid:guid];
     if (cachedNote) {
         dispatch_async(dispatch_get_main_queue(), ^{
             block(cachedNote, nil);
         });
         return;
-    }*/
+    }
     
     @try {
+        self.requestCounter++;
         [[EvernoteNoteStore noteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
             
             if( block )
@@ -204,8 +206,8 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block {
     
     // try to get it from cache
-    /*
-    __block EDAMNoteList *cachedList = [self searchListForText:filter.words ? filter.words : @""];
+    
+    /*__block EDAMNoteList *cachedList = [self searchListForText:filter.words ? filter.words : @""];
     if (cachedList) {
         dispatch_async(dispatch_get_main_queue(), ^{
             block(cachedList, nil);
@@ -215,6 +217,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     
     EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
     @try {
+        self.requestCounter++;
         [noteStore findNotesWithFilter:filter offset:0 maxNotes:kPaginator success:^(EDAMNoteList *list) {
             [self addSearchList:list forText:filter.words ? filter.words : @""];
             block(list, nil);
@@ -273,6 +276,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     
     @try {
         __block NSString *swipesTagGuid;
+        self.requestCounter++;
         [[EvernoteNoteStore noteStore] listTagsWithSuccess:^(NSArray *tags) {
             for ( EDAMTag *tag in tags ) {
                 if (NSOrderedSame == [tag.name caseInsensitiveCompare:kSwipesTagName]){
@@ -303,6 +307,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)createSwipesTagBlock:(StringBlock)block
 {
     @try {
+        self.requestCounter++;
         EDAMTag *swipesTag = [[EDAMTag alloc] init];
         swipesTag.name = kSwipesTagName;
         [[EvernoteNoteStore noteStore] createTag:swipesTag success:^(EDAMTag *tag) {

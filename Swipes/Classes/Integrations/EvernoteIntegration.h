@@ -18,6 +18,7 @@ extern const int MONNSExceptionEncounteredErrorCode;
 
 @property (nonatomic) BOOL enableSync;
 @property NSString *tagGuid;
+@property NSInteger requestCounter;
 @property NSString *tagName;
 @property (nonatomic) BOOL autoFindFromTag;
 @property NSDate *rateLimit;
@@ -38,6 +39,11 @@ extern const int MONNSExceptionEncounteredErrorCode;
 - (void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block;
 
 - (void)logout;
+
+
+/* Caching of notes */
 - (void)clearCaches;
+- (void)addNote:(EDAMNote *)note forGuid:(NSString *)guid;
+- (void)removeNoteForGuid:(NSString *)guid;
 
 @end
