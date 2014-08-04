@@ -144,14 +144,12 @@ static NSSet* g_startEndElements;
     update.content = self.updatedContent;
     [kEnInt saveNote:update block:^(EDAMNote *note, NSError *error) {
         if(error){
-            DLog(@"%@",_note.content);
-            DLog(@"%@",self.updatedContent);
+            NSDictionary *attachment = @{@"org content":_note.content, @"new content": self.updatedContent};
+            [UtilityClass sendError:error type:@"Evernote Save Note Error" attachment:attachment];
             if( block)
                 block( NO,error);
-            DLog(@"note update failed: %@", [error localizedDescription]);
         }
         else{
-            DLog(@"note update success !!!");
             if( block )
                 block( YES, nil );
         }
