@@ -32,6 +32,8 @@ static UtilityClass *sharedObject;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
         if([error description]) [errorObject setObject:[error description] forKey:@"error"];
+        if(error.userInfo)
+            [errorObject setObject:error.userInfo forKey:@"userInfo"];
         if(attachment)
             [errorObject setObject:attachment forKey:@"attachment"];
         if([error code]) [errorObject setObject:@([error code]) forKey:@"code"];
@@ -50,6 +52,8 @@ static UtilityClass *sharedObject;
         PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
         if([exception description]) [errorObject setObject:[exception description] forKey:@"error"];
         [errorObject setObject:@(1337) forKey:@"code"];
+        if([exception userInfo])
+            [errorObject addObject:exception.userInfo forKey:@"userInfo"];
         if(kCurrent) [errorObject setObject:kCurrent forKey:@"user"];
         if(type) [errorObject setObject:type forKey:@"type"];
         [errorObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
