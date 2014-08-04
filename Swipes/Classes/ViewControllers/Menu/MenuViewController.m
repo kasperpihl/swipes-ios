@@ -84,6 +84,11 @@
     }
 }
 
+-(void)reset{
+    [self popAllViewControllers];
+    [self renderSubviews];
+}
+
 - (void)renderSubviews
 {
     [self.backButton removeFromSuperview];
@@ -233,6 +238,13 @@
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
     //handle any error
     [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)popAllViewControllers{
+    NSInteger numberOfVCs = self.viewControllers.count;
+    for( NSInteger i = 0 ; i < numberOfVCs ; i++){
+        [self popViewControllerAnimated:NO];
+    }
 }
 
 -(void)popViewControllerAnimated:(BOOL)animated{
@@ -458,10 +470,7 @@
 }
 
 -(void)resetAndOpenIntegrations{
-    NSInteger numberOfVCs = self.viewControllers.count;
-    for( NSInteger i = 0 ; i < numberOfVCs ; i++){
-        [self popViewControllerAnimated:NO];
-    }
+    [self popAllViewControllers];
     IntegrationsViewController *integrationVC = [[IntegrationsViewController alloc] init];
     
     [self pushViewController:integrationVC animated:NO];
