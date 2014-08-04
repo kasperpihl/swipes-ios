@@ -31,6 +31,17 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
     attachment.sync = @(sync);
     return attachment;
 }
++(NSArray *)allIdentifiersForService:(NSString *)service sync:(BOOL)sync context:(NSManagedObjectContext *)context{
+    if(!context)
+        context = KPCORE.context;
+    NSPredicate *findPredicate = [NSPredicate predicateWithFormat:@"service = %@ AND sync == %@",service,@(sync)];
+    NSArray *objects = [KPAttachment MR_findAllWithPredicate:findPredicate inContext:context];
+    NSMutableArray *identifiers = [NSMutableArray array];
+    for( KPAttachment *attachment in objects ){
+        [identifiers addObject:attachment.identifier];
+    }
+    return [identifiers copy];
+}
 +(NSArray*)supportedServices{
     return @[ EVERNOTE_SERVICE, DROPBOX_SERVICE ];
 }

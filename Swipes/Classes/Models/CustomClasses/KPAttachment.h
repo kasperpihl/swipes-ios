@@ -9,6 +9,7 @@ extern NSString* const DROPBOX_SERVICE;
 + (instancetype)attachmentForService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync
                            inContext:(NSManagedObjectContext*)context;
 + (NSArray*)supportedServices;
++ (NSArray*)allIdentifiersForService:(NSString*)service sync:(BOOL)sync context:(NSManagedObjectContext*)context;
 + (BOOL)supportsService:(NSString *)service;
 - ( BOOL )isEqualToDictionary:(NSDictionary*)object;
 - (NSDictionary *)jsonForSaving;
