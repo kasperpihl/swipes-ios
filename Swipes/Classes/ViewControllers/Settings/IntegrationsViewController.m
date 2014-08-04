@@ -66,7 +66,7 @@
     [learnMoreButton setBackgroundImage:[alpha(kEvernoteColor, 0.5) image] forState:UIControlStateHighlighted];
     learnMoreButton.layer.cornerRadius = 5;
     learnMoreButton.layer.masksToBounds = YES;
-    [learnMoreButton addTarget:self action:@selector(showEvernoteHelperAnimated:) forControlEvents:UIControlEventTouchUpInside];
+    [learnMoreButton addTarget:self action:@selector(pressedLearnedMore) forControlEvents:UIControlEventTouchUpInside];
     [learnMoreButton setTitle:@"LEARN MORE" forState:UIControlStateNormal];
     
     
@@ -77,6 +77,9 @@
     
     [self.view addSubview:self.tableView];
     // Do any additional setup after loading the view.
+}
+-(void)pressedLearnedMore{
+    [self showEvernoteHelperAnimated:YES];
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     NSInteger extraIfConnected = [kEnInt isAuthenticated] ? 3 : 0;
