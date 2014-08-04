@@ -162,6 +162,7 @@
         
         self.headerView = [[SectionHeaderView alloc] initWithColor:tcolor(LaterColor) font:SECTION_HEADER_FONT title:@"RECENT " width:frame.size.width];
         self.headerView.fillColor = tcolorF(BackgroundColor, ThemeDark);
+        self.headerView.textColor = tcolorF(TextColor,ThemeDark);
         CGRectSetWidth(self.headerView, self.bounds.size.width);
         [self.headerView setNeedsDisplay];
         CGRectSetY(self.headerView, SearchHeight);
