@@ -20,6 +20,7 @@
 -(void)popupWithTitle:(NSString*)title andMessage:(NSString*)message buttonTitles:(NSArray*)buttonTitles block:(NumberBlock)block;
 +(NSString*)generateIdWithLength:(NSInteger)length;
 +(void)sendError:(NSError *)error type:(NSString *)type;
++(void)sendError:(NSError *)error type:(NSString *)type attachment:(NSDictionary*)attachment;
 +(void)sendException:(NSException*)exception type:(NSString*)type;
 + (BOOL) validateEmail: (NSString *) candidate;
 + (UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color;

@@ -25,10 +25,15 @@ static UtilityClass *sharedObject;
     return sharedObject;
 }
 +(void)sendError:(NSError *)error type:(NSString *)type{
+    [self.class sendError:error type:type attachment:nil];
+}
++(void)sendError:(NSError *)error type:(NSString *)type attachment:(NSDictionary*)attachment{
     DLog(@"Sending error: '%@' of type: '%@'", error, type);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
         if([error description]) [errorObject setObject:[error description] forKey:@"error"];
+        if(attachment)
+            [errorObject setObject:attachment forKey:@"attachment"];
         if([error code]) [errorObject setObject:@([error code]) forKey:@"code"];
         if(kCurrent) [errorObject setObject:kCurrent forKey:@"user"];
         if(type) [errorObject setObject:type forKey:@"type"];
