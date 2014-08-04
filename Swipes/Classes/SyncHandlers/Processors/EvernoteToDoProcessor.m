@@ -299,8 +299,9 @@ static NSSet* g_startEndElements;
     NSUInteger startPos = [self newToDoPos];
     
     if (startPos >= self.updatedContent.length) {
-        // FIXME log error
-        NSLog(@"Evernote error: found position is uncorrect");
+        //NSLog(@"Evernote error: found position is uncorrect");
+        [UtilityClass sendError:[NSError errorWithDomain:@"Evernote error: addToDoWithTitle found position is uncorrect" code:603 userInfo:nil] type:@"Evernote add todo with title" attachment:@{@"start pos": @(startPos), @"updatedContent": self.updatedContent, @"content_length": @(self.updatedContent.length)}];
+        return NO;
     }
     
     if (NSNotFound != startPos) {
