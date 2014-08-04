@@ -49,8 +49,8 @@
 }
 
 -(void)updateExpandButton:(BOOL)expanded animated:(BOOL)animated{
-    
-    [self.closeLabelButton setTitle:[NSString stringWithFormat:@"See all %lu actions",(unsigned long)[self.model getSubtasks].count] forState:UIControlStateNormal];
+    unsigned long numberOfSubtasks = (unsigned long)[self.model getSubtasks].count;
+    [self.closeLabelButton setTitle:[NSString stringWithFormat:@"See%@ %lu action%@",(numberOfSubtasks == 1 ) ? @"": @" all", numberOfSubtasks,(numberOfSubtasks == 1) ? @"" :@"s"] forState:UIControlStateNormal];
     [self.closeLabelButton sizeToFit];
     self.closeLabelButton.alpha = expanded ? 1 : 0;
     CGFloat extraHack = 15;
@@ -116,7 +116,14 @@
 
 
 -(void)updateTableFooter{
-    BOOL hasCloseButton = ([self.model getSubtasks].count > 1);
+    NSArray *subtasks = [[self.model getSubtasks] allObjects];
+    NSInteger numberOfSubtasks = subtasks.count;
+    BOOL hasCloseButton = (numberOfSubtasks > 1);
+    if(numberOfSubtasks == 1){
+        KPToDo *onlySubtask = [subtasks lastObject];
+        if(onlySubtask.completionDate)
+            hasCloseButton = YES;
+    }
     CGFloat footerHeight = hasCloseButton ? kSubtaskHeight+kCloseButtonHeight : kSubtaskHeight;
     CGRectSetHeight(self.tableView.tableFooterView,footerHeight);
     //self.closeButton.transform = CGAffineTransformMakeRotation(self.expanded ? M_PI : 0);
