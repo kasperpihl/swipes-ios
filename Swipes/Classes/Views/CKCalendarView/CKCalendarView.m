@@ -206,9 +206,11 @@
     
     [self setNeedsLayout]; // TODO: this is a hack to get the first month to show properly
 }
+
 -(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
     return YES;
 }
+
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -216,8 +218,17 @@
     }
     return self;
 }
+
+- (void)dealloc
+{
+    if (self.longPressRecognizer) {
+        self.longPressRecognizer.delegate = nil;
+    }
+}
+
 -(void)pressedTitleButton:(UIButton*)sender{
-    if([self.delegate respondsToSelector:@selector(calendar:pressedTitleButton:)]) [self.delegate calendar:self pressedTitleButton:sender];
+    if ([self.delegate respondsToSelector:@selector(calendar:pressedTitleButton:)])
+        [self.delegate calendar:self pressedTitleButton:sender];
 }
 
 - (void)layoutSubviews {

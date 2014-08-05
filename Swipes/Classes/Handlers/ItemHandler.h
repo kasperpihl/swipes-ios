@@ -20,14 +20,14 @@
 @end
 
 @interface ItemHandler : NSObject  <KPSearchBarDataSource,UITableViewDataSource>
-@property (nonatomic,weak) NSObject<ItemHandlerDelegate> *delegate;
+@property (nonatomic,weak) id<ItemHandlerDelegate> delegate;
 @property (nonatomic,strong) NSArray *allTags;
 @property (nonatomic,strong) NSArray *remainingTags;
 @property (nonatomic,strong) NSMutableArray *selectedTags;
 @property (nonatomic) BOOL hasFilter;
 @property (nonatomic) BOOL hasSearched;
 @property (nonatomic) BOOL isSorted;
-@property (nonatomic,strong) NSArray *items;
+@property (nonatomic, strong) NSArray *items;
 @property (nonatomic, strong) NSArray *filteredItems;
 @property (nonatomic) NSIndexPath *draggingIndexPath;
 @property (nonatomic) NSInteger itemCounter;

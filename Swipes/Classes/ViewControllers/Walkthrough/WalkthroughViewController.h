@@ -10,9 +10,9 @@
 #define kActionButtonFont KP_REGULAR(20)
 
 @class WalkthroughViewController;
-@protocol WalkthroughDelegate
+@protocol WalkthroughDelegate <NSObject>
 -(void)walkthrough:(WalkthroughViewController*)walkthrough didFinishSuccesfully:(BOOL)successfully;
 @end
 @interface WalkthroughViewController : UIViewController
-@property (nonatomic,weak) NSObject<WalkthroughDelegate> *delegate;
+@property (nonatomic,weak) id<WalkthroughDelegate> delegate;
 @end

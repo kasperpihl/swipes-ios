@@ -357,9 +357,8 @@
                 }
                 else if( status == SyncStatusError ){
                     self._isSyncing = NO;
-                    EvernoteSession *session = [EvernoteSession sharedSession];
 #warning Evernote permission issue is probably due to isTokenExpiredWithError:
-                    if (!session.isAuthenticated || [EvernoteSession isTokenExpiredWithError:error]) {
+                    if (![EvernoteSession sharedSession].isAuthenticated || [EvernoteSession isTokenExpiredWithError:error]) {
                         if( [EvernoteSession isTokenExpiredWithError:error] ){
                             [UtilityClass sendError:error type:@"Evernote Expired Token Error"];
                         }

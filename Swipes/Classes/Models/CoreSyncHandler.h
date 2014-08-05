@@ -20,7 +20,7 @@
 +(CoreSyncHandler *)sharedInstance;
 
 @property (nonatomic,strong) NSManagedObjectContext *context;
-@property (nonatomic,weak) NSObject<SyncDelegate> *delegate;
+@property (nonatomic,weak) id<SyncDelegate> delegate;
 
 -(void)clearAndDeleteData;
 -(void)seedObjectsSave:(BOOL)save;

@@ -19,7 +19,7 @@
 
 @interface ToDoCell : MCSwipeTableViewCell
 @property (nonatomic) CellType cellType;
-@property (nonatomic,weak) IBOutlet DotView *dotView;
+@property (nonatomic, weak) DotView *dotView;
 @property (nonatomic, strong) UIButton *actionStepsButton;
 
 @property (nonatomic, weak) NSObject<ToDoCellDelegate> *actionDelegate;

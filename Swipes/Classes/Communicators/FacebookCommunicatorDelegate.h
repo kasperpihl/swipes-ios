@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @class FacebookCommunicator;
-@protocol FacebookCommunicatorDelegate
+@protocol FacebookCommunicatorDelegate <NSObject>
 @optional
 -(void)communicator:(FacebookCommunicator*)communicator receivedRequestWithResult:(id)result;
 @required

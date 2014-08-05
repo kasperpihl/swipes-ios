@@ -29,9 +29,12 @@
 - ( BOOL )shouldStartEditingSubtaskCell:(SubtaskCell *)cell;
 - ( void )endedEditingCell: ( SubtaskCell* )cell;
 @end
+
 @class KPToDo;
+
 @interface SubtaskCell : MCSwipeTableViewCell
-@property (nonatomic,weak) NSObject<SubtaskCellDelegate> *subtaskDelegate;
+
+@property (nonatomic, weak) id<SubtaskCellDelegate> subtaskDelegate;
 @property (nonatomic) KPToDo *model;
 @property (nonatomic) BOOL addModeForCell;
 @property (nonatomic) UIView *seperator;
@@ -40,4 +43,5 @@
 @property (nonatomic) NSString *title;
 
 -(void)setDotColor:(UIColor*)color;
+
 @end

@@ -193,6 +193,12 @@
     // Do any additional setup after loading the view.
 }
 
+- (void)dealloc
+{
+    self.tableView.dataSource = nil;
+    self.tableView.delegate = nil;
+}
+
 -(void)pressedClose:(UIButton*)button{
     [self dismissViewControllerAnimated:YES completion:^{
         

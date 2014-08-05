@@ -61,43 +61,49 @@
     }
     return self;
 }
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     NSString *string = textField.text;
     NSString *trimmedString = [string stringByTrimmingCharactersInSet:
                                [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if(trimmedString.length > 0){
+    if (trimmedString.length > 0){
         self.textField.text = @"";
         [self textFieldDidChange:self.textField];
-        if([self.delegate respondsToSelector:@selector(addView:enteredTrimmedText:)]) [self.delegate addView:self enteredTrimmedText:trimmedString];
+        if ([self.delegate respondsToSelector:@selector(addView:enteredTrimmedText:)])
+            [self.delegate addView:self enteredTrimmedText:trimmedString];
     }
     return NO;
 }
+
 -(void)setText:(NSString *)text{
     self.textField.text = text;
     [self textFieldDidChange:self.textField];
 }
+
 -(void)textFieldDidChange:(UITextField*)textField{
     NSString *string = textField.text;
     NSString *trimmedString = [string stringByTrimmingCharactersInSet:
                                [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    if(trimmedString.length > 0){
-        if(!self.isRotated){
+    if (trimmedString.length > 0){
+        if (!self.isRotated){
             [self rotateButton];
             self.isRotated = YES;
         }
     }
-    else{
-        if(self.isRotated){
+    else {
+        if (self.isRotated){
             [self rotateButton];
             self.isRotated = NO;
         }
     }
 }
+
 -(void)pressedDoneEditing:(id)sender{
     [self textFieldShouldReturn:self.textField];
     if([self.delegate respondsToSelector:@selector(addViewPressedDoneButton:)]) [self.delegate addViewPressedDoneButton:self];
 }
--(IBAction)rotateButton
+
+-(void)rotateButton
 {
     [UIView beginAnimations:@"rotate" context:nil];
     [UIView setAnimationDuration:.25f];
@@ -109,18 +115,10 @@
     }
     [UIView commitAnimations];
 }
+
 -(void)dealloc{
     self.doneEditingButton = nil;
     self.textField = nil;
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end

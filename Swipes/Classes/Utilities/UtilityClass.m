@@ -31,8 +31,9 @@ static UtilityClass *sharedObject;
     DLog(@"Sending error: '%@' of type: '%@'", error, type);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
-        if([error description]) [errorObject setObject:[error description] forKey:@"error"];
-        if(error.userInfo){
+        if ([error description])
+            [errorObject setObject:[error description] forKey:@"error"];
+        if (error.userInfo){
             NSError *parseError;
             @try {
                 NSData *jsonData = [NSJSONSerialization dataWithJSONObject:error.userInfo
@@ -43,17 +44,21 @@ static UtilityClass *sharedObject;
                 }
             }
             @catch (NSException *exception) {
-                
+                NSLog(@"Error trying to send '%@' to parse", error);
             }
            
         }
-        if(attachment)
+        if (attachment)
             [errorObject setObject:attachment forKey:@"attachment"];
-        if([error code]) [errorObject setObject:@([error code]) forKey:@"code"];
-        if(kCurrent) [errorObject setObject:kCurrent forKey:@"user"];
-        if(type) [errorObject setObject:type forKey:@"type"];
+        if ([error code])
+            [errorObject setObject:@([error code]) forKey:@"code"];
+        if (kCurrent)
+            [errorObject setObject:kCurrent forKey:@"user"];
+        if (type)
+            [errorObject setObject:type forKey:@"type"];
         [errorObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if(!succeeded) [errorObject saveEventually];
+            if(!succeeded)
+                [errorObject saveEventually];
         }];
         return;
     });
@@ -63,14 +68,18 @@ static UtilityClass *sharedObject;
     DLog(@"Sending exception: '%@' of type: '%@'", exception, type);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
-        if([exception description]) [errorObject setObject:[exception description] forKey:@"error"];
+        if ([exception description])
+            [errorObject setObject:[exception description] forKey:@"error"];
         [errorObject setObject:@(1337) forKey:@"code"];
-        if([exception userInfo])
+        if ([exception userInfo])
             [errorObject addObject:exception.userInfo forKey:@"userInfo"];
-        if(kCurrent) [errorObject setObject:kCurrent forKey:@"user"];
-        if(type) [errorObject setObject:type forKey:@"type"];
+        if (kCurrent)
+            [errorObject setObject:kCurrent forKey:@"user"];
+        if (type)
+            [errorObject setObject:type forKey:@"type"];
         [errorObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if(!succeeded) [errorObject saveEventually];
+            if(!succeeded)
+                [errorObject saveEventually];
         }];
         return;
     });
