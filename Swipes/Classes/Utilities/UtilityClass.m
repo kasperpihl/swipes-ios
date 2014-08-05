@@ -32,8 +32,21 @@ static UtilityClass *sharedObject;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
         if([error description]) [errorObject setObject:[error description] forKey:@"error"];
-        if(error.userInfo)
-            [errorObject setObject:error.userInfo forKey:@"userInfo"];
+        if(error.userInfo){
+            NSError *parseError;
+            @try {
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:error.userInfo
+                                                                   options:0 // Pass 0 if you don't care about the readability of the generated string
+                                                                     error:&parseError];
+                if(!parseError && jsonData){
+                    [errorObject setObject:error.userInfo forKey:@"userInfo"];
+                }
+            }
+            @catch (NSException *exception) {
+                
+            }
+           
+        }
         if(attachment)
             [errorObject setObject:attachment forKey:@"attachment"];
         if([error code]) [errorObject setObject:@([error code]) forKey:@"code"];
