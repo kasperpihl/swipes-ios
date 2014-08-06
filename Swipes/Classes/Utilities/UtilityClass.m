@@ -30,9 +30,9 @@ static UtilityClass *sharedObject;
 +(PFObject*)emptyErrorObjectForDevice{
     PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
     [errorObject setObject:@"iOS" forKey:@"Platform"];
-    [errorObject setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forKey:@"App Version"];
-    [errorObject setObject:[[UIDevice currentDevice] systemVersion] forKey:@"OS Version"];
-    [errorObject setObject:[UIDevice currentDevice] forKey:@"Device"];
+    [errorObject setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forKey:@"AppVersion"];
+    [errorObject setObject:[[UIDevice currentDevice] systemVersion] forKey:@"OSVersion"];
+    [errorObject setObject:[UIDevice currentDevice].name forKey:@"Device"];
     return errorObject;
 }
 +(void)sendError:(NSError *)error type:(NSString *)type attachment:(NSDictionary*)attachment{
