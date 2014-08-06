@@ -135,12 +135,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         //label
         UIFont *ft = KP_SEMIBOLD(20);
         CGFloat labelWidth = 300;
-        CGSize sz = [message sizeWithFont:ft constrainedToSize:CGSizeMake(labelWidth, 1000)];
+        //CGSize sz = [message sizeWithFont:ft constrainedToSize:CGSizeMake(labelWidth, 1000)];
+        CGRect bounds = [message boundingRectWithSize:CGSizeMake(labelWidth, 1000) options:NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:ft} context:nil];
         CGFloat centerY = landscape ? presentationPlace.center.x : presentationPlace.center.y;
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width-labelWidth)/2,
-                                                                   floorf(centerY - sz.height/2 - 15),
+                                                                   floorf(centerY - ceilf(bounds.size.height)/2 - 15),
                                                                    labelWidth,
-                                                                   floorf(sz.height +10
+                                                                   floorf(ceilf(bounds.size.height) +10
                                                                           ))];
         [label setAutoresizingMask:(UIViewAutoresizingFlexibleTopMargin
                                     | UIViewAutoresizingFlexibleRightMargin

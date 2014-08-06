@@ -84,7 +84,7 @@ typedef void (^viewBlock)(UIView* view);
 #define kCurrentAttr(attr) [kCurrent objectForKey:attr]
 #define kCurrentSetAttr(key,attr) [kCurrent setObject:attr forKey:key]
 
-#define sizeWithFont(string,font) ((OSVER >= 7) ? [string sizeWithAttributes:@{NSFontAttributeName:font}] : [string sizeWithFont:font])
+#define sizeWithFont(string,font) [string sizeWithAttributes:@{NSFontAttributeName:font}]
 #define _ Underscore
 
 #define radians(degrees) (degrees * M_PI / 180)
