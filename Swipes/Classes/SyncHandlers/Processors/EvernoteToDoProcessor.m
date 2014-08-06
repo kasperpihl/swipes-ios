@@ -94,8 +94,6 @@ static NSSet* g_startEndElements;
     return self;
 }
 
-
-
 -(void)parseAndLoadTodos{
     // parse
     _untitledCount = 1;
@@ -103,8 +101,7 @@ static NSSet* g_startEndElements;
     NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[_note.content dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]];
     parser.delegate = self;
     if (![parser parse]) {
-        // TODO get error
-        return;
+        [UtilityClass sendError:parser.parserError type:@"Evernote note parse error"];
     }
 }
 

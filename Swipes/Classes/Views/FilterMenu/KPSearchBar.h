@@ -26,11 +26,11 @@ typedef NS_ENUM(NSUInteger, KPSearchBarMode) {
 @end
 @class KPTagList;
 @interface KPSearchBar : UIView
-@property (nonatomic,weak) NSObject<KPSearchBarDelegate> *searchBarDelegate;
-@property (nonatomic,weak) NSObject<KPSearchBarDataSource> *searchBarDataSource;
-@property (nonatomic) KPSearchBarMode currentMode;
-@property (nonatomic) UIColor *openBackgroundColor;
-@property (nonatomic,weak) IBOutlet KPTagList *tagListView;
+@property (nonatomic, weak) id<KPSearchBarDelegate> searchBarDelegate;
+@property (nonatomic, weak) id<KPSearchBarDataSource> searchBarDataSource;
+@property (nonatomic, assign) KPSearchBarMode currentMode;
+@property (nonatomic, strong) UIColor *openBackgroundColor;
+@property (nonatomic, weak) KPTagList *tagListView;
 -(void)resignSearchField;
 -(void)reloadDataAndUpdate:(BOOL)update;
 @end

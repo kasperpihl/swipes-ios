@@ -33,7 +33,7 @@
 
 @interface AddPanelView () <AddViewDelegate,KPBlurryDelegate>
 @property (nonatomic) UIButton *closeButton;
-@property (nonatomic,weak) IBOutlet KPAddView *addView;
+@property (nonatomic,weak) KPAddView *addView;
 @property (nonatomic) UIScrollView *scrollView;
 @property (nonatomic) KPTagList *tagList;
 

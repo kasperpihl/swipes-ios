@@ -14,7 +14,7 @@
 @protocol KPTagListDeleteDelegate <NSObject>
 -(void)tagList:(KPTagList*)tagList triedToDeleteTag:(NSString*)tag;
 @end
-@protocol KPTagDelegate
+@protocol KPTagDelegate <NSObject>
 @optional
 -(void)tagList:(KPTagList*)tagList deletedTag:(NSString*)tag;
 -(NSArray*)tagsForTagList:(KPTagList*)tagList;
@@ -46,9 +46,9 @@
 @property (nonatomic) BOOL wobling;
 @property (nonatomic) NSInteger numberOfRows;
 @property (nonatomic) NSInteger numberOfTags;
-@property (nonatomic,weak) NSObject<KPTagDelegate> *tagDelegate;
-@property (nonatomic,weak) NSObject<KPTagListResizeDelegate> *resizeDelegate;
-@property (nonatomic,weak) NSObject<KPTagListDeleteDelegate> *deleteDelegate;
+@property (nonatomic,weak) id<KPTagDelegate> tagDelegate;
+@property (nonatomic,weak) id<KPTagListResizeDelegate> resizeDelegate;
+@property (nonatomic,weak) id<KPTagListDeleteDelegate> deleteDelegate;
 -(void)setTags:(NSArray*)tags andSelectedTags:(NSArray*)selectedTags;
 +(KPTagList*)tagListWithWidth:(CGFloat)width andTags:(NSArray*)tags;
 -(void)addTag:(NSString*)tag selected:(BOOL)selected;

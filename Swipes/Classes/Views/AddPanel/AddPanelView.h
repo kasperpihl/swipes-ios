@@ -8,12 +8,16 @@
 
 #import <UIKit/UIKit.h>
 @class AddPanelView;
-@protocol AddPanelDelegate
+
+@protocol AddPanelDelegate <NSObject>
 -(void)closeAddPanel:(AddPanelView*)addPanel;
 @optional
 -(void)didAddItem:(NSString*)item priority:(BOOL)priority tags:(NSArray *)tags;
 @end
+
 @interface AddPanelView : UIView
-@property (nonatomic,weak) NSObject<AddPanelDelegate> *addDelegate;
-@property (nonatomic) NSArray *tags;
+
+@property (nonatomic,weak) id<AddPanelDelegate> addDelegate;
+@property (nonatomic, strong) NSArray *tags;
+
 @end

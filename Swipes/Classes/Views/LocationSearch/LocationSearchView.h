@@ -16,7 +16,7 @@
 
 @interface LocationSearchView : UIView
 +(NSString*)formattedAddressForPlace:(CLPlacemark*)place;
-@property (nonatomic,weak) NSObject<LocationSearchDelegate> *delegate;
+@property (nonatomic,weak) id<LocationSearchDelegate> delegate;
 @property SectionHeaderView *headerView;
 @property (nonatomic) UITextField *searchField;
 -(NSInteger)numberOfHistoryPlaces;

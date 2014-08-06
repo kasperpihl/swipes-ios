@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class KPDayPicker;
-@protocol KPDayPickerDelegate
+@protocol KPDayPickerDelegate <NSObject>
 -(void)dayPicker:(KPDayPicker*)dayPicker selectedWeekday:(NSInteger)weekday;
 @end
 @interface KPDayPicker : UIView
@@ -16,6 +16,6 @@
 @property (nonatomic) UIColor *textColor;
 @property (nonatomic) UIColor *selectedColor;
 @property (nonatomic) UIFont *font;
-@property (nonatomic,weak) NSObject<KPDayPickerDelegate> *delegate;
+@property (nonatomic,weak) id<KPDayPickerDelegate> delegate;
 -(id)initWithHeight:(CGFloat)height selectedDay:(NSInteger)selectedDay;
 @end

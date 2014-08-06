@@ -9,10 +9,10 @@
 #import "SettingsCell.h"
 #import "KPDayPicker.h"
 @class DayPickerSettingsCell;
-@protocol DayPickerSettingsDelegate
+@protocol DayPickerSettingsDelegate <NSObject>
 -(void)dayPickerCell:(DayPickerSettingsCell*)cell pickedWeekDay:(NSInteger)weekday;
 @end
 @interface DayPickerSettingsCell : SettingsCell
 @property (nonatomic) KPDayPicker *dayPicker;
-@property (nonatomic,weak) NSObject<DayPickerSettingsDelegate> *delegate;
+@property (nonatomic, weak) id<DayPickerSettingsDelegate> delegate;
 @end

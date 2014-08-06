@@ -15,7 +15,7 @@
 @end
 @class KPToDo;
 @interface ToDoViewController : UIViewController
-@property (nonatomic,weak) NSObject<ToDoVCDelegate> *delegate;
+@property (nonatomic,weak) id<ToDoVCDelegate> delegate;
 @property (nonatomic,strong) KPToDo *model;
 @property (nonatomic,weak) KPSegmentedViewController *segmentedViewController;
 -(void)update;

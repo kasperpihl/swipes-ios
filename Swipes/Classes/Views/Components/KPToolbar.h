@@ -13,20 +13,26 @@ typedef enum {
     ToolbarButton3,
     ToolbarButton4,
 } ToolbarButtons;
+
 @class KPToolbar;
-@protocol ToolbarDelegate
+
+@protocol ToolbarDelegate <NSObject>
 -(void)toolbar:(KPToolbar*)toolbar pressedItem:(NSInteger)item;
 @optional
 -(void)toolbar:(KPToolbar*)toolbar editButton:(UIButton **)button forItem:(NSInteger)item;
 @end
+
 @interface KPToolbar : UIView
+
 @property (nonatomic, readonly) IBOutletCollection(UIButton) NSArray *barButtons;
-@property (nonatomic,weak) NSObject<ToolbarDelegate> *delegate;
-@property (nonatomic) UIColor *highlightedColor;
-@property (nonatomic) NSArray *items;
-@property (nonatomic) CGFloat topInset;
-@property (nonatomic) UIFont *font;
-@property (nonatomic) UIColor *titleColor;
-@property (nonatomic) NSString *titleHighlightString;
+@property (nonatomic, weak) id<ToolbarDelegate> delegate;
+@property (nonatomic, strong) UIColor *highlightedColor;
+@property (nonatomic, strong) NSArray *items;
+@property (nonatomic, assign) CGFloat topInset;
+@property (nonatomic, strong) UIFont *font;
+@property (nonatomic, strong) UIColor *titleColor;
+@property (nonatomic, strong) NSString *titleHighlightString;
+
 -(id)initWithFrame:(CGRect)frame items:(NSArray*)items delegate:(NSObject<ToolbarDelegate>*)delegate;
+
 @end

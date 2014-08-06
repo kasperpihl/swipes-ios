@@ -153,15 +153,18 @@
     }
     return self;
 }
+
 -(void)toolbar:(KPToolbar *)toolbar editButton:(UIButton *__autoreleasing *)button forItem:(NSInteger)item{
     if(item == 1){
         [*button setTitle:iconString(@"actionDeleteFull") forState:UIControlStateHighlighted];
     }
 }
+
 -(void)updateTrashButton{
     UIButton* trashButton = (UIButton*)[self.toolbar.barButtons objectAtIndex:1];
     trashButton.enabled = !(self.tagView.numberOfTags == 0);
 }
+
 -(void)tagList:(KPTagList *)tagList triedToDeleteTag:(NSString *)tag{
     NSLog(@"tried to delete");
 
@@ -174,6 +177,7 @@
         }
     }];
 }
+
 -(void)tagList:(KPTagList *)tagList changedSize:(CGSize)size{
     self.scrollView.contentSize = size;
     CGFloat maxHeight = (self.bounds.size.height-2*TOOLBAR_HEIGHT);
@@ -185,6 +189,7 @@
     NSLog(@"%f - %f",CGRectGetMinY(self.toolbar.frame),CGRectGetHeight(self.scrollView.frame));
     CGRectSetY(self.scrollView, CGRectGetMinY(self.toolbar.frame) - CGRectGetHeight(self.scrollView.frame));
 }
+
 -(void)shiftToDeleteMode:(BOOL)deleteMode{
     UIButton *plusButton = [self.toolbar.barButtons lastObject];
     [self.tagView setWobling:deleteMode];
@@ -195,6 +200,7 @@
         
     }];
 }
+
 -(void)keyboardWillHide:(NSNotification*)notification{
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDidStopSelector:@selector(completedHidingKeyboard)];
@@ -207,10 +213,12 @@
     
     [UIView commitAnimations];
 }
+
 -(void)completedHidingKeyboard{
     self.addTagView.hidden = YES;
     self.addTagView.alpha = 1;
 }
+
 -(void)keyboardWillShow:(NSNotification*)notification{
     [UIView beginAnimations:nil context:NULL];
     
@@ -224,6 +232,7 @@
     
     [UIView commitAnimations];
 }
+
 -(void)shiftToAddMode:(BOOL)addMode{
     if(addMode){
         self.isAdding = YES;
@@ -238,19 +247,21 @@
         [self.addTagView.textField resignFirstResponder];
     }
 }
+
 -(void)addView:(KPAddView *)addView enteredTrimmedText:(NSString *)trimmedText{
     if (self.delegate && [self.delegate respondsToSelector:@selector(tagPanel:createdTag:)])
         [self.delegate tagPanel:self createdTag:trimmedText];
     [self.tagView addTag:trimmedText selected:YES];
 }
+
 -(void)addViewPressedDoneButton:(KPAddView *)addView{
     [self shiftToAddMode:NO];
 }
+
 -(void)dealloc{
     clearNotify();
 }
 
-// NEWCODE
 - (void)layoutSubviews
 {
     [super layoutSubviews];

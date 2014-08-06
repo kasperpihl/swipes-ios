@@ -48,8 +48,8 @@
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
     self.tableView.delegate = self;
-    self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
+    self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     //[self.tableView setSeparatorColor:tcolor(TextColor)];
@@ -78,13 +78,22 @@
     [self.view addSubview:self.tableView];
     // Do any additional setup after loading the view.
 }
+
+- (void)dealloc
+{
+    self.tableView.dataSource = nil;
+    self.tableView.delegate = nil;
+}
+
 -(void)pressedLearnedMore{
     [self showEvernoteHelperAnimated:YES];
 }
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     NSInteger extraIfConnected = [kEnInt isAuthenticated] ? 3 : 0;
     return kEvernoteIntegration + 1 + extraIfConnected;
 }
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier = indexPath.row > 0 ? @"SwitchCell" : @"SettingCell";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];

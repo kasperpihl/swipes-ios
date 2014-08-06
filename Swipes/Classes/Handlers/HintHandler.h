@@ -26,7 +26,7 @@ typedef enum {
 @end
 
 @interface HintHandler : NSObject
-@property (nonatomic,weak) NSObject<HintHandlerDelegate> *delegate;
+@property (nonatomic,weak) id<HintHandlerDelegate> delegate;
 +(HintHandler*)sharedInstance;
 -(BOOL)triggerHint:(Hints)hint;
 -(BOOL)hasCompletedHint:(Hints)hint;

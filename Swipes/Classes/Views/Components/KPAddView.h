@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 @class KPAddView;
-@protocol AddViewDelegate
+@protocol AddViewDelegate <NSObject>
 -(void)addView:(KPAddView*)addView enteredTrimmedText:(NSString*)trimmedText;
 -(void)addViewPressedDoneButton:(KPAddView*)addView;
 @end
 @interface KPAddView : UIView
 @property (nonatomic) IBOutlet UIButton *doneEditingButton;
-@property (nonatomic,weak) NSObject<AddViewDelegate> *delegate;
+@property (nonatomic, weak) id<AddViewDelegate> delegate;
 @property (nonatomic) IBOutlet UITextField *textField;
 -(void)setText:(NSString*)text;
 @end

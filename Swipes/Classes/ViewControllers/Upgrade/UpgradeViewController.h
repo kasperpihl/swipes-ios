@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 @class UpgradeViewController;
-@protocol UpgradeViewControllerDelegate
+@protocol UpgradeViewControllerDelegate <NSObject>
 -(void)closedUpgradeViewController:(UpgradeViewController*)viewController;
 @end
+
 @interface UpgradeViewController : UIViewController
-@property (nonatomic,weak) NSObject<UpgradeViewControllerDelegate>* delegate;
+@property (nonatomic, weak) id<UpgradeViewControllerDelegate> delegate;
 @end

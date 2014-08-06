@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class KPTimePicker;
-@protocol KPTimePickerDelegate
+@protocol KPTimePickerDelegate <NSObject>
 -(void)timePicker:(KPTimePicker*)timePicker selectedDate:(NSDate *)date;
 @optional
 -(NSString*)timePicker:(KPTimePicker*)timePicker titleForDate:(NSDate *)time;
@@ -17,7 +17,7 @@
 
 @interface KPTimePicker : UIView
 
-@property (nonatomic,weak) NSObject<KPTimePickerDelegate> *delegate;
+@property (nonatomic,weak) id<KPTimePickerDelegate> delegate;
 
 @property (nonatomic,strong) NSDate *pickingDate;
 @property (nonatomic,strong) NSDate *minimumDate;
