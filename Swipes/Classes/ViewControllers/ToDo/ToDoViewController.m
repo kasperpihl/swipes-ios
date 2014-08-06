@@ -1009,7 +1009,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.evernoteContainer addSubview:self.evernoteLabel];
         
         self.syncLabel = [[SyncLabel alloc] init];
-        [self.syncLabel setTitle:@"SYNCED"];
+        [self.syncLabel setTitle:@"ATTACHED"];
         //self.syncLabel.backgroundColor = tcolorF(BackgroundColor,ThemeDark);
         [self.evernoteContainer addSubview:self.syncLabel];
         self.syncLabel.frame = CGRectSetPos(self.syncLabel.frame, LABEL_X, CGRectGetMidY(self.evernoteLabel.frame)+10);
