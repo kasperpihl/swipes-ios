@@ -136,6 +136,21 @@ NSString* const kSwipesParamGiud = @"guid";
     return [NSDate date];
 }
 
+- (void)addTagIfNeeded:(NSString *)title
+{
+    NSArray* tags = [KPTag findByTitle:title];
+    if (nil == tags) {
+        [KPTag addTagWithString:title save:YES];
+    }
+}
+
+- (void)addTagsIfNeeded:(NSArray *)tags
+{
+    for (NSString* tagTitle in tags) {
+        [self addTagIfNeeded:tagTitle];
+    }
+}
+
 #pragma mark - ToDos
 
 - (void)doUpdateToDo:(KPToDo *)todo query:(NSDictionary *)query
@@ -162,8 +177,10 @@ NSString* const kSwipesParamGiud = @"guid";
     }
     
     NSArray* tags = [self arrayFromQuery:query withPrefix:kSwipesParamTag];
-    if (tags)
+    if (tags) {
+        [self addTagsIfNeeded:tags];
         [todo setTags:[NSSet setWithArray:tags]];
+    }
     
     [KPToDo saveToSync];
 }
@@ -176,7 +193,9 @@ NSString* const kSwipesParamGiud = @"guid";
     if (nil != title) {
         NSArray* todos = [KPToDo findByTitle:title];
         if (nil == todos) {
-            KPToDo* todo = [KPToDo addItem:title priority:NO tags:[self arrayFromQuery:query withPrefix:kSwipesParamTag] save:NO];
+            NSArray* tags = [self arrayFromQuery:query withPrefix:kSwipesParamTag];
+            [self addTagsIfNeeded:tags];
+            KPToDo* todo = [KPToDo addItem:title priority:NO tags:tags save:NO];
             
             // remove tags
             NSMutableDictionary* mQuery = query.mutableCopy;
@@ -230,10 +249,7 @@ NSString* const kSwipesParamGiud = @"guid";
 {
     NSString* title = query[kSwipesParamTitle];
     if (nil != title) {
-        NSArray* tags = [KPTag findByTitle:title];
-        if (nil == tags) {
-            [KPTag addTagWithString:title save:YES];
-        }
+        [self addTagIfNeeded:title];
         return YES;
     }
     return NO;
