@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <ENSDK/Advanced/ENSDKAdvanced.h>
 typedef void (^NoteListBlock)(EDAMNoteList *list, NSError *error);
 typedef void (^NoteBlock)(EDAMNote *note, NSError *error);
 #define kEnInt [EvernoteIntegration sharedInstance]

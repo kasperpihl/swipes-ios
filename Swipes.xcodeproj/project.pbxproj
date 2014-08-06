@@ -190,6 +190,9 @@
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
 		A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066A17296BF100DDE644 /* ToDoListViewController.m */; };
 		A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4067117296C0500DDE644 /* KPControlHandler.m */; };
+		A7F51B4B19913EA700703E7C /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7F51B4919913EA700703E7C /* ENSDK.framework */; };
+		A7F51B4C19913EA700703E7C /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7F51B4A19913EA700703E7C /* ENSDKResources.bundle */; };
+		A7F51B4D19913F4400703E7C /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
 		A7F522A9197D73CE008B6147 /* EvernoteHelperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F522A8197D73CE008B6147 /* EvernoteHelperViewController.m */; };
 		A7F522AC197D7C76008B6147 /* swipesevernotetag.png in Resources */ = {isa = PBXBuildFile; fileRef = A7F522AA197D7C76008B6147 /* swipesevernotetag.png */; };
 		A7F522AD197D7C76008B6147 /* swipesevernotetag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7F522AB197D7C76008B6147 /* swipesevernotetag@2x.png */; };
@@ -528,6 +531,8 @@
 		A7F4066A17296BF100DDE644 /* ToDoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToDoListViewController.m; sourceTree = "<group>"; };
 		A7F4067017296C0500DDE644 /* KPControlHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPControlHandler.h; sourceTree = "<group>"; };
 		A7F4067117296C0500DDE644 /* KPControlHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPControlHandler.m; sourceTree = "<group>"; };
+		A7F51B4919913EA700703E7C /* ENSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ENSDK.framework; sourceTree = "<group>"; };
+		A7F51B4A19913EA700703E7C /* ENSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ENSDKResources.bundle; sourceTree = "<group>"; };
 		A7F522A7197D73CE008B6147 /* EvernoteHelperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteHelperViewController.h; path = Integrations/EvernoteHelperViewController.h; sourceTree = "<group>"; };
 		A7F522A8197D73CE008B6147 /* EvernoteHelperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteHelperViewController.m; path = Integrations/EvernoteHelperViewController.m; sourceTree = "<group>"; };
 		A7F522AA197D7C76008B6147 /* swipesevernotetag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = swipesevernotetag.png; sourceTree = "<group>"; };
@@ -594,10 +599,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7F51B4D19913F4400703E7C /* MobileCoreServices.framework in Frameworks */,
 				A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */,
 				A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */,
 				A717DD1018B6440A00EE359C /* Crashlytics.framework in Frameworks */,
 				DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */,
+				A7F51B4B19913EA700703E7C /* ENSDK.framework in Frameworks */,
 				DA94A2C1196EEA8B008F8A3B /* libLocalyticsAMP_x64.a in Frameworks */,
 				A7ADCB3817DD352F00780F88 /* libz.dylib in Frameworks */,
 				A75545DE179B481800CE2F4E /* Accelerate.framework in Frameworks */,
@@ -1213,6 +1220,7 @@
 		A78128AB17294C56002226C8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				A7F51B4819913EA700703E7C /* Evernote */,
 				A7D0685A190E654C00699B4E /* MMDrawerController */,
 				A7C0340B18DC9AEA00A252BB /* Localytics */,
 				A74D3FC818D9E76F0056D124 /* AppsFlyer */,
@@ -1422,6 +1430,15 @@
 			path = KPControlHandler;
 			sourceTree = "<group>";
 		};
+		A7F51B4819913EA700703E7C /* Evernote */ = {
+			isa = PBXGroup;
+			children = (
+				A7F51B4919913EA700703E7C /* ENSDK.framework */,
+				A7F51B4A19913EA700703E7C /* ENSDKResources.bundle */,
+			);
+			path = Evernote;
+			sourceTree = "<group>";
+		};
 		DACD542018A1ACFC00C378DF /* Dropbox */ = {
 			isa = PBXGroup;
 			children = (
@@ -1566,6 +1583,7 @@
 				A75236E517A335680030ED1E /* walkthrough_swipe_done@2x.png in Resources */,
 				A7D06867190E654C00699B4E /* LICENSE in Resources */,
 				A74FB8F418FFBCB200F25157 /* MASTER_0000.jpg in Resources */,
+				A7F51B4C19913EA700703E7C /* ENSDKResources.bundle in Resources */,
 				A75236E617A335680030ED1E /* walkthrough_swipe_schedule.png in Resources */,
 				A772B14119671D9F00C07909 /* swipesandevernote.png in Resources */,
 				DACD545618A1ACFC00C378DF /* page_white_dvd.png in Resources */,
@@ -1847,6 +1865,7 @@
 					"$(inherited)",
 					Swipes/Ressources/Libs,
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
@@ -1991,6 +2010,7 @@
 					"$(inherited)",
 					Swipes/Ressources/Libs,
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
@@ -2066,6 +2086,7 @@
 					"$(inherited)",
 					Swipes/Ressources/Libs,
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";

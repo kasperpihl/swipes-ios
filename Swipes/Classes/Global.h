@@ -15,6 +15,7 @@
 @interface Global : NSObject
 @property (nonatomic) CGFloat fontMultiplier;
 + (Global *)sharedInstance;
++ (BOOL)isEvernoteInstalled;
 + (NSInteger)OSVersion;
 + (BOOL)is24Hour;
 + (NSDateFormatter *)isoDateFormatter;

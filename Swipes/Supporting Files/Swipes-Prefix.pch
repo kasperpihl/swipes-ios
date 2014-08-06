@@ -11,7 +11,7 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-#import <EvernoteSDK.h>
+#import <ENSDK/ENSDK.h>
 #import "Global.h"
 #import "CoreData+MagicalRecord.h"
 #import "Includes.h"

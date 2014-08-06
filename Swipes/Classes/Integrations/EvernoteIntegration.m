@@ -148,10 +148,11 @@ NSError * NewNSErrorFromException(NSException * exc) {
 {
     @try {
         self.requestCounter++;
-        [[EvernoteNoteStore noteStore] updateNote:note success:^(EDAMNote *note) {
+        
+        [[[ENSession sharedSession] primaryNoteStore] updateNote:note success:^(EDAMNote *note) {
             if( block )
                 block( note, nil );
-            if (note.guidIsSet)
+            if (note.guid && note.guid.length > 0)
                 [self addNote:note forGuid:note.guid];
         } failure:^(NSError *error) {
             [self handleError:error withType:@"Evernote Update Note Error"];
@@ -180,7 +181,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     
     @try {
         self.requestCounter++;
-        [[EvernoteNoteStore noteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
+        [[[ENSession sharedSession] primaryNoteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
             
             if( block )
                 block( note , nil );
@@ -213,7 +214,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
         });
         return;
     }*/
-    EvernoteNoteStore *noteStore = [EvernoteNoteStore noteStore];
+    ENNoteStoreClient *noteStore = [[ENSession sharedSession] primaryNoteStore];
     @try {
         self.requestCounter++;
         [noteStore findNotesWithFilter:filter offset:0 maxNotes:kPaginator success:^(EDAMNoteList *list) {
@@ -233,22 +234,22 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (BOOL)isAuthenticated
 {
-    return [[EvernoteSession sharedSession] isAuthenticated];
+    return [[ENSession sharedSession] isAuthenticated];
 }
 
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block
 {
     @try {
-        EvernoteSession *session = [EvernoteSession sharedSession];
-        [session authenticateWithViewController:viewController completionHandler:^(NSError *error) {
-            if(error) {
-                [self handleError:error withType:@"Evernote Auth Error"];
+        ENSession *session = [ENSession sharedSession];
+        [session authenticateWithViewController:viewController preferRegistration:YES completion:^(NSError *authenticateError) {
+            if(authenticateError) {
+                [self handleError:authenticateError withType:@"Evernote Auth Error"];
             }
             else {
                 [self setEnableSync:YES];
                 [self setAutoFindFromTag:YES];
             }
-            block(error);
+            block(authenticateError);
         }];
     }
     @catch (NSException *exception) {
@@ -261,7 +262,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (void)logout
 {
-    [[EvernoteSession sharedSession] logout];
+    [[ENSession sharedSession] unauthenticate];
     [self clearCaches];
 }
 
@@ -275,7 +276,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     @try {
         __block NSString *swipesTagGuid;
         self.requestCounter++;
-        [[EvernoteNoteStore noteStore] listTagsWithSuccess:^(NSArray *tags) {
+        [[[ENSession sharedSession] primaryNoteStore] listTagsWithSuccess:^(NSArray *tags) {
             for ( EDAMTag *tag in tags ) {
                 if (NSOrderedSame == [tag.name caseInsensitiveCompare:kSwipesTagName]){
                     swipesTagGuid = tag.guid;
@@ -308,7 +309,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
         self.requestCounter++;
         EDAMTag *swipesTag = [[EDAMTag alloc] init];
         swipesTag.name = kSwipesTagName;
-        [[EvernoteNoteStore noteStore] createTag:swipesTag success:^(EDAMTag *tag) {
+        [[[ENSession sharedSession] primaryNoteStore] createTag:swipesTag success:^(EDAMTag *tag) {
             block(swipesTag.guid, nil);
         } failure:^(NSError *error) {
             if(error)

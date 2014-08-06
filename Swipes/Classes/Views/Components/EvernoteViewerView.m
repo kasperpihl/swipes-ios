@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
-#import <ENMLUtility.h>
+//#import <ENMLUtility.h>
 #import "KPBlurry.h"
 #import "EvernoteViewerView.h"
 
@@ -52,7 +52,7 @@
         
         // load the note
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-        [[EvernoteNoteStore noteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
+       /* [[EvernoteNoteStore noteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
             ENMLUtility *utltility = [[ENMLUtility alloc] init];
                 [utltility convertENMLToHTML:note.content withResources:note.resources completionBlock:^(NSString *html, NSError *error) {
                     if (nil == error) {
@@ -72,7 +72,7 @@
                 [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                 NSLog(@"Failed to get note : %@",error);
             }
-        ];
+        ];*/
     }
     return self;
 }

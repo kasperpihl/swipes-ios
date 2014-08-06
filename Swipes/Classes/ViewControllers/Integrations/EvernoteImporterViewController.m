@@ -11,6 +11,7 @@
 #import "SlowHighlightIcon.h"
 #import "EvernoteSyncHandler.h"
 #import "SectionHeaderView.h"
+#import <ENSDK/Advanced/ENSDKAdvanced.h>
 #import "EvernoteIntegration.h"
 #import "EvernoteImporterViewController.h"
 #import "DejalActivityView.h"
@@ -61,16 +62,16 @@
     cell.detailTextLabel.textColor = textColor;
     cell.textLabel.textColor = textColor;
     
-    if (note.titleIsSet) {
+    if (note.title && note.title.length > 0) {
         cell.textLabel.text = note.title;
     }
-    else if (note.contentIsSet) {
+    else if (note.content && note.content.length > 0) {
         cell.textLabel.text = note.content;
     }
     else {
         cell.textLabel.text = @"Untitled note";
     }
-    NSDate *updatedAt = [NSDate dateWithTimeIntervalSince1970:note.updated/1000];
+    NSDate *updatedAt = [NSDate dateWithTimeIntervalSince1970:[note.updated integerValue]/1000];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:updatedAt showTime:YES]];
 }
 
@@ -266,7 +267,7 @@
     [super viewWillAppear:animated];
     EDAMNoteFilter* filter = [EDAMNoteFilter new];
     filter.words = @"todo:*";
-    filter.order = NoteSortOrder_UPDATED;
+    filter.order = @(NoteSortOrder_UPDATED);
     filter.ascending = NO;
     [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kPaginator block:^(EDAMNoteList *list, NSError *error) {
         if(list){

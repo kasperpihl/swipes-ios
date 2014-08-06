@@ -16,6 +16,10 @@ static Global *sharedObject;
     }
     return sharedObject;
 }
++ (BOOL)isEvernoteInstalled
+{
+    return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"en://"]];
+}
 -(CGFloat)fontMultiplier{
     if( !_fontMultiplier )
         _fontMultiplier = 1;

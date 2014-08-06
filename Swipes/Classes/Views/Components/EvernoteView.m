@@ -256,7 +256,7 @@
             if (searchTerm.length > 0)
                 filter.words = [searchTerm copy];
         }
-        filter.order = NoteSortOrder_UPDATED;
+        filter.order = @(NoteSortOrder_UPDATED);
         filter.ascending = NO;
         // setup additional flags
         if (0 == searchBarText.length) { // remove this check if you want order to be always by UPDATED
@@ -281,10 +281,10 @@
             else{
                 [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                 // failure... show error notification, etc
-                if ([EvernoteSession isTokenExpiredWithError:error]) {
+                /*if ([ENSession isTokenExpiredWithError:error]) {
                     // trigger auth again
                     [self evernoteAuthenticateUsingSelector:@selector(searchNoteStore:) withObject:nil];
-                }
+                }*/
             }
         }];
 
@@ -317,16 +317,16 @@
     cell.textLabel.textColor = tcolorF(TextColor,ThemeDark);
     cell.detailTextLabel.textColor = tcolorF(TextColor,ThemeDark);
     EDAMNote* note = _noteList.notes[indexPath.row];
-    if (note.titleIsSet) {
+    if (note.title && note.title.length > 0) {
         cell.textLabel.text = note.title;
     }
-    else if (note.contentIsSet) {
+    else if (note.content && note.content.length > 0) {
         cell.textLabel.text = note.content;
     }
     else {
         cell.textLabel.text = @"Untitled";
     }
-    NSDate *updatedAt = [NSDate dateWithTimeIntervalSince1970:note.updated/1000];
+    NSDate *updatedAt = [NSDate dateWithTimeIntervalSince1970:[note.updated integerValue]/1000];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:updatedAt showTime:YES]];
 }
 
