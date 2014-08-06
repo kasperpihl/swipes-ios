@@ -13,6 +13,7 @@
 
 
 #import "SettingsHandler.h"
+#import "AnalyticsHandler.h"
 #import "HintHandler.h"
 #import "EMHint.h"
 #import "SlowHighlightIcon.h"
@@ -26,6 +27,7 @@
 @property EMHint *emHint;
 @property Hints currentHint;
 @property BOOL hintsIsOn;
+@property double hintStartTime;
 @end
 
 @implementation HintHandler
@@ -39,7 +41,7 @@
     if([self.emHint isShowingHint])
         return NO;
     BOOL completedHint = [self completeHint:hint];
-    
+
     if(completedHint){
         
         if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
@@ -72,6 +74,11 @@
             }
         }
         self.currentHint = hint;
+        self.hintStartTime = CACurrentMediaTime();
+        NSDictionary *options = @{
+                                  @"Hint": [self keyForHint:hint]
+                                  };
+        [ANALYTICS tagEvent:@"Hint Opened" options:options];
         [self.emHint presentModalMessage:hintText where:ROOT_CONTROLLER.view];
     }
     return completedHint;
@@ -144,7 +151,21 @@ static HintHandler *sharedObject;
 }
 
 
-
+-(void)hintStateWillClose:(id)hintState{
+    double endtime = CACurrentMediaTime();
+    double elapsedTime = endtime - self.hintStartTime;
+    NSString *elapsedWithOneDecimalString = [NSString stringWithFormat:@"%.1f",elapsedTime];
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterNoStyle];
+    [numberFormatter setMinimumFractionDigits:1];
+    NSNumber *numberWithOneDecimal = [numberFormatter numberFromString:elapsedWithOneDecimalString];
+    self.hintStartTime = 0;
+    NSDictionary *options = @{
+                              @"Hint": [self keyForHint:self.currentHint],
+                              @"Time elapsed": numberWithOneDecimal
+                              };
+    [ANALYTICS tagEvent:@"Hint Closed" options:options];
+}
 /*
  
 */
