@@ -178,11 +178,10 @@ static NotificationHandler *sharedObject;
         NSDate *dayStart = (NSDate*)[kSettings valueForSetting:SettingWeekendStartTime];
         NSDate *eveningStart = (NSDate*)[kSettings valueForSetting:SettingEveningStartTime];
         NSDate *weekStart = (NSDate *)[kSettings valueForSetting:SettingWeekStart];
-        
-        NSInteger lastDayBeforeStartOfWeek = (weekStart.day - 1) == 0 ? 7 : weekStart.day-1;
+        NSInteger lastDayBeforeStartOfWeek = (weekStart.weekday - 1) == 0 ? 7 : weekStart.weekday-1;
         NSDate *sundayEvening = [NSDate dateThisOrNextWeekWithDay:lastDayBeforeStartOfWeek hours:eveningStart.hour minutes:eveningStart.minute];
-        NSDate *mondayStart = [[sundayEvening dateByAddingDays:1] dateAtStartOfDay];
-        NSDate *mondayEnd = [[mondayStart dateByAddingDays:1] dateAtStartOfDay];
+        NSDate *mondayStart = [weekStart dateAtStartOfDay];
+        NSDate *mondayEnd = [[weekStart dateByAddingDays:1] dateAtStartOfDay];
         
         NSPredicate *leftForNowPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [NSDate date] ];
         NSPredicate *leftForTodayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [[NSDate dateTomorrow] dateAtStartOfDay]];
@@ -265,6 +264,8 @@ static NotificationHandler *sharedObject;
     KPToDo *lastTodo;
     NSMutableArray *notificationsArray = [NSMutableArray array];
     for (NSInteger i = 0 ; i < scheduleCount ; i++) {
+        if(i == 35)
+            break;
         KPToDo *toDo = [scheduleArray objectAtIndex:i];
         
         BOOL isLastObject = (i == scheduleCount-1);
