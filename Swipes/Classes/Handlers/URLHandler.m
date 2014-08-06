@@ -9,6 +9,8 @@
 //
 // swipes://todo/add?title=test&tag1=first%20tag&tag2=second%20tag&priority=1&notes=test%20note%0anew%20line&schedule=1406636343
 // swipes://todo/add?title=test&schedule=now
+// swipes://todo/add?title=test&schedule=now&subtask1=First%20task&subtask2=Second%20task
+// swipes://todo/clean_add?title=test&schedule=now&subtask1=First%20task&subtask2=Second%20task
 // swipes://todo/update?oldtitle=test&title=test2&notes=
 // swipes://todo/delete?title=test2
 // swipes://tag/add?title=tag22
@@ -35,6 +37,7 @@ NSString* const kSwipesDomainTag = @"tag";
 NSString* const kSwipesDomainEnToDo = @"evernotetodo";
 
 NSString* const kSwipesCommandAdd = @"/add";
+NSString* const kSwipesCommandCleanAdd = @"/clean_add";
 NSString* const kSwipesCommandUpdate = @"/update";
 NSString* const kSwipesCommandDelete = @"/delete";
 
@@ -44,6 +47,7 @@ NSString* const kSwipesParamTag = @"tag";
 NSString* const kSwipesParamPriority = @"priority";
 NSString* const kSwipesParamNotes = @"notes";
 NSString* const kSwipesParamSchedule = @"schedule";
+NSString* const kSwipesParamSubtask = @"subtask";
 NSString* const kSwipesParamGiud = @"guid";
 
 @implementation URLHandler
@@ -74,6 +78,9 @@ NSString* const kSwipesParamGiud = @"guid";
                 }
                 else if ([url.path isEqualToString:kSwipesCommandDelete]) {
                     return [self handleDeleteToDo:query];
+                }
+                if ([url.path isEqualToString:kSwipesCommandCleanAdd]) {
+                    return [self handleCleanAddToDo:query];
                 }
             }
             else if ([url.host isEqualToString:kSwipesDomainTag]) {
@@ -110,7 +117,7 @@ NSString* const kSwipesParamGiud = @"guid";
         NSMutableArray* result = [NSMutableArray array];
         for (NSUInteger i = 1; i < 255; i++) {
             NSString* data = query[[NSString stringWithFormat:@"%@%lu", prefix, (unsigned long)i]];
-            if (nil != data) {
+            if ((nil != data) && ((id)[NSNull null] != data)) {
                 [result addObject:data];
             }
             else {
@@ -182,6 +189,13 @@ NSString* const kSwipesParamGiud = @"guid";
         [todo setTags:[NSSet setWithArray:tags]];
     }
     
+    NSArray* subtasks = [self arrayFromQuery:query withPrefix:kSwipesParamSubtask];
+    if (subtasks) {
+        for (NSString *subtaskTitle in subtasks) {
+            [todo addSubtask:subtaskTitle save:NO];
+        }
+    }
+    
     [KPToDo saveToSync];
 }
 
@@ -241,6 +255,12 @@ NSString* const kSwipesParamGiud = @"guid";
         return YES;
     }
     return NO;
+}
+
+- (BOOL)handleCleanAddToDo:(NSDictionary *)query
+{
+    [self handleDeleteToDo:query];
+    return [self handleAddToDo:query];
 }
 
 #pragma mark - Tags
