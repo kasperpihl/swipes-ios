@@ -27,10 +27,18 @@ static UtilityClass *sharedObject;
 +(void)sendError:(NSError *)error type:(NSString *)type{
     [self.class sendError:error type:type attachment:nil];
 }
++(PFObject*)emptyErrorObjectForDevice{
+    PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
+    [errorObject setObject:@"iOS" forKey:@"Platform"];
+    [errorObject setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forKey:@"App Version"];
+    [errorObject setObject:[[UIDevice currentDevice] systemVersion] forKey:@"OS Version"];
+    [errorObject setObject:[UIDevice currentDevice] forKey:@"Device"];
+    return errorObject;
+}
 +(void)sendError:(NSError *)error type:(NSString *)type attachment:(NSDictionary*)attachment{
     DLog(@"Sending error: '%@' of type: '%@'", error, type);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
+        PFObject *errorObject = [self.class emptyErrorObjectForDevice];
         if ([error description])
             [errorObject setObject:[error description] forKey:@"error"];
         if (error.userInfo){
@@ -67,7 +75,7 @@ static UtilityClass *sharedObject;
 +(void)sendException:(NSException*)exception type:(NSString*)type{
     DLog(@"Sending exception: '%@' of type: '%@'", exception, type);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
+        PFObject *errorObject = [self.class emptyErrorObjectForDevice];
         if ([exception description])
             [errorObject setObject:[exception description] forKey:@"error"];
         [errorObject setObject:@(1337) forKey:@"code"];
