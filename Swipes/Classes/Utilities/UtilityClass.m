@@ -52,7 +52,7 @@ static UtilityClass *sharedObject;
                 }
             }
             @catch (NSException *exception) {
-                NSLog(@"Error trying to send '%@' to parse", error);
+                NSLog(@"Error trying to send '%@' to parse", parseError);
             }
            
         }
