@@ -19,4 +19,5 @@
 -(void)popView;
 -(void)heartbeat;
 -(void)updateIdentity;
+@property BOOL analyticsOff;
 @end

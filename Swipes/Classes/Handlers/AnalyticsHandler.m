@@ -61,6 +61,8 @@ static AnalyticsHandler *sharedObject;
     return _views;
 }
 -(void)tagEvent:(NSString *)event options:(NSDictionary *)options{
+    if(self.analyticsOff)
+        return;
     [[LocalyticsSession shared] tagEvent:event attributes:options];
     NSError* error;
     [[KeenClient sharedClient] addEvent:options toEventCollection:event error:&error];

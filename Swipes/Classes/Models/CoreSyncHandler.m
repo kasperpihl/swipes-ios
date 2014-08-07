@@ -13,6 +13,7 @@
 #import "KPTag.h"
 #import "NSDate-Utilities.h"
 #import "Reachability.h"
+#import "AnalyticsHandler.h"
 #import "UserHandler.h"
 
 #import "RootViewController.h"
@@ -906,6 +907,7 @@ static CoreSyncHandler *sharedObject;
 
 - (void)seedObjectsSave:(BOOL)save
 {
+    ANALYTICS.analyticsOff = YES;
     NSArray *tagArray = @[
                             @"home",
                             @"shopping",
@@ -938,7 +940,7 @@ static CoreSyncHandler *sharedObject;
     [self saveContextForSynchronization:nil];
 //   NSArray *todosForTagsArray = [KPToDo MR_findAll];
 //    todosForTagsArray = [todosForTagsArray subarrayWithRange:NSMakeRange(0, 3)];
-    
+    ANALYTICS.analyticsOff = NO;
     [UTILITY.userDefaults setBool:YES forKey:@"seeded"];
 }
 

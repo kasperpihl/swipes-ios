@@ -53,7 +53,7 @@
     else if(item.length <= 30) taskLength = @"21-30";
     else if(item.length <= 40) taskLength = @"31-40";
     else if(item.length <= 50) taskLength = @"41-50";
-    [ANALYTICS tagEvent:@"Added Task" options:@{@"Length":taskLength}];
+    [ANALYTICS tagEvent:@"Added Task" options:@{@"ActionStep":@(NO),@"Length":taskLength}];
     [ANALYTICS heartbeat];
     [NOTIHANDLER updateLocalNotifications];
     
@@ -75,7 +75,7 @@
     else if(title.length <= 40) taskLength = @"31-40";
     else if(title.length <= 50) taskLength = @"41-50";
     NSInteger numberOfActionSteps = self.subtasks.count;
-    [ANALYTICS tagEvent:@"Added Action Step" options:@{@"Length":taskLength, @"Total Action Steps on Task": @(numberOfActionSteps)}];
+    [ANALYTICS tagEvent:@"Added Task" options:@{@"ActionStep":@(YES),@"Length":taskLength, @"Total Action Steps on Task": @(numberOfActionSteps)}];
     
     
     return subTask;
