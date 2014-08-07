@@ -147,6 +147,8 @@
         }
         if(save)
             [KPToDo saveToSync];
+        NSDictionary *options = @{ @"Number of tags": tags.count, @"Number of tasks": toDos.count, @"Assigned": @(!remove) };
+        [ANALYTICS tagEvent:@"Update tags" options:options];
         [ANALYTICS heartbeat];
     }
 }
