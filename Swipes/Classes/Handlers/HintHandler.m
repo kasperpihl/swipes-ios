@@ -78,6 +78,7 @@
         NSDictionary *options = @{
                                   @"Hint": [self keyForHint:hint]
                                   };
+
         [ANALYTICS tagEvent:@"Hint Opened" options:options];
         [self.emHint presentModalMessage:hintText where:ROOT_CONTROLLER.view];
     }
@@ -164,6 +165,7 @@ static HintHandler *sharedObject;
                               @"Hint": [self keyForHint:self.currentHint],
                               @"Time elapsed": numberWithOneDecimal
                               };
+    NSLog(@"key:%@",options);
     [ANALYTICS tagEvent:@"Hint Closed" options:options];
 }
 /*

@@ -121,7 +121,6 @@
     
     //NSLog(@"%@",[kCurrent sessionToken]);
     
-    DLog(@"%@",[UIFont fontNamesForFamilyName:@"Varela Round"]);
     
     return YES;
 }

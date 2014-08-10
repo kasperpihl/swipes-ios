@@ -63,6 +63,7 @@ static AnalyticsHandler *sharedObject;
 -(void)tagEvent:(NSString *)event options:(NSDictionary *)options{
     if(self.analyticsOff)
         return;
+    return;
     [[LocalyticsSession shared] tagEvent:event attributes:options];
     NSError* error;
     [[KeenClient sharedClient] addEvent:options toEventCollection:event error:&error];
@@ -85,14 +86,14 @@ static AnalyticsHandler *sharedObject;
     if(![[self customDimension:kCusDimUserLevel] isEqualToString:userLevelString]){
         [self setCustomDimension:kCusDimUserLevel value:userLevelString];
     }
-
+//@"Language": [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:[[NSLocale currentLocale] identifier]],
     
     KeenClient *client = [KeenClient sharedClient];
     NSMutableDictionary *probs = [@{
         @"Platform": @"iOS",
         @"OS Version": [[UIDevice currentDevice] systemVersion],
         @"App Version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
-        @"Language": [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:[[NSLocale currentLocale] identifier]],
+        
         @"Country": [[NSLocale currentLocale] displayNameForKey:NSLocaleCountryCode value:[[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]],
         @"Device": [[UIDevice currentDevice] model]
     } mutableCopy];
