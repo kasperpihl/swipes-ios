@@ -6,36 +6,49 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "UtilityClass.h"
+#import <QuartzCore/QuartzCore.h>
 #import "AppDelegate.h"
 #import "KPParseCommunicator.h"
-#import <QuartzCore/QuartzCore.h>
 #import "NSDate-Utilities.h"
+#import "UtilityClass.h"
+
 #define trgb(num) (num/255.0)
+
 @interface UtilityClass () <UIAlertViewDelegate>
 @property (copy) SuccessfulBlock block;
 @property (copy) NumberBlock numberBlock;
 @end
 
 @implementation UtilityClass
-@synthesize userDefaults = _userDefaults;
-static UtilityClass *sharedObject;
-+(UtilityClass*)instance{
-    if(sharedObject == nil) sharedObject = [[super allocWithZone:NULL] init];
-    return sharedObject;
+
++ (instancetype)instance
+{
+    static dispatch_once_t once;
+    static id sharedInstance;
+    dispatch_once(&once, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
 }
-+(void)sendError:(NSError *)error type:(NSString *)type{
+
++ (void)sendError:(NSError *)error type:(NSString *)type{
     [self.class sendError:error type:type attachment:nil];
 }
-+(PFObject*)emptyErrorObjectForDevice{
+
++ (PFObject*)emptyErrorObjectForDevice{
     PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
     [errorObject setObject:@"iOS" forKey:@"Platform"];
     [errorObject setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forKey:@"AppVersion"];
-    [errorObject setObject:[[UIDevice currentDevice] systemVersion] forKey:@"OSVersion"];
-    [errorObject setObject:[UIDevice currentDevice].name forKey:@"Device"];
+    NSString* data = [UIDevice currentDevice].systemVersion;
+    if (data)
+        [errorObject setObject:data forKey:@"OSVersion"];
+    data = [UIDevice currentDevice].name;
+    if (data)
+        [errorObject setObject:data forKey:@"Device"];
     return errorObject;
 }
-+(void)sendError:(NSError *)error type:(NSString *)type attachment:(NSDictionary*)attachment{
+
++ (void)sendError:(NSError *)error type:(NSString *)type attachment:(NSDictionary*)attachment{
     DLog(@"Sending error: '%@' of type: '%@'", error, type);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [self.class emptyErrorObjectForDevice];
