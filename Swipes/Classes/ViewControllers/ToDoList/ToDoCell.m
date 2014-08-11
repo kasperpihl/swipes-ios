@@ -145,6 +145,8 @@
         alarmLabel.backgroundColor = CLEAR;
         alarmLabel.textColor = tcolor(SubTextColor);
         alarmLabel.hidden = YES;
+        [self.contentView addSubview:alarmLabel];
+        self.alarmLabel = (UILabel*)[self.contentView viewWithTag:ALARM_LABEL_TAG];
         
         UIButton *priorityButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, CELL_LABEL_X, self.frame.size.height)];
         priorityButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
@@ -239,6 +241,8 @@
     
     self.alarmLabel.hidden = YES;
     if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
+        CGRectSetSize(self.alarmLabel, 200, 200);
+        self.alarmLabel.hidden = NO;
         NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
         NSString *dateInString = [UtilityClass timeStringForDate:showDate];
         self.alarmLabel.text = dateInString;
@@ -247,7 +251,7 @@
         self.alarmLabel.textColor = [StyleHandler colorForCellType:self.cellType];
         CGRectSetX(self.alarmLabel,deltaX);
         deltaX += self.alarmLabel.frame.size.width + kIconSpacing;
-        self.alarmLabel.hidden = NO;
+        
         showBottomLine = YES;
         alarmLabel = YES;
     }
