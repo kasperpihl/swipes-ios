@@ -41,7 +41,7 @@
     if([self.emHint isShowingHint])
         return NO;
     BOOL completedHint = [self completeHint:hint];
-    completedHint = YES;
+    
     if(completedHint){
         
         if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
