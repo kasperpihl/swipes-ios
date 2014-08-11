@@ -160,6 +160,8 @@ static HintHandler *sharedObject;
     [numberFormatter setNumberStyle:NSNumberFormatterNoStyle];
     [numberFormatter setMinimumFractionDigits:1];
     NSNumber *numberWithOneDecimal = [numberFormatter numberFromString:elapsedWithOneDecimalString];
+    if(!numberWithOneDecimal)
+        numberWithOneDecimal = @(0);
     self.hintStartTime = 0;
     NSDictionary *options = @{
                               @"Hint": [self keyForHint:self.currentHint],
@@ -336,6 +338,8 @@ static HintHandler *sharedObject;
     self.hints = [[NSUserDefaults standardUserDefaults] objectForKey:kHintDictionaryKey];
     if(!self.hints)
         self.hints = [NSMutableDictionary dictionary];
+    else
+        self.hints = [self.hints mutableCopy];
     self.emHint = [[EMHint alloc] init];
     self.emHint.hintDelegate = self;
     [[NSNotificationCenter defaultCenter] addObserver:sharedObject  selector:@selector(orientationChanged:)  name:UIDeviceOrientationDidChangeNotification  object:nil];
