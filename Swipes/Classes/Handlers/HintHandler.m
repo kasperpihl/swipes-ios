@@ -41,7 +41,7 @@
     if([self.emHint isShowingHint])
         return NO;
     BOOL completedHint = [self completeHint:hint];
-
+    completedHint = YES;
     if(completedHint){
         
         if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
@@ -154,13 +154,12 @@ static HintHandler *sharedObject;
 -(void)hintStateWillClose:(id)hintState{
     double endtime = CACurrentMediaTime();
     double elapsedTime = endtime - self.hintStartTime;
-    NSString *elapsedWithOneDecimalString = [NSString stringWithFormat:@"%.1f",elapsedTime];
-    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-    [numberFormatter setNumberStyle:NSNumberFormatterNoStyle];
-    [numberFormatter setMinimumFractionDigits:1];
-    NSNumber *numberWithOneDecimal = [numberFormatter numberFromString:elapsedWithOneDecimalString];
+
+    NSString *elapsedWithOneDecimalString = [NSString stringWithFormat:@"%.1lf",elapsedTime];
+    NSNumber *numberWithOneDecimal = @([elapsedWithOneDecimalString floatValue]);
     if(!numberWithOneDecimal)
         numberWithOneDecimal = @(0);
+    
     self.hintStartTime = 0;
     NSDictionary *options = @{
                               @"Hint": [self keyForHint:self.currentHint],
