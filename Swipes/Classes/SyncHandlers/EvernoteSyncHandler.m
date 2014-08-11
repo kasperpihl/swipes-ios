@@ -24,6 +24,9 @@
 
 
 #define kMaxNotes 100
+
+#define kFetchChangesTimeout 180
+
 NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 
 @interface EvernoteSyncHandler ()
@@ -287,7 +290,13 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     [self.changedNotes removeAllObjects];
     kEnInt.requestCounter = 0;
     self.block(SyncStatusStarted, nil, nil);
-    
+    BOOL hasLocalChanges = [self checkForLocalChanges];
+    if(!hasLocalChanges){
+        if( [self.lastUpdated timeIntervalSinceNow] > -kFetchChangesTimeout ){
+            NSLog(@"returning due to caching");
+            return self.block(SyncStatusSuccess, nil, nil );
+        }
+    }
     [self findUpdatedNotesWithTag:@"swipes" block:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
         if(error){
             block(SyncStatusError, nil, error);
@@ -298,7 +307,18 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     }];
     
 }
-
+-(BOOL)checkForLocalChanges{
+    self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
+    
+    NSMutableArray *changedObjects = [NSMutableArray array];
+    for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
+        BOOL hasLocalChanges = [todoWithEvernote hasChangesSinceDate:self.lastUpdated];
+        if(hasLocalChanges)
+            [changedObjects addObject:todoWithEvernote];
+    }
+    return (changedObjects.count > 0);
+    
+}
 
 -(void)findUpdatedNotesWithTag:(NSString*)tag block:(SyncBlock)block{
     
@@ -397,11 +417,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 -(void)syncEvernoteWithBlock:(SyncBlock)block{
     self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
     DLog(@"performing sync with Evernote");
-    // If no objects has attachments - send a success back to caller
-    if (self.objectsWithEvernote.count == 0){
-        return self.block(SyncStatusSuccess, nil, nil);
-    }
-
+    
     // ensure evernote authentication
     NSError* error = [NSError errorWithDomain:@"Evernote not authenticated" code:601 userInfo:nil];
     EvernoteSession *session = [EvernoteSession sharedSession];
