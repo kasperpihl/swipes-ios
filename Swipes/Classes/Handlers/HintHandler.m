@@ -159,6 +159,8 @@ static HintHandler *sharedObject;
     [numberFormatter setNumberStyle:NSNumberFormatterNoStyle];
     [numberFormatter setMinimumFractionDigits:1];
     NSNumber *numberWithOneDecimal = [numberFormatter numberFromString:elapsedWithOneDecimalString];
+    if(!numberWithOneDecimal)
+        numberWithOneDecimal = @(0);
     self.hintStartTime = 0;
     NSDictionary *options = @{
                               @"Hint": [self keyForHint:self.currentHint],
