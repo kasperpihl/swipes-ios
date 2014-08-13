@@ -28,11 +28,14 @@
 #import "AnalyticsHandler.h"
 #import "URLHandler.h"
 
+#import "UIWindow+DHCShakeRecognizer.h"
+
 #import "RootViewController.h"
 
 #import "AppDelegate.h"
 
 @implementation AppDelegate
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSString *parseApplicationKey;
@@ -118,6 +121,8 @@
     }
     
     [EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
     
     //NSLog(@"%@",[kCurrent sessionToken]);
     
@@ -282,6 +287,11 @@
 {
     UIBackgroundFetchResult result = [KPCORE synchronizeForce:YES async:NO];
     completionHandler(result);
+}
+
+- (void)onShake:(id)sender
+{
+    [KPCORE undo];
 }
 
 @end

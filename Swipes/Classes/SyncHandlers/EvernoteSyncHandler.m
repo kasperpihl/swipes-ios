@@ -45,34 +45,6 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 @end
 @implementation EvernoteSyncHandler
 
--(NSMutableArray *)_updatedTasks{
-    if( !__updatedTasks )
-        __updatedTasks = [NSMutableArray array];
-    return __updatedTasks;
-}
-
--(NSArray*)getObjectsSyncedWithEvernote{
-    
-    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
-    
-    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"ANY attachments.service like %@ AND ANY attachments.sync == 1",EVERNOTE_SERVICE];
-    NSArray *todosWithEvernote = [KPToDo MR_findAllWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
-    
-    return todosWithEvernote;
-
-}
-
-
--(void)updateEvernoteCount:(NSInteger)newUpdateCount{
-    DLog(@"new %lu exp %lu",(long)newUpdateCount,(long)self.expectedEvernoteCount);
-    if( newUpdateCount > self.expectedEvernoteCount ){
-        self.updateNeededFromEvernote = YES;
-    }
-    self.currentEvernoteUpdateCount = newUpdateCount;
-    self.expectedEvernoteCount = newUpdateCount;
-}
-
-
 +(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes{
     for( EDAMNote *note in notes ){
         
@@ -104,6 +76,34 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     }
     return self;
 }
+
+-(NSMutableArray *)_updatedTasks{
+    if( !__updatedTasks )
+        __updatedTasks = [NSMutableArray array];
+    return __updatedTasks;
+}
+
+-(NSArray*)getObjectsSyncedWithEvernote{
+    
+    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
+    
+    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"ANY attachments.service like %@ AND ANY attachments.sync == 1",EVERNOTE_SERVICE];
+    NSArray *todosWithEvernote = [KPToDo MR_findAllWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
+    
+    return todosWithEvernote;
+    
+}
+
+
+-(void)updateEvernoteCount:(NSInteger)newUpdateCount{
+    DLog(@"new %lu exp %lu",(long)newUpdateCount,(long)self.expectedEvernoteCount);
+    if( newUpdateCount > self.expectedEvernoteCount ){
+        self.updateNeededFromEvernote = YES;
+    }
+    self.currentEvernoteUpdateCount = newUpdateCount;
+    self.expectedEvernoteCount = newUpdateCount;
+}
+
 
 // Just testing
 -(void)didDelay{
@@ -179,8 +179,8 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     return updated;
 }
 
-
--(KPToDo*)findAndHandleMatchesForToDo:(KPToDo*)parentToDo withEvernoteToDos:(NSArray *)evernoteToDos inNoteProcessor:(EvernoteToDoProcessor*)processor{
+-(KPToDo*)findAndHandleMatchesForToDo:(KPToDo*)parentToDo withEvernoteToDos:(NSArray *)evernoteToDos inNoteProcessor:(EvernoteToDoProcessor*)processor
+{
     // search for our TODO (comparing only title)
     NSArray *subtasks = [self filterSubtasksWithEvernote:parentToDo.subtasks];
     
@@ -317,7 +317,6 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
             [changedObjects addObject:todoWithEvernote];
     }
     return (changedObjects.count > 0);
-    
 }
 
 -(void)findUpdatedNotesWithTag:(NSString*)tag block:(SyncBlock)block{
@@ -413,7 +412,6 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 }
 
 
-
 -(void)syncEvernoteWithBlock:(SyncBlock)block{
     self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
     DLog(@"performing sync with Evernote");
@@ -439,12 +437,19 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
             DLog(@"requests used for Evernote sync: %lu",(long)kEnInt.requestCounter);
             if(runningError){
                 self.block(SyncStatusError, nil, runningError);
-                
                 return;
             }
             // If changes to Core Data - make sure it gets synced to our server.
             if([[KPCORE context] hasChanges]){
-                [KPToDo saveToSync];
+                @synchronized(kEvernoteUpdatedAtKey) {
+                    NSUndoManager* um = [KPCORE context].undoManager;
+                    BOOL state = um.isUndoRegistrationEnabled;
+                    if (state)
+                        [um disableUndoRegistration];
+                    [KPToDo saveToSync];
+                    if (state != um.isUndoRegistrationEnabled)
+                        [um enableUndoRegistration];
+                }
             }
             [self setUpdatedAt:date];
             self.updateNeededFromEvernote = NO;
