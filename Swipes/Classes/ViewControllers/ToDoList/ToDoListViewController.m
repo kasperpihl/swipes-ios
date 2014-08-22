@@ -269,6 +269,12 @@
     
     if(self.hasStartedEditing)
         return;
+    
+    if ([ROOT_CONTROLLER.viewControllers containsObject:self.showingViewController]) {
+        [UtilityClass sendError:[NSError errorWithDomain:@"Pushing the same view controller instance more than once" code:101 userInfo:nil] type:@"Todo List"];
+        return;
+    }
+    
     self.hasStartedEditing = YES;
     self.savedContentOffset = self.tableView.contentOffset;
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
