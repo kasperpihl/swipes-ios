@@ -27,6 +27,7 @@
 #import "CoreSyncHandler.h"
 #import "AnalyticsHandler.h"
 #import "URLHandler.h"
+#import "EvernoteIntegration.h"
 
 #import "RootViewController.h"
 
@@ -121,7 +122,6 @@
     
     //NSLog(@"%@",[kCurrent sessionToken]);
     
-    DLog(@"%@",[UIFont fontNamesForFamilyName:@"Varela Round"]);
     
     return YES;
 }
@@ -253,7 +253,9 @@
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
-{
+{    
+    
+    
     [Appirater appEnteredForeground:YES];
     [ROOT_CONTROLLER openApp];
     [[LocalyticsSession shared] resume];

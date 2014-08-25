@@ -333,7 +333,7 @@
         self._isSyncing = NO;
         [self synchronizeForce:YES async:YES];
     }
-    else if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached]) {
+    else if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached] && !error) {
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             if (error) {
                 [EvernoteIntegration updateAPILimitIfNeeded:error];
@@ -541,7 +541,7 @@
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     //NSLog(@"resulted err:%@",error);
-    //NSLog(@"%@ res:%@ err: %@",result[@"message"],result[@"logs"],error);
+    //NSLog(@"res: %@ err: %@",result,error);
     if([result objectForKey:@"hardSync"])
         [self hardSync];
     
@@ -552,7 +552,7 @@
             if([message isEqualToString:@"update required"]){
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[[UIAlertView alloc] initWithTitle:@"New version required" message:@"For sync to work - please update Swipes from the App Store" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil] show];
-                    NSLog(@"adding here");
+                    //NSLog(@"adding here");
                     self.outdated = YES;
                 });
             }
