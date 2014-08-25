@@ -13,6 +13,7 @@ pod 'APAddressBook'
 pod 'DejalActivityView'
 pod 'KeenClient', :inhibit_warnings => true
 pod 'NSURL+QueryDictionary'
+pod 'DHCShakeNotifier'
 
 #pod 'MMDrawerController', '~> 0.5.3' - now part of libs as it was modified
 

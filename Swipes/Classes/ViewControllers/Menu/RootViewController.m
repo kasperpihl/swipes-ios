@@ -93,9 +93,11 @@
                 [user setObject:email forKey:@"email"];
             }
             NSString *gender = [userData objectForKey:@"gender"];
-            if(gender) [user setObject:gender forKey:@"gender"];
+            if(gender)
+                [user setObject:gender forKey:@"gender"];
             [user saveEventually];
-            if(email) [user setObject:email forKey:@"username"];
+            if(email)
+                [user setObject:email forKey:@"username"];
             [user saveEventually];
             [ANALYTICS updateIdentity];
         }

@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
+#import <AudioToolbox/AudioServices.h>
 #import "CoreSyncHandler.h"
 #import "UtilityClass.h"
 #import "KPToDo.h"
@@ -571,6 +572,9 @@
     lastUpdate = [result objectForKey:@"updateTime"];
     [result objectForKey:@"serverTime"];
     
+    __block NSUndoManager* um = self.context.undoManager;
+    if (um.isUndoRegistrationEnabled)
+        [um disableUndoRegistration];
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
     NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
     for(NSDictionary *object in allObjects){
@@ -587,6 +591,8 @@
             [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:kLastSyncServerString];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self cleanUpAfterSync];
+        if (!um.isUndoRegistrationEnabled)
+            [um enableUndoRegistration];
         DUMPDB;
         [self finalizeSyncWithUserInfo:nil error:nil];
     }];
@@ -796,27 +802,6 @@
     }
 }
 
--(void)loadTest{
-    /*NSArray *tagArray = @[
-                          @"home",
-                          @"shopping",
-                          @"work"
-                          ];
-    */
-    /*for(NSString *tag in tagArray){
-        [KPTag addTagWithString:tag save:NO];
-    }
-    [self saveContextForSynchronization:nil];*/
-    NSInteger i = 0;
-    do {
-        [KPToDo addItem:[NSString stringWithFormat:@"Testing %li",(long)i] priority:NO tags:nil save:NO];
-        i++;
-    } while (i < 500);
-    //NSLog(@"saving");
-    [self saveContextForSynchronization:nil];
-}
-
-
 - (void)clearAndDeleteData
 {
     NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
@@ -883,6 +868,7 @@ static CoreSyncHandler *sharedObject;
 {
     @try {
         [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
+        [[NSManagedObjectContext MR_defaultContext] setUndoManager:[[NSUndoManager alloc] init]];
         
         [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(performTestForSyncing) userInfo:nil repeats:NO];
     }
@@ -892,6 +878,36 @@ static CoreSyncHandler *sharedObject;
     @finally {
     }
 }
+
+#pragma mark - Undo support
+
+- (void)undo
+{
+    // TODO
+    // 1. There is a problem with evernote, swipe 2 subtasks and then undo them, first undo work for first task, there is a second undo
+    // I don't know what it does, and the third undoes second task. Am I missing something? Probably some core data update?
+    // 2. when you are in ToDo editor UI update notification does not work
+    if (!self._isSyncing) {
+        NSUndoManager* um = self.context.undoManager;
+        if (um && um.canUndo && (!um.isUndoing)) {
+            DLog(@"UNDO !!!");
+            @try {
+                [um undo];
+                [self saveContextForSynchronization:nil];
+                [self synchronizeForce:NO async:YES];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:self userInfo:nil];
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            @catch (NSException *exception) {
+                [UtilityClass sendException:exception type:@"Undo exception"];
+                [um removeAllActions];
+            }
+        }
+    }
+}
+
+#pragma mark -
+
 -(void)performTestForSyncing{
     /*[self.evernoteSyncHandler getSwipesTagGuidBlock:^(NSString *string, NSError *error) {
         DLog(@"%@",string);
@@ -975,6 +991,26 @@ static CoreSyncHandler *sharedObject;
         NSLog(@"KPAttachment: %@",obj);
     }
     NSLog(@"==== Dumping local DB end");
+}
+
+-(void)loadTest{
+    /*NSArray *tagArray = @[
+     @"home",
+     @"shopping",
+     @"work"
+     ];
+     */
+    /*for(NSString *tag in tagArray){
+     [KPTag addTagWithString:tag save:NO];
+     }
+     [self saveContextForSynchronization:nil];*/
+    NSInteger i = 0;
+    do {
+        [KPToDo addItem:[NSString stringWithFormat:@"Testing %li",(long)i] priority:NO tags:nil save:NO];
+        i++;
+    } while (i < 500);
+    //NSLog(@"saving");
+    [self saveContextForSynchronization:nil];
 }
 
 #endif

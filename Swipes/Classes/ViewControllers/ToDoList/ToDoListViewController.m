@@ -42,13 +42,13 @@
 
 @property (nonatomic,strong) MCSwipeTableViewCell *swipingCell;
 
-@property (nonatomic,strong) ToDoViewController *showingViewController;
+@property (nonatomic, strong) ToDoViewController *showingViewController;
 @property (nonatomic) CGPoint savedContentOffset;
 @property (nonatomic) CellType cellType;
-@property (nonatomic,strong) KPSearchBar *searchBar;
+@property (nonatomic, strong) KPSearchBar *searchBar;
 @property (nonatomic) NSMutableArray *selectedRows;
-@property (nonatomic,weak) IBOutlet UIView *menuText;
-@property (nonatomic,weak) UIView *fakeHeaderView;
+@property (nonatomic, weak) UIView *menuText;
+@property (nonatomic, weak) UIView *fakeHeaderView;
 @property (nonatomic) BOOL isColored;
 @property (nonatomic) BOOL isHandlingTrigger;
 @property (nonatomic) BOOL isLonelyRider;
@@ -60,7 +60,6 @@
 @end
 
 @implementation ToDoListViewController
-@synthesize showingViewController = _showingViewController;
 
 -(ItemHandler *)itemHandler{
     if(!_itemHandler){
@@ -270,6 +269,12 @@
     
     if(self.hasStartedEditing)
         return;
+    
+    if ([ROOT_CONTROLLER.viewControllers containsObject:self.showingViewController]) {
+        [UtilityClass sendError:[NSError errorWithDomain:@"Pushing the same view controller instance more than once" code:101 userInfo:nil] type:@"Todo List"];
+        return;
+    }
+    
     self.hasStartedEditing = YES;
     self.savedContentOffset = self.tableView.contentOffset;
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
