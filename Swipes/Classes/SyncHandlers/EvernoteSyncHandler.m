@@ -24,6 +24,7 @@
 
 
 #define kMaxNotes 100
+#define kTitleMaxLength 255
 
 #define kFetchChangesTimeout 180
 
@@ -58,8 +59,8 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         else {
             title = @"Untitled note";
         }
-        if(title.length > 256)
-            title = [title substringToIndex:255];
+        if(title.length > kTitleMaxLength)
+            title = [title substringToIndex:kTitleMaxLength];
         KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO];
         [newToDo attachService:EVERNOTE_SERVICE title:title identifier:note.guid sync:YES];
     }

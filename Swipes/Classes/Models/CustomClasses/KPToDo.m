@@ -824,7 +824,8 @@
 {
     // remove all present attachments for this service
     [self removeAllAttachmentsForService:service];
-    
+    if(title.length > 255)
+        title = [title substringToIndex:255];
     // create the attachment
     KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync];
     // add the new attachment
