@@ -24,7 +24,6 @@
 
 
 #define kMaxNotes 100
-#define kTitleMaxLength 255
 
 #define kFetchChangesTimeout 180
 
