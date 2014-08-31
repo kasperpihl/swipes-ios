@@ -118,6 +118,9 @@ static NSSet* g_startEndElements;
         if (0 == todoText.length) {
             todoText = [NSString stringWithFormat:@"Untitled %lu", (unsigned long)_untitledCount++];
         }
+        if(255 < todoText.length){
+            todoText = [todoText substringToIndex:255];
+        }
 //        NSLog(@"Found TODO: %@", todoText);
         [_todos addObject:[[EvernoteToDo alloc] initWithTitle:todoText checked:_checked position:_todos.count]];
         _tempToDoText = nil;
