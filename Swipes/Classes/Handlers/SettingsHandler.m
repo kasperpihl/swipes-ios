@@ -149,7 +149,7 @@ static SettingsHandler *sharedObject;
         case SettingEvernoteSync:
             return @YES;
         case IntegrationEvernoteEnableSync:
-            return @YES;
+            return @NO;
         case IntegrationEvernoteSwipesTag:
             return @NO;
     }

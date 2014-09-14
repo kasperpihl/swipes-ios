@@ -10,14 +10,8 @@
 #define UTILITY [UtilityClass instance]
 
 @interface UtilityClass : NSObject
--(int)ageForBirthday:(NSString *)birthday;
-@property (nonatomic,strong) NSUserDefaults *userDefaults;
-//+ (UIImage *)imageWithColor:(UIColor *)color;
-+(UtilityClass*)instance;
--(NSNumber*)versionNumber;
--(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block;
--(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message cancel:(NSString*)cancel confirm:(NSString*)confirm block:(SuccessfulBlock)block;
--(void)popupWithTitle:(NSString*)title andMessage:(NSString*)message buttonTitles:(NSArray*)buttonTitles block:(NumberBlock)block;
+
++(instancetype)instance;
 +(NSString*)generateIdWithLength:(NSInteger)length;
 +(void)sendError:(NSError *)error type:(NSString *)type;
 +(void)sendError:(NSError *)error type:(NSString *)type attachment:(NSDictionary*)attachment;
@@ -31,5 +25,14 @@
 +(NSString*)timeStringForDate:(NSDate*)date;
 +(NSString*)dayOfMonthForDate:(NSDate*)date;
 +(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime;
+
+@property (nonatomic,strong) NSUserDefaults *userDefaults;
+
+//+ (UIImage *)imageWithColor:(UIColor *)color;
+-(int)ageForBirthday:(NSString *)birthday;
+-(NSNumber*)versionNumber;
+-(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block;
+-(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message cancel:(NSString*)cancel confirm:(NSString*)confirm block:(SuccessfulBlock)block;
+-(void)popupWithTitle:(NSString*)title andMessage:(NSString*)message buttonTitles:(NSArray*)buttonTitles block:(NumberBlock)block;
 
 @end

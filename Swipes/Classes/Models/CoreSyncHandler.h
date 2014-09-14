@@ -36,6 +36,8 @@
 -(void)hardSync;
 - (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async;
 
+- (void)undo;
+
 #ifdef DEBUG
 - (void)dumpLocalDb;
 #endif

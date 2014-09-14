@@ -93,11 +93,11 @@ static AnalyticsHandler *sharedObject;
         @"Platform": @"iOS",
         @"OS Version": [[UIDevice currentDevice] systemVersion],
         @"App Version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
-        
         @"Country": [[NSLocale currentLocale] displayNameForKey:NSLocaleCountryCode value:[[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]],
         @"Device": [[UIDevice currentDevice] model]
     } mutableCopy];
-    
+    //@"Language": [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:[[NSLocale currentLocale] identifier]],
+
     if(kCurrent){
         [probs setObject:[kUserHandler getUserLevelString] forKey:@"userLevel"];
         if(kCurrent.objectId)
