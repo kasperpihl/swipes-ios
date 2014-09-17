@@ -18,7 +18,6 @@
 + (NSInteger)OSVersion;
 + (BOOL)is24Hour;
 + (NSDateFormatter *)isoDateFormatter;
-+ (CGFloat)statusBarHeight;
 + (UILabel*)iconLabelWithString:(NSString*)iconString height:(CGFloat)height;
 + (NSString*)iconStringForString:(NSString*)iconString;
 + (BOOL)supportsOrientation:(UIDeviceOrientation)orientation;

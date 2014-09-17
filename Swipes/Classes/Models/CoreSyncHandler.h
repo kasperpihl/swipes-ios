@@ -19,8 +19,9 @@
 
 +(CoreSyncHandler *)sharedInstance;
 
-@property (nonatomic,strong) NSManagedObjectContext *context;
-@property (nonatomic,weak) id<SyncDelegate> delegate;
+@property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic, weak) id<SyncDelegate> delegate;
+@property (nonatomic, weak) UIViewController* rootController;
 
 -(void)clearAndDeleteData;
 -(void)seedObjectsSave:(BOOL)save;

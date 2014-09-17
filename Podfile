@@ -1,19 +1,64 @@
 platform :ios, '6.1'
-pod 'Appirater', :inhibit_warnings => true
-pod 'Bolts', :inhibit_warnings => true
-pod 'Facebook-iOS-SDK', :inhibit_warnings => true
-pod 'Parse', :inhibit_warnings => true
-pod 'MagicalRecord', :inhibit_warnings => true
-pod 'Reachability'
-pod 'Underscore.m'
-pod 'RMStore', '~> 0.4.2', :inhibit_warnings => true
-pod 'Base64'
-pod 'Evernote-SDK-iOS', :inhibit_warnings => true
-pod 'APAddressBook'
-pod 'DejalActivityView'
-pod 'KeenClient', :inhibit_warnings => true
-pod 'NSURL+QueryDictionary'
-pod 'DHCShakeNotifier'
+
+target :Swipes do
+    pod 'Appirater', :inhibit_warnings => true
+    pod 'Bolts', :inhibit_warnings => true
+#    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
+    pod 'Parse', :inhibit_warnings => true
+    pod 'ParseFacebookUtils'
+    pod 'MagicalRecord', :inhibit_warnings => true
+    pod 'Reachability'
+    pod 'Underscore.m'
+    pod 'RMStore', '~> 0.4.2', :inhibit_warnings => true
+    pod 'Base64'
+    pod 'Evernote-SDK-iOS', :inhibit_warnings => true
+    pod 'APAddressBook'
+    pod 'DejalActivityView'
+    pod 'KeenClient', :inhibit_warnings => true
+    pod 'NSURL+QueryDictionary'
+    pod 'DHCShakeNotifier'
+end
+
+#target :Swipes_iOS8 do
+#    pod 'Appirater', :inhibit_warnings => true
+#    pod 'Bolts', :inhibit_warnings => true
+#    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
+#    pod 'Parse-iOS', :inhibit_warnings => true
+#    pod 'ParseFacebookUtils'
+#    pod 'MagicalRecord', :inhibit_warnings => true
+#    pod 'Reachability'
+#    pod 'Underscore.m'
+#    pod 'RMStore', '~> 0.4.2', :inhibit_warnings => true
+#    pod 'Base64'
+#    pod 'Evernote-SDK-iOS', :inhibit_warnings => true
+#    pod 'APAddressBook'
+#    pod 'DejalActivityView'
+#    pod 'KeenClient', :inhibit_warnings => true
+#    pod 'NSURL+QueryDictionary'
+#    pod 'DHCShakeNotifier'
+#end
+
+target :SwipesKit do
+    pod 'Appirater', :inhibit_warnings => true
+    pod 'Bolts', :inhibit_warnings => true
+#    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
+    pod 'Parse', :inhibit_warnings => true
+    pod 'ParseFacebookUtils'
+    pod 'MagicalRecord', :inhibit_warnings => true
+    pod 'Reachability'
+    pod 'Underscore.m'
+    pod 'RMStore', '~> 0.4.2', :inhibit_warnings => true
+    pod 'Base64'
+    pod 'Evernote-SDK-iOS', :inhibit_warnings => true
+    pod 'APAddressBook'
+    pod 'DejalActivityView'
+    pod 'KeenClient', :inhibit_warnings => true
+    pod 'NSURL+QueryDictionary'
+    pod 'DHCShakeNotifier'
+end
+
+#link_with 'Swipes', 'Swipes_iOS8', 'SwipesKit'
+#link_with 'Swipes', 'SwipesKit'
 
 #pod 'MMDrawerController', '~> 0.5.3' - now part of libs as it was modified
 

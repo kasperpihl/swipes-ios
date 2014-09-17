@@ -8,7 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #define kHints [HintHandler sharedInstance]
-typedef enum {
+
+#define HH_TriggerHint @"HH_TriggerHint"
+
+typedef NS_ENUM(NSInteger, Hints) {
     HintWelcome = 1,
     HintAccount,
     HintSelected,
@@ -18,7 +21,7 @@ typedef enum {
     HintPriority,
     HintEvernoteIntegration
     
-} Hints;
+};
 
 @class HintHandler;
 @protocol HintHandlerDelegate <NSObject>

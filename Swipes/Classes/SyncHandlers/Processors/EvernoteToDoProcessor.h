@@ -1,11 +1,12 @@
 //
 //  EvernoteToDoProcessor.h
-//  EvernoteSDK_Test
+//  Swipes
 //
 //  Created by demosten on 2/24/14.
 //
 
 #import <Foundation/Foundation.h>
+#import "EvernoteSDK.h"
 
 @interface EvernoteToDo: NSObject
 

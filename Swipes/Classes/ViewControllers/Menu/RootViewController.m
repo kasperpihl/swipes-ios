@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-
 #import "RootViewController.h"
 #import "FacebookCommunicator.h"
 
@@ -31,7 +30,7 @@
 
 #import "KPToDo.h"
 #import <MessageUI/MessageUI.h>
-#import <Parse/Parse.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 
 #import "PaymentHandler.h"
 
@@ -468,6 +467,7 @@ static RootViewController *sharedObject;
     [self.drawerViewController setAnimationVelocity:self.drawerViewController.maximumLeftDrawerWidth * 3];
     [self pushViewController:self.drawerViewController animated:NO];
     
+    KPCORE.rootController = self;
     
     [self setupAppearance];
     

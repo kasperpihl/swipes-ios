@@ -92,7 +92,7 @@ static AnalyticsHandler *sharedObject;
         @"Platform": @"iOS",
         @"OS Version": [[UIDevice currentDevice] systemVersion],
         @"App Version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
-        @"Language": [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:[[NSLocale currentLocale] identifier]],
+        @"Language": [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:[[NSLocale currentLocale] localeIdentifier]],
         @"Country": [[NSLocale currentLocale] displayNameForKey:NSLocaleCountryCode value:[[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]],
         @"Device": [[UIDevice currentDevice] model]
     } mutableCopy];

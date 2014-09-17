@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
+#import <KitLocate/KitLocate.h>
 #import "NotificationHandler.h"
 #import "UtilityClass.h"
 #import "NSDate-Utilities.h"
@@ -15,7 +16,7 @@
 #import "CWStatusBarNotification.h"
 
 #define kMaxNotifications 25
-@interface NotificationHandler () <KitLocateSingleDelegate>
+@interface NotificationHandler () <KitLocateSingleDelegate, KitLocateDelegate>
 @property (nonatomic) BOOL fencing;
 @property (nonatomic) BOOL startedLocationServices;
 @property (nonatomic) CWStatusBarNotification *notification;
@@ -35,6 +36,7 @@ static NotificationHandler *sharedObject;
 }
 -(void)initialize{
     notify(@"showNotification", sendNotification:);
+    notify(NH_UpdateLocalNotifications, onUpdateLocalNotifications:);
 }
 
 -(void)sendNotification:(NSNotification*)notification{
@@ -57,6 +59,9 @@ static NotificationHandler *sharedObject;
         [self.notification displayNotificationWithMessage:title completion:nil];
 }
 
+-(void)onUpdateLocalNotifications:(NSNotification*)notification{
+    [self updateLocalNotifications];
+}
 
 -(CLLocation *)latestLocation
 {

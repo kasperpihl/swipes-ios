@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "EvernoteSDK.h"
 
 typedef void (^NoteListBlock)(EDAMNoteList *list, NSError *error);
 typedef void (^NoteBlock)(EDAMNote *note, NSError *error);

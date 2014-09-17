@@ -1,5 +1,5 @@
 //
-//  CoreDataClass.m
+//  CoreSyncHandler.m
 //  Swipes
 //
 //  Created by Kasper Pihl Tornøe on 09/03/13.
@@ -7,8 +7,8 @@
 //
 
 #import <AudioToolbox/AudioServices.h>
-#import "CoreSyncHandler.h"
 #import "UtilityClass.h"
+#import "GlobalApp.h"
 #import "KPToDo.h"
 #import "KPAttachment.h"
 #import "KPTag.h"
@@ -17,9 +17,11 @@
 #import "AnalyticsHandler.h"
 #import "UserHandler.h"
 
-#import "RootViewController.h"
 #import "EvernoteIntegration.h"
 #import "EvernoteSyncHandler.h"
+
+#import "CoreSyncHandler.h"
+
 #define kSyncTime 3
 #define kUpdateLimit 200
 #define kBatchSize 50
@@ -42,8 +44,6 @@
 @interface CoreSyncHandler ()
 
 @property (nonatomic) Reachability *_reach;
-@property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
-
 
 
 @property (nonatomic) NSMutableDictionary *_attributeChangesOnObjects;
@@ -267,7 +267,13 @@
 - (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async
 {
     if(self.outdated){
-        if(async && force) [[[UIAlertView alloc] initWithTitle:@"New version required" message:@"For sync to work - please update Swipes from the App Store" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil] show];
+        if(async && force) {
+#ifndef __IPHONE_8_0
+            [[[UIAlertView alloc] initWithTitle:@"New version required" message:@"For sync to work - please update Swipes from the App Store" delegate:nil  cancelButtonTitle:@"Okay" otherButtonTitles: nil] show];
+#else
+#warning "Add support for iOS 8"
+#endif
+        }
         return UIBackgroundFetchResultNoData;
     }
     
@@ -392,8 +398,7 @@
         return;
     self.isAuthingEvernote = YES;
     
-    self.isAuthingEvernote = NO;
-    [kEnInt authenticateEvernoteInViewController:ROOT_CONTROLLER withBlock:^(NSError *error) {
+    [kEnInt authenticateEvernoteInViewController:self.rootController withBlock:^(NSError *error) {
         if (error || !kEnInt.isAuthenticated) {
             // TODO show message to the user
             //NSLog(@"Session authentication failed: %@", [error localizedDescription]);
@@ -401,6 +406,7 @@
         else {
             [self performSelectorOnMainThread:selector withObject:object waitUntilDone:NO];
         }
+        self.isAuthingEvernote = NO;
     }];
 }
 
@@ -483,14 +489,14 @@
     
     /* Preparing request */
     NSError *error;
-#ifdef RELEASE
+//#ifdef RELEASE
     NSString *url = @"http://api.swipesapp.com/v1/sync";
-#else
-    NSString *url = @"http://swipes-test.herokuapp.com/sync";
-    //url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
-    url = @"http://127.0.0.1:5000/v1/sync";
-    //url = @"http://api.swipesapp.com/v1/sync";
-#endif
+//#else
+//    NSString *url = @"http://swipes-test.herokuapp.com/sync";
+//    //url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
+//    url = @"http://127.0.0.1:5000/v1/sync";
+//    //url = @"http://api.swipesapp.com/v1/sync";
+//#endif
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setTimeoutInterval:35];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
@@ -552,7 +558,11 @@
             NSInteger code = [result objectForKey:@"code"] ? [[result objectForKey:@"code"] integerValue] : 500;
             if([message isEqualToString:@"update required"]){
                 dispatch_async(dispatch_get_main_queue(), ^{
+#ifndef __IPHONE_8_0
                     [[[UIAlertView alloc] initWithTitle:@"New version required" message:@"For sync to work - please update Swipes from the App Store" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil] show];
+#else
+#warning "Add support for iOS 8"
+#endif
                     //NSLog(@"adding here");
                     self.outdated = YES;
                 });
@@ -780,26 +790,14 @@
     return [NSString stringWithFormat:@"KP%@",parseClassName];
 }
 
-
+- (void)startBackgroundHandler
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:APP_StartBackgroundHandler object:nil];
+}
 
 - (void)endBackgroundHandler
 {
-    if (self.backgroundTask != UIBackgroundTaskInvalid) {
-        //NSLog(@"Background time remaining = %f seconds", [UIApplication sharedApplication].backgroundTimeRemaining);
-        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-        self.backgroundTask = UIBackgroundTaskInvalid;
-    }
-}
-
-- (void)startBackgroundHandler
-{
-    if (self.backgroundTask == UIBackgroundTaskInvalid) {
-        self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            //NSLog(@"Background handler called. Not running background tasks anymore.");
-            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-            self.backgroundTask = UIBackgroundTaskInvalid;
-        }];
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:APP_EndBackgroundHandler object:nil];
 }
 
 - (void)clearAndDeleteData
@@ -847,7 +845,6 @@ static CoreSyncHandler *sharedObject;
 
 - (void)initialize
 {
-    self.backgroundTask = UIBackgroundTaskInvalid;
     [self loadDatabase];
     notify(@"closing app", forceSync);
     notify(@"opened app", forceSync);

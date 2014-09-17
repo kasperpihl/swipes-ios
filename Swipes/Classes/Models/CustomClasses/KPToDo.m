@@ -58,7 +58,7 @@
     else if(item.length <= 50) taskLength = @"41-50";
     [ANALYTICS tagEvent:@"Added Task" options:@{@"ActionStep":@(NO),@"Length":taskLength}];
     [ANALYTICS heartbeat];
-    [NOTIHANDLER updateLocalNotifications];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     
     return newToDo;
 }
@@ -95,7 +95,7 @@
     }
     if(save)
         [KPToDo saveToSync];
-    [NOTIHANDLER updateLocalNotifications];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     [ANALYTICS heartbeat];
     return [movedToDos copy];
 }
@@ -115,9 +115,10 @@
     NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
     [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks, @"Is Action Steps": @( isSubtasks )}];
     [ANALYTICS heartbeat];
-    if( !isSubtasks )
-        [kHints triggerHint:HintCompleted];
-    [NOTIHANDLER updateLocalNotifications];
+    if( !isSubtasks ) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:HH_TriggerHint object:@(HintCompleted)];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     return [movedToDos copy];
 }
 
@@ -132,7 +133,7 @@
     if(save)
         [KPToDo saveToSync];
     
-    [NOTIHANDLER updateLocationUpdates];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     [ANALYTICS heartbeat];
     
     return [movedToDos copy];
@@ -150,7 +151,7 @@
         [KPToDo saveToSync];
     
     if (shouldUpdateNotifications)
-        [NOTIHANDLER updateLocalNotifications];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     [ANALYTICS heartbeat];
 }
 
@@ -705,8 +706,9 @@
 -(void)switchPriority{
     self.priorityValue = (self.priorityValue == 0) ? 1 : 0;
     [KPToDo saveToSync];
-    if(self.priorityValue == 1)
-        [kHints triggerHint:HintPriority];
+    if(self.priorityValue == 1) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:HH_TriggerHint object:@(HintPriority)];
+    }
 }
 
 -(BOOL)notifyOnLocation:(CLPlacemark*)location type:(GeoFenceType)type{
@@ -738,11 +740,14 @@
     CellType newCell = [self cellTypeForTodo];
     return (oldCell != newCell);
 }
+
 -(void)stopNotifyingLocationSave:(BOOL)save{
     self.location = nil;
-    if(save) [KPToDo saveToSync];
-    [NOTIHANDLER updateLocationUpdates];
+    if(save)
+        [KPToDo saveToSync];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
 }
+
 -(NSArray *)textTags{
     return Underscore.array([self.tagString componentsSeparatedByString:@", "]).filter(Underscore.isString).reject(^BOOL (NSString *tag){ return (tag.length == 0); }).unwrap;
 

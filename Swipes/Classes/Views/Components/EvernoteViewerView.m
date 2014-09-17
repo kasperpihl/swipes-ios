@@ -7,6 +7,7 @@
 //
 
 #import <ENMLUtility.h>
+#import "GlobalApp.h"
 #import "KPBlurry.h"
 #import "EvernoteViewerView.h"
 
@@ -28,7 +29,7 @@
     if (self) {
         self.backgroundColor = tcolor(BackgroundColor);
 
-        CGFloat top = (OSVER >= 7) ? [Global statusBarHeight] : 0.f;
+        CGFloat top = (OSVER >= 7) ? [GlobalApp statusBarHeight] : 0.f;
         
         // prepare back button
         _backButton = [UIButton buttonWithType:UIButtonTypeCustom];

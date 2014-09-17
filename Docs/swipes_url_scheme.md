@@ -31,7 +31,9 @@ priority  | Set to `y` or `1` to make the ToDo priority. Default is `no`
 notes     | Notes of the ToDo. Default is no notes
 schedule  | The schedule of ToDo set to the given number of seconds from the first instant of 1 January 1970, GMT. There is a special value `now` (ex: `schedule=now`) that adds current date and time as a schedule. Default is to set schedule to undefined
 tagN      | An array of tags to add to the ToDo. If any tag does not exist, it will be created. N is the number of tag starting from 1. For example to specify three tags you add them like this: `tag1=first%20tag&tag2=second&tag3=third`. Default is ToDo does not have tags attached.
+tags      | Alternative way to specify tags with a single parameter. All tags need to be comma separated: `tags=first%20tag%2Csecond%2Cthird`. If both `tags` and `tagN` are present, `tags` are added first.
 subtaskN  | An array of subtasks to add to the ToDo. N is the number of tag starting from 1. For example to specify two subtasks you add them like this: `subtask1=Go%20home&subtask2=Eat%20some%20pasta`.
+subtasks  | Alternative way to specify subtasks with a single parameter. All subtasks need to be comma separated: `subtasks=Go%20home%2CEat%20some%20pasta`. If both `subtasks` and `subtaskN` are present, `subtasks` are added first.
 
 #####Examples
 
@@ -53,7 +55,9 @@ priority  | Set to `y` or `1` to make the ToDo priority.
 notes     | Notes of the ToDo.
 schedule  | The schedule of ToDo set to the given number of seconds from the first instant of 1 January 1970, GMT. There is a special value `now` (ex: `schedule=now`) that adds current date and time as a schedule.
 tagN      | An array of tags to add to the ToDo. If any tag does not exist, it will be created. N is the number of tag starting from 1. For example to specify three tags you add them like this: `tag1=first%20tag&tag2=second&tag3=third`.
+tags      | Alternative way to specify tags with a single parameter. All tags need to be comma separated: `tags=first%20tag%2Csecond%2Cthird`. If both `tags` and `tagN` are present, `tags` are added first.
 subtaskN  | An array of subtasks to add to the ToDo. N is the number of tag starting from 1. For example to specify two subtasks you add them like this: `subtask1=Go%20home&subtask2=Eat%20some%20pasta`.
+subtasks  | Alternative way to specify subtasks with a single parameter. All subtasks need to be comma separated: `subtasks=Go%20home%2CEat%20some%20pasta`. If both `subtasks` and `subtaskN` are present, `subtasks` are added first.
 
 #####Examples
 
@@ -121,3 +125,18 @@ title     | The tag title to be deleted. This is the only parameter and is manda
 
 `swipes://tag/delete?title=Shopping%20list` - Deletes a tag with title `Shopping list`.
 
+##x-callback-url support
+
+You can have Swipes call back an URLs specified by you on success or on error. There are two optional params you can specify with each `swipes://` URL. `x-success=URL` and `x-error=URL` as specified by [x-callback-url specification](http://x-callback-url.com/specifications/). `x-success` URL will be called upon success (if specified). `x-error` URL will be called on error (again if specified). Please note that two parameters will be added to your `x-error` URL: `errorCode=number` and `errorMessage=message`.
+
+#####Errors and error codes
+errorCode | errorMessage
+----------| -------------
+1         | missing mandatory param
+101       | no such task
+102       | task already exists
+201       | no such tag
+202       | tag already exists
+
+#####Example
+`swipes://todo/clean_add?title=Have%20fun&x-success=http%3A%2F%2F127.0.0.1%2Fsuccess&x-error=http%3A%2F%2F127.0.0.1%2Ferror%3Fmyparam%3Dyes` - Will create a task with title `Have fun` and call `http://127.0.0.1/success` on success. In case of error URL will look like: `http://127.0.0.1/error?myparam=yes&errorCode=12&errorMessage=Error%20message`. You can use your application scheme to call your application from Swipes after it processes `swipes://` URL.

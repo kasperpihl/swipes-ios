@@ -6,16 +6,17 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "LoginViewController.h"
-#import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
-#import "KPAlert.h"
 #import <Parse/Parse.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
+#import "UtilityClass.h"
+#import "KPAlert.h"
 #import "WalkthroughTitleView.h"
 #import "SlowHighlightIcon.h"
 #import "RootViewController.h"
 #import "UIColor+Utilities.h"
 #import "UIImage+Blur.h"
+#import "LoginViewController.h"
 
 #define launchImageName @"MASTER_000"
 #define launchImageNumber 22

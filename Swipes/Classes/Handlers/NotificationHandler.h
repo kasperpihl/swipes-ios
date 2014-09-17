@@ -7,9 +7,9 @@
 //
 #define NOTIHANDLER [NotificationHandler sharedInstance]
 #import <Foundation/Foundation.h>
-#import <KitLocate/KitLocate.h>
 
 #define kLocationPushRadius 250
+#define NH_UpdateLocalNotifications @"NH_UpdateLocalNotifications"
 
 typedef enum {
     LocationNotAuthorized = 0,
@@ -17,7 +17,9 @@ typedef enum {
     LocationStarted = 2
 } StartLocationResult;
 
-@interface NotificationHandler : NSObject <KitLocateDelegate>
+@class CLLocation;
+
+@interface NotificationHandler : NSObject
 @property (nonatomic) CLLocation *latestLocation;
 +(NotificationHandler*)sharedInstance;
 -(void)updateUpcomingNotifications;

@@ -167,7 +167,7 @@ static SettingsHandler *sharedObject;
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:index];
     [[NSUserDefaults standardUserDefaults] synchronize];
     if(setting == SettingNotifications)
-        [NOTIHANDLER updateLocalNotifications];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
 }
 
 -(BOOL)settingForKey:(NSString *)key{

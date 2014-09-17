@@ -8,6 +8,7 @@
 
 #import <DropboxSDK/DropboxSDK.h>
 #import "KPBlurry.h"
+#import "GlobalApp.h"
 #import "DropboxView.h"
 
 #define kContentSpacingLeft 0
@@ -59,7 +60,7 @@ static NSUInteger g_thumbnailCounter = 0;
     if (self) {
         //self.backgroundColor = tcolor(BackgroundColor);
         
-        CGFloat top = (OSVER >= 7) ? [Global statusBarHeight] : 0.f;
+        CGFloat top = (OSVER >= 7) ? [GlobalApp statusBarHeight] : 0.f;
         
         // initialize controls
         _backButton = [UIButton buttonWithType:UIButtonTypeSystem];
