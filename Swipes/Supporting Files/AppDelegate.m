@@ -7,6 +7,7 @@
 //
 
 #import <Parse/Parse.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <Crashlytics/Crashlytics.h>
 #import <FacebookSDK/FBAppCall.h>
 #import <DropboxSDK/DropboxSDK.h>

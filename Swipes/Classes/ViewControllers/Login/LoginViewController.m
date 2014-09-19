@@ -11,6 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "KPAlert.h"
 #import <Parse/Parse.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "WalkthroughTitleView.h"
 #import "SlowHighlightIcon.h"
 #import "RootViewController.h"

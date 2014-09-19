@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 #import "FacebookCommunicator.h"
-#import <Parse/PFFacebookUtils.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <Social/Social.h>
 
 @interface FacebookCommunicator () <FBDialogDelegate>

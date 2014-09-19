@@ -32,6 +32,7 @@
 #import "KPToDo.h"
 #import <MessageUI/MessageUI.h>
 #import <Parse/Parse.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 
 #import "PaymentHandler.h"
 
