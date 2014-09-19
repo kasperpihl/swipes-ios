@@ -138,23 +138,23 @@
     if(self.hasPressed) return;
     self.hasPressed = YES;
     [sender showIndicator:YES];
-    [[PaymentHandler sharedInstance] requestPlusMonthlyBlock:^(BOOL succeeded, NSError *error) {
+    /*[[PaymentHandler sharedInstance] requestPlusMonthlyBlock:^(BOOL succeeded, NSError *error) {
         self.hasPressed = NO;
         [sender showIndicator:NO];
         if(succeeded) [ANALYTICS tagEvent:@"Upgraded" options:@{@"Subscription":@"Monthly",@"Package":@"Plus"}];
         [self handlePaymentSucceeded:succeeded error:error];
-    }];
+    }];*/
 }
 -(void)pressedYearButton:(UIButton*)sender{
     if(self.hasPressed) return;
     self.hasPressed = YES;
     [sender showIndicator:YES];
-    [[PaymentHandler sharedInstance] requestPlusYearlyBlock:^(BOOL succeeded, NSError *error) {
+    /*[[PaymentHandler sharedInstance] requestPlusYearlyBlock:^(BOOL succeeded, NSError *error) {
         self.hasPressed = NO;
         [sender showIndicator:NO];
         if(succeeded)[ANALYTICS tagEvent:@"Upgraded" options:@{@"Subscription":@"Yearly",@"Package":@"Plus"}];
         [self handlePaymentSucceeded:succeeded error:error];
-    }];
+    }];*/
 }
 -(void)pressedRestoreButton:(UIButton*)sender{
     if(self.hasPressed) return;

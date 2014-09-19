@@ -244,7 +244,6 @@
 		DA69248A19B87B690082D1E4 /* IntegrationHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A7C258FC197CE5A200290198 /* IntegrationHandler.h */; };
 		DA69248B19B87B6D0082D1E4 /* EvernoteIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A70D12D91966D11500A95C50 /* EvernoteIntegration.m */; };
 		DA69248C19B87B6D0082D1E4 /* IntegrationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C258FD197CE5A200290198 /* IntegrationHandler.m */; };
-		DA69248E19B87C450082D1E4 /* SwipesKit-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = DA69248D19B87C450082D1E4 /* SwipesKit-Prefix.pch */; };
 		DA69248F19B87CA10082D1E4 /* SettingsHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A7D7D53117B1586A00FBC042 /* SettingsHandler.h */; };
 		DA69249019B87CA50082D1E4 /* SettingsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53217B1586A00FBC042 /* SettingsHandler.m */; };
 		DA69249419B87ED20082D1E4 /* KitLocate.Framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A76182E0187D37AB00914A05 /* KitLocate.Framework */; };
@@ -2069,7 +2068,6 @@
 				DA23232819B4737100D996EB /* NSDate-Utilities.h in Headers */,
 				DA69247E19B879D30082D1E4 /* AnalyticsHandler.h in Headers */,
 				DA23231719B39C4600D996EB /* KPToDo.h in Headers */,
-				DA69248E19B87C450082D1E4 /* SwipesKit-Prefix.pch in Headers */,
 				DA69248519B87ACD0082D1E4 /* Vero.h in Headers */,
 				DA6924AC19BDCF330082D1E4 /* ParentSyncHandler.h in Headers */,
 				DAE9CFE119AF3AC600246B64 /* SwipesKit.h in Headers */,
@@ -2976,7 +2974,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7ABA4C2759184202B1AC97F5 /* Pods-Swipes.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
@@ -3132,7 +3129,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7ABA4C2759184202B1AC97F5 /* Pods-Swipes.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
@@ -3206,7 +3202,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7ABA4C2759184202B1AC97F5 /* Pods-Swipes.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
@@ -3407,7 +3402,6 @@
 		DAE9CFD219AF367F00246B64 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
@@ -3488,7 +3482,6 @@
 		DAE9CFD319AF367F00246B64 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
@@ -3571,7 +3564,6 @@
 		DAE9CFD419AF367F00246B64 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;

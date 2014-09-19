@@ -38,7 +38,7 @@
     
     
     if([beginningOfWeek isInPast]){
-        [nowComponents setWeek: [nowComponents week] + 1];
+        [nowComponents setWeekOfYear:[nowComponents weekOfYear] + 1];
         beginningOfWeek = [CURRENT_CALENDAR dateFromComponents:nowComponents];
     }
     return beginningOfWeek;
