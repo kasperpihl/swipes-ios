@@ -763,7 +763,10 @@
 {
     if (!__attributeChangesOnObjects){
         __attributeChangesOnObjects = [[NSUserDefaults standardUserDefaults] objectForKey:kTMPUpdateObjects];
-        if(!__attributeChangesOnObjects) __attributeChangesOnObjects = [NSMutableDictionary dictionary];
+        if(!__attributeChangesOnObjects)
+            __attributeChangesOnObjects = [NSMutableDictionary dictionary];
+        else
+            __attributeChangesOnObjects = [__attributeChangesOnObjects mutableCopy];
     }
     return __attributeChangesOnObjects;
 }

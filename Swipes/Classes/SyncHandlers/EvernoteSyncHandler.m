@@ -25,7 +25,7 @@
 
 #define kMaxNotes 100
 
-#define kFetchChangesTimeout 180
+#define kFetchChangesTimeout 30
 
 NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 
