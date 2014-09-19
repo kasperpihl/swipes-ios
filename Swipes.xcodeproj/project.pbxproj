@@ -53,6 +53,7 @@
 		A7063BCC190F8BEE003D3690 /* SubtaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7063BCB190F8BEE003D3690 /* SubtaskController.m */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
 		A70D12DA1966D11500A95C50 /* EvernoteIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A70D12D91966D11500A95C50 /* EvernoteIntegration.m */; };
+		A7110EC819CB0FE6000F7E94 /* TodayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7110EC519CB0FE6000F7E94 /* TodayTableViewCell.m */; };
 		A714369019346823009AC8A4 /* SyncLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A714368F19346823009AC8A4 /* SyncLabel.m */; };
 		A714369319349EB3009AC8A4 /* CheckmarkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A714369219349EB3009AC8A4 /* CheckmarkButton.m */; };
 		A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
@@ -82,6 +83,7 @@
 		A74D3FD118D9E7AC0056D124 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */; };
 		A74D3FD218D9E7AC0056D124 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */; };
 		A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */; };
+		A74E53B619CB4F1600C2FE62 /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A74FB8FF18FFF2FA00F25157 /* swipes.ttf */; };
 		A74F61B616EB77B3004927DA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B516EB77B3004927DA /* MapKit.framework */; };
 		A74F61B916EBA58B004927DA /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B816EBA58B004927DA /* CoreMedia.framework */; };
 		A74F61BB16EBA595004927DA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BA16EBA595004927DA /* AVFoundation.framework */; };
@@ -155,7 +157,7 @@
 		A78F392E16F7DC1900A8C78D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78F392D16F7DC1800A8C78D /* MessageUI.framework */; };
 		A792BB8818ABEDB4000573E4 /* LocationSearchView.m in Sources */ = {isa = PBXBuildFile; fileRef = A792BB8718ABEDB4000573E4 /* LocationSearchView.m */; };
 		A792BB8B18AC3A5E000573E4 /* LocationResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A792BB8A18AC3A5E000573E4 /* LocationResultCell.m */; };
-		A7933049172AB63700F1505E /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933048172AB63700F1505E /* TodayViewController.m */; };
+		A7933049172AB63700F1505E /* TodayListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933048172AB63700F1505E /* TodayListViewController.m */; };
 		A7933056172B2BA100F1505E /* DoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933055172B2BA100F1505E /* DoneViewController.m */; };
 		A7A560B8198A9A3600C3D213 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A560B7198A9A3600C3D213 /* NotificationsViewController.m */; };
 		A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A976E6184119D6001C0A51 /* PaymentHandler.m */; };
@@ -324,7 +326,7 @@
 		DAE9CF1819AF367F00246B64 /* SectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1841838EBF20047DCC9 /* SectionHeaderView.m */; };
 		DAE9CF1919AF367F00246B64 /* PaymentHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A976E6184119D6001C0A51 /* PaymentHandler.m */; };
 		DAE9CF1A19AF367F00246B64 /* KPControlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4067117296C0500DDE644 /* KPControlHandler.m */; };
-		DAE9CF1B19AF367F00246B64 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933048172AB63700F1505E /* TodayViewController.m */; };
+		DAE9CF1B19AF367F00246B64 /* TodayListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933048172AB63700F1505E /* TodayListViewController.m */; };
 		DAE9CF1C19AF367F00246B64 /* DoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933055172B2BA100F1505E /* DoneViewController.m */; };
 		DAE9CF1E19AF367F00246B64 /* HintHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34C718E098C800095F1E /* HintHandler.m */; };
 		DAE9CF1F19AF367F00246B64 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76B2386172C06CC00F742C2 /* ScheduleViewController.m */; };
@@ -621,6 +623,8 @@
 		A7090B6F175DF3F900728A3A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Login/LoginViewController.m; sourceTree = "<group>"; };
 		A70D12D81966D11500A95C50 /* EvernoteIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteIntegration.h; path = Integrations/EvernoteIntegration.h; sourceTree = "<group>"; };
 		A70D12D91966D11500A95C50 /* EvernoteIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteIntegration.m; path = Integrations/EvernoteIntegration.m; sourceTree = "<group>"; };
+		A7110EC419CB0FE6000F7E94 /* TodayTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayTableViewCell.h; sourceTree = "<group>"; };
+		A7110EC519CB0FE6000F7E94 /* TodayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodayTableViewCell.m; sourceTree = "<group>"; };
 		A714368E19346823009AC8A4 /* SyncLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncLabel.h; sourceTree = "<group>"; };
 		A714368F19346823009AC8A4 /* SyncLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncLabel.m; sourceTree = "<group>"; };
 		A714369119349EB3009AC8A4 /* CheckmarkButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckmarkButton.h; sourceTree = "<group>"; };
@@ -778,8 +782,8 @@
 		A792BB8718ABEDB4000573E4 /* LocationSearchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationSearchView.m; path = LocationSearch/LocationSearchView.m; sourceTree = "<group>"; };
 		A792BB8918AC3A5E000573E4 /* LocationResultCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationResultCell.h; path = LocationSearch/LocationResultCell.h; sourceTree = "<group>"; };
 		A792BB8A18AC3A5E000573E4 /* LocationResultCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationResultCell.m; path = LocationSearch/LocationResultCell.m; sourceTree = "<group>"; };
-		A7933047172AB63700F1505E /* TodayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TodayViewController.h; path = Today/TodayViewController.h; sourceTree = "<group>"; };
-		A7933048172AB63700F1505E /* TodayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TodayViewController.m; path = Today/TodayViewController.m; sourceTree = "<group>"; };
+		A7933047172AB63700F1505E /* TodayListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TodayListViewController.h; path = Today/TodayListViewController.h; sourceTree = "<group>"; };
+		A7933048172AB63700F1505E /* TodayListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TodayListViewController.m; path = Today/TodayListViewController.m; sourceTree = "<group>"; };
 		A7933054172B2BA100F1505E /* DoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DoneViewController.h; path = Done/DoneViewController.h; sourceTree = "<group>"; };
 		A7933055172B2BA100F1505E /* DoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DoneViewController.m; path = Done/DoneViewController.m; sourceTree = "<group>"; };
 		A7A560B6198A9A3600C3D213 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationsViewController.h; path = Settings/NotificationsViewController.h; sourceTree = "<group>"; };
@@ -1654,8 +1658,8 @@
 		A7933045172AB5B100F1505E /* Today */ = {
 			isa = PBXGroup;
 			children = (
-				A7933047172AB63700F1505E /* TodayViewController.h */,
-				A7933048172AB63700F1505E /* TodayViewController.m */,
+				A7933047172AB63700F1505E /* TodayListViewController.h */,
+				A7933048172AB63700F1505E /* TodayListViewController.m */,
 			);
 			name = Today;
 			sourceTree = "<group>";
@@ -1917,6 +1921,8 @@
 				DAE9D00819AF3B2900246B64 /* TodayViewController.m */,
 				DAE9D00A19AF3B2900246B64 /* MainInterface.storyboard */,
 				DAE9D00519AF3B2900246B64 /* Supporting Files */,
+				A7110EC419CB0FE6000F7E94 /* TodayTableViewCell.h */,
+				A7110EC519CB0FE6000F7E94 /* TodayTableViewCell.m */,
 			);
 			path = "Swipes Today";
 			sourceTree = "<group>";
@@ -2260,6 +2266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAE9D00B19AF3B2900246B64 /* MainInterface.storyboard in Resources */,
+				A74E53B619CB4F1600C2FE62 /* swipes.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2441,7 +2448,7 @@
 				A703B1B51838EBF20047DCC9 /* SectionHeaderView.m in Sources */,
 				A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */,
 				A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */,
-				A7933049172AB63700F1505E /* TodayViewController.m in Sources */,
+				A7933049172AB63700F1505E /* TodayListViewController.m in Sources */,
 				A7933056172B2BA100F1505E /* DoneViewController.m in Sources */,
 				A7AA7964194E0665003DAB3B /* ParentSyncHandler.m in Sources */,
 				A77D34C818E098C800095F1E /* HintHandler.m in Sources */,
@@ -2560,7 +2567,7 @@
 				DAE9CF1819AF367F00246B64 /* SectionHeaderView.m in Sources */,
 				DAE9CF1919AF367F00246B64 /* PaymentHandler.m in Sources */,
 				DAE9CF1A19AF367F00246B64 /* KPControlHandler.m in Sources */,
-				DAE9CF1B19AF367F00246B64 /* TodayViewController.m in Sources */,
+				DAE9CF1B19AF367F00246B64 /* TodayListViewController.m in Sources */,
 				DAE9CF1C19AF367F00246B64 /* DoneViewController.m in Sources */,
 				DAE9CF1E19AF367F00246B64 /* HintHandler.m in Sources */,
 				DAE9CF1F19AF367F00246B64 /* ScheduleViewController.m in Sources */,
@@ -2661,6 +2668,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7110EC819CB0FE6000F7E94 /* TodayTableViewCell.m in Sources */,
 				DAE9D00919AF3B2900246B64 /* TodayViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

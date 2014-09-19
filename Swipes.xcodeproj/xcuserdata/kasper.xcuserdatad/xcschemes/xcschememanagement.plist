@@ -12,12 +12,27 @@
 		<key>Swipes copy.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>19</integer>
+			<integer>2</integer>
 		</dict>
 		<key>Swipes.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>SwipesKit.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>22</integer>
+		</dict>
+		<key>Swipes_Today.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>23</integer>
+		</dict>
+		<key>Swipes_iOS8.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>21</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -38,6 +53,21 @@
 			<true/>
 		</dict>
 		<key>A7F0B9B71700BA40003BBDD1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DAE9CEF119AF367F00246B64</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DAE9CFDB19AF3AC600246B64</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DAE9D00019AF3B2900246B64</key>
 		<dict>
 			<key>primary</key>
 			<true/>

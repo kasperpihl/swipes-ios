@@ -10,7 +10,7 @@
 #define kBottomMargin 80
 #define kButtonSpacing 14
 
-#import "TodayViewController.h"
+#import "TodayListViewController.h"
 #import "KPReorderTableView.h"
 #import "FacebookCommunicator.h"
 #import "YoureAllDoneView.h"
@@ -23,7 +23,7 @@
 #import "SectionHeaderView.h"
 #import "CoreSyncHandler.h"
 #import "UtilityClass.h"
-@interface TodayViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
+@interface TodayListViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 @property (nonatomic, strong) IBOutlet KPReorderTableView *tableView;
 @property (nonatomic) YoureAllDoneView *youreAllDoneView;
 @property (nonatomic, strong) NSIndexPath *dragRow;
@@ -37,7 +37,7 @@
 @property BOOL allDoneForToday;
 
 @end
-@implementation TodayViewController
+@implementation TodayListViewController
 #pragma mark - Dragable delegate
 
 -(void)setEmptyBack:(BOOL)emptyBack{
@@ -97,8 +97,10 @@
 }
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     NSDate *endDate = [NSDate date];
+    NSLog(@"before");
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endDate];
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
+    NSLog(@"after");
     return [KPToDo sortOrderForItems:results newItemsOnTop:YES save:YES];
 }
 - (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {

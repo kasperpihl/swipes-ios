@@ -8,6 +8,7 @@
 
 #import "TodayViewController.h"
 #import <NotificationCenter/NotificationCenter.h>
+#import "TodayTableViewCell.h"
 
 @interface TodayViewController () <NCWidgetProviding, UITableViewDataSource, UITableViewDelegate>
 
@@ -21,6 +22,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _tableView.backgroundColor = [UIColor clearColor];
     // Do any additional setup after loading the view from its nib.
     CGSize updatedSize = [self preferredContentSize];
     updatedSize.width = self.view.bounds.size.width;
@@ -43,6 +45,10 @@
     rect.size.height = contentSize.height - 30;
     rect.size.width = contentSize.width;
     _tempView.frame = rect;
+    _tableView.frame = rect;
+}
+-(UIEdgeInsets)widgetMarginInsetsForProposedMarginInsets:(UIEdgeInsets)defaultMarginInsets{
+    return UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
 - (void)widgetPerformUpdateWithCompletionHandler:(void (^)(NCUpdateResult))completionHandler {
@@ -57,12 +63,21 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return nil;
+    NSString *cellIdentifier = [NSString stringWithFormat:@"%@cell",@"TodayWidget"];
+    TodayTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        cell = [[TodayTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        //cell.textLabel.text = @"Title";
+        //[cell setMode:MCSwipeTableViewCellModeExit];
+        //cell.delegate = self;
+    }
+    [cell resetAndSetTaskTitle:@"Testing title"];
+    return cell;
 }
 
 - (IBAction)onShowHideMore:(id)sender

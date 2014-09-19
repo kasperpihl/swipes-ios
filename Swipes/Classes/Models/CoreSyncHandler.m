@@ -491,6 +491,7 @@
     NSError *error;
 //#ifdef RELEASE
     NSString *url = @"http://api.swipesapp.com/v1/sync";
+    url = @"http://127.0.0.1:5000/v1/sync";
 //#else
 //    NSString *url = @"http://swipes-test.herokuapp.com/sync";
 //    //url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
@@ -548,7 +549,7 @@
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     //NSLog(@"resulted err:%@",error);
-    //NSLog(@"res: %@ err: %@",result,error);
+    NSLog(@"res: %@ err: %@",result,error);
     if([result objectForKey:@"hardSync"])
         [self hardSync];
     

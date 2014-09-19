@@ -20,6 +20,19 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellMode){
     MCSwipeTableViewCellModeExit,
     MCSwipeTableViewCellModeSwitch
 };
+typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellState){
+    MCSwipeTableViewCellStateNone = 0,
+    MCSwipeTableViewCellState1 = 1,
+    MCSwipeTableViewCellState2 = 2,
+    MCSwipeTableViewCellState3 = -1,
+    MCSwipeTableViewCellState4 = -2
+};
+typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellActivatedDirection) {
+    MCSwipeTableViewCellActivatedDirectionBoth = 0,
+    MCSwipeTableViewCellActivatedDirectionLeft,
+    MCSwipeTableViewCellActivatedDirectionRight,
+    MCSwipeTableViewCellActivatedDirectionNone
+};
 
 @protocol MCSwipeTableViewCellDelegate <NSObject>
 

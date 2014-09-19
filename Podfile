@@ -4,8 +4,8 @@ target :Swipes do
     pod 'Appirater', :inhibit_warnings => true
     pod 'Bolts', :inhibit_warnings => true
 #    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
-    pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
+    pod 'Parse', :inhibit_warnings => true
     pod 'MagicalRecord', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
@@ -42,8 +42,8 @@ target :SwipesKit do
     pod 'Appirater', :inhibit_warnings => true
     pod 'Bolts', :inhibit_warnings => true
 #    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
-    pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
+    pod 'Parse', :inhibit_warnings => true
     pod 'MagicalRecord', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
@@ -59,13 +59,6 @@ end
 
 #link_with 'Swipes', 'Swipes_iOS8', 'SwipesKit'
 #link_with 'Swipes', 'SwipesKit'
-
-#pod 'MMDrawerController', '~> 0.5.3' - now part of libs as it was modified
-
-#pod 'Localytics-AMP', '~> 2.23'
-#pod 'Analytics', '~> 0.10.2'
-#pod 'Dropbox-iOS-SDK', '~> 1.3.9'
-#pod 'ASCScreenBrightnessDetector'
 
 post_install do |installer|
   installer.project.targets.each do |target|

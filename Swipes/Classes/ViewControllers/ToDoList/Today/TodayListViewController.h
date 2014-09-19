@@ -8,6 +8,6 @@
 
 #import "ToDoListViewController.h"
 
-@interface TodayViewController : ToDoListViewController
+@interface TodayListViewController : ToDoListViewController
 
 @end

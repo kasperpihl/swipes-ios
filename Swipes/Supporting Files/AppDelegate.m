@@ -59,12 +59,11 @@
     #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
     NSString* const CONSUMER_KEY = @"swipes";
     NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6"; // when set to release also fix in Swipes-Info.plist file !
-
 #else
     parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
-//    parseApplicationKey = @"0qD3LLZIOwLOPRwbwLia9GJXTEUnEsSlBCufqDvr";
-//    parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
+    parseApplicationKey = @"0qD3LLZIOwLOPRwbwLia9GJXTEUnEsSlBCufqDvr";
+    parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
     analyticsKey = @"ncm4wfr7qc";
     localyticsKey = @"f2f927e0eafc7d3c36835fe-c0a84d84-18d8-11e3-3b24-00a426b17dd8";
 #warning Put back dev keys

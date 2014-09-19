@@ -29,5 +29,9 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.widget-extension</string>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>swipes.ttf</string>
+	</array>
 </dict>
 </plist>

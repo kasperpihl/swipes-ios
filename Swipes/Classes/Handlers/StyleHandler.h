@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "MCSwipeTableViewCell.h"
 @interface StyleHandler : NSObject
 +(MCSwipeTableViewCellActivatedDirection)directionForCellType:(CellType)type;
 +(CellType)cellTypeForCell:(CellType)type state:(MCSwipeTableViewCellState)state;

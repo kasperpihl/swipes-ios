@@ -31,19 +31,8 @@ typedef NS_ENUM(NSUInteger, KPSegmentButtons) {
     KPSegmentButtonToday,
     KPSegmentButtonDone
 };
-typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellActivatedDirection) {
-    MCSwipeTableViewCellActivatedDirectionBoth = 0,
-    MCSwipeTableViewCellActivatedDirectionLeft,
-    MCSwipeTableViewCellActivatedDirectionRight,
-    MCSwipeTableViewCellActivatedDirectionNone
-};
-typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellState){
-    MCSwipeTableViewCellStateNone = 0,
-    MCSwipeTableViewCellState1 = 1,
-    MCSwipeTableViewCellState2 = 2,
-    MCSwipeTableViewCellState3 = -1,
-    MCSwipeTableViewCellState4 = -2
-};
+
+
 typedef NS_ENUM(NSUInteger, CellType) {
     CellTypeNone = 0,
     CellTypeSchedule,
