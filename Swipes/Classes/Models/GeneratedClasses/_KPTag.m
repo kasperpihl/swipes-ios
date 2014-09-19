@@ -11,9 +11,6 @@ const struct KPTagRelationships KPTagRelationships = {
 	.todos = @"todos",
 };
 
-const struct KPTagFetchedProperties KPTagFetchedProperties = {
-};
-
 @implementation KPTagID
 @end
 
@@ -39,37 +36,22 @@ const struct KPTagFetchedProperties KPTagFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
 
 	return keyPaths;
 }
 
-
-
-
 @dynamic title;
-
-
-
-
-
 
 @dynamic todos;
 
-	
 - (NSMutableSet*)todosSet {
 	[self willAccessValueForKey:@"todos"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"todos"];
-  
+
 	[self didAccessValueForKey:@"todos"];
 	return result;
 }
-	
-
-
-
-
-
 
 @end
+

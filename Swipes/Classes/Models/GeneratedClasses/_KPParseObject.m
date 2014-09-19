@@ -12,12 +12,6 @@ const struct KPParseObjectAttributes KPParseObjectAttributes = {
 	.updatedAt = @"updatedAt",
 };
 
-const struct KPParseObjectRelationships KPParseObjectRelationships = {
-};
-
-const struct KPParseObjectFetchedProperties KPParseObjectFetchedProperties = {
-};
-
 @implementation KPParseObjectID
 @end
 
@@ -43,7 +37,7 @@ const struct KPParseObjectFetchedProperties KPParseObjectFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"deletedValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"deleted"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -53,19 +47,9 @@ const struct KPParseObjectFetchedProperties KPParseObjectFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic createdAt;
 
-
-
-
-
-
 @dynamic deleted;
-
-
 
 - (BOOL)deletedValue {
 	NSNumber *result = [self deleted];
@@ -85,41 +69,13 @@ const struct KPParseObjectFetchedProperties KPParseObjectFetchedProperties = {
 	[self setPrimitiveDeleted:[NSNumber numberWithBool:value_]];
 }
 
-
-
-
-
 @dynamic objectId;
-
-
-
-
-
 
 @dynamic parseClassName;
 
-
-
-
-
-
 @dynamic tempId;
-
-
-
-
-
 
 @dynamic updatedAt;
 
-
-
-
-
-
-
-
-
-
-
 @end
+

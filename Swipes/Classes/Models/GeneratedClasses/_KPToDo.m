@@ -28,9 +28,6 @@ const struct KPToDoRelationships KPToDoRelationships = {
 	.tags = @"tags",
 };
 
-const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
-};
-
 @implementation KPToDoID
 @end
 
@@ -56,7 +53,7 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"numberOfRepeatedValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"numberOfRepeated"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -81,40 +78,15 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic alarm;
-
-
-
-
-
 
 @dynamic completionDate;
 
-
-
-
-
-
 @dynamic location;
-
-
-
-
-
 
 @dynamic notes;
 
-
-
-
-
-
 @dynamic numberOfRepeated;
-
-
 
 - (int32_t)numberOfRepeatedValue {
 	NSNumber *result = [self numberOfRepeated];
@@ -134,13 +106,7 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 	[self setPrimitiveNumberOfRepeated:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic order;
-
-
 
 - (int32_t)orderValue {
 	NSNumber *result = [self order];
@@ -160,27 +126,11 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 	[self setPrimitiveOrder:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic origin;
-
-
-
-
-
 
 @dynamic originIdentifier;
 
-
-
-
-
-
 @dynamic priority;
-
-
 
 - (int16_t)priorityValue {
 	NSNumber *result = [self priority];
@@ -200,13 +150,7 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 	[self setPrimitivePriority:[NSNumber numberWithShort:value_]];
 }
 
-
-
-
-
 @dynamic repeatOption;
-
-
 
 - (int32_t)repeatOptionValue {
 	NSNumber *result = [self repeatOption];
@@ -226,91 +170,50 @@ const struct KPToDoFetchedProperties KPToDoFetchedProperties = {
 	[self setPrimitiveRepeatOption:[NSNumber numberWithInt:value_]];
 }
 
-
-
-
-
 @dynamic repeatedDate;
-
-
-
-
-
 
 @dynamic schedule;
 
-
-
-
-
-
 @dynamic state;
-
-
-
-
-
 
 @dynamic tagString;
 
-
-
-
-
-
 @dynamic title;
-
-
-
-
-
 
 @dynamic attachments;
 
-	
 - (NSMutableSet*)attachmentsSet {
 	[self willAccessValueForKey:@"attachments"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"attachments"];
-  
+
 	[self didAccessValueForKey:@"attachments"];
 	return result;
 }
-	
 
 @dynamic parent;
 
-	
-
 @dynamic subtasks;
 
-	
 - (NSMutableSet*)subtasksSet {
 	[self willAccessValueForKey:@"subtasks"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"subtasks"];
-  
+
 	[self didAccessValueForKey:@"subtasks"];
 	return result;
 }
-	
 
 @dynamic tags;
 
-	
 - (NSMutableSet*)tagsSet {
 	[self willAccessValueForKey:@"tags"];
-  
+
 	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"tags"];
-  
+
 	[self didAccessValueForKey:@"tags"];
 	return result;
 }
-	
-
-
-
-
-
 
 @end
+
