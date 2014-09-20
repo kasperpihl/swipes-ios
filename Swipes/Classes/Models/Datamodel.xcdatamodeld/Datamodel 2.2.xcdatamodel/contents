@@ -9,7 +9,7 @@
     </entity>
     <entity name="ParseObject" representedClassName="KPParseObject" isAbstract="YES" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="deleted" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="isLocallyDeleted" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="parseClassName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tempId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>

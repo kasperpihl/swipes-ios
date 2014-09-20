@@ -335,6 +335,7 @@
 		A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkthroughOverlayBackground.m; path = Walkthrough/WalkthroughOverlayBackground.m; sourceTree = "<group>"; };
 		A74646B718D38660003911DC /* ContactHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactHandler.h; sourceTree = "<group>"; };
 		A74646B818D38660003911DC /* ContactHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactHandler.m; sourceTree = "<group>"; };
+		A747954C19CD58D700488020 /* Datamodel 2.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.2.xcdatamodel"; sourceTree = "<group>"; };
 		A748C878190D9A0800514DB3 /* SubtaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubtaskCell.h; sourceTree = "<group>"; };
 		A748C879190D9A0800514DB3 /* SubtaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtaskCell.m; sourceTree = "<group>"; };
 		A74D3FC118D75B250056D124 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareViewController.h; path = Share/ShareViewController.h; sourceTree = "<group>"; };
@@ -1653,7 +1654,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd Swipes/Classes/Models\nmogenerator -m \"Datamodel.xcdatamodeld/Datamodel 2.0.xcdatamodel/\" -M GeneratedClasses -H CustomClasses --template-var arc=true";
+			shellScript = "cd Swipes/Classes/Models\nmogenerator -m \"Datamodel.xcdatamodeld/Datamodel 2.2.xcdatamodel/\" -M GeneratedClasses -H CustomClasses --template-var arc=true";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2180,12 +2181,13 @@
 		A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				A747954C19CD58D700488020 /* Datamodel 2.2.xcdatamodel */,
 				A7AF9B5917E2244F00F9B26F /* Datamodel 1.0.3.xcdatamodel */,
 				A7AF9B5A17E2244F00F9B26F /* Datamodel 1.1.xcdatamodel */,
 				DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */,
 				A7AF9B5B17E2244F00F9B26F /* Datamodel.xcdatamodel */,
 			);
-			currentVersion = DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */;
+			currentVersion = A747954C19CD58D700488020 /* Datamodel 2.2.xcdatamodel */;
 			path = Datamodel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

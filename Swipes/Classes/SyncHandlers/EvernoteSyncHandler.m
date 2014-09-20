@@ -125,7 +125,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 -(BOOL)handleEvernoteToDo:(EvernoteToDo*)evernoteToDo withMatchingSubtask:(KPToDo*)subtask inNoteProcessor:(EvernoteToDoProcessor*)processor isNew:(BOOL)isNew{
     BOOL updated = NO;
     // If subtask is deleted from Swipes - mark completed in Evernote
-    if ( [subtask.deleted boolValue] && !evernoteToDo.checked ){
+    if ( [subtask.isLocallyDeleted boolValue] && !evernoteToDo.checked ){
         NSLog(@"completing evernote - subtask was deleted");
         [processor updateToDo:evernoteToDo checked:YES];
         return NO;

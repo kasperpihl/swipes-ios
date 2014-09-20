@@ -223,12 +223,23 @@ static NotificationHandler *sharedObject;
         
     }
     
+    [self scheduleNotifications:localNotifications];
     
-    for( UILocalNotification *notification in localNotifications ){
-        DLog(@"%@ - %@",notification.fireDate, notification.alertBody);
+    
+}
+
+-(void)scheduleNotifications:(NSArray*)notifications{
+    UIApplication *app = [UIApplication sharedApplication];
+    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
+        UIUserNotificationSettings *currentSettings = [app currentUserNotificationSettings];
+        if ( currentSettings.types != UIUserNotificationTypeAlert ){
+            [app registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
+            return;
+        }
+    }
+    for(UILocalNotification *notification in notifications){
         [app scheduleLocalNotification:notification];
     }
-    
 }
 
 -(void)updateLocalNotifications{
@@ -238,15 +249,18 @@ static NotificationHandler *sharedObject;
     UIApplication *app = [UIApplication sharedApplication];
     NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
-#warning iOS 8 remove
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
-    /**
-    UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil];
-    if ( notificationSettings.types == UIUserNotificationTypeBadge )
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
+    
+    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
+        UIUserNotificationSettings *currentSettings = [app currentUserNotificationSettings];
+        
+        if ( currentSettings.types == UIUserNotificationTypeBadge )
+            [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
+        else{
+            [app registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
+        }
+    }
     else
-        [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
-    */
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
     
     
     if(!hasNotificationsOn){
@@ -286,7 +300,7 @@ static NotificationHandler *sharedObject;
             NSDictionary *userInfo;
             if (numberOfNotificationsForDate == 1) {
                 title = lastTodo.title;
-                userInfo = @{@"type": @"schedule",@"identifier": [[lastTodo.objectID URIRepresentation] absoluteString]};
+                userInfo = @{@"type": @"schedule",@"identifier": [[[lastTodo objectID] URIRepresentation] absoluteString]};
             }
             else {
                 title = [NSString stringWithFormat:@"You have %li new tasks.",(long)numberOfNotificationsForDate];
@@ -313,9 +327,8 @@ static NotificationHandler *sharedObject;
         lastTodo = toDo;
     }
     [app cancelAllLocalNotifications];
-    for(UILocalNotification *notification in notificationsArray){
-        [app scheduleLocalNotification:notification];
-    }
+    [self scheduleNotifications:notificationsArray];
+
 }
 
 - (void)updateLocationUpdates
@@ -347,7 +360,6 @@ static NotificationHandler *sharedObject;
 
 -(void)handleGeofences:(NSArray*)arrGeofenceList
 {
-    UIApplication *app = [UIApplication sharedApplication];
     NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
     NSLog(@"got location :%@",arrGeofenceList);
@@ -357,13 +369,13 @@ static NotificationHandler *sharedObject;
         NSPredicate *taskPredicate = [NSPredicate predicateWithFormat:@"ANY location BEGINSWITH[c] %@",identifier];
         KPToDo *toDo = [KPToDo MR_findFirstWithPredicate:taskPredicate];
         if(toDo){
-            NSDictionary *userInfo = @{@"type": @"location",@"identifier": [[toDo.objectID URIRepresentation] absoluteString]};
+            NSDictionary *userInfo = @{@"type": @"location",@"identifier": [[[toDo objectID] URIRepresentation] absoluteString]};
             NSDate *fireDate = [NSDate dateWithTimeIntervalSinceNow:3];
             UILocalNotification *notification = [self notificationForDate:fireDate badgeCounter:++todayCount title:toDo.title userInfo:userInfo];
             toDo.schedule = fireDate;
             toDo.location = nil;
             if([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive){
-                [app scheduleLocalNotification:notification];
+                [self scheduleNotifications:@[notification]];
             }
             else{
                 NSString *title = (fence.getTypeGeofence == KL_GEOFENCE_TYPE_IN) ? @"Arrived at Location" : @"Left Location";
