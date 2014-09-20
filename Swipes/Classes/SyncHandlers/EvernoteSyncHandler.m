@@ -82,7 +82,12 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         __updatedTasks = [NSMutableArray array];
     return __updatedTasks;
 }
-
+-(BOOL)hasObjectsSyncedWithEvernote{
+    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"service = %@ AND sync == 1",EVERNOTE_SERVICE];
+    NSUInteger numberOfAttachmentsWithEvernote = [KPAttachment MR_countOfEntitiesWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
+    return (numberOfAttachmentsWithEvernote > 0);
+}
 -(NSArray*)getObjectsSyncedWithEvernote{
     
     NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
@@ -292,7 +297,8 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     self.block(SyncStatusStarted, nil, nil);
     BOOL hasLocalChanges = [self checkForLocalChanges];
     if(!hasLocalChanges){
-        if( [self.lastUpdated timeIntervalSinceNow] > -kFetchChangesTimeout ){
+        NSLog(@"%f > -%i",[self.lastUpdated timeIntervalSinceNow],kFetchChangesTimeout);
+        if(self.lastUpdated && [self.lastUpdated timeIntervalSinceNow] > -kFetchChangesTimeout ){
             NSLog(@"returning due to caching");
             return self.block(SyncStatusSuccess, nil, nil );
         }
@@ -413,6 +419,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 
 
 -(void)syncEvernoteWithBlock:(SyncBlock)block{
+    
     self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
     DLog(@"performing sync with Evernote");
     

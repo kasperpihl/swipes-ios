@@ -381,6 +381,15 @@
         }];
     }
     else {
+        if(!kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]){
+            [UTILITY popupWithTitle:@"Evernote Authorization" andMessage:@"To sync with Evernote on this device, please authorize" buttonTitles:@[@"Don't sync this device",@"Authorize now"] block:^(NSInteger number, NSError *error) {
+                if(number == 1){
+                    //[[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Evernote authentication", @"duration": @(5) } ];
+                    [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+                }
+            }];
+            kEnInt.hasAskedForPermissions = YES;
+        }
         self._isSyncing = NO;
         [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
     }
@@ -392,8 +401,8 @@
         return;
     self.isAuthingEvernote = YES;
     
-    self.isAuthingEvernote = NO;
     [kEnInt authenticateEvernoteInViewController:ROOT_CONTROLLER withBlock:^(NSError *error) {
+        self.isAuthingEvernote = NO;
         if (error || !kEnInt.isAuthenticated) {
             // TODO show message to the user
             //NSLog(@"Session authentication failed: %@", [error localizedDescription]);
@@ -489,6 +498,7 @@
     NSString *url = @"http://swipes-test.herokuapp.com/sync";
     //url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
     url = @"http://127.0.0.1:5000/v1/sync";
+    url = @"http://192.168.1.21:5000/v1/sync";
     //url = @"http://api.swipesapp.com/v1/sync";
 #endif
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
