@@ -63,7 +63,7 @@ static PaymentHandler *sharedObject;
                 [purchase saveEventually];
             }
         }];*/
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"upgrade userlevel" object:self];
+/*        [[NSNotificationCenter defaultCenter] postNotificationName:@"upgrade userlevel" object:self];
         block(YES,nil);
     } failure:^(SKPaymentTransaction *transaction, NSError *error) {
         [UtilityClass sendError:error type:@"Purchase actual error"];
