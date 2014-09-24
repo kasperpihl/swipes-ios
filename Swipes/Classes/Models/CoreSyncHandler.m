@@ -387,9 +387,22 @@
         }];
     }
     else {
+        if(!kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]){
+            [UTILITY popupWithTitle:@"Evernote Authorization" andMessage:@"To sync with Evernote on this device, please authorize" buttonTitles:@[@"Don't sync this device",@"Authorize now"] block:^(NSInteger number, NSError *error) {
+                if(number == 1){
+                    //[[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Evernote authentication", @"duration": @(5) } ];
+                    [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+                }
+            }];
+            kEnInt.hasAskedForPermissions = YES;
+        }
         self._isSyncing = NO;
         [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
     }
+}
+
+-(void)clearCache{
+    [self.evernoteSyncHandler clearCache];
 }
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
@@ -399,6 +412,8 @@
     self.isAuthingEvernote = YES;
     
     [kEnInt authenticateEvernoteInViewController:self.rootController withBlock:^(NSError *error) {
+        self.isAuthingEvernote = NO;
+
         if (error || !kEnInt.isAuthenticated) {
             // TODO show message to the user
             //NSLog(@"Session authentication failed: %@", [error localizedDescription]);
@@ -492,12 +507,10 @@
 //#ifdef RELEASE
     NSString *url = @"http://api.swipesapp.com/v1/sync";
     url = @"http://127.0.0.1:5000/v1/sync";
-//#else
-//    NSString *url = @"http://swipes-test.herokuapp.com/sync";
-//    //url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
-//    url = @"http://127.0.0.1:5000/v1/sync";
-//    //url = @"http://api.swipesapp.com/v1/sync";
+    //url = @"http://192.168.1.21:5000/v1/sync";
+    //url = @"http://api.swipesapp.com/v1/sync";
 //#endif
+
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setTimeoutInterval:35];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
@@ -774,7 +787,10 @@
 {
     if (!__attributeChangesOnObjects){
         __attributeChangesOnObjects = [[NSUserDefaults standardUserDefaults] objectForKey:kTMPUpdateObjects];
-        if(!__attributeChangesOnObjects) __attributeChangesOnObjects = [NSMutableDictionary dictionary];
+        if(!__attributeChangesOnObjects)
+            __attributeChangesOnObjects = [NSMutableDictionary dictionary];
+        else
+            __attributeChangesOnObjects = [__attributeChangesOnObjects mutableCopy];
     }
     return __attributeChangesOnObjects;
 }

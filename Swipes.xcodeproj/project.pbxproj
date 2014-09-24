@@ -712,6 +712,7 @@
 		A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkthroughOverlayBackground.m; path = Walkthrough/WalkthroughOverlayBackground.m; sourceTree = "<group>"; };
 		A74646B718D38660003911DC /* ContactHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactHandler.h; sourceTree = "<group>"; };
 		A74646B818D38660003911DC /* ContactHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactHandler.m; sourceTree = "<group>"; };
+		A747954C19CD58D700488020 /* Datamodel 2.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.2.xcdatamodel"; sourceTree = "<group>"; };
 		A748C878190D9A0800514DB3 /* SubtaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubtaskCell.h; sourceTree = "<group>"; };
 		A748C879190D9A0800514DB3 /* SubtaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtaskCell.m; sourceTree = "<group>"; };
 		A74D3FC118D75B250056D124 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareViewController.h; path = Share/ShareViewController.h; sourceTree = "<group>"; };
@@ -2511,7 +2512,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd Swipes/Classes/Models\nmogenerator -m \"Datamodel.xcdatamodeld/Datamodel 2.0.xcdatamodel/\" -M GeneratedClasses -H CustomClasses --template-var arc=true";
+			shellScript = "cd Swipes/Classes/Models\nmogenerator -m \"Datamodel.xcdatamodeld/Datamodel 2.2.xcdatamodel/\" -M GeneratedClasses -H CustomClasses --template-var arc=true";
 		};
 		A8AF6FFAA34042669C52BBD9 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2966,7 +2967,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "-all_load";
 				PROVISIONING_PROFILE = "0241A838-0A70-4BF3-B073-E6A9623ABB8F";
@@ -3030,8 +3031,6 @@
 					"-framework",
 					MobileCoreServices,
 					"-framework",
-					Parse,
-					"-framework",
 					QuartzCore,
 					"-framework",
 					Security,
@@ -3050,11 +3049,15 @@
 					"-weak_framework",
 					Social,
 					"-all_load",
+					"-framework",
+					Parse,
+					"-framework",
+					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "50D18548-AD5B-41E1-80CB-4F1AA50B0982";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "50D18548-AD5B-41E1-80CB-4F1AA50B0982";
+				PROVISIONING_PROFILE = "0241A838-0A70-4BF3-B073-E6A9623ABB8F";
+				"PROVISIONING_PROFILE[sdk=*]" = "B3D3926D-6975-4B19-877B-8038D24358E9";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B3D3926D-6975-4B19-877B-8038D24358E9";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3093,7 +3096,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
 				PROVISIONING_PROFILE = "603AA3C8-9AFA-42CF-AD32-245D9E88FC07";
@@ -3121,7 +3124,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "-all_load";
 				PROVISIONING_PROFILE = "92BE8DBD-7BB9-4365-A2A0-9B30E049ED7A";
@@ -3175,8 +3178,6 @@
 					"-framework",
 					MobileCoreServices,
 					"-framework",
-					Parse,
-					"-framework",
 					QuartzCore,
 					"-framework",
 					Security,
@@ -3195,6 +3196,10 @@
 					"-weak_framework",
 					Social,
 					"-all_load",
+					"-framework",
+					Parse,
+					"-framework",
+					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
@@ -3254,8 +3259,6 @@
 					"-framework",
 					MobileCoreServices,
 					"-framework",
-					Parse,
-					"-framework",
 					QuartzCore,
 					"-framework",
 					Security,
@@ -3274,6 +3277,10 @@
 					"-weak_framework",
 					Social,
 					"-all_load",
+					"-framework",
+					Parse,
+					"-framework",
+					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
@@ -4084,13 +4091,13 @@
 		A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				A72BAED919CC2AEA0027E04B /* Datamodel 2.2.xcdatamodel */,
+				A747954C19CD58D700488020 /* Datamodel 2.2.xcdatamodel */,
 				A7AF9B5917E2244F00F9B26F /* Datamodel 1.0.3.xcdatamodel */,
 				A7AF9B5A17E2244F00F9B26F /* Datamodel 1.1.xcdatamodel */,
 				DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */,
 				A7AF9B5B17E2244F00F9B26F /* Datamodel.xcdatamodel */,
 			);
-			currentVersion = A72BAED919CC2AEA0027E04B /* Datamodel 2.2.xcdatamodel */;
+			currentVersion = A747954C19CD58D700488020 /* Datamodel 2.2.xcdatamodel */;
 			path = Datamodel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

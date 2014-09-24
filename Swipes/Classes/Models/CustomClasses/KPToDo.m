@@ -545,7 +545,7 @@
     NSArray *allSubtasks = [[self subtasks] allObjects];
     NSMutableSet *notDeletedSubtasks = [NSMutableSet set];
     for( KPToDo *subtask in allSubtasks ){
-        if( ![subtask.deleted boolValue] )
+        if( ![subtask.isLocallyDeleted boolValue] )
             [notDeletedSubtasks addObject:subtask];
     }
     return [notDeletedSubtasks copy];
@@ -696,7 +696,7 @@
         [KPToDo deleteToDos:[self.subtasks allObjects] save:NO force:YES];
     }
     else if( self.parent && !force && [self.origin isEqualToString:EVERNOTE_SERVICE]){
-        self.deleted = @(YES);
+        self.isLocallyDeleted = @(YES);
         NSLog(@"deleted subtask from Evernote");
         return NO;
     }

@@ -18,6 +18,7 @@ extern const int MONNSExceptionEncounteredErrorCode;
 @interface EvernoteIntegration : NSObject
 
 @property (nonatomic) BOOL enableSync;
+@property (nonatomic) BOOL hasAskedForPermissions;
 @property NSString *tagGuid;
 @property NSInteger requestCounter;
 @property NSString *tagName;

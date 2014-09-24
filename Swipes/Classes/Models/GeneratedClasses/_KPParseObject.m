@@ -5,7 +5,7 @@
 
 const struct KPParseObjectAttributes KPParseObjectAttributes = {
 	.createdAt = @"createdAt",
-	.deleted = @"deleted",
+	.isLocallyDeleted = @"isLocallyDeleted",
 	.objectId = @"objectId",
 	.parseClassName = @"parseClassName",
 	.tempId = @"tempId",
@@ -38,8 +38,8 @@ const struct KPParseObjectAttributes KPParseObjectAttributes = {
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
 
-	if ([key isEqualToString:@"deletedValue"]) {
-		NSSet *affectingKey = [NSSet setWithObject:@"deleted"];
+	if ([key isEqualToString:@"isLocallyDeletedValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"isLocallyDeleted"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -49,24 +49,24 @@ const struct KPParseObjectAttributes KPParseObjectAttributes = {
 
 @dynamic createdAt;
 
-@dynamic deleted;
+@dynamic isLocallyDeleted;
 
-- (BOOL)deletedValue {
-	NSNumber *result = [self deleted];
+- (BOOL)isLocallyDeletedValue {
+	NSNumber *result = [self isLocallyDeleted];
 	return [result boolValue];
 }
 
-- (void)setDeletedValue:(BOOL)value_ {
-	[self setDeleted:[NSNumber numberWithBool:value_]];
+- (void)setIsLocallyDeletedValue:(BOOL)value_ {
+	[self setIsLocallyDeleted:[NSNumber numberWithBool:value_]];
 }
 
-- (BOOL)primitiveDeletedValue {
-	NSNumber *result = [self primitiveDeleted];
+- (BOOL)primitiveIsLocallyDeletedValue {
+	NSNumber *result = [self primitiveIsLocallyDeleted];
 	return [result boolValue];
 }
 
-- (void)setPrimitiveDeletedValue:(BOOL)value_ {
-	[self setPrimitiveDeleted:[NSNumber numberWithBool:value_]];
+- (void)setPrimitiveIsLocallyDeletedValue:(BOOL)value_ {
+	[self setPrimitiveIsLocallyDeleted:[NSNumber numberWithBool:value_]];
 }
 
 @dynamic objectId;

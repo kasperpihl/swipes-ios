@@ -66,7 +66,6 @@
     parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
     analyticsKey = @"ncm4wfr7qc";
     localyticsKey = @"f2f927e0eafc7d3c36835fe-c0a84d84-18d8-11e3-3b24-00a426b17dd8";
-#warning Put back dev keys
 #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
     NSString* const CONSUMER_KEY = @"swipes";
     NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6";
@@ -128,8 +127,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
     
     //NSLog(@"%@",[kCurrent sessionToken]);
-    
-    
+    NSDateFormatter *dateFormatter = [Global isoDateFormatter];
+    NSString *isoString = [dateFormatter stringFromDate:[NSDate date]];
+    NSLog(@"%@",isoString);
     return YES;
 }
 

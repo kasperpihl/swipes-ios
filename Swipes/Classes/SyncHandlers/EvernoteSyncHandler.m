@@ -25,7 +25,7 @@
 
 #define kMaxNotes 100
 
-#define kFetchChangesTimeout 180
+#define kFetchChangesTimeout 30
 
 NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 
@@ -34,6 +34,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 @property NSArray *objectsWithEvernote;
 @property NSDate *lastUpdated;
 @property BOOL updateNeededFromEvernote;
+@property BOOL needToClearCache;
 
 @property BOOL fullEvernoteUpdate;
 @property NSInteger currentEvernoteUpdateCount;
@@ -82,7 +83,12 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         __updatedTasks = [NSMutableArray array];
     return __updatedTasks;
 }
-
+-(BOOL)hasObjectsSyncedWithEvernote{
+    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"service = %@ AND sync == 1",EVERNOTE_SERVICE];
+    NSUInteger numberOfAttachmentsWithEvernote = [KPAttachment MR_countOfEntitiesWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
+    return (numberOfAttachmentsWithEvernote > 0);
+}
 -(NSArray*)getObjectsSyncedWithEvernote{
     
     NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
@@ -104,6 +110,10 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     self.expectedEvernoteCount = newUpdateCount;
 }
 
+-(void)clearCache{
+    self.needToClearCache = YES;
+    [[EvernoteIntegration sharedInstance] clearCaches];
+}
 
 // Just testing
 -(void)didDelay{
@@ -125,7 +135,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 -(BOOL)handleEvernoteToDo:(EvernoteToDo*)evernoteToDo withMatchingSubtask:(KPToDo*)subtask inNoteProcessor:(EvernoteToDoProcessor*)processor isNew:(BOOL)isNew{
     BOOL updated = NO;
     // If subtask is deleted from Swipes - mark completed in Evernote
-    if ( [subtask.deleted boolValue] && !evernoteToDo.checked ){
+    if ( [subtask.isLocallyDeleted boolValue] && !evernoteToDo.checked ){
         NSLog(@"completing evernote - subtask was deleted");
         [processor updateToDo:evernoteToDo checked:YES];
         return NO;
@@ -154,7 +164,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         else{
             // If subtask is updated later than last sync override Evernote
             // There could be an error margin here, but I don't see a better solution at the moment
-            if ( !isNew && [self.lastUpdated isEarlierThanDate:subtask.updatedAt] ){
+            if ( !isNew && self.lastUpdated && [self.lastUpdated isEarlierThanDate:subtask.updatedAt] ){
                 DLog(@"uncompleting evernote");
                 [processor updateToDo:evernoteToDo checked:subtaskIsCompleted];
             }
@@ -291,12 +301,15 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     kEnInt.requestCounter = 0;
     self.block(SyncStatusStarted, nil, nil);
     BOOL hasLocalChanges = [self checkForLocalChanges];
-    if(!hasLocalChanges){
-        if( [self.lastUpdated timeIntervalSinceNow] > -kFetchChangesTimeout ){
+    if(!hasLocalChanges && !self.needToClearCache){
+        NSLog(@"%f > -%i",[self.lastUpdated timeIntervalSinceNow],kFetchChangesTimeout);
+        if(self.lastUpdated && [self.lastUpdated timeIntervalSinceNow] > -kFetchChangesTimeout ){
             NSLog(@"returning due to caching");
             return self.block(SyncStatusSuccess, nil, nil );
         }
     }
+    if(self.needToClearCache)
+        self.needToClearCache = NO;
     [self findUpdatedNotesWithTag:@"swipes" block:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
         if(error){
             block(SyncStatusError, nil, error);
@@ -413,6 +426,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 
 
 -(void)syncEvernoteWithBlock:(SyncBlock)block{
+    
     self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
     DLog(@"performing sync with Evernote");
     

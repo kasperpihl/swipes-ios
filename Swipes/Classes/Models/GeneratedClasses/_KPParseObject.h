@@ -5,7 +5,7 @@
 
 extern const struct KPParseObjectAttributes {
 	__unsafe_unretained NSString *createdAt;
-	__unsafe_unretained NSString *deleted;
+	__unsafe_unretained NSString *isLocallyDeleted;
 	__unsafe_unretained NSString *objectId;
 	__unsafe_unretained NSString *parseClassName;
 	__unsafe_unretained NSString *tempId;
@@ -25,13 +25,13 @@ extern const struct KPParseObjectAttributes {
 
 //- (BOOL)validateCreatedAt:(id*)value_ error:(NSError**)error_;
 
-@property (nonatomic, strong) NSNumber* deleted;
+@property (nonatomic, strong) NSNumber* isLocallyDeleted;
 
-@property (atomic) BOOL deletedValue;
-- (BOOL)deletedValue;
-- (void)setDeletedValue:(BOOL)value_;
+@property (atomic) BOOL isLocallyDeletedValue;
+- (BOOL)isLocallyDeletedValue;
+- (void)setIsLocallyDeletedValue:(BOOL)value_;
 
-//- (BOOL)validateDeleted:(id*)value_ error:(NSError**)error_;
+//- (BOOL)validateIsLocallyDeleted:(id*)value_ error:(NSError**)error_;
 
 @property (nonatomic, strong) NSString* objectId;
 
@@ -56,11 +56,11 @@ extern const struct KPParseObjectAttributes {
 - (NSDate*)primitiveCreatedAt;
 - (void)setPrimitiveCreatedAt:(NSDate*)value;
 
-- (NSNumber*)primitiveDeleted;
-- (void)setPrimitiveDeleted:(NSNumber*)value;
+- (NSNumber*)primitiveIsLocallyDeleted;
+- (void)setPrimitiveIsLocallyDeleted:(NSNumber*)value;
 
-- (BOOL)primitiveDeletedValue;
-- (void)setPrimitiveDeletedValue:(BOOL)value_;
+- (BOOL)primitiveIsLocallyDeletedValue;
+- (void)setPrimitiveIsLocallyDeletedValue:(BOOL)value_;
 
 - (NSString*)primitiveObjectId;
 - (void)setPrimitiveObjectId:(NSString*)value;
