@@ -447,8 +447,8 @@
             rotate.duration = 0.5;
             [sender.iconLabel.layer addAnimation:rotate forKey:@"myRotationAnimation"];
             
-            [[EvernoteIntegration sharedInstance] clearCaches]; // make sure Evernote caches are empty 
-            
+             // make sure Evernote caches are empty
+            [KPCORE clearCache];
             [KPCORE synchronizeForce:YES async:YES];
             
             break;

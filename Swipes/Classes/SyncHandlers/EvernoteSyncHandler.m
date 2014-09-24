@@ -34,6 +34,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 @property NSArray *objectsWithEvernote;
 @property NSDate *lastUpdated;
 @property BOOL updateNeededFromEvernote;
+@property BOOL needToClearCache;
 
 @property BOOL fullEvernoteUpdate;
 @property NSInteger currentEvernoteUpdateCount;
@@ -109,6 +110,10 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     self.expectedEvernoteCount = newUpdateCount;
 }
 
+-(void)clearCache{
+    self.needToClearCache = YES;
+    [[EvernoteIntegration sharedInstance] clearCaches];
+}
 
 // Just testing
 -(void)didDelay{
@@ -159,7 +164,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         else{
             // If subtask is updated later than last sync override Evernote
             // There could be an error margin here, but I don't see a better solution at the moment
-            if ( !isNew && [self.lastUpdated isEarlierThanDate:subtask.updatedAt] ){
+            if ( !isNew && self.lastUpdated && [self.lastUpdated isEarlierThanDate:subtask.updatedAt] ){
                 DLog(@"uncompleting evernote");
                 [processor updateToDo:evernoteToDo checked:subtaskIsCompleted];
             }
@@ -296,13 +301,15 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     kEnInt.requestCounter = 0;
     self.block(SyncStatusStarted, nil, nil);
     BOOL hasLocalChanges = [self checkForLocalChanges];
-    if(!hasLocalChanges){
+    if(!hasLocalChanges && !self.needToClearCache){
         NSLog(@"%f > -%i",[self.lastUpdated timeIntervalSinceNow],kFetchChangesTimeout);
         if(self.lastUpdated && [self.lastUpdated timeIntervalSinceNow] > -kFetchChangesTimeout ){
             NSLog(@"returning due to caching");
             return self.block(SyncStatusSuccess, nil, nil );
         }
     }
+    if(self.needToClearCache)
+        self.needToClearCache = NO;
     [self findUpdatedNotesWithTag:@"swipes" block:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
         if(error){
             block(SyncStatusError, nil, error);

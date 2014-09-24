@@ -13,4 +13,5 @@
 //-(void)getSwipesTagGuidBlock:(StringBlock)block;
 -(NSArray*)getObjectsSyncedWithEvernote;
 -(BOOL)hasObjectsSyncedWithEvernote;
+-(void)clearCache;
 @end

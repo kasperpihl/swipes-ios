@@ -395,6 +395,10 @@
     }
 }
 
+-(void)clearCache{
+    [self.evernoteSyncHandler clearCache];
+}
+
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
     if(self.isAuthingEvernote)
