@@ -130,8 +130,8 @@
             }
         }];
         if(!blockToTemp){
-            [[NSUserDefaults standardUserDefaults] setObject:self._attributeChangesOnObjects forKey:kTMPUpdateObjects];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            [USER_DEFAULTS setObject:self._attributeChangesOnObjects forKey:kTMPUpdateObjects];
+            [USER_DEFAULTS synchronize];
         }
     });
 }
@@ -287,7 +287,7 @@
     }
     /*if (!kUserHandler.isPlus) {
         NSDate *now = [NSDate date];
-        NSDate *lastUpdatedDay = [[NSUserDefaults standardUserDefaults] objectForKey:kLastSyncLocalDate];
+        NSDate *lastUpdatedDay = [USER_DEFAULTS objectForKey:kLastSyncLocalDate];
         if (lastUpdatedDay && now.dayOfYear == lastUpdatedDay.dayOfYear)
             return UIBackgroundFetchResultNoData;
     }*/
@@ -493,7 +493,7 @@
 
     
     /* The last update time - saved and received from the sync response */
-    NSString *lastUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastSyncServerString];
+    NSString *lastUpdate = [USER_DEFAULTS objectForKey:kLastSyncServerString];
     if (lastUpdate)
         [syncData setObject:lastUpdate forKey:@"lastUpdate"];
     
@@ -506,7 +506,7 @@
     NSError *error;
 //#ifdef RELEASE
     NSString *url = @"http://api.swipesapp.com/v1/sync";
-    url = @"http://127.0.0.1:5000/v1/sync";
+    //url = @"http://127.0.0.1:5000/v1/sync";
     //url = @"http://192.168.1.21:5000/v1/sync";
     //url = @"http://api.swipesapp.com/v1/sync";
 //#endif
@@ -610,10 +610,10 @@
     }
     [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
         /* Save the sync to server */
-        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastSyncLocalDate];
+        [USER_DEFAULTS setObject:[NSDate date] forKey:kLastSyncLocalDate];
         if (lastUpdate)
-            [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:kLastSyncServerString];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+            [USER_DEFAULTS setObject:lastUpdate forKey:kLastSyncServerString];
+        [USER_DEFAULTS synchronize];
         [self cleanUpAfterSync];
         if (!um.isUndoRegistrationEnabled)
             [um enableUndoRegistration];
@@ -628,13 +628,13 @@
 {
     if ( self._didHardSync ){
         //NSLog(@"did the hard sync");
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUpdateObjects];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        [USER_DEFAULTS removeObjectForKey:kUpdateObjects];
+        [USER_DEFAULTS synchronize];
         self._didHardSync = NO;
     }
     NSInteger counter = 0;
     NSMutableDictionary *copyOfNewAttributeChanges = [self copyChangesAndFlushForTemp:NO];
-    NSMutableDictionary *objectsToUpdate = [[NSUserDefaults standardUserDefaults] objectForKey:kUpdateObjects];
+    NSMutableDictionary *objectsToUpdate = [USER_DEFAULTS objectForKey:kUpdateObjects];
     if(!objectsToUpdate)
         objectsToUpdate = [NSMutableDictionary dictionary];
     else
@@ -679,7 +679,7 @@
     if(keysToRemoveInAttributeChanges.count > 0)
         [copyOfNewAttributeChanges removeObjectsForKeys:keysToRemoveInAttributeChanges];
     
-    [[NSUserDefaults standardUserDefaults] setObject:objectsToUpdate forKey:kUpdateObjects];
+    [USER_DEFAULTS setObject:objectsToUpdate forKey:kUpdateObjects];
     [self commitAttributeChanges:copyOfNewAttributeChanges toTemp:NO];
     
     return objectsToUpdate;
@@ -729,7 +729,7 @@
 
 
 -(void)cleanUpAfterSync{
-    [[NSUserDefaults standardUserDefaults] setObject:[NSMutableDictionary dictionary] forKey:kUpdateObjects];
+    [USER_DEFAULTS setObject:[NSMutableDictionary dictionary] forKey:kUpdateObjects];
     
     NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
     
@@ -786,7 +786,7 @@
 -(NSMutableDictionary *)_attributeChangesOnObjects
 {
     if (!__attributeChangesOnObjects){
-        __attributeChangesOnObjects = [[NSUserDefaults standardUserDefaults] objectForKey:kTMPUpdateObjects];
+        __attributeChangesOnObjects = [USER_DEFAULTS objectForKey:kTMPUpdateObjects];
         if(!__attributeChangesOnObjects)
             __attributeChangesOnObjects = [NSMutableDictionary dictionary];
         else
@@ -827,7 +827,7 @@
         [self loadDatabase];
     }
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
-    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+    [USER_DEFAULTS removePersistentDomainForName:appDomain];
     [self endBackgroundHandler];
     self._isSyncing = NO;
     self._needSync = NO;
@@ -881,7 +881,8 @@ static CoreSyncHandler *sharedObject;
 - (void)loadDatabase
 {
     @try {
-        [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
+        [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreAtURL:[Global coreDataUrl]];
+        //[MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
         [[NSManagedObjectContext MR_defaultContext] setUndoManager:[[NSUndoManager alloc] init]];
         
         [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(performTestForSyncing) userInfo:nil repeats:NO];
@@ -927,11 +928,11 @@ static CoreSyncHandler *sharedObject;
         DLog(@"%@",string);
         DLog(@"%@",error);
     }];*/
-    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"hasSwitchedToNewAPI"]){
+    if(![USER_DEFAULTS boolForKey:@"hasSwitchedToNewAPI"]){
         [self hardSync];
         
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasSwitchedToNewAPI"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        [USER_DEFAULTS setBool:YES forKey:@"hasSwitchedToNewAPI"];
+        [USER_DEFAULTS synchronize];
     }
 }
 

@@ -33,7 +33,7 @@ static ThemeHandler *sharedObject;
 +(ThemeHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[ThemeHandler allocWithZone:NULL] init];
-        sharedObject.currentTheme = [[NSUserDefaults standardUserDefaults] integerForKey:@"theme"];
+        sharedObject.currentTheme = [USER_DEFAULTS integerForKey:@"theme"];
         //[sharedObject brightnessDetector];
         //[sharedObject changeTheme];
     }
@@ -63,8 +63,8 @@ static ThemeHandler *sharedObject;
 -(void)setCurrentTheme:(Theme)currentTheme{
     if(currentTheme != ThemeLight && currentTheme != ThemeDark) currentTheme = ThemeLight;
     _currentTheme = currentTheme;
-    [[NSUserDefaults standardUserDefaults] setInteger:currentTheme forKey:@"theme"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [USER_DEFAULTS setInteger:currentTheme forKey:@"theme"];
+    [USER_DEFAULTS synchronize];
     
     if(OSVER >= 7){
         [[UITextField appearance] setTintColor:tcolor(TextColor)];

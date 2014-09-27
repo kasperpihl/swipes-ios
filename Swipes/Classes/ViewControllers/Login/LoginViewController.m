@@ -224,7 +224,7 @@ typedef enum {
         self.tryButton.titleLabel.font = LOGIN_FIELDS_FONT;
         
         [self.tryButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
-        NSString *title = [[NSUserDefaults standardUserDefaults] boolForKey:isTryingString] ? @"Keep trying Swipes" : @"Try out";
+        NSString *title = [USER_DEFAULTS boolForKey:isTryingString] ? @"Keep trying Swipes" : @"Try out";
         [self.tryButton setTitle:title forState:UIControlStateNormal];
         [self.tryButton addTarget:self action:@selector(pressedTryButton:) forControlEvents:UIControlEventTouchUpInside];
         self.tryButton.frame = CGRectMake(0, 0, sizeWithFont(title ,LOGIN_FIELDS_FONT).width + 36, fieldHeight);

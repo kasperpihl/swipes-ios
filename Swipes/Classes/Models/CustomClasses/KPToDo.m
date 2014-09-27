@@ -870,7 +870,7 @@
     NSArray *tasks = [KPToDo MR_findByAttribute:@"origin" withValue:EVERNOTE_SERVICE];
     [context performBlockAndWait:^{
         for( KPAttachment *attachment in attachments ){
-            [attachment MR_deleteInContext:context];
+            [attachment MR_deleteEntityInContext:context];
         }
         for ( KPToDo *todo in tasks ){
             todo.originIdentifier = nil;

@@ -1,5 +1,4 @@
 platform :ios, '7.0'
-<<<<<<< HEAD
 
 target :Swipes do
     pod 'Appirater', :inhibit_warnings => true
@@ -7,7 +6,7 @@ target :Swipes do
 #    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
     pod 'Parse', :inhibit_warnings => true
-    pod 'MagicalRecord', :inhibit_warnings => true
+#    pod 'MagicalRecord', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'RMStore', :inhibit_warnings => true
@@ -45,7 +44,7 @@ target :SwipesKit do
     pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
     pod 'Parse', :inhibit_warnings => true
-    pod 'MagicalRecord', :inhibit_warnings => true
+#    pod 'MagicalRecord', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'RMStore', :inhibit_warnings => true
@@ -63,7 +62,7 @@ target :SwipesToday do
     pod 'Bolts', :inhibit_warnings => true
     pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
-    pod 'MagicalRecord', :inhibit_warnings => true
+#    pod 'MagicalRecord', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'RMStore', :inhibit_warnings => true
@@ -78,30 +77,6 @@ end
 
 #link_with 'Swipes', 'Swipes_iOS8', 'SwipesKit'
 #link_with 'Swipes', 'SwipesKit'
-=======
-pod 'Appirater', :inhibit_warnings => true
-pod 'Bolts', :inhibit_warnings => true
-pod 'Parse', :inhibit_warnings => true
-pod 'ParseFacebookUtils'
-pod 'MagicalRecord', :inhibit_warnings => true
-pod 'Reachability'
-pod 'Underscore.m'
-pod 'RMStore', :inhibit_warnings => true
-pod 'Base64'
-pod 'Evernote-SDK-iOS', :inhibit_warnings => true
-pod 'APAddressBook'
-pod 'DejalActivityView'
-pod 'KeenClient', :inhibit_warnings => true
-pod 'NSURL+QueryDictionary'
-pod 'DHCShakeNotifier'
-
-#pod 'MMDrawerController', '~> 0.5.3' - now part of libs as it was modified
-
-#pod 'Localytics-AMP', '~> 2.23'
-#pod 'Analytics', '~> 0.10.2'
-#pod 'Dropbox-iOS-SDK', '~> 1.3.9'
-#pod 'ASCScreenBrightnessDetector'
->>>>>>> Evernote_and_64bit
 
 post_install do |installer|
   installer.project.targets.each do |target|
@@ -114,5 +89,3 @@ post_install do |installer|
   end
 end
 
-
-#

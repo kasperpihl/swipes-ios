@@ -333,7 +333,7 @@ UIImage* rotate(UIImage* src, NSInteger degrees)
 }
 #pragma mark - User Defaults
 -(NSUserDefaults *)userDefaults{
-    if(!_userDefaults) _userDefaults = [NSUserDefaults standardUserDefaults];
+    if(!_userDefaults) _userDefaults = USER_DEFAULTS;
     return _userDefaults;
 }
 -(int)ageForBirthday:(NSString *)birthday{

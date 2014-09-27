@@ -89,7 +89,7 @@
         NSInteger servicesAvailable = 0;
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) servicesAvailable++;
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) servicesAvailable++;
-        NSInteger streak = [[NSUserDefaults standardUserDefaults] integerForKey:@"numberOfDaysOnStreak"];
+        NSInteger streak = [USER_DEFAULTS integerForKey:@"numberOfDaysOnStreak"];
         NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable],@"All done for today":@(self.allDoneForToday),@"Streak":@(streak)};
         [ANALYTICS tagEvent:@"Cleared Tasks" options:dict];
     }
@@ -168,12 +168,12 @@
         
         if(self.allDoneForToday){
             self.youreAllDoneView.stampView.allDoneLabel.text = @"ALL DONE FOR TODAY";
-            NSInteger currentNumber = [[NSUserDefaults standardUserDefaults] integerForKey:@"numberOfDaysOnStreak"];
+            NSInteger currentNumber = [USER_DEFAULTS integerForKey:@"numberOfDaysOnStreak"];
             
             if(!currentNumber)
                 currentNumber = 1;
             
-            NSDate *lastStreak = (NSDate*)[[NSUserDefaults standardUserDefaults] objectForKey:@"lastStreakDate"];
+            NSDate *lastStreak = (NSDate*)[USER_DEFAULTS objectForKey:@"lastStreakDate"];
             
             if(lastStreak){
                 
@@ -181,9 +181,9 @@
                     currentNumber++;
                 else if(![lastStreak isToday])
                     currentNumber = 0;
-                [[NSUserDefaults standardUserDefaults] setInteger:currentNumber forKey:@"numberOfDaysOnStreak"];
+                [USER_DEFAULTS setInteger:currentNumber forKey:@"numberOfDaysOnStreak"];
             }
-            [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastStreakDate"];
+            [USER_DEFAULTS setObject:[NSDate date] forKey:@"lastStreakDate"];
             
             NSString *startString = (currentNumber <= 1) ? @"First day" : [NSString stringWithFormat:@"%li days",(long)currentNumber];
             self.youreAllDoneView.stampView.monthLabel.text = [NSString stringWithFormat:@"%@ on a streak!",startString];

@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
-#import "TodayViewController.h"
 #import <NotificationCenter/NotificationCenter.h>
+#import "KPToDo.h"
+#import "TodayViewController.h"
 
 @interface TodayViewController () <NCWidgetProviding>
 
@@ -17,7 +18,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    DLog(@"storeURL: %@", [Global coreDataUrl]);
+    
+    [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreAtURL:[Global coreDataUrl]];
+
     // Do any additional setup after loading the view from its nib.
+    NSDate *endDate = [NSDate date];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endDate];
+    NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
+    NSArray* result = [KPToDo sortOrderForItems:results newItemsOnTop:YES save:YES];
+    DLog(@"result: %@", result);
 }
 
 - (void)didReceiveMemoryWarning {

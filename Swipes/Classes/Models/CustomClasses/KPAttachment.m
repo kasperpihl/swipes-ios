@@ -24,7 +24,7 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
 + (instancetype)attachmentForService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync
                            inContext:(NSManagedObjectContext*)context{
     NSAssert([KPAttachment supportsService:service], @"Called with unsupported service: %@", service);
-    KPAttachment* attachment = [KPAttachment MR_createInContext:context];
+    KPAttachment* attachment = [KPAttachment MR_createEntityInContext:context];
     attachment.identifier = identifier;
     attachment.title = title;
     attachment.service = service;

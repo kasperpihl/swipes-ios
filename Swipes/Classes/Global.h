@@ -12,8 +12,10 @@
 #define iconString(string) [Global iconStringForString:string]
 #define iconLabel(key,iconHeight) [Global iconLabelWithString:key height:iconHeight]
 #define iconFont(fontSize) [UIFont fontWithName:@"swipes" size:fontSize]
+#define USER_DEFAULTS  [Global sharedDefaults]
+
 @interface Global : NSObject
-@property (nonatomic) CGFloat fontMultiplier;
+
 + (Global *)sharedInstance;
 + (NSInteger)OSVersion;
 + (BOOL)is24Hour;
@@ -21,4 +23,9 @@
 + (UILabel*)iconLabelWithString:(NSString*)iconString height:(CGFloat)height;
 + (NSString*)iconStringForString:(NSString*)iconString;
 + (BOOL)supportsOrientation:(UIDeviceOrientation)orientation;
++ (NSURL *)coreDataUrl;
++ (NSUserDefaults *)sharedDefaults;
+
+@property (nonatomic) CGFloat fontMultiplier;
+
 @end

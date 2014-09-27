@@ -53,7 +53,7 @@ static PaymentHandler *sharedObject;
         PFObject *purchase = [PFObject objectWithClassName:@"Payment"];
         purchase[@"type"] = @"ios";
         purchase[@"productIdentifier"] = identifier;
-        purchase[@"transactionIdentifier"] = transaction.transactionIdentifier;
+        purchase[@"transactionIdentifier"] = transaction.transactionIdentifier;*/
         /*if(transaction.transactionReceipt) purchase[@"transactionReceipt"] = [transaction.transactionReceipt base64Encoding];
         [purchase saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if(error){

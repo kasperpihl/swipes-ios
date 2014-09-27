@@ -35,7 +35,7 @@ static UserHandler *sharedObject;
     }
 }
 -(BOOL)isTryingOutApp{
-    return [[NSUserDefaults standardUserDefaults] boolForKey:isTryingString];
+    return [USER_DEFAULTS boolForKey:isTryingString];
 }
 -(NSString *)stringForUserLevel:(UserLevel)userLevel{
     NSString *string;
@@ -67,7 +67,7 @@ static UserHandler *sharedObject;
     }
 }
 -(void)initialize{
-    self.userLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"isPlus"];
+    self.userLevel = [USER_DEFAULTS integerForKey:@"isPlus"];
     self.isPlus = (self.userLevel > UserLevelStandard);
     notify(@"upgrade userlevel", didUpgradeUser);
     notify(@"opened app", didOpenApp);
@@ -112,7 +112,8 @@ static UserHandler *sharedObject;
     if(user){
         NSInteger userLevel = 0;
         userLevel = [[kCurrent objectForKey:@"userLevel"] integerValue];
-        [[NSUserDefaults standardUserDefaults] setInteger:userLevel forKey:@"isPlus"];
+        [USER_DEFAULTS setInteger:userLevel forKey:@"isPlus"];
+        [USER_DEFAULTS synchronize];
         self.userLevel = userLevel;
         self.isPlus = (userLevel > UserLevelStandard);
         [ANALYTICS updateIdentity];

@@ -35,7 +35,7 @@
 }
 -(NSArray *)historyResults{
     if(!_historyResults){
-        NSData *dataFromUserDef = [[NSUserDefaults standardUserDefaults] dataForKey:kUserDefKey];
+        NSData *dataFromUserDef = [USER_DEFAULTS dataForKey:kUserDefKey];
         if(dataFromUserDef) _historyResults = [NSKeyedUnarchiver unarchiveObjectWithData:dataFromUserDef];
         if(!_historyResults) _historyResults = [NSArray array];
     }
@@ -54,7 +54,7 @@
     }
     self.historyResults = [newHistory copy];
     NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self.historyResults];
-    [[NSUserDefaults standardUserDefaults] setObject:data forKey:kUserDefKey];
+    [USER_DEFAULTS setObject:data forKey:kUserDefKey];
     [self.tableView reloadData];
 }
 

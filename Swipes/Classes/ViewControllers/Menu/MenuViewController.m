@@ -211,7 +211,7 @@
 
 -(void)updateSyncLabel
 {
-    NSDate *lastSync = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastSyncLocalDate"];
+    NSDate *lastSync = [USER_DEFAULTS objectForKey:@"lastSyncLocalDate"];
     NSString *timeString = @"Never";
     if (lastSync) {
         timeString = [UtilityClass readableTime:lastSync showTime:YES];

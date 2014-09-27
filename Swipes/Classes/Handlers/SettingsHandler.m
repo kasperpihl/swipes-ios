@@ -78,7 +78,7 @@ static SettingsHandler *sharedObject;
     return index;
 }
 -(UIImage *)getDailyImage{
-    NSString *existingFileName = [[NSUserDefaults standardUserDefaults] stringForKey:@"dailyImageFileName"];
+    NSString *existingFileName = [USER_DEFAULTS stringForKey:@"dailyImageFileName"];
     if(existingFileName){
         NSString *fullPath = parseFileCachePath(existingFileName);
         if ([[NSFileManager defaultManager] fileExistsAtPath:fullPath])
@@ -93,7 +93,7 @@ static SettingsHandler *sharedObject;
 -(void)refreshDailyImage:(BOOL)force{
     if(self.isFetchingImage) return;
     NSDate *now = [NSDate date];
-    NSInteger lastUpdatedDay = [[NSUserDefaults standardUserDefaults] integerForKey:@"lastUpdatedDailyImage"];
+    NSInteger lastUpdatedDay = [USER_DEFAULTS integerForKey:@"lastUpdatedDailyImage"];
     if(now.dayOfYear != lastUpdatedDay || force){
         self.isFetchingImage = YES;
         PFQuery *query = [PFQuery queryWithClassName:@"DailyImage"];
@@ -102,7 +102,7 @@ static SettingsHandler *sharedObject;
         [query whereKey:@"year" equalTo:@(now.year)];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if(error || !object){
-                if(!object && !error) [[NSUserDefaults standardUserDefaults] setInteger:now.dayOfYear forKey:@"lastUpdatedDailyImage"];
+                if(!object && !error) [USER_DEFAULTS setInteger:now.dayOfYear forKey:@"lastUpdatedDailyImage"];
                 self.isFetchingImage = NO;
                 return;
             }
@@ -111,8 +111,8 @@ static SettingsHandler *sharedObject;
             [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                 self.isFetchingImage = NO;
                 if(data){
-                    [[NSUserDefaults standardUserDefaults] setObject:file.name forKey:@"dailyImageFileName"];
-                    [[NSUserDefaults standardUserDefaults] setInteger:now.dayOfYear forKey:@"lastUpdatedDailyImage"];
+                    [USER_DEFAULTS setObject:file.name forKey:@"dailyImageFileName"];
+                    [USER_DEFAULTS setInteger:now.dayOfYear forKey:@"lastUpdatedDailyImage"];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated daily image" object:self];
                 }
             }];
@@ -157,15 +157,15 @@ static SettingsHandler *sharedObject;
 -(id)valueForSetting:(KPSettings)setting{
     NSString *index = [self indexForSettings:setting];
     if(!index) return nil;
-    id value = [[NSUserDefaults standardUserDefaults] objectForKey:index];
+    id value = [USER_DEFAULTS objectForKey:index];
     if(!value) value = [self defaultValueForSettings:setting];
     return value;
 }
 -(void)setValue:(id)value forSetting:(KPSettings)setting{
     NSString *index = [self indexForSettings:setting];
     if(!index) return;
-    [[NSUserDefaults standardUserDefaults] setObject:value forKey:index];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [USER_DEFAULTS setObject:value forKey:index];
+    [USER_DEFAULTS synchronize];
     if(setting == SettingNotifications)
         [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
 }
@@ -176,18 +176,18 @@ static SettingsHandler *sharedObject;
 }
 -(void)setSetting:(BOOL)setting forKey:(NSString *)key{
     [self.settings setObject:@(setting) forKey:key];
-    [[NSUserDefaults standardUserDefaults] setObject:self.settings forKey:kSettingsDictionaryKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [USER_DEFAULTS setObject:self.settings forKey:kSettingsDictionaryKey];
+    [USER_DEFAULTS synchronize];
 }
 
 -(void)initialize{
-    self.settings = [[NSUserDefaults standardUserDefaults] objectForKey:kSettingsDictionaryKey];
+    self.settings = [USER_DEFAULTS objectForKey:kSettingsDictionaryKey];
     if(!self.settings)
         self.settings = [NSMutableDictionary dictionary];
     else if( ![self.settings isMemberOfClass:[NSMutableDictionary class]]){
         self.settings = [NSMutableDictionary dictionary];
-        NSLog(@"renewed");
+        DLog(@"renewed");
     }
-    NSLog(@"set %@",[self.settings class]);
+    DLog(@"set %@",[self.settings class]);
 }
 @end

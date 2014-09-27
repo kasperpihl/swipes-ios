@@ -60,20 +60,20 @@ NSError * NewNSErrorFromException(NSException * exc) {
     if (kApiLimitReachedErrorCode == error.code) {
         NSUInteger seconds = [((NSNumber *)error.userInfo[@"rateLimitDuration"]) unsignedIntegerValue];
         NSDate* willResetAt = [NSDate dateWithTimeIntervalSinceNow:seconds + 1];
-        NSLog(@"will reset at: %@", willResetAt);
-        [[NSUserDefaults standardUserDefaults] setObject:willResetAt forKey:kEvernoteUpdateWaitUntilKey];
+        DLog(@"will reset at: %@", willResetAt);
+        [USER_DEFAULTS setObject:willResetAt forKey:kEvernoteUpdateWaitUntilKey];
     }
 }
 
 + (BOOL)isAPILimitReached
 {
-    NSDate* limitDate = [[NSUserDefaults standardUserDefaults] objectForKey:kEvernoteUpdateWaitUntilKey];
+    NSDate* limitDate = [USER_DEFAULTS objectForKey:kEvernoteUpdateWaitUntilKey];
     if (nil == limitDate) {
         return NO;
     }
     BOOL result = [limitDate timeIntervalSinceNow] > 0;
     if (!result) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kEvernoteUpdateWaitUntilKey];
+        [USER_DEFAULTS removeObjectForKey:kEvernoteUpdateWaitUntilKey];
     }
     return result;
 }
@@ -83,7 +83,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     if (![self.class isAPILimitReached]) {
         return 0;
     }
-    NSDate* limitDate = [[NSUserDefaults standardUserDefaults] objectForKey:kEvernoteUpdateWaitUntilKey];
+    NSDate* limitDate = [USER_DEFAULTS objectForKey:kEvernoteUpdateWaitUntilKey];
     if (nil == limitDate) {
         return 0;
     }
@@ -111,7 +111,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
         _noteCache = [NSMutableDictionary new];
         self.autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
         self.enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
-        self.hasAskedForPermissions = [[NSUserDefaults standardUserDefaults] boolForKey:kHasAskedForPermissionKey];
+        self.hasAskedForPermissions = [USER_DEFAULTS boolForKey:kHasAskedForPermissionKey];
         //NSDictionary *currentIntegration = (NSDictionary*)[kSettings valueForSetting:IntegrationEvernote];
         //[self loadEvernoteIntegrationObject:currentIntegration];
     }
@@ -120,8 +120,8 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 -(void)setHasAskedForPermissions:(BOOL)hasAskedForPermissions{
     _hasAskedForPermissions = hasAskedForPermissions;
-    [[NSUserDefaults standardUserDefaults] setBool:hasAskedForPermissions forKey:kHasAskedForPermissionKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [USER_DEFAULTS setBool:hasAskedForPermissions forKey:kHasAskedForPermissionKey];
+    [USER_DEFAULTS synchronize];
 }
 
 

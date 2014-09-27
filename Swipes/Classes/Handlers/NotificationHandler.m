@@ -66,8 +66,8 @@ static NotificationHandler *sharedObject;
 -(CLLocation *)latestLocation
 {
     if (!_latestLocation) {
-        CGFloat latitude = [[NSUserDefaults standardUserDefaults] floatForKey:@"latestLocationLatitude"];
-        CGFloat longitude = [[NSUserDefaults standardUserDefaults] floatForKey:@"latestLocationLongitude"];
+        CGFloat latitude = [USER_DEFAULTS floatForKey:@"latestLocationLatitude"];
+        CGFloat longitude = [USER_DEFAULTS floatForKey:@"latestLocationLongitude"];
         if (latitude && longitude)
             _latestLocation = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
     }
@@ -77,9 +77,9 @@ static NotificationHandler *sharedObject;
 -(void)setLatestLocation:(CLLocation *)latestLocation
 {
     _latestLocation = latestLocation;
-    [[NSUserDefaults standardUserDefaults] setFloat:latestLocation.coordinate.latitude forKey:@"latestLocationLatitude"];
-    [[NSUserDefaults standardUserDefaults] setFloat:latestLocation.coordinate.longitude forKey:@"latestLocationLongitude"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [USER_DEFAULTS setFloat:latestLocation.coordinate.latitude forKey:@"latestLocationLatitude"];
+    [USER_DEFAULTS setFloat:latestLocation.coordinate.longitude forKey:@"latestLocationLongitude"];
+    [USER_DEFAULTS synchronize];
 }
 
 -(void)setFencing:(BOOL)fencing

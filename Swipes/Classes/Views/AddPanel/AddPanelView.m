@@ -54,8 +54,9 @@
 }
 -(void)blurryWillHide:(KPBlurry *)blurry{
     self.hasClosed = YES;
-    [[NSUserDefaults standardUserDefaults] setObject:self.addView.textField.text forKey:kAddTextStringKey];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kAddTextTimestampKey];
+    [USER_DEFAULTS setObject:self.addView.textField.text forKey:kAddTextStringKey];
+    [USER_DEFAULTS setObject:[NSDate date] forKey:kAddTextTimestampKey];
+    [USER_DEFAULTS synchronize];
     [self.addView.textField resignFirstResponder];
     
 }
@@ -189,9 +190,9 @@
         CGRectSetY(self.addView, yForAdd);
         CGRectSetCenterY(self.priorityButton, yForAdd + self.priorityButton.frame.size.height / 2);
         
-        NSDate *lastAdd = (NSDate *)[[NSUserDefaults standardUserDefaults] objectForKey:kAddTextTimestampKey];
+        NSDate *lastAdd = (NSDate *)[USER_DEFAULTS objectForKey:kAddTextTimestampKey];
         if(lastAdd && [lastAdd minutesBeforeDate:[NSDate date]] < 15){
-            NSString *lastTask = [[NSUserDefaults standardUserDefaults] objectForKey:kAddTextStringKey];
+            NSString *lastTask = [USER_DEFAULTS objectForKey:kAddTextStringKey];
             if(lastTask)
                 [self.addView setText:lastTask];
         }

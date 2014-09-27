@@ -144,8 +144,8 @@ static HintHandler *sharedObject;
     BOOL hasAlreadyCompletedHint = [[self.hints objectForKey:key] boolValue];
     if(!hasAlreadyCompletedHint){
         [self.hints setObject:@YES forKey:key];
-        [[NSUserDefaults standardUserDefaults] setObject:self.hints forKey:kHintDictionaryKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        [USER_DEFAULTS setObject:self.hints forKey:kHintDictionaryKey];
+        [USER_DEFAULTS synchronize];
     }
     
     return !hasAlreadyCompletedHint;
@@ -340,7 +340,7 @@ static HintHandler *sharedObject;
 }
 
 -(void)initialize {
-    self.hints = [[NSUserDefaults standardUserDefaults] objectForKey:kHintDictionaryKey];
+    self.hints = [USER_DEFAULTS objectForKey:kHintDictionaryKey];
     if(!self.hints)
         self.hints = [NSMutableDictionary dictionary];
     else

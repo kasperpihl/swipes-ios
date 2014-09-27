@@ -73,7 +73,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     self = [super init];
     if( self ){
         self.changedNotes = [NSMutableSet set];
-        self.lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:kEvernoteUpdatedAtKey];
+        self.lastUpdated = [USER_DEFAULTS objectForKey:kEvernoteUpdatedAtKey];
     }
     return self;
 }
@@ -290,8 +290,8 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 }
 
 -(void)setUpdatedAt:(NSDate*)updatedAt{
-    [[NSUserDefaults standardUserDefaults] setObject:updatedAt forKey:kEvernoteUpdatedAtKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [USER_DEFAULTS setObject:updatedAt forKey:kEvernoteUpdatedAtKey];
+    [USER_DEFAULTS synchronize];
     self.lastUpdated = updatedAt;
 }
 

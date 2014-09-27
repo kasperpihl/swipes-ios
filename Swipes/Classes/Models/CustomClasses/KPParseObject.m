@@ -49,7 +49,7 @@
 +(KPParseObject *)newObjectInContext:(NSManagedObjectContext*)context{
     if(!context) context = [KPCORE context];
     KPParseObject *coreDataObject;
-    coreDataObject = [[self class] MR_createInContext:context];
+    coreDataObject = [[self class] MR_createEntityInContext:context];
     [coreDataObject getTempId];
     return coreDataObject;
 }
@@ -57,7 +57,7 @@
     if(!context) context = [KPCORE context];
     __block KPParseObject *coreDataObject;
     coreDataObject = [self checkForObject:object context:context];
-    if(!coreDataObject) coreDataObject = [[self class] MR_createInContext:context];
+    if(!coreDataObject) coreDataObject = [[self class] MR_createEntityInContext:context];
     return coreDataObject;
 }
 +(KPParseObject*)checkForObject:(NSDictionary*)object context:(NSManagedObjectContext*)context{
@@ -79,7 +79,7 @@
     BOOL shouldDelete = [self shouldDeleteForce:NO];
     BOOL successful = YES;
     if(shouldDelete)
-        successful = [self MR_deleteInContext:context];
+        successful = [self MR_deleteEntityInContext:context];
     return successful;
 }
 #pragma mark - Save to server

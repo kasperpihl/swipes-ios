@@ -39,10 +39,10 @@ static AnalyticsHandler *sharedObject;
     return _vero;
 }
 -(void)heartbeat{
-    NSDate *lastHeartbeat = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastHeartBeat"];
+    NSDate *lastHeartbeat = [USER_DEFAULTS objectForKey:@"lastHeartBeat"];
     if(!lastHeartbeat || [lastHeartbeat daysBeforeDate:[NSDate date]] > 0){
         [self sendVeroEvent:@"Heartbeat" withData:nil];
-        [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastHeartBeat"];
+        [USER_DEFAULTS setObject:[NSDate date] forKey:@"lastHeartBeat"];
     }
 }
 -(void)sendVeroEvent:(NSString*)event withData:(NSDictionary*)data{
@@ -53,7 +53,7 @@ static AnalyticsHandler *sharedObject;
     if(!userLevel) userLevel = [NSNumber numberWithInteger:0];
     NSDictionary *identity = @{@"id":kCurrent.objectId,@"email":email,@"userlevel":userLevel};
     [self.vero eventsTrack:event identity:identity data:data completionHandler:^(id result, NSError *error) {
-        if([event isEqualToString:@"Heartbeat"] && error) [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"lastHeartBeat"];
+        if([event isEqualToString:@"Heartbeat"] && error) [USER_DEFAULTS removeObjectForKey:@"lastHeartBeat"];
     }];
 }
 -(NSMutableArray *)views{
@@ -107,7 +107,7 @@ static AnalyticsHandler *sharedObject;
             [probs setObject:kCurrent.email forKey:@"email"];
     }
     else{
-        if([[NSUserDefaults standardUserDefaults] boolForKey:@"isTryingOutSwipes"])
+        if([USER_DEFAULTS boolForKey:@"isTryingOutSwipes"])
             [probs setObject:@"Is trying out" forKey:@"userLevel"];
         else
             [probs setObject:@"Not logged in" forKey:@"userLevel"];

@@ -127,7 +127,7 @@
         [self changeToMenu:KPMenuHome animated:YES];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
     };
-    if([[NSUserDefaults standardUserDefaults] boolForKey:isTryingString]){
+    if([USER_DEFAULTS boolForKey:isTryingString]){
         [UTILITY confirmBoxWithTitle:@"Keep data" andMessage:@"Do you want to keep the data from the test period?" block:^(BOOL succeeded, NSError *error) {
             if(!succeeded) [KPCORE clearAndDeleteData];
             block();
@@ -360,7 +360,7 @@ static RootViewController *sharedObject;
     self.viewControllers = @[self.drawerViewController];
     
     if(!kCurrent){
-        if([[NSUserDefaults standardUserDefaults] objectForKey:isTryingString]){
+        if([USER_DEFAULTS objectForKey:isTryingString]){
             [self changeToMenu:KPMenuHome animated:NO];
         }
         else{
@@ -420,9 +420,9 @@ static RootViewController *sharedObject;
 }
 
 -(void)tryoutapp{
-    if(![[NSUserDefaults standardUserDefaults] objectForKey:isTryingString]){
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:isTryingString];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+    if(![USER_DEFAULTS objectForKey:isTryingString]){
+        [USER_DEFAULTS setBool:YES forKey:isTryingString];
+        [USER_DEFAULTS synchronize];
         [KPCORE seedObjectsSave:YES];
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
         NSDictionary *options = @{@"Time since real install" : [NSString stringWithFormat:@"%li days",(long)[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]};

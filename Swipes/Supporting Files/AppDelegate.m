@@ -46,7 +46,8 @@
     NSString *localyticsKey;
     [KeenClient disableGeoLocation];
     
-    DLog(@"Application dir: %@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
+    //DLog(@"Application dir: %@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
+    DLog(@"storeURL: %@", [Global coreDataUrl]);
     
 #ifdef RELEASE
     parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
@@ -62,8 +63,8 @@
 #else
     parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
-    parseApplicationKey = @"0qD3LLZIOwLOPRwbwLia9GJXTEUnEsSlBCufqDvr";
-    parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
+//    parseApplicationKey = @"0qD3LLZIOwLOPRwbwLia9GJXTEUnEsSlBCufqDvr";
+//    parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
     analyticsKey = @"ncm4wfr7qc";
     localyticsKey = @"f2f927e0eafc7d3c36835fe-c0a84d84-18d8-11e3-3b24-00a426b17dd8";
 #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
@@ -172,13 +173,12 @@
     }
     NSString *isLoggedIn = (kCurrent) ? @"yes" : @"no";
     [ANALYTICS tagEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism , @"Is Logged in" : isLoggedIn }];
-    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunchedBefore"]){
+    if(![USER_DEFAULTS boolForKey:@"hasLaunchedBefore"]){
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
         if(!kCurrent)
             [ANALYTICS tagEvent:@"Installation" options:@{ @"Mechanism" : launchMechanism,@"Time since real install" : [NSString stringWithFormat:@"%li days",(long)[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]}];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunchedBefore"];
-        
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        [USER_DEFAULTS setBool:YES forKey:@"hasLaunchedBefore"];
+        [USER_DEFAULTS synchronize];
     }
 }
 

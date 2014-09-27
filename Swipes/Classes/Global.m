@@ -9,18 +9,24 @@
 #import "Global.h"
 #define iconCompare(target,result) if([iconString isEqualToString:target]) return result
 @implementation Global
+
+static NSString* const SHARED_GROUP_NAME = @"group.it.pihl.swipes";
 static Global *sharedObject;
-+(Global *)sharedInstance{
-    if(!sharedObject){
+
++(Global *)sharedInstance
+{
+    if (!sharedObject){
         sharedObject = [[Global allocWithZone:NULL] init];
     }
     return sharedObject;
 }
+
 -(CGFloat)fontMultiplier{
     if( !_fontMultiplier )
         _fontMultiplier = 1;
     return _fontMultiplier;
 }
+
 +(NSString *)iconStringForString:(NSString *)iconString{
     if(OSVER >= 7)
         return iconString;
@@ -142,6 +148,7 @@ static Global *sharedObject;
     [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"];
     return dateFormatter;
 }
+
 + (NSInteger)OSVersion
 {
     static NSUInteger _deviceSystemMajorVersion = -1;
@@ -151,6 +158,7 @@ static Global *sharedObject;
     });
     return _deviceSystemMajorVersion;
 }
+
 +(BOOL)is24Hour{
     static BOOL _is24hour = YES;
     static dispatch_once_t onceToken;
@@ -176,8 +184,9 @@ static Global *sharedObject;
     [label sizeToFit];
     return label;
 }
+
 +(BOOL)supportsOrientation:(UIDeviceOrientation)orientation{
-    NSArray *supportedOrientations = [[[NSBundle mainBundle] infoDictionary]     objectForKey:@"UISupportedInterfaceOrientations"];
+    NSArray *supportedOrientations = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UISupportedInterfaceOrientations"];
     NSString *orientationString;
     switch (orientation) {
         case UIDeviceOrientationPortrait:
@@ -197,4 +206,31 @@ static Global *sharedObject;
     }
     return [supportedOrientations containsObject:orientationString];
 }
+
++ (NSURL *)coreDataUrl
+{
+    static NSURL *storeURL;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        storeURL = [[[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:SHARED_GROUP_NAME] URLByAppendingPathComponent:@"swipes"];
+        #ifdef DEBUG
+        if (nil == storeURL) {
+            NSLog(@"Error getting storeURL! Check out provisioning profiles!");
+            abort();
+        }
+        #endif
+    });
+    return storeURL;
+}
+
++ (NSUserDefaults *)sharedDefaults
+{
+    static NSUserDefaults* sharedDefaults;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:SHARED_GROUP_NAME];;
+    });
+    return sharedDefaults;
+}
+
 @end
