@@ -13,6 +13,7 @@
 
 
 #import "SettingsHandler.h"
+#import "AnalyticsHandler.h"
 #import "HintHandler.h"
 #import "EMHint.h"
 #import "SlowHighlightIcon.h"
@@ -26,6 +27,7 @@
 @property EMHint *emHint;
 @property Hints currentHint;
 @property BOOL hintsIsOn;
+@property double hintStartTime;
 @end
 
 @implementation HintHandler
@@ -72,6 +74,12 @@
             }
         }
         self.currentHint = hint;
+        self.hintStartTime = CACurrentMediaTime();
+        NSDictionary *options = @{
+                                  @"Hint": [self keyForHint:hint]
+                                  };
+
+        [ANALYTICS tagEvent:@"Hint Opened" options:options];
         [self.emHint presentModalMessage:hintText where:ROOT_CONTROLLER.view];
     }
     return completedHint;
@@ -144,7 +152,23 @@ static HintHandler *sharedObject;
 }
 
 
+-(void)hintStateWillClose:(id)hintState{
+    double endtime = CACurrentMediaTime();
+    double elapsedTime = endtime - self.hintStartTime;
 
+    NSString *elapsedWithOneDecimalString = [NSString stringWithFormat:@"%.1lf",elapsedTime];
+    NSNumber *numberWithOneDecimal = @([elapsedWithOneDecimalString floatValue]);
+    if(!numberWithOneDecimal)
+        numberWithOneDecimal = @(0);
+    
+    self.hintStartTime = 0;
+    NSDictionary *options = @{
+                              @"Hint": [self keyForHint:self.currentHint],
+                              @"Time elapsed": numberWithOneDecimal
+                              };
+    NSLog(@"key:%@",options);
+    [ANALYTICS tagEvent:@"Hint Closed" options:options];
+}
 /*
  
 */
@@ -313,6 +337,8 @@ static HintHandler *sharedObject;
     self.hints = [[NSUserDefaults standardUserDefaults] objectForKey:kHintDictionaryKey];
     if(!self.hints)
         self.hints = [NSMutableDictionary dictionary];
+    else
+        self.hints = [self.hints mutableCopy];
     self.emHint = [[EMHint alloc] init];
     self.emHint.hintDelegate = self;
     [[NSNotificationCenter defaultCenter] addObserver:sharedObject  selector:@selector(orientationChanged:)  name:UIDeviceOrientationDidChangeNotification  object:nil];

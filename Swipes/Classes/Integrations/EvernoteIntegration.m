@@ -10,6 +10,7 @@
 #import "EvernoteIntegration.h"
 
 // caches
+
 NSString* const kKeyData = @"data";
 NSString* const kKeyDate = @"date";
 NSTimeInterval const kSearchTimeout = 120;
@@ -18,6 +19,7 @@ NSTimeInterval const kNoteTimeout = (3600*24);
 int32_t const kPaginator = 100;
 NSInteger const kApiLimitReachedErrorCode = 19;
 NSString * const kSwipesTagName = @"swipes";
+NSString * const kHasAskedForPermissionKey = @"HasAskedForEvernotePermission";
 NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
 NSString* const MONExceptionHandlerDomain = @"Exception";
 const int MONNSExceptionEncounteredErrorCode = 119;
@@ -109,12 +111,20 @@ NSError * NewNSErrorFromException(NSException * exc) {
         _noteCache = [NSMutableDictionary new];
         self.autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
         self.enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
-
+        self.hasAskedForPermissions = [[NSUserDefaults standardUserDefaults] boolForKey:kHasAskedForPermissionKey];
         //NSDictionary *currentIntegration = (NSDictionary*)[kSettings valueForSetting:IntegrationEvernote];
         //[self loadEvernoteIntegrationObject:currentIntegration];
     }
     return self;
 }
+
+-(void)setHasAskedForPermissions:(BOOL)hasAskedForPermissions{
+    _hasAskedForPermissions = hasAskedForPermissions;
+    [[NSUserDefaults standardUserDefaults] setBool:hasAskedForPermissions forKey:kHasAskedForPermissionKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+
 
 - (void)setEnableSync:(BOOL)enableSync
 {

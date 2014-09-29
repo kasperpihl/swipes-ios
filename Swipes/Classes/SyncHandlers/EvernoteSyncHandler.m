@@ -23,6 +23,9 @@
 
 
 #define kMaxNotes 100
+
+#define kFetchChangesTimeout 30
+
 NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 
 @interface EvernoteSyncHandler ()
@@ -30,6 +33,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 @property NSArray *objectsWithEvernote;
 @property NSDate *lastUpdated;
 @property BOOL updateNeededFromEvernote;
+@property BOOL needToClearCache;
 
 @property BOOL fullEvernoteUpdate;
 @property NSInteger currentEvernoteUpdateCount;
@@ -40,34 +44,6 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 @property (nonatomic) NSMutableArray *_updatedTasks;
 @end
 @implementation EvernoteSyncHandler
-
--(NSMutableArray *)_updatedTasks{
-    if( !__updatedTasks )
-        __updatedTasks = [NSMutableArray array];
-    return __updatedTasks;
-}
-
--(NSArray*)getObjectsSyncedWithEvernote{
-    
-    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
-    
-    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"ANY attachments.service like %@ AND ANY attachments.sync == 1",EVERNOTE_SERVICE];
-    NSArray *todosWithEvernote = [KPToDo MR_findAllWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
-    
-    return todosWithEvernote;
-
-}
-
-
--(void)updateEvernoteCount:(NSInteger)newUpdateCount{
-    DLog(@"new %lu exp %lu",(long)newUpdateCount,(long)self.expectedEvernoteCount);
-    if( newUpdateCount > self.expectedEvernoteCount ){
-        self.updateNeededFromEvernote = YES;
-    }
-    self.currentEvernoteUpdateCount = newUpdateCount;
-    self.expectedEvernoteCount = newUpdateCount;
-}
-
 
 +(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes{
     for( EDAMNote *note in notes ){
@@ -82,8 +58,8 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         else {
             title = @"Untitled note";
         }
-        if(title.length > 256)
-            title = [title substringToIndex:255];
+        if(title.length > kTitleMaxLength)
+            title = [title substringToIndex:kTitleMaxLength];
         KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO];
         [newToDo attachService:EVERNOTE_SERVICE title:title identifier:note.guid sync:YES];
     }
@@ -99,6 +75,43 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         self.lastUpdated = [[NSUserDefaults standardUserDefaults] objectForKey:kEvernoteUpdatedAtKey];
     }
     return self;
+}
+
+-(NSMutableArray *)_updatedTasks{
+    if( !__updatedTasks )
+        __updatedTasks = [NSMutableArray array];
+    return __updatedTasks;
+}
+-(BOOL)hasObjectsSyncedWithEvernote{
+    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"service = %@ AND sync == 1",EVERNOTE_SERVICE];
+    NSUInteger numberOfAttachmentsWithEvernote = [KPAttachment MR_countOfEntitiesWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
+    return (numberOfAttachmentsWithEvernote > 0);
+}
+-(NSArray*)getObjectsSyncedWithEvernote{
+    
+    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
+    
+    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"ANY attachments.service like %@ AND ANY attachments.sync == 1",EVERNOTE_SERVICE];
+    NSArray *todosWithEvernote = [KPToDo MR_findAllWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
+    
+    return todosWithEvernote;
+    
+}
+
+
+-(void)updateEvernoteCount:(NSInteger)newUpdateCount{
+    DLog(@"new %lu exp %lu",(long)newUpdateCount,(long)self.expectedEvernoteCount);
+    if( newUpdateCount > self.expectedEvernoteCount ){
+        self.updateNeededFromEvernote = YES;
+    }
+    self.currentEvernoteUpdateCount = newUpdateCount;
+    self.expectedEvernoteCount = newUpdateCount;
+}
+
+-(void)clearCache{
+    self.needToClearCache = YES;
+    [[EvernoteIntegration sharedInstance] clearCaches];
 }
 
 // Just testing
@@ -121,7 +134,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 -(BOOL)handleEvernoteToDo:(EvernoteToDo*)evernoteToDo withMatchingSubtask:(KPToDo*)subtask inNoteProcessor:(EvernoteToDoProcessor*)processor isNew:(BOOL)isNew{
     BOOL updated = NO;
     // If subtask is deleted from Swipes - mark completed in Evernote
-    if ( [subtask.deleted boolValue] && !evernoteToDo.checked ){
+    if ( [subtask.isLocallyDeleted boolValue] && !evernoteToDo.checked ){
         NSLog(@"completing evernote - subtask was deleted");
         [processor updateToDo:evernoteToDo checked:YES];
         return NO;
@@ -150,7 +163,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         else{
             // If subtask is updated later than last sync override Evernote
             // There could be an error margin here, but I don't see a better solution at the moment
-            if ( !isNew && [self.lastUpdated isEarlierThanDate:subtask.updatedAt] ){
+            if ( !isNew && self.lastUpdated && [self.lastUpdated isEarlierThanDate:subtask.updatedAt] ){
                 DLog(@"uncompleting evernote");
                 [processor updateToDo:evernoteToDo checked:subtaskIsCompleted];
             }
@@ -175,8 +188,8 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     return updated;
 }
 
-
--(KPToDo*)findAndHandleMatchesForToDo:(KPToDo*)parentToDo withEvernoteToDos:(NSArray *)evernoteToDos inNoteProcessor:(EvernoteToDoProcessor*)processor{
+-(KPToDo*)findAndHandleMatchesForToDo:(KPToDo*)parentToDo withEvernoteToDos:(NSArray *)evernoteToDos inNoteProcessor:(EvernoteToDoProcessor*)processor
+{
     // search for our TODO (comparing only title)
     NSArray *subtasks = [self filterSubtasksWithEvernote:parentToDo.subtasks];
     
@@ -286,7 +299,16 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     [self.changedNotes removeAllObjects];
     kEnInt.requestCounter = 0;
     self.block(SyncStatusStarted, nil, nil);
-    
+    BOOL hasLocalChanges = [self checkForLocalChanges];
+    if(!hasLocalChanges && !self.needToClearCache){
+        NSLog(@"%f > -%i",[self.lastUpdated timeIntervalSinceNow],kFetchChangesTimeout);
+        if(self.lastUpdated && [self.lastUpdated timeIntervalSinceNow] > -kFetchChangesTimeout ){
+            NSLog(@"returning due to caching");
+            return self.block(SyncStatusSuccess, nil, nil );
+        }
+    }
+    if(self.needToClearCache)
+        self.needToClearCache = NO;
     [self findUpdatedNotesWithTag:@"swipes" block:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
         if(error){
             block(SyncStatusError, nil, error);
@@ -297,7 +319,17 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     }];
     
 }
-
+-(BOOL)checkForLocalChanges{
+    self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
+    
+    NSMutableArray *changedObjects = [NSMutableArray array];
+    for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
+        BOOL hasLocalChanges = [todoWithEvernote hasChangesSinceDate:self.lastUpdated];
+        if(hasLocalChanges)
+            [changedObjects addObject:todoWithEvernote];
+    }
+    return (changedObjects.count > 0);
+}
 
 -(void)findUpdatedNotesWithTag:(NSString*)tag block:(SyncBlock)block{
     
@@ -392,15 +424,11 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 }
 
 
-
 -(void)syncEvernoteWithBlock:(SyncBlock)block{
+    
     self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
     DLog(@"performing sync with Evernote");
-    // If no objects has attachments - send a success back to caller
-    if (self.objectsWithEvernote.count == 0){
-        return self.block(SyncStatusSuccess, nil, nil);
-    }
-
+    
     // ensure evernote authentication
     NSError* error = [NSError errorWithDomain:@"Evernote not authenticated" code:601 userInfo:nil];
     ENSession *session = [ENSession sharedSession];
@@ -422,12 +450,19 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
             DLog(@"requests used for Evernote sync: %lu",(long)kEnInt.requestCounter);
             if(runningError){
                 self.block(SyncStatusError, nil, runningError);
-                
                 return;
             }
             // If changes to Core Data - make sure it gets synced to our server.
             if([[KPCORE context] hasChanges]){
-                [KPToDo saveToSync];
+                @synchronized(kEvernoteUpdatedAtKey) {
+                    NSUndoManager* um = [KPCORE context].undoManager;
+                    BOOL state = um.isUndoRegistrationEnabled;
+                    if (state)
+                        [um disableUndoRegistration];
+                    [KPToDo saveToSync];
+                    if (state != um.isUndoRegistrationEnabled)
+                        [um enableUndoRegistration];
+                }
             }
             [self setUpdatedAt:date];
             self.updateNeededFromEvernote = NO;

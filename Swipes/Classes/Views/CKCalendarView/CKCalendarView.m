@@ -282,7 +282,7 @@
     NSDate *endDate = [self _firstDayOfNextMonthContainingDate:self.monthShowing];
     if (!self.onlyShowCurrentMonth) {
         NSDateComponents *comps = [[NSDateComponents alloc] init];
-        [comps setWeek:numberOfWeeksToShow];
+        [comps setWeekOfYear:numberOfWeeksToShow];
         endDate = [self.calendar dateByAddingComponents:comps toDate:date options:0];
     }
 
@@ -341,7 +341,7 @@
     /* Days earlier than current */
     else if([date isEarlierThanDate:[[NSDate date] dateAtStartOfDay]]){
         item.textColor = item.highlightedTextColor = item.unavailableColor; //color(160,169,179,1);
-        highlightedImage = [UIImage imageNamed:nil];
+        highlightedImage = [UIImage new];
         //item.textColor = gray(200, 1);
     }
     /* If the day is the selected day */

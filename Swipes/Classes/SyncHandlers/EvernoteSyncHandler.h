@@ -11,4 +11,7 @@
 @interface EvernoteSyncHandler : ParentSyncHandler
 +(NSArray*)addAndSyncNewTasksFromNotes:(NSArray*)notes;
 //-(void)getSwipesTagGuidBlock:(StringBlock)block;
+-(NSArray*)getObjectsSyncedWithEvernote;
+-(BOOL)hasObjectsSyncedWithEvernote;
+-(void)clearCache;
 @end

@@ -9,6 +9,8 @@
 //
 // swipes://todo/add?title=test&tag1=first%20tag&tag2=second%20tag&priority=1&notes=test%20note%0anew%20line&schedule=1406636343
 // swipes://todo/add?title=test&schedule=now
+// swipes://todo/add?title=test&schedule=now&subtask1=First%20task&subtask2=Second%20task
+// swipes://todo/clean_add?title=test&schedule=now&subtask1=First%20task&subtask2=Second%20task
 // swipes://todo/update?oldtitle=test&title=test2&notes=
 // swipes://todo/delete?title=test2
 // swipes://tag/add?title=tag22
@@ -35,6 +37,7 @@ NSString* const kSwipesDomainTag = @"tag";
 NSString* const kSwipesDomainEnToDo = @"evernotetodo";
 
 NSString* const kSwipesCommandAdd = @"/add";
+NSString* const kSwipesCommandCleanAdd = @"/clean_add";
 NSString* const kSwipesCommandUpdate = @"/update";
 NSString* const kSwipesCommandDelete = @"/delete";
 
@@ -44,7 +47,24 @@ NSString* const kSwipesParamTag = @"tag";
 NSString* const kSwipesParamPriority = @"priority";
 NSString* const kSwipesParamNotes = @"notes";
 NSString* const kSwipesParamSchedule = @"schedule";
+NSString* const kSwipesParamSubtask = @"subtask";
 NSString* const kSwipesParamGiud = @"guid";
+
+// x-callback-url support constants
+NSString* const kXCallbackURLXSuccess = @"x-success";
+NSString* const kXCallbackURLXError = @"x-error";
+NSString* const kXCallbackURLErrorMessage = @"errorMessage";
+NSString* const kXCallbackURLErrorCode = @"errorCode";
+
+// errors
+NSString* const kErrorMissingMandatoryParam = @"missing mandatory param";
+NSString* const kErrorNoSuchTodo = @"no such task";
+NSString* const kErrorTodoExists = @"task already exists";
+NSString* const kErrorNoSuchTag = @"no such tag";
+NSString* const kErrorTagExists = @"tag already exists";
+NSString* const kErrorEvernoteAuthentication = @"not authenticated to evernote";
+
+static NSDictionary* kErrorCodes;
 
 @implementation URLHandler
 
@@ -54,6 +74,14 @@ NSString* const kSwipesParamGiud = @"guid";
     static id sharedInstance;
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
+        kErrorCodes = @{
+                        kErrorMissingMandatoryParam: @(1),
+                        kErrorNoSuchTodo: @(101),
+                        kErrorTodoExists: @(102),
+                        kErrorNoSuchTag: @(201),
+                        kErrorTagExists: @(202),
+                        kErrorEvernoteAuthentication: @(301),
+                        };
     });
     return sharedInstance;
 }
@@ -73,7 +101,10 @@ NSString* const kSwipesParamGiud = @"guid";
                     return [self handleUpdateToDo:query];
                 }
                 else if ([url.path isEqualToString:kSwipesCommandDelete]) {
-                    return [self handleDeleteToDo:query];
+                    return [self handleDeleteToDo:query updateXCallbackURL:YES];
+                }
+                if ([url.path isEqualToString:kSwipesCommandCleanAdd]) {
+                    return [self handleCleanAddToDo:query];
                 }
             }
             else if ([url.host isEqualToString:kSwipesDomainTag]) {
@@ -92,7 +123,7 @@ NSString* const kSwipesParamGiud = @"guid";
                     return [self handleAddEvernote:query];
                 }
                 else if ([url.path isEqualToString:kSwipesCommandDelete]) {
-                    return [self handleDeleteToDo:query];
+                    return [self handleDeleteToDo:query updateXCallbackURL:YES];
                 }
             }
         }
@@ -102,15 +133,28 @@ NSString* const kSwipesParamGiud = @"guid";
 
 - (NSArray *)arrayFromQuery:(NSDictionary *)query withPrefix:(NSString *)prefix
 {
-    NSString* firstQuery = [NSString stringWithFormat:@"%@1", prefix];
-    if (query[firstQuery] == (id)[NSNull null]) {
-        return @[];
+    // try adding 's' to the prefix
+    NSMutableArray* result = [NSMutableArray array];
+    NSString* firstQuery = query[[NSString stringWithFormat:@"%@s", prefix]];
+    if (firstQuery == (id)[NSNull null]) {
+        return result;
     }
-    if (nil != query[firstQuery]) {
-        NSMutableArray* result = [NSMutableArray array];
+    else if (firstQuery) {
+        NSArray* components = [firstQuery componentsSeparatedByString:@","];
+        for (NSString* item in components) {
+            [result addObject:[item stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        }
+    }
+    
+    // try enumerating numbers with prefix
+    firstQuery = query[[NSString stringWithFormat:@"%@1", prefix]];
+    if (firstQuery == (id)[NSNull null]) {
+        return result;
+    }
+    if (nil != firstQuery) {
         for (NSUInteger i = 1; i < 255; i++) {
             NSString* data = query[[NSString stringWithFormat:@"%@%lu", prefix, (unsigned long)i]];
-            if (nil != data) {
+            if ((nil != data) && ((id)[NSNull null] != data)) {
                 [result addObject:data];
             }
             else {
@@ -119,7 +163,7 @@ NSString* const kSwipesParamGiud = @"guid";
         }
         return result;
     }
-    return nil;
+    return result.count ? result : nil;
 }
 
 - (NSDate *)dateFromString:(NSString *)data
@@ -134,6 +178,56 @@ NSString* const kSwipesParamGiud = @"guid";
         }
     }
     return [NSDate date];
+}
+
+- (BOOL)addTagIfNeeded:(NSString *)title
+{
+    NSArray* tags = [KPTag findByTitle:title];
+    if (nil == tags) {
+        [KPTag addTagWithString:title save:YES];
+    }
+    return (nil == tags);
+}
+
+- (void)addTagsIfNeeded:(NSArray *)tags
+{
+    for (NSString* tagTitle in tags) {
+        [self addTagIfNeeded:tagTitle];
+    }
+}
+
+#pragma mark - x-callback-url
+
+- (void)handleXCallbackURL:(NSDictionary *)query errorMessage:(NSString *)errorMessage errorCode:(NSNumber *)errorCode
+{
+    if (!errorMessage) {
+        // we have success
+        NSString* successString = query[kXCallbackURLXSuccess];
+        if (successString) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:successString]];
+        }
+    }
+    else {
+        // we have an error
+        NSString* errorString = query[kXCallbackURLXError];
+        if (errorString) {
+            NSURL* errorURL = [NSURL URLWithString:errorString];
+            NSMutableString* finalString = errorString.mutableCopy;
+            if (errorURL.query) {
+                [finalString appendString:@"&"];
+            }
+            else {
+                [finalString appendString:@"?"];
+            }
+            [finalString appendFormat:@"errorCode=%@&errorMessage=%@", errorCode, [errorMessage stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:finalString]];
+        }
+    }
+}
+
+- (void)handleXCallbackURL:(NSDictionary *)query errorMessage:(NSString *)errorMessage
+{
+    [self handleXCallbackURL:query errorMessage:errorMessage errorCode:kErrorCodes[errorMessage]];
 }
 
 #pragma mark - ToDos
@@ -162,8 +256,17 @@ NSString* const kSwipesParamGiud = @"guid";
     }
     
     NSArray* tags = [self arrayFromQuery:query withPrefix:kSwipesParamTag];
-    if (tags)
+    if (tags) {
+        [self addTagsIfNeeded:tags];
         [todo setTags:[NSSet setWithArray:tags]];
+    }
+    
+    NSArray* subtasks = [self arrayFromQuery:query withPrefix:kSwipesParamSubtask];
+    if (subtasks) {
+        for (NSString *subtaskTitle in subtasks) {
+            [todo addSubtask:subtaskTitle save:NO];
+        }
+    }
     
     [KPToDo saveToSync];
 }
@@ -176,16 +279,26 @@ NSString* const kSwipesParamGiud = @"guid";
     if (nil != title) {
         NSArray* todos = [KPToDo findByTitle:title];
         if (nil == todos) {
-            KPToDo* todo = [KPToDo addItem:title priority:NO tags:[self arrayFromQuery:query withPrefix:kSwipesParamTag] save:NO];
+            NSArray* tags = [self arrayFromQuery:query withPrefix:kSwipesParamTag];
+            [self addTagsIfNeeded:tags];
+            KPToDo* todo = [KPToDo addItem:title priority:NO tags:tags save:NO];
             
             // remove tags
             NSMutableDictionary* mQuery = query.mutableCopy;
             [mQuery removeObjectForKey:[NSString stringWithFormat:@"%@1", kSwipesParamTag]];
+            [mQuery removeObjectForKey:[NSString stringWithFormat:@"%@s", kSwipesParamTag]];
             
             // update
             [self doUpdateToDo:todo query:mQuery];
+            [self handleXCallbackURL:query errorMessage:nil];
+        }
+        else {
+            [self handleXCallbackURL:query errorMessage:kErrorTodoExists];
         }
         return YES;
+    }
+    else {
+        [self handleXCallbackURL:query errorMessage:kErrorMissingMandatoryParam];
     }
     return NO;
 }
@@ -205,23 +318,44 @@ NSString* const kSwipesParamGiud = @"guid";
             }
             
             [self doUpdateToDo:todo query:query];
+            [self handleXCallbackURL:query errorMessage:nil];
+        }
+        else {
+            [self handleXCallbackURL:query errorMessage:kErrorNoSuchTodo];
         }
         return YES;
+    }
+    else {
+        [self handleXCallbackURL:query errorMessage:kErrorMissingMandatoryParam];
     }
     return NO;
 }
 
-- (BOOL)handleDeleteToDo:(NSDictionary *)query
+- (BOOL)handleDeleteToDo:(NSDictionary *)query updateXCallbackURL:(BOOL)updateXCallbackURL
 {
     NSString* title = query[kSwipesParamTitle];
     if (nil != title) {
         NSArray* todos = [KPToDo findByTitle:title];
         if (nil != todos) {
             [KPToDo deleteToDos:todos save:YES force:NO];
+            if (updateXCallbackURL)
+                [self handleXCallbackURL:query errorMessage:nil];
+        }
+        else if (updateXCallbackURL) {
+            [self handleXCallbackURL:query errorMessage:kErrorNoSuchTodo];
         }
         return YES;
     }
+    else if (updateXCallbackURL) {
+        [self handleXCallbackURL:query errorMessage:kErrorMissingMandatoryParam];
+    }
     return NO;
+}
+
+- (BOOL)handleCleanAddToDo:(NSDictionary *)query
+{
+    [self handleDeleteToDo:query updateXCallbackURL:NO];
+    return [self handleAddToDo:query];
 }
 
 #pragma mark - Tags
@@ -230,11 +364,16 @@ NSString* const kSwipesParamGiud = @"guid";
 {
     NSString* title = query[kSwipesParamTitle];
     if (nil != title) {
-        NSArray* tags = [KPTag findByTitle:title];
-        if (nil == tags) {
-            [KPTag addTagWithString:title save:YES];
+        if ([self addTagIfNeeded:title]) {
+            [self handleXCallbackURL:query errorMessage:nil];
+        }
+        else {
+            [self handleXCallbackURL:query errorMessage:kErrorTagExists];
         }
         return YES;
+    }
+    else {
+        [self handleXCallbackURL:query errorMessage:kErrorMissingMandatoryParam];
     }
     return NO;
 }
@@ -252,9 +391,19 @@ NSString* const kSwipesParamGiud = @"guid";
             if (nil != title) {
                 tag.title = title;
                 [KPCORE saveContextForSynchronization:nil];
+                [self handleXCallbackURL:query errorMessage:nil];
+            }
+            else {
+                [self handleXCallbackURL:query errorMessage:kErrorMissingMandatoryParam];
             }
         }
+        else {
+            [self handleXCallbackURL:query errorMessage:kErrorNoSuchTag];
+        }
         return YES;
+    }
+    else {
+        [self handleXCallbackURL:query errorMessage:kErrorMissingMandatoryParam];
     }
     return NO;
 }
@@ -269,7 +418,13 @@ NSString* const kSwipesParamGiud = @"guid";
                 [KPTag deleteTagWithString:tag.title save:YES];
             }
         }
+        else {
+            [self handleXCallbackURL:query errorMessage:kErrorNoSuchTag];
+        }
         return YES;
+    }
+    else {
+        [self handleXCallbackURL:query errorMessage:kErrorMissingMandatoryParam];
     }
     return NO;
 }
@@ -282,6 +437,7 @@ NSString* const kSwipesParamGiud = @"guid";
     [[EvernoteIntegration sharedInstance] fetchNoteWithGuid:guid block:^(EDAMNote *note, NSError *error) {
         if (error) {
             [UtilityClass sendError:error type:@"Evernote URL error"];
+            [self handleXCallbackURL:query errorMessage:[error description] errorCode:@(302)];
         }
         else {
             NSArray* todos = [KPToDo findByTitle:note.title];
@@ -291,12 +447,17 @@ NSString* const kSwipesParamGiud = @"guid";
                 // remove tags
                 NSMutableDictionary* mQuery = query.mutableCopy;
                 [mQuery removeObjectForKey:[NSString stringWithFormat:@"%@1", kSwipesParamTag]];
+                [mQuery removeObjectForKey:[NSString stringWithFormat:@"%@s", kSwipesParamTag]];
                 
                 // attach evernote
                 [todo attachService:EVERNOTE_SERVICE title:note.title identifier:guid sync:YES];
                 
                 // update
                 [self doUpdateToDo:todo query:mQuery];
+                [self handleXCallbackURL:query errorMessage:nil];
+            }
+            else {
+                [self handleXCallbackURL:query errorMessage:kErrorTodoExists];
             }
         }
     }];
@@ -313,6 +474,7 @@ NSString* const kSwipesParamGiud = @"guid";
                 }
                 else {
                     [UtilityClass sendError:error type:@"Evernote Auth error"];
+                    [self handleXCallbackURL:query errorMessage:kErrorEvernoteAuthentication];
                 }
             }];
         }
@@ -321,9 +483,10 @@ NSString* const kSwipesParamGiud = @"guid";
         }
         return YES;
     }
+    else {
+        [self handleXCallbackURL:query errorMessage:kErrorMissingMandatoryParam];
+    }
     return NO;
 }
-
-
 
 @end

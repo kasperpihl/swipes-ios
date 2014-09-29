@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
+#import <AudioToolbox/AudioServices.h>
 #import "CoreSyncHandler.h"
 #import "UtilityClass.h"
 #import "KPToDo.h"
@@ -13,6 +14,7 @@
 #import "KPTag.h"
 #import "NSDate-Utilities.h"
 #import "Reachability.h"
+#import "AnalyticsHandler.h"
 #import "UserHandler.h"
 
 #import "RootViewController.h"
@@ -332,7 +334,7 @@
         self._isSyncing = NO;
         [self synchronizeForce:YES async:YES];
     }
-    else if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached]) {
+    else if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached] && !error) {
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             if (error) {
                 [EvernoteIntegration updateAPILimitIfNeeded:error];
@@ -376,9 +378,22 @@
         }];
     }
     else {
+        if(!kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]){
+            [UTILITY popupWithTitle:@"Evernote Authorization" andMessage:@"To sync with Evernote on this device, please authorize" buttonTitles:@[@"Don't sync this device",@"Authorize now"] block:^(NSInteger number, NSError *error) {
+                if(number == 1){
+                    //[[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Evernote authentication", @"duration": @(5) } ];
+                    [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+                }
+            }];
+            kEnInt.hasAskedForPermissions = YES;
+        }
         self._isSyncing = NO;
         [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
     }
+}
+
+-(void)clearCache{
+    [self.evernoteSyncHandler clearCache];
 }
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
@@ -387,8 +402,8 @@
         return;
     self.isAuthingEvernote = YES;
     
-    self.isAuthingEvernote = NO;
     [kEnInt authenticateEvernoteInViewController:ROOT_CONTROLLER withBlock:^(NSError *error) {
+        self.isAuthingEvernote = NO;
         if (error || !kEnInt.isAuthenticated) {
             // TODO show message to the user
             //NSLog(@"Session authentication failed: %@", [error localizedDescription]);
@@ -484,6 +499,7 @@
     NSString *url = @"http://swipes-test.herokuapp.com/sync";
     //url = @"http://swipesapi.elasticbeanstalk.com/v1/sync";
     url = @"http://127.0.0.1:5000/v1/sync";
+    url = @"http://192.168.1.21:5000/v1/sync";
     //url = @"http://api.swipesapp.com/v1/sync";
 #endif
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
@@ -537,7 +553,7 @@
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     //NSLog(@"resulted err:%@",error);
-    //NSLog(@"%@ res:%@ err: %@",result[@"message"],result[@"logs"],error);
+    //NSLog(@"res: %@ err: %@",result,error);
     if([result objectForKey:@"hardSync"])
         [self hardSync];
     
@@ -548,7 +564,7 @@
             if([message isEqualToString:@"update required"]){
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[[UIAlertView alloc] initWithTitle:@"New version required" message:@"For sync to work - please update Swipes from the App Store" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil] show];
-                    NSLog(@"adding here");
+                    //NSLog(@"adding here");
                     self.outdated = YES;
                 });
             }
@@ -567,6 +583,9 @@
     lastUpdate = [result objectForKey:@"updateTime"];
     [result objectForKey:@"serverTime"];
     
+    __block NSUndoManager* um = self.context.undoManager;
+    if (um.isUndoRegistrationEnabled)
+        [um disableUndoRegistration];
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
     NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
     for(NSDictionary *object in allObjects){
@@ -583,6 +602,8 @@
             [[NSUserDefaults standardUserDefaults] setObject:lastUpdate forKey:kLastSyncServerString];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self cleanUpAfterSync];
+        if (!um.isUndoRegistrationEnabled)
+            [um enableUndoRegistration];
         DUMPDB;
         [self finalizeSyncWithUserInfo:nil error:nil];
     }];
@@ -753,7 +774,10 @@
 {
     if (!__attributeChangesOnObjects){
         __attributeChangesOnObjects = [[NSUserDefaults standardUserDefaults] objectForKey:kTMPUpdateObjects];
-        if(!__attributeChangesOnObjects) __attributeChangesOnObjects = [NSMutableDictionary dictionary];
+        if(!__attributeChangesOnObjects)
+            __attributeChangesOnObjects = [NSMutableDictionary dictionary];
+        else
+            __attributeChangesOnObjects = [__attributeChangesOnObjects mutableCopy];
     }
     return __attributeChangesOnObjects;
 }
@@ -791,27 +815,6 @@
         }];
     }
 }
-
--(void)loadTest{
-    /*NSArray *tagArray = @[
-                          @"home",
-                          @"shopping",
-                          @"work"
-                          ];
-    */
-    /*for(NSString *tag in tagArray){
-        [KPTag addTagWithString:tag save:NO];
-    }
-    [self saveContextForSynchronization:nil];*/
-    NSInteger i = 0;
-    do {
-        [KPToDo addItem:[NSString stringWithFormat:@"Testing %li",(long)i] priority:NO tags:nil save:NO];
-        i++;
-    } while (i < 500);
-    //NSLog(@"saving");
-    [self saveContextForSynchronization:nil];
-}
-
 
 - (void)clearAndDeleteData
 {
@@ -879,6 +882,7 @@ static CoreSyncHandler *sharedObject;
 {
     @try {
         [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
+        [[NSManagedObjectContext MR_defaultContext] setUndoManager:[[NSUndoManager alloc] init]];
         
         [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(performTestForSyncing) userInfo:nil repeats:NO];
     }
@@ -888,6 +892,36 @@ static CoreSyncHandler *sharedObject;
     @finally {
     }
 }
+
+#pragma mark - Undo support
+
+- (void)undo
+{
+    // TODO
+    // 1. There is a problem with evernote, swipe 2 subtasks and then undo them, first undo work for first task, there is a second undo
+    // I don't know what it does, and the third undoes second task. Am I missing something? Probably some core data update?
+    // 2. when you are in ToDo editor UI update notification does not work
+    if (!self._isSyncing) {
+        NSUndoManager* um = self.context.undoManager;
+        if (um && um.canUndo && (!um.isUndoing)) {
+            DLog(@"UNDO !!!");
+            @try {
+                [um undo];
+                [self saveContextForSynchronization:nil];
+                [self synchronizeForce:NO async:YES];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:self userInfo:nil];
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            @catch (NSException *exception) {
+                [UtilityClass sendException:exception type:@"Undo exception"];
+                [um removeAllActions];
+            }
+        }
+    }
+}
+
+#pragma mark -
+
 -(void)performTestForSyncing{
     /*[self.evernoteSyncHandler getSwipesTagGuidBlock:^(NSString *string, NSError *error) {
         DLog(@"%@",string);
@@ -903,6 +937,7 @@ static CoreSyncHandler *sharedObject;
 
 - (void)seedObjectsSave:(BOOL)save
 {
+    ANALYTICS.analyticsOff = YES;
     NSArray *tagArray = @[
                             @"home",
                             @"shopping",
@@ -935,7 +970,7 @@ static CoreSyncHandler *sharedObject;
     [self saveContextForSynchronization:nil];
 //   NSArray *todosForTagsArray = [KPToDo MR_findAll];
 //    todosForTagsArray = [todosForTagsArray subarrayWithRange:NSMakeRange(0, 3)];
-    
+    ANALYTICS.analyticsOff = NO;
     [UTILITY.userDefaults setBool:YES forKey:@"seeded"];
 }
 
@@ -970,6 +1005,26 @@ static CoreSyncHandler *sharedObject;
         NSLog(@"KPAttachment: %@",obj);
     }
     NSLog(@"==== Dumping local DB end");
+}
+
+-(void)loadTest{
+    /*NSArray *tagArray = @[
+     @"home",
+     @"shopping",
+     @"work"
+     ];
+     */
+    /*for(NSString *tag in tagArray){
+     [KPTag addTagWithString:tag save:NO];
+     }
+     [self saveContextForSynchronization:nil];*/
+    NSInteger i = 0;
+    do {
+        [KPToDo addItem:[NSString stringWithFormat:@"Testing %li",(long)i] priority:NO tags:nil save:NO];
+        i++;
+    } while (i < 500);
+    //NSLog(@"saving");
+    [self saveContextForSynchronization:nil];
 }
 
 #endif

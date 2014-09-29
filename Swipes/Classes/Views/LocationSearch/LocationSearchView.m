@@ -102,7 +102,8 @@
         [self.tableView reloadData];
     }
     else{
-        CLRegion *region;
+        CLCircularRegion *region;
+
         if(NOTIHANDLER.latestLocation) region = [[CLCircularRegion alloc] initWithCenter:NOTIHANDLER.latestLocation.coordinate radius:1000 identifier:@"myregion"];
         [self.geoCoder geocodeAddressString:textField.text inRegion:region completionHandler:^(NSArray *placemarks, NSError *error) {
             if(self.searchField.text.length > 0){

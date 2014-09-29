@@ -12,48 +12,28 @@ extern const struct KPTagRelationships {
 	__unsafe_unretained NSString *todos;
 } KPTagRelationships;
 
-extern const struct KPTagFetchedProperties {
-} KPTagFetchedProperties;
-
 @class KPToDo;
 
-
-
-@interface KPTagID : NSManagedObjectID {}
+@interface KPTagID : KPParseObjectID {}
 @end
 
 @interface _KPTag : KPParseObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
-- (KPTagID*)objectID;
-
-
-
-
+@property (nonatomic, readonly, strong) KPTagID* objectID;
 
 @property (nonatomic, strong) NSString* title;
 
-
-
 //- (BOOL)validateTitle:(id*)value_ error:(NSError**)error_;
-
-
-
-
 
 @property (nonatomic, strong) NSSet *todos;
 
 - (NSMutableSet*)todosSet;
 
-
-
-
-
 @end
 
-@interface _KPTag (CoreDataGeneratedAccessors)
-
+@interface _KPTag (TodosCoreDataGeneratedAccessors)
 - (void)addTodos:(NSSet*)value_;
 - (void)removeTodos:(NSSet*)value_;
 - (void)addTodosObject:(KPToDo*)value_;
@@ -63,16 +43,10 @@ extern const struct KPTagFetchedProperties {
 
 @interface _KPTag (CoreDataGeneratedPrimitiveAccessors)
 
-
 - (NSString*)primitiveTitle;
 - (void)setPrimitiveTitle:(NSString*)value;
 
-
-
-
-
 - (NSMutableSet*)primitiveTodos;
 - (void)setPrimitiveTodos:(NSMutableSet*)value;
-
 
 @end

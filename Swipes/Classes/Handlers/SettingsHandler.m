@@ -149,7 +149,7 @@ static SettingsHandler *sharedObject;
         case SettingEvernoteSync:
             return @YES;
         case IntegrationEvernoteEnableSync:
-            return @YES;
+            return @NO;
         case IntegrationEvernoteSwipesTag:
             return @NO;
     }
@@ -184,5 +184,10 @@ static SettingsHandler *sharedObject;
     self.settings = [[NSUserDefaults standardUserDefaults] objectForKey:kSettingsDictionaryKey];
     if(!self.settings)
         self.settings = [NSMutableDictionary dictionary];
+    else if( ![self.settings isMemberOfClass:[NSMutableDictionary class]]){
+        self.settings = [NSMutableDictionary dictionary];
+        NSLog(@"renewed");
+    }
+    NSLog(@"set %@",[self.settings class]);
 }
 @end

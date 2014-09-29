@@ -54,7 +54,8 @@ static PaymentHandler *sharedObject;
         purchase[@"type"] = @"ios";
         purchase[@"productIdentifier"] = identifier;
         purchase[@"transactionIdentifier"] = transaction.transactionIdentifier;
-        //if(transaction.transactionReceipt) purchase[@"transactionReceipt"] = [transaction.transactionReceipt base64Encoding];
+
+        /*if(transaction.transactionReceipt) purchase[@"transactionReceipt"] = [transaction.transactionReceipt base64Encoding];
         [purchase saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if(error){
                 [UtilityClass sendError:error type:@"Purchase success error"];
@@ -62,7 +63,7 @@ static PaymentHandler *sharedObject;
             if(!succeeded){
                 [purchase saveEventually];
             }
-        }];
+        }];*/
         [[NSNotificationCenter defaultCenter] postNotificationName:@"upgrade userlevel" object:self];
         block(YES,nil);
     } failure:^(SKPaymentTransaction *transaction, NSError *error) {

@@ -25,9 +25,7 @@
 
 #define kClockSize 22
 #define kTimeLabelMarginRight 5
-#define ALARM_HACK 0
 #define ICON_SPACING 5
-#define ALARM_SPACING 3
 
 
 #define kMaxNumberOfTitleRows 2
@@ -46,12 +44,12 @@
 @property (nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
 @property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
-@property (nonatomic) IBOutlet UILabel *alarmSeperator;
 
 @property (nonatomic, strong) UILabel *evernoteIcon;
 @property (nonatomic,strong) UILabel *notesIcon;
 @property (nonatomic,strong) UILabel *recurringIcon;
 @property (nonatomic,strong) UILabel *locationIcon;
+@property (nonatomic,strong) UILabel *tagsIcon;
 
 @property (nonatomic, strong) UILabel *actionStepsLabel;
 
@@ -137,22 +135,16 @@
         [self.recurringIcon setTextColor:tcolor(SubTextColor)];
         [self.contentView addSubview:self.recurringIcon];
         
+        self.tagsIcon = iconLabel(@"editTags", iconHeight);
+        [self.tagsIcon setTextColor:tcolor(SubTextColor)];
+        [self.contentView addSubview:self.tagsIcon];
+        
         UILabel *alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
         alarmLabel.tag = ALARM_LABEL_TAG;
         alarmLabel.font = TAGS_LABEL_FONT;
         alarmLabel.backgroundColor = CLEAR;
         alarmLabel.textColor = tcolor(SubTextColor);
         alarmLabel.hidden = YES;
-        
-        self.alarmSeperator = [[UILabel alloc] init];
-        self.alarmSeperator.font = TAGS_LABEL_FONT;
-        self.alarmSeperator.text = @"//";
-        self.alarmSeperator.backgroundColor = CLEAR;
-        self.alarmSeperator.hidden = YES;
-        [self.alarmSeperator sizeToFit];
-        CGRectSetHeight(self.alarmSeperator,TAGS_LABEL_HEIGHT);
-        self.alarmSeperator.textColor = tcolor(SubTextColor);
-        [self.contentView addSubview:self.alarmSeperator];
         [self.contentView addSubview:alarmLabel];
         self.alarmLabel = (UILabel*)[self.contentView viewWithTag:ALARM_LABEL_TAG];
         
@@ -227,10 +219,10 @@
     CGFloat iconHack = 0.5;
     CGRectSetCenterY(self.locationIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y - iconHack);
+    CGRectSetCenterY(self.tagsIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.evernoteIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
-    CGRectSetCenterY(self.alarmSeperator, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
 }
 
@@ -249,6 +241,8 @@
     
     self.alarmLabel.hidden = YES;
     if((toDo.schedule && [toDo.schedule isInFuture]) || toDo.completionDate){
+        CGRectSetSize(self.alarmLabel, 200, 200);
+        self.alarmLabel.hidden = NO;
         NSDate *showDate = toDo.completionDate ? toDo.completionDate : toDo.schedule;
         NSString *dateInString = [UtilityClass timeStringForDate:showDate];
         self.alarmLabel.text = dateInString;
@@ -257,24 +251,18 @@
         self.alarmLabel.textColor = [StyleHandler colorForCellType:self.cellType];
         CGRectSetX(self.alarmLabel,deltaX);
         deltaX += self.alarmLabel.frame.size.width + kIconSpacing;
-        self.alarmLabel.hidden = NO;
+        
         showBottomLine = YES;
         alarmLabel = YES;
     }
-    self.alarmSeperator.hidden = YES;
 
     self.evernoteIcon.hidden = YES;
     self.locationIcon.hidden = YES;
     self.notesIcon.hidden = YES;
     self.recurringIcon.hidden = YES;
+    self.tagsIcon.hidden = YES;
     
     viewBlock blockForIcon = ^(UIView *view) {
-        if(alarmLabel){
-            self.alarmSeperator.hidden = NO;
-            CGRectSetX(self.alarmSeperator, deltaX);
-            deltaX += self.alarmSeperator.frame.size.width + kIconSpacing;
-            alarmLabel = NO;
-        }
         view.hidden = NO;
         showBottomLine = YES;
         CGRectSetX(view, deltaX);
@@ -298,25 +286,25 @@
         blockForIcon(self.recurringIcon);
     }
     //if(showBottomLine) deltaX += kIconSpacing;
-    
-    
+    NSString *tagString = toDo.tagString;
+    if (tagString && tagString.length > 0){
+        blockForIcon(self.tagsIcon);
+        showBottomLine = YES;
+    }
     
     CGRectSetWidth(self.tagsLabel, self.frame.size.width - deltaX - CELL_LABEL_X/2);
     CGRectSetX(self.tagsLabel,deltaX);
     
-    NSString *tagString = toDo.tagString;
-    if (tagString && tagString.length > 0){
-        showBottomLine = YES;
-    }
+    
     if(selectedTags && selectedTags.count > 0 && [self.tagsLabel respondsToSelector:@selector(setAttributedText:)] && tagString && tagString.length > 0){
         NSMutableAttributedString *mutableAttributedString = [[toDo stringForSelectedTags:selectedTags] mutableCopy];
-        if(deltaX > CELL_LABEL_X) [mutableAttributedString insertAttributedString:[[NSAttributedString alloc] initWithString:@"//  " attributes:Nil] atIndex:0];
+        //if(deltaX > CELL_LABEL_X) [mutableAttributedString insertAttributedString:[[NSAttributedString alloc] initWithString:@"//  " attributes:Nil] atIndex:0];
         [self.tagsLabel setAttributedText:mutableAttributedString];
         
     }else{
         self.tagsLabel.font = TAGS_LABEL_FONT;
         self.tagsLabel.text = tagString;
-        if(deltaX > CELL_LABEL_X && self.tagsLabel.text.length > 0) self.tagsLabel.text = [@"//  " stringByAppendingString:self.tagsLabel.text];
+        //if(deltaX > CELL_LABEL_X && self.tagsLabel.text.length > 0) self.tagsLabel.text = [@"//  " stringByAppendingString:self.tagsLabel.text];
     }
     
     [self setTextLabels:showBottomLine];

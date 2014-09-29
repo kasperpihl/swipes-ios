@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Attachment" representedClassName="KPAttachment" syncable="YES">
         <attribute name="identifier" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="service" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
@@ -42,7 +42,7 @@
     </entity>
     <elements>
         <element name="Attachment" positionX="0" positionY="0" width="128" height="120"/>
-        <element name="ParseObject" positionX="0" positionY="0" width="128" height="133"/>
+        <element name="ParseObject" positionX="0" positionY="0" width="128" height="135"/>
         <element name="Tag" positionX="0" positionY="0" width="128" height="73"/>
         <element name="ToDo" positionX="0" positionY="0" width="128" height="330"/>
     </elements>

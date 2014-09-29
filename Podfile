@@ -1,17 +1,18 @@
 platform :ios, '7.0'
 pod 'Appirater', :inhibit_warnings => true
 pod 'Bolts', :inhibit_warnings => true
-pod 'Facebook-iOS-SDK', :inhibit_warnings => true
 pod 'Parse', :inhibit_warnings => true
+pod 'ParseFacebookUtils'
 pod 'MagicalRecord', :inhibit_warnings => true
 pod 'Reachability'
 pod 'Underscore.m'
-pod 'RMStore', '~> 0.5.1', :inhibit_warnings => true
+pod 'RMStore', :inhibit_warnings => true
 pod 'Base64'
 pod 'APAddressBook'
 pod 'DejalActivityView'
 pod 'KeenClient', :inhibit_warnings => true
 pod 'NSURL+QueryDictionary'
+pod 'DHCShakeNotifier'
 
 #pod 'MMDrawerController', '~> 0.5.3' - now part of libs as it was modified
 

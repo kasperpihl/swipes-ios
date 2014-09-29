@@ -31,12 +31,15 @@ priority  | Set to `y` or `1` to make the ToDo priority. Default is `no`
 notes     | Notes of the ToDo. Default is no notes
 schedule  | The schedule of ToDo set to the given number of seconds from the first instant of 1 January 1970, GMT. There is a special value `now` (ex: `schedule=now`) that adds current date and time as a schedule. Default is to set schedule to undefined
 tagN      | An array of tags to add to the ToDo. If any tag does not exist, it will be created. N is the number of tag starting from 1. For example to specify three tags you add them like this: `tag1=first%20tag&tag2=second&tag3=third`. Default is ToDo does not have tags attached.
+subtaskN  | An array of subtasks to add to the ToDo. N is the number of tag starting from 1. For example to specify two subtasks you add them like this: `subtask1=Go%20home&subtask2=Eat%20some%20pasta`.
 
 #####Examples
 
-`swipes://todo/add?title=Buy%20coffee&schedule=now` - Creates a ToDo with title `Buy coffee` and schedule it for current date and time.
+`swipes://todo/add?title=Buy%20coffee&schedule=now` - Creates a ToDo with title `Buy coffee` and schedule it to current date and time.
 
 `swipes://todo/add?title=Buy%20coffee&tag1=shopping&tag2=development&priority=1&notes=need%20coffee%0ato%20develop&schedule=1406636343`- Creates a ToDo with title `Buy coffee`, Tags `shopping` and `development`, set it to ne a priority ToDo, notes are `need coffee<new line>to develop`, schedule it to a specific time.
+
+`swipes://todo/add?title=After%20work&subtask1=Go%20home&subtask2=Eat%20some%20pasta&schedule=now`- Creates a ToDo with title `After work`, subtasks `Go home` and `Eat some pasta`, schedule it to current date and time.
 
 ####Updating ToDo
 
@@ -50,6 +53,7 @@ priority  | Set to `y` or `1` to make the ToDo priority.
 notes     | Notes of the ToDo.
 schedule  | The schedule of ToDo set to the given number of seconds from the first instant of 1 January 1970, GMT. There is a special value `now` (ex: `schedule=now`) that adds current date and time as a schedule.
 tagN      | An array of tags to add to the ToDo. If any tag does not exist, it will be created. N is the number of tag starting from 1. For example to specify three tags you add them like this: `tag1=first%20tag&tag2=second&tag3=third`.
+subtaskN  | An array of subtasks to add to the ToDo. N is the number of tag starting from 1. For example to specify two subtasks you add them like this: `subtask1=Go%20home&subtask2=Eat%20some%20pasta`.
 
 #####Examples
 
@@ -66,6 +70,15 @@ title     | The ToDo title to be deleted. This is the only parameter and is mand
 #####Examples
 
 `swipes://todo/delete?title=Buy%20coffee` - Deletes a ToDo with title `Buy coffee`.
+
+####Adding ToDo while deleting any previous instance
+
+The command is `clean_add`. It first deletes the todo by title (if needed) and then add it. Supported parameters are same as in `add` command.
+
+#####Examples
+
+`swipes://todo/clean_add?title=After%20work&subtask1=Go%20home&subtask2=Eat%20some%20pasta&schedule=now`- Removes a ToDo with title `After work`, add it again with subtasks `Go home` and `Eat some pasta`, schedule it to current date and time.
+
 
 ###tag
 

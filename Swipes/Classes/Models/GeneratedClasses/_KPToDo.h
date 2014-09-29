@@ -29,252 +29,131 @@ extern const struct KPToDoRelationships {
 	__unsafe_unretained NSString *tags;
 } KPToDoRelationships;
 
-extern const struct KPToDoFetchedProperties {
-} KPToDoFetchedProperties;
-
 @class KPAttachment;
 @class KPToDo;
 @class KPToDo;
 @class KPTag;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@interface KPToDoID : NSManagedObjectID {}
+@interface KPToDoID : KPParseObjectID {}
 @end
 
 @interface _KPToDo : KPParseObject {}
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
-- (KPToDoID*)objectID;
-
-
-
-
+@property (nonatomic, readonly, strong) KPToDoID* objectID;
 
 @property (nonatomic, strong) NSDate* alarm;
 
-
-
 //- (BOOL)validateAlarm:(id*)value_ error:(NSError**)error_;
-
-
-
-
 
 @property (nonatomic, strong) NSDate* completionDate;
 
-
-
 //- (BOOL)validateCompletionDate:(id*)value_ error:(NSError**)error_;
-
-
-
-
 
 @property (nonatomic, strong) NSString* location;
 
-
-
 //- (BOOL)validateLocation:(id*)value_ error:(NSError**)error_;
-
-
-
-
 
 @property (nonatomic, strong) NSString* notes;
 
-
-
 //- (BOOL)validateNotes:(id*)value_ error:(NSError**)error_;
-
-
-
-
 
 @property (nonatomic, strong) NSNumber* numberOfRepeated;
 
-
-
-@property int32_t numberOfRepeatedValue;
+@property (atomic) int32_t numberOfRepeatedValue;
 - (int32_t)numberOfRepeatedValue;
 - (void)setNumberOfRepeatedValue:(int32_t)value_;
 
 //- (BOOL)validateNumberOfRepeated:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSNumber* order;
 
-
-
-@property int32_t orderValue;
+@property (atomic) int32_t orderValue;
 - (int32_t)orderValue;
 - (void)setOrderValue:(int32_t)value_;
 
 //- (BOOL)validateOrder:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSString* origin;
-
-
 
 //- (BOOL)validateOrigin:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSString* originIdentifier;
-
-
 
 //- (BOOL)validateOriginIdentifier:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSNumber* priority;
 
-
-
-@property int16_t priorityValue;
+@property (atomic) int16_t priorityValue;
 - (int16_t)priorityValue;
 - (void)setPriorityValue:(int16_t)value_;
 
 //- (BOOL)validatePriority:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSNumber* repeatOption;
 
-
-
-@property int32_t repeatOptionValue;
+@property (atomic) int32_t repeatOptionValue;
 - (int32_t)repeatOptionValue;
 - (void)setRepeatOptionValue:(int32_t)value_;
 
 //- (BOOL)validateRepeatOption:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSDate* repeatedDate;
-
-
 
 //- (BOOL)validateRepeatedDate:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSDate* schedule;
-
-
 
 //- (BOOL)validateSchedule:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSString* state;
-
-
 
 //- (BOOL)validateState:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSString* tagString;
-
-
 
 //- (BOOL)validateTagString:(id*)value_ error:(NSError**)error_;
 
-
-
-
-
 @property (nonatomic, strong) NSString* title;
 
-
-
 //- (BOOL)validateTitle:(id*)value_ error:(NSError**)error_;
-
-
-
-
 
 @property (nonatomic, strong) NSSet *attachments;
 
 - (NSMutableSet*)attachmentsSet;
 
-
-
-
 @property (nonatomic, strong) KPToDo *parent;
 
 //- (BOOL)validateParent:(id*)value_ error:(NSError**)error_;
-
-
-
 
 @property (nonatomic, strong) NSSet *subtasks;
 
 - (NSMutableSet*)subtasksSet;
 
-
-
-
 @property (nonatomic, strong) NSSet *tags;
 
 - (NSMutableSet*)tagsSet;
 
-
-
-
-
 @end
 
-@interface _KPToDo (CoreDataGeneratedAccessors)
-
+@interface _KPToDo (AttachmentsCoreDataGeneratedAccessors)
 - (void)addAttachments:(NSSet*)value_;
 - (void)removeAttachments:(NSSet*)value_;
 - (void)addAttachmentsObject:(KPAttachment*)value_;
 - (void)removeAttachmentsObject:(KPAttachment*)value_;
 
+@end
+
+@interface _KPToDo (SubtasksCoreDataGeneratedAccessors)
 - (void)addSubtasks:(NSSet*)value_;
 - (void)removeSubtasks:(NSSet*)value_;
 - (void)addSubtasksObject:(KPToDo*)value_;
 - (void)removeSubtasksObject:(KPToDo*)value_;
 
+@end
+
+@interface _KPToDo (TagsCoreDataGeneratedAccessors)
 - (void)addTags:(NSSet*)value_;
 - (void)removeTags:(NSSet*)value_;
 - (void)addTagsObject:(KPTag*)value_;
@@ -284,30 +163,17 @@ extern const struct KPToDoFetchedProperties {
 
 @interface _KPToDo (CoreDataGeneratedPrimitiveAccessors)
 
-
 - (NSDate*)primitiveAlarm;
 - (void)setPrimitiveAlarm:(NSDate*)value;
-
-
-
 
 - (NSDate*)primitiveCompletionDate;
 - (void)setPrimitiveCompletionDate:(NSDate*)value;
 
-
-
-
 - (NSString*)primitiveLocation;
 - (void)setPrimitiveLocation:(NSString*)value;
 
-
-
-
 - (NSString*)primitiveNotes;
 - (void)setPrimitiveNotes:(NSString*)value;
-
-
-
 
 - (NSNumber*)primitiveNumberOfRepeated;
 - (void)setPrimitiveNumberOfRepeated:(NSNumber*)value;
@@ -315,29 +181,17 @@ extern const struct KPToDoFetchedProperties {
 - (int32_t)primitiveNumberOfRepeatedValue;
 - (void)setPrimitiveNumberOfRepeatedValue:(int32_t)value_;
 
-
-
-
 - (NSNumber*)primitiveOrder;
 - (void)setPrimitiveOrder:(NSNumber*)value;
 
 - (int32_t)primitiveOrderValue;
 - (void)setPrimitiveOrderValue:(int32_t)value_;
 
-
-
-
 - (NSString*)primitiveOrigin;
 - (void)setPrimitiveOrigin:(NSString*)value;
 
-
-
-
 - (NSString*)primitiveOriginIdentifier;
 - (void)setPrimitiveOriginIdentifier:(NSString*)value;
-
-
-
 
 - (NSNumber*)primitivePriority;
 - (void)setPrimitivePriority:(NSNumber*)value;
@@ -345,66 +199,37 @@ extern const struct KPToDoFetchedProperties {
 - (int16_t)primitivePriorityValue;
 - (void)setPrimitivePriorityValue:(int16_t)value_;
 
-
-
-
 - (NSNumber*)primitiveRepeatOption;
 - (void)setPrimitiveRepeatOption:(NSNumber*)value;
 
 - (int32_t)primitiveRepeatOptionValue;
 - (void)setPrimitiveRepeatOptionValue:(int32_t)value_;
 
-
-
-
 - (NSDate*)primitiveRepeatedDate;
 - (void)setPrimitiveRepeatedDate:(NSDate*)value;
-
-
-
 
 - (NSDate*)primitiveSchedule;
 - (void)setPrimitiveSchedule:(NSDate*)value;
 
-
-
-
 - (NSString*)primitiveState;
 - (void)setPrimitiveState:(NSString*)value;
-
-
-
 
 - (NSString*)primitiveTagString;
 - (void)setPrimitiveTagString:(NSString*)value;
 
-
-
-
 - (NSString*)primitiveTitle;
 - (void)setPrimitiveTitle:(NSString*)value;
-
-
-
-
 
 - (NSMutableSet*)primitiveAttachments;
 - (void)setPrimitiveAttachments:(NSMutableSet*)value;
 
-
-
 - (KPToDo*)primitiveParent;
 - (void)setPrimitiveParent:(KPToDo*)value;
-
-
 
 - (NSMutableSet*)primitiveSubtasks;
 - (void)setPrimitiveSubtasks:(NSMutableSet*)value;
 
-
-
 - (NSMutableSet*)primitiveTags;
 - (void)setPrimitiveTags:(NSMutableSet*)value;
-
 
 @end

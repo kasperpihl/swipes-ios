@@ -14,9 +14,6 @@ const struct KPAttachmentRelationships KPAttachmentRelationships = {
 	.todo = @"todo",
 };
 
-const struct KPAttachmentFetchedProperties KPAttachmentFetchedProperties = {
-};
-
 @implementation KPAttachmentID
 @end
 
@@ -42,7 +39,7 @@ const struct KPAttachmentFetchedProperties KPAttachmentFetchedProperties = {
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
 	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
-	
+
 	if ([key isEqualToString:@"syncValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"sync"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
@@ -52,26 +49,11 @@ const struct KPAttachmentFetchedProperties KPAttachmentFetchedProperties = {
 	return keyPaths;
 }
 
-
-
-
 @dynamic identifier;
-
-
-
-
-
 
 @dynamic service;
 
-
-
-
-
-
 @dynamic sync;
-
-
 
 - (BOOL)syncValue {
 	NSNumber *result = [self sync];
@@ -91,24 +73,9 @@ const struct KPAttachmentFetchedProperties KPAttachmentFetchedProperties = {
 	[self setPrimitiveSync:[NSNumber numberWithBool:value_]];
 }
 
-
-
-
-
 @dynamic title;
-
-
-
-
-
 
 @dynamic todo;
 
-	
-
-
-
-
-
-
 @end
+

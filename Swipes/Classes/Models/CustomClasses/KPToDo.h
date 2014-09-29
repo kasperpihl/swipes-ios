@@ -1,4 +1,7 @@
 #import "_KPToDo.h"
+
+#define kTitleMaxLength 255
+
 @class CLPlacemark;
 @interface KPToDo : _KPToDo {}
 @property (nonatomic,strong) NSArray *textTags;

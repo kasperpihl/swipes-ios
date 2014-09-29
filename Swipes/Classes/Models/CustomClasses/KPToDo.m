@@ -38,7 +38,9 @@
 #define checkStringWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToString:pfValue]) [self setValue:pfValue forKey:cdKey]
 #define checkDateWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToDate:pfValue]) [self setValue:pfValue forKey:cdKey]
 #define checkNumberWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToNumber:pfValue]) [self setValue:pfValue forKey:cdKey]
-+(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray *)tags save:(BOOL)save{
+
++(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray *)tags save:(BOOL)save
+{
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
     newToDo.title = item;
     newToDo.schedule = [NSDate date];
@@ -46,20 +48,23 @@
     newToDo.orderValue = kDefOrderVal;
     if(tags && tags.count > 0)
         [self updateTags:tags forToDos:@[newToDo] remove:NO save:NO];
-    if(save) [KPToDo saveToSync];
+    if (save)
+        [KPToDo saveToSync];
     NSString *taskLength = @"50+";
     if(item.length <= 10) taskLength = @"1-10";
     else if(item.length <= 20) taskLength = @"11-20";
     else if(item.length <= 30) taskLength = @"21-30";
     else if(item.length <= 40) taskLength = @"31-40";
     else if(item.length <= 50) taskLength = @"41-50";
-    [ANALYTICS tagEvent:@"Added Task" options:@{@"Length":taskLength}];
+    [ANALYTICS tagEvent:@"Added Task" options:@{@"ActionStep":@(NO),@"Length":taskLength}];
     [ANALYTICS heartbeat];
     [NOTIHANDLER updateLocalNotifications];
     
     return newToDo;
 }
--(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save{
+
+-(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save
+{
     KPToDo *subTask = [KPToDo newObjectInContext:[self managedObjectContext]];
     subTask.title = title;
     subTask.orderValue = kDefOrderVal;
@@ -75,16 +80,18 @@
     else if(title.length <= 40) taskLength = @"31-40";
     else if(title.length <= 50) taskLength = @"41-50";
     NSInteger numberOfActionSteps = self.subtasks.count;
-    [ANALYTICS tagEvent:@"Added Action Step" options:@{@"Length":taskLength, @"Total Action Steps on Task": @(numberOfActionSteps)}];
-    
+    [ANALYTICS tagEvent:@"Added Task" options:@{@"ActionStep":@(YES),@"Length":taskLength, @"Total Action Steps on Task": @(numberOfActionSteps)}];
     
     return subTask;
 }
-+(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save{
+
++(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save
+{
     NSMutableArray *movedToDos = [NSMutableArray array];
     for(KPToDo *toDo in toDoArray){
         BOOL movedToDo = [toDo scheduleForDate:date];
-        if(movedToDo) [movedToDos addObject:toDo];
+        if(movedToDo)
+            [movedToDos addObject:toDo];
     }
     if(save)
         [KPToDo saveToSync];
@@ -92,6 +99,7 @@
     [ANALYTICS heartbeat];
     return [movedToDos copy];
 }
+
 +(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save{
     NSMutableArray *movedToDos = [NSMutableArray array];
     BOOL isSubtasks = NO;
@@ -99,7 +107,8 @@
         if ( toDo.parent )
             isSubtasks = YES;
         BOOL movedToDo = [toDo complete];
-        if(movedToDo) [movedToDos addObject:toDo];
+        if (movedToDo)
+            [movedToDos addObject:toDo];
     }
     if(save)
         [KPToDo saveToSync];
@@ -112,19 +121,25 @@
     return [movedToDos copy];
 }
 
-+(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save{
++(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save
+{
     NSMutableArray *movedToDos = [NSMutableArray array];
     for(KPToDo *toDo in toDoArray){
         BOOL movedToDo = [toDo notifyOnLocation:location type:type];
-        if(movedToDo) [movedToDos addObject:toDo];
+        if (movedToDo)
+            [movedToDos addObject:toDo];
     }
-    if(save) [KPToDo saveToSync];
+    if(save)
+        [KPToDo saveToSync];
+    
     [NOTIHANDLER updateLocationUpdates];
     [ANALYTICS heartbeat];
+    
     return [movedToDos copy];
 }
 
-+(void)deleteToDos:(NSArray*)toDos save:(BOOL)save force:(BOOL)force{
++(void)deleteToDos:(NSArray*)toDos save:(BOOL)save force:(BOOL)force
+{
     BOOL shouldUpdateNotifications = NO;
     for(KPToDo *toDo in toDos){
         if(!toDo.completionDate && !toDo.parent)
@@ -132,14 +147,15 @@
         [toDo deleteToDoSave:NO force:force];
     }
     if (save)
-             [KPToDo saveToSync];
+        [KPToDo saveToSync];
+    
     if (shouldUpdateNotifications)
-             [NOTIHANDLER updateLocalNotifications];
+        [NOTIHANDLER updateLocalNotifications];
     [ANALYTICS heartbeat];
 }
 
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save{
-    if(tags){
+    if (tags){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
         NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
         for(KPToDo *toDo in toDos){
@@ -147,6 +163,8 @@
         }
         if(save)
             [KPToDo saveToSync];
+        NSDictionary *options = @{ @"Number of tags": @(tags.count), @"Number of tasks": @(toDos.count), @"Assigned": @(!remove) };
+        [ANALYTICS tagEvent:@"Update tags" options:options];
         [ANALYTICS heartbeat];
     }
 }
@@ -183,7 +201,8 @@
         }
         counter++;
     }
-    if(counter > 1) commonTags = common2Tags;
+    if(counter > 1)
+        commonTags = common2Tags;
     return commonTags;
 }
 
@@ -525,7 +544,7 @@
     NSArray *allSubtasks = [[self subtasks] allObjects];
     NSMutableSet *notDeletedSubtasks = [NSMutableSet set];
     for( KPToDo *subtask in allSubtasks ){
-        if( ![subtask.deleted boolValue] )
+        if( ![subtask.isLocallyDeleted boolValue] )
             [notDeletedSubtasks addObject:subtask];
     }
     return [notDeletedSubtasks copy];
@@ -676,7 +695,7 @@
         [KPToDo deleteToDos:[self.subtasks allObjects] save:NO force:YES];
     }
     else if( self.parent && !force && [self.origin isEqualToString:EVERNOTE_SERVICE]){
-        self.deleted = @(YES);
+        self.isLocallyDeleted = @(YES);
         NSLog(@"deleted subtask from Evernote");
         return NO;
     }
@@ -742,11 +761,12 @@
         if(actionStep.completionDate)
             [actionStep scheduleForDate:nil];
     }
-    
 }
 
 -(void)completeRepeatedTask{
-    if(self.repeatOptionValue == RepeatNever) return;
+    if (self.repeatOptionValue == RepeatNever)
+        return;
+    
     NSDate *next = [self nextDateFrom:self.repeatedDate];
     
     int32_t numberOfRepeated = self.numberOfRepeatedValue;
@@ -804,7 +824,8 @@
 {
     // remove all present attachments for this service
     [self removeAllAttachmentsForService:service];
-    
+    if(title.length > kTitleMaxLength)
+        title = [title substringToIndex:kTitleMaxLength];
     // create the attachment
     KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync];
     // add the new attachment
@@ -836,6 +857,7 @@
         }
     }
 }
+
 +(void)removeAllAttachmentsForAllToDosWithService:(NSString *)service inContext:(NSManagedObjectContext *)context save:(BOOL)save{
     if(!context)
         context = KPCORE.context;
