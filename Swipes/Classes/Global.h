@@ -24,6 +24,7 @@
 + (NSString*)iconStringForString:(NSString*)iconString;
 + (BOOL)supportsOrientation:(UIDeviceOrientation)orientation;
 + (NSURL *)coreDataUrl;
++ (void)initCoreData;
 + (NSUserDefaults *)sharedDefaults;
 
 @property (nonatomic) CGFloat fontMultiplier;

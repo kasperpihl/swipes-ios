@@ -46,9 +46,6 @@
     NSString *localyticsKey;
     [KeenClient disableGeoLocation];
     
-    //DLog(@"Application dir: %@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
-    DLog(@"storeURL: %@", [Global coreDataUrl]);
-    
 #ifdef RELEASE
     parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
