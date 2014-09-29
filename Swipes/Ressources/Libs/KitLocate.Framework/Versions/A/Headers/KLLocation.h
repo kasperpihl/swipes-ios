@@ -51,6 +51,7 @@
 #define KL_START_PARAM_INT_PLACE_RECOGNIZE_MIN_SAMPLES       @"PlaceRecognizeMinSamples"
 #define KL_START_PARAM_INT_PLACE_RECOGNIZE_RADIUS            @"PlaceRecognizeRadius"
 #define KL_START_PARAM_FLOAT_PLACE_RECOGNIZE_ACCURACY_FACTOR @"PlaceRecognizeAccuracyFactor"
+//#define KL_START_PARAM_BOOL_PLACE_RECOGNIZE_ALLOW_NEAR_PLACES @"PlaceRecognizeAllowNearPlaces"
 
 ///////////////////////////////////
 // Exported Events Nofitications //
@@ -61,11 +62,14 @@
 
 #define KL_NOTIFICATION_NAME_START_DRIVING          @"KL_NOTIFICATION_NAME_START_DRIVING"
 #define KL_NOTIFICATION_NAME_STOP_DRIVING           @"KL_NOTIFICATION_NAME_STOP_DRIVING"
+#define KL_NOTIFICATION_NAME_START_WALKING          @"KL_NOTIFICATION_NAME_START_WALKING"
+#define KL_NOTIFICATION_NAME_STOP_WALKING           @"KL_NOTIFICATION_NAME_STOP_WALKING"
 #define KL_NOTIFICATION_NAME_PLACE_RECOGNITION      @"KL_NOTIFICATION_NAME_PLACE_RECOGNITION"
 #define KL_NOTIFICATION_NAME_PERIODIC_LOCATION      @"KL_NOTIFICATION_NAME_PERIODIC_LOCATION"
 #define KL_NOTIFICATION_NAME_SINGLE_LOCATION        @"KL_NOTIFICATION_NAME_SINGLE_LOCATION"
 #define KL_NOTIFICATION_NAME_GEOFENCE_IN            @"KL_NOTIFICATION_NAME_GEOFENCE_IN"
 #define KL_NOTIFICATION_NAME_GEOFENCE_OUT           @"KL_NOTIFICATION_NAME_GEOFENCE_OUT"
+#define KL_NOTIFICATION_NAME_PARKING_DETECTED       @"KL_NOTIFICATION_NAME_PARKING_DETECTED"
 
 
 typedef enum klResponseTime : NSInteger {
@@ -92,13 +96,19 @@ typedef enum klDesiredAccuracyType : NSInteger {
 
 - (void)onChangeKitLocateUserID:(NSString*)userId;
 
+- (void)didSuccessToRegisterRemotePush;
+- (void)didFailToRegisterRemotePush:(NSError*)error;
+
 - (void)gotPeriodicLocation:(KLLocationValue*)location;
 - (void)geofencesIn:(NSArray*)arrGeofenceList;
 - (void)geofencesOut:(NSArray*)arrGeofenceList;
-- (void)startDrivingDetected;
-- (void)stopDrivingDetected;
+- (void)startDrivingDetected:(KLLocationValue*)location;
+- (void)stopDrivingDetected:(KLLocationValue*)location;
+- (void)startWalkingDetected:(KLLocationValue*)location;
+- (void)stopWalkingDetected:(KLLocationValue*)location;
 - (void)recognizedNewPlace:(KLLocationValue*)location;
 - (void)gotOutOfParking:(KLLocationValue*)location;
+- (void)gotParkingDetection:(KLLocationValue*)location;
 
 /*!
  This callback method will be invoked after addGeofence function is finished with a failure.
@@ -133,13 +143,15 @@ typedef enum klDesiredAccuracyType : NSInteger {
 {
 }
 
+//#warning debug function - delete from here
+//+ (void)debugSetDrivingModeOn;
 
 /*! Set the frequency of KitLocate's locations monitoring: more short is more accurate, but consume more battery
  * \param responseTimeType The desirable time of type klResponseTime (default KL_RESPONSE_TIME_MEDIUM)
  */
 + (void)setKitLocateAverageResponseTime:(klResponseTime)responseTimeType;
 
-//+ (void)setForceStopAndRestartFunctionalityToOn:(bool)bOn;
++ (void)setForceStopAndRestartFunctionalityToOn:(bool)bOn;
 //+ (void)setLocationAccuracyRequiredLevel:(klDesiredAccuracyType)AccuracyLevel; // TO DO: Check if it proper used
 ////+ (void)SetLocationUseAccuracyFactor:(float)fAccuracyFactor;
 
@@ -159,10 +171,19 @@ typedef enum klDesiredAccuracyType : NSInteger {
 + (void)unregisterPeriodicLocation;
 
 /*! Manually change the interval between location delegates. (It's recommended to do it from the Dashboard)
- * \param interval The minimum number of seconds between getting the periodic nofitications (default 300)
+ * \param interval The minimum number of seconds between getting the periodic nofitications (default 180)
  */
 + (void)setPeriodicMinimumTimeInterval:(int)interval;
 
+/*! Manually change the distance between location delegates.
+ * \param distnace The minimum number of meters between getting the periodic nofitications
+ */
++ (void)setPeriodicMinimumDistance:(float)distance;
+
+/*! Determine if should achieve both time-interval and distance conditions
+ * \param areBothRequired - true if should wait until both conditions will be achieved (default is true)
+ */
++ (void)setPeriodicBothDistanceAndTimeRequired:(bool)areBothRequired;
 
 /*! Monitor geofences and get notified when device gets in/out (depend of each geofence's properties). Implement at least one of the callback functions: geofencesIn,geofencesOut. Make sure you add Geofences to KitLocate to make this feature relevant
  */
@@ -172,7 +193,6 @@ typedef enum klDesiredAccuracyType : NSInteger {
  */
 + (void)unregisterGeofencing;
 
-
 /*! Detect when device starts and stops driving, and get notified by the callback methods: startDrivingDetected,stopDrivingDetected (Implement at least one of them)
  */
 + (void)registerDrivingDetection;
@@ -181,22 +201,22 @@ typedef enum klDesiredAccuracyType : NSInteger {
  */
 + (void)unregisterDrivingDetection;
 
+/*! Detect when device stops driving and starts walking inside a geofence
+ */
++ (void)registerParkingDetection;
+
+/*! Stop monitoring for parking inside geofences
+ */
++ (void)unregisterParkingDetection;
 
 + (void)registerParking:(NSDictionary*)params;
 + (void)unregisterParking;
 + (bool)isParkingLogicRunning;
 
-/*
- NOTICE! This feature can't work under Regions Provider in the current design!
- */
-+ (void)startPlaceRecognitionWithParams:(NSDictionary*)dctParams;
-+ (void)stopPlaceRecognition;
-
-
 /*!
- Activate the immediate location mechanism. After 8 seconds (configurable), The callback function gotSingleLocation is called with the best location gathered by then.
+ Activate the immediate location mechanism. After 7 seconds, The callback function gotSingleLocation is called with the best location gathered by then.
  * \param delegate An object that implements <KitLocateSingleDelegate> protocol. You should implement gotSingleLocation in this object.
- * \param dctParams A dictionary that contains more parameters. For now supports KL_SP_INT_MAX_SECONDS_WAIT - The number of seconds KitLocate tries to optimize location. Can be nil.
+ * \param dctParams For future use, should be nil.
  */
 + (void)startSingleLocationWithDelegate:(id<KitLocateSingleDelegate>)delegate andParams:(NSDictionary*)dctParams;
 //+ (void)finishSingleLocation;
@@ -235,6 +255,11 @@ typedef enum klDesiredAccuracyType : NSInteger {
  * \return The requested geofence. If can't found, returns nil.
  */
 + (KLGeofence*)returnGeofenceByPrimaryID:(long)lGeofenceID;
+
+/*! Fetch the last location that KitLocate has gathered
+ * \return The location
+ */
++(KLLocationValue *)getLastKnownLocation;
 
 +(void)startForegroundLocationWithDelegate:(id<KitLocateForegroundDelegate>)delegate;
 +(void)setForegroundLocationTimeInSeconds:(int)nTime;

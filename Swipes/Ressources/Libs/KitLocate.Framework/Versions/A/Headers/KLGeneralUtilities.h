@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KLGeofence.h"
+#import "KLLocationValue.h"
 
 @interface KLGeneralUtilities : NSObject
 
@@ -29,6 +31,10 @@
 +(NSArray *)requestDebugManagementWithStringParametersArray:(NSArray *)arrStringParams; //#
 
 +(NSArray *)getLastPushManagementApprovalWithGeofences;
+
+// Location helpers
+
++(double)getDistanceBetweenGeofence:(KLGeofence*)geofence andLocation:(KLLocationValue*)location;
 
 // APP STATE
 

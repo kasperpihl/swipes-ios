@@ -56,6 +56,7 @@ enum klGeofenceType : NSInteger {
     bool            bDirtyDateForSelfDisposal;
     bool            bDirtyTrigger;
     bool            bDirtyReceiveGeofence;
+    bool            bDirtyAdditionalInfo;
     bool            bDirtyOwnerFeature;
     
     
@@ -110,6 +111,7 @@ enum klGeofenceType : NSInteger {
 @property (nonatomic, readwrite) bool            bDirtyTrigger;
 @property (nonatomic, readwrite) bool            bDirtyReceiveGeofence;
 @property (nonatomic, readwrite) bool            bDirtyOwnerFeature;
+@property (nonatomic, readwrite) bool            bDirtyAdditionalInfo;
 
 
 // Init function to create new POI
@@ -168,5 +170,7 @@ enum klGeofenceType : NSInteger {
 -(void)setLongitude:(float)fValue;
 -(float)getLongitude;
 
+-(void)setAdditionalInfo:(NSString*)strInfo;
+-(NSString*)getAdditionalInfo;
 
 @end

@@ -1,7 +1,7 @@
 
-//-------------------------
-#define KL_APP_VERSION 4.26
-//-------------------------
+//--------------------------
+#define KL_APP_VERSION 4.47
+//--------------------------
 
 
 #import <Foundation/Foundation.h>
@@ -11,6 +11,7 @@
 #import <UIKit/UIKit.h>
 
 #import <KitLocate/KLPlace.h>
+
 
 @interface KitLocate : NSObject
 
@@ -55,19 +56,35 @@
  */
 +(void)setPushNotificationTokenString:(NSString *)deviceToken;
 
-/*! If you use registerForRemotePush, call this method in your appDelegate, in the implementation of (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
- * \param deviceToken The token got from the delegate
- */
-+(void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
+// New notif. interface
+// ====================
 
-/*! If you use registerForRemotePush, call this method in your appDelegate, in the implementation of (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
- * \param error The NSError object got from the delegate
+/*! Activate local notification service for this application, ask the user for permission if needed. Relevant for iOS8 and above.
  */
-+(void)didFailToRegisterForRemoteNotificationsWithError:(NSError *)error;
++(void)registerForLocalNotifications;
 
-/*! Register for remote push nofitication through KitLocate. If you call this funcion you should also implement didRegisterForRemoteNotificationsWithDeviceToken and didFailToRegisterForRemoteNotificationsWithError in your appDelegate. In each one of them you should call  KitLocate's appropriate function (For example: [KitLocate didRegisterForRemoteNotificationsWithDeviceToken:deviceToken])
+/*! Activate local notification service for this application, ask the user for permission if needed. Relevant for iOS8 and above.
+ * \param bAlert allow notification's alerts
+ * \param bSound allow notification's sounds
+ * \param bSound allow notification's badge numbers
+ */
+//+(void)registerForLocalNotificationsWithAlerts:(bool)bAlert andSounds:(bool)bSound andBadges:(bool)bBadge;
+
+/*! Activate local and remote notifications for this application, ask the user for permission if needed. Relevant for iOS8 and above.
+ */
++(void)registerForAllNotifications;
+
+/*! Activate local and remote notifications for this application, ask the user for permission if needed. Relevant for iOS8 and above.
+ * \param bAlert allow notification's alerts
+ * \param bSound allow notification's sounds
+ * \param bSound allow notification's badge numbers
+ */
+//+(void)registerForAllNotificationsWithAlerts:(bool)bAlert andSounds:(bool)bSound andBadges:(bool)bBadge;
+
+/*! will call registerForAllNotifications
  */
 +(void)registerForRemotePush;
+
 
 // LOG
 
@@ -79,7 +96,6 @@
 +(NSString *)getLogString;
 
 //#endif
-
 
 extern bool bDidInitTookMainThread;
 
