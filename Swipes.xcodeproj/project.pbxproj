@@ -194,6 +194,11 @@
 		A7E9F60519DAA61600CAA1D1 /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
 		A7E9F60619DAA6A300CAA1D1 /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
 		A7E9F60719DAA6A400CAA1D1 /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
+		A7E9F60819DAAE3800CAA1D1 /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */; };
+		A7E9F60919DAAE8800CAA1D1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
+		A7E9F60A19DAAEA900CAA1D1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
+		A7E9F60B19DAAEC500CAA1D1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
+		A7E9F60C19DAAECD00CAA1D1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
 		A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066A17296BF100DDE644 /* ToDoListViewController.m */; };
 		A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4067117296C0500DDE644 /* KPControlHandler.m */; };
@@ -1172,10 +1177,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */,
+				A7E9F60919DAAE8800CAA1D1 /* MobileCoreServices.framework in Frameworks */,
 				A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */,
 				A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */,
 				A717DD1018B6440A00EE359C /* Crashlytics.framework in Frameworks */,
-				DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */,
 				A7E9F60619DAA6A300CAA1D1 /* ENSDK.framework in Frameworks */,
 				DA94A2C1196EEA8B008F8A3B /* libLocalyticsAMP_x64.a in Frameworks */,
 				A7ADCB3817DD352F00780F88 /* libz.dylib in Frameworks */,
@@ -1223,12 +1229,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7E9F60A19DAAEA900CAA1D1 /* MobileCoreServices.framework in Frameworks */,
+				DAE9CF6E19AF367F00246B64 /* libxml2.dylib in Frameworks */,
 				DAE9CFF019AF3AC600246B64 /* SwipesKit.framework in Frameworks */,
 				DAE9CF6B19AF367F00246B64 /* AdSupport.framework in Frameworks */,
 				DAE9CF6C19AF367F00246B64 /* CoreTelephony.framework in Frameworks */,
 				A7E9F60719DAA6A400CAA1D1 /* ENSDK.framework in Frameworks */,
 				DAE9CF6D19AF367F00246B64 /* Crashlytics.framework in Frameworks */,
-				DAE9CF6E19AF367F00246B64 /* libxml2.dylib in Frameworks */,
 				DAE9CF7019AF367F00246B64 /* libz.dylib in Frameworks */,
 				DAE9CF7119AF367F00246B64 /* Accelerate.framework in Frameworks */,
 				DAE9CF7219AF367F00246B64 /* MessageUI.framework in Frameworks */,
@@ -1263,6 +1270,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7E9F60C19DAAECD00CAA1D1 /* libxml2.dylib in Frameworks */,
+				A7E9F60B19DAAEC500CAA1D1 /* MobileCoreServices.framework in Frameworks */,
 				A7E9F60519DAA61600CAA1D1 /* ENSDK.framework in Frameworks */,
 				DA69248219B87A4A0082D1E4 /* libLocalyticsAMP_x64.a in Frameworks */,
 				789C9AAD8BA447088AAD221A /* libPods-SwipesKit.a in Frameworks */,
@@ -1637,7 +1646,6 @@
 				DAE2B15119CB7A4D00A9074E /* SwipesToday */,
 				DAE9CFDD19AF3AC600246B64 /* SwipesKit */,
 				DAE9D00419AF3B2900246B64 /* Swipes Today */,
-				DA53461319D4269B007AA15D /* Libs */,
 				A7778CCC16EB5884004D95E5 /* Frameworks */,
 				A7778CCB16EB5884004D95E5 /* Products */,
 				9BA9EC75C706A45E18C4AB77 /* Pods */,
@@ -1887,6 +1895,7 @@
 		A78128AB17294C56002226C8 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				DA53461419D426B4007AA15D /* MagicalRecord */,
 				A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */,
 				A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */,
 				A7D0685A190E654C00699B4E /* MMDrawerController */,
@@ -2092,14 +2101,6 @@
 			path = KPControlHandler;
 			sourceTree = "<group>";
 		};
-		DA53461319D4269B007AA15D /* Libs */ = {
-			isa = PBXGroup;
-			children = (
-				DA53461419D426B4007AA15D /* MagicalRecord */,
-			);
-			name = Libs;
-			sourceTree = "<group>";
-		};
 		DA53461419D426B4007AA15D /* MagicalRecord */ = {
 			isa = PBXGroup;
 			children = (
@@ -2107,8 +2108,7 @@
 				DA53463F19D426B4007AA15D /* Core */,
 				DA53465119D426B4007AA15D /* CoreData+MagicalRecord.h */,
 			);
-			name = MagicalRecord;
-			path = Swipes/Ressources/Libs/MagicalRecord;
+			path = MagicalRecord;
 			sourceTree = "<group>";
 		};
 		DA53461519D426B4007AA15D /* Categories */ = {
@@ -2755,6 +2755,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAE2B14A19C8FDF200A9074E /* Datamodel.xcdatamodeld in Resources */,
+				A7E9F60819DAAE3800CAA1D1 /* ENSDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3476,7 +3477,7 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "17bbbab4-3251-491a-976c-52fec1bb42ab";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=*]" = "17bbbab4-3251-491a-976c-52fec1bb42ab";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "17bbbab4-3251-491a-976c-52fec1bb42ab";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3624,7 +3625,7 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "17bbbab4-3251-491a-976c-52fec1bb42ab";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "17bbbab4-3251-491a-976c-52fec1bb42ab";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -3706,7 +3707,7 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "17bbbab4-3251-491a-976c-52fec1bb42ab";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "17bbbab4-3251-491a-976c-52fec1bb42ab";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -3740,6 +3741,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SwipesToday/SwipesToday-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -3779,6 +3784,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SwipesToday/SwipesToday-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -3814,6 +3823,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SwipesToday/SwipesToday-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -3842,7 +3855,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
@@ -3909,7 +3922,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "603AA3C8-9AFA-42CF-AD32-245D9E88FC07";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "603AA3C8-9AFA-42CF-AD32-245D9E88FC07";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -3923,7 +3936,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
@@ -3992,7 +4005,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "92BE8DBD-7BB9-4365-A2A0-9B30E049ED7A";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "92BE8DBD-7BB9-4365-A2A0-9B30E049ED7A";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -4006,7 +4019,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
@@ -4079,7 +4092,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "0241A838-0A70-4BF3-B073-E6A9623ABB8F";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=*]" = "50D18548-AD5B-41E1-80CB-4F1AA50B0982";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "50D18548-AD5B-41E1-80CB-4F1AA50B0982";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4099,7 +4112,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -4172,6 +4185,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -4191,7 +4205,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -4261,6 +4275,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -4280,7 +4295,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -4350,6 +4365,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -4366,8 +4382,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -4383,6 +4399,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = Swipes;
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -4396,8 +4413,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -4410,6 +4427,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = Swipes;
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -4423,8 +4441,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -4437,6 +4455,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = Swipes;
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = AdHoc;
