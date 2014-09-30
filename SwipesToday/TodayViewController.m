@@ -8,6 +8,7 @@
 
 #import <NotificationCenter/NotificationCenter.h>
 #import "KPToDo.h"
+#import "UtilityClass.h"
 #import "TodayViewController.h"
 
 @interface TodayViewController () <NCWidgetProviding>
@@ -19,6 +20,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    UTILITY.rootViewController = self;
+    
     DLog(@"storeURL: %@", [Global coreDataUrl]);
     
     [Global initCoreData];

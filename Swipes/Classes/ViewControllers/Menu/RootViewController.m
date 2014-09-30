@@ -441,6 +441,9 @@ static RootViewController *sharedObject;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    UTILITY.rootViewController = self;
+
     [self setNavigationBarHidden:YES];
     KPCORE.delegate = self;
     notify(@"changed theme", changedTheme);
