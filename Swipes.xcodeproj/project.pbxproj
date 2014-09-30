@@ -377,6 +377,10 @@
 		DA6924AC19BDCF330082D1E4 /* ParentSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AA7962194E0665003DAB3B /* ParentSyncHandler.h */; };
 		DA6924AD19BDCF330082D1E4 /* EvernoteSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AA7966194E067C003DAB3B /* EvernoteSyncHandler.h */; };
 		DA6924AE19BDCF330082D1E4 /* SyncQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AA7969194E06AA003DAB3B /* SyncQueue.h */; };
+		DA6B61BB19DAEF0D00089877 /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
+		DA6B61BC19DAF26900089877 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
+		DA6B61BD19DAF27B00089877 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
+		DA6B61BE19DAF3B600089877 /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */; };
 		DA94A2C1196EEA8B008F8A3B /* libLocalyticsAMP_x64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA94A2BE196EEA8B008F8A3B /* libLocalyticsAMP_x64.a */; };
 		DACD541918A19FB000C378DF /* DropboxView.m in Sources */ = {isa = PBXBuildFile; fileRef = DACD541818A19FB000C378DF /* DropboxView.m */; };
 		DACD544318A1ACFC00C378DF /* excel.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542118A1ACFC00C378DF /* excel.png */; };
@@ -1021,8 +1025,8 @@
 		A7E2D94817B4FE0F007BDE00 /* UpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UpgradeViewController.h; path = Upgrade/UpgradeViewController.h; sourceTree = "<group>"; };
 		A7E2D94917B4FE0F007BDE00 /* UpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UpgradeViewController.m; path = Upgrade/UpgradeViewController.m; sourceTree = "<group>"; };
 		A7E8FB001746276900CC2D26 /* DesignSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DesignSettings.h; sourceTree = "<group>"; };
-		A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ENSDK.framework; path = Evernote/ENSDK.framework; sourceTree = "<group>"; };
-		A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = ENSDKResources.bundle; path = Evernote/ENSDKResources.bundle; sourceTree = "<group>"; };
+		A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ENSDK.framework; path = ../Swipes/Ressources/Libs/Evernote/ENSDK.framework; sourceTree = "<group>"; };
+		A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = ENSDKResources.bundle; path = ../Swipes/Ressources/Libs/Evernote/ENSDKResources.bundle; sourceTree = "<group>"; };
 		A7F4065F17294ECE00DDE644 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		A7F4066017294ECE00DDE644 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		A7F4066917296BF100DDE644 /* ToDoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDoListViewController.h; sourceTree = "<group>"; };
@@ -1219,6 +1223,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA6B61BD19DAF27B00089877 /* libxml2.dylib in Frameworks */,
+				DA6B61BC19DAF26900089877 /* MobileCoreServices.framework in Frameworks */,
+				DA6B61BB19DAEF0D00089877 /* ENSDK.framework in Frameworks */,
 				DAE2B15019CB7A4D00A9074E /* NotificationCenter.framework in Frameworks */,
 				DAE2B17A19CB7D7C00A9074E /* libLocalyticsAMP_x64.a in Frameworks */,
 				81A0C94F1F16434CAE0AA041 /* libPods-SwipesToday.a in Frameworks */,
@@ -1896,8 +1903,6 @@
 			isa = PBXGroup;
 			children = (
 				DA53461419D426B4007AA15D /* MagicalRecord */,
-				A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */,
-				A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */,
 				A7D0685A190E654C00699B4E /* MMDrawerController */,
 				A74D3FC818D9E76F0056D124 /* AppsFlyer */,
 				A717DD0F18B6440A00EE359C /* Crashlytics.framework */,
@@ -2228,6 +2233,8 @@
 		DA69248119B87A3F0082D1E4 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */,
+				A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */,
 				A7C0340B18DC9AEA00A252BB /* Localytics */,
 				A7582507189BC35B00B904BC /* Vero */,
 			);
@@ -2671,6 +2678,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAE2B15819CB7A4D00A9074E /* MainInterface.storyboard in Resources */,
+				DA6B61BE19DAF3B600089877 /* ENSDKResources.bundle in Resources */,
 				DA5346BF19D5CB7B007AA15D /* Datamodel.xcdatamodeld in Resources */,
 				DA5346C019D5CB84007AA15D /* SwipesToday.entitlements in Resources */,
 			);
