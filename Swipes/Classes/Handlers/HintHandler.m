@@ -41,9 +41,7 @@
     if([self.emHint isShowingHint])
         return NO;
     BOOL completedHint = [self completeHint:hint];
-    
     if(completedHint){
-        
         if([self.delegate respondsToSelector:@selector(hintHandler:triggeredHint:)])
             [self.delegate hintHandler:self triggeredHint:hint];
         NSString *hintText;

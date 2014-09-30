@@ -143,9 +143,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         CGFloat centerY = landscape ? presentationPlace.center.x : presentationPlace.center.y;
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width-labelWidth)/2,
-                                                                   floorf(centerY - ceilf(bounds.size.height)/2 - 15),
+                                                                   floorf(centerY - ceilf(sz.height)/2 - 15),
                                                                    labelWidth,
-                                                                   floorf(ceilf(bounds.size.height) +10
+                                                                   floorf(ceilf(sz.height) +10
                                                                           ))];
         [label setAutoresizingMask:(UIViewAutoresizingFlexibleTopMargin
                                     | UIViewAutoresizingFlexibleRightMargin
