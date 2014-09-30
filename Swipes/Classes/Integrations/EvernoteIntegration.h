@@ -24,7 +24,6 @@ extern const int MONNSExceptionEncounteredErrorCode;
 @property (nonatomic) BOOL autoFindFromTag;
 @property NSDate *rateLimit;
 @property (nonatomic) BOOL isAuthenticated;
-
 + (instancetype)sharedInstance;
 + (void)updateAPILimitIfNeeded:(NSError *)error;
 + (BOOL)isAPILimitReached;

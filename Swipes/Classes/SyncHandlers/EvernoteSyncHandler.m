@@ -390,7 +390,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     filter.words = searchString;
     
     filter.order = @(NoteSortOrder_UPDATED);
-    filter.ascending = NO;
+    filter.ascending = [NSNumber numberWithBool:NO];
     DLog(@"fetching changes from Evernote");
     [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kMaxNotes block:^(EDAMNoteList *list, NSError *error) {
         if(list){

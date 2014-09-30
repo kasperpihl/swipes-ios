@@ -15,6 +15,10 @@
 @end
 
 @implementation GlobalApp
++ (BOOL)isEvernoteInstalled
+{
+    return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"en://"]];
+}
 
 
 + (instancetype)sharedInstance

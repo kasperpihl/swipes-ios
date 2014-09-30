@@ -951,7 +951,7 @@ static CoreSyncHandler *sharedObject;
                                @"Swipe left to snooze for later",
                                @"Access your tasks on web.swipesapp.com"
                           ];
-    if([Global isEvernoteInstalled]){
+    if([GlobalApp isEvernoteInstalled]){
         toDoArray = [toDoArray arrayByAddingObject:@"Open task to attach an Evernote"];
     }
     

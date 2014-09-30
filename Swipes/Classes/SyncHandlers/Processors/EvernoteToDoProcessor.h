@@ -4,9 +4,9 @@
 //
 //  Created by demosten on 2/24/14.
 //
+#import <ENSDK/ENSDK.h>
 #import <ENSDK/Advanced/ENSDKAdvanced.h>
 #import <Foundation/Foundation.h>
-#import "EvernoteSDK.h"
 
 @interface EvernoteToDo: NSObject
 

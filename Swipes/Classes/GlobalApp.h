@@ -12,7 +12,7 @@
 #define APP_EndBackgroundHandler @"APP_EndBackgroundHandler"
 
 @interface GlobalApp : NSObject
-
++ (BOOL)isEvernoteInstalled;
 + (instancetype)sharedInstance;
 
 + (CGFloat)statusBarHeight;
