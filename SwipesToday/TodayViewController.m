@@ -21,7 +21,7 @@
 
     DLog(@"storeURL: %@", [Global coreDataUrl]);
     
-    [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreAtURL:[Global coreDataUrl]];
+    [Global initCoreData];
 
     // Do any additional setup after loading the view from its nib.
     NSDate *endDate = [NSDate date];

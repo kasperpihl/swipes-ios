@@ -11,6 +11,8 @@
 @implementation Global
 
 static NSString* const SHARED_GROUP_NAME = @"group.it.pihl.swipes";
+static NSString* const DATABASE_NAME = @"swipes";
+static NSString* const DATABASE_FOLDER = @"database";
 static Global *sharedObject;
 
 +(Global *)sharedInstance
@@ -213,15 +215,72 @@ static Global *sharedObject;
     static NSURL *storeURL;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        storeURL = [[[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:SHARED_GROUP_NAME] URLByAppendingPathComponent:@"swipes"];
+        storeURL = [[[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:SHARED_GROUP_NAME] URLByAppendingPathComponent:DATABASE_FOLDER];
         #ifdef DEBUG
         if (nil == storeURL) {
             NSLog(@"Error getting storeURL! Check out provisioning profiles!");
             abort();
         }
         #endif
+        [[NSFileManager defaultManager] createDirectoryAtURL:storeURL withIntermediateDirectories:YES attributes:nil error:nil];
+        storeURL = [storeURL URLByAppendingPathComponent:DATABASE_NAME];
     });
     return storeURL;
+}
+
++ (NSString *)applicationStorageDirectory
+{
+    NSString *applicationName = [[[NSBundle mainBundle] infoDictionary] valueForKey:(NSString *)kCFBundleNameKey];
+    return [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:applicationName];
+}
+
++ (NSString *)filePathForStoreName:(NSString *)storeFileName
+{
+    NSArray *paths = [NSArray arrayWithObjects:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject], [self applicationStorageDirectory], nil];
+    NSFileManager *fm = [[NSFileManager alloc] init];
+    
+    for (NSString *path in paths) {
+        NSString *filepath = [path stringByAppendingPathComponent:storeFileName];
+        if ([fm fileExistsAtPath:filepath]) {
+            return path;
+        }
+    }
+    
+    return nil;
+}
+
++ (void)initCoreData
+{
+    NSURL* coreDataURL = [Global coreDataUrl];
+    NSFileManager *fm = [[NSFileManager alloc] init];
+    if (![fm fileExistsAtPath:[coreDataURL path]]) {
+        // move the database file if they exists
+        NSString* oldPath = [self filePathForStoreName:DATABASE_NAME];
+        if (oldPath) {
+            NSArray* oldPathFiles = [fm contentsOfDirectoryAtPath:oldPath error:nil];
+            if (oldPathFiles) {
+                NSString* coreDataPath = [[[[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:SHARED_GROUP_NAME]
+                                            URLByAppendingPathComponent:DATABASE_FOLDER] path];
+                for (NSString* oldFile in oldPathFiles) {
+                    NSError* error = nil;
+                    [fm moveItemAtPath:[oldPath stringByAppendingPathComponent:oldFile] toPath:[coreDataPath stringByAppendingPathComponent:oldFile] error:&error];
+                    if (error) {
+                        NSLog(@"Error moving old database: %@", error);
+                    }
+                }
+                // try to move NSUserDefaults
+                NSUserDefaults* defs = [NSUserDefaults standardUserDefaults];
+                NSArray *keys = [[defs dictionaryRepresentation] allKeys];
+                for (NSString* key in keys) {
+                    [[self sharedDefaults] setObject:[defs objectForKey:key] forKey:key];
+                }
+//                NSLog(@"%@", [[NSUserDefaults standardUserDefaults] dictionaryRepresentation]);
+//                NSLog(@"%@", [[self sharedDefaults] dictionaryRepresentation]);
+            }
+        }
+    }
+    [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreAtURL:coreDataURL];
+//    [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
 }
 
 + (NSUserDefaults *)sharedDefaults
@@ -229,7 +288,8 @@ static Global *sharedObject;
     static NSUserDefaults* sharedDefaults;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:SHARED_GROUP_NAME];;
+        sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:SHARED_GROUP_NAME];
+//        sharedDefaults = [NSUserDefaults standardUserDefaults];
     });
     return sharedDefaults;
 }

@@ -2,15 +2,12 @@ platform :ios, '7.0'
 target :Swipes do
     pod 'Appirater', :inhibit_warnings => true
     pod 'Bolts', :inhibit_warnings => true
-#    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
     pod 'Parse', :inhibit_warnings => true
-#    pod 'MagicalRecord', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'RMStore', :inhibit_warnings => true
     pod 'Base64'
-    #pod 'Evernote-SDK-iOS', :inhibit_warnings => true
     pod 'APAddressBook'
     pod 'DejalActivityView'
     pod 'KeenClient', :inhibit_warnings => true
@@ -43,12 +40,10 @@ target :SwipesKit do
     pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
     pod 'Parse', :inhibit_warnings => true
-#    pod 'MagicalRecord', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'RMStore', :inhibit_warnings => true
     pod 'Base64'
-    pod 'Evernote-SDK-iOS', :inhibit_warnings => true
     pod 'APAddressBook'
     pod 'DejalActivityView'
     pod 'KeenClient', :inhibit_warnings => true
@@ -61,12 +56,10 @@ target :SwipesToday do
     pod 'Bolts', :inhibit_warnings => true
     pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
-#    pod 'MagicalRecord', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'RMStore', :inhibit_warnings => true
     pod 'Base64'
-    pod 'Evernote-SDK-iOS', :inhibit_warnings => true
     pod 'APAddressBook'
     pod 'DejalActivityView'
     pod 'KeenClient', :inhibit_warnings => true

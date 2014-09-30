@@ -17,7 +17,6 @@
 @interface Global : NSObject
 
 + (Global *)sharedInstance;
-+ (BOOL)isEvernoteInstalled;
 + (NSInteger)OSVersion;
 + (BOOL)is24Hour;
 + (NSDateFormatter *)isoDateFormatter;
@@ -25,6 +24,7 @@
 + (NSString*)iconStringForString:(NSString*)iconString;
 + (BOOL)supportsOrientation:(UIDeviceOrientation)orientation;
 + (NSURL *)coreDataUrl;
++ (void)initCoreData;
 + (NSUserDefaults *)sharedDefaults;
 
 @property (nonatomic) CGFloat fontMultiplier;
