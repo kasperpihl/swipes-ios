@@ -140,11 +140,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                                            options:NSStringDrawingUsesLineFragmentOrigin
                                         attributes:@{NSFontAttributeName:ft}
                                            context:nil].size;
+
         CGFloat centerY = landscape ? presentationPlace.center.x : presentationPlace.center.y;
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((width-labelWidth)/2,
-                                                                   floorf(centerY - sz.height/2 - 15),
+                                                                   floorf(centerY - ceilf(sz.height)/2 - 15),
                                                                    labelWidth,
-                                                                   floorf(sz.height +10
+                                                                   floorf(ceilf(sz.height) +10
                                                                           ))];
         [label setAutoresizingMask:(UIViewAutoresizingFlexibleTopMargin
                                     | UIViewAutoresizingFlexibleRightMargin

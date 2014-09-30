@@ -13,8 +13,7 @@
 #import "EvernoteToDoProcessor.h"
 #import "NSDate-Utilities.h"
 #import "NSString+Levenshtein.h"
-
-#import "NSDate+EDAMAdditions.h"
+#import <ENSDK/Advanced/ENSDKAdvanced.h>
 #import "CoreSyncHandler.h"
 #import "UtilityClass.h"
 
@@ -50,10 +49,10 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     for( EDAMNote *note in notes ){
         
         NSString *title;
-        if (note.titleIsSet) {
+        if (note.title) {
             title = note.title;
         }
-        else if (note.contentIsSet) {
+        else if (note.content) {
             title = note.content;
         }
         else {
@@ -345,14 +344,14 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     }
     
     filter.words = [mutWords copy];
-    filter.order = NoteSortOrder_UPDATED;
+    filter.order = @(NoteSortOrder_UPDATED);
     filter.ascending = NO;
     
     [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kMaxNotes block:^(EDAMNoteList *list, NSError *error) {
         if(list){
             DLog(@"%lu",(long)list.updateCount);
             
-            [self updateEvernoteCount:list.updateCount];
+            [self updateEvernoteCount:[list.updateCount integerValue]];
             if( kEnInt.autoFindFromTag ){
                 NSMutableArray *newNotes = [NSMutableArray array];
                 for( EDAMNote *note in list.notes ){
@@ -361,7 +360,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
                         [newNotes addObject:note];
                     }
                     [self.changedNotes addObject:note];
-                    if(note.guidIsSet)
+                    if(note.guid && note.guid.length > 0)
                         [kEnInt addNote:note forGuid:note.guid];
                 }
                 [EvernoteSyncHandler addAndSyncNewTasksFromNotes:newNotes];
@@ -390,12 +389,12 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     
     filter.words = searchString;
     
-    filter.order = NoteSortOrder_UPDATED;
+    filter.order = @(NoteSortOrder_UPDATED);
     filter.ascending = NO;
     DLog(@"fetching changes from Evernote");
     [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kMaxNotes block:^(EDAMNoteList *list, NSError *error) {
         if(list){
-            if(list.notes.count == kMaxNotes || list.updateCount != self.expectedEvernoteCount){
+            if(list.notes.count == kMaxNotes || [list.updateCount integerValue] != self.expectedEvernoteCount){
                 DLog(@"clearing all caches");
                 [kEnInt clearCaches];
             }
@@ -432,8 +431,8 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     
     // ensure evernote authentication
     NSError* error = [NSError errorWithDomain:@"Evernote not authenticated" code:601 userInfo:nil];
-    EvernoteSession *session = [EvernoteSession sharedSession];
-    if (!session.isAuthenticated || [EvernoteSession isTokenExpiredWithError:error]) {
+    ENSession *session = [ENSession sharedSession];
+    if (!session.isAuthenticated) {
         return self.block(SyncStatusError, nil, error);
     }
     

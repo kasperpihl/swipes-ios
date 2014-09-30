@@ -775,7 +775,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
     if(sender.tag == EVERNOTE_ITEM_BUTTON_TAG){
         NSArray *buttons = @[@"Cancel", @"Remove note"];
-        if( [[EvernoteSession sharedSession] isEvernoteInstalled] )
+        if( [Global isEvernoteInstalled] )
             buttons = @[@"Cancel",@"Remove note",@"Open note"];
         [UTILITY popupWithTitle:@"Evernote" andMessage:@"What to do?" buttonTitles:buttons block:^(NSInteger number, NSError *error) {
             DLog(@"%li",(long)number);
@@ -784,12 +784,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                 [self update];
             }
             else if(number == 2){
-                if([[EvernoteSession sharedSession] isEvernoteInstalled]){
+                if([Global isEvernoteInstalled]){
                     KPAttachment *attachment = [self.model firstAttachmentForServiceType:EVERNOTE_SERVICE];
                     NSLog(@"attachment %@",attachment.identifier);
                     EDAMNote *note = [[EDAMNote alloc] init];
                     note.guid = attachment.identifier;
-                    [[EvernoteNoteStore noteStore] viewNoteInEvernote:note];
                 }
                 else{
                     
@@ -1201,7 +1200,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    if([[EvernoteSession sharedSession] isEvernoteInstalled]){
+    if([Global isEvernoteInstalled]){
         [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(delayedTriggerEvernote) userInfo:nil repeats:NO];
         self.fireHint = YES;
     }

@@ -123,7 +123,9 @@
 
     }
     
-    [EvernoteSession setSharedSessionHost:EVERNOTE_HOST consumerKey:CONSUMER_KEY consumerSecret:CONSUMER_SECRET];
+    [ENSession setSharedSessionConsumerKey:CONSUMER_KEY
+                            consumerSecret:CONSUMER_SECRET
+                              optionalHost:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
     
@@ -211,9 +213,7 @@
 {
     BOOL canHandle = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session]];
     if (!canHandle) {
-        if ([[NSString stringWithFormat:@"en-%@", [[EvernoteSession sharedSession] consumerKey]] isEqualToString:[url scheme]] == YES) {
-            canHandle = [[EvernoteSession sharedSession] canHandleOpenURL:url];
-        }
+        canHandle = [[ENSession sharedSession] handleOpenURL:url];
     }
     if (!canHandle) {
         if ([[DBSession sharedSession] handleOpenURL:url]) {
@@ -277,7 +277,6 @@
     [[LocalyticsSession shared] resume];
     [[LocalyticsSession shared] upload];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    [[EvernoteSession sharedSession] handleDidBecomeActive];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

@@ -365,11 +365,8 @@
                 }
                 else if( status == SyncStatusError ){
                     self._isSyncing = NO;
-#warning Evernote permission issue is probably due to isTokenExpiredWithError:
-                    if (![EvernoteSession sharedSession].isAuthenticated || [EvernoteSession isTokenExpiredWithError:error]) {
-                        if( [EvernoteSession isTokenExpiredWithError:error] ){
-                            [UtilityClass sendError:error type:@"Evernote Expired Token Error"];
-                        }
+                    
+                    if (!kEnInt.isAuthenticated) {
                         kEnInt.enableSync = NO;
                         [UTILITY popupWithTitle:@"Evernote Authorization" andMessage:@"To sync with Evernote on this device, please authorize" buttonTitles:@[@"Don't sync this device",@"Authorize now"] block:^(NSInteger number, NSError *error) {
                             if(number == 1){
@@ -839,8 +836,8 @@
     
     self._updatedObjectsForSyncNotification = nil;
     self._deletedObjectsForSyncNotification = nil;
-    if([[EvernoteSession sharedSession] isAuthenticated])
-        [[EvernoteSession sharedSession] logout];
+    if(kEnInt.isAuthenticated)
+        [[ENSession sharedSession] unauthenticate];
     
 }
 
@@ -954,7 +951,7 @@ static CoreSyncHandler *sharedObject;
                                @"Swipe left to snooze for later",
                                @"Access your tasks on web.swipesapp.com"
                           ];
-    if([[EvernoteSession sharedSession] isEvernoteInstalled]){
+    if([Global isEvernoteInstalled]){
         toDoArray = [toDoArray arrayByAddingObject:@"Open task to attach an Evernote"];
     }
     

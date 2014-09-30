@@ -17,6 +17,7 @@
 @interface Global : NSObject
 
 + (Global *)sharedInstance;
++ (BOOL)isEvernoteInstalled;
 + (NSInteger)OSVersion;
 + (BOOL)is24Hour;
 + (NSDateFormatter *)isoDateFormatter;

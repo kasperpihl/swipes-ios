@@ -21,6 +21,7 @@ static Global *sharedObject;
     return sharedObject;
 }
 
+
 -(CGFloat)fontMultiplier{
     if( !_fontMultiplier )
         _fontMultiplier = 1;

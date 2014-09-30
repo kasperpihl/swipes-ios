@@ -1,5 +1,4 @@
 platform :ios, '7.0'
-
 target :Swipes do
     pod 'Appirater', :inhibit_warnings => true
     pod 'Bolts', :inhibit_warnings => true
@@ -11,7 +10,7 @@ target :Swipes do
     pod 'Underscore.m'
     pod 'RMStore', :inhibit_warnings => true
     pod 'Base64'
-    pod 'Evernote-SDK-iOS', :inhibit_warnings => true
+    #pod 'Evernote-SDK-iOS', :inhibit_warnings => true
     pod 'APAddressBook'
     pod 'DejalActivityView'
     pod 'KeenClient', :inhibit_warnings => true
