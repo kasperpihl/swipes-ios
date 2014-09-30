@@ -156,7 +156,7 @@
 }
 
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save{
-    if (tags){
+    if (tags && (0 < tags.count)){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
         NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
         for(KPToDo *toDo in toDos){

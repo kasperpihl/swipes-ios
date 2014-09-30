@@ -139,7 +139,7 @@
 }
 
 -(void)pressedClose:(UIButton*)button{
-    [self dismissViewControllerAnimated:YES completion:^{
+    [self dismissViewControllerAnimated:NO completion:^{
         if([self.delegate respondsToSelector:@selector(endedEvernoteHelperSuccessfully:)])
             [self.delegate endedEvernoteHelperSuccessfully:self.success];
     }];

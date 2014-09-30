@@ -132,6 +132,9 @@ static HintHandler *sharedObject;
         case HintEvernoteIntegration:
             key = @"EvernoteIntegration";
             break;
+        default:
+            key = [NSString stringWithFormat:@"Unknown hint: %ld", (long)hint];
+            break;
     }
     return key;
 }
