@@ -1870,8 +1870,8 @@
 		A781286A17294C56002226C8 /* Segmented */ = {
 			isa = PBXGroup;
 			children = (
-				A781286C17294C56002226C8 /* KPSegmentedViewController.m */,
 				A781286B17294C56002226C8 /* KPSegmentedViewController.h */,
+				A781286C17294C56002226C8 /* KPSegmentedViewController.m */,
 			);
 			path = Segmented;
 			sourceTree = "<group>";

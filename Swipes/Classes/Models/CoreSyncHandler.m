@@ -871,6 +871,7 @@ static CoreSyncHandler *sharedObject;
 {
     @try {
         [Global initCoreData];
+
         //[MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
         [[NSManagedObjectContext MR_defaultContext] setUndoManager:[[NSUndoManager alloc] init]];
         

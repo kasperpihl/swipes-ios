@@ -32,6 +32,18 @@
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
     NSArray* result = [KPToDo sortOrderForItems:results newItemsOnTop:YES save:YES];
     DLog(@"result: %@", result);
+    
+    KPToDo* todo1 = result[0];
+    NSString* tempId = todo1.getTempId;
+    todo1 = nil;
+    NSLog(@"tempId is: %@", tempId);
+//  uncomment here for opening the first today todo or for going to add prompt
+
+/*    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/addprompt"]];
+//    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/view?id=%@", tempId]];
+    [self.extensionContext openURL:url completionHandler:^(BOOL success) {
+        // put some code here if needed or pass nil for completion handler
+    }];*/
 }
 
 - (void)didReceiveMemoryWarning {

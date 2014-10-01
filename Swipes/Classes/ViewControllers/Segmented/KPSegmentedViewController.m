@@ -27,6 +27,7 @@
 #import "UIImage+Blur.h"
 #import "SlowHighlightIcon.h"
 #import "SettingsHandler.h"
+#import "URLHandler.h"
 
 #import "HintHandler.h"
 #import "UIView+Utilities.h"
@@ -52,27 +53,94 @@
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
 @interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate>
+
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
-@property (nonatomic, weak) IBOutlet UIView *contentView;
-@property (nonatomic,strong) KPControlHandler *controlHandler;
-@property (nonatomic,weak) IBOutlet UIView *presentedPanel;
-@property (nonatomic) UIButton *_settingsButton;
-@property (nonatomic) UIButton *_accountButton;
-@property (nonatomic) BOOL tableIsShrinked;
-@property (nonatomic) NSInteger currentSelectedIndex;
-@property (nonatomic) UIView *ios7BackgroundView;
-@property (nonatomic) BOOL hasAppeared;
-@property (nonatomic) BOOL hidden;
-@property (nonatomic) UIImageView *backgroundImage;
-@property (nonatomic) NSArray *selectedItems;
+@property (nonatomic, weak) UIView *contentView;
+@property (nonatomic, strong) KPControlHandler *controlHandler;
+@property (nonatomic, weak) UIView *presentedPanel;
+@property (nonatomic, strong) UIButton *_settingsButton;
+@property (nonatomic, strong) UIButton *_accountButton;
+@property (nonatomic, assign) BOOL tableIsShrinked;
+@property (nonatomic, assign) NSInteger currentSelectedIndex;
+@property (nonatomic, strong) UIView *ios7BackgroundView;
+@property (nonatomic, assign) BOOL hasAppeared;
+@property (nonatomic, assign) BOOL hidden;
+@property (nonatomic, strong) UIImageView *backgroundImage;
+@property (nonatomic, strong) NSArray *selectedItems;
 
 @end
 
 @implementation KPSegmentedViewController
--(void)receivedLocalNotification:(UILocalNotification *)notification{
+
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    notify(@"updated daily image", updatedDailyImage);
+    notify(@"updated sync",updateFromSync:);
+    self.view.backgroundColor = tcolor(BackgroundColor);
+    
+    /* Daily image background */
+    self.backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
+    self.backgroundImage.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+    [self.backgroundImage setImage:[[kSettings getDailyImage] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
+    self.backgroundImage.alpha = 0;
+    UIView *overlay = [[UIView alloc] initWithFrame:self.backgroundImage.bounds];
+    overlay.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+    overlay.backgroundColor = gray(0,0.2);
+    [self.backgroundImage addSubview:overlay];
+    [self.view addSubview:self.backgroundImage];
+    
+    /* Content view for ToDo list view controllers */
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height-TOP_HEIGHT)];
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    contentView.layer.masksToBounds = YES;
+    contentView.tag = CONTENT_VIEW_TAG;
+    [self.view addSubview:contentView];
+    self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
+    
+    /* Control handler - Bottom toolbar for add/edit */
+    self.controlHandler = [KPControlHandler instanceInView:self.view];
+    self.controlHandler.delegate = self;
+    
+    
+    [self.view bringSubviewToFront:self.segmentedControl];
+    UIViewController *currentViewController = self.viewControllers[DEFAULT_SELECTED_INDEX];
+    self.currentSelectedIndex = DEFAULT_SELECTED_INDEX;
+    [self addChildViewController:currentViewController];
+    
+    currentViewController.view.frame = self.contentView.bounds;
+    [self.contentView addSubview:currentViewController.view];
+    [currentViewController didMoveToParentViewController:self];
+    [self.view sendSubviewToBack:self.backgroundImage];
+    //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
+    //self.navigationItem.rightBarButtonItem = filter;
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self._accountButton.hidden = kUserHandler.isLoggedIn;
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    // show add view if set from URL handler
+    if ([URLHandler sharedInstance].addTodo) {
+        [self pressedAdd:nil];
+        [URLHandler sharedInstance].addTodo = NO;
+    }
+}
+
+-(void)receivedLocalNotification:(UILocalNotification *)notification
+{
     [[self currentViewController] update];
 }
+
 #pragma mark - KPControlViewDelegate
 #pragma mark - KPAddTagDelegate
 -(void)closeAddPanel:(AddPanelView *)addPanel{
@@ -345,63 +413,12 @@
     [NOTIHANDLER updateLocalNotifications];
     [self.currentViewController update];
 }
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    self._accountButton.hidden = kUserHandler.isLoggedIn;
-}
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-}
 
--(void)viewDidLoad
-{
-    [super viewDidLoad];
-    notify(@"updated daily image", updatedDailyImage);
-    notify(@"updated sync",updateFromSync:);
-    self.view.backgroundColor = tcolor(BackgroundColor);
-    
-    /* Daily image background */
-    self.backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    self.backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
-    self.backgroundImage.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-    [self.backgroundImage setImage:[[kSettings getDailyImage] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
-    self.backgroundImage.alpha = 0;
-    UIView *overlay = [[UIView alloc] initWithFrame:self.backgroundImage.bounds];
-    overlay.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-    overlay.backgroundColor = gray(0,0.2);
-    [self.backgroundImage addSubview:overlay];
-    [self.view addSubview:self.backgroundImage];
-    
-    /* Content view for ToDo list view controllers */
-    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height-TOP_HEIGHT)];
-    self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    contentView.layer.masksToBounds = YES;
-    contentView.tag = CONTENT_VIEW_TAG;
-    [self.view addSubview:contentView];
-    self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
-    
-    /* Control handler - Bottom toolbar for add/edit */
-    self.controlHandler = [KPControlHandler instanceInView:self.view];
-    self.controlHandler.delegate = self;
-    
-    
-    [self.view bringSubviewToFront:self.segmentedControl];
-    UIViewController *currentViewController = self.viewControllers[DEFAULT_SELECTED_INDEX];
-    self.currentSelectedIndex = DEFAULT_SELECTED_INDEX;
-    [self addChildViewController:currentViewController];
-    
-    currentViewController.view.frame = self.contentView.bounds;
-    [self.contentView addSubview:currentViewController.view];
-    [currentViewController didMoveToParentViewController:self];
-    [self.view sendSubviewToBack:self.backgroundImage];
-    //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
-    //self.navigationItem.rightBarButtonItem = filter;
-}
 -(void)changeToIndex:(NSInteger)index{
     [self.segmentedControl setSelectedIndex:index];
     [self changeViewControllerAnimated:NO];
 }
+
 -(void)changeViewControllerAnimated:(BOOL)animated{
     CGFloat width = self.contentView.frame.size.width;
     CGFloat height = self.contentView.frame.size.height;

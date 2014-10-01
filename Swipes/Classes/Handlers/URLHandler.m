@@ -40,6 +40,8 @@ NSString* const kSwipesCommandAdd = @"/add";
 NSString* const kSwipesCommandCleanAdd = @"/clean_add";
 NSString* const kSwipesCommandUpdate = @"/update";
 NSString* const kSwipesCommandDelete = @"/delete";
+NSString* const kSwipesCommandView = @"/view";
+NSString* const kSwipesCommandAddPrompt = @"/addprompt";
 
 NSString* const kSwipesParamTitle = @"title";
 NSString* const kSwipesParamOldTitle = @"oldtitle";
@@ -49,6 +51,7 @@ NSString* const kSwipesParamNotes = @"notes";
 NSString* const kSwipesParamSchedule = @"schedule";
 NSString* const kSwipesParamSubtask = @"subtask";
 NSString* const kSwipesParamGiud = @"guid";
+NSString* const kSwipesParamId = @"id";
 
 // x-callback-url support constants
 NSString* const kXCallbackURLXSuccess = @"x-success";
@@ -103,8 +106,11 @@ static NSDictionary* kErrorCodes;
                 else if ([url.path isEqualToString:kSwipesCommandDelete]) {
                     return [self handleDeleteToDo:query updateXCallbackURL:YES];
                 }
-                if ([url.path isEqualToString:kSwipesCommandCleanAdd]) {
+                else if ([url.path isEqualToString:kSwipesCommandCleanAdd]) {
                     return [self handleCleanAddToDo:query];
+                }
+                else if ([url.path isEqualToString:kSwipesCommandView]) {
+                    return [self handleViewToDo:query];
                 }
             }
             else if ([url.host isEqualToString:kSwipesDomainTag]) {
@@ -126,6 +132,9 @@ static NSDictionary* kErrorCodes;
                     return [self handleDeleteToDo:query updateXCallbackURL:YES];
                 }
             }
+        }
+        else if ([url.host isEqualToString:kSwipesDomainToDo] && [url.path isEqualToString:kSwipesCommandAddPrompt]) {
+            return [self handleAddPromptToDo:query];
         }
     }
     return NO;
@@ -356,6 +365,33 @@ static NSDictionary* kErrorCodes;
 {
     [self handleDeleteToDo:query updateXCallbackURL:NO];
     return [self handleAddToDo:query];
+}
+
+- (BOOL)handleViewToDo:(NSDictionary *)query
+{
+    NSString* tempId = query[kSwipesParamId];
+    if (nil != tempId) {
+        NSArray* todos = [KPToDo findByTempId:tempId];
+        if (nil != todos) {
+            self.viewTodo = todos[0];
+            [self handleXCallbackURL:query errorMessage:nil];
+        }
+        else {
+            [self handleXCallbackURL:query errorMessage:kErrorNoSuchTodo];
+        }
+        return YES;
+    }
+    else {
+        [self handleXCallbackURL:query errorMessage:kErrorMissingMandatoryParam];
+    }
+    return NO;
+}
+
+- (BOOL)handleAddPromptToDo:(NSDictionary *)query
+{
+    self.addTodo = YES;
+    [self handleXCallbackURL:query errorMessage:nil];
+    return YES;
 }
 
 #pragma mark - Tags

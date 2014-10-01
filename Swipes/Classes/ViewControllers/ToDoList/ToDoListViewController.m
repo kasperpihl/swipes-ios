@@ -6,25 +6,25 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "ToDoListViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 #import "UtilityClass.h"
 #import "KPToDo.h"
 #import "SchedulePopup.h"
 #import "KPSearchBar.h"
-#import <QuartzCore/QuartzCore.h>
 #import "ToDoViewController.h"
-
 #import "SectionHeaderView.h"
 #import "KPBlurry.h"
 #import "AnalyticsHandler.h"
 #import "StyleHandler.h"
 #import "KPTagList.h"
 #import "UIView+Utilities.h"
-
 #import "HintHandler.h"
-
 #import "RootViewController.h"
+#import "URLHandler.h"
+
+#import "ToDoListViewController.h"
+
 #define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
@@ -260,13 +260,19 @@
         NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
         if (!indexPath)
             return;
-        UITableViewCell* cell = [_tableView cellForRowAtIndexPath:indexPath];
-        DLogFrame(cell);
+//        UITableViewCell* cell = [_tableView cellForRowAtIndexPath:indexPath];
+//        DLogFrame(cell);
         [self editIndexPath:indexPath];
     }
 }
--(void)editIndexPath:(NSIndexPath *)indexPath{
-    
+
+-(void)editIndexPath:(NSIndexPath *)indexPath
+{
+    [self editToDo:[self.itemHandler itemForIndexPath:indexPath]];
+}
+
+- (void)editToDo:(KPToDo *)todo
+{
     if(self.hasStartedEditing)
         return;
     
@@ -277,8 +283,7 @@
     
     self.hasStartedEditing = YES;
     self.savedContentOffset = self.tableView.contentOffset;
-    KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
-    self.showingViewController.model = toDo;
+    self.showingViewController.model = todo;
     [ROOT_CONTROLLER pushViewController:self.showingViewController animated:YES];
     [ANALYTICS pushView:@"Edit view"];
 }
@@ -636,6 +641,13 @@
     }
     [ANALYTICS pushView:activeView];
     [self handleShowingToolbar];
+    
+    // show any todo that needs to be viewed from the widget
+    KPToDo* todo = [URLHandler sharedInstance].viewTodo;
+    if (todo) {
+        [URLHandler sharedInstance].viewTodo = nil;
+        [self editToDo:todo];
+    }
 }
 
 - (void)handleShowingToolbar

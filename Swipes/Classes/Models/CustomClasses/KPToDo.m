@@ -183,6 +183,19 @@
     return nil;
 }
 
++(NSArray *)findByTempId:(NSString *)tempId
+{
+    if (tempId) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"tempId = %@", tempId];
+        NSArray* result = [KPToDo MR_findAllWithPredicate:predicate];
+        [ANALYTICS heartbeat];
+        if (result && (0 == result.count))
+            return nil;
+        return result;
+    }
+    return nil;
+}
+
 +(NSArray *)selectedTagsForToDos:(NSArray *)toDos{
     NSMutableArray *commonTags = [NSMutableArray array];
     NSMutableArray *common2Tags = [NSMutableArray array];

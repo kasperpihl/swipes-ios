@@ -430,8 +430,10 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
     [self updateShadowForCenterView];
     
     if(animated == NO){
-        [self.centerViewController beginAppearanceTransition:YES animated:NO];
-        [self.centerViewController endAppearanceTransition];
+//         Stanimir: This causes premature call for viewDidAppear while root controller is still in viewDidLoad state
+//                   for now this works for us. However check the comment in the beginning of this method
+//        [self.centerViewController beginAppearanceTransition:YES animated:NO];
+//        [self.centerViewController endAppearanceTransition];
         [self.centerViewController didMoveToParentViewController:self];
     }
 }
