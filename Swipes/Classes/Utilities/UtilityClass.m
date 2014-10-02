@@ -17,6 +17,8 @@
 @interface UtilityClass () <UIAlertViewDelegate>
 @property (copy) SuccessfulBlock block;
 @property (copy) NumberBlock numberBlock;
+@property (copy) StringBlock stringBlock;
+
 @end
 
 @implementation UtilityClass
@@ -174,6 +176,39 @@
 #endif
 }
 
+-(void)inputAlertWithTitle:(NSString*)title message:(NSString*)message placeholder:(NSString*)placeholder cancel:(NSString *)cancel confirm:(NSString *)confirm block:(StringBlock)block{
+#ifndef NOT_APPLICATION
+    UIAlertView *alertView = [[UIAlertView alloc]
+                              initWithTitle:title
+                              message:message
+                              delegate:self
+                              cancelButtonTitle:cancel
+                              otherButtonTitles:confirm, nil];
+    [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
+    self.stringBlock = block;
+    [alertView show];
+#else
+    if (self.rootViewController) {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.placeholder = placeholder;
+        }];
+        [alert addAction:[UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            if (block)
+                block(nil, nil);
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            UITextField *login = alert.textFields.firstObject;
+            if (block)
+                block(login.text, nil);
+        }]];
+        [self.rootViewController presentViewController:alert animated:NO completion:nil];
+    }
+#endif
+    
+    
+}
+
 -(void)confirmBoxWithTitle:(NSString *)title andMessage:(NSString *)message cancel:(NSString *)cancel confirm:(NSString *)confirm block:(SuccessfulBlock)block{
 #ifndef NOT_APPLICATION
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancel otherButtonTitles:confirm, nil];
@@ -229,6 +264,15 @@
 
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    UITextField *input = [alertView textFieldAtIndex:0];
+    if(input){
+        if( self.stringBlock && buttonIndex == 1)
+            self.stringBlock(input.text, nil);
+        else
+            self.stringBlock(nil, nil);
+        return;
+    }
+    
     if( self.numberBlock ){
         self.numberBlock( buttonIndex, nil );
         self.numberBlock = nil;

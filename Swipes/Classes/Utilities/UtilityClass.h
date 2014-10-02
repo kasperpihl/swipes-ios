@@ -35,6 +35,7 @@
 -(void)alertWithTitle:(NSString *)title andMessage:(NSString *)message;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message cancel:(NSString*)cancel confirm:(NSString*)confirm block:(SuccessfulBlock)block;
+-(void)inputAlertWithTitle:(NSString*)title message:(NSString*)message placeholder:(NSString*)placeholder cancel:(NSString *)cancel confirm:(NSString *)confirm block:(StringBlock)block;
 -(void)popupWithTitle:(NSString*)title andMessage:(NSString*)message buttonTitles:(NSArray*)buttonTitles block:(NumberBlock)block;
 
 @end
