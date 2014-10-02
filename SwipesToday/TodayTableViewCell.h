@@ -7,9 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+@class TodayTableViewCell;
 @protocol TodayCellDelegate <NSObject>
+@optional
+-(void)willCompleteCell:(TodayTableViewCell*)cell;
+-(void)didCompleteCell:(TodayTableViewCell*)cell;
 @end
 @interface TodayTableViewCell : UITableViewCell
 @property (nonatomic,weak) NSObject<TodayCellDelegate> *delegate;
 -(void)resetAndSetTaskTitle:(NSString*)title;
+@property (nonatomic) UIView *colorIndicatorView;
 @end

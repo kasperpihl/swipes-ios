@@ -971,6 +971,7 @@ static CoreSyncHandler *sharedObject;
 //   NSArray *todosForTagsArray = [KPToDo MR_findAll];
 //    todosForTagsArray = [todosForTagsArray subarrayWithRange:NSMakeRange(0, 3)];
     ANALYTICS.analyticsOff = NO;
+    
     [UTILITY.userDefaults setBool:YES forKey:@"seeded"];
 }
 

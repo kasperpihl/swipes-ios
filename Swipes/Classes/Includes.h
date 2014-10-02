@@ -85,9 +85,7 @@ typedef void (^viewBlock)(UIView* view);
 #define valForScreen(iphone4, iphone5) (kIsIphone5Size ? iphone5 : iphone4)
 
 #define CLEAR [UIColor clearColor]
-#define color(r,g,b,a) [UIColor colorWithRed: r/255.0 green: g/255.0 blue: b/255.0 alpha:a]
-#define gray(l,a) [UIColor colorWithWhite:l/255.0 alpha:a]
-#define alpha(c,a) [c colorWithAlphaComponent:a]
+
 #define trim(s) [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
 #define CGRectSetPos( r, x, y ) CGRectMake( x, y, r.size.width, r.size.height )
 #define centerItemForSize( item, containerWidth, containerHeight) item.frame = CGRectSetPos(item.frame,(containerWidth-item.frame.size.width)/2,(containerHeight-item.frame.size.height)/2)

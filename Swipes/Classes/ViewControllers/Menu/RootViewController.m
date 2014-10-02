@@ -473,6 +473,8 @@ static RootViewController *sharedObject;
     
 }
 -(void)changedTheme{
+    UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
+    [[UIApplication sharedApplication] setStatusBarStyle: statusBarStyle];
    // [self setNeedsStatusBarAppearanceUpdate];
 }
 

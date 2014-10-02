@@ -345,7 +345,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     
     filter.words = [mutWords copy];
     filter.order = @(NoteSortOrder_UPDATED);
-    filter.ascending = NO;
+    filter.ascending = [NSNumber numberWithBool:NO];
     
     [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kMaxNotes block:^(EDAMNoteList *list, NSError *error) {
         if(list){

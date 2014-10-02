@@ -54,7 +54,9 @@
 		A7063BCC190F8BEE003D3690 /* SubtaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7063BCB190F8BEE003D3690 /* SubtaskController.m */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
 		A70D12DA1966D11500A95C50 /* EvernoteIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A70D12D91966D11500A95C50 /* EvernoteIntegration.m */; };
-		A7110EC819CB0FE6000F7E94 /* TodayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7110EC519CB0FE6000F7E94 /* TodayTableViewCell.m */; };
+		A711246E19DB13D400FD9DAE /* TodayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A711246D19DB13D400FD9DAE /* TodayTableViewCell.m */; };
+		A711246F19DB166200FD9DAE /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A74FB8FF18FFF2FA00F25157 /* swipes.ttf */; };
+		A711247019DC16BF00FD9DAE /* ThemeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA18B17954C7400EB1549 /* ThemeHandler.m */; };
 		A714369019346823009AC8A4 /* SyncLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A714368F19346823009AC8A4 /* SyncLabel.m */; };
 		A714369319349EB3009AC8A4 /* CheckmarkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A714369219349EB3009AC8A4 /* CheckmarkButton.m */; };
 		A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
@@ -84,7 +86,6 @@
 		A74D3FD118D9E7AC0056D124 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */; };
 		A74D3FD218D9E7AC0056D124 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */; };
 		A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */; };
-		A74E53B619CB4F1600C2FE62 /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A74FB8FF18FFF2FA00F25157 /* swipes.ttf */; };
 		A74F61B616EB77B3004927DA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B516EB77B3004927DA /* MapKit.framework */; };
 		A74F61B916EBA58B004927DA /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B816EBA58B004927DA /* CoreMedia.framework */; };
 		A74F61BB16EBA595004927DA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BA16EBA595004927DA /* AVFoundation.framework */; };
@@ -190,13 +191,10 @@
 		A7E2D94717B3F258007BDE00 /* DayPickerSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */; };
 		A7E2D94A17B4FE0F007BDE00 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D94917B4FE0F007BDE00 /* UpgradeViewController.m */; };
 		A7E9F60019DAA2C100CAA1D1 /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */; };
-		A7E9F60419DAA31600CAA1D1 /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */; };
 		A7E9F60519DAA61600CAA1D1 /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
 		A7E9F60619DAA6A300CAA1D1 /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
-		A7E9F60719DAA6A400CAA1D1 /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
 		A7E9F60819DAAE3800CAA1D1 /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */; };
 		A7E9F60919DAAE8800CAA1D1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
-		A7E9F60A19DAAEA900CAA1D1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
 		A7E9F60B19DAAEC500CAA1D1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
 		A7E9F60C19DAAECD00CAA1D1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
 		A7F4066117294ECE00DDE644 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
@@ -227,11 +225,9 @@
 		DA23231D19B39C6F00D996EB /* _KPParseObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A781284F17294C56002226C8 /* _KPParseObject.h */; };
 		DA23231E19B39C6F00D996EB /* _KPTag.h in Headers */ = {isa = PBXBuildFile; fileRef = A7680D27172C5EA800BCB2D9 /* _KPTag.h */; };
 		DA23231F19B39C6F00D996EB /* _KPToDo.h in Headers */ = {isa = PBXBuildFile; fileRef = A781285117294C56002226C8 /* _KPToDo.h */; };
-		DA23232119B39F6000D996EB /* SwipesKit-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = DA23232019B39F6000D996EB /* SwipesKit-Prefix.pch */; };
 		DA23232219B471E900D996EB /* Global.h in Headers */ = {isa = PBXBuildFile; fileRef = A78D7A8617F4B27200AD38B1 /* Global.h */; };
 		DA23232319B471EF00D996EB /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = A78D7A8717F4B27200AD38B1 /* Global.m */; };
 		DA23232619B472BE00D996EB /* GlobalApp.m in Sources */ = {isa = PBXBuildFile; fileRef = DA23232519B472BE00D996EB /* GlobalApp.m */; };
-		DA23232719B472BE00D996EB /* GlobalApp.m in Sources */ = {isa = PBXBuildFile; fileRef = DA23232519B472BE00D996EB /* GlobalApp.m */; };
 		DA23232819B4737100D996EB /* NSDate-Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A7680D1E172C0E1C00BCB2D9 /* NSDate-Utilities.h */; };
 		DA23232919B4737500D996EB /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
 		DA23232A19B4737A00D996EB /* UtilityClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A781285B17294C56002226C8 /* UtilityClass.h */; };
@@ -366,8 +362,6 @@
 		DA69248C19B87B6D0082D1E4 /* IntegrationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C258FD197CE5A200290198 /* IntegrationHandler.m */; };
 		DA69248F19B87CA10082D1E4 /* SettingsHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A7D7D53117B1586A00FBC042 /* SettingsHandler.h */; };
 		DA69249019B87CA50082D1E4 /* SettingsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53217B1586A00FBC042 /* SettingsHandler.m */; };
-		DA69249419B87ED20082D1E4 /* KitLocate.Framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A76182E0187D37AB00914A05 /* KitLocate.Framework */; };
-		DA69249519B87EDF0082D1E4 /* NotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B260921733D1FD000BADDE /* NotificationHandler.m */; };
 		DA6924A519BDCF2D0082D1E4 /* EvernoteToDoProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = A71E9FC11951CD6F00FC9B0B /* EvernoteToDoProcessor.m */; };
 		DA6924A719BDCF2D0082D1E4 /* ParentSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AA7963194E0665003DAB3B /* ParentSyncHandler.m */; };
 		DA6924A819BDCF2D0082D1E4 /* EvernoteSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AA7967194E067C003DAB3B /* EvernoteSyncHandler.m */; };
@@ -445,204 +439,7 @@
 		DAE2B17A19CB7D7C00A9074E /* libLocalyticsAMP_x64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA94A2BE196EEA8B008F8A3B /* libLocalyticsAMP_x64.a */; };
 		DAE2B17B19CB7D8100A9074E /* Vero.m in Sources */ = {isa = PBXBuildFile; fileRef = A7582505189BC35600B904BC /* Vero.m */; };
 		DAE2B17C19CB7DF200A9074E /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285C17294C56002226C8 /* UtilityClass.m */; };
-		DAE9CEF419AF367F00246B64 /* LocationSearchView.m in Sources */ = {isa = PBXBuildFile; fileRef = A792BB8718ABEDB4000573E4 /* LocationSearchView.m */; };
-		DAE9CEF519AF367F00246B64 /* FacebookCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284117294C56002226C8 /* FacebookCommunicator.m */; };
-		DAE9CEF619AF367F00246B64 /* YoureAllDoneView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1881838EBF20047DCC9 /* YoureAllDoneView.m */; };
-		DAE9CEF719AF367F00246B64 /* KPParseCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284417294C56002226C8 /* KPParseCommunicator.m */; };
-		DAE9CEFB19AF367F00246B64 /* KPRepeatPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B17C1838EBF20047DCC9 /* KPRepeatPicker.m */; };
-		DAE9CEFC19AF367F00246B64 /* NotesView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1821838EBF20047DCC9 /* NotesView.m */; };
-		DAE9CEFE19AF367F00246B64 /* LocationResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A792BB8A18AC3A5E000573E4 /* LocationResultCell.m */; };
-		DAE9CF0019AF367F00246B64 /* KPDayPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B17A1838EBF20047DCC9 /* KPDayPicker.m */; };
-		DAE9CF0119AF367F00246B64 /* UIImage+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */; };
-		DAE9CF0219AF367F00246B64 /* EMHint.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34CB18E31E1200095F1E /* EMHint.m */; };
-		DAE9CF0319AF367F00246B64 /* SubtaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7063BCB190F8BEE003D3690 /* SubtaskController.m */; };
-		DAE9CF0519AF367F00246B64 /* CheckmarkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A714369219349EB3009AC8A4 /* CheckmarkButton.m */; };
-		DAE9CF0619AF367F00246B64 /* NSString+Levenshtein.m in Sources */ = {isa = PBXBuildFile; fileRef = A71E9FC41951CE4B00FC9B0B /* NSString+Levenshtein.m */; };
-		DAE9CF0719AF367F00246B64 /* KPModal.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B9D39219066299001E1109 /* KPModal.m */; };
-		DAE9CF0819AF367F00246B64 /* KPSegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A781286C17294C56002226C8 /* KPSegmentedViewController.m */; };
-		DAE9CF0919AF367F00246B64 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A560B7198A9A3600C3D213 /* NotificationsViewController.m */; };
-		DAE9CF0A19AF367F00246B64 /* MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D06861190E654C00699B4E /* MMDrawerController.m */; };
-		DAE9CF0B19AF367F00246B64 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A78128B417294C56002226C8 /* AppDelegate.m */; };
-		DAE9CF0C19AF367F00246B64 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A78128BA17294C56002226C8 /* main.m */; };
-		DAE9CF0D19AF367F00246B64 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066017294ECE00DDE644 /* RootViewController.m */; };
-		DAE9CF0E19AF367F00246B64 /* DropboxView.m in Sources */ = {isa = PBXBuildFile; fileRef = DACD541818A19FB000C378DF /* DropboxView.m */; };
-		DAE9CF0F19AF367F00246B64 /* SyncLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A714368F19346823009AC8A4 /* SyncLabel.m */; };
-		DAE9CF1119AF367F00246B64 /* KPAddView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1781838EBF20047DCC9 /* KPAddView.m */; };
-		DAE9CF1219AF367F00246B64 /* AttachmentPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = A763C93C19208E58005041D7 /* AttachmentPopup.m */; };
-		DAE9CF1319AF367F00246B64 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1CA1838EC570047DCC9 /* ToDoCell.m */; };
-		DAE9CF1419AF367F00246B64 /* ToDoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4066A17296BF100DDE644 /* ToDoListViewController.m */; };
-		DAE9CF1519AF367F00246B64 /* KPAccountAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B9D38F19066251001E1109 /* KPAccountAlert.m */; };
-		DAE9CF1719AF367F00246B64 /* UIButton+PassTouch.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1621838EB0E0047DCC9 /* UIButton+PassTouch.m */; };
-		DAE9CF1819AF367F00246B64 /* SectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1841838EBF20047DCC9 /* SectionHeaderView.m */; };
-		DAE9CF1919AF367F00246B64 /* PaymentHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A976E6184119D6001C0A51 /* PaymentHandler.m */; };
-		DAE9CF1A19AF367F00246B64 /* KPControlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F4067117296C0500DDE644 /* KPControlHandler.m */; };
-		DAE9CF1B19AF367F00246B64 /* TodayListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933048172AB63700F1505E /* TodayListViewController.m */; };
-		DAE9CF1C19AF367F00246B64 /* DoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933055172B2BA100F1505E /* DoneViewController.m */; };
-		DAE9CF1E19AF367F00246B64 /* HintHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34C718E098C800095F1E /* HintHandler.m */; };
-		DAE9CF1F19AF367F00246B64 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76B2386172C06CC00F742C2 /* ScheduleViewController.m */; };
-		DAE9CF2119AF367F00246B64 /* SchedulePopup.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1A21838EBF20047DCC9 /* SchedulePopup.m */; };
-		DAE9CF2219AF367F00246B64 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */; };
-		DAE9CF2319AF367F00246B64 /* IntegrationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D189C51965F47000AA7CD9 /* IntegrationsViewController.m */; };
-		DAE9CF2419AF367F00246B64 /* DateStampView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1741838EBF20047DCC9 /* DateStampView.m */; };
-		DAE9CF2919AF367F00246B64 /* ToDoViewController+ViewHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A768D39C1896C812003E2DD6 /* ToDoViewController+ViewHelpers.m */; };
-		DAE9CF2A19AF367F00246B64 /* ClockTimeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1721838EBF20047DCC9 /* ClockTimeLabel.m */; };
-		DAE9CF2B19AF367F00246B64 /* ToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A75207F91730F5F700F1B4F7 /* ToDoViewController.m */; };
-		DAE9CF2D19AF367F00246B64 /* ItemHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A75DB20F173119FE00FA256B /* ItemHandler.m */; };
-		DAE9CF2E19AF367F00246B64 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		DAE9CF3019AF367F00246B64 /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D0685E190E654C00699B4E /* MMDrawerBarButtonItem.m */; };
-		DAE9CF3119AF367F00246B64 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
-		DAE9CF3219AF367F00246B64 /* CKCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B16F1838EBF20047DCC9 /* CKCalendarView.m */; };
-		DAE9CF3519AF367F00246B64 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FC218D75B250056D124 /* ShareViewController.m */; };
-		DAE9CF3619AF367F00246B64 /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FE4401182825A1002AFB2E /* UIImage+Blur.m */; };
-		DAE9CF3819AF367F00246B64 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA1881790BD2D00EB1549 /* MenuViewController.m */; };
-		DAE9CF3919AF367F00246B64 /* URLHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5422CD1986C7A50006A1E6 /* URLHandler.m */; };
-		DAE9CF3A19AF367F00246B64 /* AKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B18E1838EBF20047DCC9 /* AKSegmentedControl.m */; };
-		DAE9CF3B19AF367F00246B64 /* ThemeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA18B17954C7400EB1549 /* ThemeHandler.m */; };
-		DAE9CF3C19AF367F00246B64 /* KPBlurry.m in Sources */ = {isa = PBXBuildFile; fileRef = A75545E2179B519200CE2F4E /* KPBlurry.m */; };
-		DAE9CF3D19AF367F00246B64 /* MCSwipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1931838EBF20047DCC9 /* MCSwipeTableViewCell.m */; };
-		DAE9CF3E19AF367F00246B64 /* EMHintsView.m in Sources */ = {isa = PBXBuildFile; fileRef = A77D34CD18E31E1200095F1E /* EMHintsView.m */; };
-		DAE9CF3F19AF367F00246B64 /* WalkthroughViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A75236C517A2EC5E0030ED1E /* WalkthroughViewController.m */; };
-		DAE9CF4019AF367F00246B64 /* WalkthroughCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A75236C917A2EE6F0030ED1E /* WalkthroughCell.m */; };
-		DAE9CF4119AF367F00246B64 /* WalkthroughTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A75236F917A3361A0030ED1E /* WalkthroughTitleView.m */; };
-		DAE9CF4219AF367F00246B64 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */; };
-		DAE9CF4319AF367F00246B64 /* WalkthroughOverlayBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */; };
-		DAE9CF4419AF367F00246B64 /* UIColor+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */; };
-		DAE9CF4519AF367F00246B64 /* SnoozesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FA8B1C17AF094D00134ED0 /* SnoozesViewController.m */; };
-		DAE9CF4619AF367F00246B64 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D06865190E654C00699B4E /* UIViewController+MMDrawerController.m */; };
-		DAE9CF4719AF367F00246B64 /* KPReorderTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1C71838EC240047DCC9 /* KPReorderTableView.m */; };
-		DAE9CF4819AF367F00246B64 /* KPTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1901838EBF20047DCC9 /* KPTimePicker.m */; };
-		DAE9CF4919AF367F00246B64 /* KPAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B16A1838EBF20047DCC9 /* KPAlert.m */; };
-		DAE9CF4B19AF367F00246B64 /* CWStatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = A72C334F1908F65C00767456 /* CWStatusBarNotification.m */; };
-		DAE9CF4C19AF367F00246B64 /* LightSchemeAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A717DD2318B7C3F700EE359C /* LightSchemeAlert.m */; };
-		DAE9CF4E19AF367F00246B64 /* EvernoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0B8F188CB4750094F866 /* EvernoteView.m */; };
-		DAE9CF4F19AF367F00246B64 /* MenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53817B1A56B00FBC042 /* MenuButton.m */; };
-		DAE9CF5019AF367F00246B64 /* SettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D93B17B2C5A4007BDE00 /* SettingsCell.m */; };
-		DAE9CF5119AF367F00246B64 /* DotView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1761838EBF20047DCC9 /* DotView.m */; };
-		DAE9CF5219AF367F00246B64 /* KPTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1A71838EBF20047DCC9 /* KPTagList.m */; };
-		DAE9CF5319AF367F00246B64 /* EvernoteViewerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41DF0823188ECD5A0074DDFB /* EvernoteViewerView.m */; };
-		DAE9CF5419AF367F00246B64 /* SlowHighlightIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1861838EBF20047DCC9 /* SlowHighlightIcon.m */; };
-		DAE9CF5519AF367F00246B64 /* KPToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1801838EBF20047DCC9 /* KPToolbar.m */; };
-		DAE9CF5619AF367F00246B64 /* DayPickerSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */; };
-		DAE9CF5719AF367F00246B64 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D94917B4FE0F007BDE00 /* UpgradeViewController.m */; };
-		DAE9CF5819AF367F00246B64 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D06863190E654C00699B4E /* MMDrawerVisualState.m */; };
-		DAE9CF5919AF367F00246B64 /* KPSubtitleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B17E1838EBF20047DCC9 /* KPSubtitleButton.m */; };
-		DAE9CF5A19AF367F00246B64 /* (null) in Sources */ = {isa = PBXBuildFile; };
-		DAE9CF5B19AF367F00246B64 /* UIGestureRecognizer+UIBreak.m in Sources */ = {isa = PBXBuildFile; fileRef = A71DE4B21844069A0097394C /* UIGestureRecognizer+UIBreak.m */; };
-		DAE9CF5C19AF367F00246B64 /* SubtaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A748C879190D9A0800514DB3 /* SubtaskCell.m */; };
-		DAE9CF5D19AF367F00246B64 /* UIView+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A771356E17BABB5A0090BE89 /* UIView+Utilities.m */; };
-		DAE9CF5E19AF367F00246B64 /* EvernoteHelperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F522A8197D73CE008B6147 /* EvernoteHelperViewController.m */; };
-		DAE9CF5F19AF367F00246B64 /* KPAddTagPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1A51838EBF20047DCC9 /* KPAddTagPanel.m */; };
-		DAE9CF6019AF367F00246B64 /* EvernoteImporterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A754DB61197BBD0B00308DBC /* EvernoteImporterViewController.m */; };
-		DAE9CF6119AF367F00246B64 /* KPOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = A789B3F817D79BFB00C25B73 /* KPOverlay.m */; };
-		DAE9CF6219AF367F00246B64 /* KPSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B18B1838EBF20047DCC9 /* KPSearchBar.m */; };
-		DAE9CF6319AF367F00246B64 /* ContactHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A74646B818D38660003911DC /* ContactHandler.m */; };
-		DAE9CF6519AF367F00246B64 /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1671838EBF20047DCC9 /* AddPanelView.m */; };
-		DAE9CF6619AF367F00246B64 /* PlusAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B16C1838EBF20047DCC9 /* PlusAlertView.m */; };
-		DAE9CF6719AF367F00246B64 /* StyleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5617E210D000F9B26F /* StyleHandler.m */; };
-		DAE9CF6B19AF367F00246B64 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B816EB59710095A9A8 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		DAE9CF6C19AF367F00246B64 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A717BEEB175E6857004791BF /* CoreTelephony.framework */; };
-		DAE9CF6D19AF367F00246B64 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A717DD0F18B6440A00EE359C /* Crashlytics.framework */; };
-		DAE9CF6E19AF367F00246B64 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
-		DAE9CF7019AF367F00246B64 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A7ADCB3717DD352F00780F88 /* libz.dylib */; };
-		DAE9CF7119AF367F00246B64 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A75545DD179B481800CE2F4E /* Accelerate.framework */; };
-		DAE9CF7219AF367F00246B64 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78F392D16F7DC1800A8C78D /* MessageUI.framework */; };
-		DAE9CF7319AF367F00246B64 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78F391316F7D5BA00A8C78D /* AddressBook.framework */; };
-		DAE9CF7419AF367F00246B64 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BE16EBA5B7004927DA /* MediaPlayer.framework */; };
-		DAE9CF7519AF367F00246B64 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA67301318A99C7100CA4C1A /* DropboxSDK.framework */; };
-		DAE9CF7619AF367F00246B64 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BC16EBA5A5004927DA /* AssetsLibrary.framework */; };
-		DAE9CF7719AF367F00246B64 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BA16EBA595004927DA /* AVFoundation.framework */; };
-		DAE9CF7819AF367F00246B64 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B816EBA58B004927DA /* CoreMedia.framework */; };
-		DAE9CF7919AF367F00246B64 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B516EB77B3004927DA /* MapKit.framework */; };
-		DAE9CF7A19AF367F00246B64 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */; };
-		DAE9CF7B19AF367F00246B64 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BA16EB59760095A9A8 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		DAE9CF7C19AF367F00246B64 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B616EB596B0095A9A8 /* CFNetwork.framework */; };
-		DAE9CF7D19AF367F00246B64 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B416EB59650095A9A8 /* CoreLocation.framework */; };
-		DAE9CF7E19AF367F00246B64 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B216EB59610095A9A8 /* libsqlite3.dylib */; };
-		DAE9CF7F19AF367F00246B64 /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B016EB595B0095A9A8 /* libz.1.1.3.dylib */; };
-		DAE9CF8019AF367F00246B64 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AC16EB594E0095A9A8 /* QuartzCore.framework */; };
-		DAE9CF8119AF367F00246B64 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AA16EB59480095A9A8 /* Security.framework */; };
-		DAE9CF8319AF367F00246B64 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A816EB59420095A9A8 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		DAE9CF8419AF367F00246B64 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A616EB593C0095A9A8 /* StoreKit.framework */; };
-		DAE9CF8519AF367F00246B64 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A416EB59370095A9A8 /* SystemConfiguration.framework */; };
-		DAE9CF8619AF367F00246B64 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A216EB59320095A9A8 /* CoreData.framework */; };
-		DAE9CF8719AF367F00246B64 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
-		DAE9CF8819AF367F00246B64 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
-		DAE9CF8919AF367F00246B64 /* libAppsFlyerLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */; };
-		DAE9CF8A19AF367F00246B64 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CD116EB5884004D95E5 /* CoreGraphics.framework */; };
-		DAE9CF8D19AF367F00246B64 /* folder_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542518A1ACFC00C378DF /* folder_gray.png */; };
-		DAE9CF8E19AF367F00246B64 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A781287D17294C56002226C8 /* InfoPlist.strings */; };
-		DAE9CF8F19AF367F00246B64 /* folder_app.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542318A1ACFC00C378DF /* folder_app.png */; };
-		DAE9CF9019AF367F00246B64 /* Nexa-Black-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3C119051BA000ABA1FF /* Nexa-Black-Italic.ttf */; };
-		DAE9CF9119AF367F00246B64 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A781287F17294C56002226C8 /* MainStoryboard.storyboard */; };
-		DAE9CF9219AF367F00246B64 /* music.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542A18A1ACFC00C378DF /* music.png */; };
-		DAE9CF9319AF367F00246B64 /* package.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542B18A1ACFC00C378DF /* package.png */; };
-		DAE9CF9419AF367F00246B64 /* page_white_c.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542F18A1ACFC00C378DF /* page_white_c.png */; };
-		DAE9CF9519AF367F00246B64 /* Nexa-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7D0D3C219051BA000ABA1FF /* Nexa-Bold.ttf */; };
-		DAE9CF9619AF367F00246B64 /* swipesandevernote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A772B14019671D9F00C07909 /* swipesandevernote@2x.png */; };
-		DAE9CF9719AF367F00246B64 /* VarelaRound-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7897D3C198C15A40047F9D9 /* VarelaRound-Regular.ttf */; };
-		DAE9CF9819AF367F00246B64 /* page_white_zip.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544018A1ACFC00C378DF /* page_white_zip.png */; };
-		DAE9CF9919AF367F00246B64 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = DA310FA6188F3F26003C8FA4 /* Assets */; };
-		DAE9CF9A19AF367F00246B64 /* folder_star.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542718A1ACFC00C378DF /* folder_star.png */; };
-		DAE9CF9B19AF367F00246B64 /* ProximaNova-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */; };
-		DAE9CF9C19AF367F00246B64 /* page_white_php.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543918A1ACFC00C378DF /* page_white_php.png */; };
-		DAE9CF9D19AF367F00246B64 /* ProximaNova-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF22176115CD004791BF /* ProximaNova-Light.ttf */; };
-		DAE9CF9E19AF367F00246B64 /* page_white_text.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543C18A1ACFC00C378DF /* page_white_text.png */; };
-		DAE9CF9F19AF367F00246B64 /* page_white_cplusplus.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543118A1ACFC00C378DF /* page_white_cplusplus.png */; };
-		DAE9CFA019AF367F00246B64 /* ProximaNova-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */; };
-		DAE9CFA119AF367F00246B64 /* page_white_code.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543018A1ACFC00C378DF /* page_white_code.png */; };
-		DAE9CFA219AF367F00246B64 /* ProximaNova-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */; };
-		DAE9CFA319AF367F00246B64 /* page_white_flash.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543518A1ACFC00C378DF /* page_white_flash.png */; };
-		DAE9CFA419AF367F00246B64 /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A74FB8FF18FFF2FA00F25157 /* swipes.ttf */; };
-		DAE9CFA519AF367F00246B64 /* page_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542C18A1ACFC00C378DF /* page_white.png */; };
-		DAE9CFA619AF367F00246B64 /* page_white_visualstudio.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543F18A1ACFC00C378DF /* page_white_visualstudio.png */; };
-		DAE9CFA719AF367F00246B64 /* swipesevernotetag.png in Resources */ = {isa = PBXBuildFile; fileRef = A7F522AA197D7C76008B6147 /* swipesevernotetag.png */; };
-		DAE9CFA819AF367F00246B64 /* page_white_picture.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543A18A1ACFC00C378DF /* page_white_picture.png */; };
-		DAE9CFA919AF367F00246B64 /* folder_user.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542818A1ACFC00C378DF /* folder_user.png */; };
-		DAE9CFAA19AF367F00246B64 /* word.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544218A1ACFC00C378DF /* word.png */; };
-		DAE9CFAB19AF367F00246B64 /* swipes-notification.aif in Resources */ = {isa = PBXBuildFile; fileRef = A7BB65CA189BF19600BE7183 /* swipes-notification.aif */; };
-		DAE9CFAC19AF367F00246B64 /* page_white_cup.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543318A1ACFC00C378DF /* page_white_cup.png */; };
-		DAE9CFAD19AF367F00246B64 /* swipesevernotetag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7F522AB197D7C76008B6147 /* swipesevernotetag@2x.png */; };
-		DAE9CFAE19AF367F00246B64 /* walkthrough_swipe_done.png in Resources */ = {isa = PBXBuildFile; fileRef = A75236D017A335680030ED1E /* walkthrough_swipe_done.png */; };
-		DAE9CFAF19AF367F00246B64 /* page_white_gear.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543618A1ACFC00C378DF /* page_white_gear.png */; };
-		DAE9CFB019AF367F00246B64 /* walkthrough_swipe_done@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A75236D117A335680030ED1E /* walkthrough_swipe_done@2x.png */; };
-		DAE9CFB119AF367F00246B64 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A7D0685B190E654C00699B4E /* LICENSE */; };
-		DAE9CFB219AF367F00246B64 /* MASTER_0000.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A74FB8EA18FFBCB200F25157 /* MASTER_0000.jpg */; };
-		DAE9CFB319AF367F00246B64 /* walkthrough_swipe_schedule.png in Resources */ = {isa = PBXBuildFile; fileRef = A75236D217A335680030ED1E /* walkthrough_swipe_schedule.png */; };
-		DAE9CFB419AF367F00246B64 /* swipesandevernote.png in Resources */ = {isa = PBXBuildFile; fileRef = A772B13F19671D9F00C07909 /* swipesandevernote.png */; };
-		DAE9CFB519AF367F00246B64 /* page_white_dvd.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543418A1ACFC00C378DF /* page_white_dvd.png */; };
-		DAE9CFB619AF367F00246B64 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A7D06866190E654C00699B4E /* README.md */; };
-		DAE9CFB719AF367F00246B64 /* walkthrough_swipe_schedule@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A75236D317A335680030ED1E /* walkthrough_swipe_schedule@2x.png */; };
-		DAE9CFB819AF367F00246B64 /* wt_menu_expain.png in Resources */ = {isa = PBXBuildFile; fileRef = A75236D817A335680030ED1E /* wt_menu_expain.png */; };
-		DAE9CFB919AF367F00246B64 /* page_white_vector.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543E18A1ACFC00C378DF /* page_white_vector.png */; };
-		DAE9CFBA19AF367F00246B64 /* page_white_ruby.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543B18A1ACFC00C378DF /* page_white_ruby.png */; };
-		DAE9CFBB19AF367F00246B64 /* default-background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A741EC4E18354726000F9F93 /* default-background.jpg */; };
-		DAE9CFBC19AF367F00246B64 /* wt_menu_expain@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A75236D917A335680030ED1E /* wt_menu_expain@2x.png */; };
-		DAE9CFBD19AF367F00246B64 /* walkthrough_phone_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A75236FB17A349340030ED1E /* walkthrough_phone_background.png */; };
-		DAE9CFBE19AF367F00246B64 /* folder_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542418A1ACFC00C378DF /* folder_camera.png */; };
-		DAE9CFBF19AF367F00246B64 /* walkthrough_phone_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A75236FC17A349340030ED1E /* walkthrough_phone_background@2x.png */; };
-		DAE9CFC019AF367F00246B64 /* wt_schedule_popup.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */; };
-		DAE9CFC119AF367F00246B64 /* wt_schedule_popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */; };
-		DAE9CFC219AF367F00246B64 /* folder_public.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542618A1ACFC00C378DF /* folder_public.png */; };
-		DAE9CFC319AF367F00246B64 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A76ADC1217ECA7AB00F52F40 /* Images.xcassets */; };
-		DAE9CFC419AF367F00246B64 /* page_white_h.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543718A1ACFC00C378DF /* page_white_h.png */; };
-		DAE9CFC519AF367F00246B64 /* NexaHeavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717DD2018B6775800EE359C /* NexaHeavy.ttf */; };
-		DAE9CFC619AF367F00246B64 /* page_white_acrobat.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542D18A1ACFC00C378DF /* page_white_acrobat.png */; };
-		DAE9CFC719AF367F00246B64 /* folder_user_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542918A1ACFC00C378DF /* folder_user_gray.png */; };
-		DAE9CFC819AF367F00246B64 /* page_white_tux.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543D18A1ACFC00C378DF /* page_white_tux.png */; };
-		DAE9CFC919AF367F00246B64 /* page_white_actionscript.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542E18A1ACFC00C378DF /* page_white_actionscript.png */; };
-		DAE9CFCA19AF367F00246B64 /* page_white_paint.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543818A1ACFC00C378DF /* page_white_paint.png */; };
-		DAE9CFCB19AF367F00246B64 /* page_white_csharp.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD543218A1ACFC00C378DF /* page_white_csharp.png */; };
-		DAE9CFCC19AF367F00246B64 /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542218A1ACFC00C378DF /* folder.png */; };
-		DAE9CFCD19AF367F00246B64 /* powerpoint.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544118A1ACFC00C378DF /* powerpoint.png */; };
-		DAE9CFCE19AF367F00246B64 /* excel.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542118A1ACFC00C378DF /* excel.png */; };
 		DAE9CFE119AF3AC600246B64 /* SwipesKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DAE9CFE019AF3AC600246B64 /* SwipesKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DAE9CFF019AF3AC600246B64 /* SwipesKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE9CFDC19AF3AC600246B64 /* SwipesKit.framework */; };
-		DAE9CFF119AF3AC600246B64 /* SwipesKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DAE9CFDC19AF3AC600246B64 /* SwipesKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		DAE9D00319AF3B2900246B64 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE9D00219AF3B2900246B64 /* NotificationCenter.framework */; };
-		DAE9D00919AF3B2900246B64 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE9D00819AF3B2900246B64 /* TodayViewController.m */; };
-		DAE9D00B19AF3B2900246B64 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAE9D00A19AF3B2900246B64 /* MainInterface.storyboard */; };
-		DAE9D00E19AF3B2900246B64 /* Swipes.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DAE9D00119AF3B2900246B64 /* Swipes.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		DAE9D01619AF3B6500246B64 /* SwipesKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE9CFDC19AF3AC600246B64 /* SwipesKit.framework */; };
 		DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
 /* End PBXBuildFile section */
 
@@ -661,41 +458,6 @@
 			remoteGlobalIDString = DAE2B14E19CB7A4D00A9074E;
 			remoteInfo = SwipesToday;
 		};
-		DAE9CFEE19AF3AC600246B64 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DAE9CFDB19AF3AC600246B64;
-			remoteInfo = SwipesKit;
-		};
-		DAE9CFF219AF3AC700246B64 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DAE9CFDB19AF3AC600246B64;
-			remoteInfo = SwipesKit;
-		};
-		DAE9D00C19AF3B2900246B64 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DAE9D00019AF3B2900246B64;
-			remoteInfo = "Swipes Today";
-		};
-		DAE9D00F19AF3B2900246B64 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DAE9D00019AF3B2900246B64;
-			remoteInfo = "Swipes Today";
-		};
-		DAE9D01719AF3B6A00246B64 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DAE9CFDB19AF3AC600246B64;
-			remoteInfo = SwipesKit;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -706,28 +468,6 @@
 			dstSubfolderSpec = 13;
 			files = (
 				DAE2B15C19CB7A4D00A9074E /* SwipesToday.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DAE9CFF819AF3AC700246B64 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				DAE9CFF119AF3AC600246B64 /* SwipesKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DAE9D01519AF3B2A00246B64 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				DAE9D00E19AF3B2900246B64 /* Swipes.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -803,8 +543,8 @@
 		A7090B6F175DF3F900728A3A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Login/LoginViewController.m; sourceTree = "<group>"; };
 		A70D12D81966D11500A95C50 /* EvernoteIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteIntegration.h; path = Integrations/EvernoteIntegration.h; sourceTree = "<group>"; };
 		A70D12D91966D11500A95C50 /* EvernoteIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteIntegration.m; path = Integrations/EvernoteIntegration.m; sourceTree = "<group>"; };
-		A7110EC419CB0FE6000F7E94 /* TodayTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayTableViewCell.h; sourceTree = "<group>"; };
-		A7110EC519CB0FE6000F7E94 /* TodayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodayTableViewCell.m; sourceTree = "<group>"; };
+		A711246C19DB13D400FD9DAE /* TodayTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayTableViewCell.h; sourceTree = "<group>"; };
+		A711246D19DB13D400FD9DAE /* TodayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodayTableViewCell.m; sourceTree = "<group>"; };
 		A714368E19346823009AC8A4 /* SyncLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncLabel.h; sourceTree = "<group>"; };
 		A714368F19346823009AC8A4 /* SyncLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncLabel.m; sourceTree = "<group>"; };
 		A714369119349EB3009AC8A4 /* CheckmarkButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckmarkButton.h; sourceTree = "<group>"; };
@@ -1047,7 +787,6 @@
 		A7FE4401182825A1002AFB2E /* UIImage+Blur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Blur.m"; sourceTree = "<group>"; };
 		B2FE7C8A8128F5F6A156B8E7 /* Pods-SwipesToday.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.adhoc.xcconfig"; sourceTree = "<group>"; };
 		DA04465019D5CDC70083F816 /* Swipes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Swipes.entitlements; sourceTree = "<group>"; };
-		DA23232019B39F6000D996EB /* SwipesKit-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SwipesKit-Prefix.pch"; path = "SwipesKit/SwipesKit-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		DA23232419B472BE00D996EB /* GlobalApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalApp.h; sourceTree = "<group>"; };
 		DA23232519B472BE00D996EB /* GlobalApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalApp.m; sourceTree = "<group>"; };
 		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
@@ -1160,16 +899,10 @@
 		DAE2B15719CB7A4D00A9074E /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		DAE2B16319CB7AA900A9074E /* SwipesToday.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SwipesToday.entitlements; sourceTree = "<group>"; };
 		DAE2B16E19CB7CE100A9074E /* SwipesToday-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwipesToday-Prefix.pch"; sourceTree = "<group>"; };
-		DAE9CFD519AF367F00246B64 /* Swipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE9CFDC19AF3AC600246B64 /* SwipesKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwipesKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE9CFDF19AF3AC600246B64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DAE9CFE019AF3AC600246B64 /* SwipesKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipesKit.h; sourceTree = "<group>"; };
-		DAE9D00119AF3B2900246B64 /* Swipes.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Swipes.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE9D00219AF3B2900246B64 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
-		DAE9D00619AF3B2900246B64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DAE9D00719AF3B2900246B64 /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
-		DAE9D00819AF3B2900246B64 /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
-		DAE9D00A19AF3B2900246B64 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		DAEBBE62188B2BB8002655CB /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		E05A80E8EEB25CD6DB2767FA /* Pods-SwipesKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.debug.xcconfig"; sourceTree = "<group>"; };
 		F17D8C581F2A222D9CA9DE7E /* Pods-SwipesToday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.release.xcconfig"; sourceTree = "<group>"; };
@@ -1232,47 +965,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DAE9CF6A19AF367F00246B64 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A7E9F60A19DAAEA900CAA1D1 /* MobileCoreServices.framework in Frameworks */,
-				DAE9CF6E19AF367F00246B64 /* libxml2.dylib in Frameworks */,
-				DAE9CFF019AF3AC600246B64 /* SwipesKit.framework in Frameworks */,
-				DAE9CF6B19AF367F00246B64 /* AdSupport.framework in Frameworks */,
-				DAE9CF6C19AF367F00246B64 /* CoreTelephony.framework in Frameworks */,
-				A7E9F60719DAA6A400CAA1D1 /* ENSDK.framework in Frameworks */,
-				DAE9CF6D19AF367F00246B64 /* Crashlytics.framework in Frameworks */,
-				DAE9CF7019AF367F00246B64 /* libz.dylib in Frameworks */,
-				DAE9CF7119AF367F00246B64 /* Accelerate.framework in Frameworks */,
-				DAE9CF7219AF367F00246B64 /* MessageUI.framework in Frameworks */,
-				DAE9CF7319AF367F00246B64 /* AddressBook.framework in Frameworks */,
-				DAE9CF7419AF367F00246B64 /* MediaPlayer.framework in Frameworks */,
-				DAE9CF7519AF367F00246B64 /* DropboxSDK.framework in Frameworks */,
-				DAE9CF7619AF367F00246B64 /* AssetsLibrary.framework in Frameworks */,
-				DAE9CF7719AF367F00246B64 /* AVFoundation.framework in Frameworks */,
-				DAE9CF7819AF367F00246B64 /* CoreMedia.framework in Frameworks */,
-				DAE9CF7919AF367F00246B64 /* MapKit.framework in Frameworks */,
-				DAE9CF7A19AF367F00246B64 /* AudioToolbox.framework in Frameworks */,
-				DAE9CF7B19AF367F00246B64 /* Accounts.framework in Frameworks */,
-				DA69249419B87ED20082D1E4 /* KitLocate.Framework in Frameworks */,
-				DAE9CF7C19AF367F00246B64 /* CFNetwork.framework in Frameworks */,
-				DAE9CF7D19AF367F00246B64 /* CoreLocation.framework in Frameworks */,
-				DAE9CF7E19AF367F00246B64 /* libsqlite3.dylib in Frameworks */,
-				DAE9CF7F19AF367F00246B64 /* libz.1.1.3.dylib in Frameworks */,
-				DAE9CF8019AF367F00246B64 /* QuartzCore.framework in Frameworks */,
-				DAE9CF8119AF367F00246B64 /* Security.framework in Frameworks */,
-				DAE9CF8319AF367F00246B64 /* Social.framework in Frameworks */,
-				DAE9CF8419AF367F00246B64 /* StoreKit.framework in Frameworks */,
-				DAE9CF8519AF367F00246B64 /* SystemConfiguration.framework in Frameworks */,
-				DAE9CF8619AF367F00246B64 /* CoreData.framework in Frameworks */,
-				DAE9CF8719AF367F00246B64 /* UIKit.framework in Frameworks */,
-				DAE9CF8819AF367F00246B64 /* Foundation.framework in Frameworks */,
-				DAE9CF8919AF367F00246B64 /* libAppsFlyerLib.a in Frameworks */,
-				DAE9CF8A19AF367F00246B64 /* CoreGraphics.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DAE9CFD819AF3AC600246B64 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1282,15 +974,6 @@
 				A7E9F60519DAA61600CAA1D1 /* ENSDK.framework in Frameworks */,
 				DA69248219B87A4A0082D1E4 /* libLocalyticsAMP_x64.a in Frameworks */,
 				789C9AAD8BA447088AAD221A /* libPods-SwipesKit.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DAE9CFFE19AF3B2900246B64 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DAE9D01619AF3B6500246B64 /* SwipesKit.framework in Frameworks */,
-				DAE9D00319AF3B2900246B64 /* NotificationCenter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1652,7 +1335,6 @@
 				A781283D17294C56002226C8 /* Swipes */,
 				DAE2B15119CB7A4D00A9074E /* SwipesToday */,
 				DAE9CFDD19AF3AC600246B64 /* SwipesKit */,
-				DAE9D00419AF3B2900246B64 /* Swipes Today */,
 				A7778CCC16EB5884004D95E5 /* Frameworks */,
 				A7778CCB16EB5884004D95E5 /* Products */,
 				9BA9EC75C706A45E18C4AB77 /* Pods */,
@@ -1663,9 +1345,7 @@
 			isa = PBXGroup;
 			children = (
 				A7778CCA16EB5884004D95E5 /* Swipes.app */,
-				DAE9CFD519AF367F00246B64 /* Swipes.app */,
 				DAE9CFDC19AF3AC600246B64 /* SwipesKit.framework */,
-				DAE9D00119AF3B2900246B64 /* Swipes.appex */,
 				DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */,
 			);
 			name = Products;
@@ -2289,6 +1969,8 @@
 				DAE2B15419CB7A4D00A9074E /* TodayViewController.h */,
 				DAE2B15519CB7A4D00A9074E /* TodayViewController.m */,
 				DAE2B15719CB7A4D00A9074E /* MainInterface.storyboard */,
+				A711246C19DB13D400FD9DAE /* TodayTableViewCell.h */,
+				A711246D19DB13D400FD9DAE /* TodayTableViewCell.m */,
 				DAE2B15219CB7A4D00A9074E /* Supporting Files */,
 			);
 			path = SwipesToday;
@@ -2338,28 +2020,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		DAE9D00419AF3B2900246B64 /* Swipes Today */ = {
-			isa = PBXGroup;
-			children = (
-				DAE9D00719AF3B2900246B64 /* TodayViewController.h */,
-				DAE9D00819AF3B2900246B64 /* TodayViewController.m */,
-				DAE9D00A19AF3B2900246B64 /* MainInterface.storyboard */,
-				DAE9D00519AF3B2900246B64 /* Supporting Files */,
-				A7110EC419CB0FE6000F7E94 /* TodayTableViewCell.h */,
-				A7110EC519CB0FE6000F7E94 /* TodayTableViewCell.m */,
-			);
-			path = "Swipes Today";
-			sourceTree = "<group>";
-		};
-		DAE9D00519AF3B2900246B64 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				DA23232019B39F6000D996EB /* SwipesKit-Prefix.pch */,
-				DAE9D00619AF3B2900246B64 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2371,7 +2031,6 @@
 				DA69248F19B87CA10082D1E4 /* SettingsHandler.h in Headers */,
 				DA23231C19B39C6F00D996EB /* _KPAttachment.h in Headers */,
 				DA5346AA19D426B4007AA15D /* MagicalRecord+Options.h in Headers */,
-				DA23232119B39F6000D996EB /* SwipesKit-Prefix.pch in Headers */,
 				DA53467A19D426B4007AA15D /* NSManagedObject+MagicalRecord.h in Headers */,
 				DA5346BA19D426B4007AA15D /* MagicalRecordDeprecated.h in Headers */,
 				DA23232A19B4737A00D996EB /* UtilityClass.h in Headers */,
@@ -2472,31 +2131,6 @@
 			productReference = DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		DAE9CEF119AF367F00246B64 /* Swipes_iOS8 */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DAE9CFD119AF367F00246B64 /* Build configuration list for PBXNativeTarget "Swipes_iOS8" */;
-			buildPhases = (
-				DAE9CEF219AF367F00246B64 /* Run Script */,
-				DAE9CEF319AF367F00246B64 /* Sources */,
-				DAE9CF6A19AF367F00246B64 /* Frameworks */,
-				DAE9CF8C19AF367F00246B64 /* Resources */,
-				DAE9CFD019AF367F00246B64 /* Run Script */,
-				DAE9CFF819AF3AC700246B64 /* Embed Frameworks */,
-				DAE9D01519AF3B2A00246B64 /* Embed App Extensions */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DAE9CFEF19AF3AC600246B64 /* PBXTargetDependency */,
-				DAE9CFF319AF3AC700246B64 /* PBXTargetDependency */,
-				DAE9D00D19AF3B2900246B64 /* PBXTargetDependency */,
-				DAE9D01019AF3B2900246B64 /* PBXTargetDependency */,
-			);
-			name = Swipes_iOS8;
-			productName = Shery;
-			productReference = DAE9CFD519AF367F00246B64 /* Swipes.app */;
-			productType = "com.apple.product-type.application";
-		};
 		DAE9CFDB19AF3AC600246B64 /* SwipesKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAE9CFF419AF3AC700246B64 /* Build configuration list for PBXNativeTarget "SwipesKit" */;
@@ -2516,24 +2150,6 @@
 			productName = SwipesKit;
 			productReference = DAE9CFDC19AF3AC600246B64 /* SwipesKit.framework */;
 			productType = "com.apple.product-type.framework";
-		};
-		DAE9D00019AF3B2900246B64 /* Swipes_Today */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DAE9D01119AF3B2A00246B64 /* Build configuration list for PBXNativeTarget "Swipes_Today" */;
-			buildPhases = (
-				DAE9CFFD19AF3B2900246B64 /* Sources */,
-				DAE9CFFE19AF3B2900246B64 /* Frameworks */,
-				DAE9CFFF19AF3B2900246B64 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DAE9D01819AF3B6A00246B64 /* PBXTargetDependency */,
-			);
-			name = Swipes_Today;
-			productName = "Swipes Today";
-			productReference = DAE9D00119AF3B2900246B64 /* Swipes.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -2564,14 +2180,7 @@
 							};
 						};
 					};
-					DAE9CEF119AF367F00246B64 = {
-						DevelopmentTeam = 85LTPM52WY;
-					};
 					DAE9CFDB19AF3AC600246B64 = {
-						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 85LTPM52WY;
-					};
-					DAE9D00019AF3B2900246B64 = {
 						CreatedOnToolsVersion = 6.0;
 						DevelopmentTeam = 85LTPM52WY;
 					};
@@ -2591,10 +2200,8 @@
 			targets = (
 				A7778CC916EB5884004D95E5 /* Swipes */,
 				DAE2B14E19CB7A4D00A9074E /* SwipesToday */,
-				DAE9CEF119AF367F00246B64 /* Swipes_iOS8 */,
 				A7F0B9B71700BA40003BBDD1 /* Mogenerator */,
 				DAE9CFDB19AF3AC600246B64 /* SwipesKit */,
-				DAE9D00019AF3B2900246B64 /* Swipes_Today */,
 			);
 		};
 /* End PBXProject section */
@@ -2677,84 +2284,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A711246F19DB166200FD9DAE /* swipes.ttf in Resources */,
 				DAE2B15819CB7A4D00A9074E /* MainInterface.storyboard in Resources */,
 				DA6B61BE19DAF3B600089877 /* ENSDKResources.bundle in Resources */,
 				DA5346BF19D5CB7B007AA15D /* Datamodel.xcdatamodeld in Resources */,
 				DA5346C019D5CB84007AA15D /* SwipesToday.entitlements in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DAE9CF8C19AF367F00246B64 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DAE9CF8D19AF367F00246B64 /* folder_gray.png in Resources */,
-				DAE9CF8E19AF367F00246B64 /* InfoPlist.strings in Resources */,
-				DAE9CF8F19AF367F00246B64 /* folder_app.png in Resources */,
-				DAE9CF9019AF367F00246B64 /* Nexa-Black-Italic.ttf in Resources */,
-				DAE9CF9119AF367F00246B64 /* MainStoryboard.storyboard in Resources */,
-				DAE9CF9219AF367F00246B64 /* music.png in Resources */,
-				DAE9CF9319AF367F00246B64 /* package.png in Resources */,
-				DAE9CF9419AF367F00246B64 /* page_white_c.png in Resources */,
-				DAE9CF9519AF367F00246B64 /* Nexa-Bold.ttf in Resources */,
-				DAE9CF9619AF367F00246B64 /* swipesandevernote@2x.png in Resources */,
-				DAE9CF9719AF367F00246B64 /* VarelaRound-Regular.ttf in Resources */,
-				DAE9CF9819AF367F00246B64 /* page_white_zip.png in Resources */,
-				DAE9CF9919AF367F00246B64 /* Assets in Resources */,
-				DAE9CF9A19AF367F00246B64 /* folder_star.png in Resources */,
-				DAE9CF9B19AF367F00246B64 /* ProximaNova-Bold.ttf in Resources */,
-				DAE9CF9C19AF367F00246B64 /* page_white_php.png in Resources */,
-				DAE9CF9D19AF367F00246B64 /* ProximaNova-Light.ttf in Resources */,
-				DAE9CF9E19AF367F00246B64 /* page_white_text.png in Resources */,
-				DAE9CF9F19AF367F00246B64 /* page_white_cplusplus.png in Resources */,
-				DAE9CFA019AF367F00246B64 /* ProximaNova-Regular.ttf in Resources */,
-				DAE9CFA119AF367F00246B64 /* page_white_code.png in Resources */,
-				DAE9CFA219AF367F00246B64 /* ProximaNova-Semibold.ttf in Resources */,
-				DAE9CFA319AF367F00246B64 /* page_white_flash.png in Resources */,
-				DAE9CFA419AF367F00246B64 /* swipes.ttf in Resources */,
-				DAE9CFA519AF367F00246B64 /* page_white.png in Resources */,
-				DAE9CFA619AF367F00246B64 /* page_white_visualstudio.png in Resources */,
-				DAE9CFA719AF367F00246B64 /* swipesevernotetag.png in Resources */,
-				DAE9CFA819AF367F00246B64 /* page_white_picture.png in Resources */,
-				DAE9CFA919AF367F00246B64 /* folder_user.png in Resources */,
-				DAE9CFAA19AF367F00246B64 /* word.png in Resources */,
-				DAE9CFAB19AF367F00246B64 /* swipes-notification.aif in Resources */,
-				DAE9CFAC19AF367F00246B64 /* page_white_cup.png in Resources */,
-				DAE9CFAD19AF367F00246B64 /* swipesevernotetag@2x.png in Resources */,
-				DAE9CFAE19AF367F00246B64 /* walkthrough_swipe_done.png in Resources */,
-				DAE9CFAF19AF367F00246B64 /* page_white_gear.png in Resources */,
-				DAE9CFB019AF367F00246B64 /* walkthrough_swipe_done@2x.png in Resources */,
-				DAE9CFB119AF367F00246B64 /* LICENSE in Resources */,
-				DAE9CFB219AF367F00246B64 /* MASTER_0000.jpg in Resources */,
-				A7E9F60419DAA31600CAA1D1 /* ENSDKResources.bundle in Resources */,
-				DAE9CFB319AF367F00246B64 /* walkthrough_swipe_schedule.png in Resources */,
-				DAE9CFB419AF367F00246B64 /* swipesandevernote.png in Resources */,
-				DAE9CFB519AF367F00246B64 /* page_white_dvd.png in Resources */,
-				DAE9CFB619AF367F00246B64 /* README.md in Resources */,
-				DAE9CFB719AF367F00246B64 /* walkthrough_swipe_schedule@2x.png in Resources */,
-				DAE9CFB819AF367F00246B64 /* wt_menu_expain.png in Resources */,
-				DAE9CFB919AF367F00246B64 /* page_white_vector.png in Resources */,
-				DAE9CFBA19AF367F00246B64 /* page_white_ruby.png in Resources */,
-				DAE9CFBB19AF367F00246B64 /* default-background.jpg in Resources */,
-				DAE9CFBC19AF367F00246B64 /* wt_menu_expain@2x.png in Resources */,
-				DAE9CFBD19AF367F00246B64 /* walkthrough_phone_background.png in Resources */,
-				DAE9CFBE19AF367F00246B64 /* folder_camera.png in Resources */,
-				DAE9CFBF19AF367F00246B64 /* walkthrough_phone_background@2x.png in Resources */,
-				DAE9CFC019AF367F00246B64 /* wt_schedule_popup.png in Resources */,
-				DAE9CFC119AF367F00246B64 /* wt_schedule_popup@2x.png in Resources */,
-				DAE9CFC219AF367F00246B64 /* folder_public.png in Resources */,
-				DAE9CFC319AF367F00246B64 /* Images.xcassets in Resources */,
-				DAE9CFC419AF367F00246B64 /* page_white_h.png in Resources */,
-				DAE9CFC519AF367F00246B64 /* NexaHeavy.ttf in Resources */,
-				DAE9CFC619AF367F00246B64 /* page_white_acrobat.png in Resources */,
-				DAE9CFC719AF367F00246B64 /* folder_user_gray.png in Resources */,
-				DAE9CFC819AF367F00246B64 /* page_white_tux.png in Resources */,
-				DAE9CFC919AF367F00246B64 /* page_white_actionscript.png in Resources */,
-				DAE9CFCA19AF367F00246B64 /* page_white_paint.png in Resources */,
-				DAE9CFCB19AF367F00246B64 /* page_white_csharp.png in Resources */,
-				DAE9CFCC19AF367F00246B64 /* folder.png in Resources */,
-				DAE9CFCD19AF367F00246B64 /* powerpoint.png in Resources */,
-				DAE9CFCE19AF367F00246B64 /* excel.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2764,15 +2298,6 @@
 			files = (
 				DAE2B14A19C8FDF200A9074E /* Datamodel.xcdatamodeld in Resources */,
 				A7E9F60819DAAE3800CAA1D1 /* ENSDKResources.bundle in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DAE9CFFF19AF3B2900246B64 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DAE9D00B19AF3B2900246B64 /* MainInterface.storyboard in Resources */,
-				A74E53B619CB4F1600C2FE62 /* swipes.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2909,34 +2434,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		DAE9CEF219AF367F00246B64 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-			shellPath = /bin/sh;
-			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
-		};
-		DAE9CFD019AF367F00246B64 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "./Swipes/Ressources/Libs/Crashlytics.framework/run 17aee5fa869f24b705e00dba6d43c51becf5c7e4 18503ba4a511e5ff371707e57ef3f51edb669c35ae9206253a6edcdf35c1fa7c";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -3130,10 +2627,12 @@
 				DAE2B17B19CB7D8100A9074E /* Vero.m in Sources */,
 				DA53468019D426B4007AA15D /* NSManagedObject+MagicalRequests.m in Sources */,
 				DAE2B16C19CB7B1B00A9074E /* _KPTag.m in Sources */,
+				A711246E19DB13D400FD9DAE /* TodayTableViewCell.m in Sources */,
 				DAE2B17119CB7D7200A9074E /* ParentSyncHandler.m in Sources */,
 				DA53469819D426B4007AA15D /* NSPersistentStore+MagicalRecord.m in Sources */,
 				DAE2B16619CB7B1B00A9074E /* KPAttachment.m in Sources */,
 				DAE2B17219CB7D7200A9074E /* EvernoteSyncHandler.m in Sources */,
+				A711247019DC16BF00FD9DAE /* ThemeHandler.m in Sources */,
 				DAE2B17019CB7D7200A9074E /* CoreSyncHandler.m in Sources */,
 				DA5346B419D426B4007AA15D /* MagicalRecord+ShorthandSupport.m in Sources */,
 				DA53467419D426B4007AA15D /* NSManagedObject+MagicalDataImport.m in Sources */,
@@ -3146,109 +2645,6 @@
 				DA5346B819D426B4007AA15D /* MagicalRecord.m in Sources */,
 				DAE2B17719CB7D7200A9074E /* SettingsHandler.m in Sources */,
 				DAE2B16B19CB7B1B00A9074E /* _KPParseObject.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DAE9CEF319AF367F00246B64 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DAE9CEF419AF367F00246B64 /* LocationSearchView.m in Sources */,
-				DAE9CEF519AF367F00246B64 /* FacebookCommunicator.m in Sources */,
-				DAE9CEF619AF367F00246B64 /* YoureAllDoneView.m in Sources */,
-				DA23232719B472BE00D996EB /* GlobalApp.m in Sources */,
-				DAE9CEF719AF367F00246B64 /* KPParseCommunicator.m in Sources */,
-				DAE9CEFB19AF367F00246B64 /* KPRepeatPicker.m in Sources */,
-				DAE9CEFC19AF367F00246B64 /* NotesView.m in Sources */,
-				DAE9CEFE19AF367F00246B64 /* LocationResultCell.m in Sources */,
-				DAE9CF0019AF367F00246B64 /* KPDayPicker.m in Sources */,
-				DAE9CF0119AF367F00246B64 /* UIImage+Utilities.m in Sources */,
-				DAE9CF0219AF367F00246B64 /* EMHint.m in Sources */,
-				DAE9CF0319AF367F00246B64 /* SubtaskController.m in Sources */,
-				DAE9CF0519AF367F00246B64 /* CheckmarkButton.m in Sources */,
-				DAE9CF0619AF367F00246B64 /* NSString+Levenshtein.m in Sources */,
-				DAE9CF0719AF367F00246B64 /* KPModal.m in Sources */,
-				DAE9CF0819AF367F00246B64 /* KPSegmentedViewController.m in Sources */,
-				DAE9CF0919AF367F00246B64 /* NotificationsViewController.m in Sources */,
-				DAE9CF0A19AF367F00246B64 /* MMDrawerController.m in Sources */,
-				DAE9CF0B19AF367F00246B64 /* AppDelegate.m in Sources */,
-				DAE9CF0C19AF367F00246B64 /* main.m in Sources */,
-				DAE9CF0D19AF367F00246B64 /* RootViewController.m in Sources */,
-				DAE9CF0E19AF367F00246B64 /* DropboxView.m in Sources */,
-				DAE9CF0F19AF367F00246B64 /* SyncLabel.m in Sources */,
-				DAE9CF1119AF367F00246B64 /* KPAddView.m in Sources */,
-				DAE9CF1219AF367F00246B64 /* AttachmentPopup.m in Sources */,
-				DAE9CF1319AF367F00246B64 /* ToDoCell.m in Sources */,
-				DAE9CF1419AF367F00246B64 /* ToDoListViewController.m in Sources */,
-				DAE9CF1519AF367F00246B64 /* KPAccountAlert.m in Sources */,
-				DAE9CF1719AF367F00246B64 /* UIButton+PassTouch.m in Sources */,
-				DAE9CF1819AF367F00246B64 /* SectionHeaderView.m in Sources */,
-				DAE9CF1919AF367F00246B64 /* PaymentHandler.m in Sources */,
-				DAE9CF1A19AF367F00246B64 /* KPControlHandler.m in Sources */,
-				DAE9CF1B19AF367F00246B64 /* TodayListViewController.m in Sources */,
-				DAE9CF1C19AF367F00246B64 /* DoneViewController.m in Sources */,
-				DAE9CF1E19AF367F00246B64 /* HintHandler.m in Sources */,
-				DAE9CF1F19AF367F00246B64 /* ScheduleViewController.m in Sources */,
-				DAE9CF2119AF367F00246B64 /* SchedulePopup.m in Sources */,
-				DAE9CF2219AF367F00246B64 /* HPTextViewInternal.m in Sources */,
-				DAE9CF2319AF367F00246B64 /* IntegrationsViewController.m in Sources */,
-				DAE9CF2419AF367F00246B64 /* DateStampView.m in Sources */,
-				DAE9CF2919AF367F00246B64 /* ToDoViewController+ViewHelpers.m in Sources */,
-				DAE9CF2A19AF367F00246B64 /* ClockTimeLabel.m in Sources */,
-				DAE9CF2B19AF367F00246B64 /* ToDoViewController.m in Sources */,
-				DAE9CF2D19AF367F00246B64 /* ItemHandler.m in Sources */,
-				DAE9CF2E19AF367F00246B64 /* (null) in Sources */,
-				DAE9CF3019AF367F00246B64 /* MMDrawerBarButtonItem.m in Sources */,
-				DAE9CF3119AF367F00246B64 /* LoginViewController.m in Sources */,
-				DAE9CF3219AF367F00246B64 /* CKCalendarView.m in Sources */,
-				DAE9CF3519AF367F00246B64 /* ShareViewController.m in Sources */,
-				DAE9CF3619AF367F00246B64 /* UIImage+Blur.m in Sources */,
-				DAE9CF3819AF367F00246B64 /* MenuViewController.m in Sources */,
-				DAE9CF3919AF367F00246B64 /* URLHandler.m in Sources */,
-				DAE9CF3A19AF367F00246B64 /* AKSegmentedControl.m in Sources */,
-				DAE9CF3B19AF367F00246B64 /* ThemeHandler.m in Sources */,
-				DAE9CF3C19AF367F00246B64 /* KPBlurry.m in Sources */,
-				DAE9CF3D19AF367F00246B64 /* MCSwipeTableViewCell.m in Sources */,
-				DAE9CF3E19AF367F00246B64 /* EMHintsView.m in Sources */,
-				DAE9CF3F19AF367F00246B64 /* WalkthroughViewController.m in Sources */,
-				DAE9CF4019AF367F00246B64 /* WalkthroughCell.m in Sources */,
-				DAE9CF4119AF367F00246B64 /* WalkthroughTitleView.m in Sources */,
-				DAE9CF4219AF367F00246B64 /* HPGrowingTextView.m in Sources */,
-				DAE9CF4319AF367F00246B64 /* WalkthroughOverlayBackground.m in Sources */,
-				DAE9CF4419AF367F00246B64 /* UIColor+Utilities.m in Sources */,
-				DA69249519B87EDF0082D1E4 /* NotificationHandler.m in Sources */,
-				DAE9CF4519AF367F00246B64 /* SnoozesViewController.m in Sources */,
-				DAE9CF4619AF367F00246B64 /* UIViewController+MMDrawerController.m in Sources */,
-				DAE9CF4719AF367F00246B64 /* KPReorderTableView.m in Sources */,
-				DAE9CF4819AF367F00246B64 /* KPTimePicker.m in Sources */,
-				DAE9CF4919AF367F00246B64 /* KPAlert.m in Sources */,
-				DAE9CF4B19AF367F00246B64 /* CWStatusBarNotification.m in Sources */,
-				DAE9CF4C19AF367F00246B64 /* LightSchemeAlert.m in Sources */,
-				DAE9CF4E19AF367F00246B64 /* EvernoteView.m in Sources */,
-				DAE9CF4F19AF367F00246B64 /* MenuButton.m in Sources */,
-				DAE9CF5019AF367F00246B64 /* SettingsCell.m in Sources */,
-				DAE9CF5119AF367F00246B64 /* DotView.m in Sources */,
-				DAE9CF5219AF367F00246B64 /* KPTagList.m in Sources */,
-				DAE9CF5319AF367F00246B64 /* EvernoteViewerView.m in Sources */,
-				DAE9CF5419AF367F00246B64 /* SlowHighlightIcon.m in Sources */,
-				DAE9CF5519AF367F00246B64 /* KPToolbar.m in Sources */,
-				DAE9CF5619AF367F00246B64 /* DayPickerSettingsCell.m in Sources */,
-				DAE9CF5719AF367F00246B64 /* UpgradeViewController.m in Sources */,
-				DAE9CF5819AF367F00246B64 /* MMDrawerVisualState.m in Sources */,
-				DAE9CF5919AF367F00246B64 /* KPSubtitleButton.m in Sources */,
-				DAE9CF5A19AF367F00246B64 /* (null) in Sources */,
-				DAE9CF5B19AF367F00246B64 /* UIGestureRecognizer+UIBreak.m in Sources */,
-				DAE9CF5C19AF367F00246B64 /* SubtaskCell.m in Sources */,
-				DAE9CF5D19AF367F00246B64 /* UIView+Utilities.m in Sources */,
-				DAE9CF5E19AF367F00246B64 /* EvernoteHelperViewController.m in Sources */,
-				DAE9CF5F19AF367F00246B64 /* KPAddTagPanel.m in Sources */,
-				DAE9CF6019AF367F00246B64 /* EvernoteImporterViewController.m in Sources */,
-				DAE9CF6119AF367F00246B64 /* KPOverlay.m in Sources */,
-				DAE9CF6219AF367F00246B64 /* KPSearchBar.m in Sources */,
-				DAE9CF6319AF367F00246B64 /* ContactHandler.m in Sources */,
-				DAE9CF6519AF367F00246B64 /* AddPanelView.m in Sources */,
-				DAE9CF6619AF367F00246B64 /* PlusAlertView.m in Sources */,
-				DAE9CF6719AF367F00246B64 /* StyleHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3308,15 +2704,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DAE9CFFD19AF3B2900246B64 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A7110EC819CB0FE6000F7E94 /* TodayTableViewCell.m in Sources */,
-				DAE9D00919AF3B2900246B64 /* TodayViewController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -3329,31 +2716,6 @@
 			isa = PBXTargetDependency;
 			target = DAE2B14E19CB7A4D00A9074E /* SwipesToday */;
 			targetProxy = DAE2B15D19CB7A4D00A9074E /* PBXContainerItemProxy */;
-		};
-		DAE9CFEF19AF3AC600246B64 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DAE9CFDB19AF3AC600246B64 /* SwipesKit */;
-			targetProxy = DAE9CFEE19AF3AC600246B64 /* PBXContainerItemProxy */;
-		};
-		DAE9CFF319AF3AC700246B64 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DAE9CFDB19AF3AC600246B64 /* SwipesKit */;
-			targetProxy = DAE9CFF219AF3AC700246B64 /* PBXContainerItemProxy */;
-		};
-		DAE9D00D19AF3B2900246B64 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DAE9D00019AF3B2900246B64 /* Swipes_Today */;
-			targetProxy = DAE9D00C19AF3B2900246B64 /* PBXContainerItemProxy */;
-		};
-		DAE9D01019AF3B2900246B64 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DAE9D00019AF3B2900246B64 /* Swipes_Today */;
-			targetProxy = DAE9D00F19AF3B2900246B64 /* PBXContainerItemProxy */;
-		};
-		DAE9D01819AF3B6A00246B64 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DAE9CFDB19AF3AC600246B64 /* SwipesKit */;
-			targetProxy = DAE9D01719AF3B6A00246B64 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3485,9 +2847,9 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "17bbbab4-3251-491a-976c-52fec1bb42ab";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "17bbbab4-3251-491a-976c-52fec1bb42ab";
+				PROVISIONING_PROFILE = "68724b44-626e-481d-85a0-5d2c97733583";
+				"PROVISIONING_PROFILE[sdk=*]" = "68724b44-626e-481d-85a0-5d2c97733583";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "68724b44-626e-481d-85a0-5d2c97733583";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3633,8 +2995,8 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "17bbbab4-3251-491a-976c-52fec1bb42ab";
+				PROVISIONING_PROFILE = "afa30f1d-077c-4fdf-b480-f7e6ece686c9";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "afa30f1d-077c-4fdf-b480-f7e6ece686c9";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3715,8 +3077,8 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "17bbbab4-3251-491a-976c-52fec1bb42ab";
+				PROVISIONING_PROFILE = "83277664-9ae5-4546-8dde-e223978976da";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "83277664-9ae5-4546-8dde-e223978976da";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3853,258 +3215,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
-			};
-			name = AdHoc;
-		};
-		DAE9CFD219AF367F00246B64 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					Swipes/Ressources/Libs,
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"${SRCROOT}/Pods/**",
-				);
-				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
-				);
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(inherited)",
-					"$(OTHER_CFLAGS)",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lsqlite3",
-					"-lsqlite3.0",
-					"-lz",
-					"-framework",
-					AudioToolbox,
-					"-framework",
-					CFNetwork,
-					"-framework",
-					CoreData,
-					"-framework",
-					CoreGraphics,
-					"-framework",
-					CoreLocation,
-					"-framework",
-					MobileCoreServices,
-					"-framework",
-					QuartzCore,
-					"-framework",
-					Security,
-					"-framework",
-					StoreKit,
-					"-framework",
-					SystemConfiguration,
-					"-framework",
-					UIKit,
-					"-weak_framework",
-					Accounts,
-					"-weak_framework",
-					AdSupport,
-					"-weak_framework",
-					Security,
-					"-weak_framework",
-					Social,
-					"-all_load",
-				);
-				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "603AA3C8-9AFA-42CF-AD32-245D9E88FC07";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = app;
-			};
-			name = Debug;
-		};
-		DAE9CFD319AF367F00246B64 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					Swipes/Ressources/Libs,
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"RELEASE=1",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"${SRCROOT}/Pods/**",
-				);
-				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
-				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(inherited)",
-					"$(OTHER_CFLAGS)",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lsqlite3",
-					"-lsqlite3.0",
-					"-lz",
-					"-framework",
-					AudioToolbox,
-					"-framework",
-					CFNetwork,
-					"-framework",
-					CoreData,
-					"-framework",
-					CoreGraphics,
-					"-framework",
-					CoreLocation,
-					"-framework",
-					MobileCoreServices,
-					"-framework",
-					QuartzCore,
-					"-framework",
-					Security,
-					"-framework",
-					StoreKit,
-					"-framework",
-					SystemConfiguration,
-					"-framework",
-					UIKit,
-					"-weak_framework",
-					Accounts,
-					"-weak_framework",
-					AdSupport,
-					"-weak_framework",
-					Security,
-					"-weak_framework",
-					Social,
-					"-all_load",
-				);
-				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "92BE8DBD-7BB9-4365-A2A0-9B30E049ED7A";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		DAE9CFD419AF367F00246B64 /* AdHoc */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					Swipes/Ressources/Libs,
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"ADHOC=1",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"${SRCROOT}/Pods/**",
-				);
-				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
-				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(inherited)",
-					"$(OTHER_CFLAGS)",
-				);
-				"OTHER_CPLUSPLUSFLAGS[arch=*]" = (
-					"$(inherited)",
-					"$(OTHER_CFLAGS)",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lsqlite3",
-					"-lsqlite3.0",
-					"-lz",
-					"-framework",
-					AudioToolbox,
-					"-framework",
-					CFNetwork,
-					"-framework",
-					CoreData,
-					"-framework",
-					CoreGraphics,
-					"-framework",
-					CoreLocation,
-					"-framework",
-					MobileCoreServices,
-					"-framework",
-					QuartzCore,
-					"-framework",
-					Security,
-					"-framework",
-					StoreKit,
-					"-framework",
-					SystemConfiguration,
-					"-framework",
-					UIKit,
-					"-weak_framework",
-					Accounts,
-					"-weak_framework",
-					AdSupport,
-					"-weak_framework",
-					Security,
-					"-weak_framework",
-					Social,
-					"-all_load",
-				);
-				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "50D18548-AD5B-41E1-80CB-4F1AA50B0982";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "50D18548-AD5B-41E1-80CB-4F1AA50B0982";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = app;
 			};
 			name = AdHoc;
 		};
@@ -4381,93 +3491,6 @@
 			};
 			name = AdHoc;
 		};
-		DAE9D01219AF3B2A00246B64 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				INFOPLIST_FILE = "Swipes Today/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		DAE9D01319AF3B2A00246B64 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				INFOPLIST_FILE = "Swipes Today/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		DAE9D01419AF3B2A00246B64 /* AdHoc */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				INFOPLIST_FILE = "Swipes Today/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				SKIP_INSTALL = YES;
-			};
-			name = AdHoc;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -4511,32 +3534,12 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DAE9CFD119AF367F00246B64 /* Build configuration list for PBXNativeTarget "Swipes_iOS8" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DAE9CFD219AF367F00246B64 /* Debug */,
-				DAE9CFD319AF367F00246B64 /* Release */,
-				DAE9CFD419AF367F00246B64 /* AdHoc */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		DAE9CFF419AF3AC700246B64 /* Build configuration list for PBXNativeTarget "SwipesKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAE9CFF519AF3AC700246B64 /* Debug */,
 				DAE9CFF619AF3AC700246B64 /* Release */,
 				DAE9CFF719AF3AC700246B64 /* AdHoc */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DAE9D01119AF3B2A00246B64 /* Build configuration list for PBXNativeTarget "Swipes_Today" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DAE9D01219AF3B2A00246B64 /* Debug */,
-				DAE9D01319AF3B2A00246B64 /* Release */,
-				DAE9D01419AF3B2A00246B64 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

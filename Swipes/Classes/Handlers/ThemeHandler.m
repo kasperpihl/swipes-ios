@@ -23,7 +23,6 @@
 //color(226,231,233,1)
 
 #import "ThemeHandler.h"
-#import "RootViewController.h"
 @interface ThemeHandler ()
 //@property (nonatomic) ASCScreenBrightnessDetector *brightnessDetector;
 @end
@@ -34,32 +33,14 @@ static ThemeHandler *sharedObject;
     if(!sharedObject){
         sharedObject = [[ThemeHandler allocWithZone:NULL] init];
         sharedObject.currentTheme = [USER_DEFAULTS integerForKey:@"theme"];
-        //[sharedObject brightnessDetector];
-        //[sharedObject changeTheme];
     }
     return sharedObject;
 }
-/*-(ASCScreenBrightnessDetector *)brightnessDetector{
-    if(!_brightnessDetector){
-        _brightnessDetector = [ASCScreenBrightnessDetector new];
-        _brightnessDetector.delegate = self;
-        _brightnessDetector.threshold = 0.3;
-    }
-    return _brightnessDetector;
-}*/
+
 -(Theme)oppositTheme{
     return (self.currentTheme == ThemeDark) ? ThemeLight : ThemeDark;
 }
-/*- (void)screenBrightnessStyleDidChange:(ASCScreenBrightnessStyle)style
-{
-    NSLog(@"The new style is: %u", style);
-    if((self.currentTheme == ThemeDark && style == ASCScreenBrightnessStyleLight) || (self.currentTheme == ThemeLight && style == ASCScreenBrightnessStyleDark)){
-        [UIView animateWithDuration:0.3 animations:^{
-            [self changeTheme];
-            [ROOT_CONTROLLER resetRoot];
-        }];
-    }
-}*/
+
 -(void)setCurrentTheme:(Theme)currentTheme{
     if(currentTheme != ThemeLight && currentTheme != ThemeDark) currentTheme = ThemeLight;
     _currentTheme = currentTheme;
@@ -70,8 +51,6 @@ static ThemeHandler *sharedObject;
         [[UITextField appearance] setTintColor:tcolor(TextColor)];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"changed theme" object:nil];
-    UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
-    [[UIApplication sharedApplication] setStatusBarStyle: statusBarStyle];
 }
 -(void)changeTheme{
     Theme newTheme = (self.currentTheme == ThemeDark) ? ThemeLight : ThemeDark;
