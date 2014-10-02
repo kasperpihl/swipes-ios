@@ -235,6 +235,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self editIndexPath:indexPath];
+    return;
     if (![self.selectedRows containsObject:indexPath])
         [self.selectedRows addObject:indexPath];
     [self handleShowingToolbar];
@@ -252,18 +254,6 @@
         return;
     self.showingViewController.expandOnShow = YES;
     [self editIndexPath:indexPath];
-}
-
-- (void)doubleTap:(UISwipeGestureRecognizer*)tap {
-    if (UIGestureRecognizerStateEnded == tap.state) {
-        CGPoint p = [tap locationInView:tap.view];
-        NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
-        if (!indexPath)
-            return;
-//        UITableViewCell* cell = [_tableView cellForRowAtIndexPath:indexPath];
-//        DLogFrame(cell);
-        [self editIndexPath:indexPath];
-    }
 }
 
 -(void)editIndexPath:(NSIndexPath *)indexPath
@@ -534,7 +524,6 @@
     [tableView setTableFooterView:[UIView new]];
     
     tableView.frame = CGRectMake(0, 0, tableView.frame.size.width, tableView.frame.size.height);
-    UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
     //tableView.contentInset = UIEdgeInsetsMake(0, 0, CONTENT_INSET_BOTTOM, 0);
     tableView.delegate = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -559,9 +548,6 @@
     self.searchBar = (KPSearchBar*)[tableView viewWithTag:SEARCH_BAR_TAG];
     tableView.contentOffset = CGPointMake(0, CGRectGetHeight(tableView.tableHeaderView.bounds));
     
-    doubleTap.numberOfTapsRequired = 2;
-    doubleTap.numberOfTouchesRequired = 1;
-    [tableView addGestureRecognizer:doubleTap];
 }
 
 #pragma mark - UIViewController stuff
