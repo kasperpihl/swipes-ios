@@ -16,6 +16,7 @@
 #define HORIZONTAL_MARGIN 10
 #define TAG_HORIZONTAL_PADDING 3
 #define TAG_BUTTON_TAG 123
+#define kAddButtonTag 4114
 #define kDefaultSpacing 10
 
 #define SPACE_HACK 0
@@ -209,6 +210,11 @@
 }
 -(void)setWobling:(BOOL)wobling forView:(UIButton*)button{
     _wobling = wobling;
+    BOOL isAddButton = (button.tag == kAddButtonTag);
+    if(isAddButton){
+        button.hidden = wobling;
+        return;
+    }
     if(wobling){
         UIColor *woblingColor = tcolor(LaterColor);
         [self animationKeyFramed:button.layer delegate:self forKey:@"wobbling"];
@@ -264,6 +270,7 @@
 -(UIButton*)addButton{
     UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
     CGSize sizeForButton = [self sizeForTagWithText:@"add"];
+    addButton.tag = kAddButtonTag;
     addButton.frame = CGRectMake(0, 0, sizeForButton.height, sizeForButton.height);
     addButton.titleLabel.font = iconFont(20);
     [addButton setTitle:@"plus" forState:UIControlStateNormal];

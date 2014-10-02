@@ -31,7 +31,7 @@
 
 #define NUMBER_OF_BAR_BUTTONS 2
 
-@interface KPAddTagPanel () <KPTagListResizeDelegate,KPTagListDeleteDelegate,KPBlurryDelegate,ToolbarDelegate,AddViewDelegate>
+@interface KPAddTagPanel () <KPTagListResizeDelegate,KPTagListDeleteDelegate, KPTagListAddDelegate,KPBlurryDelegate,ToolbarDelegate,AddViewDelegate>
 @property (nonatomic,weak) IBOutlet KPAddView *addTagView;
 @property (nonatomic,weak) IBOutlet KPToolbar *toolbar;
 @property (nonatomic,weak) IBOutlet UIScrollView *scrollView;
@@ -58,20 +58,9 @@
     else if(item == 1){
         self.deleteMode = !self.deleteMode;
     }
-    else if (item == 2) {
-        if(self.deleteMode){
-            self.deleteMode = NO;
-        }
-        else
-            [self shiftToAddMode:YES];
-    }
 }
 -(void)blurryWillShow:(KPBlurry *)blurry{
     _justShown = YES;
-}
--(void)blurryWillHide:(KPBlurry *)blurry{
-    if(self.isAdding)
-        [self shiftToAddMode:NO];
 }
 -(void)pressedClose:(id)sender{
     [self toolbar:self.toolbar pressedItem:0];
@@ -99,6 +88,8 @@
         tagView.emptyLabelMarginHack = 10;
         CGRectSetY(tagView, 0);
         tagView.resizeDelegate = self;
+        tagView.addDelegate = self;
+        tagView.addTagButton = YES;
         tagView.deleteDelegate = self;
         tagView.tag = TAG_VIEW_TAG;
         [scrollView addSubview:tagView];
@@ -119,37 +110,16 @@
         tagToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         tagToolbar.font = iconFont(23);
         tagToolbar.titleColor = tcolor(TextColor);
-        tagToolbar.items = @[@"back",@"actionDelete",@"plus"];
+        tagToolbar.items = @[@"back",@"actionDelete"];//,@"plus"];
 
         tagToolbar.tag = TOOLBAR_TAG;
         [self addSubview:tagToolbar];
         self.toolbar = (KPToolbar*)[self viewWithTag:TOOLBAR_TAG];
         
         
-        /* Initialize addView */
-        KPAddView *addView = [[KPAddView alloc] initWithFrame:CGRectMake(TEXT_FIELD_MARGIN_LEFT, self.bounds.size.height,
-                                                                         self.bounds.size.width - TEXT_FIELD_MARGIN_LEFT, ADD_VIEW_HEIGHT)];
-        addView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-        addView.tag = ADD_VIEW_TAG;
-        addView.userInteractionEnabled = YES;
-        addView.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        addView.textField.placeholder = @"Add a new tag";
-        addView.delegate = self;
-        [self addSubview:addView];
-        self.addTagView = (KPAddView*)[self viewWithTag:ADD_VIEW_TAG];
-        self.addTagView.hidden = YES;
         [self updateTrashButton];
         
         [self tagList:tagView changedSize:self.tagView.frame.size];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(keyboardWillShow:)
-                                                     name:UIKeyboardWillShowNotification
-                                                   object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(keyboardWillHide:)
-                                                     name:UIKeyboardWillHideNotification
-                                                   object:nil];
     }
     return self;
 }
@@ -163,6 +133,18 @@
 -(void)updateTrashButton{
     UIButton* trashButton = (UIButton*)[self.toolbar.barButtons objectAtIndex:1];
     trashButton.enabled = !(self.tagView.numberOfTags == 0);
+}
+
+
+-(void)pressedAddButtonForTagList:(KPTagList *)tagList{
+    [UTILITY inputAlertWithTitle:@"Add New Tag" message:@"Type the name of your tag (ex. work, project or school)" placeholder:@"Add New Tag" cancel:@"Cancel" confirm:@"OK" block:^(NSString *string, NSError *error) {
+        NSString *trimmedString = [string stringByTrimmingCharactersInSet:
+                                   [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if(trimmedString && trimmedString.length > 0){
+            [self.delegate tagPanel:self createdTag:trimmedString];
+            [self.tagView addTag:trimmedString selected:YES];
+        }
+    }];
 }
 
 -(void)tagList:(KPTagList *)tagList triedToDeleteTag:(NSString *)tag{
@@ -183,55 +165,26 @@
     CGFloat maxHeight = (self.bounds.size.height-2*TOOLBAR_HEIGHT);
     CGFloat height = (size.height > maxHeight) ? maxHeight : size.height;
     CGRectSetHeight(self.scrollView, height);
-    // OLDCODE
-    //CGRectSetY(self.scrollView, self.frame.size.height - TOOLBAR_HEIGHT - self.scrollView.frame.size.height - TAG_VIEW_BOTTOM_MARGIN);
-    // NEWCODE
-    NSLog(@"%f - %f",CGRectGetMinY(self.toolbar.frame),CGRectGetHeight(self.scrollView.frame));
     CGRectSetY(self.scrollView, CGRectGetMinY(self.toolbar.frame) - CGRectGetHeight(self.scrollView.frame));
 }
 
 -(void)shiftToDeleteMode:(BOOL)deleteMode{
     UIButton *plusButton = [self.toolbar.barButtons lastObject];
-    [self.tagView setWobling:deleteMode];
+    if(deleteMode){
+        [plusButton setTitle:@"plus" forState:UIControlStateNormal];
+        [plusButton setTitle:@"plus" forState:UIControlStateHighlighted];
+    }
+    else{
+        [plusButton setTitle:@"actionDelete" forState:UIControlStateNormal];
+        [plusButton setTitle:@"actionDeleteFull" forState:UIControlStateHighlighted];
+    }
+    
     CGAffineTransform transform = deleteMode ? CGAffineTransformMakeRotation(radians(45)) : CGAffineTransformIdentity;
-    [UIView animateWithDuration:0.2f animations:^{
-        plusButton.transform = transform;
-    } completion:^(BOOL finished) {
-        
-    }];
+    plusButton.transform = transform;
+    [self.tagView setWobling:deleteMode];
+    
 }
 
--(void)keyboardWillHide:(NSNotification*)notification{
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDidStopSelector:@selector(completedHidingKeyboard)];
-    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
-    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    self.scrollView.alpha = 1;
-    self.addTagView.alpha = 0;
-    CGRectSetY(self.addTagView, self.frame.size.height - self.addTagView.frame.size.height);
-    
-    [UIView commitAnimations];
-}
-
--(void)completedHidingKeyboard{
-    self.addTagView.hidden = YES;
-    self.addTagView.alpha = 1;
-}
-
--(void)keyboardWillShow:(NSNotification*)notification{
-    [UIView beginAnimations:nil context:NULL];
-    
-    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
-    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGFloat kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
-    self.scrollView.alpha = 0;
-    CGRectSetY(self.addTagView, self.frame.size.height - self.addTagView.frame.size.height - kbdHeight);
-    
-    [UIView commitAnimations];
-}
 
 -(void)shiftToAddMode:(BOOL)addMode{
     if(addMode){
