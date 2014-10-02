@@ -160,17 +160,44 @@
     [self confirmBoxWithTitle:title andMessage:message cancel:@"No" confirm:@"Yes" block:block];
 }
 
+-(void)alertWithTitle:(NSString *)title andMessage:(NSString *)message {
+#ifndef NOT_APPLICATION
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
+    [alertView show];
+#else
+#warning Test support on iOS 8
+    if (self.rootViewController) {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
+        [self.rootViewController presentViewController:alert animated:NO completion:nil];
+    }
+#endif
+}
+
 -(void)confirmBoxWithTitle:(NSString *)title andMessage:(NSString *)message cancel:(NSString *)cancel confirm:(NSString *)confirm block:(SuccessfulBlock)block{
-#ifndef __IPHONE_8_0
+#ifndef NOT_APPLICATION
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancel otherButtonTitles:confirm, nil];
     self.block = block;
     [alertView show];
 #else
-#warning "Add support for iOS 8"
+#warning Test support on iOS 8
+    if (self.rootViewController) {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+           if (block)
+               block(NO, nil);
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            if (block)
+                block(YES, nil);
+        }]];
+        [self.rootViewController presentViewController:alert animated:NO completion:nil];
+    }
 #endif
 }
+
 -(void)popupWithTitle:(NSString *)title andMessage:(NSString *)message buttonTitles:(NSArray *)buttonTitles block:(NumberBlock)block{
-#ifndef __IPHONE_8_0
+#ifndef NOT_APPLICATION
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
     for( NSString *buttonTitle in buttonTitles ){
         [alertView addButtonWithTitle:buttonTitle];
@@ -178,9 +205,28 @@
     self.numberBlock = block;
     [alertView show];
 #else
-#warning "Add support for iOS 8"
+#warning Test support on iOS 8
+    if (self.rootViewController) {
+        void (^buttonBlock)(UIAlertAction *action) = ^(UIAlertAction *action) {
+            NSUInteger counter = 0;
+            if (block) {
+                for (NSString* title in buttonTitles) {
+                    if ([title isEqualToString:action.title]) {
+                        block(counter, nil);
+                    }
+                    counter++;
+                }
+            }
+        };
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        for (NSString* title in buttonTitles) {
+            [alert addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:buttonBlock]];
+        }
+        [self.rootViewController presentViewController:alert animated:NO completion:nil];
+    }
 #endif
 }
+
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if( self.numberBlock ){

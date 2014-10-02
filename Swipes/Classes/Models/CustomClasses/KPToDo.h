@@ -23,6 +23,7 @@
 -(void)switchPriority;
 
 +(NSArray *)findByTitle:(NSString *)title;
++(NSArray *)findByTempId:(NSString *)tempId;
 
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;

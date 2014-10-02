@@ -8,6 +8,7 @@
 
 #import <NotificationCenter/NotificationCenter.h>
 #import "KPToDo.h"
+#import "UtilityClass.h"
 #import "TodayViewController.h"
 #import "TodayTableViewCell.h"
 #import "ThemeHandler.h"
@@ -28,6 +29,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+
+    UTILITY.rootViewController = self;
+    
     DLog(@"storeURL: %@", [Global coreDataUrl]);
     
     [Global initCoreData];
@@ -54,6 +59,18 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endDate];
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
     self.todos = [KPToDo sortOrderForItems:results newItemsOnTop:YES save:YES];
+    
+    KPToDo* todo1 = self.todos[0];
+    NSString* tempId = todo1.getTempId;
+    todo1 = nil;
+    NSLog(@"tempId is: %@", tempId);
+//  uncomment here for opening the first today todo or for going to add prompt
+
+/*    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/addprompt"]];
+//    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/view?id=%@", tempId]];
+    [self.extensionContext openURL:url completionHandler:^(BOOL success) {
+        // put some code here if needed or pass nil for completion handler
+    }];*/
 }
 
 - (void)didReceiveMemoryWarning {

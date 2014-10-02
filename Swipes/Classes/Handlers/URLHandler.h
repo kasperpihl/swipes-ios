@@ -8,9 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+@class KPToDo;
+
 @interface URLHandler : NSObject
 
 + (instancetype)sharedInstance;
+
+@property (nonatomic, strong) KPToDo* viewTodo;
+@property (nonatomic, assign) BOOL addTodo;
+
 - (BOOL)handleURL:(NSURL *)url;
 
 @end

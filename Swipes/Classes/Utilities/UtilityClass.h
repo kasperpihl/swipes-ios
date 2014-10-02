@@ -27,10 +27,12 @@
 +(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime;
 
 @property (nonatomic,strong) NSUserDefaults *userDefaults;
+@property (nonatomic, weak) UIViewController* rootViewController;
 
 //+ (UIImage *)imageWithColor:(UIColor *)color;
 -(int)ageForBirthday:(NSString *)birthday;
 -(NSNumber*)versionNumber;
+-(void)alertWithTitle:(NSString *)title andMessage:(NSString *)message;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block;
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message cancel:(NSString*)cancel confirm:(NSString*)confirm block:(SuccessfulBlock)block;
 -(void)popupWithTitle:(NSString*)title andMessage:(NSString*)message buttonTitles:(NSArray*)buttonTitles block:(NumberBlock)block;

@@ -156,7 +156,7 @@
 }
 
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save{
-    if (tags){
+    if (tags && (0 < tags.count)){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
         NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
         for(KPToDo *toDo in toDos){
@@ -174,6 +174,19 @@
 {
     if (title) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title = %@", title];
+        NSArray* result = [KPToDo MR_findAllWithPredicate:predicate];
+        [ANALYTICS heartbeat];
+        if (result && (0 == result.count))
+            return nil;
+        return result;
+    }
+    return nil;
+}
+
++(NSArray *)findByTempId:(NSString *)tempId
+{
+    if (tempId) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"tempId = %@", tempId];
         NSArray* result = [KPToDo MR_findAllWithPredicate:predicate];
         [ANALYTICS heartbeat];
         if (result && (0 == result.count))

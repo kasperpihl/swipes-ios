@@ -268,11 +268,7 @@
 {
     if(self.outdated){
         if(async && force) {
-#ifndef __IPHONE_8_0
-            [[[UIAlertView alloc] initWithTitle:@"New version required" message:@"For sync to work - please update Swipes from the App Store" delegate:nil  cancelButtonTitle:@"Okay" otherButtonTitles: nil] show];
-#else
-#warning "Add support for iOS 8"
-#endif
+            [UTILITY alertWithTitle:@"New version required" andMessage:@"For sync to work - please update Swipes from the App Store"];
         }
         return UIBackgroundFetchResultNoData;
     }
@@ -529,7 +525,7 @@
     /* Performing request */
     NSHTTPURLResponse *response;
     DLog(@"sending %lu objects %@",(long)totalNumberOfObjectsToSave,[syncData objectForKey:@"lastUpdate"]);
-    //NSLog(@"objects :%@",syncData);
+    //DLog(@"objects :%@",syncData);
     //NSLog(@"need: %@", [syncData objectForKey:@"hasMoreToSave"]);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
@@ -569,11 +565,7 @@
             NSInteger code = [result objectForKey:@"code"] ? [[result objectForKey:@"code"] integerValue] : 500;
             if([message isEqualToString:@"update required"]){
                 dispatch_async(dispatch_get_main_queue(), ^{
-#ifndef __IPHONE_8_0
-                    [[[UIAlertView alloc] initWithTitle:@"New version required" message:@"For sync to work - please update Swipes from the App Store" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil] show];
-#else
-#warning "Add support for iOS 8"
-#endif
+                    [UTILITY alertWithTitle:@"New version required" andMessage:@"For sync to work - please update Swipes from the App Store"];
                     //NSLog(@"adding here");
                     self.outdated = YES;
                 });
@@ -879,6 +871,7 @@ static CoreSyncHandler *sharedObject;
 {
     @try {
         [Global initCoreData];
+
         //[MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
         [[NSManagedObjectContext MR_defaultContext] setUndoManager:[[NSUndoManager alloc] init]];
         
