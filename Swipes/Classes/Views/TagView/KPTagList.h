@@ -23,7 +23,13 @@
 -(void)tagList:(KPTagList*)tagList selectedTag:(NSString*)tag;
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString*)tag;
 @end
+
+@protocol KPTagListAddDelegate <NSObject>
+-(void)pressedAddButtonForTagList:(KPTagList*)tagList;
+@end
+
 @interface KPTagList : UIView
+@property (nonatomic) BOOL addTagButton;
 @property (nonatomic) NSString *emptyText;
 @property (nonatomic) NSInteger marginTop;
 @property (nonatomic) NSInteger bottomMargin;
@@ -47,6 +53,7 @@
 @property (nonatomic) NSInteger numberOfRows;
 @property (nonatomic) NSInteger numberOfTags;
 @property (nonatomic,weak) id<KPTagDelegate> tagDelegate;
+@property (nonatomic,weak) id<KPTagListAddDelegate> addDelegate;
 @property (nonatomic,weak) id<KPTagListResizeDelegate> resizeDelegate;
 @property (nonatomic,weak) id<KPTagListDeleteDelegate> deleteDelegate;
 -(void)setTags:(NSArray*)tags andSelectedTags:(NSArray*)selectedTags;

@@ -12,6 +12,7 @@
 @protocol AddPanelDelegate <NSObject>
 -(void)closeAddPanel:(AddPanelView*)addPanel;
 @optional
+-(void)addPanel:(AddPanelView*)addPanel createdTag:(NSString*)tag;
 -(void)didAddItem:(NSString*)item priority:(BOOL)priority tags:(NSArray *)tags;
 @end
 

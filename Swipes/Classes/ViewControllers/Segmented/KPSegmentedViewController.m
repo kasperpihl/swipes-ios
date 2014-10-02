@@ -152,6 +152,7 @@
 -(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
     [[self currentViewController] update];
 }
+
 -(void)tagPanel:(KPAddTagPanel *)tagPanel createdTag:(NSString *)tag{
     [KPTag addTagWithString:tag save:YES];
 }
@@ -243,6 +244,10 @@
 -(void)didAddItem:(NSString *)item priority:(BOOL)priority tags:(NSArray *)tags{
     [[self currentViewController].itemHandler addItem:item priority:priority tags:tags];
 }
+-(void)addPanel:(AddPanelView *)addPanel createdTag:(NSString *)tag{
+    [KPTag addTagWithString:tag save:YES];
+}
+
 - (NSMutableArray *)viewControllers {
 	if (!_viewControllers)
 		_viewControllers = [NSMutableArray array];

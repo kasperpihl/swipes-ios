@@ -7,12 +7,13 @@
 //
 
 #import "AddPanelView.h"
-#import "KPBlurry.h"
 #import "UtilityClass.h"
+#import "KPBlurry.h"
 #import "KPAddView.h"
 
 #import "NSDate-Utilities.h"
 #import "KPTagList.h"
+#import "DejalActivityView.h"
 
 #import "UIView+Utilities.h"
 #import "DotView.h"
@@ -31,7 +32,7 @@
 #define kAddTextStringKey @"AddTextStringKey"
 #define kAddTextTimestampKey @"AddTextTimestampKey"
 
-@interface AddPanelView () <AddViewDelegate,KPBlurryDelegate>
+@interface AddPanelView () <AddViewDelegate,KPTagListAddDelegate,KPBlurryDelegate>
 @property (nonatomic) UIButton *closeButton;
 @property (nonatomic,weak) KPAddView *addView;
 @property (nonatomic) UIScrollView *scrollView;
@@ -43,6 +44,7 @@
 @property (nonatomic) BOOL shouldRemove;
 @property (nonatomic) BOOL isRotated;
 @property (nonatomic) BOOL hasClosed;
+@property (nonatomic) BOOL lock;
 @end
 @implementation AddPanelView {
     BOOL _justShown;
@@ -81,7 +83,25 @@
     [self.addDelegate closeAddPanel:self];
     return NO;
 }
+
+-(void)pressedAddButtonForTagList:(KPTagList *)tagList{
+    self.lock = YES;
+    [UTILITY inputAlertWithTitle:@"Add New Tag" message:@"Type the name of your tag (ex. work, project or school)" placeholder:@"Add New Tag" cancel:@"Cancel" confirm:@"OK" block:^(NSString *string, NSError *error) {
+        NSString *trimmedString = [string stringByTrimmingCharactersInSet:
+                                   [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if(trimmedString && trimmedString.length > 0){
+            [self.addDelegate addPanel:self createdTag:trimmedString];
+            [self.tagList addTag:trimmedString selected:YES];
+        }
+        self.lock = NO;
+        [self.addView.textField becomeFirstResponder];
+        
+    }];
+}
+
 -(void)keyboardWillHide:(NSNotification*)notification{
+    if(self.lock)
+        return;
     if ( !self.hasClosed )
         [self pressedClose];
     [UIView beginAnimations:nil context:NULL];
@@ -146,6 +166,8 @@
         self.tagList = [KPTagList tagListWithWidth:self.frame.size.width andTags:nil];
         //tagView.marginLeft = TAG_VIEW_SIDE_MARGIN;
         self.tagList.sorted = YES;
+        self.tagList.addDelegate = self;
+        self.tagList.addTagButton = YES;
         //tagView.marginRight = TAG_VIEW_SIDE_MARGIN;
         self.tagList.emptyText = @"";
         CGRectSetY(self.tagList, 0);

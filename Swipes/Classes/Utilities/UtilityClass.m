@@ -264,10 +264,11 @@
 
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    UITextField *input = [alertView textFieldAtIndex:0];
-    if(input){
-        if( self.stringBlock && buttonIndex == 1)
+    if(self.stringBlock){
+        if(buttonIndex == 1){
+            UITextField *input = [alertView textFieldAtIndex:0];
             self.stringBlock(input.text, nil);
+        }
         else
             self.stringBlock(nil, nil);
         return;

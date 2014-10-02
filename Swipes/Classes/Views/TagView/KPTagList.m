@@ -99,21 +99,36 @@
     if(numberOfTags > 0){
         self.isEmptyList = NO;
         NSMutableArray *buttonLine = [NSMutableArray array];
-        for(NSInteger j = 0 ; j < numberOfTags ; j++){
+        for(NSInteger j = 0 ; j <= numberOfTags ; j++){
+            UIButton *tagButton;
+            BOOL isLastTag = (j == (numberOfTags-1));
             CGFloat targetWidth = (self.numberOfRows == 1) ? self.frame.size.width - self.firstRowSpacingHack : self.frame.size.width;
-            NSString *tag = [self.tags objectAtIndex:j];
-            UIButton *tagLabel = [self buttonWithTag:tag];
-            tagLabel.tag = TAG_BUTTON_TAG + j;
-            if([self.selectedTags containsObject:tag]){
-                [tagLabel setSelected:YES];
-                if(self.selectedTagBorderColor) tagLabel.layer.borderColor = self.selectedTagBorderColor.CGColor;
-                //[tagLabel.layer setBorderColor:[COLOR_WHITE CGColor]];
+            
+            BOOL isAddButton = (j == numberOfTags);
+            if(isAddButton){
+                if(!self.addTagButton)
+                    continue;
+                tagButton = [self addButton];
             }
+            else{
+                NSString *tag = [self.tags objectAtIndex:j];
+                tagButton = [self buttonWithTag:tag];
+                tagButton.tag = TAG_BUTTON_TAG + j;
+                if([self.selectedTags containsObject:tag]){
+                    [tagButton setSelected:YES];
+                    if(self.selectedTagBorderColor) tagButton.layer.borderColor = self.selectedTagBorderColor.CGColor;
+                    //[tagLabel.layer setBorderColor:[COLOR_WHITE CGColor]];
+                }
+            }
+            
+
             CGFloat difference = (targetWidth - self.marginRight) - currentWidth ;
             BOOL nextLine = NO;
             
-            if((currentWidth + tagLabel.frame.size.width + self.marginRight) > targetWidth){
-                currentHeight = currentHeight + tagLabel.frame.size.height + self.spacing - SPACE_HACK;
+            CGFloat addButtonSpaceIfLastItem = (isLastTag && self.addTagButton) ? [self sizeForTagWithText:@"add"].height+self.spacing : 0;
+            
+            if((currentWidth + tagButton.frame.size.width + self.marginRight + addButtonSpaceIfLastItem ) > targetWidth){
+                currentHeight = currentHeight + tagButton.frame.size.height + self.spacing - SPACE_HACK;
                 currentWidth = self.marginLeft + SPACE_HACK;
                 tagHeight = 0;
                 nextLine = YES;
@@ -125,10 +140,11 @@
             }*/
             
             
-            if(tagLabel.frame.size.height > tagHeight) tagHeight = tagLabel.frame.size.height;
+            if(tagButton.frame.size.height > tagHeight)
+                tagHeight = tagButton.frame.size.height;
             
-            tagLabel.frame = CGRectSetPos(tagLabel.frame, currentWidth - SPACE_HACK, currentHeight);
-            currentWidth = currentWidth + tagLabel.frame.size.width + self.spacing - SPACE_HACK;
+            tagButton.frame = CGRectSetPos(tagButton.frame, currentWidth - SPACE_HACK, currentHeight);
+            currentWidth = currentWidth + tagButton.frame.size.width + self.spacing - SPACE_HACK;
             
             if(nextLine){
                 NSInteger numberOfButtonsInRow = buttonLine.count;
@@ -140,8 +156,8 @@
                 }
                 [buttonLine removeAllObjects];
             }
-            [buttonLine addObject:tagLabel];
-            [self addSubview:tagLabel];
+            [buttonLine addObject:tagButton];
+            [self addSubview:tagButton];
         }
         
     }
@@ -245,6 +261,16 @@
         if([self.tagDelegate respondsToSelector:@selector(tagList:selectedTag:)]) [self.tagDelegate tagList:self selectedTag:tag];
     }
 }
+-(UIButton*)addButton{
+    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    CGSize sizeForButton = [self sizeForTagWithText:@"add"];
+    addButton.frame = CGRectMake(0, 0, sizeForButton.height, sizeForButton.height);
+    addButton.titleLabel.font = iconFont(20);
+    [addButton setTitle:@"plus" forState:UIControlStateNormal];
+    [addButton setTitleColor:self.tagTitleColor forState:UIControlStateNormal];
+    [addButton addTarget:self action:@selector(pressedAdd:) forControlEvents:UIControlEventTouchUpInside];
+    return addButton;
+}
 -(UIButton*)buttonWithTag:(NSString*)tag{
     CGSize sizeForTag = [self sizeForTagWithText:tag];
     SlowHighlightIcon *button = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
@@ -268,6 +294,13 @@
     if(self.wobling) [self setWobling:YES forView:button];
     return button;
 }
+
+-(void)pressedAdd:(UIButton*)sender{
+    if([self.addDelegate respondsToSelector:@selector(pressedAddButtonForTagList:)])
+        [self.addDelegate pressedAddButtonForTagList:self];
+    
+}
+
 -(UILabel*)labelWithText:(NSString*)text{
     UILabel *label;
     return label;
