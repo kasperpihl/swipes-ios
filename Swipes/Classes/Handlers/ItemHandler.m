@@ -251,8 +251,11 @@
         NSMutableString *mutPredicate = [NSMutableString stringWithFormat:@""];
         NSInteger counter = 0;
         for(NSString *string in searchArray){
-            if(!string || string.length == 0) continue;
-            [mutPredicate appendFormat:@"((title contains[cd] '%@') OR (tagString contains[cd] '%@') OR (notes contains[cd] '%@')) AND ",string,string,string];
+            NSString *escapedString = [string stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+            escapedString = [escapedString stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"];
+            escapedString = [escapedString stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+            if(!escapedString || escapedString.length == 0) continue;
+            [mutPredicate appendFormat:@"((title contains[cd] '%@') OR (tagString contains[cd] '%@') OR (notes contains[cd] '%@')) AND ",escapedString,escapedString,escapedString];
             counter++;
         }
         if(counter > 0){
