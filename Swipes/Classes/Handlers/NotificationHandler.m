@@ -237,7 +237,7 @@ static NotificationHandler *sharedObject;
     UIApplication *app = [UIApplication sharedApplication];
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
         UIUserNotificationSettings *currentSettings = [app currentUserNotificationSettings];
-        if ( currentSettings.types != UIUserNotificationTypeAlert ){
+        if ( (currentSettings.types & UIUserNotificationTypeAlert) != UIUserNotificationTypeAlert ){
             [app registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
             return;
         }
@@ -257,9 +257,9 @@ static NotificationHandler *sharedObject;
     
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
         UIUserNotificationSettings *currentSettings = [app currentUserNotificationSettings];
-        
-        if ( currentSettings.types == UIUserNotificationTypeBadge )
+        if ( (currentSettings.types & UIUserNotificationTypeBadge) == UIUserNotificationTypeBadge ){
             [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
+        }
         else{
             [app registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
         }
