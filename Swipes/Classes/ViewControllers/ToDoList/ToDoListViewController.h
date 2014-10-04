@@ -28,4 +28,5 @@
 -(void)update;
 -(void)didUpdateCells;
 -(void)pressedEdit;
+- (void)editToDo:(KPToDo *)todo;
 @end

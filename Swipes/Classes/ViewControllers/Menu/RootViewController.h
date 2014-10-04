@@ -31,6 +31,7 @@ typedef enum {
 -(void)walkthrough;
 -(void)logOut;
 -(void)closeApp;
+-(void)willOpen;
 -(void)openApp;
 -(void)feedback;
 -(void)upgrade;

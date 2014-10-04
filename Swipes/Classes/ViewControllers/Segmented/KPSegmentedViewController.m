@@ -28,7 +28,7 @@
 #import "UIImage+Blur.h"
 #import "SlowHighlightIcon.h"
 #import "SettingsHandler.h"
-#import "URLHandler.h"
+
 
 #import "HintHandler.h"
 #import "UIView+Utilities.h"
@@ -130,11 +130,7 @@
 {
     [super viewDidAppear:animated];
     
-    // show add view if set from URL handler
-    if ([URLHandler sharedInstance].addTodo) {
-        [self pressedAdd:nil];
-        [URLHandler sharedInstance].addTodo = NO;
-    }
+    
 }
 
 -(void)receivedLocalNotification:(UILocalNotification *)notification

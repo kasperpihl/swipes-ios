@@ -8,7 +8,7 @@
 
 #import "RootViewController.h"
 #import "FacebookCommunicator.h"
-
+#import "URLHandler.h"
 
 #import "ScheduleViewController.h"
 #import "TodayListViewController.h"
@@ -49,6 +49,7 @@
 
 @property (nonatomic) NSDate *lastClose;
 @property (nonatomic) KPMenu currentMenu;
+@property (nonatomic) BOOL didReset;
 
 @end
 
@@ -329,19 +330,39 @@ static RootViewController *sharedObject;
     [OVERLAY popViewAnimated:YES];
 }
 
+-(void)willOpen{
+    if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
+        [OVERLAY popAllViewsAnimated:NO];
+        [self resetRoot];
+        self.didReset = YES;
+    }
+}
 -(void)openApp
 {
 #warning Outcomment this before submission
     [kSettings refreshGlobalSettingsForce:NO];
-    //if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
-        [OVERLAY popAllViewsAnimated:NO];
-        [self resetRoot];
-    /*}
-    else if(self.lastClose) {
-        [[[self menuViewController] currentViewController] update];
-        [[[self menuViewController] currentViewController] deselectAllRows:self];
-    }*/
+    KPToDo* todo = [URLHandler sharedInstance].viewTodo;
+    if(!self.didReset){
+        if([URLHandler sharedInstance].addTodo || todo){
+            [OVERLAY popAllViewsAnimated:NO];
+            [self resetRoot];
+        }
+        else if(self.lastClose) {
+            [[[self menuViewController] currentViewController] update];
+            [[[self menuViewController] currentViewController] deselectAllRows:self];
+        }
+    }
+    
+    if ([URLHandler sharedInstance].addTodo) {
+        [self.menuViewController pressedAdd:self];
+        [URLHandler sharedInstance].addTodo = NO;
+    }else if (todo) {
+        [URLHandler sharedInstance].viewTodo = nil;
+        [[self.menuViewController currentViewController] editToDo:todo];
+    }
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"opened app" object:self];
+   
 }
 
 -(void)closeApp

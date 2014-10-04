@@ -21,7 +21,6 @@
 #import "UIView+Utilities.h"
 #import "HintHandler.h"
 #import "RootViewController.h"
-#import "URLHandler.h"
 
 #import "ToDoListViewController.h"
 
@@ -629,11 +628,7 @@
     [self handleShowingToolbar];
     
     // show any todo that needs to be viewed from the widget
-    KPToDo* todo = [URLHandler sharedInstance].viewTodo;
-    if (todo) {
-        [URLHandler sharedInstance].viewTodo = nil;
-        [self editToDo:todo];
-    }
+    
 }
 
 - (void)handleShowingToolbar

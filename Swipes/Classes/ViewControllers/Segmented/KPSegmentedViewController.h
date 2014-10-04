@@ -24,6 +24,7 @@
 -(void)pressedDelete:(id)sender;
 -(void)pressedShare:(id)sender;
 -(void)changeToIndex:(NSInteger)index;
+-(void)pressedAdd:(id)sender;
 
 -(void)tagItems:(NSArray *)items inViewController:(UIViewController*)viewController withDismissAction:(voidBlock)block;
 -(void)deleteNumberOfItems:(NSInteger)numberOfItems inView:(UIViewController*)viewController completion:(SuccessfulBlock)block;
