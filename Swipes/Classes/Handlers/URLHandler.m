@@ -374,6 +374,7 @@ static NSDictionary* kErrorCodes;
         NSArray* todos = [KPToDo findByTempId:tempId];
         if (nil != todos) {
             self.viewTodo = todos[0];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"handled URL" object:self];
             [self handleXCallbackURL:query errorMessage:nil];
         }
         else {
@@ -390,6 +391,7 @@ static NSDictionary* kErrorCodes;
 - (BOOL)handleAddPromptToDo:(NSDictionary *)query
 {
     self.addTodo = YES;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"handled URL" object:self];
     [self handleXCallbackURL:query errorMessage:nil];
     return YES;
 }

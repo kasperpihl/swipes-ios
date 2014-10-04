@@ -336,23 +336,19 @@ static RootViewController *sharedObject;
         [self resetRoot];
         self.didReset = YES;
     }
+    else if(self.lastClose) {
+        [[[self menuViewController] currentViewController] update];
+        [[[self menuViewController] currentViewController] deselectAllRows:self];
+    }
 }
--(void)openApp
-{
-#warning Outcomment this before submission
-    [kSettings refreshGlobalSettingsForce:NO];
+-(void)handledURL{
     KPToDo* todo = [URLHandler sharedInstance].viewTodo;
     if(!self.didReset){
         if([URLHandler sharedInstance].addTodo || todo){
             [OVERLAY popAllViewsAnimated:NO];
             [self resetRoot];
         }
-        else if(self.lastClose) {
-            [[[self menuViewController] currentViewController] update];
-            [[[self menuViewController] currentViewController] deselectAllRows:self];
-        }
     }
-    
     if ([URLHandler sharedInstance].addTodo) {
         [self.menuViewController pressedAdd:self];
         [URLHandler sharedInstance].addTodo = NO;
@@ -361,8 +357,16 @@ static RootViewController *sharedObject;
         [[self.menuViewController currentViewController] editToDo:todo];
     }
     
+    
+}
+-(void)openApp
+{
+    
+#warning Outcomment this before submission
+    [kSettings refreshGlobalSettingsForce:NO];
+    if(self.didReset)
+        self.didReset = NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"opened app" object:self];
-   
 }
 
 -(void)closeApp
@@ -469,6 +473,7 @@ static RootViewController *sharedObject;
     [self setNavigationBarHidden:YES];
     KPCORE.delegate = self;
     notify(@"changed theme", changedTheme);
+    notify(@"handled URL", handledURL);
     kHints.delegate = self;
     
     BLURRY.delegate = self;
