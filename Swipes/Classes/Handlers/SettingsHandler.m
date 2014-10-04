@@ -186,8 +186,6 @@ static SettingsHandler *sharedObject;
         self.settings = [NSMutableDictionary dictionary];
     else if( ![self.settings isMemberOfClass:[NSMutableDictionary class]]){
         self.settings = [NSMutableDictionary dictionary];
-        DLog(@"renewed");
     }
-    DLog(@"set %@",[self.settings class]);
 }
 @end
