@@ -524,7 +524,7 @@
     
     /* Performing request */
     NSHTTPURLResponse *response;
-    DLog(@"sending %lu objects %@",(long)totalNumberOfObjectsToSave,[syncData objectForKey:@"lastUpdate"]);
+    //DLog(@"sending %lu objects %@",(long)totalNumberOfObjectsToSave,[syncData objectForKey:@"lastUpdate"]);
     //DLog(@"objects :%@",syncData);
     //NSLog(@"need: %@", [syncData objectForKey:@"hasMoreToSave"]);
     NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
@@ -555,7 +555,7 @@
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     //NSLog(@"resulted err:%@",error);
-    NSLog(@"res: %@ err: %@",result,error);
+    //NSLog(@"res: %@ err: %@",result,error);
     if([result objectForKey:@"hardSync"])
         [self hardSync];
     
