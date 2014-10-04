@@ -156,10 +156,15 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (void)saveNote:(EDAMNote*)note block:(NoteBlock)block
 {
+    NSError *error;
+    ENNoteStoreClient *noteStore = [self getNoteStoreError:&error];
+    if(error){
+        return block(nil,error);
+    }
     @try {
         self.requestCounter++;
         
-        [[[ENSession sharedSession] primaryNoteStore] updateNote:note success:^(EDAMNote *note) {
+        [noteStore updateNote:note success:^(EDAMNote *note) {
             if( block )
                 block( note, nil );
             if (note.guid && note.guid.length > 0)
@@ -181,6 +186,11 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)fetchNoteWithGuid:(NSString *)guid block:(NoteBlock)block
 {
     // try to get it from cache
+    NSError *error;
+    ENNoteStoreClient *noteStore = [self getNoteStoreError:&error];
+    if(error){
+        return block(nil,error);
+    }
     __block EDAMNote *cachedNote = [self noteForGuid:guid];
     if (cachedNote) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -191,7 +201,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     
     @try {
         self.requestCounter++;
-        [[[ENSession sharedSession] primaryNoteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
+        [noteStore getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
             
             if( block )
                 block( note , nil );
@@ -213,6 +223,15 @@ NSError * NewNSErrorFromException(NSException * exc) {
     
 }
 
+-(ENNoteStoreClient*)getNoteStoreError:(NSError**)error{
+    ENSession *session = [ENSession sharedSession];
+    if(!session.isAuthenticated){
+        NSError* authError = [NSError errorWithDomain:@"Evernote not authenticated" code:601 userInfo:nil];
+        *error = authError;
+    }
+    return [session primaryNoteStore];
+}
+
 - (void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block {
     
     // try to get it from cache
@@ -224,7 +243,11 @@ NSError * NewNSErrorFromException(NSException * exc) {
         });
         return;
     }*/
-    ENNoteStoreClient *noteStore = [[ENSession sharedSession] primaryNoteStore];
+    NSError *error;
+    ENNoteStoreClient *noteStore = [self getNoteStoreError:&error];
+    if(error){
+        return block(nil,error);
+    }
     @try {
         self.requestCounter++;
         [noteStore findNotesWithFilter:filter offset:0 maxNotes:kPaginator success:^(EDAMNoteList *list) {
@@ -278,15 +301,15 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (void)getSwipesTagGuidBlock:(StringBlock)block
 {
-    if (!self.isAuthenticated) {
-        block(nil, [NSError errorWithDomain:@"Evernote not authenticated" code:602 userInfo:nil]);
-        return;
+    NSError *error;
+    ENNoteStoreClient *noteStore = [self getNoteStoreError:&error];
+    if(error){
+        return block(nil,error);
     }
-    
     @try {
         __block NSString *swipesTagGuid;
         self.requestCounter++;
-        [[[ENSession sharedSession] primaryNoteStore] listTagsWithSuccess:^(NSArray *tags) {
+        [noteStore listTagsWithSuccess:^(NSArray *tags) {
             for ( EDAMTag *tag in tags ) {
                 if (NSOrderedSame == [tag.name caseInsensitiveCompare:kSwipesTagName]){
                     swipesTagGuid = tag.guid;
@@ -315,11 +338,16 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (void)createSwipesTagBlock:(StringBlock)block
 {
+    NSError *error;
+    ENNoteStoreClient *noteStore = [self getNoteStoreError:&error];
+    if(error){
+        return block(nil,error);
+    }
     @try {
         self.requestCounter++;
         EDAMTag *swipesTag = [[EDAMTag alloc] init];
         swipesTag.name = kSwipesTagName;
-        [[[ENSession sharedSession] primaryNoteStore] createTag:swipesTag success:^(EDAMTag *tag) {
+        [noteStore createTag:swipesTag success:^(EDAMTag *tag) {
             block(swipesTag.guid, nil);
         } failure:^(NSError *error) {
             if(error)
