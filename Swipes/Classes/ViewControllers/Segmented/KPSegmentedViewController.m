@@ -325,14 +325,15 @@
     [ROOT_CONTROLLER.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
 }
 -(void)pressedAccount{
+    [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
+    return;
     KxMenuItem *item1 = [KxMenuItem menuItem:@"Filter" image:nil target:self action:@selector(pressedFilter:)];
     [KxMenu setBackColor:tcolor(TextColor)];
     [self._accountButton setSelected:YES];
     [KxMenu showMenuInView:self.view
                   fromRect:self._accountButton.frame
                  menuItems:@[item1]];
-     return;
-    [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
+    
 }
 - (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles {
 	self = [super init];
@@ -352,12 +353,10 @@
         [self.ios7BackgroundView addSubview:self.segmentedControl];
         self.ios7BackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         UIButton *accountButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.view.frame.size.width-CELL_LABEL_X, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
-        accountButton.titleLabel.font = iconFont(20);
+        accountButton.titleLabel.font = iconFont(23);
         [accountButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        accountButton.transform = CGAffineTransformMakeRotation(radians(90));
-        [accountButton setTitle:iconString(@"rightArrow") forState:UIControlStateNormal];
-        [accountButton setTitle:iconString(@"rightArrowFull") forState:UIControlStateHighlighted];
-        [accountButton setTitle:iconString(@"rightArrowFull") forState:UIControlStateSelected];
+        [accountButton setTitle:iconString(@"settingsAccount") forState:UIControlStateNormal];
+        [accountButton setTitle:iconString(@"settingsAccountFull") forState:UIControlStateHighlighted];
         [accountButton addTarget:self action:@selector(pressedAccount) forControlEvents:UIControlEventTouchUpInside];
         accountButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [self.ios7BackgroundView addSubview:accountButton];

@@ -129,7 +129,7 @@
     //NSLog(@"%@",[kCurrent sessionToken]);
     NSDateFormatter *dateFormatter = [Global isoDateFormatter];
     NSString *isoString = [dateFormatter stringFromDate:[NSDate date]];
-    NSLog(@"%@",isoString);
+    NSLog(@"%lu",(long)[NSTimeZone localTimeZone].secondsFromGMT);
     return YES;
 }
 
