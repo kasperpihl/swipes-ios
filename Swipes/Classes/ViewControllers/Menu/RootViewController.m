@@ -331,15 +331,16 @@ static RootViewController *sharedObject;
 
 -(void)openApp
 {
+#warning Outcomment this before submission
     [kSettings refreshGlobalSettingsForce:NO];
-    if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
+    //if(self.lastClose && [[NSDate date] isLaterThanDate:[self.lastClose dateByAddingMinutes:15]]){
         [OVERLAY popAllViewsAnimated:NO];
         [self resetRoot];
-    }
+    /*}
     else if(self.lastClose) {
         [[[self menuViewController] currentViewController] update];
         [[[self menuViewController] currentViewController] deselectAllRows:self];
-    }
+    }*/
     [[NSNotificationCenter defaultCenter] postNotificationName:@"opened app" object:self];
 }
 

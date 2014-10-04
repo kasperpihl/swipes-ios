@@ -96,6 +96,7 @@
     
 }
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
+    
     NSDate *endDate = [NSDate date];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endDate];
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
@@ -249,7 +250,6 @@
 {
     self.state = @"today";
     [super viewDidLoad];
-    
     self.youreAllDoneView = [[YoureAllDoneView alloc] initWithFrame:self.view.bounds];
     self.youreAllDoneView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
