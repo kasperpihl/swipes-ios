@@ -43,6 +43,7 @@
 @property (nonatomic) DotView *dotView;
 @property (nonatomic) BOOL shouldRemove;
 @property (nonatomic) BOOL isRotated;
+@property (nonatomic) BOOL shouldUnlock;
 @property (nonatomic) BOOL hasClosed;
 @property (nonatomic) BOOL lock;
 @end
@@ -93,15 +94,16 @@
             [self.addDelegate addPanel:self createdTag:trimmedString];
             [self.tagList addTag:trimmedString selected:YES];
         }
-        self.lock = NO;
-        [self.addView.textField becomeFirstResponder];
         
+        //[self.addView.textField becomeFirstResponder];
+        self.shouldUnlock = YES;
     }];
 }
 
 -(void)keyboardWillHide:(NSNotification*)notification{
-    if(self.lock)
+    if(self.lock){
         return;
+    }
     if ( !self.hasClosed )
         [self pressedClose];
     [UIView beginAnimations:nil context:NULL];
@@ -115,6 +117,12 @@
     [UIView commitAnimations];
 }
 -(void)keyboardWillShow:(NSNotification*)notification{
+    BOOL animating = YES;
+    if(self.shouldUnlock && self.lock){
+        self.lock = NO;
+        self.shouldUnlock = NO;
+        animating = NO;
+    }
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGFloat kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     CGFloat targetHeight = kbdHeight + self.addView.frame.size.height;
@@ -122,10 +130,12 @@
     
     CGRectSetSize(self.scrollView, self.tagList.frame.size.width, MIN(self.tagList.frame.size.height, currentHeight-targetHeight-SEPERATOR_SPACING-(OSVER >= 7 ? 20 : 0)) );
     CGRectSetY(self.scrollView, -self.scrollView.frame.size.height);
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
-    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
-    [UIView setAnimationBeginsFromCurrentState:YES];
+    if(animating){
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+        [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+        [UIView setAnimationBeginsFromCurrentState:YES];
+    }
 
     if(targetHeight != currentHeight){
         CGRectSetY(self.scrollView, currentHeight-targetHeight-self.scrollView.frame.size.height-SEPERATOR_SPACING);
@@ -137,7 +147,10 @@
     CGFloat yForAdd = self.frame.size.height - self.addView.frame.size.height - kbdHeight;
     CGRectSetY(self.addView, yForAdd);
     CGRectSetCenterY(self.priorityButton, yForAdd + self.priorityButton.frame.size.height / 2);
-    [UIView commitAnimations];
+    if (animating) {
+        [UIView commitAnimations];
+    }
+    
 }
 -(void)pressedPriority{
     self.dotView.priority = !self.dotView.priority;

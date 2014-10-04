@@ -194,15 +194,23 @@
             textField.placeholder = placeholder;
         }];
         [alert addAction:[UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            UITextField *login = alert.textFields.firstObject;
+            if(login.isFirstResponder)
+                [login resignFirstResponder];
             if (block)
                 block(nil, nil);
         }]];
         [alert addAction:[UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             UITextField *login = alert.textFields.firstObject;
+            if(login.isFirstResponder)
+                [login resignFirstResponder];
             if (block)
                 block(login.text, nil);
         }]];
-        [self.rootViewController presentViewController:alert animated:NO completion:nil];
+        [self.rootViewController presentViewController:alert animated:NO completion:^{
+            UITextField *login = alert.textFields.firstObject;
+            [login becomeFirstResponder];
+        }];
     }
 #endif
     
