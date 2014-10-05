@@ -250,7 +250,8 @@
         
         [context MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
             DUMPDB;
-            [self synchronizeForce:NO async:YES];
+            if(!self.disableSync)
+                [self synchronizeForce:NO async:YES];
         }];
     }
     
