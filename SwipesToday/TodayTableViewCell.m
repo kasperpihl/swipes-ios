@@ -51,31 +51,36 @@
     [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
     [self insertSubview:_colorIndicatorView atIndex:0];
     
-    self.taskTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width-self.frame.size.height, self.frame.size.height)];
+    CGFloat titleX = 4;
+    CGFloat buttonWidth = 40;
+    
+    CGFloat notificationX = 6;
+    UIButton *completeButton = [[UIButton alloc] initWithFrame:CGRectMake(notificationX, 0,  buttonWidth, self.bounds.size.height)];
+    [completeButton setTitle:@"roundedBox" forState:UIControlStateNormal];
+    [completeButton addTarget:self action:@selector(pressedComplete:) forControlEvents:UIControlEventTouchUpInside];
+    //[completeButton addTarget:self action:@selector(touchedComplete:) forControlEvents:UIControlEventTouchDown|UIControlEventTouchDragEnter];
+    //[completeButton addTarget:self action:@selector(cancelledComplete:) forControlEvents:UIControlEventTouchCancel|UIControlEventTouchDragExit];
+    
+    [completeButton setTitle:@"" forState:UIControlStateHighlighted];
+    [completeButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];//tcolor(DoneColor)
+    completeButton.titleLabel.font = [UIFont fontWithName:@"swipes" size:30];
+    completeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    [self addSubview:completeButton];
+    [self bringSubviewToFront:completeButton];
+    
+    self.taskTitle = [[UILabel alloc] initWithFrame:CGRectMake(notificationX + buttonWidth + titleX, 0, self.frame.size.width- buttonWidth - titleX -notificationX, self.frame.size.height)];
+    self.taskTitle.font = [UIFont systemFontOfSize:14];
     self.taskTitle.lineBreakMode = NSLineBreakByTruncatingTail;
     self.taskTitle.textColor = [UIColor whiteColor];
     [self.contentView addSubview:self.taskTitle];
-    
-    
-    UIButton *completeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width-self.frame.size.height, 0, self.frame.size.height, self.frame.size.height)];
-    [completeButton setTitle:@"done" forState:UIControlStateNormal];
-    [completeButton addTarget:self action:@selector(pressedComplete:) forControlEvents:UIControlEventTouchUpInside];
-    [completeButton addTarget:self action:@selector(touchedComplete:) forControlEvents:UIControlEventTouchDown|UIControlEventTouchDragEnter];
-    [completeButton addTarget:self action:@selector(cancelledComplete:) forControlEvents:UIControlEventTouchCancel|UIControlEventTouchDragExit];
-    [completeButton setTitle:@"doneFull" forState:UIControlStateHighlighted];
-    [completeButton setTitleColor:tcolor(DoneColor) forState:UIControlStateNormal];
-    completeButton.titleLabel.font = [UIFont fontWithName:@"swipes" size:15];
-    completeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin;
-    [self addSubview:completeButton];
 }
--(void)animate{
-}
+
 -(void)resetAndSetTaskTitle:(NSString *)title{
     CGRectSetX(self.colorIndicatorView, -self.bounds.size.width);
     CGRectSetX(self.contentView, 0);
     self.taskTitle.text = title;
 }
--(void)cancelledComplete:(UIButton*)sender{
+/*-(void)cancelledComplete:(UIButton*)sender{
     [UIView animateWithDuration:0.05 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         CGRectSetX(self.colorIndicatorView, -self.bounds.size.width);
         CGRectSetX(self.contentView, 0);
@@ -89,7 +94,7 @@
         CGRectSetX(self.contentView, step);
     } completion:^(BOOL finished) {
     }];
-}
+}*/
 -(void)pressedComplete:(UIButton*)sender{
     if(self.delegate && [self.delegate respondsToSelector:@selector(willCompleteCell:)])
         [self.delegate willCompleteCell:self];

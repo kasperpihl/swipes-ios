@@ -34,6 +34,9 @@ static Global *sharedObject;
     if(OSVER >= 7)
         return iconString;
     
+    /* Notification bar */
+    iconCompare(@"roundedBox",                  @"\ue651");
+    
     /* Nav bar */
     iconCompare(@"settings",                    @"\ue601");
     iconCompare(@"done",                        @"\ue602");
