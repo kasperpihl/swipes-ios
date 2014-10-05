@@ -51,6 +51,11 @@
     [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
     [self insertSubview:_colorIndicatorView atIndex:0];
     
+    UIView *selectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];//CGRectMake((CELL_LABEL_X/2),0, LINE_SIZE,CELL_HEIGHT)]; //];
+    selectionView.backgroundColor = color(0, 0, 0, 0.15);
+    selectionView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+    self.selectedBackgroundView = selectionView;
+    
     CGFloat titleX = 4;
     CGFloat buttonWidth = 40;
     
