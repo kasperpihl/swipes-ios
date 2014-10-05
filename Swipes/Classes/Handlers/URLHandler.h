@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) KPToDo* viewTodo;
 @property (nonatomic, assign) BOOL addTodo;
+// used to reset rootviewcontroller, added by kasper and used with widget when opening
+@property (nonatomic, assign) BOOL reset;
 
 - (BOOL)handleURL:(NSURL *)url;
 

@@ -383,6 +383,9 @@ static NSDictionary* kErrorCodes;
         return YES;
     }
     else {
+        // Kasper: I added this to make a way to reset upon opening, using /view without parameters
+        self.reset = YES;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"handled URL" object:self];
         [self handleXCallbackURL:query errorMessage:kErrorMissingMandatoryParam];
     }
     return NO;

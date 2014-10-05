@@ -344,7 +344,8 @@ static RootViewController *sharedObject;
 -(void)handledURL{
     KPToDo* todo = [URLHandler sharedInstance].viewTodo;
     if(!self.didReset){
-        if([URLHandler sharedInstance].addTodo || todo){
+        if([URLHandler sharedInstance].addTodo || todo || [URLHandler sharedInstance].reset){
+            [URLHandler sharedInstance].reset = NO;
             [OVERLAY popAllViewsAnimated:NO];
             [self resetRoot];
         }
