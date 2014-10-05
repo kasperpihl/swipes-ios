@@ -36,6 +36,8 @@ static Global *sharedObject;
     
     /* Notification bar */
     iconCompare(@"roundedBox",                  @"\ue651");
+    iconCompare(@"roundedAdd",                  @"\ue655");
+    iconCompare(@"roundedAddFull",              @"\ue656");
     
     /* Nav bar */
     iconCompare(@"settings",                    @"\ue601");
