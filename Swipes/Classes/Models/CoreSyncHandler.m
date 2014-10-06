@@ -950,10 +950,6 @@ static CoreSyncHandler *sharedObject;
                                @"Access your tasks on web.swipesapp.com"
  
                             ];
-#warning Find a workaround
-//    if([GlobalApp isEvernoteInstalled]){
-//        toDoArray = [toDoArray arrayByAddingObject:@"Open task to attach an Evernote"];
-//    }
     
     for(NSInteger i = toDoArray.count-1 ; i >= 0  ; i--){
         NSString *item = [toDoArray objectAtIndex:i];

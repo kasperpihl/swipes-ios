@@ -10,29 +10,9 @@ target :Swipes do
     pod 'Base64'
     pod 'APAddressBook'
     pod 'DejalActivityView'
-    pod 'KeenClient', :inhibit_warnings => true
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
 end
-
-#target :Swipes_iOS8 do
-#    pod 'Appirater', :inhibit_warnings => true
-#    pod 'Bolts', :inhibit_warnings => true
-#    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
-#    pod 'Parse-iOS', :inhibit_warnings => true
-#    pod 'ParseFacebookUtils'
-#    pod 'MagicalRecord', :inhibit_warnings => true
-#    pod 'Reachability'
-#    pod 'Underscore.m'
-#    pod 'RMStore', '~> 0.4.2', :inhibit_warnings => true
-#    pod 'Base64'
-#    pod 'Evernote-SDK-iOS', :inhibit_warnings => true
-#    pod 'APAddressBook'
-#    pod 'DejalActivityView'
-#    pod 'KeenClient', :inhibit_warnings => true
-#    pod 'NSURL+QueryDictionary'
-#    pod 'DHCShakeNotifier'
-#end
 
 target :SwipesKit do
     pod 'Appirater', :inhibit_warnings => true
@@ -46,7 +26,6 @@ target :SwipesKit do
     pod 'Base64'
     pod 'APAddressBook'
     pod 'DejalActivityView'
-    pod 'KeenClient', :inhibit_warnings => true
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
 end
@@ -62,7 +41,6 @@ target :SwipesToday do
     pod 'Base64'
     pod 'APAddressBook'
     pod 'DejalActivityView'
-    pod 'KeenClient', :inhibit_warnings => true
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
 end

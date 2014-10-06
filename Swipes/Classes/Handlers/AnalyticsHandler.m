@@ -13,7 +13,6 @@
 #import "Vero.h"
 #import "UtilityClass.h"
 #import "UserHandler.h"
-#import "KeenClient.h"
 @interface AnalyticsHandler ()
 @property (nonatomic) NSMutableArray *views;
 @property (nonatomic) Vero* vero;
@@ -64,11 +63,6 @@ static AnalyticsHandler *sharedObject;
     if(self.analyticsOff)
         return;
     [[LocalyticsSession shared] tagEvent:event attributes:options];
-    NSError* error;
-    [[KeenClient sharedClient] addEvent:options toEventCollection:event error:&error];
-    if(error){
-        NSLog(@"%@",error);
-    }
 }
 -(NSString *)customDimension:(NSInteger)dimension{
     return [[LocalyticsSession shared] customDimension:(int)dimension];
@@ -87,7 +81,7 @@ static AnalyticsHandler *sharedObject;
     }
 //@"Language": [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:[[NSLocale currentLocale] identifier]],
     
-    KeenClient *client = [KeenClient sharedClient];
+    /*KeenClient *client = [KeenClient sharedClient];
     NSMutableDictionary *probs = [@{
         @"Platform": @"iOS",
         @"OS Version": [[UIDevice currentDevice] systemVersion],
@@ -111,7 +105,7 @@ static AnalyticsHandler *sharedObject;
         else
             [probs setObject:@"Not logged in" forKey:@"userLevel"];
     }
-    client.globalPropertiesDictionary = [probs copy];
+    client.globalPropertiesDictionary = [probs copy];*/
 }
 -(void)pushView:(NSString *)view{
     NSInteger viewsLeft = self.views.count;
