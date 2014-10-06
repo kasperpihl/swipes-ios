@@ -129,8 +129,6 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    
 }
 
 -(void)receivedLocalNotification:(UILocalNotification *)notification
@@ -352,6 +350,7 @@
         accountButton.titleLabel.font = iconFont(23);
         [accountButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [accountButton setTitle:iconString(@"settingsAccount") forState:UIControlStateNormal];
+        accountButton.hidden = YES;
         [accountButton setTitle:iconString(@"settingsAccountFull") forState:UIControlStateHighlighted];
         [accountButton addTarget:self action:@selector(pressedAccount) forControlEvents:UIControlEventTouchUpInside];
         accountButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;

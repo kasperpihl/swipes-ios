@@ -55,10 +55,11 @@
     plusButton.frame = CGRectMake(self.view.bounds.size.width-kButtonHeight-plusX, self.view.bounds.size.height-kButtonHeight, kButtonHeight, kButtonHeight); //CGRectMake(plusX, self.view.bounds.size.height-kButtonHeight, kButtonHeight, kButtonHeight);
     plusButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin;
     plusButton.titleLabel.font = iconFont(26);
-    [plusButton setTitle:iconString(@"roundedAdd") forState:UIControlStateNormal];
-    [plusButton setTitle:iconString(@"roundedAddFull") forState:UIControlStateHighlighted];
+    [plusButton setTitle:iconString(@"editActionRoundedPlus") forState:UIControlStateNormal];
+    [plusButton setTitle:iconString(@"editActionRoundedPlus") forState:UIControlStateHighlighted];
     [plusButton setTitleColor:alpha(tcolorF(TextColor,ThemeDark),1.0) forState:UIControlStateNormal];
     [plusButton addTarget:self action:@selector(onPlus:) forControlEvents:UIControlEventTouchUpInside];
+    
     [self.view addSubview:plusButton];
     
     
