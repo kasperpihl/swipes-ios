@@ -17,6 +17,7 @@ typedef enum {
     SettingWeeklyReminders,
     SettingLocation,
     SettingEvernoteSync,
+    SettingTimeZone,
     
     IntegrationEvernoteEnableSync,
     IntegrationEvernoteSwipesTag

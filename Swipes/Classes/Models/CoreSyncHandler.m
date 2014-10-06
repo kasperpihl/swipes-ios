@@ -153,6 +153,9 @@
     [self synchronizeForce:YES async:YES];
 
 }
+
+
+
 -(CGFloat)durationForStatus:(SyncStatus)status{
     CGFloat duration = 0;
     switch (status) {

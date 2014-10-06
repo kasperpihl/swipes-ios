@@ -929,6 +929,19 @@
     return nil;
 }
 
++(void)changeTimeZoneFrom:(NSInteger)from to:(NSInteger)to{
+    NSInteger difference = from - to;
+    NSPredicate *repeatingTaskPredicate = [NSPredicate predicateWithFormat:@"repeatOption > %i",RepeatNever];
+    NSArray *tasksToMove = [KPToDo MR_findAllWithPredicate:repeatingTaskPredicate];
+    for ( KPToDo *toDo in tasksToMove ){
+        if( toDo.repeatedDate )
+            toDo.repeatedDate = [toDo.repeatedDate dateByAddingTimeInterval:difference];
+        if( toDo.schedule )
+            toDo.schedule = [toDo.schedule dateByAddingTimeInterval:difference];
+    }
+    [KPToDo saveToSync];
+}
+
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, origin: %@ - %@", self.title, self.order, self.origin, self.originIdentifier];

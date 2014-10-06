@@ -64,6 +64,9 @@ static SettingsHandler *sharedObject;
         case SettingLocation:
             index = @"SettingLocation";
             break;
+        case SettingTimeZone:
+            index = @"SettingTimeZone";
+            break;
         case SettingEvernoteSync:
             index = @"SettingEvernoteSync";
             break;
@@ -119,9 +122,21 @@ static SettingsHandler *sharedObject;
         }];
     }
 }
+-(void)checkTimeZoneChange{
+    //NSLog(@"checking timezone");
+    NSInteger deviceTimeZone = [NSTimeZone localTimeZone].secondsFromGMT;
+    NSInteger settingTimeZone = [[self valueForSetting:SettingTimeZone] integerValue];
+    //NSLog(@"%lu - %lu",(long)deviceTimeZone,(long)settingTimeZone);
+    if(deviceTimeZone != settingTimeZone){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"updated time zone" object:self userInfo:@{@"from":@(settingTimeZone),@"to":@(deviceTimeZone)}];
+    }
+}
 -(void)refreshGlobalSettingsForce:(BOOL)force{
+    [self checkTimeZoneChange];
     [self refreshDailyImage:force];
-    if(self.isFetchingSettings) return;
+    
+    if(self.isFetchingSettings)
+        return;
 }
 -(id)defaultValueForSettings:(KPSettings)setting{
     //NSLog(@"defaultval for:%i",setting);
@@ -138,6 +153,8 @@ static SettingsHandler *sharedObject;
             return [NSDate dateThisOrNextWeekWithDay:7 hours:8 minutes:0];
         case SettingWeekendStartTime:
             return [[NSDate date] dateAtHours:kDefWeekendStartTime minutes:0];
+        case SettingTimeZone:
+            return @([NSTimeZone localTimeZone].secondsFromGMT);
         case SettingNotifications:
             return @YES;
         case SettingDailyReminders:
@@ -158,7 +175,10 @@ static SettingsHandler *sharedObject;
     NSString *index = [self indexForSettings:setting];
     if(!index) return nil;
     id value = [USER_DEFAULTS objectForKey:index];
-    if(!value) value = [self defaultValueForSettings:setting];
+    if(!value){
+        value = [self defaultValueForSettings:setting];
+        [self setValue:value forSetting:setting];
+    }
     return value;
 }
 -(void)setValue:(id)value forSetting:(KPSettings)setting{

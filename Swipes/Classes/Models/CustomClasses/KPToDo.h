@@ -48,4 +48,6 @@
 - (void)removeAllAttachmentsForService:(NSString *)service;
 - (KPAttachment *)firstAttachmentForServiceType:(NSString *)service;
 +(void)removeAllAttachmentsForAllToDosWithService:(NSString *)service inContext:(NSManagedObjectContext *)context save:(BOOL)save;
+
++(void)changeTimeZoneFrom:(NSInteger)from to:(NSInteger)to;
 @end

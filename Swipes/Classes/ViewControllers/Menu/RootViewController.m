@@ -360,6 +360,20 @@ static RootViewController *sharedObject;
     
     
 }
+
+-(void)changedTimeZone:(NSNotification*)notification{
+    
+    NSInteger from = [[notification.userInfo objectForKey:@"from"] integerValue];
+    NSInteger to = [[notification.userInfo objectForKey:@"to"] integerValue];
+    //NSLog(@"notif:%@",notification);
+    [UTILITY confirmBoxWithTitle:@"Time Zone Change" andMessage:@"Do you want to move all your recurring tasks to match the change? A task @ 8:00 will be 8:00 in new time zone (Recommended)" block:^(BOOL succeeded, NSError *error) {
+        
+        if ( succeeded )
+            [KPToDo changeTimeZoneFrom:from to:to];
+        [kSettings setValue:@(to) forSetting:SettingTimeZone];
+    }];
+}
+
 -(void)openApp
 {
     [kSettings refreshGlobalSettingsForce:NO];
@@ -473,6 +487,7 @@ static RootViewController *sharedObject;
     KPCORE.delegate = self;
     notify(@"changed theme", changedTheme);
     notify(@"handled URL", handledURL);
+    notify(@"updated time zone", changedTimeZone:);
     kHints.delegate = self;
     
     BLURRY.delegate = self;
