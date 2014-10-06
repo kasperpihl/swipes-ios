@@ -300,7 +300,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             [KPToDo scheduleToDos:@[self.model] forDate:[NSDate date] save:YES];
             break;
         case CellTypeDone:
-            [KPToDo completeToDos:@[self.model] save:YES];
+            [KPToDo completeToDos:@[self.model] save:YES context:nil analytics:YES];
             break;
         case CellTypeNone:
             break;

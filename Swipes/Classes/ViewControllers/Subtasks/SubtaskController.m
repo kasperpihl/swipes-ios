@@ -93,7 +93,7 @@
 -(void)loadSubtasks{
     NSSet *subtasks = [self.model getSubtasks];
     BOOL hasUncompletedTasks = YES;
-    NSArray *sortedObjects = [KPToDo sortOrderForItems:[subtasks allObjects] newItemsOnTop:NO save:YES];
+    NSArray *sortedObjects = [KPToDo sortOrderForItems:[subtasks allObjects] newItemsOnTop:NO save:YES context:nil];
     if(!self.expanded){
         sortedObjects = [sortedObjects filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
         if(!sortedObjects.count){
@@ -299,7 +299,7 @@
         if(state == MCSwipeTableViewCellState1){
             [cell setStrikeThrough:YES];
             if(!isDone){
-                [KPToDo completeToDos:@[subtask] save:YES];
+                [KPToDo completeToDos:@[subtask] save:YES context:nil analytics:YES];
                 if(self.expanded){
                     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 }

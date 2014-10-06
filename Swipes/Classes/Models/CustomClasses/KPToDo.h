@@ -10,7 +10,7 @@
 /* Schedule ToDo's - The array contains the items that changed state */
 +(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save;
 /* Complete ToDo's - The array contains the items that changed state */
-+(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save;
++(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save context:(NSManagedObjectContext*)context analytics:(BOOL)analytics;
 /* Delete ToDo's */
 +(void)deleteToDos:(NSArray*)toDos save:(BOOL)save force:(BOOL)force;
 /* Update Tags for ToDo's */
@@ -28,7 +28,7 @@
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;
 
-+(NSArray*)sortOrderForItems:(NSArray*)items newItemsOnTop:(BOOL)newOnTop save:(BOOL)save;
++(NSArray*)sortOrderForItems:(NSArray*)items newItemsOnTop:(BOOL)newOnTop save:(BOOL)save context:(NSManagedObjectContext*)context;
 
 +(void)saveToSync;
 

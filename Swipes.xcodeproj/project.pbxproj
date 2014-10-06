@@ -162,6 +162,13 @@
 		A792BB8B18AC3A5E000573E4 /* LocationResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A792BB8A18AC3A5E000573E4 /* LocationResultCell.m */; };
 		A7933049172AB63700F1505E /* TodayListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933048172AB63700F1505E /* TodayListViewController.m */; };
 		A7933056172B2BA100F1505E /* DoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933055172B2BA100F1505E /* DoneViewController.m */; };
+		A7A3C25419E1A8D40025E877 /* SavedChangeHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A7A3C25219E1A8D40025E877 /* SavedChangeHandler.h */; };
+		A7A3C25519E1A8D40025E877 /* SavedChangeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A3C25319E1A8D40025E877 /* SavedChangeHandler.m */; };
+		A7A3C25619E1C0980025E877 /* SavedChangeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A3C25319E1A8D40025E877 /* SavedChangeHandler.m */; };
+		A7A3C25719E1C0980025E877 /* SavedChangeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A3C25319E1A8D40025E877 /* SavedChangeHandler.m */; };
+		A7A3C25B19E26D0B0025E877 /* NSDate+UtilitiesiOS8.h in Headers */ = {isa = PBXBuildFile; fileRef = A7A3C25919E26D0B0025E877 /* NSDate+UtilitiesiOS8.h */; };
+		A7A3C25C19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A3C25A19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m */; };
+		A7A3C25D19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A3C25A19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m */; };
 		A7A560B8198A9A3600C3D213 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A560B7198A9A3600C3D213 /* NotificationsViewController.m */; };
 		A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A976E6184119D6001C0A51 /* PaymentHandler.m */; };
 		A7AA7964194E0665003DAB3B /* ParentSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AA7963194E0665003DAB3B /* ParentSyncHandler.m */; };
@@ -710,6 +717,10 @@
 		A7933048172AB63700F1505E /* TodayListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TodayListViewController.m; path = Today/TodayListViewController.m; sourceTree = "<group>"; };
 		A7933054172B2BA100F1505E /* DoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DoneViewController.h; path = Done/DoneViewController.h; sourceTree = "<group>"; };
 		A7933055172B2BA100F1505E /* DoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DoneViewController.m; path = Done/DoneViewController.m; sourceTree = "<group>"; };
+		A7A3C25219E1A8D40025E877 /* SavedChangeHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SavedChangeHandler.h; path = Models/SavedChangeHandler.h; sourceTree = "<group>"; };
+		A7A3C25319E1A8D40025E877 /* SavedChangeHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SavedChangeHandler.m; path = Models/SavedChangeHandler.m; sourceTree = "<group>"; };
+		A7A3C25919E26D0B0025E877 /* NSDate+UtilitiesiOS8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+UtilitiesiOS8.h"; sourceTree = "<group>"; };
+		A7A3C25A19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+UtilitiesiOS8.m"; sourceTree = "<group>"; };
 		A7A560B6198A9A3600C3D213 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationsViewController.h; path = Settings/NotificationsViewController.h; sourceTree = "<group>"; };
 		A7A560B7198A9A3600C3D213 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationsViewController.m; path = Settings/NotificationsViewController.m; sourceTree = "<group>"; };
 		A7A976E5184119D6001C0A51 /* PaymentHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentHandler.h; sourceTree = "<group>"; };
@@ -1520,6 +1531,8 @@
 				A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */,
 				A71E9FC31951CE4B00FC9B0B /* NSString+Levenshtein.h */,
 				A71E9FC41951CE4B00FC9B0B /* NSString+Levenshtein.m */,
+				A7A3C25919E26D0B0025E877 /* NSDate+UtilitiesiOS8.h */,
+				A7A3C25A19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1672,6 +1685,8 @@
 				A71E9FBF1951CD6F00FC9B0B /* Processors */,
 				A781285317294C56002226C8 /* CoreSyncHandler.h */,
 				A781285417294C56002226C8 /* CoreSyncHandler.m */,
+				A7A3C25219E1A8D40025E877 /* SavedChangeHandler.h */,
+				A7A3C25319E1A8D40025E877 /* SavedChangeHandler.m */,
 				A7AA7962194E0665003DAB3B /* ParentSyncHandler.h */,
 				A7AA7963194E0665003DAB3B /* ParentSyncHandler.m */,
 				A7AA7966194E067C003DAB3B /* EvernoteSyncHandler.h */,
@@ -2065,6 +2080,7 @@
 				DA69248A19B87B690082D1E4 /* IntegrationHandler.h in Headers */,
 				DA53469619D426B4007AA15D /* NSPersistentStore+MagicalRecord.h in Headers */,
 				DA6924AB19BDCF330082D1E4 /* CoreSyncHandler.h in Headers */,
+				A7A3C25B19E26D0B0025E877 /* NSDate+UtilitiesiOS8.h in Headers */,
 				DA23231419B39C4600D996EB /* KPAttachment.h in Headers */,
 				DA23231F19B39C6F00D996EB /* _KPToDo.h in Headers */,
 				DA5346BB19D426B4007AA15D /* MagicalRecordLogging.h in Headers */,
@@ -2073,6 +2089,7 @@
 				DA69247E19B879D30082D1E4 /* AnalyticsHandler.h in Headers */,
 				DA53469219D426B4007AA15D /* NSManagedObjectModel+MagicalRecord.h in Headers */,
 				DA53468A19D426B4007AA15D /* NSManagedObjectContext+MagicalSaves.h in Headers */,
+				A7A3C25419E1A8D40025E877 /* SavedChangeHandler.h in Headers */,
 				DA53465619D426B4007AA15D /* NSAttributeDescription+MagicalDataImport.h in Headers */,
 				DA23231719B39C4600D996EB /* KPToDo.h in Headers */,
 				DA69248519B87ACD0082D1E4 /* Vero.h in Headers */,
@@ -2471,6 +2488,7 @@
 				A78128C417294C56002226C8 /* CoreSyncHandler.m in Sources */,
 				DA53466319D426B4007AA15D /* NSObject+MagicalDataImport.m in Sources */,
 				A74D65B219DD94D900B4780C /* KxMenu.m in Sources */,
+				A7A3C25719E1C0980025E877 /* SavedChangeHandler.m in Sources */,
 				A703B1B01838EBF20047DCC9 /* KPDayPicker.m in Sources */,
 				A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */,
 				A77D34D018E31E1200095F1E /* EMHint.m in Sources */,
@@ -2610,6 +2628,7 @@
 			files = (
 				DAE2B17519CB7D7200A9074E /* IntegrationHandler.m in Sources */,
 				DA5346A819D426B4007AA15D /* MagicalRecord+iCloud.m in Sources */,
+				A7A3C25C19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m in Sources */,
 				DA53466419D426B4007AA15D /* NSObject+MagicalDataImport.m in Sources */,
 				DAE2B17819CB7D7200A9074E /* UserHandler.m in Sources */,
 				DAE2B15619CB7A4D00A9074E /* TodayViewController.m in Sources */,
@@ -2626,6 +2645,7 @@
 				DAE2B16F19CB7D6400A9074E /* EvernoteToDoProcessor.m in Sources */,
 				DA5346A419D426B4007AA15D /* MagicalRecord+ErrorHandling.m in Sources */,
 				DA53468C19D426B4007AA15D /* NSManagedObjectContext+MagicalSaves.m in Sources */,
+				A7A3C25619E1C0980025E877 /* SavedChangeHandler.m in Sources */,
 				DA53469C19D426B4007AA15D /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
 				DAE2B17C19CB7DF200A9074E /* UtilityClass.m in Sources */,
 				DA53468419D426B4007AA15D /* NSManagedObjectContext+MagicalObserving.m in Sources */,
@@ -2674,6 +2694,7 @@
 				DA53469519D426B4007AA15D /* NSManagedObjectModel+MagicalRecord.m in Sources */,
 				DA53466D19D426B4007AA15D /* NSString+MagicalDataImport.m in Sources */,
 				DA53466919D426B4007AA15D /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
+				A7A3C25D19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m in Sources */,
 				DA53467919D426B4007AA15D /* NSManagedObject+MagicalFinders.m in Sources */,
 				DA04465119D71CD10083F816 /* CoreSyncHandler.m in Sources */,
 				DA23230F19B39C2700D996EB /* Datamodel.xcdatamodeld in Sources */,
@@ -2682,6 +2703,7 @@
 				DA53469119D426B4007AA15D /* NSManagedObjectContext+MagicalThreading.m in Sources */,
 				DA69249019B87CA50082D1E4 /* SettingsHandler.m in Sources */,
 				DA23232319B471EF00D996EB /* Global.m in Sources */,
+				A7A3C25519E1A8D40025E877 /* SavedChangeHandler.m in Sources */,
 				DA5346A519D426B4007AA15D /* MagicalRecord+ErrorHandling.m in Sources */,
 				DA53468D19D426B4007AA15D /* NSManagedObjectContext+MagicalSaves.m in Sources */,
 				DA53469D19D426B4007AA15D /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,

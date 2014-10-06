@@ -52,7 +52,7 @@
 @property (nonatomic) BOOL isHandlingTrigger;
 @property (nonatomic) BOOL isLonelyRider;
 @property (nonatomic) BOOL savedOffset;
-
+@property (nonatomic) BOOL badState;
 @property (nonatomic) BOOL hasStartedEditing;
 
 @property (nonatomic,strong) NSMutableDictionary *stateDictionary;
@@ -224,7 +224,11 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(ToDoCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
     cell.cellType = [toDo cellTypeForTodo];
+    if(self.cellType == CellTypeDone && !toDo.completionDate){
+        self.badState = YES;
+    }
     [cell setDotColor:self.cellType];
+    
     [cell changeToDo:toDo withSelectedTags:self.itemHandler.selectedTags];
 }
 
@@ -409,7 +413,7 @@
             movedItems = [KPToDo scheduleToDos:toDosArray forDate:[NSDate date] save:YES];
             break;
         case CellTypeDone:
-            movedItems = [KPToDo completeToDos:toDosArray save:YES];
+            movedItems = [KPToDo completeToDos:toDosArray save:YES context:nil analytics:YES];
             break;
         case CellTypeNone:
             [self returnSelectedRowsAndBounce:NO];
@@ -626,7 +630,12 @@
     }
     [ANALYTICS pushView:activeView];
     [self handleShowingToolbar];
-    
+   
+    if(self.badState){
+        [[NSManagedObjectContext MR_defaultContext] reset];
+        [self update];
+        self.badState = NO;
+    }
     // show any todo that needs to be viewed from the widget
     
 }

@@ -56,7 +56,7 @@
     selectionView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.selectedBackgroundView = selectionView;
     
-    CGFloat titleX = 4;
+    CGFloat titleX = 3;
     CGFloat buttonWidth = 40;
     
     CGFloat notificationX = 6;
@@ -74,7 +74,7 @@
     [self bringSubviewToFront:completeButton];
     
     self.taskTitle = [[UILabel alloc] initWithFrame:CGRectMake(notificationX + buttonWidth + titleX, 0, self.frame.size.width- buttonWidth - titleX -notificationX, self.frame.size.height)];
-    self.taskTitle.font = [UIFont systemFontOfSize:14];
+    self.taskTitle.font = [UIFont systemFontOfSize:16];
     self.taskTitle.lineBreakMode = NSLineBreakByTruncatingTail;
     self.taskTitle.textColor = [UIColor whiteColor];
     [self.contentView addSubview:self.taskTitle];

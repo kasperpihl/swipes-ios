@@ -2,7 +2,11 @@
 #import "NotificationHandler.h"
 #import "KPTag.h"
 #import "UtilityClass.h"
+#ifndef NOT_APPLICATION
 #import "NSDate-Utilities.h"
+#else
+#import "NSDate+UtilitiesiOS8.h"
+#endif
 #import "CoreSyncHandler.h"
 #import "Underscore.h"
 #import "AnalyticsHandler.h"
@@ -100,25 +104,35 @@
     return [movedToDos copy];
 }
 
-+(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save{
-    NSMutableArray *movedToDos = [NSMutableArray array];
-    BOOL isSubtasks = NO;
-    for(KPToDo *toDo in toDoArray){
-        if ( toDo.parent )
-            isSubtasks = YES;
-        BOOL movedToDo = [toDo complete];
-        if (movedToDo)
-            [movedToDos addObject:toDo];
-    }
-    if(save)
-        [KPToDo saveToSync];
-    NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
-    [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks, @"Is Action Steps": @( isSubtasks )}];
-    [ANALYTICS heartbeat];
-    if( !isSubtasks ) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:HH_TriggerHint object:@(HintCompleted)];
++(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save context:(NSManagedObjectContext*)context analytics:(BOOL)analytics{
+    __block NSMutableArray *movedToDos = [NSMutableArray array];
+    if(!context)
+        context = [KPCORE context];
+    __block BOOL isSubtasks = NO;
+    [context performBlockAndWait:^{
+        
+        for(KPToDo *toDo in toDoArray){
+            if ( toDo.parent )
+                isSubtasks = YES;
+            BOOL movedToDo = [toDo completeInContext:context];
+            if (movedToDo)
+                [movedToDos addObject:toDo];
+        }
+        if(save)
+            [KPCORE saveContextForSynchronization:context];
+    }];
+    
+    
+    if(analytics){
+        NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
+        [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks, @"Is Action Steps": @( isSubtasks )}];
+        [ANALYTICS heartbeat];
+        if( !isSubtasks ) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:HH_TriggerHint object:@(HintCompleted)];
+        }
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
+    
     return [movedToDos copy];
 }
 
@@ -520,8 +534,8 @@
     } while (counter < numberOfDates);
     return array;
 }
--(KPToDo*)deepCopy{
-    KPToDo *newToDo = [KPToDo newObjectInContext:nil];
+-(KPToDo*)deepCopyInContext:(NSManagedObjectContext*)context{
+    KPToDo *newToDo = [KPToDo newObjectInContext:context];
     newToDo.completionDate = self.completionDate;
     newToDo.notes = self.notes;
     newToDo.order = self.order;
@@ -567,55 +581,62 @@
     return (self.parent) ? YES : NO;
 }
 
-+(NSArray*)sortOrderForItems:(NSArray*)items newItemsOnTop:(BOOL)newOnTop save:(BOOL)save{
-    NSMutableArray *existingOrders = [NSMutableArray array];
-
-    for( KPToDo *todo in items ){
-        [existingOrders addObject:todo.order];
-    }
-    //if(!newOnTop)
-        //NSLog(@"%@",[[existingOrders reverseObjectEnumerator] allObjects]);
++(NSArray*)sortOrderForItems:(NSArray*)items newItemsOnTop:(BOOL)newOnTop save:(BOOL)save context:(NSManagedObjectContext*)context{
+    if(!context)
+        context = KPCORE.context;
     
-    NSPredicate *orderedItemsPredicate = [NSPredicate predicateWithFormat:@"(order > %i)",kDefOrderVal];
-    NSPredicate *unorderedItemsPredicate = [NSPredicate predicateWithFormat:@"!(order > %i)",kDefOrderVal];
-    NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
-    NSSortDescriptor *unorderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"schedule" ascending:NO];
-    NSArray *orderedItems = [[items filteredArrayUsingPredicate:orderedItemsPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
-    NSArray *unorderedItems = [[items filteredArrayUsingPredicate:unorderedItemsPredicate] sortedArrayUsingDescriptors:@[unorderedItemsSortDescriptor]];
-    int counter = kDefOrderVal + 1;
-    NSArray *sortedItems;
-    if(newOnTop)
-        sortedItems= [unorderedItems arrayByAddingObjectsFromArray:orderedItems];
-    else
-        sortedItems = [orderedItems arrayByAddingObjectsFromArray:unorderedItems];
-    
-    NSInteger numberOfChanges = 0;
-    for(KPToDo *toDo in sortedItems){
-        if(toDo.orderValue != counter){
-            toDo.orderValue = counter;
-            numberOfChanges++;
-            //NSLog(@"changed %i",counter);
+    __block NSArray *sortedItems;
+    [context performBlockAndWait:^{
+        NSMutableArray *existingOrders = [NSMutableArray array];
+        
+        for( KPToDo *todo in items ){
+            [existingOrders addObject:todo.order];
         }
-        //NSLog(@"%i - %@",toDo.orderValue,toDo.title);
-        counter++;
-    }
-    if(save && numberOfChanges > 0){
-        [KPToDo saveToSync];
-    }
-    
-    /*
-     Ordered items = items where order > 0
-     itemsWithoutOrder = items where !order or order == 0
-     Sorted by schedule date ascending
-     i = 1
-     foreach ordered Item:
-     item.order = i
-     i++
-     foreach unordered Item:
-     item.order = i
-     i++
-     save
-    */
+        //if(!newOnTop)
+        //NSLog(@"%@",[[existingOrders reverseObjectEnumerator] allObjects]);
+        
+        NSPredicate *orderedItemsPredicate = [NSPredicate predicateWithFormat:@"(order > %i)",kDefOrderVal];
+        NSPredicate *unorderedItemsPredicate = [NSPredicate predicateWithFormat:@"!(order > %i)",kDefOrderVal];
+        NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
+        NSSortDescriptor *unorderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"schedule" ascending:NO];
+        NSArray *orderedItems = [[items filteredArrayUsingPredicate:orderedItemsPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
+        NSArray *unorderedItems = [[items filteredArrayUsingPredicate:unorderedItemsPredicate] sortedArrayUsingDescriptors:@[unorderedItemsSortDescriptor]];
+        int counter = kDefOrderVal + 1;
+        
+        if(newOnTop)
+            sortedItems= [unorderedItems arrayByAddingObjectsFromArray:orderedItems];
+        else
+            sortedItems = [orderedItems arrayByAddingObjectsFromArray:unorderedItems];
+        
+        NSInteger numberOfChanges = 0;
+        for(KPToDo *toDo in sortedItems){
+            if(toDo.orderValue != counter){
+                toDo.orderValue = counter;
+                numberOfChanges++;
+                //NSLog(@"changed %i",counter);
+            }
+            //NSLog(@"%i - %@",toDo.orderValue,toDo.title);
+            counter++;
+        }
+        if(save && numberOfChanges > 0){
+            [KPCORE saveContextForSynchronization:context];
+        }
+        
+        /*
+         Ordered items = items where order > 0
+         itemsWithoutOrder = items where !order or order == 0
+         Sorted by schedule date ascending
+         i = 1
+         foreach ordered Item:
+         item.order = i
+         i++
+         foreach unordered Item:
+         item.order = i
+         i++
+         save
+         */
+        
+    }];
     return sortedItems;
     
 }
@@ -781,7 +802,7 @@
     }
 }
 
--(void)completeRepeatedTask{
+-(void)completeRepeatedTaskInContext:(NSManagedObjectContext*)context{
     if (self.repeatOptionValue == RepeatNever)
         return;
     
@@ -791,28 +812,33 @@
     while ([next isInPast]) {
         next = [self nextDateFrom:next];
     }
-    KPToDo *toDoCopy = [self deepCopy];
-    [self copyActionStepsToCopy:toDoCopy inContext:nil];
+    KPToDo *toDoCopy = [self deepCopyInContext:context];
+    [self copyActionStepsToCopy:toDoCopy inContext:context];
     toDoCopy.numberOfRepeatedValue = ++numberOfRepeated;
-    [toDoCopy complete];
+    [toDoCopy completeInContext:context];
     [self scheduleForDate:next];
     self.repeatedDate = next;
     self.numberOfRepeated = [NSNumber numberWithInteger:numberOfRepeated];
 }
 
--(BOOL)complete{
-    if(self.location) self.location = nil;
-    if(self.repeatOptionValue > RepeatNever){
-        CellType oldCell = [self cellTypeForTodo];
-        [self completeRepeatedTask];
-        CellType newCell = [self cellTypeForTodo];
-        return (oldCell != newCell);
-    }
-    else{
-        self.schedule = nil;
-        self.completionDate = [NSDate date];
-        return YES;
-    }
+-(BOOL)completeInContext:(NSManagedObjectContext*)context{
+    __block BOOL completed = NO;
+    [context performBlockAndWait:^{
+        if(self.location) self.location = nil;
+        if(self.repeatOptionValue > RepeatNever){
+            CellType oldCell = [self cellTypeForTodo];
+            [self completeRepeatedTaskInContext:context];
+            CellType newCell = [self cellTypeForTodo];
+            completed = (oldCell != newCell);
+        }
+        else{
+            self.schedule = nil;
+            self.completionDate = [NSDate date];
+            completed = YES;
+        }
+    }];
+    return completed;
+    
 }
 
 -(BOOL)scheduleForDate:(NSDate*)date

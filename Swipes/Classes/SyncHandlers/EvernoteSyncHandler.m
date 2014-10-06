@@ -170,7 +170,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
             // If not, override in Swipes
             else{
                 DLog(@"completing subtask");
-                [KPToDo completeToDos:@[ subtask ] save:NO];
+                [KPToDo completeToDos:@[ subtask ] save:NO context:nil analytics:YES];
                 updated = YES;
             }
         }

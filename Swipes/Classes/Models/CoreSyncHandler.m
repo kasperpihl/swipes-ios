@@ -878,7 +878,6 @@ static CoreSyncHandler *sharedObject;
         //[MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
         [[NSManagedObjectContext MR_defaultContext] setUndoManager:[[NSUndoManager alloc] init]];
         
-        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(performTestForSyncing) userInfo:nil repeats:NO];
     }
     @catch (NSException *exception) {
         [UtilityClass sendException:exception type:@"Load Database Exception"];

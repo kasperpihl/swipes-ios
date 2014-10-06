@@ -12,6 +12,7 @@
 #import "TodayViewController.h"
 #import "TodayTableViewCell.h"
 #import "ThemeHandler.h"
+#import "SavedChangeHandler.h"
 
 #define kRowHeight 45
 #define kButtonHeight 44
@@ -38,8 +39,8 @@
     
     DLog(@"storeURL: %@", [Global coreDataUrl]);
     
+    //[Global initCoreData];
     [Global initCoreData];
-
     // Do any additional setup after loading the view from its nib.
     
     _tableView.backgroundColor = [UIColor clearColor];
@@ -88,11 +89,16 @@
 
 -(void)reloadDataSource{
     NSDate *endDate = [NSDate date];
+    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_defaultContext];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endDate];
-    NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
-    self.todos = [KPToDo sortOrderForItems:results newItemsOnTop:YES save:YES];
+    NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate inContext:localContext];
+    self.todos = [KPToDo sortOrderForItems:results newItemsOnTop:YES save:NO context:localContext];
+    SavedChangeHandler *changeHandler = [[SavedChangeHandler alloc] init];
+    if([localContext hasChanges])
+        [changeHandler saveContextForSynchronization:localContext];
     [self.tableView reloadData];
     [self updateContentSize];
+
 }
 
 -(void)updateContentSize{
@@ -119,7 +125,7 @@
 }
 
 - (void)widgetPerformUpdateWithCompletionHandler:(void (^)(NCUpdateResult))completionHandler {
-    //[self reloadDataSource];
+    [self reloadDataSource];
     // Perform any setup necessary in order to update the view.
     
     // If an error is encountered, use NCUpdateResultFailed
@@ -229,23 +235,32 @@
      }];
 }
 
+-(void)saveContext:(NSManagedObjectContext*)context{
+    
+}
 
 -(void)didCompleteCell:(TodayTableViewCell *)cell{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    //KPToDo *model = [self.todos objectAtIndex:indexPath.row];
-    //[KPToDo completeToDos:@[model] save:YES];
+    KPToDo *model = [self.todos objectAtIndex:indexPath.row];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_context];
+        KPToDo *localModel = [model MR_inContext:localContext];
+        [KPToDo completeToDos:@[localModel] save:NO context:localContext analytics:NO];
+        SavedChangeHandler *changeHandler = [[SavedChangeHandler alloc] init];
+        [changeHandler saveContextForSynchronization:localContext];
+    });
+    //[KPToDo completeToDos:@[model] save:NO];
     NSMutableArray *mutCopy = [self.todos mutableCopy];
     [mutCopy removeObjectAtIndex:indexPath.row];
     BOOL insert = mutCopy.count >= 3;
     NSIndexPath *insertPath = [NSIndexPath indexPathForItem:2 inSection:0];
     self.todos = [mutCopy copy];
-    [self.tableView reloadData];/*
     [self.tableView beginUpdates];
     
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     if(insert)
         [self.tableView insertRowsAtIndexPaths:@[insertPath] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView endUpdates];*/
+    [self.tableView endUpdates];
     [self updateContentSize];
     //[self reloadDataSource];
 }

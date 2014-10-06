@@ -8,6 +8,11 @@
 
 @class NSManagedObject,NSManagedObjectContext,CoreSyncHandler;
 #import "ParentSyncHandler.h"
+
+#define kTMPUpdateObjects @"tmpUpdateObjects"
+#define kUpdateObjects @"updateObjects"
+#define kLastSyncLocalDate @"lastSyncLocalDate"
+#define kLastSyncServerString @"lastSync"
 #define KPCORE [CoreSyncHandler sharedInstance]
 
 @protocol SyncDelegate <NSObject>
@@ -22,6 +27,9 @@
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, weak) id<SyncDelegate> delegate;
 @property (nonatomic, weak) UIViewController* rootController;
+
+// Used by widget to avoid syncing.
+@property (nonatomic) BOOL disableSync;
 
 -(void)clearAndDeleteData;
 -(void)seedObjectsSave:(BOOL)save;
