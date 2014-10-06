@@ -14,6 +14,8 @@
 #define iconFont(fontSize) [UIFont fontWithName:@"swipes" size:fontSize]
 #define USER_DEFAULTS  [Global sharedDefaults]
 
+#define LOCALIZE_STRING(string) NSLocalizedString(string, nil)
+
 @interface Global : NSObject
 
 + (Global *)sharedInstance;
