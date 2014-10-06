@@ -870,6 +870,7 @@
 		DA69248D19B87C450082D1E4 /* SwipesKit-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwipesKit-Prefix.pch"; sourceTree = "<group>"; };
 		DA6B61C219E321FE00089877 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Swipes/en.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		DA6B61C419E322FB00089877 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DA6B61C519E3298800089877 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA94A2BE196EEA8B008F8A3B /* libLocalyticsAMP_x64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLocalyticsAMP_x64.a; sourceTree = "<group>"; };
 		DA94A2BF196EEA8B008F8A3B /* LocalyticsAmpSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsAmpSession.h; sourceTree = "<group>"; };
 		DA94A2C0196EEA8B008F8A3B /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
@@ -2228,6 +2229,7 @@
 			knownRegions = (
 				en,
 				da,
+				pt,
 			);
 			mainGroup = A7778CC116EB5884004D95E5;
 			productRefGroup = A7778CCB16EB5884004D95E5 /* Products */;
@@ -2785,6 +2787,7 @@
 			children = (
 				DA6B61C219E321FE00089877 /* en */,
 				DA6B61C419E322FB00089877 /* da */,
+				DA6B61C519E3298800089877 /* pt */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
