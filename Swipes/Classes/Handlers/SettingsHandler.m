@@ -138,21 +138,37 @@ static SettingsHandler *sharedObject;
     if(self.isFetchingSettings)
         return;
 }
--(id)defaultValueForSettings:(KPSettings)setting{
+-(NSNumber*)repairValue:(NSDate*)date forSetting:(KPSettings)setting{
     //NSLog(@"defaultval for:%i",setting);
     switch (setting) {
         case SettingLaterToday:
-            return [[NSDate date] dateAtHours:3 minutes:0];
-        case SettingWeekStart:
-            return [NSDate dateThisOrNextWeekWithDay:2 hours:8 minutes:0];
-        case SettingWeekStartTime:
-            return [[NSDate date] dateAtHours:kDefWeekStartTime minutes:0];
-        case SettingEveningStartTime:
-            return [[NSDate date] dateAtHours:kDefEveningStartTime minutes:0];
-        case SettingWeekendStart:
-            return [NSDate dateThisOrNextWeekWithDay:7 hours:8 minutes:0];
         case SettingWeekendStartTime:
-            return [[NSDate date] dateAtHours:kDefWeekendStartTime minutes:0];
+        case SettingEveningStartTime:
+        case SettingWeekStartTime:
+            return @( date.hour * D_HOUR + date.minute * D_MINUTE );
+        case SettingWeekStart:
+        case SettingWeekendStart:
+            return @( date.weekday );
+        default:
+            return nil;
+    }
+}
+-(id)defaultValueForSettings:(KPSettings)setting{
+    //NSLog(@"defaultval for:%i",setting);
+    
+    switch (setting) {
+        case SettingLaterToday:
+            return @( 3 * D_HOUR );
+        case SettingWeekStart:
+            return @( 2 );
+        case SettingWeekStartTime:
+            return @(kDefWeekStartTime * D_HOUR);
+        case SettingEveningStartTime:
+            return @(kDefEveningStartTime * D_HOUR);
+        case SettingWeekendStart:
+            return @( 7 );
+        case SettingWeekendStartTime:
+            return @(kDefWeekendStartTime * D_HOUR);
         case SettingTimeZone:
             return @([NSTimeZone localTimeZone].secondsFromGMT);
         case SettingNotifications:
@@ -172,9 +188,15 @@ static SettingsHandler *sharedObject;
     }
 }
 -(id)valueForSetting:(KPSettings)setting{
+    
     NSString *index = [self indexForSettings:setting];
     if(!index) return nil;
     id value = [USER_DEFAULTS objectForKey:index];
+    if([value isKindOfClass:[NSDate class]]){
+        value = [self repairValue:value forSetting:setting];
+        if(value)
+            [self setValue:value forSetting:setting];
+    }
     if(!value){
         value = [self defaultValueForSettings:setting];
         [self setValue:value forSetting:setting];

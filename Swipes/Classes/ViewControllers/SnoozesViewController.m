@@ -96,12 +96,14 @@
     SnoozeSettings snooze = indexPath.row;
     NSString *valueString;
     KPSettings setting = [self settingValForSnooze:snooze];
-    NSDate *settingDate = (NSDate*)[kSettings valueForSetting:setting];
+    NSNumber *settingValue = (NSNumber*)[kSettings valueForSetting:setting];
+    NSDate *settingDate;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     switch (snooze) {
         case SnoozeWeekStartTime:
         case SnoozeEveningStartTime:
         case SnoozeWeekendStartTime:{
+            settingDate = [[[NSDate date] dateAtStartOfDay] dateByAddingTimeInterval:settingValue.integerValue];
             [formatter setLocale:[NSLocale currentLocale]];
             [formatter setDateStyle:NSDateFormatterNoStyle];
             [formatter setTimeStyle:NSDateFormatterShortStyle];
@@ -109,12 +111,14 @@
         }
         case SnoozeWeekStart:
         case SnoozeWeekendStart:{
+            settingDate = [NSDate dateThisOrNextWeekWithDay:settingValue.integerValue hours:8 minutes:0];
             [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
             [formatter setDateFormat:@"EEEE"];
             [cell.dayPicker setSelectedDay:settingDate.weekday];
             break;
         }
         case SnoozeLaterToday:{
+            settingDate = [[[NSDate date] dateAtStartOfDay] dateByAddingTimeInterval:settingValue.integerValue];
             [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
             [formatter setDateFormat:@"'+'H':'mm'h'"];
             break;
@@ -136,7 +140,7 @@
 
 -(void)timePicker:(KPTimePicker *)timePicker selectedDate:(NSDate *)date
 {
-    if(date) [kSettings setValue:date forSetting:[self settingValForSnooze:self.activeSnooze]];
+    if(date) [kSettings setValue:@([date timeIntervalSinceDate:[date dateAtStartOfDay]]) forSetting:[self settingValForSnooze:self.activeSnooze]];
     [UIView animateWithDuration:0.1 animations:^{
         timePicker.alpha = 0;
     } completion:^(BOOL finished) {
@@ -165,11 +169,9 @@
 -(void)dayPickerCell:(DayPickerSettingsCell *)cell pickedWeekDay:(NSInteger)weekday
 {
     KPSettings setting = [self settingValForSnooze:self.activeSnooze];
-    NSDate *weekdayDate = (NSDate*)[kSettings valueForSetting:setting];
-    NSLog(@"old:%li new:%li",(long)weekdayDate.weekday,(long)weekday);
-    if(weekday != weekdayDate.weekday){
-        weekdayDate = [NSDate dateThisOrNextWeekWithDay:weekday hours:8 minutes:0];
-        [kSettings setValue:weekdayDate forSetting:setting];
+    NSNumber *weekdayDate = (NSNumber*)[kSettings valueForSetting:setting];
+    if(weekday != weekdayDate.integerValue){
+        [kSettings setValue:@(weekday) forSetting:setting];
     }
     SnoozeSettings snooze = self.activeSnooze;
     self.activeSnooze = SnoozeNone;
@@ -190,12 +192,14 @@
     else if(self.activeSnooze != SnoozeNone) return;
     self.activeSnooze = snooze;
     KPSettings setting = [self settingValForSnooze:snooze];
-    NSDate *settingDate = (NSDate*)[kSettings valueForSetting:setting];
+    NSNumber *settingValue = (NSNumber*)[kSettings valueForSetting:setting];
+    
     switch (snooze) {
         case SnoozeLaterToday:
         case SnoozeWeekStartTime:
         case SnoozeEveningStartTime:
         case SnoozeWeekendStartTime:{
+            NSDate *settingDate = [[[NSDate date] dateAtStartOfDay] dateByAddingTimeInterval:settingValue.integerValue];
             KPTimePicker *timePicker = [[KPTimePicker alloc] initWithFrame:[self parentViewController].view.bounds];
             timePicker.pickingDate = settingDate;
             timePicker.minimumDate = [settingDate dateAtStartOfDay];

@@ -88,14 +88,14 @@ typedef enum {
     return _scheduleButtons;
 }
 -(void)setStartingTimeForDate:(NSDate**)date{
-    NSDate *weekendStartDay = (NSDate*)[kSettings valueForSetting:SettingWeekendStart];
+    NSNumber *weekendStartDay = (NSNumber*)[kSettings valueForSetting:SettingWeekendStart];
     KPSettings setting;
-    if([*date weekday] == weekendStartDay.weekday || [*date weekday] == weekendStartDay.weekday + 1) setting = SettingWeekendStartTime;
-    else if([*date weekday] == 1 && weekendStartDay.weekday == 7) setting = SettingWeekendStartTime;
+    if([*date weekday] == weekendStartDay.integerValue || [*date weekday] == weekendStartDay.integerValue + 1) setting = SettingWeekendStartTime;
+    else if([*date weekday] == 1 && weekendStartDay.integerValue == 7) setting = SettingWeekendStartTime;
     else setting = SettingWeekStartTime;
     //else if(*week.weekday == 0 && )
-    NSDate *dateForSetting = (NSDate*)[kSettings valueForSetting:setting];
-    *date = [*date dateAtHours:dateForSetting.hour minutes:dateForSetting.minute];
+    NSNumber *dateForSetting = (NSNumber*)[kSettings valueForSetting:setting];
+    *date = [[*date dateAtStartOfDay] dateByAddingTimeInterval:dateForSetting.integerValue];
 }
 +(SchedulePopup*)popupWithFrame:(CGRect)frame block:(SchedulePopupBlock)block{
     SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:frame];
@@ -181,14 +181,15 @@ typedef enum {
     NSDate *date;
     switch (button) {
         case KPScheduleButtonLaterToday:{
-            NSDate *laterToday = (NSDate*)[kSettings valueForSetting:SettingLaterToday];
-            NSInteger minutes = laterToday.hour * 60 + laterToday.minute;
-            date = [[NSDate dateWithMinutesFromNow:minutes] dateToNearest15Minutes];
+            NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
+            date = [[[NSDate date] dateByAddingTimeInterval:laterToday.integerValue] dateToNearest15Minutes];
             break;
         }
         case KPScheduleButtonThisEvening:{
-            NSDate *eveningStartTimeDate = (NSDate*)[kSettings valueForSetting:SettingEveningStartTime];
-            date = [NSDate dateThisOrTheNextDayWithHours:eveningStartTimeDate.hour minutes:eveningStartTimeDate.minute];
+            NSNumber *eveningStartTime = (NSNumber*)[kSettings valueForSetting:SettingEveningStartTime];
+            NSInteger hours = eveningStartTime.integerValue/D_HOUR;
+            NSInteger minutes = eveningStartTime.integerValue % D_HOUR;
+            date = [NSDate dateThisOrTheNextDayWithHours:hours minutes:minutes];
             break;
         }
         case KPScheduleButtonTomorrow:{
@@ -208,15 +209,19 @@ typedef enum {
             break;
         }
         case KPScheduleButtonThisWeekend:{
-            NSDate *thisWeekend = (NSDate*)[kSettings valueForSetting:SettingWeekendStart];
-            NSDate *weekendStartTime = (NSDate*)[kSettings valueForSetting:SettingWeekendStartTime];
-            date = [NSDate dateThisOrNextWeekWithDay:thisWeekend.weekday hours:weekendStartTime.hour minutes:weekendStartTime.minute];
+            NSNumber *thisWeekend = (NSNumber*)[kSettings valueForSetting:SettingWeekendStart];
+            NSNumber *weekendStartTime = (NSNumber*)[kSettings valueForSetting:SettingWeekendStartTime];
+            NSInteger hours = weekendStartTime.integerValue/D_HOUR;
+            NSInteger minutes = weekendStartTime.integerValue % D_HOUR;
+            date = [NSDate dateThisOrNextWeekWithDay:thisWeekend.integerValue hours:hours minutes:minutes];
             break;
         }
         case KPScheduleButtonNextWeek:{
-            NSDate *nextWeek = (NSDate*)[kSettings valueForSetting:SettingWeekStart];
-            NSDate *weekStartTime = (NSDate*)[kSettings valueForSetting:SettingWeekStartTime];
-            date = [NSDate dateThisOrNextWeekWithDay:nextWeek.weekday hours:weekStartTime.hour minutes:weekStartTime.minute];
+            NSNumber *nextWeek = (NSNumber*)[kSettings valueForSetting:SettingWeekStart];
+            NSNumber *weekStartTime = (NSNumber*)[kSettings valueForSetting:SettingWeekStartTime];
+            NSInteger hours = weekStartTime.integerValue/D_HOUR;
+            NSInteger minutes = weekStartTime.integerValue % D_HOUR;
+            date = [NSDate dateThisOrNextWeekWithDay:nextWeek.integerValue hours:hours minutes:minutes];
             break;
         }
         case KPScheduleButtonUnscheduled:
@@ -707,12 +712,14 @@ typedef enum {
         contentView.layer.masksToBounds = YES;
         contentView.tag = CONTENT_VIEW_TAG;
         /* Schedule buttons */
-        NSDate *laterToday = (NSDate*)[kSettings valueForSetting:SettingLaterToday];
-        NSString *title = [NSString stringWithFormat:@"Later  +%luh",(long)laterToday.hour];
+        NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
+        NSString *title = [NSString stringWithFormat:@"Later  +%luh",laterToday.integerValue/3600];
         UIButton *laterTodayButton = [self buttonForScheduleButton:KPScheduleButtonLaterToday title:title];
         [contentView addSubview:laterTodayButton];
-        NSDate *eveningStartTimeDate = (NSDate*)[kSettings valueForSetting:SettingEveningStartTime];
-        NSDate *thisEveningTime = [[NSDate date] dateAtHours:eveningStartTimeDate.hour minutes:eveningStartTimeDate.minute];
+        NSNumber *eveningStartTime = (NSNumber*)[kSettings valueForSetting:SettingEveningStartTime];
+        NSInteger hours = eveningStartTime.integerValue/60;
+        NSInteger minutes = eveningStartTime.integerValue % 60;
+        NSDate *thisEveningTime = [[NSDate date] dateAtHours:hours minutes:minutes];
         NSString *thisEveText = ([[NSDate date] isLaterThanDate:thisEveningTime]) ? @"Tomorrow Eve" : @"This Evening";
         UIButton *thisEveningButton = [self buttonForScheduleButton:KPScheduleButtonThisEvening title:thisEveText];
         [contentView addSubview:thisEveningButton];

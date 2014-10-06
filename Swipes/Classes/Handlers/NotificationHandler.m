@@ -180,13 +180,17 @@ static NotificationHandler *sharedObject;
     else{
         NSDate *now = [NSDate date];
         
-        NSDate *dayStart = (NSDate*)[kSettings valueForSetting:SettingWeekendStartTime];
-        NSDate *eveningStart = (NSDate*)[kSettings valueForSetting:SettingEveningStartTime];
-        NSDate *weekStart = (NSDate *)[kSettings valueForSetting:SettingWeekStart];
-        NSInteger lastDayBeforeStartOfWeek = (weekStart.weekday - 1) == 0 ? 7 : weekStart.weekday-1;
-        NSDate *sundayEvening = [NSDate dateThisOrNextWeekWithDay:lastDayBeforeStartOfWeek hours:eveningStart.hour minutes:eveningStart.minute];
-        NSDate *mondayStart = [weekStart dateAtStartOfDay];
-        NSDate *mondayEnd = [[weekStart dateByAddingDays:1] dateAtStartOfDay];
+        NSNumber *dayStart = (NSNumber*)[kSettings valueForSetting:SettingWeekendStartTime];
+        NSInteger dayHours = dayStart.integerValue/D_HOUR;
+        NSInteger dayMinutes = dayStart.integerValue % D_HOUR;
+        NSNumber *eveningStart = (NSNumber*)[kSettings valueForSetting:SettingEveningStartTime];
+        NSInteger eveningHours = eveningStart.integerValue/D_HOUR;
+        NSInteger eveningMinutes = eveningStart.integerValue % D_HOUR;
+        NSNumber *weekStart = (NSNumber *)[kSettings valueForSetting:SettingWeekStart];
+        NSInteger lastDayBeforeStartOfWeek = (weekStart.integerValue - 1) == 0 ? 7 : weekStart.integerValue-1;
+        NSDate *sundayEvening = [NSDate dateThisOrNextWeekWithDay:lastDayBeforeStartOfWeek hours:eveningHours minutes:eveningMinutes];
+        NSDate *mondayStart = [NSDate dateThisOrNextWeekWithDay:weekStart.integerValue hours:0 minutes:0];
+        NSDate *mondayEnd = [[mondayStart dateByAddingDays:1] dateAtStartOfDay];
         
         NSPredicate *leftForNowPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [NSDate date] ];
         NSPredicate *leftForTodayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [[NSDate dateTomorrow] dateAtStartOfDay]];
@@ -202,7 +206,7 @@ static NotificationHandler *sharedObject;
         // Check if time is before the evening starts
         if( dailyReminders && numberOfTasksLeftNow > 0 && numberOfTasksLeftNow == numberOfTasksLeftToday){
             NSString *title = [NSString stringWithFormat:@"You have %lu task%@ left for today. Anything important?",(long)numberOfTasksLeftToday, (numberOfTasksLeftToday == 1) ? @"" : @"s" ];
-            addLocalNotificationBlock(title,[NSDate dateThisOrTheNextDayWithHours:eveningStart.hour minutes:eveningStart.minute],@"remind-remaining-tasks");
+            addLocalNotificationBlock(title,[NSDate dateThisOrTheNextDayWithHours:eveningHours minutes:eveningMinutes],@"remind-remaining-tasks");
         }
         
         // Check whether or not the next morning event is today or tomorrow
@@ -210,14 +214,14 @@ static NotificationHandler *sharedObject;
         NSInteger numberToCheckForMorning = numberOfTasksForTomorrow;
         
         // Check whether or not the next morning event is today or tomorrow
-        if ( now.hour < dayStart.hour || ( now.hour == dayStart.hour && now.minute < dayStart.minute ) ){
+        if ( now.hour < dayHours || ( now.hour == dayHours && now.minute < dayMinutes ) ){
             dateToCheckForMorning = [NSDate date];
             numberToCheckForMorning = numberOfTasksLeftToday;
         }
         // Check how many tasks is schedule for the next morning and see if it's a weekday
         if( dailyReminders && numberToCheckForMorning <= 1 && dateToCheckForMorning.isTypicallyWorkday){
             // Notify to make a plan from the morning
-            addLocalNotificationBlock(@"Good morning! Start your productive day with a plan.",[dateToCheckForMorning dateAtHours:dayStart.hour minutes:dayStart.minute],@"make-a-plan-for-the-day");
+            addLocalNotificationBlock(@"Good morning! Start your productive day with a plan.",[dateToCheckForMorning dateAtHours:dayHours minutes:dayMinutes],@"make-a-plan-for-the-day");
         }
         
         // Check

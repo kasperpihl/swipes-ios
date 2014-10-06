@@ -175,10 +175,10 @@
     NSString *title;
     switch (status) {
         case SyncStatusStarted:
-            title = @"Synchronizing...";
+            //title = @"Synchronizing...";
             break;
         case SyncStatusSuccess:
-            title = @"Sync completed";
+            //title = @"Sync completed";
             break;
         case SyncStatusError:{
             title = @"Error syncing";
@@ -363,7 +363,7 @@
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == SyncStatusStarted){
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Synchronizing Evernote...", @"duration": @(0) } ];
+                    //[[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Synchronizing Evernote...", @"duration": @(0) } ];
                 }
                 else if( status == SyncStatusError ){
                     self._isSyncing = NO;

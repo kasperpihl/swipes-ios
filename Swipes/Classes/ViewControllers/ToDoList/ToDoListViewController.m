@@ -233,8 +233,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.selectedRows removeObject:indexPath];
-    [self handleShowingToolbar];
+    //[self.selectedRows removeObject:indexPath];
+    //[self handleShowingToolbar];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -268,7 +268,7 @@
 {
     if(self.hasStartedEditing)
         return;
-    
+
     if ([ROOT_CONTROLLER.viewControllers containsObject:self.showingViewController]) {
         [UtilityClass sendError:[NSError errorWithDomain:@"Pushing the same view controller instance more than once" code:101 userInfo:nil] type:@"Todo List"];
         return;
