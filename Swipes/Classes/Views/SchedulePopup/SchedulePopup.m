@@ -713,7 +713,7 @@ typedef enum {
         contentView.tag = CONTENT_VIEW_TAG;
         /* Schedule buttons */
         NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
-        NSString *title = [NSString stringWithFormat:@"Later  +%luh",laterToday.integerValue/3600];
+        NSString *title = [NSString stringWithFormat:@"Later  +%luh",(long)(laterToday.integerValue/3600)];
         UIButton *laterTodayButton = [self buttonForScheduleButton:KPScheduleButtonLaterToday title:title];
         [contentView addSubview:laterTodayButton];
         NSNumber *eveningStartTime = (NSNumber*)[kSettings valueForSetting:SettingEveningStartTime];
