@@ -72,6 +72,7 @@
     completeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     [self addSubview:completeButton];
     [self bringSubviewToFront:completeButton];
+    self.completeButton = completeButton;
     
     self.taskTitle = [[UILabel alloc] initWithFrame:CGRectMake(notificationX + buttonWidth + titleX, 0, self.frame.size.width- buttonWidth - titleX -notificationX, self.frame.size.height)];
     self.taskTitle.font = [UIFont systemFontOfSize:16];
@@ -83,6 +84,8 @@
 -(void)resetAndSetTaskTitle:(NSString *)title{
     CGRectSetX(self.colorIndicatorView, -self.bounds.size.width);
     CGRectSetX(self.contentView, 0);
+    self.completeButton.hidden = NO;
+    self.taskTitle.hidden = NO;
     self.taskTitle.text = title;
 }
 /*-(void)cancelledComplete:(UIButton*)sender{
@@ -106,11 +109,13 @@
     if(self.delegate && [self.delegate respondsToSelector:@selector(willCompleteCell:)])
         [self.delegate willCompleteCell:self];
     self.lock = YES;
+    self.completeButton.hidden = YES;
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         CGRectSetX(self.colorIndicatorView, 0);
         CGRectSetX(self.contentView, self.bounds.size.width);
     } completion:^(BOOL finished) {
         self.lock = NO;
+        self.taskTitle.hidden = YES;
         if(self.delegate && [self.delegate respondsToSelector:@selector(didCompleteCell:)])
             [self.delegate didCompleteCell:self];
     }];
