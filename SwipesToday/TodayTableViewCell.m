@@ -12,7 +12,7 @@
 @interface TodayTableViewCell () <UIGestureRecognizerDelegate>
 @property (nonatomic) IBOutlet UIButton *completeButton;
 @property (nonatomic) IBOutlet UILabel *taskTitle;
-
+@property BOOL lock;
 
 @end
 @implementation TodayTableViewCell
@@ -101,12 +101,16 @@
     }];
 }*/
 -(void)pressedComplete:(UIButton*)sender{
+    if(self.lock)
+        return;
     if(self.delegate && [self.delegate respondsToSelector:@selector(willCompleteCell:)])
         [self.delegate willCompleteCell:self];
+    self.lock = YES;
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         CGRectSetX(self.colorIndicatorView, 0);
         CGRectSetX(self.contentView, self.bounds.size.width);
     } completion:^(BOOL finished) {
+        self.lock = NO;
         if(self.delegate && [self.delegate respondsToSelector:@selector(didCompleteCell:)])
             [self.delegate didCompleteCell:self];
     }];
