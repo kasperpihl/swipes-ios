@@ -362,8 +362,6 @@ static RootViewController *sharedObject;
 }
 -(void)openApp
 {
-    
-#warning Outcomment this before submission
     [kSettings refreshGlobalSettingsForce:NO];
     if(self.didReset)
         self.didReset = NO;

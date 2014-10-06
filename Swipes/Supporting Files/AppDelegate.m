@@ -15,7 +15,7 @@
 #import "AppsFlyerTracker.h"
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
-
+#import "UtilityClass.h"
 #import "LocalyticsSession.h"
 #import "LocalyticsAmpSession.h"
 
@@ -126,9 +126,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
     
-    //NSLog(@"%@",[kCurrent sessionToken]);
-    NSDateFormatter *dateFormatter = [Global isoDateFormatter];
-    NSString *isoString = [dateFormatter stringFromDate:[NSDate date]];
     NSLog(@"%lu",(long)[NSTimeZone localTimeZone].secondsFromGMT);
     return YES;
 }
@@ -290,7 +287,16 @@
 
 - (void)onShake:(id)sender
 {
-    [KPCORE undo];
+    [UTILITY confirmBoxWithTitle:@"Undo last action" andMessage:@"Do you want to undo the last action?" block:^(BOOL succeeded, NSError *error) {
+
+        if ( succeeded ){
+            
+            [KPCORE undo];
+        
+        }
+        
+        
+    }];
 }
 
 @end

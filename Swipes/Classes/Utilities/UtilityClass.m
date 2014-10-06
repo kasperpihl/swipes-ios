@@ -213,8 +213,6 @@
         }];
     }
 #endif
-    
-    
 }
 
 -(void)confirmBoxWithTitle:(NSString *)title andMessage:(NSString *)message cancel:(NSString *)cancel confirm:(NSString *)confirm block:(SuccessfulBlock)block{

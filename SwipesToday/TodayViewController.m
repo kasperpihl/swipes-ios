@@ -111,7 +111,7 @@
     NSString *showAllTitle = @"No current tasks.  Add one";
     if(numberOfCurrentTasks > 0){
         if(numberOfCurrentTasks == 1)
-            showAllTitle = @"1 current task.  Show";
+            showAllTitle = @"1 current task.";
         else
             showAllTitle = [NSString stringWithFormat:@"%lu current tasks.  Show",(long)numberOfCurrentTasks];
         if(numberOfCurrentTasks > 3)

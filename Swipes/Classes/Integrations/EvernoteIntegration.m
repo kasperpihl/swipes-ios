@@ -229,6 +229,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
         NSError* authError = [NSError errorWithDomain:@"Evernote not authenticated" code:601 userInfo:nil];
         *error = authError;
     }
+    
     return [session primaryNoteStore];
 }
 

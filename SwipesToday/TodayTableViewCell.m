@@ -110,7 +110,7 @@
         [self.delegate willCompleteCell:self];
     self.lock = YES;
     self.completeButton.hidden = YES;
-    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         CGRectSetX(self.colorIndicatorView, 0);
         CGRectSetX(self.contentView, self.bounds.size.width);
     } completion:^(BOOL finished) {
