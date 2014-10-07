@@ -250,7 +250,6 @@
 -(void)popViewControllerAnimated:(BOOL)animated{
     NSInteger level = self.viewControllers.count;
     UIViewController *poppingViewController = [self.viewControllers lastObject];
-    
     [poppingViewController removeFromParentViewController];
     
     UIView *showingView = (level == 1) ? self.gridView : [(UIViewController*)[self.viewControllers objectAtIndex:level-1] view];
@@ -281,24 +280,25 @@
     [self addChildViewController:viewController];
     UIView *hidingView = (level == 0) ? self.gridView : [(UIViewController*)[self.viewControllers lastObject] view];
     [UIView animateWithDuration:0.1 animations:^{
-        hidingView.alpha = 0;
-        if(level == 0){
-            [self.backButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
-            [self.backButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
-        }
-        } completion:^(BOOL finished) {
-        viewController.view.alpha = 0;
-        viewController.view.frame = self.view.bounds;
-        CGFloat startHeight = (OSVER >= 7) ? (20+44) : 44;
-        CGRectSetHeight(viewController.view,viewController.view.bounds.size.height-startHeight);
-        CGRectSetY(viewController.view, startHeight);
-        [self.view addSubview:viewController.view];
-        [UIView animateWithDuration:0.2 animations:^{
-        
+            hidingView.alpha = 0;
+            if(level == 0){
+                [self.backButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
+                [self.backButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
+            }
         }
         completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.1 animations:^{
-                viewController.view.alpha = 1;
+            viewController.view.alpha = 0;
+            viewController.view.frame = self.view.bounds;
+            CGFloat startHeight = (OSVER >= 7) ? (20+44) : 44;
+            CGRectSetHeight(viewController.view,viewController.view.bounds.size.height-startHeight);
+            CGRectSetY(viewController.view, startHeight);
+            [self.view addSubview:viewController.view];
+            
+            [UIView animateWithDuration:0.2 animations:^{
+            }
+            completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.1 animations:^{
+                    viewController.view.alpha = 1;
             }];
         }];
     }];
@@ -313,26 +313,27 @@
             NotificationsViewController *notifVC = [[NotificationsViewController alloc] init];
             [self pushViewController:notifVC animated:YES];
             break;
-            BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
-            UIColor *lampColor = hasNotificationsOn ? kLampOffColor : kLampOnColor;
-            NSNumber *newSettingValue = hasNotificationsOn ? @NO : @YES;
-            if (hasNotificationsOn) {
-                KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off notification" message:@"Are you sure you no longer want to receive alarms and reminders?" block:^(BOOL succeeded, NSError *error) {
-                    [BLURRY dismissAnimated:YES];
-                    if(succeeded){
-                        [kSettings setValue:newSettingValue forSetting:SettingNotifications];
-                        [sender setLampColor:lampColor];
-                    }
-                }];
-                BLURRY.blurryTopColor = kSettingsBlurColor;
-                [BLURRY showView:alert inViewController:self];
-            }
-            else{
-                [kSettings setValue:newSettingValue forSetting:SettingNotifications];
-                [sender setLampColor:lampColor];
-            }
-            
-            break;
+#warning Do we need a break here?
+//            BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
+//            UIColor *lampColor = hasNotificationsOn ? kLampOffColor : kLampOnColor;
+//            NSNumber *newSettingValue = hasNotificationsOn ? @NO : @YES;
+//            if (hasNotificationsOn) {
+//                KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off notification" message:@"Are you sure you no longer want to receive alarms and reminders?" block:^(BOOL succeeded, NSError *error) {
+//                    [BLURRY dismissAnimated:YES];
+//                    if(succeeded){
+//                        [kSettings setValue:newSettingValue forSetting:SettingNotifications];
+//                        [sender setLampColor:lampColor];
+//                    }
+//                }];
+//                BLURRY.blurryTopColor = kSettingsBlurColor;
+//                [BLURRY showView:alert inViewController:self];
+//            }
+//            else{
+//                [kSettings setValue:newSettingValue forSetting:SettingNotifications];
+//                [sender setLampColor:lampColor];
+//            }
+//            
+//            break;
         }
         case KPMenuButtonLocation:{
             BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];

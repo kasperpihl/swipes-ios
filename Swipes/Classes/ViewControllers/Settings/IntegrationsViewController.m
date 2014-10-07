@@ -26,7 +26,8 @@
 #define kLearnMoreButtonHeight 44
 
 @interface IntegrationsViewController () <UITableViewDataSource,UITableViewDelegate, EvernoteHelperDelegate>
-@property (nonatomic) UITableView *tableView;
+
+@property (nonatomic, strong) UITableView *tableView;
 
 @end
 
@@ -83,6 +84,8 @@
 {
     self.tableView.dataSource = nil;
     self.tableView.delegate = nil;
+    [self.tableView removeFromSuperview];
+    self.tableView = nil;
 }
 
 -(void)pressedLearnedMore{
