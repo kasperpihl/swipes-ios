@@ -9,13 +9,56 @@
 
 #import "TodayTableViewCell.h"
 #import "ThemeHandler.h"
+#import "SwipeTestingView.h"
 @interface TodayTableViewCell () <UIGestureRecognizerDelegate>
 @property (nonatomic) IBOutlet UIButton *completeButton;
 @property (nonatomic) IBOutlet UILabel *taskTitle;
+@property (nonatomic) CGFloat startX;
 @property BOOL lock;
 
 @end
 @implementation TodayTableViewCell
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    self.lock = YES;
+    UITouch *touch = [touches anyObject];
+    CGPoint translation = [touch locationInView:self];
+    self.startX = translation.x;
+    
+}
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
+    UITouch *touch = [touches anyObject];
+    CGPoint translation = [touch locationInView:self];
+    CGFloat relative = MAX(translation.x-self.startX,0);
+    CGRectSetX(self.colorIndicatorView, MIN(-self.bounds.size.width+relative,0));
+    CGRectSetX(self.contentView, MIN(relative,self.bounds.size.width));
+    
+}
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+    UITouch *touch = [touches anyObject];
+    CGPoint translation = [touch locationInView:self];
+    CGFloat relative = MAX(translation.x-self.startX,0);
+    [self finalizeAnimation:NO];
+}
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
+    [self finalizeAnimation:NO];
+}
+
+-(void)finalizeAnimation:(BOOL)completed{
+    if(self.delegate && [self.delegate respondsToSelector:@selector(willCompleteCell:)])
+        [self.delegate willCompleteCell:self];
+    
+    
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        CGRectSetX(self.colorIndicatorView, completed ? 0 : -self.bounds.size.width);
+        CGRectSetX(self.contentView, completed ? self.bounds.size.width : 0);
+    } completion:^(BOOL finished) {
+        self.lock = NO;
+        if(completed)
+            self.taskTitle.hidden = YES;
+        if(completed && self.delegate && [self.delegate respondsToSelector:@selector(didCompleteCell:)])
+            [self.delegate didCompleteCell:self];
+    }];
+}
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -60,7 +103,7 @@
     CGFloat buttonWidth = 40;
     
     CGFloat notificationX = 6;
-    UIButton *completeButton = [[UIButton alloc] initWithFrame:CGRectMake(notificationX, 0,  buttonWidth, self.bounds.size.height)];
+    /*UIButton *completeButton = [[UIButton alloc] initWithFrame:CGRectMake(notificationX, 0,  buttonWidth, self.bounds.size.height)];
     [completeButton setTitle:@"roundedBox" forState:UIControlStateNormal];
     [completeButton addTarget:self action:@selector(pressedComplete:) forControlEvents:UIControlEventTouchUpInside];
     //[completeButton addTarget:self action:@selector(touchedComplete:) forControlEvents:UIControlEventTouchDown|UIControlEventTouchDragEnter];
@@ -72,13 +115,15 @@
     completeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     [self addSubview:completeButton];
     [self bringSubviewToFront:completeButton];
-    self.completeButton = completeButton;
+    self.completeButton = completeButton;*/
     
-    self.taskTitle = [[UILabel alloc] initWithFrame:CGRectMake(notificationX + buttonWidth + titleX, 0, self.frame.size.width- buttonWidth - titleX -notificationX, self.frame.size.height)];
+    self.taskTitle = [[UILabel alloc] initWithFrame:CGRectMake(notificationX + titleX, 0, self.frame.size.width - titleX -notificationX, self.frame.size.height)];
     self.taskTitle.font = [UIFont systemFontOfSize:16];
     self.taskTitle.lineBreakMode = NSLineBreakByTruncatingTail;
     self.taskTitle.textColor = [UIColor whiteColor];
     [self.contentView addSubview:self.taskTitle];
+    self.userInteractionEnabled = YES;
+    self.contentView.userInteractionEnabled = YES;
 }
 
 -(void)resetAndSetTaskTitle:(NSString *)title{
@@ -88,21 +133,7 @@
     self.taskTitle.hidden = NO;
     self.taskTitle.text = title;
 }
-/*-(void)cancelledComplete:(UIButton*)sender{
-    [UIView animateWithDuration:0.05 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        CGRectSetX(self.colorIndicatorView, -self.bounds.size.width);
-        CGRectSetX(self.contentView, 0);
-    } completion:^(BOOL finished) {
-    }];
-}
--(void)touchedComplete:(UIButton*)sender{
-    [UIView animateWithDuration:0.05 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        CGFloat step = 10;
-        CGRectSetX(self.colorIndicatorView, -self.bounds.size.width + step);
-        CGRectSetX(self.contentView, step);
-    } completion:^(BOOL finished) {
-    }];
-}*/
+
 -(void)pressedComplete:(UIButton*)sender{
     if(self.lock)
         return;

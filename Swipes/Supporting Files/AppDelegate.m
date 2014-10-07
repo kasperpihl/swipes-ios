@@ -118,6 +118,24 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
     
+    /** NOTIFICATION ACTIONS
+    UIMutableUserNotificationAction *action= [[UIMutableUserNotificationAction alloc] init];
+    action.identifier = @"Snooze"; // The id passed when the user selects the action
+    action.title = NSLocalizedString(@"Snooze",nil); // The title displayed for the action
+    action.activationMode = UIUserNotificationActivationModeBackground; // Choose whether the application is launched in foreground when the action is clicked
+    action.destructive = NO; // If YES, then the action is red
+    action.authenticationRequired = NO; // Whether the user must authenticate to execute the action
+    
+    UIMutableUserNotificationCategory *category= [[UIMutableUserNotificationCategory alloc] init];
+    category.identifier = @"CATEGORY_ID"; // Identifier passed in the payload
+    [category setActions:@[action] forContext:UIUserNotificationActionContextDefault]; // The context determines the number of actions presented (see documentation)
+    
+    NSSet *categories = [NSSet setWithObjects:category,nil];
+    NSUInteger types = UIUserNotificationTypeNone|UIUserNotificationTypeBadge|UIUserNotificationTypeAlert; // Add badge, sound, or alerts here
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    */
+    
     NSLog(@"%lu",(long)[NSTimeZone localTimeZone].secondsFromGMT);
     return YES;
 }
@@ -168,6 +186,10 @@
         [USER_DEFAULTS setBool:YES forKey:@"hasLaunchedBefore"];
         [USER_DEFAULTS synchronize];
     }
+}
+-(void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler{
+
+    
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
