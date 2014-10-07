@@ -155,7 +155,7 @@
     
     self.allDoneForToday = (numberInProgress == 0);
     
-    self.sectionHeader.title = [NSString stringWithFormat:@"%li / %li Today",(long)numberOfDone,(long)total];
+    self.sectionHeader.title = [NSString stringWithFormat:LOCALIZE_STRING(@"%li / %li Today"), (long)numberOfDone,(long)total];
     //[NSString stringWithFormat:@"%i%%",percentage];//
     
     if(total > 0)
