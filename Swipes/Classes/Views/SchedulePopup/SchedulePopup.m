@@ -717,8 +717,8 @@ typedef enum {
         UIButton *laterTodayButton = [self buttonForScheduleButton:KPScheduleButtonLaterToday title:title];
         [contentView addSubview:laterTodayButton];
         NSNumber *eveningStartTime = (NSNumber*)[kSettings valueForSetting:SettingEveningStartTime];
-        NSInteger hours = eveningStartTime.integerValue/60;
-        NSInteger minutes = eveningStartTime.integerValue % 60;
+        NSInteger hours = eveningStartTime.integerValue/D_HOUR;
+        NSInteger minutes = eveningStartTime.integerValue % D_HOUR;
         NSDate *thisEveningTime = [[NSDate date] dateAtHours:hours minutes:minutes];
         NSString *thisEveText = ([[NSDate date] isLaterThanDate:thisEveningTime]) ? @"Tomorrow Eve" : @"This Evening";
         UIButton *thisEveningButton = [self buttonForScheduleButton:KPScheduleButtonThisEvening title:thisEveText];

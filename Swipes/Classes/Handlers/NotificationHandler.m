@@ -143,7 +143,11 @@ static NotificationHandler *sharedObject;
     localNotif.alertBody = title;
     if(badgeCount > 0)
         localNotif.applicationIconBadgeNumber = badgeCount;
-    localNotif.soundName = @"swipes-notification.aif";
+    UIUserNotificationSettings *currentSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+    if ( (currentSettings.types & UIUserNotificationTypeSound) != UIUserNotificationTypeSound ){
+        localNotif.soundName = @"swipes-notification.aif";
+    }
+    
     localNotif.userInfo = userInfo;
     return localNotif;
 }
@@ -294,6 +298,7 @@ static NotificationHandler *sharedObject;
         BOOL isLastObject = (i == scheduleCount-1);
         if (!currentDate)
             currentDate = toDo.schedule;
+
         NSInteger numberOfNotificationsToAdd = [toDo.schedule isEqualToDate:currentDate] ? 0 : 1;
         if (isLastObject)
             numberOfNotificationsToAdd++;
