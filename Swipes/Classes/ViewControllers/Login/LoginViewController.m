@@ -121,7 +121,7 @@ typedef enum {
         self.logoView = iconLabel(@"logo", 60);
         self.logoView.center = CGPointMake(self.view.center.x, self.logoView.center.y);
         self.logoView.contentMode = UIViewContentModeCenter;
-        self.logoView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.logoView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
         [self.logoView setTextColor:kIconColor];
         [self.view addSubview:self.logoView];
         
