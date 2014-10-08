@@ -13,8 +13,10 @@
 #import "KPTimePicker.h"
 #import "AppDelegate.h"
 @interface SnoozesViewController () <UITableViewDataSource,UITableViewDelegate,KPTimePickerDelegate,DayPickerSettingsDelegate>
-@property (nonatomic) UITableView *tableView;
-@property (nonatomic) SnoozeSettings activeSnooze;
+
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, assign) SnoozeSettings activeSnooze;
+
 @end
 
 @implementation SnoozesViewController
@@ -225,10 +227,19 @@
         default:break;
     }
 }
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    self.tableView.dataSource = nil;
+    self.tableView.delegate = nil;
+    [self.tableView removeFromSuperview];
+    self.tableView = nil;
 }
 
 @end

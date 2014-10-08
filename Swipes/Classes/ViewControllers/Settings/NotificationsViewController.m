@@ -14,7 +14,7 @@
 #import "NotificationsViewController.h"
 
 @interface NotificationsViewController () <UITableViewDataSource,UITableViewDelegate>
-@property (nonatomic) UITableView *tableView;
+@property (nonatomic, strong) UITableView *tableView;
 @end
 
 @implementation NotificationsViewController
@@ -91,11 +91,6 @@
     aSwitch.on = settingIsOn;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return kLocalCellHeight;
-}
-
 -(void)switchChanged:(UISwitch*)sender{
     UITableViewCell *cell = (UITableViewCell*)[sender firstSuperviewOfClass:[UITableViewCell class]];
     NSIndexPath *switchHandled = [self.tableView indexPathForCell:cell];
@@ -114,16 +109,6 @@
     
 }
 
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -132,6 +117,7 @@
     self.tableView.delegate = self;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
+    self.tableView.rowHeight = kLocalCellHeight;
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     //[self.tableView setSeparatorColor:tcolor(TextColor)];
@@ -146,15 +132,12 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void)dealloc
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    self.tableView.dataSource = nil;
+    self.tableView.delegate = nil;
+    [self.tableView removeFromSuperview];
+    self.tableView = nil;
 }
-*/
 
 @end
