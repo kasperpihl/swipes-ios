@@ -102,7 +102,7 @@
         self.tagsLabel = (UILabel*)[self.contentView viewWithTag:TAGS_LABEL_TAG];
         
         // 4
-        UIView *selectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 6, self.frame.size.height)];//CGRectMake((CELL_LABEL_X/2),0, LINE_SIZE,CELL_HEIGHT)]; //];
+        UIView *selectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 6, self.frame.size.height)];// 6  CGRectMake((CELL_LABEL_X/2),0, LINE_SIZE,CELL_HEIGHT)]; //];
         selectionView.tag = SELECTION_TAG;
         selectionView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         selectionView.hidden = YES;

@@ -143,8 +143,13 @@ static NotificationHandler *sharedObject;
     localNotif.alertBody = title;
     if(badgeCount > 0)
         localNotif.applicationIconBadgeNumber = badgeCount;
-    UIUserNotificationSettings *currentSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
-    if ( (currentSettings.types & UIUserNotificationTypeSound) != UIUserNotificationTypeSound ){
+    if(OSVER > 7){
+        UIUserNotificationSettings *currentSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        if ( (currentSettings.types & UIUserNotificationTypeSound) != UIUserNotificationTypeSound ){
+            
+        }
+    }
+    else{
         localNotif.soundName = @"swipes-notification.aif";
     }
     

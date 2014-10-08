@@ -24,7 +24,7 @@
 #import "PlusAlertView.h"
 #import "RootViewController.h"
 #import "AnalyticsHandler.h"
-#import "AppDelegate.h"
+
 #import "UIImage+Blur.h"
 #import "SlowHighlightIcon.h"
 #import "SettingsHandler.h"
@@ -47,8 +47,8 @@
 #define TODAY_EXTRA_INSET 3
 #define SEGMENT_BORDER_WIDTH 0
 #define SEGMENT_HEIGHT 52
-#define TOP_Y ((OSVER >= 7) ? 20 : 0)
-#define TOP_HEIGHT ((OSVER >= 7) ? (TOP_Y+SEGMENT_HEIGHT) : SEGMENT_HEIGHT)
+#define TOP_Y 20
+#define TOP_HEIGHT (TOP_Y+SEGMENT_HEIGHT)
 #define INTERESTED_SEGMENT_RECT CGRectMake(0,TOP_Y,(3*SEGMENT_BUTTON_WIDTH)+(8*SEPERATOR_WIDTH),SEGMENT_HEIGHT)
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
@@ -123,7 +123,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self._accountButton.hidden = kUserHandler.isLoggedIn;
+    //self._accountButton.hidden = kUserHandler.isLoggedIn;
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -318,15 +318,24 @@
 -(void)pressedSettings{
     [ROOT_CONTROLLER.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
 }
+
+
+-(void)pressedSelect:(id)sender{
+
+}
+
+
 -(void)pressedAccount{
-    [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
-    return;
-    KxMenuItem *item1 = [KxMenuItem menuItem:@"Filter" image:nil target:self action:@selector(pressedFilter:)];
+    
+    KxMenuItem *item1 = [KxMenuItem menuItem:@"Select More" image:nil target:self action:@selector(pressedSelect:)];
     [KxMenu setBackColor:tcolor(TextColor)];
     [self._accountButton setSelected:YES];
     [KxMenu showMenuInView:self.view
                   fromRect:self._accountButton.frame
                  menuItems:@[item1]];
+    return;
+    [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
+    return;
     
 }
 - (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles {
@@ -350,7 +359,7 @@
         accountButton.titleLabel.font = iconFont(23);
         [accountButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [accountButton setTitle:iconString(@"settingsAccount") forState:UIControlStateNormal];
-        accountButton.hidden = YES;
+        //accountButton.hidden = YES;
         [accountButton setTitle:iconString(@"settingsAccountFull") forState:UIControlStateHighlighted];
         [accountButton addTarget:self action:@selector(pressedAccount) forControlEvents:UIControlEventTouchUpInside];
         accountButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;

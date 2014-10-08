@@ -105,12 +105,9 @@
         [self tagLaunchSource:launchOptions];
     });
 
-    if (OSVER >= 7) {
-        [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:tcolor(TextColor)];
-        [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-        [[UITextField appearance] setTintColor:tcolor(TextColor)];
-
-    }
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:tcolor(TextColor)];
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    [[UITextField appearance] setTintColor:tcolor(TextColor)];
     
     [ENSession setSharedSessionConsumerKey:CONSUMER_KEY
                             consumerSecret:CONSUMER_SECRET

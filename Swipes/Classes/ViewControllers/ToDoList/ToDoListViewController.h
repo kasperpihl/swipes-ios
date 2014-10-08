@@ -17,6 +17,7 @@
 @property (nonatomic,weak) IBOutlet UILabel *backgroundIcon;
 @property (nonatomic,weak) IBOutlet UILabel *backgroundLabel;
 @property (nonatomic,strong) ItemHandler *itemHandler;
+@property (nonatomic) BOOL selectionMode;
 @property (nonatomic,strong) NSString *state;
 @property (nonatomic,weak) IBOutlet UITableView *tableView;
 -(KPSegmentedViewController *)parent;

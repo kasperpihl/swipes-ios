@@ -233,17 +233,24 @@
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    //[self.selectedRows removeObject:indexPath];
-    //[self handleShowingToolbar];
+    if(self.selectionMode){
+        [self.selectedRows removeObject:indexPath];
+        [self handleShowingToolbar];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self editIndexPath:indexPath];
-    return;
-    if (![self.selectedRows containsObject:indexPath])
-        [self.selectedRows addObject:indexPath];
-    [self handleShowingToolbar];
-    [kHints triggerHint:HintSelected];
+    if(self.selectionMode){
+        [self editIndexPath:indexPath];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
+    else{
+        if (![self.selectedRows containsObject:indexPath])
+            [self.selectedRows addObject:indexPath];
+        [self handleShowingToolbar];
+        [kHints triggerHint:HintSelected];
+    }
+    
 }
 
 // Override to support conditional rearranging of the table view.
