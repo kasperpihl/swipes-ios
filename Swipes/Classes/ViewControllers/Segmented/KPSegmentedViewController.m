@@ -53,6 +53,11 @@
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
+typedef enum {
+    TopMenuDefault,
+    TopMenuSelect,
+    TopMenuFilter
+} TopMenuState;
 @interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate>
 
 @property (nonatomic, strong) NSMutableArray *viewControllers;
@@ -69,67 +74,11 @@
 @property (nonatomic, assign) BOOL hidden;
 @property (nonatomic, strong) UIImageView *backgroundImage;
 @property (nonatomic, strong) NSArray *selectedItems;
+@property (nonatomic) TopMenuState currentTopMenu;
 
 @end
 
 @implementation KPSegmentedViewController
-
--(void)viewDidLoad
-{
-    [super viewDidLoad];
-    notify(@"updated daily image", updatedDailyImage);
-    notify(@"updated sync",updateFromSync:);
-    self.view.backgroundColor = tcolor(BackgroundColor);
-    
-    /* Daily image background */
-    self.backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    self.backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
-    self.backgroundImage.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-    [self.backgroundImage setImage:[[kSettings getDailyImage] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
-    self.backgroundImage.alpha = 0;
-    UIView *overlay = [[UIView alloc] initWithFrame:self.backgroundImage.bounds];
-    overlay.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-    overlay.backgroundColor = gray(0,0.2);
-    [self.backgroundImage addSubview:overlay];
-    [self.view addSubview:self.backgroundImage];
-    
-    /* Content view for ToDo list view controllers */
-    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height-TOP_HEIGHT)];
-    self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    contentView.layer.masksToBounds = YES;
-    contentView.tag = CONTENT_VIEW_TAG;
-    [self.view addSubview:contentView];
-    self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
-    
-    /* Control handler - Bottom toolbar for add/edit */
-    self.controlHandler = [KPControlHandler instanceInView:self.view];
-    self.controlHandler.delegate = self;
-    
-    
-    [self.view bringSubviewToFront:self.segmentedControl];
-    UIViewController *currentViewController = self.viewControllers[DEFAULT_SELECTED_INDEX];
-    self.currentSelectedIndex = DEFAULT_SELECTED_INDEX;
-    [self addChildViewController:currentViewController];
-    
-    currentViewController.view.frame = self.contentView.bounds;
-    [self.contentView addSubview:currentViewController.view];
-    [currentViewController didMoveToParentViewController:self];
-    [self.view sendSubviewToBack:self.backgroundImage];
-    //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
-    //self.navigationItem.rightBarButtonItem = filter;
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    //self._accountButton.hidden = kUserHandler.isLoggedIn;
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
 
 -(void)receivedLocalNotification:(UILocalNotification *)notification
 {
@@ -338,48 +287,7 @@
     return;
     
 }
-- (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles {
-	self = [super init];
-	
-	if (self) {
-		[viewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
-			if ([obj isKindOfClass:[UIViewController class]]) {
-				UIViewController *viewController = obj;
-				
-				[self.viewControllers addObject:viewController];
-			}
-		}];
-        self.view.layer.masksToBounds = YES;
-        
-        self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, TOP_HEIGHT)];
-        self.ios7BackgroundView.backgroundColor = CLEAR;
-        [self.ios7BackgroundView addSubview:self.segmentedControl];
-        self.ios7BackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        UIButton *accountButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.view.frame.size.width-CELL_LABEL_X, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
-        accountButton.titleLabel.font = iconFont(23);
-        [accountButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        [accountButton setTitle:iconString(@"settingsAccount") forState:UIControlStateNormal];
-        //accountButton.hidden = YES;
-        [accountButton setTitle:iconString(@"settingsAccountFull") forState:UIControlStateHighlighted];
-        [accountButton addTarget:self action:@selector(pressedAccount) forControlEvents:UIControlEventTouchUpInside];
-        accountButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        [self.ios7BackgroundView addSubview:accountButton];
-        self._accountButton = accountButton;
-        
-        UIButton *settingsButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
-        settingsButton.titleLabel.font = iconFont(23);
-        [settingsButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        [settingsButton setTitle:iconString(@"settings") forState:UIControlStateNormal];
-        [settingsButton setTitle:iconString(@"settingsFull") forState:UIControlStateHighlighted];
-        [settingsButton addTarget:self action:@selector(pressedSettings) forControlEvents:UIControlEventTouchUpInside];
-        [self.ios7BackgroundView addSubview:settingsButton];
-        self._settingsButton = settingsButton;
-        [self.view addSubview:self.ios7BackgroundView];
-        
-        //self.navigationItem.titleView = self.segmentedControl;
-	}
-	return self;
-}
+
 -(KPControlHandlerState)handlerStateForCurrent:(KPControlCurrentState)state{
     if(state == KPControlCurrentStateAdd) return KPControlHandlerStateAdd;
     else return KPControlHandlerStateEdit;
@@ -477,6 +385,110 @@
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl{
     [self changeViewControllerAnimated:YES];
 }
+
+
+- (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles {
+    self = [super init];
+    
+    if (self) {
+        [viewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+            if ([obj isKindOfClass:[UIViewController class]]) {
+                UIViewController *viewController = obj;
+                
+                [self.viewControllers addObject:viewController];
+            }
+        }];
+        self.view.layer.masksToBounds = YES;
+        
+        self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, TOP_HEIGHT)];
+        self.ios7BackgroundView.backgroundColor = CLEAR;
+        [self.ios7BackgroundView addSubview:self.segmentedControl];
+        self.ios7BackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        UIButton *accountButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.view.frame.size.width-CELL_LABEL_X, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
+        accountButton.titleLabel.font = iconFont(23);
+        [accountButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [accountButton setTitle:iconString(@"settingsAccount") forState:UIControlStateNormal];
+        //accountButton.hidden = YES;
+        [accountButton setTitle:iconString(@"settingsAccountFull") forState:UIControlStateHighlighted];
+        [accountButton addTarget:self action:@selector(pressedAccount) forControlEvents:UIControlEventTouchUpInside];
+        accountButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        [self.ios7BackgroundView addSubview:accountButton];
+        self._accountButton = accountButton;
+        
+        UIButton *settingsButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
+        settingsButton.titleLabel.font = iconFont(23);
+        [settingsButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [settingsButton setTitle:iconString(@"settings") forState:UIControlStateNormal];
+        [settingsButton setTitle:iconString(@"settingsFull") forState:UIControlStateHighlighted];
+        [settingsButton addTarget:self action:@selector(pressedSettings) forControlEvents:UIControlEventTouchUpInside];
+        [self.ios7BackgroundView addSubview:settingsButton];
+        self._settingsButton = settingsButton;
+        [self.view addSubview:self.ios7BackgroundView];
+        
+        //self.navigationItem.titleView = self.segmentedControl;
+    }
+    return self;
+}
+
+
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    notify(@"updated daily image", updatedDailyImage);
+    notify(@"updated sync",updateFromSync:);
+    self.view.backgroundColor = tcolor(BackgroundColor);
+    
+    /* Daily image background */
+    self.backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
+    self.backgroundImage.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+    [self.backgroundImage setImage:[[kSettings getDailyImage] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
+    self.backgroundImage.alpha = 0;
+    UIView *overlay = [[UIView alloc] initWithFrame:self.backgroundImage.bounds];
+    overlay.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
+    overlay.backgroundColor = gray(0,0.2);
+    [self.backgroundImage addSubview:overlay];
+    [self.view addSubview:self.backgroundImage];
+    
+    /* Content view for ToDo list view controllers */
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height-TOP_HEIGHT)];
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    contentView.layer.masksToBounds = YES;
+    contentView.tag = CONTENT_VIEW_TAG;
+    [self.view addSubview:contentView];
+    self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
+    
+    /* Control handler - Bottom toolbar for add/edit */
+    self.controlHandler = [KPControlHandler instanceInView:self.view];
+    self.controlHandler.delegate = self;
+    
+    
+    [self.view bringSubviewToFront:self.segmentedControl];
+    UIViewController *currentViewController = self.viewControllers[DEFAULT_SELECTED_INDEX];
+    self.currentSelectedIndex = DEFAULT_SELECTED_INDEX;
+    [self addChildViewController:currentViewController];
+    
+    currentViewController.view.frame = self.contentView.bounds;
+    [self.contentView addSubview:currentViewController.view];
+    [currentViewController didMoveToParentViewController:self];
+    [self.view sendSubviewToBack:self.backgroundImage];
+    //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
+    //self.navigationItem.rightBarButtonItem = filter;
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    //self._accountButton.hidden = kUserHandler.isLoggedIn;
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
+
 -(void)dealloc{
     clearNotify();
 }
