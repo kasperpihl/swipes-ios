@@ -12,6 +12,7 @@
 @optional
 -(void)willCompleteCell:(TodayTableViewCell*)cell;
 -(void)didCompleteCell:(TodayTableViewCell*)cell;
+-(void)didTapCell:(TodayTableViewCell*)cell;
 @end
 @interface TodayTableViewCell : UITableViewCell
 @property (nonatomic,weak) NSObject<TodayCellDelegate> *delegate;

@@ -343,7 +343,7 @@
     else if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached] && !error) {
         
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
-            NSLog(@"returned %lu",(long)status);
+            //NSLog(@"returned %lu",(long)status);
             if (error) {
                 [EvernoteIntegration updateAPILimitIfNeeded:error];
             }

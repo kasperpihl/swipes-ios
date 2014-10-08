@@ -239,7 +239,17 @@
 -(void)saveContext:(NSManagedObjectContext*)context{
     
 }
-
+-(void)didTapCell:(TodayTableViewCell *)cell{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    KPToDo* todo1 = self.todos[indexPath.row];
+    NSString* tempId = todo1.getTempId;
+    todo1 = nil;
+    NSLog(@"tempId is: %@", tempId);
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/view?id=%@", tempId]];
+    [self.extensionContext openURL:url completionHandler:^(BOOL success) {
+        // put some code here if needed or pass nil for completion handler
+    }];
+}
 -(void)didCompleteCell:(TodayTableViewCell *)cell{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     KPToDo *model = [self.todos objectAtIndex:indexPath.row];

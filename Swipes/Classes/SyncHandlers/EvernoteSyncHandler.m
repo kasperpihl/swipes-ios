@@ -382,6 +382,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     if(self.lastUpdated){
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
         [dateFormatter setDateFormat:@"yyyyMMdd'T'HHmmss'Z'"];
         NSString *isoString = [dateFormatter stringFromDate:self.lastUpdated];
         searchString = [NSString stringWithFormat:@"updated:%@",isoString];

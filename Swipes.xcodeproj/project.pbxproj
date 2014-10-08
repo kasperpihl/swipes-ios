@@ -193,7 +193,7 @@
 		A7D189C61965F47000AA7CD9 /* IntegrationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D189C51965F47000AA7CD9 /* IntegrationsViewController.m */; };
 		A7D7D53317B1586A00FBC042 /* SettingsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53217B1586A00FBC042 /* SettingsHandler.m */; };
 		A7D7D53917B1A56C00FBC042 /* MenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53817B1A56B00FBC042 /* MenuButton.m */; };
-		A7D8692A19E4060900CE0923 /* SwipeTestingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D8692919E4060900CE0923 /* SwipeTestingView.m */; };
+		A7D8692A19E4060900CE0923 /* SwipingOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D8692919E4060900CE0923 /* SwipingOverlayView.m */; };
 		A7DEA1891790BD2D00EB1549 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA1881790BD2D00EB1549 /* MenuViewController.m */; };
 		A7DEA18C17954C7400EB1549 /* ThemeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA18B17954C7400EB1549 /* ThemeHandler.m */; };
 		A7E2D93C17B2C5A4007BDE00 /* SettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D93B17B2C5A4007BDE00 /* SettingsCell.m */; };
@@ -770,8 +770,8 @@
 		A7D7D53217B1586A00FBC042 /* SettingsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsHandler.m; path = ../Swipes/Classes/Handlers/SettingsHandler.m; sourceTree = "<group>"; };
 		A7D7D53717B1A56B00FBC042 /* MenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuButton.h; sourceTree = "<group>"; };
 		A7D7D53817B1A56B00FBC042 /* MenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuButton.m; sourceTree = "<group>"; };
-		A7D8692819E4060900CE0923 /* SwipeTestingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeTestingView.h; sourceTree = "<group>"; };
-		A7D8692919E4060900CE0923 /* SwipeTestingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeTestingView.m; sourceTree = "<group>"; };
+		A7D8692819E4060900CE0923 /* SwipingOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipingOverlayView.h; sourceTree = "<group>"; };
+		A7D8692919E4060900CE0923 /* SwipingOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipingOverlayView.m; sourceTree = "<group>"; };
 		A7DEA1871790BD2D00EB1549 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
 		A7DEA1881790BD2D00EB1549 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		A7DEA18A17954C7400EB1549 /* ThemeHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThemeHandler.h; sourceTree = "<group>"; };
@@ -2002,8 +2002,8 @@
 		DAE2B15119CB7A4D00A9074E /* SwipesToday */ = {
 			isa = PBXGroup;
 			children = (
-				A7D8692819E4060900CE0923 /* SwipeTestingView.h */,
-				A7D8692919E4060900CE0923 /* SwipeTestingView.m */,
+				A7D8692819E4060900CE0923 /* SwipingOverlayView.h */,
+				A7D8692919E4060900CE0923 /* SwipingOverlayView.m */,
 				DAE2B15419CB7A4D00A9074E /* TodayViewController.h */,
 				DAE2B15519CB7A4D00A9074E /* TodayViewController.m */,
 				DAE2B15719CB7A4D00A9074E /* MainInterface.storyboard */,
@@ -2652,7 +2652,7 @@
 				DA53466819D426B4007AA15D /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
 				DA53467819D426B4007AA15D /* NSManagedObject+MagicalFinders.m in Sources */,
 				DAE2B16519CB7B0C00A9074E /* Datamodel.xcdatamodeld in Sources */,
-				A7D8692A19E4060900CE0923 /* SwipeTestingView.m in Sources */,
+				A7D8692A19E4060900CE0923 /* SwipingOverlayView.m in Sources */,
 				DA53465419D426B4007AA15D /* MagicalImportFunctions.m in Sources */,
 				DAE2B16D19CB7B1B00A9074E /* _KPToDo.m in Sources */,
 				DA53469019D426B4007AA15D /* NSManagedObjectContext+MagicalThreading.m in Sources */,

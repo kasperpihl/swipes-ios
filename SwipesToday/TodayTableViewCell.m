@@ -6,47 +6,87 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 #define color(r,g,b,a) [UIColor colorWithRed: r/255.0 green: g/255.0 blue: b/255.0 alpha:a]
+//#define alpha(c,a) [c colorWithAlphaComponent:a]
+#define kActionThreshold 50
+#define kRegretThreshold 10
 
+#define kPreventNotificationTimeThreshold 0.4
+#define kPreventNotificationDistanceThreshold -30
 #import "TodayTableViewCell.h"
 #import "ThemeHandler.h"
-#import "SwipeTestingView.h"
-@interface TodayTableViewCell () <UIGestureRecognizerDelegate>
+#import "SwipingOverlayView.h"
+@interface TodayTableViewCell () <SwipingOverlayViewDelegate>
 @property (nonatomic) IBOutlet UIButton *completeButton;
 @property (nonatomic) IBOutlet UILabel *taskTitle;
-@property (nonatomic) CGFloat startX;
+@property (nonatomic) CGFloat lastX;
+@property CGFloat relativeCounter;
+@property CGFloat regretCounter;
+@property BOOL didRegret;
 @property BOOL lock;
+@property CGFloat startTime;
+@property BOOL didCancel;
 
 @end
 @implementation TodayTableViewCell
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    self.lock = YES;
-    UITouch *touch = [touches anyObject];
-    CGPoint translation = [touch locationInView:self];
-    self.startX = translation.x;
-    
+-(void)swipingDidStartOverlay:(SwipingOverlayView *)overlay{
+    self.didRegret = NO;
+    self.didCancel = NO;
+    self.startTime = CACurrentMediaTime();
 }
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-    UITouch *touch = [touches anyObject];
-    CGPoint translation = [touch locationInView:self];
-    CGFloat relative = MAX(translation.x-self.startX,0);
-    CGRectSetX(self.colorIndicatorView, MIN(-self.bounds.size.width+relative,0));
-    CGRectSetX(self.contentView, MIN(relative,self.bounds.size.width));
-    
+-(void)didTapSwipingOverlay:(SwipingOverlayView *)overlay{
+    if([self.delegate respondsToSelector:@selector(didTapCell:)])
+        [self.delegate didTapCell:self];
 }
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    UITouch *touch = [touches anyObject];
-    CGPoint translation = [touch locationInView:self];
-    CGFloat relative = MAX(translation.x-self.startX,0);
-    [self finalizeAnimation:NO];
+-(void)swipingOverlay:(SwipingOverlayView *)overlay didMoveDistance:(CGPoint)point relative:(CGPoint)relative{
+    if(self.lock)
+        return;
+    if(point.x < kPreventNotificationDistanceThreshold && (CACurrentMediaTime()-self.startTime)<kPreventNotificationTimeThreshold){
+        NSLog(@"did cancel");
+        self.didCancel = YES;
+    }
+    if(!self.didRegret){
+        if( relative.x < 0 )
+            self.regretCounter += ABS(relative.x);
+        else if(relative.x > 0)
+            self.regretCounter = 0;
+        if(self.regretCounter > kRegretThreshold){
+            self.didRegret = YES;
+            self.regretCounter = 0;
+        }
+    }
+    if(self.didRegret){
+        if( relative.x > 0 )
+            self.regretCounter += ABS(relative.x);
+        else if(relative.x < 0)
+            self.regretCounter = 0;
+        if(self.regretCounter > kRegretThreshold){
+            self.didRegret = NO;
+            self.regretCounter = 0;
+        }
+    }
+    CGFloat x = MAX(point.x,0);
+    self.lastX = point.x;
+    self.colorIndicatorView.backgroundColor = alpha(self.colorIndicatorView.backgroundColor, (x > kActionThreshold && !self.didRegret) ? 1.0 : 0.4 );
+    CGRectSetX(self.colorIndicatorView, MIN(-self.bounds.size.width+x,0));
+    CGRectSetX(self.contentView, MIN(x,self.bounds.size.width));
 }
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
-    [self finalizeAnimation:NO];
+-(void)swipingOverlay:(SwipingOverlayView *)overlay didEndWithDistance:(CGPoint)point relative:(CGPoint)relative{
+    if(self.lock)
+        return;
+    NSLog(@"l - %f - %f",CACurrentMediaTime()-self.startTime,point.x);
+    //NSLog(@"l - relative %f last %f",relative.x,self.lastX);
+    [self finalizeAnimationAndComplete:(point.x > kActionThreshold && !self.didRegret && !self.didCancel)];
+}
+-(void)swipingDidCancelOverlay:(SwipingOverlayView *)overlay{
+    if(self.lock)
+        return;
+    [self finalizeAnimationAndComplete:NO];
 }
 
--(void)finalizeAnimation:(BOOL)completed{
-    if(self.delegate && [self.delegate respondsToSelector:@selector(willCompleteCell:)])
+-(void)finalizeAnimationAndComplete:(BOOL)completed{
+    if(completed && self.delegate && [self.delegate respondsToSelector:@selector(willCompleteCell:)])
         [self.delegate willCompleteCell:self];
-    
+    self.lock = YES;
     
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         CGRectSetX(self.colorIndicatorView, completed ? 0 : -self.bounds.size.width);
@@ -122,6 +162,11 @@
     self.taskTitle.lineBreakMode = NSLineBreakByTruncatingTail;
     self.taskTitle.textColor = [UIColor whiteColor];
     [self.contentView addSubview:self.taskTitle];
+    
+    SwipingOverlayView *swipingOverlayView = [[SwipingOverlayView alloc] initWithFrame:self.bounds];
+    swipingOverlayView.delegate = self;
+    [swipingOverlayView addTarget:self action:@selector(pressedComplete:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:swipingOverlayView];
     self.userInteractionEnabled = YES;
     self.contentView.userInteractionEnabled = YES;
 }
