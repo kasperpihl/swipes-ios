@@ -134,6 +134,7 @@
 		A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A771356E17BABB5A0090BE89 /* UIView+Utilities.m */; };
 		A772B14119671D9F00C07909 /* swipesandevernote.png in Resources */ = {isa = PBXBuildFile; fileRef = A772B13F19671D9F00C07909 /* swipesandevernote.png */; };
 		A772B14219671D9F00C07909 /* swipesandevernote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A772B14019671D9F00C07909 /* swipesandevernote@2x.png */; };
+		A7751EB819E55A24002227DD /* UIColor+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */; };
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
 		A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CD116EB5884004D95E5 /* CoreGraphics.framework */; };
@@ -163,6 +164,7 @@
 		A7933049172AB63700F1505E /* TodayListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933048172AB63700F1505E /* TodayListViewController.m */; };
 		A7933056172B2BA100F1505E /* DoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933055172B2BA100F1505E /* DoneViewController.m */; };
 		A798DCCE19E523CC00386C80 /* SelectionTopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A798DCCD19E523CC00386C80 /* SelectionTopMenu.m */; };
+		A798DCD119E53A6700386C80 /* TopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A798DCD019E53A6700386C80 /* TopMenu.m */; };
 		A7A3C25419E1A8D40025E877 /* SavedChangeHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A7A3C25219E1A8D40025E877 /* SavedChangeHandler.h */; };
 		A7A3C25519E1A8D40025E877 /* SavedChangeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A3C25319E1A8D40025E877 /* SavedChangeHandler.m */; };
 		A7A3C25619E1C0980025E877 /* SavedChangeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A3C25319E1A8D40025E877 /* SavedChangeHandler.m */; };
@@ -722,6 +724,8 @@
 		A7933055172B2BA100F1505E /* DoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DoneViewController.m; path = Done/DoneViewController.m; sourceTree = "<group>"; };
 		A798DCCC19E523CC00386C80 /* SelectionTopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectionTopMenu.h; path = TopMenus/SelectionTopMenu.h; sourceTree = "<group>"; };
 		A798DCCD19E523CC00386C80 /* SelectionTopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectionTopMenu.m; path = TopMenus/SelectionTopMenu.m; sourceTree = "<group>"; };
+		A798DCCF19E53A6700386C80 /* TopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TopMenu.h; path = TopMenus/TopMenu.h; sourceTree = "<group>"; };
+		A798DCD019E53A6700386C80 /* TopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TopMenu.m; path = TopMenus/TopMenu.m; sourceTree = "<group>"; };
 		A7A3C25219E1A8D40025E877 /* SavedChangeHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SavedChangeHandler.h; path = Models/SavedChangeHandler.h; sourceTree = "<group>"; };
 		A7A3C25319E1A8D40025E877 /* SavedChangeHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SavedChangeHandler.m; path = Models/SavedChangeHandler.m; sourceTree = "<group>"; };
 		A7A3C25919E26D0B0025E877 /* NSDate+UtilitiesiOS8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+UtilitiesiOS8.h"; sourceTree = "<group>"; };
@@ -1685,6 +1689,8 @@
 			children = (
 				A798DCCC19E523CC00386C80 /* SelectionTopMenu.h */,
 				A798DCCD19E523CC00386C80 /* SelectionTopMenu.m */,
+				A798DCCF19E53A6700386C80 /* TopMenu.h */,
+				A798DCD019E53A6700386C80 /* TopMenu.m */,
 			);
 			name = TopMenus;
 			sourceTree = "<group>";
@@ -2580,6 +2586,7 @@
 				A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */,
 				DA53465F19D426B4007AA15D /* NSNumber+MagicalDataImport.m in Sources */,
 				A7D06868190E654C00699B4E /* MMDrawerBarButtonItem.m in Sources */,
+				A798DCD119E53A6700386C80 /* TopMenu.m in Sources */,
 				A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */,
 				A703B1AB1838EBF20047DCC9 /* CKCalendarView.m in Sources */,
 				A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */,
@@ -2672,6 +2679,7 @@
 				DA53469019D426B4007AA15D /* NSManagedObjectContext+MagicalThreading.m in Sources */,
 				DAE2B16819CB7B1B00A9074E /* KPTag.m in Sources */,
 				DAE2B16F19CB7D6400A9074E /* EvernoteToDoProcessor.m in Sources */,
+				A7751EB819E55A24002227DD /* UIColor+Utilities.m in Sources */,
 				DA5346A419D426B4007AA15D /* MagicalRecord+ErrorHandling.m in Sources */,
 				DA53468C19D426B4007AA15D /* NSManagedObjectContext+MagicalSaves.m in Sources */,
 				A7A3C25619E1C0980025E877 /* SavedChangeHandler.m in Sources */,

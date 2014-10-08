@@ -13,9 +13,11 @@
 #import "TodayTableViewCell.h"
 #import "ThemeHandler.h"
 #import "SavedChangeHandler.h"
+#import "UIColor+Utilities.h"
 
 #define kRowHeight 45
 #define kButtonHeight 44
+#define kToolbarHeight 60
 
 @interface TodayViewController () <NCWidgetProviding, UITableViewDataSource, UITableViewDelegate, TodayCellDelegate>
 
@@ -49,26 +51,34 @@
     // Do any additional setup after loading the view from its nib.
     
     
-    CGFloat plusX = 3;
+    CGFloat plusX = 20;
+    CGFloat plusY = 10;
     CGFloat titleXInset = 16;
     UIButton *plusButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    plusButton.frame = CGRectMake(self.view.bounds.size.width-kButtonHeight-plusX, self.view.bounds.size.height-kButtonHeight, kButtonHeight, kButtonHeight); //CGRectMake(plusX, self.view.bounds.size.height-kButtonHeight, kButtonHeight, kButtonHeight);
+    
+    plusButton.frame = CGRectMake(self.view.bounds.size.width-kButtonHeight-plusX, self.view.bounds.size.height-kButtonHeight-plusY, kButtonHeight, kButtonHeight); //CGRectMake(plusX, self.view.bounds.size.height-kButtonHeight, kButtonHeight, kButtonHeight);
+    plusButton.layer.cornerRadius = kButtonHeight/2;
+    plusButton.layer.borderWidth = 1;
+    plusButton.layer.masksToBounds = YES;
+    plusButton.layer.borderColor = alpha(tcolor(TasksColor),0.4).CGColor;
     plusButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin;
-    plusButton.titleLabel.font = iconFont(26);
-    [plusButton setTitle:iconString(@"editActionRoundedPlus") forState:UIControlStateNormal];
-    [plusButton setTitle:iconString(@"editActionRoundedPlus") forState:UIControlStateHighlighted];
-    [plusButton setTitleColor:alpha(tcolorF(TextColor,ThemeDark),1.0) forState:UIControlStateNormal];
+    plusButton.titleLabel.font = iconFont(18);
+    [plusButton setTitle:iconString(@"plusThick") forState:UIControlStateNormal];
+    [plusButton setTitle:iconString(@"plusThick") forState:UIControlStateHighlighted];
+    [plusButton setBackgroundImage:[alpha(tcolorF(TextColor,ThemeLight),0.2) image] forState:UIControlStateNormal];
+    [plusButton setBackgroundImage:[alpha(tcolorF(TextColor, ThemeLight),0.6) image] forState:UIControlStateHighlighted];
+    [plusButton setTitleColor:alpha(tcolor(TasksColor),1.0) forState:UIControlStateNormal];
     [plusButton addTarget:self action:@selector(onPlus:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:plusButton];
     
     
     UIButton *showAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    showAllButton.frame = CGRectMake(0, self.view.bounds.size.height-kButtonHeight, 220, kButtonHeight);
-    showAllButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    showAllButton.frame = CGRectMake(0, self.view.bounds.size.height-kButtonHeight-plusY, self.view.bounds.size.width-kButtonHeight-plusX, kButtonHeight);
+    showAllButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     showAllButton.titleEdgeInsets = UIEdgeInsetsMake(0, titleXInset, 0, 0);
     showAllButton.titleLabel.textAlignment = NSTextAlignmentLeft;
-    [showAllButton setTitle:@"3 current tasks. Show all" forState:UIControlStateNormal];
+    [showAllButton setTitle:@"" forState:UIControlStateNormal];
     [showAllButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
     [showAllButton setTitleColor:alpha(tcolorF(TextColor,ThemeDark),0.7) forState:UIControlStateHighlighted];
     showAllButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
@@ -105,17 +115,13 @@
 -(void)updateContentSize{
     CGSize updatedSize = [self preferredContentSize];
     updatedSize.width = self.view.bounds.size.width;
-    updatedSize.height = MIN(3,self.todos.count)*kRowHeight + kButtonHeight;
+    updatedSize.height = MIN(3,self.todos.count)*kRowHeight + kToolbarHeight;
     [self setPreferredContentSize:updatedSize];
     NSInteger numberOfCurrentTasks = self.todos.count;
     NSString *showAllTitle = @"No current tasks.  Add one";
     if(numberOfCurrentTasks > 0){
-        if(numberOfCurrentTasks == 1)
-            showAllTitle = @"1 current task.";
-        else
-            showAllTitle = [NSString stringWithFormat:@"%lu current tasks.  Show",(long)numberOfCurrentTasks];
         if(numberOfCurrentTasks > 3)
-            showAllTitle = [showAllTitle stringByAppendingString:@" all"];
+            showAllTitle = [NSString stringWithFormat:@"%lu more tasks.",(long)numberOfCurrentTasks-3];
     }
     [self.showAll setTitle:showAllTitle forState:UIControlStateNormal];
 }
