@@ -1133,7 +1133,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 -(void)keyboardWillShow:(NSNotification*)notification{
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGFloat kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
+    CGFloat kbdHeight = keyboardFrame.size.height;
+    if(OSVER == 7){
+        kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
+    }
     self.kbdHeight = kbdHeight;
     self.subtasksController.tableView.reorderingEnabled = NO;
     

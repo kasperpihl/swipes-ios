@@ -195,13 +195,16 @@
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGFloat keyboardHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
+    CGFloat kbdHeight = keyboardFrame.size.height;
+    if(OSVER == 7){
+        kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
+    }
     NSInteger spacing = 3;
     NSInteger startPoint = (OSVER >= 7) ? (20 + spacing) : spacing;
-    CGFloat height = MIN(self.frame.size.height - keyboardHeight - startPoint- spacing, MAX_HEIGHT);
+    CGFloat height = MIN(self.frame.size.height - kbdHeight - startPoint- spacing, MAX_HEIGHT);
     CGRectSetHeight(self.contentView, height);
     CGRectSetHeight(self.tableView, height - 2 * kSearchBarHeight);
-    CGFloat visibleSpace = self.frame.size.height - keyboardHeight - startPoint;
+    CGFloat visibleSpace = self.frame.size.height - kbdHeight - startPoint;
     CGRectSetCenterY(self.contentView,startPoint + visibleSpace / 2);
     
     [UIView commitAnimations];

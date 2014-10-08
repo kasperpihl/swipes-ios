@@ -533,6 +533,9 @@ typedef enum {
     [UIView setAnimationBeginsFromCurrentState:YES];
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGFloat keyboardHeight = keyboardFrame.size.height;
+    if(OSVER == 7){
+        keyboardHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
+    }
     NSInteger spacing = 3;
     NSInteger startPoint = (OSVER >= 7) ? (20 + spacing) : spacing;
     CGRectSetY(self.contentView,startPoint);

@@ -104,7 +104,7 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = kEvernoteColor;
-    CGFloat top = OSVER >= 7 ? 20 : 0;
+    CGFloat top = 20;
     
     UILabel *iconLabel = iconLabel(@"integrationEvernoteFull", kTopHeight/1.8);
     CGRectSetCenter(iconLabel, self.view.bounds.size.width/2, top + kTopHeight/2);
