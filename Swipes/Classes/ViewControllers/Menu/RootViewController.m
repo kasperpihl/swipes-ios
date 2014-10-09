@@ -50,6 +50,7 @@
 @property (nonatomic) NSDate *lastClose;
 @property (nonatomic) KPMenu currentMenu;
 @property (nonatomic) BOOL didReset;
+@property MFMailComposeViewController *mailCont;
 
 @end
 
@@ -230,9 +231,9 @@ static RootViewController *sharedObject;
 }
 -(void)shareTasks:(NSArray*)tasks{
     if([MFMailComposeViewController canSendMail]) {
-        MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
-        mailCont.mailComposeDelegate = self;
-        [mailCont setSubject:@"Tasks to complete"];
+        
+        self.mailCont.mailComposeDelegate = self;
+        [self.mailCont setSubject:@"Tasks to complete"];
         
         NSString *message = @"Tasks: \r\n";
         for(KPToDo *toDo in tasks){
@@ -250,8 +251,8 @@ static RootViewController *sharedObject;
                 message = [message stringByAppendingString:@"\r\n"];
         }
         message = [message stringByAppendingString:@"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com"];
-        [mailCont setMessageBody:message isHTML:NO];
-        [self presentViewController:mailCont animated:YES completion:nil];
+        [self.mailCont setMessageBody:message isHTML:NO];
+        [self presentViewController:self.mailCont animated:YES completion:nil];
         [ANALYTICS tagEvent:@"Share tasks" options:@{@"Number of Tasks":@(tasks.count)}];
     }
     else{
@@ -284,8 +285,7 @@ static RootViewController *sharedObject;
         [self presentViewController:mailCont animated:YES completion:nil];
     }
     else{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Mail was not setup" message:@"You can send us feedback to support@swipesapp.com. Thanks" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
-        [alert show];
+        [UTILITY alertWithTitle:@"Mail was not setup" andMessage:@"You can send us feedback to support@swipesapp.com. Thanks"];
     }
 }
 -(void)upgrade{
@@ -480,7 +480,7 @@ static RootViewController *sharedObject;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    self.mailCont = [[MFMailComposeViewController alloc] init];
     UTILITY.rootViewController = self;
 
     [self setNavigationBarHidden:YES];

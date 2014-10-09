@@ -77,6 +77,11 @@
     }
     return _showingViewController;
 }
+-(void)setSelectionMode:(BOOL)selectionMode{
+    if(!selectionMode)
+        [self deselectAllRows:self];
+    _selectionMode = selectionMode;
+}
 
 #pragma mark - ItemHandlerDelegate
 
@@ -92,8 +97,10 @@
 }
 
 - (void)didUpdateItemHandler:(ItemHandler *)handler {
+    NSLog(@"selected %lu",(long)self.selectedRows.count);
     [self willUpdateCells];
     NSArray *selectedItems = [self selectedItems];
+    NSLog(@"updated with selected %lu",(long)selectedItems.count);
     [self.selectedRows removeAllObjects];
     [self.tableView reloadData];
     for(KPToDo *item in selectedItems){
@@ -137,6 +144,7 @@
 - (void)update {
     [self.itemHandler reloadData];
 }
+
 
 - (void)willUpdateCells {
     
@@ -240,7 +248,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(self.selectionMode){
+    if(!self.selectionMode){
         [self editIndexPath:indexPath];
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
@@ -288,14 +296,6 @@
     [ANALYTICS pushView:@"Edit view"];
 }
 
-- (void)pressedEdit {
-    NSIndexPath *indexPath;
-    if (self.selectedRows.count > 0)
-        indexPath = [self.selectedRows lastObject];
-    if (indexPath)
-        [self editIndexPath:indexPath];
-}
-
 - (void)didPressCloseToDoViewController:(ToDoViewController *)viewController {
     [ROOT_CONTROLLER popViewControllerAnimated:YES];
     self.hasStartedEditing = NO;
@@ -311,6 +311,7 @@
 - (NSArray *)selectedItems {
     NSMutableArray *array = [NSMutableArray array];
     for(NSIndexPath *indexPath in self.selectedRows){
+        NSLog(@"indexPath %lu",(long)indexPath.row);
         KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
         if(toDo) [array addObject:toDo];
     }
@@ -494,7 +495,19 @@
         [self update];
     }
 }
-
+-(void)selectAllRows{
+    for (int i = 0; i < [self.tableView numberOfSections]; i++) {
+        for (int j = 0; j < [self.tableView numberOfRowsInSection:i]; j++) {
+            NSUInteger ints[2] = {i,j};
+            NSIndexPath *indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+            [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+            [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
+            //UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            //Here is your code
+            
+        }
+    }
+}
 - (void)cleanUpAfterMovingAnimated:(BOOL)animated {
     [self.selectedRows removeAllObjects];
     self.isLonelyRider = NO;

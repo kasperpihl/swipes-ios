@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DotView.h"
 @class TodayTableViewCell;
 @protocol TodayCellDelegate <NSObject>
 @optional
@@ -17,5 +18,6 @@
 @interface TodayTableViewCell : UITableViewCell
 @property (nonatomic,weak) NSObject<TodayCellDelegate> *delegate;
 -(void)resetAndSetTaskTitle:(NSString*)title;
+@property (nonatomic) DotView *dotView;
 @property (nonatomic) UIView *colorIndicatorView;
 @end

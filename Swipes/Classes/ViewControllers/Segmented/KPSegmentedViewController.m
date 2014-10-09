@@ -28,7 +28,7 @@
 #import "UIImage+Blur.h"
 #import "SlowHighlightIcon.h"
 #import "SettingsHandler.h"
-
+#import "SelectionTopMenu.h"
 
 #import "HintHandler.h"
 #import "UIView+Utilities.h"
@@ -58,7 +58,7 @@ typedef enum {
     TopMenuSelect,
     TopMenuFilter
 } TopMenuState;
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,SelectionTopMenuDelegate>
 
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
@@ -74,11 +74,14 @@ typedef enum {
 @property (nonatomic, assign) BOOL hidden;
 @property (nonatomic, strong) UIImageView *backgroundImage;
 @property (nonatomic, strong) NSArray *selectedItems;
+@property (nonatomic) SelectionTopMenu *selectionTopView;
 @property (nonatomic) TopMenuState currentTopMenu;
 
 @end
 
 @implementation KPSegmentedViewController
+
+
 
 -(void)receivedLocalNotification:(UILocalNotification *)notification
 {
@@ -136,12 +139,9 @@ typedef enum {
     BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark), 0.3);
     [BLURRY showView:addPanel inViewController:self];
 }
--(void)pressedEdit:(id)sender{
-    [[self currentViewController] pressedEdit];
-}
 -(void)pressedTag:(id)sender{
     [self tagItems:[[self currentViewController] selectedItems] inViewController:self withDismissAction:^{
-        [[self currentViewController] deselectAllRows:self];
+        //[[self currentViewController] deselectAllRows:self];
     }];
 }
 -(void)pressedShare:(id)sender{
@@ -157,7 +157,7 @@ typedef enum {
     BLURRY.showPosition = PositionBottom;
     BLURRY.blurryTopColor = alpha(tcolor(BackgroundColor), 0.3);
     if(block) BLURRY.dismissAction = ^{
-        self.selectedItems = nil;
+        //self.selectedItems = nil;
         block();
     };
     [BLURRY showView:tagView inViewController:viewController];
@@ -268,20 +268,81 @@ typedef enum {
     [ROOT_CONTROLLER.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
 }
 
+-(void)didPressAllInSelectionTopMenu:(SelectionTopMenu *)topMenu{
+    BOOL select = [topMenu.allButton.titleLabel.text isEqualToString:@"All"];
+    if(select){
+        [self.currentViewController selectAllRows];
+        [topMenu.allButton setTitle:@"None" forState:UIControlStateNormal];
+    }
+    else{
+        [self.currentViewController deselectAllRows:self];
+        [topMenu.allButton setTitle:@"All" forState:UIControlStateNormal];
+    }
+}
+-(void)didPressHelpLabelInSelectionTopMenu:(SelectionTopMenu *)topMenu{
+    [UTILITY alertWithTitle:@"Select tasks" andMessage:@"Tap your tasks to select them and swipe them all together."];
+}
+-(void)didPressCloseInSelectionTopMenu:(SelectionTopMenu *)topMenu{
+    self.currentTopMenu = TopMenuDefault;
+}
+
+-(void)setCurrentTopMenu:(TopMenuState)currentTopMenu{
+    [self setCurrentTopMenu:currentTopMenu animated:NO];
+}
+-(void)setCurrentTopMenu:(TopMenuState)currentTopMenu animated:(BOOL)animated{
+    if(currentTopMenu != _currentTopMenu){
+        if(_currentTopMenu == TopMenuSelect)
+            [self removeSelectTopMenuAnimated:animated];
+        
+        _currentTopMenu = currentTopMenu;
+    }
+    
+}
+-(void)removeSelectTopMenuAnimated:(BOOL)animated{
+    [self.currentViewController setSelectionMode:NO];
+    [self.controlHandler setState:KPControlHandlerStateAdd animated:YES];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.selectionTopView.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self.selectionTopView removeFromSuperview];
+        self.selectionTopView = nil;
+    }];
+}
 
 -(void)pressedSelect:(id)sender{
-
+    [self setCurrentTopMenu:TopMenuSelect animated:YES];
+    [self.currentViewController setSelectionMode:YES];
+    [self.controlHandler setState:KPControlHandlerStateNone animated:YES];
+    
+    SelectionTopMenu *selectionTopMenu = [[SelectionTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
+    //CGRectMake(sideMargin, TOP_Y+sideMargin, self.ios7BackgroundView.frame.size.width-2*sideMargin, self.ios7BackgroundView.frame.size.height-TOP_Y-2*sideMargin)
+    selectionTopMenu.backgroundColor = tcolor(BackgroundColor);
+    
+    [selectionTopMenu.allButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [selectionTopMenu.allButton setTitleColor:alpha(tcolor(TextColor),0.5) forState:UIControlStateHighlighted];
+    [selectionTopMenu.closeButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [selectionTopMenu.helpButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    selectionTopMenu.selectionDelegate = self;
+    selectionTopMenu.alpha = 0;
+    [selectionTopMenu.helpButton setTitle:@"Select more" forState:UIControlStateNormal];
+    [self.view addSubview:selectionTopMenu];
+    self.selectionTopView = selectionTopMenu;
+    [UIView animateWithDuration:0.3 animations:^{
+        selectionTopMenu.alpha = 1;
+    }];
 }
 
 
 -(void)pressedAccount{
     
-    KxMenuItem *item1 = [KxMenuItem menuItem:@"Select More" image:nil target:self action:@selector(pressedSelect:)];
+    KxMenuItem *selectItem = [KxMenuItem menuItem:@"Select" image:nil target:self action:@selector(pressedSelect:)];
+    KxMenuItem *filterItem = [KxMenuItem menuItem:@"Filter" image:nil target:self action:@selector(pressedSelect:)];
+    KxMenuItem *searchItem = [KxMenuItem menuItem:@"Search" image:nil target:self action:@selector(pressedSelect:)];
     [KxMenu setBackColor:tcolor(TextColor)];
     [self._accountButton setSelected:YES];
     [KxMenu showMenuInView:self.view
                   fromRect:self._accountButton.frame
-                 menuItems:@[item1]];
+                 menuItems:@[selectItem,filterItem,searchItem]];
     return;
     [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
     return;
@@ -289,7 +350,11 @@ typedef enum {
 }
 
 -(KPControlHandlerState)handlerStateForCurrent:(KPControlCurrentState)state{
-    if(state == KPControlCurrentStateAdd) return KPControlHandlerStateAdd;
+    if(state == KPControlCurrentStateAdd){
+        if(self.currentTopMenu == TopMenuSelect)
+            return KPControlHandlerStateNone;
+        return KPControlHandlerStateAdd;
+    }
     else return KPControlHandlerStateEdit;
 }
 -(void)setCurrentState:(KPControlCurrentState)currentState{
@@ -406,11 +471,12 @@ typedef enum {
         self.ios7BackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         UIButton *accountButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.view.frame.size.width-CELL_LABEL_X, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
         accountButton.titleLabel.font = iconFont(23);
-        [accountButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        [accountButton setTitle:iconString(@"settingsAccount") forState:UIControlStateNormal];
-        //accountButton.hidden = YES;
-        [accountButton setTitle:iconString(@"settingsAccountFull") forState:UIControlStateHighlighted];
         [accountButton addTarget:self action:@selector(pressedAccount) forControlEvents:UIControlEventTouchUpInside];
+        accountButton.titleLabel.font = iconFont(20);
+        [accountButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        accountButton.transform = CGAffineTransformMakeRotation(radians(90));
+        [accountButton setTitle:iconString(@"rightArrow") forState:UIControlStateNormal];
+        [accountButton setTitle:iconString(@"rightArrowFull") forState:UIControlStateHighlighted];
         accountButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [self.ios7BackgroundView addSubview:accountButton];
         self._accountButton = accountButton;

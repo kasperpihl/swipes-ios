@@ -40,9 +40,8 @@
 @property (nonatomic) BOOL isRotated;
 @property (nonatomic) BOOL deleteMode;
 @end
-@implementation KPAddTagPanel{
-    BOOL _justShown;
-}
+@implementation KPAddTagPanel
+
 -(void)setDeleteMode:(BOOL)deleteMode{
     if(_deleteMode != deleteMode){
         [self shiftToDeleteMode:deleteMode];
@@ -58,9 +57,6 @@
     else if(item == 1){
         self.deleteMode = !self.deleteMode;
     }
-}
--(void)blurryWillShow:(KPBlurry *)blurry{
-    _justShown = YES;
 }
 -(void)pressedClose:(id)sender{
     [self toolbar:self.toolbar pressedItem:0];
@@ -215,17 +211,6 @@
     clearNotify();
 }
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    // it is really complicated to recalc the new keyboard frame
-    // FIXME: maybe someday we should do it anyway
-    if ( _justShown ){
-        _justShown = NO;
-    }
-    else
-        [self toolbar:self.toolbar pressedItem:0];
-}
 
 
 @end

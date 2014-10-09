@@ -81,7 +81,7 @@
         editToolbar.font = iconFont(23);
         editToolbar.titleColor = tcolor(TextColor);
         editToolbar.titleHighlightString = @"Full";
-        editToolbar.items = @[@"actionEdit",@"actionTag",@"actionDelete",@"actionShare"];
+        editToolbar.items = @[@"",@"actionTag",@"actionDelete",@"actionShare"];
         [editToolbar setTopInset:editToolbar.frame.size.height*0.05];
         [view addSubview:editToolbar];
         self.editToolbar = (KPToolbar*)[view viewWithTag:EDIT_TOOLBAR_TAG];
@@ -193,7 +193,8 @@
         if(item == 0 && [self.delegate respondsToSelector:@selector(pressedAdd:)]) [self.delegate pressedAdd:self];
     }
     else{
-        if(item == 0 && [self.delegate respondsToSelector:@selector(pressedEdit:)]) [self.delegate pressedEdit:self];
+        if(item == 0 && [self.delegate respondsToSelector:@selector(pressedEdit:)]) return;
+        //[self.delegate pressedEdit:self];
         else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedTag:)]) [self.delegate pressedTag:self];
         else if(item == 2 && [self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:self];
         else if(item == 3 && [self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:self];

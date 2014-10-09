@@ -167,7 +167,6 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     [alertView show];
 #else
-#warning Test support on iOS 8
     if (self.rootViewController) {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
@@ -221,7 +220,6 @@
     self.block = block;
     [alertView show];
 #else
-#warning Test support on iOS 8
     if (self.rootViewController) {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
@@ -246,7 +244,6 @@
     self.numberBlock = block;
     [alertView show];
 #else
-#warning Test support on iOS 8
     if (self.rootViewController) {
         void (^buttonBlock)(UIAlertAction *action) = ^(UIAlertAction *action) {
             NSUInteger counter = 0;

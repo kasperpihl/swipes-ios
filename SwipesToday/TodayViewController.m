@@ -16,7 +16,7 @@
 #import "UIColor+Utilities.h"
 
 #define kRowHeight 45
-#define kButtonHeight 44
+#define kButtonHeight 38
 #define kToolbarHeight 60
 
 @interface TodayViewController () <NCWidgetProviding, UITableViewDataSource, UITableViewDelegate, TodayCellDelegate>
@@ -121,7 +121,10 @@
     NSString *showAllTitle = @"No current tasks.  Add one";
     if(numberOfCurrentTasks > 0){
         if(numberOfCurrentTasks > 3)
-            showAllTitle = [NSString stringWithFormat:@"%lu more tasks.",(long)numberOfCurrentTasks-3];
+            showAllTitle = [NSString stringWithFormat:@"%lu more task",(long)numberOfCurrentTasks-3];
+        else showAllTitle = @"";
+        if(numberOfCurrentTasks > 4)
+            showAllTitle = [showAllTitle stringByAppendingString:@"s"];
     }
     [self.showAll setTitle:showAllTitle forState:UIControlStateNormal];
 }
@@ -173,9 +176,6 @@
         cell = [[TodayTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.colorIndicatorView.backgroundColor =  tcolor(DoneColor);
         cell.delegate = self;
-        //cell.textLabel.text = @"Title";
-        //[cell setMode:MCSwipeTableViewCellModeExit];
-        //cell.delegate = self;
     }
     
     return cell;
@@ -183,6 +183,7 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(TodayTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     KPToDo *model = [self.todos objectAtIndex:indexPath.row];
+    [cell.dotView setPriority:model.priority.boolValue];
     [cell resetAndSetTaskTitle:model.title];
 }
 
@@ -200,13 +201,6 @@
     [self.extensionContext openURL:url completionHandler:^(BOOL success) {
         // put some code here if needed or pass nil for completion handler
     }];
-    //  uncomment here for opening the first today todo or for going to add prompt
-    
-    /*    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/addprompt"]];
-     //    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/view?id=%@", tempId]];
-     [self.extensionContext openURL:url completionHandler:^(BOOL success) {
-     // put some code here if needed or pass nil for completion handler
-     }];*/
 }
 
 - (IBAction)onShowAll:(id)sender
@@ -220,17 +214,6 @@
         // put some code here if needed or pass nil for completion handler
     }];
     return;
-    /*CGSize updatedSize = [self preferredContentSize];
-    if (101 < updatedSize.height) {
-        updatedSize.height = 100;
-        [_showHideMore setTitle:@"Show more >" forState:UIControlStateNormal];
-    }
-    else {
-        updatedSize.height = 200;
-        [_showHideMore setTitle:@"Show less <" forState:UIControlStateNormal];
-    }
-    //self.view.bounds = CGRectMake(0, 0, updatedSize.width, updatedSize.height);
-    [self setPreferredContentSize:updatedSize];*/
 }
 
 - (IBAction)onPlus:(id)sender

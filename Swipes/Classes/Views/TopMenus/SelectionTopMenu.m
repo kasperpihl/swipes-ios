@@ -7,56 +7,61 @@
 //
 
 #import "SelectionTopMenu.h"
-#define kSideButtonsWidth 50
+#import "SlowHighlightIcon.h"
+#define kSideButtonsWidth 60
+#define kTopY 20
 @interface SelectionTopMenu ()
+
 @end
 @implementation SelectionTopMenu
 -(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
-        UIButton *allButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        allButton.frame = CGRectMake(0, 0, kSideButtonsWidth, frame.size.height);
+        UIButton *allButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
+        allButton.frame = CGRectMake(0, kTopY, kSideButtonsWidth, frame.size.height-kTopY);
         allButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         allButton.titleLabel.font = KP_REGULAR(16);
         [allButton setTitle:@"All" forState:UIControlStateNormal];
+        [allButton addTarget:self action:@selector(onAll:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:allButton];
         self.allButton = allButton;
         
-        UILabel *helpLabel = [[UILabel alloc] initWithFrame:CGRectMake(kSideButtonsWidth, 0, frame.size.width-2*kSideButtonsWidth, frame.size.height)];
-        helpLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        helpLabel.font = KP_REGULAR(15);
-        helpLabel.textAlignment = NSTextAlignmentCenter;
-        [self addSubview:helpLabel];
-        self.helpLabel = helpLabel;
+        UIButton *helpButton = [[UIButton alloc] initWithFrame:CGRectMake(kSideButtonsWidth, kTopY, frame.size.width-2*kSideButtonsWidth, frame.size.height-kTopY)];
+        helpButton.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        helpButton.titleLabel.font = KP_BOLD(16);
+        [helpButton addTarget:self action:@selector(onHelpButton:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:helpButton];
+        self.helpButton = helpButton;
         
-        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        closeButton.frame = CGRectMake(frame.size.width-kSideButtonsWidth, 0, kSideButtonsWidth, frame.size.height);
+        UIButton *closeButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
+        closeButton.frame = CGRectMake(frame.size.width-kSideButtonsWidth, kTopY, kSideButtonsWidth, frame.size.height-kTopY);
         closeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin;
         closeButton.titleLabel.font = iconFont(23);
         [closeButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
+        [closeButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
+        [closeButton addTarget:self action:@selector(onClose:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
         self.closeButton = closeButton;
     }
     return self;
 }
--(void)setHelpLabelText:(NSString *)text{
-    
-}
 
 #pragma mark IBActions
 -(void)onAll:(UIButton*)allButton{
-    [self.delegate didPressAllInTopMenu:self];
+    [self.selectionDelegate didPressAllInSelectionTopMenu:self];
 }
 -(void)onClose:(UIButton*)closeButton{
-    [self.delegate didPressCloseInTopMenu:self];
+    [self.selectionDelegate didPressCloseInSelectionTopMenu:self];
 }
-
+-(void)onHelpButton:(UIButton*)helpButton{
+    [self.selectionDelegate didPressHelpLabelInSelectionTopMenu:self];
+}
 
 
 #pragma mark UIView
 -(void)dealloc{
     self.allButton = nil;
-    self.helpLabel = nil;
+    self.helpButton = nil;
     self.closeButton = nil;
 }
 @end

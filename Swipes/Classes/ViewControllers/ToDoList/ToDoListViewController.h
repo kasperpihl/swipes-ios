@@ -23,11 +23,11 @@
 -(KPSegmentedViewController *)parent;
 -(ToDoCell*)readyCell:(ToDoCell*)cell;
 -(void)deselectAllRows:(id)sender;
+-(void)selectAllRows;
 -(void)deleteSelectedItems:(id)sender;
 -(void)prepareTableView:(UITableView*)tableView;
 -(NSArray*)selectedItems;
 -(void)update;
 -(void)didUpdateCells;
--(void)pressedEdit;
 - (void)editToDo:(KPToDo *)todo;
 @end

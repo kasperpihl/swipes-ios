@@ -236,7 +236,7 @@
                 [UTILITY confirmBoxWithTitle:@"Unlink Evernote" andMessage:@"All tasks will be unlinked, are you sure?" block:^(BOOL succeeded, NSError *error) {
                     if (succeeded) {
                         [kEnInt logout];
-                        NSManagedObjectContext *context = [NSManagedObjectContext MR_contextForCurrentThread];
+                        NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
                         
                         [KPToDo removeAllAttachmentsForAllToDosWithService:EVERNOTE_SERVICE inContext:context save:YES];
                         [self reload];

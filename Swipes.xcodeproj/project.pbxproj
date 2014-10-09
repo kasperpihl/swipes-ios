@@ -135,6 +135,7 @@
 		A772B14119671D9F00C07909 /* swipesandevernote.png in Resources */ = {isa = PBXBuildFile; fileRef = A772B13F19671D9F00C07909 /* swipesandevernote.png */; };
 		A772B14219671D9F00C07909 /* swipesandevernote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A772B14019671D9F00C07909 /* swipesandevernote@2x.png */; };
 		A7751EB819E55A24002227DD /* UIColor+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */; };
+		A7751EB919E56DF2002227DD /* DotView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1761838EBF20047DCC9 /* DotView.m */; };
 		A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCD16EB5884004D95E5 /* UIKit.framework */; };
 		A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CCF16EB5884004D95E5 /* Foundation.framework */; };
 		A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7778CD116EB5884004D95E5 /* CoreGraphics.framework */; };
@@ -2707,6 +2708,7 @@
 				DAE2B17019CB7D7200A9074E /* CoreSyncHandler.m in Sources */,
 				DA5346B419D426B4007AA15D /* MagicalRecord+ShorthandSupport.m in Sources */,
 				DA53467419D426B4007AA15D /* NSManagedObject+MagicalDataImport.m in Sources */,
+				A7751EB919E56DF2002227DD /* DotView.m in Sources */,
 				DAE2B17419CB7D7200A9074E /* EvernoteIntegration.m in Sources */,
 				DAE2B16919CB7B1B00A9074E /* KPToDo.m in Sources */,
 				DA5346B019D426B4007AA15D /* MagicalRecord+Setup.m in Sources */,
@@ -2859,8 +2861,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
@@ -2931,7 +2933,7 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "17bbbab4-3251-491a-976c-52fec1bb42ab";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=*]" = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3093,8 +3095,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,

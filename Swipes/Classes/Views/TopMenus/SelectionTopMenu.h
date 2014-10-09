@@ -9,16 +9,15 @@
 #import <UIKit/UIKit.h>
 @class SelectionTopMenu;
 @protocol SelectionTopMenuDelegate <NSObject>
--(void)didPressAllInTopMenu:(SelectionTopMenu*)topMenu;
--(void)didPressCloseInTopMenu:(SelectionTopMenu*)topMenu;
+-(void)didPressAllInSelectionTopMenu:(SelectionTopMenu*)topMenu;
+-(void)didPressHelpLabelInSelectionTopMenu:(SelectionTopMenu*)topMenu;
+-(void)didPressCloseInSelectionTopMenu:(SelectionTopMenu*)topMenu;
 @end
 
 @interface SelectionTopMenu : UIView
 @property (nonatomic) IBOutlet UIButton *allButton;
-@property (nonatomic) IBOutlet UILabel *helpLabel;
+@property (nonatomic) IBOutlet UIButton *helpButton;
 @property (nonatomic) IBOutlet UIButton *closeButton;
 
-@property (nonatomic,weak) NSObject <SelectionTopMenuDelegate> *delegate;
-
--(void)setHelpLabelText:(NSString*)text;
+@property (nonatomic,weak) NSObject <SelectionTopMenuDelegate> *selectionDelegate;
 @end

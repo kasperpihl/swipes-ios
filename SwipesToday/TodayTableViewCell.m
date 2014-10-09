@@ -16,6 +16,7 @@
 #import "ThemeHandler.h"
 #import "SwipingOverlayView.h"
 @interface TodayTableViewCell () <SwipingOverlayViewDelegate>
+@property (nonatomic) IBOutlet UILabel *movingIcon;
 @property (nonatomic) IBOutlet UIButton *completeButton;
 @property (nonatomic) IBOutlet UILabel *taskTitle;
 @property (nonatomic) CGFloat lastX;
@@ -67,8 +68,11 @@
     CGFloat x = MAX(point.x,0);
     self.lastX = point.x;
     self.colorIndicatorView.backgroundColor = alpha(self.colorIndicatorView.backgroundColor, (x > kActionThreshold && !self.didRegret) ? 1.0 : 0.4 );
+    self.movingIcon.textColor = alpha(self.movingIcon.textColor, (x > kActionThreshold && !self.didRegret) ? 1.0 : 0.4 );
     CGRectSetX(self.colorIndicatorView, MIN(-self.bounds.size.width+x,0));
+    CGFloat contentX = MIN(x,self.bounds.size.width);
     CGRectSetX(self.contentView, MIN(x,self.bounds.size.width));
+    CGRectSetX(self.movingIcon, contentX-self.movingIcon.frame.size.width);
 }
 -(void)swipingOverlay:(SwipingOverlayView *)overlay didEndWithDistance:(CGPoint)point relative:(CGPoint)relative{
     if(self.lock)
@@ -91,6 +95,7 @@
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         CGRectSetX(self.colorIndicatorView, completed ? 0 : -self.bounds.size.width);
         CGRectSetX(self.contentView, completed ? self.bounds.size.width : 0);
+        CGRectSetX(self.movingIcon, completed ? self.bounds.size.width-self.movingIcon.frame.size.width : 0-self.movingIcon.frame.size.width);
     } completion:^(BOOL finished) {
         self.lock = NO;
         if(completed)
@@ -133,31 +138,32 @@
     [_colorIndicatorView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
     [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
     [self insertSubview:_colorIndicatorView atIndex:0];
+    UILabel *movingIcon = [[UILabel alloc] initWithFrame:CGRectMake(-self.bounds.size.height, 0, self.bounds.size.height, self.frame.size.height)];
+    movingIcon.font = iconFont(20);
+    movingIcon.textAlignment = NSTextAlignmentCenter;
+    [movingIcon setText:@"doneFull"];
+    [movingIcon setTextColor:tcolorF(TextColor, ThemeDark)];
+    [self insertSubview:movingIcon aboveSubview:_colorIndicatorView];
+    self.movingIcon = movingIcon;
     
     UIView *selectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];//CGRectMake((CELL_LABEL_X/2),0, LINE_SIZE,CELL_HEIGHT)]; //];
     selectionView.backgroundColor = color(0, 0, 0, 0.15);
     selectionView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.selectedBackgroundView = selectionView;
     
-    CGFloat titleX = 3;
-    CGFloat buttonWidth = 40;
     
-    CGFloat notificationX = 6;
-    /*UIButton *completeButton = [[UIButton alloc] initWithFrame:CGRectMake(notificationX, 0,  buttonWidth, self.bounds.size.height)];
-    [completeButton setTitle:@"roundedBox" forState:UIControlStateNormal];
-    [completeButton addTarget:self action:@selector(pressedComplete:) forControlEvents:UIControlEventTouchUpInside];
-    //[completeButton addTarget:self action:@selector(touchedComplete:) forControlEvents:UIControlEventTouchDown|UIControlEventTouchDragEnter];
-    //[completeButton addTarget:self action:@selector(cancelledComplete:) forControlEvents:UIControlEventTouchCancel|UIControlEventTouchDragExit];
+    self.dotView = [[DotView alloc] init];
+
+    self.dotView.dotColor = tcolor(TasksColor);
+    CGFloat titleX = 35;
+    CGFloat extra = 2;
+    [self.dotView setScale:0.85];
+    CGRectSetCenter(self.dotView, titleX/2+extra, self.frame.size.height/2);
+    [self.contentView addSubview:self.dotView];
     
-    [completeButton setTitle:@"" forState:UIControlStateHighlighted];
-    [completeButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];//tcolor(DoneColor)
-    completeButton.titleLabel.font = [UIFont fontWithName:@"swipes" size:30];
-    completeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    [self addSubview:completeButton];
-    [self bringSubviewToFront:completeButton];
-    self.completeButton = completeButton;*/
     
-    self.taskTitle = [[UILabel alloc] initWithFrame:CGRectMake(notificationX + titleX, 0, self.frame.size.width - titleX -notificationX, self.frame.size.height)];
+
+    self.taskTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 0, self.frame.size.height)];
     self.taskTitle.font = [UIFont systemFontOfSize:16];
     self.taskTitle.lineBreakMode = NSLineBreakByTruncatingTail;
     self.taskTitle.textColor = [UIColor whiteColor];
@@ -165,7 +171,6 @@
     
     SwipingOverlayView *swipingOverlayView = [[SwipingOverlayView alloc] initWithFrame:self.bounds];
     swipingOverlayView.delegate = self;
-    [swipingOverlayView addTarget:self action:@selector(pressedComplete:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:swipingOverlayView];
     self.userInteractionEnabled = YES;
     self.contentView.userInteractionEnabled = YES;
@@ -174,28 +179,10 @@
 -(void)resetAndSetTaskTitle:(NSString *)title{
     CGRectSetX(self.colorIndicatorView, -self.bounds.size.width);
     CGRectSetX(self.contentView, 0);
+    CGRectSetX(self.movingIcon, 0-self.movingIcon.frame.size.width);
     self.completeButton.hidden = NO;
     self.taskTitle.hidden = NO;
-    self.taskTitle.text = title;
-}
-
--(void)pressedComplete:(UIButton*)sender{
-    if(self.lock)
-        return;
-    if(self.delegate && [self.delegate respondsToSelector:@selector(willCompleteCell:)])
-        [self.delegate willCompleteCell:self];
-    self.lock = YES;
-    self.completeButton.hidden = YES;
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        CGRectSetX(self.colorIndicatorView, 0);
-        CGRectSetX(self.contentView, self.bounds.size.width);
-    } completion:^(BOOL finished) {
-        self.lock = NO;
-        self.taskTitle.hidden = YES;
-        if(self.delegate && [self.delegate respondsToSelector:@selector(didCompleteCell:)])
-            [self.delegate didCompleteCell:self];
-    }];
-
+    self.taskTitle.text = [@"        " stringByAppendingString:title];
 }
 
 - (void)awakeFromNib {
