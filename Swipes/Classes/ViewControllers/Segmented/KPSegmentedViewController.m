@@ -28,6 +28,8 @@
 #import "UIImage+Blur.h"
 #import "SlowHighlightIcon.h"
 #import "SettingsHandler.h"
+
+#import "SearchTopMenu.h"
 #import "SelectionTopMenu.h"
 
 #import "HintHandler.h"
@@ -56,9 +58,10 @@
 typedef enum {
     TopMenuDefault,
     TopMenuSelect,
-    TopMenuFilter
+    TopMenuFilter,
+    TopMenuSearch
 } TopMenuState;
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,SelectionTopMenuDelegate>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,SelectionTopMenuDelegate,SearchTopMenuDelegate>
 
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
@@ -74,7 +77,7 @@ typedef enum {
 @property (nonatomic, assign) BOOL hidden;
 @property (nonatomic, strong) UIImageView *backgroundImage;
 @property (nonatomic, strong) NSArray *selectedItems;
-@property (nonatomic) SelectionTopMenu *selectionTopView;
+@property (nonatomic) TopMenu *topOverlay;
 @property (nonatomic) TopMenuState currentTopMenu;
 
 @end
@@ -286,58 +289,97 @@ typedef enum {
     self.currentTopMenu = TopMenuDefault;
 }
 
+
+
+#pragma mark SearchTopMenuDelegate
+-(void)searchTopMenu:(SearchTopMenu *)topMenu didSearchForString:(NSString *)searchString{
+
+}
+-(void)didClearSearchTopMenu:(SearchTopMenu *)topMenu{
+    self.currentTopMenu = TopMenuDefault;
+}
+
+
+
 -(void)setCurrentTopMenu:(TopMenuState)currentTopMenu{
     [self setCurrentTopMenu:currentTopMenu animated:NO];
 }
 -(void)setCurrentTopMenu:(TopMenuState)currentTopMenu animated:(BOOL)animated{
     if(currentTopMenu != _currentTopMenu){
-        if(_currentTopMenu == TopMenuSelect)
-            [self removeSelectTopMenuAnimated:animated];
         
+        // Handling search / cleanup and shift to
+        if(_currentTopMenu == TopMenuSelect || currentTopMenu == TopMenuSelect){
+            [self.currentViewController setSelectionMode:(currentTopMenu == TopMenuSelect)];
+            [self.controlHandler setState:((currentTopMenu == TopMenuSelect) ? KPControlHandlerStateNone : KPControlHandlerStateAdd) animated:YES];
+        }
+        
+        if(currentTopMenu == TopMenuDefault){
+            [self present:NO topOverlay:nil animated:animated];
+        }
         _currentTopMenu = currentTopMenu;
     }
     
 }
--(void)removeSelectTopMenuAnimated:(BOOL)animated{
-    [self.currentViewController setSelectionMode:NO];
-    [self.controlHandler setState:KPControlHandlerStateAdd animated:YES];
-    [UIView animateWithDuration:0.3 animations:^{
-        self.selectionTopView.alpha = 0;
-    } completion:^(BOOL finished) {
-        [self.selectionTopView removeFromSuperview];
-        self.selectionTopView = nil;
-    }];
+-(void)present:(BOOL)present topOverlay:(TopMenu*)overlay animated:(BOOL)animated{
+    if(!present && !overlay)
+        overlay = self.topOverlay;
+    
+    voidBlock beforeBlock = ^{
+        overlay.alpha = present ? 0 : 1;
+        if(present)
+            [self.view addSubview:overlay];
+    };
+    voidBlock animationBlock = ^{
+        overlay.alpha = present ? 1 : 0;
+    };
+    voidBlock completionBlock = ^{
+        if(present)
+            self.topOverlay = overlay;
+        else{
+            [self.topOverlay removeFromSuperview];
+            self.topOverlay = nil;
+        }
+    };
+    
+    if(!animated){
+        beforeBlock();
+        animationBlock();
+        completionBlock();
+    }
+    else{
+        beforeBlock();
+        [UIView animateWithDuration:0.3 animations:animationBlock completion:^(BOOL finished) {
+            completionBlock();
+        }];
+    }
+    
 }
 
 -(void)pressedSelect:(id)sender{
-    [self setCurrentTopMenu:TopMenuSelect animated:YES];
-    [self.currentViewController setSelectionMode:YES];
-    [self.controlHandler setState:KPControlHandlerStateNone animated:YES];
-    
     SelectionTopMenu *selectionTopMenu = [[SelectionTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
-    //CGRectMake(sideMargin, TOP_Y+sideMargin, self.ios7BackgroundView.frame.size.width-2*sideMargin, self.ios7BackgroundView.frame.size.height-TOP_Y-2*sideMargin)
-    selectionTopMenu.backgroundColor = tcolor(BackgroundColor);
-    
-    [selectionTopMenu.allButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-    [selectionTopMenu.allButton setTitleColor:alpha(tcolor(TextColor),0.5) forState:UIControlStateHighlighted];
-    [selectionTopMenu.closeButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-    [selectionTopMenu.helpButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     selectionTopMenu.selectionDelegate = self;
-    selectionTopMenu.alpha = 0;
-    [selectionTopMenu.helpButton setTitle:@"Select more" forState:UIControlStateNormal];
-    [self.view addSubview:selectionTopMenu];
-    self.selectionTopView = selectionTopMenu;
-    [UIView animateWithDuration:0.3 animations:^{
-        selectionTopMenu.alpha = 1;
-    }];
+    
+    [self present:YES topOverlay:selectionTopMenu animated:YES];
+    [self setCurrentTopMenu:TopMenuSelect];
 }
-
+-(void)pressedFilter:(id)sender{
+    [self setCurrentTopMenu:TopMenuFilter animated:YES];
+}
+-(void)pressedSearch:(id)sender{
+    SearchTopMenu *searchTopMenu = [[SearchTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
+    searchTopMenu.searchDelegate = self;
+    
+    [self setCurrentTopMenu:TopMenuSearch animated:YES];
+    [self present:YES topOverlay:searchTopMenu animated:YES];
+    
+    [searchTopMenu.searchField becomeFirstResponder];
+}
 
 -(void)pressedAccount{
     
     KxMenuItem *selectItem = [KxMenuItem menuItem:@"Select" image:nil target:self action:@selector(pressedSelect:)];
     KxMenuItem *filterItem = [KxMenuItem menuItem:@"Filter" image:nil target:self action:@selector(pressedSelect:)];
-    KxMenuItem *searchItem = [KxMenuItem menuItem:@"Search" image:nil target:self action:@selector(pressedSelect:)];
+    KxMenuItem *searchItem = [KxMenuItem menuItem:@"Search" image:nil target:self action:@selector(pressedSearch:)];
     [KxMenu setBackColor:tcolor(TextColor)];
     [self._accountButton setSelected:YES];
     [KxMenu showMenuInView:self.view

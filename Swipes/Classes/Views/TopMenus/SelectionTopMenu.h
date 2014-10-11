@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "TopMenu.h"
 @class SelectionTopMenu;
 @protocol SelectionTopMenuDelegate <NSObject>
 -(void)didPressAllInSelectionTopMenu:(SelectionTopMenu*)topMenu;
@@ -14,7 +14,7 @@
 -(void)didPressCloseInSelectionTopMenu:(SelectionTopMenu*)topMenu;
 @end
 
-@interface SelectionTopMenu : UIView
+@interface SelectionTopMenu : TopMenu
 @property (nonatomic) IBOutlet UIButton *allButton;
 @property (nonatomic) IBOutlet UIButton *helpButton;
 @property (nonatomic) IBOutlet UIButton *closeButton;

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#define kSideButtonsWidth 60
+#define kTopY 20
 @interface TopMenu : UIView
 
 @end

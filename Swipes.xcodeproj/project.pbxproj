@@ -155,6 +155,7 @@
 		A78128D317294C56002226C8 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A781287F17294C56002226C8 /* MainStoryboard.storyboard */; };
 		A78128FC17294C56002226C8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A78128B417294C56002226C8 /* AppDelegate.m */; };
 		A781290217294C56002226C8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A78128BA17294C56002226C8 /* main.m */; };
+		A784DB9319E822940041225A /* SearchTopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A784DB9219E822940041225A /* SearchTopMenu.m */; };
 		A7897D3D198C15A40047F9D9 /* VarelaRound-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7897D3C198C15A40047F9D9 /* VarelaRound-Regular.ttf */; };
 		A789B3F917D79BFB00C25B73 /* KPOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = A789B3F817D79BFB00C25B73 /* KPOverlay.m */; };
 		A78D7A8817F4B27200AD38B1 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = A78D7A8717F4B27200AD38B1 /* Global.m */; };
@@ -708,6 +709,8 @@
 		A78128BA17294C56002226C8 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A78128BB17294C56002226C8 /* Swipes-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Swipes-Info.plist"; sourceTree = "<group>"; };
 		A78128BC17294C56002226C8 /* Swipes-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Swipes-Prefix.pch"; sourceTree = "<group>"; };
+		A784DB9119E822940041225A /* SearchTopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchTopMenu.h; path = TopMenus/SearchTopMenu.h; sourceTree = "<group>"; };
+		A784DB9219E822940041225A /* SearchTopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SearchTopMenu.m; path = TopMenus/SearchTopMenu.m; sourceTree = "<group>"; };
 		A7897D3C198C15A40047F9D9 /* VarelaRound-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "VarelaRound-Regular.ttf"; path = "Font/VarelaRound-Regular.ttf"; sourceTree = "<group>"; };
 		A789B3F717D79BFB00C25B73 /* KPOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPOverlay.h; path = KPBlurry/KPOverlay.h; sourceTree = "<group>"; };
 		A789B3F817D79BFB00C25B73 /* KPOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPOverlay.m; path = KPBlurry/KPOverlay.m; sourceTree = "<group>"; };
@@ -1692,6 +1695,8 @@
 				A798DCCD19E523CC00386C80 /* SelectionTopMenu.m */,
 				A798DCCF19E53A6700386C80 /* TopMenu.h */,
 				A798DCD019E53A6700386C80 /* TopMenu.m */,
+				A784DB9119E822940041225A /* SearchTopMenu.h */,
+				A784DB9219E822940041225A /* SearchTopMenu.m */,
 			);
 			name = TopMenus;
 			sourceTree = "<group>";
@@ -2592,6 +2597,7 @@
 				A703B1AB1838EBF20047DCC9 /* CKCalendarView.m in Sources */,
 				A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */,
 				A78D7A8817F4B27200AD38B1 /* Global.m in Sources */,
+				A784DB9319E822940041225A /* SearchTopMenu.m in Sources */,
 				A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */,
 				A7FE4402182825A1002AFB2E /* UIImage+Blur.m in Sources */,
 				A7AA796B194E06AA003DAB3B /* SyncQueue.m in Sources */,
