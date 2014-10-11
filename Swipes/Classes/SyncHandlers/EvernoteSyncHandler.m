@@ -83,14 +83,14 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     return __updatedTasks;
 }
 -(BOOL)hasObjectsSyncedWithEvernote{
-    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_context];
     NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"service = %@ AND sync == 1",EVERNOTE_SERVICE];
     NSUInteger numberOfAttachmentsWithEvernote = [KPAttachment MR_countOfEntitiesWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
     return (numberOfAttachmentsWithEvernote > 0);
 }
 -(NSArray*)getObjectsSyncedWithEvernote{
     
-    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_context];
     
     NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"ANY attachments.service like %@ AND ANY attachments.sync == 1",EVERNOTE_SERVICE];
     NSArray *todosWithEvernote = [KPToDo MR_findAllWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
@@ -399,7 +399,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
                 DLog(@"clearing all caches");
                 [kEnInt clearCaches];
             }
-            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_context];
             NSArray *identifiers = [KPAttachment allIdentifiersForService:EVERNOTE_SERVICE sync:YES context:localContext];
             for( EDAMNote *note in list.notes ){
                 if([identifiers containsObject:note.guid]){
