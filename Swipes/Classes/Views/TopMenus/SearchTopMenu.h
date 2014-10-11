@@ -11,6 +11,7 @@
 @protocol SearchTopMenuDelegate <NSObject>
 -(void)searchTopMenu:(SearchTopMenu*)topMenu didSearchForString:(NSString*)searchString;
 -(void)didClearSearchTopMenu:(SearchTopMenu*)topMenu;
+-(void)didCloseSearchFieldTopMenu:(SearchTopMenu*)topMenu;
 @end
 
 @interface SearchTopMenu : TopMenu

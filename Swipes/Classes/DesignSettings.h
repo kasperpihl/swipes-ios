@@ -39,7 +39,7 @@
 #define SCHEDULE_BUTTON_FONT            KP_SEMIBOLD(14)
 #define SCHEDULE_BUTTON_CAPITAL         NO
 
-#define MIN_SEARCH_LETTER_LENGTH        1
+#define MIN_SEARCH_LETTER_LENGTH        3
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \

@@ -58,6 +58,7 @@
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     if(textField.isFirstResponder)
         [textField resignFirstResponder];
+    [self.searchDelegate didCloseSearchFieldTopMenu:self];
     return YES;
 }
 -(void)textFieldChanged:(UITextField*)sender{

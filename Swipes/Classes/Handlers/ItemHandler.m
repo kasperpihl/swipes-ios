@@ -8,12 +8,12 @@
 
 #import "ItemHandler.h"
 #import "KPTag.h"
+#import "KPFilter.h"
 #import "AnalyticsHandler.h"
 
 @interface ItemHandler ()
 @property (nonatomic,strong) NSMutableArray *titleArray;
 @property (nonatomic,strong) NSMutableArray *sortedItems;
-@property (nonatomic,strong) NSString *searchString;
 @property (nonatomic,strong) NSIndexPath *draggedCellPosition;
 @end
 @implementation ItemHandler
@@ -29,13 +29,13 @@
     _draggingIndexPath = draggingIndexPath;
 }
 #pragma mark - Getters and Setters
--(NSMutableArray *)selectedTags{
-    if(!_selectedTags) _selectedTags = [NSMutableArray array];
-    return _selectedTags;
-}
 -(void)setItems:(NSArray *)items{
     _items = items;
     [self refresh];
+}
+-(void)didUpdateFilter:(KPFilter *)filter{
+    [self runSort];
+    [self notifyUpdate];
 }
 -(void)refresh{
     self.allTags = [self extractTags];
@@ -51,7 +51,6 @@
     }
 }
 -(void)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray*)tags{
-    if(self.hasFilter || self.hasSearched) [self clearAll];
     [KPToDo addItem:item priority:priority tags:tags save:YES];
     [self reloadData];
 }
@@ -79,33 +78,7 @@
         [self notifyUpdate];
     }
 }
--(void)selectTag:(NSString *)tag{
-    if(![self.selectedTags containsObject:tag]){
-        [self.selectedTags addObject:tag];
-        [self runSort];
-        [self notifyUpdate];
-    }
-}
--(void)deselectTag:(NSString *)tag{
-    if([self.selectedTags containsObject:tag]){
-        [self.selectedTags removeObject:tag];
-        [self runSort];
-        [self notifyUpdate];
-    }    
-}
--(void)clearAll{
-    [self.selectedTags removeAllObjects];
-    self.searchString = @"";
-    [self runSort];
-    [self notifyUpdate];
-}
-#pragma mark - KPSearchBarDataSource
--(NSArray *)unselectedTagsForSearchBar:(KPSearchBar *)searchBar{
-    return self.remainingTags;
-}
--(NSArray *)selectedTagsForSearchBar:(KPSearchBar *)searchBar{
-    return [self.selectedTags copy];
-}
+
 #pragma mark UITableViewDataSource
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
     self.draggedCellPosition = destinationIndexPath;
@@ -205,63 +178,63 @@
 }
 -(void)runSort{
     self.isSorted = NO;
-    self.hasFilter = NO;
-    self.hasSearched = NO;
     if([self.delegate respondsToSelector:@selector(itemHandler:titleForItem:)]) self.isSorted = YES;
     NSMutableSet *remainingTags = [NSMutableSet set];
     NSMutableArray *filteredItems = [NSMutableArray array];
-    BOOL hasSelectedTags = (self.selectedTags.count > 0);
-    BOOL hasSearchString = (self.searchString.length >= MIN_SEARCH_LETTER_LENGTH);
     
-    NSInteger counter = 0;
-    if(hasSelectedTags){
-        self.hasFilter = YES;
-        NSMutableSet *matchingTags = [NSMutableSet set];
-        for(KPToDo *toDo in self.items){
-            BOOL didIt = YES;
-            for(NSString *tag in self.selectedTags){
-                if(![toDo.textTags containsObject:tag]){
-                    didIt = NO;
-                }
-            }
-            if(didIt){
-                if(toDo.textTags && toDo.textTags.count > 0){
-                    if(counter > 0) {
-                        NSSet *iteratingSet = [matchingTags copy];
-                        for(NSString *textTag in iteratingSet){
-                            if(![toDo.textTags containsObject:textTag] && [matchingTags containsObject:textTag]) [matchingTags removeObject:textTag];
-                        }
-                    }
-                    else [matchingTags addObjectsFromArray:toDo.textTags];
-                }
-                [remainingTags addObjectsFromArray:toDo.textTags];
-                [filteredItems addObject:toDo];
+    if(kFilter.isActive){
+        NSLog(@"filter activated");
+        NSInteger counter = 0;
+        NSArray *iteratingItems = [self.items copy];
+        if(kFilter.searchString){
+            NSLog(@"search string activated");
+            NSArray *searchArray = [kFilter.searchString componentsSeparatedByString:@" "];
+            NSMutableString *mutPredicate = [NSMutableString stringWithFormat:@""];
+            for(NSString *string in searchArray){
+                NSString *escapedString = [string stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+                escapedString = [escapedString stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"];
+                escapedString = [escapedString stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+                if(!escapedString || escapedString.length == 0) continue;
+                [mutPredicate appendFormat:@"((title contains[cd] '%@') OR (tagString contains[cd] '%@') OR (notes contains[cd] '%@')) AND ",escapedString,escapedString,escapedString];
                 counter++;
             }
+            if(counter > 0){
+                NSString *predicate = [mutPredicate substringToIndex:[mutPredicate length] - 5];
+                NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:predicate];
+                filteredItems = [[self.items filteredArrayUsingPredicate:searchPredicate] mutableCopy];
+                iteratingItems = filteredItems;
+            }
         }
-        for(NSString *tag in self.selectedTags){
-            [remainingTags removeObject:tag];
-        }
-        for(NSString *textTag in matchingTags) [remainingTags removeObject:textTag];
-        self.remainingTags = [[remainingTags allObjects] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    }
-    else if(hasSearchString){
-        self.hasSearched = YES;
-        NSArray *searchArray = [self.searchString componentsSeparatedByString:@" "];
-        NSMutableString *mutPredicate = [NSMutableString stringWithFormat:@""];
-        NSInteger counter = 0;
-        for(NSString *string in searchArray){
-            NSString *escapedString = [string stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
-            escapedString = [escapedString stringByReplacingOccurrencesOfString:@"\'" withString:@"\\\'"];
-            escapedString = [escapedString stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-            if(!escapedString || escapedString.length == 0) continue;
-            [mutPredicate appendFormat:@"((title contains[cd] '%@') OR (tagString contains[cd] '%@') OR (notes contains[cd] '%@')) AND ",escapedString,escapedString,escapedString];
-            counter++;
-        }
-        if(counter > 0){
-            NSString *predicate = [mutPredicate substringToIndex:[mutPredicate length] - 5];
-            NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:predicate];
-            filteredItems = [[self.items filteredArrayUsingPredicate:searchPredicate] mutableCopy];
+        if(kFilter.selectedTags.count > 0){
+            counter = 0;
+            NSMutableSet *matchingTags = [NSMutableSet set];
+            for(KPToDo *toDo in iteratingItems){
+                BOOL didIt = YES;
+                for(NSString *tag in kFilter.selectedTags){
+                    if(![toDo.textTags containsObject:tag]){
+                        didIt = NO;
+                    }
+                }
+                if(didIt){
+                    if(toDo.textTags && toDo.textTags.count > 0){
+                        if(counter > 0) {
+                            NSSet *iteratingSet = [matchingTags copy];
+                            for(NSString *textTag in iteratingSet){
+                                if(![toDo.textTags containsObject:textTag] && [matchingTags containsObject:textTag]) [matchingTags removeObject:textTag];
+                            }
+                        }
+                        else [matchingTags addObjectsFromArray:toDo.textTags];
+                    }
+                    [remainingTags addObjectsFromArray:toDo.textTags];
+                    [filteredItems addObject:toDo];
+                    counter++;
+                }
+            }
+            for(NSString *tag in kFilter.selectedTags){
+                [remainingTags removeObject:tag];
+            }
+            for(NSString *textTag in matchingTags) [remainingTags removeObject:textTag];
+            self.remainingTags = [[remainingTags allObjects] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
         }
     }
     else{
@@ -276,15 +249,6 @@
         for(KPToDo *toDo in self.filteredItems){
             NSString *title = [self.delegate itemHandler:self titleForItem:toDo];
             [self addItem:toDo withTitle:title];
-        }
-    }
-}
--(void)searchForString:(NSString*)string{
-    if(string != self.searchString){
-        if(string.length >= MIN_SEARCH_LETTER_LENGTH || self.hasSearched){
-            self.searchString = string;
-            [self runSort];
-            [self notifyUpdate];
         }
     }
 }
@@ -304,7 +268,7 @@
         }
     }
     else{
-        NSInteger counter = (self.hasFilter || self.hasSearched) ? self.itemCounterWithFilter : self.itemCounter;
+        NSInteger counter = (kFilter.isActive) ? self.itemCounterWithFilter : self.itemCounter;
         if(counter == 0) [deletedSections addIndex:0];
     }
     return deletedSections;

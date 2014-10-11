@@ -67,7 +67,6 @@ typedef enum {
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
 @property (nonatomic, weak) UIView *contentView;
 @property (nonatomic, strong) KPControlHandler *controlHandler;
-@property (nonatomic, weak) UIView *presentedPanel;
 @property (nonatomic, strong) UIButton *_settingsButton;
 @property (nonatomic, strong) UIButton *_accountButton;
 @property (nonatomic, assign) BOOL tableIsShrinked;
@@ -125,7 +124,8 @@ typedef enum {
     [[self currentViewController] didUpdateItemHandler:nil];
 }
 -(void)tagList:(KPTagList *)tagList deletedTag:(NSString *)tag{
-    [[self currentViewController].itemHandler deselectTag:tag];
+    [kFilter deselectTag:tag];
+    [[self currentViewController].itemHandler refresh];
     [KPTag deleteTagWithString:tag save:YES];
     [[self currentViewController] didUpdateItemHandler:nil];
 }
@@ -150,6 +150,19 @@ typedef enum {
 -(void)pressedShare:(id)sender{
     [ROOT_CONTROLLER shareTasks:[[self currentViewController] selectedItems]];
 }
+-(void)pressedDelete:(id)sender{
+    NSInteger numberOfTasks = [self currentViewController].selectedItems.count;
+    [self deleteNumberOfItems:numberOfTasks inView:self completion:^(BOOL succeeded, NSError *error) {
+        if(succeeded){
+            ToDoListViewController *viewController = [self currentViewController];
+            [viewController deleteSelectedItems:self];
+            [self setCurrentState:KPControlCurrentStateAdd];
+        }
+    }];
+}
+
+
+
 -(void)tagItems:(NSArray *)items inViewController:(UIViewController*)viewController withDismissAction:(voidBlock)block{
     self.selectedItems = items;
     //[self show:NO controlsAnimated:YES];
@@ -177,16 +190,7 @@ typedef enum {
     BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
     [BLURRY showView:alert inViewController:viewController];
 }
--(void)pressedDelete:(id)sender{
-    NSInteger numberOfTasks = [self currentViewController].selectedItems.count;
-    [self deleteNumberOfItems:numberOfTasks inView:self completion:^(BOOL succeeded, NSError *error) {
-        if(succeeded){
-            ToDoListViewController *viewController = [self currentViewController];
-            [viewController deleteSelectedItems:self];
-            [self setCurrentState:KPControlCurrentStateAdd];
-        }
-    }];
-}
+
 #pragma mark - AddPanelDelegate
 -(void)didAddItem:(NSString *)item priority:(BOOL)priority tags:(NSArray *)tags{
     [[self currentViewController].itemHandler addItem:item priority:priority tags:tags];
@@ -290,15 +294,17 @@ typedef enum {
 }
 
 
-
 #pragma mark SearchTopMenuDelegate
 -(void)searchTopMenu:(SearchTopMenu *)topMenu didSearchForString:(NSString *)searchString{
-
+    [kFilter searchForString:searchString];
 }
 -(void)didClearSearchTopMenu:(SearchTopMenu *)topMenu{
+    [kFilter clearAll];
     self.currentTopMenu = TopMenuDefault;
 }
-
+-(void)didCloseSearchFieldTopMenu:(SearchTopMenu *)topMenu{
+    self.currentTopMenu = TopMenuDefault;
+}
 
 
 -(void)setCurrentTopMenu:(TopMenuState)currentTopMenu{
@@ -368,7 +374,7 @@ typedef enum {
 -(void)pressedSearch:(id)sender{
     SearchTopMenu *searchTopMenu = [[SearchTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
     searchTopMenu.searchDelegate = self;
-    
+    searchTopMenu.searchField.text = kFilter.searchString;
     [self setCurrentTopMenu:TopMenuSearch animated:YES];
     [self present:YES topOverlay:searchTopMenu animated:YES];
     
@@ -466,6 +472,7 @@ typedef enum {
 	
 	ToDoListViewController *newViewController = (ToDoListViewController*)self.viewControllers[selectedIndex];
     newViewController.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(newViewController.tableView.tableHeaderView.bounds));
+    kFilter.delegate = [newViewController itemHandler];
 	[self addChildViewController:newViewController];
 	newViewController.view.frame = CGRectSetPos(self.contentView.frame, 0, 0);
     oldViewController.view.hidden = YES;
@@ -546,6 +553,8 @@ typedef enum {
     notify(@"updated sync",updateFromSync:);
     self.view.backgroundColor = tcolor(BackgroundColor);
     
+    
+    
     /* Daily image background */
     self.backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
     self.backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
@@ -571,9 +580,10 @@ typedef enum {
     self.controlHandler = [KPControlHandler instanceInView:self.view];
     self.controlHandler.delegate = self;
     
-    
+    /* Add start view controller */
     [self.view bringSubviewToFront:self.segmentedControl];
     UIViewController *currentViewController = self.viewControllers[DEFAULT_SELECTED_INDEX];
+    kFilter.delegate = [(ToDoListViewController*)currentViewController itemHandler];
     self.currentSelectedIndex = DEFAULT_SELECTED_INDEX;
     [self addChildViewController:currentViewController];
     

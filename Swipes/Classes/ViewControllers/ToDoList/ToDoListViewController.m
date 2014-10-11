@@ -37,7 +37,7 @@
 #define SECTION_EXTRA_DELTA_Y -3
 #define SECTION_HEADER_X 15
 #define CONTENT_INSET_BOTTOM 5// 100
-@interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,KPSearchBarDelegate,KPSearchBarDelegate,ToDoVCDelegate, ToDoCellDelegate>
+@interface ToDoListViewController ()<MCSwipeTableViewCellDelegate,ToDoVCDelegate, ToDoCellDelegate>
 
 @property (nonatomic,strong) MCSwipeTableViewCell *swipingCell;
 
@@ -97,10 +97,8 @@
 }
 
 - (void)didUpdateItemHandler:(ItemHandler *)handler {
-    NSLog(@"selected %lu",(long)self.selectedRows.count);
     [self willUpdateCells];
     NSArray *selectedItems = [self selectedItems];
-    NSLog(@"updated with selected %lu",(long)selectedItems.count);
     [self.selectedRows removeAllObjects];
     [self.tableView reloadData];
     for(KPToDo *item in selectedItems){
@@ -161,33 +159,6 @@
     return _selectedRows;
 }
 
-#pragma mark - KPSearchBarDelegate
-
-- (void)startedSearchBar:(KPSearchBar *)searchBar {
-    //self.parent.fullscreenMode = YES;
-}
-
-- (void)searchBar:(KPSearchBar *)searchBar searchedForString:(NSString *)searchString {
-    [self.itemHandler searchForString:searchString];
-    [self deselectAllRows:self];
-}
-
-- (void)searchBar:(KPSearchBar *)searchBar deselectedTag:(NSString *)tag {
-    [self.itemHandler deselectTag:tag];
-    [self deselectAllRows:self];
-}
-
--(void)searchBar:(KPSearchBar *)searchBar selectedTag:(NSString *)tag{
-    [self.itemHandler selectTag:tag];
-    [self deselectAllRows:self];
-}
-
--(void)clearedAllFiltersForSearchBar:(KPSearchBar *)searchBar{
-    //[self.parent showNavbar:YES];
-    [self.itemHandler clearAll];
-    //self.parent.fullscreenMode = NO;
-    [self deselectAllRows:self];
-}
 
 #pragma mark - UITableViewDelegate
 
@@ -237,7 +208,7 @@
     }
     [cell setDotColor:self.cellType];
     
-    [cell changeToDo:toDo withSelectedTags:self.itemHandler.selectedTags];
+    [cell changeToDo:toDo withSelectedTags:kFilter.selectedTags];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -560,7 +531,7 @@
     tableView.tableHeaderView = headerView;
     tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     tableView.contentInset = UIEdgeInsetsMake(0, 0, GLOBAL_TOOLBAR_HEIGHT, 0);
-    KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, SEARCH_BAR_DEFAULT_HEIGHT)];
+    /*KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, SEARCH_BAR_DEFAULT_HEIGHT)];
     searchBar.searchBarDelegate = self;
     searchBar.backgroundColor = CLEAR;
     searchBar.searchBarDataSource = self.itemHandler;
@@ -568,7 +539,7 @@
     //searchBar.backgroundColor = CLEAR;
     searchBar.tag = SEARCH_BAR_TAG;
     [tableView addSubview:searchBar];
-    self.searchBar = (KPSearchBar*)[tableView viewWithTag:SEARCH_BAR_TAG];
+    self.searchBar = (KPSearchBar*)[tableView viewWithTag:SEARCH_BAR_TAG];*/
     tableView.contentOffset = CGPointMake(0, CGRectGetHeight(tableView.tableHeaderView.bounds));
     
 }
@@ -676,8 +647,6 @@
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self cleanUpAfterMovingAnimated:NO];
-    self.searchBar.currentMode = KPSearchBarModeNone;
-    [self.itemHandler clearAll];
 }
 
 - (void)dealloc {
