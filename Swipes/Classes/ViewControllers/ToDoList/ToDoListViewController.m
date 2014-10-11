@@ -313,7 +313,8 @@
 - (void)swipeTableViewCell:(ToDoCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
-    [self.searchBar resignSearchField];
+#warning resign search top menu
+    //[self.searchBar resignSearchField];
     if(self.selectedRows.count > 0){
         if(indexPath && ![self.selectedRows containsObject:indexPath]){
             [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];

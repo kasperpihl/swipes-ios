@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "KPToDo.h"
+#import "KPFilter.h"
+
 @class ItemHandler;
 @protocol KPFilterDelegate;
 

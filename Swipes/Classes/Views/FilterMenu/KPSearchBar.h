@@ -31,6 +31,6 @@ typedef NS_ENUM(NSUInteger, KPSearchBarMode) {
 @property (nonatomic, assign) KPSearchBarMode currentMode;
 @property (nonatomic, strong) UIColor *openBackgroundColor;
 @property (nonatomic, weak) KPTagList *tagListView;
--(void)resignSearchField;
+//-(void)resignSearchField;
 -(void)reloadDataAndUpdate:(BOOL)update;
 @end

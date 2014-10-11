@@ -159,24 +159,7 @@
     }
     return self;
 }
--(void)resignSearchField{
-    if(self.currentMode == KPSearchBarModeSearch){
-        if(self.searchField.text.length == 0) [self pressedClearFilter:self.filterButton];
-        else [self.searchField resignFirstResponder];
-    }
-}
--(BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [self resignSearchField];
-    //self.currentMode = KPSearchBarModeNone;
-    return YES;
-}
--(void)textFieldChanged:(UITextField*)sender{
-    if([self.searchBarDelegate respondsToSelector:@selector(searchBar:searchedForString:)]) [self.searchBarDelegate searchBar:self searchedForString:sender.text];
-}
--(void)startedSearch:(UITextField*)sender{
-    if([self.searchBarDelegate respondsToSelector:@selector(startedSearchBar:)]) [self.searchBarDelegate startedSearchBar:self];
-    self.currentMode = KPSearchBarModeSearch;
-}
+
 -(void)pressedClearFilter:(UIButton*)sender{
     if([self.searchBarDelegate respondsToSelector:@selector(clearedAllFiltersForSearchBar:)]) [self.searchBarDelegate clearedAllFiltersForSearchBar:self];
     self.currentMode = KPSearchBarModeNone;

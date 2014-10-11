@@ -76,6 +76,7 @@
 		A72C33501908F65C00767456 /* CWStatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = A72C334F1908F65C00767456 /* CWStatusBarNotification.m */; };
 		A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A72EFFFE18425B6A008333AA /* UserHandler.m */; };
 		A72FD5DB19E99B7B00DDEB02 /* KPFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A72FD5DA19E99B7B00DDEB02 /* KPFilter.m */; };
+		A72FD5DE19E9D10D00DDEB02 /* FilterTopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A72FD5DD19E9D10D00DDEB02 /* FilterTopMenu.m */; };
 		A741EC4F18354726000F9F93 /* default-background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A741EC4E18354726000F9F93 /* default-background.jpg */; };
 		A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */; };
 		A74646B918D38660003911DC /* ContactHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A74646B818D38660003911DC /* ContactHandler.m */; };
@@ -590,6 +591,8 @@
 		A72EFFFE18425B6A008333AA /* UserHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserHandler.m; path = ../Swipes/Classes/Handlers/UserHandler.m; sourceTree = "<group>"; };
 		A72FD5D919E99B7B00DDEB02 /* KPFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPFilter.h; path = Swipes/Classes/Handlers/KPFilter.h; sourceTree = SOURCE_ROOT; };
 		A72FD5DA19E99B7B00DDEB02 /* KPFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPFilter.m; path = Swipes/Classes/Handlers/KPFilter.m; sourceTree = SOURCE_ROOT; };
+		A72FD5DC19E9D10D00DDEB02 /* FilterTopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterTopMenu.h; path = TopMenus/FilterTopMenu.h; sourceTree = "<group>"; };
+		A72FD5DD19E9D10D00DDEB02 /* FilterTopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterTopMenu.m; path = TopMenus/FilterTopMenu.m; sourceTree = "<group>"; };
 		A741EC4E18354726000F9F93 /* default-background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "default-background.jpg"; sourceTree = "<group>"; };
 		A742415E17A5BFB2009C9735 /* WalkthroughOverlayBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkthroughOverlayBackground.h; path = Walkthrough/WalkthroughOverlayBackground.h; sourceTree = "<group>"; };
 		A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkthroughOverlayBackground.m; path = Walkthrough/WalkthroughOverlayBackground.m; sourceTree = "<group>"; };
@@ -1695,13 +1698,13 @@
 			isa = PBXGroup;
 			children = (
 				A798DCCC19E523CC00386C80 /* SelectionTopMenu.h */,
-				A72FD5D919E99B7B00DDEB02 /* KPFilter.h */,
-				A72FD5DA19E99B7B00DDEB02 /* KPFilter.m */,
 				A798DCCD19E523CC00386C80 /* SelectionTopMenu.m */,
 				A798DCCF19E53A6700386C80 /* TopMenu.h */,
 				A798DCD019E53A6700386C80 /* TopMenu.m */,
 				A784DB9119E822940041225A /* SearchTopMenu.h */,
 				A784DB9219E822940041225A /* SearchTopMenu.m */,
+				A72FD5DC19E9D10D00DDEB02 /* FilterTopMenu.h */,
+				A72FD5DD19E9D10D00DDEB02 /* FilterTopMenu.m */,
 			);
 			name = TopMenus;
 			sourceTree = "<group>";
@@ -1821,6 +1824,8 @@
 		A7F4066E17296C0500DDE644 /* Handlers */ = {
 			isa = PBXGroup;
 			children = (
+				A72FD5D919E99B7B00DDEB02 /* KPFilter.h */,
+				A72FD5DA19E99B7B00DDEB02 /* KPFilter.m */,
 				A72C334E1908F65C00767456 /* CWStatusBarNotification.h */,
 				A72C334F1908F65C00767456 /* CWStatusBarNotification.m */,
 				A7F4066F17296C0500DDE644 /* KPControlHandler */,
@@ -2564,6 +2569,7 @@
 				A70D12DA1966D11500A95C50 /* EvernoteIntegration.m in Sources */,
 				A703B1631838EB0E0047DCC9 /* UIButton+PassTouch.m in Sources */,
 				A703B1B51838EBF20047DCC9 /* SectionHeaderView.m in Sources */,
+				A72FD5DE19E9D10D00DDEB02 /* FilterTopMenu.m in Sources */,
 				A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */,
 				A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */,
 				A7933049172AB63700F1505E /* TodayListViewController.m in Sources */,
