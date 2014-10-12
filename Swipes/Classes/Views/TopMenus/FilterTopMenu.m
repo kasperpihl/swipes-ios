@@ -12,7 +12,7 @@
 
 @interface FilterTopMenu () <KPTagListResizeDelegate, KPTagDelegate>
 @property (nonatomic, strong) IBOutlet UIButton *closeButton;
-@property (nonatomic, strong) IBOutlet UIButton *filterButton;
+@property (nonatomic, strong) IBOutlet UIButton *clearButton;
 @property (nonatomic, strong) IBOutlet UIButton *priorityFilterButton;
 @property (nonatomic, strong) IBOutlet UIButton *notesFilterButton;
 @property (nonatomic, strong) IBOutlet UIButton *recurringFilterButton;
@@ -50,15 +50,15 @@
         self.tagListView = tagList;
 
         
-        UIButton *filterButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-        filterButton.frame = CGRectMake(0, self.frame.size.height - kSideButtonsWidth, kSideButtonsWidth, kSideButtonsWidth);
-        filterButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-        filterButton.titleLabel.font = KP_REGULAR(15);
-        [filterButton setTitle:@"Filter" forState:UIControlStateNormal];
-        [filterButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        [filterButton addTarget:self action:@selector(onFilter:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:filterButton];
-        self.filterButton = filterButton;
+        UIButton *clearButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
+        clearButton.frame = CGRectMake(0, self.frame.size.height - kSideButtonsWidth, kSideButtonsWidth, kSideButtonsWidth);
+        clearButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        clearButton.titleLabel.font = KP_REGULAR(15);
+        [clearButton setTitle:@"Clear" forState:UIControlStateNormal];
+        [clearButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [clearButton addTarget:self action:@selector(onClear:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:clearButton];
+        self.clearButton = clearButton;
         
         UIButton *closeButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         closeButton.frame = CGRectMake(frame.size.width-kSideButtonsWidth, self.frame.size.height - kSideButtonsWidth, kSideButtonsWidth, kSideButtonsWidth);
@@ -120,7 +120,7 @@
 -(void)tagList:(KPTagList *)tagList changedSize:(CGSize)size{
     CGRectSetHeight(self, kTopY + tagList.frame.size.height + kSideButtonsWidth  );
     [self.topMenuDelegate topMenu:self changedSize:self.frame.size];
-    
+    [self updateButtons];
 }
 
 -(void)setPriority:(BOOL)priority notes:(BOOL)notes recurring:(BOOL)recurring{
@@ -163,11 +163,11 @@
 }
 
 
--(void)onFilter:(UIButton*)filterButton{
-    [self.filterDelegate didPressFilterTopMenu:self];
+-(void)onClear:(UIButton*)clearButton{
+    [self.filterDelegate didClearFilterTopMenu:self];
 }
 -(void)onClose:(UIButton*)closeButton{
-    [self.filterDelegate didClearFilterTopMenu:self];
+    [self.filterDelegate didPressFilterTopMenu:self];
 }
 
 
@@ -180,11 +180,11 @@
     if([self.tagListView getSelectedTags].count > 0)
         hasFilterOn = YES;
     
-    NSString *closeTitle = hasFilterOn ? @"Clear" : @"Close";
-    [self.closeButton setTitle:closeTitle forState:UIControlStateNormal];
+    //NSString *closeTitle = hasFilterOn ? @"Clear" : @"Close";
+    //[self.closeButton setTitle:closeTitle forState:UIControlStateNormal];
     
-    self.filterButton.enabled = hasFilterOn;
-    self.filterButton.alpha = hasFilterOn ? 1 : 0.5;
+    self.clearButton.enabled = hasFilterOn;
+    self.clearButton.alpha = hasFilterOn ? 1 : 0.5;
 }
 
 -(void)updateSize{
@@ -194,6 +194,6 @@
 -(void)dealloc{
     self.tagListView = nil;
     self.closeButton = nil;
-    self.filterButton = nil;
+    self.clearButton = nil;
 }
 @end

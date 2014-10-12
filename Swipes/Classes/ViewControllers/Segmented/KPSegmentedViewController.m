@@ -357,6 +357,11 @@ typedef enum {
 }
 
 
+#pragma mark KPFilterDelegate
+-(void)filterActiveChanged{
+    [self updateContentViewState];
+}
+
 #pragma mark SearchTopMenuDelegate
 -(void)searchTopMenu:(SearchTopMenu *)topMenu didSearchForString:(NSString *)searchString{
     [kFilter searchForString:searchString];
@@ -370,7 +375,16 @@ typedef enum {
 }
 
 
-
+-(void)updateContentViewState{
+    if(self.currentTopMenu == TopMenuFilter || self.currentTopMenu == TopMenuSearch){
+        self.contentView.alpha = (kFilter.isActive) ? 1 : 0.5;
+        self.contentView.userInteractionEnabled = (kFilter.isActive);
+    }
+    else{
+        self.contentView.alpha = 1;
+        self.contentView.userInteractionEnabled = YES;
+    }
+}
 -(void)setCurrentTopMenu:(TopMenuState)currentTopMenu{
     [self setCurrentTopMenu:currentTopMenu animated:NO];
 }
@@ -387,7 +401,9 @@ typedef enum {
             [self topMenu:self.topOverlay changedSize:self.ios7BackgroundView.frame.size];
             [self present:NO topOverlay:nil animated:animated];
         }
+        
         _currentTopMenu = currentTopMenu;
+        [self updateContentViewState];
     }
     
 }
@@ -628,6 +644,7 @@ typedef enum {
     [super viewDidLoad];
     notify(@"updated daily image", updatedDailyImage);
     notify(@"updated sync",updateFromSync:);
+    notify(@"filter active state changed", filterActiveChanged);
     self.view.backgroundColor = tcolor(BackgroundColor);
     
     

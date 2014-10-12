@@ -72,6 +72,13 @@ static KPFilter *sharedObject;
     
 }
 
+-(void)setIsActive:(BOOL)isActive{
+    if(_isActive != isActive){
+        _isActive = isActive;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"filter active state changed" object:self];
+    }
+}
+
 -(void)updateStateAndNotify:(BOOL)notify{
     BOOL isActive = NO;
     if(self.searchString && self.searchString.length > 0)
@@ -86,13 +93,55 @@ static KPFilter *sharedObject;
     if(self.recurringFilter != FilterSettingNone)
         isActive = YES;
     
-    _isActive = isActive;
+    self.isActive = isActive;
     
     if(notify)
         [self.delegate didUpdateFilter:self];
 }
 
 -(NSString *)readableFilter{
-    return nil;
+    BOOL tagsFilter = (self.selectedTags.count > 0);
+    BOOL searchFilter = (self.searchString && self.searchString.length > 0);
+    BOOL priorityFilter = (kFilter.priorityFilter == FilterSettingOn);
+    BOOL notesFilter = (kFilter.notesFilter == FilterSettingOn);
+    BOOL recurringFilter = (kFilter.recurringFilter == FilterSettingOn);
+    NSInteger countDown = 5;
+    
+    if(!tagsFilter)
+        countDown--;
+    if(!searchFilter)
+        countDown--;
+    if(!notesFilter)
+        countDown--;
+    if(!priorityFilter)
+        countDown--;
+    if(!recurringFilter)
+        countDown--;
+    
+    NSString *totalSearchString = @"";
+    
+    if(recurringFilter){
+        totalSearchString = @"Recurring ";
+    }
+    if(priorityFilter){
+        totalSearchString = [totalSearchString stringByAppendingString:@"Priority "];
+    }
+    totalSearchString = [totalSearchString stringByAppendingString:@"Tasks"];
+    
+    NSInteger counter = 0;
+    if(notesFilter){
+        totalSearchString = [totalSearchString stringByAppendingString:@" with Notes"];
+        counter++;
+    }
+    
+    if(searchFilter){
+        totalSearchString = [totalSearchString stringByAppendingFormat:@" matching \"%@\"",self.searchString];
+        counter++;
+    }
+    if(tagsFilter){
+        NSString *tagString = [self.selectedTags componentsJoinedByString:@", "];
+        totalSearchString = [totalSearchString stringByAppendingFormat:@" %@ tags: %@",((counter == 0)?@"with":@"and"),tagString];
+    }
+    return totalSearchString;
 }
 @end

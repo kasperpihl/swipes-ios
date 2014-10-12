@@ -11,7 +11,6 @@
 #import "UtilityClass.h"
 #import "KPToDo.h"
 #import "SchedulePopup.h"
-#import "KPSearchBar.h"
 #import "ToDoViewController.h"
 #import "SectionHeaderView.h"
 #import "KPBlurry.h"
@@ -44,7 +43,6 @@
 @property (nonatomic, strong) ToDoViewController *showingViewController;
 @property (nonatomic) CGPoint savedContentOffset;
 @property (nonatomic) CellType cellType;
-@property (nonatomic, strong) KPSearchBar *searchBar;
 @property (nonatomic) NSMutableArray *selectedRows;
 @property (nonatomic, weak) UIView *menuText;
 @property (nonatomic, weak) UIView *fakeHeaderView;
@@ -88,7 +86,6 @@
 - (void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber oldNumber:(NSInteger)oldNumber {
     //[self didUpdateCells];
     [self showBackgroundItems:(itemNumber == 0)];
-    self.searchBar.hidden = (itemNumber == 0);
 }
 
 - (void)showBackgroundItems:(BOOL)show {
@@ -108,8 +105,29 @@
             [self.selectedRows addObject:indexPath];
         }
     }
-    
+    [self updateTableFooter];
     [self didUpdateCells];
+}
+-(void)updateTableFooter{
+    if(!kFilter.isActive){
+        [self.tableView setTableFooterView:[UIView new]];
+    }
+    else{
+        
+        UILabel *filterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 200)];
+        filterLabel.text = [kFilter readableFilter];
+        [filterLabel setTextColor:tcolor(TextColor)];
+        filterLabel.font = KP_REGULAR(16);
+        filterLabel.textAlignment = NSTextAlignmentCenter;
+        filterLabel.numberOfLines = 0;
+        filterLabel.alpha = 0.7;
+        [filterLabel sizeToFit];
+        CGRectSetHeight(filterLabel, filterLabel.frame.size.height+30);
+        
+        [self.tableView setTableFooterView:filterLabel];
+        
+    }
+    
 }
 
 - (KPSegmentedViewController *)parent {
@@ -149,7 +167,6 @@
 }
 
 - (void)didUpdateCells {
-    [self.searchBar reloadDataAndUpdate:YES];
     [self handleShowingToolbar];
 }
 
@@ -292,17 +309,17 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
-        if (scrollView.contentOffset.y < self.searchBar.frame.size.height) {
-            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds) - MAX(scrollView.contentOffset.y, 0), 0, 0, 0);
+        if (scrollView.contentOffset.y < self.tableView.tableHeaderView.frame.size.height) {
+            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.tableView.tableHeaderView.bounds) - MAX(scrollView.contentOffset.y, 0), 0, 0, 0);
         }
         else {
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         }
         if (scrollView.contentOffset.y < 0) {
-            CGRectSetHeight(self.searchBar, self.tableView.tableHeaderView.frame.size.height-scrollView.contentOffset.y);
+            /*CGRectSetHeight(self.searchBar, self.tableView.tableHeaderView.frame.size.height-scrollView.contentOffset.y);
             CGRect searchBarFrame = self.searchBar.frame;
             searchBarFrame.origin.y = scrollView.contentOffset.y;
-            self.searchBar.frame = searchBarFrame;
+            self.searchBar.frame = searchBarFrame;*/
         }
     }
 }
@@ -653,7 +670,6 @@
 }
 
 - (void)dealloc {
-    self.searchBar = nil;
 }
 
 - (void)didReceiveMemoryWarning {
