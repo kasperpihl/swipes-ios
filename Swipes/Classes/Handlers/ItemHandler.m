@@ -180,7 +180,7 @@
     self.isSorted = NO;
     if([self.delegate respondsToSelector:@selector(itemHandler:titleForItem:)]) self.isSorted = YES;
     NSMutableSet *remainingTags = [NSMutableSet set];
-    NSMutableArray *filteredItems = [NSMutableArray array];
+    NSMutableArray *filteredItems;
     
     if(kFilter.isActive){
         NSLog(@"filter activated");
@@ -202,11 +202,12 @@
                 NSString *predicate = [mutPredicate substringToIndex:[mutPredicate length] - 5];
                 NSPredicate *searchPredicate = [NSPredicate predicateWithFormat:predicate];
                 filteredItems = [[self.items filteredArrayUsingPredicate:searchPredicate] mutableCopy];
-                iteratingItems = filteredItems;
+                iteratingItems = [filteredItems copy];
             }
         }
         if(kFilter.selectedTags.count > 0 || kFilter.priorityFilter != FilterSettingNone || kFilter.notesFilter != FilterSettingNone || kFilter.recurringFilter != FilterSettingNone){
             counter = 0;
+            filteredItems = [NSMutableArray array];
             NSMutableSet *matchingTags = [NSMutableSet set];
             for(KPToDo *toDo in iteratingItems){
                 BOOL didIt = YES;
