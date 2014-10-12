@@ -282,7 +282,6 @@
 - (NSArray *)selectedItems {
     NSMutableArray *array = [NSMutableArray array];
     for(NSIndexPath *indexPath in self.selectedRows){
-        NSLog(@"indexPath %lu",(long)indexPath.row);
         KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
         if(toDo) [array addObject:toDo];
     }
@@ -482,6 +481,7 @@
 }
 - (void)cleanUpAfterMovingAnimated:(BOOL)animated {
     [self.selectedRows removeAllObjects];
+    NSLog(@"removed from cleanup");
     self.isLonelyRider = NO;
     self.swipingCell = nil;
     [self didUpdateCells];
@@ -492,6 +492,7 @@
     for (NSIndexPath *indexPath in selectedIndexPaths) {
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
+    NSLog(@"removed from deselect all");
     [self.selectedRows removeAllObjects];
     [self handleShowingToolbar];
 }
@@ -506,6 +507,7 @@
         }
     }
     if(self.isLonelyRider){
+        NSLog(@"removed from return");
         [self.selectedRows removeAllObjects];
         self.isLonelyRider = NO;
     }

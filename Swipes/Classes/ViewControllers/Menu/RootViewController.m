@@ -480,7 +480,9 @@ static RootViewController *sharedObject;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.mailCont = [[MFMailComposeViewController alloc] init];
+    if([MFMailComposeViewController canSendMail]) {
+        self.mailCont = [[MFMailComposeViewController alloc] init];
+    }
     UTILITY.rootViewController = self;
 
     [self setNavigationBarHidden:YES];

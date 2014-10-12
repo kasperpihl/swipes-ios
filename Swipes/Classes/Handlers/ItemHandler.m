@@ -205,29 +205,40 @@
                 iteratingItems = filteredItems;
             }
         }
-        if(kFilter.selectedTags.count > 0){
+        if(kFilter.selectedTags.count > 0 || kFilter.priorityFilter != FilterSettingNone || kFilter.notesFilter != FilterSettingNone || kFilter.recurringFilter != FilterSettingNone){
             counter = 0;
             NSMutableSet *matchingTags = [NSMutableSet set];
             for(KPToDo *toDo in iteratingItems){
                 BOOL didIt = YES;
-                for(NSString *tag in kFilter.selectedTags){
-                    if(![toDo.textTags containsObject:tag]){
-                        didIt = NO;
+                if(didIt && kFilter.priorityFilter == FilterSettingOn && !toDo.priorityValue)
+                    didIt = NO;
+                if(didIt && kFilter.notesFilter == FilterSettingOn && (!toDo.notes || toDo.notes.length == 0))
+                    didIt = NO;
+                if(didIt && kFilter.recurringFilter == FilterSettingOn && toDo.repeatOptionValue == RepeatNever)
+                    didIt = NO;
+                if(didIt && kFilter.selectedTags.count > 0){
+                    for(NSString *tag in kFilter.selectedTags){
+                        if(![toDo.textTags containsObject:tag]){
+                            didIt = NO;
+                        }
+                    }
+                    if(didIt){
+                        if(toDo.textTags && toDo.textTags.count > 0){
+                            if(counter > 0) {
+                                NSSet *iteratingSet = [matchingTags copy];
+                                for(NSString *textTag in iteratingSet){
+                                    if(![toDo.textTags containsObject:textTag] && [matchingTags containsObject:textTag]) [matchingTags removeObject:textTag];
+                                }
+                            }
+                            else [matchingTags addObjectsFromArray:toDo.textTags];
+                        }
+                        [remainingTags addObjectsFromArray:toDo.textTags];
+                        counter++;
                     }
                 }
                 if(didIt){
-                    if(toDo.textTags && toDo.textTags.count > 0){
-                        if(counter > 0) {
-                            NSSet *iteratingSet = [matchingTags copy];
-                            for(NSString *textTag in iteratingSet){
-                                if(![toDo.textTags containsObject:textTag] && [matchingTags containsObject:textTag]) [matchingTags removeObject:textTag];
-                            }
-                        }
-                        else [matchingTags addObjectsFromArray:toDo.textTags];
-                    }
-                    [remainingTags addObjectsFromArray:toDo.textTags];
                     [filteredItems addObject:toDo];
-                    counter++;
+                    
                 }
             }
             for(NSString *tag in kFilter.selectedTags){

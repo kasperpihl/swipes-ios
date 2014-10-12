@@ -14,12 +14,15 @@
 @protocol KPTagListDeleteDelegate <NSObject>
 -(void)tagList:(KPTagList*)tagList triedToDeleteTag:(NSString*)tag;
 @end
+
+@protocol KPTagListDataSource <NSObject>
+-(NSArray*)tagsForTagList:(KPTagList*)tagList;
+-(NSArray*)selectedTagsForTagList:(KPTagList*)tagList;
+@end
+
 @protocol KPTagDelegate <NSObject>
 @optional
 -(void)tagList:(KPTagList*)tagList deletedTag:(NSString*)tag;
--(NSArray*)tagsForTagList:(KPTagList*)tagList;
--(NSArray*)selectedTagsForTagList:(KPTagList*)tagList;
--(NSArray*)deselectedTagsForTagList:(KPTagList*)tagList;
 -(void)tagList:(KPTagList*)tagList selectedTag:(NSString*)tag;
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString*)tag;
 @end
@@ -36,6 +39,7 @@
 @property (nonatomic) NSInteger marginLeft;
 @property (nonatomic) NSInteger marginRight;
 @property (nonatomic) NSInteger firstRowSpacingHack;
+@property (nonatomic) NSInteger lastRowSpacingHack;
 @property (nonatomic) NSInteger spacing;
 @property (nonatomic) NSInteger emptyLabelMarginHack;
 
@@ -50,12 +54,15 @@
 @property (nonatomic) BOOL isEmptyList;
 @property (nonatomic) BOOL enableEdit;
 @property (nonatomic) BOOL wobling;
+@property (nonatomic) CGFloat remainingSpaceOnLastLine;
 @property (nonatomic) NSInteger numberOfRows;
 @property (nonatomic) NSInteger numberOfTags;
 @property (nonatomic,weak) id<KPTagDelegate> tagDelegate;
+@property (nonatomic,weak) id<KPTagListDataSource> tagDataSource;
 @property (nonatomic,weak) id<KPTagListAddDelegate> addDelegate;
 @property (nonatomic,weak) id<KPTagListResizeDelegate> resizeDelegate;
 @property (nonatomic,weak) id<KPTagListDeleteDelegate> deleteDelegate;
+
 -(void)setTags:(NSArray*)tags andSelectedTags:(NSArray*)selectedTags;
 +(KPTagList*)tagListWithWidth:(CGFloat)width andTags:(NSArray*)tags;
 -(void)addTag:(NSString*)tag selected:(BOOL)selected;

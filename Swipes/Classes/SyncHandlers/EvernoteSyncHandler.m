@@ -83,14 +83,14 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     return __updatedTasks;
 }
 -(BOOL)hasObjectsSyncedWithEvernote{
-    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_context];
+    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
     NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"service = %@ AND sync == 1",EVERNOTE_SERVICE];
     NSUInteger numberOfAttachmentsWithEvernote = [KPAttachment MR_countOfEntitiesWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
     return (numberOfAttachmentsWithEvernote > 0);
 }
 -(NSArray*)getObjectsSyncedWithEvernote{
     
-    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_context];
+    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
     
     NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"ANY attachments.service like %@ AND ANY attachments.sync == 1",EVERNOTE_SERVICE];
     NSArray *todosWithEvernote = [KPToDo MR_findAllWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
@@ -301,9 +301,9 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     self.block(SyncStatusStarted, nil, nil);
     BOOL hasLocalChanges = [self checkForLocalChanges];
     if(!hasLocalChanges && !self.needToClearCache){
-        NSLog(@"%f > -%i",[self.lastUpdated timeIntervalSinceNow],kFetchChangesTimeout);
+        //DLog(@"%f > -%i",[self.lastUpdated timeIntervalSinceNow],kFetchChangesTimeout);
         if(self.lastUpdated && [self.lastUpdated timeIntervalSinceNow] > -kFetchChangesTimeout ){
-            NSLog(@"returning due to caching");
+            //DLog(@"returning due to caching");
             return self.block(SyncStatusSuccess, nil, nil );
         }
     }
@@ -399,7 +399,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
                 DLog(@"clearing all caches");
                 [kEnInt clearCaches];
             }
-            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_context];
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
             NSArray *identifiers = [KPAttachment allIdentifiersForService:EVERNOTE_SERVICE sync:YES context:localContext];
             for( EDAMNote *note in list.notes ){
                 if([identifiers containsObject:note.guid]){

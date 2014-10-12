@@ -12,4 +12,8 @@
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title;
 @property (nonatomic) UIColor *lampColor;
 @property (nonatomic) UIButton *iconLabel;
+
+
+
+
 @end

@@ -31,6 +31,7 @@
 
 #import "SearchTopMenu.h"
 #import "SelectionTopMenu.h"
+#import "FilterTopMenu.h"
 
 #import "HintHandler.h"
 #import "UIView+Utilities.h"
@@ -39,11 +40,8 @@
 
 #import "UserHandler.h"
 #define DEFAULT_SELECTED_INDEX 1
-#define ADD_BUTTON_TAG 1337
 #define ADD_BUTTON_SIZE 90
 #define ADD_BUTTON_MARGIN_BOTTOM 0
-#define CONTENT_VIEW_TAG 1000
-#define CONTROLS_VIEW_TAG 1001
 #define SEGMENT_BORDER_RADIUS 0
 #define SEGMENT_BUTTON_WIDTH 52
 #define TODAY_EXTRA_INSET 3
@@ -61,14 +59,14 @@ typedef enum {
     TopMenuFilter,
     TopMenuSearch
 } TopMenuState;
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,SelectionTopMenuDelegate,SearchTopMenuDelegate>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,KPTagListDataSource ,SelectionTopMenuDelegate,SearchTopMenuDelegate,FilterTopMenuDelegate,TopMenuDelegate>
 
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
-@property (nonatomic, weak) UIView *contentView;
+@property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) KPControlHandler *controlHandler;
 @property (nonatomic, strong) UIButton *_settingsButton;
-@property (nonatomic, strong) UIButton *_accountButton;
+@property (nonatomic, strong) UIButton *_dropdownButton;
 @property (nonatomic, assign) BOOL tableIsShrinked;
 @property (nonatomic, assign) NSInteger currentSelectedIndex;
 @property (nonatomic, strong) UIView *ios7BackgroundView;
@@ -78,7 +76,7 @@ typedef enum {
 @property (nonatomic, strong) NSArray *selectedItems;
 @property (nonatomic) TopMenu *topOverlay;
 @property (nonatomic) TopMenuState currentTopMenu;
-
+@property (nonatomic) BOOL isEditingTags;
 @end
 
 @implementation KPSegmentedViewController
@@ -106,29 +104,51 @@ typedef enum {
     [KPTag addTagWithString:tag save:YES];
 }
 
-#pragma mark - KPTagDelegate
+
+#pragma mark - KPTagDataSource
 -(NSArray *)selectedTagsForTagList:(KPTagList *)tagList{
-    NSArray *selectedTags = [KPToDo selectedTagsForToDos:self.selectedItems];
+
+    NSArray *selectedTags;
+    
+    if(self.isEditingTags)
+        selectedTags = [KPToDo selectedTagsForToDos:self.selectedItems];
+    else
+        selectedTags = [kFilter.selectedTags copy];
+    
     return selectedTags;
 }
 -(NSArray *)tagsForTagList:(KPTagList *)tagList{
     NSArray *allTags = [KPTag allTagsAsStrings];
     return allTags;
 }
+
+
+#define KPTagDelegate
 -(void)tagList:(KPTagList *)tagList selectedTag:(NSString *)tag{
-    [KPToDo updateTags:@[tag] forToDos:self.selectedItems remove:NO save:YES];
-    [[self currentViewController] didUpdateItemHandler:nil];
+    if(self.isEditingTags){
+        [KPToDo updateTags:@[tag] forToDos:self.selectedItems remove:NO save:YES];
+        [[self currentViewController] didUpdateItemHandler:nil];
+    }
+    else{
+        [kFilter selectTag:tag];
+    }
 }
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString *)tag{
-    [KPToDo updateTags:@[tag] forToDos:self.selectedItems remove:YES save:YES];
-    [[self currentViewController] didUpdateItemHandler:nil];
+    if(self.isEditingTags){
+        [KPToDo updateTags:@[tag] forToDos:self.selectedItems remove:YES save:YES];
+        [[self currentViewController] didUpdateItemHandler:nil];
+    }
+    else{
+        [kFilter deselectTag:tag];
+    }
 }
 -(void)tagList:(KPTagList *)tagList deletedTag:(NSString *)tag{
-    [kFilter deselectTag:tag];
-    [[self currentViewController].itemHandler refresh];
     [KPTag deleteTagWithString:tag save:YES];
+    [kFilter deselectTag:tag];
     [[self currentViewController] didUpdateItemHandler:nil];
 }
+
+
 #pragma mark - KPControlHandlerDelegate
 -(void)pressedAdd:(id)sender{
     [self changeToIndex:1];
@@ -165,17 +185,21 @@ typedef enum {
 
 -(void)tagItems:(NSArray *)items inViewController:(UIViewController*)viewController withDismissAction:(voidBlock)block{
     self.selectedItems = items;
+    self.isEditingTags = YES;
     //[self show:NO controlsAnimated:YES];
     KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:viewController.view.bounds andTags:[KPTag allTagsAsStrings]];
     tagView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     tagView.delegate = self;
+    tagView.tagView.tagDataSource = self;
     tagView.tagView.tagDelegate = self;
     BLURRY.showPosition = PositionBottom;
     BLURRY.blurryTopColor = alpha(tcolor(BackgroundColor), 0.3);
     if(block) BLURRY.dismissAction = ^{
         //self.selectedItems = nil;
+        self.isEditingTags = NO;
         block();
     };
+    
     [BLURRY showView:tagView inViewController:viewController];
 }
 -(void)deleteNumberOfItems:(NSInteger)numberOfItems inView:(UIViewController*)viewController completion:(SuccessfulBlock)block{
@@ -275,6 +299,20 @@ typedef enum {
     [ROOT_CONTROLLER.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
 }
 
+
+
+#pragma mark TopMenuDelegate
+-(void)topMenu:(TopMenu *)topMenu changedSize:(CGSize)size{
+    CGFloat contentHeight = self.view.bounds.size.height - size.height;
+    CGRect contentFrame = CGRectMake(0, size.height, self.view.bounds.size.width, contentHeight);
+    //self.currentViewController.view.frame = contentFrame;
+    self.contentView.frame = contentFrame;
+    
+    
+}
+
+
+#pragma mark SelectionTopMenuDelegate
 -(void)didPressAllInSelectionTopMenu:(SelectionTopMenu *)topMenu{
     BOOL select = [topMenu.allButton.titleLabel.text isEqualToString:@"All"];
     if(select){
@@ -294,6 +332,31 @@ typedef enum {
 }
 
 
+#pragma mark FilterTopMenuDelegate
+-(void)didPressFilterTopMenu:(FilterTopMenu *)topMenu{
+    self.currentTopMenu = TopMenuDefault;
+}
+-(void)filterMenu:(FilterTopMenu *)filterMenu selectedTag:(NSString *)tag{
+    [kFilter selectTag:tag];
+}
+-(void)filterMenu:(FilterTopMenu *)filterMenu deselectedTag:(NSString *)tag{
+    [kFilter deselectTag:tag];
+}
+-(void)didClearFilterTopMenu:(FilterTopMenu *)topMenu{
+    [kFilter clearAll];
+    self.currentTopMenu = TopMenuDefault;
+}
+-(void)filterMenu:(FilterTopMenu *)filterMenu updatedPriority:(BOOL)priority{
+    kFilter.priorityFilter = priority ? FilterSettingOn : FilterSettingNone;
+}
+-(void)filterMenu:(FilterTopMenu *)filterMenu updatedNotes:(BOOL)notes{
+    kFilter.notesFilter = notes ? FilterSettingOn : FilterSettingNone;
+}
+-(void)filterMenu:(FilterTopMenu *)filterMenu updatedRecurring:(BOOL)recurring{
+    kFilter.recurringFilter = recurring ? FilterSettingOn : FilterSettingNone;
+}
+
+
 #pragma mark SearchTopMenuDelegate
 -(void)searchTopMenu:(SearchTopMenu *)topMenu didSearchForString:(NSString *)searchString{
     [kFilter searchForString:searchString];
@@ -305,6 +368,7 @@ typedef enum {
 -(void)didCloseSearchFieldTopMenu:(SearchTopMenu *)topMenu{
     self.currentTopMenu = TopMenuDefault;
 }
+
 
 
 -(void)setCurrentTopMenu:(TopMenuState)currentTopMenu{
@@ -320,6 +384,7 @@ typedef enum {
         }
         
         if(currentTopMenu == TopMenuDefault){
+            [self topMenu:self.topOverlay changedSize:self.ios7BackgroundView.frame.size];
             [self present:NO topOverlay:nil animated:animated];
         }
         _currentTopMenu = currentTopMenu;
@@ -369,7 +434,15 @@ typedef enum {
     [self setCurrentTopMenu:TopMenuSelect];
 }
 -(void)pressedFilter:(id)sender{
+    FilterTopMenu *filterTopMenu = [[FilterTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
+    [filterTopMenu setPriority:(kFilter.priorityFilter == FilterSettingOn) notes:(kFilter.notesFilter == FilterSettingOn) recurring:(kFilter.recurringFilter == FilterSettingOn)];
+    filterTopMenu.filterDelegate = self;
+    
+    filterTopMenu.topMenuDelegate = self;
+    filterTopMenu.tagListView.tagDataSource = self;
+    
     [self setCurrentTopMenu:TopMenuFilter animated:YES];
+    [self present:YES topOverlay:filterTopMenu animated:YES];
 }
 -(void)pressedSearch:(id)sender{
     SearchTopMenu *searchTopMenu = [[SearchTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
@@ -381,15 +454,16 @@ typedef enum {
     [searchTopMenu.searchField becomeFirstResponder];
 }
 
--(void)pressedAccount{
+
+-(void)pressedDropdown{
     
     KxMenuItem *selectItem = [KxMenuItem menuItem:@"Select" image:nil target:self action:@selector(pressedSelect:)];
-    KxMenuItem *filterItem = [KxMenuItem menuItem:@"Filter" image:nil target:self action:@selector(pressedSelect:)];
+    KxMenuItem *filterItem = [KxMenuItem menuItem:@"Filter" image:nil target:self action:@selector(pressedFilter:)];
     KxMenuItem *searchItem = [KxMenuItem menuItem:@"Search" image:nil target:self action:@selector(pressedSearch:)];
     [KxMenu setBackColor:tcolor(TextColor)];
-    [self._accountButton setSelected:YES];
+    [self._dropdownButton setSelected:YES];
     [KxMenu showMenuInView:self.view
-                  fromRect:self._accountButton.frame
+                  fromRect:self._dropdownButton.frame
                  menuItems:@[selectItem,filterItem,searchItem]];
     return;
     [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
@@ -518,17 +592,6 @@ typedef enum {
         self.ios7BackgroundView.backgroundColor = CLEAR;
         [self.ios7BackgroundView addSubview:self.segmentedControl];
         self.ios7BackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        UIButton *accountButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.view.frame.size.width-CELL_LABEL_X, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
-        accountButton.titleLabel.font = iconFont(23);
-        [accountButton addTarget:self action:@selector(pressedAccount) forControlEvents:UIControlEventTouchUpInside];
-        accountButton.titleLabel.font = iconFont(20);
-        [accountButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        accountButton.transform = CGAffineTransformMakeRotation(radians(90));
-        [accountButton setTitle:iconString(@"rightArrow") forState:UIControlStateNormal];
-        [accountButton setTitle:iconString(@"rightArrowFull") forState:UIControlStateHighlighted];
-        accountButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        [self.ios7BackgroundView addSubview:accountButton];
-        self._accountButton = accountButton;
         
         UIButton *settingsButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
         settingsButton.titleLabel.font = iconFont(23);
@@ -538,6 +601,20 @@ typedef enum {
         [settingsButton addTarget:self action:@selector(pressedSettings) forControlEvents:UIControlEventTouchUpInside];
         [self.ios7BackgroundView addSubview:settingsButton];
         self._settingsButton = settingsButton;
+        
+        
+        UIButton *dropdownButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.view.frame.size.width-CELL_LABEL_X, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
+        dropdownButton.titleLabel.font = iconFont(23);
+        [dropdownButton addTarget:self action:@selector(pressedDropdown) forControlEvents:UIControlEventTouchUpInside];
+        dropdownButton.titleLabel.font = iconFont(20);
+        [dropdownButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        dropdownButton.transform = CGAffineTransformMakeRotation(radians(90));
+        [dropdownButton setTitle:iconString(@"rightArrow") forState:UIControlStateNormal];
+        [dropdownButton setTitle:iconString(@"rightArrowFull") forState:UIControlStateHighlighted];
+        dropdownButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        [self.ios7BackgroundView addSubview:dropdownButton];
+        self._dropdownButton = dropdownButton;
+        
         [self.view addSubview:self.ios7BackgroundView];
         
         //self.navigationItem.titleView = self.segmentedControl;
@@ -572,9 +649,8 @@ typedef enum {
     self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     contentView.layer.masksToBounds = YES;
-    contentView.tag = CONTENT_VIEW_TAG;
     [self.view addSubview:contentView];
-    self.contentView = [self.view viewWithTag:CONTENT_VIEW_TAG];
+    self.contentView = contentView;
     
     /* Control handler - Bottom toolbar for add/edit */
     self.controlHandler = [KPControlHandler instanceInView:self.view];
@@ -609,6 +685,11 @@ typedef enum {
 
 -(void)dealloc{
     clearNotify();
+    self.contentView = nil;
+    self.backgroundImage = nil;
+    self.ios7BackgroundView = nil;
+    self.topOverlay = nil;
+    self.segmentedControl = nil;
 }
 
 // NEWCODE

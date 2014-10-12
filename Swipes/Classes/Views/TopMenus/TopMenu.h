@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #define kSideButtonsWidth 60
 #define kTopY 20
+@class TopMenu;
+@protocol TopMenuDelegate <NSObject>
+-(void)topMenu:(TopMenu*)topMenu changedSize:(CGSize)size;
+@end
 @interface TopMenu : UIView
-
+@property (nonatomic,weak) id<TopMenuDelegate> topMenuDelegate;
 @end

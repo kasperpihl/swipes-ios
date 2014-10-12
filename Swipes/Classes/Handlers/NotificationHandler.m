@@ -300,7 +300,7 @@ static NotificationHandler *sharedObject;
             break;
         KPToDo *toDo = [scheduleArray objectAtIndex:i];
         
-        BOOL isLastObject = (i == scheduleCount-1);
+        BOOL isLastObject = (i == MIN(scheduleCount-1,34));
         if (!currentDate)
             currentDate = toDo.schedule;
 

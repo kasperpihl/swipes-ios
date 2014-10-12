@@ -69,13 +69,13 @@
     }
     return self;
 }
--(void)setTagDelegate:(NSObject<KPTagDelegate> *)tagDelegate{
-    _tagDelegate = tagDelegate;
+-(void)setTagDataSource:(id<KPTagListDataSource>)tagDataSource{
+    _tagDataSource = tagDataSource;
     [self reloadData];
 }
 -(void)reloadData{
-    if([self.tagDelegate respondsToSelector:@selector(tagsForTagList:)]) self.tags = [[self.tagDelegate tagsForTagList:self] mutableCopy];
-    if([self.tagDelegate respondsToSelector:@selector(selectedTagsForTagList:)]) self.selectedTags = [[self.tagDelegate selectedTagsForTagList:self] mutableCopy];
+    if([self.tagDataSource respondsToSelector:@selector(tagsForTagList:)]) self.tags = [[self.tagDataSource tagsForTagList:self] mutableCopy];
+    if([self.tagDataSource respondsToSelector:@selector(selectedTagsForTagList:)]) self.selectedTags = [[self.tagDataSource selectedTagsForTagList:self] mutableCopy];
     [self layoutTagsFirst:NO];
 }
 -(void)addTag:(NSString *)tag selected:(BOOL)selected{
@@ -103,9 +103,16 @@
         for(NSInteger j = 0 ; j <= numberOfTags ; j++){
             UIButton *tagButton;
             BOOL isLastTag = (j == (numberOfTags-1));
-            CGFloat targetWidth = (self.numberOfRows == 1) ? self.frame.size.width - self.firstRowSpacingHack : self.frame.size.width;
-            
             BOOL isAddButton = (j == numberOfTags);
+            
+            
+            CGFloat targetWidth = self.frame.size.width;
+            if(self.numberOfRows == 1 && self.firstRowSpacingHack)
+                targetWidth = self.frame.size.width - self.firstRowSpacingHack;
+            if((isLastTag && !self.addTagButton) || isAddButton)
+                targetWidth = self.frame.size.width - self.lastRowSpacingHack;
+            
+            
             if(isAddButton){
                 if(!self.addTagButton)
                     continue;
@@ -159,6 +166,9 @@
             }
             [buttonLine addObject:tagButton];
             [self addSubview:tagButton];
+            if(isLastTag || isAddButton){
+                self.remainingSpaceOnLastLine = targetWidth - currentWidth;
+            }
         }
         
     }
