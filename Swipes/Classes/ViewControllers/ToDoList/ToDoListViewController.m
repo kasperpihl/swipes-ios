@@ -182,7 +182,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (!self.itemHandler.isSorted && self.itemHandler.itemCounterWithFilter == 0)
         return 0;
-    return SECTION_HEADER_HEIGHT;
+    return kDefaultLineSize;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

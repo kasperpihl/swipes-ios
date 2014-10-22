@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define kDefaultLineSize LINE_SIZE*1.5;
+
 @interface SectionHeaderView : UIView
 
 - (id)initWithColor:(UIColor *)color font:(UIFont *)font title:(NSString *)title width:(CGFloat)width;

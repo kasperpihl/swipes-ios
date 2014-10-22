@@ -304,7 +304,7 @@
     button.titleLabel.font = KP_REGULAR(14);
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
-    button.layer.cornerRadius = 2;
+    button.layer.cornerRadius = button.frame.size.height/2;
     button.layer.borderColor = self.tagBorderColor.CGColor;
     button.layer.borderWidth = LINE_SIZE;
     button.layer.masksToBounds = YES;

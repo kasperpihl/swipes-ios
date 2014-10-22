@@ -191,6 +191,7 @@
 		A7C258FE197CE5A200290198 /* IntegrationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C258FD197CE5A200290198 /* IntegrationHandler.m */; };
 		A7C90E6A17A6ABF700C5F9E2 /* wt_schedule_popup.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */; };
 		A7C90E6B17A6ABF700C5F9E2 /* wt_schedule_popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */; };
+		A7CEC68919F147AD0018C709 /* KPExpandingButtonBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A7CEC68819F147AD0018C709 /* KPExpandingButtonBar.m */; };
 		A7D06868190E654C00699B4E /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D0685E190E654C00699B4E /* MMDrawerBarButtonItem.m */; };
 		A7D06869190E654C00699B4E /* MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D06861190E654C00699B4E /* MMDrawerController.m */; };
 		A7D0686A190E654C00699B4E /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D06863190E654C00699B4E /* MMDrawerVisualState.m */; };
@@ -768,6 +769,8 @@
 		A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wt_schedule_popup.png; sourceTree = "<group>"; };
 		A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wt_schedule_popup@2x.png"; sourceTree = "<group>"; };
+		A7CEC68719F147AD0018C709 /* KPExpandingButtonBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPExpandingButtonBar.h; path = KPExpandingButtonBar/KPExpandingButtonBar.h; sourceTree = "<group>"; };
+		A7CEC68819F147AD0018C709 /* KPExpandingButtonBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPExpandingButtonBar.m; path = KPExpandingButtonBar/KPExpandingButtonBar.m; sourceTree = "<group>"; };
 		A7D0685B190E654C00699B4E /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		A7D0685D190E654C00699B4E /* MMDrawerBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerBarButtonItem.h; sourceTree = "<group>"; };
 		A7D0685E190E654C00699B4E /* MMDrawerBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerBarButtonItem.m; sourceTree = "<group>"; };
@@ -1037,6 +1040,7 @@
 		A703B1641838EBF20047DCC9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A7CEC68619F147830018C709 /* KPExpandingButtonBar */,
 				A798DCCB19E523A200386C80 /* TopMenus */,
 				A74D65AF19DD94B400B4780C /* KxMenu */,
 				A763C93E19208E72005041D7 /* Attachments */,
@@ -1757,6 +1761,15 @@
 			);
 			name = Localytics;
 			path = ../Swipes/Ressources/Libs/Localytics;
+			sourceTree = "<group>";
+		};
+		A7CEC68619F147830018C709 /* KPExpandingButtonBar */ = {
+			isa = PBXGroup;
+			children = (
+				A7CEC68719F147AD0018C709 /* KPExpandingButtonBar.h */,
+				A7CEC68819F147AD0018C709 /* KPExpandingButtonBar.m */,
+			);
+			name = KPExpandingButtonBar;
 			sourceTree = "<group>";
 		};
 		A7D0685A190E654C00699B4E /* MMDrawerController */ = {
@@ -2664,6 +2677,7 @@
 				A754DB62197BBD0B00308DBC /* EvernoteImporterViewController.m in Sources */,
 				DA53468319D426B4007AA15D /* NSManagedObjectContext+MagicalObserving.m in Sources */,
 				DA5346B319D426B4007AA15D /* MagicalRecord+ShorthandSupport.m in Sources */,
+				A7CEC68919F147AD0018C709 /* KPExpandingButtonBar.m in Sources */,
 				A789B3F917D79BFB00C25B73 /* KPOverlay.m in Sources */,
 				A703B1B81838EBF20047DCC9 /* KPSearchBar.m in Sources */,
 				A74646B918D38660003911DC /* ContactHandler.m in Sources */,

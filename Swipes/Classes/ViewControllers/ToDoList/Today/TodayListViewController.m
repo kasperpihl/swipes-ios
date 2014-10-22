@@ -130,7 +130,7 @@
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 5;
+    return 6;
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
@@ -155,7 +155,7 @@
     
     self.allDoneForToday = (numberInProgress == 0);
     
-    self.sectionHeader.title = [NSString stringWithFormat:LOCALIZE_STRING(@"%li / %li Today"), (long)numberOfDone,(long)total];
+    self.sectionHeader.title = [NSString stringWithFormat:LOCALIZE_STRING(@"%li / %li TODAY"), (long)numberOfDone,(long)total];
     //[NSString stringWithFormat:@"%i%%",percentage];//
     
     if(total > 0)

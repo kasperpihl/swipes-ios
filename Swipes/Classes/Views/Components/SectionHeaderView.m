@@ -5,13 +5,12 @@
 //  Created by Kasper Pihl Tornøe on 23/07/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define kDefLeftCutSize 0.75
-#define kDefLeftPadding 4
-#define kDefRightPadding 7
+#define kDefLeftCutSize 1.3 // 0.75
+#define kDefLeftPadding 1
+#define kDefRightPadding 9
 #define kDefTopPadding 1
-#define kDefBottomPadding 1
+#define kDefBottomPadding 2
 
-#define kDefaultLineSize LINE_SIZE;
 
 #import "SectionHeaderView.h"
 #import "UIView+Utilities.h"
@@ -172,7 +171,6 @@
         CGContextFillPath(currentContext);
         
         
-        
         CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
         CGContextMoveToPoint(currentContext, 0, progressY);
         CGContextSetLineWidth(currentContext, self.lineThickness*2);
@@ -198,9 +196,10 @@
     CGFloat targetY = self.bounds.size.height;
     CGFloat leftCutPoint = self.bounds.size.height * kDefLeftCutSize;
     
+    CGFloat controlX = leftCutPoint * .7;
     UIBezierPath *aPath = [UIBezierPath bezierPath];
     [aPath moveToPoint:CGPointMake(0, 0)];
-    [aPath addLineToPoint:CGPointMake(leftCutPoint, targetY)];
+    [aPath addQuadCurveToPoint:CGPointMake(leftCutPoint, targetY) controlPoint:CGPointMake(controlX, 0)];
     [aPath addLineToPoint:CGPointMake(0, targetY)];
     [aPath addLineToPoint:CGPointMake(0, 0)];
     [aPath closePath];
@@ -257,14 +256,18 @@
     CGFloat leftCutPoint = self.bounds.size.height * kDefLeftCutSize;
     CGFloat targetY = self.bounds.size.height;
     CGFloat targetX = self.bounds.size.width;
+    CGFloat controlX = leftCutPoint*0.5;
+    CGFloat controlY = 0;
     
     /* Color the background */
     if(self.fillColor){
         UIBezierPath *aPath = [UIBezierPath bezierPath];
         [aPath moveToPoint:CGPointMake(0, 0)];
-        [aPath addLineToPoint:CGPointMake(targetX, 0)];
+        [aPath addCurveToPoint:CGPointMake(leftCutPoint, targetY) controlPoint1:CGPointMake(controlX, controlY) controlPoint2:CGPointMake(leftCutPoint-controlX, targetY-controlY)];
         [aPath addLineToPoint:CGPointMake(targetX, targetY)];
-        [aPath addLineToPoint:CGPointMake(leftCutPoint, targetY)];
+        [aPath addLineToPoint:CGPointMake(targetX, 0)];
+        
+        //[aPath addLineToPoint:CGPointMake(leftCutPoint, targetY)];
         [aPath addLineToPoint:CGPointMake(0, 0)];
         [aPath closePath];
         CGContextAddPath(currentContext, aPath.CGPath);
@@ -275,13 +278,13 @@
     /* Draw the colored stroke */
     CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
     
-    
-    CGContextMoveToPoint(currentContext, 0, 0);
+    CGContextMoveToPoint(currentContext, 0, self.headerView.lineThickness/2);
     CGContextSetLineWidth(currentContext, self.headerView.lineThickness);
-    CGContextAddLineToPoint(currentContext, leftCutPoint, targetY);
-    CGContextStrokePath(currentContext);
     
-    CGContextMoveToPoint(currentContext, leftCutPoint, targetY);
+    
+    CGContextAddCurveToPoint(currentContext, controlX, controlY, leftCutPoint-controlX, targetY-controlY, leftCutPoint, targetY-self.headerView.lineThickness/2);
+    CGContextStrokePath(currentContext);
+    CGContextMoveToPoint(currentContext, leftCutPoint-self.headerView.lineThickness/2, targetY);
     //CGContextSetStrokeColorWithColor(currentContext,self.color.CGColor);
     CGContextSetLineWidth(currentContext, self.headerView.lineThickness*2);
     CGContextAddLineToPoint(currentContext, targetX, targetY);
