@@ -46,7 +46,7 @@ target :SwipesToday do
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
 end
-
+#test
 #link_with 'Swipes', 'Swipes_iOS8', 'SwipesKit'
 #link_with 'Swipes', 'SwipesKit'
 
