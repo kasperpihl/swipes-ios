@@ -9,7 +9,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FacebookCommunicatorDelegate.h"
-#import <Facebook.h>
+#import <FacebookSDK/FacebookSDK.h>
 
 @class FacebookCommunicator;
 @interface FacebookCommunicator : NSObject

@@ -82,11 +82,11 @@ typedef enum {
 @implementation KPSegmentedViewController
 
 
-
 -(void)receivedLocalNotification:(UILocalNotification *)notification
 {
     [[self currentViewController] update];
 }
+
 
 #pragma mark - KPControlViewDelegate
 #pragma mark - KPAddTagDelegate

@@ -1,3 +1,4 @@
+source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 target :Swipes do
     pod 'Appirater', :inhibit_warnings => true
@@ -12,6 +13,7 @@ target :Swipes do
     pod 'DejalActivityView'
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
+    pod 'AwesomeMenu', '~> 1.0'
 end
 
 target :SwipesKit do

@@ -9,7 +9,7 @@
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <Social/Social.h>
 
-@interface FacebookCommunicator () <FBDialogDelegate>
+@interface FacebookCommunicator ()
 @property (nonatomic,strong) FBRequestConnection *connection;
 @property (copy) FacebookRequestBlock block;
 @end

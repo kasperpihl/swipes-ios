@@ -88,7 +88,7 @@ static UserHandler *sharedObject;
 -(void)didOpenApp{
     if(!kCurrent)
         return;
-    [kCurrent refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+    [kCurrent fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         //[self save];
         if(!error){
             [self handleUser:(PFUser*)object];
