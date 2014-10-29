@@ -23,7 +23,7 @@ typedef void (^EvernoteProcessorBlock)(EvernoteToDoProcessor *processor, NSError
 +(void)processorWithGuid:(NSString*)guid block:(EvernoteProcessorBlock)block;
 
 @property (nonatomic) BOOL needUpdate;
-@property (nonatomic, strong) EDAMNote* note;
+@property (nonatomic, strong) id note;
 @property (nonatomic) NSString *guid;
 
 - (NSArray *)toDoItems;

@@ -6,27 +6,30 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
+#import <ENSDK/Advanced/ENSDKAdvanced.h>
+#import "MF_Base64Additions.h"
 #import "UtilityClass.h"
 #import "KPAttachment.h"
 #import "SlowHighlightIcon.h"
 #import "EvernoteSyncHandler.h"
 #import "SectionHeaderView.h"
-#import <ENSDK/Advanced/ENSDKAdvanced.h>
 #import "EvernoteIntegration.h"
-#import "EvernoteImporterViewController.h"
 #import "DejalActivityView.h"
+#import "EvernoteImporterViewController.h"
+
 #define kPaginator 100
-
-
 #define kTopDarkColor alpha(tcolorF(TextColor, ThemeLight),0.8)
 #define kTitleColor tcolorF(TextColor, ThemeDark)
 #define kExistingTitleColor alpha(tcolorF(TextColor,ThemeLight),0.5)
 #define kTopHeight 50
+
 @interface EvernoteImporterViewController () <UITableViewDataSource, UITableViewDelegate>
+
 @property (nonatomic, strong) UITableView* tableView;
-@property (nonatomic, strong) EDAMNoteList* noteList;
+@property (nonatomic, strong) NSArray* noteList;
 @property (nonatomic) UIButton *selectAllButton;
 @property (nonatomic) UIButton *importButton;
+
 @end
 
 @implementation EvernoteImporterViewController
@@ -43,7 +46,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger result = self.noteList.notes.count;
+    NSInteger result = self.noteList.count;
     return result;
 }
 
@@ -52,9 +55,9 @@
 //}
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    EDAMNote* note = _noteList.notes[indexPath.row];
+    ENSessionFindNotesResult* note = _noteList[indexPath.row];
     
-    NSArray *existingTasks = [KPAttachment findAttachmentsForService:EVERNOTE_SERVICE identifier:note.guid context:nil];
+    NSArray *existingTasks = [KPAttachment findAttachmentsForService:EVERNOTE_SERVICE identifier:[EvernoteIntegration ENNoteRefToNSString:note.noteRef] context:nil];
     UIColor *textColor = kTitleColor;
     if(existingTasks.count > 0){
         textColor = kExistingTitleColor;
@@ -65,14 +68,10 @@
     if (note.title && note.title.length > 0) {
         cell.textLabel.text = note.title;
     }
-    else if (note.content && note.content.length > 0) {
-        cell.textLabel.text = note.content;
-    }
     else {
         cell.textLabel.text = @"Untitled note";
     }
-    NSDate *updatedAt = [NSDate dateWithTimeIntervalSince1970:[note.updated integerValue]/1000];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:updatedAt showTime:YES]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:note.updated showTime:YES]];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -211,7 +210,7 @@
         return;
     NSMutableArray *notesToImport = [NSMutableArray array];
     for( NSIndexPath *indexPath in selectedIndexPaths ){
-        EDAMNote *note = [_noteList.notes objectAtIndex:indexPath.row];
+        ENSessionFindNotesResult *note = _noteList[indexPath.row];
         [notesToImport addObject:note];
     }
     [DejalBezelActivityView activityViewForView:self.view withLabel:@"Importing..."];
@@ -271,19 +270,17 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    EDAMNoteFilter* filter = [EDAMNoteFilter new];
-    filter.words = @"todo:*";
-    filter.order = @(NoteSortOrder_UPDATED);
-    filter.ascending = NO;
-    [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kPaginator block:^(EDAMNoteList *list, NSError *error) {
-        if(list){
-            if(list.notes.count == 0){
-                [[[UIAlertView alloc] initWithTitle:@"Couldn't find any notes with Checkmarks" message:@"Add them manually under each tasks instead" delegate:nil cancelButtonTitle:@"Got it!" otherButtonTitles: nil] show];
+
+    [kEnInt findNotesWithSearch:@"todo:*" block:^(NSArray *findNotesResults, NSError *error) {
+        if (findNotesResults) {
+            if (findNotesResults.count == 0) {
+                [UTILITY alertWithTitle:@"Couldn't find any notes with Checkmarks" andMessage:@"Add them manually under each tasks instead"];
             }
-            self.noteList = list;
+            self.noteList = findNotesResults;
             [self.tableView reloadData];
         }
     }];
+    
     [self updateButtons];
 }
 

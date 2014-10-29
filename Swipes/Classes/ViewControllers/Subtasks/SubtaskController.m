@@ -86,8 +86,8 @@
 -(void)fullReload{
     [self loadSubtasks];
     [self updateTableFooter];
+    [self updateExpandButton:_expanded animated:NO];
     [self reloadAndNotify:YES];
-    
 }
 
 -(void)loadSubtasks{

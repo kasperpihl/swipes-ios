@@ -340,7 +340,8 @@
         self._isSyncing = NO;
         [self synchronizeForce:YES async:YES];
     }
-    else if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached] && !error) {
+//    else if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached] && !error) {
+    if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached]) {
         
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             //NSLog(@"returned %lu",(long)status);

@@ -359,11 +359,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 #pragma mark - EvernoteViewDelegate
 
-- (void)selectedEvernoteInView:(EvernoteView *)EvernoteView guid:(NSString *)guid title:(NSString *)title sync:(BOOL)sync
+- (void)selectedEvernoteInView:(EvernoteView *)EvernoteView noteRef:(ENNoteRef *)noteRef title:(NSString *)title sync:(BOOL)sync
 {
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
-    [self.model attachService:EVERNOTE_SERVICE title:title identifier:guid sync:sync];
+    [self.model attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:noteRef] sync:sync];
     [KPToDo saveToSync];
     [self updateEvernote];
     [self layoutWithDuration:0];
@@ -1092,8 +1092,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.view addSubview:panningView];
         
         notify(@"updated sync",updateFromSync:);
-        
-        
+//        notify(NH_UpdateLocalNotifications, update);
     }
     return self;
 }
@@ -1120,16 +1119,17 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
     [self updateSectionHeader];
 }
+
 -(void)didChangeSubtaskController:(SubtaskController *)controller{
     [self updateSectionHeader];
 }
+
 -(void)subtaskController:(SubtaskController *)controller editingCellWithFrame:(CGRect)frame{
     self.activeEditMode = KPEditModeActionSteps;
     CGRect superFrame = frame;
     superFrame.origin.y = frame.origin.y + self.subtasksContainer.frame.origin.y;
     self.editingFrame = superFrame;
 }
-
 
 -(void)keyboardWillShow:(NSNotification*)notification{
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -1151,6 +1151,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.scrollView.contentOffset = CGPointMake(0, newY);
     [UIView commitAnimations];
 }
+
 -(void)keyboardWillHide:(NSNotification*)notification{
     self.editingFrame = CGRectZero;
     self.subtasksController.tableView.reorderingEnabled = YES;
@@ -1222,9 +1223,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [object setTextColor:tcolor(TextColor)];
     //if([object respondsToSelector:@selector(setHighlightedTextColor:)]) [object setHighlightedTextColor:EDIT_TASK_GRAYED_OUT_TEXT];
 }
-
-
-
 
 
 - (void)viewDidLoad

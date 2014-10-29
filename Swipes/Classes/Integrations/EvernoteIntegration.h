@@ -8,42 +8,48 @@
 
 #import <Foundation/Foundation.h>
 #import <ENSDK/Advanced/ENSDKAdvanced.h>
+
 typedef void (^NoteListBlock)(EDAMNoteList *list, NSError *error);
+typedef void (^NoteFindBlock)(NSArray *findNotesResults, NSError *error);
 typedef void (^NoteBlock)(EDAMNote *note, NSError *error);
+typedef void (^NoteDownloadBlock)(ENNote *note, NSError *error);
+typedef void (^NoteUpdateBlock)(ENNoteRef *noteRef, NSError *error);
 #define kEnInt [EvernoteIntegration sharedInstance]
 extern NSString* const MONExceptionHandlerDomain;
 extern const int MONNSExceptionEncounteredErrorCode;
 
 @interface EvernoteIntegration : NSObject
 
-@property (nonatomic) BOOL enableSync;
-@property (nonatomic) BOOL hasAskedForPermissions;
-@property NSString *tagGuid;
-@property NSInteger requestCounter;
-@property NSString *tagName;
-@property (nonatomic) BOOL autoFindFromTag;
-@property NSDate *rateLimit;
-@property (nonatomic) BOOL isAuthenticated;
 + (instancetype)sharedInstance;
 + (void)updateAPILimitIfNeeded:(NSError *)error;
 + (BOOL)isAPILimitReached;
 + (NSUInteger)minutesUntilAPILimitReset;
 + (NSString *)APILimitReachedMessage;
++ (NSString *)ENNoteRefToNSString:(ENNoteRef *)noteRef;
++ (ENNoteRef *)NSStringToENNoteRef:(NSString *)string;
++ (BOOL)isNoteRefString:(NSString *)string;
 
-- (void)loadEvernoteIntegrationObject:(NSDictionary*)object;
+@property (nonatomic, assign) BOOL enableSync;
+@property (nonatomic, assign) BOOL hasAskedForPermissions;
+@property (nonatomic, strong) NSString *tagGuid;
+@property (nonatomic, assign) NSInteger requestCounter;
+@property (nonatomic, strong) NSString *tagName;
+@property (nonatomic, assign) BOOL autoFindFromTag;
+@property (nonatomic, strong) NSDate *rateLimit;
+@property (nonatomic, assign) BOOL isAuthenticated;
 
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
 
-- (void)saveNote:(EDAMNote*)note block:(NoteBlock)block;
+- (void)updateNote:(EDAMNote*)note block:(NoteBlock)block;
 - (void)fetchNoteWithGuid:(NSString *)guid block:(NoteBlock)block;
-- (void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block;
+- (void)downloadNoteWithRef:(ENNoteRef *)noteRef block:(NoteDownloadBlock)block;
+//- (void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block;
+- (void)findNotesWithSearch:(NSString *)search block:(NoteFindBlock)block;
+- (void)updateNote:(ENNote*)note noteRef:(ENNoteRef *)noteRef block:(NoteUpdateBlock)block;
 
 - (void)logout;
 
-
 /* Caching of notes */
-- (void)clearCaches;
-- (void)addNote:(EDAMNote *)note forGuid:(NSString *)guid;
-- (void)removeNoteForGuid:(NSString *)guid;
+- (void)cacheClear;
 
 @end

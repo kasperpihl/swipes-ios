@@ -1,5 +1,7 @@
 
+#import <ENSDK/Advanced/ENSDKAdvanced.h>
 #import "CoreSyncHandler.h"
+#import "EvernoteIntegration.h"
 #import "KPAttachment.h"
 
 NSString* const EVERNOTE_SERVICE = @"evernote";
@@ -11,11 +13,17 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
 
 
 @implementation KPAttachment
-+( NSArray *)findAttachmentsForService:(NSString*)service identifier:(NSString*)identifier context:(NSManagedObjectContext *)context{
++( NSArray *)findAttachmentsForService:(NSString*)service identifier:(NSString *)identifier context:(NSManagedObjectContext *)context{
     if(!context)
         context = KPCORE.context;
-    NSPredicate *findPredicate = [NSPredicate predicateWithFormat:@"service = %@ AND identifier = %@",service,identifier];
-    return [KPAttachment MR_findAllWithPredicate:findPredicate inContext:context];
+    NSPredicate *findPredicate = [NSPredicate predicateWithFormat:@"service = %@ AND identifier = %@", service, identifier];
+    NSArray* result = [KPAttachment MR_findAllWithPredicate:findPredicate inContext:context];
+    if (0 == result.count && [EvernoteIntegration isNoteRefString:identifier]) {
+        ENNoteRef* noteRef = [EvernoteIntegration NSStringToENNoteRef:identifier];
+        findPredicate = [NSPredicate predicateWithFormat:@"service = %@ AND identifier = %@", service, noteRef.guid];
+        result = [KPAttachment MR_findAllWithPredicate:findPredicate inContext:context];
+    }
+    return result;
 }
 + (instancetype)attachmentForService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync
 {

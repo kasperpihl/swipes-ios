@@ -151,7 +151,6 @@
     selectionView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.selectedBackgroundView = selectionView;
     
-    
     self.dotView = [[DotView alloc] init];
 
     self.dotView.dotColor = tcolor(TasksColor);

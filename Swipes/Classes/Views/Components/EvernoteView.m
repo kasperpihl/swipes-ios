@@ -27,7 +27,7 @@
 #define POPUP_WIDTH 300
 #define MAX_HEIGHT 500
 
-#define kSearchLimit 10     // when _limitSearch is YES this is the limit
+NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
 
 @interface EvernoteView () <UITableViewDataSource, UITableViewDelegate, EvernoteViewerViewDelegate, UITextFieldDelegate>
 
@@ -36,7 +36,7 @@
 @property (nonatomic, strong) UITextField* searchBar;
 @property (nonatomic, strong) UIButton* backButton;
 
-@property (nonatomic, strong) EDAMNoteList* noteList;
+@property (nonatomic, strong) NSArray* findNotesResults;
 
 @property (nonatomic, strong) EvernoteViewerView* viewer;
 @property (nonatomic) CheckmarkButton *checkmark;
@@ -45,7 +45,7 @@
 
 @implementation EvernoteView {
     NSTimer* _timer;
-    EDAMNote* _selectedNote;
+    ENSessionFindNotesResult* _selectedNote;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -114,6 +114,7 @@
         self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 0, 0);
         self.tableView.backgroundColor = CLEAR;
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.tableView.rowHeight = 46;
         [contentView addSubview:self.tableView];
         
         [self searchBar:_searchBar textDidChange:nil];
@@ -124,23 +125,25 @@
         sectionHeader.lineThickness = 2;
         [contentView addSubview:sectionHeader];
         
-        
+        [[Global sharedDefaults] registerDefaults:@{kKeyCheckmarkState: @(YES)}];
         CheckmarkButton *checkmarkButton = [[CheckmarkButton alloc] initWithFrame:CGRectMake(startX, 0, kSearchBarHeight, kSearchBarHeight)];
         checkmarkButton.backgroundColor = kEvernoteColor;
         checkmarkButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-        checkmarkButton.selected = YES;
+        checkmarkButton.selected = [[Global sharedDefaults] boolForKey:kKeyCheckmarkState];
+        [checkmarkButton addTarget:self action:@selector(pressedCheck:) forControlEvents:UIControlEventTouchUpInside];
+
         CGRectSetY(checkmarkButton, CGRectGetHeight(contentView.frame) - kSearchBarHeight);
         
         [contentView addSubview:checkmarkButton];
         self.checkmark = checkmarkButton;
         
-        UILabel *syncTasksLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(checkmarkButton.frame), CGRectGetMinY(checkmarkButton.frame), CGRectGetWidth(contentView.frame) - CGRectGetMaxX(checkmarkButton.frame)-kContentSpacingRight, kSearchBarHeight)];
-        syncTasksLabel.backgroundColor = kEvernoteColor;
-        syncTasksLabel.text = @"Sync tasks from Evernote";
-        syncTasksLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-        syncTasksLabel.textColor = tcolorF(TextColor, ThemeDark);
-        syncTasksLabel.font = KP_REGULAR(14);
-        [contentView addSubview:syncTasksLabel];
+        UILabel *checkmarkOnlyLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(checkmarkButton.frame), CGRectGetMinY(checkmarkButton.frame), CGRectGetWidth(contentView.frame) - CGRectGetMaxX(checkmarkButton.frame)-kContentSpacingRight, kSearchBarHeight)];
+        checkmarkOnlyLabel.backgroundColor = kEvernoteColor;
+        checkmarkOnlyLabel.text = @"Only notes with ToDo inside";
+        checkmarkOnlyLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        checkmarkOnlyLabel.textColor = tcolorF(TextColor, ThemeDark);
+        checkmarkOnlyLabel.font = KP_REGULAR(14);
+        [contentView addSubview:checkmarkOnlyLabel];
         
         // initiate the start lookup
         [self addSubview:contentView];
@@ -155,7 +158,10 @@
                                                  selector:@selector(keyboardWillHide:)
                                                      name:UIKeyboardWillHideNotification
                                                    object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:UIDeviceOrientationDidChangeNotification  object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(orientationChanged:)
+                                                     name:UIDeviceOrientationDidChangeNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -210,7 +216,13 @@
     [UIView commitAnimations];
 }
 
-
+- (void)pressedCheck:(id)sender
+{
+    DLog(@"checked: %@", self.checkmark.selected ? @"YES" : @"NO");
+    [[Global sharedDefaults] setBool:self.checkmark.selected forKey:kKeyCheckmarkState];
+    [[Global sharedDefaults] synchronize];
+    [self searchNoteStore:sender];
+}
 
 - (void)cancel:(id)sender
 {
@@ -235,17 +247,14 @@
     if (kEnInt.isAuthenticated) {
         DLog(@"running search");
         
-        __block NSString* searchBarText = _searchBar.text;
-        
         if ([EvernoteIntegration isAPILimitReached]) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": [EvernoteIntegration APILimitReachedMessage], @"duration": @(3.5) } ];
         }
         
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-        
-        
-        EDAMNoteFilter* filter = [EDAMNoteFilter new];
 
+        NSString* searchBarText = _searchBar.text;
+        NSString* searchText = @"";
         // Added a better working search term: http://dev.evernote.com/doc/articles/search_grammar.php
         if (searchBarText.length > 0){
             NSArray *words = [searchBarText componentsSeparatedByString:@" "];
@@ -257,24 +266,18 @@
                     [searchTerm appendFormat:@"%@* ",trimmedString];
             }
             if (searchTerm.length > 0)
-                filter.words = [searchTerm copy];
+                searchText = [searchTerm copy];
         }
-        filter.order = @(NoteSortOrder_UPDATED);
-        filter.ascending = NO;
         // setup additional flags
-        if (0 == searchBarText.length) { // remove this check if you want order to be always by UPDATED
-            filter.words = @"";
+        if (self.checkmark.selected) {
+            searchText = [NSString stringWithFormat:@"todo:* %@", searchText];
         }
-        [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kSearchLimit block:^(EDAMNoteList *list, NSError *error) {
+        [kEnInt findNotesWithSearch:searchText block:^(NSArray *findNotesResults, NSError *error) {
             if (error) {
                 [EvernoteIntegration updateAPILimitIfNeeded:error];
             }
-            if( list ){
-//                for (EDAMNote* note in list.notes) {
-//                    DLog(@"Last update: %@",[NSDate dateWithTimeIntervalSince1970:note.updated/1000]);
-//                    DLog(@"Note title: %@, guid: %@", note.title, note.guid);
-//                }
-                _noteList = list;
+            if( findNotesResults ){
+                _findNotesResults = findNotesResults;
                 //_limitSearch = (filter.order == NoteSortOrder_UPDATED);
                 [_tableView reloadData];
                 
@@ -283,14 +286,9 @@
             }
             else{
                 [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                // failure... show error notification, etc
-                /*if ([ENSession isTokenExpiredWithError:error]) {
-                    // trigger auth again
-                    [self evernoteAuthenticateUsingSelector:@selector(searchNoteStore:) withObject:nil];
-                }*/
             }
         }];
-
+        
         
     }
     else {
@@ -310,8 +308,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger result = _noteList.notes.count;
-    return result;
+    if (_findNotesResults)
+        return _findNotesResults.count;
+    return 0;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -319,18 +318,14 @@
     cell.contentView.backgroundColor = kEvernoteColor;
     cell.textLabel.textColor = tcolorF(TextColor,ThemeDark);
     cell.detailTextLabel.textColor = tcolorF(TextColor,ThemeDark);
-    EDAMNote* note = _noteList.notes[indexPath.row];
-    if (note.title && note.title.length > 0) {
-        cell.textLabel.text = note.title;
-    }
-    else if (note.content && note.content.length > 0) {
-        cell.textLabel.text = note.content;
+    ENSessionFindNotesResult* noteData = _findNotesResults[indexPath.row];
+    if (noteData.title && noteData.title.length > 0) {
+        cell.textLabel.text = noteData.title;
     }
     else {
         cell.textLabel.text = @"Untitled";
     }
-    NSDate *updatedAt = [NSDate dateWithTimeIntervalSince1970:[note.updated integerValue]/1000];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:updatedAt showTime:YES]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [UtilityClass readableTime:noteData.updated showTime:YES]];
 }
 
 
@@ -352,22 +347,14 @@
     return cell;
 }
 
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 46;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     NSInteger index = indexPath.row;
-    _selectedNote = _noteList.notes[index];
+    _selectedNote = _findNotesResults[index];
     if ([_searchBar isFirstResponder])
         [_searchBar resignFirstResponder];
-    
-    [_delegate selectedEvernoteInView:self guid:_selectedNote.guid title:_selectedNote.title sync:self.checkmark.selected];
+    [_delegate selectedEvernoteInView:self noteRef:_selectedNote.noteRef title:_selectedNote.title sync:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-    
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -405,7 +392,7 @@
 {
     [_viewer removeFromSuperview];
     _viewer = nil;
-    [_delegate selectedEvernoteInView:self guid:_selectedNote.guid title:_selectedNote.title sync:self.checkmark.selected];
+    [_delegate selectedEvernoteInView:self noteRef:_selectedNote.noteRef title:_selectedNote.title sync:YES];
 }
 
 @end

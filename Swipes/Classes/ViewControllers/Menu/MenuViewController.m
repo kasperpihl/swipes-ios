@@ -313,7 +313,6 @@
             NotificationsViewController *notifVC = [[NotificationsViewController alloc] init];
             [self pushViewController:notifVC animated:YES];
             break;
-#warning Do we need a break here?
 //            BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
 //            UIColor *lampColor = hasNotificationsOn ? kLampOffColor : kLampOnColor;
 //            NSNumber *newSettingValue = hasNotificationsOn ? @NO : @YES;

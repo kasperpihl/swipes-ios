@@ -5,6 +5,8 @@
 //  Created by Kasper Pihl Tornøe on 04/07/14.
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
+
+#import "MF_Base64Additions.h"
 #import "UtilityClass.h"
 #import "SettingsHandler.h"
 #import "EvernoteIntegration.h"
@@ -13,8 +15,10 @@
 
 NSString* const kKeyData = @"data";
 NSString* const kKeyDate = @"date";
-NSTimeInterval const kSearchTimeout = 120;
+
+NSTimeInterval const kSearchTimeout = 300;
 NSTimeInterval const kNoteTimeout = (3600*24);
+NSTimeInterval const kReadOnlyNoteTimeout = 10800; // 3 hours
 
 int32_t const kPaginator = 100;
 NSInteger const kApiLimitReachedErrorCode = 19;
@@ -22,7 +26,8 @@ NSString * const kSwipesTagName = @"swipes";
 NSString * const kHasAskedForPermissionKey = @"HasAskedForEvernotePermission";
 NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
 NSString* const MONExceptionHandlerDomain = @"Exception";
-const int MONNSExceptionEncounteredErrorCode = 119;
+int const MONNSExceptionEncounteredErrorCode = 119;
+
 NSError * NewNSErrorFromException(NSException * exc) {
     NSMutableDictionary * info = [NSMutableDictionary dictionary];
     [info setValue:exc.name forKey:@"MONExceptionName"];
@@ -36,13 +41,15 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 @interface EvernoteIntegration ()
 
-@property BOOL isAuthing;
+@property (nonatomic, assign) BOOL isAuthing;
 
 @end
 
 @implementation EvernoteIntegration {
     NSMutableDictionary* _searchCache;
     NSMutableDictionary* _noteCache;
+    NSMutableDictionary* _noteRefCache;
+    NSMutableDictionary* _readOnlyNoteRefCache;
 }
 
 + (instancetype)sharedInstance
@@ -51,6 +58,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     static id sharedInstance;
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
+        [ENSession setDisableRefreshingNotebooksCacheOnLaunch:YES]; // check is this better
     });
     return sharedInstance;
 }
@@ -87,7 +95,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     if (nil == limitDate) {
         return 0;
     }
-    return fabs([limitDate timeIntervalSinceNow] / 60);;
+    return fabs([limitDate timeIntervalSinceNow] / 60);
 }
 
 + (NSString *)APILimitReachedMessage
@@ -103,17 +111,32 @@ NSError * NewNSErrorFromException(NSException * exc) {
     return message;
 }
 
++ (NSString *)ENNoteRefToNSString:(ENNoteRef *)noteRef
+{
+    return [[noteRef asData] base64String];
+}
+
++ (ENNoteRef *)NSStringToENNoteRef:(NSString *)string
+{
+    return [ENNoteRef noteRefFromData:[NSData dataWithBase64String:string]];
+}
+
++ (BOOL)isNoteRefString:(NSString *)string
+{
+    return (string && (40 < string.length));
+}
+
 - (instancetype)init
 {
     self = [super init];
     if (self) {
         _searchCache = [NSMutableDictionary new];
         _noteCache = [NSMutableDictionary new];
+        _noteRefCache = [NSMutableDictionary new];
+        _readOnlyNoteRefCache = [NSMutableDictionary new];
         self.autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
         self.enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
         self.hasAskedForPermissions = [USER_DEFAULTS boolForKey:kHasAskedForPermissionKey];
-        //NSDictionary *currentIntegration = (NSDictionary*)[kSettings valueForSetting:IntegrationEvernote];
-        //[self loadEvernoteIntegrationObject:currentIntegration];
     }
     return self;
 }
@@ -124,8 +147,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
     [USER_DEFAULTS synchronize];
 }
 
-
-
 - (void)setEnableSync:(BOOL)enableSync
 {
     _enableSync = enableSync;
@@ -135,29 +156,21 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)setAutoFindFromTag:(BOOL)autoFindFromTag
 {
     _autoFindFromTag = autoFindFromTag;
-    if(autoFindFromTag){
-        [self getSwipesTagGuidBlock:^(NSString *string, NSError *error) {
-            if( string ){
-                self.tagGuid = string;
-                self.tagName = @"swipes";
-            }
-        }];
-    }
+//    if(autoFindFromTag){
+//        [self swipesTagGuidBlock:^(NSString *string, NSError *error) {
+//            if( string ){
+//                self.tagGuid = string;
+//                self.tagName = @"swipes";
+//            }
+//        }];
+//    }
     [kSettings setValue:@(autoFindFromTag) forSetting:IntegrationEvernoteSwipesTag];
 }
 
-- (void)loadEvernoteIntegrationObject:(NSDictionary *)object
-{
-    /*self.tagName = [object objectForKey:@"tagName"];
-    self.tagGuid = [object objectForKey:@"tagGuid"];
-    if(self.tagName || self.tagGuid)
-        self.autoFindFromTag = YES;*/
-}
-
-- (void)saveNote:(EDAMNote*)note block:(NoteBlock)block
+- (void)updateNote:(EDAMNote*)note block:(NoteBlock)block
 {
     NSError *error;
-    ENNoteStoreClient *noteStore = [self getNoteStoreError:&error];
+    ENNoteStoreClient *noteStore = [self primaryNoteStoreError:&error];
     if(error){
         return block(nil,error);
     }
@@ -168,7 +181,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
             if( block )
                 block( note, nil );
             if (note.guid && note.guid.length > 0)
-                [self addNote:note forGuid:note.guid];
+                [self cacheAddNote:note forGuid:note.guid];
         } failure:^(NSError *error) {
             [self handleError:error withType:@"Evernote Update Note Error"];
             if( block)
@@ -186,17 +199,18 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)fetchNoteWithGuid:(NSString *)guid block:(NoteBlock)block
 {
     // try to get it from cache
-    NSError *error;
-    ENNoteStoreClient *noteStore = [self getNoteStoreError:&error];
-    if(error){
-        return block(nil,error);
-    }
-    __block EDAMNote *cachedNote = [self noteForGuid:guid];
+    __block EDAMNote *cachedNote = [self cacheNoteForGuid:guid];
     if (cachedNote) {
         dispatch_async(dispatch_get_main_queue(), ^{
             block(cachedNote, nil);
         });
         return;
+    }
+
+    NSError *error;
+    ENNoteStoreClient *noteStore = [self primaryNoteStoreError:&error];
+    if(error){
+        return block(nil,error);
     }
     
     @try {
@@ -206,7 +220,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
             if( block )
                 block( note , nil );
             
-            [self addNote:note forGuid:guid];
+            [self cacheAddNote:note forGuid:guid];
             
         } failure:^(NSError *error) {
             [self handleError:error withType:@"Evernote Get Note Error"];
@@ -219,11 +233,10 @@ NSError * NewNSErrorFromException(NSException * exc) {
         block(nil, error);
         [UtilityClass sendException:exception type:@"Evernote Get Note Exception"];
     }
-    
-    
 }
 
--(ENNoteStoreClient*)getNoteStoreError:(NSError**)error{
+- (ENNoteStoreClient *)primaryNoteStoreError:(NSError**)error
+{
     ENSession *session = [ENSession sharedSession];
     if(!session.isAuthenticated){
         NSError* authError = [NSError errorWithDomain:@"Evernote not authenticated" code:601 userInfo:nil];
@@ -231,39 +244,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
     }
     
     return [session primaryNoteStore];
-}
-
-- (void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block {
-    
-    // try to get it from cache
-    
-    /*__block EDAMNoteList *cachedList = [self searchListForText:filter.words ? filter.words : @""];
-    if (cachedList) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            block(cachedList, nil);
-        });
-        return;
-    }*/
-    NSError *error;
-    ENNoteStoreClient *noteStore = [self getNoteStoreError:&error];
-    if(error){
-        return block(nil,error);
-    }
-    @try {
-        self.requestCounter++;
-        [noteStore findNotesWithFilter:filter offset:0 maxNotes:kPaginator success:^(EDAMNoteList *list) {
-            [self addSearchList:list forText:filter.words ? filter.words : @""];
-            block(list, nil);
-        } failure:^(NSError *error) {
-            [self handleError:error withType:@"Evernote Fetch Notes with Filter Error"];
-            block(nil,error);
-        }];
-    }
-    @catch (NSException *exception) {
-        NSError *error = NewNSErrorFromException(exception);
-        block(nil, error);
-        [UtilityClass sendException:exception type:@"Evernote Fetch Notes with Filter Exception"];
-    }
 }
 
 - (BOOL)isAuthenticated
@@ -297,14 +277,14 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)logout
 {
     [[ENSession sharedSession] unauthenticate];
-    [self clearCaches];
+    [self cacheClear];
 }
 
-- (void)getSwipesTagGuidBlock:(StringBlock)block
+- (void)swipesTagGuidBlock:(StringBlock)block
 {
     NSError *error;
-    ENNoteStoreClient *noteStore = [self getNoteStoreError:&error];
-    if(error){
+    ENNoteStoreClient* noteStore = [self primaryNoteStoreError:&error];
+    if (error) {
         return block(nil,error);
     }
     @try {
@@ -319,7 +299,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
             }
             
             if (!swipesTagGuid){
-                [self createSwipesTagBlock:block];
+                [self createSwipesTagBlock:block inNoteStore:noteStore];
             }
             else
                 block(swipesTagGuid, nil);
@@ -337,13 +317,8 @@ NSError * NewNSErrorFromException(NSException * exc) {
 }
 
 
-- (void)createSwipesTagBlock:(StringBlock)block
+- (void)createSwipesTagBlock:(StringBlock)block inNoteStore:(ENNoteStoreClient *)noteStore
 {
-    NSError *error;
-    ENNoteStoreClient *noteStore = [self getNoteStoreError:&error];
-    if(error){
-        return block(nil,error);
-    }
     @try {
         self.requestCounter++;
         EDAMTag *swipesTag = [[EDAMTag alloc] init];
@@ -376,15 +351,101 @@ NSError * NewNSErrorFromException(NSException * exc) {
     return NO;
 }
 
+#pragma mark - New API
+
+- (void)findNotesWithSearch:(NSString *)search block:(NoteFindBlock)block
+{
+    // try to get it from cache
+    NSArray *cachedFindNotesResults = [self cacheFindNotesResultsForText:search];
+    if (cachedFindNotesResults) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            block(cachedFindNotesResults, nil);
+        });
+        return;
+    }
+    
+    ENSession* session = [ENSession sharedSession];
+    ENNoteSearch* noteSearch = [ENNoteSearch noteSearchWithSearchString:search];
+    
+    self.requestCounter++;
+    [session findNotesWithSearch:noteSearch inNotebook:nil orScope:ENSessionSearchScopePersonal | ENSessionSearchScopeBusiness | ENSessionSearchScopePersonalLinked sortOrder:ENSessionSortOrderRecentlyUpdated maxResults:kPaginator completion:^(NSArray *findNotesResults, NSError *error) {
+        
+        if (!error) {
+            [self cacheAddSearchResult:findNotesResults forText:search];
+            block(findNotesResults, nil);
+        }
+        else {
+            [self handleError:error withType:@"Evernote Find Notes Error"];
+            block(nil, error);
+        }
+        
+    }];
+}
+
+- (void)downloadNoteWithRef:(ENNoteRef *)noteRef block:(NoteDownloadBlock)block
+{
+    // try to get it from cache
+    ENNote* cachedNote = [self cacheNoteForRef:noteRef];
+    if (cachedNote) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            block(cachedNote, nil);
+        });
+        return;
+    }
+    
+    ENSession* session = [ENSession sharedSession];
+    self.requestCounter++;
+    [session downloadNote:noteRef progress:nil completion:^(ENNote *note, NSError *error) {
+        if (!error) {
+            [self cacheAddNote:note forNoteRef:noteRef];
+            block(note, nil);
+        }
+        else {
+            [self handleError:error withType:@"Evernote Find Notes Error"];
+            block(nil, error);
+        }
+    }];
+}
+
+- (void)updateNote:(ENNote*)note noteRef:(ENNoteRef *)noteRef block:(NoteUpdateBlock)block
+{
+    NSError* cacheError = [self cacheReadOnlyNoteForRef:noteRef];
+    if (cacheError) {
+        block(nil, nil);
+        return;
+    }
+    
+    self.requestCounter++;
+    [[ENSession sharedSession] uploadNote:note policy:ENSessionUploadPolicyReplace toNotebook:nil orReplaceNote:noteRef progress:nil completion:^(ENNoteRef *newNoteRef, NSError *error) {
+        if (nil == error) {
+            [self cacheAddNote:note forNoteRef:newNoteRef];
+            block(newNoteRef, nil);
+        }
+        else {
+            NSNumber* errorCode = error.userInfo[@"EDAMErrorCode"];
+            if (errorCode && (EDAMErrorCode_PERMISSION_DENIED == [errorCode integerValue])) {
+                [self cacheAddReadOnlyNoteForRef:noteRef withError:error];
+                block(nil, nil);
+            }
+            else {
+                [self handleError:error withType:@"Evernote Update Note Error"];
+                block(nil, error);
+            }
+        }
+    }];
+}
+
 #pragma mark - Caches
 
-- (void)clearCaches
+- (void)cacheClear
 {
     [_searchCache removeAllObjects];
     [_noteCache removeAllObjects];
+    [_noteRefCache removeAllObjects];
+    [_readOnlyNoteRefCache removeAllObjects];
 }
 
-- (EDAMNoteList *)searchListForText:(NSString *)text
+- (NSArray *)cacheFindNotesResultsForText:(NSString *)text
 {
     // purge old entries
     NSDate* now = [NSDate date];
@@ -398,12 +459,12 @@ NSError * NewNSErrorFromException(NSException * exc) {
     return _searchCache[text][kKeyData];
 }
 
-- (void)addSearchList:(EDAMNoteList *)list forText:(NSString *)text
+- (void)cacheAddSearchResult:(NSArray *)findNotesResults forText:(NSString *)text
 {
-    _searchCache[text] = @{kKeyData: list, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kSearchTimeout]};
+    _searchCache[text] = @{kKeyData: findNotesResults, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kSearchTimeout]};
 }
 
-- (EDAMNote *)noteForGuid:(NSString *)guid
+- (EDAMNote *)cacheNoteForGuid:(NSString *)guid
 {
     // purge old entries
     NSDate* now = [NSDate date];
@@ -417,16 +478,65 @@ NSError * NewNSErrorFromException(NSException * exc) {
     return _noteCache[guid][kKeyData];
 }
 
-- (void)addNote:(EDAMNote *)note forGuid:(NSString *)guid
+- (void)cacheAddNote:(EDAMNote *)note forGuid:(NSString *)guid
 {
-    if(!note.content || note.content.length == 0)
-        return [self removeNoteForGuid:guid];
-    _noteCache[guid] = @{kKeyData: note, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kNoteTimeout]};
+    if (!note.content || note.content.length == 0)
+        [self cacheRemoveNoteForGuid:guid];
+    else
+        _noteCache[guid] = @{kKeyData: note, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kNoteTimeout]};
 }
 
-- (void)removeNoteForGuid:(NSString *)guid
+- (void)cacheRemoveNoteForGuid:(NSString *)guid
 {
     [_noteCache removeObjectForKey:guid];
 }
+
+- (ENNote *)cacheNoteForRef:(ENNoteRef *)noteRef
+{
+    // purge old entries
+    NSDate* now = [NSDate date];
+    for (NSString* key in [_noteRefCache allKeys]) {
+        NSDictionary* data = _noteRefCache[key];
+        if (0 < [now timeIntervalSinceDate:data[kKeyDate]]) {
+            [_noteRefCache removeObjectForKey:key];
+        }
+    }
+    
+    return _noteRefCache[noteRef][kKeyData];
+}
+
+- (void)cacheAddNote:(ENNote *)note forNoteRef:(ENNoteRef *)noteRef
+{
+    if (!note.content)
+        [self cacheRemoveNoteForRef:noteRef];
+    else
+        _noteRefCache[noteRef] = @{kKeyData: note, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kNoteTimeout]};
+}
+
+- (void)cacheRemoveNoteForRef:(ENNoteRef *)noteRef
+{
+    [_noteRefCache removeObjectForKey:noteRef];
+}
+
+- (NSError *)cacheReadOnlyNoteForRef:(ENNoteRef *)noteRef
+{
+    // purge old entries
+    NSDate* now = [NSDate date];
+    for (NSString* key in [_readOnlyNoteRefCache allKeys]) {
+        NSDictionary* data = _readOnlyNoteRefCache[key];
+        if (0 < [now timeIntervalSinceDate:data[kKeyDate]]) {
+            [_readOnlyNoteRefCache removeObjectForKey:key];
+        }
+    }
+    
+    return _readOnlyNoteRefCache[noteRef][kKeyData];
+}
+
+- (void)cacheAddReadOnlyNoteForRef:(ENNoteRef *)noteRef withError:(NSError *)error
+{
+    _readOnlyNoteRefCache[noteRef] = @{kKeyData: error, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kReadOnlyNoteTimeout]};
+}
+
+
 
 @end

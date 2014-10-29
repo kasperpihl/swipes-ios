@@ -7,7 +7,7 @@
 //
 
 #import "Underscore.h"
-
+#import "MF_Base64Additions.h"
 #import "KPToDo.h"
 #import "KPAttachment.h"
 #import "EvernoteToDoProcessor.h"
@@ -45,15 +45,12 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 @end
 @implementation EvernoteSyncHandler
 
-+(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes{
-    for( EDAMNote *note in notes ){
-        
++(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes
+{
+    for (ENSessionFindNotesResult *note in notes){
         NSString *title;
         if (note.title) {
             title = note.title;
-        }
-        else if (note.content) {
-            title = note.content;
         }
         else {
             title = @"Untitled note";
@@ -61,9 +58,9 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         if(title.length > kTitleMaxLength)
             title = [title substringToIndex:kTitleMaxLength];
         KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO];
-        [newToDo attachService:EVERNOTE_SERVICE title:title identifier:note.guid sync:YES];
+        [newToDo attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:note.noteRef] sync:YES];
     }
-    if(notes.count > 0)
+    if (notes.count > 0)
         [KPCORE saveContextForSynchronization:nil];
     return nil;
 }
@@ -111,7 +108,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 
 -(void)clearCache{
     self.needToClearCache = YES;
-    [[EvernoteIntegration sharedInstance] clearCaches];
+    [[EvernoteIntegration sharedInstance] cacheClear];
 }
 
 // Just testing
@@ -307,17 +304,23 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
             return self.block(SyncStatusSuccess, nil, nil );
         }
     }
-    if(self.needToClearCache)
+
+    if (self.needToClearCache)
         self.needToClearCache = NO;
-    [self findUpdatedNotesWithTag:@"swipes" block:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
-        if(error){
-            block(SyncStatusError, nil, error);
-        }
-        else{
-            [self syncEvernoteWithBlock:block];
-        }
-    }];
     
+    if (kEnInt.autoFindFromTag) {
+        [self findUpdatedNotesWithTag:@"swipes" block:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
+            if(error){
+                block(SyncStatusError, nil, error);
+            }
+            else{
+                [self syncEvernoteWithBlock:block];
+            }
+        }];
+    }
+    else {
+        [self syncEvernoteWithBlock:block];
+    }
 }
 -(BOOL)checkForLocalChanges{
     self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
@@ -333,8 +336,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 
 -(void)findUpdatedNotesWithTag:(NSString*)tag block:(SyncBlock)block{
     
-    EDAMNoteFilter* filter = [EDAMNoteFilter new];
-    NSMutableString *mutWords = [NSMutableString stringWithFormat:@"tag:%@",tag];
+    NSMutableString *mutWords = [NSMutableString stringWithFormat:@"tag:%@", tag];
     if(self.lastUpdated){
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
@@ -343,29 +345,24 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         [mutWords appendFormat:@" updated:%@",isoString];
     }
     
-    filter.words = [mutWords copy];
-    filter.order = @(NoteSortOrder_UPDATED);
-    filter.ascending = [NSNumber numberWithBool:NO];
-    
-    [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kMaxNotes block:^(EDAMNoteList *list, NSError *error) {
-        if(list){
-            DLog(@"%lu",(long)list.updateCount);
+    [kEnInt findNotesWithSearch:mutWords block:^(NSArray *findNotesResults, NSError *error) {
+        if (findNotesResults) {
+//            DLog(@"%lu",(long)list.updateCount);
             
-            [self updateEvernoteCount:[list.updateCount integerValue]];
-            if( kEnInt.autoFindFromTag ){
+#warning Should we update count somehow?
+//            [self updateEvernoteCount:[list.updateCount integerValue]];
+            if (kEnInt.autoFindFromTag) {
                 NSMutableArray *newNotes = [NSMutableArray array];
-                for( EDAMNote *note in list.notes ){
-                    NSArray *existingTasks = [KPAttachment findAttachmentsForService:EVERNOTE_SERVICE identifier:note.guid context:nil];
+                for (ENSessionFindNotesResult *findNoteResult in findNotesResults) {
+                    NSArray *existingTasks = [KPAttachment findAttachmentsForService:EVERNOTE_SERVICE identifier:[EvernoteIntegration ENNoteRefToNSString:findNoteResult.noteRef] context:nil];
                     if(existingTasks.count == 0){
-                        [newNotes addObject:note];
+                        [newNotes addObject:findNoteResult];
                     }
-                    [self.changedNotes addObject:note];
-                    if(note.guid && note.guid.length > 0)
-                        [kEnInt addNote:note forGuid:note.guid];
+                    [self.changedNotes addObject:findNoteResult];
                 }
                 [EvernoteSyncHandler addAndSyncNewTasksFromNotes:newNotes];
             }
-            if( self.updateNeededFromEvernote )
+            if (self.updateNeededFromEvernote)
                 [self fetchEvernoteChangesWithBlock:block];
             else
                 [self syncEvernoteWithBlock:block];
@@ -377,7 +374,6 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 }
 
 -(void)fetchEvernoteChangesWithBlock:(SyncBlock)block{
-    EDAMNoteFilter* filter = [EDAMNoteFilter new];
     NSString *searchString;
     if(self.lastUpdated){
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -388,23 +384,29 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         searchString = [NSString stringWithFormat:@"updated:%@",isoString];
     }
     
-    filter.words = searchString;
-    
-    filter.order = @(NoteSortOrder_UPDATED);
-    filter.ascending = [NSNumber numberWithBool:NO];
     DLog(@"fetching changes from Evernote");
-    [kEnInt fetchNotesForFilter:filter offset:0 maxNotes:kMaxNotes block:^(EDAMNoteList *list, NSError *error) {
-        if(list){
-            if(list.notes.count == kMaxNotes || [list.updateCount integerValue] != self.expectedEvernoteCount){
-                DLog(@"clearing all caches");
-                [kEnInt clearCaches];
-            }
+    
+    [kEnInt findNotesWithSearch:searchString block:^(NSArray *findNotesResults, NSError *error) {
+        if (findNotesResults){
+//            if(findNotesResults.count == kMaxNotes || [list.updateCount integerValue] != self.expectedEvernoteCount){
+//                DLog(@"clearing all caches");
+//                [kEnInt cacheClear];
+//            }
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
             NSArray *identifiers = [KPAttachment allIdentifiersForService:EVERNOTE_SERVICE sync:YES context:localContext];
-            for( EDAMNote *note in list.notes ){
-                if([identifiers containsObject:note.guid]){
-                    [self.changedNotes addObject:note];
-                    [kEnInt addNote:note forGuid:note.guid];
+            for (ENSessionFindNotesResult *findNoteResult in findNotesResults) {
+                for (NSString* identifier in identifiers) {
+                    if ([EvernoteIntegration isNoteRefString:identifier]) {
+                        // we have a ENNoteRef
+                        NSData* noteDataRef = [identifier dataUsingEncoding:NSUTF8StringEncoding];
+                        if ([noteDataRef isEqualToData:[findNoteResult.noteRef asData]]) {
+                            [self.changedNotes addObject:findNoteResult];
+//                            [kEnInt cacheAddNote:note forGuid:note.guid];
+                        }
+                    }
+                    else {
+                        // this is the old guid
+                    }
                 }
             }
             [self syncEvernoteWithBlock:block];
@@ -415,10 +417,12 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     }];
 }
 
-
--(BOOL)hasChangedFromEvernoteGuid:(NSString*)guid{
-    for( EDAMNote *note in self.changedNotes ){
-        if( [guid isEqualToString:note.guid] )
+-(BOOL)hasChangedFromEvernoteId:(NSString*)enid
+{
+    for ( ENSessionFindNotesResult* note in self.changedNotes ) {
+        if ([enid isEqualToString:[EvernoteIntegration ENNoteRefToNSString:note.noteRef]])
+            return YES;
+        else if ([enid isEqualToString:note.noteRef.guid])
             return YES;
     }
     return NO;
@@ -476,14 +480,16 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
         
         KPAttachment *evernoteAttachment = [todoWithEvernote firstAttachmentForServiceType:EVERNOTE_SERVICE];
-        NSString *guid = evernoteAttachment.identifier;
+        NSString *enid = evernoteAttachment.identifier;
         
         BOOL hasLocalChanges = [todoWithEvernote hasChangesSinceDate:self.lastUpdated];
-        if(hasLocalChanges)
+        if (hasLocalChanges) {
             DLog(@"local changes: %@",todoWithEvernote.title);
-        BOOL hasChangesFromEvernote = [self hasChangedFromEvernoteGuid:guid];
-        if(hasChangesFromEvernote)
+        }
+        BOOL hasChangesFromEvernote = [self hasChangedFromEvernoteId:enid];
+        if (hasChangesFromEvernote) {
             DLog(@"evernote changes: %@",todoWithEvernote.title);
+        }
         
         if( !hasLocalChanges && !hasChangesFromEvernote ){
             finalizeBlock();
@@ -491,7 +497,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
         }
         syncedAnything = YES;
 
-        [EvernoteToDoProcessor processorWithGuid:guid block:^(EvernoteToDoProcessor *processor, NSError *error) {
+        [EvernoteToDoProcessor processorWithGuid:enid block:^(EvernoteToDoProcessor *processor, NSError *error) {
             
             //NSLog(@"guid:%@",guid);
             if( processor ){
@@ -506,7 +512,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
                             self.expectedEvernoteCount++;
                             //NSLog(@"succeeded save");
                         }
-                        else {
+                        else if (error) {
                             if(!runningError){
                                 runningError = error;
                             }

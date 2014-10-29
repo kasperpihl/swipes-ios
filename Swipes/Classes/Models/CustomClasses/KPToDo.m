@@ -50,7 +50,7 @@
     newToDo.schedule = [NSDate date];
     if(priority) newToDo.priorityValue = 1;
     newToDo.orderValue = kDefOrderVal;
-    if(tags && tags.count > 0)
+    if (tags && tags.count > 0)
         [self updateTags:tags forToDos:@[newToDo] remove:NO save:NO];
     if (save)
         [KPToDo saveToSync];
@@ -60,9 +60,9 @@
     else if(item.length <= 30) taskLength = @"21-30";
     else if(item.length <= 40) taskLength = @"31-40";
     else if(item.length <= 50) taskLength = @"41-50";
+    [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     [ANALYTICS tagEvent:@"Added Task" options:@{@"ActionStep":@(NO),@"Length":taskLength}];
     [ANALYTICS heartbeat];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     
     return newToDo;
 }

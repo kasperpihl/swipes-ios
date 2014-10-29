@@ -80,25 +80,42 @@ static NSSet* g_startEndElements;
     if (self) {
         self.guid = guid;
         _note = nil;
-        [kEnInt fetchNoteWithGuid:guid block:^(EDAMNote *note, NSError *error) {
-            if(note){
-                _note = note;
-                [self parseAndLoadTodos];
-                if(block)
-                    block(YES,nil);
-            }
-            else if(block)
-                block(NO,error);
-        }];
+        if ([EvernoteIntegration isNoteRefString:guid]) {
+            // ENNoteRef
+            [kEnInt downloadNoteWithRef:[EvernoteIntegration NSStringToENNoteRef:guid] block:^(ENNote *note, NSError *error) {
+                if (note) {
+                    _note = note;
+                    [self parseAndLoadTodos];
+                    if(block)
+                        block(YES,nil);
+                }
+                else if(block)
+                    block(NO,error);
+            }];
+        }
+        else {
+            // old guid
+            [kEnInt fetchNoteWithGuid:guid block:^(EDAMNote *note, NSError *error) {
+                if(note){
+                    _note = note;
+                    [self parseAndLoadTodos];
+                    if(block)
+                        block(YES,nil);
+                }
+                else if(block)
+                    block(NO,error);
+            }];
+        }
     }
     return self;
 }
 
--(void)parseAndLoadTodos{
+-(void)parseAndLoadTodos
+{
     // parse
     _untitledCount = 1;
     _todos = [NSMutableArray array];
-    NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[_note.content dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]];
+    NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[[self noteContent] dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]];
     parser.delegate = self;
     if (![parser parse]) {
         [UtilityClass sendError:parser.parserError type:@"Evernote note parse error"];
@@ -137,24 +154,50 @@ static NSSet* g_startEndElements;
 
 -(void)saveToEvernote:(SuccessfulBlock)block{
     if( !self.updatedContent )
-        return block ? block(NO,nil) : nil;
-    EDAMNote* update = [[EDAMNote alloc] init];
-    update.guid = _note.guid;
-    update.title = _note.title;
-    update.content = self.updatedContent;
-    [kEnInt saveNote:update block:^(EDAMNote *note, NSError *error) {
-        if(error){
-            NSDictionary *attachment = @{@"org content":_note.content, @"new content": self.updatedContent};
-            [UtilityClass sendError:error type:@"Evernote Save Note Error" attachment:attachment];
-            if( block)
-                block( NO,error);
-        }
-        else{
-            if( block )
-                block( YES, nil );
-        }
-    }];
+        return block ? block(NO, nil) : nil;
+    if ([_note isKindOfClass:ENNote.class]) {
+        ((ENNote *)_note).content = [[ENNoteContent alloc] initWithENML:self.updatedContent];
+        [kEnInt updateNote:_note noteRef:[EvernoteIntegration NSStringToENNoteRef:self.guid] block:^(ENNoteRef *noteRef, NSError *error) {
+            if (error) {
+                NSDictionary *attachment = @{@"org content":[self noteContent], @"new content": self.updatedContent};
+                [UtilityClass sendError:error type:@"Evernote Save Note Error" attachment:attachment];
+                if (block)
+                    block(NO, error);
+            }
+            if (noteRef && block) {
+                block(YES, nil);
+            }
+            if ((!noteRef) && (!error) && block) {
+                block(NO, nil);
+            }
+        }];
+    }
+    else {
+        EDAMNote* update = [[EDAMNote alloc] init];
+        update.guid = ((EDAMNote *)_note).guid;
+        update.title = ((EDAMNote *)_note).title;
+        update.content = self.updatedContent;
+        [kEnInt updateNote:update block:^(EDAMNote *note, NSError *error) {
+            if (error) {
+                NSDictionary *attachment = @{@"org content":[self noteContent], @"new content": self.updatedContent};
+                [UtilityClass sendError:error type:@"Evernote Save Note Error" attachment:attachment];
+                if( block)
+                    block(NO, error);
+            }
+            else {
+                if (block)
+                    block(YES, nil);
+            }
+        }];
+    }
+}
 
+- (NSString *)noteContent
+{
+    if ([_note isKindOfClass:ENNote.class]) {
+        return ((ENNote *)_note).content.enml;
+    }
+    return ((EDAMNote *)_note).content;
 }
 
 - (BOOL)updateToDo:(EvernoteToDo *)updatedToDo checked:(BOOL)checked
@@ -163,7 +206,7 @@ static NSSet* g_startEndElements;
         //NSLog(@"now we can update our TODO: %@", updatedToDo);
         
         if (!self.updatedContent)
-            self.updatedContent = _note.content;
+            self.updatedContent = [self noteContent];
         
         NSScanner* scanner = [NSScanner scannerWithString:self.updatedContent];
         for (NSInteger i = 0; i <= updatedToDo.position; i++) {
@@ -203,8 +246,8 @@ static NSSet* g_startEndElements;
         //NSLog(@"now we can update our TODO: %@", updatedToDo);
         
         if (!self.updatedContent)
-            self.updatedContent = _note.content;
-        
+            self.updatedContent = [self noteContent];
+       
         NSScanner* scanner = [NSScanner scannerWithString:self.updatedContent];
         for (NSInteger i = 0; i <= updatedToDo.position; i++) {
             if (![scanner scanUpToString:@"<en-todo" intoString:nil]) {
@@ -294,7 +337,7 @@ static NSSet* g_startEndElements;
 - (BOOL)addToDoWithTitle:(NSString *)title
 {
     if (!self.updatedContent)
-        self.updatedContent = _note.content;
+        self.updatedContent = [self noteContent];
     
     NSUInteger startPos = [self newToDoPos];
     

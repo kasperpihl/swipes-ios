@@ -18,7 +18,6 @@
 #import "IntegrationsViewController.h"
 
 
-#define kSwitchTag 13
 #define kLocalCellHeight 55
 #define kLearnMoreHeight 70
 
@@ -117,10 +116,17 @@
         if (indexPath.row < 3) {
             
             UISwitch *aSwitch = [[UISwitch alloc] init];
-            aSwitch.tag = kSwitchTag;
+            aSwitch.tag = indexPath.row;
             aSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
             CGRectSetCenter(aSwitch, cell.frame.size.width-aSwitch.frame.size.width + 5, kLocalCellHeight/2);
             [aSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+            
+            if(indexPath.row == 1){
+                aSwitch.on = kEnInt.enableSync;
+            }
+            if(indexPath.row == 2){
+                aSwitch.on = kEnInt.autoFindFromTag;
+            }
             
             [cell.contentView addSubview:aSwitch];
         }
@@ -132,12 +138,11 @@
 }
 
 -(void)switchChanged:(UISwitch*)sender{
-    UITableViewCell *cell = (UITableViewCell*)sender.superview.superview.superview;
-    NSIndexPath *switchHandled = [self.tableView indexPathForCell:cell];
-    if(switchHandled.row == 1){
+    NSInteger tag = sender.tag;
+    if(tag == 1){
         [kEnInt setEnableSync:sender.on];
     }
-    if(switchHandled.row == 2){
+    if(tag == 2){
         [kEnInt setAutoFindFromTag:sender.on];
     }
 }
@@ -175,13 +180,10 @@
         [cell setSetting:name value:valueString];
     if(indexPath.row > 0){
         cell.textLabel.textColor = tcolor(TextColor);
-        UISwitch *aSwitch = (UISwitch*)[cell viewWithTag:kSwitchTag];
         if(indexPath.row == 1){
             cell.textLabel.text = @"Sync with Evernote on this device";
-            aSwitch.on = kEnInt.enableSync;
         }
         if(indexPath.row == 2){
-            aSwitch.on = kEnInt.autoFindFromTag;
             cell.textLabel.text = @"Auto import notes with \"swipes\"-tag";
         }
         if(indexPath.row == 3){
