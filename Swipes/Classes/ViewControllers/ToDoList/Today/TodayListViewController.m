@@ -24,7 +24,8 @@
 #import "CoreSyncHandler.h"
 #import "UtilityClass.h"
 @interface TodayListViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
-@property (nonatomic, strong) IBOutlet KPReorderTableView *tableView;
+
+@property (nonatomic, strong) KPReorderTableView *tableView;
 @property (nonatomic) YoureAllDoneView *youreAllDoneView;
 @property (nonatomic, strong) NSIndexPath *dragRow;
 @property (nonatomic) BOOL emptyBack;

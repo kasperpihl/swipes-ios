@@ -251,7 +251,7 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
             [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": [EvernoteIntegration APILimitReachedMessage], @"duration": @(3.5) } ];
         }
         
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        [GlobalApp activityIndicatorVisible:YES];
 
         NSString* searchBarText = _searchBar.text;
         NSString* searchText = @"";
@@ -282,11 +282,8 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
                 [_tableView reloadData];
                 
                 //DLog(@"notebooks: %@", list);
-                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             }
-            else{
-                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            }
+            [GlobalApp activityIndicatorVisible:NO];
         }];
         
         

@@ -52,8 +52,8 @@
         
         
         // load the note
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-       /* [[EvernoteNoteStore noteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
+        /*[GlobalApp activityIndicatorVisible:YES];
+        [[EvernoteNoteStore noteStore] getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
             ENMLUtility *utltility = [[ENMLUtility alloc] init];
                 [utltility convertENMLToHTML:note.content withResources:note.resources completionBlock:^(NSString *html, NSError *error) {
                     if (nil == error) {
@@ -66,11 +66,11 @@
                         //DLog(@"HTML:\n%@", fullHTML);
                         [_webView loadHTMLString:fullHTML baseURL:dirUrl];
                     }
-                    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                    [GlobalApp activityIndicatorVisible:NO];
                 }];
             }
             failure:^(NSError *error) {
-                [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                [GlobalApp activityIndicatorVisible:NO];
                 NSLog(@"Failed to get note : %@",error);
             }
         ];*/

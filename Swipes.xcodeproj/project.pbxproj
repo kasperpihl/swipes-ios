@@ -1462,7 +1462,6 @@
 			isa = PBXGroup;
 			children = (
 				A781283E17294C56002226C8 /* Classes */,
-				A781287F17294C56002226C8 /* MainStoryboard.storyboard */,
 				A781288117294C56002226C8 /* Resources */,
 				A76ADC1217ECA7AB00F52F40 /* Images.xcassets */,
 				A78128B217294C56002226C8 /* Supporting Files */,
@@ -1649,6 +1648,7 @@
 		A78128B217294C56002226C8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A781287F17294C56002226C8 /* MainStoryboard.storyboard */,
 				DA04465019D5CDC70083F816 /* Swipes.entitlements */,
 				A78128B317294C56002226C8 /* AppDelegate.h */,
 				A78128B417294C56002226C8 /* AppDelegate.m */,
@@ -2842,6 +2842,7 @@
 				A781288017294C56002226C8 /* en */,
 			);
 			name = MainStoryboard.storyboard;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		DA6B61C119E321FE00089877 /* Localizable.strings */ = {

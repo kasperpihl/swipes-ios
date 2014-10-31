@@ -15,6 +15,7 @@
 #import "DejalActivityView.h"
 #import "EvernoteImporterViewController.h"
 #import "EvernoteIntegration.h"
+#import "EvernoteSyncHandler.h"
 #import "IntegrationsViewController.h"
 
 
@@ -27,6 +28,7 @@
 @interface IntegrationsViewController () <UITableViewDataSource,UITableViewDelegate, EvernoteHelperDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, assign) BOOL isEvernoteBusinessUser;
 
 @end
 
@@ -52,6 +54,7 @@
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    self.tableView.rowHeight = kLocalCellHeight;
     //[self.tableView setSeparatorColor:tcolor(TextColor)];
     
     UIView *tableFooter = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kLearnMoreHeight)];
@@ -69,7 +72,7 @@
     [learnMoreButton addTarget:self action:@selector(pressedLearnedMore) forControlEvents:UIControlEventTouchUpInside];
     [learnMoreButton setTitle:@"LEARN MORE" forState:UIControlStateNormal];
     
-    
+    _isEvernoteBusinessUser = kEnInt.isBusinessUser;
     
     [tableFooter addSubview:learnMoreButton];
     
@@ -92,7 +95,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSInteger extraIfConnected = [kEnInt isAuthenticated] ? 3 : 0;
+    NSInteger extraIfConnected = [kEnInt isAuthenticated] ? 5 : 0;
     return kEvernoteIntegration + 1 + extraIfConnected;
 }
 
@@ -108,27 +111,42 @@
         cell = localCell;
     }
     else if ( cell == nil ){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
         cell.contentView.backgroundColor = CLEAR;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = CLEAR;
         cell.textLabel.font = KP_REGULAR(14);
-        if (indexPath.row < 3) {
+        cell.detailTextLabel.font = KP_REGULAR(11);
+        if (indexPath.row < 5) {
             
             UISwitch *aSwitch = [[UISwitch alloc] init];
             aSwitch.tag = indexPath.row;
             aSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
             CGRectSetCenter(aSwitch, cell.frame.size.width-aSwitch.frame.size.width + 5, kLocalCellHeight/2);
             [aSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+            [cell.contentView addSubview:aSwitch];
             
             if(indexPath.row == 1){
                 aSwitch.on = kEnInt.enableSync;
             }
-            if(indexPath.row == 2){
+            else if(indexPath.row == 2){
                 aSwitch.on = kEnInt.autoFindFromTag;
             }
+            else if(indexPath.row == 3){
+                aSwitch.on = kEnInt.findInPersonalLinked;
+            }
+            else if(indexPath.row == 4){
+                if (_isEvernoteBusinessUser) {
+                    aSwitch.on = kEnInt.findInBusinessNotebooks;
+                }
+                else {
+                    //aSwitch.on = NO;
+                    //aSwitch.enabled = NO;
+                    [aSwitch removeFromSuperview];
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                }
+            }
             
-            [cell.contentView addSubview:aSwitch];
         }
         else{
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -142,8 +160,18 @@
     if(tag == 1){
         [kEnInt setEnableSync:sender.on];
     }
-    if(tag == 2){
+    else if(tag == 2){
         [kEnInt setAutoFindFromTag:sender.on];
+    }
+    else if(tag == 3){
+        [kEnInt setFindInPersonalLinked:sender.on];
+    }
+    else if(tag == 4){
+        [kEnInt setFindInBusinessNotebooks:sender.on];
+    }
+    
+    if (sender.on) {
+        [[KPCORE evernoteSyncHandler] setUpdatedAt:nil];
     }
 }
 
@@ -180,22 +208,30 @@
         [cell setSetting:name value:valueString];
     if(indexPath.row > 0){
         cell.textLabel.textColor = tcolor(TextColor);
+        cell.detailTextLabel.textColor = tcolor(SubTextColor);
         if(indexPath.row == 1){
             cell.textLabel.text = @"Sync with Evernote on this device";
         }
-        if(indexPath.row == 2){
+        else if(indexPath.row == 2){
             cell.textLabel.text = @"Auto import notes with \"swipes\"-tag";
         }
-        if(indexPath.row == 3){
+        else if(indexPath.row == 3){
+            cell.textLabel.text = @"Sync with personal linked notebooks";
+        }
+        else if(indexPath.row == 4){
+            if (_isEvernoteBusinessUser)
+                cell.textLabel.text = @"Sync with Evernote for Business";
+            else {
+                cell.textLabel.text = @"You don't have Evernote for Business";
+                cell.detailTextLabel.text = @"Tap to learn more";
+            }
+        }
+        else if(indexPath.row == 5){
             cell.textLabel.text = @"Open Evernote Importer";
         }
     }
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return kLocalCellHeight;
-}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -252,7 +288,12 @@
             break;
         }
     }
-    if(indexPath.row == 3){
+    if (indexPath.row == 4) {
+        if (!_isEvernoteBusinessUser) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://swipesapp.com/evernote-business/"]];
+        }
+    }
+    else if (indexPath.row == 5) {
         [self showEvernoteImporterAnimated:YES];
     }
 }

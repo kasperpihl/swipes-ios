@@ -76,10 +76,17 @@ static SettingsHandler *sharedObject;
         case IntegrationEvernoteSwipesTag:
             index = @"IntegrationEvernoteSwipesTag";
             break;
+        case IntegrationEvernoteFindInPersonalLinkedNotebooks:
+            index = @"IntegrationEvernoteFindInPersonalLinkedNotebooks";
+            break;
+        case IntegrationEvernoteFindInBusinessNotebooks:
+            index = @"IntegrationEvernoteFindInBusinessNotebooks";
+            break;
 
     }
     return index;
 }
+
 -(UIImage *)getDailyImage{
     NSString *existingFileName = [USER_DEFAULTS stringForKey:@"dailyImageFileName"];
     if(existingFileName){
@@ -93,6 +100,7 @@ static SettingsHandler *sharedObject;
     else [self refreshDailyImage:YES];
     return [UIImage imageNamed:@"default-background.jpg"];
 }
+
 -(void)refreshDailyImage:(BOOL)force{
     if(self.isFetchingImage) return;
     NSDate *now = [NSDate date];
@@ -122,6 +130,7 @@ static SettingsHandler *sharedObject;
         }];
     }
 }
+
 -(void)checkTimeZoneChange{
     //NSLog(@"checking timezone");
     NSInteger deviceTimeZone = [NSTimeZone localTimeZone].secondsFromGMT;
@@ -131,6 +140,7 @@ static SettingsHandler *sharedObject;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"updated time zone" object:self userInfo:@{@"from":@(settingTimeZone),@"to":@(deviceTimeZone)}];
     }
 }
+
 -(void)refreshGlobalSettingsForce:(BOOL)force{
     [self checkTimeZoneChange];
     [self refreshDailyImage:force];
@@ -138,6 +148,7 @@ static SettingsHandler *sharedObject;
     if(self.isFetchingSettings)
         return;
 }
+
 -(NSNumber*)repairValue:(NSDate*)date forSetting:(KPSettings)setting{
     //NSLog(@"defaultval for:%i",setting);
     switch (setting) {
@@ -153,6 +164,7 @@ static SettingsHandler *sharedObject;
             return nil;
     }
 }
+
 -(id)defaultValueForSettings:(KPSettings)setting{
     //NSLog(@"defaultval for:%i",setting);
     
@@ -185,8 +197,13 @@ static SettingsHandler *sharedObject;
             return @NO;
         case IntegrationEvernoteSwipesTag:
             return @NO;
+        case IntegrationEvernoteFindInPersonalLinkedNotebooks:
+            return @YES;
+        case IntegrationEvernoteFindInBusinessNotebooks:
+            return @YES;
     }
 }
+
 -(id)valueForSetting:(KPSettings)setting{
     
     NSString *index = [self indexForSettings:setting];
@@ -203,6 +220,7 @@ static SettingsHandler *sharedObject;
     }
     return value;
 }
+
 -(void)setValue:(id)value forSetting:(KPSettings)setting{
     NSString *index = [self indexForSettings:setting];
     if(!index) return;
@@ -216,6 +234,7 @@ static SettingsHandler *sharedObject;
     BOOL setting = [[self.settings objectForKey:key] boolValue];
     return setting;
 }
+
 -(void)setSetting:(BOOL)setting forKey:(NSString *)key{
     [self.settings setObject:@(setting) forKey:key];
     [USER_DEFAULTS setObject:self.settings forKey:kSettingsDictionaryKey];
@@ -230,4 +249,5 @@ static SettingsHandler *sharedObject;
         self.settings = [NSMutableDictionary dictionary];
     }
 }
+
 @end

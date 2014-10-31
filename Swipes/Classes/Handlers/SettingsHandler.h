@@ -20,7 +20,9 @@ typedef enum {
     SettingTimeZone,
     
     IntegrationEvernoteEnableSync,
-    IntegrationEvernoteSwipesTag
+    IntegrationEvernoteSwipesTag,
+    IntegrationEvernoteFindInPersonalLinkedNotebooks,
+    IntegrationEvernoteFindInBusinessNotebooks,
 } KPSettings;
 #import <Foundation/Foundation.h>
 #define kSettings [SettingsHandler sharedInstance]

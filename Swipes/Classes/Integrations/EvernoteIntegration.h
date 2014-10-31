@@ -30,13 +30,16 @@ extern const int MONNSExceptionEncounteredErrorCode;
 + (BOOL)isNoteRefString:(NSString *)string;
 
 @property (nonatomic, assign) BOOL enableSync;
+@property (nonatomic, assign) BOOL autoFindFromTag;
+@property (nonatomic, assign) BOOL findInPersonalLinked;
+@property (nonatomic, assign) BOOL findInBusinessNotebooks;
 @property (nonatomic, assign) BOOL hasAskedForPermissions;
 @property (nonatomic, strong) NSString *tagGuid;
 @property (nonatomic, assign) NSInteger requestCounter;
 @property (nonatomic, strong) NSString *tagName;
-@property (nonatomic, assign) BOOL autoFindFromTag;
 @property (nonatomic, strong) NSDate *rateLimit;
 @property (nonatomic, assign) BOOL isAuthenticated;
+@property (nonatomic, readonly) BOOL isBusinessUser;
 
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
 

@@ -17,6 +17,8 @@
 
 + (CGFloat)statusBarHeight;
 
++ (void)activityIndicatorVisible:(BOOL)status;
+
 - (void)startBackgroundHandler:(NSNotification *)notification;
 - (void)endBackgroundHandler:(NSNotification *)notification;
 

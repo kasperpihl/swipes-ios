@@ -14,4 +14,5 @@
 -(NSArray*)getObjectsSyncedWithEvernote;
 -(BOOL)hasObjectsSyncedWithEvernote;
 -(void)clearCache;
+-(void)setUpdatedAt:(NSDate*)updatedAt;
 @end

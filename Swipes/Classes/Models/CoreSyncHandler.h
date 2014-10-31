@@ -6,7 +6,8 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-@class NSManagedObject,NSManagedObjectContext,CoreSyncHandler;
+@class NSManagedObject, NSManagedObjectContext, CoreSyncHandler, EvernoteSyncHandler;
+
 #import "ParentSyncHandler.h"
 
 #define kTMPUpdateObjects @"tmpUpdateObjects"
@@ -30,6 +31,8 @@
 
 // Used by widget to avoid syncing.
 @property (nonatomic) BOOL disableSync;
+
+-(EvernoteSyncHandler *)evernoteSyncHandler;
 
 -(void)clearAndDeleteData;
 -(void)seedObjectsSave:(BOOL)save;

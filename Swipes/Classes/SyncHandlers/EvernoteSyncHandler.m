@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
+#import <ENSDK/Advanced/ENSDKAdvanced.h>
 #import "Underscore.h"
 #import "MF_Base64Additions.h"
 #import "KPToDo.h"
@@ -13,9 +14,9 @@
 #import "EvernoteToDoProcessor.h"
 #import "NSDate-Utilities.h"
 #import "NSString+Levenshtein.h"
-#import <ENSDK/Advanced/ENSDKAdvanced.h>
 #import "CoreSyncHandler.h"
 #import "UtilityClass.h"
+#import "CoreData+MagicalRecord.h"
 
 #import "EvernoteIntegration.h"
 
@@ -108,13 +109,13 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 
 -(void)clearCache{
     self.needToClearCache = YES;
-    [[EvernoteIntegration sharedInstance] cacheClear];
+    [kEnInt cacheClear];
 }
 
 // Just testing
--(void)didDelay{
-    self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
-}
+//-(void)didDelay{
+//    self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
+//}
 
 -(NSArray*)filterSubtasksWithEvernote:(NSSet*)subtasks{
     NSPredicate *subtaskPredicate = [NSPredicate predicateWithFormat:@"origin == %@",EVERNOTE_SERVICE];
@@ -286,7 +287,12 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 }
 
 -(void)setUpdatedAt:(NSDate*)updatedAt{
-    [USER_DEFAULTS setObject:updatedAt forKey:kEvernoteUpdatedAtKey];
+    if (updatedAt) {
+        [USER_DEFAULTS setObject:updatedAt forKey:kEvernoteUpdatedAtKey];
+    }
+    else {
+        [USER_DEFAULTS removeObjectForKey:kEvernoteUpdatedAtKey];
+    }
     [USER_DEFAULTS synchronize];
     self.lastUpdated = updatedAt;
 }

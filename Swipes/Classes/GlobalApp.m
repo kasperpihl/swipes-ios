@@ -8,6 +8,8 @@
 
 #import "GlobalApp.h"
 
+static int g_activityIndicatorStack = 0;
+
 @interface GlobalApp ()
 
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTask;
@@ -85,6 +87,21 @@
     UIGraphicsEndImageContext();
     
     return image;
+}
+
++ (void)activityIndicatorVisible:(BOOL)status
+{
+    if (status) {
+        if (++g_activityIndicatorStack && (![[UIApplication sharedApplication] isNetworkActivityIndicatorVisible])) {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        }
+    }
+    else {
+        if (0 >= --g_activityIndicatorStack) {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            g_activityIndicatorStack = 0;
+        }
+    }
 }
 
 - (instancetype)init

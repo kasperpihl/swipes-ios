@@ -136,6 +136,8 @@ NSError * NewNSErrorFromException(NSException * exc) {
         _readOnlyNoteRefCache = [NSMutableDictionary new];
         self.autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
         self.enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
+        self.findInPersonalLinked = [[kSettings valueForSetting:IntegrationEvernoteFindInPersonalLinkedNotebooks] boolValue];
+        self.findInBusinessNotebooks = [[kSettings valueForSetting:IntegrationEvernoteFindInBusinessNotebooks] boolValue];
         self.hasAskedForPermissions = [USER_DEFAULTS boolForKey:kHasAskedForPermissionKey];
     }
     return self;
@@ -165,6 +167,23 @@ NSError * NewNSErrorFromException(NSException * exc) {
 //        }];
 //    }
     [kSettings setValue:@(autoFindFromTag) forSetting:IntegrationEvernoteSwipesTag];
+}
+
+- (void)setFindInPersonalLinked:(BOOL)findInPersonalLinked
+{
+    _findInPersonalLinked = findInPersonalLinked;
+    [kSettings setValue:@(findInPersonalLinked) forSetting:IntegrationEvernoteFindInPersonalLinkedNotebooks];
+}
+
+- (void)setFindInBusinessNotebooks:(BOOL)findInBusinessNotebooks
+{
+    _findInBusinessNotebooks = findInBusinessNotebooks;
+    [kSettings setValue:@(findInBusinessNotebooks) forSetting:IntegrationEvernoteFindInBusinessNotebooks];
+}
+
+- (BOOL)isBusinessUser
+{
+    return [ENSession sharedSession].isBusinessUser;
 }
 
 - (void)updateNote:(EDAMNote*)note block:(NoteBlock)block
@@ -367,8 +386,15 @@ NSError * NewNSErrorFromException(NSException * exc) {
     ENSession* session = [ENSession sharedSession];
     ENNoteSearch* noteSearch = [ENNoteSearch noteSearchWithSearchString:search];
     
+    ENSessionSearchScope scope = ENSessionSearchScopePersonal;
+    if (self.findInBusinessNotebooks) {
+        scope |= ENSessionSearchScopeBusiness;
+    }
+    if (self.findInPersonalLinked) {
+        scope |= ENSessionSearchScopePersonalLinked;
+    }
     self.requestCounter++;
-    [session findNotesWithSearch:noteSearch inNotebook:nil orScope:ENSessionSearchScopePersonal | ENSessionSearchScopeBusiness | ENSessionSearchScopePersonalLinked sortOrder:ENSessionSortOrderRecentlyUpdated maxResults:kPaginator completion:^(NSArray *findNotesResults, NSError *error) {
+    [session findNotesWithSearch:noteSearch inNotebook:nil orScope:scope sortOrder:ENSessionSortOrderRecentlyUpdated maxResults:kPaginator completion:^(NSArray *findNotesResults, NSError *error) {
         
         if (!error) {
             [self cacheAddSearchResult:findNotesResults forText:search];
