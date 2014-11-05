@@ -786,9 +786,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             else if(number == 2){
                 if([GlobalApp isEvernoteInstalled]){
                     KPAttachment *attachment = [self.model firstAttachmentForServiceType:EVERNOTE_SERVICE];
-                    NSLog(@"attachment %@",attachment.identifier);
-                    EDAMNote *note = [[EDAMNote alloc] init];
-                    note.guid = attachment.identifier;
+                    DLog(@"attachment %@",attachment.identifier);
+//                    EDAMNote *note = [[EDAMNote alloc] init];
+//                    note.guid = attachment.identifier;
                 }
                 else{
                     

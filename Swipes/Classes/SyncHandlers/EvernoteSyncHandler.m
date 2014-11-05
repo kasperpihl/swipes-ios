@@ -17,8 +17,10 @@
 #import "CoreSyncHandler.h"
 #import "UtilityClass.h"
 #import "CoreData+MagicalRecord.h"
-
+#import "EvernoteView.h"
+#import "KPBlurry.h"
 #import "EvernoteIntegration.h"
+#import "RootViewController.h"
 
 #import "EvernoteSyncHandler.h"
 
@@ -28,9 +30,10 @@
 #define kFetchChangesTimeout 30
 
 NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
+NSString * const kEvernoteMoveTime = @"EvernoteMoveTime";
 
-@interface EvernoteSyncHandler ()
-@property (nonatomic,copy) SyncBlock block;
+@interface EvernoteSyncHandler () <EvernoteViewDelegate>
+@property (nonatomic, copy) SyncBlock block;
 @property NSArray *objectsWithEvernote;
 @property NSDate *lastUpdated;
 @property BOOL updateNeededFromEvernote;
@@ -434,6 +437,80 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     return NO;
 }
 
+-(void)handleUpdatedOrDeleted:(KPToDo *)todo evernoteAttachment:(KPAttachment *)evernoteAttachment
+{
+#ifndef NOT_APPLICATION
+    
+    NSDate* dateWait = [USER_DEFAULTS objectForKey:kEvernoteMoveTime];
+    if (dateWait && [dateWait isLaterThanDate:[NSDate date]]) {
+        return;
+    }
+    
+    if (UIApplicationStateBackground == [[UIApplication sharedApplication] applicationState])
+        return;
+    
+    NSString* msg = [NSString stringWithFormat:@"Evernote note attached to the task with title \"%@\" is missing. Select \"Note was moved\" to select the new note, \"Note was deleted\" to detach", todo.title];
+    [UTILITY popupWithTitle:nil andMessage:msg buttonTitles:@[@"Note was moved", @"Note was deleted", @"Remind me tomorrow"] block:^(NSInteger number, NSError *error) {
+        
+        switch (number) {
+            case 0: { // moved note
+                    EvernoteView* evernoteView = [[EvernoteView alloc] initWithFrame:CGRectMake(0, 0, 320, ROOT_CONTROLLER.view.frame.size.height)];
+                    evernoteView.delegate = self;
+                    evernoteView.caller = ROOT_CONTROLLER;
+                    evernoteView.userData = evernoteAttachment;
+                
+                    // we need to minimize the title to first two words max, otherwise the search filter cannot find it
+                    NSArray* titleWords = [[evernoteAttachment.title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] componentsSeparatedByString:@" "];
+                    NSString* title = nil;
+                    if (1 == titleWords.count) {
+                        title = titleWords[0];
+                    }
+                    else if (2 <= titleWords.count) {
+                        title = [NSString stringWithFormat:@"%@ %@", titleWords[0], titleWords[1]];
+                    }
+                    if (title)
+                        evernoteView.initialText = [NSString stringWithFormat:@"intitle:\"%@\"", title];
+                
+                    BLURRY.showPosition = PositionBottom;
+                    [BLURRY showView:evernoteView inViewController:ROOT_CONTROLLER];
+                }
+                break;
+                
+            case 1: // deleted note
+                [todo removeAllAttachmentsForService:EVERNOTE_SERVICE];
+                [KPToDo saveToSync];
+                break;
+                
+            case 2: // wait one more day
+                [USER_DEFAULTS setObject:[NSDate dateWithDaysFromNow:1] forKey:kEvernoteMoveTime];
+                [USER_DEFAULTS synchronize];
+                break;
+                
+            default:
+                break;
+        }
+    }];
+    
+#endif
+}
+
+- (void)selectedEvernoteInView:(EvernoteView *)evernoteView noteRef:(ENNoteRef *)noteRef title:(NSString *)title sync:(BOOL)sync
+{
+#ifndef NOT_APPLICATION
+    [BLURRY dismissAnimated:YES];
+    KPAttachment* evernoteAttachment = evernoteView.userData;
+    evernoteAttachment.identifier = [EvernoteIntegration ENNoteRefToNSString:noteRef];
+    [KPToDo saveToSync];
+#endif
+}
+
+- (void)closeEvernoteView:(EvernoteView *)evernoteView
+{
+#ifndef NOT_APPLICATION
+    [BLURRY dismissAnimated:YES];
+#endif
+}
+
 
 -(void)syncEvernoteWithBlock:(SyncBlock)block{
     
@@ -485,7 +562,7 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
     BOOL syncedAnything = NO;
     for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
         
-        KPAttachment *evernoteAttachment = [todoWithEvernote firstAttachmentForServiceType:EVERNOTE_SERVICE];
+        __block KPAttachment *evernoteAttachment = [todoWithEvernote firstAttachmentForServiceType:EVERNOTE_SERVICE];
         NSString *enid = evernoteAttachment.identifier;
         
         BOOL hasLocalChanges = [todoWithEvernote hasChangesSinceDate:self.lastUpdated];
@@ -519,7 +596,11 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
                             //NSLog(@"succeeded save");
                         }
                         else if (error) {
-                            if(!runningError){
+                            if ([error.domain isEqualToString:ENErrorDomain] && ((error.code == ENErrorCodeNotFound) || (error.code == ENErrorCodeDataConflict))) {
+                                DLog(@"Note moved or deleted");
+                                [self handleUpdatedOrDeleted:todoWithEvernote evernoteAttachment:evernoteAttachment];
+                            }
+                            else if(!runningError){
                                 runningError = error;
                             }
                             [UtilityClass sendError:error type:@"Evernote save error"];
@@ -532,9 +613,15 @@ NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
                 }
             }
             else{
-                if(!runningError){
+                if ([error.domain isEqualToString:ENErrorDomain] && ((error.code == ENErrorCodeNotFound) || (error.code == ENErrorCodeDataConflict))) {
+                    DLog(@"Note moved or deleted");
+                    [self handleUpdatedOrDeleted:todoWithEvernote evernoteAttachment:evernoteAttachment];
+                }
+                else if (!runningError) {
                     runningError = error;
                 }
+                
+                [UtilityClass sendError:error type:@"Evernote save error"];
                 
                 // it is strange that evernote returns this code (1) when the note is removed
                 // to remove a note on evernote.com first delete it and then remove it from trash too!

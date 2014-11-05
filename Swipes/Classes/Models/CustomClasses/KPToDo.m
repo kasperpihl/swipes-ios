@@ -14,7 +14,11 @@
 #import <CoreLocation/CoreLocation.h>
 #import "KPAttachment.h"
 #import "KPToDo.h"
+
 #define kDefOrderVal -1
+
+extern NSString * const kEvernoteMoveTime;
+
 @interface KPToDo ()
 @property (nonatomic,strong) NSString *readableTags;
 // Private interface goes here.
@@ -916,6 +920,8 @@
             todo.origin = nil;
         }
     }];
+    [USER_DEFAULTS removeObjectForKey:kEvernoteMoveTime];
+    [USER_DEFAULTS synchronize];
     if(save)
         [KPCORE saveContextForSynchronization:context];
     

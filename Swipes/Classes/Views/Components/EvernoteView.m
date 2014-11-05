@@ -166,6 +166,14 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
     return self;
 }
 
+- (void)didMoveToSuperview
+{
+    [super didMoveToSuperview];
+    if (_initialText) {
+        self.searchBar.text = _initialText;
+    }
+}
+
 -(void)blurryWillShow:(KPBlurry *)blurry
 {
     //[_searchBar becomeFirstResponder];
@@ -310,7 +318,8 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
     return 0;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
     cell.backgroundColor = kEvernoteColor;
     cell.contentView.backgroundColor = kEvernoteColor;
     cell.textLabel.textColor = tcolorF(TextColor,ThemeDark);
@@ -372,7 +381,8 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
     _searchBar = nil;
 }
 
-- (void)orientationChanged:(NSNotification *)notification{
+- (void)orientationChanged:(NSNotification *)notification
+{
     if(kIsIpad)
         [self cancel:self];
 }
