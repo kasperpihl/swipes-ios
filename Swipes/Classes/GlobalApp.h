@@ -18,6 +18,8 @@
 + (CGFloat)statusBarHeight;
 
 + (void)activityIndicatorVisible:(BOOL)status;
++ (NSString *)machineType;
++ (NSString *)deviceId;
 
 - (void)startBackgroundHandler:(NSNotification *)notification;
 - (void)endBackgroundHandler:(NSNotification *)notification;

@@ -133,7 +133,10 @@
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     */
     
-    NSLog(@"%lu",(long)[NSTimeZone localTimeZone].secondsFromGMT);
+    //DLog(@"%lu",(long)[NSTimeZone localTimeZone].secondsFromGMT);
+    //DLog(@"Machine type: %@", [GlobalApp machineType]);
+    //DLog(@"Device id: %@", [GlobalApp deviceId]);
+    
     return YES;
 }
 

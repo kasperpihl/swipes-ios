@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
+#import <sys/utsname.h>
 #import "GlobalApp.h"
 
 static int g_activityIndicatorStack = 0;
@@ -102,6 +103,19 @@ static int g_activityIndicatorStack = 0;
             g_activityIndicatorStack = 0;
         }
     }
+}
+
+// check http://stackoverflow.com/questions/11197509/ios-iphone-get-device-model-and-make
++ (NSString *)machineType
+{
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+}
+
++ (NSString *)deviceId
+{
+    return [UIDevice currentDevice].identifierForVendor.UUIDString;
 }
 
 - (instancetype)init
