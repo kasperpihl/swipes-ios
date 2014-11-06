@@ -151,7 +151,7 @@ typedef enum {
 
 #pragma mark - KPControlHandlerDelegate
 -(void)pressedAdd:(id)sender{
-    [self changeToIndex:1];
+    self.currentIndex = 1;
     //[[self currentViewController].itemHandler clearAll];
     
     AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.view.bounds];
@@ -543,8 +543,14 @@ typedef enum {
     [self.currentViewController update];
 }
 
--(void)changeToIndex:(NSInteger)index{
-    [self.segmentedControl setSelectedIndex:index];
+- (NSUInteger)currentIndex
+{
+    return self.segmentedControl.selectedIndexes.firstIndex;
+}
+
+- (void)setCurrentIndex:(NSUInteger)currentIndex
+{
+    [self.segmentedControl setSelectedIndex:currentIndex];
     [self changeViewControllerAnimated:NO];
 }
 
@@ -595,6 +601,7 @@ typedef enum {
     self = [super init];
     
     if (self) {
+        _totalViewControllers = viewControllers.count;
         [viewControllers enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
             if ([obj isKindOfClass:[UIViewController class]]) {
                 UIViewController *viewController = obj;
@@ -638,6 +645,23 @@ typedef enum {
     return self;
 }
 
+- (void)swipeHandler:(UISwipeGestureRecognizer *)recognizer
+{
+    if (recognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
+        DLog(@"Swipe left");
+        NSUInteger selected = self.currentIndex;
+        if (self.totalViewControllers > selected + 1) {
+            self.currentIndex = selected + 1;
+        }
+    }
+    else if (recognizer.direction == UISwipeGestureRecognizerDirectionRight) {
+        DLog(@"Swipe right");
+        NSUInteger selected = self.currentIndex;
+        if (0 < selected) {
+            self.currentIndex = selected - 1;
+        }
+    }
+}
 
 -(void)viewDidLoad
 {
@@ -672,6 +696,12 @@ typedef enum {
     /* Control handler - Bottom toolbar for add/edit */
     self.controlHandler = [KPControlHandler instanceInView:self.view];
     self.controlHandler.delegate = self;
+    UISwipeGestureRecognizer* gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeHandler:)];
+    [gesture setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self.view addGestureRecognizer:gesture];
+    gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeHandler:)];
+    [gesture setDirection:UISwipeGestureRecognizerDirectionRight];
+    [self.view addGestureRecognizer:gesture];
     
     /* Add start view controller */
     [self.view bringSubviewToFront:self.segmentedControl];

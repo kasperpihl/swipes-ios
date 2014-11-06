@@ -38,12 +38,12 @@ typedef enum {
 - (void)resetDragIVars;
 - (void)resetTableViewAndNavBarToTypical;
 
-@property (strong) UITableViewCell *draggedCell;
-@property (strong) NSIndexPath *indexPathBelowDraggedCell;
-@property (strong) CADisplayLink *timerToAutoscroll;
-@property CGFloat savedYCoordinate;
-@property DragDirection dragDirection;
-@property DragDirection dragPosition;
+@property (nonatomic, strong) UITableViewCell *draggedCell;
+@property (nonatomic, strong) NSIndexPath *indexPathBelowDraggedCell;
+@property (nonatomic, strong) CADisplayLink *timerToAutoscroll;
+@property (nonatomic, assign) CGFloat savedYCoordinate;
+@property (nonatomic, assign) DragDirection dragDirection;
+@property (nonatomic, assign) DragDirection dragPosition;
 
 @end
 

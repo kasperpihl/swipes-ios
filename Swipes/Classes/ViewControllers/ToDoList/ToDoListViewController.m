@@ -23,7 +23,6 @@
 
 #import "ToDoListViewController.h"
 
-#define TABLEVIEW_TAG 500
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
 #define SEARCH_BAR_TAG 503
@@ -561,7 +560,6 @@
     [tableView addSubview:searchBar];
     self.searchBar = (KPSearchBar*)[tableView viewWithTag:SEARCH_BAR_TAG];*/
     tableView.contentOffset = CGPointMake(0, CGRectGetHeight(tableView.tableHeaderView.bounds));
-    
 }
 
 #pragma mark - UIViewController stuff
@@ -602,11 +600,10 @@
         [self.view addSubview:menuText];
         self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];
     }
-    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    tableView.tag = TABLEVIEW_TAG;
-    [self prepareTableView:tableView];
-    [self.view addSubview:tableView];
-    self.tableView = (UITableView*)[self.view viewWithTag:TABLEVIEW_TAG];
+    
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    [self prepareTableView:self.tableView];
+    [self.view addSubview:self.tableView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

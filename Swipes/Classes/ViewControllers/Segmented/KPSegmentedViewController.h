@@ -7,15 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AKSegmentedControl.h"
 #import "KPFilter.h"
 
-@class AKSegmentedControl,ToDoListViewController, KPToDo;
+@class ToDoListViewController, KPToDo;
 
 @interface KPSegmentedViewController : UIViewController
 @property (nonatomic, readonly, strong) AKSegmentedControl *segmentedControl;
-@property (nonatomic) KPControlCurrentState currentState;
-@property (nonatomic) BOOL lock;
-@property (nonatomic) BOOL backgroundMode;
+@property (nonatomic, assign) KPControlCurrentState currentState;
+@property (nonatomic, assign) BOOL lock;
+@property (nonatomic, assign) BOOL backgroundMode;
+@property (nonatomic, assign) NSUInteger currentIndex;
+@property (nonatomic, readonly) NSUInteger totalViewControllers;
 
 - (id)initWithViewControllers:(NSArray *)viewControllers;
 -(void)highlightButton:(KPSegmentButtons)controlButton;
@@ -24,7 +27,6 @@
 -(ToDoListViewController*)currentViewController;
 -(void)pressedDelete:(id)sender;
 -(void)pressedShare:(id)sender;
--(void)changeToIndex:(NSInteger)index;
 -(void)pressedAdd:(id)sender;
 
 -(void)tagItems:(NSArray *)items inViewController:(UIViewController*)viewController withDismissAction:(voidBlock)block;

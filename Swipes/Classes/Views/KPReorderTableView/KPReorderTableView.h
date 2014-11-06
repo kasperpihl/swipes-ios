@@ -94,7 +94,7 @@
 
 @class KPReorderTableView;
 
-@protocol ATSDragToReorderTableViewControllerDelegate
+@protocol ATSDragToReorderTableViewControllerDelegate <NSObject>
 @optional
 
 - (void)dragTableViewController:(KPReorderTableView *)dragTableViewController didBeginDraggingAtRow:(NSIndexPath *)dragRow;
@@ -105,7 +105,7 @@
 @end
 
 
-@protocol ATSDragToReorderTableViewControllerDraggableIndicators
+@protocol ATSDragToReorderTableViewControllerDraggableIndicators <NSObject>
 @optional
 // hate this, required to fix an iOS 6 bug where cell is hidden when going through normal paths to get a cell
 // you must make a new cell to return this (use reuseIdent == nil), do not use dequeueResable
@@ -155,12 +155,12 @@
 }
 
 // default is YES. Removes or adds gesture recognizers to self.tableView.
-@property (assign, getter=isReorderingEnabled) BOOL reorderingEnabled;
+@property (nonatomic, assign, getter=isReorderingEnabled) BOOL reorderingEnabled;
 
 - (BOOL)isDraggingCell;
 
-@property (weak) NSObject <ATSDragToReorderTableViewControllerDelegate> *dragDelegate; // nil by default
-@property (weak) NSObject <ATSDragToReorderTableViewControllerDraggableIndicators> *indicatorDelegate; // self by default
+@property (nonatomic, weak) id<ATSDragToReorderTableViewControllerDelegate> dragDelegate; // nil by default
+@property (nonatomic, weak) id<ATSDragToReorderTableViewControllerDraggableIndicators> indicatorDelegate; // self by default
 
 @end
 

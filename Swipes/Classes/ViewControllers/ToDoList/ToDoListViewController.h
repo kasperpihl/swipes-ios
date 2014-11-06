@@ -14,12 +14,12 @@
 #import "ItemHandler.h"
 
 @interface ToDoListViewController : UIViewController <UITableViewDelegate,ItemHandlerDelegate>
-@property (nonatomic,weak) IBOutlet UILabel *backgroundIcon;
-@property (nonatomic,weak) IBOutlet UILabel *backgroundLabel;
-@property (nonatomic,strong) ItemHandler *itemHandler;
-@property (nonatomic) BOOL selectionMode;
-@property (nonatomic,strong) NSString *state;
-@property (nonatomic,weak) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) UILabel *backgroundIcon;
+@property (nonatomic, strong) UILabel *backgroundLabel;
+@property (nonatomic, strong) ItemHandler *itemHandler;
+@property (nonatomic, assign) BOOL selectionMode;
+@property (nonatomic, strong) NSString *state;
+@property (nonatomic, strong) UITableView *tableView;
 -(KPSegmentedViewController *)parent;
 -(ToDoCell*)readyCell:(ToDoCell*)cell;
 -(void)deselectAllRows:(id)sender;
