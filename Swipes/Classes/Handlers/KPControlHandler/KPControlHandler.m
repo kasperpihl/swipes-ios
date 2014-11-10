@@ -17,14 +17,15 @@
 #import "KPControlHandler.h"
 #import "KPToolbar.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "AwesomeMenu.h"
 #import "UIImage+Utilities.h"
 
 
-@interface KPControlHandler () <ToolbarDelegate>
+@interface KPControlHandler () <ToolbarDelegate, AwesomeMenuDelegate>
 @property (nonatomic) KPControlHandlerState activeState;
 @property (nonatomic) KPControlHandlerState lastChosen;
 @property (nonatomic,weak) UIView* view;
+@property (nonatomic) AwesomeMenu *awesomeMenu;
 @property (nonatomic,weak) KPToolbar *addToolbar;
 @property (nonatomic,weak) KPToolbar *editToolbar;
 @property (nonatomic) UIView *gradientView;
@@ -33,6 +34,7 @@
 @end
 @implementation KPControlHandler
 +(KPControlHandler*)instanceInView:(UIView*)view{
+    
     KPControlHandler *object = [[KPControlHandler alloc] initWithView:view];
     object.view = view;
     return object;
@@ -60,8 +62,25 @@
         self.gradientView = gradientBackground;
         [view addSubview:self.gradientView];
         
+        AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImageString:@"settings" highlightedImageString:@"settingsFull"];
+        AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImageString:@"actionSearch" highlightedImageString:@"actionSearch"];
+        AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImageString:@"actionDelete" highlightedImageString:@"actionDeleteFull"];
+        AwesomeMenuItem *starMenuItem4 = [[AwesomeMenuItem alloc] initWithImageString:@"settings" highlightedImageString:@"settingsFull"];
         
-        KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, ADD_TOOLBAR_HEIGHT) items:nil delegate:self];
+        
+        AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:view.bounds menus:[NSArray arrayWithObjects:starMenuItem1,starMenuItem2,starMenuItem3,starMenuItem4, nil]];
+        menu.startPoint = CGPointMake(view.bounds.size.width-30, view.bounds.size.height-30);
+        menu.rotateAngle = radians(270);
+        menu.endRadius = 90;
+        menu.nearRadius = 85;
+        menu.farRadius = 105;
+        menu.menuWholeAngle = radians(120);
+        //menu.frame = CGRectSetPos(menu.frame, ;
+        menu.delegate = self;
+        self.awesomeMenu = menu;
+        [view addSubview:self.awesomeMenu];
+        
+        KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(view.frame.size.width/3, view.frame.size.height, view.frame.size.width/3, ADD_TOOLBAR_HEIGHT) items:nil delegate:self];
         addToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         addToolbar.font = iconFont(41);
         addToolbar.titleColor = tcolor(TextColor);
@@ -81,7 +100,7 @@
         editToolbar.font = iconFont(23);
         editToolbar.titleColor = tcolor(TextColor);
         editToolbar.titleHighlightString = @"Full";
-        editToolbar.items = @[@"",@"actionTag",@"actionDelete",@"actionShare"];
+        editToolbar.items = @[@"actionTag",@"actionDelete",@"actionShare"];
         [editToolbar setTopInset:editToolbar.frame.size.height*0.05];
         [view addSubview:editToolbar];
         self.editToolbar = (KPToolbar*)[view viewWithTag:EDIT_TOOLBAR_TAG];
@@ -90,15 +109,14 @@
     }
     return self;
 }
--(void)toolbar:(KPToolbar *)toolbar editButton:(UIButton *__autoreleasing *)button forItem:(NSInteger)item{
-    
-}
+
 -(voidBlock)getClearBlockFromState:(KPControlHandlerState)state toState:(KPControlHandlerState)toState{
     CGFloat targetY = self.view.frame.size.height;
     voidBlock block = ^(void) {
         switch (state) {
             case KPControlHandlerStateAdd:
                 CGRectSetY(self.addToolbar, targetY);
+                CGRectSetY(self.awesomeMenu, CGRectGetMaxY(self.awesomeMenu.frame)-self.awesomeMenu.startPoint.y+self.awesomeMenu.addButton.frame.size.height/2);
                 break;
             case KPControlHandlerStateEdit:
                 CGRectSetY(self.editToolbar, targetY);
@@ -128,6 +146,7 @@
                     self.isShowingGradient = YES;
                 }
                 CGRectSetY(self.addToolbar, smallButtonY);
+                CGRectSetY(self.awesomeMenu, self.awesomeMenu.superview.frame.size.height-self.awesomeMenu.frame.size.height);
                 
                 break;
             case KPControlHandlerStateEdit:
@@ -188,16 +207,56 @@
     }
     
 }
+
+#pragma mark AwesomeMenuDelegate
+-(void)AwesomeMenuWillExpand:(AwesomeMenu *)menu{
+    CGFloat targetY = self.view.frame.size.height;
+    [UIView animateWithDuration:ANIMATION_DURATION delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        CGRectSetY(self.addToolbar, targetY);
+    } completion:^(BOOL finished) {
+        
+    }];
+    //[self.controlHandler setState:KPControlHandlerStateNone animated:YES];
+}
+-(void)cleanFromAwesomeMenu{
+    if(self.activeState == KPControlHandlerStateAdd){
+        CGFloat smallButtonY = [self getYForBigSize:NO];
+        [UIView animateWithDuration:ANIMATION_DURATION delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            CGRectSetY(self.addToolbar, smallButtonY);
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+}
+-(void)AwesomeMenuDidCollapse:(AwesomeMenu *)menu{
+    [self cleanFromAwesomeMenu];
+    //[self.controlHandler setState:KPControlHandlerStateAdd animated:YES];
+}
+-(void)AwesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx{
+    [self cleanFromAwesomeMenu];
+    if([self.delegate respondsToSelector:@selector(pressedAwesomeMenuIndex:)])
+        [self.delegate pressedAwesomeMenuIndex:idx];
+    
+}
+
+#pragma mark KPToolbarDelegate
+-(void)toolbar:(KPToolbar *)toolbar editButton:(UIButton *__autoreleasing *)button forItem:(NSInteger)item{
+    UIButton *actButton = *button;
+    if(toolbar.tag == EDIT_TOOLBAR_TAG){
+        actButton.layer.cornerRadius = actButton.frame.size.height/2;
+        actButton.layer.borderColor = tcolor(TextColor).CGColor;
+        actButton.layer.borderWidth = 1;
+    }
+}
+
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
     if(toolbar.tag == ADD_TOOLBAR_TAG){
         if(item == 0 && [self.delegate respondsToSelector:@selector(pressedAdd:)]) [self.delegate pressedAdd:self];
     }
     else{
-        if(item == 0 && [self.delegate respondsToSelector:@selector(pressedEdit:)]) return;
-        //[self.delegate pressedEdit:self];
-        else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedTag:)]) [self.delegate pressedTag:self];
-        else if(item == 2 && [self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:self];
-        else if(item == 3 && [self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:self];
+        if(item == 0 && [self.delegate respondsToSelector:@selector(pressedTag:)]) [self.delegate pressedTag:self];
+        else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:self];
+        else if(item == 2 && [self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:self];
     }
 }
 @end

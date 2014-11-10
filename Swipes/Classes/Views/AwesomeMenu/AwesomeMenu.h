@@ -17,14 +17,13 @@
     NSArray *_menusArray;
     int _flag;
     NSTimer *_timer;
-    AwesomeMenuItem *_addButton;
 
     BOOL _isAnimating;
 }
 @property (nonatomic, weak) id<AwesomeMenuDelegate> delegate;
 @property (nonatomic, copy) NSArray *menusArray;
 @property (nonatomic, getter = isExpanding) BOOL expanding;
-
+@property (nonatomic) AwesomeMenuItem *addButton;
 @property (nonatomic, assign) CGFloat nearRadius;
 @property (nonatomic, assign) CGFloat endRadius;
 @property (nonatomic, assign) CGFloat farRadius;

@@ -79,6 +79,7 @@ typedef enum {
 @property (nonatomic) TopMenu *topOverlay;
 @property (nonatomic) TopMenuState currentTopMenu;
 @property (nonatomic) BOOL isEditingTags;
+@property (nonatomic) AwesomeMenu *awesomeMenu;
 @end
 
 @implementation KPSegmentedViewController
@@ -305,36 +306,36 @@ typedef enum {
 
 #pragma mark TopMenuDelegate
 -(void)topMenu:(TopMenu *)topMenu changedSize:(CGSize)size{
+    BOOL bottom = (topMenu.position == TopMenuBottom);
     CGFloat contentHeight = self.view.bounds.size.height - size.height;
-    CGRect contentFrame = CGRectMake(0, size.height, self.view.bounds.size.width, contentHeight);
+    if(bottom)
+        contentHeight -= 20;
+    CGRectSetSize(self.contentView, self.view.bounds.size.width, contentHeight);
+//    CGRect contentFrame = CGRectMake(0, bottom ? 20 : size.height, self.view.bounds.size.width, contentHeight);
     
     //self.currentViewController.view.frame = contentFrame;
-    self.contentView.frame = contentFrame;
-    //CGRectSetY(topMenu, CGRectGetMaxY(self.contentView.frame));
+  //  self.contentView.frame = contentFrame;
+    //if(bottom)
+      //  CGRectSetY(topMenu, CGRectGetMaxY(self.contentView.frame));
     
 }
 
 #pragma mark AwesomeMenuDelegate
--(void)AwesomeMenuWillExpand:(AwesomeMenu *)menu{
-    [self.controlHandler setState:KPControlHandlerStateNone animated:YES];
-}
--(void)AwesomeMenuDidCollapse:(AwesomeMenu *)menu{
-    [self.controlHandler setState:KPControlHandlerStateAdd animated:YES];
-}
--(void)AwesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx{
-    if(idx == 0){
+-(void)pressedAwesomeMenuIndex:(NSInteger)index{
+    if(index == 0){
         [self pressedSettings];
     }
-    if(idx == 1){
+    if(index == 1){
         [self pressedSearch:self];
     }
-    if(idx == 2){
+    if(index == 2){
         [self pressedFilter:self];
     }
-    if(idx == 3){
+    if(index == 3){
         [self pressedSelect:self];
     }
-    [self.controlHandler setState:KPControlHandlerStateAdd animated:YES];
+    if(self.currentTopMenu == TopMenuDefault)
+        [self.controlHandler setState:KPControlHandlerStateAdd animated:YES];
 }
 
 #pragma mark SelectionTopMenuDelegate
@@ -353,13 +354,13 @@ typedef enum {
     [UTILITY alertWithTitle:@"Select tasks" andMessage:@"Tap your tasks to select them and swipe them all together."];
 }
 -(void)didPressCloseInSelectionTopMenu:(SelectionTopMenu *)topMenu{
-    self.currentTopMenu = TopMenuDefault;
+    [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 
 
 #pragma mark FilterTopMenuDelegate
 -(void)didPressFilterTopMenu:(FilterTopMenu *)topMenu{
-    self.currentTopMenu = TopMenuDefault;
+    [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 -(void)filterMenu:(FilterTopMenu *)filterMenu selectedTag:(NSString *)tag{
     [kFilter selectTag:tag];
@@ -411,41 +412,52 @@ typedef enum {
     }
 }
 -(void)setCurrentTopMenu:(TopMenuState)currentTopMenu{
-    [self setCurrentTopMenu:currentTopMenu animated:NO];
+    [self setTopMenu:nil state:currentTopMenu animated:NO];
 }
--(void)setCurrentTopMenu:(TopMenuState)currentTopMenu animated:(BOOL)animated{
-    if(currentTopMenu != _currentTopMenu){
+-(void)setTopMenu:(TopMenu*)overlay state:(TopMenuState)topMenuState animated:(BOOL)animated{
+    if(topMenuState != _currentTopMenu){
         
         // Handling search / cleanup and shift to
-        if(_currentTopMenu == TopMenuSelect || currentTopMenu == TopMenuSelect){
-            [self.currentViewController setSelectionMode:(currentTopMenu == TopMenuSelect)];
-            [self.controlHandler setState:((currentTopMenu == TopMenuSelect) ? KPControlHandlerStateNone : KPControlHandlerStateAdd) animated:YES];
+        if(_currentTopMenu == TopMenuSelect || topMenuState == TopMenuSelect){
+            [self.currentViewController setSelectionMode:(topMenuState == TopMenuSelect)];
+            [self.controlHandler setState:((topMenuState == TopMenuSelect) ? KPControlHandlerStateNone : KPControlHandlerStateAdd) animated:YES];
         }
         
-        if(currentTopMenu == TopMenuDefault){
+        if(topMenuState == TopMenuDefault){
             [self topMenu:self.topOverlay changedSize:self.ios7BackgroundView.frame.size];
-            [self present:NO topOverlay:nil animated:animated];
         }
-        self.ios7BackgroundView.hidden = (currentTopMenu != TopMenuDefault);
+        self.ios7BackgroundView.hidden = (topMenuState != TopMenuDefault);
         
-        _currentTopMenu = currentTopMenu;
+        _currentTopMenu = topMenuState;
         [self updateContentViewState];
     }
     
-}
--(void)present:(BOOL)present topOverlay:(TopMenu*)overlay animated:(BOOL)animated{
+    BOOL present = (TopMenuDefault != topMenuState);
     if(!present && !overlay)
         overlay = self.topOverlay;
     
     voidBlock beforeBlock = ^{
-        overlay.alpha = present ? 0 : 1;
+        if(present)
+            CGRectSetY(overlay, (overlay.position == TopMenuBottom) ? self.view.frame.size.height : -overlay.frame.size.height);
         if(present)
             [self.view addSubview:overlay];
     };
     voidBlock animationBlock = ^{
-        overlay.alpha = present ? 1 : 0;
+        //self.ios7BackgroundView.alpha = present ? 0 : 1;
+        //self.awesomeMenu.alpha = present ? 0 : 1;
+        if(present){
+            if(overlay.position == TopMenuBottom)
+                CGRectSetY(self.contentView, 20);
+            CGRectSetY(overlay, (overlay.position == TopMenuBottom) ? self.view.frame.size.height-overlay.frame.size.height : 0);
+        }
+        else{
+            if(overlay.position == TopMenuBottom)
+                CGRectSetY(self.contentView, CGRectGetMaxY(self.ios7BackgroundView.frame));
+            CGRectSetY(overlay, (overlay.position == TopMenuBottom) ? self.view.frame.size.height : -overlay.frame.size.height);
+        }
     };
     voidBlock completionBlock = ^{
+        self.awesomeMenu.hidden = present ? YES : NO;
         if(present)
             self.topOverlay = overlay;
         else{
@@ -465,33 +477,30 @@ typedef enum {
             completionBlock();
         }];
     }
-    
 }
 
 -(void)pressedSelect:(id)sender{
     SelectionTopMenu *selectionTopMenu = [[SelectionTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
     selectionTopMenu.selectionDelegate = self;
     
-    [self present:YES topOverlay:selectionTopMenu animated:YES];
-    [self setCurrentTopMenu:TopMenuSelect];
+    [self setTopMenu:selectionTopMenu state:TopMenuSelect animated:YES];
 }
 -(void)pressedFilter:(id)sender{
     FilterTopMenu *filterTopMenu = [[FilterTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
+    filterTopMenu.position = TopMenuBottom;
     [filterTopMenu setPriority:(kFilter.priorityFilter == FilterSettingOn) notes:(kFilter.notesFilter == FilterSettingOn) recurring:(kFilter.recurringFilter == FilterSettingOn)];
     filterTopMenu.filterDelegate = self;
     
     filterTopMenu.topMenuDelegate = self;
     filterTopMenu.tagListView.tagDataSource = self;
     
-    [self setCurrentTopMenu:TopMenuFilter animated:YES];
-    [self present:YES topOverlay:filterTopMenu animated:YES];
+    [self setTopMenu:filterTopMenu state:TopMenuFilter animated:YES];
 }
 -(void)pressedSearch:(id)sender{
     SearchTopMenu *searchTopMenu = [[SearchTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
     searchTopMenu.searchDelegate = self;
     searchTopMenu.searchField.text = kFilter.searchString;
-    [self setCurrentTopMenu:TopMenuSearch animated:YES];
-    [self present:YES topOverlay:searchTopMenu animated:YES];
+    [self setTopMenu:searchTopMenu state:TopMenuSearch animated:YES];
     
     [searchTopMenu.searchField becomeFirstResponder];
 }
@@ -707,23 +716,6 @@ typedef enum {
     [self.view sendSubviewToBack:self.backgroundImage];
     //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
     //self.navigationItem.rightBarButtonItem = filter;
-    AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImageString:@"settings" highlightedImageString:@"settingsFull"];
-    AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImageString:@"actionSearch" highlightedImageString:@"actionSearch"];
-    AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImageString:@"actionDelete" highlightedImageString:@"actionDeleteFull"];
-    AwesomeMenuItem *starMenuItem4 = [[AwesomeMenuItem alloc] initWithImageString:@"settings" highlightedImageString:@"settingsFull"];
-    
-    
-    AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:self.view.bounds menus:[NSArray arrayWithObjects:starMenuItem1,starMenuItem2,starMenuItem3,starMenuItem4, nil]];
-    menu.startPoint = CGPointMake(self.view.bounds.size.width-30, self.view.bounds.size.height-30);
-    menu.rotateAngle = radians(270);
-    menu.endRadius = 90;
-    menu.nearRadius = 85;
-    menu.farRadius = 105;
-    menu.menuWholeAngle = radians(120);
-    //menu.frame = CGRectSetPos(menu.frame, ;
-    menu.delegate = self;
-    
-    [self.view addSubview:menu];
     
 }
 

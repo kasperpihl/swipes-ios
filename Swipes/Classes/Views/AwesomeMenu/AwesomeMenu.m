@@ -43,6 +43,7 @@ static CGPoint RotateCGPointAroundCenter(CGPoint point, CGPoint center, float an
 @synthesize expanding = _expanding;
 @synthesize delegate = _delegate;
 @synthesize menusArray = _menusArray;
+@synthesize addButton = _addButton;
 
 #pragma mark - initialization & cleaning up
 - (id)initWithFrame:(CGRect)frame menus:(NSArray *)aMenusArray
