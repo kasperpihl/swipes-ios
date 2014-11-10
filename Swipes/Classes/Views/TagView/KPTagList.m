@@ -14,7 +14,7 @@
 #import "SlowHighlightIcon.h"
 #define VERTICAL_MARGIN 3
 #define HORIZONTAL_MARGIN 10
-#define TAG_HORIZONTAL_PADDING 3
+#define TAG_HORIZONTAL_PADDING 6
 #define TAG_BUTTON_TAG 123
 #define kAddButtonTag 4114
 #define kDefaultSpacing 10

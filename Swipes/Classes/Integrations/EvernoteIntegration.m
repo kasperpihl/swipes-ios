@@ -59,6 +59,8 @@ NSError * NewNSErrorFromException(NSException * exc) {
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
         [ENSession setDisableRefreshingNotebooksCacheOnLaunch:YES]; // check is this better
+        EDAMUser *user = [[ENSession sharedSession] user];
+        NSLog(@"user %@",user);
     });
     return sharedInstance;
 }
