@@ -42,6 +42,7 @@
 #import "KPAccountAlert.h"
 #import "UserHandler.h"
 #import "ShareViewController.h"
+#import "AwesomeMenu.h"
 
 @interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate,SyncDelegate, HintHandlerDelegate>
 
@@ -516,6 +517,7 @@ static RootViewController *sharedObject;
     KPCORE.rootController = self;
     
     [self setupAppearance];
+    
     
 }
 -(void)changedTheme{

@@ -18,13 +18,12 @@
     int _flag;
     NSTimer *_timer;
     AwesomeMenuItem *_addButton;
-    
-    id<AwesomeMenuDelegate> _delegate;
+
     BOOL _isAnimating;
 }
+@property (nonatomic, weak) id<AwesomeMenuDelegate> delegate;
 @property (nonatomic, copy) NSArray *menusArray;
 @property (nonatomic, getter = isExpanding) BOOL expanding;
-@property (nonatomic, assign) id<AwesomeMenuDelegate> delegate;
 
 @property (nonatomic, retain) UIImage *image;
 @property (nonatomic, retain) UIImage *highlightedImage;

@@ -167,6 +167,8 @@
 		A792BB8B18AC3A5E000573E4 /* LocationResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A792BB8A18AC3A5E000573E4 /* LocationResultCell.m */; };
 		A7933049172AB63700F1505E /* TodayListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933048172AB63700F1505E /* TodayListViewController.m */; };
 		A7933056172B2BA100F1505E /* DoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7933055172B2BA100F1505E /* DoneViewController.m */; };
+		A795D5831A10AF2800195DDA /* AwesomeMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A795D5801A10AF2800195DDA /* AwesomeMenu.m */; };
+		A795D5841A10AF2800195DDA /* AwesomeMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A795D5821A10AF2800195DDA /* AwesomeMenuItem.m */; };
 		A798DCCE19E523CC00386C80 /* SelectionTopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A798DCCD19E523CC00386C80 /* SelectionTopMenu.m */; };
 		A798DCD119E53A6700386C80 /* TopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A798DCD019E53A6700386C80 /* TopMenu.m */; };
 		A7A3C25419E1A8D40025E877 /* SavedChangeHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A7A3C25219E1A8D40025E877 /* SavedChangeHandler.h */; };
@@ -733,6 +735,10 @@
 		A7933048172AB63700F1505E /* TodayListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TodayListViewController.m; path = Today/TodayListViewController.m; sourceTree = "<group>"; };
 		A7933054172B2BA100F1505E /* DoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DoneViewController.h; path = Done/DoneViewController.h; sourceTree = "<group>"; };
 		A7933055172B2BA100F1505E /* DoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DoneViewController.m; path = Done/DoneViewController.m; sourceTree = "<group>"; };
+		A795D57F1A10AF2800195DDA /* AwesomeMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwesomeMenu.h; sourceTree = "<group>"; };
+		A795D5801A10AF2800195DDA /* AwesomeMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AwesomeMenu.m; sourceTree = "<group>"; };
+		A795D5811A10AF2800195DDA /* AwesomeMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwesomeMenuItem.h; sourceTree = "<group>"; };
+		A795D5821A10AF2800195DDA /* AwesomeMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AwesomeMenuItem.m; sourceTree = "<group>"; };
 		A798DCCC19E523CC00386C80 /* SelectionTopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectionTopMenu.h; path = TopMenus/SelectionTopMenu.h; sourceTree = "<group>"; };
 		A798DCCD19E523CC00386C80 /* SelectionTopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectionTopMenu.m; path = TopMenus/SelectionTopMenu.m; sourceTree = "<group>"; };
 		A798DCCF19E53A6700386C80 /* TopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TopMenu.h; path = TopMenus/TopMenu.h; sourceTree = "<group>"; };
@@ -1040,6 +1046,7 @@
 		A703B1641838EBF20047DCC9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A795D57E1A10AF2800195DDA /* AwesomeMenu */,
 				A7CEC68619F147830018C709 /* KPExpandingButtonBar */,
 				A798DCCB19E523A200386C80 /* TopMenus */,
 				A74D65AF19DD94B400B4780C /* KxMenu */,
@@ -1696,6 +1703,17 @@
 				A7933055172B2BA100F1505E /* DoneViewController.m */,
 			);
 			name = Done;
+			sourceTree = "<group>";
+		};
+		A795D57E1A10AF2800195DDA /* AwesomeMenu */ = {
+			isa = PBXGroup;
+			children = (
+				A795D57F1A10AF2800195DDA /* AwesomeMenu.h */,
+				A795D5801A10AF2800195DDA /* AwesomeMenu.m */,
+				A795D5811A10AF2800195DDA /* AwesomeMenuItem.h */,
+				A795D5821A10AF2800195DDA /* AwesomeMenuItem.m */,
+			);
+			path = AwesomeMenu;
 			sourceTree = "<group>";
 		};
 		A798DCCB19E523A200386C80 /* TopMenus */ = {
@@ -2625,6 +2643,7 @@
 				A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */,
 				A7FE4402182825A1002AFB2E /* UIImage+Blur.m in Sources */,
 				A7AA796B194E06AA003DAB3B /* SyncQueue.m in Sources */,
+				A795D5841A10AF2800195DDA /* AwesomeMenuItem.m in Sources */,
 				A7DEA1891790BD2D00EB1549 /* MenuViewController.m in Sources */,
 				DA5422CE1986C7A50006A1E6 /* URLHandler.m in Sources */,
 				A703B1B91838EBF20047DCC9 /* AKSegmentedControl.m in Sources */,
@@ -2672,6 +2691,7 @@
 				DA47B6C11A006D1B00299916 /* MagicalRecord+ShorthandSupport.m in Sources */,
 				A748C87C190D9A0800514DB3 /* SubtaskCell.m in Sources */,
 				A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */,
+				A795D5831A10AF2800195DDA /* AwesomeMenu.m in Sources */,
 				A7F522A9197D73CE008B6147 /* EvernoteHelperViewController.m in Sources */,
 				A703B1C31838EBF20047DCC9 /* KPAddTagPanel.m in Sources */,
 				A754DB62197BBD0B00308DBC /* EvernoteImporterViewController.m in Sources */,

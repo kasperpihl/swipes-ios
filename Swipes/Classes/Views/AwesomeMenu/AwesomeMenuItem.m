@@ -38,8 +38,7 @@ highlightedContentImage:(UIImage *)hcimg;
 
 - (void)dealloc
 {
-    [_contentImageView release];
-    [super dealloc];
+    _contentImageView = nil;
 }
 #pragma mark - UIView's methods
 - (void)layoutSubviews

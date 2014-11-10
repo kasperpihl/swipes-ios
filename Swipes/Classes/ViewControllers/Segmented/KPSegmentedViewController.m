@@ -36,6 +36,8 @@
 #import "HintHandler.h"
 #import "UIView+Utilities.h"
 
+#import "AwesomeMenu.h"
+
 #import "NotificationHandler.h"
 
 #import "UserHandler.h"
@@ -696,6 +698,9 @@ typedef enum {
     /* Control handler - Bottom toolbar for add/edit */
     self.controlHandler = [KPControlHandler instanceInView:self.view];
     self.controlHandler.delegate = self;
+    
+    
+    
     UISwipeGestureRecognizer* gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeHandler:)];
     [gesture setDirection:UISwipeGestureRecognizerDirectionLeft];
     [self.view addGestureRecognizer:gesture];
@@ -716,6 +721,41 @@ typedef enum {
     [self.view sendSubviewToBack:self.backgroundImage];
     //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
     //self.navigationItem.rightBarButtonItem = filter;
+    
+    UIImage *storyMenuItemImage = [UIImage imageNamed:@"bg-menuitem.png"];
+    UIImage *storyMenuItemImagePressed = [UIImage imageNamed:@"bg-menuitem-highlighted.png"];
+    UIImage *starImage = [UIImage imageNamed:@"icon-star.png"];
+    AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
+                                                           highlightedImage:storyMenuItemImagePressed
+                                                               ContentImage:[UIImage imageNamed:@"icon-plus.png"]
+                                                    highlightedContentImage:nil];
+    AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
+                                                           highlightedImage:storyMenuItemImagePressed
+                                                               ContentImage:starImage
+                                                    highlightedContentImage:nil];
+    AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
+                                                           highlightedImage:storyMenuItemImagePressed
+                                                               ContentImage:starImage
+                                                    highlightedContentImage:nil];
+    AwesomeMenuItem *starMenuItem4 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
+                                                           highlightedImage:storyMenuItemImagePressed
+                                                               ContentImage:starImage
+                                                    highlightedContentImage:nil];
+
+    // the start item, similar to "add" button of Path
+    
+    AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:self.view.bounds menus:[NSArray arrayWithObjects:starMenuItem1, starMenuItem2, starMenuItem3, starMenuItem4, nil]];
+    menu.startPoint = CGPointMake(self.view.bounds.size.width-30, self.view.bounds.size.height-30);
+    menu.rotateAngle = radians(270);
+    menu.endRadius = 90;
+    menu.nearRadius = 85;
+    menu.farRadius = 105;
+    menu.menuWholeAngle = radians(120);
+    //menu.frame = CGRectSetPos(menu.frame, ;
+    //menu.delegate = self;
+    
+    [self.view addSubview:menu];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated

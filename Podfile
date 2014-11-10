@@ -15,8 +15,6 @@ target :Swipes do
     pod 'DejalActivityView'
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
-# this is currently not used?
-#    pod 'AwesomeMenu', '~> 1.0'
 end
 
 target :SwipesKit do
