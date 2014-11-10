@@ -25,11 +25,6 @@
 @property (nonatomic, copy) NSArray *menusArray;
 @property (nonatomic, getter = isExpanding) BOOL expanding;
 
-@property (nonatomic, retain) UIImage *image;
-@property (nonatomic, retain) UIImage *highlightedImage;
-@property (nonatomic, retain) UIImage *contentImage;
-@property (nonatomic, retain) UIImage *highlightedContentImage;
-
 @property (nonatomic, assign) CGFloat nearRadius;
 @property (nonatomic, assign) CGFloat endRadius;
 @property (nonatomic, assign) CGFloat farRadius;
@@ -45,4 +40,9 @@
 
 @protocol AwesomeMenuDelegate <NSObject>
 - (void)AwesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx;
+@optional
+- (void)AwesomeMenuWillExpand:(AwesomeMenu *)menu;
+- (void)AwesomeMenuDidExpand:(AwesomeMenu *)menu;
+- (void)AwesomeMenuWillCollapse:(AwesomeMenu *)menu;
+- (void)AwesomeMenuDidCollapse:(AwesomeMenu *)menu;
 @end

@@ -8,7 +8,7 @@
 
 #import "KPSegmentedViewController.h"
 #import "KPControlHandler.h"
-#import "KxMenu.h"
+
 #import "AddPanelView.h"
 #import "ToDoListViewController.h"
 #import "KPToDo.h"
@@ -61,7 +61,7 @@ typedef enum {
     TopMenuFilter,
     TopMenuSearch
 } TopMenuState;
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,KPTagListDataSource ,SelectionTopMenuDelegate,SearchTopMenuDelegate,FilterTopMenuDelegate,TopMenuDelegate>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,KPTagListDataSource ,SelectionTopMenuDelegate,SearchTopMenuDelegate,FilterTopMenuDelegate,TopMenuDelegate, AwesomeMenuDelegate>
 
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
@@ -307,12 +307,35 @@ typedef enum {
 -(void)topMenu:(TopMenu *)topMenu changedSize:(CGSize)size{
     CGFloat contentHeight = self.view.bounds.size.height - size.height;
     CGRect contentFrame = CGRectMake(0, size.height, self.view.bounds.size.width, contentHeight);
+    
     //self.currentViewController.view.frame = contentFrame;
     self.contentView.frame = contentFrame;
-    
+    //CGRectSetY(topMenu, CGRectGetMaxY(self.contentView.frame));
     
 }
 
+#pragma mark AwesomeMenuDelegate
+-(void)AwesomeMenuWillExpand:(AwesomeMenu *)menu{
+    [self.controlHandler setState:KPControlHandlerStateNone animated:YES];
+}
+-(void)AwesomeMenuDidCollapse:(AwesomeMenu *)menu{
+    [self.controlHandler setState:KPControlHandlerStateAdd animated:YES];
+}
+-(void)AwesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx{
+    if(idx == 0){
+        [self pressedSettings];
+    }
+    if(idx == 1){
+        [self pressedSearch:self];
+    }
+    if(idx == 2){
+        [self pressedFilter:self];
+    }
+    if(idx == 3){
+        [self pressedSelect:self];
+    }
+    [self.controlHandler setState:KPControlHandlerStateAdd animated:YES];
+}
 
 #pragma mark SelectionTopMenuDelegate
 -(void)didPressAllInSelectionTopMenu:(SelectionTopMenu *)topMenu{
@@ -403,6 +426,7 @@ typedef enum {
             [self topMenu:self.topOverlay changedSize:self.ios7BackgroundView.frame.size];
             [self present:NO topOverlay:nil animated:animated];
         }
+        self.ios7BackgroundView.hidden = (currentTopMenu != TopMenuDefault);
         
         _currentTopMenu = currentTopMenu;
         [self updateContentViewState];
@@ -472,22 +496,6 @@ typedef enum {
     [searchTopMenu.searchField becomeFirstResponder];
 }
 
-
--(void)pressedDropdown{
-    
-    KxMenuItem *selectItem = [KxMenuItem menuItem:@"Select" image:nil target:self action:@selector(pressedSelect:)];
-    KxMenuItem *filterItem = [KxMenuItem menuItem:@"Filter" image:nil target:self action:@selector(pressedFilter:)];
-    KxMenuItem *searchItem = [KxMenuItem menuItem:@"Search" image:nil target:self action:@selector(pressedSearch:)];
-    [KxMenu setBackColor:tcolor(TextColor)];
-    [self._dropdownButton setSelected:YES];
-    [KxMenu showMenuInView:self.view
-                  fromRect:self._dropdownButton.frame
-                 menuItems:@[selectItem,filterItem,searchItem]];
-    return;
-    [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
-    return;
-    
-}
 
 -(KPControlHandlerState)handlerStateForCurrent:(KPControlCurrentState)state{
     if(state == KPControlCurrentStateAdd){
@@ -618,28 +626,6 @@ typedef enum {
         [self.ios7BackgroundView addSubview:self.segmentedControl];
         self.ios7BackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         
-        UIButton *settingsButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
-        settingsButton.titleLabel.font = iconFont(23);
-        [settingsButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        [settingsButton setTitle:iconString(@"settings") forState:UIControlStateNormal];
-        [settingsButton setTitle:iconString(@"settingsFull") forState:UIControlStateHighlighted];
-        [settingsButton addTarget:self action:@selector(pressedSettings) forControlEvents:UIControlEventTouchUpInside];
-        [self.ios7BackgroundView addSubview:settingsButton];
-        self._settingsButton = settingsButton;
-        
-        
-        UIButton *dropdownButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.view.frame.size.width-CELL_LABEL_X, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
-        dropdownButton.titleLabel.font = iconFont(23);
-        [dropdownButton addTarget:self action:@selector(pressedDropdown) forControlEvents:UIControlEventTouchUpInside];
-        dropdownButton.titleLabel.font = iconFont(20);
-        [dropdownButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        dropdownButton.transform = CGAffineTransformMakeRotation(radians(90));
-        [dropdownButton setTitle:iconString(@"rightArrow") forState:UIControlStateNormal];
-        [dropdownButton setTitle:iconString(@"rightArrowFull") forState:UIControlStateHighlighted];
-        dropdownButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        [self.ios7BackgroundView addSubview:dropdownButton];
-        self._dropdownButton = dropdownButton;
-        
         [self.view addSubview:self.ios7BackgroundView];
         
         //self.navigationItem.titleView = self.segmentedControl;
@@ -721,30 +707,13 @@ typedef enum {
     [self.view sendSubviewToBack:self.backgroundImage];
     //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
     //self.navigationItem.rightBarButtonItem = filter;
+    AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImageString:@"settings" highlightedImageString:@"settingsFull"];
+    AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImageString:@"actionSearch" highlightedImageString:@"actionSearch"];
+    AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImageString:@"actionDelete" highlightedImageString:@"actionDeleteFull"];
+    AwesomeMenuItem *starMenuItem4 = [[AwesomeMenuItem alloc] initWithImageString:@"settings" highlightedImageString:@"settingsFull"];
     
-    UIImage *storyMenuItemImage = [UIImage imageNamed:@"bg-menuitem.png"];
-    UIImage *storyMenuItemImagePressed = [UIImage imageNamed:@"bg-menuitem-highlighted.png"];
-    UIImage *starImage = [UIImage imageNamed:@"icon-star.png"];
-    AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
-                                                           highlightedImage:storyMenuItemImagePressed
-                                                               ContentImage:[UIImage imageNamed:@"icon-plus.png"]
-                                                    highlightedContentImage:nil];
-    AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
-                                                           highlightedImage:storyMenuItemImagePressed
-                                                               ContentImage:starImage
-                                                    highlightedContentImage:nil];
-    AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
-                                                           highlightedImage:storyMenuItemImagePressed
-                                                               ContentImage:starImage
-                                                    highlightedContentImage:nil];
-    AwesomeMenuItem *starMenuItem4 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
-                                                           highlightedImage:storyMenuItemImagePressed
-                                                               ContentImage:starImage
-                                                    highlightedContentImage:nil];
-
-    // the start item, similar to "add" button of Path
     
-    AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:self.view.bounds menus:[NSArray arrayWithObjects:starMenuItem1, starMenuItem2, starMenuItem3, starMenuItem4, nil]];
+    AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:self.view.bounds menus:[NSArray arrayWithObjects:starMenuItem1,starMenuItem2,starMenuItem3,starMenuItem4, nil]];
     menu.startPoint = CGPointMake(self.view.bounds.size.width-30, self.view.bounds.size.height-30);
     menu.rotateAngle = radians(270);
     menu.endRadius = 90;
@@ -752,7 +721,7 @@ typedef enum {
     menu.farRadius = 105;
     menu.menuWholeAngle = radians(120);
     //menu.frame = CGRectSetPos(menu.frame, ;
-    //menu.delegate = self;
+    menu.delegate = self;
     
     [self.view addSubview:menu];
     

@@ -10,9 +10,9 @@
 
 @protocol AwesomeMenuItemDelegate;
 
-@interface AwesomeMenuItem : UIImageView
+@interface AwesomeMenuItem : UILabel
 {
-    UIImageView *_contentImageView;
+    CGFloat _buttonSize;
     CGPoint _startPoint;
     CGPoint _endPoint;
     CGPoint _nearPoint; // near
@@ -20,8 +20,9 @@
     
 
 }
-
-@property (nonatomic, retain, readonly) UIImageView *contentImageView;
+@property (nonatomic) NSString *highlightString;
+@property (nonatomic) NSString *imageString;
+@property (nonatomic) CGFloat buttonSize;
 @property (nonatomic) CGPoint startPoint;
 @property (nonatomic) CGPoint endPoint;
 @property (nonatomic) CGPoint nearPoint;
@@ -29,11 +30,8 @@
 
 @property (nonatomic, weak) id<AwesomeMenuItemDelegate> delegate;
 
-- (id)initWithImage:(UIImage *)img 
-   highlightedImage:(UIImage *)himg
-       ContentImage:(UIImage *)cimg
-highlightedContentImage:(UIImage *)hcimg;
-
+- (id)initWithImageString:(NSString*)imgStr
+   highlightedImageString:(NSString*)hImgStr;
 
 @end
 

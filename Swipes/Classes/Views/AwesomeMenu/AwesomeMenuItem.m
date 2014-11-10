@@ -7,10 +7,13 @@
 //
 
 #import "AwesomeMenuItem.h"
+@interface AwesomeMenuItem ()
+
+@end
+
 static inline CGRect ScaleRect(CGRect rect, float n) {return CGRectMake((rect.size.width - rect.size.width * n)/ 2, (rect.size.height - rect.size.height * n) / 2, rect.size.width * n, rect.size.height * n);}
 @implementation AwesomeMenuItem
 
-@synthesize contentImageView = _contentImageView;
 
 @synthesize startPoint = _startPoint;
 @synthesize endPoint = _endPoint;
@@ -19,37 +22,34 @@ static inline CGRect ScaleRect(CGRect rect, float n) {return CGRectMake((rect.si
 @synthesize delegate  = _delegate;
 
 #pragma mark - initialization & cleaning up
-- (id)initWithImage:(UIImage *)img 
-   highlightedImage:(UIImage *)himg
-       ContentImage:(UIImage *)cimg
-highlightedContentImage:(UIImage *)hcimg;
-{
-    if (self = [super init]) 
-    {
-        self.image = img;
-        self.highlightedImage = himg;
+-(id)initWithImageString:(NSString *)imgStr highlightedImageString:(NSString *)hImgStr{
+    if(self = [super init]){
+        self.buttonSize = 38;
+        self.imageString = imgStr;
+        self.highlightString = hImgStr;
+        self.font = iconFont(23);
+        self.text = self.imageString;
+        self.textColor = tcolor(TextColor);
+        self.backgroundColor = tcolor(BackgroundColor);
+        self.textAlignment = NSTextAlignmentCenter;
         self.userInteractionEnabled = YES;
-        _contentImageView = [[UIImageView alloc] initWithImage:cimg];
-        _contentImageView.highlightedImage = hcimg;
-        [self addSubview:_contentImageView];
+        self.layer.borderColor = tcolor(TextColor).CGColor;
+        self.layer.borderWidth = 1;
     }
     return self;
 }
 
-- (void)dealloc
-{
-    _contentImageView = nil;
-}
+
 #pragma mark - UIView's methods
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    float width = self.buttonSize;
+    float height = self.buttonSize;
+    self.bounds = CGRectMake(0, 0, width, height);
+    self.layer.cornerRadius = width/2;
+    self.layer.masksToBounds = YES;
     
-    self.bounds = CGRectMake(0, 0, self.image.size.width, self.image.size.height);
-    
-    float width = _contentImageView.image.size.width;
-    float height = _contentImageView.image.size.height;
-    _contentImageView.frame = CGRectMake(self.bounds.size.width/2 - width/2, self.bounds.size.height/2 - height/2, width, height);
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -94,7 +94,9 @@ highlightedContentImage:(UIImage *)hcimg;
 - (void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
-    [_contentImageView setHighlighted:highlighted];
+    //self.text = highlighted ? self.highlightString : self.imageString;
+    self.backgroundColor = highlighted ? tcolor(TextColor) : tcolor(BackgroundColor);
+    self.textColor = highlighted ? tcolor(BackgroundColor) : tcolor(TextColor);
 }
 
 

@@ -64,10 +64,7 @@ static CGPoint RotateCGPointAroundCenter(CGPoint point, CGPoint center, float an
         self.menusArray = aMenusArray;
         
         // add the "Add" Button.
-        _addButton = [[AwesomeMenuItem alloc] initWithImage:[UIImage imageNamed:@"bg-addbutton.png"]
-                                       highlightedImage:[UIImage imageNamed:@"bg-addbutton-highlighted.png"] 
-                                           ContentImage:[UIImage imageNamed:@"icon-plus.png"] 
-                                highlightedContentImage:[UIImage imageNamed:@"icon-plus-highlighted.png"]];
+        _addButton = [[AwesomeMenuItem alloc] initWithImageString:@"settings" highlightedImageString:@"settingsFull"];
         _addButton.delegate = self;
         _addButton.center = self.startPoint;
         [self addSubview:_addButton];
@@ -90,39 +87,6 @@ static CGPoint RotateCGPointAroundCenter(CGPoint point, CGPoint center, float an
 }
 
 #pragma mark - images
-
-- (void)setImage:(UIImage *)image {
-	_addButton.image = image;
-}
-
-- (UIImage*)image {
-	return _addButton.image;
-}
-
-- (void)setHighlightedImage:(UIImage *)highlightedImage {
-	_addButton.highlightedImage = highlightedImage;
-}
-
-- (UIImage*)highlightedImage {
-	return _addButton.highlightedImage;
-}
-
-
-- (void)setContentImage:(UIImage *)contentImage {
-	_addButton.contentImageView.image = contentImage;
-}
-
-- (UIImage*)contentImage {
-	return _addButton.contentImageView.image;
-}
-
-- (void)setHighlightedContentImage:(UIImage *)highlightedContentImage {
-	_addButton.contentImageView.highlightedImage = highlightedContentImage;
-}
-
-- (UIImage*)highlightedContentImage {
-	return _addButton.contentImageView.highlightedImage;
-}
 
 
                                
@@ -259,6 +223,7 @@ static CGPoint RotateCGPointAroundCenter(CGPoint point, CGPoint center, float an
     // expand or close animation
     if (!_timer) 
     {
+        
         _flag = self.isExpanding ? 0 : ([_menusArray count] - 1);
         SEL selector = self.isExpanding ? @selector(_expand) : @selector(_close);
 
@@ -271,12 +236,15 @@ static CGPoint RotateCGPointAroundCenter(CGPoint point, CGPoint center, float an
 #pragma mark - private methods
 - (void)_expand
 {
-	
+    if(_flag == 0 && [self.delegate respondsToSelector:@selector(AwesomeMenuWillExpand:)])
+        [self.delegate AwesomeMenuWillExpand:self];
     if (_flag == [_menusArray count])
     {
         _isAnimating = NO;
         [_timer invalidate];
         _timer = nil;
+        if([self.delegate respondsToSelector:@selector(AwesomeMenuDidExpand:)])
+            [self.delegate AwesomeMenuDidExpand:self];
         return;
     }
     
@@ -312,13 +280,22 @@ static CGPoint RotateCGPointAroundCenter(CGPoint point, CGPoint center, float an
     
 }
 
+- (void)didClose{
+    if([self.delegate respondsToSelector:@selector(AwesomeMenuDidCollapse:)])
+        [self.delegate AwesomeMenuDidCollapse:self];
+}
+
 - (void)_close
 {
+    if(_flag == ([_menusArray count] - 1) && [self.delegate respondsToSelector:@selector(AwesomeMenuWillCollapse:)])
+        [self.delegate AwesomeMenuWillCollapse:self];
     if (_flag == -1)
     {
         _isAnimating = NO;
         [_timer invalidate];
         _timer = nil;
+        [NSTimer scheduledTimerWithTimeInterval:0.6f target:self selector:@selector(didClose) userInfo:nil repeats:NO];
+        
         return;
     }
     
