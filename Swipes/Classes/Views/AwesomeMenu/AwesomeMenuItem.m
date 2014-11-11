@@ -22,11 +22,10 @@ static inline CGRect ScaleRect(CGRect rect, float n) {return CGRectMake((rect.si
 @synthesize delegate  = _delegate;
 
 #pragma mark - initialization & cleaning up
--(id)initWithImageString:(NSString *)imgStr highlightedImageString:(NSString *)hImgStr{
+-(id)initWithImageString:(NSString *)imgStr{
     if(self = [super init]){
         self.buttonSize = 38;
         self.imageString = imgStr;
-        self.highlightString = hImgStr;
         self.font = iconFont(23);
         self.text = self.imageString;
         self.textColor = tcolor(TextColor);
@@ -94,7 +93,6 @@ static inline CGRect ScaleRect(CGRect rect, float n) {return CGRectMake((rect.si
 - (void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
-    //self.text = highlighted ? self.highlightString : self.imageString;
     self.backgroundColor = highlighted ? tcolor(TextColor) : tcolor(BackgroundColor);
     self.textColor = highlighted ? tcolor(BackgroundColor) : tcolor(TextColor);
 }

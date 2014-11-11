@@ -87,6 +87,15 @@ static Global *sharedObject;
     iconCompare(@"settingsWalkthroughFull",     @"\ue622");
     iconCompare(@"settingsNotificationFull",    @"\ue624");
     
+    /* Action menu awesomemenu */
+    iconCompare(@"actionMenuSettings",          @"\ue655");
+    iconCompare(@"actionMenuSearch",            @"\ue656");
+    iconCompare(@"actionMenuFilter",            @"\ue657");
+    iconCompare(@"actionMenuSelect",            @"\ue658");
+    
+    /* Filter icons */
+    iconCompare(@"filterPriority",              @"\ue65a");
+    iconCompare(@"filterRepeat",                @"\ue65b");
     
     iconCompare(@"checkmark",                   @"\ue625");
     iconCompare(@"checkmarkThick",              @"\ue64f");

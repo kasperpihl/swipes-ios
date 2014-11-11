@@ -36,7 +36,6 @@
 #import "HintHandler.h"
 #import "UIView+Utilities.h"
 
-#import "AwesomeMenu.h"
 
 #import "NotificationHandler.h"
 
@@ -61,7 +60,7 @@ typedef enum {
     TopMenuFilter,
     TopMenuSearch
 } TopMenuState;
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,KPTagListDataSource ,SelectionTopMenuDelegate,SearchTopMenuDelegate,FilterTopMenuDelegate,TopMenuDelegate, AwesomeMenuDelegate>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,KPTagListDataSource ,SelectionTopMenuDelegate,SearchTopMenuDelegate,FilterTopMenuDelegate,TopMenuDelegate>
 
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
@@ -79,7 +78,6 @@ typedef enum {
 @property (nonatomic) TopMenu *topOverlay;
 @property (nonatomic) TopMenuState currentTopMenu;
 @property (nonatomic) BOOL isEditingTags;
-@property (nonatomic) AwesomeMenu *awesomeMenu;
 @end
 
 @implementation KPSegmentedViewController
@@ -270,9 +268,11 @@ typedef enum {
             break;
     }
 
-    button.titleLabel.font = iconFont(23);
+    button.titleLabel.font = iconFont(20);
+    if(controlButton == KPSegmentButtonToday)
+        button.titleLabel.font = iconFont(22);
     [button setTitle:textString forState:UIControlStateNormal];
-    [button setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [button setTitleColor:color(189, 191, 193, 1) forState:UIControlStateNormal];
     [button setTitleColor:highlightColor forState:UIControlStateHighlighted];
     [button setTitleColor:highlightColor forState:UIControlStateSelected];
     [button setTitleColor:highlightColor forState:UIControlStateSelected | UIControlStateHighlighted];
@@ -416,16 +416,17 @@ typedef enum {
 }
 -(void)setTopMenu:(TopMenu*)overlay state:(TopMenuState)topMenuState animated:(BOOL)animated{
     if(topMenuState != _currentTopMenu){
-        
+        if(topMenuState == TopMenuDefault){
+            self.controlHandler.bottomPadding = 0;
+            [self topMenu:self.topOverlay changedSize:self.ios7BackgroundView.frame.size];
+        }
         // Handling search / cleanup and shift to
         if(_currentTopMenu == TopMenuSelect || topMenuState == TopMenuSelect){
             [self.currentViewController setSelectionMode:(topMenuState == TopMenuSelect)];
             [self.controlHandler setState:((topMenuState == TopMenuSelect) ? KPControlHandlerStateNone : KPControlHandlerStateAdd) animated:YES];
         }
         
-        if(topMenuState == TopMenuDefault){
-            [self topMenu:self.topOverlay changedSize:self.ios7BackgroundView.frame.size];
-        }
+        
         self.ios7BackgroundView.hidden = (topMenuState != TopMenuDefault);
         
         _currentTopMenu = topMenuState;
@@ -457,12 +458,16 @@ typedef enum {
         }
     };
     voidBlock completionBlock = ^{
-        self.awesomeMenu.hidden = present ? YES : NO;
-        if(present)
+        if(present){
+            CGRectSetHeight(self.contentView, self.view.frame.size.height - overlay.frame.size.height - (overlay.position == TopMenuBottom ? 20 : 0));
             self.topOverlay = overlay;
+            if(overlay.position == TopMenuBottom)
+                self.controlHandler.bottomPadding = overlay.frame.size.height;
+        }
         else{
             [self.topOverlay removeFromSuperview];
             self.topOverlay = nil;
+            CGRectSetHeight(self.contentView, self.view.frame.size.height - self.ios7BackgroundView.frame.size.height);
         }
     };
     
@@ -480,7 +485,8 @@ typedef enum {
 }
 
 -(void)pressedSelect:(id)sender{
-    SelectionTopMenu *selectionTopMenu = [[SelectionTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
+    SelectionTopMenu *selectionTopMenu = [[SelectionTopMenu alloc] initWithFrame:CGRectMake(0, 0, self.ios7BackgroundView.frame.size.width, self.ios7BackgroundView.frame.size.height-20)];
+    selectionTopMenu.position = TopMenuBottom;
     selectionTopMenu.selectionDelegate = self;
     
     [self setTopMenu:selectionTopMenu state:TopMenuSelect animated:YES];

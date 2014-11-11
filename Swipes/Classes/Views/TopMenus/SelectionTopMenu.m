@@ -17,9 +17,9 @@
     self = [super initWithFrame:frame];
     if(self){
         self.backgroundColor = tcolor(BackgroundColor);
-
+        CGFloat topY = 0;//kTopY;
         UIButton *allButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-        allButton.frame = CGRectMake(0, kTopY, kSideButtonsWidth, frame.size.height-kTopY);
+        allButton.frame = CGRectMake(0, topY, kSideButtonsWidth, frame.size.height-topY);
         allButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         allButton.titleLabel.font = KP_REGULAR(16);
         [allButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
@@ -29,7 +29,7 @@
         [self addSubview:allButton];
         self.allButton = allButton;
         
-        UIButton *helpButton = [[UIButton alloc] initWithFrame:CGRectMake(kSideButtonsWidth, kTopY, frame.size.width-2*kSideButtonsWidth, frame.size.height-kTopY)];
+        UIButton *helpButton = [[UIButton alloc] initWithFrame:CGRectMake(kSideButtonsWidth, topY, frame.size.width-2*kSideButtonsWidth, frame.size.height-topY)];
         helpButton.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         helpButton.titleLabel.font = KP_BOLD(16);
         [helpButton setTitle:@"Select more" forState:UIControlStateNormal];
@@ -39,7 +39,7 @@
         self.helpButton = helpButton;
         
         UIButton *closeButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-        closeButton.frame = CGRectMake(frame.size.width-kSideButtonsWidth, kTopY, kSideButtonsWidth, frame.size.height-kTopY);
+        closeButton.frame = CGRectMake(frame.size.width-kSideButtonsWidth, topY, kSideButtonsWidth, frame.size.height-topY);
         closeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin;
         closeButton.titleLabel.font = iconFont(23);
         [closeButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];

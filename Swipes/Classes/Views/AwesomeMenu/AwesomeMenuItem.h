@@ -30,8 +30,7 @@
 
 @property (nonatomic, weak) id<AwesomeMenuItemDelegate> delegate;
 
-- (id)initWithImageString:(NSString*)imgStr
-   highlightedImageString:(NSString*)hImgStr;
+- (id)initWithImageString:(NSString*)imgStr;
 
 @end
 

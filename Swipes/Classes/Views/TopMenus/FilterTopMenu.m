@@ -74,7 +74,7 @@
         
         UIButton *priorityFilterButton = [self iconButton];
         CGRectSetCenterX(priorityFilterButton, self.frame.size.width/2 - 45);
-        [priorityFilterButton setTitle:iconString(@"editActionRoundedPlus") forState:UIControlStateNormal];
+        [priorityFilterButton setTitle:iconString(@"filterPriority") forState:UIControlStateNormal];
         [priorityFilterButton addTarget:self action:@selector(onPriority:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:priorityFilterButton];
         self.priorityFilterButton = priorityFilterButton;
@@ -88,7 +88,7 @@
         
         UIButton *recurringFilterButton = [self iconButton];
         CGRectSetCenterX(recurringFilterButton, self.frame.size.width/2 + 45);
-        [recurringFilterButton setTitle:iconString(@"editRepeat") forState:UIControlStateNormal];
+        [recurringFilterButton setTitle:iconString(@"filterRepeat") forState:UIControlStateNormal];
         [recurringFilterButton addTarget:self action:@selector(onRecurring:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:recurringFilterButton];
         self.recurringFilterButton = recurringFilterButton;

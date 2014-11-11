@@ -41,8 +41,8 @@
 }
 -(CGFloat)getYForBigSize:(BOOL)big{
     CGFloat size;
-    if(big) size = (self.view.frame.size.height-EDIT_TOOLBAR_HEIGHT);
-    else size = (self.view.frame.size.height-ADD_TOOLBAR_HEIGHT);
+    if(big) size = (self.view.frame.size.height-EDIT_TOOLBAR_HEIGHT-self.bottomPadding);
+    else size = (self.view.frame.size.height-ADD_TOOLBAR_HEIGHT-self.bottomPadding);
     return size;
 }
 - (id)initWithView:(UIView*)view
@@ -62,10 +62,10 @@
         self.gradientView = gradientBackground;
         [view addSubview:self.gradientView];
         
-        AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImageString:@"settings" highlightedImageString:@"settingsFull"];
-        AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImageString:@"actionSearch" highlightedImageString:@"actionSearch"];
-        AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImageString:@"actionDelete" highlightedImageString:@"actionDeleteFull"];
-        AwesomeMenuItem *starMenuItem4 = [[AwesomeMenuItem alloc] initWithImageString:@"settings" highlightedImageString:@"settingsFull"];
+        AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuSettings"];
+        AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuSearch"];
+        AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuFilter"];
+        AwesomeMenuItem *starMenuItem4 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuSelect"];
         
         
         AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:view.bounds menus:[NSArray arrayWithObjects:starMenuItem1,starMenuItem2,starMenuItem3,starMenuItem4, nil]];
@@ -110,6 +110,7 @@
     return self;
 }
 
+
 -(voidBlock)getClearBlockFromState:(KPControlHandlerState)state toState:(KPControlHandlerState)toState{
     CGFloat targetY = self.view.frame.size.height;
     voidBlock block = ^(void) {
@@ -124,14 +125,23 @@
             default:
                 break;
         }
+        if(toState == KPControlHandlerStateNone && !self.lockGradient){
+            CGRectSetY(self.gradientView, targetY);
+            self.isShowingGradient = NO;
+        }
     };
     return block;
 }
-
+-(void)setBottomPadding:(CGFloat)bottomPadding{
+    if(_bottomPadding != bottomPadding){
+        _bottomPadding = bottomPadding;
+    }
+    
+}
 -(void)setLockGradient:(BOOL)lockGradient{
     if(_lockGradient != lockGradient){
         _lockGradient = lockGradient;
-        CGFloat targetY = lockGradient ? self.view.frame.size.height : [self getYForBigSize:YES];
+        CGFloat targetY = lockGradient ? self.view.frame.size.height-self.bottomPadding : [self getYForBigSize:YES];
         CGRectSetY(self.gradientView, targetY);
     }
 }
@@ -146,7 +156,7 @@
                     self.isShowingGradient = YES;
                 }
                 CGRectSetY(self.addToolbar, smallButtonY);
-                CGRectSetY(self.awesomeMenu, self.awesomeMenu.superview.frame.size.height-self.awesomeMenu.frame.size.height);
+                CGRectSetY(self.awesomeMenu, self.awesomeMenu.superview.frame.size.height-self.awesomeMenu.frame.size.height-self.bottomPadding);
                 
                 break;
             case KPControlHandlerStateEdit:
@@ -219,7 +229,7 @@
     //[self.controlHandler setState:KPControlHandlerStateNone animated:YES];
 }
 -(void)cleanFromAwesomeMenu{
-    if(self.activeState == KPControlHandlerStateAdd){
+    if(self.activeState == KPControlHandlerStateAdd && !self.awesomeMenu.isExpanding){
         CGFloat smallButtonY = [self getYForBigSize:NO];
         [UIView animateWithDuration:ANIMATION_DURATION delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             CGRectSetY(self.addToolbar, smallButtonY);
@@ -242,11 +252,11 @@
 #pragma mark KPToolbarDelegate
 -(void)toolbar:(KPToolbar *)toolbar editButton:(UIButton *__autoreleasing *)button forItem:(NSInteger)item{
     UIButton *actButton = *button;
-    if(toolbar.tag == EDIT_TOOLBAR_TAG){
+    /*if(toolbar.tag == EDIT_TOOLBAR_TAG){
         actButton.layer.cornerRadius = actButton.frame.size.height/2;
         actButton.layer.borderColor = tcolor(TextColor).CGColor;
         actButton.layer.borderWidth = 1;
-    }
+    }*/
 }
 
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{

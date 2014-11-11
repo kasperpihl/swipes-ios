@@ -102,7 +102,7 @@ secondStateIconName:(NSString *)secondIconName
     [_colorIndicatorView setBackgroundColor:[UIColor clearColor]];
     [self insertSubview:_colorIndicatorView atIndex:0];
 
-    _slidingImageIcon = iconLabel(@"todayFull", 20);
+    _slidingImageIcon = iconLabel(@"today", 20);
     _slidingImageIcon.text = @"";
     [_slidingImageIcon setTextColor:tcolorF(TextColor, ThemeDark)];
     [_slidingImageIcon setContentMode:UIViewContentModeCenter];

@@ -564,13 +564,13 @@ typedef enum {
     
     [self.view addSubview:self.titleView];
     
-    self.scheduleButton = [self menuButtonWithIcon:iconString(@"laterFull") color:tcolor(LaterColor)];
+    self.scheduleButton = [self menuButtonWithIcon:iconString(@"later") color:tcolor(LaterColor)];
     CGRectSetCenterX(self.scheduleButton, kMenuButtonSideMargin);
     [self.view addSubview:self.scheduleButton];
-    self.tasksButton = [self menuButtonWithIcon:iconString(@"todayFull") color:tcolor(TasksColor)];
+    self.tasksButton = [self menuButtonWithIcon:iconString(@"today") color:tcolor(TasksColor)];
     CGRectSetCenterX(self.tasksButton, self.view.center.x);
     [self.view addSubview:self.tasksButton];
-    self.doneButton = [self menuButtonWithIcon:iconString(@"doneFull") color:tcolor(DoneColor)];
+    self.doneButton = [self menuButtonWithIcon:iconString(@"done") color:tcolor(DoneColor)];
     CGRectSetCenterX(self.doneButton, self.view.bounds.size.width-kMenuButtonSideMargin);
     [self.view addSubview:self.doneButton];
     
