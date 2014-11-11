@@ -200,6 +200,15 @@
         
         if([self.delegate respondsToSelector:@selector(syncHandler:status:userInfo:error:)])
             [self.delegate syncHandler:self status:status userInfo:userInfo error:error];
+        
+#ifndef NOT_APPLICATION
+        if (SyncStatusStarted == status) {
+            [GlobalApp activityIndicatorVisible:YES];
+        }
+        else {
+            [GlobalApp activityIndicatorVisible:NO];
+        }
+#endif
     });
     
 }
