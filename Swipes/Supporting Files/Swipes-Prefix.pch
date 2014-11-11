@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'Shery' target in the 'Shery' project
+// Prefix header for all source files
 //
 
 #import <Availability.h>
@@ -20,3 +20,5 @@
     #import "DesignSettings.h"
 
 #endif
+
+//#define EVERNOTE_BUSINESS 1
