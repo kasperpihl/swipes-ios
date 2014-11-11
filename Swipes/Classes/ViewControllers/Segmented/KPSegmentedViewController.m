@@ -272,7 +272,7 @@ typedef enum {
     if(controlButton == KPSegmentButtonToday)
         button.titleLabel.font = iconFont(22);
     [button setTitle:textString forState:UIControlStateNormal];
-    [button setTitleColor:color(189, 191, 193, 1) forState:UIControlStateNormal];
+    [button setTitleColor:color(151, 153, 155, 1) forState:UIControlStateNormal];
     [button setTitleColor:highlightColor forState:UIControlStateHighlighted];
     [button setTitleColor:highlightColor forState:UIControlStateSelected];
     [button setTitleColor:highlightColor forState:UIControlStateSelected | UIControlStateHighlighted];
@@ -370,7 +370,7 @@ typedef enum {
 }
 -(void)didClearFilterTopMenu:(FilterTopMenu *)topMenu{
     [kFilter clearAll];
-    self.currentTopMenu = TopMenuDefault;
+    [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 -(void)filterMenu:(FilterTopMenu *)filterMenu updatedPriority:(BOOL)priority{
     kFilter.priorityFilter = priority ? FilterSettingOn : FilterSettingNone;
@@ -394,10 +394,10 @@ typedef enum {
 }
 -(void)didClearSearchTopMenu:(SearchTopMenu *)topMenu{
     [kFilter clearAll];
-    self.currentTopMenu = TopMenuDefault;
+    [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 -(void)didCloseSearchFieldTopMenu:(SearchTopMenu *)topMenu{
-    self.currentTopMenu = TopMenuDefault;
+    [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 
 
@@ -485,7 +485,7 @@ typedef enum {
 }
 
 -(void)pressedSelect:(id)sender{
-    SelectionTopMenu *selectionTopMenu = [[SelectionTopMenu alloc] initWithFrame:CGRectMake(0, 0, self.ios7BackgroundView.frame.size.width, self.ios7BackgroundView.frame.size.height-20)];
+    SelectionTopMenu *selectionTopMenu = [[SelectionTopMenu alloc] initWithFrame:CGRectMake(0, 0, self.ios7BackgroundView.frame.size.width, self.ios7BackgroundView.frame.size.height-16)];
     selectionTopMenu.position = TopMenuBottom;
     selectionTopMenu.selectionDelegate = self;
     

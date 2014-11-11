@@ -16,8 +16,22 @@
 -(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
-        self.backgroundColor = tcolor(BackgroundColor);
-        CGFloat topY = 0;//kTopY;
+        self.backgroundColor = CLEAR;
+        CGFloat topY = 4;//kTopY;
+        UIView *gradientBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, topY)];
+        gradientBackground.backgroundColor = CLEAR;
+        CAGradientLayer *agradient = [CAGradientLayer layer];
+        agradient.frame = gradientBackground.bounds;
+        gradientBackground.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        agradient.colors = @[(id)alpha(tcolor(TextColor),0.0f).CGColor,(id)alpha(tcolor(TextColor),0.2f).CGColor,(id)alpha(tcolor(TextColor),0.4f).CGColor];
+        agradient.locations = @[@0.0,@0.5,@1.0];
+        [gradientBackground.layer insertSublayer:agradient atIndex:0];
+        [self addSubview:gradientBackground];
+        UIView *background = [[UIView alloc] initWithFrame:CGRectMake(0, topY, self.frame.size.width, self.frame.size.height-topY)];
+        background.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+        background.backgroundColor = tcolor(BackgroundColor);
+        [self addSubview:background];
+        
         UIButton *allButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         allButton.frame = CGRectMake(0, topY, kSideButtonsWidth, frame.size.height-topY);
         allButton.autoresizingMask = UIViewAutoresizingFlexibleHeight;
@@ -31,8 +45,9 @@
         
         UIButton *helpButton = [[UIButton alloc] initWithFrame:CGRectMake(kSideButtonsWidth, topY, frame.size.width-2*kSideButtonsWidth, frame.size.height-topY)];
         helpButton.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        helpButton.titleLabel.font = KP_BOLD(16);
-        [helpButton setTitle:@"Select more" forState:UIControlStateNormal];
+        helpButton.backgroundColor = CLEAR;
+        helpButton.titleLabel.font = KP_REGULAR(16);
+        [helpButton setTitle:@"SELECT MORE" forState:UIControlStateNormal];
         [helpButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [helpButton addTarget:self action:@selector(onHelpButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:helpButton];
@@ -40,6 +55,7 @@
         
         UIButton *closeButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         closeButton.frame = CGRectMake(frame.size.width-kSideButtonsWidth, topY, kSideButtonsWidth, frame.size.height-topY);
+        closeButton.backgroundColor = CLEAR;
         closeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin;
         closeButton.titleLabel.font = iconFont(23);
         [closeButton setTitle:iconString(@"plusThick") forState:UIControlStateNormal];

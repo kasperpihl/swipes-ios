@@ -9,6 +9,7 @@
 #import "KPTagList.h"
 #import "UIColor+Utilities.h"
 #import "FilterTopMenu.h"
+#define kBackgroundColorButtons CLEAR
 
 @interface FilterTopMenu () <KPTagListResizeDelegate, KPTagDelegate>
 @property (nonatomic, strong) IBOutlet UIButton *closeButton;
@@ -22,11 +23,40 @@
 -(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
-        self.backgroundColor = tcolor(BackgroundColor);
+        self.backgroundColor = CLEAR;
+        CGFloat gradientHeight = 4;
+        UIView *gradientBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, gradientHeight)];
+        gradientBackground.backgroundColor = CLEAR;
+        CAGradientLayer *agradient = [CAGradientLayer layer];
+        agradient.frame = gradientBackground.bounds;
+        gradientBackground.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        agradient.colors = @[(id)alpha(tcolor(TextColor),0.0f).CGColor,(id)alpha(tcolor(TextColor),0.2f).CGColor,(id)alpha(tcolor(TextColor),0.4f).CGColor];
+        agradient.locations = @[@0.0,@0.5,@1.0];
+        [gradientBackground.layer insertSublayer:agradient atIndex:0];
+        [self addSubview:gradientBackground];
         
+        CGFloat topY = 44;
         
+        UIView *background = [[UIView alloc] initWithFrame:CGRectMake(0, gradientHeight, self.frame.size.width, self.frame.size.height-gradientHeight)];
+        background.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+        background.backgroundColor = tcolor(BackgroundColor);
+        [self addSubview:background];
+        /*
+        UIView *seperator2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 2)];
+        seperator2.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        seperator2.backgroundColor = alpha(tcolor(TextColor),0.3);
+        [self addSubview:seperator2];
+        */
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, gradientHeight, self.frame.size.width, topY)];
         
-        KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, kTopY, self.frame.size.width, 0)];
+        titleLabel.backgroundColor = CLEAR;
+        titleLabel.textColor = tcolor(TextColor);
+        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel.font = KP_REGULAR(16);
+        titleLabel.text = @"SET WORKSPACE";
+        [self addSubview:titleLabel];
+        
+        KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, topY+gradientHeight, self.frame.size.width, 0)];
         tagList.emptyText = @"No tags assigned";
         tagList.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         //tagList.addTagButton = YES;
@@ -42,6 +72,7 @@
         tagList.marginTop = (14+tagList.spacing)/2;
         tagList.emptyLabelMarginHack = 10;
         //tagList.lastRowSpacingHack = 90;
+        tagList.marginTop = 4;
         tagList.bottomMargin = 0;//(16+tagList.spacing)/2;
         tagList.marginRight = tagList.spacing;
         tagList.resizeDelegate = self;
@@ -51,20 +82,21 @@
 
         
         UIButton *clearButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-        clearButton.frame = CGRectMake(0, self.frame.size.height - kSideButtonsWidth, kSideButtonsWidth, kSideButtonsWidth);
-        clearButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-        clearButton.titleLabel.font = KP_REGULAR(15);
-        [clearButton setTitle:@"Clear" forState:UIControlStateNormal];
+        clearButton.frame = CGRectMake(0, gradientHeight, kSideButtonsWidth, topY);
+        clearButton.titleLabel.font = iconFont(20);
+        clearButton.transform = CGAffineTransformMakeRotation(M_PI/2/2);
+        [clearButton setTitle:@"plusThick" forState:UIControlStateNormal];
         [clearButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [clearButton addTarget:self action:@selector(onClear:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:clearButton];
         self.clearButton = clearButton;
         
         UIButton *closeButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-        closeButton.frame = CGRectMake(frame.size.width-kSideButtonsWidth, self.frame.size.height - kSideButtonsWidth, kSideButtonsWidth, kSideButtonsWidth);
-        closeButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin;
-        closeButton.titleLabel.font = KP_REGULAR(15);
-        [closeButton setTitle:@"Close" forState:UIControlStateNormal];
+        closeButton.frame = CGRectMake(frame.size.width-kSideButtonsWidth, gradientHeight, kSideButtonsWidth, topY);
+        closeButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        closeButton.titleLabel.font = iconFont(20);
+        [closeButton setTitle:@"arrowThick" forState:UIControlStateNormal];
+        
         [closeButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [closeButton addTarget:self action:@selector(onClose:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
@@ -93,6 +125,7 @@
         [self addSubview:recurringFilterButton];
         self.recurringFilterButton = recurringFilterButton;
         
+        
     }
     return self;
 }
@@ -106,8 +139,8 @@
     [filterButton setTitleColor:tcolor(TextColor) forState:UIControlStateSelected|UIControlStateHighlighted];
     [filterButton setTitleColor:tcolor(BackgroundColor) forState:UIControlStateHighlighted];
     [filterButton setTitleColor:tcolor(BackgroundColor) forState:UIControlStateSelected];
-    [filterButton setBackgroundImage:[tcolor(BackgroundColor) image] forState:UIControlStateNormal];
-    [filterButton setBackgroundImage:[tcolor(BackgroundColor) image] forState:UIControlStateSelected|UIControlStateHighlighted];
+    [filterButton setBackgroundImage:[kBackgroundColorButtons image] forState:UIControlStateNormal];
+    [filterButton setBackgroundImage:[kBackgroundColorButtons image] forState:UIControlStateSelected|UIControlStateHighlighted];
     [filterButton setBackgroundImage:[tcolor(TextColor) image] forState:UIControlStateHighlighted];
     [filterButton setBackgroundImage:[tcolor(TextColor) image] forState:UIControlStateSelected];
     filterButton.layer.borderColor = tcolor(TextColor).CGColor;
@@ -118,7 +151,7 @@
 }
 
 -(void)tagList:(KPTagList *)tagList changedSize:(CGSize)size{
-    CGRectSetHeight(self, kTopY + tagList.frame.size.height + kSideButtonsWidth  );
+    CGRectSetHeight(self, CGRectGetMaxY(tagList.frame) + kSideButtonsWidth  );
     [self.topMenuDelegate topMenu:self changedSize:self.frame.size];
     [self updateButtons];
 }
