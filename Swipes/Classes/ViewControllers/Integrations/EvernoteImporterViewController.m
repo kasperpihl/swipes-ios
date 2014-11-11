@@ -271,6 +271,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
 
+    [GlobalApp activityIndicatorVisible:YES];
     [kEnInt findNotesWithSearch:@"todo:*" block:^(NSArray *findNotesResults, NSError *error) {
         if (findNotesResults) {
             if (findNotesResults.count == 0) {
@@ -278,6 +279,7 @@
             }
             self.noteList = findNotesResults;
             [self.tableView reloadData];
+            [GlobalApp activityIndicatorVisible:NO];
         }
     }];
     

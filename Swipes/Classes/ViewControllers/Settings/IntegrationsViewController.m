@@ -18,6 +18,11 @@
 #import "EvernoteSyncHandler.h"
 #import "IntegrationsViewController.h"
 
+#ifdef EVERNOTE_BUSINESS
+int const kCellCount = 5;
+#else
+int const kCellCount = 4;
+#endif
 
 #define kLocalCellHeight 55
 #define kLearnMoreHeight 70
@@ -95,7 +100,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSInteger extraIfConnected = [kEnInt isAuthenticated] ? 5 : 0;
+    NSInteger extraIfConnected = [kEnInt isAuthenticated] ? kCellCount : 0;
     return kEvernoteIntegration + 1 + extraIfConnected;
 }
 
@@ -117,7 +122,7 @@
         cell.backgroundColor = CLEAR;
         cell.textLabel.font = KP_REGULAR(14);
         cell.detailTextLabel.font = KP_REGULAR(11);
-        if (indexPath.row < 5) {
+        if (indexPath.row < kCellCount) {
             
             UISwitch *aSwitch = [[UISwitch alloc] init];
             aSwitch.tag = indexPath.row;
@@ -126,16 +131,17 @@
             [aSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
             [cell.contentView addSubview:aSwitch];
             
-            if(indexPath.row == 1){
+            if(indexPath.row == 1) {
                 aSwitch.on = kEnInt.enableSync;
             }
-            else if(indexPath.row == 2){
+            else if(indexPath.row == 2) {
                 aSwitch.on = kEnInt.autoFindFromTag;
             }
-            else if(indexPath.row == 3){
+            else if(indexPath.row == 3) {
                 aSwitch.on = kEnInt.findInPersonalLinked;
             }
-            else if(indexPath.row == 4){
+#ifdef EVERNOTE_BUSINESS
+            else if(indexPath.row == 4) {
                 if (_isEvernoteBusinessUser) {
                     aSwitch.on = kEnInt.findInBusinessNotebooks;
                 }
@@ -146,6 +152,7 @@
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 }
             }
+#endif
             
         }
         else{
@@ -166,9 +173,11 @@
     else if(tag == 3){
         [kEnInt setFindInPersonalLinked:sender.on];
     }
+#ifdef EVERNOTE_BUSINESS
     else if(tag == 4){
         [kEnInt setFindInBusinessNotebooks:sender.on];
     }
+#endif
     
     if (sender.on) {
         [[KPCORE evernoteSyncHandler] setUpdatedAt:nil];
@@ -218,6 +227,7 @@
         else if(indexPath.row == 3){
             cell.textLabel.text = @"Sync with personal linked notebooks";
         }
+#ifdef EVERNOTE_BUSINESS
         else if(indexPath.row == 4){
             if (_isEvernoteBusinessUser)
                 cell.textLabel.text = @"Sync with Evernote for Business";
@@ -226,7 +236,9 @@
                 cell.detailTextLabel.text = @"Tap to learn more";
             }
         }
-        else if(indexPath.row == 5){
+#endif
+
+        else if(indexPath.row == kCellCount){
             cell.textLabel.text = @"Open Evernote Importer";
         }
     }
@@ -288,12 +300,14 @@
             break;
         }
     }
+#ifdef EVERNOTE_BUSINESS
     if (indexPath.row == 4) {
         if (!_isEvernoteBusinessUser) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://swipesapp.com/evernote-business/"]];
         }
     }
-    else if (indexPath.row == 5) {
+#endif
+    if (indexPath.row == kCellCount) {
         [self showEvernoteImporterAnimated:YES];
     }
 }
@@ -329,16 +343,5 @@
     [super viewDidAppear:animated];
     
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

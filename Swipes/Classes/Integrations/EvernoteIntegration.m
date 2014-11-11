@@ -389,9 +389,11 @@ NSError * NewNSErrorFromException(NSException * exc) {
     ENNoteSearch* noteSearch = [ENNoteSearch noteSearchWithSearchString:search];
     
     ENSessionSearchScope scope = ENSessionSearchScopePersonal;
+#ifdef EVERNOTE_BUSINESS
     if (self.findInBusinessNotebooks) {
         scope |= ENSessionSearchScopeBusiness;
     }
+#endif
     if (self.findInPersonalLinked) {
         scope |= ENSessionSearchScopePersonalLinked;
     }

@@ -186,6 +186,13 @@
     [self.schemeButton.iconLabel setTitle:highlightTitle forState:UIControlStateHighlighted];
 }
 
+- (void)swipeHandler:(UISwipeGestureRecognizer *)recognizer
+{
+    if (recognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
+        [self pressedBack:nil];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -207,6 +214,9 @@
     notify(@"updated sync",updateSyncLabel);
     notify(@"changed theme", changedTheme);
     
+    UISwipeGestureRecognizer* gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeHandler:)];
+    [gesture setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self.view addGestureRecognizer:gesture];
 }
 
 -(void)updateSyncLabel

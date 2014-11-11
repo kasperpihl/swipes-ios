@@ -663,6 +663,10 @@ typedef enum {
         if (0 < selected) {
             self.currentIndex = selected - 1;
         }
+        // go to settings on the next swipe 
+//        else {
+//            [ROOT_CONTROLLER.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
+//        }
     }
 }
 
