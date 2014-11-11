@@ -88,7 +88,7 @@
         
         UIButton *recurringFilterButton = [self iconButton];
         CGRectSetCenterX(recurringFilterButton, self.frame.size.width/2 + 45);
-        [recurringFilterButton setTitle:iconString(@"filterRepeat") forState:UIControlStateNormal];
+        [recurringFilterButton setTitle:iconString(@"editRepeat") forState:UIControlStateNormal];
         [recurringFilterButton addTarget:self action:@selector(onRecurring:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:recurringFilterButton];
         self.recurringFilterButton = recurringFilterButton;

@@ -42,8 +42,8 @@
         closeButton.frame = CGRectMake(frame.size.width-kSideButtonsWidth, topY, kSideButtonsWidth, frame.size.height-topY);
         closeButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin;
         closeButton.titleLabel.font = iconFont(23);
-        [closeButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
-        [closeButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
+        [closeButton setTitle:iconString(@"plusThick") forState:UIControlStateNormal];
+        closeButton.transform = CGAffineTransformMakeRotation(M_PI/2/2);
         [closeButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [closeButton addTarget:self action:@selector(onClose:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];

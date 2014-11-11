@@ -519,6 +519,7 @@ static RootViewController *sharedObject;
     [self setupAppearance];
     
     
+    
 }
 -(void)changedTheme{
     UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;

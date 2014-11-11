@@ -35,7 +35,8 @@ static Global *sharedObject;
         return iconString;
     
     /* Notification bar */
-    iconCompare(@"plusThick",                  @"\ue651");
+    iconCompare(@"plusThick",                   @"\ue65f");
+    iconCompare(@"arrowThick",                  @"\ue65b");
     
     /* Nav bar */
     iconCompare(@"settings",                    @"\ue601");
@@ -88,6 +89,7 @@ static Global *sharedObject;
     iconCompare(@"settingsNotificationFull",    @"\ue624");
     
     /* Action menu awesomemenu */
+    iconCompare(@"actionMenuIcon",              @"\ue651");
     iconCompare(@"actionMenuSettings",          @"\ue655");
     iconCompare(@"actionMenuSearch",            @"\ue656");
     iconCompare(@"actionMenuFilter",            @"\ue657");
@@ -95,7 +97,6 @@ static Global *sharedObject;
     
     /* Filter icons */
     iconCompare(@"filterPriority",              @"\ue65a");
-    iconCompare(@"filterRepeat",                @"\ue65b");
     
     iconCompare(@"checkmark",                   @"\ue625");
     iconCompare(@"checkmarkThick",              @"\ue64f");

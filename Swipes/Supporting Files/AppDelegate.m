@@ -137,7 +137,6 @@
     //DLog(@"Machine type: %@", [GlobalApp machineType]);
     //DLog(@"Device id: %@", [GlobalApp deviceId]);
     
-    
     return YES;
 }
 
