@@ -272,7 +272,7 @@ typedef enum {
     if(controlButton == KPSegmentButtonToday)
         button.titleLabel.font = iconFont(22);
     [button setTitle:textString forState:UIControlStateNormal];
-    [button setTitleColor:color(151, 153, 155, 1) forState:UIControlStateNormal];
+    [button setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     [button setTitleColor:highlightColor forState:UIControlStateHighlighted];
     [button setTitleColor:highlightColor forState:UIControlStateSelected];
     [button setTitleColor:highlightColor forState:UIControlStateSelected | UIControlStateHighlighted];
@@ -282,7 +282,7 @@ typedef enum {
     NSDictionary *userInfo = [sender userInfo];
     NSInteger index = [[userInfo objectForKey:@"button"] integerValue];
     UIButton *button = [[self.segmentedControl buttonsArray] objectAtIndex:index];
-    [button setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [button setTitleColor:color(151, 153, 155, 1) forState:UIControlStateNormal];
 }
 -(void)highlightButton:(KPSegmentButtons)controlButton{
     UIColor *highlightColor = tcolor(TasksColor);
@@ -381,6 +381,8 @@ typedef enum {
 -(void)filterMenu:(FilterTopMenu *)filterMenu updatedRecurring:(BOOL)recurring{
     kFilter.recurringFilter = recurring ? FilterSettingOn : FilterSettingNone;
 }
+
+
 
 
 #pragma mark KPFilterDelegate
@@ -670,6 +672,13 @@ typedef enum {
     }
 }
 
+- (void)orientationChanged:(NSNotification *)notification
+{
+    if(self.currentTopMenu != TopMenuDefault)
+        [self setTopMenu:nil state:TopMenuDefault animated:NO];
+}
+
+
 -(void)viewDidLoad
 {
     [super viewDidLoad];
@@ -724,9 +733,11 @@ typedef enum {
     [self.contentView addSubview:currentViewController.view];
     [currentViewController didMoveToParentViewController:self];
     [self.view sendSubviewToBack:self.backgroundImage];
-    //UIBarButtonItem *filter = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(pressedFilter:event:)];
-    //self.navigationItem.rightBarButtonItem = filter;
-    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(orientationChanged:)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated

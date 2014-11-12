@@ -199,6 +199,7 @@ static CGPoint RotateCGPointAroundCenter(CGPoint point, CGPoint center, float an
         item.farPoint = RotateCGPointAroundCenter(farPoint, startPoint, rotateAngle);  
         item.center = item.startPoint;
         item.delegate = self;
+        item.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin;
 		[self insertSubview:item belowSubview:_addButton];
     }
 }

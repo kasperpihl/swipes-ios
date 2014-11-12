@@ -12,12 +12,13 @@
 
 #define ADD_TOOLBAR_HEIGHT GLOBAL_TOOLBAR_HEIGHT
 #define EDIT_TOOLBAR_HEIGHT GLOBAL_TOOLBAR_HEIGHT
-
+#define kActionButtonSize 42
 
 #import "KPControlHandler.h"
 #import "KPToolbar.h"
 #import <QuartzCore/QuartzCore.h>
 #import "AwesomeMenu.h"
+#import "UIColor+Utilities.h"
 #import "UIImage+Utilities.h"
 
 
@@ -28,6 +29,11 @@
 @property (nonatomic) AwesomeMenu *awesomeMenu;
 @property (nonatomic,weak) KPToolbar *addToolbar;
 @property (nonatomic,weak) KPToolbar *editToolbar;
+
+@property (nonatomic) UIButton *tagButton;
+@property (nonatomic) UIButton *deleteButton;
+@property (nonatomic) UIButton *shareButton;
+
 @property (nonatomic) UIView *gradientView;
 @property (nonatomic) BOOL isShowingGradient;
 @property (nonatomic) BOOL hasStarted;
@@ -41,9 +47,34 @@
 }
 -(CGFloat)getYForBigSize:(BOOL)big{
     CGFloat size;
-    if(big) size = (self.view.frame.size.height-EDIT_TOOLBAR_HEIGHT-self.bottomPadding);
+    if(big) size = (self.view.frame.size.height-kActionButtonSize-5-self.bottomPadding);
     else size = (self.view.frame.size.height-ADD_TOOLBAR_HEIGHT-self.bottomPadding);
     return size;
+}
+-(void)addAwesomeMenu{
+    if(self.awesomeMenu){
+        [self.awesomeMenu removeFromSuperview];
+        self.awesomeMenu = nil;
+    }
+    AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuSettings"];
+    AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuSearch"];
+    AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuFilter"];
+    AwesomeMenuItem *starMenuItem4 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuSelect"];
+    
+    
+    AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:self.view.bounds menus:[NSArray arrayWithObjects:starMenuItem1,starMenuItem2,starMenuItem3,starMenuItem4, nil]];
+    menu.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    menu.startPoint = CGPointMake(self.view.bounds.size.width-30, self.view.bounds.size.height-30);
+    menu.addButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin;
+    menu.rotateAngle = radians(270);
+    menu.endRadius = 90;
+    menu.nearRadius = 85;
+    menu.farRadius = 105;
+    menu.menuWholeAngle = radians(120);
+    //menu.frame = CGRectSetPos(menu.frame, ;
+    menu.delegate = self;
+    self.awesomeMenu = menu;
+    [self.view addSubview:self.awesomeMenu];
 }
 - (id)initWithView:(UIView*)view
 {
@@ -62,23 +93,7 @@
         self.gradientView = gradientBackground;
         [view addSubview:self.gradientView];
         
-        AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuSettings"];
-        AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuSearch"];
-        AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuFilter"];
-        AwesomeMenuItem *starMenuItem4 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuSelect"];
-        
-        
-        AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:view.bounds menus:[NSArray arrayWithObjects:starMenuItem1,starMenuItem2,starMenuItem3,starMenuItem4, nil]];
-        menu.startPoint = CGPointMake(view.bounds.size.width-30, view.bounds.size.height-30);
-        menu.rotateAngle = radians(270);
-        menu.endRadius = 90;
-        menu.nearRadius = 85;
-        menu.farRadius = 105;
-        menu.menuWholeAngle = radians(120);
-        //menu.frame = CGRectSetPos(menu.frame, ;
-        menu.delegate = self;
-        self.awesomeMenu = menu;
-        [view addSubview:self.awesomeMenu];
+        [self addAwesomeMenu];
         
         KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(view.frame.size.width/3, view.frame.size.height, view.frame.size.width/3, ADD_TOOLBAR_HEIGHT) items:nil delegate:self];
         addToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
@@ -94,22 +109,63 @@
         self.addToolbar = (KPToolbar*)[view viewWithTag:ADD_TOOLBAR_TAG];
         
         
-        KPToolbar *editToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, view.frame.size.height, view.frame.size.width, EDIT_TOOLBAR_HEIGHT) items:nil delegate:self];
-        editToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-        editToolbar.tag = EDIT_TOOLBAR_TAG;
-        editToolbar.font = iconFont(23);
-        editToolbar.titleColor = tcolor(TextColor);
-        editToolbar.titleHighlightString = @"Full";
-        editToolbar.items = @[@"actionTag",@"actionDelete",@"actionShare"];
-        [editToolbar setTopInset:editToolbar.frame.size.height*0.05];
-        [view addSubview:editToolbar];
-        self.editToolbar = (KPToolbar*)[view viewWithTag:EDIT_TOOLBAR_TAG];
+        CGFloat startX = (view.frame.size.width-320)/2;
+        CGFloat oneThird = 320/5;
+        CGFloat spacing = 50;
+        CGFloat middleAddition = oneThird/2;
         
+        self.tagButton = [self actionButtonWithTitle:@"actionTag"];
+        [self.tagButton addTarget:self action:@selector(pressedTag:) forControlEvents:UIControlEventTouchUpInside];
+        self.tagButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
+        CGRectSetCenterX(self.tagButton, view.frame.size.width/2 - spacing);
+        [view addSubview:self.tagButton];
+        
+        self.deleteButton = [self actionButtonWithTitle:@"actionDelete"];
+        [self.deleteButton addTarget:self action:@selector(pressedDelete:) forControlEvents:UIControlEventTouchUpInside];
+        self.deleteButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin| UIViewAutoresizingFlexibleTopMargin;
+        CGRectSetCenterX(self.deleteButton, view.frame.size.width/2);
+        [view addSubview:self.deleteButton];
+        
+        self.shareButton = [self actionButtonWithTitle:@"actionShare"];
+        [self.shareButton addTarget:self action:@selector(pressedShare:) forControlEvents:UIControlEventTouchUpInside];
+        self.shareButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin| UIViewAutoresizingFlexibleTopMargin;
+        CGRectSetCenterX(self.shareButton, view.frame.size.width/2+spacing);
+        [view addSubview:self.shareButton];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(orientationChanged:)
+                                                     name:UIDeviceOrientationDidChangeNotification
+                                                   object:nil];
         [self setState:KPControlHandlerStateAdd animated:NO];
     }
     return self;
 }
+-(void)pressedTag:(UIButton*)sender{
+    if([self.delegate respondsToSelector:@selector(pressedTag:)]) [self.delegate pressedTag:self];
+}
+-(void)pressedDelete:(UIButton*)sender{
+    if([self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:self];
+}
+-(void)pressedShare:(UIButton*)sender{
+    if([self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:self];
+}
 
+
+-(UIButton*)actionButtonWithTitle:(NSString*)title{
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, kActionButtonSize, kActionButtonSize)];
+    button.backgroundColor = tcolor(BackgroundColor);
+    [button setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [button setTitleColor:tcolor(BackgroundColor) forState:UIControlStateHighlighted];
+    [button setBackgroundImage:[tcolor(BackgroundColor) image] forState:UIControlStateNormal];
+    [button setBackgroundImage:[tcolor(TextColor) image] forState:UIControlStateHighlighted];
+    button.titleLabel.font = iconFont(23);
+    [button setTitle:title forState:UIControlStateNormal];
+    button.layer.cornerRadius = kActionButtonSize/2;
+    button.layer.masksToBounds = YES;
+    button.layer.borderWidth = 1;
+    button.layer.borderColor = tcolor(TextColor).CGColor;
+    return button;
+}
 
 -(voidBlock)getClearBlockFromState:(KPControlHandlerState)state toState:(KPControlHandlerState)toState{
     CGFloat targetY = self.view.frame.size.height;
@@ -120,7 +176,9 @@
                 CGRectSetY(self.awesomeMenu, CGRectGetMaxY(self.awesomeMenu.frame)-self.awesomeMenu.startPoint.y+self.awesomeMenu.addButton.frame.size.height/2);
                 break;
             case KPControlHandlerStateEdit:
-                CGRectSetY(self.editToolbar, targetY);
+                CGRectSetY(self.tagButton, targetY);
+                CGRectSetY(self.deleteButton, targetY);
+                CGRectSetY(self.shareButton, targetY);
                 break;
             default:
                 break;
@@ -164,7 +222,10 @@
                     CGRectSetY(self.gradientView, smallButtonY);
                     self.isShowingGradient = YES;
                 }
-                CGRectSetY(self.editToolbar, bigButtonY);
+                CGRectSetY(self.tagButton, bigButtonY);
+                CGRectSetY(self.deleteButton, bigButtonY);
+                CGRectSetY(self.shareButton, bigButtonY);
+                
                 break;
             default:
                 break;
@@ -257,6 +318,13 @@
         actButton.layer.borderColor = tcolor(TextColor).CGColor;
         actButton.layer.borderWidth = 1;
     }*/
+}
+-(void)dealloc{
+    clearNotify();
+}
+- (void)orientationChanged:(NSNotification *)notification
+{
+    [self addAwesomeMenu];
 }
 
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
