@@ -108,15 +108,12 @@
         [view addSubview:addToolbar];
         self.addToolbar = (KPToolbar*)[view viewWithTag:ADD_TOOLBAR_TAG];
         
-        
-        CGFloat startX = (view.frame.size.width-320)/2;
         CGFloat oneThird = 320/5;
-        CGFloat spacing = 50;
-        CGFloat middleAddition = oneThird/2;
+        CGFloat spacing = oneThird;
         
         self.tagButton = [self actionButtonWithTitle:@"actionTag"];
         [self.tagButton addTarget:self action:@selector(pressedTag:) forControlEvents:UIControlEventTouchUpInside];
-        self.tagButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
+        self.tagButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin| UIViewAutoresizingFlexibleTopMargin;
         CGRectSetCenterX(self.tagButton, view.frame.size.width/2 - spacing);
         [view addSubview:self.tagButton];
         
@@ -128,7 +125,7 @@
         
         self.shareButton = [self actionButtonWithTitle:@"actionShare"];
         [self.shareButton addTarget:self action:@selector(pressedShare:) forControlEvents:UIControlEventTouchUpInside];
-        self.shareButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin| UIViewAutoresizingFlexibleTopMargin;
+        self.shareButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin| UIViewAutoresizingFlexibleTopMargin;
         CGRectSetCenterX(self.shareButton, view.frame.size.width/2+spacing);
         [view addSubview:self.shareButton];
         
@@ -324,7 +321,8 @@
 }
 - (void)orientationChanged:(NSNotification *)notification
 {
-    [self addAwesomeMenu];
+    if(kIsIpad)
+        [self addAwesomeMenu];
 }
 
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{

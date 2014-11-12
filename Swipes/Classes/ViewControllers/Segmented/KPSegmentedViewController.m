@@ -676,7 +676,7 @@ typedef enum {
 
 - (void)orientationChanged:(NSNotification *)notification
 {
-    if(self.currentTopMenu != TopMenuDefault)
+    if(self.currentTopMenu != TopMenuDefault && kIsIpad)
         [self setTopMenu:nil state:TopMenuDefault animated:NO];
 }
 
