@@ -652,6 +652,8 @@ typedef enum {
 
 - (void)swipeHandler:(UISwipeGestureRecognizer *)recognizer
 {
+    if(self.currentTopMenu != TopMenuDefault)
+        return;
     if (recognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
         DLog(@"Swipe left");
         NSUInteger selected = self.currentIndex;
@@ -716,6 +718,7 @@ typedef enum {
     
     
     UISwipeGestureRecognizer* gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeHandler:)];
+    
     [gesture setDirection:UISwipeGestureRecognizerDirectionLeft];
     [self.view addGestureRecognizer:gesture];
     gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeHandler:)];
