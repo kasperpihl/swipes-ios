@@ -35,5 +35,5 @@ typedef enum {
 -(void)searchForString:(NSString*)string;
 
 -(void)clearAll;
--(NSString*)readableFilterWithResults:(NSInteger)results;
+-(NSAttributedString*)readableFilterWithResults:(NSInteger)results;
 @end

@@ -271,7 +271,7 @@ typedef enum {
     if(controlButton == KPSegmentButtonToday)
         button.titleLabel.font = iconFont(22);
     [button setTitle:textString forState:UIControlStateNormal];
-    [button setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    [button setTitleColor:alpha(tcolor(TextColor), 0.8) forState:UIControlStateNormal];
     [button setTitleColor:highlightColor forState:UIControlStateHighlighted];
     [button setTitleColor:highlightColor forState:UIControlStateSelected];
     [button setTitleColor:highlightColor forState:UIControlStateSelected | UIControlStateHighlighted];
@@ -281,7 +281,7 @@ typedef enum {
     NSDictionary *userInfo = [sender userInfo];
     NSInteger index = [[userInfo objectForKey:@"button"] integerValue];
     UIButton *button = [[self.segmentedControl buttonsArray] objectAtIndex:index];
-    [button setTitleColor:color(151, 153, 155, 1) forState:UIControlStateNormal];
+    [button setTitleColor:alpha(tcolor(TextColor), 0.8) forState:UIControlStateNormal];
 }
 -(void)highlightButton:(KPSegmentButtons)controlButton{
     UIColor *highlightColor = tcolor(TasksColor);

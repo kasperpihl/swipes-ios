@@ -117,11 +117,11 @@
         filterBottomView.userInteractionEnabled = YES;
         filterBottomView.backgroundColor = CLEAR;
         
-        UILabel *filterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, self.tableView.frame.size.width-30, 500)];
-        filterLabel.text = [kFilter readableFilterWithResults:self.itemHandler.itemCounterWithFilter];
-        [filterLabel setTextColor:tcolor(TextColor)];
-        filterLabel.font = KP_REGULAR(16);
-        filterLabel.textAlignment = NSTextAlignmentCenter;
+        UILabel *filterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, self.tableView.frame.size.width-30, 500)];
+        filterLabel.attributedText = [kFilter readableFilterWithResults:self.itemHandler.itemCounterWithFilter];
+        //[filterLabel setTextColor:tcolor(TextColor)];
+        //filterLabel.font = KP_REGULAR(16);
+        //filterLabel.textAlignment = NSTextAlignmentCenter;
         filterLabel.numberOfLines = 0;
         filterLabel.alpha = 0.7;
         [filterLabel sizeToFit];
@@ -132,10 +132,16 @@
         UIButton *clearButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, 140, 44)];
         NSString *str = @"clear workspace";
         clearButton.titleLabel.font = KP_REGULAR(14);
+        [clearButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [clearButton addTarget:kFilter action:@selector(clearAll) forControlEvents:UIControlEventTouchUpInside];
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:str];
-                NSMutableAttributedString *attributedString2 = [[NSMutableAttributedString alloc] initWithString:str];
         
+        NSDictionary *defAttributes = @{NSForegroundColorAttributeName: tcolor(TextColor),NSFontAttributeName: KP_REGULAR(16)};
+        
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:str];
+        
+        NSMutableAttributedString *attributedString2 = [[NSMutableAttributedString alloc] initWithString:str];
+        [attributedString addAttributes:defAttributes range:NSMakeRange(0, attributedString.length)];
+        [attributedString2 addAttributes:defAttributes range:NSMakeRange(0, attributedString2.length)];
         // Add attribute NSUnderlineStyleAttributeName
         [attributedString addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:NSMakeRange(0, str.length)];
         
