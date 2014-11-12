@@ -115,10 +115,10 @@
     else{
         UIView *filterBottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 500)];
         filterBottomView.userInteractionEnabled = YES;
-        filterBottomView.backgroundColor = CLEAR;
+        filterBottomView.backgroundColor = alpha(tcolor(BackgroundColor),0.7);
         
         UILabel *filterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, self.tableView.frame.size.width-30, 500)];
-        
+        filterLabel.backgroundColor = CLEAR;
         NSString *category = @"current";
         if([self.state isEqualToString:@"done"])
             category = @"completed";
@@ -137,6 +137,7 @@
         [filterBottomView addSubview:filterLabel];
         
         UIButton *clearButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, 140, 44)];
+        clearButton.backgroundColor = CLEAR;
         NSString *str = @"clear workspace";
         clearButton.titleLabel.font = KP_REGULAR(14);
         [clearButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
@@ -159,7 +160,8 @@
         CGRectSetCenterX(clearButton, filterBottomView.frame.size.width/2);
         [filterBottomView addSubview:clearButton];
         
-        CGRectSetHeight(filterBottomView, CGRectGetMaxY(clearButton.frame)+20);
+        CGRectSetHeight(filterBottomView, CGRectGetMaxY(clearButton.frame)+5);
+        
         [self.tableView setTableFooterView:filterBottomView];
         
     }

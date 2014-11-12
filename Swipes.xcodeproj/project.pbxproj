@@ -31,7 +31,6 @@
 		A703B1AA1838EBF20047DCC9 /* PlusAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B16C1838EBF20047DCC9 /* PlusAlertView.m */; };
 		A703B1AB1838EBF20047DCC9 /* CKCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B16F1838EBF20047DCC9 /* CKCalendarView.m */; };
 		A703B1AC1838EBF20047DCC9 /* ClockTimeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1721838EBF20047DCC9 /* ClockTimeLabel.m */; };
-		A703B1AD1838EBF20047DCC9 /* DateStampView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1741838EBF20047DCC9 /* DateStampView.m */; };
 		A703B1AE1838EBF20047DCC9 /* DotView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1761838EBF20047DCC9 /* DotView.m */; };
 		A703B1AF1838EBF20047DCC9 /* KPAddView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1781838EBF20047DCC9 /* KPAddView.m */; };
 		A703B1B01838EBF20047DCC9 /* KPDayPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B17A1838EBF20047DCC9 /* KPDayPicker.m */; };
@@ -126,6 +125,10 @@
 		A761B5BB16EB59760095A9A8 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BA16EB59760095A9A8 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		A761B5BD16EB597B0095A9A8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */; };
 		A763C93D19208E58005041D7 /* AttachmentPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = A763C93C19208E58005041D7 /* AttachmentPopup.m */; };
+		A763D5521A13AC670060D994 /* alldonefornow.png in Resources */ = {isa = PBXBuildFile; fileRef = A763D54E1A13AC670060D994 /* alldonefornow.png */; };
+		A763D5531A13AC670060D994 /* alldonefornow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A763D54F1A13AC670060D994 /* alldonefornow@2x.png */; };
+		A763D5541A13AC670060D994 /* alldonefortoday.png in Resources */ = {isa = PBXBuildFile; fileRef = A763D5501A13AC670060D994 /* alldonefortoday.png */; };
+		A763D5551A13AC670060D994 /* alldonefortoday@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A763D5511A13AC670060D994 /* alldonefortoday@2x.png */; };
 		A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
 		A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D28172C5EA800BCB2D9 /* _KPTag.m */; };
 		A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D2B172C5EAF00BCB2D9 /* KPTag.m */; };
@@ -516,8 +519,6 @@
 		A703B16F1838EBF20047DCC9 /* CKCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKCalendarView.m; sourceTree = "<group>"; };
 		A703B1711838EBF20047DCC9 /* ClockTimeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClockTimeLabel.h; sourceTree = "<group>"; };
 		A703B1721838EBF20047DCC9 /* ClockTimeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClockTimeLabel.m; sourceTree = "<group>"; };
-		A703B1731838EBF20047DCC9 /* DateStampView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateStampView.h; sourceTree = "<group>"; };
-		A703B1741838EBF20047DCC9 /* DateStampView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateStampView.m; sourceTree = "<group>"; };
 		A703B1751838EBF20047DCC9 /* DotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DotView.h; sourceTree = "<group>"; };
 		A703B1761838EBF20047DCC9 /* DotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DotView.m; sourceTree = "<group>"; };
 		A703B1771838EBF20047DCC9 /* KPAddView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPAddView.h; sourceTree = "<group>"; };
@@ -663,6 +664,10 @@
 		A761B5BC16EB597B0095A9A8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		A763C93B19208E58005041D7 /* AttachmentPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AttachmentPopup.h; path = "Attachment Services/AttachmentPopup.h"; sourceTree = "<group>"; };
 		A763C93C19208E58005041D7 /* AttachmentPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AttachmentPopup.m; path = "Attachment Services/AttachmentPopup.m"; sourceTree = "<group>"; };
+		A763D54E1A13AC670060D994 /* alldonefornow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alldonefornow.png; sourceTree = "<group>"; };
+		A763D54F1A13AC670060D994 /* alldonefornow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alldonefornow@2x.png"; sourceTree = "<group>"; };
+		A763D5501A13AC670060D994 /* alldonefortoday.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alldonefortoday.png; sourceTree = "<group>"; };
+		A763D5511A13AC670060D994 /* alldonefortoday@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alldonefortoday@2x.png"; sourceTree = "<group>"; };
 		A7680D1E172C0E1C00BCB2D9 /* NSDate-Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-Utilities.h"; sourceTree = "<group>"; };
 		A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-Utilities.m"; sourceTree = "<group>"; };
 		A7680D27172C5EA800BCB2D9 /* _KPTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _KPTag.h; sourceTree = "<group>"; };
@@ -1107,8 +1112,6 @@
 			children = (
 				A703B1711838EBF20047DCC9 /* ClockTimeLabel.h */,
 				A703B1721838EBF20047DCC9 /* ClockTimeLabel.m */,
-				A703B1731838EBF20047DCC9 /* DateStampView.h */,
-				A703B1741838EBF20047DCC9 /* DateStampView.m */,
 				A703B1751838EBF20047DCC9 /* DotView.h */,
 				A703B1761838EBF20047DCC9 /* DotView.m */,
 				A703B1771838EBF20047DCC9 /* KPAddView.h */,
@@ -1732,6 +1735,10 @@
 		A79DB41B17358C33007A48E2 /* Backgrounds */ = {
 			isa = PBXGroup;
 			children = (
+				A763D54E1A13AC670060D994 /* alldonefornow.png */,
+				A763D54F1A13AC670060D994 /* alldonefornow@2x.png */,
+				A763D5501A13AC670060D994 /* alldonefortoday.png */,
+				A763D5511A13AC670060D994 /* alldonefortoday@2x.png */,
 				A7F522AA197D7C76008B6147 /* swipesevernotetag.png */,
 				A7F522AB197D7C76008B6147 /* swipesevernotetag@2x.png */,
 				A772B13F19671D9F00C07909 /* swipesandevernote.png */,
@@ -2323,6 +2330,7 @@
 				A7D0D3C319051BA000ABA1FF /* Nexa-Black-Italic.ttf in Resources */,
 				A78128D317294C56002226C8 /* MainStoryboard.storyboard in Resources */,
 				DACD544C18A1ACFC00C378DF /* music.png in Resources */,
+				A763D5551A13AC670060D994 /* alldonefortoday@2x.png in Resources */,
 				DACD544D18A1ACFC00C378DF /* package.png in Resources */,
 				DACD545118A1ACFC00C378DF /* page_white_c.png in Resources */,
 				A7D0D3C419051BA000ABA1FF /* Nexa-Bold.ttf in Resources */,
@@ -2355,18 +2363,21 @@
 				A75236E517A335680030ED1E /* walkthrough_swipe_done@2x.png in Resources */,
 				A74FB8F418FFBCB200F25157 /* MASTER_0000.jpg in Resources */,
 				A75236E617A335680030ED1E /* walkthrough_swipe_schedule.png in Resources */,
+				A763D5541A13AC670060D994 /* alldonefortoday.png in Resources */,
 				A772B14119671D9F00C07909 /* swipesandevernote.png in Resources */,
 				A7E9F60019DAA2C100CAA1D1 /* ENSDKResources.bundle in Resources */,
 				DACD545618A1ACFC00C378DF /* page_white_dvd.png in Resources */,
 				A75236E717A335680030ED1E /* walkthrough_swipe_schedule@2x.png in Resources */,
 				A75236EC17A335680030ED1E /* wt_menu_expain.png in Resources */,
 				DACD546018A1ACFC00C378DF /* page_white_vector.png in Resources */,
+				A763D5521A13AC670060D994 /* alldonefornow.png in Resources */,
 				DACD545D18A1ACFC00C378DF /* page_white_ruby.png in Resources */,
 				A75236ED17A335680030ED1E /* wt_menu_expain@2x.png in Resources */,
 				A75236FD17A349340030ED1E /* walkthrough_phone_background.png in Resources */,
 				DACD544618A1ACFC00C378DF /* folder_camera.png in Resources */,
 				A75236FE17A349340030ED1E /* walkthrough_phone_background@2x.png in Resources */,
 				A7C90E6A17A6ABF700C5F9E2 /* wt_schedule_popup.png in Resources */,
+				A763D5531A13AC670060D994 /* alldonefornow@2x.png in Resources */,
 				A7C90E6B17A6ABF700C5F9E2 /* wt_schedule_popup@2x.png in Resources */,
 				DACD544818A1ACFC00C378DF /* folder_public.png in Resources */,
 				A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */,
@@ -2614,7 +2625,6 @@
 				A703B1C21838EBF20047DCC9 /* SchedulePopup.m in Sources */,
 				A74D3FD218D9E7AC0056D124 /* HPTextViewInternal.m in Sources */,
 				A7D189C61965F47000AA7CD9 /* IntegrationsViewController.m in Sources */,
-				A703B1AD1838EBF20047DCC9 /* DateStampView.m in Sources */,
 				A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */,
 				A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */,
 				DA47B6A91A006D1B00299916 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,

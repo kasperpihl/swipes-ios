@@ -32,7 +32,6 @@ typedef enum {
 -(id)valueForSetting:(KPSettings)setting;
 -(void)setValue:(id)value forSetting:(KPSettings)setting;
 -(void)refreshGlobalSettingsForce:(BOOL)force;
--(UIImage*)getDailyImage;
 
 /* Boolean settings in ns user defaults */
 -(BOOL)settingForKey:(NSString*)key;

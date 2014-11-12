@@ -46,7 +46,7 @@
 }
 -(void)setEmptyBack:(BOOL)emptyBack animated:(BOOL)animated{
     if(emptyBack != self.emptyBack){
-        BOOL isFacebookAvailable = ([[UIDevice currentDevice].systemVersion floatValue] >= 6 && [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]);
+        BOOL isFacebookAvailable = [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook];
         BOOL isTwitterAvailable = [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter];
         if(!isTwitterAvailable) self.twitterButton.hidden = YES;
         if(!isFacebookAvailable) self.facebookButton.hidden = YES;
@@ -73,6 +73,7 @@
                 }
             }];
         }
+        [self updateBackground];
     }
 }
 -(void)itemHandler:(ItemHandler *)handler changedItemNumber:(NSInteger)itemNumber oldNumber:(NSInteger)oldNumber{
@@ -83,8 +84,8 @@
         self.shareText = [self randomTextAllDoneForToday:self.allDoneForToday];
     [self updateBackground];
     
-    [self setEmptyBack:(itemNumber == 0) animated:YES];
-    self.sectionHeader.fillColor = (itemNumber == 0) ? CLEAR : tcolor(BackgroundColor);
+    [self setEmptyBack:(itemNumber == 0 && !kFilter.isActive) animated:YES];
+    
     if(itemNumber == 0 && oldNumber > 0){
         NSInteger servicesAvailable = 0;
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) servicesAvailable++;
@@ -166,7 +167,8 @@
     if(self.itemHandler.itemCounter <= 0){
         
         if(self.allDoneForToday){
-            self.youreAllDoneView.stampView.allDoneLabel.text = @"ALL DONE FOR TODAY";
+            [self.youreAllDoneView setAllDoneForToday:YES];
+            //self.youreAllDoneView.stampView.allDoneLabel.text = @"ALL DONE FOR TODAY";
             NSInteger currentNumber = [USER_DEFAULTS integerForKey:@"numberOfDaysOnStreak"];
             
             if(!currentNumber)
@@ -185,13 +187,14 @@
             [USER_DEFAULTS setObject:[NSDate date] forKey:@"lastStreakDate"];
             
             NSString *startString = (currentNumber <= 1) ? @"First day" : [NSString stringWithFormat:@"%li days",(long)currentNumber];
-            self.youreAllDoneView.stampView.monthLabel.text = [NSString stringWithFormat:@"%@ on a streak!",startString];
+            self.youreAllDoneView.streakLabel.text = [NSString stringWithFormat:@"%@ on a streak!",startString];
         }
         else{
             NSPredicate *nextScheduleTaskPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil)",[NSDate date]];
             KPToDo *nextItem = [KPToDo MR_findFirstWithPredicate:nextScheduleTaskPredicate sortedBy:@"schedule" ascending:YES inContext:[KPCORE context]];
-            self.youreAllDoneView.stampView.allDoneLabel.text = @"ALL DONE FOR NOW";
-            self.youreAllDoneView.stampView.monthLabel.text = [NSString stringWithFormat:@"Next task  @  %@",[UtilityClass timeStringForDate:nextItem.schedule]];
+            [self.youreAllDoneView setAllDoneForToday:NO];
+            //self.youreAllDoneView.stampView.allDoneLabel.text = @"ALL DONE FOR NOW";
+            self.youreAllDoneView.streakLabel.text = [NSString stringWithFormat:@"Next task  @  %@",[UtilityClass timeStringForDate:nextItem.schedule]];
         }
     }
     
@@ -200,17 +203,18 @@
 
 #pragma mark - UIViewControllerClasses
 -(void)updateBackground{
-    BOOL isFacebookAvailable = ([[UIDevice currentDevice].systemVersion floatValue] >= 6 && [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]);
+    BOOL isFacebookAvailable = [SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook];
     BOOL isTwitterAvailable = [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter];
-    if(!self.shareText) self.shareText = [self randomTextAllDoneForToday:self.allDoneForToday];
+    if(!self.shareText)
+        self.shareText = [self randomTextAllDoneForToday:self.allDoneForToday];
     
     [self.youreAllDoneView setText:self.shareText];
+    
     CGFloat buttonsCenterY = CGRectGetMaxY(self.youreAllDoneView.shareItLabel.frame) + kButtonSpacing+ kShareButtonSize/2;
     CGRectSetCenter(self.facebookButton, self.view.frame.size.width/2-kButtonSpacing/2-kShareButtonSize/2, buttonsCenterY);
     CGRectSetCenter(self.twitterButton, self.view.frame.size.width/2+kButtonSpacing/2+kShareButtonSize/2, buttonsCenterY);
     if(!(isTwitterAvailable && isFacebookAvailable)) self.facebookButton.center = self.twitterButton.center = CGPointMake(self.view.frame.size.width/2, buttonsCenterY);
     //self.youreAllDoneView.shareItLabel.hidden = (!isTwitterAvailable && !isFacebookAvailable);
-    [self.youreAllDoneView.stampView setDate:[NSDate date]];
 }
 
 
@@ -269,7 +273,7 @@
     self.facebookButton.titleLabel.font = iconFont(36);
     [self.facebookButton setTitle:@"facebook" forState:UIControlStateNormal];
     [self.facebookButton setTitle:@"facebookFull" forState:UIControlStateHighlighted];
-    [self.facebookButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
+    [self.facebookButton setTitleColor:alpha(tcolor(TextColor),1.0) forState:UIControlStateNormal];
     [self.facebookButton addTarget:self action:@selector(pressedFacebook) forControlEvents:UIControlEventTouchUpInside];
     self.facebookButton.hidden = YES;
     [self.view addSubview:self.facebookButton];
@@ -279,7 +283,7 @@
     self.twitterButton.titleLabel.font = iconFont(36);
     [self.twitterButton setTitle:@"twitter" forState:UIControlStateNormal];
     [self.twitterButton setTitle:@"twitterFull" forState:UIControlStateHighlighted];
-    [self.twitterButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
+    [self.twitterButton setTitleColor:alpha(tcolor(TextColor),1.0) forState:UIControlStateNormal];
     [self.twitterButton addTarget:self action:@selector(pressedTwitter) forControlEvents:UIControlEventTouchUpInside];
     self.twitterButton.hidden = YES;
     [self.view addSubview:self.twitterButton];
@@ -377,7 +381,11 @@
 -(void)triggerEvernote{
     [ROOT_CONTROLLER triggerEvernoteEvent];
 }
-
+-(void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    if(self.itemHandler.itemCounterWithFilter == 0)
+        [self updateBackground];
+}
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self updateSectionHeader];

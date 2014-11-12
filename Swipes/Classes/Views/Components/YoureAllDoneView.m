@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#define kColor alpha(tcolorF(TextColor,ThemeDark),0.8)
 
 #define kAnimationTime 0.5
 #define kStampViewSpacing 30
@@ -16,10 +15,12 @@
 #define kSignatureSpacing 20
 #define kSignatureRightMargin 40
 #define kStampViewY valForIpad(250,valForScreen(110,130))
-
+#define kStreakFont [UIFont fontWithName:@"NexaHeavy" size:15]
 #define kReferBottom 30
 #define kReferX 10
 #define kShareLabelWidth 230
+
+#define kStreakSpacing 30
 
 #import "UIView+Utilities.h"
 #import "YoureAllDoneView.h"
@@ -28,12 +29,34 @@
 @interface YoureAllDoneView ()
 @end
 @implementation YoureAllDoneView
+-(void)setAllDoneForToday:(BOOL)allDoneForToday{
+    if(_allDoneForToday != allDoneForToday){
+        _allDoneForToday = allDoneForToday;
+        self.trompetView.image = [UIImage imageNamed:allDoneForToday ? @"alldonefortoday" : @"alldonefornow"];
+        [self.trompetView setNeedsDisplay];
+    }
+}
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
-        self.stampView = [[DateStampView alloc] initWithDate:[NSDate date]];
+        self.trompetView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"alldonefortoday"]];
+        self.trompetView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        [self addSubview:self.trompetView];
+        [self setAllDoneForToday:YES];
+        
+        //self.stampView = [[DateStampView alloc] initWithDate:[NSDate date]];
         //self.stampView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-        [self addSubview:self.stampView];
+        //[self addSubview:self.stampView];
+        self.streakLabel = [[UILabel alloc] initWithFrame:self.bounds];
+        self.streakLabel.text = @"Next task @ 16:30        ";
+        self.streakLabel.backgroundColor = CLEAR;
+        self.streakLabel.textColor = kColor;
+        self.streakLabel.textAlignment = NSTextAlignmentCenter;
+        self.streakLabel.font = kStreakFont;
+        [self.streakLabel sizeToFit];
+        [self addSubview:self.streakLabel];
+        CGRectSetWidth(self.streakLabel,320);
+        CGRectSetY(self.streakLabel, CGRectGetMaxY(self.trompetView.frame) + kStreakSpacing);
         
         
         self.shareItLabel = [[UILabel alloc] initWithFrame:self.bounds];
@@ -91,17 +114,19 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.stampView.center = CGPointMake(self.frame.size.width/2, kStampViewY);
+    self.trompetView.center = CGPointMake(self.frame.size.width/2, kStampViewY);
+    CGRectSetY(self.streakLabel, CGRectGetMaxY(self.trompetView.frame) + kStreakSpacing);
     self.signatureView.frame = CGRectSetPos(self.signatureView.frame, self.frame.size.width-self.signatureView.frame.size.width-kSignatureRightMargin, CGRectGetMaxY(self.shareItLabel.frame)+kSignatureSpacing);
     self.swipesReferLabel.frame = CGRectSetPos(self.swipesReferLabel.frame, self.frame.size.width-kReferX-self.swipesReferLabel.frame.size.width, self.frame.size.height-kReferBottom);
     
-    CGRectSetY(self.shareItLabel, CGRectGetMaxY(self.stampView.frame) + kSignatureSpacing);
+    CGRectSetY(self.shareItLabel, CGRectGetMaxY(self.streakLabel.frame) + kSignatureSpacing);
     CGRectSetCenterX(self.shareItLabel, self.center.x);
 }
 
 -(void)dealloc{
     self.shareItLabel = nil;
-    self.stampView = nil;
+    self.trompetView = nil;
+    self.streakLabel = nil;
     self.signatureView = nil;
     self.swipesReferLabel = nil;
 }

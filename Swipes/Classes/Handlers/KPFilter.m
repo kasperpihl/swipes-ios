@@ -161,7 +161,7 @@ static KPFilter *sharedObject;
         [boldRanges addObject:[NSValue valueWithRange:NSMakeRange(totalSearchString.length-tagString.length, tagString.length)]];
     }
     
-    [totalSearchString addAttributes:@{NSFontAttributeName:regularFont} range:NSMakeRange(0, totalSearchString.length)];
+    [totalSearchString addAttributes:@{NSFontAttributeName:regularFont,NSForegroundColorAttributeName:tcolor(TextColor)} range:NSMakeRange(0, totalSearchString.length)];
     for(NSValue *value in boldRanges){
         [totalSearchString addAttributes:@{NSFontAttributeName:boldFont} range:[value rangeValue]];
     }

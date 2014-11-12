@@ -87,49 +87,6 @@ static SettingsHandler *sharedObject;
     return index;
 }
 
--(UIImage *)getDailyImage{
-    NSString *existingFileName = [USER_DEFAULTS stringForKey:@"dailyImageFileName"];
-    if(existingFileName){
-        NSString *fullPath = parseFileCachePath(existingFileName);
-        if ([[NSFileManager defaultManager] fileExistsAtPath:fullPath])
-        {
-            NSData *returnData =[NSData dataWithContentsOfFile:fullPath];
-            return [UIImage imageWithData:returnData];
-        }
-    }
-    else [self refreshDailyImage:YES];
-    return [UIImage imageNamed:@"default-background.jpg"];
-}
-
--(void)refreshDailyImage:(BOOL)force{
-    if(self.isFetchingImage) return;
-    NSDate *now = [NSDate date];
-    NSInteger lastUpdatedDay = [USER_DEFAULTS integerForKey:@"lastUpdatedDailyImage"];
-    if(now.dayOfYear != lastUpdatedDay || force){
-        self.isFetchingImage = YES;
-        PFQuery *query = [PFQuery queryWithClassName:@"DailyImage"];
-        [query whereKey:@"device" equalTo:@"iphone"];
-        [query whereKey:@"dayOfYear" equalTo:@(now.dayOfYear)];
-        [query whereKey:@"year" equalTo:@(now.year)];
-        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            if(error || !object){
-                if(!object && !error) [USER_DEFAULTS setInteger:now.dayOfYear forKey:@"lastUpdatedDailyImage"];
-                self.isFetchingImage = NO;
-                return;
-            }
-            PFFile *file = [object objectForKey:@"image"];
-            if(!file){ self.isFetchingImage = NO; return; }
-            [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-                self.isFetchingImage = NO;
-                if(data){
-                    [USER_DEFAULTS setObject:file.name forKey:@"dailyImageFileName"];
-                    [USER_DEFAULTS setInteger:now.dayOfYear forKey:@"lastUpdatedDailyImage"];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updated daily image" object:self];
-                }
-            }];
-        }];
-    }
-}
 
 -(void)checkTimeZoneChange{
     //NSLog(@"checking timezone");
@@ -143,7 +100,6 @@ static SettingsHandler *sharedObject;
 
 -(void)refreshGlobalSettingsForce:(BOOL)force{
     [self checkTimeZoneChange];
-    [self refreshDailyImage:force];
     
     if(self.isFetchingSettings)
         return;
