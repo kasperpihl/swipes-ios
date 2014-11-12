@@ -20,7 +20,7 @@
 #import "UIView+Utilities.h"
 #import "HintHandler.h"
 #import "RootViewController.h"
-
+#import "SlowHighlightIcon.h"
 #import "ToDoListViewController.h"
 
 #define BACKGROUND_IMAGE_VIEW_TAG 504
@@ -107,23 +107,47 @@
     [self updateTableFooter];
     [self didUpdateCells];
 }
+
 -(void)updateTableFooter{
     if(!kFilter.isActive){
         [self.tableView setTableFooterView:[UIView new]];
     }
     else{
+        UIView *filterBottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 500)];
+        filterBottomView.userInteractionEnabled = YES;
+        filterBottomView.backgroundColor = CLEAR;
         
-        UILabel *filterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 200)];
-        filterLabel.text = [kFilter readableFilter];
+        UILabel *filterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, self.tableView.frame.size.width-30, 500)];
+        filterLabel.text = [kFilter readableFilterWithResults:self.itemHandler.itemCounterWithFilter];
         [filterLabel setTextColor:tcolor(TextColor)];
         filterLabel.font = KP_REGULAR(16);
         filterLabel.textAlignment = NSTextAlignmentCenter;
         filterLabel.numberOfLines = 0;
         filterLabel.alpha = 0.7;
         [filterLabel sizeToFit];
-        CGRectSetHeight(filterLabel, filterLabel.frame.size.height+30);
+        CGRectSetCenterX(filterLabel, filterBottomView.frame.size.width/2);
+        //CGRectSetHeight(filterLabel, filterLabel.frame.size.height);
+        [filterBottomView addSubview:filterLabel];
         
-        [self.tableView setTableFooterView:filterLabel];
+        UIButton *clearButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, 140, 44)];
+        NSString *str = @"clear workspace";
+        clearButton.titleLabel.font = KP_REGULAR(14);
+        [clearButton addTarget:kFilter action:@selector(clearAll) forControlEvents:UIControlEventTouchUpInside];
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:str];
+                NSMutableAttributedString *attributedString2 = [[NSMutableAttributedString alloc] initWithString:str];
+        
+        // Add attribute NSUnderlineStyleAttributeName
+        [attributedString addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:NSMakeRange(0, str.length)];
+        
+
+        [clearButton setAttributedTitle:attributedString forState:UIControlStateNormal];
+        [clearButton setAttributedTitle:attributedString2 forState:UIControlStateHighlighted];
+        CGRectSetY(clearButton, CGRectGetMaxY(filterLabel.frame));
+        CGRectSetCenterX(clearButton, filterBottomView.frame.size.width/2);
+        [filterBottomView addSubview:clearButton];
+        
+        CGRectSetHeight(filterBottomView, CGRectGetMaxY(clearButton.frame)+20);
+        [self.tableView setTableFooterView:filterBottomView];
         
     }
     

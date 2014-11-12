@@ -99,7 +99,7 @@ static KPFilter *sharedObject;
         [self.delegate didUpdateFilter:self];
 }
 
--(NSString *)readableFilter{
+-(NSString *)readableFilterWithResults:(NSInteger)results{
     BOOL tagsFilter = (self.selectedTags.count > 0);
     BOOL searchFilter = (self.searchString && self.searchString.length > 0);
     BOOL priorityFilter = (kFilter.priorityFilter == FilterSettingOn);
@@ -118,19 +118,21 @@ static KPFilter *sharedObject;
     if(!recurringFilter)
         countDown--;
     
-    NSString *totalSearchString = @"";
+    NSString *totalSearchString = [NSString stringWithFormat:@"%lu ",(long)results];
     
     if(recurringFilter){
-        totalSearchString = @"Recurring ";
+        totalSearchString = @"recurring ";
     }
     if(priorityFilter){
-        totalSearchString = [totalSearchString stringByAppendingString:@"Priority "];
+        totalSearchString = [totalSearchString stringByAppendingString:@"priority "];
     }
-    totalSearchString = [totalSearchString stringByAppendingString:@"Tasks"];
+    totalSearchString = [totalSearchString stringByAppendingString:@"task"];
+    if(results != 1)
+        totalSearchString = [totalSearchString stringByAppendingString:@"s"];
     
     NSInteger counter = 0;
     if(notesFilter){
-        totalSearchString = [totalSearchString stringByAppendingString:@" with Notes"];
+        totalSearchString = [totalSearchString stringByAppendingString:@" with notes"];
         counter++;
     }
     

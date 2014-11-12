@@ -29,5 +29,6 @@
 -(NSArray*)selectedItems;
 -(void)update;
 -(void)didUpdateCells;
+-(void)updateTableFooter;
 - (void)editToDo:(KPToDo *)todo;
 @end

@@ -52,14 +52,14 @@
         
         
         
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, gradientHeight, self.frame.size.width, topY)];
+        UIButton *setWorkSpaceButton = [[UIButton alloc] initWithFrame:CGRectMake(0, gradientHeight, self.frame.size.width, topY)];
         
-        titleLabel.backgroundColor = CLEAR;
-        titleLabel.textColor = tcolor(TextColor);
-        titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.font = KP_REGULAR(16);
-        titleLabel.text = @"SET WORKSPACE";
-        [self addSubview:titleLabel];
+        setWorkSpaceButton.backgroundColor = CLEAR;
+        [setWorkSpaceButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        setWorkSpaceButton.titleLabel.font = KP_REGULAR(16);
+        [setWorkSpaceButton setTitle:@"SET WORKSPACE" forState:UIControlStateNormal];
+        [setWorkSpaceButton addTarget:self action:@selector(onClose:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:setWorkSpaceButton];
         
         KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, topY+gradientHeight, self.frame.size.width, 0)];
         tagList.emptyText = @"No tags assigned";

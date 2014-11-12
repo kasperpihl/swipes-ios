@@ -52,8 +52,12 @@
     }];
 }
 -(void)updateTableFooter{
-    if(kFilter.isActive)
+    [super updateTableFooter];
+    if(kFilter.isActive){
+        if(self.remainingTasks != 0)
+            [self update];
         return;
+    }
     if(self.hasAskedForMore || self.remainingTasks == 0){
         [self.tableView setTableFooterView:nil];
     }
