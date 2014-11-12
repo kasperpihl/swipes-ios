@@ -9,6 +9,7 @@
 #import "KPTagList.h"
 #import "UIColor+Utilities.h"
 #import "FilterTopMenu.h"
+#import "UserHandler.h"
 #define kBackgroundColorButtons CLEAR
 
 @interface FilterTopMenu () <KPTagListResizeDelegate, KPTagDelegate>
@@ -47,6 +48,10 @@
         seperator2.backgroundColor = alpha(tcolor(TextColor),0.3);
         [self addSubview:seperator2];
         */
+        
+        
+        
+        
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, gradientHeight, self.frame.size.width, topY)];
         
         titleLabel.backgroundColor = CLEAR;
@@ -73,7 +78,9 @@
         tagList.emptyLabelMarginHack = 10;
         //tagList.lastRowSpacingHack = 90;
         tagList.marginTop = 4;
-        tagList.bottomMargin = 0;//(16+tagList.spacing)/2;
+        tagList.bottomMargin = (16+tagList.spacing)/2;
+        if(kUserHandler.isPlus)
+            tagList.bottomMargin = 0;
         tagList.marginRight = tagList.spacing;
         tagList.resizeDelegate = self;
         tagList.tagDelegate = self;
@@ -102,30 +109,30 @@
         [self addSubview:closeButton];
         self.closeButton = closeButton;
         
+        if(kUserHandler.isPlus){
         
+            UIButton *priorityFilterButton = [self iconButton];
+            CGRectSetCenterX(priorityFilterButton, self.frame.size.width/2 - 45);
+            [priorityFilterButton setTitle:iconString(@"filterPriority") forState:UIControlStateNormal];
+            [priorityFilterButton addTarget:self action:@selector(onPriority:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:priorityFilterButton];
+            self.priorityFilterButton = priorityFilterButton;
+            
+            UIButton *notesFilterButton = [self iconButton];
+            CGRectSetCenterX(notesFilterButton, self.frame.size.width/2);
+            [notesFilterButton setTitle:iconString(@"editNotes") forState:UIControlStateNormal];
+            [notesFilterButton addTarget:self action:@selector(onNotes:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:notesFilterButton];
+            self.notesFilterButton = notesFilterButton;
+            
+            UIButton *recurringFilterButton = [self iconButton];
+            CGRectSetCenterX(recurringFilterButton, self.frame.size.width/2 + 45);
+            [recurringFilterButton setTitle:iconString(@"editRepeat") forState:UIControlStateNormal];
+            [recurringFilterButton addTarget:self action:@selector(onRecurring:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:recurringFilterButton];
+            self.recurringFilterButton = recurringFilterButton;
         
-        UIButton *priorityFilterButton = [self iconButton];
-        CGRectSetCenterX(priorityFilterButton, self.frame.size.width/2 - 45);
-        [priorityFilterButton setTitle:iconString(@"filterPriority") forState:UIControlStateNormal];
-        [priorityFilterButton addTarget:self action:@selector(onPriority:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:priorityFilterButton];
-        self.priorityFilterButton = priorityFilterButton;
-        
-        UIButton *notesFilterButton = [self iconButton];
-        CGRectSetCenterX(notesFilterButton, self.frame.size.width/2);
-        [notesFilterButton setTitle:iconString(@"editNotes") forState:UIControlStateNormal];
-        [notesFilterButton addTarget:self action:@selector(onNotes:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:notesFilterButton];
-        self.notesFilterButton = notesFilterButton;
-        
-        UIButton *recurringFilterButton = [self iconButton];
-        CGRectSetCenterX(recurringFilterButton, self.frame.size.width/2 + 45);
-        [recurringFilterButton setTitle:iconString(@"editRepeat") forState:UIControlStateNormal];
-        [recurringFilterButton addTarget:self action:@selector(onRecurring:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:recurringFilterButton];
-        self.recurringFilterButton = recurringFilterButton;
-        
-        
+        }
     }
     return self;
 }
@@ -151,7 +158,10 @@
 }
 
 -(void)tagList:(KPTagList *)tagList changedSize:(CGSize)size{
-    CGRectSetHeight(self, CGRectGetMaxY(tagList.frame) + kSideButtonsWidth  );
+    if(kUserHandler.isPlus)
+        CGRectSetHeight(self, CGRectGetMaxY(tagList.frame)  + kSideButtonsWidth  );
+    else
+        CGRectSetHeight(self, CGRectGetMaxY(tagList.frame));// + kSideButtonsWidth  );
     [self.topMenuDelegate topMenu:self changedSize:self.frame.size];
     [self updateButtons];
 }
