@@ -118,7 +118,14 @@
         filterBottomView.backgroundColor = CLEAR;
         
         UILabel *filterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, self.tableView.frame.size.width-30, 500)];
-        filterLabel.attributedText = [kFilter readableFilterWithResults:self.itemHandler.itemCounterWithFilter];
+        
+        NSString *category = @"current";
+        if([self.state isEqualToString:@"done"])
+            category = @"completed";
+        else if([self.state isEqualToString:@"schedule"])
+            category = @"scheduled";
+        
+        filterLabel.attributedText = [kFilter readableFilterWithResults:self.itemHandler.itemCounterWithFilter forCategory:category];
         //[filterLabel setTextColor:tcolor(TextColor)];
         //filterLabel.font = KP_REGULAR(16);
         //filterLabel.textAlignment = NSTextAlignmentCenter;

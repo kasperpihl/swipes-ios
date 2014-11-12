@@ -99,7 +99,7 @@ static KPFilter *sharedObject;
         [self.delegate didUpdateFilter:self];
 }
 
--(NSAttributedString *)readableFilterWithResults:(NSInteger)results{
+-(NSAttributedString *)readableFilterWithResults:(NSInteger)results forCategory:(NSString *)category{
     UIFont *boldFont = KP_BOLD(15);
     UIFont *regularFont = KP_REGULAR(15);
     
@@ -125,9 +125,9 @@ static KPFilter *sharedObject;
 #define attrString(strVar) [[NSAttributedString alloc] initWithString:strVar]
     
     NSMutableArray *boldRanges = [NSMutableArray array];
-    NSAttributedString *resultAttrString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lu ",(long)results]];
+    NSAttributedString *resultAttrString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%lu %@ ",(long)results,category]];
     [totalSearchString appendAttributedString:resultAttrString];
-    [boldRanges addObject:[NSValue valueWithRange:NSMakeRange(0, resultAttrString.length-1)]];
+    [boldRanges addObject:[NSValue valueWithRange:NSMakeRange(0, resultAttrString.length-2-category.length)]];
     
     if(recurringFilter){
         [totalSearchString appendAttributedString:attrString(@"recurring ")];
