@@ -307,15 +307,6 @@
     
 }
 
-#pragma mark KPToolbarDelegate
--(void)toolbar:(KPToolbar *)toolbar editButton:(UIButton *__autoreleasing *)button forItem:(NSInteger)item{
-    UIButton *actButton = *button;
-    /*if(toolbar.tag == EDIT_TOOLBAR_TAG){
-        actButton.layer.cornerRadius = actButton.frame.size.height/2;
-        actButton.layer.borderColor = tcolor(TextColor).CGColor;
-        actButton.layer.borderWidth = 1;
-    }*/
-}
 -(void)dealloc{
     clearNotify();
 }
@@ -326,13 +317,6 @@
 }
 
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
-    if(toolbar.tag == ADD_TOOLBAR_TAG){
-        if(item == 0 && [self.delegate respondsToSelector:@selector(pressedAdd:)]) [self.delegate pressedAdd:self];
-    }
-    else{
-        if(item == 0 && [self.delegate respondsToSelector:@selector(pressedTag:)]) [self.delegate pressedTag:self];
-        else if(item == 1 && [self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:self];
-        else if(item == 2 && [self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:self];
-    }
+    if(item == 0 && [self.delegate respondsToSelector:@selector(pressedAdd:)]) [self.delegate pressedAdd:self];
 }
 @end

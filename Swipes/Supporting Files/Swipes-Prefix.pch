@@ -21,4 +21,4 @@
 
 #endif
 
-//#define EVERNOTE_BUSINESS 1
+#define EVERNOTE_BUSINESS 1

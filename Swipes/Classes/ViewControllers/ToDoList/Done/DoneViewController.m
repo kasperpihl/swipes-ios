@@ -21,7 +21,7 @@
     NSPredicate *predicate;
     
     NSDate *startDate = [[NSDate date] dateAtStartOfDay];
-    if(!self.hasAskedForMore){
+    if(!self.hasAskedForMore && !kFilter.isActive){
         predicate = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate >= %@ && parent = nil)",startDate];
         NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@ && parent = nil)",startDate];
         self.remainingTasks = [KPToDo MR_countOfEntitiesWithPredicate:remainingPred];
@@ -52,6 +52,8 @@
     }];
 }
 -(void)updateTableFooter{
+    if(kFilter.isActive)
+        return;
     if(self.hasAskedForMore || self.remainingTasks == 0){
         [self.tableView setTableFooterView:nil];
     }

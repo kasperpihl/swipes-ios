@@ -230,9 +230,9 @@ int const kCellCount = 4;
 #ifdef EVERNOTE_BUSINESS
         else if(indexPath.row == 4){
             if (_isEvernoteBusinessUser)
-                cell.textLabel.text = @"Sync with Evernote for Business";
+                cell.textLabel.text = @"Sync with Evernote Business";
             else {
-                cell.textLabel.text = @"You don't have Evernote for Business";
+                cell.textLabel.text = @"Sync with Evernote Business";
                 cell.detailTextLabel.text = @"Tap to learn more";
             }
         }
