@@ -73,7 +73,6 @@ typedef enum {
 @property (nonatomic, strong) UIView *ios7BackgroundView;
 @property (nonatomic, assign) BOOL hasAppeared;
 @property (nonatomic, assign) BOOL hidden;
-@property (nonatomic, strong) UIImageView *backgroundImage;
 @property (nonatomic, strong) NSArray *selectedItems;
 @property (nonatomic) TopMenu *topOverlay;
 @property (nonatomic) TopMenuState currentTopMenu;
@@ -528,37 +527,8 @@ typedef enum {
     }
     [self.controlHandler setState:[self handlerStateForCurrent:currentState] animated:YES];
 }
--(void)setBackgroundMode:(BOOL)backgroundMode{
-    if(_backgroundMode != backgroundMode){
-        _backgroundMode = backgroundMode;
-        [self.controlHandler setLockGradient:backgroundMode];
-        [self showBackground:backgroundMode animated:YES];
-    }
-}
--(void)showBackground:(BOOL)show animated:(BOOL)animated
-{
-    CGFloat targetAlpha = show ? 1.0f : 0.0f;
-    CGFloat duration = show ? 2.5f : 0.25f;
-    [UIView animateWithDuration:duration animations:^{
-        self.backgroundImage.alpha = targetAlpha;
-    } completion:^(BOOL finished) {
-        if(finished){
-        }
-    }];
-}
 
--(void)updatedDailyImage
-{
-    UIImage *newDailyImage = [[kSettings getDailyImage] rn_boxblurImageWithBlur:0.5f exclusionPath:nil];
-    if (self.backgroundImage.alpha == 0) {
-        [self.backgroundImage setImage:newDailyImage];
-    }
-    else{
-        [UIView transitionWithView:self.view duration:2.5f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            [self.backgroundImage setImage:newDailyImage];
-        } completion:nil];
-    }
-}
+
 
 - (void)updateFromSync:(NSNotification *)notification
 {
@@ -691,18 +661,6 @@ typedef enum {
     
     
     
-    /* Daily image background */
-    self.backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    self.backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
-    self.backgroundImage.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-    [self.backgroundImage setImage:[[kSettings getDailyImage] rn_boxblurImageWithBlur:0.5f exclusionPath:nil]];
-    self.backgroundImage.alpha = 0;
-    UIView *overlay = [[UIView alloc] initWithFrame:self.backgroundImage.bounds];
-    overlay.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
-    overlay.backgroundColor = gray(0,0.2);
-    [self.backgroundImage addSubview:overlay];
-    [self.view addSubview:self.backgroundImage];
-    
     /* Content view for ToDo list view controllers */
     UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, TOP_HEIGHT, self.view.bounds.size.width, self.view.bounds.size.height-TOP_HEIGHT)];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -735,7 +693,6 @@ typedef enum {
     currentViewController.view.frame = self.contentView.bounds;
     [self.contentView addSubview:currentViewController.view];
     [currentViewController didMoveToParentViewController:self];
-    [self.view sendSubviewToBack:self.backgroundImage];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(orientationChanged:)
@@ -758,7 +715,6 @@ typedef enum {
 -(void)dealloc{
     clearNotify();
     self.contentView = nil;
-    self.backgroundImage = nil;
     self.ios7BackgroundView = nil;
     self.topOverlay = nil;
     self.segmentedControl = nil;

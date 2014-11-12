@@ -83,7 +83,6 @@
         self.shareText = [self randomTextAllDoneForToday:self.allDoneForToday];
     [self updateBackground];
     
-    self.parent.backgroundMode = (itemNumber == 0);
     [self setEmptyBack:(itemNumber == 0) animated:YES];
     self.sectionHeader.fillColor = (itemNumber == 0) ? CLEAR : tcolor(BackgroundColor);
     if(itemNumber == 0 && oldNumber > 0){

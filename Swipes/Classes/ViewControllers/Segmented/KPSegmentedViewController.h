@@ -16,7 +16,6 @@
 @property (nonatomic, readonly, strong) AKSegmentedControl *segmentedControl;
 @property (nonatomic, assign) KPControlCurrentState currentState;
 @property (nonatomic, assign) BOOL lock;
-@property (nonatomic, assign) BOOL backgroundMode;
 @property (nonatomic, assign) NSUInteger currentIndex;
 @property (nonatomic, readonly) NSUInteger totalViewControllers;
 

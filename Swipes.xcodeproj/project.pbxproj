@@ -77,7 +77,6 @@
 		A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A72EFFFE18425B6A008333AA /* UserHandler.m */; };
 		A72FD5DB19E99B7B00DDEB02 /* KPFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A72FD5DA19E99B7B00DDEB02 /* KPFilter.m */; };
 		A72FD5DE19E9D10D00DDEB02 /* FilterTopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A72FD5DD19E9D10D00DDEB02 /* FilterTopMenu.m */; };
-		A741EC4F18354726000F9F93 /* default-background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A741EC4E18354726000F9F93 /* default-background.jpg */; };
 		A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */; };
 		A74646B918D38660003911DC /* ContactHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A74646B818D38660003911DC /* ContactHandler.m */; };
 		A748C87C190D9A0800514DB3 /* SubtaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A748C879190D9A0800514DB3 /* SubtaskCell.m */; };
@@ -596,7 +595,6 @@
 		A72FD5DA19E99B7B00DDEB02 /* KPFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPFilter.m; path = Swipes/Classes/Handlers/KPFilter.m; sourceTree = SOURCE_ROOT; };
 		A72FD5DC19E9D10D00DDEB02 /* FilterTopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterTopMenu.h; path = TopMenus/FilterTopMenu.h; sourceTree = "<group>"; };
 		A72FD5DD19E9D10D00DDEB02 /* FilterTopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilterTopMenu.m; path = TopMenus/FilterTopMenu.m; sourceTree = "<group>"; };
-		A741EC4E18354726000F9F93 /* default-background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "default-background.jpg"; sourceTree = "<group>"; };
 		A742415E17A5BFB2009C9735 /* WalkthroughOverlayBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkthroughOverlayBackground.h; path = Walkthrough/WalkthroughOverlayBackground.h; sourceTree = "<group>"; };
 		A742415F17A5BFB3009C9735 /* WalkthroughOverlayBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkthroughOverlayBackground.m; path = Walkthrough/WalkthroughOverlayBackground.m; sourceTree = "<group>"; };
 		A74646B718D38660003911DC /* ContactHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactHandler.h; sourceTree = "<group>"; };
@@ -1738,7 +1736,6 @@
 				A7F522AB197D7C76008B6147 /* swipesevernotetag@2x.png */,
 				A772B13F19671D9F00C07909 /* swipesandevernote.png */,
 				A772B14019671D9F00C07909 /* swipesandevernote@2x.png */,
-				A741EC4E18354726000F9F93 /* default-background.jpg */,
 			);
 			path = Backgrounds;
 			sourceTree = "<group>";
@@ -2365,7 +2362,6 @@
 				A75236EC17A335680030ED1E /* wt_menu_expain.png in Resources */,
 				DACD546018A1ACFC00C378DF /* page_white_vector.png in Resources */,
 				DACD545D18A1ACFC00C378DF /* page_white_ruby.png in Resources */,
-				A741EC4F18354726000F9F93 /* default-background.jpg in Resources */,
 				A75236ED17A335680030ED1E /* wt_menu_expain@2x.png in Resources */,
 				A75236FD17A349340030ED1E /* walkthrough_phone_background.png in Resources */,
 				DACD544618A1ACFC00C378DF /* folder_camera.png in Resources */,

@@ -640,10 +640,6 @@
         [self.tableView setContentOffset:self.savedContentOffset];
         self.savedContentOffset = CGPointZero;
     }
-    if (self.cellType != CellTypeToday)
-        self.parent.backgroundMode = NO;
-    else if (self.itemHandler.itemCounterWithFilter == 0)
-        self.parent.backgroundMode = YES;
     [super viewWillAppear:animated];
     self.hasStartedEditing = NO;
 }
