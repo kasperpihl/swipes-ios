@@ -775,8 +775,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     
     if(sender.tag == EVERNOTE_ITEM_BUTTON_TAG){
         NSArray *buttons = @[@"Cancel", @"Remove note"];
-        if( [GlobalApp isEvernoteInstalled] )
-            buttons = @[@"Cancel",@"Remove note",@"Open note"];
+        if( [GlobalApp isEvernoteInstalled] ){
+            //buttons = @[@"Cancel",@"Remove note",@"Open note"];
+        }
         [UTILITY alertWithTitle:@"Evernote" andMessage:@"What to do?" buttonTitles:buttons block:^(NSInteger number, NSError *error) {
             DLog(@"%li",(long)number);
             if(number == 1){
