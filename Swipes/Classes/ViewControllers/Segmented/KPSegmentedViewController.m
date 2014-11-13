@@ -395,10 +395,12 @@ typedef enum {
 }
 -(void)didClearSearchTopMenu:(SearchTopMenu *)topMenu{
     [kFilter clearAll];
-    [self setTopMenu:nil state:TopMenuDefault animated:YES];
+    [topMenu.searchField resignFirstResponder];
+    //[self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 -(void)didCloseSearchFieldTopMenu:(SearchTopMenu *)topMenu{
-    [self setTopMenu:nil state:TopMenuDefault animated:YES];
+    [topMenu.searchField resignFirstResponder];
+    //[self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 
 
@@ -485,6 +487,11 @@ typedef enum {
     }
 }
 
+
+
+
+
+
 -(void)pressedSelect:(id)sender{
     SelectionTopMenu *selectionTopMenu = [[SelectionTopMenu alloc] initWithFrame:CGRectMake(0, 0, self.ios7BackgroundView.frame.size.width, self.ios7BackgroundView.frame.size.height-16)];
     selectionTopMenu.position = TopMenuBottom;
@@ -504,10 +511,11 @@ typedef enum {
     [self setTopMenu:filterTopMenu state:TopMenuFilter animated:YES];
 }
 -(void)pressedSearch:(id)sender{
-    SearchTopMenu *searchTopMenu = [[SearchTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
+    SearchTopMenu *searchTopMenu = [[SearchTopMenu alloc] initWithFrame:CGRectMake(0, 0, self.ios7BackgroundView.frame.size.width, self.ios7BackgroundView.frame.size.height-16)];
     searchTopMenu.searchDelegate = self;
+    searchTopMenu.position = TopMenuBottom;
     searchTopMenu.searchField.text = kFilter.searchString;
-    [self setTopMenu:searchTopMenu state:TopMenuSearch animated:YES];
+    [self setTopMenu:searchTopMenu state:TopMenuSearch animated:NO];
     
     [searchTopMenu.searchField becomeFirstResponder];
 }
@@ -527,6 +535,10 @@ typedef enum {
     }
     [self.controlHandler setState:[self handlerStateForCurrent:currentState] animated:YES];
 }
+
+
+
+
 
 
 
@@ -644,6 +656,46 @@ typedef enum {
     }
 }
 
+
+
+-(void)keyboardWillHide:(NSNotification*)notification{
+    if(self.currentTopMenu != TopMenuSearch)
+        return;
+    [NSTimer scheduledTimerWithTimeInterval:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] target:self selector:@selector(removeOverlay) userInfo:nil repeats:NO];
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+    CGRectSetY(self.topOverlay, self.view.frame.size.height);
+    [UIView commitAnimations];
+}
+-(void)removeOverlay{
+    [self setTopMenu:nil state:TopMenuDefault animated:YES];
+}
+-(void)keyboardWillShow:(NSNotification*)notification{
+    CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGFloat kbdHeight = keyboardFrame.size.height;
+    if(OSVER == 7){
+        kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
+    }
+    CGFloat targetHeight = kbdHeight + self.topOverlay.frame.size.height;
+    CGFloat currentHeight = self.view.frame.size.height;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+    CGRectSetY(self.topOverlay, currentHeight-targetHeight);
+    CGRectSetHeight(self.contentView, currentHeight-targetHeight-self.contentView.frame.origin.y);
+    [UIView commitAnimations];
+    
+}
+
+
+
 - (void)orientationChanged:(NSNotification *)notification
 {
     if(self.currentTopMenu != TopMenuDefault && kIsIpad)
@@ -657,6 +709,14 @@ typedef enum {
     notify(@"updated daily image", updatedDailyImage);
     notify(@"updated sync",updateFromSync:);
     notify(@"filter active state changed", filterActiveChanged);
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
     self.view.backgroundColor = tcolor(BackgroundColor);
     
     

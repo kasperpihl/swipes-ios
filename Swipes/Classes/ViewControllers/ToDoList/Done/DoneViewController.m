@@ -114,8 +114,8 @@
 }
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
-    self.hasAskedForMore = NO;
-    [self update];
+    //self.hasAskedForMore = NO;
+    //[self update];
 }
 -(void)update{
     [super update];
