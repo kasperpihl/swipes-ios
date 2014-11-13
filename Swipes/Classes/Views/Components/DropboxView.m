@@ -10,6 +10,7 @@
 #import "KPBlurry.h"
 #import "GlobalApp.h"
 #import "DropboxView.h"
+#import "UtilityClass.h"
 
 #define kContentSpacingLeft 0
 #define kContentSpacingRight 0
@@ -160,12 +161,7 @@ static NSUInteger g_thumbnailCounter = 0;
     
     if (![linkedNum boolValue]) {
         // FIXME: is this the best way?
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error."
-                                                        message:@"Failed to login to Dropbox."
-                                                       delegate:self
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
+        [UTILITY alertWithTitle:@"Error" andMessage:@"Failed to login to Dropbox"];
     }
     else {
         [self getFilesForPath:@"/"];

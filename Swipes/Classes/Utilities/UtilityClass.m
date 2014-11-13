@@ -164,103 +164,120 @@
 
 -(void)alertWithTitle:(NSString *)title andMessage:(NSString *)message {
 #ifndef NOT_APPLICATION
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
-    [alertView show];
-#else
-    if (self.rootViewController) {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
-        [self.rootViewController presentViewController:alert animated:NO completion:nil];
+    if(OSVER < 8){
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
+        [alertView show];
+    }
+    else{
+        if (self.rootViewController) {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
+            [self.rootViewController presentViewController:alert animated:NO completion:nil];
+        }
     }
 #endif
 }
-
--(void)inputAlertWithTitle:(NSString*)title message:(NSString*)message placeholder:(NSString*)placeholder cancel:(NSString *)cancel confirm:(NSString *)confirm block:(StringBlock)block{
+-(void)inputAlertWithTitle:(NSString *)title message:(NSString *)message pretext:(NSString *)pretext placeholder:(NSString*)placeholder cancel:(NSString *)cancel confirm:(NSString *)confirm block:(StringBlock)block{
 #ifndef NOT_APPLICATION
-    UIAlertView *alertView = [[UIAlertView alloc]
-                              initWithTitle:title
-                              message:message
-                              delegate:self
-                              cancelButtonTitle:cancel
-                              otherButtonTitles:confirm, nil];
-    [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
-    self.stringBlock = block;
-    [alertView show];
-#else
-    if (self.rootViewController) {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-        [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-            textField.placeholder = placeholder;
-        }];
-        [alert addAction:[UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            UITextField *login = alert.textFields.firstObject;
-            if(login.isFirstResponder)
-                [login resignFirstResponder];
-            if (block)
-                block(nil, nil);
-        }]];
-        [alert addAction:[UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            UITextField *login = alert.textFields.firstObject;
-            if(login.isFirstResponder)
-                [login resignFirstResponder];
-            if (block)
-                block(login.text, nil);
-        }]];
-        [self.rootViewController presentViewController:alert animated:NO completion:^{
-            UITextField *login = alert.textFields.firstObject;
-            [login becomeFirstResponder];
-        }];
+    if(OSVER < 8){
+        UIAlertView *alertView = [[UIAlertView alloc]
+                                  initWithTitle:title
+                                  message:message
+                                  delegate:self
+                                  cancelButtonTitle:cancel
+                                  otherButtonTitles:confirm, nil];
+        [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
+        self.stringBlock = block;
+        [alertView show];
+    }
+    else{
+        if (self.rootViewController) {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                UITextField *login = alert.textFields.firstObject;
+                if(login.isFirstResponder)
+                    [login resignFirstResponder];
+                if (block)
+                    block(nil, nil);
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                UITextField *login = alert.textFields.firstObject;
+                if(login.isFirstResponder)
+                    [login resignFirstResponder];
+                if (block)
+                    block(login.text, nil);
+            }]];
+            [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                textField.placeholder = placeholder;
+                textField.text = pretext;
+            }];
+            [self.rootViewController presentViewController:alert animated:NO completion:^{
+                UITextField *login = alert.textFields.firstObject;
+                login.text = pretext;
+                [login becomeFirstResponder];
+            }];
+        }
     }
 #endif
+}
+-(void)inputAlertWithTitle:(NSString*)title message:(NSString*)message placeholder:(NSString*)placeholder cancel:(NSString *)cancel confirm:(NSString *)confirm block:(StringBlock)block{
+    [self inputAlertWithTitle:title message:message pretext:nil placeholder:placeholder cancel:cancel confirm:confirm block:block];
 }
 
 -(void)confirmBoxWithTitle:(NSString *)title andMessage:(NSString *)message cancel:(NSString *)cancel confirm:(NSString *)confirm block:(SuccessfulBlock)block{
 #ifndef NOT_APPLICATION
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancel otherButtonTitles:confirm, nil];
-    self.block = block;
-    [alertView show];
-#else
-    if (self.rootViewController) {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-           if (block)
-               block(NO, nil);
-        }]];
-        [alert addAction:[UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            if (block)
-                block(YES, nil);
-        }]];
-        [self.rootViewController presentViewController:alert animated:NO completion:nil];
+    if(OSVER < 8){
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancel otherButtonTitles:confirm, nil];
+        self.block = block;
+        [alertView show];
+    }
+    else{
+        if (self.rootViewController) {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                if (block)
+                    block(NO, nil);
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:confirm style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                if (block)
+                    block(YES, nil);
+            }]];
+            [self.rootViewController presentViewController:alert animated:NO completion:nil];
+        }
     }
 #endif
 }
 
--(void)popupWithTitle:(NSString *)title andMessage:(NSString *)message buttonTitles:(NSArray *)buttonTitles block:(NumberBlock)block{
+-(void)alertWithTitle:(NSString *)title andMessage:(NSString *)message buttonTitles:(NSArray *)buttonTitles block:(NumberBlock)block{
 #ifndef NOT_APPLICATION
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
-    for( NSString *buttonTitle in buttonTitles ){
-        [alertView addButtonWithTitle:buttonTitle];
-    }
-    self.numberBlock = block;
-    [alertView show];
-#else
-    if (self.rootViewController) {
-        void (^buttonBlock)(UIAlertAction *action) = ^(UIAlertAction *action) {
-            NSUInteger counter = 0;
-            if (block) {
-                for (NSString* title in buttonTitles) {
-                    if ([title isEqualToString:action.title]) {
-                        block(counter, nil);
-                    }
-                    counter++;
-                }
-            }
-        };
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-        for (NSString* title in buttonTitles) {
-            [alert addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:buttonBlock]];
+    if(OSVER < 8){
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
+        for( NSString *buttonTitle in buttonTitles ){
+            [alertView addButtonWithTitle:buttonTitle];
         }
-        [self.rootViewController presentViewController:alert animated:NO completion:nil];
+        if(block)
+            self.numberBlock = block;
+        [alertView show];
+    }
+    else{
+        if (self.rootViewController) {
+            void (^buttonBlock)(UIAlertAction *action) = ^(UIAlertAction *action) {
+                NSUInteger counter = 0;
+                if (block) {
+                    for (NSString* title in buttonTitles) {
+                        if ([title isEqualToString:action.title]) {
+                            block(counter, nil);
+                        }
+                        counter++;
+                    }
+                }
+            };
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+            for (NSString* title in buttonTitles) {
+                [alert addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:buttonBlock]];
+            }
+            [self.rootViewController presentViewController:alert animated:NO completion:nil];
+        }
     }
 #endif
 }

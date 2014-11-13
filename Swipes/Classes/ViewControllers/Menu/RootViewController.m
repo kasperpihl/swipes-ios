@@ -258,8 +258,7 @@ static RootViewController *sharedObject;
         [ANALYTICS tagEvent:@"Share tasks" options:@{@"Number of Tasks":@(tasks.count)}];
     }
     else{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Mail was not setup" message:@"You can send us feedback to support@swipesapp.com. Thanks" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
-        [alert show];
+        [UTILITY alertWithTitle:@"Mail was not setup" andMessage:@"You can send us feedback to support@swipesapp.com. Thanks"];
         [ANALYTICS tagEvent:@"Mail not available" options:nil];
     }
 }
@@ -296,19 +295,17 @@ static RootViewController *sharedObject;
         return;
     }
     
-    [UTILITY popupWithTitle:@"Can't upgrade to Swipes Plus" andMessage:@"We're remaking our Plus version. Please send us your suggestions while waiting." buttonTitles:@[@"Cancel",@"Send suggestions",@"Restore Purchases"] block:^(NSInteger number, NSError *error) {
+    [UTILITY alertWithTitle:@"Can't upgrade to Swipes Plus" andMessage:@"We're remaking our Plus version. Please send us your suggestions while waiting." buttonTitles:@[@"Cancel",@"Send suggestions",@"Restore Purchases"] block:^(NSInteger number, NSError *error) {
         if( number == 1){
             [ROOT_CONTROLLER feedback];
         }
         else if(number == 2){
             [[PaymentHandler sharedInstance] restoreWithBlock:^(NSError *error) {
                 if(!error){
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Purchase restored" message:@"Your purchase has been restored. Welcome back!" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
-                    [alert show];
+                    [UTILITY alertWithTitle:@"Your purchase has been restored" andMessage:@"Your purchase has been restored. Welcome back!"];
                 }
                 else {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"An error occured" message:@"No purchases could be restored. Contact support@swipesapp.com for help." delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
-                    [alert show];
+                    [UTILITY alertWithTitle:@"An error occured" andMessage:@"No purchases could be restored. Contact support@swipesapp.com for help."];
                 }
             }];
         }
@@ -431,7 +428,7 @@ static RootViewController *sharedObject;
 
 -(void)hintHandler:(HintHandler *)hintHandler triggeredHint:(Hints)hint{
     if(hint == HintEvernoteIntegration){
-        [UTILITY popupWithTitle:@"New feature" andMessage:@"We've made a powerful integration with Evernote!" buttonTitles:@[@"Not now", @"Learn more"] block:^(NSInteger number, NSError *error) {
+        [UTILITY alertWithTitle:@"New feature" andMessage:@"We've made a powerful integration with Evernote!" buttonTitles:@[@"Not now", @"Learn more"] block:^(NSInteger number, NSError *error) {
             if( number == 1){
                 [self openIntegrationsWithHelper];
             }

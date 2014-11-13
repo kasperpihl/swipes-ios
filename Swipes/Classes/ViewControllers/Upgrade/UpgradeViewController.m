@@ -165,23 +165,19 @@
         [sender showIndicator:NO];
         if(!error){
             [self.delegate closedUpgradeViewController:self];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Purchase restored" message:@"Your purchase has been restored. Welcome back!" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
-            [alert show];
+            [UTILITY alertWithTitle:@"Purchase restored" andMessage:@"Your purchase has been restored. Welcome back!"];
         }
         else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"An error occured" message:@"No purchases could be restored. Contact support@swipesapp.com for help." delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
-            [alert show];
+            [UTILITY alertWithTitle:@"An error occured" andMessage:@"No purchases could be restored. Contact support@swipesapp.com for help."];
         }
     }];
 }
 -(void)handlePaymentSucceeded:(BOOL)succeeded error:(NSError*)error{
     if(succeeded){
         [self.delegate closedUpgradeViewController:self];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Congratulations!" message:@"You’ve joined the Swipes Plus community. We’re so happy to have you on board. Go to swipesapp.com/plus to get started." delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
-        [alert show];
+        [UTILITY alertWithTitle:@"Congratulations!" andMessage:@"You’ve joined the Swipes Plus community. We’re so happy to have you on board. Go to swipesapp.com/plus to get started."];
     }else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"An error occured" message:@"Please try again, or contact support@swipesapp.com for help" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
-        [alert show];
+        [UTILITY alertWithTitle:@"An error occured" andMessage:@"Please try again, or contact support@swipesapp.com for help"];
     }
 }
 -(void)pressedCloseButton:(UIButton*)sender{

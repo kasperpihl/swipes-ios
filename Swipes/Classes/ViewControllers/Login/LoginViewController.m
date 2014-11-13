@@ -315,11 +315,7 @@ typedef enum {
             [PFUser requestPasswordResetForEmailInBackground:[textField.text lowercaseString] block:^(BOOL succeeded, NSError *error) {
                 [self showIndicator:NO onElement:self.forgotButton];
                 if(succeeded){
-                    [[[UIAlertView alloc] initWithTitle:@"Email sent"
-                                                message:@"Follow the instructions in the email to reset your pass"
-                                               delegate:nil
-                                      cancelButtonTitle:@"ok"
-                                      otherButtonTitles:nil] show];
+                    [UTILITY alertWithTitle:@"Email sent" andMessage:@"Follow the instructions in the email to reset your pass"];
                 }
                 else{
                     [self handleErrorFromLogin:error];
@@ -340,45 +336,25 @@ typedef enum {
     NSString *email = self.emailField.text;
     NSString *password = self.passwordField.text;
     if(![UtilityClass validateEmail:email]){
-        [[[UIAlertView alloc] initWithTitle:@"Please use an email"
-                                    message:@"Make sure you use a real email!"
-                                   delegate:nil
-                          cancelButtonTitle:@"ok"
-                          otherButtonTitles:nil] show];
+        [UTILITY alertWithTitle:@"Please use an email" andMessage:@"Make sure you use a real email!"];
         return NO;
     }
     else if(password.length == 0){
-        [[[UIAlertView alloc] initWithTitle:@"Missing password"
-                                    message:@"Make sure to enter your password!"
-                                   delegate:nil
-                          cancelButtonTitle:@"ok"
-                          otherButtonTitles:nil] show];
+        [UTILITY alertWithTitle:@"Missing password" andMessage:@"Make sure to enter your password!"];
         return NO;
     }
     return YES;
 }
 -(void)handleErrorFromLogin:(NSError*)error{
     if(error.code == 101){
-        [[[UIAlertView alloc] initWithTitle:@"Wrong email or password."
-                                    message:@"Please check your informations and try again."
-                                   delegate:nil
-                          cancelButtonTitle:@"ok"
-                          otherButtonTitles:nil] show];
+        [UTILITY alertWithTitle:@"Wrong email or password." andMessage:@"Please check your informations and try again."];
         return;
     }
     else if(error.code == 205 || error.code == 125){
-        [[[UIAlertView alloc] initWithTitle:@"Email wasn't found."
-                                   message:@"We couldn't recognize the email."
-                                  delegate:nil
-                         cancelButtonTitle:@"ok"
-                         otherButtonTitles:nil] show];
+        [UTILITY alertWithTitle:@"Email wasn't found." andMessage:@"We couldn't recognize the email."];
         return;
     }
-    [[[UIAlertView alloc] initWithTitle:@"Something went wrong."
-                                message:@"Please try again."
-                               delegate:nil
-                      cancelButtonTitle:@"ok"
-                      otherButtonTitles:nil] show];
+    [UTILITY alertWithTitle:@"Something went wrong." andMessage:@"Please try again."];
     [UtilityClass sendError:error type:@"Login"];
 }
 -(void)setCurrentState:(LoginState)currentState animated:(BOOL)animated{
@@ -438,11 +414,7 @@ typedef enum {
                 }
             }
             if(error.code == 2){
-                [[[UIAlertView alloc] initWithTitle:@"Facebook settings"
-                                            message:@"Please make sure you've allowed Swipes in Settings -> Facebook"
-                                           delegate:nil
-                                  cancelButtonTitle:@"ok"
-                                  otherButtonTitles:nil] show];
+                [UTILITY alertWithTitle:@"Facebook settings" andMessage:@"Please make sure you've allowed Swipes in Settings -> Facebook"];
             }
             else{
                 [self handleErrorFromLogin:error];
@@ -511,15 +483,22 @@ typedef enum {
     [ROOT_CONTROLLER tryoutapp];
 }
 -(void)pressedForgot:(UIButton*)sender{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Reset password" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Reset", nil];
-    alertView.delegate = self;
-    alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-    UITextField *textField = [alertView textFieldAtIndex:0];
-    alertView.title = @"Reset password";
-    textField.placeholder = @"Email";
-    textField.keyboardType = UIKeyboardTypeEmailAddress;
-    if(self.emailField.text.length > 0) textField.text = self.emailField.text;
-    [alertView show];
+    NSLog(@"for: %@",self.emailField.text);
+    [UTILITY inputAlertWithTitle:@"Reset password" message:nil pretext:self.emailField.text placeholder:@"Email" cancel:@"Cancel" confirm:@"Reset" block:^(NSString *string, NSError *error) {
+        if(string.length == 0)
+            return;
+        [self showIndicator:YES onElement:self.forgotButton];
+        [PFUser requestPasswordResetForEmailInBackground:[string lowercaseString] block:^(BOOL succeeded, NSError *error) {
+            [self showIndicator:NO onElement:self.forgotButton];
+            if(succeeded){
+                [UTILITY alertWithTitle:@"Email sent" andMessage:@"Follow the instructions in the email to reset your pass"];
+            }
+            else{
+                [self handleErrorFromLogin:error];
+                
+            }
+        }];
+    }];
 }
 -(void)pressedPrivacy:(UIButton*)sender{
     [UTILITY confirmBoxWithTitle:@"Privacy policy" andMessage:@"Do you want to open our privacy policy?" block:^(BOOL succeeded, NSError *error) {

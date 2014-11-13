@@ -761,7 +761,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
     voidBlock setNewEvernote = ^{
         if ([EvernoteIntegration isAPILimitReached]) {
-            [[[UIAlertView alloc] initWithTitle:nil message:[EvernoteIntegration APILimitReachedMessage] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            [UTILITY alertWithTitle:nil andMessage:[EvernoteIntegration APILimitReachedMessage]];
         }
         else {
             self.activeEditMode = KPEditModeEvernote;
@@ -777,7 +777,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         NSArray *buttons = @[@"Cancel", @"Remove note"];
         if( [GlobalApp isEvernoteInstalled] )
             buttons = @[@"Cancel",@"Remove note",@"Open note"];
-        [UTILITY popupWithTitle:@"Evernote" andMessage:@"What to do?" buttonTitles:buttons block:^(NSInteger number, NSError *error) {
+        [UTILITY alertWithTitle:@"Evernote" andMessage:@"What to do?" buttonTitles:buttons block:^(NSInteger number, NSError *error) {
             DLog(@"%li",(long)number);
             if(number == 1){
                 [self.model removeAllAttachmentsForService:EVERNOTE_SERVICE];

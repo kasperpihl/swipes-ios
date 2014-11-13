@@ -100,8 +100,7 @@ static NotificationHandler *sharedObject;
         return LocationNeededPermission;
     }
     else if([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Permissions" message:@"You need to turn on location permissions for Swipes in Settings > Privacy" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
-        [alert show];
+        [UTILITY alertWithTitle:@"Location Permissions" andMessage:@"You need to turn on location permissions for Swipes in Settings > Privacy"];
         return LocationNotAuthorized;
     }
     else if(self.startedLocationServices)
@@ -398,8 +397,7 @@ static NotificationHandler *sharedObject;
             }
             else{
                 NSString *title = (fence.getTypeGeofence == KL_GEOFENCE_TYPE_IN) ? @"Arrived at Location" : @"Left Location";
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:toDo.title delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
-                [alert show];
+                [UTILITY alertWithTitle:title andMessage:toDo.title];
             }
             [KLLocation deleteGeofenceWithUserID:[fence getIDUser]];
         }

@@ -450,7 +450,7 @@ NSString * const kEvernoteMoveTime = @"EvernoteMoveTime";
         return;
     
     NSString* msg = [NSString stringWithFormat:@"Evernote note attached to the task with title \"%@\" is missing. Select \"Note was moved\" to select the new note, \"Note was deleted\" to detach", todo.title];
-    [UTILITY popupWithTitle:nil andMessage:msg buttonTitles:@[@"Note was moved", @"Note was deleted", @"Remind me tomorrow"] block:^(NSInteger number, NSError *error) {
+    [UTILITY alertWithTitle:nil andMessage:msg buttonTitles:@[@"Note was moved", @"Note was deleted", @"Remind me tomorrow"] block:^(NSInteger number, NSError *error) {
         
         switch (number) {
             case 0: { // moved note

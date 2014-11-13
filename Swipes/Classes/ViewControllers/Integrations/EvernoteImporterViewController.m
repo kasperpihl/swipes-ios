@@ -216,7 +216,7 @@
     [DejalBezelActivityView activityViewForView:self.view withLabel:@"Importing..."];
     [EvernoteSyncHandler addAndSyncNewTasksFromNotes:notesToImport];
     [DejalBezelActivityView removeViewAnimated:YES];
-    [[[UIAlertView alloc] initWithTitle:@"Successfully imported." message:@"Next time, assign the \"swipes\"-tag in Evernote and we'll import the notes automatically." delegate:nil cancelButtonTitle:@"Great! I got it." otherButtonTitles: nil] show];
+    [UTILITY alertWithTitle:@"Successfully imported." andMessage:@"Next time, assign the \"swipes\"-tag in Evernote and we'll import the notes automatically." buttonTitles:@[@"Great! I got it."] block:nil];
     [self pressedClose:nil];
 }
 

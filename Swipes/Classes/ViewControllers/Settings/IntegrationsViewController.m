@@ -270,7 +270,7 @@ int const kCellCount = 4;
 }
 
 -(void)authenticated{
-    [UTILITY popupWithTitle:@"Get started" andMessage:@"Import a few notes right away." buttonTitles:@[@"Not now",@"Choose notes"] block:^(NSInteger number, NSError *error) {
+    [UTILITY alertWithTitle:@"Get started" andMessage:@"Import a few notes right away." buttonTitles:@[@"Not now",@"Choose notes"] block:^(NSInteger number, NSError *error) {
         if(number == 1){
             [self showEvernoteImporterAnimated:YES];
         }
