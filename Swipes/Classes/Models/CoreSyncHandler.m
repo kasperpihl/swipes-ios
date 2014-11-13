@@ -9,6 +9,7 @@
 #import <AudioToolbox/AudioServices.h>
 #import "UtilityClass.h"
 #import "GlobalApp.h"
+#import "KPFilter.h"
 #import "KPToDo.h"
 #import "KPAttachment.h"
 #import "KPTag.h"
@@ -824,15 +825,15 @@
 
 - (void)clearAndDeleteData
 {
-    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:@"swipes"];
+    NSURL *storeURL = [Global coreDataUrl];
     NSError *error;
     BOOL removed = [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
     if(removed){
         [MagicalRecord cleanUp];
         [self loadDatabase];
     }
-    NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
-    [USER_DEFAULTS removePersistentDomainForName:appDomain];
+    [Global clearUserDefaults];
+    [kFilter clearAll];
     [self endBackgroundHandler];
     self._isSyncing = NO;
     self._needSync = NO;

@@ -28,7 +28,7 @@
 + (NSURL *)coreDataUrl;
 + (void)initCoreData;
 + (NSUserDefaults *)sharedDefaults;
-
++ (void)clearUserDefaults;
 @property (nonatomic) CGFloat fontMultiplier;
 
 @end

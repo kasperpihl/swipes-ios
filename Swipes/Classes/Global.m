@@ -295,7 +295,13 @@ static Global *sharedObject;
     [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreAtURL:coreDataURL];
 //    [MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
 }
-
++(void)clearUserDefaults{
+    NSDictionary *defaultsDictionary = [USER_DEFAULTS dictionaryRepresentation];
+    for (NSString *key in [defaultsDictionary allKeys]) {
+        [USER_DEFAULTS removeObjectForKey:key];
+    }
+    [USER_DEFAULTS synchronize];
+}
 + (NSUserDefaults *)sharedDefaults
 {
     static NSUserDefaults* sharedDefaults;
