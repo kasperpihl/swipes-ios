@@ -33,7 +33,7 @@
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 
 #import "PaymentHandler.h"
-
+#import "KPTopClock.h"
 
 #import "KPAlert.h"
 #import "UtilityClass.h"
@@ -518,6 +518,7 @@ static RootViewController *sharedObject;
     
     
     
+    
 }
 -(void)changedTheme{
     UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
@@ -527,6 +528,8 @@ static RootViewController *sharedObject;
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    kTopClock.textColor = tcolor(TextColor);
+    kTopClock.font = KP_REGULAR(14);
 }
 
 - (void)viewDidUnload

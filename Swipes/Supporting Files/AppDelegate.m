@@ -32,7 +32,7 @@
 #import "UIWindow+DHCShakeRecognizer.h"
 
 #import "RootViewController.h"
-
+#import "KPTopClock.h"
 #import "AppDelegate.h"
 
 @implementation AppDelegate
@@ -114,7 +114,6 @@
                               optionalHost:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
-    
     /** NOTIFICATION ACTIONS
     UIMutableUserNotificationAction *action= [[UIMutableUserNotificationAction alloc] init];
     action.identifier = @"Snooze"; // The id passed when the user selects the action
