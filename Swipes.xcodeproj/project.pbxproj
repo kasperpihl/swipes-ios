@@ -255,6 +255,7 @@
 		DA23232A19B4737A00D996EB /* UtilityClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A781285B17294C56002226C8 /* UtilityClass.h */; };
 		DA23232B19B4738000D996EB /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285C17294C56002226C8 /* UtilityClass.m */; };
 		DA310FA7188F3F26003C8FA4 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = DA310FA6188F3F26003C8FA4 /* Assets */; };
+		DA3E54421A15498500C2116F /* ENNoteRefInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3E54411A15498500C2116F /* ENNoteRefInternal.h */; };
 		DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0B8F188CB4750094F866 /* EvernoteView.m */; };
 		DA47B6601A006D1B00299916 /* MagicalImportFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = DA47B6251A006D1B00299916 /* MagicalImportFunctions.h */; };
 		DA47B6611A006D1B00299916 /* MagicalImportFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = DA47B6261A006D1B00299916 /* MagicalImportFunctions.m */; };
@@ -840,6 +841,7 @@
 		DA23232419B472BE00D996EB /* GlobalApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalApp.h; sourceTree = "<group>"; };
 		DA23232519B472BE00D996EB /* GlobalApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalApp.m; sourceTree = "<group>"; };
 		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
+		DA3E54411A15498500C2116F /* ENNoteRefInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENNoteRefInternal.h; path = Integrations/ENNoteRefInternal.h; sourceTree = "<group>"; };
 		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteView.h; path = Components/EvernoteView.h; sourceTree = "<group>"; };
 		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteView.m; path = Components/EvernoteView.m; sourceTree = "<group>"; };
 		DA47B6251A006D1B00299916 /* MagicalImportFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalImportFunctions.h; sourceTree = "<group>"; };
@@ -1221,6 +1223,7 @@
 		A70D12D71966D09A00A95C50 /* Integrations */ = {
 			isa = PBXGroup;
 			children = (
+				DA3E54411A15498500C2116F /* ENNoteRefInternal.h */,
 				A70D12D81966D11500A95C50 /* EvernoteIntegration.h */,
 				A70D12D91966D11500A95C50 /* EvernoteIntegration.m */,
 				A7C258FC197CE5A200290198 /* IntegrationHandler.h */,
@@ -2191,6 +2194,7 @@
 				DA47B66C1A006D1B00299916 /* NSNumber+MagicalDataImport.h in Headers */,
 				DA47B6941A006D1B00299916 /* NSManagedObjectContext+MagicalRecord.h in Headers */,
 				DA47B6B81A006D1B00299916 /* MagicalRecord+Options.h in Headers */,
+				DA3E54421A15498500C2116F /* ENNoteRefInternal.h in Headers */,
 				DA23231719B39C4600D996EB /* KPToDo.h in Headers */,
 				DA47B6741A006D1B00299916 /* NSRelationshipDescription+MagicalDataImport.h in Headers */,
 				DA47B6701A006D1B00299916 /* NSObject+MagicalDataImport.h in Headers */,

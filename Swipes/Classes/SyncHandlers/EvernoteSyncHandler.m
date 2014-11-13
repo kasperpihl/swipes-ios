@@ -21,6 +21,7 @@
 #import "KPBlurry.h"
 #import "EvernoteIntegration.h"
 #import "RootViewController.h"
+#import "ENNoteRefInternal.h"
 
 #import "EvernoteSyncHandler.h"
 
@@ -31,6 +32,7 @@
 
 NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 NSString * const kEvernoteMoveTime = @"EvernoteMoveTime";
+NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
 
 @interface EvernoteSyncHandler () <EvernoteViewDelegate>
 @property (nonatomic, copy) SyncBlock block;
@@ -74,6 +76,7 @@ NSString * const kEvernoteMoveTime = @"EvernoteMoveTime";
     if( self ){
         self.changedNotes = [NSMutableSet set];
         self.lastUpdated = [USER_DEFAULTS objectForKey:kEvernoteUpdatedAtKey];
+        [self convertGuidToENNoteRef];
     }
     return self;
 }
@@ -560,16 +563,16 @@ NSString * const kEvernoteMoveTime = @"EvernoteMoveTime";
         }
     };
     BOOL syncedAnything = NO;
-    for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
+    for (KPToDo *todoWithEvernote in self.objectsWithEvernote) {
         
         __block KPAttachment *evernoteAttachment = [todoWithEvernote firstAttachmentForServiceType:EVERNOTE_SERVICE];
-        NSString *enid = evernoteAttachment.identifier;
+        NSString *noteRefString = evernoteAttachment.identifier;
         
         BOOL hasLocalChanges = [todoWithEvernote hasChangesSinceDate:self.lastUpdated];
         if (hasLocalChanges) {
             DLog(@"local changes: %@",todoWithEvernote.title);
         }
-        BOOL hasChangesFromEvernote = [self hasChangedFromEvernoteId:enid];
+        BOOL hasChangesFromEvernote = [self hasChangedFromEvernoteId:noteRefString];
         if (hasChangesFromEvernote) {
             DLog(@"evernote changes: %@",todoWithEvernote.title);
         }
@@ -580,7 +583,7 @@ NSString * const kEvernoteMoveTime = @"EvernoteMoveTime";
         }
         syncedAnything = YES;
 
-        [EvernoteToDoProcessor processorWithGuid:enid block:^(EvernoteToDoProcessor *processor, NSError *error) {
+        [EvernoteToDoProcessor processorWithNoteRefString:noteRefString block:^(EvernoteToDoProcessor *processor, NSError *error) {
             
             //NSLog(@"guid:%@",guid);
             if( processor ){
@@ -637,6 +640,27 @@ NSString * const kEvernoteMoveTime = @"EvernoteMoveTime";
     }
     if(!syncedAnything)
         return self.block(SyncStatusSuccess, nil, nil);
+}
+
+- (void)convertGuidToENNoteRef
+{
+    BOOL isGuidConverted = [USER_DEFAULTS boolForKey:kEvernoteGuidConveted];
+    if (!isGuidConverted) {
+        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+        NSArray *attachments = [KPAttachment MR_findByAttribute:@"service" withValue:EVERNOTE_SERVICE inContext:localContext];
+        for (KPAttachment* attachment in attachments) {
+            if (![EvernoteIntegration isNoteRefString:attachment.identifier]) {
+                ENNoteRef* noteRef = [[ENNoteRef alloc] init];
+                noteRef.guid = attachment.identifier;
+                noteRef.type = ENNoteRefTypePersonal;
+                noteRef.linkedNotebook = nil;
+                attachment.identifier = [EvernoteIntegration ENNoteRefToNSString:noteRef];
+            }
+        }
+        [KPToDo saveToSync];
+        [USER_DEFAULTS setBool:YES forKey:kEvernoteGuidConveted];
+        [USER_DEFAULTS synchronize];
+    }
 }
 
 @end

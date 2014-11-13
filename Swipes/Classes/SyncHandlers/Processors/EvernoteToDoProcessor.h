@@ -20,11 +20,11 @@ typedef void (^EvernoteProcessorBlock)(EvernoteToDoProcessor *processor, NSError
 
 @interface EvernoteToDoProcessor : NSObject
 
-+(void)processorWithGuid:(NSString*)guid block:(EvernoteProcessorBlock)block;
++ (void)processorWithNoteRefString:(NSString *)noteRefString block:(EvernoteProcessorBlock)block;
 
 @property (nonatomic) BOOL needUpdate;
-@property (nonatomic, strong) id note;
-@property (nonatomic) NSString *guid;
+@property (nonatomic, strong) ENNote* note;
+@property (nonatomic) NSString *noteRefString;
 
 - (NSArray *)toDoItems;
 - (BOOL)updateToDo:(EvernoteToDo *)todo checked:(BOOL)checked;

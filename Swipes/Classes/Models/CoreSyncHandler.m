@@ -658,7 +658,9 @@
         [objectsToUpdate setObject:newObjectsToDeleteOnServer forKey:kDeleteObjectsKey];
         [keysToRemoveInAttributeChanges addObject:kDeleteObjectsKey];
     }
-    if(newObjectsToDeleteOnServer) counter += newObjectsToDeleteOnServer.count;
+    
+    if(newObjectsToDeleteOnServer)
+        counter += newObjectsToDeleteOnServer.count;
     
     
     for (NSString *identifier in copyOfNewAttributeChanges) {

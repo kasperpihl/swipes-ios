@@ -34,7 +34,6 @@ NSString* const kSwipesScheme = @"swipes";
 
 NSString* const kSwipesDomainToDo = @"todo";
 NSString* const kSwipesDomainTag = @"tag";
-NSString* const kSwipesDomainEnToDo = @"evernotetodo";
 
 NSString* const kSwipesCommandAdd = @"/add";
 NSString* const kSwipesCommandCleanAdd = @"/clean_add";
@@ -50,7 +49,6 @@ NSString* const kSwipesParamPriority = @"priority";
 NSString* const kSwipesParamNotes = @"notes";
 NSString* const kSwipesParamSchedule = @"schedule";
 NSString* const kSwipesParamSubtask = @"subtask";
-NSString* const kSwipesParamGiud = @"guid";
 NSString* const kSwipesParamId = @"id";
 
 // x-callback-url support constants
@@ -122,14 +120,6 @@ static NSDictionary* kErrorCodes;
                 }
                 else if ([url.path isEqualToString:kSwipesCommandDelete]) {
                     return [self handleDeleteTag:query];
-                }
-            }
-            else if ([url.host isEqualToString:kSwipesDomainEnToDo]) {
-                if ([url.path isEqualToString:kSwipesCommandAdd]) {
-                    return [self handleAddEvernote:query];
-                }
-                else if ([url.path isEqualToString:kSwipesCommandDelete]) {
-                    return [self handleDeleteToDo:query updateXCallbackURL:YES];
                 }
             }
         }
@@ -461,66 +451,6 @@ static NSDictionary* kErrorCodes;
         }
         else {
             [self handleXCallbackURL:query errorMessage:kErrorNoSuchTag];
-        }
-        return YES;
-    }
-    else {
-        [self handleXCallbackURL:query errorMessage:kErrorMissingMandatoryParam];
-    }
-    return NO;
-}
-
-#pragma mark - Evernote
-
-- (void)doCreateEvernote:(NSDictionary *)query guid:(NSString *)guid
-{
-    // FIXME search for such a note?
-    [[EvernoteIntegration sharedInstance] fetchNoteWithGuid:guid block:^(EDAMNote *note, NSError *error) {
-        if (error) {
-            [UtilityClass sendError:error type:@"Evernote URL error"];
-            [self handleXCallbackURL:query errorMessage:[error description] errorCode:@(302)];
-        }
-        else {
-            NSArray* todos = [KPToDo findByTitle:note.title];
-            if (nil == todos) {
-                KPToDo* todo = [KPToDo addItem:note.title priority:NO tags:[self arrayFromQuery:query withPrefix:kSwipesParamTag] save:NO];
-                
-                // remove tags
-                NSMutableDictionary* mQuery = query.mutableCopy;
-                [mQuery removeObjectForKey:[NSString stringWithFormat:@"%@1", kSwipesParamTag]];
-                [mQuery removeObjectForKey:[NSString stringWithFormat:@"%@s", kSwipesParamTag]];
-                
-                // attach evernote
-                [todo attachService:EVERNOTE_SERVICE title:note.title identifier:guid sync:YES];
-                
-                // update
-                [self doUpdateToDo:todo query:mQuery];
-                [self handleXCallbackURL:query errorMessage:nil];
-            }
-            else {
-                [self handleXCallbackURL:query errorMessage:kErrorTodoExists];
-            }
-        }
-    }];
-}
-
-- (BOOL)handleAddEvernote:(NSDictionary *)query
-{
-    __block NSString* guid = query[kSwipesParamGiud];
-    if (nil != guid) {
-        if (![EvernoteIntegration sharedInstance].isAuthenticated) {
-            [[EvernoteIntegration sharedInstance] authenticateEvernoteInViewController:ROOT_CONTROLLER withBlock:^(NSError *error) {
-                if (!error) {
-                    [self doCreateEvernote:query guid:guid];
-                }
-                else {
-                    [UtilityClass sendError:error type:@"Evernote Auth error"];
-                    [self handleXCallbackURL:query errorMessage:kErrorEvernoteAuthentication];
-                }
-            }];
-        }
-        else {
-            [self doCreateEvernote:query guid:guid];
         }
         return YES;
     }
