@@ -198,6 +198,7 @@ static RootViewController *sharedObject;
     [[CoreSyncHandler sharedInstance] clearAndDeleteData];
     [kUserHandler didLogout];
     [kHints reset];
+    [kFilter clearAll];
     [self resetRoot];
 
 }

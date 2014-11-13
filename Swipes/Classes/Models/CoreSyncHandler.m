@@ -9,7 +9,6 @@
 #import <AudioToolbox/AudioServices.h>
 #import "UtilityClass.h"
 #import "GlobalApp.h"
-#import "KPFilter.h"
 #import "KPToDo.h"
 #import "KPAttachment.h"
 #import "KPTag.h"
@@ -833,7 +832,6 @@
         [self loadDatabase];
     }
     [Global clearUserDefaults];
-    [kFilter clearAll];
     [self endBackgroundHandler];
     self._isSyncing = NO;
     self._needSync = NO;
