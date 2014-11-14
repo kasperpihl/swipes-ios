@@ -437,26 +437,6 @@ static RootViewController *sharedObject;
     }
 }
 
--(void)syncHandler:(CoreSyncHandler *)handler status:(SyncStatus)status userInfo:(NSDictionary *)userInfo error:(NSError *)error{
-    /*switch (status) {
-        case SyncStatusStarted:
-            [self.notification displayNotificationWithMessage:@"Synchronizing..." completion:nil];
-            break;
-        case SyncStatusProgress:
-            break;
-        case SyncStatusSuccess:
-            [self.notification displayNotificationWithMessage:@"Sync completed" forDuration:1.5];
-            break;
-        case SyncStatusError:{
-            
-            [self.notification displayNotificationWithMessage:@"Error syncing" forDuration:3.5];
-            break;
-        }
-        default:
-            break;
-    }*/
-}
-
 -(void)tryoutapp{
     if(![USER_DEFAULTS objectForKey:isTryingString]){
         [USER_DEFAULTS setBool:YES forKey:isTryingString];
@@ -523,15 +503,15 @@ static RootViewController *sharedObject;
 -(void)changedTheme{
     UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
     [[UIApplication sharedApplication] setStatusBarStyle: statusBarStyle];
+    [kTopClock setTextColor:tcolor(TextColor)];
    // [self setNeedsStatusBarAppearanceUpdate];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    kTopClock.textColor = tcolor(TextColor);
-    kTopClock.font = KP_REGULAR(14);
+    kTopClock.textColor = alpha(tcolor(TextColor),0.8);
+    kTopClock.font = KP_SEMIBOLD(12);
 }
-
 - (void)viewDidUnload
 {
     [super viewDidUnload];

@@ -675,6 +675,8 @@ typedef enum {
     [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 -(void)keyboardWillShow:(NSNotification*)notification{
+    if(self.currentTopMenu != TopMenuSearch)
+        return;
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGFloat kbdHeight = keyboardFrame.size.height;
     if(OSVER == 7){

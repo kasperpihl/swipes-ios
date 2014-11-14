@@ -13,13 +13,12 @@
 #import "KPToDo.h"
 #import "SettingsHandler.h"
 #import "UserHandler.h"
-#import "CWStatusBarNotification.h"
+#import "KPTopClock.h"
 
 #define kMaxNotifications 25
 @interface NotificationHandler () <KitLocateSingleDelegate, KitLocateDelegate>
 @property (nonatomic) BOOL fencing;
 @property (nonatomic) BOOL startedLocationServices;
-@property (nonatomic) CWStatusBarNotification *notification;
 @end
 
 @implementation NotificationHandler
@@ -40,23 +39,10 @@ static NotificationHandler *sharedObject;
 }
 
 -(void)sendNotification:(NSNotification*)notification{
-    if(OSVER < 7) return;
-    if(!self.notification){
-        self.notification = [CWStatusBarNotification new];
-        self.notification.notificationTappedBlock = nil;
-        self.notification.notificationAnimationType = CWNotificationAnimationTypeOverlay;
-        self.notification.notificationAnimationInStyle = CWNotificationAnimationStyleTop;
-        self.notification.notificationAnimationOutStyle = CWNotificationAnimationStyleTop;
-    }
-    self.notification.notificationLabelBackgroundColor = tcolor(BackgroundColor);
-    self.notification.notificationLabelTextColor = tcolor(TextColor);
     NSDictionary *userInfo = notification.userInfo;
     NSString *title = [userInfo objectForKey:@"title"];
     CGFloat duration = [[userInfo objectForKey:@"duration"] floatValue];
-    if( duration ){
-        [self.notification displayNotificationWithMessage:title forDuration:duration];
-    }else
-        [self.notification displayNotificationWithMessage:title completion:nil];
+    [kTopClock showNotificationWithMessage:title forSeconds:duration];
 }
 
 -(void)onUpdateLocalNotifications:(NSNotification*)notification{
