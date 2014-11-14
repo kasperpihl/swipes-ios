@@ -98,7 +98,7 @@
 		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
-	<string>MainStoryboard</string>
+	<string>Launch Screen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard</string>
 	<key>UIPrerenderedIcon</key>

@@ -52,6 +52,7 @@
 		A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1CA1838EC570047DCC9 /* ToDoCell.m */; };
 		A7063BCC190F8BEE003D3690 /* SubtaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7063BCB190F8BEE003D3690 /* SubtaskController.m */; };
 		A708BED61A14B25600C7E15A /* KPTopClock.m in Sources */ = {isa = PBXBuildFile; fileRef = A708BED51A14B25600C7E15A /* KPTopClock.m */; };
+		A708BED81A15F35B00C7E15A /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A708BED71A15F35B00C7E15A /* Launch Screen.xib */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
 		A70D12DA1966D11500A95C50 /* EvernoteIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A70D12D91966D11500A95C50 /* EvernoteIntegration.m */; };
 		A711246E19DB13D400FD9DAE /* TodayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A711246D19DB13D400FD9DAE /* TodayTableViewCell.m */; };
@@ -561,6 +562,7 @@
 		A7063BCB190F8BEE003D3690 /* SubtaskController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtaskController.m; sourceTree = "<group>"; };
 		A708BED41A14B25600C7E15A /* KPTopClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPTopClock.h; path = KPTopClock/KPTopClock.h; sourceTree = "<group>"; };
 		A708BED51A14B25600C7E15A /* KPTopClock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPTopClock.m; path = KPTopClock/KPTopClock.m; sourceTree = "<group>"; };
+		A708BED71A15F35B00C7E15A /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		A7090B6E175DF3F900728A3A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = Login/LoginViewController.h; sourceTree = "<group>"; };
 		A7090B6F175DF3F900728A3A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Login/LoginViewController.m; sourceTree = "<group>"; };
 		A70D12D81966D11500A95C50 /* EvernoteIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteIntegration.h; path = Integrations/EvernoteIntegration.h; sourceTree = "<group>"; };
@@ -1655,6 +1657,7 @@
 		A78128B217294C56002226C8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A708BED71A15F35B00C7E15A /* Launch Screen.xib */,
 				A781287F17294C56002226C8 /* MainStoryboard.storyboard */,
 				DA04465019D5CDC70083F816 /* Swipes.entitlements */,
 				A78128B317294C56002226C8 /* AppDelegate.h */,
@@ -2337,6 +2340,7 @@
 				DACD545318A1ACFC00C378DF /* page_white_cplusplus.png in Resources */,
 				A717BF27176115CD004791BF /* ProximaNova-Regular.ttf in Resources */,
 				DACD545218A1ACFC00C378DF /* page_white_code.png in Resources */,
+				A708BED81A15F35B00C7E15A /* Launch Screen.xib in Resources */,
 				A717BF2917611D2D004791BF /* ProximaNova-Semibold.ttf in Resources */,
 				DACD545718A1ACFC00C378DF /* page_white_flash.png in Resources */,
 				A74FB90018FFF47800F25157 /* swipes.ttf in Resources */,

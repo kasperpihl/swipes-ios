@@ -503,14 +503,14 @@ static RootViewController *sharedObject;
 -(void)changedTheme{
     UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
     [[UIApplication sharedApplication] setStatusBarStyle: statusBarStyle];
-    [kTopClock setTextColor:tcolor(TextColor)];
+    [kTopClock setTextColor:alpha(tcolor(TextColor),0.8)];
    // [self setNeedsStatusBarAppearanceUpdate];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    kTopClock.textColor = alpha(tcolor(TextColor),0.8);
     kTopClock.font = KP_SEMIBOLD(12);
+    [self changedTheme];
 }
 - (void)viewDidUnload
 {
