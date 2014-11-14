@@ -135,7 +135,7 @@
     //DLog(@"%lu",(long)[NSTimeZone localTimeZone].secondsFromGMT);
     //DLog(@"Machine type: %@", [GlobalApp machineType]);
     //DLog(@"Device id: %@", [GlobalApp deviceId]);
-    
+    NSLog(@"%@",[UIFont fontNamesForFamilyName:@"Gotham Rounded"]);
     return YES;
 }
 

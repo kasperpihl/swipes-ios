@@ -30,10 +30,10 @@
 
 #define KP_FONT(fontName, fontSize) [UIFont fontWithName:fontName size:fontSize * [Global sharedInstance].fontMultiplier]
 
-#define KP_LIGHT(fontSize)              KP_FONT(@"ProximaNova-Light",fontSize)
-#define KP_REGULAR(fontSize)            KP_FONT(@"ProximaNova-Regular", fontSize)//[UIFont fontWithName:@"VarelaRound-Regular" size:fontSize]
-#define KP_BOLD(fontSize)               KP_FONT(@"ProximaNova-Bold",fontSize)
-#define KP_SEMIBOLD(fontSize)           KP_FONT(@"ProximaNova-Semibold", fontSize)
+#define KP_LIGHT(fontSize)              KP_FONT(@"GothamRounded-Light",fontSize)
+#define KP_REGULAR(fontSize)            KP_FONT(@"GothamRounded-Book", fontSize)//[UIFont fontWithName:@"VarelaRound-Regular" size:fontSize]
+#define KP_BOLD(fontSize)               KP_FONT(@"GothamRounded-Bold",fontSize)
+#define KP_SEMIBOLD(fontSize)           KP_FONT(@"GothamRounded-Medium", fontSize)
 
 
 #define SCHEDULE_BUTTON_FONT            KP_SEMIBOLD(14)
@@ -106,7 +106,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:a]
 #define TEXT_FIELD_FONT                 KP_LIGHT(18)
 #define NOTES_VIEW_FONT                 KP_REGULAR(17)
 #define SECTION_HEADER_FONT             KP_REGULAR(11)
-#define TITLE_LABEL_FONT                KP_REGULAR(18)
+#define TITLE_LABEL_FONT                KP_REGULAR(16)
 #define TAGS_LABEL_FONT                 KP_REGULAR(11)
 #define TAG_FONT                        KP_LIGHT(18)
 

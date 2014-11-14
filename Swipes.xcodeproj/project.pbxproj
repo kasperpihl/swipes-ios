@@ -53,6 +53,10 @@
 		A7063BCC190F8BEE003D3690 /* SubtaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7063BCB190F8BEE003D3690 /* SubtaskController.m */; };
 		A708BED61A14B25600C7E15A /* KPTopClock.m in Sources */ = {isa = PBXBuildFile; fileRef = A708BED51A14B25600C7E15A /* KPTopClock.m */; };
 		A708BED81A15F35B00C7E15A /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A708BED71A15F35B00C7E15A /* Launch Screen.xib */; };
+		A708BEE21A15FDFC00C7E15A /* GothamRounded-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A708BEE11A15FDFC00C7E15A /* GothamRounded-Book.ttf */; };
+		A708BEE61A15FE3400C7E15A /* GothamRounded-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A708BEE31A15FE3400C7E15A /* GothamRounded-Bold.ttf */; };
+		A708BEE71A15FE3400C7E15A /* GothamRounded-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A708BEE41A15FE3400C7E15A /* GothamRounded-Light.ttf */; };
+		A708BEE81A15FE3400C7E15A /* GothamRounded-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A708BEE51A15FE3400C7E15A /* GothamRounded-Medium.ttf */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
 		A70D12DA1966D11500A95C50 /* EvernoteIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A70D12D91966D11500A95C50 /* EvernoteIntegration.m */; };
 		A711246E19DB13D400FD9DAE /* TodayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A711246D19DB13D400FD9DAE /* TodayTableViewCell.m */; };
@@ -61,10 +65,6 @@
 		A714369019346823009AC8A4 /* SyncLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A714368F19346823009AC8A4 /* SyncLabel.m */; };
 		A714369319349EB3009AC8A4 /* CheckmarkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A714369219349EB3009AC8A4 /* CheckmarkButton.m */; };
 		A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
-		A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */; };
-		A717BF26176115CD004791BF /* ProximaNova-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF22176115CD004791BF /* ProximaNova-Light.ttf */; };
-		A717BF27176115CD004791BF /* ProximaNova-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */; };
-		A717BF2917611D2D004791BF /* ProximaNova-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */; };
 		A717DD1018B6440A00EE359C /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A717DD0F18B6440A00EE359C /* Crashlytics.framework */; };
 		A717DD2118B6775B00EE359C /* NexaHeavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717DD2018B6775800EE359C /* NexaHeavy.ttf */; };
 		A717DD2418B7C3F700EE359C /* LightSchemeAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A717DD2318B7C3F700EE359C /* LightSchemeAlert.m */; };
@@ -161,7 +161,6 @@
 		A78128FC17294C56002226C8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A78128B417294C56002226C8 /* AppDelegate.m */; };
 		A781290217294C56002226C8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A78128BA17294C56002226C8 /* main.m */; };
 		A784DB9319E822940041225A /* SearchTopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A784DB9219E822940041225A /* SearchTopMenu.m */; };
-		A7897D3D198C15A40047F9D9 /* VarelaRound-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7897D3C198C15A40047F9D9 /* VarelaRound-Regular.ttf */; };
 		A789B3F917D79BFB00C25B73 /* KPOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = A789B3F817D79BFB00C25B73 /* KPOverlay.m */; };
 		A78D7A8817F4B27200AD38B1 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = A78D7A8717F4B27200AD38B1 /* Global.m */; };
 		A78F391416F7D5BA00A8C78D /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78F391316F7D5BA00A8C78D /* AddressBook.framework */; };
@@ -563,6 +562,10 @@
 		A708BED41A14B25600C7E15A /* KPTopClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPTopClock.h; path = KPTopClock/KPTopClock.h; sourceTree = "<group>"; };
 		A708BED51A14B25600C7E15A /* KPTopClock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPTopClock.m; path = KPTopClock/KPTopClock.m; sourceTree = "<group>"; };
 		A708BED71A15F35B00C7E15A /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
+		A708BEE11A15FDFC00C7E15A /* GothamRounded-Book.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Book.ttf"; path = "Font/GothamRounded-Book.ttf"; sourceTree = "<group>"; };
+		A708BEE31A15FE3400C7E15A /* GothamRounded-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Bold.ttf"; path = "Font/GothamRounded-Bold.ttf"; sourceTree = "<group>"; };
+		A708BEE41A15FE3400C7E15A /* GothamRounded-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Light.ttf"; path = "Font/GothamRounded-Light.ttf"; sourceTree = "<group>"; };
+		A708BEE51A15FE3400C7E15A /* GothamRounded-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Medium.ttf"; path = "Font/GothamRounded-Medium.ttf"; sourceTree = "<group>"; };
 		A7090B6E175DF3F900728A3A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = Login/LoginViewController.h; sourceTree = "<group>"; };
 		A7090B6F175DF3F900728A3A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Login/LoginViewController.m; sourceTree = "<group>"; };
 		A70D12D81966D11500A95C50 /* EvernoteIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteIntegration.h; path = Integrations/EvernoteIntegration.h; sourceTree = "<group>"; };
@@ -576,10 +579,6 @@
 		A717BEEB175E6857004791BF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		A717BF1D17611162004791BF /* AnalyticsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyticsHandler.h; path = ../Swipes/Classes/Handlers/AnalyticsHandler.h; sourceTree = "<group>"; };
 		A717BF1E17611162004791BF /* AnalyticsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyticsHandler.m; path = ../Swipes/Classes/Handlers/AnalyticsHandler.m; sourceTree = "<group>"; };
-		A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Bold.ttf"; path = "Font/ProximaNova-Bold.ttf"; sourceTree = "<group>"; };
-		A717BF22176115CD004791BF /* ProximaNova-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Light.ttf"; path = "Font/ProximaNova-Light.ttf"; sourceTree = "<group>"; };
-		A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Regular.ttf"; path = "Font/ProximaNova-Regular.ttf"; sourceTree = "<group>"; };
-		A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProximaNova-Semibold.ttf"; path = "Font/ProximaNova-Semibold.ttf"; sourceTree = "<group>"; };
 		A717DD0F18B6440A00EE359C /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		A717DD2018B6775800EE359C /* NexaHeavy.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = NexaHeavy.ttf; path = Font/NexaHeavy.ttf; sourceTree = "<group>"; };
 		A717DD2218B7C3F700EE359C /* LightSchemeAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightSchemeAlert.h; sourceTree = "<group>"; };
@@ -725,7 +724,6 @@
 		A78128BC17294C56002226C8 /* Swipes-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Swipes-Prefix.pch"; sourceTree = "<group>"; };
 		A784DB9119E822940041225A /* SearchTopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchTopMenu.h; path = TopMenus/SearchTopMenu.h; sourceTree = "<group>"; };
 		A784DB9219E822940041225A /* SearchTopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SearchTopMenu.m; path = TopMenus/SearchTopMenu.m; sourceTree = "<group>"; };
-		A7897D3C198C15A40047F9D9 /* VarelaRound-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "VarelaRound-Regular.ttf"; path = "Font/VarelaRound-Regular.ttf"; sourceTree = "<group>"; };
 		A789B3F717D79BFB00C25B73 /* KPOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPOverlay.h; path = KPBlurry/KPOverlay.h; sourceTree = "<group>"; };
 		A789B3F817D79BFB00C25B73 /* KPOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPOverlay.m; path = KPBlurry/KPOverlay.m; sourceTree = "<group>"; };
 		A78D7A8617F4B27200AD38B1 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Global.h; path = ../Swipes/Classes/Global.h; sourceTree = "<group>"; };
@@ -1378,15 +1376,14 @@
 		A7680D30172D219800BCB2D9 /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				A708BEE11A15FDFC00C7E15A /* GothamRounded-Book.ttf */,
+				A708BEE31A15FE3400C7E15A /* GothamRounded-Bold.ttf */,
+				A708BEE41A15FE3400C7E15A /* GothamRounded-Light.ttf */,
+				A708BEE51A15FE3400C7E15A /* GothamRounded-Medium.ttf */,
 				A74FB8FF18FFF2FA00F25157 /* swipes.ttf */,
 				A7D0D3C119051BA000ABA1FF /* Nexa-Black-Italic.ttf */,
 				A7D0D3C219051BA000ABA1FF /* Nexa-Bold.ttf */,
 				A717DD2018B6775800EE359C /* NexaHeavy.ttf */,
-				A717BF21176115CD004791BF /* ProximaNova-Bold.ttf */,
-				A717BF22176115CD004791BF /* ProximaNova-Light.ttf */,
-				A717BF23176115CD004791BF /* ProximaNova-Regular.ttf */,
-				A717BF2817611D2D004791BF /* ProximaNova-Semibold.ttf */,
-				A7897D3C198C15A40047F9D9 /* VarelaRound-Regular.ttf */,
 			);
 			name = Font;
 			sourceTree = "<group>";
@@ -2329,19 +2326,15 @@
 				DACD545118A1ACFC00C378DF /* page_white_c.png in Resources */,
 				A7D0D3C419051BA000ABA1FF /* Nexa-Bold.ttf in Resources */,
 				A772B14219671D9F00C07909 /* swipesandevernote@2x.png in Resources */,
-				A7897D3D198C15A40047F9D9 /* VarelaRound-Regular.ttf in Resources */,
 				DACD546218A1ACFC00C378DF /* page_white_zip.png in Resources */,
 				DA310FA7188F3F26003C8FA4 /* Assets in Resources */,
 				DACD544918A1ACFC00C378DF /* folder_star.png in Resources */,
-				A717BF25176115CD004791BF /* ProximaNova-Bold.ttf in Resources */,
 				DACD545B18A1ACFC00C378DF /* page_white_php.png in Resources */,
-				A717BF26176115CD004791BF /* ProximaNova-Light.ttf in Resources */,
 				DACD545E18A1ACFC00C378DF /* page_white_text.png in Resources */,
+				A708BEE21A15FDFC00C7E15A /* GothamRounded-Book.ttf in Resources */,
 				DACD545318A1ACFC00C378DF /* page_white_cplusplus.png in Resources */,
-				A717BF27176115CD004791BF /* ProximaNova-Regular.ttf in Resources */,
 				DACD545218A1ACFC00C378DF /* page_white_code.png in Resources */,
 				A708BED81A15F35B00C7E15A /* Launch Screen.xib in Resources */,
-				A717BF2917611D2D004791BF /* ProximaNova-Semibold.ttf in Resources */,
 				DACD545718A1ACFC00C378DF /* page_white_flash.png in Resources */,
 				A74FB90018FFF47800F25157 /* swipes.ttf in Resources */,
 				DACD544E18A1ACFC00C378DF /* page_white.png in Resources */,
@@ -2354,6 +2347,7 @@
 				DACD545518A1ACFC00C378DF /* page_white_cup.png in Resources */,
 				A7F522AD197D7C76008B6147 /* swipesevernotetag@2x.png in Resources */,
 				A75236E417A335680030ED1E /* walkthrough_swipe_done.png in Resources */,
+				A708BEE71A15FE3400C7E15A /* GothamRounded-Light.ttf in Resources */,
 				DACD545818A1ACFC00C378DF /* page_white_gear.png in Resources */,
 				A75236E517A335680030ED1E /* walkthrough_swipe_done@2x.png in Resources */,
 				A74FB8F418FFBCB200F25157 /* MASTER_0000.jpg in Resources */,
@@ -2361,6 +2355,7 @@
 				A763D5541A13AC670060D994 /* alldonefortoday.png in Resources */,
 				A772B14119671D9F00C07909 /* swipesandevernote.png in Resources */,
 				A7E9F60019DAA2C100CAA1D1 /* ENSDKResources.bundle in Resources */,
+				A708BEE61A15FE3400C7E15A /* GothamRounded-Bold.ttf in Resources */,
 				DACD545618A1ACFC00C378DF /* page_white_dvd.png in Resources */,
 				A75236E717A335680030ED1E /* walkthrough_swipe_schedule@2x.png in Resources */,
 				A75236EC17A335680030ED1E /* wt_menu_expain.png in Resources */,
@@ -2370,6 +2365,7 @@
 				A75236ED17A335680030ED1E /* wt_menu_expain@2x.png in Resources */,
 				A75236FD17A349340030ED1E /* walkthrough_phone_background.png in Resources */,
 				DACD544618A1ACFC00C378DF /* folder_camera.png in Resources */,
+				A708BEE81A15FE3400C7E15A /* GothamRounded-Medium.ttf in Resources */,
 				A75236FE17A349340030ED1E /* walkthrough_phone_background@2x.png in Resources */,
 				A7C90E6A17A6ABF700C5F9E2 /* wt_schedule_popup.png in Resources */,
 				A763D5531A13AC670060D994 /* alldonefornow@2x.png in Resources */,

@@ -402,8 +402,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     // Save objectId - if deleted from sync we know it here
     if (self.model.objectId)
         self.objectId = self.model.objectId;
-    if( self.activeEditMode != KPEditModeTitle )
+    if( self.activeEditMode != KPEditModeTitle && ![self.textView.text isEqualToString:self.model.title]){
+        NSLog(@"called textView: %@ - %@",self.textView.text,self.model.title);
         self.textView.text = self.model.title;
+        
+    }
     self.cellType = [self.model cellTypeForTodo];
     [self updateTags];
     [self updateSchedule];
