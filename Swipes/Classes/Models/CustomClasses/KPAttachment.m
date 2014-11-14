@@ -1,7 +1,5 @@
 
-#import <ENSDK/Advanced/ENSDKAdvanced.h>
 #import "CoreSyncHandler.h"
-#import "EvernoteIntegration.h"
 #import "KPAttachment.h"
 
 NSString* const EVERNOTE_SERVICE = @"evernote";
@@ -13,24 +11,22 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
 
 
 @implementation KPAttachment
-+( NSArray *)findAttachmentsForService:(NSString*)service identifier:(NSString *)identifier context:(NSManagedObjectContext *)context{
++( NSArray *)findAttachmentsForService:(NSString*)service identifier:(NSString *)identifier context:(NSManagedObjectContext *)context
+{
     if(!context)
         context = KPCORE.context;
-    NSPredicate *findPredicate = [NSPredicate predicateWithFormat:@"service = %@ AND identifier = %@", service, identifier];
-    NSArray* result = [KPAttachment MR_findAllWithPredicate:findPredicate inContext:context];
-    if (0 == result.count && [EvernoteIntegration isNoteRefString:identifier]) {
-        ENNoteRef* noteRef = [EvernoteIntegration NSStringToENNoteRef:identifier];
-        findPredicate = [NSPredicate predicateWithFormat:@"service = %@ AND identifier = %@", service, noteRef.guid];
-        result = [KPAttachment MR_findAllWithPredicate:findPredicate inContext:context];
-    }
-    return result;
+    NSPredicate *findPredicate = [NSPredicate predicateWithFormat:@"service = %@ AND identifier = %@",service,identifier];
+    return [KPAttachment MR_findAllWithPredicate:findPredicate inContext:context];
 }
+
 + (instancetype)attachmentForService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync
 {
     return [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync inContext:KPCORE.context];
 }
+
 + (instancetype)attachmentForService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync
-                           inContext:(NSManagedObjectContext*)context{
+                           inContext:(NSManagedObjectContext*)context
+{
     NSAssert([KPAttachment supportsService:service], @"Called with unsupported service: %@", service);
     KPAttachment* attachment = [KPAttachment MR_createEntityInContext:context];
     attachment.identifier = identifier;
@@ -39,6 +35,7 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
     attachment.sync = @(sync);
     return attachment;
 }
+
 +(NSArray *)allIdentifiersForService:(NSString *)service sync:(BOOL)sync context:(NSManagedObjectContext *)context{
     if(!context)
         context = KPCORE.context;
@@ -50,9 +47,11 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
     }
     return [identifiers copy];
 }
+
 +(NSArray*)supportedServices{
     return @[ EVERNOTE_SERVICE, DROPBOX_SERVICE ];
 }
+
 + (BOOL)supportsService:(NSString *)service
 {
     // we can use some smarter way when we have

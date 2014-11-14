@@ -9,9 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <ENSDK/Advanced/ENSDKAdvanced.h>
 
-typedef void (^NoteListBlock)(EDAMNoteList *list, NSError *error);
 typedef void (^NoteFindBlock)(NSArray *findNotesResults, NSError *error);
-typedef void (^NoteBlock)(EDAMNote *note, NSError *error);
 typedef void (^NoteDownloadBlock)(ENNote *note, NSError *error);
 typedef void (^NoteUpdateBlock)(ENNoteRef *noteRef, NSError *error);
 #define kEnInt [EvernoteIntegration sharedInstance]
@@ -43,8 +41,6 @@ extern const int MONNSExceptionEncounteredErrorCode;
 
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
 
-- (void)updateNote:(EDAMNote*)note block:(NoteBlock)block;
-- (void)fetchNoteWithGuid:(NSString *)guid block:(NoteBlock)block;
 - (void)downloadNoteWithRef:(ENNoteRef *)noteRef block:(NoteDownloadBlock)block;
 //- (void)fetchNotesForFilter:(EDAMNoteFilter*)filter offset:(NSInteger)offset maxNotes:(NSInteger)maxNotes block:(NoteListBlock)block;
 - (void)findNotesWithSearch:(NSString *)search block:(NoteFindBlock)block;

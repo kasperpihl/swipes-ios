@@ -47,7 +47,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 @implementation EvernoteIntegration {
     NSMutableDictionary* _searchCache;
-    NSMutableDictionary* _noteCache;
     NSMutableDictionary* _noteRefCache;
     NSMutableDictionary* _readOnlyNoteRefCache;
 }
@@ -58,9 +57,9 @@ NSError * NewNSErrorFromException(NSException * exc) {
     static id sharedInstance;
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
-        [ENSession setDisableRefreshingNotebooksCacheOnLaunch:YES]; // check is this better
-        EDAMUser *user = [[ENSession sharedSession] user];
-        NSLog(@"user %@",user);
+//        [ENSession setDisableRefreshingNotebooksCacheOnLaunch:YES]; // check is this better
+//        EDAMUser *user = [[ENSession sharedSession] user];
+//        NSLog(@"user %@",user);
     });
     return sharedInstance;
 }
@@ -133,7 +132,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
     self = [super init];
     if (self) {
         _searchCache = [NSMutableDictionary new];
-        _noteCache = [NSMutableDictionary new];
         _noteRefCache = [NSMutableDictionary new];
         _readOnlyNoteRefCache = [NSMutableDictionary new];
         self.autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
@@ -186,74 +184,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (BOOL)isBusinessUser
 {
     return [ENSession sharedSession].isBusinessUser;
-}
-
-- (void)updateNote:(EDAMNote*)note block:(NoteBlock)block
-{
-    NSError *error;
-    ENNoteStoreClient *noteStore = [self primaryNoteStoreError:&error];
-    if(error){
-        return block(nil,error);
-    }
-    @try {
-        self.requestCounter++;
-        
-        [noteStore updateNote:note success:^(EDAMNote *note) {
-            if( block )
-                block( note, nil );
-            if (note.guid && note.guid.length > 0)
-                [self cacheAddNote:note forGuid:note.guid];
-        } failure:^(NSError *error) {
-            [self handleError:error withType:@"Evernote Update Note Error"];
-            if( block)
-                block( note , error);
-        }];
-    }
-    @catch (NSException *exception) {
-        NSError *error = NewNSErrorFromException(exception);
-        block(nil, error);
-        [UtilityClass sendException:exception type:@"Evernote Update Note Exception"];
-    }
-}
-
-
-- (void)fetchNoteWithGuid:(NSString *)guid block:(NoteBlock)block
-{
-    // try to get it from cache
-    __block EDAMNote *cachedNote = [self cacheNoteForGuid:guid];
-    if (cachedNote) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            block(cachedNote, nil);
-        });
-        return;
-    }
-
-    NSError *error;
-    ENNoteStoreClient *noteStore = [self primaryNoteStoreError:&error];
-    if(error){
-        return block(nil,error);
-    }
-    
-    @try {
-        self.requestCounter++;
-        [noteStore getNoteWithGuid:guid withContent:YES withResourcesData:YES withResourcesRecognition:NO withResourcesAlternateData:NO success:^(EDAMNote *note) {
-            
-            if( block )
-                block( note , nil );
-            
-            [self cacheAddNote:note forGuid:guid];
-            
-        } failure:^(NSError *error) {
-            [self handleError:error withType:@"Evernote Get Note Error"];
-            if( block )
-                block( nil , error );
-        }];
-    }
-    @catch (NSException *exception) {
-        NSError *error = NewNSErrorFromException(exception);
-        block(nil, error);
-        [UtilityClass sendException:exception type:@"Evernote Get Note Exception"];
-    }
 }
 
 - (ENNoteStoreClient *)primaryNoteStoreError:(NSError**)error
@@ -470,7 +400,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)cacheClear
 {
     [_searchCache removeAllObjects];
-    [_noteCache removeAllObjects];
     [_noteRefCache removeAllObjects];
     [_readOnlyNoteRefCache removeAllObjects];
 }
@@ -492,33 +421,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)cacheAddSearchResult:(NSArray *)findNotesResults forText:(NSString *)text
 {
     _searchCache[text] = @{kKeyData: findNotesResults, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kSearchTimeout]};
-}
-
-- (EDAMNote *)cacheNoteForGuid:(NSString *)guid
-{
-    // purge old entries
-    NSDate* now = [NSDate date];
-    for (NSString* key in [_noteCache allKeys]) {
-        NSDictionary* data = _noteCache[key];
-        if (0 < [now timeIntervalSinceDate:data[kKeyDate]]) {
-            [_noteCache removeObjectForKey:key];
-        }
-    }
-    
-    return _noteCache[guid][kKeyData];
-}
-
-- (void)cacheAddNote:(EDAMNote *)note forGuid:(NSString *)guid
-{
-    if (!note.content || note.content.length == 0)
-        [self cacheRemoveNoteForGuid:guid];
-    else
-        _noteCache[guid] = @{kKeyData: note, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kNoteTimeout]};
-}
-
-- (void)cacheRemoveNoteForGuid:(NSString *)guid
-{
-    [_noteCache removeObjectForKey:guid];
 }
 
 - (ENNote *)cacheNoteForRef:(ENNoteRef *)noteRef
