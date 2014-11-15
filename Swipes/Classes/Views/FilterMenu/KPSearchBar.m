@@ -104,7 +104,7 @@
         
         
         KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
-        tagList.emptyText = @"No tags assigned";
+        //tagList.emptyText = @"No ";
         tagList.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         //UIColor *tagColor = gray(0,1);
         //tagList.tagBackgroundColor = CLEAR;
@@ -115,7 +115,6 @@
         tagList.spacing = 8;
         tagList.marginLeft = tagList.spacing;
         tagList.marginTop = (14+tagList.spacing)/2;
-        tagList.emptyLabelMarginHack = 10;
         tagList.firstRowSpacingHack = 44;
         tagList.bottomMargin = (16+tagList.spacing)/2;
         tagList.marginRight = tagList.spacing;

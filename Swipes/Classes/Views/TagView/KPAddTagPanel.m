@@ -31,7 +31,7 @@
 
 #define NUMBER_OF_BAR_BUTTONS 2
 
-@interface KPAddTagPanel () <KPTagListResizeDelegate,KPTagListDeleteDelegate, KPTagListAddDelegate,KPBlurryDelegate,ToolbarDelegate,AddViewDelegate>
+@interface KPAddTagPanel () <KPTagListResizeDelegate,KPTagListDeleteDelegate, KPBlurryDelegate,ToolbarDelegate,AddViewDelegate>
 @property (nonatomic,weak) IBOutlet KPAddView *addTagView;
 @property (nonatomic,weak) IBOutlet KPToolbar *toolbar;
 @property (nonatomic,weak) IBOutlet UIScrollView *scrollView;
@@ -80,12 +80,8 @@
         //tagView.marginLeft = TAG_VIEW_SIDE_MARGIN;
         tagView.sorted = YES;
         //tagView.marginRight = TAG_VIEW_SIDE_MARGIN;
-        tagView.emptyText = @"No tags - press the plus to add one";
-        tagView.emptyLabelMarginHack = 10;
         CGRectSetY(tagView, 0);
         tagView.resizeDelegate = self;
-        tagView.addDelegate = self;
-        tagView.addTagButton = YES;
         tagView.deleteDelegate = self;
         tagView.tag = TAG_VIEW_TAG;
         [scrollView addSubview:tagView];
@@ -132,16 +128,6 @@
 }
 
 
--(void)pressedAddButtonForTagList:(KPTagList *)tagList{
-    [UTILITY inputAlertWithTitle:@"Add New Tag" message:@"Type the name of your tag (ex. work, project or school)" placeholder:@"Add New Tag" cancel:@"Cancel" confirm:@"OK" block:^(NSString *string, NSError *error) {
-        NSString *trimmedString = [string stringByTrimmingCharactersInSet:
-                                   [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        if(trimmedString && trimmedString.length > 0){
-            [self.delegate tagPanel:self createdTag:trimmedString];
-            [self.tagView addTag:trimmedString selected:YES];
-        }
-    }];
-}
 
 -(void)tagList:(KPTagList *)tagList triedToDeleteTag:(NSString *)tag{
     NSLog(@"tried to delete");

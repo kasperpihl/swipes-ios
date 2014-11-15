@@ -60,7 +60,7 @@ typedef enum {
     TopMenuFilter,
     TopMenuSearch
 } TopMenuState;
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,KPTagListDataSource ,SelectionTopMenuDelegate,SearchTopMenuDelegate,FilterTopMenuDelegate,TopMenuDelegate>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,KPTagListDataSource ,SelectionTopMenuDelegate,SearchTopMenuDelegate,FilterTopMenuDelegate,TopMenuDelegate,KPTagListAddDelegate>
 
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
@@ -98,10 +98,6 @@ typedef enum {
 }
 -(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
     [[self currentViewController] update];
-}
-
--(void)tagPanel:(KPAddTagPanel *)tagPanel createdTag:(NSString *)tag{
-    [KPTag addTagWithString:tag save:YES];
 }
 
 
@@ -192,6 +188,8 @@ typedef enum {
     tagView.delegate = self;
     tagView.tagView.tagDataSource = self;
     tagView.tagView.tagDelegate = self;
+    tagView.tagView.addTagButton = YES;
+    tagView.tagView.addDelegate = self;
     BLURRY.showPosition = PositionBottom;
     BLURRY.blurryTopColor = alpha(tcolor(BackgroundColor), 0.3);
     if(block) BLURRY.dismissAction = ^{
@@ -488,7 +486,16 @@ typedef enum {
 }
 
 
-
+-(void)pressedAddButtonForTagList:(KPTagList *)tagList{
+    [UTILITY inputAlertWithTitle:@"Add New Tag" message:@"Type the name of your tag (ex. work, project or school)" placeholder:@"Add New Tag" cancel:@"Cancel" confirm:@"OK" block:^(NSString *string, NSError *error) {
+        NSString *trimmedString = [string stringByTrimmingCharactersInSet:
+                                   [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if(trimmedString && trimmedString.length > 0){
+            [KPTag addTagWithString:trimmedString save:YES];
+            [tagList addTag:trimmedString selected:YES];
+        }
+    }];
+}
 
 
 
@@ -504,7 +511,8 @@ typedef enum {
     filterTopMenu.position = TopMenuBottom;
     [filterTopMenu setPriority:(kFilter.priorityFilter == FilterSettingOn) notes:(kFilter.notesFilter == FilterSettingOn) recurring:(kFilter.recurringFilter == FilterSettingOn)];
     filterTopMenu.filterDelegate = self;
-    
+    filterTopMenu.tagListView.addDelegate = self;
+    filterTopMenu.tagListView.addTagButton = YES;
     filterTopMenu.topMenuDelegate = self;
     filterTopMenu.tagListView.tagDataSource = self;
     

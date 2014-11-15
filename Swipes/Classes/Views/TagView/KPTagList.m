@@ -175,15 +175,16 @@
     else{
         tagHeight = TAG_HEIGHT;
         self.isEmptyList = YES;
-        UILabel *noTagLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.marginLeft+self.emptyLabelMarginHack, self.marginTop, self.frame.size.width-self.marginLeft-self.marginRight, TAG_HEIGHT)];
-        noTagLabel.font = NO_TAG_FONT;
-        noTagLabel.textAlignment = NSTextAlignmentLeft;
-        noTagLabel.backgroundColor = [UIColor clearColor];
-        noTagLabel.textColor = self.tagTitleColor;
-        noTagLabel.text = self.emptyText ? self.emptyText : @"No tags";
+        UIButton *noTagButton = [[UIButton alloc]initWithFrame:CGRectMake(self.marginLeft+self.emptyLabelMarginHack, self.marginTop, self.frame.size.width-self.marginLeft-self.marginRight, TAG_HEIGHT)];
+        noTagButton.titleLabel.font = NO_TAG_FONT;
+        noTagButton.titleLabel.textAlignment = NSTextAlignmentLeft;
+        noTagButton.backgroundColor = [UIColor clearColor];
+        [noTagButton setTitleColor:self.tagTitleColor forState:UIControlStateNormal];
+        [noTagButton setTitle:self.emptyText ? self.emptyText : @"No tags, tap to add." forState:UIControlStateNormal];
+        [noTagButton addTarget:self action:@selector(pressedNoTagButton) forControlEvents:UIControlEventTouchUpInside];
         //[noTagLabel sizeToFit];
         //noTagLabel.frame = CGRectSetPos(noTagLabel.frame, ((self.frame.size.width-noTagLabel.frame.size.width)/2)+self.emptyLabelMarginHack, (totalHeight-noTagLabel.frame.size.height)/2);
-        [self addSubview:noTagLabel];
+        [self addSubview:noTagButton];
         
     }
     currentHeight += tagHeight + self.bottomMargin;
@@ -193,6 +194,10 @@
         [self.resizeDelegate tagList:self changedSize:self.frame.size];
     }
     //if(resize) CGRectSetY(self.frame, self.frame.origin.y+differenceHeight);
+}
+- (void)pressedNoTagButton{
+    if([self.addDelegate respondsToSelector:@selector(pressedAddButtonForTagList:)])
+        [self.addDelegate pressedAddButtonForTagList:self];
 }
 - (void) animationKeyFramed: (CALayer *) layer
                    delegate: (id) object

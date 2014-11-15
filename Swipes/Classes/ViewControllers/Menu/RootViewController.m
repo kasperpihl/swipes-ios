@@ -383,6 +383,7 @@ static RootViewController *sharedObject;
 
 -(void)closeApp
 {
+
     [[NSNotificationCenter defaultCenter] postNotificationName:@"closing app" object:self];
     self.lastClose = [NSDate date];
 }

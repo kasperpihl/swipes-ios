@@ -62,7 +62,6 @@
         [self addSubview:setWorkSpaceButton];
         
         KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, topY+gradientHeight, self.frame.size.width, 0)];
-        tagList.emptyText = @"No tags assigned";
         tagList.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         //tagList.addTagButton = YES;
         
@@ -75,7 +74,6 @@
         tagList.spacing = 8;
         tagList.marginLeft = tagList.spacing;
         tagList.marginTop = (14+tagList.spacing)/2;
-        tagList.emptyLabelMarginHack = 10;
         //tagList.lastRowSpacingHack = 90;
         tagList.marginTop = 4;
         tagList.bottomMargin = (16+tagList.spacing)/2;
