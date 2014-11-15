@@ -47,7 +47,6 @@
 @property (nonatomic, weak) UIView *fakeHeaderView;
 @property (nonatomic) BOOL isColored;
 @property (nonatomic) BOOL isHandlingTrigger;
-@property (nonatomic) BOOL isLonelyRider;
 @property (nonatomic) BOOL savedOffset;
 @property (nonatomic) BOOL badState;
 @property (nonatomic) BOOL hasStartedEditing;
@@ -375,10 +374,6 @@
             [self.selectedRows addObject:indexPath];
         }
     }
-    else{
-        self.isLonelyRider = YES;
-        if(indexPath) [self.selectedRows addObject:indexPath];
-    }
 }
 
 - (BOOL)swipeTableViewCell:(MCSwipeTableViewCell *)cell shouldHandleGestureRecognizer:(UIPanGestureRecognizer *)gesture {
@@ -407,6 +402,8 @@
         return;
     self.isHandlingTrigger = YES;
     NSArray *toDosArray = [self selectedItems];
+    if(!toDosArray || toDosArray.count == 0)
+        toDosArray = @[[self.itemHandler itemForIndexPath:[self.tableView indexPathForCell:self.swipingCell]]];
     NSArray *movedItems;
     __block CellType targetCellType = [StyleHandler cellTypeForCell:cell.cellType state:state];
     switch (targetCellType) {
@@ -486,11 +483,7 @@
         if(toDoIP) [indexPaths addObject:toDoIP];
     }
     NSIndexSet *deletedSections = [self.itemHandler removeItems:items];
-    if(self.selectedRows.count != indexPaths.count){
-        [self update];
-        [self cleanUpAfterMovingAnimated:YES];
-    }
-    else{
+    if(self.selectedRows.count == indexPaths.count || (self.selectedRows.count == 0 && indexPaths.count == 1)){
         [self.tableView beginUpdates];
         //[self.tableView reloadData];
         [CATransaction begin];
@@ -499,14 +492,18 @@
         }];
         @try {
             [self willUpdateCells];
-            [self.tableView deleteRowsAtIndexPaths:self.selectedRows withRowAnimation:UITableViewRowAnimationFade];
-            if(deletedSections && deletedSections.count > 0) [self.tableView deleteSections:deletedSections withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+            if(deletedSections && deletedSections.count > 0) [self.tableView deleteSections:deletedSections withRowAnimation:UITableViewRowAnimationTop];
             [self.tableView endUpdates];
         }
         @catch (NSException *exception) {
             [self update];
         }
         [CATransaction commit];
+    }
+    else{
+        [self update];
+        [self cleanUpAfterMovingAnimated:YES];
     }
 }
 
@@ -537,7 +534,6 @@
 - (void)cleanUpAfterMovingAnimated:(BOOL)animated {
     [self.selectedRows removeAllObjects];
     NSLog(@"removed from cleanup");
-    self.isLonelyRider = NO;
     self.swipingCell = nil;
     [self didUpdateCells];
 }
@@ -556,15 +552,10 @@
     NSArray *visibleCells = [self.tableView visibleCells];
     for (ToDoCell *localCell in visibleCells) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:localCell];
-        if([self.selectedRows containsObject:indexPath]){
+        if([self.selectedRows containsObject:indexPath] || localCell == self.swipingCell){
             [localCell setDotColor:self.cellType];
             if(bounce) [localCell bounceToOrigin];
         }
-    }
-    if(self.isLonelyRider){
-        NSLog(@"removed from return");
-        [self.selectedRows removeAllObjects];
-        self.isLonelyRider = NO;
     }
     self.swipingCell = nil;
     [self handleShowingToolbar];
