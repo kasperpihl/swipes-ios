@@ -36,7 +36,7 @@
 #define KP_SEMIBOLD(fontSize)           KP_FONT(@"GothamRounded-Medium", fontSize)
 
 
-#define SCHEDULE_BUTTON_FONT            KP_SEMIBOLD(14)
+#define SCHEDULE_BUTTON_FONT            KP_REGULAR(12)
 #define SCHEDULE_BUTTON_CAPITAL         NO
 
 #define MIN_SEARCH_LETTER_LENGTH        3

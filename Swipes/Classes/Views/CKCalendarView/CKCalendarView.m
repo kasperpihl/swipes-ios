@@ -62,7 +62,7 @@
 - (id)init {
     self = [super init];
     if (self) {
-        self.textColor = tcolorF(TextColor,ThemeDark);
+        self.textColor = tcolor(TextColor);
         self.unavailableColor = color(80,83,88,1); //,color(170,173,178,1)
         self.selectedTextColor = gray(255,1);
         self.highlightedTextColor = gray(255, 1);
@@ -325,23 +325,29 @@
 -(DateButton*)layoutButton:(DateButton*)button{
     CKDateItem *item = [[CKDateItem alloc] init];
     NSDate *date = button.date;
+    button.alpha = 1;
     button.enabled = YES;
     button.selected = NO;
     NSInteger cornerRadius = self.cellWidth/2;
     button.layer.cornerRadius = cornerRadius;
     button.layer.masksToBounds = YES;
     UIImage *highlightedImage = [tcolor(LaterColor) image];//[UIImage imageNamed:@"selected_circle"];//[UtilityClass imageWithName: scaledToSize:CGSizeMake(kSelectedImageSize, kSelectedImageSize)];
-    item.titleFont = KP_REGULAR(20);
-    if([date isTypicallyWeekend]) item.titleFont = KP_BOLD(20);
+    item.titleFont = KP_REGULAR(17);
+    if([date isTypicallyWeekend]) item.titleFont = KP_SEMIBOLD(17);
     
     /* Days out of the current month */
     if (!self.onlyShowCurrentMonth && [self _compareByMonth:date toDate:self.monthShowing] != NSOrderedSame) {
+        if([self _compareByMonth:date toDate:self.monthShowing] == NSOrderedAscending && [self _compareByMonth:[NSDate date] toDate:self.monthShowing] == NSOrderedSame){
+            button.alpha = 0.0;
+            button.enabled = NO;
+        }
         item.textColor = item.unavailableColor;
     }
     /* Days earlier than current */
     else if([date isEarlierThanDate:[[NSDate date] dateAtStartOfDay]]){
         item.textColor = item.highlightedTextColor = item.unavailableColor; //color(160,169,179,1);
         highlightedImage = [UIImage new];
+        button.alpha = 0.5;
         //item.textColor = gray(200, 1);
     }
     /* If the day is the selected day */
@@ -451,9 +457,9 @@
     self.backgroundColor = UIColorFromRGB(0x393B40);
 
     [self setTitleColor:[UIColor whiteColor]];
-    [self setTitleFont:KP_BOLD(18)];
+    [self setTitleFont:KP_SEMIBOLD(16)];
 
-    [self setDayOfWeekFont:KP_SEMIBOLD(13)];
+    [self setDayOfWeekFont:KP_SEMIBOLD(12)];
     [self setDayOfWeekTextColor:UIColorFromRGB(0x999999)];
 
 }

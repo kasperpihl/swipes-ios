@@ -565,10 +565,10 @@ typedef enum {
     MenuButton *button = [[MenuButton alloc] initWithFrame:[self frameForButtonNumber:scheduleButton] title:title];
     button.iconLabel.titleLabel.font = iconFont(41);
     //tcolor(TextColor)
-    [button.iconLabel setTitleColor:tcolor(LaterColor) forState:UIControlStateNormal];
+    [button.iconLabel setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     [button.iconLabel setTitle:[self iconStringForScheduleButton:scheduleButton highlighted:NO] forState:UIControlStateNormal];
     [button.iconLabel setTitle:[self iconStringForScheduleButton:scheduleButton highlighted:YES] forState:UIControlStateHighlighted];
-    [button setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
+    [button setTitleColor:tcolor(LaterColor) forState:UIControlStateNormal];
     button.tag = [self tagForButton:scheduleButton];
     //[button setBackgroundImage:[POPUP_SELECTED image] forState:UIControlStateHighlighted];
     [button addTarget:self action:@selector(pressedScheduleButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -668,7 +668,8 @@ typedef enum {
     self.calendarView.delegate = self;
     self.calendarView.backgroundColor = CLEAR;
     [self.calendarView selectDate:[NSDate date] makeVisible:YES];
-    self.calendarView.titleColor = tcolorF(TextColor,ThemeDark);
+    self.calendarView.titleColor = tcolor(TextColor);
+    
     self.calendarView.dayOfWeekTextColor = tcolor(LaterColor);//tcolorF(TextColor,ThemeDark);
     self.calendarView.adaptHeightToNumberOfWeeksInMonth = YES;
     
@@ -689,6 +690,7 @@ typedef enum {
 {
     self = [super initWithFrame:frame];
     if (self) {
+        //self.backgroundColor = tcolor(LaterColor);
         UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [closeButton addTarget:self action:@selector(cancelled) forControlEvents:UIControlEventTouchUpInside];
         closeButton.frame = self.bounds;
@@ -701,7 +703,7 @@ typedef enum {
         helpLabel.textColor = alpha(tcolorF(SubTextColor,ThemeLight),0.8);
         helpLabel.textAlignment = NSTextAlignmentCenter;
         helpLabel.text = @"Hold down to adjust time";
-        helpLabel.font = KP_REGULAR(16);
+        helpLabel.font = KP_REGULAR(13);
         self.helpLabel = helpLabel;
         [self addSubview:helpLabel];
         
@@ -710,10 +712,15 @@ typedef enum {
         contentView.autoresizesSubviews = YES;
         contentView.center = self.center;
         
-        contentView.backgroundColor = tcolorF(BackgroundColor,ThemeDark);
+        contentView.backgroundColor = retColor(tcolor(BackgroundColor), gray(248,1));
         contentView.layer.cornerRadius = 10;
-        contentView.layer.masksToBounds = YES;
+        //contentView.layer.masksToBounds = YES;
+        contentView.layer.shadowOffset = CGSizeMake(0, 1);
+        //contentView.layer.shadowRadius = 10;
+        contentView.layer.shadowColor = tcolorF(BackgroundColor,ThemeDark).CGColor;
+        contentView.layer.shadowOpacity = 0.7;
         contentView.tag = CONTENT_VIEW_TAG;
+        
         /* Schedule buttons */
         NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
         NSString *title = [NSString stringWithFormat:@"Later  +%luh",(long)(laterToday.integerValue/3600)];
