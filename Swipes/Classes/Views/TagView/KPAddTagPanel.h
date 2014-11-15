@@ -10,7 +10,6 @@
 #import "KPTagList.h"
 @class KPAddTagPanel;
 @protocol KPAddTagDelegate <NSObject>
--(void)tagPanel:(KPAddTagPanel*)tagPanel createdTag:(NSString*)tag;
 -(void)closeTagPanel:(KPAddTagPanel*)tagPanel;
 @end
 

@@ -31,12 +31,10 @@
 
 #define NUMBER_OF_BAR_BUTTONS 2
 
-@interface KPAddTagPanel () <KPTagListResizeDelegate,KPTagListDeleteDelegate, KPBlurryDelegate,ToolbarDelegate,AddViewDelegate>
-@property (nonatomic,weak) IBOutlet KPAddView *addTagView;
+@interface KPAddTagPanel () <KPTagListResizeDelegate,KPTagListDeleteDelegate, KPBlurryDelegate,ToolbarDelegate>
 @property (nonatomic,weak) IBOutlet KPToolbar *toolbar;
 @property (nonatomic,weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic,weak) IBOutlet UIButton *doneEditingButton;
-@property (nonatomic) BOOL isAdding;
 @property (nonatomic) BOOL isRotated;
 @property (nonatomic) BOOL deleteMode;
 @end
@@ -167,31 +165,6 @@
     
 }
 
-
--(void)shiftToAddMode:(BOOL)addMode{
-    if(addMode){
-        self.isAdding = YES;
-        self.addTagView.hidden = NO;
-        self.addTagView.alpha = 1;
-        CGRectSetY(self.addTagView,self.frame.size.height-self.addTagView.frame.size.height);
-        [self.addTagView.textField becomeFirstResponder];
-    }
-    else{
-        [self updateTrashButton];
-        self.isAdding = NO;
-        [self.addTagView.textField resignFirstResponder];
-    }
-}
-
--(void)addView:(KPAddView *)addView enteredTrimmedText:(NSString *)trimmedText{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(tagPanel:createdTag:)])
-        [self.delegate tagPanel:self createdTag:trimmedText];
-    [self.tagView addTag:trimmedText selected:YES];
-}
-
--(void)addViewPressedDoneButton:(KPAddView *)addView{
-    [self shiftToAddMode:NO];
-}
 
 -(void)dealloc{
     clearNotify();
