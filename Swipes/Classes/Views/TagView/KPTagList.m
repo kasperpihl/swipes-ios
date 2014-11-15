@@ -283,13 +283,21 @@
     }
 }
 -(UIButton*)addButton{
-    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *addButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
     CGSize sizeForButton = [self sizeForTagWithText:@"add"];
     addButton.tag = kAddButtonTag;
     addButton.frame = CGRectMake(0, 0, sizeForButton.height, sizeForButton.height);
-    addButton.titleLabel.font = iconFont(20);
-    [addButton setTitle:@"plus" forState:UIControlStateNormal];
+    addButton.layer.cornerRadius = sizeForButton.height/2;
+    addButton.layer.borderColor = self.tagTitleColor.CGColor;
+    addButton.layer.masksToBounds = YES;
+    addButton.layer.borderWidth = LINE_SIZE;
+    addButton.titleLabel.font = iconFont(14);
+    //addButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [addButton setTitle:@"plusThick" forState:UIControlStateNormal];
     [addButton setTitleColor:self.tagTitleColor forState:UIControlStateNormal];
+    [addButton setTitleColor:self.selectedTagTitleColor forState:UIControlStateHighlighted];
+    [addButton setBackgroundImage:[self.tagBackgroundColor image] forState:UIControlStateNormal];
+    [addButton setBackgroundImage:[self.selectedTagBackgroundColor image] forState:UIControlStateHighlighted];
     [addButton addTarget:self action:@selector(pressedAdd:) forControlEvents:UIControlEventTouchUpInside];
     return addButton;
 }
@@ -308,6 +316,7 @@
     [button setBackgroundImage:[self.selectedTagBackgroundColor image] forState:UIControlStateHighlighted];
     button.titleLabel.font = KP_REGULAR(14);
     [button addTarget:self action:@selector(clickedButton:) forControlEvents:UIControlEventTouchUpInside];
+    button.titleEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
     [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
     button.layer.cornerRadius = button.frame.size.height/2;
     button.layer.borderColor = self.tagBorderColor.CGColor;

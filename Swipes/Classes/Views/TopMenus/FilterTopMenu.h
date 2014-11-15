@@ -17,6 +17,7 @@
 @protocol FilterTopMenuDelegate <NSObject>
 -(void)didClearFilterTopMenu:(FilterTopMenu*)topMenu;
 -(void)didPressFilterTopMenu:(FilterTopMenu*)topMenu;
+-(void)didPressHelpInFilterTopMenu:(FilterTopMenu*)topMenu;
 
 -(void)filterMenu:(FilterTopMenu*)filterMenu selectedTag:(NSString*)tag;
 -(void)filterMenu:(FilterTopMenu*)filterMenu deselectedTag:(NSString *)tag;

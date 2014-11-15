@@ -58,7 +58,7 @@
         [setWorkSpaceButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         setWorkSpaceButton.titleLabel.font = KP_REGULAR(16);
         [setWorkSpaceButton setTitle:@"SET WORKSPACE" forState:UIControlStateNormal];
-        [setWorkSpaceButton addTarget:self action:@selector(onClose:) forControlEvents:UIControlEventTouchUpInside];
+        [setWorkSpaceButton addTarget:self action:@selector(onHelp:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:setWorkSpaceButton];
         
         KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, topY+gradientHeight, self.frame.size.width, 0)];
@@ -210,7 +210,9 @@
 -(void)onClose:(UIButton*)closeButton{
     [self.filterDelegate didPressFilterTopMenu:self];
 }
-
+-(void)onHelp:(UIButton*)helpButton{
+    [self.filterDelegate didPressHelpInFilterTopMenu:self];
+}
 
 
 

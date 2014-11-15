@@ -359,6 +359,9 @@ typedef enum {
 -(void)didPressFilterTopMenu:(FilterTopMenu *)topMenu{
     [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
+-(void)didPressHelpInFilterTopMenu:(FilterTopMenu *)topMenu{
+    [UTILITY alertWithTitle:@"Workspaces" andMessage:@"Set your workspace, select tags and stay focused."];
+}
 -(void)filterMenu:(FilterTopMenu *)filterMenu selectedTag:(NSString *)tag{
     [kFilter selectTag:tag];
 }
