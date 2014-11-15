@@ -57,6 +57,10 @@
 		A708BEE61A15FE3400C7E15A /* GothamRounded-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A708BEE31A15FE3400C7E15A /* GothamRounded-Bold.ttf */; };
 		A708BEE71A15FE3400C7E15A /* GothamRounded-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A708BEE41A15FE3400C7E15A /* GothamRounded-Light.ttf */; };
 		A708BEE81A15FE3400C7E15A /* GothamRounded-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A708BEE51A15FE3400C7E15A /* GothamRounded-Medium.ttf */; };
+		A708BEEB1A16095000C7E15A /* timepickerwheel.png in Resources */ = {isa = PBXBuildFile; fileRef = A708BEE91A16095000C7E15A /* timepickerwheel.png */; };
+		A708BEEC1A16095000C7E15A /* timepickerwheel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A708BEEA1A16095000C7E15A /* timepickerwheel@2x.png */; };
+		A708BEEF1A160D2000C7E15A /* timepickerwheelselected.png in Resources */ = {isa = PBXBuildFile; fileRef = A708BEED1A160D2000C7E15A /* timepickerwheelselected.png */; };
+		A708BEF01A160D2000C7E15A /* timepickerwheelselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A708BEEE1A160D2000C7E15A /* timepickerwheelselected@2x.png */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
 		A70D12DA1966D11500A95C50 /* EvernoteIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A70D12D91966D11500A95C50 /* EvernoteIntegration.m */; };
 		A711246E19DB13D400FD9DAE /* TodayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A711246D19DB13D400FD9DAE /* TodayTableViewCell.m */; };
@@ -566,6 +570,10 @@
 		A708BEE31A15FE3400C7E15A /* GothamRounded-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Bold.ttf"; path = "Font/GothamRounded-Bold.ttf"; sourceTree = "<group>"; };
 		A708BEE41A15FE3400C7E15A /* GothamRounded-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Light.ttf"; path = "Font/GothamRounded-Light.ttf"; sourceTree = "<group>"; };
 		A708BEE51A15FE3400C7E15A /* GothamRounded-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Medium.ttf"; path = "Font/GothamRounded-Medium.ttf"; sourceTree = "<group>"; };
+		A708BEE91A16095000C7E15A /* timepickerwheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timepickerwheel.png; sourceTree = "<group>"; };
+		A708BEEA1A16095000C7E15A /* timepickerwheel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timepickerwheel@2x.png"; sourceTree = "<group>"; };
+		A708BEED1A160D2000C7E15A /* timepickerwheelselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timepickerwheelselected.png; sourceTree = "<group>"; };
+		A708BEEE1A160D2000C7E15A /* timepickerwheelselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timepickerwheelselected@2x.png"; sourceTree = "<group>"; };
 		A7090B6E175DF3F900728A3A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = Login/LoginViewController.h; sourceTree = "<group>"; };
 		A7090B6F175DF3F900728A3A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Login/LoginViewController.m; sourceTree = "<group>"; };
 		A70D12D81966D11500A95C50 /* EvernoteIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteIntegration.h; path = Integrations/EvernoteIntegration.h; sourceTree = "<group>"; };
@@ -1734,6 +1742,10 @@
 		A79DB41B17358C33007A48E2 /* Backgrounds */ = {
 			isa = PBXGroup;
 			children = (
+				A708BEE91A16095000C7E15A /* timepickerwheel.png */,
+				A708BEEA1A16095000C7E15A /* timepickerwheel@2x.png */,
+				A708BEED1A160D2000C7E15A /* timepickerwheelselected.png */,
+				A708BEEE1A160D2000C7E15A /* timepickerwheelselected@2x.png */,
 				A763D54E1A13AC670060D994 /* alldonefornow.png */,
 				A763D54F1A13AC670060D994 /* alldonefornow@2x.png */,
 				A763D5501A13AC670060D994 /* alldonefortoday.png */,
@@ -2336,6 +2348,7 @@
 				DACD545218A1ACFC00C378DF /* page_white_code.png in Resources */,
 				A708BED81A15F35B00C7E15A /* Launch Screen.xib in Resources */,
 				DACD545718A1ACFC00C378DF /* page_white_flash.png in Resources */,
+				A708BEEF1A160D2000C7E15A /* timepickerwheelselected.png in Resources */,
 				A74FB90018FFF47800F25157 /* swipes.ttf in Resources */,
 				DACD544E18A1ACFC00C378DF /* page_white.png in Resources */,
 				DACD546118A1ACFC00C378DF /* page_white_visualstudio.png in Resources */,
@@ -2344,7 +2357,10 @@
 				DACD544A18A1ACFC00C378DF /* folder_user.png in Resources */,
 				DACD546418A1ACFC00C378DF /* word.png in Resources */,
 				A7BB65CB189BF19600BE7183 /* swipes-notification.aif in Resources */,
+				A708BEEC1A16095000C7E15A /* timepickerwheel@2x.png in Resources */,
 				DACD545518A1ACFC00C378DF /* page_white_cup.png in Resources */,
+				A708BEF01A160D2000C7E15A /* timepickerwheelselected@2x.png in Resources */,
+				A708BEEB1A16095000C7E15A /* timepickerwheel.png in Resources */,
 				A7F522AD197D7C76008B6147 /* swipesevernotetag@2x.png in Resources */,
 				A75236E417A335680030ED1E /* walkthrough_swipe_done.png in Resources */,
 				A708BEE71A15FE3400C7E15A /* GothamRounded-Light.ttf in Resources */,
