@@ -55,7 +55,6 @@
 @property (nonatomic) CGFloat lastChangedAngle;
 @property (nonatomic) BOOL isInConfirmButton;
 @property (nonatomic) BOOL isOutOfScope;
-
 @property (nonatomic,strong) UIImageView *timeSlider;
 @property (nonatomic,strong) UIButton *confirmButton;
 @property (nonatomic,strong) UIButton *backButton;
@@ -89,6 +88,18 @@
         if(isOutOfScope){
             [self performSelector:@selector(didWaitInMiddle) withObject:nil afterDelay:kGlowMiddleShowHack];
         }
+    }
+}
+-(void)highlightImageForSlider:(BOOL)highlight animated:(BOOL)animated{
+    if(highlight == self.timeSlider.highlighted)
+        return;
+    if(animated){
+        [UIView animateWithDuration:1.5 animations:^{
+            self.timeSlider.highlighted = highlight;
+        }];
+    }
+    else{
+        self.timeSlider.highlighted = highlight;
     }
 }
 -(void)didWaitInMiddle{
@@ -126,12 +137,9 @@
     CGFloat distanceToMiddle = distanceBetween(self.centerPoint, location);
     self.isInConfirmButton = (distanceToMiddle < kDefMiddleButtonRadius);
     self.isOutOfScope = (distanceToMiddle < kDefClearMiddle);
-    if(sender.state == UIGestureRecognizerStateBegan){
-        self.timeSlider.image = [UIImage imageNamed:@"timepickerwheelselected"];
-        [self.timeSlider setNeedsDisplay];
-    }
     if (sender.state == UIGestureRecognizerStateChanged || sender.state == UIGestureRecognizerStateBegan) {
         if(!self.isOutOfScope){
+            [self highlightImageForSlider:YES animated:YES];
             CGPoint sliderStartPoint = self.lastPosition;// CGPointMake(self.centerPoint.x, self.centerPoint.y - 100.0);
             if(CGPointEqualToPoint(self.lastPosition, CGPointZero)) sliderStartPoint = location;
             CGFloat angle = [self angleBetweenCenterPoint:self.centerPoint point1:sliderStartPoint point2:location];
@@ -161,8 +169,7 @@
         }
     }
     if (sender.state == UIGestureRecognizerStateEnded) {
-        self.timeSlider.image = [UIImage imageNamed:@"timepickerwheel"];
-        [self.timeSlider setNeedsDisplay];
+        [self highlightImageForSlider:NO animated:YES];
         self.lastPosition = CGPointZero;
         self.lastChangedAngle = 0;
         self.confirmButton.highlighted = NO;
@@ -246,6 +253,7 @@
         
         
         self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"timepickerwheel"]];
+        [self.timeSlider setHighlightedImage:[UIImage imageNamed:@"timepickerwheelselected"]];
         self.timeSlider.center = self.centerPoint;
         [self addSubview:self.timeSlider];
         
@@ -292,7 +300,7 @@
     CGFloat heightForDay = sizeWithFont(@"abcdefghADB",self.dayLabel.font).height;
     CGFloat heightForTime = sizeWithFont(@"08:00pm",self.clockLabel.font).height;
     
-    CGFloat startY = 100;
+    CGFloat startY = 40;
     self.dayLabel.frame = CGRectMake(0, startY, self.bounds.size.width, heightForDay);
     self.clockLabel.frame = CGRectMake(0, startY+heightForDay+kLabelSpacing, self.bounds.size.width, heightForTime);
     

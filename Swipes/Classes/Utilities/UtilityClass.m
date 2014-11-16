@@ -172,7 +172,7 @@
         if (self.rootViewController) {
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
-            [self.rootViewController presentViewController:alert animated:NO completion:nil];
+            [self.rootViewController presentViewController:alert animated:YES completion:nil];
         }
     }
 #endif
@@ -210,8 +210,10 @@
             [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
                 textField.placeholder = placeholder;
                 textField.text = pretext;
+                textField.keyboardAppearance = UIKeyboardAppearanceAlert;
+                
             }];
-            [self.rootViewController presentViewController:alert animated:NO completion:^{
+            [self.rootViewController presentViewController:alert animated:YES completion:^{
                 UITextField *login = alert.textFields.firstObject;
                 login.text = pretext;
                 [login becomeFirstResponder];
@@ -242,7 +244,7 @@
                 if (block)
                     block(YES, nil);
             }]];
-            [self.rootViewController presentViewController:alert animated:NO completion:nil];
+            [self.rootViewController presentViewController:alert animated:YES completion:nil];
         }
     }
 #endif
@@ -276,7 +278,7 @@
             for (NSString* title in buttonTitles) {
                 [alert addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:buttonBlock]];
             }
-            [self.rootViewController presentViewController:alert animated:NO completion:nil];
+            [self.rootViewController presentViewController:alert animated:YES completion:nil];
         }
     }
 #endif

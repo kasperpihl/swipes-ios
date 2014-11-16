@@ -185,11 +185,14 @@ typedef enum {
     //[self show:NO controlsAnimated:YES];
     KPAddTagPanel *tagView = [[KPAddTagPanel alloc] initWithFrame:viewController.view.bounds andTags:[KPTag allTagsAsStrings]];
     tagView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    tagView.delegate = self;
-    tagView.tagView.tagDataSource = self;
-    tagView.tagView.tagDelegate = self;
     tagView.tagView.addTagButton = YES;
     tagView.tagView.addDelegate = self;
+    tagView.delegate = self;
+    
+    tagView.tagView.tagDataSource = self;
+    tagView.tagView.tagDelegate = self;
+    
+    //[tagView.tagView setTags: andSelectedTags:nil];
     BLURRY.showPosition = PositionBottom;
     BLURRY.blurryTopColor = alpha(tcolor(BackgroundColor), 0.3);
     if(block) BLURRY.dismissAction = ^{
