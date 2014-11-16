@@ -10,7 +10,7 @@
 #import "KPToDo.h"
 #import "UtilityClass.h"
 #import "TodayViewController.h"
-#import "TodayTableViewCell.h"
+#import "TodaySwipingCell.h"
 #import "ThemeHandler.h"
 #import "SavedChangeHandler.h"
 #import "UIColor+Utilities.h"
@@ -24,6 +24,7 @@
 @property (nonatomic, weak) IBOutlet UITableView* tableView;
 @property (nonatomic, weak) IBOutlet UIView* tempView;
 @property (nonatomic) NSArray *todos;
+@property (nonatomic) BOOL swipingEnabled;
 @property (nonatomic, weak) IBOutlet UIButton* showAll;
 @end
 
@@ -171,9 +172,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cellIdentifier = [NSString stringWithFormat:@"%@cell",@"TodayWidget"];
-    TodayTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    TodaySwipingCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        cell = [[TodayTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[TodaySwipingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.colorIndicatorView.backgroundColor =  tcolor(DoneColor);
         cell.delegate = self;
     }
@@ -181,7 +182,7 @@
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(TodayTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView willDisplayCell:(TodaySwipingCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     KPToDo *model = [self.todos objectAtIndex:indexPath.row];
     [cell.dotView setPriority:model.priority.boolValue];
     [cell resetAndSetTaskTitle:model.title];
@@ -228,7 +229,7 @@
 -(void)saveContext:(NSManagedObjectContext*)context{
     
 }
--(void)didTapCell:(TodayTableViewCell *)cell{
+-(void)didTapCell:(TodaySwipingCell *)cell{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     KPToDo* todo1 = self.todos[indexPath.row];
     NSString* tempId = todo1.getTempId;
@@ -239,7 +240,7 @@
         // put some code here if needed or pass nil for completion handler
     }];
 }
--(void)didCompleteCell:(TodayTableViewCell *)cell{
+-(void)didCompleteCell:(TodaySwipingCell *)cell{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     KPToDo *model = [self.todos objectAtIndex:indexPath.row];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

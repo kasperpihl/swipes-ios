@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "DotView.h"
-@class TodayTableViewCell;
+@class TodaySwipingCell;
 @protocol TodayCellDelegate <NSObject>
 @optional
--(void)willCompleteCell:(TodayTableViewCell*)cell;
--(void)didCompleteCell:(TodayTableViewCell*)cell;
--(void)didTapCell:(TodayTableViewCell*)cell;
+-(void)willCompleteCell:(TodaySwipingCell*)cell;
+-(void)didCompleteCell:(TodaySwipingCell*)cell;
+-(void)didTapCell:(TodaySwipingCell*)cell;
 @end
-@interface TodayTableViewCell : UITableViewCell
+@interface TodaySwipingCell : UITableViewCell
 @property (nonatomic,weak) NSObject<TodayCellDelegate> *delegate;
 -(void)resetAndSetTaskTitle:(NSString*)title;
 @property (nonatomic) DotView *dotView;

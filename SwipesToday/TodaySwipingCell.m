@@ -12,10 +12,10 @@
 
 #define kPreventNotificationTimeThreshold 0.4
 #define kPreventNotificationDistanceThreshold -30
-#import "TodayTableViewCell.h"
+#import "TodaySwipingCell.h"
 #import "ThemeHandler.h"
 #import "SwipingOverlayView.h"
-@interface TodayTableViewCell () <SwipingOverlayViewDelegate>
+@interface TodaySwipingCell () <SwipingOverlayViewDelegate>
 @property (nonatomic) IBOutlet UILabel *movingIcon;
 @property (nonatomic) IBOutlet UIButton *completeButton;
 @property (nonatomic) IBOutlet UILabel *taskTitle;
@@ -28,7 +28,7 @@
 @property BOOL didCancel;
 
 @end
-@implementation TodayTableViewCell
+@implementation TodaySwipingCell
 -(void)swipingDidStartOverlay:(SwipingOverlayView *)overlay{
     self.didRegret = NO;
     self.didCancel = NO;

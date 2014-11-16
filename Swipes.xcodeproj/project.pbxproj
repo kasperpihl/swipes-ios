@@ -63,7 +63,7 @@
 		A708BEF01A160D2000C7E15A /* timepickerwheelselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A708BEEE1A160D2000C7E15A /* timepickerwheelselected@2x.png */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
 		A70D12DA1966D11500A95C50 /* EvernoteIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A70D12D91966D11500A95C50 /* EvernoteIntegration.m */; };
-		A711246E19DB13D400FD9DAE /* TodayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A711246D19DB13D400FD9DAE /* TodayTableViewCell.m */; };
+		A711246E19DB13D400FD9DAE /* TodaySwipingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A711246D19DB13D400FD9DAE /* TodaySwipingCell.m */; };
 		A711246F19DB166200FD9DAE /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A74FB8FF18FFF2FA00F25157 /* swipes.ttf */; };
 		A711247019DC16BF00FD9DAE /* ThemeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA18B17954C7400EB1549 /* ThemeHandler.m */; };
 		A714369019346823009AC8A4 /* SyncLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A714368F19346823009AC8A4 /* SyncLabel.m */; };
@@ -578,8 +578,8 @@
 		A7090B6F175DF3F900728A3A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Login/LoginViewController.m; sourceTree = "<group>"; };
 		A70D12D81966D11500A95C50 /* EvernoteIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteIntegration.h; path = Integrations/EvernoteIntegration.h; sourceTree = "<group>"; };
 		A70D12D91966D11500A95C50 /* EvernoteIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteIntegration.m; path = Integrations/EvernoteIntegration.m; sourceTree = "<group>"; };
-		A711246C19DB13D400FD9DAE /* TodayTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayTableViewCell.h; sourceTree = "<group>"; };
-		A711246D19DB13D400FD9DAE /* TodayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodayTableViewCell.m; sourceTree = "<group>"; };
+		A711246C19DB13D400FD9DAE /* TodaySwipingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodaySwipingCell.h; sourceTree = "<group>"; };
+		A711246D19DB13D400FD9DAE /* TodaySwipingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodaySwipingCell.m; sourceTree = "<group>"; };
 		A714368E19346823009AC8A4 /* SyncLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncLabel.h; sourceTree = "<group>"; };
 		A714368F19346823009AC8A4 /* SyncLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncLabel.m; sourceTree = "<group>"; };
 		A714369119349EB3009AC8A4 /* CheckmarkButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckmarkButton.h; sourceTree = "<group>"; };
@@ -2079,8 +2079,8 @@
 				DAE2B15419CB7A4D00A9074E /* TodayViewController.h */,
 				DAE2B15519CB7A4D00A9074E /* TodayViewController.m */,
 				DAE2B15719CB7A4D00A9074E /* MainInterface.storyboard */,
-				A711246C19DB13D400FD9DAE /* TodayTableViewCell.h */,
-				A711246D19DB13D400FD9DAE /* TodayTableViewCell.m */,
+				A711246C19DB13D400FD9DAE /* TodaySwipingCell.h */,
+				A711246D19DB13D400FD9DAE /* TodaySwipingCell.m */,
 				DAE2B15219CB7A4D00A9074E /* Supporting Files */,
 			);
 			path = SwipesToday;
@@ -2760,7 +2760,7 @@
 				DA47B66A1A006D1B00299916 /* NSEntityDescription+MagicalDataImport.m in Sources */,
 				DAE2B16C19CB7B1B00A9074E /* _KPTag.m in Sources */,
 				DA47B69E1A006D1B00299916 /* NSManagedObjectContext+MagicalThreading.m in Sources */,
-				A711246E19DB13D400FD9DAE /* TodayTableViewCell.m in Sources */,
+				A711246E19DB13D400FD9DAE /* TodaySwipingCell.m in Sources */,
 				DA47B68E1A006D1B00299916 /* NSManagedObject+MagicalRequests.m in Sources */,
 				DAE2B17119CB7D7200A9074E /* ParentSyncHandler.m in Sources */,
 				DAE2B16619CB7B1B00A9074E /* KPAttachment.m in Sources */,
