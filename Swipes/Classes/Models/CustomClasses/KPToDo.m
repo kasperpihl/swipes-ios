@@ -899,7 +899,7 @@ extern NSString * const kEvernoteMoveTime;
         }
         for ( KPToDo *todo in self.subtasks ){
             if([todo.origin isEqualToString:service]){
-                todo.originIdentifier = nil;
+                //todo.originIdentifier = nil;
                 todo.origin = nil;
             }
         }
@@ -916,7 +916,7 @@ extern NSString * const kEvernoteMoveTime;
             [attachment MR_deleteEntityInContext:context];
         }
         for ( KPToDo *todo in tasks ){
-            todo.originIdentifier = nil;
+            //todo.originIdentifier = nil;
             todo.origin = nil;
         }
     }];
