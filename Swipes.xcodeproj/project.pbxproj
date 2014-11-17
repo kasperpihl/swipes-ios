@@ -115,6 +115,8 @@
 		A75545DE179B481800CE2F4E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A75545DD179B481800CE2F4E /* Accelerate.framework */; };
 		A75545E3179B519200CE2F4E /* KPBlurry.m in Sources */ = {isa = PBXBuildFile; fileRef = A75545E2179B519200CE2F4E /* KPBlurry.m */; };
 		A7582506189BC35600B904BC /* Vero.m in Sources */ = {isa = PBXBuildFile; fileRef = A7582505189BC35600B904BC /* Vero.m */; };
+		A75C13881A188FD300CC3665 /* TodayTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A75C13871A188FD300CC3665 /* TodayTableViewCell.m */; };
+		A75C138A1A1A07D200CC3665 /* BebasNeue.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A75C13891A1A07D200CC3665 /* BebasNeue.ttf */; };
 		A75DB210173119FE00FA256B /* ItemHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A75DB20F173119FE00FA256B /* ItemHandler.m */; };
 		A76182E1187D37AB00914A05 /* KitLocate.Framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A76182E0187D37AB00914A05 /* KitLocate.Framework */; };
 		A761B5A316EB59320095A9A8 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5A216EB59320095A9A8 /* CoreData.framework */; };
@@ -654,6 +656,9 @@
 		A75545E2179B519200CE2F4E /* KPBlurry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPBlurry.m; path = KPBlurry/KPBlurry.m; sourceTree = "<group>"; };
 		A7582504189BC35600B904BC /* Vero.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vero.h; path = Vero/Vero.h; sourceTree = "<group>"; };
 		A7582505189BC35600B904BC /* Vero.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Vero.m; path = Vero/Vero.m; sourceTree = "<group>"; };
+		A75C13861A188FD300CC3665 /* TodayTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayTableViewCell.h; sourceTree = "<group>"; };
+		A75C13871A188FD300CC3665 /* TodayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodayTableViewCell.m; sourceTree = "<group>"; };
+		A75C13891A1A07D200CC3665 /* BebasNeue.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = BebasNeue.ttf; path = Font/BebasNeue.ttf; sourceTree = "<group>"; };
 		A75DB20E173119FE00FA256B /* ItemHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemHandler.h; sourceTree = "<group>"; };
 		A75DB20F173119FE00FA256B /* ItemHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemHandler.m; sourceTree = "<group>"; };
 		A76182E0187D37AB00914A05 /* KitLocate.Framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KitLocate.Framework; path = Swipes/Ressources/Libs/KitLocate.Framework; sourceTree = "<group>"; };
@@ -1384,6 +1389,7 @@
 		A7680D30172D219800BCB2D9 /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				A75C13891A1A07D200CC3665 /* BebasNeue.ttf */,
 				A708BEE11A15FDFC00C7E15A /* GothamRounded-Book.ttf */,
 				A708BEE31A15FE3400C7E15A /* GothamRounded-Bold.ttf */,
 				A708BEE41A15FE3400C7E15A /* GothamRounded-Light.ttf */,
@@ -2082,6 +2088,8 @@
 				A711246C19DB13D400FD9DAE /* TodaySwipingCell.h */,
 				A711246D19DB13D400FD9DAE /* TodaySwipingCell.m */,
 				DAE2B15219CB7A4D00A9074E /* Supporting Files */,
+				A75C13861A188FD300CC3665 /* TodayTableViewCell.h */,
+				A75C13871A188FD300CC3665 /* TodayTableViewCell.m */,
 			);
 			path = SwipesToday;
 			sourceTree = "<group>";
@@ -2365,6 +2373,7 @@
 				A75236E417A335680030ED1E /* walkthrough_swipe_done.png in Resources */,
 				A708BEE71A15FE3400C7E15A /* GothamRounded-Light.ttf in Resources */,
 				DACD545818A1ACFC00C378DF /* page_white_gear.png in Resources */,
+				A75C138A1A1A07D200CC3665 /* BebasNeue.ttf in Resources */,
 				A75236E517A335680030ED1E /* walkthrough_swipe_done@2x.png in Resources */,
 				A74FB8F418FFBCB200F25157 /* MASTER_0000.jpg in Resources */,
 				A75236E617A335680030ED1E /* walkthrough_swipe_schedule.png in Resources */,
@@ -2762,6 +2771,7 @@
 				DA47B69E1A006D1B00299916 /* NSManagedObjectContext+MagicalThreading.m in Sources */,
 				A711246E19DB13D400FD9DAE /* TodaySwipingCell.m in Sources */,
 				DA47B68E1A006D1B00299916 /* NSManagedObject+MagicalRequests.m in Sources */,
+				A75C13881A188FD300CC3665 /* TodayTableViewCell.m in Sources */,
 				DAE2B17119CB7D7200A9074E /* ParentSyncHandler.m in Sources */,
 				DAE2B16619CB7B1B00A9074E /* KPAttachment.m in Sources */,
 				DAE2B17219CB7D7200A9074E /* EvernoteSyncHandler.m in Sources */,

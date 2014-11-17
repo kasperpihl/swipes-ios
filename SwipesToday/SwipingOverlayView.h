@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 @class SwipingOverlayView;
 @protocol SwipingOverlayViewDelegate <NSObject>
+@optional
 -(void)swipingDidStartOverlay:(SwipingOverlayView*)overlay;
 -(void)swipingDidCancelOverlay:(SwipingOverlayView*)overlay;
 -(void)swipingOverlay:(SwipingOverlayView*)overlay didMoveDistance:(CGPoint)point relative:(CGPoint)relative;
 -(void)swipingOverlay:(SwipingOverlayView*)overlay didEndWithDistance:(CGPoint)point relative:(CGPoint)relative;
--(void)didTapSwipingOverlay:(SwipingOverlayView*)overlay;
+-(void)swipingOverlay:(SwipingOverlayView*)overlay didTapInPoint:(CGPoint)point;
 @end
 @interface SwipingOverlayView : UIButton
 @property (nonatomic,weak) NSObject<SwipingOverlayViewDelegate> *delegate;

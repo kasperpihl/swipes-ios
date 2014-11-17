@@ -27,8 +27,8 @@
     CGPoint translation = [touch locationInView:self];
     self.startX = self.lastX = translation.x;
     self.startY = self.lastY = translation.y;
-    
-    [self.delegate swipingDidStartOverlay:self];
+    if([self.delegate respondsToSelector:@selector(swipingDidStartOverlay:)])
+        [self.delegate swipingDidStartOverlay:self];
     
 
 }
@@ -41,7 +41,7 @@
     self.lastY = translation.y;
     if(ABS(totalMovement.x) > kTapMovementMaximum || ABS(totalMovement.y) > kTapMovementMaximum)
         self.notATap = YES;
-    if(self.notATap)
+    if(self.notATap && [self.delegate respondsToSelector:@selector(swipingOverlay:didMoveDistance:relative:)])
         [self.delegate swipingOverlay:self didMoveDistance:totalMovement relative:relativeMovement];
     //NSLog(@"relative: %f",translation.x-self.startX);
 
@@ -52,26 +52,21 @@
     CGPoint totalMovement = CGPointMake(translation.x-self.startX,translation.y-self.startY);
     CGPoint relativeMovement = CGPointMake(translation.x-self.lastX,translation.y-self.lastY);
     self.lock = NO;
-    if(!self.notATap && (CACurrentMediaTime() - self.startTime) < kTapThreshold)
-        return [self.delegate didTapSwipingOverlay:self];
-    [self.delegate swipingOverlay:self didEndWithDistance:totalMovement relative:relativeMovement];
+    if(!self.notATap && (CACurrentMediaTime() - self.startTime) < kTapThreshold && [self.delegate respondsToSelector:@selector(swipingOverlay:didTapInPoint:)])
+        return [self.delegate swipingOverlay:self didTapInPoint:CGPointMake(self.lastX, self.lastY)];
+    if([self.delegate respondsToSelector:@selector(swipingOverlay:didEndWithDistance:relative:)])
+        [self.delegate swipingOverlay:self didEndWithDistance:totalMovement relative:relativeMovement];
     
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
-    [self.delegate swipingDidCancelOverlay:self];
+    if([self.delegate respondsToSelector:@selector(swipingDidCancelOverlay:)])
+        [self.delegate swipingDidCancelOverlay:self];
     self.lock = NO;
 }
 -(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
-        UIPanGestureRecognizer *gestures = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureRecognizer:)];
-        [self addGestureRecognizer:gestures];
-        [gestures setDelegate:self];
     }
     return self;
-}
-- (void)handlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture{
-    CGPoint translation = [gesture translationInView:self];
-    NSLog(@"x %f",translation.x);
 }
 @end

@@ -10,13 +10,13 @@
 #import "KPToDo.h"
 #import "UtilityClass.h"
 #import "TodayViewController.h"
-#import "TodaySwipingCell.h"
+#import "TodayTableViewCell.h"
 #import "ThemeHandler.h"
 #import "SavedChangeHandler.h"
 #import "UIColor+Utilities.h"
 
-#define kRowHeight 45
-#define kButtonHeight 38
+#define kRowHeight 32
+#define kButtonHeight 30
 #define kToolbarHeight 60
 
 @interface TodayViewController () <NCWidgetProviding, UITableViewDataSource, UITableViewDelegate, TodayCellDelegate>
@@ -61,14 +61,14 @@
     plusButton.layer.cornerRadius = kButtonHeight/2;
     plusButton.layer.borderWidth = 1;
     plusButton.layer.masksToBounds = YES;
-    plusButton.layer.borderColor = alpha(tcolor(TasksColor),0.4).CGColor;
+    plusButton.layer.borderColor = tcolorF(TextColor, ThemeDark).CGColor;
     plusButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin;
-    plusButton.titleLabel.font = iconFont(18);
-    [plusButton setTitle:iconString(@"plusThick") forState:UIControlStateNormal];
-    [plusButton setTitle:iconString(@"plusThick") forState:UIControlStateHighlighted];
+    plusButton.titleLabel.font = iconFont(14);
+    [plusButton setTitle:iconString(@"widgetAdd") forState:UIControlStateNormal];
+    [plusButton setTitle:iconString(@"widgetAdd") forState:UIControlStateHighlighted];
     [plusButton setBackgroundImage:[alpha(tcolorF(TextColor,ThemeLight),0.2) image] forState:UIControlStateNormal];
     [plusButton setBackgroundImage:[alpha(tcolorF(TextColor, ThemeLight),0.6) image] forState:UIControlStateHighlighted];
-    [plusButton setTitleColor:alpha(tcolor(TasksColor),1.0) forState:UIControlStateNormal];
+    [plusButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
     [plusButton addTarget:self action:@selector(onPlus:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:plusButton];
@@ -172,9 +172,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cellIdentifier = [NSString stringWithFormat:@"%@cell",@"TodayWidget"];
-    TodaySwipingCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    TodayTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        cell = [[TodaySwipingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[TodayTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.colorIndicatorView.backgroundColor =  tcolor(DoneColor);
         cell.delegate = self;
     }
@@ -182,14 +182,14 @@
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(TodaySwipingCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView willDisplayCell:(TodayTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     KPToDo *model = [self.todos objectAtIndex:indexPath.row];
     [cell.dotView setPriority:model.priority.boolValue];
     [cell resetAndSetTaskTitle:model.title];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 45;
+    return kRowHeight;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -229,7 +229,7 @@
 -(void)saveContext:(NSManagedObjectContext*)context{
     
 }
--(void)didTapCell:(TodaySwipingCell *)cell{
+-(void)didTapCell:(TodayTableViewCell *)cell{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     KPToDo* todo1 = self.todos[indexPath.row];
     NSString* tempId = todo1.getTempId;
@@ -240,7 +240,7 @@
         // put some code here if needed or pass nil for completion handler
     }];
 }
--(void)didCompleteCell:(TodaySwipingCell *)cell{
+-(void)didCompleteCell:(TodayTableViewCell *)cell{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     KPToDo *model = [self.todos objectAtIndex:indexPath.row];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

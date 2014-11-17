@@ -34,6 +34,11 @@ static Global *sharedObject;
     if(OSVER >= 7)
         return iconString;
     
+    /* Widget icons */
+    iconCompare(@"widgetAll",                   @"\ue662");
+    iconCompare(@"widgetDone",                  @"\ue660");
+    iconCompare(@"widgetAdd",                   @"\ue661");
+    
     /* Notification bar */
     iconCompare(@"plusThick",                   @"\ue65f");
     iconCompare(@"arrowThick",                  @"\ue65b");

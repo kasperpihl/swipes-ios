@@ -11,8 +11,8 @@
 #define kSunImageDistance valForScreen(160, 100)
 #define kLabelSpacing valForScreen(0,0)
 #define kClockLabelY valForScreen(0,0)
-#define kClockLabelFont [UIFont fontWithName:@"HelveticaNeue-Light" size:valForIpad(75,valForScreen(55,65))]
-#define kDayLabelFont KP_REGULAR(valForIpad(25,valForScreen(16,19)))
+#define kClockLabelFont [UIFont fontWithName:@"BebasNeue" size:valForIpad(75,valForScreen(55,65))]
+#define kDayLabelFont KP_SEMIBOLD(valForIpad(25,valForScreen(14,16)))
 #define kDefMiddleButtonRadius 60
 #define kDefActualSize valForScreen(85,93)
 
@@ -94,9 +94,14 @@
     if(highlight == self.timeSlider.highlighted)
         return;
     if(animated){
-        [UIView animateWithDuration:1.5 animations:^{
-            self.timeSlider.highlighted = highlight;
-        }];
+        NSLog(@"highlight");
+        self.timeSlider.highlighted = highlight;
+        CATransition *transition = [CATransition animation];
+        transition.duration = 0.25f;
+        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        transition.type = kCATransitionFade;
+        
+        [self.timeSlider.layer addAnimation:transition forKey:nil];
     }
     else{
         self.timeSlider.highlighted = highlight;
@@ -273,14 +278,14 @@
         
         self.dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 120)];
         self.dayLabel.backgroundColor = [UIColor clearColor];
-        self.dayLabel.textColor = tcolor(TextColor);
+        self.dayLabel.textColor = alpha(tcolor(TextColor),0.5);
         self.dayLabel.font = kDayLabelFont;
         self.dayLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.dayLabel];
 
         self.clockLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kClockLabelY, self.bounds.size.width, 120)];
         self.clockLabel.backgroundColor = [UIColor clearColor];
-        self.clockLabel.textColor = tcolor(TextColor); //self.foregroundColor;
+        self.clockLabel.textColor = alpha(tcolor(TextColor),0.8); //self.foregroundColor;
         self.clockLabel.font = kClockLabelFont;
         self.clockLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.clockLabel];

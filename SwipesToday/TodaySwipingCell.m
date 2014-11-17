@@ -34,7 +34,7 @@
     self.didCancel = NO;
     self.startTime = CACurrentMediaTime();
 }
--(void)didTapSwipingOverlay:(SwipingOverlayView *)overlay{
+-(void)swipingOverlay:(SwipingOverlayView *)overlay didTapInPoint:(CGPoint)point{
     if([self.delegate respondsToSelector:@selector(didTapCell:)])
         [self.delegate didTapCell:self];
 }
