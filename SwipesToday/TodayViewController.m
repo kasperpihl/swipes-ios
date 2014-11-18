@@ -15,17 +15,26 @@
 #import "SavedChangeHandler.h"
 #import "UIColor+Utilities.h"
 
-#define kRowHeight 32
+
+#define kContentInsetsTableTop 0
+#define kContentInsetsTableBottom 5
+#define kRowHeight 38
+#define kBottomHeight 75
+
 #define kButtonHeight 30
-#define kToolbarHeight 60
+#define kIconX 18
+#define kDefaultShowNumber 3
 
 @interface TodayViewController () <NCWidgetProviding, UITableViewDataSource, UITableViewDelegate, TodayCellDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView* tableView;
-@property (nonatomic, weak) IBOutlet UIView* tempView;
+@property (nonatomic) NSInteger numberToShow;
 @property (nonatomic) NSArray *todos;
 @property (nonatomic) BOOL swipingEnabled;
-@property (nonatomic, weak) IBOutlet UIButton* showAll;
+@property (nonatomic) IBOutlet UIButton* addButton;
+@property (nonatomic) IBOutlet UIButton* allButton;
+@property (nonatomic) IBOutlet UILabel *countLabel;
+@property (nonatomic) IBOutlet UILabel *infoLabel;
 @end
 
 @implementation TodayViewController
@@ -37,7 +46,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-
+    self.numberToShow = kDefaultShowNumber;
     UTILITY.rootViewController = self;
     
     DLog(@"storeURL: %@", [Global coreDataUrl]);
@@ -45,50 +54,103 @@
     //[Global initCoreData];
     [Global initCoreData];
     // Do any additional setup after loading the view from its nib.
-    
     _tableView.backgroundColor = [UIColor clearColor];
+    _tableView.contentInset = UIEdgeInsetsMake(kContentInsetsTableTop, 0, kContentInsetsTableBottom, 0);
     _tableView.scrollEnabled = NO;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     // Do any additional setup after loading the view from its nib.
     
     
-    CGFloat plusX = 20;
-    CGFloat plusY = 10;
-    CGFloat titleXInset = 16;
-    UIButton *plusButton = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    plusButton.frame = CGRectMake(self.view.bounds.size.width-kButtonHeight-plusX, self.view.bounds.size.height-kButtonHeight-plusY, kButtonHeight, kButtonHeight); //CGRectMake(plusX, self.view.bounds.size.height-kButtonHeight, kButtonHeight, kButtonHeight);
+    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-kBottomHeight, self.view.frame.size.width, kBottomHeight)];
+    bottomView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleWidth;
+    bottomView.backgroundColor = [UIColor clearColor];
+    UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(kIconX, 0, self.view.frame.size.width-2*kIconX, 1)];
+    seperator.backgroundColor = tcolorF(TextColor, ThemeDark);
+    [bottomView addSubview:seperator];
+    
+    UILabel *countLabel = [[UILabel alloc] initWithFrame:CGRectMake(kIconX, 0, bottomView.frame.size.width-kIconX, bottomView.frame.size.height)];
+    countLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:40];
+    countLabel.numberOfLines = 1;
+    countLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    countLabel.textColor = tcolorF(TextColor,ThemeDark);
+    countLabel.text = @"10";
+    [bottomView addSubview:countLabel];
+    self.countLabel = countLabel;
+    
+    UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 0, bottomView.frame.size.width-100, 30)];
+    CGRectSetCenterY(infoLabel, bottomView.frame.size.height/2);
+    infoLabel.numberOfLines = 0;
+    //infoLabel.backgroundColor = tcolor(LaterColor);
+    infoLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    infoLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
+    infoLabel.textColor = tcolorF(TextColor,ThemeDark);
+    infoLabel.text = @"TASKS\r\nFOR NOW";
+    /*NSMutableParagraphStyle *paragrahStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragrahStyle setLineSpacing:0];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"TASKS\r\nFOR TODAY" attributes:@{NSParagraphStyleAttributeName : paragrahStyle, NSForegroundColorAttributeName : tcolorF(TextColor,ThemeDark),NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Light" size:12]}];
+    infoLabel.attributedText = attributedString ;*/
+    [bottomView addSubview:infoLabel];
+    self.infoLabel = infoLabel;
+    
+    CGFloat buttonSpacing = 25;
+    
+    
+    UIButton *plusAllAroundButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-kButtonHeight-buttonSpacing, 0, kButtonHeight, bottomView.frame.size.height)];
+    plusAllAroundButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:9];
+    [plusAllAroundButton setTitle:@"ADD" forState:UIControlStateNormal];
+    [plusAllAroundButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+    [plusAllAroundButton setTitleEdgeInsets:UIEdgeInsetsMake(47, 0, 0, 0)];
+    [plusAllAroundButton addTarget:self action:@selector(onPlus:) forControlEvents:UIControlEventTouchUpInside];
+    plusAllAroundButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin;
+    
+    UIButton *plusButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    plusButton.frame = CGRectMake(0, 0, kButtonHeight, kButtonHeight); //CGRectMake(plusX, self.view.bounds.size.height-kButtonHeight, kButtonHeight, kButtonHeight);
+    CGRectSetCenterY(plusButton, bottomView.frame.size.height/2);
     plusButton.layer.cornerRadius = kButtonHeight/2;
     plusButton.layer.borderWidth = 1;
     plusButton.layer.masksToBounds = YES;
     plusButton.layer.borderColor = tcolorF(TextColor, ThemeDark).CGColor;
-    plusButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin;
-    plusButton.titleLabel.font = iconFont(14);
+    plusButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin;
+    plusButton.titleLabel.font = iconFont(12);
     [plusButton setTitle:iconString(@"widgetAdd") forState:UIControlStateNormal];
     [plusButton setTitle:iconString(@"widgetAdd") forState:UIControlStateHighlighted];
-    [plusButton setBackgroundImage:[alpha(tcolorF(TextColor,ThemeLight),0.2) image] forState:UIControlStateNormal];
-    [plusButton setBackgroundImage:[alpha(tcolorF(TextColor, ThemeLight),0.6) image] forState:UIControlStateHighlighted];
+    [plusButton setBackgroundImage:[alpha(tcolorF(TextColor,ThemeDark),0.0) image] forState:UIControlStateNormal];
+    [plusButton setBackgroundImage:[alpha(tcolorF(TextColor, ThemeDark),1.0) image] forState:UIControlStateHighlighted];
     [plusButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
+    [plusButton setTitleColor:tcolorF(TextColor, ThemeLight) forState:UIControlStateHighlighted];
     [plusButton addTarget:self action:@selector(onPlus:) forControlEvents:UIControlEventTouchUpInside];
+    [plusAllAroundButton addSubview:plusButton];
+    [bottomView addSubview:plusAllAroundButton];
     
-    [self.view addSubview:plusButton];
+    UIButton *allAroundButton = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMinX(plusAllAroundButton.frame)-buttonSpacing-kButtonHeight, 0, kButtonHeight, bottomView.frame.size.height)];
+    allAroundButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:9];
+    [allAroundButton setTitle:@"ALL" forState:UIControlStateNormal];
+    [allAroundButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+    [allAroundButton setTitleEdgeInsets:UIEdgeInsetsMake(47, 0, 0, 0)];
+    [allAroundButton addTarget:self action:@selector(onShowAll:) forControlEvents:UIControlEventTouchUpInside];
+    allAroundButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin;
     
+    UIButton *allButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    allButton.frame = CGRectMake(0, 0, kButtonHeight, kButtonHeight); //CGRectMake(plusX, self.view.bounds.size.height-kButtonHeight, kButtonHeight, kButtonHeight);
+    CGRectSetCenterY(allButton, bottomView.frame.size.height/2);
+    allButton.layer.cornerRadius = kButtonHeight/2;
+    allButton.layer.borderWidth = 1;
+    allButton.layer.masksToBounds = YES;
+    allButton.layer.borderColor = tcolorF(TextColor, ThemeDark).CGColor;
+    allButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
+    allButton.titleLabel.font = iconFont(9);
+    [allButton setTitle:iconString(@"widgetAll") forState:UIControlStateNormal];
+    [allButton setTitle:iconString(@"widgetAll") forState:UIControlStateHighlighted];
+    [allButton setBackgroundImage:[alpha(tcolorF(TextColor,ThemeDark),0.0) image] forState:UIControlStateNormal];
+    [allButton setBackgroundImage:[alpha(tcolorF(TextColor, ThemeDark),1.0) image] forState:UIControlStateHighlighted];
+    [allButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
+    [allButton setTitleColor:tcolorF(TextColor, ThemeLight) forState:UIControlStateHighlighted];
+    [allButton addTarget:self action:@selector(onShowAll:) forControlEvents:UIControlEventTouchUpInside];
+    [allAroundButton addSubview:allButton];
+    [bottomView addSubview:allAroundButton];
     
-    UIButton *showAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    showAllButton.frame = CGRectMake(0, self.view.bounds.size.height-kButtonHeight-plusY, self.view.bounds.size.width-kButtonHeight-plusX, kButtonHeight);
-    showAllButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-    showAllButton.titleEdgeInsets = UIEdgeInsetsMake(0, titleXInset, 0, 0);
-    showAllButton.titleLabel.textAlignment = NSTextAlignmentLeft;
-    [showAllButton setTitle:@"" forState:UIControlStateNormal];
-    [showAllButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
-    [showAllButton setTitleColor:alpha(tcolorF(TextColor,ThemeDark),0.7) forState:UIControlStateHighlighted];
-    showAllButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    showAllButton.titleLabel.font = [UIFont systemFontOfSize:16];
-    [showAllButton addTarget:self action:@selector(onShowAll:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:showAllButton];
-    self.showAll = showAllButton;
-    
-    
+    [self.view addSubview:bottomView];
     
     //self.view.bounds = CGRectMake(0, 0, updatedSize.width, updatedSize.height);
     [self reloadDataSource];
@@ -116,18 +178,25 @@
 -(void)updateContentSize{
     CGSize updatedSize = [self preferredContentSize];
     updatedSize.width = self.view.bounds.size.width;
-    updatedSize.height = MIN(3,self.todos.count)*kRowHeight + kToolbarHeight;
+    updatedSize.height = MIN(1,(self.todos.count == 0 ? 0 : 1))*(kContentInsetsTableBottom+kContentInsetsTableTop) + MIN(self.numberToShow,self.todos.count)*kRowHeight + kBottomHeight;
     [self setPreferredContentSize:updatedSize];
     NSInteger numberOfCurrentTasks = self.todos.count;
-    NSString *showAllTitle = @"No current tasks.  Add one";
+    NSString *infoTitle = @"TASKS\r\nFOR NOW";
     if(numberOfCurrentTasks > 0){
-        if(numberOfCurrentTasks > 3)
-            showAllTitle = [NSString stringWithFormat:@"%lu more task",(long)numberOfCurrentTasks-3];
-        else showAllTitle = @"";
-        if(numberOfCurrentTasks > 4)
-            showAllTitle = [showAllTitle stringByAppendingString:@"s"];
+        self.countLabel.text = [NSString stringWithFormat:@"%lu",(long)numberOfCurrentTasks];
+        if(numberOfCurrentTasks == 1){
+            infoTitle = @"TASK\r\nFOR NOW";
+        }
     }
-    [self.showAll setTitle:showAllTitle forState:UIControlStateNormal];
+    else{
+        self.countLabel.text = @"NO";
+    }
+    
+    
+    [self.countLabel sizeToFit];
+    CGRectSetCenterY(self.countLabel, [self.countLabel superview].frame.size.height/2);
+    CGRectSetX(self.infoLabel, CGRectGetMaxX(self.countLabel.frame) + 10);
+    [self.infoLabel setText:infoTitle];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -153,10 +222,9 @@
     [super viewDidLayoutSubviews];
     
     CGSize contentSize = self.preferredContentSize;
-    CGRect rect = _tempView.frame;
-    rect.size.height = contentSize.height - 30;
+    CGRect rect = _tableView.frame;
+    rect.size.height = contentSize.height - kBottomHeight;
     rect.size.width = contentSize.width;
-    _tempView.frame = rect;
     _tableView.frame = rect;
 }
 -(UIEdgeInsets)widgetMarginInsetsForProposedMarginInsets:(UIEdgeInsets)defaultMarginInsets{
@@ -166,7 +234,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return MIN(3,self.todos.count);
+    return MIN(self.numberToShow,self.todos.count);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

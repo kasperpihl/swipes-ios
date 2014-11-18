@@ -101,6 +101,7 @@
     self.taskTitle = [[UILabel alloc] initWithFrame:CGRectMake(titleX, 0, self.frame.size.width- titleX, self.frame.size.height)];
     self.taskTitle.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
     self.taskTitle.lineBreakMode = NSLineBreakByTruncatingTail;
+    self.taskTitle.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.taskTitle.textColor = [UIColor whiteColor];
     [self.contentView addSubview:self.taskTitle];
     
