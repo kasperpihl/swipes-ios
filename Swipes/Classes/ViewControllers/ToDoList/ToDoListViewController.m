@@ -533,7 +533,7 @@
 }
 - (void)cleanUpAfterMovingAnimated:(BOOL)animated {
     [self.selectedRows removeAllObjects];
-    NSLog(@"removed from cleanup");
+//    DLog(@"removed from cleanup");
     self.swipingCell = nil;
     [self didUpdateCells];
 }
@@ -543,7 +543,7 @@
     for (NSIndexPath *indexPath in selectedIndexPaths) {
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
-    NSLog(@"removed from deselect all");
+    DLog(@"removed from deselect all");
     [self.selectedRows removeAllObjects];
     [self handleShowingToolbar];
 }

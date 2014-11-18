@@ -123,8 +123,8 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
 //    self.block(SyncStatusSuccess, @{@"userInfoStuff": @"blabla"}, nil);
 //}
 
--(NSArray*)filterSubtasksWithEvernote:(NSSet*)subtasks{
-    NSPredicate *subtaskPredicate = [NSPredicate predicateWithFormat:@"origin == %@",EVERNOTE_SERVICE];
+-(NSArray*)filterSubtasks:(NSSet*)subtasks{
+    NSPredicate *subtaskPredicate = [NSPredicate predicateWithFormat:@"origin == %@ OR origin = nil", EVERNOTE_SERVICE];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:NO];
     return [[subtasks filteredSetUsingPredicate:subtaskPredicate] sortedArrayUsingDescriptors:@[ sortDescriptor ]];
 }
@@ -195,7 +195,7 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
 -(KPToDo*)findAndHandleMatchesForToDo:(KPToDo*)parentToDo withEvernoteToDos:(NSArray *)evernoteToDos inNoteProcessor:(EvernoteToDoProcessor*)processor
 {
     // search for our TODO (comparing only title)
-    NSArray *subtasks = [self filterSubtasksWithEvernote:parentToDo.subtasks];
+    NSArray *subtasks = [self filterSubtasks:parentToDo.subtasks];
     
     // Creating helper arrays for determining which ones has already been matched
     NSMutableArray *subtasksLeftToBeFound = [subtasks mutableCopy];
@@ -214,6 +214,13 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
                 [subtasksLeftToBeFound removeObject:subtask];
                 subtasks = [subtasksLeftToBeFound copy];
                 [evernoteToDosLeftToBeFound removeObject:evernoteToDo];
+                
+                // subtask exists but not marked as evernote yet
+                if (nil == subtask.origin) {
+                    subtask.originIdentifier = evernoteToDo.title;
+                    subtask.origin = EVERNOTE_SERVICE;
+                    [KPToDo saveToSync];
+                }
                 
                 if( [self handleEvernoteToDo:evernoteToDo withMatchingSubtask:subtask inNoteProcessor:processor isNew:NO] )
                     updated = YES;
@@ -255,6 +262,12 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
             matchingSubtask.originIdentifier = evernoteToDo.title;
             updated = YES;
             isNew = YES;
+        }
+        else if (nil == matchingSubtask.origin) {
+            // subtask exists but not marked as evernote yet
+            matchingSubtask.originIdentifier = evernoteToDo.title;
+            matchingSubtask.origin = EVERNOTE_SERVICE;
+            [KPToDo saveToSync];
         }
         
         [subtasksLeftToBeFound removeObject:matchingSubtask];
@@ -526,6 +539,9 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
     if (!session.isAuthenticated) {
         return self.block(SyncStatusError, nil, error);
     }
+    
+    // this is needed in case you have old client synchronizing the old info
+    //[self convertGuidToENNoteRef];
     
     // Tell caller that Evernote will be syncing
     

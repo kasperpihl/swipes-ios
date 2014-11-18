@@ -120,7 +120,7 @@ int const kCellCount = 4;
         cell.contentView.backgroundColor = CLEAR;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = CLEAR;
-        cell.textLabel.font = KP_REGULAR(14);
+        cell.textLabel.font = KP_REGULAR(12);
         cell.detailTextLabel.font = KP_REGULAR(11);
         if (indexPath.row < kCellCount) {
             
