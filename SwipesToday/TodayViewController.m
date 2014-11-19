@@ -97,9 +97,10 @@
     
     SwipingOverlayView *swipingOverlayView = [[SwipingOverlayView alloc] initWithFrame:bottomView.bounds];
     swipingOverlayView.delegate = self;
+    CGRectSetWidth(swipingOverlayView, bottomView.frame.size.width/2);
     [bottomView addSubview:swipingOverlayView];
     bottomView.userInteractionEnabled = YES;
-    
+    self.swipingOverlay = swipingOverlayView;
     
     /*
     UIButton *showAllButton = [[UIButton alloc] initWithFrame:CGRectMake(kIconX, 0, bottomView.frame.size.width-kIconX, bottomView.frame.size.height)];
@@ -162,7 +163,7 @@
     [allButton setBackgroundImage:[alpha(tcolorF(TextColor, ThemeDark),1.0) image] forState:UIControlStateHighlighted];
     [allButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
     [allButton setTitleColor:tcolorF(TextColor, ThemeLight) forState:UIControlStateHighlighted];
-    [allButton addTarget:self action:@selector(onShowAll:) forControlEvents:UIControlEventTouchUpInside];
+    [allButton addTarget:self action:@selector(onAll:) forControlEvents:UIControlEventTouchUpInside];
     [allAroundButton addSubview:allButton];
     [bottomView addSubview:allAroundButton];
     
