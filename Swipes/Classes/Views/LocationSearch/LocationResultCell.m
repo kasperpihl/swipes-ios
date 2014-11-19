@@ -27,12 +27,16 @@
         self.contentView.backgroundColor = CLEAR;
         self.resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(kTextX, 0, self.bounds.size.width-kTextX-kTextRightPadding, self.bounds.size.height)];
         self.resultLabel.autoresizingMask = (UIViewAutoresizingFlexibleHeight);
-        self.resultLabel.textColor = tcolorF(TextColor,ThemeDark);
+        self.resultLabel.textColor = tcolor(TextColor);
         self.resultLabel.backgroundColor = CLEAR;
         self.resultLabel.font = KP_REGULAR(15);
         [self.contentView addSubview:self.resultLabel];
         
-        UIImageView *locationIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:timageStringBW(@"edit_location_icon")]];
+        UILabel *locationIcon = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        locationIcon.font = iconFont(14);
+        locationIcon.textAlignment = NSTextAlignmentCenter;
+        locationIcon.text = iconString(@"editLocation");
+        locationIcon.textColor = tcolor(TextColor);
         locationIcon.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin);
         CGRectSetCenterY(locationIcon, self.bounds.size.height/2);
         CGRectSetCenterX(locationIcon, kTextX/2+kIconHack);
