@@ -10,6 +10,7 @@
 #import "KPToDo.h"
 #import "UtilityClass.h"
 #import "TodayViewController.h"
+#import "SwipingOverlayView.h"
 #import "TodayTableViewCell.h"
 #import "ThemeHandler.h"
 #import "SavedChangeHandler.h"
@@ -25,7 +26,7 @@
 #define kIconX 18
 #define kDefaultShowNumber 3
 
-@interface TodayViewController () <NCWidgetProviding, UITableViewDataSource, UITableViewDelegate, TodayCellDelegate>
+@interface TodayViewController () <NCWidgetProviding, UITableViewDataSource, UITableViewDelegate, TodayCellDelegate, SwipingOverlayViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView* tableView;
 @property (nonatomic) NSInteger numberToShow;
@@ -35,7 +36,7 @@
 @property (nonatomic) IBOutlet UIButton* allButton;
 @property (nonatomic) IBOutlet UILabel *countLabel;
 @property (nonatomic) IBOutlet UILabel *infoLabel;
-@property (nonatomic) IBOutlet UIButton *showAll;
+@property (nonatomic) IBOutlet SwipingOverlayView *swipingOverlay;
 @end
 
 @implementation TodayViewController
@@ -50,7 +51,6 @@
     self.numberToShow = kDefaultShowNumber;
     UTILITY.rootViewController = self;
     
-    DLog(@"storeURL: %@", [Global coreDataUrl]);
     
     //[Global initCoreData];
     [Global initCoreData];
@@ -94,8 +94,23 @@
     [bottomView addSubview:infoLabel];
     self.infoLabel = infoLabel;
     
-    CGFloat buttonSpacing = 25;
     
+    SwipingOverlayView *swipingOverlayView = [[SwipingOverlayView alloc] initWithFrame:bottomView.bounds];
+    swipingOverlayView.delegate = self;
+    [bottomView addSubview:swipingOverlayView];
+    bottomView.userInteractionEnabled = YES;
+    
+    
+    /*
+    UIButton *showAllButton = [[UIButton alloc] initWithFrame:CGRectMake(kIconX, 0, bottomView.frame.size.width-kIconX, bottomView.frame.size.height)];
+    showAllButton.titleLabel.font = iconFont(50);
+    [showAllButton setTitle:@"todaytoday" forState:UIControlStateNormal];
+    [showAllButton setTitleColor:tcolorF(TextColor, ThemeLight) forState:UIControlStateNormal];
+    showAllButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [showAllButton addTarget:self action:@selector(onShowAll:) forControlEvents:UIControlEventTouchUpInside];
+    showAllButton.alpha = 0.01;
+    [bottomView addSubview:showAllButton];*/
+    CGFloat buttonSpacing = 25;
     
     UIButton *plusAllAroundButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-kButtonHeight-buttonSpacing, 0, kButtonHeight, bottomView.frame.size.height)];
     plusAllAroundButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:9];
@@ -126,10 +141,10 @@
     
     UIButton *allAroundButton = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMinX(plusAllAroundButton.frame)-buttonSpacing-kButtonHeight, 0, kButtonHeight, bottomView.frame.size.height)];
     allAroundButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:9];
-    [allAroundButton setTitle:@"ALL" forState:UIControlStateNormal];
+    [allAroundButton setTitle:@"SHOW" forState:UIControlStateNormal];
     [allAroundButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
     [allAroundButton setTitleEdgeInsets:UIEdgeInsetsMake(47, 0, 0, 0)];
-    [allAroundButton addTarget:self action:@selector(onShowAll:) forControlEvents:UIControlEventTouchUpInside];
+    [allAroundButton addTarget:self action:@selector(onAll:) forControlEvents:UIControlEventTouchUpInside];
     allAroundButton.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin;
     
     UIButton *allButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -153,16 +168,16 @@
     
     [self.view addSubview:bottomView];
     
-    //self.view.bounds = CGRectMake(0, 0, updatedSize.width, updatedSize.height);
-    
-    /*UIButton *showAllButton = [[UIButton alloc] initWithFrame:CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)]*/
-    
     [self reloadDataSource];
+}
+
+-(void)swipingOverlay:(SwipingOverlayView *)overlay didTapInPoint:(CGPoint)point{
+    if(point.x < CGRectGetMaxX(self.infoLabel.frame))
+        [self onShowAll:nil];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    self.numberToShow = kDefaultShowNumber;
     [self reloadDataSource];
 }
 
@@ -270,14 +285,22 @@
     KPToDo* todo1 = self.todos[indexPath.row];
     NSString* tempId = todo1.getTempId;
     todo1 = nil;
-    NSLog(@"tempId is: %@", tempId);
     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/view?id=%@", tempId]];
     [self.extensionContext openURL:url completionHandler:^(BOOL success) {
         // put some code here if needed or pass nil for completion handler
     }];
 }
 
-- (IBAction)onShowAll:(id)sender
+- (IBAction)onShowAll:(id)sender{
+    if(self.todos.count > self.numberToShow){
+        self.numberToShow = self.todos.count;
+        [self.tableView reloadData];
+        [self updateContentSize];
+    }
+}
+
+
+- (IBAction)onAll:(id)sender
 {
     if(self.todos.count == 0){
         return [self onPlus:sender];
@@ -307,7 +330,6 @@
     KPToDo* todo1 = self.todos[indexPath.row];
     NSString* tempId = todo1.getTempId;
     todo1 = nil;
-    NSLog(@"tempId is: %@", tempId);
     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/view?id=%@", tempId]];
     [self.extensionContext openURL:url completionHandler:^(BOOL success) {
         // put some code here if needed or pass nil for completion handler

@@ -12,7 +12,7 @@
 #import "TodayTableViewCell.h"
 #import "ThemeHandler.h"
 #import "SwipingOverlayView.h"
-@interface TodayTableViewCell () <UIGestureRecognizerDelegate,SwipingOverlayViewDelegate>
+@interface TodayTableViewCell () <SwipingOverlayViewDelegate>
 @property (nonatomic) IBOutlet UIButton *completeButton;
 @property (nonatomic) IBOutlet UILabel *taskTitle;
 @property BOOL lock;
