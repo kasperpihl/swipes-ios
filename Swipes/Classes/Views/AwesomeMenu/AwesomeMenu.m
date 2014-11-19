@@ -17,8 +17,8 @@ static CGFloat const kAwesomeMenuDefaultStartPointY = 240.0;
 static CGFloat const kAwesomeMenuDefaultTimeOffset = 0.036f;
 static CGFloat const kAwesomeMenuDefaultRotateAngle = 0.0;
 static CGFloat const kAwesomeMenuDefaultMenuWholeAngle = M_PI * 2;
-static CGFloat const kAwesomeMenuDefaultExpandRotation = M_PI;
-static CGFloat const kAwesomeMenuDefaultCloseRotation = M_PI * 2;
+static CGFloat const kAwesomeMenuDefaultExpandRotation = M_PI/2;
+static CGFloat const kAwesomeMenuDefaultCloseRotation = M_PI;
 
 
 static CGPoint RotateCGPointAroundCenter(CGPoint point, CGPoint center, float angle)
@@ -185,7 +185,7 @@ static CGPoint RotateCGPointAroundCenter(CGPoint point, CGPoint center, float an
 
 
 - (void)_setMenu {
-	int count = [_menusArray count];
+	NSUInteger count = [_menusArray count];
     for (int i = 0; i < count; i ++)
     {
         AwesomeMenuItem *item = [_menusArray objectAtIndex:i];
