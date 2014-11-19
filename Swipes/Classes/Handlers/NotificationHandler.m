@@ -113,6 +113,7 @@ static NotificationHandler *sharedObject;
         _startedLocationServices = startedLocationServices;
         if (startedLocationServices) {
             NSString *kitLocateKey = @"ebeea91e-563e-4b32-acf3-6505d9857789";
+            
             [KitLocate initKitLocateWithDelegate:NOTIHANDLER APIKey:kitLocateKey];
             [KLLocation startSingleLocationWithDelegate:self andParams:@{KL_SP_INT_MAX_SECONDS_WAIT:@(4)}];
         }
@@ -176,10 +177,10 @@ static NotificationHandler *sharedObject;
         
         NSNumber *dayStart = (NSNumber*)[kSettings valueForSetting:SettingWeekendStartTime];
         NSInteger dayHours = dayStart.integerValue/D_HOUR;
-        NSInteger dayMinutes = dayStart.integerValue % D_HOUR;
+        NSInteger dayMinutes = (dayStart.integerValue % D_HOUR) / D_MINUTE;
         NSNumber *eveningStart = (NSNumber*)[kSettings valueForSetting:SettingEveningStartTime];
         NSInteger eveningHours = eveningStart.integerValue/D_HOUR;
-        NSInteger eveningMinutes = eveningStart.integerValue % D_HOUR;
+        NSInteger eveningMinutes = (eveningStart.integerValue % D_HOUR) / D_MINUTE;
         NSNumber *weekStart = (NSNumber *)[kSettings valueForSetting:SettingWeekStart];
         NSInteger lastDayBeforeStartOfWeek = (weekStart.integerValue - 1) == 0 ? 7 : weekStart.integerValue-1;
         NSDate *sundayEvening = [NSDate dateThisOrNextWeekWithDay:lastDayBeforeStartOfWeek hours:eveningHours minutes:eveningMinutes];
