@@ -15,6 +15,7 @@ target :Swipes do
     pod 'DejalActivityView'
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
+    pod 'Leanplum-iOS-SDK'
 end
 
 target :SwipesKit do
@@ -31,6 +32,7 @@ target :SwipesKit do
     pod 'DejalActivityView'
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
+    pod 'Leanplum-iOS-SDK'
 end
 
 target :SwipesToday do

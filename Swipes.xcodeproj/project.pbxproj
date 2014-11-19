@@ -3008,9 +3008,9 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "d6eff45a-4d62-4304-9cf2-37ff23c37e9a";
-				"PROVISIONING_PROFILE[sdk=*]" = "d6eff45a-4d62-4304-9cf2-37ff23c37e9a";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "d6eff45a-4d62-4304-9cf2-37ff23c37e9a";
+				PROVISIONING_PROFILE = "b3f3babe-3058-4605-b52f-8a6bfecda230";
+				"PROVISIONING_PROFILE[sdk=*]" = "b3f3babe-3058-4605-b52f-8a6bfecda230";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "b3f3babe-3058-4605-b52f-8a6bfecda230";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3156,8 +3156,8 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "21cf9224-14e3-47bd-98d7-82f5e3137b22";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "21cf9224-14e3-47bd-98d7-82f5e3137b22";
+				PROVISIONING_PROFILE = "8474ac89-33cd-4752-b53a-12c78ecefaa7";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8474ac89-33cd-4752-b53a-12c78ecefaa7";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3296,7 +3296,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8d98554b-a607-4fe9-b6b7-deda65c652a2";
+				PROVISIONING_PROFILE = "ab33eced-5c71-4157-9489-3c07a6cdf72c";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -3384,7 +3384,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4d262556-fe11-4f34-905f-b15b13f003b2";
+				PROVISIONING_PROFILE = "cd2beebc-25ec-4ddf-84fe-1dcd080691b9";
 				SKIP_INSTALL = YES;
 			};
 			name = AdHoc;

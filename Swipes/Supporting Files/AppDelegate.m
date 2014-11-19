@@ -31,6 +31,8 @@
 
 #import "UIWindow+DHCShakeRecognizer.h"
 
+#import <Leanplum/Leanplum.h>
+
 #import "RootViewController.h"
 #import "KPTopClock.h"
 #import "AppDelegate.h"
@@ -45,14 +47,17 @@
     NSString *localyticsKey;
     
 #ifdef RELEASE
+    [Leanplum setAppId:@"8J2O981BSPJg1536460xS0tqlMRrO4u9PykB25TE9Jc" withProductionKey:@"DGeyaY7QsAtw2IuAytry41IZaC9wyhDaUSCSMoaHDFo"];
     parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
     analyticsKey = @"twdwnk4ywb";
     localyticsKey = @"0c159f237171213e5206f21-6bd270e2-076d-11e3-11ec-004a77f8b47f";
-    #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
+#define EVERNOTE_HOST BootstrapServerBaseURLStringUS
     NSString* const CONSUMER_KEY = @"swipes";
     NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6"; // when set to release also fix in Swipes-Info.plist file !
 #else
+    LEANPLUM_USE_ADVERTISING_ID;
+    [Leanplum setAppId:@"8J2O981BSPJg1536460xS0tqlMRrO4u9PykB25TE9Jc" withDevelopmentKey:@"Tv0mQ7d8o3pEybHlju4DsoEIu7ryptnsXLG79BSoQSA"];
     parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
 //    parseApplicationKey = @"0qD3LLZIOwLOPRwbwLia9GJXTEUnEsSlBCufqDvr";
@@ -68,6 +73,11 @@
     NSString* const CONSUMER_SECRET = @"c7ed7298b3666bc4"; // when set to release also fix in Swipes-Info.plist file !*/
     //[KeenClient enableLogging];
 #endif
+    
+    /*[Leanplum syncResourcesAsync:YES];
+    [Leanplum trackAllAppScreens];
+    [Leanplum start];*/
+    
     
     [Appirater setAppId:@"657882159"];
     [Appirater setDaysUntilPrompt:1];

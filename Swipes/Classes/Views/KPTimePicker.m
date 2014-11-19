@@ -94,7 +94,6 @@
     if(highlight == self.timeSlider.highlighted)
         return;
     if(animated){
-        NSLog(@"highlight");
         self.timeSlider.highlighted = highlight;
         CATransition *transition = [CATransition animation];
         transition.duration = 0.25f;
@@ -150,7 +149,6 @@
             CGFloat angle = [self angleBetweenCenterPoint:self.centerPoint point1:sliderStartPoint point2:location];
             CGFloat imageAngle = [self angleBetweenCenterPoint:self.centerPoint point1:CGPointMake(-100, self.centerPoint.y) point2:location];
             CGFloat rounded = floorf((degrees(imageAngle)+1)/2)*2;
-            NSLog(@"imageAngle:%f - %f",degrees(imageAngle),rounded);
             self.timeSlider.transform = CGAffineTransformMakeRotation(-radians(rounded));
             self.lastChangedAngle = self.lastChangedAngle + angle;
             self.lastPosition = location;
