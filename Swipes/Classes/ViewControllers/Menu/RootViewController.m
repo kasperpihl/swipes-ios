@@ -44,7 +44,7 @@
 #import "ShareViewController.h"
 #import "AwesomeMenu.h"
 
-@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate,SyncDelegate, HintHandlerDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate, HintHandlerDelegate>
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 
@@ -466,7 +466,6 @@ static RootViewController *sharedObject;
     UTILITY.rootViewController = self;
 
     [self setNavigationBarHidden:YES];
-    KPCORE.delegate = self;
     notify(@"changed theme", changedTheme);
     notify(@"handled URL", handledURL);
     notify(@"updated time zone", changedTimeZone:);
