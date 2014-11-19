@@ -293,10 +293,14 @@
 }
 
 - (IBAction)onShowAll:(id)sender{
-    if(self.todos.count > self.numberToShow){
+    NSInteger maxCount = MIN(6,self.todos.count);
+    if(maxCount > self.numberToShow){
         self.numberToShow = self.todos.count;
         [self.tableView reloadData];
         [self updateContentSize];
+    }
+    else{
+        [self onAll:self.allButton];
     }
 }
 
