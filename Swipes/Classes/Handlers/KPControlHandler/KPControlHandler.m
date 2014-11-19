@@ -66,6 +66,7 @@
     menu.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     menu.startPoint = CGPointMake(self.view.bounds.size.width-30, self.view.bounds.size.height-30);
     menu.addButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin;
+    
     menu.rotateAngle = radians(270);
     menu.endRadius = 90;
     menu.nearRadius = 85;
