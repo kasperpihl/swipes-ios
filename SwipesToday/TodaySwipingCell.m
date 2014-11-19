@@ -141,7 +141,7 @@
     UILabel *movingIcon = [[UILabel alloc] initWithFrame:CGRectMake(-self.bounds.size.height, 0, self.bounds.size.height, self.frame.size.height)];
     movingIcon.font = iconFont(20);
     movingIcon.textAlignment = NSTextAlignmentCenter;
-    [movingIcon setText:@"doneFull"];
+    [movingIcon setText:@"done"];
     [movingIcon setTextColor:tcolorF(TextColor, ThemeDark)];
     [self insertSubview:movingIcon aboveSubview:_colorIndicatorView];
     self.movingIcon = movingIcon;

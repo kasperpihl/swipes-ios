@@ -35,6 +35,7 @@
 @property (nonatomic) IBOutlet UIButton* allButton;
 @property (nonatomic) IBOutlet UILabel *countLabel;
 @property (nonatomic) IBOutlet UILabel *infoLabel;
+@property (nonatomic) IBOutlet UIButton *showAll;
 @end
 
 @implementation TodayViewController
@@ -153,11 +154,15 @@
     [self.view addSubview:bottomView];
     
     //self.view.bounds = CGRectMake(0, 0, updatedSize.width, updatedSize.height);
+    
+    /*UIButton *showAllButton = [[UIButton alloc] initWithFrame:CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)]*/
+    
     [self reloadDataSource];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    self.numberToShow = kDefaultShowNumber;
     [self reloadDataSource];
 }
 

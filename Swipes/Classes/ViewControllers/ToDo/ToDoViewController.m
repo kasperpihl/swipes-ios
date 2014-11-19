@@ -464,7 +464,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     else {
         self.alarmLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:self.model.schedule showTime:YES]];
     }
-    [self.scheduleImageIcon setText:isLocation ? iconString(@"editLocation") : iconString(@"editSchedule")];
+    [self.scheduleImageIcon setText:isLocation ? iconString(@"editLocation") : iconString(@"later")];
 }
 
 - (void)updateNotes
@@ -936,7 +936,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
          */
         self.alarmContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
         self.alarmContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.scheduleImageIcon = [self addAndGetImage:@"editSchedule"  inView:self.alarmContainer];
+        self.scheduleImageIcon = [self addAndGetImage:@"later"  inView:self.alarmContainer];
         self.alarmLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X, self.alarmContainer.frame.size.height)];
         self.alarmLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.alarmLabel.backgroundColor = CLEAR;

@@ -76,7 +76,7 @@
     completeDesignButton.layer.cornerRadius = buttonWidth/2;
     completeDesignButton.layer.borderColor = tcolorF(TextColor, ThemeDark).CGColor;
     completeDesignButton.layer.borderWidth = 1;
-    [completeDesignButton setTitle:@"widgetDone" forState:UIControlStateNormal];
+    [completeDesignButton setTitle:iconString(@"widgetDone") forState:UIControlStateNormal];
     [completeDesignButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];//tcolor(DoneColor)
     completeDesignButton.titleLabel.font = [UIFont fontWithName:@"swipes" size:8];
     CGRectSetCenter(completeDesignButton, titleX/2+xButtonHack, self.frame.size.height/2+yButtonHack);
@@ -85,7 +85,7 @@
     
     
     UIButton *completeButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0,  titleX, self.frame.size.height)];
-    [completeButton setTitle:@"checkmarkThick" forState:UIControlStateNormal];
+    [completeButton setTitle:iconString(@"checkmarkThick") forState:UIControlStateNormal];
     [completeButton addTarget:self action:@selector(pressedComplete:) forControlEvents:UIControlEventTouchUpInside];
     //[completeButton addTarget:self action:@selector(touchedComplete:) forControlEvents:UIControlEventTouchDown|UIControlEventTouchDragEnter];
     //[completeButton addTarget:self action:@selector(cancelledComplete:) forControlEvents:UIControlEventTouchCancel|UIControlEventTouchDragExit];

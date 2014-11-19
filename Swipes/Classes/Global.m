@@ -49,9 +49,6 @@ static Global *sharedObject;
     iconCompare(@"today",                       @"\ue603");
     iconCompare(@"later",                       @"\ue604");
     iconCompare(@"settingsFull",                @"\ue605");
-    iconCompare(@"doneFull",                    @"\ue606");
-    iconCompare(@"todayFull",                   @"\ue607");
-    iconCompare(@"laterFull",                   @"\ue608");
     
     /* Edit mode */
     iconCompare(@"editNotes",                   @"\ue609");
@@ -158,8 +155,6 @@ static Global *sharedObject;
     
     iconCompare(@"logo",                        @"\ue600");
     iconCompare(@"signature",                   @"\ue623");
-    iconCompare(@"trompet",                     @"\ue627");
-    iconCompare(@"pickerWheel",                 @"\ue659");
     return iconString;
 }
 +(NSDateFormatter *)isoDateFormatter{
