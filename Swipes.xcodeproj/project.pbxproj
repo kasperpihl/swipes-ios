@@ -2936,8 +2936,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
@@ -3008,9 +3008,9 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "d6eff45a-4d62-4304-9cf2-37ff23c37e9a";
+				"PROVISIONING_PROFILE[sdk=*]" = "d6eff45a-4d62-4304-9cf2-37ff23c37e9a";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "d6eff45a-4d62-4304-9cf2-37ff23c37e9a";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3094,7 +3094,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3156,8 +3156,8 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "21cf9224-14e3-47bd-98d7-82f5e3137b22";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "21cf9224-14e3-47bd-98d7-82f5e3137b22";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3170,8 +3170,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
@@ -3238,8 +3238,8 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "7f77d205-e45d-4da3-be40-e15436cb71e4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7f77d205-e45d-4da3-be40-e15436cb71e4";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3384,7 +3384,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "94d0090f-ac2e-496a-85f2-b12c2b4ff390";
+				PROVISIONING_PROFILE = "4d262556-fe11-4f34-905f-b15b13f003b2";
 				SKIP_INSTALL = YES;
 			};
 			name = AdHoc;
