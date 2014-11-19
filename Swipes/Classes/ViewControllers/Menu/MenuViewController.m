@@ -189,7 +189,7 @@
 - (void)swipeHandler:(UISwipeGestureRecognizer *)recognizer
 {
     if (recognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
-        [self pressedBack:nil];
+        //[self pressedBack:nil];
     }
 }
 
