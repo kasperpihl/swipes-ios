@@ -104,6 +104,7 @@ typedef enum {
 #pragma mark - KPTagDataSource
 -(NSArray *)selectedTagsForTagList:(KPTagList *)tagList{
 
+    NSLog(@"selected tags");
     NSArray *selectedTags;
     
     if(self.isEditingTags)
@@ -153,7 +154,9 @@ typedef enum {
     AddPanelView *addPanel = [[AddPanelView alloc] initWithFrame:self.view.bounds];
     addPanel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     addPanel.addDelegate = self;
-    addPanel.tags = [KPTag allTagsAsStrings];
+    [addPanel setTags:[KPTag allTagsAsStrings] selected:[kFilter.selectedTags copy]];
+    
+    
     BLURRY.showPosition = PositionBottom;
     BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark), 0.3);
     [BLURRY showView:addPanel inViewController:self];

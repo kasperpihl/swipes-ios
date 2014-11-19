@@ -68,9 +68,12 @@
 }
 -(void)setTags:(NSArray *)tags{
     _tags = tags;
-    [self.tagList setTags:tags andSelectedTags:nil];
+    [self setTags:tags selected:nil];
+}
+-(void)setTags:(NSArray *)tags selected:(NSArray *)selected{
+    [self.tagList setTags:tags andSelectedTags:selected];
     self.scrollView.contentSize = CGSizeMake(self.tagList.frame.size.width, self.tagList.frame.size.height);
-
+    
     CGRectSetY(self.scrollView, -self.scrollView.frame.size.height);
 }
 -(void)addView:(KPAddView *)addView enteredTrimmedText:(NSString *)trimmedText{

@@ -20,5 +20,5 @@
 
 @property (nonatomic,weak) id<AddPanelDelegate> addDelegate;
 @property (nonatomic, strong) NSArray *tags;
-
+-(void)setTags:(NSArray *)tags selected:(NSArray*)selected;
 @end
