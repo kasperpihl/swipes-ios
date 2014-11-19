@@ -188,7 +188,7 @@ typedef enum {
         case KPScheduleButtonThisEvening:{
             NSNumber *eveningStartTime = (NSNumber*)[kSettings valueForSetting:SettingEveningStartTime];
             NSInteger hours = eveningStartTime.integerValue/D_HOUR;
-            NSInteger minutes = eveningStartTime.integerValue % D_HOUR;
+            NSInteger minutes = (eveningStartTime.integerValue % D_HOUR) / D_MINUTE;
             date = [NSDate dateThisOrTheNextDayWithHours:hours minutes:minutes];
             break;
         }
@@ -212,7 +212,7 @@ typedef enum {
             NSNumber *thisWeekend = (NSNumber*)[kSettings valueForSetting:SettingWeekendStart];
             NSNumber *weekendStartTime = (NSNumber*)[kSettings valueForSetting:SettingWeekendStartTime];
             NSInteger hours = weekendStartTime.integerValue/D_HOUR;
-            NSInteger minutes = weekendStartTime.integerValue % D_HOUR;
+            NSInteger minutes = (weekendStartTime.integerValue % D_HOUR) / D_MINUTE;
             date = [NSDate dateThisOrNextWeekWithDay:thisWeekend.integerValue hours:hours minutes:minutes];
             break;
         }
@@ -220,7 +220,7 @@ typedef enum {
             NSNumber *nextWeek = (NSNumber*)[kSettings valueForSetting:SettingWeekStart];
             NSNumber *weekStartTime = (NSNumber*)[kSettings valueForSetting:SettingWeekStartTime];
             NSInteger hours = weekStartTime.integerValue/D_HOUR;
-            NSInteger minutes = weekStartTime.integerValue % D_HOUR;
+            NSInteger minutes = (weekStartTime.integerValue % D_HOUR) / D_MINUTE;
             date = [NSDate dateThisOrNextWeekWithDay:nextWeek.integerValue hours:hours minutes:minutes];
             break;
         }
@@ -728,7 +728,7 @@ typedef enum {
         [contentView addSubview:laterTodayButton];
         NSNumber *eveningStartTime = (NSNumber*)[kSettings valueForSetting:SettingEveningStartTime];
         NSInteger hours = eveningStartTime.integerValue/D_HOUR;
-        NSInteger minutes = eveningStartTime.integerValue % D_HOUR;
+        NSInteger minutes = (eveningStartTime.integerValue % D_HOUR) / D_MINUTE;
         NSDate *thisEveningTime = [[NSDate date] dateAtHours:hours minutes:minutes];
         NSString *thisEveText = ([[NSDate date] isLaterThanDate:thisEveningTime]) ? @"Tomorrow Eve" : @"This Evening";
         UIButton *thisEveningButton = [self buttonForScheduleButton:KPScheduleButtonThisEvening title:thisEveText];
