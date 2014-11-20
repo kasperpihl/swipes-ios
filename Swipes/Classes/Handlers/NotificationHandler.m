@@ -308,7 +308,6 @@ static NotificationHandler *sharedObject;
             }
             else {
                 title = [NSString stringWithFormat:@"You have %li new tasks.",(long)numberOfNotificationsForDate];
-                
             }
             UILocalNotification *notification = [self notificationForDate:toDo.schedule badgeCounter:totalBadgeCount title:title userInfo:userInfo];
             if(OSVER >= 8){

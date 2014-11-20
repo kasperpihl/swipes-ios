@@ -25,6 +25,7 @@
 		51309AE023584D4FA13F00A9 /* libPods-Swipes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB2A69EAA2C418DA2E0283E /* libPods-Swipes.a */; };
 		789C9AAD8BA447088AAD221A /* libPods-SwipesKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 368054CA6302490B9AFBAEFE /* libPods-SwipesKit.a */; };
 		81A0C94F1F16434CAE0AA041 /* libPods-SwipesToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A3901B41E5E94AAE9A1FED2F /* libPods-SwipesToday.a */; };
+		A701BD2E1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A701BD2D1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png */; };
 		A703B1631838EB0E0047DCC9 /* UIButton+PassTouch.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1621838EB0E0047DCC9 /* UIButton+PassTouch.m */; };
 		A703B1A81838EBF20047DCC9 /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1671838EBF20047DCC9 /* AddPanelView.m */; };
 		A703B1A91838EBF20047DCC9 /* KPAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B16A1838EBF20047DCC9 /* KPAlert.m */; };
@@ -513,6 +514,7 @@
 		6E45E45BF7F32F791A91F78A /* Pods-SwipesKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.release.xcconfig"; sourceTree = "<group>"; };
 		8A10ECBCD0054ECEBA611D47 /* Pods-SwipesKit.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A3901B41E5E94AAE9A1FED2F /* libPods-SwipesToday.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwipesToday.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A701BD2D1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-logo-app@2x.png"; sourceTree = "<group>"; };
 		A703B1611838EB0E0047DCC9 /* UIButton+PassTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+PassTouch.h"; sourceTree = "<group>"; };
 		A703B1621838EB0E0047DCC9 /* UIButton+PassTouch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+PassTouch.m"; sourceTree = "<group>"; };
 		A703B1661838EBF20047DCC9 /* AddPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPanelView.h; sourceTree = "<group>"; };
@@ -1291,6 +1293,7 @@
 		A74FB85D18FFBC4D00F25157 /* launch-screen */ = {
 			isa = PBXGroup;
 			children = (
+				A701BD2D1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png */,
 				A74FB8EA18FFBCB200F25157 /* MASTER_0000.jpg */,
 			);
 			path = "launch-screen";
@@ -2397,6 +2400,7 @@
 				A7C90E6B17A6ABF700C5F9E2 /* wt_schedule_popup@2x.png in Resources */,
 				DACD544818A1ACFC00C378DF /* folder_public.png in Resources */,
 				A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */,
+				A701BD2E1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png in Resources */,
 				DACD545918A1ACFC00C378DF /* page_white_h.png in Resources */,
 				DA6B61C319E321FE00089877 /* Localizable.strings in Resources */,
 				A717DD2118B6775B00EE359C /* NexaHeavy.ttf in Resources */,

@@ -8,20 +8,24 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+            <rect key="frame" x="0.0" y="0.0" width="504" height="461"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="MASTER_0000.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="FGl-KI-8In">
-                    <rect key="frame" x="-143" y="-219" width="640" height="1136"/>
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="swipes-logo-app.png" translatesAutoresizingMaskIntoConstraints="NO" id="gpX-9s-LRn">
+                    <rect key="frame" x="115" y="178.5" width="90" height="122"/>
                 </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="centerX" secondItem="gpX-9s-LRn" secondAttribute="centerX" id="7UR-gh-jWJ"/>
+                <constraint firstAttribute="centerY" secondItem="gpX-9s-LRn" secondAttribute="centerY" id="fLN-sq-i5x"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="404" y="445"/>
+            <point key="canvasLocation" x="695" y="405.5"/>
         </view>
     </objects>
     <resources>
-        <image name="MASTER_0000.jpg" width="640" height="1136"/>
+        <image name="swipes-logo-app.png" width="90" height="122"/>
     </resources>
 </document>
