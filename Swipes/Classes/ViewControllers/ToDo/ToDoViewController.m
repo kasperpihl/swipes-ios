@@ -576,7 +576,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     NSInteger numberOfSubtasks = [self.model getSubtasks].count;
     self.sectionHeader.progress = (numberOfSubtasks > 0);
     if(numberOfSubtasks > 0){
-        CGRectSetHeight(self.sectionHeader, 5);
+        CGRectSetHeight(self.sectionHeader, 6);
         NSPredicate *completedPredicate = [NSPredicate predicateWithFormat:@"completionDate != nil"];
         NSInteger numberOfCompletedSubtasks = [[self.model getSubtasks] filteredSetUsingPredicate:completedPredicate].count;
         CGFloat percentage = (CGFloat)numberOfCompletedSubtasks / numberOfSubtasks;
@@ -588,7 +588,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
     else{
         [self.sectionHeader setTitle:[[self.model readableTitleForStatus] uppercaseString]];
-        CGRectSetHeight(self.sectionHeader, 1);
+        CGRectSetHeight(self.sectionHeader, 1.5);
     }
 }
 
