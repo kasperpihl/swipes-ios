@@ -9,13 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "AKSegmentedControl.h"
 #import "KPFilter.h"
-
+typedef enum {
+    TopMenuDefault,
+    TopMenuSelect,
+    TopMenuFilter,
+    TopMenuSearch
+} TopMenuState;
 @class ToDoListViewController, KPToDo;
 
 @interface KPSegmentedViewController : UIViewController
 @property (nonatomic, readonly, strong) AKSegmentedControl *segmentedControl;
 @property (nonatomic, assign) KPControlCurrentState currentState;
 @property (nonatomic, assign) BOOL lock;
+@property (nonatomic) TopMenuState currentTopMenu;
 @property (nonatomic, assign) NSUInteger currentIndex;
 @property (nonatomic, readonly) NSUInteger totalViewControllers;
 
@@ -30,5 +36,6 @@
 
 -(void)tagItems:(NSArray *)items inViewController:(UIViewController*)viewController withDismissAction:(voidBlock)block;
 -(void)deleteNumberOfItems:(NSInteger)numberOfItems inView:(UIViewController*)viewController completion:(SuccessfulBlock)block;
+-(void)setCurrentTopMenu:(TopMenuState)currentTopMenu animated:(BOOL)animated;
 
 @end

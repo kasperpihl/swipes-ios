@@ -365,8 +365,7 @@
 - (void)swipeTableViewCell:(ToDoCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
-#warning resign search top menu
-    //[self.searchBar resignSearchField];
+    [self.parent setCurrentTopMenu:TopMenuDefault animated:YES];
     if(self.selectedRows.count > 0){
         if(indexPath && ![self.selectedRows containsObject:indexPath]){
             [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
@@ -573,21 +572,7 @@
     
     tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     tableView.contentInset = UIEdgeInsetsMake(0, 0, GLOBAL_TOOLBAR_HEIGHT, 0);
-    /*
-     UIView *headerView = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, SEARCH_BAR_DEFAULT_HEIGHT)];
-     
-     headerView.hidden = YES;
-     //headerView.backgroundColor = [UIColor redColor];
-     tableView.tableHeaderView = headerView;
-     KPSearchBar *searchBar = [[KPSearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, SEARCH_BAR_DEFAULT_HEIGHT)];
-    searchBar.searchBarDelegate = self;
-    searchBar.backgroundColor = CLEAR;
-    searchBar.searchBarDataSource = self.itemHandler;
-    searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    //searchBar.backgroundColor = CLEAR;
-    searchBar.tag = SEARCH_BAR_TAG;
-    [tableView addSubview:searchBar];
-    self.searchBar = (KPSearchBar*)[tableView viewWithTag:SEARCH_BAR_TAG];*/
+    
     tableView.contentOffset = CGPointMake(0, CGRectGetHeight(tableView.tableHeaderView.bounds));
 }
 

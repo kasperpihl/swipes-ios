@@ -54,12 +54,7 @@
 #define CONTROL_VIEW_X (self.view.frame.size.width/2)-(ADD_BUTTON_SIZE/2)
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
-typedef enum {
-    TopMenuDefault,
-    TopMenuSelect,
-    TopMenuFilter,
-    TopMenuSearch
-} TopMenuState;
+
 @interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,KPTagListDataSource ,SelectionTopMenuDelegate,SearchTopMenuDelegate,FilterTopMenuDelegate,TopMenuDelegate,KPTagListAddDelegate>
 
 @property (nonatomic, strong) NSMutableArray *viewControllers;
@@ -75,7 +70,6 @@ typedef enum {
 @property (nonatomic, assign) BOOL hidden;
 @property (nonatomic, strong) NSArray *selectedItems;
 @property (nonatomic) TopMenu *topOverlay;
-@property (nonatomic) TopMenuState currentTopMenu;
 @property (nonatomic) BOOL isEditingTags;
 @end
 
@@ -422,6 +416,9 @@ typedef enum {
 }
 -(void)setCurrentTopMenu:(TopMenuState)currentTopMenu{
     [self setTopMenu:nil state:currentTopMenu animated:NO];
+}
+-(void)setCurrentTopMenu:(TopMenuState)currentTopMenu animated:(BOOL)animated{
+    [self setTopMenu:nil state:currentTopMenu animated:animated];
 }
 -(void)setTopMenu:(TopMenu*)overlay state:(TopMenuState)topMenuState animated:(BOOL)animated{
     if(topMenuState != _currentTopMenu){
