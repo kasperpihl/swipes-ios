@@ -472,9 +472,13 @@ typedef enum {
 }
 
 -(void)openTimePickerWithButton:(KPScheduleButtons)button andDate:(NSDate*)date{
-    if(self.timePicker) return;
+    if(self.timePicker){
+        NSLog(@"already had a timepicker);");
+        return;
+    }
     self.activeButton = button;
     self.didUseTimePicker = YES;
+    NSLog(@"bounds: %f, %f",self.bounds.size.width,self.bounds.size.height);
     self.timePicker = [[KPTimePicker alloc] initWithFrame:self.bounds];
     self.timePicker.delegate = self;
     self.timePicker.pickingDate = date;
@@ -692,6 +696,7 @@ typedef enum {
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         //self.backgroundColor = tcolor(LaterColor);
         UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [closeButton addTarget:self action:@selector(cancelled) forControlEvents:UIControlEventTouchUpInside];
@@ -700,7 +705,7 @@ typedef enum {
         [self addSubview:closeButton];
         
         UILabel *helpLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 20)];
-        helpLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        helpLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
         helpLabel.backgroundColor = CLEAR;
         helpLabel.textColor = alpha(tcolorF(SubTextColor,ThemeLight),0.8);
         helpLabel.textAlignment = NSTextAlignmentCenter;
@@ -712,6 +717,7 @@ typedef enum {
         
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH)];
         contentView.autoresizesSubviews = YES;
+        contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
         contentView.center = self.center;
         
         contentView.backgroundColor = retColor(tcolor(BackgroundColor), gray(248,1));
@@ -779,6 +785,11 @@ typedef enum {
         
     }
     return self;
+}
+
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    [self positionHelpLabelForHeight:self.contentView.frame.size.height];
 }
 
 -(void)dealloc{

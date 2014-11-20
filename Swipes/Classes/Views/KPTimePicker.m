@@ -11,7 +11,7 @@
 #define kSunImageDistance valForScreen(160, 100)
 #define kLabelSpacing valForScreen(0,0)
 #define kClockLabelY valForScreen(0,0)
-#define kClockLabelFont [UIFont fontWithName:@"BebasNeue" size:valForIpad(75,valForScreen(55,65))]
+#define kClockLabelFont [UIFont fontWithName:@"BebasNeue" size:valForScreen(65,75)]
 #define kDayLabelFont KP_SEMIBOLD(valForIpad(25,valForScreen(14,16)))
 #define kDefMiddleButtonRadius 60
 #define kDefActualSize valForScreen(85,93)
@@ -26,17 +26,7 @@
 #define kDefLightColor          retColor(tcolor(BackgroundColor),gray(255,1)) //tcolor(BackgroundColor) //retColor(gray(30,1),gray(230,1))
 #define kDefDarkColor           retColor(tcolor(BackgroundColor),gray(255,1)) //gray(255,1) //tcolor(BackgroundColor)
 
-#define kEndAngle               (360-(90-kOpenedSunAngle/2) + kExtraAngleForIcons)
-#define kStartAngle             (kEndAngle- kOpenedSunAngle - 2*kExtraAngleForIcons)
 
-#define kAngleSpan              (kEndAngle-kStartAngle)
-#define kSunRiseMinutes         5*60
-#define kSunSetMinutes          19*60
-#define kSunSpan                (kSunSetMinutes - kSunRiseMinutes)
-#define kMoonRiseMinutes        17*60
-#define kMoonRiseSpan           (kMinutesInDay - kMoonRiseMinutes)
-#define kMoonSetMinutes         7*60
-#define kMoonSetSpan            (kMoonSetMinutes)
 #define kGlowShowHack           0.4
 #define kGlowMiddleShowHack     0.12
 #define kBackButtonSize         52
@@ -230,8 +220,9 @@
     if (self) {
         self.hideIcons = YES;
         self.autoresizesSubviews = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+        self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"timepickerwheel"]];
         
-        self.centerPoint = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/3*2);
+        self.centerPoint = CGPointMake(self.bounds.size.width/2, self.bounds.size.height-self.timeSlider.frame.size.height/2-30);
         self.lightColor = kDefLightColor;
         self.darkColor = kDefDarkColor;
         
@@ -255,7 +246,7 @@
         [self addSubview:self.confirmButton];
         
         
-        self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"timepickerwheel"]];
+        
         [self.timeSlider setHighlightedImage:[UIImage imageNamed:@"timepickerwheelselected"]];
         self.timeSlider.center = self.centerPoint;
         [self addSubview:self.timeSlider];
@@ -303,7 +294,13 @@
     CGFloat heightForDay = sizeWithFont(@"abcdefghADB",self.dayLabel.font).height;
     CGFloat heightForTime = sizeWithFont(@"08:00pm",self.clockLabel.font).height;
     
-    CGFloat startY = 40;
+    CGFloat totalHeightForLabels= heightForDay + kLabelSpacing + heightForTime;
+    
+    CGFloat imageStartY = (self.centerPoint.y - self.timeSlider.image.size.height/2);
+    
+    CGFloat spacing = (imageStartY - 20 - totalHeightForLabels)/2;
+    
+    CGFloat startY = imageStartY-totalHeightForLabels-MIN(spacing,100);
     self.dayLabel.frame = CGRectMake(0, startY, self.bounds.size.width, heightForDay);
     self.clockLabel.frame = CGRectMake(0, startY+heightForDay+kLabelSpacing, self.bounds.size.width, heightForTime);
     
