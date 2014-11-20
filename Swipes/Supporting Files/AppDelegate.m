@@ -125,33 +125,33 @@
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
+    if(OSVER >= 8){
     
-    
-    UIMutableUserNotificationAction *snoozeAction= [[UIMutableUserNotificationAction alloc] init];
-    snoozeAction.identifier = @"Later"; // The id passed when the user selects the action
-    snoozeAction.title = NSLocalizedString(@"Later",nil); // The title displayed for the action
-    snoozeAction.activationMode = UIUserNotificationActivationModeBackground; // Choose whether the application is launched in foreground when the action is clicked
-    snoozeAction.destructive = NO; // If YES, then the action is red
-    snoozeAction.authenticationRequired = NO; // Whether the user must authenticate to execute the action
-    
-    UIMutableUserNotificationAction *completeAction= [[UIMutableUserNotificationAction alloc] init];
-    completeAction.identifier = @"Complete"; // The id passed when the user selects the action
-    completeAction.title = NSLocalizedString(@"Complete",nil); // The title displayed for the action
-    completeAction.activationMode = UIUserNotificationActivationModeBackground; // Choose whether the application is launched in foreground when the action is clicked
-    completeAction.destructive = NO; // If YES, then the action is red
-    completeAction.authenticationRequired = NO; // Whether the user must authenticate to execute the action
-    
-    
-    UIMutableUserNotificationCategory *category= [[UIMutableUserNotificationCategory alloc] init];
-    category.identifier = @"TASKCATEGORY"; // Identifier passed in the payload
-    [category setActions:@[completeAction,snoozeAction] forContext:UIUserNotificationActionContextDefault]; // The context determines the number of actions presented (see documentation)
-    
-    NSSet *categories = [NSSet setWithObjects:category,nil];
-    NSUInteger types = UIUserNotificationTypeNone|UIUserNotificationTypeBadge|UIUserNotificationTypeAlert; // Add badge, sound, or alerts here
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    
-    
+        UIMutableUserNotificationAction *snoozeAction= [[UIMutableUserNotificationAction alloc] init];
+        snoozeAction.identifier = @"Later"; // The id passed when the user selects the action
+        snoozeAction.title = NSLocalizedString(@"Later",nil); // The title displayed for the action
+        snoozeAction.activationMode = UIUserNotificationActivationModeBackground; // Choose whether the application is launched in foreground when the action is clicked
+        snoozeAction.destructive = NO; // If YES, then the action is red
+        snoozeAction.authenticationRequired = NO; // Whether the user must authenticate to execute the action
+        
+        UIMutableUserNotificationAction *completeAction= [[UIMutableUserNotificationAction alloc] init];
+        completeAction.identifier = @"Complete"; // The id passed when the user selects the action
+        completeAction.title = NSLocalizedString(@"Complete",nil); // The title displayed for the action
+        completeAction.activationMode = UIUserNotificationActivationModeBackground; // Choose whether the application is launched in foreground when the action is clicked
+        completeAction.destructive = NO; // If YES, then the action is red
+        completeAction.authenticationRequired = NO; // Whether the user must authenticate to execute the action
+        
+        
+        UIMutableUserNotificationCategory *category= [[UIMutableUserNotificationCategory alloc] init];
+        category.identifier = @"TASKCATEGORY"; // Identifier passed in the payload
+        [category setActions:@[completeAction,snoozeAction] forContext:UIUserNotificationActionContextDefault]; // The context determines the number of actions presented (see documentation)
+        
+        NSSet *categories = [NSSet setWithObjects:category,nil];
+        NSUInteger types = UIUserNotificationTypeNone|UIUserNotificationTypeBadge|UIUserNotificationTypeAlert; // Add badge, sound, or alerts here
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+        
+    }
     
     return YES;
 }
@@ -205,15 +205,22 @@
 }
 -(void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler{
     if([notification.category isEqualToString:@"TASKCATEGORY"]){
-        NSString *taskIdentifier = [notification.userInfo objectForKey:@"identifier"];
-        KPToDo *toDo = [KPToDo MR_findFirstByAttribute:@"tempId" withValue:taskIdentifier];
-        if([identifier isEqualToString:@"Later"]){
-            NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
-            NSDate *date = [[[NSDate date] dateByAddingTimeInterval:laterToday.integerValue] dateToNearest15Minutes];
-            [KPToDo scheduleToDos:@[toDo] forDate:date save:YES];
+        NSArray *taskIdentifiers = [notification.userInfo objectForKey:@"identifiers"];
+        NSArray *toDos;
+        if(taskIdentifiers && taskIdentifiers.count > 0){
+            NSPredicate *taskByTempIdPredicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"tempId",taskIdentifiers];
+            toDos = [KPToDo MR_findAllWithPredicate:taskByTempIdPredicate];
         }
-        if([identifier isEqualToString:@"Complete"]){
-            [KPToDo completeToDos:@[toDo] save:YES context:nil analytics:NO];
+        
+        if(toDos && toDos.count > 0){
+            if([identifier isEqualToString:@"Later"]){
+                NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
+                NSDate *date = [[[NSDate date] dateByAddingTimeInterval:laterToday.integerValue] dateToNearest15Minutes];
+                [KPToDo scheduleToDos:toDos forDate:date save:YES];
+            }
+            if([identifier isEqualToString:@"Complete"]){
+                [KPToDo completeToDos:toDos save:YES context:nil analytics:NO];
+            }
         }
     }
     

@@ -276,61 +276,56 @@ static NotificationHandler *sharedObject;
     NSArray *scheduleArray = [KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:schedulePredicate];
     NSInteger scheduleCount = scheduleArray.count;
     NSInteger totalBadgeCount = todayCount;
-    NSInteger numberOfDates = 0;
-    NSDate *currentDate;
+    NSInteger numberOfScheduledNotificiations = 0;
     NSInteger numberOfNotificationsForDate = 0;
-    KPToDo *lastTodo;
+    NSMutableArray *identifierArray = [NSMutableArray array];
     NSMutableArray *notificationsArray = [NSMutableArray array];
     for (NSInteger i = 0 ; i < scheduleCount ; i++) {
         if(i == 35)
             break;
         KPToDo *toDo = [scheduleArray objectAtIndex:i];
-        
+        [identifierArray addObject:[toDo getTempId]];
         BOOL isLastObject = (i == MIN(scheduleCount-1,34));
-        if (!currentDate)
-            currentDate = toDo.schedule;
-
-        NSInteger numberOfNotificationsToAdd = [toDo.schedule isEqualToDate:currentDate] ? 0 : 1;
-        if (isLastObject)
-            numberOfNotificationsToAdd++;
         
-        while (numberOfNotificationsToAdd > 0){
-            if(numberOfNotificationsToAdd == 1 && isLastObject){
-                currentDate = toDo.schedule;
-                totalBadgeCount++;
-                numberOfNotificationsForDate++;
-                lastTodo = toDo;
-            }
-            NSString *title;
-            NSDictionary *userInfo;
-            if (numberOfNotificationsForDate == 1) {
-                title = lastTodo.title;
-                userInfo = @{@"type": @"schedule",@"identifier": [lastTodo tempId]};
-            }
-            else {
-                title = [NSString stringWithFormat:@"You have %li new tasks.",(long)numberOfNotificationsForDate];
-                userInfo = @{@"type": @"schedule"};
-            }
-            UILocalNotification *notification = [self notificationForDate:currentDate badgeCounter:totalBadgeCount title:title userInfo:userInfo];
-            notification.category = @"TASKCATEGORY";
-            [notificationsArray addObject:notification];
-            currentDate = toDo.schedule;
-            
-            
-            
-            
-            numberOfNotificationsForDate = 0;
-            numberOfDates++;
-            numberOfNotificationsToAdd--;
+        BOOL isNextRelated = NO;
+        if(!isLastObject){
+            KPToDo *nextToDo = [scheduleArray objectAtIndex:MIN(i+1,scheduleCount)];
+            if([nextToDo.schedule isEqualToDate:[toDo schedule]])
+                isNextRelated = YES;
         }
-        
-        if(numberOfDates > kMaxNotifications)
-            break;
         
         totalBadgeCount++;
         numberOfNotificationsForDate++;
+
+
+        if (!isNextRelated){
+            
+            NSString *title;
+            NSDictionary *userInfo = @{@"type": @"schedule",@"identifiers":identifierArray};
+            if (numberOfNotificationsForDate == 1) {
+                title = toDo.title;
+                //userInfo = @{@"type": @"schedule",@"identifier": [lastTodo getTempId]};
+            }
+            else {
+                title = [NSString stringWithFormat:@"You have %li new tasks.",(long)numberOfNotificationsForDate];
+                
+            }
+            UILocalNotification *notification = [self notificationForDate:toDo.schedule badgeCounter:totalBadgeCount title:title userInfo:userInfo];
+            if(OSVER >= 8){
+                notification.category = @"TASKCATEGORY";
+            }
+            [notificationsArray addObject:notification];
+            
+            
+            [identifierArray removeAllObjects];
+            numberOfNotificationsForDate = 0;
+            numberOfScheduledNotificiations++;
+        }
         
-        lastTodo = toDo;
+        if(numberOfScheduledNotificiations > kMaxNotifications)
+            break;
+        
+        
     }
     [app cancelAllLocalNotifications];
     [self scheduleNotifications:notificationsArray];
@@ -368,7 +363,6 @@ static NotificationHandler *sharedObject;
 {
     NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
-    NSLog(@"got location :%@",arrGeofenceList);
     for (KLGeofence *fence in arrGeofenceList) {
         
         NSString *identifier = [[fence getIDUser] stringByAppendingString:kLocationSplitStr];
