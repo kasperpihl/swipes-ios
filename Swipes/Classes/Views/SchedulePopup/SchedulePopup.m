@@ -181,8 +181,10 @@ typedef enum {
     NSDate *date;
     switch (button) {
         case KPScheduleButtonLaterToday:{
+            
             NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
             date = [[[NSDate date] dateByAddingTimeInterval:laterToday.integerValue] dateToNearest15Minutes];
+            date = [[NSDate date] dateByAddingTimeInterval:5];
             break;
         }
         case KPScheduleButtonThisEvening:{

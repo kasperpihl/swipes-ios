@@ -18,7 +18,7 @@
 #import "UtilityClass.h"
 #import "LocalyticsSession.h"
 #import "LocalyticsAmpSession.h"
-
+#import "KPToDo.h"
 #import "RMStore.h"
 #import "NotificationHandler.h"
 
@@ -32,7 +32,7 @@
 #import "UIWindow+DHCShakeRecognizer.h"
 
 #import <Leanplum/Leanplum.h>
-
+#import "SettingsHandler.h"
 #import "RootViewController.h"
 #import "KPTopClock.h"
 #import "AppDelegate.h"
@@ -123,29 +123,36 @@
                             consumerSecret:CONSUMER_SECRET
                               optionalHost:nil];
     
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
-    /** NOTIFICATION ACTIONS
-    UIMutableUserNotificationAction *action= [[UIMutableUserNotificationAction alloc] init];
-    action.identifier = @"Snooze"; // The id passed when the user selects the action
-    action.title = NSLocalizedString(@"Snooze",nil); // The title displayed for the action
-    action.activationMode = UIUserNotificationActivationModeBackground; // Choose whether the application is launched in foreground when the action is clicked
-    action.destructive = NO; // If YES, then the action is red
-    action.authenticationRequired = NO; // Whether the user must authenticate to execute the action
+    
+    
+    UIMutableUserNotificationAction *snoozeAction= [[UIMutableUserNotificationAction alloc] init];
+    snoozeAction.identifier = @"Later"; // The id passed when the user selects the action
+    snoozeAction.title = NSLocalizedString(@"Later",nil); // The title displayed for the action
+    snoozeAction.activationMode = UIUserNotificationActivationModeBackground; // Choose whether the application is launched in foreground when the action is clicked
+    snoozeAction.destructive = NO; // If YES, then the action is red
+    snoozeAction.authenticationRequired = NO; // Whether the user must authenticate to execute the action
+    
+    UIMutableUserNotificationAction *completeAction= [[UIMutableUserNotificationAction alloc] init];
+    completeAction.identifier = @"Complete"; // The id passed when the user selects the action
+    completeAction.title = NSLocalizedString(@"Complete",nil); // The title displayed for the action
+    completeAction.activationMode = UIUserNotificationActivationModeBackground; // Choose whether the application is launched in foreground when the action is clicked
+    completeAction.destructive = NO; // If YES, then the action is red
+    completeAction.authenticationRequired = NO; // Whether the user must authenticate to execute the action
+    
     
     UIMutableUserNotificationCategory *category= [[UIMutableUserNotificationCategory alloc] init];
-    category.identifier = @"CATEGORY_ID"; // Identifier passed in the payload
-    [category setActions:@[action] forContext:UIUserNotificationActionContextDefault]; // The context determines the number of actions presented (see documentation)
+    category.identifier = @"TASKCATEGORY"; // Identifier passed in the payload
+    [category setActions:@[completeAction,snoozeAction] forContext:UIUserNotificationActionContextDefault]; // The context determines the number of actions presented (see documentation)
     
     NSSet *categories = [NSSet setWithObjects:category,nil];
     NSUInteger types = UIUserNotificationTypeNone|UIUserNotificationTypeBadge|UIUserNotificationTypeAlert; // Add badge, sound, or alerts here
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    */
     
-    //DLog(@"%lu",(long)[NSTimeZone localTimeZone].secondsFromGMT);
-    //DLog(@"Machine type: %@", [GlobalApp machineType]);
-    //DLog(@"Device id: %@", [GlobalApp deviceId]);
-    NSLog(@"%@",[UIFont fontNamesForFamilyName:@"Gotham Rounded"]);
+    
+    
     return YES;
 }
 
@@ -197,7 +204,18 @@
     }
 }
 -(void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler{
-
+    if([notification.category isEqualToString:@"TASKCATEGORY"]){
+        NSString *taskIdentifier = [notification.userInfo objectForKey:@"identifier"];
+        KPToDo *toDo = [KPToDo MR_findFirstByAttribute:@"tempId" withValue:taskIdentifier];
+        if([identifier isEqualToString:@"Later"]){
+            NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
+            NSDate *date = [[[NSDate date] dateByAddingTimeInterval:laterToday.integerValue] dateToNearest15Minutes];
+            [KPToDo scheduleToDos:@[toDo] forDate:date save:YES];
+        }
+        if([identifier isEqualToString:@"Complete"]){
+            [KPToDo completeToDos:@[toDo] save:YES context:nil analytics:NO];
+        }
+    }
     
 }
 

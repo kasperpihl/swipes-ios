@@ -305,13 +305,14 @@ static NotificationHandler *sharedObject;
             NSDictionary *userInfo;
             if (numberOfNotificationsForDate == 1) {
                 title = lastTodo.title;
-                userInfo = @{@"type": @"schedule",@"identifier": [[[lastTodo objectID] URIRepresentation] absoluteString]};
+                userInfo = @{@"type": @"schedule",@"identifier": [lastTodo tempId]};
             }
             else {
                 title = [NSString stringWithFormat:@"You have %li new tasks.",(long)numberOfNotificationsForDate];
                 userInfo = @{@"type": @"schedule"};
             }
             UILocalNotification *notification = [self notificationForDate:currentDate badgeCounter:totalBadgeCount title:title userInfo:userInfo];
+            notification.category = @"TASKCATEGORY";
             [notificationsArray addObject:notification];
             currentDate = toDo.schedule;
             
@@ -374,7 +375,7 @@ static NotificationHandler *sharedObject;
         NSPredicate *taskPredicate = [NSPredicate predicateWithFormat:@"ANY location BEGINSWITH[c] %@",identifier];
         KPToDo *toDo = [KPToDo MR_findFirstWithPredicate:taskPredicate];
         if(toDo){
-            NSDictionary *userInfo = @{@"type": @"location",@"identifier": [[[toDo objectID] URIRepresentation] absoluteString]};
+            NSDictionary *userInfo = @{@"type": @"location",@"identifier": [toDo tempId]};
             NSDate *fireDate = [NSDate dateWithTimeIntervalSinceNow:3];
             UILocalNotification *notification = [self notificationForDate:fireDate badgeCounter:++todayCount title:toDo.title userInfo:userInfo];
             toDo.schedule = fireDate;
