@@ -87,6 +87,13 @@ typedef enum {
     if(!_scheduleButtons) _scheduleButtons = [NSMutableArray array];
     return _scheduleButtons;
 }
+-(void)setCalendarDate:(NSDate *)calendarDate{
+    _calendarDate = calendarDate;
+    if(calendarDate && [calendarDate isInFuture])
+        [self.calendarView selectDate:calendarDate makeVisible:YES];
+    else
+        [self.calendarView selectDate:[NSDate date] makeVisible:YES];
+}
 -(void)setStartingTimeForDate:(NSDate**)date{
     NSNumber *weekendStartDay = (NSNumber*)[kSettings valueForSetting:SettingWeekendStart];
     KPSettings setting;
@@ -473,12 +480,10 @@ typedef enum {
 
 -(void)openTimePickerWithButton:(KPScheduleButtons)button andDate:(NSDate*)date{
     if(self.timePicker){
-        NSLog(@"already had a timepicker);");
         return;
     }
     self.activeButton = button;
     self.didUseTimePicker = YES;
-    NSLog(@"bounds: %f, %f",self.bounds.size.width,self.bounds.size.height);
     self.timePicker = [[KPTimePicker alloc] initWithFrame:self.bounds];
     self.timePicker.delegate = self;
     self.timePicker.pickingDate = date;
@@ -673,7 +678,7 @@ typedef enum {
     self.calendarView.hidden = YES;
     self.calendarView.delegate = self;
     self.calendarView.backgroundColor = CLEAR;
-    [self.calendarView selectDate:[NSDate date] makeVisible:YES];
+    [self setCalendarDate:[NSDate date]];
     self.calendarView.titleColor = tcolor(TextColor);
     
     self.calendarView.dayOfWeekTextColor = tcolor(LaterColor);//tcolorF(TextColor,ThemeDark);

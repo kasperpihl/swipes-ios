@@ -430,6 +430,7 @@
                     [kHints triggerHint:HintScheduled];
                 self.isHandlingTrigger = NO;
             }];
+            popup.calendarDate = ((KPToDo*)[toDosArray firstObject]).schedule;
             popup.numberOfItems = toDosArray.count;
             BLURRY.dismissAction = ^{
                 self.isHandlingTrigger = NO;

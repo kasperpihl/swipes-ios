@@ -26,4 +26,5 @@ typedef void (^SchedulePopupBlock)(KPScheduleButtons button, NSDate *chosenDate,
 @property (nonatomic) NSInteger numberOfItems;
 +(SchedulePopup*)popupWithFrame:(CGRect)frame block:(SchedulePopupBlock)block;
 //+(SchedulePopup*)showInView:(UIView*)view withBlock:(SchedulePopupBlock)block;
+@property (nonatomic) NSDate *calendarDate;
 @end

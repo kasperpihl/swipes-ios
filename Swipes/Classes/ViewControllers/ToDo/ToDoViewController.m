@@ -288,6 +288,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                 }
                 [self update];
             }];
+            popup.calendarDate = self.model.schedule;
             popup.numberOfItems = 1;
             BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark),0.1);
             BLURRY.dismissAction = ^{
@@ -726,6 +727,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         }
         [self update];
     }];
+    popup.calendarDate = self.model.schedule;
     popup.numberOfItems = 1;
     BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark),0.1);
     [BLURRY showView:popup inViewController:self];
