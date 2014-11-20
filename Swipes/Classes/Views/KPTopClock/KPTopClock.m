@@ -110,11 +110,11 @@ static KPTopClock *sharedObject;
 -(void)addTopClock{
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, window.frame.size.width, 20)];
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.clockLabel = [[UILabel alloc] initWithFrame:self.view.bounds];
     self.notificationLabel = [[UILabel alloc] initWithFrame:self.view.bounds];
 
     self.tapButton = [[UIButton alloc] initWithFrame:self.view.bounds];
-
     
     self.tapButton.autoresizingMask = self.clockLabel.autoresizingMask = self.notificationLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     [self.tapButton addTarget:self action:@selector(onTap:) forControlEvents:UIControlEventTouchUpInside];
