@@ -366,7 +366,7 @@ typedef enum {
         [self.contentView addSubview:calendarImageView];
         self.toolbar.alpha = 0;
         CGRectSetWidth(self.toolbar, self.contentView.frame.size.width);
-        self.toolbar.items = @[@"roundBack",@"roundConfirm"];
+        self.toolbar.items = @[@"",@"roundBack",@"roundConfirm",@""];
         self.toolbar.hidden = NO;
         CGFloat buttonDuration = 0.1;
         CGFloat scaleDuration = 0.2;
@@ -432,7 +432,6 @@ typedef enum {
     if([otherGestureRecognizer isEqual:self.panRecognizer] && !self.timePicker) return NO;
     return YES;
 }
-
 -(void)calendar:(CKCalendarView *)calendar didLayoutInRect:(CGRect)frame{
     
     if(self.isPickingDate){
@@ -444,10 +443,12 @@ typedef enum {
 
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
     if(item == 0){
-        if(self.isPickingDate) [self pressedSpecific:self];
-        else if(self.isChoosingLocation) [self pressedLocation:self];
+        if(self.isChoosingLocation) [self pressedLocation:self];
     }
-    if(item == 1) [self returnState:KPScheduleButtonSpecificTime date:self.calendarView.selectedDate location:nil];
+    if(item == 1){
+        if(self.isPickingDate) [self pressedSpecific:self];
+    }
+    if(item == 2) [self returnState:KPScheduleButtonSpecificTime date:self.calendarView.selectedDate location:nil];
 }
 
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
@@ -687,9 +688,9 @@ typedef enum {
     self.toolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-kToolbarHeight, self.contentView.frame.size.width, kToolbarHeight-kToolbarPadding) items:nil delegate:self];
     self.toolbar.hidden = YES;
     self.toolbar.font = iconFont(41);
-    self.toolbar.titleColor = tcolor(LaterColor); //tcolorF(TextColor,ThemeDark);
+    self.toolbar.titleColor = tcolor(TextColor); //tcolorF(TextColor,ThemeDark);
     self.toolbar.titleHighlightString = @"Full";
-    self.toolbar.items = @[@"roundBack",@"roundConfirm"];
+    self.toolbar.items = @[@"",@"roundBack",@"roundConfirm",@""];
     self.toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     self.toolbar.backgroundColor = CLEAR;
     

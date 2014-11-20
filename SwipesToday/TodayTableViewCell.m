@@ -85,7 +85,7 @@
     
     
     UIButton *completeButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0,  titleX, self.frame.size.height)];
-    [completeButton setTitle:iconString(@"checkmarkThick") forState:UIControlStateNormal];
+    [completeButton setTitle:iconString(@"done") forState:UIControlStateNormal];
     [completeButton addTarget:self action:@selector(pressedComplete:) forControlEvents:UIControlEventTouchUpInside];
     //[completeButton addTarget:self action:@selector(touchedComplete:) forControlEvents:UIControlEventTouchDown|UIControlEventTouchDragEnter];
     //[completeButton addTarget:self action:@selector(cancelledComplete:) forControlEvents:UIControlEventTouchCancel|UIControlEventTouchDragExit];

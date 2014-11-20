@@ -239,7 +239,7 @@
         [self.confirmButton addTarget:self action:@selector(pressedConfirmButton:) forControlEvents:UIControlEventTouchUpInside];
         self.confirmButton.titleLabel.font = iconFont(23);
         [self.confirmButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        [self.confirmButton setTitle:iconString(@"checkmarkThick") forState:UIControlStateNormal];
+        [self.confirmButton setTitle:iconString(@"done") forState:UIControlStateNormal];
         [self.confirmButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateHighlighted];
         self.confirmButton.layer.masksToBounds = YES;
         self.confirmButton.layer.cornerRadius = kDefActualSize;

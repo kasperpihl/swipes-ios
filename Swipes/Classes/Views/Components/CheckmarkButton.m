@@ -34,9 +34,9 @@
         self.squareView.userInteractionEnabled = NO;
 
         self.titleLabel.font = iconFont(12);
-        [self setTitle:iconString(@"checkmarkThick") forState:UIControlStateHighlighted];
+        [self setTitle:iconString(@"done") forState:UIControlStateHighlighted];
         [self setTitle:@"" forState:UIControlStateNormal];
-        [self setTitle:iconString(@"checkmarkThick") forState:UIControlStateSelected];
+        [self setTitle:iconString(@"done") forState:UIControlStateSelected];
         [self setTitle:@"" forState:UIControlStateSelected | UIControlStateHighlighted];
         [self addTarget:self action:@selector(pressedCheck:) forControlEvents:UIControlEventTouchUpInside];
         // Initialization code

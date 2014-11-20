@@ -138,7 +138,7 @@
     [self addSubview:titleButton];
     self.titleButton = titleButton;
 
-    UIColor *buttonColor = tcolor(LaterColor);
+    UIColor *buttonColor = tcolor(TextColor);
     SlowHighlightIcon *prevButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
     prevButton.titleLabel.font = iconFont(17);
     [prevButton setTitleColor:buttonColor forState:UIControlStateNormal];
