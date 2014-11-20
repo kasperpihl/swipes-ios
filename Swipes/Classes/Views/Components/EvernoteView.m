@@ -77,7 +77,7 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
         
         UIButton *loopButton = [[UIButton alloc] initWithFrame:CGRectMake(startX, 0, kSearchBarHeight, kSearchBarHeight)];
         loopButton.titleLabel.font = iconFont(23);
-        [loopButton setTitle:iconString(@"actionSearch") forState:UIControlStateNormal];
+        [loopButton setTitle:iconString(@"actionMenuSearch") forState:UIControlStateNormal];
         loopButton.backgroundColor = CLEAR;
         [loopButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
         [contentView addSubview:loopButton];

@@ -115,13 +115,10 @@ static Global *sharedObject;
     iconCompare(@"actionShare",                 @"\ue633");
     iconCompare(@"actionTag",                   @"\ue634");
     iconCompare(@"actionDelete",                @"\ue635");
-    iconCompare(@"actionEdit",                  @"\ue636");
     iconCompare(@"actionAttach",                @"\ue637");
     iconCompare(@"actionShareFull",             @"\ue639");
     iconCompare(@"actionTagFull",               @"\ue63a");
     iconCompare(@"actionDeleteFull",            @"\ue63b");
-    iconCompare(@"actionEditFull",              @"\ue63c");
-    iconCompare(@"actionSearch",                @"\ue654");
     
     /* Schedule */
     iconCompare(@"scheduleCalendar",            @"\ue63d");

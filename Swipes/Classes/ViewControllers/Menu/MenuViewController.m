@@ -108,18 +108,18 @@
     NSInteger startY = (OSVER >= 7)?20:0;
     CGSize s = self.view.frame.size;
     CGFloat backSpacing = 8.f;
-    CGFloat buttonSize = 44.0f;
+    CGFloat buttonSize = 50.0f;
     
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(s.width - buttonSize - backSpacing, startY, buttonSize, buttonSize)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(s.width - buttonSize - backSpacing, s.height-buttonSize, buttonSize, buttonSize)];
     //UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-buttonSize-backSpacing,startY,buttonSize,buttonSize)];
-    backButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    backButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin;
     [backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     backButton.titleLabel.font = iconFont(23);
     [backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
     
     [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
-    backButton.transform = CGAffineTransformMakeRotation(M_PI);
+    backButton.titleLabel.transform = CGAffineTransformMakeRotation(M_PI);
     self.backButton = backButton;
     
     
@@ -294,21 +294,26 @@
             if(level == 0){
                 [self.backButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
                 [self.backButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
+                
+                
             }
         }
         completion:^(BOOL finished) {
             viewController.view.alpha = 0;
             viewController.view.frame = self.view.bounds;
-            CGFloat startHeight = (OSVER >= 7) ? (20+44) : 44;
-            CGRectSetHeight(viewController.view,viewController.view.bounds.size.height-startHeight);
-            CGRectSetY(viewController.view, startHeight);
+            CGFloat startY = 20;
+            CGFloat bottomPadding = 44+8;
+            CGRectSetHeight(viewController.view,viewController.view.bounds.size.height-startY-bottomPadding);
+            CGRectSetY(viewController.view, 20);
             [self.view addSubview:viewController.view];
             
             [UIView animateWithDuration:0.2 animations:^{
+                
             }
             completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.1 animations:^{
                     viewController.view.alpha = 1;
+                    
             }];
         }];
     }];
@@ -657,7 +662,6 @@
     CGFloat numberOfButtons = kHorizontalGridNumber * kVerticalGridNumber;
     NSInteger numberOfRows = kHorizontalGridNumber;
     self.view.backgroundColor = tcolor(BackgroundColor);
-    NSInteger startY = (OSVER >= 7) ? 20 : 0;
     
     CGFloat gridWidth = self.gridView.bounds.size.width;
     CGFloat gridItemWidth = gridWidth / kVerticalGridNumber;
@@ -691,7 +695,7 @@
     
     CGFloat backSpacing = 8.f;
     CGFloat buttonSize = 44.0f;
-    self.backButton.frame = CGRectMake(s.width - buttonSize - backSpacing, startY, buttonSize, buttonSize);
+    self.backButton.frame = CGRectMake(s.width - buttonSize - backSpacing, s.height-buttonSize-backSpacing, buttonSize, buttonSize);
 }
 
 @end
