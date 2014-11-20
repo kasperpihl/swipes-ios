@@ -289,7 +289,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                 [self update];
             }];
             popup.numberOfItems = 1;
-            BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.5);
+            BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark),0.1);
             BLURRY.dismissAction = ^{
                 [cell bounceToOrigin];
             };
@@ -403,7 +403,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if (self.model.objectId)
         self.objectId = self.model.objectId;
     if( self.activeEditMode != KPEditModeTitle && ![self.textView.text isEqualToString:self.model.title]){
-        NSLog(@"called textView: %@ - %@",self.textView.text,self.model.title);
         self.textView.text = self.model.title;
         
     }
@@ -728,7 +727,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self update];
     }];
     popup.numberOfItems = 1;
-    BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.5);
+    BLURRY.blurryTopColor = alpha(tcolorF(TextColor,ThemeDark),0.1);
     [BLURRY showView:popup inViewController:self];
     /*if([self.delegate respondsToSelector:@selector(scheduleToDoViewController:)]) [self.delegate scheduleToDoViewController:self];*/
 }

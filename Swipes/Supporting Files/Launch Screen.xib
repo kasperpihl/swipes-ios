@@ -11,7 +11,7 @@
             <rect key="frame" x="0.0" y="0.0" width="504" height="461"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="swipes-logo-app.png" translatesAutoresizingMaskIntoConstraints="NO" id="gpX-9s-LRn">
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" image="swipes-logo-app.png" translatesAutoresizingMaskIntoConstraints="NO" id="gpX-9s-LRn">
                     <rect key="frame" x="115" y="178.5" width="90" height="122"/>
                 </imageView>
             </subviews>

@@ -98,7 +98,7 @@
         
         KPToolbar *addToolbar = [[KPToolbar alloc] initWithFrame:CGRectMake(view.frame.size.width/3, view.frame.size.height, view.frame.size.width/3, ADD_TOOLBAR_HEIGHT) items:nil delegate:self];
         addToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-        addToolbar.font = iconFont(41);
+        addToolbar.font = iconFont(45);
         addToolbar.titleColor = tcolor(TextColor);
         addToolbar.titleHighlightString = @"Full";
         addToolbar.items = @[@"roundAdd"];

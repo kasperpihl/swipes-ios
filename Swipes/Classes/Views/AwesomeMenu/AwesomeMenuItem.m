@@ -26,7 +26,7 @@ static inline CGRect ScaleRect(CGRect rect, float n) {return CGRectMake((rect.si
     if(self = [super init]){
         self.buttonSize = 38;
         self.imageString = imgStr;
-        self.font = iconFont(23);
+        self.font = iconFont(22);
         self.text = self.imageString;
         self.textColor = tcolor(TextColor);
         self.backgroundColor = tcolor(BackgroundColor);

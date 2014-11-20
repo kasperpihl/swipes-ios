@@ -144,7 +144,6 @@ static NotificationHandler *sharedObject;
 }
 
 -(void)updateUpcomingNotifications{
-    NSLog(@"update upcoming");
     BOOL weeklyReminders = [[kSettings valueForSetting:SettingWeeklyReminders] boolValue];
     BOOL dailyReminders = [[kSettings valueForSetting:SettingDailyReminders] boolValue];
     

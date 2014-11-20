@@ -232,7 +232,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     KPToDo *toDo = [self.itemHandler itemForIndexPath:indexPath];
-    //NSLog(@"height:%f",);
     return [ToDoCell heightWithText:toDo.title hasSubtask:([toDo getSubtasks].count > 0)]; // CELL_HEIGHT;
 }
 
@@ -533,7 +532,6 @@
 }
 - (void)cleanUpAfterMovingAnimated:(BOOL)animated {
     [self.selectedRows removeAllObjects];
-//    DLog(@"removed from cleanup");
     self.swipingCell = nil;
     [self didUpdateCells];
 }
@@ -543,7 +541,6 @@
     for (NSIndexPath *indexPath in selectedIndexPaths) {
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
-    DLog(@"removed from deselect all");
     [self.selectedRows removeAllObjects];
     [self handleShowingToolbar];
 }

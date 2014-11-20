@@ -224,7 +224,6 @@ extern NSString * const kEvernoteMoveTime;
             common2Tags = [NSMutableArray array];
         }
         for(KPTag *tag in toDo.tags){
-            NSLog(@"tag:%@",tag);
             if(!tag || !tag.title) continue;
             if(counter == 0) [commonTags addObject:tag.title];
             else{

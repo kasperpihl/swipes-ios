@@ -104,7 +104,6 @@ typedef enum {
 #pragma mark - KPTagDataSource
 -(NSArray *)selectedTagsForTagList:(KPTagList *)tagList{
 
-    NSLog(@"selected tags");
     NSArray *selectedTags;
     
     if(self.isEditingTags)
