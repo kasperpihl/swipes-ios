@@ -365,7 +365,9 @@
 - (void)swipeTableViewCell:(ToDoCell *)cell didStartPanningWithMode:(MCSwipeTableViewCellMode)mode{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     self.swipingCell = cell;
-    [self.parent setCurrentTopMenu:TopMenuDefault animated:YES];
+    if(self.parent.currentTopMenu == TopMenuSearch){
+        [self.parent setCurrentTopMenu:TopMenuDefault animated:YES];
+    }
     if(self.selectedRows.count > 0){
         if(indexPath && ![self.selectedRows containsObject:indexPath]){
             [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];

@@ -394,7 +394,7 @@
     [kFilter searchForString:searchString];
 }
 -(void)didClearSearchTopMenu:(SearchTopMenu *)topMenu{
-    [kFilter clearAll];
+    [kFilter searchForString:nil];
     [topMenu.searchField resignFirstResponder];
     //[self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
