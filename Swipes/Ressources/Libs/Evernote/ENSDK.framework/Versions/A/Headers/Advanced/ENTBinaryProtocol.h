@@ -17,18 +17,18 @@
  * under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import "TTransport.h"
+#import "ENTProtocol.h"
+#import "ENTTransport.h"
 
-@interface THTTPClient : NSObject <TTransport>
+@interface ENTBinaryProtocol : NSObject <ENTProtocol>
 
-- (id) initWithURL:(NSURL *)aURL;
+- (id) initWithTransport: (id <ENTTransport>) transport;
 
-- (id) initWithURL:(NSURL *)aURL
-         userAgent:(NSString *)userAgent
-           timeout:(int)timeout;
+- (id) initWithTransport: (id <ENTTransport>) transport
+              strictRead: (BOOL) strictRead
+             strictWrite: (BOOL) strictWrite;
 
-@property (strong, nonatomic) NSURL *url;
+- (int32_t) messageSizeLimit;
+- (void) setMessageSizeLimit: (int32_t) sizeLimit;
 
 @end
-

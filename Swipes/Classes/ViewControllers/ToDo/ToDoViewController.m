@@ -780,7 +780,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if(sender.tag == EVERNOTE_ITEM_BUTTON_TAG){
         NSArray *buttons = @[@"Cancel", @"Remove note"];
         if( [GlobalApp isEvernoteInstalled] ){
-            //buttons = @[@"Cancel",@"Remove note",@"Open note"];
+            buttons = @[@"Cancel",@"Remove note",@"Open note"];
         }
         [UTILITY alertWithTitle:@"Evernote" andMessage:@"What to do?" buttonTitles:buttons block:^(NSInteger number, NSError *error) {
             DLog(@"%li",(long)number);
@@ -792,6 +792,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                 if([GlobalApp isEvernoteInstalled]){
                     KPAttachment *attachment = [self.model firstAttachmentForServiceType:EVERNOTE_SERVICE];
                     DLog(@"attachment %@",attachment.identifier);
+                    [[ENSession sharedSession] viewNoteInEvernote:[EvernoteIntegration NSStringToENNoteRef:attachment.identifier]];
+                    //[ENSession
 //                    EDAMNote *note = [[EDAMNote alloc] init];
 //                    note.guid = attachment.identifier;
                 }
