@@ -12,6 +12,7 @@
 
 #import "UtilityClass.h"
 #import "KPAlert.h"
+#import "AnalyticsHandler.h"
 
 #import "WalkthroughTitleView.h"
 #import "SlowHighlightIcon.h"
@@ -117,7 +118,6 @@ typedef enum {
         [self.backButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
         [self.backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:self.backButton];
-        
         self.logoView = iconLabel(@"logo", 60);
         self.logoView.center = CGPointMake(self.view.center.x, self.logoView.center.y);
         self.logoView.contentMode = UIViewContentModeCenter;
@@ -230,6 +230,10 @@ typedef enum {
         self.tryButton.frame = CGRectMake(0, 0, sizeWithFont(title ,LOGIN_FIELDS_FONT).width + 36, fieldHeight);
         self.tryButton.frame = CGRectSetPos(self.tryButton.frame, 0, self.view.frame.size.height-self.tryButton.frame.size.height);
         [self.view addSubview:self.tryButton];
+        [Leanplum onVariablesChanged:^() {
+            self.tryButton.hidden = [newOnboardingToggle boolValue];
+                
+        }];
         
         /*
         self.continueButton = [[UIButton alloc] initWithFrame:CGRectMake((320-buttonWidth)/2, 0, buttonWidth, buttonHeight)];

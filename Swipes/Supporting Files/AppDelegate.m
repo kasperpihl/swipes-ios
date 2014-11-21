@@ -84,6 +84,7 @@
     [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
 
     [Leanplum syncResourcesAsync:YES];
+    [Leanplum trackAllAppScreens];
     [Leanplum start];
     
     
