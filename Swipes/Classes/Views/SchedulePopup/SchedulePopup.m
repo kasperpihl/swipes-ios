@@ -137,7 +137,8 @@ typedef enum {
         case KPScheduleButtonSpecificTime:
             returnString = @"Calendar";
             break;
-            
+        case KPScheduleButtonLocation:
+            returnString = @"Location";
         default:
             break;
     }
@@ -153,31 +154,23 @@ typedef enum {
     */
     GeoFenceType type = GeoFenceNone;
     if(state != KPScheduleButtonCancel){
-        NSDictionary *options;
-        NSString *event;
+        
         NSNumber *numberOfTasks = @(self.numberOfItems);
+        NSString *buttonUsed = [self stringForScheduleButton:state];
+        NSMutableDictionary *options = [@{@"Number of Tasks":numberOfTasks,@"Button Pressed": buttonUsed} mutableCopy];
         if(state == KPScheduleButtonLocation){
             type = self.leaveOrArrive.selectedSegmentIndex+1;
             if(type != GeoFenceOnLeave) type = GeoFenceOnArrive;
             NSString *fenceType = (type == GeoFenceOnLeave) ? @"Leave" : @"Arrive";
-            event = @"Locationed Tasks";
-            options = @{@"Number of Tasks":numberOfTasks,@"GeoFence":fenceType};
+            [options setObject:fenceType forKey:@"GeoFence"];
         }
         else{
-            NSString *buttonUsed = [self stringForScheduleButton:state];
             NSInteger numberOfDaysFromNow = [date daysAfterDate:[NSDate date]];
-            NSString *numberOfDaysInterval = @"56+";
-            if(numberOfDaysFromNow <= 6) numberOfDaysInterval = [NSString stringWithFormat:@"%li",(long)numberOfDaysFromNow];
-            else if(numberOfDaysFromNow <= 14) numberOfDaysInterval = @"7-14";
-            else if(numberOfDaysFromNow <= 28) numberOfDaysInterval = @"15-28";
-            else if(numberOfDaysFromNow <= 42) numberOfDaysInterval = @"29-42";
-            else if(numberOfDaysFromNow <= 56) numberOfDaysInterval = @"43-56";
-            
-            NSString *usedTimePicker = self.didUseTimePicker ? @"Yes" : @"No";
-            options = @{@"Number of days ahead":numberOfDaysInterval,@"Button Pressed": buttonUsed,@"Used Time Picker": usedTimePicker,@"Number of Tasks":numberOfTasks};
-            event = @"Scheduled Tasks";
+            NSNumber *usedTimePicker = self.didUseTimePicker ? @(YES) : @(NO);
+            [options setObject:@(numberOfDaysFromNow) forKey:@"Number of Days Ahead"];
+            [options setObject:usedTimePicker forKey:@"Used Time Picker"];
         }
-        [ANALYTICS tagEvent:event options:options];
+        [ANALYTICS tagEvent:@"Snoozed Tasks" options:[options copy]];
     }
     if(self.block) self.block(state,date,location,type);
 }
@@ -191,7 +184,6 @@ typedef enum {
             
             NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
             date = [[[NSDate date] dateByAddingTimeInterval:laterToday.integerValue] dateToNearest15Minutes];
-            date = [[NSDate date] dateByAddingTimeInterval:5];
             break;
         }
         case KPScheduleButtonThisEvening:{

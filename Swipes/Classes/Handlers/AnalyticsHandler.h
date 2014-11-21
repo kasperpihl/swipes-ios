@@ -14,6 +14,7 @@
 #define ANALYTICS [AnalyticsHandler sharedInstance]
 @interface AnalyticsHandler : NSObject
 +(AnalyticsHandler*)sharedInstance;
+-(void)trackEvent:(NSString*)event info:(NSString*)info value:(double)value parameters:(NSDictionary*)parameters;
 -(void)tagEvent:(NSString*)event options:(NSDictionary*)options;
 -(void)pushView:(NSString*)view;
 -(void)popView;

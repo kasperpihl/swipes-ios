@@ -58,14 +58,8 @@ extern NSString * const kEvernoteMoveTime;
         [self updateTags:tags forToDos:@[newToDo] remove:NO save:NO];
     if (save)
         [KPToDo saveToSync];
-    NSString *taskLength = @"50+";
-    if(item.length <= 10) taskLength = @"1-10";
-    else if(item.length <= 20) taskLength = @"11-20";
-    else if(item.length <= 30) taskLength = @"21-30";
-    else if(item.length <= 40) taskLength = @"31-40";
-    else if(item.length <= 50) taskLength = @"41-50";
     [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
-    [ANALYTICS tagEvent:@"Added Task" options:@{@"ActionStep":@(NO),@"Length":taskLength}];
+    [ANALYTICS tagEvent:@"Added Task" options:@{@"Is Action Step":@(NO),@"Length":@(item.length)}];
     [ANALYTICS heartbeat];
     
     return newToDo;
@@ -81,14 +75,8 @@ extern NSString * const kEvernoteMoveTime;
     if( save )
         [KPToDo saveToSync];
     
-    NSString *taskLength = @"50+";
-    if(title.length <= 10) taskLength = @"1-10";
-    else if(title.length <= 20) taskLength = @"11-20";
-    else if(title.length <= 30) taskLength = @"21-30";
-    else if(title.length <= 40) taskLength = @"31-40";
-    else if(title.length <= 50) taskLength = @"41-50";
     NSInteger numberOfActionSteps = self.subtasks.count;
-    [ANALYTICS tagEvent:@"Added Task" options:@{@"ActionStep":@(YES),@"Length":taskLength, @"Total Action Steps on Task": @(numberOfActionSteps)}];
+    [ANALYTICS tagEvent:@"Added Task" options:@{@"Is Action Step":@(YES),@"Length":@(title.length), @"Total Action Steps on Task": @(numberOfActionSteps)}];
     
     return subTask;
 }
@@ -182,8 +170,8 @@ extern NSString * const kEvernoteMoveTime;
         }
         if(save)
             [KPToDo saveToSync];
-        NSDictionary *options = @{ @"Number of tags": @(tags.count), @"Number of tasks": @(toDos.count), @"Assigned": @(!remove) };
-        [ANALYTICS tagEvent:@"Update tags" options:options];
+        NSDictionary *options = @{ @"Number of Tags": @(tags.count), @"Number of Tasks": @(toDos.count), @"Assigned": @(!remove) };
+        [ANALYTICS tagEvent:@"Update Tags" options:options];
         [ANALYTICS heartbeat];
     }
 }
@@ -878,9 +866,9 @@ extern NSString * const kEvernoteMoveTime;
     // add the new attachment
     [self addAttachments:[NSSet setWithObject:attachment]];
     
-    NSDictionary *options = @{ @"service": service, @"sync": @(sync) };
+    NSDictionary *options = @{ @"Service": service, @"Sync": @(sync) };
     
-    [ANALYTICS tagEvent:@"Attachment" options:options];
+    [ANALYTICS tagEvent:@"Added Attachment" options:options];
 }
 
 - (void)removeAllAttachmentsForService:(NSString *)service

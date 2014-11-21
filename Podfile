@@ -41,6 +41,7 @@ target :SwipesToday do
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'Base64'
+    pod 'Leanplum-iOS-SDK'
 end
 
 #link_with 'Swipes', 'Swipes_iOS8', 'SwipesKit'

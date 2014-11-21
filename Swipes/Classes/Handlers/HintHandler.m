@@ -165,9 +165,8 @@ static HintHandler *sharedObject;
     self.hintStartTime = 0;
     NSDictionary *options = @{
                               @"Hint": [self keyForHint:self.currentHint],
-                              @"Time elapsed": numberWithOneDecimal
+                              @"Time Elapsed": numberWithOneDecimal
                               };
-    NSLog(@"key:%@",options);
     [ANALYTICS tagEvent:@"Hint Closed" options:options];
 }
 /*

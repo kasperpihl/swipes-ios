@@ -20,7 +20,6 @@ typedef NS_ENUM(NSInteger, Hints) {
     HintScheduled,
     HintPriority,
     HintEvernoteIntegration
-    
 };
 
 @class HintHandler;

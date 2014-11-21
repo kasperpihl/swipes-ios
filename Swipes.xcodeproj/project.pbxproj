@@ -377,9 +377,6 @@
 		DA67301418A99C7100CA4C1A /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA67301318A99C7100CA4C1A /* DropboxSDK.framework */; };
 		DA69247E19B879D30082D1E4 /* AnalyticsHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A717BF1D17611162004791BF /* AnalyticsHandler.h */; };
 		DA69247F19B879D70082D1E4 /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
-		DA69248219B87A4A0082D1E4 /* libLocalyticsAMP_x64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA94A2BE196EEA8B008F8A3B /* libLocalyticsAMP_x64.a */; };
-		DA69248319B87A510082D1E4 /* LocalyticsAmpSession.h in Headers */ = {isa = PBXBuildFile; fileRef = DA94A2BF196EEA8B008F8A3B /* LocalyticsAmpSession.h */; };
-		DA69248419B87A510082D1E4 /* LocalyticsSession.h in Headers */ = {isa = PBXBuildFile; fileRef = DA94A2C0196EEA8B008F8A3B /* LocalyticsSession.h */; };
 		DA69248519B87ACD0082D1E4 /* Vero.h in Headers */ = {isa = PBXBuildFile; fileRef = A7582504189BC35600B904BC /* Vero.h */; };
 		DA69248619B87AD10082D1E4 /* Vero.m in Sources */ = {isa = PBXBuildFile; fileRef = A7582505189BC35600B904BC /* Vero.m */; };
 		DA69248719B87B160082D1E4 /* UserHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A72EFFFD18425B6A008333AA /* UserHandler.h */; };
@@ -404,7 +401,6 @@
 		DA6B61BD19DAF27B00089877 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
 		DA6B61BE19DAF3B600089877 /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */; };
 		DA6B61C319E321FE00089877 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA6B61C119E321FE00089877 /* Localizable.strings */; };
-		DA94A2C1196EEA8B008F8A3B /* libLocalyticsAMP_x64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA94A2BE196EEA8B008F8A3B /* libLocalyticsAMP_x64.a */; };
 		DACD541918A19FB000C378DF /* DropboxView.m in Sources */ = {isa = PBXBuildFile; fileRef = DACD541818A19FB000C378DF /* DropboxView.m */; };
 		DACD544318A1ACFC00C378DF /* excel.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542118A1ACFC00C378DF /* excel.png */; };
 		DACD544418A1ACFC00C378DF /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542218A1ACFC00C378DF /* folder.png */; };
@@ -465,7 +461,6 @@
 		DAE2B17719CB7D7200A9074E /* SettingsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53217B1586A00FBC042 /* SettingsHandler.m */; };
 		DAE2B17819CB7D7200A9074E /* UserHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A72EFFFE18425B6A008333AA /* UserHandler.m */; };
 		DAE2B17919CB7D7200A9074E /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = A78D7A8717F4B27200AD38B1 /* Global.m */; };
-		DAE2B17A19CB7D7C00A9074E /* libLocalyticsAMP_x64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA94A2BE196EEA8B008F8A3B /* libLocalyticsAMP_x64.a */; };
 		DAE2B17B19CB7D8100A9074E /* Vero.m in Sources */ = {isa = PBXBuildFile; fileRef = A7582505189BC35600B904BC /* Vero.m */; };
 		DAE2B17C19CB7DF200A9074E /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285C17294C56002226C8 /* UtilityClass.m */; };
 		DAE9CFE119AF3AC600246B64 /* SwipesKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DAE9CFE019AF3AC600246B64 /* SwipesKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -917,9 +912,6 @@
 		DA6B61C219E321FE00089877 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Swipes/en.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		DA6B61C419E322FB00089877 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA6B61C519E3298800089877 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
-		DA94A2BE196EEA8B008F8A3B /* libLocalyticsAMP_x64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLocalyticsAMP_x64.a; sourceTree = "<group>"; };
-		DA94A2BF196EEA8B008F8A3B /* LocalyticsAmpSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsAmpSession.h; sourceTree = "<group>"; };
-		DA94A2C0196EEA8B008F8A3B /* LocalyticsSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalyticsSession.h; sourceTree = "<group>"; };
 		DACD541718A19FB000C378DF /* DropboxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropboxView.h; path = Components/DropboxView.h; sourceTree = "<group>"; };
 		DACD541818A19FB000C378DF /* DropboxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropboxView.m; path = Components/DropboxView.m; sourceTree = "<group>"; };
 		DACD542118A1ACFC00C378DF /* excel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = excel.png; sourceTree = "<group>"; };
@@ -984,7 +976,6 @@
 				A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */,
 				A717DD1018B6440A00EE359C /* Crashlytics.framework in Frameworks */,
 				A7E9F60619DAA6A300CAA1D1 /* ENSDK.framework in Frameworks */,
-				DA94A2C1196EEA8B008F8A3B /* libLocalyticsAMP_x64.a in Frameworks */,
 				A7ADCB3817DD352F00780F88 /* libz.dylib in Frameworks */,
 				A75545DE179B481800CE2F4E /* Accelerate.framework in Frameworks */,
 				A78F392E16F7DC1900A8C78D /* MessageUI.framework in Frameworks */,
@@ -1024,7 +1015,6 @@
 				DA6B61BC19DAF26900089877 /* MobileCoreServices.framework in Frameworks */,
 				DA6B61BB19DAEF0D00089877 /* ENSDK.framework in Frameworks */,
 				DAE2B15019CB7A4D00A9074E /* NotificationCenter.framework in Frameworks */,
-				DAE2B17A19CB7D7C00A9074E /* libLocalyticsAMP_x64.a in Frameworks */,
 				81A0C94F1F16434CAE0AA041 /* libPods-SwipesToday.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1036,7 +1026,6 @@
 				A7E9F60C19DAAECD00CAA1D1 /* libxml2.dylib in Frameworks */,
 				A7E9F60B19DAAEC500CAA1D1 /* MobileCoreServices.framework in Frameworks */,
 				A7E9F60519DAA61600CAA1D1 /* ENSDK.framework in Frameworks */,
-				DA69248219B87A4A0082D1E4 /* libLocalyticsAMP_x64.a in Frameworks */,
 				789C9AAD8BA447088AAD221A /* libPods-SwipesKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1794,17 +1783,6 @@
 			path = Sounds;
 			sourceTree = "<group>";
 		};
-		A7C0340B18DC9AEA00A252BB /* Localytics */ = {
-			isa = PBXGroup;
-			children = (
-				DA94A2BE196EEA8B008F8A3B /* libLocalyticsAMP_x64.a */,
-				DA94A2BF196EEA8B008F8A3B /* LocalyticsAmpSession.h */,
-				DA94A2C0196EEA8B008F8A3B /* LocalyticsSession.h */,
-			);
-			name = Localytics;
-			path = ../Swipes/Ressources/Libs/Localytics;
-			sourceTree = "<group>";
-		};
 		A7D0685A190E654C00699B4E /* MMDrawerController */ = {
 			isa = PBXGroup;
 			children = (
@@ -2033,7 +2011,6 @@
 			children = (
 				A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */,
 				A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */,
-				A7C0340B18DC9AEA00A252BB /* Localytics */,
 				A7582507189BC35B00B904BC /* Vero */,
 			);
 			name = Libs;
@@ -2158,7 +2135,6 @@
 				DA23232219B471E900D996EB /* Global.h in Headers */,
 				DA47B6981A006D1B00299916 /* NSManagedObjectContext+MagicalSaves.h in Headers */,
 				DA47B6841A006D1B00299916 /* NSManagedObject+MagicalFinders.h in Headers */,
-				DA69248419B87A510082D1E4 /* LocalyticsSession.h in Headers */,
 				DA47B68C1A006D1B00299916 /* NSManagedObject+MagicalRequests.h in Headers */,
 				DA47B6AC1A006D1B00299916 /* MagicalRecord+Actions.h in Headers */,
 				DA23231D19B39C6F00D996EB /* _KPParseObject.h in Headers */,
@@ -2206,7 +2182,6 @@
 				DA6924AD19BDCF330082D1E4 /* EvernoteSyncHandler.h in Headers */,
 				DA47B69C1A006D1B00299916 /* NSManagedObjectContext+MagicalThreading.h in Headers */,
 				DA47B6CA1A006D1B00299916 /* MagicalRecordShorthand.h in Headers */,
-				DA69248319B87A510082D1E4 /* LocalyticsAmpSession.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

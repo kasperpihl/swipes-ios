@@ -91,7 +91,7 @@
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) servicesAvailable++;
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) servicesAvailable++;
         NSInteger streak = [USER_DEFAULTS integerForKey:@"numberOfDaysOnStreak"];
-        NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable],@"All done for today":@(self.allDoneForToday),@"Streak":@(streak)};
+        NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable],@"All Done for Today":@(self.allDoneForToday),@"Streak":@(streak)};
         [ANALYTICS tagEvent:@"Cleared Tasks" options:dict];
     }
     
@@ -324,8 +324,8 @@
                 break;
             case SLComposeViewControllerResultDone:{
                 NSString *realServiceType;
-                [dict setObject:self.shareText forKey:@"Share string"];
-                [dict setObject:@(self.allDoneForToday) forKey:@"All done for today"];
+                [dict setObject:self.shareText forKey:@"Share Message"];
+                [dict setObject:@(self.allDoneForToday) forKey:@"All Done for Today"];
                 if ([self.sharingService isEqualToString:SLServiceTypeFacebook])
                     realServiceType = @"Facebook";
                 else if([self.sharingService isEqualToString:SLServiceTypeTwitter])
@@ -355,8 +355,8 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSString *realServiceType;
     
-    [dict setObject:self.shareText forKey:@"Share string"];
-    [dict setObject:@(self.allDoneForToday) forKey:@"All done for today"];
+    [dict setObject:self.shareText forKey:@"Share Message"];
+    [dict setObject:@(self.allDoneForToday) forKey:@"All Done for Today"];
     if ([serviceType isEqualToString:SLServiceTypeFacebook])
         realServiceType = @"Facebook";
     else if([serviceType isEqualToString:SLServiceTypeTwitter])

@@ -112,7 +112,7 @@
                 if([self.sharingService isEqualToString:SLServiceTypeFacebook]) realServiceType = @"Facebook";
                 else if([self.sharingService isEqualToString:SLServiceTypeTwitter]) realServiceType = @"Twitter";
                 if(realServiceType) [dict setObject:realServiceType forKey:@"Service"];
-                [ANALYTICS tagEvent:@"Sharing Successful" options:dict];
+                //[ANALYTICS tasgEvent:@"Sharing Successful" options:dict];
                 break;
             }
         }
@@ -125,7 +125,7 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     
     if(realServiceType) [dict setObject:realServiceType forKey:@"Service"];
-    [ANALYTICS tagEvent:@"Sharing Opened" options:dict];
+    //[ANALYTICS tasgEvent:@"Sharing Opened" options:dict];
 }
 -(void)pressedFacebook{
     [self shareForServiceType:SLServiceTypeFacebook];

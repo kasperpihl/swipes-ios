@@ -110,7 +110,7 @@
     [self.settingsViewController renderSubviews];
     voidBlock block = ^{
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
-        NSDictionary *options = @{@"Time since real install" : [NSString stringWithFormat:@"%li days",(long)[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]};
+        NSDictionary *options = @{@"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]), @"Did Try App" : @([[USER_DEFAULTS objectForKey:isTryingString] boolValue])};
         if(user.isNew) {
             [ANALYTICS tagEvent:@"Signed Up" options:options];
         }
@@ -224,11 +224,10 @@ static RootViewController *sharedObject;
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
     //handle any error
-    NSString *event = @"Share tasks failed";
-    if (result == MFMailComposeResultSent)
-        event = @"Share tasks sent";
-    NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
-    [ANALYTICS tagEvent:event options:@{@"Number of Tasks":@(tasks.count)}];
+    if (result == MFMailComposeResultSent){
+        NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
+        [ANALYTICS tagEvent:@"Share Tasks Sent" options:@{@"Number of Tasks":@(tasks.count)}];
+    }
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
 -(void)shareTasks:(NSArray*)tasks{
@@ -255,11 +254,10 @@ static RootViewController *sharedObject;
         message = [message stringByAppendingString:@"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com"];
         [self.mailCont setMessageBody:message isHTML:NO];
         [self presentViewController:self.mailCont animated:YES completion:nil];
-        [ANALYTICS tagEvent:@"Share tasks" options:@{@"Number of Tasks":@(tasks.count)}];
+        [ANALYTICS tagEvent:@"Share Tasks Opened" options:@{@"Number of Tasks":@(tasks.count)}];
     }
     else{
         [UTILITY alertWithTitle:@"Mail was not setup" andMessage:@"You can send us feedback to support@swipesapp.com. Thanks"];
-        [ANALYTICS tagEvent:@"Mail not available" options:nil];
     }
 }
 
@@ -444,8 +442,8 @@ static RootViewController *sharedObject;
         [USER_DEFAULTS synchronize];
         [KPCORE seedObjectsSave:YES];
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
-        NSDictionary *options = @{@"Time since real install" : [NSString stringWithFormat:@"%li days",(long)[[NSDate date] daysAfterDate:[attrs fileCreationDate]]]};
-        [ANALYTICS tagEvent:@"Trying out app" options:options];
+        NSDictionary *options = @{@"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]])};
+        [ANALYTICS tagEvent:@"Trying Out" options:options];
     }
     
     [self changeToMenu:KPMenuHome animated:YES];

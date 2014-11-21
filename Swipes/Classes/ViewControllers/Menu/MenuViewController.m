@@ -353,7 +353,6 @@
             BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
             if(!hasLocationOn && ![kUserHandler isPlus]){
                 [ANALYTICS pushView:@"Location plus popup"];
-                [ANALYTICS tagEvent:@"Teaser Shown" options:@{@"Reference From":@"Location in Settings"}];
                 PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." block:^(BOOL succeeded, NSError *error) {
                     [ANALYTICS popView];
                     [BLURRY dismissAnimated:!succeeded];
@@ -421,7 +420,6 @@
                 return;
             }
             else{
-                [ANALYTICS tagEvent:@"Pressed Upgrade" options:@{@"Reference From":@"Settings"}];
                 [ROOT_CONTROLLER upgrade];
             }
             break;

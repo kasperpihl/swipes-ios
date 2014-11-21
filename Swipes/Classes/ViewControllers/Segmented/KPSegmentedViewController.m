@@ -87,7 +87,7 @@
 -(void)closeAddPanel:(AddPanelView *)addPanel{
     [BLURRY dismissAnimated:YES];
     if(!kUserHandler.isLoggedIn){
-        [kHints triggerHint:HintAccount];
+        //[kHints triggerHint:HintAccount];
     }
 }
 -(void)closeTagPanel:(KPAddTagPanel *)tagPanel{

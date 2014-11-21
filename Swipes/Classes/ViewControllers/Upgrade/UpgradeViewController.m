@@ -141,7 +141,7 @@
     /*[[PaymentHandler sharedInstance] requestPlusMonthlyBlock:^(BOOL succeeded, NSError *error) {
         self.hasPressed = NO;
         [sender showIndicator:NO];
-        if(succeeded) [ANALYTICS tagEvent:@"Upgraded" options:@{@"Subscription":@"Monthly",@"Package":@"Plus"}];
+        if(succeeded) [ANALYTICS tasgEvent:@"Upgraded" options:@{@"Subscription":@"Monthly",@"Package":@"Plus"}];
         [self handlePaymentSucceeded:succeeded error:error];
     }];*/
 }
@@ -152,7 +152,7 @@
     /*[[PaymentHandler sharedInstance] requestPlusYearlyBlock:^(BOOL succeeded, NSError *error) {
         self.hasPressed = NO;
         [sender showIndicator:NO];
-        if(succeeded)[ANALYTICS tagEvent:@"Upgraded" options:@{@"Subscription":@"Yearly",@"Package":@"Plus"}];
+        if(succeeded)[ANALYTICS tasgEvent:@"Upgraded" options:@{@"Subscription":@"Yearly",@"Package":@"Plus"}];
         [self handlePaymentSucceeded:succeeded error:error];
     }];*/
 }
