@@ -8,6 +8,7 @@
 #import "SettingsCell.h"
 #import "KPAttachment.h"
 #import "KPToDo.h"
+#import "AnalyticsHandler.h"
 #import "UtilityClass.h"
 #import "CoreSyncHandler.h"
 #import "UIColor+Utilities.h"
@@ -313,6 +314,7 @@ int const kCellCount = 4;
 }
 
 -(void)endedEvernoteHelperSuccessfully:(BOOL)success{
+    [ANALYTICS popView];
     if(success && !kEnInt.isAuthenticated){
         [self evernoteAuthenticateUsingSelector:@selector(authenticated) withObject:nil];
     }
@@ -327,11 +329,13 @@ int const kCellCount = 4;
 }
 
 -(void)showEvernoteImporterAnimated:(BOOL)animated{
+    [ANALYTICS pushView:@"Evernote Importer"];
     [self presentViewController:[[EvernoteImporterViewController alloc] init] animated:animated completion:^{
         
     }];
 }
 -(void)showEvernoteHelperAnimated:(BOOL)animated{
+    [ANALYTICS pushView:@"Evernote Learn More"];
     EvernoteHelperViewController *helper = [[EvernoteHelperViewController alloc] init];
     helper.delegate = self;
     [self presentViewController:helper animated:animated completion:^{

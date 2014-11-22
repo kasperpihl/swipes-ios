@@ -22,7 +22,6 @@
 #import "WalkthroughViewController.h"
 #import "UIColor+Utilities.h"
 #import "PlusAlertView.h"
-#import "UpgradeViewController.h"
 #import "CoreSyncHandler.h"
 
 #import "SettingsHandler.h"
@@ -44,7 +43,7 @@
 #import "ShareViewController.h"
 #import "AwesomeMenu.h"
 
-@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,UpgradeViewControllerDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate, HintHandlerDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate, HintHandlerDelegate>
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 
@@ -205,7 +204,9 @@ static RootViewController *sharedObject;
 
 -(void)resetRoot
 {
+    
     self.menuViewController = nil;
+    [ANALYTICS clearViews];
     [self setupAppearance];
     [self.settingsViewController reset];
     //[self.sideMenu hide];
@@ -318,13 +319,6 @@ static RootViewController *sharedObject;
     [self addChildViewController:viewController];
     [OVERLAY pushView:viewController.view animated:YES];
     [ANALYTICS pushView:@"Walkthrough"];
-}
-
--(void)closedUpgradeViewController:(UpgradeViewController *)viewController
-{
-    [ANALYTICS popView];
-    [viewController removeFromParentViewController];
-    [OVERLAY popViewAnimated:YES];
 }
 
 -(void)willOpen{

@@ -20,6 +20,7 @@ DEFINE_VAR_BOOL(newOnboardingToggle, false); // iOS
 -(void)tagEvent:(NSString*)event options:(NSDictionary*)options;
 -(void)pushView:(NSString*)view;
 -(void)popView;
+-(void)clearViews;
 -(void)heartbeat;
 -(void)updateIdentity;
 @property BOOL analyticsOff;

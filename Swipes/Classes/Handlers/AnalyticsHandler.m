@@ -119,14 +119,18 @@ static AnalyticsHandler *sharedObject;
     if(viewsLeft > 5)
         [self.views removeObjectAtIndex:0];
     [self.views addObject:view];
-    //[[LocalyticsSession shared] tagScreen:view];
+    [Leanplum advanceTo:view];
 }
 -(void)popView{
     NSInteger viewsLeft = self.views.count;
     if(viewsLeft > 0)
         [self.views removeLastObject];
     if(viewsLeft > 1){
-        //[[LocalyticsSession shared] tagScreen:[self.views lastObject]];
+        [Leanplum advanceTo:[self.views lastObject]];
     }
+}
+-(void)clearViews{
+    [self.views removeAllObjects];
+    [Leanplum advanceTo:nil];
 }
 @end

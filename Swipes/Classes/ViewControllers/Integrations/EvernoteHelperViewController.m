@@ -140,7 +140,7 @@
 }
 
 -(void)pressedClose:(UIButton*)button{
-    [self dismissViewControllerAnimated:NO completion:^{
+    [self dismissViewControllerAnimated:!self.success completion:^{
         if([self.delegate respondsToSelector:@selector(endedEvernoteHelperSuccessfully:)])
             [self.delegate endedEvernoteHelperSuccessfully:self.success];
     }];

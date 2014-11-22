@@ -10,6 +10,7 @@
 #import "MF_Base64Additions.h"
 #import "UtilityClass.h"
 #import "KPAttachment.h"
+#import "AnalyticsHandler.h"
 #import "SlowHighlightIcon.h"
 #import "EvernoteSyncHandler.h"
 #import "SectionHeaderView.h"
@@ -201,6 +202,7 @@
 }
 
 -(void)pressedClose:(UIButton*)button{
+    [ANALYTICS popView];
     [self dismissViewControllerAnimated:YES completion:^{
         
     }];

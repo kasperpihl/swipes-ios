@@ -251,6 +251,7 @@
 }
 
 -(void)popAllViewControllers{
+    [ANALYTICS clearViews];
     NSInteger numberOfVCs = self.viewControllers.count;
     for( NSInteger i = 0 ; i < numberOfVCs ; i++){
         [self popViewControllerAnimated:NO];
@@ -261,7 +262,7 @@
     NSInteger level = self.viewControllers.count;
     UIViewController *poppingViewController = [self.viewControllers lastObject];
     [poppingViewController removeFromParentViewController];
-    
+    [ANALYTICS popView];
     UIView *showingView = (level == 1) ? self.gridView : [(UIViewController*)[self.viewControllers objectAtIndex:level-1] view];
     [UIView animateWithDuration:0.1 animations:^{
         poppingViewController.view.alpha = 0;
@@ -326,6 +327,7 @@
     switch (button) {
         case KPMenuButtonNotifications:{
             NotificationsViewController *notifVC = [[NotificationsViewController alloc] init];
+            [ANALYTICS pushView:@"Notifications Menu"];
             [self pushViewController:notifVC animated:YES];
             break;
 //            BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
@@ -352,9 +354,7 @@
         case KPMenuButtonLocation:{
             BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
             if(!hasLocationOn && ![kUserHandler isPlus]){
-                [ANALYTICS pushView:@"Location plus popup"];
                 PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." block:^(BOOL succeeded, NSError *error) {
-                    [ANALYTICS popView];
                     [BLURRY dismissAnimated:!succeeded];
                     if(succeeded){
                         [ROOT_CONTROLLER upgrade];
@@ -391,11 +391,13 @@
         }
         case KPMenuButtonSnoozes:{
             SnoozesViewController *snoozeVC = [[SnoozesViewController alloc] init];
+            [ANALYTICS pushView:@"Snoozes Menu"];
             [self pushViewController:snoozeVC animated:YES];
             break;
         }
         case KPMenuButtonIntegrations:{
             IntegrationsViewController *integrationVC = [[IntegrationsViewController alloc] init];
+            [ANALYTICS pushView:@"Integrations  Menu"];
             [self pushViewController:integrationVC animated:YES];
             break;
         }
@@ -485,7 +487,7 @@
 -(void)resetAndOpenIntegrations{
     [self popAllViewControllers];
     IntegrationsViewController *integrationVC = [[IntegrationsViewController alloc] init];
-    
+    [ANALYTICS pushView:@"Integrations Menu"];
     [self pushViewController:integrationVC animated:NO];
     [integrationVC openHelperForIntegration:kEvernoteIntegration];
     

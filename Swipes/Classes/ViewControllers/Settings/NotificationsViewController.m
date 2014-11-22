@@ -66,7 +66,7 @@
         cell.contentView.backgroundColor = CLEAR;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = CLEAR;
-        cell.textLabel.font = KP_REGULAR(14);
+        cell.textLabel.font = KP_REGULAR(13);
             
         UISwitch *aSwitch = [[UISwitch alloc] init];
         aSwitch.tag = kSwitchTag;

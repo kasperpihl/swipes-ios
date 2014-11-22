@@ -77,25 +77,22 @@
     
     [Parse setApplicationId:parseApplicationKey
                   clientKey:parseClientKey];
+    
     [PFFacebookUtils initializeFacebook];
-    KPCORE;
-    NOTIHANDLER;
     
     [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
-
+    
     [Leanplum syncResourcesAsync:YES];
-    [Leanplum trackAllAppScreens];
     [Leanplum start];
     
+    
+    KPCORE;
+    NOTIHANDLER;
     
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (notification)
         [self application:application didReceiveLocalNotification:notification];
     
-    /*NSArray *notifications = [application scheduledLocalNotifications];
-    for(UILocalNotification *lNoti in notifications){
-        NSLog(@"t: %i - %@ - %@",lNoti.applicationIconBadgeNumber,lNoti.alertBody,lNoti.fireDate);
-    }*/
     
     [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"TwJuYgpTKp9ENbxf6wMi8j";
     [AppsFlyerTracker sharedTracker].appleAppID = @"657882159";
@@ -187,11 +184,10 @@
     
     NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
     NSNumber *isLoggedIn = (kCurrent) ? @(YES) : @(NO);
-    [ANALYTICS tagEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism , @"Is Logged In" : isLoggedIn, @"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]])}];
-    if(![USER_DEFAULTS boolForKey:@"hasLaunchedBefore"]){
-        
-        if(!kCurrent)
-            [ANALYTICS tagEvent:@"Installation" options:@{ @"Mechanism" : launchMechanism,@"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]])}];
+    BOOL isFirstTime = ![USER_DEFAULTS boolForKey:@"hasLaunchedBefore"];
+    [ANALYTICS tagEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism , @"Is Logged In" : isLoggedIn, @"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]), @"Is First Time": @(isFirstTime)}];
+    if(isFirstTime){
+
         [USER_DEFAULTS setBool:YES forKey:@"hasLaunchedBefore"];
         [USER_DEFAULTS synchronize];
     }

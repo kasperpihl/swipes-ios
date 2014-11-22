@@ -317,7 +317,7 @@
     self.savedContentOffset = self.tableView.contentOffset;
     self.showingViewController.model = todo;
     [ROOT_CONTROLLER pushViewController:self.showingViewController animated:YES];
-    [ANALYTICS pushView:@"Edit view"];
+    [ANALYTICS pushView:@"Edit Task"];
 }
 
 - (void)didPressCloseToDoViewController:(ToDoViewController *)viewController {
@@ -646,7 +646,7 @@
             activeView = @"Later Tab";
             break;
         default:
-            activeView = @"Tasks Tab";
+            activeView = @"Today Tab";
             break;
     }
     [ANALYTICS pushView:activeView];

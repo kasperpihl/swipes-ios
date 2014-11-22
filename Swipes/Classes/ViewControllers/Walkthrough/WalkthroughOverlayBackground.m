@@ -40,7 +40,7 @@
 -(void)setTopColor:(UIColor *)topColor{
     if(_topColor != topColor){
         _topColor = topColor;
-        self.continueButton.titleLabel.textColor = topColor;
+        [self.continueButton setTitleColor:topColor forState:UIControlStateNormal];
     }
 }
 -(void)pressedContinueButton:(UIButton*)sender{
