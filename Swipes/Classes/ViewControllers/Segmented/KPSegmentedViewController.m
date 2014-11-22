@@ -217,7 +217,7 @@
     [[self currentViewController].itemHandler addItem:item priority:priority tags:tags];
 }
 -(void)addPanel:(AddPanelView *)addPanel createdTag:(NSString *)tag{
-    [KPTag addTagWithString:tag save:YES];
+    [KPTag addTagWithString:tag save:YES from:@"Add Task"];
 }
 
 - (NSMutableArray *)viewControllers {
@@ -494,11 +494,17 @@
 
 
 -(void)pressedAddButtonForTagList:(KPTagList *)tagList{
+    NSString *fromString = @"Edit Task";
+    if(self.currentTopMenu == TopMenuSelect)
+        fromString = @"Select Tasks";
+    else if(self.currentTopMenu == TopMenuFilter)
+        fromString = @"Filter";
+    
     [UTILITY inputAlertWithTitle:@"Add New Tag" message:@"Type the name of your tag (ex. work, project or school)" placeholder:@"Add New Tag" cancel:@"Cancel" confirm:@"OK" block:^(NSString *string, NSError *error) {
         NSString *trimmedString = [string stringByTrimmingCharactersInSet:
                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if(trimmedString && trimmedString.length > 0){
-            [KPTag addTagWithString:trimmedString save:YES];
+            [KPTag addTagWithString:trimmedString save:YES from:fromString];
             [tagList addTag:trimmedString selected:YES];
         }
     }];
@@ -781,6 +787,12 @@
 {
     [super viewWillAppear:animated];
     //self._accountButton.hidden = kUserHandler.isLoggedIn;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    if(self.currentTopMenu != TopMenuDefault)
+        [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 
 -(void)viewDidAppear:(BOOL)animated

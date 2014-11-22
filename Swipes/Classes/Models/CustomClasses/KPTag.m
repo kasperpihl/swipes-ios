@@ -14,7 +14,7 @@
 
 @implementation KPTag
 
-+(KPTag*)addTagWithString:(NSString *)string save:(BOOL)save
++(KPTag*)addTagWithString:(NSString *)string save:(BOOL)save from:(NSString *)from
 {
     string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if (string.length == 0)
@@ -27,6 +27,7 @@
     newTag.title = string;
     if (save)
         [KPCORE saveContextForSynchronization:nil];
+    [ANALYTICS tagEvent:@"Added Tag" options:@{@"Length":@(string.length),@"From":from}];
     return newTag;
 }
 

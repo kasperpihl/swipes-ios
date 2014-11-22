@@ -952,7 +952,7 @@ static CoreSyncHandler *sharedObject;
                         ];
     
     for(NSString *tag in tagArray){
-        [KPTag addTagWithString:tag save:NO];
+        [KPTag addTagWithString:tag save:NO from:@"Start Objects"];
     }
     [self saveContextForSynchronization:nil];
     NSArray *toDoArray = @[

@@ -183,7 +183,7 @@ static NSDictionary* kErrorCodes;
 {
     NSArray* tags = [KPTag findByTitle:title];
     if (nil == tags) {
-        [KPTag addTagWithString:title save:YES];
+        [KPTag addTagWithString:title save:YES from:@"URL Scheme"];
     }
     return (nil == tags);
 }
