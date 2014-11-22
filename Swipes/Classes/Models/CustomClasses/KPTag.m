@@ -38,7 +38,7 @@
     KPTag *tagObj = [KPTag MR_findFirstWithPredicate:tagPredicate];
     NSPredicate *toDoPredicate = [NSPredicate predicateWithFormat:@"ANY tags = %@",tagObj];
     NSArray *toDos = [KPToDo MR_findAllWithPredicate:toDoPredicate];
-    [KPToDo updateTags:@[string] forToDos:toDos remove:YES save:YES];
+    [KPToDo updateTags:@[string] forToDos:toDos remove:YES save:YES from:@"Delete Tag"];
     [tagObj MR_deleteEntity];
     if (save)
         [KPCORE saveContextForSynchronization:nil];

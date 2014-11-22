@@ -116,7 +116,10 @@
 #define KPTagDelegate
 -(void)tagList:(KPTagList *)tagList selectedTag:(NSString *)tag{
     if(self.isEditingTags){
-        [KPToDo updateTags:@[tag] forToDos:self.selectedItems remove:NO save:YES];
+        NSString *fromString = @"Select Tasks";
+        if(self.currentTopMenu != TopMenuSelect)
+            fromString = @"Edit Task";
+        [KPToDo updateTags:@[tag] forToDos:self.selectedItems remove:NO save:YES from:fromString];
         [[self currentViewController] didUpdateItemHandler:nil];
     }
     else{
@@ -125,8 +128,16 @@
 }
 -(void)tagList:(KPTagList *)tagList deselectedTag:(NSString *)tag{
     if(self.isEditingTags){
-        [KPToDo updateTags:@[tag] forToDos:self.selectedItems remove:YES save:YES];
+        
+        NSString *fromString = @"Select Tasks";
+        
+        if(self.currentTopMenu != TopMenuSelect)
+            fromString = @"Edit Task";
+        
+        [KPToDo updateTags:@[tag] forToDos:self.selectedItems remove:YES save:YES from:fromString];
+        
         [[self currentViewController] didUpdateItemHandler:nil];
+    
     }
     else{
         [kFilter deselectTag:tag];

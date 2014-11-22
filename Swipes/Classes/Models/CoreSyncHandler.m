@@ -966,7 +966,7 @@ static CoreSyncHandler *sharedObject;
         NSString *item = [toDoArray objectAtIndex:i];
         BOOL priority = (i == 0);
         KPToDo *toDo = [KPToDo addItem:item priority:priority tags:nil save:NO];
-        if(i <= 1)[KPToDo updateTags:@[@"work"] forToDos:@[toDo] remove:NO save:YES];
+        if(i <= 1)[KPToDo updateTags:@[@"work"] forToDos:@[toDo] remove:NO save:YES from:@"Start Objects"];
         /*if ( i == 2 ) {
             [KPToDo scheduleToDos:@[toDo] forDate:[[NSDate date] dateByAddingDays:1] save:NO];
         }*/

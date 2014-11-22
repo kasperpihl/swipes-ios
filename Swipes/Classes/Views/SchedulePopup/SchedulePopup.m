@@ -157,18 +157,10 @@ typedef enum {
         
         NSNumber *numberOfTasks = @(self.numberOfItems);
         NSString *buttonUsed = [self stringForScheduleButton:state];
-        NSMutableDictionary *options = [@{@"Number of Tasks":numberOfTasks,@"Button Pressed": buttonUsed} mutableCopy];
-        if(state == KPScheduleButtonLocation){
-            type = self.leaveOrArrive.selectedSegmentIndex+1;
-            if(type != GeoFenceOnLeave) type = GeoFenceOnArrive;
-            NSString *fenceType = (type == GeoFenceOnLeave) ? @"Leave" : @"Arrive";
-            [options setObject:fenceType forKey:@"GeoFence"];
-        }
-        else{
-            NSInteger numberOfDaysFromNow = [date daysAfterDate:[NSDate date]];
-            NSNumber *usedTimePicker = self.didUseTimePicker ? @(YES) : @(NO);
-            [options setObject:@(numberOfDaysFromNow) forKey:@"Number of Days Ahead"];
-            [options setObject:usedTimePicker forKey:@"Used Time Picker"];
+        NSMutableDictionary *options = [@{@"Number of Tasks":numberOfTasks,@"From": buttonUsed} mutableCopy];
+        if(state != KPScheduleButtonLocation){
+            [options setObject:@([date daysAfterDate:[NSDate date]]) forKey:@"Number of Days Ahead"];
+            [options setObject:@(self.didUseTimePicker) forKey:@"Used Time Picker"];
         }
         [ANALYTICS tagEvent:@"Snoozed Tasks" options:[options copy]];
     }

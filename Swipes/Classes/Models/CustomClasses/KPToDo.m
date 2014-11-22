@@ -55,7 +55,7 @@ extern NSString * const kEvernoteMoveTime;
     if(priority) newToDo.priorityValue = 1;
     newToDo.orderValue = kDefOrderVal;
     if (tags && tags.count > 0)
-        [self updateTags:tags forToDos:@[newToDo] remove:NO save:NO];
+        [self updateTags:tags forToDos:@[newToDo] remove:NO save:NO from:@"Add Task"];
     if (save)
         [KPToDo saveToSync];
     [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
@@ -167,7 +167,7 @@ extern NSString * const kEvernoteMoveTime;
     [ANALYTICS heartbeat];
 }
 
-+(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save{
++(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save from:(NSString *)from{
     if (tags && (0 < tags.count)){
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
         NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
@@ -176,9 +176,11 @@ extern NSString * const kEvernoteMoveTime;
         }
         if(save)
             [KPToDo saveToSync];
-        NSDictionary *options = @{ @"Number of Tags": @(tags.count), @"Number of Tasks": @(toDos.count), @"Assigned": @(!remove) };
-        [ANALYTICS tagEvent:@"Update Tags" options:options];
-        [ANALYTICS heartbeat];
+        if(from){
+            NSDictionary *options = @{ @"Number of Tags": @(tags.count), @"Number of Tasks": @(toDos.count), @"Assigned": @(!remove), @"From": from };
+            [ANALYTICS tagEvent:@"Update Tags" options:options];
+            [ANALYTICS heartbeat];
+        }
     }
 }
 
@@ -448,7 +450,11 @@ extern NSString * const kEvernoteMoveTime;
     self.repeatOptionValue = option;
     if(option != RepeatNever) self.repeatedDate = self.schedule;
     else self.repeatedDate = nil;
-    if(save) [KPToDo saveToSync];
+    
+    if(save)
+        [KPToDo saveToSync];
+    
+    [ANALYTICS tagEvent:@"Recurring Task" options:@{@"Reoccurrence":[self stringForRepeatOption:option]}];
 }
 
 - (RepeatOptions)optionForRepeatString:(NSString *)repeatString {

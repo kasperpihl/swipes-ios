@@ -14,7 +14,7 @@
 /* Delete ToDo's */
 +(void)deleteToDos:(NSArray*)toDos save:(BOOL)save force:(BOOL)force;
 /* Update Tags for ToDo's */
-+(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDosArray remove:(BOOL)remove save:(BOOL)save;
++(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDosArray remove:(BOOL)remove save:(BOOL)save from:(NSString*)from;
 /* Start watching for Location */
 +(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save;
 
