@@ -867,7 +867,7 @@ extern NSString * const kEvernoteMoveTime;
 - (void)updateAttachmentFromObjects:(NSArray*)attachments{
     
 }
-- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync
+- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync from:(NSString *)from
 {
     // remove all present attachments for this service
     [self removeAllAttachmentsForService:service];
@@ -878,9 +878,10 @@ extern NSString * const kEvernoteMoveTime;
     // add the new attachment
     [self addAttachments:[NSSet setWithObject:attachment]];
     
-    NSDictionary *options = @{ @"Service": service, @"Sync": @(sync) };
-    
-    [ANALYTICS tagEvent:@"Added Attachment" options:options];
+    if( from ){
+        NSDictionary *options = @{ @"Service": service, @"Sync": @(sync), @"From": from };
+        [ANALYTICS tagEvent:@"Added Attachment" options:options];
+    }
 }
 
 - (void)removeAllAttachmentsForService:(NSString *)service

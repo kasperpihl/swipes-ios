@@ -64,7 +64,7 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
         if(title.length > kTitleMaxLength)
             title = [title substringToIndex:kTitleMaxLength];
         KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO];
-        [newToDo attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:note.noteRef] sync:YES];
+        [newToDo attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:note.noteRef] sync:YES from:@"swipes-tag"];
     }
     if (notes.count > 0)
         [KPCORE saveContextForSynchronization:nil];

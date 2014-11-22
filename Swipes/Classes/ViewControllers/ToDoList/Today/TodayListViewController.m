@@ -324,7 +324,7 @@
                 break;
             case SLComposeViewControllerResultDone:{
                 NSString *realServiceType;
-                [dict setObject:self.shareText forKey:@"Share Message"];
+                [dict setObject:self.shareText forKey:@"Message"];
                 [dict setObject:@(self.allDoneForToday) forKey:@"All Done for Today"];
                 if ([self.sharingService isEqualToString:SLServiceTypeFacebook])
                     realServiceType = @"Facebook";
@@ -355,7 +355,7 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSString *realServiceType;
     
-    [dict setObject:self.shareText forKey:@"Share Message"];
+    [dict setObject:self.shareText forKey:@"Message"];
     [dict setObject:@(self.allDoneForToday) forKey:@"All Done for Today"];
     if ([serviceType isEqualToString:SLServiceTypeFacebook])
         realServiceType = @"Facebook";

@@ -366,7 +366,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 {
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
-    [self.model attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:noteRef] sync:sync];
+    [self.model attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:noteRef] sync:sync from:@"manual"];
     [KPToDo saveToSync];
     [self updateEvernote];
     [self layoutWithDuration:0];
@@ -386,7 +386,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     DLog(@"selected dropbox file with path: %@", path);
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
-    [self.model attachService:DROPBOX_SERVICE title:[path lastPathComponent] identifier:path sync:NO];
+    [self.model attachService:DROPBOX_SERVICE title:[path lastPathComponent] identifier:path sync:NO from:@"manual"];
     [KPToDo saveToSync];
     [self updateDropbox];
     [self layoutWithDuration:0];
