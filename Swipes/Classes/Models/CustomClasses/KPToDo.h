@@ -6,7 +6,7 @@
 @interface KPToDo : _KPToDo {}
 @property (nonatomic,strong) NSArray *textTags;
 /* Add a new ToDo */
-+(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray*)tags save:(BOOL)save;
++(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray*)tags save:(BOOL)save from:(NSString*)from;
 /* Schedule ToDo's - The array contains the items that changed state */
 +(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save;
 /* Complete ToDo's - The array contains the items that changed state */
@@ -18,7 +18,7 @@
 /* Start watching for Location */
 +(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save;
 
--(KPToDo*)addSubtask:(NSString*)title save:(BOOL)save;
+-(KPToDo*)addSubtask:(NSString*)title save:(BOOL)save from:(NSString*)from;
 
 -(void)switchPriority;
 

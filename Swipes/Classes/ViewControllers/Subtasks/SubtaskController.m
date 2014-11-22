@@ -225,7 +225,7 @@
 
 #pragma mark SubtaskCellDelegate
 - (void)addedSubtask: ( NSString* )subtask{
-    [self.model addSubtask:subtask save:YES];
+    [self.model addSubtask:subtask save:YES from:@"Input"];
     [self fullReload];
     //[self loadData];
     //self.titles = [@[subtask] arrayByAddingObjectsFromArray:self.titles];

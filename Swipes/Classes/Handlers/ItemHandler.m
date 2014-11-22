@@ -51,7 +51,7 @@
     }
 }
 -(void)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray*)tags{
-    [KPToDo addItem:item priority:priority tags:tags save:YES];
+    [KPToDo addItem:item priority:priority tags:tags save:YES from:@"Input"];
     [self reloadData];
 }
 -(void)reloadData{

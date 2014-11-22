@@ -263,7 +263,7 @@ static NSDictionary* kErrorCodes;
     NSArray* subtasks = [self arrayFromQuery:query withPrefix:kSwipesParamSubtask];
     if (subtasks) {
         for (NSString *subtaskTitle in subtasks) {
-            [todo addSubtask:subtaskTitle save:NO];
+            [todo addSubtask:subtaskTitle save:NO from:@"URL Scheme"];
         }
     }
     
@@ -280,7 +280,7 @@ static NSDictionary* kErrorCodes;
         if (nil == todos) {
             NSArray* tags = [self arrayFromQuery:query withPrefix:kSwipesParamTag];
             [self addTagsIfNeeded:tags];
-            KPToDo* todo = [KPToDo addItem:title priority:NO tags:tags save:NO];
+            KPToDo* todo = [KPToDo addItem:title priority:NO tags:tags save:NO from:@"URL Scheme"];
             
             // remove tags
             NSMutableDictionary* mQuery = query.mutableCopy;

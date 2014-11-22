@@ -63,7 +63,7 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
         }
         if(title.length > kTitleMaxLength)
             title = [title substringToIndex:kTitleMaxLength];
-        KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO];
+        KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO from:@"Evernote"];
         [newToDo attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:note.noteRef] sync:YES from:@"swipes-tag"];
     }
     if (notes.count > 0)
@@ -257,7 +257,7 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
         
         if ( !matchingSubtask ){
             //NSLog(@"creating subtask from Evernote");
-            matchingSubtask = [parentToDo addSubtask:evernoteToDo.title save:YES];
+            matchingSubtask = [parentToDo addSubtask:evernoteToDo.title save:YES from:@"Evernote"];
             matchingSubtask.origin = EVERNOTE_SERVICE;
             matchingSubtask.originIdentifier = evernoteToDo.title;
             updated = YES;

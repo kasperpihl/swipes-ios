@@ -47,7 +47,7 @@ extern NSString * const kEvernoteMoveTime;
 #define checkDateWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToDate:pfValue]) [self setValue:pfValue forKey:cdKey]
 #define checkNumberWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToNumber:pfValue]) [self setValue:pfValue forKey:cdKey]
 
-+(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray *)tags save:(BOOL)save
++(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray *)tags save:(BOOL)save from:(NSString *)from
 {
     KPToDo *newToDo = [KPToDo newObjectInContext:nil];
     newToDo.title = item;
@@ -59,13 +59,15 @@ extern NSString * const kEvernoteMoveTime;
     if (save)
         [KPToDo saveToSync];
     [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
-    [ANALYTICS tagEvent:@"Added Task" options:@{@"Is Action Step":@(NO),@"Length":@(item.length)}];
+    if( from ){
+        [ANALYTICS tagEvent:@"Added Task" options:@{ @"Is Action Step":@(NO),@"Length":@(item.length), @"From": from }];
+    }
     [ANALYTICS heartbeat];
     
     return newToDo;
 }
 
--(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save
+-(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save from:(NSString *)from
 {
     KPToDo *subTask = [KPToDo newObjectInContext:[self managedObjectContext]];
     subTask.title = title;
@@ -75,9 +77,9 @@ extern NSString * const kEvernoteMoveTime;
     if( save )
         [KPToDo saveToSync];
     
-    NSInteger numberOfActionSteps = self.subtasks.count;
-    [ANALYTICS tagEvent:@"Added Task" options:@{@"Is Action Step":@(YES),@"Length":@(title.length), @"Total Action Steps on Task": @(numberOfActionSteps)}];
-    
+    if( from ){
+    [ANALYTICS tagEvent:@"Added Task" options:@{@"Is Action Step":@(YES),@"Length":@(title.length), @"Total Action Steps on Task": @(self.subtasks.count), @"From": from}];
+    }
     return subTask;
 }
 
