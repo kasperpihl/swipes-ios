@@ -42,7 +42,8 @@
 #import "KPBlurry.h"
 #import "KPRepeatPicker.h"
 #import "HintHandler.h"
-//#import "UIButton+PassTouch.h"
+//#import "UIButton+PassTouch.h
+#import "AnalyticsHandler.h"
 #import "UserHandler.h"
 #import "RootViewController.h"
 
@@ -348,6 +349,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [BLURRY dismissAnimated:YES];
     self.model.notes = text;
     [KPToDo saveToSync];
+    [ANALYTICS tagEvent:@"Update Notes" options:@{ @"Length": @(text.length) }];
     [self updateNotes];
     [self layoutWithDuration:0];
 }

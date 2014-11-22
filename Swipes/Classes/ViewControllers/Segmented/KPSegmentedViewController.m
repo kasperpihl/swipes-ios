@@ -376,6 +376,7 @@
 }
 -(void)filterMenu:(FilterTopMenu *)filterMenu selectedTag:(NSString *)tag{
     [kFilter selectTag:tag];
+    [ANALYTICS tagEvent:@"Filter Tasks" options:@{@"Number of Tags": @(kFilter.selectedTags.count)}];
 }
 -(void)filterMenu:(FilterTopMenu *)filterMenu deselectedTag:(NSString *)tag{
     [kFilter deselectTag:tag];
