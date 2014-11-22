@@ -38,6 +38,7 @@ extern const int MONNSExceptionEncounteredErrorCode;
 @property (nonatomic, strong) NSDate *rateLimit;
 @property (nonatomic, assign) BOOL isAuthenticated;
 @property (nonatomic, readonly) BOOL isBusinessUser;
+@property (nonatomic, readonly) BOOL isPremiumUser;
 
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
 

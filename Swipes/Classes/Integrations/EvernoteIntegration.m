@@ -10,6 +10,7 @@
 #import "UtilityClass.h"
 #import "SettingsHandler.h"
 #import "EvernoteIntegration.h"
+#import "AnalyticsHandler.h"
 
 // caches
 
@@ -185,6 +186,9 @@ NSError * NewNSErrorFromException(NSException * exc) {
 {
     return [ENSession sharedSession].isBusinessUser;
 }
+-(BOOL)isPremiumUser{
+    return [[ENSession sharedSession] isPremiumUser];
+}
 
 - (ENNoteStoreClient *)primaryNoteStoreError:(NSError**)error
 {
@@ -213,6 +217,12 @@ NSError * NewNSErrorFromException(NSException * exc) {
             else {
                 [self setEnableSync:YES];
                 [self setAutoFindFromTag:YES];
+                NSString *userLevel = @"Standard";
+                if(self.isPremiumUser)
+                    userLevel = @"Premium";
+                if(self.isBusinessUser)
+                    userLevel = @"Business";
+                [ANALYTICS tagEvent:@"Linked Evernote" options:@{@"Level": userLevel}];
             }
             block(authenticateError);
         }];

@@ -55,6 +55,7 @@ static ThemeHandler *sharedObject;
 -(void)changeTheme{
     Theme newTheme = (self.currentTheme == ThemeDark) ? ThemeLight : ThemeDark;
     self.currentTheme = newTheme;
+    
 }
 -(UIColor*)colorForItem:(ThemerItem)item forceTheme:(Theme)theme{
     switch (item) {

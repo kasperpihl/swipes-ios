@@ -495,6 +495,8 @@ static RootViewController *sharedObject;
     UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
     [[UIApplication sharedApplication] setStatusBarStyle: statusBarStyle];
     [kTopClock setTextColor:alpha(tcolor(TextColor),0.8)];
+    NSString *newTheme = ([THEMER currentTheme] == ThemeDark) ? @"Dark" : @"Light";
+    [ANALYTICS tagEvent:@"Changed Theme" options:@{@"Theme":newTheme}];
    // [self setNeedsStatusBarAppearanceUpdate];
 }
 
