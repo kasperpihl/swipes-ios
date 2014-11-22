@@ -74,7 +74,7 @@
         self.currentHint = hint;
         self.hintStartTime = CACurrentMediaTime();
         NSDictionary *options = @{
-                                  @"Hint": [self keyForHint:hint]
+                                  @"Message": [self keyForHint:hint]
                                   };
 
         [ANALYTICS tagEvent:@"Hint Opened" options:options];
@@ -164,8 +164,8 @@ static HintHandler *sharedObject;
     
     self.hintStartTime = 0;
     NSDictionary *options = @{
-                              @"Hint": [self keyForHint:self.currentHint],
-                              @"Time Elapsed": numberWithOneDecimal
+                              @"Message": [self keyForHint:self.currentHint],
+                              @"Length": numberWithOneDecimal
                               };
     [ANALYTICS tagEvent:@"Hint Closed" options:options];
 }

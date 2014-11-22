@@ -117,7 +117,7 @@ extern NSString * const kEvernoteMoveTime;
     
     if(analytics){
         NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
-        [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks, @"Is Action Steps": @( isSubtasks )}];
+        [ANALYTICS tagEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks, @"Is Action Step": @( isSubtasks )}];
         [ANALYTICS heartbeat];
         if( !isSubtasks ) {
             [[NSNotificationCenter defaultCenter] postNotificationName:HH_TriggerHint object:@(HintCompleted)];
@@ -148,13 +148,19 @@ extern NSString * const kEvernoteMoveTime;
 +(void)deleteToDos:(NSArray*)toDos save:(BOOL)save force:(BOOL)force
 {
     BOOL shouldUpdateNotifications = NO;
+    BOOL isActionStep = NO;
     for(KPToDo *toDo in toDos){
+        if(toDo.parent)
+            isActionStep = YES;
         if(!toDo.completionDate && !toDo.parent)
             shouldUpdateNotifications = YES;
         [toDo deleteToDoSave:NO force:force];
     }
     if (save)
         [KPToDo saveToSync];
+    
+    NSNumber *numberOfDeletedTasks = [NSNumber numberWithInteger:toDos.count];
+    [ANALYTICS tagEvent:@"Deleted Tasks" options:@{@"Number of Tasks":numberOfDeletedTasks, @"Is Action Step": @( isActionStep )}];
     
     if (shouldUpdateNotifications)
         [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];

@@ -27,7 +27,8 @@
     newTag.title = string;
     if (save)
         [KPCORE saveContextForSynchronization:nil];
-    [ANALYTICS tagEvent:@"Added Tag" options:@{@"Length":@(string.length),@"From":from}];
+    if(from)
+        [ANALYTICS tagEvent:@"Added Tag" options:@{@"Length":@(string.length),@"From":from}];
     return newTag;
 }
 

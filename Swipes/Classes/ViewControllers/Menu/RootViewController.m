@@ -118,7 +118,6 @@
         }
         if ([PFFacebookUtils isLinkedWithUser:user]){
             if (!user.email){
-                NSLog(@"fetching");
                 [self fetchDataFromFacebook];
             }
         }
