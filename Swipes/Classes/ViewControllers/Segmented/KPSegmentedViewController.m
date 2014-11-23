@@ -62,7 +62,7 @@
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) KPControlHandler *controlHandler;
 @property (nonatomic, strong) UIButton *_settingsButton;
-@property (nonatomic, strong) UIButton *_dropdownButton;
+@property (nonatomic, strong) UIButton *_accountButton;
 @property (nonatomic, assign) BOOL tableIsShrinked;
 @property (nonatomic, assign) NSInteger currentSelectedIndex;
 @property (nonatomic, strong) UIView *ios7BackgroundView;
@@ -304,6 +304,9 @@
 }
 - (id)initWithViewControllers:(NSArray *)viewControllers {
 	return [self initWithViewControllers:viewControllers titles:[viewControllers valueForKeyPath:@"@unionOfObjects.title"]];
+}
+-(void)pressedAccount{
+    [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
 }
 -(void)pressedSettings{
     [ROOT_CONTROLLER.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
@@ -658,6 +661,16 @@
         [self.ios7BackgroundView addSubview:self.segmentedControl];
         self.ios7BackgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         
+        UIButton *accountButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(self.view.frame.size.width-CELL_LABEL_X, TOP_Y, CELL_LABEL_X, SEGMENT_HEIGHT)];
+        accountButton.titleLabel.font = iconFont(23);
+        [accountButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [accountButton setTitle:iconString(@"settingsAccount") forState:UIControlStateNormal];
+        [accountButton setTitle:iconString(@"settingsAccountFull") forState:UIControlStateHighlighted];
+        [accountButton addTarget:self action:@selector(pressedAccount) forControlEvents:UIControlEventTouchUpInside];
+        accountButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        [self.ios7BackgroundView addSubview:accountButton];
+        self._accountButton = accountButton;
+        
         [self.view addSubview:self.ios7BackgroundView];
         
         //self.navigationItem.titleView = self.segmentedControl;
@@ -798,7 +811,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    //self._accountButton.hidden = kUserHandler.isLoggedIn;
+    self._accountButton.hidden = kUserHandler.isLoggedIn;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
