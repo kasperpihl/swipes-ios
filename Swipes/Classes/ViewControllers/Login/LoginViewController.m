@@ -231,7 +231,10 @@ typedef enum {
         self.tryButton.frame = CGRectSetPos(self.tryButton.frame, 0, self.view.frame.size.height-self.tryButton.frame.size.height);
         [self.view addSubview:self.tryButton];
         [Leanplum onVariablesChanged:^() {
-            self.tryButton.hidden = [newOnboardingToggle boolValue];
+            if([USER_DEFAULTS boolForKey:isTryingString])
+                self.tryButton.hidden = NO;
+            else
+                self.tryButton.hidden = [newOnboardingToggle boolValue];
                 
         }];
         

@@ -58,9 +58,8 @@ NSError * NewNSErrorFromException(NSException * exc) {
     static id sharedInstance;
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
-//        [ENSession setDisableRefreshingNotebooksCacheOnLaunch:YES]; // check is this better
-//        EDAMUser *user = [[ENSession sharedSession] user];
-//        NSLog(@"user %@",user);
+        [USER_DEFAULTS setBool:IsEvernoteInstalled() forKey:@"isEvernoteInstalled"];
+        [USER_DEFAULTS synchronize];
     });
     return sharedInstance;
 }

@@ -100,7 +100,9 @@ static AnalyticsHandler *sharedObject;
     if(kCurrent.email)
         [userAttributes setObject:kCurrent.email forKey:@"Email"];
     
-    NSString *evernoteUserLevel = @"Not Linked";
+    NSString *evernoteUserLevel = @"Not Installed";
+    if([USER_DEFAULTS boolForKey:@"isEvernoteInstalled"])
+        evernoteUserLevel = @"Not Linked";
     if(kEnInt.isAuthenticated){
         evernoteUserLevel = @"Standard";
         if(kEnInt.isPremiumUser)
@@ -109,7 +111,6 @@ static AnalyticsHandler *sharedObject;
             evernoteUserLevel = @"Business";
     }
     [userAttributes setObject:evernoteUserLevel forKey:@"Evernote User Level"];
-    
     
 }
 -(void)pushView:(NSString *)view{

@@ -54,7 +54,6 @@
     [ENSession setSharedSessionConsumerKey:CONSUMER_KEY
                             consumerSecret:CONSUMER_SECRET
                               optionalHost:nil];
-    
     [Appirater setAppId:@"657882159"];
     [Appirater setDaysUntilPrompt:1];
     [Appirater setUsesUntilPrompt:15];
