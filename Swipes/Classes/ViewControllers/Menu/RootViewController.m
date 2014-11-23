@@ -111,10 +111,10 @@
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
         NSDictionary *options = @{@"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]), @"Did Try App" : @([[USER_DEFAULTS objectForKey:isTryingString] boolValue])};
         if(user.isNew) {
-            [ANALYTICS tagEvent:@"Signed Up" options:options];
+            [ANALYTICS trackEvent:@"Signed Up" options:options];
         }
         else{
-            [ANALYTICS tagEvent:@"Logged In" options:options];
+            [ANALYTICS trackEvent:@"Logged In" options:options];
         }
         if ([PFFacebookUtils isLinkedWithUser:user]){
             if (!user.email){
@@ -226,7 +226,7 @@ static RootViewController *sharedObject;
     //handle any error
     if (result == MFMailComposeResultSent){
         NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
-        [ANALYTICS tagEvent:@"Share Tasks Sent" options:@{@"Number of Tasks":@(tasks.count)}];
+        [ANALYTICS trackEvent:@"Share Tasks Sent" options:@{@"Number of Tasks":@(tasks.count)}];
     }
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
@@ -254,7 +254,7 @@ static RootViewController *sharedObject;
         message = [message stringByAppendingString:@"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com"];
         [self.mailCont setMessageBody:message isHTML:NO];
         [self presentViewController:self.mailCont animated:YES completion:nil];
-        [ANALYTICS tagEvent:@"Share Tasks Opened" options:@{@"Number of Tasks":@(tasks.count)}];
+        [ANALYTICS trackEvent:@"Share Tasks Opened" options:@{@"Number of Tasks":@(tasks.count)}];
     }
     else{
         [UTILITY alertWithTitle:@"Mail was not setup" andMessage:@"You can send us feedback to support@swipesapp.com. Thanks"];
@@ -436,7 +436,7 @@ static RootViewController *sharedObject;
         [KPCORE seedObjectsSave:YES];
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
         NSDictionary *options = @{@"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]])};
-        [ANALYTICS tagEvent:@"Trying Out" options:options];
+        [ANALYTICS trackEvent:@"Trying Out" options:options];
     }
     
     [self changeToMenu:KPMenuHome animated:YES];
@@ -496,7 +496,7 @@ static RootViewController *sharedObject;
     [[UIApplication sharedApplication] setStatusBarStyle: statusBarStyle];
     [kTopClock setTextColor:alpha(tcolor(TextColor),0.8)];
     NSString *newTheme = ([THEMER currentTheme] == ThemeDark) ? @"Dark" : @"Light";
-    [ANALYTICS tagEvent:@"Changed Theme" options:@{@"Theme":newTheme}];
+    [ANALYTICS trackEvent:@"Changed Theme" options:@{@"Theme":newTheme}];
    // [self setNeedsStatusBarAppearanceUpdate];
 }
 

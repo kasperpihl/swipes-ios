@@ -77,7 +77,7 @@
                                   @"Message": [self keyForHint:hint]
                                   };
 
-        [ANALYTICS tagEvent:@"Hint Opened" options:options];
+        [ANALYTICS trackEvent:@"Hint Opened" options:options];
         [self.emHint presentModalMessage:hintText where:ROOT_CONTROLLER.view];
     }
     return completedHint;
@@ -167,7 +167,7 @@ static HintHandler *sharedObject;
                               @"Message": [self keyForHint:self.currentHint],
                               @"Length": numberWithOneDecimal
                               };
-    [ANALYTICS tagEvent:@"Hint Closed" options:options];
+    [ANALYTICS trackEvent:@"Hint Closed" options:options];
 }
 /*
  

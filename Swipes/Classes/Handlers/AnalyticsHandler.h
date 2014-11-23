@@ -17,7 +17,7 @@ DEFINE_VAR_BOOL(newOnboardingToggle, false); // iOS
 @interface AnalyticsHandler : NSObject
 +(AnalyticsHandler*)sharedInstance;
 -(void)trackEvent:(NSString*)event info:(NSString*)info value:(double)value parameters:(NSDictionary*)parameters;
--(void)tagEvent:(NSString*)event options:(NSDictionary*)options;
+-(void)trackEvent:(NSString*)event options:(NSDictionary*)options;
 -(void)pushView:(NSString*)view;
 -(void)popView;
 -(void)clearViews;

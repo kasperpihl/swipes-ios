@@ -39,34 +39,21 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSString *parseApplicationKey;
-    NSString *parseClientKey;
+    NSString *parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
+    NSString *parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
     
 #ifdef RELEASE
     [Leanplum setAppId:@"8J2O981BSPJg1536460xS0tqlMRrO4u9PykB25TE9Jc" withProductionKey:@"DGeyaY7QsAtw2IuAytry41IZaC9wyhDaUSCSMoaHDFo"];
-    parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
-    parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
-#define EVERNOTE_HOST BootstrapServerBaseURLStringUS
-    NSString* const CONSUMER_KEY = @"swipes";
-    NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6"; // when set to release also fix in Swipes-Info.plist file !
 #else
     LEANPLUM_USE_ADVERTISING_ID;
     [Leanplum setAppId:@"8J2O981BSPJg1536460xS0tqlMRrO4u9PykB25TE9Jc" withDevelopmentKey:@"Tv0mQ7d8o3pEybHlju4DsoEIu7ryptnsXLG79BSoQSA"];
-    parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
-    parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
-//    parseApplicationKey = @"0qD3LLZIOwLOPRwbwLia9GJXTEUnEsSlBCufqDvr";
-//    parseClientKey = @"zkaCbiWV0ieyDq5pinRuzclnaeLZG9G6GFJkmXMB";
+#endif
 #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
     NSString* const CONSUMER_KEY = @"swipes";
     NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6";
-/*#define EVERNOTE_HOST BootstrapServerBaseURLStringSandbox
-    
-    NSString* const CONSUMER_KEY = @"sulio22";
-    NSString* const CONSUMER_SECRET = @"c7ed7298b3666bc4"; // when set to release also fix in Swipes-Info.plist file !*/
-    //[KeenClient enableLogging];
-#endif
-    
-    
+    [ENSession setSharedSessionConsumerKey:CONSUMER_KEY
+                            consumerSecret:CONSUMER_SECRET
+                              optionalHost:nil];
     
     [Appirater setAppId:@"657882159"];
     [Appirater setDaysUntilPrompt:1];
@@ -103,13 +90,8 @@
         [self tagLaunchSource:launchOptions];
     });
 
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:tcolor(TextColor)];
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-    [[UITextField appearance] setTintColor:tcolor(TextColor)];
-    
-    [ENSession setSharedSessionConsumerKey:CONSUMER_KEY
-                            consumerSecret:CONSUMER_SECRET
-                              optionalHost:nil];
+
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
@@ -185,7 +167,7 @@
     NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
     NSNumber *isLoggedIn = (kCurrent) ? @(YES) : @(NO);
     BOOL isFirstTime = ![USER_DEFAULTS boolForKey:@"hasLaunchedBefore"];
-    [ANALYTICS tagEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism , @"Is Logged In" : isLoggedIn, @"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]), @"Is First Time": @(isFirstTime)}];
+    [ANALYTICS trackEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism , @"Is Logged In" : isLoggedIn, @"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]), @"Is First Time": @(isFirstTime)}];
     if(isFirstTime){
 
         [USER_DEFAULTS setBool:YES forKey:@"hasLaunchedBefore"];

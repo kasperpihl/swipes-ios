@@ -162,7 +162,7 @@ typedef enum {
             [options setObject:@([date daysAfterDate:[NSDate date]]) forKey:@"Number of Days Ahead"];
             [options setObject:@(self.didUseTimePicker) forKey:@"Used Time Picker"];
         }
-        [ANALYTICS tagEvent:@"Snoozed Tasks" options:[options copy]];
+        [ANALYTICS trackEvent:@"Snoozed Tasks" options:[options copy]];
     }
     if(self.block) self.block(state,date,location,type);
 }

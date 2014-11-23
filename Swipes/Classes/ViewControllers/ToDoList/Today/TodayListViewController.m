@@ -92,7 +92,7 @@
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) servicesAvailable++;
         NSInteger streak = [USER_DEFAULTS integerForKey:@"numberOfDaysOnStreak"];
         NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable],@"All Done for Today":@(self.allDoneForToday),@"Streak":@(streak)};
-        [ANALYTICS tagEvent:@"Cleared Tasks" options:dict];
+        [ANALYTICS trackEvent:@"Cleared Tasks" options:dict];
     }
     
 }
@@ -332,7 +332,7 @@
                     realServiceType = @"Twitter";
                 if (realServiceType)
                     [dict setObject:realServiceType forKey:@"Service"];
-                [ANALYTICS tagEvent:@"Sharing Successful" options:dict];
+                [ANALYTICS trackEvent:@"Sharing Successful" options:dict];
                 break;
             }
         }
@@ -363,7 +363,7 @@
         realServiceType = @"Twitter";
     if (realServiceType)
         [dict setObject:realServiceType forKey:@"Service"];
-    [ANALYTICS tagEvent:@"Sharing Opened" options:dict];
+    [ANALYTICS trackEvent:@"Sharing Opened" options:dict];
 }
 -(void)pressedFacebook{
     [self shareForServiceType:SLServiceTypeFacebook];

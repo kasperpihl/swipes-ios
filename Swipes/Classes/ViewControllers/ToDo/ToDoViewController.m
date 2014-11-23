@@ -349,7 +349,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [BLURRY dismissAnimated:YES];
     self.model.notes = text;
     [KPToDo saveToSync];
-    [ANALYTICS tagEvent:@"Update Notes" options:@{ @"Length": @(text.length) }];
+    [ANALYTICS trackEvent:@"Update Notes" options:@{ @"Length": @(text.length) }];
     [self updateNotes];
     [self layoutWithDuration:0];
 }
@@ -795,7 +795,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                     KPAttachment *attachment = [self.model firstAttachmentForServiceType:EVERNOTE_SERVICE];
                     //DLog(@"attachment %@",attachment.identifier);
                     [[ENSession sharedSession] viewNoteInEvernote:[EvernoteIntegration NSStringToENNoteRef:attachment.identifier]];
-                    [ANALYTICS tagEvent:@"Open in Evernote" options:nil];
+                    [ANALYTICS trackEvent:@"Open in Evernote" options:nil];
                     //[ENSession
 //                    EDAMNote *note = [[EDAMNote alloc] init];
 //                    note.guid = attachment.identifier;

@@ -28,7 +28,7 @@
     if (save)
         [KPCORE saveContextForSynchronization:nil];
     if(from)
-        [ANALYTICS tagEvent:@"Added Tag" options:@{@"Length":@(string.length),@"From":from}];
+        [ANALYTICS trackEvent:@"Added Tag" options:@{@"Length":@(string.length),@"From":from}];
     return newTag;
 }
 

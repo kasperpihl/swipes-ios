@@ -65,7 +65,7 @@ static AnalyticsHandler *sharedObject;
     [Leanplum track:event withValue:value andInfo:info
       andParameters:parameters];
 }
--(void)tagEvent:(NSString *)event options:(NSDictionary *)options{
+-(void)trackEvent:(NSString *)event options:(NSDictionary *)options{
     if(self.analyticsOff)
         return;
     [Leanplum track:event withParameters:options];

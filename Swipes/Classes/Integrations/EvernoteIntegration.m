@@ -222,7 +222,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
                     userLevel = @"Premium";
                 if(self.isBusinessUser)
                     userLevel = @"Business";
-                [ANALYTICS tagEvent:@"Linked Evernote" options:@{@"Level": userLevel}];
+                [ANALYTICS trackEvent:@"Linked Evernote" options:@{@"Level": userLevel}];
             }
             block(authenticateError);
         }];
