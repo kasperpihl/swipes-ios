@@ -56,6 +56,7 @@
 @property BOOL _needSync;
 @property BOOL _isSyncing;
 @property BOOL _didHardSync;
+@property BOOL _showSuccessOnce;
 
 @property (nonatomic) dispatch_queue_t isolationQueue;
 
@@ -160,7 +161,7 @@
     CGFloat duration = 0;
     switch (status) {
         case SyncStatusSuccess:
-            duration = 1.5;
+            duration = 2.5;
             break;
         case SyncStatusError:{
             duration = 3.5;
@@ -174,14 +175,20 @@
 -(NSString*)titleForStatus:(SyncStatus)status{
     NSString *title;
     switch (status) {
-        case SyncStatusStarted:
-            //title = @"Synchronizing...";
+        case SyncStatusStarted:{
             break;
-        case SyncStatusSuccess:
-            //title = @"Sync completed";
+        }
+        case SyncStatusSuccess:{
+            if(self._showSuccessOnce){
+                title = @"Sync recovered";
+                self._showSuccessOnce = NO;
+            }
+            //
             break;
+        }
         case SyncStatusError:{
             title = @"Error syncing";
+            self._showSuccessOnce = YES;
             break;
         }
         default:
@@ -373,7 +380,6 @@
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == SyncStatusStarted){
-                    //[[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Synchronizing Evernote...", @"duration": @(0) } ];
                 }
                 else if( status == SyncStatusError ){
                     self._isSyncing = NO;
@@ -382,7 +388,6 @@
                         kEnInt.enableSync = NO;
                         [UTILITY alertWithTitle:@"Evernote Authorization" andMessage:@"To sync with Evernote on this device, please authorize" buttonTitles:@[@"Don't sync this device",@"Authorize now"] block:^(NSInteger number, NSError *error) {
                             if(number == 1){
-                                //[[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Evernote authentication", @"duration": @(5) } ];
                                 [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                             }
                         }];
@@ -399,7 +404,6 @@
         if(!kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]){
             [UTILITY alertWithTitle:@"Evernote Authorization" andMessage:@"To sync with Evernote on this device, please authorize" buttonTitles:@[@"Don't sync this device",@"Authorize now"] block:^(NSInteger number, NSError *error) {
                 if(number == 1){
-                    //[[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Evernote authentication", @"duration": @(5) } ];
                     [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                 }
             }];
