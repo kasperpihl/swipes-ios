@@ -13,6 +13,8 @@
 #import "Vero.h"
 #import "UtilityClass.h"
 #import "UserHandler.h"
+#import "EvernoteIntegration.h"
+
 @interface AnalyticsHandler ()
 @property (nonatomic) NSMutableArray *views;
 @property (nonatomic) Vero* vero;
@@ -77,42 +79,38 @@ static AnalyticsHandler *sharedObject;
     //[[LocalyticsSession shared] setCustomDimension:(int)dimension value:value];
 }
 -(void)updateIdentity{
+    NSString *userLevel = @"None";
     if(kCurrent){
         [Leanplum setUserId:kCurrent.objectId];
         //[[LocalyticsSession shared] setCustomerId:kCurrent.objectId];
         //[[LocalyticsSession shared] setCustomerEmail:kCurrent.email];
+        userLevel = @"User";
+        if([kUserHandler isPlus])
+            userLevel = @"Plus";
     }
-    NSString *userLevelString = [kUserHandler getUserLevelString];
-    if(![[self customDimension:kCusDimUserLevel] isEqualToString:userLevelString]){
-        [self setCustomDimension:kCusDimUserLevel value:userLevelString];
+    else if([kUserHandler isTryingOutApp]){
+        userLevel = @"Tryout";
     }
-//@"Language": [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:[[NSLocale currentLocale] identifier]],
     
-    /*KeenClient *client = [KeenClient sharedClient];
-    NSMutableDictionary *probs = [@{
-        @"Platform": @"iOS",
-        @"OS Version": [[UIDevice currentDevice] systemVersion],
-        @"App Version": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
-        @"Language": [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:[[NSLocale currentLocale] localeIdentifier]],
-        @"Country": [[NSLocale currentLocale] displayNameForKey:NSLocaleCountryCode value:[[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]],
-        @"Device": [[UIDevice currentDevice] model]
-    } mutableCopy];
-    //@"Language": [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:[[NSLocale currentLocale] identifier]],
-
-    if(kCurrent){
-        [probs setObject:[kUserHandler getUserLevelString] forKey:@"userLevel"];
-        if(kCurrent.objectId)
-            [probs setObject:kCurrent.objectId forKey:@"userId"];
-        if(kCurrent.email)
-            [probs setObject:kCurrent.email forKey:@"email"];
+    NSMutableDictionary *userAttributes = [@{} mutableCopy];
+    
+    NSString *currentTheme = ([THEMER currentTheme] == ThemeDark) ? @"Dark" : @"Light";
+    [userAttributes setObject:currentTheme forKey:@"Active Theme"];
+    
+    if(kCurrent.email)
+        [userAttributes setObject:kCurrent.email forKey:@"Email"];
+    
+    NSString *evernoteUserLevel = @"Not Linked";
+    if(kEnInt.isAuthenticated){
+        evernoteUserLevel = @"Standard";
+        if(kEnInt.isPremiumUser)
+            evernoteUserLevel = @"Premium";
+        if(kEnInt.isBusinessUser)
+            evernoteUserLevel = @"Business";
     }
-    else{
-        if([USER_DEFAULTS boolForKey:@"isTryingOutSwipes"])
-            [probs setObject:@"Is trying out" forKey:@"userLevel"];
-        else
-            [probs setObject:@"Not logged in" forKey:@"userLevel"];
-    }
-    client.globalPropertiesDictionary = [probs copy];*/
+    [userAttributes setObject:evernoteUserLevel forKey:@"Evernote User Level"];
+    
+    
 }
 -(void)pushView:(NSString *)view{
     NSInteger viewsLeft = self.views.count;

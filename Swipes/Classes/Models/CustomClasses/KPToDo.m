@@ -748,6 +748,7 @@ extern NSString * const kEvernoteMoveTime;
     if(self.priorityValue == 1) {
         [[NSNotificationCenter defaultCenter] postNotificationName:HH_TriggerHint object:@(HintPriority)];
     }
+    [ANALYTICS tagEvent:@"Update Priority" options:@{@"Assigned":@(self.priorityValue)}];
 }
 
 -(BOOL)notifyOnLocation:(CLPlacemark*)location type:(GeoFenceType)type{

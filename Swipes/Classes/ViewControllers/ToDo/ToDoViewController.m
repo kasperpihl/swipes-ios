@@ -795,6 +795,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                     KPAttachment *attachment = [self.model firstAttachmentForServiceType:EVERNOTE_SERVICE];
                     //DLog(@"attachment %@",attachment.identifier);
                     [[ENSession sharedSession] viewNoteInEvernote:[EvernoteIntegration NSStringToENNoteRef:attachment.identifier]];
+                    [ANALYTICS tagEvent:@"Open in Evernote" options:nil];
                     //[ENSession
 //                    EDAMNote *note = [[EDAMNote alloc] init];
 //                    note.guid = attachment.identifier;
