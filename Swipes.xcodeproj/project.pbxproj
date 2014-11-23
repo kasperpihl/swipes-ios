@@ -202,6 +202,8 @@
 		A7C258FE197CE5A200290198 /* IntegrationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7C258FD197CE5A200290198 /* IntegrationHandler.m */; };
 		A7C90E6A17A6ABF700C5F9E2 /* wt_schedule_popup.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */; };
 		A7C90E6B17A6ABF700C5F9E2 /* wt_schedule_popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */; };
+		A7CED2821A22000F00A17B19 /* swipes-priority-notification.aiff in Resources */ = {isa = PBXBuildFile; fileRef = A7CED2811A22000F00A17B19 /* swipes-priority-notification.aiff */; };
+		A7CED2861A22027A00A17B19 /* swipes-priority-notification2.aiff in Resources */ = {isa = PBXBuildFile; fileRef = A7CED2851A22027A00A17B19 /* swipes-priority-notification2.aiff */; };
 		A7D06868190E654C00699B4E /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D0685E190E654C00699B4E /* MMDrawerBarButtonItem.m */; };
 		A7D06869190E654C00699B4E /* MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D06861190E654C00699B4E /* MMDrawerController.m */; };
 		A7D0686A190E654C00699B4E /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D06863190E654C00699B4E /* MMDrawerVisualState.m */; };
@@ -788,6 +790,8 @@
 		A7C7594117B56DA100A9F2D0 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		A7C90E6817A6ABF700C5F9E2 /* wt_schedule_popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wt_schedule_popup.png; sourceTree = "<group>"; };
 		A7C90E6917A6ABF700C5F9E2 /* wt_schedule_popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wt_schedule_popup@2x.png"; sourceTree = "<group>"; };
+		A7CED2811A22000F00A17B19 /* swipes-priority-notification.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "swipes-priority-notification.aiff"; sourceTree = "<group>"; };
+		A7CED2851A22027A00A17B19 /* swipes-priority-notification2.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "swipes-priority-notification2.aiff"; sourceTree = "<group>"; };
 		A7D0685B190E654C00699B4E /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		A7D0685D190E654C00699B4E /* MMDrawerBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerBarButtonItem.h; sourceTree = "<group>"; };
 		A7D0685E190E654C00699B4E /* MMDrawerBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerBarButtonItem.m; sourceTree = "<group>"; };
@@ -1778,6 +1782,8 @@
 		A7BB65C9189BF19600BE7183 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				A7CED2851A22027A00A17B19 /* swipes-priority-notification2.aiff */,
+				A7CED2811A22000F00A17B19 /* swipes-priority-notification.aiff */,
 				A7BB65CA189BF19600BE7183 /* swipes-notification.aif */,
 			);
 			path = Sounds;
@@ -2315,6 +2321,7 @@
 			files = (
 				DACD544718A1ACFC00C378DF /* folder_gray.png in Resources */,
 				A78128D217294C56002226C8 /* InfoPlist.strings in Resources */,
+				A7CED2861A22027A00A17B19 /* swipes-priority-notification2.aiff in Resources */,
 				DACD544518A1ACFC00C378DF /* folder_app.png in Resources */,
 				A7D0D3C319051BA000ABA1FF /* Nexa-Black-Italic.ttf in Resources */,
 				A78128D317294C56002226C8 /* MainStoryboard.storyboard in Resources */,
@@ -2326,6 +2333,7 @@
 				A772B14219671D9F00C07909 /* swipesandevernote@2x.png in Resources */,
 				DACD546218A1ACFC00C378DF /* page_white_zip.png in Resources */,
 				DA310FA7188F3F26003C8FA4 /* Assets in Resources */,
+				A7CED2821A22000F00A17B19 /* swipes-priority-notification.aiff in Resources */,
 				DACD544918A1ACFC00C378DF /* folder_star.png in Resources */,
 				DACD545B18A1ACFC00C378DF /* page_white_php.png in Resources */,
 				DACD545E18A1ACFC00C378DF /* page_white_text.png in Resources */,

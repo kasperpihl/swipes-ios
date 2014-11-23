@@ -97,34 +97,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
     if(OSVER >= 8){
     
-        UIMutableUserNotificationAction *snoozeAction= [[UIMutableUserNotificationAction alloc] init];
-        snoozeAction.identifier = @"Later"; // The id passed when the user selects the action
-        snoozeAction.title = NSLocalizedString(@"Later",nil); // The title displayed for the action
-        snoozeAction.activationMode = UIUserNotificationActivationModeBackground; // Choose whether the application is launched in foreground when the action is clicked
-        snoozeAction.destructive = NO; // If YES, then the action is red
-        snoozeAction.authenticationRequired = NO; // Whether the user must authenticate to execute the action
-        
-        UIMutableUserNotificationAction *completeAction= [[UIMutableUserNotificationAction alloc] init];
-        completeAction.identifier = @"Complete"; // The id passed when the user selects the action
-        completeAction.title = NSLocalizedString(@"Complete",nil); // The title displayed for the action
-        completeAction.activationMode = UIUserNotificationActivationModeBackground; // Choose whether the application is launched in foreground when the action is clicked
-        completeAction.destructive = NO; // If YES, then the action is red
-        completeAction.authenticationRequired = NO; // Whether the user must authenticate to execute the action
-        
-        
-        UIMutableUserNotificationCategory *oneTaskCategory= [[UIMutableUserNotificationCategory alloc] init];
-        oneTaskCategory.identifier = @"OneTaskCategory"; // Identifier passed in the payload
-        [oneTaskCategory setActions:@[snoozeAction,completeAction] forContext:UIUserNotificationActionContextDefault]; // The context determines the number of actions presented (see documentation)
-        
-        UIMutableUserNotificationCategory *batchTasksCategory= [[UIMutableUserNotificationCategory alloc] init];
-        batchTasksCategory.identifier = @"BatchTasksCategory"; // Identifier passed in the payload
-        [batchTasksCategory setActions:@[snoozeAction] forContext:UIUserNotificationActionContextDefault]; // The context determines the number of actions presented (see documentation)
-        
-        
-        NSSet *categories = [NSSet setWithObjects:oneTaskCategory,batchTasksCategory,nil];
-        NSUInteger types = UIUserNotificationTypeNone|UIUserNotificationTypeBadge|UIUserNotificationTypeAlert; // Add badge, sound, or alerts here
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+        //[[UIApplication sharedApplication] registerUserNotificationSettings:settings];
         
     }
     

@@ -120,6 +120,17 @@ static NotificationHandler *sharedObject;
         else [KitLocate shutKitLocate];
     }
 }
+-(void)addSound:(NSString*)soundName forNotification:(UILocalNotification**)notifcation{
+    if(OSVER > 7){
+        UIUserNotificationSettings *currentSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        if ( (currentSettings.types & UIUserNotificationTypeSound) == UIUserNotificationTypeSound ){
+            [*notifcation setSoundName:soundName];
+        }
+    }
+    else{
+        [*notifcation setSoundName:soundName];
+    }
+}
 -(UILocalNotification*)notificationForDate:(NSDate *)date badgeCounter:(NSInteger)badgeCount title:(NSString *)title userInfo:(NSDictionary*)userInfo{
     UILocalNotification *localNotif = [[UILocalNotification alloc] init];
     localNotif.fireDate = date;
@@ -129,16 +140,7 @@ static NotificationHandler *sharedObject;
     localNotif.alertBody = title;
     if(badgeCount > 0)
         localNotif.applicationIconBadgeNumber = badgeCount;
-    if(OSVER > 7){
-        UIUserNotificationSettings *currentSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
-        if ( (currentSettings.types & UIUserNotificationTypeSound) != UIUserNotificationTypeSound ){
-            
-        }
-    }
-    else{
-        localNotif.soundName = @"swipes-notification.aif";
-    }
-    
+    [self addSound:@"swipes-notification.aif"  forNotification:&localNotif];
     localNotif.userInfo = userInfo;
     return localNotif;
 }
@@ -231,12 +233,48 @@ static NotificationHandler *sharedObject;
     
 }
 
+-(UIUserNotificationSettings*)settingsWithCategories{
+    UIMutableUserNotificationAction *snoozeAction= [[UIMutableUserNotificationAction alloc] init];
+    snoozeAction.identifier = @"Later"; // The id passed when the user selects the action
+    snoozeAction.title = NSLocalizedString(@"Later",nil); // The title displayed for the action
+    snoozeAction.activationMode = UIUserNotificationActivationModeBackground; // Choose whether the application is launched in foreground when the action is clicked
+    snoozeAction.destructive = NO; // If YES, then the action is red
+    snoozeAction.authenticationRequired = NO; // Whether the user must authenticate to execute the action
+    
+    UIMutableUserNotificationAction *completeAction= [[UIMutableUserNotificationAction alloc] init];
+    completeAction.identifier = @"Complete"; // The id passed when the user selects the action
+    completeAction.title = NSLocalizedString(@"Complete",nil); // The title displayed for the action
+    completeAction.activationMode = UIUserNotificationActivationModeBackground; // Choose whether the application is launched in foreground when the action is clicked
+    completeAction.destructive = NO; // If YES, then the action is red
+    completeAction.authenticationRequired = NO; // Whether the user must authenticate to execute the action
+    
+    
+    UIMutableUserNotificationCategory *oneTaskCategory= [[UIMutableUserNotificationCategory alloc] init];
+    oneTaskCategory.identifier = @"OneTaskCategory"; // Identifier passed in the payload
+    [oneTaskCategory setActions:@[snoozeAction,completeAction] forContext:UIUserNotificationActionContextDefault]; // The context determines the number of actions presented (see documentation)
+    
+    UIMutableUserNotificationCategory *batchTasksCategory= [[UIMutableUserNotificationCategory alloc] init];
+    batchTasksCategory.identifier = @"BatchTasksCategory"; // Identifier passed in the payload
+    [batchTasksCategory setActions:@[snoozeAction] forContext:UIUserNotificationActionContextDefault]; // The context determines the number of actions presented (see documentation)
+    
+    
+    NSSet *categories = [NSSet setWithObjects:oneTaskCategory,batchTasksCategory,nil];
+    NSUInteger types = UIUserNotificationTypeNone|UIUserNotificationTypeBadge|UIUserNotificationTypeAlert|UIUserNotificationTypeSound; // Add badge, sound, or alerts here
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
+    return settings;
+}
+
 -(void)scheduleNotifications:(NSArray*)notifications{
+    if(!notifications || notifications.count == 0)
+        return;
     UIApplication *app = [UIApplication sharedApplication];
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
         UIUserNotificationSettings *currentSettings = [app currentUserNotificationSettings];
-        if ( (currentSettings.types & UIUserNotificationTypeAlert) != UIUserNotificationTypeAlert ){
-            [app registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
+        if ( (currentSettings.types & UIUserNotificationTypeAlert) != UIUserNotificationTypeAlert || ![USER_DEFAULTS boolForKey:@"hasAddedCategories"]){
+            UIUserNotificationSettings *settings = [self settingsWithCategories];
+            [app registerUserNotificationSettings:settings];
+            [USER_DEFAULTS setBool:YES forKey:@"hasAddedCategories"];
+            [USER_DEFAULTS synchronize];
             return;
         }
     }
@@ -258,9 +296,9 @@ static NotificationHandler *sharedObject;
         if ( (currentSettings.types & UIUserNotificationTypeBadge) == UIUserNotificationTypeBadge ){
             [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
         }
-        else{
+        /*else{
             [app registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
-        }
+        }*/
     }
     else
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
@@ -272,7 +310,15 @@ static NotificationHandler *sharedObject;
     }
     
     NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@) AND completionDate = nil", [NSDate date]];
+    
     NSArray *scheduleArray = [KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:schedulePredicate];
+    
+    NSSortDescriptor *scheduleDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"schedule" ascending:YES];
+    NSSortDescriptor *priorityDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO];
+    scheduleArray = [scheduleArray sortedArrayUsingDescriptors:@[scheduleDescriptor,priorityDescriptor]];
+    
+    NSLog(@"%@",scheduleArray);
+    
     NSInteger scheduleCount = scheduleArray.count;
     NSInteger totalBadgeCount = todayCount;
     NSInteger numberOfScheduledNotificiations = 0;
@@ -289,7 +335,7 @@ static NotificationHandler *sharedObject;
         BOOL isNextRelated = NO;
         if(!isLastObject){
             KPToDo *nextToDo = [scheduleArray objectAtIndex:MIN(i+1,scheduleCount)];
-            if([nextToDo.schedule isEqualToDate:[toDo schedule]])
+            if((toDo.priorityValue < 1) && [nextToDo.schedule isEqualToDate:[toDo schedule]])
                 isNextRelated = YES;
         }
         
@@ -309,6 +355,9 @@ static NotificationHandler *sharedObject;
                 title = [NSString stringWithFormat:@"You have %li new tasks.",(long)numberOfNotificationsForDate];
             }
             UILocalNotification *notification = [self notificationForDate:toDo.schedule badgeCounter:totalBadgeCount title:title userInfo:userInfo];
+            if(toDo.priorityValue > 0){
+                [self addSound:@"swipes-priority-notification2.aiff"  forNotification:&notification];
+            }
             if(OSVER >= 8){
                 notification.category = (numberOfNotificationsForDate == 1) ? @"OneTaskCategory" : @"BatchTasksCategory";
             }
@@ -327,7 +376,7 @@ static NotificationHandler *sharedObject;
     }
     [app cancelAllLocalNotifications];
     [self scheduleNotifications:notificationsArray];
-
+    NSLog(@"%@",notificationsArray);
 }
 
 - (void)updateLocationUpdates
