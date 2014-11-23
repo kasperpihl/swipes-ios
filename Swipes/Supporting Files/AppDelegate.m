@@ -54,6 +54,7 @@
     [ENSession setSharedSessionConsumerKey:CONSUMER_KEY
                             consumerSecret:CONSUMER_SECRET
                               optionalHost:nil];
+    
     [Appirater setAppId:@"657882159"];
     [Appirater setDaysUntilPrompt:1];
     [Appirater setUsesUntilPrompt:15];
@@ -111,11 +112,16 @@
         completeAction.authenticationRequired = NO; // Whether the user must authenticate to execute the action
         
         
-        UIMutableUserNotificationCategory *category= [[UIMutableUserNotificationCategory alloc] init];
-        category.identifier = @"TASKCATEGORY"; // Identifier passed in the payload
-        [category setActions:@[completeAction,snoozeAction] forContext:UIUserNotificationActionContextDefault]; // The context determines the number of actions presented (see documentation)
+        UIMutableUserNotificationCategory *oneTaskCategory= [[UIMutableUserNotificationCategory alloc] init];
+        oneTaskCategory.identifier = @"OneTaskCategory"; // Identifier passed in the payload
+        [oneTaskCategory setActions:@[snoozeAction,completeAction] forContext:UIUserNotificationActionContextDefault]; // The context determines the number of actions presented (see documentation)
         
-        NSSet *categories = [NSSet setWithObjects:category,nil];
+        UIMutableUserNotificationCategory *batchTasksCategory= [[UIMutableUserNotificationCategory alloc] init];
+        batchTasksCategory.identifier = @"BatchTasksCategory"; // Identifier passed in the payload
+        [batchTasksCategory setActions:@[snoozeAction] forContext:UIUserNotificationActionContextDefault]; // The context determines the number of actions presented (see documentation)
+        
+        
+        NSSet *categories = [NSSet setWithObjects:oneTaskCategory,batchTasksCategory,nil];
         NSUInteger types = UIUserNotificationTypeNone|UIUserNotificationTypeBadge|UIUserNotificationTypeAlert; // Add badge, sound, or alerts here
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
@@ -176,7 +182,7 @@
 
 /* Handling interactive notifications */
 -(void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler{
-    if([notification.category isEqualToString:@"TASKCATEGORY"]){
+    if([notification.category isEqualToString:@"OneTaskCategory"] || [notification.category isEqualToString:@"BatchTasksCategory"]){
         NSArray *taskIdentifiers = [notification.userInfo objectForKey:@"identifiers"];
         NSArray *toDos;
         if(taskIdentifiers && taskIdentifiers.count > 0){

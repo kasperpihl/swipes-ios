@@ -310,7 +310,7 @@ static NotificationHandler *sharedObject;
             }
             UILocalNotification *notification = [self notificationForDate:toDo.schedule badgeCounter:totalBadgeCount title:title userInfo:userInfo];
             if(OSVER >= 8){
-                notification.category = @"TASKCATEGORY";
+                notification.category = (numberOfNotificationsForDate == 1) ? @"OneTaskCategory" : @"BatchTasksCategory";
             }
             [notificationsArray addObject:notification];
             
