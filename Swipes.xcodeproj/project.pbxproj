@@ -79,6 +79,7 @@
 		A71E9FC21951CD6F00FC9B0B /* EvernoteToDoProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = A71E9FC11951CD6F00FC9B0B /* EvernoteToDoProcessor.m */; };
 		A71E9FC51951CE4B00FC9B0B /* NSString+Levenshtein.m in Sources */ = {isa = PBXBuildFile; fileRef = A71E9FC41951CE4B00FC9B0B /* NSString+Levenshtein.m */; };
 		A724B02217A96B8B00E0EF83 /* UIColor+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */; };
+		A72702151A23689C007FA2CA /* HelpingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A72702141A23689C007FA2CA /* HelpingViewController.m */; };
 		A72C33501908F65C00767456 /* CWStatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = A72C334F1908F65C00767456 /* CWStatusBarNotification.m */; };
 		A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A72EFFFE18425B6A008333AA /* UserHandler.m */; };
 		A72FD5DB19E99B7B00DDEB02 /* KPFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A72FD5DA19E99B7B00DDEB02 /* KPFilter.m */; };
@@ -600,6 +601,8 @@
 		A71E9FC41951CE4B00FC9B0B /* NSString+Levenshtein.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Levenshtein.m"; sourceTree = "<group>"; };
 		A724B02017A96B8B00E0EF83 /* UIColor+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utilities.h"; sourceTree = "<group>"; };
 		A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Utilities.m"; sourceTree = "<group>"; };
+		A72702131A23689C007FA2CA /* HelpingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelpingViewController.h; path = Settings/HelpingViewController.h; sourceTree = "<group>"; };
+		A72702141A23689C007FA2CA /* HelpingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HelpingViewController.m; path = Settings/HelpingViewController.m; sourceTree = "<group>"; };
 		A72C334E1908F65C00767456 /* CWStatusBarNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWStatusBarNotification.h; sourceTree = "<group>"; };
 		A72C334F1908F65C00767456 /* CWStatusBarNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWStatusBarNotification.m; sourceTree = "<group>"; };
 		A72EFFFD18425B6A008333AA /* UserHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserHandler.h; path = ../Swipes/Classes/Handlers/UserHandler.h; sourceTree = "<group>"; };
@@ -1824,6 +1827,8 @@
 				A7D189C51965F47000AA7CD9 /* IntegrationsViewController.m */,
 				A7A560B6198A9A3600C3D213 /* NotificationsViewController.h */,
 				A7A560B7198A9A3600C3D213 /* NotificationsViewController.m */,
+				A72702131A23689C007FA2CA /* HelpingViewController.h */,
+				A72702141A23689C007FA2CA /* HelpingViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -2629,6 +2634,7 @@
 				A7D189C61965F47000AA7CD9 /* IntegrationsViewController.m in Sources */,
 				A7680D20172C0E1C00BCB2D9 /* NSDate-Utilities.m in Sources */,
 				A7680D29172C5EA800BCB2D9 /* _KPTag.m in Sources */,
+				A72702151A23689C007FA2CA /* HelpingViewController.m in Sources */,
 				DA47B6A91A006D1B00299916 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
 				A7582506189BC35600B904BC /* Vero.m in Sources */,
 				A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */,

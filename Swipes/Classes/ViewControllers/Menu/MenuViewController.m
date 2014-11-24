@@ -16,6 +16,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "MenuButton.h"
 #import "SettingsHandler.h"
+#import "HelpingViewController.h"
 #import "NotificationsViewController.h"
 #import "IntegrationsViewController.h"
 #import "SnoozesViewController.h"
@@ -37,7 +38,7 @@
 #define kSeperatorMargin 0
 #define kGridMargin valForScreen(15,10)
 #define kVerticalGridNumber 3
-#define kHorizontalGridNumber 4
+#define kHorizontalGridNumber 3
 #define kGridButtonPadding 0
 
 @interface MenuViewController () <MFMailComposeViewControllerDelegate>
@@ -126,7 +127,7 @@
     
     self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0,startY,self.view.bounds.size.width-2*kGridMargin,self.view.bounds.size.height-startY)];
     
-    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 294, 392)];
+    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 294, 304)];
     
     CGFloat gridWidth = self.gridView.bounds.size.width;
     CGFloat gridItemWidth = gridWidth / kVerticalGridNumber;
@@ -261,7 +262,6 @@
 -(void)popViewControllerAnimated:(BOOL)animated{
     NSInteger level = self.viewControllers.count;
     UIViewController *poppingViewController = [self.viewControllers lastObject];
-    [poppingViewController removeFromParentViewController];
     [ANALYTICS popView];
     UIView *showingView = (level == 1) ? self.gridView : [(UIViewController*)[self.viewControllers objectAtIndex:level-1] view];
     [UIView animateWithDuration:0.1 animations:^{
@@ -282,6 +282,7 @@
     }];
     [self.viewControllers removeLastObject];
     [self.view setNeedsLayout];
+    [poppingViewController removeFromParentViewController];
 }
 
 -(void)pushViewController:(UIViewController*)viewController animated:(BOOL)animated
@@ -330,26 +331,6 @@
             [ANALYTICS pushView:@"Notifications Menu"];
             [self pushViewController:notifVC animated:YES];
             break;
-//            BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
-//            UIColor *lampColor = hasNotificationsOn ? kLampOffColor : kLampOnColor;
-//            NSNumber *newSettingValue = hasNotificationsOn ? @NO : @YES;
-//            if (hasNotificationsOn) {
-//                KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off notification" message:@"Are you sure you no longer want to receive alarms and reminders?" block:^(BOOL succeeded, NSError *error) {
-//                    [BLURRY dismissAnimated:YES];
-//                    if(succeeded){
-//                        [kSettings setValue:newSettingValue forSetting:SettingNotifications];
-//                        [sender setLampColor:lampColor];
-//                    }
-//                }];
-//                BLURRY.blurryTopColor = kSettingsBlurColor;
-//                [BLURRY showView:alert inViewController:self];
-//            }
-//            else{
-//                [kSettings setValue:newSettingValue forSetting:SettingNotifications];
-//                [sender setLampColor:lampColor];
-//            }
-//            
-//            break;
         }
         case KPMenuButtonLocation:{
             BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
@@ -401,11 +382,10 @@
             [self pushViewController:integrationVC animated:YES];
             break;
         }
-        case KPMenuButtonWalkthrough:
-            [ROOT_CONTROLLER walkthrough];
-            break;
-        case KPMenuButtonFeedback:{
-            [ROOT_CONTROLLER feedback];
+        case KPMenuButtonHelp:{
+            HelpingViewController *helpVC = [[HelpingViewController alloc] init];
+            [ANALYTICS pushView:@"Help Menu"];
+            [self pushViewController:helpVC animated:YES];
             break;
         }
         case KPMenuButtonUpgrade:{
@@ -426,7 +406,7 @@
             }
             break;
         }
-        case KPMenuButtonPolicies:{
+        /*case KPMenuButtonPolicies:{
             NSString *title = @"Policies";
             NSString *message = @"Do you want to open our\r\npolicies for Swipes?";
             NSString *url = @"http://swipesapp.com/policies.pdf";
@@ -439,7 +419,7 @@
             BLURRY.blurryTopColor = kSettingsBlurColor;
             [BLURRY showView:alert inViewController:self];
             break;
-        }
+        }*/
         case KPMenuButtonLogout:{
             if(!kUserHandler.isLoggedIn){
                 [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
@@ -515,11 +495,8 @@
         case KPMenuButtonLocation:
             title = @"Location";
             break;
-        case KPMenuButtonWalkthrough:
-            title = @"Walkthrough";
-            break;
-        case KPMenuButtonFeedback:
-            title = @"Feedback";
+        case KPMenuButtonHelp:
+            title = @"Help";
             break;
         case KPMenuButtonSnoozes:
             title = @"Snoozes";
@@ -528,9 +505,6 @@
             title = (kUserHandler.isPlus) ? @"Manage" : @"Upgrade";
             break;
         }
-        case KPMenuButtonPolicies:
-            title= @"Policies";
-            break;
         case KPMenuButtonSync:
             title = @"Sync";
             break;
@@ -556,10 +530,7 @@
         case KPMenuButtonLocation:
             imageString = @"scheduleLocation";
             break;
-        case KPMenuButtonWalkthrough:
-            imageString = @"settingsWalkthrough";
-            break;
-        case KPMenuButtonFeedback:
+        case KPMenuButtonHelp:
             imageString = @"settingsFeedback";
             break;
         case KPMenuButtonSnoozes:
@@ -567,9 +538,6 @@
             break;
         case KPMenuButtonUpgrade:
             imageString = @"settingsPlusFull";
-            break;
-        case KPMenuButtonPolicies:
-            imageString = @"settingsPolicy";
             break;
         case KPMenuButtonSync:
             imageString = @"settingsSync";

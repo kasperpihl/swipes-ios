@@ -22,13 +22,13 @@
 -(KPSettings)settingForIndexPath:(NSIndexPath*)indexPath{
     KPSettings setting = SettingNotifications;
     switch (indexPath.row) {
-        case 0:
+        case 2:
             setting = SettingNotifications;
             break;
         case 1:
             setting = SettingDailyReminders;
             break;
-        case 2:
+        case 0:
             setting = SettingWeeklyReminders;
             break;
         default:
@@ -39,13 +39,13 @@
 -(NSString*)titleForIndexPath:(NSIndexPath *)indexPath{
     NSString *title;
     switch (indexPath.row) {
-        case 0:
+        case 2:
             title = @"Tasks snoozed for later";
             break;
         case 1:
             title = @"Daily reminder to plan the day";
             break;
-        case 2:
+        case 0:
             title = @"Weekly reminder to plan the week";
             break;
         default:
@@ -67,7 +67,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = CLEAR;
         cell.textLabel.font = KP_REGULAR(13);
-            
+        cell.transform = CGAffineTransformMakeRotation(M_PI);
         UISwitch *aSwitch = [[UISwitch alloc] init];
         aSwitch.tag = kSwitchTag;
         aSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
@@ -114,6 +114,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = CLEAR;
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
+    self.tableView.transform = CGAffineTransformMakeRotation(-M_PI);
     self.tableView.delegate = self;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
