@@ -287,7 +287,7 @@
     NSString* tempId = todo1.getTempId;
     todo1 = nil;
     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/view?id=%@", tempId]];
-    [self.extensionContext openURL:url completionHandler:^(BOOL success) {
+        [self.extensionContext openURL:url completionHandler:^(BOOL success) {
         // put some code here if needed or pass nil for completion handler
     }];
 }
@@ -295,12 +295,13 @@
 - (IBAction)onShowAll:(id)sender{
     NSInteger maxCount = MIN(6,self.todos.count);
     if(maxCount > self.numberToShow){
-        self.numberToShow = self.todos.count;
+        self.numberToShow = 6;
         [self.tableView reloadData];
         [self updateContentSize];
     }
     else{
-        [self onAll:self.allButton];
+        if(self.todos.count > self.numberToShow)
+            [self onAll:self.allButton];
     }
 }
 
