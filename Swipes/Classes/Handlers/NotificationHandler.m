@@ -317,7 +317,6 @@ static NotificationHandler *sharedObject;
     NSSortDescriptor *priorityDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO];
     scheduleArray = [scheduleArray sortedArrayUsingDescriptors:@[scheduleDescriptor,priorityDescriptor]];
     
-    NSLog(@"%@",scheduleArray);
     
     NSInteger scheduleCount = scheduleArray.count;
     NSInteger totalBadgeCount = todayCount;
@@ -376,7 +375,6 @@ static NotificationHandler *sharedObject;
     }
     [app cancelAllLocalNotifications];
     [self scheduleNotifications:notificationsArray];
-    NSLog(@"%@",notificationsArray);
 }
 
 - (void)updateLocationUpdates

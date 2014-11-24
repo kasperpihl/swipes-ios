@@ -42,12 +42,13 @@
     NSString *parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
     NSString *parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
     
-#ifdef RELEASE
+/*#ifdef RELEASE
     [Leanplum setAppId:@"8J2O981BSPJg1536460xS0tqlMRrO4u9PykB25TE9Jc" withProductionKey:@"DGeyaY7QsAtw2IuAytry41IZaC9wyhDaUSCSMoaHDFo"];
-#else
+#else*/
     LEANPLUM_USE_ADVERTISING_ID;
     [Leanplum setAppId:@"8J2O981BSPJg1536460xS0tqlMRrO4u9PykB25TE9Jc" withDevelopmentKey:@"Tv0mQ7d8o3pEybHlju4DsoEIu7ryptnsXLG79BSoQSA"];
-#endif
+//#endif
+#warning remove before submission
 #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
     NSString* const CONSUMER_KEY = @"swipes";
     NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6";
@@ -93,13 +94,7 @@
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
     
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
-    if(OSVER >= 8){
-    
-        //[[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-        
-    }
     
     return YES;
 }

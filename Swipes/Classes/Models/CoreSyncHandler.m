@@ -608,7 +608,7 @@
     __block NSUndoManager* um = self.context.undoManager;
     if (um.isUndoRegistrationEnabled)
         [um disableUndoRegistration];
-    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_context];
     NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
     for(NSDictionary *object in allObjects){
         [self handleCDObject:nil withObject:object affectedChangedAttributes:&changesToCommit inContext:localContext];
