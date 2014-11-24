@@ -39,16 +39,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSString *parseApplicationKey = @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3";
-    NSString *parseClientKey = @"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS";
     
-/*#ifdef RELEASE
+#ifdef RELEASE
     [Leanplum setAppId:@"8J2O981BSPJg1536460xS0tqlMRrO4u9PykB25TE9Jc" withProductionKey:@"DGeyaY7QsAtw2IuAytry41IZaC9wyhDaUSCSMoaHDFo"];
-#else*/
+#else
     LEANPLUM_USE_ADVERTISING_ID;
     [Leanplum setAppId:@"8J2O981BSPJg1536460xS0tqlMRrO4u9PykB25TE9Jc" withDevelopmentKey:@"Tv0mQ7d8o3pEybHlju4DsoEIu7ryptnsXLG79BSoQSA"];
-//#endif
-#warning remove before submission
+#endif
 #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
     NSString* const CONSUMER_KEY = @"swipes";
     NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6";
@@ -63,8 +60,8 @@
     [Appirater setTimeBeforeReminding:1];
     [Appirater appLaunched:YES];
     
-    [Parse setApplicationId:parseApplicationKey
-                  clientKey:parseClientKey];
+    [Parse setApplicationId:@"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
+                  clientKey:@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"];
     
     [PFFacebookUtils initializeFacebook];
     

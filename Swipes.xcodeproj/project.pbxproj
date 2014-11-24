@@ -2910,7 +2910,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "-all_load";
 				PROVISIONING_PROFILE = "5b3f01e4-7921-4e4d-b01e-2dbb4f887121";
-				"PROVISIONING_PROFILE[sdk=*]" = "5b3f01e4-7921-4e4d-b01e-2dbb4f887121";
+				"PROVISIONING_PROFILE[sdk=*]" = "1de96ce3-1d20-41dc-90e9-8c964e80c729";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -3039,8 +3039,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "9f0d0a1a-d901-4eb6-a8f4-cbae9bc2363f";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9f0d0a1a-d901-4eb6-a8f4-cbae9bc2363f";
+				PROVISIONING_PROFILE = "56a2c84e-b970-4b21-949b-bcf800b12b24";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "56a2c84e-b970-4b21-949b-bcf800b12b24";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -3067,8 +3067,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "a02f4d78-a3ff-4a36-a853-028bbaa71aff";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a02f4d78-a3ff-4a36-a853-028bbaa71aff";
+				PROVISIONING_PROFILE = "7f77d205-e45d-4da3-be40-e15436cb71e4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7f77d205-e45d-4da3-be40-e15436cb71e4";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
