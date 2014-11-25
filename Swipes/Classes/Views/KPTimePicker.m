@@ -223,6 +223,9 @@
         self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"timepickerwheel"]];
         
         self.centerPoint = CGPointMake(self.bounds.size.width/2, self.bounds.size.height-self.timeSlider.frame.size.height/2-30);
+        if(kIsIpad){
+            self.centerPoint = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2 + self.timeSlider.frame.size.height/2);
+        }
         self.lightColor = kDefLightColor;
         self.darkColor = kDefDarkColor;
         

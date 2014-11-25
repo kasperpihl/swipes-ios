@@ -15,7 +15,7 @@
 #define kSignatureSpacing 20
 #define kSignatureRightMargin 40
 #define kStampViewY valForIpad(250,valForScreen(110,130))
-#define kStreakFont [UIFont fontWithName:@"NexaHeavy" size:15]
+#define kStreakFont [UIFont fontWithName:@"NexHeavy" size:15]
 #define kReferBottom 30
 #define kReferX 10
 #define kShareLabelWidth 230
@@ -51,11 +51,12 @@
         self.streakLabel.text = @"Next task @ 16:30        ";
         self.streakLabel.backgroundColor = CLEAR;
         self.streakLabel.textColor = kColor;
+        self.streakLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.streakLabel.textAlignment = NSTextAlignmentCenter;
         self.streakLabel.font = kStreakFont;
         [self.streakLabel sizeToFit];
         [self addSubview:self.streakLabel];
-        CGRectSetWidth(self.streakLabel,320);
+        CGRectSetWidth(self.streakLabel,self.bounds.size.width);
         CGRectSetY(self.streakLabel, CGRectGetMaxY(self.trompetView.frame) + kStreakSpacing);
         
         
