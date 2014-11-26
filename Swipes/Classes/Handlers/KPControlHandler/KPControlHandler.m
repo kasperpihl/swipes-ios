@@ -132,7 +132,7 @@
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(orientationChanged:)
-                                                     name:UIDeviceOrientationDidChangeNotification
+                                                     name:@"willRotateToInterfaceOrientation"
                                                    object:nil];
         [self setState:KPControlHandlerStateAdd animated:NO];
     }
@@ -313,8 +313,7 @@
 }
 - (void)orientationChanged:(NSNotification *)notification
 {
-    if(kIsIpad)
-        [self addAwesomeMenu];
+    [self addAwesomeMenu];
 }
 
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{

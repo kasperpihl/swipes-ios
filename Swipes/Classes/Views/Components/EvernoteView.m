@@ -160,7 +160,7 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(orientationChanged:)
-                                                     name:UIDeviceOrientationDidChangeNotification
+                                                     name:@"willRotateToInterfaceOrientation"
                                                    object:nil];
     }
     return self;
@@ -383,8 +383,7 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
 
 - (void)orientationChanged:(NSNotification *)notification
 {
-    if(kIsIpad)
-        [self cancel:self];
+    [self cancel:self];
 }
 
 #pragma mark - Evernote Viewer protocol implementation

@@ -283,7 +283,7 @@
         [self addSubview:self.clockLabel];
         [self setNeedsLayout];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:UIDeviceOrientationDidChangeNotification  object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:@"willRotateToInterfaceOrientation"  object:nil];
         
     }
     return self;
@@ -311,12 +311,10 @@
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return YES;
 }
+
 - (void)orientationChanged:(NSNotification *)notification{
     
-    UIDevice *device = (UIDevice*)[notification object];
-    
-    if([Global supportsOrientation:[device orientation]] && kIsIpad)
-        [self pressedBackButton:self.backButton];
+    [self pressedBackButton:self.backButton];
 }
 -(void)dealloc{
     self.confirmButton = nil;

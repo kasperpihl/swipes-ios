@@ -849,8 +849,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                                                      name:UIKeyboardWillHideNotification
                                                    object:nil];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:UIDeviceOrientationDidChangeNotification  object:nil];
-        
         NSInteger startY = (OSVER >= 7) ? 20 : 0;
         NSInteger toolbarWidth = 135;
         NSInteger leftPadding = 45;
@@ -1187,16 +1185,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
 }
 
-- (void)orientationChanged:(NSNotification *)notification{
-    if(kIsIpad){
-        [self.sectionHeader setNeedsDisplay];
-        [self update];
-    }
-    /*BOOL isPortrait = !UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
-     CGFloat width = isPortrait ? self.cell.frame.size.width : self.cell.frame.size.height;
-     CGFloat height = isPortrait ?  self.cell.frame.size.height : self.cell.frame.size.width;
-     //CGRectSetHeight(self.scrollView, height);
-     CGRectSetWidth(self.scrollView, width);*/
+-(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    [self.sectionHeader setNeedsDisplay];
+    [self update];
 }
 
 

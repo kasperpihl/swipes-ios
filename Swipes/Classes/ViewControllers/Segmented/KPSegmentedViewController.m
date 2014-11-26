@@ -743,11 +743,10 @@
 }
 
 
-
-- (void)orientationChanged:(NSNotification *)notification
-{
-    if(self.currentTopMenu != TopMenuDefault && kIsIpad)
+-(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    if(self.currentTopMenu != TopMenuDefault)
         [self setTopMenu:nil state:TopMenuDefault animated:NO];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"willRotateToInterfaceOrientation" object:self userInfo:@{@"to":@(toInterfaceOrientation),@"duration":@(duration)}];
 }
 
 
@@ -802,10 +801,6 @@
     [self.contentView addSubview:currentViewController.view];
     [currentViewController didMoveToParentViewController:self];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(orientationChanged:)
-                                                 name:UIDeviceOrientationDidChangeNotification
-                                               object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated

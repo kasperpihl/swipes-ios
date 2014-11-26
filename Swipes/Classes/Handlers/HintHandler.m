@@ -331,8 +331,7 @@ static HintHandler *sharedObject;
 }
 
 - (void)orientationChanged:(NSNotification *)notification{
-    if(kIsIpad)
-        [self.emHint clear];
+    [self.emHint clear];
 }
 
 - (void)onTriggerHint:(NSNotification *)notification{
@@ -347,7 +346,7 @@ static HintHandler *sharedObject;
         self.hints = [self.hints mutableCopy];
     self.emHint = [[EMHint alloc] init];
     self.emHint.hintDelegate = self;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:@"willRotateToInterfaceOrientation" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTriggerHint:) name:HH_TriggerHint object:nil];
 }
