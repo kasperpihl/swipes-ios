@@ -5,4 +5,73 @@
   Created by demosten on 10/6/14.
   Copyright (c) 2014 Pihl IT. All rights reserved.
 */
+// LOCALIZE_STRI
+
+
+
+
+/* 
+ Login Screen 
+ */
+
+// UI
+
+"Focus. Swipe. Achieve." = "Fokuser. Swipe. Opnå."; // title for login screen
+"Task List made for High Achievers" = "En Opgaveliste for dig."; // subtitle on loginscreen
+
+"Keep trying Swipes" = "Forsæt med at prøve Swipes"; // title for try button
+"Try out" = "Prøv Swipes";
+
+"Create Account" = "Ny Bruger"; // Create account button title
+"Log in" = "Log ind"; // Login button title
+"Sign up" = "Ny bruger";
+"Register" = "Opret";
+
+"Forgot password?" = "Glemt adgangskode?";
+"Privacy policy" = "Servicebetingelser";
+"Policies" = "Betingelser";
+
+"password" = "adgangskode";
+"email" = "e-mail";
+"cancel" = "annuller";
+"reset" = "nulstil";
+
+"You can register with email" = "Du kan oprette en bruger med email";
+"Or register with Facebook" = "Eller oprette med Facebook";
+
+"You can log in with email" = "Du kan logge ind med email";
+"Or log in with Facebook" = "Eller logge ind med Facebook";
+
+// Alerts
+"Please use an email" = "Brug venligst en e-mail";
+"Make sure you use a real email!" = "Dobbeltcheck at du bruger en rigtig e-mail!";
+
+"Missing password" = "Manglende adgangskode";
+"Make sure to enter your password!" = "Dobbeltcheck at du indtastede en adgangskode!";
+
+"Wrong email or password." = "Forkert e-mail eller adgangskode.";
+"Please check your informations and try again." = "Check venligst dine informationer og prøv igen";
+
+"Email wasn't found." = "E-mailen blev ikke fundet";
+"We couldn't recognize the email." = "Vi kunne ikke genkende denne e-mail";
+
+"Something went wrong." = "Noget gik galt.";
+"Please try again." = "Prøv venligst igen.";
+
+"Facebook settings" = "Facebook indstillinger";
+"Please make sure you've allowed Swipes in Settings -> Facebook" = "Check venligst at du har tilladt Swipes under Indstillinger -> Facebook";
+
+"New user" = "Ny bruger";
+"Do you want to sign up with: %@" = "Vil du registrere en bruger med: %@";
+
+"Reset password" = "Nulstil adgangskode";
+
+"Email sent" = "E-mail sendt";
+"Follow the instructions in the email to reset your pass" = "Følg instruktionerne i e-mailen for at nulstille din adgangskode";
+
+"Read through our 'Privacy Policy' and 'Terms and Conditions'." = "Gennemlæs vores 'Privatlivs-betingelser' og 'Service-betingelser'";
+
+/* Initial Tasks */
+
+
 "%li / %li Today" = "%li / %li I dag";

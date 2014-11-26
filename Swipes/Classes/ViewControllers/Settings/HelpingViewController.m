@@ -114,7 +114,7 @@
             
             break;
         case 0:{
-            [UTILITY confirmBoxWithTitle:@"Policies" andMessage:@"Read through our 'Privacy Policy' and 'Terms and Conditions'." cancel:@"Cancel" confirm:@"Open" block:^(BOOL succeeded, NSError *error) {
+            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Policies") andMessage:LOCALIZE_STRING(@"Read through our 'Privacy Policy' and 'Terms and Conditions'.") cancel:@"Cancel" confirm:@"Open" block:^(BOOL succeeded, NSError *error) {
                 
                 if(succeeded){
                     

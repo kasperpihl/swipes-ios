@@ -132,15 +132,15 @@ typedef enum {
         self.titleView.subtitleLabel.font = [UIFont fontWithName:@"Nexa-Bold" size:12];
         self.titleView.titleLabel.textColor = kDefTextColor;
         self.titleView.subtitleLabel.textColor = kDefTextColor;
-        [self.titleView setTitle:@"Focus. Swipe. Achieve." subtitle:@"Task list made for High Achievers"];
+        [self.titleView setTitle:LOCALIZE_STRING(@"Focus. Swipe. Achieve.") subtitle:LOCALIZE_STRING(@"Task List made for High Achievers")];
         [self.view addSubview:self.titleView];
         
         self.loginOrSignupLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
         self.loginOrSignupLabel.textAlignment = NSTextAlignmentCenter;
         self.loginOrSignupLabel.textColor = kDefTextColor;
-        self.loginOrSignupLabel.font = KP_REGULAR(16);
+        self.loginOrSignupLabel.font = KP_REGULAR(14);
         self.loginOrSignupLabel.backgroundColor = CLEAR;
-        self.loginOrSignupLabel.text = @"You can register with email";
+        self.loginOrSignupLabel.text = LOCALIZE_STRING(@"You can register with email");
         [self.loginOrSignupLabel sizeToFit];
         CGRectSetWidth(self.loginOrSignupLabel, self.view.frame.size.width);
         self.loginOrSignupLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -166,7 +166,7 @@ typedef enum {
         self.emailField.returnKeyType = UIReturnKeyNext;
         self.emailField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.emailField.layer.cornerRadius = kCornerRadius;
-        self.emailField.placeholder = @"email";
+        self.emailField.placeholder = LOCALIZE_STRING(@"email");
         self.emailField.textColor = kDefFieldColor;
         UIColor *color = gray(55, 0.5);
         self.emailField.backgroundColor = color;
@@ -183,7 +183,7 @@ typedef enum {
         self.passwordField.font = KP_REGULAR(16);
         self.passwordField.textColor = kDefFieldColor;
         self.passwordField.backgroundColor = color;
-        self.passwordField.placeholder = @"password";
+        self.passwordField.placeholder = LOCALIZE_STRING(@"password");
         
         @try {
             [self.emailField setValue:kDefFieldColor
@@ -208,7 +208,7 @@ typedef enum {
         self.continueButton.layer.masksToBounds = YES;
         self.continueButton.titleLabel.font = kDefLoginButtonsFont;
         [self.continueButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
-        [self.continueButton setTitle:@"CREATE ACCOUNT" forState:UIControlStateNormal];
+        [self.continueButton setTitle:[LOCALIZE_STRING(@"Create Account") uppercaseString] forState:UIControlStateNormal];
         [self.continueButton  setBackgroundImage:[conColor image] forState:UIControlStateNormal];
         [self.continueButton  setBackgroundImage:[alpha(conColor, 0) image] forState:UIControlStateHighlighted];
         [self.continueButton setTitleColor:conColor forState:UIControlStateHighlighted];
@@ -224,7 +224,7 @@ typedef enum {
         self.tryButton.titleLabel.font = LOGIN_FIELDS_FONT;
         
         [self.tryButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
-        NSString *title = [USER_DEFAULTS boolForKey:isTryingString] ? @"Keep trying Swipes" : @"Try out";
+        NSString *title = [USER_DEFAULTS boolForKey:isTryingString] ? LOCALIZE_STRING(@"Keep trying Swipes") : LOCALIZE_STRING(@"Try out");
         [self.tryButton setTitle:title forState:UIControlStateNormal];
         [self.tryButton addTarget:self action:@selector(pressedTryButton:) forControlEvents:UIControlEventTouchUpInside];
         self.tryButton.frame = CGRectMake(0, 0, sizeWithFont(title ,LOGIN_FIELDS_FONT).width + 36, fieldHeight);
@@ -248,11 +248,11 @@ typedef enum {
 
         
         self.facebookLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
-        self.facebookLabel.font = KP_REGULAR(16);
+        self.facebookLabel.font = KP_REGULAR(14);
         self.facebookLabel.textColor = kDefTextColor;
         self.facebookLabel.textAlignment = NSTextAlignmentCenter;
         
-        self.facebookLabel.text = @"Or with Facebook";
+        self.facebookLabel.text = LOCALIZE_STRING(@"Or register with Facebook");
         self.facebookLabel.backgroundColor = CLEAR;
         [self.facebookLabel sizeToFit];
         CGRectSetWidth(self.facebookLabel, self.view.frame.size.width);
@@ -273,11 +273,11 @@ typedef enum {
         
         
         self.privacyPolicyButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.privacyPolicyButton.frame = CGRectMake(0, 0, sizeWithFont(@"Privacy policy" ,LOGIN_FIELDS_FONT).width + 20, fieldHeight);
+        self.privacyPolicyButton.frame = CGRectMake(0, 0, sizeWithFont(LOCALIZE_STRING(@"Policies") ,LOGIN_FIELDS_FONT).width + 20, fieldHeight);
         self.privacyPolicyButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
         self.privacyPolicyButton.titleLabel.font = LOGIN_FIELDS_FONT;
         [self.privacyPolicyButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
-        [self.privacyPolicyButton setTitle:@"Privacy policy" forState:UIControlStateNormal];
+        [self.privacyPolicyButton setTitle:LOCALIZE_STRING(@"Policies") forState:UIControlStateNormal];
         [self.privacyPolicyButton addTarget:self action:@selector(pressedPrivacy:) forControlEvents:UIControlEventTouchUpInside];
         self.privacyPolicyButton.frame = CGRectSetPos(self.privacyPolicyButton.frame, 0, self.view.frame.size.height-self.privacyPolicyButton.frame.size.height);
         
@@ -285,10 +285,10 @@ typedef enum {
         [self.view addSubview:self.privacyPolicyButton];
         
         self.forgotButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.forgotButton.frame = CGRectMake(0, 0, sizeWithFont(@"Forgot password?" ,LOGIN_FIELDS_FONT).width+20, fieldHeight);
+        self.forgotButton.frame = CGRectMake(0, 0, sizeWithFont(LOCALIZE_STRING(@"Forgot password?") ,LOGIN_FIELDS_FONT).width+20, fieldHeight);
         self.forgotButton.titleLabel.font = LOGIN_FIELDS_FONT;
         [self.forgotButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
-        [self.forgotButton setTitle:@"Forgot password?" forState:UIControlStateNormal];
+        [self.forgotButton setTitle:LOCALIZE_STRING(@"Forgot password?") forState:UIControlStateNormal];
         [self.forgotButton addTarget:self action:@selector(pressedForgot:) forControlEvents:UIControlEventTouchUpInside];
         self.forgotButton.frame = CGRectSetPos(self.forgotButton.frame, self.view.frame.size.width-self.forgotButton.frame.size.width, self.view.frame.size.height-self.forgotButton.frame.size.height);
         self.forgotButton.hidden = YES;
@@ -297,10 +297,10 @@ typedef enum {
         self.loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
         NSInteger margin = 10;
         UIFont *loginFont = KP_BOLD(16);
-        self.loginButton.frame = CGRectMake(0, 0, sizeWithFont(@"Sign up" ,loginFont).width+20, fieldHeight - margin);
+        self.loginButton.frame = CGRectMake(0, 0, sizeWithFont(LOCALIZE_STRING(@"Sign up") ,loginFont).width+20, fieldHeight - margin);
         self.loginButton.titleLabel.font = loginFont;
         [self.loginButton setTitleColor:kDefTextColor forState:UIControlStateNormal];
-        [self.loginButton setTitle:@"Log in" forState:UIControlStateNormal];
+        [self.loginButton setTitle:LOCALIZE_STRING(@"Log in") forState:UIControlStateNormal];
         [self.loginButton addTarget:self action:@selector(pressedChange:) forControlEvents:UIControlEventTouchUpInside];
         self.loginButton.frame = CGRectSetPos(self.loginButton.frame, self.view.frame.size.width-self.loginButton.frame.size.width-margin/2, self.view.frame.size.height-self.loginButton.frame.size.height-margin/2);
         [self.view addSubview:self.loginButton];
@@ -343,25 +343,25 @@ typedef enum {
     NSString *email = self.emailField.text;
     NSString *password = self.passwordField.text;
     if(![UtilityClass validateEmail:email]){
-        [UTILITY alertWithTitle:@"Please use an email" andMessage:@"Make sure you use a real email!"];
+        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Please use an email") andMessage:LOCALIZE_STRING(@"Make sure you use a real email!")];
         return NO;
     }
     else if(password.length == 0){
-        [UTILITY alertWithTitle:@"Missing password" andMessage:@"Make sure to enter your password!"];
+        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Missing password") andMessage:LOCALIZE_STRING(@"Make sure to enter your password!")];
         return NO;
     }
     return YES;
 }
 -(void)handleErrorFromLogin:(NSError*)error{
     if(error.code == 101){
-        [UTILITY alertWithTitle:@"Wrong email or password." andMessage:@"Please check your informations and try again."];
+        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Wrong email or password.") andMessage:LOCALIZE_STRING(@"Please check your informations and try again.")];
         return;
     }
     else if(error.code == 205 || error.code == 125){
-        [UTILITY alertWithTitle:@"Email wasn't found." andMessage:@"We couldn't recognize the email."];
+        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Email wasn't found.") andMessage:LOCALIZE_STRING(@"We couldn't recognize the email.")];
         return;
     }
-    [UTILITY alertWithTitle:@"Something went wrong." andMessage:@"Please try again."];
+    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Something went wrong.") andMessage:LOCALIZE_STRING(@"Please try again.")];
     [UtilityClass sendError:error type:@"Login"];
 }
 -(void)setCurrentState:(LoginState)currentState animated:(BOOL)animated{
@@ -381,20 +381,20 @@ typedef enum {
     self.tryButton.hidden = doesRequireFields;
     self.continueButton.hidden = doesRequireFields;
     
-    [self.loginButton setTitle:(self.currentState == LoginStateLogin ? @"Sign up" : @"Log in") forState:UIControlStateNormal];
+    [self.loginButton setTitle:(self.currentState == LoginStateLogin ? LOCALIZE_STRING(@"Sign up") : LOCALIZE_STRING(@"Log in")) forState:UIControlStateNormal];
     switch (currentState) {
         case LoginStateWelcome:
-            [self.continueButton setTitle:@"CREATE ACCOUNT" forState:UIControlStateNormal];
+            [self.continueButton setTitle:[LOCALIZE_STRING(@"Create Account") uppercaseString] forState:UIControlStateNormal];
             break;
         case LoginStateLogin:
-            self.loginOrSignupLabel.text = @"You can log in with email";
-            self.facebookLabel.text = @"Or log in with Facebook";
-            [self.continueButton setTitle:@"LOG IN" forState:UIControlStateNormal];
+            self.loginOrSignupLabel.text = LOCALIZE_STRING(@"You can log in with email");
+            self.facebookLabel.text = LOCALIZE_STRING(@"Or log in with Facebook");
+            [self.continueButton setTitle:[LOCALIZE_STRING(@"Log in") uppercaseString] forState:UIControlStateNormal];
             break;
         case LoginStateSignup:
-            self.loginOrSignupLabel.text = @"You can register with email";
-            self.facebookLabel.text = @"Or register with Facebook";
-            [self.continueButton setTitle:@"REGISTER" forState:UIControlStateNormal];
+            self.loginOrSignupLabel.text = LOCALIZE_STRING(@"You can register with email");
+            self.facebookLabel.text = LOCALIZE_STRING(@"Or register with Facebook");
+            [self.continueButton setTitle:[LOCALIZE_STRING(@"Register") uppercaseString] forState:UIControlStateNormal];
             break;
     }
     [self.view setNeedsLayout];
@@ -421,7 +421,7 @@ typedef enum {
                 }
             }
             if(error.code == 2){
-                [UTILITY alertWithTitle:@"Facebook settings" andMessage:@"Please make sure you've allowed Swipes in Settings -> Facebook"];
+                [UTILITY alertWithTitle:LOCALIZE_STRING(@"Facebook settings") andMessage:LOCALIZE_STRING(@"Please make sure you've allowed Swipes in Settings -> Facebook")];
             }
             else{
                 [self handleErrorFromLogin:error];
@@ -474,8 +474,8 @@ typedef enum {
                         }
                     }];
                 };
-                NSString *title = (self.currentState == LoginStateLogin) ? @"User doesn't exist" : @"New user";
-                NSString *message = (self.currentState == LoginStateLogin) ? @"Do you want to sign up instead?" : [NSString stringWithFormat:@"Do you want to sign up with: %@",email];
+                NSString *title = LOCALIZE_STRING(@"New user");
+                NSString *message = [NSString stringWithFormat:LOCALIZE_STRING(@"Do you want to sign up with: %@"),email];
                 [UTILITY confirmBoxWithTitle:title andMessage:message block:^(BOOL succeeded, NSError *error) {
                     if(succeeded){
                         signUpBlock();
@@ -491,14 +491,14 @@ typedef enum {
 }
 -(void)pressedForgot:(UIButton*)sender{
     NSLog(@"for: %@",self.emailField.text);
-    [UTILITY inputAlertWithTitle:@"Reset password" message:nil pretext:self.emailField.text placeholder:@"Email" cancel:@"Cancel" confirm:@"Reset" block:^(NSString *string, NSError *error) {
+    [UTILITY inputAlertWithTitle:LOCALIZE_STRING(@"Reset password") message:nil pretext:self.emailField.text placeholder:[LOCALIZE_STRING(@"email") capitalizedString] cancel:[LOCALIZE_STRING(@"cancel") capitalizedString] confirm:[LOCALIZE_STRING(@"reset") capitalizedString] block:^(NSString *string, NSError *error) {
         if(string.length == 0)
             return;
         [self showIndicator:YES onElement:self.forgotButton];
         [PFUser requestPasswordResetForEmailInBackground:[string lowercaseString] block:^(BOOL succeeded, NSError *error) {
             [self showIndicator:NO onElement:self.forgotButton];
             if(succeeded){
-                [UTILITY alertWithTitle:@"Email sent" andMessage:@"Follow the instructions in the email to reset your pass"];
+                [UTILITY alertWithTitle:LOCALIZE_STRING(@"Email sent") andMessage:LOCALIZE_STRING(@"Follow the instructions in the email to reset your pass")];
             }
             else{
                 [self handleErrorFromLogin:error];
@@ -508,9 +508,9 @@ typedef enum {
     }];
 }
 -(void)pressedPrivacy:(UIButton*)sender{
-    [UTILITY confirmBoxWithTitle:@"Privacy policy" andMessage:@"Do you want to open our privacy policy?" block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Policies") andMessage:LOCALIZE_STRING(@"Read through our 'Privacy Policy' and 'Terms and Conditions'.") block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"http://swipesapp.com/privacypolicy.pdf"]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"http://swipesapp.com/policies.pdf"]];
         }
     }];
 }

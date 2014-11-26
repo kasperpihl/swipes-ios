@@ -158,7 +158,6 @@
     
     self.sectionHeader.title = [NSString stringWithFormat:LOCALIZE_STRING(@"%li / %li TODAY"), (long)numberOfDone,(long)total];
     //[NSString stringWithFormat:@"%i%%",percentage];//
-    
     if(total > 0)
         self.sectionHeader.progressPercentage = (CGFloat)numberOfDone/total;
     else
@@ -258,7 +257,6 @@
     self.youreAllDoneView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
     [self.view addSubview:self.youreAllDoneView];
-    
     [self.tableView removeFromSuperview];
     KPReorderTableView *tableView = [[KPReorderTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [self prepareTableView:tableView];
