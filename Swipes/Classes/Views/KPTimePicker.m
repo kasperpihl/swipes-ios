@@ -14,14 +14,12 @@
 #define kClockLabelFont [UIFont fontWithName:@"BebasNeue" size:valForScreen(65,75)]
 #define kDayLabelFont KP_SEMIBOLD(valForIpad(25,valForScreen(14,16)))
 #define kDefMiddleButtonRadius 60
-#define kDefActualSize valForScreen(85,93)
+#define kDefActualSize 93
 
 #define kDefClearMiddle 45
 
 #define kBackMargin 10
 
-#define kOpenedSunAngle valForScreen(70,60)
-#define kExtraAngleForIcons 22
 
 #define kDefLightColor          retColor(tcolor(BackgroundColor),gray(255,1)) //tcolor(BackgroundColor) //retColor(gray(30,1),gray(230,1))
 #define kDefDarkColor           retColor(tcolor(BackgroundColor),gray(255,1)) //gray(255,1) //tcolor(BackgroundColor)
@@ -38,7 +36,6 @@
 #import "UIColor+Utilities.h"
 #import "SlowHighlightIcon.h"
 @class KPTimePicker;
-
 
 @interface KPTimePicker () <UIGestureRecognizerDelegate>
 @property (nonatomic) CGPoint lastPosition;
@@ -132,8 +129,13 @@
     self.isInConfirmButton = (distanceToMiddle < kDefMiddleButtonRadius);
     self.isOutOfScope = (distanceToMiddle < kDefClearMiddle);
     if (sender.state == UIGestureRecognizerStateChanged || sender.state == UIGestureRecognizerStateBegan) {
+        CGFloat distance = [self distanceBetweenCenterPoint:self.centerPoint andPoint:location];
+        BOOL shouldHighlight = NO;
+        if(!self.isInConfirmButton && distance < 160)
+            shouldHighlight = YES;
+        [self highlightImageForSlider:shouldHighlight animated:YES];
         if(!self.isOutOfScope){
-            [self highlightImageForSlider:YES animated:YES];
+            
             CGPoint sliderStartPoint = self.lastPosition;// CGPointMake(self.centerPoint.x, self.centerPoint.y - 100.0);
             if(CGPointEqualToPoint(self.lastPosition, CGPointZero)) sliderStartPoint = location;
             CGFloat angle = [self angleBetweenCenterPoint:self.centerPoint point1:sliderStartPoint point2:location];
@@ -178,6 +180,9 @@
 	CGFloat angle = atan2f(v2.x*v1.y - v1.x*v2.y, v1.x*v2.x + v1.y*v2.y);
 	
 	return angle;
+}
+-(CGFloat)distanceBetweenCenterPoint:(CGPoint)centerPoint andPoint:(CGPoint)p1{
+    return sqrt ( pow((centerPoint.x-p1.x), 2) + pow((centerPoint.y-p1.y), 2) );
 }
 - (CGPoint)pointFromPoint:(CGPoint)origin withDistance:(float)distance towardAngle:(float)angle
 {
