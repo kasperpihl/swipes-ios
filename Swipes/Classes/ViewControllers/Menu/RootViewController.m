@@ -42,6 +42,7 @@
 #import "UserHandler.h"
 #import "ShareViewController.h"
 #import "AwesomeMenu.h"
+#import <EventKit/EventKit.h>
 
 @interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate, HintHandlerDelegate>
 
@@ -186,6 +187,7 @@ static RootViewController *sharedObject;
 +(RootViewController *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[RootViewController allocWithZone:NULL] init];
+        
     }
     return sharedObject;
 }
@@ -504,6 +506,24 @@ static RootViewController *sharedObject;
     [super viewDidAppear:animated];
     kTopClock.font = KP_SEMIBOLD(12);
     [self changedTheme];
+    /*EKEventStore *store = [[EKEventStore alloc] init];
+    
+    [store requestAccessToEntityType:EKEntityTypeReminder completion:^(BOOL granted, NSError *error) {
+        if(!error){
+            NSPredicate *predicate = [store predicateForRemindersInCalendars:nil];
+            
+            [store fetchRemindersMatchingPredicate:predicate completion:^(NSArray *reminders) {
+                for (EKReminder *reminder in reminders) {
+                    NSLog(@"%@",reminder.calendarItemIdentifier);
+                    
+                    // do something for each reminder
+                    [KPToDo addItem:reminder.title priority:NO tags:nil save:NO from:@"Reminders"];
+                }
+                [KPToDo saveToSync];
+            }];
+        }
+        else NSLog(@"%@",error);
+    }];*/
 }
 - (void)viewDidUnload
 {

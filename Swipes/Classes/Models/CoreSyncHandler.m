@@ -293,7 +293,7 @@
         return UIBackgroundFetchResultNoData;
     }
     
-    if (!kCurrent) {
+    if (!kCurrent || !kCurrent.sessionToken) {
         return UIBackgroundFetchResultNoData;
     }
     

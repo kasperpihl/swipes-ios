@@ -144,6 +144,7 @@
 		A768D39D1896C812003E2DD6 /* ToDoViewController+ViewHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = A768D39C1896C812003E2DD6 /* ToDoViewController+ViewHelpers.m */; };
 		A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A76ADC1217ECA7AB00F52F40 /* Images.xcassets */; };
 		A76B2387172C06CC00F742C2 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A76B2386172C06CC00F742C2 /* ScheduleViewController.m */; };
+		A76DCB0C1A246AD30067B41B /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A76DCB0B1A246AD30067B41B /* EventKit.framework */; };
 		A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A771356E17BABB5A0090BE89 /* UIView+Utilities.m */; };
 		A772B14119671D9F00C07909 /* swipesandevernote.png in Resources */ = {isa = PBXBuildFile; fileRef = A772B13F19671D9F00C07909 /* swipesandevernote.png */; };
 		A772B14219671D9F00C07909 /* swipesandevernote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A772B14019671D9F00C07909 /* swipesandevernote@2x.png */; };
@@ -695,6 +696,7 @@
 		A76ADC1217ECA7AB00F52F40 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A76B2385172C06CC00F742C2 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScheduleViewController.h; path = Schedule/ScheduleViewController.h; sourceTree = "<group>"; };
 		A76B2386172C06CC00F742C2 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScheduleViewController.m; path = Schedule/ScheduleViewController.m; sourceTree = "<group>"; };
+		A76DCB0B1A246AD30067B41B /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		A771356D17BABB5A0090BE89 /* UIView+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Utilities.h"; sourceTree = "<group>"; };
 		A771356E17BABB5A0090BE89 /* UIView+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Utilities.m"; sourceTree = "<group>"; };
 		A772B13F19671D9F00C07909 /* swipesandevernote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = swipesandevernote.png; sourceTree = "<group>"; };
@@ -977,6 +979,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A76DCB0C1A246AD30067B41B /* EventKit.framework in Frameworks */,
 				DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */,
 				A7E9F60919DAAE8800CAA1D1 /* MobileCoreServices.framework in Frameworks */,
 				A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */,
@@ -1426,6 +1429,7 @@
 		A7778CCC16EB5884004D95E5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A76DCB0B1A246AD30067B41B /* EventKit.framework */,
 				DA67301318A99C7100CA4C1A /* DropboxSDK.framework */,
 				DAEBBE62188B2BB8002655CB /* libxml2.dylib */,
 				A76182E0187D37AB00914A05 /* KitLocate.Framework */,
