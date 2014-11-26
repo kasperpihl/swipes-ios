@@ -314,6 +314,7 @@
 - (void)orientationChanged:(NSNotification *)notification
 {
     [self addAwesomeMenu];
+    [self cleanFromAwesomeMenu];
 }
 
 -(void)toolbar:(KPToolbar *)toolbar pressedItem:(NSInteger)item{
