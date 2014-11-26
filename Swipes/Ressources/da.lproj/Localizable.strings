@@ -5,10 +5,6 @@
   Created by demosten on 10/6/14.
   Copyright (c) 2014 Pihl IT. All rights reserved.
 */
-// LOCALIZE_STRI
-
-
-
 
 /* 
  Login Screen 
@@ -19,7 +15,7 @@
 "Focus. Swipe. Achieve." = "Fokuser. Swipe. Opnå."; // title for login screen
 "Task List made for High Achievers" = "En Opgaveliste for dig."; // subtitle on loginscreen
 
-"Keep trying Swipes" = "Forsæt med at prøve Swipes"; // title for try button
+"Keep trying Swipes" = "Forsæt med at prøve"; // title for try button
 "Try out" = "Prøv Swipes";
 
 "Create Account" = "Ny Bruger"; // Create account button title
@@ -28,7 +24,6 @@
 "Register" = "Opret";
 
 "Forgot password?" = "Glemt adgangskode?";
-"Privacy policy" = "Servicebetingelser";
 "Policies" = "Betingelser";
 
 "password" = "adgangskode";
@@ -71,7 +66,36 @@
 
 "Read through our 'Privacy Policy' and 'Terms and Conditions'." = "Gennemlæs vores 'Privatlivs-betingelser' og 'Service-betingelser'";
 
-/* Initial Tasks */
+/* 
+ Initial Tasks and Tags
+ */
+"home" = "privat";
+"work" = "arbejde";
+
+"Swipe right to complete" = "Swipe til højre for at gennemføre";
+"Swipe left to snooze for later" = "Swipe til venstre for at udskyde til senere";
+"Access your tasks on web.swipesapp.com" = "Check dine opgaver fra din computer på web.swipesapp.com";
 
 
-"%li / %li Today" = "%li / %li I dag";
+/*
+ Topoverlay menus (Workspaces, select and search)
+*/
+// UI
+"All" = "Alle";
+"None" = "Ingen";
+"Select more" = "Vælg flere";
+"Set Workspace" = "Sæt Filter";
+"Search" = "Søg";
+
+// Alerts
+"Select Tasks" = "Vælg Opgaver";
+"Tap your tasks to select them and swipe them all together." = "Tryk på dine opgaver for at vælge dem og swipe dem alle på samme tid.";
+
+"Workspaces" = "Filter";
+"Set your workspace, select tags and stay focused." = "Sæt et filter, vælg tags og vær fokuseret.";
+
+"Add new tag" = "Tilføj nyt tag";
+"Type the name of your tag (ex. work, project or school)" = "Indtast navnet på dit tag (f.eks. arbejde, projekt eller skole)";
+"add" = "tilføj";
+
+"%li / %li TODAY" = "%li / %li I DAG";

@@ -352,18 +352,18 @@
 
 #pragma mark SelectionTopMenuDelegate
 -(void)didPressAllInSelectionTopMenu:(SelectionTopMenu *)topMenu{
-    BOOL select = [topMenu.allButton.titleLabel.text isEqualToString:@"All"];
+    BOOL select = [topMenu.allButton.titleLabel.text isEqualToString:LOCALIZE_STRING(@"All")];
     if(select){
         [self.currentViewController selectAllRows];
-        [topMenu.allButton setTitle:@"None" forState:UIControlStateNormal];
+        [topMenu.allButton setTitle:LOCALIZE_STRING(@"None") forState:UIControlStateNormal];
     }
     else{
         [self.currentViewController deselectAllRows:self];
-        [topMenu.allButton setTitle:@"All" forState:UIControlStateNormal];
+        [topMenu.allButton setTitle:LOCALIZE_STRING(@"All") forState:UIControlStateNormal];
     }
 }
 -(void)didPressHelpLabelInSelectionTopMenu:(SelectionTopMenu *)topMenu{
-    [UTILITY alertWithTitle:@"Select tasks" andMessage:@"Tap your tasks to select them and swipe them all together."];
+    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Select Tasks") andMessage:LOCALIZE_STRING(@"Tap your tasks to select them and swipe them all together.")];
 }
 -(void)didPressCloseInSelectionTopMenu:(SelectionTopMenu *)topMenu{
     [self setTopMenu:nil state:TopMenuDefault animated:YES];
@@ -375,7 +375,7 @@
     [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 -(void)didPressHelpInFilterTopMenu:(FilterTopMenu *)topMenu{
-    [UTILITY alertWithTitle:@"Workspaces" andMessage:@"Set your workspace, select tags and stay focused."];
+    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Workspaces") andMessage:LOCALIZE_STRING(@"Set your workspace, select tags and stay focused.")];
 }
 -(void)filterMenu:(FilterTopMenu *)filterMenu selectedTag:(NSString *)tag{
     [kFilter selectTag:tag];
@@ -515,7 +515,7 @@
     else if(self.currentTopMenu == TopMenuFilter)
         fromString = @"Filter";
     
-    [UTILITY inputAlertWithTitle:@"Add New Tag" message:@"Type the name of your tag (ex. work, project or school)" placeholder:@"Add New Tag" cancel:@"Cancel" confirm:@"OK" block:^(NSString *string, NSError *error) {
+    [UTILITY inputAlertWithTitle:LOCALIZE_STRING(@"Add new tag") message:LOCALIZE_STRING(@"Type the name of your tag (ex. work, project or school)") placeholder:LOCALIZE_STRING(@"Add new tag") cancel:[LOCALIZE_STRING(@"cancel") capitalizedString] confirm:[LOCALIZE_STRING(@"add") capitalizedString] block:^(NSString *string, NSError *error) {
         NSString *trimmedString = [string stringByTrimmingCharactersInSet:
                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if(trimmedString && trimmedString.length > 0){
@@ -683,14 +683,12 @@
     if(self.currentTopMenu != TopMenuDefault)
         return;
     if (recognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
-        DLog(@"Swipe left");
         NSUInteger selected = self.currentIndex;
         if (self.totalViewControllers > selected + 1) {
             self.currentIndex = selected + 1;
         }
     }
     else if (recognizer.direction == UISwipeGestureRecognizerDirectionRight) {
-        DLog(@"Swipe right");
         NSUInteger selected = self.currentIndex;
         if (0 < selected) {
             self.currentIndex = selected - 1;

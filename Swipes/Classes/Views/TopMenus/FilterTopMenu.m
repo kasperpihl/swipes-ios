@@ -57,7 +57,7 @@
         setWorkSpaceButton.backgroundColor = CLEAR;
         [setWorkSpaceButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         setWorkSpaceButton.titleLabel.font = KP_REGULAR(16);
-        [setWorkSpaceButton setTitle:@"SET WORKSPACE" forState:UIControlStateNormal];
+        [setWorkSpaceButton setTitle:[LOCALIZE_STRING(@"Set Workspace") uppercaseString] forState:UIControlStateNormal];
         [setWorkSpaceButton addTarget:self action:@selector(onHelp:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:setWorkSpaceButton];
         

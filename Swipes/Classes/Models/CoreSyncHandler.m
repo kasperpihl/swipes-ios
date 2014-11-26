@@ -950,9 +950,8 @@ static CoreSyncHandler *sharedObject;
 {
     ANALYTICS.analyticsOff = YES;
     NSArray *tagArray = @[
-                            @"home",
-                            @"shopping",
-                            @"work"
+                            LOCALIZE_STRING(@"home"),
+                            LOCALIZE_STRING(@"work")
                         ];
     
     for(NSString *tag in tagArray){
@@ -960,9 +959,9 @@ static CoreSyncHandler *sharedObject;
     }
     [self saveContextForSynchronization:nil];
     NSArray *toDoArray = @[
-                               @"Swipe right to complete",
-                               @"Swipe left to snooze for later",
-                               @"Access your tasks on web.swipesapp.com"
+                               LOCALIZE_STRING(@"Swipe right to complete"),
+                               LOCALIZE_STRING(@"Swipe left to snooze for later"),
+                               LOCALIZE_STRING(@"Access your tasks on web.swipesapp.com")
  
                             ];
     
@@ -970,7 +969,7 @@ static CoreSyncHandler *sharedObject;
         NSString *item = [toDoArray objectAtIndex:i];
         BOOL priority = (i == 0);
         KPToDo *toDo = [KPToDo addItem:item priority:priority tags:nil save:NO from:@"Start Objects"];
-        if(i <= 1)[KPToDo updateTags:@[@"work"] forToDos:@[toDo] remove:NO save:YES from:@"Start Objects"];
+        if(i <= 1)[KPToDo updateTags:@[LOCALIZE_STRING(@"work")] forToDos:@[toDo] remove:NO save:YES from:@"Start Objects"];
         /*if ( i == 2 ) {
             [KPToDo scheduleToDos:@[toDo] forDate:[[NSDate date] dateByAddingDays:1] save:NO];
         }*/

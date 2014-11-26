@@ -90,7 +90,7 @@
 
 -(void)pressedAddButtonForTagList:(KPTagList *)tagList{
     self.lock = YES;
-    [UTILITY inputAlertWithTitle:@"Add New Tag" message:@"Type the name of your tag (ex. work, project or school)" placeholder:@"Add New Tag" cancel:@"Cancel" confirm:@"OK" block:^(NSString *string, NSError *error) {
+    [UTILITY inputAlertWithTitle:LOCALIZE_STRING(@"Add new tag") message:LOCALIZE_STRING(@"Type the name of your tag (ex. work, project or school)") placeholder:LOCALIZE_STRING(@"Add new tag") cancel:[LOCALIZE_STRING(@"cancel") capitalizedString] confirm:[LOCALIZE_STRING(@"add") capitalizedString] block:^(NSString *string, NSError *error) {
         NSString *trimmedString = [string stringByTrimmingCharactersInSet:
                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if(trimmedString && trimmedString.length > 0){
