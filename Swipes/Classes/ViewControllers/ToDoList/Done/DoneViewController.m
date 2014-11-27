@@ -41,7 +41,7 @@
     [self update];
 }
 -(void)didPressDeleteAll:(id)sender{
-    [UTILITY confirmBoxWithTitle:@"Are you sure?" andMessage:@"Deleting old completed tasks can't be undone" cancel:@"Cancel" confirm:@"Delete them" block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Are you sure?") andMessage:LOCALIZE_STRING(@"Deleting old completed tasks can't be undone") cancel:[LOCALIZE_STRING(@"cancel") capitalizedString] confirm:LOCALIZE_STRING(@"Delete them") block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             NSDate *startDate = [[NSDate date] dateAtStartOfDay];
             NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@ && parent = nil)",startDate];
@@ -75,13 +75,13 @@
         
         UIButton *loadMoreButton = [UIButton buttonWithType:UIButtonTypeCustom];
         loadMoreButton.frame = CGRectMake(tableFooter.frame.size.width/2-buttonPaddingFromMiddle-buttonWidth, buttonY, buttonWidth, buttonHeight);
-        loadMoreButton.titleLabel.font = KP_REGULAR(14);
+        loadMoreButton.titleLabel.font = KP_REGULAR(12);
         loadMoreButton.layer.cornerRadius = 3;
         loadMoreButton.layer.borderWidth = 1;
         loadMoreButton.layer.masksToBounds = YES;
         loadMoreButton.layer.borderColor = tcolor(TextColor).CGColor;
         
-        [loadMoreButton setTitle:@"Show old tasks" forState:UIControlStateNormal];
+        [loadMoreButton setTitle:LOCALIZE_STRING(@"Show old tasks") forState:UIControlStateNormal];
         [loadMoreButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [loadMoreButton setTitleColor:tcolor(BackgroundColor) forState:UIControlStateHighlighted];
         [loadMoreButton setBackgroundImage:[tcolor(TextColor) image] forState:UIControlStateHighlighted];
@@ -91,13 +91,13 @@
         UIButton *deleteAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
         
         deleteAllButton.frame = CGRectMake(tableFooter.frame.size.width/2+buttonPaddingFromMiddle, buttonY, buttonWidth, buttonHeight);
-        deleteAllButton.titleLabel.font = KP_REGULAR(14);
+        deleteAllButton.titleLabel.font = KP_REGULAR(12);
         deleteAllButton.layer.cornerRadius = 3;
         deleteAllButton.layer.borderWidth = 1;
         deleteAllButton.layer.masksToBounds = YES;
         deleteAllButton.layer.borderColor = tcolor(TextColor).CGColor;
         
-        [deleteAllButton setTitle:@"Clear old tasks" forState:UIControlStateNormal];
+        [deleteAllButton setTitle:LOCALIZE_STRING(@"Clear old tasks") forState:UIControlStateNormal];
         [deleteAllButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [deleteAllButton setTitleColor:tcolor(BackgroundColor) forState:UIControlStateHighlighted];
         [deleteAllButton setBackgroundImage:[tcolor(TextColor) image] forState:UIControlStateHighlighted];

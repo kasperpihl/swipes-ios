@@ -69,7 +69,7 @@
         CGFloat continueButtonWidth = 190;
 
         self.continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.continueButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
+        [self.continueButton setTitle:[LOCALIZE_STRING(@"continue") uppercaseString] forState:UIControlStateNormal];
       //  self.continueButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.continueButton.frame = CGRectMake(continueButtonMargin, self.popupView.frame.size.height - continueButtonHeight - kPopupSideMargin*2, continueButtonWidth, continueButtonHeight);

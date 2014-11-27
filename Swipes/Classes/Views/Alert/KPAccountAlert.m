@@ -5,10 +5,10 @@
 //  Created by Kasper Pihl Tornøe on 22/04/14.
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
-
+#import "UIColor+Utilities.h"
 #import "KPAccountAlert.h"
 #define DEFAULT_TITLE_HEIGHT 70
-#define kMoreButtonFont KP_REGULAR(20)
+#define kMoreButtonFont KP_REGULAR(17)
 #define kCrossButtonSize 44
 #define kTextPadding 16
 #define kMoreButtonHeight 44
@@ -64,7 +64,7 @@
         
         
         UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(kTextPadding, 50, self.contentView.frame.size.width-2*kTextPadding, 2*DEFAULT_TITLE_HEIGHT)];
-        messageLabel.font = KP_REGULAR(18);
+        messageLabel.font = KP_REGULAR(15);
         messageLabel.textColor = tcolor(TextColor);
         messageLabel.numberOfLines = 0;
         messageLabel.backgroundColor = CLEAR;
@@ -72,13 +72,14 @@
         [self.contentView addSubview:messageLabel];
         self.messageLabel = messageLabel;
         
-        UIImage *buttonBackground = [[UIImage imageNamed:@"btn-plus-background"] resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
+        UIImage *buttonBackground = [tcolor(LaterColor) image];
         UIButton *moreButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kMoreButtonWidth, kMoreButtonHeight)];
         [moreButton setBackgroundImage:buttonBackground forState:UIControlStateNormal];
         //[moreButton setBackgroundImage:[alpha(POPUP_BACKGROUND,0.5) image] forState:UIControlStateHighlighted];
         moreButton.layer.masksToBounds = YES;
+        moreButton.layer.cornerRadius = 5;
         moreButton.titleLabel.font = kMoreButtonFont;
-        [moreButton setTitle:@"GET STARTED" forState:UIControlStateNormal];
+        [moreButton setTitle:[LOCALIZE_STRING(@"Get Started") uppercaseString] forState:UIControlStateNormal];
         moreButton.center = CGPointMake(self.contentView.frame.size.width/2, self.contentView.frame.size.height-DEFAULT_TITLE_HEIGHT/2);
         CGRectSetY(moreButton, self.contentView.frame.size.height-DEFAULT_TITLE_HEIGHT);
         [moreButton addTarget:self action:@selector(pressedAccount:) forControlEvents:UIControlEventTouchUpInside];

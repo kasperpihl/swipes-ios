@@ -40,13 +40,13 @@
     NSString *title;
     switch (indexPath.row) {
         case 2:
-            title = @"Tasks snoozed for later";
+            title = LOCALIZE_STRING(@"Tasks snoozed for later");
             break;
         case 1:
-            title = @"Daily reminder to plan the day";
+            title = LOCALIZE_STRING(@"Daily reminder to plan the day");
             break;
         case 0:
-            title = @"Weekly reminder to plan the week";
+            title = LOCALIZE_STRING(@"Weekly reminder to plan the week");
             break;
         default:
             break;
@@ -71,7 +71,7 @@
         UISwitch *aSwitch = [[UISwitch alloc] init];
         aSwitch.tag = kSwitchTag;
         aSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        CGRectSetCenter(aSwitch, cell.frame.size.width-aSwitch.frame.size.width + 5, kLocalCellHeight/2);
+        CGRectSetCenter(aSwitch, cell.frame.size.width-aSwitch.frame.size.width/2 - 5, kLocalCellHeight/2);
         [aSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
         
         [cell.contentView addSubview:aSwitch];
@@ -99,7 +99,7 @@
         [kSettings setValue:@YES forSetting:setting];
     }
     else{
-        [UTILITY confirmBoxWithTitle:[self titleForIndexPath:switchHandled] andMessage:@"Are you sure you no longer want to receive these alarms and reminders?" block:^(BOOL succeeded, NSError *error) {
+        [UTILITY confirmBoxWithTitle:[self titleForIndexPath:switchHandled] andMessage:LOCALIZE_STRING(@"Are you sure you no longer want to receive these alarms and reminders?") block:^(BOOL succeeded, NSError *error) {
             if(succeeded)
                 [kSettings setValue:@NO forSetting:setting];
             else

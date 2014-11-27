@@ -109,13 +109,13 @@ typedef enum {
 @implementation WalkthroughViewController
 -(NSMutableArray *)items{
     if(!_items){
-        _items = [@[@"Resend offer to Michael",
-                  @"Friday catch-up",
-                  @"Fix the presentation notes",
-                  @"Buy gift for Tom",
-                  @"Email Simon Gate",
-                  @"Appointment with the dentist",
-                  @"Birthday party"
+        _items = [@[LOCALIZE_STRING(@"Resend offer to Michael"),
+                  LOCALIZE_STRING(@"Friday catch-up"),
+                  LOCALIZE_STRING(@"Fix the presentation notes"),
+                  LOCALIZE_STRING(@"Buy gift for Tom"),
+                  LOCALIZE_STRING(@"Email Simon Gate"),
+                  LOCALIZE_STRING(@"Appointment with the dentist"),
+                  LOCALIZE_STRING(@"Birthday party")
                   ] mutableCopy];
     }
     return _items;
@@ -186,8 +186,8 @@ typedef enum {
         }
         case FocusOnTheTasksAtHand:{
             block = ^{
-                [self.actionButton setTitle:@"CONTINUE" forState:UIControlStateNormal];
-                [self.titleView setTitle:@"Your main focus area" subtitle:@"All tasks start here, and you can swipe them away to keep it clear."];
+                [self.actionButton setTitle:[LOCALIZE_STRING(@"continue") uppercaseString] forState:UIControlStateNormal];
+                [self.titleView setTitle:LOCALIZE_STRING(@"Your main focus area") subtitle:LOCALIZE_STRING(@"All tasks start here, and you can swipe them away to keep it clear.")];
                 CGRectSetY(self.titleView, 2*LOGO_Y+kMenuButtonTransformedSize);
                 CGFloat span = self.view.bounds.size.height - kTableBottomSizeForFirst - CGRectGetMaxY(self.titleView.frame);
                 CGRectSetY(self.actionButton, CGRectGetMaxY(self.titleView.frame) + (span-self.actionButton.frame.size.height)/2);
@@ -195,7 +195,7 @@ typedef enum {
             break;
         }
         case SwipeRightToComplete:{ block = ^{
-            [self.titleView setTitle:@"Swipe right to complete" subtitle:@"Complete your task by swiping it to the right. Try it below!"];
+            [self.titleView setTitle:LOCALIZE_STRING(@"Swipe right to complete") subtitle:LOCALIZE_STRING(@"Complete your task by swiping it to the right. Try it below!")];
             }; }
             break;
         case AnimateUpDonePopup:{
@@ -207,7 +207,7 @@ typedef enum {
                 CGRectSetCenterX(background, self.phoneBackground.frame.size.width/2);
                 CGRectSetY(background, (kPhoneTopToStartOfCells + (ACTIVE_ROW * roundf(TABLE_WIDTH * CELL_HEIGHT))) - background.frame.size.height);
                 background.circleBottomLength = kCircleBottomOfBarToCenter + (ACTIVE_ROW * roundf(TABLE_WIDTH * CELL_HEIGHT));
-                [background setLeft:NO title:@"You've completed a task." subtitle:@"See all your completed tasks in the “Done” area."];
+                [background setLeft:NO title:LOCALIZE_STRING(@"You've completed a task.") subtitle:LOCALIZE_STRING(@"See all your completed tasks in the “Done” area.")];
                 
                 self.backgroundOverlay = background;
                 [self.phoneBackground addSubview:self.backgroundOverlay];
@@ -228,7 +228,7 @@ typedef enum {
                 [activeCell setActivatedDirection:MCSwipeTableViewCellActivatedDirectionLeft];
                 CGRectSetX(activeCell.helpingImage, activeCell.frame.size.width - activeCell.helpingImage.frame.size.width);
                 [self activeCell].helpingImage.image = [UIImage imageNamed:@"walkthrough_swipe_schedule"];
-                [self.titleView setTitle:@"Swipe left to snooze." subtitle:@"Schedule tasks for later, and keep focus on the priorities now."];
+                [self.titleView setTitle:LOCALIZE_STRING(@"Swipe left to snooze.") subtitle:LOCALIZE_STRING(@"Schedule tasks for later, and keep focus on the priorities now.")];
             };
             break;
         }
@@ -254,7 +254,7 @@ typedef enum {
                 CGRectSetCenterX(background, self.phoneBackground.frame.size.width/2);
                 CGRectSetY(background, (kPhoneTopToStartOfCells + (ACTIVE_ROW * roundf(TABLE_WIDTH * CELL_HEIGHT))) - background.frame.size.height);
                 background.circleBottomLength = kCircleBottomOfBarToCenter + (ACTIVE_ROW * roundf(TABLE_WIDTH * CELL_HEIGHT));
-                [background setLeft:YES title:@"You've snoozed a task." subtitle:@"See your upcoming tasks in the “Later” area."];
+                [background setLeft:YES title:LOCALIZE_STRING(@"You've snoozed a task.") subtitle:LOCALIZE_STRING(@"See your upcoming tasks in the “Later” area.")];
                 self.backgroundOverlay = background;
                 [self.phoneBackground addSubview:self.backgroundOverlay];
                 [self.backgroundOverlay show:NO];
@@ -278,7 +278,7 @@ typedef enum {
                 [self.signatureImage setTextColor:alpha(tcolorF(TextColor, ThemeLight), 0.6)];
                 self.signatureImage.alpha = 0;
                 CGRectSetY(self.actionButton, self.view.bounds.size.height-kActionButtonBottomSpacing - self.actionButton.frame.size.height);
-                [self.titleView setTitle:@"Welcome on board!" subtitle:@"Register an account to get started. Your tasks will be backed up every 24h.\n\nTake the leap. Swipe!"];
+                [self.titleView setTitle:LOCALIZE_STRING(@"Welcome on board!") subtitle:LOCALIZE_STRING(@"Register an account to get started.\n\nTake the leap. Swipe!")];
                 CGFloat span = self.actionButton.frame.origin.y - CGRectGetMaxY(self.greenBackground.frame);
                 CGFloat actualHeight = self.titleView.frame.size.height + self.signatureImage.frame.size.height + kSignatureSpacing;
                 CGFloat titleY = CGRectGetMaxY(self.greenBackground.frame) + (span-actualHeight)/2;
@@ -288,7 +288,7 @@ typedef enum {
                 [self.view addSubview:self.signatureImage];
                 
                 
-                [self.actionButton setTitle:@"GET STARTED" forState:UIControlStateNormal];
+                [self.actionButton setTitle:[LOCALIZE_STRING(@"Get Started") uppercaseString] forState:UIControlStateNormal];
             };
             break;
         }
@@ -389,7 +389,7 @@ typedef enum {
         case SwipedToTheLeft:{
             block = ^{
                 self.schedulePopupButton.transform = CGAffineTransformIdentity;
-                [self.titleView setTitle:@"... Then pick a date" subtitle:@"And the task will come back when the time's right."];
+                [self.titleView setTitle:LOCALIZE_STRING(@"... Then pick a date") subtitle:LOCALIZE_STRING(@"And the task will come back when the time's right.")];
             };
             break;
         }
@@ -560,7 +560,7 @@ typedef enum {
     [self.view addSubview:self.swipesLogo];
     
     self.titleView = [[WalkthroughTitleView alloc] initWithFrame:CGRectMake(0, TITLE_Y, self.view.bounds.size.width, 0)];
-    [self.titleView setTitle:@"Welcome to Swipes" subtitle:@"Here you find three areas where you can organize your tasks."];
+    [self.titleView setTitle:LOCALIZE_STRING(@"Welcome to Swipes") subtitle:LOCALIZE_STRING(@"Here you find three areas where you can organize your tasks.")];
     
     [self.view addSubview:self.titleView];
     
@@ -586,7 +586,7 @@ typedef enum {
     self.actionButton.backgroundColor = tcolor(DoneColor);
     self.actionButton.titleLabel.font = kActionButtonFont;
     [self.actionButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateNormal];
-    [self.actionButton setTitle:@"START" forState:UIControlStateNormal];
+    [self.actionButton setTitle:[LOCALIZE_STRING(@"start") uppercaseString] forState:UIControlStateNormal];
     [self.actionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     [self.actionButton addTarget:self action:@selector(pressedActionButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.actionButton];

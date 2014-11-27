@@ -201,7 +201,7 @@
     self.syncLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.syncLabel.textAlignment = NSTextAlignmentCenter;
     self.syncLabel.backgroundColor = CLEAR;
-    self.syncLabel.font = KP_REGULAR(16);
+    self.syncLabel.font = KP_REGULAR(13);
     [self updateSyncLabel];
     
     [self renderSubviews];
@@ -223,11 +223,11 @@
 -(void)updateSyncLabel
 {
     NSDate *lastSync = [USER_DEFAULTS objectForKey:@"lastSyncLocalDate"];
-    NSString *timeString = @"Never";
+    NSString *timeString = [LOCALIZE_STRING(@"never") capitalizedString];
     if (lastSync) {
         timeString = [UtilityClass readableTime:lastSync showTime:YES];
     }
-    self.syncLabel.text = [NSString stringWithFormat:@"Last sync: %@",timeString];
+    self.syncLabel.text = [NSString stringWithFormat:LOCALIZE_STRING(@"Last sync: %@"),timeString];
 }
 
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
@@ -349,16 +349,13 @@
                 UIColor *lampColor = hasLocationOn ? kLampOffColor : kLampOnColor;
                 NSNumber *newSettingValue = hasLocationOn ? @NO : @YES;
                 if(hasLocationOn){
-                    KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Turn off location" message:@"Location reminders won't be working." block:^(BOOL succeeded, NSError *error) {
-                        [BLURRY dismissAnimated:YES];
+                    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Turn off location") andMessage:LOCALIZE_STRING(@"Location reminders won't be working.") block:^(BOOL succeeded, NSError *error) {
                         if(succeeded){
                             [NOTIHANDLER stopLocationServices];
                             [kSettings setValue:newSettingValue forSetting:SettingLocation];
                             [sender setLampColor:lampColor];
                         }
                     }];
-                    BLURRY.blurryTopColor = kSettingsBlurColor;
-                    [BLURRY showView:alert inViewController:self];
                 }
                 else{
                     StartLocationResult result = [NOTIHANDLER startLocationServices];
@@ -390,15 +387,11 @@
         }
         case KPMenuButtonUpgrade:{
             if(kUserHandler.isPlus){
-                KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Manage subscription" message:@"Open App Store to manage your subscription?" block:^(BOOL succeeded, NSError *error) {
-                    [BLURRY dismissAnimated:YES];
+                [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Manage subscription") andMessage:LOCALIZE_STRING(@"Open App Store to manage your subscription?") block:^(BOOL succeeded, NSError *error) {
                     if(succeeded){
                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"]];
                     }
                 }];
-                BLURRY.blurryTopColor = kSettingsBlurColor;
-                [BLURRY showView:alert inViewController:self];
-                
                 return;
             }
             else{
@@ -406,34 +399,17 @@
             }
             break;
         }
-        /*case KPMenuButtonPolicies:{
-            NSString *title = @"Policies";
-            NSString *message = @"Do you want to open our\r\npolicies for Swipes?";
-            NSString *url = @"http://swipesapp.com/policies.pdf";
-            KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:title message:message block:^(BOOL succeeded, NSError *error) {
-                [BLURRY dismissAnimated:YES];
-                if(succeeded){
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: url]];
-                }
-            }];
-            BLURRY.blurryTopColor = kSettingsBlurColor;
-            [BLURRY showView:alert inViewController:self];
-            break;
-        }*/
         case KPMenuButtonLogout:{
             if(!kUserHandler.isLoggedIn){
                 [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
                 return;
             }
-            KPAlert *alert = [KPAlert alertWithFrame:self.view.bounds title:@"Log out" message:@"Are you sure you want to log out of your account?" block:^(BOOL succeeded, NSError *error) {
-                [BLURRY dismissAnimated:YES];
+            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Log out") andMessage:LOCALIZE_STRING(@"Are you sure you want to log out of your account?") block:^(BOOL succeeded, NSError *error) {
                 if(succeeded){
                     [ROOT_CONTROLLER logOut];
                     [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
                 }
             }];
-            BLURRY.blurryTopColor = kSettingsBlurColor;
-            [BLURRY showView:alert inViewController:self];
             break;
         }
         case KPMenuButtonSync:{
@@ -490,32 +466,32 @@
     NSString *title;
     switch (button) {
         case KPMenuButtonNotifications:
-            title = @"Notifications";
+            title = LOCALIZE_STRING(@"Notifications");
             break;
         case KPMenuButtonLocation:
-            title = @"Location";
+            title = LOCALIZE_STRING(@"Location");
             break;
         case KPMenuButtonHelp:
-            title = @"Help";
+            title = LOCALIZE_STRING(@"Help");
             break;
         case KPMenuButtonSnoozes:
-            title = @"Snoozes";
+            title = LOCALIZE_STRING(@"Snoozes");
             break;
         case KPMenuButtonUpgrade:{
-            title = (kUserHandler.isPlus) ? @"Manage" : @"Upgrade";
+            title = (kUserHandler.isPlus) ? LOCALIZE_STRING(@"Manage") : LOCALIZE_STRING(@"Upgrade");
             break;
         }
         case KPMenuButtonSync:
-            title = @"Sync";
+            title = LOCALIZE_STRING(@"Sync");
             break;
         case KPMenuButtonLogout:
-            title = (kUserHandler.isLoggedIn) ? @"Logout" : @"Account";
+            title = (kUserHandler.isLoggedIn) ? LOCALIZE_STRING(@"Logout") : LOCALIZE_STRING(@"Account");
             break;
         case KPMenuButtonScheme:
-            title = @"Theme";
+            title = LOCALIZE_STRING(@"Theme");
             break;
         case KPMenuButtonIntegrations:
-            title = @"Integrations";
+            title = LOCALIZE_STRING(@"Integrations");
     }
     return title;
 }
@@ -569,7 +545,7 @@
 -(void)longPress:(UILongPressGestureRecognizer*)recognizer
 {
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        [UTILITY confirmBoxWithTitle:@"Hard sync" andMessage:@"This will send all data and can take some time" block:^(BOOL succeeded, NSError *error) {
+        [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Hard sync") andMessage:LOCALIZE_STRING(@"This will send all data and can take some time") block:^(BOOL succeeded, NSError *error) {
             if(succeeded)
                 [KPCORE hardSync];
         }];

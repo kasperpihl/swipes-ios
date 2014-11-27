@@ -44,22 +44,22 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.row) {
         case 5:
-            cell.textLabel.text = @"Walkthrough";
+            cell.textLabel.text = LOCALIZE_STRING(@"Walkthrough");
             break;
         case 4:
-            cell.textLabel.text = @"Get Started Guides";
+            cell.textLabel.text = LOCALIZE_STRING(@"Get Started Guides");
             break;
         case 3:
-            cell.textLabel.text = @"FAQ";
+            cell.textLabel.text = LOCALIZE_STRING(@"FAQ");
             break;
         case 2:
-            cell.textLabel.text = @"Known Issues";
+            cell.textLabel.text = LOCALIZE_STRING(@"Known Issues");
             break;
         case 1:
-            cell.textLabel.text = @"Send Feedback";
+            cell.textLabel.text = LOCALIZE_STRING(@"Send Feedback");
             break;
         case 0:
-            cell.textLabel.text = @"Open Policies";
+            cell.textLabel.text = LOCALIZE_STRING(@"Open Policies");
         default:
             break;
     }
@@ -69,13 +69,14 @@
     __block NSString *faqURL = @"http://support.swipesapp.com/hc/en-us/categories/200368652-FAQ";
     __block NSString *knownIssuesURL = @"http://support.swipesapp.com/hc/en-us/sections/200659851-Known-Issues";
     __block NSString *policiesURL = @"http://swipesapp.com/policies.pdf";
-    
+    NSString *cancelTitle = [LOCALIZE_STRING(@"cancel") capitalizedString];
+    NSString *openTitle = [LOCALIZE_STRING(@"open") capitalizedString];
     switch (indexPath.row) {
         case 5:
             [ROOT_CONTROLLER walkthrough];
             break;
         case 4:
-            [UTILITY confirmBoxWithTitle:@"Get Started" andMessage:@"Learn how to get most out of Swipes." cancel:@"Cancel" confirm:@"Open" block:^(BOOL succeeded, NSError *error) {
+            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Get Started") andMessage:LOCALIZE_STRING(@"Learn how to get most out of Swipes.") cancel:cancelTitle confirm:openTitle block:^(BOOL succeeded, NSError *error) {
                 
                 if(succeeded){
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: getStartedURL]];
@@ -83,7 +84,7 @@
             }];
             break;
         case 3:
-            [UTILITY confirmBoxWithTitle:@"FAQ" andMessage:@"Learn how to get most out of the different features in Swipes." cancel:@"Cancel" confirm:@"Open" block:^(BOOL succeeded, NSError *error) {
+            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"FAQ") andMessage:LOCALIZE_STRING(@"Learn how to get most out of the different features in Swipes.") cancel:cancelTitle confirm:openTitle block:^(BOOL succeeded, NSError *error) {
                 
                 if(succeeded){
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: faqURL]];
@@ -91,7 +92,7 @@
             }];
             break;
         case 2:
-            [UTILITY confirmBoxWithTitle:@"Known Issues" andMessage:@"You found a bug? Check out if we're already working on it." cancel:@"Cancel" confirm:@"Open" block:^(BOOL succeeded, NSError *error) {
+            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Known Issues") andMessage:LOCALIZE_STRING(@"You found a bug? Check out if we're already working on it.") cancel:cancelTitle confirm:openTitle block:^(BOOL succeeded, NSError *error) {
                 
                 if(succeeded){
                     
@@ -100,7 +101,7 @@
             }];
             break;
         case 1:
-            [UTILITY alertWithTitle:@"Send Feedback" andMessage:@"We love all your inputs - but it might take us a while to get back to you :-)" buttonTitles:@[@"Cancel", @"Check FAQ", @"Known Issues", @"Send Email"] block:^(NSInteger number, NSError *error) {
+            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Send Feedback") andMessage:LOCALIZE_STRING(@"We love all your inputs - but it might take us a while to get back to you :-)") buttonTitles:@[cancelTitle, LOCALIZE_STRING(@"Check FAQ"), LOCALIZE_STRING(@"Known Issues"), LOCALIZE_STRING(@"Send Email")] block:^(NSInteger number, NSError *error) {
                 if(number == 1){
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: faqURL]];
                 }
@@ -114,7 +115,7 @@
             
             break;
         case 0:{
-            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Policies") andMessage:LOCALIZE_STRING(@"Read through our 'Privacy Policy' and 'Terms and Conditions'.") cancel:@"Cancel" confirm:@"Open" block:^(BOOL succeeded, NSError *error) {
+            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Policies") andMessage:LOCALIZE_STRING(@"Read through our 'Privacy Policy' and 'Terms and Conditions'.") cancel:cancelTitle confirm:openTitle block:^(BOOL succeeded, NSError *error) {
                 
                 if(succeeded){
                     

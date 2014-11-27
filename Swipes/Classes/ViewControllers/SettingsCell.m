@@ -9,8 +9,8 @@
 #import "SettingsCell.h"
 
 #define kDefTextColor tcolor(TextColor)
-#define kDefSettingFont KP_REGULAR(17)
-#define kDefValueFont KP_REGULAR(14)
+#define kDefSettingFont KP_REGULAR(15)
+#define kDefValueFont KP_REGULAR(12)
 #define kRightLabelMargin 18
 
 #define kValueLabelSidePadding 10

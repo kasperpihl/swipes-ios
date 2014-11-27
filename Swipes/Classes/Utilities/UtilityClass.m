@@ -115,15 +115,19 @@
     NSInteger numberOfDaysAfterTodays = [beginningOfDate distanceInDaysToDate:[[NSDate date] dateAtStartOfDay]];
     NSString *dateString;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:LOCALIZE_STRING(@"en_US")];
     [dateFormatter setLocale:usLocale];
     BOOL shouldFormat = NO;
     if(numberOfDaysAfterTodays == 0){
-        dateString = @"Today";
-        if([time isLaterThanDate:[NSDate date]]) dateString = @"Today";
+        dateString = LOCALIZE_STRING(@"Today");
+        if([time isLaterThanDate:[NSDate date]]) dateString = LOCALIZE_STRING(@"Today");
     }
-    else if(numberOfDaysAfterTodays == -1) dateString = @"Tomorrow";
-    else if(numberOfDaysAfterTodays == 1) dateString = @"Yesterday";
+    else if(numberOfDaysAfterTodays == -1){
+        dateString = LOCALIZE_STRING(@"Tomorrow");
+    }
+    else if(numberOfDaysAfterTodays == 1){
+        dateString = LOCALIZE_STRING(@"Yesterday");
+    }
     else if(numberOfDaysAfterTodays < 7 && numberOfDaysAfterTodays > -7){
         [dateFormatter setDateFormat:@"EEEE"];
         shouldFormat = YES;
@@ -135,8 +139,9 @@
     }
     if(shouldFormat){
         dateString = [dateFormatter stringFromDate:time];
+        dateString = [dateString capitalizedString];
     }
-    dateString = [dateString capitalizedString];
+    
     if(!showTime) return dateString;
     return [NSString stringWithFormat:@"%@, %@",dateString,timeString];
     
@@ -159,19 +164,19 @@
     return myNumber;
 }
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block{
-    [self confirmBoxWithTitle:title andMessage:message cancel:@"No" confirm:@"Yes" block:block];
+    [self confirmBoxWithTitle:title andMessage:message cancel:LOCALIZE_STRING(@"No") confirm:LOCALIZE_STRING(@"Yes") block:block];
 }
 
 -(void)alertWithTitle:(NSString *)title andMessage:(NSString *)message {
 #ifndef NOT_APPLICATION
     if(OSVER < 8){
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:LOCALIZE_STRING(@"Okay") otherButtonTitles:nil];
         [alertView show];
     }
     else{
         if (self.rootViewController) {
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleCancel handler:nil]];
+            [alert addAction:[UIAlertAction actionWithTitle:LOCALIZE_STRING(@"Okay") style:UIAlertActionStyleCancel handler:nil]];
             [self.rootViewController presentViewController:alert animated:YES completion:nil];
         }
     }
@@ -372,7 +377,7 @@
     [monthDayFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
     [monthDayFormatter setDateFormat:@"d"];
     int date_day = [[monthDayFormatter stringFromDate:date] intValue];
-    NSString *suffix_string = @"|st|nd|rd|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|st|nd|rd|th|th|th|th|th|th|th|st";
+    NSString *suffix_string = LOCALIZE_STRING(@"|st|nd|rd|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|st|nd|rd|th|th|th|th|th|th|th|st");
     NSArray *suffixes = [suffix_string componentsSeparatedByString: @"|"];
     NSString *suffix = [suffixes objectAtIndex:date_day];
     
@@ -383,7 +388,7 @@
 }
 +(NSString*)dayStringForDate:(NSDate*)date{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:LOCALIZE_STRING(@"en_US")];
     [dateFormatter setLocale:usLocale];
     if([date isSameYearAsDate:[NSDate date]]) dateFormatter.dateFormat = @"d LLL";
     else dateFormatter.dateFormat = @"d LLL '´'yy";
@@ -393,16 +398,19 @@
     NSDate *beginningOfDate = [date dateAtStartOfDay];
     NSInteger numberOfDaysAfterTodays = [beginningOfDate distanceInDaysToDate:[[NSDate date] dateAtStartOfDay]];
     NSString *dayString;
+    BOOL capitalize = NO;
     if(numberOfDaysAfterTodays == 0){
-        dayString = @"Today";
-        if([date isLaterThanDate:[NSDate date]]) dayString = @"Today";
+        dayString = LOCALIZE_STRING(@"Today");
+        if([date isLaterThanDate:[NSDate date]]) dayString = LOCALIZE_STRING(@"Today");
     }
-    else if(numberOfDaysAfterTodays == -1) dayString = @"Tomorrow";
-    else if(numberOfDaysAfterTodays == 1) dayString = @"Yesterday";
+    else if(numberOfDaysAfterTodays == -1) dayString = LOCALIZE_STRING(@"Tomorrow");
+    else if(numberOfDaysAfterTodays == 1) dayString = LOCALIZE_STRING(@"Yesterday");
     else{
+        capitalize = YES;
         dateFormatter.dateFormat = @"EEE";
     }
     if(!dayString) dayString = [dateFormatter stringFromDate:date];
+    if(capitalize) dayString = [dayString capitalizedString];
     return [NSString stringWithFormat:@"%@ - %@",dayString,endingString];
 }
 +(UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color{

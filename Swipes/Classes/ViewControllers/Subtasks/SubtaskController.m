@@ -50,7 +50,7 @@
 
 -(void)updateExpandButton:(BOOL)expanded animated:(BOOL)animated{
     unsigned long numberOfSubtasks = (unsigned long)[self.model getSubtasks].count;
-    [self.closeLabelButton setTitle:[NSString stringWithFormat:@"See%@ %lu action%@",(numberOfSubtasks == 1 ) ? @"": @" all", numberOfSubtasks,(numberOfSubtasks == 1) ? @"" :@"s"] forState:UIControlStateNormal];
+    [self.closeLabelButton setTitle:[NSString stringWithFormat:LOCALIZE_STRING(@"See%@ %lu action%@"),(numberOfSubtasks == 1 ) ? @"": LOCALIZE_STRING(@" all"), numberOfSubtasks,(numberOfSubtasks == 1) ? @"" :LOCALIZE_STRING(@"s")] forState:UIControlStateNormal];
     [self.closeLabelButton sizeToFit];
     self.closeLabelButton.alpha = expanded ? 1 : 0;
     CGFloat extraHack = 15;

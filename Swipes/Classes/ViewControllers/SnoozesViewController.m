@@ -25,22 +25,22 @@
     NSString *setting;
     switch (snooze) {
         case SnoozeWeekStartTime:
-            setting = @"Start my day at";
+            setting = LOCALIZE_STRING(@"Start my day at");
             break;
         case SnoozeEveningStartTime:
-            setting = @"Start my evening at";
+            setting = LOCALIZE_STRING(@"Start my evening at");
             break;
         case SnoozeWeekendStartTime:
-            setting = @"Start my weekends at";
+            setting = LOCALIZE_STRING(@"Start my weekends at");
             break;
         case SnoozeWeekStart:
-            setting = @"My week starts";
+            setting = LOCALIZE_STRING(@"My week starts");
             break;
         case SnoozeWeekendStart:
-            setting = @"My weekend starts";
+            setting = LOCALIZE_STRING(@"My weekend starts");
             break;
         case SnoozeLaterToday:
-            setting = @"Snooze Later Today";
+            setting = LOCALIZE_STRING(@"Snooze Later Today");
             break;
         default:break;
     }
@@ -101,6 +101,7 @@
     NSNumber *settingValue = (NSNumber*)[kSettings valueForSetting:setting];
     NSDate *settingDate;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    BOOL capitalizeString = NO;
     switch (snooze) {
         case SnoozeWeekStartTime:
         case SnoozeEveningStartTime:
@@ -114,20 +115,23 @@
         case SnoozeWeekStart:
         case SnoozeWeekendStart:{
             settingDate = [NSDate dateThisOrNextWeekWithDay:settingValue.integerValue hours:8 minutes:0];
-            [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+            [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:LOCALIZE_STRING(@"en_US")]];
             [formatter setDateFormat:@"EEEE"];
             [cell.dayPicker setSelectedDay:settingDate.weekday];
+            capitalizeString = YES;
             break;
         }
         case SnoozeLaterToday:{
             settingDate = [[[NSDate date] dateAtStartOfDay] dateByAddingTimeInterval:settingValue.integerValue];
             [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
-            [formatter setDateFormat:@"'+'H':'mm'h'"];
+            [formatter setDateFormat:LOCALIZE_STRING(@"'+'H':'mm'h'")];
             break;
         }
         default:break;
     }
     valueString = [formatter stringFromDate:settingDate];
+    if(capitalizeString)
+        valueString = [valueString capitalizedString];
     [cell setSetting:[self settingForSnooze:indexPath.row] value:valueString];
 }
 
@@ -157,7 +161,7 @@
     if(self.activeSnooze == SnoozeLaterToday){
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
-        [formatter setDateFormat:@"'+'H':'mm'h'"];
+        [formatter setDateFormat:LOCALIZE_STRING(@"'+'H':'mm'h'")];
         return [formatter stringFromDate:time];
     }
     else return nil;

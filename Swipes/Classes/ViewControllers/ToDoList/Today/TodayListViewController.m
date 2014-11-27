@@ -185,15 +185,15 @@
             }
             [USER_DEFAULTS setObject:[NSDate date] forKey:@"lastStreakDate"];
             
-            NSString *startString = (currentNumber <= 1) ? @"First day" : [NSString stringWithFormat:@"%li days",(long)currentNumber];
-            self.youreAllDoneView.streakLabel.text = [NSString stringWithFormat:@"%@ on a streak!",startString];
+            NSString *startString = (currentNumber <= 1) ? LOCALIZE_STRING(@"First day") : [NSString stringWithFormat:LOCALIZE_STRING(@"%li days"),(long)currentNumber];
+            self.youreAllDoneView.streakLabel.text = [NSString stringWithFormat:LOCALIZE_STRING(@"%@ on a streak!"),startString];
         }
         else{
             NSPredicate *nextScheduleTaskPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil)",[NSDate date]];
             KPToDo *nextItem = [KPToDo MR_findFirstWithPredicate:nextScheduleTaskPredicate sortedBy:@"schedule" ascending:YES inContext:[KPCORE context]];
             [self.youreAllDoneView setAllDoneForToday:NO];
             //self.youreAllDoneView.stampView.allDoneLabel.text = @"ALL DONE FOR NOW";
-            self.youreAllDoneView.streakLabel.text = [NSString stringWithFormat:@"Next task  @  %@",[UtilityClass timeStringForDate:nextItem.schedule]];
+            self.youreAllDoneView.streakLabel.text = [NSString stringWithFormat:LOCALIZE_STRING(@"Next task  @  %@"),[UtilityClass timeStringForDate:nextItem.schedule]];
         }
     }
     

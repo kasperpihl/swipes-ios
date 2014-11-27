@@ -15,7 +15,7 @@
 "Focus. Swipe. Achieve." = "Fokuser. Swipe. Opnå."; // title for login screen
 "Task List made for High Achievers" = "En Opgaveliste for dig."; // subtitle on loginscreen
 
-"Keep trying Swipes" = "Forsæt med at prøve"; // title for try button
+"Keep trying Swipes" = "Fortsæt med at prøve"; // title for try button
 "Try out" = "Prøv Swipes";
 
 "Create Account" = "Ny Bruger"; // Create account button title
@@ -39,13 +39,13 @@
 
 // Alerts
 "Please use an email" = "Brug venligst en e-mail";
-"Make sure you use a real email!" = "Dobbeltcheck at du bruger en rigtig e-mail!";
+"Make sure you use a real email!" = "Dobbeltjek at du bruger en rigtig e-mail!";
 
 "Missing password" = "Manglende adgangskode";
-"Make sure to enter your password!" = "Dobbeltcheck at du indtastede en adgangskode!";
+"Make sure to enter your password!" = "Dobbeltjek at du indtastede en adgangskode!";
 
 "Wrong email or password." = "Forkert e-mail eller adgangskode.";
-"Please check your informations and try again." = "Check venligst dine informationer og prøv igen";
+"Please check your informations and try again." = "Tjek venligst dine informationer og prøv igen";
 
 "Email wasn't found." = "E-mailen blev ikke fundet";
 "We couldn't recognize the email." = "Vi kunne ikke genkende denne e-mail";
@@ -54,7 +54,7 @@
 "Please try again." = "Prøv venligst igen.";
 
 "Facebook settings" = "Facebook indstillinger";
-"Please make sure you've allowed Swipes in Settings -> Facebook" = "Check venligst at du har tilladt Swipes under Indstillinger -> Facebook";
+"Please make sure you've allowed Swipes in Settings -> Facebook" = "Tjek venligst at du har tilladt Swipes under Indstillinger -> Facebook";
 
 "New user" = "Ny bruger";
 "Do you want to sign up with: %@" = "Vil du registrere en bruger med: %@";
@@ -66,7 +66,46 @@
 
 "Read through our 'Privacy Policy' and 'Terms and Conditions'." = "Gennemlæs vores 'Privatlivs-betingelser' og 'Service-betingelser'";
 
+/*
+ Small common expressions
+ */
+"Yes" = "Ja";
+"No" = "Nej";
+"Okay" = "Okay";
+"Delete" = "Slet";
+"open" = "åben";
+"done" = "fuldført";
+"completed" = "fuldførte";
+"current" = "nuværende";
+"schedule" = "planlagt";
+"scheduled" = "planlagte";
+"with" = "med";
+"and" = "og";
+"Learn more" = "Lær mere";
+"Not now" = "Ikke nu";
+"continue" = "fortsæt";
+"start" = "start";
+"Evernote" = "Evernote";
+
 /* 
+ Common Popups
+*/
+"Delete tag: %@" = "Slet tag: %@";
+"This can't be undone" = "Dette kan ikke fortrydes";
+"Get Started" = "Kom Igang";
+"Add a new task" = "Tilføj en ny opgave";
+"Location Permissions" = "Lokations Tilladelse";
+"You need to turn on location permissions for Swipes in Settings > Privacy" = "Du er nød til at slå lokations tilladelser til for Swipes under Indstillinger > Anonymitet";
+"Undo last action" = "Fortryd sidste handling";
+"Do you want to undo the last action?" = "Vil du fortryde den sidste handling?";
+"New version required" = "Ny version krævet";
+"For sync to work - please update Swipes from the App Store" = "For at synkronisering kan virke - opdater venligst Swipes fra App Store";
+"Evernote Authorization" = "Evernote Tilladelse";
+"To sync with Evernote on this device, please authorize" = "For at synkronisere med Evernote på denne enhed - venligt log ind med Evernote";
+"Don't sync this device" = "Synkroniser ikke denne enhed";
+"Authorize now" = "Log ind med Evernote";
+
+/*
  Initial Tasks and Tags
  */
 "home" = "privat";
@@ -74,8 +113,17 @@
 
 "Swipe right to complete" = "Swipe til højre for at gennemføre";
 "Swipe left to snooze for later" = "Swipe til venstre for at udskyde til senere";
-"Access your tasks on web.swipesapp.com" = "Check dine opgaver fra din computer på web.swipesapp.com";
+"Access your tasks on web.swipesapp.com" = "Tjek dine opgaver på din computer: web.swipesapp.com";
 
+
+
+"priority" = "prioritet";
+"recurring" = "gentagne";
+" with " = " med ";
+"notes" = "noter";
+" matching \"%@\"" = " der matcher \"%@\"";
+" %@ tags: %@" = " %@ tags: %@";
+"clear workspace" = "nulstil filter";
 
 /*
  Topoverlay menus (Workspaces, select and search)
@@ -98,4 +146,255 @@
 "Type the name of your tag (ex. work, project or school)" = "Indtast navnet på dit tag (f.eks. arbejde, projekt eller skole)";
 "add" = "tilføj";
 
-"%li / %li TODAY" = "%li / %li I DAG";
+/* List view */
+"Clear old tasks" = "Slet game opgaver";
+"Show old tasks" = "Vis gamle opgaver";
+// Alerts
+"Are you sure?" = "Er du sikker?";
+"Deleting old completed tasks can't be undone" = "Sletning af gamle udførte opgaver kan ikke fortrydes";
+"Delete them" = "Slet dem";
+
+/*
+ Scheduler
+*/
+"Later  +%luh" = "Senere +%lut";
+"This Evening" = "I aften";
+"Tomorrow Eve" = "I morgen aften";
+"In 2 Days" = "Om 2 dage";
+"This Weekend" = "Denne Weekend";
+"Next Week" = "Næste uge";
+"Pick A Date" = "Vælg en dato";
+"At Location" = "På et sted";
+
+"Hold down to adjust time" = "Hold nede for at indstille tiden";
+
+/*
+ Edit task mode
+ */
+"Add action step" = "Tilføj delopgave";
+"Attached" = "Forbundet";
+"All Done" = "100% FÆRDIG";
+"Completed" = "Udført";
+"Unspecified" = "Uspecificeret";
+"Add notes" = "Tilføj noter";
+"Add tags" = "Tilføj tags";
+
+"Later Today" = "Senere idag";
+"Today" = "I dag";
+"Tomorrow" = "I morgen";
+"Yesterday" = "I går";
+
+"See%@ %lu action%@" = "Se%@ %lu opgave%@";
+" all" = " alle";
+"s" = "r";
+
+// Evernote View
+"Only notes with ToDo inside" = "Kun noter med opgaver i";
+
+// Alerts
+"tasks" = "opgaver";
+"task" = "opgave";
+"Delete %li %@" = "Slet %li %@";
+"these" = "disse";
+"this" = "denne";
+"Are you sure you want to permanently delete %@ %@?" = "Er du sikker på at du permanent vil slette %@ %@?";
+
+"Register an account to backup your data and keep your Evernotes in sync with Swipes" = "Opret en konto for at tage backup af dine opgaver samt holde dine Evernotes i sync med Swipes";
+"Remove note" = "Fjern note";
+"Open note" = "Åben note";
+"What do you want to do?" = "Hvad vil du gøre?";
+
+/*
+    All done for today background
+*/
+"First day" = "Første dag";
+"%li days" = "%li dage";
+"%@ on a streak!" = "%@ i streg!";
+"Next task  @  %@" = "Næste opgave  @  %@";
+/*
+    Repeating a task
+*/
+"Repeat every..." = "Gentag hver...";
+"Never repeat" = "Gentag aldrig";
+"Every" = "Hver";
+"Every day" = "Hver dag";
+"Every Monday to Friday" = "Hver Mandag til Fredag";
+"Every Saturday and Sunday" = "Hver Lørdag og Søndag";
+"Every month the %@" = "Den %@ i hver måned"; // %@ = 3rd
+"Every year %@ %@" = "Hvert år %@ d. %@";
+" at %@" = " kl. %@";
+"en_US" = "da_DK";
+
+// Repeat picker
+"never" = "aldrig";
+"day" = "dag";
+"mon-fri" = "man-fre";
+"sat+sun" = "lør+søn";
+"week" = "uge";
+"month" = "måned";
+"year" = "år";
+"|st|nd|rd|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|st|nd|rd|th|th|th|th|th|th|th|st" = "|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.|.";
+
+"%li / %li TODAY" = "%li / %li  IDAG";
+"%li / %li STEPS" = "%li / %li DELOPGAVER";
+"'+'H':'mm'h'" = "'+'H':'mm't'";
+
+/*
+    Settings
+*/
+// Buttons
+"Notifications" = "Notifikationer";
+"Location" = "Lokation";
+"Help" = "Hjælp";
+"Snoozes" = "Udskydelser";
+"Manage" = "Administrer";
+"Upgrade" = "Opgrader";
+"Sync" = "Synkroniser";
+"Logout" = "Log ud";
+"Account" = "Bruger";
+"Theme" = "Tema";
+"Integrations" = "Integrationer";
+
+"Last sync: %@" = "Sidste synkronisering: %@";
+
+// Notifications menu
+"Tasks snoozed for later" = "Opgaver udskudt til senere";
+"Daily reminder to plan the day" = "Daglig påmindelse planlægning";
+"Weekly reminder to plan the week" = "Ugentlig påmindelse om planlægning";
+"Are you sure you no longer want to receive these alarms and reminders?" = "Er du sikker på du ikke længere vil modtage denne type alarm og påmindelser?";
+
+// Snoozes menu
+"Start my day at" = "Start min dag kl.";
+"Start my evening at" = "Start min aften kl.";
+"Start my weekends at" = "Start min weekend kl.";
+"My week starts" = "Min arbejdsuge starter";
+"My weekend starts" = "Min weekend starter";
+"Snooze Later Today" = "Udskyd til Senere I dag";
+
+// Integrations Menu
+" (Connected)" = " (Forbundet)";
+"Unlink" = "Fjern";
+"Link account" = "Forbind konto";
+
+"Sync with Evernote on this device" = "Synkroniser Evernote på denne enhed";
+"Auto import notes with \"swipes\"-tag" = "Auto-importer noter med \"swipes\"-tag";
+"Sync with personal linked notebooks" = "Synkroniser med delte notesbøger";
+"Sync with Evernote Business" = "Synkroniser med Evernote Business";
+"Tap to learn more" = "Tryk for at lære mere";
+"Open Evernote Importer" = "Åben Evernote import-værktøj";
+"Import a few notes right away." = "Importer et par noter med det samme.";
+"Choose notes" = "Vælg noter";
+"Unlink Evernote" = "Fjern forbindelse til Evernote";
+"All tasks will be unlinked, are you sure?" = "Alle opgaver vil få fjernet deres forbindelse også, er du sikker?";
+
+// Evernote Helper
+"WHAT IT IS" = "HVAD ER DET";
+"This integration lets you sync notes with checkmarks from Evernote into Swipes." = "Denne integration lader dig synkronisere noter med opgaver fra Evernote til Swipes";
+"HOW IT WORKS" = "HVORDAN VIRKER DET";
+"Assign the \"swipes\" tag to a note in Evernote. We'll add it as a task in Swipes and sync all its checkmarks." = "Tilføj \"swipes\"-tagget til en note i Evernote. Vi vil så oprette denne note som en opgave i Swipes og synkronisere alle notens opgaver.";
+// Evernote importer
+"Import  %li  notes" = "Importer  %li  noter";
+"notes with checkmarks" = "noter med opgaver";
+"Import notes" = "Importer noter";
+"Importing..." = "Importerer...";
+"Successfully imported." = "Succesfuldt importeret.";
+"Next time, assign the \"swipes\"-tag in Evernote and we'll import the notes automatically." = "Næste gang, tilføj \"swipes\"-tagget i Evernote og vi vil importere noterne automatisk.";
+"Great! I got it." = "Perfekt! Det er modtaget.";
+"This note has already been imported." = "Denne note har allerede været importeret.";
+"Do you want to duplicate it?" = "Vil du oprette en ny kopi alligevel?";
+"Couldn't find any notes with Checkmarks" = "Kunne ikke finde nogle noter med opgaver i fra Evernote";
+"You can add notes manually under each tasks from Swipes as well" = "Du kan tilføje noter manuelt under hver opgaver også i Swipes";
+
+// Help menu
+"Walkthrough" = "Gennemgang af App'en";
+"Get Started Guides" = "Kom igang guides";
+"FAQ" = "FAQ";
+"Known Issues" = "Kendte fejl";
+"Send Feedback" = "Send Feedback";
+"Send Email" = "Send E-mail";
+"Open Policies" = "Åben Betingelser";
+"Check FAQ" = "Tjek FAQ";
+
+// Alerts
+"Learn how to get most out of Swipes." = "Lær hvordan du får mest ud af Swipes (på engelsk)";
+"Learn how to get most out of the different features in Swipes." = "Lær hvordan du får mest ud af de forskellige funktionaliteter i Swipes (på engelsk)";
+"You found a bug? Check out if we're already working on it." = "Du har fundet en fejl? Tjek om vi allerede arbejder på at fikse den.";
+"We love all your inputs - but it might take us a while to get back to you :-)" = "Vi elsker at modtage dine ideer - men vi tager måske et stykke tid om at vende tilbage til dig :-)";
+
+
+"Hard sync" = "Fuld synkronisering";
+"This will send all data and can take some time" = "Dette vil sende alt data og kan tage noget tid";
+
+"Log out" = "Log ud";
+"Are you sure you want to log out of your account?" = "Er du sikker på at du vil logge ud fra din bruger?";
+
+"Manage subscription" = "Administrer abonnement";
+"Open App Store to manage your subscription?" = "Åben App Store for at administrere dit abonnement?";
+
+"Turn off location" = "Slå lokation fra";
+"Location reminders won't be working." = "Opgaver sat til et bestemt sted vil ikke virke.";
+
+"Register for Swipes to safely back up your data and get Swipes Plus" = "Opret en konto for at tage backup af dine opgaver og opgradere til Swipes Plus";
+
+"Mail was not setup" = "Din email er ikke sat op";
+"You can send us feedback to support@swipesapp.com. Thanks" = "Du kan sende os feedback direkte til support@swipesapp.com. Tak";
+
+"Keep data" = "Behold data";
+"Do you want to keep the data from the test period?" = "Vil du beholde data'en som er blevet oprettet igennem test perioden?";
+
+"Can't upgrade to Swipes Plus" = "Kan ikke opgradere til Swipes Plus";
+"We're remaking our Plus version. Please send us your suggestions while waiting." = "Vi er ved at lave vores plus version om. Send os venligst dine inputs mens du venter.";
+"Send suggestions" = "Send forslag";
+"Restore Purchases" = "Gendan tidligere køb";
+
+"An error occured" = "En fejl opstod";
+"No purchases could be restored. Contact support@swipesapp.com for help." = "Intet køb kunne blive gendannet. Kontakt venligst support@swipesapp.com for hjælp";
+
+"Your purchase has been restored" = "Dit køb er blevet gendannet";
+"Your purchase has been restored. Welcome back!" = "Dit køb er blevet gendannet. Velkommen tilbage!";
+
+"Time Zone Change" = "Tidszone skift";
+"Do you want to move all your recurring tasks to match the change? A task @ 8:00 will be 8:00 in new time zone (Recommended)" = "Vil du flytte alle dine gentagne opgaver til at passe denne nye tidszone? En opgave der var 8:00 i den gamle vil også blive 8:00 i den nye tidszone (Anbefalet)";
+
+"New feature" = "Ny funktionalitet";
+"We've made a powerful integration with Evernote!" = "Vi har lavet en integration med Evernote!";
+
+
+/*
+    Walkthrough
+ */
+"Welcome to Swipes" = "Velkommen til Swipes";
+"Here you find three areas where you can organize your tasks." = "Du har tre områder hvor du kan organisere dine opgaver";
+"Your main focus area" = "Dit hovedfokus område";
+"All tasks start here, and you can swipe them away to keep it clear." = "Alle opgaver starter her, og du kan swipe unødvendige opgaver væk herfra for at holde fokus";
+
+"Complete your task by swiping it to the right. Try it below!" = "Fuldfør en opgave ved at swipe den til højre. Prøv det nedenfor.";
+"You've completed a task." = "Du har fuldført en opgave.";
+"See all your completed tasks in the “Done” area." = "Se alle dine fuldførte opgaver under Fuldført-området";
+
+"Swipe left to snooze." = "Swipe til venstre for at udskyde";
+"Schedule tasks for later, and keep focus on the priorities now." = "Udskyd opgaver til senere, og hold fokus på prioriteterne nu.";
+
+"... Then pick a date" = "... Vælg så et tidspunkt";
+"And the task will come back when the time's right." = "Og opgaven vil komme tilbage når tiden er inde.";
+
+"You've snoozed a task." = "Du har udskudt en opgave";
+"See your upcoming tasks in the “Later” area." = "Se fremtidige opgaver under \"Planlagt\"-området";
+
+"Welcome on board!" = "Velkommen ombord!";
+"Register an account to get started.\n\nTake the leap. Swipe!" = "Registrer en bruger for at komme igang.\n\nTag springet. Swipe!";
+
+"Resend offer to Michael" = "Gensend tilbud til Michael";
+"Friday catch-up" = "Fredags opfølgning";
+"Fix the presentation notes" = "Fiks præsentations-noterne";
+"Buy gift for Tom" = "Køb gave til Tom";
+"Email Simon Gate" = "E-mail Simon Hansen";
+"Appointment with the dentist" = "Aftale med tandlægen";
+"Birthday party" = "Fødselsdags fest";
+
+/*
+    Share Tasks
+*/
+"Tasks to complete" = "Opgaver at fuldføre";
+"Tasks: \r\n" = "Opgaver: \r\n";
+"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com" = "\r\nSendt med Swipes – En Opgaveliste for dig.\r\nGratis iPhone app - http://swipesapp.com";

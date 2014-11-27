@@ -130,7 +130,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
     };
     if([USER_DEFAULTS boolForKey:isTryingString]){
-        [UTILITY confirmBoxWithTitle:@"Keep data" andMessage:@"Do you want to keep the data from the test period?" block:^(BOOL succeeded, NSError *error) {
+        [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Keep data") andMessage:LOCALIZE_STRING(@"Do you want to keep the data from the test period?") block:^(BOOL succeeded, NSError *error) {
             if(!succeeded) [KPCORE clearAndDeleteData];
             block();
         }];
@@ -236,9 +236,9 @@ static RootViewController *sharedObject;
     if([MFMailComposeViewController canSendMail]) {
         
         self.mailCont.mailComposeDelegate = self;
-        [self.mailCont setSubject:@"Tasks to complete"];
+        [self.mailCont setSubject:LOCALIZE_STRING(@"Tasks to complete")];
         
-        NSString *message = @"Tasks: \r\n";
+        NSString *message = LOCALIZE_STRING(@"Tasks: \r\n");
         for(KPToDo *toDo in tasks){
             message = [message stringByAppendingFormat:@"◯ %@\r\n",toDo.title];
             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
@@ -253,19 +253,19 @@ static RootViewController *sharedObject;
             if(addedSubtasks)
                 message = [message stringByAppendingString:@"\r\n"];
         }
-        message = [message stringByAppendingString:@"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com"];
+        message = [message stringByAppendingString:LOCALIZE_STRING(@"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com")];
         [self.mailCont setMessageBody:message isHTML:NO];
         [self presentViewController:self.mailCont animated:YES completion:nil];
         [ANALYTICS trackEvent:@"Share Tasks Opened" options:@{@"Number of Tasks":@(tasks.count)}];
     }
     else{
-        [UTILITY alertWithTitle:@"Mail was not setup" andMessage:@"You can send us feedback to support@swipesapp.com. Thanks"];
+        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Mail was not setup") andMessage:LOCALIZE_STRING(@"You can send us feedback to support@swipesapp.com. Thanks")];
     }
 }
 
 -(void)accountAlertWithMessage:(NSString *)message{
     if( !message )
-        message = @"Register for Swipes to safely back up your data and get Swipes Plus";
+        message = LOCALIZE_STRING(@"Register for Swipes to safely back up your data and get Swipes Plus");
     KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:message block:^(BOOL succeeded, NSError *error) {
         [BLURRY dismissAnimated:YES];
         if(succeeded){
@@ -286,7 +286,7 @@ static RootViewController *sharedObject;
         [self presentViewController:mailCont animated:YES completion:nil];
     }
     else{
-        [UTILITY alertWithTitle:@"Mail was not setup" andMessage:@"You can send us feedback to support@swipesapp.com. Thanks"];
+        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Mail was not setup") andMessage:LOCALIZE_STRING(@"You can send us feedback to support@swipesapp.com. Thanks")];
     }
 }
 -(void)upgrade{
@@ -295,17 +295,17 @@ static RootViewController *sharedObject;
         return;
     }
     
-    [UTILITY alertWithTitle:@"Can't upgrade to Swipes Plus" andMessage:@"We're remaking our Plus version. Please send us your suggestions while waiting." buttonTitles:@[@"Cancel",@"Send suggestions",@"Restore Purchases"] block:^(NSInteger number, NSError *error) {
+    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Can't upgrade to Swipes Plus") andMessage:LOCALIZE_STRING(@"We're remaking our Plus version. Please send us your suggestions while waiting.") buttonTitles:@[[LOCALIZE_STRING(@"cancel") capitalizedString],LOCALIZE_STRING(@"Send suggestions"),LOCALIZE_STRING(@"Restore Purchases")] block:^(NSInteger number, NSError *error) {
         if( number == 1){
             [ROOT_CONTROLLER feedback];
         }
         else if(number == 2){
             [[PaymentHandler sharedInstance] restoreWithBlock:^(NSError *error) {
                 if(!error){
-                    [UTILITY alertWithTitle:@"Your purchase has been restored" andMessage:@"Your purchase has been restored. Welcome back!"];
+                    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Your purchase has been restored") andMessage:LOCALIZE_STRING(@"Your purchase has been restored. Welcome back!")];
                 }
                 else {
-                    [UTILITY alertWithTitle:@"An error occured" andMessage:@"No purchases could be restored. Contact support@swipesapp.com for help."];
+                    [UTILITY alertWithTitle:LOCALIZE_STRING(@"An error occured") andMessage:LOCALIZE_STRING(@"No purchases could be restored. Contact support@swipesapp.com for help.")];
                 }
             }];
         }
@@ -358,7 +358,7 @@ static RootViewController *sharedObject;
     NSInteger from = [[notification.userInfo objectForKey:@"from"] integerValue];
     NSInteger to = [[notification.userInfo objectForKey:@"to"] integerValue];
     //NSLog(@"notif:%@",notification);
-    [UTILITY confirmBoxWithTitle:@"Time Zone Change" andMessage:@"Do you want to move all your recurring tasks to match the change? A task @ 8:00 will be 8:00 in new time zone (Recommended)" block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Time Zone Change") andMessage:LOCALIZE_STRING(@"Do you want to move all your recurring tasks to match the change? A task @ 8:00 will be 8:00 in new time zone (Recommended)") block:^(BOOL succeeded, NSError *error) {
         
         if ( succeeded )
             [KPToDo changeTimeZoneFrom:from to:to];
@@ -422,7 +422,7 @@ static RootViewController *sharedObject;
 
 -(void)hintHandler:(HintHandler *)hintHandler triggeredHint:(Hints)hint{
     if(hint == HintEvernoteIntegration){
-        [UTILITY alertWithTitle:@"New feature" andMessage:@"We've made a powerful integration with Evernote!" buttonTitles:@[@"Not now", @"Learn more"] block:^(NSInteger number, NSError *error) {
+        [UTILITY alertWithTitle:LOCALIZE_STRING(@"New feature") andMessage:LOCALIZE_STRING(@"We've made a powerful integration with Evernote!") buttonTitles:@[LOCALIZE_STRING(@"Not now"), LOCALIZE_STRING(@"Learn more")] block:^(NSInteger number, NSError *error) {
             if( number == 1){
                 [self openIntegrationsWithHelper];
             }

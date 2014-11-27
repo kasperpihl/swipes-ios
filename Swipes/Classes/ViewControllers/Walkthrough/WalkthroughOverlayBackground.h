@@ -15,8 +15,8 @@
 #define kPopupSideMargin 20
 #define kPopupSubtitleSpacing 15
 
-#define kPopupTitleFont KP_SEMIBOLD(20)
-#define kPopupSubtitleFont KP_LIGHT(17)
+#define kPopupTitleFont KP_SEMIBOLD(17)
+#define kPopupSubtitleFont KP_REGULAR(14)
 
 #import <UIKit/UIKit.h>
 #define kPopupTextColor [UIColor whiteColor]

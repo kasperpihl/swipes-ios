@@ -253,7 +253,7 @@
 
 - (void)onShake:(id)sender
 {
-    [UTILITY confirmBoxWithTitle:@"Undo last action" andMessage:@"Do you want to undo the last action?" block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Undo last action") andMessage:LOCALIZE_STRING(@"Do you want to undo the last action?") block:^(BOOL succeeded, NSError *error) {
 
         if ( succeeded ){
             

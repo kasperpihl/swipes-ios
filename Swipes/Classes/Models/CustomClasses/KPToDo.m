@@ -555,13 +555,13 @@ extern NSString * const kEvernoteMoveTime;
     NSString *title;
     CellType cellType = [self cellTypeForTodo];
     
-    if(cellType == CellTypeToday) title = @"Tasks";
+    if(cellType == CellTypeToday) title = [LOCALIZE_STRING(@"tasks") capitalizedString];
     else if(cellType == CellTypeSchedule){
         NSDate *toDoDate = self.schedule;
-        if(!toDoDate) title = @"Unspecified";
+        if(!toDoDate) title = LOCALIZE_STRING(@"Unspecified");
         else{
             title = [UtilityClass readableTime:toDoDate showTime:NO];
-            if([title isEqualToString:@"Today"]) title = @"Later Today";
+            if([title isEqualToString:[LOCALIZE_STRING(@"Today") capitalizedString]]) title = LOCALIZE_STRING(@"Later Today");
             //title = [NSString stringWithFormat:@"Schedule %@",dateString];
         }
     }

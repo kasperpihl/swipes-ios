@@ -128,10 +128,9 @@
 
 
 -(void)tagList:(KPTagList *)tagList triedToDeleteTag:(NSString *)tag{
-    NSLog(@"tried to delete");
 
-    NSString *titleString = [NSString stringWithFormat:@"Delete tag: %@",tag];
-    [UTILITY confirmBoxWithTitle:titleString andMessage:@"This can't be undone" block:^(BOOL succeeded, NSError *error) {
+    NSString *titleString = [NSString stringWithFormat:LOCALIZE_STRING(@"Delete tag: %@"),tag];
+    [UTILITY confirmBoxWithTitle:titleString andMessage:LOCALIZE_STRING(@"This can't be undone") cancel:LOCALIZE_STRING(@"No") confirm:LOCALIZE_STRING(@"Delete") block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             [self.tagView deleteTag:tag];
             if(self.tagView.numberOfTags == 0) self.deleteMode = NO;

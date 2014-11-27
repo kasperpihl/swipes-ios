@@ -211,16 +211,14 @@
     [BLURRY showView:tagView inViewController:viewController];
 }
 -(void)deleteNumberOfItems:(NSInteger)numberOfItems inView:(UIViewController*)viewController completion:(SuccessfulBlock)block{
-    NSString *endString = (numberOfItems > 1) ? @"tasks" : @"task";
-    NSString *titleString = [NSString stringWithFormat:@"Delete %li %@",(long)numberOfItems,endString];
-    NSString *thisTheseString = (numberOfItems > 1) ? @"these" : @"this";
-    NSString *messageString = [NSString stringWithFormat:@"Are you sure you want to permanently delete %@ %@?",thisTheseString,endString];
-    KPAlert *alert = [KPAlert alertWithFrame:viewController.view.bounds title:titleString message:messageString block:^(BOOL succeeded, NSError *error) {
-        [BLURRY dismissAnimated:YES];
-        block(succeeded,error);
+    NSString *endString = (numberOfItems > 1) ? LOCALIZE_STRING(@"tasks") : LOCALIZE_STRING(@"task");
+    NSString *titleString = [NSString stringWithFormat:LOCALIZE_STRING(@"Delete %li %@"),(long)numberOfItems,endString];
+    NSString *thisTheseString = (numberOfItems > 1) ? LOCALIZE_STRING(@"these") : LOCALIZE_STRING(@"this");
+    NSString *messageString = [NSString stringWithFormat:LOCALIZE_STRING(@"Are you sure you want to permanently delete %@ %@?"),thisTheseString,endString];
+    
+    [UTILITY confirmBoxWithTitle:titleString andMessage:messageString block:^(BOOL succeeded, NSError *error) {
+         block(succeeded,error);
     }];
-    BLURRY.blurryTopColor = alpha(tcolor(TextColor),0.2);
-    [BLURRY showView:alert inViewController:viewController];
 }
 
 #pragma mark - AddPanelDelegate

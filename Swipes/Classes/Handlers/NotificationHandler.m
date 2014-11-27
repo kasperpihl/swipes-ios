@@ -86,7 +86,7 @@ static NotificationHandler *sharedObject;
         return LocationNeededPermission;
     }
     else if([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized){
-        [UTILITY alertWithTitle:@"Location Permissions" andMessage:@"You need to turn on location permissions for Swipes in Settings > Privacy"];
+        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Location Permissions") andMessage:LOCALIZE_STRING(@"You need to turn on location permissions for Swipes in Settings > Privacy")];
         return LocationNotAuthorized;
     }
     else if(self.startedLocationServices)

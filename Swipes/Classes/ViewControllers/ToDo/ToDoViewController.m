@@ -431,7 +431,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.tagsLabel.frame = CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X - 10, 500);
     NSString *tagsString = self.model.tagString;
     if(!tagsString || tagsString.length == 0){
-        tagsString = @"Set tags";
+        tagsString = LOCALIZE_STRING(@"Add tags");
     }
     CGSize basicSize = sizeWithFont(tagsString,self.tagsLabel.font);
     CGFloat padding = (SCHEDULE_ROW_HEIGHTS - basicSize.height)/2;
@@ -457,9 +457,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             self.alarmLabel.text = name;
         }
         else {
-            self.alarmLabel.text = @"Unspecified";
+            self.alarmLabel.text = LOCALIZE_STRING(@"Unspecified");
             if (self.model.completionDate) {
-                self.alarmLabel.text = [NSString stringWithFormat:@"Completed: %@",[UtilityClass readableTime:self.model.completionDate showTime:YES]];
+                self.alarmLabel.text = [NSString stringWithFormat:@"%@: %@",LOCALIZE_STRING(@"Completed"),[UtilityClass readableTime:self.model.completionDate showTime:YES]];
             }
         }
     }
@@ -472,7 +472,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 - (void)updateNotes
 {
     if(!self.model.notes || self.model.notes.length == 0){
-        self.notesView.text = @"Add notes";
+        self.notesView.text = LOCALIZE_STRING(@"Add notes");
     }
     else{
         self.notesView.text = self.model.notes;
@@ -508,46 +508,46 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     NSString* labelText;
     NSString *timeInString = [UtilityClass timeStringForDate:self.model.repeatedDate];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:LOCALIZE_STRING(@"en_US")]];
     BOOL addTime = YES;
     if (self.activeEditMode == KPEditModeRepeat) {
-        labelText = @"Repeat every...";
+        labelText = LOCALIZE_STRING(@"Repeat every...");
     }
     else {
         switch (self.model.repeatOptionValue) {
             case RepeatEveryDay:{
-                labelText = @"Every day";
+                labelText = LOCALIZE_STRING(@"Every day");
                 break;
             }
             case RepeatEveryMonFriOrSatSun:{
-                if(self.model.repeatedDate.isTypicallyWeekend) labelText = @"Every Saturday and Sunday";
-                else labelText = @"Every Monday to Friday";
+                if(self.model.repeatedDate.isTypicallyWeekend) labelText = LOCALIZE_STRING(@"Every Saturday and Sunday");
+                else labelText = LOCALIZE_STRING(@"Every Monday to Friday");
                 break;
             }
             case RepeatEveryWeek:{
                 [dateFormatter setDateFormat:@"EEEE"];
                 NSString *weekday = [dateFormatter stringFromDate:self.model.repeatedDate];
-                labelText = [NSString stringWithFormat:@"Every %@",weekday];
+                labelText = [NSString stringWithFormat:@"%@ %@",LOCALIZE_STRING(@"Every"),weekday];
                 break;
             }
             case RepeatEveryMonth:{
                 NSString *dateOfMonth = [UtilityClass dayOfMonthForDate:self.model.repeatedDate];
-                labelText = [NSString stringWithFormat:@"Every month the %@",dateOfMonth];
+                labelText = [NSString stringWithFormat:LOCALIZE_STRING(@"Every month the %@"),dateOfMonth];
                 break;
             }
             case RepeatEveryYear:{
                 NSString *dateOfMonth = [UtilityClass dayOfMonthForDate:self.model.repeatedDate];
                 [dateFormatter setDateFormat:@"MMMM"];
                 NSString *month = [dateFormatter stringFromDate:self.model.repeatedDate];
-                labelText = [NSString stringWithFormat:@"Every year %@ %@",month,dateOfMonth];
+                labelText = [NSString stringWithFormat:LOCALIZE_STRING(@"Every year %@ %@"),month,dateOfMonth];
                 break;
             }
             default:
                 addTime = NO;
-                labelText = @"Never repeat";
+                labelText = LOCALIZE_STRING(@"Never repeat");
                 break;
         }
-        if(addTime) labelText = [labelText stringByAppendingFormat:@" at %@",timeInString];
+        if(addTime) labelText = [labelText stringByAppendingFormat:LOCALIZE_STRING(@" at %@"),timeInString];
     }
     self.repeatedLabel.text = labelText;
 }
@@ -584,7 +584,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         CGFloat percentage = (CGFloat)numberOfCompletedSubtasks / numberOfSubtasks;
         self.sectionHeader.progressPercentage = percentage;
         
-        NSString *title = (numberOfCompletedSubtasks != numberOfSubtasks) ? [NSString stringWithFormat:@"%li / %li Steps",(long)numberOfCompletedSubtasks,(long)numberOfSubtasks] : @"ALL DONE";
+        NSString *title = (numberOfCompletedSubtasks != numberOfSubtasks) ? [NSString stringWithFormat:LOCALIZE_STRING(@"%li / %li STEPS"),(long)numberOfCompletedSubtasks,(long)numberOfSubtasks] : [LOCALIZE_STRING(@"All Done") uppercaseString];
         
         [self.sectionHeader setTitle:title];
     }
@@ -762,7 +762,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)pressedEvernote:(UIView*)sender
 {
     if(!kUserHandler.isLoggedIn){
-        [ROOT_CONTROLLER accountAlertWithMessage:@"Register an account to backup your data and keep your Evernotes in sync with Swipes"];
+        [ROOT_CONTROLLER accountAlertWithMessage:LOCALIZE_STRING(@"Register an account to backup your data and keep your Evernotes in sync with Swipes")];
         return;
     }
     voidBlock setNewEvernote = ^{
@@ -780,11 +780,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     };
     
     if(sender.tag == EVERNOTE_ITEM_BUTTON_TAG){
-        NSArray *buttons = @[@"Cancel", @"Remove note"];
+        NSArray *buttons = @[[LOCALIZE_STRING(@"cancel") capitalizedString], LOCALIZE_STRING(@"Remove note")];
         if( [GlobalApp isEvernoteInstalled] ){
-            buttons = @[@"Cancel",@"Remove note",@"Open note"];
+            buttons = @[[LOCALIZE_STRING(@"cancel") capitalizedString],LOCALIZE_STRING(@"Remove note"),LOCALIZE_STRING(@"Open note")];
         }
-        [UTILITY alertWithTitle:@"Evernote" andMessage:@"What to do?" buttonTitles:buttons block:^(NSInteger number, NSError *error) {
+        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote") andMessage:LOCALIZE_STRING(@"What do you want to do?") buttonTitles:buttons block:^(NSInteger number, NSError *error) {
             //DLog(@"%li",(long)number);
             if(number == 1){
                 [self.model removeAllAttachmentsForService:EVERNOTE_SERVICE];
@@ -1016,7 +1016,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.evernoteContainer addSubview:self.evernoteLabel];
         
         self.syncLabel = [[SyncLabel alloc] init];
-        [self.syncLabel setTitle:@"ATTACHED"];
+        [self.syncLabel setTitle:[LOCALIZE_STRING(@"Attached") uppercaseString]];
         //self.syncLabel.backgroundColor = tcolorF(BackgroundColor,ThemeDark);
         [self.evernoteContainer addSubview:self.syncLabel];
         self.syncLabel.frame = CGRectSetPos(self.syncLabel.frame, LABEL_X, CGRectGetMidY(self.evernoteLabel.frame)+10);

@@ -96,7 +96,7 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
         self.searchBar = [[UITextField alloc] initWithFrame:CGRectMake(searchX, 0, searchWidth, kSearchBarHeight)];
         self.searchBar.font = KP_LIGHT(16);
         self.searchBar.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        self.searchBar.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search" attributes:@{NSFontAttributeName: KP_LIGHT(16) , NSForegroundColorAttributeName: tcolorF(TextColor, ThemeDark)}];
+        self.searchBar.attributedPlaceholder = [[NSAttributedString alloc] initWithString:LOCALIZE_STRING(@"Search") attributes:@{NSFontAttributeName: KP_LIGHT(16) , NSForegroundColorAttributeName: tcolorF(TextColor, ThemeDark)}];
         [contentView addSubview:self.searchBar];
         self.searchBar.delegate = self;
         self.searchBar.keyboardAppearance = UIKeyboardAppearanceAlert;
@@ -139,7 +139,7 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
         
         UILabel *checkmarkOnlyLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(checkmarkButton.frame), CGRectGetMinY(checkmarkButton.frame), CGRectGetWidth(contentView.frame) - CGRectGetMaxX(checkmarkButton.frame)-kContentSpacingRight, kSearchBarHeight)];
         checkmarkOnlyLabel.backgroundColor = kEvernoteColor;
-        checkmarkOnlyLabel.text = @"Only notes with ToDo inside";
+        checkmarkOnlyLabel.text = LOCALIZE_STRING(@"Only notes with ToDo inside");
         checkmarkOnlyLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
         checkmarkOnlyLabel.textColor = tcolorF(TextColor, ThemeDark);
         checkmarkOnlyLabel.font = KP_REGULAR(14);

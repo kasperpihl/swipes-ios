@@ -5,8 +5,8 @@
 //  Created by Kasper Pihl Tornøe on 27/07/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define WALK_HEADER_FONT KP_SEMIBOLD(20)
-#define WALK_SUBHEADER_FONT KP_LIGHT(16)
+#define WALK_HEADER_FONT KP_SEMIBOLD(17)
+#define WALK_SUBHEADER_FONT KP_REGULAR(14)
 #define WALK_COLOR  tcolorF(BackgroundColor,ThemeDark)
 #define kDefMaxWidth 260
 #define kDefTitleSpacing 13

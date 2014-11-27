@@ -76,7 +76,7 @@ int const kCellCount = 4;
     learnMoreButton.layer.cornerRadius = 5;
     learnMoreButton.layer.masksToBounds = YES;
     [learnMoreButton addTarget:self action:@selector(pressedLearnedMore) forControlEvents:UIControlEventTouchUpInside];
-    [learnMoreButton setTitle:@"LEARN MORE" forState:UIControlStateNormal];
+    [learnMoreButton setTitle:[LOCALIZE_STRING(@"Learn more") uppercaseString] forState:UIControlStateNormal];
     
     _isEvernoteBusinessUser = kEnInt.isBusinessUser;
     
@@ -128,7 +128,7 @@ int const kCellCount = 4;
             UISwitch *aSwitch = [[UISwitch alloc] init];
             aSwitch.tag = indexPath.row;
             aSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-            CGRectSetCenter(aSwitch, cell.frame.size.width-aSwitch.frame.size.width + 5, kLocalCellHeight/2);
+            CGRectSetCenter(aSwitch, cell.frame.size.width-aSwitch.frame.size.width/2 - 5, kLocalCellHeight/2);
             [aSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
             [cell.contentView addSubview:aSwitch];
             
@@ -206,11 +206,11 @@ int const kCellCount = 4;
     switch (integration) {
         case kEvernoteIntegration:
             if([kEnInt isAuthenticated]){
-                name = [name stringByAppendingString:@" (Connected)"];
-                valueString = @"Unlink";
+                name = [name stringByAppendingString:LOCALIZE_STRING(@" (Connected)")];
+                valueString = LOCALIZE_STRING(@"Unlink");
             }
             else
-                valueString = @"Link account";
+                valueString = LOCALIZE_STRING(@"Link account");
             break;
         default:break;
     }
@@ -220,27 +220,27 @@ int const kCellCount = 4;
         cell.textLabel.textColor = tcolor(TextColor);
         cell.detailTextLabel.textColor = tcolor(SubTextColor);
         if(indexPath.row == 1){
-            cell.textLabel.text = @"Sync with Evernote on this device";
+            cell.textLabel.text = LOCALIZE_STRING(@"Sync with Evernote on this device");
         }
         else if(indexPath.row == 2){
-            cell.textLabel.text = @"Auto import notes with \"swipes\"-tag";
+            cell.textLabel.text = LOCALIZE_STRING(@"Auto import notes with \"swipes\"-tag");
         }
         else if(indexPath.row == 3){
-            cell.textLabel.text = @"Sync with personal linked notebooks";
+            cell.textLabel.text = LOCALIZE_STRING(@"Sync with personal linked notebooks");
         }
 #ifdef EVERNOTE_BUSINESS
         else if(indexPath.row == 4){
             if (_isEvernoteBusinessUser)
-                cell.textLabel.text = @"Sync with Evernote Business";
+                cell.textLabel.text = LOCALIZE_STRING(@"Sync with Evernote Business");
             else {
-                cell.textLabel.text = @"Sync with Evernote Business";
-                cell.detailTextLabel.text = @"Tap to learn more";
+                cell.textLabel.text = LOCALIZE_STRING(@"Sync with Evernote Business");
+                cell.detailTextLabel.text = LOCALIZE_STRING(@"Tap to learn more");
             }
         }
 #endif
 
         else if(indexPath.row == kCellCount){
-            cell.textLabel.text = @"Open Evernote Importer";
+            cell.textLabel.text = LOCALIZE_STRING(@"Open Evernote Importer");
         }
     }
 }
@@ -271,7 +271,7 @@ int const kCellCount = 4;
 }
 
 -(void)authenticated{
-    [UTILITY alertWithTitle:@"Get started" andMessage:@"Import a few notes right away." buttonTitles:@[@"Not now",@"Choose notes"] block:^(NSInteger number, NSError *error) {
+    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Get started") andMessage:LOCALIZE_STRING(@"Import a few notes right away.") buttonTitles:@[LOCALIZE_STRING(@"Not now"),LOCALIZE_STRING(@"Choose notes")] block:^(NSInteger number, NSError *error) {
         if(number == 1){
             [self showEvernoteImporterAnimated:YES];
         }
@@ -284,7 +284,7 @@ int const kCellCount = 4;
     switch (integration) {
         case kEvernoteIntegration:{
             if(kEnInt.isAuthenticated){
-                [UTILITY confirmBoxWithTitle:@"Unlink Evernote" andMessage:@"All tasks will be unlinked, are you sure?" block:^(BOOL succeeded, NSError *error) {
+                [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Unlink Evernote") andMessage:LOCALIZE_STRING(@"All tasks will be unlinked, are you sure?") block:^(BOOL succeeded, NSError *error) {
                     if (succeeded) {
                         [kEnInt logout];
                         NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
@@ -304,7 +304,7 @@ int const kCellCount = 4;
 #ifdef EVERNOTE_BUSINESS
     if (indexPath.row == 4) {
         if (!_isEvernoteBusinessUser) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://swipesapp.com/evernote-business/"]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://evernote.com/business/"]];
         }
     }
 #endif

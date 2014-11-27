@@ -322,7 +322,7 @@ typedef enum {
             [PFUser requestPasswordResetForEmailInBackground:[textField.text lowercaseString] block:^(BOOL succeeded, NSError *error) {
                 [self showIndicator:NO onElement:self.forgotButton];
                 if(succeeded){
-                    [UTILITY alertWithTitle:@"Email sent" andMessage:@"Follow the instructions in the email to reset your pass"];
+                    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Email sent") andMessage:LOCALIZE_STRING(@"Follow the instructions in the email to reset your pass")];
                 }
                 else{
                     [self handleErrorFromLogin:error];

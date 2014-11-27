@@ -217,7 +217,7 @@
         addView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         addView.tag = ADD_VIEW_TAG;
         addView.userInteractionEnabled = YES;
-        addView.textField.placeholder = @"Add a new task";
+        addView.textField.placeholder = LOCALIZE_STRING(@"Add a new task");
         addView.delegate = self;
         
         //[self.textField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];

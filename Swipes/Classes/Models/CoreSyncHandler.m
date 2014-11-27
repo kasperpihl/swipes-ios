@@ -288,7 +288,7 @@
 {
     if(self.outdated){
         if(async && force) {
-            [UTILITY alertWithTitle:@"New version required" andMessage:@"For sync to work - please update Swipes from the App Store"];
+            [UTILITY alertWithTitle:LOCALIZE_STRING(@"New version required") andMessage:LOCALIZE_STRING(@"For sync to work - please update Swipes from the App Store")];
         }
         return UIBackgroundFetchResultNoData;
     }
@@ -386,7 +386,7 @@
                     
                     if (!kEnInt.isAuthenticated) {
                         kEnInt.enableSync = NO;
-                        [UTILITY alertWithTitle:@"Evernote Authorization" andMessage:@"To sync with Evernote on this device, please authorize" buttonTitles:@[@"Don't sync this device",@"Authorize now"] block:^(NSInteger number, NSError *error) {
+                        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
                             if(number == 1){
                                 [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                             }
@@ -402,7 +402,7 @@
     }
     else {
         if(!kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]){
-            [UTILITY alertWithTitle:@"Evernote Authorization" andMessage:@"To sync with Evernote on this device, please authorize" buttonTitles:@[@"Don't sync this device",@"Authorize now"] block:^(NSInteger number, NSError *error) {
+            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
                 if(number == 1){
                     [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                 }
@@ -585,7 +585,7 @@
             NSInteger code = [result objectForKey:@"code"] ? [[result objectForKey:@"code"] integerValue] : 500;
             if([message isEqualToString:@"update required"]){
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [UTILITY alertWithTitle:@"New version required" andMessage:@"For sync to work - please update Swipes from the App Store"];
+                    [UTILITY alertWithTitle:LOCALIZE_STRING(@"New version required") andMessage:LOCALIZE_STRING(@"For sync to work - please update Swipes from the App Store")];
                     //NSLog(@"adding here");
                     self.outdated = YES;
                 });
