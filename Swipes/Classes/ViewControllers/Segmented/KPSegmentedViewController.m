@@ -35,6 +35,7 @@
 
 #import "HintHandler.h"
 #import "UIView+Utilities.h"
+#import "M13BadgeView.h"
 
 
 #import "NotificationHandler.h"
@@ -68,6 +69,8 @@
 @property (nonatomic, strong) UIView *ios7BackgroundView;
 @property (nonatomic, assign) BOOL hasAppeared;
 @property (nonatomic, assign) BOOL hidden;
+@property (nonatomic) M13BadgeView *badgeView;
+@property (nonatomic) UIButton *badgeButton;
 @property (nonatomic, strong) NSArray *selectedItems;
 @property (nonatomic) TopMenu *topOverlay;
 @property (nonatomic) BOOL isEditingTags;
@@ -638,7 +641,9 @@
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl{
     [self changeViewControllerAnimated:YES];
 }
-
+-(void)pressedHelp:(UIButton*)sender{
+    [ROOT_CONTROLLER playVideoWithIdentifier:@"tweOSZdPmO0"];
+}
 
 - (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles {
     self = [super init];
@@ -666,14 +671,52 @@
         [accountButton setTitle:iconString(@"settingsAccountFull") forState:UIControlStateHighlighted];
         [accountButton addTarget:self action:@selector(pressedAccount) forControlEvents:UIControlEventTouchUpInside];
         accountButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        
+        CGFloat topSpace = 0;
+        CGFloat buttonSize = SEGMENT_HEIGHT-2*topSpace;
+        UIButton *helpButton = [[UIButton alloc] initWithFrame:CGRectMake(topSpace, TOP_Y+topSpace, CELL_LABEL_X , buttonSize)];
+        [helpButton setTitle:@"" forState:UIControlStateNormal];
+        [helpButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        helpButton.titleLabel.font = KP_SEMIBOLD(18);
+        helpButton.layer.borderColor = tcolor(TextColor).CGColor;
+        //helpButton.layer.borderWidth = 1;
+        //helpButton.layer.cornerRadius = buttonSize/2;
+        [helpButton addTarget:self action:@selector(pressedHelp:) forControlEvents:UIControlEventTouchUpInside];
+        M13BadgeView *badgeView = [[M13BadgeView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+        [helpButton addSubview:badgeView];
+        //badgeView.font = [UIFont fontWithName:@"Nexa-Bold" size:14];
+        //badgeView.backgroundColor = CLEAR;
+        badgeView.font = [UIFont systemFontOfSize:12];
+        badgeView.badgeBackgroundColor = tcolor(LaterColor);//tcolor(TextColor);
+        badgeView.animateChanges = YES;
+        //badgeView.borderWidth = 1;
+        //badgeView.borderColor = tcolor(TextColor);
+        //badgeView.textColor = tcolor(TextColor);
+        badgeView.text = @"4";
+        badgeView.horizontalAlignment = M13BadgeViewHorizontalAlignmentCenter;
+        badgeView.verticalAlignment = M13BadgeViewVerticalAlignmentMiddle;
+        self.badgeButton = helpButton;
+        self.badgeView = badgeView;
+        //[self.ios7BackgroundView addSubview:helpButton];
         [self.ios7BackgroundView addSubview:accountButton];
+        
         self._accountButton = accountButton;
         
         [self.view addSubview:self.ios7BackgroundView];
-        
+        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(timeFire) userInfo:nil repeats:NO];
         //self.navigationItem.titleView = self.segmentedControl;
     }
     return self;
+}
+-(void)timeFire{
+    
+    [UIView animateWithDuration:0.7 animations:^{
+        self.badgeView.text = @"3";
+        //self.badgeView.font = iconFont(11);
+        //self.badgeView.badgeBackgroundColor = tcolor(DoneColor);
+        
+    }];
+    
 }
 
 - (void)swipeHandler:(UISwipeGestureRecognizer *)recognizer

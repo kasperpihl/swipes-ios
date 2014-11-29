@@ -37,7 +37,7 @@ typedef enum {
 -(void)upgrade;
 -(void)accountAlertWithMessage:(NSString*)message;
 -(void)proWithMessage:(NSString*)message;
-
+-(void)playVideoWithIdentifier:(NSString*)identifier;
 -(void)triggerEvernoteEvent;
 
 -(void)shareTasks:(NSArray*)tasks;

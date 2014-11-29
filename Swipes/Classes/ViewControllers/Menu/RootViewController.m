@@ -23,6 +23,8 @@
 #import "UIColor+Utilities.h"
 #import "PlusAlertView.h"
 #import "CoreSyncHandler.h"
+#import "YTPlayerView.h"
+
 
 #import "SettingsHandler.h"
 #import "KPOverlay.h"
@@ -43,8 +45,9 @@
 #import "ShareViewController.h"
 #import "AwesomeMenu.h"
 #import <EventKit/EventKit.h>
+#import <MediaPlayer/MediaPlayer.h>
 
-@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate, HintHandlerDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate, HintHandlerDelegate,YTPlayerViewDelegate>
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 
@@ -312,6 +315,56 @@ static RootViewController *sharedObject;
     }];
     return;
 }
+-(void)pressedCloseForVideo:(UIButton*)sender{
+    [[sender superview] removeFromSuperview];
+}
+-(void)moviePlayerDidFinish:(NSNotification*)notification{
+    NSLog(@"noti %@",notification);
+}
+-(void)playVideoWithIdentifier:(NSString *)identifier{
+  //  NSString *url = [NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@&hd=1",identifier];
+//)[[UIApplication sharedApplication] openURL:[NSURL URLWithString: url]];
+    UIView *overlay = [[UIView alloc] initWithFrame:self.view.bounds];
+    overlay.backgroundColor = CLEAR;
+    overlay.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    
+    UIButton *closeButton = [[UIButton alloc] initWithFrame:overlay.bounds];
+    [closeButton addTarget:self action:@selector(pressedCloseForVideo:) forControlEvents:UIControlEventTouchUpInside];
+    closeButton.backgroundColor = tcolor(TextColor);
+    closeButton.alpha = 0.7;
+    [overlay addSubview:closeButton];
+    
+    CGFloat backgroundHeight = overlay.frame.size.height;
+    CGFloat backgroundWidth = overlay.frame.size.width;
+    CGFloat calculatedWidth = MIN(backgroundWidth,300);
+    CGFloat calculatedHeight = MIN(backgroundWidth/16*8,150);
+    
+    
+    YTPlayerView *playerView = [[YTPlayerView alloc] initWithFrame:CGRectMake((backgroundWidth-calculatedWidth)/2, (backgroundHeight-calculatedHeight)/2, calculatedWidth, calculatedHeight)];
+    playerView.delegate = self;
+    playerView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    playerView.backgroundColor = CLEAR;
+    NSDictionary *playerVars = @{
+                                 @"playsinline" : @1,
+                                 @"autoplay": @1,
+                                 @"controls": @2,
+                                 @"modestbranding":@1
+                                 };
+    [playerView loadWithVideoId:identifier playerVars:playerVars];
+    
+    [overlay addSubview:playerView];
+    [self.view addSubview:overlay];
+    
+}
+-(void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state{
+    NSLog(@"state:%i",state);
+    if(state == kYTPlayerStateEnded)
+        [[playerView superview] removeFromSuperview];
+}
+- (void)playerViewDidBecomeReady:(YTPlayerView *)playerView{
+    [playerView setPlaybackQuality:kYTPlaybackQualityHD1080];
+    [playerView playVideo];
+}
 
 -(void)walkthrough
 {
@@ -462,6 +515,7 @@ static RootViewController *sharedObject;
     notify(@"changed theme", changedTheme);
     notify(@"handled URL", handledURL);
     notify(@"updated time zone", changedTimeZone:);
+    notify(MPMoviePlayerPlaybackDidFinishNotification, moviePlayerDidFinish:);
     kHints.delegate = self;
     
     BLURRY.delegate = self;

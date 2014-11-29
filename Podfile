@@ -3,6 +3,8 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
 target :Swipes do
+    pod 'M13BadgeView', '~> 1.0'
+    pod 'youtube-ios-player-helper', '~> 0.1'
     pod 'Appirater', :inhibit_warnings => true
     pod 'Bolts', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
