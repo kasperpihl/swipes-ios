@@ -26,6 +26,7 @@
 		789C9AAD8BA447088AAD221A /* libPods-SwipesKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 368054CA6302490B9AFBAEFE /* libPods-SwipesKit.a */; };
 		81A0C94F1F16434CAE0AA041 /* libPods-SwipesToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A3901B41E5E94AAE9A1FED2F /* libPods-SwipesToday.a */; };
 		A701BD2E1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A701BD2D1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png */; };
+		A702E0671A29B9AD00EC3624 /* HelpTopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A702E0661A29B9AD00EC3624 /* HelpTopMenu.m */; };
 		A703B1631838EB0E0047DCC9 /* UIButton+PassTouch.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1621838EB0E0047DCC9 /* UIButton+PassTouch.m */; };
 		A703B1A81838EBF20047DCC9 /* AddPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1671838EBF20047DCC9 /* AddPanelView.m */; };
 		A703B1A91838EBF20047DCC9 /* KPAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B16A1838EBF20047DCC9 /* KPAlert.m */; };
@@ -514,6 +515,8 @@
 		8A10ECBCD0054ECEBA611D47 /* Pods-SwipesKit.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A3901B41E5E94AAE9A1FED2F /* libPods-SwipesToday.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwipesToday.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A701BD2D1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-logo-app@2x.png"; sourceTree = "<group>"; };
+		A702E0651A29B9AD00EC3624 /* HelpTopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelpTopMenu.h; path = TopMenus/HelpTopMenu.h; sourceTree = "<group>"; };
+		A702E0661A29B9AD00EC3624 /* HelpTopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HelpTopMenu.m; path = TopMenus/HelpTopMenu.m; sourceTree = "<group>"; };
 		A703B1611838EB0E0047DCC9 /* UIButton+PassTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+PassTouch.h"; sourceTree = "<group>"; };
 		A703B1621838EB0E0047DCC9 /* UIButton+PassTouch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+PassTouch.m"; sourceTree = "<group>"; };
 		A703B1661838EBF20047DCC9 /* AddPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPanelView.h; sourceTree = "<group>"; };
@@ -1744,6 +1747,8 @@
 				A784DB9219E822940041225A /* SearchTopMenu.m */,
 				A72FD5DC19E9D10D00DDEB02 /* FilterTopMenu.h */,
 				A72FD5DD19E9D10D00DDEB02 /* FilterTopMenu.m */,
+				A702E0651A29B9AD00EC3624 /* HelpTopMenu.h */,
+				A702E0661A29B9AD00EC3624 /* HelpTopMenu.m */,
 			);
 			name = TopMenus;
 			sourceTree = "<group>";
@@ -2598,6 +2603,7 @@
 				DA47B6611A006D1B00299916 /* MagicalImportFunctions.m in Sources */,
 				A7B9D39319066299001E1109 /* KPModal.m in Sources */,
 				DA47B6911A006D1B00299916 /* NSManagedObjectContext+MagicalObserving.m in Sources */,
+				A702E0671A29B9AD00EC3624 /* HelpTopMenu.m in Sources */,
 				A78128CC17294C56002226C8 /* KPSegmentedViewController.m in Sources */,
 				A7A560B8198A9A3600C3D213 /* NotificationsViewController.m in Sources */,
 				A798DCCE19E523CC00386C80 /* SelectionTopMenu.m in Sources */,
