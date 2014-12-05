@@ -171,8 +171,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if(activeEditMode != _activeEditMode){
         KPEditMode oldState = _activeEditMode;
         _activeEditMode = activeEditMode;
-        if(activeEditMode != KPEditModeNone)
-            [self clearActiveEditMode:oldState];
+        [self clearActiveEditMode:oldState];
     }
 }
 
