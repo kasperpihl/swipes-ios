@@ -355,7 +355,7 @@ static NotificationHandler *sharedObject;
             }
             UILocalNotification *notification = [self notificationForDate:toDo.schedule badgeCounter:totalBadgeCount title:title userInfo:userInfo];
             if(toDo.priorityValue > 0){
-                [self addSound:@"swipes-priority-notification2.aiff"  forNotification:&notification];
+                [self addSound:@"Priority notification three repetitions.m4a"  forNotification:&notification];
             }
             if(OSVER >= 8){
                 notification.category = (numberOfNotificationsForDate == 1) ? @"OneTaskCategory" : @"BatchTasksCategory";

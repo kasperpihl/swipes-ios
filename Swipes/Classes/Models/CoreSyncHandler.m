@@ -759,6 +759,7 @@
     
     /* Send update notification */
     NSDictionary *updatedEvents = @{@"deleted":[self._deletedObjectsForSyncNotification copy],@"updated":[self._updatedObjectsForSyncNotification copy]};
+#warning The above line can crash because of an insert nil into one of the copies // crash #892
     [self._deletedObjectsForSyncNotification removeAllObjects];
     [self._updatedObjectsForSyncNotification removeAllObjects];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:self userInfo:updatedEvents];
