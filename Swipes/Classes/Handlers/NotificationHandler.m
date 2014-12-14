@@ -443,6 +443,12 @@ static NotificationHandler *sharedObject;
     [self handleGeofences:arrGeofenceList];
 }
 
+- (void)clearLocalNotifications
+{
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+}
+
 -(void)dealloc{
     clearNotify();
 }

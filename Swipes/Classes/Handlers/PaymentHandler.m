@@ -78,7 +78,7 @@ static PaymentHandler *sharedObject;
     [self requestPayment:plusMonthlyIdentifier block:block];
 }*/
 -(void)restoreWithBlock:(void (^)(NSError *))errorBlock{
-    [[RMStore defaultStore] restoreTransactionsOfUser:kCurrent.objectId onSuccess:^{
+    [[RMStore defaultStore] restoreTransactionsOfUser:kCurrent.objectId onSuccess:^(NSArray *transactions) {
         [UtilityClass sendError:nil type:@"Restore successful"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"upgrade userlevel" object:self];
         errorBlock(nil);
@@ -86,6 +86,14 @@ static PaymentHandler *sharedObject;
         errorBlock(error);
         [UtilityClass sendError:error type:@"Restore error"];
     }];
+/*    [[RMStore defaultStore] restoreTransactionsOfUser:kCurrent.objectId onSuccess:^{
+        [UtilityClass sendError:nil type:@"Restore successful"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"upgrade userlevel" object:self];
+        errorBlock(nil);
+    } failure:^(NSError *error) {
+        errorBlock(error);
+        [UtilityClass sendError:error type:@"Restore error"];
+    }];*/
 }
 @end
 

@@ -295,6 +295,7 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
             subtask.originIdentifier = subtask.title;
             subtask.origin = EVERNOTE_SERVICE;
             updated = YES;
+            [KPToDo saveToSync];
         }
     }
 

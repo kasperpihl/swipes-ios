@@ -24,6 +24,7 @@
 #import "PlusAlertView.h"
 #import "CoreSyncHandler.h"
 #import "YTPlayerView.h"
+#import "NotificationHandler.h"
 
 
 #import "SettingsHandler.h"
@@ -202,6 +203,7 @@ static RootViewController *sharedObject;
     [kUserHandler didLogout];
     [kHints reset];
     [kFilter clearAll];
+    [NOTIHANDLER clearLocalNotifications];
     [self resetRoot];
 
 }
