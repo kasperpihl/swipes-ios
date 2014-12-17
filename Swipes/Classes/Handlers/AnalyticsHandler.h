@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Leanplum/Leanplum.h>
+//#import <Leanplum/Leanplum.h>
 
-DEFINE_VAR_BOOL(newOnboardingToggle, false); // iOS
+//DEFINE_VAR_BOOL(newOnboardingToggle, false); // iOS
 
 #define kCusDimUserLevel 0
 

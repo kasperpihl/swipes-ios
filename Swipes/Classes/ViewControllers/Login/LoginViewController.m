@@ -230,13 +230,6 @@ typedef enum {
         self.tryButton.frame = CGRectMake(0, 0, sizeWithFont(title ,LOGIN_FIELDS_FONT).width + 36, fieldHeight);
         self.tryButton.frame = CGRectSetPos(self.tryButton.frame, 0, self.view.frame.size.height-self.tryButton.frame.size.height);
         [self.view addSubview:self.tryButton];
-        [Leanplum onVariablesChanged:^() {
-            if([USER_DEFAULTS boolForKey:isTryingString])
-                self.tryButton.hidden = NO;
-            else
-                self.tryButton.hidden = [newOnboardingToggle boolValue];
-                
-        }];
         
         /*
         self.continueButton = [[UIButton alloc] initWithFrame:CGRectMake((320-buttonWidth)/2, 0, buttonWidth, buttonHeight)];

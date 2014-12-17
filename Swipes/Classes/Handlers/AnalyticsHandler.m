@@ -62,13 +62,13 @@ static AnalyticsHandler *sharedObject;
     return _views;
 }
 -(void)trackEvent:(NSString *)event info:(NSString *)info value:(double)value parameters:(NSDictionary *)parameters{
-    [Leanplum track:event withValue:value andInfo:info
-      andParameters:parameters];
+    //[Leanplum track:event withValue:value andInfo:info
+      //andParameters:parameters];
 }
 -(void)trackEvent:(NSString *)event options:(NSDictionary *)options{
     if(self.analyticsOff)
         return;
-    [Leanplum track:event withParameters:options];
+    //[Leanplum track:event withParameters:options];
     //[[LocalyticsSession shared] tagEvent:event attributes:options];
 }
 -(NSString *)customDimension:(NSInteger)dimension{
@@ -81,7 +81,7 @@ static AnalyticsHandler *sharedObject;
 -(void)updateIdentity{
     NSString *userLevel = @"None";
     if(kCurrent){
-        [Leanplum setUserId:kCurrent.objectId];
+        //[Leanplum setUserId:kCurrent.objectId];
         //[[LocalyticsSession shared] setCustomerId:kCurrent.objectId];
         //[[LocalyticsSession shared] setCustomerEmail:kCurrent.email];
         userLevel = @"User";
@@ -118,18 +118,18 @@ static AnalyticsHandler *sharedObject;
     if(viewsLeft > 5)
         [self.views removeObjectAtIndex:0];
     [self.views addObject:view];
-    [Leanplum advanceTo:view];
+    //[Leanplum advanceTo:view];
 }
 -(void)popView{
     NSInteger viewsLeft = self.views.count;
     if(viewsLeft > 0)
         [self.views removeLastObject];
     if(viewsLeft > 1){
-        [Leanplum advanceTo:[self.views lastObject]];
+        //[Leanplum advanceTo:[self.views lastObject]];
     }
 }
 -(void)clearViews{
     [self.views removeAllObjects];
-    [Leanplum advanceTo:nil];
+    //[Leanplum advanceTo:nil];
 }
 @end

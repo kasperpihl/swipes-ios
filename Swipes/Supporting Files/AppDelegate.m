@@ -29,7 +29,6 @@
 
 #import "UIWindow+DHCShakeRecognizer.h"
 
-#import <Leanplum/Leanplum.h>
 #import "SettingsHandler.h"
 #import "RootViewController.h"
 
@@ -41,10 +40,9 @@
 {
     
 #ifdef RELEASE
-    [Leanplum setAppId:@"8J2O981BSPJg1536460xS0tqlMRrO4u9PykB25TE9Jc" withProductionKey:@"DGeyaY7QsAtw2IuAytry41IZaC9wyhDaUSCSMoaHDFo"];
+    
 #else
-    LEANPLUM_USE_ADVERTISING_ID;
-    [Leanplum setAppId:@"8J2O981BSPJg1536460xS0tqlMRrO4u9PykB25TE9Jc" withDevelopmentKey:@"Tv0mQ7d8o3pEybHlju4DsoEIu7ryptnsXLG79BSoQSA"];
+
 #endif
 #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
     NSString* const CONSUMER_KEY = @"swipes";
@@ -67,8 +65,6 @@
     
     [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
     
-    [Leanplum syncResourcesAsync:YES];
-    [Leanplum start];
     
     
     KPCORE;
