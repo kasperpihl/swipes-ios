@@ -12,6 +12,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+Utilities.h"
 #import "SlowHighlightIcon.h"
+#import "AudioHandler.h"
 #define VERTICAL_MARGIN 3
 #define HORIZONTAL_MARGIN 10
 #define TAG_HORIZONTAL_PADDING 6
@@ -272,11 +273,13 @@
         return;
     }
     if([self.selectedTags containsObject:tag]){
+        [kAudio playSoundWithName:@"New state - scheduled.m4a"];
         [self.selectedTags removeObject:tag];
         sender.selected = NO;
         if([self.tagDelegate respondsToSelector:@selector(tagList:deselectedTag:)]) [self.tagDelegate tagList:self deselectedTag:tag];
     }
     else {
+        [kAudio playSoundWithName:@"Succesful action.m4a"];
         [self.selectedTags addObject:tag];
         sender.selected = YES;
         if([self.tagDelegate respondsToSelector:@selector(tagList:selectedTag:)]) [self.tagDelegate tagList:self selectedTag:tag];

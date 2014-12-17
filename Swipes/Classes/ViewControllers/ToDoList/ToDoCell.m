@@ -14,6 +14,7 @@
 #import "NSDate-Utilities.h"
 #import "UIColor+Utilities.h"
 #import "StyleHandler.h"
+#import "AudioHandler.h"
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
 #define DOT_VIEW_TAG 6
@@ -186,6 +187,11 @@
 }
 
 - (void)setPriority:(BOOL)priority {
+    if(priority)
+        [kAudio playSoundWithName:@"Succesful action.m4a"];
+    else
+        [kAudio playSoundWithName:@"New state - scheduled.m4a"];
+    
     self.dotView.priority = priority;
 }
 

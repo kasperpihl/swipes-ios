@@ -11,6 +11,7 @@
 #import "KPToolbar.h"
 #import "KPAddView.h"
 #import "UIView+Utilities.h"
+#import "AudioHandler.h"
 #import "KPAlert.h"
 #import "UtilityClass.h"
 #define BACKGROUND_VIEW_TAG 2

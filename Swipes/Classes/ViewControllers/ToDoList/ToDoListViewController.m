@@ -22,6 +22,7 @@
 #import "RootViewController.h"
 #import "SlowHighlightIcon.h"
 #import "ToDoListViewController.h"
+#import "AudioHandler.h"
 
 #define BACKGROUND_IMAGE_VIEW_TAG 504
 #define BACKGROUND_LABEL_VIEW_TAG 502
@@ -50,6 +51,9 @@
 @property (nonatomic) BOOL savedOffset;
 @property (nonatomic) BOOL badState;
 @property (nonatomic) BOOL hasStartedEditing;
+@property (nonatomic) BOOL needUpdate;
+@property double lastCompletionTime;
+@property NSInteger numberOfCompletions;
 
 @property (nonatomic,strong) NSMutableDictionary *stateDictionary;
 @end
@@ -195,7 +199,10 @@
 }
 
 - (void)update {
-    [self.itemHandler reloadData];
+    if(!self.swipingCell){
+        [self.itemHandler reloadData];
+    }
+    else self.needUpdate = YES;
 }
 
 
@@ -411,6 +418,7 @@
             [kHints triggerHint:HintSwipedLeft];
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
             __block BOOL hasReturned = NO;
+            [kAudio playSoundWithName:@"New state - scheduled.m4a"];
             SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type) {
                 hasReturned = YES;
                 [BLURRY dismissAnimated:YES];
@@ -426,8 +434,10 @@
                     NSArray *movedItems = [KPToDo scheduleToDos:toDosArray forDate:chosenDate save:YES];
                     [self moveItems:movedItems toCellType:targetCellType];
                 }
-                if(button != KPScheduleButtonCancel)
+                if(button != KPScheduleButtonCancel){
                     [kHints triggerHint:HintScheduled];
+                    [kAudio playSoundWithName:@"New state - scheduled.m4a"];
+                }
                 self.isHandlingTrigger = NO;
             }];
             popup.calendarDate = ((KPToDo*)[toDosArray firstObject]).schedule;
@@ -442,14 +452,32 @@
             return;
         }
         case CellTypeToday:
+            [kAudio playSoundWithName:@"New state - current.m4a"];
             movedItems = [KPToDo scheduleToDos:toDosArray forDate:[NSDate date] save:YES];
             break;
-        case CellTypeDone:
+        case CellTypeDone:{
+            double currentTime = CACurrentMediaTime();
+            if((currentTime - self.lastCompletionTime) < 3){
+                self.numberOfCompletions++;
+                if(self.numberOfCompletions == 7)
+                    self.numberOfCompletions = 1;
+            }
+            else{
+                self.numberOfCompletions = 1;
+            }
+            self.lastCompletionTime = currentTime;
+            [kAudio playSoundWithName:[NSString stringWithFormat:@"Task composer%i.m4a",self.numberOfCompletions]];
             movedItems = [KPToDo completeToDos:toDosArray save:YES context:nil analytics:YES];
             break;
+        }
         case CellTypeNone:
+            
             [self returnSelectedRowsAndBounce:NO];
             self.isHandlingTrigger = NO;
+            if(self.needUpdate){
+                self.needUpdate = NO;
+                [self update];
+            }
             return;
     }
     [self moveItems:movedItems toCellType:targetCellType];
@@ -462,6 +490,7 @@
         targetType = [StyleHandler cellTypeForCell:self.cellType state:state];
     }
     [cell setDotColor:targetType];
+    
 }
 /*  */
 - (void)deleteSelectedItems:(id)sender {

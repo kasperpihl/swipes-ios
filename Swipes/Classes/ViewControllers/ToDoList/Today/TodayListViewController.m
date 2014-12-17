@@ -22,6 +22,7 @@
 #import "StyleHandler.h"
 #import "SectionHeaderView.h"
 #import "CoreSyncHandler.h"
+#import "AudioHandler.h"
 #import "UtilityClass.h"
 @interface TodayListViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 
@@ -93,6 +94,8 @@
         NSInteger streak = [USER_DEFAULTS integerForKey:@"numberOfDaysOnStreak"];
         NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable],@"All Done for Today":@(self.allDoneForToday),@"Streak":@(streak)};
         [ANALYTICS trackEvent:@"Cleared Tasks" options:dict];
+        [kAudio playSoundWithName:@"All done for today.m4a"];
+        
     }
     
 }
@@ -129,6 +132,7 @@
     self.tableView.allowsMultipleSelection = YES;
     [self parent].lock = NO;
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
+    [kAudio playSoundWithName:@"Succesful action.m4a"];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 6;

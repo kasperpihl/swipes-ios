@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 #define kDEFAULT_SPACING 15
-
+#import "AudioHandler.h"
 #import "KPAddView.h"
 @interface KPAddView () <UITextFieldDelegate>
 @property (nonatomic) BOOL isRotated;

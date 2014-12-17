@@ -9,6 +9,7 @@
 #import "KPTagList.h"
 #import "UIColor+Utilities.h"
 #import "FilterTopMenu.h"
+#import "AudioHandler.h"
 #import "UserHandler.h"
 #define kBackgroundColorButtons CLEAR
 
@@ -187,18 +188,30 @@
 -(void)onPriority:(UIButton*)priorityButton{
     BOOL newStatus = !priorityButton.selected;
     [self.filterDelegate filterMenu:self updatedPriority:newStatus];
+    if(newStatus)
+        [kAudio playSoundWithName:@"Succesful action.m4a"];
+    else
+        [kAudio playSoundWithName:@"New state - scheduled.m4a"];
     [priorityButton setSelected:newStatus];
     [self updateButtons];
 }
 -(void)onNotes:(UIButton*)notesButton{
     BOOL newStatus = !notesButton.selected;
     [self.filterDelegate filterMenu:self updatedNotes:newStatus];
+    if(newStatus)
+        [kAudio playSoundWithName:@"Succesful action.m4a"];
+    else
+        [kAudio playSoundWithName:@"New state - scheduled.m4a"];
     [notesButton setSelected:newStatus];
     [self updateButtons];
 }
 -(void)onRecurring:(UIButton*)recurringButton{
     BOOL newStatus = !recurringButton.selected;
     [self.filterDelegate filterMenu:self updatedRecurring:newStatus];
+    if(newStatus)
+        [kAudio playSoundWithName:@"Succesful action.m4a"];
+    else
+        [kAudio playSoundWithName:@"New state - scheduled.m4a"];
     [recurringButton setSelected:newStatus];
     [self updateButtons];
 }

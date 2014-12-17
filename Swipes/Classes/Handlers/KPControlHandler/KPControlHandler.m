@@ -14,6 +14,7 @@
 #define EDIT_TOOLBAR_HEIGHT GLOBAL_TOOLBAR_HEIGHT
 #define kActionButtonSize 42
 
+#import "AudioHandler.h"
 #import "KPControlHandler.h"
 #import "KPToolbar.h"
 #import <QuartzCore/QuartzCore.h>
@@ -299,6 +300,8 @@
 }
 -(void)AwesomeMenuDidCollapse:(AwesomeMenu *)menu{
     [self cleanFromAwesomeMenu];
+    
+
     //[self.controlHandler setState:KPControlHandlerStateAdd animated:YES];
 }
 -(void)AwesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx{

@@ -37,7 +37,7 @@
 #import "UIView+Utilities.h"
 #import "M13BadgeView.h"
 
-
+#import "AudioHandler.h"
 #import "NotificationHandler.h"
 
 #import "UserHandler.h"
@@ -355,10 +355,12 @@
 -(void)didPressAllInSelectionTopMenu:(SelectionTopMenu *)topMenu{
     BOOL select = [topMenu.allButton.titleLabel.text isEqualToString:LOCALIZE_STRING(@"All")];
     if(select){
+        [kAudio playSoundWithName:@"Succesful action.m4a"];
         [self.currentViewController selectAllRows];
         [topMenu.allButton setTitle:LOCALIZE_STRING(@"None") forState:UIControlStateNormal];
     }
     else{
+        [kAudio playSoundWithName:@"New state - scheduled.m4a"];
         [self.currentViewController deselectAllRows:self];
         [topMenu.allButton setTitle:LOCALIZE_STRING(@"All") forState:UIControlStateNormal];
     }
@@ -606,9 +608,24 @@
     NSInteger selectedIndex = [[self.segmentedControl selectedIndexes] firstIndex];
     //CGFloat delta = (self.currentSelectedIndex < selectedIndex) ? width : -width;
 	ToDoListViewController *oldViewController = (ToDoListViewController*)self.viewControllers[self.currentSelectedIndex];
+    
     if(selectedIndex == self.currentSelectedIndex){
         return;
     }
+    /*NSString *sound = @"New state - completed.m4a";
+    switch (selectedIndex) {
+        case 0:
+            sound = @"New state - scheduled.m4a";
+            break;
+        case 1:
+            sound = @"New state - current.m4a";
+            break;
+        case 2:
+            break;
+    }
+    if(animated){
+        [kAudio playSoundWithName:sound];
+    }*/
     self.segmentedControl.userInteractionEnabled = NO;
 	[oldViewController willMoveToParentViewController:nil];
 	
@@ -640,6 +657,7 @@
 }
 - (void)changeViewController:(AKSegmentedControl *)segmentedControl{
     [self changeViewControllerAnimated:YES];
+    
 }
 -(void)pressedHelp:(UIButton*)sender{
     [ROOT_CONTROLLER playVideoWithIdentifier:@"tweOSZdPmO0"];

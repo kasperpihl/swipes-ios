@@ -8,6 +8,7 @@
 
 #import "SelectionTopMenu.h"
 #import "SlowHighlightIcon.h"
+#import "AudioHandler.h"
 
 @interface SelectionTopMenu ()
 

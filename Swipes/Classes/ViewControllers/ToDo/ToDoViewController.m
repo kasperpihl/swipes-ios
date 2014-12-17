@@ -64,6 +64,7 @@
 #import "UIView+Utilities.h"
 #import "UIImage+Blur.h"
 #import "KPAttachment.h"
+#import "AudioHandler.h"
 
 #import "SyncLabel.h"
 #import "EvernoteIntegration.h"
@@ -689,7 +690,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 #pragma mark - Click handlers
 
 -(void)pressedPriority{
+    
     [self.model switchPriority];
+    if([self.model.priority boolValue])
+        [kAudio playSoundWithName:@"Succesful action.m4a"];
+    else
+        [kAudio playSoundWithName:@"New state - scheduled.m4a"];
+    
     [self updateDot];
 }
 

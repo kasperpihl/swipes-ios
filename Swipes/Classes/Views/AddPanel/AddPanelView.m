@@ -17,6 +17,7 @@
 
 #import "UIView+Utilities.h"
 #import "DotView.h"
+#import "AudioHandler.h"
 #define ADD_VIEW_TAG 1
 #define BACKGROUND_VIEW_TAG 2
 #define PICKER_VIEW_TAG 3
@@ -79,6 +80,7 @@
 -(void)addView:(KPAddView *)addView enteredTrimmedText:(NSString *)trimmedText{
     if(self.addDelegate && [self.addDelegate respondsToSelector:@selector(didAddItem:priority:tags:)])
         [self.addDelegate didAddItem:trimmedText priority:self.dotView.priority tags:[self.tagList getSelectedTags]];
+    [kAudio playSoundWithName:@"Succesful action.m4a"];
 }
 -(void)addViewPressedDoneButton:(KPAddView *)addView{
     [self.addDelegate closeAddPanel:self];
@@ -160,6 +162,11 @@
 }
 -(void)pressedPriority{
     self.dotView.priority = !self.dotView.priority;
+    if(self.dotView.priority)
+        [kAudio playSoundWithName:@"Succesful action.m4a"];
+    else
+        [kAudio playSoundWithName:@"New state - scheduled.m4a"];
+    
 }
 - (id)initWithFrame:(CGRect)frame
 {

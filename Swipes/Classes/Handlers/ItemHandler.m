@@ -8,6 +8,7 @@
 
 #import "ItemHandler.h"
 #import "KPTag.h"
+#import "AudioHandler.h"
 #import "KPFilter.h"
 #import "AnalyticsHandler.h"
 
@@ -15,6 +16,7 @@
 @property (nonatomic,strong) NSMutableArray *titleArray;
 @property (nonatomic,strong) NSMutableArray *sortedItems;
 @property (nonatomic,strong) NSIndexPath *draggedCellPosition;
+@property (nonatomic) CGFloat lastPlayTime;
 @end
 @implementation ItemHandler
 -(id)init{
@@ -81,6 +83,12 @@
 
 #pragma mark UITableViewDataSource
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath{
+    CGFloat currentTime = CACurrentMediaTime();
+    if((currentTime-self.lastPlayTime) > 0.06){
+        [kAudio playSoundWithName:@"Time picker.m4a"];
+        self.lastPlayTime = currentTime;
+    }
+    
     self.draggedCellPosition = destinationIndexPath;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{

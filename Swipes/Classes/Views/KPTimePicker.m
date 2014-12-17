@@ -35,6 +35,7 @@
 #import "UtilityClass.h"
 #import "UIColor+Utilities.h"
 #import "SlowHighlightIcon.h"
+#import "AudioHandler.h"
 @class KPTimePicker;
 
 @interface KPTimePicker () <UIGestureRecognizerDelegate>
@@ -47,6 +48,8 @@
 @property (nonatomic,strong) UIButton *backButton;
 @property (nonatomic,strong) UILabel *dayLabel;
 @property (nonatomic,strong) UILabel *clockLabel;
+@property double lastPlayTime;
+@property CGFloat lastAngle;
 @end
 @implementation KPTimePicker
 /*-(void)setDelegate:(NSObject<KPTimePickerDelegate> *)delegate{
@@ -141,7 +144,18 @@
             CGFloat angle = [self angleBetweenCenterPoint:self.centerPoint point1:sliderStartPoint point2:location];
             CGFloat imageAngle = [self angleBetweenCenterPoint:self.centerPoint point1:CGPointMake(-100, self.centerPoint.y) point2:location];
             CGFloat rounded = floorf((degrees(imageAngle)+1)/2)*2;
-            self.timeSlider.transform = CGAffineTransformMakeRotation(-radians(rounded));
+            CGAffineTransform newTransform = CGAffineTransformMakeRotation(-radians(rounded));
+            if(rounded != self.lastAngle){
+                self.lastAngle = rounded;
+                self.timeSlider.transform = newTransform;
+                double currentTime = CACurrentMediaTime();
+                NSLog(@"%f",currentTime);
+                [kAudio playSoundWithName:@"Time picker.m4a"];
+                if((currentTime - self.lastPlayTime) > 0.05 && shouldHighlight){
+                    
+                    self.lastPlayTime = currentTime;
+                }
+            }
             self.lastChangedAngle = self.lastChangedAngle + angle;
             self.lastPosition = location;
             NSInteger numberOfIntervals = round(self.lastChangedAngle/angleInterval);

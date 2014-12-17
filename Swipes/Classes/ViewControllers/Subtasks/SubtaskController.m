@@ -10,6 +10,7 @@
 #import "SubtaskController.h"
 #import "SlowHighlightIcon.h"
 #import "UIColor+Utilities.h"
+#import "AudioHandler.h"
 
 #define kCloseButtonHeight 50
 
@@ -227,6 +228,7 @@
 - (void)addedSubtask: ( NSString* )subtask{
     [self.model addSubtask:subtask save:YES from:@"Input"];
     [self fullReload];
+    [kAudio playSoundWithName:@"Succesful action.m4a"];
     //[self loadData];
     //self.titles = [@[subtask] arrayByAddingObjectsFromArray:self.titles];
     //[self animateInAddTask];

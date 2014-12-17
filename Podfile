@@ -17,7 +17,7 @@ target :Swipes do
     pod 'DejalActivityView'
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
-    pod 'Leanplum-iOS-SDK'
+    pod 'Intercom'
 end
 
 target :SwipesKit do
@@ -34,7 +34,7 @@ target :SwipesKit do
     pod 'DejalActivityView'
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
-    pod 'Leanplum-iOS-SDK'
+    pod 'Intercom'
 end
 
 target :SwipesToday do
@@ -43,7 +43,7 @@ target :SwipesToday do
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'Base64'
-    pod 'Leanplum-iOS-SDK'
+    pod 'Intercom'
 end
 
 #link_with 'Swipes', 'Swipes_iOS8', 'SwipesKit'

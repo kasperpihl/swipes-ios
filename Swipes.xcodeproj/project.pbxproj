@@ -209,6 +209,9 @@
 		A7AD457C1A39809300DF19BD /* Priority notification three repetitions.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A7AD45651A39809300DF19BD /* Priority notification three repetitions.m4a */; };
 		A7AD457D1A39809300DF19BD /* Scheduling step1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A7AD45671A39809300DF19BD /* Scheduling step1.m4a */; };
 		A7AD457E1A39809300DF19BD /* Scheduling step2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A7AD45681A39809300DF19BD /* Scheduling step2.m4a */; };
+		A7AD45831A3981E400DF19BD /* AudioHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AD45821A3981E400DF19BD /* AudioHandler.m */; };
+		A7AD45861A3989F200DF19BD /* Succesful action.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A7AD45841A3989F200DF19BD /* Succesful action.m4a */; };
+		A7AD45871A3989F200DF19BD /* Time picker.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A7AD45851A3989F200DF19BD /* Time picker.m4a */; };
 		A7ADCB3817DD352F00780F88 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A7ADCB3717DD352F00780F88 /* libz.dylib */; };
 		A7AF9B5717E210D000F9B26F /* StyleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5617E210D000F9B26F /* StyleHandler.m */; };
 		A7AF9B5C17E2244F00F9B26F /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
@@ -805,6 +808,10 @@
 		A7AD45651A39809300DF19BD /* Priority notification three repetitions.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Priority notification three repetitions.m4a"; sourceTree = "<group>"; };
 		A7AD45671A39809300DF19BD /* Scheduling step1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Scheduling step1.m4a"; sourceTree = "<group>"; };
 		A7AD45681A39809300DF19BD /* Scheduling step2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Scheduling step2.m4a"; sourceTree = "<group>"; };
+		A7AD45811A3981E400DF19BD /* AudioHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioHandler.h; sourceTree = "<group>"; };
+		A7AD45821A3981E400DF19BD /* AudioHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioHandler.m; sourceTree = "<group>"; };
+		A7AD45841A3989F200DF19BD /* Succesful action.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Succesful action.m4a"; sourceTree = "<group>"; };
+		A7AD45851A3989F200DF19BD /* Time picker.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Time picker.m4a"; sourceTree = "<group>"; };
 		A7ADCB3717DD352F00780F88 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		A7AF9B5517E210D000F9B26F /* StyleHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleHandler.h; sourceTree = "<group>"; };
 		A7AF9B5617E210D000F9B26F /* StyleHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleHandler.m; sourceTree = "<group>"; };
@@ -1855,6 +1862,8 @@
 				A7AD45641A39809300DF19BD /* Priority notification one repetition.m4a */,
 				A7AD45651A39809300DF19BD /* Priority notification three repetitions.m4a */,
 				A7AD45661A39809300DF19BD /* Scheduling */,
+				A7AD45841A3989F200DF19BD /* Succesful action.m4a */,
+				A7AD45851A3989F200DF19BD /* Time picker.m4a */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -1947,6 +1956,8 @@
 				A7B260921733D1FD000BADDE /* NotificationHandler.m */,
 				DA5422CC1986C7A50006A1E6 /* URLHandler.h */,
 				DA5422CD1986C7A50006A1E6 /* URLHandler.m */,
+				A7AD45811A3981E400DF19BD /* AudioHandler.h */,
+				A7AD45821A3981E400DF19BD /* AudioHandler.m */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -2396,6 +2407,7 @@
 				A78128D217294C56002226C8 /* InfoPlist.strings in Resources */,
 				DACD544518A1ACFC00C378DF /* folder_app.png in Resources */,
 				A7D0D3C319051BA000ABA1FF /* Nexa-Black-Italic.ttf in Resources */,
+				A7AD45871A3989F200DF19BD /* Time picker.m4a in Resources */,
 				A78128D317294C56002226C8 /* MainStoryboard.storyboard in Resources */,
 				DACD544C18A1ACFC00C378DF /* music.png in Resources */,
 				A763D5551A13AC670060D994 /* alldonefortoday@2x.png in Resources */,
@@ -2477,6 +2489,7 @@
 				DACD544418A1ACFC00C378DF /* folder.png in Resources */,
 				DACD546318A1ACFC00C378DF /* powerpoint.png in Resources */,
 				DACD544318A1ACFC00C378DF /* excel.png in Resources */,
+				A7AD45861A3989F200DF19BD /* Succesful action.m4a in Resources */,
 				A7AD456B1A39809300DF19BD /* All done for today.m4a in Resources */,
 				A7AD456C1A39809300DF19BD /* Task composer1.m4a in Resources */,
 				DA5346BE19D5C9FA007AA15D /* Datamodel.xcdatamodeld in Resources */,
@@ -2743,6 +2756,7 @@
 				A703B1B91838EBF20047DCC9 /* AKSegmentedControl.m in Sources */,
 				DA47B67D1A006D1B00299916 /* NSManagedObject+MagicalAggregation.m in Sources */,
 				A7DEA18C17954C7400EB1549 /* ThemeHandler.m in Sources */,
+				A7AD45831A3981E400DF19BD /* AudioHandler.m in Sources */,
 				DA23232619B472BE00D996EB /* GlobalApp.m in Sources */,
 				A75545E3179B519200CE2F4E /* KPBlurry.m in Sources */,
 				A703B1BB1838EBF20047DCC9 /* MCSwipeTableViewCell.m in Sources */,
