@@ -27,4 +27,5 @@ typedef enum {
 -(void)updateLocationUpdates;
 -(StartLocationResult)startLocationServices;
 -(void)stopLocationServices;
+-(void)clearLocalNotifications;
 @end
