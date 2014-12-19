@@ -34,6 +34,7 @@ static inline CGRect ScaleRect(CGRect rect, float n) {return CGRectMake((rect.si
         self.userInteractionEnabled = YES;
         self.layer.borderColor = tcolor(TextColor).CGColor;
         self.layer.borderWidth = 1;
+        [self layoutSubviews];
     }
     return self;
 }
@@ -48,7 +49,6 @@ static inline CGRect ScaleRect(CGRect rect, float n) {return CGRectMake((rect.si
     self.bounds = CGRectMake(0, 0, width, height);
     self.layer.cornerRadius = width/2;
     self.layer.masksToBounds = YES;
-    
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

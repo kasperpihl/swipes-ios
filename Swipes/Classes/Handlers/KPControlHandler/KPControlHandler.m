@@ -57,11 +57,10 @@
         [self.awesomeMenu removeFromSuperview];
         self.awesomeMenu = nil;
     }
-    AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuSettings"];
-    AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuSearch"];
-    AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuFilter"];
-    AwesomeMenuItem *starMenuItem4 = [[AwesomeMenuItem alloc] initWithImageString:@"actionMenuSelect"];
-    
+    AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImageString:iconString(@"actionMenuSettings")];
+    AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImageString:iconString(@"actionMenuSearch")];
+    AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImageString:iconString(@"actionMenuFilter")];
+    AwesomeMenuItem *starMenuItem4 = [[AwesomeMenuItem alloc] initWithImageString:iconString(@"actionMenuSelect")];
     
     AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:self.view.bounds menus:[NSArray arrayWithObjects:starMenuItem1,starMenuItem2,starMenuItem3,starMenuItem4, nil]];
     menu.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -158,7 +157,7 @@
     [button setBackgroundImage:[tcolor(BackgroundColor) image] forState:UIControlStateNormal];
     [button setBackgroundImage:[tcolor(TextColor) image] forState:UIControlStateHighlighted];
     button.titleLabel.font = iconFont(23);
-    [button setTitle:title forState:UIControlStateNormal];
+    [button setTitle:iconString(title) forState:UIControlStateNormal];
     button.layer.cornerRadius = kActionButtonSize/2;
     button.layer.masksToBounds = YES;
     button.layer.borderWidth = 1;
