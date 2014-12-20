@@ -758,8 +758,23 @@
     
     
     /* Send update notification */
-    NSDictionary *updatedEvents = @{@"deleted":[self._deletedObjectsForSyncNotification copy],@"updated":[self._updatedObjectsForSyncNotification copy]};
-#warning The above line can crash because of an insert nil into one of the copies // crash #892
+    NSMutableDictionary *updatedEvents = [[NSMutableDictionary alloc] init]; //@{@"deleted":[self._deletedObjectsForSyncNotification copy],@"updated":[self._updatedObjectsForSyncNotification copy]};
+    NSSet* set = nil;
+    @try {
+        set = [self._deletedObjectsForSyncNotification copy];
+        if (set)
+            updatedEvents[@"deleted"] = set;
+    }
+    @catch (NSException *exception) { }
+
+    @try {
+        set = [self._updatedObjectsForSyncNotification copy];
+        if (set)
+            updatedEvents[@"updated"] = set;
+    }
+    @catch (NSException *exception) { }
+    //#warning The above code can crash because of an insert nil into one of the copies // crash #892 & #940
+    
     [self._deletedObjectsForSyncNotification removeAllObjects];
     [self._updatedObjectsForSyncNotification removeAllObjects];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:self userInfo:updatedEvents];

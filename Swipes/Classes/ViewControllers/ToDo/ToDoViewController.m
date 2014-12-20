@@ -224,9 +224,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     NSDictionary *changeEvent = [notification userInfo];
     NSSet *updatedObjects = [changeEvent objectForKey:@"updated"];
     NSSet *deletedObjects = [changeEvent objectForKey:@"deleted"];
-    if([deletedObjects containsObject:self.objectId]){
+    if(deletedObjects && [deletedObjects containsObject:self.objectId]){
         [self pressedBack:nil];
-    }else if([updatedObjects containsObject:self.model.objectId]){
+    }else if(updatedObjects && [updatedObjects containsObject:self.model.objectId]){
         [self update];
     }
 }
