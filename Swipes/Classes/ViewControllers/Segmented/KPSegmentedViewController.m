@@ -111,7 +111,7 @@
     return selectedTags;
 }
 -(NSArray *)tagsForTagList:(KPTagList *)tagList{
-    NSArray *allTags = [KPTag allTagsAsStrings];
+    NSArray *allTags = [[KPTag allTagsAsStrings] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     return allTags;
 }
 
