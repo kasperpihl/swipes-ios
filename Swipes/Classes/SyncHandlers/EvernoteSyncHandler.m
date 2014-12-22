@@ -345,19 +345,20 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
         }];
     }
     else {
-        [self syncEvernoteWithBlock:block];
+        [self fetchEvernoteChangesWithBlock:block];
     }
 }
+
 -(BOOL)checkForLocalChanges{
+    BOOL result = NO;
     self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
-    
-    NSMutableArray *changedObjects = [NSMutableArray array];
     for ( KPToDo *todoWithEvernote in self.objectsWithEvernote ){
-        BOOL hasLocalChanges = [todoWithEvernote hasChangesSinceDate:self.lastUpdated];
-        if(hasLocalChanges)
-            [changedObjects addObject:todoWithEvernote];
+        if ([todoWithEvernote hasChangesSinceDate:self.lastUpdated]) {
+            result = YES;
+            break;
+        }
     }
-    return (changedObjects.count > 0);
+    return result;
 }
 
 -(void)findUpdatedNotesWithTag:(NSString*)tag block:(SyncBlock)block{
@@ -388,10 +389,10 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
                 }
                 [EvernoteSyncHandler addAndSyncNewTasksFromNotes:newNotes];
             }
-            if (self.updateNeededFromEvernote)
+//            if (self.updateNeededFromEvernote)
                 [self fetchEvernoteChangesWithBlock:block];
-            else
-                [self syncEvernoteWithBlock:block];
+//            else
+//                [self syncEvernoteWithBlock:block];
         }
         else if(error){
             block(SyncStatusError, nil ,error);
@@ -424,8 +425,9 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
                 for (NSString* identifier in identifiers) {
                     if ([EvernoteIntegration isNoteRefString:identifier]) {
                         // we have a ENNoteRef
-                        NSData* noteDataRef = [identifier dataUsingEncoding:NSUTF8StringEncoding];
-                        if ([noteDataRef isEqualToData:[findNoteResult.noteRef asData]]) {
+                        ENNoteRef* localNoteRef = [EvernoteIntegration NSStringToENNoteRef:identifier];
+                        ENNoteRef* remoteNoteRef = findNoteResult.noteRef;
+                        if ([remoteNoteRef.guid isEqualToString:localNoteRef.guid] && (remoteNoteRef.type == localNoteRef.type)) {
                             [self.changedNotes addObject:findNoteResult];
 //                            [kEnInt cacheAddNote:note forGuid:note.guid];
                         }
@@ -450,6 +452,11 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
             return YES;
         else if ([enid isEqualToString:note.noteRef.guid])
             return YES;
+        else {
+            ENNoteRef* localNoteRef = [EvernoteIntegration NSStringToENNoteRef:enid];
+            if (localNoteRef && [note.noteRef.guid isEqualToString:localNoteRef.guid] && (note.noteRef.type == localNoteRef.type))
+                return YES;
+        }
     }
     return NO;
 }

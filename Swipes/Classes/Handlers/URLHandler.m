@@ -16,8 +16,6 @@
 // swipes://tag/add?title=tag22
 // swipes://tag/update?oldtitle=tag22&title=tag23
 // swipes://tag/delete?title=tag23
-// swipes://evernotetodo/add?guid=b2b35b4d-4c86-465d-8895-25160d9f9f21&tag1=first%20tag&tag2=second%20tag&priority=1&notes=test%20note%0anew%20line&schedule=1406636343
-// swipes://evernotetodo/add?guid=b2b35b4d-4c86-465d-8895-25160d9f9f21
 //
 
 #import "NSURL+QueryDictionary.h"
@@ -30,40 +28,45 @@
 #import "RootViewController.h"
 #import "URLHandler.h"
 
-NSString* const kSwipesScheme = @"swipes";
+static NSString* const kSwipesScheme = @"swipes";
 
-NSString* const kSwipesDomainToDo = @"todo";
-NSString* const kSwipesDomainTag = @"tag";
+static NSString* const kSwipesDomainToDo = @"todo";
+static NSString* const kSwipesDomainTag = @"tag";
 
-NSString* const kSwipesCommandAdd = @"/add";
-NSString* const kSwipesCommandCleanAdd = @"/clean_add";
-NSString* const kSwipesCommandUpdate = @"/update";
-NSString* const kSwipesCommandDelete = @"/delete";
-NSString* const kSwipesCommandView = @"/view";
-NSString* const kSwipesCommandAddPrompt = @"/addprompt";
+static NSString* const kSwipesCommandAdd = @"/add";
+static NSString* const kSwipesCommandCleanAdd = @"/clean_add";
+static NSString* const kSwipesCommandUpdate = @"/update";
+static NSString* const kSwipesCommandDelete = @"/delete";
+static NSString* const kSwipesCommandView = @"/view";
+static NSString* const kSwipesCommandAddPrompt = @"/addprompt";
 
-NSString* const kSwipesParamTitle = @"title";
-NSString* const kSwipesParamOldTitle = @"oldtitle";
-NSString* const kSwipesParamTag = @"tag";
-NSString* const kSwipesParamPriority = @"priority";
-NSString* const kSwipesParamNotes = @"notes";
-NSString* const kSwipesParamSchedule = @"schedule";
-NSString* const kSwipesParamSubtask = @"subtask";
-NSString* const kSwipesParamId = @"id";
+static NSString* const kSwipesParamTitle = @"title";
+static NSString* const kSwipesParamOldTitle = @"oldtitle";
+static NSString* const kSwipesParamTag = @"tag";
+static NSString* const kSwipesParamPriority = @"priority";
+static NSString* const kSwipesParamNotes = @"notes";
+static NSString* const kSwipesParamSchedule = @"schedule";
+static NSString* const kSwipesParamSubtask = @"subtask";
+static NSString* const kSwipesParamId = @"id";
 
 // x-callback-url support constants
-NSString* const kXCallbackURLXSuccess = @"x-success";
-NSString* const kXCallbackURLXError = @"x-error";
-NSString* const kXCallbackURLErrorMessage = @"errorMessage";
-NSString* const kXCallbackURLErrorCode = @"errorCode";
+static NSString* const kXCallbackURLXSuccess = @"x-success";
+static NSString* const kXCallbackURLXError = @"x-error";
+static NSString* const kXCallbackURLErrorMessage = @"errorMessage";
+static NSString* const kXCallbackURLErrorCode = @"errorCode";
 
 // errors
-NSString* const kErrorMissingMandatoryParam = @"missing mandatory param";
-NSString* const kErrorNoSuchTodo = @"no such task";
-NSString* const kErrorTodoExists = @"task already exists";
-NSString* const kErrorNoSuchTag = @"no such tag";
-NSString* const kErrorTagExists = @"tag already exists";
-NSString* const kErrorEvernoteAuthentication = @"not authenticated to evernote";
+static NSString* const kErrorMissingMandatoryParam = @"missing mandatory param";
+static NSString* const kErrorNoSuchTodo = @"no such task";
+static NSString* const kErrorTodoExists = @"task already exists";
+static NSString* const kErrorNoSuchTag = @"no such tag";
+static NSString* const kErrorTagExists = @"tag already exists";
+static NSString* const kErrorEvernoteAuthentication = @"not authenticated to evernote";
+
+// other constants
+static NSString* const kFromURLScheme = @"URL Scheme";
+static NSString* const kNotificationName = @"handled URL";
+
 
 static NSDictionary* kErrorCodes;
 
@@ -183,7 +186,7 @@ static NSDictionary* kErrorCodes;
 {
     NSArray* tags = [KPTag findByTitle:title];
     if (nil == tags) {
-        [KPTag addTagWithString:title save:YES from:@"URL Scheme"];
+        [KPTag addTagWithString:title save:YES from:kFromURLScheme];
     }
     return (nil == tags);
 }
@@ -202,14 +205,14 @@ static NSDictionary* kErrorCodes;
     if (!errorMessage) {
         // we have success
         NSString* successString = query[kXCallbackURLXSuccess];
-        if (successString) {
+        if (successString && (id)[NSNull null] != successString) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:successString]];
         }
     }
     else {
         // we have an error
         NSString* errorString = query[kXCallbackURLXError];
-        if (errorString) {
+        if (errorString && (id)[NSNull null] != errorString) {
             NSURL* errorURL = [NSURL URLWithString:errorString];
             NSMutableString* finalString = errorString.mutableCopy;
             if (errorURL.query) {
@@ -236,23 +239,13 @@ static NSDictionary* kErrorCodes;
     // keep in mind that 'param=&nextparam=test' means that param will be [NSNull null] which in our
     // url scheme means 'clear this'
     NSString* priority = query[kSwipesParamPriority];
-    todo.priority = @(priority ? [priority boolValue] : NO);
+    todo.priority = @((priority && (id)[NSNull null] != priority) ? [priority boolValue] : NO);
 
     NSString* data = query[kSwipesParamNotes];
-    if (data == (id)[NSNull null]) {
-        todo.notes = nil;
-    }
-    else if (data) {
-        todo.notes = data;
-    }
+    todo.notes = (data && (id)[NSNull null] != data) ? data : nil;
     
-    if (query[kSwipesParamSchedule] == (id)[NSNull null]) {
-        todo.schedule = nil;
-    }
-    else {
-        NSDate* date = [self dateFromString:query[kSwipesParamSchedule]];
-        todo.schedule = date;
-    }
+    NSDate* date = [self dateFromString:query[kSwipesParamSchedule]];
+    todo.schedule = (date && (id)[NSNull null] != date) ? date : nil;
     
     NSArray* tags = [self arrayFromQuery:query withPrefix:kSwipesParamTag];
     if (tags) {
@@ -263,7 +256,7 @@ static NSDictionary* kErrorCodes;
     NSArray* subtasks = [self arrayFromQuery:query withPrefix:kSwipesParamSubtask];
     if (subtasks) {
         for (NSString *subtaskTitle in subtasks) {
-            [todo addSubtask:subtaskTitle save:NO from:@"URL Scheme"];
+            [todo addSubtask:subtaskTitle save:NO from:kFromURLScheme];
         }
     }
     
@@ -275,12 +268,12 @@ static NSDictionary* kErrorCodes;
 //    DLog(@"date: %f", [[NSDate dateWithTimeIntervalSinceNow:3600] timeIntervalSince1970]);
 //    NSDate* d = [NSDate dateWithTimeIntervalSince1970:1406636343];
     NSString* title = query[kSwipesParamTitle];
-    if (nil != title) {
+    if (title && (id)[NSNull null] != title) {
         NSArray* todos = [KPToDo findByTitle:title];
         if (nil == todos) {
             NSArray* tags = [self arrayFromQuery:query withPrefix:kSwipesParamTag];
             [self addTagsIfNeeded:tags];
-            KPToDo* todo = [KPToDo addItem:title priority:NO tags:tags save:NO from:@"URL Scheme"];
+            KPToDo* todo = [KPToDo addItem:title priority:NO tags:tags save:NO from:kFromURLScheme];
             
             // remove tags
             NSMutableDictionary* mQuery = query.mutableCopy;
@@ -305,14 +298,14 @@ static NSDictionary* kErrorCodes;
 - (BOOL)handleUpdateToDo:(NSDictionary *)query
 {
     NSString* oldTitle = query[kSwipesParamOldTitle];
-    if (nil != oldTitle) {
+    if (oldTitle && (id)[NSNull null] != oldTitle) {
         NSArray* todos = [KPToDo findByTitle:oldTitle];
-        if (nil != todos) {
+        if (todos) {
             KPToDo* todo = todos[0];
 
             // update the title
             NSString* title = query[kSwipesParamTitle];
-            if (nil != title) {
+            if (title && (id)[NSNull null] != title) {
                 todo.title = title;
             }
             
@@ -333,9 +326,9 @@ static NSDictionary* kErrorCodes;
 - (BOOL)handleDeleteToDo:(NSDictionary *)query updateXCallbackURL:(BOOL)updateXCallbackURL
 {
     NSString* title = query[kSwipesParamTitle];
-    if (nil != title) {
+    if (title && (id)[NSNull null] != title) {
         NSArray* todos = [KPToDo findByTitle:title];
-        if (nil != todos) {
+        if (todos) {
             [KPToDo deleteToDos:todos save:YES force:NO];
             if (updateXCallbackURL)
                 [self handleXCallbackURL:query errorMessage:nil];
@@ -360,11 +353,11 @@ static NSDictionary* kErrorCodes;
 - (BOOL)handleViewToDo:(NSDictionary *)query
 {
     NSString* tempId = query[kSwipesParamId];
-    if (nil != tempId) {
+    if (tempId && (id)[NSNull null] != tempId) {
         NSArray* todos = [KPToDo findByTempId:tempId];
-        if (nil != todos) {
+        if (todos) {
             self.viewTodo = todos[0];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"handled URL" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationName object:self];
             [self handleXCallbackURL:query errorMessage:nil];
         }
         else {
@@ -375,7 +368,7 @@ static NSDictionary* kErrorCodes;
     else {
         // Kasper: I added this to make a way to reset upon opening, using /view without parameters
         self.reset = YES;
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"handled URL" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationName object:self];
         [self handleXCallbackURL:query errorMessage:kErrorMissingMandatoryParam];
     }
     return NO;
@@ -384,7 +377,7 @@ static NSDictionary* kErrorCodes;
 - (BOOL)handleAddPromptToDo:(NSDictionary *)query
 {
     self.addTodo = YES;
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"handled URL" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationName object:self];
     [self handleXCallbackURL:query errorMessage:nil];
     return YES;
 }
@@ -394,7 +387,7 @@ static NSDictionary* kErrorCodes;
 - (BOOL)handleAddTag:(NSDictionary *)query
 {
     NSString* title = query[kSwipesParamTitle];
-    if (nil != title) {
+    if (title && (id)[NSNull null] != title) {
         if ([self addTagIfNeeded:title]) {
             [self handleXCallbackURL:query errorMessage:nil];
         }
@@ -412,14 +405,14 @@ static NSDictionary* kErrorCodes;
 - (BOOL)handleUpdateTag:(NSDictionary *)query
 {
     NSString* oldTitle = query[kSwipesParamOldTitle];
-    if (nil != oldTitle) {
+    if (oldTitle && (id)[NSNull null] != oldTitle) {
         NSArray* tags = [KPTag findByTitle:oldTitle];
-        if (nil != tags) {
+        if (tags) {
             KPTag* tag = tags[0];
             
             // update the title
             NSString* title = query[kSwipesParamTitle];
-            if (nil != title) {
+            if (title && (id)[NSNull null] != title) {
                 tag.title = title;
                 [KPCORE saveContextForSynchronization:nil];
                 [self handleXCallbackURL:query errorMessage:nil];
@@ -442,9 +435,9 @@ static NSDictionary* kErrorCodes;
 - (BOOL)handleDeleteTag:(NSDictionary *)query
 {
     NSString* title = query[kSwipesParamTitle];
-    if (nil != title) {
+    if (title && (id)[NSNull null] != title) {
         NSArray* tags = [KPTag findByTitle:title];
-        if (nil != tags) {
+        if (tags) {
             for (KPTag* tag in tags) {
                 [KPTag deleteTagWithString:tag.title save:YES];
             }

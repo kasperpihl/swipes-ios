@@ -164,29 +164,31 @@
 #pragma mark - Public API
 -(void)changeToMenu:(KPMenu)menu animated:(BOOL)animated
 {
-    UIViewController *viewController;
-    switch(menu) {
-        case KPMenuLogin:{
-            LoginViewController *loginVC = [[LoginViewController alloc] init];
-            loginVC.delegate = self;
-            self.lockSettings = YES;
-            viewController = loginVC;
-            break;
+    if (self.drawerViewController) {
+        UIViewController *viewController;
+        switch(menu) {
+            case KPMenuLogin:{
+                LoginViewController *loginVC = [[LoginViewController alloc] init];
+                loginVC.delegate = self;
+                self.lockSettings = YES;
+                viewController = loginVC;
+                break;
+            }
+            case KPMenuHome:
+                [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
+                self.lockSettings = NO;
+                viewController = self.menuViewController;
+                break;
         }
-        case KPMenuHome:
-            [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
-            self.lockSettings = NO;
-            viewController = self.menuViewController;
-            break;
+        self.viewControllers = @[self.drawerViewController];
+        self.currentMenu = menu;
+        if(self.drawerViewController.openSide == MMDrawerSideLeft)
+            [self.drawerViewController closeDrawerAnimated:YES completion:nil];
+        
+        //CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
+        //CGRectSetHeight(self.drawerViewController.view,viewController.view.frame.size.height-100);
+        [self.drawerViewController setCenterViewController:viewController];
     }
-    self.viewControllers = @[self.drawerViewController];
-    self.currentMenu = menu;
-    if(self.drawerViewController.openSide == MMDrawerSideLeft)
-        [self.drawerViewController closeDrawerAnimated:YES completion:nil];
-    
-    //CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
-    //CGRectSetHeight(self.drawerViewController.view,viewController.view.frame.size.height-100);
-    [self.drawerViewController setCenterViewController:viewController];
 }
 
 static RootViewController *sharedObject;

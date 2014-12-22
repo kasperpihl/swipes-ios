@@ -29,7 +29,7 @@ static AudioHandler *sharedObject;
     AudioServicesPlaySystemSound(soundId);
 }
 -(void)cancelSoundWithName:(NSString *)name{
-    SystemSoundID soundId = [[self.sounds objectForKey:name] unsignedLongValue];
+    SystemSoundID soundId = (SystemSoundID)[[self.sounds objectForKey:name] unsignedLongValue];
     if(soundId){
         AudioServicesDisposeSystemSoundID(soundId);
         [self.sounds removeObjectForKey:name];
@@ -38,7 +38,7 @@ static AudioHandler *sharedObject;
 -(SystemSoundID)soundWithName:(NSString *)name{
     SystemSoundID soundId;
     if([self.sounds objectForKey:name]){
-        soundId = [[self.sounds objectForKey:name] unsignedLongValue];
+        soundId = (SystemSoundID)[[self.sounds objectForKey:name] unsignedLongValue];
     }
     else{
         soundId = [AudioHandler createSoundID:name];
@@ -60,7 +60,7 @@ static AudioHandler *sharedObject;
 
 -(void)dealloc{
     for (NSString *key in [self.sounds allKeys]){
-        SystemSoundID soundId = [[self.sounds objectForKey:key] unsignedLongValue];
+        SystemSoundID soundId = (SystemSoundID)[[self.sounds objectForKey:key] unsignedLongValue];
         AudioServicesDisposeSystemSoundID(soundId);
     }
 }

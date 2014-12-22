@@ -466,7 +466,7 @@
                 self.numberOfCompletions = 1;
             }
             self.lastCompletionTime = currentTime;
-            [kAudio playSoundWithName:[NSString stringWithFormat:@"Task composer%i.m4a",self.numberOfCompletions]];
+            [kAudio playSoundWithName:[NSString stringWithFormat:@"Task composer%li.m4a",(long)self.numberOfCompletions]];
             movedItems = [KPToDo completeToDos:toDosArray save:YES context:nil analytics:YES];
             break;
         }
