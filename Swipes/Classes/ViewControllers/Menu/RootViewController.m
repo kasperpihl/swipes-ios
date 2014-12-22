@@ -46,6 +46,8 @@
 #import "ShareViewController.h"
 #import "AwesomeMenu.h"
 #import <EventKit/EventKit.h>
+
+#import "Intercom.h"
 #import <MediaPlayer/MediaPlayer.h>
 
 @interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate, HintHandlerDelegate,YTPlayerViewDelegate>
@@ -557,11 +559,14 @@ static RootViewController *sharedObject;
     [ANALYTICS trackEvent:@"Changed Theme" options:@{@"Theme":newTheme}];
    // [self setNeedsStatusBarAppearanceUpdate];
 }
-
+-(void)timering{
+    [Intercom presentMessageViewAsConversationList:NO];
+}
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     kTopClock.font = KP_SEMIBOLD(12);
     [self changedTheme];
+    //[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(timering) userInfo:nil repeats:NO];
     /*EKEventStore *store = [[EKEventStore alloc] init];
     
     [store requestAccessToEntityType:EKEntityTypeReminder completion:^(BOOL granted, NSError *error) {

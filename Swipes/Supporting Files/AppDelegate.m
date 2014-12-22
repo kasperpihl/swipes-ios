@@ -31,7 +31,8 @@
 
 #import "SettingsHandler.h"
 #import "RootViewController.h"
-
+#import "Intercom.h"
+#import "GAI.h"
 #import "AppDelegate.h"
 
 @implementation AppDelegate
@@ -44,6 +45,11 @@
 #else
 
 #endif
+    [Intercom setApiKey:@"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1" forAppId:@"yobuz4ff"];
+    [Intercom beginSessionForUserWithEmail:@"kasper@pihl.it" completion:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
 #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
     NSString* const CONSUMER_KEY = @"swipes";
     NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6";
@@ -65,7 +71,10 @@
     
     [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
     
-    
+    [GAI sharedInstance].dispatchInterval = 20;
+    [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+    [[GAI sharedInstance] trackerWithTrackingId:@"UA-XXXX-Y"];
+    [[GAI sharedInstance] defaultTracker].allowIDFACollection = YES;
     
     KPCORE;
     NOTIHANDLER;

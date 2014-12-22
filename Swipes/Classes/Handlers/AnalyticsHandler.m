@@ -14,6 +14,9 @@
 #import "UtilityClass.h"
 #import "UserHandler.h"
 #import "EvernoteIntegration.h"
+#import "GAI.h"
+#import "GAIFields.h"
+#import "GAIDictionaryBuilder.h"
 
 @interface AnalyticsHandler ()
 @property (nonatomic) NSMutableArray *views;
@@ -114,11 +117,16 @@ static AnalyticsHandler *sharedObject;
     
 }
 -(void)pushView:(NSString *)view{
+    
     NSInteger viewsLeft = self.views.count;
     if(viewsLeft > 5)
         [self.views removeObjectAtIndex:0];
     [self.views addObject:view];
     //[Leanplum advanceTo:view];
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:view];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 -(void)popView{
     NSInteger viewsLeft = self.views.count;
