@@ -439,7 +439,7 @@ static NSDictionary* kErrorCodes;
         NSArray* tags = [KPTag findByTitle:title];
         if (tags) {
             for (KPTag* tag in tags) {
-                [KPTag deleteTagWithString:tag.title save:YES];
+                [KPTag deleteTagWithString:tag.title save:YES from:kFromURLScheme];
             }
         }
         else {

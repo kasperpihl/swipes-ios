@@ -350,6 +350,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.model.notes = text;
     [KPToDo saveToSync];
     [ANALYTICS trackEvent:@"Update Notes" options:@{ @"Length": @(text.length) }];
+    [ANALYTICS trackCategory:@"Tasks" action:@"Note" label:nil value:@(text.length)];
     [self updateNotes];
     [self layoutWithDuration:0];
 }

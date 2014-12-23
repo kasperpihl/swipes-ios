@@ -147,7 +147,12 @@
     }
 }
 -(void)tagList:(KPTagList *)tagList deletedTag:(NSString *)tag{
-    [KPTag deleteTagWithString:tag save:YES];
+    NSString *fromString = @"Edit Task";
+    if(self.currentTopMenu == TopMenuSelect)
+        fromString = @"Select Tasks";
+    else if(self.currentTopMenu == TopMenuFilter)
+        fromString = @"Filter";
+    [KPTag deleteTagWithString:tag save:YES from:fromString];
     [kFilter deselectTag:tag];
     [[self currentViewController] didUpdateItemHandler:nil];
 }

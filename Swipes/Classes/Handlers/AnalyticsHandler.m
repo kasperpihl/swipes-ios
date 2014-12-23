@@ -16,11 +16,13 @@
 #import "EvernoteIntegration.h"
 #import "GAI.h"
 #import "GAIFields.h"
+#import "Intercom.h"
 #import "GAIDictionaryBuilder.h"
 
 @interface AnalyticsHandler ()
 @property (nonatomic) NSMutableArray *views;
 @property (nonatomic) Vero* vero;
+@property (nonatomic) BOOL intercomSession;
 @end
 @implementation AnalyticsHandler
 static AnalyticsHandler *sharedObject;
@@ -64,9 +66,11 @@ static AnalyticsHandler *sharedObject;
     if(!_views) _views = [NSMutableArray array];
     return _views;
 }
--(void)trackEvent:(NSString *)event info:(NSString *)info value:(double)value parameters:(NSDictionary *)parameters{
-    //[Leanplum track:event withValue:value andInfo:info
-      //andParameters:parameters];
+-(void)trackCategory:(NSString *)category action:(NSString *)action label:(NSString *)label value:(NSNumber *)value{
+    if(self.analyticsOff)
+        return;
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:category action:action label:label value:value] build]];
 }
 -(void)trackEvent:(NSString *)event options:(NSDictionary *)options{
     if(self.analyticsOff)
@@ -114,7 +118,13 @@ static AnalyticsHandler *sharedObject;
             evernoteUserLevel = @"Business";
     }
     [userAttributes setObject:evernoteUserLevel forKey:@"Evernote User Level"];
-    
+    if(!self.intercomSession && kCurrent){
+        [Intercom beginSessionForUserWithUserId:kCurrent.objectId completion:^(NSError *error) {
+            if(!error){
+                self.intercomSession = YES;
+            }
+        }];
+    }
 }
 -(void)pushView:(NSString *)view{
     
@@ -127,13 +137,17 @@ static AnalyticsHandler *sharedObject;
     [tracker set:kGAIScreenName
            value:view];
     [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+    
 }
 -(void)popView{
     NSInteger viewsLeft = self.views.count;
     if(viewsLeft > 0)
         [self.views removeLastObject];
     if(viewsLeft > 1){
-        //[Leanplum advanceTo:[self.views lastObject]];
+        id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker set:kGAIScreenName
+               value:[self.views lastObject]];
+        [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
     }
 }
 -(void)clearViews{

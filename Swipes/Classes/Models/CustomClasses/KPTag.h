@@ -4,7 +4,7 @@
 @interface KPTag : _KPTag
 
 +(KPTag*)addTagWithString:(NSString *)string save:(BOOL)save from:(NSString*)from;
-+(void)deleteTagWithString:(NSString*)string save:(BOOL)save;
++(void)deleteTagWithString:(NSString*)string save:(BOOL)save from:(NSString*)from;
 +(NSArray *)allTagsAsStrings;
 +(NSArray *)findByTitle:(NSString *)title;
 

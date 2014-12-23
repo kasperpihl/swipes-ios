@@ -116,12 +116,15 @@
     [self.settingsViewController renderSubviews];
     voidBlock block = ^{
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
-        NSDictionary *options = @{@"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]), @"Did Try App" : @([[USER_DEFAULTS objectForKey:isTryingString] boolValue])};
+        NSNumber *daysSinceInstall = @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]);
+        NSDictionary *options = @{@"Days Since Install" : daysSinceInstall, @"Did Try App" : @([[USER_DEFAULTS objectForKey:isTryingString] boolValue])};
         if(user.isNew) {
             [ANALYTICS trackEvent:@"Signed Up" options:options];
+            [ANALYTICS trackCategory:@"Onboarding" action:@"Signed Up" label:nil value:daysSinceInstall];
         }
         else{
             [ANALYTICS trackEvent:@"Logged In" options:options];
+            [ANALYTICS trackCategory:@"Onboarding" action:@"Logged In" label:nil value:daysSinceInstall];
         }
         if ([PFFacebookUtils isLinkedWithUser:user]){
             if (!user.email){
@@ -496,8 +499,10 @@ static RootViewController *sharedObject;
         [USER_DEFAULTS synchronize];
         [KPCORE seedObjectsSave:YES];
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
-        NSDictionary *options = @{@"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]])};
+        NSNumber *daysSinceInstall = @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]);
+        NSDictionary *options = @{@"Days Since Install" : daysSinceInstall};
         [ANALYTICS trackEvent:@"Trying Out" options:options];
+        [ANALYTICS trackCategory:@"Onboarding" action:@"Trying Out" label:nil value:daysSinceInstall];
     }
     
     [self changeToMenu:KPMenuHome animated:YES];

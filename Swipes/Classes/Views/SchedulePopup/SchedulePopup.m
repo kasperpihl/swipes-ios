@@ -163,6 +163,7 @@ typedef enum {
             [options setObject:@(self.didUseTimePicker) forKey:@"Used Time Picker"];
         }
         [ANALYTICS trackEvent:@"Snoozed Tasks" options:[options copy]];
+        [ANALYTICS trackCategory:@"Tasks" action:@"Snoozed" label:buttonUsed value:@([date daysAfterDate:[NSDate date]])];
     }
     if(self.block) self.block(state,date,location,type);
 }
