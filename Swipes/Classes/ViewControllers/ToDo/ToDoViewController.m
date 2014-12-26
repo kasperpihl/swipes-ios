@@ -803,6 +803,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                     //DLog(@"attachment %@",attachment.identifier);
                     [[ENSession sharedSession] viewNoteInEvernote:[EvernoteIntegration NSStringToENNoteRef:attachment.identifier]];
                     [ANALYTICS trackEvent:@"Open in Evernote" options:nil];
+                    [ANALYTICS trackCategory:@"Actions" action:@"Open In Evernote" label:nil value:nil];
                     //[ENSession
 //                    EDAMNote *note = [[EDAMNote alloc] init];
 //                    note.guid = attachment.identifier;

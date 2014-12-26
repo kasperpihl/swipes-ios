@@ -241,6 +241,7 @@ static RootViewController *sharedObject;
     if (result == MFMailComposeResultSent){
         NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
         [ANALYTICS trackEvent:@"Share Tasks Sent" options:@{@"Number of Tasks":@(tasks.count)}];
+        [ANALYTICS trackCategory:@"Share Task" action:@"Sent" label:nil value:@(tasks.count)];
     }
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
@@ -269,6 +270,7 @@ static RootViewController *sharedObject;
         [self.mailCont setMessageBody:message isHTML:NO];
         [self presentViewController:self.mailCont animated:YES completion:nil];
         [ANALYTICS trackEvent:@"Share Tasks Opened" options:@{@"Number of Tasks":@(tasks.count)}];
+        [ANALYTICS trackCategory:@"Share Task" action:@"Opened" label:nil value:@(tasks.count)];
     }
     else{
         [UTILITY alertWithTitle:LOCALIZE_STRING(@"Mail was not setup") andMessage:LOCALIZE_STRING(@"You can send us feedback to support@swipesapp.com. Thanks")];

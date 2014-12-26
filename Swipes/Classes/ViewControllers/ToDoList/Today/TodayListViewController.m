@@ -335,6 +335,7 @@
                 if (realServiceType)
                     [dict setObject:realServiceType forKey:@"Service"];
                 [ANALYTICS trackEvent:@"Sharing Successful" options:dict];
+                [ANALYTICS trackCategory:@"Sharing" action:@"Shared" label:self.shareText value:@(self.allDoneForToday)];
                 break;
             }
         }
@@ -366,6 +367,7 @@
     if (realServiceType)
         [dict setObject:realServiceType forKey:@"Service"];
     [ANALYTICS trackEvent:@"Sharing Opened" options:dict];
+    [ANALYTICS trackCategory:@"Sharing" action:@"Opened" label:self.shareText value:@(self.allDoneForToday)];
 }
 -(void)pressedFacebook{
     [self shareForServiceType:SLServiceTypeFacebook];

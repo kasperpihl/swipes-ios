@@ -141,10 +141,12 @@
     
     NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
     NSNumber *isLoggedIn = (kCurrent) ? @(YES) : @(NO);
+    NSNumber *daysSinceInstall = @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]);
     BOOL isFirstTime = ![USER_DEFAULTS boolForKey:@"hasLaunchedBefore"];
-    [ANALYTICS trackEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism , @"Is Logged In" : isLoggedIn, @"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]), @"Is First Time": @(isFirstTime)}];
+    [ANALYTICS trackEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism , @"Is Logged In" : isLoggedIn, @"Days Since Install" : daysSinceInstall, @"Is First Time": @(isFirstTime)}];
+    [ANALYTICS trackCategory:@"Session" action:@"App Launch" label:launchMechanism value:daysSinceInstall];
     if(isFirstTime){
-
+        [ANALYTICS trackCategory:@"Onboarding" action:@"Installation" label:nil value:nil];
         [USER_DEFAULTS setBool:YES forKey:@"hasLaunchedBefore"];
         [USER_DEFAULTS synchronize];
     }
