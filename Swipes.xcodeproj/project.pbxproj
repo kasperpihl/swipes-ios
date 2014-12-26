@@ -114,6 +114,8 @@
 		A75236FA17A3361A0030ED1E /* WalkthroughTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A75236F917A3361A0030ED1E /* WalkthroughTitleView.m */; };
 		A75236FD17A349340030ED1E /* walkthrough_phone_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A75236FB17A349340030ED1E /* walkthrough_phone_background.png */; };
 		A75236FE17A349340030ED1E /* walkthrough_phone_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A75236FC17A349340030ED1E /* walkthrough_phone_background@2x.png */; };
+		A75279E01A4D5C8700838C1D /* OnboardingTopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A75279DF1A4D5C8700838C1D /* OnboardingTopMenu.m */; };
+		A75279E31A4D5D6500838C1D /* OnboardingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A75279E21A4D5D6500838C1D /* OnboardingTableViewCell.m */; };
 		A754DB62197BBD0B00308DBC /* EvernoteImporterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A754DB61197BBD0B00308DBC /* EvernoteImporterViewController.m */; };
 		A75545DE179B481800CE2F4E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A75545DD179B481800CE2F4E /* Accelerate.framework */; };
 		A75545E3179B519200CE2F4E /* KPBlurry.m in Sources */ = {isa = PBXBuildFile; fileRef = A75545E2179B519200CE2F4E /* KPBlurry.m */; };
@@ -669,6 +671,10 @@
 		A75236F917A3361A0030ED1E /* WalkthroughTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkthroughTitleView.m; path = Walkthrough/WalkthroughTitleView.m; sourceTree = "<group>"; };
 		A75236FB17A349340030ED1E /* walkthrough_phone_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walkthrough_phone_background.png; sourceTree = "<group>"; };
 		A75236FC17A349340030ED1E /* walkthrough_phone_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "walkthrough_phone_background@2x.png"; sourceTree = "<group>"; };
+		A75279DE1A4D5C8700838C1D /* OnboardingTopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnboardingTopMenu.h; path = TopMenus/OnboardingTopMenu.h; sourceTree = "<group>"; };
+		A75279DF1A4D5C8700838C1D /* OnboardingTopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnboardingTopMenu.m; path = TopMenus/OnboardingTopMenu.m; sourceTree = "<group>"; };
+		A75279E11A4D5D6500838C1D /* OnboardingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnboardingTableViewCell.h; path = TopMenus/OnboardingTableViewCell.h; sourceTree = "<group>"; };
+		A75279E21A4D5D6500838C1D /* OnboardingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnboardingTableViewCell.m; path = TopMenus/OnboardingTableViewCell.m; sourceTree = "<group>"; };
 		A754DB60197BBD0B00308DBC /* EvernoteImporterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteImporterViewController.h; path = Integrations/EvernoteImporterViewController.h; sourceTree = "<group>"; };
 		A754DB61197BBD0B00308DBC /* EvernoteImporterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteImporterViewController.m; path = Integrations/EvernoteImporterViewController.m; sourceTree = "<group>"; };
 		A75545DD179B481800CE2F4E /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -1779,6 +1785,10 @@
 				A72FD5DD19E9D10D00DDEB02 /* FilterTopMenu.m */,
 				A702E0651A29B9AD00EC3624 /* HelpTopMenu.h */,
 				A702E0661A29B9AD00EC3624 /* HelpTopMenu.m */,
+				A75279DE1A4D5C8700838C1D /* OnboardingTopMenu.h */,
+				A75279DF1A4D5C8700838C1D /* OnboardingTopMenu.m */,
+				A75279E11A4D5D6500838C1D /* OnboardingTableViewCell.h */,
+				A75279E21A4D5D6500838C1D /* OnboardingTableViewCell.m */,
 			);
 			name = TopMenus;
 			sourceTree = "<group>";
@@ -2699,6 +2709,7 @@
 				DACD541918A19FB000C378DF /* DropboxView.m in Sources */,
 				A714369019346823009AC8A4 /* SyncLabel.m in Sources */,
 				A71E9FC21951CD6F00FC9B0B /* EvernoteToDoProcessor.m in Sources */,
+				A75279E31A4D5D6500838C1D /* OnboardingTableViewCell.m in Sources */,
 				A703B1AF1838EBF20047DCC9 /* KPAddView.m in Sources */,
 				A763C93D19208E58005041D7 /* AttachmentPopup.m in Sources */,
 				A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */,
@@ -2750,6 +2761,7 @@
 				A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */,
 				A7FE4402182825A1002AFB2E /* UIImage+Blur.m in Sources */,
 				A7AA796B194E06AA003DAB3B /* SyncQueue.m in Sources */,
+				A75279E01A4D5C8700838C1D /* OnboardingTopMenu.m in Sources */,
 				A795D5841A10AF2800195DDA /* AwesomeMenuItem.m in Sources */,
 				A7DEA1891790BD2D00EB1549 /* MenuViewController.m in Sources */,
 				DA5422CE1986C7A50006A1E6 /* URLHandler.m in Sources */,

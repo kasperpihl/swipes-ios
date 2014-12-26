@@ -29,6 +29,7 @@
 #import "SlowHighlightIcon.h"
 #import "SettingsHandler.h"
 
+#import "OnboardingTopMenu.h"
 #import "SearchTopMenu.h"
 #import "SelectionTopMenu.h"
 #import "FilterTopMenu.h"
@@ -56,7 +57,7 @@
 #define CONTROL_VIEW_Y (self.view.frame.size.height-CONTROL_VIEW_HEIGHT)
 
 
-@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,KPTagListDataSource ,SelectionTopMenuDelegate,SearchTopMenuDelegate,FilterTopMenuDelegate,TopMenuDelegate,KPTagListAddDelegate>
+@interface KPSegmentedViewController () <AddPanelDelegate,KPControlHandlerDelegate,KPAddTagDelegate,KPTagDelegate,KPTagListDataSource ,SelectionTopMenuDelegate,SearchTopMenuDelegate,FilterTopMenuDelegate,TopMenuDelegate,KPTagListAddDelegate,OnboardingTopMenuDelegate>
 
 @property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (nonatomic, strong) AKSegmentedControl *segmentedControl;
@@ -376,6 +377,9 @@
 -(void)didPressCloseInSelectionTopMenu:(SelectionTopMenu *)topMenu{
     [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
+-(void)didPressCloseInOnboardingTopMenu:(OnboardingTopMenu *)topMenu{
+    [self setTopMenu:nil state:TopMenuDefault animated:YES];
+}
 
 
 #pragma mark FilterTopMenuDelegate
@@ -469,8 +473,12 @@
         overlay = self.topOverlay;
     
     voidBlock beforeBlock = ^{
-        if(present)
+        if(present){
+            if(self.topOverlay){
+                [self.topOverlay removeFromSuperview];
+            }
             CGRectSetY(overlay, (overlay.position == TopMenuBottom) ? self.view.frame.size.height : -overlay.frame.size.height);
+        }
         if(present)
             [self.view addSubview:overlay];
     };
@@ -664,8 +672,22 @@
     [self changeViewControllerAnimated:YES];
     
 }
+-(NSArray *)itemsForTopMenu:(OnboardingTopMenu *)topMenu{
+    return @[@"Get Started Video",@"Complete a task", @"Snooze a task", @"Get All Done for Today"];
+}
+-(BOOL)topMenu:(OnboardingTopMenu *)topMenu hasCompletedItem:(NSInteger)itemIndex{
+    if (itemIndex == 0) {
+        return YES;
+    }
+    else return NO;
+}
 -(void)pressedHelp:(UIButton*)sender{
-    [ROOT_CONTROLLER playVideoWithIdentifier:@"tweOSZdPmO0"];
+    //[ROOT_CONTROLLER playVideoWithIdentifier:@"tweOSZdPmO0"];
+    OnboardingTopMenu *onboardingTopMenu = [[OnboardingTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
+    onboardingTopMenu.position = TopMenuBottom;
+    onboardingTopMenu.topMenuDelegate = self;
+    onboardingTopMenu.delegate = self;
+    [self setTopMenu:onboardingTopMenu state:TopMenuOnboarding animated:YES];
 }
 
 - (id)initWithViewControllers:(NSArray *)viewControllers titles:(NSArray *)titles {
@@ -707,20 +729,15 @@
         [helpButton addTarget:self action:@selector(pressedHelp:) forControlEvents:UIControlEventTouchUpInside];
         M13BadgeView *badgeView = [[M13BadgeView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
         [helpButton addSubview:badgeView];
-        //badgeView.font = [UIFont fontWithName:@"Nexa-Bold" size:14];
-        //badgeView.backgroundColor = CLEAR;
         badgeView.font = [UIFont systemFontOfSize:12];
         badgeView.badgeBackgroundColor = tcolor(LaterColor);//tcolor(TextColor);
         badgeView.animateChanges = YES;
-        //badgeView.borderWidth = 1;
-        //badgeView.borderColor = tcolor(TextColor);
-        //badgeView.textColor = tcolor(TextColor);
         badgeView.text = @"4";
         badgeView.horizontalAlignment = M13BadgeViewHorizontalAlignmentCenter;
         badgeView.verticalAlignment = M13BadgeViewVerticalAlignmentMiddle;
         self.badgeButton = helpButton;
         self.badgeView = badgeView;
-        //[self.ios7BackgroundView addSubview:helpButton];
+        [self.ios7BackgroundView addSubview:helpButton];
         [self.ios7BackgroundView addSubview:accountButton];
         
         self._accountButton = accountButton;
@@ -732,11 +749,11 @@
     return self;
 }
 -(void)timeFire{
-    
+    self.badgeView.font = iconFont(11);
+    self.badgeView.text = @"done";
     [UIView animateWithDuration:0.7 animations:^{
-        self.badgeView.text = @"3";
-        //self.badgeView.font = iconFont(11);
-        //self.badgeView.badgeBackgroundColor = tcolor(DoneColor);
+        
+        self.badgeView.badgeBackgroundColor = tcolor(DoneColor);
         
     }];
     

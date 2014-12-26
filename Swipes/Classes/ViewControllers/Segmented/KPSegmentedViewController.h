@@ -13,7 +13,8 @@ typedef enum {
     TopMenuDefault,
     TopMenuSelect,
     TopMenuFilter,
-    TopMenuSearch
+    TopMenuSearch,
+    TopMenuOnboarding
 } TopMenuState;
 @class ToDoListViewController, KPToDo;
 
