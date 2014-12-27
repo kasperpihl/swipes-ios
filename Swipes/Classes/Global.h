@@ -22,13 +22,13 @@
 + (NSInteger)OSVersion;
 + (BOOL)is24Hour;
 + (NSDateFormatter *)isoDateFormatter;
-+ (UILabel*)iconLabelWithString:(NSString*)iconString height:(CGFloat)height;
 + (NSString*)iconStringForString:(NSString*)iconString;
-+ (BOOL)supportsOrientation:(UIDeviceOrientation)orientation;
 + (NSURL *)coreDataUrl;
 + (void)initCoreData;
 + (NSUserDefaults *)sharedDefaults;
 + (void)clearUserDefaults;
++ (BOOL)supportsOrientation:(UIDeviceOrientation)orientation;
++ (UILabel*)iconLabelWithString:(NSString*)iconString height:(CGFloat)height;
 @property (nonatomic) CGFloat fontMultiplier;
 
 @end

@@ -254,6 +254,15 @@
 		A7FA8B1D17AF094E00134ED0 /* SnoozesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FA8B1C17AF094D00134ED0 /* SnoozesViewController.m */; };
 		A7FE4402182825A1002AFB2E /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FE4401182825A1002AFB2E /* UIImage+Blur.m */; };
 		DA04465119D71CD10083F816 /* CoreSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285417294C56002226C8 /* CoreSyncHandler.m */; };
+		DA1194D51A4F3ECD00C1E770 /* _KPAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194CE1A4F3ECD00C1E770 /* _KPAttachment.m */; };
+		DA1194D61A4F3ECD00C1E770 /* _KPParseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194D01A4F3ECD00C1E770 /* _KPParseObject.m */; };
+		DA1194D71A4F3ECD00C1E770 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194D21A4F3ECD00C1E770 /* _KPTag.m */; };
+		DA1194D81A4F3ECD00C1E770 /* _KPToDo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194D41A4F3ECD00C1E770 /* _KPToDo.m */; };
+		DA1194E11A4F3F3200C1E770 /* KPAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194DA1A4F3F3200C1E770 /* KPAttachment.m */; };
+		DA1194E21A4F3F3200C1E770 /* SWACoreDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194DC1A4F3F3200C1E770 /* SWACoreDataModel.m */; };
+		DA1194E31A4F3F3200C1E770 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194DE1A4F3F3200C1E770 /* KPTag.m */; };
+		DA1194E41A4F3F3200C1E770 /* KPToDo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194E01A4F3F3200C1E770 /* KPToDo.m */; };
+		DA1194E51A4F440800C1E770 /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
 		DA23230F19B39C2700D996EB /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		DA23231019B39C3900D996EB /* KPAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F9D79818BA2E7A003D8833 /* KPAttachment.m */; };
 		DA23231119B39C3900D996EB /* KPParseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284917294C56002226C8 /* KPParseObject.m */; };
@@ -279,6 +288,19 @@
 		DA23232A19B4737A00D996EB /* UtilityClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A781285B17294C56002226C8 /* UtilityClass.h */; };
 		DA23232B19B4738000D996EB /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285C17294C56002226C8 /* UtilityClass.m */; };
 		DA310FA7188F3F26003C8FA4 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = DA310FA6188F3F26003C8FA4 /* Assets */; };
+		DA3282BE1A4CB7CF0054CE04 /* ScheduleInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282BD1A4CB7CF0054CE04 /* ScheduleInterfaceController.m */; };
+		DA3282C11A4CB7CF0054CE04 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282C01A4CB7CF0054CE04 /* NotificationController.m */; };
+		DA3282C41A4CB7CF0054CE04 /* GlanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282C31A4CB7CF0054CE04 /* GlanceController.m */; };
+		DA3282C61A4CB7CF0054CE04 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA3282C51A4CB7CF0054CE04 /* Images.xcassets */; };
+		DA3282CA1A4CB7CF0054CE04 /* Swipes WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = DA3282C91A4CB7CF0054CE04 /* Swipes WatchKit App.app */; };
+		DA3282D21A4CB7CF0054CE04 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA3282D01A4CB7CF0054CE04 /* Interface.storyboard */; };
+		DA3282D41A4CB7D00054CE04 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA3282D31A4CB7CF0054CE04 /* Images.xcassets */; };
+		DA3282D71A4CB7D00054CE04 /* Swipes WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DA3282E21A4CB9C70054CE04 /* BaseInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282E11A4CB9C70054CE04 /* BaseInterfaceController.m */; };
+		DA3282E51A4CBD2B0054CE04 /* SWATodoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282E41A4CBD2B0054CE04 /* SWATodoCell.m */; };
+		DA3282E81A4CC0EE0054CE04 /* TodayInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282E71A4CC0EE0054CE04 /* TodayInterfaceController.m */; };
+		DA3282EB1A4CC1000054CE04 /* DoneInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282EA1A4CC1000054CE04 /* DoneInterfaceController.m */; };
+		DA3283131A4E1FA20054CE04 /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		DA3E54421A15498500C2116F /* ENNoteRefInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3E54411A15498500C2116F /* ENNoteRefInternal.h */; };
 		DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0B8F188CB4750094F866 /* EvernoteView.m */; };
 		DA47B6601A006D1B00299916 /* MagicalImportFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = DA47B6251A006D1B00299916 /* MagicalImportFunctions.h */; };
@@ -487,6 +509,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DA3282CB1A4CB7CF0054CE04 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA3282C81A4CB7CF0054CE04;
+			remoteInfo = "Swipes WatchKit App";
+		};
+		DA3282D51A4CB7D00054CE04 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA3282B61A4CB7CF0054CE04;
+			remoteInfo = "Swipes WatchKit Extension";
+		};
 		DAE2B15919CB7A4D00A9074E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
@@ -510,6 +546,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				DA3282D71A4CB7D00054CE04 /* Swipes WatchKit Extension.appex in Embed App Extensions */,
 				DAE2B15C19CB7A4D00A9074E /* SwipesToday.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
@@ -884,9 +921,49 @@
 		A7FE4401182825A1002AFB2E /* UIImage+Blur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Blur.m"; sourceTree = "<group>"; };
 		B2FE7C8A8128F5F6A156B8E7 /* Pods-SwipesToday.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.adhoc.xcconfig"; sourceTree = "<group>"; };
 		DA04465019D5CDC70083F816 /* Swipes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Swipes.entitlements; path = ../Swipes.entitlements; sourceTree = "<group>"; };
+		DA1194CD1A4F3ECD00C1E770 /* _KPAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _KPAttachment.h; path = CoreData/Generated/_KPAttachment.h; sourceTree = "<group>"; };
+		DA1194CE1A4F3ECD00C1E770 /* _KPAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _KPAttachment.m; path = CoreData/Generated/_KPAttachment.m; sourceTree = "<group>"; };
+		DA1194CF1A4F3ECD00C1E770 /* _KPParseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _KPParseObject.h; path = CoreData/Generated/_KPParseObject.h; sourceTree = "<group>"; };
+		DA1194D01A4F3ECD00C1E770 /* _KPParseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _KPParseObject.m; path = CoreData/Generated/_KPParseObject.m; sourceTree = "<group>"; };
+		DA1194D11A4F3ECD00C1E770 /* _KPTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _KPTag.h; path = CoreData/Generated/_KPTag.h; sourceTree = "<group>"; };
+		DA1194D21A4F3ECD00C1E770 /* _KPTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _KPTag.m; path = CoreData/Generated/_KPTag.m; sourceTree = "<group>"; };
+		DA1194D31A4F3ECD00C1E770 /* _KPToDo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _KPToDo.h; path = CoreData/Generated/_KPToDo.h; sourceTree = "<group>"; };
+		DA1194D41A4F3ECD00C1E770 /* _KPToDo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _KPToDo.m; path = CoreData/Generated/_KPToDo.m; sourceTree = "<group>"; };
+		DA1194D91A4F3F3200C1E770 /* KPAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPAttachment.h; path = CoreData/KPAttachment.h; sourceTree = "<group>"; };
+		DA1194DA1A4F3F3200C1E770 /* KPAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPAttachment.m; path = CoreData/KPAttachment.m; sourceTree = "<group>"; };
+		DA1194DB1A4F3F3200C1E770 /* SWACoreDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWACoreDataModel.h; path = CoreData/SWACoreDataModel.h; sourceTree = "<group>"; };
+		DA1194DC1A4F3F3200C1E770 /* SWACoreDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWACoreDataModel.m; path = CoreData/SWACoreDataModel.m; sourceTree = "<group>"; };
+		DA1194DD1A4F3F3200C1E770 /* KPTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPTag.h; path = CoreData/KPTag.h; sourceTree = "<group>"; };
+		DA1194DE1A4F3F3200C1E770 /* KPTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPTag.m; path = CoreData/KPTag.m; sourceTree = "<group>"; };
+		DA1194DF1A4F3F3200C1E770 /* KPToDo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPToDo.h; path = CoreData/KPToDo.h; sourceTree = "<group>"; };
+		DA1194E01A4F3F3200C1E770 /* KPToDo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPToDo.m; path = CoreData/KPToDo.m; sourceTree = "<group>"; };
 		DA23232419B472BE00D996EB /* GlobalApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalApp.h; sourceTree = "<group>"; };
 		DA23232519B472BE00D996EB /* GlobalApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalApp.m; sourceTree = "<group>"; };
 		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
+		DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Swipes WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA3282BA1A4CB7CF0054CE04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DA3282BB1A4CB7CF0054CE04 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		DA3282BC1A4CB7CF0054CE04 /* ScheduleInterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScheduleInterfaceController.h; sourceTree = "<group>"; };
+		DA3282BD1A4CB7CF0054CE04 /* ScheduleInterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScheduleInterfaceController.m; sourceTree = "<group>"; };
+		DA3282BF1A4CB7CF0054CE04 /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
+		DA3282C01A4CB7CF0054CE04 /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
+		DA3282C21A4CB7CF0054CE04 /* GlanceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlanceController.h; sourceTree = "<group>"; };
+		DA3282C31A4CB7CF0054CE04 /* GlanceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GlanceController.m; sourceTree = "<group>"; };
+		DA3282C51A4CB7CF0054CE04 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DA3282C91A4CB7CF0054CE04 /* Swipes WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swipes WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA3282CF1A4CB7CF0054CE04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DA3282D11A4CB7CF0054CE04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		DA3282D31A4CB7CF0054CE04 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DA3282E01A4CB9C70054CE04 /* BaseInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseInterfaceController.h; sourceTree = "<group>"; };
+		DA3282E11A4CB9C70054CE04 /* BaseInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseInterfaceController.m; sourceTree = "<group>"; };
+		DA3282E31A4CBD2B0054CE04 /* SWATodoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWATodoCell.h; sourceTree = "<group>"; };
+		DA3282E41A4CBD2B0054CE04 /* SWATodoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWATodoCell.m; sourceTree = "<group>"; };
+		DA3282E71A4CC0EE0054CE04 /* TodayInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodayInterfaceController.m; sourceTree = "<group>"; };
+		DA3282E91A4CC1000054CE04 /* DoneInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoneInterfaceController.h; sourceTree = "<group>"; };
+		DA3282EA1A4CC1000054CE04 /* DoneInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoneInterfaceController.m; sourceTree = "<group>"; };
+		DA3282EC1A4CC1F10054CE04 /* TodayInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayInterfaceController.h; sourceTree = "<group>"; };
+		DA3283291A4EE90C0054CE04 /* Swipes WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Swipes WatchKit Extension.entitlements"; sourceTree = "<group>"; };
+		DA32832A1A4EEE440054CE04 /* SWAIncludes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAIncludes.h; sourceTree = "<group>"; };
 		DA3E54411A15498500C2116F /* ENNoteRefInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENNoteRefInternal.h; path = Integrations/ENNoteRefInternal.h; sourceTree = "<group>"; };
 		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteView.h; path = Components/EvernoteView.h; sourceTree = "<group>"; };
 		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteView.m; path = Components/EvernoteView.m; sourceTree = "<group>"; };
@@ -1047,6 +1124,13 @@
 				A74D3FCB18D9E76F0056D124 /* libAppsFlyerLib.a in Frameworks */,
 				A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */,
 				51309AE023584D4FA13F00A9 /* libPods-Swipes.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA3282B41A4CB7CF0054CE04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1443,6 +1527,8 @@
 				A781283D17294C56002226C8 /* Swipes */,
 				DAE2B15119CB7A4D00A9074E /* SwipesToday */,
 				DAE9CFDD19AF3AC600246B64 /* SwipesKit */,
+				DA3282B81A4CB7CF0054CE04 /* Swipes WatchKit Extension */,
+				DA3282CD1A4CB7CF0054CE04 /* Swipes WatchKit App */,
 				A7778CCC16EB5884004D95E5 /* Frameworks */,
 				A7778CCB16EB5884004D95E5 /* Products */,
 				9BA9EC75C706A45E18C4AB77 /* Pods */,
@@ -1455,6 +1541,8 @@
 				A7778CCA16EB5884004D95E5 /* Swipes.app */,
 				DAE9CFDC19AF3AC600246B64 /* SwipesKit.framework */,
 				DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */,
+				DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */,
+				DA3282C91A4CB7CF0054CE04 /* Swipes WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1971,6 +2059,106 @@
 			path = KPControlHandler;
 			sourceTree = "<group>";
 		};
+		DA1194C31A4F3C4200C1E770 /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				DA1194CD1A4F3ECD00C1E770 /* _KPAttachment.h */,
+				DA1194CE1A4F3ECD00C1E770 /* _KPAttachment.m */,
+				DA1194CF1A4F3ECD00C1E770 /* _KPParseObject.h */,
+				DA1194D01A4F3ECD00C1E770 /* _KPParseObject.m */,
+				DA1194D11A4F3ECD00C1E770 /* _KPTag.h */,
+				DA1194D21A4F3ECD00C1E770 /* _KPTag.m */,
+				DA1194D31A4F3ECD00C1E770 /* _KPToDo.h */,
+				DA1194D41A4F3ECD00C1E770 /* _KPToDo.m */,
+			);
+			name = Generated;
+			sourceTree = "<group>";
+		};
+		DA3282B81A4CB7CF0054CE04 /* Swipes WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				DA32832A1A4EEE440054CE04 /* SWAIncludes.h */,
+				DA3283241A4E22500054CE04 /* Models */,
+				DA3282EE1A4CC7F40054CE04 /* Interface Controllers */,
+				DA3282EF1A4CC8210054CE04 /* Cells */,
+				DA3282BF1A4CB7CF0054CE04 /* NotificationController.h */,
+				DA3282C01A4CB7CF0054CE04 /* NotificationController.m */,
+				DA3282C21A4CB7CF0054CE04 /* GlanceController.h */,
+				DA3282C31A4CB7CF0054CE04 /* GlanceController.m */,
+				DA3282C51A4CB7CF0054CE04 /* Images.xcassets */,
+				DA3282B91A4CB7CF0054CE04 /* Supporting Files */,
+			);
+			path = "Swipes WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		DA3282B91A4CB7CF0054CE04 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DA3283291A4EE90C0054CE04 /* Swipes WatchKit Extension.entitlements */,
+				DA3282BA1A4CB7CF0054CE04 /* Info.plist */,
+				DA3282BB1A4CB7CF0054CE04 /* PushNotificationPayload.apns */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DA3282CD1A4CB7CF0054CE04 /* Swipes WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				DA3282D01A4CB7CF0054CE04 /* Interface.storyboard */,
+				DA3282D31A4CB7CF0054CE04 /* Images.xcassets */,
+				DA3282CE1A4CB7CF0054CE04 /* Supporting Files */,
+			);
+			path = "Swipes WatchKit App";
+			sourceTree = "<group>";
+		};
+		DA3282CE1A4CB7CF0054CE04 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DA3282CF1A4CB7CF0054CE04 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DA3282EE1A4CC7F40054CE04 /* Interface Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DA3282E01A4CB9C70054CE04 /* BaseInterfaceController.h */,
+				DA3282E11A4CB9C70054CE04 /* BaseInterfaceController.m */,
+				DA3282BC1A4CB7CF0054CE04 /* ScheduleInterfaceController.h */,
+				DA3282BD1A4CB7CF0054CE04 /* ScheduleInterfaceController.m */,
+				DA3282EC1A4CC1F10054CE04 /* TodayInterfaceController.h */,
+				DA3282E71A4CC0EE0054CE04 /* TodayInterfaceController.m */,
+				DA3282E91A4CC1000054CE04 /* DoneInterfaceController.h */,
+				DA3282EA1A4CC1000054CE04 /* DoneInterfaceController.m */,
+			);
+			name = "Interface Controllers";
+			sourceTree = "<group>";
+		};
+		DA3282EF1A4CC8210054CE04 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				DA3282E31A4CBD2B0054CE04 /* SWATodoCell.h */,
+				DA3282E41A4CBD2B0054CE04 /* SWATodoCell.m */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		DA3283241A4E22500054CE04 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DA1194DB1A4F3F3200C1E770 /* SWACoreDataModel.h */,
+				DA1194DC1A4F3F3200C1E770 /* SWACoreDataModel.m */,
+				DA1194C31A4F3C4200C1E770 /* Generated */,
+				DA1194D91A4F3F3200C1E770 /* KPAttachment.h */,
+				DA1194DA1A4F3F3200C1E770 /* KPAttachment.m */,
+				DA1194DD1A4F3F3200C1E770 /* KPTag.h */,
+				DA1194DE1A4F3F3200C1E770 /* KPTag.m */,
+				DA1194DF1A4F3F3200C1E770 /* KPToDo.h */,
+				DA1194E01A4F3F3200C1E770 /* KPToDo.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		DA47B6231A006D1B00299916 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -2295,11 +2483,45 @@
 			dependencies = (
 				DAE2B15A19CB7A4D00A9074E /* PBXTargetDependency */,
 				DAE2B15E19CB7A4D00A9074E /* PBXTargetDependency */,
+				DA3282D61A4CB7D00054CE04 /* PBXTargetDependency */,
 			);
 			name = Swipes;
 			productName = Shery;
 			productReference = A7778CCA16EB5884004D95E5 /* Swipes.app */;
 			productType = "com.apple.product-type.application";
+		};
+		DA3282B61A4CB7CF0054CE04 /* Swipes WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA3282DF1A4CB7D00054CE04 /* Build configuration list for PBXNativeTarget "Swipes WatchKit Extension" */;
+			buildPhases = (
+				DA3282B31A4CB7CF0054CE04 /* Sources */,
+				DA3282B41A4CB7CF0054CE04 /* Frameworks */,
+				DA3282B51A4CB7CF0054CE04 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DA3282CC1A4CB7CF0054CE04 /* PBXTargetDependency */,
+			);
+			name = "Swipes WatchKit Extension";
+			productName = "Swipes WatchKit Extension";
+			productReference = DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit-extension";
+		};
+		DA3282C81A4CB7CF0054CE04 /* Swipes WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA3282DE1A4CB7D00054CE04 /* Build configuration list for PBXNativeTarget "Swipes WatchKit App" */;
+			buildPhases = (
+				DA3282C71A4CB7CF0054CE04 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Swipes WatchKit App";
+			productName = "Swipes WatchKit App";
+			productReference = DA3282C91A4CB7CF0054CE04 /* Swipes WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp";
 		};
 		DAE2B14E19CB7A4D00A9074E /* SwipesToday */ = {
 			isa = PBXNativeTarget;
@@ -2360,6 +2582,18 @@
 							};
 						};
 					};
+					DA3282B61A4CB7CF0054CE04 = {
+						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 85LTPM52WY;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					DA3282C81A4CB7CF0054CE04 = {
+						CreatedOnToolsVersion = 6.2;
+					};
 					DAE2B14E19CB7A4D00A9074E = {
 						CreatedOnToolsVersion = 6.0;
 						DevelopmentTeam = 85LTPM52WY;
@@ -2384,6 +2618,7 @@
 				da,
 				pt,
 				es,
+				Base,
 			);
 			mainGroup = A7778CC116EB5884004D95E5;
 			productRefGroup = A7778CCB16EB5884004D95E5 /* Products */;
@@ -2394,6 +2629,8 @@
 				DAE2B14E19CB7A4D00A9074E /* SwipesToday */,
 				A7F0B9B71700BA40003BBDD1 /* Mogenerator */,
 				DAE9CFDB19AF3AC600246B64 /* SwipesKit */,
+				DA3282B61A4CB7CF0054CE04 /* Swipes WatchKit Extension */,
+				DA3282C81A4CB7CF0054CE04 /* Swipes WatchKit App */,
 			);
 		};
 /* End PBXProject section */
@@ -2494,6 +2731,24 @@
 				A7AD456C1A39809300DF19BD /* Task composer1.m4a in Resources */,
 				DA5346BE19D5C9FA007AA15D /* Datamodel.xcdatamodeld in Resources */,
 				A7AD457B1A39809300DF19BD /* Priority notification one repetition.m4a in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA3282B51A4CB7CF0054CE04 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA3282C61A4CB7CF0054CE04 /* Images.xcassets in Resources */,
+				DA3282CA1A4CB7CF0054CE04 /* Swipes WatchKit App.app in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA3282C71A4CB7CF0054CE04 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA3282D21A4CB7CF0054CE04 /* Interface.storyboard in Resources */,
+				DA3282D41A4CB7D00054CE04 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2818,6 +3073,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DA3282B31A4CB7CF0054CE04 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA3282E21A4CB9C70054CE04 /* BaseInterfaceController.m in Sources */,
+				DA3283131A4E1FA20054CE04 /* Datamodel.xcdatamodeld in Sources */,
+				DA1194E31A4F3F3200C1E770 /* KPTag.m in Sources */,
+				DA1194D81A4F3ECD00C1E770 /* _KPToDo.m in Sources */,
+				DA3282E81A4CC0EE0054CE04 /* TodayInterfaceController.m in Sources */,
+				DA1194E41A4F3F3200C1E770 /* KPToDo.m in Sources */,
+				DA3282E51A4CBD2B0054CE04 /* SWATodoCell.m in Sources */,
+				DA1194E11A4F3F3200C1E770 /* KPAttachment.m in Sources */,
+				DA1194E21A4F3F3200C1E770 /* SWACoreDataModel.m in Sources */,
+				DA1194D61A4F3ECD00C1E770 /* _KPParseObject.m in Sources */,
+				DA3282C11A4CB7CF0054CE04 /* NotificationController.m in Sources */,
+				DA1194D51A4F3ECD00C1E770 /* _KPAttachment.m in Sources */,
+				DA3282EB1A4CC1000054CE04 /* DoneInterfaceController.m in Sources */,
+				DA1194E51A4F440800C1E770 /* NSDate-Utilities.m in Sources */,
+				DA1194D71A4F3ECD00C1E770 /* _KPTag.m in Sources */,
+				DA3282BE1A4CB7CF0054CE04 /* ScheduleInterfaceController.m in Sources */,
+				DA3282C41A4CB7CF0054CE04 /* GlanceController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DAE2B14B19CB7A4D00A9074E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2943,6 +3222,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		DA3282CC1A4CB7CF0054CE04 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA3282C81A4CB7CF0054CE04 /* Swipes WatchKit App */;
+			targetProxy = DA3282CB1A4CB7CF0054CE04 /* PBXContainerItemProxy */;
+		};
+		DA3282D61A4CB7D00054CE04 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA3282B61A4CB7CF0054CE04 /* Swipes WatchKit Extension */;
+			targetProxy = DA3282D51A4CB7D00054CE04 /* PBXContainerItemProxy */;
+		};
 		DAE2B15A19CB7A4D00A9074E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DAE2B14E19CB7A4D00A9074E /* SwipesToday */;
@@ -2972,6 +3261,14 @@
 			);
 			name = MainStoryboard.storyboard;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		DA3282D01A4CB7CF0054CE04 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DA3282D11A4CB7CF0054CE04 /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 		DA6B61C119E321FE00089877 /* Localizable.strings */ = {
@@ -3037,6 +3334,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"ADHOC=1",
+					"NOT_WATCH=1",
 				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -3192,7 +3490,10 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"NOT_WATCH=1",
+				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -3271,6 +3572,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"RELEASE=1",
+					"NOT_WATCH=1",
 				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -3347,6 +3649,205 @@
 			};
 			name = Release;
 		};
+		DA3282D81A4CB7D00054CE04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = "Swipes WatchKit Extension/Swipes WatchKit Extension.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					Swipes,
+					WatchKit,
+					Extension/CoreData,
+					"$(inherited)",
+					"/Applications/Xcode-Beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+				);
+				INFOPLIST_FILE = "Swipes WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		DA3282D91A4CB7D00054CE04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = "Swipes WatchKit Extension/Swipes WatchKit Extension.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					Swipes,
+					WatchKit,
+					Extension/CoreData,
+					"$(inherited)",
+					"/Applications/Xcode-Beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+				);
+				INFOPLIST_FILE = "Swipes WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		DA3282DA1A4CB7D00054CE04 /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = "Swipes WatchKit Extension/Swipes WatchKit Extension.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					Swipes,
+					WatchKit,
+					Extension/CoreData,
+					"$(inherited)",
+					"/Applications/Xcode-Beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+				);
+				INFOPLIST_FILE = "Swipes WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = AdHoc;
+		};
+		DA3282DB1A4CB7D00054CE04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				IBSC_MODULE = Swipes_WatchKit_Extension;
+				INFOPLIST_FILE = "Swipes WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Debug;
+		};
+		DA3282DC1A4CB7D00054CE04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				IBSC_MODULE = Swipes_WatchKit_Extension;
+				INFOPLIST_FILE = "Swipes WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Release;
+		};
+		DA3282DD1A4CB7D00054CE04 /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				IBSC_MODULE = Swipes_WatchKit_Extension;
+				INFOPLIST_FILE = "Swipes WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = AdHoc;
+		};
 		DAE2B15F19CB7A4D00A9074E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2A574DC6041F17E4233CE71E /* Pods-SwipesToday.debug.xcconfig */;
@@ -3369,6 +3870,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"NOT_APPLICATION=1",
+					"NOT_WATCH=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -3413,6 +3915,7 @@
 					"$(inherited)",
 					"COCOAPODS=1",
 					"NOT_APPLICATION=1",
+					"NOT_WATCH=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -3457,6 +3960,7 @@
 					"$(inherited)",
 					"COCOAPODS=1",
 					"NOT_APPLICATION=1",
+					"NOT_WATCH=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -3780,6 +4284,26 @@
 				A7F0B9B81700BA41003BBDD1 /* Debug */,
 				A7F0B9B91700BA41003BBDD1 /* Release */,
 				A7680D4F172D54F400BCB2D9 /* AdHoc */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DA3282DE1A4CB7D00054CE04 /* Build configuration list for PBXNativeTarget "Swipes WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA3282DB1A4CB7D00054CE04 /* Debug */,
+				DA3282DC1A4CB7D00054CE04 /* Release */,
+				DA3282DD1A4CB7D00054CE04 /* AdHoc */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DA3282DF1A4CB7D00054CE04 /* Build configuration list for PBXNativeTarget "Swipes WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA3282D81A4CB7D00054CE04 /* Debug */,
+				DA3282D91A4CB7D00054CE04 /* Release */,
+				DA3282DA1A4CB7D00054CE04 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
