@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
-#import "SWAToDo.h"
+#import "CoreData/KPToDo.h"
 #import "BaseInterfaceController.h"
 
 NSString * const ROW_TYPE_NAME = @"SWATodoCell";
@@ -94,6 +94,16 @@ NSString * const ROW_TYPE_NAME = @"SWATodoCell";
             [_selected removeObject:todo];
         }
     }
+}
+
+- (void)onDelete:(id)sender {
+    // TODO this deletion might not be enough
+    NSLog(@"Delete");
+    SWACoreDataModel* dataModel = [SWACoreDataModel sharedInstance];
+    for (KPToDo* todo in self.selected) {
+        [dataModel deleteObject:todo];
+    }
+    [self reloadData];
 }
 
 @end

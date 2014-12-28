@@ -53,7 +53,7 @@
     
     // add items if there is anything selected
     if (self.selected.count > 0) {
-        [self addMenuItemWithItemIcon:WKMenuItemIconAccept title:NSLocalizedString(@"Is Done", nil) action:@selector(onMarkAsDone:)];
+        [self addMenuItemWithItemIcon:WKMenuItemIconAccept title:NSLocalizedString(@"Complete", nil) action:@selector(onMarkAsDone:)];
         [self addMenuItemWithItemIcon:WKMenuItemIconPause title:NSLocalizedString(@"Schedule", nil) action:@selector(onSchedule:)];
         [self addMenuItemWithItemIcon:WKMenuItemIconDecline title:NSLocalizedString(@"Delete", nil) action:@selector(onDelete:)];
         [self addMenuItemWithItemIcon:WKMenuItemIconMore title:NSLocalizedString(@"Back", nil) action:@selector(onBack:)];
@@ -75,12 +75,7 @@
 }
 
 - (void)onDelete:(id)sender {
-    NSLog(@"Delete");
-    SWACoreDataModel* dataModel = [SWACoreDataModel sharedInstance];
-    for (KPToDo* todo in self.selected) {
-        [dataModel deleteObject:todo];
-    }
-    [self reloadData];
+    [super onDelete:nil];
 }
 
 - (void)onBack:(id)sender {

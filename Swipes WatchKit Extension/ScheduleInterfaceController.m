@@ -31,12 +31,47 @@
     [super didDeactivate];
 }
 
-- (void)table:(WKInterfaceTable *)table didSelectRowAtIndex:(NSInteger)rowIndex {
-    [super table:table didSelectRowAtIndex:rowIndex];
-}
-
 - (SWAPage)page {
     return SWAPageSchedule;
+}
+
+- (void)table:(WKInterfaceTable *)table didSelectRowAtIndex:(NSInteger)rowIndex {
+    [super table:table didSelectRowAtIndex:rowIndex];
+    [self updateMenuItems];
+}
+
+- (void)updateMenuItems {
+    [self clearAllMenuItems];
+    
+    // add items if there is anything selected
+    if (self.selected.count > 0) {
+        [self addMenuItemWithItemIcon:WKMenuItemIconPlay title:NSLocalizedString(@"Today", nil) action:@selector(onToday:)];
+        [self addMenuItemWithItemIcon:WKMenuItemIconAccept title:NSLocalizedString(@"Complete", nil) action:@selector(onMarkAsDone:)];
+        [self addMenuItemWithItemIcon:WKMenuItemIconDecline title:NSLocalizedString(@"Delete", nil) action:@selector(onDelete:)];
+        [self addMenuItemWithItemIcon:WKMenuItemIconMore title:NSLocalizedString(@"Back", nil) action:@selector(onBack:)];
+    }
+}
+
+- (void)onToday:(id)sender {
+    NSLog(@"Today");
+    [self reloadData];
+}
+
+- (void)onMarkAsDone:(id)sender {
+    NSLog(@"Marking as done");
+    for (KPToDo* todo in self.selected) {
+        [todo complete];
+    }
+    [[SWACoreDataModel sharedInstance] saveContext];
+    [self reloadData];
+}
+
+- (void)onDelete:(id)sender {
+    [super onDelete:nil];
+}
+
+- (void)onBack:(id)sender {
+    NSLog(@"Back");
 }
 
 @end

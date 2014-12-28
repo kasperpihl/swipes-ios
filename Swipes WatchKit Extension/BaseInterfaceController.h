@@ -19,5 +19,6 @@
 @property (nonatomic, readonly, strong) NSMutableSet* selected;
 
 - (void)reloadData;
+- (void)onDelete:(id)sender;
 
 @end

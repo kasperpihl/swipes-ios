@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
-#import "CoreData/SWAToDo.h"
+#import "CoreData/KPToDo.h"
 #import "SWACoreDataModel.h"
 #import "GlanceController.h"
 

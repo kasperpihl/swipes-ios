@@ -7,7 +7,7 @@
 //
 
 @import CoreData;
-#import "SWAToDo.h"
+#import "KPToDo.h"
 #import "SWACoreDataModel.h"
 
 @interface SWACoreDataModel ()
@@ -175,7 +175,7 @@ static NSString* const DATABASE_FOLDER = @"database";
     [self.managedObjectContext deleteObject:object];
 }
 
-- (SWAToDo *)newToDo
+- (KPToDo *)newToDo
 {
     return [NSEntityDescription insertNewObjectForEntityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
 }
