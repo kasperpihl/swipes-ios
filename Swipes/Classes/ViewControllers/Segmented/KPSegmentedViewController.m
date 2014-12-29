@@ -741,10 +741,17 @@
 }
 -(void)hintHandlerTriggeredHint:(NSNotification*)notification{
     NSNumber *hintNumber = [notification.userInfo objectForKey:@"Hint"];
-    NSInteger currentBadgeNumber = [kHints hintLeftForCurrentHints];
-    self.currentBadgeNumber = currentBadgeNumber;
     if(hintNumber){
         [self.hintsToComplete addObject:hintNumber];
+    }
+    NSInteger currentBadgeNumber = [kHints hintLeftForCurrentHints];
+    self.currentBadgeNumber = currentBadgeNumber;
+    
+    if(self.currentTopMenu == TopMenuOnboarding){
+        NSArray *currentHints = [kHints getCurrentHints];
+        NSInteger index = [currentHints indexOfObject:hintNumber];
+        if(index != NSNotFound)
+            [self completeNextHint];
     }
 }
 -(NSString*)titleForHint:(Hints)hint{
