@@ -10,16 +10,14 @@
 #define kHints [HintHandler sharedInstance]
 
 #define HH_TriggerHint @"HH_TriggerHint"
+#define HH_TriggeredHintListener @"HH_TriggeredHint"
 
 typedef NS_ENUM(NSInteger, Hints) {
-    HintWelcome = 1,
-    HintAccount,
-    HintSelected,
+    HintWelcomeVideo = 1,
+    HintAddTask,
     HintCompleted,
-    HintSwipedLeft,
     HintScheduled,
-    HintPriority,
-    HintEvernoteIntegration
+    HintAllDone
 };
 
 @class HintHandler;
@@ -34,4 +32,5 @@ typedef NS_ENUM(NSInteger, Hints) {
 -(BOOL)hasCompletedHint:(Hints)hint;
 -(void)reset;
 -(void)turnHintsOn:(BOOL)hintsOn;
+-(NSArray*)getCurrentHints;
 @end

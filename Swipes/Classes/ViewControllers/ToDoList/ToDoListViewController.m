@@ -287,7 +287,6 @@
         if (![self.selectedRows containsObject:indexPath])
             [self.selectedRows addObject:indexPath];
         [self handleShowingToolbar];
-        [kHints triggerHint:HintSelected];
     }
     
 }
@@ -415,7 +414,6 @@
     __block CellType targetCellType = [StyleHandler cellTypeForCell:cell.cellType state:state];
     switch (targetCellType) {
         case CellTypeSchedule:{
-            [kHints triggerHint:HintSwipedLeft];
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
             __block BOOL hasReturned = NO;
             [kAudio playSoundWithName:@"New state - scheduled.m4a"];

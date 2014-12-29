@@ -90,9 +90,6 @@
 #pragma mark - KPAddTagDelegate
 -(void)closeAddPanel:(AddPanelView *)addPanel{
     [BLURRY dismissAnimated:YES];
-    if(!kUserHandler.isLoggedIn){
-        //[kHints triggerHint:HintAccount];
-    }
 }
 -(void)closeTagPanel:(KPAddTagPanel *)tagPanel{
     [[self currentViewController] update];

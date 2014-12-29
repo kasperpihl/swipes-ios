@@ -1207,14 +1207,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.expandOnShow = NO;
     }
 }
--(void)delayedTriggerEvernote{
-    /*if( self.fireHint )
-        [kHints triggerHint:HintEvernote];*/
-}
+
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     if([GlobalApp isEvernoteInstalled]){
-        [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(delayedTriggerEvernote) userInfo:nil repeats:NO];
         self.fireHint = YES;
     }
 }

@@ -178,7 +178,6 @@
                 break;
             }
             case KPMenuHome:
-                [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
                 self.lockSettings = NO;
                 viewController = self.menuViewController;
                 break;
@@ -478,21 +477,8 @@ static RootViewController *sharedObject;
     
 }
 
--(void)triggerEvernoteEvent{
-    if(self.currentMenu == KPMenuHome){
-        [kHints triggerHint:HintEvernoteIntegration];
-    }
-}
-
 -(void)hintHandler:(HintHandler *)hintHandler triggeredHint:(Hints)hint{
-    if(hint == HintEvernoteIntegration){
-        [UTILITY alertWithTitle:LOCALIZE_STRING(@"New feature") andMessage:LOCALIZE_STRING(@"We've made a powerful integration with Evernote!") buttonTitles:@[LOCALIZE_STRING(@"Not now"), LOCALIZE_STRING(@"Learn more")] block:^(NSInteger number, NSError *error) {
-            if( number == 1){
-                [self openIntegrationsWithHelper];
-            }
-        }];
-        
-    }
+    
 }
 
 -(void)tryoutapp{
@@ -512,9 +498,6 @@ static RootViewController *sharedObject;
 }
 
 
--(void)triggerWelcome{
-    [kHints triggerHint:HintWelcome];
-}
 
 - (void)viewDidLoad
 {

@@ -761,9 +761,6 @@ extern NSString * const kEvernoteMoveTime;
 -(void)switchPriority{
     self.priorityValue = (self.priorityValue == 0) ? 1 : 0;
     [KPToDo saveToSync];
-    if(self.priorityValue == 1) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:HH_TriggerHint object:@(HintPriority)];
-    }
     NSString *prioritySwitch = self.priorityValue ? @"On" : @"Off";
     [ANALYTICS trackEvent:@"Update Priority" options:@{@"Assigned":self.priority}];
     [ANALYTICS trackCategory:@"Tasks" action:@"Priority" label:prioritySwitch value:nil];

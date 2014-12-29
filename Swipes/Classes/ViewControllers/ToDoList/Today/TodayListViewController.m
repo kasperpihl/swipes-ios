@@ -382,9 +382,6 @@
     clearNotify();
 }
 
--(void)triggerEvernote{
-    [ROOT_CONTROLLER triggerEvernoteEvent];
-}
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     if(self.itemHandler.itemCounterWithFilter == 0)
@@ -394,7 +391,6 @@
     [super viewDidAppear:animated];
     [self updateSectionHeader];
     [self updateBackground];
-    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(triggerEvernote) userInfo:nil repeats:NO];
 }
 - (void)didReceiveMemoryWarning
 {
