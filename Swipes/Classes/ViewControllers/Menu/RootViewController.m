@@ -367,9 +367,11 @@ static RootViewController *sharedObject;
     
 }
 -(void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state{
-    NSLog(@"state:%i",state);
-    if(state == kYTPlayerStateEnded)
+    if(state == kYTPlayerStateEnded){
+        [kHints triggerHint:HintWelcomeVideo];
         [[playerView superview] removeFromSuperview];
+        
+    }
 }
 - (void)playerViewDidBecomeReady:(YTPlayerView *)playerView{
     [playerView setPlaybackQuality:kYTPlaybackQualityHD1080];
@@ -459,7 +461,7 @@ static RootViewController *sharedObject;
             [self changeToMenu:KPMenuHome animated:NO];
         }
         else{
-            [kHints turnHintsOn:YES];
+            [kHints turnHintsOff:NO];
             [self changeToMenu:KPMenuLogin animated:NO];
         }
     }

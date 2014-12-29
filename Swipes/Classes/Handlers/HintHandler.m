@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 #define kHintDictionaryKey @"HintsDictionary"
-#define kHintsOnKey @"HintsTurnedOn"
+#define kHintsOffKey @"HintsTurnedOff"
 
 
 #import "DotView.h"
@@ -23,16 +23,16 @@
 
 @interface HintHandler ()
 @property NSMutableDictionary *hints;
-@property BOOL hintsIsOn;
+@property BOOL hintsIsOff;
 @end
 
 @implementation HintHandler
 -(void)reset{
     self.hints = [NSMutableDictionary dictionary];
-    [self turnHintsOn:YES];
+    [self turnHintsOff:NO];
 }
 -(BOOL)triggerHint:(Hints)hint{
-    if(!self.hintsIsOn)
+    if(self.hintsIsOff)
         return NO;
     BOOL completedHint = [self completeHint:hint];
     if(completedHint){
@@ -68,14 +68,14 @@ static HintHandler *sharedObject;
     if(!sharedObject){
         sharedObject = [[HintHandler allocWithZone:NULL] init];
         [sharedObject initialize];
-        sharedObject.hintsIsOn = [kSettings settingForKey:kHintsOnKey];
+        sharedObject.hintsIsOff = [kSettings settingForKey:kHintsOffKey];
         
     }
     return sharedObject;
 }
--(void)turnHintsOn:(BOOL)hintsOn{
-    [kSettings setSetting:hintsOn forKey:kHintsOnKey];
-    self.hintsIsOn = hintsOn;
+-(void)turnHintsOff:(BOOL)hintsOff{
+    [kSettings setSetting:hintsOff forKey:kHintsOffKey];
+    self.hintsIsOff = hintsOff;
 }
 -(NSString*)keyForHint:(Hints)hint{
     NSString *key;

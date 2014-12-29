@@ -16,6 +16,7 @@
 #import "YoureAllDoneView.h"
 #import <Social/Social.h>
 #import "UIView+Utilities.h"
+#import "HintHandler.h"
 #import "AnalyticsHandler.h"
 #import "SlowHighlightIcon.h"
 #import "RootViewController.h"
@@ -94,6 +95,7 @@
         NSInteger streak = [USER_DEFAULTS integerForKey:@"numberOfDaysOnStreak"];
         NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable],@"All Done for Today":@(self.allDoneForToday),@"Streak":@(streak)};
         [ANALYTICS trackEvent:@"Cleared Tasks" options:dict];
+        [kHints triggerHint:HintAllDone];
         [kAudio playSoundWithName:@"All done for today.m4a"];
         
     }

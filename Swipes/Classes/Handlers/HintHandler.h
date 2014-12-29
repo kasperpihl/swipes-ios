@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, Hints) {
 -(BOOL)triggerHint:(Hints)hint;
 -(BOOL)hasCompletedHint:(Hints)hint;
 -(void)reset;
--(void)turnHintsOn:(BOOL)hintsOn;
+-(void)turnHintsOff:(BOOL)hintsOff;
 -(NSArray*)getCurrentHints;
+-(NSInteger)hintLeftForCurrentHints;
 @end

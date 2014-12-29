@@ -80,11 +80,6 @@
     [self.tableView reloadData];
     CGRectSetHeight(self, self.items.count * kCellHeight + self.tableView.frame.origin.y + 10);
     [self.topMenuDelegate topMenu:self changedSize:self.frame.size];
-    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(timetime) userInfo:nil repeats:NO];
-}
--(void)timetime{
-    //NSLog(@"test");
-    [self setDone:YES animated:YES itemIndex:2];
 }
 -(void)fetchFromDelegate{
     self.items = [self.delegate itemsForTopMenu:self];
@@ -126,7 +121,7 @@
         [setWorkSpaceButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         setWorkSpaceButton.titleLabel.font = KP_REGULAR(16);
         [setWorkSpaceButton setTitle:[LOCALIZE_STRING(@"Get Started") uppercaseString] forState:UIControlStateNormal];
-        [setWorkSpaceButton addTarget:self action:@selector(onHelp:) forControlEvents:UIControlEventTouchUpInside];
+        //[setWorkSpaceButton addTarget:self action:@selector(onHelp:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:setWorkSpaceButton];
         
         UIButton *closeButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];

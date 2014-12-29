@@ -72,14 +72,21 @@
 @property (nonatomic, assign) BOOL hidden;
 @property (nonatomic) M13BadgeView *badgeView;
 @property (nonatomic) UIButton *badgeButton;
+@property (nonatomic) NSInteger currentBadgeNumber;
 @property (nonatomic, strong) NSArray *selectedItems;
 @property (nonatomic) TopMenu *topOverlay;
 @property (nonatomic) BOOL isEditingTags;
+@property (nonatomic) NSMutableArray *hintsToComplete;
+@property (nonatomic) NSTimer *hintsTimer;
 @end
 
 @implementation KPSegmentedViewController
 
-
+-(NSMutableArray *)hintsToComplete{
+    if(!_hintsToComplete)
+        _hintsToComplete = [NSMutableArray array];
+    return _hintsToComplete;
+}
 -(void)receivedLocalNotification:(UILocalNotification *)notification
 {
     [[self currentViewController] update];
@@ -230,6 +237,7 @@
 #pragma mark - AddPanelDelegate
 -(void)didAddItem:(NSString *)item priority:(BOOL)priority tags:(NSArray *)tags{
     [[self currentViewController].itemHandler addItem:item priority:priority tags:tags];
+    [kHints triggerHint:HintAddTask];
 }
 -(void)addPanel:(AddPanelView *)addPanel createdTag:(NSString *)tag{
     [KPTag addTagWithString:tag save:YES from:@"Add Task"];
@@ -505,6 +513,9 @@
             self.topOverlay = nil;
             CGRectSetHeight(self.contentView, self.view.frame.size.height - self.ios7BackgroundView.frame.size.height);
         }
+        if([overlay isKindOfClass:[OnboardingTopMenu class]]){
+            [self completeHints];
+        }
     };
     
     if(!animated){
@@ -517,6 +528,30 @@
         [UIView animateWithDuration:0.3 animations:animationBlock completion:^(BOOL finished) {
             completionBlock();
         }];
+    }
+}
+-(void)completeNextHint{
+    if(self.hintsToComplete.count > 0){
+        NSArray *currentHints = [kHints getCurrentHints];
+        NSNumber *hintNumber = [self.hintsToComplete firstObject];
+        NSInteger index = [currentHints indexOfObject:hintNumber];
+        if(index != NSNotFound){
+            OnboardingTopMenu *topMenu = (OnboardingTopMenu*)self.topOverlay;
+            if(topMenu){
+                [topMenu setDone:YES animated:YES itemIndex:index];
+            }
+        }
+        [self.hintsToComplete removeObjectAtIndex:0];
+    }
+    else{
+        [self.hintsTimer invalidate];
+        self.hintsTimer = nil;
+    }
+}
+-(void)completeHints{
+    [self.hintsToComplete sortUsingSelector:@selector(compare:)];
+    if(self.hintsToComplete.count > 0){
+        self.hintsTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(completeNextHint) userInfo:nil repeats:YES];
     }
 }
 
@@ -669,17 +704,101 @@
     [self changeViewControllerAnimated:YES];
     
 }
+-(void)setCurrentBadgeNumber:(NSInteger)currentBadgeNumber{
+    if(currentBadgeNumber != _currentBadgeNumber){
+        [self updateBadgeWithNumber:currentBadgeNumber animated:YES];
+        _currentBadgeNumber = currentBadgeNumber;
+    }
+}
+-(void)updateBadgeWithNumber:(NSInteger)number animated:(BOOL)animated{
+    BOOL isComplete = (number == 0);
+    voidBlock beforeBlock = ^{
+        self.badgeView.font = isComplete ? iconFont(11) : KP_REGULAR(11);
+        if(isComplete){
+            
+        }
+        else{
+            self.badgeView.badgeBackgroundColor = tcolor(LaterColor);
+        }
+    };
+    voidBlock showBlock = ^{
+        if(!isComplete){
+            self.badgeView.text = [NSString stringWithFormat:@"%i",number];
+        }
+        else{
+            self.badgeView.text = @"done";
+            self.badgeView.badgeBackgroundColor = tcolor(DoneColor);
+        }
+    };
+    
+    beforeBlock();
+    if(!animated){
+        showBlock();
+    }
+    else{
+        [UIView animateWithDuration:0.7 animations:showBlock];
+    }
+}
+-(void)hintHandlerTriggeredHint:(NSNotification*)notification{
+    NSNumber *hintNumber = [notification.userInfo objectForKey:@"Hint"];
+    NSInteger currentBadgeNumber = [kHints hintLeftForCurrentHints];
+    self.currentBadgeNumber = currentBadgeNumber;
+    if(hintNumber){
+        [self.hintsToComplete addObject:hintNumber];
+    }
+}
+-(NSString*)titleForHint:(Hints)hint{
+    NSString *title;
+    switch (hint) {
+        case HintWelcomeVideo:
+            title = @"Get Started Video";
+            break;
+        case HintAddTask:
+            title = @"Add new a task";
+            break;
+        case HintCompleted:
+            title = @"Complete a task";
+            break;
+        case HintScheduled:
+            title = @"Snooze a task";
+            break;
+        case HintAllDone:
+            title = @"Get All Done for Today";
+            break;
+        default:
+            break;
+    }
+    return title;
+}
 -(NSArray *)itemsForTopMenu:(OnboardingTopMenu *)topMenu{
-    return @[@"Get Started Video",@"Complete a task", @"Snooze a task", @"Get All Done for Today"];
+    NSArray *currentHints = [kHints getCurrentHints];
+    NSMutableArray *hintStrings = [NSMutableArray array];
+    for (NSNumber *hintNumber in currentHints) {
+        Hints hint = [hintNumber integerValue];
+        NSString *title = [self titleForHint:hint];
+        if(title){
+            [hintStrings addObject:title];
+        }
+    }
+    return [hintStrings copy];
+}
+-(void)topMenu:(OnboardingTopMenu *)topMenu didSelectItem:(NSInteger)itemIndex{
+    NSArray *currentHints = [kHints getCurrentHints];
+    Hints hint = [[currentHints objectAtIndex:itemIndex] integerValue];
+    if(hint == HintWelcomeVideo){
+        [ROOT_CONTROLLER playVideoWithIdentifier:@"tweOSZdPmO0"];
+    }
 }
 -(BOOL)topMenu:(OnboardingTopMenu *)topMenu hasCompletedItem:(NSInteger)itemIndex{
-    if (itemIndex == 0) {
+    NSArray *currentHints = [kHints getCurrentHints];
+    Hints hint = [[currentHints objectAtIndex:itemIndex] integerValue];
+    if (![self.hintsToComplete containsObject:@(hint)] && [kHints hasCompletedHint:hint]) {
         return YES;
     }
     else return NO;
 }
 -(void)pressedHelp:(UIButton*)sender{
-    //[ROOT_CONTROLLER playVideoWithIdentifier:@"tweOSZdPmO0"];
+    //
     OnboardingTopMenu *onboardingTopMenu = [[OnboardingTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
     onboardingTopMenu.position = TopMenuBottom;
     onboardingTopMenu.topMenuDelegate = self;
@@ -726,34 +845,22 @@
         [helpButton addTarget:self action:@selector(pressedHelp:) forControlEvents:UIControlEventTouchUpInside];
         M13BadgeView *badgeView = [[M13BadgeView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
         [helpButton addSubview:badgeView];
-        badgeView.font = [UIFont systemFontOfSize:12];
+        badgeView.font = KP_REGULAR(11);
         badgeView.badgeBackgroundColor = tcolor(LaterColor);//tcolor(TextColor);
         badgeView.animateChanges = YES;
-        badgeView.text = @"4";
+        badgeView.hidden = YES;
         badgeView.horizontalAlignment = M13BadgeViewHorizontalAlignmentCenter;
         badgeView.verticalAlignment = M13BadgeViewVerticalAlignmentMiddle;
         self.badgeButton = helpButton;
         self.badgeView = badgeView;
         [self.ios7BackgroundView addSubview:helpButton];
         [self.ios7BackgroundView addSubview:accountButton];
-        
         self._accountButton = accountButton;
-        
+        [self setCurrentBadgeNumber:[kHints hintLeftForCurrentHints]];
         [self.view addSubview:self.ios7BackgroundView];
-        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(timeFire) userInfo:nil repeats:NO];
         //self.navigationItem.titleView = self.segmentedControl;
     }
     return self;
-}
--(void)timeFire{
-    self.badgeView.font = iconFont(11);
-    self.badgeView.text = @"done";
-    [UIView animateWithDuration:0.7 animations:^{
-        
-        self.badgeView.badgeBackgroundColor = tcolor(DoneColor);
-        
-    }];
-    
 }
 
 - (void)swipeHandler:(UISwipeGestureRecognizer *)recognizer
@@ -832,6 +939,7 @@
     notify(@"updated daily image", updatedDailyImage);
     notify(@"updated sync",updateFromSync:);
     notify(@"filter active state changed", filterActiveChanged);
+    notify(HH_TriggeredHintListener, hintHandlerTriggeredHint:);
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
