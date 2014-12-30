@@ -85,6 +85,7 @@
 		A74D3FCB18D9E76F0056D124 /* libAppsFlyerLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */; };
 		A74D3FD118D9E7AC0056D124 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */; };
 		A74D3FD218D9E7AC0056D124 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */; };
+		A74D65B219DD94D900B4780C /* KxMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D65B119DD94D900B4780C /* KxMenu.m */; };
 		A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */; };
 		A74F61B616EB77B3004927DA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B516EB77B3004927DA /* MapKit.framework */; };
 		A74F61B916EBA58B004927DA /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61B816EBA58B004927DA /* CoreMedia.framework */; };
@@ -588,6 +589,8 @@
 		A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
 		A74D3FCF18D9E7AC0056D124 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
 		A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
+		A74D65B019DD94D900B4780C /* KxMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KxMenu.h; path = KxMenu/KxMenu.h; sourceTree = "<group>"; };
+		A74D65B119DD94D900B4780C /* KxMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KxMenu.m; path = KxMenu/KxMenu.m; sourceTree = "<group>"; };
 		A74DCCAA18AA684C004E32FA /* UIImage+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utilities.h"; sourceTree = "<group>"; };
 		A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utilities.m"; sourceTree = "<group>"; };
 		A74F61B516EB77B3004927DA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -999,6 +1002,7 @@
 		A703B1641838EBF20047DCC9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A74D65AF19DD94B400B4780C /* KxMenu */,
 				A763C93E19208E72005041D7 /* Attachments */,
 				A792BB8518ABED97000573E4 /* LocationSearch */,
 				A703B1651838EBF20047DCC9 /* AddPanel */,
@@ -1213,6 +1217,15 @@
 				A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */,
 			);
 			path = GrowingTextView;
+			sourceTree = "<group>";
+		};
+		A74D65AF19DD94B400B4780C /* KxMenu */ = {
+			isa = PBXGroup;
+			children = (
+				A74D65B019DD94D900B4780C /* KxMenu.h */,
+				A74D65B119DD94D900B4780C /* KxMenu.m */,
+			);
+			name = KxMenu;
 			sourceTree = "<group>";
 		};
 		A74FB85D18FFBC4D00F25157 /* launch-screen */ = {
@@ -2457,6 +2470,7 @@
 				A792BB8B18AC3A5E000573E4 /* LocationResultCell.m in Sources */,
 				A78128C417294C56002226C8 /* CoreSyncHandler.m in Sources */,
 				DA53466319D426B4007AA15D /* NSObject+MagicalDataImport.m in Sources */,
+				A74D65B219DD94D900B4780C /* KxMenu.m in Sources */,
 				A703B1B01838EBF20047DCC9 /* KPDayPicker.m in Sources */,
 				A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */,
 				A77D34D018E31E1200095F1E /* EMHint.m in Sources */,
@@ -2775,8 +2789,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
@@ -2847,9 +2861,9 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "68724b44-626e-481d-85a0-5d2c97733583";
-				"PROVISIONING_PROFILE[sdk=*]" = "68724b44-626e-481d-85a0-5d2c97733583";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "68724b44-626e-481d-85a0-5d2c97733583";
+				PROVISIONING_PROFILE = "5b3f01e4-7921-4e4d-b01e-2dbb4f887121";
+				"PROVISIONING_PROFILE[sdk=*]" = "5b3f01e4-7921-4e4d-b01e-2dbb4f887121";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5b3f01e4-7921-4e4d-b01e-2dbb4f887121";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2933,8 +2947,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
@@ -2995,8 +3009,8 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "afa30f1d-077c-4fdf-b480-f7e6ece686c9";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "afa30f1d-077c-4fdf-b480-f7e6ece686c9";
+				PROVISIONING_PROFILE = "9f0d0a1a-d901-4eb6-a8f4-cbae9bc2363f";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9f0d0a1a-d901-4eb6-a8f4-cbae9bc2363f";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3009,8 +3023,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Swipes/Ressources/Libs,
@@ -3077,8 +3091,8 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "83277664-9ae5-4546-8dde-e223978976da";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "83277664-9ae5-4546-8dde-e223978976da";
+				PROVISIONING_PROFILE = "a02f4d78-a3ff-4a36-a853-028bbaa71aff";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a02f4d78-a3ff-4a36-a853-028bbaa71aff";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3108,8 +3122,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesToday/SwipesToday.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3135,7 +3149,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "8d98554b-a607-4fe9-b6b7-deda65c652a2";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -3150,8 +3164,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesToday/SwipesToday.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3179,7 +3193,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "0666ad47-fd26-4ef0-a7db-49c93a6cf3ae";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -3194,8 +3208,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesToday/SwipesToday.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3223,7 +3237,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "94d0090f-ac2e-496a-85f2-b12c2b4ff390";
 				SKIP_INSTALL = YES;
 			};
 			name = AdHoc;
