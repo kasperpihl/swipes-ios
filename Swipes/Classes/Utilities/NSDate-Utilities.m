@@ -27,19 +27,17 @@
 + (NSDate *) dateThisOrNextWeekWithDay:(NSInteger)day hours:(NSInteger)hours minutes:(NSInteger)minutes{
     NSDate *today = [NSDate date];
     
-    NSDateComponents *nowComponents = [CURRENT_CALENDAR components:NSYearCalendarUnit | NSWeekCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:today];
+    NSDateComponents *nowComponents = [CURRENT_CALENDAR components: NSWeekOfYearCalendarUnit| NSYearCalendarUnit | NSWeekCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:today];
     
     [nowComponents setWeekday:day]; //Monday
     [nowComponents setHour:hours]; //8a.m.
     [nowComponents setMinute:minutes];
     [nowComponents setSecond:0];
-    
     NSDate *beginningOfWeek = [CURRENT_CALENDAR dateFromComponents:nowComponents];
     
     
     if([beginningOfWeek isInPast]){
-        [nowComponents setWeekOfYear:[nowComponents weekOfYear] + 1];
-        beginningOfWeek = [CURRENT_CALENDAR dateFromComponents:nowComponents];
+        beginningOfWeek = [beginningOfWeek dateByAddingTimeInterval:D_WEEK];
     }
     return beginningOfWeek;
     
