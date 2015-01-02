@@ -754,23 +754,43 @@
             [self completeNextHint];
     }
 }
+-(NSString*)hintTextForHint:(Hints)hint{
+    NSString *hintText;
+    switch (hint) {
+        case HintAddTask:
+            hintText = @"To add a new task, press the big plus button at the bottom of the screen.";
+            break;
+        case HintCompleted:
+            hintText = @"To complete a task, swipe it to the right into the completed area.";
+            break;
+        case HintScheduled:
+            hintText = @"To snooze a task for later, swipe it to the left and choose a time when it should return.";
+            break;
+        case HintAllDone:
+            hintText = @"To get 'All Done' you need to either complete or snooze all the tasks in your main area.";
+            break;
+        default:
+            break;
+    }
+    return hintText;
+}
 -(NSString*)titleForHint:(Hints)hint{
     NSString *title;
     switch (hint) {
         case HintWelcomeVideo:
-            title = @"Get Started Video";
+            title = @"Watch the 'Get Started Video'";
             break;
         case HintAddTask:
-            title = @"Add new a task";
+            title = @"Add a new task";
             break;
         case HintCompleted:
             title = @"Complete a task";
             break;
         case HintScheduled:
-            title = @"Snooze a task";
+            title = @"Snooze a task for later";
             break;
         case HintAllDone:
-            title = @"Get All Done for Today";
+            title = @"Get 'All Done for Today'";
             break;
         default:
             break;
@@ -794,6 +814,12 @@
     Hints hint = [[currentHints objectAtIndex:itemIndex] integerValue];
     if(hint == HintWelcomeVideo){
         [ROOT_CONTROLLER playVideoWithIdentifier:@"tweOSZdPmO0"];
+    }
+    else{
+        NSString *hintText = [self hintTextForHint:hint];
+        if (hintText) {
+            [UTILITY alertWithTitle:nil andMessage:hintText];
+        }
     }
 }
 -(BOOL)topMenu:(OnboardingTopMenu *)topMenu hasCompletedItem:(NSInteger)itemIndex{
@@ -826,7 +852,7 @@
             }
         }];
         self.view.layer.masksToBounds = YES;
-        
+        _currentBadgeNumber = -1;
         self.ios7BackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, TOP_HEIGHT)];
         self.ios7BackgroundView.backgroundColor = CLEAR;
         [self.ios7BackgroundView addSubview:self.segmentedControl];
@@ -1028,3 +1054,4 @@
 }
 
 @end
+

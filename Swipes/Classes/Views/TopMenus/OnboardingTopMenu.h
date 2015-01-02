@@ -20,4 +20,5 @@
 @property (nonatomic,weak) NSObject<OnboardingTopMenuDelegate> *delegate;
 -(void)setDone:(BOOL)done animated:(BOOL)animated itemIndex:(NSInteger)itemIndex;
 -(void)setItems:(NSArray*)items;
+
 @end
