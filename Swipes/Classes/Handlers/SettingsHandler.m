@@ -202,8 +202,17 @@ static SettingsHandler *sharedObject;
     if(!self.settings)
         self.settings = [NSMutableDictionary dictionary];
     else if( ![self.settings isMemberOfClass:[NSMutableDictionary class]]){
-        self.settings = [NSMutableDictionary dictionary];
+        
+        if([self.settings isKindOfClass:[NSDictionary class]])
+            self.settings = [self.settings mutableCopy];
+        else{
+            self.settings = [NSMutableDictionary dictionary];
+        }
     }
+}
+
+-(void)printSettings{
+    NSLog(@"%@",self.settings);
 }
 
 @end

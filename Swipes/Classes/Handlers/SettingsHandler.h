@@ -36,4 +36,6 @@ typedef enum {
 /* Boolean settings in ns user defaults */
 -(BOOL)settingForKey:(NSString*)key;
 -(void)setSetting:(BOOL)setting forKey:(NSString*)key;
+
+-(void)printSettings;
 @end

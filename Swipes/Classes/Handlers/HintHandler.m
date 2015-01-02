@@ -42,6 +42,9 @@
     }
     return completedHint;
 }
+-(BOOL)isHintsOff{
+    return self.hintsIsOff;
+}
 
 -(BOOL)hasCompletedHint:(Hints)hint{
     NSString *key = [self keyForHint:hint];
@@ -69,7 +72,6 @@ static HintHandler *sharedObject;
         sharedObject = [[HintHandler allocWithZone:NULL] init];
         [sharedObject initialize];
         sharedObject.hintsIsOff = [kSettings settingForKey:kHintsOffKey];
-        
     }
     return sharedObject;
 }

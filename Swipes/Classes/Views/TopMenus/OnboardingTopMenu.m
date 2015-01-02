@@ -14,6 +14,7 @@
 @interface OnboardingTopMenu () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic) UITableView *tableView;
 @property (nonatomic) NSArray *items;
+@property (nonatomic) UIButton *clearButton;
 @property (nonatomic) NSArray *selectedItems;
 @end
 
@@ -96,6 +97,9 @@
     self.selectedItems = selectedItems;
 }
 
+-(void)showClearButton:(BOOL)show{
+    self.clearButton.hidden = !show;
+}
 
 #pragma mark UIView methods
 -(id)initWithFrame:(CGRect)frame{
@@ -124,6 +128,17 @@
         //[setWorkSpaceButton addTarget:self action:@selector(onHelp:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:setWorkSpaceButton];
         
+        UIButton *clearButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
+        clearButton.frame = CGRectMake(0, gradientHeight, kSideButtonsWidth, topY);
+        clearButton.titleLabel.font = KP_REGULAR(16);
+        [clearButton setTitle:@"Clear" forState:UIControlStateNormal];
+        [clearButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [clearButton addTarget:self action:@selector(onClear:) forControlEvents:UIControlEventTouchUpInside];
+        clearButton.hidden = YES;
+        [self addSubview:clearButton];
+        self.clearButton = clearButton;
+        
+        
         UIButton *closeButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         closeButton.frame = CGRectMake(frame.size.width-kSideButtonsWidth, gradientHeight, kSideButtonsWidth, topY);
         closeButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
@@ -150,6 +165,10 @@
 -(void)onClose:(UIButton*)closeButton{
     if([self.delegate respondsToSelector:@selector(didPressCloseInOnboardingTopMenu:)])
         [self.delegate didPressCloseInOnboardingTopMenu:self];
+}
+-(void)onClear:(UIButton*)clearButton{
+    if([self.delegate respondsToSelector:@selector(didPressClearInOnboardingTopMenu:)])
+        [self.delegate didPressClearInOnboardingTopMenu:self];
 }
 
 -(void)dealloc{

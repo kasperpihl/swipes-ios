@@ -382,9 +382,7 @@
 -(void)didPressCloseInSelectionTopMenu:(SelectionTopMenu *)topMenu{
     [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
--(void)didPressCloseInOnboardingTopMenu:(OnboardingTopMenu *)topMenu{
-    [self setTopMenu:nil state:TopMenuDefault animated:YES];
-}
+
 
 
 #pragma mark FilterTopMenuDelegate
@@ -435,6 +433,49 @@
 -(void)didCloseSearchFieldTopMenu:(SearchTopMenu *)topMenu{
     [topMenu.searchField resignFirstResponder];
     //[self setTopMenu:nil state:TopMenuDefault animated:YES];
+}
+
+#pragma mark OnboardingTopMenuDelegate
+-(void)didPressCloseInOnboardingTopMenu:(OnboardingTopMenu *)topMenu{
+    [self setTopMenu:nil state:TopMenuDefault animated:YES];
+}
+-(NSArray *)itemsForTopMenu:(OnboardingTopMenu *)topMenu{
+    NSArray *currentHints = [kHints getCurrentHints];
+    NSMutableArray *hintStrings = [NSMutableArray array];
+    for (NSNumber *hintNumber in currentHints) {
+        Hints hint = [hintNumber integerValue];
+        NSString *title = [self titleForHint:hint];
+        if(title){
+            [hintStrings addObject:title];
+        }
+    }
+    return [hintStrings copy];
+}
+-(void)didPressClearInOnboardingTopMenu:(OnboardingTopMenu *)topMenu{
+    [kHints turnHintsOff:YES];
+    [self checkForUpdateOnBadge];
+    [self setTopMenu:nil state:TopMenuDefault animated:YES];
+}
+-(void)topMenu:(OnboardingTopMenu *)topMenu didSelectItem:(NSInteger)itemIndex{
+    NSArray *currentHints = [kHints getCurrentHints];
+    Hints hint = [[currentHints objectAtIndex:itemIndex] integerValue];
+    if(hint == HintWelcomeVideo){
+        [ROOT_CONTROLLER playVideoWithIdentifier:@"tweOSZdPmO0"];
+    }
+    else{
+        NSString *hintText = [self hintTextForHint:hint];
+        if (hintText) {
+            [UTILITY alertWithTitle:nil andMessage:hintText];
+        }
+    }
+}
+-(BOOL)topMenu:(OnboardingTopMenu *)topMenu hasCompletedItem:(NSInteger)itemIndex{
+    NSArray *currentHints = [kHints getCurrentHints];
+    Hints hint = [[currentHints objectAtIndex:itemIndex] integerValue];
+    if (![self.hintsToComplete containsObject:@(hint)] && [kHints hasCompletedHint:hint]) {
+        return YES;
+    }
+    else return NO;
 }
 
 
@@ -537,6 +578,7 @@
         NSInteger index = [currentHints indexOfObject:hintNumber];
         if(index != NSNotFound){
             OnboardingTopMenu *topMenu = (OnboardingTopMenu*)self.topOverlay;
+            [topMenu showClearButton:([kHints hintLeftForCurrentHints] == 0)];
             if(topMenu){
                 [topMenu setDone:YES animated:YES itemIndex:index];
             }
@@ -739,13 +781,17 @@
         [UIView animateWithDuration:0.7 animations:showBlock];
     }
 }
+-(void)checkForUpdateOnBadge{
+    self.badgeButton.hidden = [kHints isHintsOff];
+    NSInteger currentBadgeNumber = [kHints hintLeftForCurrentHints];
+    self.currentBadgeNumber = currentBadgeNumber;
+}
 -(void)hintHandlerTriggeredHint:(NSNotification*)notification{
     NSNumber *hintNumber = [notification.userInfo objectForKey:@"Hint"];
     if(hintNumber){
         [self.hintsToComplete addObject:hintNumber];
     }
-    NSInteger currentBadgeNumber = [kHints hintLeftForCurrentHints];
-    self.currentBadgeNumber = currentBadgeNumber;
+    [self checkForUpdateOnBadge];
     
     if(self.currentTopMenu == TopMenuOnboarding){
         NSArray *currentHints = [kHints getCurrentHints];
@@ -797,43 +843,12 @@
     }
     return title;
 }
--(NSArray *)itemsForTopMenu:(OnboardingTopMenu *)topMenu{
-    NSArray *currentHints = [kHints getCurrentHints];
-    NSMutableArray *hintStrings = [NSMutableArray array];
-    for (NSNumber *hintNumber in currentHints) {
-        Hints hint = [hintNumber integerValue];
-        NSString *title = [self titleForHint:hint];
-        if(title){
-            [hintStrings addObject:title];
-        }
-    }
-    return [hintStrings copy];
-}
--(void)topMenu:(OnboardingTopMenu *)topMenu didSelectItem:(NSInteger)itemIndex{
-    NSArray *currentHints = [kHints getCurrentHints];
-    Hints hint = [[currentHints objectAtIndex:itemIndex] integerValue];
-    if(hint == HintWelcomeVideo){
-        [ROOT_CONTROLLER playVideoWithIdentifier:@"tweOSZdPmO0"];
-    }
-    else{
-        NSString *hintText = [self hintTextForHint:hint];
-        if (hintText) {
-            [UTILITY alertWithTitle:nil andMessage:hintText];
-        }
-    }
-}
--(BOOL)topMenu:(OnboardingTopMenu *)topMenu hasCompletedItem:(NSInteger)itemIndex{
-    NSArray *currentHints = [kHints getCurrentHints];
-    Hints hint = [[currentHints objectAtIndex:itemIndex] integerValue];
-    if (![self.hintsToComplete containsObject:@(hint)] && [kHints hasCompletedHint:hint]) {
-        return YES;
-    }
-    else return NO;
-}
+
 -(void)pressedHelp:(UIButton*)sender{
     //
     OnboardingTopMenu *onboardingTopMenu = [[OnboardingTopMenu alloc] initWithFrame:self.ios7BackgroundView.bounds];
     onboardingTopMenu.position = TopMenuBottom;
+    [onboardingTopMenu showClearButton:([kHints hintLeftForCurrentHints] == 0)];
     onboardingTopMenu.topMenuDelegate = self;
     onboardingTopMenu.delegate = self;
     [self setTopMenu:onboardingTopMenu state:TopMenuOnboarding animated:YES];
@@ -889,8 +904,9 @@
         [self.ios7BackgroundView addSubview:helpButton];
         [self.ios7BackgroundView addSubview:accountButton];
         self._accountButton = accountButton;
-        [self setCurrentBadgeNumber:[kHints hintLeftForCurrentHints]];
+        
         [self.view addSubview:self.ios7BackgroundView];
+        [self checkForUpdateOnBadge];
         //self.navigationItem.titleView = self.segmentedControl;
     }
     return self;
