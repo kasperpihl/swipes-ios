@@ -60,7 +60,7 @@ extern NSString * const kEvernoteMoveTime;
         [KPToDo saveToSync];
     [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     if( from ){
-        [ANALYTICS trackEvent:@"Added Task" options:@{ @"Is Action Step":@(NO),@"Length":@(item.length), @"From": from }];
+        [ANALYTICS trackEvent:@"Added Task" options:@{@"Length":@(item.length), @"From": from }];
         [ANALYTICS trackCategory:@"Tasks" action:@"Added" label:from value:@(item.length)];
     }
     [ANALYTICS heartbeat];
@@ -79,7 +79,7 @@ extern NSString * const kEvernoteMoveTime;
         [KPToDo saveToSync];
     
     if( from ){
-        [ANALYTICS trackEvent:@"Added Task" options:@{@"Is Action Step":@(YES),@"Length":@(title.length), @"Total Action Steps on Task": @(self.subtasks.count), @"From": from}];
+        [ANALYTICS trackEvent:@"Added Action Step" options:@{@"Length":@(title.length), @"Total Action Steps on Task": @(self.subtasks.count), @"From": from}];
         [ANALYTICS trackCategory:@"Action Steps" action:@"Added" label:from value:@(title.length)];
     }
     return subTask;
@@ -121,12 +121,15 @@ extern NSString * const kEvernoteMoveTime;
     
     if(analytics){
         NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
-        [ANALYTICS trackEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks, @"Is Action Step": @( isSubtasks )}];
+
         if(!isSubtasks){
             [ANALYTICS trackCategory:@"Tasks" action:@"Completed" label:nil value:numberOfCompletedTasks];
+            [ANALYTICS trackEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
         }
         else{
             [ANALYTICS trackCategory:@"Action Steps" action:@"Completed" label:nil value:nil];
+            [ANALYTICS trackEvent:@"Completed Action Step" options:nil];
+            
         }
         [ANALYTICS heartbeat];
         if( !isSubtasks ) {
@@ -170,12 +173,14 @@ extern NSString * const kEvernoteMoveTime;
         [KPToDo saveToSync];
     
     NSNumber *numberOfDeletedTasks = [NSNumber numberWithInteger:toDos.count];
-    [ANALYTICS trackEvent:@"Deleted Tasks" options:@{@"Number of Tasks":numberOfDeletedTasks, @"Is Action Step": @( isActionStep )}];
+    
     if(!isActionStep){
         [ANALYTICS trackCategory:@"Tasks" action:@"Deleted" label:nil value:numberOfDeletedTasks];
+        [ANALYTICS trackEvent:@"Deleted Tasks" options:@{@"Number of Tasks":numberOfDeletedTasks}];
     }
     else{
         [ANALYTICS trackCategory:@"Action Steps" action:@"Deleted" label:nil value:nil];
+        [ANALYTICS trackEvent:@"Deleted Action Step" options:nil];
     }
     if (shouldUpdateNotifications)
         [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
@@ -192,10 +197,11 @@ extern NSString * const kEvernoteMoveTime;
         if(save)
             [KPToDo saveToSync];
         if(from){
-            NSDictionary *options = @{ @"Number of Tags": @(tags.count), @"Number of Tasks": @(toDos.count), @"Assigned": @(!remove), @"From": from };
+            NSDictionary *options = @{ @"Number of Tags": @(tags.count), @"Number of Tasks": @(toDos.count), @"From": from };
             NSString *actionString = remove ? @"Unassigned" : @"Assigned";
+            NSString *eventString = remove ? @"Unassign Tags" : @"Assign Tags";
             [ANALYTICS trackCategory:@"Tags" action:actionString label:from value:@(toDos.count)];
-            [ANALYTICS trackEvent:@"Update Tags" options:options];
+            [ANALYTICS trackEvent:eventString options:options];
             [ANALYTICS heartbeat];
         }
     }
@@ -762,7 +768,7 @@ extern NSString * const kEvernoteMoveTime;
     self.priorityValue = (self.priorityValue == 0) ? 1 : 0;
     [KPToDo saveToSync];
     NSString *prioritySwitch = self.priorityValue ? @"On" : @"Off";
-    [ANALYTICS trackEvent:@"Update Priority" options:@{@"Assigned":self.priority}];
+    [ANALYTICS trackEvent:@"Update Priority" options:@{@"Assigned":prioritySwitch}];
     [ANALYTICS trackCategory:@"Tasks" action:@"Priority" label:prioritySwitch value:nil];
 }
 
@@ -897,7 +903,7 @@ extern NSString * const kEvernoteMoveTime;
     [self addAttachments:[NSSet setWithObject:attachment]];
     
     if( from ){
-        NSDictionary *options = @{ @"Service": service, @"Sync": @(sync), @"From": from };
+        NSDictionary *options = @{ @"Service": service, @"From": from };
         [ANALYTICS trackEvent:@"Added Attachment" options:options];
         [ANALYTICS trackCategory:@"Tasks" action:@"Attachment" label:service value:nil];
     }

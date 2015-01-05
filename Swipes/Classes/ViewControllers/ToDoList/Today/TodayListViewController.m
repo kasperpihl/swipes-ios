@@ -93,8 +93,10 @@
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) servicesAvailable++;
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) servicesAvailable++;
         NSInteger streak = [USER_DEFAULTS integerForKey:@"numberOfDaysOnStreak"];
-        NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable],@"All Done for Today":@(self.allDoneForToday),@"Streak":@(streak)};
+        NSString *allDoneString = self.allDoneForToday ? @"Today" : @"Now";
+        NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable],@"All Done for Today":allDoneString ,@"Streak":@(streak)};
         [ANALYTICS trackEvent:@"Cleared Tasks" options:dict];
+        [ANALYTICS trackCategory:@"Actions" action:@"Cleared Tasks" label:allDoneString value:@(streak)];
         [kHints triggerHint:HintAllDone];
         [kAudio playSoundWithName:@"All done for today.m4a"];
         
@@ -328,8 +330,7 @@
                 break;
             case SLComposeViewControllerResultDone:{
                 NSString *realServiceType;
-                [dict setObject:self.shareText forKey:@"Message"];
-                [dict setObject:@(self.allDoneForToday) forKey:@"All Done for Today"];
+                [dict setObject:(self.allDoneForToday ? @"Today" : @"Now") forKey:@"All Done for Today"];
                 if ([self.sharingService isEqualToString:SLServiceTypeFacebook])
                     realServiceType = @"Facebook";
                 else if([self.sharingService isEqualToString:SLServiceTypeTwitter])
@@ -361,7 +362,7 @@
     NSString *realServiceType;
     
     [dict setObject:self.shareText forKey:@"Message"];
-    [dict setObject:@(self.allDoneForToday) forKey:@"All Done for Today"];
+    [dict setObject:(self.allDoneForToday ? @"Today" : @"Now") forKey:@"All Done for Today"];
     if ([serviceType isEqualToString:SLServiceTypeFacebook])
         realServiceType = @"Facebook";
     else if([serviceType isEqualToString:SLServiceTypeTwitter])

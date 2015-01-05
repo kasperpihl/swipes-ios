@@ -160,7 +160,7 @@ typedef enum {
         NSMutableDictionary *options = [@{@"Number of Tasks":numberOfTasks,@"From": buttonUsed} mutableCopy];
         if(state != KPScheduleButtonLocation){
             [options setObject:@([date daysAfterDate:[NSDate date]]) forKey:@"Number of Days Ahead"];
-            [options setObject:@(self.didUseTimePicker) forKey:@"Used Time Picker"];
+            [options setObject:(self.didUseTimePicker ? @"Yes" : @"No") forKey:@"Used Time Picker"];
         }
         [ANALYTICS trackEvent:@"Snoozed Tasks" options:[options copy]];
         [ANALYTICS trackCategory:@"Tasks" action:@"Snoozed" label:buttonUsed value:@([date daysAfterDate:[NSDate date]])];

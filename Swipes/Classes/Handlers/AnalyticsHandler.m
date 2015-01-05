@@ -14,9 +14,9 @@
 #import "UtilityClass.h"
 #import "UserHandler.h"
 #import "EvernoteIntegration.h"
+#import "Intercom.h"
 #import "GAI.h"
 #import "GAIFields.h"
-#import "Intercom.h"
 #import "GAIDictionaryBuilder.h"
 
 @interface AnalyticsHandler ()
@@ -78,19 +78,15 @@ static AnalyticsHandler *sharedObject;
     //[Leanplum track:event withParameters:options];
     //[[LocalyticsSession shared] tagEvent:event attributes:options];
 }
--(NSString *)customDimension:(NSInteger)dimension{
-    //return [[LocalyticsSession shared] customDimension:(int)dimension];
-    return nil;
-}
--(void)setCustomDimension:(NSInteger)dimension value:(NSString *)value{
-    //[[LocalyticsSession shared] setCustomDimension:(int)dimension value:value];
-}
 -(void)updateIdentity{
+    NSMutableDictionary *userAttributes = [@{} mutableCopy];
+    NSMutableDictionary *intercomAttributes = [@{} mutableCopy];
+    NSMutableDictionary *customIntercomAttributes = [@{} mutableCopy];
+
+    
+    // User level
     NSString *userLevel = @"None";
     if(kCurrent){
-        //[Leanplum setUserId:kCurrent.objectId];
-        //[[LocalyticsSession shared] setCustomerId:kCurrent.objectId];
-        //[[LocalyticsSession shared] setCustomerEmail:kCurrent.email];
         userLevel = @"User";
         if([kUserHandler isPlus])
             userLevel = @"Plus";
@@ -98,15 +94,20 @@ static AnalyticsHandler *sharedObject;
     else if([kUserHandler isTryingOutApp]){
         userLevel = @"Tryout";
     }
+    [customIntercomAttributes setObject:userLevel forKey:@"user_level"];
+    if(kCurrent.email){
+        [userAttributes setObject:kCurrent.email forKey:@"Email"];
+        [intercomAttributes setObject:kCurrent.email forKey:@"email"];
+    }
     
-    NSMutableDictionary *userAttributes = [@{} mutableCopy];
-    
+
+    // Active Theme
     NSString *currentTheme = ([THEMER currentTheme] == ThemeDark) ? @"Dark" : @"Light";
     [userAttributes setObject:currentTheme forKey:@"Active Theme"];
+    [customIntercomAttributes setObject:currentTheme forKey:@"active_theme"];
     
-    if(kCurrent.email)
-        [userAttributes setObject:kCurrent.email forKey:@"Email"];
     
+    // Evernote User Level
     NSString *evernoteUserLevel = @"Not Installed";
     if([USER_DEFAULTS boolForKey:@"isEvernoteInstalled"])
         evernoteUserLevel = @"Not Linked";
@@ -118,11 +119,26 @@ static AnalyticsHandler *sharedObject;
             evernoteUserLevel = @"Business";
     }
     [userAttributes setObject:evernoteUserLevel forKey:@"Evernote User Level"];
+    [customIntercomAttributes setObject:evernoteUserLevel forKey:@"evernote_user_level"];
+    
+    [intercomAttributes setObject:customIntercomAttributes forKey:@"custom_attributes"];
+    
+    
+    
+    // Update Intercom / start session
     if(!self.intercomSession && kCurrent){
         [Intercom beginSessionForUserWithUserId:kCurrent.objectId completion:^(NSError *error) {
             if(!error){
                 self.intercomSession = YES;
+                [Intercom updateUserWithAttributes:intercomAttributes completion:^(NSError *error) {
+                    
+                }];
             }
+        }];
+    }
+    else if(kCurrent){
+        [Intercom updateUserWithAttributes:intercomAttributes completion:^(NSError *error) {
+            
         }];
     }
 }
@@ -152,6 +168,5 @@ static AnalyticsHandler *sharedObject;
 }
 -(void)clearViews{
     [self.views removeAllObjects];
-    //[Leanplum advanceTo:nil];
 }
 @end
