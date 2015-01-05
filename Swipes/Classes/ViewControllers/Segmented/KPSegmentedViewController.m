@@ -395,6 +395,7 @@
 -(void)filterMenu:(FilterTopMenu *)filterMenu selectedTag:(NSString *)tag{
     [kFilter selectTag:tag];
     [ANALYTICS trackEvent:@"Filter Tasks" options:@{@"Number of Tags": @(kFilter.selectedTags.count)}];
+    [ANALYTICS trackCategory:@"Workspaces" action:@"Filter Tags" label:nil value:@(kFilter.selectedTags.count)];
 }
 -(void)filterMenu:(FilterTopMenu *)filterMenu deselectedTag:(NSString *)tag{
     [kFilter deselectTag:tag];

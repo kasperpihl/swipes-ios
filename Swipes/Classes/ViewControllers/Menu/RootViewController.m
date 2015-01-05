@@ -551,6 +551,7 @@ static RootViewController *sharedObject;
     [kTopClock setTextColor:alpha(tcolor(TextColor),0.8)];
     NSString *newTheme = ([THEMER currentTheme] == ThemeDark) ? @"Dark" : @"Light";
     [ANALYTICS trackEvent:@"Changed Theme" options:@{@"Theme":newTheme}];
+    [ANALYTICS trackCategory:@"Settings" action:@"Changed Theme" label:newTheme value:nil];
    // [self setNeedsStatusBarAppearanceUpdate];
 }
 -(void)timering{
