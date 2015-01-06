@@ -11,11 +11,24 @@
 #import "SettingsHandler.h"
 #import "EvernoteIntegration.h"
 #import "AnalyticsHandler.h"
+#import "ENNoteRefInternal.h"
 
 // caches
+static NSString* const kKeyData = @"data";
+static NSString* const kKeyDate = @"date";
 
-NSString* const kKeyData = @"data";
-NSString* const kKeyDate = @"date";
+// json keys
+static NSString* const kKeyJson = @"json:";
+static NSString* const kKeyJsonGuid = @"guid";
+static NSString* const kKeyJsonType = @"type";
+static NSString* const kKeyJsonTypePersonal = @"personal";
+static NSString* const kKeyJsonTypeShared = @"shared";
+static NSString* const kKeyJsonTypeBusiness = @"business";
+static NSString* const kKeyJsonLinkedNotebook = @"linkedNotebook";
+static NSString* const kKeyJsonNotebookGuid = @"guid";
+static NSString* const kKeyJsonNotebookNoteStoreUrl = @"url";
+static NSString* const kKeyJsonNotebookShardId = @"shardid";
+static NSString* const kKeyJsonNotebookSharedNotebookGlobalId = @"globalid";
 
 NSTimeInterval const kSearchTimeout = 300;
 NSTimeInterval const kNoteTimeout = (3600*24);
@@ -114,17 +127,86 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 + (NSString *)ENNoteRefToNSString:(ENNoteRef *)noteRef
 {
-    return [[noteRef asData] base64String];
+    // always provide new JSON string
+    NSMutableDictionary* jsonDict = [NSMutableDictionary dictionary];
+    [jsonDict setObject:noteRef.guid forKey:kKeyJsonGuid];
+    switch (noteRef.type) {
+        case ENNoteRefTypePersonal:
+            jsonDict[kKeyJsonType] = kKeyJsonTypePersonal;
+            break;
+        case ENNoteRefTypeBusiness:
+            jsonDict[kKeyJsonType] = kKeyJsonTypeBusiness;
+            break;
+        case ENNoteRefTypeShared:
+            jsonDict[kKeyJsonType] = kKeyJsonTypeShared;
+            break;
+    }
+    if (noteRef.linkedNotebook) {
+        NSMutableDictionary* jsonLinkedNotebook = [NSMutableDictionary dictionary];
+        if (noteRef.linkedNotebook.guid)
+            jsonLinkedNotebook[kKeyJsonNotebookGuid] = noteRef.linkedNotebook.guid;
+        if (noteRef.linkedNotebook.noteStoreUrl)
+            jsonLinkedNotebook[kKeyJsonNotebookNoteStoreUrl] = noteRef.linkedNotebook.noteStoreUrl;
+        if (noteRef.linkedNotebook.shardId)
+            jsonLinkedNotebook[kKeyJsonNotebookShardId] = noteRef.linkedNotebook.shardId;
+        if (noteRef.linkedNotebook.sharedNotebookGlobalId)
+            jsonLinkedNotebook[kKeyJsonNotebookSharedNotebookGlobalId] = noteRef.linkedNotebook.sharedNotebookGlobalId;
+        jsonDict[kKeyJsonLinkedNotebook] = jsonLinkedNotebook;
+    }
+    NSError* error;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:jsonDict options:0 error:&error];
+    if (error) {
+        // TODO log error
+        return nil;
+    }
+    return [kKeyJson stringByAppendingString:[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
+    //return [[noteRef asData] base64String];
 }
 
 + (ENNoteRef *)NSStringToENNoteRef:(NSString *)string
 {
-    return [ENNoteRef noteRefFromData:[NSData dataWithBase64String:string]];
+    if (![EvernoteIntegration isNoteRefJsonString:string])
+        return [ENNoteRef noteRefFromData:[NSData dataWithBase64String:string]];
+    else if ([EvernoteIntegration isNoteRefJsonString:string]) {
+        NSError* error;
+        NSDictionary* jsonDict = [NSJSONSerialization JSONObjectWithData:[[string substringFromIndex:kKeyJson.length] dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+        if (error) {
+            // TODO log error
+            return nil;
+        }
+        
+        ENNoteRef* noteRef = [[ENNoteRef alloc] init];
+        noteRef.guid = jsonDict[kKeyJsonGuid];
+        NSString* type = jsonDict[kKeyJsonType];
+        if ([type isEqualToString:kKeyJsonTypeShared])
+            noteRef.type = ENNoteRefTypeShared;
+        else if ([type isEqualToString:kKeyJsonTypeBusiness])
+            noteRef.type = ENNoteRefTypeBusiness;
+        else
+            noteRef.type = ENNoteRefTypePersonal;
+        
+        if (jsonDict[kKeyJsonLinkedNotebook]) {
+            NSDictionary* jsonLinkedNotebook = jsonDict[kKeyJsonLinkedNotebook];
+            noteRef.linkedNotebook = [[ENLinkedNotebookRef alloc] init];
+            noteRef.linkedNotebook.guid = jsonLinkedNotebook[kKeyJsonNotebookGuid];
+            noteRef.linkedNotebook.noteStoreUrl = jsonLinkedNotebook[kKeyJsonNotebookNoteStoreUrl];
+            noteRef.linkedNotebook.shardId = jsonLinkedNotebook[kKeyJsonNotebookShardId];
+            noteRef.linkedNotebook.sharedNotebookGlobalId = jsonLinkedNotebook[kKeyJsonNotebookSharedNotebookGlobalId];
+        }
+            
+        return noteRef;
+    }
+    return nil;
 }
 
 + (BOOL)isNoteRefString:(NSString *)string
 {
     return (string && (40 < string.length));
+}
+
++ (BOOL)isNoteRefJsonString:(NSString *)string
+{
+    return (string && [string hasPrefix:kKeyJson]);
 }
 
 - (instancetype)init

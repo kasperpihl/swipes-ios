@@ -33,6 +33,7 @@
 NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
 NSString * const kEvernoteMoveTime = @"EvernoteMoveTime";
 NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
+NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
 
 @interface EvernoteSyncHandler () <EvernoteViewDelegate>
 @property (nonatomic, copy) SyncBlock block;
@@ -683,6 +684,21 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
         }
         [KPToDo saveToSync];
         [USER_DEFAULTS setBool:YES forKey:kEvernoteGuidConveted];
+        [USER_DEFAULTS synchronize];
+    }
+
+    BOOL isNoteRefConverted = [USER_DEFAULTS boolForKey:kEvernoteNoteRefConveted];
+    if (!isNoteRefConverted) {
+        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+        NSArray *attachments = [KPAttachment MR_findByAttribute:@"service" withValue:EVERNOTE_SERVICE inContext:localContext];
+        for (KPAttachment* attachment in attachments) {
+            if (![EvernoteIntegration isNoteRefJsonString:attachment.identifier]) {
+                ENNoteRef* noteRef = [EvernoteIntegration NSStringToENNoteRef:attachment.identifier];
+                attachment.identifier = [EvernoteIntegration ENNoteRefToNSString:noteRef];
+            }
+        }
+        [KPToDo saveToSync];
+        [USER_DEFAULTS setBool:YES forKey:kEvernoteNoteRefConveted];
         [USER_DEFAULTS synchronize];
     }
 }
