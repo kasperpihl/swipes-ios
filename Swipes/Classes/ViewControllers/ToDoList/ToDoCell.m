@@ -158,9 +158,7 @@
         //self.actionStepsButton.backgroundColor = tcolor(TextColor);
         //self.actionStepsButton.titleLabel.backgroundColor = tcolor(DoneColor);
         self.actionStepsLabel = [[UILabel alloc] init];
-        self.actionStepsLabel.font = KP_REGULAR(11);
         self.actionStepsLabel.textColor = tcolor(TextColor);
-        self.actionStepsLabel.layer.borderColor = tcolor(TextColor).CGColor;
         self.actionStepsLabel.layer.cornerRadius = 3;
         self.actionStepsLabel.layer.borderWidth = 1;
         self.actionStepsLabel.textAlignment = NSTextAlignmentCenter;
@@ -196,15 +194,30 @@
 }
 
 -(void)updateActionSteps{
+    NSInteger totalSubtask = [self.toDo getSubtasks].count;
     NSSet *filteredSubtasks = [[self.toDo getSubtasks] filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
     if( filteredSubtasks && filteredSubtasks.count > 0){
         self.actionStepsButton.hidden = NO;
+        self.actionStepsLabel.layer.borderColor = tcolor(TasksColor).CGColor;
         self.actionStepsLabel.text = [NSString stringWithFormat:@"%lu",(unsigned long)filteredSubtasks.count];
+        self.actionStepsLabel.font = KP_REGULAR(11);
         [self.actionStepsLabel sizeToFit];
-        CGRectSetSize(self.actionStepsLabel, CGRectGetWidth(self.actionStepsLabel.frame)+12, CGRectGetHeight(self.actionStepsLabel.frame)+5);
-        CGRectSetCenter(self.actionStepsLabel, CGRectGetWidth(self.actionStepsButton.frame)/2, CGRectGetHeight(self.actionStepsButton.frame)/2);
+        CGRectSetSize(self.actionStepsLabel, CGRectGetWidth(self.actionStepsLabel.frame)+12, CGRectGetHeight(self.actionStepsLabel.frame)+6);
     }
-    else self.actionStepsButton.hidden = YES;
+    else if(totalSubtask > 0){
+        self.actionStepsLabel.layer.borderColor = tcolor(DoneColor).CGColor;
+        self.actionStepsLabel.text = @"done";
+        self.actionStepsLabel.font = iconFont(9);
+        [self.actionStepsLabel sizeToFit];
+        CGRectSetSize(self.actionStepsLabel, CGRectGetWidth(self.actionStepsLabel.frame)+10, CGRectGetHeight(self.actionStepsLabel.frame)+8);
+    }
+    else{
+        self.actionStepsButton.hidden = YES;
+        return;
+    }
+
+    
+    CGRectSetCenter(self.actionStepsLabel, CGRectGetWidth(self.actionStepsButton.frame)/2, CGRectGetHeight(self.actionStepsButton.frame)/2);
 }
 
 - (void)setTextLabels:(BOOL)showBottomLine {
@@ -321,7 +334,6 @@
     UIColor *color = [StyleHandler colorForCellType:cellType];
     self.selectionView.backgroundColor = color;
     self.dotView.dotColor = color;
-    self.actionStepsLabel.layer.borderColor = color.CGColor;
 }
 
 -(void)setSelected:(BOOL)selected{
