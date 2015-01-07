@@ -11,6 +11,7 @@
 #import "KPAlert.h"
 #import "KPBlurry.h"
 #import "UtilityClass.h"
+#import "Intercom.h"
 #define kLocalCellHeight 55
 #define kSettingsBlurColor retColor(gray(230, 0.5),gray(50, 0.4))
 #define kCellCount 6
@@ -44,19 +45,19 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.row) {
         case 5:
-            cell.textLabel.text = LOCALIZE_STRING(@"Walkthrough");
+            cell.textLabel.text = LOCALIZE_STRING(@"Contact Swipes");
             break;
         case 4:
-            cell.textLabel.text = LOCALIZE_STRING(@"Get Started Guides");
+            cell.textLabel.text = LOCALIZE_STRING(@"Walkthrough");
             break;
         case 3:
-            cell.textLabel.text = LOCALIZE_STRING(@"FAQ");
+            cell.textLabel.text = LOCALIZE_STRING(@"Get Started Guides");
             break;
         case 2:
-            cell.textLabel.text = LOCALIZE_STRING(@"Known Issues");
+            cell.textLabel.text = LOCALIZE_STRING(@"FAQ");
             break;
         case 1:
-            cell.textLabel.text = LOCALIZE_STRING(@"Send Feedback");
+            cell.textLabel.text = LOCALIZE_STRING(@"Known Issues");
             break;
         case 0:
             cell.textLabel.text = LOCALIZE_STRING(@"Open Policies");
@@ -73,9 +74,12 @@
     NSString *openTitle = [LOCALIZE_STRING(@"open") capitalizedString];
     switch (indexPath.row) {
         case 5:
-            [ROOT_CONTROLLER walkthrough];
+            [Intercom presentMessageViewAsConversationList:YES];
             break;
         case 4:
+            [ROOT_CONTROLLER walkthrough];
+            break;
+        case 3:
             [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Get Started") andMessage:LOCALIZE_STRING(@"Learn how to get most out of Swipes.") cancel:cancelTitle confirm:openTitle block:^(BOOL succeeded, NSError *error) {
                 
                 if(succeeded){
@@ -83,7 +87,7 @@
                 }
             }];
             break;
-        case 3:
+        case 2:
             [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"FAQ") andMessage:LOCALIZE_STRING(@"Learn how to get most out of the different features in Swipes.") cancel:cancelTitle confirm:openTitle block:^(BOOL succeeded, NSError *error) {
                 
                 if(succeeded){
@@ -91,7 +95,7 @@
                 }
             }];
             break;
-        case 2:
+        case 1:
             [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Known Issues") andMessage:LOCALIZE_STRING(@"You found a bug? Check out if we're already working on it.") cancel:cancelTitle confirm:openTitle block:^(BOOL succeeded, NSError *error) {
                 
                 if(succeeded){
@@ -99,20 +103,6 @@
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: knownIssuesURL]];
                 }
             }];
-            break;
-        case 1:
-            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Send Feedback") andMessage:LOCALIZE_STRING(@"We love all your inputs - but it might take us a while to get back to you :-)") buttonTitles:@[cancelTitle, LOCALIZE_STRING(@"Check FAQ"), LOCALIZE_STRING(@"Known Issues"), LOCALIZE_STRING(@"Send Email")] block:^(NSInteger number, NSError *error) {
-                if(number == 1){
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: faqURL]];
-                }
-                else if(number == 2){
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: knownIssuesURL]];
-                }
-                else if(number == 3){
-                    [ROOT_CONTROLLER feedback];
-                }
-            }];
-            
             break;
         case 0:{
             [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Policies") andMessage:LOCALIZE_STRING(@"Read through our 'Privacy Policy' and 'Terms and Conditions'.") cancel:cancelTitle confirm:openTitle block:^(BOOL succeeded, NSError *error) {

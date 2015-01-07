@@ -306,20 +306,17 @@
 "You can add notes manually under each tasks from Swipes as well" = "You can add notes manually under each tasks from Swipes as well";
 
 // Help menu
+"Contact Swipes" = "Contact Swipes";
 "Walkthrough" = "Walkthrough";
 "Get Started Guides" = "Get Started Guides";
 "FAQ" = "FAQ";
 "Known Issues" = "Known Issues";
-"Send Feedback" = "Send Feedback";
-"Send Email" = "Send Email";
 "Open Policies" = "Open Policies";
-"Check FAQ" = "Check FAQ";
 
 // Alerts
 "Learn how to get most out of Swipes." = "Learn how to get most out of Swipes.";
 "Learn how to get most out of the different features in Swipes." = "Learn how to get most out of the different features in Swipes.";
 "You found a bug? Check out if we're already working on it." = "You found a bug? Check out if we're already working on it.";
-"We love all your inputs - but it might take us a while to get back to you :-)" = "We love all your inputs - but it might take us a while to get back to you :-)";
 
 
 "Hard sync" = "Hard sync";
