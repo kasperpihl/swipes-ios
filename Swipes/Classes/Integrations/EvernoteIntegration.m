@@ -424,12 +424,12 @@ NSError * NewNSErrorFromException(NSException * exc) {
         }
     }
     
-    return _searchCache[text][kKeyData];
+    return _searchCache[text ? text : [NSNull null]][kKeyData];
 }
 
 - (void)cacheAddSearchResult:(NSArray *)findNotesResults forText:(NSString *)text
 {
-    _searchCache[text] = @{kKeyData: findNotesResults, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kSearchTimeout]};
+    _searchCache[text ? text : [NSNull null]] = @{kKeyData: findNotesResults, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kSearchTimeout]};
 }
 
 - (ENNote *)cacheNoteForRef:(ENNoteRef *)noteRef
