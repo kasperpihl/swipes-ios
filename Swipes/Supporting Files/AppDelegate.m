@@ -12,7 +12,6 @@
 
 #import <DropboxSDK/DropboxSDK.h>
 
-#import "AppsFlyerTracker.h"
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
 #import "UtilityClass.h"
@@ -45,10 +44,6 @@
 #else
 
 #endif
-    [Intercom setApiKey:@"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1" forAppId:@"yobuz4ff"];
-    [Intercom beginSessionForUserWithEmail:@"kasper@pihl.it" completion:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
     
 #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
     NSString* const CONSUMER_KEY = @"swipes";
@@ -72,7 +67,7 @@
     [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
     
     [GAI sharedInstance].dispatchInterval = 20;
-    [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+    //[[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
     [[GAI sharedInstance] trackerWithTrackingId:@"UA-41592802-4"];
     [[GAI sharedInstance] defaultTracker].allowIDFACollection = YES;
     
@@ -84,9 +79,6 @@
         [self application:application didReceiveLocalNotification:notification];
     
     
-    [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"TwJuYgpTKp9ENbxf6wMi8j";
-    [AppsFlyerTracker sharedTracker].appleAppID = @"657882159";
-    [AppsFlyerTracker sharedTracker].isDebug = NO;
     [PaymentHandler sharedInstance];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // this call blocks when there is an internet connection but no real data passes through
@@ -243,7 +235,6 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [[AppsFlyerTracker sharedTracker] trackAppLaunch];
     [ROOT_CONTROLLER openApp];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }

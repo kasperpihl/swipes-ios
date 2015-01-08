@@ -91,7 +91,6 @@
 		A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FC218D75B250056D124 /* ShareViewController.m */; };
 		A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A717BEEB175E6857004791BF /* CoreTelephony.framework */; };
 		A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5B816EB59710095A9A8 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		A74D3FCB18D9E76F0056D124 /* libAppsFlyerLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */; };
 		A74D3FD118D9E7AC0056D124 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */; };
 		A74D3FD218D9E7AC0056D124 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = A74D3FD018D9E7AC0056D124 /* HPTextViewInternal.m */; };
 		A74DCCAC18AA684C004E32FA /* UIImage+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A74DCCAB18AA684C004E32FA /* UIImage+Utilities.m */; };
@@ -640,8 +639,6 @@
 		A748C879190D9A0800514DB3 /* SubtaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubtaskCell.m; sourceTree = "<group>"; };
 		A74D3FC118D75B250056D124 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareViewController.h; path = Share/ShareViewController.h; sourceTree = "<group>"; };
 		A74D3FC218D75B250056D124 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShareViewController.m; path = Share/ShareViewController.m; sourceTree = "<group>"; };
-		A74D3FC918D9E76F0056D124 /* AppsFlyerTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppsFlyerTracker.h; sourceTree = "<group>"; };
-		A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppsFlyerLib.a; sourceTree = "<group>"; };
 		A74D3FCD18D9E7AC0056D124 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
 		A74D3FCE18D9E7AC0056D124 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
 		A74D3FCF18D9E7AC0056D124 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
@@ -1050,7 +1047,6 @@
 				A761B5A316EB59320095A9A8 /* CoreData.framework in Frameworks */,
 				A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */,
 				A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */,
-				A74D3FCB18D9E76F0056D124 /* libAppsFlyerLib.a in Frameworks */,
 				A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */,
 				51309AE023584D4FA13F00A9 /* libPods-Swipes.a in Frameworks */,
 			);
@@ -1306,15 +1302,6 @@
 				A74D3FC218D75B250056D124 /* ShareViewController.m */,
 			);
 			name = Share;
-			sourceTree = "<group>";
-		};
-		A74D3FC818D9E76F0056D124 /* AppsFlyer */ = {
-			isa = PBXGroup;
-			children = (
-				A74D3FC918D9E76F0056D124 /* AppsFlyerTracker.h */,
-				A74D3FCA18D9E76F0056D124 /* libAppsFlyerLib.a */,
-			);
-			path = AppsFlyer;
 			sourceTree = "<group>";
 		};
 		A74D3FCC18D9E7AC0056D124 /* GrowingTextView */ = {
@@ -1700,7 +1687,6 @@
 			children = (
 				DA53461419D426B4007AA15D /* MagicalRecord */,
 				A7D0685A190E654C00699B4E /* MMDrawerController */,
-				A74D3FC818D9E76F0056D124 /* AppsFlyer */,
 				A717DD0F18B6440A00EE359C /* Crashlytics.framework */,
 				A74D3FCC18D9E7AC0056D124 /* GrowingTextView */,
 			);
