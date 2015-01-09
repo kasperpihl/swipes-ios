@@ -19,10 +19,12 @@
 #import "GAIFields.h"
 #import "GAIDictionaryBuilder.h"
 
-@interface AnalyticsHandler ()
+@interface AnalyticsHandler () <IntercomSessionListener>
 @property (nonatomic) NSMutableArray *views;
 @property (nonatomic) Vero* vero;
 @property (nonatomic) BOOL intercomSession;
+@property (nonatomic) BOOL initializedIntercom;
+@property (nonatomic) BOOL isBeginningIntercomSession;
 @end
 @implementation AnalyticsHandler
 static AnalyticsHandler *sharedObject;
@@ -32,6 +34,12 @@ static AnalyticsHandler *sharedObject;
         [sharedObject updateIdentity];
     }
     return sharedObject;
+}
+-(BOOL)initializedIntercom{
+    if(!_initializedIntercom){
+        [self initializeIntercom];
+    }
+    return _initializedIntercom;
 }
 -(Vero *)vero{
     if(!_vero){
@@ -75,6 +83,11 @@ static AnalyticsHandler *sharedObject;
 -(void)trackEvent:(NSString *)event options:(NSDictionary *)options{
     if(self.analyticsOff)
         return;
+    if(self.initializedIntercom && self.intercomSession){
+        [Intercom logEventWithName:event optionalMetaData:options completion:^(NSError *error) {
+            NSLog(@"Error: %@",error);
+        }];
+    }
     //[Leanplum track:event withParameters:options];
     //[[LocalyticsSession shared] tagEvent:event attributes:options];
 }
@@ -95,12 +108,25 @@ static AnalyticsHandler *sharedObject;
         userLevel = @"Tryout";
     }
     [customIntercomAttributes setObject:userLevel forKey:@"user_level"];
-    if(kCurrent.email){
-        [userAttributes setObject:kCurrent.email forKey:@"Email"];
-        [intercomAttributes setObject:kCurrent.email forKey:@"email"];
+    if(kCurrent.username && [UtilityClass validateEmail:kCurrent.username]){
+        [userAttributes setObject:kCurrent.username forKey:@"Email"];
+        [intercomAttributes setObject:kCurrent.username forKey:@"email"];
+        NSLog(@"email %@",kCurrent.username);
     }
     
+    
+    // Signup date
+    if(kCurrent.createdAt){
+        NSDateFormatter *dateFormatter = [Global isoDateFormatter];
+        NSString *isoSignup = [dateFormatter stringFromDate:kCurrent.createdAt];
+        [intercomAttributes setObject:isoSignup forKey:@"remote_created_at"];
+    }
 
+    
+    // Number of Recurring Tasks
+    
+    
+    
     // Active Theme
     NSString *currentTheme = ([THEMER currentTheme] == ThemeDark) ? @"Dark" : @"Light";
     [userAttributes setObject:currentTheme forKey:@"Active Theme"];
@@ -124,22 +150,52 @@ static AnalyticsHandler *sharedObject;
     [intercomAttributes setObject:customIntercomAttributes forKey:@"custom_attributes"];
     
     
-    
     // Update Intercom / start session
-    if(!self.intercomSession && kCurrent){
-        [Intercom beginSessionForUserWithUserId:kCurrent.objectId completion:^(NSError *error) {
-            if(!error){
-                self.intercomSession = YES;
-                [Intercom updateUserWithAttributes:intercomAttributes completion:^(NSError *error) {
+    if(self.initializedIntercom){
+        if(!self.intercomSession && !self.isBeginningIntercomSession && kCurrent){
+            NSLog(@"beginning session");
+            self.isBeginningIntercomSession = YES;
+            [Intercom beginSessionForUserWithUserId:kCurrent.objectId completion:^(NSError *error) {
+                NSLog(@"began session %@",error);
+                self.isBeginningIntercomSession = NO;
+                if(!error){
                     
-                }];
-            }
-        }];
+                    [Intercom updateUserWithAttributes:intercomAttributes completion:^(NSError *error) {
+                        
+                    }];
+                }
+            }];
+        }
+        else if(self.intercomSession && kCurrent){
+            [Intercom updateUserWithAttributes:intercomAttributes completion:^(NSError *error) {
+                
+            }];
+        }
     }
-    else if(kCurrent){
-        [Intercom updateUserWithAttributes:intercomAttributes completion:^(NSError *error) {
-            
-        }];
+    
+    
+    // Update Google Analytics Custom
+}
+
+- (void)intercomSessionStatusDidChange:(BOOL)isSessionOpen{
+    self.intercomSession = isSessionOpen;
+    if(isSessionOpen){
+        NSLog(@"session on");
+    }
+    else
+        NSLog(@"session off");
+}
+
+-(void)initializeIntercom{
+    NSString *hmac = [USER_DEFAULTS objectForKey:@"intercom-hmac"];
+    if(kCurrent.objectId && hmac){
+        NSLog(@"initialized intercom %@",hmac);
+        
+        [Intercom setApiKey:@"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1" forAppId:@"yobuz4ff" securityOptions:@{ @"hmac" : hmac, @"data": kCurrent.objectId }];
+        [Intercom enableLogging];
+        [Intercom setPresentationInsetOverScreen:UIEdgeInsetsMake(0, 0, 0, 0)];
+        [Intercom setSessionListener:self];
+        self.initializedIntercom = YES;
     }
 }
 -(void)pushView:(NSString *)view{

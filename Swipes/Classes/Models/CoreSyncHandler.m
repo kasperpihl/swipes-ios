@@ -575,7 +575,10 @@
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     //NSLog(@"resulted err:%@",error);
-    //NSLog(@"res: %@ err: %@",result,error);
+    if([result objectForKey:@"intercom-hmac"]){
+        [USER_DEFAULTS setObject:[result objectForKey:@"intercom-hmac"] forKey:@"intercom-hmac"];
+        [USER_DEFAULTS synchronize];
+    }
     if([result objectForKey:@"hardSync"])
         [self hardSync];
     
