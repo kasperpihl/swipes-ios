@@ -554,15 +554,13 @@ static RootViewController *sharedObject;
     [ANALYTICS trackCategory:@"Settings" action:@"Changed Theme" label:newTheme value:nil];
    // [self setNeedsStatusBarAppearanceUpdate];
 }
--(void)timering{
-    [Intercom presentMessageViewAsConversationList:NO];
-}
+
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     kTopClock.font = KP_SEMIBOLD(12);
     [self changedTheme];
     //[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(timering) userInfo:nil repeats:NO];
-    /*EKEventStore *store = [[EKEventStore alloc] init];
+   /* EKEventStore *store = [[EKEventStore alloc] init];
     
     [store requestAccessToEntityType:EKEntityTypeReminder completion:^(BOOL granted, NSError *error) {
         if(!error){
@@ -573,7 +571,9 @@ static RootViewController *sharedObject;
                     NSLog(@"%@",reminder.calendarItemIdentifier);
                     
                     // do something for each reminder
-                    [KPToDo addItem:reminder.title priority:NO tags:nil save:NO from:@"Reminders"];
+                    KPToDo *newToDo = [KPToDo addItem:reminder.title priority:NO tags:nil save:NO from:@"Reminders"];
+                    newToDo.origin = @"Reminders";
+                    newToDo.originIdentifier = reminder.calendarItemIdentifier;
                 }
                 [KPToDo saveToSync];
             }];
