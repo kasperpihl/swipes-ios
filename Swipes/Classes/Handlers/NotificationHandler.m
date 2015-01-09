@@ -14,6 +14,7 @@
 #import "SettingsHandler.h"
 #import "UserHandler.h"
 #import "KPTopClock.h"
+#import "Intercom.h"
 
 #define kMaxNotifications 25
 @interface NotificationHandler () <KitLocateSingleDelegate, KitLocateDelegate>
@@ -264,19 +265,64 @@ static NotificationHandler *sharedObject;
     return settings;
 }
 
+- (BOOL) pushNotificationOnOrOff
+{
+    if ([UIApplication instancesRespondToSelector:@selector(isRegisteredForRemoteNotifications)]) {
+        return ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
+    } else {
+        UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+        return (types & UIRemoteNotificationTypeAlert);
+    }
+}
+
+
 -(void)scheduleNotifications:(NSArray*)notifications{
     if(!notifications || notifications.count == 0)
         return;
     UIApplication *app = [UIApplication sharedApplication];
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
         UIUserNotificationSettings *currentSettings = [app currentUserNotificationSettings];
-        if ( (currentSettings.types & UIUserNotificationTypeAlert) != UIUserNotificationTypeAlert || ![USER_DEFAULTS boolForKey:@"hasAddedCategories"]){
-            UIUserNotificationSettings *settings = [self settingsWithCategories];
-            [app registerUserNotificationSettings:settings];
-            [USER_DEFAULTS setBool:YES forKey:@"hasAddedCategories"];
-            [USER_DEFAULTS synchronize];
-            return;
+        BOOL userNotifications = NO;
+        BOOL remoteNotifications = NO;
+        
+        if ( (currentSettings.types & UIUserNotificationTypeAlert) != UIUserNotificationTypeAlert && ![USER_DEFAULTS boolForKey:@"hasAddedCategories"]){
+            userNotifications = YES;
         }
+        
+        if([self pushNotificationOnOrOff] && ![USER_DEFAULTS boolForKey:@"hasAddedRemoteNotification"])
+            remoteNotifications = YES;
+        
+        if(userNotifications | remoteNotifications){
+            voidBlock registerBlock = ^{
+                if(userNotifications){
+                    UIUserNotificationSettings *settings = [self settingsWithCategories];
+                    [app registerUserNotificationSettings:settings];
+                    [Intercom registerForRemoteNotifications];
+                    [USER_DEFAULTS setBool:YES forKey:@"hasAddedCategories"];
+                    
+                }
+                if(remoteNotifications){
+                    [Intercom registerForRemoteNotifications];
+                    [USER_DEFAULTS setBool:YES forKey:@"hasAddedRemoteNotification"];
+                }
+                
+                [USER_DEFAULTS setBool:YES forKey:@"hasAskedNotificationPermissions"];
+                [USER_DEFAULTS synchronize];
+            };
+            
+            if(![USER_DEFAULTS boolForKey:@"hasAskedNotificationPermissions"]){
+                [UTILITY alertWithTitle:@"Better experience!" andMessage:@"For a better experience we need your permission to send notifications when tasks are due." buttonTitles:@[@"Okay"] block:^(NSInteger number, NSError *error) {
+                    registerBlock();
+                }];
+            }
+            else{
+                registerBlock();
+            }
+            
+            
+        }
+        
+        return;
     }
     for(UILocalNotification *notification in notifications){
         [app scheduleLocalNotification:notification];
@@ -296,9 +342,6 @@ static NotificationHandler *sharedObject;
         if ( (currentSettings.types & UIUserNotificationTypeBadge) == UIUserNotificationTypeBadge ){
             [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
         }
-        /*else{
-            [app registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
-        }*/
     }
     else
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
