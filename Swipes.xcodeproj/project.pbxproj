@@ -3038,11 +3038,7 @@
 				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(inherited)",
 					"$(OTHER_CFLAGS)",
@@ -3193,11 +3189,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -3272,11 +3264,7 @@
 				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/AppsFlyer",
-					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(inherited)",
 					"$(OTHER_CFLAGS)",
