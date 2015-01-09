@@ -270,15 +270,16 @@
         if (self.rootViewController) {
             void (^buttonBlock)(UIAlertAction *action) = ^(UIAlertAction *action) {
                 NSUInteger counter = 0;
-                if (block) {
+                if (self.numberBlock) {
                     for (NSString* title in buttonTitles) {
                         if ([title isEqualToString:action.title]) {
-                            block(counter, nil);
+                            self.numberBlock(counter, nil);
                         }
                         counter++;
                     }
                 }
             };
+            self.numberBlock = block;
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
             for (NSString* title in buttonTitles) {
                 [alert addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:buttonBlock]];
