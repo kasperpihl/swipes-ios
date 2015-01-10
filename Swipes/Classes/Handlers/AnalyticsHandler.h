@@ -22,6 +22,7 @@
 -(void)popView;
 -(void)clearViews;
 -(void)heartbeat;
--(void)updateIdentity;
+-(void)beginSession;
+-(void)checkForUpdatesOnIdentity;
 @property BOOL analyticsOff;
 @end

@@ -529,6 +529,7 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
                                                        options:0 // Pass 0 if you don't care about the readability of the generated string
                                                         error:&error];
+    
     if(error){
         [UtilityClass sendError:error type:@"Sync JSON prepare parse"];
         [self finalizeSyncWithUserInfo:nil error:error];

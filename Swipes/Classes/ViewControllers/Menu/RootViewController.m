@@ -107,7 +107,7 @@
             if(email)
                 [user setObject:email forKey:@"username"];
             [user saveEventually];
-            [ANALYTICS updateIdentity];
+            [ANALYTICS checkForUpdatesOnIdentity];
         }
         return NO;
     }];
@@ -117,14 +117,12 @@
     voidBlock block = ^{
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
         NSNumber *daysSinceInstall = @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]);
-        NSDictionary *options = @{@"Days Since Install" : daysSinceInstall, @"Did Try App" : @([[USER_DEFAULTS objectForKey:isTryingString] boolValue])};
+        NSString *didTryApp = [[USER_DEFAULTS objectForKey:isTryingString] boolValue] ? @"Yes" : @"No";
         if(user.isNew) {
-            [ANALYTICS trackEvent:@"Signed Up" options:options];
-            [ANALYTICS trackCategory:@"Onboarding" action:@"Signed Up" label:nil value:daysSinceInstall];
+            [ANALYTICS trackCategory:@"Onboarding" action:@"Signed Up" label:didTryApp value:daysSinceInstall];
         }
         else{
-            [ANALYTICS trackEvent:@"Logged In" options:options];
-            [ANALYTICS trackCategory:@"Onboarding" action:@"Logged In" label:nil value:daysSinceInstall];
+            [ANALYTICS trackCategory:@"Onboarding" action:@"Logged In" label:didTryApp value:daysSinceInstall];
         }
         if ([PFFacebookUtils isLinkedWithUser:user]){
             if (!user.email){
@@ -134,7 +132,7 @@
         else{
             
         }
-        [ANALYTICS updateIdentity];
+        [ANALYTICS checkForUpdatesOnIdentity];
         [self changeToMenu:KPMenuHome animated:YES];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
     };
@@ -490,8 +488,6 @@ static RootViewController *sharedObject;
         [KPCORE seedObjectsSave:YES];
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
         NSNumber *daysSinceInstall = @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]);
-        NSDictionary *options = @{@"Days Since Install" : daysSinceInstall};
-        [ANALYTICS trackEvent:@"Trying Out" options:options];
         [ANALYTICS trackCategory:@"Onboarding" action:@"Trying Out" label:nil value:daysSinceInstall];
     }
     
@@ -542,16 +538,14 @@ static RootViewController *sharedObject;
     [self setupAppearance];
     
     
-    
-    
 }
+
+
 -(void)changedTheme{
     UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
     [[UIApplication sharedApplication] setStatusBarStyle: statusBarStyle];
     [kTopClock setTextColor:alpha(tcolor(TextColor),0.8)];
-    NSString *newTheme = ([THEMER currentTheme] == ThemeDark) ? @"Dark" : @"Light";
-    [ANALYTICS trackEvent:@"Changed Theme" options:@{@"Theme":newTheme}];
-    [ANALYTICS trackCategory:@"Settings" action:@"Changed Theme" label:newTheme value:nil];
+    
    // [self setNeedsStatusBarAppearanceUpdate];
 }
 

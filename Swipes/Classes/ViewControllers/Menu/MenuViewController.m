@@ -426,8 +426,11 @@
         }
         case KPMenuButtonScheme:{
             [THEMER changeTheme];
+            NSString *newTheme = ([THEMER currentTheme] == ThemeDark) ? @"Dark" : @"Light";
+            [ANALYTICS trackEvent:@"Changed Theme" options:@{@"Theme":newTheme}];
+            [ANALYTICS trackCategory:@"Settings" action:@"Changed Theme" label:newTheme value:nil];
             [ROOT_CONTROLLER resetRoot];
-        
+            
             break;
         }
         

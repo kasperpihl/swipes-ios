@@ -115,7 +115,7 @@ static UserHandler *sharedObject;
         [USER_DEFAULTS synchronize];
         self.userLevel = userLevel;
         self.isPlus = (userLevel > UserLevelStandard);
-        [ANALYTICS updateIdentity];
+        [ANALYTICS checkForUpdatesOnIdentity];
     }
 }
 -(void)dealloc{

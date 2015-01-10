@@ -12,6 +12,8 @@
 //#import <Leanplum/Leanplum.h>
 #import "Vero.h"
 #import "UtilityClass.h"
+#import "KPToDo.h"
+#import "KPTag.h"
 #import "UserHandler.h"
 #import "EvernoteIntegration.h"
 #import "Intercom.h"
@@ -31,9 +33,12 @@ static AnalyticsHandler *sharedObject;
 +(AnalyticsHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[AnalyticsHandler allocWithZone:NULL] init];
-        [sharedObject updateIdentity];
+        [sharedObject initializeIntercom];
     }
     return sharedObject;
+}
+-(void)initialize{
+    notify(@"logged in", beginSession);
 }
 -(BOOL)initializedIntercom{
     if(!_initializedIntercom){
@@ -91,13 +96,35 @@ static AnalyticsHandler *sharedObject;
     //[Leanplum track:event withParameters:options];
     //[[LocalyticsSession shared] tagEvent:event attributes:options];
 }
--(void)updateIdentity{
-    NSMutableDictionary *userAttributes = [@{} mutableCopy];
+-(void)beginSession{
+    if(self.isBeginningIntercomSession)
+        return;
+    self.isBeginningIntercomSession = YES;
+    [Intercom beginSessionForUserWithUserId:kCurrent.objectId completion:^(NSError *error) {
+        self.isBeginningIntercomSession = NO;
+    }];
+}
+
+-(void)checkForUpdatesOnIdentity{
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    
+    NSMutableDictionary *currentValues = [[USER_DEFAULTS objectForKey:@"identityValues"] mutableCopy];
+    if(!currentValues){
+        currentValues = [NSMutableDictionary dictionary];
+    }
+    
+    BOOL shouldUpdate = NO;
+    BOOL gaUpdate = NO;
+    
+    GAIDictionaryBuilder *gaCustomBuilder = [GAIDictionaryBuilder createEventWithCategory:@"Session" action:@"Updated Identity" label:nil value:nil];
     NSMutableDictionary *intercomAttributes = [@{} mutableCopy];
     NSMutableDictionary *customIntercomAttributes = [@{} mutableCopy];
-
+    
+    
     
     // User level
+    NSString *currentUserLevel = [currentValues objectForKey:@"user_level"];
     NSString *userLevel = @"None";
     if(kCurrent){
         userLevel = @"User";
@@ -107,33 +134,58 @@ static AnalyticsHandler *sharedObject;
     else if([kUserHandler isTryingOutApp]){
         userLevel = @"Tryout";
     }
-    [customIntercomAttributes setObject:userLevel forKey:@"user_level"];
-    if(kCurrent.username && [UtilityClass validateEmail:kCurrent.username]){
-        [userAttributes setObject:kCurrent.username forKey:@"Email"];
-        [intercomAttributes setObject:kCurrent.username forKey:@"email"];
-        NSLog(@"email %@",kCurrent.username);
+    if(![userLevel isEqualToString:currentUserLevel]){
+        shouldUpdate = YES;
+        gaUpdate = YES;
+        [currentValues setObject:userLevel forKey:@"user_level"];
+        
+        [tracker set:[GAIFields customDimensionForIndex:1]
+               value:userLevel];
+        [gaCustomBuilder set:userLevel forKey:[GAIFields customDimensionForIndex:1]];
+        [customIntercomAttributes setObject:userLevel forKey:@"user_level"];
     }
+   
     
     
-    // Signup date
-    if(kCurrent.createdAt){
-        NSDateFormatter *dateFormatter = [Global isoDateFormatter];
-        NSString *isoSignup = [dateFormatter stringFromDate:kCurrent.createdAt];
-        [intercomAttributes setObject:isoSignup forKey:@"remote_created_at"];
+    
+    // Email Checking
+    NSString *currentEmail = [currentValues objectForKey:@"email"];
+    NSString *email;
+    if(kCurrent.username && [UtilityClass validateEmail:kCurrent.username])
+        email = kCurrent.username;
+    if(kCurrent.email && [UtilityClass validateEmail:kCurrent.email])
+        email = kCurrent.email;
+    
+    
+    if(email && ![email isEqualToString:currentEmail]){
+        shouldUpdate = YES;
+        [currentValues setObject:email forKey:@"email"];
+        
+        [intercomAttributes setObject:email forKey:@"email"];
     }
 
     
-    // Number of Recurring Tasks
     
     
     
-    // Active Theme
-    NSString *currentTheme = ([THEMER currentTheme] == ThemeDark) ? @"Dark" : @"Light";
-    [userAttributes setObject:currentTheme forKey:@"Active Theme"];
-    [customIntercomAttributes setObject:currentTheme forKey:@"active_theme"];
+    // Signup date
+    NSString *currentSignupDate = [currentValues objectForKey:@"signup_date"];
+    if(kCurrent.createdAt){
+        NSDateFormatter *dateFormatter = [Global isoDateFormatter];
+        NSString *isoSignup = [dateFormatter stringFromDate:kCurrent.createdAt];
+        if(![isoSignup isEqualToString:currentSignupDate]){
+            shouldUpdate = YES;
+            
+            [currentValues setObject:isoSignup forKey:@"signup_date"];
+            
+            [intercomAttributes setObject:isoSignup forKey:@"remote_created_at"];
+        }
+    }
+
     
     
     // Evernote User Level
+    NSString *currentEvernoteUserLevel = [currentValues objectForKey:@"evernote_user_level"];
     NSString *evernoteUserLevel = @"Not Installed";
     if([USER_DEFAULTS boolForKey:@"isEvernoteInstalled"])
         evernoteUserLevel = @"Not Linked";
@@ -144,29 +196,89 @@ static AnalyticsHandler *sharedObject;
         if(kEnInt.isBusinessUser)
             evernoteUserLevel = @"Business";
     }
-    [userAttributes setObject:evernoteUserLevel forKey:@"Evernote User Level"];
-    [customIntercomAttributes setObject:evernoteUserLevel forKey:@"evernote_user_level"];
+    if(![evernoteUserLevel isEqualToString:currentEvernoteUserLevel]){
+        shouldUpdate = YES;
+        gaUpdate = YES;
+        
+        [currentValues setObject:evernoteUserLevel forKey:@"evernote_user_level"];
+        
+        [tracker set:[GAIFields customDimensionForIndex:2]
+               value:evernoteUserLevel];
+        [gaCustomBuilder set:evernoteUserLevel forKey:[GAIFields customDimensionForIndex:2]];
+        
+        [customIntercomAttributes setObject:evernoteUserLevel forKey:@"evernote_user_level"];
+    }
     
-    [intercomAttributes setObject:customIntercomAttributes forKey:@"custom_attributes"];
     
+    
+    
+    // Active Theme
+    NSString *currentTheme = [currentValues objectForKey:@"active_theme"];
+    NSString *theme = ([THEMER currentTheme] == ThemeDark) ? @"Dark" : @"Light";
+    if(![theme isEqualToString:currentTheme]){
+        shouldUpdate = YES;
+        gaUpdate = YES;
+        [currentValues setObject:theme forKey:@"active_theme"];
+        
+        [tracker set:[GAIFields customDimensionForIndex:3]
+               value:theme];
+        [gaCustomBuilder set:theme forKey:[GAIFields customDimensionForIndex:3]];
+        
+        [customIntercomAttributes setObject:theme forKey:@"active_theme"];
+    }
+    
+    
+    // Number of Recurring Tasks
+    NSNumber *currentRecurringTasks = [currentValues objectForKey:@"recurring_tasks"];
+    NSPredicate *recurringPredicate = [NSPredicate predicateWithFormat:@"repeatOption != 'never'"];
+    NSNumber *numberOfRecurring = @([KPToDo MR_countOfEntitiesWithPredicate:recurringPredicate]);
+    if(!currentRecurringTasks || ![numberOfRecurring isEqualToNumber:currentRecurringTasks]){
+        shouldUpdate = YES;
+        gaUpdate = YES;
+        [currentValues setObject:numberOfRecurring forKey:@"recurring_tasks"];
+        
+        [tracker set:[GAIFields customDimensionForIndex:4]
+               value:[numberOfRecurring stringValue]];
+        [gaCustomBuilder set:[numberOfRecurring stringValue] forKey:[GAIFields customDimensionForIndex:4]];
+        
+        [customIntercomAttributes setObject:numberOfRecurring forKey:@"recurring_tasks"];
+    }
+    NSLog(@"number of rec: %@",numberOfRecurring);
+    
+    
+    // Number of Tags
+    NSNumber *currentNumberOfTags = [currentValues objectForKey:@"number_of_tags"];
+    NSNumber *numberOfTags = @([KPTag MR_countOfEntities]);
+    if(!currentNumberOfTags || ![numberOfTags isEqualToNumber:currentNumberOfTags]){
+        shouldUpdate = YES;
+        gaUpdate = YES;
+        [currentValues setObject:numberOfTags forKey:@"number_of_tags"];
+        
+        [tracker set:[GAIFields customDimensionForIndex:5]
+               value:[numberOfTags stringValue]];
+        [gaCustomBuilder set:[numberOfTags stringValue] forKey:[GAIFields customDimensionForIndex:5]];
+        [customIntercomAttributes setObject:numberOfTags forKey:@"number_of_tags"];
+    }
+    NSLog(@"number of tags: %@",numberOfTags);
+    
+    
+    
+    //
+    if( shouldUpdate ){
+        NSLog(@"did update");
+        [USER_DEFAULTS setObject:[currentValues copy] forKey:@"identityValues"];
+        [USER_DEFAULTS synchronize];
+    }
+
+    if(gaUpdate){
+        [tracker send:[gaCustomBuilder build]];
+    }
+
     
     // Update Intercom / start session
+    [intercomAttributes setObject:customIntercomAttributes forKey:@"custom_attributes"];
     if(self.initializedIntercom){
-        if(!self.intercomSession && !self.isBeginningIntercomSession && kCurrent){
-            NSLog(@"beginning session");
-            self.isBeginningIntercomSession = YES;
-            [Intercom beginSessionForUserWithUserId:kCurrent.objectId completion:^(NSError *error) {
-                NSLog(@"began session %@",error);
-                self.isBeginningIntercomSession = NO;
-                if(!error){
-                    
-                    [Intercom updateUserWithAttributes:intercomAttributes completion:^(NSError *error) {
-                        
-                    }];
-                }
-            }];
-        }
-        else if(self.intercomSession && kCurrent){
+        if(self.intercomSession && kCurrent && shouldUpdate){
             [Intercom updateUserWithAttributes:intercomAttributes completion:^(NSError *error) {
                 
             }];
@@ -176,6 +288,7 @@ static AnalyticsHandler *sharedObject;
     
     // Update Google Analytics Custom
 }
+
 
 - (void)intercomSessionStatusDidChange:(BOOL)isSessionOpen{
     self.intercomSession = isSessionOpen;
@@ -224,5 +337,8 @@ static AnalyticsHandler *sharedObject;
 }
 -(void)clearViews{
     [self.views removeAllObjects];
+}
+-(void)dealloc{
+    clearNotify();
 }
 @end
