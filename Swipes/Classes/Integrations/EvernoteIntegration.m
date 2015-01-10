@@ -156,7 +156,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     NSError* error;
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:jsonDict options:0 error:&error];
     if (error) {
-        // TODO log error
+        [UtilityClass sendError:error type:@"ENNoteRefToNSString error"];
         return nil;
     }
     return [kKeyJson stringByAppendingString:[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
@@ -171,7 +171,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
         NSError* error;
         NSDictionary* jsonDict = [NSJSONSerialization JSONObjectWithData:[[string substringFromIndex:kKeyJson.length] dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
         if (error) {
-            // TODO log error
+            [UtilityClass sendError:error type:@"NSStringToENNoteRef error"];
             return nil;
         }
         
@@ -507,12 +507,12 @@ NSError * NewNSErrorFromException(NSException * exc) {
         }
     }
     
-    return _searchCache[text][kKeyData];
+    return _searchCache[text ? text : [NSNull null]][kKeyData];
 }
 
 - (void)cacheAddSearchResult:(NSArray *)findNotesResults forText:(NSString *)text
 {
-    _searchCache[text] = @{kKeyData: findNotesResults, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kSearchTimeout]};
+    _searchCache[text ? text : [NSNull null]] = @{kKeyData: findNotesResults, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kSearchTimeout]};
 }
 
 - (ENNote *)cacheNoteForRef:(ENNoteRef *)noteRef
