@@ -127,6 +127,7 @@ static AnalyticsHandler *sharedObject;
     NSString *userId = kCurrent.objectId;
     if(userId && ![userId isEqualToString:currentUserId]){
         gaUpdate = YES;
+        shouldUpdate = YES;
         [tracker set:@"&uid"
                value:userId];
     }
