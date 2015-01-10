@@ -122,6 +122,51 @@ static AnalyticsHandler *sharedObject;
     NSMutableDictionary *customIntercomAttributes = [@{} mutableCopy];
     
     
+    // User ID Checking
+    NSString *currentUserId = [currentValues objectForKey:@"userId"];
+    NSString *userId = kCurrent.objectId;
+    if(userId && ![userId isEqualToString:currentUserId]){
+        gaUpdate = YES;
+        [tracker set:@"&uid"
+               value:userId];
+    }
+    
+    
+    
+    // Email Checking
+    NSString *currentEmail = [currentValues objectForKey:@"email"];
+    NSString *email;
+    if(kCurrent.username && [UtilityClass validateEmail:kCurrent.username])
+        email = kCurrent.username;
+    if(kCurrent.email && [UtilityClass validateEmail:kCurrent.email])
+        email = kCurrent.email;
+    
+    
+    if(email && ![email isEqualToString:currentEmail]){
+        shouldUpdate = YES;
+        [currentValues setObject:email forKey:@"email"];
+        
+        [intercomAttributes setObject:email forKey:@"email"];
+    }
+
+    
+    
+    
+    // Signup date
+    NSString *currentSignupDate = [currentValues objectForKey:@"signup_date"];
+    if(kCurrent.createdAt){
+        NSDateFormatter *dateFormatter = [Global isoDateFormatter];
+        NSString *isoSignup = [dateFormatter stringFromDate:kCurrent.createdAt];
+        if(![isoSignup isEqualToString:currentSignupDate]){
+            shouldUpdate = YES;
+            
+            [currentValues setObject:isoSignup forKey:@"signup_date"];
+            
+            [intercomAttributes setObject:isoSignup forKey:@"remote_created_at"];
+        }
+    }
+    
+    
     
     // User level
     NSString *currentUserLevel = [currentValues objectForKey:@"user_level"];
@@ -146,41 +191,6 @@ static AnalyticsHandler *sharedObject;
     }
    
     
-    
-    
-    // Email Checking
-    NSString *currentEmail = [currentValues objectForKey:@"email"];
-    NSString *email;
-    if(kCurrent.username && [UtilityClass validateEmail:kCurrent.username])
-        email = kCurrent.username;
-    if(kCurrent.email && [UtilityClass validateEmail:kCurrent.email])
-        email = kCurrent.email;
-    
-    
-    if(email && ![email isEqualToString:currentEmail]){
-        shouldUpdate = YES;
-        [currentValues setObject:email forKey:@"email"];
-        
-        [intercomAttributes setObject:email forKey:@"email"];
-    }
-
-    
-    
-    
-    
-    // Signup date
-    NSString *currentSignupDate = [currentValues objectForKey:@"signup_date"];
-    if(kCurrent.createdAt){
-        NSDateFormatter *dateFormatter = [Global isoDateFormatter];
-        NSString *isoSignup = [dateFormatter stringFromDate:kCurrent.createdAt];
-        if(![isoSignup isEqualToString:currentSignupDate]){
-            shouldUpdate = YES;
-            
-            [currentValues setObject:isoSignup forKey:@"signup_date"];
-            
-            [intercomAttributes setObject:isoSignup forKey:@"remote_created_at"];
-        }
-    }
 
     
     
