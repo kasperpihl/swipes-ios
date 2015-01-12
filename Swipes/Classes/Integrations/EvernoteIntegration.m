@@ -9,9 +9,10 @@
 #import "MF_Base64Additions.h"
 #import "UtilityClass.h"
 #import "SettingsHandler.h"
-#import "EvernoteIntegration.h"
 #import "AnalyticsHandler.h"
+#import "EvernoteIntegration.h"
 #import "ENNoteRefInternal.h"
+#import "KPAttachment.h"
 
 // caches
 static NSString* const kKeyData = @"data";
@@ -127,6 +128,8 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 + (NSString *)ENNoteRefToNSString:(ENNoteRef *)noteRef
 {
+    if (nil == noteRef)
+        return nil;
     // always provide new JSON string
     NSMutableDictionary* jsonDict = [NSMutableDictionary dictionary];
     [jsonDict setObject:noteRef.guid forKey:kKeyJsonGuid];
@@ -165,8 +168,9 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 + (ENNoteRef *)NSStringToENNoteRef:(NSString *)string
 {
-    if (![EvernoteIntegration isNoteRefJsonString:string])
-        return [ENNoteRef noteRefFromData:[NSData dataWithBase64String:string]];
+    if (![EvernoteIntegration isNoteRefJsonString:string]) {
+        return [ENNoteRef noteRefFromData:[NSData dataWithBase64String:string]];;
+    }
     else if ([EvernoteIntegration isNoteRefJsonString:string]) {
         NSError* error;
         NSDictionary* jsonDict = [NSJSONSerialization JSONObjectWithData:[[string substringFromIndex:kKeyJson.length] dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
@@ -207,6 +211,18 @@ NSError * NewNSErrorFromException(NSException * exc) {
 + (BOOL)isNoteRefJsonString:(NSString *)string
 {
     return (string && [string hasPrefix:kKeyJson]);
+}
+
++ (BOOL)hasNoteWithRef:(ENNoteRef *)noteRef
+{
+    NSArray* allAttachments = [KPAttachment allIdentifiersForService:EVERNOTE_SERVICE sync:YES context:nil];
+    for (NSString* attachmentString in allAttachments) {
+        ENNoteRef* tempNote = [EvernoteIntegration NSStringToENNoteRef:attachmentString];
+        if (tempNote && (tempNote.type == noteRef.type) && [tempNote.guid isEqualToString:noteRef.guid]) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (instancetype)init

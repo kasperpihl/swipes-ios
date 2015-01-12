@@ -5,6 +5,9 @@
 //  Created by Kasper Pihl Tornøe on 15/06/14.
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
+/* known issues
+ - refresh UI on update ?
+ */
 
 #import <ENSDK/Advanced/ENSDKAdvanced.h>
 #import "Underscore.h"
@@ -382,8 +385,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
             if (kEnInt.autoFindFromTag) {
                 NSMutableArray *newNotes = [NSMutableArray array];
                 for (ENSessionFindNotesResult *findNoteResult in findNotesResults) {
-                    NSArray *existingTasks = [KPAttachment findAttachmentsForService:EVERNOTE_SERVICE identifier:[EvernoteIntegration ENNoteRefToNSString:findNoteResult.noteRef] context:nil];
-                    if(existingTasks.count == 0){
+                    if (![EvernoteIntegration hasNoteWithRef:findNoteResult.noteRef]) {
                         [newNotes addObject:findNoteResult];
                     }
                     [self.changedNotes addObject:findNoteResult];
