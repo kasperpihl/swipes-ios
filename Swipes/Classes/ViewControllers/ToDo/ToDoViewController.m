@@ -322,8 +322,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 - (void)growingTextViewDidEndEditing:(HPGrowingTextView *)growingTextView{
     growingTextView.text = [growingTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     if(growingTextView.text.length > 0){
-        self.model.title = growingTextView.text;
-        [KPToDo saveToSync];
+        if(self.model){
+            self.model.title = growingTextView.text;
+            [KPToDo saveToSync];
+        }
     }
     else{
         growingTextView.text = self.model.title;
