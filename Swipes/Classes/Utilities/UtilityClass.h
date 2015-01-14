@@ -16,6 +16,7 @@
 +(void)sendError:(NSError *)error type:(NSString *)type;
 +(void)sendError:(NSError *)error type:(NSString *)type attachment:(NSDictionary*)attachment;
 +(void)sendException:(NSException*)exception type:(NSString*)type;
++(void)sendException:(NSException*)exception type:(NSString*)type attachment:(NSDictionary*)attachment;
 + (BOOL) validateEmail: (NSString *) candidate;
 + (UIImage *)imageNamed:(NSString *)name withColor:(UIColor *)color;
 + (UIImage *)image:(UIImage *)image withColor:(UIColor *)color multiply:(BOOL)multiply;

@@ -88,6 +88,9 @@
     
 }
 +(void)sendException:(NSException*)exception type:(NSString*)type{
+    [self.class sendException:exception type:type attachment:nil];
+}
++(void)sendException:(NSException *)exception type:(NSString *)type attachment:(NSDictionary *)attachment{
     DLog(@"Sending exception: '%@' of type: '%@'", exception, type);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [self.class emptyErrorObjectForDevice];
@@ -96,6 +99,8 @@
         [errorObject setObject:@(1337) forKey:@"code"];
         if ([exception userInfo])
             [errorObject addObject:exception.userInfo forKey:@"userInfo"];
+        if (attachment)
+            [errorObject setObject:attachment forKey:@"attachment"];
         if (kCurrent)
             [errorObject setObject:kCurrent forKey:@"user"];
         if (type)
