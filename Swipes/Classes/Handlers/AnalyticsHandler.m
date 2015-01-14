@@ -257,7 +257,6 @@ static AnalyticsHandler *sharedObject;
         
         [customIntercomAttributes setObject:numberOfRecurring forKey:@"recurring_tasks"];
     }
-    NSLog(@"number of rec: %@",numberOfRecurring);
     
     
     // Number of Tags
@@ -273,7 +272,6 @@ static AnalyticsHandler *sharedObject;
         [gaCustomBuilder set:[numberOfTags stringValue] forKey:[GAIFields customDimensionForIndex:5]];
         [customIntercomAttributes setObject:numberOfTags forKey:@"number_of_tags"];
     }
-    NSLog(@"number of tags: %@",numberOfTags);
     
     
     
@@ -307,16 +305,16 @@ static AnalyticsHandler *sharedObject;
 - (void)intercomSessionStatusDidChange:(BOOL)isSessionOpen{
     self.intercomSession = isSessionOpen;
     if(isSessionOpen){
-        NSLog(@"session on");
+        DLog(@"session on");
     }
     else
-        NSLog(@"session off");
+        DLog(@"session off");
 }
 
 -(void)initializeIntercom{
     NSString *hmac = [USER_DEFAULTS objectForKey:@"intercom-hmac"];
     if(kCurrent.objectId && hmac){
-        NSLog(@"initialized intercom %@",hmac);
+        DLog(@"initialized intercom %@",hmac);
         
         [Intercom setApiKey:@"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1" forAppId:@"yobuz4ff" securityOptions:@{ @"hmac" : hmac, @"data": kCurrent.objectId }];
         [Intercom enableLogging];
