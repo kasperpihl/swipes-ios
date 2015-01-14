@@ -128,6 +128,7 @@ static AnalyticsHandler *sharedObject;
     if(userId && ![userId isEqualToString:currentUserId]){
         gaUpdate = YES;
         shouldUpdate = YES;
+        [self beginSession];
         [tracker set:@"&uid"
                value:userId];
     }
