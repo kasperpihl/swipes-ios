@@ -408,8 +408,12 @@
         return;
     self.isHandlingTrigger = YES;
     NSArray *toDosArray = [self selectedItems];
-    if(!toDosArray || toDosArray.count == 0)
-        toDosArray = @[[self.itemHandler itemForIndexPath:[self.tableView indexPathForCell:self.swipingCell]]];
+    if(!toDosArray || toDosArray.count == 0){
+        KPToDo *item = [self.itemHandler itemForIndexPath:[self.tableView indexPathForCell:self.swipingCell]];
+        if(!item)
+            return;
+        toDosArray = @[item];
+    }
     NSArray *movedItems;
     __block CellType targetCellType = [StyleHandler cellTypeForCell:cell.cellType state:state];
     switch (targetCellType) {
