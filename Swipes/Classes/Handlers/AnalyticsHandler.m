@@ -130,6 +130,7 @@ static AnalyticsHandler *sharedObject;
         gaUpdate = YES;
         shouldUpdate = YES;
         [self beginSession];
+        [currentValues setObject:userId forKey:@"userId"];
         [tracker set:@"&uid"
                value:userId];
     }
