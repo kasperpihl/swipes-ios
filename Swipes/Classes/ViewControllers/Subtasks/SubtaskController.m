@@ -239,9 +239,11 @@
     NSString *editedText = [subtask stringByTrimmingCharactersInSet:
                             [NSCharacterSet newlineCharacterSet]];
     if ( editedText.length > 0 ){
-        [cell.model setTitle:subtask];
-        [KPToDo saveToSync];
-        cell.title = subtask;
+        if(cell && cell.model){
+            [cell.model setTitle:subtask];
+            [KPToDo saveToSync];
+            cell.title = subtask;
+        }
     }
     else {
         [cell.titleField setText:cell.model.title];
