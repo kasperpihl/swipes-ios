@@ -189,21 +189,30 @@ extern NSString * const kEvernoteMoveTime;
 
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save from:(NSString *)from{
     if (tags && (0 < tags.count)){
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
-        NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
-        for(KPToDo *toDo in toDos){
-            [toDo updateTagSet:tagsSet withTags:tags remove:remove];
+        @try {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
+            NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
+            for(KPToDo *toDo in toDos){
+                [toDo updateTagSet:tagsSet withTags:tags remove:remove];
+            }
+            if(save)
+                [KPToDo saveToSync];
+            if(from){
+                NSDictionary *options = @{ @"Number of Tags": @(tags.count), @"Number of Tasks": @(toDos.count), @"From": from };
+                NSString *actionString = remove ? @"Unassigned" : @"Assigned";
+                NSString *eventString = remove ? @"Unassign Tags" : @"Assign Tags";
+                [ANALYTICS trackCategory:@"Tags" action:actionString label:from value:@(toDos.count)];
+                [ANALYTICS trackEvent:eventString options:options];
+                [ANALYTICS heartbeat];
+            }
         }
-        if(save)
-            [KPToDo saveToSync];
-        if(from){
-            NSDictionary *options = @{ @"Number of Tags": @(tags.count), @"Number of Tasks": @(toDos.count), @"From": from };
-            NSString *actionString = remove ? @"Unassigned" : @"Assigned";
-            NSString *eventString = remove ? @"Unassign Tags" : @"Assign Tags";
-            [ANALYTICS trackCategory:@"Tags" action:actionString label:from value:@(toDos.count)];
-            [ANALYTICS trackEvent:eventString options:options];
-            [ANALYTICS heartbeat];
+        @catch (NSException *exception) {
+            NSMutableDictionary *attachment = [NSMutableDictionary dictionary];
+            if(tags)
+                [attachment setObject:attachment forKey:@"tags"];
+            [UtilityClass sendException:exception type:@"Update Tags Exception" attachment:attachment];
         }
+        
     }
 }
 
