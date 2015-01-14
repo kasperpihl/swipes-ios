@@ -115,7 +115,7 @@ static AnalyticsHandler *sharedObject;
         currentValues = [NSMutableDictionary dictionary];
     }
     
-    BOOL shouldUpdate = NO;
+    __block BOOL shouldUpdate = NO;
     BOOL gaUpdate = NO;
     
     GAIDictionaryBuilder *gaCustomBuilder = [GAIDictionaryBuilder createEventWithCategory:@"Session" action:@"Updated Identity" label:nil value:nil];
@@ -278,11 +278,7 @@ static AnalyticsHandler *sharedObject;
     
     
     //
-    if( shouldUpdate ){
-        NSLog(@"did update");
-        [USER_DEFAULTS setObject:[currentValues copy] forKey:@"identityValues"];
-        [USER_DEFAULTS synchronize];
-    }
+    
 
     if(gaUpdate){
         [tracker send:[gaCustomBuilder build]];
@@ -294,8 +290,15 @@ static AnalyticsHandler *sharedObject;
     if(self.initializedIntercom){
         if(self.intercomSession && kCurrent && shouldUpdate){
             [Intercom updateUserWithAttributes:intercomAttributes completion:^(NSError *error) {
-                
+                if (!error) {
+                    if( shouldUpdate ){
+                        DLog(@"did update");
+                        [USER_DEFAULTS setObject:[currentValues copy] forKey:@"identityValues"];
+                        [USER_DEFAULTS synchronize];
+                    }
+                }
             }];
+            
         }
     }
     
