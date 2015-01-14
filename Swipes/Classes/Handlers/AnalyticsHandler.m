@@ -102,6 +102,7 @@ static AnalyticsHandler *sharedObject;
     self.isBeginningIntercomSession = YES;
     [Intercom beginSessionForUserWithUserId:kCurrent.objectId completion:^(NSError *error) {
         self.isBeginningIntercomSession = NO;
+        [self checkForUpdatesOnIdentity];
     }];
 }
 
