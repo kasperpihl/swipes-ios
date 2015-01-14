@@ -165,9 +165,12 @@ NSString * const kMagicalRecordPSCMismatchCouldNotRecreateStore = @"kMagicalReco
         }
         else
         {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
             [self lock];
             [self MR_addSqliteStoreNamed:storeIdentifier withOptions:options];
             [self unlock];
+#pragma clang diagnostic pop
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{

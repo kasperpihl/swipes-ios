@@ -44,7 +44,7 @@
     return self;
 }
 -(void)setNumber:(NSInteger)number text:(NSString*)text{
-    self.badgeView.text = [NSString stringWithFormat:@"%i",number];
+    self.badgeView.text = [NSString stringWithFormat:@"%li", (long)number];
     self.actionLabel.text = text;
 }
 -(void)setDone:(BOOL)done{

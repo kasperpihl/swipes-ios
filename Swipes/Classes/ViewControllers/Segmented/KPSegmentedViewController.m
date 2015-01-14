@@ -766,7 +766,7 @@
     };
     voidBlock showBlock = ^{
         if(!isComplete){
-            self.badgeView.text = [NSString stringWithFormat:@"%i",number];
+            self.badgeView.text = [NSString stringWithFormat:@"%li",(long)number];
         }
         else{
             self.badgeView.text = @"done";

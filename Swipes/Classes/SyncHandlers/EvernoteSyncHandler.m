@@ -28,6 +28,8 @@
 
 #import "EvernoteSyncHandler.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
 #define kMaxNotes 100
 
@@ -384,7 +386,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
         if (findNotesResults) {
 //            DLog(@"%lu",(long)list.updateCount);
             
-#warning Should we update count somehow?
+// Should we update count somehow?
 //            [self updateEvernoteCount:[list.updateCount integerValue]];
             if (kEnInt.autoFindFromTag) {
                 NSMutableArray *newNotes = [NSMutableArray array];
@@ -709,3 +711,5 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
 }
 
 @end
+
+#pragma clang diagnostic pop
