@@ -286,10 +286,14 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
     
     // remove evernote subtasks not found in the evernote from our task
     subtasks = [subtasksLeftToBeFound copy];
-    if ( subtasks && subtasks.count > 0 ){
-        updated = YES;
-        DLog(@"delete: %@",subtasks);
-        [KPToDo deleteToDos:subtasks save:NO force:YES];
+    if (subtasks && subtasks.count > 0) {
+        for (KPToDo* subtask in subtasks) {
+            if (nil != subtask.origin && [subtask.origin isEqualToString:EVERNOTE_SERVICE]) {
+                updated = YES;
+                DLog(@"delete: %@",subtask);
+                [KPToDo deleteToDos:@[subtask] save:YES force:YES];
+            }
+        }
     }
     
     // add newly added tasks to evernote
@@ -303,7 +307,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
         }
     }
 
-    if( updated && parentToDo.objectId) {
+    if (updated && parentToDo.objectId) {
         [self._updatedTasks addObject:parentToDo.objectId];
     }
     
@@ -611,11 +615,10 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
         syncedAnything = YES;
 
         [EvernoteToDoProcessor processorWithNoteRefString:noteRefString block:^(EvernoteToDoProcessor *processor, NSError *error) {
-            
-            //NSLog(@"guid:%@",guid);
-            if( processor ){
+
+            if (processor) {
                 
-                //NSLog(@"processing:%@",processor.toDoItems);
+                //DLog(@"processing:%@",processor.toDoItems);
                 
                 NSArray *evernoteToDos = [[processor.toDoItems reverseObjectEnumerator] allObjects];
                 [self findAndHandleMatchesForToDo:todoWithEvernote withEvernoteToDos:evernoteToDos inNoteProcessor:processor];
