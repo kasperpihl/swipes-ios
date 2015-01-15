@@ -57,7 +57,6 @@ static NSSet* g_startEndElements;
     NSMutableString* _tempToDoText;
     NSMutableArray* _todos;
     BOOL _checked;
-    NSUInteger _untitledCount;
 }
 
 + (void)processorWithNoteRefString:(NSString *)noteRefString block:(EvernoteProcessorBlock)block
@@ -98,7 +97,6 @@ static NSSet* g_startEndElements;
 -(void)parseAndLoadTodos
 {
     // parse
-    _untitledCount = 1;
     _todos = [NSMutableArray array];
     NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[_note.content.enml dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]];
     parser.delegate = self;
@@ -109,7 +107,13 @@ static NSSet* g_startEndElements;
 
 - (NSArray *)toDoItems
 {
-    return _todos;
+    NSMutableArray* validTodos = [_todos mutableCopy];
+    for (EvernoteToDo* todo in _todos) {
+        if (nil == todo.title) {
+            [validTodos removeObject:todo];
+        }
+    }
+    return validTodos;
 }
 
 - (void)finishCurrentToDo
@@ -118,7 +122,7 @@ static NSSet* g_startEndElements;
         // we have a TODO
         NSString* todoText = [_tempToDoText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if (0 == todoText.length) {
-            todoText = [NSString stringWithFormat:@"Untitled %lu", (unsigned long)_untitledCount++];
+            todoText = nil;
         }
         if(255 < todoText.length){
             todoText = [todoText substringToIndex:255];

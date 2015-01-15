@@ -15,6 +15,7 @@
 @property (nonatomic, assign, readonly) NSInteger position;
 
 @end
+
 @class EvernoteToDoProcessor;
 typedef void (^EvernoteProcessorBlock)(EvernoteToDoProcessor *processor, NSError *error);
 
@@ -22,9 +23,9 @@ typedef void (^EvernoteProcessorBlock)(EvernoteToDoProcessor *processor, NSError
 
 + (void)processorWithNoteRefString:(NSString *)noteRefString block:(EvernoteProcessorBlock)block;
 
-@property (nonatomic) BOOL needUpdate;
+@property (nonatomic, assign) BOOL needUpdate;
 @property (nonatomic, strong) ENNote* note;
-@property (nonatomic) NSString *noteRefString;
+@property (nonatomic, strong) NSString *noteRefString;
 
 - (NSArray *)toDoItems;
 - (BOOL)updateToDo:(EvernoteToDo *)todo checked:(BOOL)checked;
