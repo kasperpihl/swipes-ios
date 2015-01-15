@@ -5,6 +5,7 @@
 //
 
 #import "UtilityClass.h"
+#import "KPStringScanner.h"
 #import "EvernoteIntegration.h"
 #import "EvernoteToDoProcessor.h"
 
@@ -140,6 +141,7 @@ static NSSet* g_startEndElements;
     if( !self.updatedContent )
         return block ? block(NO, nil) : nil;
     _note.content = [[ENNoteContent alloc] initWithENML:self.updatedContent];
+//    _note.content = [[ENNoteContent alloc] initWithENML:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\"><en-note><en-todo></en-todo><br/> </en-note>"];
     [kEnInt updateNote:_note noteRef:[EvernoteIntegration NSStringToENNoteRef:self.noteRefString] block:^(ENNoteRef *noteRef, NSError *error) {
         if (error) {
             NSDictionary *attachment = @{@"org content":_note.content.enml, @"new content": self.updatedContent};
@@ -164,12 +166,11 @@ static NSSet* g_startEndElements;
         if (!self.updatedContent)
             self.updatedContent = _note.content.enml;
         
-        NSScanner* scanner = [NSScanner scannerWithString:self.updatedContent];
+        KPStringScanner* scanner = [KPStringScanner scannerWithString:self.updatedContent];
         for (NSInteger i = 0; i <= updatedToDo.position; i++) {
-            if (![scanner scanUpToString:@"<en-todo" intoString:nil]) {
+            if (![scanner scanToAfterString:@"<en-todo"]) {
                 return NO;
             }
-            scanner.scanLocation += 8;
 //            DLog(@"pos: %d", scanner.scanLocation);
         }
         
@@ -204,17 +205,16 @@ static NSSet* g_startEndElements;
         if (!self.updatedContent)
             self.updatedContent = _note.content.enml;
        
-        NSScanner* scanner = [NSScanner scannerWithString:self.updatedContent];
+        KPStringScanner* scanner = [KPStringScanner scannerWithString:self.updatedContent];
         for (NSInteger i = 0; i <= updatedToDo.position; i++) {
-            if (![scanner scanUpToString:@"<en-todo" intoString:nil]) {
+            if (![scanner scanToAfterString:@"<en-todo"]) {
                 return NO;
             }
-            scanner.scanLocation += 8;
 //            DLog(@"pos: %d", scanner.scanLocation);
         }
         
         NSString* escapedOldTitle = [self xmlEscape:updatedToDo.title];
-        if (![scanner scanUpToString:escapedOldTitle intoString:nil]) {
+        if (![scanner scanUpToString:escapedOldTitle]) {
             return NO;
         }
         
@@ -264,23 +264,22 @@ static NSSet* g_startEndElements;
 {
     if (_todos.count) {
         EvernoteToDo* todo = _todos[_todos.count - 1];
-        NSScanner* scanner = [NSScanner scannerWithString:self.updatedContent];
+        KPStringScanner* scanner = [KPStringScanner scannerWithString:self.updatedContent];
         for (NSInteger i = 0; i <= todo.position; i++) {
-            if (![scanner scanUpToString:@"<en-todo" intoString:nil]) {
+            if (![scanner scanToAfterString:@"<en-todo" ]) {
                 return [self newToDoPosAtTheBeginning];
             }
-            scanner.scanLocation += 8;
         }
         
         NSString* escapedTitle = [self xmlEscape:todo.title];
         
-        if (![scanner scanUpToString:escapedTitle intoString:nil]) {
+        if (![scanner scanToAfterString:escapedTitle]) {
             return [self newToDoPosAtTheBeginning];
         }
         
         NSUInteger tempResult = scanner.scanLocation + escapedTitle.length;
-        if ([scanner scanUpToString:@"</div>" intoString:nil]) {
-            return scanner.scanLocation + 6; // 6 is the length of @"</div>"
+        if ([scanner scanToAfterString:@"</div>"]) {
+            return scanner.scanLocation;
         }
         
         return tempResult;
