@@ -145,7 +145,7 @@ static NSSet* g_startEndElements;
     if( !self.updatedContent )
         return block ? block(NO, nil) : nil;
     _note.content = [[ENNoteContent alloc] initWithENML:self.updatedContent];
-//    _note.content = [[ENNoteContent alloc] initWithENML:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\"><en-note><en-todo></en-todo><br/> </en-note>"];
+//    _note.content = [[ENNoteContent alloc] initWithENML:@"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\n<en-note><en-todo checked=\"true\"/>Book meeting with mw, Dr, sr, km on blockchains and lab product engagement etc <br clear=\"none\"/><en-todo checked=\"true\"/>Naveed Dm deck <br clear=\"none\"/><en-todo checked=\"true\"/>Expenses: London x 2, ny x 1, <br clear=\"none\"/><en-todo checked=\"true\"/>Action plan for opportunity 01 <br clear=\"none\"/><en-todo checked=\"true\"/>Action plan for Dm practice <br clear=\"none\"/><en-todo checked=\"true\"/>DM LinkedIn blog post : why the blockchain changes things <br clear=\"none\"/><en-todo checked=\"true\"/>DM research seigniorage <br clear=\"none\"/><en-todo checked=\"false\"/>121 w Debbie  Feedback Now you know me what opportunities do you see for growth <br/>\n\n</en-note>\n"];
     [kEnInt updateNote:_note noteRef:[EvernoteIntegration NSStringToENNoteRef:self.noteRefString] block:^(ENNoteRef *noteRef, NSError *error) {
         if (error) {
             NSDictionary *attachment = @{@"org content":_note.content.enml, @"new content": self.updatedContent};
@@ -281,12 +281,8 @@ static NSSet* g_startEndElements;
             return [self newToDoPosAtTheBeginning];
         }
         
-        NSUInteger tempResult = scanner.scanLocation + escapedTitle.length;
-        if ([scanner scanToAfterString:@"</div>"]) {
-            return scanner.scanLocation;
-        }
-        
-        return tempResult;
+        [scanner scanToAfterString:@"</div>"];
+        return scanner.scanLocation;
     }
     else {
         return [self newToDoPosAtTheBeginning];
