@@ -484,6 +484,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     }
     
     self.requestCounter++;
+    
     [[ENSession sharedSession] uploadNote:note policy:ENSessionUploadPolicyReplace toNotebook:nil orReplaceNote:noteRef progress:nil completion:^(ENNoteRef *newNoteRef, NSError *error) {
         if (nil == error) {
             [self cacheAddNote:note forNoteRef:newNoteRef];

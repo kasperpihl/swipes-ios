@@ -348,6 +348,10 @@
 		DACD546218A1ACFC00C378DF /* page_white_zip.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544018A1ACFC00C378DF /* page_white_zip.png */; };
 		DACD546318A1ACFC00C378DF /* powerpoint.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544118A1ACFC00C378DF /* powerpoint.png */; };
 		DACD546418A1ACFC00C378DF /* word.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544218A1ACFC00C378DF /* word.png */; };
+		DAD78B761A67E958009992C3 /* KPStringScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD78B741A67E958009992C3 /* KPStringScanner.h */; };
+		DAD78B771A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
+		DAD78B781A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
+		DAD78B791A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
 		DAE2B14A19C8FDF200A9074E /* Datamodel.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		DAE2B15019CB7A4D00A9074E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE9D00219AF3B2900246B64 /* NotificationCenter.framework */; };
 		DAE2B15619CB7A4D00A9074E /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE2B15519CB7A4D00A9074E /* TodayViewController.m */; };
@@ -941,6 +945,8 @@
 		DACD544018A1ACFC00C378DF /* page_white_zip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_zip.png; sourceTree = "<group>"; };
 		DACD544118A1ACFC00C378DF /* powerpoint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = powerpoint.png; sourceTree = "<group>"; };
 		DACD544218A1ACFC00C378DF /* word.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = word.png; sourceTree = "<group>"; };
+		DAD78B741A67E958009992C3 /* KPStringScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPStringScanner.h; path = Swipes/Classes/Utilities/KPStringScanner.h; sourceTree = SOURCE_ROOT; };
+		DAD78B751A67E958009992C3 /* KPStringScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPStringScanner.m; path = Swipes/Classes/Utilities/KPStringScanner.m; sourceTree = SOURCE_ROOT; };
 		DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SwipesToday.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE2B15319CB7A4D00A9074E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DAE2B15419CB7A4D00A9074E /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
@@ -2077,6 +2083,8 @@
 			children = (
 				A781285B17294C56002226C8 /* UtilityClass.h */,
 				A781285C17294C56002226C8 /* UtilityClass.m */,
+				DAD78B741A67E958009992C3 /* KPStringScanner.h */,
+				DAD78B751A67E958009992C3 /* KPStringScanner.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -2266,6 +2274,7 @@
 				DAFBF4231A65D92F003DD799 /* NSManagedObject+MagicalAggregation.h in Headers */,
 				DA23231519B39C4600D996EB /* KPParseObject.h in Headers */,
 				DAFBF4731A65D92F003DD799 /* MagicalRecordDeprecated.h in Headers */,
+				DAD78B761A67E958009992C3 /* KPStringScanner.h in Headers */,
 				DA69248719B87B160082D1E4 /* UserHandler.h in Headers */,
 				DA6924AD19BDCF330082D1E4 /* EvernoteSyncHandler.h in Headers */,
 				DAFBF4371A65D92F003DD799 /* NSManagedObjectContext+MagicalChainSave.h in Headers */,
@@ -2704,6 +2713,7 @@
 				DAFBF4401A65D92F003DD799 /* NSManagedObjectContext+MagicalRecord.m in Sources */,
 				A75279E31A4D5D6500838C1D /* OnboardingTableViewCell.m in Sources */,
 				DAFBF4341A65D92F003DD799 /* NSManagedObject+MagicalRequests.m in Sources */,
+				DAD78B771A67E958009992C3 /* KPStringScanner.m in Sources */,
 				A703B1AF1838EBF20047DCC9 /* KPAddView.m in Sources */,
 				DAFBF40C1A65D92F003DD799 /* NSAttributeDescription+MagicalDataImport.m in Sources */,
 				A763C93D19208E58005041D7 /* AttachmentPopup.m in Sources */,
@@ -2832,6 +2842,7 @@
 			files = (
 				DAE2B17519CB7D7200A9074E /* IntegrationHandler.m in Sources */,
 				DAFBF4511A65D92F003DD799 /* NSPersistentStore+MagicalRecord.m in Sources */,
+				DAD78B781A67E958009992C3 /* KPStringScanner.m in Sources */,
 				DAFBF4211A65D92F003DD799 /* NSString+MagicalDataImport.m in Sources */,
 				A7A3C25C19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m in Sources */,
 				DAE2B17819CB7D7200A9074E /* UserHandler.m in Sources */,
@@ -2903,6 +2914,7 @@
 				DA69248819B87B190082D1E4 /* UserHandler.m in Sources */,
 				DAFBF4161A65D92F003DD799 /* NSNumber+MagicalDataImport.m in Sources */,
 				DAFBF43E1A65D92F003DD799 /* NSManagedObjectContext+MagicalObserving.m in Sources */,
+				DAD78B791A67E958009992C3 /* KPStringScanner.m in Sources */,
 				DAFBF4361A65D92F003DD799 /* NSManagedObject+MagicalRequests.m in Sources */,
 				A7A3C25D19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m in Sources */,
 				DAFBF45E1A65D92F003DD799 /* MagicalRecord+ErrorHandling.m in Sources */,
