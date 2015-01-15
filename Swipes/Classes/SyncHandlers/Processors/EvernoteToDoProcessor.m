@@ -101,7 +101,8 @@ static NSSet* g_startEndElements;
     NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[_note.content.enml dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]];
     parser.delegate = self;
     if (![parser parse]) {
-        [UtilityClass sendError:parser.parserError type:@"Evernote note parse error"];
+        NSError* newError = [NSError errorWithDomain:parser.parserError.domain code:605 userInfo:parser.parserError.userInfo]; // change error code to something known
+        [UtilityClass sendError:newError type:@"Evernote note parse error" attachment:@{@"content": _note.content.enml}];
     }
 }
 
@@ -127,7 +128,6 @@ static NSSet* g_startEndElements;
         if(255 < todoText.length){
             todoText = [todoText substringToIndex:255];
         }
-//        NSLog(@"Found TODO: %@", todoText);
         [_todos addObject:[[EvernoteToDo alloc] initWithTitle:todoText checked:_checked position:_todos.count]];
         _tempToDoText = nil;
     }
@@ -145,11 +145,12 @@ static NSSet* g_startEndElements;
     if( !self.updatedContent )
         return block ? block(NO, nil) : nil;
     _note.content = [[ENNoteContent alloc] initWithENML:self.updatedContent];
-//    _note.content = [[ENNoteContent alloc] initWithENML:@"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\n<en-note><en-todo checked=\"true\"/>Book meeting with mw, Dr, sr, km on blockchains and lab product engagement etc <br clear=\"none\"/><en-todo checked=\"true\"/>Naveed Dm deck <br clear=\"none\"/><en-todo checked=\"true\"/>Expenses: London x 2, ny x 1, <br clear=\"none\"/><en-todo checked=\"true\"/>Action plan for opportunity 01 <br clear=\"none\"/><en-todo checked=\"true\"/>Action plan for Dm practice <br clear=\"none\"/><en-todo checked=\"true\"/>DM LinkedIn blog post : why the blockchain changes things <br clear=\"none\"/><en-todo checked=\"true\"/>DM research seigniorage <br clear=\"none\"/><en-todo checked=\"false\"/>121 w Debbie  Feedback Now you know me what opportunities do you see for growth <br/>\n\n</en-note>\n"];
+//    _note.content = [[ENNoteContent alloc] initWithENML:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\n<en-note><div><em><span style=\"font-family: helvetica, arial, sans-serif; font-size: 18px;\">CLIENT FOLDER</span></em></div><div><br clear=\"none\"/></div><div><strong>TASKS</strong></div><div><strong><strong><en-todo></en-todo></strong></strong>Scott to push hard for analyst recognition in Amundi's 2014 vote (Joe, Peach?)<div><br clear=\"none\"/></div><div><strong>KEY HOLDINGS</strong><br clear=\"none\"/></div><div><br clear=\"none\"/></div><div><div><strong>RELATIONSHIP AND VOTE HISTORY</strong></div><div>Nij was covering Amundi previously and struggled to get air-time with Timothy. I know Timothy from before, so it was relatively easy to get his attention once Carolyn made the introduction. Since then (April/May?) have had fairly regular contact.<br clear=\"none\"/></div><div><br clear=\"none\"/></div><div>For the last few votes, we have been &quot;Not Rated&quot; (which means outside of Top 12). The 2014 vote should be out in December 2014 or January 2015</div></div><div><br clear=\"none\"/></div><div><strong>OCTOBER 2014</strong></div><ul><li>Tim request on property sector<br clear=\"none\"/></li><li>Tim call with Joe Phanich on telcos</li><li>Scott dropped of new research/sales materials package</li></ul><div><strong>NOVEMBER 2014</strong></div><ul><li>Tim taking VGI meeting<br clear=\"none\"/></li><li>Carolyn made comment to me that &quot;Tim has already said he's seen a big pick-up in service...so that should be reflected in a higher ranking.&quot;</li></ul></div></en-note>"];
     [kEnInt updateNote:_note noteRef:[EvernoteIntegration NSStringToENNoteRef:self.noteRefString] block:^(ENNoteRef *noteRef, NSError *error) {
         if (error) {
             NSDictionary *attachment = @{@"org content":_note.content.enml, @"new content": self.updatedContent};
-            [UtilityClass sendError:error type:@"Evernote Save Note Error" attachment:attachment];
+            NSError* newError = [NSError errorWithDomain:error.domain code:604 userInfo:error.userInfo]; // change error code to something known
+            [UtilityClass sendError:newError type:@"Evernote Save Note Error" attachment:attachment];
             if (block)
                 block(NO, error);
         }
@@ -165,8 +166,6 @@ static NSSet* g_startEndElements;
 - (BOOL)updateToDo:(EvernoteToDo *)updatedToDo checked:(BOOL)checked
 {
     if ((nil != updatedToDo) && (updatedToDo.checked != checked)) {
-        //NSLog(@"now we can update our TODO: %@", updatedToDo);
-        
         if (!self.updatedContent)
             self.updatedContent = _note.content.enml;
         
@@ -175,7 +174,6 @@ static NSSet* g_startEndElements;
             if (![scanner scanToAfterString:@"<en-todo"]) {
                 return NO;
             }
-//            DLog(@"pos: %d", scanner.scanLocation);
         }
         
         NSUInteger startLocation = scanner.scanLocation;
@@ -204,8 +202,6 @@ static NSSet* g_startEndElements;
 - (BOOL)updateToDo:(EvernoteToDo *)updatedToDo title:(NSString *)title
 {
     if ((nil != updatedToDo) && (![updatedToDo.title isEqualToString:title])) {
-        //NSLog(@"now we can update our TODO: %@", updatedToDo);
-        
         if (!self.updatedContent)
             self.updatedContent = _note.content.enml;
        
@@ -214,7 +210,6 @@ static NSSet* g_startEndElements;
             if (![scanner scanToAfterString:@"<en-todo"]) {
                 return NO;
             }
-//            DLog(@"pos: %d", scanner.scanLocation);
         }
         
         NSString* escapedOldTitle = [self xmlEscape:updatedToDo.title];
@@ -224,7 +219,7 @@ static NSSet* g_startEndElements;
         
         NSUInteger startLocation = scanner.scanLocation;
         if (startLocation + escapedOldTitle.length > self.updatedContent.length) {
-            NSLog(@"Cannot find title: '%@' to replace it with: '%@'", updatedToDo.title, title);
+            [UtilityClass sendError:[NSError errorWithDomain:@"Evernote error: updateToDo cannot find title" code:606 userInfo:nil] type:@"Evernote update ToDo" attachment:@{@"title": updatedToDo.title, @"replacement title": title, @"updatedContent": self.updatedContent}];
             return NO;
         }
         
@@ -247,9 +242,9 @@ static NSSet* g_startEndElements;
     
     [str replaceOccurrencesOfString:@"&"  withString:@"&amp;"  options:NSLiteralSearch range:NSMakeRange(0, [str length])];
     [str replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
-    [str replaceOccurrencesOfString:@"'"  withString:@"&#x27;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
     [str replaceOccurrencesOfString:@">"  withString:@"&gt;"   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
     [str replaceOccurrencesOfString:@"<"  withString:@"&lt;"   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+    //[str replaceOccurrencesOfString:@"'"  withString:@"&#x27;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
     
     return str;
 }
@@ -264,10 +259,24 @@ static NSSet* g_startEndElements;
     return div.location;
 }
 
+- (EvernoteToDo *)lastValidTodo
+{
+    for (NSInteger i = _todos.count - 1; i >= 0; i--) {
+        EvernoteToDo* todo = _todos[i];
+        if (nil != todo.title) {
+            return todo;
+        }
+    }
+    return nil;
+}
+
 - (NSUInteger)newToDoPos
 {
     if (_todos.count) {
-        EvernoteToDo* todo = _todos[_todos.count - 1];
+        EvernoteToDo* todo = [self lastValidTodo];
+        if (nil == todo) {
+            return [self newToDoPosAtTheBeginning];
+        }
         KPStringScanner* scanner = [KPStringScanner scannerWithString:self.updatedContent];
         for (NSInteger i = 0; i <= todo.position; i++) {
             if (![scanner scanToAfterString:@"<en-todo" ]) {
@@ -298,7 +307,7 @@ static NSSet* g_startEndElements;
     
     if (startPos >= self.updatedContent.length) {
         //NSLog(@"Evernote error: found position is uncorrect");
-        [UtilityClass sendError:[NSError errorWithDomain:@"Evernote error: addToDoWithTitle found position is uncorrect" code:603 userInfo:nil] type:@"Evernote add todo with title" attachment:@{@"start pos": @(startPos), @"updatedContent": self.updatedContent, @"content_length": @(self.updatedContent.length)}];
+        [UtilityClass sendError:[NSError errorWithDomain:@"Evernote error: addToDoWithTitle found position is not correct" code:603 userInfo:nil] type:@"Evernote add todo with title" attachment:@{@"start pos": @(startPos), @"updatedContent": self.updatedContent, @"content_length": @(self.updatedContent.length)}];
         return NO;
     }
     
