@@ -129,7 +129,8 @@ static AnalyticsHandler *sharedObject;
     if(userId && ![userId isEqualToString:currentUserId]){
         gaUpdate = YES;
         shouldUpdate = YES;
-        [self beginSession];
+        if(!self.intercomSession)
+            [self beginSession];
         [currentValues setObject:userId forKey:@"userId"];
         [tracker set:@"&uid"
                value:userId];
@@ -294,6 +295,9 @@ static AnalyticsHandler *sharedObject;
                         [USER_DEFAULTS setObject:[currentValues copy] forKey:@"identityValues"];
                         [USER_DEFAULTS synchronize];
                     }
+                }
+                else{
+                    NSLog(@"error %@",error);
                 }
             }];
             
