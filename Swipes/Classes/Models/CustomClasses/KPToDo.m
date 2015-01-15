@@ -68,7 +68,7 @@ extern NSString * const kEvernoteMoveTime;
     return newToDo;
 }
 
--(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save from:(NSString *)from
+-(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save from:(NSString *)from analytics:(BOOL)analytics
 {
     KPToDo *subTask = [KPToDo newObjectInContext:[self managedObjectContext]];
     subTask.title = title;
@@ -78,7 +78,7 @@ extern NSString * const kEvernoteMoveTime;
     if( save )
         [KPToDo saveToSync];
     
-    if( from ){
+    if( from && analytics){
         [ANALYTICS trackEvent:@"Added Action Step" options:@{@"Length":@(title.length), @"Total Action Steps on Task": @(self.subtasks.count), @"From": from}];
         [ANALYTICS trackCategory:@"Action Steps" action:@"Added" label:from value:@(title.length)];
     }

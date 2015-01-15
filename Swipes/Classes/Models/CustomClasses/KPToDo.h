@@ -18,7 +18,8 @@
 /* Start watching for Location */
 +(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save;
 
--(KPToDo*)addSubtask:(NSString*)title save:(BOOL)save from:(NSString*)from;
+-(KPToDo*)addSubtask:(NSString*)title save:(BOOL)save from:(NSString*)from analytics:(BOOL)analytics
+;
 
 -(void)switchPriority;
 

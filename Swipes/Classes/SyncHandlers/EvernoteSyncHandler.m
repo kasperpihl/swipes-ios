@@ -263,7 +263,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
         
         if ( !matchingSubtask ){
             //NSLog(@"creating subtask from Evernote");
-            matchingSubtask = [parentToDo addSubtask:evernoteToDo.title save:YES from:@"Evernote"];
+            matchingSubtask = [parentToDo addSubtask:evernoteToDo.title save:YES from:@"Evernote" analytics:NO];
             matchingSubtask.origin = EVERNOTE_SERVICE;
             matchingSubtask.originIdentifier = evernoteToDo.title;
             updated = YES;

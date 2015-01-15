@@ -226,7 +226,7 @@
 
 #pragma mark SubtaskCellDelegate
 - (void)addedSubtask: ( NSString* )subtask{
-    [self.model addSubtask:subtask save:YES from:@"Input"];
+    [self.model addSubtask:subtask save:YES from:@"Input" analytics:YES];
     [self fullReload];
     [kAudio playSoundWithName:@"Succesful action.m4a"];
     //[self loadData];
