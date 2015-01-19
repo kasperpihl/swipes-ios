@@ -313,6 +313,18 @@
 		DA6B61BD19DAF27B00089877 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
 		DA6B61BE19DAF3B600089877 /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */; };
 		DA6B61C319E321FE00089877 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA6B61C119E321FE00089877 /* Localizable.strings */; };
+		DAB164E71A6D294F008D69B2 /* GmailSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */; };
+		DAB164E81A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
+		DAB164E91A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
+		DAB164EA1A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
+		DAB164EF1A6D29A3008D69B2 /* GmailIntegration.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */; };
+		DAB164F01A6D29A3008D69B2 /* GmailIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164EE1A6D29A3008D69B2 /* GmailIntegration.m */; };
+		DAB164F11A6D29A3008D69B2 /* GmailIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164EE1A6D29A3008D69B2 /* GmailIntegration.m */; };
+		DAB164F21A6D29A3008D69B2 /* GmailIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164EE1A6D29A3008D69B2 /* GmailIntegration.m */; };
+		DAB164F51A6D29EF008D69B2 /* GmailProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB164F31A6D29EF008D69B2 /* GmailProcessor.h */; };
+		DAB164F61A6D29EF008D69B2 /* GmailProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164F41A6D29EF008D69B2 /* GmailProcessor.m */; };
+		DAB164F71A6D29EF008D69B2 /* GmailProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164F41A6D29EF008D69B2 /* GmailProcessor.m */; };
+		DAB164F81A6D29EF008D69B2 /* GmailProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164F41A6D29EF008D69B2 /* GmailProcessor.m */; };
 		DACD541918A19FB000C378DF /* DropboxView.m in Sources */ = {isa = PBXBuildFile; fileRef = DACD541818A19FB000C378DF /* DropboxView.m */; };
 		DACD544318A1ACFC00C378DF /* excel.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542118A1ACFC00C378DF /* excel.png */; };
 		DACD544418A1ACFC00C378DF /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542218A1ACFC00C378DF /* folder.png */; };
@@ -909,6 +921,13 @@
 		DA6B61C219E321FE00089877 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Swipes/en.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		DA6B61C419E322FB00089877 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA6B61C519E3298800089877 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GTL.xcodeproj; path = "../Swipes/Ressources/Libs/google-api-objectivec-client/Source/GTL.xcodeproj"; sourceTree = "<group>"; };
+		DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailSyncHandler.h; path = SyncHandlers/GmailSyncHandler.h; sourceTree = "<group>"; };
+		DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailSyncHandler.m; path = SyncHandlers/GmailSyncHandler.m; sourceTree = "<group>"; };
+		DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailIntegration.h; path = Integrations/GmailIntegration.h; sourceTree = "<group>"; };
+		DAB164EE1A6D29A3008D69B2 /* GmailIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailIntegration.m; path = Integrations/GmailIntegration.m; sourceTree = "<group>"; };
+		DAB164F31A6D29EF008D69B2 /* GmailProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GmailProcessor.h; sourceTree = "<group>"; };
+		DAB164F41A6D29EF008D69B2 /* GmailProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GmailProcessor.m; sourceTree = "<group>"; };
 		DACD541718A19FB000C378DF /* DropboxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropboxView.h; path = Components/DropboxView.h; sourceTree = "<group>"; };
 		DACD541818A19FB000C378DF /* DropboxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropboxView.m; path = Components/DropboxView.m; sourceTree = "<group>"; };
 		DACD542118A1ACFC00C378DF /* excel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = excel.png; sourceTree = "<group>"; };
@@ -1276,6 +1295,8 @@
 		A70D12D71966D09A00A95C50 /* Integrations */ = {
 			isa = PBXGroup;
 			children = (
+				DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */,
+				DAB164EE1A6D29A3008D69B2 /* GmailIntegration.m */,
 				DA3E54411A15498500C2116F /* ENNoteRefInternal.h */,
 				A70D12D81966D11500A95C50 /* EvernoteIntegration.h */,
 				A70D12D91966D11500A95C50 /* EvernoteIntegration.m */,
@@ -1291,6 +1312,8 @@
 			children = (
 				A71E9FC01951CD6F00FC9B0B /* EvernoteToDoProcessor.h */,
 				A71E9FC11951CD6F00FC9B0B /* EvernoteToDoProcessor.m */,
+				DAB164F31A6D29EF008D69B2 /* GmailProcessor.h */,
+				DAB164F41A6D29EF008D69B2 /* GmailProcessor.m */,
 			);
 			name = Processors;
 			path = SyncHandlers/Processors;
@@ -1824,6 +1847,8 @@
 				A7AA7967194E067C003DAB3B /* EvernoteSyncHandler.m */,
 				A7AA7969194E06AA003DAB3B /* SyncQueue.h */,
 				A7AA796A194E06AA003DAB3B /* SyncQueue.m */,
+				DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */,
+				DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */,
 			);
 			name = SyncClasses;
 			path = ../Swipes/Classes;
@@ -2003,6 +2028,7 @@
 		DA69248119B87A3F0082D1E4 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */,
 				A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */,
 				A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */,
 				A7582507189BC35B00B904BC /* Vero */,
@@ -2243,6 +2269,7 @@
 				DAFBF4071A65D92F003DD799 /* MagicalImportFunctions.h in Headers */,
 				DAFBF4271A65D92F003DD799 /* NSManagedObject+MagicalDataImport.h in Headers */,
 				DAFBF4761A65D92F003DD799 /* CoreData+MagicalRecord.h in Headers */,
+				DAB164E71A6D294F008D69B2 /* GmailSyncHandler.h in Headers */,
 				DAFBF4671A65D92F003DD799 /* MagicalRecord+Setup.h in Headers */,
 				DAFBF46B1A65D92F003DD799 /* MagicalRecord+ShorthandSupport.h in Headers */,
 				DAFBF41B1A65D92F003DD799 /* NSRelationshipDescription+MagicalDataImport.h in Headers */,
@@ -2256,6 +2283,7 @@
 				DA23231419B39C4600D996EB /* KPAttachment.h in Headers */,
 				DA23231F19B39C6F00D996EB /* _KPToDo.h in Headers */,
 				DA23231E19B39C6F00D996EB /* _KPTag.h in Headers */,
+				DAB164EF1A6D29A3008D69B2 /* GmailIntegration.h in Headers */,
 				DA23232819B4737100D996EB /* NSDate-Utilities.h in Headers */,
 				DAFBF46F1A65D92F003DD799 /* MagicalRecord.h in Headers */,
 				DAFBF45B1A65D92F003DD799 /* MagicalRecord+ErrorHandling.h in Headers */,
@@ -2283,6 +2311,7 @@
 				DAFBF44F1A65D92F003DD799 /* NSPersistentStore+MagicalRecord.h in Headers */,
 				DAFBF41F1A65D92F003DD799 /* NSString+MagicalDataImport.h in Headers */,
 				DAFBF4471A65D92F003DD799 /* NSManagedObjectContext+MagicalThreading.h in Headers */,
+				DAB164F51A6D29EF008D69B2 /* GmailProcessor.h in Headers */,
 				DAFBF4751A65D92F003DD799 /* MagicalRecordShorthand.h in Headers */,
 				DAFBF4171A65D92F003DD799 /* NSObject+MagicalDataImport.h in Headers */,
 			);
@@ -2721,6 +2750,7 @@
 				A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */,
 				A7B9D39019066251001E1109 /* KPAccountAlert.m in Sources */,
 				A70D12DA1966D11500A95C50 /* EvernoteIntegration.m in Sources */,
+				DAB164F61A6D29EF008D69B2 /* GmailProcessor.m in Sources */,
 				A703B1631838EB0E0047DCC9 /* UIButton+PassTouch.m in Sources */,
 				DAFBF4581A65D92F003DD799 /* MagicalRecord+Actions.m in Sources */,
 				A703B1B51838EBF20047DCC9 /* SectionHeaderView.m in Sources */,
@@ -2788,6 +2818,7 @@
 				A7FA8B1D17AF094E00134ED0 /* SnoozesViewController.m in Sources */,
 				A7D0686B190E654C00699B4E /* UIViewController+MMDrawerController.m in Sources */,
 				A703B1C81838EC240047DCC9 /* KPReorderTableView.m in Sources */,
+				DAB164F01A6D29A3008D69B2 /* GmailIntegration.m in Sources */,
 				A703B1BA1838EBF20047DCC9 /* KPTimePicker.m in Sources */,
 				A703B1A91838EBF20047DCC9 /* KPAlert.m in Sources */,
 				A7D7D53317B1586A00FBC042 /* SettingsHandler.m in Sources */,
@@ -2823,6 +2854,7 @@
 				DAFBF4381A65D92F003DD799 /* NSManagedObjectContext+MagicalChainSave.m in Sources */,
 				A74646B918D38660003911DC /* ContactHandler.m in Sources */,
 				DAFBF46C1A65D92F003DD799 /* MagicalRecord+ShorthandSupport.m in Sources */,
+				DAB164E81A6D294F008D69B2 /* GmailSyncHandler.m in Sources */,
 				A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */,
 				A703B1A81838EBF20047DCC9 /* AddPanelView.m in Sources */,
 				A703B1AA1838EBF20047DCC9 /* PlusAlertView.m in Sources */,
@@ -2858,11 +2890,14 @@
 				DAE2B16F19CB7D6400A9074E /* EvernoteToDoProcessor.m in Sources */,
 				A7751EB819E55A24002227DD /* UIColor+Utilities.m in Sources */,
 				A7A3C25619E1C0980025E877 /* SavedChangeHandler.m in Sources */,
+				DAB164E91A6D294F008D69B2 /* GmailSyncHandler.m in Sources */,
+				DAB164F11A6D29A3008D69B2 /* GmailIntegration.m in Sources */,
 				DAFBF4451A65D92F003DD799 /* NSManagedObjectContext+MagicalSaves.m in Sources */,
 				DAFBF44D1A65D92F003DD799 /* NSManagedObjectModel+MagicalRecord.m in Sources */,
 				DAFBF4151A65D92F003DD799 /* NSNumber+MagicalDataImport.m in Sources */,
 				DAFBF46D1A65D92F003DD799 /* MagicalRecord+ShorthandSupport.m in Sources */,
 				DAE2B17C19CB7DF200A9074E /* UtilityClass.m in Sources */,
+				DAB164F71A6D29EF008D69B2 /* GmailProcessor.m in Sources */,
 				DAE2B16A19CB7B1B00A9074E /* _KPAttachment.m in Sources */,
 				DAE2B17619CB7D7200A9074E /* AnalyticsHandler.m in Sources */,
 				DAE2B17319CB7D7200A9074E /* SyncQueue.m in Sources */,
@@ -2930,6 +2965,8 @@
 				DAFBF46E1A65D92F003DD799 /* MagicalRecord+ShorthandSupport.m in Sources */,
 				DA6924A919BDCF2D0082D1E4 /* SyncQueue.m in Sources */,
 				DA23231219B39C3900D996EB /* KPTag.m in Sources */,
+				DAB164EA1A6D294F008D69B2 /* GmailSyncHandler.m in Sources */,
+				DAB164F21A6D29A3008D69B2 /* GmailIntegration.m in Sources */,
 				DA23231919B39C5A00D996EB /* _KPParseObject.m in Sources */,
 				DA23231B19B39C5A00D996EB /* _KPToDo.m in Sources */,
 				DAFBF42A1A65D92F003DD799 /* NSManagedObject+MagicalDataImport.m in Sources */,
@@ -2957,6 +2994,7 @@
 				DA23232919B4737500D996EB /* NSDate-Utilities.m in Sources */,
 				DAFBF4221A65D92F003DD799 /* NSString+MagicalDataImport.m in Sources */,
 				DAFBF4261A65D92F003DD799 /* NSManagedObject+MagicalAggregation.m in Sources */,
+				DAB164F81A6D29EF008D69B2 /* GmailProcessor.m in Sources */,
 				DA69248619B87AD10082D1E4 /* Vero.m in Sources */,
 				DAFBF41A1A65D92F003DD799 /* NSObject+MagicalDataImport.m in Sources */,
 			);
