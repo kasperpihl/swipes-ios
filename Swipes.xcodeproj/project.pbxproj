@@ -325,6 +325,8 @@
 		DAB164F61A6D29EF008D69B2 /* GmailProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164F41A6D29EF008D69B2 /* GmailProcessor.m */; };
 		DAB164F71A6D29EF008D69B2 /* GmailProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164F41A6D29EF008D69B2 /* GmailProcessor.m */; };
 		DAB164F81A6D29EF008D69B2 /* GmailProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164F41A6D29EF008D69B2 /* GmailProcessor.m */; };
+		DAB1651C1A6D3D8B008D69B2 /* libGTLTouchStaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */; };
+		DAB1651D1A6D3D94008D69B2 /* libGTLTouchStaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */; };
 		DACD541918A19FB000C378DF /* DropboxView.m in Sources */ = {isa = PBXBuildFile; fileRef = DACD541818A19FB000C378DF /* DropboxView.m */; };
 		DACD544318A1ACFC00C378DF /* excel.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542118A1ACFC00C378DF /* excel.png */; };
 		DACD544418A1ACFC00C378DF /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542218A1ACFC00C378DF /* folder.png */; };
@@ -508,30 +510,30 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		A7E5FDA21A6D379500AD9AFC /* PBXContainerItemProxy */ = {
+		DAB165141A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4F38F6A60B66E91D00B24B81;
 			remoteInfo = GTLFramework;
 		};
-		A7E5FDA41A6D379500AD9AFC /* PBXContainerItemProxy */ = {
+		DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4F12027C11A4CA2F00BEB470;
 			remoteInfo = GTLTouchStaticLib;
 		};
-		A7E5FDA61A6D379500AD9AFC /* PBXContainerItemProxy */ = {
+		DAB165181A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4F12027D11A4CA2F00BEB470;
 			remoteInfo = GTLUnitTests;
 		};
-		A7E5FDA81A6D379500AD9AFC /* PBXContainerItemProxy */ = {
+		DAB1651A1A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4F1AD9020B71603F00DC0485;
 			remoteInfo = DevelopmentTestTool;
@@ -948,13 +950,13 @@
 		DA6B61C219E321FE00089877 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Swipes/en.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		DA6B61C419E322FB00089877 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA6B61C519E3298800089877 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
-		DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GTL.xcodeproj; path = "../Swipes/Ressources/Libs/google-api-objectivec-client/Source/GTL.xcodeproj"; sourceTree = "<group>"; };
 		DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailSyncHandler.h; path = SyncHandlers/GmailSyncHandler.h; sourceTree = "<group>"; };
 		DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailSyncHandler.m; path = SyncHandlers/GmailSyncHandler.m; sourceTree = "<group>"; };
 		DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailIntegration.h; path = Integrations/GmailIntegration.h; sourceTree = "<group>"; };
 		DAB164EE1A6D29A3008D69B2 /* GmailIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailIntegration.m; path = Integrations/GmailIntegration.m; sourceTree = "<group>"; };
 		DAB164F31A6D29EF008D69B2 /* GmailProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GmailProcessor.h; sourceTree = "<group>"; };
 		DAB164F41A6D29EF008D69B2 /* GmailProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GmailProcessor.m; sourceTree = "<group>"; };
+		DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GTL.xcodeproj; path = "Swipes/Ressources/Libs/google-api-objectivec-client/Source/GTL.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		DACD541718A19FB000C378DF /* DropboxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropboxView.h; path = Components/DropboxView.h; sourceTree = "<group>"; };
 		DACD541818A19FB000C378DF /* DropboxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropboxView.m; path = Components/DropboxView.m; sourceTree = "<group>"; };
 		DACD542118A1ACFC00C378DF /* excel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = excel.png; sourceTree = "<group>"; };
@@ -1073,6 +1075,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAB1651D1A6D3D94008D69B2 /* libGTLTouchStaticLib.a in Frameworks */,
 				A76DCB0C1A246AD30067B41B /* EventKit.framework in Frameworks */,
 				DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */,
 				A7E9F60919DAAE8800CAA1D1 /* MobileCoreServices.framework in Frameworks */,
@@ -1114,6 +1117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAB1651C1A6D3D8B008D69B2 /* libGTLTouchStaticLib.a in Frameworks */,
 				DA6B61BD19DAF27B00089877 /* libxml2.dylib in Frameworks */,
 				DA6B61BC19DAF26900089877 /* MobileCoreServices.framework in Frameworks */,
 				DA6B61BB19DAEF0D00089877 /* ENSDK.framework in Frameworks */,
@@ -2066,12 +2070,23 @@
 		DA69248119B87A3F0082D1E4 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
-				DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */,
+				DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */,
 				A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */,
 				A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */,
 				A7582507189BC35B00B904BC /* Vero */,
 			);
 			name = Libs;
+			sourceTree = "<group>";
+		};
+		DAB1650E1A6D3D51008D69B2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DAB165151A6D3D51008D69B2 /* GTL.framework */,
+				DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */,
+				DAB165191A6D3D51008D69B2 /* GTLUnitTests.xctest */,
+				DAB1651B1A6D3D51008D69B2 /* DevelopmentTestTool */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		DACD542018A1ACFC00C378DF /* Dropbox */ = {
@@ -2469,8 +2484,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = A7E5FD9C1A6D379400AD9AFC /* Products */;
-					ProjectRef = DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */;
+					ProductGroup = DAB1650E1A6D3D51008D69B2 /* Products */;
+					ProjectRef = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -2484,32 +2499,32 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		A7E5FDA31A6D379500AD9AFC /* GTL.framework */ = {
+		DAB165151A6D3D51008D69B2 /* GTL.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = GTL.framework;
-			remoteRef = A7E5FDA21A6D379500AD9AFC /* PBXContainerItemProxy */;
+			remoteRef = DAB165141A6D3D51008D69B2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A7E5FDA51A6D379500AD9AFC /* libGTLTouchStaticLib.a */ = {
+		DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libGTLTouchStaticLib.a;
-			remoteRef = A7E5FDA41A6D379500AD9AFC /* PBXContainerItemProxy */;
+			remoteRef = DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A7E5FDA71A6D379500AD9AFC /* GTLUnitTests.xctest */ = {
+		DAB165191A6D3D51008D69B2 /* GTLUnitTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = GTLUnitTests.xctest;
-			remoteRef = A7E5FDA61A6D379500AD9AFC /* PBXContainerItemProxy */;
+			remoteRef = DAB165181A6D3D51008D69B2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A7E5FDA91A6D379500AD9AFC /* DevelopmentTestTool */ = {
+		DAB1651B1A6D3D51008D69B2 /* DevelopmentTestTool */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = DevelopmentTestTool;
-			remoteRef = A7E5FDA81A6D379500AD9AFC /* PBXContainerItemProxy */;
+			remoteRef = DAB1651A1A6D3D51008D69B2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -3169,6 +3184,29 @@
 					"$(inherited)",
 					"ADHOC=1",
 				);
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
+					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
+					"\"${PODS_ROOT}/Headers/Public/Base64\"",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/DHCShakeNotifier\"",
+					"\"${PODS_ROOT}/Headers/Public/DejalActivityView\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAnalytics-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Intercom\"",
+					"\"${PODS_ROOT}/Headers/Public/M13BadgeView\"",
+					"\"${PODS_ROOT}/Headers/Public/NSURL+QueryDictionary\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/RMStore\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/Underscore.m\"",
+					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
+					"$(SDKROOT)/usr/include/libz",
+					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
+				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -3320,6 +3358,29 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
+					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
+					"\"${PODS_ROOT}/Headers/Public/Base64\"",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/DHCShakeNotifier\"",
+					"\"${PODS_ROOT}/Headers/Public/DejalActivityView\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAnalytics-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Intercom\"",
+					"\"${PODS_ROOT}/Headers/Public/M13BadgeView\"",
+					"\"${PODS_ROOT}/Headers/Public/NSURL+QueryDictionary\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/RMStore\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/Underscore.m\"",
+					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
+					"$(SDKROOT)/usr/include/libz",
+					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
+				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -3394,6 +3455,29 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"RELEASE=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
+					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
+					"\"${PODS_ROOT}/Headers/Public/Base64\"",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/DHCShakeNotifier\"",
+					"\"${PODS_ROOT}/Headers/Public/DejalActivityView\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAnalytics-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Intercom\"",
+					"\"${PODS_ROOT}/Headers/Public/M13BadgeView\"",
+					"\"${PODS_ROOT}/Headers/Public/NSURL+QueryDictionary\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/RMStore\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/Underscore.m\"",
+					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
+					"$(SDKROOT)/usr/include/libz",
+					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
 				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -3494,6 +3578,29 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
+					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
+					"\"${PODS_ROOT}/Headers/Public/Base64\"",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/DHCShakeNotifier\"",
+					"\"${PODS_ROOT}/Headers/Public/DejalActivityView\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAnalytics-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Intercom\"",
+					"\"${PODS_ROOT}/Headers/Public/M13BadgeView\"",
+					"\"${PODS_ROOT}/Headers/Public/NSURL+QueryDictionary\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/RMStore\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/Underscore.m\"",
+					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
+					"$(SDKROOT)/usr/include/libz",
+					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
+				);
 				INFOPLIST_FILE = SwipesToday/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -3539,6 +3646,29 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
+					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
+					"\"${PODS_ROOT}/Headers/Public/Base64\"",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/DHCShakeNotifier\"",
+					"\"${PODS_ROOT}/Headers/Public/DejalActivityView\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAnalytics-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Intercom\"",
+					"\"${PODS_ROOT}/Headers/Public/M13BadgeView\"",
+					"\"${PODS_ROOT}/Headers/Public/NSURL+QueryDictionary\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/RMStore\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/Underscore.m\"",
+					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
+					"$(SDKROOT)/usr/include/libz",
+					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
+				);
 				INFOPLIST_FILE = SwipesToday/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -3584,6 +3714,29 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
+					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
+					"\"${PODS_ROOT}/Headers/Public/Base64\"",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/DHCShakeNotifier\"",
+					"\"${PODS_ROOT}/Headers/Public/DejalActivityView\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAnalytics-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Intercom\"",
+					"\"${PODS_ROOT}/Headers/Public/M13BadgeView\"",
+					"\"${PODS_ROOT}/Headers/Public/NSURL+QueryDictionary\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/RMStore\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/Underscore.m\"",
+					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
+					"$(SDKROOT)/usr/include/libz",
+					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
+				);
 				INFOPLIST_FILE = SwipesToday/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";

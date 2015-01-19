@@ -194,60 +194,23 @@
 		4FDE227E1384818E005AEFAA /* GTLQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDE22541384818E005AEFAA /* GTLQuery.m */; };
 		4FDE227F1384818E005AEFAA /* GTLRuntimeCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDE22561384818E005AEFAA /* GTLRuntimeCommon.m */; };
 		4FDE22801384818E005AEFAA /* GTLService.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDE22581384818E005AEFAA /* GTLService.m */; };
-		DA426EC31A6D200C00290CBF /* GTLGmail.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4267401A6D200A00290CBF /* GTLGmail.h */; };
-		DA426EC41A6D200C00290CBF /* GTLGmail_Sources.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267411A6D200A00290CBF /* GTLGmail_Sources.m */; };
-		DA426EC51A6D200C00290CBF /* GTLGmail_Sources.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267411A6D200A00290CBF /* GTLGmail_Sources.m */; };
-		DA426EC61A6D200C00290CBF /* GTLGmailConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4267421A6D200A00290CBF /* GTLGmailConstants.h */; };
-		DA426EC71A6D200C00290CBF /* GTLGmailConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267431A6D200A00290CBF /* GTLGmailConstants.m */; };
-		DA426EC81A6D200C00290CBF /* GTLGmailConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267431A6D200A00290CBF /* GTLGmailConstants.m */; };
-		DA426EC91A6D200C00290CBF /* GTLGmailDraft.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4267441A6D200A00290CBF /* GTLGmailDraft.h */; };
-		DA426ECA1A6D200C00290CBF /* GTLGmailDraft.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267451A6D200A00290CBF /* GTLGmailDraft.m */; };
-		DA426ECB1A6D200C00290CBF /* GTLGmailDraft.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267451A6D200A00290CBF /* GTLGmailDraft.m */; };
-		DA426ECC1A6D200C00290CBF /* GTLGmailHistory.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4267461A6D200A00290CBF /* GTLGmailHistory.h */; };
-		DA426ECD1A6D200C00290CBF /* GTLGmailHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267471A6D200A00290CBF /* GTLGmailHistory.m */; };
-		DA426ECE1A6D200C00290CBF /* GTLGmailHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267471A6D200A00290CBF /* GTLGmailHistory.m */; };
-		DA426ECF1A6D200C00290CBF /* GTLGmailLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4267481A6D200A00290CBF /* GTLGmailLabel.h */; };
-		DA426ED01A6D200C00290CBF /* GTLGmailLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267491A6D200A00290CBF /* GTLGmailLabel.m */; };
-		DA426ED11A6D200C00290CBF /* GTLGmailLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267491A6D200A00290CBF /* GTLGmailLabel.m */; };
-		DA426ED21A6D200C00290CBF /* GTLGmailListDraftsResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = DA42674A1A6D200A00290CBF /* GTLGmailListDraftsResponse.h */; };
-		DA426ED31A6D200C00290CBF /* GTLGmailListDraftsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DA42674B1A6D200A00290CBF /* GTLGmailListDraftsResponse.m */; };
-		DA426ED41A6D200C00290CBF /* GTLGmailListDraftsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DA42674B1A6D200A00290CBF /* GTLGmailListDraftsResponse.m */; };
-		DA426ED51A6D200C00290CBF /* GTLGmailListHistoryResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = DA42674C1A6D200A00290CBF /* GTLGmailListHistoryResponse.h */; };
-		DA426ED61A6D200C00290CBF /* GTLGmailListHistoryResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DA42674D1A6D200A00290CBF /* GTLGmailListHistoryResponse.m */; };
-		DA426ED71A6D200C00290CBF /* GTLGmailListHistoryResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DA42674D1A6D200A00290CBF /* GTLGmailListHistoryResponse.m */; };
-		DA426ED81A6D200C00290CBF /* GTLGmailListLabelsResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = DA42674E1A6D200A00290CBF /* GTLGmailListLabelsResponse.h */; };
-		DA426ED91A6D200C00290CBF /* GTLGmailListLabelsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DA42674F1A6D200A00290CBF /* GTLGmailListLabelsResponse.m */; };
-		DA426EDA1A6D200C00290CBF /* GTLGmailListLabelsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DA42674F1A6D200A00290CBF /* GTLGmailListLabelsResponse.m */; };
-		DA426EDB1A6D200C00290CBF /* GTLGmailListMessagesResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4267501A6D200A00290CBF /* GTLGmailListMessagesResponse.h */; };
-		DA426EDC1A6D200C00290CBF /* GTLGmailListMessagesResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267511A6D200A00290CBF /* GTLGmailListMessagesResponse.m */; };
-		DA426EDD1A6D200C00290CBF /* GTLGmailListMessagesResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267511A6D200A00290CBF /* GTLGmailListMessagesResponse.m */; };
-		DA426EDE1A6D200C00290CBF /* GTLGmailListThreadsResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4267521A6D200A00290CBF /* GTLGmailListThreadsResponse.h */; };
-		DA426EDF1A6D200C00290CBF /* GTLGmailListThreadsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267531A6D200A00290CBF /* GTLGmailListThreadsResponse.m */; };
-		DA426EE01A6D200C00290CBF /* GTLGmailListThreadsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267531A6D200A00290CBF /* GTLGmailListThreadsResponse.m */; };
-		DA426EE11A6D200C00290CBF /* GTLGmailMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4267541A6D200A00290CBF /* GTLGmailMessage.h */; };
-		DA426EE21A6D200C00290CBF /* GTLGmailMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267551A6D200A00290CBF /* GTLGmailMessage.m */; };
-		DA426EE31A6D200C00290CBF /* GTLGmailMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267551A6D200A00290CBF /* GTLGmailMessage.m */; };
-		DA426EE41A6D200C00290CBF /* GTLGmailMessagePart.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4267561A6D200A00290CBF /* GTLGmailMessagePart.h */; };
-		DA426EE51A6D200C00290CBF /* GTLGmailMessagePart.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267571A6D200A00290CBF /* GTLGmailMessagePart.m */; };
-		DA426EE61A6D200C00290CBF /* GTLGmailMessagePart.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267571A6D200A00290CBF /* GTLGmailMessagePart.m */; };
-		DA426EE71A6D200C00290CBF /* GTLGmailMessagePartBody.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4267581A6D200A00290CBF /* GTLGmailMessagePartBody.h */; };
-		DA426EE81A6D200C00290CBF /* GTLGmailMessagePartBody.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267591A6D200A00290CBF /* GTLGmailMessagePartBody.m */; };
-		DA426EE91A6D200C00290CBF /* GTLGmailMessagePartBody.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267591A6D200A00290CBF /* GTLGmailMessagePartBody.m */; };
-		DA426EEA1A6D200C00290CBF /* GTLGmailMessagePartHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = DA42675A1A6D200A00290CBF /* GTLGmailMessagePartHeader.h */; };
-		DA426EEB1A6D200C00290CBF /* GTLGmailMessagePartHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = DA42675B1A6D200A00290CBF /* GTLGmailMessagePartHeader.m */; };
-		DA426EEC1A6D200C00290CBF /* GTLGmailMessagePartHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = DA42675B1A6D200A00290CBF /* GTLGmailMessagePartHeader.m */; };
-		DA426EED1A6D200C00290CBF /* GTLGmailProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = DA42675C1A6D200A00290CBF /* GTLGmailProfile.h */; };
-		DA426EEE1A6D200C00290CBF /* GTLGmailProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA42675D1A6D200A00290CBF /* GTLGmailProfile.m */; };
-		DA426EEF1A6D200C00290CBF /* GTLGmailProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA42675D1A6D200A00290CBF /* GTLGmailProfile.m */; };
-		DA426EF01A6D200C00290CBF /* GTLGmailThread.h in Headers */ = {isa = PBXBuildFile; fileRef = DA42675E1A6D200A00290CBF /* GTLGmailThread.h */; };
-		DA426EF11A6D200C00290CBF /* GTLGmailThread.m in Sources */ = {isa = PBXBuildFile; fileRef = DA42675F1A6D200A00290CBF /* GTLGmailThread.m */; };
-		DA426EF21A6D200C00290CBF /* GTLGmailThread.m in Sources */ = {isa = PBXBuildFile; fileRef = DA42675F1A6D200A00290CBF /* GTLGmailThread.m */; };
-		DA426EF31A6D200C00290CBF /* GTLQueryGmail.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4267601A6D200A00290CBF /* GTLQueryGmail.h */; };
-		DA426EF41A6D200C00290CBF /* GTLQueryGmail.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267611A6D200A00290CBF /* GTLQueryGmail.m */; };
-		DA426EF51A6D200C00290CBF /* GTLQueryGmail.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267611A6D200A00290CBF /* GTLQueryGmail.m */; };
-		DA426EF61A6D200C00290CBF /* GTLServiceGmail.h in Headers */ = {isa = PBXBuildFile; fileRef = DA4267621A6D200A00290CBF /* GTLServiceGmail.h */; };
-		DA426EF71A6D200C00290CBF /* GTLServiceGmail.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267631A6D200A00290CBF /* GTLServiceGmail.m */; };
-		DA426EF81A6D200C00290CBF /* GTLServiceGmail.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4267631A6D200A00290CBF /* GTLServiceGmail.m */; };
+		DAB165461A6D3E62008D69B2 /* GTLGmailConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB165241A6D3E62008D69B2 /* GTLGmailConstants.m */; };
+		DAB165471A6D3E62008D69B2 /* GTLGmailDraft.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB165261A6D3E62008D69B2 /* GTLGmailDraft.m */; };
+		DAB165481A6D3E62008D69B2 /* GTLGmailHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB165281A6D3E62008D69B2 /* GTLGmailHistory.m */; };
+		DAB165491A6D3E62008D69B2 /* GTLGmailLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB1652A1A6D3E62008D69B2 /* GTLGmailLabel.m */; };
+		DAB1654A1A6D3E62008D69B2 /* GTLGmailListDraftsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB1652C1A6D3E62008D69B2 /* GTLGmailListDraftsResponse.m */; };
+		DAB1654B1A6D3E62008D69B2 /* GTLGmailListHistoryResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB1652E1A6D3E62008D69B2 /* GTLGmailListHistoryResponse.m */; };
+		DAB1654C1A6D3E62008D69B2 /* GTLGmailListLabelsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB165301A6D3E62008D69B2 /* GTLGmailListLabelsResponse.m */; };
+		DAB1654D1A6D3E62008D69B2 /* GTLGmailListMessagesResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB165321A6D3E62008D69B2 /* GTLGmailListMessagesResponse.m */; };
+		DAB1654E1A6D3E62008D69B2 /* GTLGmailListThreadsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB165341A6D3E62008D69B2 /* GTLGmailListThreadsResponse.m */; };
+		DAB1654F1A6D3E62008D69B2 /* GTLGmailMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB165361A6D3E62008D69B2 /* GTLGmailMessage.m */; };
+		DAB165501A6D3E62008D69B2 /* GTLGmailMessagePart.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB165381A6D3E62008D69B2 /* GTLGmailMessagePart.m */; };
+		DAB165511A6D3E62008D69B2 /* GTLGmailMessagePartBody.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB1653A1A6D3E62008D69B2 /* GTLGmailMessagePartBody.m */; };
+		DAB165521A6D3E62008D69B2 /* GTLGmailMessagePartHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB1653C1A6D3E62008D69B2 /* GTLGmailMessagePartHeader.m */; };
+		DAB165531A6D3E62008D69B2 /* GTLGmailProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB1653E1A6D3E62008D69B2 /* GTLGmailProfile.m */; };
+		DAB165541A6D3E62008D69B2 /* GTLGmailThread.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB165401A6D3E62008D69B2 /* GTLGmailThread.m */; };
+		DAB165551A6D3E62008D69B2 /* GTLQueryGmail.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB165421A6D3E62008D69B2 /* GTLQueryGmail.m */; };
+		DAB165561A6D3E62008D69B2 /* GTLServiceGmail.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB165441A6D3E62008D69B2 /* GTLServiceGmail.m */; };
 		F40E7366138A03CA00EE3F02 /* GTLQueryTasks.m in Sources */ = {isa = PBXBuildFile; fileRef = F47C37F7134B08EF00CCF631 /* GTLQueryTasks.m */; };
 		F40E7367138A03CA00EE3F02 /* GTLServiceTasks.m in Sources */ = {isa = PBXBuildFile; fileRef = F47C37F9134B08EF00CCF631 /* GTLServiceTasks.m */; };
 		F40E7368138A03CA00EE3F02 /* GTLTasksConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F407F0FF136F948A005A4866 /* GTLTasksConstants.m */; };
@@ -409,42 +372,42 @@
 		4FDE22561384818E005AEFAA /* GTLRuntimeCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLRuntimeCommon.m; path = Objects/GTLRuntimeCommon.m; sourceTree = "<group>"; };
 		4FDE22571384818E005AEFAA /* GTLService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLService.h; path = Objects/GTLService.h; sourceTree = "<group>"; };
 		4FDE22581384818E005AEFAA /* GTLService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLService.m; path = Objects/GTLService.m; sourceTree = "<group>"; };
-		DA4267401A6D200A00290CBF /* GTLGmail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmail.h; sourceTree = "<group>"; };
-		DA4267411A6D200A00290CBF /* GTLGmail_Sources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmail_Sources.m; sourceTree = "<group>"; };
-		DA4267421A6D200A00290CBF /* GTLGmailConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailConstants.h; sourceTree = "<group>"; };
-		DA4267431A6D200A00290CBF /* GTLGmailConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailConstants.m; sourceTree = "<group>"; };
-		DA4267441A6D200A00290CBF /* GTLGmailDraft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailDraft.h; sourceTree = "<group>"; };
-		DA4267451A6D200A00290CBF /* GTLGmailDraft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailDraft.m; sourceTree = "<group>"; };
-		DA4267461A6D200A00290CBF /* GTLGmailHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailHistory.h; sourceTree = "<group>"; };
-		DA4267471A6D200A00290CBF /* GTLGmailHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailHistory.m; sourceTree = "<group>"; };
-		DA4267481A6D200A00290CBF /* GTLGmailLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailLabel.h; sourceTree = "<group>"; };
-		DA4267491A6D200A00290CBF /* GTLGmailLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailLabel.m; sourceTree = "<group>"; };
-		DA42674A1A6D200A00290CBF /* GTLGmailListDraftsResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailListDraftsResponse.h; sourceTree = "<group>"; };
-		DA42674B1A6D200A00290CBF /* GTLGmailListDraftsResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailListDraftsResponse.m; sourceTree = "<group>"; };
-		DA42674C1A6D200A00290CBF /* GTLGmailListHistoryResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailListHistoryResponse.h; sourceTree = "<group>"; };
-		DA42674D1A6D200A00290CBF /* GTLGmailListHistoryResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailListHistoryResponse.m; sourceTree = "<group>"; };
-		DA42674E1A6D200A00290CBF /* GTLGmailListLabelsResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailListLabelsResponse.h; sourceTree = "<group>"; };
-		DA42674F1A6D200A00290CBF /* GTLGmailListLabelsResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailListLabelsResponse.m; sourceTree = "<group>"; };
-		DA4267501A6D200A00290CBF /* GTLGmailListMessagesResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailListMessagesResponse.h; sourceTree = "<group>"; };
-		DA4267511A6D200A00290CBF /* GTLGmailListMessagesResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailListMessagesResponse.m; sourceTree = "<group>"; };
-		DA4267521A6D200A00290CBF /* GTLGmailListThreadsResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailListThreadsResponse.h; sourceTree = "<group>"; };
-		DA4267531A6D200A00290CBF /* GTLGmailListThreadsResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailListThreadsResponse.m; sourceTree = "<group>"; };
-		DA4267541A6D200A00290CBF /* GTLGmailMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailMessage.h; sourceTree = "<group>"; };
-		DA4267551A6D200A00290CBF /* GTLGmailMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailMessage.m; sourceTree = "<group>"; };
-		DA4267561A6D200A00290CBF /* GTLGmailMessagePart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailMessagePart.h; sourceTree = "<group>"; };
-		DA4267571A6D200A00290CBF /* GTLGmailMessagePart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailMessagePart.m; sourceTree = "<group>"; };
-		DA4267581A6D200A00290CBF /* GTLGmailMessagePartBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailMessagePartBody.h; sourceTree = "<group>"; };
-		DA4267591A6D200A00290CBF /* GTLGmailMessagePartBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailMessagePartBody.m; sourceTree = "<group>"; };
-		DA42675A1A6D200A00290CBF /* GTLGmailMessagePartHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailMessagePartHeader.h; sourceTree = "<group>"; };
-		DA42675B1A6D200A00290CBF /* GTLGmailMessagePartHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailMessagePartHeader.m; sourceTree = "<group>"; };
-		DA42675C1A6D200A00290CBF /* GTLGmailProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailProfile.h; sourceTree = "<group>"; };
-		DA42675D1A6D200A00290CBF /* GTLGmailProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailProfile.m; sourceTree = "<group>"; };
-		DA42675E1A6D200A00290CBF /* GTLGmailThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailThread.h; sourceTree = "<group>"; };
-		DA42675F1A6D200A00290CBF /* GTLGmailThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailThread.m; sourceTree = "<group>"; };
-		DA4267601A6D200A00290CBF /* GTLQueryGmail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLQueryGmail.h; sourceTree = "<group>"; };
-		DA4267611A6D200A00290CBF /* GTLQueryGmail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLQueryGmail.m; sourceTree = "<group>"; };
-		DA4267621A6D200A00290CBF /* GTLServiceGmail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLServiceGmail.h; sourceTree = "<group>"; };
-		DA4267631A6D200A00290CBF /* GTLServiceGmail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLServiceGmail.m; sourceTree = "<group>"; };
+		DAB165211A6D3E62008D69B2 /* GTLGmail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmail.h; sourceTree = "<group>"; };
+		DAB165221A6D3E62008D69B2 /* GTLGmail_Sources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmail_Sources.m; sourceTree = "<group>"; };
+		DAB165231A6D3E62008D69B2 /* GTLGmailConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailConstants.h; sourceTree = "<group>"; };
+		DAB165241A6D3E62008D69B2 /* GTLGmailConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailConstants.m; sourceTree = "<group>"; };
+		DAB165251A6D3E62008D69B2 /* GTLGmailDraft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailDraft.h; sourceTree = "<group>"; };
+		DAB165261A6D3E62008D69B2 /* GTLGmailDraft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailDraft.m; sourceTree = "<group>"; };
+		DAB165271A6D3E62008D69B2 /* GTLGmailHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailHistory.h; sourceTree = "<group>"; };
+		DAB165281A6D3E62008D69B2 /* GTLGmailHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailHistory.m; sourceTree = "<group>"; };
+		DAB165291A6D3E62008D69B2 /* GTLGmailLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailLabel.h; sourceTree = "<group>"; };
+		DAB1652A1A6D3E62008D69B2 /* GTLGmailLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailLabel.m; sourceTree = "<group>"; };
+		DAB1652B1A6D3E62008D69B2 /* GTLGmailListDraftsResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailListDraftsResponse.h; sourceTree = "<group>"; };
+		DAB1652C1A6D3E62008D69B2 /* GTLGmailListDraftsResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailListDraftsResponse.m; sourceTree = "<group>"; };
+		DAB1652D1A6D3E62008D69B2 /* GTLGmailListHistoryResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailListHistoryResponse.h; sourceTree = "<group>"; };
+		DAB1652E1A6D3E62008D69B2 /* GTLGmailListHistoryResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailListHistoryResponse.m; sourceTree = "<group>"; };
+		DAB1652F1A6D3E62008D69B2 /* GTLGmailListLabelsResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailListLabelsResponse.h; sourceTree = "<group>"; };
+		DAB165301A6D3E62008D69B2 /* GTLGmailListLabelsResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailListLabelsResponse.m; sourceTree = "<group>"; };
+		DAB165311A6D3E62008D69B2 /* GTLGmailListMessagesResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailListMessagesResponse.h; sourceTree = "<group>"; };
+		DAB165321A6D3E62008D69B2 /* GTLGmailListMessagesResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailListMessagesResponse.m; sourceTree = "<group>"; };
+		DAB165331A6D3E62008D69B2 /* GTLGmailListThreadsResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailListThreadsResponse.h; sourceTree = "<group>"; };
+		DAB165341A6D3E62008D69B2 /* GTLGmailListThreadsResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailListThreadsResponse.m; sourceTree = "<group>"; };
+		DAB165351A6D3E62008D69B2 /* GTLGmailMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailMessage.h; sourceTree = "<group>"; };
+		DAB165361A6D3E62008D69B2 /* GTLGmailMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailMessage.m; sourceTree = "<group>"; };
+		DAB165371A6D3E62008D69B2 /* GTLGmailMessagePart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailMessagePart.h; sourceTree = "<group>"; };
+		DAB165381A6D3E62008D69B2 /* GTLGmailMessagePart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailMessagePart.m; sourceTree = "<group>"; };
+		DAB165391A6D3E62008D69B2 /* GTLGmailMessagePartBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailMessagePartBody.h; sourceTree = "<group>"; };
+		DAB1653A1A6D3E62008D69B2 /* GTLGmailMessagePartBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailMessagePartBody.m; sourceTree = "<group>"; };
+		DAB1653B1A6D3E62008D69B2 /* GTLGmailMessagePartHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailMessagePartHeader.h; sourceTree = "<group>"; };
+		DAB1653C1A6D3E62008D69B2 /* GTLGmailMessagePartHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailMessagePartHeader.m; sourceTree = "<group>"; };
+		DAB1653D1A6D3E62008D69B2 /* GTLGmailProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailProfile.h; sourceTree = "<group>"; };
+		DAB1653E1A6D3E62008D69B2 /* GTLGmailProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailProfile.m; sourceTree = "<group>"; };
+		DAB1653F1A6D3E62008D69B2 /* GTLGmailThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLGmailThread.h; sourceTree = "<group>"; };
+		DAB165401A6D3E62008D69B2 /* GTLGmailThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLGmailThread.m; sourceTree = "<group>"; };
+		DAB165411A6D3E62008D69B2 /* GTLQueryGmail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLQueryGmail.h; sourceTree = "<group>"; };
+		DAB165421A6D3E62008D69B2 /* GTLQueryGmail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLQueryGmail.m; sourceTree = "<group>"; };
+		DAB165431A6D3E62008D69B2 /* GTLServiceGmail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLServiceGmail.h; sourceTree = "<group>"; };
+		DAB165441A6D3E62008D69B2 /* GTLServiceGmail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLServiceGmail.m; sourceTree = "<group>"; };
 		F407F0FE136F948A005A4866 /* GTLTasksConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLTasksConstants.h; path = Generated/GTLTasksConstants.h; sourceTree = "<group>"; };
 		F407F0FF136F948A005A4866 /* GTLTasksConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLTasksConstants.m; path = Generated/GTLTasksConstants.m; sourceTree = "<group>"; };
 		F45D6A4012F0B2140091E9D9 /* GTLObjectTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLObjectTest.m; path = Tests/GTLObjectTest.m; sourceTree = "<group>"; };
@@ -561,7 +524,7 @@
 		32C88E010371C26100C91783 /* GTL Source */ = {
 			isa = PBXGroup;
 			children = (
-				DA4264AB1A6D200A00290CBF /* Services */,
+				DAB1651E1A6D3E49008D69B2 /* Services */,
 				4F346DD20D7500C9006033E0 /* Common */,
 			);
 			name = "GTL Source";
@@ -750,61 +713,62 @@
 			name = OAuth2;
 			sourceTree = "<group>";
 		};
-		DA4264AB1A6D200A00290CBF /* Services */ = {
+		DAB1651E1A6D3E49008D69B2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				DA42673E1A6D200A00290CBF /* Gmail */,
+				DAB1651F1A6D3E62008D69B2 /* Gmail */,
 			);
-			path = Services;
+			name = Services;
 			sourceTree = "<group>";
 		};
-		DA42673E1A6D200A00290CBF /* Gmail */ = {
+		DAB1651F1A6D3E62008D69B2 /* Gmail */ = {
 			isa = PBXGroup;
 			children = (
-				DA42673F1A6D200A00290CBF /* Generated */,
+				DAB165201A6D3E62008D69B2 /* Generated */,
 			);
-			path = Gmail;
+			name = Gmail;
+			path = Services/Gmail;
 			sourceTree = "<group>";
 		};
-		DA42673F1A6D200A00290CBF /* Generated */ = {
+		DAB165201A6D3E62008D69B2 /* Generated */ = {
 			isa = PBXGroup;
 			children = (
-				DA4267401A6D200A00290CBF /* GTLGmail.h */,
-				DA4267411A6D200A00290CBF /* GTLGmail_Sources.m */,
-				DA4267421A6D200A00290CBF /* GTLGmailConstants.h */,
-				DA4267431A6D200A00290CBF /* GTLGmailConstants.m */,
-				DA4267441A6D200A00290CBF /* GTLGmailDraft.h */,
-				DA4267451A6D200A00290CBF /* GTLGmailDraft.m */,
-				DA4267461A6D200A00290CBF /* GTLGmailHistory.h */,
-				DA4267471A6D200A00290CBF /* GTLGmailHistory.m */,
-				DA4267481A6D200A00290CBF /* GTLGmailLabel.h */,
-				DA4267491A6D200A00290CBF /* GTLGmailLabel.m */,
-				DA42674A1A6D200A00290CBF /* GTLGmailListDraftsResponse.h */,
-				DA42674B1A6D200A00290CBF /* GTLGmailListDraftsResponse.m */,
-				DA42674C1A6D200A00290CBF /* GTLGmailListHistoryResponse.h */,
-				DA42674D1A6D200A00290CBF /* GTLGmailListHistoryResponse.m */,
-				DA42674E1A6D200A00290CBF /* GTLGmailListLabelsResponse.h */,
-				DA42674F1A6D200A00290CBF /* GTLGmailListLabelsResponse.m */,
-				DA4267501A6D200A00290CBF /* GTLGmailListMessagesResponse.h */,
-				DA4267511A6D200A00290CBF /* GTLGmailListMessagesResponse.m */,
-				DA4267521A6D200A00290CBF /* GTLGmailListThreadsResponse.h */,
-				DA4267531A6D200A00290CBF /* GTLGmailListThreadsResponse.m */,
-				DA4267541A6D200A00290CBF /* GTLGmailMessage.h */,
-				DA4267551A6D200A00290CBF /* GTLGmailMessage.m */,
-				DA4267561A6D200A00290CBF /* GTLGmailMessagePart.h */,
-				DA4267571A6D200A00290CBF /* GTLGmailMessagePart.m */,
-				DA4267581A6D200A00290CBF /* GTLGmailMessagePartBody.h */,
-				DA4267591A6D200A00290CBF /* GTLGmailMessagePartBody.m */,
-				DA42675A1A6D200A00290CBF /* GTLGmailMessagePartHeader.h */,
-				DA42675B1A6D200A00290CBF /* GTLGmailMessagePartHeader.m */,
-				DA42675C1A6D200A00290CBF /* GTLGmailProfile.h */,
-				DA42675D1A6D200A00290CBF /* GTLGmailProfile.m */,
-				DA42675E1A6D200A00290CBF /* GTLGmailThread.h */,
-				DA42675F1A6D200A00290CBF /* GTLGmailThread.m */,
-				DA4267601A6D200A00290CBF /* GTLQueryGmail.h */,
-				DA4267611A6D200A00290CBF /* GTLQueryGmail.m */,
-				DA4267621A6D200A00290CBF /* GTLServiceGmail.h */,
-				DA4267631A6D200A00290CBF /* GTLServiceGmail.m */,
+				DAB165211A6D3E62008D69B2 /* GTLGmail.h */,
+				DAB165221A6D3E62008D69B2 /* GTLGmail_Sources.m */,
+				DAB165231A6D3E62008D69B2 /* GTLGmailConstants.h */,
+				DAB165241A6D3E62008D69B2 /* GTLGmailConstants.m */,
+				DAB165251A6D3E62008D69B2 /* GTLGmailDraft.h */,
+				DAB165261A6D3E62008D69B2 /* GTLGmailDraft.m */,
+				DAB165271A6D3E62008D69B2 /* GTLGmailHistory.h */,
+				DAB165281A6D3E62008D69B2 /* GTLGmailHistory.m */,
+				DAB165291A6D3E62008D69B2 /* GTLGmailLabel.h */,
+				DAB1652A1A6D3E62008D69B2 /* GTLGmailLabel.m */,
+				DAB1652B1A6D3E62008D69B2 /* GTLGmailListDraftsResponse.h */,
+				DAB1652C1A6D3E62008D69B2 /* GTLGmailListDraftsResponse.m */,
+				DAB1652D1A6D3E62008D69B2 /* GTLGmailListHistoryResponse.h */,
+				DAB1652E1A6D3E62008D69B2 /* GTLGmailListHistoryResponse.m */,
+				DAB1652F1A6D3E62008D69B2 /* GTLGmailListLabelsResponse.h */,
+				DAB165301A6D3E62008D69B2 /* GTLGmailListLabelsResponse.m */,
+				DAB165311A6D3E62008D69B2 /* GTLGmailListMessagesResponse.h */,
+				DAB165321A6D3E62008D69B2 /* GTLGmailListMessagesResponse.m */,
+				DAB165331A6D3E62008D69B2 /* GTLGmailListThreadsResponse.h */,
+				DAB165341A6D3E62008D69B2 /* GTLGmailListThreadsResponse.m */,
+				DAB165351A6D3E62008D69B2 /* GTLGmailMessage.h */,
+				DAB165361A6D3E62008D69B2 /* GTLGmailMessage.m */,
+				DAB165371A6D3E62008D69B2 /* GTLGmailMessagePart.h */,
+				DAB165381A6D3E62008D69B2 /* GTLGmailMessagePart.m */,
+				DAB165391A6D3E62008D69B2 /* GTLGmailMessagePartBody.h */,
+				DAB1653A1A6D3E62008D69B2 /* GTLGmailMessagePartBody.m */,
+				DAB1653B1A6D3E62008D69B2 /* GTLGmailMessagePartHeader.h */,
+				DAB1653C1A6D3E62008D69B2 /* GTLGmailMessagePartHeader.m */,
+				DAB1653D1A6D3E62008D69B2 /* GTLGmailProfile.h */,
+				DAB1653E1A6D3E62008D69B2 /* GTLGmailProfile.m */,
+				DAB1653F1A6D3E62008D69B2 /* GTLGmailThread.h */,
+				DAB165401A6D3E62008D69B2 /* GTLGmailThread.m */,
+				DAB165411A6D3E62008D69B2 /* GTLQueryGmail.h */,
+				DAB165421A6D3E62008D69B2 /* GTLQueryGmail.m */,
+				DAB165431A6D3E62008D69B2 /* GTLServiceGmail.h */,
+				DAB165441A6D3E62008D69B2 /* GTLServiceGmail.m */,
 			);
 			path = Generated;
 			sourceTree = "<group>";
@@ -843,46 +807,28 @@
 				4F697FA7131C1A4100A5AB6A /* GTMOAuth2Authentication.h in Headers */,
 				4F697FA9131C1A4100A5AB6A /* GTMOAuth2SignIn.h in Headers */,
 				4F697FB7131C1A5800A5AB6A /* GTMOAuth2WindowController.h in Headers */,
-				DA426EC31A6D200C00290CBF /* GTLGmail.h in Headers */,
 				4F698060131C1F1D00A5AB6A /* GTMGatherInputStream.h in Headers */,
 				4F698062131C1F1D00A5AB6A /* GTMHTTPFetcher.h in Headers */,
 				4F698064131C1F1D00A5AB6A /* GTMHTTPFetcherLogging.h in Headers */,
-				DA426EF01A6D200C00290CBF /* GTLGmailThread.h in Headers */,
-				DA426EDE1A6D200C00290CBF /* GTLGmailListThreadsResponse.h in Headers */,
 				4F698066131C1F1D00A5AB6A /* GTMHTTPFetcherService.h in Headers */,
 				4F698068131C1F1D00A5AB6A /* GTMHTTPFetchHistory.h in Headers */,
-				DA426ECF1A6D200C00290CBF /* GTLGmailLabel.h in Headers */,
-				DA426EEA1A6D200C00290CBF /* GTLGmailMessagePartHeader.h in Headers */,
 				4F69806A131C1F1D00A5AB6A /* GTMHTTPUploadFetcher.h in Headers */,
-				DA426EE11A6D200C00290CBF /* GTLGmailMessage.h in Headers */,
-				DA426ECC1A6D200C00290CBF /* GTLGmailHistory.h in Headers */,
 				4F69806C131C1F1D00A5AB6A /* GTMMIMEDocument.h in Headers */,
 				4FDE223C13848173005AEFAA /* GTLFramework.h in Headers */,
-				DA426EF61A6D200C00290CBF /* GTLServiceGmail.h in Headers */,
-				DA426EE71A6D200C00290CBF /* GTLGmailMessagePartBody.h in Headers */,
 				4FDE223E13848173005AEFAA /* GTLJSONParser.h in Headers */,
 				4FDE224013848173005AEFAA /* GTLTargetNamespace.h in Headers */,
-				DA426EE41A6D200C00290CBF /* GTLGmailMessagePart.h in Headers */,
-				DA426EED1A6D200C00290CBF /* GTLGmailProfile.h in Headers */,
-				DA426ED21A6D200C00290CBF /* GTLGmailListDraftsResponse.h in Headers */,
 				4FDE224113848173005AEFAA /* GTLUtilities.h in Headers */,
 				4FDE22611384818E005AEFAA /* GTLBatchQuery.h in Headers */,
 				4FDE22631384818E005AEFAA /* GTLBatchResult.h in Headers */,
-				DA426EC61A6D200C00290CBF /* GTLGmailConstants.h in Headers */,
 				4FDE22651384818E005AEFAA /* GTLDateTime.h in Headers */,
 				4FDE22671384818E005AEFAA /* GTLErrorObject.h in Headers */,
-				DA426ED81A6D200C00290CBF /* GTLGmailListLabelsResponse.h in Headers */,
 				4FDE22691384818E005AEFAA /* GTLObject.h in Headers */,
-				DA426EF31A6D200C00290CBF /* GTLQueryGmail.h in Headers */,
-				DA426EDB1A6D200C00290CBF /* GTLGmailListMessagesResponse.h in Headers */,
 				4FDE226B1384818E005AEFAA /* GTLQuery.h in Headers */,
 				4FDE226D1384818E005AEFAA /* GTLRuntimeCommon.h in Headers */,
 				4FDE226F1384818E005AEFAA /* GTLService.h in Headers */,
 				4F0C4FBC13CFA7E5007E5E92 /* GTLUploadParameters.h in Headers */,
 				4F8DB61913FDAC160001DD6C /* GTMReadMonitorInputStream.h in Headers */,
-				DA426ED51A6D200C00290CBF /* GTLGmailListHistoryResponse.h in Headers */,
 				4F934E671512712100C4EA34 /* GTLBase64.h in Headers */,
-				DA426EC91A6D200C00290CBF /* GTLGmailDraft.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -965,7 +911,7 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = 1DEB913E08733D840010E9CD /* Build configuration list for PBXProject "GTL" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1128,48 +1074,47 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA426EE31A6D200C00290CBF /* GTLGmailMessage.m in Sources */,
+				DAB1654D1A6D3E62008D69B2 /* GTLGmailListMessagesResponse.m in Sources */,
+				DAB165461A6D3E62008D69B2 /* GTLGmailConstants.m in Sources */,
+				DAB165521A6D3E62008D69B2 /* GTLGmailMessagePartHeader.m in Sources */,
 				4F697FAB131C1A4100A5AB6A /* GTMOAuth2Authentication.m in Sources */,
+				DAB165541A6D3E62008D69B2 /* GTLGmailThread.m in Sources */,
 				4F697FAC131C1A4100A5AB6A /* GTMOAuth2SignIn.m in Sources */,
+				DAB1654A1A6D3E62008D69B2 /* GTLGmailListDraftsResponse.m in Sources */,
+				DAB165501A6D3E62008D69B2 /* GTLGmailMessagePart.m in Sources */,
 				4F697FBE131C1A6800A5AB6A /* GTMOAuth2ViewControllerTouch.m in Sources */,
 				4F698059131C1F1D00A5AB6A /* GTMGatherInputStream.m in Sources */,
-				DA426EC81A6D200C00290CBF /* GTLGmailConstants.m in Sources */,
-				DA426EDD1A6D200C00290CBF /* GTLGmailListMessagesResponse.m in Sources */,
-				DA426EF21A6D200C00290CBF /* GTLGmailThread.m in Sources */,
+				DAB1654C1A6D3E62008D69B2 /* GTLGmailListLabelsResponse.m in Sources */,
 				4F69805A131C1F1D00A5AB6A /* GTMHTTPFetcher.m in Sources */,
-				DA426EE61A6D200C00290CBF /* GTLGmailMessagePart.m in Sources */,
-				DA426EE91A6D200C00290CBF /* GTLGmailMessagePartBody.m in Sources */,
-				DA426EF51A6D200C00290CBF /* GTLQueryGmail.m in Sources */,
-				DA426EF81A6D200C00290CBF /* GTLServiceGmail.m in Sources */,
+				DAB165551A6D3E62008D69B2 /* GTLQueryGmail.m in Sources */,
+				DAB1654E1A6D3E62008D69B2 /* GTLGmailListThreadsResponse.m in Sources */,
 				4F69805B131C1F1D00A5AB6A /* GTMHTTPFetcherLogging.m in Sources */,
+				DAB165481A6D3E62008D69B2 /* GTLGmailHistory.m in Sources */,
 				4F69805D131C1F1D00A5AB6A /* GTMHTTPFetchHistory.m in Sources */,
-				DA426EE01A6D200C00290CBF /* GTLGmailListThreadsResponse.m in Sources */,
+				DAB1654B1A6D3E62008D69B2 /* GTLGmailListHistoryResponse.m in Sources */,
 				4F69805E131C1F1D00A5AB6A /* GTMHTTPUploadFetcher.m in Sources */,
+				DAB165531A6D3E62008D69B2 /* GTLGmailProfile.m in Sources */,
 				4F69805F131C1F1D00A5AB6A /* GTMMIMEDocument.m in Sources */,
 				4F69808F131C20DA00A5AB6A /* GTMHTTPFetcherService.m in Sources */,
 				4FDE224313848173005AEFAA /* GTLFramework.m in Sources */,
 				4FDE224413848173005AEFAA /* GTLJSONParser.m in Sources */,
-				DA426ED71A6D200C00290CBF /* GTLGmailListHistoryResponse.m in Sources */,
+				DAB165561A6D3E62008D69B2 /* GTLServiceGmail.m in Sources */,
+				DAB165511A6D3E62008D69B2 /* GTLGmailMessagePartBody.m in Sources */,
+				DAB165491A6D3E62008D69B2 /* GTLGmailLabel.m in Sources */,
 				4FDE224513848173005AEFAA /* GTLUtilities.m in Sources */,
+				DAB1654F1A6D3E62008D69B2 /* GTLGmailMessage.m in Sources */,
 				4FDE22711384818E005AEFAA /* GTLBatchQuery.m in Sources */,
-				DA426ECB1A6D200C00290CBF /* GTLGmailDraft.m in Sources */,
-				DA426ED41A6D200C00290CBF /* GTLGmailListDraftsResponse.m in Sources */,
 				4FDE22721384818E005AEFAA /* GTLBatchResult.m in Sources */,
-				DA426EEF1A6D200C00290CBF /* GTLGmailProfile.m in Sources */,
 				4FDE22731384818E005AEFAA /* GTLDateTime.m in Sources */,
-				DA426EC51A6D200C00290CBF /* GTLGmail_Sources.m in Sources */,
 				4FDE22741384818E005AEFAA /* GTLErrorObject.m in Sources */,
 				4FDE22751384818E005AEFAA /* GTLObject.m in Sources */,
-				DA426EDA1A6D200C00290CBF /* GTLGmailListLabelsResponse.m in Sources */,
 				4FDE22761384818E005AEFAA /* GTLQuery.m in Sources */,
 				4FDE22771384818E005AEFAA /* GTLRuntimeCommon.m in Sources */,
+				DAB165471A6D3E62008D69B2 /* GTLGmailDraft.m in Sources */,
 				4FDE22781384818E005AEFAA /* GTLService.m in Sources */,
 				4F0C4FBE13CFA7E5007E5E92 /* GTLUploadParameters.m in Sources */,
 				4F8DB61B13FDAC160001DD6C /* GTMReadMonitorInputStream.m in Sources */,
-				DA426ECE1A6D200C00290CBF /* GTLGmailHistory.m in Sources */,
 				4F934E691512712100C4EA34 /* GTLBase64.m in Sources */,
-				DA426ED11A6D200C00290CBF /* GTLGmailLabel.m in Sources */,
-				DA426EEC1A6D200C00290CBF /* GTLGmailMessagePartHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1177,48 +1122,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA426EE21A6D200C00290CBF /* GTLGmailMessage.m in Sources */,
 				4F697FA8131C1A4100A5AB6A /* GTMOAuth2Authentication.m in Sources */,
 				4F697FAA131C1A4100A5AB6A /* GTMOAuth2SignIn.m in Sources */,
 				4F697FB8131C1A5800A5AB6A /* GTMOAuth2WindowController.m in Sources */,
 				4F698061131C1F1D00A5AB6A /* GTMGatherInputStream.m in Sources */,
-				DA426EC71A6D200C00290CBF /* GTLGmailConstants.m in Sources */,
-				DA426EDC1A6D200C00290CBF /* GTLGmailListMessagesResponse.m in Sources */,
-				DA426EF11A6D200C00290CBF /* GTLGmailThread.m in Sources */,
 				4F698063131C1F1D00A5AB6A /* GTMHTTPFetcher.m in Sources */,
-				DA426EE51A6D200C00290CBF /* GTLGmailMessagePart.m in Sources */,
-				DA426EE81A6D200C00290CBF /* GTLGmailMessagePartBody.m in Sources */,
-				DA426EF41A6D200C00290CBF /* GTLQueryGmail.m in Sources */,
-				DA426EF71A6D200C00290CBF /* GTLServiceGmail.m in Sources */,
 				4F698065131C1F1D00A5AB6A /* GTMHTTPFetcherLogging.m in Sources */,
 				4F698069131C1F1D00A5AB6A /* GTMHTTPFetchHistory.m in Sources */,
-				DA426EDF1A6D200C00290CBF /* GTLGmailListThreadsResponse.m in Sources */,
 				4F69806B131C1F1D00A5AB6A /* GTMHTTPUploadFetcher.m in Sources */,
 				4F69806D131C1F1D00A5AB6A /* GTMMIMEDocument.m in Sources */,
 				4F698090131C20DA00A5AB6A /* GTMHTTPFetcherService.m in Sources */,
 				4FDE223D13848173005AEFAA /* GTLFramework.m in Sources */,
 				4FDE223F13848173005AEFAA /* GTLJSONParser.m in Sources */,
-				DA426ED61A6D200C00290CBF /* GTLGmailListHistoryResponse.m in Sources */,
 				4FDE224213848173005AEFAA /* GTLUtilities.m in Sources */,
 				4FDE22621384818E005AEFAA /* GTLBatchQuery.m in Sources */,
-				DA426ECA1A6D200C00290CBF /* GTLGmailDraft.m in Sources */,
-				DA426ED31A6D200C00290CBF /* GTLGmailListDraftsResponse.m in Sources */,
 				4FDE22641384818E005AEFAA /* GTLBatchResult.m in Sources */,
-				DA426EEE1A6D200C00290CBF /* GTLGmailProfile.m in Sources */,
 				4FDE22661384818E005AEFAA /* GTLDateTime.m in Sources */,
-				DA426EC41A6D200C00290CBF /* GTLGmail_Sources.m in Sources */,
 				4FDE22681384818E005AEFAA /* GTLErrorObject.m in Sources */,
 				4FDE226A1384818E005AEFAA /* GTLObject.m in Sources */,
-				DA426ED91A6D200C00290CBF /* GTLGmailListLabelsResponse.m in Sources */,
 				4FDE226C1384818E005AEFAA /* GTLQuery.m in Sources */,
 				4FDE226E1384818E005AEFAA /* GTLRuntimeCommon.m in Sources */,
 				4FDE22701384818E005AEFAA /* GTLService.m in Sources */,
 				4F0C4FBD13CFA7E5007E5E92 /* GTLUploadParameters.m in Sources */,
 				4F8DB61A13FDAC160001DD6C /* GTMReadMonitorInputStream.m in Sources */,
-				DA426ECD1A6D200C00290CBF /* GTLGmailHistory.m in Sources */,
 				4F934E681512712100C4EA34 /* GTLBase64.m in Sources */,
-				DA426ED01A6D200C00290CBF /* GTLGmailLabel.m in Sources */,
-				DA426EEB1A6D200C00290CBF /* GTLGmailMessagePartHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1236,10 +1163,6 @@
 		1DEB913F08733D840010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DEPLOYMENT_POSTPROCESSING = NO;
@@ -1253,6 +1176,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = "";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DDEBUG=1";
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
@@ -1279,10 +1203,6 @@
 		1DEB914008733D840010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
@@ -1321,7 +1241,6 @@
 		4F14A9E00B1276B70072EBB8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(value)",
@@ -1350,7 +1269,6 @@
 		4F14A9E10B1276B70072EBB8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(value)",
@@ -1379,7 +1297,6 @@
 		4F1AD9090B71606100DC0485 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				GCC_ENABLE_OBJC_GC = unsupported;
 				INFOPLIST_FILE = "Resources/DevTestTool-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -1390,7 +1307,6 @@
 		4F1AD90A0B71606100DC0485 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				GCC_ENABLE_OBJC_GC = unsupported;
 				INFOPLIST_FILE = "Resources/DevTestTool-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -1401,7 +1317,6 @@
 		4F1C6E101027B3CF00B46459 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-DGTL_IPHONE=1",
@@ -1414,7 +1329,6 @@
 		4F1C6E111027B3CF00B46459 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-DGTL_IPHONE=1",
@@ -1427,7 +1341,6 @@
 		4F38F7120B66EF2C00B24B81 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1451,7 +1364,6 @@
 		4F38F7130B66EF2C00B24B81 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

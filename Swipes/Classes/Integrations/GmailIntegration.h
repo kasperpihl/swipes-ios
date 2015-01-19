@@ -10,4 +10,8 @@
 
 @interface GmailIntegration : NSObject
 
+- (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
+
+- (void)logout;
+
 @end
