@@ -15,6 +15,6 @@
 @property (nonatomic) UIColor *textColor;
 @property (nonatomic) NSDateFormatter *dateFormatter;
 +(KPTopClock*)sharedInstance;
-
+-(void)addTopClock;
 -(void)showNotificationWithMessage:(NSString*)message forSeconds:(CGFloat)seconds;
 @end

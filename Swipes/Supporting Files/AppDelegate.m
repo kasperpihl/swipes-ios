@@ -24,13 +24,12 @@
 #import "CoreSyncHandler.h"
 #import "AnalyticsHandler.h"
 #import "URLHandler.h"
-
+#import "KPTopClock.h"
 
 #import "UIWindow+DHCShakeRecognizer.h"
 
 #import "SettingsHandler.h"
 #import "RootViewController.h"
-#import "Intercom.h"
 #import "GAI.h"
 #import "AppDelegate.h"
 
@@ -89,9 +88,10 @@
 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
-    
+   
     [USER_DEFAULTS setBool:[GlobalApp isMailboxInstalled] forKey:@"isMailboxInstalled"];
     [USER_DEFAULTS synchronize];
+    [self.window makeKeyAndVisible];
     return YES;
 }
 

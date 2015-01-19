@@ -548,12 +548,16 @@ static RootViewController *sharedObject;
     
    // [self setNeedsStatusBarAppearanceUpdate];
 }
+-(void)initializeClock{
+    [kTopClock addTopClock];
+    kTopClock.font = KP_SEMIBOLD(12);
+    [kTopClock setTextColor:alpha(tcolor(TextColor),0.8)];
+}
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    kTopClock.font = KP_SEMIBOLD(12);
     [self changedTheme];
-    //[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(timering) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(initializeClock) userInfo:nil repeats:NO];
    /* EKEventStore *store = [[EKEventStore alloc] init];
     
     [store requestAccessToEntityType:EKEntityTypeReminder completion:^(BOOL granted, NSError *error) {
