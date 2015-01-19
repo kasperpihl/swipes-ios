@@ -100,10 +100,13 @@ static AnalyticsHandler *sharedObject;
     if(self.isBeginningIntercomSession)
         return;
     self.isBeginningIntercomSession = YES;
-    [Intercom beginSessionForUserWithUserId:kCurrent.objectId completion:^(NSError *error) {
-        self.isBeginningIntercomSession = NO;
-        [self checkForUpdatesOnIdentity];
-    }];
+    if(self.initializedIntercom){
+        __weak AnalyticsHandler *weakSelf = self;
+        [Intercom beginSessionForUserWithUserId:kCurrent.objectId completion:^(NSError *error) {
+            weakSelf.isBeginningIntercomSession = NO;
+            [weakSelf checkForUpdatesOnIdentity];
+        }];
+    }
 }
 
 -(void)checkForUpdatesOnIdentity{
@@ -129,7 +132,7 @@ static AnalyticsHandler *sharedObject;
     if(userId && ![userId isEqualToString:currentUserId]){
         gaUpdate = YES;
         shouldUpdate = YES;
-        if(!self.intercomSession)
+        if(self.initializedIntercom && !self.intercomSession)
             [self beginSession];
         [currentValues setObject:userId forKey:@"userId"];
         [tracker set:@"&uid"
