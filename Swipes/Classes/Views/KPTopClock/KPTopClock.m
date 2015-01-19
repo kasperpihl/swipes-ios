@@ -13,6 +13,7 @@ typedef enum {
 } TopClockState;
 
 #import "KPTopClock.h"
+#import "RootViewController.h"
 @interface KPTopClock ()
 
 @property (nonatomic) UIView *view;
@@ -29,7 +30,6 @@ static KPTopClock *sharedObject;
 +(KPTopClock *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[KPTopClock alloc] init];
-        [sharedObject addTopClock];
     }
     return sharedObject;
 }
@@ -108,7 +108,9 @@ static KPTopClock *sharedObject;
 
 
 -(void)addTopClock{
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    if(self.view)
+        return;
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
     self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, window.frame.size.width, 20)];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.clockLabel = [[UILabel alloc] initWithFrame:self.view.bounds];
