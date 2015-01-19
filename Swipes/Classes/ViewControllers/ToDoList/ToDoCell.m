@@ -198,14 +198,12 @@
     NSSet *filteredSubtasks = [[self.toDo getSubtasks] filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
     if( filteredSubtasks && filteredSubtasks.count > 0){
         self.actionStepsButton.hidden = NO;
-        self.actionStepsLabel.layer.borderColor = tcolor(TasksColor).CGColor;
         self.actionStepsLabel.text = [NSString stringWithFormat:@"%lu",(unsigned long)filteredSubtasks.count];
         self.actionStepsLabel.font = KP_REGULAR(11);
         [self.actionStepsLabel sizeToFit];
         CGRectSetSize(self.actionStepsLabel, CGRectGetWidth(self.actionStepsLabel.frame)+12, CGRectGetHeight(self.actionStepsLabel.frame)+6);
     }
     else if(totalSubtask > 0){
-        self.actionStepsLabel.layer.borderColor = tcolor(DoneColor).CGColor;
         self.actionStepsLabel.text = @"done";
         self.actionStepsLabel.font = iconFont(9);
         [self.actionStepsLabel sizeToFit];
@@ -334,6 +332,7 @@
     UIColor *color = [StyleHandler colorForCellType:cellType];
     self.selectionView.backgroundColor = color;
     self.dotView.dotColor = color;
+    self.actionStepsLabel.layer.borderColor = color.CGColor;
 }
 
 -(void)setSelected:(BOOL)selected{
