@@ -309,7 +309,6 @@ static AnalyticsHandler *sharedObject;
             [Intercom updateUserWithAttributes:intercomAttributes completion:^(NSError *error) {
                 if (!error) {
                     if( shouldUpdate ){
-                        DLog(@"did update");
                         [USER_DEFAULTS setObject:[currentValues copy] forKey:@"identityValues"];
                         [USER_DEFAULTS synchronize];
                     }

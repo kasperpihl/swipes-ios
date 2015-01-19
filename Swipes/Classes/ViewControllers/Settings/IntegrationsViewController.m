@@ -19,11 +19,7 @@
 #import "EvernoteSyncHandler.h"
 #import "IntegrationsViewController.h"
 
-#ifdef EVERNOTE_BUSINESS
 int const kCellCount = 5;
-#else
-int const kCellCount = 4;
-#endif
 
 #define kLocalCellHeight 55
 #define kLearnMoreHeight 70
@@ -102,13 +98,13 @@ int const kCellCount = 4;
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     NSInteger extraIfConnected = [kEnInt isAuthenticated] ? kCellCount : 0;
-    return kEvernoteIntegration + 1 + extraIfConnected;
+    return kMailboxIntegration + 2 + extraIfConnected;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *cellIdentifier = indexPath.row > 0 ? @"SwitchCell" : @"SettingCell";
+    NSString *cellIdentifier = indexPath.row > 1 ? @"SwitchCell" : @"SettingCell";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil && indexPath.row == 0) {
+    if (cell == nil && indexPath.row <= 1) {
         SettingsCell *localCell = [[SettingsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         localCell.settingFont = KP_SEMIBOLD(16);
         localCell.leftPadding = 14;
@@ -123,62 +119,24 @@ int const kCellCount = 4;
         cell.backgroundColor = CLEAR;
         cell.textLabel.font = KP_REGULAR(12);
         cell.detailTextLabel.font = KP_REGULAR(11);
-        if (indexPath.row < kCellCount) {
-            
-            UISwitch *aSwitch = [[UISwitch alloc] init];
-            aSwitch.tag = indexPath.row;
-            aSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-            CGRectSetCenter(aSwitch, cell.frame.size.width-aSwitch.frame.size.width/2 - 5, kLocalCellHeight/2);
-            [aSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
-            [cell.contentView addSubview:aSwitch];
-            
-            if(indexPath.row == 1) {
-                aSwitch.on = kEnInt.enableSync;
-            }
-            else if(indexPath.row == 2) {
-                aSwitch.on = kEnInt.autoFindFromTag;
-            }
-            else if(indexPath.row == 3) {
-                aSwitch.on = kEnInt.findInPersonalLinked;
-            }
-#ifdef EVERNOTE_BUSINESS
-            else if(indexPath.row == 4) {
-                if (_isEvernoteBusinessUser) {
-                    aSwitch.on = kEnInt.findInBusinessNotebooks;
-                }
-                else {
-                    //aSwitch.on = NO;
-                    //aSwitch.enabled = NO;
-                    [aSwitch removeFromSuperview];
-                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                }
-            }
-#endif
-            
-        }
-        else{
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
     }
 	return cell;
 }
 
 -(void)switchChanged:(UISwitch*)sender{
     NSInteger tag = sender.tag;
-    if(tag == 1){
+    if(tag == 2){
         [kEnInt setEnableSync:sender.on];
     }
-    else if(tag == 2){
+    else if(tag == 3){
         [kEnInt setAutoFindFromTag:sender.on];
     }
-    else if(tag == 3){
+    else if(tag == 4){
         [kEnInt setFindInPersonalLinked:sender.on];
     }
-#ifdef EVERNOTE_BUSINESS
-    else if(tag == 4){
+    else if(tag == 5){
         [kEnInt setFindInBusinessNotebooks:sender.on];
     }
-#endif
     
     if (sender.on) {
         [[KPCORE evernoteSyncHandler] setUpdatedAt:nil];
@@ -191,7 +149,9 @@ int const kCellCount = 4;
         case kEvernoteIntegration:
             name = @"Evernote";
             break;
-            
+        case kMailboxIntegration:
+            name = @"Mailbox (Beta)";
+            break;
         default:
             break;
     }
@@ -204,6 +164,16 @@ int const kCellCount = 4;
     NSString *name = [self nameForIntegration:integration];
     NSString *valueString;
     switch (integration) {
+        case kMailboxIntegration:{
+#warning Stanimir - change below to check if gmail is linked
+            if([kEnInt isAuthenticated]){
+                name = [name stringByAppendingString:LOCALIZE_STRING(@" (Connected)")];
+                valueString = LOCALIZE_STRING(@"Unlink");
+            }
+            else
+                valueString = LOCALIZE_STRING(@"Link account");
+            break;
+        }
         case kEvernoteIntegration:
             if([kEnInt isAuthenticated]){
                 name = [name stringByAppendingString:LOCALIZE_STRING(@" (Connected)")];
@@ -214,22 +184,55 @@ int const kCellCount = 4;
             break;
         default:break;
     }
-    if(indexPath.row == 0)
+    if(indexPath.row <= 1)
         [cell setSetting:name value:valueString];
-    if(indexPath.row > 0){
+    if(indexPath.row > 1){
+        UISwitch *aSwitch;
+        for (UIView *subview in cell.contentView.subviews)
+        {
+            if([subview isKindOfClass:[UISwitch class]])
+                aSwitch = (UISwitch*)subview;
+        }
+        if(indexPath.row > 1 && indexPath.row <= 5 && !aSwitch){
+            aSwitch = [[UISwitch alloc] init];
+            aSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+            CGRectSetCenter(aSwitch, cell.frame.size.width-aSwitch.frame.size.width/2 - 5, kLocalCellHeight/2);
+            [aSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+            [cell.contentView addSubview:aSwitch];
+        }
+        aSwitch.tag = indexPath.row;
+        if(indexPath.row == 2) {
+            aSwitch.on = kEnInt.enableSync;
+        }
+        else if(indexPath.row == 3) {
+            aSwitch.on = kEnInt.autoFindFromTag;
+        }
+        else if(indexPath.row == 4) {
+            aSwitch.on = kEnInt.findInPersonalLinked;
+        }
+        else if(indexPath.row == 5) {
+            if (_isEvernoteBusinessUser) {
+                aSwitch.on = kEnInt.findInBusinessNotebooks;
+            }
+            else {
+                //aSwitch.on = NO;
+                //aSwitch.enabled = NO;
+                [aSwitch removeFromSuperview];
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
+        }
         cell.textLabel.textColor = tcolor(TextColor);
         cell.detailTextLabel.textColor = tcolor(SubTextColor);
-        if(indexPath.row == 1){
+        if(indexPath.row == 2){
             cell.textLabel.text = LOCALIZE_STRING(@"Sync with Evernote on this device");
         }
-        else if(indexPath.row == 2){
+        else if(indexPath.row == 3){
             cell.textLabel.text = LOCALIZE_STRING(@"Auto import notes with \"swipes\"-tag");
         }
-        else if(indexPath.row == 3){
+        else if(indexPath.row == 4){
             cell.textLabel.text = LOCALIZE_STRING(@"Sync with personal linked notebooks");
         }
-#ifdef EVERNOTE_BUSINESS
-        else if(indexPath.row == 4){
+        else if(indexPath.row == 5){
             if (_isEvernoteBusinessUser)
                 cell.textLabel.text = LOCALIZE_STRING(@"Sync with Evernote Business");
             else {
@@ -237,10 +240,10 @@ int const kCellCount = 4;
                 cell.detailTextLabel.text = LOCALIZE_STRING(@"Tap to learn more");
             }
         }
-#endif
 
-        else if(indexPath.row == kCellCount){
+        else if(indexPath.row == kCellCount+1){
             cell.textLabel.text = LOCALIZE_STRING(@"Open Evernote Importer");
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
     }
 }
@@ -282,6 +285,11 @@ int const kCellCount = 4;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     Integrations integration = indexPath.row;
     switch (integration) {
+        case kMailboxIntegration:{
+#warning Stanimir connect/disconnect gmail api
+            [UTILITY alertWithTitle:@"Connecting Mailbox" andMessage:@"Now!"];
+            break;
+        }
         case kEvernoteIntegration:{
             if(kEnInt.isAuthenticated){
                 [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Unlink Evernote") andMessage:LOCALIZE_STRING(@"All tasks will be unlinked, are you sure?") block:^(BOOL succeeded, NSError *error) {
@@ -301,14 +309,12 @@ int const kCellCount = 4;
             break;
         }
     }
-#ifdef EVERNOTE_BUSINESS
-    if (indexPath.row == 4) {
+    if (indexPath.row == 5) {
         if (!_isEvernoteBusinessUser) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://evernote.com/business/"]];
         }
     }
-#endif
-    if (indexPath.row == kCellCount) {
+    if (indexPath.row == 6) {
         [self showEvernoteImporterAnimated:YES];
     }
 }
@@ -324,6 +330,8 @@ int const kCellCount = 4;
     switch (integration) {
         case kEvernoteIntegration:
             [self showEvernoteHelperAnimated:NO];
+            break;
+        default:
             break;
     }
 }

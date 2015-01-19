@@ -92,6 +92,7 @@
     [USER_DEFAULTS setBool:[GlobalApp isMailboxInstalled] forKey:@"isMailboxInstalled"];
     [USER_DEFAULTS synchronize];
     [self.window makeKeyAndVisible];
+    NSLog(@"%@",kCurrent.email);
     return YES;
 }
 
