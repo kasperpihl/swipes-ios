@@ -508,6 +508,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A7E5FDA21A6D379500AD9AFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F38F6A60B66E91D00B24B81;
+			remoteInfo = GTLFramework;
+		};
+		A7E5FDA41A6D379500AD9AFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F12027C11A4CA2F00BEB470;
+			remoteInfo = GTLTouchStaticLib;
+		};
+		A7E5FDA61A6D379500AD9AFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F12027D11A4CA2F00BEB470;
+			remoteInfo = GTLUnitTests;
+		};
+		A7E5FDA81A6D379500AD9AFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F1AD9020B71603F00DC0485;
+			remoteInfo = DevelopmentTestTool;
+		};
 		DAE2B15919CB7A4D00A9074E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
@@ -1951,6 +1979,17 @@
 			name = Upgrade;
 			sourceTree = "<group>";
 		};
+		A7E5FD9C1A6D379400AD9AFC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A7E5FDA31A6D379500AD9AFC /* GTL.framework */,
+				A7E5FDA51A6D379500AD9AFC /* libGTLTouchStaticLib.a */,
+				A7E5FDA71A6D379500AD9AFC /* GTLUnitTests.xctest */,
+				A7E5FDA91A6D379500AD9AFC /* DevelopmentTestTool */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		A7F4066617296BF100DDE644 /* ToDoList */ = {
 			isa = PBXGroup;
 			children = (
@@ -2431,6 +2470,12 @@
 			mainGroup = A7778CC116EB5884004D95E5;
 			productRefGroup = A7778CCB16EB5884004D95E5 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A7E5FD9C1A6D379400AD9AFC /* Products */;
+					ProjectRef = DAB164D41A6D1E8D008D69B2 /* GTL.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				A7778CC916EB5884004D95E5 /* Swipes */,
@@ -2440,6 +2485,37 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A7E5FDA31A6D379500AD9AFC /* GTL.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GTL.framework;
+			remoteRef = A7E5FDA21A6D379500AD9AFC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A7E5FDA51A6D379500AD9AFC /* libGTLTouchStaticLib.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGTLTouchStaticLib.a;
+			remoteRef = A7E5FDA41A6D379500AD9AFC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A7E5FDA71A6D379500AD9AFC /* GTLUnitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GTLUnitTests.xctest;
+			remoteRef = A7E5FDA61A6D379500AD9AFC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A7E5FDA91A6D379500AD9AFC /* DevelopmentTestTool */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = DevelopmentTestTool;
+			remoteRef = A7E5FDA81A6D379500AD9AFC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A7778CC816EB5884004D95E5 /* Resources */ = {
