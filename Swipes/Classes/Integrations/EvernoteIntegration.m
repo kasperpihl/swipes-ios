@@ -463,13 +463,14 @@ NSError * NewNSErrorFromException(NSException * exc) {
     
     ENSession* session = [ENSession sharedSession];
     self.requestCounter++;
+#warning Stanimir, I think here is a lot of bad things going on! Of all the errors online, this is the one producing authtoken error
     [session downloadNote:noteRef progress:nil completion:^(ENNote *note, NSError *error) {
         if (!error) {
             [self cacheAddNote:note forNoteRef:noteRef];
             block(note, nil);
         }
         else {
-            [self handleError:error withType:@"Evernote Find Notes Error"];
+            [self handleError:error withType:@"Evernote Download Note Error"];
             block(nil, error);
         }
     }];
