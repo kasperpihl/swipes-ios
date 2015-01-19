@@ -18,7 +18,9 @@ static int g_activityIndicatorStack = 0;
 @end
 
 @implementation GlobalApp
-
++ (BOOL)isMailboxInstalled{
+    return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"dbx-mailbox://"]];
+}
 + (BOOL)isEvernoteInstalled
 {
     return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"en://"]];

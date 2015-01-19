@@ -90,6 +90,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
     
+    [USER_DEFAULTS setBool:[GlobalApp isMailboxInstalled] forKey:@"isMailboxInstalled"];
+    [USER_DEFAULTS synchronize];
     return YES;
 }
 

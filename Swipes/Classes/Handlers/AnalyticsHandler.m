@@ -276,7 +276,22 @@ static AnalyticsHandler *sharedObject;
     
     
     
-    //
+    NSString *currentIsMailboxInstalled = [currentValues objectForKey:@"mailbox_installed"];
+    NSString *isMailboxInstalled = @"Not Installed";
+    if([USER_DEFAULTS boolForKey:@"isMailboxInstalled"])
+        isMailboxInstalled = @"Installed";
+    if(![isMailboxInstalled isEqualToString:currentIsMailboxInstalled]){
+        shouldUpdate = YES;
+        gaUpdate = YES;
+        
+        [currentValues setObject:isMailboxInstalled forKey:@"mailbox_installed"];
+        
+        [tracker set:[GAIFields customDimensionForIndex:6]
+               value:isMailboxInstalled];
+        [gaCustomBuilder set:isMailboxInstalled forKey:[GAIFields customDimensionForIndex:6]];
+        
+        [customIntercomAttributes setObject:isMailboxInstalled forKey:@"mailbox_installed"];
+    }
     
 
     if(gaUpdate){
