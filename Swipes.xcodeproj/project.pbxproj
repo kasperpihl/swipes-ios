@@ -507,6 +507,7 @@
 		DAFBF4741A65D92F003DD799 /* MagicalRecordLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFBF4041A65D92F003DD799 /* MagicalRecordLogging.h */; };
 		DAFBF4751A65D92F003DD799 /* MagicalRecordShorthand.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFBF4051A65D92F003DD799 /* MagicalRecordShorthand.h */; };
 		DAFBF4761A65D92F003DD799 /* CoreData+MagicalRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFBF4061A65D92F003DD799 /* CoreData+MagicalRecord.h */; };
+		DAFBF47A1A6DB63C003DD799 /* GTMOAuth2ViewTouch.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAFBF4791A6DB63C003DD799 /* GTMOAuth2ViewTouch.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -949,7 +950,6 @@
 		DA69248D19B87C450082D1E4 /* SwipesKit-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwipesKit-Prefix.pch"; sourceTree = "<group>"; };
 		DA6B61C219E321FE00089877 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Swipes/en.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		DA6B61C419E322FB00089877 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
-		DA6B61C519E3298800089877 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailSyncHandler.h; path = SyncHandlers/GmailSyncHandler.h; sourceTree = "<group>"; };
 		DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailSyncHandler.m; path = SyncHandlers/GmailSyncHandler.m; sourceTree = "<group>"; };
 		DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailIntegration.h; path = Integrations/GmailIntegration.h; sourceTree = "<group>"; };
@@ -1065,6 +1065,7 @@
 		DAFBF4041A65D92F003DD799 /* MagicalRecordLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordLogging.h; sourceTree = "<group>"; };
 		DAFBF4051A65D92F003DD799 /* MagicalRecordShorthand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordShorthand.h; sourceTree = "<group>"; };
 		DAFBF4061A65D92F003DD799 /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
+		DAFBF4791A6DB63C003DD799 /* GTMOAuth2ViewTouch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GTMOAuth2ViewTouch.xib; path = "Swipes/Ressources/Libs/google-api-objectivec-client/Source/OAuth2/Touch/GTMOAuth2ViewTouch.xib"; sourceTree = SOURCE_ROOT; };
 		E05A80E8EEB25CD6DB2767FA /* Pods-SwipesKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.debug.xcconfig"; sourceTree = "<group>"; };
 		F17D8C581F2A222D9CA9DE7E /* Pods-SwipesToday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.release.xcconfig"; sourceTree = "<group>"; };
 		FA01441E525669BA3638C6B1 /* Pods-Swipes.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swipes.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-Swipes/Pods-Swipes.adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -1326,11 +1327,8 @@
 		A70D12D71966D09A00A95C50 /* Integrations */ = {
 			isa = PBXGroup;
 			children = (
-				DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */,
-				DAB164EE1A6D29A3008D69B2 /* GmailIntegration.m */,
-				DA3E54411A15498500C2116F /* ENNoteRefInternal.h */,
-				A70D12D81966D11500A95C50 /* EvernoteIntegration.h */,
-				A70D12D91966D11500A95C50 /* EvernoteIntegration.m */,
+				DAFBF47F1A6DB641003DD799 /* Gmail */,
+				DAFBF4801A6DB666003DD799 /* Evernote */,
 				A7C258FC197CE5A200290198 /* IntegrationHandler.h */,
 				A7C258FD197CE5A200290198 /* IntegrationHandler.m */,
 			);
@@ -1982,17 +1980,6 @@
 			name = Upgrade;
 			sourceTree = "<group>";
 		};
-		A7E5FD9C1A6D379400AD9AFC /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A7E5FDA31A6D379500AD9AFC /* GTL.framework */,
-				A7E5FDA51A6D379500AD9AFC /* libGTLTouchStaticLib.a */,
-				A7E5FDA71A6D379500AD9AFC /* GTLUnitTests.xctest */,
-				A7E5FDA91A6D379500AD9AFC /* DevelopmentTestTool */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		A7F4066617296BF100DDE644 /* ToDoList */ = {
 			isa = PBXGroup;
 			children = (
@@ -2299,6 +2286,26 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		DAFBF47F1A6DB641003DD799 /* Gmail */ = {
+			isa = PBXGroup;
+			children = (
+				DAFBF4791A6DB63C003DD799 /* GTMOAuth2ViewTouch.xib */,
+				DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */,
+				DAB164EE1A6D29A3008D69B2 /* GmailIntegration.m */,
+			);
+			name = Gmail;
+			sourceTree = "<group>";
+		};
+		DAFBF4801A6DB666003DD799 /* Evernote */ = {
+			isa = PBXGroup;
+			children = (
+				DA3E54411A15498500C2116F /* ENNoteRefInternal.h */,
+				A70D12D81966D11500A95C50 /* EvernoteIntegration.h */,
+				A70D12D91966D11500A95C50 /* EvernoteIntegration.m */,
+			);
+			name = Evernote;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2562,6 +2569,7 @@
 				A708BEEF1A160D2000C7E15A /* timepickerwheelselected.png in Resources */,
 				A74FB90018FFF47800F25157 /* swipes.ttf in Resources */,
 				DACD544E18A1ACFC00C378DF /* page_white.png in Resources */,
+				DAFBF47A1A6DB63C003DD799 /* GTMOAuth2ViewTouch.xib in Resources */,
 				DACD546118A1ACFC00C378DF /* page_white_visualstudio.png in Resources */,
 				A7F522AC197D7C76008B6147 /* swipesevernotetag.png in Resources */,
 				DACD545C18A1ACFC00C378DF /* page_white_picture.png in Resources */,

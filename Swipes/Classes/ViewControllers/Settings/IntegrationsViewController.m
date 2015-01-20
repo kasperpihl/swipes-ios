@@ -17,6 +17,7 @@
 #import "EvernoteImporterViewController.h"
 #import "EvernoteIntegration.h"
 #import "EvernoteSyncHandler.h"
+#import "GmailIntegration.h"
 #import "IntegrationsViewController.h"
 
 int const kCellCount = 5;
@@ -165,8 +166,7 @@ int const kCellCount = 5;
     NSString *valueString;
     switch (integration) {
         case kMailboxIntegration:{
-#warning Stanimir - change below to check if gmail is linked
-            if([kEnInt isAuthenticated]){
+            if([kGmInt isAuthenticated]){
                 name = [name stringByAppendingString:LOCALIZE_STRING(@" (Connected)")];
                 valueString = LOCALIZE_STRING(@"Unlink");
             }
@@ -269,11 +269,26 @@ int const kCellCount = 5;
     }];
 }
 
--(void)reload{
+- (void)gmailAuthenticateUsingSelector:(SEL)selector withObject:(id)object
+{
+    [DejalBezelActivityView activityViewForView:self.parentViewController.view withLabel:@"Authenticating.."];
+    [kGmInt authenticateEvernoteInViewController:self withBlock:^(NSError *error) {
+        [DejalBezelActivityView removeViewAnimated:YES];
+        if (error || !kGmInt.isAuthenticated) {
+            // TODO show message to the user
+            //NSLog(@"Session authentication failed: %@", [error localizedDescription]);
+        }
+        else {
+            [self performSelectorOnMainThread:selector withObject:object waitUntilDone:NO];
+        }
+    }];
+}
+
+-(void)reload {
     [self.tableView reloadData];
 }
 
--(void)authenticated{
+-(void)authenticatedEvernote {
     [UTILITY alertWithTitle:LOCALIZE_STRING(@"Get started") andMessage:LOCALIZE_STRING(@"Import a few notes right away.") buttonTitles:@[LOCALIZE_STRING(@"Not now"),LOCALIZE_STRING(@"Choose notes")] block:^(NSInteger number, NSError *error) {
         if(number == 1){
             [self showEvernoteImporterAnimated:YES];
@@ -282,12 +297,28 @@ int const kCellCount = 5;
     [self reload];
 }
 
+-(void)authenticatedGmail {
+    [self reload];
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     Integrations integration = indexPath.row;
     switch (integration) {
         case kMailboxIntegration:{
-#warning Stanimir connect/disconnect gmail api
-            [UTILITY alertWithTitle:@"Connecting Mailbox" andMessage:@"Now!"];
+            if (kGmInt.isAuthenticated) {
+                [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Unlink Gmail") andMessage:LOCALIZE_STRING(@"All tasks will be unlinked, are you sure?") block:^(BOOL succeeded, NSError *error) {
+                    if (succeeded) {
+                        [kGmInt logout];
+                        NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
+                        [KPToDo removeAllAttachmentsForAllToDosWithService:GMAIL_SERVICE inContext:context save:YES];
+                        [self reload];
+                    }
+                }];
+                
+            }
+            else{
+                [self gmailAuthenticateUsingSelector:@selector(authenticatedGmail) withObject:nil];
+            }
             break;
         }
         case kEvernoteIntegration:{
@@ -296,15 +327,13 @@ int const kCellCount = 5;
                     if (succeeded) {
                         [kEnInt logout];
                         NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-                        
                         [KPToDo removeAllAttachmentsForAllToDosWithService:EVERNOTE_SERVICE inContext:context save:YES];
                         [self reload];
                     }
                 }];
-                
             }
             else{
-                [self evernoteAuthenticateUsingSelector:@selector(authenticated) withObject:nil];
+                [self evernoteAuthenticateUsingSelector:@selector(authenticatedEvernote) withObject:nil];
             }
             break;
         }

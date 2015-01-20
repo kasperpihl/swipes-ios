@@ -3,6 +3,7 @@
 #import "KPAttachment.h"
 
 NSString* const EVERNOTE_SERVICE = @"evernote";
+NSString* const GMAIL_SERVICE = @"gmail";
 NSString* const DROPBOX_SERVICE = @"dropbox";
 
 @interface KPAttachment ()

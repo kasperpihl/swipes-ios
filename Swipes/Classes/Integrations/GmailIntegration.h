@@ -8,10 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+#define kGmInt [GmailIntegration sharedInstance]
+
 @interface GmailIntegration : NSObject
 
-- (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
++ (instancetype)sharedInstance;
 
+@property (nonatomic, assign) BOOL isAuthenticated;
+
+- (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
 - (void)logout;
 
 @end
