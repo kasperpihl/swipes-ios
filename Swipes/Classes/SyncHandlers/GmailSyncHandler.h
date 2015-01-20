@@ -10,4 +10,6 @@
 
 @interface GmailSyncHandler : ParentSyncHandler
 
+-(void)synchronizeWithBlock:(SyncBlock)block;
+
 @end

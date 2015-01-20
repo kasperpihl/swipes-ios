@@ -6,8 +6,144 @@
 //  Copyright (c) 2015 Pihl IT. All rights reserved.
 //
 
+/*
+ TODO
+ 
+ - we should recognize first start on the device and logout gmail
+ */
+
+#import "KPToDo.h"
+#import "KPAttachment.h"
+#import "CoreSyncHandler.h"
+#import "UtilityClass.h"
+#import "CoreData+MagicalRecord.h"
+
+#import "GmailIntegration.h"
+#import "GmailThreadProcessor.h"
 #import "GmailSyncHandler.h"
 
+NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
+
+@interface GmailSyncHandler ()
+
+@property (nonatomic, strong) NSDate *lastUpdated;
+@property (nonatomic, strong) NSMutableArray* updatedTasks;
+
+@end
+
 @implementation GmailSyncHandler
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _lastUpdated = [USER_DEFAULTS objectForKey:kGmailUpdatedAtKey];
+        _updatedTasks = [NSMutableArray array];
+    }
+    return self;
+}
+
+-(void)setUpdatedAt:(NSDate*)updatedAt
+{
+    if (updatedAt) {
+        [USER_DEFAULTS setObject:updatedAt forKey:kGmailUpdatedAtKey];
+    }
+    else {
+        [USER_DEFAULTS removeObjectForKey:kGmailUpdatedAtKey];
+    }
+    [USER_DEFAULTS synchronize];
+    self.lastUpdated = updatedAt;
+}
+
+-(void)synchronizeWithBlock:(SyncBlock)block
+{
+    block(SyncStatusStarted, nil, nil);
+    if (!kGmInt.isAuthenticated) {
+        NSError* error = [NSError errorWithDomain:@"Gmail not authenticated" code:702 userInfo:nil];
+        return block(SyncStatusError, nil, error);
+    }
+    [self findUpdatedThreads:block];
+}
+
+- (void)findUpdatedThreads:(SyncBlock)block
+{
+    NSString *query = nil;
+//    if(self.lastUpdated){
+//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+//        [dateFormatter setDateFormat:@"yyyy/MM/dd"];
+//        query = [NSString stringWithFormat:@"after:%@", [dateFormatter stringFromDate:self.lastUpdated]];
+//    }
+    
+    [kGmInt listThreads:query withBlock:^(NSArray *threadListResults, NSError *error) {
+        if (error) {
+            block(SyncStatusError, nil, error);
+        }
+        else {
+            [self synchronizeThreads:threadListResults withBlock:block];
+        }
+    }];
+}
+
+- (void)synchronizeThreads:(NSArray *)threadListResults withBlock:(SyncBlock)block
+{
+    __block NSDate *date = [NSDate date];
+    __block NSInteger returnCount = 0;
+    __block NSInteger targetCount = threadListResults.count;
+    __block NSError *runningError;
+    
+    __block voidBlock finalizeBlock = ^{
+        returnCount++;
+        if (returnCount == targetCount){
+            if (runningError){
+                block(SyncStatusError, nil, runningError);
+                return;
+            }
+            // If changes to Core Data - make sure it gets synced to our server.
+            if([[KPCORE context] hasChanges]){
+                @synchronized(kGmailUpdatedAtKey) {
+                    NSUndoManager* um = [KPCORE context].undoManager;
+                    BOOL state = um.isUndoRegistrationEnabled;
+                    if (state)
+                        [um disableUndoRegistration];
+                    [KPToDo saveToSync];
+                    if (state != um.isUndoRegistrationEnabled)
+                        [um enableUndoRegistration];
+                }
+            }
+            [self setUpdatedAt:date];
+            block(SyncStatusSuccess, @{@"updated": [_updatedTasks copy]}, nil);
+            [_updatedTasks removeAllObjects];
+        }
+    };
+    
+    for (__block GTLGmailThread* thread in threadListResults) {
+        NSArray *existingTasks = [KPAttachment findAttachmentsForService:GMAIL_SERVICE identifier:thread.identifier context:nil];
+        if (!existingTasks || (0 == existingTasks.count)) {
+            // we don't know this thread
+            [GmailThreadProcessor processorWithThreadId:thread.identifier block:^(GmailThreadProcessor *processor, NSError *error) {
+                if (error) {
+                    if (!runningError)
+                        runningError = error;
+                }
+                else {
+                    NSString* title = [processor title];
+                    if (title) {
+                        if(title.length > kTitleMaxLength)
+                            title = [title substringToIndex:kTitleMaxLength];
+                        KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO from:@"Gmail"];
+                        [newToDo attachService:GMAIL_SERVICE title:title identifier:processor.threadId sync:YES from:@"gmail-integration"];
+                        [_updatedTasks addObject:newToDo];
+                    }
+                }
+                finalizeBlock();
+            }];
+        }
+        else {
+            // we already have the thread into task
+            finalizeBlock();
+        }
+    }
+}
 
 @end

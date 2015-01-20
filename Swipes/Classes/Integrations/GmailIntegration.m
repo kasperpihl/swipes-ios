@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Pihl IT. All rights reserved.
 //
 
-#import "GTLGmail.h"
 #import "GTMOAuth2Authentication.h"
 #import "GTMOAuth2ViewControllerTouch.h"
 #import "GmailIntegration.h"
@@ -20,7 +19,8 @@ static NSString* const kClientSecret = @"mILogx6YkvKKoMo72YjT8Ksa";
 // where to we store gmail integration data
 static NSString* const kKeychainKeyName = @"swipes_gmail_integration";
 
-static NSString* const kSwipesLabelName = @"Swipes";
+static NSString* const kSwipesLabelName = @"Swipes"; // label name
+static NSUInteger const kMaxResults = 100; // how many results to retrieve
 
 @interface GmailIntegration ()
 
@@ -56,9 +56,6 @@ static NSString* const kSwipesLabelName = @"Swipes";
             _googleAuth = auth;
             [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
                 // TODO log error
-                if (!error) {
-                    [self listThreads:nil];
-                }
             }];
         }
         
@@ -81,9 +78,6 @@ static NSString* const kSwipesLabelName = @"Swipes";
                 _googleAuth = auth;
                 [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
                     // TODO log error
-                    if (!error) {
-                        [self listThreads:nil];
-                    }
                 }];
             }
             block(error);
@@ -157,68 +151,50 @@ static NSString* const kSwipesLabelName = @"Swipes";
     }];
 }
 
-
-- (void)listMessages:(NSString *)query
-{
-    GTLQueryGmail* listMessages = [GTLQueryGmail queryForUsersMessagesList];
-    listMessages.labelIds = @[_swipesLabelId];
-    listMessages.maxResults = 100;
-    listMessages.q = query;
-    
-    GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
-    service.authorizer = _googleAuth;
-    [service executeQuery:listMessages completionHandler:^(GTLServiceTicket *ticket, GTLGmailListMessagesResponse* object, NSError *error) {
-        if (error) {
-            DLog(@"queried - error: %@", error);
-        }
-        else {
-            for (GTLGmailMessage* message in object.messages) {
-                DLog(@"message: %@", message);
-                GTLQueryGmail* getMessage = [GTLQueryGmail queryForUsersMessagesGet];
-                getMessage.identifier = message.identifier;
-                GTLServiceGmail* serviceGetMessage = [[GTLServiceGmail alloc] init];
-                serviceGetMessage.authorizer = _googleAuth;
-                [serviceGetMessage executeQuery:getMessage completionHandler:^(GTLServiceTicket *ticket, GTLGmailMessage* object, NSError *error) {
-                    DLog(@"queried - message:%@, error: %@", object, error);
-                    if (nil == error) {
-                        DLog(@"Message: %@", object.snippet);
-                    }
-                }];
-            }
-        }
-    }];
-}
-
-- (void)listThreads:(NSString *)query
+- (void)doListThreads:(NSString *)query withBlock:(ThreadListBlock)block
 {
     GTLQueryGmail* listThreads = [GTLQueryGmail queryForUsersThreadsList];
     listThreads.labelIds = @[_swipesLabelId];
-    listThreads.maxResults = 100;
+    listThreads.maxResults = kMaxResults;
     listThreads.q = query;
     
     GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
     service.authorizer = _googleAuth;
     [service executeQuery:listThreads completionHandler:^(GTLServiceTicket *ticket, GTLGmailListThreadsResponse* object, NSError *error) {
-        if (error) {
-            DLog(@"queried - error: %@", error);
-        }
-        else {
-            for (GTLGmailThread* thread in object.threads) {
-                DLog(@"thread: %@", thread);
-                GTLQueryGmail* getThread = [GTLQueryGmail queryForUsersThreadsGet];
-                getThread.identifier = thread.identifier;
-                GTLServiceGmail* serviceGetThread = [[GTLServiceGmail alloc] init];
-                serviceGetThread.authorizer = _googleAuth;
-                [serviceGetThread executeQuery:getThread completionHandler:^(GTLServiceTicket *ticket, GTLGmailThread* thread, NSError *error) {
-                    DLog(@"queried - thread:%@, error: %@", thread, error);
-                    if (nil == error) {
-                        GTLGmailMessage* message = thread.messages[0];
-                        DLog(@"Thread: %@", message.snippet);
-                    }
-                }];
-            }
-        }
+        block(nil == object ? nil : object.threads, error);
     }];
+}
+
+- (void)getThread:(NSString *)threadId withBlock:(ThreadGetBlock)block
+{
+    GTLQueryGmail* getThread = [GTLQueryGmail queryForUsersThreadsGet];
+    getThread.identifier = threadId;
+    GTLServiceGmail* serviceGetThread = [[GTLServiceGmail alloc] init];
+    serviceGetThread.authorizer = _googleAuth;
+    [serviceGetThread executeQuery:getThread completionHandler:^(GTLServiceTicket *ticket, GTLGmailThread* thread, NSError *error) {
+        DLog(@"queried - thread:%@, error: %@", thread, error);
+        block(thread, error);
+    }];
+}
+
+- (void)listThreads:(NSString *)query withBlock:(ThreadListBlock)block
+{
+    if (nil == _googleAuth) {
+        block(nil, [[NSError alloc] initWithDomain:@"Gmail not authenticated" code:701 userInfo:nil]);
+    }
+    else if (nil == _swipesLabelId) {
+        [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
+            if (error) {
+                block(nil, error);
+            }
+            else {
+                [self doListThreads:query withBlock:block];
+            }
+        }];
+    }
+    else {
+        [self doListThreads:query withBlock:block];
+    }
 }
 
 

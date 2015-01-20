@@ -20,6 +20,9 @@
 #import "EvernoteIntegration.h"
 #import "EvernoteSyncHandler.h"
 
+#import "GmailIntegration.h"
+#import "GmailSyncHandler.h"
+
 #import "CoreSyncHandler.h"
 
 #define kSyncTime 3
@@ -43,40 +46,46 @@
 */
 @interface CoreSyncHandler ()
 
-@property (nonatomic) Reachability *_reach;
+@property (nonatomic, strong) Reachability *_reach;
 
+@property (nonatomic, strong) NSMutableDictionary *_attributeChangesOnObjects;
+@property (nonatomic, strong) NSMutableDictionary *_attributeChangesOnNewObjectsWhileSyncing;
+@property (nonatomic, strong) NSMutableDictionary *_tempIdsThatGotObjectIds;
 
-@property (nonatomic) NSMutableDictionary *_attributeChangesOnObjects;
-@property (nonatomic) NSMutableDictionary *_attributeChangesOnNewObjectsWhileSyncing;
-
-@property (nonatomic) NSMutableDictionary *_tempIdsThatGotObjectIds;
-
-
-@property BOOL outdated;
-@property BOOL _needSync;
-@property BOOL _isSyncing;
-@property BOOL _didHardSync;
-@property BOOL _showSuccessOnce;
+@property (nonatomic, assign) BOOL outdated;
+@property (nonatomic, assign) BOOL _needSync;
+@property (nonatomic, assign) BOOL _isSyncing;
+@property (nonatomic, assign) BOOL _didHardSync;
+@property (nonatomic, assign) BOOL _showSuccessOnce;
 
 @property (nonatomic) dispatch_queue_t isolationQueue;
 
-@property NSTimer *_syncTimer;
-@property NSDate *lastTry;
-@property NSInteger tryCounter;
-@property BOOL isAuthingEvernote;
+@property (nonatomic, strong) NSTimer *_syncTimer;
+@property (nonatomic, strong) NSDate *lastTry;
+@property (nonatomic, assign) NSInteger tryCounter;
+@property (nonatomic, assign) BOOL isAuthingEvernote;
+@property (nonatomic, assign) BOOL isAuthingGmail;
 
-@property (nonatomic) EvernoteSyncHandler *evernoteSyncHandler;
+@property (nonatomic, strong) EvernoteSyncHandler *evernoteSyncHandler;
+@property (nonatomic, strong) GmailSyncHandler *gmailSyncHandler;
 
-@property (nonatomic) NSMutableSet *_deletedObjectsForSyncNotification;
-@property (nonatomic) NSMutableSet *_updatedObjectsForSyncNotification;
+@property (nonatomic, strong) NSMutableSet *_deletedObjectsForSyncNotification;
+@property (nonatomic, strong) NSMutableSet *_updatedObjectsForSyncNotification;
+
 @end
 
 @implementation CoreSyncHandler
 
--(EvernoteSyncHandler *)evernoteSyncHandler{
+- (EvernoteSyncHandler *)evernoteSyncHandler {
     if (!_evernoteSyncHandler)
-        _evernoteSyncHandler = [[EvernoteSyncHandler allocWithZone:NULL] init];
+        _evernoteSyncHandler = [[EvernoteSyncHandler alloc] init];
     return _evernoteSyncHandler;
+}
+
+- (GmailSyncHandler *)gmailSyncHandler {
+    if (!_gmailSyncHandler)
+        _gmailSyncHandler = [[GmailSyncHandler alloc] init];
+    return _gmailSyncHandler;
 }
 
 #pragma mark - public handlers of changes
@@ -98,6 +107,7 @@
     });
     return copyOfChanges;
 }
+
 -(NSArray*)lookupTemporaryChangedAttributesForTempId:(NSString *)tempId{
     __block NSArray *attributeArray;
     dispatch_sync(self.isolationQueue, ^(){
@@ -105,6 +115,7 @@
     });
     return attributeArray;
 }
+
 -(NSArray*)lookupTemporaryChangedAttributesForObject:(NSString*)objectId{
     __block NSArray *attributeArray;
     dispatch_sync(self.isolationQueue, ^(){
@@ -112,7 +123,6 @@
     });
     return attributeArray;
 }
-
 
 /* Loops through a dictionary of changes to */
 -(void)commitAttributeChanges:(NSDictionary *)changes toTemp:(BOOL)toTemp{
@@ -137,7 +147,6 @@
     });
 }
 
-
 -(void)hardSync{
     NSArray* objects = [KPParseObject MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"objectId != nil"] inContext:[self context]];
     NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
@@ -155,8 +164,6 @@
 
 }
 
-
-
 -(CGFloat)durationForStatus:(SyncStatus)status{
     CGFloat duration = 0;
     switch (status) {
@@ -172,6 +179,7 @@
     }
     return duration;
 }
+
 -(NSString*)titleForStatus:(SyncStatus)status{
     NSString *title;
     switch (status) {
@@ -196,6 +204,7 @@
     }
     return title;
 }
+
 -(void)sendStatus:(SyncStatus)status userInfo:(NSDictionary*)userInfo error:(NSError*)error{
     dispatch_async(dispatch_get_main_queue(), ^{
         NSString *title = [self titleForStatus:status];
@@ -338,7 +347,7 @@
     }
 }
 
--(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error{
+-(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error {
     if ( error ){
         //NSLog(@"error:%@",error);
         self._isSyncing = NO;
@@ -412,9 +421,49 @@
         self._isSyncing = NO;
         [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
     }
+
+    if (kGmInt.isAuthenticated) {
+        [self.gmailSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
+            //NSLog(@"returned %lu",(long)status);
+            if (status == SyncStatusSuccess){
+                if( userInfo ){
+                    NSArray *updatedToDos = [userInfo objectForKey:@"updated"];
+                    if( updatedToDos && updatedToDos.count > 0 ){
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            //NSLog(@"shooting notification from Evernote");
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:@{ @"updated" : updatedToDos }];
+                        });
+                    }
+                }
+                //NSLog(@"successfully ended");
+                self._isSyncing = NO;
+                [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (status == SyncStatusStarted){
+                }
+                else if( status == SyncStatusError ){
+                    self._isSyncing = NO;
+                    
+                    if (!kGmInt.isAuthenticated) {
+                        // kGmInt.enableSync = NO;
+                        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Gmail Authorization") andMessage:LOCALIZE_STRING(@"To sync with Gmail on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
+                            if (number == 1){
+                                [self gmailAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+                            }
+                        }];
+                        [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+                    }
+                    else {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
+                    }
+                }
+            });
+        }];
+    }
 }
 
--(void)clearCache{
+- (void)clearCache{
     [self.evernoteSyncHandler clearCache];
 }
 
@@ -434,12 +483,27 @@
         else {
             [self performSelectorOnMainThread:selector withObject:object waitUntilDone:NO];
         }
-        self.isAuthingEvernote = NO;
     }];
 }
 
-/*
-*/
+- (void)gmailAuthenticateUsingSelector:(SEL)selector withObject:(id)object
+{
+    if (self.isAuthingGmail)
+        return;
+    self.isAuthingGmail = YES;
+    
+    [kGmInt authenticateEvernoteInViewController:self.rootController withBlock:^(NSError *error) {
+        self.isAuthingGmail = NO;
+        
+        if (error || !kGmInt.isAuthenticated) {
+            // TODO show message to the user
+            //NSLog(@"Session authentication failed: %@", [error localizedDescription]);
+        }
+        else {
+            [self performSelectorOnMainThread:selector withObject:object waitUntilDone:NO];
+        }
+    }];
+}
 
 - (BOOL)synchronizeWithParseAsync:(BOOL)async
 {
@@ -636,7 +700,8 @@
     
     return (0 < totalNumberOfObjectsToSave);
 }
-#pragma mark Sync flow helpers
+
+#pragma mark - Sync flow helpers
 - (NSDictionary*)prepareUpdatedObjectsToBeSavedOnServerWithLimit:(NSInteger)limit
 {
     if ( self._didHardSync ){
@@ -783,9 +848,6 @@
     [self._updatedObjectsForSyncNotification removeAllObjects];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:self userInfo:updatedEvents];
 }
-
-
-
 
 
 #pragma mark Getters and Setters

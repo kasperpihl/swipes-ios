@@ -7,8 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "GTLGmail.h"
 
 #define kGmInt [GmailIntegration sharedInstance]
+
+typedef void (^ThreadListBlock)(NSArray *threadListResults, NSError *error);
+typedef void (^ThreadGetBlock)(GTLGmailThread *thread, NSError *error);
 
 @interface GmailIntegration : NSObject
 
@@ -18,5 +22,7 @@
 
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
 - (void)logout;
+- (void)listThreads:(NSString *)query withBlock:(ThreadListBlock)block;
+- (void)getThread:(NSString *)threadId withBlock:(ThreadGetBlock)block;
 
 @end

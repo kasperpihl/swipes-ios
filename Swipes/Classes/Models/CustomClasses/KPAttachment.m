@@ -56,7 +56,7 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
 + (BOOL)supportsService:(NSString *)service
 {
     // we can use some smarter way when we have
-    return ([EVERNOTE_SERVICE isEqualToString:service] || [DROPBOX_SERVICE isEqualToString:service]);
+    return ([EVERNOTE_SERVICE isEqualToString:service] || [GMAIL_SERVICE isEqualToString:service] || [DROPBOX_SERVICE isEqualToString:service]);
 }
 
 -(BOOL)isEqualToDictionary:(NSDictionary *)object{

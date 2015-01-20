@@ -5,9 +5,6 @@
 //  Created by Kasper Pihl Tornøe on 15/06/14.
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
-/* known issues
- - refresh UI on update ?
- */
 
 #import <ENSDK/Advanced/ENSDKAdvanced.h>
 #import "Underscore.h"
@@ -77,7 +74,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
     return nil;
 }
 
--(id)init{
+-(instancetype)init{
     self = [super init];
     if( self ){
         self.changedNotes = [NSMutableSet set];
