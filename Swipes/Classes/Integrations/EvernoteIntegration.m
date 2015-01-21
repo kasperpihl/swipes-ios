@@ -308,7 +308,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     @try {
         ENSession *session = [ENSession sharedSession];
         [session authenticateWithViewController:viewController preferRegistration:NO completion:^(NSError *authenticateError) {
-            if(authenticateError) {
+            if (authenticateError) {
                 [self handleError:authenticateError withType:@"Evernote Auth Error"];
             }
             else {

@@ -13,16 +13,32 @@
 static NSString* const SHARED_GROUP_NAME = @"group.it.pihl.swipes";
 static NSString* const DATABASE_NAME = @"swipes";
 static NSString* const DATABASE_FOLDER = @"database";
-static Global *sharedObject;
+static NSString* const kFirstRunApp = @"FirstRun";
+static BOOL g_isNotFirstRun = NO;
 
 +(Global *)sharedInstance
 {
+    static Global *sharedObject;
     if (!sharedObject){
         sharedObject = [[Global allocWithZone:NULL] init];
     }
     return sharedObject;
 }
 
++ (void)initialize
+{
+    g_isNotFirstRun = [USER_DEFAULTS boolForKey:kFirstRunApp];
+    if (!g_isNotFirstRun) {
+        [USER_DEFAULTS setBool:YES forKey:kFirstRunApp];
+        [USER_DEFAULTS synchronize];
+    }
+    
+}
+
++ (BOOL)isFirstRun
+{
+    return !g_isNotFirstRun;
+}
 
 -(CGFloat)fontMultiplier{
     if( !_fontMultiplier )

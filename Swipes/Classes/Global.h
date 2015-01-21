@@ -19,6 +19,7 @@
 @interface Global : NSObject
 
 + (Global *)sharedInstance;
++ (BOOL)isFirstRun;
 + (NSInteger)OSVersion;
 + (BOOL)is24Hour;
 + (NSDateFormatter *)isoDateFormatter;
@@ -29,6 +30,7 @@
 + (void)initCoreData;
 + (NSUserDefaults *)sharedDefaults;
 + (void)clearUserDefaults;
+
 @property (nonatomic) CGFloat fontMultiplier;
 
 @end

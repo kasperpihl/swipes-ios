@@ -9,9 +9,13 @@
 /*
  TODO
  
- - we should recognize first start on the device and logout gmail
+ - use historyId?
+ - fix the integration data
+ - shall we remove the attachments on logout
+ - shall we show anything special todo list
  */
 
+#import "Global.h"
 #import "KPToDo.h"
 #import "KPAttachment.h"
 #import "CoreSyncHandler.h"
@@ -32,6 +36,16 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
 @end
 
 @implementation GmailSyncHandler
+
++ (void)initialize
+{
+    // we need to logout on first run
+    // we cannot discover uninstall and gmail stores its authentication token in iOS keychain
+    // to the next install with be automatically logged in if we don't do this
+    if ([Global isFirstRun]) {
+        [kGmInt logout];
+    }
+}
 
 - (instancetype)init
 {
@@ -118,8 +132,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
     };
     
     for (__block GTLGmailThread* thread in threadListResults) {
-        NSArray *existingTasks = [KPAttachment findAttachmentsForService:GMAIL_SERVICE identifier:thread.identifier context:nil];
-        if (!existingTasks || (0 == existingTasks.count)) {
+        if (![kGmInt hasNoteWithThreadId:thread.identifier]) {
             // we don't know this thread
             [GmailThreadProcessor processorWithThreadId:thread.identifier block:^(GmailThreadProcessor *processor, NSError *error) {
                 if (error) {
@@ -132,7 +145,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
                         if(title.length > kTitleMaxLength)
                             title = [title substringToIndex:kTitleMaxLength];
                         KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO from:@"Gmail"];
-                        [newToDo attachService:GMAIL_SERVICE title:title identifier:processor.threadId sync:YES from:@"gmail-integration"];
+                        [newToDo attachService:GMAIL_SERVICE title:title identifier:[kGmInt threadIdToNSString:processor.threadId] sync:YES from:@"gmail-integration"];
                         [_updatedTasks addObject:newToDo];
                     }
                 }

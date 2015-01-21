@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Pihl IT. All rights reserved.
 //
 
+#import "UtilityClass.h"
+#import "KPAttachment.h"
 #import "GTMOAuth2Authentication.h"
 #import "GTMOAuth2ViewControllerTouch.h"
 #import "GmailIntegration.h"
@@ -22,10 +24,16 @@ static NSString* const kKeychainKeyName = @"swipes_gmail_integration";
 static NSString* const kSwipesLabelName = @"Swipes"; // label name
 static NSUInteger const kMaxResults = 100; // how many results to retrieve
 
+// json keys
+static NSString* const kKeyJson = @"json:";
+static NSString* const kKeyJsonEmail = @"email";
+static NSString* const kKeyJsonThreadId = @"threadid";
+
 @interface GmailIntegration ()
 
 @property (nonatomic, strong) GTMOAuth2Authentication* googleAuth;
 @property (nonatomic, strong) NSString* swipesLabelId;
+@property (nonatomic, strong) NSString* emailAddress;
 
 @end
 
@@ -46,6 +54,7 @@ static NSUInteger const kMaxResults = 100; // how many results to retrieve
     self = [super init];
     if (self) {
         _googleAuth = nil;
+        _emailAddress = nil;
         NSError* error;
         GTMOAuth2Authentication* auth = [GTMOAuth2ViewControllerTouch
                                          authForGoogleFromKeychainForName:kKeychainKeyName
@@ -57,11 +66,55 @@ static NSUInteger const kMaxResults = 100; // how many results to retrieve
             [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
                 // TODO log error
             }];
+            [self emailAddressWithBlock:^(NSError *error) {
+                // TODO log error
+            }];
         }
         
     }
     return self;
 }
+
+- (NSString *)threadIdToNSString:(NSString *)threadId
+{
+    if ((nil == threadId) || (nil == _emailAddress))
+        return nil;
+
+    NSMutableDictionary* jsonDict = [NSMutableDictionary dictionary];
+    [jsonDict setObject:_emailAddress forKey:kKeyJsonEmail];
+    [jsonDict setObject:threadId forKey:kKeyJsonThreadId];
+    NSError* error;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:jsonDict options:0 error:&error];
+    if (error) {
+        [UtilityClass sendError:error type:@"gmail:threadIdToNSString error"];
+        return nil;
+    }
+    return [kKeyJson stringByAppendingString:[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
+}
+
+- (NSString *)NSStringToThreadId:(NSString *)string
+{
+    NSError* error;
+    NSDictionary* jsonDict = [NSJSONSerialization JSONObjectWithData:[[string substringFromIndex:kKeyJson.length] dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+    if (error) {
+        [UtilityClass sendError:error type:@"gmail:NSStringToThreadId error"];
+        return nil;
+    }
+    return jsonDict[kKeyJsonThreadId];
+}
+
+- (BOOL)hasNoteWithThreadId:(NSString *)threadId
+{
+    NSArray* allAttachments = [KPAttachment allIdentifiersForService:GMAIL_SERVICE sync:YES context:nil];
+    for (NSString* attachmentString in allAttachments) {
+        NSString* tempThreadId = [self NSStringToThreadId:attachmentString];
+        if (tempThreadId && [tempThreadId isEqualToString:threadId]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block
 {
     NSError* error;
@@ -101,10 +154,17 @@ static NSUInteger const kMaxResults = 100; // how many results to retrieve
 {
     [GTMOAuth2ViewControllerTouch removeAuthFromKeychainForName:kKeychainKeyName];
     _googleAuth = nil;
+    _swipesLabelId = nil;
+    _emailAddress = nil;
 }
 
 - (void)createSwipesLabelIfNeededWithBlock:(ErrorBlock)block
 {
+    if (_swipesLabelId) {
+        block(nil);
+        return;
+    }
+    
     GTLQueryGmail* listLabels = [GTLQueryGmail queryForUsersLabelsList];
     GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
     service.authorizer = _googleAuth;
@@ -120,7 +180,6 @@ static NSUInteger const kMaxResults = 100; // how many results to retrieve
                     DLog(@"label: %@", label);
                     if (NSOrderedSame == [label.name caseInsensitiveCompare:kSwipesLabelName]) {
                         _swipesLabelId = label.identifier;
-                        //[self listMessages:@"after:2014/12/01"];
                         hasSwipes = YES;
                         break;
                     }
@@ -142,12 +201,31 @@ static NSUInteger const kMaxResults = 100; // how many results to retrieve
                     DLog(@"queried - error: %@", error);
                     if (nil == error) {
                         _swipesLabelId = object.identifier;
-                        //[self listMessages:nil];
                     }
                     block(error);
                 }];
             }
         }
+    }];
+}
+
+- (void)emailAddressWithBlock:(ErrorBlock)block
+{
+    // maybe we need a flag that we are currently doing this?
+    if (_emailAddress) {
+        block(nil);
+        return;
+    }
+    
+    GTLQueryGmail* getProfile = [GTLQueryGmail queryForUsersGetProfile];
+    
+    GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
+    service.authorizer = _googleAuth;
+    [service executeQuery:getProfile completionHandler:^(GTLServiceTicket *ticket, GTLGmailProfile* profile, NSError *error) {
+        if (!error) {
+            _emailAddress = profile.emailAddress;
+        }
+        block(error);
     }];
 }
 
@@ -182,19 +260,22 @@ static NSUInteger const kMaxResults = 100; // how many results to retrieve
     if (nil == _googleAuth) {
         block(nil, [[NSError alloc] initWithDomain:@"Gmail not authenticated" code:701 userInfo:nil]);
     }
-    else if (nil == _swipesLabelId) {
-        [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
-            if (error) {
-                block(nil, error);
-            }
-            else {
-                [self doListThreads:query withBlock:block];
-            }
-        }];
-    }
-    else {
-        [self doListThreads:query withBlock:block];
-    }
+    
+    [self emailAddressWithBlock:^(NSError *error) {
+        if (error) {
+            block(nil, error);
+        }
+        else {
+            [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
+                if (error) {
+                    block(nil, error);
+                }
+                else {
+                    [self doListThreads:query withBlock:block];
+                }
+            }];
+        }
+    }];
 }
 
 
