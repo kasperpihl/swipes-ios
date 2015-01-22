@@ -9,8 +9,7 @@
 /*
  TODO
  
- - use historyId?
- - fix the integration data
+ - fix the integration data (use the one from Kasper)
  - shall we remove the attachments on logout
  - shall we show anything special todo list
  */

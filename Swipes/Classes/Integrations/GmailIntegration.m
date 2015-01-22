@@ -10,6 +10,7 @@
 #import "KPAttachment.h"
 #import "GTMOAuth2Authentication.h"
 #import "GTMOAuth2ViewControllerTouch.h"
+#import "GmailAuthViewController.h"
 #import "GmailIntegration.h"
 
 // instructions at https://code.google.com/p/google-api-objectivec-client/wiki/Introduction#Preparing_to_Use_the_Library
@@ -22,7 +23,7 @@ static NSString* const kClientSecret = @"mILogx6YkvKKoMo72YjT8Ksa";
 static NSString* const kKeychainKeyName = @"swipes_gmail_integration";
 
 static NSString* const kSwipesLabelName = @"Swipes"; // label name
-static NSUInteger const kMaxResults = 100; // how many results to retrieve
+static NSUInteger const kMaxResults = 200; // how many results to retrieve
 
 // json keys
 static NSString* const kKeyJson = @"json:";
@@ -124,7 +125,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
                                          clientSecret:kClientSecret
                                          error:&error];
     if (error) {
-        GTMOAuth2ViewControllerTouch* vc = [GTMOAuth2ViewControllerTouch controllerWithScope:kGTLAuthScopeGmailModify clientID:kClientID clientSecret:kClientSecret keychainItemName:kKeychainKeyName completionHandler:^(GTMOAuth2ViewControllerTouch *viewController, GTMOAuth2Authentication *auth, NSError *error)
+        GmailAuthViewController* vc = [GmailAuthViewController controllerWithScope:kGTLAuthScopeGmailModify clientID:kClientID clientSecret:kClientSecret keychainItemName:kKeychainKeyName completionHandler:^(GTMOAuth2ViewControllerTouch *viewController, GTMOAuth2Authentication *auth, NSError *error)
         {
             [viewController dismissViewControllerAnimated:NO completion:nil];
             if (nil == error) {
@@ -136,13 +137,26 @@ static NSString* const kKeyJsonThreadId = @"threadid";
             block(error);
             DLog(@"Authenticated. Auth: %@, Error: %@", auth, error);
         }];
+        UINavigationController* nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
+                                       initWithTitle:LOCALIZE_STRING(@"Cancel")
+                                       style:UIBarButtonItemStylePlain
+                                       target:self
+                                       action:@selector(onCancel:)];
+        vc.rightBarButtonItem = cancelButton;
+        nav.navigationController.navigationItem.rightBarButtonItem = cancelButton;
         
-        [viewController presentViewController:vc animated:YES completion:nil];
+        [viewController presentViewController:nav animated:YES completion:nil];
     }
     else {
         _googleAuth = auth;
         block(error);
     }
+}
+
+- (void)onCancel:(id)sender
+{
+    int i = 5;
 }
 
 - (BOOL)isAuthenticated
