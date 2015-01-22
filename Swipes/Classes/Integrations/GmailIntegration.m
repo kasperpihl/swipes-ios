@@ -63,10 +63,10 @@ static NSString* const kKeyJsonThreadId = @"threadid";
         if (!error) {
             _googleAuth = auth;
             [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
-                // TODO log error
+                [UtilityClass sendError:error type:@"gmail:cannot create swipes label"];
             }];
             [self emailAddressWithBlock:^(NSError *error) {
-                // TODO log error
+                [UtilityClass sendError:error type:@"gmail:cannot get user email address"];
             }];
         }
         
@@ -246,9 +246,9 @@ static NSString* const kKeyJsonThreadId = @"threadid";
 {
     GTLQueryGmail* getThread = [GTLQueryGmail queryForUsersThreadsGet];
     getThread.identifier = threadId;
-    GTLServiceGmail* serviceGetThread = [[GTLServiceGmail alloc] init];
-    serviceGetThread.authorizer = _googleAuth;
-    [serviceGetThread executeQuery:getThread completionHandler:^(GTLServiceTicket *ticket, GTLGmailThread* thread, NSError *error) {
+    GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
+    service.authorizer = _googleAuth;
+    [service executeQuery:getThread completionHandler:^(GTLServiceTicket *ticket, GTLGmailThread* thread, NSError *error) {
         //DLog(@"queried - thread:%@, error: %@", thread, error);
         block(thread, error);
     }];
@@ -277,5 +277,17 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     }];
 }
 
+- (void)removeSwipesLabelFromThread:(NSString *)threadId withBlock:(ErrorBlock)block
+{
+    GTLQueryGmail* modifyThread = [GTLQueryGmail queryForUsersThreadsModify];
+    modifyThread.identifier = threadId;
+    modifyThread.removeLabelIds = @[_swipesLabelId];
+    GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
+    service.authorizer = _googleAuth;
+    [service executeQuery:modifyThread completionHandler:^(GTLServiceTicket *ticket, GTLGmailThread* thread, NSError *error) {
+        //DLog(@"queried - thread:%@, error: %@", thread, error);
+        block(error);
+    }];
+}
 
 @end

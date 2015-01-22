@@ -242,6 +242,25 @@ extern NSString * const kEvernoteMoveTime;
     return nil;
 }
 
++(NSArray *)findLocallyDeletedForService:(NSString *)service
+{
+    if (service) {
+        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"isLocallyDeleted = %@", @(YES)];
+        NSArray* result = [KPToDo MR_findAllWithPredicate:predicate];
+        [ANALYTICS heartbeat];
+        if (result && (0 == result.count))
+            return nil;
+        NSMutableArray* todos = [NSMutableArray array];
+        for (KPToDo* todo in result) {
+            if ([todo firstAttachmentForServiceType:service]) {
+                [todos addObject:todo];
+            }
+        }
+        return todos;
+    }
+    return nil;
+}
+
 +(NSArray *)selectedTagsForToDos:(NSArray *)toDos{
     NSMutableArray *commonTags = [NSMutableArray array];
     NSMutableArray *common2Tags = [NSMutableArray array];
@@ -752,22 +771,29 @@ extern NSString * const kEvernoteMoveTime;
     return attributedText;
     
 }
+
 -(void)deleteToDoSave:(BOOL)save force:(BOOL)force{
     BOOL shouldDelete = [self shouldDeleteForce:force];
     if( shouldDelete ){
+        [self removeAllAttachmentsForService:@"all"];
         [self MR_deleteEntity];
     }
     if(save)
         [KPToDo saveToSync];
 }
--(BOOL)shouldDeleteForce:(BOOL)force{
-    [self removeAllAttachmentsForService:@"all"];
+
+-(BOOL)shouldDeleteForce:(BOOL)force {
     if(self.subtasks.count > 0){
         [KPToDo deleteToDos:[self.subtasks allObjects] save:NO force:YES];
     }
     else if( self.parent && !force && [self.origin isEqualToString:EVERNOTE_SERVICE]){
         self.isLocallyDeleted = @(YES);
         NSLog(@"deleted subtask from Evernote");
+        return NO;
+    }
+    else if (!self.parent && !force && [self firstAttachmentForServiceType:GMAIL_SERVICE]) {
+        self.isLocallyDeleted = @(YES);
+        NSLog(@"deleted Gmail task");
         return NO;
     }
     return YES;

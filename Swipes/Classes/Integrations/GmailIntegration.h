@@ -29,5 +29,6 @@ typedef void (^ThreadGetBlock)(GTLGmailThread *thread, NSError *error);
 
 - (void)listThreads:(NSString *)query withBlock:(ThreadListBlock)block;
 - (void)getThread:(NSString *)threadId withBlock:(ThreadGetBlock)block;
+- (void)removeSwipesLabelFromThread:(NSString *)threadId withBlock:(ErrorBlock)block;
 
 @end

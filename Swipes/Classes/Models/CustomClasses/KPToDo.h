@@ -25,6 +25,7 @@
 
 +(NSArray *)findByTitle:(NSString *)title;
 +(NSArray *)findByTempId:(NSString *)tempId;
++(NSArray *)findLocallyDeletedForService:(NSString *)service;
 
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;

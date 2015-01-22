@@ -130,6 +130,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
         }
     };
     
+    // sync with gmail
     for (__block GTLGmailThread* thread in threadListResults) {
         if (![kGmInt hasNoteWithThreadId:thread.identifier]) {
             // we don't know this thread
@@ -143,9 +144,15 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
                     if (title) {
                         if(title.length > kTitleMaxLength)
                             title = [title substringToIndex:kTitleMaxLength];
-                        KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO from:@"Gmail"];
-                        [newToDo attachService:GMAIL_SERVICE title:title identifier:[kGmInt threadIdToNSString:processor.threadId] sync:YES from:@"gmail-integration"];
-                        [_updatedTasks addObject:newToDo];
+                        NSString* identifier = [kGmInt threadIdToNSString:processor.threadId];
+                        if (identifier) {
+                            KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO from:@"Gmail"];
+                            [newToDo attachService:GMAIL_SERVICE title:title identifier:identifier sync:YES from:@"gmail-integration"];
+                            [_updatedTasks addObject:newToDo];
+                        }
+                        else {
+                            [UtilityClass sendError:[NSError errorWithDomain:@"Failed to create identifier" code:703 userInfo:nil] type:@"gmail:failed to create identifier"];
+                        }
                     }
                 }
                 finalizeBlock();
@@ -154,6 +161,25 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
         else {
             // we already have the thread into task
             finalizeBlock();
+        }
+    }
+    
+    // find out locally deleted tasks, remove swipes tag and really delete them
+    NSArray* locallyDeleted = [KPToDo findLocallyDeletedForService:GMAIL_SERVICE];
+    for (__block KPToDo* todo in locallyDeleted) {
+        KPAttachment* attachment = [todo firstAttachmentForServiceType:GMAIL_SERVICE];
+        NSString* threadId = [kGmInt NSStringToThreadId:attachment.identifier];
+        if (threadId) {
+            [kGmInt removeSwipesLabelFromThread:threadId withBlock:^(NSError *error) {
+                if (nil == error) {
+                    [KPToDo deleteToDos:@[todo] save:YES force:YES];
+                }
+                else {
+                    // TODO
+                    // check what happens when the thread is deleted from gmail
+                    // check what happens when the label is removed
+                }
+            }];
         }
     }
 }
