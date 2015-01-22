@@ -164,6 +164,11 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
         }
     }
     
+    [self clearLocallyDeleted];
+}
+
+- (void)clearLocallyDeleted
+{
     // find out locally deleted tasks, remove swipes tag and really delete them
     NSArray* locallyDeleted = [KPToDo findLocallyDeletedForService:GMAIL_SERVICE];
     for (__block KPToDo* todo in locallyDeleted) {
