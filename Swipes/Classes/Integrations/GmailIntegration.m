@@ -14,10 +14,8 @@
 #import "GmailIntegration.h"
 
 // instructions at https://code.google.com/p/google-api-objectivec-client/wiki/Introduction#Preparing_to_Use_the_Library
-//static NSString* const kClientID = @"336134475796-f7o2fbc288c2k3ud473nfp5bedstsi90.apps.googleusercontent.com";
-//static NSString* const kClientSecret = @"-O9A0oLCG7Ll_gMlyIq51QEZ ";
-static NSString* const kClientID = @"791921060265-b1d0c65g7spt9evnl2lug4g33cpbgfq6.apps.googleusercontent.com";
-static NSString* const kClientSecret = @"mILogx6YkvKKoMo72YjT8Ksa";
+static NSString* const kClientID = @"336134475796-mqcavkepb80idm0qdacd2fhkf573r4cd.apps.googleusercontent.com";
+static NSString* const kClientSecret = @"5heB-MAD5Qm-y1miBVic03cE";
 
 // where to we store gmail integration data
 static NSString* const kKeychainKeyName = @"swipes_gmail_integration";
@@ -138,25 +136,12 @@ static NSString* const kKeyJsonThreadId = @"threadid";
             DLog(@"Authenticated. Auth: %@, Error: %@", auth, error);
         }];
         UINavigationController* nav = [[UINavigationController alloc] initWithRootViewController:vc];
-        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
-                                       initWithTitle:LOCALIZE_STRING(@"Cancel")
-                                       style:UIBarButtonItemStylePlain
-                                       target:self
-                                       action:@selector(onCancel:)];
-        vc.rightBarButtonItem = cancelButton;
-        nav.navigationController.navigationItem.rightBarButtonItem = cancelButton;
-        
         [viewController presentViewController:nav animated:YES completion:nil];
     }
     else {
         _googleAuth = auth;
         block(error);
     }
-}
-
-- (void)onCancel:(id)sender
-{
-    int i = 5;
 }
 
 - (BOOL)isAuthenticated
@@ -183,7 +168,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
     service.authorizer = _googleAuth;
     [service executeQuery:listLabels completionHandler:^(GTLServiceTicket *ticket, GTLGmailListLabelsResponse* object, NSError *error) {
-        DLog(@"queried - error: %@", error);
+        //DLog(@"queried - error: %@", error);
         if (error) {
             block(error);
         }
@@ -191,7 +176,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
             BOOL hasSwipes = NO;
             if (object) {
                 for (GTLGmailLabel* label in object.labels) {
-                    DLog(@"label: %@", label);
+                    //DLog(@"label: %@", label);
                     if (NSOrderedSame == [label.name caseInsensitiveCompare:kSwipesLabelName]) {
                         _swipesLabelId = label.identifier;
                         hasSwipes = YES;
@@ -212,7 +197,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
                 GTLServiceGmail* serviceCreateLabel = [[GTLServiceGmail alloc] init];
                 serviceCreateLabel.authorizer = _googleAuth;
                 [serviceCreateLabel executeQuery:createLabel completionHandler:^(GTLServiceTicket *ticket, GTLGmailLabel* object, NSError *error) {
-                    DLog(@"queried - error: %@", error);
+                    //DLog(@"queried - error: %@", error);
                     if (nil == error) {
                         _swipesLabelId = object.identifier;
                     }
@@ -264,7 +249,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     GTLServiceGmail* serviceGetThread = [[GTLServiceGmail alloc] init];
     serviceGetThread.authorizer = _googleAuth;
     [serviceGetThread executeQuery:getThread completionHandler:^(GTLServiceTicket *ticket, GTLGmailThread* thread, NSError *error) {
-        DLog(@"queried - thread:%@, error: %@", thread, error);
+        //DLog(@"queried - thread:%@, error: %@", thread, error);
         block(thread, error);
     }];
 }
