@@ -185,7 +185,7 @@
 -(void)reloadDataSource{
     NSDate *endDate = [NSDate date];
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_defaultContext];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endDate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)",endDate];
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate inContext:localContext];
     self.todos = [KPToDo sortOrderForItems:results newItemsOnTop:YES save:NO context:localContext];
     SavedChangeHandler *changeHandler = [[SavedChangeHandler alloc] init];

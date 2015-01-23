@@ -20,7 +20,7 @@ static NSString* const kClientSecret = @"5heB-MAD5Qm-y1miBVic03cE";
 // where to we store gmail integration data
 static NSString* const kKeychainKeyName = @"swipes_gmail_integration";
 
-static NSString* const kSwipesLabelName = @"Swipes"; // label name
+static NSString* const kSwipesLabelName = @"[Mailbox]/Swipes"; // label name
 static NSUInteger const kMaxResults = 200; // how many results to retrieve
 
 // json keys
