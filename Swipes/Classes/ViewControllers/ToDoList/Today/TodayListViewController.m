@@ -106,7 +106,7 @@
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     
     NSDate *endDate = [NSDate date];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endDate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)",endDate];
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
     return [KPToDo sortOrderForItems:results newItemsOnTop:YES save:YES context:nil];
 }
@@ -155,8 +155,8 @@
 -(void)updateSectionHeader{
     NSDate *endOfToday = [[NSDate dateTomorrow] dateAtStartOfDay];
     NSDate *startOfToday = [[NSDate date] dateAtStartOfDay];
-    NSPredicate *inprogressPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endOfToday];
-    NSPredicate *completedPredicate = [NSPredicate predicateWithFormat:@"(completionDate > %@ AND parent = nil)",startOfToday];
+    NSPredicate *inprogressPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)",endOfToday];
+    NSPredicate *completedPredicate = [NSPredicate predicateWithFormat:@"(completionDate > %@ AND parent = nil AND isLocallyDeleted <> YES)",startOfToday];
     NSInteger numberInProgress = [KPToDo MR_countOfEntitiesWithPredicate:inprogressPredicate inContext:[KPCORE context]];
     NSInteger numberOfDone = [KPToDo MR_countOfEntitiesWithPredicate:completedPredicate inContext:[KPCORE context]];
     NSInteger total = numberInProgress+numberOfDone;
@@ -197,7 +197,7 @@
             self.youreAllDoneView.streakLabel.text = [NSString stringWithFormat:LOCALIZE_STRING(@"%@ on a streak!"),startString];
         }
         else{
-            NSPredicate *nextScheduleTaskPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil)",[NSDate date]];
+            NSPredicate *nextScheduleTaskPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil AND isLocallyDeleted <> YES)",[NSDate date]];
             KPToDo *nextItem = [KPToDo MR_findFirstWithPredicate:nextScheduleTaskPredicate sortedBy:@"schedule" ascending:YES inContext:[KPCORE context]];
             [self.youreAllDoneView setAllDoneForToday:NO];
             //self.youreAllDoneView.stampView.allDoneLabel.text = @"ALL DONE FOR NOW";
