@@ -4,6 +4,7 @@
 
 NSString* const EVERNOTE_SERVICE = @"evernote";
 NSString* const DROPBOX_SERVICE = @"dropbox";
+NSString* const URL_SERVICE = @"url";
 
 @interface KPAttachment ()
 
@@ -49,13 +50,13 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
 }
 
 +(NSArray*)supportedServices{
-    return @[ EVERNOTE_SERVICE, DROPBOX_SERVICE ];
+    return @[ EVERNOTE_SERVICE, DROPBOX_SERVICE, URL_SERVICE ];
 }
 
 + (BOOL)supportsService:(NSString *)service
 {
     // we can use some smarter way when we have
-    return ([EVERNOTE_SERVICE isEqualToString:service] || [DROPBOX_SERVICE isEqualToString:service]);
+    return ([EVERNOTE_SERVICE isEqualToString:service] || [DROPBOX_SERVICE isEqualToString:service] || [URL_SERVICE isEqualToString:service]);
 }
 
 -(BOOL)isEqualToDictionary:(NSDictionary *)object{
