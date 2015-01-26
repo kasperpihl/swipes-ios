@@ -27,7 +27,6 @@
     return self;
 }
 - ( void )initializer{
-    
     self.titleLabel.font = KP_SEMIBOLD(kIconSize);
     self.layer.cornerRadius = kCornerRadius;
     self.syncIcon = iconLabel(@"editSyncIcon", kIconSize);

@@ -510,7 +510,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
                 break;
                 
             case 1: // deleted note
-                [todo removeAllAttachmentsForService:EVERNOTE_SERVICE];
+                [todo removeAllAttachmentsForService:EVERNOTE_SERVICE identifier:nil];
                 [KPToDo saveToSync];
                 break;
                 
@@ -662,7 +662,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
                 // to remove a note on evernote.com first delete it and then remove it from trash too!
                 // this will still give you sync error once (because there is an error after all)
                 if (error && (1 == error.code)) {
-                    [todoWithEvernote removeAllAttachmentsForService:EVERNOTE_SERVICE];
+                    [todoWithEvernote removeAllAttachmentsForService:EVERNOTE_SERVICE identifier:nil];
                 }
                 finalizeBlock();
             }

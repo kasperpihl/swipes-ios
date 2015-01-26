@@ -345,7 +345,7 @@ extern NSString * const kEvernoteMoveTime;
             
             if([pfKey isEqualToString:@"attachments"]){
                 NSArray *attachments = (NSArray*)pfValue;
-                [self removeAllAttachmentsForService:@"all"];
+                [self removeAllAttachmentsForService:@"all" identifier:nil];
                 for( NSDictionary *attachmentObj in attachments){
                     NSString *title = [attachmentObj objectForKey:@"title"];
                     NSString *identifier = [attachmentObj objectForKey:@"identifier"];
@@ -761,7 +761,7 @@ extern NSString * const kEvernoteMoveTime;
         [KPToDo saveToSync];
 }
 -(BOOL)shouldDeleteForce:(BOOL)force{
-    [self removeAllAttachmentsForService:@"all"];
+    [self removeAllAttachmentsForService:@"all" identifier:nil];
     if(self.subtasks.count > 0){
         [KPToDo deleteToDos:[self.subtasks allObjects] save:NO force:YES];
     }
@@ -903,7 +903,7 @@ extern NSString * const kEvernoteMoveTime;
 - (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync from:(NSString *)from
 {
     // remove all present attachments for this service
-    [self removeAllAttachmentsForService:service];
+    [self removeAllAttachmentsForService:service identifier:identifier];
     if(title.length > kTitleMaxLength)
         title = [title substringToIndex:kTitleMaxLength];
     // create the attachment
@@ -918,12 +918,13 @@ extern NSString * const kEvernoteMoveTime;
     }
 }
 
-- (void)removeAllAttachmentsForService:(NSString *)service
+- (void)removeAllAttachmentsForService:(NSString *)service identifier:(NSString*)identifier
 {
     NSMutableSet* attachmentSet = [NSMutableSet set];
     for (KPAttachment* att in self.attachments) {
         if ([att.service isEqualToString:service] || [service isEqualToString:@"all"]) {
-            [attachmentSet addObject:att];
+            if(!identifier || [identifier isEqualToString:att.identifier])
+                [attachmentSet addObject:att];
         }
     }
     if (0 < attachmentSet.count) {
@@ -959,6 +960,13 @@ extern NSString * const kEvernoteMoveTime;
     if(save)
         [KPCORE saveContextForSynchronization:context];
     
+}
+-(KPAttachment *)attachmentForService:(NSString *)service identifier:(NSString *)identifier{
+    for (KPAttachment* attachment in self.attachments) {
+        if ([attachment.service isEqualToString:service] && [attachment.identifier isEqualToString:identifier])
+            return attachment;
+    }
+    return nil;
 }
 - (KPAttachment *)firstAttachmentForServiceType:(NSString *)service
 {
