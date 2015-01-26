@@ -25,6 +25,7 @@
 		51309AE023584D4FA13F00A9 /* libPods-Swipes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB2A69EAA2C418DA2E0283E /* libPods-Swipes.a */; };
 		789C9AAD8BA447088AAD221A /* libPods-SwipesKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 368054CA6302490B9AFBAEFE /* libPods-SwipesKit.a */; };
 		81A0C94F1F16434CAE0AA041 /* libPods-SwipesToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A3901B41E5E94AAE9A1FED2F /* libPods-SwipesToday.a */; };
+		A70188181A7682FD00C039DF /* AttachmentEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = A70188171A7682FD00C039DF /* AttachmentEditView.m */; };
 		A701BD2E1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A701BD2D1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png */; };
 		A702E0671A29B9AD00EC3624 /* HelpTopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A702E0661A29B9AD00EC3624 /* HelpTopMenu.m */; };
 		A703B1631838EB0E0047DCC9 /* UIButton+PassTouch.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1621838EB0E0047DCC9 /* UIButton+PassTouch.m */; };
@@ -537,6 +538,8 @@
 		6E45E45BF7F32F791A91F78A /* Pods-SwipesKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.release.xcconfig"; sourceTree = "<group>"; };
 		8A10ECBCD0054ECEBA611D47 /* Pods-SwipesKit.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A3901B41E5E94AAE9A1FED2F /* libPods-SwipesToday.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwipesToday.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A70188161A7682FD00C039DF /* AttachmentEditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditView.h; sourceTree = "<group>"; };
+		A70188171A7682FD00C039DF /* AttachmentEditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentEditView.m; sourceTree = "<group>"; };
 		A701BD2D1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-logo-app@2x.png"; sourceTree = "<group>"; };
 		A702E0651A29B9AD00EC3624 /* HelpTopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelpTopMenu.h; path = TopMenus/HelpTopMenu.h; sourceTree = "<group>"; };
 		A702E0661A29B9AD00EC3624 /* HelpTopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HelpTopMenu.m; path = TopMenus/HelpTopMenu.m; sourceTree = "<group>"; };
@@ -1169,10 +1172,14 @@
 		A703B1701838EBF20047DCC9 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				A714369119349EB3009AC8A4 /* CheckmarkButton.h */,
+				A714369219349EB3009AC8A4 /* CheckmarkButton.m */,
 				A703B1711838EBF20047DCC9 /* ClockTimeLabel.h */,
 				A703B1721838EBF20047DCC9 /* ClockTimeLabel.m */,
 				A703B1751838EBF20047DCC9 /* DotView.h */,
 				A703B1761838EBF20047DCC9 /* DotView.m */,
+				A70188161A7682FD00C039DF /* AttachmentEditView.h */,
+				A70188171A7682FD00C039DF /* AttachmentEditView.m */,
 				A703B1771838EBF20047DCC9 /* KPAddView.h */,
 				A703B1781838EBF20047DCC9 /* KPAddView.m */,
 				A703B1791838EBF20047DCC9 /* KPDayPicker.h */,
@@ -1189,12 +1196,10 @@
 				A703B1841838EBF20047DCC9 /* SectionHeaderView.m */,
 				A703B1851838EBF20047DCC9 /* SlowHighlightIcon.h */,
 				A703B1861838EBF20047DCC9 /* SlowHighlightIcon.m */,
-				A703B1871838EBF20047DCC9 /* YoureAllDoneView.h */,
-				A703B1881838EBF20047DCC9 /* YoureAllDoneView.m */,
 				A714368E19346823009AC8A4 /* SyncLabel.h */,
 				A714368F19346823009AC8A4 /* SyncLabel.m */,
-				A714369119349EB3009AC8A4 /* CheckmarkButton.h */,
-				A714369219349EB3009AC8A4 /* CheckmarkButton.m */,
+				A703B1871838EBF20047DCC9 /* YoureAllDoneView.h */,
+				A703B1881838EBF20047DCC9 /* YoureAllDoneView.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2720,6 +2725,7 @@
 				A703B1631838EB0E0047DCC9 /* UIButton+PassTouch.m in Sources */,
 				DAFBF4581A65D92F003DD799 /* MagicalRecord+Actions.m in Sources */,
 				A703B1B51838EBF20047DCC9 /* SectionHeaderView.m in Sources */,
+				A70188181A7682FD00C039DF /* AttachmentEditView.m in Sources */,
 				A72FD5DE19E9D10D00DDEB02 /* FilterTopMenu.m in Sources */,
 				A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */,
 				A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */,
