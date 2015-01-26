@@ -3044,7 +3044,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					Swipes/Ressources/Libs,
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
 				);
@@ -3053,6 +3052,30 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"ADHOC=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
+					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
+					"\"${PODS_ROOT}/Headers/Public/Base64\"",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/DHCShakeNotifier\"",
+					"\"${PODS_ROOT}/Headers/Public/DejalActivityView\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAnalytics-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Intercom\"",
+					"\"${PODS_ROOT}/Headers/Public/M13BadgeView\"",
+					"\"${PODS_ROOT}/Headers/Public/NSURL+QueryDictionary\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/RMStore\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/Underscore.m\"",
+					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
+					"$(SDKROOT)/usr/include/libz",
+					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
+					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -3108,9 +3131,9 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "c8eb220b-4812-4a57-bcf1-420a9bde3016";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "c8eb220b-4812-4a57-bcf1-420a9bde3016";
+				PROVISIONING_PROFILE = "a8072126-9fdf-45a1-8c8b-45f8aa889c6b";
+				"PROVISIONING_PROFILE[sdk=*]" = "a8072126-9fdf-45a1-8c8b-45f8aa889c6b";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a8072126-9fdf-45a1-8c8b-45f8aa889c6b";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3198,13 +3221,36 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					Swipes/Ressources/Libs,
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Swipes/Supporting Files/Swipes-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
+					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
+					"\"${PODS_ROOT}/Headers/Public/Base64\"",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/DHCShakeNotifier\"",
+					"\"${PODS_ROOT}/Headers/Public/DejalActivityView\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAnalytics-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Intercom\"",
+					"\"${PODS_ROOT}/Headers/Public/M13BadgeView\"",
+					"\"${PODS_ROOT}/Headers/Public/NSURL+QueryDictionary\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/RMStore\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/Underscore.m\"",
+					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
+					"$(SDKROOT)/usr/include/libz",
+					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -3253,7 +3299,7 @@
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a0b585cb-2ccd-462e-b4e6-1398a8dbe1c0";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "521a6fb9-7fad-43cd-bb52-525b210295a0";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3270,7 +3316,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					Swipes/Ressources/Libs,
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
 				);
@@ -3279,6 +3324,30 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"RELEASE=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
+					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
+					"\"${PODS_ROOT}/Headers/Public/Base64\"",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/DHCShakeNotifier\"",
+					"\"${PODS_ROOT}/Headers/Public/DejalActivityView\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAnalytics-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Intercom\"",
+					"\"${PODS_ROOT}/Headers/Public/M13BadgeView\"",
+					"\"${PODS_ROOT}/Headers/Public/NSURL+QueryDictionary\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/RMStore\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/Underscore.m\"",
+					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
+					"$(SDKROOT)/usr/include/libz",
+					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
+					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -3331,7 +3400,7 @@
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8d0d4b37-a06e-440b-8b2c-3089997c8771";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9709eb47-4efa-499a-a4ca-05bf154c4b90";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3361,7 +3430,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesToday/SwipesToday.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3379,6 +3448,30 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
+					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
+					"\"${PODS_ROOT}/Headers/Public/Base64\"",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/DHCShakeNotifier\"",
+					"\"${PODS_ROOT}/Headers/Public/DejalActivityView\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAnalytics-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Intercom\"",
+					"\"${PODS_ROOT}/Headers/Public/M13BadgeView\"",
+					"\"${PODS_ROOT}/Headers/Public/NSURL+QueryDictionary\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/RMStore\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/Underscore.m\"",
+					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
+					"$(SDKROOT)/usr/include/libz",
+					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
+				);
 				INFOPLIST_FILE = SwipesToday/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -3388,8 +3481,8 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a5780059-6565-47c5-98ea-be82ba41726b";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a5780059-6565-47c5-98ea-be82ba41726b";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a65e28a6-747d-4b32-b4a8-542cae4017af";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -3404,7 +3497,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesToday/SwipesToday.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -3424,6 +3517,30 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
+					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
+					"\"${PODS_ROOT}/Headers/Public/Base64\"",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/DHCShakeNotifier\"",
+					"\"${PODS_ROOT}/Headers/Public/DejalActivityView\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAnalytics-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Intercom\"",
+					"\"${PODS_ROOT}/Headers/Public/M13BadgeView\"",
+					"\"${PODS_ROOT}/Headers/Public/NSURL+QueryDictionary\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/RMStore\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/Underscore.m\"",
+					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
+					"$(SDKROOT)/usr/include/libz",
+					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
+				);
 				INFOPLIST_FILE = SwipesToday/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -3433,8 +3550,8 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1421985c-4dd2-4aab-9e25-ded8897a4eff";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1421985c-4dd2-4aab-9e25-ded8897a4eff";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1e97edb9-1234-4f81-9340-9750e70f440a";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -3469,6 +3586,30 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
+					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
+					"\"${PODS_ROOT}/Headers/Public/Base64\"",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/DHCShakeNotifier\"",
+					"\"${PODS_ROOT}/Headers/Public/DejalActivityView\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAnalytics-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/Intercom\"",
+					"\"${PODS_ROOT}/Headers/Public/M13BadgeView\"",
+					"\"${PODS_ROOT}/Headers/Public/NSURL+QueryDictionary\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/RMStore\"",
+					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
+					"\"${PODS_ROOT}/Headers/Public/Underscore.m\"",
+					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
+					"$(SDKROOT)/usr/include/libz",
+					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
+				);
 				INFOPLIST_FILE = SwipesToday/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -3478,8 +3619,8 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "81562103-0443-490a-9f80-f547a23afa9c";
+				PROVISIONING_PROFILE = "46179da4-4ebc-4075-a815-c0b0af70f5ef";
+				"PROVISIONING_PROFILE[sdk=*]" = "c0b10ca4-3f12-4865-8f46-408ef450fcc7";
 				SKIP_INSTALL = YES;
 			};
 			name = AdHoc;
