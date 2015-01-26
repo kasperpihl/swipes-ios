@@ -3284,8 +3284,8 @@
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "c8eb220b-4812-4a57-bcf1-420a9bde3016";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "c8eb220b-4812-4a57-bcf1-420a9bde3016";
+				"PROVISIONING_PROFILE[sdk=*]" = "a8072126-9fdf-45a1-8c8b-45f8aa889c6b";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a8072126-9fdf-45a1-8c8b-45f8aa889c6b";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3451,7 +3451,7 @@
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a0b585cb-2ccd-462e-b4e6-1398a8dbe1c0";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "521a6fb9-7fad-43cd-bb52-525b210295a0";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3552,7 +3552,7 @@
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8d0d4b37-a06e-440b-8b2c-3089997c8771";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9709eb47-4efa-499a-a4ca-05bf154c4b90";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3632,8 +3632,8 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a5780059-6565-47c5-98ea-be82ba41726b";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a5780059-6565-47c5-98ea-be82ba41726b";
+				PROVISIONING_PROFILE = "a65e28a6-747d-4b32-b4a8-542cae4017af";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a65e28a6-747d-4b32-b4a8-542cae4017af";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -3700,8 +3700,8 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1421985c-4dd2-4aab-9e25-ded8897a4eff";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1421985c-4dd2-4aab-9e25-ded8897a4eff";
+				PROVISIONING_PROFILE = "1e97edb9-1234-4f81-9340-9750e70f440a";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1e97edb9-1234-4f81-9340-9750e70f440a";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -3769,7 +3769,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "81562103-0443-490a-9f80-f547a23afa9c";
+				"PROVISIONING_PROFILE[sdk=*]" = "c0b10ca4-3f12-4865-8f46-408ef450fcc7";
 				SKIP_INSTALL = YES;
 			};
 			name = AdHoc;
