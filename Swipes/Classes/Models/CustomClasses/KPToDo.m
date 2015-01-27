@@ -286,7 +286,6 @@ extern NSString * const kEvernoteMoveTime;
         for(NSString *pfKey in [object allKeys]){
             if([localChanges containsObject:pfKey])
                 continue;
-            
             id pfValue = [object objectForKey:pfKey];
             if([pfKey isEqualToString:@"repeatOption"]){
                 if(![[self stringForRepeatOption:self.repeatOptionValue] isEqualToString:pfValue]) self.repeatOptionValue = [self optionForRepeatString:pfValue];
@@ -350,7 +349,10 @@ extern NSString * const kEvernoteMoveTime;
                     NSString *title = [attachmentObj objectForKey:@"title"];
                     NSString *identifier = [attachmentObj objectForKey:@"identifier"];
                     NSString *service = [attachmentObj objectForKey:@"service"];
-                    BOOL sync = [[attachmentObj objectForKey:@"sync"] boolValue];
+                    NSNumber *syncNumber = [attachmentObj objectForKey:@"sync"];
+                    BOOL sync = NO;
+                    if (syncNumber && syncNumber != (id)[NSNull null])
+                        sync = [syncNumber boolValue];
                     KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync inContext:context];
                     // add the new attachment
                     [self addAttachments:[NSSet setWithObject:attachment]];
@@ -492,18 +494,18 @@ extern NSString * const kEvernoteMoveTime;
 
 - (RepeatOptions)optionForRepeatString:(NSString *)repeatString {
     RepeatOptions option = RepeatNever;
-    
-    if([repeatString isEqualToString:@"every day"])
-        option = RepeatEveryDay;
-    else if([repeatString isEqualToString:@"mon-fri or sat+sun"])
-        option = RepeatEveryMonFriOrSatSun;
-    else if([repeatString isEqualToString:@"every week"])
-        option = RepeatEveryWeek;
-    else if([repeatString isEqualToString:@"every month"])
-        option = RepeatEveryMonth;
-    else if([repeatString isEqualToString:@"every year"])
-        option = RepeatEveryYear;
-
+    if(repeatString && repeatString != (id)[NSNull null]){
+        if([repeatString isEqualToString:@"every day"])
+            option = RepeatEveryDay;
+        else if([repeatString isEqualToString:@"mon-fri or sat+sun"])
+            option = RepeatEveryMonFriOrSatSun;
+        else if([repeatString isEqualToString:@"every week"])
+            option = RepeatEveryWeek;
+        else if([repeatString isEqualToString:@"every month"])
+            option = RepeatEveryMonth;
+        else if([repeatString isEqualToString:@"every year"])
+            option = RepeatEveryYear;
+    }
     return option;
 
 }
