@@ -568,6 +568,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         attachmentEditView.identifier = attachment.identifier;
         attachmentEditView.service = attachment.service;
         attachmentEditView.delegate = self;
+        BOOL shouldAdd = YES;
         if([attachment.service isEqualToString:EVERNOTE_SERVICE]){
             [attachmentEditView setIconString:@"editEvernote"];
            
@@ -577,8 +578,21 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                 [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Attached")  uppercaseString]];
             [attachmentEditView setTitleString:attachment.title];
         }
-        [self.scrollView addSubview:attachmentEditView];
-        [attachmentViews addObject:attachmentEditView];
+        else if([attachment.service isEqualToString:URL_SERVICE]){
+            [attachmentEditView setIconString:@"editURL"];
+            NSString *title;
+            if(attachment.title && attachment.title.length > 0)
+                title = attachment.title;
+            else
+                title = attachment.identifier;
+            [attachmentEditView setTitleString:title];
+        }
+        else
+            shouldAdd = NO;
+        if(shouldAdd){
+            [self.scrollView addSubview:attachmentEditView];
+            [attachmentViews addObject:attachmentEditView];
+        }
     }
     self.attachmentViews = attachmentViews;
 }
@@ -780,8 +794,16 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)clickedAttachment:(AttachmentEditView *)attachmentView{
     if([attachmentView.service isEqualToString:EVERNOTE_SERVICE])
         [self pressedEvernote:attachmentView];
+    else if([attachmentView.service isEqualToString:URL_SERVICE])
+        [self pressedURL:attachmentView];
 }
-
+-(void)pressedURL:(AttachmentEditView*)attachmentView{
+    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Open Link") andMessage:LOCALIZE_STRING(@"Do you want to open the link?") block:^(BOOL succeeded, NSError *error) {
+        if(succeeded){
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:attachmentView.identifier]];
+        }
+    }];
+}
 -(void)pressedEvernote:(UIView*)sender
 {
     if(!kUserHandler.isLoggedIn){
