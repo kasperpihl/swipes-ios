@@ -517,33 +517,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		DAB165141A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4F38F6A60B66E91D00B24B81;
-			remoteInfo = GTLFramework;
-		};
 		DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4F12027C11A4CA2F00BEB470;
 			remoteInfo = GTLTouchStaticLib;
-		};
-		DAB165181A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4F12027D11A4CA2F00BEB470;
-			remoteInfo = GTLUnitTests;
-		};
-		DAB1651A1A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4F1AD9020B71603F00DC0485;
-			remoteInfo = DevelopmentTestTool;
 		};
 		DAE2B15919CB7A4D00A9074E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2075,10 +2054,7 @@
 		DAB1650E1A6D3D51008D69B2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DAB165151A6D3D51008D69B2 /* GTL.framework */,
 				DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */,
-				DAB165191A6D3D51008D69B2 /* GTLUnitTests.xctest */,
-				DAB1651B1A6D3D51008D69B2 /* DevelopmentTestTool */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2515,32 +2491,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		DAB165151A6D3D51008D69B2 /* GTL.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = GTL.framework;
-			remoteRef = DAB165141A6D3D51008D69B2 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libGTLTouchStaticLib.a;
 			remoteRef = DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DAB165191A6D3D51008D69B2 /* GTLUnitTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = GTLUnitTests.xctest;
-			remoteRef = DAB165181A6D3D51008D69B2 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DAB1651B1A6D3D51008D69B2 /* DevelopmentTestTool */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = DevelopmentTestTool;
-			remoteRef = DAB1651A1A6D3D51008D69B2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -3284,8 +3239,8 @@
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "a8072126-9fdf-45a1-8c8b-45f8aa889c6b";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a8072126-9fdf-45a1-8c8b-45f8aa889c6b";
+				"PROVISIONING_PROFILE[sdk=*]" = "8478310d-7e3d-4f14-b519-f30d4f4a7633";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8478310d-7e3d-4f14-b519-f30d4f4a7633";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3632,8 +3587,8 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a65e28a6-747d-4b32-b4a8-542cae4017af";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a65e28a6-747d-4b32-b4a8-542cae4017af";
+				PROVISIONING_PROFILE = "605ee839-e832-442d-a93e-9cc6fcc52b12";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "605ee839-e832-442d-a93e-9cc6fcc52b12";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -3700,8 +3655,8 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1e97edb9-1234-4f81-9340-9750e70f440a";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1e97edb9-1234-4f81-9340-9750e70f440a";
+				PROVISIONING_PROFILE = "f8b020e9-22e1-4f1a-b75a-55503a431745";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "f8b020e9-22e1-4f1a-b75a-55503a431745";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -3769,7 +3724,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "c0b10ca4-3f12-4865-8f46-408ef450fcc7";
+				"PROVISIONING_PROFILE[sdk=*]" = "34053976-820b-4a63-b11b-9f50669da9fe";
 				SKIP_INSTALL = YES;
 			};
 			name = AdHoc;

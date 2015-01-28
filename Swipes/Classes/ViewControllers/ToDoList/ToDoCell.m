@@ -46,7 +46,7 @@
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
 @property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
 
-@property (nonatomic, strong) UILabel *evernoteIcon;
+@property (nonatomic, strong) UILabel *sourceIcon;
 @property (nonatomic,strong) UILabel *notesIcon;
 @property (nonatomic,strong) UILabel *recurringIcon;
 @property (nonatomic,strong) UILabel *locationIcon;
@@ -120,9 +120,9 @@
         self.dotView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
         NSInteger iconHeight = 9;
         
-        self.evernoteIcon = iconLabel(@"editEvernote", iconHeight);
-        [self.evernoteIcon setTextColor:tcolor(SubTextColor)];
-        [self.contentView addSubview:self.evernoteIcon];
+        self.sourceIcon = iconLabel(@"editEvernote", iconHeight);
+        [self.sourceIcon setTextColor:tcolor(SubTextColor)];
+        [self.contentView addSubview:self.sourceIcon];
         
         self.locationIcon = iconLabel(@"editLocation", iconHeight);
         [self.locationIcon setTextColor:tcolor(SubTextColor)];
@@ -237,7 +237,7 @@
     CGRectSetCenterY(self.locationIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.tagsIcon, self.tagsLabel.center.y - iconHack);
-    CGRectSetCenterY(self.evernoteIcon, self.tagsLabel.center.y - iconHack);
+    CGRectSetCenterY(self.sourceIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
@@ -273,7 +273,7 @@
         alarmLabel = YES;
     }
 
-    self.evernoteIcon.hidden = YES;
+    self.sourceIcon.hidden = YES;
     self.locationIcon.hidden = YES;
     self.notesIcon.hidden = YES;
     self.recurringIcon.hidden = YES;
@@ -288,7 +288,14 @@
     
     KPAttachment *evernoteAttachment = [toDo firstAttachmentForServiceType:EVERNOTE_SERVICE];
     if(evernoteAttachment){
-        blockForIcon(self.evernoteIcon);
+        [self.sourceIcon setText:iconString(@"editEvernote")];
+        blockForIcon(self.sourceIcon);
+    }
+    
+    KPAttachment *mailAttachment = [toDo firstAttachmentForServiceType:GMAIL_SERVICE];
+    if(mailAttachment){
+        [self.sourceIcon setText:iconString(@"editMail")];
+        blockForIcon(self.sourceIcon);
     }
     
     if(toDo.location && toDo.location.length > 0){
