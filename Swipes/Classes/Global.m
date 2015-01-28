@@ -57,6 +57,7 @@ static Global *sharedObject;
     iconCompare(@"editSchedule",                @"\ue60c");
     iconCompare(@"editLocation",                @"\ue60d");
     iconCompare(@"editEvernote",                @"\ue65c");
+    iconCompare(@"editURL",                     @"\ue607");
     iconCompare(@"editActionRoundedArrow",      @"\ue65d");
     iconCompare(@"editActionRoundedPlus",       @"\ue65e");
     iconCompare(@"editSyncIcon",                @"\ue615");

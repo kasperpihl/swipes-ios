@@ -579,12 +579,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             [attachmentEditView setTitleString:attachment.title];
         }
         else if([attachment.service isEqualToString:URL_SERVICE]){
-            [attachmentEditView setIconString:@"editURL"];
-            NSString *title;
-            if(attachment.title && attachment.title.length > 0)
-                title = attachment.title;
-            else
-                title = attachment.identifier;
+            [attachmentEditView setIconString:@"editMail"];
+            NSString *title = attachment.identifier;
             [attachmentEditView setTitleString:title];
         }
         else

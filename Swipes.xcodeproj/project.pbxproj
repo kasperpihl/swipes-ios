@@ -3138,8 +3138,8 @@
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "a8072126-9fdf-45a1-8c8b-45f8aa889c6b";
-				"PROVISIONING_PROFILE[sdk=*]" = "a8072126-9fdf-45a1-8c8b-45f8aa889c6b";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a8072126-9fdf-45a1-8c8b-45f8aa889c6b";
+				"PROVISIONING_PROFILE[sdk=*]" = "8478310d-7e3d-4f14-b519-f30d4f4a7633";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8478310d-7e3d-4f14-b519-f30d4f4a7633";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3488,7 +3488,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a65e28a6-747d-4b32-b4a8-542cae4017af";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "605ee839-e832-442d-a93e-9cc6fcc52b12";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -3557,7 +3557,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1e97edb9-1234-4f81-9340-9750e70f440a";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "f8b020e9-22e1-4f1a-b75a-55503a431745";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -3626,7 +3626,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "46179da4-4ebc-4075-a815-c0b0af70f5ef";
-				"PROVISIONING_PROFILE[sdk=*]" = "c0b10ca4-3f12-4865-8f46-408ef450fcc7";
+				"PROVISIONING_PROFILE[sdk=*]" = "34053976-820b-4a63-b11b-9f50669da9fe";
 				SKIP_INSTALL = YES;
 			};
 			name = AdHoc;
