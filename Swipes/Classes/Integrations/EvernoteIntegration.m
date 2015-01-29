@@ -271,20 +271,24 @@ NSError * NewNSErrorFromException(NSException * exc) {
 {
     _findInPersonalLinked = findInPersonalLinked;
     [kSettings setValue:@(findInPersonalLinked) forSetting:IntegrationEvernoteFindInPersonalLinkedNotebooks];
+    [self cacheClear];
 }
 
 - (void)setFindInBusinessNotebooks:(BOOL)findInBusinessNotebooks
 {
     _findInBusinessNotebooks = findInBusinessNotebooks;
     [kSettings setValue:@(findInBusinessNotebooks) forSetting:IntegrationEvernoteFindInBusinessNotebooks];
+    [self cacheClear];
 }
 
 - (BOOL)isBusinessUser
 {
     return [ENSession sharedSession].isBusinessUser;
 }
--(BOOL)isPremiumUser{
-    return [[ENSession sharedSession] isPremiumUser];
+
+-(BOOL)isPremiumUser
+{
+    return [ENSession sharedSession].isPremiumUser;
 }
 
 - (ENNoteStoreClient *)primaryNoteStoreError:(NSError**)error
@@ -313,6 +317,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
             }
             else {
                 [self setEnableSync:YES];
+                [self setHasAskedForPermissions:NO];
                 [self setAutoFindFromTag:YES];
                 NSString *userLevel = @"Standard";
                 if(self.isPremiumUser)
