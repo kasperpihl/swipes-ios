@@ -3239,8 +3239,8 @@
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "8478310d-7e3d-4f14-b519-f30d4f4a7633";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8478310d-7e3d-4f14-b519-f30d4f4a7633";
+				"PROVISIONING_PROFILE[sdk=*]" = "ed611df5-13ae-4de0-bb70-a2b2cd6acd22";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ed611df5-13ae-4de0-bb70-a2b2cd6acd22";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3724,7 +3724,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "34053976-820b-4a63-b11b-9f50669da9fe";
+				"PROVISIONING_PROFILE[sdk=*]" = "9b582cbf-09a1-4408-8160-e089dea20a37";
 				SKIP_INSTALL = YES;
 			};
 			name = AdHoc;
