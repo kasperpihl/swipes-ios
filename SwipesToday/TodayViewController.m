@@ -188,7 +188,7 @@
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_defaultContext];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)",endDate];
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate inContext:localContext];
-    BOOL newItemsToBottom = [kSettings valueForSetting:SettingAddToBottom];
+    BOOL newItemsToBottom = [[kSettings valueForSetting:SettingAddToBottom] boolValue];
     self.todos = [KPToDo sortOrderForItems:results newItemsOnTop:!newItemsToBottom save:NO context:localContext];
     SavedChangeHandler *changeHandler = [[SavedChangeHandler alloc] init];
     if([localContext hasChanges])

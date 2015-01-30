@@ -109,7 +109,7 @@
     NSDate *endDate = [NSDate date];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)",endDate];
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
-    BOOL newItemsToBottom = [kSettings valueForSetting:SettingAddToBottom];
+    BOOL newItemsToBottom = [[kSettings valueForSetting:SettingAddToBottom] boolValue];
     return [KPToDo sortOrderForItems:results newItemsOnTop:!newItemsToBottom save:YES context:nil];
 }
 - (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
