@@ -14,6 +14,7 @@
 #import "SettingsHandler.h"
 #import "NSDate-Utilities.h"
 #import "NotificationHandler.h"
+#import "UserHandler.h"
 #import <Parse/PFQuery.h>
 #import <Parse/PFFile.h>
 @interface SettingsHandler ()
@@ -30,6 +31,50 @@ static SettingsHandler *sharedObject;
         [sharedObject initialize];
     }
     return sharedObject;
+}
+-(NSArray*)syncedSettingIndexes{
+    return @[ @(SettingLaterToday), @(SettingEveningStartTime), @(SettingWeekStart), @(SettingWeekStartTime), @(SettingWeekendStart), @(SettingWeekendStartTime), @(SettingAddToBottom), @(SettingTimeZone) ];
+}
+-(KPSettings)settingForIndex:(NSString*)index{
+    KPSettings setting;
+    if([index isEqualToString:@"SettingLaterToday"])
+        setting = SettingLaterToday;
+    else if([index isEqualToString:@"SettingEveningStart"])
+        setting = SettingEveningStartTime;
+    else if([index isEqualToString:@"SettingWeekStart"])
+        setting = SettingWeekStart;
+    else if([index isEqualToString:@"SettingWeekStartTime"])
+        setting = SettingWeekStartTime;
+    else if([index isEqualToString:@"SettingWeekendStart"])
+        setting = SettingWeekendStart;
+    else if([index isEqualToString:@"SettingWeekendStartTime"])
+        setting = SettingWeekendStartTime;
+    else if([index isEqualToString:@"SettingAppSounds"])
+        setting = SettingAppSounds;
+    else if([index isEqualToString:@"SettingNotifications"])
+        setting = SettingNotifications;
+    else if([index isEqualToString:@"SettingDailyReminders"])
+        setting = SettingDailyReminders;
+    else if([index isEqualToString:@"SettingWeeklyReminders"])
+        setting = SettingWeeklyReminders;
+    else if([index isEqualToString:@"SettingAddToBottom"])
+        setting = SettingAddToBottom;
+    else if([index isEqualToString:@"SettingLocation"])
+        setting = SettingLocation;
+    else if([index isEqualToString:@"SettingTimeZone"])
+        setting = SettingTimeZone;
+    else if([index isEqualToString:@"SettingEvernoteSync"])
+        setting = SettingEvernoteSync;
+    else if([index isEqualToString:@"IntegrationEvernoteEnableSync"])
+        setting = IntegrationEvernoteEnableSync;
+    else if([index isEqualToString:@"IntegrationEvernoteSwipesTag"])
+        setting = IntegrationEvernoteSwipesTag;
+    else if([index isEqualToString:@"IntegrationEvernoteFindInPersonalLinkedNotebooks"])
+        setting = IntegrationEvernoteFindInPersonalLinkedNotebooks;
+    else if([index isEqualToString:@"IntegrationEvernoteFindInBusinessNotebooks"])
+        setting = IntegrationEvernoteFindInBusinessNotebooks;
+    
+    return setting;
 }
 -(NSString*)indexForSettings:(KPSettings)setting{
     NSString *index;
@@ -103,12 +148,31 @@ static SettingsHandler *sharedObject;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"updated time zone" object:self userInfo:@{@"from":@(settingTimeZone),@"to":@(deviceTimeZone)}];
     }
 }
-
+-(void)sendSettingsToServer{
+    NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+    for( NSNumber *indexNumber in [self syncedSettingIndexes]){
+        KPSettings setting = (KPSettings)[indexNumber integerValue];
+        NSString *index = [self indexForSettings:setting];
+        id value = [self valueForSetting:setting];
+        [settings setObject:value forKey:index];
+    }
+    [kUserHandler saveSettings:[settings copy]];
+}
+-(void)updateSettingsFromServer:(NSDictionary*)settings{
+    if(!settings)
+        return [self sendSettingsToServer];
+    for( NSNumber *indexNumber in [self syncedSettingIndexes]){
+        KPSettings setting = (KPSettings)[indexNumber integerValue];
+        NSString *index = [self indexForSettings:setting];
+        id currentValue = [self valueForSetting:setting];
+        id newValue = [settings objectForKey:index];
+        if(newValue && ![newValue isEqual:currentValue]){
+            [self setValue:newValue forSetting:setting];
+        }
+    }
+}
 -(void)refreshGlobalSettingsForce:(BOOL)force{
     [self checkTimeZoneChange];
-    
-    if(self.isFetchingSettings)
-        return;
 }
 
 -(NSNumber*)repairValue:(NSDate*)date forSetting:(KPSettings)setting{
@@ -188,13 +252,21 @@ static SettingsHandler *sharedObject;
 }
 
 -(void)setValue:(id)value forSetting:(KPSettings)setting{
+    [self setValue:value forSetting:setting notify:YES];
+}
+-(void)setValue:(id)value forSetting:(KPSettings)setting notify:(BOOL)notify{
     NSString *index = [self indexForSettings:setting];
     if(!index) return;
     [USER_DEFAULTS setObject:value forKey:index];
     [USER_DEFAULTS synchronize];
     if(setting == SettingNotifications)
         [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:SH_UpdateSetting object:self userInfo:@{@"Setting":@(setting), @"Value": value }];
+    if(notify){
+        [[NSNotificationCenter defaultCenter] postNotificationName:SH_UpdateSetting object:self userInfo:@{@"Setting":@(setting), @"Value": value }];
+        NSArray *syncedSettings = [self syncedSettingIndexes];
+        if([syncedSettings containsObject:@(setting)])
+            [self sendSettingsToServer];
+    }
 }
 
 -(BOOL)settingForKey:(NSString *)key{
@@ -227,6 +299,8 @@ static SettingsHandler *sharedObject;
     for(KPSettings setting = 0 ; setting <= IntegrationEvernoteFindInBusinessNotebooks ; setting++){
         NSLog(@"%@ - %@", [self indexForSettings:setting] ,[self valueForSetting:setting]);
     }
+}
+-(void)dealloc{
 }
 
 @end
