@@ -43,6 +43,7 @@
     return cell;
 }
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    cell.textLabel.textColor = tcolor(TextColor);
     switch (indexPath.row) {
         case 5:
             cell.textLabel.text = LOCALIZE_STRING(@"Contact Swipes");
