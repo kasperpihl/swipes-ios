@@ -52,6 +52,9 @@ static SettingsHandler *sharedObject;
         case SettingWeekendStartTime:
             index = @"SettingWeekendStartTime";
             break;
+        case SettingAppSounds:
+            index = @"SettingAppSounds";
+            break;
         case SettingNotifications:
             index = @"SettingNotifications";
             break;
@@ -60,6 +63,9 @@ static SettingsHandler *sharedObject;
             break;
         case SettingWeeklyReminders:
             index = @"SettingWeeklyReminders";
+            break;
+        case SettingAddToBottom:
+            index = @"SettingAddToBottom";
             break;
         case SettingLocation:
             index = @"SettingLocation";
@@ -139,12 +145,16 @@ static SettingsHandler *sharedObject;
             return @(kDefWeekendStartTime * D_HOUR);
         case SettingTimeZone:
             return @([NSTimeZone localTimeZone].secondsFromGMT);
+        case SettingAppSounds:
+            return @YES;
         case SettingNotifications:
             return @YES;
         case SettingDailyReminders:
             return @YES;
         case SettingWeeklyReminders:
             return @YES;
+        case SettingAddToBottom:
+            return @NO;
         case SettingLocation:
             return @NO;
         case SettingEvernoteSync:
@@ -184,6 +194,7 @@ static SettingsHandler *sharedObject;
     [USER_DEFAULTS synchronize];
     if(setting == SettingNotifications)
         [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SH_UpdateSetting object:self userInfo:@{@"Setting":@(setting), @"Value": value }];
 }
 
 -(BOOL)settingForKey:(NSString *)key{
@@ -213,6 +224,9 @@ static SettingsHandler *sharedObject;
 
 -(void)printSettings{
     NSLog(@"%@",self.settings);
+    for(KPSettings setting = 0 ; setting <= IntegrationEvernoteFindInBusinessNotebooks ; setting++){
+        NSLog(@"%@ - %@", [self indexForSettings:setting] ,[self valueForSetting:setting]);
+    }
 }
 
 @end

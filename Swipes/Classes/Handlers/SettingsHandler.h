@@ -12,10 +12,12 @@ typedef enum {
     SettingWeekStart,
     SettingWeekendStart,
     SettingLaterToday,
+    SettingAppSounds,
     SettingNotifications,
     SettingDailyReminders,
     SettingWeeklyReminders,
     SettingLocation,
+    SettingAddToBottom,
     SettingEvernoteSync,
     SettingTimeZone,
     
@@ -24,6 +26,9 @@ typedef enum {
     IntegrationEvernoteFindInPersonalLinkedNotebooks,
     IntegrationEvernoteFindInBusinessNotebooks,
 } KPSettings;
+
+#define SH_UpdateSetting @"SH_UpdateSetting"
+
 #import <Foundation/Foundation.h>
 #define kSettings [SettingsHandler sharedInstance]
 @interface SettingsHandler : NSObject
