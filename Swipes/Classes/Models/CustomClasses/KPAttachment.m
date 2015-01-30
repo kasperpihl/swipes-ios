@@ -45,7 +45,9 @@ NSString* const URL_SERVICE = @"url";
     NSArray *objects = [KPAttachment MR_findAllWithPredicate:findPredicate inContext:context];
     NSMutableArray *identifiers = [NSMutableArray array];
     for( KPAttachment *attachment in objects ){
-        [identifiers addObject:attachment.identifier];
+        if(attachment && attachment.identifier){
+            [identifiers addObject:attachment.identifier];
+        }
     }
     return [identifiers copy];
 }
