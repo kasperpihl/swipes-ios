@@ -98,7 +98,7 @@
 }
 
 -(void)showClearButton:(BOOL)show{
-    self.clearButton.hidden = !show;
+    //self.clearButton.hidden = !show;
 }
 
 #pragma mark UIView methods
@@ -134,7 +134,6 @@
         [clearButton setTitle:@"Clear" forState:UIControlStateNormal];
         [clearButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [clearButton addTarget:self action:@selector(onClear:) forControlEvents:UIControlEventTouchUpInside];
-        clearButton.hidden = YES;
         [self addSubview:clearButton];
         self.clearButton = clearButton;
         

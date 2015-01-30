@@ -453,9 +453,14 @@
     return [hintStrings copy];
 }
 -(void)didPressClearInOnboardingTopMenu:(OnboardingTopMenu *)topMenu{
-    [kHints turnHintsOff:YES];
-    [self checkForUpdateOnBadge];
-    [self setTopMenu:nil state:TopMenuDefault animated:YES];
+    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Turn off hints") andMessage:LOCALIZE_STRING(@"Are you sure you want to turn off and clear the hints?") block:^(BOOL succeeded, NSError *error) {
+        if(succeeded){
+            [kHints turnHintsOff:YES];
+            [self checkForUpdateOnBadge];
+            [self setTopMenu:nil state:TopMenuDefault animated:YES];
+        }
+    }];
+    
 }
 -(void)topMenu:(OnboardingTopMenu *)topMenu didSelectItem:(NSInteger)itemIndex{
     NSArray *currentHints = [kHints getCurrentHints];
