@@ -319,10 +319,10 @@ static NotificationHandler *sharedObject;
                 registerBlock();
             }
             
-            
+            return;
         }
         
-        return;
+        
     }
     for(UILocalNotification *notification in notifications){
         [app scheduleLocalNotification:notification];
