@@ -327,7 +327,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         }
     }
     else{
-        growingTextView.text = self.model.title;
+        if(self.model){
+            growingTextView.text = self.model.title;
+        }
     }
     self.activeEditMode = KPEditModeNone;
 }
