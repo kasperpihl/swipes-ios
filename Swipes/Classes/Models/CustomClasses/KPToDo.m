@@ -305,7 +305,6 @@ extern NSString * const kEvernoteMoveTime;
         for(NSString *pfKey in [object allKeys]){
             if([localChanges containsObject:pfKey])
                 continue;
-            
             id pfValue = [object objectForKey:pfKey];
             if([pfKey isEqualToString:@"repeatOption"]){
                 if(![[self stringForRepeatOption:self.repeatOptionValue] isEqualToString:pfValue]) self.repeatOptionValue = [self optionForRepeatString:pfValue];
@@ -364,12 +363,15 @@ extern NSString * const kEvernoteMoveTime;
             
             if([pfKey isEqualToString:@"attachments"]){
                 NSArray *attachments = (NSArray*)pfValue;
-                [self removeAllAttachmentsForService:@"all"];
+                [self removeAllAttachmentsForService:@"all" identifier:nil];
                 for( NSDictionary *attachmentObj in attachments){
                     NSString *title = [attachmentObj objectForKey:@"title"];
                     NSString *identifier = [attachmentObj objectForKey:@"identifier"];
                     NSString *service = [attachmentObj objectForKey:@"service"];
-                    BOOL sync = [[attachmentObj objectForKey:@"sync"] boolValue];
+                    NSNumber *syncNumber = [attachmentObj objectForKey:@"sync"];
+                    BOOL sync = NO;
+                    if (syncNumber && syncNumber != (id)[NSNull null])
+                        sync = [syncNumber boolValue];
                     KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync inContext:context];
                     // add the new attachment
                     [self addAttachments:[NSSet setWithObject:attachment]];
@@ -511,18 +513,18 @@ extern NSString * const kEvernoteMoveTime;
 
 - (RepeatOptions)optionForRepeatString:(NSString *)repeatString {
     RepeatOptions option = RepeatNever;
-    
-    if([repeatString isEqualToString:@"every day"])
-        option = RepeatEveryDay;
-    else if([repeatString isEqualToString:@"mon-fri or sat+sun"])
-        option = RepeatEveryMonFriOrSatSun;
-    else if([repeatString isEqualToString:@"every week"])
-        option = RepeatEveryWeek;
-    else if([repeatString isEqualToString:@"every month"])
-        option = RepeatEveryMonth;
-    else if([repeatString isEqualToString:@"every year"])
-        option = RepeatEveryYear;
-
+    if(repeatString && repeatString != (id)[NSNull null]){
+        if([repeatString isEqualToString:@"every day"])
+            option = RepeatEveryDay;
+        else if([repeatString isEqualToString:@"mon-fri or sat+sun"])
+            option = RepeatEveryMonFriOrSatSun;
+        else if([repeatString isEqualToString:@"every week"])
+            option = RepeatEveryWeek;
+        else if([repeatString isEqualToString:@"every month"])
+            option = RepeatEveryMonth;
+        else if([repeatString isEqualToString:@"every year"])
+            option = RepeatEveryYear;
+    }
     return option;
 
 }
@@ -775,14 +777,14 @@ extern NSString * const kEvernoteMoveTime;
 -(void)deleteToDoSave:(BOOL)save force:(BOOL)force{
     BOOL shouldDelete = [self shouldDeleteForce:force];
     if( shouldDelete ){
-        [self removeAllAttachmentsForService:@"all"];
+        [self removeAllAttachmentsForService:@"all" identifier:nil];
         [self MR_deleteEntity];
     }
     if(save)
         [KPToDo saveToSync];
 }
 
--(BOOL)shouldDeleteForce:(BOOL)force {
+-(BOOL)shouldDeleteForce:(BOOL)force{
     if(self.subtasks.count > 0){
         [KPToDo deleteToDos:[self.subtasks allObjects] save:NO force:YES];
     }
@@ -929,7 +931,7 @@ extern NSString * const kEvernoteMoveTime;
 - (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync from:(NSString *)from
 {
     // remove all present attachments for this service
-    [self removeAllAttachmentsForService:service];
+    [self removeAllAttachmentsForService:service identifier:identifier];
     if(title.length > kTitleMaxLength)
         title = [title substringToIndex:kTitleMaxLength];
     // create the attachment
@@ -944,12 +946,13 @@ extern NSString * const kEvernoteMoveTime;
     }
 }
 
-- (void)removeAllAttachmentsForService:(NSString *)service
+- (void)removeAllAttachmentsForService:(NSString *)service identifier:(NSString*)identifier
 {
     NSMutableSet* attachmentSet = [NSMutableSet set];
     for (KPAttachment* att in self.attachments) {
         if ([att.service isEqualToString:service] || [service isEqualToString:@"all"]) {
-            [attachmentSet addObject:att];
+            if(!identifier || [identifier isEqualToString:att.identifier])
+                [attachmentSet addObject:att];
         }
     }
     if (0 < attachmentSet.count) {
@@ -985,6 +988,13 @@ extern NSString * const kEvernoteMoveTime;
     if(save)
         [KPCORE saveContextForSynchronization:context];
     
+}
+-(KPAttachment *)attachmentForService:(NSString *)service identifier:(NSString *)identifier{
+    for (KPAttachment* attachment in self.attachments) {
+        if ([attachment.service isEqualToString:service] && [attachment.identifier isEqualToString:identifier])
+            return attachment;
+    }
+    return nil;
 }
 - (KPAttachment *)firstAttachmentForServiceType:(NSString *)service
 {

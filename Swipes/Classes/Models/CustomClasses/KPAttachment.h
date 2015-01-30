@@ -3,6 +3,7 @@
 extern NSString* const EVERNOTE_SERVICE;
 extern NSString* const GMAIL_SERVICE;
 extern NSString* const DROPBOX_SERVICE;
+extern NSString* const URL_SERVICE;
 
 @interface KPAttachment : _KPAttachment {}
 +( NSArray *)findAttachmentsForService:(NSString*)service identifier:(NSString*)identifier context:(NSManagedObjectContext*)context;

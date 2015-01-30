@@ -74,6 +74,7 @@ static BOOL g_isNotFirstRun = NO;
     iconCompare(@"editLocation",                @"\ue60d");
     iconCompare(@"editEvernote",                @"\ue65c");
     iconCompare(@"editMail",                    @"\ue606");
+    iconCompare(@"editURL",                     @"\ue607");
     iconCompare(@"editActionRoundedArrow",      @"\ue65d");
     iconCompare(@"editActionRoundedPlus",       @"\ue65e");
     iconCompare(@"editSyncIcon",                @"\ue615");
