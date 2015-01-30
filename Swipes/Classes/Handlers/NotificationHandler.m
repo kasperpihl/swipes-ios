@@ -318,8 +318,8 @@ static NotificationHandler *sharedObject;
             else{
                 registerBlock();
             }
-            
-            return;
+            if(userNotifications)
+                return;
         }
         
         
