@@ -12,7 +12,11 @@
 #import "UtilityClass.h"
 #import "SettingsHandler.h"
 #import "NotificationsViewController.h"
-
+typedef enum {
+    IndexPathTweaks = 0,
+    IndexPathSounds,
+    IndexPathNotifications
+} IndexPathSettings;
 @interface NotificationsViewController () <UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @end
@@ -21,40 +25,90 @@
 
 -(KPSettings)settingForIndexPath:(NSIndexPath*)indexPath{
     KPSettings setting = SettingNotifications;
-    switch (indexPath.row) {
-        case 2:
-            setting = SettingNotifications;
-            break;
-        case 1:
-            setting = SettingDailyReminders;
-            break;
-        case 0:
-            setting = SettingWeeklyReminders;
-            break;
-        default:
-            break;
+    if(indexPath.section == IndexPathTweaks){
+        setting = SettingAddToBottom;
     }
+    else if(indexPath.section == IndexPathSounds){
+        setting = SettingAppSounds;
+    }
+    else if (indexPath.section == IndexPathNotifications){
+        switch (indexPath.row) {
+            case 0:
+                setting = SettingNotifications;
+                break;
+            case 1:
+                setting = SettingDailyReminders;
+                break;
+            case 2:
+                setting = SettingWeeklyReminders;
+                break;
+            default:
+                break;
+        }
+    }
+    
     return setting;
 }
 -(NSString*)titleForIndexPath:(NSIndexPath *)indexPath{
     NSString *title;
-    switch (indexPath.row) {
-        case 2:
-            title = LOCALIZE_STRING(@"Tasks snoozed for later");
-            break;
-        case 1:
-            title = LOCALIZE_STRING(@"Daily reminder to plan the day");
-            break;
-        case 0:
-            title = LOCALIZE_STRING(@"Weekly reminder to plan the week");
-            break;
-        default:
-            break;
+    if(indexPath.section == IndexPathTweaks){
+        switch (indexPath.row) {
+            case 0:
+                title = LOCALIZE_STRING(@"Add new tasks to bottom");
+                break;
+            default:
+                break;
+        }
+
     }
+    else if(indexPath.section == IndexPathSounds){
+        title = LOCALIZE_STRING(@"In-app sounds");
+    }
+    else if(indexPath.section == IndexPathNotifications){
+        switch (indexPath.row) {
+            case 0:
+                title = LOCALIZE_STRING(@"Tasks snoozed for later");
+                break;
+            case 1:
+                title = LOCALIZE_STRING(@"Daily reminder to plan the day");
+                break;
+            case 2:
+                title = LOCALIZE_STRING(@"Weekly reminder to plan the week");
+                break;
+            default:
+                break;
+        }
+    }
+    
     return title;
 }
 
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    switch (section) {
+        case IndexPathTweaks:
+            return LOCALIZE_STRING(@"Tweaks");
+        case IndexPathSounds:
+            return LOCALIZE_STRING(@"Sounds");
+        case IndexPathNotifications:
+            return LOCALIZE_STRING(@"Notifications");
+        default:
+            return @"";
+    }
+}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    switch (section) {
+        case IndexPathTweaks:
+            return 1;
+        case IndexPathSounds:
+            return 1;
+        case IndexPathNotifications:
+            return 3;
+        default:
+            return 0;
+    }
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 3;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -67,7 +121,6 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = CLEAR;
         cell.textLabel.font = KP_REGULAR(13);
-        cell.transform = CGAffineTransformMakeRotation(M_PI);
         UISwitch *aSwitch = [[UISwitch alloc] init];
         aSwitch.tag = kSwitchTag;
         aSwitch.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
@@ -99,12 +152,17 @@
         [kSettings setValue:@YES forSetting:setting];
     }
     else{
-        [UTILITY confirmBoxWithTitle:[self titleForIndexPath:switchHandled] andMessage:LOCALIZE_STRING(@"Are you sure you no longer want to receive these alarms and reminders?") block:^(BOOL succeeded, NSError *error) {
-            if(succeeded)
-                [kSettings setValue:@NO forSetting:setting];
-            else
-                sender.on = YES;
-        }];
+        if(switchHandled.section == IndexPathNotifications){
+            [UTILITY confirmBoxWithTitle:[self titleForIndexPath:switchHandled] andMessage:LOCALIZE_STRING(@"Are you sure you no longer want to receive these alarms and reminders?") block:^(BOOL succeeded, NSError *error) {
+                if(succeeded)
+                    [kSettings setValue:@NO forSetting:setting];
+                else
+                    sender.on = YES;
+            }];
+        }
+        else {
+            [kSettings setValue:@NO forSetting:setting];
+        }
     }
     
 }
@@ -114,7 +172,6 @@
     [super viewDidLoad];
     self.view.backgroundColor = CLEAR;
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
-    self.tableView.transform = CGAffineTransformMakeRotation(-M_PI);
     self.tableView.delegate = self;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.dataSource = self;
