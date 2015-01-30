@@ -22,6 +22,7 @@
 @property BOOL isFetchingSettings;
 @property BOOL isFetchingImage;
 @property NSMutableDictionary *settings;
+@property (nonatomic) NSTimer *settingTimer;
 @end
 @implementation SettingsHandler
 static SettingsHandler *sharedObject;
@@ -33,10 +34,10 @@ static SettingsHandler *sharedObject;
     return sharedObject;
 }
 -(NSArray*)syncedSettingIndexes{
-    return @[ @(SettingLaterToday), @(SettingEveningStartTime), @(SettingWeekStart), @(SettingWeekStartTime), @(SettingWeekendStart), @(SettingWeekendStartTime), @(SettingAddToBottom), @(SettingTimeZone) ];
+    return @[ @(SettingLaterToday), @(SettingEveningStartTime), @(SettingWeekStart), @(SettingWeekStartTime), @(SettingWeekendStart), @(SettingWeekendStartTime), @(SettingAddToBottom), @(SettingTimeZone), @(SettingFilter) ];
 }
 -(KPSettings)settingForIndex:(NSString*)index{
-    KPSettings setting;
+    KPSettings setting = SettingLaterToday;
     if([index isEqualToString:@"SettingLaterToday"])
         setting = SettingLaterToday;
     else if([index isEqualToString:@"SettingEveningStart"])
@@ -65,6 +66,8 @@ static SettingsHandler *sharedObject;
         setting = SettingTimeZone;
     else if([index isEqualToString:@"SettingEvernoteSync"])
         setting = SettingEvernoteSync;
+    else if([index isEqualToString:@"SettingFilter"])
+        setting = SettingFilter;
     else if([index isEqualToString:@"IntegrationEvernoteEnableSync"])
         setting = IntegrationEvernoteEnableSync;
     else if([index isEqualToString:@"IntegrationEvernoteSwipesTag"])
@@ -121,6 +124,9 @@ static SettingsHandler *sharedObject;
         case SettingEvernoteSync:
             index = @"SettingEvernoteSync";
             break;
+        case SettingFilter:
+            index = @"SettingFilter";
+            break;
         case IntegrationEvernoteEnableSync:
             index = @"IntegrationEvernoteEnableSync";
             break;
@@ -149,6 +155,7 @@ static SettingsHandler *sharedObject;
     }
 }
 -(void)sendSettingsToServer{
+    NSLog(@"sending sync settings");
     NSMutableDictionary *settings = [NSMutableDictionary dictionary];
     for( NSNumber *indexNumber in [self syncedSettingIndexes]){
         KPSettings setting = (KPSettings)[indexNumber integerValue];
@@ -223,6 +230,8 @@ static SettingsHandler *sharedObject;
             return @NO;
         case SettingEvernoteSync:
             return @YES;
+        case SettingFilter:
+            return @"";
         case IntegrationEvernoteEnableSync:
             return @NO;
         case IntegrationEvernoteSwipesTag:
@@ -261,11 +270,15 @@ static SettingsHandler *sharedObject;
     [USER_DEFAULTS synchronize];
     if(setting == SettingNotifications)
         [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:SH_UpdateSetting object:self userInfo:@{@"Setting":@(setting), @"Value": value }];
+    
     if(notify){
+        [[NSNotificationCenter defaultCenter] postNotificationName:SH_UpdateSetting object:self userInfo:@{@"Setting":@(setting), @"Value": value }];
         NSArray *syncedSettings = [self syncedSettingIndexes];
-        if([syncedSettings containsObject:@(setting)])
-            [self sendSettingsToServer];
+        if([syncedSettings containsObject:@(setting)]){
+            if (self.settingTimer && self.settingTimer.isValid)
+                [self.settingTimer invalidate];
+            self.settingTimer = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(sendSettingsToServer) userInfo:nil repeats:NO];
+        }
     }
 }
 

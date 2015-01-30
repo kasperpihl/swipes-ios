@@ -90,7 +90,7 @@ static AnalyticsHandler *sharedObject;
         return;
     if(self.initializedIntercom && self.intercomSession){
         [Intercom logEventWithName:event optionalMetaData:options completion:^(NSError *error) {
-            NSLog(@"Error: %@",error);
+            
         }];
     }
     //[Leanplum track:event withParameters:options];
@@ -341,7 +341,6 @@ static AnalyticsHandler *sharedObject;
         DLog(@"initialized intercom %@",hmac);
         
         [Intercom setApiKey:@"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1" forAppId:@"yobuz4ff" securityOptions:@{ @"hmac" : hmac, @"data": kCurrent.objectId }];
-        [Intercom enableLogging];
         [Intercom setPresentationInsetOverScreen:UIEdgeInsetsMake(0, 0, 0, 0)];
         [Intercom setSessionListener:self];
         self.initializedIntercom = YES;

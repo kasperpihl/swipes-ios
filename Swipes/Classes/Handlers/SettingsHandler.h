@@ -20,6 +20,7 @@ typedef enum {
     SettingAddToBottom,
     SettingEvernoteSync,
     SettingTimeZone,
+    SettingFilter,
     
     IntegrationEvernoteEnableSync,
     IntegrationEvernoteSwipesTag,
@@ -42,6 +43,7 @@ typedef enum {
 /* Boolean settings in ns user defaults */
 -(BOOL)settingForKey:(NSString*)key;
 -(void)setSetting:(BOOL)setting forKey:(NSString*)key;
+-(void)setValue:(id)value forSetting:(KPSettings)setting notify:(BOOL)notify;
 
 -(void)printSettings;
 @end

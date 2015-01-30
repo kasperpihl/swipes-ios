@@ -7,6 +7,7 @@
 //
 
 #import "KPFilter.h"
+#import "SettingsHandler.h"
 @interface KPFilter ()
 
 @end
@@ -15,8 +16,21 @@ static KPFilter *sharedObject;
 +(KPFilter *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[KPFilter allocWithZone:NULL] init];
+        [sharedObject initialize];
     }
     return sharedObject;
+}
+-(void)initialize{
+    //notify(SH_UpdateSetting, updatedSetting:);
+}
+-(void)updatedSetting:(NSNotification*)notification{
+    NSDictionary *userInfo = [notification userInfo];
+    NSNumber *setting = [userInfo objectForKey:@"Setting"];
+    NSString *value = [userInfo objectForKey:@"Value"];
+    if(setting && setting.integerValue == SettingFilter){
+        [self loadFilterFromString:value];
+    }
+    
 }
 -(NSMutableArray *)selectedTags{
     if(!_selectedTags)
@@ -78,21 +92,79 @@ static KPFilter *sharedObject;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"filter active state changed" object:self];
     }
 }
+-(void)loadFilterFromString:(NSString*)string{
+    if(!string || string == (id)[NSNull null] || string.length == 0)
+        return [self clearAll];
+    
+    NSData *jsonData = [string dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error;
+    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&error];
+    if(!error){
+        NSArray *tags = [result objectForKey:@"tags"];
+        if(tags){
+            for( NSString *tag in tags)
+                [self selectTag:tag];
+        }
+        NSString *search = [result objectForKey:@"search"];
+        if(search){
+            [self searchForString:search];
+        }
+        NSNumber *notes = [result objectForKey:@"notes"];
+        NSNumber *priority = [result objectForKey:@"priority"];
+        NSNumber *recurring = [result objectForKey:@"recurring"];
+        if(notes){
+            if([notes boolValue])
+                [self setNotesFilter:FilterSettingOn];
+        }
+        if(priority){
+            if([priority boolValue])
+                [self setPriorityFilter:FilterSettingOn];
+        }
+        if(recurring){
+            if([recurring boolValue])
+                [self setRecurringFilter:FilterSettingOn];
 
+        }
+        
+    }
+}
 -(void)updateStateAndNotify:(BOOL)notify{
     BOOL isActive = NO;
-    if(self.searchString && self.searchString.length > 0)
+    NSMutableDictionary *filter = [NSMutableDictionary dictionary];
+    if(self.searchString && self.searchString.length > 0){
+        [filter setObject:self.searchString forKey:@"search"];
         isActive = YES;
-    if(self.selectedTags.count > 0)
+    }
+    if(self.selectedTags.count > 0){
+        [filter setObject:self.selectedTags forKey:@"tags"];
         isActive = YES;
+    }
     
-    if(self.notesFilter != FilterSettingNone)
+    if(self.notesFilter != FilterSettingNone){
+        [filter setObject:@(YES) forKey:@"notes"];
         isActive = YES;
-    if(self.priorityFilter != FilterSettingNone)
+    }
+    if(self.priorityFilter != FilterSettingNone){
+        [filter setObject:@(YES) forKey:@"priority"];
         isActive = YES;
-    if(self.recurringFilter != FilterSettingNone)
+    }
+    if(self.recurringFilter != FilterSettingNone){
+        [filter setObject:@(YES) forKey:@"recurring"];
         isActive = YES;
-    
+    }
+    /*NSString *filterString = @"";
+    if(isActive){
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:filter
+                                                           options:0 // Pass 0 if you don't care about the readability of the generated string
+                                                             error:&error];
+        if(!error){
+            filterString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            //[self loadFilterFromString:jsonString];
+        }
+    }
+    //if(![[kSettings valueForSetting:SettingFilter] isEqualToString:filterString])
+        //[kSettings setValue:filterString forSetting:SettingFilter notify:YES];*/
     self.isActive = isActive;
     
     if(notify)
@@ -171,5 +243,8 @@ static KPFilter *sharedObject;
     }
     
     return totalSearchString;
+}
+-(void)dealloc{
+    
 }
 @end
