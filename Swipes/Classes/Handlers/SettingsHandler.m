@@ -242,11 +242,11 @@ static SettingsHandler *sharedObject;
     if([value isKindOfClass:[NSDate class]]){
         value = [self repairValue:value forSetting:setting];
         if(value)
-            [self setValue:value forSetting:setting];
+            [self setValue:value forSetting:setting notify:NO];
     }
     if(!value){
         value = [self defaultValueForSettings:setting];
-        [self setValue:value forSetting:setting];
+        [self setValue:value forSetting:setting notify:NO];
     }
     return value;
 }
@@ -261,8 +261,8 @@ static SettingsHandler *sharedObject;
     [USER_DEFAULTS synchronize];
     if(setting == SettingNotifications)
         [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SH_UpdateSetting object:self userInfo:@{@"Setting":@(setting), @"Value": value }];
     if(notify){
-        [[NSNotificationCenter defaultCenter] postNotificationName:SH_UpdateSetting object:self userInfo:@{@"Setting":@(setting), @"Value": value }];
         NSArray *syncedSettings = [self syncedSettingIndexes];
         if([syncedSettings containsObject:@(setting)])
             [self sendSettingsToServer];

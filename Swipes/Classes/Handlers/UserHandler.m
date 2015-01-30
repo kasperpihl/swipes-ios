@@ -92,8 +92,6 @@ static UserHandler *sharedObject;
     if(!kCurrent)
         return;
     [kCurrent fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        NSDictionary *settings = [object objectForKey:@"settings"];
-        [kSettings updateSettingsFromServer:settings];
         if(!error){
             [self handleUser:(PFUser*)object];
         }
@@ -110,7 +108,6 @@ static UserHandler *sharedObject;
     }
     self.isSaving = YES;
     [kCurrent saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        DLog(@"save error: %@",error);
         self.isSaving = NO;
         if(self.needSave){
             self.needSave = NO;
@@ -133,6 +130,8 @@ static UserHandler *sharedObject;
         self.userLevel = userLevel;
         self.isPlus = (userLevel > UserLevelStandard);
         [ANALYTICS checkForUpdatesOnIdentity];
+        NSDictionary *settings = [user objectForKey:@"settings"];
+        [kSettings updateSettingsFromServer:settings];
     }
 }
 -(void)dealloc{
