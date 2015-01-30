@@ -24,6 +24,9 @@
 @property (nonatomic) UIButton *closeButton;
 @property (nonatomic) UIButton *closeLabelButton;
 
+
+@property double lastCompletionTime;
+@property NSInteger numberOfCompletions;
 @end
 
 @implementation SubtaskController
@@ -303,6 +306,17 @@
         if(state == MCSwipeTableViewCellState1){
             [cell setStrikeThrough:YES];
             if(!isDone){
+                double currentTime = CACurrentMediaTime();
+                if((currentTime - self.lastCompletionTime) < 3){
+                    self.numberOfCompletions++;
+                    if(self.numberOfCompletions == 7)
+                        self.numberOfCompletions = 1;
+                }
+                else{
+                    self.numberOfCompletions = 1;
+                }
+                self.lastCompletionTime = currentTime;
+                [kAudio playSoundWithName:[NSString stringWithFormat:@"Task composer%li.m4a",(long)self.numberOfCompletions]];
                 [KPToDo completeToDos:@[subtask] save:YES context:nil analytics:YES];
                 if(self.expanded){
                     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
