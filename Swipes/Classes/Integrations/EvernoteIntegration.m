@@ -232,10 +232,10 @@ NSError * NewNSErrorFromException(NSException * exc) {
         _searchCache = [NSMutableDictionary new];
         _noteRefCache = [NSMutableDictionary new];
         _readOnlyNoteRefCache = [NSMutableDictionary new];
-        self.autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
-        self.enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
-        self.findInPersonalLinked = [[kSettings valueForSetting:IntegrationEvernoteFindInPersonalLinkedNotebooks] boolValue];
-        self.findInBusinessNotebooks = [[kSettings valueForSetting:IntegrationEvernoteFindInBusinessNotebooks] boolValue];
+        _autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
+        _enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
+        _findInPersonalLinked = [[kSettings valueForSetting:IntegrationEvernoteFindInPersonalLinkedNotebooks] boolValue];
+        _findInBusinessNotebooks = [[kSettings valueForSetting:IntegrationEvernoteFindInBusinessNotebooks] boolValue];
         self.hasAskedForPermissions = [USER_DEFAULTS boolForKey:kHasAskedForPermissionKey];
     }
     return self;
