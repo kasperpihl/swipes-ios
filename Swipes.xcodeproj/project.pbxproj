@@ -192,7 +192,7 @@
 		A7A3C25B19E26D0B0025E877 /* NSDate+UtilitiesiOS8.h in Headers */ = {isa = PBXBuildFile; fileRef = A7A3C25919E26D0B0025E877 /* NSDate+UtilitiesiOS8.h */; };
 		A7A3C25C19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A3C25A19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m */; };
 		A7A3C25D19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A3C25A19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m */; };
-		A7A560B8198A9A3600C3D213 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A560B7198A9A3600C3D213 /* NotificationsViewController.m */; };
+		A7A560B8198A9A3600C3D213 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A560B7198A9A3600C3D213 /* SettingsViewController.m */; };
 		A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A976E6184119D6001C0A51 /* PaymentHandler.m */; };
 		A7AA7964194E0665003DAB3B /* ParentSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AA7963194E0665003DAB3B /* ParentSyncHandler.m */; };
 		A7AA7968194E067C003DAB3B /* EvernoteSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AA7967194E067C003DAB3B /* EvernoteSyncHandler.m */; };
@@ -826,8 +826,8 @@
 		A7A3C25319E1A8D40025E877 /* SavedChangeHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SavedChangeHandler.m; path = Models/SavedChangeHandler.m; sourceTree = "<group>"; };
 		A7A3C25919E26D0B0025E877 /* NSDate+UtilitiesiOS8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+UtilitiesiOS8.h"; sourceTree = "<group>"; };
 		A7A3C25A19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+UtilitiesiOS8.m"; sourceTree = "<group>"; };
-		A7A560B6198A9A3600C3D213 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationsViewController.h; path = Settings/NotificationsViewController.h; sourceTree = "<group>"; };
-		A7A560B7198A9A3600C3D213 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationsViewController.m; path = Settings/NotificationsViewController.m; sourceTree = "<group>"; };
+		A7A560B6198A9A3600C3D213 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsViewController.h; path = Settings/SettingsViewController.h; sourceTree = "<group>"; };
+		A7A560B7198A9A3600C3D213 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsViewController.m; path = Settings/SettingsViewController.m; sourceTree = "<group>"; };
 		A7A976E5184119D6001C0A51 /* PaymentHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentHandler.h; sourceTree = "<group>"; };
 		A7A976E6184119D6001C0A51 /* PaymentHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentHandler.m; sourceTree = "<group>"; };
 		A7AA7962194E0665003DAB3B /* ParentSyncHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParentSyncHandler.h; path = SyncHandlers/ParentSyncHandler.h; sourceTree = "<group>"; };
@@ -1954,8 +1954,8 @@
 				A7FA8B1C17AF094D00134ED0 /* SnoozesViewController.m */,
 				A7D189C41965F47000AA7CD9 /* IntegrationsViewController.h */,
 				A7D189C51965F47000AA7CD9 /* IntegrationsViewController.m */,
-				A7A560B6198A9A3600C3D213 /* NotificationsViewController.h */,
-				A7A560B7198A9A3600C3D213 /* NotificationsViewController.m */,
+				A7A560B6198A9A3600C3D213 /* SettingsViewController.h */,
+				A7A560B7198A9A3600C3D213 /* SettingsViewController.m */,
 				A72702131A23689C007FA2CA /* HelpingViewController.h */,
 				A72702141A23689C007FA2CA /* HelpingViewController.m */,
 			);
@@ -2797,7 +2797,7 @@
 				A702E0671A29B9AD00EC3624 /* HelpTopMenu.m in Sources */,
 				DA09DD7B1A6E636B00E66E97 /* GmailThreadProcessor.m in Sources */,
 				A78128CC17294C56002226C8 /* KPSegmentedViewController.m in Sources */,
-				A7A560B8198A9A3600C3D213 /* NotificationsViewController.m in Sources */,
+				A7A560B8198A9A3600C3D213 /* SettingsViewController.m in Sources */,
 				A798DCCE19E523CC00386C80 /* SelectionTopMenu.m in Sources */,
 				A7D06869190E654C00699B4E /* MMDrawerController.m in Sources */,
 				A78128FC17294C56002226C8 /* AppDelegate.m in Sources */,

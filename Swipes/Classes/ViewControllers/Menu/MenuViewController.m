@@ -17,7 +17,7 @@
 #import "MenuButton.h"
 #import "SettingsHandler.h"
 #import "HelpingViewController.h"
-#import "NotificationsViewController.h"
+#import "SettingsViewController.h"
 #import "IntegrationsViewController.h"
 #import "SnoozesViewController.h"
 #import "AnalyticsHandler.h"
@@ -326,9 +326,9 @@
     
     KPMenuButtons button = [self buttonForTag:sender.tag];
     switch (button) {
-        case KPMenuButtonNotifications:{
-            NotificationsViewController *notifVC = [[NotificationsViewController alloc] init];
-            [ANALYTICS pushView:@"Notifications Menu"];
+        case KPMenuButtonSettings:{
+            SettingsViewController *notifVC = [[SettingsViewController alloc] init];
+            [ANALYTICS pushView:@"Settings Menu"];
             [self pushViewController:notifVC animated:YES];
             break;
         }
@@ -468,8 +468,8 @@
 {
     NSString *title;
     switch (button) {
-        case KPMenuButtonNotifications:
-            title = LOCALIZE_STRING(@"Notifications");
+        case KPMenuButtonSettings:
+            title = LOCALIZE_STRING(@"Settings");
             break;
         case KPMenuButtonLocation:
             title = LOCALIZE_STRING(@"Location");
@@ -503,8 +503,8 @@
 {
     NSString *imageString;
     switch (button) {
-        case KPMenuButtonNotifications:
-            imageString = @"settingsNotification";
+        case KPMenuButtonSettings:
+            imageString = @"settings";
             break;
         case KPMenuButtonLocation:
             imageString = @"scheduleLocation";

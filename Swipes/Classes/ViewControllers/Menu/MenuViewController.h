@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #define kSettingsBlurColor retColor(gray(230, 0.5),gray(50, 0.4))
 typedef NS_ENUM(NSUInteger, KPMenuButtons){
-    KPMenuButtonNotifications = 1,
+    KPMenuButtonSettings = 1,
     KPMenuButtonScheme = 2,
     KPMenuButtonUpgrade = 3,
     KPMenuButtonSnoozes = 4,

@@ -11,17 +11,17 @@
 #import "UIView+Utilities.h"
 #import "UtilityClass.h"
 #import "SettingsHandler.h"
-#import "NotificationsViewController.h"
+#import "SettingsViewController.h"
 typedef enum {
     IndexPathTweaks = 0,
     IndexPathSounds,
     IndexPathNotifications
 } IndexPathSettings;
-@interface NotificationsViewController () <UITableViewDataSource,UITableViewDelegate>
+@interface SettingsViewController () <UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @end
 
-@implementation NotificationsViewController
+@implementation SettingsViewController
 
 -(KPSettings)settingForIndexPath:(NSIndexPath*)indexPath{
     KPSettings setting = SettingNotifications;

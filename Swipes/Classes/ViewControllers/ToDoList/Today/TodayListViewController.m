@@ -18,6 +18,7 @@
 #import "UIView+Utilities.h"
 #import "HintHandler.h"
 #import "AnalyticsHandler.h"
+#import "SettingsHandler.h"
 #import "SlowHighlightIcon.h"
 #import "RootViewController.h"
 #import "StyleHandler.h"
@@ -108,7 +109,8 @@
     NSDate *endDate = [NSDate date];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)",endDate];
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
-    return [KPToDo sortOrderForItems:results newItemsOnTop:YES save:YES context:nil];
+    BOOL newItemsToBottom = [kSettings valueForSetting:SettingAddToBottom];
+    return [KPToDo sortOrderForItems:results newItemsOnTop:!newItemsToBottom save:YES context:nil];
 }
 - (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
     ToDoCell *cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];

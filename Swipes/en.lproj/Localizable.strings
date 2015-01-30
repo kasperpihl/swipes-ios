@@ -246,6 +246,7 @@
     Settings
 */
 // Buttons
+"Settings" = "Settings";
 "Notifications" = "Notifications";
 "Location" = "Location";
 "Help" = "Help";
