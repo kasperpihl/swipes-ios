@@ -480,12 +480,18 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 - (void)updateNotes
 {
+    
+    NSDictionary *defaultAttributes = @{
+                                        NSForegroundColorAttributeName: tcolor(TextColor),
+                                        NSFontAttributeName: EDIT_TASK_TEXT_FONT
+                                        };
     if(!self.model.notes || self.model.notes.length == 0){
-        self.notesView.text = LOCALIZE_STRING(@"Add notes");
+        self.notesView.attributedText = [[NSAttributedString alloc] initWithString:LOCALIZE_STRING(@"Add notes") attributes:defaultAttributes];
     }
     else{
-        self.notesView.text = self.model.notes;
+        self.notesView.attributedText = [[NSAttributedString alloc] initWithString:self.model.notes attributes:defaultAttributes];
     }
+   
     CGRectSetSize(self.notesView, self.view.frame.size.width-LABEL_X-10, 1500);
     //CGSize contentSize = [self.notesView sizeThatFits:CGSizeMake(self.notesView.frame.size.width, 500)];
     [self.notesView sizeToFit];
@@ -1082,19 +1088,19 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self addAndGetImage:@"editNotes" inView:self.notesContainer];
         self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, self.view.frame.size.width - LABEL_X - 200, 500)];
         self.notesView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.notesView.font = EDIT_TASK_TEXT_FONT;
+        
         self.notesView.contentInset = UIEdgeInsetsMake(0,-5,0,0);
         self.notesView.editable = NO;
         self.notesView.userInteractionEnabled = YES;
         self.notesView.dataDetectorTypes = UIDataDetectorTypeAll;
-        self.notesView.textColor = tcolor(TextColor);
         self.notesView.backgroundColor = CLEAR;
         UITapGestureRecognizer *tapRegocnizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pressedNotes:)];
         [self.notesView addGestureRecognizer:tapRegocnizer];
         self.notesView.delegate = self;
         [self.notesContainer addSubview:self.notesView];
         
-        //[self addClickButtonToView:self.notesContainer action:@selector(pressedNotes:)];
+        UIButton *notesClickButton = [self addClickButtonToView:self.notesContainer action:@selector(pressedNotes:)];
+        CGRectSetWidth(notesClickButton, LABEL_X);
         [self.scrollView addSubview:self.notesContainer];
         
         /* Adding scroll and content view */
