@@ -568,39 +568,56 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     NSSortDescriptor *secondDesc = [NSSortDescriptor sortDescriptorWithKey:@"title" ascending:YES];
     NSSortDescriptor *thirdDesc = [NSSortDescriptor sortDescriptorWithKey:@"identifier" ascending:YES];
     NSArray *attachments = [[self.model attachments] sortedArrayUsingDescriptors:@[firstDesc,secondDesc,thirdDesc]];
-    for(AttachmentEditView *view in self.attachmentViews)
-        [view removeFromSuperview];
-    
-    NSMutableArray *attachmentViews = [NSMutableArray array];
-    for (KPAttachment *attachment in attachments)
-    {
-        AttachmentEditView *attachmentEditView = [[AttachmentEditView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
-        attachmentEditView.identifier = attachment.identifier;
-        attachmentEditView.service = attachment.service;
-        attachmentEditView.delegate = self;
-        BOOL shouldAdd = YES;
-        if([attachment.service isEqualToString:EVERNOTE_SERVICE]){
-            [attachmentEditView setIconString:@"editEvernote"];
-           
-            BOOL isSyncing = [attachment.sync boolValue];
-            CGRectSetHeight(attachmentEditView, (isSyncing ? SCHEDULE_ROW_HEIGHTS + 10 : SCHEDULE_ROW_HEIGHTS));
-            if(isSyncing)
-                [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Attached")  uppercaseString]];
-            [attachmentEditView setTitleString:attachment.title];
-        }
-        else if([attachment.service isEqualToString:URL_SERVICE]){
-            [attachmentEditView setIconString:@"editMail"];
-            NSString *title = attachment.identifier;
-            [attachmentEditView setTitleString:title];
-        }
-        else
-            shouldAdd = NO;
-        if(shouldAdd){
-            [self.scrollView addSubview:attachmentEditView];
-            [attachmentViews addObject:attachmentEditView];
+    BOOL addViews = NO;
+    if(attachments.count != self.attachmentViews.count)
+        addViews = YES;
+    if(!addViews){
+        NSInteger counter = 0;
+        for(AttachmentEditView *view in self.attachmentViews){
+            KPAttachment *attachment = [attachments objectAtIndex:0];
+            if(![attachment.service isEqualToString:view.service] || ![attachment.identifier isEqualToString:view.identifier])
+                addViews = YES;
+            counter++;
         }
     }
-    self.attachmentViews = attachmentViews;
+    
+    if(addViews){
+        for(AttachmentEditView *view in self.attachmentViews){
+            [view removeFromSuperview];
+        }
+        
+        NSMutableArray *attachmentViews = [NSMutableArray array];
+        for (KPAttachment *attachment in attachments)
+        {
+            AttachmentEditView *attachmentEditView = [[AttachmentEditView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
+            attachmentEditView.hidden = YES;
+            attachmentEditView.identifier = attachment.identifier;
+            attachmentEditView.service = attachment.service;
+            attachmentEditView.delegate = self;
+            BOOL shouldAdd = YES;
+            if([attachment.service isEqualToString:EVERNOTE_SERVICE]){
+                [attachmentEditView setIconString:@"editEvernote"];
+                
+                BOOL isSyncing = [attachment.sync boolValue];
+                CGRectSetHeight(attachmentEditView, (isSyncing ? SCHEDULE_ROW_HEIGHTS + 10 : SCHEDULE_ROW_HEIGHTS));
+                if(isSyncing)
+                    [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Attached")  uppercaseString]];
+                [attachmentEditView setTitleString:attachment.title];
+            }
+            else if([attachment.service isEqualToString:URL_SERVICE]){
+                [attachmentEditView setIconString:@"editMail"];
+                NSString *title = attachment.identifier;
+                [attachmentEditView setTitleString:title];
+            }
+            else
+                shouldAdd = NO;
+            if(shouldAdd){
+                [self.scrollView addSubview:attachmentEditView];
+                [attachmentViews addObject:attachmentEditView];
+            }
+        }
+        self.attachmentViews = attachmentViews;
+    }
 }
 -(void)updateSectionHeader
 {
@@ -669,8 +686,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         tempHeight += self.tagsContainerView.frame.size.height;
         
         for( AttachmentEditView *attachment in self.attachmentViews){
+            
             CGRectSetY(attachment, tempHeight);
             tempHeight += attachment.frame.size.height;
+            attachment.hidden = NO;
         }
         
         
@@ -1124,7 +1143,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 -(void)subtaskController:(SubtaskController *)controller changedToSize:(CGSize)size{
     //self.expandButton.hidden = ([self.model getSubtasks].count <= 1);
-    [self layoutWithDuration:0.25f];
+    [self layoutWithDuration:0];
     //NSLog(@"%f + %f + %f = %f",self.subtasksContainer.frame.size.height, self.subtasksContainer.frame.origin.y, self.cell.frame.origin.y, superFrame.origin.y);
     if(self.kbdHeight){
         CGRect newEdit = self.editingFrame;
