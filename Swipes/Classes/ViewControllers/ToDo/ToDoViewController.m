@@ -86,7 +86,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 
 
-@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate, SubtaskControllerDelegate, AttachmentEditViewDelegate>
+@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate, SubtaskControllerDelegate, AttachmentEditViewDelegate, UITextViewDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
 @property (nonatomic) CellType cellType;
 @property (nonatomic) NSString *objectId;
@@ -267,6 +267,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }
     [self updateRepeated];
     [self layoutWithDuration:0];
+}
+
+-(BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange{
+    if([[UIApplication sharedApplication] canOpenURL:URL]){
+        return YES;
+    }
+    return NO;
 }
 
 
@@ -486,6 +493,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     //    DLogFrame(self.notesView);
     
     CGRectSetHeight(self.notesView,self.notesView.frame.size.height);
+    
     CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
 }
 
@@ -1051,17 +1059,23 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         self.notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
         self.notesContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.notesContainer.userInteractionEnabled = YES;
         [self addAndGetImage:@"editNotes" inView:self.notesContainer];
         self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, self.view.frame.size.width - LABEL_X - 200, 500)];
         self.notesView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.notesView.font = EDIT_TASK_TEXT_FONT;
         self.notesView.contentInset = UIEdgeInsetsMake(0,-5,0,0);
         self.notesView.editable = NO;
+        self.notesView.userInteractionEnabled = YES;
+        self.notesView.dataDetectorTypes = UIDataDetectorTypeAll;
         self.notesView.textColor = tcolor(TextColor);
         self.notesView.backgroundColor = CLEAR;
+        UITapGestureRecognizer *tapRegocnizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pressedNotes:)];
+        [self.notesView addGestureRecognizer:tapRegocnizer];
+        self.notesView.delegate = self;
         [self.notesContainer addSubview:self.notesView];
         
-        [self addClickButtonToView:self.notesContainer action:@selector(pressedNotes:)];
+        //[self addClickButtonToView:self.notesContainer action:@selector(pressedNotes:)];
         [self.scrollView addSubview:self.notesContainer];
         
         /* Adding scroll and content view */
