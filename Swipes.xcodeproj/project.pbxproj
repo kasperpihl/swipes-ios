@@ -940,7 +940,7 @@
 		DA5422CD1986C7A50006A1E6 /* URLHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLHandler.m; sourceTree = "<group>"; };
 		DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.0.xcdatamodel"; sourceTree = "<group>"; };
 		DA67301318A99C7100CA4C1A /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = Swipes/Ressources/Libs/DropboxSDK.framework; sourceTree = "<group>"; };
-		DA6B61C219E321FE00089877 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Swipes/en.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
+		DA6B61C219E321FE00089877 /* en */ = {isa = PBXFileReference; explicitFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA6B61C419E322FB00089877 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailSyncHandler.h; path = SyncHandlers/GmailSyncHandler.h; sourceTree = "<group>"; };
 		DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailSyncHandler.m; path = SyncHandlers/GmailSyncHandler.m; sourceTree = "<group>"; };
@@ -1715,12 +1715,12 @@
 		A781288117294C56002226C8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A7B2B3DE1A80E66100C96DBE /* Localizations */,
 				A7BB65C9189BF19600BE7183 /* Sounds */,
 				DA310FA6188F3F26003C8FA4 /* Assets */,
 				A7680D30172D219800BCB2D9 /* Font */,
 				A781288217294C56002226C8 /* Images */,
 				A78128AB17294C56002226C8 /* Libs */,
-				DA6B61C119E321FE00089877 /* Localizable.strings */,
 			);
 			name = Resources;
 			path = Ressources;
@@ -1752,14 +1752,12 @@
 			isa = PBXGroup;
 			children = (
 				A708BED71A15F35B00C7E15A /* Launch Screen.xib */,
-				A781287F17294C56002226C8 /* MainStoryboard.storyboard */,
 				DA04465019D5CDC70083F816 /* Swipes.entitlements */,
 				A78128B317294C56002226C8 /* AppDelegate.h */,
 				A78128B417294C56002226C8 /* AppDelegate.m */,
 				A78128BA17294C56002226C8 /* main.m */,
 				A78128BB17294C56002226C8 /* Swipes-Info.plist */,
 				A78128BC17294C56002226C8 /* Swipes-Prefix.pch */,
-				A781287D17294C56002226C8 /* InfoPlist.strings */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -1904,6 +1902,16 @@
 				A7AD45681A39809300DF19BD /* Scheduling step2.m4a */,
 			);
 			path = Scheduling;
+			sourceTree = "<group>";
+		};
+		A7B2B3DE1A80E66100C96DBE /* Localizations */ = {
+			isa = PBXGroup;
+			children = (
+				A781287F17294C56002226C8 /* MainStoryboard.storyboard */,
+				DA6B61C119E321FE00089877 /* Localizable.strings */,
+				A781287D17294C56002226C8 /* InfoPlist.strings */,
+			);
+			name = Localizations;
 			sourceTree = "<group>";
 		};
 		A7BB65C9189BF19600BE7183 /* Sounds */ = {
@@ -3093,7 +3101,7 @@
 				A781287E17294C56002226C8 /* en */,
 			);
 			name = InfoPlist.strings;
-			path = ..;
+			path = Localizations;
 			sourceTree = "<group>";
 		};
 		A781287F17294C56002226C8 /* MainStoryboard.storyboard */ = {
@@ -3102,8 +3110,8 @@
 				A781288017294C56002226C8 /* en */,
 			);
 			name = MainStoryboard.storyboard;
-			path = ..;
-			sourceTree = "<group>";
+			path = Swipes/Ressources/Localizations;
+			sourceTree = SOURCE_ROOT;
 		};
 		DA6B61C119E321FE00089877 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -3112,7 +3120,8 @@
 				DA6B61C419E322FB00089877 /* da */,
 			);
 			name = Localizable.strings;
-			sourceTree = "<group>";
+			path = Swipes/Ressources/Localizations;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXVariantGroup section */
 
