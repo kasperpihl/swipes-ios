@@ -424,6 +424,7 @@
             SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type) {
                 hasReturned = YES;
                 [BLURRY dismissAnimated:YES];
+                NSInteger beforeCounter = self.itemHandler.itemCounter;
                 if(button == KPScheduleButtonCancel){
                     [self returnSelectedRowsAndBounce:YES];
                 }
@@ -438,7 +439,8 @@
                 }
                 if(button != KPScheduleButtonCancel){
                     [kHints triggerHint:HintScheduled];
-                    [kAudio playSoundWithName:@"New state - scheduled.m4a"];
+                    if(!([self.state isEqualToString:@"today"] && beforeCounter == toDosArray.count))
+                        [kAudio playSoundWithName:@"New state - scheduled.m4a"];
                 }
                 self.isHandlingTrigger = NO;
             }];
