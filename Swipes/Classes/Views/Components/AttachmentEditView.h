@@ -19,5 +19,5 @@
 
 -(void)setIconString:(NSString*)iconString;
 -(void)setTitleString:(NSString*)titleString;
--(void)setSyncString:(NSString*)syncString;
+-(void)setSyncString:(NSString*)syncString iconString:(NSString*)iconString;
 @end

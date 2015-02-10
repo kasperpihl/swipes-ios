@@ -59,9 +59,11 @@
 -(void)setTitleString:(NSString*)titleString{
     self.titleLabel.text = titleString;
 }
--(void)setSyncString:(NSString *)syncString{
+-(void)setSyncString:(NSString *)syncString iconString:(NSString *)iconString{
     self.syncLabel.hidden = (!syncString);
     [self.syncLabel setTitle:syncString];
+    if(iconString)
+        [self.syncLabel setIconString:iconString];
     self.syncLabel.frame = CGRectSetPos(self.syncLabel.frame, LABEL_X, CGRectGetMidY(self.frame)+10);
 }
 -(void)pressedAttachment:(UIButton*)sender{

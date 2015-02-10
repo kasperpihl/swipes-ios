@@ -607,7 +607,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                 BOOL isSyncing = [attachment.sync boolValue];
                 CGRectSetHeight(attachmentEditView, (isSyncing ? SCHEDULE_ROW_HEIGHTS + 10 : SCHEDULE_ROW_HEIGHTS));
                 if(isSyncing)
-                    [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Attached")  uppercaseString]];
+                    [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Attached")  uppercaseString] iconString:nil];
                 [attachmentEditView setTitleString:attachment.title];
             }
             else if([attachment.service isEqualToString:URL_SERVICE]){
