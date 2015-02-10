@@ -22,7 +22,7 @@ typedef void (^ThreadGetBlock)(GTLGmailThread *thread, NSError *error);
 
 - (NSString *)threadIdToNSString:(NSString *)threadId;
 - (NSString *)NSStringToThreadId:(NSString *)string;
-- (BOOL)hasNoteWithThreadId:(NSString *)threadId;
+- (NSString *)NSStringToEmail:(NSString *)string;
 
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
 - (void)logout;

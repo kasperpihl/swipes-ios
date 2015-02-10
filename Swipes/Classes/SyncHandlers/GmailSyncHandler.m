@@ -97,6 +97,17 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
     }];
 }
 
+- (KPAttachment *)hasAttachmentWithThreadId:(NSString *)threadId attachmentsWithGmail:(NSArray *)attachmentsWithGmail
+{
+    for (KPAttachment* attachment in attachmentsWithGmail) {
+        NSString* tempThreadId = [kGmInt NSStringToThreadId:attachment.identifier];
+        if (tempThreadId && [tempThreadId isEqualToString:threadId]) {
+            return attachment;
+        }
+    }
+    return nil;
+}
+
 - (void)synchronizeThreads:(NSArray *)threadListResults withBlock:(SyncBlock)block
 {
     __block NSDate *date = [NSDate date];
@@ -130,8 +141,12 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
     };
     
     // sync with gmail
+    NSPredicate *findPredicate = [NSPredicate predicateWithFormat:@"service = %@ AND sync == %@", GMAIL_SERVICE, @(YES)];
+    NSArray *attachmentsWithGmail = [KPAttachment MR_findAllWithPredicate:findPredicate inContext:KPCORE.context];
+    
     for (__block GTLGmailThread* thread in threadListResults) {
-        if (![kGmInt hasNoteWithThreadId:thread.identifier]) {
+        KPAttachment* attachment = [self hasAttachmentWithThreadId:thread.identifier attachmentsWithGmail:attachmentsWithGmail];
+        if (nil == attachment) {
             // we don't know this thread
             [GmailThreadProcessor processorWithThreadId:thread.identifier block:^(GmailThreadProcessor *processor, NSError *error) {
                 if (error) {
@@ -147,7 +162,8 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
                         if (identifier) {
                             KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO from:@"Gmail"];
                             [newToDo attachService:GMAIL_SERVICE title:title identifier:identifier sync:YES from:@"gmail-integration"];
-                            [_updatedTasks addObject:newToDo];
+                            if (nil != newToDo.objectId)
+                                [_updatedTasks addObject:newToDo.objectId];
                         }
                         else {
                             [UtilityClass sendError:[NSError errorWithDomain:@"Failed to create identifier" code:703 userInfo:nil] type:@"gmail:failed to create identifier"];
@@ -159,7 +175,20 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
         }
         else {
             // we already have the thread into task
-            finalizeBlock();
+            KPToDo* todo = attachment.todo;
+            if ((NO == todo.isLocallyDeletedValue) && (nil != todo.completionDate) && (nil == todo.parent)) {
+                [kGmInt removeSwipesLabelFromThreadAndArchive:thread.identifier withBlock:^(NSError *error) {
+                    if (nil == error) {
+                        attachment.sync = @(NO);
+                        if (nil != todo.objectId)
+                            [_updatedTasks addObject:todo.objectId];
+                    }
+                    finalizeBlock();
+                }];
+            }
+            else {
+                finalizeBlock();
+            }
         }
     }
     

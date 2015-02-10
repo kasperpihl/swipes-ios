@@ -38,20 +38,22 @@ NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
 NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
 
 @interface EvernoteSyncHandler () <EvernoteViewDelegate>
+
 @property (nonatomic, copy) SyncBlock block;
-@property NSArray *objectsWithEvernote;
-@property NSDate *lastUpdated;
-@property BOOL updateNeededFromEvernote;
-@property BOOL needToClearCache;
+@property (nonatomic, strong) NSArray *objectsWithEvernote;
+@property (nonatomic, strong) NSDate *lastUpdated;
+@property (nonatomic, assign) BOOL updateNeededFromEvernote;
+@property (nonatomic, assign) BOOL needToClearCache;
 
-@property BOOL fullEvernoteUpdate;
-@property NSInteger currentEvernoteUpdateCount;
-@property NSInteger expectedEvernoteCount;
+@property (nonatomic, assign) BOOL fullEvernoteUpdate;
+@property (nonatomic, assign) NSInteger currentEvernoteUpdateCount;
+@property (nonatomic, assign) NSInteger expectedEvernoteCount;
 
+@property (nonatomic, strong) NSMutableSet *changedNotes;
+@property (nonatomic, strong) NSMutableArray *_updatedTasks;
 
-@property NSMutableSet *changedNotes;
-@property (nonatomic) NSMutableArray *_updatedTasks;
 @end
+
 @implementation EvernoteSyncHandler
 
 +(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes
@@ -208,12 +210,12 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
     /* Match and clean all direct matches */
     for ( EvernoteToDo *evernoteToDo in evernoteToDos ){
         
-        KPToDo* matchingSubtask = nil;
+        //KPToDo* matchingSubtask = nil;
         
         for ( KPToDo* subtask in subtasks ) {
             if ( [subtask.originIdentifier isEqualToString: evernoteToDo.title] ) {
                 
-                matchingSubtask = subtask;
+                //matchingSubtask = subtask;
                 [subtasksLeftToBeFound removeObject:subtask];
                 subtasks = [subtasksLeftToBeFound copy];
                 [evernoteToDosLeftToBeFound removeObject:evernoteToDo];
@@ -245,6 +247,8 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
         CGFloat bestScore = 0;
         KPToDo* bestMatch = nil;
         for ( KPToDo *subtask in subtasks ){
+            if (nil == subtask.originIdentifier)
+                continue;
             CGFloat match = fabsf([subtask.originIdentifier compareWithWord:evernoteToDo.title matchGain:10 missingCost:1]);
             if (match > bestScore) {
                 bestScore = match;
@@ -284,7 +288,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
     }
     
     // remove evernote subtasks not found in the evernote from our task
-    subtasks = [subtasksLeftToBeFound copy];
+    //subtasks = [subtasksLeftToBeFound copy];
     if (subtasks && subtasks.count > 0) {
         for (KPToDo* subtask in subtasks) {
             if (nil != subtask.origin && [subtask.origin isEqualToString:EVERNOTE_SERVICE]) {

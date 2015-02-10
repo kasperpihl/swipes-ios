@@ -102,16 +102,15 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     return jsonDict[kKeyJsonThreadId];
 }
 
-- (BOOL)hasNoteWithThreadId:(NSString *)threadId
+- (NSString *)NSStringToEmail:(NSString *)string
 {
-    NSArray* allAttachments = [KPAttachment allIdentifiersForService:GMAIL_SERVICE sync:YES context:nil];
-    for (NSString* attachmentString in allAttachments) {
-        NSString* tempThreadId = [self NSStringToThreadId:attachmentString];
-        if (tempThreadId && [tempThreadId isEqualToString:threadId]) {
-            return YES;
-        }
+    NSError* error;
+    NSDictionary* jsonDict = [NSJSONSerialization JSONObjectWithData:[[string substringFromIndex:kKeyJson.length] dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+    if (error) {
+        [UtilityClass sendError:error type:@"gmail:NSStringToThreadId error"];
+        return nil;
     }
-    return NO;
+    return jsonDict[kKeyJsonEmail];
 }
 
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block

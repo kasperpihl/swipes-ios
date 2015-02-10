@@ -69,6 +69,7 @@
 
 #import "SyncLabel.h"
 #import "EvernoteIntegration.h"
+#import "GmailIntegration.h"
 
 #import "ToDoViewController.h"
 
@@ -433,9 +434,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 }
 
 
-
-
-
 -(void)updateTags{
     self.tagsLabel.frame = CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X - 10, 500);
     NSString *tagsString = self.model.tagString;
@@ -593,31 +591,46 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         }
         
         NSMutableArray *attachmentViews = [NSMutableArray array];
-        for (KPAttachment *attachment in attachments)
-        {
+        for (KPAttachment *attachment in attachments) {
             AttachmentEditView *attachmentEditView = [[AttachmentEditView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
             attachmentEditView.hidden = YES;
             attachmentEditView.identifier = attachment.identifier;
             attachmentEditView.service = attachment.service;
             attachmentEditView.delegate = self;
             BOOL shouldAdd = YES;
-            if([attachment.service isEqualToString:EVERNOTE_SERVICE]){
+            if ([attachment.service isEqualToString:EVERNOTE_SERVICE]){
                 [attachmentEditView setIconString:@"editEvernote"];
                 
                 BOOL isSyncing = [attachment.sync boolValue];
                 CGRectSetHeight(attachmentEditView, (isSyncing ? SCHEDULE_ROW_HEIGHTS + 10 : SCHEDULE_ROW_HEIGHTS));
                 if(isSyncing)
-                    [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Attached")  uppercaseString] iconString:nil];
+                    [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Attached") uppercaseString] iconString:nil];
                 [attachmentEditView setTitleString:attachment.title];
             }
-            else if([attachment.service isEqualToString:URL_SERVICE]){
-                [attachmentEditView setIconString:@"editMail"];
+            else if ([attachment.service isEqualToString:URL_SERVICE]) {
+                [attachmentEditView setIconString:@"editURL"];
                 NSString *title = attachment.identifier;
                 [attachmentEditView setTitleString:title];
             }
+            else if ([attachment.service isEqualToString:GMAIL_SERVICE]) {
+                NSString *title = [kGmInt NSStringToEmail:attachment.identifier];
+                if (nil == title) {
+                    // for some reason attachment is broken
+                    shouldAdd = NO;
+                }
+                else {
+                    [attachmentEditView setIconString:@"editMail"];
+                    [attachmentEditView setTitleString:title];
+                    if (![attachment.sync boolValue]) {
+                        [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Archived") uppercaseString] iconString:@"done"];
+                        CGRectSetHeight(attachmentEditView, SCHEDULE_ROW_HEIGHTS + 10);
+                    }
+                }
+            }
             else
                 shouldAdd = NO;
-            if(shouldAdd){
+            
+            if (shouldAdd) {
                 [self.scrollView addSubview:attachmentEditView];
                 [attachmentViews addObject:attachmentEditView];
             }
@@ -625,6 +638,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.attachmentViews = attachmentViews;
     }
 }
+
 -(void)updateSectionHeader
 {
     [self.sectionHeader setColor:[StyleHandler colorForCellType:self.cellType]];
@@ -822,12 +836,20 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self layoutWithDuration:0];
     }];
 }
+
 -(void)clickedAttachment:(AttachmentEditView *)attachmentView{
     if([attachmentView.service isEqualToString:EVERNOTE_SERVICE])
         [self pressedEvernote:attachmentView];
     else if([attachmentView.service isEqualToString:URL_SERVICE])
         [self pressedURL:attachmentView];
+    else if([attachmentView.service isEqualToString:GMAIL_SERVICE])
+        [self pressedGmail:attachmentView];
 }
+
+- (void)pressedGmail:(AttachmentEditView*)attachmentView{
+    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Open Email") andMessage:LOCALIZE_STRING(@"We are working with Mailbox on providing this functionality")];
+}
+
 -(void)pressedURL:(AttachmentEditView*)attachmentView{
     [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Open Link") andMessage:LOCALIZE_STRING(@"Do you want to open the link?") block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
@@ -835,6 +857,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         }
     }];
 }
+
 -(void)pressedEvernote:(UIView*)sender
 {
     if(!kUserHandler.isLoggedIn){

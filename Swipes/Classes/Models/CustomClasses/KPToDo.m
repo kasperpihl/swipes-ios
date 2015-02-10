@@ -1020,7 +1020,8 @@ extern NSString * const kEvernoteMoveTime;
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, origin: %@ - %@", self.title, self.order, self.origin, self.originIdentifier];
+    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, origin: %@ - %@, parent: %@, completionDate: %@, isLocallyDeleted: %@",
+            self.title, self.order, self.origin, self.originIdentifier, self.parent, self.completionDate, self.isLocallyDeleted];
 }
 
 @end
