@@ -18,6 +18,9 @@
 
 
 @implementation SyncLabel
+-(void)setIconString:(NSString *)iconString{
+    [self.syncIcon setText:iconString(iconString)];
+}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];

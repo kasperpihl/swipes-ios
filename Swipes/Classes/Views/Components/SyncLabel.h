@@ -10,4 +10,5 @@
 
 @interface SyncLabel : UIButton
 @property (nonatomic) NSString *title;
+-(void)setIconString:(NSString*)iconString;
 @end
