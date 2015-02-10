@@ -174,7 +174,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
         KPAttachment* attachment = [todo firstAttachmentForServiceType:GMAIL_SERVICE];
         NSString* threadId = [kGmInt NSStringToThreadId:attachment.identifier];
         if (threadId) {
-            [kGmInt removeSwipesLabelFromThread:threadId withBlock:^(NSError *error) {
+            [kGmInt removeSwipesLabelFromThreadAndArchive:threadId withBlock:^(NSError *error) {
                 if (nil == error) {
                     [KPToDo deleteToDos:@[todo] save:YES force:YES];
                 }

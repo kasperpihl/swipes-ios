@@ -176,7 +176,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
             BOOL hasSwipes = NO;
             if (object) {
                 for (GTLGmailLabel* label in object.labels) {
-                    //DLog(@"label: %@", label);
+                    DLog(@"label: %@", label);
                     if (NSOrderedSame == [label.name caseInsensitiveCompare:kSwipesLabelName]) {
                         _swipesLabelId = label.identifier;
                         hasSwipes = YES;
@@ -277,11 +277,11 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     }];
 }
 
-- (void)removeSwipesLabelFromThread:(NSString *)threadId withBlock:(ErrorBlock)block
+- (void)removeSwipesLabelFromThreadAndArchive:(NSString *)threadId withBlock:(ErrorBlock)block
 {
     GTLQueryGmail* modifyThread = [GTLQueryGmail queryForUsersThreadsModify];
     modifyThread.identifier = threadId;
-    modifyThread.removeLabelIds = @[_swipesLabelId];
+    modifyThread.removeLabelIds = @[_swipesLabelId, @"INBOX"];
     GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
     service.authorizer = _googleAuth;
     [service executeQuery:modifyThread completionHandler:^(GTLServiceTicket *ticket, GTLGmailThread* thread, NSError *error) {
