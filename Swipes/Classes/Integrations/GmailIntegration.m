@@ -21,7 +21,13 @@ static NSString* const kClientSecret = @"5heB-MAD5Qm-y1miBVic03cE";
 static NSString* const kKeychainKeyName = @"swipes_gmail_integration";
 
 static NSString* const kSwipesLabelName = @"[Mailbox]/Swipes"; // label name
+static NSString* const kInboxLabelName = @"INBOX"; // do not change!
 static NSUInteger const kMaxResults = 200; // how many results to retrieve
+
+// caches
+static NSString* const kKeyData = @"data";
+static NSString* const kKeyDate = @"date";
+static NSTimeInterval const kThreadArchieveTimeout = 300;
 
 // json keys
 static NSString* const kKeyJson = @"json:";
@@ -33,6 +39,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
 @property (nonatomic, strong) GTMOAuth2Authentication* googleAuth;
 @property (nonatomic, strong) NSString* swipesLabelId;
 @property (nonatomic, strong) NSString* emailAddress;
+@property (nonatomic, strong) NSMutableDictionary* knownArchievedThreads;
 
 @end
 
@@ -62,6 +69,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
                                          error:&error];
         if (!error) {
             _googleAuth = auth;
+            _knownArchievedThreads = [NSMutableDictionary dictionary];
             [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
                 [UtilityClass sendError:error type:@"gmail:cannot create swipes label"];
             }];
@@ -175,7 +183,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
             BOOL hasSwipes = NO;
             if (object) {
                 for (GTLGmailLabel* label in object.labels) {
-                    DLog(@"label: %@", label);
+                    //DLog(@"label: %@", label);
                     if (NSOrderedSame == [label.name caseInsensitiveCompare:kSwipesLabelName]) {
                         _swipesLabelId = label.identifier;
                         hasSwipes = YES;
@@ -241,10 +249,13 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     }];
 }
 
-- (void)getThread:(NSString *)threadId withBlock:(ThreadGetBlock)block
+- (void)getThread:(NSString *)threadId format:(NSString*)format withBlock:(ThreadGetBlock)block
 {
     GTLQueryGmail* getThread = [GTLQueryGmail queryForUsersThreadsGet];
     getThread.identifier = threadId;
+    if (format) {
+        getThread.format = format;
+    }
     GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
     service.authorizer = _googleAuth;
     [service executeQuery:getThread completionHandler:^(GTLServiceTicket *ticket, GTLGmailThread* thread, NSError *error) {
@@ -280,13 +291,60 @@ static NSString* const kKeyJsonThreadId = @"threadid";
 {
     GTLQueryGmail* modifyThread = [GTLQueryGmail queryForUsersThreadsModify];
     modifyThread.identifier = threadId;
-    modifyThread.removeLabelIds = @[_swipesLabelId, @"INBOX"];
+    modifyThread.removeLabelIds = @[_swipesLabelId, kInboxLabelName];
     GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
     service.authorizer = _googleAuth;
     [service executeQuery:modifyThread completionHandler:^(GTLServiceTicket *ticket, GTLGmailThread* thread, NSError *error) {
         //DLog(@"queried - thread:%@, error: %@", thread, error);
         block(error);
     }];
+}
+
+- (void)checkArchievedThread:(NSString *)threadId block:(SuccessfulBlock)block {
+    __block BOOL isArchieved = [self cacheIsArchieved:threadId];
+    if (isArchieved) {
+        block(isArchieved, nil);
+    }
+    else {
+        [self getThread:threadId format:@"minimal" withBlock:^(GTLGmailThread *thread, NSError *error) {
+            if (nil == error) {
+                isArchieved = YES;
+                if (thread.messages && 0 < thread.messages.count) {
+                    for (GTLGmailMessage* message in thread.messages) {
+                        if (message.labelIds) {
+                            for (NSString* labelId in message.labelIds) {
+                                if ([labelId isEqualToString:kInboxLabelName] || [labelId isEqualToString:kSwipesLabelName]) {
+                                    isArchieved = NO;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!isArchieved)
+                            break;
+                    }
+                }
+                [self cacheAddToArchieved:threadId isArchieved:isArchieved];
+            }
+            block(isArchieved, error);
+        }];
+    }
+}
+
+- (void)cacheAddToArchieved:(NSString *)threadId isArchieved:(BOOL)isArchieved {
+    _knownArchievedThreads[threadId] = @{kKeyData: @(isArchieved), kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kThreadArchieveTimeout]};
+}
+
+- (BOOL)cacheIsArchieved:(NSString *)threadId {
+    // purge old entries
+    NSDate* now = [NSDate date];
+    for (NSString* key in [_knownArchievedThreads allKeys]) {
+        NSDictionary* data = _knownArchievedThreads[key];
+        if (0 < [now timeIntervalSinceDate:data[kKeyDate]]) {
+            [_knownArchievedThreads removeObjectForKey:key];
+        }
+    }
+    
+    return [_knownArchievedThreads[threadId][kKeyData] boolValue];
 }
 
 @end

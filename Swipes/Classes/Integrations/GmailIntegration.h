@@ -28,7 +28,8 @@ typedef void (^ThreadGetBlock)(GTLGmailThread *thread, NSError *error);
 - (void)logout;
 
 - (void)listThreads:(NSString *)query withBlock:(ThreadListBlock)block;
-- (void)getThread:(NSString *)threadId withBlock:(ThreadGetBlock)block;
+- (void)getThread:(NSString *)threadId format:(NSString*)format withBlock:(ThreadGetBlock)block;
 - (void)removeSwipesLabelFromThreadAndArchive:(NSString *)threadId withBlock:(ErrorBlock)block;
+- (void)checkArchievedThread:(NSString *)threadId block:(SuccessfulBlock)block;
 
 @end

@@ -10,7 +10,6 @@
 
 @implementation GmailThreadProcessor {
     GTLGmailThread* _thread;
-    NSString* _title;
 }
 
 + (void)processorWithThreadId:(NSString *)threadId block:(GmailThreadProcessorBlock)block
@@ -30,7 +29,7 @@
         _title = nil;
         _thread = nil;
         self.threadId = threadId;
-        [kGmInt getThread:threadId withBlock:^(GTLGmailThread *thread, NSError *error) {
+        [kGmInt getThread:threadId format:nil withBlock:^(GTLGmailThread *thread, NSError *error) {
             _thread = thread;
             if (nil == error) {
                 [self processTitle];
@@ -53,8 +52,12 @@
                 for (GTLGmailMessagePartHeader* header in message.payload.headers) {
                     if (NSOrderedSame == [header.name compare:@"Subject" options:NSCaseInsensitiveSearch]) {
                         _title = header.value;
-                        return;
+                        break;
                     }
+                }
+                if (_title) {
+                    _snippet = message.snippet;
+                    return;
                 }
             }
             _title = message.snippet;
@@ -63,11 +66,6 @@
     }
     _title = nil;
     
-}
-
-- (NSString *)title
-{
-    return _title;
 }
 
 @end

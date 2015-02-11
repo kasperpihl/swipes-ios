@@ -625,6 +625,21 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                         [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Archived") uppercaseString] iconString:@"done"];
                         CGRectSetHeight(attachmentEditView, SCHEDULE_ROW_HEIGHTS + 10);
                     }
+                    else {
+                        [kGmInt checkArchievedThread:[kGmInt NSStringToThreadId:attachment.identifier] block:^(BOOL isArchived, NSError *error) {
+                            if ([attachment.sync boolValue] == isArchived) {
+                                // we have difference in our knowledge about is this task archieved
+                                if (isArchived) {
+                                    attachment.sync = @(NO);
+                                    [KPToDo saveToSync];
+                                }
+                                NSString* objectId = attachment.todo.objectId;
+                                if (objectId) {
+                                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:@{ @"updated" : @[objectId] }];
+                                }
+                            }
+                        }];
+                    }
                 }
             }
             else
