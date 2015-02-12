@@ -97,30 +97,29 @@
 /* 
  Thread safe handling of attribute changes
 */
--(NSMutableDictionary*)copyChangesAndFlushForTemp:(BOOL)isTemp{
-    __block NSMutableDictionary *copyOfChanges;
-    __block BOOL blockIsTemp = isTemp;
-    dispatch_sync(self.isolationQueue, ^(){
-        NSMutableDictionary *target = blockIsTemp ? self._attributeChangesOnNewObjectsWhileSyncing : self._attributeChangesOnObjects;
+-(NSMutableDictionary*)copyChangesAndFlushForTemp:(BOOL)isTemp {
+    NSMutableDictionary *copyOfChanges;
+    @synchronized(self) {
+        NSMutableDictionary *target = isTemp ? self._attributeChangesOnNewObjectsWhileSyncing : self._attributeChangesOnObjects;
         copyOfChanges = [target mutableCopy];
         [target removeAllObjects];
-    });
+    }
     return copyOfChanges;
 }
 
 -(NSArray*)lookupTemporaryChangedAttributesForTempId:(NSString *)tempId{
-    __block NSArray *attributeArray;
-    dispatch_sync(self.isolationQueue, ^(){
+    NSArray *attributeArray;
+    @synchronized(self) {
         attributeArray = self._attributeChangesOnNewObjectsWhileSyncing[tempId];
-    });
+    }
     return attributeArray;
 }
 
 -(NSArray*)lookupTemporaryChangedAttributesForObject:(NSString*)objectId{
     __block NSArray *attributeArray;
-    dispatch_sync(self.isolationQueue, ^(){
+    @synchronized(self) {
         attributeArray = self._attributeChangesOnObjects[objectId];
-    });
+    };
     return attributeArray;
 }
 
@@ -585,7 +584,7 @@
 
     
     /* The last update time - saved and received from the sync response */
-    NSString *lastUpdate = [USER_DEFAULTS objectForKey:kLastSyncServerString];
+    __block NSString *lastUpdate = [USER_DEFAULTS objectForKey:kLastSyncServerString];
     if (lastUpdate)
         [syncData setObject:lastUpdate forKey:@"lastUpdate"];
     
@@ -700,7 +699,7 @@
         [self commitAttributeChanges:changesToCommit toTemp:NO];
         self._needSync = YES;
     }
-    [context MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
+    [context MR_saveWithOptions:MRSaveParentContexts completion:^(BOOL success, NSError *error) {
         /* Save the sync to server */
         [USER_DEFAULTS setObject:[NSDate date] forKey:kLastSyncLocalDate];
         if (lastUpdate)
@@ -709,7 +708,6 @@
         [self cleanUpAfterSync];
         if (!um.isUndoRegistrationEnabled)
             [um enableUndoRegistration];
-        DUMPDB;
         [self finalizeSyncWithUserInfo:nil error:nil];
     }];
     
