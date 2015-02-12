@@ -188,7 +188,7 @@ extern NSString * const kEvernoteMoveTime;
 }
 
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save from:(NSString *)from{
-    if (tags && (0 < tags.count)){
+    if (tags && [tags isKindOfClass:NSArray.class] && (0 < tags.count)){
         @try {
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
             NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
