@@ -54,10 +54,9 @@
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 
-@property (nonatomic) NSDate *lastClose;
-@property (nonatomic) KPMenu currentMenu;
-@property (nonatomic) BOOL didReset;
-@property MFMailComposeViewController *mailCont;
+@property (nonatomic, strong) NSDate *lastClose;
+@property (nonatomic, assign) KPMenu currentMenu;
+@property (nonatomic, assign) BOOL didReset;
 
 @end
 
@@ -244,28 +243,29 @@ static RootViewController *sharedObject;
 }
 -(void)shareTasks:(NSArray*)tasks{
     if([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
         
-        self.mailCont.mailComposeDelegate = self;
-        [self.mailCont setSubject:LOCALIZE_STRING(@"Tasks to complete")];
+        mailCont.mailComposeDelegate = self;
+        [mailCont setSubject:LOCALIZE_STRING(@"Tasks to complete")];
         
-        NSString *message = LOCALIZE_STRING(@"Tasks: \r\n");
+        NSMutableString* message = [[NSMutableString alloc] initWithString:LOCALIZE_STRING(@"Tasks:\r\n")];
         for(KPToDo *toDo in tasks){
-            message = [message stringByAppendingFormat:@"◯ %@\r\n",toDo.title];
+            [message appendFormat:@"◯ %@\r\n",toDo.title];
             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
             NSArray *subtasks = [[toDo getSubtasks] sortedArrayUsingDescriptors:@[sortDescriptor]];
             BOOL addedSubtasks = NO;
             for( KPToDo *subtask in subtasks){
                 if(!subtask.completionDate){
-                    message = [message stringByAppendingFormat:@"   ◯ %@\r\n",subtask.title];
+                    [message appendFormat:@"   ◯ %@\r\n",subtask.title];
                     addedSubtasks = YES;
                 }
             }
-            if(addedSubtasks)
-                message = [message stringByAppendingString:@"\r\n"];
+            if (addedSubtasks)
+                [message appendString:@"\r\n"];
         }
-        message = [message stringByAppendingString:LOCALIZE_STRING(@"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com")];
-        [self.mailCont setMessageBody:message isHTML:NO];
-        [self presentViewController:self.mailCont animated:YES completion:nil];
+        [message appendString:LOCALIZE_STRING(@"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com")];
+        [mailCont setMessageBody:message isHTML:NO];
+        [self presentViewController:mailCont animated:YES completion:nil];
         [ANALYTICS trackEvent:@"Share Tasks Opened" options:@{@"Number of Tasks":@(tasks.count)}];
         [ANALYTICS trackCategory:@"Share Task" action:@"Opened" label:nil value:@(tasks.count)];
     }
@@ -500,9 +500,6 @@ static RootViewController *sharedObject;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if([MFMailComposeViewController canSendMail]) {
-        self.mailCont = [[MFMailComposeViewController alloc] init];
-    }
     UTILITY.rootViewController = self;
 
     [self setNavigationBarHidden:YES];
