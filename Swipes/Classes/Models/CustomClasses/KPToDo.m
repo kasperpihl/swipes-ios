@@ -70,7 +70,11 @@ extern NSString * const kEvernoteMoveTime;
 
 -(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save from:(NSString *)from analytics:(BOOL)analytics
 {
-    KPToDo *subTask = [KPToDo newObjectInContext:[self managedObjectContext]];
+//    KPToDo *subTask = [KPToDo newObjectInContext:[self managedObjectContext]];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    KPToDo *subTask = [KPToDo newObjectInContext:[NSManagedObjectContext MR_contextForCurrentThread]];
+#pragma clang diagnostic pop
     subTask.title = title;
     subTask.orderValue = kDefOrderVal;
     subTask.schedule = [NSDate date];
