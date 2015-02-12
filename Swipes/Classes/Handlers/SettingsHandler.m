@@ -76,6 +76,8 @@ static SettingsHandler *sharedObject;
         setting = IntegrationEvernoteFindInPersonalLinkedNotebooks;
     else if([index isEqualToString:@"IntegrationEvernoteFindInBusinessNotebooks"])
         setting = IntegrationEvernoteFindInBusinessNotebooks;
+    else if([index isEqualToString:@"IntegrationGmailUsingMailbox"])
+        setting = IntegrationGmailUsingMailbox;
     
     return setting;
 }
@@ -138,6 +140,9 @@ static SettingsHandler *sharedObject;
             break;
         case IntegrationEvernoteFindInBusinessNotebooks:
             index = @"IntegrationEvernoteFindInBusinessNotebooks";
+            break;
+        case IntegrationGmailUsingMailbox:
+            index = @"IntegrationGmailUsingMailbox";
             break;
 
     }
@@ -239,6 +244,8 @@ static SettingsHandler *sharedObject;
         case IntegrationEvernoteFindInPersonalLinkedNotebooks:
             return @YES;
         case IntegrationEvernoteFindInBusinessNotebooks:
+            return @YES;
+        case IntegrationGmailUsingMailbox:
             return @YES;
     }
 }

@@ -26,6 +26,8 @@ typedef enum {
     IntegrationEvernoteSwipesTag,
     IntegrationEvernoteFindInPersonalLinkedNotebooks,
     IntegrationEvernoteFindInBusinessNotebooks,
+
+    IntegrationGmailUsingMailbox,
 } KPSettings;
 
 #define SH_UpdateSetting @"SH_UpdateSetting"

@@ -8,10 +8,14 @@
 
 #import "UtilityClass.h"
 #import "KPAttachment.h"
+#import "SettingsHandler.h"
 #import "GTMOAuth2Authentication.h"
 #import "GTMOAuth2ViewControllerTouch.h"
 #import "GmailAuthViewController.h"
 #import "GmailIntegration.h"
+
+NSString* const kSwipesMailboxLabelName = @"[Mailbox]/Swipes"; // label name for Mailbox
+NSString* const kSwipesLabelName = @"Swipes"; // label name for normal Gmail integration
 
 // instructions at https://code.google.com/p/google-api-objectivec-client/wiki/Introduction#Preparing_to_Use_the_Library
 static NSString* const kClientID = @"336134475796-mqcavkepb80idm0qdacd2fhkf573r4cd.apps.googleusercontent.com";
@@ -20,7 +24,6 @@ static NSString* const kClientSecret = @"5heB-MAD5Qm-y1miBVic03cE";
 // where to we store gmail integration data
 static NSString* const kKeychainKeyName = @"swipes_gmail_integration";
 
-static NSString* const kSwipesLabelName = @"[Mailbox]/Swipes"; // label name
 static NSString* const kInboxLabelName = @"INBOX"; // do not change!
 static NSUInteger const kMaxResults = 200; // how many results to retrieve
 
@@ -70,16 +73,31 @@ static NSString* const kKeyJsonThreadId = @"threadid";
         if (!error) {
             _googleAuth = auth;
             _knownArchievedThreads = [NSMutableDictionary dictionary];
-            [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
-                [UtilityClass sendError:error type:@"gmail:cannot create swipes label"];
-            }];
+            _isUsingMailbox = [[kSettings valueForSetting:IntegrationGmailUsingMailbox] boolValue];
+            self.labelName = _isUsingMailbox ? kSwipesMailboxLabelName : kSwipesLabelName;
             [self emailAddressWithBlock:^(NSError *error) {
-                [UtilityClass sendError:error type:@"gmail:cannot get user email address"];
+                if (nil != error)
+                    [UtilityClass sendError:error type:@"gmail:cannot get user email address"];
             }];
         }
         
     }
     return self;
+}
+
+- (void)setLabelName:(NSString *)labelName
+{
+    if ((nil == labelName) || [labelName isEqualToString:_labelName]) {
+        return;
+    }
+    _labelName = labelName;
+    _swipesLabelId = nil;
+    if (_googleAuth) {
+        [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
+            if (nil != error)
+                [UtilityClass sendError:error type:[NSString stringWithFormat:@"gmail:cannot create swipes label %@", labelName]];
+        }];
+    }
 }
 
 - (NSString *)threadIdToNSString:(NSString *)threadId
@@ -184,7 +202,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
             if (object) {
                 for (GTLGmailLabel* label in object.labels) {
                     //DLog(@"label: %@", label);
-                    if (NSOrderedSame == [label.name caseInsensitiveCompare:kSwipesLabelName]) {
+                    if (NSOrderedSame == [label.name caseInsensitiveCompare:_labelName]) {
                         _swipesLabelId = label.identifier;
                         hasSwipes = YES;
                         break;
