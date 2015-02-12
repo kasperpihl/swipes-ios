@@ -98,7 +98,7 @@ int const kCellCount = 5;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSInteger extraIfConnected = [kEnInt isAuthenticated] ? kCellCount : 0;
+    NSInteger extraIfConnected = kEnInt.isAuthenticated ? kCellCount : 0;
     return kMailboxIntegration + 2 + extraIfConnected;
 }
 
@@ -166,7 +166,7 @@ int const kCellCount = 5;
     NSString *valueString;
     switch (integration) {
         case kMailboxIntegration:{
-            if([kGmInt isAuthenticated]){
+            if(kGmInt.isAuthenticated){
                 name = [name stringByAppendingString:LOCALIZE_STRING(@" (Connected)")];
                 valueString = LOCALIZE_STRING(@"Unlink");
             }
@@ -175,7 +175,7 @@ int const kCellCount = 5;
             break;
         }
         case kEvernoteIntegration:
-            if([kEnInt isAuthenticated]){
+            if(kEnInt.isAuthenticated){
                 name = [name stringByAppendingString:LOCALIZE_STRING(@" (Connected)")];
                 valueString = LOCALIZE_STRING(@"Unlink");
             }
@@ -351,7 +351,7 @@ int const kCellCount = 5;
 -(void)endedEvernoteHelperSuccessfully:(BOOL)success{
     [ANALYTICS popView];
     if(success && !kEnInt.isAuthenticated){
-        [self evernoteAuthenticateUsingSelector:@selector(authenticated) withObject:nil];
+        [self evernoteAuthenticateUsingSelector:@selector(authenticatedEvernote) withObject:nil];
     }
 }
 
