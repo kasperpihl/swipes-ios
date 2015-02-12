@@ -141,10 +141,10 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
     };
     
     // sync with gmail
-    NSPredicate *findPredicate = [NSPredicate predicateWithFormat:@"service = %@ AND sync == %@", GMAIL_SERVICE, @(YES)];
+    NSPredicate *findPredicate = [NSPredicate predicateWithFormat:@"service = %@", GMAIL_SERVICE];
     NSArray *attachmentsWithGmail = [KPAttachment MR_findAllWithPredicate:findPredicate inContext:KPCORE.context];
     
-    for (__block GTLGmailThread* thread in threadListResults) {
+    for (GTLGmailThread* thread in threadListResults) {
         KPAttachment* attachment = [self hasAttachmentWithThreadId:thread.identifier attachmentsWithGmail:attachmentsWithGmail];
         if (nil == attachment) {
             // we don't know this thread
@@ -161,6 +161,9 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
                         NSString* identifier = [kGmInt threadIdToNSString:processor.threadId];
                         if (identifier) {
                             KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO from:@"Gmail"];
+                            if (processor.snippet) {
+                                newToDo.notes = processor.snippet;
+                            }
                             [newToDo attachService:GMAIL_SERVICE title:title identifier:identifier sync:YES from:@"gmail-integration"];
                             if (nil != newToDo.objectId)
                                 [_updatedTasks addObject:newToDo.objectId];

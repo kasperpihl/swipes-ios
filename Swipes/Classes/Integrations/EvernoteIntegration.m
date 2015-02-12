@@ -31,15 +31,15 @@ static NSString* const kKeyJsonNotebookNoteStoreUrl = @"url";
 static NSString* const kKeyJsonNotebookShardId = @"shardid";
 static NSString* const kKeyJsonNotebookSharedNotebookGlobalId = @"globalid";
 
-NSTimeInterval const kSearchTimeout = 300;
-NSTimeInterval const kNoteTimeout = (3600*24);
-NSTimeInterval const kReadOnlyNoteTimeout = 10800; // 3 hours
+static NSTimeInterval const kSearchTimeout = 300;
+static NSTimeInterval const kNoteTimeout = (3600*24);
+static NSTimeInterval const kReadOnlyNoteTimeout = 10800; // 3 hours
 
-int32_t const kPaginator = 100;
-NSInteger const kApiLimitReachedErrorCode = 19;
-NSString * const kSwipesTagName = @"swipes";
-NSString * const kHasAskedForPermissionKey = @"HasAskedForEvernotePermission";
-NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
+static int32_t const kPaginator = 100;
+static NSInteger const kApiLimitReachedErrorCode = 19;
+static NSString * const kSwipesTagName = @"swipes";
+static NSString * const kHasAskedForPermissionKey = @"HasAskedForEvernotePermission";
+static NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
 NSString* const MONExceptionHandlerDomain = @"Exception";
 int const MONNSExceptionEncounteredErrorCode = 119;
 

@@ -245,17 +245,32 @@
             /* Iterate all updated objects and add their changed attributes to tmpUpdating */
             NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
             NSMutableDictionary *tempChangesToCommit = [NSMutableDictionary dictionary];
-            for(KPParseObject *object in updatedObjects){
-                if( ![object isKindOfClass:[KPParseObject class]] )
-                    continue;
+
+            for (KPParseObject *objectToSave in updatedObjects) {
+                KPParseObject *object = objectToSave;
+                NSArray *keysToSaveForUpdate = [object.changedValues allKeys];
+                if (![object isKindOfClass:KPParseObject.class]) {
+                    if ([object isKindOfClass:KPAttachment.class]) {
+                        KPAttachment *savedAttachment = (KPAttachment*)object;
+                        object = savedAttachment.todo;
+                        keysToSaveForUpdate = @[@"attachments"];
+                    }
+                    else
+                        continue;
+                }
                 /* If the object doesn't have an objectId - it's not saved on the server and will automatically include all keys */
                 if(!object.objectId && !self._isSyncing)
                     continue;
                 
                 NSString *targetKey = object.objectId ? object.objectId : object.tempId;
                 NSMutableDictionary *collection = object.objectId ? changesToCommit : tempChangesToCommit;
-                if(object.changedValues)
-                    [collection setObject:[object.changedValues allKeys] forKey:targetKey];
+                if(keysToSaveForUpdate) {
+                    NSArray* currentValue = [collection objectForKey:targetKey];
+                    if (currentValue && (0 < currentValue.count)) {
+                        keysToSaveForUpdate = [currentValue arrayByAddingObjectsFromArray:keysToSaveForUpdate];
+                    }
+                    [collection setObject:keysToSaveForUpdate forKey:targetKey];
+                }
                 
             }
             /* Add all deleted objects with objectId to be deleted*/

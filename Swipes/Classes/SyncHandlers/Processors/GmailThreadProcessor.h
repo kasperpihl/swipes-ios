@@ -15,8 +15,8 @@ typedef void (^GmailThreadProcessorBlock)(GmailThreadProcessor *processor, NSErr
 
 + (void)processorWithThreadId:(NSString *)threadId block:(GmailThreadProcessorBlock)block;
 
-@property (nonatomic, strong) NSString *threadId;
-
-- (NSString *)title;
+@property (nonatomic, strong) NSString* threadId;
+@property (nonatomic, strong, readonly) NSString* title;
+@property (nonatomic, strong, readonly) NSString* snippet;
 
 @end
