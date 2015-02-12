@@ -97,29 +97,30 @@
 /* 
  Thread safe handling of attribute changes
 */
--(NSMutableDictionary*)copyChangesAndFlushForTemp:(BOOL)isTemp {
-    NSMutableDictionary *copyOfChanges;
-    @synchronized(self) {
-        NSMutableDictionary *target = isTemp ? self._attributeChangesOnNewObjectsWhileSyncing : self._attributeChangesOnObjects;
+-(NSMutableDictionary*)copyChangesAndFlushForTemp:(BOOL)isTemp{
+    __block NSMutableDictionary *copyOfChanges;
+    __block BOOL blockIsTemp = isTemp;
+    dispatch_sync(self.isolationQueue, ^(){
+        NSMutableDictionary *target = blockIsTemp ? self._attributeChangesOnNewObjectsWhileSyncing : self._attributeChangesOnObjects;
         copyOfChanges = [target mutableCopy];
         [target removeAllObjects];
-    }
+    });
     return copyOfChanges;
 }
 
 -(NSArray*)lookupTemporaryChangedAttributesForTempId:(NSString *)tempId{
-    NSArray *attributeArray;
-    @synchronized(self) {
+    __block NSArray *attributeArray;
+    dispatch_sync(self.isolationQueue, ^(){
         attributeArray = self._attributeChangesOnNewObjectsWhileSyncing[tempId];
-    }
+    });
     return attributeArray;
 }
 
 -(NSArray*)lookupTemporaryChangedAttributesForObject:(NSString*)objectId{
     __block NSArray *attributeArray;
-    @synchronized(self) {
+    dispatch_sync(self.isolationQueue, ^(){
         attributeArray = self._attributeChangesOnObjects[objectId];
-    };
+    });
     return attributeArray;
 }
 
@@ -236,7 +237,6 @@
         context = [self context];
 
     @synchronized(self){
-        DUMPDB;
         [context performBlockAndWait:^{
             //NSSet *insertedObjects = [context insertedObjects];
             NSSet *updatedObjects = [context updatedObjects];
