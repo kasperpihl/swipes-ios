@@ -691,16 +691,16 @@
     __block NSUndoManager* um = self.context.undoManager;
     if (um.isUndoRegistrationEnabled)
         [um disableUndoRegistration];
-    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_context];
+    //NSManagedObjectContext *localContext = [NSManagedObjectContext MR_context];
     NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
     for(NSDictionary *object in allObjects){
-        [self handleCDObject:nil withObject:object affectedChangedAttributes:&changesToCommit inContext:localContext];
+        [self handleCDObject:nil withObject:object affectedChangedAttributes:&changesToCommit inContext:context];
     }
     if(changesToCommit.count > 0){
         [self commitAttributeChanges:changesToCommit toTemp:NO];
         self._needSync = YES;
     }
-    [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
+    [context MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
         /* Save the sync to server */
         [USER_DEFAULTS setObject:[NSDate date] forKey:kLastSyncLocalDate];
         if (lastUpdate)
