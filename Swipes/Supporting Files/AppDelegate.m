@@ -64,6 +64,10 @@
     [PFFacebookUtils initializeFacebook];
     
     [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
+    if(kCurrent){
+        [Crashlytics setUserIdentifier:kCurrent.objectId];
+        [Crashlytics setUserEmail:kCurrent.username];
+    }
     
     [GAI sharedInstance].dispatchInterval = 20;
     //[[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
