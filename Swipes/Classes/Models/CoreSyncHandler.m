@@ -252,6 +252,8 @@
                     if ([object isKindOfClass:KPAttachment.class]) {
                         KPAttachment *savedAttachment = (KPAttachment*)object;
                         object = savedAttachment.todo;
+                        if (nil == object)
+                            continue;
                         keysToSaveForUpdate = @[@"attachments"];
                     }
                     else

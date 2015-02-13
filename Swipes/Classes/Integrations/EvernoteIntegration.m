@@ -5,6 +5,16 @@
 //  Created by Kasper Pihl Tornøe on 04/07/14.
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
+// TODO:
+// - test in parse error with these:
+//    Error Domain=NSXMLParserErrorDomain Code=605
+//    Error Domain=ENErrorDomain Code=604
+// - test with authorizing different account
+// - add support to the account in json!
+// - test with the same account on 2 devices
+// - test with 2 accounts on 2 devices
+// - sync should probably check for connection?
+// - add ENSDKLogging implementation for error logging?
 
 #import "MF_Base64Additions.h"
 #import "UtilityClass.h"

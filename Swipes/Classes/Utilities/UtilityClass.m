@@ -65,6 +65,9 @@
                 if(!parseError && jsonData){
                     [errorObject setObject:error.userInfo forKey:@"userInfo"];
                 }
+                else {
+                    [errorObject setObject:[NSString stringWithFormat:@"%@", error.userInfo] forKey:@"userInfo"];
+                }
             }
             @catch (NSException *exception) {
                 NSLog(@"Error trying to send '%@' to parse", parseError);

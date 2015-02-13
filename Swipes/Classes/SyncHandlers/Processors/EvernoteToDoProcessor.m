@@ -145,7 +145,7 @@ static NSSet* g_startEndElements;
     if( !self.updatedContent )
         return block ? block(NO, nil) : nil;
     _note.content = [[ENNoteContent alloc] initWithENML:self.updatedContent];
-//    _note.content = [[ENNoteContent alloc] initWithENML:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\n<en-note><div><em><span style=\"font-family: helvetica, arial, sans-serif; font-size: 18px;\">CLIENT FOLDER</span></em></div><div><br clear=\"none\"/></div><div><strong>TASKS</strong></div><div><strong><strong><en-todo></en-todo></strong></strong>Scott to push hard for analyst recognition in Amundi's 2014 vote (Joe, Peach?)<div><br clear=\"none\"/></div><div><strong>KEY HOLDINGS</strong><br clear=\"none\"/></div><div><br clear=\"none\"/></div><div><div><strong>RELATIONSHIP AND VOTE HISTORY</strong></div><div>Nij was covering Amundi previously and struggled to get air-time with Timothy. I know Timothy from before, so it was relatively easy to get his attention once Carolyn made the introduction. Since then (April/May?) have had fairly regular contact.<br clear=\"none\"/></div><div><br clear=\"none\"/></div><div>For the last few votes, we have been &quot;Not Rated&quot; (which means outside of Top 12). The 2014 vote should be out in December 2014 or January 2015</div></div><div><br clear=\"none\"/></div><div><strong>OCTOBER 2014</strong></div><ul><li>Tim request on property sector<br clear=\"none\"/></li><li>Tim call with Joe Phanich on telcos</li><li>Scott dropped of new research/sales materials package</li></ul><div><strong>NOVEMBER 2014</strong></div><ul><li>Tim taking VGI meeting<br clear=\"none\"/></li><li>Carolyn made comment to me that &quot;Tim has already said he's seen a big pick-up in service...so that should be reflected in a higher ranking.&quot;</li></ul></div></en-note>"];
+//    _note.content = [[ENNoteContent alloc] initWithENML:@"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\n<en-note/>"];
     [kEnInt updateNote:_note noteRef:[EvernoteIntegration NSStringToENNoteRef:self.noteRefString] block:^(ENNoteRef *noteRef, NSError *error) {
         if (error) {
             NSDictionary *attachment = @{@"org content":_note.content.enml, @"new content": self.updatedContent};
@@ -167,7 +167,7 @@ static NSSet* g_startEndElements;
 {
     if ((nil != updatedToDo) && (updatedToDo.checked != checked)) {
         if (!self.updatedContent)
-            self.updatedContent = _note.content.enml;
+            self.updatedContent = [self noteContent];
         
         KPStringScanner* scanner = [KPStringScanner scannerWithString:self.updatedContent];
         for (NSInteger i = 0; i <= updatedToDo.position; i++) {
@@ -203,7 +203,7 @@ static NSSet* g_startEndElements;
 {
     if ((nil != updatedToDo) && (![updatedToDo.title isEqualToString:title])) {
         if (!self.updatedContent)
-            self.updatedContent = _note.content.enml;
+            self.updatedContent = [self noteContent];
        
         KPStringScanner* scanner = [KPStringScanner scannerWithString:self.updatedContent];
         for (NSInteger i = 0; i <= updatedToDo.position; i++) {
@@ -270,6 +270,10 @@ static NSSet* g_startEndElements;
     return nil;
 }
 
+- (NSString *)noteContent {
+    return [_note.content.enml stringByReplacingOccurrencesOfString:@"<en-note/>" withString:@"<en-note></en-note>"];
+}
+
 - (NSUInteger)newToDoPos
 {
     if (_todos.count) {
@@ -301,7 +305,7 @@ static NSSet* g_startEndElements;
 - (BOOL)addToDoWithTitle:(NSString *)title
 {
     if (!self.updatedContent)
-        self.updatedContent = _note.content.enml;
+        self.updatedContent = [self noteContent];
     
     NSUInteger startPos = [self newToDoPos];
     
