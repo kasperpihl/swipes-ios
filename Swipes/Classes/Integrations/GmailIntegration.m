@@ -24,7 +24,7 @@ static NSString* const kClientSecret = @"5heB-MAD5Qm-y1miBVic03cE";
 // where to we store gmail integration data
 static NSString* const kKeychainKeyName = @"swipes_gmail_integration";
 
-static NSString* const kInboxLabelName = @"INBOX"; // do not change!
+static NSString* const kInboxLabelId = @"INBOX"; // do not change!
 static NSUInteger const kMaxResults = 200; // how many results to retrieve
 
 // caches
@@ -64,6 +64,10 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     if (self) {
         _googleAuth = nil;
         _emailAddress = nil;
+        _knownArchievedThreads = [NSMutableDictionary dictionary];
+        _isUsingMailbox = [[kSettings valueForSetting:IntegrationGmailUsingMailbox] boolValue];
+        self.labelName = _isUsingMailbox ? kSwipesMailboxLabelName : kSwipesLabelName;
+
         NSError* error;
         GTMOAuth2Authentication* auth = [GTMOAuth2ViewControllerTouch
                                          authForGoogleFromKeychainForName:kKeychainKeyName
@@ -72,9 +76,6 @@ static NSString* const kKeyJsonThreadId = @"threadid";
                                          error:&error];
         if (!error) {
             _googleAuth = auth;
-            _knownArchievedThreads = [NSMutableDictionary dictionary];
-            _isUsingMailbox = [[kSettings valueForSetting:IntegrationGmailUsingMailbox] boolValue];
-            self.labelName = _isUsingMailbox ? kSwipesMailboxLabelName : kSwipesLabelName;
             [self emailAddressWithBlock:^(NSError *error) {
                 if (nil != error)
                     [UtilityClass sendError:error type:@"gmail:cannot get user email address"];
@@ -269,6 +270,9 @@ static NSString* const kKeyJsonThreadId = @"threadid";
 
 - (void)getThread:(NSString *)threadId format:(NSString*)format withBlock:(ThreadGetBlock)block
 {
+    if (nil == _googleAuth) {
+        block(nil, [[NSError alloc] initWithDomain:@"Gmail not authenticated" code:701 userInfo:nil]);
+    }
     GTLQueryGmail* getThread = [GTLQueryGmail queryForUsersThreadsGet];
     getThread.identifier = threadId;
     if (format) {
@@ -307,14 +311,57 @@ static NSString* const kKeyJsonThreadId = @"threadid";
 
 - (void)removeSwipesLabelFromThreadAndArchive:(NSString *)threadId withBlock:(ErrorBlock)block
 {
-    GTLQueryGmail* modifyThread = [GTLQueryGmail queryForUsersThreadsModify];
-    modifyThread.identifier = threadId;
-    modifyThread.removeLabelIds = @[_swipesLabelId, kInboxLabelName];
-    GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
-    service.authorizer = _googleAuth;
-    [service executeQuery:modifyThread completionHandler:^(GTLServiceTicket *ticket, GTLGmailThread* thread, NSError *error) {
-        //DLog(@"queried - thread:%@, error: %@", thread, error);
-        block(error);
+    [self hasSwipesLabelThread:threadId block:^(BOOL hasSwipesLabel, NSError *error) {
+        if (error)
+            block(error);
+        else {
+            if (hasSwipesLabel) {
+                GTLQueryGmail* modifyThread = [GTLQueryGmail queryForUsersThreadsModify];
+                modifyThread.identifier = threadId;
+                modifyThread.removeLabelIds = @[_swipesLabelId, kInboxLabelId];
+                GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
+                service.authorizer = _googleAuth;
+                [service executeQuery:modifyThread completionHandler:^(GTLServiceTicket *ticket, GTLGmailThread* thread, NSError *error) {
+                    //DLog(@"queried - thread:%@, error: %@", thread, error);
+                    block(error);
+                }];
+            }
+            else
+                block(nil);
+        }
+    }];
+}
+
+- (void)hasSwipesLabelThread:(NSString *)threadId block:(SuccessfulBlock)block {
+    if (nil == _googleAuth) {
+        block(NO, [[NSError alloc] initWithDomain:@"Gmail not authenticated" code:701 userInfo:nil]);
+    }
+    [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
+        if (error) {
+            block(NO, error);
+        }
+        else {
+            [self getThread:threadId format:@"minimal" withBlock:^(GTLGmailThread *thread, NSError *error) {
+                BOOL hasSwipesLabel = NO;
+                if (nil == error) {
+                    if (thread.messages && 0 < thread.messages.count) {
+                        for (GTLGmailMessage* message in thread.messages) {
+                            if (message.labelIds) {
+                                for (NSString* labelId in message.labelIds) {
+                                    if (_swipesLabelId && [labelId isEqualToString:_swipesLabelId]) {
+                                        hasSwipesLabel = YES;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (hasSwipesLabel)
+                                break;
+                        }
+                    }
+                }
+                block(hasSwipesLabel, error);
+            }];
+        }
     }];
 }
 
@@ -331,7 +378,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
                     for (GTLGmailMessage* message in thread.messages) {
                         if (message.labelIds) {
                             for (NSString* labelId in message.labelIds) {
-                                if ([labelId isEqualToString:kInboxLabelName] || [labelId isEqualToString:kSwipesLabelName]) {
+                                if ([labelId isEqualToString:kInboxLabelId] || (_swipesLabelId && [labelId isEqualToString:_swipesLabelId])) {
                                     isArchieved = NO;
                                     break;
                                 }

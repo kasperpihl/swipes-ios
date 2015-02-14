@@ -97,15 +97,23 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
     }];
 }
 
-- (KPAttachment *)hasAttachmentWithThreadId:(NSString *)threadId attachmentsWithGmail:(NSArray *)attachmentsWithGmail
+- (KPToDo *)hasAttachmentWithThreadId:(NSString *)threadId todosWithGmail:(NSArray *)todosWithGmail attachment:(KPAttachment **)attachment
 {
-    for (KPAttachment* attachment in attachmentsWithGmail) {
-        NSString* tempThreadId = [kGmInt NSStringToThreadId:attachment.identifier];
+    for (KPToDo* todo in todosWithGmail) {
+        KPAttachment* firstAttachment = [todo firstAttachmentForServiceType:GMAIL_SERVICE];
+        NSString* tempThreadId = [kGmInt NSStringToThreadId:firstAttachment.identifier];
         if (tempThreadId && [tempThreadId isEqualToString:threadId]) {
-            return attachment;
+            *attachment = firstAttachment;
+            return todo;
         }
     }
     return nil;
+}
+
+- (NSArray *)objectsSyncedWithGmail
+{
+    NSPredicate *predicateForTodosWithGmail = [NSPredicate predicateWithFormat:@"ANY attachments.service like %@", GMAIL_SERVICE];
+    return [KPToDo MR_findAllWithPredicate:predicateForTodosWithGmail inContext:[NSManagedObjectContext MR_contextForCurrentThread]];
 }
 
 - (void)synchronizeThreads:(NSArray *)threadListResults withBlock:(SyncBlock)block
@@ -141,12 +149,14 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
     };
     
     // sync with gmail
-    NSPredicate *findPredicate = [NSPredicate predicateWithFormat:@"service = %@", GMAIL_SERVICE];
-    NSArray *attachmentsWithGmail = [KPAttachment MR_findAllWithPredicate:findPredicate inContext:KPCORE.context];
+    NSArray* todosWithGmail = nil;
+    if (threadListResults.count) // don't load data unless it is needed
+        todosWithGmail = [self objectsSyncedWithGmail];
     
     for (GTLGmailThread* thread in threadListResults) {
-        KPAttachment* attachment = [self hasAttachmentWithThreadId:thread.identifier attachmentsWithGmail:attachmentsWithGmail];
-        if (nil == attachment) {
+        __block KPAttachment* attachment;
+        __block KPToDo* todoWithGmail = [self hasAttachmentWithThreadId:thread.identifier todosWithGmail:todosWithGmail attachment:&attachment];
+        if (nil == todoWithGmail) {
             // we don't know this thread
             [GmailThreadProcessor processorWithThreadId:thread.identifier block:^(GmailThreadProcessor *processor, NSError *error) {
                 if (error) {
@@ -178,13 +188,13 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
         }
         else {
             // we already have the thread into task
-            KPToDo* todo = attachment.todo;
-            if ((NO == todo.isLocallyDeletedValue) && (nil != todo.completionDate) && (nil == todo.parent)) {
+            if ((NO == todoWithGmail.isLocallyDeletedValue) && (nil != todoWithGmail.completionDate) && (nil == todoWithGmail.parent) && (YES == [attachment.sync boolValue])) {
+                // TODO is completed and have no parent (not a subtask)
                 [kGmInt removeSwipesLabelFromThreadAndArchive:thread.identifier withBlock:^(NSError *error) {
                     if (nil == error) {
                         attachment.sync = @(NO);
-                        if (nil != todo.objectId)
-                            [_updatedTasks addObject:todo.objectId];
+                        if (nil != todoWithGmail.objectId)
+                            [_updatedTasks addObject:todoWithGmail.objectId];
                     }
                     finalizeBlock();
                 }];
