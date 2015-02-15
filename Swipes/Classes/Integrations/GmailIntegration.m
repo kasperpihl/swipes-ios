@@ -14,8 +14,8 @@
 #import "GmailAuthViewController.h"
 #import "GmailIntegration.h"
 
-NSString* const kSwipesMailboxLabelName = @"[Mailbox]/Swipes"; // label name for Mailbox
-NSString* const kSwipesLabelName = @"Swipes"; // label name for normal Gmail integration
+NSString* const kSwipesMailboxLabelName = @"[Mailbox]/Add to Swipes"; // label name for Mailbox
+NSString* const kSwipesLabelName = @"Add to Swipes"; // label name for normal Gmail integration
 
 // instructions at https://code.google.com/p/google-api-objectivec-client/wiki/Introduction#Preparing_to_Use_the_Library
 static NSString* const kClientID = @"336134475796-mqcavkepb80idm0qdacd2fhkf573r4cd.apps.googleusercontent.com";
@@ -216,7 +216,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
             else {
                 GTLQueryGmail* createLabel = [GTLQueryGmail queryForUsersLabelsCreate];
                 GTLGmailLabel* label = [[GTLGmailLabel alloc] init];
-                label.name = kSwipesLabelName;
+                label.name = _labelName;
                 label.labelListVisibility = @"labelShow";
                 label.messageListVisibility = @"show";
                 createLabel.label = label;

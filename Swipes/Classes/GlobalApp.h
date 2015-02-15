@@ -14,6 +14,7 @@
 @interface GlobalApp : NSObject
 + (BOOL)isEvernoteInstalled;
 + (BOOL)isMailboxInstalled;
++ (BOOL)isGoogleMailInstalled;
 + (instancetype)sharedInstance;
 
 + (CGFloat)statusBarHeight;

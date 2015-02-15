@@ -6,13 +6,6 @@
 //  Copyright (c) 2015 Pihl IT. All rights reserved.
 //
 
-/*
- TODO
- 
- - shall we remove the attachments on logout
- - shall we show anything special todo list
- */
-
 #import "Global.h"
 #import "KPToDo.h"
 #import "KPAttachment.h"

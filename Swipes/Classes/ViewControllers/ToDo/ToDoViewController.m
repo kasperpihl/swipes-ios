@@ -861,8 +861,19 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self pressedGmail:attachmentView];
 }
 
-- (void)pressedGmail:(AttachmentEditView*)attachmentView{
-    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Open Email") andMessage:LOCALIZE_STRING(@"We are working with Mailbox on providing this functionality")];
+- (void)pressedGmail:(AttachmentEditView*)attachmentView {
+    
+    if (kGmInt.isUsingMailbox) {
+        if ([GlobalApp isMailboxInstalled]) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"dbx-mailbox://"]];
+        }
+        else {
+            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Mailbox not installed") andMessage:LOCALIZE_STRING(@"Please install Mailbox!")];
+        }
+    }
+    else if ([GlobalApp isGoogleMailInstalled]) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"googlemail:///cv=14b371fb471b7719"]];
+    }
 }
 
 -(void)pressedURL:(AttachmentEditView*)attachmentView{
