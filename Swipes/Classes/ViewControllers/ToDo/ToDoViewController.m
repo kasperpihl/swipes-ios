@@ -868,11 +868,17 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"dbx-mailbox://"]];
         }
         else {
-            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Mailbox not installed") andMessage:LOCALIZE_STRING(@"Please install Mailbox!")];
+            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Mailbox not installed") andMessage:LOCALIZE_STRING(@"Please install Mailbox from App Store!")];
         }
     }
-    else if ([GlobalApp isGoogleMailInstalled]) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"googlemail:///cv=14b371fb471b7719"]];
+    else {
+        if ([GlobalApp isGoogleMailInstalled]) {
+            NSString* urlString = [NSString stringWithFormat:@"googlegmail:///cv=%@/accountId=1&create-new-tab", [kGmInt NSStringToThreadId:attachmentView.identifier]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+        }
+        else {
+            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Gmail not installed") andMessage:LOCALIZE_STRING(@"Please install Gmail from App Store!")];
+        }
     }
 }
 

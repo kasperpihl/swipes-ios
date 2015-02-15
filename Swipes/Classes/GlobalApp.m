@@ -26,7 +26,7 @@ static int g_activityIndicatorStack = 0;
 
 + (BOOL)isGoogleMailInstalled
 {
-    return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"googlemail://"]];
+    return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"googlegmail://"]];
 }
 
 + (BOOL)isEvernoteInstalled
