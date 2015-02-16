@@ -601,10 +601,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             if ([attachment.service isEqualToString:EVERNOTE_SERVICE]){
                 [attachmentEditView setIconString:@"editEvernote"];
                 
+                CGRectSetHeight(attachmentEditView, SCHEDULE_ROW_HEIGHTS + 10);
                 BOOL isSyncing = [attachment.sync boolValue];
-                CGRectSetHeight(attachmentEditView, (isSyncing ? SCHEDULE_ROW_HEIGHTS + 10 : SCHEDULE_ROW_HEIGHTS));
-                if(isSyncing)
+                if (isSyncing)
                     [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Attached") uppercaseString] iconString:nil];
+                else
+                    [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Deleted") uppercaseString] iconString:@"actionDelete"];
                 [attachmentEditView setTitleString:attachment.title];
             }
             else if ([attachment.service isEqualToString:URL_SERVICE]) {

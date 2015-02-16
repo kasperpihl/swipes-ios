@@ -106,7 +106,10 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
 - (NSArray *)objectsSyncedWithGmail
 {
     NSPredicate *predicateForTodosWithGmail = [NSPredicate predicateWithFormat:@"ANY attachments.service like %@", GMAIL_SERVICE];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     return [KPToDo MR_findAllWithPredicate:predicateForTodosWithGmail inContext:[NSManagedObjectContext MR_contextForCurrentThread]];
+#pragma clang diagnostic pop
 }
 
 - (void)synchronizeThreads:(NSArray *)threadListResults withBlock:(SyncBlock)block
@@ -205,7 +208,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
 {
     // find out locally deleted tasks, remove swipes tag and really delete them
     NSArray* locallyDeleted = [KPToDo findLocallyDeletedForService:GMAIL_SERVICE];
-    for (__block KPToDo* todo in locallyDeleted) {
+    for (KPToDo* todo in locallyDeleted) {
         KPAttachment* attachment = [todo firstAttachmentForServiceType:GMAIL_SERVICE];
         NSString* threadId = [kGmInt NSStringToThreadId:attachment.identifier];
         if (threadId) {

@@ -7,7 +7,6 @@
 //
 // TODO:
 // - test in parse error with these:
-//    Error Domain=NSXMLParserErrorDomain Code=605
 //    Error Domain=ENErrorDomain Code=604
 // - test with authorizing different account
 // - add support to the account in json!
@@ -42,7 +41,7 @@ static NSString* const kKeyJsonNotebookShardId = @"shardid";
 static NSString* const kKeyJsonNotebookSharedNotebookGlobalId = @"globalid";
 
 static NSTimeInterval const kSearchTimeout = 300;
-static NSTimeInterval const kNoteTimeout = (3600*24);
+static NSTimeInterval const kNoteTimeout = 300;
 static NSTimeInterval const kReadOnlyNoteTimeout = 10800; // 3 hours
 
 static int32_t const kPaginator = 100;
@@ -233,6 +232,11 @@ NSError * NewNSErrorFromException(NSException * exc) {
         }
     }
     return NO;
+}
+
++ (BOOL)isMovedOrDeleted:(NSError *)error
+{
+    return ([error.domain isEqualToString:ENErrorDomain] && ((error.code == ENErrorCodeNotFound) || (error.code == ENErrorCodeDataConflict)));
 }
 
 - (instancetype)init
@@ -478,7 +482,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
     
     ENSession* session = [ENSession sharedSession];
     self.requestCounter++;
-#warning Stanimir, I think here is a lot of bad things going on! Of all the errors online, this is the one producing authtoken error
     [session downloadNote:noteRef progress:nil completion:^(ENNote *note, NSError *error) {
         if (!error) {
             [self cacheAddNote:note forNoteRef:noteRef];

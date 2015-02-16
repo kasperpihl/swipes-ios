@@ -28,6 +28,7 @@ extern const int MONNSExceptionEncounteredErrorCode;
 + (BOOL)isNoteRefString:(NSString *)string;
 + (BOOL)isNoteRefJsonString:(NSString *)string;
 + (BOOL)hasNoteWithRef:(ENNoteRef *)noteRef;
++ (BOOL)isMovedOrDeleted:(NSError *)error;
 
 @property (nonatomic, assign) BOOL enableSync;
 @property (nonatomic, assign) BOOL autoFindFromTag;
