@@ -316,12 +316,12 @@ NSError * NewNSErrorFromException(NSException * exc) {
     return [session primaryNoteStore];
 }
 
-- (BOOL)isAuthenticationInProgress
+- (BOOL)isAuthenticated
 {
     return [[ENSession sharedSession] isAuthenticated];
 }
 
-- (BOOL)isAuthenticating
+- (BOOL)isAuthenticationInProgress
 {
     return [[ENSession sharedSession] isAuthenticationInProgress];
 }
@@ -329,6 +329,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block
 {
     @try {
+        [self handleError:[NSError errorWithDomain:@"Evernote authentication request" code:610 userInfo:nil] withType:@"Evernote authentication request"];
         ENSession *session = [ENSession sharedSession];
         [session authenticateWithViewController:viewController preferRegistration:NO completion:^(NSError *authenticateError) {
             if (authenticateError) {
