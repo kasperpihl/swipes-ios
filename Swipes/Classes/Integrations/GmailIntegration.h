@@ -29,7 +29,7 @@ extern NSString* const kSwipesLabelName; // label name for normal Gmail integrat
 - (NSString *)NSStringToThreadId:(NSString *)string;
 - (NSString *)NSStringToEmail:(NSString *)string;
 
-- (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
+- (void)authenticateInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
 - (void)logout;
 
 - (void)listThreads:(NSString *)query withBlock:(ThreadListBlock)block;

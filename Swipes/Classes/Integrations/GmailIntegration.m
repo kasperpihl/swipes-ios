@@ -140,7 +140,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     return jsonDict[kKeyJsonEmail];
 }
 
-- (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block
+- (void)authenticateInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block
 {
     NSError* error;
     GTMOAuth2Authentication* auth = [GTMOAuth2ViewControllerTouch

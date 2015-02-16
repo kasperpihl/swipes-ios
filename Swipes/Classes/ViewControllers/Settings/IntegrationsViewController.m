@@ -256,6 +256,8 @@ int const kCellCount = 5;
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
+    if (kEnInt.isAuthenticationInProgress)
+        return;
     [DejalBezelActivityView activityViewForView:self.parentViewController.view withLabel:@"Opening Evernote.."];
     [kEnInt authenticateEvernoteInViewController:self withBlock:^(NSError *error) {
         [DejalBezelActivityView removeViewAnimated:YES];
@@ -272,7 +274,7 @@ int const kCellCount = 5;
 - (void)gmailAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
     [DejalBezelActivityView activityViewForView:self.parentViewController.view withLabel:@"Authenticating.."];
-    [kGmInt authenticateEvernoteInViewController:self withBlock:^(NSError *error) {
+    [kGmInt authenticateInViewController:self withBlock:^(NSError *error) {
         [DejalBezelActivityView removeViewAnimated:YES];
         if (error || !kGmInt.isAuthenticated) {
             // TODO show message to the user
@@ -350,7 +352,7 @@ int const kCellCount = 5;
 
 -(void)endedEvernoteHelperSuccessfully:(BOOL)success{
     [ANALYTICS popView];
-    if(success && !kEnInt.isAuthenticated){
+    if (success && (!kEnInt.isAuthenticated) && (!kEnInt.isAuthenticationInProgress)) {
         [self evernoteAuthenticateUsingSelector:@selector(authenticatedEvernote) withObject:nil];
     }
 }
@@ -371,6 +373,7 @@ int const kCellCount = 5;
         
     }];
 }
+
 -(void)showEvernoteHelperAnimated:(BOOL)animated{
     [ANALYTICS pushView:@"Evernote Learn More"];
     EvernoteHelperViewController *helper = [[EvernoteHelperViewController alloc] init];
@@ -378,11 +381,6 @@ int const kCellCount = 5;
     [self presentViewController:helper animated:animated completion:^{
         
     }];
-}
-
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    
 }
 
 @end

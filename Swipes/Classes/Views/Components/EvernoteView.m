@@ -239,6 +239,8 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
+    if (kEnInt.isAuthenticationInProgress)
+        return;
     [kEnInt authenticateEvernoteInViewController:_caller withBlock:^(NSError *error) {
         if (error || !kEnInt.isAuthenticated) {
             // TODO show message to the user
@@ -297,7 +299,7 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
         
     }
     else {
-        NSLog(@"Session not authenticated");
+        DLog(@"Session not authenticated");
         [self evernoteAuthenticateUsingSelector:@selector(searchNoteStore:) withObject:nil];
     }
 }

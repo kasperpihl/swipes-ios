@@ -409,7 +409,7 @@
                 else if( status == SyncStatusError ){
                     self._isSyncing = NO;
                     
-                    if (!kEnInt.isAuthenticated) {
+                    if (!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) {
                         kEnInt.enableSync = NO;
                         [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
                             if(number == 1){
@@ -426,6 +426,7 @@
         }];
     }
     else {
+        self._isSyncing = NO;
         if(!kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]){
             [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
                 if(number == 1){
@@ -434,7 +435,6 @@
             }];
             kEnInt.hasAskedForPermissions = YES;
         }
-        self._isSyncing = NO;
         [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
     }
 
@@ -485,7 +485,7 @@
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
-    if(self.isAuthingEvernote)
+    if (self.isAuthingEvernote || kEnInt.isAuthenticationInProgress)
         return;
     self.isAuthingEvernote = YES;
     
@@ -508,7 +508,7 @@
         return;
     self.isAuthingGmail = YES;
     
-    [kGmInt authenticateEvernoteInViewController:self.rootController withBlock:^(NSError *error) {
+    [kGmInt authenticateInViewController:self.rootController withBlock:^(NSError *error) {
         self.isAuthingGmail = NO;
         
         if (error || !kGmInt.isAuthenticated) {

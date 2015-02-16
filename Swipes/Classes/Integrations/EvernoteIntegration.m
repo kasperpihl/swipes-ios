@@ -316,9 +316,14 @@ NSError * NewNSErrorFromException(NSException * exc) {
     return [session primaryNoteStore];
 }
 
-- (BOOL)isAuthenticated
+- (BOOL)isAuthenticationInProgress
 {
     return [[ENSession sharedSession] isAuthenticated];
+}
+
+- (BOOL)isAuthenticating
+{
+    return [[ENSession sharedSession] isAuthenticationInProgress];
 }
 
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block
