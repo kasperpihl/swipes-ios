@@ -160,6 +160,8 @@
     }
     [self.context MR_saveOnlySelfAndWait];
     [self commitAttributeChanges:changesToCommit toTemp:NO];
+    [USER_DEFAULTS removeObjectForKey:kLastSyncServerString];
+    [USER_DEFAULTS synchronize];
     [self synchronizeForce:YES async:YES];
 
 }
@@ -188,14 +190,14 @@
         }
         case SyncStatusSuccess:{
             if(self._showSuccessOnce){
-                title = @"Sync recovered";
+                title = LOCALIZE_STRING(@"Synchronized");
                 self._showSuccessOnce = NO;
             }
             //
             break;
         }
         case SyncStatusError:{
-            title = @"Error syncing";
+            title = LOCALIZE_STRING(@"Error synchronizing");
             self._showSuccessOnce = YES;
             break;
         }
@@ -381,7 +383,7 @@
         self._isSyncing = NO;
         [self synchronizeForce:YES async:YES];
     }
-//    else if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached] && !error) {
+
     if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached]) {
         
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
@@ -943,12 +945,12 @@
     self._tempIdsThatGotObjectIds = nil;
     self._attributeChangesOnNewObjectsWhileSyncing = nil;
     
-    
     self._updatedObjectsForSyncNotification = nil;
     self._deletedObjectsForSyncNotification = nil;
-    if(kEnInt.isAuthenticated)
-        [[ENSession sharedSession] unauthenticate];
-    
+    if (kEnInt.isAuthenticated)
+        [kEnInt logout];
+    if (kGmInt.isAuthenticated)
+        [kGmInt logout];
 }
 
 #pragma mark Instantiation
