@@ -12,6 +12,8 @@
 #import "GTMOAuth2Authentication.h"
 #import "GTMOAuth2ViewControllerTouch.h"
 #import "GmailAuthViewController.h"
+#import "CoreSyncHandler.h"
+#import "GmailSyncHandler.h"
 #import "GmailIntegration.h"
 
 NSString* const kSwipesMailboxLabelName = @"[Mailbox]/Add to Swipes"; // label name for Mailbox
@@ -181,6 +183,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     _googleAuth = nil;
     _swipesLabelId = nil;
     _emailAddress = nil;
+    [[KPCORE gmailSyncHandler] setUpdatedAt:nil];
 }
 
 - (void)createSwipesLabelIfNeededWithBlock:(ErrorBlock)block

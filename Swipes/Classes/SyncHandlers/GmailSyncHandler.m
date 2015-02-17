@@ -48,7 +48,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
     return self;
 }
 
--(void)setUpdatedAt:(NSDate*)updatedAt
+- (void)setUpdatedAt:(NSDate*)updatedAt
 {
     if (updatedAt) {
         [USER_DEFAULTS setObject:updatedAt forKey:kGmailUpdatedAtKey];
@@ -60,7 +60,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
     self.lastUpdated = updatedAt;
 }
 
--(void)synchronizeWithBlock:(SyncBlock)block
+- (void)synchronizeWithBlock:(SyncBlock)block
 {
     block(SyncStatusStarted, nil, nil);
     if (!kGmInt.isAuthenticated) {

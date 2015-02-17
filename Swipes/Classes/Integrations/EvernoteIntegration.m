@@ -20,7 +20,9 @@
 #import "SettingsHandler.h"
 #import "AnalyticsHandler.h"
 #import "EvernoteIntegration.h"
+#import "EvernoteSyncHandler.h"
 #import "ENNoteRefInternal.h"
+#import "CoreSyncHandler.h"
 #import "KPAttachment.h"
 
 // caches
@@ -362,6 +364,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
 {
     [[ENSession sharedSession] unauthenticate];
     [self cacheClear];
+    [[KPCORE evernoteSyncHandler] setUpdatedAt:nil];
 }
 
 - (void)swipesTagGuidBlock:(StringBlock)block

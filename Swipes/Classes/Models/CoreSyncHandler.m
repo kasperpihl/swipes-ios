@@ -947,6 +947,7 @@
     
     self._updatedObjectsForSyncNotification = nil;
     self._deletedObjectsForSyncNotification = nil;
+    
     if (kEnInt.isAuthenticated)
         [kEnInt logout];
     if (kGmInt.isAuthenticated)

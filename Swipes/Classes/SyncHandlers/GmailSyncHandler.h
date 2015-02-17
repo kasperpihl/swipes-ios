@@ -10,6 +10,7 @@
 
 @interface GmailSyncHandler : ParentSyncHandler
 
--(void)synchronizeWithBlock:(SyncBlock)block;
+- (void)setUpdatedAt:(NSDate*)updatedAt;
+- (void)synchronizeWithBlock:(SyncBlock)block;
 
 @end
