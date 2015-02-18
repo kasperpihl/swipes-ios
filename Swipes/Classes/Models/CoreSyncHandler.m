@@ -17,6 +17,11 @@
 #import "AnalyticsHandler.h"
 #import "UserHandler.h"
 
+#ifndef NOT_APPLICATION
+#import "RootViewController.h"
+#import "DejalActivityView.h"
+#endif
+
 #import "EvernoteIntegration.h"
 #import "EvernoteSyncHandler.h"
 
@@ -145,6 +150,11 @@
             [USER_DEFAULTS synchronize];
         }
     });
+}
+
+-(void)onCoreDataRecreated
+{
+    [self hardSync];
 }
 
 -(void)hardSync{
@@ -366,6 +376,11 @@
 }
 
 -(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error {
+#ifndef NOT_APPLICATION
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [DejalBezelActivityView removeViewAnimated:YES];
+    });
+#endif
     if ( error ){
         //NSLog(@"error:%@",error);
         self._isSyncing = NO;
@@ -473,7 +488,7 @@
                         [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
                     }
                     else {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Gmail", @"duration": @(3.5) } ];
                     }
                 }
             });
@@ -591,7 +606,13 @@
     NSString *lastUpdate = [USER_DEFAULTS objectForKey:kLastSyncServerString];
     if (lastUpdate)
         [syncData setObject:lastUpdate forKey:@"lastUpdate"];
-    
+    else {
+#ifndef NOT_APPLICATION
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [DejalBezelActivityView activityViewForView:[GlobalApp topView] withLabel:LOCALIZE_STRING(@"Synchronizing...")];
+        });
+#endif
+    }
     
     
     
@@ -976,6 +997,7 @@ static CoreSyncHandler *sharedObject;
     notify(@"closing app", forceSync);
     notify(@"opened app", forceSync);
     notify(@"logged in", forceSync);
+    notify(kMagicalRecordPSCMismatchDidRecreateStore, onCoreDataRecreated);
     sharedObject._reach = [Reachability reachabilityWithHostname:@"www.google.com"];
     // Set the blocks
     sharedObject._reach.reachableBlock = ^(Reachability*reach) {

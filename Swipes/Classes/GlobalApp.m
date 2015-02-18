@@ -128,6 +128,14 @@ static int g_activityIndicatorStack = 0;
     return [UIDevice currentDevice].identifierForVendor.UUIDString;
 }
 
++ (UIView *)topView
+{
+    UIWindow *topWindow = [[[UIApplication sharedApplication].windows sortedArrayUsingComparator:^NSComparisonResult(UIWindow *win1, UIWindow *win2) {
+        return win1.windowLevel - win2.windowLevel;
+    }] lastObject];
+    return [[topWindow subviews] lastObject];
+}
+
 - (instancetype)init
 {
     self = [super init];
