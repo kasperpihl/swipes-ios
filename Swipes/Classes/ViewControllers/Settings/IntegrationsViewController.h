@@ -7,6 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+
+@protocol IntegrationProvider <NSObject>
+
+- (NSString *)integrationTitle;
+- (NSString *)integrationSubtitle;
+- (NSString *)integrationIcon;
+- (BOOL)integrationEnabled;
+
+@end
+
+
 typedef NS_ENUM(NSUInteger, Integrations) {
     kMailboxIntegration,
     kEvernoteIntegration
