@@ -762,6 +762,10 @@
 		A771356E17BABB5A0090BE89 /* UIView+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Utilities.m"; sourceTree = "<group>"; };
 		A772B13F19671D9F00C07909 /* swipesandevernote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = swipesandevernote.png; sourceTree = "<group>"; };
 		A772B14019671D9F00C07909 /* swipesandevernote@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipesandevernote@2x.png"; sourceTree = "<group>"; };
+		A77398471A9B38810055BD45 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A77398481A9B388D0055BD45 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A77398491A9B38940055BD45 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A773984A1A9B38A40055BD45 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A7778CCA16EB5884004D95E5 /* Swipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7778CCD16EB5884004D95E5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A7778CCF16EB5884004D95E5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -2486,6 +2490,10 @@
 			knownRegions = (
 				en,
 				da,
+				nl,
+				es,
+				ko,
+				de,
 			);
 			mainGroup = A7778CC116EB5884004D95E5;
 			productRefGroup = A7778CCB16EB5884004D95E5 /* Products */;
@@ -3122,6 +3130,10 @@
 			children = (
 				DA6B61C219E321FE00089877 /* en */,
 				DA6B61C419E322FB00089877 /* da */,
+				A77398471A9B38810055BD45 /* nl */,
+				A77398481A9B388D0055BD45 /* es */,
+				A77398491A9B38940055BD45 /* ko */,
+				A773984A1A9B38A40055BD45 /* de */,
 			);
 			name = Localizable.strings;
 			path = Swipes/Ressources/Localizations;
