@@ -8,13 +8,13 @@
 
 #import "IntegrationSettingCell.h"
 
-static CGFloat const kIconLeftMargin = 9;
+static CGFloat const kIconLeftMargin = 26;
+static CGFloat const kIconRightMargin = 26;
 static CGFloat const kIconTopMargin = 9;
-static CGFloat const kIconSize = 20;
-static CGFloat const kIconRightMargin = 9;
+static CGFloat const kIconSize = 28;
 
-#define kDefTitleFont KP_REGULAR(15)
-#define kDefSubtitleFont KP_REGULAR(12)
+#define kDefTitleFont KP_REGULAR(12)
+#define kDefSubtitleFont KP_REGULAR(10)
 
 @interface IntegrationSettingCell ()
 
@@ -28,7 +28,6 @@ static CGFloat const kIconRightMargin = 9;
 {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
-        _style = style;
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.textColor = tcolor(TextColor);
@@ -47,8 +46,6 @@ static CGFloat const kIconRightMargin = 9;
         _iconLabel.textAlignment = NSTextAlignmentCenter;
         _iconLabel.font = iconFont(kIconSize);
         [self.contentView addSubview:_iconLabel];
-        if (style & IntegrationSettingsStyleIcon) {
-        }
         
         _statusLabel = [[UILabel alloc] init];
         _statusLabel.backgroundColor = [UIColor clearColor];
@@ -56,8 +53,10 @@ static CGFloat const kIconRightMargin = 9;
         _statusLabel.textAlignment = NSTextAlignmentCenter;
         _statusLabel.font = iconFont(kIconSize);
         [self.contentView addSubview:_statusLabel];
-        if (style & IntegrationSettingsStyleState) {
-        }
+        
+        self.customStyle = style;
+        
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -75,24 +74,27 @@ static CGFloat const kIconRightMargin = 9;
     return _style;
 }
 
-- (void)layoutSubviews {
+- (void)layoutSubviews
+{
     [super layoutSubviews];
     
     CGFloat leftMargin = kIconLeftMargin;
     CGFloat topMargin = kIconTopMargin;
-    CGFloat labelSize = self.contentView.frame.size.width - kIconLeftMargin * 2;
+    CGFloat labelSize = self.contentView.frame.size.width - kIconLeftMargin - kIconRightMargin;
+    CGFloat iconHeight = self.contentView.frame.size.height - kIconTopMargin * 2;
+    
     if (_style & IntegrationSettingsStyleIcon) {
-        _iconLabel.frame = CGRectMake(kIconLeftMargin, kIconTopMargin, kIconSize, kIconSize);
+        _iconLabel.frame = CGRectMake(kIconLeftMargin, kIconTopMargin, kIconSize, iconHeight);
         leftMargin += kIconSize + kIconRightMargin;
         labelSize -= kIconSize + kIconRightMargin;
     }
     
     if (_style & IntegrationSettingsStyleState) {
-        labelSize -= kIconSize + kIconRightMargin;
-        _statusLabel.frame = CGRectMake(labelSize, kIconTopMargin, kIconSize, kIconSize);
+        _statusLabel.frame = CGRectMake(self.contentView.frame.size.width - kIconLeftMargin - kIconSize, kIconTopMargin, kIconSize, iconHeight);
+        labelSize -= kIconSize + 3; // 3 to not be just inside the state
     }
     
-    _titleLabel.frame = CGRectMake(leftMargin, topMargin, labelSize, self.contentView.frame.size.height - kIconTopMargin * 2);
+    _titleLabel.frame = CGRectMake(leftMargin, topMargin, labelSize, iconHeight);
     
     if (_style & IntegrationSettingsStyleSubtitle) {
         // TODO

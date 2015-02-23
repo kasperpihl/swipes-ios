@@ -17,14 +17,16 @@ NSString* const kKeyIsOn = @"isOn";
 NSString* const kKeyCellType = @"cellType";
 NSString* const kKeyTouchSelector = @"touchSelector";
 
-static CGFloat const kTopMargin = 50;
-static CGFloat const kBottomMargin = 50;
-static CGFloat const kCellHeight = 60;
-static CGFloat const kSeparatorHeight = 40;
+static CGFloat const kTopMargin = 60;
+static CGFloat const kBottomMargin = 45;
+static CGFloat const kCellHeight = 50;
+static CGFloat const kSeparatorHeight = 22;
+static CGFloat const kLineMarginX = 26;
+static CGFloat const kLineMarginY = kTopMargin - 10;
 
 @interface IntegrationBaseViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, assign) BOOL hasLeadingIcons;
+@property (nonatomic, strong) UIView* lineView;
 
 @end
 
@@ -32,10 +34,23 @@ static CGFloat const kSeparatorHeight = 40;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
     self.view.backgroundColor = tcolor(BackgroundColor);
     
+    // setup top view
+    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(kLineMarginX, 20, self.view.frame.size.width - kLineMarginX * 2, 25)];
+    _titleLabel.textColor = tcolor(TextColor);
+    _titleLabel.font = KP_SEMIBOLD(10);
+    _titleLabel.text = self.title;
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:_titleLabel];
+    
+    _lineView = [[UIView alloc] initWithFrame:CGRectMake(kLineMarginX, kLineMarginY, self.view.frame.size.width - kLineMarginX * 2, 1.5)];
+    _lineView.backgroundColor = tcolor(TextColor);
+    _lineView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:_lineView];
+    
+    // setup table view
     CGRect viewFrame = self.view.frame;
     viewFrame.origin.y += kTopMargin;
     viewFrame.size.height -= kTopMargin + kBottomMargin;
@@ -48,13 +63,22 @@ static CGFloat const kSeparatorHeight = 40;
     self.table.dataSource = self;
     [self.view addSubview:self.table];
     
+    // setup back button
     self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, self.view.frame.size.height - kBottomMargin, kBottomMargin, kBottomMargin)];
     self.backButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-    self.backButton.titleLabel.font = iconFont(23);
+    self.backButton.titleLabel.font = iconFont(15);
     [self.backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.backButton];
+}
+
+- (void)setTitle:(NSString *)title
+{
+    [super setTitle:title];
+    if (_titleLabel) {
+        _titleLabel.text = title;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -63,20 +87,18 @@ static CGFloat const kSeparatorHeight = 40;
 }
 
 - (void)pressedBack:(id)sender {
-    [self removeFromParentViewController];
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    _hasLeadingIcons = NO;
     return _cellInfo.count;
 }
 
 - (IntegrationSettingsStyle)styleForData:(NSDictionary *)data
 {
     IntegrationSettingsStyle result = IntegrationSettingsStyleDefaultMask;
-    if (_hasLeadingIcons || [data objectForKey:kKeyIcon]) {
+    if ([data objectForKey:kKeyIcon]) {
         result |= IntegrationSettingsStyleIcon;
-        _hasLeadingIcons = YES; // we have at least one with icon
     }
     if ([data objectForKey:kKeySubtitle]) {
         result |= IntegrationSettingsStyleSubtitle;
@@ -87,12 +109,24 @@ static CGFloat const kSeparatorHeight = 40;
     return result;
 }
 
+- (NSString *)stringForCellType:(NSUInteger)cellType
+{
+    switch (cellType) {
+        case kIntegrationCellTypeViewMore:
+            return iconString(@"arrowThick");
+            
+        case kIntegrationCellTypeCheck:
+            return iconString(@"arrowThick");
+    }
+    return nil;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary* data = _cellInfo[indexPath.row];
 
-    static NSString *kCellSettingsID =@"settings_cell";
-    static NSString *kCellSeparatorID =@"separator_cell";
+    static NSString *kCellSettingsID = @"settings_cell";
+    static NSString *kCellSeparatorID = @"separator_cell";
     
     NSNumber* cellType = data[kKeyCellType];
     if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeSeparator) {
@@ -104,10 +138,39 @@ static CGFloat const kSeparatorHeight = 40;
     }
     
     IntegrationSettingCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellSettingsID];
+    IntegrationSettingsStyle style = [self styleForData:data];
     if (nil == cell) {
-        cell = [[IntegrationSettingCell alloc] initWithCustomStyle:[self styleForData:data] reuseIdentifier:kCellSettingsID];
+        cell = [[IntegrationSettingCell alloc] initWithCustomStyle:style reuseIdentifier:kCellSettingsID];
+    }
+    else {
+        cell.customStyle = style;
     }
     
+    cell.titleLabel.text = data[kKeyTitle];
+    cell.subtitleLabel.text = data[kKeySubtitle];
+    cell.iconLabel.text = data[kKeyIcon];
+    cell.statusLabel.text = nil;
+    
+    if (cellType) {
+        switch ([cellType unsignedIntegerValue]) {
+            case kIntegrationCellTypeViewMore:
+                cell.statusLabel.text = iconString(@"arrowThick");
+                break;
+                
+            case kIntegrationCellTypeCheck: {
+                    BOOL isOn = data[kKeyIsOn] ? [data[kKeyIsOn] boolValue] : NO;
+                    if (isOn) {
+                        cell.statusLabel.text = iconString(@"roundAdd");
+                        cell.statusLabel.textColor = [UIColor greenColor]; // TODO fix color
+                    }
+                    else {
+                        cell.statusLabel.text = iconString(@"roundClose");
+                        cell.statusLabel.textColor = tcolor(TextColor); // TODO fix color
+                    }
+                }
+                break;
+        }
+    }
     
     
     return cell;
@@ -119,6 +182,17 @@ static CGFloat const kSeparatorHeight = 40;
         return kSeparatorHeight;
     }
     return kCellHeight;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary* data = _cellInfo[indexPath.row];
+    NSString* strSel = data[kKeyTouchSelector];
+    if (strSel) {
+        SEL sel = NSSelectorFromString(strSel);
+        ((void (*)(id, SEL))[self methodForSelector:sel])(self, sel); // [self performSelector:sel];
+        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:NO];
+    }
 }
 
 @end

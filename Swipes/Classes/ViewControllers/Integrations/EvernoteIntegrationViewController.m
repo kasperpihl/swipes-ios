@@ -60,6 +60,11 @@
                     kKeyIcon: @"today", // TODO fix
                     kKeyTouchSelector: NSStringFromSelector(@selector(onLearnMoreTouch))
                     },
+                  @{kKeyTitle: LOCALIZE_STRING(@"Sign out"),
+                    kKeyCellType: @(kIntegrationCellTypeNoAccessory),
+                    kKeyIcon: @"roundClose",
+                    kKeyTouchSelector: NSStringFromSelector(@selector(onSignOutTouch))
+                    },
                   ];
 }
 
@@ -120,6 +125,10 @@
 }
 
 - (void)onLearnMoreTouch {
+    
+}
+
+- (void)onSignOutTouch {
     
 }
 

@@ -18,6 +18,7 @@
 #import "EvernoteIntegration.h"
 #import "EvernoteSyncHandler.h"
 #import "GmailIntegration.h"
+#import "EvernoteIntegrationViewController.h"
 #import "IntegrationsViewController.h"
 
 int const kCellCount = 5;
@@ -337,6 +338,9 @@ int const kCellCount = 5;
             else{
                 [self evernoteAuthenticateUsingSelector:@selector(authenticatedEvernote) withObject:nil];
             }
+//            EvernoteIntegrationViewController* vc = [[EvernoteIntegrationViewController alloc] init];
+//            vc.title = @"EVERNOTE INTEGRATION";
+//            [self presentViewController:vc animated:NO completion:nil];
             break;
         }
     }
