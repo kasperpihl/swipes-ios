@@ -18,7 +18,7 @@
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 - (void)saveContext;
-- (NSArray *)loadTodosForPage:(SWAPage)page withError:(NSError **)error oneResult:(BOOL)oneResult;
+- (NSArray *)loadTodosWithError:(NSError **)error oneResult:(BOOL)oneResult;
 - (void)deleteObject:(id)object;
 - (KPToDo *)newToDo;
 

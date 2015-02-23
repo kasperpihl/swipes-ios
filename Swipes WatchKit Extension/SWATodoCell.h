@@ -11,6 +11,5 @@
 @interface SWATodoCell : NSObject
 
 @property (nonatomic, weak) IBOutlet WKInterfaceLabel* label;
-@property (nonatomic, weak) IBOutlet WKInterfaceGroup* group;
 
 @end

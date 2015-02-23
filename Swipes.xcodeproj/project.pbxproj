@@ -254,6 +254,7 @@
 		A7FA8B1D17AF094E00134ED0 /* SnoozesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FA8B1C17AF094D00134ED0 /* SnoozesViewController.m */; };
 		A7FE4402182825A1002AFB2E /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FE4401182825A1002AFB2E /* UIImage+Blur.m */; };
 		DA04465119D71CD10083F816 /* CoreSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285417294C56002226C8 /* CoreSyncHandler.m */; };
+		DA044DAB1A994E8F009BB4ED /* TodoInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA044DAA1A994E8F009BB4ED /* TodoInterfaceController.m */; };
 		DA1194D51A4F3ECD00C1E770 /* _KPAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194CE1A4F3ECD00C1E770 /* _KPAttachment.m */; };
 		DA1194D61A4F3ECD00C1E770 /* _KPParseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194D01A4F3ECD00C1E770 /* _KPParseObject.m */; };
 		DA1194D71A4F3ECD00C1E770 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194D21A4F3ECD00C1E770 /* _KPTag.m */; };
@@ -288,7 +289,6 @@
 		DA23232A19B4737A00D996EB /* UtilityClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A781285B17294C56002226C8 /* UtilityClass.h */; };
 		DA23232B19B4738000D996EB /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285C17294C56002226C8 /* UtilityClass.m */; };
 		DA310FA7188F3F26003C8FA4 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = DA310FA6188F3F26003C8FA4 /* Assets */; };
-		DA3282BE1A4CB7CF0054CE04 /* ScheduleInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282BD1A4CB7CF0054CE04 /* ScheduleInterfaceController.m */; };
 		DA3282C11A4CB7CF0054CE04 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282C01A4CB7CF0054CE04 /* NotificationController.m */; };
 		DA3282C41A4CB7CF0054CE04 /* GlanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282C31A4CB7CF0054CE04 /* GlanceController.m */; };
 		DA3282C61A4CB7CF0054CE04 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA3282C51A4CB7CF0054CE04 /* Images.xcassets */; };
@@ -296,10 +296,8 @@
 		DA3282D21A4CB7CF0054CE04 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA3282D01A4CB7CF0054CE04 /* Interface.storyboard */; };
 		DA3282D41A4CB7D00054CE04 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA3282D31A4CB7CF0054CE04 /* Images.xcassets */; };
 		DA3282D71A4CB7D00054CE04 /* Swipes WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		DA3282E21A4CB9C70054CE04 /* BaseInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282E11A4CB9C70054CE04 /* BaseInterfaceController.m */; };
 		DA3282E51A4CBD2B0054CE04 /* SWATodoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282E41A4CBD2B0054CE04 /* SWATodoCell.m */; };
 		DA3282E81A4CC0EE0054CE04 /* TodayInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282E71A4CC0EE0054CE04 /* TodayInterfaceController.m */; };
-		DA3282EB1A4CC1000054CE04 /* DoneInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282EA1A4CC1000054CE04 /* DoneInterfaceController.m */; };
 		DA3283131A4E1FA20054CE04 /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		DA3E54421A15498500C2116F /* ENNoteRefInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3E54411A15498500C2116F /* ENNoteRefInternal.h */; };
 		DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0B8F188CB4750094F866 /* EvernoteView.m */; };
@@ -921,6 +919,8 @@
 		A7FE4401182825A1002AFB2E /* UIImage+Blur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Blur.m"; sourceTree = "<group>"; };
 		B2FE7C8A8128F5F6A156B8E7 /* Pods-SwipesToday.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.adhoc.xcconfig"; sourceTree = "<group>"; };
 		DA04465019D5CDC70083F816 /* Swipes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Swipes.entitlements; path = ../Swipes.entitlements; sourceTree = "<group>"; };
+		DA044DA91A994E8F009BB4ED /* TodoInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodoInterfaceController.h; sourceTree = "<group>"; };
+		DA044DAA1A994E8F009BB4ED /* TodoInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodoInterfaceController.m; sourceTree = "<group>"; };
 		DA1194CD1A4F3ECD00C1E770 /* _KPAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _KPAttachment.h; path = CoreData/Generated/_KPAttachment.h; sourceTree = "<group>"; };
 		DA1194CE1A4F3ECD00C1E770 /* _KPAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _KPAttachment.m; path = CoreData/Generated/_KPAttachment.m; sourceTree = "<group>"; };
 		DA1194CF1A4F3ECD00C1E770 /* _KPParseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _KPParseObject.h; path = CoreData/Generated/_KPParseObject.h; sourceTree = "<group>"; };
@@ -943,8 +943,6 @@
 		DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Swipes WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA3282BA1A4CB7CF0054CE04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA3282BB1A4CB7CF0054CE04 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
-		DA3282BC1A4CB7CF0054CE04 /* ScheduleInterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScheduleInterfaceController.h; sourceTree = "<group>"; };
-		DA3282BD1A4CB7CF0054CE04 /* ScheduleInterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScheduleInterfaceController.m; sourceTree = "<group>"; };
 		DA3282BF1A4CB7CF0054CE04 /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
 		DA3282C01A4CB7CF0054CE04 /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
 		DA3282C21A4CB7CF0054CE04 /* GlanceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlanceController.h; sourceTree = "<group>"; };
@@ -954,13 +952,9 @@
 		DA3282CF1A4CB7CF0054CE04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA3282D11A4CB7CF0054CE04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		DA3282D31A4CB7CF0054CE04 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		DA3282E01A4CB9C70054CE04 /* BaseInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseInterfaceController.h; sourceTree = "<group>"; };
-		DA3282E11A4CB9C70054CE04 /* BaseInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseInterfaceController.m; sourceTree = "<group>"; };
 		DA3282E31A4CBD2B0054CE04 /* SWATodoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWATodoCell.h; sourceTree = "<group>"; };
 		DA3282E41A4CBD2B0054CE04 /* SWATodoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWATodoCell.m; sourceTree = "<group>"; };
 		DA3282E71A4CC0EE0054CE04 /* TodayInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodayInterfaceController.m; sourceTree = "<group>"; };
-		DA3282E91A4CC1000054CE04 /* DoneInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoneInterfaceController.h; sourceTree = "<group>"; };
-		DA3282EA1A4CC1000054CE04 /* DoneInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoneInterfaceController.m; sourceTree = "<group>"; };
 		DA3282EC1A4CC1F10054CE04 /* TodayInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayInterfaceController.h; sourceTree = "<group>"; };
 		DA3283291A4EE90C0054CE04 /* Swipes WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Swipes WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 		DA32832A1A4EEE440054CE04 /* SWAIncludes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWAIncludes.h; sourceTree = "<group>"; };
@@ -2122,14 +2116,10 @@
 		DA3282EE1A4CC7F40054CE04 /* Interface Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				DA3282E01A4CB9C70054CE04 /* BaseInterfaceController.h */,
-				DA3282E11A4CB9C70054CE04 /* BaseInterfaceController.m */,
-				DA3282BC1A4CB7CF0054CE04 /* ScheduleInterfaceController.h */,
-				DA3282BD1A4CB7CF0054CE04 /* ScheduleInterfaceController.m */,
 				DA3282EC1A4CC1F10054CE04 /* TodayInterfaceController.h */,
 				DA3282E71A4CC0EE0054CE04 /* TodayInterfaceController.m */,
-				DA3282E91A4CC1000054CE04 /* DoneInterfaceController.h */,
-				DA3282EA1A4CC1000054CE04 /* DoneInterfaceController.m */,
+				DA044DA91A994E8F009BB4ED /* TodoInterfaceController.h */,
+				DA044DAA1A994E8F009BB4ED /* TodoInterfaceController.m */,
 			);
 			name = "Interface Controllers";
 			sourceTree = "<group>";
@@ -2593,6 +2583,7 @@
 					};
 					DA3282C81A4CB7CF0054CE04 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 85LTPM52WY;
 					};
 					DAE2B14E19CB7A4D00A9074E = {
 						CreatedOnToolsVersion = 6.0;
@@ -3077,7 +3068,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA3282E21A4CB9C70054CE04 /* BaseInterfaceController.m in Sources */,
 				DA3283131A4E1FA20054CE04 /* Datamodel.xcdatamodeld in Sources */,
 				DA1194E31A4F3F3200C1E770 /* KPTag.m in Sources */,
 				DA1194D81A4F3ECD00C1E770 /* _KPToDo.m in Sources */,
@@ -3089,10 +3079,9 @@
 				DA1194D61A4F3ECD00C1E770 /* _KPParseObject.m in Sources */,
 				DA3282C11A4CB7CF0054CE04 /* NotificationController.m in Sources */,
 				DA1194D51A4F3ECD00C1E770 /* _KPAttachment.m in Sources */,
-				DA3282EB1A4CC1000054CE04 /* DoneInterfaceController.m in Sources */,
 				DA1194E51A4F440800C1E770 /* NSDate-Utilities.m in Sources */,
+				DA044DAB1A994E8F009BB4ED /* TodoInterfaceController.m in Sources */,
 				DA1194D71A4F3ECD00C1E770 /* _KPTag.m in Sources */,
-				DA3282BE1A4CB7CF0054CE04 /* ScheduleInterfaceController.m in Sources */,
 				DA3282C41A4CB7CF0054CE04 /* GlanceController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3394,9 +3383,9 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "7df6b65f-6344-43d6-af18-9c7bd9cb2a49";
-				"PROVISIONING_PROFILE[sdk=*]" = "7df6b65f-6344-43d6-af18-9c7bd9cb2a49";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7df6b65f-6344-43d6-af18-9c7bd9cb2a49";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=*]" = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3545,8 +3534,8 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "0a75d825-87ca-42ac-9d90-0d06ae9aa48f";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0a75d825-87ca-42ac-9d90-0d06ae9aa48f";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3628,8 +3617,8 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "d8925d13-efdc-4884-be90-3043ba9e1868";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "d8925d13-efdc-4884-be90-3043ba9e1868";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3769,6 +3758,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -3784,6 +3775,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -3800,6 +3792,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -3813,6 +3807,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -3829,6 +3824,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -3842,6 +3839,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -3858,8 +3856,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesToday/SwipesToday.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3886,7 +3884,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b64ff0ca-b95b-4805-9536-8332a654d43a";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -3901,8 +3899,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesToday/SwipesToday.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3931,7 +3929,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0666ad47-fd26-4ef0-a7db-49c93a6cf3ae";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -3946,8 +3944,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesToday/SwipesToday.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3976,7 +3974,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6d258b2c-46de-495e-b0e0-723353ba6cbc";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=*]" = "4d44c0c9-adf3-467c-999e-1ac7b2b9c1b9";
 				SKIP_INSTALL = YES;
 			};

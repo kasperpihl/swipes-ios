@@ -30,7 +30,7 @@
     // This method is called when watch view controller is about to be visible to user
     [super willActivate];
     NSError* error;
-    NSArray* todos = [[SWACoreDataModel sharedInstance] loadTodosForPage:SWAPageToday withError:&error oneResult:YES];
+    NSArray* todos = [[SWACoreDataModel sharedInstance] loadTodosWithError:&error oneResult:YES];
     if (todos.count > 0) {
         KPToDo* todo = todos[0];
         [_taskText setText:todo.title];

@@ -51,12 +51,12 @@ static NSString* const DATABASE_FOLDER = @"database";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         storeURL = [[[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:SHARED_GROUP_NAME] URLByAppendingPathComponent:DATABASE_FOLDER];
-#ifdef DEBUG
+        #ifdef DEBUG
         if (nil == storeURL) {
             NSLog(@"Error getting storeURL! Check out provisioning profiles!");
             abort();
         }
-#endif
+        #endif
         [[NSFileManager defaultManager] createDirectoryAtURL:storeURL withIntermediateDirectories:YES attributes:nil error:nil];
         storeURL = [storeURL URLByAppendingPathComponent:DATABASE_NAME];
     });
@@ -105,9 +105,9 @@ static NSString* const DATABASE_FOLDER = @"database";
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-#ifdef DEBUG
+        #ifdef DEBUG
         abort();
-#endif
+        #endif
     }
     
     return _persistentStoreCoordinator;
@@ -122,51 +122,27 @@ static NSString* const DATABASE_FOLDER = @"database";
             // Replace this implementation with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-#ifdef DEBUG
+            #ifdef DEBUG
             //abort();
-#endif
+            #endif
         }
     }
 }
 
-- (NSArray *)loadTodosForPage:(SWAPage)page withError:(NSError **)error oneResult:(BOOL)oneResult
+- (NSArray *)loadTodosWithError:(NSError **)error oneResult:(BOOL)oneResult
 {
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];
     
-    if (SWAPageToday == page) {
-        NSDate *endDate = [NSDate date];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endDate];
-        [request setPredicate:predicate];
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
-        [request setSortDescriptors:@[sortDescriptor]];
-        if (oneResult)
-            [request setFetchLimit:1];
-    }
-    else if (SWAPageDone == page) {
-        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"(completionDate != nil && parent = nil)"];
-        [request setPredicate:predicate];
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"completionDate" ascending:YES];
-        [request setSortDescriptors:@[sortDescriptor]];
-    }
-    else if (SWAPageSchedule == page) {
-        NSDate *startDate = [NSDate date];
-        NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil AND parent = nil)", startDate];
-        [request setPredicate:schedulePredicate];
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"schedule" ascending:NO];
-        [request setSortDescriptors:@[sortDescriptor]];
-        NSArray *scheduleArray = [self.managedObjectContext executeFetchRequest:request error:error];
-        
-        NSPredicate *unspecifiedPredicate = [NSPredicate predicateWithFormat:@"(schedule = nil AND completionDate = nil) AND parent = nil"];
-        [request setPredicate:unspecifiedPredicate];
-        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
-        [request setSortDescriptors:@[sortDescriptor]];
-        NSArray *unspecifiedArray = [self.managedObjectContext executeFetchRequest:request error:error];
-        NSArray *totalArray = [scheduleArray arrayByAddingObjectsFromArray:unspecifiedArray];
-        return totalArray;
-    }
- 
+    NSDate *endDate = [NSDate date];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)",endDate];
+    [request setPredicate:predicate];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
+    [request setSortDescriptors:@[sortDescriptor]];
+    if (oneResult)
+        [request setFetchLimit:1];
+
     return [self.managedObjectContext executeFetchRequest:request error:error];
 }
 

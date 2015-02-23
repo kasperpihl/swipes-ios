@@ -1,44 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6724" systemVersion="14B25" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6750" systemVersion="13F34" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WHq-iy-Tkd">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6711"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3735"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6735"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
     </dependencies>
     <scenes>
-        <!--Schedule Interface Controller-->
-        <scene sceneID="aou-V4-d1y">
-            <objects>
-                <controller id="AgC-eL-Hgc" customClass="ScheduleInterfaceController">
-                    <items>
-                        <table alignment="left" id="ZDE-GL-5Xp">
-                            <items>
-                                <tableRow identifier="SWATodoCell" id="WlS-nw-Tnm" customClass="SWATodoCell">
-                                    <group key="rootItem" width="1" alignment="left" id="fh6-oE-SOa">
-                                        <items>
-                                            <group width="4" height="1" alignment="left" layout="vertical" id="hPh-mz-pUA"/>
-                                            <label width="1" alignment="left" numberOfLines="0" id="5AJ-se-U4L"/>
-                                        </items>
-                                        <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
-                                    </group>
-                                    <connections>
-                                        <outlet property="group" destination="hPh-mz-pUA" id="oPk-uM-WWv"/>
-                                        <outlet property="label" destination="5AJ-se-U4L" id="unD-1a-1up"/>
-                                    </connections>
-                                </tableRow>
-                            </items>
-                        </table>
-                        <label width="1" alignment="left" text="No scheduled tasks" textAlignment="center" numberOfLines="0" id="46a-Bi-7Tw"/>
-                    </items>
-                    <menu key="menu" id="gGO-rk-qUS"/>
-                    <connections>
-                        <outlet property="noDataLabel" destination="46a-Bi-7Tw" id="bzO-Ba-Mrw"/>
-                        <outlet property="table" destination="ZDE-GL-5Xp" id="5Q0-Id-3wb"/>
-                        <segue destination="WHq-iy-Tkd" kind="relationship" relationship="nextPage" id="QQo-g3-L9B"/>
-                    </connections>
-                </controller>
-            </objects>
-            <point key="canvasLocation" x="235" y="341"/>
-        </scene>
         <!--Today Interface Controller-->
         <scene sceneID="nb6-GJ-4CV">
             <objects>
@@ -49,13 +15,14 @@
                                 <tableRow identifier="SWATodoCell" id="v5V-TE-Ooo" customClass="SWATodoCell">
                                     <group key="rootItem" width="1" alignment="left" id="DIF-hI-qaJ">
                                         <items>
-                                            <group width="4" height="1" alignment="left" layout="vertical" id="fwZ-Yp-5Is"/>
                                             <label alignment="left" numberOfLines="0" id="9hb-dn-s4h"/>
                                         </items>
                                         <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                                        <connections>
+                                            <segue destination="U58-tQ-Xcj" kind="push" id="5oo-O6-1KN"/>
+                                        </connections>
                                     </group>
                                     <connections>
-                                        <outlet property="group" destination="fwZ-Yp-5Is" id="fNQ-nV-hSu"/>
                                         <outlet property="label" destination="9hb-dn-s4h" id="efj-FZ-uh8"/>
                                     </connections>
                                 </tableRow>
@@ -67,44 +34,44 @@
                     <connections>
                         <outlet property="noDataLabel" destination="oNB-cM-KZP" id="AIU-xZ-1KY"/>
                         <outlet property="table" destination="3dt-00-epq" id="boT-ch-amk"/>
-                        <segue destination="mhq-i9-6a8" kind="relationship" relationship="nextPage" id="LNF-A3-io3"/>
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="461" y="343"/>
+            <point key="canvasLocation" x="235" y="340"/>
         </scene>
-        <!--Done Interface Controller-->
-        <scene sceneID="0HU-w3-WmO">
+        <!--Back-->
+        <scene sceneID="IOl-SG-wYh">
             <objects>
-                <controller id="mhq-i9-6a8" customClass="DoneInterfaceController">
+                <controller identifier="details" title="Back" id="U58-tQ-Xcj" customClass="TodoInterfaceController">
                     <items>
-                        <table alignment="left" id="74F-G7-LaS">
-                            <items>
-                                <tableRow identifier="SWATodoCell" id="BSK-JP-nFN" customClass="SWATodoCell">
-                                    <group key="rootItem" width="1" alignment="left" id="l9J-3x-BzM">
-                                        <items>
-                                            <group width="4" height="1" alignment="left" layout="vertical" id="1Yk-xS-wQ2"/>
-                                            <label alignment="left" numberOfLines="0" id="PDg-pG-PLF"/>
-                                        </items>
-                                        <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
-                                    </group>
-                                    <connections>
-                                        <outlet property="group" destination="1Yk-xS-wQ2" id="aoE-WM-0TZ"/>
-                                        <outlet property="label" destination="PDg-pG-PLF" id="kdV-by-iUt"/>
-                                    </connections>
-                                </tableRow>
-                            </items>
-                        </table>
-                        <label width="1" alignment="left" text="No done tasks" textAlignment="center" numberOfLines="0" id="cas-9d-wDn"/>
+                        <label width="136" height="45" alignment="left" textAlignment="left" numberOfLines="2" id="ePe-EL-Hvz"/>
                     </items>
-                    <menu key="menu" id="oMZ-F7-IrX"/>
+                    <menu key="menu" id="y93-ed-Nj4">
+                        <items>
+                            <menuItem title="Complete" icon="accept" id="E9l-T8-4zv">
+                                <connections>
+                                    <action selector="onMarkDone:" destination="U58-tQ-Xcj" id="bm7-uk-u5f"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Schedule" icon="pause" id="vCS-3E-kp0">
+                                <connections>
+                                    <action selector="onSchedule:" destination="U58-tQ-Xcj" id="XlE-vS-4dU"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Delete" icon="trash" id="b44-cR-hPc">
+                                <connections>
+                                    <action selector="onDelete:" destination="U58-tQ-Xcj" id="XQV-Q3-FdP"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Back" icon="more" id="8Vr-fD-3gJ"/>
+                        </items>
+                    </menu>
                     <connections>
-                        <outlet property="noDataLabel" destination="cas-9d-wDn" id="y9h-JH-Uq9"/>
-                        <outlet property="table" destination="74F-G7-LaS" id="77i-Cq-pN0"/>
+                        <outlet property="titleLabel" destination="ePe-EL-Hvz" id="vWV-xQ-BiB"/>
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="679" y="345"/>
+            <point key="canvasLocation" x="456" y="340"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">
