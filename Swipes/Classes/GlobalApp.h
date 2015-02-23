@@ -22,6 +22,7 @@
 + (void)activityIndicatorVisible:(BOOL)status;
 + (NSString *)machineType;
 + (NSString *)deviceId;
++ (UIView *)topView;
 
 - (void)startBackgroundHandler:(NSNotification *)notification;
 - (void)endBackgroundHandler:(NSNotification *)notification;

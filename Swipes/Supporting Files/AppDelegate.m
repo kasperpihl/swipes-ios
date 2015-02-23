@@ -252,6 +252,7 @@
 {
     
     UIBackgroundFetchResult result = [KPCORE synchronizeForce:YES async:NO];
+    [NOTIHANDLER updateLocalNotifications];
     completionHandler(result);
 }
 

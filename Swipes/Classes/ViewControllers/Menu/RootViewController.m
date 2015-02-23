@@ -435,6 +435,7 @@ static RootViewController *sharedObject;
     if(self.didReset)
         self.didReset = NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"opened app" object:self];
+    [NOTIHANDLER updateLocalNotifications];
 }
 
 -(void)closeApp

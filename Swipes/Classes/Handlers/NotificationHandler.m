@@ -334,7 +334,7 @@ static NotificationHandler *sharedObject;
     BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
     [self updateLocationUpdates];
     UIApplication *app = [UIApplication sharedApplication];
-    NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [NSDate date]];
+    NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
     
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
