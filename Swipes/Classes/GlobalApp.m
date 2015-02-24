@@ -136,6 +136,25 @@ static int g_activityIndicatorStack = 0;
     return [[topWindow subviews] lastObject];
 }
 
++ (UIViewController*)topViewControllerWithRootViewController:(UIViewController*)rootViewController
+{
+    // Handling Modal views
+    if (rootViewController.presentedViewController) {
+        UIViewController* presentedViewController = rootViewController.presentedViewController;
+        return [self topViewControllerWithRootViewController:presentedViewController];
+    }
+    // Handling UIViewController's added as subviews to some other views.
+    else {
+        for (UIView *view in [rootViewController.view subviews]) {
+            id subViewController = [view nextResponder];    // Key property which most of us are unaware of / rarely use.
+            if (subViewController && [subViewController isKindOfClass:[UIViewController class]]) {
+                return [self topViewControllerWithRootViewController:subViewController];
+            }
+        }
+        return rootViewController;
+    }
+}
+
 - (instancetype)init
 {
     self = [super init];

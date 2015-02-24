@@ -30,4 +30,6 @@ typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
 @property (nonatomic, strong) UIColor* lightColor;
 @property (nonatomic, strong) NSArray* cellInfo;
 
+- (void)reloadData;
+
 @end

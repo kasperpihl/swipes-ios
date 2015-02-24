@@ -38,12 +38,12 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     self.view.backgroundColor = tcolor(BackgroundColor);
     
     // setup top view
+    _lightColor = [UIColor greenColor]; // TODO fix the color
+
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(kLineMarginX, 20, self.view.frame.size.width - kLineMarginX * 2, 25)];
-    _titleLabel.textColor = tcolor(TextColor);
-    _titleLabel.font = KP_SEMIBOLD(10);
-    _titleLabel.text = self.title;
-    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    //_titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:_titleLabel];
+    [self updateTitle];
     
     _lineView = [[UIView alloc] initWithFrame:CGRectMake(kLineMarginX, kLineMarginY, self.view.frame.size.width - kLineMarginX * 2, 1.5)];
     _lineView.backgroundColor = tcolor(TextColor);
@@ -77,7 +77,15 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
 {
     [super setTitle:title];
     if (_titleLabel) {
-        _titleLabel.text = title;
+        [self updateTitle];
+    }
+}
+
+- (void)setLightColor:(UIColor *)lightColor
+{
+    _lightColor = lightColor;
+    if (_titleLabel) {
+        [self updateTitle];
     }
 }
 
@@ -90,8 +98,37 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _cellInfo.count;
+- (void)updateTitle
+{
+    // Create the attributed string
+    NSMutableAttributedString *myString = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"\ue613 %@ \ue613", self.title]];
+    
+    // Declare the fonts
+    UIFont *fontIcon = iconFont(10);
+    UIFont *fontTitle = KP_SEMIBOLD(10);
+    
+    NSRange rangeFirst = NSMakeRange(0,1);
+    NSRange rangeLast = NSMakeRange(myString.length - 1, 1);
+    NSRange rangeTitle = NSMakeRange(1, myString.length - 2);
+    
+    // Declare the paragraph styles
+    NSMutableParagraphStyle *myStringParaStyle1 = [[NSMutableParagraphStyle alloc] init];
+    myStringParaStyle1.alignment = 1;
+    
+    // Create the attributes and add them to the string
+    [myString addAttribute:NSForegroundColorAttributeName value:_lightColor range:rangeFirst];
+    [myString addAttribute:NSParagraphStyleAttributeName value:myStringParaStyle1 range:rangeFirst];
+    [myString addAttribute:NSFontAttributeName value:fontIcon range:rangeFirst];
+    
+    [myString addAttribute:NSFontAttributeName value:fontTitle range:rangeTitle];
+    [myString addAttribute:NSParagraphStyleAttributeName value:myStringParaStyle1 range:rangeTitle];
+    [myString addAttribute:NSForegroundColorAttributeName value:tcolor(TextColor) range:rangeTitle];
+    
+    [myString addAttribute:NSForegroundColorAttributeName value:_lightColor range:rangeLast];
+    [myString addAttribute:NSParagraphStyleAttributeName value:myStringParaStyle1 range:rangeLast];
+    [myString addAttribute:NSFontAttributeName value:fontIcon range:rangeLast];
+    
+    self.titleLabel.attributedText = [[NSAttributedString alloc]initWithAttributedString: myString];
 }
 
 - (IntegrationSettingsStyle)styleForData:(NSDictionary *)data
@@ -119,6 +156,15 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
             return iconString(@"arrowThick");
     }
     return nil;
+}
+
+- (void)reloadData
+{
+    [_table reloadData];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return _cellInfo.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -191,7 +237,8 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     if (strSel) {
         SEL sel = NSSelectorFromString(strSel);
         ((void (*)(id, SEL))[self methodForSelector:sel])(self, sel); // [self performSelector:sel];
-        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:NO];
+        if (_cellInfo.count > indexPath.row)
+            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:NO];
     }
 }
 

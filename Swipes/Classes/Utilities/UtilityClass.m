@@ -10,6 +10,9 @@
 #import "AppDelegate.h"
 #import "KPParseCommunicator.h"
 #import "NSDate-Utilities.h"
+#ifndef NOT_APPLICATION
+#import "GlobalApp.h"
+#endif
 #import "UtilityClass.h"
 
 #define trgb(num) (num/255.0)
@@ -185,7 +188,7 @@
         if (self.rootViewController) {
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:LOCALIZE_STRING(@"Okay") style:UIAlertActionStyleCancel handler:nil]];
-            [self.rootViewController presentViewController:alert animated:YES completion:nil];
+            [[GlobalApp topViewControllerWithRootViewController:self.rootViewController] presentViewController:alert animated:YES completion:nil];
         }
     }
 #endif
@@ -226,7 +229,7 @@
                 textField.keyboardAppearance = UIKeyboardAppearanceAlert;
                 
             }];
-            [self.rootViewController presentViewController:alert animated:YES completion:^{
+            [[GlobalApp topViewControllerWithRootViewController:self.rootViewController] presentViewController:alert animated:YES completion:^{
                 UITextField *login = alert.textFields.firstObject;
                 login.text = pretext;
                 [login becomeFirstResponder];
@@ -257,7 +260,7 @@
                 if (block)
                     block(YES, nil);
             }]];
-            [self.rootViewController presentViewController:alert animated:YES completion:nil];
+            [[GlobalApp topViewControllerWithRootViewController:self.rootViewController] presentViewController:alert animated:YES completion:nil];
         }
     }
 #endif
@@ -292,7 +295,7 @@
             for (NSString* title in buttonTitles) {
                 [alert addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:buttonBlock]];
             }
-            [self.rootViewController presentViewController:alert animated:YES completion:nil];
+            [[GlobalApp topViewControllerWithRootViewController:self.rootViewController] presentViewController:alert animated:YES completion:nil];
         }
     }
 #endif

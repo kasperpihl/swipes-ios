@@ -23,6 +23,7 @@
 + (NSString *)machineType;
 + (NSString *)deviceId;
 + (UIView *)topView;
++ (UIViewController*)topViewControllerWithRootViewController:(UIViewController*)rootViewController;
 
 - (void)startBackgroundHandler:(NSNotification *)notification;
 - (void)endBackgroundHandler:(NSNotification *)notification;
