@@ -90,13 +90,20 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     }
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (void)pressedBack:(id)sender {
+- (void)goBack
+{
     [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+- (void)pressedBack:(id)sender
+{
+    [self goBack];
 }
 
 - (void)updateTitle

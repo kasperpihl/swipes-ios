@@ -13,6 +13,7 @@
 #import "DejalActivityView.h"
 
 #import "GmailIntegration.h"
+#import "GmailDetailsIntegrationViewController.h"
 #import "GmailIntegrationViewController.h"
 
 @interface GmailIntegrationViewController ()
@@ -51,7 +52,7 @@
         self.cellInfo = @[
                           @{kKeyTitle: emailAddress,
                             kKeyCellType: @(kIntegrationCellTypeNoAccessory),
-                            kKeyIcon: @"editMail",
+                            kKeyIcon: kGmInt.isUsingMailbox ? @"roundAdd" : @"editMail",
                             kKeyTouchSelector: NSStringFromSelector(@selector(onEmailTouch))
                             }.mutableCopy,
                           @{kKeyCellType: @(kIntegrationCellTypeSeparator)}
@@ -103,30 +104,11 @@
 
 - (void)onEmailTouch
 {
+    if (kGmInt.emailAddress) {
+        GmailDetailsIntegrationViewController* vc = [[GmailDetailsIntegrationViewController alloc] init];
+        [self presentViewController:vc animated:NO completion:nil];
+    }
 }
-
-- (void)onLearnMoreTouch
-{
-    [ANALYTICS pushView:@"Gmail Learn More"];
-//    EvernoteHelperViewController *helper = [[EvernoteHelperViewController alloc] init];
-//    helper.delegate = self;
-//    [self presentViewController:helper animated:YES completion:nil];
-}
-
-//- (void)onSignOutTouch
-//{
-//    if (kGmInt.isAuthenticated) {
-//        [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Unlink Gmail") andMessage:LOCALIZE_STRING(@"All tasks will be unlinked, are you sure?") block:^(BOOL succeeded, NSError *error) {
-//            if (succeeded) {
-//                [kGmInt logout];
-//                NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-//                [KPToDo removeAllAttachmentsForAllToDosWithService:GMAIL_SERVICE inContext:context save:YES];
-//                [self reload];
-//            }
-//        }];
-//        
-//    }
-//}
 
 - (void)onLinkGmailTouch
 {

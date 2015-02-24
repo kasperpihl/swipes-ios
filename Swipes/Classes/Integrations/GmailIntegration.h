@@ -22,7 +22,7 @@ extern NSString* const kSwipesLabelName; // label name for normal Gmail integrat
 + (instancetype)sharedInstance;
 
 @property (nonatomic, assign, readonly) BOOL isAuthenticated;
-@property (nonatomic, assign, readonly) BOOL isUsingMailbox;
+@property (nonatomic, assign) BOOL isUsingMailbox;
 @property (nonatomic, strong) NSString* labelName;
 
 - (NSString *)threadIdToNSString:(NSString *)threadId;

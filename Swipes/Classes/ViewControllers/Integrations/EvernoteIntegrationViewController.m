@@ -47,7 +47,7 @@
                           @{kKeyTitle: LOCALIZE_STRING(@"Sync with evernote on this device"),
                             kKeyCellType: @(kIntegrationCellTypeCheck),
                             kKeyIsOn: @(kEnInt.enableSync),
-                            kKeyTouchSelector: NSStringFromSelector(@selector(onSincWithEvernoteTouch))
+                            kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                             }.mutableCopy,
                           @{kKeyTitle: LOCALIZE_STRING(@"Auto import notes with \"swipes\" tag"),
                             kKeyCellType: @(kIntegrationCellTypeCheck),
@@ -123,7 +123,7 @@
 
 #pragma mark - selectors
 
-- (void)onSincWithEvernoteTouch
+- (void)onSyncWithEvernoteTouch
 {
     kEnInt.enableSync = !kEnInt.enableSync;
     self.cellInfo[0][kKeyIsOn] = @(kEnInt.enableSync);

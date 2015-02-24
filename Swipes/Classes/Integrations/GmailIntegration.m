@@ -103,6 +103,13 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     }
 }
 
+- (void)setIsUsingMailbox:(BOOL)isUsingMailbox
+{
+    _isUsingMailbox = isUsingMailbox;
+    [kSettings setValue:@(_isUsingMailbox) forSetting:IntegrationGmailUsingMailbox];
+    self.labelName = _isUsingMailbox ? kSwipesMailboxLabelName : kSwipesLabelName;
+}
+
 - (NSString *)threadIdToNSString:(NSString *)threadId
 {
     if ((nil == threadId) || (nil == _emailAddress))

@@ -31,5 +31,6 @@ typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
 @property (nonatomic, strong) NSArray* cellInfo;
 
 - (void)reloadData;
+- (void)goBack;
 
 @end
