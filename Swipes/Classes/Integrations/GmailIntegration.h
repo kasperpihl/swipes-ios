@@ -36,5 +36,7 @@ extern NSString* const kSwipesLabelName; // label name for normal Gmail integrat
 - (void)getThread:(NSString *)threadId format:(NSString*)format withBlock:(ThreadGetBlock)block;
 - (void)removeSwipesLabelFromThreadAndArchive:(NSString *)threadId withBlock:(ErrorBlock)block;
 - (void)checkArchievedThread:(NSString *)threadId block:(SuccessfulBlock)block;
+- (void)emailAddressWithBlock:(ErrorBlock)block;
+- (NSString *)emailAddress;
 
 @end

@@ -186,6 +186,11 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     [[KPCORE gmailSyncHandler] setUpdatedAt:nil];
 }
 
+- (NSString *)emailAddress
+{
+    return _emailAddress;
+}
+
 - (void)createSwipesLabelIfNeededWithBlock:(ErrorBlock)block
 {
     if (_swipesLabelId) {

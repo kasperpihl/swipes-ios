@@ -293,6 +293,7 @@
 		DA23232A19B4737A00D996EB /* UtilityClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A781285B17294C56002226C8 /* UtilityClass.h */; };
 		DA23232B19B4738000D996EB /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285C17294C56002226C8 /* UtilityClass.m */; };
 		DA310FA7188F3F26003C8FA4 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = DA310FA6188F3F26003C8FA4 /* Assets */; };
+		DA37E0F41A9CC65C0020A009 /* GmailIntegrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA37E0F31A9CC65C0020A009 /* GmailIntegrationViewController.m */; };
 		DA3A07031A95E7B400F47C59 /* EvernoteIntegrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3A07001A95E7B400F47C59 /* EvernoteIntegrationViewController.m */; };
 		DA3A07041A95E7B400F47C59 /* IntegrationBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3A07021A95E7B400F47C59 /* IntegrationBaseViewController.m */; };
 		DA3A07071A95EAA400F47C59 /* IntegrationSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3A07061A95EAA400F47C59 /* IntegrationSettingCell.m */; };
@@ -939,6 +940,8 @@
 		DA23232419B472BE00D996EB /* GlobalApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalApp.h; sourceTree = "<group>"; };
 		DA23232519B472BE00D996EB /* GlobalApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalApp.m; sourceTree = "<group>"; };
 		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
+		DA37E0F21A9CC65C0020A009 /* GmailIntegrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailIntegrationViewController.h; path = Integrations/GmailIntegrationViewController.h; sourceTree = "<group>"; };
+		DA37E0F31A9CC65C0020A009 /* GmailIntegrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailIntegrationViewController.m; path = Integrations/GmailIntegrationViewController.m; sourceTree = "<group>"; };
 		DA3A06FF1A95E7B400F47C59 /* EvernoteIntegrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteIntegrationViewController.h; path = Integrations/EvernoteIntegrationViewController.h; sourceTree = "<group>"; };
 		DA3A07001A95E7B400F47C59 /* EvernoteIntegrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteIntegrationViewController.m; path = Integrations/EvernoteIntegrationViewController.m; sourceTree = "<group>"; };
 		DA3A07011A95E7B400F47C59 /* IntegrationBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationBaseViewController.h; path = Integrations/IntegrationBaseViewController.h; sourceTree = "<group>"; };
@@ -1451,6 +1454,8 @@
 				DA3A07061A95EAA400F47C59 /* IntegrationSettingCell.m */,
 				DA3A07081A95EAC000F47C59 /* IntegrationSeparatorCell.h */,
 				DA3A07091A95EAC000F47C59 /* IntegrationSeparatorCell.m */,
+				DA37E0F21A9CC65C0020A009 /* GmailIntegrationViewController.h */,
+				DA37E0F31A9CC65C0020A009 /* GmailIntegrationViewController.m */,
 			);
 			name = Integrations;
 			sourceTree = "<group>";
@@ -2963,6 +2968,7 @@
 				A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */,
 				A703B1A81838EBF20047DCC9 /* AddPanelView.m in Sources */,
 				A703B1AA1838EBF20047DCC9 /* PlusAlertView.m in Sources */,
+				DA37E0F41A9CC65C0020A009 /* GmailIntegrationViewController.m in Sources */,
 				DAFBF4301A65D92F003DD799 /* NSManagedObject+MagicalRecord.m in Sources */,
 				A7AF9B5717E210D000F9B26F /* StyleHandler.m in Sources */,
 				A7C258FE197CE5A200290198 /* IntegrationHandler.m in Sources */,

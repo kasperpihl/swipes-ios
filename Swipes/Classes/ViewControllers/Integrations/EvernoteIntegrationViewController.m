@@ -26,8 +26,10 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
+    self.title = @"EVERNOTE INTEGRATION";
+    self.lightColor = [UIColor greenColor];
     [self recreateCellInfo];
+    [super viewDidLoad];
 }
 
 - (void)recreateCellInfo

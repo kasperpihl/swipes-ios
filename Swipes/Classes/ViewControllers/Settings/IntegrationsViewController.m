@@ -19,6 +19,7 @@
 #import "EvernoteSyncHandler.h"
 #import "GmailIntegration.h"
 #import "EvernoteIntegrationViewController.h"
+#import "GmailIntegrationViewController.h"
 #import "IntegrationsViewController.h"
 
 int const kCellCount = 5;
@@ -308,20 +309,22 @@ int const kCellCount = 5;
     Integrations integration = indexPath.row;
     switch (integration) {
         case kMailboxIntegration:{
-            if (kGmInt.isAuthenticated) {
-                [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Unlink Gmail") andMessage:LOCALIZE_STRING(@"All tasks will be unlinked, are you sure?") block:^(BOOL succeeded, NSError *error) {
-                    if (succeeded) {
-                        [kGmInt logout];
-                        NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-                        [KPToDo removeAllAttachmentsForAllToDosWithService:GMAIL_SERVICE inContext:context save:YES];
-                        [self reload];
-                    }
-                }];
-                
-            }
-            else{
-                [self gmailAuthenticateUsingSelector:@selector(authenticatedGmail) withObject:nil];
-            }
+//            if (kGmInt.isAuthenticated) {
+//                [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Unlink Gmail") andMessage:LOCALIZE_STRING(@"All tasks will be unlinked, are you sure?") block:^(BOOL succeeded, NSError *error) {
+//                    if (succeeded) {
+//                        [kGmInt logout];
+//                        NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
+//                        [KPToDo removeAllAttachmentsForAllToDosWithService:GMAIL_SERVICE inContext:context save:YES];
+//                        [self reload];
+//                    }
+//                }];
+//                
+//            }
+//            else{
+//                [self gmailAuthenticateUsingSelector:@selector(authenticatedGmail) withObject:nil];
+//            }
+            GmailIntegrationViewController* vc = [[GmailIntegrationViewController alloc] init];
+            [self presentViewController:vc animated:NO completion:nil];
             break;
         }
         case kEvernoteIntegration:{
@@ -339,7 +342,6 @@ int const kCellCount = 5;
                 [self evernoteAuthenticateUsingSelector:@selector(authenticatedEvernote) withObject:nil];
             }
 //            EvernoteIntegrationViewController* vc = [[EvernoteIntegrationViewController alloc] init];
-//            vc.title = @"EVERNOTE INTEGRATION";
 //            [self presentViewController:vc animated:NO completion:nil];
             break;
         }

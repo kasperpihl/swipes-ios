@@ -38,7 +38,8 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     self.view.backgroundColor = tcolor(BackgroundColor);
     
     // setup top view
-    _lightColor = [UIColor greenColor]; // TODO fix the color
+    if (!_lightColor)
+        _lightColor = [UIColor clearColor];
 
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(kLineMarginX, 20, self.view.frame.size.width - kLineMarginX * 2, 25)];
     //_titleLabel.textAlignment = NSTextAlignmentCenter;
