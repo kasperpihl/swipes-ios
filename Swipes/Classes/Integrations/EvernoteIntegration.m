@@ -266,8 +266,10 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (NSString *)integrationSubtitle
 {
-    // TODO return something meaningful
-    return @" ";
+    if (self.isAuthenticated) {
+        return [ENSession sharedSession].userDisplayName;
+    }
+    return LOCALIZE_STRING(@"Not connected");
 }
 
 - (NSString *)integrationIcon

@@ -21,7 +21,6 @@
 {
     self.title = LOCALIZE_STRING(@"INTEGRATIONS");
     self.lightColor = [UIColor clearColor];
-    [self recreateCellInfo];
     [super viewDidLoad];
 }
 

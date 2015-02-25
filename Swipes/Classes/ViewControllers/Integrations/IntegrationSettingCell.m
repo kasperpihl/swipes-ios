@@ -36,7 +36,7 @@ static CGFloat const kIconSize = 28;
         
         _subtitleLabel = [[UILabel alloc] init];
         _subtitleLabel.backgroundColor = [UIColor clearColor];
-        _subtitleLabel.textColor = tcolor(TextColor);
+        _subtitleLabel.textColor = tcolor(SubTextColor);
         _subtitleLabel.font = kDefSubtitleFont;
         [self.contentView addSubview:_subtitleLabel];
         
@@ -94,11 +94,14 @@ static CGFloat const kIconSize = 28;
         labelSize -= kIconSize + 3; // 3 to not be just inside the state
     }
     
+    if (_style & IntegrationSettingsStyleSubtitle) {
+        iconHeight /= 2;
+        _subtitleLabel.frame = CGRectMake(leftMargin, topMargin + iconHeight, labelSize, iconHeight);
+        
+    }
+
     _titleLabel.frame = CGRectMake(leftMargin, topMargin, labelSize, iconHeight);
     
-    if (_style & IntegrationSettingsStyleSubtitle) {
-        // TODO
-    }
 }
 
 @end
