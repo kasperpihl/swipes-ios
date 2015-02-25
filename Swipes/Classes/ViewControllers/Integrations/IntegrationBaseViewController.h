@@ -18,6 +18,7 @@ extern NSString* const kKeyTouchSelector;
 typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
     kIntegrationCellTypeNoAccessory,
     kIntegrationCellTypeCheck,
+    kIntegrationCellTypeStatus,
     kIntegrationCellTypeViewMore,
     kIntegrationCellTypeSeparator,
 };
@@ -30,6 +31,7 @@ typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
 @property (nonatomic, strong) UIColor* lightColor;
 @property (nonatomic, strong) NSArray* cellInfo;
 
+- (void)recreateCellInfo;
 - (void)reloadData;
 - (void)goBack;
 

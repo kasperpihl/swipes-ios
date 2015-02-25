@@ -257,6 +257,31 @@ NSError * NewNSErrorFromException(NSException * exc) {
     return self;
 }
 
+#pragma mark - IntegrationProvider
+
+- (NSString *)integrationTitle
+{
+    return @"EVERNOTE";
+}
+
+- (NSString *)integrationSubtitle
+{
+    // TODO return something meaningful
+    return @" ";
+}
+
+- (NSString *)integrationIcon
+{
+    return iconString(@"integrationEvernote");
+}
+
+- (BOOL)integrationEnabled
+{
+    return kEnInt.isAuthenticated;
+}
+
+#pragma mark - Methods
+
 -(void)setHasAskedForPermissions:(BOOL)hasAskedForPermissions{
     _hasAskedForPermissions = hasAskedForPermissions;
     [USER_DEFAULTS setBool:hasAskedForPermissions forKey:kHasAskedForPermissionKey];

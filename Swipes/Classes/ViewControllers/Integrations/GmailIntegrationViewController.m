@@ -26,7 +26,6 @@
 {
     self.title = @"GMAIL INTEGRATION";
     self.lightColor = [UIColor redColor];
-    [self recreateCellInfo];
     [super viewDidLoad];
 }
 
@@ -38,6 +37,7 @@
 
 - (void)recreateCellInfo
 {
+    [super recreateCellInfo];
     if (kGmInt.isAuthenticated) {
         NSString* emailAddress = kGmInt.emailAddress;
         if (!emailAddress) {
@@ -75,29 +75,6 @@
                                                                    ]];
 }
 
-#pragma mark - IntegrationProvider
-
-- (NSString *)integrationTitle
-{
-    return @"GMAIL";
-}
-
-- (NSString *)integrationSubtitle
-{
-    // TODO return something meaningful
-    return @" ";
-}
-
-- (NSString *)integrationIcon
-{
-    return iconString(@"integrationGmail");
-}
-
-- (BOOL)integrationEnabled
-{
-    return kGmInt.isAuthenticated;
-}
-
 #pragma mark - UITableViewDataSource
 
 #pragma mark - selectors
@@ -113,6 +90,11 @@
 - (void)onLinkGmailTouch
 {
     [self gmailAuthenticateUsingSelector:@selector(authenticatedGmail) withObject:nil];
+}
+
+- (void)onLearnMoreTouch
+{
+    // TODO add code
 }
 
 #pragma mark - Helpers

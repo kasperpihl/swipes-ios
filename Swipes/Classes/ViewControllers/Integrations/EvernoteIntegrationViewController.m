@@ -15,10 +15,9 @@
 #import "EvernoteHelperViewController.h"
 #import "EvernoteImporterViewController.h"
 #import "EvernoteIntegration.h"
-#import "IntegrationsViewController.h"
 #import "EvernoteIntegrationViewController.h"
 
-@interface EvernoteIntegrationViewController ()  <IntegrationProvider, EvernoteHelperDelegate>
+@interface EvernoteIntegrationViewController ()  <EvernoteHelperDelegate>
 
 @end
 
@@ -28,12 +27,12 @@
 {
     self.title = @"EVERNOTE INTEGRATION";
     self.lightColor = [UIColor greenColor];
-    [self recreateCellInfo];
     [super viewDidLoad];
 }
 
 - (void)recreateCellInfo
 {
+    [super recreateCellInfo];
     if (kEnInt.isAuthenticated) {
         NSDictionary* businessInfo;
         if (kEnInt.isBusinessUser) {
@@ -95,31 +94,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-#pragma mark - IntegrationProvider
-
-- (NSString *)integrationTitle
-{
-    return @"EVERNOTE";
-}
-
-- (NSString *)integrationSubtitle
-{
-    // TODO return something meaningful
-    return @" ";
-}
-
-- (NSString *)integrationIcon
-{
-    return iconString(@"integrationEvernote");
-}
-
-- (BOOL)integrationEnabled
-{
-    return kEnInt.isAuthenticated;
-}
-
-#pragma mark - UITableViewDataSource
 
 #pragma mark - selectors
 

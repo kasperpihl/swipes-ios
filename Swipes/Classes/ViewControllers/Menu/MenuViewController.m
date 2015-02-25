@@ -376,7 +376,8 @@
         case KPMenuButtonIntegrations:{
             IntegrationsViewController *integrationVC = [[IntegrationsViewController alloc] init];
             [ANALYTICS pushView:@"Integrations  Menu"];
-            [self pushViewController:integrationVC animated:YES];
+            //[self pushViewController:integrationVC animated:YES];
+            [self presentViewController:integrationVC animated:NO completion:nil];
             break;
         }
         case KPMenuButtonHelp:{
@@ -448,8 +449,7 @@
     IntegrationsViewController *integrationVC = [[IntegrationsViewController alloc] init];
     [ANALYTICS pushView:@"Integrations Menu"];
     [self pushViewController:integrationVC animated:NO];
-    [integrationVC openHelperForIntegration:kEvernoteIntegration];
-    
+    //[integrationVC openHelperForIntegration:kEvernoteIntegration];
 }
 
 -(void)changedIsPlus{

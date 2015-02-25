@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GTLGmail.h"
+#import "IntegrationProvider.h"
 
 #define kGmInt [GmailIntegration sharedInstance]
 
@@ -17,7 +18,7 @@ typedef void (^ThreadGetBlock)(GTLGmailThread *thread, NSError *error);
 extern NSString* const kSwipesMailboxLabelName; // label name for Mailbox
 extern NSString* const kSwipesLabelName; // label name for normal Gmail integration
 
-@interface GmailIntegration : NSObject
+@interface GmailIntegration : NSObject <IntegrationProvider>
 
 + (instancetype)sharedInstance;
 

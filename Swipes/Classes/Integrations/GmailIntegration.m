@@ -88,6 +88,31 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     return self;
 }
 
+#pragma mark - IntegrationProvider
+
+- (NSString *)integrationTitle
+{
+    return @"GMAIL";
+}
+
+- (NSString *)integrationSubtitle
+{
+    // TODO return something meaningful
+    return @"not connected";
+}
+
+- (NSString *)integrationIcon
+{
+    return iconString(@"editMail"); // TODO fixme
+}
+
+#pragma mark - Methods
+
+- (BOOL)integrationEnabled
+{
+    return kGmInt.isAuthenticated;
+}
+
 - (void)setLabelName:(NSString *)labelName
 {
     if ((nil == labelName) || [labelName isEqualToString:_labelName]) {

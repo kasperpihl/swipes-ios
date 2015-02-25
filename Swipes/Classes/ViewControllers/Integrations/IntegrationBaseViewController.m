@@ -74,6 +74,18 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     [self.view addSubview:self.backButton];
 }
 
+- (void)recreateCellInfo
+{
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self recreateCellInfo];
+    [self reloadData];
+}
+
 - (void)setTitle:(NSString *)title
 {
     [super setTitle:title];
@@ -154,18 +166,6 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     return result;
 }
 
-- (NSString *)stringForCellType:(NSUInteger)cellType
-{
-    switch (cellType) {
-        case kIntegrationCellTypeViewMore:
-            return iconString(@"arrowThick");
-            
-        case kIntegrationCellTypeCheck:
-            return iconString(@"arrowThick");
-    }
-    return nil;
-}
-
 - (void)reloadData
 {
     [_table reloadData];
@@ -223,6 +223,20 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
                     }
                 }
                 break;
+                
+            case kIntegrationCellTypeStatus: {
+                    BOOL isOn = data[kKeyIsOn] ? [data[kKeyIsOn] boolValue] : NO;
+                    if (isOn) {
+                        cell.statusLabel.text = iconString(@"roundConfirmFull");
+                        cell.statusLabel.textColor = [UIColor greenColor]; // TODO fix color
+                    }
+                    else {
+                        cell.statusLabel.text = iconString(@"roundConfirm");
+                        cell.statusLabel.textColor = tcolor(TextColor); // TODO fix color
+                    }
+                }
+                break;
+
         }
     }
     
