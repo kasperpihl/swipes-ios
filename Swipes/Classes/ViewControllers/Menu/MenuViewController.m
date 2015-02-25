@@ -327,9 +327,17 @@
     KPMenuButtons button = [self buttonForTag:sender.tag];
     switch (button) {
         case KPMenuButtonSettings:{
-            SettingsViewController *notifVC = [[SettingsViewController alloc] init];
+            CATransition* transition = [CATransition animation];
+            transition.duration = 0.2;
+            transition.type = kCATransitionMoveIn;
+            transition.subtype = kCATransitionFromRight;
+            [self.view.window.layer removeAllAnimations];
+            [self.view.window.layer addAnimation:transition forKey:kCATransition];
+            self.modalPresentationStyle = UIModalPresentationFullScreen;
+            SettingsViewController *vc = [[SettingsViewController alloc] init];
             [ANALYTICS pushView:@"Settings Menu"];
-            [self pushViewController:notifVC animated:YES];
+            //[self pushViewController:notifVC animated:YES];
+            [self presentViewController:vc animated:NO completion:nil];
             break;
         }
         case KPMenuButtonLocation:{
@@ -380,7 +388,6 @@
             transition.subtype = kCATransitionFromRight;
             [self.view.window.layer removeAllAnimations];
             [self.view.window.layer addAnimation:transition forKey:kCATransition];
-            self.modalPresentationStyle = UIModalPresentationFullScreen;
             IntegrationsViewController *integrationVC = [[IntegrationsViewController alloc] init];
             [ANALYTICS pushView:@"Integrations  Menu"];
             //[self pushViewController:integrationVC animated:YES];
