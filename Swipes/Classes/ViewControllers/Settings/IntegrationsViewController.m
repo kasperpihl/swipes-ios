@@ -46,12 +46,14 @@
 
 - (void)onEvernoteTouch
 {
+    [self addMoveFromRightTransition];
     EvernoteIntegrationViewController* vc = [[EvernoteIntegrationViewController alloc] init];
     [self presentViewController:vc animated:NO completion:nil];
 }
 
 - (void)onGmailTouch
 {
+    [self addMoveFromRightTransition];
     GmailIntegrationViewController* vc = [[GmailIntegrationViewController alloc] init];
     [self presentViewController:vc animated:NO completion:nil];
 }

@@ -17,9 +17,11 @@ NSString* const kKeyIsOn = @"isOn";
 NSString* const kKeyCellType = @"cellType";
 NSString* const kKeyTouchSelector = @"touchSelector";
 
+UIColor* kIntegrationGreenColor;
+
 static CGFloat const kTopMargin = 60;
 static CGFloat const kBottomMargin = 45;
-static CGFloat const kCellHeight = 50;
+static CGFloat const kCellHeight = 55;
 static CGFloat const kSeparatorHeight = 22;
 static CGFloat const kLineMarginX = 26;
 static CGFloat const kLineMarginY = kTopMargin - 10;
@@ -31,6 +33,11 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
 @end
 
 @implementation IntegrationBaseViewController
+
++ (void)initialize
+{
+    kIntegrationGreenColor = color(139, 195, 74, 1);
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -102,6 +109,26 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     }
 }
 
+- (void)addMoveFromRightTransition
+{
+//    CATransition* transition = [CATransition animation];
+//    transition.duration = 0.2;
+//    transition.type = kCATransitionMoveIn;
+//    transition.subtype = kCATransitionFromRight;
+//    [self.view.window.layer removeAllAnimations];
+//    [self.view.window.layer addAnimation:transition forKey:kCATransition];
+}
+
+- (void)addMoveFromLeftTransition
+{
+//    CATransition* transition = [CATransition animation];
+//    transition.duration = 0.2;
+//    transition.type = kCATransitionReveal;
+//    transition.subtype = kCATransitionFromLeft;
+//    [self.view.window.layer removeAllAnimations];
+//    [self.view.window.layer addAnimation:transition forKey:kCATransition];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -110,6 +137,7 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
 
 - (void)goBack
 {
+    [self addMoveFromLeftTransition];
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
@@ -121,7 +149,7 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
 - (void)updateTitle
 {
     // Create the attributed string
-    NSMutableAttributedString *myString = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"\ue613 %@ \ue613", self.title]];
+    NSMutableAttributedString *myString = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"\ue64f %@ \ue64f", self.title]];
     
     // Declare the fonts
     UIFont *fontIcon = iconFont(10);
@@ -147,6 +175,8 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     [myString addAttribute:NSForegroundColorAttributeName value:_lightColor range:rangeLast];
     [myString addAttribute:NSParagraphStyleAttributeName value:myStringParaStyle1 range:rangeLast];
     [myString addAttribute:NSFontAttributeName value:fontIcon range:rangeLast];
+    
+    [myString addAttribute:NSKernAttributeName value:@(1.5) range:NSMakeRange(0, myString.length)];
     
     self.titleLabel.attributedText = [[NSAttributedString alloc]initWithAttributedString: myString];
 }
@@ -208,43 +238,42 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     if (cellType) {
         switch ([cellType unsignedIntegerValue]) {
             case kIntegrationCellTypeViewMore:
-                cell.statusLabel.text = iconString(@"arrowThick");
+                cell.statusLabel.text = iconString(@"arrowRightThick");
                 break;
                 
             case kIntegrationCellTypeCheck: {
                     BOOL isOn = data[kKeyIsOn] ? [data[kKeyIsOn] boolValue] : NO;
                     if (isOn) {
-                        cell.statusLabel.text = iconString(@"roundAdd");
-                        cell.statusLabel.textColor = [UIColor greenColor]; // TODO fix color
+                        cell.statusLabel.text = iconString(@"actionIndicatorOn");
+                        cell.statusLabel.textColor = kIntegrationGreenColor;
                     }
                     else {
-                        cell.statusLabel.text = iconString(@"roundClose");
-                        cell.statusLabel.textColor = tcolor(TextColor); // TODO fix color
+                        cell.statusLabel.text = iconString(@"actionIndicatorOff");
+                        cell.statusLabel.textColor = tcolor(TextColor);
                     }
                 }
                 break;
                 
             case kIntegrationCellTypeStatus: {
                     BOOL isOn = data[kKeyIsOn] ? [data[kKeyIsOn] boolValue] : NO;
+                    cell.statusLabel.text = iconString(@"indicator");
                     if (isOn) {
-                        cell.statusLabel.text = iconString(@"roundConfirmFull");
-                        cell.statusLabel.textColor = [UIColor greenColor]; // TODO fix color
+                        cell.statusLabel.textColor = kIntegrationGreenColor;
                     }
                     else {
-                        cell.statusLabel.text = iconString(@"roundConfirm");
-                        cell.statusLabel.textColor = tcolor(TextColor); // TODO fix color
+                        cell.statusLabel.textColor = tcolor(SubTextColor);
                     }
                 }
                 break;
 
         }
     }
-    
-    
+
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     UITableViewCell* cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     if ([cell isKindOfClass:IntegrationSeparatorCell.class]) {
         return kSeparatorHeight;

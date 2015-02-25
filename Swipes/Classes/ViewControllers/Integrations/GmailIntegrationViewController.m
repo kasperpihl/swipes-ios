@@ -25,7 +25,7 @@
 - (void)viewDidLoad
 {
     self.title = @"GMAIL INTEGRATION";
-    self.lightColor = [UIColor redColor];
+    self.lightColor = color(224, 76, 64, 1);
     [super viewDidLoad];
 }
 
@@ -52,7 +52,7 @@
         self.cellInfo = @[
                           @{kKeyTitle: emailAddress,
                             kKeyCellType: @(kIntegrationCellTypeNoAccessory),
-                            kKeyIcon: kGmInt.isUsingMailbox ? @"roundAdd" : @"editMail",
+                            kKeyIcon: kGmInt.isUsingMailbox ? @"integrationMailbox" : @"integrationMail",
                             kKeyTouchSelector: NSStringFromSelector(@selector(onEmailTouch))
                             }.mutableCopy,
                           @{kKeyCellType: @(kIntegrationCellTypeSeparator)}
@@ -69,7 +69,7 @@
     self.cellInfo = [self.cellInfo arrayByAddingObjectsFromArray:@[
                                                                    @{kKeyTitle: LOCALIZE_STRING(@"Learn more"),
                                                                      kKeyCellType: @(kIntegrationCellTypeViewMore),
-                                                                     kKeyIcon: @"today", // TODO fix
+                                                                     kKeyIcon: @"integrationActionLearn",
                                                                      kKeyTouchSelector: NSStringFromSelector(@selector(onLearnMoreTouch))
                                                                      },
                                                                    ]];

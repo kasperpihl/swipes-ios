@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     self.title = @"EVERNOTE INTEGRATION";
-    self.lightColor = [UIColor greenColor];
+    self.lightColor = kEvernoteColor;
     [super viewDidLoad];
 }
 
@@ -73,12 +73,12 @@
                     @{kKeyCellType: @(kIntegrationCellTypeSeparator)},
                      @{kKeyTitle: LOCALIZE_STRING(@"Import notes"),
                        kKeyCellType: @(kIntegrationCellTypeViewMore),
-                       kKeyIcon: @"done", // TODO fix
+                       kKeyIcon: @"integrationActionImporter",
                        kKeyTouchSelector: NSStringFromSelector(@selector(onImportNotesTouch))
                        },
                      @{kKeyTitle: LOCALIZE_STRING(@"Learn more"),
                        kKeyCellType: @(kIntegrationCellTypeViewMore),
-                       kKeyIcon: @"today", // TODO fix
+                       kKeyIcon: @"integrationActionLearn",
                        kKeyTouchSelector: NSStringFromSelector(@selector(onLearnMoreTouch))
                        },
                      @{kKeyTitle: LOCALIZE_STRING(@"Unlink"),

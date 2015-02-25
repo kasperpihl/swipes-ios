@@ -105,7 +105,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
 
 - (NSString *)integrationIcon
 {
-    return iconString(@"editMail"); // TODO fixme
+    return iconString(@"integrationMail");
 }
 
 #pragma mark - Methods

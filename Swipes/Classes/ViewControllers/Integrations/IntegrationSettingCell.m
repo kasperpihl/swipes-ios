@@ -12,6 +12,7 @@ static CGFloat const kIconLeftMargin = 26;
 static CGFloat const kIconRightMargin = 26;
 static CGFloat const kIconTopMargin = 9;
 static CGFloat const kIconSize = 28;
+static CGFloat const kStatusSize = 10;
 
 #define kDefTitleFont KP_REGULAR(12)
 #define kDefSubtitleFont KP_REGULAR(10)
@@ -51,7 +52,7 @@ static CGFloat const kIconSize = 28;
         _statusLabel.backgroundColor = [UIColor clearColor];
         _statusLabel.textColor = tcolor(TextColor);
         _statusLabel.textAlignment = NSTextAlignmentCenter;
-        _statusLabel.font = iconFont(kIconSize);
+        _statusLabel.font = iconFont(kStatusSize);
         [self.contentView addSubview:_statusLabel];
         
         self.customStyle = style;
@@ -90,8 +91,8 @@ static CGFloat const kIconSize = 28;
     }
     
     if (_style & IntegrationSettingsStyleState) {
-        _statusLabel.frame = CGRectMake(self.contentView.frame.size.width - kIconLeftMargin - kIconSize, kIconTopMargin, kIconSize, iconHeight);
-        labelSize -= kIconSize + 3; // 3 to not be just inside the state
+        _statusLabel.frame = CGRectMake(self.contentView.frame.size.width - kIconRightMargin - kStatusSize, kIconTopMargin, kStatusSize, iconHeight);
+        labelSize -= kStatusSize + 3; // 3 to not be just inside the state
     }
     
     if (_style & IntegrationSettingsStyleSubtitle) {

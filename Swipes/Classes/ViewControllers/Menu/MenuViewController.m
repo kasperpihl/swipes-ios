@@ -374,6 +374,13 @@
             break;
         }
         case KPMenuButtonIntegrations:{
+            CATransition* transition = [CATransition animation];
+            transition.duration = 0.2;
+            transition.type = kCATransitionMoveIn;
+            transition.subtype = kCATransitionFromRight;
+            [self.view.window.layer removeAllAnimations];
+            [self.view.window.layer addAnimation:transition forKey:kCATransition];
+            self.modalPresentationStyle = UIModalPresentationFullScreen;
             IntegrationsViewController *integrationVC = [[IntegrationsViewController alloc] init];
             [ANALYTICS pushView:@"Integrations  Menu"];
             //[self pushViewController:integrationVC animated:YES];

@@ -14,6 +14,7 @@ extern NSString* const kKeyIcon;
 extern NSString* const kKeyIsOn;
 extern NSString* const kKeyCellType;
 extern NSString* const kKeyTouchSelector;
+extern UIColor* kIntegrationGreenColor;
 
 typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
     kIntegrationCellTypeNoAccessory,
@@ -34,5 +35,7 @@ typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
 - (void)recreateCellInfo;
 - (void)reloadData;
 - (void)goBack;
+
+- (void)addMoveFromRightTransition;
 
 @end

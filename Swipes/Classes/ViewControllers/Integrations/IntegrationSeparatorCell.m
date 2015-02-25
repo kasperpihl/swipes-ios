@@ -24,7 +24,7 @@ static CGFloat const kVerticalMargin = 15;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         _lineView = [[UIView alloc] initWithFrame:CGRectMake(kHorizontalMargin, kVerticalMargin, self.contentView.frame.size.width - 2 * kHorizontalMargin, 0.5)];
-        _lineView.backgroundColor = tcolor(TextColor);
+        _lineView.backgroundColor = alpha(tcolor(SubTextColor), 0.5);
         _lineView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:_lineView];
         self.backgroundColor = [UIColor clearColor];

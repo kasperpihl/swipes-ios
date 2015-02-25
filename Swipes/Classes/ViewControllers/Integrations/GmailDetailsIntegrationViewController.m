@@ -23,7 +23,7 @@
 
 - (void)viewDidLoad {
     self.title = kGmInt.emailAddress;
-    self.lightColor = [UIColor redColor];
+    self.lightColor = [UIColor clearColor];
     [self recreateCellInfo];
     [super viewDidLoad];
 }
