@@ -22,6 +22,7 @@ typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
     kIntegrationCellTypeStatus,
     kIntegrationCellTypeViewMore,
     kIntegrationCellTypeSeparator,
+    kIntegrationCellTypeSection,
 };
 
 @interface IntegrationBaseViewController : UIViewController

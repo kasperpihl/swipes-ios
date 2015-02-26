@@ -28,12 +28,9 @@ static CGFloat const kVerticalMargin = 15;
         _lineView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:_lineView];
         self.backgroundColor = [UIColor clearColor];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
-}
-
-- (void)awakeFromNib {
-    // Initialization code
 }
 
 @end

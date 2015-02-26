@@ -58,6 +58,7 @@ static CGFloat const kStatusSize = 10;
         self.customStyle = style;
         
         self.backgroundColor = [UIColor clearColor];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }

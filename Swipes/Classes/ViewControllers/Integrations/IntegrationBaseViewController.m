@@ -8,6 +8,7 @@
 
 #import "IntegrationSettingCell.h"
 #import "IntegrationSeparatorCell.h"
+#import "IntegrationSectionCell.h"
 #import "IntegrationBaseViewController.h"
 
 NSString* const kKeyTitle = @"title";
@@ -23,6 +24,7 @@ static CGFloat const kTopMargin = 60;
 static CGFloat const kBottomMargin = 45;
 static CGFloat const kCellHeight = 55;
 static CGFloat const kSeparatorHeight = 22;
+static CGFloat const kSectionHeight = 34;
 static CGFloat const kLineMarginX = 26;
 static CGFloat const kLineMarginY = kTopMargin - 10;
 
@@ -201,22 +203,31 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     [_table reloadData];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return _cellInfo.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary* data = _cellInfo[indexPath.row];
-
     static NSString *kCellSettingsID = @"settings_cell";
     static NSString *kCellSeparatorID = @"separator_cell";
+    static NSString *kCellSectionID = @"section_cell";
     
+    NSDictionary* data = _cellInfo[indexPath.row];
     NSNumber* cellType = data[kKeyCellType];
     if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeSeparator) {
         UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellSeparatorID];
         if (nil == cell) {
             cell = [[IntegrationSeparatorCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellSeparatorID];
+        }
+        return cell;
+    }
+    else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeSection) {
+        IntegrationSectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellSectionID];
+        if (nil == cell) {
+            cell = [[IntegrationSectionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellSectionID];
+            cell.title = data[kKeyTitle];
         }
         return cell;
     }
@@ -274,9 +285,13 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell* cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-    if ([cell isKindOfClass:IntegrationSeparatorCell.class]) {
+    NSDictionary* data = _cellInfo[indexPath.row];
+    NSNumber* cellType = data[kKeyCellType];
+    if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeSeparator) {
         return kSeparatorHeight;
+    }
+    else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeSection) {
+        return kSectionHeight;
     }
     return kCellHeight;
 }

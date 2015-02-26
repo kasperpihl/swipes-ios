@@ -44,7 +44,7 @@
                          @{kKeyCellType: @(kIntegrationCellTypeSeparator)},
                          @{kKeyTitle: LOCALIZE_STRING(@"Unlink"),
                            kKeyCellType: @(kIntegrationCellTypeNoAccessory),
-                           kKeyIcon: @"roundClose",
+                           kKeyIcon: @"settingsLogout",
                            kKeyTouchSelector: NSStringFromSelector(@selector(onSignOutTouch))
                            },
                           ];

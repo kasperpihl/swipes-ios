@@ -49,18 +49,19 @@
 {
     [super recreateCellInfo];
     self.cellInfo = @[
+                      @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: LOCALIZE_STRING(@"TWEAKS")},
                       @{kKeyTitle: LOCALIZE_STRING(@"Add new tasks to bottom"),
                         kKeyCellType: @(kIntegrationCellTypeCheck),
                         kKeyIsOn: [kSettings valueForSetting:SettingAddToBottom],
                         kKeyTouchSelector: NSStringFromSelector(@selector(onAddNewTasksToBottomTouch))
                         }.mutableCopy,
-                      @{kKeyCellType: @(kIntegrationCellTypeSeparator)},
+                      @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: LOCALIZE_STRING(@"SOUNDS")},
                       @{kKeyTitle: LOCALIZE_STRING(@"In-app sounds"),
                         kKeyCellType: @(kIntegrationCellTypeCheck),
                         kKeyIsOn: [kSettings valueForSetting:SettingAppSounds],
                         kKeyTouchSelector: NSStringFromSelector(@selector(onInAppSoundsTouch))
                         }.mutableCopy,
-                      @{kKeyCellType: @(kIntegrationCellTypeSeparator)},
+                      @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: LOCALIZE_STRING(@"NOTIFICATIONS")},
                       @{kKeyTitle: LOCALIZE_STRING(@"Tasks snoozed for later"),
                         kKeyCellType: @(kIntegrationCellTypeCheck),
                         kKeyIsOn: [kSettings valueForSetting:SettingNotifications],
@@ -84,7 +85,7 @@
     BOOL value = [[kSettings valueForSetting:SettingAddToBottom] boolValue];
     value = !value;
     [kSettings setValue:@(value) forSetting:SettingAddToBottom];
-    self.cellInfo[0][kKeyIsOn] = @(value);
+    self.cellInfo[1][kKeyIsOn] = @(value);
 }
 
 - (void)onInAppSoundsTouch
@@ -92,7 +93,7 @@
     BOOL value = [[kSettings valueForSetting:SettingAppSounds] boolValue];
     value = !value;
     [kSettings setValue:@(value) forSetting:SettingAppSounds];
-    self.cellInfo[2][kKeyIsOn] = @(value);
+    self.cellInfo[3][kKeyIsOn] = @(value);
 }
 
 - (void)onTasksSnoozedForLaterTouch
@@ -103,14 +104,14 @@
         [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Tasks snoozed for later") andMessage:LOCALIZE_STRING(@"Are you sure you no longer want to receive these alarms and reminders?") block:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 [kSettings setValue:@NO forSetting:SettingNotifications];
-                self.cellInfo[4][kKeyIsOn] = @(value);
+                self.cellInfo[5][kKeyIsOn] = @(value);
                 [self reloadData];
             }
         }];
     }
     else {
         [kSettings setValue:@(value) forSetting:SettingNotifications];
-        self.cellInfo[4][kKeyIsOn] = @(value);
+        self.cellInfo[5][kKeyIsOn] = @(value);
     }
 }
 
@@ -119,7 +120,7 @@
     BOOL value = [[kSettings valueForSetting:SettingDailyReminders] boolValue];
     value = !value;
     [kSettings setValue:@(value) forSetting:SettingDailyReminders];
-    self.cellInfo[5][kKeyIsOn] = @(value);
+    self.cellInfo[6][kKeyIsOn] = @(value);
 }
 
 - (void)onWeeklyReminderTouch
