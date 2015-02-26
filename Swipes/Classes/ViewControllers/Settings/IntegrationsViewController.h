@@ -7,22 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@protocol IntegrationProvider <NSObject>
-
-- (NSString *)integrationTitle;
-- (NSString *)integrationSubtitle;
-- (NSString *)integrationIcon;
-- (BOOL)integrationEnabled;
-
-@end
-
+#import "IntegrationBaseViewController.h"
 
 typedef NS_ENUM(NSUInteger, Integrations) {
     kMailboxIntegration,
     kEvernoteIntegration
 };
 
-@interface IntegrationsViewController : UIViewController
--(void)openHelperForIntegration:(Integrations)integration;
+@interface IntegrationsViewController : IntegrationBaseViewController
+
 @end

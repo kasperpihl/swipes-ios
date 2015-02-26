@@ -88,6 +88,33 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     return self;
 }
 
+#pragma mark - IntegrationProvider
+
+- (NSString *)integrationTitle
+{
+    return @"GMAIL";
+}
+
+- (NSString *)integrationSubtitle
+{
+    if (self.isAuthenticated) {
+        return _emailAddress ? _emailAddress : LOCALIZE_STRING(@"Connected 1 account");
+    }
+    return LOCALIZE_STRING(@"Not connected");
+}
+
+- (NSString *)integrationIcon
+{
+    return iconString(@"integrationMail");
+}
+
+#pragma mark - Methods
+
+- (BOOL)integrationEnabled
+{
+    return kGmInt.isAuthenticated;
+}
+
 - (void)setLabelName:(NSString *)labelName
 {
     if ((nil == labelName) || [labelName isEqualToString:_labelName]) {
@@ -101,6 +128,13 @@ static NSString* const kKeyJsonThreadId = @"threadid";
                 [UtilityClass sendError:error type:[NSString stringWithFormat:@"gmail:cannot create swipes label %@", labelName]];
         }];
     }
+}
+
+- (void)setIsUsingMailbox:(BOOL)isUsingMailbox
+{
+    _isUsingMailbox = isUsingMailbox;
+    [kSettings setValue:@(_isUsingMailbox) forSetting:IntegrationGmailUsingMailbox];
+    self.labelName = _isUsingMailbox ? kSwipesMailboxLabelName : kSwipesLabelName;
 }
 
 - (NSString *)threadIdToNSString:(NSString *)threadId
@@ -184,6 +218,11 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     _swipesLabelId = nil;
     _emailAddress = nil;
     [[KPCORE gmailSyncHandler] setUpdatedAt:nil];
+}
+
+- (NSString *)emailAddress
+{
+    return _emailAddress;
 }
 
 - (void)createSwipesLabelIfNeededWithBlock:(ErrorBlock)block

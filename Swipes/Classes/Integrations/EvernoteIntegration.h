@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <ENSDK/Advanced/ENSDKAdvanced.h>
+#import "IntegrationProvider.h"
 
 typedef void (^NoteFindBlock)(NSArray *findNotesResults, NSError *error);
 typedef void (^NoteDownloadBlock)(ENNote *note, NSError *error);
@@ -16,7 +17,7 @@ typedef void (^NoteUpdateBlock)(ENNoteRef *noteRef, NSError *error);
 extern NSString* const MONExceptionHandlerDomain;
 extern const int MONNSExceptionEncounteredErrorCode;
 
-@interface EvernoteIntegration : NSObject
+@interface EvernoteIntegration : NSObject <IntegrationProvider>
 
 + (instancetype)sharedInstance;
 + (void)updateAPILimitIfNeeded:(NSError *)error;

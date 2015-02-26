@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GTLGmail.h"
+#import "IntegrationProvider.h"
 
 #define kGmInt [GmailIntegration sharedInstance]
 
@@ -17,12 +18,12 @@ typedef void (^ThreadGetBlock)(GTLGmailThread *thread, NSError *error);
 extern NSString* const kSwipesMailboxLabelName; // label name for Mailbox
 extern NSString* const kSwipesLabelName; // label name for normal Gmail integration
 
-@interface GmailIntegration : NSObject
+@interface GmailIntegration : NSObject <IntegrationProvider>
 
 + (instancetype)sharedInstance;
 
 @property (nonatomic, assign, readonly) BOOL isAuthenticated;
-@property (nonatomic, assign, readonly) BOOL isUsingMailbox;
+@property (nonatomic, assign) BOOL isUsingMailbox;
 @property (nonatomic, strong) NSString* labelName;
 
 - (NSString *)threadIdToNSString:(NSString *)threadId;
@@ -36,5 +37,7 @@ extern NSString* const kSwipesLabelName; // label name for normal Gmail integrat
 - (void)getThread:(NSString *)threadId format:(NSString*)format withBlock:(ThreadGetBlock)block;
 - (void)removeSwipesLabelFromThreadAndArchive:(NSString *)threadId withBlock:(ErrorBlock)block;
 - (void)checkArchievedThread:(NSString *)threadId block:(SuccessfulBlock)block;
+- (void)emailAddressWithBlock:(ErrorBlock)block;
+- (NSString *)emailAddress;
 
 @end

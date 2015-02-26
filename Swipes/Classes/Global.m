@@ -162,9 +162,14 @@ static BOOL g_isNotFirstRun = NO;
     
     /* Integrations */
     iconCompare(@"integrationEvernote",         @"\ue642");
-    
-    /* Integrations full */
     iconCompare(@"integrationEvernoteFull",     @"\ue64d");
+    iconCompare(@"integrationMailbox",          @"\ue664");
+    iconCompare(@"indicator",                   @"\ue64f");
+    iconCompare(@"actionIndicatorOn",           @"\ue650");
+    iconCompare(@"actionIndicatorOff",          @"\ue654");
+    iconCompare(@"integrationActionImporter",   @"\ue665");
+    iconCompare(@"integrationActionLearn",      @"\ue666");
+    iconCompare(@"arrowRightThick",             @"\ue667");
     
     iconCompare(@"logo",                        @"\ue600");
     iconCompare(@"signature",                   @"\ue623");
