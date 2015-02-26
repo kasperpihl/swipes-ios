@@ -25,9 +25,9 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     self.title = @"EVERNOTE INTEGRATION";
     self.lightColor = kEvernoteColor;
-    [super viewDidLoad];
 }
 
 - (void)recreateCellInfo

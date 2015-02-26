@@ -29,7 +29,6 @@ typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
 
 @property (nonatomic, strong) UITableView* table;
 @property (nonatomic, strong) UIButton* backButton;
-@property (nonatomic, strong) UILabel* titleLabel;
 @property (nonatomic, strong) UIColor* lightColor;
 @property (nonatomic, strong) NSArray* cellInfo;
 

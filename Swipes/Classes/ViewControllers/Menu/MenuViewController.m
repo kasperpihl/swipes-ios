@@ -6,14 +6,12 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "MenuViewController.h"
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 #import "RootViewController.h"
-#import "KPToolbar.h"
 #import "UtilityClass.h"
 #import "KPAlert.h"
 #import "KPBlurry.h"
-#import <MessageUI/MessageUI.h>
-#import <MessageUI/MFMailComposeViewController.h>
 #import "MenuButton.h"
 #import "SettingsHandler.h"
 #import "HelpingViewController.h"
@@ -22,20 +20,20 @@
 #import "SnoozesViewController.h"
 #import "AnalyticsHandler.h"
 #import "UserHandler.h"
-#import "KPAccountAlert.h"
 #import "UIView+Utilities.h"
-#import "EvernoteIntegration.h"
-
 #import "CoreSyncHandler.h"
 #import "PlusAlertView.h"
 #import "NotificationHandler.h"
+#import "IntegrationTitleView.h"
 
+#import "MenuViewController.h"
+
+static CGFloat const kTopMargin = 60;
 
 #define kMenuButtonStartTag 4123
-#define kLampOnColor tcolor(DoneColor)
+#define kLampOnColor (kIntegrationGreenColor)
 #define kLampOffColor tcolor(BackgroundColor)
 
-#define kSeperatorMargin 0
 #define kGridMargin valForScreen(15,10)
 #define kVerticalGridNumber 3
 #define kHorizontalGridNumber 3
@@ -43,19 +41,49 @@
 
 @interface MenuViewController () <MFMailComposeViewControllerDelegate>
 
-@property (nonatomic, strong) IBOutletCollection(UIView) NSMutableArray *seperatorsH;
-@property (nonatomic, strong) IBOutletCollection(UIView) NSMutableArray *seperatorsV;
-@property (nonatomic) IBOutletCollection(UIButton) NSArray *menuButtons;
-@property (nonatomic) UIButton *backButton;
-@property (nonatomic) NSMutableArray *viewControllers;
-@property (nonatomic) MenuButton *schemeButton;
-@property (nonatomic) UIView *gridView;
-@property (nonatomic) UILabel *syncLabel;
-@property (nonatomic) UIPanGestureRecognizer *menuPanning;
+@property (nonatomic, strong) NSArray *menuButtons;
+@property (nonatomic, strong) UIButton *backButton;
+@property (nonatomic, strong) NSMutableArray *viewControllers;
+@property (nonatomic, strong) MenuButton *schemeButton;
+@property (nonatomic, strong) UIView *gridView;
+@property (nonatomic, strong) UILabel *syncLabel;
+@property (nonatomic, strong) UIPanGestureRecognizer *menuPanning;
+@property (nonatomic, strong) IntegrationTitleView* titleView;
 
 @end
 
 @implementation MenuViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    _titleView = [[IntegrationTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kTopMargin)];
+    _titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _titleView.title = LOCALIZE_STRING(@"SETTINGS");
+    [self.view addSubview:_titleView];
+    
+    self.syncLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.syncLabel.textAlignment = NSTextAlignmentCenter;
+    self.syncLabel.backgroundColor = CLEAR;
+    self.syncLabel.font = KP_REGULAR(13);
+    [self updateSyncLabel];
+    
+    [self renderSubviews];
+    
+    self.menuPanning = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
+    
+    UIView *panningView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - kGridMargin, 0, kGridMargin, self.view.bounds.size.height)];
+    [panningView addGestureRecognizer:self.menuPanning];
+    [self.view addSubview:panningView];
+    notify(@"changed isPlus", changedIsPlus);
+    notify(@"updated sync",updateSyncLabel);
+    notify(@"changed theme", changedTheme);
+    
+    UISwipeGestureRecognizer* gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeHandler:)];
+    [gesture setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self.view addGestureRecognizer:gesture];
+}
 
 -(NSMutableArray *)viewControllers
 {
@@ -97,20 +125,11 @@
     for (UIView *view in self.menuButtons)
         [view removeFromSuperview];
     
-    for (UIView *view in self.seperatorsH)
-        [view removeFromSuperview];
-    
-    for (UIView *view in self.seperatorsV)
-        [view removeFromSuperview];
-    
     CGFloat numberOfButtons = kHorizontalGridNumber * kVerticalGridNumber;
-    NSInteger numberOfRows = kHorizontalGridNumber;
     self.view.backgroundColor = gray(224,1);//tcolor(BackgroundColor);
-    NSInteger startY = (OSVER >= 7)?20:0;
     CGSize s = self.view.frame.size;
     CGFloat backSpacing = 8.f;
     CGFloat buttonSize = 50.0f;
-    
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(s.width - buttonSize - backSpacing, s.height-buttonSize, buttonSize, buttonSize)];
     //UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-buttonSize-backSpacing,startY,buttonSize,buttonSize)];
@@ -118,39 +137,14 @@
     [backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     backButton.titleLabel.font = iconFont(23);
     [backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
-    
     [backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
     backButton.titleLabel.transform = CGAffineTransformMakeRotation(M_PI);
     self.backButton = backButton;
     
-    
-    
-    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0,startY,self.view.bounds.size.width-2*kGridMargin,self.view.bounds.size.height-startY)];
-    
-    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 294, 304)];
+    //self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0,startY,self.view.bounds.size.width-2*kGridMargin,self.view.bounds.size.height-startY)];
+    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
     
     CGFloat gridWidth = self.gridView.bounds.size.width;
-    CGFloat gridItemWidth = gridWidth / kVerticalGridNumber;
-//    CGRectSetHeight(self.gridView, numberOfRows * gridItemWidth);
-    
-    CGFloat gridHeight = self.gridView.bounds.size.height;
-    CGFloat numberOfGrids = gridHeight / gridItemWidth;
-    
-    self.seperatorsV = [NSMutableArray array];
-    for (NSInteger i = 1; i < kVerticalGridNumber; i++) {
-        UIView *verticalSeperatorView = [self seperatorWithSize:gridHeight - (kSeperatorMargin * 2) vertical:YES];
-        verticalSeperatorView.frame = CGRectSetPos(verticalSeperatorView.frame, gridItemWidth * i, kSeperatorMargin);
-        [self.gridView addSubview:verticalSeperatorView];
-        [self.seperatorsV addObject:verticalSeperatorView];
-    }
-    
-    self.seperatorsH = [NSMutableArray array];
-    for (NSInteger i = 1; i < numberOfRows; i++) {
-        UIView *horizontalSeperatorView = [self seperatorWithSize:gridWidth - (kSeperatorMargin * 2) vertical:NO];
-        horizontalSeperatorView.frame = CGRectSetPos(horizontalSeperatorView.frame,kSeperatorMargin, gridHeight/numberOfGrids*i);
-        [self.gridView addSubview:horizontalSeperatorView];
-        [self.seperatorsH addObject:horizontalSeperatorView];
-    }
     
     UIButton *actualButton;
     NSMutableArray *menuButtons = [NSMutableArray array];
@@ -169,7 +163,7 @@
     
     self.gridView.center = CGPointMake(s.width / 2, s.height / 2 - valForScreen(0, 20));
     self.syncLabel.frame = CGRectMake(0, CGRectGetMaxY(self.gridView.bounds) + 10, gridWidth, 20);
-    self.syncLabel.textColor = tcolor(TextColor);
+    self.syncLabel.textColor = tcolor(SubTextColor);
     [self.gridView addSubview:self.syncLabel];
     [self updateSchemeButton];
     [self changedIsPlus];
@@ -192,32 +186,6 @@
     if (recognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
         //[self pressedBack:nil];
     }
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    self.syncLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.syncLabel.textAlignment = NSTextAlignmentCenter;
-    self.syncLabel.backgroundColor = CLEAR;
-    self.syncLabel.font = KP_REGULAR(13);
-    [self updateSyncLabel];
-    
-    [self renderSubviews];
-    
-    self.menuPanning = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
-
-    UIView *panningView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - kGridMargin, 0, kGridMargin, self.view.bounds.size.height)];
-    [panningView addGestureRecognizer:self.menuPanning];
-    [self.view addSubview:panningView];
-    notify(@"changed isPlus", changedIsPlus);
-    notify(@"updated sync",updateSyncLabel);
-    notify(@"changed theme", changedTheme);
-    
-    UISwipeGestureRecognizer* gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeHandler:)];
-    [gesture setDirection:UISwipeGestureRecognizerDirectionLeft];
-    [self.view addGestureRecognizer:gesture];
 }
 
 -(void)updateSyncLabel
@@ -322,21 +290,23 @@
     [self.viewControllers addObject:viewController];
 }
 
+-(void)addModalTransition {
+    CATransition* transition = [CATransition animation];
+    transition.duration = 0.2;
+    transition.type = kCATransitionMoveIn;
+    transition.subtype = kCATransitionFromRight;
+    [self.view.window.layer removeAllAnimations];
+    [self.view.window.layer addAnimation:transition forKey:kCATransition];
+}
+
 -(void)pressedMenuButton:(MenuButton*)sender{
     
     KPMenuButtons button = [self buttonForTag:sender.tag];
     switch (button) {
         case KPMenuButtonSettings:{
-            CATransition* transition = [CATransition animation];
-            transition.duration = 0.2;
-            transition.type = kCATransitionMoveIn;
-            transition.subtype = kCATransitionFromRight;
-            [self.view.window.layer removeAllAnimations];
-            [self.view.window.layer addAnimation:transition forKey:kCATransition];
-            self.modalPresentationStyle = UIModalPresentationFullScreen;
             SettingsViewController *vc = [[SettingsViewController alloc] init];
             [ANALYTICS pushView:@"Settings Menu"];
-            //[self pushViewController:notifVC animated:YES];
+            [self addModalTransition];
             [self presentViewController:vc animated:NO completion:nil];
             break;
         }
@@ -378,19 +348,15 @@
         case KPMenuButtonSnoozes:{
             SnoozesViewController *snoozeVC = [[SnoozesViewController alloc] init];
             [ANALYTICS pushView:@"Snoozes Menu"];
-            [self pushViewController:snoozeVC animated:YES];
+            //[self pushViewController:snoozeVC animated:YES];
+            [self addModalTransition];
+            [self presentViewController:snoozeVC animated:NO completion:nil];
             break;
         }
         case KPMenuButtonIntegrations:{
-            CATransition* transition = [CATransition animation];
-            transition.duration = 0.2;
-            transition.type = kCATransitionMoveIn;
-            transition.subtype = kCATransitionFromRight;
-            [self.view.window.layer removeAllAnimations];
-            [self.view.window.layer addAnimation:transition forKey:kCATransition];
             IntegrationsViewController *integrationVC = [[IntegrationsViewController alloc] init];
             [ANALYTICS pushView:@"Integrations  Menu"];
-            //[self pushViewController:integrationVC animated:YES];
+            [self addModalTransition];
             [self presentViewController:integrationVC animated:NO completion:nil];
             break;
         }
@@ -483,7 +449,7 @@
     NSString *title;
     switch (button) {
         case KPMenuButtonSettings:
-            title = LOCALIZE_STRING(@"Settings");
+            title = LOCALIZE_STRING(@"Options");
             break;
         case KPMenuButtonLocation:
             title = LOCALIZE_STRING(@"Location");
@@ -621,28 +587,9 @@
     [super viewDidLayoutSubviews];
    
     CGFloat numberOfButtons = kHorizontalGridNumber * kVerticalGridNumber;
-    NSInteger numberOfRows = kHorizontalGridNumber;
     self.view.backgroundColor = tcolor(BackgroundColor);
     
     CGFloat gridWidth = self.gridView.bounds.size.width;
-    CGFloat gridItemWidth = gridWidth / kVerticalGridNumber;
-    
-    CGFloat gridHeight = self.gridView.bounds.size.height;
-    CGFloat numberOfGrids = gridHeight / gridItemWidth;
-    
-    if (_seperatorsV && (_seperatorsV.count > kVerticalGridNumber - 2)) {
-        for (NSInteger i = 1; i < kVerticalGridNumber; i++) {
-            UIView *verticalSeperatorView = _seperatorsV[i - 1];
-            verticalSeperatorView.frame = CGRectMake(gridItemWidth * i, kSeperatorMargin, SEPERATOR_WIDTH, gridHeight - (kSeperatorMargin * 2));
-        }
-    }
-    
-    if (_seperatorsH && (_seperatorsH.count > numberOfRows - 2)) {
-        for (NSInteger i = 1; i < numberOfRows; i++) {
-            UIView *horizontalSeperatorView = _seperatorsH[i - 1];
-            horizontalSeperatorView.frame = CGRectMake(kSeperatorMargin, gridHeight/numberOfGrids*i, gridWidth - (kSeperatorMargin * 2), SEPERATOR_WIDTH);
-        }
-    }
     
     if (_menuButtons && (_menuButtons.count > numberOfButtons - 1)) {
         for (NSInteger i = 1; i <= numberOfButtons; i++) {

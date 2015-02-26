@@ -333,6 +333,7 @@
 		DA6B61BE19DAF3B600089877 /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */; };
 		DA6B61C319E321FE00089877 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA6B61C119E321FE00089877 /* Localizable.strings */; };
 		DA7AEE931A9F328000436CE3 /* IntegrationSectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7AEE921A9F328000436CE3 /* IntegrationSectionCell.m */; };
+		DA7AEE971A9FBCAA00436CE3 /* IntegrationTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7AEE961A9FBCAA00436CE3 /* IntegrationTitleView.m */; };
 		DAB164E71A6D294F008D69B2 /* GmailSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */; };
 		DAB164E81A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
 		DAB164E91A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
@@ -966,6 +967,8 @@
 		DA6B61C419E322FB00089877 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA7AEE911A9F328000436CE3 /* IntegrationSectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationSectionCell.h; path = Integrations/IntegrationSectionCell.h; sourceTree = "<group>"; };
 		DA7AEE921A9F328000436CE3 /* IntegrationSectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationSectionCell.m; path = Integrations/IntegrationSectionCell.m; sourceTree = "<group>"; };
+		DA7AEE951A9FBCAA00436CE3 /* IntegrationTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationTitleView.h; path = Integrations/IntegrationTitleView.h; sourceTree = "<group>"; };
+		DA7AEE961A9FBCAA00436CE3 /* IntegrationTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationTitleView.m; path = Integrations/IntegrationTitleView.m; sourceTree = "<group>"; };
 		DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailSyncHandler.h; path = SyncHandlers/GmailSyncHandler.h; sourceTree = "<group>"; };
 		DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailSyncHandler.m; path = SyncHandlers/GmailSyncHandler.m; sourceTree = "<group>"; };
 		DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailIntegration.h; path = Integrations/GmailIntegration.h; sourceTree = "<group>"; };
@@ -1193,6 +1196,7 @@
 				A703B1911838EBF20047DCC9 /* MCSwipeTableViewCell */,
 				A703B1A01838EBF20047DCC9 /* SchedulePopup */,
 				A703B1A31838EBF20047DCC9 /* TagView */,
+				DA7AEE941A9FB9BB00436CE3 /* Integrations */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2112,6 +2116,15 @@
 			name = Cells;
 			sourceTree = "<group>";
 		};
+		DA7AEE941A9FB9BB00436CE3 /* Integrations */ = {
+			isa = PBXGroup;
+			children = (
+				DA7AEE951A9FBCAA00436CE3 /* IntegrationTitleView.h */,
+				DA7AEE961A9FBCAA00436CE3 /* IntegrationTitleView.m */,
+			);
+			name = Integrations;
+			sourceTree = "<group>";
+		};
 		DAB1650E1A6D3D51008D69B2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -2831,6 +2844,7 @@
 				A78128BD17294C56002226C8 /* FacebookCommunicator.m in Sources */,
 				A703B1B71838EBF20047DCC9 /* YoureAllDoneView.m in Sources */,
 				A78128BE17294C56002226C8 /* KPParseCommunicator.m in Sources */,
+				DA7AEE971A9FBCAA00436CE3 /* IntegrationTitleView.m in Sources */,
 				A78128BF17294C56002226C8 /* KPParseObject.m in Sources */,
 				A78128C017294C56002226C8 /* KPToDo.m in Sources */,
 				A78128C217294C56002226C8 /* _KPParseObject.m in Sources */,

@@ -19,9 +19,9 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     self.title = LOCALIZE_STRING(@"INTEGRATIONS");
     self.lightColor = [UIColor clearColor];
-    [super viewDidLoad];
 }
 
 - (void)recreateCellInfo

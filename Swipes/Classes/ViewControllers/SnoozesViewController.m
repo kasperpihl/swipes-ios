@@ -6,22 +6,65 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "SnoozesViewController.h"
 #import "DayPickerSettingsCell.h"
 #import "SettingsHandler.h"
 #import "NSDate-Utilities.h"
 #import "KPTimePicker.h"
 #import "AppDelegate.h"
+#import "IntegrationTitleView.h"
+#import "SnoozesViewController.h"
+
+static CGFloat const kTopMargin = 60;
+static CGFloat const kBottomMargin = 45;
+
 @interface SnoozesViewController () <UITableViewDataSource,UITableViewDelegate,KPTimePickerDelegate,DayPickerSettingsDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, assign) SnoozeSettings activeSnooze;
+@property (nonatomic, strong) IntegrationTitleView* titleView;
+@property (nonatomic, strong) UIButton* backButton;
 
 @end
 
 @implementation SnoozesViewController
 
--(NSString*)settingForSnooze:(SnoozeSettings)snooze{
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    _titleView = [[IntegrationTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kTopMargin)];
+    _titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _titleView.title = LOCALIZE_STRING(@"SNOOZES");
+    [self.view addSubview:_titleView];
+
+    self.activeSnooze = SnoozeNone;
+    self.view.backgroundColor = tcolor(BackgroundColor);
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, kTopMargin, self.view.bounds.size.width, self.view.bounds.size.height - kTopMargin - kBottomMargin)];
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    //[self.tableView setSeparatorColor:tcolor(TextColor)];
+    [self.tableView setTableFooterView:[UIView new]];
+    [self.view addSubview:self.tableView];
+
+    // setup back button
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, self.view.frame.size.height - kBottomMargin, kBottomMargin, kBottomMargin - 15)];
+    self.backButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
+    [self.backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    self.backButton.titleLabel.font = iconFont(23);
+    [self.backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
+    [self.backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.backButton];
+}
+
+- (void)pressedBack:(id)sender
+{
+    [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+-(NSString*)settingForSnooze:(SnoozeSettings)snooze
+{
     NSString *setting;
     switch (snooze) {
         case SnoozeWeekStartTime:
@@ -47,24 +90,8 @@
     return setting;
 }
 
-- (void)viewDidLoad
+-(KPSettings)settingValForSnooze:(SnoozeSettings)snooze
 {
-    [super viewDidLoad];
-    self.activeSnooze = SnoozeNone;
-    self.view.backgroundColor = CLEAR;
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
-    self.tableView.delegate = self;
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.tableView.dataSource = self;
-    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    //[self.tableView setSeparatorColor:tcolor(TextColor)];
-    [self.tableView setTableFooterView:[UIView new]];
-    [self.view addSubview:self.tableView];
-	// Do any additional setup after loading the view.
-}
-
--(KPSettings)settingValForSnooze:(SnoozeSettings)snooze{
     switch (snooze) {
         case SnoozeWeekStartTime:
             return SettingWeekStartTime;
@@ -78,13 +105,18 @@
             return SettingWeekendStart;
         case SnoozeLaterToday:
             return SettingLaterToday;
-        default:return -1;
+        default:
+            return -1;
     }
 }
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return SnoozeTotalNumber;
 }
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSString *cellIdentifier = @"SettingCell";
     DayPickerSettingsCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
@@ -94,7 +126,8 @@
 	return cell;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(DayPickerSettingsCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView willDisplayCell:(DayPickerSettingsCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
     SnoozeSettings snooze = indexPath.row;
     NSString *valueString;
     KPSettings setting = [self settingValForSnooze:snooze];
@@ -181,21 +214,20 @@
     }
     SnoozeSettings snooze = self.activeSnooze;
     self.activeSnooze = SnoozeNone;
-    [self.tableView beginUpdates];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:snooze inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView endUpdates];
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     SnoozeSettings snooze = indexPath.row;
     if(self.activeSnooze == snooze && (self.activeSnooze == SnoozeWeekendStart || self.activeSnooze == SnoozeWeekStart)){
         self.activeSnooze = SnoozeNone;
-        [self.tableView beginUpdates];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:snooze inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView endUpdates];
         return;
     }
-    else if(self.activeSnooze != SnoozeNone) return;
+    else if(self.activeSnooze != SnoozeNone)
+        return;
+    
     self.activeSnooze = snooze;
     KPSettings setting = [self settingValForSnooze:snooze];
     NSNumber *settingValue = (NSNumber*)[kSettings valueForSetting:setting];
@@ -206,7 +238,7 @@
         case SnoozeEveningStartTime:
         case SnoozeWeekendStartTime:{
             NSDate *settingDate = [[[NSDate date] dateAtStartOfDay] dateByAddingTimeInterval:settingValue.integerValue];
-            KPTimePicker *timePicker = [[KPTimePicker alloc] initWithFrame:[self parentViewController].view.bounds];
+            KPTimePicker *timePicker = [[KPTimePicker alloc] initWithFrame:self.view.bounds];
             timePicker.pickingDate = settingDate;
             timePicker.minimumDate = [settingDate dateAtStartOfDay];
             if(self.activeSnooze == SnoozeLaterToday){
@@ -216,26 +248,17 @@
             timePicker.maximumDate = [[[settingDate dateByAddingDays:1] dateAtStartOfDay] dateBySubtractingMinutes:5];
             timePicker.delegate = self;
             timePicker.alpha = 0;
-            [self.parentViewController.view addSubview:timePicker];
+            [self.view addSubview:timePicker];
             [UIView animateWithDuration:0.1 animations:^{
                 timePicker.alpha = 1;
             }];
         }
         case SnoozeWeekStart:
         case SnoozeWeekendStart:{
-            [self.tableView beginUpdates];
-                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:snooze inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-
-            [self.tableView endUpdates];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:snooze inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
         }
         default:break;
     }
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)dealloc

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#define kCellHeight 65
+#define kCellHeight 55
 @interface SettingsCell : UITableViewCell
 @property (nonatomic) UIColor *labelColor;
 @property (nonatomic) UIFont *settingFont;
