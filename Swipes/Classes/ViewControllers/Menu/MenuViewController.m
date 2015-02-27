@@ -363,7 +363,9 @@ static CGFloat const kTopMargin = 60;
         case KPMenuButtonHelp:{
             HelpingViewController *helpVC = [[HelpingViewController alloc] init];
             [ANALYTICS pushView:@"Help Menu"];
-            [self pushViewController:helpVC animated:YES];
+            //[self pushViewController:helpVC animated:YES];
+            [self addModalTransition];
+            [self presentViewController:helpVC animated:NO completion:nil];
             break;
         }
         case KPMenuButtonUpgrade:{

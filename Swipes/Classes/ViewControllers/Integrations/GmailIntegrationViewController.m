@@ -29,12 +29,6 @@
     self.lightColor = color(224, 76, 64, 1);
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)recreateCellInfo
 {
     [super recreateCellInfo];

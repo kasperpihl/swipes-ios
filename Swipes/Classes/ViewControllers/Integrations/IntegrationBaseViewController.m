@@ -71,6 +71,8 @@ static CGFloat const kSectionHeight = 34;
     [self.backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.backButton];
+    
+    [self tableView:_table numberOfRowsInSection:10];
 }
 
 - (void)recreateCellInfo
