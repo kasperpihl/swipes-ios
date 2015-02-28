@@ -52,6 +52,19 @@
                         kKeyTouchSelector: NSStringFromSelector(@selector(onWeeklyReminderTouch))
                         }.mutableCopy,
                       ];
+    if ([self showAppSettings]) {
+        self.cellInfo = [self.cellInfo arrayByAddingObjectsFromArray:@[
+                                                                       @{kKeyTitle: LOCALIZE_STRING(@"App permissions"),
+                                                                         kKeyCellType: @(kIntegrationCellTypeViewMore),
+                                                                         kKeyTouchSelector: NSStringFromSelector(@selector(onShowAppSettingsTouch))
+                                                                         },
+                                                                       ]];
+    }
+}
+
+- (BOOL)showAppSettings
+{
+    return (&UIApplicationOpenSettingsURLString != nil);
 }
 
 #pragma mark - selectors
@@ -105,6 +118,13 @@
     value = !value;
     [kSettings setValue:@(value) forSetting:SettingWeeklyReminders];
     self.cellInfo[6][kKeyIsOn] = @(value);
+}
+
+- (void)onShowAppSettingsTouch
+{
+    if (&UIApplicationOpenSettingsURLString != nil) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
 }
 
 @end
