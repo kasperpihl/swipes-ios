@@ -189,10 +189,10 @@ static NotificationHandler *sharedObject;
         NSDate *mondayStart = [NSDate dateThisOrNextWeekWithDay:weekStart.integerValue hours:0 minutes:0];
         NSDate *mondayEnd = [[mondayStart dateByAddingDays:1] dateAtStartOfDay];
         
-        NSPredicate *leftForNowPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [NSDate date] ];
-        NSPredicate *leftForTodayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [[NSDate dateTomorrow] dateAtStartOfDay]];
-        NSPredicate *tomorrowPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil)", [[NSDate dateTomorrow] dateAtStartOfDay],[[[NSDate dateTomorrow] dateByAddingDays:1] dateAtStartOfDay]];
-        NSPredicate *mondayPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil)", mondayStart, mondayEnd];
+        NSPredicate *leftForNowPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [NSDate date] ];
+        NSPredicate *leftForTodayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [[NSDate dateTomorrow] dateAtStartOfDay]];
+        NSPredicate *tomorrowPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [[NSDate dateTomorrow] dateAtStartOfDay],[[[NSDate dateTomorrow] dateByAddingDays:1] dateAtStartOfDay]];
+        NSPredicate *mondayPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", mondayStart, mondayEnd];
         
         NSInteger numberOfTasksLeftNow = [KPToDo MR_countOfEntitiesWithPredicate:leftForNowPredicate];
         NSInteger numberOfTasksLeftToday = [KPToDo MR_countOfEntitiesWithPredicate:leftForTodayPredicate];
@@ -352,7 +352,7 @@ static NotificationHandler *sharedObject;
         return;
     }
     
-    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@) AND completionDate = nil", [NSDate date]];
+    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@) AND completionDate = nil AND isLocallyDeleted <> YES", [NSDate date]];
     
     NSArray *scheduleArray = [KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:schedulePredicate];
     
@@ -424,7 +424,7 @@ static NotificationHandler *sharedObject;
 {
     BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
     if(!hasLocationOn) [self stopLocationServices];
-    NSPredicate *locationPredicate = [NSPredicate predicateWithFormat:@"(location != nil)"];
+    NSPredicate *locationPredicate = [NSPredicate predicateWithFormat:@"(location != nil) AND isLocallyDeleted <> YES"];
     NSArray *tasksWithLocation = [KPToDo MR_findAllWithPredicate:locationPredicate];
     if(tasksWithLocation && tasksWithLocation.count > 0){
         [KLLocation deleteAllGeofences];
@@ -449,12 +449,12 @@ static NotificationHandler *sharedObject;
 
 -(void)handleGeofences:(NSArray*)arrGeofenceList
 {
-    NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)", [NSDate date]];
+    NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND isLocallyDeleted <> YES)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
     for (KLGeofence *fence in arrGeofenceList) {
         
         NSString *identifier = [[fence getIDUser] stringByAppendingString:kLocationSplitStr];
-        NSPredicate *taskPredicate = [NSPredicate predicateWithFormat:@"ANY location BEGINSWITH[c] %@",identifier];
+        NSPredicate *taskPredicate = [NSPredicate predicateWithFormat:@"ANY location BEGINSWITH[c] %@ AND isLocallyDeleted <> YES",identifier];
         KPToDo *toDo = [KPToDo MR_findFirstWithPredicate:taskPredicate];
         if(toDo){
             NSDictionary *userInfo = @{@"type": @"location",@"identifier": [toDo tempId]};

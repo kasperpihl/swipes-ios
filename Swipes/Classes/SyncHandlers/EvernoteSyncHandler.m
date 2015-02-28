@@ -8,7 +8,6 @@
 
 #import <ENSDK/Advanced/ENSDKAdvanced.h>
 #import "Underscore.h"
-#import "MF_Base64Additions.h"
 #import "KPToDo.h"
 #import "KPAttachment.h"
 #import "EvernoteToDoProcessor.h"
@@ -95,19 +94,19 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
 
 -(BOOL)hasObjectsSyncedWithEvernote{
     NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
-    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"service = %@ AND sync == 1",EVERNOTE_SERVICE];
-    NSUInteger numberOfAttachmentsWithEvernote = [KPAttachment MR_countOfEntitiesWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
-    return (numberOfAttachmentsWithEvernote > 0);
+//    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"service = %@ AND sync == 1",EVERNOTE_SERVICE];
+//    NSUInteger numberOfAttachmentsWithEvernote = [KPAttachment MR_countOfEntitiesWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
+    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"ANY attachments.service == %@ AND ANY attachments.sync == 1 AND isLocallyDeleted <> YES", EVERNOTE_SERVICE];
+    NSUInteger numberOfTasksWithEvernote = [KPToDo MR_countOfEntitiesWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
+    return (numberOfTasksWithEvernote > 0);
 }
 
 -(NSArray*)getObjectsSyncedWithEvernote
 {
     NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
-    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"ANY attachments.service like %@ AND ANY attachments.sync == 1",EVERNOTE_SERVICE];
+    NSPredicate *predicateForTodosWithEvernote = [NSPredicate predicateWithFormat:@"ANY attachments.service == %@ AND ANY attachments.sync == 1 AND isLocallyDeleted <> YES", EVERNOTE_SERVICE];
     return [KPToDo MR_findAllWithPredicate:predicateForTodosWithEvernote inContext:contextForThread];
-    
 }
-
 
 -(void)updateEvernoteCount:(NSInteger)newUpdateCount{
     DLog(@"new %lu exp %lu",(long)newUpdateCount,(long)self.expectedEvernoteCount);

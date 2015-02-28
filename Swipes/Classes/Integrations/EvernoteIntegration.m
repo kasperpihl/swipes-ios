@@ -174,7 +174,6 @@ NSError * NewNSErrorFromException(NSException * exc) {
         return nil;
     }
     return [kKeyJson stringByAppendingString:[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
-    //return [[noteRef asData] base64String];
 }
 
 + (ENNoteRef *)NSStringToENNoteRef:(NSString *)string
