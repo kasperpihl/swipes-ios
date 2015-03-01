@@ -5,15 +5,11 @@
 //  Created by Kasper Pihl Tornøe on 13/11/14.
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
-typedef enum {
-    TopClockStateNone = 0,
-    TopClockStateClock,
-    TopClockStateNotification,
-    TopClockStateRealStatusBar
-} TopClockState;
 
-#import "KPTopClock.h"
+#import "SettingsHandler.h"
 #import "RootViewController.h"
+#import "KPTopClock.h"
+
 @interface KPTopClock ()
 
 @property (nonatomic, strong) UIView *view;
@@ -130,7 +126,13 @@ static KPTopClock *sharedObject;
     [_clockViewStack addObject:window];
     
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateClock) userInfo:nil repeats:YES];
-    [self setCurrentState:TopClockStateClock];
+    
+    
+    if ([[kSettings valueForSetting:SettingUseStandardStatusBar] boolValue])
+        [self setCurrentState:TopClockStateRealStatusBar];
+    else
+        [self setCurrentState:TopClockStateClock];
+    
     [self updateClock];
 }
 

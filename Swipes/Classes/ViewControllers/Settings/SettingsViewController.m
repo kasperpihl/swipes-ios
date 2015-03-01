@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
+#import "KPTopClock.h"
 #import "UIView+Utilities.h"
 #import "UtilityClass.h"
 #import "SettingsHandler.h"
@@ -28,6 +29,11 @@
                         kKeyCellType: @(kIntegrationCellTypeCheck),
                         kKeyIsOn: [kSettings valueForSetting:SettingAddToBottom],
                         kKeyTouchSelector: NSStringFromSelector(@selector(onAddNewTasksToBottomTouch))
+                        }.mutableCopy,
+                      @{kKeyTitle: LOCALIZE_STRING(@"Use standard status bar"),
+                        kKeyCellType: @(kIntegrationCellTypeCheck),
+                        kKeyIsOn: [kSettings valueForSetting:SettingUseStandardStatusBar],
+                        kKeyTouchSelector: NSStringFromSelector(@selector(onUseStandardStatusBarTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: LOCALIZE_STRING(@"SOUNDS")},
                       @{kKeyTitle: LOCALIZE_STRING(@"In-app sounds"),
@@ -52,6 +58,7 @@
                         kKeyTouchSelector: NSStringFromSelector(@selector(onWeeklyReminderTouch))
                         }.mutableCopy,
                       ];
+    
     if ([self showAppSettings]) {
         self.cellInfo = [self.cellInfo arrayByAddingObjectsFromArray:@[
                                                                        @{kKeyTitle: LOCALIZE_STRING(@"App permissions"),
@@ -77,12 +84,21 @@
     self.cellInfo[1][kKeyIsOn] = @(value);
 }
 
+- (void)onUseStandardStatusBarTouch
+{
+    BOOL value = [[kSettings valueForSetting:SettingUseStandardStatusBar] boolValue];
+    value = !value;
+    [kSettings setValue:@(value) forSetting:SettingUseStandardStatusBar];
+    self.cellInfo[2][kKeyIsOn] = @(value);
+    [kTopClock setCurrentState:value ? TopClockStateRealStatusBar : TopClockStateClock animated:YES];
+}
+
 - (void)onInAppSoundsTouch
 {
     BOOL value = [[kSettings valueForSetting:SettingAppSounds] boolValue];
     value = !value;
     [kSettings setValue:@(value) forSetting:SettingAppSounds];
-    self.cellInfo[3][kKeyIsOn] = @(value);
+    self.cellInfo[4][kKeyIsOn] = @(value);
 }
 
 - (void)onTasksSnoozedForLaterTouch
@@ -93,14 +109,14 @@
         [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Tasks snoozed for later") andMessage:LOCALIZE_STRING(@"Are you sure you no longer want to receive these alarms and reminders?") block:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 [kSettings setValue:@NO forSetting:SettingNotifications];
-                self.cellInfo[5][kKeyIsOn] = @(value);
+                self.cellInfo[6][kKeyIsOn] = @(value);
                 [self reloadData];
             }
         }];
     }
     else {
         [kSettings setValue:@(value) forSetting:SettingNotifications];
-        self.cellInfo[5][kKeyIsOn] = @(value);
+        self.cellInfo[6][kKeyIsOn] = @(value);
     }
 }
 
@@ -109,7 +125,7 @@
     BOOL value = [[kSettings valueForSetting:SettingDailyReminders] boolValue];
     value = !value;
     [kSettings setValue:@(value) forSetting:SettingDailyReminders];
-    self.cellInfo[6][kKeyIsOn] = @(value);
+    self.cellInfo[7][kKeyIsOn] = @(value);
 }
 
 - (void)onWeeklyReminderTouch
@@ -117,7 +133,7 @@
     BOOL value = [[kSettings valueForSetting:SettingWeeklyReminders] boolValue];
     value = !value;
     [kSettings setValue:@(value) forSetting:SettingWeeklyReminders];
-    self.cellInfo[6][kKeyIsOn] = @(value);
+    self.cellInfo[8][kKeyIsOn] = @(value);
 }
 
 - (void)onShowAppSettingsTouch

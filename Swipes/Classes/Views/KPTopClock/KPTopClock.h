@@ -9,6 +9,14 @@
 #import <Foundation/Foundation.h>
 
 #define kTopClock [KPTopClock sharedInstance]
+
+typedef enum {
+    TopClockStateNone = 0,
+    TopClockStateClock,
+    TopClockStateNotification,
+    TopClockStateRealStatusBar
+} TopClockState;
+
 @interface KPTopClock : NSObject
 
 @property (nonatomic, strong) UIFont *font;
@@ -17,7 +25,8 @@
 +(KPTopClock*)sharedInstance;
 -(void)addTopClock;
 -(void)showNotificationWithMessage:(NSString*)message forSeconds:(CGFloat)seconds;
-- (void)pushClockToView:(UIView *)view;
-- (void)popClock;
+-(void)pushClockToView:(UIView *)view;
+-(void)popClock;
+-(void)setCurrentState:(TopClockState)currentState animated:(BOOL)animated;
 
 @end
