@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Pihl IT. All rights reserved.
 //
 
+#import "KPTopClock.h"
 #import "IntegrationSettingCell.h"
 #import "IntegrationSeparatorCell.h"
 #import "IntegrationSectionCell.h"
@@ -85,6 +86,13 @@ static CGFloat const kSectionHeight = 34;
     [super viewWillAppear:animated];
     [self recreateCellInfo];
     [self reloadData];
+    [kTopClock pushClockToView:self.view];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [kTopClock popClock];
 }
 
 - (void)setTitle:(NSString *)title

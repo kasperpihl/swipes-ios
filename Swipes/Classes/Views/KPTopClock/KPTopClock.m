@@ -16,13 +16,15 @@ typedef enum {
 #import "RootViewController.h"
 @interface KPTopClock ()
 
-@property (nonatomic) UIView *view;
-@property (nonatomic) UIButton *tapButton;
-@property (nonatomic) UILabel *clockLabel;
-@property (nonatomic) UILabel *notificationLabel;
-@property (nonatomic) NSTimer *timer;
-@property (nonatomic) TopClockState currentState;
-@property (nonatomic) BOOL lock;
+@property (nonatomic, strong) UIView *view;
+@property (nonatomic, strong) UIButton *tapButton;
+@property (nonatomic, strong) UILabel *clockLabel;
+@property (nonatomic, strong) UILabel *notificationLabel;
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, assign) TopClockState currentState;
+@property (nonatomic, assign) BOOL lock;
+@property (nonatomic, strong) NSMutableArray* clockViewStack;
+
 @end
 
 @implementation KPTopClock
@@ -33,6 +35,7 @@ static KPTopClock *sharedObject;
     }
     return sharedObject;
 }
+
 -(NSDateFormatter *)dateFormatter{
     if(!_dateFormatter){
         _dateFormatter = [[NSDateFormatter alloc] init];
@@ -110,6 +113,7 @@ static KPTopClock *sharedObject;
 -(void)addTopClock{
     if(self.view)
         return;
+    _clockViewStack = [NSMutableArray array];
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
     self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, window.frame.size.width, 20)];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -123,10 +127,32 @@ static KPTopClock *sharedObject;
     [self.view addSubview:self.tapButton];
     
     [window addSubview:self.view];
+    [_clockViewStack addObject:window];
     
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateClock) userInfo:nil repeats:YES];
     [self setCurrentState:TopClockStateClock];
     [self updateClock];
+}
+
+- (void)pushClockToView:(UIView *)view
+{
+    if (!_view)
+        return;
+    [_clockViewStack addObject:view];
+    [_view removeFromSuperview];
+    [view addSubview:_view];
+}
+
+- (void)popClock
+{
+    if (!_view)
+        return;
+    if (1 < _clockViewStack.count) {
+        [_clockViewStack removeLastObject];
+    }
+    [_view removeFromSuperview];
+    UIView* lastView = [_clockViewStack lastObject];
+    [lastView addSubview:_view];
 }
 
 -(void)onTap:(UIButton*)sender{
