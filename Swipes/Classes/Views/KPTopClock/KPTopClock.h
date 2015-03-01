@@ -19,10 +19,12 @@ typedef enum {
 
 @interface KPTopClock : NSObject
 
++(instancetype)sharedInstance;
+
 @property (nonatomic, strong) UIFont *font;
 @property (nonatomic, strong) UIColor *textColor;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
-+(KPTopClock*)sharedInstance;
+
 -(void)addTopClock;
 -(void)showNotificationWithMessage:(NSString*)message forSeconds:(CGFloat)seconds;
 -(void)pushClockToView:(UIView *)view;

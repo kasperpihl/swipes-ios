@@ -17,19 +17,24 @@
 @property (nonatomic, strong) UILabel *clockLabel;
 @property (nonatomic, strong) UILabel *notificationLabel;
 @property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong) NSMutableArray* clockViewStack;
 @property (nonatomic, assign) TopClockState currentState;
 @property (nonatomic, assign) BOOL lock;
-@property (nonatomic, strong) NSMutableArray* clockViewStack;
 
 @end
 
 @implementation KPTopClock
+
 static KPTopClock *sharedObject;
-+(KPTopClock *)sharedInstance{
-    if(!sharedObject){
-        sharedObject = [[KPTopClock alloc] init];
-    }
-    return sharedObject;
+
++ (instancetype)sharedInstance
+{
+    static dispatch_once_t once;
+    static id sharedInstance;
+    dispatch_once(&once, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
 }
 
 -(NSDateFormatter *)dateFormatter{
@@ -46,6 +51,7 @@ static KPTopClock *sharedObject;
 -(void)setCurrentState:(TopClockState)currentState{
     [self setCurrentState:currentState animated:NO];
 }
+
 -(void)setCurrentState:(TopClockState)currentState animated:(BOOL)animated{
     
     voidBlock beforeBlock = ^{
@@ -95,16 +101,15 @@ static KPTopClock *sharedObject;
 
 }
 
-
 -(void)setTextColor:(UIColor *)textColor{
     _textColor = textColor;
     [self.tapButton setTitleColor:textColor forState:UIControlStateNormal];
 }
+
 -(void)setFont:(UIFont *)font{
     _font = font;
     [self.tapButton.titleLabel setFont:font];
 }
-
 
 -(void)addTopClock{
     if(self.view)
@@ -173,18 +178,20 @@ static KPTopClock *sharedObject;
 }
 
 -(void)showBack{
-    [self setCurrentState:TopClockStateClock animated:YES];
+    if ([[kSettings valueForSetting:SettingUseStandardStatusBar] boolValue])
+        [self setCurrentState:TopClockStateRealStatusBar animated:YES];
+    else
+        [self setCurrentState:TopClockStateClock animated:YES];
 }
+
 -(void)showNotificationWithMessage:(NSString *)message forSeconds:(CGFloat)seconds{
     self.notificationLabel.text = message;
     [self setCurrentState:TopClockStateNotification animated:YES];
     [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(showBack) userInfo:nil repeats:NO];
 }
 
-
-
 -(void)dealloc{
-    self.view = nil;
     self.tapButton = nil;
+    self.view = nil;
 }
 @end
