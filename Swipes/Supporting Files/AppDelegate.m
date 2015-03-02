@@ -33,6 +33,9 @@
 #import "RootViewController.h"
 #import "Intercom.h"
 #import "GAI.h"
+
+#import "SWADefinitions.h"
+
 #import "AppDelegate.h"
 
 @implementation AppDelegate
@@ -261,13 +264,28 @@
     [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Undo last action") andMessage:LOCALIZE_STRING(@"Do you want to undo the last action?") block:^(BOOL succeeded, NSError *error) {
 
         if ( succeeded ){
-            
             [KPCORE undo];
-        
         }
-        
-        
     }];
+}
+
+- (void)application:(UIApplication *)application handleWatchKitExtensionRequest:(NSDictionary *)userInfo reply:(void (^)(NSDictionary *replyInfo))reply
+{
+    NSMutableDictionary* replyInfo = [NSMutableDictionary dictionary];
+    NSString* tempId = [userInfo valueForKey:kKeyCmdDelete];
+    if (tempId) {
+        NSArray* todos = [KPToDo findByTempId:tempId];
+        if (todos)
+            [KPToDo deleteToDos:todos save:YES force:NO];
+    }
+
+    tempId = [userInfo valueForKey:kKeyCmdComplete];
+    if (tempId) {
+        NSArray* todos = [KPToDo findByTempId:tempId];
+        if (todos)
+            [KPToDo completeToDos:todos save:YES context:nil analytics:YES];
+    }
+    reply(replyInfo);
 }
 
 @end

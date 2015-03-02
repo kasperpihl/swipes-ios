@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 Pihl IT. All rights reserved.
 //
 
+#import "SWAIncludes.h"
+#import "SWADefinitions.h"
 #import "CoreData/KPToDo.h"
 #import "SWACoreDataModel.h"
-#import "SWAIncludes.h"
 #import "TodoInterfaceController.h"
-
 
 @interface TodoInterfaceController()
 
@@ -43,19 +43,22 @@
 
 - (IBAction)onMarkDone:(id)sender
 {
-    NSLog(@"Marking as done");
-    [_todo complete];
-    [[SWACoreDataModel sharedInstance] saveContext];
-    [self popController];
+    [WKInterfaceController openParentApplication:@{kKeyCmdComplete: _todo.tempId} reply:^(NSDictionary *replyInfo, NSError *error) {
+        if (error) {
+            
+        }
+        [self popController];
+    }];
 }
 
 - (IBAction)onDelete:(id)sender
 {
-    // TODO this deletion does not work properly
-    NSLog(@"Delete");
-    SWACoreDataModel* dataModel = [SWACoreDataModel sharedInstance];
-    [dataModel deleteObject:_todo];
-    [self popController];
+    [WKInterfaceController openParentApplication:@{kKeyCmdDelete: _todo.tempId} reply:^(NSDictionary *replyInfo, NSError *error) {
+        if (error) {
+            
+        }
+        [self popController];
+    }];
 }
 
 - (IBAction)onSchedule:(id)sender
@@ -65,6 +68,3 @@
 }
 
 @end
-
-
-

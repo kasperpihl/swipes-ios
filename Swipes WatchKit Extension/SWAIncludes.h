@@ -9,6 +9,8 @@
 #ifndef Swipes_SWAIncludes_h
 #define Swipes_SWAIncludes_h
 
+#import <Foundation/Foundation.h>
+
 typedef NS_ENUM(NSUInteger, RepeatOptions) {
     RepeatNever = 0,
     RepeatEveryDay,

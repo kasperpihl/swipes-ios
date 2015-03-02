@@ -1017,6 +1017,8 @@
 		DA47B65D1A006D1B00299916 /* MagicalRecordLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordLogging.h; sourceTree = "<group>"; };
 		DA47B65E1A006D1B00299916 /* MagicalRecordShorthand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordShorthand.h; sourceTree = "<group>"; };
 		DA47B65F1A006D1B00299916 /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
+		DA50DBEC1AA3DF1E0081FD20 /* Swipes WatchKit Extension copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Swipes WatchKit Extension copy-Info.plist"; path = "/Users/demosten/work/swipes/swipes-ios/Swipes WatchKit Extension copy-Info.plist"; sourceTree = "<absolute>"; };
+		DA50DBED1AA3E1140081FD20 /* SWADefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWADefinitions.h; sourceTree = "<group>"; };
 		DA5422CC1986C7A50006A1E6 /* URLHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLHandler.h; sourceTree = "<group>"; };
 		DA5422CD1986C7A50006A1E6 /* URLHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLHandler.m; sourceTree = "<group>"; };
 		DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.0.xcdatamodel"; sourceTree = "<group>"; };
@@ -1526,6 +1528,7 @@
 				A7778CCC16EB5884004D95E5 /* Frameworks */,
 				A7778CCB16EB5884004D95E5 /* Products */,
 				9BA9EC75C706A45E18C4AB77 /* Pods */,
+				DA50DBEC1AA3DF1E0081FD20 /* Swipes WatchKit Extension copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2072,6 +2075,7 @@
 			isa = PBXGroup;
 			children = (
 				DA32832A1A4EEE440054CE04 /* SWAIncludes.h */,
+				DA50DBED1AA3E1140081FD20 /* SWADefinitions.h */,
 				DA3283241A4E22500054CE04 /* Models */,
 				DA3282EE1A4CC7F40054CE04 /* Interface Controllers */,
 				DA3282EF1A4CC8210054CE04 /* Cells */,
