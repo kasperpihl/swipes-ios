@@ -19,16 +19,20 @@
 @interface Global : NSObject
 
 + (Global *)sharedInstance;
-+ (NSInteger)OSVersion;
 + (BOOL)is24Hour;
 + (NSDateFormatter *)isoDateFormatter;
 + (NSString*)iconStringForString:(NSString*)iconString;
 + (NSURL *)coreDataUrl;
-+ (void)initCoreData;
 + (NSUserDefaults *)sharedDefaults;
 + (void)clearUserDefaults;
+
+#ifndef APPLE_WATCH
++ (void)initCoreData;
++ (NSInteger)OSVersion;
 + (BOOL)supportsOrientation:(UIDeviceOrientation)orientation;
 + (UILabel*)iconLabelWithString:(NSString*)iconString height:(CGFloat)height;
-@property (nonatomic) CGFloat fontMultiplier;
+
+@property (nonatomic, assign) CGFloat fontMultiplier;
+#endif
 
 @end

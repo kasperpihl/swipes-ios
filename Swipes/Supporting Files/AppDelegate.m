@@ -278,13 +278,25 @@
         if (todos)
             [KPToDo deleteToDos:todos save:YES force:NO];
     }
-
+   
     tempId = [userInfo valueForKey:kKeyCmdComplete];
     if (tempId) {
         NSArray* todos = [KPToDo findByTempId:tempId];
         if (todos)
             [KPToDo completeToDos:todos save:YES context:nil analytics:YES];
     }
+
+    tempId = [userInfo valueForKey:kKeyCmdSchedule];
+    if (tempId) {
+        NSArray* todos = [KPToDo findByTempId:tempId];
+        if (todos && 0 < todos.count) {
+            NSDate* scheduleDate = [userInfo valueForKey:kKeyCmdDate];
+            if ((NSDate *)[NSNull null] == scheduleDate)
+                scheduleDate = nil;
+            [KPToDo scheduleToDos:todos forDate:scheduleDate save:YES];
+        }
+    }
+
     reply(replyInfo);
 }
 

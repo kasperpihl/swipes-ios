@@ -11,12 +11,13 @@
 #import "SWAIncludes.h"
 #import "SWATodoCell.h"
 
-NSString * const ROW_TYPE_NAME = @"SWATodoCell";
+static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 
 @interface TodayInterfaceController()
 
 @property (nonatomic, weak) IBOutlet WKInterfaceTable* table;
 @property (nonatomic, weak) IBOutlet WKInterfaceLabel* noDataLabel;
+@property (nonatomic, weak) IBOutlet WKInterfaceButton* refreshButton;
 
 @property (nonatomic, readonly, strong) NSArray* todos;
 
@@ -24,14 +25,6 @@ NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 
 
 @implementation TodayInterfaceController
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-    }
-    return self;
-}
 
 - (void)awakeWithContext:(id)context
 {
@@ -62,6 +55,7 @@ NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 - (void)fillData
 {
     [self.noDataLabel setHidden:_todos.count > 0];
+    [self.refreshButton setHidden:_todos.count > 0];
     [self.table setNumberOfRows:_todos.count withRowType:ROW_TYPE_NAME];
     for (NSUInteger i = 0; i < _todos.count; i++) {
         SWATodoCell* cell = [self.table rowControllerAtIndex:i];
@@ -73,39 +67,11 @@ NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 - (void)table:(WKInterfaceTable *)table didSelectRowAtIndex:(NSInteger)rowIndex
 {
     [super table:table didSelectRowAtIndex:rowIndex];
-    [self updateMenuItems];
 }
 
-- (void)updateMenuItems
+- (IBAction)onRefreshButton:(id)sender
 {
-    [self clearAllMenuItems];
-    
-    // add items if there is anything selected
-//    if (self.selected.count > 0) {
-//        [self addMenuItemWithItemIcon:WKMenuItemIconAccept title:NSLocalizedString(@"Complete", nil) action:@selector(onMarkAsDone:)];
-//        [self addMenuItemWithItemIcon:WKMenuItemIconPause title:NSLocalizedString(@"Schedule", nil) action:@selector(onSchedule:)];
-//        [self addMenuItemWithItemIcon:WKMenuItemIconDecline title:NSLocalizedString(@"Delete", nil) action:@selector(onDelete:)];
-//        [self addMenuItemWithItemIcon:WKMenuItemIconMore title:NSLocalizedString(@"Back", nil) action:@selector(onBack:)];
-//    }
-}
-
-- (void)onMarkAsDone:(id)sender
-{
-
-}
-
-- (void)onSchedule:(id)sender
-{
-}
-
-- (void)onDelete:(id)sender
-{
-
-}
-
-- (void)onBack:(id)sender
-{
-    NSLog(@"Back");
+    [self reloadData];
 }
 
 - (id)contextForSegueWithIdentifier:(NSString *)segueIdentifier

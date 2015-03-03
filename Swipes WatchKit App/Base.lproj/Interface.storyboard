@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6750" systemVersion="13F34" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WHq-iy-Tkd">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6750" systemVersion="14C109" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WHq-iy-Tkd">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6735"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
@@ -29,20 +29,26 @@
                             </items>
                         </table>
                         <label width="1" alignment="left" text="No tasks for today" textAlignment="center" numberOfLines="0" id="oNB-cM-KZP"/>
+                        <button width="1" alignment="left" title="Refresh" id="Gyb-1F-vO9">
+                            <connections>
+                                <action selector="onRefreshButton:" destination="WHq-iy-Tkd" id="p1L-ZT-XUo"/>
+                            </connections>
+                        </button>
                     </items>
                     <menu key="menu" id="UsF-gn-DHT"/>
                     <connections>
                         <outlet property="noDataLabel" destination="oNB-cM-KZP" id="AIU-xZ-1KY"/>
+                        <outlet property="refreshButton" destination="Gyb-1F-vO9" id="NTF-24-3WX"/>
                         <outlet property="table" destination="3dt-00-epq" id="boT-ch-amk"/>
                     </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="235" y="340"/>
         </scene>
-        <!--Back-->
+        <!--Details-->
         <scene sceneID="IOl-SG-wYh">
             <objects>
-                <controller identifier="details" title="Back" id="U58-tQ-Xcj" customClass="TodoInterfaceController">
+                <controller identifier="details" title="Details" id="U58-tQ-Xcj" customClass="TodoInterfaceController">
                     <items>
                         <label width="136" height="45" alignment="left" textAlignment="left" numberOfLines="2" id="ePe-EL-Hvz"/>
                     </items>
@@ -55,7 +61,7 @@
                             </menuItem>
                             <menuItem title="Schedule" icon="pause" id="vCS-3E-kp0">
                                 <connections>
-                                    <action selector="onSchedule:" destination="U58-tQ-Xcj" id="XlE-vS-4dU"/>
+                                    <action selector="onSchedule:" destination="U58-tQ-Xcj" id="T4J-ul-Yy0"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Delete" icon="trash" id="b44-cR-hPc">
@@ -72,6 +78,33 @@
                 </controller>
             </objects>
             <point key="canvasLocation" x="456" y="340"/>
+        </scene>
+        <!--Schedule-->
+        <scene sceneID="Reb-CZ-h15">
+            <objects>
+                <controller identifier="Schedule" title="Schedule" id="3fk-TB-XAy" customClass="ScheduleInterfaceController">
+                    <items>
+                        <table alignment="left" id="9OY-oE-qjl">
+                            <items>
+                                <tableRow identifier="SWAScheduleCell" id="rcH-dv-PbS" customClass="SWAScheduleCell">
+                                    <group key="rootItem" width="1" alignment="left" id="gQm-2y-QZW">
+                                        <items>
+                                            <label alignment="left" id="x8e-K2-Wt9"/>
+                                        </items>
+                                    </group>
+                                    <connections>
+                                        <outlet property="label" destination="x8e-K2-Wt9" id="6pW-Ep-sdc"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <outlet property="table" destination="9OY-oE-qjl" id="ln9-cc-0TP"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="662" y="340"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">

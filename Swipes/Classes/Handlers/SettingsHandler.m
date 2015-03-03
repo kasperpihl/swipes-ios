@@ -11,19 +11,22 @@
 
 #define kSettingsDictionaryKey @"SettingsDictionary"
 
+#import "Global.h"
 #import "SettingsHandler.h"
 #import "NSDate-Utilities.h"
 #import "NotificationHandler.h"
-#import <Parse/PFQuery.h>
-#import <Parse/PFFile.h>
+
 @interface SettingsHandler ()
-@property (nonatomic,copy) ImageBlock block;
-@property BOOL isFetchingSettings;
-@property BOOL isFetchingImage;
-@property NSMutableDictionary *settings;
+
+@property (nonatomic, assign) BOOL isFetchingSettings;
+@property (nonatomic, strong) NSMutableDictionary *settings;
+
 @end
+
 @implementation SettingsHandler
+
 static SettingsHandler *sharedObject;
+
 +(SettingsHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[self allocWithZone:NULL] init];

@@ -15,7 +15,7 @@
 @interface TodoInterfaceController()
 
 @property (nonatomic, strong) KPToDo* todo;
-@property (nonatomic, strong) IBOutlet WKInterfaceLabel* titleLabel;
+@property (nonatomic, weak) IBOutlet WKInterfaceLabel* titleLabel;
 
 @end
 
@@ -64,7 +64,8 @@
 - (IBAction)onSchedule:(id)sender
 {
     NSLog(@"Schedule");
-    [self popController];
+    //[self popController];
+    [self pushControllerWithName:@"Schedule" context:_todo];
 }
 
 @end
