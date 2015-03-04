@@ -66,6 +66,7 @@ typedef void (^voidBlock)(void);
 typedef void (^viewBlock)(UIView* view);
 
 #define kEvernoteColor color(32,192,92,1)
+#define kGmailColor color(224, 76, 64, 1)
 #define kLocationSplitStr @"_-_"
 #define isTryingString @"isTryingOutSwipes"
 
