@@ -19,9 +19,8 @@
 
 - (void)viewDidLoad
 {
-    self.title = LOCALIZE_STRING(@"INTEGRATIONS");
-    self.lightColor = [UIColor clearColor];
     [super viewDidLoad];
+    self.title = LOCALIZE_STRING(@"INTEGRATIONS");
 }
 
 - (void)recreateCellInfo
@@ -44,6 +43,8 @@
                       ];
 }
 
+#pragma mark - selectors
+
 - (void)onEvernoteTouch
 {
     [self addMoveFromRightTransition];
@@ -56,12 +57,6 @@
     [self addMoveFromRightTransition];
     GmailIntegrationViewController* vc = [[GmailIntegrationViewController alloc] init];
     [self presentViewController:vc animated:NO completion:nil];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

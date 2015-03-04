@@ -9,11 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "IntegrationBaseViewController.h"
 
-typedef NS_ENUM(NSUInteger, Integrations) {
-    kMailboxIntegration,
-    kEvernoteIntegration
-};
-
 @interface IntegrationsViewController : IntegrationBaseViewController
 
 @end

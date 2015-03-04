@@ -7,7 +7,6 @@
 //
 
 #import <ENSDK/Advanced/ENSDKAdvanced.h>
-#import "MF_Base64Additions.h"
 #import "UtilityClass.h"
 #import "KPAttachment.h"
 #import "AnalyticsHandler.h"

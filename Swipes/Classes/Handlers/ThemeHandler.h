@@ -16,6 +16,7 @@
 #define tfont(ThemerItem) [THEMER fontForItem:ThemerItem]
 #define tcolor(ThemerItem) tcolorF(ThemerItem,ThemeNone)
 #define tcolorF(ThemerItem,Theme) [THEMER colorForItem:ThemerItem forceTheme:Theme]
+#define tcolorR(ThemerItem) [THEMER colorForItem:ThemerItem forceTheme:(THEMER.currentTheme == ThemeDark) ? ThemeLight : ThemeDark]
 
 #define timageString(ImageBase,DarkEnding,LightEnding) timageStringF(ImageBase,DarkEnding,LightEnding,ThemeNone)
 #define timageStringBW(ImageBase) timageStringF(ImageBase,@"_white",@"_black",ThemeNone)

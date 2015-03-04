@@ -217,7 +217,7 @@
 +(NSArray *)findByTitle:(NSString *)title
 {
     if (title) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title = %@", title];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title = %@ AND isLocallyDeleted <> YES", title];
         NSArray* result = [KPToDo MR_findAllWithPredicate:predicate];
         [ANALYTICS heartbeat];
         if (result && (0 == result.count))

@@ -25,9 +25,9 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     self.title = @"EVERNOTE INTEGRATION";
     self.lightColor = kEvernoteColor;
-    [super viewDidLoad];
 }
 
 - (void)recreateCellInfo
@@ -57,42 +57,39 @@
                             kKeyIsOn: @(kEnInt.findInPersonalLinked),
                             kKeyTouchSelector: NSStringFromSelector(@selector(onFindPersonalTouch))
                             }.mutableCopy,
-                          businessInfo];
-        
+                          businessInfo,
+                          @{kKeyCellType: @(kIntegrationCellTypeSeparator)},
+                          @{kKeyTitle: LOCALIZE_STRING(@"Import notes"),
+                            kKeyCellType: @(kIntegrationCellTypeViewMore),
+                            kKeyIcon: @"integrationActionImporter",
+                            kKeyTouchSelector: NSStringFromSelector(@selector(onImportNotesTouch))
+                            },
+                          @{kKeyTitle: LOCALIZE_STRING(@"Learn more"),
+                            kKeyCellType: @(kIntegrationCellTypeViewMore),
+                            kKeyIcon: @"integrationActionLearn",
+                            kKeyTouchSelector: NSStringFromSelector(@selector(onLearnMoreTouch))
+                            },
+                          @{kKeyTitle: LOCALIZE_STRING(@"Unlink"),
+                            kKeyCellType: @(kIntegrationCellTypeNoAccessory),
+                            kKeyIcon: @"settingsLogout",
+                            kKeyTouchSelector: NSStringFromSelector(@selector(onSignOutTouch))
+                            },
+                          ];
     }
     else {
         self.cellInfo = @[
                           @{kKeyTitle: LOCALIZE_STRING(@"Link account"),
                             kKeyCellType: @(kIntegrationCellTypeViewMore),
                             kKeyTouchSelector: NSStringFromSelector(@selector(onLinkEvernoteTouch))
-                            }
+                            },
+                          @{kKeyCellType: @(kIntegrationCellTypeSeparator)},
+                          @{kKeyTitle: LOCALIZE_STRING(@"Learn more"),
+                            kKeyCellType: @(kIntegrationCellTypeViewMore),
+                            kKeyIcon: @"integrationActionLearn",
+                            kKeyTouchSelector: NSStringFromSelector(@selector(onLearnMoreTouch))
+                            },
                           ];
     }
-    
-    self.cellInfo = [self.cellInfo arrayByAddingObjectsFromArray:@[
-                    @{kKeyCellType: @(kIntegrationCellTypeSeparator)},
-                     @{kKeyTitle: LOCALIZE_STRING(@"Import notes"),
-                       kKeyCellType: @(kIntegrationCellTypeViewMore),
-                       kKeyIcon: @"integrationActionImporter",
-                       kKeyTouchSelector: NSStringFromSelector(@selector(onImportNotesTouch))
-                       },
-                     @{kKeyTitle: LOCALIZE_STRING(@"Learn more"),
-                       kKeyCellType: @(kIntegrationCellTypeViewMore),
-                       kKeyIcon: @"integrationActionLearn",
-                       kKeyTouchSelector: NSStringFromSelector(@selector(onLearnMoreTouch))
-                       },
-                     @{kKeyTitle: LOCALIZE_STRING(@"Unlink"),
-                       kKeyCellType: @(kIntegrationCellTypeNoAccessory),
-                       kKeyIcon: @"roundClose",
-                       kKeyTouchSelector: NSStringFromSelector(@selector(onSignOutTouch))
-                       },
-                     ]];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - selectors

@@ -78,6 +78,8 @@ static SettingsHandler *sharedObject;
         setting = IntegrationEvernoteFindInBusinessNotebooks;
     else if([index isEqualToString:@"IntegrationGmailUsingMailbox"])
         setting = IntegrationGmailUsingMailbox;
+    else if([index isEqualToString:@"SettingUseStandardStatusBar"])
+        setting = IntegrationGmailUsingMailbox;
     
     return setting;
 }
@@ -143,6 +145,9 @@ static SettingsHandler *sharedObject;
             break;
         case IntegrationGmailUsingMailbox:
             index = @"IntegrationGmailUsingMailbox";
+            break;
+        case SettingUseStandardStatusBar:
+            index = @"SettingUseStandardStatusBar";
             break;
 
     }
@@ -247,6 +252,8 @@ static SettingsHandler *sharedObject;
             return @YES;
         case IntegrationGmailUsingMailbox:
             return @YES;
+        case SettingUseStandardStatusBar:
+            return @NO;
     }
 }
 

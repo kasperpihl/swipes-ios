@@ -5,34 +5,38 @@
 //  Created by Kasper Pihl Tornøe on 13/11/14.
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
-typedef enum {
-    TopClockStateNone = 0,
-    TopClockStateClock,
-    TopClockStateNotification,
-    TopClockStateRealStatusBar
-} TopClockState;
 
-#import "KPTopClock.h"
+#import "SettingsHandler.h"
 #import "RootViewController.h"
+#import "KPTopClock.h"
+
 @interface KPTopClock ()
 
-@property (nonatomic) UIView *view;
-@property (nonatomic) UIButton *tapButton;
-@property (nonatomic) UILabel *clockLabel;
-@property (nonatomic) UILabel *notificationLabel;
-@property (nonatomic) NSTimer *timer;
-@property (nonatomic) TopClockState currentState;
-@property (nonatomic) BOOL lock;
+@property (nonatomic, strong) UIView *view;
+@property (nonatomic, strong) UIButton *tapButton;
+@property (nonatomic, strong) UILabel *clockLabel;
+@property (nonatomic, strong) UILabel *notificationLabel;
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong) NSMutableArray* clockViewStack;
+@property (nonatomic, assign) TopClockState currentState;
+@property (nonatomic, assign) BOOL lock;
+
 @end
 
 @implementation KPTopClock
+
 static KPTopClock *sharedObject;
-+(KPTopClock *)sharedInstance{
-    if(!sharedObject){
-        sharedObject = [[KPTopClock alloc] init];
-    }
-    return sharedObject;
+
++ (instancetype)sharedInstance
+{
+    static dispatch_once_t once;
+    static id sharedInstance;
+    dispatch_once(&once, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
 }
+
 -(NSDateFormatter *)dateFormatter{
     if(!_dateFormatter){
         _dateFormatter = [[NSDateFormatter alloc] init];
@@ -47,6 +51,7 @@ static KPTopClock *sharedObject;
 -(void)setCurrentState:(TopClockState)currentState{
     [self setCurrentState:currentState animated:NO];
 }
+
 -(void)setCurrentState:(TopClockState)currentState animated:(BOOL)animated{
     
     voidBlock beforeBlock = ^{
@@ -96,20 +101,20 @@ static KPTopClock *sharedObject;
 
 }
 
-
 -(void)setTextColor:(UIColor *)textColor{
     _textColor = textColor;
     [self.tapButton setTitleColor:textColor forState:UIControlStateNormal];
 }
+
 -(void)setFont:(UIFont *)font{
     _font = font;
     [self.tapButton.titleLabel setFont:font];
 }
 
-
 -(void)addTopClock{
     if(self.view)
         return;
+    _clockViewStack = [NSMutableArray array];
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
     self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, window.frame.size.width, 20)];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -123,10 +128,38 @@ static KPTopClock *sharedObject;
     [self.view addSubview:self.tapButton];
     
     [window addSubview:self.view];
+    [_clockViewStack addObject:window];
     
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateClock) userInfo:nil repeats:YES];
-    [self setCurrentState:TopClockStateClock];
+    
+    
+    if ([[kSettings valueForSetting:SettingUseStandardStatusBar] boolValue])
+        [self setCurrentState:TopClockStateRealStatusBar];
+    else
+        [self setCurrentState:TopClockStateClock];
+    
     [self updateClock];
+}
+
+- (void)pushClockToView:(UIView *)view
+{
+    if (!_view)
+        return;
+    [_clockViewStack addObject:view];
+    [_view removeFromSuperview];
+    [view addSubview:_view];
+}
+
+- (void)popClock
+{
+    if (!_view)
+        return;
+    if (1 < _clockViewStack.count) {
+        [_clockViewStack removeLastObject];
+    }
+    [_view removeFromSuperview];
+    UIView* lastView = [_clockViewStack lastObject];
+    [lastView addSubview:_view];
 }
 
 -(void)onTap:(UIButton*)sender{
@@ -145,18 +178,20 @@ static KPTopClock *sharedObject;
 }
 
 -(void)showBack{
-    [self setCurrentState:TopClockStateClock animated:YES];
+    if ([[kSettings valueForSetting:SettingUseStandardStatusBar] boolValue])
+        [self setCurrentState:TopClockStateRealStatusBar animated:YES];
+    else
+        [self setCurrentState:TopClockStateClock animated:YES];
 }
+
 -(void)showNotificationWithMessage:(NSString *)message forSeconds:(CGFloat)seconds{
     self.notificationLabel.text = message;
     [self setCurrentState:TopClockStateNotification animated:YES];
     [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(showBack) userInfo:nil repeats:NO];
 }
 
-
-
 -(void)dealloc{
-    self.view = nil;
     self.tapButton = nil;
+    self.view = nil;
 }
 @end

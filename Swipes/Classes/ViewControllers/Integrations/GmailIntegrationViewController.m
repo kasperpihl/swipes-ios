@@ -24,15 +24,9 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     self.title = @"GMAIL INTEGRATION";
     self.lightColor = color(224, 76, 64, 1);
-    [super viewDidLoad];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)recreateCellInfo

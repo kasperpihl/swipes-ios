@@ -22,15 +22,9 @@
 @implementation GmailDetailsIntegrationViewController
 
 - (void)viewDidLoad {
-    self.title = kGmInt.emailAddress;
-    self.lightColor = [UIColor clearColor];
-    [self recreateCellInfo];
     [super viewDidLoad];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    self.title = kGmInt.emailAddress;
+    [self recreateCellInfo];
 }
 
 - (void)recreateCellInfo
@@ -44,7 +38,7 @@
                          @{kKeyCellType: @(kIntegrationCellTypeSeparator)},
                          @{kKeyTitle: LOCALIZE_STRING(@"Unlink"),
                            kKeyCellType: @(kIntegrationCellTypeNoAccessory),
-                           kKeyIcon: @"roundClose",
+                           kKeyIcon: @"settingsLogout",
                            kKeyTouchSelector: NSStringFromSelector(@selector(onSignOutTouch))
                            },
                           ];

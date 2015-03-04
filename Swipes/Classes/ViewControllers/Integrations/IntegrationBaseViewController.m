@@ -6,8 +6,11 @@
 //  Copyright (c) 2015 Pihl IT. All rights reserved.
 //
 
+#import "KPTopClock.h"
 #import "IntegrationSettingCell.h"
 #import "IntegrationSeparatorCell.h"
+#import "IntegrationSectionCell.h"
+#import "IntegrationTitleView.h"
 #import "IntegrationBaseViewController.h"
 
 NSString* const kKeyTitle = @"title";
@@ -23,12 +26,11 @@ static CGFloat const kTopMargin = 60;
 static CGFloat const kBottomMargin = 45;
 static CGFloat const kCellHeight = 55;
 static CGFloat const kSeparatorHeight = 22;
-static CGFloat const kLineMarginX = 26;
-static CGFloat const kLineMarginY = kTopMargin - 10;
+static CGFloat const kSectionHeight = 34;
 
 @interface IntegrationBaseViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) UIView* lineView;
+@property (nonatomic, strong) IntegrationTitleView* titleView;
 
 @end
 
@@ -45,19 +47,10 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     self.view.backgroundColor = tcolor(BackgroundColor);
     
     // setup top view
-    if (!_lightColor)
-        _lightColor = [UIColor clearColor];
+    _titleView = [[IntegrationTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kTopMargin)];
+    _titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:_titleView];
 
-    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(kLineMarginX, 20, self.view.frame.size.width - kLineMarginX * 2, 25)];
-    //_titleLabel.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:_titleLabel];
-    [self updateTitle];
-    
-    _lineView = [[UIView alloc] initWithFrame:CGRectMake(kLineMarginX, kLineMarginY, self.view.frame.size.width - kLineMarginX * 2, 1.5)];
-    _lineView.backgroundColor = tcolor(TextColor);
-    _lineView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [self.view addSubview:_lineView];
-    
     // setup table view
     CGRect viewFrame = self.view.frame;
     viewFrame.origin.y += kTopMargin;
@@ -79,6 +72,8 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     [self.backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.backButton];
+    
+    [self tableView:_table numberOfRowsInSection:10];
 }
 
 - (void)recreateCellInfo
@@ -91,22 +86,25 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     [super viewWillAppear:animated];
     [self recreateCellInfo];
     [self reloadData];
+    [kTopClock pushClockToView:self.view];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [kTopClock popClock];
 }
 
 - (void)setTitle:(NSString *)title
 {
     [super setTitle:title];
-    if (_titleLabel) {
-        [self updateTitle];
-    }
+    _titleView.title = title;
 }
 
 - (void)setLightColor:(UIColor *)lightColor
 {
     _lightColor = lightColor;
-    if (_titleLabel) {
-        [self updateTitle];
-    }
+    _titleView.lightColor = lightColor;
 }
 
 - (void)addMoveFromRightTransition
@@ -146,41 +144,6 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     [self goBack];
 }
 
-- (void)updateTitle
-{
-    // Create the attributed string
-    NSMutableAttributedString *myString = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"\ue64f %@ \ue64f", self.title]];
-    
-    // Declare the fonts
-    UIFont *fontIcon = iconFont(10);
-    UIFont *fontTitle = KP_SEMIBOLD(10);
-    
-    NSRange rangeFirst = NSMakeRange(0,1);
-    NSRange rangeLast = NSMakeRange(myString.length - 1, 1);
-    NSRange rangeTitle = NSMakeRange(1, myString.length - 2);
-    
-    // Declare the paragraph styles
-    NSMutableParagraphStyle *myStringParaStyle1 = [[NSMutableParagraphStyle alloc] init];
-    myStringParaStyle1.alignment = 1;
-    
-    // Create the attributes and add them to the string
-    [myString addAttribute:NSForegroundColorAttributeName value:_lightColor range:rangeFirst];
-    [myString addAttribute:NSParagraphStyleAttributeName value:myStringParaStyle1 range:rangeFirst];
-    [myString addAttribute:NSFontAttributeName value:fontIcon range:rangeFirst];
-    
-    [myString addAttribute:NSFontAttributeName value:fontTitle range:rangeTitle];
-    [myString addAttribute:NSParagraphStyleAttributeName value:myStringParaStyle1 range:rangeTitle];
-    [myString addAttribute:NSForegroundColorAttributeName value:tcolor(TextColor) range:rangeTitle];
-    
-    [myString addAttribute:NSForegroundColorAttributeName value:_lightColor range:rangeLast];
-    [myString addAttribute:NSParagraphStyleAttributeName value:myStringParaStyle1 range:rangeLast];
-    [myString addAttribute:NSFontAttributeName value:fontIcon range:rangeLast];
-    
-    [myString addAttribute:NSKernAttributeName value:@(1.5) range:NSMakeRange(0, myString.length)];
-    
-    self.titleLabel.attributedText = [[NSAttributedString alloc]initWithAttributedString: myString];
-}
-
 - (IntegrationSettingsStyle)styleForData:(NSDictionary *)data
 {
     IntegrationSettingsStyle result = IntegrationSettingsStyleDefaultMask;
@@ -201,22 +164,31 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
     [_table reloadData];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return _cellInfo.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary* data = _cellInfo[indexPath.row];
-
     static NSString *kCellSettingsID = @"settings_cell";
     static NSString *kCellSeparatorID = @"separator_cell";
+    static NSString *kCellSectionID = @"section_cell";
     
+    NSDictionary* data = _cellInfo[indexPath.row];
     NSNumber* cellType = data[kKeyCellType];
     if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeSeparator) {
         UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellSeparatorID];
         if (nil == cell) {
             cell = [[IntegrationSeparatorCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellSeparatorID];
+        }
+        return cell;
+    }
+    else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeSection) {
+        IntegrationSectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellSectionID];
+        if (nil == cell) {
+            cell = [[IntegrationSectionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellSectionID];
+            cell.title = data[kKeyTitle];
         }
         return cell;
     }
@@ -274,9 +246,13 @@ static CGFloat const kLineMarginY = kTopMargin - 10;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell* cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-    if ([cell isKindOfClass:IntegrationSeparatorCell.class]) {
+    NSDictionary* data = _cellInfo[indexPath.row];
+    NSNumber* cellType = data[kKeyCellType];
+    if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeSeparator) {
         return kSeparatorHeight;
+    }
+    else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeSection) {
+        return kSectionHeight;
     }
     return kCellHeight;
 }

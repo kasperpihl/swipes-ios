@@ -105,7 +105,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
 
 - (NSArray *)objectsSyncedWithGmail
 {
-    NSPredicate *predicateForTodosWithGmail = [NSPredicate predicateWithFormat:@"ANY attachments.service like %@", GMAIL_SERVICE];
+    NSPredicate *predicateForTodosWithGmail = [NSPredicate predicateWithFormat:@"ANY attachments.service == %@", GMAIL_SERVICE];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     return [KPToDo MR_findAllWithPredicate:predicateForTodosWithGmail inContext:[NSManagedObjectContext MR_contextForCurrentThread]];
