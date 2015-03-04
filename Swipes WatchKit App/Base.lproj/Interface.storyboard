@@ -52,14 +52,7 @@
                         <table alignment="left" id="iHg-jP-A0N">
                             <items>
                                 <tableRow identifier="SWATwoLineCell" selectable="NO" id="zTs-N8-eqw" customClass="SWATwoLineCell">
-                                    <group key="rootItem" width="1" alignment="left" id="BIi-2h-P9K">
-                                        <items>
-                                            <label width="1" alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="0" id="J5F-I1-kjo"/>
-                                        </items>
-                                    </group>
-                                    <connections>
-                                        <outlet property="label" destination="J5F-I1-kjo" id="UGN-Ke-Rei"/>
-                                    </connections>
+                                    <group key="rootItem" width="1" alignment="left" id="BIi-2h-P9K"/>
                                 </tableRow>
                             </items>
                         </table>
