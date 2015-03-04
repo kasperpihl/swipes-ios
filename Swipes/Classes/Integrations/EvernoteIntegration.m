@@ -6,14 +6,10 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 // TODO:
-// - test in parse error with these:
-//    Error Domain=ENErrorDomain Code=604
 // - test with authorizing different account
 // - add support to the account in json!
-// - test with the same account on 2 devices
 // - test with 2 accounts on 2 devices
 // - sync should probably check for connection?
-// - add ENSDKLogging implementation for error logging?
 
 #import "MF_Base64Additions.h"
 #import "UtilityClass.h"
@@ -65,7 +61,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     return [[NSError alloc] initWithDomain:MONExceptionHandlerDomain code:MONNSExceptionEncounteredErrorCode userInfo:info];
 }
 
-@interface EvernoteIntegration ()
+@interface EvernoteIntegration () <ENSDKLogging>
 
 @property (nonatomic, assign) BOOL isAuthing;
 
@@ -252,8 +248,42 @@ NSError * NewNSErrorFromException(NSException * exc) {
         _findInPersonalLinked = [[kSettings valueForSetting:IntegrationEvernoteFindInPersonalLinkedNotebooks] boolValue];
         _findInBusinessNotebooks = [[kSettings valueForSetting:IntegrationEvernoteFindInBusinessNotebooks] boolValue];
         self.hasAskedForPermissions = [USER_DEFAULTS boolForKey:kHasAskedForPermissionKey];
+        //notify(ENSessionDidAuthenticateNotification, onAuthenticatedNotification);
+        notify(ENSessionDidUnauthenticateNotification, onUnauthenticatedNotification);
+        [ENSession sharedSession].logger = self;
     }
     return self;
+}
+
+- (void)dealloc
+{
+    clearNotify();
+}
+
+//- (void)onAuthenticatedNotification
+//{
+//    NSError* error = [NSError errorWithDomain:@"Evernote authenticated" code:607 userInfo:nil];
+//    [UtilityClass sendError:error type:@"onAuthenticatedNotification"];
+//}
+
+- (void)onUnauthenticatedNotification
+{
+    NSError* error = [NSError errorWithDomain:@"Evernote unauthenticated" code:608 userInfo:nil];
+    [UtilityClass sendError:error type:@"onUnauthenticatedNotification"];
+}
+
+#pragma mark - ENSDKLogging
+
+- (void)evernoteLogInfoString:(NSString *)str
+{
+    DLog(@"EN info: %@", str);
+}
+
+- (void)evernoteLogErrorString:(NSString *)str
+{
+    NSError* error = [NSError errorWithDomain:str code:609 userInfo:nil];
+    [UtilityClass sendError:error type:@"evernoteLogErrorString"];
+    DLog(@"EN error: %@", str);
 }
 
 #pragma mark - IntegrationProvider
@@ -631,7 +661,5 @@ NSError * NewNSErrorFromException(NSException * exc) {
 {
     _readOnlyNoteRefCache[noteRef] = @{kKeyData: error, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kReadOnlyNoteTimeout]};
 }
-
-
 
 @end
