@@ -14,9 +14,10 @@
 
 #import "GmailIntegration.h"
 #import "GmailDetailsIntegrationViewController.h"
+#import "GmailHelperViewController.h"
 #import "GmailIntegrationViewController.h"
 
-@interface GmailIntegrationViewController ()
+@interface GmailIntegrationViewController () <GmailHelperDelegate>
 
 @end
 
@@ -26,7 +27,7 @@
 {
     [super viewDidLoad];
     self.title = @"GMAIL INTEGRATION";
-    self.lightColor = color(224, 76, 64, 1);
+    self.lightColor = kGmailColor;
 }
 
 - (void)recreateCellInfo
@@ -88,7 +89,10 @@
 
 - (void)onLearnMoreTouch
 {
-    // TODO add code
+    [ANALYTICS pushView:@"Gmail Learn More"];
+    GmailHelperViewController *helper = [[GmailHelperViewController alloc] init];
+    helper.delegate = self;
+    [self presentViewController:helper animated:YES completion:nil];
 }
 
 #pragma mark - Helpers
@@ -114,10 +118,17 @@
     }];
 }
 
--(void)authenticatedGmail
+- (void)authenticatedGmail
 {
     [self reload];
 }
 
+- (void)endedGmailHelperSuccessfully:(BOOL)success
+{
+    [ANALYTICS popView];
+    if (success && (!kGmInt.isAuthenticated)) {
+        [self gmailAuthenticateUsingSelector:@selector(authenticatedEvernote) withObject:nil];
+    }
+}
 
 @end

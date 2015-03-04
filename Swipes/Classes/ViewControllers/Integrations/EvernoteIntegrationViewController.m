@@ -17,7 +17,7 @@
 #import "EvernoteIntegration.h"
 #import "EvernoteIntegrationViewController.h"
 
-@interface EvernoteIntegrationViewController ()  <EvernoteHelperDelegate>
+@interface EvernoteIntegrationViewController () <EvernoteHelperDelegate>
 
 @end
 

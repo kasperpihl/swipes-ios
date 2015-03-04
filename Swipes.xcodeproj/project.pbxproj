@@ -301,6 +301,13 @@
 		DA3A070A1A95EAC000F47C59 /* IntegrationSeparatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3A07091A95EAC000F47C59 /* IntegrationSeparatorCell.m */; };
 		DA3E54421A15498500C2116F /* ENNoteRefInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3E54411A15498500C2116F /* ENNoteRefInternal.h */; };
 		DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0B8F188CB4750094F866 /* EvernoteView.m */; };
+		DA4F29C21AA73BF60048C71A /* GmailHelperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4F29C11AA73BF60048C71A /* GmailHelperViewController.m */; };
+		DA4F29CA1AA73D8C0048C71A /* swipes-ui-gmail-integrations-1.png in Resources */ = {isa = PBXBuildFile; fileRef = DA4F29C41AA73D8C0048C71A /* swipes-ui-gmail-integrations-1.png */; };
+		DA4F29CB1AA73D8C0048C71A /* swipes-ui-gmail-integrations-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA4F29C51AA73D8C0048C71A /* swipes-ui-gmail-integrations-1@2x.png */; };
+		DA4F29CC1AA73D8C0048C71A /* swipes-ui-gmail-integrations-2.png in Resources */ = {isa = PBXBuildFile; fileRef = DA4F29C61AA73D8C0048C71A /* swipes-ui-gmail-integrations-2.png */; };
+		DA4F29CD1AA73D8C0048C71A /* swipes-ui-gmail-integrations-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA4F29C71AA73D8C0048C71A /* swipes-ui-gmail-integrations-2@2x.png */; };
+		DA4F29CE1AA73D8C0048C71A /* swipes-ui-gmail-integrations-3.png in Resources */ = {isa = PBXBuildFile; fileRef = DA4F29C81AA73D8C0048C71A /* swipes-ui-gmail-integrations-3.png */; };
+		DA4F29CF1AA73D8C0048C71A /* swipes-ui-gmail-integrations-3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA4F29C91AA73D8C0048C71A /* swipes-ui-gmail-integrations-3@2x.png */; };
 		DA5346BE19D5C9FA007AA15D /* Datamodel.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		DA5346BF19D5CB7B007AA15D /* Datamodel.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		DA5346C019D5CB84007AA15D /* SwipesToday.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DAE2B16319CB7AA900A9074E /* SwipesToday.entitlements */; };
@@ -963,6 +970,14 @@
 		DA3E54411A15498500C2116F /* ENNoteRefInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENNoteRefInternal.h; path = Integrations/ENNoteRefInternal.h; sourceTree = "<group>"; };
 		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteView.h; path = Components/EvernoteView.h; sourceTree = "<group>"; };
 		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteView.m; path = Components/EvernoteView.m; sourceTree = "<group>"; };
+		DA4F29C01AA73BF60048C71A /* GmailHelperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailHelperViewController.h; path = Integrations/GmailHelperViewController.h; sourceTree = "<group>"; };
+		DA4F29C11AA73BF60048C71A /* GmailHelperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailHelperViewController.m; path = Integrations/GmailHelperViewController.m; sourceTree = "<group>"; };
+		DA4F29C41AA73D8C0048C71A /* swipes-ui-gmail-integrations-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-ui-gmail-integrations-1.png"; sourceTree = "<group>"; };
+		DA4F29C51AA73D8C0048C71A /* swipes-ui-gmail-integrations-1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-ui-gmail-integrations-1@2x.png"; sourceTree = "<group>"; };
+		DA4F29C61AA73D8C0048C71A /* swipes-ui-gmail-integrations-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-ui-gmail-integrations-2.png"; sourceTree = "<group>"; };
+		DA4F29C71AA73D8C0048C71A /* swipes-ui-gmail-integrations-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-ui-gmail-integrations-2@2x.png"; sourceTree = "<group>"; };
+		DA4F29C81AA73D8C0048C71A /* swipes-ui-gmail-integrations-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-ui-gmail-integrations-3.png"; sourceTree = "<group>"; };
+		DA4F29C91AA73D8C0048C71A /* swipes-ui-gmail-integrations-3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-ui-gmail-integrations-3@2x.png"; sourceTree = "<group>"; };
 		DA5422CC1986C7A50006A1E6 /* URLHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLHandler.h; sourceTree = "<group>"; };
 		DA5422CD1986C7A50006A1E6 /* URLHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLHandler.m; sourceTree = "<group>"; };
 		DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.0.xcdatamodel"; sourceTree = "<group>"; };
@@ -1471,6 +1486,8 @@
 				DA37E0F31A9CC65C0020A009 /* GmailIntegrationViewController.m */,
 				DA37E0F71A9CFA530020A009 /* GmailDetailsIntegrationViewController.h */,
 				DA37E0F81A9CFA530020A009 /* GmailDetailsIntegrationViewController.m */,
+				DA4F29C01AA73BF60048C71A /* GmailHelperViewController.h */,
+				DA4F29C11AA73BF60048C71A /* GmailHelperViewController.m */,
 			);
 			name = Integrations;
 			sourceTree = "<group>";
@@ -1889,6 +1906,12 @@
 				A7F522AB197D7C76008B6147 /* swipesevernotetag@2x.png */,
 				A772B13F19671D9F00C07909 /* swipesandevernote.png */,
 				A772B14019671D9F00C07909 /* swipesandevernote@2x.png */,
+				DA4F29C41AA73D8C0048C71A /* swipes-ui-gmail-integrations-1.png */,
+				DA4F29C51AA73D8C0048C71A /* swipes-ui-gmail-integrations-1@2x.png */,
+				DA4F29C61AA73D8C0048C71A /* swipes-ui-gmail-integrations-2.png */,
+				DA4F29C71AA73D8C0048C71A /* swipes-ui-gmail-integrations-2@2x.png */,
+				DA4F29C81AA73D8C0048C71A /* swipes-ui-gmail-integrations-3.png */,
+				DA4F29C91AA73D8C0048C71A /* swipes-ui-gmail-integrations-3@2x.png */,
 			);
 			path = Backgrounds;
 			sourceTree = "<group>";
@@ -2595,6 +2618,7 @@
 				A710F14C1A828BD3006FC16F /* swipes-notification.aif in Resources */,
 				A78128D317294C56002226C8 /* MainStoryboard.storyboard in Resources */,
 				DACD544C18A1ACFC00C378DF /* music.png in Resources */,
+				DA4F29CE1AA73D8C0048C71A /* swipes-ui-gmail-integrations-3.png in Resources */,
 				A763D5551A13AC670060D994 /* alldonefortoday@2x.png in Resources */,
 				A7AD45791A39809300DF19BD /* New state - current.m4a in Resources */,
 				DACD544D18A1ACFC00C378DF /* package.png in Resources */,
@@ -2641,7 +2665,9 @@
 				A772B14119671D9F00C07909 /* swipesandevernote.png in Resources */,
 				A7E9F60019DAA2C100CAA1D1 /* ENSDKResources.bundle in Resources */,
 				A708BEE61A15FE3400C7E15A /* GothamRounded-Bold.ttf in Resources */,
+				DA4F29CD1AA73D8C0048C71A /* swipes-ui-gmail-integrations-2@2x.png in Resources */,
 				DACD545618A1ACFC00C378DF /* page_white_dvd.png in Resources */,
+				DA4F29CF1AA73D8C0048C71A /* swipes-ui-gmail-integrations-3@2x.png in Resources */,
 				A75236E717A335680030ED1E /* walkthrough_swipe_schedule@2x.png in Resources */,
 				A75236EC17A335680030ED1E /* wt_menu_expain.png in Resources */,
 				DACD546018A1ACFC00C378DF /* page_white_vector.png in Resources */,
@@ -2653,13 +2679,16 @@
 				A7AD45701A39809300DF19BD /* Task composer5.m4a in Resources */,
 				A75236FD17A349340030ED1E /* walkthrough_phone_background.png in Resources */,
 				DACD544618A1ACFC00C378DF /* folder_camera.png in Resources */,
+				DA4F29CA1AA73D8C0048C71A /* swipes-ui-gmail-integrations-1.png in Resources */,
 				A708BEE81A15FE3400C7E15A /* GothamRounded-Medium.ttf in Resources */,
 				A75236FE17A349340030ED1E /* walkthrough_phone_background@2x.png in Resources */,
 				A7C90E6A17A6ABF700C5F9E2 /* wt_schedule_popup.png in Resources */,
 				A763D5531A13AC670060D994 /* alldonefornow@2x.png in Resources */,
 				A7C90E6B17A6ABF700C5F9E2 /* wt_schedule_popup@2x.png in Resources */,
 				DACD544818A1ACFC00C378DF /* folder_public.png in Resources */,
+				DA4F29CC1AA73D8C0048C71A /* swipes-ui-gmail-integrations-2.png in Resources */,
 				A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */,
+				DA4F29CB1AA73D8C0048C71A /* swipes-ui-gmail-integrations-1@2x.png in Resources */,
 				A701BD2E1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png in Resources */,
 				DACD545918A1ACFC00C378DF /* page_white_h.png in Resources */,
 				DA6B61C319E321FE00089877 /* Localizable.strings in Resources */,
@@ -2938,6 +2967,7 @@
 				DAFBF41C1A65D92F003DD799 /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
 				A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */,
 				A703B1AB1838EBF20047DCC9 /* CKCalendarView.m in Sources */,
+				DA4F29C21AA73BF60048C71A /* GmailHelperViewController.m in Sources */,
 				A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */,
 				A78D7A8817F4B27200AD38B1 /* Global.m in Sources */,
 				A784DB9319E822940041225A /* SearchTopMenu.m in Sources */,
