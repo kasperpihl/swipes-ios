@@ -179,10 +179,15 @@
                 viewController = self.menuViewController;
                 break;
         }
+        if(self.drawerViewController.openSide == MMDrawerSideLeft){
+            NSLog(@"closing");
+            [self.settingsViewController reset];
+            NSLog(@"reset");
+            [self.drawerViewController closeDrawerAnimated:YES completion:nil];
+        }
         self.viewControllers = @[self.drawerViewController];
         self.currentMenu = menu;
-        if(self.drawerViewController.openSide == MMDrawerSideLeft)
-            [self.drawerViewController closeDrawerAnimated:YES completion:nil];
+       
         
         //CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
         //CGRectSetHeight(self.drawerViewController.view,viewController.view.frame.size.height-100);
@@ -275,8 +280,13 @@ static RootViewController *sharedObject;
 }
 
 -(void)accountAlertWithMessage:(NSString *)message{
+    [self accountAlertWithMessage:message inViewController:self];
+}
+-(void)accountAlertWithMessage:(NSString *)message inViewController:(UIViewController *)viewController{
     if( !message )
         message = LOCALIZE_STRING(@"Register for Swipes to safely back up your data and get Swipes Plus");
+    else
+        message = LOCALIZE_STRING(message);
     KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:message block:^(BOOL succeeded, NSError *error) {
         [BLURRY dismissAnimated:YES];
         if(succeeded){
@@ -285,7 +295,7 @@ static RootViewController *sharedObject;
         
     }];
     BLURRY.blurryTopColor = kSettingsBlurColor;
-    [BLURRY showView:alert inViewController:self];
+    [BLURRY showView:alert inViewController:viewController];
 }
 -(void)feedback{
     if([MFMailComposeViewController canSendMail]) {
@@ -468,15 +478,6 @@ static RootViewController *sharedObject;
         [self changeToMenu:KPMenuHome animated:NO];
 }
 
--(void)openIntegrationsWithHelper{
-    [self.settingsViewController resetAndOpenIntegrations];
-    if(self.drawerViewController.openSide != MMDrawerSideLeft){
-        [self.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
-            
-        }];
-    }
-    
-}
 
 -(void)hintHandler:(HintHandler *)hintHandler triggeredHint:(Hints)hint{
     

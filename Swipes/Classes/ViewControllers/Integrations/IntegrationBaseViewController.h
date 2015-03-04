@@ -35,7 +35,6 @@ typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
 - (void)recreateCellInfo;
 - (void)reloadData;
 - (void)goBack;
-
-- (void)addMoveFromRightTransition;
+-(void)addModalTransition;
 
 @end

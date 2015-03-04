@@ -36,6 +36,7 @@ typedef enum {
 -(void)feedback;
 -(void)upgrade;
 -(void)accountAlertWithMessage:(NSString*)message;
+-(void)accountAlertWithMessage:(NSString*)message inViewController:(UIViewController*)viewController;
 -(void)proWithMessage:(NSString*)message;
 -(void)playVideoWithIdentifier:(NSString*)identifier;
 

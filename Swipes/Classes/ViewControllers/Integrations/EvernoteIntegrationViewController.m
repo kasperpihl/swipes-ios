@@ -11,7 +11,7 @@
 #import "DejalActivityView.h"
 #import "KPToDo.h"
 #import "KPAttachment.h"
-
+#import "RootViewController.h"
 #import "EvernoteHelperViewController.h"
 #import "EvernoteImporterViewController.h"
 #import "EvernoteIntegration.h"
@@ -168,6 +168,10 @@
 {
     if (kEnInt.isAuthenticationInProgress)
         return;
+    if(!kCurrent){
+        [ROOT_CONTROLLER accountAlertWithMessage:@"To use Evernote with Swipes, please create a Swipes account" inViewController:self];
+        return;
+    }
     [DejalBezelActivityView activityViewForView:self.parentViewController.view withLabel:LOCALIZE_STRING(@"Opening Evernote...")];
     [kEnInt authenticateEvernoteInViewController:self withBlock:^(NSError *error) {
         [DejalBezelActivityView removeViewAnimated:YES];
