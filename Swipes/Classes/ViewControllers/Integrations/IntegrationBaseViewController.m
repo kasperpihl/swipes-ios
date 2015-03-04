@@ -106,26 +106,15 @@ static CGFloat const kSectionHeight = 34;
     _lightColor = lightColor;
     _titleView.lightColor = lightColor;
 }
-
-- (void)addMoveFromRightTransition
-{
-//    CATransition* transition = [CATransition animation];
-//    transition.duration = 0.2;
-//    transition.type = kCATransitionMoveIn;
-//    transition.subtype = kCATransitionFromRight;
-//    [self.view.window.layer removeAllAnimations];
-//    [self.view.window.layer addAnimation:transition forKey:kCATransition];
+-(void)addModalTransition {
+    CATransition* transition = [CATransition animation];
+    
+    transition.duration = 0.15;
+    transition.type = kCATransitionFade;
+    
+    [self.view.window.layer addAnimation:transition forKey:kCATransition];
 }
 
-- (void)addMoveFromLeftTransition
-{
-//    CATransition* transition = [CATransition animation];
-//    transition.duration = 0.2;
-//    transition.type = kCATransitionReveal;
-//    transition.subtype = kCATransitionFromLeft;
-//    [self.view.window.layer removeAllAnimations];
-//    [self.view.window.layer addAnimation:transition forKey:kCATransition];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -135,7 +124,7 @@ static CGFloat const kSectionHeight = 34;
 
 - (void)goBack
 {
-    [self addMoveFromLeftTransition];
+    [self addModalTransition];
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 

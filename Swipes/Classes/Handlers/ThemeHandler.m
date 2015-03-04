@@ -37,10 +37,6 @@ static ThemeHandler *sharedObject;
     return sharedObject;
 }
 
--(Theme)oppositTheme{
-    return (self.currentTheme == ThemeDark) ? ThemeLight : ThemeDark;
-}
-
 -(void)setCurrentTheme:(Theme)currentTheme{
     if(currentTheme != ThemeLight && currentTheme != ThemeDark) currentTheme = ThemeLight;
     _currentTheme = currentTheme;

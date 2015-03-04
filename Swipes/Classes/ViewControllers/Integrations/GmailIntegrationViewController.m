@@ -11,7 +11,7 @@
 #import "KPToDo.h"
 #import "KPAttachment.h"
 #import "DejalActivityView.h"
-
+#import "RootViewController.h"
 #import "GmailIntegration.h"
 #import "GmailDetailsIntegrationViewController.h"
 #import "GmailHelperViewController.h"
@@ -105,6 +105,10 @@
 
 - (void)gmailAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
+    if(!kCurrent){
+        [ROOT_CONTROLLER accountAlertWithMessage:@"To use Gmail with Swipes, please create a Swipes account" inViewController:self];
+        return;
+    }
     [DejalBezelActivityView activityViewForView:self.parentViewController.view withLabel:@"Authenticating.."];
     [kGmInt authenticateInViewController:self withBlock:^(NSError *error) {
         [DejalBezelActivityView removeViewAnimated:YES];

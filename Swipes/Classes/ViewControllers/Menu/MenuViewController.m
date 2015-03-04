@@ -104,17 +104,10 @@ static CGFloat const kTopMargin = 60;
 
 -(void)pressedBack:(UIButton*)backButton
 {
-    if (self.viewControllers.count > 0) {
-        [self popViewControllerAnimated:YES];
-        return;
-    }
-    else {
-        [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
-    }
+    [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
 }
 
 -(void)reset{
-    [self popAllViewControllers];
     [self renderSubviews];
 }
 
@@ -219,83 +212,12 @@ static CGFloat const kTopMargin = 60;
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)popAllViewControllers{
-    [ANALYTICS clearViews];
-    NSInteger numberOfVCs = self.viewControllers.count;
-    for( NSInteger i = 0 ; i < numberOfVCs ; i++){
-        [self popViewControllerAnimated:NO];
-    }
-}
-
--(void)popViewControllerAnimated:(BOOL)animated{
-    NSInteger level = self.viewControllers.count;
-    UIViewController *poppingViewController = [self.viewControllers lastObject];
-    [ANALYTICS popView];
-    UIView *showingView = (level == 1) ? self.gridView : [(UIViewController*)[self.viewControllers objectAtIndex:level-1] view];
-    [UIView animateWithDuration:0.1 animations:^{
-        poppingViewController.view.alpha = 0;
-    } completion:^(BOOL finished) {
-        showingView.alpha = 0;
-        if(level == 1){
-            [self.backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
-            [self.backButton setTitle:iconString(@"back") forState:UIControlStateHighlighted];
-        }
-        [UIView animateWithDuration:0.2 animations:^{
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.1 animations:^{
-                showingView.alpha = 1;
-                
-            }];
-        }];
-    }];
-    [self.viewControllers removeLastObject];
-    [self.view setNeedsLayout];
-    [poppingViewController removeFromParentViewController];
-}
-
--(void)pushViewController:(UIViewController*)viewController animated:(BOOL)animated
-{
-    NSInteger level = self.viewControllers.count;
-    
-    [self addChildViewController:viewController];
-    UIView *hidingView = (level == 0) ? self.gridView : [(UIViewController*)[self.viewControllers lastObject] view];
-    [UIView animateWithDuration:0.1 animations:^{
-            hidingView.alpha = 0;
-            if(level == 0){
-                [self.backButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
-                [self.backButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
-                
-                
-            }
-        }
-        completion:^(BOOL finished) {
-            viewController.view.alpha = 0;
-            viewController.view.frame = self.view.bounds;
-            CGFloat startY = 20;
-            CGFloat bottomPadding = 44+8;
-            CGRectSetHeight(viewController.view,viewController.view.bounds.size.height-startY-bottomPadding);
-            CGRectSetY(viewController.view, 20);
-            [self.view addSubview:viewController.view];
-            
-            [UIView animateWithDuration:0.2 animations:^{
-                
-            }
-            completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.1 animations:^{
-                    viewController.view.alpha = 1;
-                    
-            }];
-        }];
-    }];
-    [self.viewControllers addObject:viewController];
-}
-
 -(void)addModalTransition {
     CATransition* transition = [CATransition animation];
-    transition.duration = 0.2;
-    transition.type = kCATransitionMoveIn;
-    transition.subtype = kCATransitionFromRight;
-    [self.view.window.layer removeAllAnimations];
+    
+    transition.duration = 0.15;
+    transition.type = kCATransitionFade;
+    
     [self.view.window.layer addAnimation:transition forKey:kCATransition];
 }
 
@@ -424,14 +346,6 @@ static CGFloat const kTopMargin = 60;
 
 -(void)changedTheme{
     //[self renderSubviews];
-}
-
--(void)resetAndOpenIntegrations{
-    [self popAllViewControllers];
-    IntegrationsViewController *integrationVC = [[IntegrationsViewController alloc] init];
-    [ANALYTICS pushView:@"Integrations Menu"];
-    [self pushViewController:integrationVC animated:NO];
-    //[integrationVC openHelperForIntegration:kEvernoteIntegration];
 }
 
 -(void)changedIsPlus{
