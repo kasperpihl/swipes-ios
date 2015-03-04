@@ -303,6 +303,9 @@
 		DA369BF01AA5396D003D0AF9 /* SWAScheduleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA369BEF1AA5396D003D0AF9 /* SWAScheduleCell.m */; };
 		DA369BF21AA54F31003D0AF9 /* SettingsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53217B1586A00FBC042 /* SettingsHandler.m */; };
 		DA369BF31AA54FE9003D0AF9 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = A78D7A8717F4B27200AD38B1 /* Global.m */; };
+		DA369BF81AA65EAE003D0AF9 /* SWATwoLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA369BF71AA65EAE003D0AF9 /* SWATwoLineCell.m */; };
+		DA369BFA1AA672A4003D0AF9 /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA369BF91AA672A4003D0AF9 /* swipes.ttf */; };
+		DA369BFC1AA67325003D0AF9 /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA369BFB1AA67325003D0AF9 /* swipes.ttf */; };
 		DA3E54421A15498500C2116F /* ENNoteRefInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3E54411A15498500C2116F /* ENNoteRefInternal.h */; };
 		DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0B8F188CB4750094F866 /* EvernoteView.m */; };
 		DA47B6601A006D1B00299916 /* MagicalImportFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = DA47B6251A006D1B00299916 /* MagicalImportFunctions.h */; };
@@ -966,6 +969,10 @@
 		DA369BEC1AA538B6003D0AF9 /* ScheduleInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleInterfaceController.m; sourceTree = "<group>"; };
 		DA369BEE1AA5396D003D0AF9 /* SWAScheduleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAScheduleCell.h; sourceTree = "<group>"; };
 		DA369BEF1AA5396D003D0AF9 /* SWAScheduleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAScheduleCell.m; sourceTree = "<group>"; };
+		DA369BF61AA65EAE003D0AF9 /* SWATwoLineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWATwoLineCell.h; sourceTree = "<group>"; };
+		DA369BF71AA65EAE003D0AF9 /* SWATwoLineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWATwoLineCell.m; sourceTree = "<group>"; };
+		DA369BF91AA672A4003D0AF9 /* swipes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = swipes.ttf; path = Swipes/Ressources/Font/swipes.ttf; sourceTree = SOURCE_ROOT; };
+		DA369BFB1AA67325003D0AF9 /* swipes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = swipes.ttf; path = Swipes/Ressources/Font/swipes.ttf; sourceTree = SOURCE_ROOT; };
 		DA3E54411A15498500C2116F /* ENNoteRefInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENNoteRefInternal.h; path = Integrations/ENNoteRefInternal.h; sourceTree = "<group>"; };
 		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteView.h; path = Components/EvernoteView.h; sourceTree = "<group>"; };
 		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteView.m; path = Components/EvernoteView.m; sourceTree = "<group>"; };
@@ -1025,7 +1032,6 @@
 		DA47B65D1A006D1B00299916 /* MagicalRecordLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordLogging.h; sourceTree = "<group>"; };
 		DA47B65E1A006D1B00299916 /* MagicalRecordShorthand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordShorthand.h; sourceTree = "<group>"; };
 		DA47B65F1A006D1B00299916 /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
-		DA50DBEC1AA3DF1E0081FD20 /* Swipes WatchKit Extension copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Swipes WatchKit Extension copy-Info.plist"; path = "/Users/demosten/work/swipes/swipes-ios/Swipes WatchKit Extension copy-Info.plist"; sourceTree = "<absolute>"; };
 		DA50DBED1AA3E1140081FD20 /* SWADefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWADefinitions.h; sourceTree = "<group>"; };
 		DA5422CC1986C7A50006A1E6 /* URLHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLHandler.h; sourceTree = "<group>"; };
 		DA5422CD1986C7A50006A1E6 /* URLHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLHandler.m; sourceTree = "<group>"; };
@@ -1536,7 +1542,6 @@
 				A7778CCC16EB5884004D95E5 /* Frameworks */,
 				A7778CCB16EB5884004D95E5 /* Products */,
 				9BA9EC75C706A45E18C4AB77 /* Pods */,
-				DA50DBEC1AA3DF1E0081FD20 /* Swipes WatchKit Extension copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2100,6 +2105,7 @@
 		DA3282B91A4CB7CF0054CE04 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				DA369BFB1AA67325003D0AF9 /* swipes.ttf */,
 				DA3283291A4EE90C0054CE04 /* Swipes WatchKit Extension.entitlements */,
 				DA3282BA1A4CB7CF0054CE04 /* Info.plist */,
 				DA3282BB1A4CB7CF0054CE04 /* PushNotificationPayload.apns */,
@@ -2110,6 +2116,7 @@
 		DA3282CD1A4CB7CF0054CE04 /* Swipes WatchKit App */ = {
 			isa = PBXGroup;
 			children = (
+				DA369BF91AA672A4003D0AF9 /* swipes.ttf */,
 				DA3282D01A4CB7CF0054CE04 /* Interface.storyboard */,
 				DA3282D31A4CB7CF0054CE04 /* Images.xcassets */,
 				DA3282CE1A4CB7CF0054CE04 /* Supporting Files */,
@@ -2145,6 +2152,8 @@
 				DA3282E41A4CBD2B0054CE04 /* SWATodoCell.m */,
 				DA369BEE1AA5396D003D0AF9 /* SWAScheduleCell.h */,
 				DA369BEF1AA5396D003D0AF9 /* SWAScheduleCell.m */,
+				DA369BF61AA65EAE003D0AF9 /* SWATwoLineCell.h */,
+				DA369BF71AA65EAE003D0AF9 /* SWATwoLineCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -2745,6 +2754,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA369BFC1AA67325003D0AF9 /* swipes.ttf in Resources */,
 				DA3282C61A4CB7CF0054CE04 /* Images.xcassets in Resources */,
 				DA3282CA1A4CB7CF0054CE04 /* Swipes WatchKit App.app in Resources */,
 			);
@@ -2754,6 +2764,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA369BFA1AA672A4003D0AF9 /* swipes.ttf in Resources */,
 				DA3282D21A4CB7CF0054CE04 /* Interface.storyboard in Resources */,
 				DA3282D41A4CB7D00054CE04 /* Images.xcassets in Resources */,
 			);
@@ -3092,6 +3103,7 @@
 				DA369BF21AA54F31003D0AF9 /* SettingsHandler.m in Sources */,
 				DA3282E51A4CBD2B0054CE04 /* SWATodoCell.m in Sources */,
 				DA1194E11A4F3F3200C1E770 /* KPAttachment.m in Sources */,
+				DA369BF81AA65EAE003D0AF9 /* SWATwoLineCell.m in Sources */,
 				DA369BF31AA54FE9003D0AF9 /* Global.m in Sources */,
 				DA1194E21A4F3F3200C1E770 /* SWACoreDataModel.m in Sources */,
 				DA1194D61A4F3ECD00C1E770 /* _KPParseObject.m in Sources */,

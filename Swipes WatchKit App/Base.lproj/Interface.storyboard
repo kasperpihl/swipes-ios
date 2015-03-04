@@ -15,9 +15,8 @@
                                 <tableRow identifier="SWATodoCell" id="v5V-TE-Ooo" customClass="SWATodoCell">
                                     <group key="rootItem" width="1" alignment="left" id="DIF-hI-qaJ">
                                         <items>
-                                            <label alignment="left" numberOfLines="0" id="9hb-dn-s4h"/>
+                                            <label width="1" alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="0" id="9hb-dn-s4h"/>
                                         </items>
-                                        <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
                                         <connections>
                                             <segue destination="U58-tQ-Xcj" kind="push" id="5oo-O6-1KN"/>
                                         </connections>
@@ -50,7 +49,20 @@
             <objects>
                 <controller identifier="details" title="Details" id="U58-tQ-Xcj" customClass="TodoInterfaceController">
                     <items>
-                        <label width="136" height="45" alignment="left" textAlignment="left" numberOfLines="2" id="ePe-EL-Hvz"/>
+                        <table alignment="left" id="iHg-jP-A0N">
+                            <items>
+                                <tableRow identifier="SWATwoLineCell" selectable="NO" id="zTs-N8-eqw" customClass="SWATwoLineCell">
+                                    <group key="rootItem" width="1" alignment="left" id="BIi-2h-P9K">
+                                        <items>
+                                            <label width="1" alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="0" id="J5F-I1-kjo"/>
+                                        </items>
+                                    </group>
+                                    <connections>
+                                        <outlet property="label" destination="J5F-I1-kjo" id="UGN-Ke-Rei"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
                     </items>
                     <menu key="menu" id="y93-ed-Nj4">
                         <items>
@@ -73,7 +85,7 @@
                         </items>
                     </menu>
                     <connections>
-                        <outlet property="titleLabel" destination="ePe-EL-Hvz" id="vWV-xQ-BiB"/>
+                        <outlet property="table" destination="iHg-jP-A0N" id="BTr-S9-WFs"/>
                     </connections>
                 </controller>
             </objects>
