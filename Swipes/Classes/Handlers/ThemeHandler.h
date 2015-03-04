@@ -48,6 +48,5 @@ typedef NS_ENUM(NSUInteger, ThemerItem) {
 -(UIColor*)colorForItem:(ThemerItem)item forceTheme:(Theme)theme;
 -(UIFont *)fontForItem:(ThemerItem)item;
 -(void)changeTheme;
--(Theme)oppositTheme;
 -(NSString*)imageStringForBase:(NSString*)imageBase darkEnding:(NSString*)darkEnding lightEnding:(NSString*)lightEnding forceTheme:(Theme)theme;
 @end

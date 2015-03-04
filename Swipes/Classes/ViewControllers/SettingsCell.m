@@ -59,13 +59,13 @@
         [self.contentView addSubview:self.settingLabel];
         
         self.valueLabel = [[UILabel alloc] init];
-        self.valueLabel.backgroundColor = tcolorR(BackgroundColor); //[UIColor clearColor];
+        self.valueLabel.backgroundColor = tcolor(BackgroundColor); //[UIColor clearColor];
         self.valueLabel.textAlignment = NSTextAlignmentCenter;
-        //self.valueLabel.layer.borderWidth = LINE_SIZE;
+        self.valueLabel.layer.borderWidth = LINE_SIZE;
         self.valueLabel.layer.cornerRadius = kCellHeight / 4;
         self.valueLabel.layer.masksToBounds = YES;
-        //self.valueLabel.layer.borderColor = self.labelColor.CGColor;
-        self.valueLabel.textColor = tcolorR(TextColor);
+        self.valueLabel.layer.borderColor = self.labelColor.CGColor;
+        self.valueLabel.textColor = tcolor(TextColor);
         self.valueLabel.font = self.valueFont;
         [self.contentView addSubview:self.valueLabel];
     }
