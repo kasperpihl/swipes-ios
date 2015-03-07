@@ -12,17 +12,17 @@
 #import "CoreData/KPToDo.h"
 #import "CoreData/KPTag.h"
 #import "CoreData/KPAttachment.h"
-#import "SWATwoLineCell.h"
+#import "SWASubtaskCell.h"
 #import "SWACoreDataModel.h"
 #import "TodoInterfaceController.h"
 
-static NSString* const kCellIdentifier = @"SWATwoLineCell";
+static NSString* const kCellIdentifier = @"SWASubtaskCell";
 static NSString* const EVERNOTE_SERVICE = @"evernote";
 static NSString* const GMAIL_SERVICE = @"gmail";
 
 static NSInteger const kTotalRows = 1;
 
-@interface TodoInterfaceController()
+@interface TodoInterfaceController() <SWASubtaskCellDelegate>
 
 @property (nonatomic, strong) KPToDo* todo;
 
@@ -81,27 +81,21 @@ static NSInteger const kTotalRows = 1;
     }
 
     [self.table setNumberOfRows:totalRows withRowType:kCellIdentifier];
-    SWATwoLineCell* cell = [self.table rowControllerAtIndex:0];
+    SWASubtaskCell* cell = [self.table rowControllerAtIndex:0];
     [cell.label setText:_todo.title];
 
-    if (0 < subtasks.count) {
-        NSUInteger index = 1;
-        for (KPToDo* todo in subtasks) {
-            cell = [self.table rowControllerAtIndex:index++];
-            [cell.label setAttributedText:[self stringForSubtask:todo]];
-        }
-    }
-    
     if (hasTags) {
-        cell = [self.table rowControllerAtIndex:totalRows - 1];
+        cell = [self.table rowControllerAtIndex:1];
         NSMutableString* str = [[NSMutableString alloc] init];
-        for (KPTag* tag in _todo.tags) {
-            if (str.length) {
-                [str appendString:@","];
+        if (_todo.tags.count) {
+            for (KPTag* tag in _todo.tags) {
+                if (str.length) {
+                    [str appendString:@","];
+                }
+                [str appendString:tag.title];
             }
-            [str appendString:tag.title];
+            [str insertString:@"\ue60b " atIndex:0];
         }
-        [str insertString:@"\ue60b " atIndex:0];
         NSUInteger index = 0;
         for (KPAttachment* attachment in _todo.attachments) {
             if ([attachment.service isEqualToString:EVERNOTE_SERVICE]) {
@@ -111,15 +105,30 @@ static NSInteger const kTotalRows = 1;
                 [str insertString:@"\ue606" atIndex:index++];
             }
         }
-        index++;
+        if (_todo.tags.count)
+            index++; // this is the tag symbol
         
         // set attributes
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString: str];
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:str];
         UIFont *swipesFont = iconFont(10);
         [attributedString addAttribute:NSFontAttributeName value:swipesFont range:NSMakeRange(0,index)];
         
         [cell.label setAttributedText:attributedString];
     }
+
+    if (0 < subtasks.count) {
+        NSUInteger index = 2;
+        for (KPToDo* todo in subtasks) {
+            cell = [self.table rowControllerAtIndex:index++];
+            [cell.button setHidden:NO];
+            [cell.button setTitle:@"\ue62c"];
+            cell.todo = todo;
+            cell.delegate = self;
+            //[cell.label setAttributedText:[self stringForSubtask:todo]];
+            [cell.label setText:todo.title];
+        }
+    }
+    
 }
 
 - (IBAction)onMarkDone:(id)sender
@@ -144,9 +153,18 @@ static NSInteger const kTotalRows = 1;
 
 - (IBAction)onSchedule:(id)sender
 {
-    NSLog(@"Schedule");
-    //[self popController];
     [self pushControllerWithName:@"Schedule" context:_todo];
+}
+
+- (void)onCompleteButtonTouch:(KPToDo *)todo
+{
+    NSDictionary* data = @{kKeyCmdComplete: todo.tempId};
+    [WKInterfaceController openParentApplication:data reply:^(NSDictionary *replyInfo, NSError *error) {
+        if (error) {
+            
+        }
+        [self popController];
+    }];
 }
 
 @end

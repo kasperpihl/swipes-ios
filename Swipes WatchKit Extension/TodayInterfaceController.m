@@ -48,6 +48,7 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 - (void)reloadData
 {
     NSError* error;
+    DLog(@"Reloading data");
     _todos = [[SWACoreDataModel sharedInstance] loadTodosWithError:&error oneResult:NO];
     [self fillData];
 }

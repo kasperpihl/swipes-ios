@@ -303,7 +303,7 @@
 		DA369BF01AA5396D003D0AF9 /* SWAScheduleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA369BEF1AA5396D003D0AF9 /* SWAScheduleCell.m */; };
 		DA369BF21AA54F31003D0AF9 /* SettingsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53217B1586A00FBC042 /* SettingsHandler.m */; };
 		DA369BF31AA54FE9003D0AF9 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = A78D7A8717F4B27200AD38B1 /* Global.m */; };
-		DA369BF81AA65EAE003D0AF9 /* SWATwoLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA369BF71AA65EAE003D0AF9 /* SWATwoLineCell.m */; };
+		DA369BF81AA65EAE003D0AF9 /* SWASubtaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA369BF71AA65EAE003D0AF9 /* SWASubtaskCell.m */; };
 		DA369BFA1AA672A4003D0AF9 /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA369BF91AA672A4003D0AF9 /* swipes.ttf */; };
 		DA369BFC1AA67325003D0AF9 /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA369BFB1AA67325003D0AF9 /* swipes.ttf */; };
 		DA3E54421A15498500C2116F /* ENNoteRefInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3E54411A15498500C2116F /* ENNoteRefInternal.h */; };
@@ -969,8 +969,8 @@
 		DA369BEC1AA538B6003D0AF9 /* ScheduleInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleInterfaceController.m; sourceTree = "<group>"; };
 		DA369BEE1AA5396D003D0AF9 /* SWAScheduleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAScheduleCell.h; sourceTree = "<group>"; };
 		DA369BEF1AA5396D003D0AF9 /* SWAScheduleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAScheduleCell.m; sourceTree = "<group>"; };
-		DA369BF61AA65EAE003D0AF9 /* SWATwoLineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWATwoLineCell.h; sourceTree = "<group>"; };
-		DA369BF71AA65EAE003D0AF9 /* SWATwoLineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWATwoLineCell.m; sourceTree = "<group>"; };
+		DA369BF61AA65EAE003D0AF9 /* SWASubtaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWASubtaskCell.h; sourceTree = "<group>"; };
+		DA369BF71AA65EAE003D0AF9 /* SWASubtaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWASubtaskCell.m; sourceTree = "<group>"; };
 		DA369BF91AA672A4003D0AF9 /* swipes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = swipes.ttf; path = Swipes/Ressources/Font/swipes.ttf; sourceTree = SOURCE_ROOT; };
 		DA369BFB1AA67325003D0AF9 /* swipes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = swipes.ttf; path = Swipes/Ressources/Font/swipes.ttf; sourceTree = SOURCE_ROOT; };
 		DA3E54411A15498500C2116F /* ENNoteRefInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENNoteRefInternal.h; path = Integrations/ENNoteRefInternal.h; sourceTree = "<group>"; };
@@ -2152,8 +2152,8 @@
 				DA3282E41A4CBD2B0054CE04 /* SWATodoCell.m */,
 				DA369BEE1AA5396D003D0AF9 /* SWAScheduleCell.h */,
 				DA369BEF1AA5396D003D0AF9 /* SWAScheduleCell.m */,
-				DA369BF61AA65EAE003D0AF9 /* SWATwoLineCell.h */,
-				DA369BF71AA65EAE003D0AF9 /* SWATwoLineCell.m */,
+				DA369BF61AA65EAE003D0AF9 /* SWASubtaskCell.h */,
+				DA369BF71AA65EAE003D0AF9 /* SWASubtaskCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -3103,7 +3103,7 @@
 				DA369BF21AA54F31003D0AF9 /* SettingsHandler.m in Sources */,
 				DA3282E51A4CBD2B0054CE04 /* SWATodoCell.m in Sources */,
 				DA1194E11A4F3F3200C1E770 /* KPAttachment.m in Sources */,
-				DA369BF81AA65EAE003D0AF9 /* SWATwoLineCell.m in Sources */,
+				DA369BF81AA65EAE003D0AF9 /* SWASubtaskCell.m in Sources */,
 				DA369BF31AA54FE9003D0AF9 /* Global.m in Sources */,
 				DA1194E21A4F3F3200C1E770 /* SWACoreDataModel.m in Sources */,
 				DA1194D61A4F3ECD00C1E770 /* _KPParseObject.m in Sources */,

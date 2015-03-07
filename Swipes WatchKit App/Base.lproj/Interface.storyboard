@@ -4,6 +4,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6735"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="swipes.ttf">
+            <string>swipes</string>
+        </mutableArray>
+    </customFonts>
     <scenes>
         <!--Today Interface Controller-->
         <scene sceneID="nb6-GJ-4CV">
@@ -13,9 +18,9 @@
                         <table alignment="left" id="3dt-00-epq">
                             <items>
                                 <tableRow identifier="SWATodoCell" id="v5V-TE-Ooo" customClass="SWATodoCell">
-                                    <group key="rootItem" width="1" alignment="left" id="DIF-hI-qaJ">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" radius="0.0" id="DIF-hI-qaJ">
                                         <items>
-                                            <label width="1" alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="0" id="9hb-dn-s4h"/>
+                                            <label width="1" alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="9hb-dn-s4h"/>
                                         </items>
                                         <connections>
                                             <segue destination="U58-tQ-Xcj" kind="push" id="5oo-O6-1KN"/>
@@ -34,7 +39,6 @@
                             </connections>
                         </button>
                     </items>
-                    <menu key="menu" id="UsF-gn-DHT"/>
                     <connections>
                         <outlet property="noDataLabel" destination="oNB-cM-KZP" id="AIU-xZ-1KY"/>
                         <outlet property="refreshButton" destination="Gyb-1F-vO9" id="NTF-24-3WX"/>
@@ -51,8 +55,26 @@
                     <items>
                         <table alignment="left" id="iHg-jP-A0N">
                             <items>
-                                <tableRow identifier="SWATwoLineCell" selectable="NO" id="zTs-N8-eqw" customClass="SWATwoLineCell">
-                                    <group key="rootItem" width="1" alignment="left" id="BIi-2h-P9K"/>
+                                <tableRow identifier="SWASubtaskCell" selectable="NO" id="zTs-N8-eqw" customClass="SWASubtaskCell">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" radius="0.0" spacing="2" id="BIi-2h-P9K">
+                                        <items>
+                                            <button width="24" alignment="left" verticalAlignment="center" hidden="YES" id="1qi-3X-4vQ">
+                                                <color key="titleColor" red="1" green="0.78431372549019607" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="font" name="swipes" family="swipes" pointSize="14"/>
+                                                <connections>
+                                                    <action selector="onButtonTouch:" destination="zTs-N8-eqw" id="bHT-G8-CUF"/>
+                                                </connections>
+                                            </button>
+                                            <label alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="q4P-u5-MyL"/>
+                                        </items>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <edgeInsets key="margins" left="2" right="2" top="0.0" bottom="0.0"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="button" destination="1qi-3X-4vQ" id="VWO-kz-f02"/>
+                                        <outlet property="label" destination="q4P-u5-MyL" id="bW4-kt-uLu"/>
+                                    </connections>
                                 </tableRow>
                             </items>
                         </table>

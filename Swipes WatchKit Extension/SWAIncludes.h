@@ -9,13 +9,19 @@
 #ifndef Swipes_SWAIncludes_h
 #define Swipes_SWAIncludes_h
 
+#import <Foundation/Foundation.h>
+
 #define color(r,g,b,a) [UIColor colorWithRed: r/255.0 green: g/255.0 blue: b/255.0 alpha:a]
 #define TASKS_COLOR                    color(255,200,94,1) //color(244,203,28,1) //color(237,194,0,1)
 #define DONE_COLOR                     color(134,211,110,1) // color(69,217,132,1)  //
 
 #define LOCALIZE_STRING(string) NSLocalizedString(string, nil)
 
-#import <Foundation/Foundation.h>
+#ifdef DEBUG
+#    define DLog(__FORMAT__, ...) NSLog((@"%s [Line %d]\n" __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#else
+#    define DLog(...) /* */
+#endif
 
 typedef NS_ENUM(NSUInteger, RepeatOptions) {
     RepeatNever = 0,
