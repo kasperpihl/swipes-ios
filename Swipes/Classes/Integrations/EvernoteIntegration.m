@@ -613,6 +613,8 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (void)cacheAddSearchResult:(NSArray *)findNotesResults forText:(NSString *)text
 {
+    if (text && [text containsString:@"updated:"])
+        return; // these better not be cached
     _searchCache[text ? text : [NSNull null]] = @{kKeyData: findNotesResults, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kSearchTimeout]};
 }
 
