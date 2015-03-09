@@ -318,6 +318,8 @@ static NSSet* g_startEndElements;
     if (NSNotFound != startPos) {
         self.updatedContent = [self.updatedContent stringByReplacingCharactersInRange:NSMakeRange(startPos, 0)
                                                                            withString:[NSString stringWithFormat:@"<div><en-todo/>%@<br/></div>", [self xmlEscape:title]]];
+        // add todo so it is the last known todo
+        [_todos addObject:[[EvernoteToDo alloc] initWithTitle:title checked:NO position:_todos.count]];
         self.needUpdate = YES;
         return YES;
     }
