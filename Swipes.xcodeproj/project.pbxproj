@@ -258,15 +258,6 @@
 		A7FE4402182825A1002AFB2E /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = A7FE4401182825A1002AFB2E /* UIImage+Blur.m */; };
 		DA04465119D71CD10083F816 /* CoreSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285417294C56002226C8 /* CoreSyncHandler.m */; };
 		DA044DAB1A994E8F009BB4ED /* TodoInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA044DAA1A994E8F009BB4ED /* TodoInterfaceController.m */; };
-		DA1194D51A4F3ECD00C1E770 /* _KPAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194CE1A4F3ECD00C1E770 /* _KPAttachment.m */; };
-		DA1194D61A4F3ECD00C1E770 /* _KPParseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194D01A4F3ECD00C1E770 /* _KPParseObject.m */; };
-		DA1194D71A4F3ECD00C1E770 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194D21A4F3ECD00C1E770 /* _KPTag.m */; };
-		DA1194D81A4F3ECD00C1E770 /* _KPToDo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194D41A4F3ECD00C1E770 /* _KPToDo.m */; };
-		DA1194E11A4F3F3200C1E770 /* KPAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194DA1A4F3F3200C1E770 /* KPAttachment.m */; };
-		DA1194E21A4F3F3200C1E770 /* SWACoreDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194DC1A4F3F3200C1E770 /* SWACoreDataModel.m */; };
-		DA1194E31A4F3F3200C1E770 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194DE1A4F3F3200C1E770 /* KPTag.m */; };
-		DA1194E41A4F3F3200C1E770 /* KPToDo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194E01A4F3F3200C1E770 /* KPToDo.m */; };
-		DA1194E51A4F440800C1E770 /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
 		DA09DD7A1A6E636B00E66E97 /* GmailThreadProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = DA09DD781A6E636B00E66E97 /* GmailThreadProcessor.h */; };
 		DA09DD7B1A6E636B00E66E97 /* GmailThreadProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = DA09DD791A6E636B00E66E97 /* GmailThreadProcessor.m */; };
 		DA09DD7C1A6E636B00E66E97 /* GmailThreadProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = DA09DD791A6E636B00E66E97 /* GmailThreadProcessor.m */; };
@@ -278,6 +269,15 @@
 		DA09DD8C1A71071E00E66E97 /* GmailAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA09DD871A71071E00E66E97 /* GmailAuthViewController.xib */; };
 		DA09DD8D1A71071E00E66E97 /* GmailAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA09DD871A71071E00E66E97 /* GmailAuthViewController.xib */; };
 		DA09DD8E1A71071E00E66E97 /* GmailAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA09DD871A71071E00E66E97 /* GmailAuthViewController.xib */; };
+		DA1194D51A4F3ECD00C1E770 /* _KPAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194CE1A4F3ECD00C1E770 /* _KPAttachment.m */; };
+		DA1194D61A4F3ECD00C1E770 /* _KPParseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194D01A4F3ECD00C1E770 /* _KPParseObject.m */; };
+		DA1194D71A4F3ECD00C1E770 /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194D21A4F3ECD00C1E770 /* _KPTag.m */; };
+		DA1194D81A4F3ECD00C1E770 /* _KPToDo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194D41A4F3ECD00C1E770 /* _KPToDo.m */; };
+		DA1194E11A4F3F3200C1E770 /* KPAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194DA1A4F3F3200C1E770 /* KPAttachment.m */; };
+		DA1194E21A4F3F3200C1E770 /* SWACoreDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194DC1A4F3F3200C1E770 /* SWACoreDataModel.m */; };
+		DA1194E31A4F3F3200C1E770 /* KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194DE1A4F3F3200C1E770 /* KPTag.m */; };
+		DA1194E41A4F3F3200C1E770 /* KPToDo.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1194E01A4F3F3200C1E770 /* KPToDo.m */; };
+		DA1194E51A4F440800C1E770 /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
 		DA23230F19B39C2700D996EB /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		DA23231019B39C3900D996EB /* KPAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F9D79818BA2E7A003D8833 /* KPAttachment.m */; };
 		DA23231119B39C3900D996EB /* KPParseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A781284917294C56002226C8 /* KPParseObject.m */; };
@@ -581,6 +581,27 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4F12027C11A4CA2F00BEB470;
 			remoteInfo = GTLTouchStaticLib;
+		};
+		DACA4A431AAF43D400DB1D2C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F38F6A60B66E91D00B24B81;
+			remoteInfo = GTLFramework;
+		};
+		DACA4A451AAF43D400DB1D2C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F12027D11A4CA2F00BEB470;
+			remoteInfo = GTLUnitTests;
+		};
+		DACA4A471AAF43D400DB1D2C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F1AD9020B71603F00DC0485;
+			remoteInfo = DevelopmentTestTool;
 		};
 		DAE2B15919CB7A4D00A9074E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -990,6 +1011,11 @@
 		DA04465019D5CDC70083F816 /* Swipes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Swipes.entitlements; path = ../Swipes.entitlements; sourceTree = "<group>"; };
 		DA044DA91A994E8F009BB4ED /* TodoInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodoInterfaceController.h; sourceTree = "<group>"; };
 		DA044DAA1A994E8F009BB4ED /* TodoInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodoInterfaceController.m; sourceTree = "<group>"; };
+		DA09DD781A6E636B00E66E97 /* GmailThreadProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GmailThreadProcessor.h; sourceTree = "<group>"; };
+		DA09DD791A6E636B00E66E97 /* GmailThreadProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GmailThreadProcessor.m; sourceTree = "<group>"; };
+		DA09DD851A71071E00E66E97 /* GmailAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailAuthViewController.h; path = Integrations/GmailAuthViewController.h; sourceTree = "<group>"; };
+		DA09DD861A71071E00E66E97 /* GmailAuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailAuthViewController.m; path = Integrations/GmailAuthViewController.m; sourceTree = "<group>"; };
+		DA09DD871A71071E00E66E97 /* GmailAuthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GmailAuthViewController.xib; path = Integrations/GmailAuthViewController.xib; sourceTree = "<group>"; };
 		DA1194CD1A4F3ECD00C1E770 /* _KPAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _KPAttachment.h; path = CoreData/Generated/_KPAttachment.h; sourceTree = "<group>"; };
 		DA1194CE1A4F3ECD00C1E770 /* _KPAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _KPAttachment.m; path = CoreData/Generated/_KPAttachment.m; sourceTree = "<group>"; };
 		DA1194CF1A4F3ECD00C1E770 /* _KPParseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _KPParseObject.h; path = CoreData/Generated/_KPParseObject.h; sourceTree = "<group>"; };
@@ -1035,74 +1061,6 @@
 		DA369BF71AA65EAE003D0AF9 /* SWASubtaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWASubtaskCell.m; sourceTree = "<group>"; };
 		DA369BF91AA672A4003D0AF9 /* swipes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = swipes.ttf; path = Swipes/Ressources/Font/swipes.ttf; sourceTree = SOURCE_ROOT; };
 		DA369BFB1AA67325003D0AF9 /* swipes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = swipes.ttf; path = Swipes/Ressources/Font/swipes.ttf; sourceTree = SOURCE_ROOT; };
-		DA3E54411A15498500C2116F /* ENNoteRefInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENNoteRefInternal.h; path = Integrations/ENNoteRefInternal.h; sourceTree = "<group>"; };
-		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteView.h; path = Components/EvernoteView.h; sourceTree = "<group>"; };
-		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteView.m; path = Components/EvernoteView.m; sourceTree = "<group>"; };
-		DA47B6251A006D1B00299916 /* MagicalImportFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalImportFunctions.h; sourceTree = "<group>"; };
-		DA47B6261A006D1B00299916 /* MagicalImportFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalImportFunctions.m; sourceTree = "<group>"; };
-		DA47B6271A006D1B00299916 /* NSAttributeDescription+MagicalDataImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributeDescription+MagicalDataImport.h"; sourceTree = "<group>"; };
-		DA47B6281A006D1B00299916 /* NSAttributeDescription+MagicalDataImport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributeDescription+MagicalDataImport.m"; sourceTree = "<group>"; };
-		DA47B6291A006D1B00299916 /* NSEntityDescription+MagicalDataImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSEntityDescription+MagicalDataImport.h"; sourceTree = "<group>"; };
-		DA47B62A1A006D1B00299916 /* NSEntityDescription+MagicalDataImport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSEntityDescription+MagicalDataImport.m"; sourceTree = "<group>"; };
-		DA47B62B1A006D1B00299916 /* NSNumber+MagicalDataImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+MagicalDataImport.h"; sourceTree = "<group>"; };
-		DA47B62C1A006D1B00299916 /* NSNumber+MagicalDataImport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+MagicalDataImport.m"; sourceTree = "<group>"; };
-		DA47B62D1A006D1B00299916 /* NSObject+MagicalDataImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MagicalDataImport.h"; sourceTree = "<group>"; };
-		DA47B62E1A006D1B00299916 /* NSObject+MagicalDataImport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MagicalDataImport.m"; sourceTree = "<group>"; };
-		DA47B62F1A006D1B00299916 /* NSRelationshipDescription+MagicalDataImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSRelationshipDescription+MagicalDataImport.h"; sourceTree = "<group>"; };
-		DA47B6301A006D1B00299916 /* NSRelationshipDescription+MagicalDataImport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSRelationshipDescription+MagicalDataImport.m"; sourceTree = "<group>"; };
-		DA47B6311A006D1B00299916 /* NSString+MagicalDataImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MagicalDataImport.h"; sourceTree = "<group>"; };
-		DA47B6321A006D1B00299916 /* NSString+MagicalDataImport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MagicalDataImport.m"; sourceTree = "<group>"; };
-		DA47B6341A006D1B00299916 /* NSManagedObject+MagicalAggregation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+MagicalAggregation.h"; sourceTree = "<group>"; };
-		DA47B6351A006D1B00299916 /* NSManagedObject+MagicalAggregation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+MagicalAggregation.m"; sourceTree = "<group>"; };
-		DA47B6361A006D1B00299916 /* NSManagedObject+MagicalDataImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+MagicalDataImport.h"; sourceTree = "<group>"; };
-		DA47B6371A006D1B00299916 /* NSManagedObject+MagicalDataImport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+MagicalDataImport.m"; sourceTree = "<group>"; };
-		DA47B6381A006D1B00299916 /* NSManagedObject+MagicalFinders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+MagicalFinders.h"; sourceTree = "<group>"; };
-		DA47B6391A006D1B00299916 /* NSManagedObject+MagicalFinders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+MagicalFinders.m"; sourceTree = "<group>"; };
-		DA47B63A1A006D1B00299916 /* NSManagedObject+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+MagicalRecord.h"; sourceTree = "<group>"; };
-		DA47B63B1A006D1B00299916 /* NSManagedObject+MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+MagicalRecord.m"; sourceTree = "<group>"; };
-		DA47B63C1A006D1B00299916 /* NSManagedObject+MagicalRequests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+MagicalRequests.h"; sourceTree = "<group>"; };
-		DA47B63D1A006D1B00299916 /* NSManagedObject+MagicalRequests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+MagicalRequests.m"; sourceTree = "<group>"; };
-		DA47B63F1A006D1B00299916 /* NSManagedObjectContext+MagicalObserving.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+MagicalObserving.h"; sourceTree = "<group>"; };
-		DA47B6401A006D1B00299916 /* NSManagedObjectContext+MagicalObserving.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+MagicalObserving.m"; sourceTree = "<group>"; };
-		DA47B6411A006D1B00299916 /* NSManagedObjectContext+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+MagicalRecord.h"; sourceTree = "<group>"; };
-		DA47B6421A006D1B00299916 /* NSManagedObjectContext+MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+MagicalRecord.m"; sourceTree = "<group>"; };
-		DA47B6431A006D1B00299916 /* NSManagedObjectContext+MagicalSaves.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+MagicalSaves.h"; sourceTree = "<group>"; };
-		DA47B6441A006D1B00299916 /* NSManagedObjectContext+MagicalSaves.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+MagicalSaves.m"; sourceTree = "<group>"; };
-		DA47B6451A006D1B00299916 /* NSManagedObjectContext+MagicalThreading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+MagicalThreading.h"; sourceTree = "<group>"; };
-		DA47B6461A006D1B00299916 /* NSManagedObjectContext+MagicalThreading.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+MagicalThreading.m"; sourceTree = "<group>"; };
-		DA47B6471A006D1B00299916 /* NSManagedObjectModel+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectModel+MagicalRecord.h"; sourceTree = "<group>"; };
-		DA47B6481A006D1B00299916 /* NSManagedObjectModel+MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+MagicalRecord.m"; sourceTree = "<group>"; };
-		DA47B6491A006D1B00299916 /* NSPersistentStore+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStore+MagicalRecord.h"; sourceTree = "<group>"; };
-		DA47B64A1A006D1B00299916 /* NSPersistentStore+MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStore+MagicalRecord.m"; sourceTree = "<group>"; };
-		DA47B64B1A006D1B00299916 /* NSPersistentStoreCoordinator+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStoreCoordinator+MagicalRecord.h"; sourceTree = "<group>"; };
-		DA47B64C1A006D1B00299916 /* NSPersistentStoreCoordinator+MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStoreCoordinator+MagicalRecord.m"; sourceTree = "<group>"; };
-		DA47B64E1A006D1B00299916 /* MagicalRecord+Actions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicalRecord+Actions.h"; sourceTree = "<group>"; };
-		DA47B64F1A006D1B00299916 /* MagicalRecord+Actions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MagicalRecord+Actions.m"; sourceTree = "<group>"; };
-		DA47B6501A006D1B00299916 /* MagicalRecord+ErrorHandling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicalRecord+ErrorHandling.h"; sourceTree = "<group>"; };
-		DA47B6511A006D1B00299916 /* MagicalRecord+ErrorHandling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MagicalRecord+ErrorHandling.m"; sourceTree = "<group>"; };
-		DA47B6521A006D1B00299916 /* MagicalRecord+iCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicalRecord+iCloud.h"; sourceTree = "<group>"; };
-		DA47B6531A006D1B00299916 /* MagicalRecord+iCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MagicalRecord+iCloud.m"; sourceTree = "<group>"; };
-		DA47B6541A006D1B00299916 /* MagicalRecord+Options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicalRecord+Options.h"; sourceTree = "<group>"; };
-		DA47B6551A006D1B00299916 /* MagicalRecord+Options.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MagicalRecord+Options.m"; sourceTree = "<group>"; };
-		DA47B6561A006D1B00299916 /* MagicalRecord+Setup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicalRecord+Setup.h"; sourceTree = "<group>"; };
-		DA47B6571A006D1B00299916 /* MagicalRecord+Setup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MagicalRecord+Setup.m"; sourceTree = "<group>"; };
-		DA47B6581A006D1B00299916 /* MagicalRecord+ShorthandSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MagicalRecord+ShorthandSupport.h"; sourceTree = "<group>"; };
-		DA47B6591A006D1B00299916 /* MagicalRecord+ShorthandSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MagicalRecord+ShorthandSupport.m"; sourceTree = "<group>"; };
-		DA47B65A1A006D1B00299916 /* MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecord.h; sourceTree = "<group>"; };
-		DA47B65B1A006D1B00299916 /* MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalRecord.m; sourceTree = "<group>"; };
-		DA47B65C1A006D1B00299916 /* MagicalRecordDeprecated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordDeprecated.h; sourceTree = "<group>"; };
-		DA47B65D1A006D1B00299916 /* MagicalRecordLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordLogging.h; sourceTree = "<group>"; };
-		DA47B65E1A006D1B00299916 /* MagicalRecordShorthand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordShorthand.h; sourceTree = "<group>"; };
-		DA47B65F1A006D1B00299916 /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
-		DA50DBED1AA3E1140081FD20 /* SWADefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWADefinitions.h; sourceTree = "<group>"; };
-		DA09DD781A6E636B00E66E97 /* GmailThreadProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GmailThreadProcessor.h; sourceTree = "<group>"; };
-		DA09DD791A6E636B00E66E97 /* GmailThreadProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GmailThreadProcessor.m; sourceTree = "<group>"; };
-		DA09DD851A71071E00E66E97 /* GmailAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailAuthViewController.h; path = Integrations/GmailAuthViewController.h; sourceTree = "<group>"; };
-		DA09DD861A71071E00E66E97 /* GmailAuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailAuthViewController.m; path = Integrations/GmailAuthViewController.m; sourceTree = "<group>"; };
-		DA09DD871A71071E00E66E97 /* GmailAuthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GmailAuthViewController.xib; path = Integrations/GmailAuthViewController.xib; sourceTree = "<group>"; };
-		DA23232419B472BE00D996EB /* GlobalApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalApp.h; sourceTree = "<group>"; };
-		DA23232519B472BE00D996EB /* GlobalApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalApp.m; sourceTree = "<group>"; };
-		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		DA37E0F21A9CC65C0020A009 /* GmailIntegrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailIntegrationViewController.h; path = Integrations/GmailIntegrationViewController.h; sourceTree = "<group>"; };
 		DA37E0F31A9CC65C0020A009 /* GmailIntegrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailIntegrationViewController.m; path = Integrations/GmailIntegrationViewController.m; sourceTree = "<group>"; };
 		DA37E0F71A9CFA530020A009 /* GmailDetailsIntegrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailDetailsIntegrationViewController.h; path = Integrations/GmailDetailsIntegrationViewController.h; sourceTree = "<group>"; };
@@ -1127,6 +1085,7 @@
 		DA4F29C71AA73D8C0048C71A /* swipes-ui-gmail-integrations-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-ui-gmail-integrations-2@2x.png"; sourceTree = "<group>"; };
 		DA4F29C81AA73D8C0048C71A /* swipes-ui-gmail-integrations-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-ui-gmail-integrations-3.png"; sourceTree = "<group>"; };
 		DA4F29C91AA73D8C0048C71A /* swipes-ui-gmail-integrations-3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-ui-gmail-integrations-3@2x.png"; sourceTree = "<group>"; };
+		DA50DBED1AA3E1140081FD20 /* SWADefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWADefinitions.h; sourceTree = "<group>"; };
 		DA5422CC1986C7A50006A1E6 /* URLHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLHandler.h; sourceTree = "<group>"; };
 		DA5422CD1986C7A50006A1E6 /* URLHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLHandler.m; sourceTree = "<group>"; };
 		DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.0.xcdatamodel"; sourceTree = "<group>"; };
@@ -2363,109 +2322,6 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
-		DA47B6231A006D1B00299916 /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-				DA47B6241A006D1B00299916 /* DataImport */,
-				DA47B6331A006D1B00299916 /* NSManagedObject */,
-				DA47B63E1A006D1B00299916 /* NSManagedObjectContext */,
-				DA47B6471A006D1B00299916 /* NSManagedObjectModel+MagicalRecord.h */,
-				DA47B6481A006D1B00299916 /* NSManagedObjectModel+MagicalRecord.m */,
-				DA47B6491A006D1B00299916 /* NSPersistentStore+MagicalRecord.h */,
-				DA47B64A1A006D1B00299916 /* NSPersistentStore+MagicalRecord.m */,
-				DA47B64B1A006D1B00299916 /* NSPersistentStoreCoordinator+MagicalRecord.h */,
-				DA47B64C1A006D1B00299916 /* NSPersistentStoreCoordinator+MagicalRecord.m */,
-			);
-			path = Categories;
-			sourceTree = "<group>";
-		};
-		DA47B6241A006D1B00299916 /* DataImport */ = {
-			isa = PBXGroup;
-			children = (
-				DA47B6251A006D1B00299916 /* MagicalImportFunctions.h */,
-				DA47B6261A006D1B00299916 /* MagicalImportFunctions.m */,
-				DA47B6271A006D1B00299916 /* NSAttributeDescription+MagicalDataImport.h */,
-				DA47B6281A006D1B00299916 /* NSAttributeDescription+MagicalDataImport.m */,
-				DA47B6291A006D1B00299916 /* NSEntityDescription+MagicalDataImport.h */,
-				DA47B62A1A006D1B00299916 /* NSEntityDescription+MagicalDataImport.m */,
-				DA47B62B1A006D1B00299916 /* NSNumber+MagicalDataImport.h */,
-				DA47B62C1A006D1B00299916 /* NSNumber+MagicalDataImport.m */,
-				DA47B62D1A006D1B00299916 /* NSObject+MagicalDataImport.h */,
-				DA47B62E1A006D1B00299916 /* NSObject+MagicalDataImport.m */,
-				DA47B62F1A006D1B00299916 /* NSRelationshipDescription+MagicalDataImport.h */,
-				DA47B6301A006D1B00299916 /* NSRelationshipDescription+MagicalDataImport.m */,
-				DA47B6311A006D1B00299916 /* NSString+MagicalDataImport.h */,
-				DA47B6321A006D1B00299916 /* NSString+MagicalDataImport.m */,
-			);
-			path = DataImport;
-			sourceTree = "<group>";
-		};
-		DA47B6331A006D1B00299916 /* NSManagedObject */ = {
-			isa = PBXGroup;
-			children = (
-				DA47B6341A006D1B00299916 /* NSManagedObject+MagicalAggregation.h */,
-				DA47B6351A006D1B00299916 /* NSManagedObject+MagicalAggregation.m */,
-				DA47B6361A006D1B00299916 /* NSManagedObject+MagicalDataImport.h */,
-				DA47B6371A006D1B00299916 /* NSManagedObject+MagicalDataImport.m */,
-				DA47B6381A006D1B00299916 /* NSManagedObject+MagicalFinders.h */,
-				DA47B6391A006D1B00299916 /* NSManagedObject+MagicalFinders.m */,
-				DA47B63A1A006D1B00299916 /* NSManagedObject+MagicalRecord.h */,
-				DA47B63B1A006D1B00299916 /* NSManagedObject+MagicalRecord.m */,
-				DA47B63C1A006D1B00299916 /* NSManagedObject+MagicalRequests.h */,
-				DA47B63D1A006D1B00299916 /* NSManagedObject+MagicalRequests.m */,
-			);
-			path = NSManagedObject;
-			sourceTree = "<group>";
-		};
-		DA47B63E1A006D1B00299916 /* NSManagedObjectContext */ = {
-			isa = PBXGroup;
-			children = (
-				DA47B63F1A006D1B00299916 /* NSManagedObjectContext+MagicalObserving.h */,
-				DA47B6401A006D1B00299916 /* NSManagedObjectContext+MagicalObserving.m */,
-				DA47B6411A006D1B00299916 /* NSManagedObjectContext+MagicalRecord.h */,
-				DA47B6421A006D1B00299916 /* NSManagedObjectContext+MagicalRecord.m */,
-				DA47B6431A006D1B00299916 /* NSManagedObjectContext+MagicalSaves.h */,
-				DA47B6441A006D1B00299916 /* NSManagedObjectContext+MagicalSaves.m */,
-				DA47B6451A006D1B00299916 /* NSManagedObjectContext+MagicalThreading.h */,
-				DA47B6461A006D1B00299916 /* NSManagedObjectContext+MagicalThreading.m */,
-			);
-			path = NSManagedObjectContext;
-			sourceTree = "<group>";
-		};
-		DA47B64D1A006D1B00299916 /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				DA47B64E1A006D1B00299916 /* MagicalRecord+Actions.h */,
-				DA47B64F1A006D1B00299916 /* MagicalRecord+Actions.m */,
-				DA47B6501A006D1B00299916 /* MagicalRecord+ErrorHandling.h */,
-				DA47B6511A006D1B00299916 /* MagicalRecord+ErrorHandling.m */,
-				DA47B6521A006D1B00299916 /* MagicalRecord+iCloud.h */,
-				DA47B6531A006D1B00299916 /* MagicalRecord+iCloud.m */,
-				DA47B6541A006D1B00299916 /* MagicalRecord+Options.h */,
-				DA47B6551A006D1B00299916 /* MagicalRecord+Options.m */,
-				DA47B6561A006D1B00299916 /* MagicalRecord+Setup.h */,
-				DA47B6571A006D1B00299916 /* MagicalRecord+Setup.m */,
-				DA47B6581A006D1B00299916 /* MagicalRecord+ShorthandSupport.h */,
-				DA47B6591A006D1B00299916 /* MagicalRecord+ShorthandSupport.m */,
-				DA47B65A1A006D1B00299916 /* MagicalRecord.h */,
-				DA47B65B1A006D1B00299916 /* MagicalRecord.m */,
-				DA47B65C1A006D1B00299916 /* MagicalRecordDeprecated.h */,
-				DA47B65D1A006D1B00299916 /* MagicalRecordLogging.h */,
-				DA47B65E1A006D1B00299916 /* MagicalRecordShorthand.h */,
-			);
-			path = Core;
-			sourceTree = "<group>";
-		};
-		DA53461419D426B4007AA15D /* MagicalRecord */ = {
-			isa = PBXGroup;
-			children = (
-				DA47B6231A006D1B00299916 /* Categories */,
-				DA47B64D1A006D1B00299916 /* Core */,
-				DA47B65F1A006D1B00299916 /* CoreData+MagicalRecord.h */,
-			);
-			path = MagicalRecord;
-			sourceTree = "<group>";
-		};
 		DA69247D19B879C20082D1E4 /* Handlers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2523,7 +2379,10 @@
 		DAB1650E1A6D3D51008D69B2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				DACA4A441AAF43D400DB1D2C /* GTL.framework */,
 				DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */,
+				DACA4A461AAF43D400DB1D2C /* GTLUnitTests.xctest */,
+				DACA4A481AAF43D400DB1D2C /* DevelopmentTestTool */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3018,6 +2877,27 @@
 			fileType = archive.ar;
 			path = libGTLTouchStaticLib.a;
 			remoteRef = DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DACA4A441AAF43D400DB1D2C /* GTL.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GTL.framework;
+			remoteRef = DACA4A431AAF43D400DB1D2C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DACA4A461AAF43D400DB1D2C /* GTLUnitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GTLUnitTests.xctest;
+			remoteRef = DACA4A451AAF43D400DB1D2C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DACA4A481AAF43D400DB1D2C /* DevelopmentTestTool */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = DevelopmentTestTool;
+			remoteRef = DACA4A471AAF43D400DB1D2C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -3756,8 +3636,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
@@ -3934,8 +3814,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
@@ -3966,6 +3846,7 @@
 					"\"${PODS_ROOT}/Headers/Public/youtube-ios-player-helper\"",
 					"$(SDKROOT)/usr/include/libz",
 					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
+					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Swipes/Supporting Files/Swipes-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -4028,8 +3909,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs",

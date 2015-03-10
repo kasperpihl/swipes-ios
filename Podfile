@@ -3,8 +3,8 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '7.0'
 
 target :Swipes do
-    pod 'M13BadgeView', '~> 1.0'
-    pod 'youtube-ios-player-helper', '~> 0.1'
+    pod 'M13BadgeView'
+    pod 'youtube-ios-player-helper'
     pod 'Appirater', :inhibit_warnings => true
     pod 'Bolts', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
@@ -18,7 +18,7 @@ target :Swipes do
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
     pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK', '~> 3.10'
+    pod 'GoogleAnalytics-iOS-SDK'
 end
 
 target :SwipesKit do
@@ -36,7 +36,7 @@ target :SwipesKit do
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
     pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK', '~> 3.10'
+    pod 'GoogleAnalytics-iOS-SDK'
 end
 
 target :SwipesToday do
@@ -46,7 +46,7 @@ target :SwipesToday do
     pod 'Underscore.m'
     pod 'Base64'
     pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK', '~> 3.10'
+    pod 'GoogleAnalytics-iOS-SDK'
 end
 
 #link_with 'Swipes', 'Swipes_iOS8', 'SwipesKit'
