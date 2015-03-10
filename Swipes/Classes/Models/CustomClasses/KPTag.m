@@ -27,12 +27,14 @@
     newTag.title = string;
     if (save)
         [KPCORE saveContextForSynchronization:nil];
-    if(from)
+    if(from){
         [ANALYTICS trackEvent:@"Added Tag" options:@{@"Length":@(string.length),@"From":from}];
+        [ANALYTICS trackCategory:@"Tags" action:@"Added" label:from value:@(string.length)];
+    }
     return newTag;
 }
 
-+(void)deleteTagWithString:(NSString *)string save:(BOOL)save
++(void)deleteTagWithString:(NSString *)string save:(BOOL)save from:(NSString *)from
 {
     NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",@[string]];
     KPTag *tagObj = [KPTag MR_findFirstWithPredicate:tagPredicate];
@@ -42,6 +44,10 @@
     [tagObj MR_deleteEntity];
     if (save)
         [KPCORE saveContextForSynchronization:nil];
+    if(from){
+        [ANALYTICS trackEvent:@"Deleted Tag" options:@{@"From":from}];
+        [ANALYTICS trackCategory:@"Tags" action:@"Deleted" label:from value:nil];
+    }
 }
 
 +(NSArray *)allTagsAsStrings

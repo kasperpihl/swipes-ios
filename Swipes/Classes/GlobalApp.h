@@ -13,6 +13,8 @@
 
 @interface GlobalApp : NSObject
 + (BOOL)isEvernoteInstalled;
++ (BOOL)isMailboxInstalled;
++ (BOOL)isGoogleMailInstalled;
 + (instancetype)sharedInstance;
 
 + (CGFloat)statusBarHeight;
@@ -20,6 +22,8 @@
 + (void)activityIndicatorVisible:(BOOL)status;
 + (NSString *)machineType;
 + (NSString *)deviceId;
++ (UIView *)topView;
++ (UIViewController*)topViewControllerWithRootViewController:(UIViewController*)rootViewController;
 
 - (void)startBackgroundHandler:(NSNotification *)notification;
 - (void)endBackgroundHandler:(NSNotification *)notification;

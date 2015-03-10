@@ -51,6 +51,7 @@
 #import "DotView.h"
 #import "EvernoteView.h"
 #import "DropboxView.h"
+#import "AttachmentEditView.h"
 //#import "MCSwipeTableViewCell.h"
 
 #import "SectionHeaderView.h"
@@ -68,6 +69,7 @@
 
 #import "SyncLabel.h"
 #import "EvernoteIntegration.h"
+#import "GmailIntegration.h"
 
 #import "ToDoViewController.h"
 
@@ -85,7 +87,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 
 
-@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate, SubtaskControllerDelegate>
+@interface ToDoViewController () <HPGrowingTextViewDelegate, NotesViewDelegate,EvernoteViewDelegate, ToolbarDelegate,KPRepeatPickerDelegate,KPTimePickerDelegate,MCSwipeTableViewCellDelegate, DropboxViewDelegate, SubtaskControllerDelegate, AttachmentEditViewDelegate, UITextViewDelegate>
 @property (nonatomic) KPEditMode activeEditMode;
 @property (nonatomic) CellType cellType;
 @property (nonatomic) NSString *objectId;
@@ -111,8 +113,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UIView *alarmContainer;
 @property (nonatomic) UIView *notesContainer;
 @property (nonatomic) UIView *repeatedContainer;
-@property (nonatomic) UIView *evernoteContainer;
-@property (nonatomic) UIView *dropboxContainer;
+
+@property (nonatomic) IBOutletCollection(AttachmentEditView) NSArray *attachmentViews;
 
 @property (nonatomic) KPRepeatPicker *repeatPicker;
 @property (nonatomic) UILabel *subtaskLabel;
@@ -120,9 +122,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 @property (nonatomic) UILabel *tagsLabel;
 @property (nonatomic) UITextView *notesView;
 @property (nonatomic) UILabel *repeatedLabel;
-@property (nonatomic) UILabel *evernoteLabel;
 @property (nonatomic) SyncLabel *syncLabel;
-@property (nonatomic) UILabel *dropboxLabel;
 
 @property (nonatomic) UILabel *scheduleImageIcon;
 
@@ -270,6 +270,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self layoutWithDuration:0];
 }
 
+-(BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange{
+    if([[UIApplication sharedApplication] canOpenURL:URL]){
+        return YES;
+    }
+    return NO;
+}
+
 
 #pragma mark MCSwipeTableViewCellDelegate
 -(void)swipeTableViewCell:(MCSwipeTableViewCell *)cell didTriggerState:(MCSwipeTableViewCellState)state withMode:(MCSwipeTableViewCellMode)mode{
@@ -322,11 +329,15 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 - (void)growingTextViewDidEndEditing:(HPGrowingTextView *)growingTextView{
     growingTextView.text = [growingTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     if(growingTextView.text.length > 0){
-        self.model.title = growingTextView.text;
-        [KPToDo saveToSync];
+        if(self.model){
+            self.model.title = growingTextView.text;
+            [KPToDo saveToSync];
+        }
     }
     else{
-        growingTextView.text = self.model.title;
+        if(self.model){
+            growingTextView.text = self.model.title;
+        }
     }
     self.activeEditMode = KPEditModeNone;
 }
@@ -350,6 +361,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.model.notes = text;
     [KPToDo saveToSync];
     [ANALYTICS trackEvent:@"Update Notes" options:@{ @"Length": @(text.length) }];
+    [ANALYTICS trackCategory:@"Tasks" action:@"Note" label:nil value:@(text.length)];
     [self updateNotes];
     [self layoutWithDuration:0];
 }
@@ -359,7 +371,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [BLURRY dismissAnimated:YES];
 }
 
-
 #pragma mark - EvernoteViewDelegate
 
 - (void)selectedEvernoteInView:(EvernoteView *)EvernoteView noteRef:(ENNoteRef *)noteRef title:(NSString *)title sync:(BOOL)sync
@@ -368,7 +379,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [BLURRY dismissAnimated:YES];
     [self.model attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:noteRef] sync:sync from:@"manual"];
     [KPToDo saveToSync];
-    [self updateEvernote];
+    [self updateAttachments];
     [self layoutWithDuration:0];
 }
 
@@ -388,7 +399,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [BLURRY dismissAnimated:YES];
     [self.model attachService:DROPBOX_SERVICE title:[path lastPathComponent] identifier:path sync:NO from:@"manual"];
     [KPToDo saveToSync];
-    [self updateDropbox];
+    [self updateAttachments];
     [self layoutWithDuration:0];
 }
 
@@ -415,16 +426,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     [self updateNotes];
     [self updateDot];
     [self updateRepeated];
-    [self updateEvernote];
-    [self updateDropbox];
+    [self updateAttachments];
     [self updateSectionHeader];
     [self.subtasksController fullReload];
     [self layoutWithDuration:0];
     
 }
-
-
-
 
 
 -(void)updateTags{
@@ -471,12 +478,18 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 - (void)updateNotes
 {
+    
+    NSDictionary *defaultAttributes = @{
+                                        NSForegroundColorAttributeName: tcolor(TextColor),
+                                        NSFontAttributeName: EDIT_TASK_TEXT_FONT
+                                        };
     if(!self.model.notes || self.model.notes.length == 0){
-        self.notesView.text = LOCALIZE_STRING(@"Add notes");
+        self.notesView.attributedText = [[NSAttributedString alloc] initWithString:LOCALIZE_STRING(@"Add notes") attributes:defaultAttributes];
     }
     else{
-        self.notesView.text = self.model.notes;
+        self.notesView.attributedText = [[NSAttributedString alloc] initWithString:self.model.notes attributes:defaultAttributes];
     }
+   
     CGRectSetSize(self.notesView, self.view.frame.size.width-LABEL_X-10, 1500);
     //CGSize contentSize = [self.notesView sizeThatFits:CGSizeMake(self.notesView.frame.size.width, 500)];
     [self.notesView sizeToFit];
@@ -484,6 +497,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     //    DLogFrame(self.notesView);
     
     CGRectSetHeight(self.notesView,self.notesView.frame.size.height);
+    
     CGRectSetHeight(self.notesContainer, self.notesView.frame.size.height+2*NOTES_PADDING);
 }
 
@@ -552,24 +566,94 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.repeatedLabel.text = labelText;
 }
 
-- (void)updateEvernote
-{
-    KPAttachment* attachment = [self.model firstAttachmentForServiceType:EVERNOTE_SERVICE];
-    if ( !attachment ){
-        CGRectSetHeight(self.evernoteContainer, 0);
-        return;
-    }
-    BOOL isSyncing = [attachment.sync boolValue];
-    CGRectSetHeight(self.evernoteContainer, (isSyncing ? SCHEDULE_ROW_HEIGHTS + 10 : SCHEDULE_ROW_HEIGHTS));
-    self.syncLabel.hidden = !isSyncing;
-    
-    self.evernoteLabel.text = attachment.title;
-}
 
-- (void)updateDropbox
-{
-    KPAttachment* attachment = [self.model firstAttachmentForServiceType:DROPBOX_SERVICE];
-    self.dropboxLabel.text = (nil != attachment) ? attachment.title : @"Attach Dropbox file";
+-(void)updateAttachments{
+    NSSortDescriptor *firstDesc = [NSSortDescriptor sortDescriptorWithKey:@"service" ascending:YES];
+    NSSortDescriptor *secondDesc = [NSSortDescriptor sortDescriptorWithKey:@"title" ascending:YES];
+    NSSortDescriptor *thirdDesc = [NSSortDescriptor sortDescriptorWithKey:@"identifier" ascending:YES];
+    NSArray *attachments = [[self.model attachments] sortedArrayUsingDescriptors:@[firstDesc,secondDesc,thirdDesc]];
+    BOOL addViews = NO;
+    if(attachments.count != self.attachmentViews.count)
+        addViews = YES;
+    if(!addViews){
+        NSInteger counter = 0;
+        for(AttachmentEditView *view in self.attachmentViews){
+            KPAttachment *attachment = [attachments objectAtIndex:0];
+            if(![attachment.service isEqualToString:view.service] || ![attachment.identifier isEqualToString:view.identifier])
+                addViews = YES;
+            counter++;
+        }
+    }
+    
+    if(addViews){
+        for(AttachmentEditView *view in self.attachmentViews){
+            [view removeFromSuperview];
+        }
+        
+        NSMutableArray *attachmentViews = [NSMutableArray array];
+        for (KPAttachment *attachment in attachments) {
+            AttachmentEditView *attachmentEditView = [[AttachmentEditView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
+            attachmentEditView.hidden = YES;
+            attachmentEditView.identifier = attachment.identifier;
+            attachmentEditView.service = attachment.service;
+            attachmentEditView.delegate = self;
+            BOOL shouldAdd = YES;
+            if ([attachment.service isEqualToString:EVERNOTE_SERVICE]){
+                [attachmentEditView setIconString:@"editEvernote"];
+                
+                CGRectSetHeight(attachmentEditView, SCHEDULE_ROW_HEIGHTS + 10);
+                BOOL isSyncing = [attachment.sync boolValue];
+                if (isSyncing)
+                    [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Attached") uppercaseString] iconString:nil];
+                else
+                    [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Deleted") uppercaseString] iconString:@"actionDelete"];
+                [attachmentEditView setTitleString:attachment.title];
+            }
+            else if ([attachment.service isEqualToString:URL_SERVICE]) {
+                [attachmentEditView setIconString:@"editURL"];
+                NSString *title = attachment.identifier;
+                [attachmentEditView setTitleString:title];
+            }
+            else if ([attachment.service isEqualToString:GMAIL_SERVICE]) {
+                NSString *title = [kGmInt NSStringToEmail:attachment.identifier];
+                if (nil == title) {
+                    // for some reason attachment is broken
+                    shouldAdd = NO;
+                }
+                else {
+                    [attachmentEditView setIconString:@"editMail"];
+                    [attachmentEditView setTitleString:title];
+                    if (![attachment.sync boolValue]) {
+                        [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Archived") uppercaseString] iconString:@"done"];
+                        CGRectSetHeight(attachmentEditView, SCHEDULE_ROW_HEIGHTS + 10);
+                    }
+                    else {
+                        [kGmInt checkArchievedThread:[kGmInt NSStringToThreadId:attachment.identifier] block:^(BOOL isArchived, NSError *error) {
+                            if ([attachment.sync boolValue] == isArchived) {
+                                // we have difference in our knowledge about is this task archieved
+                                if (isArchived) {
+                                    attachment.sync = @(NO);
+                                    [KPToDo saveToSync];
+                                }
+                                NSString* objectId = attachment.todo.objectId;
+                                if (objectId) {
+                                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:@{ @"updated" : @[objectId] }];
+                                }
+                            }
+                        }];
+                    }
+                }
+            }
+            else
+                shouldAdd = NO;
+            
+            if (shouldAdd) {
+                [self.scrollView addSubview:attachmentEditView];
+                [attachmentViews addObject:attachmentEditView];
+            }
+        }
+        self.attachmentViews = attachmentViews;
+    }
 }
 
 -(void)updateSectionHeader
@@ -610,7 +694,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     tempHeight += self.subtasksContainer.frame.size.height + 20;
     
     CGFloat targetAlpha = self.subtasksController.expanded ? 0 : 1;
-    self.alarmContainer.alpha = self.repeatedContainer.alpha = self.tagsContainerView.alpha = self.evernoteContainer.alpha = self.dropboxContainer.alpha = self.notesContainer.alpha = targetAlpha;
+    self.alarmContainer.alpha = self.repeatedContainer.alpha = self.tagsContainerView.alpha = self.notesContainer.alpha = targetAlpha;
+    for( AttachmentEditView *view in self.attachmentViews)
+        view.alpha = targetAlpha;
+    
     CGFloat heightWithSubtasks = tempHeight;
     
     if(!self.subtasksController.expanded){
@@ -635,11 +722,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         CGRectSetY(self.tagsContainerView, tempHeight);
         tempHeight += self.tagsContainerView.frame.size.height;
         
-        CGRectSetY(self.evernoteContainer, tempHeight);
-        tempHeight += self.evernoteContainer.frame.size.height;
+        for( AttachmentEditView *attachment in self.attachmentViews){
+            
+            CGRectSetY(attachment, tempHeight);
+            tempHeight += attachment.frame.size.height;
+            attachment.hidden = NO;
+        }
         
-        CGRectSetY(self.dropboxContainer, tempHeight);
-        tempHeight += self.dropboxContainer.frame.size.height;
         
         
         CGRectSetY(self.notesContainer, tempHeight);
@@ -765,6 +854,44 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }];
 }
 
+-(void)clickedAttachment:(AttachmentEditView *)attachmentView{
+    if([attachmentView.service isEqualToString:EVERNOTE_SERVICE])
+        [self pressedEvernote:attachmentView];
+    else if([attachmentView.service isEqualToString:URL_SERVICE])
+        [self pressedURL:attachmentView];
+    else if([attachmentView.service isEqualToString:GMAIL_SERVICE])
+        [self pressedGmail:attachmentView];
+}
+
+- (void)pressedGmail:(AttachmentEditView*)attachmentView {
+    
+    if (kGmInt.isUsingMailbox) {
+        if ([GlobalApp isMailboxInstalled]) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"dbx-mailbox://"]];
+        }
+        else {
+            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Mailbox not installed") andMessage:LOCALIZE_STRING(@"Please install Mailbox from App Store!")];
+        }
+    }
+    else {
+        if ([GlobalApp isGoogleMailInstalled]) {
+            NSString* urlString = [NSString stringWithFormat:@"googlegmail:///cv=%@/accountId=1&create-new-tab", [kGmInt NSStringToThreadId:attachmentView.identifier]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+        }
+        else {
+            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Gmail not installed") andMessage:LOCALIZE_STRING(@"Please install Gmail from App Store!")];
+        }
+    }
+}
+
+-(void)pressedURL:(AttachmentEditView*)attachmentView{
+    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Open Link") andMessage:LOCALIZE_STRING(@"Do you want to open the link?") block:^(BOOL succeeded, NSError *error) {
+        if(succeeded){
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:attachmentView.identifier]];
+        }
+    }];
+}
+
 -(void)pressedEvernote:(UIView*)sender
 {
     if(!kUserHandler.isLoggedIn){
@@ -785,23 +912,25 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         }
     };
     
-    if(sender.tag == EVERNOTE_ITEM_BUTTON_TAG){
+    if([sender isKindOfClass:[AttachmentEditView class]]){
         NSArray *buttons = @[[LOCALIZE_STRING(@"cancel") capitalizedString], LOCALIZE_STRING(@"Remove note")];
+        AttachmentEditView *evernoteEditView = (AttachmentEditView*)sender;
         if( [GlobalApp isEvernoteInstalled] ){
             buttons = @[[LOCALIZE_STRING(@"cancel") capitalizedString],LOCALIZE_STRING(@"Remove note"),LOCALIZE_STRING(@"Open note")];
         }
         [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote") andMessage:LOCALIZE_STRING(@"What do you want to do?") buttonTitles:buttons block:^(NSInteger number, NSError *error) {
             //DLog(@"%li",(long)number);
+            KPAttachment *attachment = [self.model attachmentForService:EVERNOTE_SERVICE identifier:evernoteEditView.identifier];
             if(number == 1){
-                [self.model removeAllAttachmentsForService:EVERNOTE_SERVICE];
+                [self.model removeAllAttachmentsForService:EVERNOTE_SERVICE identifier:evernoteEditView.identifier];
                 [self update];
             }
             else if(number == 2){
                 if([GlobalApp isEvernoteInstalled]){
-                    KPAttachment *attachment = [self.model firstAttachmentForServiceType:EVERNOTE_SERVICE];
                     //DLog(@"attachment %@",attachment.identifier);
                     [[ENSession sharedSession] viewNoteInEvernote:[EvernoteIntegration NSStringToENNoteRef:attachment.identifier]];
                     [ANALYTICS trackEvent:@"Open in Evernote" options:nil];
+                    [ANALYTICS trackCategory:@"Actions" action:@"Open In Evernote" label:nil value:nil];
                     //[ENSession
 //                    EDAMNote *note = [[EDAMNote alloc] init];
 //                    note.guid = attachment.identifier;
@@ -931,7 +1060,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self.titleContainerView addSubview:seperator];
         self.dotSeperator = seperator;
         
-    
         
         self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, contentView.frame.size.height)];
         self.scrollView.autoresizingMask = 0;// UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -1007,64 +1135,29 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         
         [self.scrollView addSubview:self.tagsContainerView];
         
-        /*
-         Evernote Container with button!
-         */
-        self.evernoteContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
-        [self addAndGetImage:@"editEvernote" inView:self.evernoteContainer];
-        self.evernoteContainer.layer.masksToBounds = YES;
         
-        self.evernoteLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X, self.evernoteContainer.frame.size.height)];
-        self.evernoteLabel.font = EDIT_TASK_TEXT_FONT;
-        self.evernoteLabel.backgroundColor = CLEAR;
-        [self setColorsFor:self.evernoteLabel];
-        
-        [self.evernoteContainer addSubview:self.evernoteLabel];
-        
-        self.syncLabel = [[SyncLabel alloc] init];
-        [self.syncLabel setTitle:[LOCALIZE_STRING(@"Attached") uppercaseString]];
-        //self.syncLabel.backgroundColor = tcolorF(BackgroundColor,ThemeDark);
-        [self.evernoteContainer addSubview:self.syncLabel];
-        self.syncLabel.frame = CGRectSetPos(self.syncLabel.frame, LABEL_X, CGRectGetMidY(self.evernoteLabel.frame)+10);
-        
-        UIButton *clickButtonForEvernote = [self addClickButtonToView:self.evernoteContainer action:@selector(pressedEvernote:)];
-        clickButtonForEvernote.tag = EVERNOTE_ITEM_BUTTON_TAG;
-        [self.scrollView addSubview:self.evernoteContainer];
-        
-        
-        /*
-         Dropbox Container with button!
-         
-         self.dropboxContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, DEFAULT_ROW_HEIGHT)];
-         [self addAndGetImage:timageString(@"edit_notes_icon", @"_white", @"_black") inView:self.dropboxContainer];
-         
-         self.dropboxLabel = [[UILabel alloc] initWithFrame:CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X, self.dropboxContainer.frame.size.height)];
-         self.dropboxLabel.font = EDIT_TASK_TEXT_FONT;
-         self.dropboxLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-         self.dropboxLabel.backgroundColor = CLEAR;
-         [self setColorsFor:self.dropboxLabel];
-         [self.dropboxContainer addSubview:self.dropboxLabel];
-         
-         [self addClickButtonToView:self.dropboxContainer action:@selector(pressedDropbox:)];
-         
-         [self.scrollView addSubview:self.dropboxContainer];
-         */
         
         //Notes view
         
         self.notesContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, SCHEDULE_ROW_HEIGHTS)];
         self.notesContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.notesContainer.userInteractionEnabled = YES;
         [self addAndGetImage:@"editNotes" inView:self.notesContainer];
         self.notesView = [[UITextView alloc] initWithFrame:CGRectMake(LABEL_X, NOTES_PADDING, self.view.frame.size.width - LABEL_X - 200, 500)];
         self.notesView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.notesView.font = EDIT_TASK_TEXT_FONT;
+        
         self.notesView.contentInset = UIEdgeInsetsMake(0,-5,0,0);
         self.notesView.editable = NO;
-        self.notesView.textColor = tcolor(TextColor);
+        self.notesView.userInteractionEnabled = YES;
+        self.notesView.dataDetectorTypes = UIDataDetectorTypeAll;
         self.notesView.backgroundColor = CLEAR;
+        UITapGestureRecognizer *tapRegocnizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pressedNotes:)];
+        [self.notesView addGestureRecognizer:tapRegocnizer];
+        self.notesView.delegate = self;
         [self.notesContainer addSubview:self.notesView];
         
-        [self addClickButtonToView:self.notesContainer action:@selector(pressedNotes:)];
+        UIButton *notesClickButton = [self addClickButtonToView:self.notesContainer action:@selector(pressedNotes:)];
+        CGRectSetWidth(notesClickButton, LABEL_X);
         [self.scrollView addSubview:self.notesContainer];
         
         /* Adding scroll and content view */
@@ -1113,7 +1206,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 -(void)subtaskController:(SubtaskController *)controller changedToSize:(CGSize)size{
     //self.expandButton.hidden = ([self.model getSubtasks].count <= 1);
-    [self layoutWithDuration:0.25f];
+    [self layoutWithDuration:0];
     //NSLog(@"%f + %f + %f = %f",self.subtasksContainer.frame.size.height, self.subtasksContainer.frame.origin.y, self.cell.frame.origin.y, superFrame.origin.y);
     if(self.kbdHeight){
         CGRect newEdit = self.editingFrame;
@@ -1205,14 +1298,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         self.expandOnShow = NO;
     }
 }
--(void)delayedTriggerEvernote{
-    /*if( self.fireHint )
-        [kHints triggerHint:HintEvernote];*/
-}
+
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     if([GlobalApp isEvernoteInstalled]){
-        [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(delayedTriggerEvernote) userInfo:nil repeats:NO];
         self.fireHint = YES;
     }
 }
@@ -1253,10 +1342,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.notesView = nil;
     self.dotView = nil;
     self.textView = nil;
-    self.evernoteLabel = nil;
-    self.evernoteContainer = nil;
-    self.dropboxLabel = nil;
-    self.dropboxContainer = nil;
     self.scheduleImageIcon = nil;
     self.repeatedContainer = nil;
     self.repeatedLabel = nil;

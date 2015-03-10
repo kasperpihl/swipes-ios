@@ -10,6 +10,9 @@
 #import "AppDelegate.h"
 #import "KPParseCommunicator.h"
 #import "NSDate-Utilities.h"
+#ifndef NOT_APPLICATION
+#import "GlobalApp.h"
+#endif
 #import "UtilityClass.h"
 
 #define trgb(num) (num/255.0)
@@ -65,6 +68,9 @@
                 if(!parseError && jsonData){
                     [errorObject setObject:error.userInfo forKey:@"userInfo"];
                 }
+                else {
+                    [errorObject setObject:[NSString stringWithFormat:@"%@", error.userInfo] forKey:@"userInfo"];
+                }
             }
             @catch (NSException *exception) {
                 NSLog(@"Error trying to send '%@' to parse", parseError);
@@ -88,6 +94,9 @@
     
 }
 +(void)sendException:(NSException*)exception type:(NSString*)type{
+    [self.class sendException:exception type:type attachment:nil];
+}
++(void)sendException:(NSException *)exception type:(NSString *)type attachment:(NSDictionary *)attachment{
     DLog(@"Sending exception: '%@' of type: '%@'", exception, type);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [self.class emptyErrorObjectForDevice];
@@ -96,6 +105,8 @@
         [errorObject setObject:@(1337) forKey:@"code"];
         if ([exception userInfo])
             [errorObject addObject:exception.userInfo forKey:@"userInfo"];
+        if (attachment)
+            [errorObject setObject:attachment forKey:@"attachment"];
         if (kCurrent)
             [errorObject setObject:kCurrent forKey:@"user"];
         if (type)
@@ -177,7 +188,7 @@
         if (self.rootViewController) {
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:LOCALIZE_STRING(@"Okay") style:UIAlertActionStyleCancel handler:nil]];
-            [self.rootViewController presentViewController:alert animated:YES completion:nil];
+            [[GlobalApp topViewControllerWithRootViewController:self.rootViewController] presentViewController:alert animated:YES completion:nil];
         }
     }
 #endif
@@ -218,7 +229,7 @@
                 textField.keyboardAppearance = UIKeyboardAppearanceAlert;
                 
             }];
-            [self.rootViewController presentViewController:alert animated:YES completion:^{
+            [[GlobalApp topViewControllerWithRootViewController:self.rootViewController] presentViewController:alert animated:YES completion:^{
                 UITextField *login = alert.textFields.firstObject;
                 login.text = pretext;
                 [login becomeFirstResponder];
@@ -249,7 +260,7 @@
                 if (block)
                     block(YES, nil);
             }]];
-            [self.rootViewController presentViewController:alert animated:YES completion:nil];
+            [[GlobalApp topViewControllerWithRootViewController:self.rootViewController] presentViewController:alert animated:YES completion:nil];
         }
     }
 #endif
@@ -270,20 +281,21 @@
         if (self.rootViewController) {
             void (^buttonBlock)(UIAlertAction *action) = ^(UIAlertAction *action) {
                 NSUInteger counter = 0;
-                if (block) {
+                if (self.numberBlock) {
                     for (NSString* title in buttonTitles) {
                         if ([title isEqualToString:action.title]) {
-                            block(counter, nil);
+                            self.numberBlock(counter, nil);
                         }
                         counter++;
                     }
                 }
             };
+            self.numberBlock = block;
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
             for (NSString* title in buttonTitles) {
                 [alert addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:buttonBlock]];
             }
-            [self.rootViewController presentViewController:alert animated:YES completion:nil];
+            [[GlobalApp topViewControllerWithRootViewController:self.rootViewController] presentViewController:alert animated:YES completion:nil];
         }
     }
 #endif

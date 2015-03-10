@@ -18,12 +18,14 @@
 /* Start watching for Location */
 +(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save;
 
--(KPToDo*)addSubtask:(NSString*)title save:(BOOL)save from:(NSString*)from;
+-(KPToDo*)addSubtask:(NSString*)title save:(BOOL)save from:(NSString*)from analytics:(BOOL)analytics
+;
 
 -(void)switchPriority;
 
 +(NSArray *)findByTitle:(NSString *)title;
 +(NSArray *)findByTempId:(NSString *)tempId;
++(NSArray *)findLocallyDeletedForService:(NSString *)service;
 
 /* Selected tags for ToDo's */
 +(NSArray *)selectedTagsForToDos:(NSArray*)toDos;
@@ -45,8 +47,9 @@
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save;
 -(NSArray*)nextNumberOfRepeatedDates:(NSInteger)numberOfDates;
 - (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync from:(NSString*)from;
-- (void)removeAllAttachmentsForService:(NSString *)service;
+- (void)removeAllAttachmentsForService:(NSString *)service identifier:(NSString*)identifier;
 - (KPAttachment *)firstAttachmentForServiceType:(NSString *)service;
+- (KPAttachment *)attachmentForService:(NSString*)service identifier:(NSString*)identifier;
 +(void)removeAllAttachmentsForAllToDosWithService:(NSString *)service inContext:(NSManagedObjectContext *)context save:(BOOL)save;
 
 +(void)changeTimeZoneFrom:(NSInteger)from to:(NSInteger)to;

@@ -5,22 +5,28 @@
 //  Created by Kasper Pihl Tornøe on 07/08/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define kDefSelectedColor tcolor(DoneColor)
+#define kDefSelectedColor tcolorR(BackgroundColor)
 #define kDefBackgroundColor CLEAR
 #define kDefFont KP_REGULAR(13)
 #define kDefTextColor tcolor(TextColor)
-#define kDefSelTextColor tcolorF(TextColor,ThemeDark)
+#define kDefSelTextColor tcolorR(TextColor)
+#define kDefSeparatorColor gray(224, 1)
 #define kSepWidth 1
 #define kSepMargin 0.0
 
 #import "KPDayPicker.h"
 #import "UIColor+Utilities.h"
 #import "UIView+Utilities.h"
+
 @interface KPDayPicker ()
-@property (nonatomic) IBOutletCollection(UILabel) NSArray *dayButtons;
+
+@property (nonatomic) NSArray *dayButtons;
 @property (nonatomic) UIButton *selectedButton;
+
 @end
+
 @implementation KPDayPicker
+
 -(void)setSelectedButton:(UIButton *)selectedButton{
     if(_selectedButton != selectedButton){
         [_selectedButton setSelected:NO];
@@ -31,10 +37,12 @@
         self.selectedDay = selectedButton.tag;
     }
 }
+
 -(void)setSelectedDay:(NSInteger)selectedDay{
     _selectedDay = selectedDay;
     [self setNeedsLayout];
 }
+
 -(UIButton*)buttonForTouches:(NSSet*)touches{
     if (touches.count != 1) {
         return nil;
@@ -42,30 +50,36 @@
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInView:self];
     NSInteger buttonIndex = (NSInteger)floorf(location.x/(self.frame.size.width/7));
-    if(buttonIndex < 0) buttonIndex = 0;
-    if(buttonIndex > 6) buttonIndex = 6;
+    if (buttonIndex < 0)
+        buttonIndex = 0;
+    if (buttonIndex > 6)
+        buttonIndex = 6;
     return [self.dayButtons objectAtIndex:buttonIndex];
 }
+
 -(void)handleTouches:(NSSet*)touches{
     UIButton *selectButton = [self buttonForTouches:touches];
     if(selectButton){
         self.selectedButton = selectButton;
     }
 }
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [self handleTouches:touches];
 }
+
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
     [self handleTouches:touches];
 }
+
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     [self handleTouches:touches];
     [self.delegate dayPicker:self selectedWeekday:self.selectedButton.tag];
 }
+
 -(id)initWithHeight:(CGFloat)height selectedDay:(NSInteger)selectedDay{
     self = [super initWithFrame:CGRectMake(0, 0, 320, height)];
-    if(self){
-        
+    if (self){
         self.userInteractionEnabled = YES;
         self.textColor = kDefTextColor;
         self.backgroundColor = kDefBackgroundColor;
@@ -74,12 +88,14 @@
         CGFloat sepHeight = self.frame.size.height-(self.frame.size.height*kSepMargin);
         for(NSInteger i = 0 ; i < 7 ; i++){
             CGFloat buttonX = i*buttonWidth + i*kSepWidth;
-            if(i == 6) buttonWidth = 44;
+            if (i == 6)
+                buttonWidth = 44;
             UIButton *dayButton = [[UIButton alloc] initWithFrame:CGRectMake(buttonX,0,buttonWidth,self.frame.size.height)];
             [self addSubview:dayButton];
-            if(i < 6){
+            if (i < 6){
                 UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(buttonX+buttonWidth, (self.frame.size.height-sepHeight)/2, kSepWidth, sepHeight)];
-                [seperator setBackgroundColor:self.textColor];
+                //[seperator setBackgroundColor:self.textColor];
+                [seperator setBackgroundColor:kDefSeparatorColor];
                 [self addSubview:seperator];
             }
             [buttonArray addObject:dayButton];

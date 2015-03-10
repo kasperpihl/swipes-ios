@@ -24,6 +24,9 @@
 @property (nonatomic) UIButton *closeButton;
 @property (nonatomic) UIButton *closeLabelButton;
 
+
+@property double lastCompletionTime;
+@property NSInteger numberOfCompletions;
 @end
 
 @implementation SubtaskController
@@ -226,7 +229,7 @@
 
 #pragma mark SubtaskCellDelegate
 - (void)addedSubtask: ( NSString* )subtask{
-    [self.model addSubtask:subtask save:YES from:@"Input"];
+    [self.model addSubtask:subtask save:YES from:@"Input" analytics:YES];
     [self fullReload];
     [kAudio playSoundWithName:@"Succesful action.m4a"];
     //[self loadData];
@@ -239,9 +242,11 @@
     NSString *editedText = [subtask stringByTrimmingCharactersInSet:
                             [NSCharacterSet newlineCharacterSet]];
     if ( editedText.length > 0 ){
-        [cell.model setTitle:subtask];
-        [KPToDo saveToSync];
-        cell.title = subtask;
+        if(cell && cell.model){
+            [cell.model setTitle:subtask];
+            [KPToDo saveToSync];
+            cell.title = subtask;
+        }
     }
     else {
         [cell.titleField setText:cell.model.title];
@@ -301,6 +306,17 @@
         if(state == MCSwipeTableViewCellState1){
             [cell setStrikeThrough:YES];
             if(!isDone){
+                double currentTime = CACurrentMediaTime();
+                if((currentTime - self.lastCompletionTime) < 3){
+                    self.numberOfCompletions++;
+                    if(self.numberOfCompletions == 7)
+                        self.numberOfCompletions = 1;
+                }
+                else{
+                    self.numberOfCompletions = 1;
+                }
+                self.lastCompletionTime = currentTime;
+                [kAudio playSoundWithName:[NSString stringWithFormat:@"Task composer%li.m4a",(long)self.numberOfCompletions]];
                 [KPToDo completeToDos:@[subtask] save:YES context:nil analytics:YES];
                 if(self.expanded){
                     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];

@@ -7,8 +7,10 @@
 //
 
 #import "AudioHandler.h"
+#import "SettingsHandler.h"
 @interface AudioHandler ()
 @property (nonatomic) NSMutableDictionary *sounds;
+@property (nonatomic) BOOL soundsIsOn;
 @end
 @implementation AudioHandler
 static AudioHandler *sharedObject;
@@ -21,10 +23,26 @@ static AudioHandler *sharedObject;
 +(AudioHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[AudioHandler allocWithZone:NULL] init];
+        [sharedObject initialize];
     }
     return sharedObject;
 }
+-(void)initialize{
+    self.soundsIsOn = [[kSettings valueForSetting:SettingAppSounds] boolValue];
+    notify(SH_UpdateSetting, updatedSetting:);
+}
+-(void)updatedSetting:(NSNotification*)notification{
+    NSDictionary *userInfo = [notification userInfo];
+    NSNumber *setting = [userInfo objectForKey:@"Setting"];
+    NSNumber *value = [userInfo objectForKey:@"Value"];
+    if(setting && setting.integerValue == SettingAppSounds){
+        self.soundsIsOn = value.boolValue;
+    }
+    
+}
 -(void)playSoundWithName:(NSString *)name{
+    if(!self.soundsIsOn)
+        return;
     SystemSoundID soundId = [self soundWithName:name];
     AudioServicesPlaySystemSound(soundId);
 }
@@ -63,5 +81,6 @@ static AudioHandler *sharedObject;
         SystemSoundID soundId = (SystemSoundID)[[self.sounds objectForKey:key] unsignedLongValue];
         AudioServicesDisposeSystemSoundID(soundId);
     }
+    clearNotify();
 }
 @end

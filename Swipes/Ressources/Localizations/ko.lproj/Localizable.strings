@@ -1,0 +1,404 @@
+/* 
+  Localizable.strings
+  Swipes
+
+  Created by demosten on 10/6/14.
+  Copyright (c) 2014 Pihl IT. All rights reserved.
+*/
+
+/* 
+ Login Screen 
+ */
+
+// UI
+
+"Focus. Swipe. Achieve." = "계획하고, 실행하고, 성취하기."; // title for login screen
+"Task List made for High Achievers" = "높은 생산성을 위한 당신의 동반자"; // subtitle on loginscreen
+
+"Keep trying Swipes" = "평가판 계속하기"; // title for try button
+"Try out" = "평가판 사용하기";
+
+"Create Account" = "계정 만들기"; // Create account button title
+"Log in" = "로그인"; // Login button title
+"Sign up" = "회원가입";
+"Register" = "등ㄹ";
+
+"Forgot password?" = "비밀번호를 잊으셨나요?";
+"Policies" = "정책";
+
+"password" = "패스워드";
+"email" = "이메일";
+"cancel" = "취소";
+"reset" = "초기화";
+
+"You can register with email" = "이메일로 가입하기";
+"Or register with Facebook" = "또는 페이스북으로 가입하기";
+
+"You can log in with email" = "이메일로 로그인하기";
+"Or log in with Facebook" = "또는 페이스북으로 로그인하기";
+
+// Alerts
+"Please use an email" = "이메일 주소를 적어주세요";
+"Make sure you use a real email!" = "이메일 주소가 맞는지 다시 확인하세요!";
+
+"Missing password" = "패스워드를 입력하세요";
+"Make sure to enter your password!" = "패스워드를 다시 확인하세요!";
+
+"Wrong email or password." = "잘못된 이메일 주소 또는 패스워드입니다.";
+"Please check your informations and try again." = "당신의 정보를 확인하고 다시 시도하세요.";
+
+"Email wasn't found." = "이메일 주소를 찾을 수 없습니다.";
+"We couldn't recognize the email." = "이메일 주소를 찾지 못했습니다.";
+
+"Something went wrong." = "잘못되었습니다.";
+"Please try again." = "다시 시도하세요.";
+
+"Facebook settings" = "페이스북 설정";
+"Please make sure you've allowed Swipes in Settings -> Facebook" = "'설정'에서 Swipes가 페이스북 계정을 사용하도록 허용됐는지 확인하세요.";
+
+"New user" = "새로운 사용자";
+"Do you want to sign up with: %@" = "다음 계정으로 가입합니다: %@";
+
+"Reset password" = "패스워드 재설정";
+
+"Email sent" = "이메일 보내기";
+"Follow the instructions in the email to reset your pass" = "이메일에 적힌 안내에 따라 패스워드를 재설정해주세요.";
+
+"Read through our 'Privacy Policy' and 'Terms and Conditions'." = "이 앱의 '개인정보 보호 정책'과 '이용약관'을 확인하십시오.";
+
+"Open Link" = "링크 열기";
+"Do you want to open the link?" = "링크를 여시겠습니까?";
+
+/*
+ Small common expressions
+ */
+"Yes" = "네";
+"No" = "아니오";
+"Okay" = "좋아요";
+"Delete" = "삭제";
+"open" = "열기";
+"done" = "완료";
+"completed" = "완료된";
+"current" = "현재";
+"schedule" = "일정";
+"scheduled" = "예정된";
+"with" = "과(와)";
+"and" = "그리고";
+"Learn more" = "더 알아보기";
+"Not now" = "다음에";
+"continue" = "계속";
+"start" = "시작";
+"Evernote" = "에버노트";
+
+/* 
+ Common Popups
+*/
+"Delete tag: %@" = "태그 삭제: %@";
+"This can't be undone" = "이 작업은 되돌릴 수 없습니다";
+"Get Started" = "시작하기";
+"Add a new task" = "새로운 일정 추가하기";
+"Location Permissions" = "위치 서비스 이용 동의";
+"You need to turn on location permissions for Swipes in Settings > Privacy" = "당신의 위치를 사용하기 위해서 '설정 > 개인 정보 보호'에 위치 서비스를 켜주세요.";
+"Undo last action" = "마지막 작업 되돌리기";
+"Do you want to undo the last action?" = "작업을 되돌리시겠습니까?";
+"New version required" = "새로운 버전이 필요합니다";
+"For sync to work - please update Swipes from the App Store" = "동기화를 활성화시키기 위해 App Store에서 Swipes를 업데이트 하십시오";
+"Evernote Authorization" = "Evernote 인증";
+"To sync with Evernote on this device, please authorize" = "Evernote를 이 기기에서 동기화시키기 위해 추가인증이 필요합니다";
+"Don't sync this device" = "이 기기를 동기화하지 않습니다";
+"Authorize now" = "지금 인증합니다";
+
+/*
+ Initial Tasks and Tags
+ */
+"home" = "집";
+"work" = "회사";
+
+"Swipe right to complete" = "작업을 완료하려면 오른쪽으로 쓸기";
+"Swipe left to snooze for later" = "미리알림을 하려면 왼쪽으로 쓸기";
+"Access your tasks on web.swipesapp.com" = "web.swipesapp.com을 통해 당신의 일정에 접속하세요";
+
+
+
+"priority" = "우선순위";
+"recurring" = "반복";
+" with " = "과(와)";
+"notes" = "노트";
+" matching \"%@\"" = "\"%@\"와 일치";
+" %@ tags: %@" = "%@ 태그: %@";
+"clear workspace" = "작업공간 비우기";
+
+/*
+ Topoverlay menus (Workspaces, select and search)
+*/
+// UI
+"All" = "전체";
+"None" = "없음";
+"Select more" = "더 선택하기";
+"Set Workspace" = "작업공간 설정";
+"Search" = "찾기";
+
+// Alerts
+"Select Tasks" = "일정 선택하기";
+"Tap your tasks to select them and swipe them all together." = "일정들을 선택하고, 한번에 완료하세요.";
+
+"Workspaces" = "작업공";
+"Set your workspace, select tags and stay focused." = "작업공간을 설정하고, 태그를 선택하세요.";
+
+"Add new tag" = "새로운 태그 추가하기";
+"Type the name of your tag (ex. work, project or school)" = "태그의 이름을 적으세요(예 - 직장, 프로젝트 또는 학교)";
+"add" = "추가하기";
+
+/* List view */
+"Clear old tasks" = "오래된 일정 지우기";
+"Show old tasks" = "오래된 일정 보기";
+// Alerts
+"Are you sure?" = "확실한가요?";
+"Deleting old completed tasks can't be undone" = "완료된 일정을 지우는 것은 되돌릴 수 없습니다";
+"Delete them" = "삭제하기";
+
+/*
+ Scheduler
+*/
+"Later  +%luh" = "+%lu시간 후에";
+"This Evening" = "오늘 밤";
+"Tomorrow Eve" = "내일 저녁";
+"In 2 Days" = "2일 안에";
+"This Weekend" = "이번 주말";
+"Next Week" = "다음 주";
+"Pick A Date" = "날짜 선택";
+"At Location" = "지정한 장소에서";
+
+"Hold down to adjust time" = "누르며 원하는 시간에 맞추세요";
+
+/*
+ Edit task mode
+ */
+"Add action step" = "세부 단계 추가하기";
+"Attached" = "붙임";
+"All Done" = "모두 완료";
+"Completed" = "완료된";
+"Unspecified" = "지정되지 않은";
+"Add notes" = "노트 추가하기";
+"Add tags" = "태그 추가하기";
+
+"Later Today" = "나중에";
+"Today" = "오늘";
+"Tomorrow" = "내일";
+"Yesterday" = "어제";
+
+"See%@ %lu action%@" = "보기%@ %lu 행동%@";
+" all" = "모두";
+"s" = "s";
+
+// Evernote View
+"Only notes with ToDo inside" = "할일이 있는 노트만";
+
+// Alerts
+"tasks" = "일정";
+"task" = "일정";
+
+"these" = "이것들";
+"this" = "이거";
+"Are you sure you want to permanently delete %@ %@?" = "%@ %@를 영구히 삭제하시겠습니까?";
+
+"Register an account to backup your data and keep your Evernotes in sync with Swipes" = "Swipes를 통해 Evernote와 동기화하고 백업하기 위해 등록하기";
+"Remove note" = "노트 지우기";
+"Open note" = "노트 열기";
+"What do you want to do?" = "어떻게 하기를 원하시나요?";
+
+/*
+    All done for today background
+*/
+"First day" = "첫번째 날";
+
+
+
+/*
+    Repeating a task
+*/
+
+
+
+"Every day" = "날마다";
+"Every Monday to Friday" = "주중마다";
+"Every Saturday and Sunday" = "주말마다";
+"Every month the %@" = "매달 %@일마다"; // %@ = 3rd
+"Every year %@ %@" = "매년 %@ %@일마다";
+" at %@" = "%@에";
+
+
+// Repeat picker
+"never" = "반복안함";
+"day" = "날";
+"mon-fri" = "주중";
+"sat+sun" = "주말";
+
+"month" = "월";
+"year" = "년";
+
+
+
+
+
+
+/*
+    Settings
+*/
+// Buttons
+"Settings" = "설정";
+"Notifications" = "알림";
+"Location" = "위치";
+"Help" = "도움말";
+"Snoozes" = "미리 알림";
+"Manage" = "관리";
+"Upgrade" = "업그레이드";
+"Sync" = "동기화";
+"Logout" = "로그아웃";
+"Account" = "계정";
+"Theme" = "테마";
+"Integrations" = "확장 기능";
+
+"Last sync: %@" = "마지막 동기화: %@";
+
+// Notifications menu
+"Tasks snoozed for later" = "미리 알림";
+"Daily reminder to plan the day" = "하루를 계획하기 위한 알림";
+"Weekly reminder to plan the week" = "한 주를 계획하기 위한 알림";
+"Are you sure you no longer want to receive these alarms and reminders?" = "미리 알림을 수신하지 않기를 원하십니까?";
+
+// Snoozes menu
+"Start my day at" = "아침의 시작은";
+"Start my evening at" = "저녁의 시작은";
+"Start my weekends at" = "주말의 시작은";
+"My week starts" = "한 주의 시작은";
+"My weekend starts" = "주말의 시작은";
+"Snooze Later Today" = "미리 알림";
+
+// Integrations Menu
+" (Connected)" = "(연결된)";
+"Unlink" = "연결 끊기";
+"Link account" = "계정 연결하기";
+
+"Sync with Evernote on this device" = "이 기기에 Evernote 동기화하기";
+"Auto import notes with \"swipes\"-tag" = "자동으로 \"swipes\" 태그를 단 노트 추가";
+"Sync with personal linked notebooks" = "개인 노트북에 동기화";
+"Sync with Evernote Business" = "Evernote Business에 동기화";
+"Tap to learn more" = "더 알아보기";
+"Open Evernote Importer" = "Evernote 불러오기";
+"Import a few notes right away." = "지금 바로 노트 불러오기";
+"Choose notes" = "노트 선택하기";
+"Unlink Evernote" = "Evernote 연결 끊기";
+"All tasks will be unlinked, are you sure?" = "모든 일정의 연결이 해제됩니다. 동의하십니까?";
+
+// Evernote Helper
+"WHAT IT IS" = "이 기능은?";
+"This integration lets you sync notes with checkmarks from Evernote into Swipes." = "확장 기능을 통해 Evernote에 있는 할 일(체크 표시)을 Swipes로 동기화합니다.";
+"HOW IT WORKS" = "어떻게 작동하나요?";
+"Assign the \"swipes\" tag to a note in Evernote. We'll add it as a task in Swipes and sync all its checkmarks." = "Evernote에 \"swipes\"가 붙어 있는 노트를 작성합니다. 그러면 Swipes 내 일정에 추가되고, 할 일(체크 표시)이 모두 동기화됩니다.";
+// Evernote importer
+
+"notes with checkmarks" = "할 일(체크 표시)이 있는 노트";
+"Import notes" = "노트 불러오기";
+"Importing..." = "불러오는 중...";
+"Successfully imported." = "성공적으로 불러왔습니다.";
+"Next time, assign the \"swipes\"-tag in Evernote and we'll import the notes automatically." = "다음부터는 Evernote에서 \"swipes\" 태그가 붙은 노트를 자동으로 불러옵니다.";
+"Great! I got it." = "잘했어요! 알겠습니다.";
+"This note has already been imported." = "이 노트는 이미 가져왔습니다.";
+"Do you want to duplicate it?" = "복제하시겠습니까?";
+"Couldn't find any notes with Checkmarks" = "체크 부호가 있는 노트를 찾을 수 없습니다.";
+"You can add notes manually under each tasks from Swipes as well" = "Swipes에서도 노트에 작업을 직접 추가할 수 있습니다.";
+
+// Help menu
+"Contact Swipes" = "Swipes에 연락하기";
+"Walkthrough" = "자세한 설명";
+"Get Started Guides" = "설명서 보기";
+"FAQ" = "FAQ";
+"Known Issues" = "알려진 문제";
+"Open Policies" = "정책 알아보기";
+
+// Alerts
+"Learn how to get most out of Swipes." = "Swipes를 최대한 활용하는 방법 알아보기";
+"Learn how to get most out of the different features in Swipes." = "Swipes의 다양한 특징 알아보기";
+"You found a bug? Check out if we're already working on it." = "버그를 발견했나요? 저희가 이미 해결하고 있을지도 모릅니다.";
+
+
+"Hard sync" = "동기화 문제";
+"This will send all data and can take some time" = "모든 데이터를 전송합니다 잠시만 기다려주세요";
+
+"Log out" = "로그아웃";
+"Are you sure you want to log out of your account?" = "이 계정을 로그아웃 하시겠습니까?";
+
+"Manage subscription" = "구독 관리";
+"Open App Store to manage your subscription?" = "구독 관리를 위해 앱 스토어를 실행 하시겠습니까?";
+
+"Turn off hints" = "사용법을 끕니다";
+"Are you sure you want to turn off and clear the hints?" = "사용법을 끄고 더 이상 보지 않겠습니까?";
+
+"Turn off location" = "위치 서비스 끄기";
+"Location reminders won't be working." = "위치 기반 알림이 작동하지 않습니다.";
+
+"Register for Swipes to safely back up your data and get Swipes Plus" = "Swipes에서 당신의 데이터를 안전하게 지킬 수 있도록 등록하고 Swipes Plus를 추가하세요";
+
+"Mail was not setup" = "메일이 설정되지 않았습니다";
+"You can send us feedback to support@swipesapp.com. Thanks" = "피드백을 support@swipesapp.com로 보내주세요. 감사합니다.";
+
+"Keep data" = "기록을 보존하세요";
+"Do you want to keep the data from the test period?" = "시험 사용 기간의 기록를 보존하기 원하십니까?";
+
+"Can't upgrade to Swipes Plus" = "Swipes Plus로 업그레이드 할 수 없습니다.";
+"We're remaking our Plus version. Please send us your suggestions while waiting." = "Plus 버전을 새로 제작하고 있습니다. 더 나은 성능을 위해 당신의 의견을 보내주세요.";
+"Send suggestions" = "의견 보내기";
+"Restore Purchases" = "구입항목 복원";
+
+"An error occured" = "에러가 발생했습니다";
+"No purchases could be restored. Contact support@swipesapp.com for help." = "복원할 구입항목이 없습니다. 도움을 받으려면 support@swipesapp.com로 연락하세요.";
+
+"Your purchase has been restored" = "구입항목을 복원했습니다";
+"Your purchase has been restored. Welcome back!" = "구입항목을 복원했습니다. 다시 만나 반가워요!";
+
+"Time Zone Change" = "표준 시간대가 변경되었습니다";
+"Do you want to move all your recurring tasks to match the change? A task @ 8:00 will be 8:00 in new time zone (Recommended)" = "반복되는 일정을 모두 시간대에 맞춰 변경하시겠습니까? 예를 들어 @ 8:00 일정은 모두 새로운 시간대의 8:00로 변경됩니다 (권장합니다)";
+
+"New feature" = "새로운 기능";
+"We've made a powerful integration with Evernote!" = "이제 Evernote와 강력한 협업이 가능합니다.";
+
+
+/*
+    Walkthrough
+ */
+"Welcome to Swipes" = "Swipes에 오신 것을 환영합니다";
+"Here you find three areas where you can organize your tasks." = "일정을 관리할 3개의 작업 영역을 확인하세요.";
+"Your main focus area" = "메인 영역입니다.";
+"All tasks start here, and you can swipe them away to keep it clear." = "모든 일정은 여기에서 시작됩니다, 그리고 완료되면 쓸어서 버릴 수 있습니다.";
+
+"Complete your task by swiping it to the right. Try it below!" = "일정이 완료되면 오른쪽으로 쓸어버리세요. 한 번 해보시죠!";
+"You've completed a task." = "일정을 완료했습니다.";
+"See all your completed tasks in the “Done” area." = "\"Done\" 영역에서 완료된 모든 일정을 확인할 수 있습니다.";
+
+"Swipe left to snooze." = "왼쪽으로 쓸면 스누즈됩니다.";
+"Schedule tasks for later, and keep focus on the priorities now." = "스케줄을 작성하고, 우선 해야할 일에 집중하세요.";
+
+"... Then pick a date" = "... 그리고 날짜를 지정하세요";
+"And the task will come back when the time's right." = "예약된 날짜가 되면 일정이 나타납니다.";
+
+"You've snoozed a task." = "일정을 연기했습니다.";
+"See your upcoming tasks in the “Later” area." = "\"Later\"에서 다가올 일정을 확인하세요.";
+
+"Welcome on board!" = "환영합니다!";
+"Register an account to get started.\n\nTake the leap. Swipe!" = "계정을 등록하고 시작하세요.\n\n서두르세요. Swipe!";
+
+"Resend offer to Michael" = "Michael에게 다시 요청하기";
+"Friday catch-up" = "금요일까지 마감";
+"Fix the presentation notes" = "발표 노트 수정하기";
+"Buy gift for Tom" = " Tom의 선물 사기";
+"Email Simon Gate" = " Simon에게 Email 보내기";
+"Appointment with the dentist" = "치과 예약 진료 받기";
+"Birthday party" = "생일 파티";
+
+/*
+    Share Tasks
+*/
+"Tasks to complete" = "완료할 작업";
+"Tasks: \r\n" = "Tasks:";
+"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com" = "\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com";

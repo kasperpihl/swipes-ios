@@ -22,13 +22,13 @@
     
     NSDate *startDate = [[NSDate date] dateAtStartOfDay];
     if(!self.hasAskedForMore && !kFilter.isActive){
-        predicate = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate >= %@ && parent = nil)",startDate];
-        NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@ && parent = nil)",startDate];
+        predicate = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate >= %@ && parent = nil && isLocallyDeleted <> YES)",startDate];
+        NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@ && parent = nil && isLocallyDeleted <> YES)",startDate];
         self.remainingTasks = [KPToDo MR_countOfEntitiesWithPredicate:remainingPred];
     }
     else{
         self.remainingTasks = 0;
-        predicate = [NSPredicate predicateWithFormat:@"(completionDate != nil && parent = nil)"];
+        predicate = [NSPredicate predicateWithFormat:@"(completionDate != nil && parent = nil && isLocallyDeleted <> YES)"];
     }
     return [KPToDo MR_findAllSortedBy:@"completionDate" ascending:NO withPredicate:predicate];
 }
@@ -44,7 +44,7 @@
     [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Are you sure?") andMessage:LOCALIZE_STRING(@"Deleting old completed tasks can't be undone") cancel:[LOCALIZE_STRING(@"cancel") capitalizedString] confirm:LOCALIZE_STRING(@"Delete them") block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             NSDate *startDate = [[NSDate date] dateAtStartOfDay];
-            NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@ && parent = nil)",startDate];
+            NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@ && parent = nil && isLocallyDeleted <> YES)",startDate];
             NSArray *oldCompletedTasks = [KPToDo MR_findAllWithPredicate:remainingPred];
             [KPToDo deleteToDos:oldCompletedTasks save:YES force:NO];
             [self update];

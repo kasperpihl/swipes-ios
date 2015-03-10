@@ -17,8 +17,16 @@
 #import "AnalyticsHandler.h"
 #import "UserHandler.h"
 
+#ifndef NOT_APPLICATION
+#import "RootViewController.h"
+#import "DejalActivityView.h"
+#endif
+
 #import "EvernoteIntegration.h"
 #import "EvernoteSyncHandler.h"
+
+#import "GmailIntegration.h"
+#import "GmailSyncHandler.h"
 
 #import "CoreSyncHandler.h"
 
@@ -43,40 +51,46 @@
 */
 @interface CoreSyncHandler ()
 
-@property (nonatomic) Reachability *_reach;
+@property (nonatomic, strong) Reachability *_reach;
 
+@property (nonatomic, strong) NSMutableDictionary *_attributeChangesOnObjects;
+@property (nonatomic, strong) NSMutableDictionary *_attributeChangesOnNewObjectsWhileSyncing;
+@property (nonatomic, strong) NSMutableDictionary *_tempIdsThatGotObjectIds;
 
-@property (nonatomic) NSMutableDictionary *_attributeChangesOnObjects;
-@property (nonatomic) NSMutableDictionary *_attributeChangesOnNewObjectsWhileSyncing;
-
-@property (nonatomic) NSMutableDictionary *_tempIdsThatGotObjectIds;
-
-
-@property BOOL outdated;
-@property BOOL _needSync;
-@property BOOL _isSyncing;
-@property BOOL _didHardSync;
-@property BOOL _showSuccessOnce;
+@property (nonatomic, assign) BOOL outdated;
+@property (nonatomic, assign) BOOL _needSync;
+@property (nonatomic, assign) BOOL _isSyncing;
+@property (nonatomic, assign) BOOL _didHardSync;
+@property (nonatomic, assign) BOOL _showSuccessOnce;
 
 @property (nonatomic) dispatch_queue_t isolationQueue;
 
-@property NSTimer *_syncTimer;
-@property NSDate *lastTry;
-@property NSInteger tryCounter;
-@property BOOL isAuthingEvernote;
+@property (nonatomic, strong) NSTimer *_syncTimer;
+@property (nonatomic, strong) NSDate *lastTry;
+@property (nonatomic, assign) NSInteger tryCounter;
+@property (nonatomic, assign) BOOL isAuthingEvernote;
+@property (nonatomic, assign) BOOL isAuthingGmail;
 
-@property (nonatomic) EvernoteSyncHandler *evernoteSyncHandler;
+@property (nonatomic, strong) EvernoteSyncHandler *evernoteSyncHandler;
+@property (nonatomic, strong) GmailSyncHandler *gmailSyncHandler;
 
-@property (nonatomic) NSMutableSet *_deletedObjectsForSyncNotification;
-@property (nonatomic) NSMutableSet *_updatedObjectsForSyncNotification;
+@property (nonatomic, strong) NSMutableSet *_deletedObjectsForSyncNotification;
+@property (nonatomic, strong) NSMutableSet *_updatedObjectsForSyncNotification;
+
 @end
 
 @implementation CoreSyncHandler
 
--(EvernoteSyncHandler *)evernoteSyncHandler{
+- (EvernoteSyncHandler *)evernoteSyncHandler {
     if (!_evernoteSyncHandler)
-        _evernoteSyncHandler = [[EvernoteSyncHandler allocWithZone:NULL] init];
+        _evernoteSyncHandler = [[EvernoteSyncHandler alloc] init];
     return _evernoteSyncHandler;
+}
+
+- (GmailSyncHandler *)gmailSyncHandler {
+    if (!_gmailSyncHandler)
+        _gmailSyncHandler = [[GmailSyncHandler alloc] init];
+    return _gmailSyncHandler;
 }
 
 #pragma mark - public handlers of changes
@@ -98,6 +112,7 @@
     });
     return copyOfChanges;
 }
+
 -(NSArray*)lookupTemporaryChangedAttributesForTempId:(NSString *)tempId{
     __block NSArray *attributeArray;
     dispatch_sync(self.isolationQueue, ^(){
@@ -105,6 +120,7 @@
     });
     return attributeArray;
 }
+
 -(NSArray*)lookupTemporaryChangedAttributesForObject:(NSString*)objectId{
     __block NSArray *attributeArray;
     dispatch_sync(self.isolationQueue, ^(){
@@ -112,7 +128,6 @@
     });
     return attributeArray;
 }
-
 
 /* Loops through a dictionary of changes to */
 -(void)commitAttributeChanges:(NSDictionary *)changes toTemp:(BOOL)toTemp{
@@ -137,6 +152,10 @@
     });
 }
 
+-(void)onCoreDataRecreated
+{
+    [self hardSync];
+}
 
 -(void)hardSync{
     NSArray* objects = [KPParseObject MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"objectId != nil"] inContext:[self context]];
@@ -151,11 +170,11 @@
     }
     [self.context MR_saveOnlySelfAndWait];
     [self commitAttributeChanges:changesToCommit toTemp:NO];
+    [USER_DEFAULTS removeObjectForKey:kLastSyncServerString];
+    [USER_DEFAULTS synchronize];
     [self synchronizeForce:YES async:YES];
 
 }
-
-
 
 -(CGFloat)durationForStatus:(SyncStatus)status{
     CGFloat duration = 0;
@@ -172,6 +191,7 @@
     }
     return duration;
 }
+
 -(NSString*)titleForStatus:(SyncStatus)status{
     NSString *title;
     switch (status) {
@@ -180,14 +200,14 @@
         }
         case SyncStatusSuccess:{
             if(self._showSuccessOnce){
-                title = @"Sync recovered";
+                title = LOCALIZE_STRING(@"Synchronized");
                 self._showSuccessOnce = NO;
             }
             //
             break;
         }
         case SyncStatusError:{
-            title = @"Error syncing";
+            title = LOCALIZE_STRING(@"Error synchronizing");
             self._showSuccessOnce = YES;
             break;
         }
@@ -196,6 +216,7 @@
     }
     return title;
 }
+
 -(void)sendStatus:(SyncStatus)status userInfo:(NSDictionary*)userInfo error:(NSError*)error{
     dispatch_async(dispatch_get_main_queue(), ^{
         NSString *title = [self titleForStatus:status];
@@ -228,7 +249,6 @@
         context = [self context];
 
     @synchronized(self){
-        DUMPDB;
         [context performBlockAndWait:^{
             //NSSet *insertedObjects = [context insertedObjects];
             NSSet *updatedObjects = [context updatedObjects];
@@ -236,17 +256,34 @@
             /* Iterate all updated objects and add their changed attributes to tmpUpdating */
             NSMutableDictionary *changesToCommit = [NSMutableDictionary dictionary];
             NSMutableDictionary *tempChangesToCommit = [NSMutableDictionary dictionary];
-            for(KPParseObject *object in updatedObjects){
-                if( ![object isKindOfClass:[KPParseObject class]] )
-                    continue;
+
+            for (KPParseObject *objectToSave in updatedObjects) {
+                KPParseObject *object = objectToSave;
+                NSArray *keysToSaveForUpdate = [object.changedValues allKeys];
+                if (![object isKindOfClass:KPParseObject.class]) {
+                    if ([object isKindOfClass:KPAttachment.class]) {
+                        KPAttachment *savedAttachment = (KPAttachment*)object;
+                        object = savedAttachment.todo;
+                        if (nil == object)
+                            continue;
+                        keysToSaveForUpdate = @[@"attachments"];
+                    }
+                    else
+                        continue;
+                }
                 /* If the object doesn't have an objectId - it's not saved on the server and will automatically include all keys */
                 if(!object.objectId && !self._isSyncing)
                     continue;
                 
                 NSString *targetKey = object.objectId ? object.objectId : object.tempId;
                 NSMutableDictionary *collection = object.objectId ? changesToCommit : tempChangesToCommit;
-                if(object.changedValues)
-                    [collection setObject:[object.changedValues allKeys] forKey:targetKey];
+                if(keysToSaveForUpdate) {
+                    NSArray* currentValue = [collection objectForKey:targetKey];
+                    if (currentValue && (0 < currentValue.count)) {
+                        keysToSaveForUpdate = [currentValue arrayByAddingObjectsFromArray:keysToSaveForUpdate];
+                    }
+                    [collection setObject:keysToSaveForUpdate forKey:targetKey];
+                }
                 
             }
             /* Add all deleted objects with objectId to be deleted*/
@@ -338,7 +375,12 @@
     }
 }
 
--(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error{
+-(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error {
+#ifndef NOT_APPLICATION
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [DejalBezelActivityView removeViewAnimated:YES];
+    });
+#endif
     if ( error ){
         //NSLog(@"error:%@",error);
         self._isSyncing = NO;
@@ -356,7 +398,7 @@
         self._isSyncing = NO;
         [self synchronizeForce:YES async:YES];
     }
-//    else if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached] && !error) {
+
     if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached]) {
         
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
@@ -384,7 +426,7 @@
                 else if( status == SyncStatusError ){
                     self._isSyncing = NO;
                     
-                    if (!kEnInt.isAuthenticated) {
+                    if (!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) {
                         kEnInt.enableSync = NO;
                         [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
                             if(number == 1){
@@ -401,6 +443,7 @@
         }];
     }
     else {
+        self._isSyncing = NO;
         if(!kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]){
             [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
                 if(number == 1){
@@ -409,18 +452,57 @@
             }];
             kEnInt.hasAskedForPermissions = YES;
         }
-        self._isSyncing = NO;
         [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+    }
+
+    if (kGmInt.isAuthenticated) {
+        [self.gmailSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
+            //NSLog(@"returned %lu",(long)status);
+            if (status == SyncStatusSuccess){
+                if( userInfo ){
+                    NSArray *updatedToDos = [userInfo objectForKey:@"updated"];
+                    if( updatedToDos && updatedToDos.count > 0 ){
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            //NSLog(@"shooting notification from Evernote");
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:@{ @"updated" : updatedToDos }];
+                        });
+                    }
+                }
+                //NSLog(@"successfully ended");
+                self._isSyncing = NO;
+                [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (status == SyncStatusStarted){
+                }
+                else if( status == SyncStatusError ){
+                    self._isSyncing = NO;
+                    
+                    if (!kGmInt.isAuthenticated) {
+                        // kGmInt.enableSync = NO;
+                        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Gmail Authorization") andMessage:LOCALIZE_STRING(@"To sync with Gmail on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
+                            if (number == 1){
+                                [self gmailAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+                            }
+                        }];
+                        [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+                    }
+                    else {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Gmail", @"duration": @(3.5) } ];
+                    }
+                }
+            });
+        }];
     }
 }
 
--(void)clearCache{
+- (void)clearCache{
     [self.evernoteSyncHandler clearCache];
 }
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
-    if(self.isAuthingEvernote)
+    if (self.isAuthingEvernote || kEnInt.isAuthenticationInProgress)
         return;
     self.isAuthingEvernote = YES;
     
@@ -434,12 +516,27 @@
         else {
             [self performSelectorOnMainThread:selector withObject:object waitUntilDone:NO];
         }
-        self.isAuthingEvernote = NO;
     }];
 }
 
-/*
-*/
+- (void)gmailAuthenticateUsingSelector:(SEL)selector withObject:(id)object
+{
+    if (self.isAuthingGmail)
+        return;
+    self.isAuthingGmail = YES;
+    
+    [kGmInt authenticateInViewController:self.rootController withBlock:^(NSError *error) {
+        self.isAuthingGmail = NO;
+        
+        if (error || !kGmInt.isAuthenticated) {
+            // TODO show message to the user
+            //NSLog(@"Session authentication failed: %@", [error localizedDescription]);
+        }
+        else {
+            [self performSelectorOnMainThread:selector withObject:object waitUntilDone:NO];
+        }
+    }];
+}
 
 - (BOOL)synchronizeWithParseAsync:(BOOL)async
 {
@@ -509,7 +606,13 @@
     NSString *lastUpdate = [USER_DEFAULTS objectForKey:kLastSyncServerString];
     if (lastUpdate)
         [syncData setObject:lastUpdate forKey:@"lastUpdate"];
-    
+    else {
+#ifndef NOT_APPLICATION
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [DejalBezelActivityView activityViewForView:[GlobalApp topView] withLabel:LOCALIZE_STRING(@"Synchronizing...")];
+        });
+#endif
+    }
     
     
     
@@ -529,6 +632,7 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
                                                        options:0 // Pass 0 if you don't care about the readability of the generated string
                                                         error:&error];
+    
     if(error){
         [UtilityClass sendError:error type:@"Sync JSON prepare parse"];
         [self finalizeSyncWithUserInfo:nil error:error];
@@ -575,7 +679,10 @@
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
     //NSLog(@"resulted err:%@",error);
-    //NSLog(@"res: %@ err: %@",result,error);
+    if([result objectForKey:@"intercom-hmac"]){
+        [USER_DEFAULTS setObject:[result objectForKey:@"intercom-hmac"] forKey:@"intercom-hmac"];
+        [USER_DEFAULTS synchronize];
+    }
     if([result objectForKey:@"hardSync"])
         [self hardSync];
     
@@ -626,13 +733,13 @@
         [self cleanUpAfterSync];
         if (!um.isUndoRegistrationEnabled)
             [um enableUndoRegistration];
-        DUMPDB;
         [self finalizeSyncWithUserInfo:nil error:nil];
     }];
     
     return (0 < totalNumberOfObjectsToSave);
 }
-#pragma mark Sync flow helpers
+
+#pragma mark - Sync flow helpers
 - (NSDictionary*)prepareUpdatedObjectsToBeSavedOnServerWithLimit:(NSInteger)limit
 {
     if ( self._didHardSync ){
@@ -781,9 +888,6 @@
 }
 
 
-
-
-
 #pragma mark Getters and Setters
 - (NSManagedObjectContext *)context
 {
@@ -862,12 +966,13 @@
     self._tempIdsThatGotObjectIds = nil;
     self._attributeChangesOnNewObjectsWhileSyncing = nil;
     
-    
     self._updatedObjectsForSyncNotification = nil;
     self._deletedObjectsForSyncNotification = nil;
-    if(kEnInt.isAuthenticated)
-        [[ENSession sharedSession] unauthenticate];
     
+    if (kEnInt.isAuthenticated)
+        [kEnInt logout];
+    if (kGmInt.isAuthenticated)
+        [kGmInt logout];
 }
 
 #pragma mark Instantiation
@@ -892,6 +997,7 @@ static CoreSyncHandler *sharedObject;
     notify(@"closing app", forceSync);
     notify(@"opened app", forceSync);
     notify(@"logged in", forceSync);
+    notify(kMagicalRecordPSCMismatchDidRecreateStore, onCoreDataRecreated);
     sharedObject._reach = [Reachability reachabilityWithHostname:@"www.google.com"];
     // Set the blocks
     sharedObject._reach.reachableBlock = ^(Reachability*reach) {
@@ -908,15 +1014,10 @@ static CoreSyncHandler *sharedObject;
 {
     @try {
         [Global initCoreData];
-
-        //[MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:@"swipes"];
         [[NSManagedObjectContext MR_defaultContext] setUndoManager:[[NSUndoManager alloc] init]];
-        
     }
     @catch (NSException *exception) {
         [UtilityClass sendException:exception type:@"Load Database Exception"];
-    }
-    @finally {
     }
 }
 

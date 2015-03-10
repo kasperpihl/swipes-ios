@@ -16,7 +16,9 @@
 #import "YoureAllDoneView.h"
 #import <Social/Social.h>
 #import "UIView+Utilities.h"
+#import "HintHandler.h"
 #import "AnalyticsHandler.h"
+#import "SettingsHandler.h"
 #import "SlowHighlightIcon.h"
 #import "RootViewController.h"
 #import "StyleHandler.h"
@@ -92,8 +94,11 @@
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) servicesAvailable++;
         if([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) servicesAvailable++;
         NSInteger streak = [USER_DEFAULTS integerForKey:@"numberOfDaysOnStreak"];
-        NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable],@"All Done for Today":@(self.allDoneForToday),@"Streak":@(streak)};
+        NSString *allDoneString = self.allDoneForToday ? @"Today" : @"Now";
+        NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable],@"All Done for Today":allDoneString ,@"Streak":@(streak)};
         [ANALYTICS trackEvent:@"Cleared Tasks" options:dict];
+        [ANALYTICS trackCategory:@"Actions" action:@"Cleared Tasks" label:allDoneString value:@(streak)];
+        [kHints triggerHint:HintAllDone];
         [kAudio playSoundWithName:@"All done for today.m4a"];
         
     }
@@ -102,9 +107,10 @@
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     
     NSDate *endDate = [NSDate date];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endDate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)",endDate];
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
-    return [KPToDo sortOrderForItems:results newItemsOnTop:YES save:YES context:nil];
+    BOOL newItemsToBottom = [[kSettings valueForSetting:SettingAddToBottom] boolValue];
+    return [KPToDo sortOrderForItems:results newItemsOnTop:!newItemsToBottom save:YES context:nil];
 }
 - (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
     ToDoCell *cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
@@ -151,8 +157,8 @@
 -(void)updateSectionHeader{
     NSDate *endOfToday = [[NSDate dateTomorrow] dateAtStartOfDay];
     NSDate *startOfToday = [[NSDate date] dateAtStartOfDay];
-    NSPredicate *inprogressPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)",endOfToday];
-    NSPredicate *completedPredicate = [NSPredicate predicateWithFormat:@"(completionDate > %@ AND parent = nil)",startOfToday];
+    NSPredicate *inprogressPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)",endOfToday];
+    NSPredicate *completedPredicate = [NSPredicate predicateWithFormat:@"(completionDate > %@ AND parent = nil AND isLocallyDeleted <> YES)",startOfToday];
     NSInteger numberInProgress = [KPToDo MR_countOfEntitiesWithPredicate:inprogressPredicate inContext:[KPCORE context]];
     NSInteger numberOfDone = [KPToDo MR_countOfEntitiesWithPredicate:completedPredicate inContext:[KPCORE context]];
     NSInteger total = numberInProgress+numberOfDone;
@@ -193,7 +199,7 @@
             self.youreAllDoneView.streakLabel.text = [NSString stringWithFormat:LOCALIZE_STRING(@"%@ on a streak!"),startString];
         }
         else{
-            NSPredicate *nextScheduleTaskPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil)",[NSDate date]];
+            NSPredicate *nextScheduleTaskPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil AND isLocallyDeleted <> YES)",[NSDate date]];
             KPToDo *nextItem = [KPToDo MR_findFirstWithPredicate:nextScheduleTaskPredicate sortedBy:@"schedule" ascending:YES inContext:[KPCORE context]];
             [self.youreAllDoneView setAllDoneForToday:NO];
             //self.youreAllDoneView.stampView.allDoneLabel.text = @"ALL DONE FOR NOW";
@@ -326,8 +332,7 @@
                 break;
             case SLComposeViewControllerResultDone:{
                 NSString *realServiceType;
-                [dict setObject:self.shareText forKey:@"Message"];
-                [dict setObject:@(self.allDoneForToday) forKey:@"All Done for Today"];
+                [dict setObject:(self.allDoneForToday ? @"Today" : @"Now") forKey:@"All Done for Today"];
                 if ([self.sharingService isEqualToString:SLServiceTypeFacebook])
                     realServiceType = @"Facebook";
                 else if([self.sharingService isEqualToString:SLServiceTypeTwitter])
@@ -335,6 +340,7 @@
                 if (realServiceType)
                     [dict setObject:realServiceType forKey:@"Service"];
                 [ANALYTICS trackEvent:@"Sharing Successful" options:dict];
+                [ANALYTICS trackCategory:@"Sharing" action:@"Shared" label:self.shareText value:@(self.allDoneForToday)];
                 break;
             }
         }
@@ -358,7 +364,7 @@
     NSString *realServiceType;
     
     [dict setObject:self.shareText forKey:@"Message"];
-    [dict setObject:@(self.allDoneForToday) forKey:@"All Done for Today"];
+    [dict setObject:(self.allDoneForToday ? @"Today" : @"Now") forKey:@"All Done for Today"];
     if ([serviceType isEqualToString:SLServiceTypeFacebook])
         realServiceType = @"Facebook";
     else if([serviceType isEqualToString:SLServiceTypeTwitter])
@@ -366,6 +372,7 @@
     if (realServiceType)
         [dict setObject:realServiceType forKey:@"Service"];
     [ANALYTICS trackEvent:@"Sharing Opened" options:dict];
+    [ANALYTICS trackCategory:@"Sharing" action:@"Opened" label:self.shareText value:@(self.allDoneForToday)];
 }
 -(void)pressedFacebook{
     [self shareForServiceType:SLServiceTypeFacebook];
@@ -380,9 +387,6 @@
     clearNotify();
 }
 
--(void)triggerEvernote{
-    [ROOT_CONTROLLER triggerEvernoteEvent];
-}
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     if(self.itemHandler.itemCounterWithFilter == 0)
@@ -392,7 +396,6 @@
     [super viewDidAppear:animated];
     [self updateSectionHeader];
     [self updateBackground];
-    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(triggerEvernote) userInfo:nil repeats:NO];
 }
 - (void)didReceiveMemoryWarning
 {

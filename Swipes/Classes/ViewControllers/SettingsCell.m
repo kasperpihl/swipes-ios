@@ -9,9 +9,10 @@
 #import "SettingsCell.h"
 
 #define kDefTextColor tcolor(TextColor)
-#define kDefSettingFont KP_REGULAR(15)
+#define kDefSettingFont KP_REGULAR(14)
 #define kDefValueFont KP_REGULAR(12)
-#define kRightLabelMargin 18
+#define kRightLabelMargin 26
+#define kRightLabelWidth 92
 
 #define kValueLabelSidePadding 10
 #define kValueLabelTopPadding 7
@@ -20,8 +21,6 @@
 #define kValBorderWidth 2
 
 @interface SettingsCell ()
-
-
 
 @end
 
@@ -33,8 +32,9 @@
     self.settingLabel.font = self.settingFont;
     self.valueLabel.text = value;
     self.valueLabel.font = self.valueFont;
-    CGSize textSize = sizeWithFont(value, self.valueFont);
-    CGRectSetSize(self.valueLabel,textSize.width+2*kValueLabelSidePadding,textSize.height + 2*kValueLabelTopPadding);
+    //CGSize textSize = sizeWithFont(value, self.valueFont);
+    //CGRectSetSize(self.valueLabel,textSize.width+2*kValueLabelSidePadding,textSize.height + 2*kValueLabelTopPadding);
+    CGRectSetSize(self.valueLabel, kRightLabelWidth, 12 + 2*kValueLabelTopPadding);
     [self setNeedsLayout];
 }
 
@@ -59,23 +59,17 @@
         [self.contentView addSubview:self.settingLabel];
         
         self.valueLabel = [[UILabel alloc] init];
-        self.valueLabel.backgroundColor = [UIColor clearColor];
+        self.valueLabel.backgroundColor = tcolor(BackgroundColor); //[UIColor clearColor];
         self.valueLabel.textAlignment = NSTextAlignmentCenter;
         self.valueLabel.layer.borderWidth = LINE_SIZE;
-        self.valueLabel.layer.cornerRadius = 3;
+        self.valueLabel.layer.cornerRadius = kCellHeight / 4;
+        self.valueLabel.layer.masksToBounds = YES;
         self.valueLabel.layer.borderColor = self.labelColor.CGColor;
-        self.valueLabel.textColor = self.labelColor;
+        self.valueLabel.textColor = tcolor(TextColor);
         self.valueLabel.font = self.valueFont;
         [self.contentView addSubview:self.valueLabel];
     }
     return self;
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 - (void)layoutSubviews

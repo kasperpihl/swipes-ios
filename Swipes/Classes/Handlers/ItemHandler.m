@@ -191,7 +191,6 @@
     NSMutableArray *filteredItems;
     
     if(kFilter.isActive){
-        NSLog(@"filter activated");
         NSInteger counter = 0;
         NSArray *iteratingItems = [self.items copy];
         if(kFilter.searchString){

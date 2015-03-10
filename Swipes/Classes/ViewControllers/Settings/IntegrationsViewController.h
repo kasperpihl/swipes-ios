@@ -7,10 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-typedef NS_ENUM(NSUInteger, Integrations) {
-    kEvernoteIntegration
-};
+#import "IntegrationBaseViewController.h"
 
-@interface IntegrationsViewController : UIViewController
--(void)openHelperForIntegration:(Integrations)integration;
+@interface IntegrationsViewController : IntegrationBaseViewController
+
 @end

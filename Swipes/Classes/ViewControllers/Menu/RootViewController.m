@@ -54,10 +54,9 @@
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 
-@property (nonatomic) NSDate *lastClose;
-@property (nonatomic) KPMenu currentMenu;
-@property (nonatomic) BOOL didReset;
-@property MFMailComposeViewController *mailCont;
+@property (nonatomic, strong) NSDate *lastClose;
+@property (nonatomic, assign) KPMenu currentMenu;
+@property (nonatomic, assign) BOOL didReset;
 
 @end
 
@@ -107,7 +106,7 @@
             if(email)
                 [user setObject:email forKey:@"username"];
             [user saveEventually];
-            [ANALYTICS updateIdentity];
+            [ANALYTICS checkForUpdatesOnIdentity];
         }
         return NO;
     }];
@@ -116,12 +115,13 @@
     [self.settingsViewController renderSubviews];
     voidBlock block = ^{
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
-        NSDictionary *options = @{@"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]), @"Did Try App" : @([[USER_DEFAULTS objectForKey:isTryingString] boolValue])};
+        NSNumber *daysSinceInstall = @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]);
+        NSString *didTryApp = [[USER_DEFAULTS objectForKey:isTryingString] boolValue] ? @"Yes" : @"No";
         if(user.isNew) {
-            [ANALYTICS trackEvent:@"Signed Up" options:options];
+            [ANALYTICS trackCategory:@"Onboarding" action:@"Signed Up" label:didTryApp value:daysSinceInstall];
         }
         else{
-            [ANALYTICS trackEvent:@"Logged In" options:options];
+            [ANALYTICS trackCategory:@"Onboarding" action:@"Logged In" label:didTryApp value:daysSinceInstall];
         }
         if ([PFFacebookUtils isLinkedWithUser:user]){
             if (!user.email){
@@ -131,7 +131,7 @@
         else{
             
         }
-        [ANALYTICS updateIdentity];
+        [ANALYTICS checkForUpdatesOnIdentity];
         [self changeToMenu:KPMenuHome animated:YES];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
     };
@@ -175,15 +175,19 @@
                 break;
             }
             case KPMenuHome:
-                [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(triggerWelcome) userInfo:nil repeats:NO];
                 self.lockSettings = NO;
                 viewController = self.menuViewController;
                 break;
         }
+        if(self.drawerViewController.openSide == MMDrawerSideLeft){
+            NSLog(@"closing");
+            [self.settingsViewController reset];
+            NSLog(@"reset");
+            [self.drawerViewController closeDrawerAnimated:YES completion:nil];
+        }
         self.viewControllers = @[self.drawerViewController];
         self.currentMenu = menu;
-        if(self.drawerViewController.openSide == MMDrawerSideLeft)
-            [self.drawerViewController closeDrawerAnimated:YES completion:nil];
+       
         
         //CGRectSetHeight(viewController.view,viewController.view.frame.size.height-100);
         //CGRectSetHeight(self.drawerViewController.view,viewController.view.frame.size.height-100);
@@ -238,34 +242,37 @@ static RootViewController *sharedObject;
     if (result == MFMailComposeResultSent){
         NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
         [ANALYTICS trackEvent:@"Share Tasks Sent" options:@{@"Number of Tasks":@(tasks.count)}];
+        [ANALYTICS trackCategory:@"Share Task" action:@"Sent" label:nil value:@(tasks.count)];
     }
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
 -(void)shareTasks:(NSArray*)tasks{
     if([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
         
-        self.mailCont.mailComposeDelegate = self;
-        [self.mailCont setSubject:LOCALIZE_STRING(@"Tasks to complete")];
+        mailCont.mailComposeDelegate = self;
+        [mailCont setSubject:LOCALIZE_STRING(@"Tasks to complete")];
         
-        NSString *message = LOCALIZE_STRING(@"Tasks: \r\n");
+        NSMutableString* message = [[NSMutableString alloc] initWithString:LOCALIZE_STRING(@"Tasks:\r\n")];
         for(KPToDo *toDo in tasks){
-            message = [message stringByAppendingFormat:@"◯ %@\r\n",toDo.title];
+            [message appendFormat:@"◯ %@\r\n",toDo.title];
             NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
             NSArray *subtasks = [[toDo getSubtasks] sortedArrayUsingDescriptors:@[sortDescriptor]];
             BOOL addedSubtasks = NO;
             for( KPToDo *subtask in subtasks){
                 if(!subtask.completionDate){
-                    message = [message stringByAppendingFormat:@"   ◯ %@\r\n",subtask.title];
+                    [message appendFormat:@"   ◯ %@\r\n",subtask.title];
                     addedSubtasks = YES;
                 }
             }
-            if(addedSubtasks)
-                message = [message stringByAppendingString:@"\r\n"];
+            if (addedSubtasks)
+                [message appendString:@"\r\n"];
         }
-        message = [message stringByAppendingString:LOCALIZE_STRING(@"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com")];
-        [self.mailCont setMessageBody:message isHTML:NO];
-        [self presentViewController:self.mailCont animated:YES completion:nil];
+        [message appendString:LOCALIZE_STRING(@"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com")];
+        [mailCont setMessageBody:message isHTML:NO];
+        [self presentViewController:mailCont animated:YES completion:nil];
         [ANALYTICS trackEvent:@"Share Tasks Opened" options:@{@"Number of Tasks":@(tasks.count)}];
+        [ANALYTICS trackCategory:@"Share Task" action:@"Opened" label:nil value:@(tasks.count)];
     }
     else{
         [UTILITY alertWithTitle:LOCALIZE_STRING(@"Mail was not setup") andMessage:LOCALIZE_STRING(@"You can send us feedback to support@swipesapp.com. Thanks")];
@@ -273,8 +280,13 @@ static RootViewController *sharedObject;
 }
 
 -(void)accountAlertWithMessage:(NSString *)message{
+    [self accountAlertWithMessage:message inViewController:self];
+}
+-(void)accountAlertWithMessage:(NSString *)message inViewController:(UIViewController *)viewController{
     if( !message )
         message = LOCALIZE_STRING(@"Register for Swipes to safely back up your data and get Swipes Plus");
+    else
+        message = LOCALIZE_STRING(message);
     KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:message block:^(BOOL succeeded, NSError *error) {
         [BLURRY dismissAnimated:YES];
         if(succeeded){
@@ -283,7 +295,7 @@ static RootViewController *sharedObject;
         
     }];
     BLURRY.blurryTopColor = kSettingsBlurColor;
-    [BLURRY showView:alert inViewController:self];
+    [BLURRY showView:alert inViewController:viewController];
 }
 -(void)feedback{
     if([MFMailComposeViewController canSendMail]) {
@@ -363,9 +375,11 @@ static RootViewController *sharedObject;
     
 }
 -(void)playerView:(YTPlayerView *)playerView didChangeToState:(YTPlayerState)state{
-    NSLog(@"state:%i",state);
-    if(state == kYTPlayerStateEnded)
+    if(state == kYTPlayerStateEnded){
+        [kHints triggerHint:HintWelcomeVideo];
         [[playerView superview] removeFromSuperview];
+        
+    }
 }
 - (void)playerViewDidBecomeReady:(YTPlayerView *)playerView{
     [playerView setPlaybackQuality:kYTPlaybackQualityHD1080];
@@ -431,6 +445,7 @@ static RootViewController *sharedObject;
     if(self.didReset)
         self.didReset = NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"opened app" object:self];
+    [NOTIHANDLER updateLocalNotifications];
 }
 
 -(void)closeApp
@@ -455,7 +470,7 @@ static RootViewController *sharedObject;
             [self changeToMenu:KPMenuHome animated:NO];
         }
         else{
-            [kHints turnHintsOn:YES];
+            [kHints turnHintsOff:NO];
             [self changeToMenu:KPMenuLogin animated:NO];
         }
     }
@@ -463,31 +478,9 @@ static RootViewController *sharedObject;
         [self changeToMenu:KPMenuHome animated:NO];
 }
 
--(void)openIntegrationsWithHelper{
-    [self.settingsViewController resetAndOpenIntegrations];
-    if(self.drawerViewController.openSide != MMDrawerSideLeft){
-        [self.drawerViewController openDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
-            
-        }];
-    }
-    
-}
-
--(void)triggerEvernoteEvent{
-    if(self.currentMenu == KPMenuHome){
-        [kHints triggerHint:HintEvernoteIntegration];
-    }
-}
 
 -(void)hintHandler:(HintHandler *)hintHandler triggeredHint:(Hints)hint{
-    if(hint == HintEvernoteIntegration){
-        [UTILITY alertWithTitle:LOCALIZE_STRING(@"New feature") andMessage:LOCALIZE_STRING(@"We've made a powerful integration with Evernote!") buttonTitles:@[LOCALIZE_STRING(@"Not now"), LOCALIZE_STRING(@"Learn more")] block:^(NSInteger number, NSError *error) {
-            if( number == 1){
-                [self openIntegrationsWithHelper];
-            }
-        }];
-        
-    }
+    
 }
 
 -(void)tryoutapp{
@@ -496,8 +489,8 @@ static RootViewController *sharedObject;
         [USER_DEFAULTS synchronize];
         [KPCORE seedObjectsSave:YES];
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
-        NSDictionary *options = @{@"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]])};
-        [ANALYTICS trackEvent:@"Trying Out" options:options];
+        NSNumber *daysSinceInstall = @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]);
+        [ANALYTICS trackCategory:@"Onboarding" action:@"Trying Out" label:nil value:daysSinceInstall];
     }
     
     [self changeToMenu:KPMenuHome animated:YES];
@@ -505,16 +498,10 @@ static RootViewController *sharedObject;
 }
 
 
--(void)triggerWelcome{
-    [kHints triggerHint:HintWelcome];
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if([MFMailComposeViewController canSendMail]) {
-        self.mailCont = [[MFMailComposeViewController alloc] init];
-    }
     UTILITY.rootViewController = self;
 
     [self setNavigationBarHidden:YES];
@@ -550,26 +537,27 @@ static RootViewController *sharedObject;
     [self setupAppearance];
     
     
-    
-    
 }
+
+
 -(void)changedTheme{
     UIStatusBarStyle statusBarStyle = (THEMER.currentTheme == ThemeDark) ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
     [[UIApplication sharedApplication] setStatusBarStyle: statusBarStyle];
     [kTopClock setTextColor:alpha(tcolor(TextColor),0.8)];
-    NSString *newTheme = ([THEMER currentTheme] == ThemeDark) ? @"Dark" : @"Light";
-    [ANALYTICS trackEvent:@"Changed Theme" options:@{@"Theme":newTheme}];
+    
    // [self setNeedsStatusBarAppearanceUpdate];
 }
--(void)timering{
-    [Intercom presentMessageViewAsConversationList:NO];
+-(void)initializeClock{
+    [kTopClock addTopClock];
+    kTopClock.font = KP_SEMIBOLD(12);
+    [kTopClock setTextColor:alpha(tcolor(TextColor),0.8)];
 }
+
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    kTopClock.font = KP_SEMIBOLD(12);
     [self changedTheme];
-    //[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(timering) userInfo:nil repeats:NO];
-    /*EKEventStore *store = [[EKEventStore alloc] init];
+    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(initializeClock) userInfo:nil repeats:NO];
+   /* EKEventStore *store = [[EKEventStore alloc] init];
     
     [store requestAccessToEntityType:EKEntityTypeReminder completion:^(BOOL granted, NSError *error) {
         if(!error){
@@ -580,7 +568,9 @@ static RootViewController *sharedObject;
                     NSLog(@"%@",reminder.calendarItemIdentifier);
                     
                     // do something for each reminder
-                    [KPToDo addItem:reminder.title priority:NO tags:nil save:NO from:@"Reminders"];
+                    KPToDo *newToDo = [KPToDo addItem:reminder.title priority:NO tags:nil save:NO from:@"Reminders"];
+                    newToDo.origin = @"Reminders";
+                    newToDo.originIdentifier = reminder.calendarItemIdentifier;
                 }
                 [KPToDo saveToSync];
             }];

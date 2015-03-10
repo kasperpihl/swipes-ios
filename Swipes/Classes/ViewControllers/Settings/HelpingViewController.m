@@ -6,163 +6,114 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
-#import "HelpingViewController.h"
+#import "Intercom.h"
 #import "RootViewController.h"
+#import "UtilityClass.h"
 #import "KPAlert.h"
 #import "KPBlurry.h"
-#import "UtilityClass.h"
-#define kLocalCellHeight 55
-#define kSettingsBlurColor retColor(gray(230, 0.5),gray(50, 0.4))
-#define kCellCount 6
+#import "HelpingViewController.h"
 
-@interface HelpingViewController () <UITableViewDataSource, UITableViewDelegate>
-
-@property (nonatomic,strong) UITableView *tableView;
-
-@end
+static NSString* const kGetStartedURL = @"http://support.swipesapp.com/hc/en-us/sections/200685992-Get-Started";
+static NSString* const kFaqURL = @"http://support.swipesapp.com/hc/en-us/categories/200368652-FAQ";
+static NSString* const kKnownIssuesURL = @"http://support.swipesapp.com/hc/en-us/sections/200659851-Known-Issues";
+static NSString* const kPoliciesURL = @"http://swipesapp.com/policies.pdf";
+static NSString* kCancelTitle;
+static NSString* kOpenTitle;
 
 @implementation HelpingViewController
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return kCellCount;
++ (void)initialize
+{
+    kCancelTitle = [LOCALIZE_STRING(@"cancel") capitalizedString];
+    kOpenTitle = [LOCALIZE_STRING(@"open") capitalizedString];
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *cellIdentifier = @"ActionCell";
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if ( cell == nil ){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.contentView.backgroundColor = CLEAR;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundColor = CLEAR;
-        cell.textLabel.font = KP_REGULAR(16);
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.transform = CGAffineTransformMakeRotation(M_PI);
-    }
-    return cell;
-}
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    switch (indexPath.row) {
-        case 5:
-            cell.textLabel.text = LOCALIZE_STRING(@"Walkthrough");
-            break;
-        case 4:
-            cell.textLabel.text = LOCALIZE_STRING(@"Get Started Guides");
-            break;
-        case 3:
-            cell.textLabel.text = LOCALIZE_STRING(@"FAQ");
-            break;
-        case 2:
-            cell.textLabel.text = LOCALIZE_STRING(@"Known Issues");
-            break;
-        case 1:
-            cell.textLabel.text = LOCALIZE_STRING(@"Send Feedback");
-            break;
-        case 0:
-            cell.textLabel.text = LOCALIZE_STRING(@"Open Policies");
-        default:
-            break;
-    }
-}
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    __block NSString *getStartedURL = @"http://support.swipesapp.com/hc/en-us/sections/200685992-Get-Started";
-    __block NSString *faqURL = @"http://support.swipesapp.com/hc/en-us/categories/200368652-FAQ";
-    __block NSString *knownIssuesURL = @"http://support.swipesapp.com/hc/en-us/sections/200659851-Known-Issues";
-    __block NSString *policiesURL = @"http://swipesapp.com/policies.pdf";
-    NSString *cancelTitle = [LOCALIZE_STRING(@"cancel") capitalizedString];
-    NSString *openTitle = [LOCALIZE_STRING(@"open") capitalizedString];
-    switch (indexPath.row) {
-        case 5:
-            [ROOT_CONTROLLER walkthrough];
-            break;
-        case 4:
-            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Get Started") andMessage:LOCALIZE_STRING(@"Learn how to get most out of Swipes.") cancel:cancelTitle confirm:openTitle block:^(BOOL succeeded, NSError *error) {
-                
-                if(succeeded){
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: getStartedURL]];
-                }
-            }];
-            break;
-        case 3:
-            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"FAQ") andMessage:LOCALIZE_STRING(@"Learn how to get most out of the different features in Swipes.") cancel:cancelTitle confirm:openTitle block:^(BOOL succeeded, NSError *error) {
-                
-                if(succeeded){
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: faqURL]];
-                }
-            }];
-            break;
-        case 2:
-            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Known Issues") andMessage:LOCALIZE_STRING(@"You found a bug? Check out if we're already working on it.") cancel:cancelTitle confirm:openTitle block:^(BOOL succeeded, NSError *error) {
-                
-                if(succeeded){
-                    
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: knownIssuesURL]];
-                }
-            }];
-            break;
-        case 1:
-            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Send Feedback") andMessage:LOCALIZE_STRING(@"We love all your inputs - but it might take us a while to get back to you :-)") buttonTitles:@[cancelTitle, LOCALIZE_STRING(@"Check FAQ"), LOCALIZE_STRING(@"Known Issues"), LOCALIZE_STRING(@"Send Email")] block:^(NSInteger number, NSError *error) {
-                if(number == 1){
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: faqURL]];
-                }
-                else if(number == 2){
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: knownIssuesURL]];
-                }
-                else if(number == 3){
-                    [ROOT_CONTROLLER feedback];
-                }
-            }];
-            
-            break;
-        case 0:{
-            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Policies") andMessage:LOCALIZE_STRING(@"Read through our 'Privacy Policy' and 'Terms and Conditions'.") cancel:cancelTitle confirm:openTitle block:^(BOOL succeeded, NSError *error) {
-                
-                if(succeeded){
-                    
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: policiesURL]];
-                }
-            }];
-            break;
-        }
-        default:
-            break;
-    }
-}
-
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    self.view.backgroundColor = CLEAR;
-    
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.transform = CGAffineTransformMakeRotation(-M_PI);
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    self.tableView.rowHeight = kLocalCellHeight;
-    
-    [self.view addSubview:self.tableView];
+    self.title = LOCALIZE_STRING(@"HELP");
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)recreateCellInfo
+{
+    self.cellInfo = @[
+                      @{kKeyTitle: LOCALIZE_STRING(@"Open Policies"),
+                        kKeyCellType: @(kIntegrationCellTypeViewMore),
+                        kKeyTouchSelector: NSStringFromSelector(@selector(onOpenPoliciesTouch))
+                        },
+                      @{kKeyTitle: LOCALIZE_STRING(@"Known Issues"),
+                        kKeyCellType: @(kIntegrationCellTypeViewMore),
+                        kKeyTouchSelector: NSStringFromSelector(@selector(onKnownIssuesTouch))
+                        },
+                      @{kKeyTitle: LOCALIZE_STRING(@"FAQ"),
+                        kKeyCellType: @(kIntegrationCellTypeViewMore),
+                        kKeyTouchSelector: NSStringFromSelector(@selector(onFaqTouch))
+                        },
+                      @{kKeyTitle: LOCALIZE_STRING(@"Get Started"),
+                        kKeyCellType: @(kIntegrationCellTypeViewMore),
+                        kKeyTouchSelector: NSStringFromSelector(@selector(onGetStartedTouch))
+                        },
+                      @{kKeyTitle: LOCALIZE_STRING(@"Walkthrough"),
+                        kKeyCellType: @(kIntegrationCellTypeViewMore),
+                        kKeyTouchSelector: NSStringFromSelector(@selector(onWalkthroughTouch))
+                        },
+                      @{kKeyTitle: LOCALIZE_STRING(@"Contact Swipes"),
+                        kKeyCellType: @(kIntegrationCellTypeViewMore),
+                        kKeyTouchSelector: NSStringFromSelector(@selector(onContactSwipesTouch))
+                        },
+                      ];
 }
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark - selectors
+
+- (void)onOpenPoliciesTouch
+{
+    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Policies") andMessage:LOCALIZE_STRING(@"Read through our 'Privacy Policy' and 'Terms and Conditions'.") cancel:kCancelTitle confirm:kOpenTitle block:^(BOOL succeeded, NSError *error) {
+        
+        if (succeeded) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kPoliciesURL]];
+        }
+    }];
 }
-*/
--(void)dealloc{
-    self.tableView.delegate = nil;
-    self.tableView.dataSource = nil;
-    [self.tableView removeFromSuperview];
-    self.tableView = nil;
+
+- (void)onKnownIssuesTouch
+{
+    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Known Issues") andMessage:LOCALIZE_STRING(@"You found a bug? Check out if we're already working on it.") cancel:kCancelTitle confirm:kOpenTitle block:^(BOOL succeeded, NSError *error) {
+        
+        if (succeeded) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kKnownIssuesURL]];
+        }
+    }];
 }
+
+- (void)onFaqTouch
+{
+    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"FAQ") andMessage:LOCALIZE_STRING(@"Learn how to get most out of the different features in Swipes.") cancel:kCancelTitle confirm:kOpenTitle block:^(BOOL succeeded, NSError *error) {
+        
+        if (succeeded) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kFaqURL]];
+        }
+    }];
+}
+
+- (void)onGetStartedTouch
+{
+    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Get Started") andMessage:LOCALIZE_STRING(@"Learn how to get most out of Swipes.") cancel:kCancelTitle confirm:kOpenTitle block:^(BOOL succeeded, NSError *error) {
+        
+        if (succeeded) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kGetStartedURL]];
+        }
+    }];
+}
+
+- (void)onWalkthroughTouch
+{
+    [ROOT_CONTROLLER walkthrough];
+}
+
+- (void)onContactSwipesTouch
+{
+    [Intercom presentMessageViewAsConversationList:YES];
+}
+
 @end

@@ -27,12 +27,15 @@
 + (void)clearUserDefaults;
 
 #ifndef APPLE_WATCH
+
++ (BOOL)isFirstRun;
 + (void)initCoreData;
 + (NSInteger)OSVersion;
 + (BOOL)supportsOrientation:(UIDeviceOrientation)orientation;
 + (UILabel*)iconLabelWithString:(NSString*)iconString height:(CGFloat)height;
 
 @property (nonatomic, assign) CGFloat fontMultiplier;
+
 #endif
 
 @end

@@ -32,14 +32,15 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
 @interface EvernoteView () <UITableViewDataSource, UITableViewDelegate, EvernoteViewerViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) UITableView* tableView;
-@property (nonatomic) UIView *contentView;
+@property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UITextField* searchBar;
 @property (nonatomic, strong) UIButton* backButton;
+@property (nonatomic, strong) UIActivityIndicatorView *busyIndicator;
 
 @property (nonatomic, strong) NSArray* findNotesResults;
 
 @property (nonatomic, strong) EvernoteViewerView* viewer;
-@property (nonatomic) CheckmarkButton *checkmark;
+@property (nonatomic, strong) CheckmarkButton *checkmark;
 
 @end
 
@@ -60,8 +61,6 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
         self.backgroundColor = CLEAR;
         
         CGFloat top = (OSVER >= 7) ? 20 : 0;
-        
-        
         CGFloat height = MIN(self.frame.size.height - top - 2*kContentTopBottomSpacing, MAX_HEIGHT);
         
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, height)];
@@ -116,6 +115,13 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.rowHeight = 46;
         [contentView addSubview:self.tableView];
+        
+        self.busyIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        CGPoint center = self.tableView.center;
+        center.x = POPUP_WIDTH / 2;
+        self.busyIndicator.center = center;
+        self.busyIndicator.hidden = YES;
+        [contentView addSubview:self.busyIndicator];
         
         [self searchBar:_searchBar textDidChange:nil];
         
@@ -239,6 +245,8 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
+    if (kEnInt.isAuthenticationInProgress)
+        return;
     [kEnInt authenticateEvernoteInViewController:_caller withBlock:^(NSError *error) {
         if (error || !kEnInt.isAuthenticated) {
             // TODO show message to the user
@@ -250,10 +258,26 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
     }];
 }
 
+- (void)startBusyIndicator {
+    if (!_findNotesResults || (0 == _findNotesResults.count)) {
+        self.tableView.hidden = YES;
+        self.busyIndicator.hidden = NO;
+        [self.busyIndicator startAnimating];
+    }
+}
+
+- (void)stopBusyIndicator {
+    [self.busyIndicator stopAnimating];
+    self.busyIndicator.hidden = YES;
+    self.tableView.hidden = NO;
+}
+
 - (void)searchNoteStore:(id)sender
 {
     if (kEnInt.isAuthenticated) {
         DLog(@"running search");
+        
+        [self startBusyIndicator];
         
         if ([EvernoteIntegration isAPILimitReached]) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": [EvernoteIntegration APILimitReachedMessage], @"duration": @(3.5) } ];
@@ -281,8 +305,11 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
             searchText = [NSString stringWithFormat:@"todo:* %@", searchText];
         }
         [kEnInt findNotesWithSearch:searchText block:^(NSArray *findNotesResults, NSError *error) {
+            DLog(@"search ended");
+            [self stopBusyIndicator];
             if (error) {
                 [EvernoteIntegration updateAPILimitIfNeeded:error];
+                DLog(@"search error: %@", error);
             }
             if( findNotesResults ){
                 _findNotesResults = findNotesResults;
@@ -297,7 +324,7 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
         
     }
     else {
-        NSLog(@"Session not authenticated");
+        DLog(@"Session not authenticated");
         [self evernoteAuthenticateUsingSelector:@selector(searchNoteStore:) withObject:nil];
     }
 }

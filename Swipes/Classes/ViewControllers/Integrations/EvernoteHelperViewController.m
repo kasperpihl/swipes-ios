@@ -9,7 +9,7 @@
 #import "UIColor+Utilities.h"
 #import "WalkthroughTitleView.h"
 #import "EvernoteHelperViewController.h"
-#define kTopHeight 50
+#define kTopHeight 60
 #define kIconHack 0
 #define kTextSpacing 10
 #define kTitleTopSpacing 45
@@ -34,40 +34,35 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = gray(225,1);
+    self.view.backgroundColor = [UIColor whiteColor];
     
-    CGFloat top = OSVER >= 7 ? 20 : 0;
+    CGFloat top = 0;
     UIView *topHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, kTopHeight + top)];
     topHeader.backgroundColor = kEvernoteColor;
     topHeader.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     
-    
-    
-    UILabel *iconLabel = iconLabel(@"integrationEvernoteFull", kTopHeight/2);
-    CGRectSetCenter(iconLabel, self.view.bounds.size.width/2-kIconHack, top + kTopHeight/2);
-    iconLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
-    iconLabel.textColor = alpha(tcolorF(TextColor, ThemeLight),0.8);
-    [topHeader addSubview:iconLabel];
-    
+    // Create the attributed string
+    NSMutableAttributedString *titleString = [[NSMutableAttributedString alloc]initWithString:@"EVERNOTE INTEGRATION"];
+    [titleString addAttribute:NSKernAttributeName value:@(1.5) range:NSMakeRange(0, titleString.length)];
+
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, top, self.view.bounds.size.width, kTopHeight)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
-    titleLabel.text = @"      EVERNOTE            INTEGRATION";
+    titleLabel.attributedText = titleString;
     titleLabel.numberOfLines = 0;
-    titleLabel.font = KP_SEMIBOLD(15);
+    titleLabel.font = KP_SEMIBOLD(10);
     titleLabel.backgroundColor = CLEAR;
-    titleLabel.textColor = alpha(tcolorF(TextColor, ThemeLight),0.8);
+    titleLabel.textColor = alpha(tcolorF(TextColor, ThemeDark),0.8);
     [topHeader addSubview:titleLabel];
 
     [self.view addSubview:topHeader];
     
     UIButton *closeButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, top, kTopHeight, kTopHeight)];
     closeButton.titleLabel.font = iconFont(23);
-    [closeButton setTitleColor:tcolorF(TextColor, ThemeLight) forState:UIControlStateNormal];
-    [closeButton setTitle:iconString(@"plusThick") forState:UIControlStateNormal];
-    [closeButton setTitle:iconString(@"plusThick") forState:UIControlStateHighlighted];
-    closeButton.transform = CGAffineTransformMakeRotation(M_PI/2/2);
-    //closeButton.transform = CGAffineTransformMakeRotation(M_PI/4);
+    [closeButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
+    [closeButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
+    [closeButton setTitle:iconString(@"roundClose") forState:UIControlStateHighlighted];
+    //closeButton.transform = CGAffineTransformMakeRotation(M_PI/2/2);
     closeButton.backgroundColor = CLEAR;
     [closeButton addTarget:self action:@selector(pressedClose:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:closeButton];
@@ -80,10 +75,10 @@
     
     WalkthroughTitleView *firstTitleView = [[WalkthroughTitleView alloc] init];
     CGRectSetWidth(firstTitleView, self.view.bounds.size.width);
-    firstTitleView.titleLabel.font = KP_LIGHT(20);
+    firstTitleView.titleLabel.font = KP_SEMIBOLD(16);
     firstTitleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     firstTitleView.titleLabel.textColor = tcolorF(TextColor, ThemeLight);
-    firstTitleView.subtitleLabel.font = KP_LIGHT(14);
+    firstTitleView.subtitleLabel.font = KP_REGULAR(12);
     firstTitleView.spacing = kTextSpacing;
     firstTitleView.maxWidth = 250;
     [firstTitleView setTitle:LOCALIZE_STRING(@"WHAT IT IS") subtitle:LOCALIZE_STRING(@"This integration lets you sync notes with checkmarks from Evernote into Swipes.")];
@@ -99,10 +94,10 @@
     
     WalkthroughTitleView *secondTitleView = [[WalkthroughTitleView alloc] init];
     CGRectSetWidth(secondTitleView, self.view.bounds.size.width);
-    secondTitleView.titleLabel.font = KP_LIGHT(20);
+    secondTitleView.titleLabel.font = KP_SEMIBOLD(16);
     secondTitleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     secondTitleView.titleLabel.textColor = tcolorF(TextColor, ThemeLight);
-    secondTitleView.subtitleLabel.font = KP_LIGHT(14);
+    secondTitleView.subtitleLabel.font = KP_REGULAR(12);
     secondTitleView.spacing = kTextSpacing;
     secondTitleView.maxWidth = 250;
     [secondTitleView setTitle:LOCALIZE_STRING(@"HOW IT WORKS") subtitle:LOCALIZE_STRING(@"Assign the \"swipes\" tag to a note in Evernote. We'll add it as a task in Swipes and sync all its checkmarks.")];

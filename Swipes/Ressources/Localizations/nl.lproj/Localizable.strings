@@ -1,0 +1,404 @@
+/* 
+  Localizable.strings
+  Swipes
+
+  Created by demosten on 10/6/14.
+  Copyright (c) 2014 Pihl IT. All rights reserved.
+*/
+
+/* 
+ Login Screen 
+ */
+
+// UI
+
+"Focus. Swipe. Achieve." = "Focus. Swipe. Bereik."; // title for login screen
+"Task List made for High Achievers" = "De Takenlijst die Presteert"; // subtitle on loginscreen
+
+"Keep trying Swipes" = "Blijf Swipes uitproberen"; // title for try button
+"Try out" = "Probeer";
+
+"Create Account" = "Maak Account"; // Create account button title
+"Log in" = "Inloggen"; // Login button title
+"Sign up" = "Aanmelden";
+"Register" = "Registreren";
+
+"Forgot password?" = "Wachtwoord vergeten?";
+"Policies" = "Beleid";
+
+"password" = "wachtwoord";
+"email" = "e-mail";
+"cancel" = "annuleer";
+"reset" = "opnieuw instellen";
+
+"You can register with email" = "Je kan je registreren via e-mail";
+"Or register with Facebook" = "Of registreer je via Facebook";
+
+"You can log in with email" = "Je kunt inloggen met je e-mailadres";
+"Or log in with Facebook" = "Of log in via Facebook";
+
+// Alerts
+"Please use an email" = "Geef alsjeblieft een e-mailadres op";
+"Make sure you use a real email!" = "Zorg ervoor dat je een werkend e-mailadres gebruikt!";
+
+"Missing password" = "Ontbrekend wachtwoord";
+"Make sure to enter your password!" = "Zorg dat je jouw wachtwoord invoert!";
+
+"Wrong email or password." = "Foutief e-mailadres of wachtwoord.";
+"Please check your informations and try again." = "Controleer je gegevens en probeer opnieuw.";
+
+"Email wasn't found." = "Het e-mailadres is niet gevonden.";
+"We couldn't recognize the email." = "We herkennen het e-mailadres niet.";
+
+"Something went wrong." = "Er is iets misgegaan.";
+"Please try again." = "Probeer het alsjeblieft opnieuw.";
+
+"Facebook settings" = "Facebook-instellingen";
+"Please make sure you've allowed Swipes in Settings -> Facebook" = "Zorg er alsjeblieft voor dat je Swipes toegang hebt gegeven in Instellingen -> Facebook";
+
+"New user" = "Nieuwe gebruiker";
+"Do you want to sign up with: %@" = "Wil je je aanmelden met: %@";
+
+"Reset password" = "Stel wachtwoord opnieuw in";
+
+"Email sent" = "E-mail verstuurd";
+"Follow the instructions in the email to reset your pass" = "Volg de instructies in de e-mail om je wachtwoord opnieuw in te stellen";
+
+"Read through our 'Privacy Policy' and 'Terms and Conditions'." = "Lees ons 'Privacybeleid' en onze 'Voorwaarden'.";
+
+"Open Link" = "Open de Koppeling";
+"Do you want to open the link?" = "Wil je de koppeling openen?";
+
+/*
+ Small common expressions
+ */
+"Yes" = "Ja";
+"No" = "Nee";
+"Okay" = "Oké";
+"Delete" = "Verwijder";
+"open" = "open";
+"done" = "gereed";
+"completed" = "voltooid";
+"current" = "huidig";
+"schedule" = "plannen";
+"scheduled" = "ingepland";
+"with" = "met";
+"and" = "en";
+"Learn more" = "Meer informatie";
+"Not now" = "Niet nu";
+"continue" = "ga verder";
+"start" = "start";
+"Evernote" = "Evernote";
+
+/* 
+ Common Popups
+*/
+"Delete tag: %@" = "Verwijder label: %@";
+"This can't be undone" = "Dit kan niet ongedaan worden gemaakt";
+"Get Started" = "Begin nu";
+"Add a new task" = "Voeg een taak toe";
+"Location Permissions" = "Locatievoorzieningen";
+"You need to turn on location permissions for Swipes in Settings > Privacy" = "Je dient locatievoorzieningen aan te zetten voor Swipes in Instellingen -> Privacy";
+"Undo last action" = "Laatste actie ongedaan maken";
+"Do you want to undo the last action?" = "Wil je de laatste actie ongedaan maken?";
+"New version required" = "Nieuwe versie vereist";
+"For sync to work - please update Swipes from the App Store" = "Ga naar de App Store voor een update van Swipes om synchronisatie te laten werken";
+"Evernote Authorization" = "Evernote Autorisatie";
+"To sync with Evernote on this device, please authorize" = "Autoriseer Swipes om op dit apparaat met Evernote te synchroniseren";
+"Don't sync this device" = "Synchroniseer dit apparaat niet";
+"Authorize now" = "Autoriseer nu";
+
+/*
+ Initial Tasks and Tags
+ */
+"home" = "thuis";
+"work" = "werk";
+
+"Swipe right to complete" = "Veeg naar rechts om te voltooien";
+"Swipe left to snooze for later" = "Veeg naar links om uit te stellen";
+"Access your tasks on web.swipesapp.com" = "Beheer je taken op web.swipesapp.com";
+
+
+
+"priority" = "prioriteit";
+"recurring" = "herhalende";
+" with " = " met ";
+"notes" = "notities";
+" matching \"%@\"" = " gelijk aan \"%@\"";
+" %@ tags: %@" = " %@ labels: %@";
+"clear workspace" = "maak werkruimte leeg";
+
+/*
+ Topoverlay menus (Workspaces, select and search)
+*/
+// UI
+"All" = "Alle";
+"None" = "Geen";
+"Select more" = "Selecteer meer";
+"Set Workspace" = "Richt Werkruimte in";
+"Search" = "Zoeken";
+
+// Alerts
+"Select Tasks" = "Selecteer Taken";
+"Tap your tasks to select them and swipe them all together." = "Tik op je taken om ze te selecteren en veeg ze daarna in één beweging";
+
+"Workspaces" = "Werkruimtes";
+"Set your workspace, select tags and stay focused." = "Richt je werkruimte in, selecteer labels en blijf gefocused.";
+
+"Add new tag" = "Voeg nieuw label toe";
+"Type the name of your tag (ex. work, project or school)" = "Type de naam van je label (bijv. werk, project of school)";
+"add" = "voeg toe";
+
+/* List view */
+"Clear old tasks" = "Verwijder oude taken";
+"Show old tasks" = "Toon oude taken";
+// Alerts
+"Are you sure?" = "Weet je het zeker?";
+"Deleting old completed tasks can't be undone" = "Het verwijderen van oude voltooide taken kan niet ongedaan worden gemaakt";
+"Delete them" = "Verwijder ze";
+
+/*
+ Scheduler
+*/
+"Later  +%luh" = "Later +%luh";
+"This Evening" = "Vanavond";
+"Tomorrow Eve" = "Morgenavond";
+"In 2 Days" = "Over 2 dagen";
+"This Weekend" = "Dit weekend";
+"Next Week" = "Volgende week";
+"Pick A Date" = "Kies een datum";
+"At Location" = "Op Locatie";
+
+"Hold down to adjust time" = "Houd vast om de tijd aan te passen";
+
+/*
+ Edit task mode
+ */
+"Add action step" = "Voeg een actie toe";
+"Attached" = "Bijgevoegd";
+"All Done" = "Alles Voltooid";
+"Completed" = "Voltooid";
+"Unspecified" = "Ongespecificeerd";
+"Add notes" = "Voeg notities toe";
+"Add tags" = "Voeg labels toe";
+
+"Later Today" = "Later Vandaag";
+"Today" = "Vandaag";
+"Tomorrow" = "Morgen";
+"Yesterday" = "Gisteren";
+
+"See%@ %lu action%@" = "Zie%@ %lu actie%@";
+" all" = " alle";
+"s" = "s";
+
+// Evernote View
+"Only notes with ToDo inside" = "Alleen notities met To do's";
+
+// Alerts
+"tasks" = "taken";
+"task" = "taak";
+"Delete %li %@" = "Verwijder %li %@";
+"these" = "deze";
+"this" = "dit";
+"Are you sure you want to permanently delete %@ %@?" = "Weet je zeker dat je %@ %@ voorgoed wil verwijderen?";
+
+"Register an account to backup your data and keep your Evernotes in sync with Swipes" = "Registreer een account om een back-up te maken en om Evernote gesynchroniseerd te houden met Swipes";
+"Remove note" = "Verwijder notitie";
+"Open note" = "Open notitie";
+"What do you want to do?" = "Wat wil je doen?";
+
+/*
+    All done for today background
+*/
+"First day" = "Eerste dag";
+"%li days" = "%li dagen";
+"%@ on a streak!" = "%@ op een rij!";
+"Next task  @  %@" = "Volgende taak @ %@";
+/*
+    Repeating a task
+*/
+"Repeat every..." = "Herhaal elke...";
+"Never repeat" = "Herhaal nooit";
+"Every" = "Elke";
+"Every day" = "Elke dag";
+"Every Monday to Friday" = "Elke maandag tot en met vrijdag";
+"Every Saturday and Sunday" = "Elke zaterdag en zondag";
+"Every month the %@" = "Elke maand de %@"; // %@ = 3rd
+"Every year %@ %@" = "Elk jaar %@ %@";
+" at %@" = " om %@";
+"en_US" = "nl_NL";
+
+// Repeat picker
+"never" = "nooit";
+"day" = "dag";
+"mon-fri" = "ma-vr";
+"sat+sun" = "zat+zon";
+"week" = "week";
+"month" = "maand";
+"year" = "jaar";
+"|st|nd|rd|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|st|nd|rd|th|th|th|th|th|th|th|st" = "|st|nd|rd|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|st|nd|rd|th|th|th|th|th|th|th|st";
+
+"%li / %li TODAY" = "%li / %li VANDAAG";
+"%li / %li STEPS" = "%li / %li STAPPEN";
+"'+'H':'mm'h'" = "'+'U':'mm'h'";
+
+/*
+    Settings
+*/
+// Buttons
+"Settings" = "Instellingen";
+"Notifications" = "Meldingen";
+"Location" = "Locatie";
+"Help" = "Help";
+"Snoozes" = "Stelt uit";
+"Manage" = "Beheer";
+"Upgrade" = "Upgrade";
+"Sync" = "Synchroniseer";
+"Logout" = "Afmelden";
+"Account" = "Account";
+"Theme" = "Thema";
+"Integrations" = "Integraties";
+
+"Last sync: %@" = "Laatste synchronisatie: %@";
+
+// Notifications menu
+"Tasks snoozed for later" = "Uitgestelde taken";
+"Daily reminder to plan the day" = "Dagelijkse herinnering om de dag te plannen";
+"Weekly reminder to plan the week" = "Wekelijkse herinnering om de week te plannen";
+"Are you sure you no longer want to receive these alarms and reminders?" = "Weet je zeker dat je deze meldingen en herinneringen niet langer wil ontvangen?";
+
+// Snoozes menu
+"Start my day at" = "Begin mijn dag om";
+"Start my evening at" = "Begin mijn avond om";
+"Start my weekends at" = "Begin mijn weekenden om";
+"My week starts" = "Mijn week begint";
+"My weekend starts" = "Mijn weekend begint";
+"Snooze Later Today" = "Stel uit tot later vandaag";
+
+// Integrations Menu
+" (Connected)" = " (Verbonden)";
+"Unlink" = "Ontkoppel";
+"Link account" = "Koppel account";
+
+"Sync with Evernote on this device" = "Synchroniseer met Evernote op dit apparaat";
+"Auto import notes with \"swipes\"-tag" = "Importeer notities met het \"swipes\"-label automatisch";
+"Sync with personal linked notebooks" = "Synchroniseer met gekoppelde persoonlijke notitieboeken";
+"Sync with Evernote Business" = "Synchroniseer met Evernote Business";
+"Tap to learn more" = "Tik voor meer informatie";
+"Open Evernote Importer" = "Open Evernote Importer";
+"Import a few notes right away." = "Importeer meteen een paar notities.";
+"Choose notes" = "Kies notities";
+"Unlink Evernote" = "Ontkoppel Evernote";
+"All tasks will be unlinked, are you sure?" = "Alle taken worden ontkoppeld, weet je het zeker?";
+
+// Evernote Helper
+"WHAT IT IS" = "WAT HET IS";
+"This integration lets you sync notes with checkmarks from Evernote into Swipes." = "Dankzij deze integratie worden de notities met vinkjes gesynchroniseerd tussen Evernote en Swipes.";
+"HOW IT WORKS" = "HOE HET WERKT";
+"Assign the \"swipes\" tag to a note in Evernote. We'll add it as a task in Swipes and sync all its checkmarks." = "Geef een notitie in Evernote het \"swipes\"-label. Wij voegen deze notitie dan als een taak toe aan Swipes en synchroniseren alle vinkjes.";
+// Evernote importer
+"Import  %li  notes" = "Importeer %li notities";
+"notes with checkmarks" = "notities met vinkjes";
+"Import notes" = "Importeer notities";
+"Importing..." = "Importeren...";
+"Successfully imported." = "Succesvol geïmporteerd.";
+"Next time, assign the \"swipes\"-tag in Evernote and we'll import the notes automatically." = "Geef je notities in Evernote de volgende keer het \"swipes\"-label en wij zullen deze notities automatisch importeren.";
+"Great! I got it." = "Top! Ik snap het.";
+"This note has already been imported." = "Deze notitie is al geïmporteerd.";
+"Do you want to duplicate it?" = "Wil je deze dupliceren?";
+"Couldn't find any notes with Checkmarks" = "Kon geen notities met Vinkjes vinden";
+"You can add notes manually under each tasks from Swipes as well" = "Je kan ook handmatig notities toevoegen onder iedere taak binnen Swipes";
+
+// Help menu
+"Contact Swipes" = "Neem contact op met Swipes";
+"Walkthrough" = "Rondleiding";
+"Get Started Guides" = "Korte Handleiding";
+"FAQ" = "FAQ";
+"Known Issues" = "Bekende Problemen";
+"Open Policies" = "Open de Voorwaarden";
+
+// Alerts
+"Learn how to get most out of Swipes." = "Zie hoe je het meest uit Swipes haalt";
+"Learn how to get most out of the different features in Swipes." = "Zie hoe je het meest uit de diverse Swipes-onderdelen haalt";
+"You found a bug? Check out if we're already working on it." = "Heb je een bug gevonden? Kijk hier of we er al mee aan de slag zijn gegaan.";
+
+
+"Hard sync" = "Complete synchronisatie";
+"This will send all data and can take some time" = "Dit zal alle data verzenden en kan enige tijd in beslag nemen";
+
+"Log out" = "Uitloggen";
+"Are you sure you want to log out of your account?" = "Weet je zeker dat je wilt uitloggen?";
+
+"Manage subscription" = "Beheer je abonnement";
+"Open App Store to manage your subscription?" = "Wil je de App Store openen om je abonnement te beheren?";
+
+"Turn off hints" = "Zet de hints uit";
+"Are you sure you want to turn off and clear the hints?" = "Weet je zeker dat je de hints wilt uitzetten en verwijderen?";
+
+"Turn off location" = "Zet je locatie uit";
+"Location reminders won't be working." = "Herinneringen op basis van je locatie zullen niet werkzaam zijn.";
+
+"Register for Swipes to safely back up your data and get Swipes Plus" = "Registreer je bij Swipes om een veilige back-up van je data te maken en koop Swipes Plus.";
+
+"Mail was not setup" = "E-mail was niet ingesteld";
+"You can send us feedback to support@swipesapp.com. Thanks" = "Je kunt ons feedback sturen via support@swipesapp.com. Dankjewel.";
+
+"Keep data" = "Bewaar data";
+"Do you want to keep the data from the test period?" = "Wil je de data uit de testperiode bewaren?";
+
+"Can't upgrade to Swipes Plus" = "Kan niet upgraden naar Swipes Plus";
+"We're remaking our Plus version. Please send us your suggestions while waiting." = "We werken aan onze Plus versie. Stuur ons ondetussen alsjeblieft je suggesties terwijl je wacht.";
+"Send suggestions" = "Stuur suggesties";
+"Restore Purchases" = "Herstel aankopen";
+
+"An error occured" = "Er is iets fout gegaan";
+"No purchases could be restored. Contact support@swipesapp.com for help." = "De aankopen konden niet worden hersteld. Neem contact op met support@swipesapp.com voor hulp.";
+
+"Your purchase has been restored" = "Je aankoop is hersteld";
+"Your purchase has been restored. Welcome back!" = "Je aankoop is hersteld. Welkom terug!";
+
+"Time Zone Change" = "Verandering Tijdzone";
+"Do you want to move all your recurring tasks to match the change? A task @ 8:00 will be 8:00 in new time zone (Recommended)" = "Wil je dat deze verandering wordt doorgevoerd in al je herhalende taken? Een taak @ 8.00 zal om 8.00 gepland zijn in de nieuwe tijdzone (Aanbevolen)";
+
+"New feature" = "Nieuwe eigenschap";
+"We've made a powerful integration with Evernote!" = "We hebben een krachtige intergratie met Evernote gemaakt!";
+
+
+/*
+    Walkthrough
+ */
+"Welcome to Swipes" = "Welkom bij Swipes";
+"Here you find three areas where you can organize your tasks." = "Hier vind je drie gedeeltes waar je jouw taken kunt organiseren.";
+"Your main focus area" = "Het gedeelte met je prioriteiten";
+"All tasks start here, and you can swipe them away to keep it clear." = "Alle taken beginnen hier. Je kunt ze wegvegen om het overzichtelijk te houden.";
+
+"Complete your task by swiping it to the right. Try it below!" = "Voltooi een taak door deze naar rechts te vegen. Probeer het hieronder!";
+"You've completed a task." = "Je hebt een taak voltooid";
+"See all your completed tasks in the “Done” area." = "Bekijk al je voltooide taken in het \"Voltooid\" gedeelte.";
+
+"Swipe left to snooze." = "Veeg naar links om uit te stellen.";
+"Schedule tasks for later, and keep focus on the priorities now." = "Plan taken in voor later en behoud de focus op je prioriteiten.";
+
+"... Then pick a date" = "... Kies daarna een datum";
+"And the task will come back when the time's right." = "En de taak komt terug wanneer de tijd daar is.";
+
+"You've snoozed a task." = "Je hebt een taak uitgesteld.";
+"See your upcoming tasks in the “Later” area." = "Bekijk je toekomstige taken in het \"Later\" gedeelte.";
+
+"Welcome on board!" = "Welkom aan boord!";
+"Register an account to get started.\n\nTake the leap. Swipe!" = "Registreer een account om te beginnen.\n\nWaag de sprong. Swipe!";
+
+"Resend offer to Michael" = "Verstuur het aanbod nogmaals aan Michael.";
+"Friday catch-up" = "Vrijdag bijwerkdag";
+"Fix the presentation notes" = "Notities voor de presentatie afmaken";
+"Buy gift for Tom" = "Cadeau voor Tom kopen";
+"Email Simon Gate" = "Simon Gate e-mailen";
+"Appointment with the dentist" = "Afspraak bij de tandarts";
+"Birthday party" = "Verjaardagsfeest";
+
+/*
+    Share Tasks
+*/
+"Tasks to complete" = "Taken om te voltooien";
+"Tasks: \r\n" = "Taken: ";
+"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com" = "\r\nVerstuurd met mijn Swipes – De Takenlijst die Presteert\r\nGratis iPhone app - http://swipesapp.com";

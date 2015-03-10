@@ -28,12 +28,13 @@
 
 #import <ENSDK/ENSDK.h>
 #import "EDAM.h"
-#import "ENNoteStoreClient.h"
 #import "ENUserStoreClient.h"
 #import "ENPreferencesStore.h"
 #import "NSDate+EDAMAdditions.h"
 #import "ENMLWriter.h"
-@class ENNoteStoreClient;
+#import "ENNoteStoreClient.h"
+#import "ENBusinessNoteStoreClient.h"
+#import "ENSDKPrivate.h"
 
 @interface ENSession (Advanced)
 /**
@@ -92,7 +93,7 @@
  *
  *  @return A client for the user's business note store, or nil if the user is not a member of a business.
  */
-- (ENNoteStoreClient *)businessNoteStore;
+- (ENBusinessNoteStoreClient *)businessNoteStore;
 
 /**
  *  Every linked notebook requires its own note store client instance to access.
@@ -122,6 +123,22 @@
  *  @return A client for the note store that contains the notebook.
  */
 - (ENNoteStoreClient *)noteStoreForNotebook:(ENNotebook *)notebook;
+
+/**
+ *  Set to the security application group identifier, if the app should share authenticate with an application group.
+ *
+ *  @param the security application group identifier.
+ *  @see https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html#//apple_ref/doc/uid/TP40014214-CH21-SW6
+ */
++ (void) setSecurityApplicationGroupIdentifier:(NSString*)securityApplicationGroupIdentifier;
+
+/**
+ *  The keychain groups used for keychain sharing. If not set, keychain sharing is disabled.
+ *
+ *  This should be the shared keychain group of your app in XCode "Capabilities" > "Keychain Sharing".
+ */
++ (void) setKeychainGroup:(NSString*)keychainGroup;
+
 @end
 
 @interface ENSessionFindNotesResult (Advanced)
@@ -191,6 +208,22 @@
  *  @return The hash for this resource.
  */
 - (NSData *)dataHash;
+
+/**
+ *  An optional dictionary of attributes which are used at upload time only to apply to an EDAMResource's attributes during
+ *  its creation. The keys in the dictionary should be valid keys in an EDAMResourceAttributes, e.g. "fileName", or "applicationData";
+ *  the values are the objects to apply.
+ *
+ *  Note that downloaded resources do not populate this dictionary; if you need to inspect properties of an EDAMResource that aren't
+ *  represented by ENResource, you should use ENNoteStoreClient's -getResourceWithGuid... method to download the EDAMResource directly.
+ */
+@property (nonatomic, strong) NSDictionary * edamAttributes;
+
+/**
+ *  The Evernote service guid for the resource. Valid only with a note store client
+ *  that also corresponds to this resource; see ENSession to retrieve an appropriate note store client.
+ */
+@property (nonatomic, readonly) NSString * guid;
 @end
 
 @interface ENNoteRef (Advanced)
@@ -207,4 +240,12 @@
  *  that also corresponds to this notebook; see ENSession to retrieve an appropriate note store client.
  */
 @property (nonatomic, readonly) NSString * guid;
+@end
+
+@interface ENPreferencesStore (Advanced)
+
++(instancetype) defaultPreferenceStore;
+
++(instancetype) preferenceStoreWithSecurityApplicationGroupIdentifier:(NSString*)groupId;
+
 @end

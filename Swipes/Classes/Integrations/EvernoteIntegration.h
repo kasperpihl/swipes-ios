@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <ENSDK/Advanced/ENSDKAdvanced.h>
+#import "IntegrationProvider.h"
 
 typedef void (^NoteFindBlock)(NSArray *findNotesResults, NSError *error);
 typedef void (^NoteDownloadBlock)(ENNote *note, NSError *error);
@@ -16,7 +17,7 @@ typedef void (^NoteUpdateBlock)(ENNoteRef *noteRef, NSError *error);
 extern NSString* const MONExceptionHandlerDomain;
 extern const int MONNSExceptionEncounteredErrorCode;
 
-@interface EvernoteIntegration : NSObject
+@interface EvernoteIntegration : NSObject <IntegrationProvider>
 
 + (instancetype)sharedInstance;
 + (void)updateAPILimitIfNeeded:(NSError *)error;
@@ -26,19 +27,23 @@ extern const int MONNSExceptionEncounteredErrorCode;
 + (NSString *)ENNoteRefToNSString:(ENNoteRef *)noteRef;
 + (ENNoteRef *)NSStringToENNoteRef:(NSString *)string;
 + (BOOL)isNoteRefString:(NSString *)string;
++ (BOOL)isNoteRefJsonString:(NSString *)string;
++ (BOOL)hasNoteWithRef:(ENNoteRef *)noteRef;
++ (BOOL)isMovedOrDeleted:(NSError *)error;
 
 @property (nonatomic, assign) BOOL enableSync;
 @property (nonatomic, assign) BOOL autoFindFromTag;
 @property (nonatomic, assign) BOOL findInPersonalLinked;
 @property (nonatomic, assign) BOOL findInBusinessNotebooks;
 @property (nonatomic, assign) BOOL hasAskedForPermissions;
-@property (nonatomic, strong) NSString *tagGuid;
-@property (nonatomic, assign) NSInteger requestCounter;
-@property (nonatomic, strong) NSString *tagName;
 @property (nonatomic, strong) NSDate *rateLimit;
-@property (nonatomic, assign) BOOL isAuthenticated;
-@property (nonatomic, readonly) BOOL isBusinessUser;
-@property (nonatomic, readonly) BOOL isPremiumUser;
+@property (nonatomic, assign) NSInteger requestCounter;
+@property (nonatomic, strong, readonly) NSString *tagGuid;
+@property (nonatomic, strong, readonly) NSString *tagName;
+@property (nonatomic, assign, readonly) BOOL isAuthenticated;
+@property (nonatomic, assign, readonly) BOOL isAuthenticationInProgress;
+@property (nonatomic, assign, readonly) BOOL isBusinessUser;
+@property (nonatomic, assign, readonly) BOOL isPremiumUser;
 
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block;
 

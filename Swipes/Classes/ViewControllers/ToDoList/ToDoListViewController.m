@@ -287,7 +287,6 @@
         if (![self.selectedRows containsObject:indexPath])
             [self.selectedRows addObject:indexPath];
         [self handleShowingToolbar];
-        [kHints triggerHint:HintSelected];
     }
     
 }
@@ -409,19 +408,23 @@
         return;
     self.isHandlingTrigger = YES;
     NSArray *toDosArray = [self selectedItems];
-    if(!toDosArray || toDosArray.count == 0)
-        toDosArray = @[[self.itemHandler itemForIndexPath:[self.tableView indexPathForCell:self.swipingCell]]];
+    if(!toDosArray || toDosArray.count == 0){
+        KPToDo *item = [self.itemHandler itemForIndexPath:[self.tableView indexPathForCell:self.swipingCell]];
+        if(!item)
+            return;
+        toDosArray = @[item];
+    }
     NSArray *movedItems;
     __block CellType targetCellType = [StyleHandler cellTypeForCell:cell.cellType state:state];
     switch (targetCellType) {
         case CellTypeSchedule:{
-            [kHints triggerHint:HintSwipedLeft];
             //SchedulePopup *popup = [[SchedulePopup alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
             __block BOOL hasReturned = NO;
             [kAudio playSoundWithName:@"New state - scheduled.m4a"];
             SchedulePopup *popup = [SchedulePopup popupWithFrame:self.parent.view.bounds block:^(KPScheduleButtons button, NSDate *chosenDate, CLPlacemark *chosenLocation, GeoFenceType type) {
                 hasReturned = YES;
                 [BLURRY dismissAnimated:YES];
+                NSInteger beforeCounter = self.itemHandler.itemCounter;
                 if(button == KPScheduleButtonCancel){
                     [self returnSelectedRowsAndBounce:YES];
                 }
@@ -436,7 +439,8 @@
                 }
                 if(button != KPScheduleButtonCancel){
                     [kHints triggerHint:HintScheduled];
-                    [kAudio playSoundWithName:@"New state - scheduled.m4a"];
+                    if(!([self.state isEqualToString:@"today"] && beforeCounter == toDosArray.count))
+                        [kAudio playSoundWithName:@"New state - scheduled.m4a"];
                 }
                 self.isHandlingTrigger = NO;
             }];
@@ -466,8 +470,11 @@
                 self.numberOfCompletions = 1;
             }
             self.lastCompletionTime = currentTime;
-            [kAudio playSoundWithName:[NSString stringWithFormat:@"Task composer%li.m4a",(long)self.numberOfCompletions]];
+            if(!([self.state isEqualToString:@"today"] && self.itemHandler.itemCounter == toDosArray.count))
+                [kAudio playSoundWithName:[NSString stringWithFormat:@"Task composer%li.m4a",(long)self.numberOfCompletions]];
             movedItems = [KPToDo completeToDos:toDosArray save:YES context:nil analytics:YES];
+           
+
             break;
         }
         case CellTypeNone:

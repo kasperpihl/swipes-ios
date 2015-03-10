@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-@class NSManagedObject, NSManagedObjectContext, CoreSyncHandler, EvernoteSyncHandler;
+@class NSManagedObject, NSManagedObjectContext, CoreSyncHandler, EvernoteSyncHandler, GmailSyncHandler;
 
 #import "ParentSyncHandler.h"
 
@@ -33,6 +33,7 @@
 @property (nonatomic) BOOL disableSync;
 
 -(EvernoteSyncHandler *)evernoteSyncHandler;
+-(GmailSyncHandler *)gmailSyncHandler;
 
 -(void)clearAndDeleteData;
 -(void)seedObjectsSave:(BOOL)save;

@@ -17,8 +17,6 @@
 
 #define kDefOrderVal -1
 
-extern NSString * const kEvernoteMoveTime;
-
 @interface KPToDo ()
 @property (nonatomic,strong) NSString *readableTags;
 // Private interface goes here.
@@ -60,14 +58,15 @@ extern NSString * const kEvernoteMoveTime;
         [KPToDo saveToSync];
     [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     if( from ){
-        [ANALYTICS trackEvent:@"Added Task" options:@{ @"Is Action Step":@(NO),@"Length":@(item.length), @"From": from }];
+        [ANALYTICS trackEvent:@"Added Task" options:@{@"Length":@(item.length), @"From": from }];
+        [ANALYTICS trackCategory:@"Tasks" action:@"Added" label:from value:@(item.length)];
     }
     [ANALYTICS heartbeat];
     
     return newToDo;
 }
 
--(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save from:(NSString *)from
+-(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save from:(NSString *)from analytics:(BOOL)analytics
 {
     KPToDo *subTask = [KPToDo newObjectInContext:[self managedObjectContext]];
     subTask.title = title;
@@ -77,8 +76,9 @@ extern NSString * const kEvernoteMoveTime;
     if( save )
         [KPToDo saveToSync];
     
-    if( from ){
-    [ANALYTICS trackEvent:@"Added Task" options:@{@"Is Action Step":@(YES),@"Length":@(title.length), @"Total Action Steps on Task": @(self.subtasks.count), @"From": from}];
+    if( from && analytics){
+        [ANALYTICS trackEvent:@"Added Action Step" options:@{@"Length":@(title.length), @"Total Action Steps on Task": @(self.subtasks.count), @"From": from}];
+        [ANALYTICS trackCategory:@"Action Steps" action:@"Added" label:from value:@(title.length)];
     }
     return subTask;
 }
@@ -119,7 +119,16 @@ extern NSString * const kEvernoteMoveTime;
     
     if(analytics){
         NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
-        [ANALYTICS trackEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks, @"Is Action Step": @( isSubtasks )}];
+
+        if(!isSubtasks){
+            [ANALYTICS trackCategory:@"Tasks" action:@"Completed" label:nil value:numberOfCompletedTasks];
+            [ANALYTICS trackEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
+        }
+        else{
+            [ANALYTICS trackCategory:@"Action Steps" action:@"Completed" label:nil value:nil];
+            [ANALYTICS trackEvent:@"Completed Action Step" options:nil];
+            
+        }
         [ANALYTICS heartbeat];
         if( !isSubtasks ) {
             [[NSNotificationCenter defaultCenter] postNotificationName:HH_TriggerHint object:@(HintCompleted)];
@@ -162,34 +171,53 @@ extern NSString * const kEvernoteMoveTime;
         [KPToDo saveToSync];
     
     NSNumber *numberOfDeletedTasks = [NSNumber numberWithInteger:toDos.count];
-    [ANALYTICS trackEvent:@"Deleted Tasks" options:@{@"Number of Tasks":numberOfDeletedTasks, @"Is Action Step": @( isActionStep )}];
     
+    if(!isActionStep){
+        [ANALYTICS trackCategory:@"Tasks" action:@"Deleted" label:nil value:numberOfDeletedTasks];
+        [ANALYTICS trackEvent:@"Deleted Tasks" options:@{@"Number of Tasks":numberOfDeletedTasks}];
+    }
+    else{
+        [ANALYTICS trackCategory:@"Action Steps" action:@"Deleted" label:nil value:nil];
+        [ANALYTICS trackEvent:@"Deleted Action Step" options:nil];
+    }
     if (shouldUpdateNotifications)
         [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     [ANALYTICS heartbeat];
 }
 
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save from:(NSString *)from{
-    if (tags && (0 < tags.count)){
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
-        NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
-        for(KPToDo *toDo in toDos){
-            [toDo updateTagSet:tagsSet withTags:tags remove:remove];
+    if (tags && [tags isKindOfClass:NSArray.class] && (0 < tags.count)){
+        @try {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
+            NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
+            for(KPToDo *toDo in toDos){
+                [toDo updateTagSet:tagsSet withTags:tags remove:remove];
+            }
+            if(save)
+                [KPToDo saveToSync];
+            if(from){
+                NSDictionary *options = @{ @"Number of Tags": @(tags.count), @"Number of Tasks": @(toDos.count), @"From": from };
+                NSString *actionString = remove ? @"Unassigned" : @"Assigned";
+                NSString *eventString = remove ? @"Unassign Tags" : @"Assign Tags";
+                [ANALYTICS trackCategory:@"Tags" action:actionString label:from value:@(toDos.count)];
+                [ANALYTICS trackEvent:eventString options:options];
+                [ANALYTICS heartbeat];
+            }
         }
-        if(save)
-            [KPToDo saveToSync];
-        if(from){
-            NSDictionary *options = @{ @"Number of Tags": @(tags.count), @"Number of Tasks": @(toDos.count), @"Assigned": @(!remove), @"From": from };
-            [ANALYTICS trackEvent:@"Update Tags" options:options];
-            [ANALYTICS heartbeat];
+        @catch (NSException *exception) {
+            NSMutableDictionary *attachment = [NSMutableDictionary dictionary];
+            if(tags)
+                [attachment setObject:attachment forKey:@"tags"];
+            [UtilityClass sendException:exception type:@"Update Tags Exception" attachment:attachment];
         }
+        
     }
 }
 
 +(NSArray *)findByTitle:(NSString *)title
 {
     if (title) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title = %@", title];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title = %@ AND isLocallyDeleted <> YES", title];
         NSArray* result = [KPToDo MR_findAllWithPredicate:predicate];
         [ANALYTICS heartbeat];
         if (result && (0 == result.count))
@@ -208,6 +236,25 @@ extern NSString * const kEvernoteMoveTime;
         if (result && (0 == result.count))
             return nil;
         return result;
+    }
+    return nil;
+}
+
++(NSArray *)findLocallyDeletedForService:(NSString *)service
+{
+    if (service) {
+        NSPredicate* predicate = [NSPredicate predicateWithFormat:@"isLocallyDeleted = %@", @(YES)];
+        NSArray* result = [KPToDo MR_findAllWithPredicate:predicate];
+        [ANALYTICS heartbeat];
+        if (result && (0 == result.count))
+            return nil;
+        NSMutableArray* todos = [NSMutableArray array];
+        for (KPToDo* todo in result) {
+            if ([todo firstAttachmentForServiceType:service]) {
+                [todos addObject:todo];
+            }
+        }
+        return todos;
     }
     return nil;
 }
@@ -256,7 +303,6 @@ extern NSString * const kEvernoteMoveTime;
         for(NSString *pfKey in [object allKeys]){
             if([localChanges containsObject:pfKey])
                 continue;
-            
             id pfValue = [object objectForKey:pfKey];
             if([pfKey isEqualToString:@"repeatOption"]){
                 if(![[self stringForRepeatOption:self.repeatOptionValue] isEqualToString:pfValue]) self.repeatOptionValue = [self optionForRepeatString:pfValue];
@@ -315,12 +361,15 @@ extern NSString * const kEvernoteMoveTime;
             
             if([pfKey isEqualToString:@"attachments"]){
                 NSArray *attachments = (NSArray*)pfValue;
-                [self removeAllAttachmentsForService:@"all"];
+                [self removeAllAttachmentsForService:@"all" identifier:nil];
                 for( NSDictionary *attachmentObj in attachments){
                     NSString *title = [attachmentObj objectForKey:@"title"];
                     NSString *identifier = [attachmentObj objectForKey:@"identifier"];
                     NSString *service = [attachmentObj objectForKey:@"service"];
-                    BOOL sync = [[attachmentObj objectForKey:@"sync"] boolValue];
+                    NSNumber *syncNumber = [attachmentObj objectForKey:@"sync"];
+                    BOOL sync = NO;
+                    if (syncNumber && syncNumber != (id)[NSNull null])
+                        sync = [syncNumber boolValue];
                     KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync inContext:context];
                     // add the new attachment
                     [self addAttachments:[NSSet setWithObject:attachment]];
@@ -457,22 +506,23 @@ extern NSString * const kEvernoteMoveTime;
         [KPToDo saveToSync];
     
     [ANALYTICS trackEvent:@"Recurring Task" options:@{@"Reoccurrence":[self stringForRepeatOption:option]}];
+    [ANALYTICS trackCategory:@"Tasks" action:@"Recurring" label:[self stringForRepeatOption:option] value:nil];
 }
 
 - (RepeatOptions)optionForRepeatString:(NSString *)repeatString {
     RepeatOptions option = RepeatNever;
-    
-    if([repeatString isEqualToString:@"every day"])
-        option = RepeatEveryDay;
-    else if([repeatString isEqualToString:@"mon-fri or sat+sun"])
-        option = RepeatEveryMonFriOrSatSun;
-    else if([repeatString isEqualToString:@"every week"])
-        option = RepeatEveryWeek;
-    else if([repeatString isEqualToString:@"every month"])
-        option = RepeatEveryMonth;
-    else if([repeatString isEqualToString:@"every year"])
-        option = RepeatEveryYear;
-
+    if(repeatString && repeatString != (id)[NSNull null]){
+        if([repeatString isEqualToString:@"every day"])
+            option = RepeatEveryDay;
+        else if([repeatString isEqualToString:@"mon-fri or sat+sun"])
+            option = RepeatEveryMonFriOrSatSun;
+        else if([repeatString isEqualToString:@"every week"])
+            option = RepeatEveryWeek;
+        else if([repeatString isEqualToString:@"every month"])
+            option = RepeatEveryMonth;
+        else if([repeatString isEqualToString:@"every year"])
+            option = RepeatEveryYear;
+    }
     return option;
 
 }
@@ -721,16 +771,18 @@ extern NSString * const kEvernoteMoveTime;
     return attributedText;
     
 }
+
 -(void)deleteToDoSave:(BOOL)save force:(BOOL)force{
     BOOL shouldDelete = [self shouldDeleteForce:force];
     if( shouldDelete ){
+        [self removeAllAttachmentsForService:@"all" identifier:nil];
         [self MR_deleteEntity];
     }
     if(save)
         [KPToDo saveToSync];
 }
+
 -(BOOL)shouldDeleteForce:(BOOL)force{
-    [self removeAllAttachmentsForService:@"all"];
     if(self.subtasks.count > 0){
         [KPToDo deleteToDos:[self.subtasks allObjects] save:NO force:YES];
     }
@@ -739,16 +791,20 @@ extern NSString * const kEvernoteMoveTime;
         NSLog(@"deleted subtask from Evernote");
         return NO;
     }
+    else if (!self.parent && !force && [self firstAttachmentForServiceType:GMAIL_SERVICE]) {
+        self.isLocallyDeleted = @(YES);
+        NSLog(@"deleted Gmail task");
+        return NO;
+    }
     return YES;
 }
 
 -(void)switchPriority{
     self.priorityValue = (self.priorityValue == 0) ? 1 : 0;
     [KPToDo saveToSync];
-    if(self.priorityValue == 1) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:HH_TriggerHint object:@(HintPriority)];
-    }
-    [ANALYTICS trackEvent:@"Update Priority" options:@{@"Assigned":@(self.priorityValue)}];
+    NSString *prioritySwitch = self.priorityValue ? @"On" : @"Off";
+    [ANALYTICS trackEvent:@"Update Priority" options:@{@"Assigned":prioritySwitch}];
+    [ANALYTICS trackCategory:@"Tasks" action:@"Priority" label:prioritySwitch value:nil];
 }
 
 -(BOOL)notifyOnLocation:(CLPlacemark*)location type:(GeoFenceType)type{
@@ -873,7 +929,7 @@ extern NSString * const kEvernoteMoveTime;
 - (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync from:(NSString *)from
 {
     // remove all present attachments for this service
-    [self removeAllAttachmentsForService:service];
+    [self removeAllAttachmentsForService:service identifier:identifier];
     if(title.length > kTitleMaxLength)
         title = [title substringToIndex:kTitleMaxLength];
     // create the attachment
@@ -882,17 +938,19 @@ extern NSString * const kEvernoteMoveTime;
     [self addAttachments:[NSSet setWithObject:attachment]];
     
     if( from ){
-        NSDictionary *options = @{ @"Service": service, @"Sync": @(sync), @"From": from };
+        NSDictionary *options = @{ @"Service": service, @"From": from };
         [ANALYTICS trackEvent:@"Added Attachment" options:options];
+        [ANALYTICS trackCategory:@"Tasks" action:@"Attachment" label:service value:nil];
     }
 }
 
-- (void)removeAllAttachmentsForService:(NSString *)service
+- (void)removeAllAttachmentsForService:(NSString *)service identifier:(NSString*)identifier
 {
     NSMutableSet* attachmentSet = [NSMutableSet set];
     for (KPAttachment* att in self.attachments) {
         if ([att.service isEqualToString:service] || [service isEqualToString:@"all"]) {
-            [attachmentSet addObject:att];
+            if(!identifier || [identifier isEqualToString:att.identifier])
+                [attachmentSet addObject:att];
         }
     }
     if (0 < attachmentSet.count) {
@@ -923,11 +981,16 @@ extern NSString * const kEvernoteMoveTime;
             todo.origin = nil;
         }
     }];
-    [USER_DEFAULTS removeObjectForKey:kEvernoteMoveTime];
-    [USER_DEFAULTS synchronize];
     if(save)
         [KPCORE saveContextForSynchronization:context];
     
+}
+-(KPAttachment *)attachmentForService:(NSString *)service identifier:(NSString *)identifier{
+    for (KPAttachment* attachment in self.attachments) {
+        if ([attachment.service isEqualToString:service] && [attachment.identifier isEqualToString:identifier])
+            return attachment;
+    }
+    return nil;
 }
 - (KPAttachment *)firstAttachmentForServiceType:(NSString *)service
 {
@@ -953,7 +1016,8 @@ extern NSString * const kEvernoteMoveTime;
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, origin: %@ - %@", self.title, self.order, self.origin, self.originIdentifier];
+    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, origin: %@ - %@, parent: %@, completionDate: %@, isLocallyDeleted: %@",
+            self.title, self.order, self.origin, self.originIdentifier, self.parent, self.completionDate, self.isLocallyDeleted];
 }
 
 @end

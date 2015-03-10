@@ -5,27 +5,48 @@
 //  Created by Kasper Pihl Tornøe on 04/07/14.
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
+// TODO:
+// - test with authorizing different account
+// - add support to the account in json!
+// - test with 2 accounts on 2 devices
+// - sync should probably check for connection?
 
 #import "MF_Base64Additions.h"
 #import "UtilityClass.h"
 #import "SettingsHandler.h"
-#import "EvernoteIntegration.h"
 #import "AnalyticsHandler.h"
+#import "EvernoteIntegration.h"
+#import "EvernoteSyncHandler.h"
+#import "ENNoteRefInternal.h"
+#import "CoreSyncHandler.h"
+#import "KPAttachment.h"
 
 // caches
+static NSString* const kKeyData = @"data";
+static NSString* const kKeyDate = @"date";
 
-NSString* const kKeyData = @"data";
-NSString* const kKeyDate = @"date";
+// json keys
+static NSString* const kKeyJson = @"json:";
+static NSString* const kKeyJsonGuid = @"guid";
+static NSString* const kKeyJsonType = @"type";
+static NSString* const kKeyJsonTypePersonal = @"personal";
+static NSString* const kKeyJsonTypeShared = @"shared";
+static NSString* const kKeyJsonTypeBusiness = @"business";
+static NSString* const kKeyJsonLinkedNotebook = @"linkedNotebook";
+static NSString* const kKeyJsonNotebookGuid = @"guid";
+static NSString* const kKeyJsonNotebookNoteStoreUrl = @"url";
+static NSString* const kKeyJsonNotebookShardId = @"shardid";
+static NSString* const kKeyJsonNotebookSharedNotebookGlobalId = @"globalid";
 
-NSTimeInterval const kSearchTimeout = 300;
-NSTimeInterval const kNoteTimeout = (3600*24);
-NSTimeInterval const kReadOnlyNoteTimeout = 10800; // 3 hours
+static NSTimeInterval const kSearchTimeout = 300;
+static NSTimeInterval const kNoteTimeout = 300;
+static NSTimeInterval const kReadOnlyNoteTimeout = 10800; // 3 hours
 
-int32_t const kPaginator = 100;
-NSInteger const kApiLimitReachedErrorCode = 19;
-NSString * const kSwipesTagName = @"swipes";
-NSString * const kHasAskedForPermissionKey = @"HasAskedForEvernotePermission";
-NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
+static int32_t const kPaginator = 100;
+static NSInteger const kApiLimitReachedErrorCode = 19;
+static NSString * const kSwipesTagName = @"swipes";
+static NSString * const kHasAskedForPermissionKey = @"HasAskedForEvernotePermission";
+static NSString * const kEvernoteUpdateWaitUntilKey = @"EvernoteUpdateWaitUntil";
 NSString* const MONExceptionHandlerDomain = @"Exception";
 int const MONNSExceptionEncounteredErrorCode = 119;
 
@@ -40,7 +61,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     return [[NSError alloc] initWithDomain:MONExceptionHandlerDomain code:MONNSExceptionEncounteredErrorCode userInfo:info];
 }
 
-@interface EvernoteIntegration ()
+@interface EvernoteIntegration () <ENSDKLogging>
 
 @property (nonatomic, assign) BOOL isAuthing;
 
@@ -114,17 +135,105 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 + (NSString *)ENNoteRefToNSString:(ENNoteRef *)noteRef
 {
-    return [[noteRef asData] base64String];
+    if (nil == noteRef)
+        return nil;
+    // always provide new JSON string
+    NSMutableDictionary* jsonDict = [NSMutableDictionary dictionary];
+    [jsonDict setObject:noteRef.guid forKey:kKeyJsonGuid];
+    switch (noteRef.type) {
+        case ENNoteRefTypePersonal:
+            jsonDict[kKeyJsonType] = kKeyJsonTypePersonal;
+            break;
+        case ENNoteRefTypeBusiness:
+            jsonDict[kKeyJsonType] = kKeyJsonTypeBusiness;
+            break;
+        case ENNoteRefTypeShared:
+            jsonDict[kKeyJsonType] = kKeyJsonTypeShared;
+            break;
+    }
+    if (noteRef.linkedNotebook) {
+        NSMutableDictionary* jsonLinkedNotebook = [NSMutableDictionary dictionary];
+        if (noteRef.linkedNotebook.guid)
+            jsonLinkedNotebook[kKeyJsonNotebookGuid] = noteRef.linkedNotebook.guid;
+        if (noteRef.linkedNotebook.noteStoreUrl)
+            jsonLinkedNotebook[kKeyJsonNotebookNoteStoreUrl] = noteRef.linkedNotebook.noteStoreUrl;
+        if (noteRef.linkedNotebook.shardId)
+            jsonLinkedNotebook[kKeyJsonNotebookShardId] = noteRef.linkedNotebook.shardId;
+        if (noteRef.linkedNotebook.sharedNotebookGlobalId)
+            jsonLinkedNotebook[kKeyJsonNotebookSharedNotebookGlobalId] = noteRef.linkedNotebook.sharedNotebookGlobalId;
+        jsonDict[kKeyJsonLinkedNotebook] = jsonLinkedNotebook;
+    }
+    NSError* error;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:jsonDict options:0 error:&error];
+    if (error) {
+        [UtilityClass sendError:error type:@"ENNoteRefToNSString error"];
+        return nil;
+    }
+    return [kKeyJson stringByAppendingString:[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]];
 }
 
 + (ENNoteRef *)NSStringToENNoteRef:(NSString *)string
 {
-    return [ENNoteRef noteRefFromData:[NSData dataWithBase64String:string]];
+    if (![EvernoteIntegration isNoteRefJsonString:string]) {
+        return [ENNoteRef noteRefFromData:[NSData dataWithBase64String:string]];;
+    }
+    else if ([EvernoteIntegration isNoteRefJsonString:string]) {
+        NSError* error;
+        NSDictionary* jsonDict = [NSJSONSerialization JSONObjectWithData:[[string substringFromIndex:kKeyJson.length] dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+        if (error) {
+            [UtilityClass sendError:error type:@"NSStringToENNoteRef error"];
+            return nil;
+        }
+        
+        ENNoteRef* noteRef = [[ENNoteRef alloc] init];
+        noteRef.guid = jsonDict[kKeyJsonGuid];
+        NSString* type = jsonDict[kKeyJsonType];
+        if ([type isEqualToString:kKeyJsonTypeShared])
+            noteRef.type = ENNoteRefTypeShared;
+        else if ([type isEqualToString:kKeyJsonTypeBusiness])
+            noteRef.type = ENNoteRefTypeBusiness;
+        else
+            noteRef.type = ENNoteRefTypePersonal;
+        
+        if (jsonDict[kKeyJsonLinkedNotebook]) {
+            NSDictionary* jsonLinkedNotebook = jsonDict[kKeyJsonLinkedNotebook];
+            noteRef.linkedNotebook = [[ENLinkedNotebookRef alloc] init];
+            noteRef.linkedNotebook.guid = jsonLinkedNotebook[kKeyJsonNotebookGuid];
+            noteRef.linkedNotebook.noteStoreUrl = jsonLinkedNotebook[kKeyJsonNotebookNoteStoreUrl];
+            noteRef.linkedNotebook.shardId = jsonLinkedNotebook[kKeyJsonNotebookShardId];
+            noteRef.linkedNotebook.sharedNotebookGlobalId = jsonLinkedNotebook[kKeyJsonNotebookSharedNotebookGlobalId];
+        }
+            
+        return noteRef;
+    }
+    return nil;
 }
 
 + (BOOL)isNoteRefString:(NSString *)string
 {
     return (string && (40 < string.length));
+}
+
++ (BOOL)isNoteRefJsonString:(NSString *)string
+{
+    return (string && [string hasPrefix:kKeyJson]);
+}
+
++ (BOOL)hasNoteWithRef:(ENNoteRef *)noteRef
+{
+    NSArray* allAttachments = [KPAttachment allIdentifiersForService:EVERNOTE_SERVICE sync:YES context:nil];
+    for (NSString* attachmentString in allAttachments) {
+        ENNoteRef* tempNote = [EvernoteIntegration NSStringToENNoteRef:attachmentString];
+        if (tempNote && (tempNote.type == noteRef.type) && [tempNote.guid isEqualToString:noteRef.guid]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
++ (BOOL)isMovedOrDeleted:(NSError *)error
+{
+    return ([error.domain isEqualToString:ENErrorDomain] && ((error.code == ENErrorCodeNotFound) || (error.code == ENErrorCodeDataConflict)));
 }
 
 - (instancetype)init
@@ -134,14 +243,75 @@ NSError * NewNSErrorFromException(NSException * exc) {
         _searchCache = [NSMutableDictionary new];
         _noteRefCache = [NSMutableDictionary new];
         _readOnlyNoteRefCache = [NSMutableDictionary new];
-        self.autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
-        self.enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
-        self.findInPersonalLinked = [[kSettings valueForSetting:IntegrationEvernoteFindInPersonalLinkedNotebooks] boolValue];
-        self.findInBusinessNotebooks = [[kSettings valueForSetting:IntegrationEvernoteFindInBusinessNotebooks] boolValue];
+        _autoFindFromTag = [[kSettings valueForSetting:IntegrationEvernoteSwipesTag] boolValue];
+        _enableSync = [[kSettings valueForSetting:IntegrationEvernoteEnableSync] boolValue];
+        _findInPersonalLinked = [[kSettings valueForSetting:IntegrationEvernoteFindInPersonalLinkedNotebooks] boolValue];
+        _findInBusinessNotebooks = [[kSettings valueForSetting:IntegrationEvernoteFindInBusinessNotebooks] boolValue];
         self.hasAskedForPermissions = [USER_DEFAULTS boolForKey:kHasAskedForPermissionKey];
+        //notify(ENSessionDidAuthenticateNotification, onAuthenticatedNotification);
+        notify(ENSessionDidUnauthenticateNotification, onUnauthenticatedNotification);
+        [ENSession sharedSession].logger = self;
     }
     return self;
 }
+
+- (void)dealloc
+{
+    clearNotify();
+}
+
+//- (void)onAuthenticatedNotification
+//{
+//    NSError* error = [NSError errorWithDomain:@"Evernote authenticated" code:607 userInfo:nil];
+//    [UtilityClass sendError:error type:@"onAuthenticatedNotification"];
+//}
+
+- (void)onUnauthenticatedNotification
+{
+    NSError* error = [NSError errorWithDomain:@"Evernote unauthenticated" code:608 userInfo:nil];
+    [UtilityClass sendError:error type:@"onUnauthenticatedNotification"];
+}
+
+#pragma mark - ENSDKLogging
+
+- (void)evernoteLogInfoString:(NSString *)str
+{
+    DLog(@"EN info: %@", str);
+}
+
+- (void)evernoteLogErrorString:(NSString *)str
+{
+    NSError* error = [NSError errorWithDomain:str code:609 userInfo:nil];
+    [UtilityClass sendError:error type:@"evernoteLogErrorString"];
+    DLog(@"EN error: %@", str);
+}
+
+#pragma mark - IntegrationProvider
+
+- (NSString *)integrationTitle
+{
+    return @"EVERNOTE";
+}
+
+- (NSString *)integrationSubtitle
+{
+    if (self.isAuthenticated) {
+        return [ENSession sharedSession].userDisplayName;
+    }
+    return LOCALIZE_STRING(@"Not connected");
+}
+
+- (NSString *)integrationIcon
+{
+    return iconString(@"integrationEvernote");
+}
+
+- (BOOL)integrationEnabled
+{
+    return kEnInt.isAuthenticated;
+}
+
+#pragma mark - Methods
 
 -(void)setHasAskedForPermissions:(BOOL)hasAskedForPermissions{
     _hasAskedForPermissions = hasAskedForPermissions;
@@ -173,20 +343,24 @@ NSError * NewNSErrorFromException(NSException * exc) {
 {
     _findInPersonalLinked = findInPersonalLinked;
     [kSettings setValue:@(findInPersonalLinked) forSetting:IntegrationEvernoteFindInPersonalLinkedNotebooks];
+    [self cacheClear];
 }
 
 - (void)setFindInBusinessNotebooks:(BOOL)findInBusinessNotebooks
 {
     _findInBusinessNotebooks = findInBusinessNotebooks;
     [kSettings setValue:@(findInBusinessNotebooks) forSetting:IntegrationEvernoteFindInBusinessNotebooks];
+    [self cacheClear];
 }
 
 - (BOOL)isBusinessUser
 {
     return [ENSession sharedSession].isBusinessUser;
 }
--(BOOL)isPremiumUser{
-    return [[ENSession sharedSession] isPremiumUser];
+
+-(BOOL)isPremiumUser
+{
+    return [ENSession sharedSession].isPremiumUser;
 }
 
 - (ENNoteStoreClient *)primaryNoteStoreError:(NSError**)error
@@ -205,16 +379,23 @@ NSError * NewNSErrorFromException(NSException * exc) {
     return [[ENSession sharedSession] isAuthenticated];
 }
 
+- (BOOL)isAuthenticationInProgress
+{
+    return [[ENSession sharedSession] isAuthenticationInProgress];
+}
+
 - (void)authenticateEvernoteInViewController:(UIViewController*)viewController withBlock:(ErrorBlock)block
 {
     @try {
+        [self handleError:[NSError errorWithDomain:@"Evernote authentication request" code:610 userInfo:nil] withType:@"Evernote authentication request"];
         ENSession *session = [ENSession sharedSession];
         [session authenticateWithViewController:viewController preferRegistration:NO completion:^(NSError *authenticateError) {
-            if(authenticateError) {
+            if (authenticateError) {
                 [self handleError:authenticateError withType:@"Evernote Auth Error"];
             }
             else {
                 [self setEnableSync:YES];
+                [self setHasAskedForPermissions:NO];
                 [self setAutoFindFromTag:YES];
                 NSString *userLevel = @"Standard";
                 if(self.isPremiumUser)
@@ -222,6 +403,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
                 if(self.isBusinessUser)
                     userLevel = @"Business";
                 [ANALYTICS trackEvent:@"Linked Evernote" options:@{@"Level": userLevel}];
+                [ANALYTICS trackCategory:@"Integrations" action:@"Linked Evernote" label:userLevel value:nil];
             }
             block(authenticateError);
         }];
@@ -238,6 +420,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
 {
     [[ENSession sharedSession] unauthenticate];
     [self cacheClear];
+    [[KPCORE evernoteSyncHandler] setUpdatedAt:nil];
 }
 
 - (void)swipesTagGuidBlock:(StringBlock)block
@@ -370,7 +553,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
             block(note, nil);
         }
         else {
-            [self handleError:error withType:@"Evernote Find Notes Error"];
+            [self handleError:error withType:@"Evernote Download Note Error"];
             block(nil, error);
         }
     }];
@@ -385,6 +568,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     }
     
     self.requestCounter++;
+    
     [[ENSession sharedSession] uploadNote:note policy:ENSessionUploadPolicyReplace toNotebook:nil orReplaceNote:noteRef progress:nil completion:^(ENNoteRef *newNoteRef, NSError *error) {
         if (nil == error) {
             [self cacheAddNote:note forNoteRef:newNoteRef];
@@ -429,6 +613,8 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (void)cacheAddSearchResult:(NSArray *)findNotesResults forText:(NSString *)text
 {
+    if (text && [text containsString:@"updated:"])
+        return; // these better not be cached
     _searchCache[text ? text : [NSNull null]] = @{kKeyData: findNotesResults, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kSearchTimeout]};
 }
 
@@ -477,7 +663,5 @@ NSError * NewNSErrorFromException(NSException * exc) {
 {
     _readOnlyNoteRefCache[noteRef] = @{kKeyData: error, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kReadOnlyNoteTimeout]};
 }
-
-
 
 @end

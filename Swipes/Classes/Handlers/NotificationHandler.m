@@ -14,6 +14,7 @@
 #import "SettingsHandler.h"
 #import "UserHandler.h"
 #import "KPTopClock.h"
+#import "Intercom.h"
 
 #define kMaxNotifications 25
 @interface NotificationHandler () <KitLocateSingleDelegate, KitLocateDelegate>
@@ -188,10 +189,10 @@ static NotificationHandler *sharedObject;
         NSDate *mondayStart = [NSDate dateThisOrNextWeekWithDay:weekStart.integerValue hours:0 minutes:0];
         NSDate *mondayEnd = [[mondayStart dateByAddingDays:1] dateAtStartOfDay];
         
-        NSPredicate *leftForNowPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [NSDate date] ];
-        NSPredicate *leftForTodayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [[NSDate dateTomorrow] dateAtStartOfDay]];
-        NSPredicate *tomorrowPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil)", [[NSDate dateTomorrow] dateAtStartOfDay],[[[NSDate dateTomorrow] dateByAddingDays:1] dateAtStartOfDay]];
-        NSPredicate *mondayPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil)", mondayStart, mondayEnd];
+        NSPredicate *leftForNowPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [NSDate date] ];
+        NSPredicate *leftForTodayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [[NSDate dateTomorrow] dateAtStartOfDay]];
+        NSPredicate *tomorrowPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [[NSDate dateTomorrow] dateAtStartOfDay],[[[NSDate dateTomorrow] dateByAddingDays:1] dateAtStartOfDay]];
+        NSPredicate *mondayPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", mondayStart, mondayEnd];
         
         NSInteger numberOfTasksLeftNow = [KPToDo MR_countOfEntitiesWithPredicate:leftForNowPredicate];
         NSInteger numberOfTasksLeftToday = [KPToDo MR_countOfEntitiesWithPredicate:leftForTodayPredicate];
@@ -264,19 +265,64 @@ static NotificationHandler *sharedObject;
     return settings;
 }
 
+- (BOOL) pushNotificationOnOrOff
+{
+    if ([UIApplication instancesRespondToSelector:@selector(isRegisteredForRemoteNotifications)]) {
+        return ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
+    } else {
+        UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+        return (types & UIRemoteNotificationTypeAlert);
+    }
+}
+
+
 -(void)scheduleNotifications:(NSArray*)notifications{
     if(!notifications || notifications.count == 0)
         return;
     UIApplication *app = [UIApplication sharedApplication];
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
         UIUserNotificationSettings *currentSettings = [app currentUserNotificationSettings];
-        if ( (currentSettings.types & UIUserNotificationTypeAlert) != UIUserNotificationTypeAlert || ![USER_DEFAULTS boolForKey:@"hasAddedCategories"]){
-            UIUserNotificationSettings *settings = [self settingsWithCategories];
-            [app registerUserNotificationSettings:settings];
-            [USER_DEFAULTS setBool:YES forKey:@"hasAddedCategories"];
-            [USER_DEFAULTS synchronize];
-            return;
+        BOOL userNotifications = NO;
+        BOOL remoteNotifications = NO;
+        
+        if ( (currentSettings.types & UIUserNotificationTypeAlert) != UIUserNotificationTypeAlert && ![USER_DEFAULTS boolForKey:@"hasAddedCategories"]){
+            userNotifications = YES;
         }
+        
+        if([self pushNotificationOnOrOff] && ![USER_DEFAULTS boolForKey:@"hasAddedRemoteNotification"])
+            remoteNotifications = YES;
+        
+        if(userNotifications | remoteNotifications){
+            voidBlock registerBlock = ^{
+                if(userNotifications){
+                    UIUserNotificationSettings *settings = [self settingsWithCategories];
+                    [app registerUserNotificationSettings:settings];
+                    [Intercom registerForRemoteNotifications];
+                    [USER_DEFAULTS setBool:YES forKey:@"hasAddedCategories"];
+                    
+                }
+                if(remoteNotifications){
+                    [Intercom registerForRemoteNotifications];
+                    [USER_DEFAULTS setBool:YES forKey:@"hasAddedRemoteNotification"];
+                }
+                
+                [USER_DEFAULTS setBool:YES forKey:@"hasAskedNotificationPermissions"];
+                [USER_DEFAULTS synchronize];
+            };
+            
+            if(![USER_DEFAULTS boolForKey:@"hasAskedNotificationPermissions"]){
+                [UTILITY alertWithTitle:@"Better experience!" andMessage:@"For a better experience we need your permission to send notifications when tasks are due." buttonTitles:@[@"Okay"] block:^(NSInteger number, NSError *error) {
+                    registerBlock();
+                }];
+            }
+            else{
+                registerBlock();
+            }
+            if(userNotifications)
+                return;
+        }
+        
+        
     }
     for(UILocalNotification *notification in notifications){
         [app scheduleLocalNotification:notification];
@@ -288,7 +334,7 @@ static NotificationHandler *sharedObject;
     BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
     [self updateLocationUpdates];
     UIApplication *app = [UIApplication sharedApplication];
-    NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil)", [NSDate date]];
+    NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
     
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
@@ -296,9 +342,6 @@ static NotificationHandler *sharedObject;
         if ( (currentSettings.types & UIUserNotificationTypeBadge) == UIUserNotificationTypeBadge ){
             [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
         }
-        /*else{
-            [app registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
-        }*/
     }
     else
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:todayCount];
@@ -309,7 +352,7 @@ static NotificationHandler *sharedObject;
         return;
     }
     
-    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@) AND completionDate = nil", [NSDate date]];
+    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@) AND completionDate = nil AND isLocallyDeleted <> YES", [NSDate date]];
     
     NSArray *scheduleArray = [KPToDo MR_findAllSortedBy:@"schedule" ascending:YES withPredicate:schedulePredicate];
     
@@ -381,7 +424,7 @@ static NotificationHandler *sharedObject;
 {
     BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
     if(!hasLocationOn) [self stopLocationServices];
-    NSPredicate *locationPredicate = [NSPredicate predicateWithFormat:@"(location != nil)"];
+    NSPredicate *locationPredicate = [NSPredicate predicateWithFormat:@"(location != nil) AND isLocallyDeleted <> YES"];
     NSArray *tasksWithLocation = [KPToDo MR_findAllWithPredicate:locationPredicate];
     if(tasksWithLocation && tasksWithLocation.count > 0){
         [KLLocation deleteAllGeofences];
@@ -406,12 +449,12 @@ static NotificationHandler *sharedObject;
 
 -(void)handleGeofences:(NSArray*)arrGeofenceList
 {
-    NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil)", [NSDate date]];
+    NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND isLocallyDeleted <> YES)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
     for (KLGeofence *fence in arrGeofenceList) {
         
         NSString *identifier = [[fence getIDUser] stringByAppendingString:kLocationSplitStr];
-        NSPredicate *taskPredicate = [NSPredicate predicateWithFormat:@"ANY location BEGINSWITH[c] %@",identifier];
+        NSPredicate *taskPredicate = [NSPredicate predicateWithFormat:@"ANY location BEGINSWITH[c] %@ AND isLocallyDeleted <> YES",identifier];
         KPToDo *toDo = [KPToDo MR_findFirstWithPredicate:taskPredicate];
         if(toDo){
             NSDictionary *userInfo = @{@"type": @"location",@"identifier": [toDo tempId]};

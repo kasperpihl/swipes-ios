@@ -256,7 +256,7 @@ static NSDictionary* kErrorCodes;
     NSArray* subtasks = [self arrayFromQuery:query withPrefix:kSwipesParamSubtask];
     if (subtasks) {
         for (NSString *subtaskTitle in subtasks) {
-            [todo addSubtask:subtaskTitle save:NO from:kFromURLScheme];
+            [todo addSubtask:subtaskTitle save:NO from:kFromURLScheme analytics:YES];
         }
     }
     
@@ -439,7 +439,7 @@ static NSDictionary* kErrorCodes;
         NSArray* tags = [KPTag findByTitle:title];
         if (tags) {
             for (KPTag* tag in tags) {
-                [KPTag deleteTagWithString:tag.title save:YES];
+                [KPTag deleteTagWithString:tag.title save:YES from:kFromURLScheme];
             }
         }
         else {

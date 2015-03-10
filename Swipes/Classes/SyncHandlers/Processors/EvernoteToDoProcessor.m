@@ -5,6 +5,7 @@
 //
 
 #import "UtilityClass.h"
+#import "KPStringScanner.h"
 #import "EvernoteIntegration.h"
 #import "EvernoteToDoProcessor.h"
 
@@ -56,7 +57,6 @@ static NSSet* g_startEndElements;
     NSMutableString* _tempToDoText;
     NSMutableArray* _todos;
     BOOL _checked;
-    NSUInteger _untitledCount;
 }
 
 + (void)processorWithNoteRefString:(NSString *)noteRefString block:(EvernoteProcessorBlock)block
@@ -97,18 +97,24 @@ static NSSet* g_startEndElements;
 -(void)parseAndLoadTodos
 {
     // parse
-    _untitledCount = 1;
     _todos = [NSMutableArray array];
     NSXMLParser* parser = [[NSXMLParser alloc] initWithData:[_note.content.enml dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES]];
     parser.delegate = self;
     if (![parser parse]) {
-        [UtilityClass sendError:parser.parserError type:@"Evernote note parse error"];
+        NSError* newError = [NSError errorWithDomain:parser.parserError.domain code:605 userInfo:parser.parserError.userInfo]; // change error code to something known
+        [UtilityClass sendError:newError type:@"Evernote note parse error" attachment:@{@"content": _note.content.enml}];
     }
 }
 
 - (NSArray *)toDoItems
 {
-    return _todos;
+    NSMutableArray* validTodos = [_todos mutableCopy];
+    for (EvernoteToDo* todo in _todos) {
+        if (nil == todo.title) {
+            [validTodos removeObject:todo];
+        }
+    }
+    return validTodos;
 }
 
 - (void)finishCurrentToDo
@@ -117,12 +123,11 @@ static NSSet* g_startEndElements;
         // we have a TODO
         NSString* todoText = [_tempToDoText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if (0 == todoText.length) {
-            todoText = [NSString stringWithFormat:@"Untitled %lu", (unsigned long)_untitledCount++];
+            todoText = nil;
         }
         if(255 < todoText.length){
             todoText = [todoText substringToIndex:255];
         }
-//        NSLog(@"Found TODO: %@", todoText);
         [_todos addObject:[[EvernoteToDo alloc] initWithTitle:todoText checked:_checked position:_todos.count]];
         _tempToDoText = nil;
     }
@@ -140,10 +145,12 @@ static NSSet* g_startEndElements;
     if( !self.updatedContent )
         return block ? block(NO, nil) : nil;
     _note.content = [[ENNoteContent alloc] initWithENML:self.updatedContent];
+//    _note.content = [[ENNoteContent alloc] initWithENML:@"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\n<en-note/>"];
     [kEnInt updateNote:_note noteRef:[EvernoteIntegration NSStringToENNoteRef:self.noteRefString] block:^(ENNoteRef *noteRef, NSError *error) {
         if (error) {
             NSDictionary *attachment = @{@"org content":_note.content.enml, @"new content": self.updatedContent};
-            [UtilityClass sendError:error type:@"Evernote Save Note Error" attachment:attachment];
+            NSError* newError = [NSError errorWithDomain:error.domain code:604 userInfo:error.userInfo]; // change error code to something known
+            [UtilityClass sendError:newError type:@"Evernote Save Note Error" attachment:attachment];
             if (block)
                 block(NO, error);
         }
@@ -159,18 +166,14 @@ static NSSet* g_startEndElements;
 - (BOOL)updateToDo:(EvernoteToDo *)updatedToDo checked:(BOOL)checked
 {
     if ((nil != updatedToDo) && (updatedToDo.checked != checked)) {
-        //NSLog(@"now we can update our TODO: %@", updatedToDo);
-        
         if (!self.updatedContent)
-            self.updatedContent = _note.content.enml;
+            self.updatedContent = [self noteContent];
         
-        NSScanner* scanner = [NSScanner scannerWithString:self.updatedContent];
+        KPStringScanner* scanner = [KPStringScanner scannerWithString:self.updatedContent];
         for (NSInteger i = 0; i <= updatedToDo.position; i++) {
-            if (![scanner scanUpToString:@"<en-todo" intoString:nil]) {
+            if (![scanner scanToAfterString:@"<en-todo"]) {
                 return NO;
             }
-            scanner.scanLocation += 8;
-//            DLog(@"pos: %d", scanner.scanLocation);
         }
         
         NSUInteger startLocation = scanner.scanLocation;
@@ -199,28 +202,24 @@ static NSSet* g_startEndElements;
 - (BOOL)updateToDo:(EvernoteToDo *)updatedToDo title:(NSString *)title
 {
     if ((nil != updatedToDo) && (![updatedToDo.title isEqualToString:title])) {
-        //NSLog(@"now we can update our TODO: %@", updatedToDo);
-        
         if (!self.updatedContent)
-            self.updatedContent = _note.content.enml;
+            self.updatedContent = [self noteContent];
        
-        NSScanner* scanner = [NSScanner scannerWithString:self.updatedContent];
+        KPStringScanner* scanner = [KPStringScanner scannerWithString:self.updatedContent];
         for (NSInteger i = 0; i <= updatedToDo.position; i++) {
-            if (![scanner scanUpToString:@"<en-todo" intoString:nil]) {
+            if (![scanner scanToAfterString:@"<en-todo"]) {
                 return NO;
             }
-            scanner.scanLocation += 8;
-//            DLog(@"pos: %d", scanner.scanLocation);
         }
         
         NSString* escapedOldTitle = [self xmlEscape:updatedToDo.title];
-        if (![scanner scanUpToString:escapedOldTitle intoString:nil]) {
+        if (![scanner scanUpToString:escapedOldTitle]) {
             return NO;
         }
         
         NSUInteger startLocation = scanner.scanLocation;
         if (startLocation + escapedOldTitle.length > self.updatedContent.length) {
-            NSLog(@"Cannot find title: '%@' to replace it with: '%@'", updatedToDo.title, title);
+            [UtilityClass sendError:[NSError errorWithDomain:@"Evernote error: updateToDo cannot find title" code:606 userInfo:nil] type:@"Evernote update ToDo" attachment:@{@"title": updatedToDo.title, @"replacement title": title, @"updatedContent": self.updatedContent}];
             return NO;
         }
         
@@ -243,9 +242,9 @@ static NSSet* g_startEndElements;
     
     [str replaceOccurrencesOfString:@"&"  withString:@"&amp;"  options:NSLiteralSearch range:NSMakeRange(0, [str length])];
     [str replaceOccurrencesOfString:@"\"" withString:@"&quot;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
-    [str replaceOccurrencesOfString:@"'"  withString:@"&#x27;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
     [str replaceOccurrencesOfString:@">"  withString:@"&gt;"   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
     [str replaceOccurrencesOfString:@"<"  withString:@"&lt;"   options:NSLiteralSearch range:NSMakeRange(0, [str length])];
+    //[str replaceOccurrencesOfString:@"'"  withString:@"&#x27;" options:NSLiteralSearch range:NSMakeRange(0, [str length])];
     
     return str;
 }
@@ -260,30 +259,43 @@ static NSSet* g_startEndElements;
     return div.location;
 }
 
+- (EvernoteToDo *)lastValidTodo
+{
+    for (NSInteger i = _todos.count - 1; i >= 0; i--) {
+        EvernoteToDo* todo = _todos[i];
+        if (nil != todo.title) {
+            return todo;
+        }
+    }
+    return nil;
+}
+
+- (NSString *)noteContent {
+    return [_note.content.enml stringByReplacingOccurrencesOfString:@"<en-note/>" withString:@"<en-note></en-note>"];
+}
+
 - (NSUInteger)newToDoPos
 {
     if (_todos.count) {
-        EvernoteToDo* todo = _todos[_todos.count - 1];
-        NSScanner* scanner = [NSScanner scannerWithString:self.updatedContent];
+        EvernoteToDo* todo = [self lastValidTodo];
+        if (nil == todo) {
+            return [self newToDoPosAtTheBeginning];
+        }
+        KPStringScanner* scanner = [KPStringScanner scannerWithString:self.updatedContent];
         for (NSInteger i = 0; i <= todo.position; i++) {
-            if (![scanner scanUpToString:@"<en-todo" intoString:nil]) {
+            if (![scanner scanToAfterString:@"<en-todo" ]) {
                 return [self newToDoPosAtTheBeginning];
             }
-            scanner.scanLocation += 8;
         }
         
         NSString* escapedTitle = [self xmlEscape:todo.title];
         
-        if (![scanner scanUpToString:escapedTitle intoString:nil]) {
+        if (![scanner scanToAfterString:escapedTitle]) {
             return [self newToDoPosAtTheBeginning];
         }
         
-        NSUInteger tempResult = scanner.scanLocation + escapedTitle.length;
-        if ([scanner scanUpToString:@"</div>" intoString:nil]) {
-            return scanner.scanLocation + 6; // 6 is the length of @"</div>"
-        }
-        
-        return tempResult;
+        [scanner scanToAfterString:@"</div>"];
+        return scanner.scanLocation;
     }
     else {
         return [self newToDoPosAtTheBeginning];
@@ -293,19 +305,21 @@ static NSSet* g_startEndElements;
 - (BOOL)addToDoWithTitle:(NSString *)title
 {
     if (!self.updatedContent)
-        self.updatedContent = _note.content.enml;
+        self.updatedContent = [self noteContent];
     
     NSUInteger startPos = [self newToDoPos];
     
     if (startPos >= self.updatedContent.length) {
         //NSLog(@"Evernote error: found position is uncorrect");
-        [UtilityClass sendError:[NSError errorWithDomain:@"Evernote error: addToDoWithTitle found position is uncorrect" code:603 userInfo:nil] type:@"Evernote add todo with title" attachment:@{@"start pos": @(startPos), @"updatedContent": self.updatedContent, @"content_length": @(self.updatedContent.length)}];
+        [UtilityClass sendError:[NSError errorWithDomain:@"Evernote error: addToDoWithTitle found position is not correct" code:603 userInfo:nil] type:@"Evernote add todo with title" attachment:@{@"start pos": @(startPos), @"updatedContent": self.updatedContent, @"content_length": @(self.updatedContent.length)}];
         return NO;
     }
     
     if (NSNotFound != startPos) {
         self.updatedContent = [self.updatedContent stringByReplacingCharactersInRange:NSMakeRange(startPos, 0)
                                                                            withString:[NSString stringWithFormat:@"<div><en-todo/>%@<br/></div>", [self xmlEscape:title]]];
+        // add todo so it is the last known todo
+        [_todos addObject:[[EvernoteToDo alloc] initWithTitle:title checked:NO position:_todos.count]];
         self.needUpdate = YES;
         return YES;
     }

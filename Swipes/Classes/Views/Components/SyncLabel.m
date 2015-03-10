@@ -18,6 +18,9 @@
 
 
 @implementation SyncLabel
+-(void)setIconString:(NSString *)iconString{
+    [self.syncIcon setText:iconString(iconString)];
+}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -27,7 +30,6 @@
     return self;
 }
 - ( void )initializer{
-    
     self.titleLabel.font = KP_SEMIBOLD(kIconSize);
     self.layer.cornerRadius = kCornerRadius;
     self.syncIcon = iconLabel(@"editSyncIcon", kIconSize);

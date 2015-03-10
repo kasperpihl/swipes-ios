@@ -149,10 +149,9 @@
                 self.lastAngle = rounded;
                 self.timeSlider.transform = newTransform;
                 double currentTime = CACurrentMediaTime();
-                NSLog(@"%f",currentTime);
-                [kAudio playSoundWithName:@"Time picker.m4a"];
+                
                 if((currentTime - self.lastPlayTime) > 0.05 && shouldHighlight){
-                    
+                    [kAudio playSoundWithName:@"Time picker.m4a"];
                     self.lastPlayTime = currentTime;
                 }
             }

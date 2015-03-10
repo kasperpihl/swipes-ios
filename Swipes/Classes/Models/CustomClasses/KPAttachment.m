@@ -3,7 +3,9 @@
 #import "KPAttachment.h"
 
 NSString* const EVERNOTE_SERVICE = @"evernote";
+NSString* const GMAIL_SERVICE = @"gmail";
 NSString* const DROPBOX_SERVICE = @"dropbox";
+NSString* const URL_SERVICE = @"url";
 
 @interface KPAttachment ()
 
@@ -43,19 +45,21 @@ NSString* const DROPBOX_SERVICE = @"dropbox";
     NSArray *objects = [KPAttachment MR_findAllWithPredicate:findPredicate inContext:context];
     NSMutableArray *identifiers = [NSMutableArray array];
     for( KPAttachment *attachment in objects ){
-        [identifiers addObject:attachment.identifier];
+        if(attachment && attachment.identifier){
+            [identifiers addObject:attachment.identifier];
+        }
     }
     return [identifiers copy];
 }
 
 +(NSArray*)supportedServices{
-    return @[ EVERNOTE_SERVICE, DROPBOX_SERVICE ];
+    return @[ EVERNOTE_SERVICE, DROPBOX_SERVICE, URL_SERVICE ];
 }
 
 + (BOOL)supportsService:(NSString *)service
 {
     // we can use some smarter way when we have
-    return ([EVERNOTE_SERVICE isEqualToString:service] || [DROPBOX_SERVICE isEqualToString:service]);
+    return ([EVERNOTE_SERVICE isEqualToString:service] || [GMAIL_SERVICE isEqualToString:service] || [DROPBOX_SERVICE isEqualToString:service] || [URL_SERVICE isEqualToString:service]);
 }
 
 -(BOOL)isEqualToDictionary:(NSDictionary *)object{

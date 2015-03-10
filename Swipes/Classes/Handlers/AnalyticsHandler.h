@@ -16,12 +16,13 @@
 #define ANALYTICS [AnalyticsHandler sharedInstance]
 @interface AnalyticsHandler : NSObject
 +(AnalyticsHandler*)sharedInstance;
--(void)trackEvent:(NSString*)event info:(NSString*)info value:(double)value parameters:(NSDictionary*)parameters;
+-(void)trackCategory:(NSString*)category action:(NSString*)action label:(NSString*)label value:(NSNumber*)value;
 -(void)trackEvent:(NSString*)event options:(NSDictionary*)options;
 -(void)pushView:(NSString*)view;
 -(void)popView;
 -(void)clearViews;
 -(void)heartbeat;
--(void)updateIdentity;
+-(void)beginSession;
+-(void)checkForUpdatesOnIdentity;
 @property BOOL analyticsOff;
 @end

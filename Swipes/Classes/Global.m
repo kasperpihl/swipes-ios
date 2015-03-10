@@ -13,10 +13,12 @@
 static NSString* const SHARED_GROUP_NAME = @"group.it.pihl.swipes";
 static NSString* const DATABASE_NAME = @"swipes";
 static NSString* const DATABASE_FOLDER = @"database";
-static Global *sharedObject;
+static NSString* const kFirstRunApp = @"FirstRun";
+static BOOL g_isNotFirstRun = NO;
 
 +(Global *)sharedInstance
 {
+    static Global *sharedObject;
     if (!sharedObject){
         sharedObject = [[Global allocWithZone:NULL] init];
     }
@@ -24,6 +26,23 @@ static Global *sharedObject;
 }
 
 #ifndef APPLE_WATCH
+
++ (void)initialize
+{
+    g_isNotFirstRun = [USER_DEFAULTS boolForKey:kFirstRunApp];
+    if (!g_isNotFirstRun) {
+        [USER_DEFAULTS setBool:YES forKey:kFirstRunApp];
+        [USER_DEFAULTS synchronize];
+    }
+    
+}
+
++ (BOOL)isFirstRun
+{
+    return !g_isNotFirstRun;
+}
+
+
 -(CGFloat)fontMultiplier{
     if( !_fontMultiplier )
         _fontMultiplier = 1;
@@ -134,6 +153,8 @@ static Global *sharedObject;
     iconCompare(@"editSchedule",                @"\ue60c");
     iconCompare(@"editLocation",                @"\ue60d");
     iconCompare(@"editEvernote",                @"\ue65c");
+    iconCompare(@"editMail",                    @"\ue606");
+    iconCompare(@"editURL",                     @"\ue607");
     iconCompare(@"editActionRoundedArrow",      @"\ue65d");
     iconCompare(@"editActionRoundedPlus",       @"\ue65e");
     iconCompare(@"editSyncIcon",                @"\ue615");
@@ -221,14 +242,20 @@ static Global *sharedObject;
     
     // Integrations
     iconCompare(@"integrationEvernote",         @"\ue642");
-    
-    // Integrations full
     iconCompare(@"integrationEvernoteFull",     @"\ue64d");
+    iconCompare(@"integrationMailbox",          @"\ue664");
+    iconCompare(@"indicator",                   @"\ue64f");
+    iconCompare(@"actionIndicatorOn",           @"\ue650");
+    iconCompare(@"actionIndicatorOff",          @"\ue654");
+    iconCompare(@"integrationActionImporter",   @"\ue665");
+    iconCompare(@"integrationActionLearn",      @"\ue666");
+    iconCompare(@"arrowRightThick",             @"\ue667");
     
     iconCompare(@"logo",                        @"\ue600");
     iconCompare(@"signature",                   @"\ue623");
     return iconString;
 }
+
 +(NSDateFormatter *)isoDateFormatter{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];

@@ -12,7 +12,6 @@
 
 #import <DropboxSDK/DropboxSDK.h>
 
-#import "AppsFlyerTracker.h"
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
 #import "UtilityClass.h"
@@ -25,13 +24,12 @@
 #import "CoreSyncHandler.h"
 #import "AnalyticsHandler.h"
 #import "URLHandler.h"
-
+#import "KPTopClock.h"
 
 #import "UIWindow+DHCShakeRecognizer.h"
 
 #import "SettingsHandler.h"
 #import "RootViewController.h"
-#import "Intercom.h"
 #import "GAI.h"
 
 #import "SWADefinitions.h"
@@ -48,10 +46,6 @@
 #else
 
 #endif
-    [Intercom setApiKey:@"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1" forAppId:@"yobuz4ff"];
-    [Intercom beginSessionForUserWithEmail:@"kasper@pihl.it" completion:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
     
 #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
     NSString* const CONSUMER_KEY = @"swipes";
@@ -73,11 +67,15 @@
     [PFFacebookUtils initializeFacebook];
     
     [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
+    if(kCurrent){
+        [Crashlytics setUserIdentifier:kCurrent.objectId];
+        [Crashlytics setUserEmail:kCurrent.username];
+    }
     
     [GAI sharedInstance].dispatchInterval = 20;
-    [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
-    [[GAI sharedInstance] trackerWithTrackingId:@"UA-XXXX-Y"];
-    [[GAI sharedInstance] defaultTracker].allowIDFACollection = YES;
+    //[[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+    [[GAI sharedInstance] trackerWithTrackingId:@"UA-41592802-4"];
+    //[[GAI sharedInstance] defaultTracker].allowIDFACollection = YES;
     
     KPCORE;
     NOTIHANDLER;
@@ -87,9 +85,6 @@
         [self application:application didReceiveLocalNotification:notification];
     
     
-    [AppsFlyerTracker sharedTracker].appsFlyerDevKey = @"TwJuYgpTKp9ENbxf6wMi8j";
-    [AppsFlyerTracker sharedTracker].appleAppID = @"657882159";
-    [AppsFlyerTracker sharedTracker].isDebug = NO;
     [PaymentHandler sharedInstance];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // this call blocks when there is an internet connection but no real data passes through
@@ -100,7 +95,10 @@
 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
-    
+   
+    [USER_DEFAULTS setBool:[GlobalApp isMailboxInstalled] forKey:@"isMailboxInstalled"];
+    [USER_DEFAULTS synchronize];
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
@@ -143,11 +141,11 @@
     }
     
     NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
-    NSNumber *isLoggedIn = (kCurrent) ? @(YES) : @(NO);
+    NSNumber *daysSinceInstall = @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]);
     BOOL isFirstTime = ![USER_DEFAULTS boolForKey:@"hasLaunchedBefore"];
-    [ANALYTICS trackEvent:@"App Launch" options:@{ @"Mechanism" : launchMechanism , @"Is Logged In" : isLoggedIn, @"Days Since Install" : @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]), @"Is First Time": @(isFirstTime)}];
+    [ANALYTICS trackCategory:@"Session" action:@"App Launch" label:launchMechanism value:daysSinceInstall];
     if(isFirstTime){
-
+        [ANALYTICS trackCategory:@"Onboarding" action:@"Installation" label:nil value:nil];
         [USER_DEFAULTS setBool:YES forKey:@"hasLaunchedBefore"];
         [USER_DEFAULTS synchronize];
     }
@@ -244,7 +242,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [[AppsFlyerTracker sharedTracker] trackAppLaunch];
+    
     [ROOT_CONTROLLER openApp];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
@@ -255,7 +253,9 @@
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
+    
     UIBackgroundFetchResult result = [KPCORE synchronizeForce:YES async:NO];
+    [NOTIHANDLER updateLocalNotifications];
     completionHandler(result);
 }
 

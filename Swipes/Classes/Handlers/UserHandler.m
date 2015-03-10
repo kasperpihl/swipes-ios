@@ -10,9 +10,12 @@
 #import <Parse/PFUser.h>
 #import "AnalyticsHandler.h"
 #import "IntegrationHandler.h"
+#import "SettingsHandler.h"
 
 @interface UserHandler ()
 @property (nonatomic) BOOL needRefresh;
+@property (nonatomic) BOOL needSave;
+@property (nonatomic) BOOL isSaving;
 @property (nonatomic) UserLevel userLevel;
 @end
 @implementation UserHandler
@@ -89,7 +92,6 @@ static UserHandler *sharedObject;
     if(!kCurrent)
         return;
     [kCurrent fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        //[self save];
         if(!error){
             [self handleUser:(PFUser*)object];
         }
@@ -97,10 +99,22 @@ static UserHandler *sharedObject;
     }];
 }
 
--(void)save{
-    [kCurrent setObject:[kIntHandle getAllIntegrations] forKey:@"integrations"];
+-(void)saveSettings:(NSDictionary *)settings{
+    if(settings)
+        [kCurrent setObject:settings forKey:@"settings"];
+    if(self.isSaving){
+        self.needSave = YES;
+        return;
+    }
+    self.isSaving = YES;
     [kCurrent saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        DLog(@"save error: %@",error);
+        self.isSaving = NO;
+        if(self.needSave){
+            self.needSave = NO;
+            [self saveSettings:nil];
+        }
+        else if(error)
+            [kCurrent saveEventually];
     }];
 }
 
@@ -115,7 +129,9 @@ static UserHandler *sharedObject;
         [USER_DEFAULTS synchronize];
         self.userLevel = userLevel;
         self.isPlus = (userLevel > UserLevelStandard);
-        [ANALYTICS updateIdentity];
+        [ANALYTICS checkForUpdatesOnIdentity];
+        NSDictionary *settings = [user objectForKey:@"settings"];
+        [kSettings updateSettingsFromServer:settings];
     }
 }
 -(void)dealloc{

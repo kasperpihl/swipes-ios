@@ -46,7 +46,7 @@
 @property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
 @property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
 
-@property (nonatomic, strong) UILabel *evernoteIcon;
+@property (nonatomic, strong) UILabel *sourceIcon;
 @property (nonatomic,strong) UILabel *notesIcon;
 @property (nonatomic,strong) UILabel *recurringIcon;
 @property (nonatomic,strong) UILabel *locationIcon;
@@ -120,9 +120,9 @@
         self.dotView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
         NSInteger iconHeight = 9;
         
-        self.evernoteIcon = iconLabel(@"editEvernote", iconHeight);
-        [self.evernoteIcon setTextColor:tcolor(SubTextColor)];
-        [self.contentView addSubview:self.evernoteIcon];
+        self.sourceIcon = iconLabel(@"editEvernote", iconHeight);
+        [self.sourceIcon setTextColor:tcolor(SubTextColor)];
+        [self.contentView addSubview:self.sourceIcon];
         
         self.locationIcon = iconLabel(@"editLocation", iconHeight);
         [self.locationIcon setTextColor:tcolor(SubTextColor)];
@@ -158,9 +158,7 @@
         //self.actionStepsButton.backgroundColor = tcolor(TextColor);
         //self.actionStepsButton.titleLabel.backgroundColor = tcolor(DoneColor);
         self.actionStepsLabel = [[UILabel alloc] init];
-        self.actionStepsLabel.font = KP_REGULAR(11);
         self.actionStepsLabel.textColor = tcolor(TextColor);
-        self.actionStepsLabel.layer.borderColor = tcolor(TextColor).CGColor;
         self.actionStepsLabel.layer.cornerRadius = 3;
         self.actionStepsLabel.layer.borderWidth = 1;
         self.actionStepsLabel.textAlignment = NSTextAlignmentCenter;
@@ -196,15 +194,28 @@
 }
 
 -(void)updateActionSteps{
+    NSInteger totalSubtask = [self.toDo getSubtasks].count;
     NSSet *filteredSubtasks = [[self.toDo getSubtasks] filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"completionDate = nil"]];
     if( filteredSubtasks && filteredSubtasks.count > 0){
         self.actionStepsButton.hidden = NO;
         self.actionStepsLabel.text = [NSString stringWithFormat:@"%lu",(unsigned long)filteredSubtasks.count];
+        self.actionStepsLabel.font = KP_REGULAR(11);
         [self.actionStepsLabel sizeToFit];
-        CGRectSetSize(self.actionStepsLabel, CGRectGetWidth(self.actionStepsLabel.frame)+12, CGRectGetHeight(self.actionStepsLabel.frame)+5);
-        CGRectSetCenter(self.actionStepsLabel, CGRectGetWidth(self.actionStepsButton.frame)/2, CGRectGetHeight(self.actionStepsButton.frame)/2);
+        CGRectSetSize(self.actionStepsLabel, CGRectGetWidth(self.actionStepsLabel.frame)+12, CGRectGetHeight(self.actionStepsLabel.frame)+6);
     }
-    else self.actionStepsButton.hidden = YES;
+    else if(totalSubtask > 0){
+        self.actionStepsLabel.text = @"done";
+        self.actionStepsLabel.font = iconFont(9);
+        [self.actionStepsLabel sizeToFit];
+        CGRectSetSize(self.actionStepsLabel, CGRectGetWidth(self.actionStepsLabel.frame)+10, CGRectGetHeight(self.actionStepsLabel.frame)+8);
+    }
+    else{
+        self.actionStepsButton.hidden = YES;
+        return;
+    }
+
+    
+    CGRectSetCenter(self.actionStepsLabel, CGRectGetWidth(self.actionStepsButton.frame)/2, CGRectGetHeight(self.actionStepsButton.frame)/2);
 }
 
 - (void)setTextLabels:(BOOL)showBottomLine {
@@ -226,7 +237,7 @@
     CGRectSetCenterY(self.locationIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.tagsIcon, self.tagsLabel.center.y - iconHack);
-    CGRectSetCenterY(self.evernoteIcon, self.tagsLabel.center.y - iconHack);
+    CGRectSetCenterY(self.sourceIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
@@ -262,7 +273,7 @@
         alarmLabel = YES;
     }
 
-    self.evernoteIcon.hidden = YES;
+    self.sourceIcon.hidden = YES;
     self.locationIcon.hidden = YES;
     self.notesIcon.hidden = YES;
     self.recurringIcon.hidden = YES;
@@ -277,7 +288,14 @@
     
     KPAttachment *evernoteAttachment = [toDo firstAttachmentForServiceType:EVERNOTE_SERVICE];
     if(evernoteAttachment){
-        blockForIcon(self.evernoteIcon);
+        [self.sourceIcon setText:iconString(@"editEvernote")];
+        blockForIcon(self.sourceIcon);
+    }
+    
+    KPAttachment *mailAttachment = [toDo firstAttachmentForServiceType:GMAIL_SERVICE];
+    if(mailAttachment){
+        [self.sourceIcon setText:iconString(@"editMail")];
+        blockForIcon(self.sourceIcon);
     }
     
     if(toDo.location && toDo.location.length > 0){

@@ -1,0 +1,404 @@
+/* 
+  Localizable.strings
+  Swipes
+
+  Created by demosten on 10/6/14.
+  Copyright (c) 2014 Pihl IT. All rights reserved.
+*/
+
+/* 
+ Login Screen 
+ */
+
+// UI
+
+"Focus. Swipe. Achieve." = "Concéntrate. Desliza. Logra."; // title for login screen
+"Task List made for High Achievers" = "La lista de tareas hecha para los que alcanzan su objetivo."; // subtitle on loginscreen
+
+"Keep trying Swipes" = "Sigue probando Swipes"; // title for try button
+"Try out" = "Probar";
+
+"Create Account" = "Crear cuenta"; // Create account button title
+"Log in" = "Identificarse"; // Login button title
+"Sign up" = "Registrarse";
+"Register" = "Registrar";
+
+"Forgot password?" = "¿Contraseña olvidada?";
+"Policies" = "Políticas";
+
+"password" = "contraseña";
+"email" = "correo";
+"cancel" = "cancelar";
+"reset" = "reiniciar";
+
+"You can register with email" = "Puedes registrarte con tú correo";
+"Or register with Facebook" = "O registrarte con Facebook";
+
+"You can log in with email" = "Puedes identificarte con tú correo";
+"Or log in with Facebook" = "O identificarte con Facebook";
+
+// Alerts
+"Please use an email" = "Por favor, utiliza un correo";
+"Make sure you use a real email!" = "¡Asegúrate de que el correo es correcto!";
+
+"Missing password" = "Falta la contraseña";
+"Make sure to enter your password!" = "¡Asegúrate de introducir tu contraseña!";
+
+"Wrong email or password." = "Correo o contraseña incorrectos.";
+"Please check your informations and try again." = "Por favor comprueba los datos e intenta de nuevo.";
+
+"Email wasn't found." = "No se ha encontrado el correo.";
+"We couldn't recognize the email." = "No hemos podido reconocer el correo.";
+
+"Something went wrong." = "Algo ha fallado.";
+"Please try again." = "Por favor, vuelve a intentarlo.";
+
+"Facebook settings" = "Configuración de Facebook";
+"Please make sure you've allowed Swipes in Settings -> Facebook" = "Por favor, asegúrate de que has autorizado a Swipes en Configuración -> Facebook";
+
+"New user" = "Nuevo usuario";
+"Do you want to sign up with: %@" = "Quieres registrarte con: %@";
+
+"Reset password" = "Restablecer contraseña";
+
+"Email sent" = "Correo enviado";
+"Follow the instructions in the email to reset your pass" = "Sigue las instrucciones del correo para restablecer la contraseña";
+
+"Read through our 'Privacy Policy' and 'Terms and Conditions'." = "Lee nuestra 'Política de privacidad' y los 'Terminos y Condiciones'.";
+
+"Open Link" = "Abrir enlace";
+"Do you want to open the link?" = "¿Quieres abrir el enlace?";
+
+/*
+ Small common expressions
+ */
+"Yes" = "Sí";
+"No" = "No";
+"Okay" = "Ok";
+"Delete" = "Eliminar";
+"open" = "abrir";
+"done" = "terminado";
+"completed" = "completado";
+"current" = "presente";
+"schedule" = "programar";
+"scheduled" = "programado";
+"with" = "con";
+"and" = "y";
+"Learn more" = "Saber más";
+"Not now" = "Ahora no";
+"continue" = "continuar";
+"start" = "inicio";
+"Evernote" = "Evernote";
+
+/* 
+ Common Popups
+*/
+"Delete tag: %@" = "Borrar etiqueta: %@";
+"This can't be undone" = "Esto no se puede deshacer";
+"Get Started" = "Comenzar";
+"Add a new task" = "Añadir una tarea nueva";
+"Location Permissions" = "Permisos de ubicación";
+"You need to turn on location permissions for Swipes in Settings > Privacy" = "Es necesario activar los permisos de ubicación para Swipes en Configuración > Privacidad";
+"Undo last action" = "Deshacer la última acción";
+"Do you want to undo the last action?" = "¿Quieres deshacer la última acción?";
+"New version required" = "Se requiere una nueva versión";
+"For sync to work - please update Swipes from the App Store" = "Para que funcione la sincronización - por favor, actualiza Swipes desde la App Store";
+"Evernote Authorization" = "Autorización Evernote";
+"To sync with Evernote on this device, please authorize" = "Para sincronizar este dispositivo con Evernote, por favor autorizalo";
+"Don't sync this device" = "No sincronizar este dispositivo";
+"Authorize now" = "Autorizar ahora";
+
+/*
+ Initial Tasks and Tags
+ */
+"home" = "personal";
+"work" = "trabajo";
+
+"Swipe right to complete" = "Desliza a la derecha para completar";
+"Swipe left to snooze for later" = "Desliza a la izquierda para posponer";
+"Access your tasks on web.swipesapp.com" = "Accede a tus tareas en web.swipesapp.com";
+
+
+
+"priority" = "prioridad";
+"recurring" = "periodica";
+" with " = " con ";
+"notes" = "notas";
+" matching \"%@\"" = " coincide con \"%@\"";
+" %@ tags: %@" = " %@ etiquetas: %@";
+"clear workspace" = "Limpiar espacio de trabajo";
+
+/*
+ Topoverlay menus (Workspaces, select and search)
+*/
+// UI
+"All" = "Todo";
+"None" = "Ninguno";
+"Select more" = "Seleccionar más";
+"Set Workspace" = "Asignar espacio de trabajo";
+"Search" = "Buscar";
+
+// Alerts
+"Select Tasks" = "Seleccionar Tareas";
+"Tap your tasks to select them and swipe them all together." = "Toca tus tareas para seleccionarlas y deslizarlas juntas.";
+
+"Workspaces" = "Espacios de trabajo";
+"Set your workspace, select tags and stay focused." = "Crea tu espacio de trabajo, selecciona etiquetas y mantén la concentración.";
+
+"Add new tag" = "Añadir una etiqueta nueva";
+"Type the name of your tag (ex. work, project or school)" = "Escribe el nombre de tu etiqueta (ej. trabajo, proyecto o escuela)";
+"add" = "añadir";
+
+/* List view */
+"Clear old tasks" = "Borrar tareas antiguas";
+"Show old tasks" = "Mostrar tareas antiguas";
+// Alerts
+"Are you sure?" = "¿Estás seguro?";
+"Deleting old completed tasks can't be undone" = "Las tareas antiguas completadas no se puede deshacer";
+"Delete them" = "Borrarlas";
+
+/*
+ Scheduler
+*/
+"Later  +%luh" = "Más tarde  +%luh";
+"This Evening" = "Esta noche";
+"Tomorrow Eve" = "Mañana por la noche";
+"In 2 Days" = "En 2 días";
+"This Weekend" = "Este fin de semana";
+"Next Week" = "Próxima Semana";
+"Pick A Date" = "Elige una Fecha";
+"At Location" = "Lugar";
+
+"Hold down to adjust time" = "Mantén pulsado para ajustar la hora";
+
+/*
+ Edit task mode
+ */
+"Add action step" = "Añadir tarea intermedia";
+"Attached" = "Adjunto";
+"All Done" = "Todo terminado";
+"Completed" = "Completado";
+"Unspecified" = "No especificado";
+"Add notes" = "Añadir notas";
+"Add tags" = "Añadir etiquetas";
+
+"Later Today" = "Más tarde";
+"Today" = "Hoy";
+"Tomorrow" = "Mañana";
+"Yesterday" = "Ayer";
+
+"See%@ %lu action%@" = "See%@ %lu action%@";
+" all" = " todo";
+"s" = "s";
+
+// Evernote View
+"Only notes with ToDo inside" = "Sólo notas con ToDo dentro";
+
+// Alerts
+"tasks" = "tareas";
+"task" = "tarea";
+"Delete %li %@" = "Eliminar %li %@";
+"these" = "estos";
+"this" = "esta";
+"Are you sure you want to permanently delete %@ %@?" = "¿Estas seguro que quieres eliminar %@ %@ permanentemente?";
+
+"Register an account to backup your data and keep your Evernotes in sync with Swipes" = "Registra una cuenta para hacer una copia de seguridad de tus datos y mantener Swipes sincronizado con Evernote";
+"Remove note" = "Eliminar nota";
+"Open note" = "Abrir nota";
+"What do you want to do?" = "¿Qué deseas hacer?";
+
+/*
+    All done for today background
+*/
+"First day" = "Primer día";
+"%li days" = "%li días";
+"%@ on a streak!" = "¡%@ del tirón!";
+"Next task  @  %@" = "Siguiente tarea @  %@";
+/*
+    Repeating a task
+*/
+"Repeat every..." = "Repetir cada...";
+"Never repeat" = "No repetir";
+"Every" = "Cada";
+"Every day" = "Cada día";
+"Every Monday to Friday" = "Cada Lunes a Viernes";
+"Every Saturday and Sunday" = "Cada Sábado y Domingo";
+"Every month the %@" = "Cada mes el %@"; // %@ = 3rd
+"Every year %@ %@" = "Cada año %@ %@";
+" at %@" = " a las %@";
+"en_US" = "en_US";
+
+// Repeat picker
+"never" = "nunca";
+"day" = "día";
+"mon-fri" = "lun-vie";
+"sat+sun" = "sáb+dom";
+"week" = "semana";
+"month" = "mes";
+"year" = "año";
+"|st|nd|rd|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|st|nd|rd|th|th|th|th|th|th|th|st" = "|st|nd|rd|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|st|nd|rd|th|th|th|th|th|th|th|st";
+
+"%li / %li TODAY" = "%li / %li HOY";
+"%li / %li STEPS" = "%li / %li PASOS";
+"'+'H':'mm'h'" = "'+'H':'mm'h'";
+
+/*
+    Settings
+*/
+// Buttons
+"Settings" = "Ajustes";
+"Notifications" = "Notificaciones";
+"Location" = "Ubicación";
+"Help" = "Ayuda";
+"Snoozes" = "Pospuestas";
+"Manage" = "Gestiona";
+"Upgrade" = "Actualizar";
+"Sync" = "Sincronizar";
+"Logout" = "Cerrar sesión";
+"Account" = "Cuenta";
+"Theme" = "Tema";
+"Integrations" = "Integraciones";
+
+"Last sync: %@" = "Última sincronización: %@";
+
+// Notifications menu
+"Tasks snoozed for later" = "Tareas pospuestas";
+"Daily reminder to plan the day" = "Aviso diario para planificar el día";
+"Weekly reminder to plan the week" = "Aviso semanal para panificar la semana";
+"Are you sure you no longer want to receive these alarms and reminders?" = "¿Estás seguro de que no deseas recibir estas alarmas ni recordatorios?";
+
+// Snoozes menu
+"Start my day at" = "Mi día empieza a las";
+"Start my evening at" = "Mi noche empieza a las";
+"Start my weekends at" = "Mi fin de semana empieza a las";
+"My week starts" = "Mi semana empieza el";
+"My weekend starts" = "Mi fin de semana empieza el";
+"Snooze Later Today" = "Posponer para más tarde";
+
+// Integrations Menu
+" (Connected)" = " (Conectado)";
+"Unlink" = "Desvincular";
+"Link account" = "Vincular cuenta";
+
+"Sync with Evernote on this device" = "Sincronizar este dispositivo con Evernote";
+"Auto import notes with \"swipes\"-tag" = "Auto importar notas con la etiqueta \"swipes\"";
+"Sync with personal linked notebooks" = "Sincronizar con libretas personales vinculadas";
+"Sync with Evernote Business" = "Sincronizar con Evernote Business";
+"Tap to learn more" = "Pulsa para saber más";
+"Open Evernote Importer" = "Abrir el importador de Evernote";
+"Import a few notes right away." = "Importar algunas notas ahora mísmo.";
+"Choose notes" = "Elegir notas";
+"Unlink Evernote" = "Desvincular Evernote";
+"All tasks will be unlinked, are you sure?" = "Todas las tareas se desvincularán ¿Estás seguro?";
+
+// Evernote Helper
+"WHAT IT IS" = "QUÉ ES";
+"This integration lets you sync notes with checkmarks from Evernote into Swipes." = "Esta integración permite sincronizar la notas marcadas desde Evernote a Swipes.";
+"HOW IT WORKS" = "CÓMO FUNCIONA";
+"Assign the \"swipes\" tag to a note in Evernote. We'll add it as a task in Swipes and sync all its checkmarks." = "Asigna la etiqueta \"swipes\" a una nota en Evernote. Nosotros la añadiremos en Swipes como una tarea y sincronizaremos todas sus marcas de verificación.";
+// Evernote importer
+"Import  %li  notes" = "Importar  %li  notas";
+"notes with checkmarks" = "notas con casillas de verificación";
+"Import notes" = "Importar notas";
+"Importing..." = "Importando...";
+"Successfully imported." = "Importadas correctamente.";
+"Next time, assign the \"swipes\"-tag in Evernote and we'll import the notes automatically." = "La próxima vez, asigna la etiqueta \"swipes\" en Evernote e importaremos las notas automáticamente.";
+"Great! I got it." = "Genial! Lo he conseguido.";
+"This note has already been imported." = "Esta nota ya había sido importada.";
+"Do you want to duplicate it?" = "¿Deseas duplicarla?";
+"Couldn't find any notes with Checkmarks" = "No se han encontrado notas con marcas de verificación";
+"You can add notes manually under each tasks from Swipes as well" = "Tambien puedes añadir manualmente notas a cada tarea desde Swipes";
+
+// Help menu
+"Contact Swipes" = "Contacta con el equipo de Swipes";
+"Walkthrough" = "Tutorial";
+"Get Started Guides" = "Guias de inicio";
+"FAQ" = "Preguntas frecuentes";
+"Known Issues" = "Problemas conocidos";
+"Open Policies" = "Abrir Políticas";
+
+// Alerts
+"Learn how to get most out of Swipes." = "Aprende a sacar mayor provecho de Swipes.";
+"Learn how to get most out of the different features in Swipes." = "Aprende a sacar mayor provecho de las diferentes funcionalidades de Swipes.";
+"You found a bug? Check out if we're already working on it." = "¿Has encontrado un error? Verifica si ya estamos trabajando en él.";
+
+
+"Hard sync" = "Sincronización difícil";
+"This will send all data and can take some time" = "Esto enviará todos los datos y puede tomar un poco de tiempo";
+
+"Log out" = "Cerrar sesión";
+"Are you sure you want to log out of your account?" = "¿Estás seguro de que quieres cerrar sesión de tu cuenta?";
+
+"Manage subscription" = "Gestionar suscripción";
+"Open App Store to manage your subscription?" = "¿Abrir la App Store para gestionar tu suscripción?";
+
+"Turn off hints" = "Desactivar consejos";
+"Are you sure you want to turn off and clear the hints?" = "¿Estas seguro que quieres desactivar y borrar los consejos?";
+
+"Turn off location" = "Desactivar ubicación";
+"Location reminders won't be working." = "Los recordatorios de ubicación dejarán de funcionar.";
+
+"Register for Swipes to safely back up your data and get Swipes Plus" = "Registrate para que Swipes haga copia de seguridad de tus datos y para obtener Swipes Plus";
+
+"Mail was not setup" = "El correo no se ha configurado";
+"You can send us feedback to support@swipesapp.com. Thanks" = "Puedes enviarnos tus comentarios a support@swipesapp.com. Gracias";
+
+"Keep data" = "Conservar datos";
+"Do you want to keep the data from the test period?" = "¿Deseas conservar los datos del periodo de prueba?";
+
+"Can't upgrade to Swipes Plus" = "No se puede actualizar Swipes Plus";
+"We're remaking our Plus version. Please send us your suggestions while waiting." = "Estamos remodelando nuestra versión Plus. Por favor, mientras esperas envianos tus comentarios.";
+"Send suggestions" = "Enviar comentarios";
+"Restore Purchases" = "Restaurar compras";
+
+"An error occured" = "Ha ocurrido un error";
+"No purchases could be restored. Contact support@swipesapp.com for help." = "No se pueden restaurar las compras. Ponte en contacto con support@swipesapp.com para obtener ayuda.";
+
+"Your purchase has been restored" = "Tu compra ha sido restaurada";
+"Your purchase has been restored. Welcome back!" = "Tu compra ha sido restaurada. ¡Bienvenido de nuevo!";
+
+"Time Zone Change" = "Cambio de zona horaria";
+"Do you want to move all your recurring tasks to match the change? A task @ 8:00 will be 8:00 in new time zone (Recommended)" = "¿Quieres mover todas tus tareas periódicas para adaptarlas al cambio? Una tarea a las 8:00 será a las 8:00 en la nueva zona horaria (Recomendado)";
+
+"New feature" = "Nueva funcionalidad";
+"We've made a powerful integration with Evernote!" = "¡Hemos hecho una potente integración con Evernote!";
+
+
+/*
+    Walkthrough
+ */
+"Welcome to Swipes" = "Bienvenido a Swipes";
+"Here you find three areas where you can organize your tasks." = "Aquí puedes encontrar tres zonas donde puedes organizar tus tareas.";
+"Your main focus area" = "Tu zona de enfoque principal";
+"All tasks start here, and you can swipe them away to keep it clear." = "Todas las tareas empiezan aquí, y tu puedes desplazarlas fuera para mantenerla despejada.";
+
+"Complete your task by swiping it to the right. Try it below!" = "Completa tus tareas deslizándolas a la derecha. ¡Inténtalo!";
+"You've completed a task." = "Has completado una tarea.";
+"See all your completed tasks in the “Done” area." = "Encuentra todas tus tareas completadas en el área “Terminado”.";
+
+"Swipe left to snooze." = "Desliza a la izquierda para posponer.";
+"Schedule tasks for later, and keep focus on the priorities now." = "Programa las tareas para después, y mantente centrado en las prioridades actuales.";
+
+"... Then pick a date" = "... Entonces elige una fecha";
+"And the task will come back when the time's right." = "Y la tarea volverá en el momento adecuado.";
+
+"You've snoozed a task." = "Has pospuesto una tarea.";
+"See your upcoming tasks in the “Later” area." = "Encuentra tus próximas tareas en el area “Pospuestas”.";
+
+"Welcome on board!" = "¡Bienvenido a bordo!";
+"Register an account to get started.\n\nTake the leap. Swipe!" = "Registra una cuenta para empezar.\n\nDa el salto. Swipe!";
+
+"Resend offer to Michael" = "Reenviar oferta a Maria";
+"Friday catch-up" = "Viernes de ponerse al día";
+"Fix the presentation notes" = "Arreglar las notas para la presentación";
+"Buy gift for Tom" = "Comprar un regalo a Juan";
+"Email Simon Gate" = "Correo a Antonio Díaz";
+"Appointment with the dentist" = "Cita con el dentista";
+"Birthday party" = "Fiesta de cumpleaños";
+
+/*
+    Share Tasks
+*/
+"Tasks to complete" = "Tareas a completar";
+"Tasks: \r\n" = "Tareas: \r\n";
+"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com" = "\r\nEnviado con Swipes – La lista de tareas hecha para grandes logros\r\nApp gratuita para iPhone - http://swipesapp.com";
