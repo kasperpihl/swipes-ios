@@ -444,6 +444,9 @@
 		DAE2B17919CB7D7200A9074E /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = A78D7A8717F4B27200AD38B1 /* Global.m */; };
 		DAE2B17B19CB7D8100A9074E /* Vero.m in Sources */ = {isa = PBXBuildFile; fileRef = A7582505189BC35600B904BC /* Vero.m */; };
 		DAE2B17C19CB7DF200A9074E /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285C17294C56002226C8 /* UtilityClass.m */; };
+		DAE4D5F81AB1C473001BDC52 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE4D5F71AB1C473001BDC52 /* ShareViewController.m */; };
+		DAE4D5FA1AB1C473001BDC52 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAE4D5F91AB1C473001BDC52 /* MainInterface.storyboard */; };
+		DAE4D5FD1AB1C473001BDC52 /* SwipesShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DAE4D5F21AB1C473001BDC52 /* SwipesShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DAE9CFE119AF3AC600246B64 /* SwipesKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DAE9CFE019AF3AC600246B64 /* SwipesKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
 		DAFBF4071A65D92F003DD799 /* MagicalImportFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = DAFBF3CA1A65D92F003DD799 /* MagicalImportFunctions.h */; };
@@ -617,6 +620,13 @@
 			remoteGlobalIDString = DAE2B14E19CB7A4D00A9074E;
 			remoteInfo = SwipesToday;
 		};
+		DAE4D5FB1AB1C473001BDC52 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DAE4D5F11AB1C473001BDC52;
+			remoteInfo = SwipesShare;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -627,6 +637,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				DA3282D71A4CB7D00054CE04 /* Swipes WatchKit Extension.appex in Embed App Extensions */,
+				DAE4D5FD1AB1C473001BDC52 /* SwipesShare.appex in Embed App Extensions */,
 				DAE2B15C19CB7A4D00A9074E /* SwipesToday.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
@@ -1146,6 +1157,12 @@
 		DAE2B15719CB7A4D00A9074E /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		DAE2B16319CB7AA900A9074E /* SwipesToday.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SwipesToday.entitlements; sourceTree = "<group>"; };
 		DAE2B16E19CB7CE100A9074E /* SwipesToday-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwipesToday-Prefix.pch"; sourceTree = "<group>"; };
+		DAE4D5F21AB1C473001BDC52 /* SwipesShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SwipesShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAE4D5F51AB1C473001BDC52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DAE4D5F61AB1C473001BDC52 /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
+		DAE4D5F71AB1C473001BDC52 /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		DAE4D5F91AB1C473001BDC52 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
+		DAE4D6061AB1C552001BDC52 /* SwipesShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SwipesShare.entitlements; sourceTree = "<group>"; };
 		DAE9CFDC19AF3AC600246B64 /* SwipesKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwipesKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE9CFDF19AF3AC600246B64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DAE9CFE019AF3AC600246B64 /* SwipesKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipesKit.h; sourceTree = "<group>"; };
@@ -1274,6 +1291,13 @@
 				DA6B61BB19DAEF0D00089877 /* ENSDK.framework in Frameworks */,
 				DAE2B15019CB7A4D00A9074E /* NotificationCenter.framework in Frameworks */,
 				81A0C94F1F16434CAE0AA041 /* libPods-SwipesToday.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAE4D5EF1AB1C473001BDC52 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1667,6 +1691,7 @@
 				DAE9CFDD19AF3AC600246B64 /* SwipesKit */,
 				DA3282B81A4CB7CF0054CE04 /* Swipes WatchKit Extension */,
 				DA3282CD1A4CB7CF0054CE04 /* Swipes WatchKit App */,
+				DAE4D5F31AB1C473001BDC52 /* SwipesShare */,
 				A7778CCC16EB5884004D95E5 /* Frameworks */,
 				A7778CCB16EB5884004D95E5 /* Products */,
 				9BA9EC75C706A45E18C4AB77 /* Pods */,
@@ -1681,6 +1706,7 @@
 				DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */,
 				DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */,
 				DA3282C91A4CB7CF0054CE04 /* Swipes WatchKit App.app */,
+				DAE4D5F21AB1C473001BDC52 /* SwipesShare.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2466,6 +2492,26 @@
 			name = Utilities;
 			sourceTree = "<group>";
 		};
+		DAE4D5F31AB1C473001BDC52 /* SwipesShare */ = {
+			isa = PBXGroup;
+			children = (
+				DAE4D6061AB1C552001BDC52 /* SwipesShare.entitlements */,
+				DAE4D5F61AB1C473001BDC52 /* ShareViewController.h */,
+				DAE4D5F71AB1C473001BDC52 /* ShareViewController.m */,
+				DAE4D5F91AB1C473001BDC52 /* MainInterface.storyboard */,
+				DAE4D5F41AB1C473001BDC52 /* Supporting Files */,
+			);
+			path = SwipesShare;
+			sourceTree = "<group>";
+		};
+		DAE4D5F41AB1C473001BDC52 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DAE4D5F51AB1C473001BDC52 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		DAE9CFDD19AF3AC600246B64 /* SwipesKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -2712,6 +2758,7 @@
 				DAE2B15A19CB7A4D00A9074E /* PBXTargetDependency */,
 				DAE2B15E19CB7A4D00A9074E /* PBXTargetDependency */,
 				DA3282D61A4CB7D00054CE04 /* PBXTargetDependency */,
+				DAE4D5FC1AB1C473001BDC52 /* PBXTargetDependency */,
 			);
 			name = Swipes;
 			productName = Shery;
@@ -2768,6 +2815,23 @@
 			name = SwipesToday;
 			productName = SwipesToday;
 			productReference = DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		DAE4D5F11AB1C473001BDC52 /* SwipesShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DAE4D6051AB1C474001BDC52 /* Build configuration list for PBXNativeTarget "SwipesShare" */;
+			buildPhases = (
+				DAE4D5EE1AB1C473001BDC52 /* Sources */,
+				DAE4D5EF1AB1C473001BDC52 /* Frameworks */,
+				DAE4D5F01AB1C473001BDC52 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwipesShare;
+			productName = SwipesShare;
+			productReference = DAE4D5F21AB1C473001BDC52 /* SwipesShare.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		DAE9CFDB19AF3AC600246B64 /* SwipesKit */ = {
@@ -2832,6 +2896,15 @@
 							};
 						};
 					};
+					DAE4D5F11AB1C473001BDC52 = {
+						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 85LTPM52WY;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
 					DAE9CFDB19AF3AC600246B64 = {
 						CreatedOnToolsVersion = 6.0;
 						DevelopmentTeam = 85LTPM52WY;
@@ -2863,6 +2936,7 @@
 			targets = (
 				A7778CC916EB5884004D95E5 /* Swipes */,
 				DAE2B14E19CB7A4D00A9074E /* SwipesToday */,
+				DAE4D5F11AB1C473001BDC52 /* SwipesShare */,
 				A7F0B9B71700BA40003BBDD1 /* Mogenerator */,
 				DAE9CFDB19AF3AC600246B64 /* SwipesKit */,
 				DA3282B61A4CB7CF0054CE04 /* Swipes WatchKit Extension */,
@@ -3039,6 +3113,14 @@
 				DA09DD8D1A71071E00E66E97 /* GmailAuthViewController.xib in Resources */,
 				DA5346BF19D5CB7B007AA15D /* Datamodel.xcdatamodeld in Resources */,
 				DA5346C019D5CB84007AA15D /* SwipesToday.entitlements in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAE4D5F01AB1C473001BDC52 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAE4D5FA1AB1C473001BDC52 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3467,6 +3549,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DAE4D5EE1AB1C473001BDC52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAE4D5F81AB1C473001BDC52 /* ShareViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DAE9CFD719AF3AC600246B64 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3553,6 +3643,11 @@
 			isa = PBXTargetDependency;
 			target = DAE2B14E19CB7A4D00A9074E /* SwipesToday */;
 			targetProxy = DAE2B15D19CB7A4D00A9074E /* PBXContainerItemProxy */;
+		};
+		DAE4D5FC1AB1C473001BDC52 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DAE4D5F11AB1C473001BDC52 /* SwipesShare */;
+			targetProxy = DAE4D5FB1AB1C473001BDC52 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -4434,6 +4529,95 @@
 			};
 			name = AdHoc;
 		};
+		DAE4D5FE1AB1C474001BDC52 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = SwipesShare/SwipesShare.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = SwipesShare/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		DAE4D5FF1AB1C474001BDC52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = SwipesShare/SwipesShare.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = SwipesShare/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		DAE4D6001AB1C474001BDC52 /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = SwipesShare/SwipesShare.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = SwipesShare/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = AdHoc;
+		};
 		DAE9CFF519AF3AC700246B64 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E05A80E8EEB25CD6DB2767FA /* Pods-SwipesKit.debug.xcconfig */;
@@ -4766,6 +4950,16 @@
 				DAE2B15F19CB7A4D00A9074E /* Debug */,
 				DAE2B16019CB7A4D00A9074E /* Release */,
 				DAE2B16119CB7A4D00A9074E /* AdHoc */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DAE4D6051AB1C474001BDC52 /* Build configuration list for PBXNativeTarget "SwipesShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAE4D5FE1AB1C474001BDC52 /* Debug */,
+				DAE4D5FF1AB1C474001BDC52 /* Release */,
+				DAE4D6001AB1C474001BDC52 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
