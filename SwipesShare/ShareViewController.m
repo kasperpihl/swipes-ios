@@ -10,6 +10,8 @@
 #import <Parse/Parse.h>
 #import "KPToDo.h"
 #import "KPAttachment.h"
+#import "KPTag.h"
+#import "KPTagList.h"
 #import "ShareViewController.h"
 
 @interface ShareViewController ()
@@ -18,6 +20,8 @@
 @property (nonatomic, weak) IBOutlet UILabel* urlText;
 @property (nonatomic, weak) IBOutlet UIButton* cancelButton;
 @property (nonatomic, weak) IBOutlet UIButton* postButton;
+@property (nonatomic, weak) IBOutlet KPTagList* tagList;
+@property (nonatomic, weak) IBOutlet UIScrollView* scrollView;
 
 @property (nonatomic, strong) NSURL* url;
 
@@ -35,6 +39,18 @@
     [Global initCoreData];
 
     [self.textField becomeFirstResponder];
+    
+    self.tagList.sorted = YES;
+    self.tagList.addTagButton = NO;
+    self.tagList.emptyText = LOCALIZE_STRING(@"No tags");
+    self.tagList.tagBackgroundColor = tcolorF(BackgroundColor, ThemeLight);
+    self.tagList.tagTitleColor = tcolorF(TextColor, ThemeLight);
+    self.tagList.tagBorderColor = tcolorF(TextColor, ThemeLight);
+    self.tagList.selectedTagBackgroundColor = tcolorF(BackgroundColor, ThemeDark);
+    self.tagList.selectedTagTitleColor = tcolorF(TextColor, ThemeDark);
+    self.tagList.selectedTagBorderColor = tcolorF(TextColor, ThemeLight);
+    [self.tagList setTags:[KPTag allTagsAsStrings] andSelectedTags:@[]];
+    self.scrollView.contentSize = CGSizeMake(self.tagList.frame.size.width, self.tagList.frame.size.height);
     
     NSExtensionItem* item = [self.extensionContext.inputItems.firstObject copy];
     self.textField.text = item.attributedContentText.string;
@@ -87,7 +103,7 @@
 
 - (void)createTodoWithText:(NSString *)text
 {
-    KPToDo* todo = [KPToDo addItem:text priority:NO tags:nil save:YES from:@"Share extension"];
+    KPToDo* todo = [KPToDo addItem:text priority:NO tags:[_tagList getSelectedTags] save:YES from:@"Share extension"];
     if (_url) {
         KPAttachment* attachment = [KPAttachment attachmentForService:URL_SERVICE title:[_url absoluteString] identifier:[_url absoluteString] sync:YES];
         [todo addAttachmentsObject:attachment];

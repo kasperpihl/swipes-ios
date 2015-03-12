@@ -436,6 +436,15 @@
 		DA09B09A1AB2291B002632DC /* ThemeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA18B17954C7400EB1549 /* ThemeHandler.m */; };
 		DA09B09B1AB23495002632DC /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
 		DA09B09C1AB23496002632DC /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D1F172C0E1C00BCB2D9 /* NSDate-Utilities.m */; };
+		DA09B09D1AB24031002632DC /* KPTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1A71838EBF20047DCC9 /* KPTagList.m */; };
+		DA09B09E1AB24127002632DC /* AudioHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AD45821A3981E400DF19BD /* AudioHandler.m */; };
+		DA09B09F1AB2418B002632DC /* SlowHighlightIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1861838EBF20047DCC9 /* SlowHighlightIcon.m */; };
+		DA09B0A71AB24DDF002632DC /* GothamRounded-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA09B0A21AB24DDF002632DC /* GothamRounded-Bold.ttf */; };
+		DA09B0A81AB24DDF002632DC /* GothamRounded-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA09B0A31AB24DDF002632DC /* GothamRounded-Book.ttf */; };
+		DA09B0A91AB24DDF002632DC /* GothamRounded-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA09B0A41AB24DDF002632DC /* GothamRounded-Light.ttf */; };
+		DA09B0AA1AB24DDF002632DC /* GothamRounded-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA09B0A51AB24DDF002632DC /* GothamRounded-Medium.ttf */; };
+		DA09B0AB1AB24DDF002632DC /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA09B0A61AB24DDF002632DC /* swipes.ttf */; };
+		DA09B0AC1AB25408002632DC /* UIColor+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */; };
 		DA09DD7A1A6E636B00E66E97 /* GmailThreadProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = DA09DD781A6E636B00E66E97 /* GmailThreadProcessor.h */; };
 		DA09DD7B1A6E636B00E66E97 /* GmailThreadProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = DA09DD791A6E636B00E66E97 /* GmailThreadProcessor.m */; };
 		DA09DD7C1A6E636B00E66E97 /* GmailThreadProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = DA09DD791A6E636B00E66E97 /* GmailThreadProcessor.m */; };
@@ -1151,6 +1160,11 @@
 		DA09B00C1AB228D6002632DC /* MagicalRecordLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordLogging.h; sourceTree = "<group>"; };
 		DA09B00D1AB228D6002632DC /* MagicalRecordShorthand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordShorthand.h; sourceTree = "<group>"; };
 		DA09B00E1AB228D6002632DC /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
+		DA09B0A21AB24DDF002632DC /* GothamRounded-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Bold.ttf"; path = "Swipes/Ressources/Font/GothamRounded-Bold.ttf"; sourceTree = SOURCE_ROOT; };
+		DA09B0A31AB24DDF002632DC /* GothamRounded-Book.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Book.ttf"; path = "Swipes/Ressources/Font/GothamRounded-Book.ttf"; sourceTree = SOURCE_ROOT; };
+		DA09B0A41AB24DDF002632DC /* GothamRounded-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Light.ttf"; path = "Swipes/Ressources/Font/GothamRounded-Light.ttf"; sourceTree = SOURCE_ROOT; };
+		DA09B0A51AB24DDF002632DC /* GothamRounded-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Medium.ttf"; path = "Swipes/Ressources/Font/GothamRounded-Medium.ttf"; sourceTree = SOURCE_ROOT; };
+		DA09B0A61AB24DDF002632DC /* swipes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = swipes.ttf; path = Swipes/Ressources/Font/swipes.ttf; sourceTree = SOURCE_ROOT; };
 		DA09DD781A6E636B00E66E97 /* GmailThreadProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GmailThreadProcessor.h; sourceTree = "<group>"; };
 		DA09DD791A6E636B00E66E97 /* GmailThreadProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GmailThreadProcessor.m; sourceTree = "<group>"; };
 		DA09DD851A71071E00E66E97 /* GmailAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailAuthViewController.h; path = Integrations/GmailAuthViewController.h; sourceTree = "<group>"; };
@@ -1414,8 +1428,6 @@
 		A703B1641838EBF20047DCC9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A708BED41A14B25600C7E15A /* KPTopClock.h */,
-				A708BED51A14B25600C7E15A /* KPTopClock.m */,
 				A708BED31A14B21800C7E15A /* KPTopClock */,
 				A795D57E1A10AF2800195DDA /* AwesomeMenu */,
 				A798DCCB19E523A200386C80 /* TopMenus */,
@@ -1568,6 +1580,8 @@
 		A708BED31A14B21800C7E15A /* KPTopClock */ = {
 			isa = PBXGroup;
 			children = (
+				A708BED41A14B25600C7E15A /* KPTopClock.h */,
+				A708BED51A14B25600C7E15A /* KPTopClock.m */,
 			);
 			name = KPTopClock;
 			sourceTree = "<group>";
@@ -2429,6 +2443,26 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		DA09B0A01AB24D9D002632DC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DA09B0A11AB24DAA002632DC /* Fonts */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		DA09B0A11AB24DAA002632DC /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				DA09B0A21AB24DDF002632DC /* GothamRounded-Bold.ttf */,
+				DA09B0A31AB24DDF002632DC /* GothamRounded-Book.ttf */,
+				DA09B0A41AB24DDF002632DC /* GothamRounded-Light.ttf */,
+				DA09B0A51AB24DDF002632DC /* GothamRounded-Medium.ttf */,
+				DA09B0A61AB24DDF002632DC /* swipes.ttf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		DA1194C31A4F3C4200C1E770 /* Generated */ = {
 			isa = PBXGroup;
 			children = (
@@ -2685,6 +2719,7 @@
 				DAE4D5F61AB1C473001BDC52 /* ShareViewController.h */,
 				DAE4D5F71AB1C473001BDC52 /* ShareViewController.m */,
 				DAE4D5F91AB1C473001BDC52 /* MainInterface.storyboard */,
+				DA09B0A01AB24D9D002632DC /* Resources */,
 				DAE4D5F41AB1C473001BDC52 /* Supporting Files */,
 			);
 			path = SwipesShare;
@@ -3205,6 +3240,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA09AFB61AB1CE84002632DC /* ENSDKResources.bundle in Resources */,
+				DA09B0AB1AB24DDF002632DC /* swipes.ttf in Resources */,
+				DA09B0A71AB24DDF002632DC /* GothamRounded-Bold.ttf in Resources */,
+				DA09B0AA1AB24DDF002632DC /* GothamRounded-Medium.ttf in Resources */,
+				DA09B0A81AB24DDF002632DC /* GothamRounded-Book.ttf in Resources */,
+				DA09B0A91AB24DDF002632DC /* GothamRounded-Light.ttf in Resources */,
 				DAE4D5FA1AB1C473001BDC52 /* MainInterface.storyboard in Resources */,
 				DA09AFA51AB1CE22002632DC /* GmailAuthViewController.xib in Resources */,
 			);
@@ -3671,9 +3711,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA09B0671AB228D6002632DC /* NSManagedObjectModel+MagicalRecord.m in Sources */,
+				DA09B09E1AB24127002632DC /* AudioHandler.m in Sources */,
 				DA09AFB41AB1CE65002632DC /* _KPToDo.m in Sources */,
+				DA09B09D1AB24031002632DC /* KPTagList.m in Sources */,
 				DA09AFA91AB1CE3D002632DC /* SettingsHandler.m in Sources */,
 				DA09AFAF1AB1CE5A002632DC /* KPTag.m in Sources */,
+				DA09B09F1AB2418B002632DC /* SlowHighlightIcon.m in Sources */,
 				DA09AF9B1AB1CDE9002632DC /* EvernoteToDoProcessor.m in Sources */,
 				DA09B03F1AB228D6002632DC /* NSManagedObject+MagicalFinders.m in Sources */,
 				DA09AFB71AB1CE8A002632DC /* Vero.m in Sources */,
@@ -3705,6 +3748,7 @@
 				DA09B01C1AB228D6002632DC /* NSEntityDescription+MagicalDataImport.m in Sources */,
 				DA09AF9C1AB1CDEB002632DC /* GmailThreadProcessor.m in Sources */,
 				DA09B0621AB228D6002632DC /* NSManagedObjectContext+MagicalThreading.m in Sources */,
+				DA09B0AC1AB25408002632DC /* UIColor+Utilities.m in Sources */,
 				DA09AFA11AB1CDFB002632DC /* SyncQueue.m in Sources */,
 				DA09AFA31AB1CE0B002632DC /* GmailIntegration.m in Sources */,
 				DA09AFA01AB1CDFB002632DC /* EvernoteSyncHandler.m in Sources */,

@@ -15,6 +15,9 @@
 #define DATE_COMPONENTS (NSEraCalendarUnit | NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit)
 #define CURRENT_CALENDAR [NSCalendar currentCalendar]
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 @implementation NSDate (Utilities)
 +(NSDate *)dateThisOrTheNextDayWithHours:(NSInteger)hours minutes:(NSInteger)minutes{
     NSDate *today = [NSDate date];
@@ -494,3 +497,5 @@
 	return components.year;
 }
 @end
+
+#pragma clang diagnostic pop
