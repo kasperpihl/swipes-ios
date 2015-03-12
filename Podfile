@@ -49,6 +49,16 @@ target :SwipesToday do
     pod 'GoogleAnalytics-iOS-SDK'
 end
 
+target :SwipesShare do
+    pod 'Parse', :inhibit_warnings => true
+    pod 'ParseFacebookUtils'
+    pod 'Reachability'
+    pod 'Underscore.m'
+    pod 'Base64'
+    pod 'Intercom'
+    pod 'GoogleAnalytics-iOS-SDK'
+end
+
 #link_with 'Swipes', 'Swipes_iOS8', 'SwipesKit'
 #link_with 'Swipes', 'SwipesKit'
 

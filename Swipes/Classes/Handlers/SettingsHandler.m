@@ -310,7 +310,9 @@ static SettingsHandler *sharedObject;
         if([syncedSettings containsObject:@(setting)]){
             if (self.settingTimer && self.settingTimer.isValid)
                 [self.settingTimer invalidate];
+#ifndef APPLE_WATCH
             self.settingTimer = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(sendSettingsToServer) userInfo:nil repeats:NO];
+#endif
         }
     }
 }

@@ -5,8 +5,9 @@
 //  Created by James Lamont on 16/04/13.
 //  Copyright (c) 2013 James Lamont. All rights reserved.
 //
-typedef void (^VeroBlock)(id result, NSError *error);
 #import <Foundation/Foundation.h>
+
+typedef void (^VeroBlock)(id result, NSError *error);
 
 @interface Vero : NSObject
 +(Vero*)shared;

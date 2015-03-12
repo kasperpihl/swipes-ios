@@ -7,6 +7,9 @@
 //
 
 @import MobileCoreServices;
+#import <Parse/Parse.h>
+#import "KPToDo.h"
+#import "KPAttachment.h"
 #import "ShareViewController.h"
 
 @interface ShareViewController ()
@@ -27,6 +30,10 @@
 {
     [super viewDidLoad];
     
+    [Parse setApplicationId:@"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
+                  clientKey:@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"];
+    [Global initCoreData];
+
     [self.textField becomeFirstResponder];
     
     NSExtensionItem* item = [self.extensionContext.inputItems.firstObject copy];
@@ -57,9 +64,11 @@
     NSExtensionItem* item = self.extensionContext.inputItems.firstObject;
     //    NSLog(@"title: %@", item.attributedTitle.string);
     //    NSLog(@"content: %@", item.attributedContentText.string);
+
+    NSString* text = (self.textField.text.length == 0) ? item.attributedContentText.string : self.textField.text;
+    [self createTodoWithText:text];
     
-    
-    NSLog(@"title: %@", (self.textField.text.length == 0) ? item.attributedContentText.string : self.textField.text);
+    NSLog(@"title: %@", text);
     if (_url)
         NSLog(@"url: %@", [_url absoluteString]);
     
@@ -74,6 +83,16 @@
 - (NSArray *)configurationItems {
     // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
     return @[];
+}
+
+- (void)createTodoWithText:(NSString *)text
+{
+    KPToDo* todo = [KPToDo addItem:text priority:NO tags:nil save:YES from:@"Share extension"];
+    if (_url) {
+        KPAttachment* attachment = [KPAttachment attachmentForService:URL_SERVICE title:[_url absoluteString] identifier:[_url absoluteString] sync:YES];
+        [todo addAttachmentsObject:attachment];
+    }
+    [KPToDo saveToSync];
 }
 
 @end

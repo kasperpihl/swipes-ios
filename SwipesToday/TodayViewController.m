@@ -53,7 +53,6 @@
     UTILITY.rootViewController = self;
     
     
-    //[Global initCoreData];
     [Global initCoreData];
     // Do any additional setup after loading the view from its nib.
     _tableView.backgroundColor = [UIColor clearColor];
@@ -368,10 +367,5 @@
     [self updateContentSize];
     //[self reloadDataSource];
 }
-
-//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-//{
-//
-//}
 
 @end
