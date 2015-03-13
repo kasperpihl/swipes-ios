@@ -863,6 +863,21 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self pressedGmail:attachmentView];
 }
 
+- (void)openInNonMailbox:(AttachmentEditView*)attachmentView
+{
+    if ([GlobalApp isCloudMagicInstalled]) {
+        NSString* urlString = [NSString stringWithFormat:@"cloudmagic://open?account_name=%@&thread_id=%@", [kGmInt NSStringToEmail:attachmentView.identifier], [kGmInt NSStringToThreadId:attachmentView.identifier]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+    }
+    else if ([GlobalApp isGoogleMailInstalled]) {
+        NSString* urlString = [NSString stringWithFormat:@"googlegmail:///cv=%@/accountId=1&create-new-tab", [kGmInt NSStringToThreadId:attachmentView.identifier]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+    }
+    else {
+        [UTILITY alertWithTitle:LOCALIZE_STRING(@"No supported email client installed") andMessage:LOCALIZE_STRING(@"Please install Gmail, CloudMagic or Mailbox from the App Store!")];
+    }
+}
+
 - (void)pressedGmail:(AttachmentEditView*)attachmentView {
     
     if (kGmInt.isUsingMailbox) {
@@ -870,17 +885,11 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"dbx-mailbox://"]];
         }
         else {
-            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Mailbox not installed") andMessage:LOCALIZE_STRING(@"Please install Mailbox from App Store!")];
+            [self openInNonMailbox:attachmentView];
         }
     }
     else {
-        if ([GlobalApp isGoogleMailInstalled]) {
-            NSString* urlString = [NSString stringWithFormat:@"googlegmail:///cv=%@/accountId=1&create-new-tab", [kGmInt NSStringToThreadId:attachmentView.identifier]];
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
-        }
-        else {
-            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Gmail not installed") andMessage:LOCALIZE_STRING(@"Please install Gmail from App Store!")];
-        }
+        [self openInNonMailbox:attachmentView];
     }
 }
 
