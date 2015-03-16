@@ -15,6 +15,7 @@
 + (BOOL)isEvernoteInstalled;
 + (BOOL)isMailboxInstalled;
 + (BOOL)isGoogleMailInstalled;
++ (BOOL)isCloudMagicInstalled;
 + (instancetype)sharedInstance;
 
 + (CGFloat)statusBarHeight;

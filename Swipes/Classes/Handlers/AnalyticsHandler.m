@@ -296,6 +296,14 @@ static AnalyticsHandler *sharedObject;
         [customIntercomAttributes setObject:isMailboxInstalled forKey:@"mailbox_installed"];
     }
     
+    NSString *currentPlatform = [currentValues objectForKey:@"platform"];
+    NSString *platform = @"iOS";
+    if(![currentPlatform isEqualToString:platform]){
+        gaUpdate = YES;
+        [tracker set:[GAIFields customDimensionForIndex:7] value:platform];
+        [gaCustomBuilder set:platform forKey:[GAIFields customDimensionForIndex:7]];
+    }
+    
 
     if(gaUpdate){
         [tracker send:[gaCustomBuilder build]];
