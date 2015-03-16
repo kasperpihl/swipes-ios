@@ -49,6 +49,7 @@
     self.tagList.selectedTagBackgroundColor = tcolorF(BackgroundColor, ThemeDark);
     self.tagList.selectedTagTitleColor = tcolorF(TextColor, ThemeDark);
     self.tagList.selectedTagBorderColor = tcolorF(TextColor, ThemeLight);
+    self.tagList.spacing = 2;
     [self.tagList setTags:[KPTag allTagsAsStrings] andSelectedTags:@[]];
     self.scrollView.contentSize = CGSizeMake(self.tagList.frame.size.width, self.tagList.frame.size.height);
     
@@ -68,37 +69,18 @@
     }
 }
 
-
-- (BOOL)isContentValid {
-    // Do validation of contentText and/or NSExtensionContext attachments here
-    return YES;
-}
-
-- (IBAction)didSelectPost:(id)sender {
-    // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
-    
-    NSExtensionItem* item = self.extensionContext.inputItems.firstObject;
-    //    NSLog(@"title: %@", item.attributedTitle.string);
-    //    NSLog(@"content: %@", item.attributedContentText.string);
-
-    NSString* text = (self.textField.text.length == 0) ? item.attributedContentText.string : self.textField.text;
-    [self createTodoWithText:text];
-    
-    NSLog(@"title: %@", text);
-    if (_url)
-        NSLog(@"url: %@", [_url absoluteString]);
-    
-    [self.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
+- (IBAction)didSelectPost:(id)sender
+{
+    NSString* text = self.textField.text;
+    if (0 < text.length) {
+        [self createTodoWithText:text];
+        [self.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
+    }
 }
 
 - (IBAction)didCancel:(id)sender
 {
     [self.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
-}
-
-- (NSArray *)configurationItems {
-    // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
-    return @[];
 }
 
 - (void)createTodoWithText:(NSString *)text
