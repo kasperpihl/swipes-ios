@@ -4,43 +4,54 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <mutableArray key="swipes.ttf">
-            <string>swipes</string>
-        </mutableArray>
-    </customFonts>
     <scenes>
         <!--Today Interface Controller-->
         <scene sceneID="nb6-GJ-4CV">
             <objects>
                 <controller id="WHq-iy-Tkd" customClass="TodayInterfaceController">
                     <items>
-                        <table alignment="left" id="3dt-00-epq">
+                        <group width="1" height="1" alignment="left" contentMode="scaleAspectFill" layout="vertical" radius="0.0" id="Tzr-vo-j6m">
                             <items>
-                                <tableRow identifier="SWATodoCell" id="v5V-TE-Ooo" customClass="SWATodoCell">
-                                    <group key="rootItem" width="1" height="0.0" alignment="left" radius="0.0" id="DIF-hI-qaJ">
-                                        <items>
-                                            <label width="1" alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="9hb-dn-s4h"/>
-                                        </items>
-                                        <connections>
-                                            <segue destination="U58-tQ-Xcj" kind="push" id="5oo-O6-1KN"/>
-                                        </connections>
-                                    </group>
-                                    <connections>
-                                        <outlet property="label" destination="9hb-dn-s4h" id="efj-FZ-uh8"/>
-                                    </connections>
-                                </tableRow>
+                                <table alignment="left" id="3dt-00-epq">
+                                    <items>
+                                        <tableRow identifier="SWATodoCell" id="v5V-TE-Ooo" customClass="SWATodoCell">
+                                            <group key="rootItem" width="1" height="0.0" alignment="left" id="DIF-hI-qaJ">
+                                                <items>
+                                                    <label width="1" alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="9hb-dn-s4h"/>
+                                                </items>
+                                                <edgeInsets key="margins" left="8" right="8" top="8" bottom="8"/>
+                                                <connections>
+                                                    <segue destination="U58-tQ-Xcj" kind="push" id="5oo-O6-1KN"/>
+                                                </connections>
+                                            </group>
+                                            <connections>
+                                                <outlet property="group" destination="DIF-hI-qaJ" id="qcq-rx-0eg"/>
+                                                <outlet property="label" destination="9hb-dn-s4h" id="efj-FZ-uh8"/>
+                                            </connections>
+                                        </tableRow>
+                                    </items>
+                                </table>
+                                <imageView alignment="left" image="alldone-transparent" id="i54-Lj-5qO"/>
+                                <group width="1" alignment="left" radius="9" id="4zR-Tv-GgF">
+                                    <items>
+                                        <button width="1" height="36" alignment="left" title="Refresh" id="Gyb-1F-vO9">
+                                            <color key="backgroundColor" red="0.84705882352941175" green="0.63137254901960782" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
+                                            <fontDescription key="font" type="system" weight="semibold" pointSize="15"/>
+                                            <connections>
+                                                <action selector="onRefreshButton:" destination="WHq-iy-Tkd" id="p1L-ZT-XUo"/>
+                                            </connections>
+                                        </button>
+                                    </items>
+                                    <edgeInsets key="margins" left="14" right="14" top="0.0" bottom="0.0"/>
+                                </group>
                             </items>
-                        </table>
-                        <label width="1" alignment="left" text="No tasks for today" textAlignment="center" numberOfLines="0" id="oNB-cM-KZP"/>
-                        <button width="1" alignment="left" title="Refresh" id="Gyb-1F-vO9">
-                            <connections>
-                                <action selector="onRefreshButton:" destination="WHq-iy-Tkd" id="p1L-ZT-XUo"/>
-                            </connections>
-                        </button>
+                            <color key="backgroundColor" red="1" green="0.75686274509803919" blue="0.027450980392156862" alpha="1" colorSpace="calibratedRGB"/>
+                            <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                        </group>
                     </items>
                     <connections>
-                        <outlet property="noDataLabel" destination="oNB-cM-KZP" id="AIU-xZ-1KY"/>
+                        <outlet property="group" destination="Tzr-vo-j6m" id="Zhm-xd-W2m"/>
+                        <outlet property="noDataImage" destination="i54-Lj-5qO" id="o8E-CO-PTF"/>
                         <outlet property="refreshButton" destination="Gyb-1F-vO9" id="NTF-24-3WX"/>
                         <outlet property="table" destination="3dt-00-epq" id="boT-ch-amk"/>
                     </connections>
@@ -55,21 +66,44 @@
                     <items>
                         <table alignment="left" id="iHg-jP-A0N">
                             <items>
-                                <tableRow identifier="SWASubtaskCell" selectable="NO" id="zTs-N8-eqw" customClass="SWASubtaskCell">
-                                    <group key="rootItem" width="1" height="0.0" alignment="left" radius="0.0" spacing="2" id="BIi-2h-P9K">
+                                <tableRow identifier="SWADetailCell" id="lqg-L1-Pr9" customClass="SWADetailCell">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" backgroundImage="detail-shadow" layout="vertical" radius="0.0" spacing="0.0" id="AFk-G9-9Is">
                                         <items>
-                                            <button width="24" alignment="left" verticalAlignment="center" hidden="YES" id="1qi-3X-4vQ">
+                                            <label width="1" alignment="left" text="Label" textAlignment="left" numberOfLines="2" id="o4X-Ix-PQr">
+                                                <color key="textColor" red="0.10588235294117647" green="0.11764705882352941" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="font" type="system" pointSize="19"/>
+                                            </label>
+                                            <label width="1" alignment="left" text="Label" id="x4C-Yj-f7B">
+                                                <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="font" type="system" pointSize="10"/>
+                                            </label>
+                                            <label height="6" alignment="left" id="htn-ls-2N6"/>
+                                        </items>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <edgeInsets key="margins" left="4" right="4" top="8" bottom="8"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="label" destination="o4X-Ix-PQr" id="oal-Ag-auC"/>
+                                        <outlet property="tags" destination="x4C-Yj-f7B" id="ZWU-ng-VN7"/>
+                                    </connections>
+                                </tableRow>
+                                <tableRow identifier="SWASubtaskCell" selectable="NO" id="zTs-N8-eqw" customClass="SWASubtaskCell">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" radius="0.0" spacing="8" id="BIi-2h-P9K">
+                                        <items>
+                                            <button alignment="left" verticalAlignment="center" backgroundImage="action-step-white" id="1qi-3X-4vQ">
                                                 <color key="titleColor" red="1" green="0.78431372549019607" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <fontDescription key="font" name="swipes" family="swipes" pointSize="14"/>
+                                                <fontDescription key="font" type="system" pointSize="14"/>
                                                 <connections>
                                                     <action selector="onButtonTouch:" destination="zTs-N8-eqw" id="bHT-G8-CUF"/>
                                                 </connections>
                                             </button>
-                                            <label alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="q4P-u5-MyL"/>
+                                            <label alignment="left" verticalAlignment="center" id="q4P-u5-MyL">
+                                                <fontDescription key="font" type="system" pointSize="14"/>
+                                            </label>
                                         </items>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <edgeInsets key="margins" left="2" right="2" top="0.0" bottom="0.0"/>
+                                        <edgeInsets key="margins" left="8" right="8" top="8" bottom="8"/>
                                     </group>
                                     <connections>
                                         <outlet property="button" destination="1qi-3X-4vQ" id="VWO-kz-f02"/>
@@ -81,22 +115,16 @@
                     </items>
                     <menu key="menu" id="y93-ed-Nj4">
                         <items>
-                            <menuItem title="Complete" icon="accept" id="E9l-T8-4zv">
+                            <menuItem title=" Complete" image="menu-complete" id="E9l-T8-4zv">
                                 <connections>
                                     <action selector="onMarkDone:" destination="U58-tQ-Xcj" id="bm7-uk-u5f"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Schedule" icon="pause" id="vCS-3E-kp0">
+                            <menuItem title=" Schedule" image="menu-schedule" id="vCS-3E-kp0">
                                 <connections>
                                     <action selector="onSchedule:" destination="U58-tQ-Xcj" id="T4J-ul-Yy0"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Delete" icon="trash" id="b44-cR-hPc">
-                                <connections>
-                                    <action selector="onDelete:" destination="U58-tQ-Xcj" id="XQV-Q3-FdP"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Back" icon="more" id="8Vr-fD-3gJ"/>
                         </items>
                     </menu>
                     <connections>
@@ -109,26 +137,46 @@
         <!--Schedule-->
         <scene sceneID="Reb-CZ-h15">
             <objects>
-                <controller identifier="Schedule" title="Schedule" id="3fk-TB-XAy" customClass="ScheduleInterfaceController">
+                <controller identifier="Schedule" title="Schedule" backgroundImage="scheduler" contentMode="center" id="3fk-TB-XAy" customClass="ScheduleInterfaceController">
                     <items>
-                        <table alignment="left" id="9OY-oE-qjl">
+                        <group width="1" height="1" alignment="left" layout="vertical" id="2b3-w3-pq0">
                             <items>
-                                <tableRow identifier="SWAScheduleCell" id="rcH-dv-PbS" customClass="SWAScheduleCell">
-                                    <group key="rootItem" width="1" alignment="left" id="gQm-2y-QZW">
-                                        <items>
-                                            <label alignment="left" id="x8e-K2-Wt9"/>
-                                        </items>
-                                    </group>
+                                <button width="0.5" height="0.33000000000000002" alignment="center" id="0HQ-Yz-zlj">
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <connections>
-                                        <outlet property="label" destination="x8e-K2-Wt9" id="6pW-Ep-sdc"/>
+                                        <action selector="onLaterToday:" destination="3fk-TB-XAy" id="caz-ZT-yin"/>
                                     </connections>
-                                </tableRow>
+                                </button>
+                                <group width="1" height="0.34000000000000002" alignment="left" id="2gb-kC-CYR">
+                                    <items>
+                                        <button width="0.40000000000000002" alignment="left" id="zyf-uR-IFM">
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <connections>
+                                                <action selector="onTomorrow:" destination="3fk-TB-XAy" id="XGg-MX-AzO"/>
+                                            </connections>
+                                        </button>
+                                        <button width="0.20000000000000001" alignment="left" id="0om-wv-69n">
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </button>
+                                        <button width="0.40000000000000002" alignment="left" id="DJQ-6x-oAF">
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <connections>
+                                                <action selector="onIn2Days:" destination="3fk-TB-XAy" id="eob-61-a9L"/>
+                                            </connections>
+                                        </button>
+                                    </items>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </group>
+                                <button width="0.5" height="0.33000000000000002" alignment="center" id="7Fe-Dw-vuh">
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <connections>
+                                        <action selector="onButtonThisWeekend:" destination="3fk-TB-XAy" id="ax8-56-yQV"/>
+                                    </connections>
+                                </button>
                             </items>
-                        </table>
+                        </group>
                     </items>
-                    <connections>
-                        <outlet property="table" destination="9OY-oE-qjl" id="ln9-cc-0TP"/>
-                    </connections>
+                    <color key="backgroundColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </controller>
             </objects>
             <point key="canvasLocation" x="662" y="340"/>
@@ -163,9 +211,12 @@
             <objects>
                 <notificationController id="YCC-NB-fut">
                     <items>
-                        <label alignment="left" text="Alert Label" id="XkS-y5-khE"/>
+                        <label alignment="left" text="Alert Label" textAlignment="left" numberOfLines="0" id="XkS-y5-khE">
+                            <color key="textColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </label>
                     </items>
                     <notificationCategory key="notificationCategory" id="JfB-70-Muf"/>
+                    <color key="backgroundColor" red="1" green="0.75686274509999996" blue="0.027450980390000001" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
                         <outlet property="notificationAlertLabel" destination="XkS-y5-khE" id="49B-RR-99y"/>
                         <segue destination="gdX-wl-uQE" kind="relationship" relationship="dynamicNotificationInterface" id="fKh-qV-3T2"/>
@@ -177,9 +228,12 @@
         <!--Notification Controller-->
         <scene sceneID="KIl-fV-djm">
             <objects>
-                <controller id="gdX-wl-uQE" customClass="NotificationController"/>
+                <controller id="gdX-wl-uQE" customClass="NotificationController">
+                    <color key="backgroundColor" red="1" green="0.75686274509999996" blue="0.027450980390000001" alpha="1" colorSpace="calibratedRGB"/>
+                </controller>
             </objects>
             <point key="canvasLocation" x="553" y="1001"/>
         </scene>
     </scenes>
+    <color key="tintColor" red="1" green="0.75686274509803919" blue="0.027450980392156862" alpha="1" colorSpace="calibratedRGB"/>
 </document>

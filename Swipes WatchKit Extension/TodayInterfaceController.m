@@ -16,8 +16,9 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 @interface TodayInterfaceController()
 
 @property (nonatomic, weak) IBOutlet WKInterfaceTable* table;
-@property (nonatomic, weak) IBOutlet WKInterfaceLabel* noDataLabel;
 @property (nonatomic, weak) IBOutlet WKInterfaceButton* refreshButton;
+@property (nonatomic, weak) IBOutlet WKInterfaceImage* noDataImage;
+@property (nonatomic, weak) IBOutlet WKInterfaceGroup* group;
 
 @property (nonatomic, readonly, strong) NSArray* todos;
 
@@ -55,13 +56,17 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 
 - (void)fillData
 {
-    [self.noDataLabel setHidden:_todos.count > 0];
-    [self.refreshButton setHidden:_todos.count > 0];
+    BOOL hasTodos = _todos.count > 0;
+    [self.noDataImage setHidden:hasTodos];
+    [self.refreshButton setHidden:hasTodos];
+    [self.group setBackgroundColor:hasTodos ? [UIColor blackColor] : TASKS_COLOR];
     [self.table setNumberOfRows:_todos.count withRowType:ROW_TYPE_NAME];
     for (NSUInteger i = 0; i < _todos.count; i++) {
         SWATodoCell* cell = [self.table rowControllerAtIndex:i];
         KPToDo* todo = _todos[i];
+        [cell.group setBackgroundColor:TASKS_COLOR];
         [cell.label setText:todo.title];
+        [cell.label setTextColor:TEXT_COLOR];
     }
 }
 

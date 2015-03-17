@@ -13,10 +13,10 @@
 #import "CoreData/KPTag.h"
 #import "CoreData/KPAttachment.h"
 #import "SWASubtaskCell.h"
+#import "SWADetailCell.h"
 #import "SWACoreDataModel.h"
 #import "TodoInterfaceController.h"
 
-static NSString* const kCellIdentifier = @"SWASubtaskCell";
 static NSString* const EVERNOTE_SERVICE = @"evernote";
 static NSString* const GMAIL_SERVICE = @"gmail";
 
@@ -64,6 +64,7 @@ static NSInteger const kTotalRows = 1;
 
 - (void)reloadData
 {
+    // gather data about rows
     NSInteger totalRows = kTotalRows;
     BOOL hasTags = NO;
     if (_todo.tags.count || _todo.attachments.count) {
@@ -80,12 +81,17 @@ static NSInteger const kTotalRows = 1;
         }
     }
 
-    [self.table setNumberOfRows:totalRows withRowType:kCellIdentifier];
-    SWASubtaskCell* cell = [self.table rowControllerAtIndex:0];
-    [cell.label setText:_todo.title];
+    // create rows
+    NSMutableArray* rowTypes = @[@"SWADetailCell"].mutableCopy;
+    for (NSUInteger i = kTotalRows; i < totalRows; i++) {
+        [rowTypes addObject:@"SWASubtaskCell"];
+    }
+    [self.table setRowTypes:rowTypes];
 
+    // fill rows
+    SWADetailCell* cell = [self.table rowControllerAtIndex:0];
+    [cell.label setText:_todo.title];
     if (hasTags) {
-        cell = [self.table rowControllerAtIndex:1];
         NSMutableString* str = [[NSMutableString alloc] init];
         if (_todo.tags.count) {
             for (KPTag* tag in _todo.tags) {
@@ -112,20 +118,20 @@ static NSInteger const kTotalRows = 1;
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:str];
         UIFont *swipesFont = iconFont(10);
         [attributedString addAttribute:NSFontAttributeName value:swipesFont range:NSMakeRange(0,index)];
-        
-        [cell.label setAttributedText:attributedString];
+        [cell.tags setAttributedText:attributedString];
+    }
+    else {
+        [cell.tags setHidden:YES];
     }
 
     if (0 < subtasks.count) {
-        NSUInteger index = 2;
+        NSUInteger index = kTotalRows;
         for (KPToDo* todo in subtasks) {
-            cell = [self.table rowControllerAtIndex:index++];
-            [cell.button setHidden:NO];
-            [cell.button setTitle:@"\ue62c"];
-            cell.todo = todo;
-            cell.delegate = self;
-            //[cell.label setAttributedText:[self stringForSubtask:todo]];
-            [cell.label setText:todo.title];
+            SWASubtaskCell* subtaskCell = [self.table rowControllerAtIndex:index++];
+            //[subtaskCell.button setTitle:@"\ue62c"];
+            subtaskCell.todo = todo;
+            subtaskCell.delegate = self;
+            [subtaskCell.label setText:todo.title];
         }
     }
     

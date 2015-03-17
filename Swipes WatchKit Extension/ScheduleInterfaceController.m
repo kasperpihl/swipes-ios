@@ -31,7 +31,6 @@ typedef NS_ENUM(NSUInteger, KPScheduleButtons){
 @interface ScheduleInterfaceController ()
 
 @property (nonatomic, strong) KPToDo* todo;
-@property (nonatomic, weak) IBOutlet WKInterfaceTable* table;
 
 @end
 
@@ -41,46 +40,48 @@ typedef NS_ENUM(NSUInteger, KPScheduleButtons){
 {
     [super awakeWithContext:context];
     _todo = context;
-    [self reloadData];
 }
 
 - (void)willActivate
 {
     // This method is called when watch view controller is about to be visible to user
     [super willActivate];
-    [self reloadData];
 }
 
-- (NSString *)stringForTableRow:(KPScheduleButtons)state
+- (void)openAppForDate:(NSDate*)scheduleDate
 {
-    NSString *returnString;
-    switch (state) {
-        case KPScheduleButtonLaterToday:
-            returnString = LOCALIZE_STRING(@"Later Today");
-            break;
-        case KPScheduleButtonThisEvening:
-            returnString = LOCALIZE_STRING(@"This Evening");
-            break;
-        case KPScheduleButtonTomorrow:
-            returnString = LOCALIZE_STRING(@"Tomorrow");
-            break;
-        case KPScheduleButtonIn2Days:
-            returnString = LOCALIZE_STRING(@"In 2 Days");
-            break;
-        case KPScheduleButtonThisWeekend:
-            returnString = LOCALIZE_STRING(@"This Weekend");
-            break;
-        case KPScheduleButtonNextWeek:
-            returnString = LOCALIZE_STRING(@"Next Week");
-            break;
-        case KPScheduleButtonUnscheduled:
-            returnString = LOCALIZE_STRING(@"Unspecified");
-            break;
-        case KPScheduleButtonCancel:
-            returnString = LOCALIZE_STRING(@"Cancel");
-            break;
-    }
-    return returnString;
+    [WKInterfaceController openParentApplication:@{kKeyCmdSchedule: _todo.tempId, kKeyCmdDate: scheduleDate} reply:^(NSDictionary *replyInfo, NSError *error) {
+        if (error) {
+            [self popController];
+        }
+        else {
+            [self popToRootController];
+        }
+    }];
+}
+
+- (IBAction)onLaterToday:(id)sender
+{
+    NSDate* scheduleDate = [self dateForTableRow:KPScheduleButtonLaterToday];
+    [self openAppForDate:scheduleDate];
+}
+
+- (IBAction)onTomorrow:(id)sender
+{
+    NSDate* scheduleDate = [self dateForTableRow:KPScheduleButtonTomorrow];
+    [self openAppForDate:scheduleDate];
+}
+
+- (IBAction)onIn2Days:(id)sender
+{
+    NSDate* scheduleDate = [self dateForTableRow:KPScheduleButtonIn2Days];
+    [self openAppForDate:scheduleDate];
+}
+
+- (IBAction)onButtonThisWeekend:(id)sender
+{
+    NSDate* scheduleDate = [self dateForTableRow:KPScheduleButtonThisWeekend];
+    [self openAppForDate:scheduleDate];
 }
 
 -(NSDate*)dateForTableRow:(KPScheduleButtons)button
@@ -135,34 +136,6 @@ typedef NS_ENUM(NSUInteger, KPScheduleButtons){
             break;
     }
     return date;
-}
-
-- (void)reloadData
-{
-    [self.table setNumberOfRows:kTotalRows withRowType:kCellIdentifier];
-    for (NSInteger i = 0; i < kTotalRows; i++) {
-        SWAScheduleCell* cell = [self.table rowControllerAtIndex:i];
-        [cell.label setText:[self stringForTableRow:i]];
-    }
-}
-
-- (void)table:(WKInterfaceTable *)table didSelectRowAtIndex:(NSInteger)rowIndex
-{
-    [super table:table didSelectRowAtIndex:rowIndex];
-    if (rowIndex == KPScheduleButtonCancel) {
-        [self popController];
-    }
-    else {
-        NSDate* scheduleDate = [self dateForTableRow:rowIndex];
-        [WKInterfaceController openParentApplication:@{kKeyCmdSchedule: _todo.tempId, kKeyCmdDate: scheduleDate} reply:^(NSDictionary *replyInfo, NSError *error) {
-            if (error) {
-                [self popController];
-            }
-            else {
-                [self popToRootController];
-            }
-        }];
-    }
 }
 
 @end
