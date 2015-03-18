@@ -147,6 +147,23 @@ static NSString* const DATABASE_FOLDER = @"database";
     return [self.managedObjectContext executeFetchRequest:request error:error];
 }
 
+- (KPToDo *)loadTodoWithTempId:(NSString *)tempId error:(NSError **)error
+{
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(tempId = %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", tempId];
+    [request setPredicate:predicate];
+    [request setFetchLimit:1];
+    
+    NSArray* results = [self.managedObjectContext executeFetchRequest:request error:error];
+    if (results && 1 <= results.count) {
+        return results[0];
+    }
+    return nil;
+}
+
 - (void)deleteObject:(id)object
 {
     [self.managedObjectContext deleteObject:object];

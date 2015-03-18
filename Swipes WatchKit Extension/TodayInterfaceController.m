@@ -5,6 +5,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
+#import "SWADefinitions.h"
 #import "TodayInterfaceController.h"
 #import "CoreData/KPToDo.h"
 #import "SWACoreDataModel.h"
@@ -27,12 +28,6 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 
 @implementation TodayInterfaceController
 
-- (void)awakeWithContext:(id)context
-{
-    [super awakeWithContext:context];
-//    [self reloadData];
-}
-
 - (void)willActivate
 {
     // This method is called when watch view controller is about to be visible to user
@@ -44,6 +39,20 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 {
     // This method is called when watch view controller is no longer visible
     [super didDeactivate];
+}
+
+- (void)handleUserActivity:(NSDictionary *)userInfo
+{
+    DLog(@"user info: %@", userInfo);
+    NSString* tempId = userInfo[kKeyCmdGlance];
+    if (tempId) {
+        NSError* error;
+        KPToDo* todo = [[SWACoreDataModel sharedInstance] loadTodoWithTempId:tempId error:&error];
+        DLog(@"found todo: %@", todo);
+        if (todo) {
+            [self pushControllerWithName:@"details" context:tempId];
+        }
+    }
 }
 
 - (void)reloadData

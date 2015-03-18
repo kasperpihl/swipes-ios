@@ -19,6 +19,7 @@
 
 - (void)saveContext;
 - (NSArray *)loadTodosWithError:(NSError **)error oneResult:(BOOL)oneResult;
+- (KPToDo *)loadTodoWithTempId:(NSString *)tempId error:(NSError **)error;
 - (void)deleteObject:(id)object;
 - (KPToDo *)newToDo;
 

@@ -36,7 +36,13 @@ static NSInteger const kTotalRows = 1;
 - (void)awakeWithContext:(id)context
 {
     [super awakeWithContext:context];
-    _todo = context;
+    if ([context isKindOfClass:KPToDo.class])
+        _todo = context;
+    else {
+        NSError* error;
+        _todo = [[SWACoreDataModel sharedInstance] loadTodoWithTempId:context error:&error];
+    }
+    DLog(@"TODO is: %@", _todo);
     [self reloadData];
 }
 
@@ -52,16 +58,16 @@ static NSInteger const kTotalRows = 1;
     [super didDeactivate];
 }
 
-- (NSAttributedString *)stringForSubtask:(KPToDo *)todo
-{
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"\ue654 %@", todo.title]];
-    UIFont* swipesFont = iconFont(10);
-    UIColor* cyrcleColor = todo.completionDate ? DONE_COLOR : TASKS_COLOR;
-    [attributedString addAttribute:NSFontAttributeName value:swipesFont range:NSMakeRange(0, 1)];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:cyrcleColor range:NSMakeRange(0,1)];
-    return attributedString;
-}
-
+//- (NSAttributedString *)stringForSubtask:(KPToDo *)todo
+//{
+//    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"\ue654 %@", todo.title]];
+//    UIFont* swipesFont = iconFont(10);
+//    UIColor* cyrcleColor = todo.completionDate ? DONE_COLOR : TASKS_COLOR;
+//    [attributedString addAttribute:NSFontAttributeName value:swipesFont range:NSMakeRange(0, 1)];
+//    [attributedString addAttribute:NSForegroundColorAttributeName value:cyrcleColor range:NSMakeRange(0,1)];
+//    return attributedString;
+//}
+//
 - (void)reloadData
 {
     // gather data about rows
@@ -69,7 +75,6 @@ static NSInteger const kTotalRows = 1;
     BOOL hasTags = NO;
     if (_todo.tags.count || _todo.attachments.count) {
         hasTags = YES;
-        totalRows++;
     }
     NSArray* subtasks;
     if (0 < _todo.subtasks.count) {
@@ -100,12 +105,14 @@ static NSInteger const kTotalRows = 1;
                 }
                 [str appendString:tag.title];
             }
-            [str insertString:@"\ue60b " atIndex:0];
+        }
+        else {
+            [str appendString:LOCALIZE_STRING(@" (no tags)")];
         }
         NSUInteger index = 0;
         for (KPAttachment* attachment in _todo.attachments) {
             if ([attachment.service isEqualToString:EVERNOTE_SERVICE]) {
-                [str insertString:@"\ue65c" atIndex:index++];
+                [str insertString:@"\ue64d" atIndex:index++];
             }
             else if ([attachment.service isEqualToString:GMAIL_SERVICE]) {
                 [str insertString:@"\ue606" atIndex:index++];
@@ -147,16 +154,16 @@ static NSInteger const kTotalRows = 1;
     }];
 }
 
-- (IBAction)onDelete:(id)sender
-{
-    [WKInterfaceController openParentApplication:@{kKeyCmdDelete: _todo.tempId} reply:^(NSDictionary *replyInfo, NSError *error) {
-        if (error) {
-            
-        }
-        [self popController];
-    }];
-}
-
+//- (IBAction)onDelete:(id)sender
+//{
+//    [WKInterfaceController openParentApplication:@{kKeyCmdDelete: _todo.tempId} reply:^(NSDictionary *replyInfo, NSError *error) {
+//        if (error) {
+//            
+//        }
+//        [self popController];
+//    }];
+//}
+//
 - (IBAction)onSchedule:(id)sender
 {
     [self pushControllerWithName:@"Schedule" context:_todo];

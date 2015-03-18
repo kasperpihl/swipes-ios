@@ -12,6 +12,7 @@
 #define kKeyCmdDelete @"delete"
 #define kKeyCmdComplete @"complete"
 #define kKeyCmdSchedule @"schedule"
+#define kKeyCmdGlance @"glance"
 #define kKeyCmdDate @"date"
 #define kKeyCmdError @"error"
 

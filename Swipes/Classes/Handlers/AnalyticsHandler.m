@@ -9,7 +9,6 @@
 #import "AnalyticsHandler.h"
 #import "NSDate-Utilities.h"
 #import <Parse/PFUser.h>
-//#import <Leanplum/Leanplum.h>
 #import "Vero.h"
 #import "UtilityClass.h"
 #import "KPToDo.h"
@@ -111,12 +110,10 @@ static AnalyticsHandler *sharedObject;
 
 -(void)checkForUpdatesOnIdentity{
     
-    id tracker = [[GAI sharedInstance] defaultTracker];
+/*    id tracker = [[GAI sharedInstance] defaultTracker];
     
-    NSMutableDictionary *currentValues = [[USER_DEFAULTS objectForKey:@"identityValues"] mutableCopy];
-    if(!currentValues){
-        currentValues = [NSMutableDictionary dictionary];
-    }
+    NSDictionary* identityValues = [USER_DEFAULTS objectForKey:@"identityValues"];
+    NSMutableDictionary *currentValues = identityValues ? [identityValues mutableCopy] : [NSMutableDictionary dictionary];
     
     __block BOOL shouldUpdate = NO;
     BOOL gaUpdate = NO;
@@ -329,7 +326,7 @@ static AnalyticsHandler *sharedObject;
         }
     }
     
-    
+*/    
     // Update Google Analytics Custom
 }
 
