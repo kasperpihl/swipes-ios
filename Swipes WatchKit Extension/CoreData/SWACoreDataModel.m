@@ -164,6 +164,43 @@ static NSString* const DATABASE_FOLDER = @"database";
     return nil;
 }
 
+- (KPToDo *)loadScheduledTodoWithError:(NSError **)error
+{
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
+    
+    // check specified
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSDate *startDate = [NSDate date];
+    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", startDate];
+    
+    [request setPredicate:schedulePredicate];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"schedule" ascending:YES];
+    [request setSortDescriptors:@[sortDescriptor]];
+    [request setFetchLimit:1];
+    
+    NSArray* results = [self.managedObjectContext executeFetchRequest:request error:error];
+    if (results && 1 <= results.count) {
+        return results[0];
+    }
+    
+    // check unspecified
+    request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    NSPredicate *unspecifiedPredicate = [NSPredicate predicateWithFormat:@"(schedule = nil AND completionDate = nil) AND parent = nil AND isLocallyDeleted <> YES"];
+    
+    [request setPredicate:unspecifiedPredicate];
+    [request setFetchLimit:1];
+    
+    results = [self.managedObjectContext executeFetchRequest:request error:error];
+    if (results && 1 <= results.count) {
+        return results[0];
+    }
+    
+    return nil;
+}
+
 - (void)deleteObject:(id)object
 {
     [self.managedObjectContext deleteObject:object];
