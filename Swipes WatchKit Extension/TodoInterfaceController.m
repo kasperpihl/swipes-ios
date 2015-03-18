@@ -27,6 +27,7 @@ static NSInteger const kTotalRows = 1;
 @property (nonatomic, strong) KPToDo* todo;
 
 @property (nonatomic, weak) IBOutlet WKInterfaceTable* table;
+@property (nonatomic, strong) NSMutableSet* todosToCheck;
 
 @end
 
@@ -43,6 +44,7 @@ static NSInteger const kTotalRows = 1;
         _todo = [[SWACoreDataModel sharedInstance] loadTodoWithTempId:context error:&error];
     }
     DLog(@"TODO is: %@", _todo);
+    _todosToCheck = [NSMutableSet set];
     [self reloadData];
 }
 
@@ -56,6 +58,14 @@ static NSInteger const kTotalRows = 1;
 {
     // This method is called when watch view controller is no longer visible
     [super didDeactivate];
+    if (0 < _todosToCheck.count) {
+        NSDictionary* data = @{kKeyCmdComplete: [_todosToCheck allObjects]};
+        [WKInterfaceController openParentApplication:data reply:^(NSDictionary *replyInfo, NSError *error) {
+            if (error) {
+                DLog(@"Error didDeactivate %@", error);
+            }
+        }];
+    }
 }
 
 //- (NSAttributedString *)stringForSubtask:(KPToDo *)todo
@@ -97,7 +107,7 @@ static NSInteger const kTotalRows = 1;
     SWADetailCell* cell = [self.table rowControllerAtIndex:0];
     [cell.label setText:_todo.title];
     if (hasTags) {
-        NSMutableString* str = [[NSMutableString alloc] init];
+        NSMutableString* str = [[NSMutableString alloc] initWithString:@" "];
         if (_todo.tags.count) {
             for (KPTag* tag in _todo.tags) {
                 if (str.length) {
@@ -107,7 +117,7 @@ static NSInteger const kTotalRows = 1;
             }
         }
         else {
-            [str appendString:LOCALIZE_STRING(@" (no tags)")];
+            [str appendString:LOCALIZE_STRING(@"(no tags)")];
         }
         NSUInteger index = 0;
         for (KPAttachment* attachment in _todo.attachments) {
@@ -148,7 +158,7 @@ static NSInteger const kTotalRows = 1;
 {
     [WKInterfaceController openParentApplication:@{kKeyCmdComplete: _todo.tempId} reply:^(NSDictionary *replyInfo, NSError *error) {
         if (error) {
-            
+            DLog(@"Error onMarkDone %@", error);
         }
         [self popController];
     }];
@@ -169,15 +179,14 @@ static NSInteger const kTotalRows = 1;
     [self pushControllerWithName:@"Schedule" context:_todo];
 }
 
-- (void)onCompleteButtonTouch:(KPToDo *)todo
+- (void)onCompleteButtonTouch:(KPToDo *)todo checked:(BOOL)checked
 {
-    NSDictionary* data = @{kKeyCmdComplete: todo.tempId};
-    [WKInterfaceController openParentApplication:data reply:^(NSDictionary *replyInfo, NSError *error) {
-        if (error) {
-            
-        }
-        [self popController];
-    }];
+    if (checked) {
+        [_todosToCheck addObject:todo.tempId];
+    }
+    else {
+        [_todosToCheck removeObject:todo.tempId];
+    }
 }
 
 @end

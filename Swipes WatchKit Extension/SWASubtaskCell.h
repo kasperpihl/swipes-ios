@@ -12,7 +12,7 @@
 
 @protocol SWASubtaskCellDelegate <NSObject>
 
-- (void)onCompleteButtonTouch:(KPToDo *)todo;
+- (void)onCompleteButtonTouch:(KPToDo *)todo checked:(BOOL)checked;
 
 @end
 
@@ -22,5 +22,6 @@
 @property (nonatomic, weak) IBOutlet WKInterfaceButton* button;
 @property (nonatomic, weak) id<SWASubtaskCellDelegate> delegate;
 @property (nonatomic, strong) KPToDo* todo;
+@property (nonatomic, readonly, assign) BOOL checked;
 
 @end
