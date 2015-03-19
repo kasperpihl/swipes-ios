@@ -12,13 +12,11 @@
 #import "CoreData/KPToDo.h"
 #import "CoreData/KPTag.h"
 #import "CoreData/KPAttachment.h"
+#import "SWAUtility.h"
 #import "SWASubtaskCell.h"
 #import "SWADetailCell.h"
 #import "SWACoreDataModel.h"
 #import "TodoInterfaceController.h"
-
-static NSString* const EVERNOTE_SERVICE = @"evernote";
-static NSString* const GMAIL_SERVICE = @"gmail";
 
 static NSInteger const kTotalRows = 1;
 
@@ -128,8 +126,6 @@ static NSInteger const kTotalRows = 1;
                 [str insertString:@"\ue606" atIndex:index++];
             }
         }
-        if (_todo.tags.count)
-            index++; // this is the tag symbol
         
         // set attributes
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:str];

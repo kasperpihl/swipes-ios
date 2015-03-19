@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString* const EVERNOTE_SERVICE;
+extern NSString* const GMAIL_SERVICE;
+
 @interface SWAUtility : NSObject
 
 +(NSString *)readableTime:(NSDate*)time;

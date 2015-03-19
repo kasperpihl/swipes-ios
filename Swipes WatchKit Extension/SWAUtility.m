@@ -10,6 +10,9 @@
 #import "NSDate-Utilities.h"
 #import "SWAUtility.h"
 
+NSString* const EVERNOTE_SERVICE = @"evernote";
+NSString* const GMAIL_SERVICE = @"gmail";
+
 @implementation SWAUtility
 
 +(NSString*)timeStringForDate:(NSDate*)date{

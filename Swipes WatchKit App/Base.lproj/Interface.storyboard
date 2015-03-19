@@ -66,7 +66,7 @@
                     <items>
                         <table alignment="left" id="iHg-jP-A0N">
                             <items>
-                                <tableRow identifier="SWADetailCell" id="lqg-L1-Pr9" customClass="SWADetailCell">
+                                <tableRow identifier="SWADetailCell" selectable="NO" id="lqg-L1-Pr9" customClass="SWADetailCell">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" backgroundImage="detail-shadow" layout="vertical" radius="0.0" spacing="0.0" id="AFk-G9-9Is">
                                         <items>
                                             <label width="1" alignment="left" text="Label" textAlignment="left" numberOfLines="2" id="o4X-Ix-PQr">
@@ -147,7 +147,7 @@
                                         <action selector="onLaterToday:" destination="3fk-TB-XAy" id="caz-ZT-yin"/>
                                     </connections>
                                 </button>
-                                <group width="1" height="0.34000000000000002" alignment="left" id="2gb-kC-CYR">
+                                <group width="134" height="0.34000000000000002" alignment="left" id="2gb-kC-CYR">
                                     <items>
                                         <button width="0.40000000000000002" alignment="left" id="zyf-uR-IFM">
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -258,11 +258,14 @@
                 <notificationController id="YCC-NB-fut">
                     <items>
                         <label alignment="left" text="Alert Label" textAlignment="left" numberOfLines="0" id="XkS-y5-khE">
-                            <color key="textColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </label>
                     </items>
-                    <notificationCategory key="notificationCategory" id="JfB-70-Muf"/>
-                    <color key="backgroundColor" red="1" green="0.75686274509999996" blue="0.027450980390000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <notificationCategory key="notificationCategory" id="JfB-70-Muf">
+                        <color key="titleColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="sashColor" red="1" green="0.75686274509999996" blue="0.027450980390000001" alpha="1" colorSpace="calibratedRGB"/>
+                    </notificationCategory>
+                    <color key="backgroundColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <outlet property="notificationAlertLabel" destination="XkS-y5-khE" id="49B-RR-99y"/>
                         <segue destination="gdX-wl-uQE" kind="relationship" relationship="dynamicNotificationInterface" id="fKh-qV-3T2"/>
@@ -275,7 +278,53 @@
         <scene sceneID="KIl-fV-djm">
             <objects>
                 <controller id="gdX-wl-uQE" customClass="NotificationController">
-                    <color key="backgroundColor" red="1" green="0.75686274509999996" blue="0.027450980390000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <items>
+                        <table alignment="left" id="zC2-GU-dTU">
+                            <items>
+                                <tableRow identifier="SWADetailCell" selectable="NO" id="oer-7n-0l9" customClass="SWADetailCell">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" backgroundImage="detail-shadow" layout="vertical" radius="0.0" spacing="0.0" id="OLN-KX-8g2">
+                                        <items>
+                                            <label width="1" alignment="left" text="Label" textAlignment="left" numberOfLines="2" id="gni-yC-MlP">
+                                                <color key="textColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="font" type="system" pointSize="19"/>
+                                            </label>
+                                            <label width="1" alignment="left" alpha="0.5" text="Label" id="OpZ-Or-nuY">
+                                                <color key="textColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="font" type="system" pointSize="12"/>
+                                            </label>
+                                            <label height="6" alignment="left" id="OCH-r0-TDt"/>
+                                        </items>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <edgeInsets key="margins" left="4" right="4" top="8" bottom="8"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="label" destination="gni-yC-MlP" id="nzx-52-XF6"/>
+                                        <outlet property="tags" destination="OpZ-Or-nuY" id="QqQ-xd-Pi6"/>
+                                    </connections>
+                                </tableRow>
+                                <tableRow identifier="SWASubtaskCell" selectable="NO" id="Nom-sv-C6u" customClass="SWASubtaskCell">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" radius="0.0" spacing="8" id="8H7-Tg-wyC">
+                                        <items>
+                                            <imageView alignment="left" image="action-step-white" id="I0C-km-CMD"/>
+                                            <label alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="g1p-ZZ-LNK">
+                                                <fontDescription key="font" type="system" pointSize="14"/>
+                                            </label>
+                                        </items>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <edgeInsets key="margins" left="8" right="8" top="8" bottom="8"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="label" destination="g1p-ZZ-LNK" id="yLh-sf-NzP"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <color key="backgroundColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
+                    <connections>
+                        <outlet property="table" destination="zC2-GU-dTU" id="a8z-xH-waa"/>
+                    </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="553" y="1001"/>

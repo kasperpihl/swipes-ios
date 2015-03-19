@@ -164,6 +164,18 @@ static NSString* const DATABASE_FOLDER = @"database";
     return nil;
 }
 
+- (NSArray *)loadTodoWithTempIds:(NSArray *)tempIds error:(NSError **)error
+{
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@", @"tempId", tempIds];
+    [request setPredicate:predicate];
+    
+    return [self.managedObjectContext executeFetchRequest:request error:error];
+}
+
 - (KPToDo *)loadScheduledTodoWithError:(NSError **)error
 {
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
