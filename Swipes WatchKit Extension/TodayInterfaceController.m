@@ -76,6 +76,7 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
         [cell.group setBackgroundColor:TASKS_COLOR];
         [cell.label setText:todo.title];
         [cell.label setTextColor:TEXT_COLOR];
+        DLog(@"TODO: %@: %@", todo.title, todo.tempId);
     }
 }
 

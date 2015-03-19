@@ -15,7 +15,6 @@
 #import "ScheduleInterfaceController.h"
 
 static NSString * const kCellIdentifier = @"SWAScheduleCell";
-static NSInteger const kTotalRows = 8;
 
 typedef NS_ENUM(NSUInteger, KPScheduleButtons){
     KPScheduleButtonLaterToday = 0,

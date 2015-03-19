@@ -304,6 +304,7 @@ static SettingsHandler *sharedObject;
     if(setting == SettingNotifications)
         [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     
+#ifndef APPLE_WATCH
     if(notify){
         [[NSNotificationCenter defaultCenter] postNotificationName:SH_UpdateSetting object:self userInfo:@{@"Setting":@(setting), @"Value": value }];
         NSArray *syncedSettings = [self syncedSettingIndexes];
@@ -313,6 +314,7 @@ static SettingsHandler *sharedObject;
             self.settingTimer = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(sendSettingsToServer) userInfo:nil repeats:NO];
         }
     }
+#endif
 }
 
 -(BOOL)settingForKey:(NSString *)key{

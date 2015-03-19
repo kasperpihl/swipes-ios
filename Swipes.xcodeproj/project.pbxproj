@@ -1013,6 +1013,7 @@
 		DA04465019D5CDC70083F816 /* Swipes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Swipes.entitlements; path = ../Swipes.entitlements; sourceTree = "<group>"; };
 		DA044DA91A994E8F009BB4ED /* TodoInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodoInterfaceController.h; sourceTree = "<group>"; };
 		DA044DAA1A994E8F009BB4ED /* TodoInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodoInterfaceController.m; sourceTree = "<group>"; };
+		DA07FF5D1ABB386900C1134A /* PushNotificationPayloadManyTasks.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayloadManyTasks.apns; sourceTree = "<group>"; };
 		DA09DD781A6E636B00E66E97 /* GmailThreadProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GmailThreadProcessor.h; sourceTree = "<group>"; };
 		DA09DD791A6E636B00E66E97 /* GmailThreadProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GmailThreadProcessor.m; sourceTree = "<group>"; };
 		DA09DD851A71071E00E66E97 /* GmailAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailAuthViewController.h; path = Integrations/GmailAuthViewController.h; sourceTree = "<group>"; };
@@ -1039,7 +1040,7 @@
 		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Swipes WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA3282BA1A4CB7CF0054CE04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DA3282BB1A4CB7CF0054CE04 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		DA3282BB1A4CB7CF0054CE04 /* PushNotificationPayloadOneTask.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayloadOneTask.apns; sourceTree = "<group>"; };
 		DA3282BF1A4CB7CF0054CE04 /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
 		DA3282C01A4CB7CF0054CE04 /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
 		DA3282C21A4CB7CF0054CE04 /* GlanceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlanceController.h; sourceTree = "<group>"; };
@@ -2264,7 +2265,8 @@
 				DA369BFB1AA67325003D0AF9 /* swipes.ttf */,
 				DA3283291A4EE90C0054CE04 /* Swipes WatchKit Extension.entitlements */,
 				DA3282BA1A4CB7CF0054CE04 /* Info.plist */,
-				DA3282BB1A4CB7CF0054CE04 /* PushNotificationPayload.apns */,
+				DA3282BB1A4CB7CF0054CE04 /* PushNotificationPayloadOneTask.apns */,
+				DA07FF5D1ABB386900C1134A /* PushNotificationPayloadManyTasks.apns */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";

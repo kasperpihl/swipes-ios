@@ -14,7 +14,6 @@ static NSString* const SHARED_GROUP_NAME = @"group.it.pihl.swipes";
 static NSString* const DATABASE_NAME = @"swipes";
 static NSString* const DATABASE_FOLDER = @"database";
 static NSString* const kFirstRunApp = @"FirstRun";
-static BOOL g_isNotFirstRun = NO;
 
 +(Global *)sharedInstance
 {
@@ -26,6 +25,8 @@ static BOOL g_isNotFirstRun = NO;
 }
 
 #ifndef APPLE_WATCH
+
+static BOOL g_isNotFirstRun = NO;
 
 + (void)initialize
 {

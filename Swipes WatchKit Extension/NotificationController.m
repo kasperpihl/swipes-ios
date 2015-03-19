@@ -28,7 +28,8 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
 
 @implementation NotificationController
 
-- (instancetype)init {
+- (instancetype)init
+{
     self = [super init];
     if (self){
         // Initialize variables here.
@@ -38,12 +39,14 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
     return self;
 }
 
-- (void)willActivate {
+- (void)willActivate
+{
     // This method is called when watch view controller is about to be visible to user
     [super willActivate];
 }
 
-- (void)didDeactivate {
+- (void)didDeactivate
+{
     // This method is called when watch view controller is no longer visible
     [super didDeactivate];
 }
@@ -53,34 +56,15 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
     NSUInteger totalRows = 1;
     SWADetailCell* cell = [_table rowControllerAtIndex:offset];
     [cell.label setText:todo.title];
-    if (todo.tags.count || todo.attachments.count) {
-        NSMutableString* str = [[NSMutableString alloc] initWithString:@" "];
-        if (todo.tags.count) {
-            for (KPTag* tag in todo.tags) {
-                if (str.length) {
-                    [str appendString:@","];
-                }
-                [str appendString:tag.title];
+    if (todo.tags.count) {
+        NSMutableString* str = [[NSMutableString alloc] init];
+        for (KPTag* tag in todo.tags) {
+            if (str.length) {
+                [str appendString:@","];
             }
+            [str appendString:tag.title];
         }
-        else {
-            [str appendString:LOCALIZE_STRING(@"(no tags)")];
-        }
-        NSUInteger index = 0;
-        for (KPAttachment* attachment in todo.attachments) {
-            if ([attachment.service isEqualToString:EVERNOTE_SERVICE]) {
-                [str insertString:@"\ue64d" atIndex:index++];
-            }
-            else if ([attachment.service isEqualToString:GMAIL_SERVICE]) {
-                [str insertString:@"\ue606" atIndex:index++];
-            }
-        }
-        
-        // set attributes
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:str];
-        UIFont *swipesFont = iconFont(10);
-        [attributedString addAttribute:NSFontAttributeName value:swipesFont range:NSMakeRange(0,index)];
-        [cell.tags setAttributedText:attributedString];
+        [cell.tags setText:str];
     }
     else {
         [cell.tags setHidden:YES];
@@ -140,6 +124,7 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
             NSError* error;
             toDos = [[SWACoreDataModel sharedInstance] loadTodoWithTempIds:taskIdentifiers error:&error];
             if (toDos && 0 < toDos.count) {
+                [self loadDataForToDos:toDos];
                 return WKUserNotificationInterfaceTypeCustom;
             }
         }
@@ -147,18 +132,16 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
     return WKUserNotificationInterfaceTypeDefault;
 }
 
-- (void)didReceiveLocalNotification:(UILocalNotification *)localNotification withCompletion:(void (^)(WKUserNotificationInterfaceType))completionHandler {
+- (void)didReceiveLocalNotification:(UILocalNotification *)localNotification withCompletion:(void (^)(WKUserNotificationInterfaceType))completionHandler
+{
     NSArray *taskIdentifiers = [localNotification.userInfo objectForKey:@"identifiers"];
     WKUserNotificationInterfaceType result = [self displayTasks:localNotification.category taskIdentifiers:taskIdentifiers alert:localNotification.alertBody];
     
-    // After populating your dynamic notification interface call the completion block.
     completionHandler(result);
 }
 
-- (void)didReceiveRemoteNotification:(NSDictionary *)remoteNotification withCompletion:(void (^)(WKUserNotificationInterfaceType))completionHandler {
-    // This method is called when a remote notification needs to be presented.
-    // Implement it if you use a dynamic notification interface.
-    // Populate your dynamic notification inteface as quickly as possible.
+- (void)didReceiveRemoteNotification:(NSDictionary *)remoteNotification withCompletion:(void (^)(WKUserNotificationInterfaceType))completionHandler
+{
     NSDictionary* aps = remoteNotification[@"aps"];
     NSArray* taskIdentifiers = remoteNotification[@"identifiers"];
     if (aps && taskIdentifiers && (0 < taskIdentifiers.count)) {
