@@ -245,6 +245,7 @@
                         <outlet property="subtaskLabel1" destination="cyq-NS-lr4" id="ZIH-vw-6qv"/>
                         <outlet property="subtaskLabel2" destination="NFA-wY-ER4" id="1Vc-jy-f1i"/>
                         <outlet property="subtaskLabel3" destination="aZI-xm-bzB" id="Q9d-9G-sH2"/>
+                        <outlet property="taskStatus" destination="zJX-s0-iSs" id="M7N-sL-5t0"/>
                         <outlet property="taskText" destination="Cv6-sP-6bc" id="661-1o-qMU"/>
                     </connections>
                 </glanceController>
