@@ -30,6 +30,8 @@ typedef enum {
     IntegrationGmailUsingMailbox,
 
     SettingUseStandardStatusBar,
+
+    IntegrationGmailOpenType,
     
 } KPSettings;
 

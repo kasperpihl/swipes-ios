@@ -841,7 +841,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     notesView.delegate = self;
     BLURRY.showPosition = PositionBottom;
     [BLURRY showView:notesView inViewController:self];
-    
 }
 
 -(void)pressedTags:(id)sender
@@ -854,7 +853,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }];
 }
 
--(void)clickedAttachment:(AttachmentEditView *)attachmentView{
+-(void)clickedAttachment:(AttachmentEditView *)attachmentView
+{
     if([attachmentView.service isEqualToString:EVERNOTE_SERVICE])
         [self pressedEvernote:attachmentView];
     else if([attachmentView.service isEqualToString:URL_SERVICE])
@@ -863,37 +863,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self pressedGmail:attachmentView];
 }
 
-- (void)openInNonMailbox:(AttachmentEditView*)attachmentView
+- (void)pressedGmail:(AttachmentEditView*)attachmentView
 {
-    if ([GlobalApp isCloudMagicInstalled]) {
-        NSString* urlString = [NSString stringWithFormat:@"cloudmagic://open?account_name=%@&thread_id=%@", [kGmInt NSStringToEmail:attachmentView.identifier], [kGmInt NSStringToThreadId:attachmentView.identifier]];
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
-    }
-    else if ([GlobalApp isGoogleMailInstalled]) {
-        NSString* urlString = [NSString stringWithFormat:@"googlegmail:///cv=%@/accountId=1&create-new-tab", [kGmInt NSStringToThreadId:attachmentView.identifier]];
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
-    }
-    else {
-        [UTILITY alertWithTitle:LOCALIZE_STRING(@"No supported email client installed") andMessage:LOCALIZE_STRING(@"Please install Gmail, CloudMagic or Mailbox from the App Store!")];
-    }
+    [kGmInt openMail:attachmentView.identifier];
 }
 
-- (void)pressedGmail:(AttachmentEditView*)attachmentView {
-    
-    if (kGmInt.isUsingMailbox) {
-        if ([GlobalApp isMailboxInstalled]) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"dbx-mailbox://"]];
-        }
-        else {
-            [self openInNonMailbox:attachmentView];
-        }
-    }
-    else {
-        [self openInNonMailbox:attachmentView];
-    }
-}
-
--(void)pressedURL:(AttachmentEditView*)attachmentView{
+-(void)pressedURL:(AttachmentEditView*)attachmentView
+{
     [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Open Link") andMessage:LOCALIZE_STRING(@"Do you want to open the link?") block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:attachmentView.identifier]];
