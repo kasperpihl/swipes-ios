@@ -6,6 +6,10 @@
 //  Copyright (c) 2015 Pihl IT. All rights reserved.
 //
 
+#ifndef NOT_APPLICATION
+#import "GlobalApp.h"
+#endif
+
 #import "UtilityClass.h"
 #import "KPAttachment.h"
 #import "SettingsHandler.h"
@@ -453,5 +457,66 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     
     return [_knownArchievedThreads[threadId][kKeyData] boolValue];
 }
+
+#ifndef NOT_APPLICATION
+
+- (MailOpenType)defaultMailOpenType
+{
+    if (kGmInt.isUsingMailbox && [GlobalApp isMailboxInstalled]) {
+        return MailOpenTypeMailbox;
+    }
+    return MailOpenTypeInbox;
+}
+
+- (MailOpenType)mailOpenType
+{
+    MailOpenType result = [[kSettings valueForSetting:IntegrationGmailOpenType] unsignedIntegerValue];
+    switch (result) {
+        case MailOpenTypeMailbox:
+            if (![GlobalApp isMailboxInstalled]) {
+                return [self defaultMailOpenType];
+            }
+            break;
+        case MailOpenTypeGmail:
+            if (![GlobalApp isGoogleMailInstalled]) {
+                return [self defaultMailOpenType];
+            }
+            break;
+        case MailOpenTypeCloudMagic:
+            if (![GlobalApp isCloudMagicInstalled]) {
+                return [self defaultMailOpenType];
+            }
+            break;
+        default:
+            break;
+    }
+    return result;
+}
+
+- (void)openMail:(NSString *)identifier
+{
+    MailOpenType openType = [self mailOpenType];
+    switch (openType) {
+        case MailOpenTypeMailbox:
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"dbx-mailbox://"]];
+            break;
+        case MailOpenTypeGmail: {
+                NSString* urlString = [NSString stringWithFormat:@"googlegmail:///cv=%@/accountId=1&create-new-tab", [kGmInt NSStringToThreadId:identifier]];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+            }
+            break;
+        case MailOpenTypeCloudMagic: {
+                NSString* urlString = [NSString stringWithFormat:@"cloudmagic://open?account_name=%@&thread_id=%@", [kGmInt NSStringToEmail:identifier], [kGmInt NSStringToThreadId:identifier]];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+            }
+            break;
+            
+        default:
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"message://"]];
+            break;
+    }
+}
+
+#endif
 
 @end
