@@ -91,19 +91,19 @@
                                     <group key="rootItem" width="1" height="0.0" alignment="left" radius="0.0" spacing="8" id="BIi-2h-P9K">
                                         <items>
                                             <button alignment="left" verticalAlignment="center" backgroundImage="action-step-white" id="1qi-3X-4vQ">
-                                                <color key="titleColor" red="1" green="0.78431372549019607" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="font" type="system" pointSize="14"/>
                                                 <connections>
                                                     <action selector="onButtonTouch:" destination="zTs-N8-eqw" id="bHT-G8-CUF"/>
                                                 </connections>
                                             </button>
-                                            <label alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="q4P-u5-MyL">
+                                            <label width="0.80000000000000004" alignment="left" verticalAlignment="center" text="This is a longer text to text how it works" textAlignment="left" numberOfLines="2" id="q4P-u5-MyL">
+                                                <color key="textColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="font" type="system" pointSize="14"/>
                                             </label>
                                         </items>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <edgeInsets key="margins" left="8" right="8" top="8" bottom="8"/>
+                                        <edgeInsets key="margins" left="8" right="2" top="8" bottom="8"/>
                                     </group>
                                     <connections>
                                         <outlet property="button" destination="1qi-3X-4vQ" id="VWO-kz-f02"/>
@@ -141,13 +141,15 @@
                     <items>
                         <group width="1" height="1" alignment="left" layout="vertical" id="2b3-w3-pq0">
                             <items>
-                                <button width="0.5" height="0.33000000000000002" alignment="center" id="0HQ-Yz-zlj">
+                                <button width="0.5" height="0.34999999999999998" alignment="center" id="0HQ-Yz-zlj">
+                                    <color key="titleColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <fontDescription key="font" type="boldSystem" pointSize="18"/>
                                     <connections>
                                         <action selector="onLaterToday:" destination="3fk-TB-XAy" id="caz-ZT-yin"/>
                                     </connections>
                                 </button>
-                                <group width="134" height="0.34000000000000002" alignment="left" id="2gb-kC-CYR">
+                                <group width="134" height="0.32000000000000001" alignment="left" id="2gb-kC-CYR">
                                     <items>
                                         <button width="0.40000000000000002" alignment="left" id="zyf-uR-IFM">
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -177,6 +179,9 @@
                         </group>
                     </items>
                     <color key="backgroundColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <connections>
+                        <outlet property="laterButton" destination="0HQ-Yz-zlj" id="pC3-NH-pqS"/>
+                    </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="662" y="340"/>
@@ -303,15 +308,15 @@
                                     </connections>
                                 </tableRow>
                                 <tableRow identifier="SWASubtaskCell" selectable="NO" id="Nom-sv-C6u" customClass="SWASubtaskCell">
-                                    <group key="rootItem" width="1" height="0.0" alignment="left" radius="0.0" spacing="8" id="8H7-Tg-wyC">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" radius="0.0" spacing="6" id="8H7-Tg-wyC">
                                         <items>
-                                            <imageView alignment="left" image="action-step-white" id="I0C-km-CMD"/>
-                                            <label alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="g1p-ZZ-LNK">
+                                            <imageView alignment="left" verticalAlignment="center" image="action-step-white" id="I0C-km-CMD"/>
+                                            <label width="0.80000000000000004" alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="g1p-ZZ-LNK">
                                                 <fontDescription key="font" type="system" pointSize="14"/>
                                             </label>
                                         </items>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <edgeInsets key="margins" left="8" right="8" top="8" bottom="8"/>
+                                        <edgeInsets key="margins" left="4" right="2" top="8" bottom="8"/>
                                     </group>
                                     <connections>
                                         <outlet property="label" destination="g1p-ZZ-LNK" id="yLh-sf-NzP"/>
@@ -327,7 +332,7 @@
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="553" y="1001"/>
+            <point key="canvasLocation" x="553" y="1002"/>
         </scene>
     </scenes>
     <color key="tintColor" red="1" green="0.75686274509803919" blue="0.027450980392156862" alpha="1" colorSpace="calibratedRGB"/>

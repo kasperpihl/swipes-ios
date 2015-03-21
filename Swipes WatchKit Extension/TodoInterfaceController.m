@@ -105,7 +105,7 @@ static NSInteger const kTotalRows = 1;
     SWADetailCell* cell = [self.table rowControllerAtIndex:0];
     [cell.label setText:_todo.title];
     if (hasTags) {
-        NSMutableString* str = [[NSMutableString alloc] initWithString:@" "];
+        NSMutableString* str = [[NSMutableString alloc] init];
         if (_todo.tags.count) {
             for (KPTag* tag in _todo.tags) {
                 if (str.length) {
@@ -117,6 +117,11 @@ static NSInteger const kTotalRows = 1;
         else {
             [str appendString:LOCALIZE_STRING(@"(no tags)")];
         }
+        
+        if (_todo.attachments && _todo.attachments.count) {
+            [str insertString:@" " atIndex:0];
+        }
+        
         NSUInteger index = 0;
         for (KPAttachment* attachment in _todo.attachments) {
             if ([attachment.service isEqualToString:EVERNOTE_SERVICE]) {

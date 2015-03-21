@@ -30,6 +30,7 @@ typedef NS_ENUM(NSUInteger, KPScheduleButtons){
 @interface ScheduleInterfaceController ()
 
 @property (nonatomic, strong) KPToDo* todo;
+@property (nonatomic, weak) IBOutlet WKInterfaceButton* laterButton;
 
 @end
 
@@ -45,6 +46,9 @@ typedef NS_ENUM(NSUInteger, KPScheduleButtons){
 {
     // This method is called when watch view controller is about to be visible to user
     [super willActivate];
+    NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
+    NSString *title = [NSString stringWithFormat:LOCALIZE_STRING(@"+%luh"),(long)(laterToday.integerValue/3600)];
+    [_laterButton setTitle:title];
 }
 
 - (void)openAppForDate:(NSDate*)scheduleDate
