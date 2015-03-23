@@ -17,7 +17,10 @@
 @interface GlanceController()
 
 @property (nonatomic, weak) IBOutlet WKInterfaceLabel* taskStatus;
+@property (nonatomic, weak) IBOutlet WKInterfaceLabel* taskStatus2;
 @property (nonatomic, weak) IBOutlet WKInterfaceLabel* taskText;
+@property (nonatomic, weak) IBOutlet WKInterfaceLabel* taskText2;
+@property (nonatomic, weak) IBOutlet WKInterfaceImage* noTasksImage;
 @property (nonatomic, weak) IBOutlet WKInterfaceLabel* subtaskLabel1;
 @property (nonatomic, weak) IBOutlet WKInterfaceGroup* subtaskGroup1;
 @property (nonatomic, weak) IBOutlet WKInterfaceLabel* subtaskLabel2;
@@ -45,8 +48,16 @@
 
 - (void)loadTodo:(KPToDo *)todo isScheduled:(BOOL)isScheduled
 {
-    [_taskText setText:todo.title];
-    if (0 < todo.subtasks.count) {
+    BOOL hasSubtasks = (0 < todo.subtasks.count);
+    [_taskText setHidden:isScheduled || (!hasSubtasks)];
+    [_taskText2 setHidden:isScheduled || hasSubtasks];
+    [_taskStatus setHidden:!hasSubtasks];
+    [_taskStatus2 setHidden:hasSubtasks];
+    [_noTasksImage setHidden:!isScheduled];
+    WKInterfaceLabel* nextLabel = hasSubtasks ? _taskStatus : _taskStatus2;
+    
+    if (hasSubtasks) {
+        [_taskText setText:todo.title];
         NSArray* subtasks;
         NSPredicate *uncompletedPredicate = [NSPredicate predicateWithFormat:@"completionDate == nil"];
         NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
@@ -64,20 +75,23 @@
             }
         }
     }
+    else {
+        [_taskText2 setText:todo.title];
+    }
     [self updateUserActivity:@"com.swipes.open.todo" userInfo:@{kKeyCmdGlance: todo.tempId} webpageURL:nil];
     
     if (isScheduled) {
         if (todo.schedule) {
-            [_taskStatus setText:[[SWAUtility readableTime:todo.schedule] uppercaseString]];
+            [nextLabel setText:[NSString stringWithFormat:@"%@\n%@", LOCALIZE_STRING(@"NEXT TASK"), [[SWAUtility readableTime:todo.schedule] uppercaseString]]];
         }
         else {
-            [_taskStatus setText:LOCALIZE_STRING(@"NEXT TASK")];
+            [nextLabel setText:LOCALIZE_STRING(@"NEXT TASK")];
         }
-        [_taskStatus setTextColor:LATER_COLOR];
+        [nextLabel setTextColor:LATER_COLOR];
     }
     else {
-        [_taskStatus setText:LOCALIZE_STRING(@"CURRENT TASK")];
-        [_taskStatus setTextColor:TASKS_COLOR];
+        [nextLabel setText:LOCALIZE_STRING(@"CURRENT TASK")];
+        [nextLabel setTextColor:TASKS_COLOR];
     }
 }
 
