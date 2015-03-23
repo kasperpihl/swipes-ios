@@ -19,6 +19,7 @@ typedef NS_ENUM(NSUInteger, UserLevel) {
 -(NSString*)getUserLevelString;
 -(void)didLogout;
 -(BOOL)isTryingOutApp;
+-(NSString*)emailOrFacebookString;
 -(void)saveSettings:(NSDictionary*)settings;
 @property (nonatomic) BOOL isPlus;
 @property (nonatomic) BOOL isLoggedIn;

@@ -12,6 +12,7 @@
 #import "KPAlert.h"
 #import "KPBlurry.h"
 #import "HelpingViewController.h"
+#import "UserHandler.h"
 
 static NSString* const kGetStartedURL = @"http://support.swipesapp.com/hc/en-us/sections/200685992-Get-Started";
 static NSString* const kFaqURL = @"http://support.swipesapp.com/hc/en-us/categories/200368652-FAQ";
@@ -36,6 +37,10 @@ static NSString* kOpenTitle;
 
 - (void)recreateCellInfo
 {
+    NSString *emailString = @"User: Is trying out";
+    if(kUserHandler.isLoggedIn){
+        emailString = [kUserHandler emailOrFacebookString];
+    }
     self.cellInfo = @[
                       @{kKeyTitle: LOCALIZE_STRING(@"Open Policies"),
                         kKeyCellType: @(kIntegrationCellTypeViewMore),
@@ -61,6 +66,9 @@ static NSString* kOpenTitle;
                         kKeyCellType: @(kIntegrationCellTypeViewMore),
                         kKeyTouchSelector: NSStringFromSelector(@selector(onContactSwipesTouch))
                         },
+                      @{kKeyTitle: emailString,
+                        kKeyCellType: @(kIntegrationCellTypeNoAccessory)
+                        }
                       ];
 }
 
