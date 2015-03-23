@@ -465,7 +465,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     if (kGmInt.isUsingMailbox && [GlobalApp isMailboxInstalled]) {
         return MailOpenTypeMailbox;
     }
-    return MailOpenTypeInbox;
+    return MailOpenTypeMail;
 }
 
 - (MailOpenType)mailOpenType

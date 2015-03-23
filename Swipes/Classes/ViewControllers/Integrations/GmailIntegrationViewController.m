@@ -53,9 +53,9 @@
                             kKeyTouchSelector: NSStringFromSelector(@selector(onEmailTouch))
                             }.mutableCopy,
                           @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: LOCALIZE_STRING(@"OPEN EMAILS IN")},
-                          @{kKeyTitle: @"Inbox",
+                          @{kKeyTitle: @"Mail",
                             kKeyCellType: @(kIntegrationCellTypeCheck),
-                            kKeyIsOn: @(openType == MailOpenTypeInbox),
+                            kKeyIsOn: @(openType == MailOpenTypeMail),
                             kKeyIcon: @"integrationMail",
                             kKeyTouchSelector: NSStringFromSelector(@selector(onInboxTouch))
                             }.mutableCopy,
@@ -131,7 +131,7 @@
 
 - (void)onInboxTouch
 {
-    [kSettings setValue:@(MailOpenTypeInbox) forSetting:IntegrationGmailOpenType];
+    [kSettings setValue:@(MailOpenTypeMail) forSetting:IntegrationGmailOpenType];
     [self reload];
 }
 

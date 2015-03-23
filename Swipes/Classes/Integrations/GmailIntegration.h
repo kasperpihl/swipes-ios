@@ -20,7 +20,7 @@ extern NSString* const kSwipesLabelName; // label name for normal Gmail integrat
 
 typedef NS_ENUM(NSUInteger, MailOpenType)
 {
-    MailOpenTypeInbox = 0,
+    MailOpenTypeMail = 0,
     MailOpenTypeMailbox = 1,
     MailOpenTypeGmail = 2,
     MailOpenTypeCloudMagic = 3,
