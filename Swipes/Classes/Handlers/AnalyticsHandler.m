@@ -110,7 +110,8 @@ static AnalyticsHandler *sharedObject;
 }
 
 -(void)checkForUpdatesOnIdentity{
-    
+
+    return;
     id tracker = [[GAI sharedInstance] defaultTracker];
     
     NSMutableDictionary *currentValues = [[USER_DEFAULTS objectForKey:@"identityValues"] mutableCopy];

@@ -17,7 +17,6 @@
 @interface ShareViewController ()
 
 @property (nonatomic, weak) IBOutlet UITextField* textField;
-@property (nonatomic, weak) IBOutlet UILabel* urlText;
 @property (nonatomic, weak) IBOutlet UIButton* cancelButton;
 @property (nonatomic, weak) IBOutlet UIButton* postButton;
 @property (nonatomic, weak) IBOutlet KPTagList* tagList;
@@ -61,9 +60,6 @@
             NSObject* itm = (NSObject *)item;
             if ([itm isKindOfClass:NSURL.class]) {
                 self.url = (NSURL *)itm;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.urlText.text = [self.url absoluteString];
-                });
             }
         }];
     }
