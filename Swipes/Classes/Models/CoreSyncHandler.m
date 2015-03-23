@@ -399,8 +399,19 @@
         self._isSyncing = NO;
         [self synchronizeForce:YES async:YES];
     }
+    self._isSyncing = NO;
+    if(!kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]){
+        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
+            if(number == 1){
+                [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+            }
+        }];
+        kEnInt.hasAskedForPermissions = YES;
+    }
+    [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+    
 
-    if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached]) {
+    if (kEnInt.enableSync && !self.evernoteSyncHandler.isSyncing && ![EvernoteIntegration isAPILimitReached]) {
         
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             //NSLog(@"returned %lu",(long)status);
@@ -418,14 +429,13 @@
                     }
                 }
                 //NSLog(@"successfully ended");
-                self._isSyncing = NO;
-                [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+                self.evernoteSyncHandler.isSyncing = NO;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == SyncStatusStarted){
                 }
                 else if( status == SyncStatusError ){
-                    self._isSyncing = NO;
+                    self.evernoteSyncHandler.isSyncing = NO;
                     
                     if (!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) {
                         kEnInt.enableSync = NO;
@@ -434,7 +444,6 @@
                                 [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                             }
                         }];
-                        [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
                     }
                     else {
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
@@ -444,19 +453,10 @@
         }];
     }
     else {
-        self._isSyncing = NO;
-        if(!kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]){
-            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
-                if(number == 1){
-                    [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
-                }
-            }];
-            kEnInt.hasAskedForPermissions = YES;
-        }
-        [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+        
     }
 
-    if (kGmInt.isAuthenticated) {
+    if (kGmInt.isAuthenticated && !self.gmailSyncHandler.isSyncing) {
         [self.gmailSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             //NSLog(@"returned %lu",(long)status);
             if (status == SyncStatusSuccess){
@@ -470,14 +470,13 @@
                     }
                 }
                 //NSLog(@"successfully ended");
-                self._isSyncing = NO;
-                [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+                self.gmailSyncHandler.isSyncing = NO;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == SyncStatusStarted){
                 }
                 else if( status == SyncStatusError ){
-                    self._isSyncing = NO;
+                    self.gmailSyncHandler.isSyncing = NO;
                     
                     if (!kGmInt.isAuthenticated) {
                         // kGmInt.enableSync = NO;
@@ -486,7 +485,6 @@
                                 [self gmailAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                             }
                         }];
-                        [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
                     }
                     else {
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Gmail", @"duration": @(3.5) } ];

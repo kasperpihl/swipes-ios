@@ -62,6 +62,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
 
 - (void)synchronizeWithBlock:(SyncBlock)block
 {
+    self.isSyncing = YES;
     block(SyncStatusStarted, nil, nil);
     if (!kGmInt.isAuthenticated) {
         NSError* error = [NSError errorWithDomain:@"Gmail not authenticated" code:702 userInfo:nil];
