@@ -48,7 +48,7 @@ static AnalyticsHandler *sharedObject;
     if(hmac){
         [self setHmac:hmac];
     }
-    [Intercom enableLogging];
+    //[Intercom enableLogging];
 }
 -(void)fetchHmacForTestUser{
     NSString *testIntercomId = [USER_DEFAULTS objectForKey:@"intercom-test-userid"];
@@ -88,11 +88,9 @@ static AnalyticsHandler *sharedObject;
         [USER_DEFAULTS synchronize];
         [self setHmac:[result objectForKey:@"intercom-hmac"]];
     }
-    NSLog(@"%@",result);
     
 }
 -(void)registerUser{
-    NSLog(@"registerUser called");
     if(kCurrent.objectId){
         [Intercom registerUserWithUserId:kCurrent.objectId];
     }

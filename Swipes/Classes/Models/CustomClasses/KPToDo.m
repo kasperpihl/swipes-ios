@@ -193,9 +193,7 @@
                     predicate = [NSPredicate predicateWithFormat:@"title == %@",tag];
                 }
             }
-            NSLog(@"%@",predicate);
             NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
-            NSLog(@"setting %@",tagsSet);
             for(KPToDo *toDo in toDos){
                 
                 [toDo updateTagSet:tagsSet withTags:tags remove:remove];
