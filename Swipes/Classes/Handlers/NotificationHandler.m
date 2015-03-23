@@ -297,12 +297,10 @@ static NotificationHandler *sharedObject;
                 if(userNotifications){
                     UIUserNotificationSettings *settings = [self settingsWithCategories];
                     [app registerUserNotificationSettings:settings];
-                    [Intercom registerForRemoteNotifications];
                     [USER_DEFAULTS setBool:YES forKey:@"hasAddedCategories"];
                     
                 }
                 if(remoteNotifications){
-                    [Intercom registerForRemoteNotifications];
                     [USER_DEFAULTS setBool:YES forKey:@"hasAddedRemoteNotification"];
                 }
                 

@@ -596,7 +596,7 @@
                                        @"sessionToken": [kCurrent sessionToken],
                                        @"platform" : @"ios",
                                        @"hasMoreToSave": @(self._needSync),
-                                       @"sendLogs": @(YES),
+                                       @"sendLogs": @(NO),
                                        @"batchSize": @(kBatchSize),
                                        @"version": [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]}
                                      mutableCopy];
@@ -644,7 +644,7 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
     [request setHTTPBody:jsonData];
-
+    //DLog(@"%@",syncData);
     
     /* Performing request */
     NSHTTPURLResponse *response;
@@ -678,10 +678,11 @@
     }
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
-    //NSLog(@"resulted err:%@",error);
+    //DLog(@"resulted err:%@",result);
     if([result objectForKey:@"intercom-hmac"]){
         [USER_DEFAULTS setObject:[result objectForKey:@"intercom-hmac"] forKey:@"intercom-hmac"];
         [USER_DEFAULTS synchronize];
+        [ANALYTICS setHmac:[result objectForKey:@"intercom-hmac"]];
     }
     if([result objectForKey:@"hardSync"])
         [self hardSync];

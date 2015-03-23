@@ -113,7 +113,7 @@ static NSString* kOpenTitle;
 
 - (void)onContactSwipesTouch
 {
-    [Intercom presentMessageViewAsConversationList:YES];
+    [Intercom presentConversationList];
 }
 
 @end

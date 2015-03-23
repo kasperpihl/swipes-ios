@@ -21,12 +21,9 @@
 #import "GAIFields.h"
 #import "GAIDictionaryBuilder.h"
 
-@interface AnalyticsHandler () <IntercomSessionListener>
+@interface AnalyticsHandler ()
 @property (nonatomic) NSMutableArray *views;
-@property (nonatomic) Vero* vero;
 @property (nonatomic) BOOL intercomSession;
-@property (nonatomic) BOOL initializedIntercom;
-@property (nonatomic) BOOL isBeginningIntercomSession;
 @end
 @implementation AnalyticsHandler
 static AnalyticsHandler *sharedObject;
@@ -34,47 +31,36 @@ static AnalyticsHandler *sharedObject;
     if(!sharedObject){
         sharedObject = [[AnalyticsHandler allocWithZone:NULL] init];
         [sharedObject initializeIntercom];
+        [sharedObject registerUser];
     }
     return sharedObject;
 }
 -(void)initialize{
-    notify(@"logged in", beginSession);
+    notify(@"logged in", registerUser);
 }
--(BOOL)initializedIntercom{
-    if(!_initializedIntercom){
-        [self initializeIntercom];
+-(void)initializeIntercom{
+    [Intercom setApiKey:@"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1" forAppId:@"yobuz4ff"];
+    [Intercom setPreviewPaddingWithX:0 y:0];
+    NSString *hmac = [USER_DEFAULTS objectForKey:@"intercom-hmac"];
+    if(kCurrent.objectId && hmac){
+        [self setHmac:hmac];
     }
-    return _initializedIntercom;
+    //[Intercom enableLogging];
 }
--(Vero *)vero{
-    if(!_vero){
-        _vero = [Vero shared];
-        [_vero setAuthToken:@"YmU3ZGNlMTBhOTAzZTJlMjRhMTJkZjFjODYyODE2YzZmZWFkMmRmNzphZmZiNjI1YWQ4YzY3YTU1NDA3Nzk4ZTZjMWY4OWZjNTAyZjU1NTQ4"];
-        [_vero setDevelopmentMode:YES];
-#ifdef RELEASE
-        [_vero setDevelopmentMode:NO];
-#endif
+-(void)registerUser{
+    if(kCurrent.objectId){
+        [Intercom registerUserWithUserId:kCurrent.objectId];
     }
-    return _vero;
-}
--(void)heartbeat{
-    NSDate *lastHeartbeat = [USER_DEFAULTS objectForKey:@"lastHeartBeat"];
-    if(!lastHeartbeat || [lastHeartbeat daysBeforeDate:[NSDate date]] > 0){
-        [self sendVeroEvent:@"Heartbeat" withData:nil];
-        [USER_DEFAULTS setObject:[NSDate date] forKey:@"lastHeartBeat"];
+    else{
+        [Intercom registerUnidentifiedUser];
     }
+    
 }
--(void)sendVeroEvent:(NSString*)event withData:(NSDictionary*)data{
-    NSString *email = kCurrent.email;
-    if(!email) email = kCurrent.username;
-    if(![UtilityClass validateEmail:email]) return;
-    NSNumber *userLevel = [kCurrent objectForKey:@"userLevel"];
-    if(!userLevel) userLevel = [NSNumber numberWithInteger:0];
-    NSDictionary *identity = @{@"id":kCurrent.objectId,@"email":email,@"userlevel":userLevel};
-    [self.vero eventsTrack:event identity:identity data:data completionHandler:^(id result, NSError *error) {
-        if([event isEqualToString:@"Heartbeat"] && error) [USER_DEFAULTS removeObjectForKey:@"lastHeartBeat"];
-    }];
+-(void)logout{
+    [self clearViews];
+    [Intercom reset];
 }
+
 -(NSMutableArray *)views{
     if(!_views) _views = [NSMutableArray array];
     return _views;
@@ -88,32 +74,15 @@ static AnalyticsHandler *sharedObject;
 -(void)trackEvent:(NSString *)event options:(NSDictionary *)options{
     if(self.analyticsOff)
         return;
-    if(self.initializedIntercom && self.intercomSession){
-        [Intercom logEventWithName:event optionalMetaData:options completion:^(NSError *error) {
-            
-        }];
-    }
-    //[Leanplum track:event withParameters:options];
-    //[[LocalyticsSession shared] tagEvent:event attributes:options];
-}
--(void)beginSession{
-    if(self.isBeginningIntercomSession)
-        return;
-    self.isBeginningIntercomSession = YES;
-    if(self.initializedIntercom){
-        __weak AnalyticsHandler *weakSelf = self;
-        [Intercom beginSessionForUserWithUserId:kCurrent.objectId completion:^(NSError *error) {
-            weakSelf.isBeginningIntercomSession = NO;
-            [weakSelf checkForUpdatesOnIdentity];
-        }];
-    }
+    [Intercom logEventWithName:event metaData:options];
 }
 
 -(void)checkForUpdatesOnIdentity{
-    
     id tracker = [[GAI sharedInstance] defaultTracker];
-    
-    NSMutableDictionary *currentValues = [[USER_DEFAULTS objectForKey:@"identityValues"] mutableCopy];
+    NSDictionary *current = [USER_DEFAULTS objectForKey:@"identityValues"];
+    if(!current)
+        current = [NSDictionary dictionary];
+    NSMutableDictionary *currentValues = [current mutableCopy];
     if(!currentValues){
         currentValues = [NSMutableDictionary dictionary];
     }
@@ -132,8 +101,6 @@ static AnalyticsHandler *sharedObject;
     if(userId && ![userId isEqualToString:currentUserId]){
         gaUpdate = YES;
         shouldUpdate = YES;
-        if(self.initializedIntercom && !self.intercomSession)
-            [self beginSession];
         [currentValues setObject:userId forKey:@"userId"];
         [tracker set:@"&uid"
                value:userId];
@@ -312,48 +279,17 @@ static AnalyticsHandler *sharedObject;
     
     // Update Intercom / start session
     [intercomAttributes setObject:customIntercomAttributes forKey:@"custom_attributes"];
-    if(self.initializedIntercom){
-        if(self.intercomSession && kCurrent && shouldUpdate){
-            [Intercom updateUserWithAttributes:intercomAttributes completion:^(NSError *error) {
-                if (!error) {
-                    if( shouldUpdate ){
-                        [USER_DEFAULTS setObject:[currentValues copy] forKey:@"identityValues"];
-                        [USER_DEFAULTS synchronize];
-                    }
-                }
-                else{
-                    NSLog(@"error %@",error);
-                }
-            }];
-            
-        }
-    }
-    
-    
+    [Intercom updateUserWithAttributes:intercomAttributes];
+    [USER_DEFAULTS setObject:[currentValues copy] forKey:@"identityValues"];
+    [USER_DEFAULTS synchronize];
     // Update Google Analytics Custom
 }
 
-
-- (void)intercomSessionStatusDidChange:(BOOL)isSessionOpen{
-    self.intercomSession = isSessionOpen;
-    if(isSessionOpen){
-        DLog(@"session on");
-    }
-    else
-        DLog(@"session off");
+-(void)setHmac:(NSString*)hmac{
+    [Intercom setHMAC:hmac data:kCurrent.objectId];
 }
 
--(void)initializeIntercom{
-    NSString *hmac = [USER_DEFAULTS objectForKey:@"intercom-hmac"];
-    if(kCurrent.objectId && hmac){
-        DLog(@"initialized intercom %@",hmac);
-        
-        [Intercom setApiKey:@"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1" forAppId:@"yobuz4ff" securityOptions:@{ @"hmac" : hmac, @"data": kCurrent.objectId }];
-        [Intercom setPresentationInsetOverScreen:UIEdgeInsetsMake(0, 0, 0, 0)];
-        [Intercom setSessionListener:self];
-        self.initializedIntercom = YES;
-    }
-}
+
 -(void)pushView:(NSString *)view{
     
     NSInteger viewsLeft = self.views.count;
