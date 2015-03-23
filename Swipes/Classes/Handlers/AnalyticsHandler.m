@@ -30,29 +30,76 @@ static AnalyticsHandler *sharedObject;
 +(AnalyticsHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[AnalyticsHandler allocWithZone:NULL] init];
-        [sharedObject initializeIntercom];
-        [sharedObject registerUser];
+        [sharedObject initialize];
+        
     }
     return sharedObject;
 }
 -(void)initialize{
+    [self initializeIntercom];
+    [self registerUser];
     notify(@"logged in", registerUser);
+    notify(@"trying out", registerUser);
 }
 -(void)initializeIntercom{
     [Intercom setApiKey:@"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1" forAppId:@"yobuz4ff"];
     [Intercom setPreviewPaddingWithX:0 y:0];
     NSString *hmac = [USER_DEFAULTS objectForKey:@"intercom-hmac"];
-    if(kCurrent.objectId && hmac){
+    if(hmac){
         [self setHmac:hmac];
     }
-    //[Intercom enableLogging];
+    [Intercom enableLogging];
+}
+-(void)fetchHmacForTestUser{
+    NSString *testIntercomId = [USER_DEFAULTS objectForKey:@"intercom-test-userid"];
+    if(!testIntercomId){
+        testIntercomId = [@"test-" stringByAppendingString:[UtilityClass generateIdWithLength:10]];
+        [USER_DEFAULTS setObject:testIntercomId forKey:@"intercom-test-userid"];
+    }
+
+    NSString *url = @"http://api.swipesapp.com/hmac";
+    NSDictionary *syncData = @{@"identifier": testIntercomId};
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    [request setTimeoutInterval:35];
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
+                                                       options:0 // Pass 0 if you don't care about the readability of the generated string
+                                                         error:&error];
+    if(error){
+        return;
+    }
+    
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    [request setHTTPBody:jsonData];
+
+    NSHTTPURLResponse *response;
+    NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    if(error){
+        return;
+    }
+    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
+    if(error){
+        return;
+    }
+    if([result objectForKey:@"intercom-hmac"]){
+        [USER_DEFAULTS setObject:[result objectForKey:@"intercom-hmac"] forKey:@"intercom-hmac"];
+        [USER_DEFAULTS synchronize];
+        [self setHmac:[result objectForKey:@"intercom-hmac"]];
+    }
+    NSLog(@"%@",result);
+    
 }
 -(void)registerUser{
+    NSLog(@"registerUser called");
     if(kCurrent.objectId){
         [Intercom registerUserWithUserId:kCurrent.objectId];
     }
-    else{
+    else if([USER_DEFAULTS objectForKey:isTryingString]){
         [Intercom registerUnidentifiedUser];
+        if(![USER_DEFAULTS objectForKey:@"intercom-hmac"])
+            [self fetchHmacForTestUser];
     }
     
 }
@@ -278,15 +325,27 @@ static AnalyticsHandler *sharedObject;
 
     
     // Update Intercom / start session
-    [intercomAttributes setObject:customIntercomAttributes forKey:@"custom_attributes"];
-    [Intercom updateUserWithAttributes:intercomAttributes];
-    [USER_DEFAULTS setObject:[currentValues copy] forKey:@"identityValues"];
-    [USER_DEFAULTS synchronize];
+    if(shouldUpdate){
+        [intercomAttributes setObject:customIntercomAttributes forKey:@"custom_attributes"];
+        [Intercom updateUserWithAttributes:intercomAttributes];
+    
+    }
+    if(shouldUpdate || gaUpdate){
+        [USER_DEFAULTS setObject:[currentValues copy] forKey:@"identityValues"];
+        [USER_DEFAULTS synchronize];
+    }
     // Update Google Analytics Custom
 }
 
 -(void)setHmac:(NSString*)hmac{
-    [Intercom setHMAC:hmac data:kCurrent.objectId];
+    NSString *data;
+    if(kCurrent.objectId)
+        data = kCurrent.objectId;
+    else if([USER_DEFAULTS objectForKey:@"intercom-test-userid"])
+        data = [USER_DEFAULTS objectForKey:@"intercom-test-userid"];
+    else return;
+    [Intercom setHMAC:hmac data:data];
+    [self checkForUpdatesOnIdentity];
 }
 
 

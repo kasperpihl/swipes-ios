@@ -509,6 +509,7 @@ static RootViewController *sharedObject;
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
         NSNumber *daysSinceInstall = @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]);
         [ANALYTICS trackCategory:@"Onboarding" action:@"Trying Out" label:nil value:daysSinceInstall];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"trying out" object:self];
     }
     
     [self changeToMenu:KPMenuHome animated:YES];

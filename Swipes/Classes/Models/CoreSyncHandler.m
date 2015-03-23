@@ -331,6 +331,7 @@
     }
     
     if (!kCurrent || !kCurrent.sessionToken) {
+        
         return UIBackgroundFetchResultNoData;
     }
     
