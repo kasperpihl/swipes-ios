@@ -142,15 +142,16 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)remoteNotification withCompletion:(void (^)(WKUserNotificationInterfaceType))completionHandler
 {
-    NSDictionary* aps = remoteNotification[@"aps"];
-    NSArray* taskIdentifiers = remoteNotification[@"identifiers"];
-    if (aps && taskIdentifiers && (0 < taskIdentifiers.count)) {
-        WKUserNotificationInterfaceType result = [self displayTasks:aps[@"category"] taskIdentifiers:taskIdentifiers alert:aps[@"alert"]];
-        completionHandler(result);
-    }
-    else {
-        completionHandler(WKUserNotificationInterfaceTypeDefault);
-    }
+    completionHandler(WKUserNotificationInterfaceTypeDefault);
+//    NSDictionary* aps = remoteNotification[@"aps"];
+//    NSArray* taskIdentifiers = remoteNotification[@"identifiers"];
+//    if (aps && taskIdentifiers && (0 < taskIdentifiers.count)) {
+//        WKUserNotificationInterfaceType result = [self displayTasks:aps[@"category"] taskIdentifiers:taskIdentifiers alert:aps[@"alert"]];
+//        completionHandler(result);
+//    }
+//    else {
+//        completionHandler(WKUserNotificationInterfaceTypeDefault);
+//    }
 }
 
 

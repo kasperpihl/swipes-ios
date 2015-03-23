@@ -16,15 +16,15 @@
 #import "SWASubtaskCell.h"
 #import "SWADetailCell.h"
 #import "SWACoreDataModel.h"
+#import "MenuInterfaceController.h"
 #import "TodoInterfaceController.h"
 
 static NSInteger const kTotalRows = 1;
 
-@interface TodoInterfaceController() <SWASubtaskCellDelegate>
-
-@property (nonatomic, strong) KPToDo* todo;
+@interface TodoInterfaceController() <SWASubtaskCellDelegate, MenuInterfaceControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet WKInterfaceTable* table;
+@property (nonatomic, strong) KPToDo* todo;
 @property (nonatomic, strong) NSMutableSet* todosToCheck;
 
 @end
@@ -188,6 +188,23 @@ static NSInteger const kTotalRows = 1;
     else {
         [_todosToCheck removeObject:todo.tempId];
     }
+}
+
+- (void)onMenuChoice:(SWAMenuChoice)choice
+{
+    if (SWA_MENU_CHOICE_COMPLETE == choice) {
+        [self onMarkDone:nil];
+    }
+    else if (SWA_MENU_CHOICE_SNOOZE) {
+        [self onSchedule:nil];
+    }
+}
+
+- (id)contextForSegueWithIdentifier:(NSString *)segueIdentifier
+                            inTable:(WKInterfaceTable *)table
+                           rowIndex:(NSInteger)rowIndex
+{
+    return self;
 }
 
 @end

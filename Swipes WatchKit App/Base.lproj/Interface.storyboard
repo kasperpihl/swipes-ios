@@ -4,6 +4,12 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="swipes.ttf">
+            <string>swipes</string>
+            <string>swipes</string>
+        </mutableArray>
+    </customFonts>
     <scenes>
         <!--Today Interface Controller-->
         <scene sceneID="nb6-GJ-4CV">
@@ -54,14 +60,14 @@
             </objects>
             <point key="canvasLocation" x="235" y="340"/>
         </scene>
-        <!--Details-->
+        <!--Task-->
         <scene sceneID="IOl-SG-wYh">
             <objects>
-                <controller identifier="details" title="Details" id="U58-tQ-Xcj" customClass="TodoInterfaceController">
+                <controller identifier="details" title="Task" id="U58-tQ-Xcj" customClass="TodoInterfaceController">
                     <items>
                         <table alignment="left" id="iHg-jP-A0N">
                             <items>
-                                <tableRow identifier="SWADetailCell" selectable="NO" id="lqg-L1-Pr9" customClass="SWADetailCell">
+                                <tableRow identifier="SWADetailCell" id="lqg-L1-Pr9" customClass="SWADetailCell">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" backgroundImage="detail-shadow" layout="vertical" radius="0.0" spacing="0.0" id="AFk-G9-9Is">
                                         <items>
                                             <label width="1" alignment="left" text="Label" textAlignment="left" numberOfLines="2" id="o4X-Ix-PQr">
@@ -76,6 +82,9 @@
                                         </items>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <edgeInsets key="margins" left="4" right="4" top="8" bottom="8"/>
+                                        <connections>
+                                            <segue destination="n0B-za-cdT" kind="push" id="HTE-TX-eIB"/>
+                                        </connections>
                                     </group>
                                     <connections>
                                         <outlet property="label" destination="o4X-Ix-PQr" id="oal-Ag-auC"/>
@@ -115,7 +124,7 @@
                                     <action selector="onMarkDone:" destination="U58-tQ-Xcj" id="bm7-uk-u5f"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title=" Schedule" image="menu-schedule" id="vCS-3E-kp0">
+                            <menuItem title=" Snooze" image="menu-schedule" id="vCS-3E-kp0">
                                 <connections>
                                     <action selector="onSchedule:" destination="U58-tQ-Xcj" id="T4J-ul-Yy0"/>
                                 </connections>
@@ -129,10 +138,44 @@
             </objects>
             <point key="canvasLocation" x="456" y="340"/>
         </scene>
-        <!--Schedule-->
+        <!--Select-->
+        <scene sceneID="E8P-Wa-qGI">
+            <objects>
+                <controller identifier="menu" title="Select" id="n0B-za-cdT" customClass="MenuInterfaceController">
+                    <items>
+                        <group width="1" alignment="left" layout="vertical" id="pXf-VO-l66">
+                            <items>
+                                <button width="0.59999999999999998" height="0.5" alignment="center" title="Complete" id="lBu-ka-WHX">
+                                    <color key="titleColor" red="0.54509803921568623" green="0.68627450980392157" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <fontDescription key="font" name="swipes" family="swipes" pointSize="60"/>
+                                    <connections>
+                                        <action selector="onComplete:" destination="n0B-za-cdT" id="wiu-6O-1EA"/>
+                                    </connections>
+                                </button>
+                                <button width="0.59999999999999998" height="0.5" heightAdjustment="-5" alignment="center" verticalAlignment="center" title="Snooze" id="ZCX-35-FzX">
+                                    <color key="titleColor" red="1" green="0.3411764705882353" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <fontDescription key="font" name="swipes" family="swipes" pointSize="60"/>
+                                    <connections>
+                                        <action selector="onSnooze:" destination="n0B-za-cdT" id="yJ1-jf-zDY"/>
+                                    </connections>
+                                </button>
+                            </items>
+                        </group>
+                    </items>
+                    <connections>
+                        <outlet property="completeButton" destination="lBu-ka-WHX" id="r9e-3K-pcH"/>
+                        <outlet property="snoozeButton" destination="ZCX-35-FzX" id="nIB-GT-Vm7"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="638" y="340"/>
+        </scene>
+        <!--Snooze-->
         <scene sceneID="Reb-CZ-h15">
             <objects>
-                <controller identifier="Schedule" title="Schedule" backgroundImage="scheduler" contentMode="center" id="3fk-TB-XAy" customClass="ScheduleInterfaceController">
+                <controller identifier="Schedule" title="Snooze" backgroundImage="scheduler" contentMode="center" id="3fk-TB-XAy" customClass="ScheduleInterfaceController">
                     <items>
                         <group width="1" height="1" alignment="left" layout="vertical" id="2b3-w3-pq0">
                             <items>
@@ -179,7 +222,7 @@
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="662" y="340"/>
+            <point key="canvasLocation" x="829" y="340"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">
@@ -284,11 +327,11 @@
                                 <tableRow identifier="SWADetailCell" selectable="NO" id="oer-7n-0l9" customClass="SWADetailCell">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" backgroundImage="detail-shadow" layout="vertical" radius="0.0" spacing="0.0" id="OLN-KX-8g2">
                                         <items>
-                                            <label width="1" alignment="left" text="Label" textAlignment="left" numberOfLines="2" id="gni-yC-MlP">
+                                            <label width="1" alignment="left" text="Title" textAlignment="left" numberOfLines="2" id="gni-yC-MlP">
                                                 <color key="textColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="font" type="system" pointSize="19"/>
                                             </label>
-                                            <label width="1" alignment="left" alpha="0.5" text="Label" id="OpZ-Or-nuY">
+                                            <label width="1" alignment="left" alpha="0.5" text="tags" id="OpZ-Or-nuY">
                                                 <color key="textColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="font" type="system" pointSize="12"/>
                                             </label>
@@ -306,7 +349,7 @@
                                     <group key="rootItem" width="1" height="0.0" alignment="left" radius="0.0" spacing="6" id="8H7-Tg-wyC">
                                         <items>
                                             <imageView alignment="left" verticalAlignment="center" image="action-step-white" id="I0C-km-CMD"/>
-                                            <label width="0.80000000000000004" alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="g1p-ZZ-LNK">
+                                            <label width="0.80000000000000004" alignment="left" verticalAlignment="center" text="Action step" textAlignment="left" numberOfLines="2" id="g1p-ZZ-LNK">
                                                 <fontDescription key="font" type="system" pointSize="14"/>
                                             </label>
                                         </items>
