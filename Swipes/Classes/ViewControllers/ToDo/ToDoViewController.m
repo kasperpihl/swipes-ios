@@ -767,7 +767,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         }];
     }
     else if(item == 1){
-        [ROOT_CONTROLLER shareTasks:@[self.model]];
+        CGRect frame = ((UIButton *)toolbar.barButtons[item]).frame;
+        frame.origin.x += toolbar.frame.origin.x;
+        frame.origin.y += toolbar.frame.origin.y;
+        [ROOT_CONTROLLER shareTasks:@[self.model] withFrame:frame];
         /*NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
          [self.segmentedViewController pressedShare:self];*/
     }

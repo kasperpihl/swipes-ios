@@ -40,6 +40,6 @@ typedef enum {
 -(void)proWithMessage:(NSString*)message;
 -(void)playVideoWithIdentifier:(NSString*)identifier;
 
--(void)shareTasks:(NSArray*)tasks;
+-(void)shareTasks:(NSArray*)tasks withFrame:(CGRect)frame;
 -(void)tryoutapp;
 @end
