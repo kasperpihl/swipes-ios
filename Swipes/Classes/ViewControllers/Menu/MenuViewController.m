@@ -108,6 +108,7 @@ static CGFloat const kTopMargin = 60;
 }
 
 -(void)reset{
+    [self dismissViewControllerAnimated:NO completion:nil];
     [self renderSubviews];
 }
 
