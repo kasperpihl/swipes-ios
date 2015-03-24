@@ -91,7 +91,7 @@ static AnalyticsHandler *sharedObject;
     
 }
 -(void)registerUser{
-    if(kCurrent.objectId){
+    if(kCurrent){
         [Intercom registerUserWithUserId:kCurrent.objectId];
     }
     else if([USER_DEFAULTS objectForKey:isTryingString]){

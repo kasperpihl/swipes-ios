@@ -452,9 +452,6 @@
             });
         }];
     }
-    else {
-        
-    }
 
     if (kGmInt.isAuthenticated && !self.gmailSyncHandler.isSyncing) {
         [self.gmailSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
