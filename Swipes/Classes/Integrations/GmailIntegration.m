@@ -17,6 +17,7 @@
 #import "GTMOAuth2ViewControllerTouch.h"
 #import "GmailAuthViewController.h"
 #import "CoreSyncHandler.h"
+#import "AnalyticsHandler.h"
 #import "GmailSyncHandler.h"
 #import "GmailIntegration.h"
 
@@ -194,8 +195,11 @@ static NSString* const kKeyJsonThreadId = @"threadid";
             [viewController dismissViewControllerAnimated:NO completion:nil];
             if (nil == error) {
                 _googleAuth = auth;
+                [ANALYTICS trackEvent:@"Linked Gmail" options:nil];
+                [ANALYTICS trackCategory:@"Integrations" action:@"Linked Gmail" label:nil value:nil];
                 [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
                     // TODO log error
+                    
                 }];
             }
             block(error);
@@ -495,26 +499,33 @@ static NSString* const kKeyJsonThreadId = @"threadid";
 
 - (void)openMail:(NSString *)identifier
 {
+    NSString *client;
     MailOpenType openType = [self mailOpenType];
     switch (openType) {
         case MailOpenTypeMailbox:
+            client = @"Mailbox";
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"dbx-mailbox://"]];
             break;
         case MailOpenTypeGmail: {
+                client = @"Gmail";
                 NSString* urlString = [NSString stringWithFormat:@"googlegmail:///cv=%@/accountId=1&create-new-tab", [kGmInt NSStringToThreadId:identifier]];
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
             }
             break;
         case MailOpenTypeCloudMagic: {
+                client = @"CloudMagic";
                 NSString* urlString = [NSString stringWithFormat:@"cloudmagic://open?account_name=%@&thread_id=%@", [kGmInt NSStringToEmail:identifier], [kGmInt NSStringToThreadId:identifier]];
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
             }
             break;
             
         default:
+            client = @"Mail";
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"message://"]];
             break;
     }
+    [ANALYTICS trackEvent:@"Open In Mail" options:@{@"Client": client}];
+    [ANALYTICS trackCategory:@"Actions" action:@"Open In Mail" label:client value:nil];
 }
 
 #endif

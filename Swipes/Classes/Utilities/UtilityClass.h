@@ -26,6 +26,7 @@
 +(NSString*)timeStringForDate:(NSDate*)date;
 +(NSString*)dayOfMonthForDate:(NSDate*)date;
 +(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime;
++ (NSString *)unescapeString:(NSString *)str;
 
 @property (nonatomic,strong) NSUserDefaults *userDefaults;
 @property (nonatomic, weak) UIViewController* rootViewController;

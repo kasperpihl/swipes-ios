@@ -62,6 +62,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
 
 - (void)synchronizeWithBlock:(SyncBlock)block
 {
+    self.isSyncing = YES;
     block(SyncStatusStarted, nil, nil);
     if (!kGmInt.isAuthenticated) {
         NSError* error = [NSError errorWithDomain:@"Gmail not authenticated" code:702 userInfo:nil];
@@ -166,9 +167,9 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
                             title = [title substringToIndex:kTitleMaxLength];
                         NSString* identifier = [kGmInt threadIdToNSString:processor.threadId];
                         if (identifier) {
-                            KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO from:@"Gmail"];
+                            KPToDo *newToDo = [KPToDo addItem:[UtilityClass unescapeString:title] priority:NO tags:nil save:NO from:@"Gmail"];
                             if (processor.snippet) {
-                                newToDo.notes = processor.snippet;
+                                newToDo.notes = [UtilityClass unescapeString:processor.snippet];
                             }
                             [newToDo attachService:GMAIL_SERVICE title:title identifier:identifier sync:YES from:@"gmail-integration"];
                             if (nil != newToDo.objectId)

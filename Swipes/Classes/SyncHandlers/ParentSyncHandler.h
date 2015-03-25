@@ -21,5 +21,7 @@ typedef void (^SyncBlock) (SyncStatus status, NSDictionary *userInfo, NSError *e
 
 @interface ParentSyncHandler : NSObject
 @property BOOL syncIsEnabled;
+@property (nonatomic, assign) BOOL isSyncing;
+@property (nonatomic, copy) SyncBlock block;
 -(void)synchronizeWithBlock:(SyncBlock)block;
 @end

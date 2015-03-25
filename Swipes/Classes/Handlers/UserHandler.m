@@ -8,9 +8,11 @@
 
 #import "UserHandler.h"
 #import <Parse/PFUser.h>
+#import "PFFacebookUtils.h"
 #import "AnalyticsHandler.h"
 #import "IntegrationHandler.h"
 #import "SettingsHandler.h"
+#import "UtilityClass.h"
 
 @interface UserHandler ()
 @property (nonatomic) BOOL needRefresh;
@@ -98,7 +100,16 @@ static UserHandler *sharedObject;
         else NSLog(@"t%@",error);
     }];
 }
-
+-(NSString *)emailOrFacebookString{
+    NSString *email = @"User: ";
+    if([UtilityClass validateEmail:kCurrent.username]){
+        email = [email stringByAppendingString:kCurrent.username];
+    }
+    if([PFFacebookUtils isLinkedWithUser:kCurrent]){
+        email = [email stringByAppendingString:@" (Facebook)"];
+    }
+    return email;
+}
 -(void)saveSettings:(NSDictionary *)settings{
     if(settings)
         [kCurrent setObject:settings forKey:@"settings"];

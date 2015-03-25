@@ -61,7 +61,6 @@
         [ANALYTICS trackEvent:@"Added Task" options:@{@"Length":@(item.length), @"From": from }];
         [ANALYTICS trackCategory:@"Tasks" action:@"Added" label:from value:@(item.length)];
     }
-    [ANALYTICS heartbeat];
     
     return newToDo;
 }
@@ -94,7 +93,6 @@
     if(save)
         [KPToDo saveToSync];
     [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
-    [ANALYTICS heartbeat];
     return [movedToDos copy];
 }
 
@@ -129,7 +127,6 @@
             [ANALYTICS trackEvent:@"Completed Action Step" options:nil];
             
         }
-        [ANALYTICS heartbeat];
         if( !isSubtasks ) {
             [[NSNotificationCenter defaultCenter] postNotificationName:HH_TriggerHint object:@(HintCompleted)];
         }
@@ -151,7 +148,6 @@
         [KPToDo saveToSync];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
-    [ANALYTICS heartbeat];
     
     return [movedToDos copy];
 }
@@ -182,15 +178,24 @@
     }
     if (shouldUpdateNotifications)
         [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
-    [ANALYTICS heartbeat];
 }
 
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDos remove:(BOOL)remove save:(BOOL)save from:(NSString *)from{
     if (tags && [tags isKindOfClass:NSArray.class] && (0 < tags.count)){
         @try {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
+            NSPredicate *predicate;
+            if(tags.count > 1){
+                predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@",@"title",tags];
+            }
+            else{
+                NSString *tag = [tags lastObject];
+                if(tag){
+                    predicate = [NSPredicate predicateWithFormat:@"title == %@",tag];
+                }
+            }
             NSSet *tagsSet = [NSSet setWithArray:[KPTag MR_findAllWithPredicate:predicate]];
             for(KPToDo *toDo in toDos){
+                
                 [toDo updateTagSet:tagsSet withTags:tags remove:remove];
             }
             if(save)
@@ -201,11 +206,12 @@
                 NSString *eventString = remove ? @"Unassign Tags" : @"Assign Tags";
                 [ANALYTICS trackCategory:@"Tags" action:actionString label:from value:@(toDos.count)];
                 [ANALYTICS trackEvent:eventString options:options];
-                [ANALYTICS heartbeat];
             }
         }
         @catch (NSException *exception) {
+            
             NSMutableDictionary *attachment = [NSMutableDictionary dictionary];
+            NSLog(@"%@",tags);
             if(tags)
                 [attachment setObject:attachment forKey:@"tags"];
             [UtilityClass sendException:exception type:@"Update Tags Exception" attachment:attachment];
@@ -219,7 +225,6 @@
     if (title) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"title = %@ AND isLocallyDeleted <> YES", title];
         NSArray* result = [KPToDo MR_findAllWithPredicate:predicate];
-        [ANALYTICS heartbeat];
         if (result && (0 == result.count))
             return nil;
         return result;
@@ -232,7 +237,6 @@
     if (tempId) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"tempId = %@", tempId];
         NSArray* result = [KPToDo MR_findAllWithPredicate:predicate];
-        [ANALYTICS heartbeat];
         if (result && (0 == result.count))
             return nil;
         return result;
@@ -245,7 +249,6 @@
     if (service) {
         NSPredicate* predicate = [NSPredicate predicateWithFormat:@"isLocallyDeleted = %@", @(YES)];
         NSArray* result = [KPToDo MR_findAllWithPredicate:predicate];
-        [ANALYTICS heartbeat];
         if (result && (0 == result.count))
             return nil;
         NSMutableArray* todos = [NSMutableArray array];
@@ -297,6 +300,10 @@
             KPToDo *parent = [KPToDo MR_findFirstByAttribute:@"objectId" withValue:parentId inContext:context];
             if( parent ){
                 self.parent = parent;
+            }
+            else{
+                // Parent didn't exist (maybe a remote delete task)
+                [self deleteToDoSave:NO force:YES];
             }
         }
             
@@ -715,7 +722,6 @@
     
     
     [KPToDo saveToSync];
-    [ANALYTICS heartbeat];
     NSArray *newOrderItems = [items sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES]]];
     /*newOrderItems = [KPToDo sortOrderForItems:newOrderItems newItemsOnTop:NO save:<#(BOOL)#>]*/
     return newOrderItems;

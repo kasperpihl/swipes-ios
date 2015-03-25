@@ -181,9 +181,7 @@
                 break;
         }
         if(self.drawerViewController.openSide == MMDrawerSideLeft){
-            NSLog(@"closing");
             [self.settingsViewController reset];
-            NSLog(@"reset");
             [self.drawerViewController closeDrawerAnimated:YES completion:nil];
         }
         self.viewControllers = @[self.drawerViewController];
@@ -212,6 +210,7 @@ static RootViewController *sharedObject;
     [kUserHandler didLogout];
     [kHints reset];
     [kFilter clearAll];
+    [ANALYTICS logout];
     [NOTIHANDLER clearLocalNotifications];
     [self resetRoot];
 
@@ -510,6 +509,7 @@ static RootViewController *sharedObject;
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
         NSNumber *daysSinceInstall = @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]);
         [ANALYTICS trackCategory:@"Onboarding" action:@"Trying Out" label:nil value:daysSinceInstall];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"trying out" object:self];
     }
     
     [self changeToMenu:KPMenuHome animated:YES];
@@ -566,11 +566,14 @@ static RootViewController *sharedObject;
     
    // [self setNeedsStatusBarAppearanceUpdate];
 }
+
+
 -(void)initializeClock{
     [kTopClock addTopClock];
     kTopClock.font = KP_SEMIBOLD(12);
     [kTopClock setTextColor:alpha(tcolor(TextColor),0.8)];
 }
+
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
