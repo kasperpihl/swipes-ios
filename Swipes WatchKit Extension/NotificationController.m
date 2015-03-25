@@ -159,7 +159,6 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
 {
     NSArray *taskIdentifiers = [localNotification.userInfo objectForKey:@"identifiers"];
     WKUserNotificationInterfaceType result = [self displayTasks:localNotification.category taskIdentifiers:taskIdentifiers alert:localNotification.alertBody];
-    
     completionHandler(result);
 }
 
