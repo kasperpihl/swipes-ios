@@ -62,6 +62,7 @@
 @property (nonatomic, assign) BOOL _isSyncing;
 @property (nonatomic, assign) BOOL _didHardSync;
 @property (nonatomic, assign) BOOL _showSuccessOnce;
+@property (nonatomic, assign) BOOL showErrorOnce;
 
 @property (nonatomic) dispatch_queue_t isolationQueue;
 
@@ -202,6 +203,7 @@
             if(self._showSuccessOnce){
                 title = LOCALIZE_STRING(@"Synchronized");
                 self._showSuccessOnce = NO;
+                self.showErrorOnce = NO;
             }
             //
             break;
@@ -209,6 +211,7 @@
         case SyncStatusError:{
             title = LOCALIZE_STRING(@"Error synchronizing");
             self._showSuccessOnce = YES;
+            self.showErrorOnce = YES;
             break;
         }
         default:
@@ -376,6 +379,15 @@
     }
 }
 
+- (void)showErrorNotificationOnce:(NSString *)errorString
+{
+    if (!self.showErrorOnce) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": errorString, @"duration": @(3.5)}];
+        self.showErrorOnce = YES;
+        self._showSuccessOnce = YES;
+    }
+}
+
 -(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error {
 #ifndef NOT_APPLICATION
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -448,7 +460,7 @@
                         }];
                     }
                     else {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
+                        [self showErrorNotificationOnce:LOCALIZE_STRING(@"Error syncing Evernote")];
                     }
                 }
             });
@@ -486,7 +498,7 @@
                         }];
                     }
                     else {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Gmail", @"duration": @(3.5) } ];
+                        [self showErrorNotificationOnce:LOCALIZE_STRING(@"Error syncing Gmail")];
                     }
                 }
             });
