@@ -2,7 +2,7 @@
     "aps": {
         "alert": "Test message",
         "title": "Optional title",
-        "category": "OneTaskCategory"
+        "category": "BatchTasksCategory"
     },
     
     "WatchKit Simulator Actions": [
@@ -16,5 +16,5 @@
         },
     ],
     
-    "identifiers": ["PhXTyXhp1A0I3I", "5cyw7TaypqdRAU"]
+    "identifiers": ["4VDbvdj1M0LFvy", "hM6w8ELGAh28ct"]
 }

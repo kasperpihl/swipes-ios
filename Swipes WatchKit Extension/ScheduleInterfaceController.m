@@ -27,14 +27,24 @@ typedef NS_ENUM(NSUInteger, KPScheduleButtons){
     KPScheduleButtonCancel = 7,
 };
 
+static NSArray* g_weekDays;
+
 @interface ScheduleInterfaceController ()
 
 @property (nonatomic, strong) KPToDo* todo;
 @property (nonatomic, weak) IBOutlet WKInterfaceButton* laterButton;
+@property (nonatomic, weak) IBOutlet WKInterfaceButton* nextWeekButton;
 
 @end
 
 @implementation ScheduleInterfaceController
+
++ (void)initialize
+{
+    g_weekDays = @[LOCALIZE_STRING(@"Mon"), LOCALIZE_STRING(@"Sun"), LOCALIZE_STRING(@"Mon"),
+                   LOCALIZE_STRING(@"Tue"), LOCALIZE_STRING(@"Wed"), LOCALIZE_STRING(@"Thu"),
+                   LOCALIZE_STRING(@"Fri"), LOCALIZE_STRING(@"Sat")];
+}
 
 - (void)awakeWithContext:(id)context
 {
@@ -49,6 +59,8 @@ typedef NS_ENUM(NSUInteger, KPScheduleButtons){
     NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
     NSString *title = [NSString stringWithFormat:LOCALIZE_STRING(@"+%luh"),(long)(laterToday.integerValue/3600)];
     [_laterButton setTitle:title];
+    NSNumber *weekStart = (NSNumber*)[kSettings valueForSetting:SettingWeekStart];
+    [_nextWeekButton setTitle:weekStart ? g_weekDays[[weekStart unsignedIntValue]] : g_weekDays[2]];
 }
 
 - (void)openAppForDate:(NSDate*)scheduleDate
@@ -75,15 +87,15 @@ typedef NS_ENUM(NSUInteger, KPScheduleButtons){
     [self openAppForDate:scheduleDate];
 }
 
-- (IBAction)onIn2Days:(id)sender
+- (IBAction)onThisEvening:(id)sender
 {
-    NSDate* scheduleDate = [self dateForTableRow:KPScheduleButtonIn2Days];
+    NSDate* scheduleDate = [self dateForTableRow:KPScheduleButtonThisEvening];
     [self openAppForDate:scheduleDate];
 }
 
-- (IBAction)onButtonThisWeekend:(id)sender
+- (IBAction)onNextWeek:(id)sender
 {
-    NSDate* scheduleDate = [self dateForTableRow:KPScheduleButtonThisWeekend];
+    NSDate* scheduleDate = [self dateForTableRow:KPScheduleButtonNextWeek];
     [self openAppForDate:scheduleDate];
 }
 

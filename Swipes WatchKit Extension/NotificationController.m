@@ -100,19 +100,39 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
     return cellTypes;
 }
 
-- (void)loadDataForToDos:(NSArray *)toDos
+- (void)loadDataForToDo:(KPToDo *)todo
 {
     // load cell types
     NSMutableArray* cellTypes = [NSMutableArray array];
-    for (KPToDo* todo in toDos) {
-        [cellTypes addObjectsFromArray:[self cellTypesForTodo:todo]];
-    }
+    [cellTypes addObjectsFromArray:[self cellTypesForTodo:todo]];
     [_table setRowTypes:cellTypes];
     
     // load data
     NSUInteger offset = 0;
+    offset += [self loadTodoData:todo offset:offset];
+}
+
+- (void)loadDataForToDos:(NSArray *)toDos
+{
+    // load cell types
+    NSMutableArray* cellTypes = [NSMutableArray array];
+    [cellTypes addObject:kCellTypeTitle];
+    for (NSUInteger i = 0; i < toDos.count; i++) {
+        [cellTypes addObject:kCellTypeSubtask];
+    }
+    [_table setRowTypes:cellTypes];
+    
+    // load data
+    SWADetailCell* cell = [_table rowControllerAtIndex:0];
+    [cell.label setText:[NSString stringWithFormat:@"%lu upcomming tasks", (unsigned long)toDos.count]];
+    [cell.tags setHidden:YES];
+    
+    // load tasks
+    NSInteger index = 1;
     for (KPToDo* todo in toDos) {
-        offset += [self loadTodoData:todo offset:offset];
+        SWASubtaskCell* subtaskCell = [self.table rowControllerAtIndex:index++];
+        [subtaskCell.label setText:todo.title];
+        [subtaskCell.image setImageNamed:@"task_circle"];
     }
 }
 
@@ -124,7 +144,10 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
             NSError* error;
             toDos = [[SWACoreDataModel sharedInstance] loadTodoWithTempIds:taskIdentifiers error:&error];
             if (toDos && 0 < toDos.count) {
-                [self loadDataForToDos:toDos];
+                if (1 == toDos.count)
+                    [self loadDataForToDo:toDos[0]];
+                else
+                    [self loadDataForToDos:toDos];
                 return WKUserNotificationInterfaceTypeCustom;
             }
         }
@@ -142,16 +165,16 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
 
 - (void)didReceiveRemoteNotification:(NSDictionary *)remoteNotification withCompletion:(void (^)(WKUserNotificationInterfaceType))completionHandler
 {
-    completionHandler(WKUserNotificationInterfaceTypeDefault);
-//    NSDictionary* aps = remoteNotification[@"aps"];
-//    NSArray* taskIdentifiers = remoteNotification[@"identifiers"];
-//    if (aps && taskIdentifiers && (0 < taskIdentifiers.count)) {
-//        WKUserNotificationInterfaceType result = [self displayTasks:aps[@"category"] taskIdentifiers:taskIdentifiers alert:aps[@"alert"]];
-//        completionHandler(result);
-//    }
-//    else {
-//        completionHandler(WKUserNotificationInterfaceTypeDefault);
-//    }
+//    completionHandler(WKUserNotificationInterfaceTypeDefault);
+    NSDictionary* aps = remoteNotification[@"aps"];
+    NSArray* taskIdentifiers = remoteNotification[@"identifiers"];
+    if (aps && taskIdentifiers && (0 < taskIdentifiers.count)) {
+        WKUserNotificationInterfaceType result = [self displayTasks:aps[@"category"] taskIdentifiers:taskIdentifiers alert:aps[@"alert"]];
+        completionHandler(result);
+    }
+    else {
+        completionHandler(WKUserNotificationInterfaceTypeDefault);
+    }
 }
 
 

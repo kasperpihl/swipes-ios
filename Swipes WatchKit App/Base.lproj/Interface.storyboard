@@ -145,25 +145,33 @@
                     <items>
                         <group width="1" alignment="left" layout="vertical" id="pXf-VO-l66">
                             <items>
-                                <button width="0.59999999999999998" height="0.5" alignment="center" title="Complete" id="lBu-ka-WHX">
+                                <button width="0.59999999999999998" height="0.5" alignment="center" verticalAlignment="center" title="Complete" id="lBu-ka-WHX">
                                     <color key="titleColor" red="0.54509803921568623" green="0.68627450980392157" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <fontDescription key="font" name="swipes" family="swipes" pointSize="60"/>
+                                    <variation key="device=watch38mm">
+                                        <fontDescription key="font" name="swipes" family="swipes" pointSize="55"/>
+                                    </variation>
                                     <connections>
                                         <action selector="onComplete:" destination="n0B-za-cdT" id="wiu-6O-1EA"/>
                                     </connections>
                                 </button>
-                                <button width="0.59999999999999998" height="0.5" heightAdjustment="-5" alignment="center" verticalAlignment="center" title="Snooze" id="ZCX-35-FzX">
+                                <button width="0.59999999999999998" height="0.5" alignment="center" verticalAlignment="bottom" title="Snooze" id="ZCX-35-FzX">
                                     <color key="titleColor" red="1" green="0.3411764705882353" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <fontDescription key="font" name="swipes" family="swipes" pointSize="60"/>
+                                    <variation key="device=watch38mm">
+                                        <fontDescription key="font" name="swipes" family="swipes" pointSize="55"/>
+                                    </variation>
                                     <connections>
                                         <action selector="onSnooze:" destination="n0B-za-cdT" id="yJ1-jf-zDY"/>
                                     </connections>
                                 </button>
                             </items>
+                            <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="10"/>
                         </group>
                     </items>
+                    <color key="backgroundColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <outlet property="completeButton" destination="lBu-ka-WHX" id="r9e-3K-pcH"/>
                         <outlet property="snoozeButton" destination="ZCX-35-FzX" id="nIB-GT-Vm7"/>
@@ -179,7 +187,7 @@
                     <items>
                         <group width="1" height="1" alignment="left" layout="vertical" id="2b3-w3-pq0">
                             <items>
-                                <button width="0.5" height="0.34999999999999998" alignment="center" id="0HQ-Yz-zlj">
+                                <button width="0.45000000000000001" height="0.33000000000000002" alignment="center" title="+3h" id="0HQ-Yz-zlj">
                                     <color key="titleColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <fontDescription key="font" type="boldSystem" pointSize="18"/>
@@ -187,38 +195,45 @@
                                         <action selector="onLaterToday:" destination="3fk-TB-XAy" id="caz-ZT-yin"/>
                                     </connections>
                                 </button>
-                                <group width="134" height="0.32000000000000001" alignment="left" id="2gb-kC-CYR">
+                                <group width="1" height="0.33000000000000002" alignment="left" id="2gb-kC-CYR">
                                     <items>
-                                        <button width="0.40000000000000002" alignment="left" id="zyf-uR-IFM">
+                                        <button width="0.40000000000000002" alignment="left" verticalAlignment="center" id="zyf-uR-IFM">
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <connections>
-                                                <action selector="onTomorrow:" destination="3fk-TB-XAy" id="XGg-MX-AzO"/>
+                                                <action selector="onThisEvening:" destination="3fk-TB-XAy" id="F4A-sb-9W0"/>
                                             </connections>
                                         </button>
                                         <button width="0.20000000000000001" alignment="left" id="0om-wv-69n">
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </button>
-                                        <button width="0.40000000000000002" alignment="left" id="DJQ-6x-oAF">
+                                        <button width="0.40000000000000002" alignment="left" verticalAlignment="center" id="DJQ-6x-oAF">
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <connections>
-                                                <action selector="onIn2Days:" destination="3fk-TB-XAy" id="eob-61-a9L"/>
+                                                <action selector="onTomorrow:" destination="3fk-TB-XAy" id="vLu-je-7br"/>
                                             </connections>
                                         </button>
                                     </items>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </group>
-                                <button width="0.5" height="0.33000000000000002" alignment="center" id="7Fe-Dw-vuh">
+                                <button width="0.5" height="0.33000000000000002" alignment="center" verticalAlignment="bottom" title="Mon" id="7Fe-Dw-vuh">
+                                    <color key="titleColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <fontDescription key="font" type="boldSystem" pointSize="18"/>
                                     <connections>
-                                        <action selector="onButtonThisWeekend:" destination="3fk-TB-XAy" id="ax8-56-yQV"/>
+                                        <action selector="onNextWeek:" destination="3fk-TB-XAy" id="8Dp-hA-Wvu"/>
                                     </connections>
                                 </button>
                             </items>
+                            <edgeInsets key="margins" left="0.0" right="0.0" top="10" bottom="10"/>
+                            <variation key="device=watch38mm">
+                                <edgeInsets key="margins" left="0.0" right="0.0" top="2" bottom="2"/>
+                            </variation>
                         </group>
                     </items>
                     <color key="backgroundColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <outlet property="laterButton" destination="0HQ-Yz-zlj" id="pC3-NH-pqS"/>
+                        <outlet property="nextWeekButton" destination="7Fe-Dw-vuh" id="uB0-h2-058"/>
                     </connections>
                 </controller>
             </objects>
@@ -359,8 +374,8 @@
                                 <tableRow identifier="SWASubtaskCell" selectable="NO" id="Nom-sv-C6u" customClass="SWASubtaskCell">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" radius="0.0" spacing="6" id="8H7-Tg-wyC">
                                         <items>
-                                            <imageView alignment="left" verticalAlignment="center" image="action-step-white" id="I0C-km-CMD"/>
-                                            <label width="0.80000000000000004" alignment="left" verticalAlignment="center" text="Action step" textAlignment="left" numberOfLines="2" id="g1p-ZZ-LNK">
+                                            <imageView alignment="left" verticalAlignment="center" image="subtask_circle" id="I0C-km-CMD"/>
+                                            <label width="0.90000000000000002" alignment="left" verticalAlignment="center" text="Action step" textAlignment="left" numberOfLines="2" id="g1p-ZZ-LNK">
                                                 <fontDescription key="font" type="system" pointSize="14"/>
                                             </label>
                                         </items>
@@ -368,6 +383,7 @@
                                         <edgeInsets key="margins" left="4" right="2" top="8" bottom="8"/>
                                     </group>
                                     <connections>
+                                        <outlet property="image" destination="I0C-km-CMD" id="Peb-gN-NdZ"/>
                                         <outlet property="label" destination="g1p-ZZ-LNK" id="yLh-sf-NzP"/>
                                     </connections>
                                 </tableRow>
