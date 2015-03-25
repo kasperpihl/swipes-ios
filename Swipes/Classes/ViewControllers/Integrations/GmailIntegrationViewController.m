@@ -48,7 +48,7 @@
         MailOpenType openType = [kGmInt mailOpenType];
         NSMutableArray* cellInfo = @[
                           @{kKeyTitle: emailAddress,
-                            kKeyCellType: @(kIntegrationCellTypeNoAccessory),
+                            kKeyCellType: @(kIntegrationCellTypeViewMore),
                             kKeyIcon: kGmInt.isUsingMailbox ? @"integrationMailbox" : @"integrationMail",
                             kKeyTouchSelector: NSStringFromSelector(@selector(onEmailTouch))
                             }.mutableCopy,

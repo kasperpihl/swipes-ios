@@ -168,6 +168,20 @@
 + (UIImage *)imageWithName:(NSString *)imageName scaledToSize:(CGSize)newSize {
     return [self imageWithImage:[UIImage imageNamed:imageName] scaledToSize:newSize];
 }
+
++ (NSString *)unescapeString:(NSString *)str
+{
+    if (!str || (0 == str.length)) {
+        return str;
+    }
+    NSDictionary *options = @{ NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                               NSCharacterEncodingDocumentAttribute :@(NSUTF8StringEncoding) };
+    
+    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+    
+    return [[[NSAttributedString alloc] initWithData:data options:options documentAttributes:nil error:nil] string];
+}
+
 -(NSNumber *)versionNumber{
     NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
     [f setNumberStyle:NSNumberFormatterDecimalStyle];
