@@ -119,7 +119,12 @@ static AnalyticsHandler *sharedObject;
 -(void)trackEvent:(NSString *)event options:(NSDictionary *)options{
     if(self.analyticsOff)
         return;
-    [Intercom logEventWithName:event metaData:options];
+    if(!options || options.count == 0){
+        [Intercom logEventWithName:event];
+    }
+    else{
+        [Intercom logEventWithName:event metaData:options];
+    }
 }
 
 -(void)checkForUpdatesOnIdentity{
