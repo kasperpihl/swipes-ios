@@ -252,6 +252,9 @@ static AnalyticsHandler *sharedObject;
     if(kGmInt.isAuthenticated){
         gmailUserLevel = @"Linked";
     }
+    if(kGmInt.isUsingMailbox){
+        gmailUserLevel = @"Mailbox";
+    }
     if(![gmailUserLevel isEqualToString:currentGmailUserLevel]){
         shouldUpdate = YES;
         gaUpdate = YES;

@@ -17,6 +17,7 @@
 #import "GTMOAuth2ViewControllerTouch.h"
 #import "GmailAuthViewController.h"
 #import "CoreSyncHandler.h"
+#import "AnalyticsHandler.h"
 #import "GmailSyncHandler.h"
 #import "GmailIntegration.h"
 
@@ -194,8 +195,11 @@ static NSString* const kKeyJsonThreadId = @"threadid";
             [viewController dismissViewControllerAnimated:NO completion:nil];
             if (nil == error) {
                 _googleAuth = auth;
+                [ANALYTICS trackEvent:@"Linked Gmail" options:nil];
+                [ANALYTICS trackCategory:@"Integrations" action:@"Linked Gmail" label:nil value:nil];
                 [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
                     // TODO log error
+                    
                 }];
             }
             block(error);
