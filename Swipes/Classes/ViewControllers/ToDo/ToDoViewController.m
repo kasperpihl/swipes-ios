@@ -917,7 +917,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                 if([GlobalApp isEvernoteInstalled]){
                     //DLog(@"attachment %@",attachment.identifier);
                     [[ENSession sharedSession] viewNoteInEvernote:[EvernoteIntegration NSStringToENNoteRef:attachment.identifier]];
-                    [ANALYTICS trackEvent:@"Open in Evernote" options:nil];
+                    [ANALYTICS trackEvent:@"Open In Evernote" options:nil];
                     [ANALYTICS trackCategory:@"Actions" action:@"Open In Evernote" label:nil value:nil];
                     //[ENSession
 //                    EDAMNote *note = [[EDAMNote alloc] init];
