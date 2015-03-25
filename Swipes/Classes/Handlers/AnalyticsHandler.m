@@ -16,6 +16,7 @@
 #import "KPTag.h"
 #import "UserHandler.h"
 #import "EvernoteIntegration.h"
+#import "GmailIntegration.h"
 #import "Intercom.h"
 #import "GAI.h"
 #import "GAIFields.h"
@@ -242,6 +243,26 @@ static AnalyticsHandler *sharedObject;
         [gaCustomBuilder set:evernoteUserLevel forKey:[GAIFields customDimensionForIndex:2]];
         
         [customIntercomAttributes setObject:evernoteUserLevel forKey:@"evernote_user_level"];
+    }
+    
+    
+    // Gmail User Level
+    NSString *currentGmailUserLevel = [currentValues objectForKey:@"gmail_user_level"];
+    NSString *gmailUserLevel = @"Not Linked";
+    if(kGmInt.isAuthenticated){
+        gmailUserLevel = @"Linked";
+    }
+    if(![gmailUserLevel isEqualToString:currentGmailUserLevel]){
+        shouldUpdate = YES;
+        gaUpdate = YES;
+        
+        [currentValues setObject:gmailUserLevel forKey:@"gmail_user_level"];
+        
+        [tracker set:[GAIFields customDimensionForIndex:8]
+               value:gmailUserLevel];
+        [gaCustomBuilder set:gmailUserLevel forKey:[GAIFields customDimensionForIndex:8]];
+        
+        [customIntercomAttributes setObject:gmailUserLevel forKey:@"gmail_user_level"];
     }
     
     
