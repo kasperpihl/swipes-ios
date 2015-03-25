@@ -400,7 +400,9 @@
         [self synchronizeForce:YES async:YES];
     }
     self._isSyncing = NO;
-    if(!kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]){
+    if ((!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) &&
+        !kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]) {
+        
         [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
             if(number == 1){
                 [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];

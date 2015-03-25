@@ -301,7 +301,6 @@
     
     KPAttachment *mailAttachment = [toDo firstAttachmentForServiceType:GMAIL_SERVICE];
     if (mailAttachment){
-        [self.gmailIcon setText:iconString(@"editMail")];
         blockForIcon(self.gmailIcon);
     }
     
