@@ -42,6 +42,9 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
     else {
         NSError* error;
         _todo = [[SWACoreDataModel sharedInstance] loadTodoWithTempId:context error:&error];
+        if (error) {
+            [SWAUtility sendErrorToHost:error];
+        }
     }
     DLog(@"TODO is: %@", _todo);
     _todosToCheck = [NSMutableSet set];
@@ -62,6 +65,7 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
         NSDictionary* data = @{kKeyCmdComplete: [_todosToCheck allObjects]};
         [WKInterfaceController openParentApplication:data reply:^(NSDictionary *replyInfo, NSError *error) {
             if (error) {
+                [SWAUtility sendErrorToHost:error];
                 DLog(@"Error didDeactivate %@", error);
             }
         }];
@@ -155,6 +159,7 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
 {
     [WKInterfaceController openParentApplication:@{kKeyCmdComplete: _todo.tempId} reply:^(NSDictionary *replyInfo, NSError *error) {
         if (error) {
+            [SWAUtility sendErrorToHost:error];
             DLog(@"Error onMarkDone %@", error);
         }
         [self popController];

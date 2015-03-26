@@ -99,6 +99,9 @@
 {
     NSError* error;
     NSArray* todos = [[SWACoreDataModel sharedInstance] loadTodosWithError:&error oneResult:YES];
+    if (error) {
+        [SWAUtility sendErrorToHost:error];
+    }
     if (todos.count > 0) {
         KPToDo* todo = todos[0];
         [self loadTodo:todo isScheduled:NO];

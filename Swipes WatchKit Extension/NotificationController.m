@@ -126,6 +126,9 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
         if (taskIdentifiers && taskIdentifiers.count > 0){
             NSError* error;
             toDos = [[SWACoreDataModel sharedInstance] loadTodoWithTempIds:taskIdentifiers error:&error];
+            if (error) {
+                [SWAUtility sendErrorToHost:error];
+            }
             if (toDos && 0 < toDos.count) {
                 if (1 == toDos.count)
                     [self loadDataForToDo:toDos[0]];

@@ -314,6 +314,11 @@
         }
     }
 
+    tempId = [userInfo valueForKey:kKeyCmdError];
+    if (tempId && [tempId isKindOfClass:NSError.class]) {
+        [UtilityClass sendError:(NSError *)tempId type:@"Watch App"];
+    }
+    
     reply(replyInfo);
 }
 

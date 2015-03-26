@@ -13,6 +13,7 @@ extern NSString* const GMAIL_SERVICE;
 
 @interface SWAUtility : NSObject
 
-+(NSString *)readableTime:(NSDate*)time;
++ (NSString *)readableTime:(NSDate*)time;
++ (void)sendErrorToHost:(NSError *)error;
 
 @end

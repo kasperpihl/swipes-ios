@@ -6,7 +6,9 @@
 //  Copyright (c) 2015 Pihl IT. All rights reserved.
 //
 
+@import WatchKit;
 #import "SWAIncludes.h"
+#import "SWADefinitions.h"
 #import "NSDate-Utilities.h"
 #import "SWAUtility.h"
 
@@ -15,7 +17,7 @@ NSString* const GMAIL_SERVICE = @"gmail";
 
 @implementation SWAUtility
 
-+(NSString*)timeStringForDate:(NSDate*)date{
++ (NSString*)timeStringForDate:(NSDate*)date{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[NSLocale currentLocale]];
     [dateFormatter setDateStyle:NSDateFormatterNoStyle];
@@ -24,7 +26,7 @@ NSString* const GMAIL_SERVICE = @"gmail";
     
 }
 
-+(NSString *)readableTime:(NSDate*)time
++ (NSString *)readableTime:(NSDate*)time
 {
     if (!time)
         return nil;
@@ -66,6 +68,16 @@ NSString* const GMAIL_SERVICE = @"gmail";
     }
     
     return [NSString stringWithFormat:@"%@, %@",dateString,timeString];
+}
+
++ (void)sendErrorToHost:(NSError *)error
+{
+    NSDictionary* data = @{kKeyCmdError: error};
+    [WKInterfaceController openParentApplication:data reply:^(NSDictionary *replyInfo, NSError *error) {
+        if (error) {
+            DLog(@"Error sendErrorToHost %@", error);
+        }
+    }];
 }
 
 @end
