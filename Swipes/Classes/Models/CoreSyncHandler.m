@@ -222,9 +222,10 @@
 
 -(void)sendStatus:(SyncStatus)status userInfo:(NSDictionary*)userInfo error:(NSError*)error{
     dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL showErrorOnce = self.showErrorOnce;
         NSString *title = [self titleForStatus:status];
         CGFloat duration = [self durationForStatus:status];
-        if( title ){
+        if( title && ((SyncStatusError != status) || ((SyncStatusError == status) && !showErrorOnce))) {
             NSDictionary *userInfoToNotification = @{ @"title": title, @"duration": @( duration ) };
             [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:userInfoToNotification];
         }
