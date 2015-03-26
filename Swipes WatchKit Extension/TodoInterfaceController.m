@@ -20,6 +20,8 @@
 #import "TodoInterfaceController.h"
 
 static NSInteger const kTotalRows = 1;
+static NSString* const kEvernoteIntegrationIconFull = @"integrationEvernoteFull";
+static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
 
 @interface TodoInterfaceController() <SWASubtaskCellDelegate, MenuInterfaceControllerDelegate>
 
@@ -66,16 +68,6 @@ static NSInteger const kTotalRows = 1;
     }
 }
 
-//- (NSAttributedString *)stringForSubtask:(KPToDo *)todo
-//{
-//    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"\ue654 %@", todo.title]];
-//    UIFont* swipesFont = iconFont(10);
-//    UIColor* cyrcleColor = todo.completionDate ? DONE_COLOR : TASKS_COLOR;
-//    [attributedString addAttribute:NSFontAttributeName value:swipesFont range:NSMakeRange(0, 1)];
-//    [attributedString addAttribute:NSForegroundColorAttributeName value:cyrcleColor range:NSMakeRange(0,1)];
-//    return attributedString;
-//}
-//
 - (void)reloadData
 {
     // gather data about rows
@@ -125,17 +117,21 @@ static NSInteger const kTotalRows = 1;
         NSUInteger index = 0;
         for (KPAttachment* attachment in _todo.attachments) {
             if ([attachment.service isEqualToString:EVERNOTE_SERVICE]) {
-                [str insertString:@"\ue64d" atIndex:index++];
+                [str insertString:kEvernoteIntegrationIconFull atIndex:0]; // put evernote first
+                index += kEvernoteIntegrationIconFull.length;
             }
             else if ([attachment.service isEqualToString:GMAIL_SERVICE]) {
-                [str insertString:@"\ue606" atIndex:index++];
+                [str insertString:kMailIntegrationIconFull atIndex:index];
+                index += kMailIntegrationIconFull.length;
             }
         }
         
         // set attributes
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:str];
         UIFont *swipesFont = iconFont(10);
-        [attributedString addAttribute:NSFontAttributeName value:swipesFont range:NSMakeRange(0,index)];
+        NSRange iconsRange = NSMakeRange(0, index);
+        [attributedString addAttribute:NSFontAttributeName value:swipesFont range:iconsRange];
+        [attributedString addAttribute:NSKernAttributeName value:@(1.5) range:iconsRange];
         [cell.tags setAttributedText:attributedString];
     }
     else {
@@ -165,16 +161,6 @@ static NSInteger const kTotalRows = 1;
     }];
 }
 
-//- (IBAction)onDelete:(id)sender
-//{
-//    [WKInterfaceController openParentApplication:@{kKeyCmdDelete: _todo.tempId} reply:^(NSDictionary *replyInfo, NSError *error) {
-//        if (error) {
-//            
-//        }
-//        [self popController];
-//    }];
-//}
-//
 - (IBAction)onSchedule:(id)sender
 {
     [self pushControllerWithName:@"Schedule" context:_todo];

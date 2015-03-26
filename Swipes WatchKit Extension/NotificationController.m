@@ -51,10 +51,25 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
     [super didDeactivate];
 }
 
-- (NSUInteger)loadTodoData:(KPToDo *)todo offset:(NSUInteger)offset
+- (void)loadDataForToDo:(KPToDo *)todo
 {
-    NSUInteger totalRows = 1;
-    SWADetailCell* cell = [_table rowControllerAtIndex:offset];
+    // load cell types
+    NSMutableArray* cellTypes = @[kCellTypeTitle].mutableCopy;
+    NSArray* filteredSubtasks;
+    if (0 < todo.subtasks.count) {
+        NSPredicate *uncompletedPredicate = [NSPredicate predicateWithFormat:@"completionDate == nil"];
+        NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
+        filteredSubtasks = [[todo.subtasks filteredSetUsingPredicate:uncompletedPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
+        if (0 < filteredSubtasks.count) {
+            for (NSUInteger i = 0; i < filteredSubtasks.count; i++) {
+                [cellTypes addObject:kCellTypeSubtask];
+            }
+        }
+    }
+    [_table setRowTypes:cellTypes];
+    
+    // load data
+    SWADetailCell* cell = [_table rowControllerAtIndex:0];
     [cell.label setText:todo.title];
     if (todo.tags.count) {
         NSMutableString* str = [[NSMutableString alloc] init];
@@ -69,47 +84,15 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
     else {
         [cell.tags setHidden:YES];
     }
-
+    
     // load subtasks
-    NSArray* subtasks;
-    if (0 < todo.subtasks.count) {
-        NSPredicate *uncompletedPredicate = [NSPredicate predicateWithFormat:@"completionDate == nil"];
-        NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
-        subtasks = [[todo.subtasks filteredSetUsingPredicate:uncompletedPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
-        if (0 < subtasks.count) {
-            NSUInteger index = offset + totalRows;
-            for (KPToDo* subtask in subtasks) {
-                SWASubtaskCell* subtaskCell = [self.table rowControllerAtIndex:index++];
-                [subtaskCell.label setText:subtask.title];
-            }
-            totalRows += subtasks.count;
+    if (0 < filteredSubtasks.count) {
+        NSUInteger index = 1;
+        for (KPToDo* subtask in filteredSubtasks) {
+            SWASubtaskCell* subtaskCell = [self.table rowControllerAtIndex:index++];
+            [subtaskCell.label setText:subtask.title];
         }
     }
-    
-    return totalRows;
-}
-
-- (NSArray *)cellTypesForTodo:(KPToDo *)todo
-{
-    NSMutableArray* cellTypes = @[kCellTypeTitle].mutableCopy;
-    if (todo.subtasks) {
-        for (NSUInteger i = 0; i < todo.subtasks.count; i++) {
-            [cellTypes addObject:kCellTypeSubtask];
-        }
-    }
-    return cellTypes;
-}
-
-- (void)loadDataForToDo:(KPToDo *)todo
-{
-    // load cell types
-    NSMutableArray* cellTypes = [NSMutableArray array];
-    [cellTypes addObjectsFromArray:[self cellTypesForTodo:todo]];
-    [_table setRowTypes:cellTypes];
-    
-    // load data
-    NSUInteger offset = 0;
-    offset += [self loadTodoData:todo offset:offset];
 }
 
 - (void)loadDataForToDos:(NSArray *)toDos

@@ -22,11 +22,18 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 @property (nonatomic, weak) IBOutlet WKInterfaceGroup* group;
 
 @property (nonatomic, readonly, strong) NSArray* todos;
+@property (nonatomic, readonly, strong) NSMutableArray* todoTempIds;
 
 @end
 
 
 @implementation TodayInterfaceController
+
+- (void)awakeWithContext:(id)context
+{
+    [super awakeWithContext:context];
+    _todoTempIds = [NSMutableArray array];
+}
 
 - (void)willActivate
 {
@@ -55,20 +62,37 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
     }
 }
 
+- (BOOL)areDifferentArrays:(NSArray *)newTodos
+{
+    for (NSUInteger i = 0; i < newTodos.count; i++) {
+        if (![((KPToDo *)newTodos[i]).tempId isEqualToString:_todoTempIds[i]]) {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
 - (void)reloadData
 {
     NSError* error;
-    DLog(@"Reloading data");
-    _todos = [[SWACoreDataModel sharedInstance] loadTodosWithError:&error oneResult:NO];
-    [self fillData];
+//    DLog(@"Reloading data");
+    NSArray* newTodos = [[SWACoreDataModel sharedInstance] loadTodosWithError:&error oneResult:NO];
+    if (newTodos.count != _todos.count || [self areDifferentArrays:newTodos]) {
+        _todos = newTodos;
+        [self fillData];
+    }
+    else {
+        _todos = newTodos;
+    }
 }
 
 - (void)fillData
 {
     BOOL hasTodos = _todos.count > 0;
-    [self.noDataImage setHidden:hasTodos];
-    [self.refreshButton setHidden:hasTodos];
-    [self.group setBackgroundColor:hasTodos ? [UIColor blackColor] : TASKS_COLOR];
+    [_todoTempIds removeAllObjects];
+    [self.table setHidden:YES];
+    [self.group setHidden:hasTodos];
     [self.table setNumberOfRows:_todos.count withRowType:ROW_TYPE_NAME];
     for (NSUInteger i = 0; i < _todos.count; i++) {
         SWATodoCell* cell = [self.table rowControllerAtIndex:i];
@@ -76,8 +100,10 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
         [cell.group setBackgroundColor:TASKS_COLOR];
         [cell.label setText:todo.title];
         [cell.label setTextColor:TEXT_COLOR];
+        [_todoTempIds addObject:todo.tempId];
         DLog(@"TODO: %@: %@", todo.title, todo.tempId);
     }
+    [self.table setHidden:NO];
 }
 
 - (void)table:(WKInterfaceTable *)table didSelectRowAtIndex:(NSInteger)rowIndex

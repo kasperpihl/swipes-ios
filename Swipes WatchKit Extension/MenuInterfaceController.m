@@ -13,6 +13,7 @@
 
 @property (nonatomic, weak) IBOutlet WKInterfaceButton* completeButton;
 @property (nonatomic, weak) IBOutlet WKInterfaceButton* snoozeButton;
+
 @property (nonatomic, weak) id<MenuInterfaceControllerDelegate> delegate;
 
 @end
@@ -23,8 +24,8 @@
 {
     [super awakeWithContext:context];
     _delegate = context;
-    [_completeButton setTitle:[Global iconStringForString:@"roundConfirm"]];
-    [_snoozeButton setTitle:[Global iconStringForString:@"settingsSchedule"]];
+    [_completeButton setTitle:iconString(@"roundConfirm")];
+    [_snoozeButton setTitle:iconString(@"settingsSchedule")];
 }
 
 - (void)willActivate

@@ -132,6 +132,7 @@ static NSString* const DATABASE_FOLDER = @"database";
 - (NSArray *)loadTodosWithError:(NSError **)error oneResult:(BOOL)oneResult
 {
     _managedObjectContext = nil; // force refresh!
+    //_persistentStoreCoordinator = nil; // force refresh!
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];

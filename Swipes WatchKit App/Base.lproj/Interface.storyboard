@@ -16,27 +16,27 @@
             <objects>
                 <controller id="WHq-iy-Tkd" customClass="TodayInterfaceController">
                     <items>
+                        <table alignment="left" id="3dt-00-epq">
+                            <items>
+                                <tableRow identifier="SWATodoCell" id="v5V-TE-Ooo" customClass="SWATodoCell">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" id="DIF-hI-qaJ">
+                                        <items>
+                                            <label width="1" alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="9hb-dn-s4h"/>
+                                        </items>
+                                        <edgeInsets key="margins" left="8" right="8" top="8" bottom="8"/>
+                                        <connections>
+                                            <segue destination="U58-tQ-Xcj" kind="push" id="5oo-O6-1KN"/>
+                                        </connections>
+                                    </group>
+                                    <connections>
+                                        <outlet property="group" destination="DIF-hI-qaJ" id="qcq-rx-0eg"/>
+                                        <outlet property="label" destination="9hb-dn-s4h" id="efj-FZ-uh8"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
                         <group width="1" height="1" alignment="left" contentMode="scaleAspectFill" layout="vertical" radius="0.0" id="Tzr-vo-j6m">
                             <items>
-                                <table alignment="left" id="3dt-00-epq">
-                                    <items>
-                                        <tableRow identifier="SWATodoCell" id="v5V-TE-Ooo" customClass="SWATodoCell">
-                                            <group key="rootItem" width="1" height="0.0" alignment="left" id="DIF-hI-qaJ">
-                                                <items>
-                                                    <label width="1" alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="9hb-dn-s4h"/>
-                                                </items>
-                                                <edgeInsets key="margins" left="8" right="8" top="8" bottom="8"/>
-                                                <connections>
-                                                    <segue destination="U58-tQ-Xcj" kind="push" id="5oo-O6-1KN"/>
-                                                </connections>
-                                            </group>
-                                            <connections>
-                                                <outlet property="group" destination="DIF-hI-qaJ" id="qcq-rx-0eg"/>
-                                                <outlet property="label" destination="9hb-dn-s4h" id="efj-FZ-uh8"/>
-                                            </connections>
-                                        </tableRow>
-                                    </items>
-                                </table>
                                 <imageView alignment="left" image="alldone-transparent" contentMode="scaleAspectFit" id="i54-Lj-5qO"/>
                                 <button width="0.80000000000000004" height="36" alignment="center" title="Refresh" id="Gyb-1F-vO9">
                                     <color key="backgroundColor" red="0.84705882352941175" green="0.63137254901960782" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
