@@ -72,7 +72,7 @@
             [cellInfo addObject:@{kKeyTitle: @"Gmail",
                                   kKeyCellType: @(kIntegrationCellTypeCheck),
                                   kKeyIsOn: @(openType == MailOpenTypeGmail),
-                                  kKeyIcon: @"integrationMail",
+                                  kKeyIcon: @"integrationGmail",
                                   kKeyTouchSelector: NSStringFromSelector(@selector(onGMailTouch))
                                   }.mutableCopy];
         }
@@ -80,7 +80,7 @@
             [cellInfo addObject:@{kKeyTitle: @"Cloud Magic",
                                   kKeyCellType: @(kIntegrationCellTypeCheck),
                                   kKeyIsOn: @(openType == MailOpenTypeCloudMagic),
-                                  kKeyIcon: @"integrationMail",
+                                  kKeyIcon: @"integrationCloudMagic",
                                   kKeyTouchSelector: NSStringFromSelector(@selector(onCloudMagicTouch))
                                   }.mutableCopy];
         }
