@@ -120,7 +120,7 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
                             inTable:(WKInterfaceTable *)table
                            rowIndex:(NSInteger)rowIndex
 {
-    return _todos[rowIndex];
+    return ((KPToDo *)_todos[rowIndex]).tempId;
 }
 
 @end

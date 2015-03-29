@@ -27,7 +27,9 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
 
 @property (nonatomic, weak) IBOutlet WKInterfaceTable* table;
 @property (nonatomic, strong) KPToDo* todo;
+@property (nonatomic, strong) id context;
 @property (nonatomic, strong) NSMutableSet* todosToCheck;
+@property (nonatomic, assign) BOOL shouldReload;
 
 @end
 
@@ -37,24 +39,23 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
 - (void)awakeWithContext:(id)context
 {
     [super awakeWithContext:context];
-    if ([context isKindOfClass:KPToDo.class])
-        _todo = context;
-    else {
-        NSError* error;
-        _todo = [[SWACoreDataModel sharedInstance] loadTodoWithTempId:context error:&error];
-        if (error) {
-            [SWAUtility sendErrorToHost:error];
-        }
-    }
-    DLog(@"TODO is: %@", _todo);
-    _todosToCheck = [NSMutableSet set];
-    [self reloadData];
+    _context = context;
+    _shouldReload = YES;
 }
 
 - (void)willActivate
 {
-    // This method is called when watch view controller is about to be visible to user
     [super willActivate];
+    if (_shouldReload) {
+        NSError* error;
+        _todo = [[SWACoreDataModel sharedInstance] loadTodoWithTempId:_context error:&error];
+        if (error) {
+            [SWAUtility sendErrorToHost:error];
+        }
+        DLog(@"TODO is: %@", _todo);
+        _todosToCheck = [NSMutableSet set];
+        [self reloadData];
+    }
 }
 
 - (void)didDeactivate
@@ -69,6 +70,7 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
                 DLog(@"Error didDeactivate %@", error);
             }
         }];
+        _shouldReload = YES;
     }
 }
 
@@ -153,6 +155,7 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
         }
     }
     
+    _shouldReload = NO;
 }
 
 - (IBAction)onMarkDone:(id)sender

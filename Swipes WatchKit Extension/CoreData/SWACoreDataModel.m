@@ -157,6 +157,7 @@ static NSString* const DATABASE_FOLDER = @"database";
 
 - (KPToDo *)loadTodoWithTempId:(NSString *)tempId error:(NSError **)error
 {
+    _managedObjectContext = nil; // force refresh!
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];
