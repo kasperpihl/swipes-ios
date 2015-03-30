@@ -15,15 +15,15 @@
 #import "SWAUtility.h"
 #import "SWASubtaskCell.h"
 #import "SWADetailCell.h"
+#import "SWAButtonCell.h"
 #import "SWACoreDataModel.h"
-#import "MenuInterfaceController.h"
 #import "TodoInterfaceController.h"
 
 static NSInteger const kTotalRows = 1;
 static NSString* const kEvernoteIntegrationIconFull = @"integrationEvernoteFull";
 static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
 
-@interface TodoInterfaceController() <SWASubtaskCellDelegate, MenuInterfaceControllerDelegate>
+@interface TodoInterfaceController() <SWASubtaskCellDelegate, SWAButtonCellDelegate>
 
 @property (nonatomic, weak) IBOutlet WKInterfaceTable* table;
 @property (nonatomic, strong) KPToDo* todo;
@@ -92,6 +92,7 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
     for (NSUInteger i = kTotalRows; i < totalRows; i++) {
         [rowTypes addObject:@"SWASubtaskCell"];
     }
+    [rowTypes addObject:@"SWAButtonCell"];
     [self.table setRowTypes:rowTypes];
 
     // fill rows
@@ -128,7 +129,7 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
         }
         
         // set attributes
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:str];
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:str];
         UIFont *swipesFont = iconFont(10);
         NSRange iconsRange = NSMakeRange(0, index);
         [attributedString addAttribute:NSFontAttributeName value:swipesFont range:iconsRange];
@@ -139,16 +140,20 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
         [cell.tags setHidden:YES];
     }
 
+    // add subtasks
     if (0 < subtasks.count) {
         NSUInteger index = kTotalRows;
         for (KPToDo* todo in subtasks) {
             SWASubtaskCell* subtaskCell = [self.table rowControllerAtIndex:index++];
-            //[subtaskCell.button setTitle:@"\ue62c"];
             subtaskCell.todo = todo;
             subtaskCell.delegate = self;
             [subtaskCell.label setText:todo.title];
         }
     }
+    
+    // buttons
+    SWAButtonCell* buttonCell = [self.table rowControllerAtIndex:rowTypes.count - 1];
+    buttonCell.delegate = self;
     
     _shouldReload = NO;
 }
@@ -179,21 +184,14 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
     }
 }
 
-- (void)onMenuChoice:(SWAMenuChoice)choice
+- (void)onButton1Touch
 {
-    if (SWA_MENU_CHOICE_COMPLETE == choice) {
-        [self onMarkDone:nil];
-    }
-    else if (SWA_MENU_CHOICE_SNOOZE) {
-        [self onSchedule:nil];
-    }
+    [self onSchedule:nil];
 }
 
-- (id)contextForSegueWithIdentifier:(NSString *)segueIdentifier
-                            inTable:(WKInterfaceTable *)table
-                           rowIndex:(NSInteger)rowIndex
+- (void)onButton2Touch
 {
-    return self;
+    [self onMarkDone:nil];
 }
 
 @end

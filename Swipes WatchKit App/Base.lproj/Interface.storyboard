@@ -38,7 +38,7 @@
                         <group width="1" height="1" alignment="left" contentMode="scaleAspectFill" layout="vertical" radius="0.0" id="Tzr-vo-j6m">
                             <items>
                                 <imageView alignment="left" image="alldone-transparent" contentMode="scaleAspectFit" id="i54-Lj-5qO"/>
-                                <button width="0.80000000000000004" height="36" alignment="center" title="Refresh" id="Gyb-1F-vO9">
+                                <button width="0.80000000000000004" height="30" alignment="center" title="Refresh" id="Gyb-1F-vO9">
                                     <color key="backgroundColor" red="0.84705882352941175" green="0.63137254901960782" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="font" type="system" weight="semibold" pointSize="15"/>
                                     <connections>
@@ -67,7 +67,7 @@
                     <items>
                         <table alignment="left" id="iHg-jP-A0N">
                             <items>
-                                <tableRow identifier="SWADetailCell" id="lqg-L1-Pr9" customClass="SWADetailCell">
+                                <tableRow identifier="SWADetailCell" selectable="NO" id="lqg-L1-Pr9" customClass="SWADetailCell">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" backgroundImage="detail-shadow" layout="vertical" radius="0.0" spacing="0.0" id="AFk-G9-9Is">
                                         <items>
                                             <label width="1" alignment="left" text="Label" textAlignment="left" numberOfLines="2" id="o4X-Ix-PQr">
@@ -82,9 +82,6 @@
                                         </items>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <edgeInsets key="margins" left="4" right="4" top="8" bottom="8"/>
-                                        <connections>
-                                            <segue destination="n0B-za-cdT" kind="push" id="HTE-TX-eIB"/>
-                                        </connections>
                                     </group>
                                     <connections>
                                         <outlet property="label" destination="o4X-Ix-PQr" id="oal-Ag-auC"/>
@@ -114,6 +111,34 @@
                                         <outlet property="label" destination="q4P-u5-MyL" id="bW4-kt-uLu"/>
                                     </connections>
                                 </tableRow>
+                                <tableRow identifier="SWAButtonCell" selectable="NO" id="Cuh-Eq-XTx" customClass="SWAButtonCell">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" id="Pgd-iz-j2z">
+                                        <items>
+                                            <button width="0.5" alignment="center" title="settingsSchedule" id="Jh8-Qu-E6e">
+                                                <color key="titleColor" red="1" green="0.3411764706" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="font" name="swipes" family="swipes" pointSize="40"/>
+                                                <connections>
+                                                    <action selector="onButton1Touch:" destination="Cuh-Eq-XTx" id="Evg-ry-Pgv"/>
+                                                </connections>
+                                            </button>
+                                            <button width="0.5" alignment="center" verticalAlignment="center" title="roundConfirm" id="JC6-NH-rc6">
+                                                <color key="titleColor" red="0.5450980392" green="0.68627450980000004" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="font" name="swipes" family="swipes" pointSize="40"/>
+                                                <connections>
+                                                    <action selector="onButton2Touch:" destination="Cuh-Eq-XTx" id="jG4-JN-YH5"/>
+                                                </connections>
+                                            </button>
+                                        </items>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <edgeInsets key="margins" left="0.0" right="0.0" top="4" bottom="16"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="button1" destination="JC6-NH-rc6" id="uv3-hc-K9T"/>
+                                        <outlet property="button2" destination="Jh8-Qu-E6e" id="zF1-Xq-exC"/>
+                                    </connections>
+                                </tableRow>
                             </items>
                         </table>
                     </items>
@@ -137,48 +162,6 @@
                 </controller>
             </objects>
             <point key="canvasLocation" x="456" y="340"/>
-        </scene>
-        <!--Select-->
-        <scene sceneID="E8P-Wa-qGI">
-            <objects>
-                <controller identifier="menu" title="Select" id="n0B-za-cdT" customClass="MenuInterfaceController">
-                    <items>
-                        <group width="1" alignment="left" layout="vertical" id="pXf-VO-l66">
-                            <items>
-                                <button width="0.59999999999999998" height="0.5" alignment="center" verticalAlignment="center" title="Complete" id="lBu-ka-WHX">
-                                    <color key="titleColor" red="0.54509803921568623" green="0.68627450980392157" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <fontDescription key="font" name="swipes" family="swipes" pointSize="60"/>
-                                    <variation key="device=watch38mm">
-                                        <fontDescription key="font" name="swipes" family="swipes" pointSize="55"/>
-                                    </variation>
-                                    <connections>
-                                        <action selector="onComplete:" destination="n0B-za-cdT" id="wiu-6O-1EA"/>
-                                    </connections>
-                                </button>
-                                <button width="0.59999999999999998" height="0.5" alignment="center" verticalAlignment="bottom" title="Snooze" id="ZCX-35-FzX">
-                                    <color key="titleColor" red="1" green="0.3411764705882353" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <fontDescription key="font" name="swipes" family="swipes" pointSize="60"/>
-                                    <variation key="device=watch38mm">
-                                        <fontDescription key="font" name="swipes" family="swipes" pointSize="55"/>
-                                    </variation>
-                                    <connections>
-                                        <action selector="onSnooze:" destination="n0B-za-cdT" id="yJ1-jf-zDY"/>
-                                    </connections>
-                                </button>
-                            </items>
-                            <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="10"/>
-                        </group>
-                    </items>
-                    <color key="backgroundColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <connections>
-                        <outlet property="completeButton" destination="lBu-ka-WHX" id="r9e-3K-pcH"/>
-                        <outlet property="snoozeButton" destination="ZCX-35-FzX" id="nIB-GT-Vm7"/>
-                    </connections>
-                </controller>
-            </objects>
-            <point key="canvasLocation" x="673" y="340"/>
         </scene>
         <!--Snooze-->
         <scene sceneID="Reb-CZ-h15">

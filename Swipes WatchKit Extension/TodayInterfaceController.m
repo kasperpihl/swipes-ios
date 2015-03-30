@@ -78,7 +78,7 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
     NSError* error;
 //    DLog(@"Reloading data");
     NSArray* newTodos = [[SWACoreDataModel sharedInstance] loadTodosWithError:&error oneResult:NO];
-    if (newTodos.count != _todos.count || [self areDifferentArrays:newTodos]) {
+    if ((nil == _todos) || (newTodos.count != _todos.count) || [self areDifferentArrays:newTodos]) {
         _todos = newTodos;
         [self fillData];
     }
@@ -103,7 +103,7 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
         [_todoTempIds addObject:todo.tempId];
         DLog(@"TODO: %@: %@", todo.title, todo.tempId);
     }
-    [self.table setHidden:NO];
+    [self.table setHidden:!hasTodos];
 }
 
 - (void)table:(WKInterfaceTable *)table didSelectRowAtIndex:(NSInteger)rowIndex
