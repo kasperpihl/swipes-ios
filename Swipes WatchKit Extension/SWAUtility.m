@@ -80,4 +80,14 @@ NSString* const GMAIL_SERVICE = @"gmail";
     }];
 }
 
++ (NSArray *)nonCompletedSubtasks:(NSSet *)subtasks
+{
+    if (!subtasks || (0 == subtasks.count))
+        return @[];
+    
+    NSPredicate *uncompletedPredicate = [NSPredicate predicateWithFormat:@"completionDate == nil"];
+    NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
+    return [[subtasks filteredSetUsingPredicate:uncompletedPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
+}
+
 @end

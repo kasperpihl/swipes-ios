@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WHq-iy-Tkd">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WHq-iy-Tkd">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
@@ -246,13 +246,16 @@
                     <items>
                         <group alignment="left" layout="vertical" radius="0.0" spacing="0.0" id="t8f-Gd-c4y">
                             <items>
-                                <label width="1" alignment="left" text="CURRENT TASK" id="zJX-s0-iSs">
+                                <label width="1" alignment="left" text="CURRENT TASK" textAlignment="left" id="zJX-s0-iSs">
                                     <color key="textColor" red="1" green="0.75686274509999996" blue="0.027450980390000001" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="font" type="boldSystem" pointSize="10"/>
                                 </label>
                                 <label width="1" alignment="left" text="Task text" textAlignment="left" numberOfLines="2" id="Cv6-sP-6bc">
                                     <color key="textColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="font" type="system" weight="semibold" pointSize="17"/>
+                                    <variation key="device=watch38mm">
+                                        <fontDescription key="font" type="system" weight="semibold" pointSize="15"/>
+                                    </variation>
                                 </label>
                                 <label width="1" alignment="left" verticalAlignment="bottom" hidden="YES" text="CURRENT TASK" textAlignment="left" numberOfLines="0" id="t5R-hN-FQm">
                                     <color key="textColor" red="1" green="0.75686274509999996" blue="0.027450980390000001" alpha="1" colorSpace="calibratedRGB"/>

@@ -82,14 +82,9 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
     if (_todo.tags.count || _todo.attachments.count) {
         hasTags = YES;
     }
-    NSArray* subtasks;
-    if (0 < _todo.subtasks.count) {
-        NSPredicate *uncompletedPredicate = [NSPredicate predicateWithFormat:@"completionDate == nil"];
-        NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
-        subtasks = [[_todo.subtasks filteredSetUsingPredicate:uncompletedPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
-        if (0 < subtasks.count) {
-            totalRows += subtasks.count;
-        }
+    NSArray* subtasks = [SWAUtility nonCompletedSubtasks:_todo.subtasks];
+    if (0 < subtasks.count) {
+        totalRows += subtasks.count;
     }
 
     // create rows

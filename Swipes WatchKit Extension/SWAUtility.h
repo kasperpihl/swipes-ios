@@ -15,5 +15,6 @@ extern NSString* const GMAIL_SERVICE;
 
 + (NSString *)readableTime:(NSDate*)time;
 + (void)sendErrorToHost:(NSError *)error;
++ (NSArray *)nonCompletedSubtasks:(NSSet *)subtasks;
 
 @end
