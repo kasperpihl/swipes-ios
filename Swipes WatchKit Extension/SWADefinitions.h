@@ -15,5 +15,6 @@
 #define kKeyCmdGlance @"glance"
 #define kKeyCmdDate @"date"
 #define kKeyCmdError @"error"
+#define kKeyCmdAdd @"add"
 
 #endif

@@ -8,6 +8,7 @@
         <mutableArray key="swipes.ttf">
             <string>swipes</string>
             <string>swipes</string>
+            <string>swipes</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -31,6 +32,24 @@
                                     <connections>
                                         <outlet property="group" destination="DIF-hI-qaJ" id="qcq-rx-0eg"/>
                                         <outlet property="label" destination="9hb-dn-s4h" id="efj-FZ-uh8"/>
+                                    </connections>
+                                </tableRow>
+                                <tableRow identifier="SWAButtonCell" selectable="NO" id="uVB-Ka-ZjE" customClass="SWAButtonCell">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" id="RzD-HA-Xgo">
+                                        <items>
+                                            <button width="0.5" alignment="center" verticalAlignment="center" title="roundAdd" id="fw8-lX-JGo">
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="font" name="swipes" family="swipes" pointSize="30"/>
+                                                <connections>
+                                                    <action selector="onButton1Touch:" destination="uVB-Ka-ZjE" id="qqb-ow-Icy"/>
+                                                </connections>
+                                            </button>
+                                        </items>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="8"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="button1" destination="fw8-lX-JGo" id="9MY-QE-fnC"/>
                                     </connections>
                                 </tableRow>
                             </items>

@@ -314,6 +314,11 @@
         }
     }
 
+    tempId = [userInfo valueForKey:kKeyCmdAdd];
+    if (tempId) {
+        [KPToDo addItem:tempId priority:NO tags:nil save:YES from:@"Watch App"];
+    }
+    
     tempId = [userInfo valueForKey:kKeyCmdError];
     if (tempId) {
         [UtilityClass sendError:[NSError errorWithDomain:[tempId description] code:801 userInfo:userInfo] type:@"Watch App"];
