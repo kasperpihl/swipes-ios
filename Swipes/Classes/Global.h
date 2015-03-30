@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #define OSVER [Global OSVersion]
-#define iconString(string) [Global iconStringForString:string]
+#define iconString(string) string // [Global iconStringForString:string]
 #define iconLabel(key,iconHeight) [Global iconLabelWithString:key height:iconHeight]
 #define iconFont(fontSize) [UIFont fontWithName:@"swipes" size:fontSize]
 #define USER_DEFAULTS  [Global sharedDefaults]
