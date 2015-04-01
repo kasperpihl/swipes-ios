@@ -48,29 +48,28 @@
 
 - (void)loadTodo:(KPToDo *)todo isScheduled:(BOOL)isScheduled
 {
-    BOOL hasSubtasks = (0 < todo.subtasks.count);
+    NSArray* subtasks = [SWAUtility nonCompletedSubtasks:todo.subtasks];
+    BOOL hasSubtasks = (0 < subtasks.count);
     [_taskText setHidden:isScheduled || (!hasSubtasks)];
     [_taskText2 setHidden:isScheduled || hasSubtasks];
-    [_taskStatus setHidden:!hasSubtasks];
-    [_taskStatus2 setHidden:hasSubtasks];
+    [_taskStatus setHidden:!hasSubtasks || isScheduled];
+    [_taskStatus2 setHidden:hasSubtasks && !isScheduled];
     [_noTasksImage setHidden:!isScheduled];
-    WKInterfaceLabel* nextLabel = hasSubtasks ? _taskStatus : _taskStatus2;
+    WKInterfaceLabel* nextLabel = hasSubtasks && (!isScheduled) ? _taskStatus : _taskStatus2;
     
     if (hasSubtasks) {
-        [_taskText setText:todo.title];
-        NSArray* subtasks;
-        NSPredicate *uncompletedPredicate = [NSPredicate predicateWithFormat:@"completionDate == nil"];
-        NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
-        subtasks = [[todo.subtasks filteredSetUsingPredicate:uncompletedPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
-        if (1 <= subtasks.count) {
-            [_subtaskGroup1 setHidden:NO];
-            [_subtaskLabel1 setText:((KPToDo *)subtasks[0]).title];
-            if (2 <= subtasks.count) {
-                [_subtaskGroup2 setHidden:NO];
-                [_subtaskLabel2 setText:((KPToDo *)subtasks[1]).title];
-                if (3 <= subtasks.count) {
-                    [_subtaskGroup3 setHidden:NO];
-                    [_subtaskLabel3 setText:((KPToDo *)subtasks[2]).title];
+        if (!isScheduled) {
+            [_taskText setText:todo.title];
+            if (1 <= subtasks.count) {
+                [_subtaskGroup1 setHidden:NO];
+                [_subtaskLabel1 setText:((KPToDo *)subtasks[0]).title];
+                if (2 <= subtasks.count) {
+                    [_subtaskGroup2 setHidden:NO];
+                    [_subtaskLabel2 setText:((KPToDo *)subtasks[1]).title];
+                    if (3 <= subtasks.count) {
+                        [_subtaskGroup3 setHidden:NO];
+                        [_subtaskLabel3 setText:((KPToDo *)subtasks[2]).title];
+                    }
                 }
             }
         }
@@ -112,8 +111,14 @@
             [self loadTodo:todo isScheduled:YES];
         }
         else {
-            // TODO have design for that
-            [_taskText setText:NSLocalizedString(@"No data", nil)];
+            [_taskStatus setHidden:YES];
+            [_noTasksImage setHidden:NO];
+            [_taskText setHidden:YES];
+            [_taskText2 setHidden:YES];
+            [_taskStatus2 setHidden:NO];
+
+            [_taskStatus2 setText:LOCALIZE_STRING(@"NO TASKS\n")];
+            [_taskStatus2 setTextColor:TASKS_COLOR];
         }
     }
 }

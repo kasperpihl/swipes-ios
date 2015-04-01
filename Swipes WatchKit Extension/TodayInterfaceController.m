@@ -11,10 +11,12 @@
 #import "SWACoreDataModel.h"
 #import "SWAIncludes.h"
 #import "SWATodoCell.h"
+#import "SWAButtonCell.h"
+#import "SWAUtility.h"
 
 static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 
-@interface TodayInterfaceController()
+@interface TodayInterfaceController() <SWAButtonCellDelegate>
 
 @property (nonatomic, weak) IBOutlet WKInterfaceTable* table;
 @property (nonatomic, weak) IBOutlet WKInterfaceButton* refreshButton;
@@ -78,7 +80,7 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
     NSError* error;
 //    DLog(@"Reloading data");
     NSArray* newTodos = [[SWACoreDataModel sharedInstance] loadTodosWithError:&error oneResult:NO];
-    if (newTodos.count != _todos.count || [self areDifferentArrays:newTodos]) {
+    if ((nil == _todos) || (newTodos.count != _todos.count) || [self areDifferentArrays:newTodos]) {
         _todos = newTodos;
         [self fillData];
     }
@@ -93,17 +95,32 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
     [_todoTempIds removeAllObjects];
     [self.table setHidden:YES];
     [self.group setHidden:hasTodos];
-    [self.table setNumberOfRows:_todos.count withRowType:ROW_TYPE_NAME];
-    for (NSUInteger i = 0; i < _todos.count; i++) {
-        SWATodoCell* cell = [self.table rowControllerAtIndex:i];
-        KPToDo* todo = _todos[i];
-        [cell.group setBackgroundColor:TASKS_COLOR];
-        [cell.label setText:todo.title];
-        [cell.label setTextColor:TEXT_COLOR];
-        [_todoTempIds addObject:todo.tempId];
-        DLog(@"TODO: %@: %@", todo.title, todo.tempId);
+    
+    if (hasTodos) {
+        // create rows
+        NSMutableArray* rowTypes = [NSMutableArray array];
+        for (NSUInteger i = 0; i < _todos.count; i++) {
+            [rowTypes addObject:ROW_TYPE_NAME];
+        }
+        [rowTypes addObject:@"SWAButtonCell"];
+        [self.table setRowTypes:rowTypes];
+        
+        for (NSUInteger i = 0; i < _todos.count; i++) {
+            SWATodoCell* cell = [self.table rowControllerAtIndex:i];
+            KPToDo* todo = _todos[i];
+            [cell.group setBackgroundColor:TASKS_COLOR];
+            [cell.label setText:todo.title];
+            [cell.label setTextColor:TEXT_COLOR];
+            [_todoTempIds addObject:todo.tempId];
+            DLog(@"TODO: %@: %@", todo.title, todo.tempId);
+        }
+
+        // buttons
+        SWAButtonCell* buttonCell = [self.table rowControllerAtIndex:rowTypes.count - 1];
+        buttonCell.delegate = self;
+        
+        [self.table setHidden:NO];
     }
-    [self.table setHidden:NO];
 }
 
 - (void)table:(WKInterfaceTable *)table didSelectRowAtIndex:(NSInteger)rowIndex
@@ -116,11 +133,30 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
     [self reloadData];
 }
 
+- (void)onButton1Touch
+{
+    [self presentTextInputControllerWithSuggestions:@[LOCALIZE_STRING(@"Email a colleague"), LOCALIZE_STRING(@"Meeting today")]
+                                   allowedInputMode:WKTextInputModePlain completion:^(NSArray *results) {
+        DLog(@"Input: %@", results);
+        if (results && 0 < results[0]) {
+            [WKInterfaceController openParentApplication:@{kKeyCmdAdd: results[0]} reply:^(NSDictionary *replyInfo, NSError *error) {
+                if (error) {
+                    [SWAUtility sendErrorToHost:error];
+                    DLog(@"Error adding task %@", error);
+                }
+                else {
+                    [self reloadData];
+                }
+            }];
+        }
+    }];
+}
+
 - (id)contextForSegueWithIdentifier:(NSString *)segueIdentifier
                             inTable:(WKInterfaceTable *)table
                            rowIndex:(NSInteger)rowIndex
 {
-    return _todos[rowIndex];
+    return ((KPToDo *)_todos[rowIndex]).tempId;
 }
 
 @end

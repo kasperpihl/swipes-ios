@@ -17,7 +17,7 @@ NSString* const GMAIL_SERVICE = @"gmail";
 
 @implementation SWAUtility
 
-+ (NSString*)timeStringForDate:(NSDate*)date{
++ (NSString*)timeStringForDate:(NSDate *)date{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[NSLocale currentLocale]];
     [dateFormatter setDateStyle:NSDateFormatterNoStyle];
@@ -26,7 +26,7 @@ NSString* const GMAIL_SERVICE = @"gmail";
     
 }
 
-+ (NSString *)readableTime:(NSDate*)time
++ (NSString *)readableTime:(NSDate *)time
 {
     if (!time)
         return nil;
@@ -72,12 +72,22 @@ NSString* const GMAIL_SERVICE = @"gmail";
 
 + (void)sendErrorToHost:(NSError *)error
 {
-    NSDictionary* data = @{kKeyCmdError: error};
+    NSDictionary* data = @{kKeyCmdError: error.description};
     [WKInterfaceController openParentApplication:data reply:^(NSDictionary *replyInfo, NSError *error) {
         if (error) {
             DLog(@"Error sendErrorToHost %@", error);
         }
     }];
+}
+
++ (NSArray *)nonCompletedSubtasks:(NSSet *)subtasks
+{
+    if (!subtasks || (0 == subtasks.count))
+        return @[];
+    
+    NSPredicate *uncompletedPredicate = [NSPredicate predicateWithFormat:@"completionDate == nil"];
+    NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
+    return [[subtasks filteredSetUsingPredicate:uncompletedPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
 }
 
 @end

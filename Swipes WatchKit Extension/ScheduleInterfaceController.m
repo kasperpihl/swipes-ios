@@ -11,7 +11,6 @@
 #import "SWAIncludes.h"
 #import "SWADefinitions.h"
 #import "CoreData/KPToDo.h"
-#import "SWAScheduleCell.h"
 #import "ScheduleInterfaceController.h"
 
 static NSString * const kCellIdentifier = @"SWAScheduleCell";

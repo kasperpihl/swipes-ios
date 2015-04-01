@@ -15,19 +15,21 @@
 #import "SWAUtility.h"
 #import "SWASubtaskCell.h"
 #import "SWADetailCell.h"
+#import "SWAButtonCell.h"
 #import "SWACoreDataModel.h"
-#import "MenuInterfaceController.h"
 #import "TodoInterfaceController.h"
 
 static NSInteger const kTotalRows = 1;
 static NSString* const kEvernoteIntegrationIconFull = @"integrationEvernoteFull";
 static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
 
-@interface TodoInterfaceController() <SWASubtaskCellDelegate, MenuInterfaceControllerDelegate>
+@interface TodoInterfaceController() <SWASubtaskCellDelegate, SWAButtonCellDelegate>
 
 @property (nonatomic, weak) IBOutlet WKInterfaceTable* table;
 @property (nonatomic, strong) KPToDo* todo;
+@property (nonatomic, strong) id context;
 @property (nonatomic, strong) NSMutableSet* todosToCheck;
+@property (nonatomic, assign) BOOL shouldReload;
 
 @end
 
@@ -37,24 +39,23 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
 - (void)awakeWithContext:(id)context
 {
     [super awakeWithContext:context];
-    if ([context isKindOfClass:KPToDo.class])
-        _todo = context;
-    else {
-        NSError* error;
-        _todo = [[SWACoreDataModel sharedInstance] loadTodoWithTempId:context error:&error];
-        if (error) {
-            [SWAUtility sendErrorToHost:error];
-        }
-    }
-    DLog(@"TODO is: %@", _todo);
-    _todosToCheck = [NSMutableSet set];
-    [self reloadData];
+    _context = context;
+    _shouldReload = YES;
 }
 
 - (void)willActivate
 {
-    // This method is called when watch view controller is about to be visible to user
     [super willActivate];
+    if (_shouldReload) {
+        NSError* error;
+        _todo = [[SWACoreDataModel sharedInstance] loadTodoWithTempId:_context error:&error];
+        if (error) {
+            [SWAUtility sendErrorToHost:error];
+        }
+        DLog(@"TODO is: %@", _todo);
+        _todosToCheck = [NSMutableSet set];
+        [self reloadData];
+    }
 }
 
 - (void)didDeactivate
@@ -69,6 +70,7 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
                 DLog(@"Error didDeactivate %@", error);
             }
         }];
+        _shouldReload = YES;
     }
 }
 
@@ -80,14 +82,9 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
     if (_todo.tags.count || _todo.attachments.count) {
         hasTags = YES;
     }
-    NSArray* subtasks;
-    if (0 < _todo.subtasks.count) {
-        NSPredicate *uncompletedPredicate = [NSPredicate predicateWithFormat:@"completionDate == nil"];
-        NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
-        subtasks = [[_todo.subtasks filteredSetUsingPredicate:uncompletedPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
-        if (0 < subtasks.count) {
-            totalRows += subtasks.count;
-        }
+    NSArray* subtasks = [SWAUtility nonCompletedSubtasks:_todo.subtasks];
+    if (0 < subtasks.count) {
+        totalRows += subtasks.count;
     }
 
     // create rows
@@ -95,6 +92,7 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
     for (NSUInteger i = kTotalRows; i < totalRows; i++) {
         [rowTypes addObject:@"SWASubtaskCell"];
     }
+    [rowTypes addObject:@"SWAButtonCell"];
     [self.table setRowTypes:rowTypes];
 
     // fill rows
@@ -131,7 +129,7 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
         }
         
         // set attributes
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:str];
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:str];
         UIFont *swipesFont = iconFont(10);
         NSRange iconsRange = NSMakeRange(0, index);
         [attributedString addAttribute:NSFontAttributeName value:swipesFont range:iconsRange];
@@ -142,17 +140,22 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
         [cell.tags setHidden:YES];
     }
 
+    // add subtasks
     if (0 < subtasks.count) {
         NSUInteger index = kTotalRows;
         for (KPToDo* todo in subtasks) {
             SWASubtaskCell* subtaskCell = [self.table rowControllerAtIndex:index++];
-            //[subtaskCell.button setTitle:@"\ue62c"];
             subtaskCell.todo = todo;
             subtaskCell.delegate = self;
             [subtaskCell.label setText:todo.title];
         }
     }
     
+    // buttons
+    SWAButtonCell* buttonCell = [self.table rowControllerAtIndex:rowTypes.count - 1];
+    buttonCell.delegate = self;
+    
+    _shouldReload = NO;
 }
 
 - (IBAction)onMarkDone:(id)sender
@@ -181,21 +184,14 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
     }
 }
 
-- (void)onMenuChoice:(SWAMenuChoice)choice
+- (void)onButton1Touch
 {
-    if (SWA_MENU_CHOICE_COMPLETE == choice) {
-        [self onMarkDone:nil];
-    }
-    else if (SWA_MENU_CHOICE_SNOOZE) {
-        [self onSchedule:nil];
-    }
+    [self onSchedule:nil];
 }
 
-- (id)contextForSegueWithIdentifier:(NSString *)segueIdentifier
-                            inTable:(WKInterfaceTable *)table
-                           rowIndex:(NSInteger)rowIndex
+- (void)onButton2Touch
 {
-    return self;
+    [self onMarkDone:nil];
 }
 
 @end

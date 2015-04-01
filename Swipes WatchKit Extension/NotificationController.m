@@ -55,15 +55,10 @@ NSString* const kCellTypeSubtask = @"SWASubtaskCell";
 {
     // load cell types
     NSMutableArray* cellTypes = @[kCellTypeTitle].mutableCopy;
-    NSArray* filteredSubtasks;
-    if (0 < todo.subtasks.count) {
-        NSPredicate *uncompletedPredicate = [NSPredicate predicateWithFormat:@"completionDate == nil"];
-        NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
-        filteredSubtasks = [[todo.subtasks filteredSetUsingPredicate:uncompletedPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
-        if (0 < filteredSubtasks.count) {
-            for (NSUInteger i = 0; i < filteredSubtasks.count; i++) {
-                [cellTypes addObject:kCellTypeSubtask];
-            }
+    NSArray* filteredSubtasks = [SWAUtility nonCompletedSubtasks:todo.subtasks];
+    if (0 < filteredSubtasks.count) {
+        for (NSUInteger i = 0; i < filteredSubtasks.count; i++) {
+            [cellTypes addObject:kCellTypeSubtask];
         }
     }
     [_table setRowTypes:cellTypes];
