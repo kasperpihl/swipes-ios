@@ -339,4 +339,17 @@
     UILabel *label;
     return label;
 }
+
+- (void)sizeToFit
+{
+    [super sizeToFit];
+    [self layoutTagsFirst:NO];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self layoutTagsFirst:NO];
+}
+
 @end

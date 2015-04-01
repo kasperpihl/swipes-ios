@@ -11,46 +11,46 @@
 #import "KPToDo.h"
 #import "KPAttachment.h"
 #import "KPTag.h"
-#import "KPTagList.h"
+#import "TagsViewController.h"
 #import "ShareViewController.h"
 
-@interface ShareViewController ()
+const NSUInteger kTagsIndex = 0;
+const NSUInteger kScheduleIndex = 1;
+
+@interface ShareViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UITextField* textField;
 @property (nonatomic, weak) IBOutlet UIButton* cancelButton;
+@property (nonatomic, weak) IBOutlet UIButton* backButton;
 @property (nonatomic, weak) IBOutlet UIButton* postButton;
-@property (nonatomic, weak) IBOutlet KPTagList* tagList;
-@property (nonatomic, weak) IBOutlet UIScrollView* scrollView;
+@property (nonatomic, weak) IBOutlet UITextView* notesTextView;
+@property (nonatomic, weak) IBOutlet UITableView* optionsTable;
+@property (nonatomic, weak) IBOutlet UIView* tagsContainer;
+
+@property (nonatomic, weak) TagsViewController* tagsVC;
 
 @property (nonatomic, strong) NSURL* url;
 
 @end
 
-@implementation ShareViewController
+@implementation ShareViewController {
+    BOOL _readTags;
+    BOOL _readSchedule;
+    NSArray* _selectedTags;
+}
 
++ (void)initialize
+{
+    [Parse setApplicationId:@"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
+                  clientKey:@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"];
+    [Global initCoreData];
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    [Parse setApplicationId:@"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
-                  clientKey:@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"];
-    [Global initCoreData];
-
     [self.textField becomeFirstResponder];
-    
-    self.tagList.sorted = YES;
-    self.tagList.addTagButton = NO;
-    self.tagList.emptyText = LOCALIZE_STRING(@"No tags");
-    self.tagList.tagBackgroundColor = tcolorF(BackgroundColor, ThemeLight);
-    self.tagList.tagTitleColor = tcolorF(TextColor, ThemeLight);
-    self.tagList.tagBorderColor = tcolorF(TextColor, ThemeLight);
-    self.tagList.selectedTagBackgroundColor = tcolorF(BackgroundColor, ThemeDark);
-    self.tagList.selectedTagTitleColor = tcolorF(TextColor, ThemeDark);
-    self.tagList.selectedTagBorderColor = tcolorF(TextColor, ThemeLight);
-    self.tagList.spacing = 2;
-    [self.tagList setTags:[KPTag allTagsAsStrings] andSelectedTags:@[]];
-    self.scrollView.contentSize = CGSizeMake(self.tagList.frame.size.width, self.tagList.frame.size.height);
     
     NSExtensionItem* item = [self.extensionContext.inputItems.firstObject copy];
     self.textField.text = item.attributedContentText.string;
@@ -74,19 +74,119 @@
     }
 }
 
-- (IBAction)didCancel:(id)sender
+- (IBAction)onCancel:(id)sender
 {
     [self.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
 }
 
+- (IBAction)onBack:(id)sender
+{
+    _tagsContainer.hidden = YES;
+    _cancelButton.hidden = NO;
+    _backButton.hidden = YES;
+    
+    if (_readTags) {
+        if (_tagsVC) {
+            _selectedTags = [_tagsVC.tagList getSelectedTags];
+            [_optionsTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kTagsIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }
+        _readTags = NO;
+    }
+}
+
 - (void)createTodoWithText:(NSString *)text
 {
-    KPToDo* todo = [KPToDo addItem:text priority:NO tags:[_tagList getSelectedTags] save:YES from:@"Share extension"];
+    KPToDo* todo = [KPToDo addItem:text priority:NO tags:_selectedTags save:YES from:@"Share extension"];
     if (_url) {
         KPAttachment* attachment = [KPAttachment attachmentForService:URL_SERVICE title:[_url absoluteString] identifier:[_url absoluteString] sync:YES];
         [todo addAttachmentsObject:attachment];
     }
     [KPToDo saveToSync];
+}
+
+- (void)setupTagsLabel:(UILabel *)label
+{
+    if (!_selectedTags || (0 == _selectedTags.count)) {
+        label.text = @"Tags";
+    }
+    else {
+        NSMutableString* tags = [NSMutableString string];
+        for (NSUInteger i = 0; i < _selectedTags.count; i++) {
+            if (0 < i) {
+                [tags appendString:@", "];
+            }
+            [tags appendString:_selectedTags[i]];
+        }
+        
+        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"editTags %@", tags]];
+        [attrString addAttribute:NSFontAttributeName value:iconFont(10) range:NSMakeRange(0, 8)];
+        
+        label.attributedText = attrString;
+    }
+}
+
+- (void)setupScheduleLabel:(UILabel *)label
+{
+    label.text = @"Schedule";
+}
+
+- (void)displayView:(UIView *)view
+{
+    view.hidden = NO;
+    _cancelButton.hidden = YES;
+    _backButton.hidden = NO;
+}
+
+#pragma mark - table view fills
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *kCellID = @"shareCell";
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellID];
+    if (nil == cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellID];
+    }
+    
+    switch (indexPath.row) {
+        case kTagsIndex:
+            [self setupTagsLabel:cell.textLabel];
+            break;
+            
+        case kScheduleIndex:
+            [self setupScheduleLabel:cell.textLabel];
+            break;
+    }
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [_textField resignFirstResponder];
+    [_notesTextView resignFirstResponder];
+    
+    switch (indexPath.row) {
+        case kTagsIndex:
+            _readTags = YES;
+            [self displayView:_tagsContainer];
+            break;
+            
+        case kScheduleIndex:
+            break;
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"tags"]) {
+        _tagsVC = segue.destinationViewController;
+    }
 }
 
 @end

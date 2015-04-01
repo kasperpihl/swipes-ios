@@ -565,6 +565,8 @@
 		DAB164F21A6D29A3008D69B2 /* GmailIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164EE1A6D29A3008D69B2 /* GmailIntegration.m */; };
 		DAB1651C1A6D3D8B008D69B2 /* libGTLTouchStaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */; };
 		DAB1651D1A6D3D94008D69B2 /* libGTLTouchStaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */; };
+		DAC8A1661ACAB3E000061377 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAC8A1651ACAB3E000061377 /* Images.xcassets */; };
+		DAC8A16D1ACABFF600061377 /* TagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC8A16C1ACABFF600061377 /* TagsViewController.m */; };
 		DACD541918A19FB000C378DF /* DropboxView.m in Sources */ = {isa = PBXBuildFile; fileRef = DACD541818A19FB000C378DF /* DropboxView.m */; };
 		DACD544318A1ACFC00C378DF /* excel.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542118A1ACFC00C378DF /* excel.png */; };
 		DACD544418A1ACFC00C378DF /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542218A1ACFC00C378DF /* folder.png */; };
@@ -1255,6 +1257,9 @@
 		DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailIntegration.h; path = Integrations/GmailIntegration.h; sourceTree = "<group>"; };
 		DAB164EE1A6D29A3008D69B2 /* GmailIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailIntegration.m; path = Integrations/GmailIntegration.m; sourceTree = "<group>"; };
 		DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GTL.xcodeproj; path = "Swipes/Ressources/Libs/google-api-objectivec-client/Source/GTL.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		DAC8A1651ACAB3E000061377 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DAC8A16B1ACABFF600061377 /* TagsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagsViewController.h; sourceTree = "<group>"; };
+		DAC8A16C1ACABFF600061377 /* TagsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagsViewController.m; sourceTree = "<group>"; };
 		DACD541718A19FB000C378DF /* DropboxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropboxView.h; path = Components/DropboxView.h; sourceTree = "<group>"; };
 		DACD541818A19FB000C378DF /* DropboxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropboxView.m; path = Components/DropboxView.m; sourceTree = "<group>"; };
 		DACD542118A1ACFC00C378DF /* excel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = excel.png; sourceTree = "<group>"; };
@@ -2718,9 +2723,12 @@
 				DAE4D6061AB1C552001BDC52 /* SwipesShare.entitlements */,
 				DAE4D5F61AB1C473001BDC52 /* ShareViewController.h */,
 				DAE4D5F71AB1C473001BDC52 /* ShareViewController.m */,
+				DAC8A16B1ACABFF600061377 /* TagsViewController.h */,
+				DAC8A16C1ACABFF600061377 /* TagsViewController.m */,
 				DAE4D5F91AB1C473001BDC52 /* MainInterface.storyboard */,
 				DA09B0A01AB24D9D002632DC /* Resources */,
 				DAE4D5F41AB1C473001BDC52 /* Supporting Files */,
+				DAC8A1651ACAB3E000061377 /* Images.xcassets */,
 			);
 			path = SwipesShare;
 			sourceTree = "<group>";
@@ -3239,6 +3247,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAC8A1661ACAB3E000061377 /* Images.xcassets in Resources */,
 				DA09AFB61AB1CE84002632DC /* ENSDKResources.bundle in Resources */,
 				DA09B0AB1AB24DDF002632DC /* swipes.ttf in Resources */,
 				DA09B0A71AB24DDF002632DC /* GothamRounded-Bold.ttf in Resources */,
@@ -3755,6 +3764,7 @@
 				DA09AFAA1AB1CE3D002632DC /* UserHandler.m in Sources */,
 				DA09AFB11AB1CE65002632DC /* _KPAttachment.m in Sources */,
 				DA09B0941AB228D6002632DC /* MagicalRecord.m in Sources */,
+				DAC8A16D1ACABFF600061377 /* TagsViewController.m in Sources */,
 				DA09B0531AB228D6002632DC /* NSManagedObjectContext+MagicalObserving.m in Sources */,
 				DA09B02B1AB228D6002632DC /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
 				DA09B07B1AB228D6002632DC /* MagicalRecord+ErrorHandling.m in Sources */,
