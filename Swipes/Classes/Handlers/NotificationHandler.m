@@ -40,10 +40,12 @@ static NotificationHandler *sharedObject;
 }
 
 -(void)sendNotification:(NSNotification*)notification{
+#ifndef NOT_APPLICATION
     NSDictionary *userInfo = notification.userInfo;
     NSString *title = [userInfo objectForKey:@"title"];
     CGFloat duration = [[userInfo objectForKey:@"duration"] floatValue];
     [kTopClock showNotificationWithMessage:title forSeconds:duration];
+#endif
 }
 
 -(void)onUpdateLocalNotifications:(NSNotification*)notification{
@@ -122,6 +124,7 @@ static NotificationHandler *sharedObject;
     }
 }
 -(void)addSound:(NSString*)soundName forNotification:(UILocalNotification**)notifcation{
+#ifndef NOT_APPLICATION
     if(OSVER > 7){
         UIUserNotificationSettings *currentSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
         if ( (currentSettings.types & UIUserNotificationTypeSound) == UIUserNotificationTypeSound ){
@@ -129,8 +132,12 @@ static NotificationHandler *sharedObject;
         }
     }
     else{
+#endif
         [*notifcation setSoundName:soundName];
+
+#ifndef NOT_APPLICATION
     }
+#endif
 }
 -(UILocalNotification*)notificationForDate:(NSDate *)date badgeCounter:(NSInteger)badgeCount title:(NSString *)title userInfo:(NSDictionary*)userInfo{
     UILocalNotification *localNotif = [[UILocalNotification alloc] init];
@@ -147,6 +154,7 @@ static NotificationHandler *sharedObject;
 }
 
 -(void)updateUpcomingNotifications{
+#ifndef NOT_APPLICATION
     BOOL weeklyReminders = [[kSettings valueForSetting:SettingWeeklyReminders] boolValue];
     BOOL dailyReminders = [[kSettings valueForSetting:SettingDailyReminders] boolValue];
     
@@ -231,7 +239,7 @@ static NotificationHandler *sharedObject;
     
     [self scheduleNotifications:localNotifications];
     
-    
+#endif
 }
 
 -(UIUserNotificationSettings*)settingsWithCategories{
@@ -267,18 +275,24 @@ static NotificationHandler *sharedObject;
 
 - (BOOL) pushNotificationOnOrOff
 {
+#ifndef NOT_APPLICATION
     if ([UIApplication instancesRespondToSelector:@selector(isRegisteredForRemoteNotifications)]) {
         return ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
     } else {
         UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
         return (types & UIRemoteNotificationTypeAlert);
     }
+#else
+    return NO;
+#endif
 }
 
 
 -(void)scheduleNotifications:(NSArray*)notifications{
     if(!notifications || notifications.count == 0)
         return;
+
+#ifndef NOT_APPLICATION
     UIApplication *app = [UIApplication sharedApplication];
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
         UIUserNotificationSettings *currentSettings = [app currentUserNotificationSettings];
@@ -327,12 +341,15 @@ static NotificationHandler *sharedObject;
     for(UILocalNotification *notification in notifications){
         [app scheduleLocalNotification:notification];
     }
+#endif
 }
 
 -(void)updateLocalNotifications{
     /* Check for settings */
     BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
     [self updateLocationUpdates];
+
+#ifndef NOT_APPLICATION
     UIApplication *app = [UIApplication sharedApplication];
     NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
@@ -418,6 +435,7 @@ static NotificationHandler *sharedObject;
     }
     [app cancelAllLocalNotifications];
     [self scheduleNotifications:notificationsArray];
+#endif
 }
 
 - (void)updateLocationUpdates
@@ -449,6 +467,7 @@ static NotificationHandler *sharedObject;
 
 -(void)handleGeofences:(NSArray*)arrGeofenceList
 {
+#ifndef NOT_APPLICATION
     NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND isLocallyDeleted <> YES)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
     for (KLGeofence *fence in arrGeofenceList) {
@@ -474,6 +493,7 @@ static NotificationHandler *sharedObject;
     }
     [KPToDo saveToSync];
     [self updateLocalNotifications];
+#endif
 }
 
 - (void)geofencesIn:(NSArray*)arrGeofenceList
@@ -488,8 +508,10 @@ static NotificationHandler *sharedObject;
 
 - (void)clearLocalNotifications
 {
+#ifndef NOT_APPLICATION
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+#endif
 }
 
 -(void)dealloc{

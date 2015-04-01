@@ -567,6 +567,17 @@
 		DAB1651D1A6D3D94008D69B2 /* libGTLTouchStaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */; };
 		DAC8A1661ACAB3E000061377 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAC8A1651ACAB3E000061377 /* Images.xcassets */; };
 		DAC8A16D1ACABFF600061377 /* TagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC8A16C1ACABFF600061377 /* TagsViewController.m */; };
+		DAC8A1781ACC3F6B00061377 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC8A1771ACC3F6B00061377 /* ScheduleViewController.m */; };
+		DAC8A17D1ACC46EC00061377 /* SchedulePopup.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1A21838EBF20047DCC9 /* SchedulePopup.m */; };
+		DAC8A17E1ACC477700061377 /* CKCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B16F1838EBF20047DCC9 /* CKCalendarView.m */; };
+		DAC8A17F1ACC479300061377 /* KPTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1901838EBF20047DCC9 /* KPTimePicker.m */; };
+		DAC8A1801ACC47A200061377 /* KPToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1801838EBF20047DCC9 /* KPToolbar.m */; };
+		DAC8A1811ACC47B800061377 /* MenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A7D7D53817B1A56B00FBC042 /* MenuButton.m */; };
+		DAC8A1821ACC47DD00061377 /* LocationSearchView.m in Sources */ = {isa = PBXBuildFile; fileRef = A792BB8718ABEDB4000573E4 /* LocationSearchView.m */; };
+		DAC8A1831ACC47F400061377 /* LocationResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A792BB8A18AC3A5E000573E4 /* LocationResultCell.m */; };
+		DAC8A1841ACC480900061377 /* NotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B260921733D1FD000BADDE /* NotificationHandler.m */; };
+		DAC8A1851ACC483700061377 /* KitLocate.Framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A76182E0187D37AB00914A05 /* KitLocate.Framework */; };
+		DAC8A1861ACC49D800061377 /* SectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A703B1841838EBF20047DCC9 /* SectionHeaderView.m */; };
 		DACD541918A19FB000C378DF /* DropboxView.m in Sources */ = {isa = PBXBuildFile; fileRef = DACD541818A19FB000C378DF /* DropboxView.m */; };
 		DACD544318A1ACFC00C378DF /* excel.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542118A1ACFC00C378DF /* excel.png */; };
 		DACD544418A1ACFC00C378DF /* folder.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD542218A1ACFC00C378DF /* folder.png */; };
@@ -1260,6 +1271,8 @@
 		DAC8A1651ACAB3E000061377 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DAC8A16B1ACABFF600061377 /* TagsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagsViewController.h; sourceTree = "<group>"; };
 		DAC8A16C1ACABFF600061377 /* TagsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagsViewController.m; sourceTree = "<group>"; };
+		DAC8A1761ACC3F6B00061377 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
+		DAC8A1771ACC3F6B00061377 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
 		DACD541718A19FB000C378DF /* DropboxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropboxView.h; path = Components/DropboxView.h; sourceTree = "<group>"; };
 		DACD541818A19FB000C378DF /* DropboxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropboxView.m; path = Components/DropboxView.m; sourceTree = "<group>"; };
 		DACD542118A1ACFC00C378DF /* excel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = excel.png; sourceTree = "<group>"; };
@@ -1389,6 +1402,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA09AFC61AB1D23F002632DC /* libGTLTouchStaticLib.a in Frameworks */,
+				DAC8A1851ACC483700061377 /* KitLocate.Framework in Frameworks */,
 				DA09AFBF1AB1D215002632DC /* libxml2.dylib in Frameworks */,
 				DA09AFC41AB1D225002632DC /* MobileCoreServices.framework in Frameworks */,
 				DA09AFB51AB1CE80002632DC /* ENSDK.framework in Frameworks */,
@@ -2725,6 +2739,8 @@
 				DAE4D5F71AB1C473001BDC52 /* ShareViewController.m */,
 				DAC8A16B1ACABFF600061377 /* TagsViewController.h */,
 				DAC8A16C1ACABFF600061377 /* TagsViewController.m */,
+				DAC8A1761ACC3F6B00061377 /* ScheduleViewController.h */,
+				DAC8A1771ACC3F6B00061377 /* ScheduleViewController.m */,
 				DAE4D5F91AB1C473001BDC52 /* MainInterface.storyboard */,
 				DA09B0A01AB24D9D002632DC /* Resources */,
 				DAE4D5F41AB1C473001BDC52 /* Supporting Files */,
@@ -3720,6 +3736,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA09B0671AB228D6002632DC /* NSManagedObjectModel+MagicalRecord.m in Sources */,
+				DAC8A1821ACC47DD00061377 /* LocationSearchView.m in Sources */,
 				DA09B09E1AB24127002632DC /* AudioHandler.m in Sources */,
 				DA09AFB41AB1CE65002632DC /* _KPToDo.m in Sources */,
 				DA09B09D1AB24031002632DC /* KPTagList.m in Sources */,
@@ -3731,6 +3748,7 @@
 				DA09AFB71AB1CE8A002632DC /* Vero.m in Sources */,
 				DA09B09C1AB23496002632DC /* NSDate-Utilities.m in Sources */,
 				DA09B0301AB228D6002632DC /* NSString+MagicalDataImport.m in Sources */,
+				DAC8A1801ACC47A200061377 /* KPToolbar.m in Sources */,
 				DA09B0351AB228D6002632DC /* NSManagedObject+MagicalAggregation.m in Sources */,
 				DA09B0121AB228D6002632DC /* MagicalImportFunctions.m in Sources */,
 				DAE4D5F81AB1C473001BDC52 /* ShareViewController.m in Sources */,
@@ -3745,16 +3763,21 @@
 				DA09B0581AB228D6002632DC /* NSManagedObjectContext+MagicalRecord.m in Sources */,
 				DA09AFA81AB1CE3D002632DC /* AnalyticsHandler.m in Sources */,
 				DA09B0441AB228D6002632DC /* NSManagedObject+MagicalRecord.m in Sources */,
+				DAC8A1831ACC47F400061377 /* LocationResultCell.m in Sources */,
+				DAC8A1841ACC480900061377 /* NotificationHandler.m in Sources */,
 				DA09B05D1AB228D6002632DC /* NSManagedObjectContext+MagicalSaves.m in Sources */,
 				DA09AFAD1AB1CE5A002632DC /* KPAttachment.m in Sources */,
 				DA09AFA71AB1CE30002632DC /* IntegrationHandler.m in Sources */,
 				DA09AF9E1AB1CDFB002632DC /* SavedChangeHandler.m in Sources */,
+				DAC8A17E1ACC477700061377 /* CKCalendarView.m in Sources */,
 				DA09AF9F1AB1CDFB002632DC /* ParentSyncHandler.m in Sources */,
+				DAC8A1781ACC3F6B00061377 /* ScheduleViewController.m in Sources */,
 				DA09AFAB1AB1CE49002632DC /* Global.m in Sources */,
 				DA09AFAC1AB1CE50002632DC /* Datamodel.xcdatamodeld in Sources */,
 				DA09AFB31AB1CE65002632DC /* _KPTag.m in Sources */,
 				DA09AF9D1AB1CDFB002632DC /* CoreSyncHandler.m in Sources */,
 				DA09B01C1AB228D6002632DC /* NSEntityDescription+MagicalDataImport.m in Sources */,
+				DAC8A17D1ACC46EC00061377 /* SchedulePopup.m in Sources */,
 				DA09AF9C1AB1CDEB002632DC /* GmailThreadProcessor.m in Sources */,
 				DA09B0621AB228D6002632DC /* NSManagedObjectContext+MagicalThreading.m in Sources */,
 				DA09B0AC1AB25408002632DC /* UIColor+Utilities.m in Sources */,
@@ -3762,12 +3785,14 @@
 				DA09AFA31AB1CE0B002632DC /* GmailIntegration.m in Sources */,
 				DA09AFA01AB1CDFB002632DC /* EvernoteSyncHandler.m in Sources */,
 				DA09AFAA1AB1CE3D002632DC /* UserHandler.m in Sources */,
+				DAC8A1811ACC47B800061377 /* MenuButton.m in Sources */,
 				DA09AFB11AB1CE65002632DC /* _KPAttachment.m in Sources */,
 				DA09B0941AB228D6002632DC /* MagicalRecord.m in Sources */,
 				DAC8A16D1ACABFF600061377 /* TagsViewController.m in Sources */,
 				DA09B0531AB228D6002632DC /* NSManagedObjectContext+MagicalObserving.m in Sources */,
 				DA09B02B1AB228D6002632DC /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
 				DA09B07B1AB228D6002632DC /* MagicalRecord+ErrorHandling.m in Sources */,
+				DAC8A1861ACC49D800061377 /* SectionHeaderView.m in Sources */,
 				DA09AF9A1AB1CDDB002632DC /* KPStringScanner.m in Sources */,
 				DA09B0171AB228D6002632DC /* NSAttributeDescription+MagicalDataImport.m in Sources */,
 				DA09B08F1AB228D6002632DC /* MagicalRecord+ShorthandSupport.m in Sources */,
@@ -3775,6 +3800,7 @@
 				DA09B09A1AB2291B002632DC /* ThemeHandler.m in Sources */,
 				DA09B06C1AB228D6002632DC /* NSPersistentStore+MagicalRecord.m in Sources */,
 				DA09AFA21AB1CDFB002632DC /* GmailSyncHandler.m in Sources */,
+				DAC8A17F1ACC479300061377 /* KPTimePicker.m in Sources */,
 				DA09AFAE1AB1CE5A002632DC /* KPParseObject.m in Sources */,
 				DA09B0711AB228D6002632DC /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
 				DA09AF951AB1CDD1002632DC /* UtilityClass.m in Sources */,
@@ -4768,6 +4794,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 				);
 				GCC_PREFIX_HEADER = "SwipesShare/SwipesShare-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -4780,6 +4807,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
 					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
 					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
@@ -4830,6 +4858,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 				);
 				GCC_PREFIX_HEADER = "SwipesShare/SwipesShare-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -4842,6 +4871,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
 					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
 					"\"${PODS_ROOT}/Headers/Public/Appirater\"",
@@ -4892,6 +4922,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Evernote",
+					"$(PROJECT_DIR)/Swipes/Ressources/Libs",
 				);
 				GCC_PREFIX_HEADER = "SwipesShare/SwipesShare-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -4904,6 +4935,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
 					"\"${PODS_ROOT}/Headers/Public/APAddressBook\"",
 					"\"${PODS_ROOT}/Headers/Public/Appirater\"",

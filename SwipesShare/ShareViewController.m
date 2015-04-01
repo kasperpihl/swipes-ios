@@ -11,7 +11,9 @@
 #import "KPToDo.h"
 #import "KPAttachment.h"
 #import "KPTag.h"
+#import "UITextView+Placeholder.h"
 #import "TagsViewController.h"
+#import "ScheduleViewController.h"
 #import "ShareViewController.h"
 
 const NSUInteger kTagsIndex = 0;
@@ -26,6 +28,7 @@ const NSUInteger kScheduleIndex = 1;
 @property (nonatomic, weak) IBOutlet UITextView* notesTextView;
 @property (nonatomic, weak) IBOutlet UITableView* optionsTable;
 @property (nonatomic, weak) IBOutlet UIView* tagsContainer;
+@property (nonatomic, weak) IBOutlet UIView* scheduleContainer;
 
 @property (nonatomic, weak) TagsViewController* tagsVC;
 
@@ -53,7 +56,14 @@ const NSUInteger kScheduleIndex = 1;
     [self.textField becomeFirstResponder];
     
     NSExtensionItem* item = [self.extensionContext.inputItems.firstObject copy];
-    self.textField.text = item.attributedContentText.string;
+    NSString* fullText = item.attributedContentText.string;
+    NSRange firstNewLine = [fullText rangeOfString:@"\n"];
+    if (firstNewLine.location != NSNotFound) {
+        _notesTextView.text = fullText;
+        fullText = [self firstNonEmptyLine:fullText];
+    }
+    
+    self.textField.text = fullText;
     NSItemProvider* attachment = [item.attachments.firstObject copy];
     if ([attachment hasItemConformingToTypeIdentifier:(NSString *)kUTTypeURL]) {
         [attachment loadItemForTypeIdentifier:(NSString *)kUTTypeURL options:nil completionHandler:^(id<NSSecureCoding> item, NSError *error) {
@@ -63,13 +73,16 @@ const NSUInteger kScheduleIndex = 1;
             }
         }];
     }
+    
+    _notesTextView.placeholderColor = [UIColor lightGrayColor];
+    _notesTextView.placeholder = LOCALIZE_STRING(@"Enter task's notes");
 }
 
 - (IBAction)didSelectPost:(id)sender
 {
     NSString* text = self.textField.text;
     if (0 < text.length) {
-        [self createTodoWithText:text];
+        [self createTodo];
         [self.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
     }
 }
@@ -81,9 +94,7 @@ const NSUInteger kScheduleIndex = 1;
 
 - (IBAction)onBack:(id)sender
 {
-    _tagsContainer.hidden = YES;
-    _cancelButton.hidden = NO;
-    _backButton.hidden = YES;
+    [self hideView];
     
     if (_readTags) {
         if (_tagsVC) {
@@ -94,9 +105,12 @@ const NSUInteger kScheduleIndex = 1;
     }
 }
 
-- (void)createTodoWithText:(NSString *)text
+- (void)createTodo
 {
-    KPToDo* todo = [KPToDo addItem:text priority:NO tags:_selectedTags save:YES from:@"Share extension"];
+    KPToDo* todo = [KPToDo addItem:_textField.text priority:NO tags:_selectedTags save:YES from:@"Share Extension"];
+    if (_notesTextView.text.length) {
+        [todo setNotes:_notesTextView.text];
+    }
     if (_url) {
         KPAttachment* attachment = [KPAttachment attachmentForService:URL_SERVICE title:[_url absoluteString] identifier:[_url absoluteString] sync:YES];
         [todo addAttachmentsObject:attachment];
@@ -130,11 +144,42 @@ const NSUInteger kScheduleIndex = 1;
     label.text = @"Schedule";
 }
 
+- (void)hideView
+{
+    _tagsContainer.hidden = YES;
+    _scheduleContainer.hidden = YES;
+    _cancelButton.hidden = NO;
+    _backButton.hidden = YES;
+}
+
 - (void)displayView:(UIView *)view
 {
     view.hidden = NO;
     _cancelButton.hidden = YES;
     _backButton.hidden = NO;
+}
+
+- (NSString *)firstNonEmptyLine:(NSString *)string
+{
+    NSArray* lines = [string componentsSeparatedByString:@"\n"];
+    for (NSString* line in lines) {
+        NSString* finalLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if (0 < finalLine.length) {
+            return [finalLine copy];
+        }
+    }
+    return @"";
+}
+
+- (void)addCellDisclosure:(UITableViewCell *)cell
+{
+    UILabel* disclosureLabel = [[UILabel alloc] init];
+    disclosureLabel.backgroundColor = [UIColor clearColor];
+    disclosureLabel.textColor = tcolorF(TextColor, ThemeLight);
+    disclosureLabel.font = iconFont(6);
+    disclosureLabel.text = @"arrowRightThick";
+    [disclosureLabel sizeToFit];
+    cell.accessoryView = disclosureLabel;
 }
 
 #pragma mark - table view fills
@@ -152,6 +197,22 @@ const NSUInteger kScheduleIndex = 1;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellID];
     }
     
+    // Remove seperator inset
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    // Prevent the cell from inheriting the Table View's margin settings
+    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+        [cell setPreservesSuperviewLayoutMargins:NO];
+    }
+    
+    // Explictly set your cell's layout margins
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+    [self addCellDisclosure:cell];
     switch (indexPath.row) {
         case kTagsIndex:
             [self setupTagsLabel:cell.textLabel];
@@ -177,6 +238,7 @@ const NSUInteger kScheduleIndex = 1;
             break;
             
         case kScheduleIndex:
+            [self displayView:_scheduleContainer];
             break;
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

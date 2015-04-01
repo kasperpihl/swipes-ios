@@ -57,6 +57,7 @@ target :SwipesShare do
     pod 'Base64'
     pod 'Intercom'
     pod 'GoogleAnalytics-iOS-SDK'
+    pod 'UITextView+Placeholder'
 end
 
 #link_with 'Swipes', 'Swipes_iOS8', 'SwipesKit'

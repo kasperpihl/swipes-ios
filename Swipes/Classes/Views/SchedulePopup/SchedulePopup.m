@@ -65,19 +65,19 @@ typedef enum {
 
 @interface SchedulePopup () <KPBlurryDelegate,CKCalendarDelegate,ToolbarDelegate,KPTimePickerDelegate, UIGestureRecognizerDelegate,LocationSearchDelegate>
 @property (nonatomic,copy) SchedulePopupBlock block;
-@property (nonatomic,weak) IBOutlet UIView *contentView;
+@property (nonatomic,strong) UIView *contentView;
 @property (nonatomic) BOOL isPickingDate;
 @property (nonatomic) BOOL isChoosingLocation;
 @property (nonatomic) BOOL hasReturned;
 @property (nonatomic) NSDate *pickingDate;
-@property (nonatomic) IBOutletCollection(UIButton) NSMutableArray *scheduleButtons;
+@property (nonatomic) NSMutableArray *scheduleButtons;
 @property (nonatomic,strong) CKCalendarView *calendarView;
 @property (nonatomic,strong) LocationSearchView *locationView;
 @property (nonatomic,strong) KPToolbar *toolbar;
 @property (nonatomic,strong) KPTimePicker *timePicker;
 @property (nonatomic) KPScheduleButtons activeButton;
 @property (nonatomic,strong) UIPanGestureRecognizer *panRecognizer;
-@property (nonatomic, weak) IBOutlet UIView *timeViewer;
+@property (nonatomic, strong) UIView *timeViewer;
 @property (nonatomic) BOOL didUseTimePicker;
 @property (nonatomic) UILabel *helpLabel;
 @property (nonatomic) UISegmentedControl *leaveOrArrive;
@@ -530,9 +530,11 @@ typedef enum {
     [UIView setAnimationBeginsFromCurrentState:YES];
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGFloat keyboardHeight = keyboardFrame.size.height;
+#ifndef NOT_APPLICATION
     if(OSVER == 7){
         keyboardHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     }
+#endif
     NSInteger spacing = 3;
     NSInteger startPoint = (OSVER >= 7) ? (20 + spacing) : spacing;
     CGRectSetY(self.contentView,startPoint);
