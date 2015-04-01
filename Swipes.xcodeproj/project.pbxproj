@@ -534,6 +534,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A7495BD31AC9570F00D458AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F38F6A60B66E91D00B24B81;
+			remoteInfo = GTLFramework;
+		};
+		A7495BD51AC9570F00D458AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F12027D11A4CA2F00BEB470;
+			remoteInfo = GTLUnitTests;
+		};
+		A7495BD71AC9570F00D458AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F1AD9020B71603F00DC0485;
+			remoteInfo = DevelopmentTestTool;
+		};
 		DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
@@ -2155,7 +2176,10 @@
 		DAB1650E1A6D3D51008D69B2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				A7495BD41AC9570F00D458AD /* GTL.framework */,
 				DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */,
+				A7495BD61AC9570F00D458AD /* GTLUnitTests.xctest */,
+				A7495BD81AC9570F00D458AD /* DevelopmentTestTool */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2596,6 +2620,27 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		A7495BD41AC9570F00D458AD /* GTL.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GTL.framework;
+			remoteRef = A7495BD31AC9570F00D458AD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A7495BD61AC9570F00D458AD /* GTLUnitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GTLUnitTests.xctest;
+			remoteRef = A7495BD51AC9570F00D458AD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A7495BD81AC9570F00D458AD /* DevelopmentTestTool */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = DevelopmentTestTool;
+			remoteRef = A7495BD71AC9570F00D458AD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -3632,8 +3677,8 @@
 					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ad3bd7b9-10ae-49a1-bca0-48d8782ee6b0";
+				PROVISIONING_PROFILE = "e9a0c893-d951-476e-8e7a-db258295ed5e";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "e9a0c893-d951-476e-8e7a-db258295ed5e";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3730,7 +3775,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesToday/SwipesToday.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -3783,8 +3828,8 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "edc1c1c7-0ff0-4d62-878d-5eb4f8637ed0";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "edc1c1c7-0ff0-4d62-878d-5eb4f8637ed0";
+				PROVISIONING_PROFILE = "f46d6b26-8ac0-4fc8-b444-964e7b4c8167";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "f46d6b26-8ac0-4fc8-b444-964e7b4c8167";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
