@@ -90,6 +90,7 @@ static CGFloat const kLineMarginY = 50;
         UIFont *fontIcon = iconFont(10);
         UIFont *fontTitle = KP_SEMIBOLD(10);
         
+        // ranges
         NSRange rangeFirst = NSMakeRange(0, indicator.length);
         NSRange rangeLast = NSMakeRange(myString.length - indicator.length, indicator.length);
         NSRange rangeTitle = NSMakeRange(indicator.length, myString.length - indicator.length * 2);
@@ -112,7 +113,6 @@ static CGFloat const kLineMarginY = 50;
         [myString addAttribute:NSFontAttributeName value:fontIcon range:rangeLast];
         
         [myString addAttribute:NSKernAttributeName value:@(1.5) range:NSMakeRange(0, myString.length)];
-        
         self.titleLabel.attributedText = [[NSAttributedString alloc]initWithAttributedString: myString];
     }
 }

@@ -2391,10 +2391,10 @@
 		DAB1650E1A6D3D51008D69B2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DACA4A441AAF43D400DB1D2C /* GTL.framework */,
+				A7495BD41AC9570F00D458AD /* GTL.framework */,
 				DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */,
-				DACA4A461AAF43D400DB1D2C /* GTLUnitTests.xctest */,
-				DACA4A481AAF43D400DB1D2C /* DevelopmentTestTool */,
+				A7495BD61AC9570F00D458AD /* GTLUnitTests.xctest */,
+				A7495BD81AC9570F00D458AD /* DevelopmentTestTool */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2884,6 +2884,27 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		A7495BD41AC9570F00D458AD /* GTL.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GTL.framework;
+			remoteRef = A7495BD31AC9570F00D458AD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A7495BD61AC9570F00D458AD /* GTLUnitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GTLUnitTests.xctest;
+			remoteRef = A7495BD51AC9570F00D458AD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A7495BD81AC9570F00D458AD /* DevelopmentTestTool */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = DevelopmentTestTool;
+			remoteRef = A7495BD71AC9570F00D458AD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -4376,6 +4397,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "f46d6b26-8ac0-4fc8-b444-964e7b4c8167";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "f46d6b26-8ac0-4fc8-b444-964e7b4c8167";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
