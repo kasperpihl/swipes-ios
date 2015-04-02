@@ -407,12 +407,20 @@
         self.tryCounter++;
         if( self.tryCounter > 5 )
             return;
+        else
+            self._needSync = YES;
     }
     if (self._needSync) {
         self._isSyncing = NO;
         [self synchronizeForce:YES async:YES];
+        return;
     }
     self._isSyncing = NO;
+    
+    [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+    
+    
+    
     if ((!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) &&
         !kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]) {
         
@@ -423,9 +431,6 @@
         }];
         kEnInt.hasAskedForPermissions = YES;
     }
-    [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
-    
-
     if (kEnInt.enableSync && !self.evernoteSyncHandler.isSyncing && ![EvernoteIntegration isAPILimitReached]) {
         
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
