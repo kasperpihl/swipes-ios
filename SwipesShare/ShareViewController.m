@@ -7,6 +7,7 @@
 //
 
 @import MobileCoreServices;
+#import "Includes.h"
 #import <Parse/Parse.h>
 #import "KPToDo.h"
 #import "KPAttachment.h"
@@ -18,9 +19,12 @@
 
 const NSUInteger kTagsIndex = 0;
 const NSUInteger kScheduleIndex = 1;
+const CGFloat kMargin = 20.f;
+const CGFloat kTopMargin = 35.f;
 
 @interface ShareViewController () <UITableViewDataSource, UITableViewDelegate>
 
+@property (nonatomic, weak) IBOutlet UIView* contentView;
 @property (nonatomic, weak) IBOutlet UITextField* textField;
 @property (nonatomic, weak) IBOutlet UIButton* cancelButton;
 @property (nonatomic, weak) IBOutlet UIButton* backButton;
@@ -76,6 +80,27 @@ const NSUInteger kScheduleIndex = 1;
     
     _notesTextView.placeholderColor = [UIColor lightGrayColor];
     _notesTextView.placeholder = LOCALIZE_STRING(@"Enter task's notes");
+    
+    notify(UIKeyboardWillShowNotification, keyboardWillShow:);
+    notify(UIKeyboardWillHideNotification, keyboardWillHide:);
+}
+
+- (void)dealloc
+{
+    clearNotify();
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    if (UIUserInterfaceIdiomPhone == [UIDevice currentDevice].userInterfaceIdiom) {
+        return UIInterfaceOrientationMaskPortrait;
+    }
+    return UIInterfaceOrientationMaskAll;
+}
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
 }
 
 - (IBAction)didSelectPost:(id)sender
@@ -104,6 +129,48 @@ const NSUInteger kScheduleIndex = 1;
         _readTags = NO;
     }
 }
+
+- (void)moveTextViewForKeyboard:(NSNotification*)aNotification up:(BOOL)up
+{
+    NSDictionary* userInfo = [aNotification userInfo];
+    NSTimeInterval animationDuration;
+    UIViewAnimationCurve animationCurve;
+    CGRect keyboardEndFrame;
+    
+    [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
+    [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+    [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    [UIView setAnimationCurve:animationCurve];
+    
+    CGRect newFrame = self.view.frame;
+    newFrame.origin.x = kMargin;
+    newFrame.origin.y = kTopMargin;
+    newFrame.size.width -= kMargin * 2;
+    if (up)
+        newFrame.size.height = keyboardEndFrame.origin.y - kMargin - kTopMargin;
+    else
+        newFrame.size.height -= kMargin + kTopMargin;
+    
+    _contentView.frame = newFrame;
+    
+    [UIView commitAnimations];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    DLog(@"keyboardWillShow");
+    [self moveTextViewForKeyboard:notification up:YES];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    DLog(@"keyboardWillHide");
+    [self moveTextViewForKeyboard:notification up:NO];
+}
+
 
 - (void)createTodo
 {
