@@ -18,7 +18,9 @@ static const NSUInteger kTagSpacing = 6;
 
 @end
 
-@implementation TagsViewController
+@implementation TagsViewController {
+    NSArray* _tagsAsStrings;
+}
 
 - (void)viewDidLoad
 {
@@ -38,9 +40,16 @@ static const NSUInteger kTagSpacing = 6;
     self.tagList.marginLeft = kTagMargin;
     self.tagList.marginRight = kTagMargin;
     self.tagList.spacing = kTagSpacing;
-    [self.tagList setTags:[KPTag allTagsAsStrings] andSelectedTags:@[]];
+    _tagsAsStrings = [KPTag allTagsAsStrings];
+    [self.tagList setTags:_tagsAsStrings andSelectedTags:_selectedTags ? _selectedTags : @[]];
     //self.scrollView.contentSize = CGSizeMake(self.tagList.frame.size.width, self.tagList.frame.size.height);
     
+}
+
+- (void)setSelectedTags:(NSArray *)selectedTags
+{
+    _selectedTags = [selectedTags copy];
+    [self.tagList setTags:_tagsAsStrings andSelectedTags:_selectedTags ? _selectedTags : @[]];
 }
 
 - (void)didReceiveMemoryWarning

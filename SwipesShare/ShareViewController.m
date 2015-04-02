@@ -8,6 +8,7 @@
 
 @import MobileCoreServices;
 #import "Includes.h"
+#import "Global.h"
 #import <Parse/Parse.h>
 #import "KPToDo.h"
 #import "KPAttachment.h"
@@ -17,12 +18,14 @@
 #import "ScheduleViewController.h"
 #import "ShareViewController.h"
 
-const NSUInteger kTagsIndex = 0;
-const NSUInteger kScheduleIndex = 1;
-const CGFloat kMargin = 20.f;
-const CGFloat kTopMargin = 35.f;
+static const NSUInteger kTagsIndex = 0;
+static const NSUInteger kScheduleIndex = 1;
+static const CGFloat kMargin = 20.f;
+static const CGFloat kTopMargin = 35.f;
+static NSString* const kKeyUserSettingsName = @"ShareExtensionTags";
+static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
-@interface ShareViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ShareViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, weak) IBOutlet UIView* contentView;
 @property (nonatomic, weak) IBOutlet UITextField* textField;
@@ -57,7 +60,7 @@ const CGFloat kTopMargin = 35.f;
 {
     [super viewDidLoad];
     
-    [self.textField becomeFirstResponder];
+    NSString* keyTags = kKeyUserSettingsName;
     
     NSExtensionItem* item = [self.extensionContext.inputItems.firstObject copy];
     NSString* fullText = item.attributedContentText.string;
@@ -76,6 +79,20 @@ const CGFloat kTopMargin = 35.f;
                 self.url = (NSURL *)itm;
             }
         }];
+        keyTags = kKeyUserSettingsNameURL;
+    }
+    
+    NSArray* selectedTags = [USER_DEFAULTS objectForKey:keyTags];
+    if (selectedTags && [selectedTags isKindOfClass:NSArray.class] && (0 < selectedTags.count)) {
+        // clear non existing tags
+        NSMutableArray* selectedMutable = [selectedTags mutableCopy];
+        NSArray* tags = [KPTag allTagsAsStrings];
+        for (NSString* tag in selectedTags) {
+            if (![tags containsObject:tag]) {
+                [selectedMutable removeObject:tag];
+            }
+        }
+        _selectedTags = [selectedMutable copy];
     }
     
     _notesTextView.placeholderColor = [UIColor lightGrayColor];
@@ -83,6 +100,8 @@ const CGFloat kTopMargin = 35.f;
     
     notify(UIKeyboardWillShowNotification, keyboardWillShow:);
     notify(UIKeyboardWillHideNotification, keyboardWillHide:);
+    
+    [self.textField becomeFirstResponder];
 }
 
 - (void)dealloc
@@ -161,16 +180,19 @@ const CGFloat kTopMargin = 35.f;
 
 - (void)keyboardWillShow:(NSNotification *)notification
 {
-    DLog(@"keyboardWillShow");
     [self moveTextViewForKeyboard:notification up:YES];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
 {
-    DLog(@"keyboardWillHide");
     [self moveTextViewForKeyboard:notification up:NO];
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self didSelectPost:nil];
+    return NO;
+}
 
 - (void)createTodo
 {
@@ -178,11 +200,16 @@ const CGFloat kTopMargin = 35.f;
     if (_notesTextView.text.length) {
         [todo setNotes:_notesTextView.text];
     }
+    NSString* keyTags = kKeyUserSettingsName;
     if (_url) {
         KPAttachment* attachment = [KPAttachment attachmentForService:URL_SERVICE title:[_url absoluteString] identifier:[_url absoluteString] sync:YES];
         [todo addAttachmentsObject:attachment];
+        keyTags = kKeyUserSettingsNameURL;
     }
     [KPToDo saveToSync];
+    
+    [USER_DEFAULTS setObject:_selectedTags ? _selectedTags : @[] forKey:keyTags];
+    [USER_DEFAULTS synchronize];
 }
 
 - (void)setupTagsLabel:(UILabel *)label
@@ -265,19 +292,9 @@ const CGFloat kTopMargin = 35.f;
     }
     
     // Remove seperator inset
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-        [cell setSeparatorInset:UIEdgeInsetsZero];
-    }
-    
-    // Prevent the cell from inheriting the Table View's margin settings
-    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-        [cell setPreservesSuperviewLayoutMargins:NO];
-    }
-    
-    // Explictly set your cell's layout margins
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
-    }
+    [cell setSeparatorInset:UIEdgeInsetsZero];
+    [cell setPreservesSuperviewLayoutMargins:NO];
+    [cell setLayoutMargins:UIEdgeInsetsZero];
     
     [self addCellDisclosure:cell];
     switch (indexPath.row) {
@@ -301,6 +318,8 @@ const CGFloat kTopMargin = 35.f;
     switch (indexPath.row) {
         case kTagsIndex:
             _readTags = YES;
+            if (_tagsVC)
+                _tagsVC.selectedTags = _selectedTags;
             [self displayView:_tagsContainer];
             break;
             

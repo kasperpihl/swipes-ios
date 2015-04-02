@@ -12,5 +12,6 @@
 @interface TagsViewController : UIViewController
 
 @property (nonatomic, weak) IBOutlet KPTagList* tagList;
+@property (nonatomic, strong) NSArray* selectedTags;
 
 @end
