@@ -28,6 +28,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 @interface ShareViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, weak) IBOutlet UIView* contentView;
+@property (nonatomic, weak) IBOutlet UIView* containerView;
 @property (nonatomic, weak) IBOutlet UITextField* textField;
 @property (nonatomic, weak) IBOutlet UIButton* cancelButton;
 @property (nonatomic, weak) IBOutlet UIButton* backButton;
@@ -138,9 +139,8 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
 - (IBAction)onBack:(id)sender
 {
-    [self hideView];
-    
     if (_readTags) {
+        [self hideView:_tagsContainer];
         if (_tagsVC) {
             _selectedTags = [_tagsVC.tagList getSelectedTags];
             [_optionsTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kTagsIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
@@ -173,7 +173,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     else
         newFrame.size.height -= kMargin + kTopMargin;
     
-    _contentView.frame = newFrame;
+    _containerView.frame = newFrame;
     
     [UIView commitAnimations];
 }
@@ -238,19 +238,64 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     label.text = @"Schedule";
 }
 
-- (void)hideView
+- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
 {
-    _tagsContainer.hidden = YES;
-    _scheduleContainer.hidden = YES;
+    UIView* view = (__bridge UIView *)(context);
+    view.hidden = YES;
+}
+
+- (void)hideView:(UIView *)view
+{
     _cancelButton.hidden = NO;
+    _backButton.hidden = NO;
+    _cancelButton.alpha = 0;
+    _backButton.alpha = 1;
+    
+    CGRect frame = view.frame;
+    
+    [UIView beginAnimations:nil context:(__bridge void *)(view)];
+    [UIView setAnimationDuration:0.25];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+    
+    frame.origin.x += view.frame.size.width;
+    view.frame = frame;
+    
+    _cancelButton.alpha = 1;
+    _cancelButton.hidden = NO;
+    _backButton.alpha = 0;
     _backButton.hidden = YES;
+    
+    [UIView commitAnimations];
+
 }
 
 - (void)displayView:(UIView *)view
 {
     view.hidden = NO;
-    _cancelButton.hidden = YES;
+    _cancelButton.alpha = 1;
+    _cancelButton.hidden = NO;
+    _backButton.alpha = 0;
     _backButton.hidden = NO;
+    
+    CGRect frame = _contentView.frame;
+    frame.origin.x += view.frame.size.width;
+    view.frame = frame;
+
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.25];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+    
+    frame.origin.x -= view.frame.size.width;
+    view.frame = frame;
+    
+    _cancelButton.alpha = 0;
+    _cancelButton.hidden = YES;
+    _backButton.alpha = 1;
+    _backButton.hidden = NO;
+
+    [UIView commitAnimations];
 }
 
 - (NSString *)firstNonEmptyLine:(NSString *)string
