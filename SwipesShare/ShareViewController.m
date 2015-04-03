@@ -20,8 +20,14 @@
 
 static const NSUInteger kTagsIndex = 0;
 static const NSUInteger kScheduleIndex = 1;
-static const CGFloat kMargin = 20.f;
+
 static const CGFloat kTopMargin = 35.f;
+static const CGFloat kMargin = 20.f;
+static const CGFloat kBottomMargin = 20.f;
+
+static const CGFloat kWidthPad = 450.f;
+static const CGFloat kHeightPad = 300.f;
+
 static NSString* const kKeyUserSettingsName = @"ShareExtensionTags";
 static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
@@ -39,6 +45,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 @property (nonatomic, weak) IBOutlet UIView* scheduleContainer;
 
 @property (nonatomic, weak) TagsViewController* tagsVC;
+@property (nonatomic, weak) ScheduleViewController* scheduleVC;
 
 @property (nonatomic, strong) NSURL* url;
 
@@ -99,8 +106,13 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     _notesTextView.placeholderColor = [UIColor lightGrayColor];
     _notesTextView.placeholder = LOCALIZE_STRING(@"Enter task's notes");
     
-    notify(UIKeyboardWillShowNotification, keyboardWillShow:);
-    notify(UIKeyboardWillHideNotification, keyboardWillHide:);
+    if (UIUserInterfaceIdiomPhone == [UIDevice currentDevice].userInterfaceIdiom) {
+        notify(UIKeyboardWillShowNotification, keyboardWillShow:);
+        notify(UIKeyboardWillHideNotification, keyboardWillHide:);
+    }
+    else {
+        [self setupPadSize];
+    }
     
     [self.textField becomeFirstResponder];
 }
@@ -121,6 +133,16 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 - (BOOL)shouldAutorotate
 {
     return NO;
+}
+
+- (void)setupPadSize
+{
+    CGRect newFrame = self.view.frame;
+    newFrame.origin.x = (self.view.frame.size.width - kWidthPad) / 2;
+    newFrame.origin.y = kTopMargin;
+    newFrame.size.width = kWidthPad;
+    newFrame.size.height = kHeightPad;
+    _containerView.frame = newFrame;
 }
 
 - (IBAction)didSelectPost:(id)sender
@@ -147,6 +169,14 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
         }
         _readTags = NO;
     }
+
+    if (_readSchedule) {
+        [self hideView:_scheduleContainer];
+        if (_scheduleVC) {
+            [_optionsTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kScheduleIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }
+        _readSchedule = NO;
+    }
 }
 
 - (void)moveTextViewForKeyboard:(NSNotification*)aNotification up:(BOOL)up
@@ -169,9 +199,9 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     newFrame.origin.y = kTopMargin;
     newFrame.size.width -= kMargin * 2;
     if (up)
-        newFrame.size.height = keyboardEndFrame.origin.y - kMargin - kTopMargin;
+        newFrame.size.height = keyboardEndFrame.origin.y - kBottomMargin - kTopMargin;
     else
-        newFrame.size.height -= kMargin + kTopMargin;
+        newFrame.size.height -= kBottomMargin + kTopMargin;
     
     _containerView.frame = newFrame;
     
@@ -369,6 +399,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
             break;
             
         case kScheduleIndex:
+            _readSchedule = YES;
             [self displayView:_scheduleContainer];
             break;
     }
@@ -376,9 +407,21 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 }
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
     if ([segue.identifier isEqualToString:@"tags"]) {
         _tagsVC = segue.destinationViewController;
+    }
+    else if ([segue.identifier isEqualToString:@"schedule"]) {
+        _scheduleVC = segue.destinationViewController;
+    }
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    if (UIUserInterfaceIdiomPad == [UIDevice currentDevice].userInterfaceIdiom) {
+        [self setupPadSize];
     }
 }
 
