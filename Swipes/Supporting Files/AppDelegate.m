@@ -269,21 +269,38 @@
     }];
 }
 
+- (void)completeByTempId:(NSString *)tempId
+{
+    DLog(@"Completing with tempId: %@", tempId);
+    NSArray* todos = [KPToDo findByTempId:tempId];
+    if (todos) {
+        [KPToDo completeToDos:todos save:YES context:nil analytics:YES];
+        DLog(@"Completing with tempId: %@ ... done", tempId);
+    }
+}
+
 - (void)application:(UIApplication *)application handleWatchKitExtensionRequest:(NSDictionary *)userInfo reply:(void (^)(NSDictionary *replyInfo))reply
 {
     NSMutableDictionary* replyInfo = [NSMutableDictionary dictionary];
-    NSString* tempId = [userInfo valueForKey:kKeyCmdDelete];
-    if (tempId) {
-        NSArray* todos = [KPToDo findByTempId:tempId];
-        if (todos)
-            [KPToDo deleteToDos:todos save:YES force:NO];
-    }
+    id tempId;
+//    tempId = [userInfo valueForKey:kKeyCmdDelete];
+//    if (tempId) {
+//        NSArray* todos = [KPToDo findByTempId:tempId];
+//        if (todos)
+//            [KPToDo deleteToDos:todos save:YES force:NO];
+//    }
    
-    tempId = [userInfo valueForKey:kKeyCmdComplete];
+    tempId = [userInfo objectForKey:kKeyCmdComplete];
     if (tempId) {
-        NSArray* todos = [KPToDo findByTempId:tempId];
-        if (todos)
-            [KPToDo completeToDos:todos save:YES context:nil analytics:YES];
+        if ([tempId isKindOfClass:NSArray.class]) {
+            NSSet* ids = tempId;
+            for (NSString* tid in ids) {
+                [self completeByTempId:tid];
+            }
+        }
+        else {
+            [self completeByTempId:tempId];
+        }
     }
 
     tempId = [userInfo valueForKey:kKeyCmdSchedule];
@@ -297,6 +314,16 @@
         }
     }
 
+    tempId = [userInfo valueForKey:kKeyCmdAdd];
+    if (tempId) {
+        [KPToDo addItem:tempId priority:NO tags:nil save:YES from:@"Watch App"];
+    }
+    
+    tempId = [userInfo valueForKey:kKeyCmdError];
+    if (tempId) {
+        [UtilityClass sendError:[NSError errorWithDomain:[tempId description] code:801 userInfo:userInfo] type:@"Watch App"];
+    }
+    
     reply(replyInfo);
 }
 

@@ -6,9 +6,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
-#import "KPAttachment.h"
-#import "_KPToDo.h"
-
+#import "_KPAttachment.h"
 
 @implementation _KPAttachment
 

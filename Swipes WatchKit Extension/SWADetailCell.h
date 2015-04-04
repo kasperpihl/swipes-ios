@@ -1,5 +1,5 @@
 //
-//  SWAScheduleCell.h
+//  SWADetailCell.h
 //  Swipes
 //
 //  Created by demosten on 3/3/15.
@@ -9,8 +9,9 @@
 @import WatchKit;
 #import <Foundation/Foundation.h>
 
-@interface SWAScheduleCell : NSObject
+@interface SWADetailCell : NSObject
 
 @property (nonatomic, weak) IBOutlet WKInterfaceLabel* label;
+@property (nonatomic, weak) IBOutlet WKInterfaceLabel* tags;
 
 @end

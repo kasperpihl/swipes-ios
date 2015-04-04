@@ -91,7 +91,9 @@ static SettingsHandler *sharedObject;
     else if([index isEqualToString:@"IntegrationGmailUsingMailbox"])
         setting = IntegrationGmailUsingMailbox;
     else if([index isEqualToString:@"SettingUseStandardStatusBar"])
-        setting = IntegrationGmailUsingMailbox;
+        setting = SettingUseStandardStatusBar;
+    else if([index isEqualToString:@"IntegrationGmailOpenType"])
+        setting = IntegrationGmailOpenType;
     
     return setting;
 }
@@ -161,7 +163,9 @@ static SettingsHandler *sharedObject;
         case SettingUseStandardStatusBar:
             index = @"SettingUseStandardStatusBar";
             break;
-
+        case IntegrationGmailOpenType:
+            index = @"IntegrationGmailOpenType";
+            break;
     }
     return index;
 }
@@ -273,6 +277,8 @@ static SettingsHandler *sharedObject;
             return @YES;
         case SettingUseStandardStatusBar:
             return @NO;
+        case IntegrationGmailOpenType:
+            return [self valueForSetting:IntegrationGmailUsingMailbox] ? @(1) : @(0);
     }
 }
 
@@ -304,6 +310,7 @@ static SettingsHandler *sharedObject;
     if(setting == SettingNotifications)
         [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     
+#ifndef APPLE_WATCH
     if(notify){
         [[NSNotificationCenter defaultCenter] postNotificationName:SH_UpdateSetting object:self userInfo:@{@"Setting":@(setting), @"Value": value }];
         NSArray *syncedSettings = [self syncedSettingIndexes];
@@ -315,6 +322,7 @@ static SettingsHandler *sharedObject;
 #endif
         }
     }
+#endif
 }
 
 -(BOOL)settingForKey:(NSString *)key{

@@ -36,6 +36,11 @@
 @class CAGradientLayer;
 
 
+// TODO
+// this is full of iOS8 related deprecation warnings
+// we should fix them when we remove support for iOS7
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
 @interface DateButton : SlowHighlightIcon
 
@@ -646,3 +651,5 @@
 }
 
 @end
+
+#pragma clang diagnostic pop

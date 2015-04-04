@@ -12,21 +12,24 @@
 #import "CoreData/KPToDo.h"
 #import "CoreData/KPTag.h"
 #import "CoreData/KPAttachment.h"
+#import "SWAUtility.h"
 #import "SWASubtaskCell.h"
+#import "SWADetailCell.h"
+#import "SWAButtonCell.h"
 #import "SWACoreDataModel.h"
 #import "TodoInterfaceController.h"
 
-static NSString* const kCellIdentifier = @"SWASubtaskCell";
-static NSString* const EVERNOTE_SERVICE = @"evernote";
-static NSString* const GMAIL_SERVICE = @"gmail";
-
 static NSInteger const kTotalRows = 1;
+static NSString* const kEvernoteIntegrationIconFull = @"integrationEvernoteFull";
+static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
 
-@interface TodoInterfaceController() <SWASubtaskCellDelegate>
-
-@property (nonatomic, strong) KPToDo* todo;
+@interface TodoInterfaceController() <SWASubtaskCellDelegate, SWAButtonCellDelegate>
 
 @property (nonatomic, weak) IBOutlet WKInterfaceTable* table;
+@property (nonatomic, strong) KPToDo* todo;
+@property (nonatomic, strong) id context;
+@property (nonatomic, strong) NSMutableSet* todosToCheck;
+@property (nonatomic, assign) BOOL shouldReload;
 
 @end
 
@@ -36,56 +39,66 @@ static NSInteger const kTotalRows = 1;
 - (void)awakeWithContext:(id)context
 {
     [super awakeWithContext:context];
-    _todo = context;
-    [self reloadData];
+    _context = context;
+    _shouldReload = YES;
 }
 
 - (void)willActivate
 {
-    // This method is called when watch view controller is about to be visible to user
     [super willActivate];
+    if (_shouldReload) {
+        NSError* error;
+        _todo = [[SWACoreDataModel sharedInstance] loadTodoWithTempId:_context error:&error];
+        if (error) {
+            [SWAUtility sendErrorToHost:error];
+        }
+        DLog(@"TODO is: %@", _todo);
+        _todosToCheck = [NSMutableSet set];
+        [self reloadData];
+    }
 }
 
 - (void)didDeactivate
 {
     // This method is called when watch view controller is no longer visible
     [super didDeactivate];
-}
-
-- (NSAttributedString *)stringForSubtask:(KPToDo *)todo
-{
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"\ue654 %@", todo.title]];
-    UIFont* swipesFont = iconFont(10);
-    UIColor* cyrcleColor = todo.completionDate ? DONE_COLOR : TASKS_COLOR;
-    [attributedString addAttribute:NSFontAttributeName value:swipesFont range:NSMakeRange(0, 1)];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:cyrcleColor range:NSMakeRange(0,1)];
-    return attributedString;
+    if (0 < _todosToCheck.count) {
+        NSDictionary* data = @{kKeyCmdComplete: [_todosToCheck allObjects]};
+        [WKInterfaceController openParentApplication:data reply:^(NSDictionary *replyInfo, NSError *error) {
+            if (error) {
+                [SWAUtility sendErrorToHost:error];
+                DLog(@"Error didDeactivate %@", error);
+            }
+        }];
+        _shouldReload = YES;
+    }
 }
 
 - (void)reloadData
 {
+    // gather data about rows
     NSInteger totalRows = kTotalRows;
     BOOL hasTags = NO;
     if (_todo.tags.count || _todo.attachments.count) {
         hasTags = YES;
-        totalRows++;
     }
-    NSArray* subtasks;
-    if (0 < _todo.subtasks.count) {
-        NSPredicate *uncompletedPredicate = [NSPredicate predicateWithFormat:@"completionDate == nil"];
-        NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
-        subtasks = [[_todo.subtasks filteredSetUsingPredicate:uncompletedPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
-        if (0 < subtasks.count) {
-            totalRows += subtasks.count;
-        }
+    NSArray* subtasks = [SWAUtility nonCompletedSubtasks:_todo.subtasks];
+    if (0 < subtasks.count) {
+        totalRows += subtasks.count;
     }
 
-    [self.table setNumberOfRows:totalRows withRowType:kCellIdentifier];
-    SWASubtaskCell* cell = [self.table rowControllerAtIndex:0];
+    // create rows
+    NSMutableArray* rowTypes = @[@"SWADetailCell"].mutableCopy;
+    for (NSUInteger i = kTotalRows; i < totalRows; i++) {
+        [rowTypes addObject:@"SWASubtaskCell"];
+    }
+    [rowTypes addObject:@"SWAButtonCell"];
+    [self.table setRowTypes:rowTypes];
+
+    // fill rows
+    SWADetailCell* cell = [self.table rowControllerAtIndex:0];
     [cell.label setText:_todo.title];
-
     if (hasTags) {
-        cell = [self.table rowControllerAtIndex:1];
         NSMutableString* str = [[NSMutableString alloc] init];
         if (_todo.tags.count) {
             for (KPTag* tag in _todo.tags) {
@@ -94,58 +107,63 @@ static NSInteger const kTotalRows = 1;
                 }
                 [str appendString:tag.title];
             }
-            [str insertString:@"\ue60b " atIndex:0];
         }
+        else {
+            [str appendString:LOCALIZE_STRING(@"(no tags)")];
+        }
+        
+        if (_todo.attachments && _todo.attachments.count) {
+            [str insertString:@" " atIndex:0];
+        }
+        
         NSUInteger index = 0;
         for (KPAttachment* attachment in _todo.attachments) {
             if ([attachment.service isEqualToString:EVERNOTE_SERVICE]) {
-                [str insertString:@"\ue65c" atIndex:index++];
+                [str insertString:kEvernoteIntegrationIconFull atIndex:0]; // put evernote first
+                index += kEvernoteIntegrationIconFull.length;
             }
             else if ([attachment.service isEqualToString:GMAIL_SERVICE]) {
-                [str insertString:@"\ue606" atIndex:index++];
+                [str insertString:kMailIntegrationIconFull atIndex:index];
+                index += kMailIntegrationIconFull.length;
             }
         }
-        if (_todo.tags.count)
-            index++; // this is the tag symbol
         
         // set attributes
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:str];
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:str];
         UIFont *swipesFont = iconFont(10);
-        [attributedString addAttribute:NSFontAttributeName value:swipesFont range:NSMakeRange(0,index)];
-        
-        [cell.label setAttributedText:attributedString];
+        NSRange iconsRange = NSMakeRange(0, index);
+        [attributedString addAttribute:NSFontAttributeName value:swipesFont range:iconsRange];
+        [attributedString addAttribute:NSKernAttributeName value:@(1.5) range:iconsRange];
+        [cell.tags setAttributedText:attributedString];
+    }
+    else {
+        [cell.tags setHidden:YES];
     }
 
+    // add subtasks
     if (0 < subtasks.count) {
-        NSUInteger index = 2;
+        NSUInteger index = kTotalRows;
         for (KPToDo* todo in subtasks) {
-            cell = [self.table rowControllerAtIndex:index++];
-            [cell.button setHidden:NO];
-            [cell.button setTitle:@"\ue62c"];
-            cell.todo = todo;
-            cell.delegate = self;
-            //[cell.label setAttributedText:[self stringForSubtask:todo]];
-            [cell.label setText:todo.title];
+            SWASubtaskCell* subtaskCell = [self.table rowControllerAtIndex:index++];
+            subtaskCell.todo = todo;
+            subtaskCell.delegate = self;
+            [subtaskCell.label setText:todo.title];
         }
     }
     
+    // buttons
+    SWAButtonCell* buttonCell = [self.table rowControllerAtIndex:rowTypes.count - 1];
+    buttonCell.delegate = self;
+    
+    _shouldReload = NO;
 }
 
 - (IBAction)onMarkDone:(id)sender
 {
     [WKInterfaceController openParentApplication:@{kKeyCmdComplete: _todo.tempId} reply:^(NSDictionary *replyInfo, NSError *error) {
         if (error) {
-            
-        }
-        [self popController];
-    }];
-}
-
-- (IBAction)onDelete:(id)sender
-{
-    [WKInterfaceController openParentApplication:@{kKeyCmdDelete: _todo.tempId} reply:^(NSDictionary *replyInfo, NSError *error) {
-        if (error) {
-            
+            [SWAUtility sendErrorToHost:error];
+            DLog(@"Error onMarkDone %@", error);
         }
         [self popController];
     }];
@@ -156,15 +174,24 @@ static NSInteger const kTotalRows = 1;
     [self pushControllerWithName:@"Schedule" context:_todo];
 }
 
-- (void)onCompleteButtonTouch:(KPToDo *)todo
+- (void)onCompleteButtonTouch:(KPToDo *)todo checked:(BOOL)checked
 {
-    NSDictionary* data = @{kKeyCmdComplete: todo.tempId};
-    [WKInterfaceController openParentApplication:data reply:^(NSDictionary *replyInfo, NSError *error) {
-        if (error) {
-            
-        }
-        [self popController];
-    }];
+    if (checked) {
+        [_todosToCheck addObject:todo.tempId];
+    }
+    else {
+        [_todosToCheck removeObject:todo.tempId];
+    }
+}
+
+- (void)onButton1Touch
+{
+    [self onSchedule:nil];
+}
+
+- (void)onButton2Touch
+{
+    [self onMarkDone:nil];
 }
 
 @end

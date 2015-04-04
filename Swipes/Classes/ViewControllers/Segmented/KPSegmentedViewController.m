@@ -183,8 +183,8 @@
         //[[self currentViewController] deselectAllRows:self];
     }];
 }
--(void)pressedShare:(id)sender{
-    [ROOT_CONTROLLER shareTasks:[[self currentViewController] selectedItems]];
+-(void)pressedShare:(UIView *)sender{
+    [ROOT_CONTROLLER shareTasks:[[self currentViewController] selectedItems] withFrame:sender.frame];
 }
 -(void)pressedDelete:(id)sender{
     NSInteger numberOfTasks = [self currentViewController].selectedItems.count;

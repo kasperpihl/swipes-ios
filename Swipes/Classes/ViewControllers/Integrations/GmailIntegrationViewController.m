@@ -7,6 +7,7 @@
 //
 
 #import "AnalyticsHandler.h"
+#import "SettingsHandler.h"
 #import "UtilityClass.h"
 #import "KPToDo.h"
 #import "KPAttachment.h"
@@ -44,14 +45,47 @@
                 [self.table reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:NO];
             }];
         }
-        self.cellInfo = @[
+        MailOpenType openType = [kGmInt mailOpenType];
+        NSMutableArray* cellInfo = @[
                           @{kKeyTitle: emailAddress,
-                            kKeyCellType: @(kIntegrationCellTypeNoAccessory),
+                            kKeyCellType: @(kIntegrationCellTypeViewMore),
                             kKeyIcon: kGmInt.isUsingMailbox ? @"integrationMailbox" : @"integrationMail",
                             kKeyTouchSelector: NSStringFromSelector(@selector(onEmailTouch))
                             }.mutableCopy,
-                          @{kKeyCellType: @(kIntegrationCellTypeSeparator)}
-                          ];
+                          @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: LOCALIZE_STRING(@"OPEN EMAILS IN")},
+                          @{kKeyTitle: @"Mail",
+                            kKeyCellType: @(kIntegrationCellTypeCheck),
+                            kKeyIsOn: @(openType == MailOpenTypeMail),
+                            kKeyIcon: @"integrationMail",
+                            kKeyTouchSelector: NSStringFromSelector(@selector(onInboxTouch))
+                            }.mutableCopy,
+                          ].mutableCopy;
+        if ([GlobalApp isMailboxInstalled]) {
+            [cellInfo addObject:@{kKeyTitle: @"Mailbox",
+                                  kKeyCellType: @(kIntegrationCellTypeCheck),
+                                  kKeyIsOn: @(openType == MailOpenTypeMailbox),
+                                  kKeyIcon: @"integrationMailbox",
+                                  kKeyTouchSelector: NSStringFromSelector(@selector(onMailboxTouch))
+                                  }.mutableCopy];
+        }
+        if ([GlobalApp isGoogleMailInstalled]) {
+            [cellInfo addObject:@{kKeyTitle: @"Gmail",
+                                  kKeyCellType: @(kIntegrationCellTypeCheck),
+                                  kKeyIsOn: @(openType == MailOpenTypeGmail),
+                                  kKeyIcon: @"integrationGmail",
+                                  kKeyTouchSelector: NSStringFromSelector(@selector(onGMailTouch))
+                                  }.mutableCopy];
+        }
+        if ([GlobalApp isCloudMagicInstalled]) {
+            [cellInfo addObject:@{kKeyTitle: @"Cloud Magic",
+                                  kKeyCellType: @(kIntegrationCellTypeCheck),
+                                  kKeyIsOn: @(openType == MailOpenTypeCloudMagic),
+                                  kKeyIcon: @"integrationCloudMagic",
+                                  kKeyTouchSelector: NSStringFromSelector(@selector(onCloudMagicTouch))
+                                  }.mutableCopy];
+        }
+        [cellInfo addObject:@{kKeyCellType: @(kIntegrationCellTypeSeparator)}];
+        self.cellInfo = cellInfo;
     }
     else {
         self.cellInfo = @[
@@ -93,6 +127,30 @@
     GmailHelperViewController *helper = [[GmailHelperViewController alloc] init];
     helper.delegate = self;
     [self presentViewController:helper animated:YES completion:nil];
+}
+
+- (void)onInboxTouch
+{
+    [kSettings setValue:@(MailOpenTypeMail) forSetting:IntegrationGmailOpenType];
+    [self reload];
+}
+
+- (void)onMailboxTouch
+{
+    [kSettings setValue:@(MailOpenTypeMailbox) forSetting:IntegrationGmailOpenType];
+    [self reload];
+}
+
+- (void)onGMailTouch
+{
+    [kSettings setValue:@(MailOpenTypeGmail) forSetting:IntegrationGmailOpenType];
+    [self reload];
+}
+
+- (void)onCloudMagicTouch
+{
+    [kSettings setValue:@(MailOpenTypeCloudMagic) forSetting:IntegrationGmailOpenType];
+    [self reload];
 }
 
 #pragma mark - Helpers

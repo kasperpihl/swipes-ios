@@ -8,6 +8,7 @@
 
 @import CoreData;
 #import "KPToDo.h"
+#import "SWAUtility.h"
 #import "SWACoreDataModel.h"
 
 @interface SWACoreDataModel ()
@@ -105,6 +106,9 @@ static NSString* const DATABASE_FOLDER = @"database";
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        if (error) {
+            [SWAUtility sendErrorToHost:error];
+        }
         #ifdef DEBUG
         abort();
         #endif
@@ -122,6 +126,9 @@ static NSString* const DATABASE_FOLDER = @"database";
             // Replace this implementation with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            if (error) {
+                [SWAUtility sendErrorToHost:error];
+            }
             #ifdef DEBUG
             //abort();
             #endif
@@ -132,6 +139,7 @@ static NSString* const DATABASE_FOLDER = @"database";
 - (NSArray *)loadTodosWithError:(NSError **)error oneResult:(BOOL)oneResult
 {
     _managedObjectContext = nil; // force refresh!
+    //_persistentStoreCoordinator = nil; // force refresh!
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];
@@ -145,6 +153,73 @@ static NSString* const DATABASE_FOLDER = @"database";
         [request setFetchLimit:1];
 
     return [self.managedObjectContext executeFetchRequest:request error:error];
+}
+
+- (KPToDo *)loadTodoWithTempId:(NSString *)tempId error:(NSError **)error
+{
+    _managedObjectContext = nil; // force refresh!
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(tempId = %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", tempId];
+    [request setPredicate:predicate];
+    [request setFetchLimit:1];
+    
+    NSArray* results = [self.managedObjectContext executeFetchRequest:request error:error];
+    if (results && 1 <= results.count) {
+        return results[0];
+    }
+    return nil;
+}
+
+- (NSArray *)loadTodoWithTempIds:(NSArray *)tempIds error:(NSError **)error
+{
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY %K IN %@", @"tempId", tempIds];
+    [request setPredicate:predicate];
+    
+    return [self.managedObjectContext executeFetchRequest:request error:error];
+}
+
+- (KPToDo *)loadScheduledTodoWithError:(NSError **)error
+{
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
+    
+    // check specified
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSDate *startDate = [NSDate date];
+    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", startDate];
+    
+    [request setPredicate:schedulePredicate];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"schedule" ascending:YES];
+    [request setSortDescriptors:@[sortDescriptor]];
+    [request setFetchLimit:1];
+    
+    NSArray* results = [self.managedObjectContext executeFetchRequest:request error:error];
+    if (results && 1 <= results.count) {
+        return results[0];
+    }
+    
+    // check unspecified
+    request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    NSPredicate *unspecifiedPredicate = [NSPredicate predicateWithFormat:@"(schedule = nil AND completionDate = nil) AND parent = nil AND isLocallyDeleted <> YES"];
+    
+    [request setPredicate:unspecifiedPredicate];
+    [request setFetchLimit:1];
+    
+    results = [self.managedObjectContext executeFetchRequest:request error:error];
+    if (results && 1 <= results.count) {
+        return results[0];
+    }
+    
+    return nil;
 }
 
 - (void)deleteObject:(id)object

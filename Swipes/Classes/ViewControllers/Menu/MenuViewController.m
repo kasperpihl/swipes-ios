@@ -108,6 +108,7 @@ static CGFloat const kTopMargin = 60;
 }
 
 -(void)reset{
+    [self dismissViewControllerAnimated:NO completion:nil];
     [self renderSubviews];
 }
 
@@ -318,6 +319,10 @@ static CGFloat const kTopMargin = 60;
             break;
         }
         case KPMenuButtonSync:{
+            if(!kUserHandler.isLoggedIn){
+                [ROOT_CONTROLLER accountAlertWithMessage:nil];
+                return;
+            }
             CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
             rotate.byValue = @(M_PI * 2); // Change to - angle for counter clockwise rotation
             rotate.duration = 0.5;

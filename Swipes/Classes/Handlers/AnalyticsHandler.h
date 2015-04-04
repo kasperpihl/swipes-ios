@@ -21,8 +21,9 @@
 -(void)pushView:(NSString*)view;
 -(void)popView;
 -(void)clearViews;
--(void)heartbeat;
--(void)beginSession;
+-(void)logout;
+-(void)registerUser;
 -(void)checkForUpdatesOnIdentity;
+-(void)setHmac:(NSString*)hmac;
 @property BOOL analyticsOff;
 @end

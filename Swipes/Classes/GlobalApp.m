@@ -29,6 +29,11 @@ static int g_activityIndicatorStack = 0;
     return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"googlegmail://"]];
 }
 
++ (BOOL)isCloudMagicInstalled
+{
+    return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"cloudmagic://"]];
+}
+
 + (BOOL)isEvernoteInstalled
 {
     return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"en://"]];

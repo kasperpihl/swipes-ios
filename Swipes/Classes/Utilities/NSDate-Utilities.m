@@ -12,6 +12,12 @@
 
 #import "NSDate-Utilities.h"
 
+// TODO
+// this is full of iOS8 related deprecation warnings
+// we should fix them when we remove support for iOS7
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 #define DATE_COMPONENTS (NSEraCalendarUnit | NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit)
 #define CURRENT_CALENDAR [NSCalendar currentCalendar]
 

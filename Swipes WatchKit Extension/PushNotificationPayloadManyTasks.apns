@@ -1,0 +1,20 @@
+{
+    "aps": {
+        "alert": "Test message",
+        "title": "Optional title",
+        "category": "BatchTasksCategory"
+    },
+    
+    "WatchKit Simulator Actions": [
+        {
+            "title": "Later",
+            "identifier": "Later"
+        },
+        {
+            "title": "Complete",
+            "identifier": "Complete"
+        },
+    ],
+    
+    "identifiers": ["SN3f4qSzuXaqMM", "3YVCc3cnmbMJcM"]
+}

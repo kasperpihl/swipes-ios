@@ -160,6 +160,9 @@ typedef enum {
         if(state != KPScheduleButtonLocation){
             [options setObject:@([date daysAfterDate:[NSDate date]]) forKey:@"Number of Days Ahead"];
             [options setObject:(self.didUseTimePicker ? @"Yes" : @"No") forKey:@"Used Time Picker"];
+            if(self.didUseTimePicker){
+                [ANALYTICS trackEvent:@"Time Picker" options:@{@"Number of Tasks": numberOfTasks, @"From": buttonUsed}];
+            }
         }
         [ANALYTICS trackEvent:@"Snoozed Tasks" options:[options copy]];
         [ANALYTICS trackCategory:@"Tasks" action:@"Snoozed" label:buttonUsed value:@([date daysAfterDate:[NSDate date]])];

@@ -62,6 +62,7 @@
 @property (nonatomic, assign) BOOL _isSyncing;
 @property (nonatomic, assign) BOOL _didHardSync;
 @property (nonatomic, assign) BOOL _showSuccessOnce;
+@property (nonatomic, assign) BOOL showErrorOnce;
 
 @property (nonatomic) dispatch_queue_t isolationQueue;
 
@@ -202,6 +203,7 @@
             if(self._showSuccessOnce){
                 title = LOCALIZE_STRING(@"Synchronized");
                 self._showSuccessOnce = NO;
+                self.showErrorOnce = NO;
             }
             //
             break;
@@ -209,6 +211,7 @@
         case SyncStatusError:{
             title = LOCALIZE_STRING(@"Error synchronizing");
             self._showSuccessOnce = YES;
+            self.showErrorOnce = YES;
             break;
         }
         default:
@@ -219,9 +222,10 @@
 
 -(void)sendStatus:(SyncStatus)status userInfo:(NSDictionary*)userInfo error:(NSError*)error{
     dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL showErrorOnce = self.showErrorOnce;
         NSString *title = [self titleForStatus:status];
         CGFloat duration = [self durationForStatus:status];
-        if( title ){
+        if( title && ((SyncStatusError != status) || ((SyncStatusError == status) && !showErrorOnce))) {
             NSDictionary *userInfoToNotification = @{ @"title": title, @"duration": @( duration ) };
             [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:userInfoToNotification];
         }
@@ -331,6 +335,7 @@
     }
     
     if (!kCurrent || !kCurrent.sessionToken) {
+        
         return UIBackgroundFetchResultNoData;
     }
     
@@ -375,6 +380,15 @@
     }
 }
 
+- (void)showErrorNotificationOnce:(NSString *)errorString
+{
+    if (!self.showErrorOnce) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": errorString, @"duration": @(3.5)}];
+        self.showErrorOnce = YES;
+        self._showSuccessOnce = YES;
+    }
+}
+
 -(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error {
 #ifndef NOT_APPLICATION
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -393,13 +407,31 @@
         self.tryCounter++;
         if( self.tryCounter > 5 )
             return;
+        else
+            self._needSync = YES;
     }
     if (self._needSync) {
         self._isSyncing = NO;
         [self synchronizeForce:YES async:YES];
+        return;
     }
-
-    if (kEnInt.enableSync && ![EvernoteIntegration isAPILimitReached]) {
+    self._isSyncing = NO;
+    
+    [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+    
+    
+    
+    if ((!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) &&
+        !kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]) {
+        
+        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
+            if(number == 1){
+                [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+            }
+        }];
+        kEnInt.hasAskedForPermissions = YES;
+    }
+    if (kEnInt.enableSync && !self.evernoteSyncHandler.isSyncing && ![EvernoteIntegration isAPILimitReached]) {
         
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             //NSLog(@"returned %lu",(long)status);
@@ -417,14 +449,13 @@
                     }
                 }
                 //NSLog(@"successfully ended");
-                self._isSyncing = NO;
-                [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+                self.evernoteSyncHandler.isSyncing = NO;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == SyncStatusStarted){
                 }
                 else if( status == SyncStatusError ){
-                    self._isSyncing = NO;
+                    self.evernoteSyncHandler.isSyncing = NO;
                     
                     if (!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) {
                         kEnInt.enableSync = NO;
@@ -433,29 +464,16 @@
                                 [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                             }
                         }];
-                        [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
                     }
                     else {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Evernote", @"duration": @(3.5) } ];
+                        [self showErrorNotificationOnce:LOCALIZE_STRING(@"Error syncing Evernote")];
                     }
                 }
             });
         }];
     }
-    else {
-        self._isSyncing = NO;
-        if(!kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]){
-            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
-                if(number == 1){
-                    [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
-                }
-            }];
-            kEnInt.hasAskedForPermissions = YES;
-        }
-        [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
-    }
 
-    if (kGmInt.isAuthenticated) {
+    if (kGmInt.isAuthenticated && !self.gmailSyncHandler.isSyncing) {
         [self.gmailSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             //NSLog(@"returned %lu",(long)status);
             if (status == SyncStatusSuccess){
@@ -469,14 +487,13 @@
                     }
                 }
                 //NSLog(@"successfully ended");
-                self._isSyncing = NO;
-                [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+                self.gmailSyncHandler.isSyncing = NO;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == SyncStatusStarted){
                 }
                 else if( status == SyncStatusError ){
-                    self._isSyncing = NO;
+                    self.gmailSyncHandler.isSyncing = NO;
                     
                     if (!kGmInt.isAuthenticated) {
                         // kGmInt.enableSync = NO;
@@ -485,10 +502,9 @@
                                 [self gmailAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                             }
                         }];
-                        [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
                     }
                     else {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"showNotification" object:nil userInfo:@{ @"title": @"Error syncing Gmail", @"duration": @(3.5) } ];
+                        [self showErrorNotificationOnce:LOCALIZE_STRING(@"Error syncing Gmail")];
                     }
                 }
             });
@@ -596,7 +612,7 @@
                                        @"sessionToken": [kCurrent sessionToken],
                                        @"platform" : @"ios",
                                        @"hasMoreToSave": @(self._needSync),
-                                       @"sendLogs": @(YES),
+                                       @"sendLogs": @(NO),
                                        @"batchSize": @(kBatchSize),
                                        @"version": [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]}
                                      mutableCopy];
@@ -644,7 +660,7 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
     [request setHTTPBody:jsonData];
-
+    //DLog(@"%@",syncData);
     
     /* Performing request */
     NSHTTPURLResponse *response;
@@ -678,10 +694,11 @@
     }
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
-    //NSLog(@"resulted err:%@",error);
+    //DLog(@"resulted err:%@",result);
     if([result objectForKey:@"intercom-hmac"]){
         [USER_DEFAULTS setObject:[result objectForKey:@"intercom-hmac"] forKey:@"intercom-hmac"];
         [USER_DEFAULTS synchronize];
+        [ANALYTICS setHmac:[result objectForKey:@"intercom-hmac"]];
     }
     if([result objectForKey:@"hardSync"])
         [self hardSync];

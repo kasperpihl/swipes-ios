@@ -767,7 +767,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         }];
     }
     else if(item == 1){
-        [ROOT_CONTROLLER shareTasks:@[self.model]];
+        CGRect frame = ((UIButton *)toolbar.barButtons[item]).frame;
+        frame.origin.x += toolbar.frame.origin.x;
+        frame.origin.y += toolbar.frame.origin.y;
+        [ROOT_CONTROLLER shareTasks:@[self.model] withFrame:frame];
         /*NSArray *tasks = [[self.menuViewController currentViewController] selectedItems];
          [self.segmentedViewController pressedShare:self];*/
     }
@@ -841,7 +844,6 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     notesView.delegate = self;
     BLURRY.showPosition = PositionBottom;
     [BLURRY showView:notesView inViewController:self];
-    
 }
 
 -(void)pressedTags:(id)sender
@@ -854,7 +856,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     }];
 }
 
--(void)clickedAttachment:(AttachmentEditView *)attachmentView{
+-(void)clickedAttachment:(AttachmentEditView *)attachmentView
+{
     if([attachmentView.service isEqualToString:EVERNOTE_SERVICE])
         [self pressedEvernote:attachmentView];
     else if([attachmentView.service isEqualToString:URL_SERVICE])
@@ -863,28 +866,13 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         [self pressedGmail:attachmentView];
 }
 
-- (void)pressedGmail:(AttachmentEditView*)attachmentView {
-    
-    if (kGmInt.isUsingMailbox) {
-        if ([GlobalApp isMailboxInstalled]) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"dbx-mailbox://"]];
-        }
-        else {
-            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Mailbox not installed") andMessage:LOCALIZE_STRING(@"Please install Mailbox from App Store!")];
-        }
-    }
-    else {
-        if ([GlobalApp isGoogleMailInstalled]) {
-            NSString* urlString = [NSString stringWithFormat:@"googlegmail:///cv=%@/accountId=1&create-new-tab", [kGmInt NSStringToThreadId:attachmentView.identifier]];
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
-        }
-        else {
-            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Gmail not installed") andMessage:LOCALIZE_STRING(@"Please install Gmail from App Store!")];
-        }
-    }
+- (void)pressedGmail:(AttachmentEditView*)attachmentView
+{
+    [kGmInt openMail:attachmentView.identifier];
 }
 
--(void)pressedURL:(AttachmentEditView*)attachmentView{
+-(void)pressedURL:(AttachmentEditView*)attachmentView
+{
     [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Open Link") andMessage:LOCALIZE_STRING(@"Do you want to open the link?") block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:attachmentView.identifier]];
@@ -929,7 +917,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                 if([GlobalApp isEvernoteInstalled]){
                     //DLog(@"attachment %@",attachment.identifier);
                     [[ENSession sharedSession] viewNoteInEvernote:[EvernoteIntegration NSStringToENNoteRef:attachment.identifier]];
-                    [ANALYTICS trackEvent:@"Open in Evernote" options:nil];
+                    [ANALYTICS trackEvent:@"Open In Evernote" options:nil];
                     [ANALYTICS trackCategory:@"Actions" action:@"Open In Evernote" label:nil value:nil];
                     //[ENSession
 //                    EDAMNote *note = [[EDAMNote alloc] init];

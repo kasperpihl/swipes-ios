@@ -18,6 +18,14 @@ typedef void (^ThreadGetBlock)(GTLGmailThread *thread, NSError *error);
 extern NSString* const kSwipesMailboxLabelName; // label name for Mailbox
 extern NSString* const kSwipesLabelName; // label name for normal Gmail integration
 
+typedef NS_ENUM(NSUInteger, MailOpenType)
+{
+    MailOpenTypeMail = 0,
+    MailOpenTypeMailbox = 1,
+    MailOpenTypeGmail = 2,
+    MailOpenTypeCloudMagic = 3,
+};
+
 @interface GmailIntegration : NSObject <IntegrationProvider>
 
 + (instancetype)sharedInstance;
@@ -39,5 +47,10 @@ extern NSString* const kSwipesLabelName; // label name for normal Gmail integrat
 - (void)checkArchievedThread:(NSString *)threadId block:(SuccessfulBlock)block;
 - (void)emailAddressWithBlock:(ErrorBlock)block;
 - (NSString *)emailAddress;
+
+#ifndef NOT_APPLICATION
+- (MailOpenType)mailOpenType;
+- (void)openMail:(NSString *)identifier;
+#endif
 
 @end

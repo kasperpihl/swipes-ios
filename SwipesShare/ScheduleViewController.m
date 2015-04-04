@@ -39,7 +39,7 @@
 //                [kAudio playSoundWithName:@"New state - scheduled.m4a"];
 //        }
 //        self.isHandlingTrigger = NO;
-        int i = 5;
+//        int i = 5;
     }];
     _scheduleView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [[NSNotificationCenter defaultCenter] removeObserver:_scheduleView];

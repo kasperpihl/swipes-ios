@@ -39,14 +39,16 @@
 #define TAGS_LABEL_HEIGHT sizeWithFont(@"Tg",TAGS_LABEL_FONT).height
 
 @interface ToDoCell ()
-@property (nonatomic,weak) IBOutlet UIView *selectionView;
 
-@property (nonatomic) KPToDo *toDo;
-@property (nonatomic,weak) IBOutlet UILabel *titleLabel;
-@property (nonatomic,weak) IBOutlet UILabel *tagsLabel;
-@property (nonatomic,weak) IBOutlet UILabel *alarmLabel;
+@property (nonatomic,strong) UIView *selectionView;
 
-@property (nonatomic, strong) UILabel *sourceIcon;
+@property (nonatomic,strong) KPToDo *toDo;
+@property (nonatomic,strong) UILabel *titleLabel;
+@property (nonatomic,strong) UILabel *tagsLabel;
+@property (nonatomic,strong) UILabel *alarmLabel;
+
+@property (nonatomic,strong) UILabel *evernoteIcon;
+@property (nonatomic,strong) UILabel *gmailIcon;
 @property (nonatomic,strong) UILabel *notesIcon;
 @property (nonatomic,strong) UILabel *recurringIcon;
 @property (nonatomic,strong) UILabel *locationIcon;
@@ -120,10 +122,14 @@
         self.dotView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
         NSInteger iconHeight = 9;
         
-        self.sourceIcon = iconLabel(@"editEvernote", iconHeight);
-        [self.sourceIcon setTextColor:tcolor(SubTextColor)];
-        [self.contentView addSubview:self.sourceIcon];
+        self.evernoteIcon = iconLabel(@"editEvernote", iconHeight);
+        [self.evernoteIcon setTextColor:tcolor(SubTextColor)];
+        [self.contentView addSubview:self.evernoteIcon];
         
+        self.gmailIcon = iconLabel(@"editMail", iconHeight);
+        [self.gmailIcon setTextColor:tcolor(SubTextColor)];
+        [self.contentView addSubview:self.gmailIcon];
+
         self.locationIcon = iconLabel(@"editLocation", iconHeight);
         [self.locationIcon setTextColor:tcolor(SubTextColor)];
         [self.contentView addSubview:self.locationIcon];
@@ -237,7 +243,8 @@
     CGRectSetCenterY(self.locationIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.recurringIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.tagsIcon, self.tagsLabel.center.y - iconHack);
-    CGRectSetCenterY(self.sourceIcon, self.tagsLabel.center.y - iconHack);
+    CGRectSetCenterY(self.evernoteIcon, self.tagsLabel.center.y - iconHack);
+    CGRectSetCenterY(self.gmailIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.notesIcon, self.tagsLabel.center.y - iconHack);
     CGRectSetCenterY(self.alarmLabel, self.tagsLabel.center.y);
     self.tagsLabel.hidden = !showBottomLine;
@@ -273,7 +280,8 @@
         alarmLabel = YES;
     }
 
-    self.sourceIcon.hidden = YES;
+    self.evernoteIcon.hidden = YES;
+    self.gmailIcon.hidden = YES;
     self.locationIcon.hidden = YES;
     self.notesIcon.hidden = YES;
     self.recurringIcon.hidden = YES;
@@ -288,14 +296,12 @@
     
     KPAttachment *evernoteAttachment = [toDo firstAttachmentForServiceType:EVERNOTE_SERVICE];
     if(evernoteAttachment){
-        [self.sourceIcon setText:iconString(@"editEvernote")];
-        blockForIcon(self.sourceIcon);
+        blockForIcon(self.evernoteIcon);
     }
     
     KPAttachment *mailAttachment = [toDo firstAttachmentForServiceType:GMAIL_SERVICE];
-    if(mailAttachment){
-        [self.sourceIcon setText:iconString(@"editMail")];
-        blockForIcon(self.sourceIcon);
+    if (mailAttachment){
+        blockForIcon(self.gmailIcon);
     }
     
     if(toDo.location && toDo.location.length > 0){

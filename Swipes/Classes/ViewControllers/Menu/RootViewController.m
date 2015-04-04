@@ -57,6 +57,7 @@
 @property (nonatomic, strong) NSDate *lastClose;
 @property (nonatomic, assign) KPMenu currentMenu;
 @property (nonatomic, assign) BOOL didReset;
+@property (nonatomic, strong) UIPopoverController* popover;
 
 @end
 
@@ -180,9 +181,7 @@
                 break;
         }
         if(self.drawerViewController.openSide == MMDrawerSideLeft){
-            NSLog(@"closing");
             [self.settingsViewController reset];
-            NSLog(@"reset");
             [self.drawerViewController closeDrawerAnimated:YES completion:nil];
         }
         self.viewControllers = @[self.drawerViewController];
@@ -211,6 +210,7 @@ static RootViewController *sharedObject;
     [kUserHandler didLogout];
     [kHints reset];
     [kFilter clearAll];
+    [ANALYTICS logout];
     [NOTIHANDLER clearLocalNotifications];
     [self resetRoot];
 
@@ -246,37 +246,55 @@ static RootViewController *sharedObject;
     }
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
--(void)shareTasks:(NSArray*)tasks{
-    if([MFMailComposeViewController canSendMail]) {
-        MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
-        
-        mailCont.mailComposeDelegate = self;
-        [mailCont setSubject:LOCALIZE_STRING(@"Tasks to complete")];
-        
-        NSMutableString* message = [[NSMutableString alloc] initWithString:LOCALIZE_STRING(@"Tasks:\r\n")];
-        for(KPToDo *toDo in tasks){
-            [message appendFormat:@"◯ %@\r\n",toDo.title];
-            NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
-            NSArray *subtasks = [[toDo getSubtasks] sortedArrayUsingDescriptors:@[sortDescriptor]];
-            BOOL addedSubtasks = NO;
-            for( KPToDo *subtask in subtasks){
-                if(!subtask.completionDate){
-                    [message appendFormat:@"   ◯ %@\r\n",subtask.title];
-                    addedSubtasks = YES;
-                }
+
+- (NSString *)textForTasks:(NSArray *)tasks
+{
+    NSMutableString* message = [[NSMutableString alloc] initWithString:LOCALIZE_STRING(@"Tasks:\r\n")];
+    for(KPToDo *toDo in tasks){
+        [message appendFormat:@"◯ %@\r\n",toDo.title];
+        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
+        NSArray *subtasks = [[toDo getSubtasks] sortedArrayUsingDescriptors:@[sortDescriptor]];
+        BOOL addedSubtasks = NO;
+        for( KPToDo *subtask in subtasks){
+            if(!subtask.completionDate){
+                [message appendFormat:@"   ◯ %@\r\n",subtask.title];
+                addedSubtasks = YES;
             }
-            if (addedSubtasks)
-                [message appendString:@"\r\n"];
         }
-        [message appendString:LOCALIZE_STRING(@"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com")];
-        [mailCont setMessageBody:message isHTML:NO];
-        [self presentViewController:mailCont animated:YES completion:nil];
-        [ANALYTICS trackEvent:@"Share Tasks Opened" options:@{@"Number of Tasks":@(tasks.count)}];
-        [ANALYTICS trackCategory:@"Share Task" action:@"Opened" label:nil value:@(tasks.count)];
+        if (addedSubtasks)
+            [message appendString:@"\r\n"];
     }
-    else{
-        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Mail was not setup") andMessage:LOCALIZE_STRING(@"You can send us feedback to support@swipesapp.com. Thanks")];
+    [message appendString:LOCALIZE_STRING(@"\r\nCreated with Swipes – Task list made for High Achievers\r\nhttp://swipesapp.com")];
+    return message;
+}
+
+- (void)openActivityViewWithArray:(NSArray *)array withFrame:(CGRect)frame
+{
+    UIActivityViewController *activityViewController =
+    [[UIActivityViewController alloc] initWithActivityItems:array
+                                      applicationActivities:nil];
+    
+    //activityViewController.excludedActivityTypes = @[@"com.demosten.TestUIActivityView.testShare"];
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        self.popover = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
+        //self.popover.delegate = self;
+        [self.popover presentPopoverFromRect:frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
+    else {
+        [self presentViewController:activityViewController
+                           animated:YES
+                         completion:^{
+                             // ...
+                         }];
+    }
+}
+
+-(void)shareTasks:(NSArray*)tasks withFrame:(CGRect)frame
+{
+    NSString* text = [self textForTasks:tasks];
+    [self openActivityViewWithArray:@[text] withFrame:frame];
+    [ANALYTICS trackEvent:@"Share Tasks Opened" options:@{@"Number of Tasks":@(tasks.count)}];
+    [ANALYTICS trackCategory:@"Share Task" action:@"Opened" label:nil value:@(tasks.count)];
 }
 
 -(void)accountAlertWithMessage:(NSString *)message{
@@ -491,6 +509,7 @@ static RootViewController *sharedObject;
         NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
         NSNumber *daysSinceInstall = @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]);
         [ANALYTICS trackCategory:@"Onboarding" action:@"Trying Out" label:nil value:daysSinceInstall];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"trying out" object:self];
     }
     
     [self changeToMenu:KPMenuHome animated:YES];
@@ -547,11 +566,14 @@ static RootViewController *sharedObject;
     
    // [self setNeedsStatusBarAppearanceUpdate];
 }
+
+
 -(void)initializeClock{
     [kTopClock addTopClock];
     kTopClock.font = KP_SEMIBOLD(12);
     [kTopClock setTextColor:alpha(tcolor(TextColor),0.8)];
 }
+
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];

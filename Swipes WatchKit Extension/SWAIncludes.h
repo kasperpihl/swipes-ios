@@ -12,8 +12,10 @@
 #import <Foundation/Foundation.h>
 
 #define color(r,g,b,a) [UIColor colorWithRed: r/255.0 green: g/255.0 blue: b/255.0 alpha:a]
-#define TASKS_COLOR                    color(255,200,94,1) //color(244,203,28,1) //color(237,194,0,1)
-#define DONE_COLOR                     color(134,211,110,1) // color(69,217,132,1)  //
+#define TASKS_COLOR                    color(255,193,7,1)
+#define DONE_COLOR                     color(134,211,110,1)
+#define TEXT_COLOR                     color(27,30,35,1)
+#define LATER_COLOR                    color(255,86,55,1)
 
 #define LOCALIZE_STRING(string) NSLocalizedString(string, nil)
 

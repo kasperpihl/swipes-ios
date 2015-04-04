@@ -12,8 +12,11 @@
 
 - (IBAction)onButtonTouch:(id)sender
 {
+    _checked = !_checked;
+    UIImage* newImage = [UIImage imageNamed:_checked ? @"action-step-complete" : @"action-step-white"];
+    [_button setBackgroundImage:newImage];
     if (_todo && _delegate) {
-        [_delegate onCompleteButtonTouch:_todo];
+        [_delegate onCompleteButtonTouch:_todo checked:_checked];
     }
 }
 

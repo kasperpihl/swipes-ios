@@ -37,7 +37,6 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
 
 @interface EvernoteSyncHandler () <EvernoteViewDelegate>
 
-@property (nonatomic, copy) SyncBlock block;
 @property (nonatomic, strong) NSArray *objectsWithEvernote;
 @property (nonatomic, strong) NSDate *lastUpdated;
 @property (nonatomic, assign) BOOL updateNeededFromEvernote;
@@ -327,6 +326,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
 
 -(void)synchronizeWithBlock:(SyncBlock)block
 {
+    self.isSyncing = YES;
     self.block = block;
     [self.changedNotes removeAllObjects];
     kEnInt.requestCounter = 0;
