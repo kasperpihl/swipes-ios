@@ -526,6 +526,7 @@
 		DA5346BF19D5CB7B007AA15D /* Datamodel.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		DA5346C019D5CB84007AA15D /* SwipesToday.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DAE2B16319CB7AA900A9074E /* SwipesToday.entitlements */; };
 		DA5422CE1986C7A50006A1E6 /* URLHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5422CD1986C7A50006A1E6 /* URLHandler.m */; };
+		DA57B29D1ACF66C4000F2377 /* UIView+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A771356E17BABB5A0090BE89 /* UIView+Utilities.m */; };
 		DA67301418A99C7100CA4C1A /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA67301318A99C7100CA4C1A /* DropboxSDK.framework */; };
 		DA69247E19B879D30082D1E4 /* AnalyticsHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A717BF1D17611162004791BF /* AnalyticsHandler.h */; };
 		DA69247F19B879D70082D1E4 /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
@@ -3736,6 +3737,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA09B0671AB228D6002632DC /* NSManagedObjectModel+MagicalRecord.m in Sources */,
+				DA57B29D1ACF66C4000F2377 /* UIView+Utilities.m in Sources */,
 				DAC8A1821ACC47DD00061377 /* LocationSearchView.m in Sources */,
 				DA09B09E1AB24127002632DC /* AudioHandler.m in Sources */,
 				DA09AFB41AB1CE65002632DC /* _KPToDo.m in Sources */,

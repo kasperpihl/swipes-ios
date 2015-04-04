@@ -65,7 +65,6 @@ typedef enum {
 
 @interface SchedulePopup () <KPBlurryDelegate,CKCalendarDelegate,ToolbarDelegate,KPTimePickerDelegate, UIGestureRecognizerDelegate,LocationSearchDelegate>
 @property (nonatomic,copy) SchedulePopupBlock block;
-@property (nonatomic,strong) UIView *contentView;
 @property (nonatomic) BOOL isPickingDate;
 @property (nonatomic) BOOL isChoosingLocation;
 @property (nonatomic) BOOL hasReturned;
@@ -710,7 +709,7 @@ typedef enum {
         
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, POPUP_WIDTH)];
         contentView.autoresizesSubviews = YES;
-        contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
+//        contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
         contentView.center = self.center;
         
         contentView.backgroundColor = retColor(tcolor(BackgroundColor), gray(248,1));
@@ -782,6 +781,7 @@ typedef enum {
 
 -(void)layoutSubviews{
     [super layoutSubviews];
+    self.contentView.center = self.center;
     [self positionHelpLabelForHeight:self.contentView.frame.size.height];
 }
 

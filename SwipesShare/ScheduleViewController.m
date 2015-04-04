@@ -42,6 +42,13 @@
         int i = 5;
     }];
     _scheduleView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    [[NSNotificationCenter defaultCenter] removeObserver:_scheduleView];
+    _scheduleView.contentView.backgroundColor = [UIColor clearColor];
+    _scheduleView.contentView.layer.cornerRadius = 0;
+    _scheduleView.contentView.layer.shadowOffset = CGSizeMake(0, 0);
+    _scheduleView.contentView.layer.shadowColor = nil;
+    _scheduleView.contentView.layer.shadowOpacity = 0;
+        
     [self.view addSubview:_scheduleView];
     
     // Do any additional setup after loading the view.
