@@ -16,6 +16,13 @@
 #import "KPTopClock.h"
 #import "Intercom.h"
 
+// TODO
+// this is full of iOS8 related deprecation warnings
+// we should fix them when we remove support for iOS7
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
+
 #define kMaxNotifications 25
 @interface NotificationHandler () <KitLocateSingleDelegate, KitLocateDelegate>
 @property (nonatomic) BOOL fencing;
@@ -344,10 +351,10 @@ static NotificationHandler *sharedObject;
 
 -(void)updateLocalNotifications{
     /* Check for settings */
-    BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
     [self updateLocationUpdates];
 
 #ifndef NOT_APPLICATION
+    BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:SettingNotifications] boolValue];
     UIApplication *app = [UIApplication sharedApplication];
     NSPredicate *todayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [NSDate date]];
     NSInteger todayCount = [KPToDo MR_countOfEntitiesWithPredicate:todayPredicate];
@@ -517,3 +524,6 @@ static NotificationHandler *sharedObject;
 }
 
 @end
+
+#pragma clang diagnostic pop
+

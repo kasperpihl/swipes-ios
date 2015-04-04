@@ -116,8 +116,9 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     
     // setup back button
     _backButton.titleLabel.text = nil;
-    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:@"materialBackBack"];
-    [attrString addAttribute:NSFontAttributeName value:iconFont(12) range:NSMakeRange(0, 12)];
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:@"arrowLeftThick Back"];
+    [attrString addAttribute:NSFontAttributeName value:iconFont(10) range:NSMakeRange(0, 14)];
+    [attrString addAttribute:NSFontAttributeName value:KP_LIGHT(6) range:NSMakeRange(14, 1)];
     [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, attrString.length)];
     [_backButton setAttributedTitle:attrString forState:UIControlStateNormal];
     [_backButton setAttributedTitle:attrString forState:UIControlStateHighlighted];
