@@ -114,6 +114,14 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
         [self setupPadSize];
     }
     
+    // setup back button
+    _backButton.titleLabel.text = nil;
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:@"materialBackBack"];
+    [attrString addAttribute:NSFontAttributeName value:iconFont(12) range:NSMakeRange(0, 12)];
+    [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, attrString.length)];
+    [_backButton setAttributedTitle:attrString forState:UIControlStateNormal];
+    [_backButton setAttributedTitle:attrString forState:UIControlStateHighlighted];
+    
     [self.textField becomeFirstResponder];
 }
 
@@ -355,7 +363,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
