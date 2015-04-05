@@ -80,8 +80,6 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Location will be used to make tasks that will alert based on your arrival on a location.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>swipes.ttf</string>
@@ -126,5 +124,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location will be used to make tasks that will alert based on your arrival on a location.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Location will be used to make tasks that will alert based on your arrival on a location.</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Will be used to import your reminders into tasks</string>
 </dict>
 </plist>
