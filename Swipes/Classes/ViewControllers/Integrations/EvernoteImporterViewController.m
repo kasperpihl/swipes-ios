@@ -216,7 +216,7 @@
         [notesToImport addObject:note];
     }
     [DejalBezelActivityView activityViewForView:self.view withLabel:LOCALIZE_STRING(@"Importing...")];
-    [EvernoteSyncHandler addAndSyncNewTasksFromNotes:notesToImport];
+    [EvernoteSyncHandler addAndSyncNewTasksFromNotes:notesToImport withArray:nil];
     [DejalBezelActivityView removeViewAnimated:YES];
     [UTILITY alertWithTitle:LOCALIZE_STRING(@"Successfully imported.") andMessage:LOCALIZE_STRING(@"Next time, assign the \"swipes\"-tag in Evernote and we'll import the notes automatically.") buttonTitles:@[LOCALIZE_STRING(@"Great! I got it.")] block:nil];
     [self pressedClose:nil];

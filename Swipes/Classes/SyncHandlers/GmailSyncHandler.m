@@ -23,6 +23,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
 
 @property (nonatomic, strong) NSDate *lastUpdated;
 @property (nonatomic, strong) NSMutableArray* updatedTasks;
+@property (nonatomic, strong) NSMutableArray* createdTasks;
 
 @end
 
@@ -44,6 +45,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
     if (self) {
         _lastUpdated = [USER_DEFAULTS objectForKey:kGmailUpdatedAtKey];
         _updatedTasks = [NSMutableArray array];
+        _createdTasks = [NSMutableArray array];
     }
     return self;
 }
@@ -140,8 +142,16 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
                 }
             }
             [self setUpdatedAt:date];
-            block(SyncStatusSuccess, @{@"updated": [_updatedTasks copy]}, nil);
+            __block NSDictionary* userInfo = @{@"updated": [_updatedTasks copy], @"created": [_createdTasks copy]};
+            self.block(SyncStatusSuccess, userInfo, nil);
+            if (_updatedTasks.count || _createdTasks.count) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:userInfo];
+                });
+            }
+            
             [_updatedTasks removeAllObjects];
+            [_createdTasks removeAllObjects];
         }
     };
     
@@ -172,8 +182,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
                                 newToDo.notes = [UtilityClass unescapeString:processor.snippet];
                             }
                             [newToDo attachService:GMAIL_SERVICE title:title identifier:identifier sync:YES from:@"gmail-integration"];
-                            if (nil != newToDo.objectId)
-                                [_updatedTasks addObject:newToDo.objectId];
+                            [_createdTasks addObject:newToDo.tempId];
                         }
                         else {
                             [UtilityClass sendError:[NSError errorWithDomain:@"Failed to create identifier" code:703 userInfo:nil] type:@"gmail:failed to create identifier"];

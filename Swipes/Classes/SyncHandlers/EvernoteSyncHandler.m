@@ -48,12 +48,13 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
 
 @property (nonatomic, strong) NSMutableSet *changedNotes;
 @property (nonatomic, strong) NSMutableArray *_updatedTasks;
+@property (nonatomic, strong) NSMutableArray *createdTasks;
 
 @end
 
 @implementation EvernoteSyncHandler
 
-+(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes
++(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes withArray:(NSMutableArray *)createdTasks
 {
     for (ENSessionFindNotesResult *note in notes){
         NSString *title;
@@ -67,7 +68,11 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
             title = [title substringToIndex:kTitleMaxLength];
         KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO from:@"Evernote"];
         [newToDo attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:note.noteRef] sync:YES from:@"swipes-tag"];
+        if (createdTasks) {
+            [createdTasks addObject:newToDo.tempId];
+        }
     }
+    
     if (notes.count > 0)
         [KPCORE saveContextForSynchronization:nil];
     return nil;
@@ -79,6 +84,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
     if (self) {
         self.changedNotes = [NSMutableSet set];
         self.lastUpdated = [USER_DEFAULTS objectForKey:kEvernoteUpdatedAtKey];
+        _createdTasks = [NSMutableArray array];
         [self convertGuidToENNoteRef];
     }
     return self;
@@ -393,7 +399,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
                     }
                     [self.changedNotes addObject:findNoteResult];
                 }
-                [EvernoteSyncHandler addAndSyncNewTasksFromNotes:newNotes];
+                [EvernoteSyncHandler addAndSyncNewTasksFromNotes:newNotes withArray:_createdTasks];
             }
 //            if (self.updateNeededFromEvernote)
                 [self fetchEvernoteChangesWithBlock:block];
@@ -550,6 +556,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
     __block NSInteger returnCount = 0;
     __block NSInteger targetCount = self.objectsWithEvernote.count;
     __block NSError *runningError;
+    __block BOOL syncedAnything = NO;
     
     __block voidBlock finalizeBlock = ^{
         returnCount++;
@@ -557,6 +564,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
             DLog(@"requests used for Evernote sync: %lu",(long)kEnInt.requestCounter);
             if(runningError){
                 self.block(SyncStatusError, nil, runningError);
+                syncedAnything = YES;
                 return;
             }
             // If changes to Core Data - make sure it gets synced to our server.
@@ -573,12 +581,19 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
             }
             [self setUpdatedAt:date];
             self.updateNeededFromEvernote = NO;
+            __block NSDictionary* userInfo = @{@"updated": [self._updatedTasks copy], @"created": [_createdTasks copy]};
+            self.block(SyncStatusSuccess, userInfo, nil);
+            syncedAnything = YES;
+            if (self._updatedTasks.count || _createdTasks.count) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:userInfo];
+                });
+            }
             [self.changedNotes removeAllObjects];
-            self.block(SyncStatusSuccess, @{@"updated": [self._updatedTasks copy]}, nil);
             [self._updatedTasks removeAllObjects];
+            [_createdTasks removeAllObjects];
         }
     };
-    BOOL syncedAnything = NO;
     for (KPToDo *todoWithEvernote in self.objectsWithEvernote) {
         
         __block KPAttachment *evernoteAttachment = [todoWithEvernote firstAttachmentForServiceType:EVERNOTE_SERVICE];

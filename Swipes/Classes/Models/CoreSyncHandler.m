@@ -439,16 +439,7 @@
                 [EvernoteIntegration updateAPILimitIfNeeded:error];
             }
             if (status == SyncStatusSuccess){
-                if( userInfo ){
-                    NSArray *updatedToDos = [userInfo objectForKey:@"updated"];
-                    if( updatedToDos && updatedToDos.count > 0 ){
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            //NSLog(@"shooting notification from Evernote");
-                            [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:@{ @"updated" : updatedToDos }];
-                        });
-                    }
-                }
-                //NSLog(@"successfully ended");
+                DLog(@"Evernote sync successfully ended: %@", userInfo);
                 self.evernoteSyncHandler.isSyncing = NO;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -477,16 +468,7 @@
         [self.gmailSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             //NSLog(@"returned %lu",(long)status);
             if (status == SyncStatusSuccess){
-                if( userInfo ){
-                    NSArray *updatedToDos = [userInfo objectForKey:@"updated"];
-                    if( updatedToDos && updatedToDos.count > 0 ){
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            //NSLog(@"shooting notification from Evernote");
-                            [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:@{ @"updated" : updatedToDos }];
-                        });
-                    }
-                }
-                //NSLog(@"successfully ended");
+                DLog(@"Gmail sync successfully ended: %@", userInfo);
                 self.gmailSyncHandler.isSyncing = NO;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
