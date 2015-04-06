@@ -38,8 +38,8 @@ static SettingsHandler *sharedObject;
 
 +(SettingsHandler *)sharedInstance{
     if(!sharedObject){
-        sharedObject = [[self allocWithZone:NULL] init];
-        [sharedObject initialize];
+        sharedObject = [[self alloc] init];
+        //[sharedObject initialize];
     }
     return sharedObject;
 }
@@ -336,19 +336,36 @@ static SettingsHandler *sharedObject;
     [USER_DEFAULTS synchronize];
 }
 
--(void)initialize{
-    self.settings = [USER_DEFAULTS objectForKey:kSettingsDictionaryKey];
-    if(!self.settings)
-        self.settings = [NSMutableDictionary dictionary];
-    else if( ![self.settings isMemberOfClass:[NSMutableDictionary class]]){
-        
-        if([self.settings isKindOfClass:[NSDictionary class]])
-            self.settings = [self.settings mutableCopy];
-        else{
-            self.settings = [NSMutableDictionary dictionary];
+- (NSMutableDictionary *)settings
+{
+    if (!_settings) {
+        _settings = [USER_DEFAULTS objectForKey:kSettingsDictionaryKey];
+        if(!_settings)
+            _settings = [NSMutableDictionary dictionary];
+        else if( ![_settings isMemberOfClass:[NSMutableDictionary class]]){
+            if([_settings isKindOfClass:[NSDictionary class]])
+                _settings = [self.settings mutableCopy];
+            else{
+                _settings = [NSMutableDictionary dictionary];
+            }
         }
     }
+    return _settings;
 }
+
+//-(void)initialize{
+//    self.settings = [USER_DEFAULTS objectForKey:kSettingsDictionaryKey];
+//    if(!self.settings)
+//        self.settings = [NSMutableDictionary dictionary];
+//    else if( ![self.settings isMemberOfClass:[NSMutableDictionary class]]){
+//        
+//        if([self.settings isKindOfClass:[NSDictionary class]])
+//            self.settings = [self.settings mutableCopy];
+//        else{
+//            self.settings = [NSMutableDictionary dictionary];
+//        }
+//    }
+//}
 
 -(void)printSettings{
     NSLog(@"%@",self.settings);

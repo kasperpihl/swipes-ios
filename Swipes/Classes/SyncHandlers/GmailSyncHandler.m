@@ -66,6 +66,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
 {
     self.isSyncing = YES;
     block(SyncStatusStarted, nil, nil);
+    self.block = block;
     if (!kGmInt.isAuthenticated) {
         NSError* error = [NSError errorWithDomain:@"Gmail not authenticated" code:702 userInfo:nil];
         return block(SyncStatusError, nil, error);
@@ -143,7 +144,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
             }
             [self setUpdatedAt:date];
             __block NSDictionary* userInfo = @{@"updated": [_updatedTasks copy], @"created": [_createdTasks copy]};
-            self.block(SyncStatusSuccess, userInfo, nil);
+            block(SyncStatusSuccess, userInfo, nil);
             if (_updatedTasks.count || _createdTasks.count) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:userInfo];

@@ -336,13 +336,13 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
     self.block = block;
     [self.changedNotes removeAllObjects];
     kEnInt.requestCounter = 0;
-    self.block(SyncStatusStarted, nil, nil);
+    block(SyncStatusStarted, nil, nil);
     BOOL hasLocalChanges = [self checkForLocalChanges];
-    if(!hasLocalChanges && !self.needToClearCache){
+    if (!hasLocalChanges && !self.needToClearCache) {
         //DLog(@"%f > -%i",[self.lastUpdated timeIntervalSinceNow],kFetchChangesTimeout);
-        if(self.lastUpdated && [self.lastUpdated timeIntervalSinceNow] > -kFetchChangesTimeout ){
+        if (self.lastUpdated && [self.lastUpdated timeIntervalSinceNow] > -kFetchChangesTimeout) {
             //DLog(@"returning due to caching");
-            return self.block(SyncStatusSuccess, nil, nil );
+            return block(SyncStatusSuccess, nil, nil);
         }
     }
 
@@ -543,7 +543,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
     NSError* error = [NSError errorWithDomain:@"Evernote not authenticated" code:601 userInfo:nil];
     ENSession *session = [ENSession sharedSession];
     if (!session.isAuthenticated) {
-        return self.block(SyncStatusError, nil, error);
+        return block(SyncStatusError, nil, error);
     }
     
     // this is needed in case you have old client synchronizing the old info
@@ -563,7 +563,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
         if(returnCount == targetCount){
             DLog(@"requests used for Evernote sync: %lu",(long)kEnInt.requestCounter);
             if(runningError){
-                self.block(SyncStatusError, nil, runningError);
+                block(SyncStatusError, nil, runningError);
                 syncedAnything = YES;
                 return;
             }
@@ -582,7 +582,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
             [self setUpdatedAt:date];
             self.updateNeededFromEvernote = NO;
             __block NSDictionary* userInfo = @{@"updated": [self._updatedTasks copy], @"created": [_createdTasks copy]};
-            self.block(SyncStatusSuccess, userInfo, nil);
+            block(SyncStatusSuccess, userInfo, nil);
             syncedAnything = YES;
             if (self._updatedTasks.count || _createdTasks.count) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -668,8 +668,9 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
         }];
         
     }
-    if(!syncedAnything)
-        return self.block(SyncStatusSuccess, nil, nil);
+    if (!syncedAnything) {
+        return block(SyncStatusSuccess, nil, nil);
+    }
 }
 
 - (void)convertGuidToENNoteRef
