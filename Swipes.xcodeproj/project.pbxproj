@@ -669,33 +669,33 @@
 			remoteGlobalIDString = DA3282B61A4CB7CF0054CE04;
 			remoteInfo = "Swipes WatchKit Extension";
 		};
-		DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4F12027C11A4CA2F00BEB470;
-			remoteInfo = GTLTouchStaticLib;
-		};
-		DACA4A431AAF43D400DB1D2C /* PBXContainerItemProxy */ = {
+		DA3F7A2A1AD437E6005364A5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4F38F6A60B66E91D00B24B81;
 			remoteInfo = GTLFramework;
 		};
-		DACA4A451AAF43D400DB1D2C /* PBXContainerItemProxy */ = {
+		DA3F7A2C1AD437E6005364A5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4F12027D11A4CA2F00BEB470;
 			remoteInfo = GTLUnitTests;
 		};
-		DACA4A471AAF43D400DB1D2C /* PBXContainerItemProxy */ = {
+		DA3F7A2E1AD437E6005364A5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4F1AD9020B71603F00DC0485;
 			remoteInfo = DevelopmentTestTool;
+		};
+		DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F12027C11A4CA2F00BEB470;
+			remoteInfo = GTLTouchStaticLib;
 		};
 		DAE2B15919CB7A4D00A9074E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1117,6 +1117,7 @@
 		DA04465019D5CDC70083F816 /* Swipes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Swipes.entitlements; path = ../Swipes.entitlements; sourceTree = "<group>"; };
 		DA044DA91A994E8F009BB4ED /* TodoInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodoInterfaceController.h; sourceTree = "<group>"; };
 		DA044DAA1A994E8F009BB4ED /* TodoInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodoInterfaceController.m; sourceTree = "<group>"; };
+		DA07FF5D1ABB386900C1134A /* PushNotificationPayloadManyTasks.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayloadManyTasks.apns; sourceTree = "<group>"; };
 		DA09AFCA1AB224C7002632DC /* SwipesShare-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwipesShare-Prefix.pch"; sourceTree = "<group>"; };
 		DA09AFD21AB228D6002632DC /* MagicalImportFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalImportFunctions.h; sourceTree = "<group>"; };
 		DA09AFD31AB228D6002632DC /* MagicalImportFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalImportFunctions.m; sourceTree = "<group>"; };
@@ -1181,7 +1182,6 @@
 		DA09B0A41AB24DDF002632DC /* GothamRounded-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Light.ttf"; path = "Swipes/Ressources/Font/GothamRounded-Light.ttf"; sourceTree = SOURCE_ROOT; };
 		DA09B0A51AB24DDF002632DC /* GothamRounded-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Medium.ttf"; path = "Swipes/Ressources/Font/GothamRounded-Medium.ttf"; sourceTree = SOURCE_ROOT; };
 		DA09B0A61AB24DDF002632DC /* swipes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = swipes.ttf; path = Swipes/Ressources/Font/swipes.ttf; sourceTree = SOURCE_ROOT; };
-		DA07FF5D1ABB386900C1134A /* PushNotificationPayloadManyTasks.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayloadManyTasks.apns; sourceTree = "<group>"; };
 		DA09DD781A6E636B00E66E97 /* GmailThreadProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GmailThreadProcessor.h; sourceTree = "<group>"; };
 		DA09DD791A6E636B00E66E97 /* GmailThreadProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GmailThreadProcessor.m; sourceTree = "<group>"; };
 		DA09DD851A71071E00E66E97 /* GmailAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailAuthViewController.h; path = Integrations/GmailAuthViewController.h; sourceTree = "<group>"; };
@@ -1248,6 +1248,11 @@
 		DA3E54411A15498500C2116F /* ENNoteRefInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENNoteRefInternal.h; path = Integrations/ENNoteRefInternal.h; sourceTree = "<group>"; };
 		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteView.h; path = Components/EvernoteView.h; sourceTree = "<group>"; };
 		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteView.m; path = Components/EvernoteView.m; sourceTree = "<group>"; };
+		DA3F7A251AD437E6005364A5 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DA3F7A301AD437E6005364A5 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DA3F7A311AD437E7005364A5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DA3F7A321AD437E7005364A5 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DA3F7A331AD437E8005364A5 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DA446DE61ABA4632002BE386 /* SWAUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAUtility.h; sourceTree = "<group>"; };
 		DA446DE71ABA4632002BE386 /* SWAUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAUtility.m; sourceTree = "<group>"; };
 		DA4B61811AB87E8B0092238C /* SWADetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWADetailCell.h; sourceTree = "<group>"; };
@@ -2657,10 +2662,10 @@
 		DAB1650E1A6D3D51008D69B2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A7495BD41AC9570F00D458AD /* GTL.framework */,
+				DA3F7A2B1AD437E6005364A5 /* GTL.framework */,
 				DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */,
-				A7495BD61AC9570F00D458AD /* GTLUnitTests.xctest */,
-				A7495BD81AC9570F00D458AD /* DevelopmentTestTool */,
+				DA3F7A2D1AD437E6005364A5 /* GTLUnitTests.xctest */,
+				DA3F7A2F1AD437E6005364A5 /* DevelopmentTestTool */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3102,25 +3107,25 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		A7495BD41AC9570F00D458AD /* GTL.framework */ = {
+		DA3F7A2B1AD437E6005364A5 /* GTL.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = GTL.framework;
-			remoteRef = A7495BD31AC9570F00D458AD /* PBXContainerItemProxy */;
+			remoteRef = DA3F7A2A1AD437E6005364A5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A7495BD61AC9570F00D458AD /* GTLUnitTests.xctest */ = {
+		DA3F7A2D1AD437E6005364A5 /* GTLUnitTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = GTLUnitTests.xctest;
-			remoteRef = A7495BD51AC9570F00D458AD /* PBXContainerItemProxy */;
+			remoteRef = DA3F7A2C1AD437E6005364A5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A7495BD81AC9570F00D458AD /* DevelopmentTestTool */ = {
+		DA3F7A2F1AD437E6005364A5 /* DevelopmentTestTool */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = DevelopmentTestTool;
-			remoteRef = A7495BD71AC9570F00D458AD /* PBXContainerItemProxy */;
+			remoteRef = DA3F7A2E1AD437E6005364A5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */ = {
@@ -3128,27 +3133,6 @@
 			fileType = archive.ar;
 			path = libGTLTouchStaticLib.a;
 			remoteRef = DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DACA4A441AAF43D400DB1D2C /* GTL.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = GTL.framework;
-			remoteRef = DACA4A431AAF43D400DB1D2C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DACA4A461AAF43D400DB1D2C /* GTLUnitTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = GTLUnitTests.xctest;
-			remoteRef = DACA4A451AAF43D400DB1D2C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DACA4A481AAF43D400DB1D2C /* DevelopmentTestTool */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = DevelopmentTestTool;
-			remoteRef = DACA4A471AAF43D400DB1D2C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -3947,6 +3931,11 @@
 			isa = PBXVariantGroup;
 			children = (
 				A781287E17294C56002226C8 /* en */,
+				DA3F7A251AD437E6005364A5 /* da */,
+				DA3F7A301AD437E6005364A5 /* nl */,
+				DA3F7A311AD437E7005364A5 /* es */,
+				DA3F7A321AD437E7005364A5 /* ko */,
+				DA3F7A331AD437E8005364A5 /* de */,
 			);
 			name = InfoPlist.strings;
 			path = Localizations;
