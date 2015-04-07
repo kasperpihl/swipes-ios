@@ -4,10 +4,25 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Glance - Swipes WatchKit App.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>50</integer>
+		</dict>
 		<key>Mogenerator.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
+		</dict>
+		<key>Notification - Swipes WatchKit App.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>51</integer>
+		</dict>
+		<key>Swipes WatchKit App.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>52</integer>
 		</dict>
 		<key>Swipes.xcscheme</key>
 		<dict>
@@ -18,6 +33,11 @@
 		<dict>
 			<key>orderHint</key>
 			<integer>2</integer>
+		</dict>
+		<key>SwipesShare.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>53</integer>
 		</dict>
 		<key>SwipesToday.xcscheme</key>
 		<dict>
@@ -53,6 +73,11 @@
 			<true/>
 		</dict>
 		<key>DAE2B14E19CB7A4D00A9074E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DAE4D5F11AB1C473001BDC52</key>
 		<dict>
 			<key>primary</key>
 			<true/>

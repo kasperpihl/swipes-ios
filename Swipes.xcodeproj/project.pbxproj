@@ -655,6 +655,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A7BC168B1AD435060054E854 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F38F6A60B66E91D00B24B81;
+			remoteInfo = GTLFramework;
+		};
+		A7BC168D1AD435060054E854 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F12027D11A4CA2F00BEB470;
+			remoteInfo = GTLUnitTests;
+		};
+		A7BC168F1AD435060054E854 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F1AD9020B71603F00DC0485;
+			remoteInfo = DevelopmentTestTool;
+		};
 		DA3282CB1A4CB7CF0054CE04 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
@@ -675,27 +696,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4F12027C11A4CA2F00BEB470;
 			remoteInfo = GTLTouchStaticLib;
-		};
-		DACA4A431AAF43D400DB1D2C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4F38F6A60B66E91D00B24B81;
-			remoteInfo = GTLFramework;
-		};
-		DACA4A451AAF43D400DB1D2C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4F12027D11A4CA2F00BEB470;
-			remoteInfo = GTLUnitTests;
-		};
-		DACA4A471AAF43D400DB1D2C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4F1AD9020B71603F00DC0485;
-			remoteInfo = DevelopmentTestTool;
 		};
 		DAE2B15919CB7A4D00A9074E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1117,6 +1117,7 @@
 		DA04465019D5CDC70083F816 /* Swipes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Swipes.entitlements; path = ../Swipes.entitlements; sourceTree = "<group>"; };
 		DA044DA91A994E8F009BB4ED /* TodoInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodoInterfaceController.h; sourceTree = "<group>"; };
 		DA044DAA1A994E8F009BB4ED /* TodoInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodoInterfaceController.m; sourceTree = "<group>"; };
+		DA07FF5D1ABB386900C1134A /* PushNotificationPayloadManyTasks.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayloadManyTasks.apns; sourceTree = "<group>"; };
 		DA09AFCA1AB224C7002632DC /* SwipesShare-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwipesShare-Prefix.pch"; sourceTree = "<group>"; };
 		DA09AFD21AB228D6002632DC /* MagicalImportFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalImportFunctions.h; sourceTree = "<group>"; };
 		DA09AFD31AB228D6002632DC /* MagicalImportFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalImportFunctions.m; sourceTree = "<group>"; };
@@ -1181,7 +1182,6 @@
 		DA09B0A41AB24DDF002632DC /* GothamRounded-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Light.ttf"; path = "Swipes/Ressources/Font/GothamRounded-Light.ttf"; sourceTree = SOURCE_ROOT; };
 		DA09B0A51AB24DDF002632DC /* GothamRounded-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Medium.ttf"; path = "Swipes/Ressources/Font/GothamRounded-Medium.ttf"; sourceTree = SOURCE_ROOT; };
 		DA09B0A61AB24DDF002632DC /* swipes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = swipes.ttf; path = Swipes/Ressources/Font/swipes.ttf; sourceTree = SOURCE_ROOT; };
-		DA07FF5D1ABB386900C1134A /* PushNotificationPayloadManyTasks.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayloadManyTasks.apns; sourceTree = "<group>"; };
 		DA09DD781A6E636B00E66E97 /* GmailThreadProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GmailThreadProcessor.h; sourceTree = "<group>"; };
 		DA09DD791A6E636B00E66E97 /* GmailThreadProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GmailThreadProcessor.m; sourceTree = "<group>"; };
 		DA09DD851A71071E00E66E97 /* GmailAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailAuthViewController.h; path = Integrations/GmailAuthViewController.h; sourceTree = "<group>"; };
@@ -2657,10 +2657,10 @@
 		DAB1650E1A6D3D51008D69B2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A7495BD41AC9570F00D458AD /* GTL.framework */,
+				A7BC168C1AD435060054E854 /* GTL.framework */,
 				DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */,
-				A7495BD61AC9570F00D458AD /* GTLUnitTests.xctest */,
-				A7495BD81AC9570F00D458AD /* DevelopmentTestTool */,
+				A7BC168E1AD435060054E854 /* GTLUnitTests.xctest */,
+				A7BC16901AD435060054E854 /* DevelopmentTestTool */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3102,25 +3102,25 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		A7495BD41AC9570F00D458AD /* GTL.framework */ = {
+		A7BC168C1AD435060054E854 /* GTL.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = GTL.framework;
-			remoteRef = A7495BD31AC9570F00D458AD /* PBXContainerItemProxy */;
+			remoteRef = A7BC168B1AD435060054E854 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A7495BD61AC9570F00D458AD /* GTLUnitTests.xctest */ = {
+		A7BC168E1AD435060054E854 /* GTLUnitTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = GTLUnitTests.xctest;
-			remoteRef = A7495BD51AC9570F00D458AD /* PBXContainerItemProxy */;
+			remoteRef = A7BC168D1AD435060054E854 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A7495BD81AC9570F00D458AD /* DevelopmentTestTool */ = {
+		A7BC16901AD435060054E854 /* DevelopmentTestTool */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = DevelopmentTestTool;
-			remoteRef = A7495BD71AC9570F00D458AD /* PBXContainerItemProxy */;
+			remoteRef = A7BC168F1AD435060054E854 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */ = {
@@ -3128,27 +3128,6 @@
 			fileType = archive.ar;
 			path = libGTLTouchStaticLib.a;
 			remoteRef = DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DACA4A441AAF43D400DB1D2C /* GTL.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = GTL.framework;
-			remoteRef = DACA4A431AAF43D400DB1D2C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DACA4A461AAF43D400DB1D2C /* GTLUnitTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = GTLUnitTests.xctest;
-			remoteRef = DACA4A451AAF43D400DB1D2C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DACA4A481AAF43D400DB1D2C /* DevelopmentTestTool */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = DevelopmentTestTool;
-			remoteRef = DACA4A471AAF43D400DB1D2C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -4890,8 +4869,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesShare/SwipesShare.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4939,7 +4918,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ee91b371-6de8-4901-9f28-aadb4c717754";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;

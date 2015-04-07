@@ -68,7 +68,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>113</string>
+	<string>117</string>
 	<key>FacebookAppID</key>
 	<string>531435630236702</string>
 	<key>LSApplicationCategoryType</key>
@@ -80,6 +80,12 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location will be used to make tasks that will alert based on your arrival on a location.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Location will be used to make tasks that will alert based on your arrival on a location.</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Will be used to import your reminders into tasks</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>swipes.ttf</string>
@@ -124,11 +130,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Location will be used to make tasks that will alert based on your arrival on a location.</string>
-	<key>NSLocationUsageDescription</key>
-	<string>Location will be used to make tasks that will alert based on your arrival on a location.</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>Will be used to import your reminders into tasks</string>
 </dict>
 </plist>
