@@ -56,6 +56,7 @@ static NSArray* g_weekDays;
     // This method is called when watch view controller is about to be visible to user
     [super willActivate];
     NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
+    // TODO figure our a better way to have this formated
     NSString *title = [NSString stringWithFormat:LOCALIZE_STRING(@"+%luh"),(long)(laterToday.integerValue/3600)];
     [_laterButton setTitle:title];
     NSNumber *weekStart = (NSNumber*)[kSettings valueForSetting:SettingWeekStart];

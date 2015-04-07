@@ -32,7 +32,7 @@ static NSString* kOpenTitle;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = LOCALIZE_STRING(@"HELP");
+    self.title = [LOCALIZE_STRING(@"Help") uppercaseString];
 }
 
 - (void)recreateCellInfo

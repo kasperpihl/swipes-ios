@@ -2,8 +2,7 @@
   Localizable.strings
   Swipes
 
-  Created by demosten on 10/6/14.
-  Copyright (c) 2014 Pihl IT. All rights reserved.
+  Copyright (c) 2015 Pihl IT. All rights reserved.
 */
 
 /* 
@@ -161,6 +160,7 @@
  Scheduler
 */
 "Later  +%luh" = "Later  +%luh";
+"+%luh" = "+%luh"; // h is for hour
 "This Evening" = "This Evening";
 "Tomorrow Eve" = "Tomorrow Eve";
 "In 2 Days" = "In 2 Days";
@@ -181,6 +181,8 @@
 "Unspecified" = "Unspecified";
 "Add notes" = "Add notes";
 "Add tags" = "Add tags";
+"Archived" = "Archived";
+"Deleted" = "Deleted";
 
 "Later Today" = "Later Today";
 "Today" = "Today";
@@ -189,7 +191,7 @@
 
 "See%@ %lu action%@" = "See%@ %lu action%@";
 " all" = " all";
-"s" = "s";
+"s" = "s"; // plural
 
 // Evernote View
 "Only notes with ToDo inside" = "Only notes with ToDo inside";
@@ -275,22 +277,6 @@
 "My weekend starts" = "My weekend starts";
 "Snooze Later Today" = "Snooze Later Today";
 
-// Integrations Menu
-" (Connected)" = " (Connected)";
-"Unlink" = "Unlink";
-"Link account" = "Link account";
-
-"Sync with Evernote on this device" = "Sync with Evernote on this device";
-"Auto import notes with \"swipes\"-tag" = "Auto import notes with \"swipes\"-tag";
-"Sync with personal linked notebooks" = "Sync with personal linked notebooks";
-"Sync with Evernote Business" = "Sync with Evernote Business";
-"Tap to learn more" = "Tap to learn more";
-"Open Evernote Importer" = "Open Evernote Importer";
-"Import a few notes right away." = "Import a few notes right away.";
-"Choose notes" = "Choose notes";
-"Unlink Evernote" = "Unlink Evernote";
-"All tasks will be unlinked, are you sure?" = "All tasks will be unlinked, are you sure?";
-
 // Evernote Helper
 "WHAT IT IS" = "WHAT IT IS";
 "This integration lets you sync notes with checkmarks from Evernote into Swipes." = "This integration lets you sync notes with checkmarks from Evernote into Swipes.";
@@ -312,7 +298,7 @@
 // Help menu
 "Contact Swipes" = "Contact Swipes";
 "Walkthrough" = "Walkthrough";
-"Get Started Guides" = "Get Started Guides";
+"Get Started" = "Get Started";
 "FAQ" = "FAQ";
 "Known Issues" = "Known Issues";
 "Open Policies" = "Open Policies";
@@ -337,6 +323,7 @@
 
 "Turn off location" = "Turn off location";
 "Location reminders won't be working." = "Location reminders won't be working.";
+"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." = "Location reminders is a Swipes Plus feature. Get reminded at the right place and time.";
 
 "Register for Swipes to safely back up your data and get Swipes Plus" = "Register for Swipes to safely back up your data and get Swipes Plus";
 
@@ -401,4 +388,74 @@
 */
 "Tasks to complete" = "Tasks to complete";
 "Tasks: \r\n" = "Tasks: \r\n";
-"\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com" = "\r\nSent with my Swipes – Task list made for High Achievers\r\nFree iPhone app - http://swipesapp.com";
+"\r\nCreated with Swipes – Task list made for High Achievers\r\nhttp://swipesapp.com" = "\r\nCreated with Swipes – Task list made for High Achievers\r\nhttp://swipesapp.com";
+
+// Messages & Others
+"Synchronized" = "Synchronized";
+"Error synchronizing" = "Error synchronizing";
+"Error synchronizing Evernote" = "Error synchronizing Evernote";
+"Synchronizing..." = "Synchronizing...";
+"No tags" = "No tags";
+
+// Gmail
+"Gmail Authorization" = "Gmail Authorization";
+"To sync with Gmail on this device, please authorize" = "To sync with Gmail on this device, please authorize";
+"Error synchronizing Gmail" = "Error synchronizing Gmail";
+
+// Integrations
+"Not connected" = "Not connected";
+"Learn more about Evernote Business" = "Learn more about Evernote Business";
+"Sync with Evernote on this device" = "Sync with Evernote on this device";
+"Auto import notes with \"swipes\"-tag" = "Auto import notes with \"swipes\"-tag";
+"Sync with personal linked notebooks" = "Sync with personal linked notebooks";
+"Sync with Evernote Business" = "Sync with Evernote Business";
+"Unlink" = "Unlink";
+"Link account" = "Link account";
+"Unlink Evernote" = "Unlink Evernote";
+"All tasks will be unlinked, are you sure?" = "All tasks will be unlinked, are you sure?";
+"Opening Evernote..." = "Opening Evernote...";
+"Import a few notes right away." = "Import a few notes right away.";
+"Choose notes" = "Choose notes";
+"I use Mailbox" = "I use Mailbox";
+"Unlink Gmail" = "Unlink Gmail";
+"Connected 1 account" = "Connected 1 account";
+"Loading data..." = "Loading data...";
+"Error loading data" = "Error loading data";
+"OPEN EMAILS IN" = "OPEN EMAILS IN";
+"Mail" = "Mail";
+"Mailbox" = "Mailbox";
+"Gmail" = "Gmail";
+"Cloud Magic" = "Cloud Magic";
+"Add new account" = "Add new account";
+
+// Options
+"OPTIONS" = "OPTIONS";
+"TWEAKS" = "TWEAKS";
+"SOUNDS" = "SOUNDS";
+"NOTIFICATIONS" = "NOTIFICATIONS";
+"Add new tasks to bottom" = "Add new tasks to bottom";
+"Use standard status bar" = "Use standard status bar";
+"In-app sounds" = "In-app sounds";
+"Tasks snoozed for later" = "Tasks snoozed for later";
+"Daily reminder to plan the day" = "Daily reminder to plan the day";
+"Weekly reminder to plan the week" = "Weekly reminder to plan the week";
+"App permissions" = "App permissions";
+
+// Gmail helper
+"TURN EMAILS INTO TASKS" = "TURN EMAILS INTO TASKS";
+"To de-clutter your inbox from tasks, use this integration. The integration works with all Gmail based clients.\n\nRecommended workflow with:" = "To de-clutter your inbox from tasks, use this integration. The integration works with all Gmail based clients.\n\nRecommended workflow with:";
+"HOW TO IMPORT FROM GMAIL" = "HOW TO IMPORT FROM GMAIL";
+"Move an email to the \"Add to Swipes\" folder in your Gmail client." = "Move an email to the \"Add to Swipes\" folder in your Gmail client.";
+"HOW IT APPEARS IN SWIPES" = "HOW IT APPEARS IN SWIPES";
+"The email will then appear in your current tasks in Swipes. The title of the email becomes the task name and the preview text will be saved as a note." = "The email will then appear in your current tasks in Swipes. The title of the email becomes the task name and the preview text will be saved as a note.";
+
+// weekdays
+"Sun" = "Sun";
+"Mon" = "Mon";
+"Tue" = "Tue";
+"Wed" = "Wed";
+"Thu" = "Thu";
+"Fri" = "Fri";
+"Sat" = "Sat";
+
+

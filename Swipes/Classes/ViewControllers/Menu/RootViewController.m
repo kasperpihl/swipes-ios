@@ -249,7 +249,7 @@ static RootViewController *sharedObject;
 
 - (NSString *)textForTasks:(NSArray *)tasks
 {
-    NSMutableString* message = [[NSMutableString alloc] initWithString:LOCALIZE_STRING(@"Tasks:\r\n")];
+    NSMutableString* message = [[NSMutableString alloc] initWithString:LOCALIZE_STRING(@"Tasks: \r\n")];
     for(KPToDo *toDo in tasks){
         [message appendFormat:@"◯ %@\r\n",toDo.title];
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];

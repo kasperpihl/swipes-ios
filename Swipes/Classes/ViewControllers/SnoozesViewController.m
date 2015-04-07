@@ -33,7 +33,7 @@ static CGFloat const kBottomMargin = 45;
     [super viewDidLoad];
     _titleView = [[IntegrationTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kTopMargin)];
     _titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _titleView.title = LOCALIZE_STRING(@"SNOOZES");
+    _titleView.title = [LOCALIZE_STRING(@"Snoozes") uppercaseString];
     [self.view addSubview:_titleView];
 
     self.activeSnooze = SnoozeNone;

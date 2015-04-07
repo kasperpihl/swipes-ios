@@ -122,7 +122,7 @@
     thirdTitleView.subtitleLabel.font = KP_REGULAR(12);
     thirdTitleView.spacing = kTextSpacing;
     thirdTitleView.maxWidth = 250;
-    [thirdTitleView setTitle:LOCALIZE_STRING(@"HOW TO IMPORT FROM GMAIL") subtitle:LOCALIZE_STRING(@"Move an email to the \"Add to Swipes\" folder in your Gmail client.")];
+    [thirdTitleView setTitle:LOCALIZE_STRING(@"HOW IT APPEARS IN SWIPES") subtitle:LOCALIZE_STRING(@"The email will then appear in your current tasks in Swipes. The title of the email becomes the task name and the preview text will be saved as a note.")];
     CGRectSetY(thirdTitleView, CGRectGetMaxY(secondImage.frame)+kTitleTopSpacing);
     [scrollView addSubview:thirdTitleView];
     

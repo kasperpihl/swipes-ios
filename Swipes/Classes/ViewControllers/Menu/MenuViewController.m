@@ -60,7 +60,7 @@ static CGFloat const kTopMargin = 60;
     
     _titleView = [[IntegrationTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kTopMargin)];
     _titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _titleView.title = LOCALIZE_STRING(@"SETTINGS");
+    _titleView.title = [LOCALIZE_STRING(@"Settings") uppercaseString];
     [self.view addSubview:_titleView];
     
     self.syncLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -236,7 +236,7 @@ static CGFloat const kTopMargin = 60;
         case KPMenuButtonLocation:{
             BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
             if(!hasLocationOn && ![kUserHandler isPlus]){
-                PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time." block:^(BOOL succeeded, NSError *error) {
+                PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:LOCALIZE_STRING(@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time.") block:^(BOOL succeeded, NSError *error) {
                     [BLURRY dismissAnimated:!succeeded];
                     if(succeeded){
                         [ROOT_CONTROLLER upgrade];

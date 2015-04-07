@@ -54,6 +54,7 @@
 
 -(void)updateExpandButton:(BOOL)expanded animated:(BOOL)animated{
     unsigned long numberOfSubtasks = (unsigned long)[self.model getSubtasks].count;
+    // TODO this "s" is not good for i18n
     [self.closeLabelButton setTitle:[NSString stringWithFormat:LOCALIZE_STRING(@"See%@ %lu action%@"),(numberOfSubtasks == 1 ) ? @"": LOCALIZE_STRING(@" all"), numberOfSubtasks,(numberOfSubtasks == 1) ? @"" :LOCALIZE_STRING(@"s")] forState:UIControlStateNormal];
     [self.closeLabelButton sizeToFit];
     self.closeLabelButton.alpha = expanded ? 1 : 0;

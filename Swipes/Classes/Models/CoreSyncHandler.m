@@ -457,7 +457,7 @@
                         }];
                     }
                     else {
-                        [self showErrorNotificationOnce:LOCALIZE_STRING(@"Error syncing Evernote")];
+                        [self showErrorNotificationOnce:LOCALIZE_STRING(@"Error synchronizing Evernote")];
                     }
                 }
             });
@@ -486,7 +486,7 @@
                         }];
                     }
                     else {
-                        [self showErrorNotificationOnce:LOCALIZE_STRING(@"Error syncing Gmail")];
+                        [self showErrorNotificationOnce:LOCALIZE_STRING(@"Error synchronizing Gmail")];
                     }
                 }
             });

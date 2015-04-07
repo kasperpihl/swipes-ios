@@ -20,7 +20,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = LOCALIZE_STRING(@"INTEGRATIONS");
+    self.title = [LOCALIZE_STRING(@"Integrations") uppercaseString];
 }
 
 - (void)recreateCellInfo

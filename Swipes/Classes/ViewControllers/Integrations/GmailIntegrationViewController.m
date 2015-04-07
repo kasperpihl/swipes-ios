@@ -53,7 +53,7 @@
                             kKeyTouchSelector: NSStringFromSelector(@selector(onEmailTouch))
                             }.mutableCopy,
                           @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: LOCALIZE_STRING(@"OPEN EMAILS IN")},
-                          @{kKeyTitle: @"Mail",
+                          @{kKeyTitle: LOCALIZE_STRING(@"Mail"),
                             kKeyCellType: @(kIntegrationCellTypeCheck),
                             kKeyIsOn: @(openType == MailOpenTypeMail),
                             kKeyIcon: @"integrationMail",
@@ -61,7 +61,7 @@
                             }.mutableCopy,
                           ].mutableCopy;
         if ([GlobalApp isMailboxInstalled]) {
-            [cellInfo addObject:@{kKeyTitle: @"Mailbox",
+            [cellInfo addObject:@{kKeyTitle: LOCALIZE_STRING(@"Mailbox"),
                                   kKeyCellType: @(kIntegrationCellTypeCheck),
                                   kKeyIsOn: @(openType == MailOpenTypeMailbox),
                                   kKeyIcon: @"integrationMailbox",
@@ -69,7 +69,7 @@
                                   }.mutableCopy];
         }
         if ([GlobalApp isGoogleMailInstalled]) {
-            [cellInfo addObject:@{kKeyTitle: @"Gmail",
+            [cellInfo addObject:@{kKeyTitle: LOCALIZE_STRING(@"Gmail"),
                                   kKeyCellType: @(kIntegrationCellTypeCheck),
                                   kKeyIsOn: @(openType == MailOpenTypeGmail),
                                   kKeyIcon: @"integrationGmail",
@@ -77,7 +77,7 @@
                                   }.mutableCopy];
         }
         if ([GlobalApp isCloudMagicInstalled]) {
-            [cellInfo addObject:@{kKeyTitle: @"Cloud Magic",
+            [cellInfo addObject:@{kKeyTitle: LOCALIZE_STRING(@"Cloud Magic"),
                                   kKeyCellType: @(kIntegrationCellTypeCheck),
                                   kKeyIsOn: @(openType == MailOpenTypeCloudMagic),
                                   kKeyIcon: @"integrationCloudMagic",
