@@ -2,4 +2,5 @@
 
 NSLocationAlwaysUsageDescription = "Will be used to allow Swipes to alert you based on your arrival at a location.";
 NSLocationUsageDescription = "Will be used to allow Swipes to alert you based on your arrival at a location.";
+NSLocationWhenInUseUsageDescription = "Will be used to allow Swipes to alert you based on your arrival at a location.";
 NSRemindersUsageDescription = "Will be used to support importing your Reminders into Swipes.";
