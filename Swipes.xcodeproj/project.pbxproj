@@ -690,6 +690,27 @@
 			remoteGlobalIDString = DA3282B61A4CB7CF0054CE04;
 			remoteInfo = "Swipes WatchKit Extension";
 		};
+		DA3F7A2A1AD437E6005364A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F38F6A60B66E91D00B24B81;
+			remoteInfo = GTLFramework;
+		};
+		DA3F7A2C1AD437E6005364A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F12027D11A4CA2F00BEB470;
+			remoteInfo = GTLUnitTests;
+		};
+		DA3F7A2E1AD437E6005364A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4F1AD9020B71603F00DC0485;
+			remoteInfo = DevelopmentTestTool;
+		};
 		DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
@@ -1248,6 +1269,11 @@
 		DA3E54411A15498500C2116F /* ENNoteRefInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENNoteRefInternal.h; path = Integrations/ENNoteRefInternal.h; sourceTree = "<group>"; };
 		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteView.h; path = Components/EvernoteView.h; sourceTree = "<group>"; };
 		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteView.m; path = Components/EvernoteView.m; sourceTree = "<group>"; };
+		DA3F7A251AD437E6005364A5 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DA3F7A301AD437E6005364A5 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DA3F7A311AD437E7005364A5 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DA3F7A321AD437E7005364A5 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DA3F7A331AD437E8005364A5 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DA446DE61ABA4632002BE386 /* SWAUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWAUtility.h; sourceTree = "<group>"; };
 		DA446DE71ABA4632002BE386 /* SWAUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWAUtility.m; sourceTree = "<group>"; };
 		DA4B61811AB87E8B0092238C /* SWADetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWADetailCell.h; sourceTree = "<group>"; };
@@ -3102,25 +3128,25 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		A7BC168C1AD435060054E854 /* GTL.framework */ = {
+		DA3F7A2B1AD437E6005364A5 /* GTL.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = GTL.framework;
-			remoteRef = A7BC168B1AD435060054E854 /* PBXContainerItemProxy */;
+			remoteRef = DA3F7A2A1AD437E6005364A5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A7BC168E1AD435060054E854 /* GTLUnitTests.xctest */ = {
+		DA3F7A2D1AD437E6005364A5 /* GTLUnitTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = GTLUnitTests.xctest;
-			remoteRef = A7BC168D1AD435060054E854 /* PBXContainerItemProxy */;
+			remoteRef = DA3F7A2C1AD437E6005364A5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A7BC16901AD435060054E854 /* DevelopmentTestTool */ = {
+		DA3F7A2F1AD437E6005364A5 /* DevelopmentTestTool */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = DevelopmentTestTool;
-			remoteRef = A7BC168F1AD435060054E854 /* PBXContainerItemProxy */;
+			remoteRef = DA3F7A2E1AD437E6005364A5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */ = {
@@ -3926,6 +3952,11 @@
 			isa = PBXVariantGroup;
 			children = (
 				A781287E17294C56002226C8 /* en */,
+				DA3F7A251AD437E6005364A5 /* da */,
+				DA3F7A301AD437E6005364A5 /* nl */,
+				DA3F7A311AD437E7005364A5 /* es */,
+				DA3F7A321AD437E7005364A5 /* ko */,
+				DA3F7A331AD437E8005364A5 /* de */,
 			);
 			name = InfoPlist.strings;
 			path = Localizations;
