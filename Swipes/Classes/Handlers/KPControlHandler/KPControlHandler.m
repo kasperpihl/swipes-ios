@@ -139,13 +139,13 @@
     return self;
 }
 -(void)pressedTag:(UIButton*)sender{
-    if([self.delegate respondsToSelector:@selector(pressedTag:)]) [self.delegate pressedTag:self];
+    if([self.delegate respondsToSelector:@selector(pressedTag:)]) [self.delegate pressedTag:sender];
 }
 -(void)pressedDelete:(UIButton*)sender{
-    if([self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:self];
+    if([self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:sender];
 }
 -(void)pressedShare:(UIButton*)sender{
-    if([self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:self];
+    if([self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:sender];
 }
 
 
