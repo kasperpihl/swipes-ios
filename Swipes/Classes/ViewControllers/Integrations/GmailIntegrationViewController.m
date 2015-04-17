@@ -189,7 +189,7 @@
 {
     [ANALYTICS popView];
     if (success && (!kGmInt.isAuthenticated)) {
-        [self gmailAuthenticateUsingSelector:@selector(authenticatedEvernote) withObject:nil];
+        [self gmailAuthenticateUsingSelector:@selector(authenticatedGmail) withObject:nil];
     }
 }
 
