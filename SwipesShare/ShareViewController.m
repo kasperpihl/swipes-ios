@@ -154,7 +154,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
 - (void)setupPadSize
 {
-    CGFloat offset = ((self.view.frame.size.height > 800) ? 150 : 10);
+    CGFloat offset = ((self.view.frame.size.height > 800) ? 150 : 10); // TODO: not the smartest way to setup things
     CGRect newFrame = self.view.frame;
     newFrame.origin.x = (self.view.frame.size.width - kWidthPad) / 2;
     newFrame.origin.y = kTopMargin + offset;
