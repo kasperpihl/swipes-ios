@@ -138,16 +138,24 @@
     }
     return self;
 }
--(void)pressedTag:(UIButton*)sender{
-    if([self.delegate respondsToSelector:@selector(pressedTag:)]) [self.delegate pressedTag:self];
-}
--(void)pressedDelete:(UIButton*)sender{
-    if([self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:self];
-}
--(void)pressedShare:(UIButton*)sender{
-    if([self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:self];
+
+-(void)pressedTag:(UIButton*)sender
+{
+    if([self.delegate respondsToSelector:@selector(pressedTag:)])
+        [self.delegate pressedTag:self];
 }
 
+-(void)pressedDelete:(UIButton*)sender
+{
+    if([self.delegate respondsToSelector:@selector(pressedDelete:)])
+        [self.delegate pressedDelete:self];
+}
+
+-(void)pressedShare:(UIButton*)sender
+{
+    if([self.delegate respondsToSelector:@selector(pressedShare:)])
+        [self.delegate pressedShare:sender];
+}
 
 -(UIButton*)actionButtonWithTitle:(NSString*)title{
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, kActionButtonSize, kActionButtonSize)];

@@ -534,7 +534,7 @@ typedef enum {
     CGFloat keyboardHeight = keyboardFrame.size.height;
 #ifndef NOT_APPLICATION
     if(OSVER == 7){
-        keyboardHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
+        keyboardHeight = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     }
 #endif
     NSInteger spacing = 3;

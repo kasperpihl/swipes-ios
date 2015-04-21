@@ -640,7 +640,7 @@ typedef enum {
     WalkthroughCell *activeCell = [self activeCell];
     CGPoint translation = [recognizer translationInView:self.view];
     [activeCell publicHandlePanGestureRecognizer:recognizer withTranslation:translation];
-    CGFloat percOfHelping = fabsf(activeCell.readPercentage)/kHelparrowPercentage;
+    CGFloat percOfHelping = fabs(activeCell.readPercentage)/kHelparrowPercentage;
     if(percOfHelping > 1.0f) percOfHelping = 1.0f;
     CGFloat newOpacity = 1.0f - percOfHelping;
     activeCell.helpingImage.alpha = newOpacity;
