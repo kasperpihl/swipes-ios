@@ -252,7 +252,7 @@ secondStateIconName:(NSString *)secondIconName
         UIPanGestureRecognizer *g = (UIPanGestureRecognizer *)gestureRecognizer;
         CGPoint point = [g velocityInView:self];
         //NSLog(@"%f,%f",point.x,point.y);
-        if (fabs(point.x) > fabsf(point.y) ) {
+        if (fabs(point.x) > fabs(point.y) ) {
             return YES;
         }
     }
@@ -320,7 +320,7 @@ secondStateIconName:(NSString *)secondIconName
     }
         
     else if (percentage < 0 && percentage > -kMCStop1){
-        if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionBoth || self.activatedDirection == MCSwipeTableViewCellActivatedDirectionRight) alpha = fabsf(percentage / kMCStop1);
+        if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionBoth || self.activatedDirection == MCSwipeTableViewCellActivatedDirectionRight) alpha = fabs(percentage / kMCStop1);
     }
     else alpha = 1.0;
 

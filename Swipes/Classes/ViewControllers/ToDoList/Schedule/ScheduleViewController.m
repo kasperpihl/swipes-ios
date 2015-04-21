@@ -28,6 +28,7 @@
 {
     self.state = @"schedule";
     [super viewDidLoad];
+    self.tableView.reorderingEnabled = NO;
 }
 
 - (void)didReceiveMemoryWarning
