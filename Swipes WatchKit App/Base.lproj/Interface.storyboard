@@ -22,7 +22,7 @@
                                 <tableRow identifier="SWATodoCell" id="v5V-TE-Ooo" customClass="SWATodoCell">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" id="DIF-hI-qaJ">
                                         <items>
-                                            <label width="1" alignment="left" verticalAlignment="center" textAlignment="left" numberOfLines="2" id="9hb-dn-s4h"/>
+                                            <label width="1" alignment="left" verticalAlignment="center" text="Don't translate" textAlignment="left" numberOfLines="2" id="9hb-dn-s4h"/>
                                         </items>
                                         <edgeInsets key="margins" left="8" right="8" top="8" bottom="8"/>
                                         <connections>
@@ -89,11 +89,11 @@
                                 <tableRow identifier="SWADetailCell" selectable="NO" id="lqg-L1-Pr9" customClass="SWADetailCell">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" backgroundImage="detail-shadow" layout="vertical" radius="0.0" spacing="0.0" id="AFk-G9-9Is">
                                         <items>
-                                            <label width="1" alignment="left" text="Label" textAlignment="left" numberOfLines="2" id="o4X-Ix-PQr">
+                                            <label width="1" alignment="left" text="Don't translate" textAlignment="left" numberOfLines="2" id="o4X-Ix-PQr">
                                                 <color key="textColor" red="0.10588235294117647" green="0.11764705882352941" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="font" type="system" pointSize="19"/>
                                             </label>
-                                            <label width="1" alignment="left" alpha="0.5" text="Label" id="x4C-Yj-f7B">
+                                            <label width="1" alignment="left" alpha="0.5" text="Don't translate" id="x4C-Yj-f7B">
                                                 <color key="textColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="font" type="system" pointSize="12"/>
                                             </label>
@@ -117,7 +117,7 @@
                                                     <action selector="onButtonTouch:" destination="zTs-N8-eqw" id="bHT-G8-CUF"/>
                                                 </connections>
                                             </button>
-                                            <label width="0.80000000000000004" alignment="left" verticalAlignment="center" text="This is a longer text to text how it works" textAlignment="left" numberOfLines="2" id="q4P-u5-MyL">
+                                            <label width="0.80000000000000004" alignment="left" verticalAlignment="center" text="Don't translate" textAlignment="left" numberOfLines="2" id="q4P-u5-MyL">
                                                 <color key="textColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="font" type="system" pointSize="14"/>
                                             </label>
@@ -163,12 +163,12 @@
                     </items>
                     <menu key="menu" id="y93-ed-Nj4">
                         <items>
-                            <menuItem title=" Complete" image="menu-complete" id="E9l-T8-4zv">
+                            <menuItem title="Complete" image="menu-complete" id="E9l-T8-4zv">
                                 <connections>
                                     <action selector="onMarkDone:" destination="U58-tQ-Xcj" id="bm7-uk-u5f"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title=" Snooze" image="menu-schedule" id="vCS-3E-kp0">
+                            <menuItem title="Snooze" image="menu-schedule" id="vCS-3E-kp0">
                                 <connections>
                                     <action selector="onSchedule:" destination="U58-tQ-Xcj" id="T4J-ul-Yy0"/>
                                 </connections>
@@ -189,7 +189,7 @@
                     <items>
                         <group width="1" height="1" alignment="left" layout="vertical" id="2b3-w3-pq0">
                             <items>
-                                <button width="0.45000000000000001" height="0.33000000000000002" alignment="center" title="+3h" id="0HQ-Yz-zlj">
+                                <button width="0.45000000000000001" height="0.33000000000000002" alignment="center" id="0HQ-Yz-zlj">
                                     <color key="titleColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <fontDescription key="font" type="boldSystem" pointSize="18"/>
@@ -217,7 +217,7 @@
                                     </items>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </group>
-                                <button width="0.5" height="0.33000000000000002" alignment="center" verticalAlignment="bottom" title="Mon" id="7Fe-Dw-vuh">
+                                <button width="0.5" height="0.33000000000000002" alignment="center" verticalAlignment="bottom" id="7Fe-Dw-vuh">
                                     <color key="titleColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <fontDescription key="font" type="boldSystem" pointSize="18"/>
@@ -252,7 +252,7 @@
                                     <color key="textColor" red="1" green="0.75686274509999996" blue="0.027450980390000001" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="font" type="boldSystem" pointSize="10"/>
                                 </label>
-                                <label width="1" alignment="left" text="Task text" textAlignment="left" numberOfLines="2" id="Cv6-sP-6bc">
+                                <label width="1" alignment="left" text="Don't translate" textAlignment="left" numberOfLines="2" id="Cv6-sP-6bc">
                                     <color key="textColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="font" type="system" weight="semibold" pointSize="17"/>
                                     <variation key="device=watch38mm">
@@ -269,7 +269,7 @@
                         </group>
                         <group alignment="left" layout="vertical" radius="0.0" id="uCw-4Q-Ouw">
                             <items>
-                                <label alignment="left" hidden="YES" text="Task text" textAlignment="left" numberOfLines="0" id="5UF-zi-bIt">
+                                <label alignment="left" hidden="YES" text="Don't translate" textAlignment="left" numberOfLines="0" id="5UF-zi-bIt">
                                     <color key="textColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="font" type="system" weight="semibold" pointSize="17"/>
                                 </label>
@@ -277,7 +277,7 @@
                                 <group width="1" alignment="left" hidden="YES" radius="0.0" spacing="6" id="vqU-zt-x4d">
                                     <items>
                                         <imageView alignment="left" verticalAlignment="center" image="subtask_circle" contentMode="center" id="q2M-TN-hMn"/>
-                                        <label alignment="left" verticalAlignment="center" text="Label" textAlignment="left" numberOfLines="2" id="cyq-NS-lr4">
+                                        <label alignment="left" verticalAlignment="center" text="Don't translate" textAlignment="left" numberOfLines="2" id="cyq-NS-lr4">
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <fontDescription key="font" type="system" weight="medium" pointSize="14"/>
                                         </label>
@@ -287,7 +287,7 @@
                                 <group width="1" alignment="left" hidden="YES" radius="0.0" spacing="6" id="rvM-IV-un9">
                                     <items>
                                         <imageView alignment="left" verticalAlignment="center" image="subtask_circle" contentMode="center" id="Fr5-NE-BSQ"/>
-                                        <label alignment="left" verticalAlignment="center" text="Label" textAlignment="left" numberOfLines="2" id="NFA-wY-ER4">
+                                        <label alignment="left" verticalAlignment="center" text="Don't translate" textAlignment="left" numberOfLines="2" id="NFA-wY-ER4">
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <fontDescription key="font" type="system" weight="medium" pointSize="14"/>
                                         </label>
@@ -297,7 +297,7 @@
                                 <group width="1" alignment="left" hidden="YES" radius="0.0" spacing="6" id="mVP-iL-nvT">
                                     <items>
                                         <imageView alignment="left" verticalAlignment="center" image="subtask_circle" contentMode="center" id="j8Y-46-Ixh"/>
-                                        <label alignment="left" verticalAlignment="center" text="Label" textAlignment="left" numberOfLines="2" id="aZI-xm-bzB">
+                                        <label alignment="left" verticalAlignment="center" text="Don't translate" textAlignment="left" numberOfLines="2" id="aZI-xm-bzB">
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <fontDescription key="font" type="system" weight="medium" pointSize="14"/>
                                         </label>
@@ -331,7 +331,7 @@
             <objects>
                 <notificationController id="YCC-NB-fut">
                     <items>
-                        <label alignment="left" text="Alert Label" textAlignment="left" numberOfLines="0" id="XkS-y5-khE">
+                        <label alignment="left" text="Don't translate" textAlignment="left" numberOfLines="0" id="XkS-y5-khE">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </label>
                     </items>
@@ -358,11 +358,11 @@
                                 <tableRow identifier="SWADetailCell" selectable="NO" id="oer-7n-0l9" customClass="SWADetailCell">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" backgroundImage="detail-shadow" layout="vertical" radius="0.0" spacing="0.0" id="OLN-KX-8g2">
                                         <items>
-                                            <label width="1" alignment="left" text="Title" textAlignment="left" numberOfLines="2" id="gni-yC-MlP">
+                                            <label width="1" alignment="left" text="Don't translate" textAlignment="left" numberOfLines="2" id="gni-yC-MlP">
                                                 <color key="textColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="font" type="system" pointSize="19"/>
                                             </label>
-                                            <label width="1" alignment="left" alpha="0.5" text="tags" id="OpZ-Or-nuY">
+                                            <label width="1" alignment="left" alpha="0.5" text="Don't translate" id="OpZ-Or-nuY">
                                                 <color key="textColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="font" type="system" pointSize="12"/>
                                             </label>
@@ -380,7 +380,7 @@
                                     <group key="rootItem" width="1" height="0.0" alignment="left" radius="0.0" spacing="6" id="8H7-Tg-wyC">
                                         <items>
                                             <imageView alignment="left" verticalAlignment="center" image="subtask_circle" id="I0C-km-CMD"/>
-                                            <label width="0.90000000000000002" alignment="left" verticalAlignment="center" text="Action step" textAlignment="left" numberOfLines="2" id="g1p-ZZ-LNK">
+                                            <label width="0.90000000000000002" alignment="left" verticalAlignment="center" text="Don't translate" textAlignment="left" numberOfLines="2" id="g1p-ZZ-LNK">
                                                 <fontDescription key="font" type="system" pointSize="14"/>
                                             </label>
                                         </items>

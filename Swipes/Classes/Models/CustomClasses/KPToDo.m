@@ -612,13 +612,13 @@
     NSString *title;
     CellType cellType = [self cellTypeForTodo];
     
-    if(cellType == CellTypeToday) title = [LOCALIZE_STRING(@"tasks") capitalizedString];
+    if(cellType == CellTypeToday) title = [NSLocalizedString(@"tasks", nil) capitalizedString];
     else if(cellType == CellTypeSchedule){
         NSDate *toDoDate = self.schedule;
-        if(!toDoDate) title = LOCALIZE_STRING(@"Unspecified");
+        if(!toDoDate) title = NSLocalizedString(@"Unspecified", nil);
         else{
             title = [UtilityClass readableTime:toDoDate showTime:NO];
-            if([title isEqualToString:[LOCALIZE_STRING(@"Today") capitalizedString]]) title = LOCALIZE_STRING(@"Later Today");
+            if([title isEqualToString:[NSLocalizedString(@"Today", nil) capitalizedString]]) title = NSLocalizedString(@"Later Today", nil);
             //title = [NSString stringWithFormat:@"Schedule %@",dateString];
         }
     }

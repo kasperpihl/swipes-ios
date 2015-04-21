@@ -37,10 +37,10 @@
     if (kGmInt.isAuthenticated) {
         NSString* emailAddress = kGmInt.emailAddress;
         if (!emailAddress) {
-            emailAddress = LOCALIZE_STRING(@"Loading data...");
+            emailAddress = NSLocalizedString(@"Loading data...", nil);
             __weak GmailIntegrationViewController *weakSelf = self;
             [kGmInt emailAddressWithBlock:^(NSError *error) {
-                NSString* newEmail = error ? LOCALIZE_STRING(@"Error loading data") : kGmInt.emailAddress;
+                NSString* newEmail = error ? NSLocalizedString(@"Error loading data", nil) : kGmInt.emailAddress;
                 weakSelf.cellInfo[0][kKeyTitle] = newEmail;
                 [self.table reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:NO];
             }];
@@ -52,8 +52,8 @@
                             kKeyIcon: kGmInt.isUsingMailbox ? @"integrationMailbox" : @"integrationMail",
                             kKeyTouchSelector: NSStringFromSelector(@selector(onEmailTouch))
                             }.mutableCopy,
-                          @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: LOCALIZE_STRING(@"OPEN EMAILS IN")},
-                          @{kKeyTitle: LOCALIZE_STRING(@"Mail"),
+                          @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: NSLocalizedString(@"OPEN EMAILS IN", nil)},
+                          @{kKeyTitle: NSLocalizedString(@"Mail", nil),
                             kKeyCellType: @(kIntegrationCellTypeCheck),
                             kKeyIsOn: @(openType == MailOpenTypeMail),
                             kKeyIcon: @"integrationMail",
@@ -61,7 +61,7 @@
                             }.mutableCopy,
                           ].mutableCopy;
         if ([GlobalApp isMailboxInstalled]) {
-            [cellInfo addObject:@{kKeyTitle: LOCALIZE_STRING(@"Mailbox"),
+            [cellInfo addObject:@{kKeyTitle: NSLocalizedString(@"Mailbox", nil),
                                   kKeyCellType: @(kIntegrationCellTypeCheck),
                                   kKeyIsOn: @(openType == MailOpenTypeMailbox),
                                   kKeyIcon: @"integrationMailbox",
@@ -69,7 +69,7 @@
                                   }.mutableCopy];
         }
         if ([GlobalApp isGoogleMailInstalled]) {
-            [cellInfo addObject:@{kKeyTitle: LOCALIZE_STRING(@"Gmail"),
+            [cellInfo addObject:@{kKeyTitle: NSLocalizedString(@"Gmail", nil),
                                   kKeyCellType: @(kIntegrationCellTypeCheck),
                                   kKeyIsOn: @(openType == MailOpenTypeGmail),
                                   kKeyIcon: @"integrationGmail",
@@ -77,7 +77,7 @@
                                   }.mutableCopy];
         }
         if ([GlobalApp isCloudMagicInstalled]) {
-            [cellInfo addObject:@{kKeyTitle: LOCALIZE_STRING(@"Cloud Magic"),
+            [cellInfo addObject:@{kKeyTitle: NSLocalizedString(@"Cloud Magic", nil),
                                   kKeyCellType: @(kIntegrationCellTypeCheck),
                                   kKeyIsOn: @(openType == MailOpenTypeCloudMagic),
                                   kKeyIcon: @"integrationCloudMagic",
@@ -89,14 +89,14 @@
     }
     else {
         self.cellInfo = @[
-                          @{kKeyTitle: LOCALIZE_STRING(@"Add new account"),
+                          @{kKeyTitle: NSLocalizedString(@"Add new account", nil),
                             kKeyCellType: @(kIntegrationCellTypeNoAccessory),
                             kKeyIcon: @"roundAdd",
                             kKeyTouchSelector: NSStringFromSelector(@selector(onLinkGmailTouch))
                             }];
     }
     self.cellInfo = [self.cellInfo arrayByAddingObjectsFromArray:@[
-                                                                   @{kKeyTitle: LOCALIZE_STRING(@"Learn more"),
+                                                                   @{kKeyTitle: NSLocalizedString(@"Learn more", nil),
                                                                      kKeyCellType: @(kIntegrationCellTypeViewMore),
                                                                      kKeyIcon: @"integrationActionLearn",
                                                                      kKeyTouchSelector: NSStringFromSelector(@selector(onLearnMoreTouch))
@@ -164,7 +164,7 @@
 - (void)gmailAuthenticateUsingSelector:(SEL)selector withObject:(id)object
 {
     if(!kCurrent){
-        [ROOT_CONTROLLER accountAlertWithMessage:@"To use Gmail with Swipes, please create a Swipes account" inViewController:self];
+        [ROOT_CONTROLLER accountAlertWithMessage:NSLocalizedString(@"To use Gmail with Swipes, please create a Swipes account", nil) inViewController:self];
         return;
     }
     [DejalBezelActivityView activityViewForView:self.parentViewController.view withLabel:@"Authenticating.."];

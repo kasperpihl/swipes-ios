@@ -137,7 +137,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
     };
     if([USER_DEFAULTS boolForKey:isTryingString]){
-        [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Keep data") andMessage:LOCALIZE_STRING(@"Do you want to keep the data from the test period?") block:^(BOOL succeeded, NSError *error) {
+        [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Keep data", nil) andMessage:NSLocalizedString(@"Do you want to keep the data from the test period?", nil) block:^(BOOL succeeded, NSError *error) {
             if(!succeeded) [KPCORE clearAndDeleteData];
             block();
         }];
@@ -249,7 +249,7 @@ static RootViewController *sharedObject;
 
 - (NSString *)textForTasks:(NSArray *)tasks
 {
-    NSMutableString* message = [[NSMutableString alloc] initWithString:LOCALIZE_STRING(@"Tasks: \r\n")];
+    NSMutableString* message = [[NSMutableString alloc] initWithString:NSLocalizedString(@"Tasks: \r\n", nil)];
     for(KPToDo *toDo in tasks){
         [message appendFormat:@"◯ %@\r\n",toDo.title];
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
@@ -264,7 +264,7 @@ static RootViewController *sharedObject;
         if (addedSubtasks)
             [message appendString:@"\r\n"];
     }
-    [message appendString:LOCALIZE_STRING(@"\r\nCreated with Swipes – Task list made for High Achievers\r\nhttp://swipesapp.com")];
+    [message appendString:NSLocalizedString(@"\r\nCreated with Swipes – Task list made for High Achievers\r\nhttp://swipesapp.com", nil)];
     return message;
 }
 
@@ -302,9 +302,7 @@ static RootViewController *sharedObject;
 }
 -(void)accountAlertWithMessage:(NSString *)message inViewController:(UIViewController *)viewController{
     if( !message )
-        message = LOCALIZE_STRING(@"Register for Swipes to safely back up your data and get Swipes Plus");
-    else
-        message = LOCALIZE_STRING(message);
+        message = NSLocalizedString(@"Register for Swipes to safely back up your data and get Swipes Plus", nil);
     KPAccountAlert *alert = [KPAccountAlert alertWithFrame:self.view.bounds message:message block:^(BOOL succeeded, NSError *error) {
         [BLURRY dismissAnimated:YES];
         if(succeeded){
@@ -325,7 +323,7 @@ static RootViewController *sharedObject;
         [self presentViewController:mailCont animated:YES completion:nil];
     }
     else{
-        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Mail was not setup") andMessage:LOCALIZE_STRING(@"You can send us feedback to support@swipesapp.com. Thanks")];
+        [UTILITY alertWithTitle:NSLocalizedString(@"Mail was not setup", nil) andMessage:NSLocalizedString(@"You can send us feedback to support@swipesapp.com. Thanks", nil)];
     }
 }
 -(void)upgrade{
@@ -334,17 +332,17 @@ static RootViewController *sharedObject;
         return;
     }
     
-    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Can't upgrade to Swipes Plus") andMessage:LOCALIZE_STRING(@"We're remaking our Plus version. Please send us your suggestions while waiting.") buttonTitles:@[[LOCALIZE_STRING(@"cancel") capitalizedString],LOCALIZE_STRING(@"Send suggestions"),LOCALIZE_STRING(@"Restore Purchases")] block:^(NSInteger number, NSError *error) {
+    [UTILITY alertWithTitle:NSLocalizedString(@"Can't upgrade to Swipes Plus", nil) andMessage:NSLocalizedString(@"We're remaking our Plus version. Please send us your suggestions while waiting.", nil) buttonTitles:@[[NSLocalizedString(@"cancel", nil) capitalizedString],NSLocalizedString(@"Send suggestions", nil),NSLocalizedString(@"Restore Purchases", nil)] block:^(NSInteger number, NSError *error) {
         if( number == 1){
             [ROOT_CONTROLLER feedback];
         }
         else if(number == 2){
             [[PaymentHandler sharedInstance] restoreWithBlock:^(NSError *error) {
                 if(!error){
-                    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Your purchase has been restored") andMessage:LOCALIZE_STRING(@"Your purchase has been restored. Welcome back!")];
+                    [UTILITY alertWithTitle:NSLocalizedString(@"Your purchase has been restored", nil) andMessage:NSLocalizedString(@"Your purchase has been restored. Welcome back!", nil)];
                 }
                 else {
-                    [UTILITY alertWithTitle:LOCALIZE_STRING(@"An error occured") andMessage:LOCALIZE_STRING(@"No purchases could be restored. Contact support@swipesapp.com for help.")];
+                    [UTILITY alertWithTitle:NSLocalizedString(@"An error occured", nil) andMessage:NSLocalizedString(@"No purchases could be restored. Contact support@swipesapp.com for help.", nil)];
                 }
             }];
         }
@@ -449,7 +447,7 @@ static RootViewController *sharedObject;
     NSInteger from = [[notification.userInfo objectForKey:@"from"] integerValue];
     NSInteger to = [[notification.userInfo objectForKey:@"to"] integerValue];
     //NSLog(@"notif:%@",notification);
-    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Time Zone Change") andMessage:LOCALIZE_STRING(@"Do you want to move all your recurring tasks to match the change? A task @ 8:00 will be 8:00 in new time zone (Recommended)") block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Time Zone Change", nil) andMessage:NSLocalizedString(@"Do you want to move all your recurring tasks to match the change? A task @ 8:00 will be 8:00 in new time zone (Recommended)", nil) block:^(BOOL succeeded, NSError *error) {
         
         if ( succeeded )
             [KPToDo changeTimeZoneFrom:from to:to];

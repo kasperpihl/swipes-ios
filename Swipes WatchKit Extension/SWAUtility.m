@@ -37,19 +37,19 @@ NSString* const GMAIL_SERVICE = @"gmail";
     NSInteger numberOfDaysAfterTodays = [beginningOfDate distanceInDaysToDate:[[NSDate date] dateAtStartOfDay]];
     NSString *dateString;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:LOCALIZE_STRING(@"en_US")];
+    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:NSLocalizedString(@"en_US", nil)];
     [dateFormatter setLocale:usLocale];
     BOOL shouldFormat = NO;
     if(numberOfDaysAfterTodays == 0){
-        dateString = LOCALIZE_STRING(@"Today");
+        dateString = NSLocalizedString(@"Today", nil);
         if ([time isLaterThanDate:[NSDate date]])
-            dateString = LOCALIZE_STRING(@"Today");
+            dateString = NSLocalizedString(@"Today", nil);
     }
     else if(numberOfDaysAfterTodays == -1){
-        dateString = LOCALIZE_STRING(@"Tomorrow");
+        dateString = NSLocalizedString(@"Tomorrow", nil);
     }
     else if(numberOfDaysAfterTodays == 1){
-        dateString = LOCALIZE_STRING(@"Yesterday");
+        dateString = NSLocalizedString(@"Yesterday", nil);
     }
     else if(numberOfDaysAfterTodays < 7 && numberOfDaysAfterTodays > -7){
         [dateFormatter setDateFormat:@"EEEE"];

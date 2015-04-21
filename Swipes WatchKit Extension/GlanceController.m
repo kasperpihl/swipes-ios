@@ -81,15 +81,15 @@
     
     if (isScheduled) {
         if (todo.schedule) {
-            [nextLabel setText:[NSString stringWithFormat:@"%@\n%@", LOCALIZE_STRING(@"NEXT TASK"), [[SWAUtility readableTime:todo.schedule] uppercaseString]]];
+            [nextLabel setText:[NSString stringWithFormat:@"%@\n%@", NSLocalizedString(@"NEXT TASK", nil), [[SWAUtility readableTime:todo.schedule] uppercaseString]]];
         }
         else {
-            [nextLabel setText:LOCALIZE_STRING(@"NEXT TASK")];
+            [nextLabel setText:NSLocalizedString(@"NEXT TASK", nil)];
         }
         [nextLabel setTextColor:LATER_COLOR];
     }
     else {
-        [nextLabel setText:LOCALIZE_STRING(@"CURRENT TASK")];
+        [nextLabel setText:NSLocalizedString(@"CURRENT TASK", nil)];
         [nextLabel setTextColor:TASKS_COLOR];
     }
 }
@@ -117,7 +117,7 @@
             [_taskText2 setHidden:YES];
             [_taskStatus2 setHidden:NO];
 
-            [_taskStatus2 setText:LOCALIZE_STRING(@"NO TASKS\n")];
+            [_taskStatus2 setText:NSLocalizedString(@"NO TASKS\n", nil)];
             [_taskStatus2 setTextColor:TASKS_COLOR];
         }
     }

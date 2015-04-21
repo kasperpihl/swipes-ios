@@ -39,7 +39,7 @@
         allButton.titleLabel.font = KP_REGULAR(16);
         [allButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [allButton setTitleColor:alpha(tcolor(TextColor),0.5) forState:UIControlStateHighlighted];
-        [allButton setTitle:LOCALIZE_STRING(@"All") forState:UIControlStateNormal];
+        [allButton setTitle:NSLocalizedString(@"All", nil) forState:UIControlStateNormal];
         [allButton addTarget:self action:@selector(onAll:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:allButton];
         self.allButton = allButton;
@@ -48,7 +48,7 @@
         helpButton.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         helpButton.backgroundColor = CLEAR;
         helpButton.titleLabel.font = KP_REGULAR(16);
-        [helpButton setTitle:[LOCALIZE_STRING(@"Select more") uppercaseString] forState:UIControlStateNormal];
+        [helpButton setTitle:[NSLocalizedString(@"Select more", nil) uppercaseString] forState:UIControlStateNormal];
         [helpButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [helpButton addTarget:self action:@selector(onHelpButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:helpButton];

@@ -438,7 +438,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     self.tagsLabel.frame = CGRectMake(LABEL_X, 0, self.view.frame.size.width - LABEL_X - 10, 500);
     NSString *tagsString = self.model.tagString;
     if(!tagsString || tagsString.length == 0){
-        tagsString = LOCALIZE_STRING(@"Add tags");
+        tagsString = NSLocalizedString(@"Add tags", nil);
     }
     CGSize basicSize = sizeWithFont(tagsString,self.tagsLabel.font);
     CGFloat padding = (SCHEDULE_ROW_HEIGHTS - basicSize.height)/2;
@@ -464,9 +464,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             self.alarmLabel.text = name;
         }
         else {
-            self.alarmLabel.text = LOCALIZE_STRING(@"Unspecified");
+            self.alarmLabel.text = NSLocalizedString(@"Unspecified", nil);
             if (self.model.completionDate) {
-                self.alarmLabel.text = [NSString stringWithFormat:@"%@: %@",LOCALIZE_STRING(@"Completed"),[UtilityClass readableTime:self.model.completionDate showTime:YES]];
+                self.alarmLabel.text = [NSString stringWithFormat:@"%@: %@",NSLocalizedString(@"Completed", nil),[UtilityClass readableTime:self.model.completionDate showTime:YES]];
             }
         }
     }
@@ -484,7 +484,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                                         NSFontAttributeName: EDIT_TASK_TEXT_FONT
                                         };
     if(!self.model.notes || self.model.notes.length == 0){
-        self.notesView.attributedText = [[NSAttributedString alloc] initWithString:LOCALIZE_STRING(@"Add notes") attributes:defaultAttributes];
+        self.notesView.attributedText = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"Add notes", nil) attributes:defaultAttributes];
     }
     else{
         self.notesView.attributedText = [[NSAttributedString alloc] initWithString:self.model.notes attributes:defaultAttributes];
@@ -522,46 +522,46 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     NSString* labelText;
     NSString *timeInString = [UtilityClass timeStringForDate:self.model.repeatedDate];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:LOCALIZE_STRING(@"en_US")]];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:NSLocalizedString(@"en_US", nil)]];
     BOOL addTime = YES;
     if (self.activeEditMode == KPEditModeRepeat) {
-        labelText = LOCALIZE_STRING(@"Repeat every...");
+        labelText = NSLocalizedString(@"Repeat every...", nil);
     }
     else {
         switch (self.model.repeatOptionValue) {
             case RepeatEveryDay:{
-                labelText = LOCALIZE_STRING(@"Every day");
+                labelText = NSLocalizedString(@"Every day", nil);
                 break;
             }
             case RepeatEveryMonFriOrSatSun:{
-                if(self.model.repeatedDate.isTypicallyWeekend) labelText = LOCALIZE_STRING(@"Every Saturday and Sunday");
-                else labelText = LOCALIZE_STRING(@"Every Monday to Friday");
+                if(self.model.repeatedDate.isTypicallyWeekend) labelText = NSLocalizedString(@"Every Saturday and Sunday", nil);
+                else labelText = NSLocalizedString(@"Every Monday to Friday", nil);
                 break;
             }
             case RepeatEveryWeek:{
                 [dateFormatter setDateFormat:@"EEEE"];
                 NSString *weekday = [dateFormatter stringFromDate:self.model.repeatedDate];
-                labelText = [NSString stringWithFormat:@"%@ %@",LOCALIZE_STRING(@"Every"),weekday];
+                labelText = [NSString stringWithFormat:@"%@ %@",NSLocalizedString(@"Every", nil),weekday];
                 break;
             }
             case RepeatEveryMonth:{
                 NSString *dateOfMonth = [UtilityClass dayOfMonthForDate:self.model.repeatedDate];
-                labelText = [NSString stringWithFormat:LOCALIZE_STRING(@"Every month the %@"),dateOfMonth];
+                labelText = [NSString stringWithFormat:NSLocalizedString(@"Every month the %@", nil),dateOfMonth];
                 break;
             }
             case RepeatEveryYear:{
                 NSString *dateOfMonth = [UtilityClass dayOfMonthForDate:self.model.repeatedDate];
                 [dateFormatter setDateFormat:@"MMMM"];
                 NSString *month = [dateFormatter stringFromDate:self.model.repeatedDate];
-                labelText = [NSString stringWithFormat:LOCALIZE_STRING(@"Every year %@ %@"),month,dateOfMonth];
+                labelText = [NSString stringWithFormat:NSLocalizedString(@"Every year %@ %@", nil),month,dateOfMonth];
                 break;
             }
             default:
                 addTime = NO;
-                labelText = LOCALIZE_STRING(@"Never repeat");
+                labelText = NSLocalizedString(@"Never repeat", nil);
                 break;
         }
-        if(addTime) labelText = [labelText stringByAppendingFormat:LOCALIZE_STRING(@" at %@"),timeInString];
+        if(addTime) labelText = [labelText stringByAppendingFormat:NSLocalizedString(@" at %@", nil),timeInString];
     }
     self.repeatedLabel.text = labelText;
 }
@@ -604,9 +604,9 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                 CGRectSetHeight(attachmentEditView, SCHEDULE_ROW_HEIGHTS + 10);
                 BOOL isSyncing = [attachment.sync boolValue];
                 if (isSyncing)
-                    [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Attached") uppercaseString] iconString:nil];
+                    [attachmentEditView setSyncString:[NSLocalizedString(@"Attached", nil) uppercaseString] iconString:nil];
                 else
-                    [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Deleted") uppercaseString] iconString:@"actionDelete"];
+                    [attachmentEditView setSyncString:[NSLocalizedString(@"Deleted", nil) uppercaseString] iconString:@"actionDelete"];
                 [attachmentEditView setTitleString:attachment.title];
             }
             else if ([attachment.service isEqualToString:URL_SERVICE]) {
@@ -624,7 +624,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                     [attachmentEditView setIconString:@"editMail"];
                     [attachmentEditView setTitleString:title];
                     if (![attachment.sync boolValue]) {
-                        [attachmentEditView setSyncString:[LOCALIZE_STRING(@"Archived") uppercaseString] iconString:@"done"];
+                        [attachmentEditView setSyncString:[NSLocalizedString(@"Archived", nil) uppercaseString] iconString:@"done"];
                         CGRectSetHeight(attachmentEditView, SCHEDULE_ROW_HEIGHTS + 10);
                     }
                     else {
@@ -668,7 +668,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         CGFloat percentage = (CGFloat)numberOfCompletedSubtasks / numberOfSubtasks;
         self.sectionHeader.progressPercentage = percentage;
         
-        NSString *title = (numberOfCompletedSubtasks != numberOfSubtasks) ? [NSString stringWithFormat:LOCALIZE_STRING(@"%li / %li STEPS"),(long)numberOfCompletedSubtasks,(long)numberOfSubtasks] : [LOCALIZE_STRING(@"All Done") uppercaseString];
+        NSString *title = (numberOfCompletedSubtasks != numberOfSubtasks) ? [NSString stringWithFormat:NSLocalizedString(@"%li / %li STEPS", nil),(long)numberOfCompletedSubtasks,(long)numberOfSubtasks] : [NSLocalizedString(@"All Done", nil) uppercaseString];
         
         [self.sectionHeader setTitle:title];
     }
@@ -873,7 +873,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 
 -(void)pressedURL:(AttachmentEditView*)attachmentView
 {
-    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Open Link") andMessage:LOCALIZE_STRING(@"Do you want to open the link?") block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Open Link", nil) andMessage:NSLocalizedString(@"Do you want to open the link?", nil) block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:attachmentView.identifier]];
         }
@@ -883,7 +883,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)pressedEvernote:(UIView*)sender
 {
     if(!kUserHandler.isLoggedIn){
-        [ROOT_CONTROLLER accountAlertWithMessage:LOCALIZE_STRING(@"Register an account to backup your data and keep your Evernotes in sync with Swipes")];
+        [ROOT_CONTROLLER accountAlertWithMessage:NSLocalizedString(@"Register an account to backup your data and keep your Evernotes in sync with Swipes", nil)];
         return;
     }
     voidBlock setNewEvernote = ^{
@@ -901,12 +901,12 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     };
     
     if([sender isKindOfClass:[AttachmentEditView class]]){
-        NSArray *buttons = @[[LOCALIZE_STRING(@"cancel") capitalizedString], LOCALIZE_STRING(@"Remove note")];
+        NSArray *buttons = @[[NSLocalizedString(@"cancel", nil) capitalizedString], NSLocalizedString(@"Remove note", nil)];
         AttachmentEditView *evernoteEditView = (AttachmentEditView*)sender;
         if( [GlobalApp isEvernoteInstalled] ){
-            buttons = @[[LOCALIZE_STRING(@"cancel") capitalizedString],LOCALIZE_STRING(@"Remove note"),LOCALIZE_STRING(@"Open note")];
+            buttons = @[[NSLocalizedString(@"cancel", nil) capitalizedString],NSLocalizedString(@"Remove note", nil),NSLocalizedString(@"Open note", nil)];
         }
-        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote") andMessage:LOCALIZE_STRING(@"What do you want to do?") buttonTitles:buttons block:^(NSInteger number, NSError *error) {
+        [UTILITY alertWithTitle:NSLocalizedString(@"Evernote", nil) andMessage:NSLocalizedString(@"What do you want to do?", nil) buttonTitles:buttons block:^(NSInteger number, NSError *error) {
             //DLog(@"%li",(long)number);
             KPAttachment *attachment = [self.model attachmentForService:EVERNOTE_SERVICE identifier:evernoteEditView.identifier];
             if(number == 1){

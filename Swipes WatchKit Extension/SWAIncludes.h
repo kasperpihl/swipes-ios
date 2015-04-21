@@ -17,8 +17,6 @@
 #define TEXT_COLOR                     color(27,30,35,1)
 #define LATER_COLOR                    color(255,86,55,1)
 
-#define LOCALIZE_STRING(string) NSLocalizedString(string, nil)
-
 #ifdef DEBUG
 #    define DLog(__FORMAT__, ...) NSLog((@"%s [Line %d]\n" __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 #else

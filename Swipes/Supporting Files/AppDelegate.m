@@ -261,7 +261,7 @@
 
 - (void)onShake:(id)sender
 {
-    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Undo last action") andMessage:LOCALIZE_STRING(@"Do you want to undo the last action?") block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Undo last action", nil) andMessage:NSLocalizedString(@"Do you want to undo the last action?", nil) block:^(BOOL succeeded, NSError *error) {
 
         if ( succeeded ){
             [KPCORE undo];

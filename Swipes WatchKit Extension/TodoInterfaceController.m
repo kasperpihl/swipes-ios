@@ -109,7 +109,7 @@ static NSString* const kMailIntegrationIconFull = @"integrationMailFull";
             }
         }
         else {
-            [str appendString:LOCALIZE_STRING(@"(no tags)")];
+            [str appendString:NSLocalizedString(@"(no tags)", nil)];
         }
         
         if (_todo.attachments && _todo.attachments.count) {

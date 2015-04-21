@@ -116,7 +116,7 @@
 -(void)layoutSubviews{
     NSInteger firstDay = [[NSCalendar currentCalendar] firstWeekday]-1;
     NSDateFormatter *weekdayFormater = [[NSDateFormatter alloc] init];
-    weekdayFormater.locale = [[NSLocale alloc] initWithLocaleIdentifier:LOCALIZE_STRING(@"en_US")];
+    weekdayFormater.locale = [[NSLocale alloc] initWithLocaleIdentifier:NSLocalizedString(@"en_US", nil)];
     NSArray *weekdays = [weekdayFormater shortWeekdaySymbols];
     for(NSInteger i = 0 ; i < 7 ; i++){
         NSInteger day = ((i + firstDay) % 7)+1;

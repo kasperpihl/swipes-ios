@@ -135,7 +135,7 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 
 - (void)onButton1Touch
 {
-    [self presentTextInputControllerWithSuggestions:@[LOCALIZE_STRING(@"Email a colleague"), LOCALIZE_STRING(@"Meeting today")]
+    [self presentTextInputControllerWithSuggestions:@[NSLocalizedString(@"Email a colleague", nil), NSLocalizedString(@"Meeting today", nil)]
                                    allowedInputMode:WKTextInputModePlain completion:^(NSArray *results) {
         DLog(@"Input: %@", results);
         if (results && 0 < results[0]) {

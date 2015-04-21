@@ -107,7 +107,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     }
     
     _notesTextView.placeholderColor = gray(192, 1);
-    _notesTextView.placeholder = LOCALIZE_STRING(@"Enter task's notes");
+    _notesTextView.placeholder = NSLocalizedString(@"Enter task's notes", nil);
     
     if (UIUserInterfaceIdiomPhone == [UIDevice currentDevice].userInterfaceIdiom) {
         notify(UIKeyboardWillShowNotification, keyboardWillShow:);

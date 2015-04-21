@@ -67,7 +67,7 @@
         aniblock1 = ^{
             self.dotContainer.transform = CGAffineTransformMakeScale(kDotMultiplier, kDotMultiplier);
             CGRectSetCenter(self.dotContainer, kTitleX/2, self.bounds.size.height/2);
-            self.titleField.text = LOCALIZE_STRING(@"Add action step");
+            self.titleField.text = NSLocalizedString(@"Add action step", nil);
             //self.titleField.textColor = tcolor(SubTextColor);
             self.dotView.layer.borderWidth = kLineSize/kDotMultiplier;
             self.titleField.font = EDIT_TASK_TEXT_FONT;

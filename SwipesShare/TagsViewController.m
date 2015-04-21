@@ -28,7 +28,7 @@ static const NSUInteger kTagSpacing = 6;
 
     self.tagList.sorted = YES;
     self.tagList.addTagButton = NO;
-    self.tagList.emptyText = LOCALIZE_STRING(@"No tags");
+    self.tagList.emptyText = NSLocalizedString(@"No tags", nil);
     self.tagList.tagBackgroundColor = tcolorF(BackgroundColor, ThemeLight);
     self.tagList.tagTitleColor = tcolorF(TextColor, ThemeLight);
     self.tagList.tagBorderColor = tcolorF(TextColor, ThemeLight);

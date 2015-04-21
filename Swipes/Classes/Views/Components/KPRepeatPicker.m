@@ -117,23 +117,23 @@
     NSString *buttonString;
     switch (option) {
         case RepeatNever:
-            buttonString = LOCALIZE_STRING(@"never");
+            buttonString = NSLocalizedString(@"never", nil);
             break;
         case RepeatEveryDay:
-            buttonString = LOCALIZE_STRING(@"day");
+            buttonString = NSLocalizedString(@"day", nil);
             break;
         case RepeatEveryMonFriOrSatSun:
-            if([self.selectedDate isTypicallyWorkday]) buttonString = LOCALIZE_STRING(@"mon-fri");
-            else buttonString = LOCALIZE_STRING(@"sat+sun");
+            if([self.selectedDate isTypicallyWorkday]) buttonString = NSLocalizedString(@"mon-fri", nil);
+            else buttonString = NSLocalizedString(@"sat+sun", nil);
         break;
         case RepeatEveryWeek:
-            buttonString = LOCALIZE_STRING(@"week");
+            buttonString = NSLocalizedString(@"week", nil);
             break;
         case RepeatEveryMonth:
-            buttonString = LOCALIZE_STRING(@"month");
+            buttonString = NSLocalizedString(@"month", nil);
             break;
         case RepeatEveryYear:
-            buttonString = LOCALIZE_STRING(@"year");
+            buttonString = NSLocalizedString(@"year", nil);
             break;
         default:
             break;

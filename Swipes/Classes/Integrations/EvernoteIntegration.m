@@ -298,7 +298,7 @@ NSError * NewNSErrorFromException(NSException * exc) {
     if (self.isAuthenticated) {
         return [ENSession sharedSession].userDisplayName;
     }
-    return LOCALIZE_STRING(@"Not connected");
+    return NSLocalizedString(@"Not connected", nil);
 }
 
 - (NSString *)integrationIcon

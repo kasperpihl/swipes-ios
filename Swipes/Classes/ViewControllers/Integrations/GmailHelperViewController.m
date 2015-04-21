@@ -84,7 +84,7 @@
     firstTitleView.subtitleLabel.font = KP_REGULAR(12);
     firstTitleView.spacing = kTextSpacing;
     firstTitleView.maxWidth = 250;
-    [firstTitleView setTitle:LOCALIZE_STRING(@"TURN EMAILS INTO TASKS") subtitle:LOCALIZE_STRING(@"To de-clutter your inbox from tasks, use this integration. The integration works with all Gmail based clients.\n\nRecommended workflow with:")];
+    [firstTitleView setTitle:NSLocalizedString(@"TURN EMAILS INTO TASKS", nil) subtitle:NSLocalizedString(@"To de-clutter your inbox from tasks, use this integration. The integration works with all Gmail based clients.\n\nRecommended workflow with:", nil)];
     CGRectSetY(firstTitleView, kTitleTopSpacing);
     [scrollView addSubview:firstTitleView];
     
@@ -103,7 +103,7 @@
     secondTitleView.subtitleLabel.font = KP_REGULAR(12);
     secondTitleView.spacing = kTextSpacing;
     secondTitleView.maxWidth = 250;
-    [secondTitleView setTitle:LOCALIZE_STRING(@"HOW TO IMPORT FROM GMAIL") subtitle:LOCALIZE_STRING(@"Move an email to the \"Add to Swipes\" folder in your Gmail client.")];
+    [secondTitleView setTitle:NSLocalizedString(@"HOW TO IMPORT FROM GMAIL", nil) subtitle:NSLocalizedString(@"Move an email to the \"Add to Swipes\" folder in your Gmail client.", nil)];
     CGRectSetY(secondTitleView, CGRectGetMaxY(firstImage.frame)+kTitleTopSpacing);
     [scrollView addSubview:secondTitleView];
     
@@ -122,7 +122,7 @@
     thirdTitleView.subtitleLabel.font = KP_REGULAR(12);
     thirdTitleView.spacing = kTextSpacing;
     thirdTitleView.maxWidth = 250;
-    [thirdTitleView setTitle:LOCALIZE_STRING(@"HOW IT APPEARS IN SWIPES") subtitle:LOCALIZE_STRING(@"The email will then appear in your current tasks in Swipes. The title of the email becomes the task name and the preview text will be saved as a note.")];
+    [thirdTitleView setTitle:NSLocalizedString(@"HOW IT APPEARS IN SWIPES", nil) subtitle:NSLocalizedString(@"The email will then appear in your current tasks in Swipes. The title of the email becomes the task name and the preview text will be saved as a note.", nil)];
     CGRectSetY(thirdTitleView, CGRectGetMaxY(secondImage.frame)+kTitleTopSpacing);
     [scrollView addSubview:thirdTitleView];
     
@@ -134,7 +134,7 @@
     
     
     SlowHighlightIcon *getStartedButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
-    [getStartedButton setTitle:[LOCALIZE_STRING(@"Get Started") uppercaseString] forState:UIControlStateNormal];
+    [getStartedButton setTitle:[NSLocalizedString(@"Get Started", nil) uppercaseString] forState:UIControlStateNormal];
     getStartedButton.layer.cornerRadius = 5;
     getStartedButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     getStartedButton.titleLabel.font = KP_LIGHT(18);

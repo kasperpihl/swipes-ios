@@ -202,37 +202,37 @@ static KPFilter *sharedObject;
     [boldRanges addObject:[NSValue valueWithRange:NSMakeRange(0, resultAttrString.length-2-category.length)]];
     
     if(recurringFilter){
-        NSString *recurringString = [LOCALIZE_STRING(@"recurring") stringByAppendingString:@" "];
+        NSString *recurringString = [NSLocalizedString(@"recurring", nil) stringByAppendingString:@" "];
         [totalSearchString appendAttributedString:attrString(recurringString)];
         [boldRanges addObject:[NSValue valueWithRange:NSMakeRange(totalSearchString.length-recurringString.length, recurringString.length-1)]];
     }
     if(priorityFilter){
-        NSString *priorityString = [LOCALIZE_STRING(@"priority") stringByAppendingString:@" "];
+        NSString *priorityString = [NSLocalizedString(@"priority", nil) stringByAppendingString:@" "];
         [totalSearchString appendAttributedString:attrString(priorityString)];
         [boldRanges addObject:[NSValue valueWithRange:NSMakeRange(totalSearchString.length-priorityString.length, priorityString.length-1)]];
     }
-    [totalSearchString appendAttributedString:attrString(LOCALIZE_STRING(@"task"))];
+    [totalSearchString appendAttributedString:attrString(NSLocalizedString(@"task", nil))];
     if(results != 1)
-        [totalSearchString appendAttributedString:attrString(LOCALIZE_STRING(@"s"))];
+        [totalSearchString appendAttributedString:attrString(NSLocalizedString(@"s", nil))];
     
     NSInteger counter = 0;
     if(notesFilter){
-        NSString *withString = LOCALIZE_STRING(@" with ");
-        NSString *noteString = LOCALIZE_STRING(@"notes");
+        NSString *withString = NSLocalizedString(@" with ", nil);
+        NSString *noteString = NSLocalizedString(@"notes", nil);
         [totalSearchString appendAttributedString:attrString([withString stringByAppendingString:noteString])];
         [boldRanges addObject:[NSValue valueWithRange:NSMakeRange(totalSearchString.length-noteString.length, noteString.length)]];
         counter++;
     }
     
     if(searchFilter){
-        NSString *searchString = [NSString stringWithFormat:LOCALIZE_STRING(@" matching \"%@\""),self.searchString];
+        NSString *searchString = [NSString stringWithFormat:NSLocalizedString(@" matching \"%@\"", nil),self.searchString];
         [totalSearchString appendAttributedString:attrString(searchString)];
         counter++;
         [boldRanges addObject:[NSValue valueWithRange:NSMakeRange(totalSearchString.length-self.searchString.length-1, self.searchString.length)]];
     }
     if(tagsFilter){
         NSString *tagString = [self.selectedTags componentsJoinedByString:@", "];
-        NSString *fullTagString = [NSString stringWithFormat:LOCALIZE_STRING(@" %@ tags: %@"),((counter == 0)?LOCALIZE_STRING(@"with"):LOCALIZE_STRING(@"and")),tagString];
+        NSString *fullTagString = [NSString stringWithFormat:NSLocalizedString(@" %@ tags: %@", nil),((counter == 0)?NSLocalizedString(@"with", nil):NSLocalizedString(@"and", nil)),tagString];
         [totalSearchString appendAttributedString:attrString(fullTagString)];
         [boldRanges addObject:[NSValue valueWithRange:NSMakeRange(totalSearchString.length-tagString.length, tagString.length)]];
     }

@@ -122,11 +122,11 @@
         
         UILabel *filterLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, self.tableView.frame.size.width-30, 500)];
         filterLabel.backgroundColor = CLEAR;
-        NSString *category = LOCALIZE_STRING(@"current");
+        NSString *category = NSLocalizedString(@"current", nil);
         if([self.state isEqualToString:@"done"])
-            category = LOCALIZE_STRING(@"completed");
+            category = NSLocalizedString(@"completed", nil);
         else if([self.state isEqualToString:@"schedule"])
-            category = LOCALIZE_STRING(@"scheduled");
+            category = NSLocalizedString(@"scheduled", nil);
         
         filterLabel.attributedText = [kFilter readableFilterWithResults:self.itemHandler.itemCounterWithFilter forCategory:category];
         //[filterLabel setTextColor:tcolor(TextColor)];
@@ -141,7 +141,7 @@
         
         UIButton *clearButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, 140, 44)];
         clearButton.backgroundColor = CLEAR;
-        NSString *str = LOCALIZE_STRING(@"clear workspace");
+        NSString *str = NSLocalizedString(@"clear workspace", nil);
         clearButton.titleLabel.font = KP_REGULAR(14);
         [clearButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [clearButton addTarget:kFilter action:@selector(clearAll) forControlEvents:UIControlEventTouchUpInside];
@@ -637,10 +637,10 @@
         NSString *text;
         switch (self.cellType) {
             case CellTypeDone:
-                text = [LOCALIZE_STRING(@"done") capitalizedString];
+                text = [NSLocalizedString(@"done", nil) capitalizedString];
                 break;
             case CellTypeSchedule:
-                text = [LOCALIZE_STRING(@"schedule") capitalizedString];
+                text = [NSLocalizedString(@"schedule", nil) capitalizedString];
                 break;
             default:
                 text = @"";

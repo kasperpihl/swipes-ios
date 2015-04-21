@@ -103,9 +103,9 @@ static NSString* const kKeyJsonThreadId = @"threadid";
 - (NSString *)integrationSubtitle
 {
     if (self.isAuthenticated) {
-        return _emailAddress ? _emailAddress : LOCALIZE_STRING(@"Connected 1 account");
+        return _emailAddress ? _emailAddress : NSLocalizedString(@"Connected 1 account", nil);
     }
-    return LOCALIZE_STRING(@"Not connected");
+    return NSLocalizedString(@"Not connected", nil);
 }
 
 - (NSString *)integrationIcon
