@@ -68,7 +68,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>119</string>
+	<string>121</string>
 	<key>FacebookAppID</key>
 	<string>531435630236702</string>
 	<key>LSApplicationCategoryType</key>
@@ -80,8 +80,6 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Location will be used to make tasks that will alert based on your arrival on a location.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Location will be used to make tasks that will alert based on your arrival on a location.</string>
 	<key>NSRemindersUsageDescription</key>
@@ -101,7 +99,6 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
-		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>Launch Screen</string>

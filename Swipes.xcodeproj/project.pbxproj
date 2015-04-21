@@ -655,21 +655,21 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		A7BC168B1AD435060054E854 /* PBXContainerItemProxy */ = {
+		A77987261ADC14CF00604875 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4F38F6A60B66E91D00B24B81;
 			remoteInfo = GTLFramework;
 		};
-		A7BC168D1AD435060054E854 /* PBXContainerItemProxy */ = {
+		A77987281ADC14CF00604875 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4F12027D11A4CA2F00BEB470;
 			remoteInfo = GTLUnitTests;
 		};
-		A7BC168F1AD435060054E854 /* PBXContainerItemProxy */ = {
+		A779872A1ADC14CF00604875 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
 			proxyType = 2;
@@ -689,27 +689,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = DA3282B61A4CB7CF0054CE04;
 			remoteInfo = "Swipes WatchKit Extension";
-		};
-		DA3F7A2A1AD437E6005364A5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4F38F6A60B66E91D00B24B81;
-			remoteInfo = GTLFramework;
-		};
-		DA3F7A2C1AD437E6005364A5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4F12027D11A4CA2F00BEB470;
-			remoteInfo = GTLUnitTests;
-		};
-		DA3F7A2E1AD437E6005364A5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4F1AD9020B71603F00DC0485;
-			remoteInfo = DevelopmentTestTool;
 		};
 		DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2683,10 +2662,10 @@
 		DAB1650E1A6D3D51008D69B2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A7BC168C1AD435060054E854 /* GTL.framework */,
+				A77987271ADC14CF00604875 /* GTL.framework */,
 				DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */,
-				A7BC168E1AD435060054E854 /* GTLUnitTests.xctest */,
-				A7BC16901AD435060054E854 /* DevelopmentTestTool */,
+				A77987291ADC14CF00604875 /* GTLUnitTests.xctest */,
+				A779872B1ADC14CF00604875 /* DevelopmentTestTool */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3128,25 +3107,25 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		DA3F7A2B1AD437E6005364A5 /* GTL.framework */ = {
+		A77987271ADC14CF00604875 /* GTL.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = GTL.framework;
-			remoteRef = DA3F7A2A1AD437E6005364A5 /* PBXContainerItemProxy */;
+			remoteRef = A77987261ADC14CF00604875 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		DA3F7A2D1AD437E6005364A5 /* GTLUnitTests.xctest */ = {
+		A77987291ADC14CF00604875 /* GTLUnitTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = GTLUnitTests.xctest;
-			remoteRef = DA3F7A2C1AD437E6005364A5 /* PBXContainerItemProxy */;
+			remoteRef = A77987281ADC14CF00604875 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		DA3F7A2F1AD437E6005364A5 /* DevelopmentTestTool */ = {
+		A779872B1ADC14CF00604875 /* DevelopmentTestTool */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = DevelopmentTestTool;
-			remoteRef = DA3F7A2E1AD437E6005364A5 /* PBXContainerItemProxy */;
+			remoteRef = A779872A1ADC14CF00604875 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		DAB165171A6D3D51008D69B2 /* libGTLTouchStaticLib.a */ = {
