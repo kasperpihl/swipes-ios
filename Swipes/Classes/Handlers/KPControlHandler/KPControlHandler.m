@@ -145,7 +145,7 @@
     if([self.delegate respondsToSelector:@selector(pressedDelete:)]) [self.delegate pressedDelete:self];
 }
 -(void)pressedShare:(UIButton*)sender{
-    if([self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:self];
+    if([self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:self.view];
 }
 
 
