@@ -9,6 +9,7 @@ target :Swipes do
     pod 'Bolts', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
     pod 'Parse', :inhibit_warnings => true
+    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'RMStore', :inhibit_warnings => true
@@ -27,6 +28,7 @@ target :SwipesKit do
     pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
     pod 'Parse', :inhibit_warnings => true
+    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'RMStore', :inhibit_warnings => true
@@ -42,6 +44,7 @@ end
 target :SwipesToday do
     pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
+    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'Base64'
@@ -52,6 +55,7 @@ end
 target :SwipesShare do
     pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
+    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'Base64'

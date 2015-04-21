@@ -654,7 +654,7 @@
         self.menuText = [self.view viewWithTag:MENU_TEXT_TAG];
     }
     
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView = [[KPReorderTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [self prepareTableView:self.tableView];
     [self.view addSubview:self.tableView];
 }

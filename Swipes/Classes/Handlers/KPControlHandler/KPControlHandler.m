@@ -148,7 +148,6 @@
     if([self.delegate respondsToSelector:@selector(pressedShare:)]) [self.delegate pressedShare:sender];
 }
 
-
 -(UIButton*)actionButtonWithTitle:(NSString*)title{
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, kActionButtonSize, kActionButtonSize)];
     button.backgroundColor = tcolor(BackgroundColor);

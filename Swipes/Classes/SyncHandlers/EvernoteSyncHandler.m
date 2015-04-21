@@ -250,7 +250,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
         for ( KPToDo *subtask in subtasks ){
             if (nil == subtask.originIdentifier)
                 continue;
-            CGFloat match = fabsf([subtask.originIdentifier compareWithWord:evernoteToDo.title matchGain:10 missingCost:1]);
+            CGFloat match = labs([subtask.originIdentifier compareWithWord:evernoteToDo.title matchGain:10 missingCost:1]);
             if (match > bestScore) {
                 bestScore = match;
                 bestMatch = subtask;

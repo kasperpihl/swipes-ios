@@ -735,7 +735,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         tempHeight += self.notesContainer.frame.size.height;
     }
     CGFloat targetHeight = self.subtasksController.expanded ? heightWithSubtasks : tempHeight;
-    BOOL isPortrait = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
+    BOOL isPortrait = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
     CGFloat width = isPortrait ? self.scrollView.frame.size.width : self.scrollView.frame.size.height;
     self.scrollView.contentSize = CGSizeMake(width,targetHeight);
     
@@ -1230,7 +1230,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGFloat kbdHeight = keyboardFrame.size.height;
     if(OSVER == 7){
-        kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
+        kbdHeight = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     }
     self.kbdHeight = kbdHeight;
     self.subtasksController.tableView.reorderingEnabled = NO;

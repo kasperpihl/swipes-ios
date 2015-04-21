@@ -964,7 +964,7 @@
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGFloat kbdHeight = keyboardFrame.size.height;
     if(OSVER == 7){
-        kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
+        kbdHeight = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     }
     CGFloat targetHeight = kbdHeight + self.topOverlay.frame.size.height;
     CGFloat currentHeight = self.view.frame.size.height;

@@ -16,16 +16,17 @@
 #import "UITextView+Placeholder.h"
 #import "TagsViewController.h"
 #import "ScheduleViewController.h"
+#import "MenuCell.h"
 #import "ShareViewController.h"
 
 static const NSUInteger kTagsIndex = 0;
 static const NSUInteger kScheduleIndex = 1;
 
-static const CGFloat kTopMargin = 35.f;
+static const CGFloat kTopMargin = 40.f;
 static const CGFloat kMargin = 20.f;
 static const CGFloat kBottomMargin = 20.f;
 
-static const CGFloat kWidthPad = 450.f;
+static const CGFloat kWidthPad = 420.f;
 static const CGFloat kHeightPad = 300.f;
 
 static NSString* const kKeyUserSettingsName = @"ShareExtensionTags";
@@ -35,6 +36,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
 @property (nonatomic, weak) IBOutlet UIView* contentView;
 @property (nonatomic, weak) IBOutlet UIView* containerView;
+@property (nonatomic, weak) IBOutlet UIView* lineView;
 @property (nonatomic, weak) IBOutlet UITextField* textField;
 @property (nonatomic, weak) IBOutlet UIButton* cancelButton;
 @property (nonatomic, weak) IBOutlet UIButton* backButton;
@@ -43,6 +45,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 @property (nonatomic, weak) IBOutlet UITableView* optionsTable;
 @property (nonatomic, weak) IBOutlet UIView* tagsContainer;
 @property (nonatomic, weak) IBOutlet UIView* scheduleContainer;
+@property (nonatomic, weak) IBOutlet UIImageView* icon;
 
 @property (nonatomic, weak) TagsViewController* tagsVC;
 @property (nonatomic, weak) ScheduleViewController* scheduleVC;
@@ -103,7 +106,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
         _selectedTags = [selectedMutable copy];
     }
     
-    _notesTextView.placeholderColor = [UIColor lightGrayColor];
+    _notesTextView.placeholderColor = gray(192, 1);
     _notesTextView.placeholder = LOCALIZE_STRING(@"Enter task's notes");
     
     if (UIUserInterfaceIdiomPhone == [UIDevice currentDevice].userInterfaceIdiom) {
@@ -114,12 +117,17 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
         [self setupPadSize];
     }
     
+    CGRect f = _lineView.frame;
+    f.origin.y += 0.5;
+    f.size.height = 0.5;
+    _lineView.frame = f;
+    
     // setup back button
     _backButton.titleLabel.text = nil;
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:@"arrowLeftThick Back"];
+    [attrString addAttribute:NSForegroundColorAttributeName value:color(27, 30, 35, 1) range:NSMakeRange(0, attrString.length)];
     [attrString addAttribute:NSFontAttributeName value:iconFont(10) range:NSMakeRange(0, 14)];
-    [attrString addAttribute:NSFontAttributeName value:KP_LIGHT(6) range:NSMakeRange(14, 1)];
-    [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, attrString.length)];
+    [attrString addAttribute:NSFontAttributeName value:KP_REGULAR(14) range:NSMakeRange(14, attrString.length - 14)];
     [_backButton setAttributedTitle:attrString forState:UIControlStateNormal];
     [_backButton setAttributedTitle:attrString forState:UIControlStateHighlighted];
     
@@ -146,12 +154,17 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
 - (void)setupPadSize
 {
+    CGFloat offset = ((self.view.frame.size.height > 800) ? 150 : 10); // TODO: not the smartest way to setup things
     CGRect newFrame = self.view.frame;
     newFrame.origin.x = (self.view.frame.size.width - kWidthPad) / 2;
-    newFrame.origin.y = kTopMargin;
+    newFrame.origin.y = kTopMargin + offset;
     newFrame.size.width = kWidthPad;
     newFrame.size.height = kHeightPad;
     _containerView.frame = newFrame;
+    
+    CGRect f = _icon.frame;
+    f.origin.y = 20.f + offset;
+    _icon.frame = f;
 }
 
 - (IBAction)didSelectPost:(id)sender
@@ -254,7 +267,8 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 - (void)setupTagsLabel:(UILabel *)label
 {
     if (!_selectedTags || (0 == _selectedTags.count)) {
-        label.text = @"Tags";
+        label.text = @"no tags";
+        label.textColor = gray(192, 1);
     }
     else {
         NSMutableString* tags = [NSMutableString string];
@@ -265,10 +279,8 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
             [tags appendString:_selectedTags[i]];
         }
         
-        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"editTags %@", tags]];
-        [attrString addAttribute:NSFontAttributeName value:iconFont(10) range:NSMakeRange(0, 8)];
-        
-        label.attributedText = attrString;
+        label.text = tags;
+        label.textColor = color(27, 30, 35, 1);
     }
 }
 
@@ -307,7 +319,6 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     _backButton.hidden = YES;
     
     [UIView commitAnimations];
-
 }
 
 - (void)displayView:(UIView *)view
@@ -349,17 +360,6 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     return @"";
 }
 
-- (void)addCellDisclosure:(UITableViewCell *)cell
-{
-    UILabel* disclosureLabel = [[UILabel alloc] init];
-    disclosureLabel.backgroundColor = [UIColor clearColor];
-    disclosureLabel.textColor = tcolorF(TextColor, ThemeLight);
-    disclosureLabel.font = iconFont(6);
-    disclosureLabel.text = @"arrowRightThick";
-    [disclosureLabel sizeToFit];
-    cell.accessoryView = disclosureLabel;
-}
-
 #pragma mark - table view fills
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -370,24 +370,20 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *kCellID = @"shareCell";
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellID];
-    if (nil == cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellID];
-    }
+    MenuCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellID forIndexPath:indexPath];
     
     // Remove seperator inset
     [cell setSeparatorInset:UIEdgeInsetsZero];
     [cell setPreservesSuperviewLayoutMargins:NO];
     [cell setLayoutMargins:UIEdgeInsetsZero];
     
-    [self addCellDisclosure:cell];
     switch (indexPath.row) {
         case kTagsIndex:
-            [self setupTagsLabel:cell.textLabel];
+            [self setupTagsLabel:cell.mainLabel];
             break;
             
         case kScheduleIndex:
-            [self setupScheduleLabel:cell.textLabel];
+            [self setupScheduleLabel:cell.mainLabel];
             break;
     }
     
