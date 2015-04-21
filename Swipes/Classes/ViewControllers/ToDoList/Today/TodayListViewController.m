@@ -28,7 +28,6 @@
 #import "UtilityClass.h"
 @interface TodayListViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 
-@property (nonatomic, strong) KPReorderTableView *tableView;
 @property (nonatomic) YoureAllDoneView *youreAllDoneView;
 @property (nonatomic, strong) NSIndexPath *dragRow;
 @property (nonatomic) BOOL emptyBack;

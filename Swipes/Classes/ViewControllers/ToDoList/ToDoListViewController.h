@@ -11,6 +11,7 @@
 #import "ToDoCell.h"
 #import "NSDate-Utilities.h"
 #import "KPSegmentedViewController.h"
+#import "KPReorderTableView.h"
 #import "ItemHandler.h"
 
 @interface ToDoListViewController : UIViewController <UITableViewDelegate,ItemHandlerDelegate>
@@ -19,7 +20,7 @@
 @property (nonatomic, strong) ItemHandler *itemHandler;
 @property (nonatomic, assign) BOOL selectionMode;
 @property (nonatomic, strong) NSString *state;
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) KPReorderTableView *tableView;
 -(KPSegmentedViewController *)parent;
 -(ToDoCell*)readyCell:(ToDoCell*)cell;
 -(void)deselectAllRows:(id)sender;

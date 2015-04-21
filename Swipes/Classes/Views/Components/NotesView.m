@@ -106,7 +106,7 @@
     CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGFloat kbdHeight = keyboardFrame.size.height;
     if(OSVER == 7){
-        kbdHeight = UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
+        kbdHeight = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     }
     CGRectSetY(self.backbutton, self.frame.size.height - self.backbutton.frame.size.height - kbdHeight);
     CGRectSetHeight(self.notesView, self.frame.size.height - kbdHeight - kTextBottomPadding);

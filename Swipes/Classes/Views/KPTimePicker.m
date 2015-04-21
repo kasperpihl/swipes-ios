@@ -119,7 +119,7 @@
 {
     CGPoint velocity = [sender velocityInView:self];
     CGPoint location = [sender locationInView:self];
-    CGFloat vel = fabsf(velocity.y)+fabsf(velocity.x);
+    CGFloat vel = fabs(velocity.y)+fabs(velocity.x);
     NSInteger minutesPerInterval = 5;
     CGFloat angleInterval = 50;
     //NSLog(@"%f",vel);
