@@ -1,0 +1,24 @@
+
+/* Class = "UITextField"; placeholder = "Enter task's title"; ObjectID = "7zc-Qa-Mtg"; */
+"7zc-Qa-Mtg.placeholder" = "Enter task's title";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "B3H-Hc-ddf"; */
+"B3H-Hc-ddf.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "no tags"; ObjectID = "F9w-6V-eKv"; */
+"F9w-6V-eKv.text" = "no tags";
+
+/* Class = "UILabel"; text = "editTags"; ObjectID = "IYw-eE-4oI"; */
+"IYw-eE-4oI.text" = "editTags";
+
+/* Class = "UIButton"; normalTitle = "Add task"; ObjectID = "VFb-zN-NdP"; */
+"VFb-zN-NdP.normalTitle" = "Add task";
+
+/* Class = "UILabel"; text = "arrowRightThick"; ObjectID = "Zwk-DL-SeQ"; */
+"Zwk-DL-SeQ.text" = "arrowRightThick";
+
+/* Class = "UILabel"; text = "actionIndicatorOn"; ObjectID = "iRg-o5-JYn"; */
+"iRg-o5-JYn.text" = "actionIndicatorOn";
+
+/* Class = "UILabel"; text = "editNotes"; ObjectID = "ktX-Vl-THk"; */
+"ktX-Vl-THk.text" = "editNotes";

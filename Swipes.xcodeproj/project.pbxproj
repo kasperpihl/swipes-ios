@@ -490,12 +490,13 @@
 		DA23232A19B4737A00D996EB /* UtilityClass.h in Headers */ = {isa = PBXBuildFile; fileRef = A781285B17294C56002226C8 /* UtilityClass.h */; };
 		DA23232B19B4738000D996EB /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285C17294C56002226C8 /* UtilityClass.m */; };
 		DA2D4B471AE5223B00AFDB80 /* MenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2D4B461AE5223B00AFDB80 /* MenuCell.m */; };
+		DA2D4B521AE6714E00AFDB80 /* ShareExtension.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA2D4B541AE6714E00AFDB80 /* ShareExtension.storyboard */; };
 		DA310FA7188F3F26003C8FA4 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = DA310FA6188F3F26003C8FA4 /* Assets */; };
 		DA3282C11A4CB7CF0054CE04 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282C01A4CB7CF0054CE04 /* NotificationController.m */; };
 		DA3282C41A4CB7CF0054CE04 /* GlanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282C31A4CB7CF0054CE04 /* GlanceController.m */; };
 		DA3282C61A4CB7CF0054CE04 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA3282C51A4CB7CF0054CE04 /* Images.xcassets */; };
 		DA3282CA1A4CB7CF0054CE04 /* Swipes WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = DA3282C91A4CB7CF0054CE04 /* Swipes WatchKit App.app */; };
-		DA3282D21A4CB7CF0054CE04 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA3282D01A4CB7CF0054CE04 /* Interface.storyboard */; };
+		DA3282D21A4CB7CF0054CE04 /* Watch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA3282D01A4CB7CF0054CE04 /* Watch.storyboard */; };
 		DA3282D41A4CB7D00054CE04 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA3282D31A4CB7CF0054CE04 /* Images.xcassets */; };
 		DA3282D71A4CB7D00054CE04 /* Swipes WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DA3282E51A4CBD2B0054CE04 /* SWATodoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282E41A4CBD2B0054CE04 /* SWATodoCell.m */; };
@@ -624,7 +625,7 @@
 		DAE2B14A19C8FDF200A9074E /* Datamodel.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		DAE2B15019CB7A4D00A9074E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE9D00219AF3B2900246B64 /* NotificationCenter.framework */; };
 		DAE2B15619CB7A4D00A9074E /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE2B15519CB7A4D00A9074E /* TodayViewController.m */; };
-		DAE2B15819CB7A4D00A9074E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAE2B15719CB7A4D00A9074E /* MainInterface.storyboard */; };
+		DAE2B15819CB7A4D00A9074E /* TodayExtension.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAE2B15719CB7A4D00A9074E /* TodayExtension.storyboard */; };
 		DAE2B15C19CB7A4D00A9074E /* SwipesToday.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DAE2B16519CB7B0C00A9074E /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		DAE2B16619CB7B1B00A9074E /* KPAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F9D79818BA2E7A003D8833 /* KPAttachment.m */; };
@@ -649,7 +650,6 @@
 		DAE2B17B19CB7D8100A9074E /* Vero.m in Sources */ = {isa = PBXBuildFile; fileRef = A7582505189BC35600B904BC /* Vero.m */; };
 		DAE2B17C19CB7DF200A9074E /* UtilityClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285C17294C56002226C8 /* UtilityClass.m */; };
 		DAE4D5F81AB1C473001BDC52 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE4D5F71AB1C473001BDC52 /* ShareViewController.m */; };
-		DAE4D5FA1AB1C473001BDC52 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAE4D5F91AB1C473001BDC52 /* MainInterface.storyboard */; };
 		DAE4D5FD1AB1C473001BDC52 /* SwipesShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DAE4D5F21AB1C473001BDC52 /* SwipesShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DAE9CFE119AF3AC600246B64 /* SwipesKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DAE9CFE019AF3AC600246B64 /* SwipesKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
@@ -1208,6 +1208,8 @@
 		DA23232519B472BE00D996EB /* GlobalApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalApp.m; sourceTree = "<group>"; };
 		DA2D4B451AE5223B00AFDB80 /* MenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCell.h; sourceTree = "<group>"; };
 		DA2D4B461AE5223B00AFDB80 /* MenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuCell.m; sourceTree = "<group>"; };
+		DA2D4B531AE6714E00AFDB80 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ShareExtension.storyboard; sourceTree = "<group>"; };
+		DA2D4B561AE6718800AFDB80 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ShareExtension.strings; sourceTree = "<group>"; };
 		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Swipes WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA3282BA1A4CB7CF0054CE04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1219,7 +1221,7 @@
 		DA3282C51A4CB7CF0054CE04 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DA3282C91A4CB7CF0054CE04 /* Swipes WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swipes WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA3282CF1A4CB7CF0054CE04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DA3282D11A4CB7CF0054CE04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		DA3282D11A4CB7CF0054CE04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Watch.storyboard; sourceTree = "<group>"; };
 		DA3282D31A4CB7CF0054CE04 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DA3282E31A4CBD2B0054CE04 /* SWATodoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWATodoCell.h; sourceTree = "<group>"; };
 		DA3282E41A4CBD2B0054CE04 /* SWATodoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWATodoCell.m; sourceTree = "<group>"; };
@@ -1331,14 +1333,13 @@
 		DAE2B15319CB7A4D00A9074E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DAE2B15419CB7A4D00A9074E /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
 		DAE2B15519CB7A4D00A9074E /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
-		DAE2B15719CB7A4D00A9074E /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
+		DAE2B15719CB7A4D00A9074E /* TodayExtension.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TodayExtension.storyboard; sourceTree = "<group>"; };
 		DAE2B16319CB7AA900A9074E /* SwipesToday.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SwipesToday.entitlements; sourceTree = "<group>"; };
 		DAE2B16E19CB7CE100A9074E /* SwipesToday-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwipesToday-Prefix.pch"; sourceTree = "<group>"; };
 		DAE4D5F21AB1C473001BDC52 /* SwipesShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SwipesShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE4D5F51AB1C473001BDC52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DAE4D5F61AB1C473001BDC52 /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
 		DAE4D5F71AB1C473001BDC52 /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
-		DAE4D5F91AB1C473001BDC52 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		DAE4D6061AB1C552001BDC52 /* SwipesShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SwipesShare.entitlements; sourceTree = "<group>"; };
 		DAE9CFDC19AF3AC600246B64 /* SwipesKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwipesKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE9CFDF19AF3AC600246B64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2549,7 +2550,7 @@
 			isa = PBXGroup;
 			children = (
 				DA369BF91AA672A4003D0AF9 /* swipes.ttf */,
-				DA3282D01A4CB7CF0054CE04 /* Interface.storyboard */,
+				DA3282D01A4CB7CF0054CE04 /* Watch.storyboard */,
 				DA3282D31A4CB7CF0054CE04 /* Images.xcassets */,
 				DA3282CE1A4CB7CF0054CE04 /* Supporting Files */,
 			);
@@ -2721,7 +2722,7 @@
 				A7D8692919E4060900CE0923 /* SwipingOverlayView.m */,
 				DAE2B15419CB7A4D00A9074E /* TodayViewController.h */,
 				DAE2B15519CB7A4D00A9074E /* TodayViewController.m */,
-				DAE2B15719CB7A4D00A9074E /* MainInterface.storyboard */,
+				DAE2B15719CB7A4D00A9074E /* TodayExtension.storyboard */,
 				A711246C19DB13D400FD9DAE /* TodaySwipingCell.h */,
 				A711246D19DB13D400FD9DAE /* TodaySwipingCell.m */,
 				DAE2B15219CB7A4D00A9074E /* Supporting Files */,
@@ -2764,7 +2765,7 @@
 				DAC8A1771ACC3F6B00061377 /* ScheduleViewController.m */,
 				DA2D4B451AE5223B00AFDB80 /* MenuCell.h */,
 				DA2D4B461AE5223B00AFDB80 /* MenuCell.m */,
-				DAE4D5F91AB1C473001BDC52 /* MainInterface.storyboard */,
+				DA2D4B541AE6714E00AFDB80 /* ShareExtension.storyboard */,
 				DA09B0A01AB24D9D002632DC /* Resources */,
 				DAE4D5F41AB1C473001BDC52 /* Supporting Files */,
 				DAC8A1651ACAB3E000061377 /* Images.xcassets */,
@@ -3264,7 +3265,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA369BFA1AA672A4003D0AF9 /* swipes.ttf in Resources */,
-				DA3282D21A4CB7CF0054CE04 /* Interface.storyboard in Resources */,
+				DA3282D21A4CB7CF0054CE04 /* Watch.storyboard in Resources */,
 				DA3282D41A4CB7D00054CE04 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3274,7 +3275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A711246F19DB166200FD9DAE /* swipes.ttf in Resources */,
-				DAE2B15819CB7A4D00A9074E /* MainInterface.storyboard in Resources */,
+				DAE2B15819CB7A4D00A9074E /* TodayExtension.storyboard in Resources */,
 				DA6B61BE19DAF3B600089877 /* ENSDKResources.bundle in Resources */,
 				DA09DD8D1A71071E00E66E97 /* GmailAuthViewController.xib in Resources */,
 				DA5346BF19D5CB7B007AA15D /* Datamodel.xcdatamodeld in Resources */,
@@ -3293,7 +3294,7 @@
 				DA09B0AA1AB24DDF002632DC /* GothamRounded-Medium.ttf in Resources */,
 				DA09B0A81AB24DDF002632DC /* GothamRounded-Book.ttf in Resources */,
 				DA09B0A91AB24DDF002632DC /* GothamRounded-Light.ttf in Resources */,
-				DAE4D5FA1AB1C473001BDC52 /* MainInterface.storyboard in Resources */,
+				DA2D4B521AE6714E00AFDB80 /* ShareExtension.storyboard in Resources */,
 				DA09AFA51AB1CE22002632DC /* GmailAuthViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3956,12 +3957,21 @@
 			path = Swipes/Ressources/Localizations;
 			sourceTree = SOURCE_ROOT;
 		};
-		DA3282D01A4CB7CF0054CE04 /* Interface.storyboard */ = {
+		DA2D4B541AE6714E00AFDB80 /* ShareExtension.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DA2D4B531AE6714E00AFDB80 /* Base */,
+				DA2D4B561AE6718800AFDB80 /* en */,
+			);
+			name = ShareExtension.storyboard;
+			sourceTree = "<group>";
+		};
+		DA3282D01A4CB7CF0054CE04 /* Watch.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				DA3282D11A4CB7CF0054CE04 /* Base */,
 			);
-			name = Interface.storyboard;
+			name = Watch.storyboard;
 			sourceTree = "<group>";
 		};
 		DA6B61C119E321FE00089877 /* Localizable.strings */ = {
