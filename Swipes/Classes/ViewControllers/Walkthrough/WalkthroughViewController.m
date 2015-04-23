@@ -389,7 +389,7 @@ typedef enum {
         case SwipedToTheLeft:{
             block = ^{
                 self.schedulePopupButton.transform = CGAffineTransformIdentity;
-                [self.titleView setTitle:NSLocalizedString(@"... Then pick a date", nil) subtitle:NSLocalizedString(@"And the task will come back when the time's right.", nil)];
+                [self.titleView setTitle:NSLocalizedString(@"... Then pick a date", nil) subtitle:NSLocalizedString(@"And the task will come back when the time\'s right.", nil)];
             };
             break;
         }

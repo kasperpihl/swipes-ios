@@ -986,7 +986,6 @@
 		A78128B317294C56002226C8 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A78128B417294C56002226C8 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A78128BA17294C56002226C8 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		A78128BB17294C56002226C8 /* Swipes-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Swipes-Info.plist"; sourceTree = "<group>"; };
 		A78128BC17294C56002226C8 /* Swipes-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Swipes-Prefix.pch"; sourceTree = "<group>"; };
 		A784DB9119E822940041225A /* SearchTopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchTopMenu.h; path = TopMenus/SearchTopMenu.h; sourceTree = "<group>"; };
 		A784DB9219E822940041225A /* SearchTopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SearchTopMenu.m; path = TopMenus/SearchTopMenu.m; sourceTree = "<group>"; };
@@ -1212,7 +1211,7 @@
 		DA2D4B561AE6718800AFDB80 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ShareExtension.strings; sourceTree = "<group>"; };
 		DA310FA6188F3F26003C8FA4 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Swipes WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA3282BA1A4CB7CF0054CE04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DA3282BA1A4CB7CF0054CE04 /* SwipesWatchInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SwipesWatchInfo.plist; sourceTree = "<group>"; };
 		DA3282BB1A4CB7CF0054CE04 /* PushNotificationPayloadOneTask.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayloadOneTask.apns; sourceTree = "<group>"; };
 		DA3282BF1A4CB7CF0054CE04 /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
 		DA3282C01A4CB7CF0054CE04 /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
@@ -1271,6 +1270,7 @@
 		DA4F29C81AA73D8C0048C71A /* swipes-ui-gmail-integrations-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-ui-gmail-integrations-3.png"; sourceTree = "<group>"; };
 		DA4F29C91AA73D8C0048C71A /* swipes-ui-gmail-integrations-3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-ui-gmail-integrations-3@2x.png"; sourceTree = "<group>"; };
 		DA50DBED1AA3E1140081FD20 /* SWADefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWADefinitions.h; sourceTree = "<group>"; };
+		DA5140D31AE9203F000B3BDB /* Swipes-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Swipes-Info.plist"; sourceTree = "<group>"; };
 		DA5422CC1986C7A50006A1E6 /* URLHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLHandler.h; sourceTree = "<group>"; };
 		DA5422CD1986C7A50006A1E6 /* URLHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLHandler.m; sourceTree = "<group>"; };
 		DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.0.xcdatamodel"; sourceTree = "<group>"; };
@@ -1330,14 +1330,14 @@
 		DAD78B741A67E958009992C3 /* KPStringScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPStringScanner.h; path = Swipes/Classes/Utilities/KPStringScanner.h; sourceTree = SOURCE_ROOT; };
 		DAD78B751A67E958009992C3 /* KPStringScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPStringScanner.m; path = Swipes/Classes/Utilities/KPStringScanner.m; sourceTree = SOURCE_ROOT; };
 		DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SwipesToday.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		DAE2B15319CB7A4D00A9074E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DAE2B15319CB7A4D00A9074E /* SwipesTodayInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SwipesTodayInfo.plist; sourceTree = "<group>"; };
 		DAE2B15419CB7A4D00A9074E /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
 		DAE2B15519CB7A4D00A9074E /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
 		DAE2B15719CB7A4D00A9074E /* TodayExtension.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TodayExtension.storyboard; sourceTree = "<group>"; };
 		DAE2B16319CB7AA900A9074E /* SwipesToday.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SwipesToday.entitlements; sourceTree = "<group>"; };
 		DAE2B16E19CB7CE100A9074E /* SwipesToday-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SwipesToday-Prefix.pch"; sourceTree = "<group>"; };
 		DAE4D5F21AB1C473001BDC52 /* SwipesShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SwipesShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		DAE4D5F51AB1C473001BDC52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DAE4D5F51AB1C473001BDC52 /* SwipesShareInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SwipesShareInfo.plist; sourceTree = "<group>"; };
 		DAE4D5F61AB1C473001BDC52 /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
 		DAE4D5F71AB1C473001BDC52 /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
 		DAE4D6061AB1C552001BDC52 /* SwipesShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SwipesShare.entitlements; sourceTree = "<group>"; };
@@ -2091,7 +2091,7 @@
 				A78128B317294C56002226C8 /* AppDelegate.h */,
 				A78128B417294C56002226C8 /* AppDelegate.m */,
 				A78128BA17294C56002226C8 /* main.m */,
-				A78128BB17294C56002226C8 /* Swipes-Info.plist */,
+				DA5140D31AE9203F000B3BDB /* Swipes-Info.plist */,
 				A78128BC17294C56002226C8 /* Swipes-Prefix.pch */,
 			);
 			path = "Supporting Files";
@@ -2539,7 +2539,7 @@
 			children = (
 				DA369BFB1AA67325003D0AF9 /* swipes.ttf */,
 				DA3283291A4EE90C0054CE04 /* Swipes WatchKit Extension.entitlements */,
-				DA3282BA1A4CB7CF0054CE04 /* Info.plist */,
+				DA3282BA1A4CB7CF0054CE04 /* SwipesWatchInfo.plist */,
 				DA3282BB1A4CB7CF0054CE04 /* PushNotificationPayloadOneTask.apns */,
 				DA07FF5D1ABB386900C1134A /* PushNotificationPayloadManyTasks.apns */,
 			);
@@ -2737,7 +2737,7 @@
 			children = (
 				DAE2B16319CB7AA900A9074E /* SwipesToday.entitlements */,
 				DAE2B16E19CB7CE100A9074E /* SwipesToday-Prefix.pch */,
-				DAE2B15319CB7A4D00A9074E /* Info.plist */,
+				DAE2B15319CB7A4D00A9074E /* SwipesTodayInfo.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -2777,7 +2777,7 @@
 			isa = PBXGroup;
 			children = (
 				DA09AFCA1AB224C7002632DC /* SwipesShare-Prefix.pch */,
-				DAE4D5F51AB1C473001BDC52 /* Info.plist */,
+				DAE4D5F51AB1C473001BDC52 /* SwipesShareInfo.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -4439,7 +4439,7 @@
 					"$(inherited)",
 					"/Applications/Xcode-Beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
 				);
-				INFOPLIST_FILE = "Swipes WatchKit Extension/Info.plist";
+				INFOPLIST_FILE = "Swipes WatchKit Extension/SwipesWatchInfo.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -4476,7 +4476,7 @@
 					"$(inherited)",
 					"/Applications/Xcode-Beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
 				);
-				INFOPLIST_FILE = "Swipes WatchKit Extension/Info.plist";
+				INFOPLIST_FILE = "Swipes WatchKit Extension/SwipesWatchInfo.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -4513,7 +4513,7 @@
 					"$(inherited)",
 					"/Applications/Xcode-Beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
 				);
-				INFOPLIST_FILE = "Swipes WatchKit Extension/Info.plist";
+				INFOPLIST_FILE = "Swipes WatchKit Extension/SwipesWatchInfo.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -4673,7 +4673,7 @@
 					"$(SDKROOT)/usr/include/libz",
 					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
 				);
-				INFOPLIST_FILE = SwipesToday/Info.plist;
+				INFOPLIST_FILE = SwipesToday/SwipesTodayInfo.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -4740,7 +4740,7 @@
 					"$(SDKROOT)/usr/include/libz",
 					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
 				);
-				INFOPLIST_FILE = SwipesToday/Info.plist;
+				INFOPLIST_FILE = SwipesToday/SwipesTodayInfo.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -4808,7 +4808,7 @@
 					"$(SDKROOT)/usr/include/libz",
 					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
 				);
-				INFOPLIST_FILE = SwipesToday/Info.plist;
+				INFOPLIST_FILE = SwipesToday/SwipesTodayInfo.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -4875,7 +4875,7 @@
 					"$(SDKROOT)/usr/include/libz",
 					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
 				);
-				INFOPLIST_FILE = SwipesShare/Info.plist;
+				INFOPLIST_FILE = SwipesShare/SwipesShareInfo.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -4939,7 +4939,7 @@
 					"$(SDKROOT)/usr/include/libz",
 					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
 				);
-				INFOPLIST_FILE = SwipesShare/Info.plist;
+				INFOPLIST_FILE = SwipesShare/SwipesShareInfo.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -5003,7 +5003,7 @@
 					"$(SDKROOT)/usr/include/libz",
 					"Swipes/Ressources/Libs/google-api-objectivec-client/Source/**",
 				);
-				INFOPLIST_FILE = SwipesShare/Info.plist;
+				INFOPLIST_FILE = SwipesShare/SwipesShareInfo.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
