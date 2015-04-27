@@ -217,7 +217,7 @@ static NotificationHandler *sharedObject;
         
         // Check if time is before the evening starts
         if( dailyReminders && numberOfTasksLeftNow > 0 && numberOfTasksLeftNow == numberOfTasksLeftToday){
-            NSString *title = [NSString stringWithFormat:@"You have %lu task%@ left for today. Anything important?",(long)numberOfTasksLeftToday, (numberOfTasksLeftToday == 1) ? @"" : @"s" ];
+            NSString *title = [NSString stringWithFormat:NSLocalizedString(@"You have %lu task(s) left for today. Anything important?", nil),(long)numberOfTasksLeftToday];
             addLocalNotificationBlock(title,[NSDate dateThisOrTheNextDayWithHours:eveningHours minutes:eveningMinutes],@"remind-remaining-tasks");
         }
         
@@ -233,12 +233,12 @@ static NotificationHandler *sharedObject;
         // Check how many tasks is schedule for the next morning and see if it's a weekday
         if( dailyReminders && numberToCheckForMorning <= 1 && dateToCheckForMorning.isTypicallyWorkday){
             // Notify to make a plan from the morning
-            addLocalNotificationBlock(@"Good morning! Start your productive day with a plan.",[dateToCheckForMorning dateAtHours:dayHours minutes:dayMinutes],@"make-a-plan-for-the-day");
+            addLocalNotificationBlock(NSLocalizedString(@"Good morning! Start your productive day with a plan.", nil),[dateToCheckForMorning dateAtHours:dayHours minutes:dayMinutes],@"make-a-plan-for-the-day");
         }
         
         // Check
         if( weeklyReminders && numberOfTasksForMonday <= 1 ){
-            addLocalNotificationBlock(@"Good evening! Start your productive week with a plan tonight.", sundayEvening, @"weekly-plan-reminder");
+            addLocalNotificationBlock(NSLocalizedString(@"Good evening! Start your productive week with a plan tonight.", nil), sundayEvening, @"weekly-plan-reminder");
         }
         
         
@@ -275,7 +275,7 @@ static NotificationHandler *sharedObject;
     
     
     NSSet *categories = [NSSet setWithObjects:oneTaskCategory,batchTasksCategory,nil];
-    NSUInteger types = UIUserNotificationTypeNone|UIUserNotificationTypeBadge|UIUserNotificationTypeAlert|UIUserNotificationTypeSound; // Add badge, sound, or alerts here
+    NSUInteger types = UIUserNotificationTypeBadge|UIUserNotificationTypeAlert|UIUserNotificationTypeSound; // Add badge, sound, or alerts here
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
     return settings;
 }

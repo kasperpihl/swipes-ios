@@ -16,7 +16,7 @@
 #import "SWAUtility.h"
 
 static NSString* const ROW_TYPE_NAME = @"SWATodoCell";
-static NSString* const kNotFirstRun = @"AppleWatchNotFirstRun1";
+static NSString* const kNotFirstRun = @"AppleWatchNotFirstRun";
 static BOOL g_isNotFirstRun = NO;
 
 @interface TodayInterfaceController() <SWAButtonCellDelegate>
