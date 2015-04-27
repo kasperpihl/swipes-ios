@@ -36,6 +36,8 @@
 
 #import "AppDelegate.h"
 
+static NSString * const kFromAppleWatch = @"Apple Watch";
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -165,10 +167,10 @@
             if([identifier isEqualToString:@"Later"]){
                 NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
                 NSDate *date = [[[NSDate date] dateByAddingTimeInterval:laterToday.integerValue] dateToNearest15Minutes];
-                [KPToDo scheduleToDos:toDos forDate:date save:YES];
+                [KPToDo scheduleToDos:toDos forDate:date save:YES from:nil];
             }
             if([identifier isEqualToString:@"Complete"]){
-                [KPToDo completeToDos:toDos save:YES context:nil analytics:NO];
+                [KPToDo completeToDos:toDos save:YES context:nil from:nil];
             }
         }
     }
@@ -274,7 +276,7 @@
     DLog(@"Completing with tempId: %@", tempId);
     NSArray* todos = [KPToDo findByTempId:tempId];
     if (todos) {
-        [KPToDo completeToDos:todos save:YES context:nil analytics:YES];
+        [KPToDo completeToDos:todos save:YES context:nil from:kFromAppleWatch];
         DLog(@"Completing with tempId: %@ ... done", tempId);
     }
 }
@@ -310,18 +312,18 @@
             NSDate* scheduleDate = [userInfo valueForKey:kKeyCmdDate];
             if ((NSDate *)[NSNull null] == scheduleDate)
                 scheduleDate = nil;
-            [KPToDo scheduleToDos:todos forDate:scheduleDate save:YES];
+            [KPToDo scheduleToDos:todos forDate:scheduleDate save:YES from:kFromAppleWatch];
         }
     }
 
     tempId = [userInfo valueForKey:kKeyCmdAdd];
     if (tempId) {
-        [KPToDo addItem:tempId priority:NO tags:nil save:YES from:@"Watch App"];
+        [KPToDo addItem:tempId priority:NO tags:nil save:YES from:kFromAppleWatch];
     }
     
     tempId = [userInfo valueForKey:kKeyCmdError];
     if (tempId) {
-        [UtilityClass sendError:[NSError errorWithDomain:[tempId description] code:801 userInfo:userInfo] type:@"Watch App"];
+        [UtilityClass sendError:[NSError errorWithDomain:[tempId description] code:801 userInfo:userInfo] type:kFromAppleWatch];
     }
     
     reply(replyInfo);

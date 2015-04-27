@@ -348,7 +348,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSManagedObjectContext *localContext = [NSManagedObjectContext MR_context];
         KPToDo *localModel = [model MR_inContext:localContext];
-        [KPToDo completeToDos:@[localModel] save:NO context:localContext analytics:NO];
+        [KPToDo completeToDos:@[localModel] save:NO context:localContext from:@"Today"];
         SavedChangeHandler *changeHandler = [[SavedChangeHandler alloc] init];
         [changeHandler saveContextForSynchronization:localContext];
     });

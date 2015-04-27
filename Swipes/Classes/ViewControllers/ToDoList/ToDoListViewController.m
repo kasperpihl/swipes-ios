@@ -434,7 +434,7 @@
                 }
                 else {
                     if([chosenDate isEarlierThanDate:[NSDate date]]) targetCellType = CellTypeToday;
-                    NSArray *movedItems = [KPToDo scheduleToDos:toDosArray forDate:chosenDate save:YES];
+                    NSArray *movedItems = [KPToDo scheduleToDos:toDosArray forDate:chosenDate save:YES from:@"Swipe"];
                     [self moveItems:movedItems toCellType:targetCellType];
                 }
                 if(button != KPScheduleButtonCancel){
@@ -457,7 +457,7 @@
         }
         case CellTypeToday:
             [kAudio playSoundWithName:@"New state - current.m4a"];
-            movedItems = [KPToDo scheduleToDos:toDosArray forDate:[NSDate date] save:YES];
+            movedItems = [KPToDo scheduleToDos:toDosArray forDate:[NSDate date] save:YES from:@"Swipe"];
             break;
         case CellTypeDone:{
             double currentTime = CACurrentMediaTime();

@@ -211,7 +211,8 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         if(finished){
             [timePicker removeFromSuperview];
             self.timePicker = nil;
-            if(date) [KPToDo scheduleToDos:@[self.model] forDate:date save:YES];
+            if(date)
+                [KPToDo scheduleToDos:@[self.model] forDate:date save:YES from:@"Time picker"];
             [self update];
         }
     }];
@@ -292,7 +293,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                     [KPToDo notifyToDos:@[self.model] onLocation:chosenLocation type:type save:YES];
                 }
                 else{
-                    [KPToDo scheduleToDos:@[self.model] forDate:chosenDate save:YES];
+                    [KPToDo scheduleToDos:@[self.model] forDate:chosenDate save:YES from:@"Swipe"];
                 }
                 [self update];
             }];
@@ -306,10 +307,10 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             return;
         }
         case CellTypeToday:
-            [KPToDo scheduleToDos:@[self.model] forDate:[NSDate date] save:YES];
+            [KPToDo scheduleToDos:@[self.model] forDate:[NSDate date] save:YES from:@"Swipe"];
             break;
         case CellTypeDone:
-            [KPToDo completeToDos:@[self.model] save:YES context:nil analytics:YES];
+            [KPToDo completeToDos:@[self.model] save:YES context:nil from:@"Swipe"];
             break;
         case CellTypeNone:
             break;
@@ -821,7 +822,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
         }
         else {
             // TODO: Fix the edit mode
-            [KPToDo scheduleToDos:@[self.model] forDate:chosenDate save:YES];
+            [KPToDo scheduleToDos:@[self.model] forDate:chosenDate save:YES from:@"Schedule button"];
             //[KPToDo scheduleToDos:@[self.parent.showingModel] forDate:chosenDate save:YES];
             [self.model setRepeatOption:self.model.repeatOptionValue save:YES];
         }

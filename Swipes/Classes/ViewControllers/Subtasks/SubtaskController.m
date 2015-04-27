@@ -230,7 +230,7 @@
 
 #pragma mark SubtaskCellDelegate
 - (void)addedSubtask: ( NSString* )subtask{
-    [self.model addSubtask:subtask save:YES from:@"Input" analytics:YES];
+    [self.model addSubtask:subtask save:YES from:@"Input"];
     [self fullReload];
     [kAudio playSoundWithName:@"Succesful action.m4a"];
     //[self loadData];
@@ -354,7 +354,7 @@
         }
         else if(state == MCSwipeTableViewCellState3){
             [cell setStrikeThrough:NO];
-            [KPToDo scheduleToDos:@[subtask] forDate:nil save:YES];
+            [KPToDo scheduleToDos:@[subtask] forDate:nil save:YES from:@"Swipe"];
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             if([self.delegate respondsToSelector:@selector(didChangeSubtaskController:)])
                 [self.delegate didChangeSubtaskController:self];

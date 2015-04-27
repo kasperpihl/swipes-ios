@@ -8,9 +8,9 @@
 /* Add a new ToDo */
 +(KPToDo*)addItem:(NSString *)item priority:(BOOL)priority tags:(NSArray*)tags save:(BOOL)save from:(NSString*)from;
 /* Schedule ToDo's - The array contains the items that changed state */
-+(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save;
++(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save from:(NSString *)from;
 /* Complete ToDo's - The array contains the items that changed state */
-+(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save context:(NSManagedObjectContext*)context analytics:(BOOL)analytics;
++(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save context:(NSManagedObjectContext*)context from:(NSString *)from;
 /* Delete ToDo's */
 +(void)deleteToDos:(NSArray*)toDos save:(BOOL)save force:(BOOL)force;
 /* Update Tags for ToDo's */
@@ -18,8 +18,7 @@
 /* Start watching for Location */
 +(NSArray*)notifyToDos:(NSArray *)toDoArray onLocation:(CLPlacemark*)location type:(GeoFenceType)type save:(BOOL)save;
 
--(KPToDo*)addSubtask:(NSString*)title save:(BOOL)save from:(NSString*)from analytics:(BOOL)analytics
-;
+-(KPToDo*)addSubtask:(NSString*)title save:(BOOL)save from:(NSString*)from;
 
 -(void)switchPriority;
 
