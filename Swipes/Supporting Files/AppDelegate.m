@@ -326,6 +326,15 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
         [UtilityClass sendError:[NSError errorWithDomain:[tempId description] code:801 userInfo:userInfo] type:kFromAppleWatch];
     }
     
+    tempId = [userInfo valueForKey:kKeyCmdAnalytics];
+    if (tempId) {
+        NSDictionary* data = tempId;
+        if (data[kKeyAnalyticsAction] && data[kKeyAnalyticsCategory]) {
+            [ANALYTICS trackEvent:data[kKeyAnalyticsAction] options:@{ @"From": kFromAppleWatch }];
+            [ANALYTICS trackCategory:data[kKeyAnalyticsCategory] action:data[kKeyAnalyticsAction] label:kFromAppleWatch value:data[kKeyAnalyticsValue]];
+        }
+    }
+    
     reply(replyInfo);
 }
 

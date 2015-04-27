@@ -12,9 +12,12 @@
 #import "SWAIncludes.h"
 #import "SWATodoCell.h"
 #import "SWAButtonCell.h"
+#import "Global.h"
 #import "SWAUtility.h"
 
-static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
+static NSString* const ROW_TYPE_NAME = @"SWATodoCell";
+static NSString* const kNotFirstRun = @"AppleWatchNotFirstRun1";
+static BOOL g_isNotFirstRun = NO;
 
 @interface TodayInterfaceController() <SWAButtonCellDelegate>
 
@@ -35,6 +38,18 @@ static NSString * const ROW_TYPE_NAME = @"SWATodoCell";
 {
     [super awakeWithContext:context];
     _todoTempIds = [NSMutableArray array];
+    
+    g_isNotFirstRun = [USER_DEFAULTS boolForKey:kNotFirstRun];
+    if (!g_isNotFirstRun) {
+        [USER_DEFAULTS setBool:YES forKey:kNotFirstRun];
+        [USER_DEFAULTS synchronize];
+        [WKInterfaceController openParentApplication:@{kKeyCmdAnalytics: @{kKeyAnalyticsCategory: @"Onboarding", kKeyAnalyticsAction: @"Apple Watch Installation"}} reply:^(NSDictionary *replyInfo, NSError *error) {
+            if (error) {
+                [SWAUtility sendErrorToHost:error];
+                DLog(@"Error sending first run analytics %@", error);
+            }
+        }];
+    }
 }
 
 - (void)willActivate
