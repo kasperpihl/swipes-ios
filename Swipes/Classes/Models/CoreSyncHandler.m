@@ -331,6 +331,7 @@
         if(async && force) {
             [UTILITY alertWithTitle:LOCALIZE_STRING(@"New version required") andMessage:LOCALIZE_STRING(@"For sync to work - please update Swipes from the App Store")];
         }
+        DLog(@"self outdated");
         return UIBackgroundFetchResultNoData;
     }
     
@@ -365,8 +366,6 @@
         self._needSync = YES;
         return UIBackgroundFetchResultFailed;
     }
-    
-    DUMPDB;
     
     // when we are using async synchronization the return type doen't matter
     if (async) {
@@ -536,7 +535,7 @@
     }];
 }
 
-- (BOOL)synchronizeWithParseAsync:(BOOL)async
+- (UIBackgroundFetchResult)synchronizeWithParseAsync:(BOOL)async
 {
     self._isSyncing = YES;
     
@@ -604,7 +603,7 @@
     NSString *lastUpdate = [USER_DEFAULTS objectForKey:kLastSyncServerString];
     if (lastUpdate)
         [syncData setObject:lastUpdate forKey:@"lastUpdate"];
-    else {
+    else if (async) {
 #ifndef NOT_APPLICATION
         dispatch_async(dispatch_get_main_queue(), ^{
             [DejalBezelActivityView activityViewForView:[GlobalApp topView] withLabel:LOCALIZE_STRING(@"Synchronizing...")];
@@ -634,7 +633,7 @@
     if(error){
         [UtilityClass sendError:error type:@"Sync JSON prepare parse"];
         [self finalizeSyncWithUserInfo:nil error:error];
-        return NO;
+        return UIBackgroundFetchResultFailed;
     }
     
     
@@ -672,7 +671,7 @@
         }
         self._needSync = YES;
         [self finalizeSyncWithUserInfo:nil error:error];
-        return NO;
+        return UIBackgroundFetchResultFailed;
     }
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
@@ -700,7 +699,7 @@
         }
         [UtilityClass sendError:error type:@"Sync Json Parse Error"];
         [self finalizeSyncWithUserInfo:result error:error];
-        return NO;
+        return UIBackgroundFetchResultFailed;
     }
     //NSLog(@"objects:%@",result);
     
@@ -735,7 +734,7 @@
         [self finalizeSyncWithUserInfo:nil error:nil];
     }];
     
-    return (0 < totalNumberOfObjectsToSave);
+    return (0 < totalNumberOfObjectsToSave) ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultNoData;
 }
 
 #pragma mark - Sync flow helpers

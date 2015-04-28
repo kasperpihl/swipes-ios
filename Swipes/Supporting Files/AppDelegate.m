@@ -100,7 +100,7 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
     
     [NOTIHANDLER registerForPushNotifications];
-   
+    
     [USER_DEFAULTS setBool:[GlobalApp isMailboxInstalled] forKey:@"isMailboxInstalled"];
     [USER_DEFAULTS synchronize];
     [self.window makeKeyAndVisible];
@@ -183,6 +183,7 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 // called on new remote notification while Swipes is running
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler
 {
+    DLog(@"handling remote notification with identifier");
     // TODO add meaningful implementation
     completionHandler();
 }
@@ -206,9 +207,20 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     DLog(@"Error in registration. Error: %@", err);
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    // TODO update
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
+{
+    DLog(@"received remote notification: %@", userInfo);
+    UIBackgroundFetchResult result = UIBackgroundFetchResultNoData;
+    NSDictionary* aps = userInfo[@"aps"];
+    if (aps && aps[@"content-available"]) {
+        DLog(@"going to sync");
+        result = [KPCORE synchronizeForce:YES async:NO];
+        DLog(@"sync done, updating local notifications");
+        [NOTIHANDLER updateLocalNotifications];
+    }
     [PFPush handlePush:userInfo];
+    DLog(@"returning: %d", result);
+    handler(result);
 }
 
 -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
