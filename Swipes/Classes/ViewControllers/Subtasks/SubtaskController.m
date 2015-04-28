@@ -318,7 +318,7 @@
                 }
                 self.lastCompletionTime = currentTime;
                 [kAudio playSoundWithName:[NSString stringWithFormat:@"Task composer%li.m4a",(long)self.numberOfCompletions]];
-                [KPToDo completeToDos:@[subtask] save:YES context:nil analytics:YES];
+                [KPToDo completeToDos:@[subtask] save:YES context:nil from:@"Swipe"];
                 if(self.expanded){
                     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 }

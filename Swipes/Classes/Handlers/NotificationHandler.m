@@ -280,6 +280,21 @@ static NotificationHandler *sharedObject;
     return settings;
 }
 
+- (void)registerForPushNotifications
+{
+#ifndef NOT_APPLICATION
+    NSUInteger types = UIUserNotificationTypeBadge | UIUserNotificationTypeAlert |UIUserNotificationTypeSound;
+    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
+    else {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
+    }
+#endif
+}
+
 - (BOOL) pushNotificationOnOrOff
 {
 #ifndef NOT_APPLICATION

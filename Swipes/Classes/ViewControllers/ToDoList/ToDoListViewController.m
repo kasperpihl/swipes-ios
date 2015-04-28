@@ -472,7 +472,7 @@
             self.lastCompletionTime = currentTime;
             if(!([self.state isEqualToString:@"today"] && self.itemHandler.itemCounter == toDosArray.count))
                 [kAudio playSoundWithName:[NSString stringWithFormat:@"Task composer%li.m4a",(long)self.numberOfCompletions]];
-            movedItems = [KPToDo completeToDos:toDosArray save:YES context:nil analytics:YES];
+            movedItems = [KPToDo completeToDos:toDosArray save:YES context:nil from:@"Swipe"];
            
 
             break;

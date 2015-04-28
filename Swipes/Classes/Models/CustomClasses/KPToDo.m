@@ -89,13 +89,13 @@
         [toDo scheduleForDate:date];
         [movedToDos addObject:toDo];
         if (from) {
-            [ANALYTICS trackEvent:@"Scheduled Task" options:@{@"Length":@(toDo.title.length), @"From": from }];
         }
     }
     if (save)
         [KPToDo saveToSync];
     [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
     if (from) {
+        [ANALYTICS trackEvent:@"Scheduled Tasks" options:@{@"Number of Tasks":@(toDoArray.count), @"From": from }];
         [ANALYTICS trackCategory:@"Tasks" action:@"Scheduled" label:from value:@(toDoArray.count)];
     }
     return [movedToDos copy];

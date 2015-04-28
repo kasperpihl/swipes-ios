@@ -50,6 +50,7 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 #endif
     
 #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
+    
     NSString* const CONSUMER_KEY = @"swipes";
     NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6";
     [ENSession setSharedSessionConsumerKey:CONSUMER_KEY
@@ -97,6 +98,8 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
+    
+    [NOTIHANDLER registerForPushNotifications];
    
     [USER_DEFAULTS setBool:[GlobalApp isMailboxInstalled] forKey:@"isMailboxInstalled"];
     [USER_DEFAULTS synchronize];
@@ -177,21 +180,34 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     completionHandler();
 }
 
+// called on new remote notification while Swipes is running
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler
 {
+    // TODO add meaningful implementation
     completionHandler();
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
+    // TODO handle properly our registration
+    
     // Store the deviceToken in the current Installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
+//    id value = [currentInstallation valueForKey:@"channels"];
+//    if (!value) {
+//        [currentInstallation addUniqueObject:@"Development" forKey:@"channels"];
+//    }
     [currentInstallation saveInBackground];
-    
+}
+
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
+{
+    DLog(@"Error in registration. Error: %@", err);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    // TODO update
     [PFPush handlePush:userInfo];
 }
 
