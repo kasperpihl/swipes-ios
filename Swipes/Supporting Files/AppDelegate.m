@@ -190,14 +190,20 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    // TODO handle properly our registration
-    
     // Store the deviceToken in the current Installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
-    id value = [currentInstallation valueForKey:@"channels"];
-    if (!value) {
-        [currentInstallation addUniqueObject:@"Development" forKey:@"channels"];
+    NSString* userId = kCurrent.objectId;
+    if (userId) {
+        NSArray* channels = currentInstallation.channels;
+        if (![channels containsObject:userId]) {
+            [currentInstallation addUniqueObject:userId forKey:@"channels"];
+        }
+#ifdef DEBUG
+        if (![channels containsObject:@"Development"]) {
+            [currentInstallation addUniqueObject:@"Development" forKey:@"channels"];
+        }
+#endif
     }
     [currentInstallation saveInBackground];
 }
@@ -213,10 +219,13 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     UIBackgroundFetchResult result = UIBackgroundFetchResultNoData;
     NSDictionary* aps = userInfo[@"aps"];
     if (aps && aps[@"content-available"]) {
-        DLog(@"going to sync");
-        result = [KPCORE synchronizeForce:YES async:NO];
-        DLog(@"sync done, updating local notifications");
-        [NOTIHANDLER updateLocalNotifications];
+        NSString* syncId = userInfo[@"syncId"];
+        if (!syncId || (![syncId isEqualToString:[USER_DEFAULTS objectForKey:kLastSyncId]])) {
+            DLog(@"going to sync");
+            result = [KPCORE synchronizeForce:YES async:application.applicationState != UIApplicationStateBackground];
+            DLog(@"sync done, updating local notifications");
+            [NOTIHANDLER updateLocalNotifications];
+        }
     }
     [PFPush handlePush:userInfo];
     DLog(@"returning: %lu", result);

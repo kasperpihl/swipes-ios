@@ -8,9 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define APP_StartBackgroundHandler @"APP_StartBackgroundHandler"
-#define APP_EndBackgroundHandler @"APP_EndBackgroundHandler"
-
 @interface GlobalApp : NSObject
 + (BOOL)isEvernoteInstalled;
 + (BOOL)isMailboxInstalled;
@@ -26,7 +23,7 @@
 + (UIView *)topView;
 + (UIViewController*)topViewControllerWithRootViewController:(UIViewController*)rootViewController;
 
-- (void)startBackgroundHandler:(NSNotification *)notification;
-- (void)endBackgroundHandler:(NSNotification *)notification;
+- (void)startBackgroundHandler;
+- (void)endBackgroundHandler;
 
 @end

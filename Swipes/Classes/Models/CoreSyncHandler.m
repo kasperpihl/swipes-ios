@@ -58,6 +58,7 @@
 @property (nonatomic, assign) BOOL _didHardSync;
 @property (nonatomic, assign) BOOL _showSuccessOnce;
 @property (nonatomic, assign) BOOL showErrorOnce;
+@property (nonatomic, assign) BOOL isAsync;
 
 @property (nonatomic) dispatch_queue_t isolationQueue;
 
@@ -406,7 +407,7 @@
     }
     if (self._needSync) {
         self._isSyncing = NO;
-        [self synchronizeForce:YES async:YES];
+        [self synchronizeForce:YES async:_isAsync];
         return;
     }
     self._isSyncing = NO;
@@ -486,6 +487,9 @@
             });
         }];
     }
+
+    if (_isAsync)
+        [self endBackgroundHandler];
 }
 
 - (void)clearCache{
@@ -532,6 +536,7 @@
 
 - (UIBackgroundFetchResult)synchronizeWithParseAsync:(BOOL)async
 {
+    _isAsync = async;
     UIBackgroundFetchResult syncResult = UIBackgroundFetchResultNoData;
     self._isSyncing = YES;
     
@@ -944,12 +949,16 @@
 
 - (void)startBackgroundHandler
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:APP_StartBackgroundHandler object:nil];
+#ifndef NOT_APPLICATION
+    [[GlobalApp sharedInstance] startBackgroundHandler];
+#endif
 }
 
 - (void)endBackgroundHandler
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:APP_EndBackgroundHandler object:nil];
+#ifndef NOT_APPLICATION
+    [[GlobalApp sharedInstance] endBackgroundHandler];
+#endif
 }
 
 - (void)clearAndDeleteData
