@@ -34,11 +34,6 @@
 #define kUpdateLimit 200
 #define kBatchSize 50
 
-#define kTMPUpdateObjects @"tmpUpdateObjects"
-#define kUpdateObjects @"updateObjects"
-#define kLastSyncLocalDate @"lastSyncLocalDate"
-#define kLastSyncServerString @"lastSync"
-
 #define kDeleteObjectsKey @"deleteObjects"
 
 #ifdef DEBUG
@@ -537,6 +532,7 @@
 
 - (UIBackgroundFetchResult)synchronizeWithParseAsync:(BOOL)async
 {
+    UIBackgroundFetchResult syncResult = UIBackgroundFetchResultNoData;
     self._isSyncing = YES;
     
     if (async)
@@ -547,6 +543,8 @@
     NSPredicate *newObjectsPredicate = [NSPredicate predicateWithFormat:@"(objectId = nil)"];
     NSArray *newObjects = [KPParseObject MR_findAllWithPredicate:newObjectsPredicate inContext:context];
     NSInteger numberOfNewObjects = newObjects.count;
+    if (0 < numberOfNewObjects)
+        syncResult = UIBackgroundFetchResultNewData;
     NSInteger totalNumberOfObjectsToSave = numberOfNewObjects;
     
     __block NSMutableDictionary *updateObjectsToServer = [NSMutableDictionary dictionary];
@@ -588,6 +586,10 @@
         }
     }
     
+    NSString* syncId = [UtilityClass generateIdWithLength:6];
+    [USER_DEFAULTS setObject:syncId forKey:kLastSyncId];
+    [USER_DEFAULTS synchronize];
+    
     NSMutableDictionary *syncData = [@{
                                        @"changesOnly" : @YES,
                                        @"sessionToken": [kCurrent sessionToken],
@@ -595,6 +597,7 @@
                                        @"hasMoreToSave": @(self._needSync),
                                        @"sendLogs": @(NO),
                                        @"batchSize": @(kBatchSize),
+                                       @"syncId": syncId,
                                        @"version": [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]}
                                      mutableCopy];
 
@@ -707,6 +710,9 @@
     NSArray *tags = [result objectForKey:@"Tag"] ? [result objectForKey:@"Tag"] : @[];
     NSArray *tasks = [result objectForKey:@"ToDo"] ? [result objectForKey:@"ToDo"] : @[];
     NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
+    if (0 < allObjects.count)
+        syncResult = UIBackgroundFetchResultNewData;
+    
     lastUpdate = [result objectForKey:@"updateTime"];
     [result objectForKey:@"serverTime"];
     
@@ -734,7 +740,7 @@
         [self finalizeSyncWithUserInfo:nil error:nil];
     }];
     
-    return (0 < totalNumberOfObjectsToSave) ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultNoData;
+    return syncResult;
 }
 
 #pragma mark - Sync flow helpers

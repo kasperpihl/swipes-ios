@@ -195,10 +195,10 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     // Store the deviceToken in the current Installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
-//    id value = [currentInstallation valueForKey:@"channels"];
-//    if (!value) {
-//        [currentInstallation addUniqueObject:@"Development" forKey:@"channels"];
-//    }
+    id value = [currentInstallation valueForKey:@"channels"];
+    if (!value) {
+        [currentInstallation addUniqueObject:@"Development" forKey:@"channels"];
+    }
     [currentInstallation saveInBackground];
 }
 
@@ -219,7 +219,7 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
         [NOTIHANDLER updateLocalNotifications];
     }
     [PFPush handlePush:userInfo];
-    DLog(@"returning: %d", result);
+    DLog(@"returning: %lu", result);
     handler(result);
 }
 
