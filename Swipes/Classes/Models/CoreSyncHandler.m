@@ -16,6 +16,7 @@
 #import "Reachability.h"
 #import "AnalyticsHandler.h"
 #import "UserHandler.h"
+#import "NotificationHandler.h"
 
 #ifndef NOT_APPLICATION
 #import "RootViewController.h"
@@ -59,6 +60,7 @@
 @property (nonatomic, assign) BOOL _showSuccessOnce;
 @property (nonatomic, assign) BOOL showErrorOnce;
 @property (nonatomic, assign) BOOL isAsync;
+@property (nonatomic, assign) BOOL isShowingActivity;
 
 @property (nonatomic) dispatch_queue_t isolationQueue;
 
@@ -387,7 +389,11 @@
 -(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error {
 #ifndef NOT_APPLICATION
     dispatch_async(dispatch_get_main_queue(), ^{
-        [DejalBezelActivityView removeViewAnimated:YES];
+        if (self.isShowingActivity) {
+            self.isShowingActivity = NO;
+            [DejalBezelActivityView removeViewAnimated:YES];
+            [NOTIHANDLER registerForNotifications];
+        }
     });
 #endif
     if ( error ){
@@ -614,7 +620,8 @@
     else if (async) {
 #ifndef NOT_APPLICATION
         dispatch_async(dispatch_get_main_queue(), ^{
-            [DejalBezelActivityView activityViewForView:[GlobalApp topView] withLabel:LOCALIZE_STRING(@"Synchronizing...")];
+            [DejalBezelActivityView activityViewForView:[GlobalApp topView] withLabel:NSLocalizedString(@"Synchronizing...", nil)];
+            self.isShowingActivity = YES;
         });
 #endif
     }

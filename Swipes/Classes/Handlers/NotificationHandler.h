@@ -28,6 +28,6 @@ typedef enum {
 -(StartLocationResult)startLocationServices;
 -(void)stopLocationServices;
 -(void)clearLocalNotifications;
--(void)registerForPushNotifications;
+-(void)registerForNotifications;
 
 @end

@@ -72,6 +72,9 @@
 "Good evening! Start your productive week with a plan tonight." = "Good evening! Start your productive week with a plan tonight.";
 "You have %lu task(s) left for today. Anything important?" = "You have %lu task(s) left for today. Anything important?";
 
+"Better experience!" = "Better experience!";
+"For a better experience we need your permission to send notifications when tasks are due. Also used for faster syncronization between devices." = "For a better experience we need your permission to send notifications when tasks are due. Also used for faster syncronization between devices.";
+
 /*
  Small common expressions
  */

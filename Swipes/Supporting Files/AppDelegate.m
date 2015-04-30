@@ -99,8 +99,6 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
     
-    [NOTIHANDLER registerForPushNotifications];
-    
     [USER_DEFAULTS setBool:[GlobalApp isMailboxInstalled] forKey:@"isMailboxInstalled"];
     [USER_DEFAULTS synchronize];
     [self.window makeKeyAndVisible];
@@ -191,10 +189,12 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     // Store the deviceToken in the current Installation and save it to Parse.
+    DLog(@"Received push device token");
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
     NSString* userId = kCurrent.objectId;
     if (userId) {
+        DLog(@"has userId");
         NSArray* channels = currentInstallation.channels;
         if (![channels containsObject:userId]) {
             [currentInstallation addUniqueObject:userId forKey:@"channels"];
@@ -228,7 +228,7 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
         }
     }
     [PFPush handlePush:userInfo];
-    DLog(@"returning: %lu", result);
+    DLog(@"returning: %lu", (unsigned long)result);
     handler(result);
 }
 

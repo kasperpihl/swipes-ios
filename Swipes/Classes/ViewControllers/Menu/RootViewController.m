@@ -6,6 +6,11 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
+#import <Parse/Parse.h>
+#import <EventKit/EventKit.h>
+#import <MessageUI/MessageUI.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
+#import <MediaPlayer/MediaPlayer.h>
 #import "RootViewController.h"
 #import "FacebookCommunicator.h"
 #import "URLHandler.h"
@@ -31,8 +36,6 @@
 #import "KPOverlay.h"
 
 #import "KPToDo.h"
-#import <MessageUI/MessageUI.h>
-#import <ParseFacebookUtils/PFFacebookUtils.h>
 
 #import "PaymentHandler.h"
 #import "KPTopClock.h"
@@ -45,10 +48,8 @@
 #import "UserHandler.h"
 #import "ShareViewController.h"
 #import "AwesomeMenu.h"
-#import <EventKit/EventKit.h>
 
 #import "Intercom.h"
-#import <MediaPlayer/MediaPlayer.h>
 
 @interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate, HintHandlerDelegate,YTPlayerViewDelegate>
 
@@ -134,6 +135,7 @@
         }
         [ANALYTICS checkForUpdatesOnIdentity];
         [self changeToMenu:KPMenuHome animated:YES];
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
     };
     if([USER_DEFAULTS boolForKey:isTryingString]){
@@ -205,6 +207,12 @@ static RootViewController *sharedObject;
 
 -(void)logOut
 {
+    PFInstallation* currentInstallation = [PFInstallation currentInstallation];
+    currentInstallation.channels = @[];
+    [currentInstallation saveInBackground];
+    [USER_DEFAULTS removeObjectForKey:kLastSyncServerString];
+    [USER_DEFAULTS synchronize];
+
     [PFUser logOut];
     [[CoreSyncHandler sharedInstance] clearAndDeleteData];
     [kUserHandler didLogout];

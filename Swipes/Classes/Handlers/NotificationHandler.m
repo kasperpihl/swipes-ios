@@ -280,34 +280,59 @@ static NotificationHandler *sharedObject;
     return settings;
 }
 
-- (void)registerForPushNotifications
+- (void)doRegisterForNotifications
 {
 #ifndef NOT_APPLICATION
-    NSUInteger types = UIUserNotificationTypeBadge | UIUserNotificationTypeAlert |UIUserNotificationTypeSound;
+    DLog(@"Registering for notifications");
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+        UIUserNotificationSettings *settings = [self settingsWithCategories];
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     }
     else {
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound];
+    }
+    
+//    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
+//        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+//        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+//        [[UIApplication sharedApplication] registerForRemoteNotifications];
+//    }
+//    else {
+//        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
+//    }
+#endif
+}
+
+- (void)registerForNotifications
+{
+#ifndef NOT_APPLICATION
+    if(![USER_DEFAULTS boolForKey:@"hasAskedNotificationPermissions"]){
+        [UTILITY alertWithTitle:NSLocalizedString(@"Better experience!", nil) andMessage:NSLocalizedString(@"For a better experience we need your permission to send notifications when tasks are due. Also used for faster syncronization between devices.", nil) buttonTitles:@[NSLocalizedString(@"Okay", nil)] block:^(NSInteger number, NSError *error) {
+            [self doRegisterForNotifications];
+            [USER_DEFAULTS setBool:YES forKey:@"hasAskedNotificationPermissions"];
+            [USER_DEFAULTS synchronize];
+        }];
+    }
+    else {
+        [self doRegisterForNotifications];
     }
 #endif
 }
 
-- (BOOL) pushNotificationOnOrOff
-{
-#ifndef NOT_APPLICATION
-    if ([UIApplication instancesRespondToSelector:@selector(isRegisteredForRemoteNotifications)]) {
-        return ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
-    } else {
-        UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
-        return (types & UIRemoteNotificationTypeAlert);
-    }
-#else
-    return NO;
-#endif
-}
+//- (BOOL) pushNotificationOnOrOff
+//{
+//#ifndef NOT_APPLICATION
+//    if ([UIApplication instancesRespondToSelector:@selector(isRegisteredForRemoteNotifications)]) {
+//        return ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]);
+//    } else {
+//        UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+//        return (types & UIRemoteNotificationTypeAlert);
+//    }
+//#else
+//    return NO;
+//#endif
+//}
 
 
 -(void)scheduleNotifications:(NSArray*)notifications{
@@ -315,49 +340,50 @@ static NotificationHandler *sharedObject;
         return;
 
 #ifndef NOT_APPLICATION
+    [self registerForNotifications];
     UIApplication *app = [UIApplication sharedApplication];
-    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
-        UIUserNotificationSettings *currentSettings = [app currentUserNotificationSettings];
-        BOOL userNotifications = NO;
-        BOOL remoteNotifications = NO;
-        
-        if ( (currentSettings.types & UIUserNotificationTypeAlert) != UIUserNotificationTypeAlert && ![USER_DEFAULTS boolForKey:@"hasAddedCategories"]){
-            userNotifications = YES;
-        }
-        
-        if([self pushNotificationOnOrOff] && ![USER_DEFAULTS boolForKey:@"hasAddedRemoteNotification"])
-            remoteNotifications = YES;
-        
-        if(userNotifications | remoteNotifications){
-            voidBlock registerBlock = ^{
-                if(userNotifications){
-                    UIUserNotificationSettings *settings = [self settingsWithCategories];
-                    [app registerUserNotificationSettings:settings];
-                    [USER_DEFAULTS setBool:YES forKey:@"hasAddedCategories"];
-                    
-                }
-                if(remoteNotifications){
-                    [USER_DEFAULTS setBool:YES forKey:@"hasAddedRemoteNotification"];
-                }
-                
-                [USER_DEFAULTS setBool:YES forKey:@"hasAskedNotificationPermissions"];
-                [USER_DEFAULTS synchronize];
-            };
-            
-            if(![USER_DEFAULTS boolForKey:@"hasAskedNotificationPermissions"]){
-                [UTILITY alertWithTitle:@"Better experience!" andMessage:@"For a better experience we need your permission to send notifications when tasks are due." buttonTitles:@[@"Okay"] block:^(NSInteger number, NSError *error) {
-                    registerBlock();
-                }];
-            }
-            else{
-                registerBlock();
-            }
-            if(userNotifications)
-                return;
-        }
-        
-        
-    }
+//    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
+//        UIUserNotificationSettings *currentSettings = [app currentUserNotificationSettings];
+//        BOOL userNotifications = NO;
+//        BOOL remoteNotifications = NO;
+//        
+//        if ( (currentSettings.types & UIUserNotificationTypeAlert) != UIUserNotificationTypeAlert && ![USER_DEFAULTS boolForKey:@"hasAddedCategories"]){
+//            userNotifications = YES;
+//        }
+//        
+//        if([self pushNotificationOnOrOff] && ![USER_DEFAULTS boolForKey:@"hasAddedRemoteNotification"])
+//            remoteNotifications = YES;
+//        
+//        if(userNotifications | remoteNotifications){
+//            voidBlock registerBlock = ^{
+//                if(userNotifications){
+//                    UIUserNotificationSettings *settings = [self settingsWithCategories];
+//                    [app registerUserNotificationSettings:settings];
+//                    [USER_DEFAULTS setBool:YES forKey:@"hasAddedCategories"];
+//                    
+//                }
+//                if(remoteNotifications){
+//                    [USER_DEFAULTS setBool:YES forKey:@"hasAddedRemoteNotification"];
+//                }
+//                
+//                [USER_DEFAULTS setBool:YES forKey:@"hasAskedNotificationPermissions"];
+//                [USER_DEFAULTS synchronize];
+//            };
+//            
+//            if(![USER_DEFAULTS boolForKey:@"hasAskedNotificationPermissions"]){
+//                [UTILITY alertWithTitle:@"Better experience!" andMessage:@"For a better experience we need your permission to send notifications when tasks are due." buttonTitles:@[@"Okay"] block:^(NSInteger number, NSError *error) {
+//                    registerBlock();
+//                }];
+//            }
+//            else{
+//                registerBlock();
+//            }
+//            if(userNotifications)
+//                return;
+//        }
+//        
+//        
+//    }
     for(UILocalNotification *notification in notifications){
         [app scheduleLocalNotification:notification];
     }
