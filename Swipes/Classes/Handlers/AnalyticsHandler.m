@@ -152,11 +152,11 @@ static AnalyticsHandler *sharedObject;
         gaUpdate = YES;
         shouldUpdate = YES;
         [currentValues setObject:userId forKey:@"userId"];
-        [tracker set:@"&uid"
-               value:userId];
     }
-    
-    
+    if(userId){
+        [tracker set:@"&uid"
+           value:userId];
+    }
     
     // Email Checking
     NSString *currentEmail = [currentValues objectForKey:@"email"];
