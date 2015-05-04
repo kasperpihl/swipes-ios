@@ -256,7 +256,7 @@ static NSDictionary* kErrorCodes;
     NSArray* subtasks = [self arrayFromQuery:query withPrefix:kSwipesParamSubtask];
     if (subtasks) {
         for (NSString *subtaskTitle in subtasks) {
-            [todo addSubtask:subtaskTitle save:NO from:kFromURLScheme analytics:YES];
+            [todo addSubtask:subtaskTitle save:NO from:kFromURLScheme];
         }
     }
     

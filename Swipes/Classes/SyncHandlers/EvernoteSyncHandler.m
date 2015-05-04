@@ -31,9 +31,10 @@
 
 #define kFetchChangesTimeout 30
 
-NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
-NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
-NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
+static NSString * const kEvernoteUpdatedAtKey = @"EvernoteUpdatedAt";
+static NSString * const kEvernoteGuidConveted = @"EvernoteGuidConverted";
+static NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
+static NSString * const kFromEvernote = @"Evernote";
 
 @interface EvernoteSyncHandler () <EvernoteViewDelegate>
 
@@ -66,7 +67,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
         }
         if(title.length > kTitleMaxLength)
             title = [title substringToIndex:kTitleMaxLength];
-        KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO from:@"Evernote"];
+        KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO from:kFromEvernote];
         [newToDo attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:note.noteRef] sync:YES from:@"swipes-tag"];
         if (createdTasks) {
             [createdTasks addObject:newToDo.tempId];
@@ -167,7 +168,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
             // If not, uncomplete in Swipes
             else{
                 DLog(@"uncompleting subtask");
-                [KPToDo scheduleToDos:@[subtask] forDate:nil save:NO];
+                [KPToDo scheduleToDos:@[subtask] forDate:nil save:NO from:kFromEvernote];
                 updated = YES;
             }
         }
@@ -182,7 +183,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
             // If not, override in Swipes
             else{
                 DLog(@"completing subtask");
-                [KPToDo completeToDos:@[ subtask ] save:NO context:nil analytics:YES];
+                [KPToDo completeToDos:@[ subtask ] save:NO context:nil from:kFromEvernote];
                 updated = YES;
             }
         }
@@ -265,7 +266,7 @@ NSString * const kEvernoteNoteRefConveted = @"EvernoteNoteRefConverted";
         
         if ( !matchingSubtask ){
             //NSLog(@"creating subtask from Evernote");
-            matchingSubtask = [parentToDo addSubtask:evernoteToDo.title save:YES from:@"Evernote" analytics:NO];
+            matchingSubtask = [parentToDo addSubtask:evernoteToDo.title save:YES from:nil];
             matchingSubtask.origin = EVERNOTE_SERVICE;
             matchingSubtask.originIdentifier = evernoteToDo.title;
             updated = YES;

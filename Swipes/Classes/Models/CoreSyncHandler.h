@@ -14,6 +14,8 @@
 #define kUpdateObjects @"updateObjects"
 #define kLastSyncLocalDate @"lastSyncLocalDate"
 #define kLastSyncServerString @"lastSync"
+#define kLastSyncId @"lastSyncId"
+
 #define KPCORE [CoreSyncHandler sharedInstance]
 
 @protocol SyncDelegate <NSObject>

@@ -77,7 +77,7 @@
                                   }.mutableCopy];
         }
         if ([GlobalApp isCloudMagicInstalled]) {
-            [cellInfo addObject:@{kKeyTitle: LOCALIZE_STRING(@"Cloud Magic"),
+            [cellInfo addObject:@{kKeyTitle: LOCALIZE_STRING(@"CloudMagic"),
                                   kKeyCellType: @(kIntegrationCellTypeCheck),
                                   kKeyIsOn: @(openType == MailOpenTypeCloudMagic),
                                   kKeyIcon: @"integrationCloudMagic",

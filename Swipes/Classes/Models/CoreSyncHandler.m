@@ -16,6 +16,7 @@
 #import "Reachability.h"
 #import "AnalyticsHandler.h"
 #import "UserHandler.h"
+#import "NotificationHandler.h"
 
 #ifndef NOT_APPLICATION
 #import "RootViewController.h"
@@ -33,11 +34,6 @@
 #define kSyncTime 3
 #define kUpdateLimit 200
 #define kBatchSize 50
-
-#define kTMPUpdateObjects @"tmpUpdateObjects"
-#define kUpdateObjects @"updateObjects"
-#define kLastSyncLocalDate @"lastSyncLocalDate"
-#define kLastSyncServerString @"lastSync"
 
 #define kDeleteObjectsKey @"deleteObjects"
 
@@ -63,6 +59,8 @@
 @property (nonatomic, assign) BOOL _didHardSync;
 @property (nonatomic, assign) BOOL _showSuccessOnce;
 @property (nonatomic, assign) BOOL showErrorOnce;
+@property (nonatomic, assign) BOOL isAsync;
+@property (nonatomic, assign) BOOL isShowingActivity;
 
 @property (nonatomic) dispatch_queue_t isolationQueue;
 
@@ -331,6 +329,7 @@
         if(async && force) {
             [UTILITY alertWithTitle:LOCALIZE_STRING(@"New version required") andMessage:LOCALIZE_STRING(@"For sync to work - please update Swipes from the App Store")];
         }
+        DLog(@"self outdated");
         return UIBackgroundFetchResultNoData;
     }
     
@@ -366,8 +365,6 @@
         return UIBackgroundFetchResultFailed;
     }
     
-    DUMPDB;
-    
     // when we are using async synchronization the return type doen't matter
     if (async) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -392,7 +389,11 @@
 -(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error {
 #ifndef NOT_APPLICATION
     dispatch_async(dispatch_get_main_queue(), ^{
-        [DejalBezelActivityView removeViewAnimated:YES];
+        if (self.isShowingActivity) {
+            self.isShowingActivity = NO;
+            [DejalBezelActivityView removeViewAnimated:YES];
+            [NOTIHANDLER registerForNotifications];
+        }
     });
 #endif
     if ( error ){
@@ -412,7 +413,7 @@
     }
     if (self._needSync) {
         self._isSyncing = NO;
-        [self synchronizeForce:YES async:YES];
+        [self synchronizeForce:YES async:_isAsync];
         return;
     }
     self._isSyncing = NO;
@@ -492,6 +493,9 @@
             });
         }];
     }
+
+    if (_isAsync)
+        [self endBackgroundHandler];
 }
 
 - (void)clearCache{
@@ -536,8 +540,10 @@
     }];
 }
 
-- (BOOL)synchronizeWithParseAsync:(BOOL)async
+- (UIBackgroundFetchResult)synchronizeWithParseAsync:(BOOL)async
 {
+    _isAsync = async;
+    UIBackgroundFetchResult syncResult = UIBackgroundFetchResultNoData;
     self._isSyncing = YES;
     
     if (async)
@@ -548,6 +554,8 @@
     NSPredicate *newObjectsPredicate = [NSPredicate predicateWithFormat:@"(objectId = nil)"];
     NSArray *newObjects = [KPParseObject MR_findAllWithPredicate:newObjectsPredicate inContext:context];
     NSInteger numberOfNewObjects = newObjects.count;
+    if (0 < numberOfNewObjects)
+        syncResult = UIBackgroundFetchResultNewData;
     NSInteger totalNumberOfObjectsToSave = numberOfNewObjects;
     
     __block NSMutableDictionary *updateObjectsToServer = [NSMutableDictionary dictionary];
@@ -589,6 +597,10 @@
         }
     }
     
+    NSString* syncId = [UtilityClass generateIdWithLength:6];
+    [USER_DEFAULTS setObject:syncId forKey:kLastSyncId];
+    [USER_DEFAULTS synchronize];
+    
     NSMutableDictionary *syncData = [@{
                                        @"changesOnly" : @YES,
                                        @"sessionToken": [kCurrent sessionToken],
@@ -596,6 +608,7 @@
                                        @"hasMoreToSave": @(self._needSync),
                                        @"sendLogs": @(NO),
                                        @"batchSize": @(kBatchSize),
+                                       @"syncId": syncId,
                                        @"version": [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]}
                                      mutableCopy];
 
@@ -604,10 +617,11 @@
     NSString *lastUpdate = [USER_DEFAULTS objectForKey:kLastSyncServerString];
     if (lastUpdate)
         [syncData setObject:lastUpdate forKey:@"lastUpdate"];
-    else {
+    else if (async) {
 #ifndef NOT_APPLICATION
         dispatch_async(dispatch_get_main_queue(), ^{
-            [DejalBezelActivityView activityViewForView:[GlobalApp topView] withLabel:LOCALIZE_STRING(@"Synchronizing...")];
+            [DejalBezelActivityView activityViewForView:[GlobalApp topView] withLabel:NSLocalizedString(@"Synchronizing...", nil)];
+            self.isShowingActivity = YES;
         });
 #endif
     }
@@ -634,7 +648,7 @@
     if(error){
         [UtilityClass sendError:error type:@"Sync JSON prepare parse"];
         [self finalizeSyncWithUserInfo:nil error:error];
-        return NO;
+        return UIBackgroundFetchResultFailed;
     }
     
     
@@ -672,7 +686,7 @@
         }
         self._needSync = YES;
         [self finalizeSyncWithUserInfo:nil error:error];
-        return NO;
+        return UIBackgroundFetchResultFailed;
     }
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
@@ -700,7 +714,7 @@
         }
         [UtilityClass sendError:error type:@"Sync Json Parse Error"];
         [self finalizeSyncWithUserInfo:result error:error];
-        return NO;
+        return UIBackgroundFetchResultFailed;
     }
     //NSLog(@"objects:%@",result);
     
@@ -708,6 +722,9 @@
     NSArray *tags = [result objectForKey:@"Tag"] ? [result objectForKey:@"Tag"] : @[];
     NSArray *tasks = [result objectForKey:@"ToDo"] ? [result objectForKey:@"ToDo"] : @[];
     NSArray *allObjects = [tags arrayByAddingObjectsFromArray:tasks];
+    if (0 < allObjects.count)
+        syncResult = UIBackgroundFetchResultNewData;
+    
     lastUpdate = [result objectForKey:@"updateTime"];
     [result objectForKey:@"serverTime"];
     
@@ -735,7 +752,7 @@
         [self finalizeSyncWithUserInfo:nil error:nil];
     }];
     
-    return (0 < totalNumberOfObjectsToSave);
+    return syncResult;
 }
 
 #pragma mark - Sync flow helpers
@@ -939,12 +956,16 @@
 
 - (void)startBackgroundHandler
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:APP_StartBackgroundHandler object:nil];
+#ifndef NOT_APPLICATION
+    [[GlobalApp sharedInstance] startBackgroundHandler];
+#endif
 }
 
 - (void)endBackgroundHandler
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:APP_EndBackgroundHandler object:nil];
+#ifndef NOT_APPLICATION
+    [[GlobalApp sharedInstance] endBackgroundHandler];
+#endif
 }
 
 - (void)clearAndDeleteData

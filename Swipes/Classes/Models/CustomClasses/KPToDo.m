@@ -65,7 +65,7 @@
     return newToDo;
 }
 
--(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save from:(NSString *)from analytics:(BOOL)analytics
+-(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save from:(NSString *)from
 {
     KPToDo *subTask = [KPToDo newObjectInContext:[self managedObjectContext]];
     subTask.title = title;
@@ -75,57 +75,59 @@
     if( save )
         [KPToDo saveToSync];
     
-    if( from && analytics){
+    if (from) {
         [ANALYTICS trackEvent:@"Added Action Step" options:@{@"Length":@(title.length), @"Total Action Steps on Task": @(self.subtasks.count), @"From": from}];
         [ANALYTICS trackCategory:@"Action Steps" action:@"Added" label:from value:@(title.length)];
     }
     return subTask;
 }
 
-+(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save
++(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save from:(NSString *)from
 {
     NSMutableArray *movedToDos = [NSMutableArray array];
     for(KPToDo *toDo in toDoArray){
-        BOOL movedToDo = [toDo scheduleForDate:date];
-        if(movedToDo)
-            [movedToDos addObject:toDo];
+        [toDo scheduleForDate:date];
+        [movedToDos addObject:toDo];
+        if (from) {
+        }
     }
-    if(save)
+    if (save)
         [KPToDo saveToSync];
     [[NSNotificationCenter defaultCenter] postNotificationName:NH_UpdateLocalNotifications object:nil];
+    if (from) {
+        [ANALYTICS trackEvent:@"Scheduled Tasks" options:@{@"Number of Tasks":@(toDoArray.count), @"From": from }];
+        [ANALYTICS trackCategory:@"Tasks" action:@"Scheduled" label:from value:@(toDoArray.count)];
+    }
     return [movedToDos copy];
 }
 
-+(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save context:(NSManagedObjectContext*)context analytics:(BOOL)analytics{
++(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save context:(NSManagedObjectContext*)context from:(NSString *)from {
     __block NSMutableArray *movedToDos = [NSMutableArray array];
     if(!context)
         context = [KPCORE context];
     __block BOOL isSubtasks = NO;
     [context performBlockAndWait:^{
-        
         for(KPToDo *toDo in toDoArray){
             if ( toDo.parent )
                 isSubtasks = YES;
-            BOOL movedToDo = [toDo completeInContext:context];
-            if (movedToDo)
-                [movedToDos addObject:toDo];
+            [toDo completeInContext:context];
+            [movedToDos addObject:toDo];
         }
         if(save)
             [KPCORE saveContextForSynchronization:context];
     }];
     
     
-    if(analytics){
+    if (from) {
         NSNumber *numberOfCompletedTasks = [NSNumber numberWithInteger:toDoArray.count];
 
         if(!isSubtasks){
-            [ANALYTICS trackCategory:@"Tasks" action:@"Completed" label:nil value:numberOfCompletedTasks];
-            [ANALYTICS trackEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks}];
+            [ANALYTICS trackCategory:@"Tasks" action:@"Completed" label:from value:numberOfCompletedTasks];
+            [ANALYTICS trackEvent:@"Completed Tasks" options:@{@"Number of Tasks":numberOfCompletedTasks, @"From": from }];
         }
         else{
-            [ANALYTICS trackCategory:@"Action Steps" action:@"Completed" label:nil value:nil];
-            [ANALYTICS trackEvent:@"Completed Action Step" options:nil];
-            
+            [ANALYTICS trackCategory:@"Action Steps" action:@"Completed" label:from value:nil];
+            [ANALYTICS trackEvent:@"Completed Action Step" options:@{ @"From": from }];
         }
         if( !isSubtasks ) {
             [[NSNotificationCenter defaultCenter] postNotificationName:HH_TriggerHint object:@(HintCompleted)];

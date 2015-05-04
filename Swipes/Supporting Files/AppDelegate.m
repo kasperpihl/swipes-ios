@@ -36,6 +36,8 @@
 
 #import "AppDelegate.h"
 
+static NSString * const kFromAppleWatch = @"Apple Watch";
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -48,6 +50,7 @@
 #endif
     
 #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
+    
     NSString* const CONSUMER_KEY = @"swipes";
     NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6";
     [ENSession setSharedSessionConsumerKey:CONSUMER_KEY
@@ -95,7 +98,7 @@
 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
-   
+    
     [USER_DEFAULTS setBool:[GlobalApp isMailboxInstalled] forKey:@"isMailboxInstalled"];
     [USER_DEFAULTS synchronize];
     [self.window makeKeyAndVisible];
@@ -165,27 +168,68 @@
             if([identifier isEqualToString:@"Later"]){
                 NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
                 NSDate *date = [[[NSDate date] dateByAddingTimeInterval:laterToday.integerValue] dateToNearest15Minutes];
-                [KPToDo scheduleToDos:toDos forDate:date save:YES];
+                [KPToDo scheduleToDos:toDos forDate:date save:YES from:nil];
             }
             if([identifier isEqualToString:@"Complete"]){
-                [KPToDo completeToDos:toDos save:YES context:nil analytics:NO];
+                [KPToDo completeToDos:toDos save:YES context:nil from:nil];
             }
         }
     }
-    
+    completionHandler();
+}
+
+// called on new remote notification while Swipes is running
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void (^)())completionHandler
+{
+    DLog(@"handling remote notification with identifier");
+    // TODO add meaningful implementation
+    completionHandler();
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     // Store the deviceToken in the current Installation and save it to Parse.
+    DLog(@"Received push device token");
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
+    NSString* userId = kCurrent.objectId;
+    if (userId) {
+        DLog(@"has userId");
+        NSArray* channels = currentInstallation.channels;
+        if (![channels containsObject:userId]) {
+            [currentInstallation addUniqueObject:userId forKey:@"channels"];
+        }
+#ifdef DEBUG
+        if (![channels containsObject:@"Development"]) {
+            [currentInstallation addUniqueObject:@"Development" forKey:@"channels"];
+        }
+#endif
+    }
     [currentInstallation saveInBackground];
-    
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
+{
+    DLog(@"Error in registration. Error: %@", err);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
+{
+    DLog(@"received remote notification: %@", userInfo);
+    UIBackgroundFetchResult result = UIBackgroundFetchResultNoData;
+    NSDictionary* aps = userInfo[@"aps"];
+    if (aps && aps[@"content-available"]) {
+        NSString* syncId = userInfo[@"syncId"];
+        if (!syncId || (![syncId isEqualToString:[USER_DEFAULTS objectForKey:kLastSyncId]])) {
+            DLog(@"going to sync");
+            result = [KPCORE synchronizeForce:YES async:application.applicationState != UIApplicationStateBackground];
+            DLog(@"sync done, updating local notifications");
+            [NOTIHANDLER updateLocalNotifications];
+        }
+    }
     [PFPush handlePush:userInfo];
+    DLog(@"returning: %lu", (unsigned long)result);
+    handler(result);
 }
 
 -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
@@ -274,7 +318,7 @@
     DLog(@"Completing with tempId: %@", tempId);
     NSArray* todos = [KPToDo findByTempId:tempId];
     if (todos) {
-        [KPToDo completeToDos:todos save:YES context:nil analytics:YES];
+        [KPToDo completeToDos:todos save:YES context:nil from:kFromAppleWatch];
         DLog(@"Completing with tempId: %@ ... done", tempId);
     }
 }
@@ -310,18 +354,27 @@
             NSDate* scheduleDate = [userInfo valueForKey:kKeyCmdDate];
             if ((NSDate *)[NSNull null] == scheduleDate)
                 scheduleDate = nil;
-            [KPToDo scheduleToDos:todos forDate:scheduleDate save:YES];
+            [KPToDo scheduleToDos:todos forDate:scheduleDate save:YES from:kFromAppleWatch];
         }
     }
 
     tempId = [userInfo valueForKey:kKeyCmdAdd];
     if (tempId) {
-        [KPToDo addItem:tempId priority:NO tags:nil save:YES from:@"Watch App"];
+        [KPToDo addItem:tempId priority:NO tags:nil save:YES from:kFromAppleWatch];
     }
     
     tempId = [userInfo valueForKey:kKeyCmdError];
     if (tempId) {
-        [UtilityClass sendError:[NSError errorWithDomain:[tempId description] code:801 userInfo:userInfo] type:@"Watch App"];
+        [UtilityClass sendError:[NSError errorWithDomain:[tempId description] code:801 userInfo:userInfo] type:kFromAppleWatch];
+    }
+    
+    tempId = [userInfo valueForKey:kKeyCmdAnalytics];
+    if (tempId) {
+        NSDictionary* data = tempId;
+        if (data[kKeyAnalyticsAction] && data[kKeyAnalyticsCategory]) {
+            [ANALYTICS trackEvent:data[kKeyAnalyticsAction] options:@{ @"From": kFromAppleWatch }];
+            [ANALYTICS trackCategory:data[kKeyAnalyticsCategory] action:data[kKeyAnalyticsAction] label:kFromAppleWatch value:data[kKeyAnalyticsValue]];
+        }
     }
     
     reply(replyInfo);

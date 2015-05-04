@@ -16,5 +16,9 @@
 #define kKeyCmdDate @"date"
 #define kKeyCmdError @"error"
 #define kKeyCmdAdd @"add"
+#define kKeyCmdAnalytics @"analytics"
+#define kKeyAnalyticsCategory @"category"
+#define kKeyAnalyticsAction @"action"
+#define kKeyAnalyticsValue @"value"
 
 #endif

@@ -111,6 +111,7 @@
 {
     self.state = @"done";
     [super viewDidLoad];
+    self.tableView.reorderingEnabled = NO;
 }
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];

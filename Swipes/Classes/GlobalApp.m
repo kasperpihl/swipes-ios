@@ -162,8 +162,6 @@ static int g_activityIndicatorStack = 0;
     self = [super init];
     if (self) {
         self.backgroundTask = UIBackgroundTaskInvalid;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startBackgroundHandler:) name:APP_StartBackgroundHandler object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endBackgroundHandler:) name:APP_EndBackgroundHandler object:nil];
     }
     return self;
 }
@@ -173,7 +171,7 @@ static int g_activityIndicatorStack = 0;
     clearNotify();
 }
 
-- (void)endBackgroundHandler:(NSNotification *)notification
+- (void)endBackgroundHandler
 {
     if (self.backgroundTask != UIBackgroundTaskInvalid) {
         //NSLog(@"Background time remaining = %f seconds", [UIApplication sharedApplication].backgroundTimeRemaining);
@@ -182,7 +180,7 @@ static int g_activityIndicatorStack = 0;
     }
 }
 
-- (void)startBackgroundHandler:(NSNotification *)notification
+- (void)startBackgroundHandler
 {
     if (self.backgroundTask == UIBackgroundTaskInvalid) {
         self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
