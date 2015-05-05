@@ -559,6 +559,7 @@
 		DA6B61C319E321FE00089877 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA6B61C119E321FE00089877 /* Localizable.strings */; };
 		DA7AEE931A9F328000436CE3 /* IntegrationSectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7AEE921A9F328000436CE3 /* IntegrationSectionCell.m */; };
 		DA7AEE971A9FBCAA00436CE3 /* IntegrationTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7AEE961A9FBCAA00436CE3 /* IntegrationTitleView.m */; };
+		DA91E60E1AF7938A00FF20FE /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA91E60D1AF7938A00FF20FE /* PullToRefreshView.m */; };
 		DAB164E71A6D294F008D69B2 /* GmailSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */; };
 		DAB164E81A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
 		DAB164E91A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
@@ -1279,6 +1280,8 @@
 		DA7AEE921A9F328000436CE3 /* IntegrationSectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationSectionCell.m; path = Integrations/IntegrationSectionCell.m; sourceTree = "<group>"; };
 		DA7AEE951A9FBCAA00436CE3 /* IntegrationTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationTitleView.h; path = Integrations/IntegrationTitleView.h; sourceTree = "<group>"; };
 		DA7AEE961A9FBCAA00436CE3 /* IntegrationTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationTitleView.m; path = Integrations/IntegrationTitleView.m; sourceTree = "<group>"; };
+		DA91E60C1AF7938A00FF20FE /* PullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PullToRefreshView.h; path = PullToRefresh/PullToRefreshView.h; sourceTree = "<group>"; };
+		DA91E60D1AF7938A00FF20FE /* PullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PullToRefreshView.m; path = PullToRefresh/PullToRefreshView.m; sourceTree = "<group>"; };
 		DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailSyncHandler.h; path = SyncHandlers/GmailSyncHandler.h; sourceTree = "<group>"; };
 		DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailSyncHandler.m; path = SyncHandlers/GmailSyncHandler.m; sourceTree = "<group>"; };
 		DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailIntegration.h; path = Integrations/GmailIntegration.h; sourceTree = "<group>"; };
@@ -1463,6 +1466,7 @@
 		A703B1641838EBF20047DCC9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DA91E60F1AF7939100FF20FE /* PullToRefresh */,
 				A708BED31A14B21800C7E15A /* KPTopClock */,
 				A795D57E1A10AF2800195DDA /* AwesomeMenu */,
 				A798DCCB19E523A200386C80 /* TopMenus */,
@@ -2662,6 +2666,15 @@
 			name = Integrations;
 			sourceTree = "<group>";
 		};
+		DA91E60F1AF7939100FF20FE /* PullToRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				DA91E60C1AF7938A00FF20FE /* PullToRefreshView.h */,
+				DA91E60D1AF7938A00FF20FE /* PullToRefreshView.m */,
+			);
+			name = PullToRefresh;
+			sourceTree = "<group>";
+		};
 		DAB1650E1A6D3D51008D69B2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -3643,6 +3656,7 @@
 				A703B1B81838EBF20047DCC9 /* KPSearchBar.m in Sources */,
 				A74646B918D38660003911DC /* ContactHandler.m in Sources */,
 				DAB164E81A6D294F008D69B2 /* GmailSyncHandler.m in Sources */,
+				DA91E60E1AF7938A00FF20FE /* PullToRefreshView.m in Sources */,
 				DA3A07071A95EAA400F47C59 /* IntegrationSettingCell.m in Sources */,
 				A72EFFFF18425B6A008333AA /* UserHandler.m in Sources */,
 				A703B1A81838EBF20047DCC9 /* AddPanelView.m in Sources */,
@@ -4103,10 +4117,6 @@
 					"-weak_framework",
 					Social,
 					"-all_load",
-					"-framework",
-					Parse,
-					"-framework",
-					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
@@ -4270,10 +4280,6 @@
 					"-weak_framework",
 					Social,
 					"-all_load",
-					"-framework",
-					Parse,
-					"-framework",
-					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
@@ -4373,10 +4379,6 @@
 					"-weak_framework",
 					Social,
 					"-all_load",
-					"-framework",
-					Parse,
-					"-framework",
-					ParseFacebookUtils,
 				);
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
