@@ -343,7 +343,7 @@
         return UIBackgroundFetchResultNoData;
     }
     
-    if (self._isSyncing) {
+    if (self.isSyncing) {
         self._needSync = YES;
         return UIBackgroundFetchResultNoData;
     }
@@ -430,12 +430,14 @@
     if ((!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) &&
         !kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]) {
         
-        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
-            if(number == 1){
-                [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
-            }
-        }];
-        kEnInt.hasAskedForPermissions = YES;
+        if (_isAsync) {
+            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
+                if(number == 1){
+                    [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+                }
+            }];
+            kEnInt.hasAskedForPermissions = YES;
+        }
     }
     if (kEnInt.enableSync && !self.evernoteSyncHandler.isSyncing && ![EvernoteIntegration isAPILimitReached]) {
         
@@ -456,11 +458,13 @@
                     
                     if (!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) {
                         kEnInt.enableSync = NO;
-                        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
-                            if(number == 1){
-                                [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
-                            }
-                        }];
+                        if (_isAsync) {
+                            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
+                                if(number == 1){
+                                    [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+                                }
+                            }];
+                        }
                     }
                     else {
                         [self showErrorNotificationOnce:LOCALIZE_STRING(@"Error synchronizing Evernote")];
@@ -485,11 +489,13 @@
                     
                     if (!kGmInt.isAuthenticated) {
                         // kGmInt.enableSync = NO;
-                        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Gmail Authorization") andMessage:LOCALIZE_STRING(@"To sync with Gmail on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
-                            if (number == 1){
-                                [self gmailAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
-                            }
-                        }];
+                        if (_isAsync) {
+                            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Gmail Authorization") andMessage:LOCALIZE_STRING(@"To sync with Gmail on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
+                                if (number == 1){
+                                    [self gmailAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
+                                }
+                            }];
+                        }
                     }
                     else {
                         [self showErrorNotificationOnce:LOCALIZE_STRING(@"Error synchronizing Gmail")];
