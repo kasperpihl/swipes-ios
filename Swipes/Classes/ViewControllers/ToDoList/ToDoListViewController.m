@@ -22,6 +22,8 @@
 #import "RootViewController.h"
 #import "SlowHighlightIcon.h"
 #import "ToDoListViewController.h"
+#import "PullToRefreshView.h"
+#import "UIScrollView+BobPullToRefresh.h"
 #import "AudioHandler.h"
 
 #define BACKGROUND_IMAGE_VIEW_TAG 504
@@ -349,22 +351,22 @@
 
 #pragma mark - ScrollViewDelegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
-        if (scrollView.contentOffset.y < self.tableView.tableHeaderView.frame.size.height) {
-            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.tableView.tableHeaderView.bounds) - MAX(scrollView.contentOffset.y, 0), 0, 0, 0);
-        }
-        else {
-            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0);
-        }
-        if (scrollView.contentOffset.y < 0) {
-            /*CGRectSetHeight(self.searchBar, self.tableView.tableHeaderView.frame.size.height-scrollView.contentOffset.y);
-            CGRect searchBarFrame = self.searchBar.frame;
-            searchBarFrame.origin.y = scrollView.contentOffset.y;
-            self.searchBar.frame = searchBarFrame;*/
-        }
-    }
-}
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    if (scrollView == self.tableView) { // Don't do anything if the search table view get's scrolled
+//        if (scrollView.contentOffset.y < self.tableView.tableHeaderView.frame.size.height) {
+//            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.tableView.tableHeaderView.bounds) - MAX(scrollView.contentOffset.y, 0), 0, 0, 0);
+//        }
+//        else {
+//            self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+//        }
+//        if (scrollView.contentOffset.y < 0) {
+//            /*CGRectSetHeight(self.searchBar, self.tableView.tableHeaderView.frame.size.height-scrollView.contentOffset.y);
+//            CGRect searchBarFrame = self.searchBar.frame;
+//            searchBarFrame.origin.y = scrollView.contentOffset.y;
+//            self.searchBar.frame = searchBarFrame;*/
+//        }
+//    }
+//}
 
 #pragma mark - SwipeTableCell
 
@@ -657,6 +659,13 @@
     self.tableView = [[KPReorderTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [self prepareTableView:self.tableView];
     [self.view addSubview:self.tableView];
+    
+    PullToRefreshView* refreshView = [[PullToRefreshView alloc] initWithLocationType:BPRRefreshViewLocationTypeFixedBottom];
+    [self.tableView addPullToRefreshView:refreshView withActionHandler:^(BPRPullToRefresh *pullToRefresh) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [pullToRefresh dismiss];
+        });
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

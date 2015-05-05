@@ -98,6 +98,11 @@
     [self._tempIdsThatGotObjectIds setObject:objectId forKey:tempId];
 }
 
+- (BOOL)isSyncing
+{
+    return self._isSyncing || self.gmailSyncHandler.isSyncing || self.evernoteSyncHandler.isSyncing;
+}
+
 /* 
  Thread safe handling of attribute changes
 */
