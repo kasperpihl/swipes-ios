@@ -10,12 +10,15 @@
 #import "AppDelegate.h"
 #import "KPParseCommunicator.h"
 #import "NSDate-Utilities.h"
+#import "MF_Base64Additions.h"
 #ifndef NOT_APPLICATION
 #import "GlobalApp.h"
 #endif
 #import "UtilityClass.h"
 
 #define trgb(num) (num/255.0)
+
+static char * const kPwd = "The Swipes Team";
 
 @interface UtilityClass () <UIAlertViewDelegate>
 @property (copy) SuccessfulBlock block;
@@ -180,6 +183,31 @@
     NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
     
     return [[[NSAttributedString alloc] initWithData:data options:options documentAttributes:nil error:nil] string];
+}
+
++ (NSString *)encrypt:(NSString *)string
+{
+    NSData* data = [string dataUsingEncoding:NSUTF8StringEncoding];
+    Byte* result = malloc(data.length);
+    size_t pwdLen = strlen(kPwd);
+    [data getBytes:result length:data.length];
+    for (NSUInteger i = 0; i < data.length; i++) {
+        result[i] ^= kPwd[i % pwdLen];
+    }
+    data = [NSData dataWithBytes:result length:data.length];
+    return [data base64String];
+}
+
++ (NSString *)decrypt:(NSString *)string
+{
+    NSData* data = [NSData dataWithBase64String:string];
+    Byte* result = malloc(data.length);
+    size_t pwdLen = strlen(kPwd);
+    [data getBytes:result length:data.length];
+    for (NSUInteger i = 0; i < data.length; i++) {
+        result[i] ^= kPwd[i % pwdLen];
+    }
+    return [[NSString alloc] initWithBytes:result length:data.length encoding:NSUTF8StringEncoding];
 }
 
 -(NSNumber *)versionNumber{
