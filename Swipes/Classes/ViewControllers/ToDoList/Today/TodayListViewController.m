@@ -265,12 +265,9 @@
     self.youreAllDoneView = [[YoureAllDoneView alloc] initWithFrame:self.view.bounds];
     self.youreAllDoneView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
-    [self.view addSubview:self.youreAllDoneView];
-    [self.tableView removeFromSuperview];
-    KPReorderTableView *tableView = [[KPReorderTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    [self prepareTableView:tableView];
-    tableView.tag = TABLEVIEW_TAG;
-    [self.view addSubview:tableView];
+    [self.view insertSubview:self.youreAllDoneView belowSubview:self.tableView];
+    
+    self.tableView.tag = TABLEVIEW_TAG;
     self.tableView = (KPReorderTableView*)[self.view viewWithTag:TABLEVIEW_TAG];
     self.tableView.dragDelegate = self;
     self.tableView.indicatorDelegate = self;

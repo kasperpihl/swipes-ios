@@ -50,9 +50,12 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 #endif
     
 #define EVERNOTE_HOST BootstrapServerBaseURLStringUS
+//    NSString* encrypted = [UtilityClass encrypt:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
+//    DLog(@"%@ = %@", @"17aee5fa869f24b705e00dba6d43c51becf5c7e4", encrypted);
+//    DLog(@"%@ = %@", encrypted, [UtilityClass decrypt:encrypted]);
     
-    NSString* const CONSUMER_KEY = @"swipes";
-    NSString* const CONSUMER_SECRET = @"e862f0d879e2c2b6";
+    NSString* const CONSUMER_KEY = [UtilityClass decrypt:@"Jx8MUDYE"]; // @"swipes";
+    NSString* const CONSUMER_SECRET = [UtilityClass decrypt:@"MVBTEjVHDUhSSkVmBlMPYg=="]; // @"e862f0d879e2c2b6";
     [ENSession setSharedSessionConsumerKey:CONSUMER_KEY
                             consumerSecret:CONSUMER_SECRET
                               optionalHost:nil];
@@ -64,12 +67,12 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     [Appirater setTimeBeforeReminding:1];
     [Appirater appLaunched:YES];
     
-    [Parse setApplicationId:@"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
-                  clientKey:@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"];
+    [Parse setApplicationId:[UtilityClass decrypt:@"Og5cTB4HASAqGxM+PwgbLBk0QR42DkY8P1QuCQcbBgIgWAYyIiMxQA=="] // @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
+                  clientKey:[UtilityClass decrypt:@"BxoOVhgNLx1QQk42LjtePBIQVz0xESA1CRJgLFgIJgMPVjgRWSgfIA=="]]; //@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"
     
     [PFFacebookUtils initializeFacebook];
     
-    [Crashlytics startWithAPIKey:@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
+    [Crashlytics startWithAPIKey:[UtilityClass decrypt:@"ZV8ERTZCDxFdRRkyV1UPY1hQRWNHDRIERURgVgJYZQoAQzVCCkcARw=="]]; //@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
     if(kCurrent){
         [Crashlytics setUserIdentifier:kCurrent.objectId];
         [Crashlytics setUserEmail:kCurrent.username];

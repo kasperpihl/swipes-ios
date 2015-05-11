@@ -20,6 +20,7 @@ target :Swipes do
     pod 'DHCShakeNotifier'
     pod 'Intercom'
     pod 'GoogleAnalytics-iOS-SDK'
+    pod 'BobPullToRefresh'
 end
 
 target :SwipesKit do

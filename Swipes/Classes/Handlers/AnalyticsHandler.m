@@ -42,7 +42,16 @@ static AnalyticsHandler *sharedObject;
     notify(@"trying out", registerUser);
 }
 -(void)initializeIntercom{
-    [Intercom setApiKey:@"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1" forAppId:@"yobuz4ff"];
+//    NSString* encrypted = [UtilityClass encrypt:@"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1"];
+//    DLog(@"%@ = %@", @"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1", encrypted);
+//    DLog(@"%@ = %@", encrypted, [UtilityClass decrypt:encrypted]);
+//
+//    encrypted = [UtilityClass encrypt:@"yobuz4ff"];
+//    DLog(@"%@ = %@", @"yobuz4ff", encrypted);
+//    DLog(@"%@ = %@", encrypted, [UtilityClass decrypt:encrypted]);
+    
+    [Intercom setApiKey:[UtilityClass decrypt:@"PQcWfyATAl1VRhAwVwJYYFxQRGpHWhQBEkRhAFRUMgwHFzIVUBVVQhVgVlJdZwlU"] // @"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1"
+               forAppId:[UtilityClass decrypt:@"LQcHVSlDDxY="]]; // @"yobuz4ff"
     [Intercom setPreviewPaddingWithX:0 y:0];
     NSString *hmac = [USER_DEFAULTS objectForKey:@"intercom-hmac"];
     if(hmac){

@@ -602,11 +602,11 @@ static NSString * const kFromEvernote = @"Evernote";
         
         BOOL hasLocalChanges = [todoWithEvernote hasChangesSinceDate:self.lastUpdated];
         if (hasLocalChanges) {
-            DLog(@"local changes: %@",todoWithEvernote.title);
+//            DLog(@"local changes: %@",todoWithEvernote.title);
         }
         BOOL hasChangesFromEvernote = [self hasChangedFromEvernoteId:noteRefString];
         if (hasChangesFromEvernote) {
-            DLog(@"evernote changes: %@",todoWithEvernote.title);
+//            DLog(@"evernote changes: %@",todoWithEvernote.title);
         }
         
         if( !hasLocalChanges && !hasChangesFromEvernote ){

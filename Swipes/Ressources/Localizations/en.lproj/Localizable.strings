@@ -465,4 +465,8 @@
 "Fri" = "Fri";
 "Sat" = "Sat";
 
+// pull to synchronize
+"Pull to Synchronize" = "Pull to Synchronize";
+"Release to Synchronize" = "Release to Synchronize";
+
 

@@ -69,22 +69,15 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
     self.block = block;
     if (!kGmInt.isAuthenticated) {
         NSError* error = [NSError errorWithDomain:@"Gmail not authenticated" code:702 userInfo:nil];
-        return block(SyncStatusError, nil, error);
+        block(SyncStatusError, nil, error);
+        return;
     }
     [self findUpdatedThreads:block];
 }
 
 - (void)findUpdatedThreads:(SyncBlock)block
 {
-    NSString *query = nil;
-//    if(self.lastUpdated){
-//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-//        [dateFormatter setDateFormat:@"yyyy/MM/dd"];
-//        query = [NSString stringWithFormat:@"after:%@", [dateFormatter stringFromDate:self.lastUpdated]];
-//    }
-    
-    [kGmInt listThreads:query withBlock:^(NSArray *threadListResults, NSError *error) {
+    [kGmInt listThreads:nil withBlock:^(NSArray *threadListResults, NSError *error) {
         if (error) {
             block(SyncStatusError, nil, error);
         }
