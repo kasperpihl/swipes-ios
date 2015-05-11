@@ -24,7 +24,6 @@ end
 
 target :SwipesKit do
     pod 'Appirater', :inhibit_warnings => true
-    pod 'Bolts', :inhibit_warnings => true
     pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
     pod 'Parse', :inhibit_warnings => true
