@@ -13,6 +13,8 @@ extern NSString* const kKeySubtitle;
 extern NSString* const kKeyIcon;
 extern NSString* const kKeyIsOn;
 extern NSString* const kKeyCellType;
+extern NSString* const kKeyTextType;
+extern NSString* const kKeyText;
 extern NSString* const kKeyTouchSelector;
 extern UIColor* kIntegrationGreenColor;
 
@@ -23,6 +25,7 @@ typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
     kIntegrationCellTypeViewMore,
     kIntegrationCellTypeSeparator,
     kIntegrationCellTypeSection,
+    kIntegrationCellTypeTextField,
 };
 
 @interface IntegrationBaseViewController : UIViewController
@@ -35,6 +38,6 @@ typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
 - (void)recreateCellInfo;
 - (void)reloadData;
 - (void)goBack;
--(void)addModalTransition;
+- (void)addModalTransition;
 
 @end

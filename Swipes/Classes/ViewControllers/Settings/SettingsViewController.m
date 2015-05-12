@@ -17,7 +17,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"OPTIONS";
+    self.title = [LOCALIZE_STRING(@"TWEAKS") uppercaseString];
 }
 
 - (void)recreateCellInfo

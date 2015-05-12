@@ -10,6 +10,7 @@
 #import "IntegrationSettingCell.h"
 #import "IntegrationSeparatorCell.h"
 #import "IntegrationSectionCell.h"
+#import "IntegrationTextFieldCell.h"
 #import "IntegrationTitleView.h"
 #import "IntegrationBaseViewController.h"
 
@@ -18,6 +19,8 @@ NSString* const kKeySubtitle = @"subtitle";
 NSString* const kKeyIcon = @"icon";
 NSString* const kKeyIsOn = @"isOn";
 NSString* const kKeyCellType = @"cellType";
+NSString* const kKeyTextType = @"textType";
+NSString* const kKeyText = @"text";
 NSString* const kKeyTouchSelector = @"touchSelector";
 
 UIColor* kIntegrationGreenColor;
@@ -27,6 +30,7 @@ static CGFloat const kBottomMargin = 45;
 static CGFloat const kCellHeight = 55;
 static CGFloat const kSeparatorHeight = 22;
 static CGFloat const kSectionHeight = 34;
+static CGFloat const kTextFieldHeight = 72;
 
 @interface IntegrationBaseViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -106,7 +110,9 @@ static CGFloat const kSectionHeight = 34;
     _lightColor = lightColor;
     _titleView.lightColor = lightColor;
 }
--(void)addModalTransition {
+
+-(void)addModalTransition
+{
     CATransition* transition = [CATransition animation];
     
     transition.duration = 0.15;
@@ -114,7 +120,6 @@ static CGFloat const kSectionHeight = 34;
     
     [self.view.window.layer addAnimation:transition forKey:kCATransition];
 }
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -163,6 +168,7 @@ static CGFloat const kSectionHeight = 34;
     static NSString *kCellSettingsID = @"settings_cell";
     static NSString *kCellSeparatorID = @"separator_cell";
     static NSString *kCellSectionID = @"section_cell";
+    static NSString *kCellTextFieldID = @"textfield_cell";
     
     NSDictionary* data = _cellInfo[indexPath.row];
     NSNumber* cellType = data[kKeyCellType];
@@ -178,6 +184,15 @@ static CGFloat const kSectionHeight = 34;
         if (nil == cell) {
             cell = [[IntegrationSectionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellSectionID];
             cell.title = data[kKeyTitle];
+        }
+        return cell;
+    }
+    else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeTextField) {
+        IntegrationTextFieldCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellTextFieldID];
+        if (nil == cell) {
+            cell = [[IntegrationTextFieldCell alloc] initWithCustomStyle:[data[kKeyTextType] unsignedIntegerValue] reuseIdentifier:kCellTextFieldID mandatory:[data[kKeyIsOn] boolValue]];
+            cell.title = data[kKeyTitle];
+            cell.textField.text = data[kKeyText];
         }
         return cell;
     }
@@ -242,6 +257,9 @@ static CGFloat const kSectionHeight = 34;
     }
     else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeSection) {
         return kSectionHeight;
+    }
+    else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeTextField) {
+        return kTextFieldHeight;
     }
     return kCellHeight;
 }

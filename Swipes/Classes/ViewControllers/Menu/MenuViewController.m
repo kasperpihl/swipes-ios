@@ -25,6 +25,7 @@
 #import "PlusAlertView.h"
 #import "NotificationHandler.h"
 #import "IntegrationTitleView.h"
+#import "ProfileViewController.h"
 
 #import "MenuViewController.h"
 
@@ -306,16 +307,20 @@ static CGFloat const kTopMargin = 60;
             break;
         }
         case KPMenuButtonLogout:{
-            if(!kUserHandler.isLoggedIn){
-                [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
-                return;
-            }
-            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Log out") andMessage:LOCALIZE_STRING(@"Are you sure you want to log out of your account?") block:^(BOOL succeeded, NSError *error) {
-                if(succeeded){
-                    [ROOT_CONTROLLER logOut];
-                    [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
-                }
-            }];
+//            if(!kUserHandler.isLoggedIn){
+//                [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
+//                return;
+//            }
+//            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Log out") andMessage:LOCALIZE_STRING(@"Are you sure you want to log out of your account?") block:^(BOOL succeeded, NSError *error) {
+//                if(succeeded){
+//                    [ROOT_CONTROLLER logOut];
+//                    [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
+//                }
+//            }];
+            ProfileViewController *vc = [[ProfileViewController alloc] init];
+            [ANALYTICS pushView:@"Profile"];
+            [self addModalTransition];
+            [self presentViewController:vc animated:NO completion:nil];
             break;
         }
         case KPMenuButtonSync:{

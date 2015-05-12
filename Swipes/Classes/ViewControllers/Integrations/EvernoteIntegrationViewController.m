@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"EVERNOTE INTEGRATION";
+    self.title = [LOCALIZE_STRING(@"EVERNOTE INTEGRATION") uppercaseString];
     self.lightColor = kEvernoteColor;
 }
 

@@ -440,6 +440,8 @@
 "TWEAKS" = "TWEAKS";
 "SOUNDS" = "SOUNDS";
 "NOTIFICATIONS" = "NOTIFICATIONS";
+"GMAIL INTEGRATION" = "GMAIL INTEGRATION";
+"EVERNOTE INTEGRATION" = "EVERNOTE INTEGRATION";
 "Add new tasks to bottom" = "Add new tasks to bottom";
 "Use standard status bar" = "Use standard status bar";
 "In-app sounds" = "In-app sounds";

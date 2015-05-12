@@ -560,6 +560,8 @@
 		DA7AEE931A9F328000436CE3 /* IntegrationSectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7AEE921A9F328000436CE3 /* IntegrationSectionCell.m */; };
 		DA7AEE971A9FBCAA00436CE3 /* IntegrationTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7AEE961A9FBCAA00436CE3 /* IntegrationTitleView.m */; };
 		DA91E60E1AF7938A00FF20FE /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA91E60D1AF7938A00FF20FE /* PullToRefreshView.m */; };
+		DA91E6231B01FEC800FF20FE /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA91E6221B01FEC800FF20FE /* ProfileViewController.m */; };
+		DA91E6261B02088400FF20FE /* IntegrationTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA91E6251B02088400FF20FE /* IntegrationTextFieldCell.m */; };
 		DAB164E71A6D294F008D69B2 /* GmailSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */; };
 		DAB164E81A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
 		DAB164E91A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
@@ -1282,6 +1284,10 @@
 		DA7AEE961A9FBCAA00436CE3 /* IntegrationTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationTitleView.m; path = Integrations/IntegrationTitleView.m; sourceTree = "<group>"; };
 		DA91E60C1AF7938A00FF20FE /* PullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PullToRefreshView.h; path = PullToRefresh/PullToRefreshView.h; sourceTree = "<group>"; };
 		DA91E60D1AF7938A00FF20FE /* PullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PullToRefreshView.m; path = PullToRefresh/PullToRefreshView.m; sourceTree = "<group>"; };
+		DA91E6211B01FEC800FF20FE /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProfileViewController.h; path = Swipes/Classes/Delegation/ProfileViewController.h; sourceTree = SOURCE_ROOT; };
+		DA91E6221B01FEC800FF20FE /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProfileViewController.m; path = Swipes/Classes/Delegation/ProfileViewController.m; sourceTree = SOURCE_ROOT; };
+		DA91E6241B02088400FF20FE /* IntegrationTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationTextFieldCell.h; path = Integrations/IntegrationTextFieldCell.h; sourceTree = "<group>"; };
+		DA91E6251B02088400FF20FE /* IntegrationTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationTextFieldCell.m; path = Integrations/IntegrationTextFieldCell.m; sourceTree = "<group>"; };
 		DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailSyncHandler.h; path = SyncHandlers/GmailSyncHandler.h; sourceTree = "<group>"; };
 		DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailSyncHandler.m; path = SyncHandlers/GmailSyncHandler.m; sourceTree = "<group>"; };
 		DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailIntegration.h; path = Integrations/GmailIntegration.h; sourceTree = "<group>"; };
@@ -2008,6 +2014,7 @@
 		A781285D17294C56002226C8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				DA91E6191B01FDE700FF20FE /* Delegation */,
 				A754DB5F197BBCF500308DBC /* Integrations */,
 				A7D189C31965F45300AA7CD9 /* Settings */,
 				A748C877190D9A0800514DB3 /* Subtasks */,
@@ -2647,6 +2654,8 @@
 		DA7AEE8F1A9F31F900436CE3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA91E6241B02088400FF20FE /* IntegrationTextFieldCell.h */,
+				DA91E6251B02088400FF20FE /* IntegrationTextFieldCell.m */,
 				DA3A07051A95EAA400F47C59 /* IntegrationSettingCell.h */,
 				DA3A07061A95EAA400F47C59 /* IntegrationSettingCell.m */,
 				DA3A07081A95EAC000F47C59 /* IntegrationSeparatorCell.h */,
@@ -2673,6 +2682,15 @@
 				DA91E60D1AF7938A00FF20FE /* PullToRefreshView.m */,
 			);
 			name = PullToRefresh;
+			sourceTree = "<group>";
+		};
+		DA91E6191B01FDE700FF20FE /* Delegation */ = {
+			isa = PBXGroup;
+			children = (
+				DA91E6211B01FEC800FF20FE /* ProfileViewController.h */,
+				DA91E6221B01FEC800FF20FE /* ProfileViewController.m */,
+			);
+			name = Delegation;
 			sourceTree = "<group>";
 		};
 		DAB1650E1A6D3D51008D69B2 /* Products */ = {
@@ -3574,6 +3592,7 @@
 				A7680D2C172C5EB000BCB2D9 /* KPTag.m in Sources */,
 				A768D39D1896C812003E2DD6 /* ToDoViewController+ViewHelpers.m in Sources */,
 				A703B1AC1838EBF20047DCC9 /* ClockTimeLabel.m in Sources */,
+				DA91E6261B02088400FF20FE /* IntegrationTextFieldCell.m in Sources */,
 				A75207FA1730F5F700F1B4F7 /* ToDoViewController.m in Sources */,
 				DA7AEE931A9F328000436CE3 /* IntegrationSectionCell.m in Sources */,
 				A7AA7968194E067C003DAB3B /* EvernoteSyncHandler.m in Sources */,
@@ -3654,6 +3673,7 @@
 				A754DB62197BBD0B00308DBC /* EvernoteImporterViewController.m in Sources */,
 				A789B3F917D79BFB00C25B73 /* KPOverlay.m in Sources */,
 				A703B1B81838EBF20047DCC9 /* KPSearchBar.m in Sources */,
+				DA91E6231B01FEC800FF20FE /* ProfileViewController.m in Sources */,
 				A74646B918D38660003911DC /* ContactHandler.m in Sources */,
 				DAB164E81A6D294F008D69B2 /* GmailSyncHandler.m in Sources */,
 				DA91E60E1AF7938A00FF20FE /* PullToRefreshView.m in Sources */,
