@@ -18,7 +18,7 @@ static CGFloat const kUnderlineMargin = 2;
 #define kDefTitleFont KP_BOLD(10)
 #define kDefTextFieldFont KP_REGULAR(16)
 
-@interface IntegrationTextFieldCell ()
+@interface IntegrationTextFieldCell () <UITextFieldDelegate>
 
 @property (nonatomic, assign) IntegrationTextFieldStyle style;
 @property (nonatomic, assign) BOOL mandatory;
@@ -29,7 +29,7 @@ static CGFloat const kUnderlineMargin = 2;
 
 @implementation IntegrationTextFieldCell
 
-- (id)initWithCustomStyle:(IntegrationTextFieldStyle)style reuseIdentifier:(NSString *)reuseIdentifier mandatory:(BOOL)mandatory
+- (instancetype)initWithCustomStyle:(IntegrationTextFieldStyle)style reuseIdentifier:(NSString *)reuseIdentifier mandatory:(BOOL)mandatory
 {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -45,6 +45,8 @@ static CGFloat const kUnderlineMargin = 2;
         _textField.backgroundColor = [UIColor clearColor];
         _textField.textColor = tcolor(TextColor);
         _textField.font = kDefTextFieldFont;
+        _textField.returnKeyType = UIReturnKeyNext;
+        _textField.delegate = self;
         [self.contentView addSubview:_textField];
         
         _lineView = [[UIView alloc] initWithFrame:CGRectMake(kHorizontalMargin, kTopMargin + kLabelHeight + kLabelMargin + kTextFieldHeight + kUnderlineMargin, self.contentView.frame.size.width - 2 * kHorizontalMargin, 0.5)];
@@ -79,6 +81,37 @@ static CGFloat const kUnderlineMargin = 2;
         [myString addAttribute:NSForegroundColorAttributeName value:tcolor(LaterColor) range:range];
     }
     self.titleLabel.attributedText = [[NSAttributedString alloc]initWithAttributedString: myString];
+}
+
+- (void)setCustomStyle:(IntegrationTextFieldStyle)customStyle
+{
+    _customStyle = customStyle;
+    switch (customStyle) {
+        case IntegrationTextFieldStyleEmail:
+            self.textField.keyboardType = UIKeyboardTypeEmailAddress;
+            break;
+        case IntegrationTextFieldStylePhone:
+            self.textField.keyboardType = UIKeyboardTypePhonePad;
+            break;
+        default:
+            self.textField.keyboardType = UIKeyboardTypeDefault;
+            break;
+    }
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(textFieldCellShouldReturn:)]) {
+        return [_delegate textFieldCellShouldReturn:self];
+    }
+    return NO;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(textFieldCellDidBeginEditing:)]) {
+        [_delegate textFieldCellDidBeginEditing:self];
+    }
 }
 
 @end

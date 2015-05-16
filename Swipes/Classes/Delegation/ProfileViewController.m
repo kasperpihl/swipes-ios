@@ -28,10 +28,14 @@
 {
     [super recreateCellInfo];
     self.cellInfo = @[
+                      @{kKeyCellType: @(kIntegrationCellTypeProfilePicture),
+//                        kKeyIcon: @(YES),
+//                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
+                        }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyIsOn: @(YES),
                         kKeyTitle: @"NAME", kKeyText: @"My Name",
-//                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
+                        //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyIsOn: @(YES),
@@ -50,6 +54,18 @@
                         kKeyTitle: @"POSITION", kKeyText: @"Creative Creator",
                         //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
+                      @{kKeyCellType: @(kIntegrationCellTypeButton),
+                        kKeyTitle: @"Sign out",
+                        //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
+                        },
+                      @{kKeyCellType: @(kIntegrationCellTypeButton),
+                        kKeyTitle: @"Change password",
+                        //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
+                        },
+                      @{kKeyCellType: @(kIntegrationCellTypeButton),
+                        kKeyTitle: @"Delete account",
+                        //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
+                        },
                       ];
 }
 

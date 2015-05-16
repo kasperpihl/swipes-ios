@@ -18,7 +18,7 @@ typedef NS_OPTIONS(NSUInteger, IntegrationSettingsStyle) {
 
 @interface IntegrationSettingCell : UITableViewCell
 
-- (id)initWithCustomStyle:(IntegrationSettingsStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
+- (instancetype)initWithCustomStyle:(IntegrationSettingsStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 
 @property (nonatomic, strong) UILabel* titleLabel;
 @property (nonatomic, strong) UILabel* subtitleLabel;

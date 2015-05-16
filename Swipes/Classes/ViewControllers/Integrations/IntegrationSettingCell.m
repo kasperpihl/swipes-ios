@@ -25,7 +25,7 @@ static CGFloat const kStatusSize = 10;
 
 @implementation IntegrationSettingCell
 
-- (id)initWithCustomStyle:(IntegrationSettingsStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithCustomStyle:(IntegrationSettingsStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {

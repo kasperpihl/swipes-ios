@@ -14,13 +14,25 @@ typedef NS_ENUM(NSUInteger, IntegrationTextFieldStyle) {
     IntegrationTextFieldStylePhone,
 };
 
+@class IntegrationTextFieldCell;
+
+@protocol IntegrationTextFieldCellDelegate <NSObject>
+
+@optional
+
+- (BOOL)textFieldCellShouldReturn:(IntegrationTextFieldCell *)cell;
+- (void)textFieldCellDidBeginEditing:(IntegrationTextFieldCell *)cell;
+
+@end
+
 
 @interface IntegrationTextFieldCell : UITableViewCell
 
-- (id)initWithCustomStyle:(IntegrationTextFieldStyle)style reuseIdentifier:(NSString *)reuseIdentifier mandatory:(BOOL)mandatory;
+- (instancetype)initWithCustomStyle:(IntegrationTextFieldStyle)style reuseIdentifier:(NSString *)reuseIdentifier mandatory:(BOOL)mandatory;
 
 @property (nonatomic, strong) UITextField* textField;
 @property (nonatomic, assign) IntegrationTextFieldStyle customStyle;
 @property (nonatomic, strong) NSString* title;
+@property (nonatomic, weak) id<IntegrationTextFieldCellDelegate> delegate;
 
 @end

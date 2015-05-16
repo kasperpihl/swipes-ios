@@ -12,6 +12,8 @@
 #import "IntegrationSectionCell.h"
 #import "IntegrationTextFieldCell.h"
 #import "IntegrationTitleView.h"
+#import "IntegrationButtonCell.h"
+#import "ProfileImageCell.h"
 #import "IntegrationBaseViewController.h"
 
 NSString* const kKeyTitle = @"title";
@@ -31,10 +33,12 @@ static CGFloat const kCellHeight = 55;
 static CGFloat const kSeparatorHeight = 22;
 static CGFloat const kSectionHeight = 34;
 static CGFloat const kTextFieldHeight = 72;
+static CGFloat const kProfilePictureHeight = 130;
 
-@interface IntegrationBaseViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface IntegrationBaseViewController () <UITableViewDelegate, UITableViewDataSource, IntegrationTextFieldCellDelegate>
 
 @property (nonatomic, strong) IntegrationTitleView* titleView;
+@property (nonatomic, assign) NSInteger focusedItem;
 
 @end
 
@@ -78,11 +82,21 @@ static CGFloat const kTextFieldHeight = 72;
     [self.view addSubview:self.backButton];
     
     [self tableView:_table numberOfRowsInSection:10];
+    
+    if (UIUserInterfaceIdiomPhone == [UIDevice currentDevice].userInterfaceIdiom) {
+        notify(UIKeyboardWillShowNotification, keyboardWillShow:);
+        notify(UIKeyboardWillHideNotification, keyboardWillHide:);
+    }
+}
+
+- (void)dealloc
+{
+    clearNotify();
 }
 
 - (void)recreateCellInfo
 {
-    
+    _focusedItem = -1;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -97,6 +111,48 @@ static CGFloat const kTextFieldHeight = 72;
 {
     [super viewWillDisappear:animated];
     [kTopClock popClock];
+}
+
+- (void)moveTextViewForKeyboard:(NSNotification*)aNotification up:(BOOL)up
+{
+    NSDictionary* userInfo = [aNotification userInfo];
+    NSTimeInterval animationDuration;
+    UIViewAnimationCurve animationCurve;
+    CGRect keyboardEndFrame;
+    
+    [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
+    [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+    [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    [UIView setAnimationCurve:animationCurve];
+    
+    CGRect newFrame = self.view.frame;
+    newFrame.origin.y = kTopMargin;
+    if (up)
+        newFrame.size.height = keyboardEndFrame.origin.y - kTopMargin;
+    else
+        newFrame.size.height -= kTopMargin + kBottomMargin;
+    
+    _table.frame = newFrame;
+    
+    [UIView commitAnimations];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    [self moveTextViewForKeyboard:notification up:YES];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    [self moveTextViewForKeyboard:notification up:NO];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    return NO;
 }
 
 - (void)setTitle:(NSString *)title
@@ -163,12 +219,29 @@ static CGFloat const kTextFieldHeight = 72;
     return _cellInfo.count;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == _focusedItem) {
+        NSDictionary* data = _cellInfo[indexPath.row];
+        NSNumber* cellType = data[kKeyCellType];
+        if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeTextField) {
+            IntegrationTextFieldCell* inputCell = (IntegrationTextFieldCell *)cell;
+            if (![inputCell.textField isFirstResponder]) {
+                [inputCell.textField becomeFirstResponder];
+                [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            }
+        }
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *kCellSettingsID = @"settings_cell";
     static NSString *kCellSeparatorID = @"separator_cell";
     static NSString *kCellSectionID = @"section_cell";
     static NSString *kCellTextFieldID = @"textfield_cell";
+    static NSString *kCellButtonID = @"button_cell";
+    static NSString *kCellProfilePictureID = @"profile_picture_cell";
     
     NSDictionary* data = _cellInfo[indexPath.row];
     NSNumber* cellType = data[kKeyCellType];
@@ -183,17 +256,34 @@ static CGFloat const kTextFieldHeight = 72;
         IntegrationSectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellSectionID];
         if (nil == cell) {
             cell = [[IntegrationSectionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellSectionID];
-            cell.title = data[kKeyTitle];
         }
+        cell.title = data[kKeyTitle];
         return cell;
     }
     else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeTextField) {
         IntegrationTextFieldCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellTextFieldID];
         if (nil == cell) {
             cell = [[IntegrationTextFieldCell alloc] initWithCustomStyle:[data[kKeyTextType] unsignedIntegerValue] reuseIdentifier:kCellTextFieldID mandatory:[data[kKeyIsOn] boolValue]];
-            cell.title = data[kKeyTitle];
-            cell.textField.text = data[kKeyText];
         }
+        cell.title = data[kKeyTitle];
+        cell.textField.text = data[kKeyText];
+        cell.delegate = self;
+        return cell;
+    }
+    else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeButton) {
+        IntegrationButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellButtonID];
+        if (nil == cell) {
+            cell = [[IntegrationButtonCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellButtonID];
+        }
+        cell.title = data[kKeyTitle];
+        return cell;
+    }
+    else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeProfilePicture) {
+        ProfileImageCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellProfilePictureID];
+        if (nil == cell) {
+            cell = [[ProfileImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellProfilePictureID];
+        }
+        cell.image = data[kKeyIcon];
         return cell;
     }
     
@@ -261,6 +351,9 @@ static CGFloat const kTextFieldHeight = 72;
     else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeTextField) {
         return kTextFieldHeight;
     }
+    else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeProfilePicture) {
+        return kProfilePictureHeight;
+    }
     return kCellHeight;
 }
 
@@ -273,6 +366,42 @@ static CGFloat const kTextFieldHeight = 72;
         ((void (*)(id, SEL))[self methodForSelector:sel])(self, sel); // [self performSelector:sel];
         if (_cellInfo.count > indexPath.row)
             [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:NO];
+    }
+}
+
+- (BOOL)textFieldCellShouldReturn:(IntegrationTextFieldCell *)cell
+{
+    NSIndexPath* indexPath = [_table indexPathForCell:cell];
+    if (indexPath) {
+        // find if there is a next focusable cell
+        BOOL hasNext = NO;
+        for (NSUInteger i = indexPath.row + 1; i < _cellInfo.count; i++) {
+            NSDictionary* data = _cellInfo[i];
+            NSNumber* cellType = data[kKeyCellType];
+            if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeTextField) {
+                IntegrationTextFieldCell* newCell = (IntegrationTextFieldCell *)[_table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+                if (newCell) {
+                    [newCell.textField becomeFirstResponder];
+                }
+                hasNext = YES;
+                [_table scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                _focusedItem = i;
+                break;
+            }
+        }
+        if (!hasNext) {
+            [cell.textField resignFirstResponder];
+            _focusedItem = -1;
+        }
+    }
+    return NO;
+}
+
+- (void)textFieldCellDidBeginEditing:(IntegrationTextFieldCell *)cell
+{
+    NSIndexPath* indexPath = [_table indexPathForCell:cell];
+    if (indexPath) {
+        [_table scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
 }
 

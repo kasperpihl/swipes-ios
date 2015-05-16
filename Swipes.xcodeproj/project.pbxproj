@@ -562,6 +562,12 @@
 		DA91E60E1AF7938A00FF20FE /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA91E60D1AF7938A00FF20FE /* PullToRefreshView.m */; };
 		DA91E6231B01FEC800FF20FE /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA91E6221B01FEC800FF20FE /* ProfileViewController.m */; };
 		DA91E6261B02088400FF20FE /* IntegrationTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA91E6251B02088400FF20FE /* IntegrationTextFieldCell.m */; };
+		DA91E6291B035F2000FF20FE /* IntegrationButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA91E6281B035F2000FF20FE /* IntegrationButtonCell.m */; };
+		DA91E62C1B038E2F00FF20FE /* ProfileImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA91E62B1B038E2F00FF20FE /* ProfileImageCell.m */; };
+		DA91E6341B039A6E00FF20FE /* profile_form_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = DA91E6301B039A6E00FF20FE /* profile_form_dark.png */; };
+		DA91E6351B039A6E00FF20FE /* profile_form_dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA91E6311B039A6E00FF20FE /* profile_form_dark@2x.png */; };
+		DA91E6361B039A6E00FF20FE /* profile_form_light.png in Resources */ = {isa = PBXBuildFile; fileRef = DA91E6321B039A6E00FF20FE /* profile_form_light.png */; };
+		DA91E6371B039A6E00FF20FE /* profile_form_light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA91E6331B039A6E00FF20FE /* profile_form_light@2x.png */; };
 		DAB164E71A6D294F008D69B2 /* GmailSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */; };
 		DAB164E81A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
 		DAB164E91A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
@@ -1288,6 +1294,14 @@
 		DA91E6221B01FEC800FF20FE /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProfileViewController.m; path = Swipes/Classes/Delegation/ProfileViewController.m; sourceTree = SOURCE_ROOT; };
 		DA91E6241B02088400FF20FE /* IntegrationTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationTextFieldCell.h; path = Integrations/IntegrationTextFieldCell.h; sourceTree = "<group>"; };
 		DA91E6251B02088400FF20FE /* IntegrationTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationTextFieldCell.m; path = Integrations/IntegrationTextFieldCell.m; sourceTree = "<group>"; };
+		DA91E6271B035F2000FF20FE /* IntegrationButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationButtonCell.h; path = Integrations/IntegrationButtonCell.h; sourceTree = "<group>"; };
+		DA91E6281B035F2000FF20FE /* IntegrationButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationButtonCell.m; path = Integrations/IntegrationButtonCell.m; sourceTree = "<group>"; };
+		DA91E62A1B038E2F00FF20FE /* ProfileImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProfileImageCell.h; path = Integrations/ProfileImageCell.h; sourceTree = "<group>"; };
+		DA91E62B1B038E2F00FF20FE /* ProfileImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProfileImageCell.m; path = Integrations/ProfileImageCell.m; sourceTree = "<group>"; };
+		DA91E6301B039A6E00FF20FE /* profile_form_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_form_dark.png; sourceTree = "<group>"; };
+		DA91E6311B039A6E00FF20FE /* profile_form_dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_form_dark@2x.png"; sourceTree = "<group>"; };
+		DA91E6321B039A6E00FF20FE /* profile_form_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_form_light.png; sourceTree = "<group>"; };
+		DA91E6331B039A6E00FF20FE /* profile_form_light@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_form_light@2x.png"; sourceTree = "<group>"; };
 		DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailSyncHandler.h; path = SyncHandlers/GmailSyncHandler.h; sourceTree = "<group>"; };
 		DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailSyncHandler.m; path = SyncHandlers/GmailSyncHandler.m; sourceTree = "<group>"; };
 		DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailIntegration.h; path = Integrations/GmailIntegration.h; sourceTree = "<group>"; };
@@ -2074,6 +2088,7 @@
 		A781288217294C56002226C8 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				DA91E62F1B039A6E00FF20FE /* Profile */,
 				A74FB85D18FFBC4D00F25157 /* launch-screen */,
 				A75236CF17A335680030ED1E /* Walkthrough */,
 				A79DB41B17358C33007A48E2 /* Backgrounds */,
@@ -2654,6 +2669,10 @@
 		DA7AEE8F1A9F31F900436CE3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA91E62A1B038E2F00FF20FE /* ProfileImageCell.h */,
+				DA91E62B1B038E2F00FF20FE /* ProfileImageCell.m */,
+				DA91E6271B035F2000FF20FE /* IntegrationButtonCell.h */,
+				DA91E6281B035F2000FF20FE /* IntegrationButtonCell.m */,
 				DA91E6241B02088400FF20FE /* IntegrationTextFieldCell.h */,
 				DA91E6251B02088400FF20FE /* IntegrationTextFieldCell.m */,
 				DA3A07051A95EAA400F47C59 /* IntegrationSettingCell.h */,
@@ -2691,6 +2710,17 @@
 				DA91E6221B01FEC800FF20FE /* ProfileViewController.m */,
 			);
 			name = Delegation;
+			sourceTree = "<group>";
+		};
+		DA91E62F1B039A6E00FF20FE /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				DA91E6301B039A6E00FF20FE /* profile_form_dark.png */,
+				DA91E6311B039A6E00FF20FE /* profile_form_dark@2x.png */,
+				DA91E6321B039A6E00FF20FE /* profile_form_light.png */,
+				DA91E6331B039A6E00FF20FE /* profile_form_light@2x.png */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		DAB1650E1A6D3D51008D69B2 /* Products */ = {
@@ -3182,6 +3212,7 @@
 				A78128D217294C56002226C8 /* InfoPlist.strings in Resources */,
 				DACD544518A1ACFC00C378DF /* folder_app.png in Resources */,
 				A7D0D3C319051BA000ABA1FF /* Nexa-Black-Italic.ttf in Resources */,
+				DA91E6351B039A6E00FF20FE /* profile_form_dark@2x.png in Resources */,
 				A7AD45871A3989F200DF19BD /* Time picker.m4a in Resources */,
 				A710F14C1A828BD3006FC16F /* swipes-notification.aif in Resources */,
 				A78128D317294C56002226C8 /* MainStoryboard.storyboard in Resources */,
@@ -3191,6 +3222,7 @@
 				A7AD45791A39809300DF19BD /* New state - current.m4a in Resources */,
 				DACD544D18A1ACFC00C378DF /* package.png in Resources */,
 				DACD545118A1ACFC00C378DF /* page_white_c.png in Resources */,
+				DA91E6361B039A6E00FF20FE /* profile_form_light.png in Resources */,
 				A7D0D3C419051BA000ABA1FF /* Nexa-Bold.ttf in Resources */,
 				A7AD457E1A39809300DF19BD /* Scheduling step2.m4a in Resources */,
 				A772B14219671D9F00C07909 /* swipesandevernote@2x.png in Resources */,
@@ -3202,6 +3234,7 @@
 				A708BEE21A15FDFC00C7E15A /* GothamRounded-Book.ttf in Resources */,
 				DACD545318A1ACFC00C378DF /* page_white_cplusplus.png in Resources */,
 				A7AD456E1A39809300DF19BD /* Task composer3.m4a in Resources */,
+				DA91E6371B039A6E00FF20FE /* profile_form_light@2x.png in Resources */,
 				DACD545218A1ACFC00C378DF /* page_white_code.png in Resources */,
 				A708BED81A15F35B00C7E15A /* Launch Screen.xib in Resources */,
 				DACD545718A1ACFC00C378DF /* page_white_flash.png in Resources */,
@@ -3211,6 +3244,7 @@
 				DACD546118A1ACFC00C378DF /* page_white_visualstudio.png in Resources */,
 				A7F522AC197D7C76008B6147 /* swipesevernotetag.png in Resources */,
 				DACD545C18A1ACFC00C378DF /* page_white_picture.png in Resources */,
+				DA91E6341B039A6E00FF20FE /* profile_form_dark.png in Resources */,
 				DACD544A18A1ACFC00C378DF /* folder_user.png in Resources */,
 				DACD546418A1ACFC00C378DF /* word.png in Resources */,
 				A7AD456D1A39809300DF19BD /* Task composer2.m4a in Resources */,
@@ -3537,6 +3571,7 @@
 				A7B9D39319066299001E1109 /* KPModal.m in Sources */,
 				A702E0671A29B9AD00EC3624 /* HelpTopMenu.m in Sources */,
 				DA09DD7B1A6E636B00E66E97 /* GmailThreadProcessor.m in Sources */,
+				DA91E62C1B038E2F00FF20FE /* ProfileImageCell.m in Sources */,
 				A78128CC17294C56002226C8 /* KPSegmentedViewController.m in Sources */,
 				A7A560B8198A9A3600C3D213 /* SettingsViewController.m in Sources */,
 				A798DCCE19E523CC00386C80 /* SelectionTopMenu.m in Sources */,
@@ -3648,6 +3683,7 @@
 				DA09B02E1AB228D6002632DC /* NSString+MagicalDataImport.m in Sources */,
 				A7F9D79918BA2E7A003D8833 /* KPAttachment.m in Sources */,
 				DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */,
+				DA91E6291B035F2000FF20FE /* IntegrationButtonCell.m in Sources */,
 				A7D7D53917B1A56C00FBC042 /* MenuButton.m in Sources */,
 				DA3A07031A95E7B400F47C59 /* EvernoteIntegrationViewController.m in Sources */,
 				A7E2D93C17B2C5A4007BDE00 /* SettingsCell.m in Sources */,
