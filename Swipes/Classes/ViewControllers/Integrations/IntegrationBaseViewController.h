@@ -15,6 +15,7 @@ extern NSString* const kKeyIsOn;
 extern NSString* const kKeyCellType;
 extern NSString* const kKeyTextType;
 extern NSString* const kKeyText;
+extern NSString* const kKeyPlaceholder;
 extern NSString* const kKeyTouchSelector;
 extern UIColor* kIntegrationGreenColor;
 

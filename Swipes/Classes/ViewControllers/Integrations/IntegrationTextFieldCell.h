@@ -28,11 +28,10 @@ typedef NS_ENUM(NSUInteger, IntegrationTextFieldStyle) {
 
 @interface IntegrationTextFieldCell : UITableViewCell
 
-- (instancetype)initWithCustomStyle:(IntegrationTextFieldStyle)style reuseIdentifier:(NSString *)reuseIdentifier mandatory:(BOOL)mandatory;
-
 @property (nonatomic, strong) UITextField* textField;
 @property (nonatomic, assign) IntegrationTextFieldStyle customStyle;
 @property (nonatomic, strong) NSString* title;
 @property (nonatomic, weak) id<IntegrationTextFieldCellDelegate> delegate;
+@property (nonatomic, assign) BOOL mandatory;
 
 @end

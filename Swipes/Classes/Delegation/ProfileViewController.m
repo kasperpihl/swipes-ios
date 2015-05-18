@@ -8,8 +8,8 @@
 
 #import "AnalyticsHandler.h"
 #import "UtilityClass.h"
-#import "DejalActivityView.h"
-#import "EvernoteIntegration.h"
+//#import "DejalActivityView.h"
+#import "IntegrationTextFieldCell.h"
 #import "ProfileViewController.h"
 
 @interface ProfileViewController ()
@@ -34,24 +34,36 @@
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyIsOn: @(YES),
-                        kKeyTitle: @"NAME", kKeyText: @"My Name",
+                        kKeyTitle: @"NAME",
+                        kKeyText: @"My Name",
+                        kKeyPlaceholder: @"Enter your name",
                         //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyIsOn: @(YES),
-                        kKeyTitle: @"EMAIL", kKeyText: @"user@host.com",
+                        kKeyTitle: @"EMAIL",
+                        kKeyText: @"user@host.com",
+                        kKeyTextType: @(IntegrationTextFieldStyleEmail),
+                        kKeyPlaceholder: @"Your email is mandatory",
                         //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
-                        kKeyTitle: @"PHONE", kKeyText: @"+359 88 7660834",
+                        kKeyTitle: @"PHONE",
+                        kKeyText: @"+359 88 7660834",
+                        kKeyTextType: @(IntegrationTextFieldStylePhone),
+                        kKeyPlaceholder: @"Your phone",
                         //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
-                        kKeyTitle: @"COMPANY", kKeyText: @"Swipes Inc.",
+                        kKeyTitle: @"COMPANY",
+                        kKeyText: @"Swipes Inc.",
+                        kKeyPlaceholder: @"Your company",
                         //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
-                        kKeyTitle: @"POSITION", kKeyText: @"Creative Creator",
+                        kKeyTitle: @"POSITION",
+                        kKeyText: @"Creative Creator",
+                        kKeyPlaceholder: @"Your position in the company",
                         //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeButton),

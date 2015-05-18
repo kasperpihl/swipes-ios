@@ -21,7 +21,6 @@ static CGFloat const kUnderlineMargin = 2;
 @interface IntegrationTextFieldCell () <UITextFieldDelegate>
 
 @property (nonatomic, assign) IntegrationTextFieldStyle style;
-@property (nonatomic, assign) BOOL mandatory;
 @property (nonatomic, strong) UIView* lineView;
 @property (nonatomic, strong) UILabel* titleLabel;
 
@@ -29,7 +28,7 @@ static CGFloat const kUnderlineMargin = 2;
 
 @implementation IntegrationTextFieldCell
 
-- (instancetype)initWithCustomStyle:(IntegrationTextFieldStyle)style reuseIdentifier:(NSString *)reuseIdentifier mandatory:(BOOL)mandatory
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -53,9 +52,6 @@ static CGFloat const kUnderlineMargin = 2;
         _lineView.backgroundColor = gray(158, 1);
         _lineView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self.contentView addSubview:_lineView];
-        
-        self.customStyle = style;
-        self.mandatory = mandatory;
         
         self.backgroundColor = [UIColor clearColor];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -81,6 +77,14 @@ static CGFloat const kUnderlineMargin = 2;
         [myString addAttribute:NSForegroundColorAttributeName value:tcolor(LaterColor) range:range];
     }
     self.titleLabel.attributedText = [[NSAttributedString alloc]initWithAttributedString: myString];
+}
+
+- (void)setMandatory:(BOOL)mandatory
+{
+    if (_mandatory != mandatory) {
+        _mandatory = mandatory;
+        [self setupTitle];
+    }
 }
 
 - (void)setCustomStyle:(IntegrationTextFieldStyle)customStyle

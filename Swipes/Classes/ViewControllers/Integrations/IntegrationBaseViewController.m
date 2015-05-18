@@ -23,6 +23,7 @@ NSString* const kKeyIsOn = @"isOn";
 NSString* const kKeyCellType = @"cellType";
 NSString* const kKeyTextType = @"textType";
 NSString* const kKeyText = @"text";
+NSString* const kKeyPlaceholder = @"placeholder";
 NSString* const kKeyTouchSelector = @"touchSelector";
 
 UIColor* kIntegrationGreenColor;
@@ -228,7 +229,7 @@ static CGFloat const kProfilePictureHeight = 130;
             IntegrationTextFieldCell* inputCell = (IntegrationTextFieldCell *)cell;
             if (![inputCell.textField isFirstResponder]) {
                 [inputCell.textField becomeFirstResponder];
-                [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
             }
         }
     }
@@ -263,10 +264,13 @@ static CGFloat const kProfilePictureHeight = 130;
     else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeTextField) {
         IntegrationTextFieldCell* cell = [tableView dequeueReusableCellWithIdentifier:kCellTextFieldID];
         if (nil == cell) {
-            cell = [[IntegrationTextFieldCell alloc] initWithCustomStyle:[data[kKeyTextType] unsignedIntegerValue] reuseIdentifier:kCellTextFieldID mandatory:[data[kKeyIsOn] boolValue]];
+            cell = [[IntegrationTextFieldCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellTextFieldID];
         }
+        cell.mandatory = [data[kKeyIsOn] boolValue];
+        cell.customStyle = [data[kKeyTextType] unsignedIntegerValue];
         cell.title = data[kKeyTitle];
         cell.textField.text = data[kKeyText];
+        cell.textField.placeholder = data[kKeyPlaceholder];
         cell.delegate = self;
         return cell;
     }
@@ -384,7 +388,7 @@ static CGFloat const kProfilePictureHeight = 130;
                     [newCell.textField becomeFirstResponder];
                 }
                 hasNext = YES;
-                [_table scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                [_table scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
                 _focusedItem = i;
                 break;
             }
@@ -401,7 +405,7 @@ static CGFloat const kProfilePictureHeight = 130;
 {
     NSIndexPath* indexPath = [_table indexPathForCell:cell];
     if (indexPath) {
-        [_table scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        [_table scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     }
 }
 
