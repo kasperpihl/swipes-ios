@@ -19,6 +19,7 @@
 
 #define TEXT_COLOR(Theme)               retColorF(color(248,248,249,1), color(27,30,35,1), Theme)
 #define SUB_TEXT_COLOR                  retColor(color(189,191,193,1),               color(95,97,99,1))
+#define PLACEHOLDER_COLOR               retColor(gray(158, 1),               color(95,97,99,1))
 #define BACKGROUND(Theme)               retColorF(color(27,30,35,1),     color(248,248,249,1),Theme) //retColorF(color(36,40,46,1),     gray(255,1),Theme)
 //color(226,231,233,1)
 

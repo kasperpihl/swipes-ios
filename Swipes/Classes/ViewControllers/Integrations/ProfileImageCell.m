@@ -42,7 +42,11 @@ static CGFloat const kPictureSize = 100;
 {
     _image = image;
     
-    UIImage* ourShellImage = [UIImage imageNamed:(ThemeDark == THEMER.currentTheme) ? @"profile_form_dark" : @"profile_form_light"];
+    NSString* fileName = (ThemeDark == THEMER.currentTheme) ? @"profile_form_dark" : @"profile_form_light";
+    if (!image)
+        fileName = [fileName stringByAppendingString:@"_plus"];
+    
+    UIImage* ourShellImage = [UIImage imageNamed:fileName];
     
     _shellImageView.image = ourShellImage;
     [_shellImageView sizeToFit];

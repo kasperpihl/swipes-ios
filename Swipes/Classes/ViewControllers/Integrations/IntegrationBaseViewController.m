@@ -215,6 +215,11 @@ static CGFloat const kProfilePictureHeight = 130;
     [_table reloadData];
 }
 
+- (void)reloadRow:(NSUInteger)row
+{
+    [_table reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _cellInfo.count;
@@ -406,6 +411,7 @@ static CGFloat const kProfilePictureHeight = 130;
     NSIndexPath* indexPath = [_table indexPathForCell:cell];
     if (indexPath) {
         [_table scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+        _focusedItem = indexPath.row;
     }
 }
 

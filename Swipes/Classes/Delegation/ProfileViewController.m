@@ -6,17 +6,21 @@
 //  Copyright (c) 2015 Pihl IT. All rights reserved.
 //
 
+#import <Parse/Parse.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "AnalyticsHandler.h"
 #import "UtilityClass.h"
 //#import "DejalActivityView.h"
 #import "IntegrationTextFieldCell.h"
 #import "ProfileViewController.h"
 
-@interface ProfileViewController ()
+@interface ProfileViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @end
 
-@implementation ProfileViewController
+@implementation ProfileViewController {
+    BOOL _canTakePicture;
+}
 
 - (void)viewDidLoad
 {
@@ -29,8 +33,7 @@
     [super recreateCellInfo];
     self.cellInfo = @[
                       @{kKeyCellType: @(kIntegrationCellTypeProfilePicture),
-//                        kKeyIcon: @(YES),
-//                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
+                        kKeyTouchSelector: NSStringFromSelector(@selector(onSelectImageTouch)),
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyIsOn: @(YES),
@@ -82,6 +85,83 @@
 }
 
 #pragma mark - selectors
+
+- (void)onSelectImageTouch
+{
+    // TODO make it work for iPad too
+    
+    UIActionSheet* action = [[UIActionSheet alloc] initWithTitle:LOCALIZE_STRING(@"Select picture") delegate:self cancelButtonTitle:LOCALIZE_STRING(@"Cancel") destructiveButtonTitle:LOCALIZE_STRING(@"Remove current picture") otherButtonTitles:LOCALIZE_STRING(@"Take from Photos"), nil];
+    
+    _canTakePicture = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
+    if (_canTakePicture) {
+        [action addButtonWithTitle:LOCALIZE_STRING(@"Take picture")];
+    }
+
+    if ([PFFacebookUtils isLinkedWithUser:kCurrent]) {
+        [action addButtonWithTitle:LOCALIZE_STRING(@"Facebook profile picture")];
+    }
+    
+    [action showFromRect:self.view.frame inView:self.view animated:YES];
+}
+
+- (void)downloadFacebookPicture
+{
+    FBSession* fbSession = [PFFacebookUtils session];
+    NSString* accessToken = fbSession.accessTokenData.accessToken;
+    //self.imageData = [[NSMutableData alloc] init];
+    NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/me/picture?type=large&return_ssl_resources=1&access_token=%@", accessToken]];
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:pictureURL] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        
+    }];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 1:
+            [self showImagePickerForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+            break;
+            
+        case 2:
+            if (!_canTakePicture) {
+                [self downloadFacebookPicture];
+            }
+            else {
+                [self showImagePickerForSourceType:UIImagePickerControllerSourceTypeCamera];
+            }
+            break;
+            
+        case 3:
+            [self downloadFacebookPicture];
+            break;
+            
+        default:
+            break;
+    }
+    
+}
+
+- (void)showImagePickerForSourceType:(UIImagePickerControllerSourceType)sourceType
+{
+    UIImagePickerController* imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    imagePickerController.sourceType = sourceType;
+    imagePickerController.allowsEditing = YES;
+    imagePickerController.delegate = self;
+    
+    [self presentViewController:imagePickerController animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    // TODO set image
+    UIImage* result = info[UIImagePickerControllerEditedImage];
+    if (result) {
+        self.cellInfo[0][kKeyIcon] = result;
+        [self reloadRow:0];
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 //- (void)onSyncWithEvernoteTouch
 //{

@@ -568,6 +568,10 @@
 		DA91E6351B039A6E00FF20FE /* profile_form_dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA91E6311B039A6E00FF20FE /* profile_form_dark@2x.png */; };
 		DA91E6361B039A6E00FF20FE /* profile_form_light.png in Resources */ = {isa = PBXBuildFile; fileRef = DA91E6321B039A6E00FF20FE /* profile_form_light.png */; };
 		DA91E6371B039A6E00FF20FE /* profile_form_light@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA91E6331B039A6E00FF20FE /* profile_form_light@2x.png */; };
+		DA91E6711B0B65F100FF20FE /* profile_form_dark_plus.png in Resources */ = {isa = PBXBuildFile; fileRef = DA91E66D1B0B65F100FF20FE /* profile_form_dark_plus.png */; };
+		DA91E6721B0B65F100FF20FE /* profile_form_dark_plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA91E66E1B0B65F100FF20FE /* profile_form_dark_plus@2x.png */; };
+		DA91E6731B0B65F100FF20FE /* profile_form_light_plus.png in Resources */ = {isa = PBXBuildFile; fileRef = DA91E66F1B0B65F100FF20FE /* profile_form_light_plus.png */; };
+		DA91E6741B0B65F100FF20FE /* profile_form_light_plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA91E6701B0B65F100FF20FE /* profile_form_light_plus@2x.png */; };
 		DAB164E71A6D294F008D69B2 /* GmailSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */; };
 		DAB164E81A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
 		DAB164E91A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
@@ -1302,6 +1306,10 @@
 		DA91E6311B039A6E00FF20FE /* profile_form_dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_form_dark@2x.png"; sourceTree = "<group>"; };
 		DA91E6321B039A6E00FF20FE /* profile_form_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_form_light.png; sourceTree = "<group>"; };
 		DA91E6331B039A6E00FF20FE /* profile_form_light@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_form_light@2x.png"; sourceTree = "<group>"; };
+		DA91E66D1B0B65F100FF20FE /* profile_form_dark_plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_form_dark_plus.png; sourceTree = "<group>"; };
+		DA91E66E1B0B65F100FF20FE /* profile_form_dark_plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_form_dark_plus@2x.png"; sourceTree = "<group>"; };
+		DA91E66F1B0B65F100FF20FE /* profile_form_light_plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_form_light_plus.png; sourceTree = "<group>"; };
+		DA91E6701B0B65F100FF20FE /* profile_form_light_plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_form_light_plus@2x.png"; sourceTree = "<group>"; };
 		DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailSyncHandler.h; path = SyncHandlers/GmailSyncHandler.h; sourceTree = "<group>"; };
 		DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailSyncHandler.m; path = SyncHandlers/GmailSyncHandler.m; sourceTree = "<group>"; };
 		DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailIntegration.h; path = Integrations/GmailIntegration.h; sourceTree = "<group>"; };
@@ -2719,6 +2727,10 @@
 				DA91E6311B039A6E00FF20FE /* profile_form_dark@2x.png */,
 				DA91E6321B039A6E00FF20FE /* profile_form_light.png */,
 				DA91E6331B039A6E00FF20FE /* profile_form_light@2x.png */,
+				DA91E66D1B0B65F100FF20FE /* profile_form_dark_plus.png */,
+				DA91E66E1B0B65F100FF20FE /* profile_form_dark_plus@2x.png */,
+				DA91E66F1B0B65F100FF20FE /* profile_form_light_plus.png */,
+				DA91E6701B0B65F100FF20FE /* profile_form_light_plus@2x.png */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -3220,6 +3232,7 @@
 				DA4F29CE1AA73D8C0048C71A /* swipes-ui-gmail-integrations-3.png in Resources */,
 				A763D5551A13AC670060D994 /* alldonefortoday@2x.png in Resources */,
 				A7AD45791A39809300DF19BD /* New state - current.m4a in Resources */,
+				DA91E6741B0B65F100FF20FE /* profile_form_light_plus@2x.png in Resources */,
 				DACD544D18A1ACFC00C378DF /* package.png in Resources */,
 				DACD545118A1ACFC00C378DF /* page_white_c.png in Resources */,
 				DA91E6361B039A6E00FF20FE /* profile_form_light.png in Resources */,
@@ -3253,6 +3266,7 @@
 				A708BEF01A160D2000C7E15A /* timepickerwheelselected@2x.png in Resources */,
 				A7AD457D1A39809300DF19BD /* Scheduling step1.m4a in Resources */,
 				A708BEEB1A16095000C7E15A /* timepickerwheel.png in Resources */,
+				DA91E6711B0B65F100FF20FE /* profile_form_dark_plus.png in Resources */,
 				A7AD45781A39809300DF19BD /* New state - completed.m4a in Resources */,
 				A7F522AD197D7C76008B6147 /* swipesevernotetag@2x.png in Resources */,
 				A75236E417A335680030ED1E /* walkthrough_swipe_done.png in Resources */,
@@ -3284,6 +3298,7 @@
 				DA4F29CA1AA73D8C0048C71A /* swipes-ui-gmail-integrations-1.png in Resources */,
 				A708BEE81A15FE3400C7E15A /* GothamRounded-Medium.ttf in Resources */,
 				A75236FE17A349340030ED1E /* walkthrough_phone_background@2x.png in Resources */,
+				DA91E6721B0B65F100FF20FE /* profile_form_dark_plus@2x.png in Resources */,
 				A7C90E6A17A6ABF700C5F9E2 /* wt_schedule_popup.png in Resources */,
 				A763D5531A13AC670060D994 /* alldonefornow@2x.png in Resources */,
 				A7C90E6B17A6ABF700C5F9E2 /* wt_schedule_popup@2x.png in Resources */,
@@ -3308,6 +3323,7 @@
 				DACD544318A1ACFC00C378DF /* excel.png in Resources */,
 				A7AD45861A3989F200DF19BD /* Succesful action.m4a in Resources */,
 				A7AD456B1A39809300DF19BD /* All done for today.m4a in Resources */,
+				DA91E6731B0B65F100FF20FE /* profile_form_light_plus.png in Resources */,
 				A7AD456C1A39809300DF19BD /* Task composer1.m4a in Resources */,
 				DA5346BE19D5C9FA007AA15D /* Datamodel.xcdatamodeld in Resources */,
 				A7AD457B1A39809300DF19BD /* Priority notification one repetition.m4a in Resources */,
