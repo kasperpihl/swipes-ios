@@ -307,10 +307,10 @@ static CGFloat const kTopMargin = 60;
             break;
         }
         case KPMenuButtonLogout:{
-//            if(!kUserHandler.isLoggedIn){
-//                [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
-//                return;
-//            }
+            if(!kUserHandler.isLoggedIn){
+                [ROOT_CONTROLLER changeToMenu:KPMenuLogin animated:YES];
+                return;
+            }
 //            [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Log out") andMessage:LOCALIZE_STRING(@"Are you sure you want to log out of your account?") block:^(BOOL succeeded, NSError *error) {
 //                if(succeeded){
 //                    [ROOT_CONTROLLER logOut];

@@ -10,6 +10,9 @@
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "AnalyticsHandler.h"
 #import "UtilityClass.h"
+#import "UserHandler.h"
+#import "RootViewController.h"
+#import "SettingsHandler.h"
 //#import "DejalActivityView.h"
 #import "IntegrationTextFieldCell.h"
 #import "ProfileViewController.h"
@@ -31,6 +34,12 @@
 - (void)recreateCellInfo
 {
     [super recreateCellInfo];
+    
+    NSString* email = kCurrent.email;
+    if (![UtilityClass validateEmail:email]) {
+        email = @"";
+    }
+    
     self.cellInfo = @[
                       @{kKeyCellType: @(kIntegrationCellTypeProfilePicture),
                         kKeyTouchSelector: NSStringFromSelector(@selector(onSelectImageTouch)),
@@ -38,40 +47,40 @@
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyIsOn: @(YES),
                         kKeyTitle: @"NAME",
-                        kKeyText: @"My Name",
+                        kKeyText: [kSettings valueForSetting:ProfileName],
                         kKeyPlaceholder: @"Enter your name",
                         //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyIsOn: @(YES),
                         kKeyTitle: @"EMAIL",
-                        kKeyText: @"user@host.com",
+                        kKeyText: email,
                         kKeyTextType: @(IntegrationTextFieldStyleEmail),
                         kKeyPlaceholder: @"Your email is mandatory",
                         //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyTitle: @"PHONE",
-                        kKeyText: @"+359 88 7660834",
+                        kKeyText: [kSettings valueForSetting:ProfilePhone],
                         kKeyTextType: @(IntegrationTextFieldStylePhone),
                         kKeyPlaceholder: @"Your phone",
                         //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyTitle: @"COMPANY",
-                        kKeyText: @"Swipes Inc.",
+                        kKeyText: [kSettings valueForSetting:ProfileCompany],
                         kKeyPlaceholder: @"Your company",
                         //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyTitle: @"POSITION",
-                        kKeyText: @"Creative Creator",
+                        kKeyText: [kSettings valueForSetting:ProfilePosition],
                         kKeyPlaceholder: @"Your position in the company",
                         //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeButton),
                         kKeyTitle: @"Sign out",
-                        //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
+                        kKeyTouchSelector: NSStringFromSelector(@selector(onSignOut))
                         },
                       @{kKeyCellType: @(kIntegrationCellTypeButton),
                         kKeyTitle: @"Change password",
@@ -138,7 +147,6 @@
         default:
             break;
     }
-    
 }
 
 - (void)showImagePickerForSourceType:(UIImagePickerControllerSourceType)sourceType
@@ -163,74 +171,32 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-//- (void)onSyncWithEvernoteTouch
-//{
-//    kEnInt.enableSync = !kEnInt.enableSync;
-//    self.cellInfo[0][kKeyIsOn] = @(kEnInt.enableSync);
-//}
-//
-//- (void)onAutoImportTouch
-//{
-//    kEnInt.autoFindFromTag = !kEnInt.autoFindFromTag;
-//    self.cellInfo[1][kKeyIsOn] = @(kEnInt.autoFindFromTag);
-//}
-//
-//- (void)onFindPersonalTouch
-//{
-//    kEnInt.findInPersonalLinked = !kEnInt.findInPersonalLinked;
-//    self.cellInfo[2][kKeyIsOn] = @(kEnInt.findInPersonalLinked);
-//}
-//
-//- (void)onFindBusinessNotebooksTouch
-//{
-//    kEnInt.findInBusinessNotebooks = !kEnInt.findInBusinessNotebooks;
-//    self.cellInfo[3][kKeyIsOn] = @(kEnInt.findInBusinessNotebooks);
-//}
-//
-//- (void)onBusinessLearnMoreTouch
-//{
-//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://evernote.com/business/"]];
-//}
-//
-//- (void)onImportNotesTouch
-//{
-//    [ANALYTICS pushView:@"Evernote Importer"];
-//    [self presentViewController:[[EvernoteImporterViewController alloc] init] animated:YES completion:nil];
-//}
-//
-//- (void)onLearnMoreTouch
-//{
-//    [ANALYTICS pushView:@"Evernote Learn More"];
-//    EvernoteHelperViewController *helper = [[EvernoteHelperViewController alloc] init];
-//    helper.delegate = self;
-//    [self presentViewController:helper animated:YES completion:nil];
-//}
-//
-//- (void)onSignOutTouch
-//{
-//    if (kEnInt.isAuthenticated){
-//        [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Unlink Evernote") andMessage:LOCALIZE_STRING(@"All tasks will be unlinked, are you sure?") block:^(BOOL succeeded, NSError *error) {
-//            if (succeeded) {
-//                [kEnInt logout];
-//                NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
-//                [KPToDo removeAllAttachmentsForAllToDosWithService:EVERNOTE_SERVICE inContext:context save:YES];
-//                [self reload];
-//            }
-//        }];
-//    }
-//}
-//
-//- (void)onLinkEvernoteTouch
-//{
-//    [self evernoteAuthenticateUsingSelector:@selector(authenticatedEvernote) withObject:nil];
-//}
-//
+- (void)onSignOut
+{
+    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Log out") andMessage:LOCALIZE_STRING(@"Are you sure you want to log out of your account?") block:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            [self.parentViewController dismissViewControllerAnimated:NO completion:nil];
+            [ROOT_CONTROLLER logOut];
+            [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
+        }
+    }];
+}
+
 #pragma mark - Helpers
 
 - (void)reload
 {
     [self recreateCellInfo];
     [self reloadData];
+}
+
+- (void)goBack
+{
+    [kSettings setValue:self.cellInfo[1][kKeyText] forSetting:ProfileName];
+    [kSettings setValue:self.cellInfo[3][kKeyText] forSetting:ProfilePhone];
+    [kSettings setValue:self.cellInfo[4][kKeyText] forSetting:ProfileCompany];
+    [kSettings setValue:self.cellInfo[5][kKeyText] forSetting:ProfilePosition];
+    [super goBack];
 }
 
 @end

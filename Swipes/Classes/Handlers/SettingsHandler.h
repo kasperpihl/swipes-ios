@@ -36,6 +36,11 @@ typedef enum {
 
     IntegrationGmailOpenType,
     
+    ProfileName,
+    ProfilePhone,
+    ProfileCompany,
+    ProfilePosition,
+    
 } KPSettings;
 
 #define SH_UpdateSetting @"SH_UpdateSetting"

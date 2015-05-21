@@ -45,7 +45,7 @@ static SettingsHandler *sharedObject;
 }
 
 -(NSArray*)syncedSettingIndexes{
-    return @[ @(SettingLaterToday), @(SettingEveningStartTime), @(SettingWeekStart), @(SettingWeekStartTime), @(SettingWeekendStart), @(SettingWeekendStartTime), @(SettingAddToBottom), @(SettingTimeZone), @(SettingFilter) ];
+    return @[ @(SettingLaterToday), @(SettingEveningStartTime), @(SettingWeekStart), @(SettingWeekStartTime), @(SettingWeekendStart), @(SettingWeekendStartTime), @(SettingAddToBottom), @(SettingTimeZone), @(SettingFilter), @(SettingUseStandardStatusBar), @(ProfileName), @(ProfilePhone), @(ProfileCompany), @(ProfilePosition) ];
 }
 
 -(KPSettings)settingForIndex:(NSString*)index{
@@ -94,6 +94,14 @@ static SettingsHandler *sharedObject;
         setting = SettingUseStandardStatusBar;
     else if([index isEqualToString:@"IntegrationGmailOpenType"])
         setting = IntegrationGmailOpenType;
+    else if([index isEqualToString:@"ProfileName"])
+        setting = ProfileName;
+    else if([index isEqualToString:@"ProfilePhone"])
+        setting = ProfilePhone;
+    else if([index isEqualToString:@"ProfileCompany"])
+        setting = ProfileCompany;
+    else if([index isEqualToString:@"ProfilePosition"])
+        setting = ProfilePosition;
     
     return setting;
 }
@@ -165,6 +173,18 @@ static SettingsHandler *sharedObject;
             break;
         case IntegrationGmailOpenType:
             index = @"IntegrationGmailOpenType";
+            break;
+        case ProfileName:
+            index = @"ProfileName";
+            break;
+        case ProfilePhone:
+            index = @"ProfilePhone";
+            break;
+        case ProfileCompany:
+            index = @"ProfileCompany";
+            break;
+        case ProfilePosition:
+            index = @"ProfilePosition";
             break;
     }
     return index;
@@ -279,6 +299,11 @@ static SettingsHandler *sharedObject;
             return @NO;
         case IntegrationGmailOpenType:
             return [self valueForSetting:IntegrationGmailUsingMailbox] ? @(1) : @(0);
+        case ProfileName:
+        case ProfilePhone:
+        case ProfileCompany:
+        case ProfilePosition:
+            return @"";
     }
 }
 

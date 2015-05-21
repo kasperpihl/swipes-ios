@@ -118,4 +118,11 @@ static CGFloat const kUnderlineMargin = 2;
     }
 }
 
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(textFieldCellDidEndEditing:)]) {
+        [_delegate textFieldCellDidEndEditing:self];
+    }
+}
+
 @end

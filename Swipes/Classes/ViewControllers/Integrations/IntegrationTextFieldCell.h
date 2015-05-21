@@ -22,6 +22,7 @@ typedef NS_ENUM(NSUInteger, IntegrationTextFieldStyle) {
 
 - (BOOL)textFieldCellShouldReturn:(IntegrationTextFieldCell *)cell;
 - (void)textFieldCellDidBeginEditing:(IntegrationTextFieldCell *)cell;
+- (void)textFieldCellDidEndEditing:(IntegrationTextFieldCell *)cell;
 
 @end
 

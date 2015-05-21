@@ -71,6 +71,7 @@ static CGFloat const kProfilePictureHeight = 130;
     self.table.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.table.delegate = self;
     self.table.dataSource = self;
+    self.table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     [self.view addSubview:self.table];
     
     // setup back button
@@ -412,6 +413,14 @@ static CGFloat const kProfilePictureHeight = 130;
     if (indexPath) {
         [_table scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
         _focusedItem = indexPath.row;
+    }
+}
+
+- (void)textFieldCellDidEndEditing:(IntegrationTextFieldCell *)cell
+{
+    NSIndexPath* indexPath = [_table indexPathForCell:cell];
+    if (indexPath) {
+        _cellInfo[indexPath.row][kKeyText] = cell.textField.text;
     }
 }
 
