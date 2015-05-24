@@ -618,6 +618,8 @@
 		DACD546218A1ACFC00C378DF /* page_white_zip.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544018A1ACFC00C378DF /* page_white_zip.png */; };
 		DACD546318A1ACFC00C378DF /* powerpoint.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544118A1ACFC00C378DF /* powerpoint.png */; };
 		DACD546418A1ACFC00C378DF /* word.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544218A1ACFC00C378DF /* word.png */; };
+		DAD501561B11535700A1E6D0 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD501541B11535700A1E6D0 /* libc++.dylib */; };
+		DAD501571B11535700A1E6D0 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD501551B11535700A1E6D0 /* Fabric.framework */; };
 		DAD78B761A67E958009992C3 /* KPStringScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD78B741A67E958009992C3 /* KPStringScanner.h */; };
 		DAD78B771A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
 		DAD78B781A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
@@ -1328,6 +1330,8 @@
 		DACD544018A1ACFC00C378DF /* page_white_zip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_zip.png; sourceTree = "<group>"; };
 		DACD544118A1ACFC00C378DF /* powerpoint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = powerpoint.png; sourceTree = "<group>"; };
 		DACD544218A1ACFC00C378DF /* word.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = word.png; sourceTree = "<group>"; };
+		DAD501541B11535700A1E6D0 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		DAD501551B11535700A1E6D0 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		DAD78B741A67E958009992C3 /* KPStringScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPStringScanner.h; path = Swipes/Classes/Utilities/KPStringScanner.h; sourceTree = SOURCE_ROOT; };
 		DAD78B751A67E958009992C3 /* KPStringScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPStringScanner.m; path = Swipes/Classes/Utilities/KPStringScanner.m; sourceTree = SOURCE_ROOT; };
 		DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SwipesToday.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1380,6 +1384,7 @@
 				A761B5BB16EB59760095A9A8 /* Accounts.framework in Frameworks */,
 				A761B5B716EB596B0095A9A8 /* CFNetwork.framework in Frameworks */,
 				A761B5B516EB59650095A9A8 /* CoreLocation.framework in Frameworks */,
+				DAD501561B11535700A1E6D0 /* libc++.dylib in Frameworks */,
 				A761B5B316EB59610095A9A8 /* libsqlite3.dylib in Frameworks */,
 				A761B5B116EB595B0095A9A8 /* libz.1.1.3.dylib in Frameworks */,
 				A761B5AD16EB594E0095A9A8 /* QuartzCore.framework in Frameworks */,
@@ -1390,6 +1395,7 @@
 				A761B5A516EB59370095A9A8 /* SystemConfiguration.framework in Frameworks */,
 				A761B5A316EB59320095A9A8 /* CoreData.framework in Frameworks */,
 				A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */,
+				DAD501571B11535700A1E6D0 /* Fabric.framework in Frameworks */,
 				A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */,
 				A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */,
 				51309AE023584D4FA13F00A9 /* libPods-Swipes.a in Frameworks */,
@@ -2080,6 +2086,8 @@
 			children = (
 				DA09AFCF1AB228D6002632DC /* MagicalRecord */,
 				A7D0685A190E654C00699B4E /* MMDrawerController */,
+				DAD501541B11535700A1E6D0 /* libc++.dylib */,
+				DAD501551B11535700A1E6D0 /* Fabric.framework */,
 				A717DD0F18B6440A00EE359C /* Crashlytics.framework */,
 				A74D3FCC18D9E7AC0056D124 /* GrowingTextView */,
 			);

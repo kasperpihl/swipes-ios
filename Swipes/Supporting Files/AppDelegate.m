@@ -12,6 +12,7 @@
 
 #import <DropboxSDK/DropboxSDK.h>
 
+#import "Intercom.h"
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
 #import "UtilityClass.h"
@@ -74,8 +75,8 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     
     [Crashlytics startWithAPIKey:[UtilityClass decrypt:@"ZV8ERTZCDxFdRRkyV1UPY1hQRWNHDRIERURgVgJYZQoAQzVCCkcARw=="]]; //@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
     if(kCurrent){
-        [Crashlytics setUserIdentifier:kCurrent.objectId];
-        [Crashlytics setUserEmail:kCurrent.username];
+        [[Crashlytics sharedInstance] setUserIdentifier:kCurrent.objectId];
+        [[Crashlytics sharedInstance] setUserEmail:kCurrent.username];
     }
     
     [GAI sharedInstance].dispatchInterval = 20;
@@ -209,11 +210,13 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 #endif
     }
     [currentInstallation saveInBackground];
+    
+    [Intercom setDeviceToken:deviceToken];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
 {
-    DLog(@"Error in registration. Error: %@", err);
+    DLog(@"Remote notification registration. Error: %@", err);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
