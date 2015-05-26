@@ -9,13 +9,14 @@
 #import <Parse/Parse.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <DZNPhotoPickerController/UIImagePickerController+Edit.h>
+#import <DZNPhotoPickerController/DZNPhotoEditorViewController.h>
 #import "KPImageCache.h"
 #import "AnalyticsHandler.h"
 #import "UtilityClass.h"
 #import "UserHandler.h"
 #import "RootViewController.h"
 #import "SettingsHandler.h"
-//#import "DejalActivityView.h"
+#import "DejalActivityView.h"
 #import "IntegrationTextFieldCell.h"
 #import "ProfileViewController.h"
 
@@ -136,17 +137,6 @@
     [action showFromRect:self.view.frame inView:self.view animated:YES];
 }
 
-- (void)downloadFacebookPicture
-{
-    FBSession* fbSession = [PFFacebookUtils session];
-    NSString* accessToken = fbSession.accessTokenData.accessToken;
-    //self.imageData = [[NSMutableData alloc] init];
-    NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/me/picture?type=large&return_ssl_resources=1&access_token=%@", accessToken]];
-    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:pictureURL] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        
-    }];
-}
-
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSInteger buttonOffset = 1;
@@ -203,12 +193,7 @@
     // TODO set image
     UIImage* result = info[UIImagePickerControllerEditedImage];
     if (result) {
-        NSString* predictedURLString = [NSString stringWithFormat:@"https://demosten-test-1.s3.amazonaws.com/%@", [self profilePicturePath]];
-        NSURL* predictedURL = [NSURL URLWithString:predictedURLString];
-        [[KPImageCache sharedCache] setImage:result forURL:predictedURL];
-        [kSettings setValue:predictedURLString forSetting:ProfilePictureURL];
-        self.cellInfo[0][kKeyIcon] = result;
-        [self reloadRow:0];
+        [self storeProfilePicture:result];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -230,6 +215,56 @@
 }
 
 #pragma mark - Helpers
+
+- (void)downloadFacebookPicture
+{
+    // TODO show wait screen?
+    [DejalBezelActivityView activityViewForView:[GlobalApp topView] withLabel:NSLocalizedString(@"Loading from Facebook...", nil)];
+
+    FBSession* fbSession = [PFFacebookUtils session];
+    NSString* accessToken = fbSession.accessTokenData.accessToken;
+    NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/me/picture?type=large&return_ssl_resources=1&access_token=%@", accessToken]];
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:pictureURL] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        [DejalBezelActivityView removeViewAnimated:YES];
+        if (data) {
+            UIImage* image = [UIImage imageWithData:data];
+            if (image) {
+                // TODO search for the circular editor problem
+//                DZNPhotoEditorViewController *editor = [[DZNPhotoEditorViewController alloc] initWithImage:image];
+//                editor.cropMode = DZNPhotoEditorViewControllerCropModeCircular;
+//                CGFloat width = CGRectGetWidth(self.view.frame) - 50;
+//                editor.cropSize = CGSizeMake(width, width);
+//                
+//                [editor setAcceptBlock:^(DZNPhotoEditorViewController *editor, NSDictionary *userInfo){
+                    [self storeProfilePicture:image];
+//                }];
+//                
+//                [editor setCancelBlock:^(DZNPhotoEditorViewController *editor){
+//                    DLog(@"Canceled");
+//                    [self dismissViewControllerAnimated:NO completion:nil];
+//                }];
+//                [self presentViewController:editor animated:YES completion:nil];
+                return;
+            }
+        }
+        // report error
+        NSError* error = connectionError;
+        if (!error) {
+            error = [NSError errorWithDomain:@"Invalid facebook image without error and data" code:801 userInfo:nil];
+        }
+        [UtilityClass sendError:error type:@"Facebook profile picture extract"];
+    }];
+}
+
+- (void)storeProfilePicture:(UIImage *)image
+{
+    NSString* predictedURLString = [NSString stringWithFormat:@"https://demosten-test-1.s3.amazonaws.com/%@", [self profilePicturePath]];
+    NSURL* predictedURL = [NSURL URLWithString:predictedURLString];
+    [[KPImageCache sharedCache] setImage:image forURL:predictedURL];
+    [kSettings setValue:predictedURLString forSetting:ProfilePictureURL];
+    self.cellInfo[0][kKeyIcon] = image;
+    [self reloadRow:0];
+}
 
 - (BOOL)hasProfilePicture
 {
