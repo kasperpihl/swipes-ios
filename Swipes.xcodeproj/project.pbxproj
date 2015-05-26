@@ -630,6 +630,7 @@
 		DACD546218A1ACFC00C378DF /* page_white_zip.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544018A1ACFC00C378DF /* page_white_zip.png */; };
 		DACD546318A1ACFC00C378DF /* powerpoint.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544118A1ACFC00C378DF /* powerpoint.png */; };
 		DACD546418A1ACFC00C378DF /* word.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544218A1ACFC00C378DF /* word.png */; };
+		DAD501621B13614400A1E6D0 /* KPImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD501611B13614400A1E6D0 /* KPImageCache.m */; };
 		DAD78B761A67E958009992C3 /* KPStringScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD78B741A67E958009992C3 /* KPStringScanner.h */; };
 		DAD78B771A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
 		DAD78B781A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
@@ -1356,6 +1357,8 @@
 		DACD544018A1ACFC00C378DF /* page_white_zip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_zip.png; sourceTree = "<group>"; };
 		DACD544118A1ACFC00C378DF /* powerpoint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = powerpoint.png; sourceTree = "<group>"; };
 		DACD544218A1ACFC00C378DF /* word.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = word.png; sourceTree = "<group>"; };
+		DAD501601B13614400A1E6D0 /* KPImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPImageCache.h; sourceTree = "<group>"; };
+		DAD501611B13614400A1E6D0 /* KPImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPImageCache.m; sourceTree = "<group>"; };
 		DAD78B741A67E958009992C3 /* KPStringScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPStringScanner.h; path = Swipes/Classes/Utilities/KPStringScanner.h; sourceTree = SOURCE_ROOT; };
 		DAD78B751A67E958009992C3 /* KPStringScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPStringScanner.m; path = Swipes/Classes/Utilities/KPStringScanner.m; sourceTree = SOURCE_ROOT; };
 		DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SwipesToday.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2029,6 +2032,8 @@
 				A71E9FC41951CE4B00FC9B0B /* NSString+Levenshtein.m */,
 				A7A3C25919E26D0B0025E877 /* NSDate+UtilitiesiOS8.h */,
 				A7A3C25A19E26D0B0025E877 /* NSDate+UtilitiesiOS8.m */,
+				DAD501601B13614400A1E6D0 /* KPImageCache.h */,
+				DAD501611B13614400A1E6D0 /* KPImageCache.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -3607,6 +3612,7 @@
 				A703B1AF1838EBF20047DCC9 /* KPAddView.m in Sources */,
 				A763C93D19208E58005041D7 /* AttachmentPopup.m in Sources */,
 				A703B1CB1838EC570047DCC9 /* ToDoCell.m in Sources */,
+				DAD501621B13614400A1E6D0 /* KPImageCache.m in Sources */,
 				A7F4066C17296BF100DDE644 /* ToDoListViewController.m in Sources */,
 				A7B9D39019066251001E1109 /* KPAccountAlert.m in Sources */,
 				DA09B0331AB228D6002632DC /* NSManagedObject+MagicalAggregation.m in Sources */,

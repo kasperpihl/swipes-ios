@@ -45,7 +45,7 @@ static SettingsHandler *sharedObject;
 }
 
 -(NSArray*)syncedSettingIndexes{
-    return @[ @(SettingLaterToday), @(SettingEveningStartTime), @(SettingWeekStart), @(SettingWeekStartTime), @(SettingWeekendStart), @(SettingWeekendStartTime), @(SettingAddToBottom), @(SettingTimeZone), @(SettingFilter), @(SettingUseStandardStatusBar), @(ProfileName), @(ProfilePhone), @(ProfileCompany), @(ProfilePosition) ];
+    return @[ @(SettingLaterToday), @(SettingEveningStartTime), @(SettingWeekStart), @(SettingWeekStartTime), @(SettingWeekendStart), @(SettingWeekendStartTime), @(SettingAddToBottom), @(SettingTimeZone), @(SettingFilter), @(SettingUseStandardStatusBar), @(ProfileName), @(ProfilePhone), @(ProfileCompany), @(ProfilePosition), @(ProfilePictureURL) ];
 }
 
 -(KPSettings)settingForIndex:(NSString*)index{
@@ -102,6 +102,10 @@ static SettingsHandler *sharedObject;
         setting = ProfileCompany;
     else if([index isEqualToString:@"ProfilePosition"])
         setting = ProfilePosition;
+    else if([index isEqualToString:@"ProfilePictureURL"])
+        setting = ProfilePictureURL;
+    else if([index isEqualToString:@"ProfilePictureUploaded"])
+        setting = ProfilePictureUploaded;
     
     return setting;
 }
@@ -185,6 +189,12 @@ static SettingsHandler *sharedObject;
             break;
         case ProfilePosition:
             index = @"ProfilePosition";
+            break;
+        case ProfilePictureURL:
+            index = @"ProfilePictureURL";
+            break;
+        case ProfilePictureUploaded:
+            index = @"ProfilePictureUploaded";
             break;
     }
     return index;
@@ -303,25 +313,29 @@ static SettingsHandler *sharedObject;
         case ProfilePhone:
         case ProfileCompany:
         case ProfilePosition:
+        case ProfilePictureURL:
             return @"";
+        case ProfilePictureUploaded:
+            return @NO;
     }
 }
 
 -(id)valueForSetting:(KPSettings)setting{
-    
-    NSString *index = [self indexForSettings:setting];
-    if(!index) return nil;
-    id value = [USER_DEFAULTS objectForKey:index];
-    if([value isKindOfClass:[NSDate class]]){
-        value = [self repairValue:value forSetting:setting];
-        if(value)
+    @synchronized(self) {
+        NSString *index = [self indexForSettings:setting];
+        if(!index) return nil;
+        id value = [USER_DEFAULTS objectForKey:index];
+        if([value isKindOfClass:[NSDate class]]){
+            value = [self repairValue:value forSetting:setting];
+            if(value)
+                [self setValue:value forSetting:setting notify:NO];
+        }
+        if(!value){
+            value = [self defaultValueForSettings:setting];
             [self setValue:value forSetting:setting notify:NO];
+        }
+        return value;
     }
-    if(!value){
-        value = [self defaultValueForSettings:setting];
-        [self setValue:value forSetting:setting notify:NO];
-    }
-    return value;
 }
 
 -(void)setValue:(id)value forSetting:(KPSettings)setting{

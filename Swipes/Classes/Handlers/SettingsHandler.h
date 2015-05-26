@@ -40,6 +40,8 @@ typedef enum {
     ProfilePhone,
     ProfileCompany,
     ProfilePosition,
+    ProfilePictureURL,
+    ProfilePictureUploaded,
     
 } KPSettings;
 

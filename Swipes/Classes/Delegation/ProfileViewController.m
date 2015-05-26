@@ -8,6 +8,8 @@
 
 #import <Parse/Parse.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
+#import <DZNPhotoPickerController/UIImagePickerController+Edit.h>
+#import "KPImageCache.h"
 #import "AnalyticsHandler.h"
 #import "UtilityClass.h"
 #import "UserHandler.h"
@@ -91,6 +93,27 @@
                         //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         },
                       ];
+    
+    // load profile picture
+    NSString* profileURLString = [kSettings valueForSetting:ProfilePictureURL];
+    if (profileURLString && (10 < profileURLString.length)) {
+        // we have profile picture
+        NSURL* profileURL = [NSURL URLWithString:profileURLString];
+        UIImage* profilePicture = [[KPImageCache sharedCache] cachedImageForURL:profileURL];
+        if (profilePicture) {
+            // we have it cached
+            self.cellInfo[0][kKeyIcon] = profilePicture;
+        }
+        else {
+            // we try to download it
+            [[KPImageCache sharedCache] imageForURL:profileURL completionBlock:^(UIImage *image) {
+                if (image) {
+                    self.cellInfo[0][kKeyIcon] = image;
+                    [self reloadRow:0];
+                }
+            }];
+        }
+    }
 }
 
 #pragma mark - selectors
@@ -99,7 +122,7 @@
 {
     // TODO make it work for iPad too
     
-    UIActionSheet* action = [[UIActionSheet alloc] initWithTitle:LOCALIZE_STRING(@"Select picture") delegate:self cancelButtonTitle:LOCALIZE_STRING(@"Cancel") destructiveButtonTitle:LOCALIZE_STRING(@"Remove current picture") otherButtonTitles:LOCALIZE_STRING(@"Take from Photos"), nil];
+    UIActionSheet* action = [[UIActionSheet alloc] initWithTitle:LOCALIZE_STRING(@"Select picture") delegate:self cancelButtonTitle:LOCALIZE_STRING(@"Cancel") destructiveButtonTitle:[self hasProfilePicture]  ? LOCALIZE_STRING(@"Remove current picture") : nil otherButtonTitles:LOCALIZE_STRING(@"Take from Photos"), nil];
     
     _canTakePicture = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
     if (_canTakePicture) {
@@ -126,7 +149,21 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    switch (buttonIndex) {
+    NSInteger buttonOffset = 1;
+    if ([self hasProfilePicture]) {
+        buttonOffset--;
+    }
+    switch (buttonIndex + buttonOffset) {
+        case 0: {
+                NSURL* url = [NSURL URLWithString:(NSString *)[kSettings valueForSetting:ProfilePictureURL]];
+                [[KPImageCache sharedCache] removeImageForURL:(NSString *)url]; // strange warning for sending URLs?
+                [kSettings setValue:@"" forSetting:ProfilePictureURL];
+                [kSettings setValue:@NO forSetting:ProfilePictureUploaded];
+                [self.cellInfo[0] removeObjectForKey:kKeyIcon];
+                [self reloadRow:0];
+            }
+            break;
+            
         case 1:
             [self showImagePickerForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
             break;
@@ -156,6 +193,7 @@
     imagePickerController.sourceType = sourceType;
     imagePickerController.allowsEditing = YES;
     imagePickerController.delegate = self;
+    imagePickerController.cropMode = DZNPhotoEditorViewControllerCropModeCircular;
     
     [self presentViewController:imagePickerController animated:YES completion:nil];
 }
@@ -165,10 +203,19 @@
     // TODO set image
     UIImage* result = info[UIImagePickerControllerEditedImage];
     if (result) {
+        NSString* predictedURLString = [NSString stringWithFormat:@"https://demosten-test-1.s3.amazonaws.com/%@", [self profilePicturePath]];
+        NSURL* predictedURL = [NSURL URLWithString:predictedURLString];
+        [[KPImageCache sharedCache] setImage:result forURL:predictedURL];
+        [kSettings setValue:predictedURLString forSetting:ProfilePictureURL];
         self.cellInfo[0][kKeyIcon] = result;
         [self reloadRow:0];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    DLog(@"Image picker canceled");
 }
 
 - (void)onSignOut
@@ -183,6 +230,17 @@
 }
 
 #pragma mark - Helpers
+
+- (BOOL)hasProfilePicture
+{
+    NSString* profilePictureURL = [kSettings valueForSetting:ProfilePictureURL];
+    return profilePictureURL && (10 < profilePictureURL.length); // http://a.b
+}
+
+- (NSString *)profilePicturePath
+{
+    return [NSString stringWithFormat:@"%@/%@.jpg", kCurrent.objectId, [UtilityClass generateIdWithLength:8]];
+}
 
 - (void)reload
 {

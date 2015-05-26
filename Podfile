@@ -21,6 +21,8 @@ target :Swipes do
     pod 'Intercom'
     pod 'GoogleAnalytics-iOS-SDK'
     pod 'BobPullToRefresh'
+    pod 'DZNPhotoPickerController/Editor', :inhibit_warnings => true
+    pod 'JMImageCache', :inhibit_warnings => true
 end
 
 target :SwipesKit do
