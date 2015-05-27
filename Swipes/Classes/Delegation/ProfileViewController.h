@@ -11,4 +11,6 @@
 
 @interface ProfileViewController : IntegrationBaseViewController
 
++ (void)checkUploadPhoto;
+
 @end

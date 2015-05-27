@@ -21,6 +21,7 @@
 #ifndef NOT_APPLICATION
 #import "RootViewController.h"
 #import "DejalActivityView.h"
+#import "ProfileViewController.h"
 #endif
 
 #import "EvernoteIntegration.h"
@@ -400,6 +401,10 @@
             [NOTIHANDLER registerForNotifications];
         }
     });
+
+    // update profile
+    [ProfileViewController checkUploadPhoto];
+
 #endif
     if ( error ){
         //NSLog(@"error:%@",error);

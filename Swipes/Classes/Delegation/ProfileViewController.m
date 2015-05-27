@@ -5,11 +5,17 @@
 //  Created by demosten on 2/19/15.
 //  Copyright (c) 2015 Pihl IT. All rights reserved.
 //
+// TODO:
+// - add field validation
+// - test on iPad
 
 #import <Parse/Parse.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <DZNPhotoPickerController/UIImagePickerController+Edit.h>
-#import <DZNPhotoPickerController/DZNPhotoEditorViewController.h>
+//#import <DZNPhotoPickerController/DZNPhotoEditorViewController.h>
+#import <AFAmazonS3Manager/AFAmazonS3Manager.h>
+#import <AFAmazonS3Manager/AFAmazonS3ResponseSerializer.h>
+
 #import "KPImageCache.h"
 #import "AnalyticsHandler.h"
 #import "UtilityClass.h"
@@ -26,6 +32,64 @@
 
 @implementation ProfileViewController {
     BOOL _canTakePicture;
+}
+
++ (AFAmazonS3Manager *)s3Manager
+{
+    static AFAmazonS3Manager* s_manager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        // TODO ensure encoded data
+        s_manager = [[AFAmazonS3Manager alloc] initWithAccessKeyID:@"AKIAIT34G5FY7B7UGIQA" secret:@"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"];
+        s_manager.requestSerializer.region = AFAmazonS3USStandardRegion;
+        s_manager.requestSerializer.bucket = @"demosten-test-1";
+    });
+    return s_manager;
+}
+
++ (void)checkUploadPhoto
+{
+    AFAmazonS3Manager* s3Manager = [ProfileViewController s3Manager];
+    if (![[kSettings valueForSetting:ProfilePictureUploaded] boolValue]) {
+        NSString* pictureURLString = [kSettings valueForSetting:ProfilePictureURL];
+        if (pictureURLString && (10 < pictureURLString.length)) {
+            NSURL* pictureURL = [NSURL URLWithString:pictureURLString];
+            NSString* fullImagePath = [[KPImageCache sharedCache] imagePathForURL:pictureURL];
+            if (fullImagePath) {
+                NSString* remotePath = [pictureURL path];
+                [s3Manager putObjectWithFile:fullImagePath
+                             destinationPath:remotePath
+                                  parameters:nil
+                                    progress:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+                                        DLog(@"%f%% Uploaded", (totalBytesWritten / (totalBytesExpectedToWrite * 1.0f) * 100));
+                                    }
+                                     success:^(AFAmazonS3ResponseObject *responseObject) {
+                                         DLog(@"Upload Complete: %@", responseObject.URL);
+                                         [kSettings setValue:@YES forSetting:ProfilePictureUploaded];
+                                         [kSettings setValue:[responseObject.URL absoluteString] forSetting:ProfilePictureURL];
+                                     }
+                                     failure:^(NSError *error) {
+                                         DLog(@"Error: %@", error);
+                                     }];
+            }
+        }
+    }
+    
+    // delete old profile picture if it exists
+    NSString* profileURLToDelete = [kSettings valueForSetting:ProfilePictureURLToDelete];
+    if (profileURLToDelete && (10 < profileURLToDelete.length)) {
+        NSURL* pictureURL = [NSURL URLWithString:profileURLToDelete];
+        NSString* remotePath = [pictureURL path];
+        if (remotePath) {
+            [s3Manager deleteObjectWithPath:remotePath
+                                    success:^(AFAmazonS3ResponseObject *responseObject) {
+                                        [kSettings setValue:@"" forSetting:ProfilePictureURLToDelete];
+                                    }
+                                    failure:^(NSError *error) {
+                                        [UtilityClass sendError:error type:@"Profile picture delete"];
+                                    }];
+        }
+    }
 }
 
 - (void)viewDidLoad
@@ -147,10 +211,12 @@
         case 0: {
                 NSURL* url = [NSURL URLWithString:(NSString *)[kSettings valueForSetting:ProfilePictureURL]];
                 [[KPImageCache sharedCache] removeImageForURL:(NSString *)url]; // strange warning for sending URLs?
+                [kSettings setValue:[kSettings valueForSetting:ProfilePictureURL] forSetting:ProfilePictureURLToDelete];
                 [kSettings setValue:@"" forSetting:ProfilePictureURL];
                 [kSettings setValue:@NO forSetting:ProfilePictureUploaded];
                 [self.cellInfo[0] removeObjectForKey:kKeyIcon];
                 [self reloadRow:0];
+                [ProfileViewController checkUploadPhoto];
             }
             break;
             
@@ -261,9 +327,12 @@
     NSString* predictedURLString = [NSString stringWithFormat:@"https://demosten-test-1.s3.amazonaws.com/%@", [self profilePicturePath]];
     NSURL* predictedURL = [NSURL URLWithString:predictedURLString];
     [[KPImageCache sharedCache] setImage:image forURL:predictedURL];
+    [kSettings setValue:[kSettings valueForSetting:ProfilePictureURL] forSetting:ProfilePictureURLToDelete];
     [kSettings setValue:predictedURLString forSetting:ProfilePictureURL];
+    [kSettings setValue:@NO forSetting:ProfilePictureUploaded];
     self.cellInfo[0][kKeyIcon] = image;
     [self reloadRow:0];
+    [ProfileViewController checkUploadPhoto];
 }
 
 - (BOOL)hasProfilePicture
@@ -283,12 +352,22 @@
     [self reloadData];
 }
 
+// update value only if changed
+- (void)updateValue:(NSString *)value Setting:(KPSettings)setting
+{
+    NSString* currentValue = [kSettings valueForSetting:setting];
+    if (currentValue && [currentValue isEqualToString:value]) {
+        return; // do not store if the value is unchanged
+    }
+    [kSettings setValue:value forSetting:setting];
+}
+
 - (void)goBack
 {
-    [kSettings setValue:self.cellInfo[1][kKeyText] forSetting:ProfileName];
-    [kSettings setValue:self.cellInfo[3][kKeyText] forSetting:ProfilePhone];
-    [kSettings setValue:self.cellInfo[4][kKeyText] forSetting:ProfileCompany];
-    [kSettings setValue:self.cellInfo[5][kKeyText] forSetting:ProfilePosition];
+    [self updateValue:self.cellInfo[1][kKeyText] Setting:ProfileName];
+    [self updateValue:self.cellInfo[3][kKeyText] Setting:ProfilePhone];
+    [self updateValue:self.cellInfo[4][kKeyText] Setting:ProfileCompany];
+    [self updateValue:self.cellInfo[5][kKeyText] Setting:ProfilePosition];
     [super goBack];
 }
 

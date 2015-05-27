@@ -57,4 +57,12 @@ static KPImageCache *_sharedCache = nil;
     [self performDiskWriteOperation:writeInvocation];
 }
 
+- (NSString *)imagePathForURL:(NSURL *)url
+{
+    NSString *cachePath = cachePathForKey(keyForURL(url));
+    if ([[NSFileManager defaultManager] fileExistsAtPath:cachePath])
+        return cachePath;
+    return nil;
+}
+
 @end

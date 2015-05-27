@@ -10,6 +10,8 @@
 
 @interface KPImageCache : JMImageCache
 
++ (instancetype) sharedCache;
 - (void) setImage:(UIImage *)i forURL:(NSURL *)url;
+- (NSString *)imagePathForURL:(NSURL *)url;
 
 @end

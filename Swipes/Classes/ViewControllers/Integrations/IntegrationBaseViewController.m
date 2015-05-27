@@ -418,6 +418,11 @@ static CGFloat const kProfilePictureHeight = 130;
 
 - (void)textFieldCellDidEndEditing:(IntegrationTextFieldCell *)cell
 {
+    [self textFieldCellDidChange:cell];
+}
+
+- (void)textFieldCellDidChange:(IntegrationTextFieldCell *)cell
+{
     NSIndexPath* indexPath = [_table indexPathForCell:cell];
     if (indexPath) {
         _cellInfo[indexPath.row][kKeyText] = cell.textField.text;

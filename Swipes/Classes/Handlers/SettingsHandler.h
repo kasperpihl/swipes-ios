@@ -42,7 +42,7 @@ typedef enum {
     ProfilePosition,
     ProfilePictureURL,
     ProfilePictureUploaded,
-    
+    ProfilePictureURLToDelete,
 } KPSettings;
 
 #define SH_UpdateSetting @"SH_UpdateSetting"

@@ -106,6 +106,8 @@ static SettingsHandler *sharedObject;
         setting = ProfilePictureURL;
     else if([index isEqualToString:@"ProfilePictureUploaded"])
         setting = ProfilePictureUploaded;
+    else if([index isEqualToString:@"ProfilePictureURLToDelete"])
+        setting = ProfilePictureURLToDelete;
     
     return setting;
 }
@@ -195,6 +197,9 @@ static SettingsHandler *sharedObject;
             break;
         case ProfilePictureUploaded:
             index = @"ProfilePictureUploaded";
+            break;
+        case ProfilePictureURLToDelete:
+            index = @"ProfilePictureURLToDelete";
             break;
     }
     return index;
@@ -314,6 +319,7 @@ static SettingsHandler *sharedObject;
         case ProfileCompany:
         case ProfilePosition:
         case ProfilePictureURL:
+        case ProfilePictureURLToDelete:
             return @"";
         case ProfilePictureUploaded:
             return @NO;

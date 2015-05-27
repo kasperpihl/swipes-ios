@@ -45,6 +45,9 @@ static CGFloat const kUnderlineMargin = 2;
         _textField.textColor = tcolor(TextColor);
         _textField.font = kDefTextFieldFont;
         _textField.returnKeyType = UIReturnKeyNext;
+        [_textField addTarget:self
+                      action:@selector(textFieldDidChange:)
+            forControlEvents:UIControlEventEditingChanged];
         _textField.delegate = self;
         [self.contentView addSubview:_textField];
         
@@ -122,6 +125,13 @@ static CGFloat const kUnderlineMargin = 2;
 {
     if (_delegate && [_delegate respondsToSelector:@selector(textFieldCellDidEndEditing:)]) {
         [_delegate textFieldCellDidEndEditing:self];
+    }
+}
+
+- (void)textFieldDidChange:(UITextField *)textField
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(textFieldCellDidChange:)]) {
+        [_delegate textFieldCellDidChange:self];
     }
 }
 

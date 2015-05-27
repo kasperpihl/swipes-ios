@@ -23,6 +23,7 @@ target :Swipes do
     pod 'BobPullToRefresh'
     pod 'DZNPhotoPickerController/Editor', :inhibit_warnings => true
     pod 'JMImageCache', :inhibit_warnings => true
+    pod 'AFAmazonS3Manager', :inhibit_warnings => true
 end
 
 target :SwipesKit do
