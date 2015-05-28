@@ -327,14 +327,13 @@ static BOOL g_isNotFirstRun = NO;
     }
     [USER_DEFAULTS synchronize];
 }
+
 + (NSUserDefaults *)sharedDefaults
 {
-    static NSUserDefaults* sharedDefaults;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    static NSUserDefaults* sharedDefaults = nil;
+    if (!sharedDefaults) {
         sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:SHARED_GROUP_NAME];
-//        sharedDefaults = [NSUserDefaults standardUserDefaults];
-    });
+    }
     return sharedDefaults;
 }
 

@@ -27,7 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"GMAIL INTEGRATION";
+    self.title = [LOCALIZE_STRING(@"GMAIL INTEGRATION") uppercaseString];
     self.lightColor = kGmailColor;
 }
 
