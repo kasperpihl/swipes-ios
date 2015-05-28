@@ -343,7 +343,7 @@
         return UIBackgroundFetchResultNoData;
     }
     
-    if (self.isSyncing) {
+    if (self._isSyncing) {
         self._needSync = YES;
         return UIBackgroundFetchResultNoData;
     }
