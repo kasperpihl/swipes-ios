@@ -17,6 +17,8 @@ extern NSString* const kKeyTextType;
 extern NSString* const kKeyText;
 extern NSString* const kKeyPlaceholder;
 extern NSString* const kKeyTouchSelector;
+extern NSString* const kKeyValidateSelector;
+
 extern UIColor* kIntegrationGreenColor;
 
 typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {

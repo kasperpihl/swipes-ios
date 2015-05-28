@@ -25,6 +25,7 @@ NSString* const kKeyTextType = @"textType";
 NSString* const kKeyText = @"text";
 NSString* const kKeyPlaceholder = @"placeholder";
 NSString* const kKeyTouchSelector = @"touchSelector";
+NSString* const kKeyValidateSelector = @"validateSelector";
 
 UIColor* kIntegrationGreenColor;
 
@@ -278,6 +279,7 @@ static CGFloat const kProfilePictureHeight = 130;
         cell.textField.text = data[kKeyText];
         cell.textField.placeholder = data[kKeyPlaceholder];
         cell.delegate = self;
+        [self validateTextCell:cell indexPath:indexPath];
         return cell;
     }
     else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeButton) {
@@ -421,11 +423,31 @@ static CGFloat const kProfilePictureHeight = 130;
     [self textFieldCellDidChange:cell];
 }
 
+- (void)validateTextCell:(IntegrationTextFieldCell *)cell indexPath:(NSIndexPath *)indexPath
+{
+    if (_cellInfo[indexPath.row][kKeyValidateSelector]) {
+        SEL sel = NSSelectorFromString(_cellInfo[indexPath.row][kKeyValidateSelector]);
+        
+        NSDictionary* cellData = _cellInfo[indexPath.row];
+        BOOL returnVal = YES;
+        NSMethodSignature *sig = [self methodSignatureForSelector:sel];
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:sig];
+        [invocation setTarget:self];
+        [invocation setSelector:sel];
+        [invocation setArgument:&cellData atIndex:2]; //Index 0 and 1 are for self and _cmd
+        [invocation invoke]; //Call the selector
+        [invocation getReturnValue:&returnVal];
+        
+        cell.textField.backgroundColor = returnVal ? [UIColor clearColor] : alpha(tcolor(LaterColor), 0.2);
+    }
+}
+
 - (void)textFieldCellDidChange:(IntegrationTextFieldCell *)cell
 {
     NSIndexPath* indexPath = [_table indexPathForCell:cell];
     if (indexPath) {
         _cellInfo[indexPath.row][kKeyText] = cell.textField.text;
+        [self validateTextCell:cell indexPath:indexPath];
     }
 }
 

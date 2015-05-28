@@ -6,8 +6,10 @@
 //  Copyright (c) 2015 Pihl IT. All rights reserved.
 //
 // TODO:
-// - add field validation
+// - add support for https://github.com/iziz/libPhoneNumber-iOS
 // - test on iPad
+// - how do we act upon extraction of email from FB, do se set it to profile
+// - how do we act upon email change
 
 #import <Parse/Parse.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
@@ -26,6 +28,9 @@
 #import "IntegrationTextFieldCell.h"
 #import "ProfileViewController.h"
 
+static NSString* const kAmazonS3BucketName = @"demosten-test-1";
+static NSString* const kFacebookKeyEmail = @"email";
+
 @interface ProfileViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @end
@@ -42,9 +47,19 @@
         // TODO ensure encoded data
         s_manager = [[AFAmazonS3Manager alloc] initWithAccessKeyID:@"AKIAIT34G5FY7B7UGIQA" secret:@"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"];
         s_manager.requestSerializer.region = AFAmazonS3USStandardRegion;
-        s_manager.requestSerializer.bucket = @"demosten-test-1";
+        s_manager.requestSerializer.bucket = kAmazonS3BucketName;
     });
     return s_manager;
+}
+
+// update string value only if changed
++ (void)updateValue:(NSString *)value forSetting:(KPSettings)setting
+{
+    NSString* currentValue = [kSettings valueForSetting:setting];
+    if (currentValue && [currentValue isEqualToString:value]) {
+        return; // do not store if the value is unchanged
+    }
+    [kSettings setValue:value forSetting:setting];
 }
 
 + (void)checkUploadPhoto
@@ -66,10 +81,10 @@
                                      success:^(AFAmazonS3ResponseObject *responseObject) {
                                          DLog(@"Upload Complete: %@", responseObject.URL);
                                          [kSettings setValue:@YES forSetting:ProfilePictureUploaded];
-                                         [kSettings setValue:[responseObject.URL absoluteString] forSetting:ProfilePictureURL];
+                                         [ProfileViewController updateValue:[responseObject.URL absoluteString] forSetting:ProfilePictureURL];
                                      }
                                      failure:^(NSError *error) {
-                                         DLog(@"Error: %@", error);
+                                         [UtilityClass sendError:error type:@"Profile picture upload"];
                                      }];
             }
         }
@@ -104,7 +119,10 @@
     
     NSString* email = kCurrent.email;
     if (![UtilityClass validateEmail:email]) {
-        email = @"";
+        email = kCurrent.username;
+        if (![UtilityClass validateEmail:email]) {
+            email = @"";
+        }
     }
     
     self.cellInfo = @[
@@ -116,7 +134,7 @@
                         kKeyTitle: @"NAME",
                         kKeyText: [kSettings valueForSetting:ProfileName],
                         kKeyPlaceholder: @"Enter your name",
-                        //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
+                        kKeyValidateSelector: NSStringFromSelector(@selector(validateName:)),
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyIsOn: @(YES),
@@ -124,7 +142,7 @@
                         kKeyText: email,
                         kKeyTextType: @(IntegrationTextFieldStyleEmail),
                         kKeyPlaceholder: @"Your email is mandatory",
-                        //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
+                        kKeyValidateSelector: NSStringFromSelector(@selector(validateEmail:)),
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyTitle: @"PHONE",
@@ -179,6 +197,11 @@
             }];
         }
     }
+    
+    // load Facebook email if needed
+    if (0 == email.length && [PFFacebookUtils isLinkedWithUser:kCurrent]) {
+        [self loadFacebookEmail];
+    }
 }
 
 #pragma mark - selectors
@@ -200,6 +223,21 @@
     
     [action showFromRect:self.view.frame inView:self.view animated:YES];
 }
+
+#pragma mark - Validators
+
+- (BOOL)validateEmail:(NSDictionary *)data
+{
+    return [UtilityClass validateEmail:data[kKeyText]];
+}
+
+- (BOOL)validateName:(NSDictionary *)data
+{
+    NSString* text = data[kKeyText];
+    return text && (1 < text.length);
+}
+
+#pragma mark - Helpers
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -324,7 +362,7 @@
 
 - (void)storeProfilePicture:(UIImage *)image
 {
-    NSString* predictedURLString = [NSString stringWithFormat:@"https://demosten-test-1.s3.amazonaws.com/%@", [self profilePicturePath]];
+    NSString* predictedURLString = [NSString stringWithFormat:@"https://%@.s3.amazonaws.com/%@", kAmazonS3BucketName, [self profilePicturePath]];
     NSURL* predictedURL = [NSURL URLWithString:predictedURLString];
     [[KPImageCache sharedCache] setImage:image forURL:predictedURL];
     [kSettings setValue:[kSettings valueForSetting:ProfilePictureURL] forSetting:ProfilePictureURLToDelete];
@@ -346,28 +384,38 @@
     return [NSString stringWithFormat:@"%@/%@.jpg", kCurrent.objectId, [UtilityClass generateIdWithLength:8]];
 }
 
+- (void)loadFacebookEmail
+{
+    FBSession* fbSession = [PFFacebookUtils session];
+    NSString* accessToken = fbSession.accessTokenData.accessToken;
+    NSURL *profileURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/me/?fields=email&access_token=%@", accessToken]];
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:profileURL] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (data) {
+            NSError *error = nil;
+            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+            if (jsonDict && jsonDict[kFacebookKeyEmail]) {
+                self.cellInfo[2][kKeyText] = jsonDict[kFacebookKeyEmail];
+                [self reloadRow:2];
+            }
+        }
+    }];
+}
+
 - (void)reload
 {
     [self recreateCellInfo];
     [self reloadData];
 }
 
-// update value only if changed
-- (void)updateValue:(NSString *)value Setting:(KPSettings)setting
-{
-    NSString* currentValue = [kSettings valueForSetting:setting];
-    if (currentValue && [currentValue isEqualToString:value]) {
-        return; // do not store if the value is unchanged
-    }
-    [kSettings setValue:value forSetting:setting];
-}
-
 - (void)goBack
 {
-    [self updateValue:self.cellInfo[1][kKeyText] Setting:ProfileName];
-    [self updateValue:self.cellInfo[3][kKeyText] Setting:ProfilePhone];
-    [self updateValue:self.cellInfo[4][kKeyText] Setting:ProfileCompany];
-    [self updateValue:self.cellInfo[5][kKeyText] Setting:ProfilePosition];
+    // store values
+    // TODO: store email (change it/update it)
+    [ProfileViewController updateValue:self.cellInfo[1][kKeyText] forSetting:ProfileName];
+    [ProfileViewController updateValue:self.cellInfo[3][kKeyText] forSetting:ProfilePhone];
+    [ProfileViewController updateValue:self.cellInfo[4][kKeyText] forSetting:ProfileCompany];
+    [ProfileViewController updateValue:self.cellInfo[5][kKeyText] forSetting:ProfilePosition];
+
     [super goBack];
 }
 
