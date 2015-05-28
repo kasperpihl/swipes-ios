@@ -23,7 +23,7 @@ static BOOL g_isNotFirstRun = NO;
 
 @property (nonatomic, weak) IBOutlet WKInterfaceTable* table;
 @property (nonatomic, weak) IBOutlet WKInterfaceButton* refreshButton;
-@property (nonatomic, weak) IBOutlet WKInterfaceImage* noDataImage;
+@property (nonatomic, weak) IBOutlet WKInterfaceButton* noDataButton;
 @property (nonatomic, weak) IBOutlet WKInterfaceGroup* group;
 
 @property (nonatomic, readonly, strong) NSArray* todos;
@@ -148,7 +148,7 @@ static BOOL g_isNotFirstRun = NO;
     [self reloadData];
 }
 
-- (void)onButton1Touch
+- (IBAction)onButton1Touch
 {
     [self presentTextInputControllerWithSuggestions:@[LOCALIZE_STRING(@"Email a colleague"), LOCALIZE_STRING(@"Meeting today")]
                                    allowedInputMode:WKTextInputModePlain completion:^(NSArray *results) {
