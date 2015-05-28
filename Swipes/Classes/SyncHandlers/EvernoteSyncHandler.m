@@ -384,7 +384,7 @@ static NSString * const kFromEvernote = @"Evernote";
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         [dateFormatter setDateFormat:@"yyyyMMdd'T'HHmmss'Z'"];
-        NSString *isoString = [dateFormatter stringFromDate:self.lastUpdated];
+        NSString *isoString = [dateFormatter stringFromDate:[self.lastUpdated dateBySubtractingHours:1]];
         [mutWords appendFormat:@" updated:%@",isoString];
     }
     

@@ -97,6 +97,7 @@ static const CGFloat kProgressMultiply = (1.0 / 0.5);
             else if (state == BPRPullToRefreshStateLoading) {
                 if (_lastState != BPRPullToRefreshStateLoading) {
 //                    DLog(@"Synchronizing");
+                    [KPCORE clearCache];
                     [KPCORE synchronizeForce:YES async:YES];
                 }
                 [self setTitleText:[NSString stringWithFormat:@"%@\n", LOCALIZE_STRING(@"Synchronizing...")] icon:@"settingsSync"];
