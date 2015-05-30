@@ -42,6 +42,7 @@ static NSString * const kFromEvernote = @"Evernote";
 @property (nonatomic, strong) NSDate *lastUpdated;
 @property (nonatomic, assign) BOOL updateNeededFromEvernote;
 @property (nonatomic, assign) BOOL needToClearCache;
+@property (nonatomic, assign) BOOL hasNewData;
 
 @property (nonatomic, assign) BOOL fullEvernoteUpdate;
 @property (nonatomic, assign) NSInteger currentEvernoteUpdateCount;
@@ -334,6 +335,7 @@ static NSString * const kFromEvernote = @"Evernote";
 -(void)synchronizeWithBlock:(SyncBlock)block
 {
     self.isSyncing = YES;
+    self.hasNewData = NO;
     self.block = block;
     [self.changedNotes removeAllObjects];
     kEnInt.requestCounter = 0;
@@ -356,6 +358,8 @@ static NSString * const kFromEvernote = @"Evernote";
                 block(SyncStatusError, nil, error);
             }
             else{
+                if (SyncStatusSuccessWithData == status)
+                    self.hasNewData = YES;
                 [self syncEvernoteWithBlock:block];
             }
         }];
@@ -583,13 +587,14 @@ static NSString * const kFromEvernote = @"Evernote";
             [self setUpdatedAt:date];
             self.updateNeededFromEvernote = NO;
             __block NSDictionary* userInfo = @{@"updated": [self._updatedTasks copy], @"created": [_createdTasks copy]};
-            block(SyncStatusSuccess, userInfo, nil);
-            syncedAnything = YES;
+            BOOL updated = (self._updatedTasks.count || _createdTasks.count || self.hasNewData);
+            block(updated ? SyncStatusSuccessWithData : SyncStatusSuccess, userInfo, nil);
             if (self._updatedTasks.count || _createdTasks.count) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:userInfo];
                 });
             }
+            syncedAnything = YES;
             [self.changedNotes removeAllObjects];
             [self._updatedTasks removeAllObjects];
             [_createdTasks removeAllObjects];

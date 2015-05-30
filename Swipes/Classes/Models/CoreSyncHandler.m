@@ -184,6 +184,7 @@
     CGFloat duration = 0;
     switch (status) {
         case SyncStatusSuccess:
+        case SyncStatusSuccessWithData:
             duration = 2.5;
             break;
         case SyncStatusError:{
@@ -202,7 +203,9 @@
         case SyncStatusStarted:{
             break;
         }
-        case SyncStatusSuccess:{
+        case SyncStatusSuccess:
+        case SyncStatusSuccessWithData:
+        {
             if(self._showSuccessOnce){
                 title = LOCALIZE_STRING(@"Synchronized");
                 self._showSuccessOnce = NO;
@@ -235,17 +238,7 @@
         
         if([self.delegate respondsToSelector:@selector(syncHandler:status:userInfo:error:)])
             [self.delegate syncHandler:self status:status userInfo:userInfo error:error];
-        
-#ifndef NOT_APPLICATION
-        if (SyncStatusStarted == status) {
-            [GlobalApp activityIndicatorVisible:YES];
-        }
-        else {
-            [GlobalApp activityIndicatorVisible:NO];
-        }
-#endif
     });
-    
 }
 /*
     This is called everytime data is saved and will persist all the changed attributes for syncing.
@@ -327,25 +320,36 @@
     [self synchronizeForce:YES async:YES];
 }
 
-
-- (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async
+- (void)synchronizeForce:(BOOL)force async:(BOOL)async
 {
+    [self synchronizeForce:force async:async completionHandler:nil];
+}
+
+- (void)synchronizeForce:(BOOL)force async:(BOOL)async completionHandler:(SyncCompletionBlock)handler
+{
+    // handler should be called either from this method before calling DB sync or in finalize method
+    
     if(self.outdated){
         if(async && force) {
             [UTILITY alertWithTitle:LOCALIZE_STRING(@"New version required") andMessage:LOCALIZE_STRING(@"For sync to work - please update Swipes from the App Store")];
         }
         DLog(@"self outdated");
-        return UIBackgroundFetchResultNoData;
+        if (handler)
+            handler(UIBackgroundFetchResultNoData);
+        return;
     }
     
     if (!kCurrent || !kCurrent.sessionToken) {
-        
-        return UIBackgroundFetchResultNoData;
+        if (handler)
+            handler(UIBackgroundFetchResultNoData);
+        return;
     }
     
     if (self._isSyncing) {
         self._needSync = YES;
-        return UIBackgroundFetchResultNoData;
+        if (handler)
+            handler(UIBackgroundFetchResultNoData);
+        return;
     }
     /*if (!kUserHandler.isPlus) {
         NSDate *now = [NSDate date];
@@ -359,7 +363,9 @@
         if (self._syncTimer && self._syncTimer.isValid)
             [self._syncTimer invalidate];
         self._syncTimer = [NSTimer scheduledTimerWithTimeInterval:kSyncTime target:self selector:@selector(forceSync) userInfo:nil repeats:NO];
-        return UIBackgroundFetchResultNoData;
+        if (handler)
+            handler(UIBackgroundFetchResultNoData);
+        return;
     }
     
     // Testing for network connection
@@ -367,18 +373,23 @@
         self._needSync = NO;
     if (!self._reach.isReachable) {
         self._needSync = YES;
-        return UIBackgroundFetchResultFailed;
+        if (handler)
+            handler(UIBackgroundFetchResultFailed);
+        return;
     }
     
-    // when we are using async synchronization the return type doen't matter
+
+#ifndef NOT_APPLICATION
+    [GlobalApp activityIndicatorVisible:YES];
+#endif
+    
     if (async) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self synchronizeWithParseAsync:async];
+            [self synchronizeWithParseAsync:async completionHandler:handler];
         });
-        return UIBackgroundFetchResultNewData;
     }
     else {
-        return [self synchronizeWithParseAsync:async];
+        [self synchronizeWithParseAsync:async completionHandler:handler];
     }
 }
 
@@ -391,7 +402,8 @@
     }
 }
 
--(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error {
+-(void)finalizeSyncWithUserInfo:(NSDictionary*)coreUserInfo error:(NSError*)error currentResult:(UIBackgroundFetchResult)currentResult completionHandler:(SyncCompletionBlock)handler
+{
 #ifndef NOT_APPLICATION
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.isShowingActivity) {
@@ -411,21 +423,23 @@
             self.tryCounter = 0;
         }
         self.tryCounter++;
-        if( self.tryCounter > 5 )
+        if( self.tryCounter > 5 ) {
+            if (handler)
+                handler(UIBackgroundFetchResultFailed);
             return;
+        }
         else
             self._needSync = YES;
     }
     if (self._needSync) {
         self._isSyncing = NO;
-        [self synchronizeForce:YES async:_isAsync];
+        [self synchronizeForce:YES async:_isAsync completionHandler:handler];
         return;
     }
-    self._isSyncing = NO;
+    self._isSyncing = NO; // this is only for DB sync
     
-    [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
-    
-    
+    ////////////////////////////////////////
+    // call other sync handlers
     
     if ((!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) &&
         !kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]) {
@@ -439,23 +453,32 @@
             kEnInt.hasAskedForPermissions = YES;
         }
     }
+
+    dispatch_group_t group = dispatch_group_create();
+    __block UIBackgroundFetchResult syncResult = currentResult;
+    
     if (kEnInt.enableSync && !self.evernoteSyncHandler.isSyncing && ![EvernoteIntegration isAPILimitReached]) {
-        
+        dispatch_group_enter(group);
         [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             //NSLog(@"returned %lu",(long)status);
             if (error) {
                 [EvernoteIntegration updateAPILimitIfNeeded:error];
             }
-            if (status == SyncStatusSuccess){
+            if (status == SyncStatusSuccess || status == SyncStatusSuccessWithData){
                 DLog(@"Evernote sync successfully ended: %@", userInfo);
-                self.evernoteSyncHandler.isSyncing = NO;
             }
+            
+            if (status == SyncStatusSuccess || status == SyncStatusSuccessWithData || status == SyncStatusError) {
+                self.evernoteSyncHandler.isSyncing = NO;
+                if (SyncStatusSuccessWithData == status)
+                    syncResult = UIBackgroundFetchResultNewData;
+                dispatch_group_leave(group);
+            }
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == SyncStatusStarted){
                 }
-                else if( status == SyncStatusError ){
-                    self.evernoteSyncHandler.isSyncing = NO;
-                    
+                else if (status == SyncStatusError) {
                     if (!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) {
                         kEnInt.enableSync = NO;
                         if (_isAsync) {
@@ -475,18 +498,22 @@
     }
 
     if (kGmInt.isAuthenticated && !self.gmailSyncHandler.isSyncing) {
+        dispatch_group_enter(group);
         [self.gmailSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             //NSLog(@"returned %lu",(long)status);
-            if (status == SyncStatusSuccess){
+            if (status == SyncStatusSuccess || status == SyncStatusSuccessWithData) {
                 DLog(@"Gmail sync successfully ended: %@", userInfo);
+            }
+            if (status == SyncStatusSuccess || status == SyncStatusSuccessWithData || status == SyncStatusError) {
                 self.gmailSyncHandler.isSyncing = NO;
+                if (SyncStatusSuccessWithData == status)
+                    syncResult = UIBackgroundFetchResultNewData;
+                dispatch_group_leave(group);
             }
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (status == SyncStatusStarted){
+                if (status == SyncStatusStarted) {
                 }
-                else if( status == SyncStatusError ){
-                    self.gmailSyncHandler.isSyncing = NO;
-                    
+                else if (status == SyncStatusError) {
                     if (!kGmInt.isAuthenticated) {
                         // kGmInt.enableSync = NO;
                         if (_isAsync) {
@@ -505,8 +532,19 @@
         }];
     }
 
-    if (_isAsync)
-        [self endBackgroundHandler];
+    dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // this is outside main thread
+#ifndef NOT_APPLICATION
+        [GlobalApp activityIndicatorVisible:NO];
+#endif
+        if (_isAsync)
+            [self endBackgroundHandler];
+        if (handler)
+            handler(syncResult);
+        [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+        
+        DLog(@"Sync finished with result: %lu", syncResult);
+    });
 }
 
 - (void)clearCache{
@@ -551,8 +589,9 @@
     }];
 }
 
-- (UIBackgroundFetchResult)synchronizeWithParseAsync:(BOOL)async
+- (void)synchronizeWithParseAsync:(BOOL)async completionHandler:(SyncCompletionBlock)handler
 {
+    // this method should call handler only indirectly through finalizeSyncWithUserInfo:..
     _isAsync = async;
     UIBackgroundFetchResult syncResult = UIBackgroundFetchResultNoData;
     self._isSyncing = YES;
@@ -658,8 +697,8 @@
     
     if(error){
         [UtilityClass sendError:error type:@"Sync JSON prepare parse"];
-        [self finalizeSyncWithUserInfo:nil error:error];
-        return UIBackgroundFetchResultFailed;
+        [self finalizeSyncWithUserInfo:nil error:error currentResult:UIBackgroundFetchResultFailed completionHandler:handler];
+        return;
     }
     
     
@@ -696,8 +735,8 @@
             [UtilityClass sendError:error type:@"Sync request error 2"];
         }
         self._needSync = YES;
-        [self finalizeSyncWithUserInfo:nil error:error];
-        return UIBackgroundFetchResultFailed;
+        [self finalizeSyncWithUserInfo:nil error:error currentResult:UIBackgroundFetchResultFailed completionHandler:handler];
+        return;
     }
     
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
@@ -724,8 +763,8 @@
             error = [NSError errorWithDomain:message code:code userInfo:result];
         }
         [UtilityClass sendError:error type:@"Sync Json Parse Error"];
-        [self finalizeSyncWithUserInfo:result error:error];
-        return UIBackgroundFetchResultFailed;
+        [self finalizeSyncWithUserInfo:result error:error currentResult:UIBackgroundFetchResultFailed completionHandler:handler];
+        return;
     }
     //NSLog(@"objects:%@",result);
     
@@ -752,6 +791,7 @@
         self._needSync = YES;
     }
     [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:^(BOOL success, NSError *error) {
+        // this executes in main thread!
         /* Save the sync to server */
         [USER_DEFAULTS setObject:[NSDate date] forKey:kLastSyncLocalDate];
         if (lastUpdate)
@@ -760,10 +800,8 @@
         [self cleanUpAfterSync];
         if (!um.isUndoRegistrationEnabled)
             [um enableUndoRegistration];
-        [self finalizeSyncWithUserInfo:nil error:nil];
+        [self finalizeSyncWithUserInfo:nil error:nil currentResult:syncResult completionHandler:handler];
     }];
-    
-    return syncResult;
 }
 
 #pragma mark - Sync flow helpers

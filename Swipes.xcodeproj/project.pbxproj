@@ -3423,7 +3423,7 @@
 		};
 		A7A976DC18410F56001C0A51 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
@@ -3431,9 +3431,10 @@
 			name = "Run Script";
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "./Swipes/Ressources/Libs/Crashlytics.framework/run 17aee5fa869f24b705e00dba6d43c51becf5c7e4 18503ba4a511e5ff371707e57ef3f51edb669c35ae9206253a6edcdf35c1fa7c";
+			showEnvVarsInLog = 0;
 		};
 		A7F0B9BB1700BA51003BBDD1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

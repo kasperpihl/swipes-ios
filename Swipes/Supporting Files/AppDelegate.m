@@ -222,20 +222,20 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
     DLog(@"received remote notification: %@", userInfo);
-    UIBackgroundFetchResult result = UIBackgroundFetchResultNoData;
     NSDictionary* aps = userInfo[@"aps"];
+    [PFPush handlePush:userInfo];
     if (aps && aps[@"content-available"]) {
         NSString* syncId = userInfo[@"syncId"];
         if (!syncId || (![syncId isEqualToString:[USER_DEFAULTS objectForKey:kLastSyncId]])) {
             DLog(@"going to sync");
-            result = [KPCORE synchronizeForce:YES async:application.applicationState != UIApplicationStateBackground];
-            DLog(@"sync done, updating local notifications");
-            [NOTIHANDLER updateLocalNotifications];
+            [KPCORE synchronizeForce:YES async:application.applicationState != UIApplicationStateBackground completionHandler:^(UIBackgroundFetchResult result) {
+                DLog(@"sync done, updating local notifications");
+                [NOTIHANDLER updateLocalNotifications];
+                DLog(@"returning: %lu", (unsigned long)result);
+                handler(result);
+            }];
         }
     }
-    [PFPush handlePush:userInfo];
-    DLog(@"returning: %lu", (unsigned long)result);
-    handler(result);
 }
 
 -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
@@ -303,10 +303,10 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    
-    UIBackgroundFetchResult result = [KPCORE synchronizeForce:YES async:NO];
-    [NOTIHANDLER updateLocalNotifications];
-    completionHandler(result);
+    [KPCORE synchronizeForce:YES async:NO completionHandler:^(UIBackgroundFetchResult result) {
+        [NOTIHANDLER updateLocalNotifications];
+        completionHandler(result);
+    }];
 }
 
 - (void)onShake:(id)sender

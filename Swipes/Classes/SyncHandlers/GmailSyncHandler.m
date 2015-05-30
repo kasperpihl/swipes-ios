@@ -137,8 +137,9 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
             }
             [self setUpdatedAt:date];
             __block NSDictionary* userInfo = @{@"updated": [_updatedTasks copy], @"created": [_createdTasks copy]};
-            block(SyncStatusSuccess, userInfo, nil);
-            if (_updatedTasks.count || _createdTasks.count) {
+            BOOL updated = (_updatedTasks.count || _createdTasks.count);
+            block(updated ? SyncStatusSuccessWithData : SyncStatusSuccess, userInfo, nil);
+            if (updated) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:userInfo];
                 });
