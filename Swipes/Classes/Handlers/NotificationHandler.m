@@ -33,7 +33,10 @@
 @synthesize latestLocation = _latestLocation;
 
 static NotificationHandler *sharedObject;
+
+#ifndef NOT_APPLICATION
 static BOOL g_registeredForNotifications = NO;
+#endif
 
 +(NotificationHandler *)sharedInstance{
     if(!sharedObject){
