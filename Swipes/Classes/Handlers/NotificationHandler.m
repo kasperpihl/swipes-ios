@@ -31,7 +31,9 @@
 
 @implementation NotificationHandler
 @synthesize latestLocation = _latestLocation;
+
 static NotificationHandler *sharedObject;
+static BOOL g_registeredForNotifications = NO;
 
 +(NotificationHandler *)sharedInstance{
     if(!sharedObject){
@@ -282,25 +284,20 @@ static NotificationHandler *sharedObject;
 
 - (void)doRegisterForNotifications
 {
+    // TODO fix this to check the settings when we drop iOS 7 support
 #ifndef NOT_APPLICATION
-    DLog(@"Registering for notifications");
-    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
-        UIUserNotificationSettings *settings = [self settingsWithCategories];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    if (!g_registeredForNotifications) {
+        DLog(@"Registering for notifications");
+        if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
+            UIUserNotificationSettings *settings = [self settingsWithCategories];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+        }
+        else {
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound];
+        }
+        g_registeredForNotifications = YES;
     }
-    else {
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound];
-    }
-    
-//    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
-//        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
-//        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-//        [[UIApplication sharedApplication] registerForRemoteNotifications];
-//    }
-//    else {
-//        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
-//    }
 #endif
 }
 
