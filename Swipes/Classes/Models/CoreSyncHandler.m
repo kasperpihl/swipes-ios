@@ -413,9 +413,11 @@
         }
     });
 #endif
+
+    self._isSyncing = NO; // this is only for DB sync
+    
     if ( error ){
         //NSLog(@"error:%@",error);
-        self._isSyncing = NO;
         [self sendStatus:SyncStatusError userInfo:coreUserInfo error:error];
         NSDate *now = [NSDate date];
         if(!self.lastTry || [now timeIntervalSinceDate:self.lastTry] > 60){
@@ -426,17 +428,21 @@
         if( self.tryCounter > 5 ) {
             if (handler)
                 handler(UIBackgroundFetchResultFailed);
+#ifndef NOT_APPLICATION
+            [GlobalApp activityIndicatorVisible:NO];
+#endif
             return;
         }
         else
             self._needSync = YES;
     }
     if (self._needSync) {
-        self._isSyncing = NO;
         [self synchronizeForce:YES async:_isAsync completionHandler:handler];
+#ifndef NOT_APPLICATION
+        [GlobalApp activityIndicatorVisible:NO];
+#endif
         return;
     }
-    self._isSyncing = NO; // this is only for DB sync
     
     ////////////////////////////////////////
     // call other sync handlers
