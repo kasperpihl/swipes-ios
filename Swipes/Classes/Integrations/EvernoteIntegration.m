@@ -629,14 +629,12 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (void)cacheAddSearchResult:(NSArray *)findNotesResults forText:(NSString *)text
 {
-    if (text && ![text isKindOfClass:NSString.class]) {
-        DLog(@"ERROR ERROR ERROR!!! Text is of class: %@", NSStringFromClass(text.class));
-        NSError* error = [NSError errorWithDomain:@"Invalid class sent as text to cacheAddSearchResult:forText:" code:611 userInfo:nil];
-        [UtilityClass sendError:error type:@"onUnauthenticatedNotification" attachment:@{@"class" : NSStringFromClass(text.class)}];
+    if (text) {
+        NSRange range = [text rangeOfString:@"updated:"];
+        if (range.location != NSNotFound) {
+            return; // these better not be cached
+        }
     }
-
-    if (text && [text isKindOfClass:NSString.class] && [text containsString:@"updated:"])
-        return; // these better not be cached
     _searchCache[text ? text : [NSNull null]] = @{kKeyData: findNotesResults, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kSearchTimeout]};
 }
 

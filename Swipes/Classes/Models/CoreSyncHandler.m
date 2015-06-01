@@ -543,7 +543,7 @@
             handler(syncResult);
         [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
         
-        DLog(@"Sync finished with result: %lu", syncResult);
+        DLog(@"Sync finished with result: %lu", (unsigned long)syncResult);
     });
 }
 

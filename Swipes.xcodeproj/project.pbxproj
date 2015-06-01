@@ -656,6 +656,7 @@
 		DAE4D5FD1AB1C473001BDC52 /* SwipesShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DAE4D5F21AB1C473001BDC52 /* SwipesShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DAE9CFE119AF3AC600246B64 /* SwipesKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DAE9CFE019AF3AC600246B64 /* SwipesKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
+		DAF14F301B1C700C00BBAAF6 /* 1sec_silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DAF14F2F1B1C700C00BBAAF6 /* 1sec_silence.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1352,6 +1353,7 @@
 		DAE9CFE019AF3AC600246B64 /* SwipesKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipesKit.h; sourceTree = "<group>"; };
 		DAE9D00219AF3B2900246B64 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		DAEBBE62188B2BB8002655CB /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		DAF14F2F1B1C700C00BBAAF6 /* 1sec_silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 1sec_silence.mp3; sourceTree = "<group>"; };
 		E05A80E8EEB25CD6DB2767FA /* Pods-SwipesKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.debug.xcconfig"; sourceTree = "<group>"; };
 		F17D8C581F2A222D9CA9DE7E /* Pods-SwipesToday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.release.xcconfig"; sourceTree = "<group>"; };
 		FA01441E525669BA3638C6B1 /* Pods-Swipes.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swipes.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-Swipes/Pods-Swipes.adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -2269,6 +2271,7 @@
 		A7BB65C9189BF19600BE7183 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				DAF14F2F1B1C700C00BBAAF6 /* 1sec_silence.mp3 */,
 				A710F14B1A828BD3006FC16F /* swipes-notification.aif */,
 				A7AD45521A39809300DF19BD /* All done for today.m4a */,
 				A7AD45531A39809300DF19BD /* Compling task */,
@@ -3248,6 +3251,7 @@
 				A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */,
 				DA4F29CB1AA73D8C0048C71A /* swipes-ui-gmail-integrations-1@2x.png in Resources */,
 				A701BD2E1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png in Resources */,
+				DAF14F301B1C700C00BBAAF6 /* 1sec_silence.mp3 in Resources */,
 				DACD545918A1ACFC00C378DF /* page_white_h.png in Resources */,
 				DA6B61C319E321FE00089877 /* Localizable.strings in Resources */,
 				A717DD2118B6775B00EE359C /* NexaHeavy.ttf in Resources */,
