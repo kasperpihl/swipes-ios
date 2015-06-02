@@ -10,6 +10,7 @@
 #import "Includes.h"
 #import "Global.h"
 #import <Parse/Parse.h>
+#import <ENSDK/ENSDK.h>
 #import "UtilityClass.h"
 #import "KPToDo.h"
 #import "KPAttachment.h"
@@ -63,6 +64,9 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
 + (void)initialize
 {
+    [ENSession setSharedSessionConsumerKey:[UtilityClass decrypt:@"Jx8MUDYE"]
+                            consumerSecret:[UtilityClass decrypt:@"MVBTEjVHDUhSSkVmBlMPYg=="]
+                              optionalHost:nil];
     [Parse setApplicationId:[UtilityClass decrypt:@"Og5cTB4HASAqGxM+PwgbLBk0QR42DkY8P1QuCQcbBgIgWAYyIiMxQA=="] // @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
                   clientKey:[UtilityClass decrypt:@"BxoOVhgNLx1QQk42LjtePBIQVz0xESA1CRJgLFgIJgMPVjgRWSgfIA=="]]; //@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"
     [Global initCoreData];

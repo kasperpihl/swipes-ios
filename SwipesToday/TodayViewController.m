@@ -8,6 +8,7 @@
 
 #import <NotificationCenter/NotificationCenter.h>
 #import <Parse/Parse.h>
+#import <ENSDK/ENSDK.h>
 #import "KPToDo.h"
 #import "UtilityClass.h"
 #import "TodayViewController.h"
@@ -45,6 +46,9 @@
 
 + (void)initialize
 {
+    [ENSession setSharedSessionConsumerKey:[UtilityClass decrypt:@"Jx8MUDYE"]
+                            consumerSecret:[UtilityClass decrypt:@"MVBTEjVHDUhSSkVmBlMPYg=="]
+                              optionalHost:nil];
     [Parse setApplicationId:[UtilityClass decrypt:@"Og5cTB4HASAqGxM+PwgbLBk0QR42DkY8P1QuCQcbBgIgWAYyIiMxQA=="] // @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
                   clientKey:[UtilityClass decrypt:@"BxoOVhgNLx1QQk42LjtePBIQVz0xESA1CRJgLFgIJgMPVjgRWSgfIA=="]]; //@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"
     [Global initCoreData];
