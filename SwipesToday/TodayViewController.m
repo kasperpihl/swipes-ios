@@ -7,6 +7,7 @@
 //
 
 #import <NotificationCenter/NotificationCenter.h>
+#import <Parse/Parse.h>
 #import "KPToDo.h"
 #import "UtilityClass.h"
 #import "TodayViewController.h"
@@ -41,6 +42,14 @@
 @end
 
 @implementation TodayViewController
+
++ (void)initialize
+{
+    [Parse setApplicationId:[UtilityClass decrypt:@"Og5cTB4HASAqGxM+PwgbLBk0QR42DkY8P1QuCQcbBgIgWAYyIiMxQA=="] // @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
+                  clientKey:[UtilityClass decrypt:@"BxoOVhgNLx1QQk42LjtePBIQVz0xESA1CRJgLFgIJgMPVjgRWSgfIA=="]]; //@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"
+    [Global initCoreData];
+}
+
 -(void)setTodos:(NSArray *)todos{
     _todos = todos;
     //[self.tableView reloadData];
@@ -53,7 +62,6 @@
     UTILITY.rootViewController = self;
     
     
-    [Global initCoreData];
     // Do any additional setup after loading the view from its nib.
     _tableView.backgroundColor = [UIColor clearColor];
     _tableView.contentInset = UIEdgeInsetsMake(kContentInsetsTableTop, 0, kContentInsetsTableBottom, 0);
