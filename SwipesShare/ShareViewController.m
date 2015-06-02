@@ -131,13 +131,17 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     [attrString addAttribute:NSFontAttributeName value:KP_REGULAR(14) range:NSMakeRange(14, attrString.length - 14)];
     [_backButton setAttributedTitle:attrString forState:UIControlStateNormal];
     [_backButton setAttributedTitle:attrString forState:UIControlStateHighlighted];
-    
-    [self.textField becomeFirstResponder];
 }
 
 - (void)dealloc
 {
     clearNotify();
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.textField becomeFirstResponder];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -249,6 +253,10 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
 - (void)createTodo
 {
+    if (_readTags && _tagsVC) {
+        _selectedTags = [_tagsVC.tagList getSelectedTags];
+    }
+
     KPToDo* todo = [KPToDo addItem:_textField.text priority:NO tags:_selectedTags save:YES from:@"Share Extension"];
     if (_notesTextView.text.length) {
         [todo setNotes:_notesTextView.text];
@@ -268,7 +276,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 - (void)setupTagsLabel:(UILabel *)label
 {
     if (!_selectedTags || (0 == _selectedTags.count)) {
-        label.text = @"no tags";
+        label.text = [LOCALIZE_STRING(@"No tags") lowercaseString];
         label.textColor = gray(192, 1);
     }
     else {
@@ -287,7 +295,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
 - (void)setupScheduleLabel:(UILabel *)label
 {
-    label.text = @"Schedule";
+    label.text = [LOCALIZE_STRING(@"schedule") capitalizedString];
 }
 
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
