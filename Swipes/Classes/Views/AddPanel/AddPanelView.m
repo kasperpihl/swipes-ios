@@ -100,6 +100,7 @@
             if (nil == [KPTag findByTitle:trimmedString]) {
                 [self.addDelegate addPanel:self createdTag:trimmedString];
                 [self.tagList addTag:trimmedString selected:YES];
+                self.scrollView.contentSize = CGSizeMake(self.tagList.frame.size.width, self.tagList.frame.size.height);
             }
             else {
                 [self.tagList selectTag:trimmedString];
