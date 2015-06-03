@@ -45,7 +45,7 @@ static SettingsHandler *sharedObject;
 }
 
 -(NSArray*)syncedSettingIndexes{
-    return @[ @(SettingLaterToday), @(SettingEveningStartTime), @(SettingWeekStart), @(SettingWeekStartTime), @(SettingWeekendStart), @(SettingWeekendStartTime), @(SettingAddToBottom), @(SettingTimeZone), @(SettingFilter) ];
+    return @[ @(SettingLaterToday), @(SettingEveningStartTime), @(SettingWeekStart), @(SettingWeekStartTime), @(SettingWeekendStart), @(SettingWeekendStartTime), @(SettingAddToBottom), @(SettingUseStandardStatusBar), @(SettingTimeZone), @(SettingFilter) ];
 }
 
 -(KPSettings)settingForIndex:(NSString*)index{

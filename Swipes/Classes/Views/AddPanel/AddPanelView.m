@@ -10,6 +10,7 @@
 #import "UtilityClass.h"
 #import "KPBlurry.h"
 #import "KPAddView.h"
+#import "KPTag.h"
 
 #import "NSDate-Utilities.h"
 #import "KPTagList.h"
@@ -96,8 +97,13 @@
         NSString *trimmedString = [string stringByTrimmingCharactersInSet:
                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if(trimmedString && trimmedString.length > 0){
-            [self.addDelegate addPanel:self createdTag:trimmedString];
-            [self.tagList addTag:trimmedString selected:YES];
+            if (nil == [KPTag findByTitle:trimmedString]) {
+                [self.addDelegate addPanel:self createdTag:trimmedString];
+                [self.tagList addTag:trimmedString selected:YES];
+            }
+            else {
+                [self.tagList selectTag:trimmedString];
+            }
         }
         
         //[self.addView.textField becomeFirstResponder];

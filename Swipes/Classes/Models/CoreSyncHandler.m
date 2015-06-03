@@ -726,7 +726,7 @@
         //NSLog(@"status code: %i error %@",response.statusCode,error);
         if(error){
             if(!(error.code == -1001 || error.code == -1003 || error.code == -1005 || error.code == -1009))
-                [UtilityClass sendError:error type:@"Sync request error 1"];
+                [UtilityClass sendError:error type:@"Sync request error 1" attachment:@{@"out": [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding],  @"in" : [resData base64EncodedStringWithOptions:0]}];
         }
         else if(response.statusCode == 503){
             error = [NSError errorWithDomain:@"Request timed out" code:503 userInfo:nil];
@@ -738,7 +738,7 @@
                 error = [NSError errorWithDomain:myString code:response.statusCode userInfo:nil];
             else
                 error = [NSError errorWithDomain:@"(missing data)" code:response.statusCode userInfo:nil];
-            [UtilityClass sendError:error type:@"Sync request error 2"];
+            [UtilityClass sendError:error type:@"Sync request error 2" attachment:@{@"out": [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding],  @"in" : [resData base64EncodedStringWithOptions:0]}];
         }
         self._needSync = YES;
         [self finalizeSyncWithUserInfo:nil error:error currentResult:UIBackgroundFetchResultFailed completionHandler:handler];
@@ -768,7 +768,7 @@
             }
             error = [NSError errorWithDomain:message code:code userInfo:result];
         }
-        [UtilityClass sendError:error type:@"Sync Json Parse Error"];
+        [UtilityClass sendError:error type:@"Sync Json Parse Error" attachment:@{@"out": [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding],  @"in" : [resData base64EncodedStringWithOptions:0]}];
         [self finalizeSyncWithUserInfo:result error:error currentResult:UIBackgroundFetchResultFailed completionHandler:handler];
         return;
     }
@@ -782,7 +782,7 @@
         syncResult = UIBackgroundFetchResultNewData;
     
     lastUpdate = [result objectForKey:@"updateTime"];
-    [result objectForKey:@"serverTime"];
+    //[result objectForKey:@"serverTime"]; // stanimir: commenting this line as not needed
     
     __block NSUndoManager* um = self.context.undoManager;
     if (um.isUndoRegistrationEnabled)
