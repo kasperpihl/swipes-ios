@@ -92,6 +92,12 @@ static NSString * const kFromEvernote = @"Evernote";
     return self;
 }
 
+- (void)hardSync
+{
+    [kEnInt cacheClear];
+    [self setUpdatedAt:nil];
+}
+
 -(NSMutableArray *)_updatedTasks
 {
     if( !__updatedTasks )
@@ -334,6 +340,14 @@ static NSString * const kFromEvernote = @"Evernote";
 
 -(void)synchronizeWithBlock:(SyncBlock)block
 {
+    // search orphaned attachments
+//    NSPredicate *findPredicate = [NSPredicate predicateWithFormat:@"service = %@", EVERNOTE_SERVICE];
+//    NSArray *evernoteAttachments = [KPAttachment MR_findAllWithPredicate:findPredicate inContext:KPCORE.context];
+//    for (KPAttachment* attachment in evernoteAttachments) {
+//        DLog(@"%@", attachment);
+//        DLog(@"Todo: %@", attachment.todo);
+//    }
+    
     self.isSyncing = YES;
     self.hasNewData = NO;
     self.block = block;
@@ -351,6 +365,13 @@ static NSString * const kFromEvernote = @"Evernote";
 
     if (self.needToClearCache)
         self.needToClearCache = NO;
+    
+    // ensure evernote authentication
+    NSError* error = [NSError errorWithDomain:@"Evernote not authenticated" code:601 userInfo:nil];
+    ENSession *session = [ENSession sharedSession];
+    if (!session.isAuthenticated) {
+        return block(SyncStatusError, nil, error);
+    }
     
     if (kEnInt.autoFindFromTag) {
         [self findUpdatedNotesWithTag:@"swipes" block:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
@@ -541,21 +562,11 @@ static NSString * const kFromEvernote = @"Evernote";
 
 -(void)syncEvernoteWithBlock:(SyncBlock)block{
     
-    self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
     DLog(@"performing sync with Evernote");
-    
-    // ensure evernote authentication
-    NSError* error = [NSError errorWithDomain:@"Evernote not authenticated" code:601 userInfo:nil];
-    ENSession *session = [ENSession sharedSession];
-    if (!session.isAuthenticated) {
-        return block(SyncStatusError, nil, error);
-    }
+    self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
     
     // this is needed in case you have old client synchronizing the old info
     //[self convertGuidToENNoteRef];
-    
-    // Tell caller that Evernote will be syncing
-    
     
     __block NSDate *date = [NSDate date];
     __block NSInteger returnCount = 0;
@@ -606,13 +617,13 @@ static NSString * const kFromEvernote = @"Evernote";
         NSString *noteRefString = evernoteAttachment.identifier;
         
         BOOL hasLocalChanges = [todoWithEvernote hasChangesSinceDate:self.lastUpdated];
-        if (hasLocalChanges) {
+//        if (hasLocalChanges) {
 //            DLog(@"local changes: %@",todoWithEvernote.title);
-        }
+//        }
         BOOL hasChangesFromEvernote = [self hasChangedFromEvernoteId:noteRefString];
-        if (hasChangesFromEvernote) {
+//        if (hasChangesFromEvernote) {
 //            DLog(@"evernote changes: %@",todoWithEvernote.title);
-        }
+//        }
         
         if( !hasLocalChanges && !hasChangesFromEvernote ){
             finalizeBlock();

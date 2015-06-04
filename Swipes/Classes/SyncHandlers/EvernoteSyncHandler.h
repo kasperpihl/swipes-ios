@@ -9,11 +9,13 @@
 #import "ParentSyncHandler.h"
 
 @interface EvernoteSyncHandler : ParentSyncHandler
-+(NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes withArray:(NSMutableArray *)createdTasks;
+
++ (NSArray *)addAndSyncNewTasksFromNotes:(NSArray *)notes withArray:(NSMutableArray *)createdTasks;
 //-(void)getSwipesTagGuidBlock:(StringBlock)block;
--(NSArray*)getObjectsSyncedWithEvernote;
--(BOOL)hasObjectsSyncedWithEvernote;
--(void)clearCache;
--(void)setUpdatedAt:(NSDate*)updatedAt;
+- (NSArray*)getObjectsSyncedWithEvernote;
+- (BOOL)hasObjectsSyncedWithEvernote;
+- (void)clearCache;
+- (void)setUpdatedAt:(NSDate*)updatedAt;
+- (void)hardSync;
 
 @end

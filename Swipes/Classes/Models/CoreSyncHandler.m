@@ -176,6 +176,9 @@
     [self commitAttributeChanges:changesToCommit toTemp:NO];
     [USER_DEFAULTS removeObjectForKey:kLastSyncServerString];
     [USER_DEFAULTS synchronize];
+    
+    [self.evernoteSyncHandler hardSync];
+    
     [self synchronizeForce:YES async:YES];
 
 }
@@ -485,6 +488,15 @@
                 if (status == SyncStatusStarted){
                 }
                 else if (status == SyncStatusError) {
+                    // from user error logs it looks like too many users have their EN token expired without knowing it
+                    if (error && error.userInfo) {
+                        NSNumber* errorCode = error.userInfo[@"EDAMErrorCode"];
+                        if (errorCode && (EDAMErrorCode_AUTH_EXPIRED == [errorCode integerValue])) {
+                            [kEnInt logout];
+                            kEnInt.hasAskedForPermissions = NO;
+                        }
+                    }
+
                     if (!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) {
                         kEnInt.enableSync = NO;
                         if (_isAsync) {
