@@ -35,6 +35,8 @@
 #define kUpdateLimit 200
 #define kBatchSize 50
 
+static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
+
 #define kDeleteObjectsKey @"deleteObjects"
 
 #ifdef DEBUG
@@ -1069,7 +1071,7 @@ static CoreSyncHandler *sharedObject;
 + (CoreSyncHandler *)sharedInstance
 {
     if (!sharedObject) {
-        sharedObject = [[CoreSyncHandler allocWithZone:NULL] init];
+        sharedObject = [[CoreSyncHandler alloc] init];
         [sharedObject initialize];
         //[sharedObject loadTest];
     }
@@ -1085,7 +1087,7 @@ static CoreSyncHandler *sharedObject;
     notify(@"opened app", forceSync);
     notify(@"logged in", forceSync);
     notify(kMagicalRecordPSCMismatchDidRecreateStore, onCoreDataRecreated);
-    sharedObject._reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    sharedObject._reach = [Reachability reachabilityWithHostname:@"api.swipesapp.com"];
     // Set the blocks
     sharedObject._reach.reachableBlock = ^(Reachability*reach) {
         if (sharedObject._needSync)
@@ -1094,7 +1096,8 @@ static CoreSyncHandler *sharedObject;
     self.isolationQueue = dispatch_queue_create([@"SyncAttributeQueue" UTF8String], DISPATCH_QUEUE_CONCURRENT);
     // Start the notifier, which will cause the reachability object to retain itself!
     [sharedObject._reach startNotifier];
-    
+ 
+    [self initialMaintenance];
 }
 
 - (void)loadDatabase
@@ -1185,6 +1188,26 @@ static CoreSyncHandler *sharedObject;
     ANALYTICS.analyticsOff = NO;
     
     [UTILITY.userDefaults setBool:YES forKey:@"seeded"];
+}
+
+- (void)initialMaintenance
+{
+    // clear orphaned attachments
+    BOOL isOrphanedCleared = [USER_DEFAULTS boolForKey:kKeyOrphanedCleared];
+    if (!isOrphanedCleared) {
+        BOOL save = NO;
+        NSArray *allAttachments = [KPAttachment MR_findAll];
+        for (KPAttachment* attachment in allAttachments) {
+            if (nil == attachment.todo) {
+                [attachment MR_deleteEntity];
+                save = YES;
+            }
+        }
+        if (save)
+            [KPToDo saveToSync];
+        [USER_DEFAULTS setBool:YES forKey:kKeyOrphanedCleared];
+        [USER_DEFAULTS synchronize];
+    }
 }
 
 - (void)dealloc
