@@ -34,7 +34,7 @@
 #define kAddTextStringKey @"AddTextStringKey"
 #define kAddTextTimestampKey @"AddTextTimestampKey"
 
-@interface AddPanelView () <AddViewDelegate,KPTagListAddDelegate,KPBlurryDelegate>
+@interface AddPanelView () <AddViewDelegate, KPTagListAddDelegate, KPBlurryDelegate>
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, weak) KPAddView *addView;
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -59,13 +59,13 @@
     [self.addView.textField becomeFirstResponder];
 }
 
--(void)blurryWillHide:(KPBlurry *)blurry{
+-(void)blurryWillHide:(KPBlurry *)blurry
+{
     self.hasClosed = YES;
     [USER_DEFAULTS setObject:self.addView.textField.text forKey:kAddTextStringKey];
     [USER_DEFAULTS setObject:[NSDate date] forKey:kAddTextTimestampKey];
     [USER_DEFAULTS synchronize];
     [self.addView.textField resignFirstResponder];
-    
 }
 
 -(void)pressedClose
@@ -84,8 +84,6 @@
     [self.tagList setTags:tags andSelectedTags:selected];
     self.scrollView.contentSize = CGSizeMake(self.tagList.frame.size.width, self.tagList.frame.size.height);
     [self layoutSubviewsWithKeyboardHeight:0];
-    
-//    CGRectSetY(self.scrollView, -self.scrollView.frame.size.height);
 }
 
 -(void)addView:(KPAddView *)addView enteredTrimmedText:(NSString *)trimmedText
@@ -140,10 +138,6 @@
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
     [self layoutSubviewsWithKeyboardHeight:0];
-//        CGRectSetY(self.scrollView, -self.scrollView.frame.size.height);
-//        CGFloat yForAdd = self.frame.size.height-self.addView.frame.size.height;
-//        CGRectSetY(self.addView, yForAdd);
-//        CGRectSetCenterY(self.priorityButton, yForAdd+self.priorityButton.frame.size.height/2);
     [UIView commitAnimations];
 }
 
@@ -160,11 +154,6 @@
     if(OSVER == 7){
         kbdHeight = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     }
-//    CGFloat targetHeight = kbdHeight + self.addView.frame.size.height;
-//    CGFloat currentHeight = self.frame.size.height;
-//    
-//    CGRectSetSize(self.scrollView, self.tagList.frame.size.width, MIN(self.tagList.frame.size.height, currentHeight-targetHeight-SEPERATOR_SPACING-(OSVER >= 7 ? 20 : 0)) );
-//    CGRectSetY(self.scrollView, -self.scrollView.frame.size.height);
     if(animating){
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
@@ -172,14 +161,6 @@
         [UIView setAnimationBeginsFromCurrentState:YES];
     }
 
-//    if(targetHeight != currentHeight){
-//        CGRectSetY(self.scrollView, currentHeight-targetHeight-self.scrollView.frame.size.height-SEPERATOR_SPACING);
-//    }
-//    
-//    CGFloat yForAdd = self.frame.size.height - self.addView.frame.size.height - kbdHeight;
-//    CGRectSetY(self.addView, yForAdd);
-//    CGRectSetCenterY(self.priorityButton, yForAdd + self.priorityButton.frame.size.height / 2);
-    
     [self layoutSubviewsWithKeyboardHeight:kbdHeight];
     
     if (animating) {
@@ -260,8 +241,6 @@
         self.scrollView.scrollEnabled = YES;
         
         [self addSubview:self.scrollView];
-        
-        
         
         
         CGFloat dotWidth = 44;
