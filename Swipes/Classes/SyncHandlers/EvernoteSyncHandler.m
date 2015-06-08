@@ -340,14 +340,6 @@ static NSString * const kFromEvernote = @"Evernote";
 
 -(void)synchronizeWithBlock:(SyncBlock)block
 {
-    // search orphaned attachments
-//    NSPredicate *findPredicate = [NSPredicate predicateWithFormat:@"service = %@", EVERNOTE_SERVICE];
-//    NSArray *evernoteAttachments = [KPAttachment MR_findAllWithPredicate:findPredicate inContext:KPCORE.context];
-//    for (KPAttachment* attachment in evernoteAttachments) {
-//        DLog(@"%@", attachment);
-//        DLog(@"Todo: %@", attachment.todo);
-//    }
-    
     self.isSyncing = YES;
     self.hasNewData = NO;
     self.block = block;

@@ -275,6 +275,11 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     
     [USER_DEFAULTS setObject:_selectedTags ? _selectedTags : @[] forKey:keyTags];
     [USER_DEFAULTS synchronize];
+    
+//    NSString* userId = kCurrent.objectId;
+//    if (userId) {
+//        [PFPush sendPushMessageToChannelInBackground:userId withMessage:@"{\"aps\":{\"content-available\": 1,\"sound\": \"1sec_silence.mp3\"}}"];
+//    }
 }
 
 - (void)setupTagsLabel:(UILabel *)label
