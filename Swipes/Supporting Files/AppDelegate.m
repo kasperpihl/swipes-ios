@@ -100,6 +100,9 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
+    if (kIsIpad) {
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
     

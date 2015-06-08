@@ -26,7 +26,7 @@
 #define DONE_EDITING_BUTTON_TAG 5
 #define ANIMATION_DURATION 0.25f
 
-#define SEPERATOR_SPACING 15
+#define SEPERATOR_SPACING 5
 
 #define ADD_VIEW_HEIGHT GLOBAL_TEXTFIELD_HEIGHT
 #define ADD_FIELD_HEIGHT 30
@@ -35,28 +35,30 @@
 #define kAddTextTimestampKey @"AddTextTimestampKey"
 
 @interface AddPanelView () <AddViewDelegate,KPTagListAddDelegate,KPBlurryDelegate>
-@property (nonatomic) UIButton *closeButton;
-@property (nonatomic,weak) KPAddView *addView;
-@property (nonatomic) UIScrollView *scrollView;
-@property (nonatomic) KPTagList *tagList;
+@property (nonatomic, strong) UIButton *closeButton;
+@property (nonatomic, weak) KPAddView *addView;
+@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) KPTagList *tagList;
 
-
-@property (nonatomic) UIButton *priorityButton;
-@property (nonatomic) DotView *dotView;
-@property (nonatomic) BOOL shouldRemove;
-@property (nonatomic) BOOL isRotated;
-@property (nonatomic) BOOL shouldUnlock;
-@property (nonatomic) BOOL hasClosed;
-@property (nonatomic) BOOL lock;
+@property (nonatomic, strong) UIButton *priorityButton;
+@property (nonatomic, strong) DotView *dotView;
+//@property (nonatomic) BOOL shouldRemove;
+//@property (nonatomic) BOOL isRotated;
+@property (nonatomic, assign) BOOL shouldUnlock;
+@property (nonatomic, assign) BOOL hasClosed;
+@property (nonatomic, assign) BOOL lock;
 @end
+
 @implementation AddPanelView {
-    BOOL _justShown;
+    UIDeviceOrientation currentOrientation;
 }
--(void)blurryWillShow:(KPBlurry *)blurry{
-    _justShown = YES;
+
+-(void)blurryWillShow:(KPBlurry *)blurry
+{
     self.hasClosed = NO;
     [self.addView.textField becomeFirstResponder];
 }
+
 -(void)blurryWillHide:(KPBlurry *)blurry{
     self.hasClosed = YES;
     [USER_DEFAULTS setObject:self.addView.textField.text forKey:kAddTextStringKey];
@@ -65,33 +67,47 @@
     [self.addView.textField resignFirstResponder];
     
 }
--(void)pressedClose{
+
+-(void)pressedClose
+{
     [self.addDelegate closeAddPanel:self];
 }
--(void)setTags:(NSArray *)tags{
+
+-(void)setTags:(NSArray *)tags
+{
     _tags = tags;
     [self setTags:tags selected:nil];
 }
--(void)setTags:(NSArray *)tags selected:(NSArray *)selected{
+
+-(void)setTags:(NSArray *)tags selected:(NSArray *)selected
+{
     [self.tagList setTags:tags andSelectedTags:selected];
     self.scrollView.contentSize = CGSizeMake(self.tagList.frame.size.width, self.tagList.frame.size.height);
+    [self layoutSubviewsWithKeyboardHeight:0];
     
-    CGRectSetY(self.scrollView, -self.scrollView.frame.size.height);
+//    CGRectSetY(self.scrollView, -self.scrollView.frame.size.height);
 }
--(void)addView:(KPAddView *)addView enteredTrimmedText:(NSString *)trimmedText{
+
+-(void)addView:(KPAddView *)addView enteredTrimmedText:(NSString *)trimmedText
+{
     if(self.addDelegate && [self.addDelegate respondsToSelector:@selector(didAddItem:priority:tags:)])
         [self.addDelegate didAddItem:trimmedText priority:self.dotView.priority tags:[self.tagList getSelectedTags]];
     [kAudio playSoundWithName:@"Succesful action.m4a"];
 }
--(void)addViewPressedDoneButton:(KPAddView *)addView{
+
+-(void)addViewPressedDoneButton:(KPAddView *)addView
+{
     [self.addDelegate closeAddPanel:self];
 }
--(BOOL)blurryShouldClose:(KPBlurry *)blurry{
+
+-(BOOL)blurryShouldClose:(KPBlurry *)blurry
+{
     [self.addDelegate closeAddPanel:self];
     return NO;
 }
 
--(void)pressedAddButtonForTagList:(KPTagList *)tagList{
+-(void)pressedAddButtonForTagList:(KPTagList *)tagList
+{
     self.lock = YES;
     [UTILITY inputAlertWithTitle:LOCALIZE_STRING(@"Add new tag") message:LOCALIZE_STRING(@"Type the name of your tag (ex. work, project or school)") placeholder:LOCALIZE_STRING(@"Add new tag") cancel:[LOCALIZE_STRING(@"cancel") capitalizedString] confirm:[LOCALIZE_STRING(@"add") capitalizedString] block:^(NSString *string, NSError *error) {
         NSString *trimmedString = [string stringByTrimmingCharactersInSet:
@@ -112,7 +128,8 @@
     }];
 }
 
--(void)keyboardWillHide:(NSNotification*)notification{
+-(void)keyboardWillHide:(NSNotification*)notification
+{
     if(self.lock){
         return;
     }
@@ -122,13 +139,16 @@
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
-        CGRectSetY(self.scrollView, -self.scrollView.frame.size.height);
-        CGFloat yForAdd = self.frame.size.height-self.addView.frame.size.height;
-        CGRectSetY(self.addView, yForAdd);
-        CGRectSetCenterY(self.priorityButton, yForAdd+self.priorityButton.frame.size.height/2);
+    [self layoutSubviewsWithKeyboardHeight:0];
+//        CGRectSetY(self.scrollView, -self.scrollView.frame.size.height);
+//        CGFloat yForAdd = self.frame.size.height-self.addView.frame.size.height;
+//        CGRectSetY(self.addView, yForAdd);
+//        CGRectSetCenterY(self.priorityButton, yForAdd+self.priorityButton.frame.size.height/2);
     [UIView commitAnimations];
 }
--(void)keyboardWillShow:(NSNotification*)notification{
+
+-(void)keyboardWillShow:(NSNotification*)notification
+{
     BOOL animating = YES;
     if(self.shouldUnlock && self.lock){
         self.lock = NO;
@@ -140,11 +160,11 @@
     if(OSVER == 7){
         kbdHeight = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     }
-    CGFloat targetHeight = kbdHeight + self.addView.frame.size.height;
-    CGFloat currentHeight = self.frame.size.height;
-    
-    CGRectSetSize(self.scrollView, self.tagList.frame.size.width, MIN(self.tagList.frame.size.height, currentHeight-targetHeight-SEPERATOR_SPACING-(OSVER >= 7 ? 20 : 0)) );
-    CGRectSetY(self.scrollView, -self.scrollView.frame.size.height);
+//    CGFloat targetHeight = kbdHeight + self.addView.frame.size.height;
+//    CGFloat currentHeight = self.frame.size.height;
+//    
+//    CGRectSetSize(self.scrollView, self.tagList.frame.size.width, MIN(self.tagList.frame.size.height, currentHeight-targetHeight-SEPERATOR_SPACING-(OSVER >= 7 ? 20 : 0)) );
+//    CGRectSetY(self.scrollView, -self.scrollView.frame.size.height);
     if(animating){
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
@@ -152,22 +172,45 @@
         [UIView setAnimationBeginsFromCurrentState:YES];
     }
 
-    if(targetHeight != currentHeight){
-        CGRectSetY(self.scrollView, currentHeight-targetHeight-self.scrollView.frame.size.height-SEPERATOR_SPACING);
-        //CGFloat deltaY = currentHeight - targetHeight;
-        //CGRectSetY(self, self.frame.origin.y + deltaY);
-        //CGRectSetHeight(self, targetHeight);
-    }
+//    if(targetHeight != currentHeight){
+//        CGRectSetY(self.scrollView, currentHeight-targetHeight-self.scrollView.frame.size.height-SEPERATOR_SPACING);
+//    }
+//    
+//    CGFloat yForAdd = self.frame.size.height - self.addView.frame.size.height - kbdHeight;
+//    CGRectSetY(self.addView, yForAdd);
+//    CGRectSetCenterY(self.priorityButton, yForAdd + self.priorityButton.frame.size.height / 2);
     
-    CGFloat yForAdd = self.frame.size.height - self.addView.frame.size.height - kbdHeight;
-    CGRectSetY(self.addView, yForAdd);
-    CGRectSetCenterY(self.priorityButton, yForAdd + self.priorityButton.frame.size.height / 2);
+    [self layoutSubviewsWithKeyboardHeight:kbdHeight];
+    
     if (animating) {
         [UIView commitAnimations];
     }
     
 }
--(void)pressedPriority{
+
+- (void)deviceOrientationDidChange:(NSNotification *)notification
+{
+    //Obtaining the current device orientation
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    
+    //Ignoring specific orientations
+    if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown || orientation == UIDeviceOrientationUnknown || currentOrientation == orientation) {
+        return;
+    }
+    
+    currentOrientation = orientation;
+
+    if (self.addView.textField.isFirstResponder) {
+        [self.addView.textField resignFirstResponder];
+    }
+//    [self layoutSubviewsWithKeyboardHeight:0];
+    
+    if (!self.hasClosed)
+        [self pressedClose];
+}
+
+-(void)pressedPriority
+{
     self.dotView.priority = !self.dotView.priority;
     if(self.dotView.priority)
         [kAudio playSoundWithName:@"Succesful action.m4a"];
@@ -175,6 +218,7 @@
         [kAudio playSoundWithName:@"New state - scheduled.m4a"];
     
 }
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -187,13 +231,19 @@
                                                  selector:@selector(keyboardWillHide:)
                                                      name:UIKeyboardWillHideNotification
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(deviceOrientationDidChange:)
+                                                     name:UIDeviceOrientationDidChangeNotification
+                                                   object:nil];
+        
+        currentOrientation =  (UIDeviceOrientation)[UIApplication sharedApplication].statusBarOrientation;
         
         UIButton *closeButton = [[UIButton alloc] initWithFrame:self.bounds];
         closeButton.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth);
         [closeButton addTarget:self action:@selector(pressedClose) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
         
-        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 20, self.frame.size.width, self.frame.size.height)];
         self.scrollView.backgroundColor = CLEAR;
         
         self.tagList = [KPTagList tagListWithWidth:self.frame.size.width andTags:nil];
@@ -251,7 +301,6 @@
             if(lastTask)
                 [self.addView setText:lastTask];
         }
-
     }
     return self;
 }
@@ -260,18 +309,26 @@
     clearNotify();
 }
 
-// NEWCODE
-- (void)layoutSubviews
+- (void)layoutSubviewsWithKeyboardHeight:(CGFloat)kbdHeight
 {
-    [super layoutSubviews];
-    // it is really complicated to recalc the new keyboard frame
-    // FIXME: maybe someday we should do it anyway
-    if (_justShown) {
-        _justShown = NO;
+    if (self.tagList.frame.size.width != self.frame.size.width) {
+        CGRectSetWidth(self.tagList, self.frame.size.width);
+        [self.tagList layoutSubviews];
+        self.scrollView.contentSize = CGSizeMake(self.tagList.frame.size.width, self.tagList.frame.size.height);
     }
-    else {
-        //[self pressedClose];
+    
+    CGFloat targetHeight = kbdHeight + self.addView.frame.size.height;
+    CGFloat currentHeight = self.frame.size.height;
+    
+    CGRectSetSize(self.scrollView, self.tagList.frame.size.width, MIN(self.tagList.frame.size.height, currentHeight-targetHeight-SEPERATOR_SPACING-20));
+    if(targetHeight != currentHeight){
+        CGRectSetY(self.scrollView, currentHeight-targetHeight-self.scrollView.frame.size.height-SEPERATOR_SPACING);
     }
+    
+    CGFloat yForAdd = self.frame.size.height - self.addView.frame.size.height - kbdHeight;
+    CGRectSetY(self.addView, yForAdd);
+//    CGRectSetWidth(self.addView, self.frame.size.width - 44);
+    CGRectSetCenterY(self.priorityButton, yForAdd + self.priorityButton.frame.size.height / 2);
 }
 
 @end
