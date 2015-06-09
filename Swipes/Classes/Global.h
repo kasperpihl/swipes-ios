@@ -16,6 +16,9 @@
 
 #define LOCALIZE_STRING(string) NSLocalizedString(string, nil)
 
+extern NSString* const SHARED_GROUP_NAME;
+extern NSString* const SHARED_KEYCHAIN_NAME;
+
 @interface Global : NSObject
 
 + (Global *)sharedInstance;

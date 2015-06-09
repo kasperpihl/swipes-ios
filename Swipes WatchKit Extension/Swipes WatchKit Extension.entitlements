@@ -6,5 +6,9 @@
 	<array>
 		<string>group.it.pihl.swipes</string>
 	</array>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)it.pihl.Swipes</string>
+	</array>
 </dict>
 </plist>

@@ -68,6 +68,8 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     [Appirater setTimeBeforeReminding:1];
     [Appirater appLaunched:YES];
     
+    // Enable data sharing in main app.
+    [Parse enableDataSharingWithApplicationGroupIdentifier:SHARED_GROUP_NAME];
     [Parse setApplicationId:[UtilityClass decrypt:@"Og5cTB4HASAqGxM+PwgbLBk0QR42DkY8P1QuCQcbBgIgWAYyIiMxQA=="] // @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
                   clientKey:[UtilityClass decrypt:@"BxoOVhgNLx1QQk42LjtePBIQVz0xESA1CRJgLFgIJgMPVjgRWSgfIA=="]]; //@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"
     
