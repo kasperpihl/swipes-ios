@@ -308,10 +308,10 @@ static BOOL g_registeredForNotifications = NO;
 {
 #ifndef NOT_APPLICATION
     if(![USER_DEFAULTS boolForKey:@"hasAskedNotificationPermissions"]){
+        [USER_DEFAULTS setBool:YES forKey:@"hasAskedNotificationPermissions"];
+        [USER_DEFAULTS synchronize];
         [UTILITY alertWithTitle:NSLocalizedString(@"Better experience!", nil) andMessage:NSLocalizedString(@"For a better experience we need your permission to send notifications when tasks are due. Also used for faster syncronization between devices.", nil) buttonTitles:@[NSLocalizedString(@"Okay", nil)] block:^(NSInteger number, NSError *error) {
             [self doRegisterForNotifications];
-            [USER_DEFAULTS setBool:YES forKey:@"hasAskedNotificationPermissions"];
-            [USER_DEFAULTS synchronize];
         }];
     }
     else {
