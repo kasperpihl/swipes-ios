@@ -1024,8 +1024,8 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, origin: %@ - %@, parent: %@, completionDate: %@, isLocallyDeleted: %@",
-            self.title, self.order, self.origin, self.originIdentifier, self.parent, self.completionDate, self.isLocallyDeleted];
+    return [NSString stringWithFormat:@"KPToDo -> title: %@, order: %@, origin: %@ - %@, parent: %@, completionDate: %@, schedule: %@, isLocallyDeleted: %@",
+            self.title, self.order, self.origin, self.originIdentifier, self.parent, self.completionDate, self.schedule, self.isLocallyDeleted];
 }
 
 @end

@@ -37,6 +37,7 @@ static NSString* const kKeyJsonNotebookGuid = @"guid";
 static NSString* const kKeyJsonNotebookNoteStoreUrl = @"url";
 static NSString* const kKeyJsonNotebookShardId = @"shardid";
 static NSString* const kKeyJsonNotebookSharedNotebookGlobalId = @"globalid";
+static NSString* const kKeyJsonAndroidNoteGuid = @"noteguid";
 
 static NSTimeInterval const kSearchTimeout = 300;
 static NSTimeInterval const kNoteTimeout = 300;
@@ -175,13 +176,26 @@ NSError * NewNSErrorFromException(NSException * exc) {
 + (ENNoteRef *)NSStringToENNoteRef:(NSString *)string
 {
     if (![EvernoteIntegration isNoteRefJsonString:string]) {
-        return [ENNoteRef noteRefFromData:[NSData dataWithBase64String:string]];;
+        ENNoteRef* noteRef = [ENNoteRef noteRefFromData:[NSData dataWithBase64String:string]];
+        if (nil == noteRef) {
+            // this is the case of old Android BETA version of the data in form of
+            // {"notebookguid":"74391953-86be-4789-83f5-6bb672facb58","noteguid":"ea67462c-ac4b-42e2-8a7e-0f1de6636b15"}
+            // we cannot recall the version or disallow it, so we cover the case here instead of one time convertion
+            NSError* error;
+            NSDictionary* jsonDict = [NSJSONSerialization JSONObjectWithData:[string dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+            if (!error && jsonDict[kKeyJsonAndroidNoteGuid]) {
+                ENNoteRef* noteRef = [[ENNoteRef alloc] init];
+                noteRef.guid = jsonDict[kKeyJsonAndroidNoteGuid];
+                noteRef.type = ENNoteRefTypePersonal;
+                return noteRef;
+            }
+        }
     }
     else if ([EvernoteIntegration isNoteRefJsonString:string]) {
         NSError* error;
         NSDictionary* jsonDict = [NSJSONSerialization JSONObjectWithData:[[string substringFromIndex:kKeyJson.length] dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
         if (error) {
-            [UtilityClass sendError:error type:@"NSStringToENNoteRef error"];
+            [UtilityClass sendError:error type:@"NSStringToENNoteRef error" attachment:@{@"data" : string}];
             return nil;
         }
         
@@ -206,6 +220,8 @@ NSError * NewNSErrorFromException(NSException * exc) {
             
         return noteRef;
     }
+    NSError* error = [NSError errorWithDomain:@"NSStringToENNoteRef invalid data" code:612 userInfo:nil];
+    [UtilityClass sendError:error type:@"NSStringToENNoteRef error" attachment:@{@"data" : string}];
     return nil;
 }
 
@@ -613,14 +629,12 @@ NSError * NewNSErrorFromException(NSException * exc) {
 
 - (void)cacheAddSearchResult:(NSArray *)findNotesResults forText:(NSString *)text
 {
-    if (text && ![text isKindOfClass:NSString.class]) {
-        DLog(@"ERROR ERROR ERROR!!! Text is of class: %@", NSStringFromClass(text.class));
-        NSError* error = [NSError errorWithDomain:@"Invalid class sent as text to cacheAddSearchResult:forText:" code:611 userInfo:nil];
-        [UtilityClass sendError:error type:@"onUnauthenticatedNotification" attachment:@{@"class" : NSStringFromClass(text.class)}];
+    if (text) {
+        NSRange range = [text rangeOfString:@"updated:"];
+        if (range.location != NSNotFound) {
+            return; // these better not be cached
+        }
     }
-
-    if (text && [text isKindOfClass:NSString.class] && [text containsString:@"updated:"])
-        return; // these better not be cached
     _searchCache[text ? text : [NSNull null]] = @{kKeyData: findNotesResults, kKeyDate: [NSDate dateWithTimeIntervalSinceNow:kSearchTimeout]};
 }
 

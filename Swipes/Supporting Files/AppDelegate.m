@@ -12,6 +12,7 @@
 
 #import <DropboxSDK/DropboxSDK.h>
 
+#import "Intercom.h"
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
 #import "UtilityClass.h"
@@ -67,6 +68,8 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     [Appirater setTimeBeforeReminding:1];
     [Appirater appLaunched:YES];
     
+    // Enable data sharing in main app.
+    [Parse enableDataSharingWithApplicationGroupIdentifier:SHARED_GROUP_NAME];
     [Parse setApplicationId:[UtilityClass decrypt:@"Og5cTB4HASAqGxM+PwgbLBk0QR42DkY8P1QuCQcbBgIgWAYyIiMxQA=="] // @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
                   clientKey:[UtilityClass decrypt:@"BxoOVhgNLx1QQk42LjtePBIQVz0xESA1CRJgLFgIJgMPVjgRWSgfIA=="]]; //@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"
     
@@ -74,8 +77,8 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     
     [Crashlytics startWithAPIKey:[UtilityClass decrypt:@"ZV8ERTZCDxFdRRkyV1UPY1hQRWNHDRIERURgVgJYZQoAQzVCCkcARw=="]]; //@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
     if(kCurrent){
-        [Crashlytics setUserIdentifier:kCurrent.objectId];
-        [Crashlytics setUserEmail:kCurrent.username];
+        [[Crashlytics sharedInstance] setUserIdentifier:kCurrent.objectId];
+        [[Crashlytics sharedInstance] setUserEmail:kCurrent.username];
     }
     
     [GAI sharedInstance].dispatchInterval = 20;
@@ -99,6 +102,9 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
+    if (kIsIpad) {
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onShake:) name:DHCSHakeNotificationName object:nil];
     
@@ -209,30 +215,32 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 #endif
     }
     [currentInstallation saveInBackground];
+    
+    [Intercom setDeviceToken:deviceToken];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
 {
-    DLog(@"Error in registration. Error: %@", err);
+    DLog(@"Remote notification registration. Error: %@", err);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
     DLog(@"received remote notification: %@", userInfo);
-    UIBackgroundFetchResult result = UIBackgroundFetchResultNoData;
     NSDictionary* aps = userInfo[@"aps"];
+    [PFPush handlePush:userInfo];
     if (aps && aps[@"content-available"]) {
         NSString* syncId = userInfo[@"syncId"];
         if (!syncId || (![syncId isEqualToString:[USER_DEFAULTS objectForKey:kLastSyncId]])) {
             DLog(@"going to sync");
-            result = [KPCORE synchronizeForce:YES async:application.applicationState != UIApplicationStateBackground];
-            DLog(@"sync done, updating local notifications");
-            [NOTIHANDLER updateLocalNotifications];
+            [KPCORE synchronizeForce:YES async:application.applicationState != UIApplicationStateBackground completionHandler:^(UIBackgroundFetchResult result) {
+                DLog(@"sync done, updating local notifications");
+                [NOTIHANDLER updateLocalNotifications];
+                DLog(@"returning: %lu", (unsigned long)result);
+                handler(result);
+            }];
         }
     }
-    [PFPush handlePush:userInfo];
-    DLog(@"returning: %lu", (unsigned long)result);
-    handler(result);
 }
 
 -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
@@ -300,10 +308,10 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    
-    UIBackgroundFetchResult result = [KPCORE synchronizeForce:YES async:NO];
-    [NOTIHANDLER updateLocalNotifications];
-    completionHandler(result);
+    [KPCORE synchronizeForce:YES async:NO completionHandler:^(UIBackgroundFetchResult result) {
+        [NOTIHANDLER updateLocalNotifications];
+        completionHandler(result);
+    }];
 }
 
 - (void)onShake:(id)sender

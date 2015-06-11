@@ -10,6 +10,8 @@
 #import "Includes.h"
 #import "Global.h"
 #import <Parse/Parse.h>
+#import <ENSDK/ENSDK.h>
+#import "UtilityClass.h"
 #import "KPToDo.h"
 #import "KPAttachment.h"
 #import "KPTag.h"
@@ -62,8 +64,14 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
 + (void)initialize
 {
-    [Parse setApplicationId:@"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
-                  clientKey:@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"];
+    [ENSession setSharedSessionConsumerKey:[UtilityClass decrypt:@"Jx8MUDYE"]
+                            consumerSecret:[UtilityClass decrypt:@"MVBTEjVHDUhSSkVmBlMPYg=="]
+                              optionalHost:nil];
+    // Enable data sharing in app extensions.
+    [Parse enableDataSharingWithApplicationGroupIdentifier:SHARED_GROUP_NAME
+                                     containingApplication:SHARED_KEYCHAIN_NAME];
+    [Parse setApplicationId:[UtilityClass decrypt:@"Og5cTB4HASAqGxM+PwgbLBk0QR42DkY8P1QuCQcbBgIgWAYyIiMxQA=="] // @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
+                  clientKey:[UtilityClass decrypt:@"BxoOVhgNLx1QQk42LjtePBIQVz0xESA1CRJgLFgIJgMPVjgRWSgfIA=="]]; //@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"
     [Global initCoreData];
 }
 
@@ -130,13 +138,17 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     [attrString addAttribute:NSFontAttributeName value:KP_REGULAR(14) range:NSMakeRange(14, attrString.length - 14)];
     [_backButton setAttributedTitle:attrString forState:UIControlStateNormal];
     [_backButton setAttributedTitle:attrString forState:UIControlStateHighlighted];
-    
-    [self.textField becomeFirstResponder];
 }
 
 - (void)dealloc
 {
     clearNotify();
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.textField becomeFirstResponder];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -248,6 +260,10 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
 - (void)createTodo
 {
+    if (_readTags && _tagsVC) {
+        _selectedTags = [_tagsVC.tagList getSelectedTags];
+    }
+
     KPToDo* todo = [KPToDo addItem:_textField.text priority:NO tags:_selectedTags save:YES from:@"Share Extension"];
     if (_notesTextView.text.length) {
         [todo setNotes:_notesTextView.text];
@@ -262,12 +278,23 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     
     [USER_DEFAULTS setObject:_selectedTags ? _selectedTags : @[] forKey:keyTags];
     [USER_DEFAULTS synchronize];
+    
+    NSString* userId = kCurrent.objectId;
+    if (userId) {
+        NSDictionary* pushData = @{@"sound": @"", @"content-available": @(1)};
+        [PFPush sendPushDataToChannelInBackground:userId withData:pushData];
+//        NSError* error;
+//        [PFPush sendPushDataToChannel:userId withData:pushData error:&error];
+//        if (error) {
+//            DLog(@"Error sending push: %@", error);
+//        }
+    }
 }
 
 - (void)setupTagsLabel:(UILabel *)label
 {
     if (!_selectedTags || (0 == _selectedTags.count)) {
-        label.text = @"no tags";
+        label.text = [LOCALIZE_STRING(@"No tags") lowercaseString];
         label.textColor = gray(192, 1);
     }
     else {
@@ -286,7 +313,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
 - (void)setupScheduleLabel:(UILabel *)label
 {
-    label.text = @"Schedule";
+    label.text = [LOCALIZE_STRING(@"schedule") capitalizedString];
 }
 
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context

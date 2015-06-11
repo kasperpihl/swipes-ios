@@ -13,6 +13,7 @@ typedef enum {
     SyncStatusStarted,
     SyncStatusProgress,
     SyncStatusSuccess,
+    SyncStatusSuccessWithData, // there is new data
     SyncStatusError
     
 } SyncStatus;

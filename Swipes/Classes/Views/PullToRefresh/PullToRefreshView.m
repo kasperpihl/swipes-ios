@@ -29,7 +29,7 @@ static const CGFloat kProgressMultiply = (1.0 / 0.5);
     self = [super initWithLocationType:locationType];
     if (self) {
         self.backgroundColor = tcolor(BackgroundColor);
-        _title = [[UILabel alloc] initWithFrame:CGRectMake(0, 6, self.frame.size.width, 40)];
+        _title = [[UILabel alloc] initWithFrame:CGRectMake(0, 2, self.frame.size.width, 40)];
         _title.text = @"Title";
         _title.alpha = 0.f;
         _title.numberOfLines = 0;
@@ -39,7 +39,7 @@ static const CGFloat kProgressMultiply = (1.0 / 0.5);
         _title.textColor = tcolor(TextColor);
         [self addSubview:_title];
         
-        _subtitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 26, self.frame.size.width, 20)];
+        _subtitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, self.frame.size.width, 20)];
         _subtitle.text = @"Some subtitle";
         _subtitle.alpha = 0.f;
         _subtitle.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -97,6 +97,7 @@ static const CGFloat kProgressMultiply = (1.0 / 0.5);
             else if (state == BPRPullToRefreshStateLoading) {
                 if (_lastState != BPRPullToRefreshStateLoading) {
 //                    DLog(@"Synchronizing");
+                    [KPCORE clearCache];
                     [KPCORE synchronizeForce:YES async:YES];
                 }
                 [self setTitleText:[NSString stringWithFormat:@"%@\n", LOCALIZE_STRING(@"Synchronizing...")] icon:@"settingsSync"];

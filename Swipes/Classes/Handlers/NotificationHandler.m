@@ -31,7 +31,12 @@
 
 @implementation NotificationHandler
 @synthesize latestLocation = _latestLocation;
+
 static NotificationHandler *sharedObject;
+
+#ifndef NOT_APPLICATION
+static BOOL g_registeredForNotifications = NO;
+#endif
 
 +(NotificationHandler *)sharedInstance{
     if(!sharedObject){
@@ -282,25 +287,20 @@ static NotificationHandler *sharedObject;
 
 - (void)doRegisterForNotifications
 {
+    // TODO fix this to check the settings when we drop iOS 7 support
 #ifndef NOT_APPLICATION
-    DLog(@"Registering for notifications");
-    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
-        UIUserNotificationSettings *settings = [self settingsWithCategories];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    if (!g_registeredForNotifications) {
+        DLog(@"Registering for notifications");
+        if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
+            UIUserNotificationSettings *settings = [self settingsWithCategories];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+        }
+        else {
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound];
+        }
+        g_registeredForNotifications = YES;
     }
-    else {
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound];
-    }
-    
-//    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
-//        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
-//        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-//        [[UIApplication sharedApplication] registerForRemoteNotifications];
-//    }
-//    else {
-//        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
-//    }
 #endif
 }
 
@@ -308,10 +308,10 @@ static NotificationHandler *sharedObject;
 {
 #ifndef NOT_APPLICATION
     if(![USER_DEFAULTS boolForKey:@"hasAskedNotificationPermissions"]){
+        [USER_DEFAULTS setBool:YES forKey:@"hasAskedNotificationPermissions"];
+        [USER_DEFAULTS synchronize];
         [UTILITY alertWithTitle:NSLocalizedString(@"Better experience!", nil) andMessage:NSLocalizedString(@"For a better experience we need your permission to send notifications when tasks are due. Also used for faster syncronization between devices.", nil) buttonTitles:@[NSLocalizedString(@"Okay", nil)] block:^(NSInteger number, NSError *error) {
             [self doRegisterForNotifications];
-            [USER_DEFAULTS setBool:YES forKey:@"hasAskedNotificationPermissions"];
-            [USER_DEFAULTS synchronize];
         }];
     }
     else {

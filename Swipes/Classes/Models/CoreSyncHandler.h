@@ -18,6 +18,8 @@
 
 #define KPCORE [CoreSyncHandler sharedInstance]
 
+typedef void (^SyncCompletionBlock)(UIBackgroundFetchResult result);
+
 @protocol SyncDelegate <NSObject>
 
 -(void)syncHandler:(CoreSyncHandler *)handler status:(SyncStatus)status userInfo:(NSDictionary *)userInfo error:(NSError*)error;
@@ -49,7 +51,8 @@
 -(void)saveContextForSynchronization:(NSManagedObjectContext*)context;
 
 -(void)hardSync;
-- (UIBackgroundFetchResult)synchronizeForce:(BOOL)force async:(BOOL)async;
+- (void)synchronizeForce:(BOOL)force async:(BOOL)async;
+- (void)synchronizeForce:(BOOL)force async:(BOOL)async completionHandler:(SyncCompletionBlock)handler;
 
 - (void)undo;
 -(void)clearCache;

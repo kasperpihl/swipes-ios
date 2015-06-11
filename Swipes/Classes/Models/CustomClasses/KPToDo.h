@@ -33,6 +33,10 @@
 
 +(void)saveToSync;
 
++(void)removeAllAttachmentsForAllToDosWithService:(NSString *)service inContext:(NSManagedObjectContext *)context save:(BOOL)save;
+
++(void)changeTimeZoneFrom:(NSInteger)from to:(NSInteger)to;
+
 -(NSArray*)changeToOrder:(int32_t)newOrder withItems:(NSArray*)items;
 
 -(CellType)cellTypeForTodo;
@@ -49,7 +53,6 @@
 - (void)removeAllAttachmentsForService:(NSString *)service identifier:(NSString*)identifier;
 - (KPAttachment *)firstAttachmentForServiceType:(NSString *)service;
 - (KPAttachment *)attachmentForService:(NSString*)service identifier:(NSString*)identifier;
-+(void)removeAllAttachmentsForAllToDosWithService:(NSString *)service inContext:(NSManagedObjectContext *)context save:(BOOL)save;
+-(void)deleteToDoSave:(BOOL)save force:(BOOL)force;
 
-+(void)changeTimeZoneFrom:(NSInteger)from to:(NSInteger)to;
 @end

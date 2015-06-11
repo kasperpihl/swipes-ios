@@ -7,6 +7,8 @@
 //
 
 #import <NotificationCenter/NotificationCenter.h>
+#import <Parse/Parse.h>
+#import <ENSDK/ENSDK.h>
 #import "KPToDo.h"
 #import "UtilityClass.h"
 #import "TodayViewController.h"
@@ -41,6 +43,20 @@
 @end
 
 @implementation TodayViewController
+
++ (void)initialize
+{
+    [ENSession setSharedSessionConsumerKey:[UtilityClass decrypt:@"Jx8MUDYE"]
+                            consumerSecret:[UtilityClass decrypt:@"MVBTEjVHDUhSSkVmBlMPYg=="]
+                              optionalHost:nil];
+    // Enable data sharing in app extensions.
+    [Parse enableDataSharingWithApplicationGroupIdentifier:SHARED_GROUP_NAME
+                                     containingApplication:SHARED_KEYCHAIN_NAME];
+    [Parse setApplicationId:[UtilityClass decrypt:@"Og5cTB4HASAqGxM+PwgbLBk0QR42DkY8P1QuCQcbBgIgWAYyIiMxQA=="] // @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
+                  clientKey:[UtilityClass decrypt:@"BxoOVhgNLx1QQk42LjtePBIQVz0xESA1CRJgLFgIJgMPVjgRWSgfIA=="]]; //@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"
+    [Global initCoreData];
+}
+
 -(void)setTodos:(NSArray *)todos{
     _todos = todos;
     //[self.tableView reloadData];
@@ -53,7 +69,6 @@
     UTILITY.rootViewController = self;
     
     
-    [Global initCoreData];
     // Do any additional setup after loading the view from its nib.
     _tableView.backgroundColor = [UIColor clearColor];
     _tableView.contentInset = UIEdgeInsetsMake(kContentInsetsTableTop, 0, kContentInsetsTableBottom, 0);
@@ -366,6 +381,16 @@
     [self.tableView endUpdates];
     [self updateContentSize];
     //[self reloadDataSource];
+    NSString* userId = kCurrent.objectId;
+    if (userId) {
+        NSDictionary* pushData = @{@"sound": @"", @"content-available": @(1)};
+        [PFPush sendPushDataToChannelInBackground:userId withData:pushData];
+//        NSError* error;
+//        [PFPush sendPushDataToChannel:userId withData:pushData error:&error];
+//        if (error) {
+//            DLog(@"Error sending push: %@", error);
+//        }
+    }
 }
 
 @end

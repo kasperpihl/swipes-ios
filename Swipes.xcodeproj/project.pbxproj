@@ -631,6 +631,8 @@
 		DACD546318A1ACFC00C378DF /* powerpoint.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544118A1ACFC00C378DF /* powerpoint.png */; };
 		DACD546418A1ACFC00C378DF /* word.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544218A1ACFC00C378DF /* word.png */; };
 		DAD501621B13614400A1E6D0 /* KPImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD501611B13614400A1E6D0 /* KPImageCache.m */; };
+		DAD501561B11535700A1E6D0 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD501541B11535700A1E6D0 /* libc++.dylib */; };
+		DAD501571B11535700A1E6D0 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD501551B11535700A1E6D0 /* Fabric.framework */; };
 		DAD78B761A67E958009992C3 /* KPStringScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD78B741A67E958009992C3 /* KPStringScanner.h */; };
 		DAD78B771A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
 		DAD78B781A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
@@ -667,6 +669,7 @@
 		DAE4D5FD1AB1C473001BDC52 /* SwipesShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DAE4D5F21AB1C473001BDC52 /* SwipesShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DAE9CFE119AF3AC600246B64 /* SwipesKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DAE9CFE019AF3AC600246B64 /* SwipesKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
+		DAF14F301B1C700C00BBAAF6 /* 1sec_silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DAF14F2F1B1C700C00BBAAF6 /* 1sec_silence.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1359,6 +1362,8 @@
 		DACD544218A1ACFC00C378DF /* word.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = word.png; sourceTree = "<group>"; };
 		DAD501601B13614400A1E6D0 /* KPImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPImageCache.h; sourceTree = "<group>"; };
 		DAD501611B13614400A1E6D0 /* KPImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPImageCache.m; sourceTree = "<group>"; };
+		DAD501541B11535700A1E6D0 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		DAD501551B11535700A1E6D0 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		DAD78B741A67E958009992C3 /* KPStringScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPStringScanner.h; path = Swipes/Classes/Utilities/KPStringScanner.h; sourceTree = SOURCE_ROOT; };
 		DAD78B751A67E958009992C3 /* KPStringScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPStringScanner.m; path = Swipes/Classes/Utilities/KPStringScanner.m; sourceTree = SOURCE_ROOT; };
 		DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SwipesToday.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1379,6 +1384,7 @@
 		DAE9CFE019AF3AC600246B64 /* SwipesKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipesKit.h; sourceTree = "<group>"; };
 		DAE9D00219AF3B2900246B64 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		DAEBBE62188B2BB8002655CB /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		DAF14F2F1B1C700C00BBAAF6 /* 1sec_silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 1sec_silence.mp3; sourceTree = "<group>"; };
 		E05A80E8EEB25CD6DB2767FA /* Pods-SwipesKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.debug.xcconfig"; sourceTree = "<group>"; };
 		F17D8C581F2A222D9CA9DE7E /* Pods-SwipesToday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.release.xcconfig"; sourceTree = "<group>"; };
 		FA01441E525669BA3638C6B1 /* Pods-Swipes.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swipes.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-Swipes/Pods-Swipes.adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -1411,6 +1417,7 @@
 				A761B5BB16EB59760095A9A8 /* Accounts.framework in Frameworks */,
 				A761B5B716EB596B0095A9A8 /* CFNetwork.framework in Frameworks */,
 				A761B5B516EB59650095A9A8 /* CoreLocation.framework in Frameworks */,
+				DAD501561B11535700A1E6D0 /* libc++.dylib in Frameworks */,
 				A761B5B316EB59610095A9A8 /* libsqlite3.dylib in Frameworks */,
 				A761B5B116EB595B0095A9A8 /* libz.1.1.3.dylib in Frameworks */,
 				A761B5AD16EB594E0095A9A8 /* QuartzCore.framework in Frameworks */,
@@ -1421,6 +1428,7 @@
 				A761B5A516EB59370095A9A8 /* SystemConfiguration.framework in Frameworks */,
 				A761B5A316EB59320095A9A8 /* CoreData.framework in Frameworks */,
 				A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */,
+				DAD501571B11535700A1E6D0 /* Fabric.framework in Frameworks */,
 				A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */,
 				A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */,
 				51309AE023584D4FA13F00A9 /* libPods-Swipes.a in Frameworks */,
@@ -2115,6 +2123,8 @@
 			children = (
 				DA09AFCF1AB228D6002632DC /* MagicalRecord */,
 				A7D0685A190E654C00699B4E /* MMDrawerController */,
+				DAD501541B11535700A1E6D0 /* libc++.dylib */,
+				DAD501551B11535700A1E6D0 /* Fabric.framework */,
 				A717DD0F18B6440A00EE359C /* Crashlytics.framework */,
 				A74D3FCC18D9E7AC0056D124 /* GrowingTextView */,
 			);
@@ -2296,6 +2306,7 @@
 		A7BB65C9189BF19600BE7183 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				DAF14F2F1B1C700C00BBAAF6 /* 1sec_silence.mp3 */,
 				A710F14B1A828BD3006FC16F /* swipes-notification.aif */,
 				A7AD45521A39809300DF19BD /* All done for today.m4a */,
 				A7AD45531A39809300DF19BD /* Compling task */,
@@ -3116,6 +3127,9 @@
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
 						};
 					};
 					DA3282B61A4CB7CF0054CE04 = {
@@ -3123,6 +3137,9 @@
 						DevelopmentTeam = 85LTPM52WY;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
 								enabled = 1;
 							};
 						};
@@ -3138,6 +3155,9 @@
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
 							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
 						};
 					};
 					DAE4D5F11AB1C473001BDC52 = {
@@ -3145,6 +3165,9 @@
 						DevelopmentTeam = 85LTPM52WY;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
 								enabled = 1;
 							};
 						};
@@ -3312,6 +3335,7 @@
 				A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */,
 				DA4F29CB1AA73D8C0048C71A /* swipes-ui-gmail-integrations-1@2x.png in Resources */,
 				A701BD2E1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png in Resources */,
+				DAF14F301B1C700C00BBAAF6 /* 1sec_silence.mp3 in Resources */,
 				DACD545918A1ACFC00C378DF /* page_white_h.png in Resources */,
 				DA6B61C319E321FE00089877 /* Localizable.strings in Resources */,
 				A717DD2118B6775B00EE359C /* NexaHeavy.ttf in Resources */,
@@ -3488,7 +3512,7 @@
 		};
 		A7A976DC18410F56001C0A51 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
@@ -3496,9 +3520,10 @@
 			name = "Run Script";
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "./Swipes/Ressources/Libs/Crashlytics.framework/run 17aee5fa869f24b705e00dba6d43c51becf5c7e4 18503ba4a511e5ff371707e57ef3f51edb669c35ae9206253a6edcdf35c1fa7c";
+			showEnvVarsInLog = 0;
 		};
 		A7F0B9BB1700BA51003BBDD1 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4374,8 +4399,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4459,7 +4484,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "9e40b73d-12df-4a3b-9e00-bfb31c8ea518";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9e40b73d-12df-4a3b-9e00-bfb31c8ea518";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -4528,8 +4553,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = "Swipes WatchKit Extension/Swipes WatchKit Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4551,7 +4576,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "80b003e7-eaa4-45eb-a1cb-8a7bb27c2d39";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -4637,7 +4662,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4767,8 +4792,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesToday/SwipesToday.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4819,7 +4844,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a6fcfe4f-4b0c-452e-b594-468be1c1265b";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a6fcfe4f-4b0c-452e-b594-468be1c1265b";
 				SKIP_INSTALL = YES;
 			};
@@ -4965,8 +4990,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesShare/SwipesShare.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -5014,7 +5039,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4819512e-3508-460b-8258-fb0a723b969a";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4819512e-3508-460b-8258-fb0a723b969a";
 				SKIP_INSTALL = YES;
 			};

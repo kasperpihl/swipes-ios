@@ -32,7 +32,7 @@
 static ThemeHandler *sharedObject;
 +(ThemeHandler *)sharedInstance{
     if(!sharedObject){
-        sharedObject = [[ThemeHandler allocWithZone:NULL] init];
+        sharedObject = [[ThemeHandler alloc] init];
         sharedObject.currentTheme = [USER_DEFAULTS integerForKey:@"theme"];
     }
     return sharedObject;

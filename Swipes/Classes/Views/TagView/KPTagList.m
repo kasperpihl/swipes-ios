@@ -87,6 +87,17 @@
     }
     [self layoutTagsFirst:NO];
 }
+
+- (void)selectTag:(NSString *)tag
+{
+    if ([self.tags containsObject:tag]) {
+        if (![self.selectedTags containsObject:tag]) {
+            [self.selectedTags addObject:tag];
+            [self layoutTagsFirst:NO];
+        }
+    }
+}
+
 -(void)layoutTagsFirst:(BOOL)first{
     CGFloat oldHeight = self.frame.size.height;
     if(self.sorted) [self.tags sortUsingSelector:@selector(localizedCaseInsensitiveCompare:)];

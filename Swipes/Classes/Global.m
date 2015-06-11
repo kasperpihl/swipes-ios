@@ -10,7 +10,8 @@
 #define iconCompare(target,result) if([iconString isEqualToString:target]) return result
 @implementation Global
 
-static NSString* const SHARED_GROUP_NAME = @"group.it.pihl.swipes";
+NSString* const SHARED_GROUP_NAME = @"group.it.pihl.swipes";
+NSString* const SHARED_KEYCHAIN_NAME = @"it.pihl.Swipes";
 static NSString* const DATABASE_NAME = @"swipes";
 static NSString* const DATABASE_FOLDER = @"database";
 static NSString* const kFirstRunApp = @"FirstRun";
@@ -327,14 +328,13 @@ static BOOL g_isNotFirstRun = NO;
     }
     [USER_DEFAULTS synchronize];
 }
+
 + (NSUserDefaults *)sharedDefaults
 {
-    static NSUserDefaults* sharedDefaults;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    static NSUserDefaults* sharedDefaults = nil;
+    if (!sharedDefaults) {
         sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:SHARED_GROUP_NAME];
-//        sharedDefaults = [NSUserDefaults standardUserDefaults];
-    });
+    }
     return sharedDefaults;
 }
 

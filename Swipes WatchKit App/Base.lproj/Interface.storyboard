@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WHq-iy-Tkd">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WHq-iy-Tkd">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="swipes.ttf">
+            <string>swipes</string>
             <string>swipes</string>
             <string>swipes</string>
             <string>swipes</string>
@@ -56,7 +57,12 @@
                         </table>
                         <group width="1" height="1" alignment="left" contentMode="scaleAspectFill" layout="vertical" radius="0.0" id="Tzr-vo-j6m">
                             <items>
-                                <imageView alignment="left" image="alldone-transparent" contentMode="scaleAspectFit" id="i54-Lj-5qO"/>
+                                <button width="1" alignment="left" title="materialAdd" backgroundImage="alldone-transparent" id="jKY-wp-ohG">
+                                    <fontDescription key="font" name="swipes" family="swipes" pointSize="25"/>
+                                    <connections>
+                                        <action selector="onButton1Touch" destination="WHq-iy-Tkd" id="fvd-jf-MBe"/>
+                                    </connections>
+                                </button>
                                 <button width="0.80000000000000004" height="30" alignment="center" title="Refresh" id="Gyb-1F-vO9">
                                     <color key="backgroundColor" red="0.84705882352941175" green="0.63137254901960782" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="font" type="system" weight="semibold" pointSize="15"/>
@@ -71,7 +77,7 @@
                     </items>
                     <connections>
                         <outlet property="group" destination="Tzr-vo-j6m" id="Zhm-xd-W2m"/>
-                        <outlet property="noDataImage" destination="i54-Lj-5qO" id="o8E-CO-PTF"/>
+                        <outlet property="noDataButton" destination="jKY-wp-ohG" id="D8Z-wa-zSN"/>
                         <outlet property="refreshButton" destination="Gyb-1F-vO9" id="NTF-24-3WX"/>
                         <outlet property="table" destination="3dt-00-epq" id="boT-ch-amk"/>
                     </connections>

@@ -1,15 +1,22 @@
+
 #import "KPParseObject.h"
 #import "CoreSyncHandler.h"
 #import "UtilityClass.h"
+#import "KPToDo.h"
+
 @interface KPParseObject ()
+
 @property NSMutableDictionary *savingObject;
+
 @end
 
 
-
 @implementation KPParseObject
+
 @synthesize savingObject = _savingObject;
+
 #pragma mark - Forward declarations
+
 -(BOOL)setAttributesForSavingObject:(NSMutableDictionary**)object changedAttributes:(NSArray *)changedAttributes{ return NO; }
 -(BOOL)shouldDeleteForce:(BOOL)force{ return YES; }
 
@@ -76,10 +83,13 @@
     return successful;
 }
 -(BOOL)deleteInContext:(NSManagedObjectContext *)context{
-    BOOL shouldDelete = [self shouldDeleteForce:NO];
     BOOL successful = YES;
-    if(shouldDelete)
+    if ([self isKindOfClass:KPToDo.class]) {
+        [(KPToDo *)self deleteToDoSave:NO force:NO];
+    }
+    else if([self shouldDeleteForce:NO]) {
         successful = [self MR_deleteEntityInContext:context];
+    }
     return successful;
 }
 #pragma mark - Save to server

@@ -42,6 +42,7 @@ static NSString * const kFromEvernote = @"Evernote";
 @property (nonatomic, strong) NSDate *lastUpdated;
 @property (nonatomic, assign) BOOL updateNeededFromEvernote;
 @property (nonatomic, assign) BOOL needToClearCache;
+@property (nonatomic, assign) BOOL hasNewData;
 
 @property (nonatomic, assign) BOOL fullEvernoteUpdate;
 @property (nonatomic, assign) NSInteger currentEvernoteUpdateCount;
@@ -89,6 +90,12 @@ static NSString * const kFromEvernote = @"Evernote";
         [self convertGuidToENNoteRef];
     }
     return self;
+}
+
+- (void)hardSync
+{
+    [kEnInt cacheClear];
+    [self setUpdatedAt:nil];
 }
 
 -(NSMutableArray *)_updatedTasks
@@ -334,6 +341,7 @@ static NSString * const kFromEvernote = @"Evernote";
 -(void)synchronizeWithBlock:(SyncBlock)block
 {
     self.isSyncing = YES;
+    self.hasNewData = NO;
     self.block = block;
     [self.changedNotes removeAllObjects];
     kEnInt.requestCounter = 0;
@@ -350,12 +358,21 @@ static NSString * const kFromEvernote = @"Evernote";
     if (self.needToClearCache)
         self.needToClearCache = NO;
     
+    // ensure evernote authentication
+    NSError* error = [NSError errorWithDomain:@"Evernote not authenticated" code:601 userInfo:nil];
+    ENSession *session = [ENSession sharedSession];
+    if (!session.isAuthenticated) {
+        return block(SyncStatusError, nil, error);
+    }
+    
     if (kEnInt.autoFindFromTag) {
         [self findUpdatedNotesWithTag:@"swipes" block:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
             if(error){
                 block(SyncStatusError, nil, error);
             }
             else{
+                if (SyncStatusSuccessWithData == status)
+                    self.hasNewData = YES;
                 [self syncEvernoteWithBlock:block];
             }
         }];
@@ -384,7 +401,7 @@ static NSString * const kFromEvernote = @"Evernote";
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         [dateFormatter setDateFormat:@"yyyyMMdd'T'HHmmss'Z'"];
-        NSString *isoString = [dateFormatter stringFromDate:self.lastUpdated];
+        NSString *isoString = [dateFormatter stringFromDate:[self.lastUpdated dateBySubtractingHours:1]];
         [mutWords appendFormat:@" updated:%@",isoString];
     }
     
@@ -537,21 +554,11 @@ static NSString * const kFromEvernote = @"Evernote";
 
 -(void)syncEvernoteWithBlock:(SyncBlock)block{
     
-    self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
     DLog(@"performing sync with Evernote");
-    
-    // ensure evernote authentication
-    NSError* error = [NSError errorWithDomain:@"Evernote not authenticated" code:601 userInfo:nil];
-    ENSession *session = [ENSession sharedSession];
-    if (!session.isAuthenticated) {
-        return block(SyncStatusError, nil, error);
-    }
+    self.objectsWithEvernote = [self getObjectsSyncedWithEvernote];
     
     // this is needed in case you have old client synchronizing the old info
     //[self convertGuidToENNoteRef];
-    
-    // Tell caller that Evernote will be syncing
-    
     
     __block NSDate *date = [NSDate date];
     __block NSInteger returnCount = 0;
@@ -583,13 +590,14 @@ static NSString * const kFromEvernote = @"Evernote";
             [self setUpdatedAt:date];
             self.updateNeededFromEvernote = NO;
             __block NSDictionary* userInfo = @{@"updated": [self._updatedTasks copy], @"created": [_createdTasks copy]};
-            block(SyncStatusSuccess, userInfo, nil);
-            syncedAnything = YES;
+            BOOL updated = (self._updatedTasks.count || _createdTasks.count || self.hasNewData);
+            block(updated ? SyncStatusSuccessWithData : SyncStatusSuccess, userInfo, nil);
             if (self._updatedTasks.count || _createdTasks.count) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updated sync" object:nil userInfo:userInfo];
                 });
             }
+            syncedAnything = YES;
             [self.changedNotes removeAllObjects];
             [self._updatedTasks removeAllObjects];
             [_createdTasks removeAllObjects];
@@ -601,13 +609,13 @@ static NSString * const kFromEvernote = @"Evernote";
         NSString *noteRefString = evernoteAttachment.identifier;
         
         BOOL hasLocalChanges = [todoWithEvernote hasChangesSinceDate:self.lastUpdated];
-        if (hasLocalChanges) {
+//        if (hasLocalChanges) {
 //            DLog(@"local changes: %@",todoWithEvernote.title);
-        }
+//        }
         BOOL hasChangesFromEvernote = [self hasChangedFromEvernoteId:noteRefString];
-        if (hasChangesFromEvernote) {
+//        if (hasChangesFromEvernote) {
 //            DLog(@"evernote changes: %@",todoWithEvernote.title);
-        }
+//        }
         
         if( !hasLocalChanges && !hasChangesFromEvernote ){
             finalizeBlock();

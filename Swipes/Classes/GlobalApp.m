@@ -104,6 +104,7 @@ static int g_activityIndicatorStack = 0;
 
 + (void)activityIndicatorVisible:(BOOL)status
 {
+    //DLog("activity: %@\n%@", status ? @"ON" : @"OFF", [NSThread callStackSymbols]);
     if (status) {
         if (++g_activityIndicatorStack && (![[UIApplication sharedApplication] isNetworkActivityIndicatorVisible])) {
             [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;

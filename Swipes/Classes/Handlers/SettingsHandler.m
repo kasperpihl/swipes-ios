@@ -24,6 +24,10 @@
 
 #endif
 
+#ifndef NOT_APPLICATION
+#import "KPTopClock.h"
+#endif
+
 @interface SettingsHandler ()
 
 @property (nonatomic, assign) BOOL isFetchingSettings;
@@ -45,7 +49,7 @@ static SettingsHandler *sharedObject;
 }
 
 -(NSArray*)syncedSettingIndexes{
-    return @[ @(SettingLaterToday), @(SettingEveningStartTime), @(SettingWeekStart), @(SettingWeekStartTime), @(SettingWeekendStart), @(SettingWeekendStartTime), @(SettingAddToBottom), @(SettingTimeZone), @(SettingFilter), @(SettingUseStandardStatusBar), @(ProfileName), @(ProfilePhone), @(ProfileCompany), @(ProfilePosition), @(ProfilePictureURL) ];
+    return @[ @(SettingLaterToday), @(SettingEveningStartTime), @(SettingWeekStart), @(SettingWeekStartTime), @(SettingWeekendStart), @(SettingWeekendStartTime), @(SettingAddToBottom), @(SettingUseStandardStatusBar), @(SettingTimeZone), @(SettingFilter), @(SettingUseStandardStatusBar), @(ProfileName), @(ProfilePhone), @(ProfileCompany), @(ProfilePosition), @(ProfilePictureURL) ];
 }
 
 -(KPSettings)settingForIndex:(NSString*)index{
@@ -240,6 +244,12 @@ static SettingsHandler *sharedObject;
         id newValue = [settings objectForKey:index];
         if(newValue && ![newValue isEqual:currentValue]){
             [self setValue:newValue forSetting:setting];
+#ifndef NOT_APPLICATION
+            if (SettingUseStandardStatusBar == setting) {
+                BOOL value = [newValue boolValue];
+                [kTopClock setCurrentState:value ? TopClockStateRealStatusBar : TopClockStateClock animated:YES];
+            }
+#endif
         }
     }
 }

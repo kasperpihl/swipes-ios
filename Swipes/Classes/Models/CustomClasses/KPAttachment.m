@@ -87,7 +87,7 @@ NSString* const URL_SERVICE = @"url";
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"KPAttachment -> service: %@, title: %@, identifier: %@", self.service, self.title, self.identifier];
+    return [NSString stringWithFormat:@"KPAttachment -> service: %@, title: %@, sync: %@, identifier: %@", self.service, self.title, self.sync, self.identifier];
 }
 
 @end
