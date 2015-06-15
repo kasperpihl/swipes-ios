@@ -67,7 +67,6 @@
 		A708BEF01A160D2000C7E15A /* timepickerwheelselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A708BEEE1A160D2000C7E15A /* timepickerwheelselected@2x.png */; };
 		A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7090B6F175DF3F900728A3A /* LoginViewController.m */; };
 		A70D12DA1966D11500A95C50 /* EvernoteIntegration.m in Sources */ = {isa = PBXBuildFile; fileRef = A70D12D91966D11500A95C50 /* EvernoteIntegration.m */; };
-		A710F14C1A828BD3006FC16F /* swipes-notification.aif in Resources */ = {isa = PBXBuildFile; fileRef = A710F14B1A828BD3006FC16F /* swipes-notification.aif */; };
 		A711246E19DB13D400FD9DAE /* TodaySwipingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A711246D19DB13D400FD9DAE /* TodaySwipingCell.m */; };
 		A711246F19DB166200FD9DAE /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A74FB8FF18FFF2FA00F25157 /* swipes.ttf */; };
 		A711247019DC16BF00FD9DAE /* ThemeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DEA18B17954C7400EB1549 /* ThemeHandler.m */; };
@@ -552,6 +551,8 @@
 		DA6924AC19BDCF330082D1E4 /* ParentSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AA7962194E0665003DAB3B /* ParentSyncHandler.h */; };
 		DA6924AD19BDCF330082D1E4 /* EvernoteSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AA7966194E067C003DAB3B /* EvernoteSyncHandler.h */; };
 		DA6924AE19BDCF330082D1E4 /* SyncQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AA7969194E06AA003DAB3B /* SyncQueue.h */; };
+		DA6A361F1B2EF946009BD8A9 /* 1sec_silence.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DA6A361D1B2EF946009BD8A9 /* 1sec_silence.m4a */; };
+		DA6A36201B2EF946009BD8A9 /* swipes-notification.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DA6A361E1B2EF946009BD8A9 /* swipes-notification.m4a */; };
 		DA6B61BB19DAEF0D00089877 /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
 		DA6B61BC19DAF26900089877 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
 		DA6B61BD19DAF27B00089877 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
@@ -656,7 +657,6 @@
 		DAE4D5FD1AB1C473001BDC52 /* SwipesShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DAE4D5F21AB1C473001BDC52 /* SwipesShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DAE9CFE119AF3AC600246B64 /* SwipesKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DAE9CFE019AF3AC600246B64 /* SwipesKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
-		DAF14F301B1C700C00BBAAF6 /* 1sec_silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DAF14F2F1B1C700C00BBAAF6 /* 1sec_silence.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -827,7 +827,6 @@
 		A7090B6F175DF3F900728A3A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = Login/LoginViewController.m; sourceTree = "<group>"; };
 		A70D12D81966D11500A95C50 /* EvernoteIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteIntegration.h; path = Integrations/EvernoteIntegration.h; sourceTree = "<group>"; };
 		A70D12D91966D11500A95C50 /* EvernoteIntegration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteIntegration.m; path = Integrations/EvernoteIntegration.m; sourceTree = "<group>"; };
-		A710F14B1A828BD3006FC16F /* swipes-notification.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "swipes-notification.aif"; sourceTree = "<group>"; };
 		A711246C19DB13D400FD9DAE /* TodaySwipingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodaySwipingCell.h; sourceTree = "<group>"; };
 		A711246D19DB13D400FD9DAE /* TodaySwipingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodaySwipingCell.m; sourceTree = "<group>"; };
 		A714368E19346823009AC8A4 /* SyncLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncLabel.h; sourceTree = "<group>"; };
@@ -1277,6 +1276,8 @@
 		DA5422CD1986C7A50006A1E6 /* URLHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLHandler.m; sourceTree = "<group>"; };
 		DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.0.xcdatamodel"; sourceTree = "<group>"; };
 		DA67301318A99C7100CA4C1A /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = Swipes/Ressources/Libs/DropboxSDK.framework; sourceTree = "<group>"; };
+		DA6A361D1B2EF946009BD8A9 /* 1sec_silence.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1sec_silence.m4a; sourceTree = "<group>"; };
+		DA6A361E1B2EF946009BD8A9 /* swipes-notification.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "swipes-notification.m4a"; sourceTree = "<group>"; };
 		DA6B61C219E321FE00089877 /* en */ = {isa = PBXFileReference; explicitFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA6B61C419E322FB00089877 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA7AEE911A9F328000436CE3 /* IntegrationSectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationSectionCell.h; path = Integrations/IntegrationSectionCell.h; sourceTree = "<group>"; };
@@ -1353,7 +1354,6 @@
 		DAE9CFE019AF3AC600246B64 /* SwipesKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipesKit.h; sourceTree = "<group>"; };
 		DAE9D00219AF3B2900246B64 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		DAEBBE62188B2BB8002655CB /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		DAF14F2F1B1C700C00BBAAF6 /* 1sec_silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 1sec_silence.mp3; sourceTree = "<group>"; };
 		E05A80E8EEB25CD6DB2767FA /* Pods-SwipesKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.debug.xcconfig"; sourceTree = "<group>"; };
 		F17D8C581F2A222D9CA9DE7E /* Pods-SwipesToday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.release.xcconfig"; sourceTree = "<group>"; };
 		FA01441E525669BA3638C6B1 /* Pods-Swipes.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swipes.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-Swipes/Pods-Swipes.adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -2271,8 +2271,8 @@
 		A7BB65C9189BF19600BE7183 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				DAF14F2F1B1C700C00BBAAF6 /* 1sec_silence.mp3 */,
-				A710F14B1A828BD3006FC16F /* swipes-notification.aif */,
+				DA6A361D1B2EF946009BD8A9 /* 1sec_silence.m4a */,
+				DA6A361E1B2EF946009BD8A9 /* swipes-notification.m4a */,
 				A7AD45521A39809300DF19BD /* All done for today.m4a */,
 				A7AD45531A39809300DF19BD /* Compling task */,
 				A7AD45601A39809300DF19BD /* New state */,
@@ -3188,7 +3188,6 @@
 				DACD544518A1ACFC00C378DF /* folder_app.png in Resources */,
 				A7D0D3C319051BA000ABA1FF /* Nexa-Black-Italic.ttf in Resources */,
 				A7AD45871A3989F200DF19BD /* Time picker.m4a in Resources */,
-				A710F14C1A828BD3006FC16F /* swipes-notification.aif in Resources */,
 				A78128D317294C56002226C8 /* MainStoryboard.storyboard in Resources */,
 				DACD544C18A1ACFC00C378DF /* music.png in Resources */,
 				DA4F29CE1AA73D8C0048C71A /* swipes-ui-gmail-integrations-3.png in Resources */,
@@ -3215,6 +3214,7 @@
 				DACD544E18A1ACFC00C378DF /* page_white.png in Resources */,
 				DACD546118A1ACFC00C378DF /* page_white_visualstudio.png in Resources */,
 				A7F522AC197D7C76008B6147 /* swipesevernotetag.png in Resources */,
+				DA6A361F1B2EF946009BD8A9 /* 1sec_silence.m4a in Resources */,
 				DACD545C18A1ACFC00C378DF /* page_white_picture.png in Resources */,
 				DACD544A18A1ACFC00C378DF /* folder_user.png in Resources */,
 				DACD546418A1ACFC00C378DF /* word.png in Resources */,
@@ -3263,7 +3263,6 @@
 				A76ADC1317ECA7AB00F52F40 /* Images.xcassets in Resources */,
 				DA4F29CB1AA73D8C0048C71A /* swipes-ui-gmail-integrations-1@2x.png in Resources */,
 				A701BD2E1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png in Resources */,
-				DAF14F301B1C700C00BBAAF6 /* 1sec_silence.mp3 in Resources */,
 				DACD545918A1ACFC00C378DF /* page_white_h.png in Resources */,
 				DA6B61C319E321FE00089877 /* Localizable.strings in Resources */,
 				A717DD2118B6775B00EE359C /* NexaHeavy.ttf in Resources */,
@@ -3278,6 +3277,7 @@
 				DACD544418A1ACFC00C378DF /* folder.png in Resources */,
 				DACD546318A1ACFC00C378DF /* powerpoint.png in Resources */,
 				DACD544318A1ACFC00C378DF /* excel.png in Resources */,
+				DA6A36201B2EF946009BD8A9 /* swipes-notification.m4a in Resources */,
 				A7AD45861A3989F200DF19BD /* Succesful action.m4a in Resources */,
 				A7AD456B1A39809300DF19BD /* All done for today.m4a in Resources */,
 				A7AD456C1A39809300DF19BD /* Task composer1.m4a in Resources */,
