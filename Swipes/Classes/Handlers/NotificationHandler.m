@@ -160,7 +160,7 @@ static BOOL g_registeredForNotifications = NO;
     localNotif.alertBody = title;
     if(badgeCount > 0)
         localNotif.applicationIconBadgeNumber = badgeCount;
-    [self addSound:@"swipes-notification.aif"  forNotification:&localNotif];
+    [self addSound:@"swipes-notification.m4a"  forNotification:&localNotif];
     localNotif.userInfo = userInfo;
     return localNotif;
 }
