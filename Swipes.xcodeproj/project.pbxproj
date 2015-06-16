@@ -551,8 +551,8 @@
 		DA6924AC19BDCF330082D1E4 /* ParentSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AA7962194E0665003DAB3B /* ParentSyncHandler.h */; };
 		DA6924AD19BDCF330082D1E4 /* EvernoteSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AA7966194E067C003DAB3B /* EvernoteSyncHandler.h */; };
 		DA6924AE19BDCF330082D1E4 /* SyncQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AA7969194E06AA003DAB3B /* SyncQueue.h */; };
-		DA6A361F1B2EF946009BD8A9 /* 1sec_silence.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DA6A361D1B2EF946009BD8A9 /* 1sec_silence.m4a */; };
 		DA6A36201B2EF946009BD8A9 /* swipes-notification.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DA6A361E1B2EF946009BD8A9 /* swipes-notification.m4a */; };
+		DA6A36291B30663F009BD8A9 /* s.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DA6A36281B30663F009BD8A9 /* s.m4a */; };
 		DA6B61BB19DAEF0D00089877 /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
 		DA6B61BC19DAF26900089877 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
 		DA6B61BD19DAF27B00089877 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
@@ -1276,8 +1276,8 @@
 		DA5422CD1986C7A50006A1E6 /* URLHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLHandler.m; sourceTree = "<group>"; };
 		DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.0.xcdatamodel"; sourceTree = "<group>"; };
 		DA67301318A99C7100CA4C1A /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = Swipes/Ressources/Libs/DropboxSDK.framework; sourceTree = "<group>"; };
-		DA6A361D1B2EF946009BD8A9 /* 1sec_silence.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1sec_silence.m4a; sourceTree = "<group>"; };
 		DA6A361E1B2EF946009BD8A9 /* swipes-notification.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "swipes-notification.m4a"; sourceTree = "<group>"; };
+		DA6A36281B30663F009BD8A9 /* s.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = s.m4a; sourceTree = "<group>"; };
 		DA6B61C219E321FE00089877 /* en */ = {isa = PBXFileReference; explicitFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA6B61C419E322FB00089877 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA7AEE911A9F328000436CE3 /* IntegrationSectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationSectionCell.h; path = Integrations/IntegrationSectionCell.h; sourceTree = "<group>"; };
@@ -2271,7 +2271,7 @@
 		A7BB65C9189BF19600BE7183 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				DA6A361D1B2EF946009BD8A9 /* 1sec_silence.m4a */,
+				DA6A36281B30663F009BD8A9 /* s.m4a */,
 				DA6A361E1B2EF946009BD8A9 /* swipes-notification.m4a */,
 				A7AD45521A39809300DF19BD /* All done for today.m4a */,
 				A7AD45531A39809300DF19BD /* Compling task */,
@@ -3214,7 +3214,6 @@
 				DACD544E18A1ACFC00C378DF /* page_white.png in Resources */,
 				DACD546118A1ACFC00C378DF /* page_white_visualstudio.png in Resources */,
 				A7F522AC197D7C76008B6147 /* swipesevernotetag.png in Resources */,
-				DA6A361F1B2EF946009BD8A9 /* 1sec_silence.m4a in Resources */,
 				DACD545C18A1ACFC00C378DF /* page_white_picture.png in Resources */,
 				DACD544A18A1ACFC00C378DF /* folder_user.png in Resources */,
 				DACD546418A1ACFC00C378DF /* word.png in Resources */,
@@ -3244,6 +3243,7 @@
 				A75236E717A335680030ED1E /* walkthrough_swipe_schedule@2x.png in Resources */,
 				A75236EC17A335680030ED1E /* wt_menu_expain.png in Resources */,
 				DACD546018A1ACFC00C378DF /* page_white_vector.png in Resources */,
+				DA6A36291B30663F009BD8A9 /* s.m4a in Resources */,
 				A763D5521A13AC670060D994 /* alldonefornow.png in Resources */,
 				DACD545D18A1ACFC00C378DF /* page_white_ruby.png in Resources */,
 				A7AD456F1A39809300DF19BD /* Task composer4.m4a in Resources */,

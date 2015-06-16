@@ -228,8 +228,8 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 {
     DLog(@"received remote notification: %@", userInfo);
     NSDictionary* aps = userInfo[@"aps"];
-    [PFPush handlePush:userInfo];
     if (aps && aps[@"content-available"]) {
+        //[PFPush handlePush:userInfo];
         NSString* syncId = userInfo[@"syncId"];
         if (!syncId || (![syncId isEqualToString:[USER_DEFAULTS objectForKey:kLastSyncId]])) {
             DLog(@"going to sync");
@@ -240,6 +240,10 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
                 handler(result);
             }];
         }
+    }
+    else {
+        //[PFPush handlePush:userInfo];
+        handler(UIBackgroundFetchResultNoData);
     }
 }
 
