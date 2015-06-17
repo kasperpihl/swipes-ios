@@ -11,26 +11,25 @@
 #define kLampBorderWidth 1
 #define kLampY 3
 #define kLampX 5
+
+#define kBadgeHeight 16
+#define kBadgeBorderRadius (kBadgeHeight / 2)
+#define kBadgeFontSize 13
+#define kBadgeOffset 3
+
 #import "MenuButton.h"
 #import "UtilityClass.h"
 #import <QuartzCore/QuartzCore.h>
+
 @interface MenuButton ()
-@property (nonatomic) UIView *lampView;
+
+@property (nonatomic, strong) UIView *lampView;
+@property (nonatomic, strong) UILabel *badgeLabel;
+
 @end
+
 @implementation MenuButton
--(void)setHighlighted:(BOOL)highlighted{
-    [super setHighlighted:highlighted];
-    [UIView transitionWithView:self.iconLabel
-                      duration:0.3
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^{ if(highlighted != self.iconLabel.highlighted) self.iconLabel.highlighted = highlighted; }
-                    completion:nil];
-}
--(void)setLampColor:(UIColor*)lampColor{
-    _lampColor = lampColor;
-    self.lampView.hidden = (!lampColor);
-    self.lampView.backgroundColor = lampColor;
-}
+
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title{
     self = [super initWithFrame:frame];
     if (self) {
@@ -62,19 +61,53 @@
         self.lampView.layer.masksToBounds = YES;
         self.lampView.layer.cornerRadius = kLampBorderRadius;
         [self addSubview:self.lampView];
+        
+        self.badgeLabel = [[UILabel alloc] init];
+        self.badgeLabel.hidden = YES;
+        self.badgeLabel.backgroundColor = tcolor(LaterColor);
+        self.badgeLabel.textColor = tcolorR(TextColor);
+        self.badgeLabel.textAlignment = NSTextAlignmentCenter;
+        self.badgeLabel.font = KP_REGULAR(kBadgeFontSize);
+        self.badgeLabel.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin;
+        self.badgeLabel.layer.masksToBounds = YES;
+        self.badgeLabel.layer.cornerRadius = kBadgeBorderRadius;
+        [self addSubview:self.badgeLabel];
     }
     return self;
 }
--(void)dealloc{
+
+-(void)dealloc
+{
     self.iconLabel = nil;
 }
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+
+-(void)setHighlighted:(BOOL)highlighted
 {
-    // Drawing code
+    [super setHighlighted:highlighted];
+    [UIView transitionWithView:self.iconLabel
+                      duration:0.3
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{ if(highlighted != self.iconLabel.highlighted) self.iconLabel.highlighted = highlighted; }
+                    completion:nil];
 }
-*/
+
+-(void)setLampColor:(UIColor*)lampColor
+{
+    _lampColor = lampColor;
+    self.lampView.hidden = (!lampColor);
+    self.lampView.backgroundColor = lampColor;
+}
+
+- (void)setBadgeNumber:(NSNumber *)badgeNumber
+{
+    _badgeNumber = badgeNumber;
+    self.badgeLabel.hidden = !(badgeNumber && (0 < badgeNumber.intValue));
+    if (badgeNumber) {
+        NSString* text = [NSString stringWithFormat:@"%d", badgeNumber.intValue];
+        self.badgeLabel.text = text;
+        CGFloat baseWidth = self.badgeLabel.intrinsicContentSize.width + (2 * kBadgeBorderRadius);
+        self.badgeLabel.frame = CGRectMake(self.frame.size.width - baseWidth - kBadgeOffset, kBadgeOffset, baseWidth, kBadgeHeight);
+    }
+}
 
 @end
