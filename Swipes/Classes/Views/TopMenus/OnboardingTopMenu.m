@@ -124,7 +124,7 @@
         setWorkSpaceButton.backgroundColor = CLEAR;
         [setWorkSpaceButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         setWorkSpaceButton.titleLabel.font = KP_REGULAR(16);
-        [setWorkSpaceButton setTitle:[LOCALIZE_STRING(@"Get Started") uppercaseString] forState:UIControlStateNormal];
+        [setWorkSpaceButton setTitle:[NSLocalizedString(@"Get Started", nil) uppercaseString] forState:UIControlStateNormal];
         //[setWorkSpaceButton addTarget:self action:@selector(onHelp:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:setWorkSpaceButton];
         

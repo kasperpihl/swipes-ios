@@ -20,7 +20,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = [LOCALIZE_STRING(@"Integrations") uppercaseString];
+    self.title = [NSLocalizedString(@"Integrations", nil) uppercaseString];
 }
 
 - (void)recreateCellInfo

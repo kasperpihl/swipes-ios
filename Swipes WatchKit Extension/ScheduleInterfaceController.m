@@ -40,9 +40,9 @@ static NSArray* g_weekDays;
 
 + (void)initialize
 {
-    g_weekDays = @[LOCALIZE_STRING(@"Mon"), LOCALIZE_STRING(@"Sun"), LOCALIZE_STRING(@"Mon"),
-                   LOCALIZE_STRING(@"Tue"), LOCALIZE_STRING(@"Wed"), LOCALIZE_STRING(@"Thu"),
-                   LOCALIZE_STRING(@"Fri"), LOCALIZE_STRING(@"Sat")];
+    g_weekDays = @[NSLocalizedString(@"Mon", nil), NSLocalizedString(@"Sun", nil), NSLocalizedString(@"Mon", nil),
+                   NSLocalizedString(@"Tue", nil), NSLocalizedString(@"Wed", nil), NSLocalizedString(@"Thu", nil),
+                   NSLocalizedString(@"Fri", nil), NSLocalizedString(@"Sat", nil)];
 }
 
 - (void)awakeWithContext:(id)context
@@ -57,7 +57,7 @@ static NSArray* g_weekDays;
     [super willActivate];
     NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
     // TODO figure our a better way to have this formated
-    NSString *title = [NSString stringWithFormat:LOCALIZE_STRING(@"+%luh"),(long)(laterToday.integerValue/3600)];
+    NSString *title = [NSString stringWithFormat:NSLocalizedString(@"+%luh", nil),(long)(laterToday.integerValue/3600)];
     [_laterButton setTitle:title];
     NSNumber *weekStart = (NSNumber*)[kSettings valueForSetting:SettingWeekStart];
     [_nextWeekButton setTitle:weekStart ? g_weekDays[[weekStart unsignedIntValue]] : g_weekDays[2]];

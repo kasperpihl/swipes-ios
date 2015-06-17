@@ -165,7 +165,7 @@
     
     self.allDoneForToday = (numberInProgress == 0);
     
-    self.sectionHeader.title = [NSString stringWithFormat:LOCALIZE_STRING(@"%li / %li TODAY"), (long)numberOfDone,(long)total];
+    self.sectionHeader.title = [NSString stringWithFormat:NSLocalizedString(@"%li / %li TODAY", nil), (long)numberOfDone,(long)total];
     //[NSString stringWithFormat:@"%i%%",percentage];//
     if(total > 0)
         self.sectionHeader.progressPercentage = (CGFloat)numberOfDone/total;
@@ -194,15 +194,15 @@
             }
             [USER_DEFAULTS setObject:[NSDate date] forKey:@"lastStreakDate"];
             
-            NSString *startString = (currentNumber <= 1) ? LOCALIZE_STRING(@"First day") : [NSString stringWithFormat:LOCALIZE_STRING(@"%li days"),(long)currentNumber];
-            self.youreAllDoneView.streakLabel.text = [NSString stringWithFormat:LOCALIZE_STRING(@"%@ on a streak!"),startString];
+            NSString *startString = (currentNumber <= 1) ? NSLocalizedString(@"First day", nil) : [NSString stringWithFormat:NSLocalizedString(@"%li days", nil),(long)currentNumber];
+            self.youreAllDoneView.streakLabel.text = [NSString stringWithFormat:NSLocalizedString(@"%@ on a streak!", nil),startString];
         }
         else{
             NSPredicate *nextScheduleTaskPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil AND isLocallyDeleted <> YES)",[NSDate date]];
             KPToDo *nextItem = [KPToDo MR_findFirstWithPredicate:nextScheduleTaskPredicate sortedBy:@"schedule" ascending:YES inContext:[KPCORE context]];
             [self.youreAllDoneView setAllDoneForToday:NO];
             //self.youreAllDoneView.stampView.allDoneLabel.text = @"ALL DONE FOR NOW";
-            self.youreAllDoneView.streakLabel.text = [NSString stringWithFormat:LOCALIZE_STRING(@"Next task  @  %@"),[UtilityClass timeStringForDate:nextItem.schedule]];
+            self.youreAllDoneView.streakLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Next task  @  %@", nil),[UtilityClass timeStringForDate:nextItem.schedule]];
         }
     }
     

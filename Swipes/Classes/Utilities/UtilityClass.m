@@ -129,18 +129,18 @@ static char * const kPwd = "The Swipes Team";
     NSInteger numberOfDaysAfterTodays = [beginningOfDate distanceInDaysToDate:[[NSDate date] dateAtStartOfDay]];
     NSString *dateString;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:LOCALIZE_STRING(@"en_US")];
+    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:NSLocalizedString(@"en_US", nil)];
     [dateFormatter setLocale:usLocale];
     BOOL shouldFormat = NO;
     if(numberOfDaysAfterTodays == 0){
-        dateString = LOCALIZE_STRING(@"Today");
-        if([time isLaterThanDate:[NSDate date]]) dateString = LOCALIZE_STRING(@"Today");
+        dateString = NSLocalizedString(@"Today", nil);
+        if([time isLaterThanDate:[NSDate date]]) dateString = NSLocalizedString(@"Today", nil);
     }
     else if(numberOfDaysAfterTodays == -1){
-        dateString = LOCALIZE_STRING(@"Tomorrow");
+        dateString = NSLocalizedString(@"Tomorrow", nil);
     }
     else if(numberOfDaysAfterTodays == 1){
-        dateString = LOCALIZE_STRING(@"Yesterday");
+        dateString = NSLocalizedString(@"Yesterday", nil);
     }
     else if(numberOfDaysAfterTodays < 7 && numberOfDaysAfterTodays > -7){
         [dateFormatter setDateFormat:@"EEEE"];
@@ -217,19 +217,19 @@ static char * const kPwd = "The Swipes Team";
     return myNumber;
 }
 -(void)confirmBoxWithTitle:(NSString*)title andMessage:(NSString*)message block:(SuccessfulBlock)block{
-    [self confirmBoxWithTitle:title andMessage:message cancel:LOCALIZE_STRING(@"No") confirm:LOCALIZE_STRING(@"Yes") block:block];
+    [self confirmBoxWithTitle:title andMessage:message cancel:NSLocalizedString(@"No", nil) confirm:NSLocalizedString(@"Yes", nil) block:block];
 }
 
 -(void)alertWithTitle:(NSString *)title andMessage:(NSString *)message {
 #ifndef NOT_APPLICATION
     if(OSVER < 8){
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:LOCALIZE_STRING(@"Okay") otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"Okay", nil) otherButtonTitles:nil];
         [alertView show];
     }
     else{
         if (self.rootViewController) {
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:LOCALIZE_STRING(@"Okay") style:UIAlertActionStyleCancel handler:nil]];
+            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", nil) style:UIAlertActionStyleCancel handler:nil]];
             [[GlobalApp topViewControllerWithRootViewController:self.rootViewController] presentViewController:alert animated:YES completion:nil];
         }
     }
@@ -432,7 +432,7 @@ static char * const kPwd = "The Swipes Team";
     [monthDayFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
     [monthDayFormatter setDateFormat:@"d"];
     int date_day = [[monthDayFormatter stringFromDate:date] intValue];
-    NSString *suffix_string = LOCALIZE_STRING(@"|st|nd|rd|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|st|nd|rd|th|th|th|th|th|th|th|st");
+    NSString *suffix_string = NSLocalizedString(@"|st|nd|rd|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|th|st|nd|rd|th|th|th|th|th|th|th|st", nil);
     NSArray *suffixes = [suffix_string componentsSeparatedByString: @"|"];
     NSString *suffix = [suffixes objectAtIndex:date_day];
     
@@ -443,7 +443,7 @@ static char * const kPwd = "The Swipes Team";
 }
 +(NSString*)dayStringForDate:(NSDate*)date{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:LOCALIZE_STRING(@"en_US")];
+    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:NSLocalizedString(@"en_US", nil)];
     [dateFormatter setLocale:usLocale];
     if([date isSameYearAsDate:[NSDate date]]) dateFormatter.dateFormat = @"d LLL";
     else dateFormatter.dateFormat = @"d LLL '´'yy";
@@ -455,11 +455,11 @@ static char * const kPwd = "The Swipes Team";
     NSString *dayString;
     BOOL capitalize = NO;
     if(numberOfDaysAfterTodays == 0){
-        dayString = LOCALIZE_STRING(@"Today");
-        if([date isLaterThanDate:[NSDate date]]) dayString = LOCALIZE_STRING(@"Today");
+        dayString = NSLocalizedString(@"Today", nil);
+        if([date isLaterThanDate:[NSDate date]]) dayString = NSLocalizedString(@"Today", nil);
     }
-    else if(numberOfDaysAfterTodays == -1) dayString = LOCALIZE_STRING(@"Tomorrow");
-    else if(numberOfDaysAfterTodays == 1) dayString = LOCALIZE_STRING(@"Yesterday");
+    else if(numberOfDaysAfterTodays == -1) dayString = NSLocalizedString(@"Tomorrow", nil);
+    else if(numberOfDaysAfterTodays == 1) dayString = NSLocalizedString(@"Yesterday", nil);
     else{
         capitalize = YES;
         dateFormatter.dateFormat = @"EEE";

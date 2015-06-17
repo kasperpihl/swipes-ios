@@ -41,7 +41,7 @@
     [self update];
 }
 -(void)didPressDeleteAll:(id)sender{
-    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Are you sure?") andMessage:LOCALIZE_STRING(@"Deleting old completed tasks can't be undone") cancel:[LOCALIZE_STRING(@"cancel") capitalizedString] confirm:LOCALIZE_STRING(@"Delete them") block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Are you sure?", nil) andMessage:NSLocalizedString(@"Deleting old completed tasks can't be undone", nil) cancel:[NSLocalizedString(@"cancel", nil) capitalizedString] confirm:NSLocalizedString(@"Delete them", nil) block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             NSDate *startDate = [[NSDate date] dateAtStartOfDay];
             NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@ && parent = nil && isLocallyDeleted <> YES)",startDate];
@@ -81,7 +81,7 @@
         loadMoreButton.layer.masksToBounds = YES;
         loadMoreButton.layer.borderColor = tcolor(TextColor).CGColor;
         
-        [loadMoreButton setTitle:LOCALIZE_STRING(@"Show old tasks") forState:UIControlStateNormal];
+        [loadMoreButton setTitle:NSLocalizedString(@"Show old tasks", nil) forState:UIControlStateNormal];
         [loadMoreButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [loadMoreButton setTitleColor:tcolor(BackgroundColor) forState:UIControlStateHighlighted];
         [loadMoreButton setBackgroundImage:[tcolor(TextColor) image] forState:UIControlStateHighlighted];
@@ -97,7 +97,7 @@
         deleteAllButton.layer.masksToBounds = YES;
         deleteAllButton.layer.borderColor = tcolor(TextColor).CGColor;
         
-        [deleteAllButton setTitle:LOCALIZE_STRING(@"Clear old tasks") forState:UIControlStateNormal];
+        [deleteAllButton setTitle:NSLocalizedString(@"Clear old tasks", nil) forState:UIControlStateNormal];
         [deleteAllButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
         [deleteAllButton setTitleColor:tcolor(BackgroundColor) forState:UIControlStateHighlighted];
         [deleteAllButton setBackgroundImage:[tcolor(TextColor) image] forState:UIControlStateHighlighted];

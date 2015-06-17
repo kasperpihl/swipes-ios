@@ -33,7 +33,7 @@ static CGFloat const kBottomMargin = 45;
     [super viewDidLoad];
     _titleView = [[IntegrationTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kTopMargin)];
     _titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _titleView.title = [LOCALIZE_STRING(@"Snoozes") uppercaseString];
+    _titleView.title = [NSLocalizedString(@"Snoozes", nil) uppercaseString];
     [self.view addSubview:_titleView];
 
     self.activeSnooze = SnoozeNone;
@@ -74,22 +74,22 @@ static CGFloat const kBottomMargin = 45;
     NSString *setting;
     switch (snooze) {
         case SnoozeWeekStartTime:
-            setting = LOCALIZE_STRING(@"Start my day at");
+            setting = NSLocalizedString(@"Start my day at", nil);
             break;
         case SnoozeEveningStartTime:
-            setting = LOCALIZE_STRING(@"Start my evening at");
+            setting = NSLocalizedString(@"Start my evening at", nil);
             break;
         case SnoozeWeekendStartTime:
-            setting = LOCALIZE_STRING(@"Start my weekends at");
+            setting = NSLocalizedString(@"Start my weekends at", nil);
             break;
         case SnoozeWeekStart:
-            setting = LOCALIZE_STRING(@"My week starts");
+            setting = NSLocalizedString(@"My week starts", nil);
             break;
         case SnoozeWeekendStart:
-            setting = LOCALIZE_STRING(@"My weekend starts");
+            setting = NSLocalizedString(@"My weekend starts", nil);
             break;
         case SnoozeLaterToday:
-            setting = LOCALIZE_STRING(@"Snooze Later Today");
+            setting = NSLocalizedString(@"Snooze Later Today", nil);
             break;
         default:break;
     }
@@ -154,7 +154,7 @@ static CGFloat const kBottomMargin = 45;
         case SnoozeWeekStart:
         case SnoozeWeekendStart:{
             settingDate = [NSDate dateThisOrNextWeekWithDay:settingValue.integerValue hours:8 minutes:0];
-            [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:LOCALIZE_STRING(@"en_US")]];
+            [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:NSLocalizedString(@"en_US", nil)]];
             [formatter setDateFormat:@"EEEE"];
             [cell.dayPicker setSelectedDay:settingDate.weekday];
             capitalizeString = YES;
@@ -163,7 +163,7 @@ static CGFloat const kBottomMargin = 45;
         case SnoozeLaterToday:{
             settingDate = [[[NSDate date] dateAtStartOfDay] dateByAddingTimeInterval:settingValue.integerValue];
             [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
-            [formatter setDateFormat:LOCALIZE_STRING(@"'+'H':'mm'h'")];
+            [formatter setDateFormat:NSLocalizedString(@"'+'H':'mm'h'", nil)];
             break;
         }
         default:break;
@@ -200,7 +200,7 @@ static CGFloat const kBottomMargin = 45;
     if(self.activeSnooze == SnoozeLaterToday){
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
-        [formatter setDateFormat:LOCALIZE_STRING(@"'+'H':'mm'h'")];
+        [formatter setDateFormat:NSLocalizedString(@"'+'H':'mm'h'", nil)];
         return [formatter stringFromDate:time];
     }
     else return nil;

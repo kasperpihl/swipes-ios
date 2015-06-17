@@ -704,7 +704,7 @@ typedef enum {
         helpLabel.backgroundColor = CLEAR;
         helpLabel.textColor = alpha(tcolorF(SubTextColor,ThemeLight),0.8);
         helpLabel.textAlignment = NSTextAlignmentCenter;
-        helpLabel.text = LOCALIZE_STRING(@"Hold down to adjust time");
+        helpLabel.text = NSLocalizedString(@"Hold down to adjust time", nil);
         helpLabel.font = KP_REGULAR(13);
         self.helpLabel = helpLabel;
         [self addSubview:helpLabel];
@@ -726,37 +726,37 @@ typedef enum {
         
         /* Schedule buttons */
         NSNumber *laterToday = (NSNumber*)[kSettings valueForSetting:SettingLaterToday];
-        NSString *title = [NSString stringWithFormat:LOCALIZE_STRING(@"Later  +%luh"),(long)(laterToday.integerValue/3600)];
+        NSString *title = [NSString stringWithFormat:NSLocalizedString(@"Later  +%luh", nil),(long)(laterToday.integerValue/3600)];
         UIButton *laterTodayButton = [self buttonForScheduleButton:KPScheduleButtonLaterToday title:title];
         [contentView addSubview:laterTodayButton];
         NSNumber *eveningStartTime = (NSNumber*)[kSettings valueForSetting:SettingEveningStartTime];
         NSInteger hours = eveningStartTime.integerValue/D_HOUR;
         NSInteger minutes = (eveningStartTime.integerValue % D_HOUR) / D_MINUTE;
         NSDate *thisEveningTime = [[NSDate date] dateAtHours:hours minutes:minutes];
-        NSString *thisEveText = ([[NSDate date] isLaterThanDate:thisEveningTime]) ? LOCALIZE_STRING(@"Tomorrow Eve") : LOCALIZE_STRING(@"This Evening");
+        NSString *thisEveText = ([[NSDate date] isLaterThanDate:thisEveningTime]) ? NSLocalizedString(@"Tomorrow Eve", nil) : NSLocalizedString(@"This Evening", nil);
         UIButton *thisEveningButton = [self buttonForScheduleButton:KPScheduleButtonThisEvening title:thisEveText];
         [contentView addSubview:thisEveningButton];
-        UIButton *tomorrowButton = [self buttonForScheduleButton:KPScheduleButtonTomorrow title:LOCALIZE_STRING(@"Tomorrow")];
+        UIButton *tomorrowButton = [self buttonForScheduleButton:KPScheduleButtonTomorrow title:NSLocalizedString(@"Tomorrow", nil)];
         [contentView addSubview:tomorrowButton];
         NSDate *twoDaysDate = [NSDate dateWithDaysFromNow:2];
         NSDateFormatter *weekday = [[NSDateFormatter alloc] init];
-        NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:LOCALIZE_STRING(@"en_US")];
+        NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:NSLocalizedString(@"en_US", nil)];
         [weekday setLocale:usLocale];
         [weekday setDateFormat: @"EEEE"];
         NSString *twoDaysString = [[weekday stringFromDate:twoDaysDate] capitalizedString];
         UIButton *in2DaysButton = [self buttonForScheduleButton:KPScheduleButtonIn2Days title:twoDaysString];
         [contentView addSubview:in2DaysButton];
-        UIButton *thisWeekendButton = [self buttonForScheduleButton:KPScheduleButtonThisWeekend title:LOCALIZE_STRING(@"This Weekend")];
+        UIButton *thisWeekendButton = [self buttonForScheduleButton:KPScheduleButtonThisWeekend title:NSLocalizedString(@"This Weekend", nil)];
         [contentView addSubview:thisWeekendButton];
-        UIButton *nextWeekButton = [self buttonForScheduleButton:KPScheduleButtonNextWeek title:LOCALIZE_STRING(@"Next Week")];
+        UIButton *nextWeekButton = [self buttonForScheduleButton:KPScheduleButtonNextWeek title:NSLocalizedString(@"Next Week", nil)];
         [contentView addSubview:nextWeekButton];
-        UIButton *specificTimeButton = [self buttonForScheduleButton:KPScheduleButtonSpecificTime title:LOCALIZE_STRING(@"Pick A Date")];
+        UIButton *specificTimeButton = [self buttonForScheduleButton:KPScheduleButtonSpecificTime title:NSLocalizedString(@"Pick A Date", nil)];
         [contentView addSubview:specificTimeButton];
-        UIButton *locationButton = [self buttonForScheduleButton:KPScheduleButtonLocation title:LOCALIZE_STRING(@"At Location")];
+        UIButton *locationButton = [self buttonForScheduleButton:KPScheduleButtonLocation title:NSLocalizedString(@"At Location", nil)];
         if( [kUserHandler isPlus] )
             [contentView addSubview:locationButton];
         
-        UIButton *unspecifiedButton = [self buttonForScheduleButton:KPScheduleButtonUnscheduled title:LOCALIZE_STRING(@"Unspecified")];
+        UIButton *unspecifiedButton = [self buttonForScheduleButton:KPScheduleButtonUnscheduled title:NSLocalizedString(@"Unspecified", nil)];
         [contentView addSubview:unspecifiedButton];
         
         self.panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];

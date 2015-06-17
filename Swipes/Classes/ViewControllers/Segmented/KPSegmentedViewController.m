@@ -224,10 +224,10 @@
     [BLURRY showView:tagView inViewController:viewController];
 }
 -(void)deleteNumberOfItems:(NSInteger)numberOfItems inView:(UIViewController*)viewController completion:(SuccessfulBlock)block{
-    NSString *endString = (numberOfItems > 1) ? LOCALIZE_STRING(@"tasks") : LOCALIZE_STRING(@"task");
-    NSString *titleString = [NSString stringWithFormat:LOCALIZE_STRING(@"Delete %li %@"),(long)numberOfItems,endString];
-    NSString *thisTheseString = (numberOfItems > 1) ? LOCALIZE_STRING(@"these") : LOCALIZE_STRING(@"this");
-    NSString *messageString = [NSString stringWithFormat:LOCALIZE_STRING(@"Are you sure you want to permanently delete %@ %@?"),thisTheseString,endString];
+    NSString *endString = (numberOfItems > 1) ? NSLocalizedString(@"tasks", nil) : NSLocalizedString(@"task", nil);
+    NSString *titleString = [NSString stringWithFormat:NSLocalizedString(@"Delete %li %@", nil),(long)numberOfItems,endString];
+    NSString *thisTheseString = (numberOfItems > 1) ? NSLocalizedString(@"these", nil) : NSLocalizedString(@"this", nil);
+    NSString *messageString = [NSString stringWithFormat:NSLocalizedString(@"Are you sure you want to permanently delete %@ %@?", nil),thisTheseString,endString];
     
     [UTILITY confirmBoxWithTitle:titleString andMessage:messageString block:^(BOOL succeeded, NSError *error) {
          block(succeeded,error);
@@ -364,20 +364,20 @@
 
 #pragma mark SelectionTopMenuDelegate
 -(void)didPressAllInSelectionTopMenu:(SelectionTopMenu *)topMenu{
-    BOOL select = [topMenu.allButton.titleLabel.text isEqualToString:LOCALIZE_STRING(@"All")];
+    BOOL select = [topMenu.allButton.titleLabel.text isEqualToString:NSLocalizedString(@"All", nil)];
     if(select){
         [kAudio playSoundWithName:@"Succesful action.m4a"];
         [self.currentViewController selectAllRows];
-        [topMenu.allButton setTitle:LOCALIZE_STRING(@"None") forState:UIControlStateNormal];
+        [topMenu.allButton setTitle:NSLocalizedString(@"None", nil) forState:UIControlStateNormal];
     }
     else{
         [kAudio playSoundWithName:@"New state - scheduled.m4a"];
         [self.currentViewController deselectAllRows:self];
-        [topMenu.allButton setTitle:LOCALIZE_STRING(@"All") forState:UIControlStateNormal];
+        [topMenu.allButton setTitle:NSLocalizedString(@"All", nil) forState:UIControlStateNormal];
     }
 }
 -(void)didPressHelpLabelInSelectionTopMenu:(SelectionTopMenu *)topMenu{
-    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Select Tasks") andMessage:LOCALIZE_STRING(@"Tap your tasks to select them and swipe them all together.")];
+    [UTILITY alertWithTitle:NSLocalizedString(@"Select Tasks", nil) andMessage:NSLocalizedString(@"Tap your tasks to select them and swipe them all together.", nil)];
 }
 -(void)didPressCloseInSelectionTopMenu:(SelectionTopMenu *)topMenu{
     [self setTopMenu:nil state:TopMenuDefault animated:YES];
@@ -390,7 +390,7 @@
     [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 -(void)didPressHelpInFilterTopMenu:(FilterTopMenu *)topMenu{
-    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Workspaces") andMessage:LOCALIZE_STRING(@"Set your workspace, select tags and stay focused.")];
+    [UTILITY alertWithTitle:NSLocalizedString(@"Workspaces", nil) andMessage:NSLocalizedString(@"Set your workspace, select tags and stay focused.", nil)];
 }
 -(void)filterMenu:(FilterTopMenu *)filterMenu selectedTag:(NSString *)tag{
     [kFilter selectTag:tag];
@@ -453,7 +453,7 @@
     return [hintStrings copy];
 }
 -(void)didPressClearInOnboardingTopMenu:(OnboardingTopMenu *)topMenu{
-    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Turn off hints") andMessage:LOCALIZE_STRING(@"Are you sure you want to turn off and clear the hints?") block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Turn off hints", nil) andMessage:NSLocalizedString(@"Are you sure you want to turn off and clear the hints?", nil) block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             [kHints turnHintsOff:YES];
             [self checkForUpdateOnBadge];
@@ -611,7 +611,7 @@
     else if(self.currentTopMenu == TopMenuFilter)
         fromString = @"Filter";
     
-    [UTILITY inputAlertWithTitle:LOCALIZE_STRING(@"Add new tag") message:LOCALIZE_STRING(@"Type the name of your tag (ex. work, project or school)") placeholder:LOCALIZE_STRING(@"Add new tag") cancel:[LOCALIZE_STRING(@"cancel") capitalizedString] confirm:[LOCALIZE_STRING(@"add") capitalizedString] block:^(NSString *string, NSError *error) {
+    [UTILITY inputAlertWithTitle:NSLocalizedString(@"Add new tag", nil) message:NSLocalizedString(@"Type the name of your tag (ex. work, project or school)", nil) placeholder:NSLocalizedString(@"Add new tag", nil) cancel:[NSLocalizedString(@"cancel", nil) capitalizedString] confirm:[NSLocalizedString(@"add", nil) capitalizedString] block:^(NSString *string, NSError *error) {
         NSString *trimmedString = [string stringByTrimmingCharactersInSet:
                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if(trimmedString && trimmedString.length > 0){

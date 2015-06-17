@@ -75,24 +75,24 @@ static const CGFloat kProgressMultiply = (1.0 / 0.5);
 -(void)updateSyncLabel
 {
     NSDate *lastSync = [USER_DEFAULTS objectForKey:@"lastSyncLocalDate"];
-    NSString *timeString = lastSync ? [UtilityClass readableTime:lastSync showTime:YES] : [LOCALIZE_STRING(@"never") capitalizedString];
-    _subtitle.text = [NSString stringWithFormat:LOCALIZE_STRING(@"Last sync: %@"),timeString];
+    NSString *timeString = lastSync ? [UtilityClass readableTime:lastSync showTime:YES] : [NSLocalizedString(@"never", nil) capitalizedString];
+    _subtitle.text = [NSString stringWithFormat:NSLocalizedString(@"Last sync: %@", nil),timeString];
 }
 
 - (void)updateTexts:(BPRPullToRefreshState)state
 {
     if (!kUserHandler.isLoggedIn) {
-        [self setTitleText:LOCALIZE_STRING(@"Register for Swipes to safely back up your data and get Swipes Plus") icon:@"settingsAccount"];
+        [self setTitleText:NSLocalizedString(@"Register for Swipes to safely back up your data and get Swipes Plus", nil) icon:@"settingsAccount"];
         _subtitle.hidden = YES;
     }
     else {
         BOOL isSyncing = KPCORE.isSyncing;
         if (isSyncing) {
-            [self setTitleText:[NSString stringWithFormat:@"%@\n", LOCALIZE_STRING(@"Synchronizing...")] icon:@"settingsSync"];
+            [self setTitleText:[NSString stringWithFormat:@"%@\n", NSLocalizedString(@"Synchronizing...", nil)] icon:@"settingsSync"];
         }
         else {
             if (state == BPRPullToRefreshStateIdle) {
-                _title.text = [NSString stringWithFormat:@"%@\n", LOCALIZE_STRING(@"Pull to Synchronize")];
+                _title.text = [NSString stringWithFormat:@"%@\n", NSLocalizedString(@"Pull to Synchronize", nil)];
             }
             else if (state == BPRPullToRefreshStateLoading) {
                 if (_lastState != BPRPullToRefreshStateLoading) {
@@ -100,10 +100,10 @@ static const CGFloat kProgressMultiply = (1.0 / 0.5);
                     [KPCORE clearCache];
                     [KPCORE synchronizeForce:YES async:YES];
                 }
-                [self setTitleText:[NSString stringWithFormat:@"%@\n", LOCALIZE_STRING(@"Synchronizing...")] icon:@"settingsSync"];
+                [self setTitleText:[NSString stringWithFormat:@"%@\n", NSLocalizedString(@"Synchronizing...", nil)] icon:@"settingsSync"];
             }
             else {
-                _title.text = [NSString stringWithFormat:@"%@\n", LOCALIZE_STRING(@"Release to Synchronize")];
+                _title.text = [NSString stringWithFormat:@"%@\n", NSLocalizedString(@"Release to Synchronize", nil)];
             }
         }
         _subtitle.hidden = NO;

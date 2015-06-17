@@ -79,7 +79,7 @@
         moreButton.layer.masksToBounds = YES;
         moreButton.layer.cornerRadius = 5;
         moreButton.titleLabel.font = kMoreButtonFont;
-        [moreButton setTitle:[LOCALIZE_STRING(@"Get Started") uppercaseString] forState:UIControlStateNormal];
+        [moreButton setTitle:[NSLocalizedString(@"Get Started", nil) uppercaseString] forState:UIControlStateNormal];
         moreButton.center = CGPointMake(self.contentView.frame.size.width/2, self.contentView.frame.size.height-DEFAULT_TITLE_HEIGHT/2);
         CGRectSetY(moreButton, self.contentView.frame.size.height-DEFAULT_TITLE_HEIGHT);
         [moreButton addTarget:self action:@selector(pressedAccount:) forControlEvents:UIControlEventTouchUpInside];

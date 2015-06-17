@@ -115,7 +115,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     }
     
     _notesTextView.placeholderColor = gray(192, 1);
-    _notesTextView.placeholder = LOCALIZE_STRING(@"Enter task's notes");
+    _notesTextView.placeholder = NSLocalizedString(@"Enter task's notes", nil);
     
     if (UIUserInterfaceIdiomPhone == [UIDevice currentDevice].userInterfaceIdiom) {
         notify(UIKeyboardWillShowNotification, keyboardWillShow:);
@@ -294,7 +294,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 - (void)setupTagsLabel:(UILabel *)label
 {
     if (!_selectedTags || (0 == _selectedTags.count)) {
-        label.text = [LOCALIZE_STRING(@"No tags") lowercaseString];
+        label.text = [NSLocalizedString(@"No tags", nil) lowercaseString];
         label.textColor = gray(192, 1);
     }
     else {
@@ -313,7 +313,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
 
 - (void)setupScheduleLabel:(UILabel *)label
 {
-    label.text = [LOCALIZE_STRING(@"schedule") capitalizedString];
+    label.text = [NSLocalizedString(@"schedule", nil) capitalizedString];
 }
 
 - (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context

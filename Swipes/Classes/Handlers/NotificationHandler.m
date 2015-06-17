@@ -101,7 +101,7 @@ static BOOL g_registeredForNotifications = NO;
         return LocationNeededPermission;
     }
     else if([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorized){
-        [UTILITY alertWithTitle:LOCALIZE_STRING(@"Location Permissions") andMessage:LOCALIZE_STRING(@"You need to turn on location permissions for Swipes in Settings > Privacy")];
+        [UTILITY alertWithTitle:NSLocalizedString(@"Location Permissions", nil) andMessage:NSLocalizedString(@"You need to turn on location permissions for Swipes in Settings > Privacy", nil)];
         return LocationNotAuthorized;
     }
     else if(self.startedLocationServices)

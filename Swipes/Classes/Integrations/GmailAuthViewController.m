@@ -39,7 +39,7 @@
 - (void)setUpNavigation
 {
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
-                                     initWithTitle:LOCALIZE_STRING(@"Cancel")
+                                     initWithTitle:NSLocalizedString(@"Cancel", nil)
                                      style:UIBarButtonItemStylePlain
                                      target:self
                                      action:@selector(onCancel:)];

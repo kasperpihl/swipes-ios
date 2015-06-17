@@ -14,8 +14,6 @@
 #define iconFont(fontSize) [UIFont fontWithName:@"swipes" size:fontSize]
 #define USER_DEFAULTS  [Global sharedDefaults]
 
-#define LOCALIZE_STRING(string) NSLocalizedString(string, nil)
-
 extern NSString* const SHARED_GROUP_NAME;
 extern NSString* const SHARED_KEYCHAIN_NAME;
 
