@@ -284,7 +284,7 @@ static SettingsHandler *sharedObject;
         case IntegrationEvernoteFindInBusinessNotebooks:
             return @YES;
         case IntegrationGmailUsingMailbox:
-            return @YES;
+            return @NO;
         case SettingUseStandardStatusBar:
             return @NO;
         case IntegrationGmailOpenType:

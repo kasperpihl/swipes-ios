@@ -170,9 +170,11 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
                     if (title) {
                         if(title.length > kTitleMaxLength)
                             title = [title substringToIndex:kTitleMaxLength];
-                        NSString* identifier = [kGmInt threadIdToNSString:processor.threadId];
+                        NSString* identifier = [kGmInt threadIdToJSONNSString:processor.threadId];
                         if (identifier) {
                             KPToDo *newToDo = [KPToDo addItem:[UtilityClass unescapeString:title] priority:NO tags:nil save:NO from:@"Gmail"];
+                            newToDo.origin = GMAIL_SERVICE;
+                            //newToDo.originIdentifier = [NSString stringWithFormat:@"%@|%@", kGmInt.userId, processor.threadId];
                             if (processor.snippet) {
                                 newToDo.notes = [UtilityClass unescapeString:processor.snippet];
                             }

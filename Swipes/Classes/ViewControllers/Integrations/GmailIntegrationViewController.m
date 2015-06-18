@@ -35,19 +35,9 @@
 {
     [super recreateCellInfo];
     if (kGmInt.isAuthenticated) {
-        NSString* emailAddress = kGmInt.emailAddress;
-        if (!emailAddress) {
-            emailAddress = NSLocalizedString(@"Loading data...", nil);
-            __weak GmailIntegrationViewController *weakSelf = self;
-            [kGmInt emailAddressWithBlock:^(NSError *error) {
-                NSString* newEmail = error ? NSLocalizedString(@"Error loading data", nil) : kGmInt.emailAddress;
-                weakSelf.cellInfo[0][kKeyTitle] = newEmail;
-                [self.table reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:NO];
-            }];
-        }
         MailOpenType openType = [kGmInt mailOpenType];
         NSMutableArray* cellInfo = @[
-                          @{kKeyTitle: emailAddress,
+                          @{kKeyTitle: kGmInt.emailAddress,
                             kKeyCellType: @(kIntegrationCellTypeViewMore),
                             kKeyIcon: kGmInt.isUsingMailbox ? @"integrationMailbox" : @"integrationMail",
                             kKeyTouchSelector: NSStringFromSelector(@selector(onEmailTouch))

@@ -33,8 +33,10 @@ typedef NS_ENUM(NSUInteger, MailOpenType)
 @property (nonatomic, assign, readonly) BOOL isAuthenticated;
 @property (nonatomic, assign) BOOL isUsingMailbox;
 @property (nonatomic, strong) NSString* labelName;
+@property (nonatomic, strong) NSString* emailAddress;
+@property (nonatomic, strong) NSString* userId;
 
-- (NSString *)threadIdToNSString:(NSString *)threadId;
+- (NSString *)threadIdToJSONNSString:(NSString *)threadId;
 - (NSString *)NSStringToThreadId:(NSString *)string;
 - (NSString *)NSStringToEmail:(NSString *)string;
 
@@ -45,7 +47,6 @@ typedef NS_ENUM(NSUInteger, MailOpenType)
 - (void)getThread:(NSString *)threadId format:(NSString*)format withBlock:(ThreadGetBlock)block;
 - (void)removeSwipesLabelFromThreadAndArchive:(NSString *)threadId withBlock:(ErrorBlock)block;
 - (void)checkArchievedThread:(NSString *)threadId block:(SuccessfulBlock)block;
-- (void)emailAddressWithBlock:(ErrorBlock)block;
 - (NSString *)emailAddress;
 
 #ifndef NOT_APPLICATION
