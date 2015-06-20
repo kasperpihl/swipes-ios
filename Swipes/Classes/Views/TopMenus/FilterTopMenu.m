@@ -14,14 +14,18 @@
 #define kBackgroundColorButtons CLEAR
 
 @interface FilterTopMenu () <KPTagListResizeDelegate, KPTagDelegate>
-@property (nonatomic, strong) IBOutlet UIButton *closeButton;
-@property (nonatomic, strong) IBOutlet UIButton *clearButton;
-@property (nonatomic, strong) IBOutlet UIButton *priorityFilterButton;
-@property (nonatomic, strong) IBOutlet UIButton *notesFilterButton;
-@property (nonatomic, strong) IBOutlet UIButton *recurringFilterButton;
+
+@property (nonatomic, strong) UIButton *closeButton;
+@property (nonatomic, strong) UIButton *clearButton;
+@property (nonatomic, strong) UIButton *priorityFilterButton;
+@property (nonatomic, strong) UIButton *notesFilterButton;
+@property (nonatomic, strong) UIButton *recurringFilterButton;
+@property (nonatomic, strong) UIScrollView *scrollView;
+
 @end
 
 @implementation FilterTopMenu
+
 -(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
@@ -62,9 +66,14 @@
         [setWorkSpaceButton addTarget:self action:@selector(onHelp:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:setWorkSpaceButton];
         
-        KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, topY+gradientHeight, self.frame.size.width, 0)];
+        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, topY+gradientHeight, self.frame.size.width, 0)];
+        self.scrollView.backgroundColor = CLEAR;
+        
+        
+        
+        KPTagList *tagList = [[KPTagList alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0)];
         tagList.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        //tagList.addTagButton = YES;
+        //tagList.addTagButton = NO;
         
         //UIColor *tagColor = gray(0,1);
         //tagList.tagBackgroundColor = CLEAR;
@@ -83,9 +92,12 @@
         tagList.marginRight = tagList.spacing;
         tagList.resizeDelegate = self;
         tagList.tagDelegate = self;
-        [self addSubview:tagList];
         self.tagListView = tagList;
-
+        
+        [self.scrollView addSubview:self.tagListView];
+        self.scrollView.contentSize = CGSizeMake(self.tagListView.frame.size.width, self.tagListView.frame.size.height);
+        self.scrollView.scrollEnabled = YES;
+        [self addSubview:self.scrollView];
         
         UIButton *clearButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         clearButton.frame = CGRectMake(0, gradientHeight, kSideButtonsWidth, topY);
@@ -157,10 +169,18 @@
 }
 
 -(void)tagList:(KPTagList *)tagList changedSize:(CGSize)size{
+    CGFloat maxHeight = [[UIScreen mainScreen] bounds].size.height / 4 * 3;
+    CGFloat maxY = CGRectGetMaxY(tagList.frame);
+    CGFloat targetHeight = (maxY > maxHeight) ? maxHeight : maxY;
+    
+    self.scrollView.contentSize = CGSizeMake(tagList.frame.size.width, tagList.frame.size.height);
+    CGRectSetHeight(self.scrollView, targetHeight - 48);
+    
+    
     if(kUserHandler.isPlus)
-        CGRectSetHeight(self, CGRectGetMaxY(tagList.frame)  + kSideButtonsWidth  );
+        CGRectSetHeight(self, targetHeight  + kSideButtonsWidth  );
     else
-        CGRectSetHeight(self, CGRectGetMaxY(tagList.frame));// + kSideButtonsWidth  );
+        CGRectSetHeight(self, targetHeight);// + kSideButtonsWidth  );
     [self.topMenuDelegate topMenu:self changedSize:self.frame.size];
     [self updateButtons];
 }
