@@ -429,11 +429,11 @@
 -(void)didClearSearchTopMenu:(SearchTopMenu *)topMenu{
     [kFilter searchForString:nil];
     [topMenu.searchField resignFirstResponder];
-    //[self setTopMenu:nil state:TopMenuDefault animated:YES];
+    [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 -(void)didCloseSearchFieldTopMenu:(SearchTopMenu *)topMenu{
     [topMenu.searchField resignFirstResponder];
-    //[self setTopMenu:nil state:TopMenuDefault animated:YES];
+    [self setTopMenu:nil state:TopMenuDefault animated:YES];
 }
 
 #pragma mark OnboardingTopMenuDelegate
