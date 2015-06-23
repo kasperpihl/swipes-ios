@@ -609,6 +609,20 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
     }];
 }
 
+- (NSString *)errorValueForData:(NSData *)data base64encode:(BOOL)base64encode
+{
+    NSString* value = @"null";
+    if (data) {
+        if (0 < data.length) {
+            value = base64encode ? [data base64EncodedStringWithOptions:0] : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        }
+        else {
+            value = @"0 bytes";
+        }
+    }
+    return value;
+}
+
 - (void)synchronizeWithParseAsync:(BOOL)async completionHandler:(SyncCompletionBlock)handler
 {
     // this method should call handler only indirectly through finalizeSyncWithUserInfo:..
@@ -740,7 +754,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
         //NSLog(@"status code: %i error %@",response.statusCode,error);
         if(error){
             if(!(error.code == -1001 || error.code == -1003 || error.code == -1005 || error.code == -1009))
-                [UtilityClass sendError:error type:@"Sync request error 1" attachment:@{@"out": [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding],  @"in" : [resData base64EncodedStringWithOptions:0]}];
+                [UtilityClass sendError:error type:@"Sync request error 1" attachment:@{@"out":  [self errorValueForData:jsonData base64encode:NO], @"in" : [self errorValueForData:resData base64encode:YES]}];
         }
         else if(response.statusCode == 503){
             error = [NSError errorWithDomain:@"Request timed out" code:503 userInfo:nil];
@@ -752,7 +766,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
                 error = [NSError errorWithDomain:myString code:response.statusCode userInfo:nil];
             else
                 error = [NSError errorWithDomain:@"(missing data)" code:response.statusCode userInfo:nil];
-            [UtilityClass sendError:error type:@"Sync request error 2" attachment:@{@"out": [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding],  @"in" : [resData base64EncodedStringWithOptions:0]}];
+            [UtilityClass sendError:error type:@"Sync request error 2" attachment:@{@"out":  [self errorValueForData:jsonData base64encode:NO], @"in" : [self errorValueForData:resData base64encode:YES]}];
         }
         self._needSync = YES;
         [self finalizeSyncWithUserInfo:nil error:error currentResult:UIBackgroundFetchResultFailed completionHandler:handler];
@@ -782,7 +796,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
             }
             error = [NSError errorWithDomain:message code:code userInfo:result];
         }
-        [UtilityClass sendError:error type:@"Sync Json Parse Error" attachment:@{@"out": [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding],  @"in" : [resData base64EncodedStringWithOptions:0]}];
+        [UtilityClass sendError:error type:@"Sync Json Parse Error" attachment:@{@"out":  [self errorValueForData:jsonData base64encode:NO], @"in" : [self errorValueForData:resData base64encode:YES]}];
         [self finalizeSyncWithUserInfo:result error:error currentResult:UIBackgroundFetchResultFailed completionHandler:handler];
         return;
     }
