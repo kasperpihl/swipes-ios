@@ -49,12 +49,13 @@ static CGFloat const kBottomMargin = 45;
     [self.view addSubview:self.tableView];
 
     // setup back button
-    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, self.view.frame.size.height - kBottomMargin, kBottomMargin, kBottomMargin - 15)];
-    self.backButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 7.5 - kBottomMargin, self.view.frame.size.height - kBottomMargin, kBottomMargin, kBottomMargin - 15)];
+    self.backButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
     [self.backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     self.backButton.titleLabel.font = iconFont(23);
     [self.backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
+    self.backButton.titleLabel.transform = CGAffineTransformMakeRotation(M_PI);
     [self.view addSubview:self.backButton];
 }
 

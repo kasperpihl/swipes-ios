@@ -54,7 +54,7 @@ static CGFloat const kSectionHeight = 34;
     // setup table view
     CGRect viewFrame = self.view.frame;
     viewFrame.origin.y += kTopMargin;
-    viewFrame.size.height -= kTopMargin + kBottomMargin;
+    viewFrame.size.height -= kTopMargin + kBottomMargin + 3;
     self.table = [[UITableView alloc] initWithFrame:viewFrame];
     self.table.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.table.backgroundColor = [UIColor clearColor];
@@ -65,12 +65,14 @@ static CGFloat const kSectionHeight = 34;
     [self.view addSubview:self.table];
     
     // setup back button
-    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, self.view.frame.size.height - kBottomMargin, kBottomMargin, kBottomMargin - 15)];
-    self.backButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 7.5 - kBottomMargin, self.view.frame.size.height - kBottomMargin, kBottomMargin, kBottomMargin - 15)];
+    self.backButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
     [self.backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     self.backButton.titleLabel.font = iconFont(23);
     [self.backButton setTitle:iconString(@"back") forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
+    self.backButton.titleLabel.transform = CGAffineTransformMakeRotation(M_PI);
+
     [self.view addSubview:self.backButton];
     
     [self tableView:_table numberOfRowsInSection:10];
@@ -106,6 +108,7 @@ static CGFloat const kSectionHeight = 34;
     _lightColor = lightColor;
     _titleView.lightColor = lightColor;
 }
+
 -(void)addModalTransition {
     CATransition* transition = [CATransition animation];
     
@@ -114,7 +117,6 @@ static CGFloat const kSectionHeight = 34;
     
     [self.view.window.layer addAnimation:transition forKey:kCATransition];
 }
-
 
 - (void)didReceiveMemoryWarning
 {
