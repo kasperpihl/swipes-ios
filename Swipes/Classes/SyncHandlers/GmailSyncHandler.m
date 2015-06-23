@@ -115,6 +115,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
     __block NSInteger returnCount = 0;
     __block NSInteger targetCount = threadListResults.count;
     __block NSError *runningError;
+    __block BOOL syncedAnything = NO;
     
     __block voidBlock finalizeBlock = ^{
         returnCount++;
@@ -158,6 +159,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
     for (GTLGmailThread* thread in threadListResults) {
         __block KPAttachment* attachment;
         __block KPToDo* todoWithGmail = [self hasAttachmentWithThreadId:thread.identifier todosWithGmail:todosWithGmail attachment:&attachment];
+        syncedAnything = YES;
         if (nil == todoWithGmail) {
             // we don't know this thread
             [GmailThreadProcessor processorWithThreadId:thread.identifier block:^(GmailThreadProcessor *processor, NSError *error) {
@@ -206,6 +208,10 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
                 finalizeBlock();
             }
         }
+    }
+    
+    if (!syncedAnything) {
+        return block(SyncStatusSuccess, nil, nil);
     }
     
     [self clearLocallyDeleted];
