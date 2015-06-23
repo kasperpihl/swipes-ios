@@ -25,8 +25,8 @@ NSString* const kSwipesMailboxLabelName = @"[Mailbox]/Add to Swipes"; // label n
 NSString* const kSwipesLabelName = @"Add to Swipes"; // label name for normal Gmail integration
 
 // instructions at https://code.google.com/p/google-api-objectivec-client/wiki/Introduction#Preparing_to_Use_the_Library
-static NSString* const kClientID = @"336134475796-mqcavkepb80idm0qdacd2fhkf573r4cd.apps.googleusercontent.com";
-static NSString* const kClientSecret = @"5heB-MAD5Qm-y1miBVic03cE";
+static NSString* const kClientID =  @"Z1tTEWBDXUdQRBliSAwcNwkTSzYHC0hVGkQ5VRAJNQsBEjUfAhZQRBMmUQIJegkVUCBZDh8KFEwxEBIIJgsKTicSBwRLEE85"; // @"336134475796-mqcavkepb80idm0qdacd2fhkf573r4cd.apps.googleusercontent.com";
+static NSString* const kClientSecret = @"YQAAYn46KDRQIk15HFAAPSozSTBHWhMg"; // @"5heB-MAD5Qm-y1miBVic03cE";
 
 // where to we store gmail integration data
 static NSString* const kKeychainKeyName = @"swipes_gmail_integration";
@@ -75,8 +75,8 @@ static NSString* const kKeyJsonThreadId = @"threadid";
         NSError* error;
         GTMOAuth2Authentication* auth = [GTMOAuth2ViewControllerTouch
                                          authForGoogleFromKeychainForName:kKeychainKeyName
-                                         clientID:kClientID
-                                         clientSecret:kClientSecret
+                                         clientID:[UtilityClass decrypt:kClientID]
+                                         clientSecret:[UtilityClass decrypt:kClientSecret]
                                          error:&error];
         if (!error) {
             self.googleAuth = auth;
@@ -192,11 +192,11 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     NSError* error;
     GTMOAuth2Authentication* auth = [GTMOAuth2ViewControllerTouch
                                          authForGoogleFromKeychainForName:kKeychainKeyName
-                                         clientID:kClientID
-                                         clientSecret:kClientSecret
+                                         clientID:[UtilityClass decrypt:kClientID]
+                                         clientSecret:[UtilityClass decrypt:kClientSecret]
                                          error:&error];
     if (error) {
-        GmailAuthViewController* vc = [GmailAuthViewController controllerWithScope:kGTLAuthScopeGmailModify clientID:kClientID clientSecret:kClientSecret keychainItemName:kKeychainKeyName completionHandler:^(GTMOAuth2ViewControllerTouch *viewController, GTMOAuth2Authentication *auth, NSError *error)
+        GmailAuthViewController* vc = [GmailAuthViewController controllerWithScope:kGTLAuthScopeGmailModify clientID:[UtilityClass decrypt:kClientID] clientSecret:[UtilityClass decrypt:kClientSecret] keychainItemName:kKeychainKeyName completionHandler:^(GTMOAuth2ViewControllerTouch *viewController, GTMOAuth2Authentication *auth, NSError *error)
         {
             [viewController dismissViewControllerAnimated:NO completion:nil];
             if (nil == error) {

@@ -264,10 +264,10 @@
     rect.size.width = contentSize.width;
     _tableView.frame = rect;
 }
+
 -(UIEdgeInsets)widgetMarginInsetsForProposedMarginInsets:(UIEdgeInsets)defaultMarginInsets{
     return UIEdgeInsetsMake(0, 0, 0, 0);
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -308,7 +308,7 @@
     }];
 }
 
-- (IBAction)onShowAll:(id)sender{
+- (void)onShowAll:(id)sender{
     NSInteger maxCount = MIN(6,self.todos.count);
     if(maxCount > self.numberToShow){
         self.numberToShow = 6;
@@ -322,7 +322,7 @@
 }
 
 
-- (IBAction)onAll:(id)sender
+- (void)onAll:(id)sender
 {
     if(self.todos.count == 0){
         return [self onPlus:sender];
@@ -335,7 +335,7 @@
     return;
 }
 
-- (IBAction)onPlus:(id)sender
+- (void)onPlus:(id)sender
 {
         NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/addprompt"]];
      //    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/view?id=%@", tempId]];
@@ -347,6 +347,7 @@
 -(void)saveContext:(NSManagedObjectContext*)context{
     
 }
+
 -(void)didTapCell:(TodayTableViewCell *)cell{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     KPToDo* todo1 = self.todos[indexPath.row];
@@ -357,6 +358,7 @@
         // put some code here if needed or pass nil for completion handler
     }];
 }
+
 -(void)didCompleteCell:(TodayTableViewCell *)cell{
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     KPToDo *model = [self.todos objectAtIndex:indexPath.row];

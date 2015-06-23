@@ -50,10 +50,6 @@
     return result;
 }
 
-//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    return 46;
-//}
-
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     ENSessionFindNotesResult* note = _noteList[indexPath.row];
     
@@ -69,7 +65,7 @@
         cell.textLabel.text = note.title;
     }
     else {
-        cell.textLabel.text = @"Untitled note";
+        cell.textLabel.text = NSLocalizedString(@"Untitled note", nil);
     }
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:note.updated showTime:YES]];
 }
@@ -247,8 +243,9 @@
     sectionHeader.textColor = kTopDarkColor;
     return sectionHeader;
 }
+
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 1.5;
+    return 8;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -282,8 +279,8 @@
             }
             self.noteList = findNotesResults;
             [self.tableView reloadData];
-            [GlobalApp activityIndicatorVisible:NO];
         }
+        [GlobalApp activityIndicatorVisible:NO];
     }];
     
     [self updateButtons];
