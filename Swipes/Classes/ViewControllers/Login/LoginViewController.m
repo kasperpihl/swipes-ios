@@ -81,15 +81,17 @@ typedef enum {
 @property (nonatomic,strong) UIButton *privacyPolicyButton;
 @property (nonatomic,strong) UIButton *forgotButton;
 @property (nonatomic,strong) UIButton *loginButton;
+
 @end
 
 @implementation LoginViewController
--(id)init{
+
+-(id)init
+{
     self = [super init];
-    if (self){
+    if (self) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
-        
         
         self.backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@%i.jpg",launchImageName,0]]];
         [self.backgroundImage setFrame:self.view.bounds];
@@ -128,8 +130,8 @@ typedef enum {
         self.titleView = [[WalkthroughTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0)];
         self.titleView.spacing = 5;
         self.titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.titleView.titleLabel.font = [UIFont fontWithName:@"Nexa-Black-Italic" size:17];
-        self.titleView.subtitleLabel.font = [UIFont fontWithName:@"Nexa-Bold" size:12];
+        self.titleView.titleLabel.font = KP_BOLD(17);
+        self.titleView.subtitleLabel.font = KP_REGULAR(12);
         self.titleView.titleLabel.textColor = kDefTextColor;
         self.titleView.subtitleLabel.textColor = kDefTextColor;
         [self.titleView setTitle:NSLocalizedString(@"Focus. Swipe. Achieve.", nil) subtitle:NSLocalizedString(@"Task List made for High Achievers", nil)];
@@ -302,10 +304,15 @@ typedef enum {
     }
     return self;
 }
--(void)resignFields{
-    if([self.emailField isFirstResponder]) [self.emailField resignFirstResponder];
-    else if([self.passwordField isFirstResponder]) [self.passwordField resignFirstResponder];
+
+-(void)resignFields
+{
+    if (self.emailField.isFirstResponder)
+        [self.emailField resignFirstResponder];
+    else if (self.passwordField.isFirstResponder)
+        [self.passwordField resignFirstResponder];
 }
+
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
     NSLog(@"index:%li",(long)buttonIndex);
     if(buttonIndex == 1){
@@ -325,13 +332,52 @@ typedef enum {
         }
     }
 }
--(BOOL)textFieldShouldReturn:(UITextField *)textField{
-    if([textField isEqual:self.emailField]) return [self.passwordField becomeFirstResponder];
-    else{
-        [self pressedContinue:self.continueButton];
-        return YES;
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if([textField isEqual:self.emailField])
+        return [self.passwordField becomeFirstResponder];
+    else {
+        return [self pressedContinue:self.continueButton];
     }
 }
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    self.continueButton.hidden = NO;
+    self.backButton.hidden = YES;
+    self.passwordField.hidden = NO;
+    self.facebookButton.hidden = YES;
+    self.logoView.hidden = YES;
+    self.facebookLabel.hidden = YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (!self.emailField.isFirstResponder && !self.passwordField.isFirstResponder) {
+        self.logoView.hidden = NO;
+        self.continueButton.hidden = YES;
+        self.backButton.hidden = NO;
+        self.facebookButton.hidden = NO;
+        if (self.currentState != LoginStateLogin)
+            self.passwordField.hidden = YES;
+        self.facebookLabel.hidden = NO;
+    }
+}
+
+-(BOOL)areValidFields
+{
+    NSString *email = self.emailField.text;
+    NSString *password = self.passwordField.text;
+    if(![UtilityClass validateEmail:email]){
+        return NO;
+    }
+    else if (password.length == 0){
+        return NO;
+    }
+    return YES;
+}
+
 -(BOOL)validateFields{
     NSString *email = self.emailField.text;
     NSString *password = self.passwordField.text;
@@ -345,8 +391,12 @@ typedef enum {
     }
     return YES;
 }
+
 -(void)handleErrorFromLogin:(NSError*)error{
-    if(error.code == 101){
+    [self resignFields];
+    [self keyboardWillHide];
+    
+    if (error.code == 101){
         [UTILITY alertWithTitle:NSLocalizedString(@"Wrong email or password.", nil) andMessage:NSLocalizedString(@"Please check your informations and try again.", nil)];
         return;
     }
@@ -357,7 +407,8 @@ typedef enum {
     [UTILITY alertWithTitle:NSLocalizedString(@"Something went wrong.", nil) andMessage:NSLocalizedString(@"Please try again.", nil)];
     [UtilityClass sendError:error type:@"Login"];
 }
--(void)setCurrentState:(LoginState)currentState animated:(BOOL)animated{
+-(void)setCurrentState:(LoginState)currentState animated:(BOOL)animated
+{
     _currentState = currentState;
     BOOL doesRequireFields = (currentState != LoginStateWelcome);
     self.backButton.hidden = !doesRequireFields;
@@ -392,15 +443,20 @@ typedef enum {
     }
     [self.view setNeedsLayout];
 }
+
 -(void)setCurrentState:(LoginState)currentState{
     [self setCurrentState:currentState animated:NO];
 }
+
 -(void)pressedBack:(UIButton*)sender{
     [self setCurrentState:LoginStateWelcome];
 }
+
 -(void)pressedChange:(UIButton*)sender{
+    [self resignFields];
     [self setCurrentState:(self.currentState == LoginStateLogin) ? LoginStateSignup : LoginStateLogin];
 }
+
 -(void)pressedFacebook:(UIButton*)sender{
     [self showIndicator:YES onElement:sender];
     
@@ -426,13 +482,20 @@ typedef enum {
         }
     }];
 }
--(void)pressedContinue:(UIButton*)sender{
-    if(self.currentState == LoginStateWelcome)
-        return [self setCurrentState:LoginStateSignup animated:NO];
-    if(self.emailField.isFirstResponder && self.passwordField.text.length == 0) [self.passwordField becomeFirstResponder];
+-(BOOL)pressedContinue:(UIButton*)sender{
+    if (self.currentState == LoginStateWelcome) {
+        [self setCurrentState:LoginStateSignup animated:NO];
+        return YES;
+    }
+    if (self.emailField.isFirstResponder && self.passwordField.text.length == 0)
+        [self.passwordField becomeFirstResponder];
     else{
         self.emailField.text = [self.emailField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        if(![self validateFields]) return;
+        if(![self areValidFields]) {
+            [self resignFields];
+            [self validateFields];
+            return NO;
+        }
         [self showIndicator:YES onElement:sender];
         NSString *email = [self.emailField.text lowercaseString];
         [PFCloud callFunctionInBackground:@"checkEmail" withParameters:@{@"email":email} block:^(id object, NSError *error) {
@@ -473,11 +536,13 @@ typedef enum {
                     if(succeeded){
                         signUpBlock();
                     }
-                    else [self showIndicator:NO onElement:sender];
+                    else
+                        [self showIndicator:NO onElement:sender];
                 }];
             }
         }];
     }
+    return YES;
 }
 -(void)pressedTryButton:(UIButton*)sender{
     [ROOT_CONTROLLER tryoutapp];
