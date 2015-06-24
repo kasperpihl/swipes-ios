@@ -18,6 +18,8 @@ extern NSString* const kKeyText;
 extern NSString* const kKeyPlaceholder;
 extern NSString* const kKeyTouchSelector;
 extern NSString* const kKeyValidateSelector;
+extern NSString* const kKeySecure;
+extern NSString* const kKeyFocus;
 
 extern UIColor* kIntegrationGreenColor;
 
@@ -37,6 +39,7 @@ typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
 
 @property (nonatomic, strong) UITableView* table;
 @property (nonatomic, strong) UIButton* backButton;
+@property (nonatomic, strong) UIButton* confirmButton;
 @property (nonatomic, strong) UIColor* lightColor;
 @property (nonatomic, strong) NSArray* cellInfo;
 
@@ -44,6 +47,9 @@ typedef NS_ENUM(NSUInteger, IntegrationCellTypes) {
 - (void)reloadData;
 - (void)reloadRow:(NSUInteger)row;
 - (void)goBack;
+- (void)confirm;
 - (void)addModalTransition;
+
+- (void)setDialogModeWithSize:(CGSize)size minOffset:(CGFloat)minOffset options:(NSDictionary *)options;
 
 @end

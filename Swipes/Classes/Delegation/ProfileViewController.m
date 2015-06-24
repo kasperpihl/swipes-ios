@@ -8,7 +8,7 @@
 // TODO:
 // - add support for https://github.com/iziz/libPhoneNumber-iOS
 // - test on iPad
-// - how do we act upon extraction of email from FB, do se set it to profile
+// - how do we act upon extraction of email from FB, do we set it to profile
 // - how do we act upon email change
 
 #import <Parse/Parse.h>
@@ -26,6 +26,7 @@
 #import "SettingsHandler.h"
 #import "DejalActivityView.h"
 #import "IntegrationTextFieldCell.h"
+#import "PasswordChangeViewController.h"
 #import "ProfileViewController.h"
 
 static NSString* const kAmazonS3BucketName = @"demosten-test-1";
@@ -149,19 +150,16 @@ static NSString* const kFacebookKeyEmail = @"email";
                         kKeyText: [kSettings valueForSetting:ProfilePhone],
                         kKeyTextType: @(IntegrationTextFieldStylePhone),
                         kKeyPlaceholder: @"Your phone",
-                        //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyTitle: @"COMPANY",
                         kKeyText: [kSettings valueForSetting:ProfileCompany],
                         kKeyPlaceholder: @"Your company",
-                        //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeTextField),
                         kKeyTitle: @"POSITION",
                         kKeyText: [kSettings valueForSetting:ProfilePosition],
                         kKeyPlaceholder: @"Your position in the company",
-                        //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                         }.mutableCopy,
                       @{kKeyCellType: @(kIntegrationCellTypeButton),
                         kKeyTitle: @"Sign out",
@@ -169,11 +167,11 @@ static NSString* const kFacebookKeyEmail = @"email";
                         },
                       @{kKeyCellType: @(kIntegrationCellTypeButton),
                         kKeyTitle: @"Change password",
-                        //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
+                        kKeyTouchSelector: NSStringFromSelector(@selector(onChangePassword))
                         },
                       @{kKeyCellType: @(kIntegrationCellTypeButton),
                         kKeyTitle: @"Delete account",
-                        //                        kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
+                        kKeyTouchSelector: NSStringFromSelector(@selector(onDeleteAccount))
                         },
                       ];
     
@@ -222,6 +220,30 @@ static NSString* const kFacebookKeyEmail = @"email";
     }
     
     [action showFromRect:self.view.frame inView:self.view animated:YES];
+}
+
+- (void)onSignOut
+{
+    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Log out", nil) andMessage:NSLocalizedString(@"Are you sure you want to log out of your account?", nil) block:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            [self.parentViewController dismissViewControllerAnimated:NO completion:nil];
+            [ROOT_CONTROLLER logOut];
+            [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
+        }
+    }];
+}
+
+- (void)onChangePassword
+{
+    PasswordChangeViewController* vc = [[PasswordChangeViewController alloc] init];
+    vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    //self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentViewController:vc animated:NO completion:nil];
+}
+
+- (void)onDeleteAccount
+{
+    // TODO add implementation
 }
 
 #pragma mark - Validators
@@ -305,17 +327,6 @@ static NSString* const kFacebookKeyEmail = @"email";
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     DLog(@"Image picker canceled");
-}
-
-- (void)onSignOut
-{
-    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Log out", nil) andMessage:NSLocalizedString(@"Are you sure you want to log out of your account?", nil) block:^(BOOL succeeded, NSError *error) {
-        if (succeeded) {
-            [self.parentViewController dismissViewControllerAnimated:NO completion:nil];
-            [ROOT_CONTROLLER logOut];
-            [ROOT_CONTROLLER.drawerViewController closeDrawerAnimated:YES completion:nil];
-        }
-    }];
 }
 
 #pragma mark - Helpers

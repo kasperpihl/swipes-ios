@@ -26,6 +26,8 @@ NSString* const kKeyText = @"text";
 NSString* const kKeyPlaceholder = @"placeholder";
 NSString* const kKeyTouchSelector = @"touchSelector";
 NSString* const kKeyValidateSelector = @"validateSelector";
+NSString* const kKeySecure = @"secure";
+NSString* const kKeyFocus = @"focus";
 
 UIColor* kIntegrationGreenColor;
 
@@ -36,11 +38,21 @@ static CGFloat const kSeparatorHeight = 22;
 static CGFloat const kSectionHeight = 34;
 static CGFloat const kTextFieldHeight = 72;
 static CGFloat const kProfilePictureHeight = 130;
+static CGFloat const kButtonCenterOffset = 40;
+static CGFloat const kButtonSize = 40;
 
 @interface IntegrationBaseViewController () <UITableViewDelegate, UITableViewDataSource, IntegrationTextFieldCellDelegate>
 
 @property (nonatomic, strong) IntegrationTitleView* titleView;
 @property (nonatomic, assign) NSInteger focusedItem;
+@property (nonatomic, strong) UIView* contentView;
+
+@property (nonatomic, assign) BOOL dialogMode;
+@property (nonatomic, assign) CGSize dialogSize;
+@property (nonatomic, assign) CGFloat dialogOffset;
+@property (nonatomic, strong) NSDictionary* dialogOptions;
+
+@property (nonatomic, assign) CGFloat kbdHeight;
 
 @end
 
@@ -53,16 +65,24 @@ static CGFloat const kProfilePictureHeight = 130;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.view.backgroundColor = tcolor(BackgroundColor);
+
+    self.view.opaque = YES;
+    self.view.backgroundColor = [UIColor clearColor];
+    self.modalPresentationStyle = UIModalPresentationCurrentContext;
+
+    self.contentView = [[UIView alloc] initWithFrame:self.view.frame];
+    self.contentView.autoresizesSubviews = YES;
+    self.contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.contentView.backgroundColor = tcolor(BackgroundColor);
+    [self.view addSubview:self.contentView];
     
     // setup top view
     _titleView = [[IntegrationTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kTopMargin)];
     _titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [self.view addSubview:_titleView];
+    [self.contentView addSubview:_titleView];
 
     // setup table view
-    CGRect viewFrame = self.view.frame;
+    CGRect viewFrame = self.contentView.frame;
     viewFrame.origin.y += kTopMargin;
     viewFrame.size.height -= kTopMargin + kBottomMargin + 3;
     self.table = [[UITableView alloc] initWithFrame:viewFrame];
@@ -73,10 +93,10 @@ static CGFloat const kProfilePictureHeight = 130;
     self.table.delegate = self;
     self.table.dataSource = self;
     self.table.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-    [self.view addSubview:self.table];
+    [self.contentView addSubview:self.table];
     
     // setup back button
-    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 7.5 - kBottomMargin, self.view.frame.size.height - kBottomMargin, kBottomMargin, kBottomMargin - 15)];
+    self.backButton = [[UIButton alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width - 7.5 - kBottomMargin, self.contentView.frame.size.height - kBottomMargin, kButtonSize, kButtonSize)];
     self.backButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
     [self.backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
     self.backButton.titleLabel.font = iconFont(23);
@@ -84,7 +104,7 @@ static CGFloat const kProfilePictureHeight = 130;
     [self.backButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
     self.backButton.titleLabel.transform = CGAffineTransformMakeRotation(M_PI);
 
-    [self.view addSubview:self.backButton];
+    [self.contentView addSubview:self.backButton];
     
     [self tableView:_table numberOfRowsInSection:10];
     
@@ -133,14 +153,20 @@ static CGFloat const kProfilePictureHeight = 130;
     [UIView setAnimationDuration:animationDuration];
     [UIView setAnimationCurve:animationCurve];
     
-    CGRect newFrame = self.view.frame;
-    newFrame.origin.y = kTopMargin;
-    if (up)
-        newFrame.size.height = keyboardEndFrame.origin.y - kTopMargin;
-    else
-        newFrame.size.height -= kTopMargin + kBottomMargin;
-    
-    _table.frame = newFrame;
+    if (self.dialogMode) {
+        self.kbdHeight = up ? keyboardEndFrame.size.height : 0;
+        [self setDialogUpdatedSize];
+    }
+    else {
+        CGRect newFrame = self.view.frame;
+        newFrame.origin.y = kTopMargin;
+        if (up)
+            newFrame.size.height = keyboardEndFrame.origin.y - kTopMargin;
+        else
+            newFrame.size.height -= kTopMargin + kBottomMargin;
+        
+        _table.frame = newFrame;
+    }
     
     [UIView commitAnimations];
 }
@@ -194,9 +220,20 @@ static CGFloat const kProfilePictureHeight = 130;
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
+- (void)confirm
+{
+    [self addModalTransition];
+    [self dismissViewControllerAnimated:NO completion:nil];
+}
+
 - (void)pressedBack:(id)sender
 {
     [self goBack];
+}
+
+- (void)pressedConfirm:(id)sender
+{
+    [self confirm];
 }
 
 - (IntegrationSettingsStyle)styleForData:(NSDictionary *)data
@@ -280,8 +317,15 @@ static CGFloat const kProfilePictureHeight = 130;
         cell.title = data[kKeyTitle];
         cell.textField.text = data[kKeyText];
         cell.textField.placeholder = data[kKeyPlaceholder];
+        cell.textField.secureTextEntry = [data[kKeySecure] boolValue];
         cell.delegate = self;
         [self validateTextCell:cell indexPath:indexPath];
+        
+        if ([data[kKeyFocus] boolValue]) {
+            ((NSMutableDictionary *) data)[kKeyFocus] = @(NO);
+            _focusedItem = indexPath.row;
+        }
+        
         return cell;
     }
     else if (cellType && [cellType unsignedIntegerValue] == kIntegrationCellTypeButton) {
@@ -451,6 +495,68 @@ static CGFloat const kProfilePictureHeight = 130;
         _cellInfo[indexPath.row][kKeyText] = cell.textField.text;
         [self validateTextCell:cell indexPath:indexPath];
     }
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    if (self.dialogMode) {
+        CGFloat centerX = self.view.center.x;
+        CGFloat contentHeight = self.contentView.bounds.size.height;
+        self.backButton.frame = CGRectMake(centerX - kButtonSize - kButtonCenterOffset, contentHeight - kBottomMargin, kButtonSize, kButtonSize);
+        self.confirmButton.frame = CGRectMake(centerX + kButtonCenterOffset, contentHeight - kBottomMargin, kButtonSize, kButtonSize);
+    }
+}
+
+#pragma mark - Dialog methods
+
+- (void)setDialogUpdatedSize
+{
+    CGSize fitInSize = self.view.bounds.size;
+    fitInSize.height -= self.kbdHeight - 20;
+    
+    CGSize resultSize;
+    resultSize.width = fitInSize.width - self.dialogOffset * 2;
+    if (resultSize.width > self.dialogSize.width) {
+        resultSize.width = self.dialogSize.width;
+    }
+
+    resultSize.height = fitInSize.height - self.dialogOffset * 2;
+    if (resultSize.height > self.dialogSize.height) {
+        resultSize.height = self.dialogSize.height;
+    }
+    
+    self.contentView.frame = CGRectMake(0, 0, resultSize.width, resultSize.height);
+    self.contentView.center = CGPointMake(fitInSize.width / 2, fitInSize.height / 2);
+}
+
+- (void)setDialogModeWithSize:(CGSize)size minOffset:(CGFloat)minOffset options:(NSDictionary *)options
+{
+    self.contentView.layer.cornerRadius = 10;
+    //self.contentView.layer.masksToBounds = YES;
+    self.contentView.layer.shadowOffset = CGSizeMake(0, 1);
+    //contentView.layer.shadowRadius = 10;
+    self.contentView.layer.shadowColor = tcolorF(BackgroundColor,ThemeDark).CGColor;
+    self.contentView.layer.shadowOpacity = 0.7;
+    
+    self.dialogMode = YES;
+    self.dialogOffset = minOffset;
+    self.dialogSize = size;
+    self.dialogOptions = options;
+    
+    // setup confirm button
+    self.confirmButton = [[UIButton alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width - 7.5 - kBottomMargin, self.contentView.frame.size.height - kBottomMargin, kButtonSize, kButtonSize)];
+    [self.confirmButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+    self.confirmButton.titleLabel.font = iconFont(23);
+    [self.confirmButton setTitle:@"done" forState:UIControlStateNormal];
+    [self.confirmButton addTarget:self action:@selector(pressedConfirm:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:self.confirmButton];
+
+    self.backButton.titleLabel.transform = CGAffineTransformMakeRotation(0);
+    self.backButton.autoresizingMask = 0;
+    
+    [self setDialogUpdatedSize];
+    [self.view layoutIfNeeded];
 }
 
 @end

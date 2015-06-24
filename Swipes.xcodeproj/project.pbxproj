@@ -631,9 +631,9 @@
 		DACD546218A1ACFC00C378DF /* page_white_zip.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544018A1ACFC00C378DF /* page_white_zip.png */; };
 		DACD546318A1ACFC00C378DF /* powerpoint.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544118A1ACFC00C378DF /* powerpoint.png */; };
 		DACD546418A1ACFC00C378DF /* word.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544218A1ACFC00C378DF /* word.png */; };
-		DAD501621B13614400A1E6D0 /* KPImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD501611B13614400A1E6D0 /* KPImageCache.m */; };
 		DAD501561B11535700A1E6D0 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD501541B11535700A1E6D0 /* libc++.dylib */; };
 		DAD501571B11535700A1E6D0 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD501551B11535700A1E6D0 /* Fabric.framework */; };
+		DAD501621B13614400A1E6D0 /* KPImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD501611B13614400A1E6D0 /* KPImageCache.m */; };
 		DAD78B761A67E958009992C3 /* KPStringScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD78B741A67E958009992C3 /* KPStringScanner.h */; };
 		DAD78B771A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
 		DAD78B781A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
@@ -669,6 +669,7 @@
 		DAE4D5FA1AB1C473001BDC52 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAE4D5F91AB1C473001BDC52 /* MainInterface.storyboard */; };
 		DAE4D5FD1AB1C473001BDC52 /* SwipesShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DAE4D5F21AB1C473001BDC52 /* SwipesShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DAE9CFE119AF3AC600246B64 /* SwipesKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DAE9CFE019AF3AC600246B64 /* SwipesKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DAEB6FF51B3AE89D00438762 /* PasswordChangeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEB6FF41B3AE89D00438762 /* PasswordChangeViewController.m */; };
 		DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
 /* End PBXBuildFile section */
 
@@ -1361,10 +1362,10 @@
 		DACD544018A1ACFC00C378DF /* page_white_zip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = page_white_zip.png; sourceTree = "<group>"; };
 		DACD544118A1ACFC00C378DF /* powerpoint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = powerpoint.png; sourceTree = "<group>"; };
 		DACD544218A1ACFC00C378DF /* word.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = word.png; sourceTree = "<group>"; };
-		DAD501601B13614400A1E6D0 /* KPImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPImageCache.h; sourceTree = "<group>"; };
-		DAD501611B13614400A1E6D0 /* KPImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPImageCache.m; sourceTree = "<group>"; };
 		DAD501541B11535700A1E6D0 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		DAD501551B11535700A1E6D0 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		DAD501601B13614400A1E6D0 /* KPImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPImageCache.h; sourceTree = "<group>"; };
+		DAD501611B13614400A1E6D0 /* KPImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPImageCache.m; sourceTree = "<group>"; };
 		DAD78B741A67E958009992C3 /* KPStringScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPStringScanner.h; path = Swipes/Classes/Utilities/KPStringScanner.h; sourceTree = SOURCE_ROOT; };
 		DAD78B751A67E958009992C3 /* KPStringScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPStringScanner.m; path = Swipes/Classes/Utilities/KPStringScanner.m; sourceTree = SOURCE_ROOT; };
 		DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SwipesToday.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1384,6 +1385,8 @@
 		DAE9CFDF19AF3AC600246B64 /* SwipesKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SwipesKit-Info.plist"; sourceTree = "<group>"; };
 		DAE9CFE019AF3AC600246B64 /* SwipesKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipesKit.h; sourceTree = "<group>"; };
 		DAE9D00219AF3B2900246B64 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
+		DAEB6FF31B3AE89D00438762 /* PasswordChangeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasswordChangeViewController.h; path = Settings/PasswordChangeViewController.h; sourceTree = "<group>"; };
+		DAEB6FF41B3AE89D00438762 /* PasswordChangeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasswordChangeViewController.m; path = Settings/PasswordChangeViewController.m; sourceTree = "<group>"; };
 		DAEBBE62188B2BB8002655CB /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		E05A80E8EEB25CD6DB2767FA /* Pods-SwipesKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.debug.xcconfig"; sourceTree = "<group>"; };
 		F17D8C581F2A222D9CA9DE7E /* Pods-SwipesToday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.release.xcconfig"; sourceTree = "<group>"; };
@@ -2732,6 +2735,8 @@
 			children = (
 				DA91E6211B01FEC800FF20FE /* ProfileViewController.h */,
 				DA91E6221B01FEC800FF20FE /* ProfileViewController.m */,
+				DAEB6FF31B3AE89D00438762 /* PasswordChangeViewController.h */,
+				DAEB6FF41B3AE89D00438762 /* PasswordChangeViewController.m */,
 			);
 			name = Delegation;
 			sourceTree = "<group>";
@@ -3715,6 +3720,7 @@
 				DA09B0101AB228D6002632DC /* MagicalImportFunctions.m in Sources */,
 				A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */,
 				DA09B0741AB228D6002632DC /* MagicalRecord+Actions.m in Sources */,
+				DAEB6FF51B3AE89D00438762 /* PasswordChangeViewController.m in Sources */,
 				A724B02217A96B8B00E0EF83 /* UIColor+Utilities.m in Sources */,
 				A7FA8B1D17AF094E00134ED0 /* SnoozesViewController.m in Sources */,
 				A7D0686B190E654C00699B4E /* UIViewController+MMDrawerController.m in Sources */,
