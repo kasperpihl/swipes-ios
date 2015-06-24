@@ -50,10 +50,6 @@
     return result;
 }
 
-//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    return 46;
-//}
-
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     ENSessionFindNotesResult* note = _noteList[indexPath.row];
     
@@ -69,7 +65,7 @@
         cell.textLabel.text = note.title;
     }
     else {
-        cell.textLabel.text = @"Untitled note";
+        cell.textLabel.text = NSLocalizedString(@"Untitled note", nil);
     }
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",[UtilityClass readableTime:note.updated showTime:YES]];
 }
@@ -215,10 +211,10 @@
         ENSessionFindNotesResult *note = _noteList[indexPath.row];
         [notesToImport addObject:note];
     }
-    [DejalBezelActivityView activityViewForView:self.view withLabel:LOCALIZE_STRING(@"Importing...")];
+    [DejalBezelActivityView activityViewForView:self.view withLabel:NSLocalizedString(@"Importing...", nil)];
     [EvernoteSyncHandler addAndSyncNewTasksFromNotes:notesToImport withArray:nil];
     [DejalBezelActivityView removeViewAnimated:YES];
-    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Successfully imported.") andMessage:LOCALIZE_STRING(@"Next time, assign the \"swipes\"-tag in Evernote and we'll import the notes automatically.") buttonTitles:@[LOCALIZE_STRING(@"Great! I got it.")] block:nil];
+    [UTILITY alertWithTitle:NSLocalizedString(@"Successfully imported.", nil) andMessage:NSLocalizedString(@"Next time, assign the \"swipes\"-tag in Evernote and we'll import the notes automatically.", nil) buttonTitles:@[NSLocalizedString(@"Great! I got it.", nil)] block:nil];
     [self pressedClose:nil];
 }
 
@@ -227,7 +223,7 @@
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if([cell.textLabel.textColor isEqual:kExistingTitleColor]){
         __block EvernoteImporterViewController *strongSelf = self;
-        [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"This note has already been imported.") andMessage:LOCALIZE_STRING(@"Do you want to duplicate it?") block:^(BOOL succeeded, NSError *error) {
+        [UTILITY confirmBoxWithTitle:NSLocalizedString(@"This note has already been imported.", nil) andMessage:NSLocalizedString(@"Do you want to duplicate it?", nil) block:^(BOOL succeeded, NSError *error) {
             if(succeeded){
                 [strongSelf.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
                 [strongSelf updateButtons];
@@ -239,7 +235,7 @@
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    NSString *title = [LOCALIZE_STRING(@"notes with checkmarks") uppercaseString];
+    NSString *title = [NSLocalizedString(@"notes with checkmarks", nil) uppercaseString];
     UIFont *font = SECTION_HEADER_FONT;
     SectionHeaderView *sectionHeader = [[SectionHeaderView alloc] initWithColor:kTopDarkColor
                                                                            font:font title:title width:tableView.frame.size.width];
@@ -247,8 +243,9 @@
     sectionHeader.textColor = kTopDarkColor;
     return sectionHeader;
 }
+
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 1.5;
+    return 8;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -262,10 +259,10 @@
 -(void)updateButtons{
     NSInteger numberOfSelectedNotes = [self.tableView indexPathsForSelectedRows].count;
     if(numberOfSelectedNotes > 0){
-        [self.importButton setTitle:[NSString stringWithFormat:LOCALIZE_STRING(@"Import  %li  notes"),(long)numberOfSelectedNotes] forState:UIControlStateNormal];
+        [self.importButton setTitle:[NSString stringWithFormat:NSLocalizedString(@"Import  %li  notes", nil),(long)numberOfSelectedNotes] forState:UIControlStateNormal];
         self.importButton.alpha = 1.0;
     }else{
-        [self.importButton setTitle:LOCALIZE_STRING(@"Import notes") forState:UIControlStateNormal];
+        [self.importButton setTitle:NSLocalizedString(@"Import notes", nil) forState:UIControlStateNormal];
         self.importButton.alpha = 0.3;
 
     }
@@ -278,12 +275,12 @@
     [kEnInt findNotesWithSearch:@"todo:*" block:^(NSArray *findNotesResults, NSError *error) {
         if (findNotesResults) {
             if (findNotesResults.count == 0) {
-                [UTILITY alertWithTitle:LOCALIZE_STRING(@"Couldn't find any notes with Checkmarks") andMessage:LOCALIZE_STRING(@"You can add notes manually under each tasks from Swipes as well")];
+                [UTILITY alertWithTitle:NSLocalizedString(@"Couldn't find any notes with Checkmarks", nil) andMessage:NSLocalizedString(@"You can add notes manually under each tasks from Swipes as well", nil)];
             }
             self.noteList = findNotesResults;
             [self.tableView reloadData];
-            [GlobalApp activityIndicatorVisible:NO];
         }
+        [GlobalApp activityIndicatorVisible:NO];
     }];
     
     [self updateButtons];

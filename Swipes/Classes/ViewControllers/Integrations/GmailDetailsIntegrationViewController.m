@@ -30,13 +30,13 @@
 - (void)recreateCellInfo
 {
        self.cellInfo = @[
-                         @{kKeyTitle: LOCALIZE_STRING(@"I use Mailbox"),
+                         @{kKeyTitle: NSLocalizedString(@"I use Mailbox", nil),
                            kKeyCellType: @(kIntegrationCellTypeCheck),
                            kKeyIsOn: @(kGmInt.isUsingMailbox),
                            kKeyTouchSelector: NSStringFromSelector(@selector(onMailboxTouch))
                            }.mutableCopy,
                          @{kKeyCellType: @(kIntegrationCellTypeSeparator)},
-                         @{kKeyTitle: LOCALIZE_STRING(@"Unlink"),
+                         @{kKeyTitle: NSLocalizedString(@"Unlink", nil),
                            kKeyCellType: @(kIntegrationCellTypeNoAccessory),
                            kKeyIcon: @"settingsLogout",
                            kKeyTouchSelector: NSStringFromSelector(@selector(onSignOutTouch))
@@ -53,7 +53,7 @@
 - (void)onSignOutTouch
 {
     if (kGmInt.isAuthenticated) {
-        [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Unlink Gmail") andMessage:LOCALIZE_STRING(@"All tasks will be unlinked, are you sure?") block:^(BOOL succeeded, NSError *error) {
+        [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Unlink Gmail", nil) andMessage:NSLocalizedString(@"All tasks will be unlinked, are you sure?", nil) block:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 [kGmInt logout];
                 NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];

@@ -25,8 +25,8 @@ NSString* const kSwipesMailboxLabelName = @"[Mailbox]/Add to Swipes"; // label n
 NSString* const kSwipesLabelName = @"Add to Swipes"; // label name for normal Gmail integration
 
 // instructions at https://code.google.com/p/google-api-objectivec-client/wiki/Introduction#Preparing_to_Use_the_Library
-static NSString* const kClientID = @"336134475796-mqcavkepb80idm0qdacd2fhkf573r4cd.apps.googleusercontent.com";
-static NSString* const kClientSecret = @"5heB-MAD5Qm-y1miBVic03cE";
+static NSString* const kClientID =  @"Z1tTEWBDXUdQRBliSAwcNwkTSzYHC0hVGkQ5VRAJNQsBEjUfAhZQRBMmUQIJegkVUCBZDh8KFEwxEBIIJgsKTicSBwRLEE85"; // @"336134475796-mqcavkepb80idm0qdacd2fhkf573r4cd.apps.googleusercontent.com";
+static NSString* const kClientSecret = @"YQAAYn46KDRQIk15HFAAPSozSTBHWhMg"; // @"5heB-MAD5Qm-y1miBVic03cE";
 
 // where to we store gmail integration data
 static NSString* const kKeychainKeyName = @"swipes_gmail_integration";
@@ -48,7 +48,6 @@ static NSString* const kKeyJsonThreadId = @"threadid";
 
 @property (nonatomic, strong) GTMOAuth2Authentication* googleAuth;
 @property (nonatomic, strong) NSString* swipesLabelId;
-@property (nonatomic, strong) NSString* emailAddress;
 @property (nonatomic, strong) NSMutableDictionary* knownArchievedThreads;
 
 @end
@@ -69,24 +68,18 @@ static NSString* const kKeyJsonThreadId = @"threadid";
 {
     self = [super init];
     if (self) {
-        _googleAuth = nil;
-        _emailAddress = nil;
-        _knownArchievedThreads = [NSMutableDictionary dictionary];
-        _isUsingMailbox = [[kSettings valueForSetting:IntegrationGmailUsingMailbox] boolValue];
+        self.knownArchievedThreads = [NSMutableDictionary dictionary];
+        self.isUsingMailbox = [[kSettings valueForSetting:IntegrationGmailUsingMailbox] boolValue];
         self.labelName = _isUsingMailbox ? kSwipesMailboxLabelName : kSwipesLabelName;
 
         NSError* error;
         GTMOAuth2Authentication* auth = [GTMOAuth2ViewControllerTouch
                                          authForGoogleFromKeychainForName:kKeychainKeyName
-                                         clientID:kClientID
-                                         clientSecret:kClientSecret
+                                         clientID:[UtilityClass decrypt:kClientID]
+                                         clientSecret:[UtilityClass decrypt:kClientSecret]
                                          error:&error];
         if (!error) {
-            _googleAuth = auth;
-            [self emailAddressWithBlock:^(NSError *error) {
-                if (nil != error)
-                    [UtilityClass sendError:error type:@"gmail:cannot get user email address"];
-            }];
+            self.googleAuth = auth;
         }
         
     }
@@ -103,9 +96,9 @@ static NSString* const kKeyJsonThreadId = @"threadid";
 - (NSString *)integrationSubtitle
 {
     if (self.isAuthenticated) {
-        return _emailAddress ? _emailAddress : LOCALIZE_STRING(@"Connected 1 account");
+        return _emailAddress ? _emailAddress : NSLocalizedString(@"Connected 1 account", nil);
     }
-    return LOCALIZE_STRING(@"Not connected");
+    return NSLocalizedString(@"Not connected", nil);
 }
 
 - (NSString *)integrationIcon
@@ -135,6 +128,19 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     }
 }
 
+- (void)setGoogleAuth:(GTMOAuth2Authentication *)googleAuth
+{
+    _googleAuth = googleAuth;
+    if (_googleAuth) {
+        _emailAddress = _googleAuth.userEmail;
+        _userId = _googleAuth.userID;
+    }
+    else {
+        _emailAddress = nil;
+        _userId = nil;
+    }
+}
+
 - (void)setIsUsingMailbox:(BOOL)isUsingMailbox
 {
     _isUsingMailbox = isUsingMailbox;
@@ -142,7 +148,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     self.labelName = _isUsingMailbox ? kSwipesMailboxLabelName : kSwipesLabelName;
 }
 
-- (NSString *)threadIdToNSString:(NSString *)threadId
+- (NSString *)threadIdToJSONNSString:(NSString *)threadId
 {
     if ((nil == threadId) || (nil == _emailAddress))
         return nil;
@@ -186,15 +192,15 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     NSError* error;
     GTMOAuth2Authentication* auth = [GTMOAuth2ViewControllerTouch
                                          authForGoogleFromKeychainForName:kKeychainKeyName
-                                         clientID:kClientID
-                                         clientSecret:kClientSecret
+                                         clientID:[UtilityClass decrypt:kClientID]
+                                         clientSecret:[UtilityClass decrypt:kClientSecret]
                                          error:&error];
     if (error) {
-        GmailAuthViewController* vc = [GmailAuthViewController controllerWithScope:kGTLAuthScopeGmailModify clientID:kClientID clientSecret:kClientSecret keychainItemName:kKeychainKeyName completionHandler:^(GTMOAuth2ViewControllerTouch *viewController, GTMOAuth2Authentication *auth, NSError *error)
+        GmailAuthViewController* vc = [GmailAuthViewController controllerWithScope:kGTLAuthScopeGmailModify clientID:[UtilityClass decrypt:kClientID] clientSecret:[UtilityClass decrypt:kClientSecret] keychainItemName:kKeychainKeyName completionHandler:^(GTMOAuth2ViewControllerTouch *viewController, GTMOAuth2Authentication *auth, NSError *error)
         {
             [viewController dismissViewControllerAnimated:NO completion:nil];
             if (nil == error) {
-                _googleAuth = auth;
+                self.googleAuth = auth;
                 [ANALYTICS trackEvent:@"Linked Gmail" options:nil];
                 [ANALYTICS trackCategory:@"Integrations" action:@"Linked Gmail" label:nil value:nil];
                 [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
@@ -209,7 +215,7 @@ static NSString* const kKeyJsonThreadId = @"threadid";
         [viewController presentViewController:nav animated:YES completion:nil];
     }
     else {
-        _googleAuth = auth;
+        self.googleAuth = auth;
         block(error);
     }
 }
@@ -222,9 +228,8 @@ static NSString* const kKeyJsonThreadId = @"threadid";
 - (void)logout
 {
     [GTMOAuth2ViewControllerTouch removeAuthFromKeychainForName:kKeychainKeyName];
-    _googleAuth = nil;
-    _swipesLabelId = nil;
-    _emailAddress = nil;
+    self.googleAuth = nil;
+    self.swipesLabelId = nil;
     [[KPCORE gmailSyncHandler] setUpdatedAt:nil];
 }
 
@@ -284,26 +289,6 @@ static NSString* const kKeyJsonThreadId = @"threadid";
     }];
 }
 
-- (void)emailAddressWithBlock:(ErrorBlock)block
-{
-    // maybe we need a flag that we are currently doing this?
-    if (_emailAddress) {
-        block(nil);
-        return;
-    }
-    
-    GTLQueryGmail* getProfile = [GTLQueryGmail queryForUsersGetProfile];
-    
-    GTLServiceGmail* service = [[GTLServiceGmail alloc] init];
-    service.authorizer = _googleAuth;
-    [service executeQuery:getProfile completionHandler:^(GTLServiceTicket *ticket, GTLGmailProfile* profile, NSError *error) {
-        if (!error) {
-            _emailAddress = profile.emailAddress;
-        }
-        block(error);
-    }];
-}
-
 - (void)doListThreads:(NSString *)query withBlock:(ThreadListBlock)block
 {
     GTLQueryGmail* listThreads = [GTLQueryGmail queryForUsersThreadsList];
@@ -342,19 +327,12 @@ static NSString* const kKeyJsonThreadId = @"threadid";
         block(nil, [[NSError alloc] initWithDomain:@"Gmail not authenticated" code:701 userInfo:nil]);
     }
     
-    [self emailAddressWithBlock:^(NSError *error) {
+    [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
         if (error) {
             block(nil, error);
         }
         else {
-            [self createSwipesLabelIfNeededWithBlock:^(NSError *error) {
-                if (error) {
-                    block(nil, error);
-                }
-                else {
-                    [self doListThreads:query withBlock:block];
-                }
-            }];
+            [self doListThreads:query withBlock:block];
         }
     }];
 }

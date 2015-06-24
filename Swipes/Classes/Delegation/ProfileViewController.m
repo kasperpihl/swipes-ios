@@ -110,7 +110,7 @@ static NSString* const kFacebookKeyEmail = @"email";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = LOCALIZE_STRING(@"PROFILE");
+    self.title = NSLocalizedString(@"PROFILE", nil);
 }
 
 - (void)recreateCellInfo
@@ -210,15 +210,15 @@ static NSString* const kFacebookKeyEmail = @"email";
 {
     // TODO make it work for iPad too
     
-    UIActionSheet* action = [[UIActionSheet alloc] initWithTitle:LOCALIZE_STRING(@"Select picture") delegate:self cancelButtonTitle:LOCALIZE_STRING(@"Cancel") destructiveButtonTitle:[self hasProfilePicture]  ? LOCALIZE_STRING(@"Remove current picture") : nil otherButtonTitles:LOCALIZE_STRING(@"Take from Photos"), nil];
+    UIActionSheet* action = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Select picture", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:[self hasProfilePicture]  ? NSLocalizedString(@"Remove current picture", nil) : nil otherButtonTitles:NSLocalizedString(@"Take from Photos", nil), nil];
     
     _canTakePicture = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
     if (_canTakePicture) {
-        [action addButtonWithTitle:LOCALIZE_STRING(@"Take picture")];
+        [action addButtonWithTitle:NSLocalizedString(@"Take picture", nil)];
     }
 
     if ([PFFacebookUtils isLinkedWithUser:kCurrent]) {
-        [action addButtonWithTitle:LOCALIZE_STRING(@"Facebook profile picture")];
+        [action addButtonWithTitle:NSLocalizedString(@"Facebook profile picture", nil)];
     }
     
     [action showFromRect:self.view.frame inView:self.view animated:YES];
@@ -309,7 +309,7 @@ static NSString* const kFacebookKeyEmail = @"email";
 
 - (void)onSignOut
 {
-    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Log out") andMessage:LOCALIZE_STRING(@"Are you sure you want to log out of your account?") block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Log out", nil) andMessage:NSLocalizedString(@"Are you sure you want to log out of your account?", nil) block:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             [self.parentViewController dismissViewControllerAnimated:NO completion:nil];
             [ROOT_CONTROLLER logOut];

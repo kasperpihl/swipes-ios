@@ -81,7 +81,7 @@
     firstTitleView.subtitleLabel.font = KP_REGULAR(12);
     firstTitleView.spacing = kTextSpacing;
     firstTitleView.maxWidth = 250;
-    [firstTitleView setTitle:LOCALIZE_STRING(@"WHAT IT IS") subtitle:LOCALIZE_STRING(@"This integration lets you sync notes with checkmarks from Evernote into Swipes.")];
+    [firstTitleView setTitle:NSLocalizedString(@"WHAT IT IS", nil) subtitle:NSLocalizedString(@"This integration lets you sync notes with checkmarks from Evernote into Swipes.", nil)];
     CGRectSetY(firstTitleView, kTitleTopSpacing);
     [scrollView addSubview:firstTitleView];
     
@@ -100,7 +100,7 @@
     secondTitleView.subtitleLabel.font = KP_REGULAR(12);
     secondTitleView.spacing = kTextSpacing;
     secondTitleView.maxWidth = 250;
-    [secondTitleView setTitle:LOCALIZE_STRING(@"HOW IT WORKS") subtitle:LOCALIZE_STRING(@"Assign the \"swipes\" tag to a note in Evernote. We'll add it as a task in Swipes and sync all its checkmarks.")];
+    [secondTitleView setTitle:NSLocalizedString(@"HOW IT WORKS", nil) subtitle:NSLocalizedString(@"Assign the \"swipes\" tag to a note in Evernote. We'll add it as a task in Swipes and sync all its checkmarks.", nil)];
     CGRectSetY(secondTitleView, CGRectGetMaxY(firstImage.frame)+kTitleTopSpacing);
     [scrollView addSubview:secondTitleView];
     
@@ -112,7 +112,7 @@
     
     
     SlowHighlightIcon *getStartedButton = [[SlowHighlightIcon alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
-    [getStartedButton setTitle:[LOCALIZE_STRING(@"Get Started") uppercaseString] forState:UIControlStateNormal];
+    [getStartedButton setTitle:[NSLocalizedString(@"Get Started", nil) uppercaseString] forState:UIControlStateNormal];
     getStartedButton.layer.cornerRadius = 5;
     getStartedButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     getStartedButton.titleLabel.font = KP_LIGHT(18);

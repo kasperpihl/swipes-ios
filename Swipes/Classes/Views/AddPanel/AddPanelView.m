@@ -107,7 +107,7 @@
 -(void)pressedAddButtonForTagList:(KPTagList *)tagList
 {
     self.lock = YES;
-    [UTILITY inputAlertWithTitle:LOCALIZE_STRING(@"Add new tag") message:LOCALIZE_STRING(@"Type the name of your tag (ex. work, project or school)") placeholder:LOCALIZE_STRING(@"Add new tag") cancel:[LOCALIZE_STRING(@"cancel") capitalizedString] confirm:[LOCALIZE_STRING(@"add") capitalizedString] block:^(NSString *string, NSError *error) {
+    [UTILITY inputAlertWithTitle:NSLocalizedString(@"Add new tag", nil) message:NSLocalizedString(@"Type the name of your tag (ex. work, project or school)", nil) placeholder:NSLocalizedString(@"Add new tag", nil) cancel:[NSLocalizedString(@"cancel", nil) capitalizedString] confirm:[NSLocalizedString(@"add", nil) capitalizedString] block:^(NSString *string, NSError *error) {
         NSString *trimmedString = [string stringByTrimmingCharactersInSet:
                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         if(trimmedString && trimmedString.length > 0){
@@ -260,7 +260,7 @@
         addView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         addView.tag = ADD_VIEW_TAG;
         addView.userInteractionEnabled = YES;
-        addView.textField.placeholder = LOCALIZE_STRING(@"Add a new task");
+        addView.textField.placeholder = NSLocalizedString(@"Add a new task", nil);
         addView.delegate = self;
         
         //[self.textField setValue:TEXT_FIELD_COLOR forKeyPath:@"_placeholderLabel.textColor"];

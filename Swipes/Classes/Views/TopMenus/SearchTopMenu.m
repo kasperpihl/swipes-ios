@@ -38,7 +38,7 @@
         self.searchField.keyboardAppearance = UIKeyboardAppearanceAlert;
         self.searchField.returnKeyType = UIReturnKeySearch;
         self.searchField.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
-        self.searchField.placeholder = LOCALIZE_STRING(@"Search");
+        self.searchField.placeholder = NSLocalizedString(@"Search", nil);
         self.searchField.borderStyle = UITextBorderStyleNone;
         self.searchField.delegate = self;
         self.searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;

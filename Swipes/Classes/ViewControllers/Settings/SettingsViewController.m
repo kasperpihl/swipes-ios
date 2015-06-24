@@ -17,42 +17,42 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = [LOCALIZE_STRING(@"TWEAKS") uppercaseString];
+    self.title = [NSLocalizedString(@"TWEAKS", nil) uppercaseString];
 }
 
 - (void)recreateCellInfo
 {
     [super recreateCellInfo];
     self.cellInfo = @[
-                      @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: LOCALIZE_STRING(@"TWEAKS")},
-                      @{kKeyTitle: LOCALIZE_STRING(@"Add new tasks to bottom"),
+                      @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: NSLocalizedString(@"TWEAKS", nil)},
+                      @{kKeyTitle: NSLocalizedString(@"Add new tasks to bottom", nil),
                         kKeyCellType: @(kIntegrationCellTypeCheck),
                         kKeyIsOn: [kSettings valueForSetting:SettingAddToBottom],
                         kKeyTouchSelector: NSStringFromSelector(@selector(onAddNewTasksToBottomTouch))
                         }.mutableCopy,
-                      @{kKeyTitle: LOCALIZE_STRING(@"Use standard status bar"),
+                      @{kKeyTitle: NSLocalizedString(@"Use standard status bar", nil),
                         kKeyCellType: @(kIntegrationCellTypeCheck),
                         kKeyIsOn: [kSettings valueForSetting:SettingUseStandardStatusBar],
                         kKeyTouchSelector: NSStringFromSelector(@selector(onUseStandardStatusBarTouch))
                         }.mutableCopy,
-                      @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: LOCALIZE_STRING(@"SOUNDS")},
-                      @{kKeyTitle: LOCALIZE_STRING(@"In-app sounds"),
+                      @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: NSLocalizedString(@"SOUNDS", nil)},
+                      @{kKeyTitle: NSLocalizedString(@"In-app sounds", nil),
                         kKeyCellType: @(kIntegrationCellTypeCheck),
                         kKeyIsOn: [kSettings valueForSetting:SettingAppSounds],
                         kKeyTouchSelector: NSStringFromSelector(@selector(onInAppSoundsTouch))
                         }.mutableCopy,
-                      @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: LOCALIZE_STRING(@"NOTIFICATIONS")},
-                      @{kKeyTitle: LOCALIZE_STRING(@"Tasks snoozed for later"),
+                      @{kKeyCellType: @(kIntegrationCellTypeSection), kKeyTitle: NSLocalizedString(@"NOTIFICATIONS", nil)},
+                      @{kKeyTitle: NSLocalizedString(@"Tasks snoozed for later", nil),
                         kKeyCellType: @(kIntegrationCellTypeCheck),
                         kKeyIsOn: [kSettings valueForSetting:SettingNotifications],
                         kKeyTouchSelector: NSStringFromSelector(@selector(onTasksSnoozedForLaterTouch))
                         }.mutableCopy,
-                      @{kKeyTitle: LOCALIZE_STRING(@"Daily reminder to plan the day"),
+                      @{kKeyTitle: NSLocalizedString(@"Daily reminder to plan the day", nil),
                         kKeyCellType: @(kIntegrationCellTypeCheck),
                         kKeyIsOn: [kSettings valueForSetting:SettingDailyReminders],
                         kKeyTouchSelector: NSStringFromSelector(@selector(onDailyReminderTouch))
                         }.mutableCopy,
-                      @{kKeyTitle: LOCALIZE_STRING(@"Weekly reminder to plan the week"),
+                      @{kKeyTitle: NSLocalizedString(@"Weekly reminder to plan the week", nil),
                         kKeyCellType: @(kIntegrationCellTypeCheck),
                         kKeyIsOn: [kSettings valueForSetting:SettingWeeklyReminders],
                         kKeyTouchSelector: NSStringFromSelector(@selector(onWeeklyReminderTouch))
@@ -61,7 +61,7 @@
     
     if ([self showAppSettings]) {
         self.cellInfo = [self.cellInfo arrayByAddingObjectsFromArray:@[
-                                                                       @{kKeyTitle: LOCALIZE_STRING(@"App permissions"),
+                                                                       @{kKeyTitle: NSLocalizedString(@"App permissions", nil),
                                                                          kKeyCellType: @(kIntegrationCellTypeViewMore),
                                                                          kKeyTouchSelector: NSStringFromSelector(@selector(onShowAppSettingsTouch))
                                                                          },
@@ -106,7 +106,7 @@
     BOOL value = [[kSettings valueForSetting:SettingNotifications] boolValue];
     value = !value;
     if (!value) {
-        [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Tasks snoozed for later") andMessage:LOCALIZE_STRING(@"Are you sure you no longer want to receive these alarms and reminders?") block:^(BOOL succeeded, NSError *error) {
+        [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Tasks snoozed for later", nil) andMessage:NSLocalizedString(@"Are you sure you no longer want to receive these alarms and reminders?", nil) block:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 [kSettings setValue:@NO forSetting:SettingNotifications];
                 self.cellInfo[6][kKeyIsOn] = @(value);

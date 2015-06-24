@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = [LOCALIZE_STRING(@"EVERNOTE INTEGRATION") uppercaseString];
+    self.title = [NSLocalizedString(@"EVERNOTE INTEGRATION", nil) uppercaseString];
     self.lightColor = kEvernoteColor;
 }
 
@@ -36,40 +36,40 @@
     if (kEnInt.isAuthenticated) {
         NSDictionary* businessInfo;
         if (kEnInt.isBusinessUser) {
-            businessInfo = @{kKeyTitle: LOCALIZE_STRING(@"Sync with Evernote Business"), kKeyCellType: @(kIntegrationCellTypeCheck), kKeyIsOn: @(kEnInt.findInBusinessNotebooks), kKeyTouchSelector: NSStringFromSelector(@selector(onFindBusinessNotebooksTouch))}.mutableCopy;
+            businessInfo = @{kKeyTitle: NSLocalizedString(@"Sync with Evernote Business", nil), kKeyCellType: @(kIntegrationCellTypeCheck), kKeyIsOn: @(kEnInt.findInBusinessNotebooks), kKeyTouchSelector: NSStringFromSelector(@selector(onFindBusinessNotebooksTouch))}.mutableCopy;
         }
         else {
-            businessInfo = @{kKeyTitle: LOCALIZE_STRING(@"Learn more about Evernote Business"), kKeyCellType: @(kIntegrationCellTypeViewMore), kKeyTouchSelector: NSStringFromSelector(@selector(onBusinessLearnMoreTouch))};
+            businessInfo = @{kKeyTitle: NSLocalizedString(@"Learn more about Evernote Business", nil), kKeyCellType: @(kIntegrationCellTypeViewMore), kKeyTouchSelector: NSStringFromSelector(@selector(onBusinessLearnMoreTouch))};
         }
         
         self.cellInfo = @[
-                          @{kKeyTitle: LOCALIZE_STRING(@"Sync with evernote on this device"),
+                          @{kKeyTitle: NSLocalizedString(@"Sync with evernote on this device", nil),
                             kKeyCellType: @(kIntegrationCellTypeCheck),
                             kKeyIsOn: @(kEnInt.enableSync),
                             kKeyTouchSelector: NSStringFromSelector(@selector(onSyncWithEvernoteTouch))
                             }.mutableCopy,
-                          @{kKeyTitle: LOCALIZE_STRING(@"Auto import notes with \"swipes\" tag"),
+                          @{kKeyTitle: NSLocalizedString(@"Auto import notes with \"swipes\" tag", nil),
                             kKeyCellType: @(kIntegrationCellTypeCheck),
                             kKeyIsOn: @(kEnInt.autoFindFromTag),
                             kKeyTouchSelector: NSStringFromSelector(@selector(onAutoImportTouch))}.mutableCopy,
-                          @{kKeyTitle: LOCALIZE_STRING(@"Sync with personal linked notebooks"),
+                          @{kKeyTitle: NSLocalizedString(@"Sync with personal linked notebooks", nil),
                             kKeyCellType: @(kIntegrationCellTypeCheck),
                             kKeyIsOn: @(kEnInt.findInPersonalLinked),
                             kKeyTouchSelector: NSStringFromSelector(@selector(onFindPersonalTouch))
                             }.mutableCopy,
                           businessInfo,
                           @{kKeyCellType: @(kIntegrationCellTypeSeparator)},
-                          @{kKeyTitle: LOCALIZE_STRING(@"Import notes"),
+                          @{kKeyTitle: NSLocalizedString(@"Import notes", nil),
                             kKeyCellType: @(kIntegrationCellTypeViewMore),
                             kKeyIcon: @"integrationActionImporter",
                             kKeyTouchSelector: NSStringFromSelector(@selector(onImportNotesTouch))
                             },
-                          @{kKeyTitle: LOCALIZE_STRING(@"Learn more"),
+                          @{kKeyTitle: NSLocalizedString(@"Learn more", nil),
                             kKeyCellType: @(kIntegrationCellTypeViewMore),
                             kKeyIcon: @"integrationActionLearn",
                             kKeyTouchSelector: NSStringFromSelector(@selector(onLearnMoreTouch))
                             },
-                          @{kKeyTitle: LOCALIZE_STRING(@"Unlink"),
+                          @{kKeyTitle: NSLocalizedString(@"Unlink", nil),
                             kKeyCellType: @(kIntegrationCellTypeNoAccessory),
                             kKeyIcon: @"settingsLogout",
                             kKeyTouchSelector: NSStringFromSelector(@selector(onSignOutTouch))
@@ -78,12 +78,12 @@
     }
     else {
         self.cellInfo = @[
-                          @{kKeyTitle: LOCALIZE_STRING(@"Link account"),
+                          @{kKeyTitle: NSLocalizedString(@"Link account", nil),
                             kKeyCellType: @(kIntegrationCellTypeViewMore),
                             kKeyTouchSelector: NSStringFromSelector(@selector(onLinkEvernoteTouch))
                             },
                           @{kKeyCellType: @(kIntegrationCellTypeSeparator)},
-                          @{kKeyTitle: LOCALIZE_STRING(@"Learn more"),
+                          @{kKeyTitle: NSLocalizedString(@"Learn more", nil),
                             kKeyCellType: @(kIntegrationCellTypeViewMore),
                             kKeyIcon: @"integrationActionLearn",
                             kKeyTouchSelector: NSStringFromSelector(@selector(onLearnMoreTouch))
@@ -140,7 +140,7 @@
 - (void)onSignOutTouch
 {
     if (kEnInt.isAuthenticated){
-        [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Unlink Evernote") andMessage:LOCALIZE_STRING(@"All tasks will be unlinked, are you sure?") block:^(BOOL succeeded, NSError *error) {
+        [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Unlink Evernote", nil) andMessage:NSLocalizedString(@"All tasks will be unlinked, are you sure?", nil) block:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 [kEnInt logout];
                 NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
@@ -172,7 +172,7 @@
         [ROOT_CONTROLLER accountAlertWithMessage:@"To use Evernote with Swipes, please create a Swipes account" inViewController:self];
         return;
     }
-    [DejalBezelActivityView activityViewForView:self.parentViewController.view withLabel:LOCALIZE_STRING(@"Opening Evernote...")];
+    [DejalBezelActivityView activityViewForView:self.parentViewController.view withLabel:NSLocalizedString(@"Opening Evernote...", nil)];
     [kEnInt authenticateEvernoteInViewController:self withBlock:^(NSError *error) {
         [DejalBezelActivityView removeViewAnimated:YES];
         if (error || !kEnInt.isAuthenticated) {
@@ -193,7 +193,7 @@
 
 -(void)authenticatedEvernote
 {
-    [UTILITY alertWithTitle:LOCALIZE_STRING(@"Get started") andMessage:LOCALIZE_STRING(@"Import a few notes right away.") buttonTitles:@[LOCALIZE_STRING(@"Not now"),LOCALIZE_STRING(@"Choose notes")] block:^(NSInteger number, NSError *error) {
+    [UTILITY alertWithTitle:NSLocalizedString(@"Get started", nil) andMessage:NSLocalizedString(@"Import a few notes right away.", nil) buttonTitles:@[NSLocalizedString(@"Not now", nil),NSLocalizedString(@"Choose notes", nil)] block:^(NSInteger number, NSError *error) {
         if (number == 1){
             [self showEvernoteImporterAnimated:YES];
         }

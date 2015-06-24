@@ -213,7 +213,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
         case SyncStatusSuccessWithData:
         {
             if(self._showSuccessOnce){
-                title = LOCALIZE_STRING(@"Synchronized");
+                title = NSLocalizedString(@"Synchronized", nil);
                 self._showSuccessOnce = NO;
                 self.showErrorOnce = NO;
             }
@@ -221,7 +221,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
             break;
         }
         case SyncStatusError:{
-            title = LOCALIZE_STRING(@"Error synchronizing");
+            title = NSLocalizedString(@"Error synchronizing", nil);
             self._showSuccessOnce = YES;
             self.showErrorOnce = YES;
             break;
@@ -337,7 +337,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
     
     if(self.outdated){
         if(async && force) {
-            [UTILITY alertWithTitle:LOCALIZE_STRING(@"New version required") andMessage:LOCALIZE_STRING(@"For sync to work - please update Swipes from the App Store")];
+            [UTILITY alertWithTitle:NSLocalizedString(@"New version required", nil) andMessage:NSLocalizedString(@"For sync to work - please update Swipes from the App Store", nil)];
         }
         DLog(@"self outdated");
         if (handler)
@@ -461,7 +461,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
         !kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]) {
         
         if (_isAsync) {
-            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
+            [UTILITY alertWithTitle:NSLocalizedString(@"Evernote Authorization", nil) andMessage:NSLocalizedString(@"To sync with Evernote on this device, please authorize", nil) buttonTitles:@[NSLocalizedString(@"Don't sync this device", nil),NSLocalizedString(@"Authorize now", nil)] block:^(NSInteger number, NSError *error) {
                 if(number == 1){
                     [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                 }
@@ -507,7 +507,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
                     if (!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) {
                         kEnInt.enableSync = NO;
                         if (_isAsync) {
-                            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Evernote Authorization") andMessage:LOCALIZE_STRING(@"To sync with Evernote on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
+                            [UTILITY alertWithTitle:NSLocalizedString(@"Evernote Authorization", nil) andMessage:NSLocalizedString(@"To sync with Evernote on this device, please authorize", nil) buttonTitles:@[NSLocalizedString(@"Don't sync this device", nil),NSLocalizedString(@"Authorize now", nil)] block:^(NSInteger number, NSError *error) {
                                 if(number == 1){
                                     [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                                 }
@@ -515,7 +515,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
                         }
                     }
                     else {
-                        [self showErrorNotificationOnce:LOCALIZE_STRING(@"Error synchronizing Evernote")];
+                        [self showErrorNotificationOnce:NSLocalizedString(@"Error synchronizing Evernote", nil)];
                     }
                 }
             });
@@ -542,7 +542,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
                     if (!kGmInt.isAuthenticated) {
                         // kGmInt.enableSync = NO;
                         if (_isAsync) {
-                            [UTILITY alertWithTitle:LOCALIZE_STRING(@"Gmail Authorization") andMessage:LOCALIZE_STRING(@"To sync with Gmail on this device, please authorize") buttonTitles:@[LOCALIZE_STRING(@"Don't sync this device"),LOCALIZE_STRING(@"Authorize now")] block:^(NSInteger number, NSError *error) {
+                            [UTILITY alertWithTitle:NSLocalizedString(@"Gmail Authorization", nil) andMessage:NSLocalizedString(@"To sync with Gmail on this device, please authorize", nil) buttonTitles:@[NSLocalizedString(@"Don't sync this device", nil),NSLocalizedString(@"Authorize now", nil)] block:^(NSInteger number, NSError *error) {
                                 if (number == 1){
                                     [self gmailAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
                                 }
@@ -550,7 +550,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
                         }
                     }
                     else {
-                        [self showErrorNotificationOnce:LOCALIZE_STRING(@"Error synchronizing Gmail")];
+                        [self showErrorNotificationOnce:NSLocalizedString(@"Error synchronizing Gmail", nil)];
                     }
                 }
             });
@@ -612,6 +612,20 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
             [self performSelectorOnMainThread:selector withObject:object waitUntilDone:NO];
         }
     }];
+}
+
+- (NSString *)errorValueForData:(NSData *)data base64encode:(BOOL)base64encode
+{
+    NSString* value = @"null";
+    if (data) {
+        if (0 < data.length) {
+            value = base64encode ? [data base64EncodedStringWithOptions:0] : [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        }
+        else {
+            value = @"0 bytes";
+        }
+    }
+    return value;
 }
 
 - (void)synchronizeWithParseAsync:(BOOL)async completionHandler:(SyncCompletionBlock)handler
@@ -745,7 +759,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
         //NSLog(@"status code: %i error %@",response.statusCode,error);
         if(error){
             if(!(error.code == -1001 || error.code == -1003 || error.code == -1005 || error.code == -1009))
-                [UtilityClass sendError:error type:@"Sync request error 1" attachment:@{@"out": [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding],  @"in" : [resData base64EncodedStringWithOptions:0]}];
+                [UtilityClass sendError:error type:@"Sync request error 1" attachment:@{@"out":  [self errorValueForData:jsonData base64encode:NO], @"in" : [self errorValueForData:resData base64encode:YES]}];
         }
         else if(response.statusCode == 503){
             error = [NSError errorWithDomain:@"Request timed out" code:503 userInfo:nil];
@@ -757,7 +771,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
                 error = [NSError errorWithDomain:myString code:response.statusCode userInfo:nil];
             else
                 error = [NSError errorWithDomain:@"(missing data)" code:response.statusCode userInfo:nil];
-            [UtilityClass sendError:error type:@"Sync request error 2" attachment:@{@"out": [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding],  @"in" : [resData base64EncodedStringWithOptions:0]}];
+            [UtilityClass sendError:error type:@"Sync request error 2" attachment:@{@"out":  [self errorValueForData:jsonData base64encode:NO], @"in" : [self errorValueForData:resData base64encode:YES]}];
         }
         self._needSync = YES;
         [self finalizeSyncWithUserInfo:nil error:error currentResult:UIBackgroundFetchResultFailed completionHandler:handler];
@@ -780,14 +794,14 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
             NSInteger code = [result objectForKey:@"code"] ? [[result objectForKey:@"code"] integerValue] : 500;
             if([message isEqualToString:@"update required"]){
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [UTILITY alertWithTitle:LOCALIZE_STRING(@"New version required") andMessage:LOCALIZE_STRING(@"For sync to work - please update Swipes from the App Store")];
+                    [UTILITY alertWithTitle:NSLocalizedString(@"New version required", nil) andMessage:NSLocalizedString(@"For sync to work - please update Swipes from the App Store", nil)];
                     //NSLog(@"adding here");
                     self.outdated = YES;
                 });
             }
             error = [NSError errorWithDomain:message code:code userInfo:result];
         }
-        [UtilityClass sendError:error type:@"Sync Json Parse Error" attachment:@{@"out": [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding],  @"in" : [resData base64EncodedStringWithOptions:0]}];
+        [UtilityClass sendError:error type:@"Sync Json Parse Error" attachment:@{@"out":  [self errorValueForData:jsonData base64encode:NO], @"in" : [self errorValueForData:resData base64encode:YES]}];
         [self finalizeSyncWithUserInfo:result error:error currentResult:UIBackgroundFetchResultFailed completionHandler:handler];
         return;
     }
@@ -1162,8 +1176,8 @@ static CoreSyncHandler *sharedObject;
 {
     ANALYTICS.analyticsOff = YES;
     NSArray *tagArray = @[
-                            LOCALIZE_STRING(@"home"),
-                            LOCALIZE_STRING(@"work")
+                            NSLocalizedString(@"home", nil),
+                            NSLocalizedString(@"work", nil)
                         ];
     
     for(NSString *tag in tagArray){
@@ -1171,9 +1185,9 @@ static CoreSyncHandler *sharedObject;
     }
     [self saveContextForSynchronization:nil];
     NSArray *toDoArray = @[
-                               LOCALIZE_STRING(@"Swipe right to complete"),
-                               LOCALIZE_STRING(@"Swipe left to snooze for later"),
-                               LOCALIZE_STRING(@"Access your tasks on web.swipesapp.com")
+                               NSLocalizedString(@"Swipe right to complete", nil),
+                               NSLocalizedString(@"Swipe left to snooze for later", nil),
+                               NSLocalizedString(@"Access your tasks on web.swipesapp.com", nil)
  
                             ];
     
@@ -1181,7 +1195,7 @@ static CoreSyncHandler *sharedObject;
         NSString *item = [toDoArray objectAtIndex:i];
         BOOL priority = (i == 0);
         KPToDo *toDo = [KPToDo addItem:item priority:priority tags:nil save:NO from:@"Start Objects"];
-        if(i <= 1)[KPToDo updateTags:@[LOCALIZE_STRING(@"work")] forToDos:@[toDo] remove:NO save:YES from:@"Start Objects"];
+        if(i <= 1)[KPToDo updateTags:@[NSLocalizedString(@"work", nil)] forToDos:@[toDo] remove:NO save:YES from:@"Start Objects"];
         /*if ( i == 2 ) {
             [KPToDo scheduleToDos:@[toDo] forDate:[[NSDate date] dateByAddingDays:1] save:NO];
         }*/

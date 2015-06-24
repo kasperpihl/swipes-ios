@@ -60,6 +60,8 @@
         self.progressView.backgroundColor = color;
         
         self.progressEndingView = [[_ProgressEndingView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.progressView.frame), 0, 12, self.progressView.frame.size.height)];
+        self.progressEndingView.hidden = YES;
+        self.progressEndingView.clipsToBounds = YES;
         self.progressEndingView.headerView = self;
         self.progressEndingView.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin);
         self.progressEndingView.backgroundColor = CLEAR;
@@ -137,6 +139,12 @@
     CGRectSetX(self.sectionHeader, CGRectGetWidth(self.frame) - CGRectGetWidth(self.sectionHeader.frame));
     CGFloat targetX = self.frame.size.width - CGRectGetWidth(self.sectionHeader.frame);
     CGRectSetWidth(self.progressView, targetX * _progressPercentage);
+}
+
+- (void)setProgress:(BOOL)progress
+{
+    _progress = progress;
+    self.progressEndingView.hidden = !progress;
 }
 
 - (void)drawRect:(CGRect)rect

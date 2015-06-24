@@ -61,7 +61,7 @@ static CGFloat const kTopMargin = 60;
     
     _titleView = [[IntegrationTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, kTopMargin)];
     _titleView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _titleView.title = [LOCALIZE_STRING(@"Settings") uppercaseString];
+    _titleView.title = [NSLocalizedString(@"Settings", nil) uppercaseString];
     [self.view addSubview:_titleView];
     
     self.syncLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -186,11 +186,11 @@ static CGFloat const kTopMargin = 60;
 -(void)updateSyncLabel
 {
     NSDate *lastSync = [USER_DEFAULTS objectForKey:@"lastSyncLocalDate"];
-    NSString *timeString = [LOCALIZE_STRING(@"never") capitalizedString];
+    NSString *timeString = [NSLocalizedString(@"never", nil) capitalizedString];
     if (lastSync) {
         timeString = [UtilityClass readableTime:lastSync showTime:YES];
     }
-    self.syncLabel.text = [NSString stringWithFormat:LOCALIZE_STRING(@"Last sync: %@"),timeString];
+    self.syncLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Last sync: %@", nil),timeString];
 }
 
 -(void)panGestureRecognized:(UIPanGestureRecognizer*)sender{
@@ -237,7 +237,7 @@ static CGFloat const kTopMargin = 60;
         case KPMenuButtonLocation:{
             BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
             if(!hasLocationOn && ![kUserHandler isPlus]){
-                PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:LOCALIZE_STRING(@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time.") block:^(BOOL succeeded, NSError *error) {
+                PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:NSLocalizedString(@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time.", nil) block:^(BOOL succeeded, NSError *error) {
                     [BLURRY dismissAnimated:!succeeded];
                     if(succeeded){
                         [ROOT_CONTROLLER upgrade];
@@ -251,7 +251,7 @@ static CGFloat const kTopMargin = 60;
                 UIColor *lampColor = hasLocationOn ? kLampOffColor : kLampOnColor;
                 NSNumber *newSettingValue = hasLocationOn ? @NO : @YES;
                 if(hasLocationOn){
-                    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Turn off location") andMessage:LOCALIZE_STRING(@"Location reminders won't be working.") block:^(BOOL succeeded, NSError *error) {
+                    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Turn off location", nil) andMessage:NSLocalizedString(@"Location reminders won't be working.", nil) block:^(BOOL succeeded, NSError *error) {
                         if(succeeded){
                             [NOTIHANDLER stopLocationServices];
                             [kSettings setValue:newSettingValue forSetting:SettingLocation];
@@ -294,7 +294,7 @@ static CGFloat const kTopMargin = 60;
         }
         case KPMenuButtonUpgrade:{
             if(kUserHandler.isPlus){
-                [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Manage subscription") andMessage:LOCALIZE_STRING(@"Open App Store to manage your subscription?") block:^(BOOL succeeded, NSError *error) {
+                [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Manage subscription", nil) andMessage:NSLocalizedString(@"Open App Store to manage your subscription?", nil) block:^(BOOL succeeded, NSError *error) {
                     if(succeeded){
                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"]];
                     }
@@ -375,32 +375,32 @@ static CGFloat const kTopMargin = 60;
     NSString *title;
     switch (button) {
         case KPMenuButtonSettings:
-            title = LOCALIZE_STRING(@"Options");
+            title = NSLocalizedString(@"Options", nil);
             break;
         case KPMenuButtonLocation:
-            title = LOCALIZE_STRING(@"Location");
+            title = NSLocalizedString(@"Location", nil);
             break;
         case KPMenuButtonHelp:
-            title = LOCALIZE_STRING(@"Help");
+            title = NSLocalizedString(@"Help", nil);
             break;
         case KPMenuButtonSnoozes:
-            title = LOCALIZE_STRING(@"Snoozes");
+            title = NSLocalizedString(@"Snoozes", nil);
             break;
         case KPMenuButtonUpgrade:{
-            title = (kUserHandler.isPlus) ? LOCALIZE_STRING(@"Manage") : LOCALIZE_STRING(@"Upgrade");
+            title = (kUserHandler.isPlus) ? NSLocalizedString(@"Manage", nil) : NSLocalizedString(@"Upgrade", nil);
             break;
         }
         case KPMenuButtonSync:
-            title = LOCALIZE_STRING(@"Sync");
+            title = NSLocalizedString(@"Sync", nil);
             break;
         case KPMenuButtonLogout:
-            title = (kUserHandler.isLoggedIn) ? LOCALIZE_STRING(@"Logout") : LOCALIZE_STRING(@"Account");
+            title = (kUserHandler.isLoggedIn) ? NSLocalizedString(@"Logout", nil) : NSLocalizedString(@"Account", nil);
             break;
         case KPMenuButtonScheme:
-            title = LOCALIZE_STRING(@"Theme");
+            title = NSLocalizedString(@"Theme", nil);
             break;
         case KPMenuButtonIntegrations:
-            title = LOCALIZE_STRING(@"Integrations");
+            title = NSLocalizedString(@"Integrations", nil);
     }
     return title;
 }
@@ -454,7 +454,7 @@ static CGFloat const kTopMargin = 60;
 -(void)longPress:(UILongPressGestureRecognizer*)recognizer
 {
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Hard sync") andMessage:LOCALIZE_STRING(@"This will send all data and can take some time") block:^(BOOL succeeded, NSError *error) {
+        [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Hard sync", nil) andMessage:NSLocalizedString(@"This will send all data and can take some time", nil) block:^(BOOL succeeded, NSError *error) {
             if(succeeded)
                 [KPCORE hardSync];
         }];

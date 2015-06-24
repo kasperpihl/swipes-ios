@@ -25,14 +25,14 @@ static NSString* kOpenTitle;
 
 + (void)initialize
 {
-    kCancelTitle = [LOCALIZE_STRING(@"cancel") capitalizedString];
-    kOpenTitle = [LOCALIZE_STRING(@"open") capitalizedString];
+    kCancelTitle = [NSLocalizedString(@"cancel", nil) capitalizedString];
+    kOpenTitle = [NSLocalizedString(@"open", nil) capitalizedString];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = [LOCALIZE_STRING(@"Help") uppercaseString];
+    self.title = [NSLocalizedString(@"Help", nil) uppercaseString];
 }
 
 - (void)recreateCellInfo
@@ -42,27 +42,27 @@ static NSString* kOpenTitle;
         emailString = [kUserHandler emailOrFacebookString];
     }
     self.cellInfo = @[
-                      @{kKeyTitle: LOCALIZE_STRING(@"Open Policies"),
+                      @{kKeyTitle: NSLocalizedString(@"Open Policies", nil),
                         kKeyCellType: @(kIntegrationCellTypeViewMore),
                         kKeyTouchSelector: NSStringFromSelector(@selector(onOpenPoliciesTouch))
                         },
-                      @{kKeyTitle: LOCALIZE_STRING(@"Known Issues"),
+                      @{kKeyTitle: NSLocalizedString(@"Known Issues", nil),
                         kKeyCellType: @(kIntegrationCellTypeViewMore),
                         kKeyTouchSelector: NSStringFromSelector(@selector(onKnownIssuesTouch))
                         },
-                      @{kKeyTitle: LOCALIZE_STRING(@"FAQ"),
+                      @{kKeyTitle: NSLocalizedString(@"FAQ", nil),
                         kKeyCellType: @(kIntegrationCellTypeViewMore),
                         kKeyTouchSelector: NSStringFromSelector(@selector(onFaqTouch))
                         },
-                      @{kKeyTitle: LOCALIZE_STRING(@"Get Started"),
+                      @{kKeyTitle: NSLocalizedString(@"Get Started", nil),
                         kKeyCellType: @(kIntegrationCellTypeViewMore),
                         kKeyTouchSelector: NSStringFromSelector(@selector(onGetStartedTouch))
                         },
-                      @{kKeyTitle: LOCALIZE_STRING(@"Walkthrough"),
+                      @{kKeyTitle: NSLocalizedString(@"Walkthrough", nil),
                         kKeyCellType: @(kIntegrationCellTypeViewMore),
                         kKeyTouchSelector: NSStringFromSelector(@selector(onWalkthroughTouch))
                         },
-                      @{kKeyTitle: LOCALIZE_STRING(@"Contact Swipes"),
+                      @{kKeyTitle: NSLocalizedString(@"Contact Swipes", nil),
                         kKeyCellType: @(kIntegrationCellTypeViewMore),
                         kKeyTouchSelector: NSStringFromSelector(@selector(onContactSwipesTouch))
                         },
@@ -76,7 +76,7 @@ static NSString* kOpenTitle;
 
 - (void)onOpenPoliciesTouch
 {
-    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Policies") andMessage:LOCALIZE_STRING(@"Read through our 'Privacy Policy' and 'Terms and Conditions'.") cancel:kCancelTitle confirm:kOpenTitle block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Policies", nil) andMessage:NSLocalizedString(@"Read through our 'Privacy Policy' and 'Terms and Conditions'.", nil) cancel:kCancelTitle confirm:kOpenTitle block:^(BOOL succeeded, NSError *error) {
         
         if (succeeded) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kPoliciesURL]];
@@ -86,7 +86,7 @@ static NSString* kOpenTitle;
 
 - (void)onKnownIssuesTouch
 {
-    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Known Issues") andMessage:LOCALIZE_STRING(@"You found a bug? Check out if we're already working on it.") cancel:kCancelTitle confirm:kOpenTitle block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Known Issues", nil) andMessage:NSLocalizedString(@"You found a bug? Check out if we're already working on it.", nil) cancel:kCancelTitle confirm:kOpenTitle block:^(BOOL succeeded, NSError *error) {
         
         if (succeeded) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kKnownIssuesURL]];
@@ -96,7 +96,7 @@ static NSString* kOpenTitle;
 
 - (void)onFaqTouch
 {
-    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"FAQ") andMessage:LOCALIZE_STRING(@"Learn how to get most out of the different features in Swipes.") cancel:kCancelTitle confirm:kOpenTitle block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"FAQ", nil) andMessage:NSLocalizedString(@"Learn how to get most out of the different features in Swipes.", nil) cancel:kCancelTitle confirm:kOpenTitle block:^(BOOL succeeded, NSError *error) {
         
         if (succeeded) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kFaqURL]];
@@ -106,7 +106,7 @@ static NSString* kOpenTitle;
 
 - (void)onGetStartedTouch
 {
-    [UTILITY confirmBoxWithTitle:LOCALIZE_STRING(@"Get Started") andMessage:LOCALIZE_STRING(@"Learn how to get most out of Swipes.") cancel:kCancelTitle confirm:kOpenTitle block:^(BOOL succeeded, NSError *error) {
+    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Get Started", nil) andMessage:NSLocalizedString(@"Learn how to get most out of Swipes.", nil) cancel:kCancelTitle confirm:kOpenTitle block:^(BOOL succeeded, NSError *error) {
         
         if (succeeded) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kGetStartedURL]];

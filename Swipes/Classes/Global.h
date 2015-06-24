@@ -14,7 +14,14 @@
 #define iconFont(fontSize) [UIFont fontWithName:@"swipes" size:fontSize]
 #define USER_DEFAULTS  [Global sharedDefaults]
 
-#define LOCALIZE_STRING(string) NSLocalizedString(string, nil)
+//#undef NSLocalizedString
+//#ifndef ONESKY_OTA
+//#define NSLocalizedString(key, comment) \
+//    [[NSBundle mainBundle] localizedStringForKey:(key) value:@"" table:nil]
+//#else
+//#define NSLocalizedString(key, comment) \
+//    OSLocalizedString(key, comment)
+//#endif
 
 extern NSString* const SHARED_GROUP_NAME;
 extern NSString* const SHARED_KEYCHAIN_NAME;
