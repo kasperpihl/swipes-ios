@@ -42,10 +42,7 @@ static ThemeHandler *sharedObject;
     _currentTheme = currentTheme;
     [USER_DEFAULTS setInteger:currentTheme forKey:@"theme"];
     [USER_DEFAULTS synchronize];
-    
-    if(OSVER >= 7){
-        [[UITextField appearance] setTintColor:tcolor(TextColor)];
-    }
+    [[UITextField appearance] setTintColor:tcolor(TextColor)];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"changed theme" object:nil];
 }
 -(void)changeTheme{

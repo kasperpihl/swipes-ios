@@ -115,7 +115,7 @@
     [closeButton setTitleColor:tcolorF(TextColor, ThemeDark) forState:UIControlStateNormal];
     [closeButton setTitle:iconString(@"roundClose") forState:UIControlStateNormal];
     [closeButton setTitle:iconString(@"roundCloseFull") forState:UIControlStateHighlighted];
-    closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, (OSVER >= 7 ? 20 : 0), kCloseButtonSize, kCloseButtonSize);
+    closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, [GlobalApp statusBarHeight], kCloseButtonSize, kCloseButtonSize);
     [closeButton addTarget:self action:@selector(pressedCloseButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:closeButton];
     

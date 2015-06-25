@@ -838,7 +838,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 -(void)pressedNotes:(id)sender
 {
     self.activeEditMode = KPEditModeNotes;
-    CGFloat extra = (OSVER >= 7) ? 20 : 0;
+    CGFloat extra = [GlobalApp statusBarHeight];
     NotesView *notesView = [[NotesView alloc] initWithFrame:CGRectMake(0, extra, self.view.frame.size.width, self.view.frame.size.height - extra)];
     notesView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [notesView setNotesText:self.model.notes title:self.model.title];
@@ -973,7 +973,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
                                                      name:UIKeyboardWillHideNotification
                                                    object:nil];
         
-        NSInteger startY = (OSVER >= 7) ? 20 : 0;
+        NSInteger startY = [GlobalApp statusBarHeight];
         NSInteger toolbarWidth = 135;
         NSInteger leftPadding = 45;
         self.toolbarEditView = [[KPToolbar alloc] initWithFrame:CGRectMake(self.view.frame.size.width - toolbarWidth - leftPadding, startY, toolbarWidth, TOOLBAR_HEIGHT) items:nil delegate:self];

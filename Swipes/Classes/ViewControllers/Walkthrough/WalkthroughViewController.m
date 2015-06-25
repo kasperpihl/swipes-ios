@@ -610,7 +610,7 @@ typedef enum {
     
     UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [closeButton setTitle:@"Skip" forState:UIControlStateNormal];
-    closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, (OSVER >= 7 ? 10 : 0), kCloseButtonSize, 54);
+    closeButton.frame = CGRectMake(self.view.bounds.size.width-kCloseButtonSize, 10, kCloseButtonSize, 54);
     [closeButton.titleLabel setFont:KP_REGULAR(13)];
     [closeButton setTitleColor:alpha(tcolorF(BackgroundColor,ThemeDark),0.5) forState:UIControlStateNormal];
     closeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 15, 0);

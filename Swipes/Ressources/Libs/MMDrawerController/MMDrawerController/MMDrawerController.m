@@ -900,26 +900,19 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
 }
 
 -(void)setShowsStatusBarBackgroundView:(BOOL)showsDummyStatusBar{
-    NSArray *sysVersion = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
-    float majorVersion = [[sysVersion objectAtIndex:0] floatValue];
-    if (majorVersion >= 7){
-        if(showsDummyStatusBar!=_showsStatusBarBackgroundView){
-            _showsStatusBarBackgroundView = showsDummyStatusBar;
-            CGRect frame = self.childControllerContainerView.frame;
-            if(_showsStatusBarBackgroundView){
-                frame.origin.y = 20;
-                frame.size.height = CGRectGetHeight(self.view.bounds)-20;
-            }
-            else {
-                frame.origin.y = 0;
-                frame.size.height = CGRectGetHeight(self.view.bounds);
-            }
-            [self.childControllerContainerView setFrame:frame];
-            [self.dummyStatusBarView setHidden:!showsDummyStatusBar];
+    if(showsDummyStatusBar!=_showsStatusBarBackgroundView){
+        _showsStatusBarBackgroundView = showsDummyStatusBar;
+        CGRect frame = self.childControllerContainerView.frame;
+        if(_showsStatusBarBackgroundView){
+            frame.origin.y = [GlobalApp statusBarHeight];
+            frame.size.height = CGRectGetHeight(self.view.bounds) - [GlobalApp statusBarHeight];
         }
-    }
-    else {
-        _showsStatusBarBackgroundView = NO;
+        else {
+            frame.origin.y = 0;
+            frame.size.height = CGRectGetHeight(self.view.bounds);
+        }
+        [self.childControllerContainerView setFrame:frame];
+        [self.dummyStatusBarView setHidden:!showsDummyStatusBar];
     }
 }
 
@@ -988,7 +981,7 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
 
 -(UIView*)dummyStatusBarView{
     if(_dummyStatusBarView==nil){
-        _dummyStatusBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 20)];
+        _dummyStatusBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), [GlobalApp statusBarHeight])];
         [_dummyStatusBarView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
         [_dummyStatusBarView setBackgroundColor:self.statusBarViewBackgroundColor];
         [_dummyStatusBarView setHidden:!_showsStatusBarBackgroundView];

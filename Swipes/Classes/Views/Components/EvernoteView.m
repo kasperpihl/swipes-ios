@@ -60,7 +60,7 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
         [self addSubview:closeButton];
         self.backgroundColor = CLEAR;
         
-        CGFloat top = (OSVER >= 7) ? 20 : 0;
+        CGFloat top = [GlobalApp statusBarHeight];
         CGFloat height = MIN(self.frame.size.height - top - 2*kContentTopBottomSpacing, MAX_HEIGHT);
         
         UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, POPUP_WIDTH, height)];
@@ -201,7 +201,7 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
     [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     [UIView setAnimationBeginsFromCurrentState:YES];
-    NSInteger startPoint = (OSVER >= 7) ? 20 : 0;
+    NSInteger startPoint = [GlobalApp statusBarHeight];
     CGFloat height = MIN(self.frame.size.height - startPoint - 2*kContentTopBottomSpacing, MAX_HEIGHT);
     CGRectSetHeight(self.contentView, height);
     CGRectSetHeight(self.tableView, height - 2 * kSearchBarHeight);
@@ -220,7 +220,7 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
         kbdHeight = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? keyboardFrame.size.height : keyboardFrame.size.width;
     }
     NSInteger spacing = 3;
-    NSInteger startPoint = (OSVER >= 7) ? (20 + spacing) : spacing;
+    NSInteger startPoint = [GlobalApp statusBarHeight] + spacing;
     CGFloat height = MIN(self.frame.size.height - kbdHeight - startPoint- spacing, MAX_HEIGHT);
     CGRectSetHeight(self.contentView, height);
     CGRectSetHeight(self.tableView, height - 2 * kSearchBarHeight);

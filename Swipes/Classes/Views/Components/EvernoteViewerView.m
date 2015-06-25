@@ -29,7 +29,7 @@
     if (self) {
         self.backgroundColor = tcolor(BackgroundColor);
 
-        CGFloat top = (OSVER >= 7) ? [GlobalApp statusBarHeight] : 0.f;
+        CGFloat top = [GlobalApp statusBarHeight];
         
         // prepare back button
         _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
