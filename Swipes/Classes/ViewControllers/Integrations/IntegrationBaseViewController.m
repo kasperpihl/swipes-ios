@@ -50,6 +50,7 @@ static CGFloat const kButtonSize = 40;
 @property (nonatomic, assign) BOOL dialogMode;
 @property (nonatomic, assign) CGSize dialogSize;
 @property (nonatomic, assign) CGFloat dialogOffset;
+@property (nonatomic, strong) UIButton* dialogBackButton;
 @property (nonatomic, strong) NSDictionary* dialogOptions;
 
 @property (nonatomic, assign) CGFloat kbdHeight;
@@ -70,6 +71,12 @@ static CGFloat const kButtonSize = 40;
     self.view.backgroundColor = [UIColor clearColor];
     self.modalPresentationStyle = UIModalPresentationCurrentContext;
 
+    self.dialogBackButton = [[UIButton alloc] initWithFrame:self.view.frame];
+    self.dialogBackButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
+    self.dialogBackButton.hidden = YES;
+    [self.dialogBackButton addTarget:self action:@selector(pressedBack:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.dialogBackButton];
+    
     self.contentView = [[UIView alloc] initWithFrame:self.view.frame];
     self.contentView.autoresizesSubviews = YES;
     self.contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -539,6 +546,7 @@ static CGFloat const kButtonSize = 40;
     self.contentView.layer.shadowColor = tcolorF(BackgroundColor,ThemeDark).CGColor;
     self.contentView.layer.shadowOpacity = 0.7;
     
+    self.dialogBackButton.hidden = NO;
     self.dialogMode = YES;
     self.dialogOffset = minOffset;
     self.dialogSize = size;
