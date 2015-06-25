@@ -66,7 +66,7 @@ static AnalyticsHandler *sharedObject;
         [USER_DEFAULTS setObject:testIntercomId forKey:@"intercom-test-userid"];
     }
 
-    NSString *url = @"http://api.swipesapp.com/hmac";
+    NSString *url = @"https://api.swipesapp.com:443/hmac";
     NSDictionary *syncData = @{@"identifier": testIntercomId};
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setTimeoutInterval:35];

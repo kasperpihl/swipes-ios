@@ -717,7 +717,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
     /* Preparing request */
     NSError *error;
 //#ifdef RELEASE
-    NSString *url = @"http://api.swipesapp.com/v1/sync";
+    NSString *url = @"https://api.swipesapp.com:443/v1/sync";
     //url = @"http://127.0.0.1:5000/v1/sync";
     //url = @"http://192.168.1.21:5000/v1/sync";
     //url = @"http://api.swipesapp.com/v1/sync";
