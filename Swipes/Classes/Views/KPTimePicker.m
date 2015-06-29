@@ -24,21 +24,26 @@
 #define kDefLightColor          retColor(tcolor(BackgroundColor),gray(255,1)) //tcolor(BackgroundColor) //retColor(gray(30,1),gray(230,1))
 #define kDefDarkColor           retColor(tcolor(BackgroundColor),gray(255,1)) //gray(255,1) //tcolor(BackgroundColor)
 
-
 #define kGlowShowHack           0.4
 #define kGlowMiddleShowHack     0.12
 #define kBackButtonSize         52
 
+#define distanceBetween(p1,p2) sqrt(pow((p2.x-p1.x),2) + pow((p2.y-p1.y),2))
+
 #import <QuartzCore/QuartzCore.h>
-#import "KPTimePicker.h"
 #import "NSDate-Utilities.h"
 #import "UtilityClass.h"
 #import "UIColor+Utilities.h"
 #import "SlowHighlightIcon.h"
 #import "AudioHandler.h"
+#import "KPTimeline.h"
+#import "KPTimelineEvent.h"
+#import "KPTimePicker.h"
+
 @class KPTimePicker;
 
 @interface KPTimePicker () <UIGestureRecognizerDelegate>
+
 @property (nonatomic) CGPoint lastPosition;
 @property (nonatomic) CGFloat lastChangedAngle;
 @property (nonatomic) BOOL isInConfirmButton;
@@ -48,14 +53,101 @@
 @property (nonatomic,strong) UIButton *backButton;
 @property (nonatomic,strong) UILabel *dayLabel;
 @property (nonatomic,strong) UILabel *clockLabel;
+@property (nonatomic,strong) KPTimeline* timeline;
 @property double lastPlayTime;
 @property CGFloat lastAngle;
+
 @end
+
 @implementation KPTimePicker
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.autoresizesSubviews = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+        self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"timepickerwheel"]];
+        
+        self.centerPoint = CGPointMake(self.bounds.size.width/2, self.bounds.size.height-self.timeSlider.frame.size.height/2-30);
+        if(kIsIpad){
+            self.centerPoint = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2 + self.timeSlider.frame.size.height/2);
+        }
+        self.lightColor = kDefLightColor;
+        self.darkColor = kDefDarkColor;
+        
+        
+        
+        self.confirmButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
+        self.confirmButton.backgroundColor = [UIColor clearColor];
+        [self.confirmButton setBackgroundImage:[tcolor(DoneColor) image] forState:UIControlStateHighlighted];
+        self.confirmButton.frame = CGRectMake(0, 0, 2*kDefActualSize, 2*kDefActualSize);
+        
+        //self.confirmButton.layer.borderWidth = LINE_SIZE;
+        //self.confirmButton.layer.borderColor = tcolor(TextColor).CGColor;
+        self.confirmButton.center = self.centerPoint;
+        [self.confirmButton addTarget:self action:@selector(pressedConfirmButton:) forControlEvents:UIControlEventTouchUpInside];
+        self.confirmButton.titleLabel.font = iconFont(23);
+        [self.confirmButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [self.confirmButton setTitle:iconString(@"done") forState:UIControlStateNormal];
+        [self.confirmButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateHighlighted];
+        self.confirmButton.layer.masksToBounds = YES;
+        self.confirmButton.layer.cornerRadius = kDefActualSize;
+        [self addSubview:self.confirmButton];
+        
+        
+        
+        [self.timeSlider setHighlightedImage:[UIImage imageNamed:@"timepickerwheelselected"]];
+        self.timeSlider.center = self.centerPoint;
+        [self addSubview:self.timeSlider];
+        
+        self.backButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
+        self.backButton.frame = CGRectMake(kBackMargin, self.bounds.size.height-kBackButtonSize-kBackMargin, kBackButtonSize, kBackButtonSize);
+        self.backButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin);
+        self.backButton.titleLabel.font = iconFont(41);
+        [self.backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
+        [self.backButton setTitle:iconString(@"roundBack") forState:UIControlStateNormal];
+        [self.backButton setTitle:iconString(@"roundBackFull") forState:UIControlStateHighlighted];
+        [self.backButton addTarget:self action:@selector(pressedBackButton:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.backButton];
+        
+        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
+        panGestureRecognizer.delegate = self;
+        [self addGestureRecognizer:panGestureRecognizer];
+        
+        self.dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 120)];
+        self.dayLabel.backgroundColor = [UIColor clearColor];
+        self.dayLabel.textColor = alpha(tcolor(TextColor),0.5);
+        self.dayLabel.font = kDayLabelFont;
+        self.dayLabel.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:self.dayLabel];
+        
+        self.clockLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kClockLabelY, self.bounds.size.width, 120)];
+        self.clockLabel.backgroundColor = [UIColor clearColor];
+        self.clockLabel.textColor = alpha(tcolor(TextColor),0.8); //self.foregroundColor;
+        self.clockLabel.font = kClockLabelFont;
+        self.clockLabel.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:self.clockLabel];
+        
+        self.timeline = [[KPTimeline alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.timeSlider.frame.origin.y)];
+        [self addSubview:self.timeline];
+        
+        // test code
+        self.timeline.event = [[KPTimelineEvent alloc] initWithTitle:@"DG log video" startDate:[NSDate new] duration:60 * 60];
+        
+        
+        [self setNeedsLayout];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:@"willRotateToInterfaceOrientation"  object:nil];
+        
+    }
+    return self;
+}
+
 /*-(void)setDelegate:(NSObject<KPTimePickerDelegate> *)delegate{
     _delegate = delegate;
     [self updateForDate:self.pickingDate];
 }*/
+
 -(void)setPickingDate:(NSDate *)pickingDate{
     if(_pickingDate != pickingDate){
         if(pickingDate) pickingDate = [pickingDate dateToNearest5Minutes];
@@ -63,6 +155,7 @@
         [self updateForDate:pickingDate];
     }
 }
+
 -(void)setIsInConfirmButton:(BOOL)isInConfirmButton{
     if(_isInConfirmButton != isInConfirmButton){
         _isInConfirmButton = isInConfirmButton;
@@ -72,6 +165,7 @@
         else [self didWaitDelay];
     }
 }
+
 -(void)setIsOutOfScope:(BOOL)isOutOfScope{
     if(_isOutOfScope != isOutOfScope){
         _isOutOfScope = isOutOfScope;
@@ -80,6 +174,7 @@
         }
     }
 }
+
 -(void)highlightImageForSlider:(BOOL)highlight animated:(BOOL)animated{
     if(highlight == self.timeSlider.highlighted)
         return;
@@ -96,25 +191,31 @@
         self.timeSlider.highlighted = highlight;
     }
 }
+
 -(void)didWaitInMiddle{
     if(self.isOutOfScope){
         self.confirmButton.highlighted = YES;
     }
 }
+
 -(void)didWaitDelay{
     self.confirmButton.highlighted = self.isInConfirmButton;
 }
-#pragma mark Actions
+
+#pragma mark - Actions
+
 -(void)pressedBackButton:(UIButton*)sender{
     [self.delegate timePicker:self selectedDate:nil];
 }
+
 -(void)pressedConfirmButton:(UIButton*)sender{
     [self.delegate timePicker:self selectedDate:self.pickingDate];
 }
+
 -(void)forwardGesture:(UIPanGestureRecognizer *)sender{
     [self panGestureRecognized:sender];
 }
-#define distanceBetween(p1,p2) sqrt(pow((p2.x-p1.x),2) + pow((p2.y-p1.y),2))
+
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender
 {
     CGPoint velocity = [sender velocityInView:self];
@@ -186,6 +287,7 @@
         }
     }
 }
+
 -(CGFloat)angleBetweenCenterPoint:(CGPoint)centerPoint point1:(CGPoint)p1 point2:(CGPoint)p2{
     CGPoint v1 = CGPointMake(p1.x - centerPoint.x, p1.y - centerPoint.y);
 	CGPoint v2 = CGPointMake(p2.x - centerPoint.x, p2.y - centerPoint.y);
@@ -194,9 +296,11 @@
 	
 	return angle;
 }
+
 -(CGFloat)distanceBetweenCenterPoint:(CGPoint)centerPoint andPoint:(CGPoint)p1{
     return sqrt ( pow((centerPoint.x-p1.x), 2) + pow((centerPoint.y-p1.y), 2) );
 }
+
 - (CGPoint)pointFromPoint:(CGPoint)origin withDistance:(float)distance towardAngle:(float)angle
 {
     double radAngle = angle * M_PI / 180.0;
@@ -217,10 +321,8 @@
     self.clockLabel.text = timeString;
     self.dayLabel.text = dayString;
     self.backgroundColor = [self colorForDate:date];
-    if(self.hideIcons){
-        return;
-    }
 }
+
 -(UIColor *)colorForDate:(NSDate*)date{
     
     NSDate *startOfTheDay = [date dateAtStartOfDay];
@@ -232,85 +334,23 @@
     UIColor *endColor = overNoon ? self.darkColor : self.lightColor;
     return [startColor colorToColor:endColor percent:percentage];
 }
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        self.hideIcons = YES;
-        self.autoresizesSubviews = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-        self.timeSlider = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"timepickerwheel"]];
-        
-        self.centerPoint = CGPointMake(self.bounds.size.width/2, self.bounds.size.height-self.timeSlider.frame.size.height/2-30);
-        if(kIsIpad){
-            self.centerPoint = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2 + self.timeSlider.frame.size.height/2);
-        }
-        self.lightColor = kDefLightColor;
-        self.darkColor = kDefDarkColor;
-        
-        
-        
-        self.confirmButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-        self.confirmButton.backgroundColor = [UIColor clearColor];
-        [self.confirmButton setBackgroundImage:[tcolor(DoneColor) image] forState:UIControlStateHighlighted];
-        self.confirmButton.frame = CGRectMake(0, 0, 2*kDefActualSize, 2*kDefActualSize);
-        
-        //self.confirmButton.layer.borderWidth = LINE_SIZE;
-        //self.confirmButton.layer.borderColor = tcolor(TextColor).CGColor;
-        self.confirmButton.center = self.centerPoint;
-        [self.confirmButton addTarget:self action:@selector(pressedConfirmButton:) forControlEvents:UIControlEventTouchUpInside];
-        self.confirmButton.titleLabel.font = iconFont(23);
-        [self.confirmButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        [self.confirmButton setTitle:iconString(@"done") forState:UIControlStateNormal];
-        [self.confirmButton setTitleColor:tcolorF(TextColor,ThemeDark) forState:UIControlStateHighlighted];
-        self.confirmButton.layer.masksToBounds = YES;
-        self.confirmButton.layer.cornerRadius = kDefActualSize;
-        [self addSubview:self.confirmButton];
-        
-        
-        
-        [self.timeSlider setHighlightedImage:[UIImage imageNamed:@"timepickerwheelselected"]];
-        self.timeSlider.center = self.centerPoint;
-        [self addSubview:self.timeSlider];
-        
-        self.backButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
-        self.backButton.frame = CGRectMake(kBackMargin, self.bounds.size.height-kBackButtonSize-kBackMargin, kBackButtonSize, kBackButtonSize);
-        self.backButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin);
-        self.backButton.titleLabel.font = iconFont(41);
-        [self.backButton setTitleColor:tcolor(TextColor) forState:UIControlStateNormal];
-        [self.backButton setTitle:iconString(@"roundBack") forState:UIControlStateNormal];
-        [self.backButton setTitle:iconString(@"roundBackFull") forState:UIControlStateHighlighted];
-        [self.backButton addTarget:self action:@selector(pressedBackButton:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:self.backButton];
-        
-        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
-        panGestureRecognizer.delegate = self;
-        [self addGestureRecognizer:panGestureRecognizer];
-        
-        self.dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 120)];
-        self.dayLabel.backgroundColor = [UIColor clearColor];
-        self.dayLabel.textColor = alpha(tcolor(TextColor),0.5);
-        self.dayLabel.font = kDayLabelFont;
-        self.dayLabel.textAlignment = NSTextAlignmentCenter;
-        [self addSubview:self.dayLabel];
 
-        self.clockLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kClockLabelY, self.bounds.size.width, 120)];
-        self.clockLabel.backgroundColor = [UIColor clearColor];
-        self.clockLabel.textColor = alpha(tcolor(TextColor),0.8); //self.foregroundColor;
-        self.clockLabel.font = kClockLabelFont;
-        self.clockLabel.textAlignment = NSTextAlignmentCenter;
-        [self addSubview:self.clockLabel];
-        [self setNeedsLayout];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:@"willRotateToInterfaceOrientation"  object:nil];
-        
-    }
-    return self;
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    return YES;
 }
+
+- (void)orientationChanged:(NSNotification *)notification{
+    
+    [self pressedBackButton:self.backButton];
+}
+
 -(void)layoutSubviews{
     [super layoutSubviews];
-    if(!self.pickingDate) self.pickingDate = [NSDate date];
-    else [self updateForDate:self.pickingDate];
     
+    if(!self.pickingDate)
+        self.pickingDate = [NSDate date];
+    else
+        [self updateForDate:self.pickingDate];
     
     CGFloat heightForDay = sizeWithFont(@"abcdefghADB",self.dayLabel.font).height;
     CGFloat heightForTime = sizeWithFont(@"08:00pm",self.clockLabel.font).height;
@@ -326,14 +366,7 @@
     self.clockLabel.frame = CGRectMake(0, startY+heightForDay+kLabelSpacing, self.bounds.size.width, heightForTime);
     
 }
--(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
-    return YES;
-}
 
-- (void)orientationChanged:(NSNotification *)notification{
-    
-    [self pressedBackButton:self.backButton];
-}
 -(void)dealloc{
     self.confirmButton = nil;
     self.backButton = nil;

@@ -19,7 +19,7 @@ target :Swipes do
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
     pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK'
+    pod 'GoogleAnalytics'
     pod 'BobPullToRefresh'
 end
 
@@ -38,7 +38,7 @@ target :SwipesKit do
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
     pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK'
+    pod 'GoogleAnalytics'
 end
 
 target :SwipesToday do
@@ -49,7 +49,7 @@ target :SwipesToday do
     pod 'Underscore.m'
     pod 'Base64'
     pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK'
+    pod 'GoogleAnalytics'
 end
 
 target :SwipesShare do
@@ -60,8 +60,8 @@ target :SwipesShare do
     pod 'Underscore.m'
     pod 'Base64'
     pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK'
     pod 'UITextView+Placeholder'
+    pod 'GoogleAnalytics'
 end
 
 #link_with 'Swipes', 'Swipes_iOS8', 'SwipesKit'

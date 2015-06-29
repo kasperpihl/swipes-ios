@@ -656,6 +656,10 @@
 		DAE4D5FA1AB1C473001BDC52 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAE4D5F91AB1C473001BDC52 /* MainInterface.storyboard */; };
 		DAE4D5FD1AB1C473001BDC52 /* SwipesShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DAE4D5F21AB1C473001BDC52 /* SwipesShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DAE9CFE119AF3AC600246B64 /* SwipesKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DAE9CFE019AF3AC600246B64 /* SwipesKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DAEB70111B415BC500438762 /* KPTimeline.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEB70101B415BC500438762 /* KPTimeline.m */; };
+		DAEB70121B416DF700438762 /* KPTimeline.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEB70101B415BC500438762 /* KPTimeline.m */; };
+		DAEB70151B4171EC00438762 /* KPTimelineEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEB70141B4171EC00438762 /* KPTimelineEvent.m */; };
+		DAEB70161B4171EC00438762 /* KPTimelineEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = DAEB70141B4171EC00438762 /* KPTimelineEvent.m */; };
 		DAEBBE63188B2BB8002655CB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
 /* End PBXBuildFile section */
 
@@ -1353,6 +1357,10 @@
 		DAE9CFDF19AF3AC600246B64 /* SwipesKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SwipesKit-Info.plist"; sourceTree = "<group>"; };
 		DAE9CFE019AF3AC600246B64 /* SwipesKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipesKit.h; sourceTree = "<group>"; };
 		DAE9D00219AF3B2900246B64 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
+		DAEB700F1B415BC500438762 /* KPTimeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPTimeline.h; path = TimeManagement/KPTimeline.h; sourceTree = "<group>"; };
+		DAEB70101B415BC500438762 /* KPTimeline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPTimeline.m; path = TimeManagement/KPTimeline.m; sourceTree = "<group>"; };
+		DAEB70131B4171EC00438762 /* KPTimelineEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPTimelineEvent.h; path = TimeManagement/KPTimelineEvent.h; sourceTree = "<group>"; };
+		DAEB70141B4171EC00438762 /* KPTimelineEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPTimelineEvent.m; path = TimeManagement/KPTimelineEvent.m; sourceTree = "<group>"; };
 		DAEBBE62188B2BB8002655CB /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		E05A80E8EEB25CD6DB2767FA /* Pods-SwipesKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.debug.xcconfig"; sourceTree = "<group>"; };
 		F17D8C581F2A222D9CA9DE7E /* Pods-SwipesToday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.release.xcconfig"; sourceTree = "<group>"; };
@@ -1474,6 +1482,7 @@
 		A703B1641838EBF20047DCC9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DAEB700E1B415B3700438762 /* TimeManagement */,
 				DA91E60F1AF7939100FF20FE /* PullToRefresh */,
 				A708BED31A14B21800C7E15A /* KPTopClock */,
 				A795D57E1A10AF2800195DDA /* AwesomeMenu */,
@@ -1487,8 +1496,6 @@
 				A703B1701838EBF20047DCC9 /* Components */,
 				A703B1891838EBF20047DCC9 /* FilterMenu */,
 				A703B18C1838EBF20047DCC9 /* KPSegmentedControl */,
-				A703B18F1838EBF20047DCC9 /* KPTimePicker.h */,
-				A703B1901838EBF20047DCC9 /* KPTimePicker.m */,
 				A703B1C51838EC240047DCC9 /* KPReorderTableView */,
 				A703B1911838EBF20047DCC9 /* MCSwipeTableViewCell */,
 				A703B1A01838EBF20047DCC9 /* SchedulePopup */,
@@ -2830,6 +2837,19 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		DAEB700E1B415B3700438762 /* TimeManagement */ = {
+			isa = PBXGroup;
+			children = (
+				DAEB700F1B415BC500438762 /* KPTimeline.h */,
+				DAEB70101B415BC500438762 /* KPTimeline.m */,
+				DAEB70131B4171EC00438762 /* KPTimelineEvent.h */,
+				DAEB70141B4171EC00438762 /* KPTimelineEvent.m */,
+				A703B18F1838EBF20047DCC9 /* KPTimePicker.h */,
+				A703B1901838EBF20047DCC9 /* KPTimePicker.m */,
+			);
+			name = TimeManagement;
+			sourceTree = "<group>";
+		};
 		DAFBF47F1A6DB641003DD799 /* Gmail */ = {
 			isa = PBXGroup;
 			children = (
@@ -3614,6 +3634,7 @@
 				DA09B05B1AB228D6002632DC /* NSManagedObjectContext+MagicalSaves.m in Sources */,
 				A78D7A8817F4B27200AD38B1 /* Global.m in Sources */,
 				A784DB9319E822940041225A /* SearchTopMenu.m in Sources */,
+				DAEB70151B4171EC00438762 /* KPTimelineEvent.m in Sources */,
 				A74D3FC318D75B250056D124 /* ShareViewController.m in Sources */,
 				DA09B0511AB228D6002632DC /* NSManagedObjectContext+MagicalObserving.m in Sources */,
 				DA09B04C1AB228D6002632DC /* NSManagedObjectContext+MagicalChainSave.m in Sources */,
@@ -3670,6 +3691,7 @@
 				A717DD2E18B7E12300EE359C /* (null) in Sources */,
 				DA09B01F1AB228D6002632DC /* NSNumber+MagicalDataImport.m in Sources */,
 				DA09B06F1AB228D6002632DC /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
+				DAEB70111B415BC500438762 /* KPTimeline.m in Sources */,
 				A71DE4B31844069A0097394C /* UIGestureRecognizer+UIBreak.m in Sources */,
 				A748C87C190D9A0800514DB3 /* SubtaskCell.m in Sources */,
 				A771356F17BABB5A0090BE89 /* UIView+Utilities.m in Sources */,
@@ -3808,6 +3830,7 @@
 				DA09AFA91AB1CE3D002632DC /* SettingsHandler.m in Sources */,
 				DA09AFAF1AB1CE5A002632DC /* KPTag.m in Sources */,
 				DA09B09F1AB2418B002632DC /* SlowHighlightIcon.m in Sources */,
+				DAEB70161B4171EC00438762 /* KPTimelineEvent.m in Sources */,
 				DA09AF9B1AB1CDE9002632DC /* EvernoteToDoProcessor.m in Sources */,
 				DA09B03F1AB228D6002632DC /* NSManagedObject+MagicalFinders.m in Sources */,
 				DA09AFB71AB1CE8A002632DC /* Vero.m in Sources */,
@@ -3820,6 +3843,7 @@
 				DAE4D5F81AB1C473001BDC52 /* ShareViewController.m in Sources */,
 				DA09B0261AB228D6002632DC /* NSObject+MagicalDataImport.m in Sources */,
 				DA09B04E1AB228D6002632DC /* NSManagedObjectContext+MagicalChainSave.m in Sources */,
+				DAEB70121B416DF700438762 /* KPTimeline.m in Sources */,
 				DA09B0801AB228D6002632DC /* MagicalRecord+iCloud.m in Sources */,
 				DA09AFB01AB1CE5A002632DC /* KPToDo.m in Sources */,
 				DA09B08A1AB228D6002632DC /* MagicalRecord+Setup.m in Sources */,
