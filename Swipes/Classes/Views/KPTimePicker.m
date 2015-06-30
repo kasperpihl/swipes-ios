@@ -13,8 +13,8 @@
 #define kClockLabelY valForScreen(0,0)
 #define kClockLabelFont [UIFont fontWithName:@"BebasNeue" size:valForScreen(65,75)]
 #define kDayLabelFont KP_SEMIBOLD(valForIpad(25,valForScreen(14,16)))
-#define kDefMiddleButtonRadius 60
-#define kDefActualSize 93
+#define kDefMiddleButtonRadius 45
+#define kDefActualSize 70
 
 #define kDefClearMiddle 45
 
@@ -36,13 +36,14 @@
 #import "UIColor+Utilities.h"
 #import "SlowHighlightIcon.h"
 #import "AudioHandler.h"
+#import "GlobalApp.h"
 #import "KPTimeline.h"
 #import "KPTimelineEvent.h"
 #import "KPTimePicker.h"
 
 @class KPTimePicker;
 
-@interface KPTimePicker () <UIGestureRecognizerDelegate>
+@interface KPTimePicker () <UIGestureRecognizerDelegate, KPTimelineDataSource>
 
 @property (nonatomic) CGPoint lastPosition;
 @property (nonatomic) CGFloat lastChangedAngle;
@@ -80,7 +81,7 @@
         self.confirmButton = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];
         self.confirmButton.backgroundColor = [UIColor clearColor];
         [self.confirmButton setBackgroundImage:[tcolor(DoneColor) image] forState:UIControlStateHighlighted];
-        self.confirmButton.frame = CGRectMake(0, 0, 2*kDefActualSize, 2*kDefActualSize);
+        self.confirmButton.frame = CGRectMake(0, 0, 2 * kDefActualSize, 2 * kDefActualSize);
         
         //self.confirmButton.layer.borderWidth = LINE_SIZE;
         //self.confirmButton.layer.borderColor = tcolor(TextColor).CGColor;
@@ -116,29 +117,28 @@
         
         self.dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 120)];
         self.dayLabel.backgroundColor = [UIColor clearColor];
-        self.dayLabel.textColor = alpha(tcolor(TextColor),0.5);
+        self.dayLabel.textColor = alpha(tcolor(TextColor), 0.5);
         self.dayLabel.font = kDayLabelFont;
         self.dayLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.dayLabel];
         
         self.clockLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kClockLabelY, self.bounds.size.width, 120)];
         self.clockLabel.backgroundColor = [UIColor clearColor];
-        self.clockLabel.textColor = alpha(tcolor(TextColor),0.8); //self.foregroundColor;
+        self.clockLabel.textColor = alpha(tcolor(TextColor), 0.8); //self.foregroundColor;
         self.clockLabel.font = kClockLabelFont;
         self.clockLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.clockLabel];
         
-        self.timeline = [[KPTimeline alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.timeSlider.frame.origin.y)];
+        self.timeline = [[KPTimeline alloc] initWithFrame:CGRectMake(0, 20, self.bounds.size.width, self.timeSlider.frame.origin.y - 25)];
+        self.timeline.dataSource = self;
         [self addSubview:self.timeline];
         
         // test code
-        self.timeline.event = [[KPTimelineEvent alloc] initWithTitle:@"DG log video" startDate:[NSDate new] duration:60 * 60];
-        
+        self.timeline.event = [[KPTimelineEvent alloc] initWithTitle:@"DG log video" startDate:[NSDate new] duration:60 * 30];
         
         [self setNeedsLayout];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:@"willRotateToInterfaceOrientation"  object:nil];
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:@"willRotateToInterfaceOrientation" object:nil];
     }
     return self;
 }
@@ -149,10 +149,13 @@
 }*/
 
 -(void)setPickingDate:(NSDate *)pickingDate{
-    if(_pickingDate != pickingDate){
-        if(pickingDate) pickingDate = [pickingDate dateToNearest5Minutes];
+    if (_pickingDate != pickingDate) {
+        if (pickingDate)
+            pickingDate = [pickingDate dateToNearest5Minutes];
         _pickingDate = pickingDate;
         [self updateForDate:pickingDate];
+        ((KPTimelineEvent *)_timeline.event).startDate = self.pickingDate;
+        [_timeline eventUpdated];
     }
 }
 
@@ -223,11 +226,27 @@
     CGFloat vel = fabs(velocity.y)+fabs(velocity.x);
     NSInteger minutesPerInterval = 5;
     CGFloat angleInterval = 50;
-    //NSLog(@"%f",vel);
-    if(vel > 1400){
+    if (vel > 1400) {
         minutesPerInterval = 30;
         angleInterval = 40;
     }
+    else if (vel > 900) {
+        minutesPerInterval = 25;
+        angleInterval = 40;
+    }
+    else if (vel > 700) {
+        minutesPerInterval = 20;
+        angleInterval = 45;
+    }
+    else if (vel > 500) {
+        minutesPerInterval = 15;
+        angleInterval = 45;
+    }
+    else if (vel > 300) {
+        minutesPerInterval = 10;
+    }
+//    NSLog(@"velocity: %f, interval: %ld, angle: %f", vel, (long)minutesPerInterval, angleInterval);
+    
     angleInterval = angleInterval*M_PI/180;
     CGFloat distanceToMiddle = distanceBetween(self.centerPoint, location);
     self.isInConfirmButton = (distanceToMiddle < kDefMiddleButtonRadius);
@@ -235,13 +254,14 @@
     if (sender.state == UIGestureRecognizerStateChanged || sender.state == UIGestureRecognizerStateBegan) {
         CGFloat distance = [self distanceBetweenCenterPoint:self.centerPoint andPoint:location];
         BOOL shouldHighlight = NO;
-        if(!self.isInConfirmButton && distance < 160)
+        if(!self.isInConfirmButton && distance < 120)
             shouldHighlight = YES;
         [self highlightImageForSlider:shouldHighlight animated:YES];
         if(!self.isOutOfScope){
             
             CGPoint sliderStartPoint = self.lastPosition;// CGPointMake(self.centerPoint.x, self.centerPoint.y - 100.0);
-            if(CGPointEqualToPoint(self.lastPosition, CGPointZero)) sliderStartPoint = location;
+            if(CGPointEqualToPoint(self.lastPosition, CGPointZero))
+                sliderStartPoint = location;
             CGFloat angle = [self angleBetweenCenterPoint:self.centerPoint point1:sliderStartPoint point2:location];
             CGFloat imageAngle = [self angleBetweenCenterPoint:self.centerPoint point1:CGPointMake(-100, self.centerPoint.y) point2:location];
             CGFloat rounded = floorf((degrees(imageAngle)+1)/2)*2;
@@ -259,14 +279,15 @@
             self.lastChangedAngle = self.lastChangedAngle + angle;
             self.lastPosition = location;
             NSInteger numberOfIntervals = round(self.lastChangedAngle/angleInterval);
-            if(numberOfIntervals != 0){
-                
+            if (numberOfIntervals != 0) {
                 NSInteger timeAdded = minutesPerInterval*numberOfIntervals;
                 NSDate *newTime = [self.pickingDate dateBySubtractingMinutes:timeAdded];
                 self.lastChangedAngle = 0;
                 
-                if(self.minimumDate && [newTime isEarlierThanDate:self.minimumDate]) newTime = self.minimumDate;
-                if(self.maximumDate && [newTime isLaterThanDate:self.maximumDate]) newTime = self.maximumDate;
+                if(self.minimumDate && [newTime isEarlierThanDate:self.minimumDate])
+                    newTime = self.minimumDate;
+                if(self.maximumDate && [newTime isLaterThanDate:self.maximumDate])
+                    newTime = self.maximumDate;
                 
                 self.pickingDate = newTime;
             }
@@ -307,17 +328,22 @@
     return CGPointMake(origin.x + distance * cos(radAngle), origin.y + distance * sin(radAngle));
 }
 
--(void)updateForDate:(NSDate*)date{
+-(void)updateForDate:(NSDate*)date
+{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[NSLocale currentLocale]];
     [dateFormatter setDateStyle:NSDateFormatterNoStyle];
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     NSString *dayString;
     NSString *timeString;
-    if([self.delegate respondsToSelector:@selector(timePicker:titleForDate:)]) dayString = [self.delegate timePicker:self titleForDate:date];
-    if(!dayString) dayString = [UtilityClass dayStringForDate:date];
-    if([self.delegate respondsToSelector:@selector(timePicker:clockForDate:)]) timeString = [self.delegate timePicker:self clockForDate:date];
-    if(!timeString) timeString = [[dateFormatter stringFromDate:date] lowercaseString];
+    if([self.delegate respondsToSelector:@selector(timePicker:titleForDate:)])
+        dayString = [self.delegate timePicker:self titleForDate:date];
+    if(!dayString)
+        dayString = [UtilityClass dayStringForDate:date];
+    if([self.delegate respondsToSelector:@selector(timePicker:clockForDate:)])
+        timeString = [self.delegate timePicker:self clockForDate:date];
+    if(!timeString)
+        timeString = [[dateFormatter stringFromDate:date] lowercaseString];
     self.clockLabel.text = timeString;
     self.dayLabel.text = dayString;
     self.backgroundColor = [self colorForDate:date];
@@ -373,6 +399,19 @@
     self.timeSlider = nil;
     self.clockLabel = nil;
     clearNotify();
+}
+
+#pragma mark - Test code
+
+- (nonnull NSArray *)timeline:(nonnull KPTimeline *)timeline eventsFromDate:(nonnull NSDate *)fromDate toDate:(nonnull NSDate *)toDate
+{
+    return @[
+             [[KPTimelineEvent alloc] initWithTitle:@"Meeting with SK" startDate:[self.pickingDate dateAtHours:9 minutes:0] duration:60 * 60 * 1],
+             [[KPTimelineEvent alloc] initWithTitle:@"Meeting with SK 1" startDate:[self.pickingDate dateAtHours:12 minutes:0] duration:60 * 15],
+             //[[KPTimelineEvent alloc] initWithTitle:@"Meeting with SK 2" startDate:[self.pickingDate dateAtHours:12 minutes:30] duration:60 * 15],
+             //[[KPTimelineEvent alloc] initWithTitle:@"Make some coffee" startDate:[self.pickingDate dateAtHours:13 minutes:0] duration:0],
+             [[KPTimelineEvent alloc] initWithTitle:@"Conference Call" startDate:[self.pickingDate dateAtHours:17 minutes:0] duration:60 * 60 * 2],
+             ];
 }
 
 @end

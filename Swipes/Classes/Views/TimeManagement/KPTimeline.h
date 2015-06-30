@@ -20,7 +20,7 @@
 
 @protocol KPTimelineDataSource <NSObject>
 
--(nonnull NSArray<KPTimelineEventProtocol> *)timeline:(nonnull KPTimeline  *)timeline eventsFromDate:(nonnull NSDate *)fromDate toDate:(nonnull NSDate *)toDate;
+-(nonnull NSArray *)timeline:(nonnull KPTimeline  *)timeline eventsFromDate:(nonnull NSDate *)fromDate toDate:(nonnull NSDate *)toDate;
 
 @end
 
@@ -36,9 +36,11 @@
 @property (nonatomic, strong, nonnull) id<KPTimelineEventProtocol> event;
 @property (nonatomic, assign) NSTimeInterval timespan;
 
-// theme
+// theme (has some defaults)
 @property (nonatomic, strong, nonnull) UIColor* titleColor;
 @property (nonatomic, strong, nonnull) UIColor* subtitleColor;
 @property (nonatomic, strong, nonnull) UIColor* timeColor;
+
+- (void)eventUpdated;
 
 @end
