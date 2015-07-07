@@ -11,6 +11,7 @@
 
 static const CGFloat kTimelineWidth = 0.5f;
 static const CGFloat kTimelineSpacing = 3.0f;
+static const CGFloat kTimelineSpacingSmall = 0.1f;
 static const CGFloat kTimelineEventWidth = 4.0f;
 static const CGFloat kTextBoundX = 10.f;
 static const CGFloat kTextBoundY = 3.f;
@@ -31,6 +32,8 @@ static const CGFloat kInvalidOffset = -1000000;
     NSArray* _events;
     NSDate* _startDate;
     NSDate* _endDate;
+    NSTimeInterval _startTI;
+    NSTimeInterval _endTI;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -97,6 +100,8 @@ static const CGFloat kInvalidOffset = -1000000;
 {
     _startDate = [NSDate dateWithTimeInterval:-(_timespan / 2) sinceDate:_event.startDate];
     _endDate = [NSDate dateWithTimeInterval:_timespan / 2 sinceDate:_event.startDate];
+    _startTI = [_startDate timeIntervalSinceReferenceDate];
+    _endTI = [_endDate timeIntervalSinceReferenceDate];
 }
 
 - (void)eventUpdated
@@ -125,28 +130,46 @@ static const CGFloat kInvalidOffset = -1000000;
 
 - (CGFloat)offsetForEvent:(id<KPTimelineEventProtocol>)event inRect:(CGRect)rect
 {
-    NSTimeInterval startTI = [_startDate timeIntervalSinceReferenceDate];
-    NSTimeInterval endTI = [_endDate timeIntervalSinceReferenceDate];
     NSTimeInterval startTarget = [event.startDate timeIntervalSinceReferenceDate];
     NSTimeInterval endTarget = startTarget + event.duration;
     
-    if (startTarget > endTI || (endTarget < startTI)) {
+    if (startTarget > _endTI || (endTarget < _startTI)) {
         return kInvalidOffset;
     }
     
-    return ((startTarget - startTI) / _timespan) * rect.size.height + rect.origin.y;
+    return ((startTarget - _startTI) / _timespan) * rect.size.height + rect.origin.y;
+}
+
+- (CGPoint)spacingForEvent:(id<KPTimelineEventProtocol>)event1 spacingTimeInterval:(CGFloat)spacingTimeInterval
+{
+    CGPoint result = CGPointMake(kTimelineSpacing, kTimelineSpacing);
+    NSTimeInterval dateTIStart = [event1.startDate timeIntervalSinceReferenceDate] - spacingTimeInterval;
+    NSTimeInterval dateTIEnd = dateTIStart + event1.duration + spacingTimeInterval;
+    for (id<KPTimelineEventProtocol> event in _events) {
+        if (event == event1)
+            continue; // do not match with ourselfs
+        NSTimeInterval eventTIStart = [event.startDate timeIntervalSinceReferenceDate];
+        NSTimeInterval eventTIEnd = eventTIStart + event.duration;
+        if (dateTIStart >= eventTIStart && dateTIStart <= eventTIEnd) {
+            result.x = kTimelineSpacingSmall;
+        }
+        if (dateTIEnd >= eventTIStart && dateTIEnd <= eventTIEnd) {
+            result.y = kTimelineSpacingSmall;
+        }
+    }
+    return result;
 }
 
 #pragma mark - Drawing
 
-- (void)drawTimeLineInContext:(CGContextRef)context withHeight:(CGFloat)height atOffset:(CGFloat)offset withColor:(UIColor *)color inRect:(CGRect)rect
+- (void)drawTimeLineInContext:(CGContextRef)context withHeight:(CGFloat)height atOffset:(CGFloat)offset withColor:(UIColor *)color inRect:(CGRect)rect topSpacing:(CGFloat)topSpacing bottomSpacing:(CGFloat)bottomSpacing
 {
     // draw the space
     [self.backgroundColor setStroke];
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineWidth(context, kTimelineEventWidth + 2);
-    CGContextMoveToPoint(context, rect.origin.x + rect.size.width / 2, offset - kTimelineSpacing);
-    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width / 2, offset + height + kTimelineSpacing);
+    CGContextMoveToPoint(context, rect.origin.x + rect.size.width / 2, offset - topSpacing);
+    CGContextAddLineToPoint(context, rect.origin.x + rect.size.width / 2, offset + height + bottomSpacing);
     CGContextStrokePath(context);
     
     // draw the line itself
@@ -161,7 +184,7 @@ static const CGFloat kInvalidOffset = -1000000;
 - (CGFloat)drawText:(NSString *)text attributes:(NSDictionary *)attributes context:(CGContextRef)context offset:(CGFloat)offset height:(CGFloat)height rect:(CGRect)rect
 {
     CGFloat width = rect.size.width - kTextBoundX * 2;
-    CGFloat textHeight = [text boundingRectWithSize:CGSizeMake(width, INFINITY) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context: nil].size.height;
+    CGFloat textHeight = [text boundingRectWithSize:CGSizeMake(width, INFINITY) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size.height;
     CGContextSaveGState(context);
     CGFloat heightUpdate = height >= textHeight ? textHeight / 3 : textHeight / 2;
     CGRect textRect = CGRectMake(kTextBoundX + rect.origin.x, offset - heightUpdate, width, textHeight);
@@ -180,6 +203,8 @@ static const CGFloat kInvalidOffset = -1000000;
     CGContextSetAllowsAntialiasing(context, true);
     CGContextSetShouldAntialias(context, true);
     
+    CGFloat spacingTimeInterval = _timespan / rect.size.height * kTimelineSpacing;
+    
     // draw the initial line
     [_titleColor setStroke];
     CGContextSetLineWidth(context, kTimelineWidth);
@@ -190,18 +215,19 @@ static const CGFloat kInvalidOffset = -1000000;
     // draw events
     CGRect eventDrawRect = CGRectMake(rect.origin.x + rect.size.width / 2, rect.origin.y, rect.size.width / 2, rect.size.height);
     for (id<KPTimelineEventProtocol> event in _events) {
-        CGFloat height = [self heightForDuration:event.duration inRect:rect] + 1;
+        CGFloat height = [self heightForDuration:event.duration inRect:rect];
         CGFloat offset = [self offsetForEvent:event inRect:rect];
         if (offset != kInvalidOffset) {
-            [self drawTimeLineInContext:context withHeight:height atOffset:offset withColor:_titleColor inRect:rect];
+            [self drawTimeLineInContext:context withHeight:height atOffset:offset withColor:_titleColor inRect:rect topSpacing:kTimelineSpacing bottomSpacing:kTimelineSpacing];
             CGFloat textHeight = [self drawText:[self textForTime:event] attributes:_eventTimeAttr context:context offset:offset height:height rect:eventDrawRect];
             [self drawText:event.title attributes:_eventTitleAttr context:context offset:offset + textHeight + kTextBoundY height:height rect:eventDrawRect];
         }
     }
     
     // draw our title line
-    CGFloat height = [self heightForDuration:self.event.duration inRect:rect] + 1;
-    [self drawTimeLineInContext:context withHeight:height atOffset:rect.origin.y + rect.size.height / 2 withColor:_timeColor inRect:rect];
+    CGFloat height = [self heightForDuration:_event.duration inRect:rect];
+    CGPoint spacing = [self spacingForEvent:_event spacingTimeInterval:spacingTimeInterval];
+    [self drawTimeLineInContext:context withHeight:height atOffset:rect.origin.y + rect.size.height / 2 withColor:_timeColor inRect:rect topSpacing:spacing.x bottomSpacing:spacing.y];
     
     CGFloat textHeight = [self drawText:[self textForTime:self.event] attributes:_mainEventTimeAttr context:context offset:rect.origin.y + rect.size.height / 2 height:height rect:CGRectMake(rect.origin.x, rect.origin.y, rect.size.width / 2, rect.size.height)];
     
