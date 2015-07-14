@@ -12,7 +12,7 @@
 /* Complete ToDo's - The array contains the items that changed state */
 +(NSArray*)completeToDos:(NSArray*)toDoArray save:(BOOL)save context:(NSManagedObjectContext*)context from:(NSString *)from;
 /* Delete ToDo's */
-+(void)deleteToDos:(NSArray*)toDos save:(BOOL)save force:(BOOL)force;
++(void)deleteToDos:(NSArray*)toDos inContext:(NSManagedObjectContext*)context save:(BOOL)save force:(BOOL)force;
 /* Update Tags for ToDo's */
 +(void)updateTags:(NSArray *)tags forToDos:(NSArray *)toDosArray remove:(BOOL)remove save:(BOOL)save from:(NSString*)from;
 /* Start watching for Location */
@@ -49,10 +49,10 @@
 -(NSString*)readableTitleForStatus;
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save;
 -(NSArray*)nextNumberOfRepeatedDates:(NSInteger)numberOfDates;
-- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync from:(NSString*)from;
+- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context sync:(BOOL)sync from:(NSString *)from;
 -(void) removeAllAttachmentsForService:(NSString *)service identifier:(NSString*)identifier inContext:(NSManagedObjectContext *)context;
 - (KPAttachment *)firstAttachmentForServiceType:(NSString *)service;
 - (KPAttachment *)attachmentForService:(NSString*)service identifier:(NSString*)identifier;
--(void)deleteToDoSave:(BOOL)save force:(BOOL)force;
+-(void)deleteToDoSave:(BOOL)save inContext:(NSManagedObjectContext*)context force:(BOOL)force;
 
 @end

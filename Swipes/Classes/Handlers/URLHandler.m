@@ -329,7 +329,7 @@ static NSDictionary* kErrorCodes;
     if (title && (id)[NSNull null] != title) {
         NSArray* todos = [KPToDo findByTitle:title];
         if (todos) {
-            [KPToDo deleteToDos:todos save:YES force:NO];
+            [KPToDo deleteToDos:todos inContext:nil save:YES force:NO];
             if (updateXCallbackURL)
                 [self handleXCallbackURL:query errorMessage:nil];
         }

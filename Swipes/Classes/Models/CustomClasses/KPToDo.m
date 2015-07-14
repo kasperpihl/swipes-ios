@@ -65,23 +65,6 @@
     return newToDo;
 }
 
--(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save from:(NSString *)from
-{
-    KPToDo *subTask = [KPToDo newObjectInContext:[self managedObjectContext]];
-    subTask.title = title;
-    subTask.orderValue = kDefOrderVal;
-    subTask.schedule = [NSDate date];
-    subTask.parent = self;
-    if( save )
-        [KPToDo saveToSync];
-    
-    if (from) {
-        [ANALYTICS trackEvent:@"Added Action Step" options:@{@"Length":@(title.length), @"Total Action Steps on Task": @(self.subtasks.count), @"From": from}];
-        [ANALYTICS trackCategory:@"Action Steps" action:@"Added" label:from value:@(title.length)];
-    }
-    return subTask;
-}
-
 +(NSArray*)scheduleToDos:(NSArray*)toDoArray forDate:(NSDate *)date save:(BOOL)save from:(NSString *)from
 {
     NSMutableArray *movedToDos = [NSMutableArray array];
@@ -154,7 +137,7 @@
     return [movedToDos copy];
 }
 
-+(void)deleteToDos:(NSArray*)toDos save:(BOOL)save force:(BOOL)force
++(void)deleteToDos:(NSArray*)toDos inContext:(NSManagedObjectContext*)context save:(BOOL)save force:(BOOL)force
 {
     BOOL shouldUpdateNotifications = NO;
     BOOL isActionStep = NO;
@@ -163,7 +146,7 @@
             isActionStep = YES;
         if(!toDo.completionDate && !toDo.parent)
             shouldUpdateNotifications = YES;
-        [toDo deleteToDoSave:NO force:force];
+        [toDo deleteToDoSave:NO inContext:context force:force];
     }
     if (save)
         [KPToDo saveToSync];
@@ -287,6 +270,87 @@
     return commonTags;
 }
 
++(void)saveToSync{
+    [KPCORE saveContextForSynchronization:nil];
+}
+
++(NSArray*)sortOrderForItems:(NSArray*)items newItemsOnTop:(BOOL)newOnTop save:(BOOL)save context:(NSManagedObjectContext*)context{
+    if(!context)
+        context = KPCORE.context;
+    
+    __block NSArray *sortedItems;
+    [context performBlockAndWait:^{
+        NSMutableArray *existingOrders = [NSMutableArray array];
+        
+        for( KPToDo *todo in items ){
+            [existingOrders addObject:todo.order];
+        }
+        //if(!newOnTop)
+        //NSLog(@"%@",[[existingOrders reverseObjectEnumerator] allObjects]);
+        
+        NSPredicate *orderedItemsPredicate = [NSPredicate predicateWithFormat:@"(order > %i)",kDefOrderVal];
+        NSPredicate *unorderedItemsPredicate = [NSPredicate predicateWithFormat:@"!(order > %i)",kDefOrderVal];
+        NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
+        NSSortDescriptor *unorderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"schedule" ascending:NO];
+        NSArray *orderedItems = [[items filteredArrayUsingPredicate:orderedItemsPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
+        NSArray *unorderedItems = [[items filteredArrayUsingPredicate:unorderedItemsPredicate] sortedArrayUsingDescriptors:@[unorderedItemsSortDescriptor]];
+        int counter = kDefOrderVal + 1;
+        
+        if(newOnTop)
+            sortedItems= [unorderedItems arrayByAddingObjectsFromArray:orderedItems];
+        else
+            sortedItems = [orderedItems arrayByAddingObjectsFromArray:unorderedItems];
+        
+        NSInteger numberOfChanges = 0;
+        for(KPToDo *toDo in sortedItems){
+            if(toDo.orderValue != counter){
+                toDo.orderValue = counter;
+                numberOfChanges++;
+                //NSLog(@"changed %i",counter);
+            }
+            //NSLog(@"%i - %@",toDo.orderValue,toDo.title);
+            counter++;
+        }
+        if(save && numberOfChanges > 0){
+            [KPCORE saveContextForSynchronization:context];
+        }
+        
+        /*
+         Ordered items = items where order > 0
+         itemsWithoutOrder = items where !order or order == 0
+         Sorted by schedule date ascending
+         i = 1
+         foreach ordered Item:
+         item.order = i
+         i++
+         foreach unordered Item:
+         item.order = i
+         i++
+         save
+         */
+        
+    }];
+    return sortedItems;
+    
+}
+
+-(KPToDo*)addSubtask:(NSString *)title save:(BOOL)save from:(NSString *)from
+{
+    KPToDo *subTask = [KPToDo newObjectInContext:[self managedObjectContext]];
+    subTask.title = title;
+    subTask.orderValue = kDefOrderVal;
+    subTask.schedule = [NSDate date];
+    subTask.parent = self;
+    if( save )
+        [KPToDo saveToSync];
+    
+    if (from) {
+        [ANALYTICS trackEvent:@"Added Action Step" options:@{@"Length":@(title.length), @"Total Action Steps on Task": @(self.subtasks.count), @"From": from}];
+        [ANALYTICS trackCategory:@"Action Steps" action:@"Added" label:from value:@(title.length)];
+    }
+    return subTask;
+}
+
 -(NSArray*)updateWithObjectFromServer:(NSDictionary *)object context:(NSManagedObjectContext *)context{
     [super updateWithObjectFromServer:object context:context];
     __block NSMutableSet *changedAttributesSet = [NSMutableSet set];
@@ -298,11 +362,6 @@
         if(!localChanges)
             localChanges = [KPCORE lookupTemporaryChangedAttributesForTempId:self.tempId];
         NSString *parentId = [object objectForKey:@"parentLocalId"];
-        DLog(@"parentId: %@", parentId);
-        if ([@"sCw3EuTMIBWdaB" isEqualToString:parentId]) {
-            DLog(@"%@",object);
-            int i = 6;
-        }
         BOOL didDelete = NO;
         if(!self.parent && parentId && parentId != (id)[NSNull null]){
             KPToDo *parent = [KPToDo MR_findFirstByAttribute:@"objectId" withValue:parentId inContext:context];
@@ -312,18 +371,12 @@
             else{
                 // Parent didn't exist (maybe a remote delete task)
                 didDelete = YES;
-                [self deleteToDoSave:NO force:YES];
+                [self deleteToDoSave:NO inContext:context force:YES];
             }
         }
         if(!didDelete){
-            NSLog(@"task: %@", self);
-            if ([self.title isEqualToString:@"Coffee with Carmen"]) {
-                int i = 6;
-            }
+            //NSLog(@"task: %@", self);
             for(NSString *pfKey in [object allKeys]){
-                if ([self.title isEqualToString:@"Coffee with Carmen"]) {
-                    int i = 5;
-                }
                 if([localChanges containsObject:pfKey])
                     continue;
                 id pfValue = [object objectForKey:pfKey];
@@ -387,7 +440,7 @@
                 
                 if([pfKey isEqualToString:@"attachments"]){
                     NSArray *attachments = (NSArray*)pfValue;
-                    [self removeAllAttachmentsForService:@"all" identifier:nil];
+                    [self removeAllAttachmentsForService:@"all" identifier:nil inContext:context];
                     for( NSDictionary *attachmentObj in attachments){
                         NSString *title = [attachmentObj objectForKey:@"title"];
                         NSString *identifier = [attachmentObj objectForKey:@"identifier"];
@@ -422,10 +475,14 @@
             }
         }
     }];
-    if(changedAttributesSet.count > 0) return [changedAttributesSet allObjects];
-    else return nil;
+    if(changedAttributesSet.count > 0)
+        return [changedAttributesSet allObjects];
+    else
+        return nil;
 }
--(BOOL)setAttributesForSavingObject:(NSMutableDictionary *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes{
+
+-(BOOL)setAttributesForSavingObject:(NSMutableDictionary *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes
+{
     NSDictionary *keyMatch = [self keyMatch];
     BOOL isNewObject = (!self.objectId);
     if(changedAttributes && [changedAttributes containsObject:@"all"]) isNewObject = YES;
@@ -524,10 +581,13 @@
     }
     return CellTypeNone;
 }
+
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save{
     self.repeatOptionValue = option;
-    if(option != RepeatNever) self.repeatedDate = self.schedule;
-    else self.repeatedDate = nil;
+    if(option != RepeatNever)
+        self.repeatedDate = self.schedule;
+    else
+        self.repeatedDate = nil;
     
     if(save)
         [KPToDo saveToSync];
@@ -553,6 +613,7 @@
     return option;
 
 }
+
 -(NSString*)stringForRepeatOption:(RepeatOptions)option{
     NSString *repeatString;
     switch (option) {
@@ -580,9 +641,6 @@
     return repeatString;
 }
 
-+(void)saveToSync{
-    [KPCORE saveContextForSynchronization:nil];
-}
 -(NSDate *)nextDateFrom:(NSDate*)date{
     NSDate *returnDate;
     switch (self.repeatOptionValue) {
@@ -605,6 +663,7 @@
     }
     return returnDate;
 }
+
 -(NSArray*)nextNumberOfRepeatedDates:(NSInteger)numberOfDates{
     if(self.repeatOptionValue == RepeatNever) return nil;
     NSInteger counter = 0;
@@ -616,7 +675,9 @@
     } while (counter < numberOfDates);
     return array;
 }
--(KPToDo*)deepCopyInContext:(NSManagedObjectContext*)context{
+
+-(KPToDo*)deepCopyInContext:(NSManagedObjectContext*)context
+{
     KPToDo *newToDo = [KPToDo newObjectInContext:context];
     newToDo.completionDate = self.completionDate;
     newToDo.notes = self.notes;
@@ -628,17 +689,21 @@
     return newToDo;
 }
 
--(NSString *)readableTitleForStatus{
+-(NSString *)readableTitleForStatus
+{
     NSString *title;
     CellType cellType = [self cellTypeForTodo];
     
-    if(cellType == CellTypeToday) title = [NSLocalizedString(@"tasks", nil) capitalizedString];
+    if(cellType == CellTypeToday)
+        title = [NSLocalizedString(@"tasks", nil) capitalizedString];
     else if(cellType == CellTypeSchedule){
         NSDate *toDoDate = self.schedule;
-        if(!toDoDate) title = NSLocalizedString(@"Unspecified", nil);
+        if(!toDoDate)
+            title = NSLocalizedString(@"Unspecified", nil);
         else{
             title = [UtilityClass readableTime:toDoDate showTime:NO];
-            if([title isEqualToString:[NSLocalizedString(@"Today", nil) capitalizedString]]) title = NSLocalizedString(@"Later Today", nil);
+            if([title isEqualToString:[NSLocalizedString(@"Today", nil) capitalizedString]])
+                title = NSLocalizedString(@"Later Today", nil);
             //title = [NSString stringWithFormat:@"Schedule %@",dateString];
         }
     }
@@ -650,6 +715,7 @@
     
     return [title capitalizedString];
 }
+
 -(NSSet *)getSubtasks{
     NSArray *allSubtasks = [[self subtasks] allObjects];
     NSMutableSet *notDeletedSubtasks = [NSMutableSet set];
@@ -659,72 +725,14 @@
     }
     return [notDeletedSubtasks copy];
 }
+
 -(BOOL)isSubtask{
     return (self.parent) ? YES : NO;
 }
 
-+(NSArray*)sortOrderForItems:(NSArray*)items newItemsOnTop:(BOOL)newOnTop save:(BOOL)save context:(NSManagedObjectContext*)context{
-    if(!context)
-        context = KPCORE.context;
-    
-    __block NSArray *sortedItems;
-    [context performBlockAndWait:^{
-        NSMutableArray *existingOrders = [NSMutableArray array];
-        
-        for( KPToDo *todo in items ){
-            [existingOrders addObject:todo.order];
-        }
-        //if(!newOnTop)
-        //NSLog(@"%@",[[existingOrders reverseObjectEnumerator] allObjects]);
-        
-        NSPredicate *orderedItemsPredicate = [NSPredicate predicateWithFormat:@"(order > %i)",kDefOrderVal];
-        NSPredicate *unorderedItemsPredicate = [NSPredicate predicateWithFormat:@"!(order > %i)",kDefOrderVal];
-        NSSortDescriptor *orderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"order" ascending:YES];
-        NSSortDescriptor *unorderedItemsSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"schedule" ascending:NO];
-        NSArray *orderedItems = [[items filteredArrayUsingPredicate:orderedItemsPredicate] sortedArrayUsingDescriptors:@[orderedItemsSortDescriptor]];
-        NSArray *unorderedItems = [[items filteredArrayUsingPredicate:unorderedItemsPredicate] sortedArrayUsingDescriptors:@[unorderedItemsSortDescriptor]];
-        int counter = kDefOrderVal + 1;
-        
-        if(newOnTop)
-            sortedItems= [unorderedItems arrayByAddingObjectsFromArray:orderedItems];
-        else
-            sortedItems = [orderedItems arrayByAddingObjectsFromArray:unorderedItems];
-        
-        NSInteger numberOfChanges = 0;
-        for(KPToDo *toDo in sortedItems){
-            if(toDo.orderValue != counter){
-                toDo.orderValue = counter;
-                numberOfChanges++;
-                //NSLog(@"changed %i",counter);
-            }
-            //NSLog(@"%i - %@",toDo.orderValue,toDo.title);
-            counter++;
-        }
-        if(save && numberOfChanges > 0){
-            [KPCORE saveContextForSynchronization:context];
-        }
-        
-        /*
-         Ordered items = items where order > 0
-         itemsWithoutOrder = items where !order or order == 0
-         Sorted by schedule date ascending
-         i = 1
-         foreach ordered Item:
-         item.order = i
-         i++
-         foreach unordered Item:
-         item.order = i
-         i++
-         save
-         */
-        
-    }];
-    return sortedItems;
-    
-}
-
 -(NSArray*)changeToOrder:(int32_t)newOrder withItems:(NSArray *)items{
-    if(newOrder == self.orderValue) return nil;
+    if(newOrder == self.orderValue)
+        return nil;
     //NSLog(@"change:%i - %i",self.orderValue,newOrder);
     BOOL decrease = (newOrder > self.orderValue);
     NSString *predicateRawString = (newOrder > self.orderValue) ? @"(order > %i) AND (order =< %i)" : @"(order < %i) AND (order >= %i)";
@@ -735,8 +743,10 @@
     for (int i = 0 ; i < results.count; i++) {
         KPToDo *toDo = [results objectAtIndex:i];
        
-        if(decrease) toDo.orderValue--;
-        else toDo.orderValue++;
+        if(decrease)
+            toDo.orderValue--;
+        else
+            toDo.orderValue++;
         //NSLog(@"r %i - %@",toDo.orderValue,toDo.title);
     }
     
@@ -762,7 +772,8 @@
         BOOL contained = [tagsStrings containsObject:tag];
         if(remove && contained)
             [tagsStrings removeObject:tag];
-        else if(!remove && !contained) [tagsStrings addObject:tag];
+        else if(!remove && !contained)
+            [tagsStrings addObject:tag];
     }
     self.tagString = [tagsStrings componentsJoinedByString:@", "];
 }
@@ -783,7 +794,8 @@
     }
     
     NSString *sortedTagString = [tagsStringArray componentsJoinedByString:@", "];
-    if(!sortedTagString || sortedTagString.length == 0) return nil;
+    if(!sortedTagString || sortedTagString.length == 0)
+        return nil;
     NSMutableAttributedString *attributedText =
     [[NSMutableAttributedString alloc] initWithString:sortedTagString
                                            attributes:attrs];
@@ -798,31 +810,33 @@
     
 }
 
--(void)deleteToDoSave:(BOOL)save context:(NSManagedObjectContext*)context force:(BOOL)force{
+-(void)deleteToDoSave:(BOOL)save inContext:(NSManagedObjectContext*)context force:(BOOL)force
+{
     if(!context)
         context = KPCORE.context;
     
-    BOOL shouldDelete = [self shouldDeleteForce:force];
+    BOOL shouldDelete = [self shouldDeleteForce:force inContext:context];
     if( shouldDelete ){
-        [self removeAllAttachmentsForService:@"all" identifier:nil];
+        [self removeAllAttachmentsForService:@"all" identifier:nil inContext:context];
         [self MR_deleteEntityInContext:context];
     }
     if(save)
         [KPToDo saveToSync];
 }
 
--(BOOL)shouldDeleteForce:(BOOL)force{
+-(BOOL)shouldDeleteForce:(BOOL)force inContext:(NSManagedObjectContext*)context
+{
     if(self.subtasks.count > 0){
-        [KPToDo deleteToDos:[self.subtasks allObjects] save:NO force:YES];
+        [KPToDo deleteToDos:[self.subtasks allObjects] inContext:context save:NO force:YES];
     }
     else if( self.parent && !force && [self.origin isEqualToString:EVERNOTE_SERVICE]){
         self.isLocallyDeleted = @(YES);
-        NSLog(@"deleted subtask from Evernote");
+        DLog(@"deleted subtask from Evernote");
         return NO;
     }
     else if (!self.parent && !force && [self firstAttachmentForServiceType:GMAIL_SERVICE]) {
         self.isLocallyDeleted = @(YES);
-        NSLog(@"deleted Gmail task");
+        DLog(@"deleted Gmail task");
         return NO;
     }
     return YES;
@@ -851,9 +865,11 @@
         NSArray *existingLocation = [self.location componentsSeparatedByString:kLocationSplitStr];
         locationId = [existingLocation objectAtIndex:0];
     }
-    if(!locationId) locationId = [UtilityClass generateIdWithLength:5];
+    if(!locationId)
+        locationId = [UtilityClass generateIdWithLength:5];
     NSString *typeString = @"IN";
-    if(type == GeoFenceOnLeave) typeString = @"OUT";
+    if(type == GeoFenceOnLeave)
+        typeString = @"OUT";
     
     NSArray *locationArray = @[locationId,locationName,@(latitude),@(longitude),typeString];
     
@@ -915,7 +931,8 @@
 -(BOOL)completeInContext:(NSManagedObjectContext*)context{
     __block BOOL completed = NO;
     [context performBlockAndWait:^{
-        if(self.location) self.location = nil;
+        if(self.location)
+            self.location = nil;
         if(self.repeatOptionValue > RepeatNever){
             CellType oldCell = [self cellTypeForTodo];
             [self completeRepeatedTaskInContext:context];
@@ -952,21 +969,20 @@
 }
 
 #pragma mark - Attachments
-- (void)updateAttachmentFromObjects:(NSArray*)attachments{
-    
-}
+
 - (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context sync:(BOOL)sync from:(NSString *)from
 {
     if(!context)
         context = KPCORE.context;
-    // remove all present attachments for this service
-    [self removeAllAttachmentsForService:service identifier:identifier inContext:nil];
-    if(title.length > kTitleMaxLength)
-        title = [title substringToIndex:kTitleMaxLength];
-    // create the attachment
-    KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync];
     // add the new attachment
-    [self addAttachments:[NSSet setWithObject:attachment]];
+    [context performBlockAndWait:^{
+        // remove all present attachments for this service
+        [self removeAllAttachmentsForService:service identifier:identifier inContext:context];
+        NSString* newTitle = (title.length > kTitleMaxLength) ? [title substringToIndex:kTitleMaxLength] : title;
+        // create the attachment
+        KPAttachment* attachment = [KPAttachment attachmentForService:service title:newTitle identifier:identifier sync:sync inContext:context];
+        [self addAttachments:[NSSet setWithObject:attachment]];
+    }];
     
     if( from ){
         NSDictionary *options = @{ @"Service": service, @"From": from };

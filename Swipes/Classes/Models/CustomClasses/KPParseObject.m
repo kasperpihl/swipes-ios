@@ -86,7 +86,7 @@
 -(BOOL)deleteInContext:(NSManagedObjectContext *)context{
     BOOL successful = YES;
     if ([self isKindOfClass:KPToDo.class]) {
-        [(KPToDo *)self deleteToDoSave:NO force:NO];
+        [(KPToDo *)self deleteToDoSave:NO inContext:context force:NO];
     }
     else if([self shouldDeleteForce:NO]) {
         successful = [self MR_deleteEntityInContext:context];

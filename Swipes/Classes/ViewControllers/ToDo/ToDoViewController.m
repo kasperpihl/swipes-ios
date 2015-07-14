@@ -378,7 +378,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
 {
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
-    [self.model attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:noteRef] sync:sync from:@"manual"];
+    [self.model attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:noteRef] inContext:nil sync:sync from:@"manual"];
     [KPToDo saveToSync];
     [self updateAttachments];
     [self layoutWithDuration:0];
@@ -398,7 +398,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     DLog(@"selected dropbox file with path: %@", path);
     self.activeEditMode = KPEditModeNone;
     [BLURRY dismissAnimated:YES];
-    [self.model attachService:DROPBOX_SERVICE title:[path lastPathComponent] identifier:path sync:NO from:@"manual"];
+    [self.model attachService:DROPBOX_SERVICE title:[path lastPathComponent] identifier:path inContext:nil sync:NO from:@"manual"];
     [KPToDo saveToSync];
     [self updateAttachments];
     [self layoutWithDuration:0];
@@ -762,7 +762,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
     if(item == 2){
         [self.segmentedViewController deleteNumberOfItems:1 inView:self completion:^(BOOL succeeded, NSError *error) {
             if(succeeded){
-                [KPToDo deleteToDos:@[self.model] save:YES force:NO];
+                [KPToDo deleteToDos:@[self.model] inContext:nil save:YES force:NO];
                 [self pressedBack:nil];
             }
         }];
@@ -911,7 +911,7 @@ typedef NS_ENUM(NSUInteger, KPEditMode){
             //DLog(@"%li",(long)number);
             KPAttachment *attachment = [self.model attachmentForService:EVERNOTE_SERVICE identifier:evernoteEditView.identifier];
             if(number == 1){
-                [self.model removeAllAttachmentsForService:EVERNOTE_SERVICE identifier:evernoteEditView.identifier];
+                [self.model removeAllAttachmentsForService:EVERNOTE_SERVICE identifier:evernoteEditView.identifier inContext:nil];
                 [self update];
             }
             else if(number == 2){

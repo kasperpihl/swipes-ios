@@ -333,7 +333,7 @@
                 }
             }
             else{
-                [KPToDo deleteToDos:@[subtask] save:YES force:NO];
+                [KPToDo deleteToDos:@[subtask] inContext:nil save:YES force:NO];
                 NSMutableArray *mutableSubtasks = [self.subtasks mutableCopy];
                 [mutableSubtasks removeObjectAtIndex:indexPath.row];
                 self.subtasks = [mutableSubtasks copy];

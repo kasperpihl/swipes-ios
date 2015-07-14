@@ -69,7 +69,7 @@ static NSString * const kFromEvernote = @"Evernote";
         if(title.length > kTitleMaxLength)
             title = [title substringToIndex:kTitleMaxLength];
         KPToDo *newToDo = [KPToDo addItem:title priority:NO tags:nil save:NO from:kFromEvernote];
-        [newToDo attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:note.noteRef] sync:YES from:@"swipes-tag"];
+        [newToDo attachService:EVERNOTE_SERVICE title:title identifier:[EvernoteIntegration ENNoteRefToNSString:note.noteRef]  inContext:nil sync:YES from:@"swipes-tag"];
         if (createdTasks) {
             [createdTasks addObject:newToDo.tempId];
         }
@@ -303,7 +303,7 @@ static NSString * const kFromEvernote = @"Evernote";
             if (nil != subtask.origin && [subtask.origin isEqualToString:EVERNOTE_SERVICE]) {
                 updated = YES;
                 DLog(@"delete: %@",subtask);
-                [KPToDo deleteToDos:@[subtask] save:YES force:YES];
+                [KPToDo deleteToDos:@[subtask] inContext:nil save:YES force:YES];
             }
         }
     }
@@ -522,7 +522,7 @@ static NSString * const kFromEvernote = @"Evernote";
                 break;
                 
             case 1: // deleted note
-                [todo removeAllAttachmentsForService:EVERNOTE_SERVICE identifier:nil];
+                [todo removeAllAttachmentsForService:EVERNOTE_SERVICE identifier:nil inContext:nil];
                 [KPToDo saveToSync];
                 break;
                 

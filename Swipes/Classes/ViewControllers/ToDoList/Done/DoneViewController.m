@@ -32,6 +32,7 @@
     }
     return [KPToDo MR_findAllSortedBy:@"completionDate" ascending:NO withPredicate:predicate];
 }
+
 -(NSString *)itemHandler:(ItemHandler *)handler titleForItem:(KPToDo *)item{
     return [item readableTitleForStatus];
 }
@@ -40,17 +41,19 @@
     self.hasAskedForMore = YES;
     [self update];
 }
+
 -(void)didPressDeleteAll:(id)sender{
     [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Are you sure?", nil) andMessage:NSLocalizedString(@"Deleting old completed tasks can't be undone", nil) cancel:[NSLocalizedString(@"cancel", nil) capitalizedString] confirm:NSLocalizedString(@"Delete them", nil) block:^(BOOL succeeded, NSError *error) {
         if(succeeded){
             NSDate *startDate = [[NSDate date] dateAtStartOfDay];
             NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@ && parent = nil && isLocallyDeleted <> YES)",startDate];
             NSArray *oldCompletedTasks = [KPToDo MR_findAllWithPredicate:remainingPred];
-            [KPToDo deleteToDos:oldCompletedTasks save:YES force:NO];
+            [KPToDo deleteToDos:oldCompletedTasks inContext:nil save:YES force:NO];
             [self update];
         }
     }];
 }
+
 -(void)updateTableFooter{
     [super updateTableFooter];
     if(kFilter.isActive){

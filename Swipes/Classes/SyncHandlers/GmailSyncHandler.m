@@ -180,7 +180,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
                             if (processor.snippet) {
                                 newToDo.notes = [UtilityClass unescapeString:processor.snippet];
                             }
-                            [newToDo attachService:GMAIL_SERVICE title:title identifier:identifier sync:YES from:@"gmail-integration"];
+                            [newToDo attachService:GMAIL_SERVICE title:title identifier:identifier inContext:nil sync:YES from:@"gmail-integration"];
                             [_createdTasks addObject:newToDo.tempId];
                         }
                         else {
@@ -227,7 +227,7 @@ NSString * const kGmailUpdatedAtKey = @"GmailUpdatedAt";
         if (threadId) {
             [kGmInt removeSwipesLabelFromThreadAndArchive:threadId withBlock:^(NSError *error) {
                 if (nil == error) {
-                    [KPToDo deleteToDos:@[todo] save:YES force:YES];
+                    [KPToDo deleteToDos:@[todo] inContext:nil save:YES force:YES];
                 }
                 else {
                     // TODO
