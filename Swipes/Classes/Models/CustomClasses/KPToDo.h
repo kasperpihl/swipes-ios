@@ -50,7 +50,7 @@
 -(void)setRepeatOption:(RepeatOptions)option save:(BOOL)save;
 -(NSArray*)nextNumberOfRepeatedDates:(NSInteger)numberOfDates;
 - (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync from:(NSString*)from;
-- (void)removeAllAttachmentsForService:(NSString *)service identifier:(NSString*)identifier;
+-(void) removeAllAttachmentsForService:(NSString *)service identifier:(NSString*)identifier inContext:(NSManagedObjectContext *)context;
 - (KPAttachment *)firstAttachmentForServiceType:(NSString *)service;
 - (KPAttachment *)attachmentForService:(NSString*)service identifier:(NSString*)identifier;
 -(void)deleteToDoSave:(BOOL)save force:(BOOL)force;

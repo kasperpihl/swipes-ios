@@ -39,7 +39,8 @@
 }
 #pragma mark - Handling of changes
 -(NSArray*)updateWithObjectFromServer:(NSDictionary *)object context:(NSManagedObjectContext*)context{
-    if(!context) context = [KPCORE context];
+    if(!context)
+        context = [KPCORE context];
     [context performBlockAndWait:^{
         self.savingObject = nil;
         NSDateFormatter *dateFormatter = [Global isoDateFormatter];

@@ -291,13 +291,19 @@
     [super updateWithObjectFromServer:object context:context];
     __block NSMutableSet *changedAttributesSet = [NSMutableSet set];
     [context performBlockAndWait:^{
-        
         NSDictionary *keyMatch = [self keyMatch];
         // Get changes since start of the sync - not to overwrite recent changes
         NSArray *localChanges = [KPCORE lookupTemporaryChangedAttributesForObject:self.objectId];
         // If the object saved was new - the changes will be for it's tempId not objectId
-        if(!localChanges) localChanges = [KPCORE lookupTemporaryChangedAttributesForTempId:self.tempId];
+        if(!localChanges)
+            localChanges = [KPCORE lookupTemporaryChangedAttributesForTempId:self.tempId];
         NSString *parentId = [object objectForKey:@"parentLocalId"];
+        DLog(@"parentId: %@", parentId);
+        if ([@"sCw3EuTMIBWdaB" isEqualToString:parentId]) {
+            DLog(@"%@",object);
+            int i = 6;
+        }
+        BOOL didDelete = NO;
         if(!self.parent && parentId && parentId != (id)[NSNull null]){
             KPToDo *parent = [KPToDo MR_findFirstByAttribute:@"objectId" withValue:parentId inContext:context];
             if( parent ){
@@ -305,101 +311,113 @@
             }
             else{
                 // Parent didn't exist (maybe a remote delete task)
+                didDelete = YES;
                 [self deleteToDoSave:NO force:YES];
             }
         }
-            
-        for(NSString *pfKey in [object allKeys]){
-            if([localChanges containsObject:pfKey])
-                continue;
-            id pfValue = [object objectForKey:pfKey];
-            if([pfKey isEqualToString:@"repeatOption"]){
-                if(![[self stringForRepeatOption:self.repeatOptionValue] isEqualToString:pfValue]) self.repeatOptionValue = [self optionForRepeatString:pfValue];
-                continue;
+        if(!didDelete){
+            NSLog(@"task: %@", self);
+            if ([self.title isEqualToString:@"Coffee with Carmen"]) {
+                int i = 6;
             }
-            if([pfKey isEqualToString:@"tags"]){
-                NSArray *tagsFromServer = (NSArray*)pfValue;
-                //NSLog(@"tags:%@",tagsFromServer);
-                NSMutableArray *objectIDs = [NSMutableArray array];
-                if(tagsFromServer && [tagsFromServer isKindOfClass:[NSArray class]]){
-                    for(NSDictionary *tag in tagsFromServer){
-                        if(tag && (NSNull*)tag != [NSNull null]) [objectIDs addObject:[tag objectForKey:@"objectId"]];
-                        else {
-                            [changedAttributesSet addObject:@"tags"];
-                        }
-                    }
+            for(NSString *pfKey in [object allKeys]){
+                if ([self.title isEqualToString:@"Coffee with Carmen"]) {
+                    int i = 5;
                 }
-                if(objectIDs.count > 0){
-                    NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"%K IN %@",@"objectId",[objectIDs copy]];
-                    NSArray *tagsObjects = [KPTag MR_findAllWithPredicate:tagPredicate inContext:context];
-                    NSMutableArray *tagStrings = [NSMutableArray array];
-                    NSInteger tagCount = tagsObjects.count;
-                    NSMutableArray *notSortedTags = [NSMutableArray array];
-                    for(NSInteger i = 0 ; i < tagCount ; i++) [tagStrings addObject:[NSNull null]];
-                    for(KPTag *tag in tagsObjects){
-                        if(!tag || tag == (id)[NSNull null] || tag.title.length == 0){
-                            [changedAttributesSet addObject:@"tags"];
-                            continue;
-                        }
-                        NSInteger index = [objectIDs indexOfObject:tag.objectId];
-                        if(index != NSNotFound && index < tagCount) [tagStrings replaceObjectAtIndex:index withObject:tag.title];
-                        else{
-                            [notSortedTags addObject:tag.title];
-                        }
-                    }
-                    if(notSortedTags.count > 0){
-                        NSInteger counter = 0;
-                        for(NSInteger i = 0 ; i < tagCount ; i++){
-                            if([tagStrings objectAtIndex:i] == [NSNull null]){
-                                counter++;
-                                if(notSortedTags.count < counter) [tagStrings replaceObjectAtIndex:i withObject:[notSortedTags objectAtIndex:counter]];
+                if([localChanges containsObject:pfKey])
+                    continue;
+                id pfValue = [object objectForKey:pfKey];
+                if([pfKey isEqualToString:@"repeatOption"]){
+                    if(![[self stringForRepeatOption:self.repeatOptionValue] isEqualToString:pfValue]) self.repeatOptionValue = [self optionForRepeatString:pfValue];
+                    continue;
+                }
+                if([pfKey isEqualToString:@"tags"]){
+                    NSArray *tagsFromServer = (NSArray*)pfValue;
+                    NSLog(@"tags:%@",tagsFromServer);
+                    NSLog(@"%@, %@",self, self.objectId);
+                    NSMutableArray *objectIDs = [NSMutableArray array];
+                    if(tagsFromServer && [tagsFromServer isKindOfClass:[NSArray class]]){
+                        for(NSDictionary *tag in tagsFromServer){
+                            if(tag && (NSNull*)tag != [NSNull null]) {
+                                [objectIDs addObject:[tag objectForKey:@"objectId"]];
+                            }
+                            else {
+                                [changedAttributesSet addObject:@"tags"];
                             }
                         }
                     }
-                    [tagStrings removeObjectIdenticalTo:[NSNull null]];
-                    self.tagString = [tagStrings componentsJoinedByString:@", "];
-                    self.tags = [NSSet setWithArray:tagsObjects];
-                    
+                    if(objectIDs.count > 0){
+                        NSPredicate *tagPredicate = [NSPredicate predicateWithFormat:@"%K IN %@",@"objectId",[objectIDs copy]];
+                        NSArray *tagsObjects = [KPTag MR_findAllWithPredicate:tagPredicate inContext:context];
+                        NSMutableArray *tagStrings = [NSMutableArray array];
+                        NSInteger tagCount = tagsObjects.count;
+                        NSMutableArray *notSortedTags = [NSMutableArray array];
+                        for(NSInteger i = 0 ; i < tagCount ; i++) [tagStrings addObject:[NSNull null]];
+                        for(KPTag *tag in tagsObjects){
+                            if(!tag || tag == (id)[NSNull null] || tag.title.length == 0){
+                                [changedAttributesSet addObject:@"tags"];
+                                continue;
+                            }
+                            NSInteger index = [objectIDs indexOfObject:tag.objectId];
+                            if(index != NSNotFound && index < tagCount) [tagStrings replaceObjectAtIndex:index withObject:tag.title];
+                            else{
+                                [notSortedTags addObject:tag.title];
+                            }
+                        }
+                        if(notSortedTags.count > 0){
+                            NSInteger counter = 0;
+                            for(NSInteger i = 0 ; i < tagCount ; i++){
+                                if([tagStrings objectAtIndex:i] == [NSNull null]){
+                                    counter++;
+                                    if(notSortedTags.count < counter) [tagStrings replaceObjectAtIndex:i withObject:[notSortedTags objectAtIndex:counter]];
+                                }
+                            }
+                        }
+                        [tagStrings removeObjectIdenticalTo:[NSNull null]];
+                        self.tagString = [tagStrings componentsJoinedByString:@", "];
+                        self.tags = [NSSet setWithArray:tagsObjects];
+                        
+                    }
+                    else {
+                        self.tagString = @"";
+                        self.tags = [NSSet set];
+                    }
+                    continue;
                 }
-                else {
-                    self.tagString = @"";
-                    self.tags = [NSSet set];
-                }
-                continue;
-            }
-            
-            if([pfKey isEqualToString:@"attachments"]){
-                NSArray *attachments = (NSArray*)pfValue;
-                [self removeAllAttachmentsForService:@"all" identifier:nil];
-                for( NSDictionary *attachmentObj in attachments){
-                    NSString *title = [attachmentObj objectForKey:@"title"];
-                    NSString *identifier = [attachmentObj objectForKey:@"identifier"];
-                    NSString *service = [attachmentObj objectForKey:@"service"];
-                    NSNumber *syncNumber = [attachmentObj objectForKey:@"sync"];
-                    BOOL sync = NO;
-                    if (syncNumber && syncNumber != (id)[NSNull null])
-                        sync = [syncNumber boolValue];
-                    KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync inContext:context];
-                    // add the new attachment
-                    [self addAttachments:[NSSet setWithObject:attachment]];
-                }
-                continue;
-            }
-            
-            NSString *cdKey = [keyMatch objectForKey:pfKey];
-            if(cdKey){
                 
-                id cdValue = [self valueForKey:cdKey];
-                if([pfValue isKindOfClass:[NSDictionary class]] && [[pfValue objectForKey:@"__type"] isEqualToString:@"Date"]){
-                    NSDateFormatter *dateFormatter = [Global isoDateFormatter];
-                    pfValue = [dateFormatter dateFromString:[pfValue objectForKey:@"iso"]];
+                if([pfKey isEqualToString:@"attachments"]){
+                    NSArray *attachments = (NSArray*)pfValue;
+                    [self removeAllAttachmentsForService:@"all" identifier:nil];
+                    for( NSDictionary *attachmentObj in attachments){
+                        NSString *title = [attachmentObj objectForKey:@"title"];
+                        NSString *identifier = [attachmentObj objectForKey:@"identifier"];
+                        NSString *service = [attachmentObj objectForKey:@"service"];
+                        NSNumber *syncNumber = [attachmentObj objectForKey:@"sync"];
+                        BOOL sync = NO;
+                        if (syncNumber && syncNumber != (id)[NSNull null])
+                            sync = [syncNumber boolValue];
+                        KPAttachment* attachment = [KPAttachment attachmentForService:service title:title identifier:identifier sync:sync inContext:context];
+                        // add the new attachment
+                        [self addAttachments:[NSSet setWithObject:attachment]];
+                    }
+                    continue;
                 }
-                if([cdValue isKindOfClass:[NSString class]] && [pfValue isKindOfClass:[NSString class]]){ checkStringWithKey(object, pfValue, cdKey, cdValue); }
-                else if([cdValue isKindOfClass:[NSDate class]] && [pfValue isKindOfClass:[NSDate class]]){ checkDateWithKey(object, pfValue, cdKey, cdValue); }
-                else if([cdValue isKindOfClass:[NSNumber class]] && [pfValue isKindOfClass:[NSNumber class]]){ checkNumberWithKey(object, pfValue, cdKey, cdValue); }
-                else if(pfValue != cdValue){
-                    if(pfValue == (id)[NSNull null]) pfValue = nil;
-                    [self setValue:pfValue forKey:cdKey];
+                
+                NSString *cdKey = [keyMatch objectForKey:pfKey];
+                if(cdKey){
+                    
+                    id cdValue = [self valueForKey:cdKey];
+                    if([pfValue isKindOfClass:[NSDictionary class]] && [[pfValue objectForKey:@"__type"] isEqualToString:@"Date"]){
+                        NSDateFormatter *dateFormatter = [Global isoDateFormatter];
+                        pfValue = [dateFormatter dateFromString:[pfValue objectForKey:@"iso"]];
+                    }
+                    if([cdValue isKindOfClass:[NSString class]] && [pfValue isKindOfClass:[NSString class]]){ checkStringWithKey(object, pfValue, cdKey, cdValue); }
+                    else if([cdValue isKindOfClass:[NSDate class]] && [pfValue isKindOfClass:[NSDate class]]){ checkDateWithKey(object, pfValue, cdKey, cdValue); }
+                    else if([cdValue isKindOfClass:[NSNumber class]] && [pfValue isKindOfClass:[NSNumber class]]){ checkNumberWithKey(object, pfValue, cdKey, cdValue); }
+                    else if(pfValue != cdValue){
+                        if(pfValue == (id)[NSNull null]) pfValue = nil;
+                        [self setValue:pfValue forKey:cdKey];
+                    }
                 }
             }
         }
@@ -780,11 +798,14 @@
     
 }
 
--(void)deleteToDoSave:(BOOL)save force:(BOOL)force{
+-(void)deleteToDoSave:(BOOL)save context:(NSManagedObjectContext*)context force:(BOOL)force{
+    if(!context)
+        context = KPCORE.context;
+    
     BOOL shouldDelete = [self shouldDeleteForce:force];
     if( shouldDelete ){
         [self removeAllAttachmentsForService:@"all" identifier:nil];
-        [self MR_deleteEntity];
+        [self MR_deleteEntityInContext:context];
     }
     if(save)
         [KPToDo saveToSync];
@@ -934,10 +955,12 @@
 - (void)updateAttachmentFromObjects:(NSArray*)attachments{
     
 }
-- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier sync:(BOOL)sync from:(NSString *)from
+- (void)attachService:(NSString *)service title:(NSString *)title identifier:(NSString *)identifier inContext:(NSManagedObjectContext *)context sync:(BOOL)sync from:(NSString *)from
 {
+    if(!context)
+        context = KPCORE.context;
     // remove all present attachments for this service
-    [self removeAllAttachmentsForService:service identifier:identifier];
+    [self removeAllAttachmentsForService:service identifier:identifier inContext:nil];
     if(title.length > kTitleMaxLength)
         title = [title substringToIndex:kTitleMaxLength];
     // create the attachment
@@ -952,27 +975,32 @@
     }
 }
 
-- (void)removeAllAttachmentsForService:(NSString *)service identifier:(NSString*)identifier
+- (void)removeAllAttachmentsForService:(NSString *)service identifier:(NSString*)identifier inContext:(NSManagedObjectContext *)context
 {
-    NSMutableSet* attachmentSet = [NSMutableSet set];
-    for (KPAttachment* att in self.attachments) {
-        if ([att.service isEqualToString:service] || [service isEqualToString:@"all"]) {
-            if(!identifier || [identifier isEqualToString:att.identifier])
-                [attachmentSet addObject:att];
-        }
-    }
-    if (0 < attachmentSet.count) {
-        [self removeAttachments:attachmentSet];
-        for(KPAttachment *att in attachmentSet ){
-            [att MR_deleteEntity];
-        }
-        for ( KPToDo *todo in self.subtasks ){
-            if([todo.origin isEqualToString:service]){
-                //todo.originIdentifier = nil;
-                todo.origin = nil;
+    if(!context)
+        context = KPCORE.context;
+    [context performBlockAndWait:^{
+        NSMutableSet* attachmentSet = [NSMutableSet set];
+        for (KPAttachment* att in self.attachments) {
+            if ([att.service isEqualToString:service] || [service isEqualToString:@"all"]) {
+                if(!identifier || [identifier isEqualToString:att.identifier])
+                    [attachmentSet addObject:att];
             }
         }
-    }
+        if (0 < attachmentSet.count) {
+            [self removeAttachments:attachmentSet];
+            for(KPAttachment *att in attachmentSet ){
+                [att MR_deleteEntityInContext:context];
+            }
+            for ( KPToDo *todo in self.subtasks ){
+                if([todo.origin isEqualToString:service]){
+                    //todo.originIdentifier = nil;
+                    todo.origin = nil;
+                }
+            }
+        }
+    }];
+    
 }
 
 +(void)removeAllAttachmentsForAllToDosWithService:(NSString *)service inContext:(NSManagedObjectContext *)context save:(BOOL)save{
