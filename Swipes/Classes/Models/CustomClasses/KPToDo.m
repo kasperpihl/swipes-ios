@@ -319,7 +319,8 @@
             }
             if([pfKey isEqualToString:@"tags"]){
                 NSArray *tagsFromServer = (NSArray*)pfValue;
-                //NSLog(@"tags:%@",tagsFromServer);
+                //DLog(@"tags:%@",tagsFromServer);
+                //DLog(@"task:%@, %@", self, self.objectId);
                 NSMutableArray *objectIDs = [NSMutableArray array];
                 if(tagsFromServer && [tagsFromServer isKindOfClass:[NSArray class]]){
                     for(NSDictionary *tag in tagsFromServer){

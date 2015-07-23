@@ -211,12 +211,12 @@ static BOOL g_registeredForNotifications = NO;
         
         NSPredicate *leftForNowPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [NSDate date] ];
         NSPredicate *leftForTodayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [[NSDate dateTomorrow] dateAtStartOfDay]];
-        NSPredicate *tomorrowPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [[NSDate dateTomorrow] dateAtStartOfDay],[[[NSDate dateTomorrow] dateByAddingDays:1] dateAtStartOfDay]];
+        //NSPredicate *tomorrowPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [[NSDate dateTomorrow] dateAtStartOfDay],[[[NSDate dateTomorrow] dateByAddingDays:1] dateAtStartOfDay]];
         NSPredicate *mondayPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", mondayStart, mondayEnd];
         
         NSInteger numberOfTasksLeftNow = [KPToDo MR_countOfEntitiesWithPredicate:leftForNowPredicate];
         NSInteger numberOfTasksLeftToday = [KPToDo MR_countOfEntitiesWithPredicate:leftForTodayPredicate];
-        NSInteger numberOfTasksForTomorrow = [KPToDo MR_countOfEntitiesWithPredicate:tomorrowPredicate];
+        //NSInteger numberOfTasksForTomorrow = [KPToDo MR_countOfEntitiesWithPredicate:tomorrowPredicate];
         NSInteger numberOfTasksForMonday = [KPToDo MR_countOfEntitiesWithPredicate:mondayPredicate];
         
         
@@ -228,17 +228,17 @@ static BOOL g_registeredForNotifications = NO;
         
         // Check whether or not the next morning event is today or tomorrow
         NSDate *dateToCheckForMorning = [NSDate dateTomorrow];
-        NSInteger numberToCheckForMorning = numberOfTasksForTomorrow;
+        //NSInteger numberToCheckForMorning = numberOfTasksForTomorrow;
         
         // Check whether or not the next morning event is today or tomorrow
         if ( now.hour < dayHours || ( now.hour == dayHours && now.minute < dayMinutes ) ){
             dateToCheckForMorning = [NSDate date];
-            numberToCheckForMorning = numberOfTasksLeftToday;
+            //numberToCheckForMorning = numberOfTasksLeftToday;
         }
         // Check how many tasks is schedule for the next morning and see if it's a weekday
-        if( dailyReminders && numberToCheckForMorning <= 1 && dateToCheckForMorning.isTypicallyWorkday){
+        if( dailyReminders && /*numberToCheckForMorning <= 1 &&*/ dateToCheckForMorning.isTypicallyWorkday){
             // Notify to make a plan from the morning
-            addLocalNotificationBlock(NSLocalizedString(@"Good morning! Start your productive day with a plan.", nil),[dateToCheckForMorning dateAtHours:dayHours minutes:dayMinutes],@"make-a-plan-for-the-day");
+            addLocalNotificationBlock(NSLocalizedString(@"Good morning! Start your productive day with a plan.", nil),[dateToCheckForMorning dateAtHours:dayHours minutes:dayMinutes], @"make-a-plan-for-the-day");
         }
         
         // Check
