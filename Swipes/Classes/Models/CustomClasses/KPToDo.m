@@ -375,7 +375,7 @@
             }
         }
         if(!didDelete){
-            //NSLog(@"task: %@", self);
+            //DLog(@"task: %@", self);
             for(NSString *pfKey in [object allKeys]){
                 if([localChanges containsObject:pfKey])
                     continue;
@@ -386,8 +386,8 @@
                 }
                 if([pfKey isEqualToString:@"tags"]){
                     NSArray *tagsFromServer = (NSArray*)pfValue;
-                    NSLog(@"tags:%@",tagsFromServer);
-                    NSLog(@"%@, %@",self, self.objectId);
+                    //DLog(@"tags:%@",tagsFromServer);
+                    //DLog(@"%@, %@",self, self.objectId);
                     NSMutableArray *objectIDs = [NSMutableArray array];
                     if(tagsFromServer && [tagsFromServer isKindOfClass:[NSArray class]]){
                         for(NSDictionary *tag in tagsFromServer){
