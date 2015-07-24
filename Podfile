@@ -7,8 +7,9 @@ target :Swipes do
     pod 'youtube-ios-player-helper'
     pod 'Appirater', :inhibit_warnings => true
     pod 'Bolts', :inhibit_warnings => true
-    pod 'ParseFacebookUtils'
     pod 'Parse', :inhibit_warnings => true
+    pod 'ParseFacebookUtils'
+    pod 'evernote-cloud-sdk-ios'
     pod 'Facebook-iOS-SDK', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
@@ -19,7 +20,7 @@ target :Swipes do
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
     pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK'
+    pod 'GoogleAnalytics'
     pod 'BobPullToRefresh'
 end
 
@@ -27,7 +28,7 @@ target :SwipesKit do
     pod 'Appirater', :inhibit_warnings => true
     pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
-    pod 'Parse', :inhibit_warnings => true
+    pod 'evernote-cloud-sdk-ios'
     pod 'Facebook-iOS-SDK', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
@@ -38,29 +39,31 @@ target :SwipesKit do
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
     pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK'
+    pod 'GoogleAnalytics'
 end
 
 target :SwipesToday do
     pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
+    pod 'evernote-cloud-sdk-ios'
     pod 'Facebook-iOS-SDK', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'Base64'
     pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK'
+    pod 'GoogleAnalytics'
 end
 
 target :SwipesShare do
     pod 'Parse', :inhibit_warnings => true
     pod 'ParseFacebookUtils'
+    pod 'evernote-cloud-sdk-ios'
     pod 'Facebook-iOS-SDK', :inhibit_warnings => true
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'Base64'
     pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK'
+    pod 'GoogleAnalytics'
     pod 'UITextView+Placeholder'
 end
 
