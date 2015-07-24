@@ -196,7 +196,7 @@
         @catch (NSException *exception) {
             
             NSMutableDictionary *attachment = [NSMutableDictionary dictionary];
-            NSLog(@"%@",tags);
+            //NSLog(@"%@",tags);
             if(tags)
                 [attachment setObject:attachment forKey:@"tags"];
             [UtilityClass sendException:exception type:@"Update Tags Exception" attachment:attachment];

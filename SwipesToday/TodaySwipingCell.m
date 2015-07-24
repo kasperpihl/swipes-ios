@@ -42,7 +42,7 @@
     if(self.lock)
         return;
     if(point.x < kPreventNotificationDistanceThreshold && (CACurrentMediaTime()-self.startTime)<kPreventNotificationTimeThreshold){
-        NSLog(@"did cancel");
+        DLog(@"did cancel");
         self.didCancel = YES;
     }
     if(!self.didRegret){
@@ -77,7 +77,7 @@
 -(void)swipingOverlay:(SwipingOverlayView *)overlay didEndWithDistance:(CGPoint)point relative:(CGPoint)relative{
     if(self.lock)
         return;
-    NSLog(@"l - %f - %f",CACurrentMediaTime()-self.startTime,point.x);
+    DLog(@"l - %f - %f",CACurrentMediaTime()-self.startTime,point.x);
     //NSLog(@"l - relative %f last %f",relative.x,self.lastX);
     [self finalizeAnimationAndComplete:(point.x > kActionThreshold && !self.didRegret && !self.didCancel)];
 }

@@ -122,7 +122,7 @@
 }
 
 -(void)swipingOverlay:(SwipingOverlayView *)overlay didTapInPoint:(CGPoint)point{
-    NSLog(@"pressed in point %f",point.x);
+    DLog(@"pressed in point %f",point.x);
     if(point.x < self.taskTitle.frame.origin.x)
         [self pressedComplete:self.completeButton];
 }

@@ -118,8 +118,8 @@ static BOOL g_isNotFirstRun = NO;
                 for (NSString* key in keys) {
                     [[self sharedDefaults] setObject:[defs objectForKey:key] forKey:key];
                 }
-                //                NSLog(@"%@", [[NSUserDefaults standardUserDefaults] dictionaryRepresentation]);
-                //                NSLog(@"%@", [[self sharedDefaults] dictionaryRepresentation]);
+                //NSLog(@"%@", [[NSUserDefaults standardUserDefaults] dictionaryRepresentation]);
+                //NSLog(@"%@", [[self sharedDefaults] dictionaryRepresentation]);
             }
         }
     }

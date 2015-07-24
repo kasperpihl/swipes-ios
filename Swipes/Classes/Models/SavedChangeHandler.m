@@ -77,7 +77,7 @@
         
         [context MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error) {
             if(error)
-                NSLog(@"error%@",error);
+                DLog(@"error: %@", error);
         }];
     }
     
@@ -100,7 +100,7 @@
             }
         }];
         if(!blockToTemp){
-            NSLog(@"adding changes");
+            DLog(@"adding changes");
             [USER_DEFAULTS setObject:self._attributeChangesOnObjects forKey:kTMPUpdateObjects];
             [USER_DEFAULTS synchronize];
         }

@@ -64,7 +64,7 @@ static FacebookCommunicator *sharedObject;
      parameters:params
      handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
          if (error) {
-             NSLog(@"dialog swithError:%@",[error localizedDescription]);
+             DLog(@"dialog swithError:%@", [error localizedDescription]);
              BOOL hasHandled;
              if(block){
                  hasHandled = block(FBReturnTypeError,nil,error);

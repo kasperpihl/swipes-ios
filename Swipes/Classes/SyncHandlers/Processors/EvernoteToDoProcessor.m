@@ -194,7 +194,7 @@ static NSSet* g_startEndElements;
         return YES;
     }
     else {
-        NSLog(@"Cannot find TODO: %@ (or found but already with the same status)", updatedToDo);
+        DLog(@"Cannot find TODO: %@ (or found but already with the same status)", updatedToDo);
     }
     return NO;
 }
@@ -226,12 +226,12 @@ static NSSet* g_startEndElements;
         NSRange range = NSMakeRange(startLocation, escapedOldTitle.length);
         self.updatedContent = [self.updatedContent stringByReplacingCharactersInRange:range withString:[self xmlEscape:title]];
         self.needUpdate = YES;
-        NSLog(@"successfully went through updating content local (title)");
+        DLog(@"successfully went through updating content local (title)");
         
         return YES;
     }
     else {
-        NSLog(@"Cannot find TODO: %@", updatedToDo);
+        DLog(@"Cannot find TODO: %@", updatedToDo);
     }
     return NO;
 }

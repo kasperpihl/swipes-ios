@@ -155,7 +155,7 @@ static NSString * const kFromEvernote = @"Evernote";
     BOOL updated = NO;
     // If subtask is deleted from Swipes - mark completed in Evernote
     if ( [subtask.isLocallyDeleted boolValue] && !evernoteToDo.checked ){
-        NSLog(@"completing evernote - subtask was deleted");
+        DLog(@"completing evernote - subtask was deleted");
         [processor updateToDo:evernoteToDo checked:YES];
         return NO;
     }

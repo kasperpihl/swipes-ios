@@ -314,7 +314,7 @@ typedef enum {
 }
 
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex{
-    NSLog(@"index:%li",(long)buttonIndex);
+    DLog(@"index:%li",(long)buttonIndex);
     if(buttonIndex == 1){
         UITextField *textField = [alertView textFieldAtIndex:0];
         if(textField.text.length > 0){
@@ -548,7 +548,7 @@ typedef enum {
     [ROOT_CONTROLLER tryoutapp];
 }
 -(void)pressedForgot:(UIButton*)sender{
-    NSLog(@"for: %@",self.emailField.text);
+    DLog(@"for: %@",self.emailField.text);
     [UTILITY inputAlertWithTitle:NSLocalizedString(@"Reset password", nil) message:nil pretext:self.emailField.text placeholder:[NSLocalizedString(@"email", nil) capitalizedString] cancel:[NSLocalizedString(@"cancel", nil) capitalizedString] confirm:[NSLocalizedString(@"reset", nil) capitalizedString] block:^(NSString *string, NSError *error) {
         if(string.length == 0)
             return;

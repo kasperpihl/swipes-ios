@@ -54,7 +54,7 @@
             [self.textField setValue:tcolor(TextColor) forKeyPath:@"_placeholderLabel.textColor"];
         }
         @catch (NSException *exception) {
-            NSLog(@"excepton:%@",exception);
+            DLog(@"excepton:%@",exception);
         }
         [self.textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         [self addSubview:self.textField];

@@ -24,7 +24,7 @@
 -(void)setDone:(BOOL)done animated:(BOOL)animated itemIndex:(NSInteger)itemIndex{
     
     OnboardingTableViewCell *cell = (OnboardingTableViewCell*)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:itemIndex inSection:0]];
-    NSLog(@"cell%@",cell);
+    DLog(@"cell%@",cell);
     if( cell ){
         
         [cell setDone:done animated:animated];

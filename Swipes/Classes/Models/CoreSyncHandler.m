@@ -937,7 +937,6 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
         [self._updatedObjectsForSyncNotification addObject:[object objectForKey:@"objectId"]];
         if (!cdObject)
             cdObject = [class getCDObjectFromObject:object context:context];
-        NSLog(@"%@",[object objectForKey:@"objectId"]);
         NSArray *affectedChanges = [cdObject updateWithObjectFromServer:object context:context];
         if(affectedChanges)
             [*affectedChangedAttributes setObject:affectedChanges forKey:cdObject.objectId];

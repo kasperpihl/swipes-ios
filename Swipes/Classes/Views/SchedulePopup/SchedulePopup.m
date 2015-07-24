@@ -448,7 +448,7 @@ typedef enum {
 }
 
 -(void)locationSearchView:(LocationSearchView *)locationSearchView selectedLocation:(CLPlacemark *)location{
-    NSLog(@"place: %@",location);
+    DLog(@"place: %@",location);
     [self returnState:KPScheduleButtonLocation date:nil location:location];
     [self pressedLocation:self];
 }

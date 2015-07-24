@@ -42,12 +42,15 @@
         
     }];
     
-    if (result == MessageComposeResultCancelled)
-        NSLog(@"Message cancelled");
-    else if (result == MessageComposeResultSent)
-        NSLog(@"Message sent");
-    else
-        NSLog(@"Message failed");
+    if (result == MessageComposeResultCancelled) {
+        DLog(@"Message cancelled");
+    }
+    else if (result == MessageComposeResultSent) {
+        DLog(@"Message sent");
+    }
+    else {
+        DLog(@"Message failed");
+    }
 }
 
 

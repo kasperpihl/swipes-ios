@@ -250,7 +250,7 @@ NSString* const kKeyCheckmarkState = @"findnoteswithtodos";
     [kEnInt authenticateEvernoteInViewController:_caller withBlock:^(NSError *error) {
         if (error || !kEnInt.isAuthenticated) {
             // TODO show message to the user
-            NSLog(@"Session authentication failed: %@", [error localizedDescription]);
+            DLog(@"Session authentication failed: %@", [error localizedDescription]);
         }
         else {
             [self performSelectorOnMainThread:selector withObject:object waitUntilDone:NO];

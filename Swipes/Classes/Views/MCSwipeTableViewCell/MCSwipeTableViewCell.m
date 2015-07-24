@@ -119,7 +119,7 @@ secondStateIconName:(NSString *)secondIconName
 -(void)privateHandlePanGestureRecognizer:(UIPanGestureRecognizer *)gesture withTranslation:(CGPoint)translation{
     
     if(self.activatedDirection == MCSwipeTableViewCellActivatedDirectionNone){
-        NSLog(@"wasn't activated");
+        DLog(@"wasn't activated");
         return;
     
     }

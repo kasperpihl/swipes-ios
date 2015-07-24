@@ -76,7 +76,7 @@ static char * const kPwd = "The Swipes Team";
                 }
             }
             @catch (NSException *exception) {
-                NSLog(@"Error trying to send '%@' to parse", parseError);
+                DLog(@"Error trying to send '%@' to parse", parseError);
             }
            
         }

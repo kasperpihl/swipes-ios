@@ -53,7 +53,7 @@ static KPParseCommunicator *sharedObject;
             return;
         }
         if(priority){
-            NSLog(@"file is downloading prior");
+            DLog(@"file is downloading prior");
             [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
                 if(!error) block(KPDLResultSuccess,data,error);
                 else block(KPDLResultError,nil,error);

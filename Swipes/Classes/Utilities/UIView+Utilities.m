@@ -133,7 +133,7 @@
 {
 //    NSLog(@"%@class: %@, tag: %d, frame: %@, (%u) %@", prefix, NSStringFromClass(self.class), self.tag,
 //          NSStringFromCGRect(self.frame), self.subviews.count, self.hidden ? @"HIDDEN" : @"");
-    NSLog(@"%@%@ %@", prefix, [self description], [self isKindOfClass:UILabel.class] ? ((UILabel *)self).text : @"");
+    DLog(@"%@%@ %@", prefix, [self description], [self isKindOfClass:UILabel.class] ? ((UILabel *)self).text : @"");
     for (UIView* v in self.subviews) {
         [v explainSubiews:[prefix stringByAppendingString:@"  "]];
     }

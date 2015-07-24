@@ -194,7 +194,7 @@
         NSInteger counter = 0;
         NSArray *iteratingItems = [self.items copy];
         if(kFilter.searchString){
-            NSLog(@"search string activated");
+            DLog(@"search string activated");
             NSArray *searchArray = [kFilter.searchString componentsSeparatedByString:@" "];
             NSMutableString *mutPredicate = [NSMutableString stringWithFormat:@""];
             for(NSString *string in searchArray){

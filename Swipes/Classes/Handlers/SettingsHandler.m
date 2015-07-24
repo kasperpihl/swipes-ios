@@ -188,7 +188,7 @@ static SettingsHandler *sharedObject;
 #ifndef APPLE_WATCH
 
 -(void)sendSettingsToServer{
-    NSLog(@"sending sync settings");
+    DLog(@"sending sync settings");
     NSMutableDictionary *settings = [NSMutableDictionary dictionary];
     for( NSNumber *indexNumber in [self syncedSettingIndexes]){
         KPSettings setting = (KPSettings)[indexNumber integerValue];
@@ -382,8 +382,6 @@ static SettingsHandler *sharedObject;
     for(KPSettings setting = 0 ; setting <= IntegrationEvernoteFindInBusinessNotebooks ; setting++){
         NSLog(@"%@ - %@", [self indexForSettings:setting] ,[self valueForSetting:setting]);
     }
-}
--(void)dealloc{
 }
 
 @end

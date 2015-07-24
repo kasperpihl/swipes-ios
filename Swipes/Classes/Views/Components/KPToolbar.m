@@ -68,7 +68,7 @@
             else if ([item isKindOfClass:[UIImage class]] && !self.font)
                 itemImage = (UIImage*)item;
             else{
-                NSLog(@"only strings and uiimages as items");
+                DLog(@"only strings and uiimages as items");
                 return;
             }
             UIButton *button = [SlowHighlightIcon buttonWithType:UIButtonTypeCustom];

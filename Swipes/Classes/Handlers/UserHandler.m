@@ -97,7 +97,9 @@ static UserHandler *sharedObject;
         if(!error){
             [self handleUser:(PFUser*)object];
         }
-        else NSLog(@"t%@",error);
+        else {
+            DLog(@"t%@",error);
+        }
     }];
 }
 -(NSString *)emailOrFacebookString{

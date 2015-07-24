@@ -280,7 +280,6 @@
     NSInteger numberOfDaysInMonth = [CURRENT_CALENDAR rangeOfUnit:NSCalendarUnitDay
                                                            inUnit:NSCalendarUnitMonth
                                                           forDate:retDate].length;
-    NSLog(@"numberOfDays:%li",(long)numberOfDaysInMonth);
     if(retDate.day >= 28 && retDate.day < numberOfDaysInMonth){
         offsetComponents = [[NSDateComponents alloc] init];
         [offsetComponents setDay:numberOfDaysInMonth-retDate.day];

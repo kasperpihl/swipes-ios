@@ -89,7 +89,7 @@
     __block NSString *requestPath = @"me?fields=email,gender";
     FBRequest *request = [FBRequest requestForGraphPath:requestPath];
     [FBC addRequest:request write:NO permissions:nil block:^BOOL(FBReturnType status, id result, NSError *error) {
-        NSLog(@"fetched");
+        DLog(@"fetched");
         PFUser *user = kCurrent;
         if(error) {
             return NO;
@@ -361,7 +361,7 @@ static RootViewController *sharedObject;
     [[sender superview] removeFromSuperview];
 }
 -(void)moviePlayerDidFinish:(NSNotification*)notification{
-    NSLog(@"noti %@",notification);
+    DLog(@"noti %@",notification);
 }
 -(void)playVideoWithIdentifier:(NSString *)identifier{
   //  NSString *url = [NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@&hd=1",identifier];
