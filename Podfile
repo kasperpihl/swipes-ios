@@ -1,70 +1,51 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 platform :ios, '7.0'
+inhibit_all_warnings!
 
-target :Swipes do
-    pod 'M13BadgeView'
-    pod 'youtube-ios-player-helper'
-    pod 'Appirater', :inhibit_warnings => true
-    pod 'Bolts', :inhibit_warnings => true
+def shared_pods
+    pod 'Parse'
     pod 'ParseFacebookUtils'
-    pod 'Parse', :inhibit_warnings => true
-    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
+    pod 'evernote-cloud-sdk-ios'
     pod 'Reachability'
     pod 'Underscore.m'
-    pod 'RMStore', :inhibit_warnings => true
     pod 'Base64'
+    pod 'Intercom'
+    pod 'GoogleAnalytics'
+end
+
+target :Swipes do
+    shared_pods
+    pod 'M13BadgeView'
+    pod 'youtube-ios-player-helper'
+    pod 'Appirater'
+    pod 'RMStore'
     pod 'APAddressBook'
     pod 'DejalActivityView'
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
-    pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK'
     pod 'BobPullToRefresh'
 end
 
-target :SwipesKit do
-    pod 'Appirater', :inhibit_warnings => true
-    pod 'Parse', :inhibit_warnings => true
-    pod 'ParseFacebookUtils'
-    pod 'Parse', :inhibit_warnings => true
-    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
-    pod 'Reachability'
-    pod 'Underscore.m'
-    pod 'RMStore', :inhibit_warnings => true
-    pod 'Base64'
-    pod 'APAddressBook'
-    pod 'DejalActivityView'
-    pod 'NSURL+QueryDictionary'
-    pod 'DHCShakeNotifier'
-    pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK'
-end
-
 target :SwipesToday do
-    pod 'Parse', :inhibit_warnings => true
-    pod 'ParseFacebookUtils'
-    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
-    pod 'Reachability'
-    pod 'Underscore.m'
-    pod 'Base64'
-    pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK'
+    shared_pods
 end
 
 target :SwipesShare do
-    pod 'Parse', :inhibit_warnings => true
-    pod 'ParseFacebookUtils'
-    pod 'Facebook-iOS-SDK', :inhibit_warnings => true
-    pod 'Reachability'
-    pod 'Underscore.m'
-    pod 'Base64'
-    pod 'Intercom'
-    pod 'GoogleAnalytics-iOS-SDK'
+    shared_pods
     pod 'UITextView+Placeholder'
 end
 
-#link_with 'Swipes', 'Swipes_iOS8', 'SwipesKit'
+#target :SwipesKit do
+#    shared_pods
+#    pod 'Appirater'
+#    pod 'RMStore'
+#    pod 'APAddressBook'
+#    pod 'DejalActivityView'
+#    pod 'NSURL+QueryDictionary'
+#    pod 'DHCShakeNotifier'
+#end
+
 #link_with 'Swipes', 'SwipesKit'
 
 post_install do |installer|

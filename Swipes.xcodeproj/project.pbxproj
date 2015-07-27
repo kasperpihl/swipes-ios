@@ -239,10 +239,6 @@
 		A7E2D93C17B2C5A4007BDE00 /* SettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D93B17B2C5A4007BDE00 /* SettingsCell.m */; };
 		A7E2D94717B3F258007BDE00 /* DayPickerSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D94617B3F258007BDE00 /* DayPickerSettingsCell.m */; };
 		A7E2D94A17B4FE0F007BDE00 /* UpgradeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E2D94917B4FE0F007BDE00 /* UpgradeViewController.m */; };
-		A7E9F60019DAA2C100CAA1D1 /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */; };
-		A7E9F60519DAA61600CAA1D1 /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
-		A7E9F60619DAA6A300CAA1D1 /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
-		A7E9F60819DAAE3800CAA1D1 /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */; };
 		A7E9F60919DAAE8800CAA1D1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
 		A7E9F60B19DAAEC500CAA1D1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
 		A7E9F60C19DAAECD00CAA1D1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
@@ -286,8 +282,6 @@
 		DA09AFB21AB1CE65002632DC /* _KPParseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285017294C56002226C8 /* _KPParseObject.m */; };
 		DA09AFB31AB1CE65002632DC /* _KPTag.m in Sources */ = {isa = PBXBuildFile; fileRef = A7680D28172C5EA800BCB2D9 /* _KPTag.m */; };
 		DA09AFB41AB1CE65002632DC /* _KPToDo.m in Sources */ = {isa = PBXBuildFile; fileRef = A781285217294C56002226C8 /* _KPToDo.m */; };
-		DA09AFB51AB1CE80002632DC /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
-		DA09AFB61AB1CE84002632DC /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */; };
 		DA09AFB71AB1CE8A002632DC /* Vero.m in Sources */ = {isa = PBXBuildFile; fileRef = A7582505189BC35600B904BC /* Vero.m */; };
 		DA09AFBF1AB1D215002632DC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
 		DA09AFC41AB1D225002632DC /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
@@ -553,10 +547,8 @@
 		DA6924AE19BDCF330082D1E4 /* SyncQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = A7AA7969194E06AA003DAB3B /* SyncQueue.h */; };
 		DA6A36201B2EF946009BD8A9 /* swipes-notification.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DA6A361E1B2EF946009BD8A9 /* swipes-notification.m4a */; };
 		DA6A36291B30663F009BD8A9 /* s.m4a in Resources */ = {isa = PBXBuildFile; fileRef = DA6A36281B30663F009BD8A9 /* s.m4a */; };
-		DA6B61BB19DAEF0D00089877 /* ENSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */; };
 		DA6B61BC19DAF26900089877 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A761B5AE16EB59550095A9A8 /* MobileCoreServices.framework */; };
 		DA6B61BD19DAF27B00089877 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAEBBE62188B2BB8002655CB /* libxml2.dylib */; };
-		DA6B61BE19DAF3B600089877 /* ENSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */; };
 		DA6B61C319E321FE00089877 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA6B61C119E321FE00089877 /* Localizable.strings */; };
 		DA7AEE931A9F328000436CE3 /* IntegrationSectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7AEE921A9F328000436CE3 /* IntegrationSectionCell.m */; };
 		DA7AEE971A9FBCAA00436CE3 /* IntegrationTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7AEE961A9FBCAA00436CE3 /* IntegrationTitleView.m */; };
@@ -1096,8 +1088,6 @@
 		A7E2D94817B4FE0F007BDE00 /* UpgradeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UpgradeViewController.h; path = Upgrade/UpgradeViewController.h; sourceTree = "<group>"; };
 		A7E2D94917B4FE0F007BDE00 /* UpgradeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UpgradeViewController.m; path = Upgrade/UpgradeViewController.m; sourceTree = "<group>"; };
 		A7E8FB001746276900CC2D26 /* DesignSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DesignSettings.h; sourceTree = "<group>"; };
-		A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ENSDK.framework; path = ../Swipes/Ressources/Libs/Evernote/ENSDK.framework; sourceTree = "<group>"; };
-		A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = ENSDKResources.bundle; path = ../Swipes/Ressources/Libs/Evernote/ENSDKResources.bundle; sourceTree = "<group>"; };
 		A7F4065F17294ECE00DDE644 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		A7F4066017294ECE00DDE644 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		A7F4066917296BF100DDE644 /* ToDoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToDoListViewController.h; sourceTree = "<group>"; };
@@ -1371,7 +1361,6 @@
 				A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */,
 				A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */,
 				A717DD1018B6440A00EE359C /* Crashlytics.framework in Frameworks */,
-				A7E9F60619DAA6A300CAA1D1 /* ENSDK.framework in Frameworks */,
 				A7ADCB3817DD352F00780F88 /* libz.dylib in Frameworks */,
 				A75545DE179B481800CE2F4E /* Accelerate.framework in Frameworks */,
 				A78F392E16F7DC1900A8C78D /* MessageUI.framework in Frameworks */,
@@ -1418,7 +1407,6 @@
 				DAB1651C1A6D3D8B008D69B2 /* libGTLTouchStaticLib.a in Frameworks */,
 				DA6B61BD19DAF27B00089877 /* libxml2.dylib in Frameworks */,
 				DA6B61BC19DAF26900089877 /* MobileCoreServices.framework in Frameworks */,
-				DA6B61BB19DAEF0D00089877 /* ENSDK.framework in Frameworks */,
 				DAE2B15019CB7A4D00A9074E /* NotificationCenter.framework in Frameworks */,
 				81A0C94F1F16434CAE0AA041 /* libPods-SwipesToday.a in Frameworks */,
 			);
@@ -1432,7 +1420,6 @@
 				DAC8A1851ACC483700061377 /* KitLocate.Framework in Frameworks */,
 				DA09AFBF1AB1D215002632DC /* libxml2.dylib in Frameworks */,
 				DA09AFC41AB1D225002632DC /* MobileCoreServices.framework in Frameworks */,
-				DA09AFB51AB1CE80002632DC /* ENSDK.framework in Frameworks */,
 				DA09AFC51AB1D22B002632DC /* NotificationCenter.framework in Frameworks */,
 				137CA93FEEDD28557C76343D /* libPods-SwipesShare.a in Frameworks */,
 			);
@@ -1444,7 +1431,6 @@
 			files = (
 				A7E9F60C19DAAECD00CAA1D1 /* libxml2.dylib in Frameworks */,
 				A7E9F60B19DAAEC500CAA1D1 /* MobileCoreServices.framework in Frameworks */,
-				A7E9F60519DAA61600CAA1D1 /* ENSDK.framework in Frameworks */,
 				789C9AAD8BA447088AAD221A /* libPods-SwipesKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2648,8 +2634,6 @@
 			isa = PBXGroup;
 			children = (
 				DAB1650D1A6D3D51008D69B2 /* GTL.xcodeproj */,
-				A7E9F5FD19DAA2C000CAA1D1 /* ENSDK.framework */,
-				A7E9F5FE19DAA2C000CAA1D1 /* ENSDKResources.bundle */,
 				A7582507189BC35B00B904BC /* Vero */,
 			);
 			name = Libs;
@@ -3235,7 +3219,6 @@
 				A75236E617A335680030ED1E /* walkthrough_swipe_schedule.png in Resources */,
 				A763D5541A13AC670060D994 /* alldonefortoday.png in Resources */,
 				A772B14119671D9F00C07909 /* swipesandevernote.png in Resources */,
-				A7E9F60019DAA2C100CAA1D1 /* ENSDKResources.bundle in Resources */,
 				A708BEE61A15FE3400C7E15A /* GothamRounded-Bold.ttf in Resources */,
 				DA4F29CD1AA73D8C0048C71A /* swipes-ui-gmail-integrations-2@2x.png in Resources */,
 				DACD545618A1ACFC00C378DF /* page_white_dvd.png in Resources */,
@@ -3312,7 +3295,6 @@
 			files = (
 				A711246F19DB166200FD9DAE /* swipes.ttf in Resources */,
 				DAE2B15819CB7A4D00A9074E /* MainInterface.storyboard in Resources */,
-				DA6B61BE19DAF3B600089877 /* ENSDKResources.bundle in Resources */,
 				DA09DD8D1A71071E00E66E97 /* GmailAuthViewController.xib in Resources */,
 				DA5346BF19D5CB7B007AA15D /* Datamodel.xcdatamodeld in Resources */,
 				DA5346C019D5CB84007AA15D /* SwipesToday.entitlements in Resources */,
@@ -3324,7 +3306,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAC8A1661ACAB3E000061377 /* Images.xcassets in Resources */,
-				DA09AFB61AB1CE84002632DC /* ENSDKResources.bundle in Resources */,
 				DA09B0AB1AB24DDF002632DC /* swipes.ttf in Resources */,
 				DA09B0A71AB24DDF002632DC /* GothamRounded-Bold.ttf in Resources */,
 				DA09B0AA1AB24DDF002632DC /* GothamRounded-Medium.ttf in Resources */,
@@ -3341,7 +3322,6 @@
 			files = (
 				DA09DD8E1A71071E00E66E97 /* GmailAuthViewController.xib in Resources */,
 				DAE2B14A19C8FDF200A9074E /* Datamodel.xcdatamodeld in Resources */,
-				A7E9F60819DAAE3800CAA1D1 /* ENSDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
