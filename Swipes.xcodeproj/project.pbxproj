@@ -553,6 +553,7 @@
 		DA7AEE931A9F328000436CE3 /* IntegrationSectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7AEE921A9F328000436CE3 /* IntegrationSectionCell.m */; };
 		DA7AEE971A9FBCAA00436CE3 /* IntegrationTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7AEE961A9FBCAA00436CE3 /* IntegrationTitleView.m */; };
 		DA91E60E1AF7938A00FF20FE /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA91E60D1AF7938A00FF20FE /* PullToRefreshView.m */; };
+		DA9B27711B6796FC004A1016 /* SpotlightHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B27701B6796FC004A1016 /* SpotlightHandler.m */; };
 		DAB164E71A6D294F008D69B2 /* GmailSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */; };
 		DAB164E81A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
 		DAB164E91A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
@@ -1276,6 +1277,8 @@
 		DA7AEE961A9FBCAA00436CE3 /* IntegrationTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationTitleView.m; path = Integrations/IntegrationTitleView.m; sourceTree = "<group>"; };
 		DA91E60C1AF7938A00FF20FE /* PullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PullToRefreshView.h; path = PullToRefresh/PullToRefreshView.h; sourceTree = "<group>"; };
 		DA91E60D1AF7938A00FF20FE /* PullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PullToRefreshView.m; path = PullToRefresh/PullToRefreshView.m; sourceTree = "<group>"; };
+		DA9B276F1B6796FC004A1016 /* SpotlightHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpotlightHandler.h; path = Swipes/Classes/Handlers/SpotlightHandler.h; sourceTree = SOURCE_ROOT; };
+		DA9B27701B6796FC004A1016 /* SpotlightHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SpotlightHandler.m; path = Swipes/Classes/Handlers/SpotlightHandler.m; sourceTree = SOURCE_ROOT; };
 		DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailSyncHandler.h; path = SyncHandlers/GmailSyncHandler.h; sourceTree = "<group>"; };
 		DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GmailSyncHandler.m; path = SyncHandlers/GmailSyncHandler.m; sourceTree = "<group>"; };
 		DAB164ED1A6D29A3008D69B2 /* GmailIntegration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GmailIntegration.h; path = Integrations/GmailIntegration.h; sourceTree = "<group>"; };
@@ -2618,6 +2621,8 @@
 				A7D7D53217B1586A00FBC042 /* SettingsHandler.m */,
 				A72EFFFD18425B6A008333AA /* UserHandler.h */,
 				A72EFFFE18425B6A008333AA /* UserHandler.m */,
+				DA9B276F1B6796FC004A1016 /* SpotlightHandler.h */,
+				DA9B27701B6796FC004A1016 /* SpotlightHandler.m */,
 			);
 			name = Handlers;
 			sourceTree = "<group>";
@@ -3538,6 +3543,7 @@
 				A71E9FC21951CD6F00FC9B0B /* EvernoteToDoProcessor.m in Sources */,
 				DA09B0791AB228D6002632DC /* MagicalRecord+ErrorHandling.m in Sources */,
 				A75279E31A4D5D6500838C1D /* OnboardingTableViewCell.m in Sources */,
+				DA9B27711B6796FC004A1016 /* SpotlightHandler.m in Sources */,
 				DA09B07E1AB228D6002632DC /* MagicalRecord+iCloud.m in Sources */,
 				DAD78B771A67E958009992C3 /* KPStringScanner.m in Sources */,
 				A703B1AF1838EBF20047DCC9 /* KPAddView.m in Sources */,
@@ -4035,6 +4041,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -4209,6 +4216,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -4303,6 +4311,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";

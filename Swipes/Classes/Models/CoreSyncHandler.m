@@ -28,6 +28,7 @@
 
 #import "GmailIntegration.h"
 #import "GmailSyncHandler.h"
+#import "SpotlightHandler.h"
 
 #import "CoreSyncHandler.h"
 
@@ -556,6 +557,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
         // this is outside main thread
 #ifndef NOT_APPLICATION
         [GlobalApp activityIndicatorVisible:NO];
+        [SPOTLIGHT reset];
 #endif
         if (_isAsync)
             [self endBackgroundHandler];

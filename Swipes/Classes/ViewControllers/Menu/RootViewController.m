@@ -48,6 +48,7 @@
 #import "UserHandler.h"
 #import "ShareViewController.h"
 #import "AwesomeMenu.h"
+#import "SpotlightHandler.h"
 
 #import "Intercom.h"
 
@@ -220,6 +221,7 @@ static RootViewController *sharedObject;
     [kFilter clearAll];
     [ANALYTICS logout];
     [NOTIHANDLER clearLocalNotifications];
+    [SPOTLIGHT clearAll];
     [self resetRoot];
 
 }
@@ -429,6 +431,7 @@ static RootViewController *sharedObject;
         [[[self menuViewController] currentViewController] update];
         [[[self menuViewController] currentViewController] deselectAllRows:self];
     }
+    SPOTLIGHT; // initiate
 }
 -(void)handledURL{
     KPToDo* todo = [URLHandler sharedInstance].viewTodo;
