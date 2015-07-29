@@ -10,6 +10,7 @@
 @import CoreSpotlight;
 #import "Global.h"
 #import "KPToDo.h"
+#import "KPTag.h"
 #import "SpotlightHandler.h"
 
 NSString * const kSwipesIdentifier = @"swipes_corespotlight";
@@ -39,14 +40,16 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
 
 - (void)clearAll
 {
-    [[CSSearchableIndex defaultSearchableIndex] deleteAllSearchableItemsWithCompletionHandler:^(NSError * _Nullable error) {
-        DLog(@"deleteAllSearchableItemsWithCompletionHandler: %@", error);
-        if (error) {
-            // TODO log
-        }
-    }];
-    [USER_DEFAULTS removeObjectForKey:kSwipesIdentifier];
-    [USER_DEFAULTS synchronize];
+    if (OSVER >= 9) {
+        [[CSSearchableIndex defaultSearchableIndex] deleteAllSearchableItemsWithCompletionHandler:^(NSError * _Nullable error) {
+            DLog(@"deleteAllSearchableItemsWithCompletionHandler: %@", error);
+            if (error) {
+                // TODO log
+            }
+        }];
+        [USER_DEFAULTS removeObjectForKey:kSwipesIdentifier];
+        [USER_DEFAULTS synchronize];
+    }
 }
 
 - (void)setTodoItem:(KPToDo *)todo
@@ -57,9 +60,17 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
         CSSearchableItemAttributeSet* attributeSet = [[CSSearchableItemAttributeSet alloc] initWithItemContentType:(NSString*)kUTTypeCompositeContent];
         // Set properties that describe attributes of the item such as title, description, and image.
         [attributeSet setTitle:todo.title];
-        if (todo.tags) {
-            [attributeSet setContentDescription:[NSString stringWithFormat:@"%@", todo.tags]];
+        NSMutableString* tagsString = [NSMutableString new];
+        for (KPTag* tag in todo.tags) {
+            if (tagsString.length) {
+                [tagsString appendString:@", "];
+            }
+            [tagsString appendString:tag.title];
         }
+        if (tagsString.length) {
+            [attributeSet setContentDescription:tagsString];
+        }
+        
 //        UIImage* image = [UIImage imageNamed:@"logo"];
 //        if (image) {
 //            [attributeSet setThumbnailData:UIImageJPEGRepresentation(image, 0.7f)];
@@ -74,19 +85,21 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
         // Create a searchable item, specifying its ID, associated domain, and attribute set.
         CSSearchableItem* item = [[CSSearchableItem alloc] initWithUniqueIdentifier:todo.tempId domainIdentifier:kSwipesIdentifier attributeSet:attributeSet];
         
-        // Index the item.
-        [[CSSearchableIndex defaultSearchableIndex] indexSearchableItems:@[item] completionHandler: ^(NSError * __nullable error) {
-            DLog(@"indexSearchableItems: %@", error);
-           // TODO log
-        }];
+        if (item) {
+            // Index the item.
+            [[CSSearchableIndex defaultSearchableIndex] indexSearchableItems:@[item] completionHandler: ^(NSError * __nullable error) {
+                DLog(@"indexSearchableItems: %@", error);
+               // TODO log
+            }];
+        }
     }
 }
 
 - (void)setAll
 {
-    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_defaultContext];
+    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(isLocallyDeleted <> YES)"];
-    NSArray<KPToDo *> *results = [KPToDo MR_findAllWithPredicate:predicate inContext:localContext];
+    NSArray<KPToDo *> *results = [KPToDo MR_findAllWithPredicate:predicate inContext:contextForThread];
     [[CSSearchableIndex defaultSearchableIndex] beginIndexBatch];
     for (KPToDo* todo in results) {
         [self setTodoItem:todo];
@@ -101,12 +114,14 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
 
 - (void)reset
 {
-    UIApplicationState state = [UIApplication sharedApplication].applicationState;
-    if (UIApplicationStateActive == state) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            [self clearAll];
-            [self setAll];
-        });
+    if (OSVER >= 9) {
+        UIApplicationState state = [UIApplication sharedApplication].applicationState;
+        if (UIApplicationStateBackground != state) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                [self clearAll];
+                [self setAll];
+            });
+        }
     }
 }
 

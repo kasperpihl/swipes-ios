@@ -431,7 +431,6 @@ static RootViewController *sharedObject;
         [[[self menuViewController] currentViewController] update];
         [[[self menuViewController] currentViewController] deselectAllRows:self];
     }
-    SPOTLIGHT; // initiate
 }
 -(void)handledURL{
     KPToDo* todo = [URLHandler sharedInstance].viewTodo;

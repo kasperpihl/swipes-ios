@@ -34,6 +34,7 @@
 #import "GAI.h"
 
 #import "SWADefinitions.h"
+#import "SpotlightHandler.h"
 
 #import "AppDelegate.h"
 
@@ -88,6 +89,7 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     
     KPCORE;
     NOTIHANDLER;
+    SPOTLIGHT;
     
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (notification)
