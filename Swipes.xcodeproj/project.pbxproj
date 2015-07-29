@@ -487,8 +487,10 @@
 		DA3282C11A4CB7CF0054CE04 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282C01A4CB7CF0054CE04 /* NotificationController.m */; };
 		DA3282C41A4CB7CF0054CE04 /* GlanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282C31A4CB7CF0054CE04 /* GlanceController.m */; };
 		DA3282C61A4CB7CF0054CE04 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA3282C51A4CB7CF0054CE04 /* Images.xcassets */; };
+		DA3282CA1A4CB7CF0054CE04 /* Swipes WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = DA3282C91A4CB7CF0054CE04 /* Swipes WatchKit App.app */; };
 		DA3282D21A4CB7CF0054CE04 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA3282D01A4CB7CF0054CE04 /* Interface.storyboard */; };
 		DA3282D41A4CB7D00054CE04 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA3282D31A4CB7CF0054CE04 /* Images.xcassets */; };
+		DA3282D71A4CB7D00054CE04 /* Swipes WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DA3282E51A4CBD2B0054CE04 /* SWATodoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282E41A4CBD2B0054CE04 /* SWATodoCell.m */; };
 		DA3282E81A4CC0EE0054CE04 /* TodayInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3282E71A4CC0EE0054CE04 /* TodayInterfaceController.m */; };
 		DA3283131A4E1FA20054CE04 /* Datamodel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
@@ -552,8 +554,6 @@
 		DA7AEE971A9FBCAA00436CE3 /* IntegrationTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA7AEE961A9FBCAA00436CE3 /* IntegrationTitleView.m */; };
 		DA91E60E1AF7938A00FF20FE /* PullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA91E60D1AF7938A00FF20FE /* PullToRefreshView.m */; };
 		DA9B27711B6796FC004A1016 /* SpotlightHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9B27701B6796FC004A1016 /* SpotlightHandler.m */; };
-		DA9B27791B68CDE8004A1016 /* Swipes WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		DA9B277C1B68CDE8004A1016 /* Swipes WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = DA3282C91A4CB7CF0054CE04 /* Swipes WatchKit App.app */; };
 		DAB164E71A6D294F008D69B2 /* GmailSyncHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = DAB164E51A6D294F008D69B2 /* GmailSyncHandler.h */; };
 		DAB164E81A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
 		DAB164E91A6D294F008D69B2 /* GmailSyncHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB164E61A6D294F008D69B2 /* GmailSyncHandler.m */; };
@@ -674,19 +674,19 @@
 			remoteGlobalIDString = 4F1AD9020B71603F00DC0485;
 			remoteInfo = DevelopmentTestTool;
 		};
-		DA9B27771B68CDE8004A1016 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DA3282B61A4CB7CF0054CE04;
-			remoteInfo = "Swipes WatchKit Extension";
-		};
-		DA9B277A1B68CDE8004A1016 /* PBXContainerItemProxy */ = {
+		DA3282CB1A4CB7CF0054CE04 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = DA3282C81A4CB7CF0054CE04;
 			remoteInfo = "Swipes WatchKit App";
+		};
+		DA3282D51A4CB7D00054CE04 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A7778CC216EB5884004D95E5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA3282B61A4CB7CF0054CE04;
+			remoteInfo = "Swipes WatchKit Extension";
 		};
 		DAB165161A6D3D51008D69B2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -719,34 +719,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		DA9B27811B68CDE8004A1016 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				DA9B27791B68CDE8004A1016 /* Swipes WatchKit Extension.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DA9B27821B68CDE8004A1016 /* Embed Watch Content */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
-			dstSubfolderSpec = 16;
-			files = (
-				DA9B277C1B68CDE8004A1016 /* Swipes WatchKit App.app in Embed Watch Content */,
-			);
-			name = "Embed Watch Content";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DAE2B15B19CB7A4D00A9074E /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				DA3282D71A4CB7D00054CE04 /* Swipes WatchKit Extension.appex in Embed App Extensions */,
 				DAE4D5FD1AB1C473001BDC52 /* SwipesShare.appex in Embed App Extensions */,
 				DAE2B15C19CB7A4D00A9074E /* SwipesToday.appex in Embed App Extensions */,
 			);
@@ -2949,15 +2928,14 @@
 				14A4BEEC691D48EDAF59F6F0 /* Copy Pods Resources */,
 				A7A976DC18410F56001C0A51 /* Run Script */,
 				DAE2B15B19CB7A4D00A9074E /* Embed App Extensions */,
-				DA9B27821B68CDE8004A1016 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				DAE2B15A19CB7A4D00A9074E /* PBXTargetDependency */,
 				DAE2B15E19CB7A4D00A9074E /* PBXTargetDependency */,
+				DA3282D61A4CB7D00054CE04 /* PBXTargetDependency */,
 				DAE4D5FC1AB1C473001BDC52 /* PBXTargetDependency */,
-				DA9B277B1B68CDE8004A1016 /* PBXTargetDependency */,
 			);
 			name = Swipes;
 			productName = Shery;
@@ -2975,28 +2953,27 @@
 			buildRules = (
 			);
 			dependencies = (
+				DA3282CC1A4CB7CF0054CE04 /* PBXTargetDependency */,
 			);
 			name = "Swipes WatchKit Extension";
 			productName = "Swipes WatchKit Extension";
 			productReference = DA3282B71A4CB7CF0054CE04 /* Swipes WatchKit Extension.appex */;
-			productType = "com.apple.product-type.watchkit2-extension";
+			productType = "com.apple.product-type.watchkit-extension";
 		};
 		DA3282C81A4CB7CF0054CE04 /* Swipes WatchKit App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DA3282DE1A4CB7D00054CE04 /* Build configuration list for PBXNativeTarget "Swipes WatchKit App" */;
 			buildPhases = (
 				DA3282C71A4CB7CF0054CE04 /* Resources */,
-				DA9B27811B68CDE8004A1016 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				DA9B27781B68CDE8004A1016 /* PBXTargetDependency */,
 			);
 			name = "Swipes WatchKit App";
 			productName = "Swipes WatchKit App";
 			productReference = DA3282C91A4CB7CF0054CE04 /* Swipes WatchKit App.app */;
-			productType = "com.apple.product-type.application.watchapp2";
+			productType = "com.apple.product-type.application.watchapp";
 		};
 		DAE2B14E19CB7A4D00A9074E /* SwipesToday */ = {
 			isa = PBXNativeTarget;
@@ -3062,7 +3039,7 @@
 		A7778CC216EB5884004D95E5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "Pihl IT";
 				TargetAttributes = {
 					A7778CC916EB5884004D95E5 = {
@@ -3303,6 +3280,7 @@
 			files = (
 				DA369BFC1AA67325003D0AF9 /* swipes.ttf in Resources */,
 				DA3282C61A4CB7CF0054CE04 /* Images.xcassets in Resources */,
+				DA3282CA1A4CB7CF0054CE04 /* Swipes WatchKit App.app in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3952,15 +3930,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		DA9B27781B68CDE8004A1016 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DA3282B61A4CB7CF0054CE04 /* Swipes WatchKit Extension */;
-			targetProxy = DA9B27771B68CDE8004A1016 /* PBXContainerItemProxy */;
-		};
-		DA9B277B1B68CDE8004A1016 /* PBXTargetDependency */ = {
+		DA3282CC1A4CB7CF0054CE04 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DA3282C81A4CB7CF0054CE04 /* Swipes WatchKit App */;
-			targetProxy = DA9B277A1B68CDE8004A1016 /* PBXContainerItemProxy */;
+			targetProxy = DA3282CB1A4CB7CF0054CE04 /* PBXContainerItemProxy */;
+		};
+		DA3282D61A4CB7D00054CE04 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA3282B61A4CB7CF0054CE04 /* Swipes WatchKit Extension */;
+			targetProxy = DA3282D51A4CB7D00054CE04 /* PBXContainerItemProxy */;
 		};
 		DAE2B15A19CB7A4D00A9074E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4152,7 +4130,6 @@
 					Social,
 					"-all_load",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "it.pihl.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=*]" = "";
@@ -4184,7 +4161,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kasper Tornoee (C6VT946UE3)";
 				COPY_PHASE_STRIP = NO;
-				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -4321,7 +4297,6 @@
 					Social,
 					"-all_load",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "it.pihl.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -4422,7 +4397,6 @@
 					Social,
 					"-all_load",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "it.pihl.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Swipes;
 				PROVISIONING_PROFILE = "9e40b73d-12df-4a3b-9e00-bfb31c8ea518";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9e40b73d-12df-4a3b-9e00-bfb31c8ea518";
@@ -4478,13 +4452,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = it.pihl.Swipes.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
-				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -4519,13 +4489,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = it.pihl.Swipes.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "80b003e7-eaa4-45eb-a1cb-8a7bb27c2d39";
-				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
@@ -4560,13 +4526,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = it.pihl.Swipes.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "";
-				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = AdHoc;
 		};
@@ -4591,14 +4553,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				IBSC_MODULE = Swipes_WatchKit_Extension;
 				INFOPLIST_FILE = "Swipes WatchKit App/SwipesWatchKitApp-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = it.pihl.Swipes.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
 			};
 			name = Debug;
 		};
@@ -4624,14 +4585,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				IBSC_MODULE = Swipes_WatchKit_Extension;
 				INFOPLIST_FILE = "Swipes WatchKit App/SwipesWatchKitApp-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = it.pihl.Swipes.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "b39a6629-0e4c-49c0-9503-9e93e797684c";
-				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
 			};
 			name = Release;
 		};
@@ -4657,14 +4617,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				IBSC_MODULE = Swipes_WatchKit_Extension;
 				INFOPLIST_FILE = "Swipes WatchKit App/SwipesWatchKitApp-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = it.pihl.Swipes.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
 			};
 			name = AdHoc;
 		};
@@ -4728,7 +4687,6 @@
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "it.pihl.Swipes.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -4796,7 +4754,6 @@
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "it.pihl.Swipes.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "a6fcfe4f-4b0c-452e-b594-468be1c1265b";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a6fcfe4f-4b0c-452e-b594-468be1c1265b";
@@ -4865,7 +4822,6 @@
 					"$(PROJECT_DIR)/Swipes/Ressources/Libs/Localytics",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "it.pihl.Swipes.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=*]" = "";
@@ -4929,7 +4885,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "it.pihl.Swipes.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -4994,7 +4949,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "it.pihl.Swipes.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "4819512e-3508-460b-8258-fb0a723b969a";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4819512e-3508-460b-8258-fb0a723b969a";
@@ -5060,7 +5014,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "it.pihl.Swipes.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -5151,7 +5104,6 @@
 					Social,
 					"-all_load",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "it.pihl.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -5242,7 +5194,6 @@
 					Social,
 					"-all_load",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "it.pihl.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -5333,7 +5284,6 @@
 					Social,
 					"-all_load",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "it.pihl.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
