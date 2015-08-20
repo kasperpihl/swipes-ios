@@ -11,9 +11,11 @@
 #import "Global.h"
 #import "KPToDo.h"
 #import "KPTag.h"
+#import "NSDate-Utilities.h"
 #import "SpotlightHandler.h"
 
 NSString * const kSwipesIdentifier = @"swipes_corespotlight";
+//NSString * const kSwipesIndex = @"swipes_index";
 
 @implementation SpotlightHandler
 
@@ -41,7 +43,8 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
 - (void)clearAll
 {
     if (OSVER >= 9) {
-        [[CSSearchableIndex defaultSearchableIndex] deleteAllSearchableItemsWithCompletionHandler:^(NSError * _Nullable error) {
+        CSSearchableIndex* index = [[CSSearchableIndex alloc] initWithName:kSwipesIdentifier];
+        [index deleteAllSearchableItemsWithCompletionHandler:^(NSError * _Nullable error) {
             DLog(@"deleteAllSearchableItemsWithCompletionHandler: %@", error);
             if (error) {
                 // TODO log
@@ -52,7 +55,37 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
     }
 }
 
-- (void)setTodoItem:(KPToDo *)todo
+- (NSURL *)imageURLForTodo:(KPToDo *)todo
+{
+    NSMutableString* name = [[NSMutableString alloc] initWithString:@"cs_"];
+    NSDate* now = [NSDate date];
+    if ((todo.schedule && [todo.schedule isLaterThanDate:now]) || (nil == todo.schedule && nil == todo.completionDate)) {
+        [name appendString:@"scheduled"];
+    }
+    else if (todo.completionDate) {
+        [name appendString:@"done"];
+    }
+    else {
+        [name appendString:@"today"];
+    }
+    
+    if ([todo.priority boolValue]) {
+        [name appendString:@"_priority"];
+    }
+    
+    if (nil != todo.parent) {
+        [name appendString:@"_action"];
+    }
+
+    NSString* path = [[NSBundle mainBundle] pathForResource:name ofType:@"png" inDirectory:@"Assets/CoreSpotlight"];
+    if (path) {
+        return [NSURL fileURLWithPath:path];
+    }
+
+    return nil;
+}
+
+- (void)setTodoItem:(KPToDo *)todo index:(CSSearchableIndex *)index
 {
     if (nil == todo.parent) {
         // this is a high level TODO
@@ -76,18 +109,17 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
 //            [attributeSet setThumbnailData:UIImageJPEGRepresentation(image, 0.7f)];
 //        }
         
-//        NSString* path = [[NSBundle mainBundle] pathForResource:@"logo" ofType:@"png" inDirectory:@"Assets"];
-//        if (path) {
-//            NSURL* imageURL = [NSURL fileURLWithPath:path];
-//            [attributeSet setThumbnailURL:imageURL];
-//        }
+        NSURL* imageURL = [self imageURLForTodo:todo];
+        if (imageURL) {
+            [attributeSet setThumbnailURL:imageURL];
+        }
         
         // Create a searchable item, specifying its ID, associated domain, and attribute set.
         CSSearchableItem* item = [[CSSearchableItem alloc] initWithUniqueIdentifier:todo.tempId domainIdentifier:kSwipesIdentifier attributeSet:attributeSet];
         
         if (item) {
             // Index the item.
-            [[CSSearchableIndex defaultSearchableIndex] indexSearchableItems:@[item] completionHandler: ^(NSError * __nullable error) {
+            [index indexSearchableItems:@[item] completionHandler: ^(NSError * __nullable error) {
                 DLog(@"indexSearchableItems: %@", error);
                // TODO log
             }];
@@ -100,11 +132,13 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
     NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(isLocallyDeleted <> YES)"];
     NSArray<KPToDo *> *results = [KPToDo MR_findAllWithPredicate:predicate inContext:contextForThread];
-    [[CSSearchableIndex defaultSearchableIndex] beginIndexBatch];
+    
+    CSSearchableIndex* index = [[CSSearchableIndex alloc] initWithName:kSwipesIdentifier];
+    [index beginIndexBatch];
     for (KPToDo* todo in results) {
-        [self setTodoItem:todo];
+        [self setTodoItem:todo index:index];
     }
-    [[CSSearchableIndex defaultSearchableIndex] endIndexBatchWithClientState:[NSData new] completionHandler:^(NSError * _Nullable error) {
+    [index endIndexBatchWithClientState:[@"done" dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] completionHandler:^(NSError * _Nullable error) {
         DLog(@"endIndexBatchWithClientState: %@", error);
         // TODO log
     }];
