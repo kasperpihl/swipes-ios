@@ -558,7 +558,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
 #ifndef NOT_APPLICATION
         [GlobalApp activityIndicatorVisible:NO];
         if (UIBackgroundFetchResultNewData == syncResult)
-            [SPOTLIGHT reset];
+            [SPOTLIGHT resetWithCompletionHandler:nil];
 #endif
         if (_isAsync)
             [self endBackgroundHandler];

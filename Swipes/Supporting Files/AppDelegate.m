@@ -320,6 +320,13 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     }];
 }
 
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
+{
+    //DLog(@"userActivity info: %@", userActivity.userInfo);
+    [SPOTLIGHT restoreUserActivity:userActivity];
+    return YES;
+}
+
 - (void)onShake:(id)sender
 {
     [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Undo last action", nil) andMessage:NSLocalizedString(@"Do you want to undo the last action?", nil) block:^(BOOL succeeded, NSError *error) {

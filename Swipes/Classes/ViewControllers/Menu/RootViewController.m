@@ -221,7 +221,7 @@ static RootViewController *sharedObject;
     [kFilter clearAll];
     [ANALYTICS logout];
     [NOTIHANDLER clearLocalNotifications];
-    [SPOTLIGHT clearAll];
+    [SPOTLIGHT clearAllWithCompletionHandler:nil];
     [self resetRoot];
 
 }
@@ -450,6 +450,17 @@ static RootViewController *sharedObject;
     }
     
     
+}
+
+- (void)editToDo:(KPToDo *)todo
+{
+    if(!self.didReset){
+        [URLHandler sharedInstance].reset = NO;
+        [OVERLAY popAllViewsAnimated:NO];
+        [self resetRoot];
+    }
+    [URLHandler sharedInstance].viewTodo = nil;
+    [[self.menuViewController currentViewController] editToDo:todo];
 }
 
 -(void)changedTimeZone:(NSNotification*)notification{

@@ -11,11 +11,19 @@
 #import "Global.h"
 #import "KPToDo.h"
 #import "KPTag.h"
+#import "KPAttachment.h"
 #import "NSDate-Utilities.h"
+#import "RootViewController.h"
 #import "SpotlightHandler.h"
 
 NSString * const kSwipesIdentifier = @"swipes_corespotlight";
 //NSString * const kSwipesIndex = @"swipes_index";
+
+@interface SpotlightHandler () <CSSearchableIndexDelegate>
+
+@property (nonatomic, strong) CSSearchableIndex* index;
+
+@end
 
 @implementation SpotlightHandler
 
@@ -33,25 +41,32 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
 {
     self = [super init];
     if (self) {
+        _index = [[CSSearchableIndex alloc] initWithName:kSwipesIdentifier];
+        _index.indexDelegate = self;
         if (![USER_DEFAULTS objectForKey:kSwipesIdentifier]) {
-            [self reset];
+            [self resetWithCompletionHandler:nil];
         }
     }
     return self;
 }
 
-- (void)clearAll
+- (void)clearAllWithCompletionHandler:(void (^ __nullable)(NSError * __nullable error))completionHandler
 {
     if (OSVER >= 9) {
-        CSSearchableIndex* index = [[CSSearchableIndex alloc] initWithName:kSwipesIdentifier];
-        [index deleteAllSearchableItemsWithCompletionHandler:^(NSError * _Nullable error) {
-            DLog(@"deleteAllSearchableItemsWithCompletionHandler: %@", error);
+        [_index deleteAllSearchableItemsWithCompletionHandler:^(NSError * _Nullable error) {
             if (error) {
+                DLog(@"deleteAllSearchableItemsWithCompletionHandler: %@", error);
                 // TODO log
             }
+            if (completionHandler)
+                completionHandler(error);
         }];
         [USER_DEFAULTS removeObjectForKey:kSwipesIdentifier];
         [USER_DEFAULTS synchronize];
+    }
+    else {
+        if (completionHandler)
+            completionHandler(nil);
     }
 }
 
@@ -87,76 +102,130 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
 
 - (void)setTodoItem:(KPToDo *)todo index:(CSSearchableIndex *)index
 {
+    // this is a high level TODO
+    CSSearchableItemAttributeSet* attributeSet = [[CSSearchableItemAttributeSet alloc] initWithItemContentType:(NSString*)kUTTypeToDoItem];
+    // Set properties that describe attributes of the item such as title, description, and image.
+    NSString* identifier;
     if (nil == todo.parent) {
-        // this is a high level TODO
-        // Create an attribute set for an item that represents an image.
-        CSSearchableItemAttributeSet* attributeSet = [[CSSearchableItemAttributeSet alloc] initWithItemContentType:(NSString*)kUTTypeCompositeContent];
-        // Set properties that describe attributes of the item such as title, description, and image.
         [attributeSet setTitle:todo.title];
-        NSMutableString* tagsString = [NSMutableString new];
+        NSMutableArray<NSString *>* keywords = [NSMutableArray new];
         for (KPTag* tag in todo.tags) {
-            if (tagsString.length) {
-                [tagsString appendString:@", "];
-            }
-            [tagsString appendString:tag.title];
-        }
-        if (tagsString.length) {
-            [attributeSet setContentDescription:tagsString];
+            [keywords addObject:tag.title];
         }
         
-//        UIImage* image = [UIImage imageNamed:@"logo"];
-//        if (image) {
-//            [attributeSet setThumbnailData:UIImageJPEGRepresentation(image, 0.7f)];
-//        }
-        
-        NSURL* imageURL = [self imageURLForTodo:todo];
-        if (imageURL) {
-            [attributeSet setThumbnailURL:imageURL];
+        for (KPAttachment* attachment in todo.attachments) {
+            [keywords addObject:attachment.service];
         }
         
-        // Create a searchable item, specifying its ID, associated domain, and attribute set.
-        CSSearchableItem* item = [[CSSearchableItem alloc] initWithUniqueIdentifier:todo.tempId domainIdentifier:kSwipesIdentifier attributeSet:attributeSet];
-        
-        if (item) {
-            // Index the item.
-            [index indexSearchableItems:@[item] completionHandler: ^(NSError * __nullable error) {
+        if (keywords.count) {
+            [attributeSet setKeywords:keywords];
+        }
+        if (todo.notes && 0 < todo.notes.length) {
+            //[attributeSet setTextContent:todo.notes];
+            [attributeSet setContentDescription:todo.notes];
+        }
+        identifier = todo.tempId;
+    }
+    else {
+        identifier = [NSString stringWithFormat:@"%@:%@", todo.parent.tempId, todo.tempId];
+        [attributeSet setTitle:todo.title];
+        [attributeSet setContentDescription:[NSString stringWithFormat:@"• %@", todo.parent.title]];
+    }
+
+    attributeSet.contentURL = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/view?id=%@", (nil == todo.parent) ? todo.tempId : todo.parent.tempId]];
+//    UIImage* image = [UIImage imageNamed:@"logo"];
+//    if (image) {
+//        [attributeSet setThumbnailData:UIImageJPEGRepresentation(image, 0.7f)];
+//    }
+    
+    NSURL* imageURL = [self imageURLForTodo:todo];
+    if (imageURL) {
+        [attributeSet setThumbnailURL:imageURL];
+    }
+    
+    // Create a searchable item, specifying its ID, associated domain, and attribute set.
+    CSSearchableItem* item = [[CSSearchableItem alloc] initWithUniqueIdentifier:identifier domainIdentifier:kSwipesIdentifier attributeSet:attributeSet];
+    
+    if (item) {
+        // Index the item.
+        [index indexSearchableItems:@[item] completionHandler: ^(NSError * __nullable error) {
+            if (error)
                 DLog(@"indexSearchableItems: %@", error);
-               // TODO log
-            }];
-        }
+           // TODO log
+        }];
     }
 }
 
-- (void)setAll
+- (void)setAllWithCompletionHandler:(void (^ __nullable)(NSError * __nullable error))completionHandler
 {
     NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(isLocallyDeleted <> YES)"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isLocallyDeleted <> YES"];
     NSArray<KPToDo *> *results = [KPToDo MR_findAllWithPredicate:predicate inContext:contextForThread];
     
-    CSSearchableIndex* index = [[CSSearchableIndex alloc] initWithName:kSwipesIdentifier];
-    [index beginIndexBatch];
+    [_index beginIndexBatch];
     for (KPToDo* todo in results) {
-        [self setTodoItem:todo index:index];
+        [self setTodoItem:todo index:_index];
     }
-    [index endIndexBatchWithClientState:[@"done" dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] completionHandler:^(NSError * _Nullable error) {
-        DLog(@"endIndexBatchWithClientState: %@", error);
+    [_index endIndexBatchWithClientState:[@"done" dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] completionHandler:^(NSError * _Nullable error) {
+        if (error)
+            DLog(@"endIndexBatchWithClientState: %@", error);
         // TODO log
+        if (completionHandler)
+            completionHandler(error);
+        DLog(@"CS: INDEXING DONE");
     }];
     [USER_DEFAULTS setObject:@(YES) forKey:kSwipesIdentifier];
     [USER_DEFAULTS synchronize];
 }
 
-- (void)reset
+- (void)resetWithCompletionHandler:(void (^ __nullable)(NSError * __nullable error))completionHandler
 {
     if (OSVER >= 9) {
         UIApplicationState state = [UIApplication sharedApplication].applicationState;
         if (UIApplicationStateBackground != state) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-                [self clearAll];
-                [self setAll];
+                [self clearAllWithCompletionHandler:^(NSError * _Nullable error) {
+                    [self setAllWithCompletionHandler:^(NSError * _Nullable error) {
+                        if (completionHandler)
+                            completionHandler(error);
+                    }];
+                }];
             });
         }
     }
+    else {
+        if (completionHandler)
+            completionHandler(nil);
+    }
+}
+
+- (void)restoreUserActivity:(NSUserActivity *)userActivity
+{
+    NSString* identifier = userActivity.userInfo[CSSearchableItemActivityIdentifier];
+    if (identifier) {
+        NSArray <NSString *>* components = [identifier componentsSeparatedByString:@":"];
+        if (components.count) {
+            NSArray* todos = [KPToDo findByTempId:components[0]];
+            if (todos)
+                [ROOT_CONTROLLER editToDo:todos[0]];
+        }
+    }
+}
+
+#pragma mark - CSSearchableIndexDelegate
+
+- (void)searchableIndex:(CSSearchableIndex *)searchableIndex reindexAllSearchableItemsWithAcknowledgementHandler:(void (^)(void))acknowledgementHandler
+{
+    [self resetWithCompletionHandler:^(NSError * _Nullable error) {
+        acknowledgementHandler();
+    }];
+}
+
+- (void)searchableIndex:(CSSearchableIndex *)searchableIndex reindexSearchableItemsWithIdentifiers:(NSArray<NSString *> *)identifiers acknowledgementHandler:(void (^)(void))acknowledgementHandler
+{
+    [self resetWithCompletionHandler:^(NSError * _Nullable error) {
+        acknowledgementHandler();
+    }];
 }
 
 @end

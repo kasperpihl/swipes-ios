@@ -42,4 +42,5 @@ typedef enum {
 
 -(void)shareTasks:(NSArray*)tasks withFrame:(CGRect)frame;
 -(void)tryoutapp;
+- (void)editToDo:(KPToDo *)todo;
 @end
