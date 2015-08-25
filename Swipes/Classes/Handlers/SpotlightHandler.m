@@ -14,11 +14,10 @@
 #import "KPAttachment.h"
 #import "NSDate-Utilities.h"
 #import "RootViewController.h"
+#import "UtilityClass.h"
 #import "SpotlightHandler.h"
 
 NSString * const kSwipesIdentifier = @"swipes_corespotlight";
-//CGFloat const kImageSize = 15;
-//NSString * const kSwipesIndex = @"swipes_index";
 
 typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
 {
@@ -65,8 +64,7 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
     if (OSVER >= 9) {
         [_index deleteAllSearchableItemsWithCompletionHandler:^(NSError * _Nullable error) {
             if (error) {
-                DLog(@"deleteAllSearchableItemsWithCompletionHandler: %@", error);
-                // TODO log
+                [UtilityClass sendError:error type:@"CoreSpotlight: clearAllWithCompletionHandler"];
             }
             if (completionHandler)
                 completionHandler(error);
@@ -84,7 +82,8 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
 {
     NSMutableString* name = [[NSMutableString alloc] initWithString:@"cs_"];
     NSDate* now = [NSDate date];
-    if ((todo.schedule && [todo.schedule isLaterThanDate:now]) || (nil == todo.schedule && nil == todo.completionDate)) {
+    if (((todo.schedule && [todo.schedule isLaterThanDate:now]) || (nil == todo.schedule && nil == todo.completionDate)) &&
+        (nil == todo.parent)) {
         [name appendString:@"scheduled"];
     }
     else if (todo.completionDate) {
@@ -94,7 +93,7 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
         [name appendString:@"today"];
     }
     
-    if ([todo.priority boolValue]) {
+    if ([todo.priority boolValue] && (nil == todo.parent)) {
         [name appendString:@"_priority"];
     }
     
@@ -160,8 +159,9 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
     if (item) {
         // Index the item.
         [index indexSearchableItems:@[item] completionHandler: ^(NSError * __nullable error) {
-            if (error)
-                DLog(@"indexSearchableItems: %@", error);
+            if (error) {
+                [UtilityClass sendError:error type:@"CoreSpotlight: indexSearchableItems"];
+            }
            // TODO log
         }];
     }
@@ -178,8 +178,9 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
         [self setTodoItem:todo index:_index];
     }
     [_index endIndexBatchWithClientState:[@"done" dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] completionHandler:^(NSError * _Nullable error) {
-        if (error)
-            DLog(@"endIndexBatchWithClientState: %@", error);
+        if (error) {
+            [UtilityClass sendError:error type:@"CoreSpotlight: endIndexBatchWithClientState"];
+        }
         // TODO log
         if (completionHandler)
             completionHandler(error);
