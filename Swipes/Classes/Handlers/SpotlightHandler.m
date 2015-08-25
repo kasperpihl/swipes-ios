@@ -17,7 +17,15 @@
 #import "SpotlightHandler.h"
 
 NSString * const kSwipesIdentifier = @"swipes_corespotlight";
+//CGFloat const kImageSize = 15;
 //NSString * const kSwipesIndex = @"swipes_index";
+
+typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
+{
+    SCHEDULE_IMAGE = 0,
+    TODAY_IMAGE,
+    DONE_IMAGE
+};
 
 @interface SpotlightHandler () <CSSearchableIndexDelegate>
 
@@ -41,10 +49,12 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
 {
     self = [super init];
     if (self) {
-        _index = [[CSSearchableIndex alloc] initWithName:kSwipesIdentifier];
-        _index.indexDelegate = self;
-        if (![USER_DEFAULTS objectForKey:kSwipesIdentifier]) {
-            [self resetWithCompletionHandler:nil];
+        if (OSVER >= 9) {
+            _index = [[CSSearchableIndex alloc] initWithName:kSwipesIdentifier];
+            _index.indexDelegate = self;
+            if (![USER_DEFAULTS objectForKey:kSwipesIdentifier]) {
+                [self resetWithCompletionHandler:nil];
+            }
         }
     }
     return self;
@@ -132,12 +142,13 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
         [attributeSet setContentDescription:[NSString stringWithFormat:@"• %@", todo.parent.title]];
     }
 
-    attributeSet.contentURL = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/view?id=%@", (nil == todo.parent) ? todo.tempId : todo.parent.tempId]];
-//    UIImage* image = [UIImage imageNamed:@"logo"];
-//    if (image) {
-//        [attributeSet setThumbnailData:UIImageJPEGRepresentation(image, 0.7f)];
-//    }
+//    attributeSet.contentURL = [NSURL URLWithString:[NSString stringWithFormat:@"swipes://todo/view?id=%@", (nil == todo.parent) ? todo.tempId : todo.parent.tempId]];
     
+//    UIImage* image = [self drawImageWithType:TODAY_IMAGE twoLine:NO priority:NO];
+//    if (image) {
+//        [attributeSet setThumbnailData:UIImagePNGRepresentation(image)];
+//    }
+//    
     NSURL* imageURL = [self imageURLForTodo:todo];
     if (imageURL) {
         [attributeSet setThumbnailURL:imageURL];
@@ -183,7 +194,7 @@ NSString * const kSwipesIdentifier = @"swipes_corespotlight";
     if (OSVER >= 9) {
         UIApplicationState state = [UIApplication sharedApplication].applicationState;
         if (UIApplicationStateBackground != state) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [self clearAllWithCompletionHandler:^(NSError * _Nullable error) {
                     [self setAllWithCompletionHandler:^(NSError * _Nullable error) {
                         if (completionHandler)
