@@ -162,7 +162,6 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
             if (error) {
                 [UtilityClass sendError:error type:@"CoreSpotlight: indexSearchableItems"];
             }
-           // TODO log
         }];
     }
 }
@@ -181,7 +180,6 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
         if (error) {
             [UtilityClass sendError:error type:@"CoreSpotlight: endIndexBatchWithClientState"];
         }
-        // TODO log
         if (completionHandler)
             completionHandler(error);
         DLog(@"CS: INDEXING DONE");
