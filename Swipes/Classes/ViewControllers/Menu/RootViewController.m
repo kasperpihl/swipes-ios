@@ -221,7 +221,9 @@ static RootViewController *sharedObject;
     [kFilter clearAll];
     [ANALYTICS logout];
     [NOTIHANDLER clearLocalNotifications];
+#ifdef __IPHONE_9_0
     [SPOTLIGHT clearAllWithCompletionHandler:nil];
+#endif
     [self resetRoot];
 
 }

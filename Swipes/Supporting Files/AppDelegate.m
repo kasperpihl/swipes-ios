@@ -89,7 +89,9 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     
     KPCORE;
     NOTIHANDLER;
+#ifdef __IPHONE_9_0
     SPOTLIGHT;
+#endif
     
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (notification)
@@ -323,7 +325,9 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 {
     //DLog(@"userActivity info: %@", userActivity.userInfo);
+#ifdef __IPHONE_9_0
     [SPOTLIGHT restoreUserActivity:userActivity];
+#endif
     return YES;
 }
 

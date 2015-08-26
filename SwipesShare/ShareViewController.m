@@ -151,7 +151,7 @@ static NSString* const kKeyUserSettingsNameURL = @"ShareExtensionTagsURL";
     [self.textField becomeFirstResponder];
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+- (NSUInteger)supportedInterfaceOrientations
 {
     if (UIUserInterfaceIdiomPhone == [UIDevice currentDevice].userInterfaceIdiom) {
         return UIInterfaceOrientationMaskPortrait;

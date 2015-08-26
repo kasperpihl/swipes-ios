@@ -6,6 +6,8 @@
 //  Copyright © 2015 Pihl IT. All rights reserved.
 //
 
+#ifdef __IPHONE_9_0
+
 @import MobileCoreServices;
 @import CoreSpotlight;
 #import "Global.h"
@@ -239,3 +241,5 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
 }
 
 @end
+
+#endif
