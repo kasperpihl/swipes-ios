@@ -1176,7 +1176,7 @@
 				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DDEBUG=1";
-				SDKROOT = macosx;
+				SDKROOT = iphoneos;
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Werror",
@@ -1214,7 +1214,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = "";
-				SDKROOT = macosx;
+				SDKROOT = iphoneos;
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Werror",

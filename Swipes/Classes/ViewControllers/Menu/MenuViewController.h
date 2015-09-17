@@ -10,14 +10,14 @@
 #define kSettingsBlurColor retColor(gray(230, 0.5),gray(50, 0.4))
 typedef NS_ENUM(NSUInteger, KPMenuButtons){
     KPMenuButtonSettings = 1,
-    KPMenuButtonScheme = 2,
-    KPMenuButtonUpgrade = 3,
-    KPMenuButtonSnoozes = 4,
-    KPMenuButtonHelp = 5,
-    KPMenuButtonIntegrations = 6,
-    KPMenuButtonLogout = 7,
-    KPMenuButtonSync = 8,
-    KPMenuButtonLocation = 9
+    KPMenuButtonScheme,
+    //KPMenuButtonUpgrade,
+    //KPMenuButtonSnoozes,
+    KPMenuButtonHelp,
+    //KPMenuButtonIntegrations,
+    KPMenuButtonLogout,
+    KPMenuButtonSync,
+    //KPMenuButtonLocation,
 };
 @interface MenuViewController : UIViewController
 -(void)renderSubviews;

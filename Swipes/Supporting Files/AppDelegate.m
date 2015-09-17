@@ -6,6 +6,29 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
+/* Swipes for teams TODO
+
+ - change bundle ids
+ 
+ - change icon
+ 
+ - change product name
+ 
+ - change all kinds of analytics services keys
+ -- google analytics
+ -- fabric
+ -- Appirater
+ -- intercom?
+ 
+ - make login with Slack
+ 
+ - remove Parse at least as login ?
+ 
+ 
+ */
+
+
+
 #import <Parse/Parse.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <Crashlytics/Crashlytics.h>

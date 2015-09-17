@@ -22,11 +22,11 @@ NSString* const kKeyTouchSelector = @"touchSelector";
 
 UIColor* kIntegrationGreenColor;
 
-static CGFloat const kTopMargin = 60;
-static CGFloat const kBottomMargin = 45;
-static CGFloat const kCellHeight = 55;
+static CGFloat const kTopMargin = 58;
+static CGFloat const kBottomMargin = 42;
+static CGFloat const kCellHeight = 52;
 static CGFloat const kSeparatorHeight = 22;
-static CGFloat const kSectionHeight = 34;
+static CGFloat const kSectionHeight = 32;
 
 @interface IntegrationBaseViewController () <UITableViewDelegate, UITableViewDataSource>
 

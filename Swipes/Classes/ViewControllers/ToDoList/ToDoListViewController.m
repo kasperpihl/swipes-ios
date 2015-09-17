@@ -313,19 +313,19 @@
 
 - (void)editToDo:(KPToDo *)todo
 {
-    if(self.hasStartedEditing)
-        return;
-
-    if ([ROOT_CONTROLLER.viewControllers containsObject:self.showingViewController]) {
-        [UtilityClass sendError:[NSError errorWithDomain:@"Pushing the same view controller instance more than once" code:101 userInfo:nil] type:@"Todo List"];
-        return;
-    }
-    
-    self.hasStartedEditing = YES;
-    self.savedContentOffset = self.tableView.contentOffset;
-    self.showingViewController.model = todo;
-    [ROOT_CONTROLLER pushViewController:self.showingViewController animated:YES];
-    [ANALYTICS pushView:@"Edit Task"];
+//    if(self.hasStartedEditing)
+//        return;
+//
+//    if ([ROOT_CONTROLLER.viewControllers containsObject:self.showingViewController]) {
+//        [UtilityClass sendError:[NSError errorWithDomain:@"Pushing the same view controller instance more than once" code:101 userInfo:nil] type:@"Todo List"];
+//        return;
+//    }
+//    
+//    self.hasStartedEditing = YES;
+//    self.savedContentOffset = self.tableView.contentOffset;
+//    self.showingViewController.model = todo;
+//    [ROOT_CONTROLLER pushViewController:self.showingViewController animated:YES];
+//    [ANALYTICS pushView:@"Edit Task"];
 }
 
 - (void)didPressCloseToDoViewController:(ToDoViewController *)viewController {

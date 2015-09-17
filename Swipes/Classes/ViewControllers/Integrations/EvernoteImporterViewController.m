@@ -11,7 +11,6 @@
 #import "KPAttachment.h"
 #import "AnalyticsHandler.h"
 #import "SlowHighlightIcon.h"
-#import "EvernoteSyncHandler.h"
 #import "SectionHeaderView.h"
 #import "EvernoteIntegration.h"
 #import "DejalActivityView.h"
@@ -212,7 +211,7 @@
         [notesToImport addObject:note];
     }
     [DejalBezelActivityView activityViewForView:self.view withLabel:NSLocalizedString(@"Importing...", nil)];
-    [EvernoteSyncHandler addAndSyncNewTasksFromNotes:notesToImport withArray:nil];
+    //[EvernoteSyncHandler addAndSyncNewTasksFromNotes:notesToImport withArray:nil];
     [DejalBezelActivityView removeViewAnimated:YES];
     [UTILITY alertWithTitle:NSLocalizedString(@"Successfully imported.", nil) andMessage:NSLocalizedString(@"Next time, assign the \"swipes\"-tag in Evernote and we'll import the notes automatically.", nil) buttonTitles:@[NSLocalizedString(@"Great! I got it.", nil)] block:nil];
     [self pressedClose:nil];

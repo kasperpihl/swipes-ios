@@ -24,10 +24,8 @@
 #endif
 
 #import "EvernoteIntegration.h"
-#import "EvernoteSyncHandler.h"
 
 #import "GmailIntegration.h"
-#import "GmailSyncHandler.h"
 #import "SpotlightHandler.h"
 
 #import "CoreSyncHandler.h"
@@ -83,18 +81,6 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
 
 @implementation CoreSyncHandler
 
-- (EvernoteSyncHandler *)evernoteSyncHandler {
-    if (!_evernoteSyncHandler)
-        _evernoteSyncHandler = [[EvernoteSyncHandler alloc] init];
-    return _evernoteSyncHandler;
-}
-
-- (GmailSyncHandler *)gmailSyncHandler {
-    if (!_gmailSyncHandler)
-        _gmailSyncHandler = [[GmailSyncHandler alloc] init];
-    return _gmailSyncHandler;
-}
-
 #pragma mark - public handlers of changes
 -(void)tempId:(NSString *)tempId gotObjectId:(NSString *)objectId{
     if(!tempId || !objectId) return;
@@ -103,7 +89,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
 
 - (BOOL)isSyncing
 {
-    return self._isSyncing || self.gmailSyncHandler.isSyncing || self.evernoteSyncHandler.isSyncing;
+    return self._isSyncing;
 }
 
 /* 
@@ -180,10 +166,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
     [USER_DEFAULTS removeObjectForKey:kLastSyncServerString];
     [USER_DEFAULTS synchronize];
     
-    [self.evernoteSyncHandler hardSync];
-    
     [self synchronizeForce:YES async:YES];
-
 }
 
 -(CGFloat)durationForStatus:(SyncStatus)status{
@@ -450,130 +433,23 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
         return;
     }
     
-    ////////////////////////////////////////
-    // call other sync handlers
-    
-    if ((!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) &&
-        !kEnInt.hasAskedForPermissions && [self.evernoteSyncHandler hasObjectsSyncedWithEvernote]) {
-        
-        if (_isAsync) {
-            [UTILITY alertWithTitle:NSLocalizedString(@"Evernote Authorization", nil) andMessage:NSLocalizedString(@"To sync with Evernote on this device, please authorize", nil) buttonTitles:@[NSLocalizedString(@"Don't sync this device", nil),NSLocalizedString(@"Authorize now", nil)] block:^(NSInteger number, NSError *error) {
-                if(number == 1){
-                    [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
-                }
-            }];
-            kEnInt.hasAskedForPermissions = YES;
-        }
-    }
-
-    dispatch_group_t group = dispatch_group_create();
-    __block UIBackgroundFetchResult syncResult = currentResult;
-    
-    if (kEnInt.enableSync && !self.evernoteSyncHandler.isSyncing && ![EvernoteIntegration isAPILimitReached]) {
-        dispatch_group_enter(group);
-        [self.evernoteSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
-            //NSLog(@"returned %lu",(long)status);
-            if (error) {
-                [EvernoteIntegration updateAPILimitIfNeeded:error];
-            }
-            if (status == SyncStatusSuccess || status == SyncStatusSuccessWithData){
-                DLog(@"Evernote sync successfully ended: %@", userInfo);
-            }
-            
-            if (status == SyncStatusSuccess || status == SyncStatusSuccessWithData || status == SyncStatusError) {
-                self.evernoteSyncHandler.isSyncing = NO;
-                if (SyncStatusSuccessWithData == status)
-                    syncResult = UIBackgroundFetchResultNewData;
-                dispatch_group_leave(group);
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (status == SyncStatusStarted){
-                }
-                else if (status == SyncStatusError) {
-                    // from user error logs it looks like too many users have their EN token expired without knowing it
-                    if (error && error.userInfo) {
-                        NSNumber* errorCode = error.userInfo[@"EDAMErrorCode"];
-                        if (errorCode && (EDAMErrorCode_AUTH_EXPIRED == [errorCode integerValue])) {
-                            [kEnInt logout];
-                            kEnInt.hasAskedForPermissions = NO;
-                        }
-                    }
-
-                    if (!kEnInt.isAuthenticated && (!kEnInt.isAuthenticationInProgress)) {
-                        kEnInt.enableSync = NO;
-                        if (_isAsync) {
-                            [UTILITY alertWithTitle:NSLocalizedString(@"Evernote Authorization", nil) andMessage:NSLocalizedString(@"To sync with Evernote on this device, please authorize", nil) buttonTitles:@[NSLocalizedString(@"Don't sync this device", nil),NSLocalizedString(@"Authorize now", nil)] block:^(NSInteger number, NSError *error) {
-                                if(number == 1){
-                                    [self evernoteAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
-                                }
-                            }];
-                        }
-                    }
-                    else {
-                        [self showErrorNotificationOnce:NSLocalizedString(@"Error synchronizing Evernote", nil)];
-                    }
-                }
-            });
-        }];
-    }
-
-    if (kGmInt.isAuthenticated && !self.gmailSyncHandler.isSyncing) {
-        dispatch_group_enter(group);
-        [self.gmailSyncHandler synchronizeWithBlock:^(SyncStatus status, NSDictionary *userInfo, NSError *error) {
-            //NSLog(@"returned %lu",(long)status);
-            if (status == SyncStatusSuccess || status == SyncStatusSuccessWithData) {
-                DLog(@"Gmail sync successfully ended: %@", userInfo);
-            }
-            if (status == SyncStatusSuccess || status == SyncStatusSuccessWithData || status == SyncStatusError) {
-                self.gmailSyncHandler.isSyncing = NO;
-                if (SyncStatusSuccessWithData == status)
-                    syncResult = UIBackgroundFetchResultNewData;
-                dispatch_group_leave(group);
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (status == SyncStatusStarted) {
-                }
-                else if (status == SyncStatusError) {
-                    if (!kGmInt.isAuthenticated) {
-                        // kGmInt.enableSync = NO;
-                        if (_isAsync) {
-                            [UTILITY alertWithTitle:NSLocalizedString(@"Gmail Authorization", nil) andMessage:NSLocalizedString(@"To sync with Gmail on this device, please authorize", nil) buttonTitles:@[NSLocalizedString(@"Don't sync this device", nil),NSLocalizedString(@"Authorize now", nil)] block:^(NSInteger number, NSError *error) {
-                                if (number == 1){
-                                    [self gmailAuthenticateUsingSelector:@selector(forceSync) withObject:nil];
-                                }
-                            }];
-                        }
-                    }
-                    else {
-                        [self showErrorNotificationOnce:NSLocalizedString(@"Error synchronizing Gmail", nil)];
-                    }
-                }
-            });
-        }];
-    }
-
-    dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // this is outside main thread
 #ifndef NOT_APPLICATION
-        [GlobalApp activityIndicatorVisible:NO];
+    [GlobalApp activityIndicatorVisible:NO];
 #ifdef __IPHONE_9_0
-        if (UIBackgroundFetchResultNewData == syncResult)
-            [SPOTLIGHT resetWithCompletionHandler:nil];
+    if (UIBackgroundFetchResultNewData == currentResult)
+        [SPOTLIGHT resetWithCompletionHandler:nil];
 #endif
 #endif
-        if (_isAsync)
-            [self endBackgroundHandler];
-        if (handler)
-            handler(syncResult);
-        [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
-        
-        DLog(@"Sync finished with result: %lu", (unsigned long)syncResult);
-    });
+    if (_isAsync)
+        [self endBackgroundHandler];
+    if (handler)
+        handler(currentResult);
+    [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
+    
+    DLog(@"Sync finished with result: %lu", (unsigned long)currentResult);
 }
 
 - (void)clearCache{
-    [self.evernoteSyncHandler clearCache];
 }
 
 - (void)evernoteAuthenticateUsingSelector:(SEL)selector withObject:(id)object

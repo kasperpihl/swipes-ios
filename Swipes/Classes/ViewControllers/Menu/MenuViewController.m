@@ -36,7 +36,7 @@ static CGFloat const kTopMargin = 60;
 
 #define kGridMargin valForScreen(15,10)
 #define kVerticalGridNumber 3
-#define kHorizontalGridNumber 3
+#define kHorizontalGridNumber 2
 #define kGridButtonPadding 0
 
 @interface MenuViewController () <MFMailComposeViewControllerDelegate>
@@ -136,7 +136,7 @@ static CGFloat const kTopMargin = 60;
     self.backButton = backButton;
     
     //self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0,startY,self.view.bounds.size.width-2*kGridMargin,self.view.bounds.size.height-startY)];
-    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
+    self.gridView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 318, 242)];
     
     CGFloat gridWidth = self.gridView.bounds.size.width;
     
@@ -160,7 +160,6 @@ static CGFloat const kTopMargin = 60;
     self.syncLabel.textColor = tcolor(SubTextColor);
     [self.gridView addSubview:self.syncLabel];
     [self updateSchemeButton];
-    [self changedIsPlus];
 
     [self.view addSubview:backButton]; // shoud be on top of grid
 }
@@ -178,7 +177,7 @@ static CGFloat const kTopMargin = 60;
 - (void)swipeHandler:(UISwipeGestureRecognizer *)recognizer
 {
     if (recognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
-        //[self pressedBack:nil];
+        [self pressedBack:nil];
     }
 }
 
@@ -233,76 +232,12 @@ static CGFloat const kTopMargin = 60;
             [self presentViewController:vc animated:NO completion:nil];
             break;
         }
-        case KPMenuButtonLocation:{
-            BOOL hasLocationOn = [(NSNumber*)[kSettings valueForSetting:SettingLocation] boolValue];
-            if(!hasLocationOn && ![kUserHandler isPlus]){
-                PlusAlertView *alert = [PlusAlertView alertWithFrame:self.view.bounds message:NSLocalizedString(@"Location reminders is a Swipes Plus feature. Get reminded at the right place and time.", nil) block:^(BOOL succeeded, NSError *error) {
-                    [BLURRY dismissAnimated:!succeeded];
-                    if(succeeded){
-                        [ROOT_CONTROLLER upgrade];
-                    }
-                }];
-                alert.shouldRemove = NO;
-                BLURRY.blurryTopColor = kSettingsBlurColor;
-                [BLURRY showView:alert inViewController:self];
-            }
-            else{
-                UIColor *lampColor = hasLocationOn ? kLampOffColor : kLampOnColor;
-                NSNumber *newSettingValue = hasLocationOn ? @NO : @YES;
-                if(hasLocationOn){
-                    [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Turn off location", nil) andMessage:NSLocalizedString(@"Location reminders won't be working.", nil) block:^(BOOL succeeded, NSError *error) {
-                        if(succeeded){
-                            [NOTIHANDLER stopLocationServices];
-                            [kSettings setValue:newSettingValue forSetting:SettingLocation];
-                            [sender setLampColor:lampColor];
-                        }
-                    }];
-                }
-                else{
-                    StartLocationResult result = [NOTIHANDLER startLocationServices];
-                    if(result == LocationStarted){
-                        [kSettings setValue:newSettingValue forSetting:SettingLocation];
-                        [sender setLampColor:lampColor];
-                    }
-                }
-            }
-            break;
-        }
-        case KPMenuButtonSnoozes:{
-            SnoozesViewController *snoozeVC = [[SnoozesViewController alloc] init];
-            [ANALYTICS pushView:@"Snoozes Menu"];
-            //[self pushViewController:snoozeVC animated:YES];
-            [self addModalTransition];
-            [self presentViewController:snoozeVC animated:NO completion:nil];
-            break;
-        }
-        case KPMenuButtonIntegrations:{
-            IntegrationsViewController *integrationVC = [[IntegrationsViewController alloc] init];
-            [ANALYTICS pushView:@"Integrations  Menu"];
-            [self addModalTransition];
-            [self presentViewController:integrationVC animated:NO completion:nil];
-            break;
-        }
         case KPMenuButtonHelp:{
             HelpingViewController *helpVC = [[HelpingViewController alloc] init];
             [ANALYTICS pushView:@"Help Menu"];
             //[self pushViewController:helpVC animated:YES];
             [self addModalTransition];
             [self presentViewController:helpVC animated:NO completion:nil];
-            break;
-        }
-        case KPMenuButtonUpgrade:{
-            if(kUserHandler.isPlus){
-                [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Manage subscription", nil) andMessage:NSLocalizedString(@"Open App Store to manage your subscription?", nil) block:^(BOOL succeeded, NSError *error) {
-                    if(succeeded){
-                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"]];
-                    }
-                }];
-                return;
-            }
-            else{
-                [ROOT_CONTROLLER upgrade];
-            }
             break;
         }
         case KPMenuButtonLogout:{
@@ -353,18 +288,6 @@ static CGFloat const kTopMargin = 60;
     //[self renderSubviews];
 }
 
--(void)changedIsPlus{
-    UIButton *upgradeButton = (UIButton*)[self.gridView viewWithTag:[self tagForButton:KPMenuButtonUpgrade]];
-    UIButton *locationButton = (UIButton *)[self.gridView viewWithTag:[self tagForButton:KPMenuButtonLocation]];
-    if(locationButton){
-        locationButton.hidden = !kUserHandler.isPlus;
-    }
-    
-    if(upgradeButton){
-        [upgradeButton setTitle:[self titleForMenuButton:KPMenuButtonUpgrade] forState:UIControlStateNormal];
-    }
-}
-
 -(NSString *)titleForMenuButton:(KPMenuButtons)button
 {
     NSString *title;
@@ -372,19 +295,9 @@ static CGFloat const kTopMargin = 60;
         case KPMenuButtonSettings:
             title = NSLocalizedString(@"Options", nil);
             break;
-        case KPMenuButtonLocation:
-            title = NSLocalizedString(@"Location", nil);
-            break;
         case KPMenuButtonHelp:
             title = NSLocalizedString(@"Help", nil);
             break;
-        case KPMenuButtonSnoozes:
-            title = NSLocalizedString(@"Snoozes", nil);
-            break;
-        case KPMenuButtonUpgrade:{
-            title = (kUserHandler.isPlus) ? NSLocalizedString(@"Manage", nil) : NSLocalizedString(@"Upgrade", nil);
-            break;
-        }
         case KPMenuButtonSync:
             title = NSLocalizedString(@"Sync", nil);
             break;
@@ -394,8 +307,6 @@ static CGFloat const kTopMargin = 60;
         case KPMenuButtonScheme:
             title = NSLocalizedString(@"Theme", nil);
             break;
-        case KPMenuButtonIntegrations:
-            title = NSLocalizedString(@"Integrations", nil);
     }
     return title;
 }
@@ -407,17 +318,8 @@ static CGFloat const kTopMargin = 60;
         case KPMenuButtonSettings:
             imageString = @"settings";
             break;
-        case KPMenuButtonLocation:
-            imageString = @"scheduleLocation";
-            break;
         case KPMenuButtonHelp:
             imageString = @"settingsFeedback";
-            break;
-        case KPMenuButtonSnoozes:
-            imageString = @"settingsSchedule";
-            break;
-        case KPMenuButtonUpgrade:
-            imageString = @"settingsPlusFull";
             break;
         case KPMenuButtonSync:
             imageString = @"settingsSync";
@@ -428,13 +330,10 @@ static CGFloat const kTopMargin = 60;
         case KPMenuButtonScheme:
             imageString = @"settingsTheme";
             break;
-        case KPMenuButtonIntegrations:
-            imageString = @"settingsIntegrations";
     }
     if (highlighted)
         imageString = [imageString stringByAppendingString:@"Full"];
-    if (button == KPMenuButtonUpgrade && highlighted)
-        imageString = @"settingsPlus";
+
     return iconString(imageString);
 }
 
@@ -464,19 +363,9 @@ static CGFloat const kTopMargin = 60;
     [button.iconLabel setTitleColor:tcolor(TextColor) forState:UIControlStateHighlighted];
     [button.iconLabel setTitle:[self stringForMenuButton:menuButton highlighted:NO] forState:UIControlStateNormal];
     [button.iconLabel setTitle:[self stringForMenuButton:menuButton highlighted:YES] forState:UIControlStateHighlighted];
-    if(menuButton == KPMenuButtonUpgrade){
-        [button.iconLabel setTitleColor:tcolor(LaterColor) forState:UIControlStateNormal];
-        [button.iconLabel setTitleColor:tcolor(TextColor) forState:UIControlStateHighlighted];
-    }
     if(menuButton == KPMenuButtonSync){
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
         [button addGestureRecognizer:longPress];
-    }
-    if(menuButton == KPMenuButtonLocation){
-        KPSettings setting = SettingLocation;
-        BOOL hasNotificationsOn = [(NSNumber*)[kSettings valueForSetting:setting] boolValue];
-        UIColor *lampColor = hasNotificationsOn ? kLampOnColor : kLampOffColor;
-        [button setLampColor:lampColor];
     }
     button.tag = [self tagForButton:menuButton];
     [button addTarget:self action:@selector(pressedMenuButton:) forControlEvents:UIControlEventTouchUpInside];
