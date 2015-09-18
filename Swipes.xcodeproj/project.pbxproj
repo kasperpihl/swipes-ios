@@ -101,7 +101,6 @@
 		A74F61BB16EBA595004927DA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BA16EBA595004927DA /* AVFoundation.framework */; };
 		A74F61BD16EBA5A5004927DA /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BC16EBA5A5004927DA /* AssetsLibrary.framework */; };
 		A74F61BF16EBA5B8004927DA /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A74F61BE16EBA5B7004927DA /* MediaPlayer.framework */; };
-		A74FB8F418FFBCB200F25157 /* MASTER_0000.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A74FB8EA18FFBCB200F25157 /* MASTER_0000.jpg */; };
 		A74FB90018FFF47800F25157 /* swipes.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A74FB8FF18FFF2FA00F25157 /* swipes.ttf */; };
 		A75207FA1730F5F700F1B4F7 /* ToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A75207F91730F5F700F1B4F7 /* ToDoViewController.m */; };
 		A75236C617A2EC5E0030ED1E /* WalkthroughViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A75236C517A2EC5E0030ED1E /* WalkthroughViewController.m */; };
@@ -861,7 +860,6 @@
 		A74F61BA16EBA595004927DA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A74F61BC16EBA5A5004927DA /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		A74F61BE16EBA5B7004927DA /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		A74FB8EA18FFBCB200F25157 /* MASTER_0000.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = MASTER_0000.jpg; sourceTree = "<group>"; };
 		A74FB8FF18FFF2FA00F25157 /* swipes.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = swipes.ttf; path = Font/swipes.ttf; sourceTree = "<group>"; };
 		A75207F81730F5F700F1B4F7 /* ToDoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToDoViewController.h; path = ToDo/ToDoViewController.h; sourceTree = "<group>"; };
 		A75207F91730F5F700F1B4F7 /* ToDoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ToDoViewController.m; path = ToDo/ToDoViewController.m; sourceTree = "<group>"; };
@@ -1677,7 +1675,6 @@
 			isa = PBXGroup;
 			children = (
 				A701BD2D1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png */,
-				A74FB8EA18FFBCB200F25157 /* MASTER_0000.jpg */,
 			);
 			path = "launch-screen";
 			sourceTree = "<group>";
@@ -3200,7 +3197,6 @@
 				DACD545818A1ACFC00C378DF /* page_white_gear.png in Resources */,
 				A75C138A1A1A07D200CC3665 /* BebasNeue.ttf in Resources */,
 				A75236E517A335680030ED1E /* walkthrough_swipe_done@2x.png in Resources */,
-				A74FB8F418FFBCB200F25157 /* MASTER_0000.jpg in Resources */,
 				A75236E617A335680030ED1E /* walkthrough_swipe_schedule.png in Resources */,
 				A763D5541A13AC670060D994 /* alldonefortoday.png in Resources */,
 				A772B14119671D9F00C07909 /* swipesandevernote.png in Resources */,

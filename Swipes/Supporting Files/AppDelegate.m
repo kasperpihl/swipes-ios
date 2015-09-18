@@ -10,8 +10,6 @@
 
  - change bundle ids
  
- - change icon
- 
  - change product name
  
  - change all kinds of analytics services keys
@@ -22,7 +20,7 @@
  
  - make login with Slack
  
- - remove Parse at least as login ?
+ - remove Parse at least as 84klogin ?
  
  
  */
