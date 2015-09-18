@@ -23,7 +23,7 @@
 	<key>CFBundleIcons~ipad</key>
 	<dict/>
 	<key>CFBundleIdentifier</key>
-	<string>it.pihl.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>com.swipes.${PRODUCT_NAME:rfc1034identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -142,10 +142,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>en</string>
-        <string>dbx-mailbox</string>
-    </array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>en</string>
+		<string>dbx-mailbox</string>
+	</array>
 </dict>
 </plist>

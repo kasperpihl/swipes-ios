@@ -20,7 +20,7 @@
 
 @implementation SWACoreDataModel
 
-static NSString* const SHARED_GROUP_NAME = @"group.it.pihl.swipes";
+static NSString* const SHARED_GROUP_NAME = @"group.com.swipes.Swipes-Teams";
 static NSString* const DATABASE_NAME = @"swipes";
 static NSString* const DATABASE_MODEL_NAME = @"Datamodel";
 static NSString* const DATABASE_FOLDER = @"database";

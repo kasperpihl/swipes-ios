@@ -10,8 +10,8 @@
 #define iconCompare(target,result) if([iconString isEqualToString:target]) return result
 @implementation Global
 
-NSString* const SHARED_GROUP_NAME = @"group.it.pihl.swipes";
-NSString* const SHARED_KEYCHAIN_NAME = @"it.pihl.Swipes";
+NSString* const SHARED_GROUP_NAME = @"group.com.swipes.Swipes-Teams";
+NSString* const SHARED_KEYCHAIN_NAME = @"com.swipes.Swipes-Teams";
 static NSString* const DATABASE_NAME = @"swipes";
 static NSString* const DATABASE_FOLDER = @"database";
 static NSString* const kFirstRunApp = @"FirstRun";
