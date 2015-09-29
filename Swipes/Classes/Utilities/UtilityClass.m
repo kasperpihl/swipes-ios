@@ -7,6 +7,7 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import "SlackUser.h"
 #import "AppDelegate.h"
 #import "KPParseCommunicator.h"
 #import "NSDate-Utilities.h"

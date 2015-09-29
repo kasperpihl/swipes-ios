@@ -11,6 +11,7 @@
 #import <MessageUI/MessageUI.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import "SlackUser.h"
 #import "RootViewController.h"
 #import "FacebookCommunicator.h"
 #import "URLHandler.h"
@@ -86,34 +87,6 @@
 }
 
 
--(void)fetchDataFromFacebook{
-    __block NSString *requestPath = @"me?fields=email,gender";
-    FBRequest *request = [FBRequest requestForGraphPath:requestPath];
-    [FBC addRequest:request write:NO permissions:nil block:^BOOL(FBReturnType status, id result, NSError *error) {
-        DLog(@"fetched");
-        PFUser *user = kCurrent;
-        if(error) {
-            return NO;
-        }
-        else{
-            NSDictionary *userData = (NSDictionary *)result; // The result is a dictionary
-            NSString *email = [userData objectForKey:@"email"];
-            
-            if(email){
-                [user setObject:email forKey:@"email"];
-            }
-            NSString *gender = [userData objectForKey:@"gender"];
-            if(gender)
-                [user setObject:gender forKey:@"gender"];
-            [user saveEventually];
-            if(email)
-                [user setObject:email forKey:@"username"];
-            [user saveEventually];
-            [ANALYTICS checkForUpdatesOnIdentity];
-        }
-        return NO;
-    }];
-}
 -(void)didLoginUser:(PFUser*)user{
     [self.settingsViewController renderSubviews];
     voidBlock block = ^{
@@ -125,14 +98,6 @@
         }
         else{
             [ANALYTICS trackCategory:@"Onboarding" action:@"Logged In" label:didTryApp value:daysSinceInstall];
-        }
-        if ([PFFacebookUtils isLinkedWithUser:user]){
-            if (!user.email){
-                [self fetchDataFromFacebook];
-            }
-        }
-        else{
-            
         }
         [ANALYTICS checkForUpdatesOnIdentity];
         [self changeToMenu:KPMenuHome animated:YES];
@@ -200,7 +165,7 @@
 static RootViewController *sharedObject;
 +(RootViewController *)sharedInstance{
     if(!sharedObject){
-        sharedObject = [[RootViewController allocWithZone:NULL] init];
+        sharedObject = [[RootViewController alloc] init];
         
     }
     return sharedObject;

@@ -9,6 +9,7 @@
 #import <NotificationCenter/NotificationCenter.h>
 #import <Parse/Parse.h>
 #import <ENSDK/ENSDK.h>
+#import "SlackUser.h"
 #import "KPToDo.h"
 #import "UtilityClass.h"
 #import "TodayViewController.h"

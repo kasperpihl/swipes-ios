@@ -11,6 +11,7 @@
 #import "Global.h"
 #import <Parse/Parse.h>
 #import <ENSDK/ENSDK.h>
+#import "SlackUser.h"
 #import "UtilityClass.h"
 #import "KPToDo.h"
 #import "KPAttachment.h"

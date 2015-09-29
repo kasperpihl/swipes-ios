@@ -9,6 +9,7 @@
 #import "UserHandler.h"
 #import <Parse/PFUser.h>
 #import "PFFacebookUtils.h"
+#import "SlackUser.h"
 #import "AnalyticsHandler.h"
 #import "IntegrationHandler.h"
 #import "SettingsHandler.h"
@@ -24,7 +25,7 @@
 static UserHandler *sharedObject;
 +(UserHandler *)sharedInstance{
     if(!sharedObject){
-        sharedObject = [[UserHandler allocWithZone:NULL] init];
+        sharedObject = [[UserHandler alloc] init];
         [sharedObject initialize];
         [sharedObject handleUser:kCurrent];
     }
@@ -93,58 +94,58 @@ static UserHandler *sharedObject;
 -(void)didOpenApp{
     if(!kCurrent)
         return;
-    [kCurrent fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if(!error){
-            [self handleUser:(PFUser*)object];
-        }
-        else {
-            DLog(@"t%@",error);
-        }
-    }];
+//    [kCurrent fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+//        if(!error){
+//            [self handleUser:(PFUser*)object];
+//        }
+//        else {
+//            DLog(@"t%@",error);
+//        }
+//    }];
 }
 -(NSString *)emailOrFacebookString{
     NSString *email = @"User: ";
     if([UtilityClass validateEmail:kCurrent.username]){
         email = [email stringByAppendingString:kCurrent.username];
     }
-    if([PFFacebookUtils isLinkedWithUser:kCurrent]){
-        email = [email stringByAppendingString:@" (Facebook)"];
-    }
+//    if([PFFacebookUtils isLinkedWithUser:kCurrent]){
+//        email = [email stringByAppendingString:@" (Facebook)"];
+//    }
     return email;
 }
 -(void)saveSettings:(NSDictionary *)settings{
-    if(settings)
-        [kCurrent setObject:settings forKey:@"settings"];
-    if(self.isSaving){
-        self.needSave = YES;
-        return;
-    }
-    self.isSaving = YES;
-    [kCurrent saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        self.isSaving = NO;
-        if(self.needSave){
-            self.needSave = NO;
-            [self saveSettings:nil];
-        }
-        else if(error)
-            [kCurrent saveEventually];
-    }];
+//    if(settings)
+//        [kCurrent setObject:settings forKey:@"settings"];
+//    if(self.isSaving){
+//        self.needSave = YES;
+//        return;
+//    }
+//    self.isSaving = YES;
+//    [kCurrent saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//        self.isSaving = NO;
+//        if(self.needSave){
+//            self.needSave = NO;
+//            [self saveSettings:nil];
+//        }
+//        else if(error)
+//            [kCurrent saveEventually];
+//    }];
 }
 
 -(void)didUpgradeUser{
     self.isPlus = YES;
 }
--(void)handleUser:(PFUser*)user{
+-(void)handleUser:(SlackUser *)user{
     if(user){
         NSInteger userLevel = 0;
-        userLevel = [[kCurrent objectForKey:@"userLevel"] integerValue];
-        [USER_DEFAULTS setInteger:userLevel forKey:@"isPlus"];
-        [USER_DEFAULTS synchronize];
+//        userLevel = [[kCurrent objectForKey:@"userLevel"] integerValue];
+//        [USER_DEFAULTS setInteger:userLevel forKey:@"isPlus"];
+//        [USER_DEFAULTS synchronize];
         self.userLevel = userLevel;
         self.isPlus = (userLevel > UserLevelStandard);
         [ANALYTICS checkForUpdatesOnIdentity];
-        NSDictionary *settings = [user objectForKey:@"settings"];
-        [kSettings updateSettingsFromServer:settings];
+//        NSDictionary *settings = [user objectForKey:@"settings"];
+//        [kSettings updateSettingsFromServer:settings];
     }
 }
 -(void)dealloc{

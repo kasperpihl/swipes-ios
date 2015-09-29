@@ -7,6 +7,7 @@
 //
 
 #import "AnalyticsHandler.h"
+#import "SlackUser.h"
 #import "UtilityClass.h"
 #import "DejalActivityView.h"
 #import "KPToDo.h"

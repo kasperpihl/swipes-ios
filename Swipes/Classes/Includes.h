@@ -70,9 +70,13 @@ typedef void (^viewBlock)(UIView* view);
 #define kLocationSplitStr @"_-_"
 #define isTryingString @"isTryingOutSwipes"
 
-#define kCurrent [PFUser currentUser]
+#define kCurrent [SlackUser currentUser]
 #define kCurrentAttr(attr) [kCurrent objectForKey:attr]
 #define kCurrentSetAttr(key,attr) [kCurrent setObject:attr forKey:key]
+
+//#define kCurrent [PFUser currentUser]
+//#define kCurrentAttr(attr) [kCurrent objectForKey:attr]
+//#define kCurrentSetAttr(key,attr) [kCurrent setObject:attr forKey:key]
 
 #define sizeWithFont(string,font) [string sizeWithAttributes:@{NSFontAttributeName:font}]
 #define _ Underscore

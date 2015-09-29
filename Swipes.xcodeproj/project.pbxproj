@@ -518,6 +518,11 @@
 		DA5346BF19D5CB7B007AA15D /* Datamodel.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */; };
 		DA5346C019D5CB84007AA15D /* SwipesToday.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = DAE2B16319CB7AA900A9074E /* SwipesToday.entitlements */; };
 		DA5422CE1986C7A50006A1E6 /* URLHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5422CD1986C7A50006A1E6 /* URLHandler.m */; };
+		DA571A801BB95BAF0016DF4C /* SlackUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571A7F1BB95BAF0016DF4C /* SlackUser.m */; settings = {ASSET_TAGS = (); }; };
+		DA571A851BB95BBE0016DF4C /* SlackUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571A7F1BB95BAF0016DF4C /* SlackUser.m */; settings = {ASSET_TAGS = (); }; };
+		DA571A861BB95BBE0016DF4C /* SlackUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571A7F1BB95BAF0016DF4C /* SlackUser.m */; settings = {ASSET_TAGS = (); }; };
+		DA571A871BB95BBF0016DF4C /* SlackUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571A7F1BB95BAF0016DF4C /* SlackUser.m */; settings = {ASSET_TAGS = (); }; };
+		DA571A8A1BB98E830016DF4C /* SlackWebAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571A891BB98E830016DF4C /* SlackWebAPIClient.m */; settings = {ASSET_TAGS = (); }; };
 		DA57B29D1ACF66C4000F2377 /* UIView+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A771356E17BABB5A0090BE89 /* UIView+Utilities.m */; };
 		DA67301418A99C7100CA4C1A /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA67301318A99C7100CA4C1A /* DropboxSDK.framework */; };
 		DA69247E19B879D30082D1E4 /* AnalyticsHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A717BF1D17611162004791BF /* AnalyticsHandler.h */; };
@@ -1251,6 +1256,10 @@
 		DA50DBED1AA3E1140081FD20 /* SWADefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWADefinitions.h; sourceTree = "<group>"; };
 		DA5422CC1986C7A50006A1E6 /* URLHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLHandler.h; sourceTree = "<group>"; };
 		DA5422CD1986C7A50006A1E6 /* URLHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLHandler.m; sourceTree = "<group>"; };
+		DA571A7E1BB95BAF0016DF4C /* SlackUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlackUser.h; path = Swipes/Classes/Handlers/SlackUser.h; sourceTree = SOURCE_ROOT; };
+		DA571A7F1BB95BAF0016DF4C /* SlackUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlackUser.m; path = Swipes/Classes/Handlers/SlackUser.m; sourceTree = SOURCE_ROOT; };
+		DA571A881BB98E830016DF4C /* SlackWebAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlackWebAPIClient.h; sourceTree = "<group>"; };
+		DA571A891BB98E830016DF4C /* SlackWebAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlackWebAPIClient.m; sourceTree = "<group>"; };
 		DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.0.xcdatamodel"; sourceTree = "<group>"; };
 		DA67301318A99C7100CA4C1A /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = Swipes/Ressources/Libs/DropboxSDK.framework; sourceTree = "<group>"; };
 		DA6A361E1B2EF946009BD8A9 /* swipes-notification.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "swipes-notification.m4a"; sourceTree = "<group>"; };
@@ -1915,6 +1924,8 @@
 				A781284217294C56002226C8 /* FacebookCommunicatorDelegate.h */,
 				A781284317294C56002226C8 /* KPParseCommunicator.h */,
 				A781284417294C56002226C8 /* KPParseCommunicator.m */,
+				DA571A881BB98E830016DF4C /* SlackWebAPIClient.h */,
+				DA571A891BB98E830016DF4C /* SlackWebAPIClient.m */,
 			);
 			path = Communicators;
 			sourceTree = "<group>";
@@ -2600,6 +2611,8 @@
 				A7D7D53217B1586A00FBC042 /* SettingsHandler.m */,
 				A72EFFFD18425B6A008333AA /* UserHandler.h */,
 				A72EFFFE18425B6A008333AA /* UserHandler.m */,
+				DA571A7E1BB95BAF0016DF4C /* SlackUser.h */,
+				DA571A7F1BB95BAF0016DF4C /* SlackUser.m */,
 				DA9B276F1B6796FC004A1016 /* SpotlightHandler.h */,
 				DA9B27701B6796FC004A1016 /* SpotlightHandler.m */,
 			);
@@ -3599,6 +3612,7 @@
 				A74D3FD118D9E7AC0056D124 /* HPGrowingTextView.m in Sources */,
 				DA09B0101AB228D6002632DC /* MagicalImportFunctions.m in Sources */,
 				A742416017A5BFB3009C9735 /* WalkthroughOverlayBackground.m in Sources */,
+				DA571A801BB95BAF0016DF4C /* SlackUser.m in Sources */,
 				DA09B0741AB228D6002632DC /* MagicalRecord+Actions.m in Sources */,
 				A724B02217A96B8B00E0EF83 /* UIColor+Utilities.m in Sources */,
 				A7FA8B1D17AF094E00134ED0 /* SnoozesViewController.m in Sources */,
@@ -3624,6 +3638,7 @@
 				A703B1B61838EBF20047DCC9 /* SlowHighlightIcon.m in Sources */,
 				A703B1B31838EBF20047DCC9 /* KPToolbar.m in Sources */,
 				DA09B0381AB228D6002632DC /* NSManagedObject+MagicalDataImport.m in Sources */,
+				DA571A8A1BB98E830016DF4C /* SlackWebAPIClient.m in Sources */,
 				A7E2D94717B3F258007BDE00 /* DayPickerSettingsCell.m in Sources */,
 				A7E2D94A17B4FE0F007BDE00 /* UpgradeViewController.m in Sources */,
 				A7D0686A190E654C00699B4E /* MMDrawerVisualState.m in Sources */,
@@ -3725,6 +3740,7 @@
 				A711246E19DB13D400FD9DAE /* TodaySwipingCell.m in Sources */,
 				A75C13881A188FD300CC3665 /* TodayTableViewCell.m in Sources */,
 				DA09B02F1AB228D6002632DC /* NSString+MagicalDataImport.m in Sources */,
+				DA571A851BB95BBE0016DF4C /* SlackUser.m in Sources */,
 				DAE2B17119CB7D7200A9074E /* ParentSyncHandler.m in Sources */,
 				DAE2B16619CB7B1B00A9074E /* KPAttachment.m in Sources */,
 				DA09B08E1AB228D6002632DC /* MagicalRecord+ShorthandSupport.m in Sources */,
@@ -3786,6 +3802,7 @@
 				DA09B0851AB228D6002632DC /* MagicalRecord+Options.m in Sources */,
 				DA09B0581AB228D6002632DC /* NSManagedObjectContext+MagicalRecord.m in Sources */,
 				DA09AFA81AB1CE3D002632DC /* AnalyticsHandler.m in Sources */,
+				DA571A861BB95BBE0016DF4C /* SlackUser.m in Sources */,
 				DA09B0441AB228D6002632DC /* NSManagedObject+MagicalRecord.m in Sources */,
 				DAC8A1831ACC47F400061377 /* LocationResultCell.m in Sources */,
 				DAC8A1841ACC480900061377 /* NotificationHandler.m in Sources */,
@@ -3888,6 +3905,7 @@
 				DA09B0811AB228D6002632DC /* MagicalRecord+iCloud.m in Sources */,
 				DA09B0721AB228D6002632DC /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
 				DA09B0771AB228D6002632DC /* MagicalRecord+Actions.m in Sources */,
+				DA571A871BB95BBF0016DF4C /* SlackUser.m in Sources */,
 				DA09B02C1AB228D6002632DC /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
 				DA09B0681AB228D6002632DC /* NSManagedObjectModel+MagicalRecord.m in Sources */,
 				DA23232919B4737500D996EB /* NSDate-Utilities.m in Sources */,

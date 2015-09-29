@@ -353,6 +353,10 @@
 
 -(NSArray*)updateWithObjectFromServer:(NSDictionary *)object context:(NSManagedObjectContext *)context{
     [super updateWithObjectFromServer:object context:context];
+    
+//    DLog(@"updateWithObjectFromServer: %@", object);
+    
+    
     __block NSMutableSet *changedAttributesSet = [NSMutableSet set];
     [context performBlockAndWait:^{
         NSDictionary *keyMatch = [self keyMatch];
@@ -438,7 +442,7 @@
                     continue;
                 }
                 
-                if([pfKey isEqualToString:@"attachments"]){
+                if([pfKey isEqualToString:@"attachments"] && (pfValue != [NSNull null])){
                     NSArray *attachments = (NSArray*)pfValue;
                     [self removeAllAttachmentsForService:@"all" identifier:nil inContext:context];
                     for( NSDictionary *attachmentObj in attachments){
@@ -479,6 +483,7 @@
         return [changedAttributesSet allObjects];
     else
         return nil;
+ 
 }
 
 -(BOOL)setAttributesForSavingObject:(NSMutableDictionary *__autoreleasing *)object changedAttributes:(NSArray *)changedAttributes

@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "AnalyticsHandler.h"
 #import "NSDate-Utilities.h"
 #import <Parse/PFUser.h>
+#import "SlackUser.h"
 #import "Vero.h"
 #import "UtilityClass.h"
 #import "KPToDo.h"
@@ -20,6 +20,7 @@
 #import "GAI.h"
 #import "GAIFields.h"
 #import "GAIDictionaryBuilder.h"
+#import "AnalyticsHandler.h"
 
 @interface AnalyticsHandler ()
 @property (nonatomic) NSMutableArray *views;
@@ -187,18 +188,18 @@ static AnalyticsHandler *sharedObject;
     
     
     // Signup date
-    NSString *currentSignupDate = [currentValues objectForKey:@"signup_date"];
-    if(kCurrent.createdAt){
-        NSDateFormatter *dateFormatter = [Global isoDateFormatter];
-        NSString *isoSignup = [dateFormatter stringFromDate:kCurrent.createdAt];
-        if(![isoSignup isEqualToString:currentSignupDate]){
-            shouldUpdate = YES;
-            
-            [currentValues setObject:isoSignup forKey:@"signup_date"];
-            
-            [intercomAttributes setObject:isoSignup forKey:@"remote_created_at"];
-        }
-    }
+//    NSString *currentSignupDate = [currentValues objectForKey:@"signup_date"];
+//    if(kCurrent.createdAt){
+//        NSDateFormatter *dateFormatter = [Global isoDateFormatter];
+//        NSString *isoSignup = [dateFormatter stringFromDate:kCurrent.createdAt];
+//        if(![isoSignup isEqualToString:currentSignupDate]){
+//            shouldUpdate = YES;
+//            
+//            [currentValues setObject:isoSignup forKey:@"signup_date"];
+//            
+//            [intercomAttributes setObject:isoSignup forKey:@"remote_created_at"];
+//        }
+//    }
     
     
     

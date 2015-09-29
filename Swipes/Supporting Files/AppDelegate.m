@@ -33,6 +33,8 @@
 
 #import <DropboxSDK/DropboxSDK.h>
 
+#import "SlackUser.h"
+
 #import "Intercom.h"
 #import "NSDate-Utilities.h"
 #import "Appirater.h"

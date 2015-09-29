@@ -5,14 +5,15 @@
 //  Created by Kasper Pihl Tornøe on 23/11/13.
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
-#define plusMonthlyIdentifier @"plusMonthlyTier1"
-#define plusYearlyIdentifier @"plusYearlyTier10"
-#import "PaymentHandler.h"
 #import "RMStore.h"
 //#import "MF_Base64Additions.h"
 #import <Parse/Parse.h>
+#import "SlackUser.h"
 #import "UtilityClass.h"
+#import "PaymentHandler.h"
 
+#define plusMonthlyIdentifier @"plusMonthlyTier1"
+#define plusYearlyIdentifier @"plusYearlyTier10"
 
 @interface PaymentHandler ()
 @property SKProductsRequest *productsRequest;

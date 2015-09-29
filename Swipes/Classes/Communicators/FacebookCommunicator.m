@@ -100,22 +100,22 @@ static FacebookCommunicator *sharedObject;
             }
         }
     }
-    if (updatePermissions && write) {
-        if([PFFacebookUtils isLinkedWithUser:kCurrent]){
-            [PFFacebookUtils reauthorizeUser:kCurrent  withPublishPermissions:FACEBOOK_WRITE_PERMISSIONS audience:FBSessionDefaultAudienceFriends block:^(BOOL succeeded, NSError *error) {
-                if(succeeded) [self runRequest:request block:block];
-                else block(FBReturnTypeCancelled, nil,error);
-            }];
-        }
-        else{
-            [PFFacebookUtils linkUser:kCurrent permissions:FACEBOOK_WRITE_PERMISSIONS block:^(BOOL succeeded, NSError *error) {
-                if(succeeded) [self runRequest:request block:block];
-                else block(FBReturnTypeCancelled, nil,error);
-            }];
-        }
-        return;
-    }
-    else [self runRequest:request block:block];
+//    if (updatePermissions && write) {
+//        if([PFFacebookUtils isLinkedWithUser:kCurrent]){
+//            [PFFacebookUtils reauthorizeUser:kCurrent  withPublishPermissions:FACEBOOK_WRITE_PERMISSIONS audience:FBSessionDefaultAudienceFriends block:^(BOOL succeeded, NSError *error) {
+//                if(succeeded) [self runRequest:request block:block];
+//                else block(FBReturnTypeCancelled, nil,error);
+//            }];
+//        }
+//        else{
+//            [PFFacebookUtils linkUser:kCurrent permissions:FACEBOOK_WRITE_PERMISSIONS block:^(BOOL succeeded, NSError *error) {
+//                if(succeeded) [self runRequest:request block:block];
+//                else block(FBReturnTypeCancelled, nil,error);
+//            }];
+//        }
+//        return;
+//    }
+//    else [self runRequest:request block:block];
     
 }
 -(void)addRequest:(FBRequest *)request index:(NSInteger)index write:(BOOL)write permissions:(NSArray *)permissions block:(FBReqIndexBlock)block{

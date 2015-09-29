@@ -8,6 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
+#if __has_feature(nullability)
+#  define KP_NONNULL nonnull
+#  define KP_NONNULL_S __nonnull
+#  define KP_NULLABLE nullable
+#  define KP_NULLABLE_S __nullable
+#  define KP_NULLABLE_PROPERTY nullable,
+#else
+#  define KP_NONNULL
+#  define KP_NONNULL_S
+#  define KP_NULLABLE
+#  define KP_NULLABLE_S
+#  define KP_NULLABLE_PROPERTY
+#endif
+
 #define OSVER [Global OSVersion]
 #define iconString(string) string //[Global iconStringForString:string]
 #define iconLabel(key,iconHeight) [Global iconLabelWithString:key height:iconHeight]
