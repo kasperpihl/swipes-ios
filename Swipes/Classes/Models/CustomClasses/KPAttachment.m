@@ -53,7 +53,7 @@ NSString* const URL_SERVICE = @"url";
 }
 
 +(NSArray*)supportedServices{
-    return @[ EVERNOTE_SERVICE, DROPBOX_SERVICE, URL_SERVICE ];
+    return @[ EVERNOTE_SERVICE, DROPBOX_SERVICE, URL_SERVICE, GMAIL_SERVICE ];
 }
 
 + (BOOL)supportsService:(NSString *)service

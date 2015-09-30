@@ -8,9 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void (^SlackCallbackBlock)(NSDictionary* result);
+//typedef void (^SlackCallbackBlock)(NSDictionary* result);
+
+#define SLACKWEBAPI [SlackWebAPIClient sharedInstance]
 
 @interface SlackWebAPIClient : NSObject
+
++ (instancetype)sharedInstance;
 
 - (instancetype)init;
 - (instancetype)initWithToken:(NSString *)token;

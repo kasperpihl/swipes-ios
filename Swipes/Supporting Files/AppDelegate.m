@@ -34,6 +34,7 @@
 #import <DropboxSDK/DropboxSDK.h>
 
 #import "SlackUser.h"
+#import "SlackWebAPIClient.h"
 
 #import "Intercom.h"
 #import "NSDate-Utilities.h"
@@ -103,6 +104,8 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     if(kCurrent){
         [[Crashlytics sharedInstance] setUserIdentifier:kCurrent.objectId];
         [[Crashlytics sharedInstance] setUserEmail:kCurrent.username];
+        
+        SLACKWEBAPI.token = kCurrent.sessionToken;
     }
     
     [GAI sharedInstance].dispatchInterval = 20;
@@ -328,9 +331,10 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    
     [ROOT_CONTROLLER openApp];
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        SLACKWEBAPI.userId;
+    });
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

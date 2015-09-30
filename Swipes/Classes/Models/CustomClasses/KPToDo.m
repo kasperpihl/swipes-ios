@@ -1,6 +1,7 @@
 
 #import "NotificationHandler.h"
 #import "KPTag.h"
+#import "KPAssignee.h"
 #import "UtilityClass.h"
 #ifndef NOT_APPLICATION
 #import "NSDate-Utilities.h"
@@ -38,7 +39,12 @@
       @"order": @"order",
       @"origin": @"origin",
       @"originIdentifier": @"originIdentifier",
-      @"priority":@"priority"
+      @"priority":@"priority",
+      @"ownerId":@"ownerId",
+      @"projectLocalId":@"projectLocalId",
+      @"projectOrder":@"projectOrder",
+      @"toUserId":@"toUserId",
+      @"userId":@"userId",
     };
 }
 #define checkStringWithKey(object, pfValue, cdKey, cdValue) if(![cdValue isEqualToString:pfValue]) [self setValue:pfValue forKey:cdKey]
@@ -354,7 +360,7 @@
 -(NSArray*)updateWithObjectFromServer:(NSDictionary *)object context:(NSManagedObjectContext *)context{
     [super updateWithObjectFromServer:object context:context];
     
-//    DLog(@"updateWithObjectFromServer: %@", object);
+    DLog(@"updateWithObjectFromServer: %@", object);
     
     
     __block NSMutableSet *changedAttributesSet = [NSMutableSet set];
@@ -409,7 +415,8 @@
                         NSMutableArray *tagStrings = [NSMutableArray array];
                         NSInteger tagCount = tagsObjects.count;
                         NSMutableArray *notSortedTags = [NSMutableArray array];
-                        for(NSInteger i = 0 ; i < tagCount ; i++) [tagStrings addObject:[NSNull null]];
+                        for(NSInteger i = 0 ; i < tagCount ; i++)
+                            [tagStrings addObject:[NSNull null]];
                         for(KPTag *tag in tagsObjects){
                             if(!tag || tag == (id)[NSNull null] || tag.title.length == 0){
                                 [changedAttributesSet addObject:@"tags"];
@@ -441,6 +448,24 @@
                     }
                     continue;
                 }
+
+                if([pfKey isEqualToString:@"assignees"]){
+                    if (pfValue == [NSNull null])
+                        continue;
+                    NSArray *assigneesFromServer = (NSArray*)pfValue;
+                    if (assigneesFromServer && 1 <= assigneesFromServer.count) {
+                        NSSet* allAssignees = [self assignees];
+                        if (allAssignees && 1 <= allAssignees.count) {
+                            [self removeAssignees:allAssignees];
+                        }
+                        for (NSString* assigneeUserId in assigneesFromServer) {
+                            KPAssignee* assignee = [KPAssignee addAssigneeWithUserId:assigneeUserId save:YES from:@"sync" inContext:context];
+                            if (assignee)
+                                [self addAssigneesObject:assignee];
+                        }
+                    }
+                    continue;
+                }
                 
                 if([pfKey isEqualToString:@"attachments"] && (pfValue != [NSNull null])){
                     NSArray *attachments = (NSArray*)pfValue;
@@ -462,17 +487,23 @@
                 
                 NSString *cdKey = [keyMatch objectForKey:pfKey];
                 if(cdKey){
-                    
                     id cdValue = [self valueForKey:cdKey];
                     if([pfValue isKindOfClass:[NSDictionary class]] && [[pfValue objectForKey:@"__type"] isEqualToString:@"Date"]){
                         NSDateFormatter *dateFormatter = [Global isoDateFormatter];
                         pfValue = [dateFormatter dateFromString:[pfValue objectForKey:@"iso"]];
                     }
-                    if([cdValue isKindOfClass:[NSString class]] && [pfValue isKindOfClass:[NSString class]]){ checkStringWithKey(object, pfValue, cdKey, cdValue); }
-                    else if([cdValue isKindOfClass:[NSDate class]] && [pfValue isKindOfClass:[NSDate class]]){ checkDateWithKey(object, pfValue, cdKey, cdValue); }
-                    else if([cdValue isKindOfClass:[NSNumber class]] && [pfValue isKindOfClass:[NSNumber class]]){ checkNumberWithKey(object, pfValue, cdKey, cdValue); }
+                    if([cdValue isKindOfClass:[NSString class]] && [pfValue isKindOfClass:[NSString class]]){
+                        checkStringWithKey(object, pfValue, cdKey, cdValue);
+                    }
+                    else if([cdValue isKindOfClass:[NSDate class]] && [pfValue isKindOfClass:[NSDate class]]){
+                        checkDateWithKey(object, pfValue, cdKey, cdValue);
+                    }
+                    else if([cdValue isKindOfClass:[NSNumber class]] && [pfValue isKindOfClass:[NSNumber class]]){
+                        checkNumberWithKey(object, pfValue, cdKey, cdValue);
+                    }
                     else if(pfValue != cdValue){
-                        if(pfValue == (id)[NSNull null]) pfValue = nil;
+                        if(pfValue == (id)[NSNull null])
+                            pfValue = nil;
                         [self setValue:pfValue forKey:cdKey];
                     }
                 }

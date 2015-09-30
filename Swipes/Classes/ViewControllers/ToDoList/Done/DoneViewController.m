@@ -6,14 +6,18 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
-#import "DoneViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+Utilities.h"
 #import "UtilityClass.h"
+#import "SlackWebAPIClient.h"
 #import "SlowHighlightIcon.h"
+#import "DoneViewController.h"
+
 @interface DoneViewController ()
+
 @property (nonatomic) BOOL hasAskedForMore;
 @property (nonatomic) NSInteger remainingTasks;
+
 @end
 
 @implementation DoneViewController
@@ -21,14 +25,15 @@
     NSPredicate *predicate;
     
     NSDate *startDate = [[NSDate date] dateAtStartOfDay];
+    NSString* userId = SLACKWEBAPI.userId;
     if(!self.hasAskedForMore && !kFilter.isActive){
-        predicate = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate >= %@ && parent = nil && isLocallyDeleted <> YES)",startDate];
-        NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"(completionDate != nil && completionDate < %@ && parent = nil && isLocallyDeleted <> YES)",startDate];
+        predicate = [NSPredicate predicateWithFormat:@"completionDate != nil AND completionDate >= %@ AND parent = nil AND isLocallyDeleted <> YES AND (toUserId = %@ OR ANY assignees.userId == %@)",startDate, userId, userId];
+        NSPredicate *remainingPred = [NSPredicate predicateWithFormat:@"completionDate != nil AND completionDate < %@ AND parent = nil AND isLocallyDeleted <> YES AND (toUserId = %@ OR ANY assignees.userId == %@)",startDate, userId, userId];
         self.remainingTasks = [KPToDo MR_countOfEntitiesWithPredicate:remainingPred];
     }
     else{
         self.remainingTasks = 0;
-        predicate = [NSPredicate predicateWithFormat:@"(completionDate != nil && parent = nil && isLocallyDeleted <> YES)"];
+        predicate = [NSPredicate predicateWithFormat:@"completionDate != nil AND parent = nil AND isLocallyDeleted <> YES AND (toUserId = %@ OR ANY assignees.userId == %@)", userId, userId];
     }
     return [KPToDo MR_findAllSortedBy:@"completionDate" ascending:NO withPredicate:predicate];
 }

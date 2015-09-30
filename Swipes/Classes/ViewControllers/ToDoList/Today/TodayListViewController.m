@@ -10,7 +10,6 @@
 #define kBottomMargin 80
 #define kButtonSpacing 14
 
-#import "TodayListViewController.h"
 #import "KPReorderTableView.h"
 #import "FacebookCommunicator.h"
 #import "YoureAllDoneView.h"
@@ -26,6 +25,9 @@
 #import "CoreSyncHandler.h"
 #import "AudioHandler.h"
 #import "UtilityClass.h"
+#import "SlackWebAPIClient.h"
+#import "TodayListViewController.h"
+
 @interface TodayListViewController ()<ATSDragToReorderTableViewControllerDelegate,ATSDragToReorderTableViewControllerDraggableIndicators>
 
 @property (nonatomic) YoureAllDoneView *youreAllDoneView;
@@ -90,8 +92,10 @@
     
     if(itemNumber == 0 && oldNumber > 0){
         NSInteger servicesAvailable = 0;
-        if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) servicesAvailable++;
-        if([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) servicesAvailable++;
+        if([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook])
+            servicesAvailable++;
+        if([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
+            servicesAvailable++;
         NSInteger streak = [USER_DEFAULTS integerForKey:@"numberOfDaysOnStreak"];
         NSString *allDoneString = self.allDoneForToday ? @"Today" : @"Now";
         NSDictionary *dict = @{@"Sharing Services Available":[NSNumber numberWithInteger:servicesAvailable],@"All Done for Today":allDoneString ,@"Streak":@(streak)};
@@ -106,11 +110,13 @@
 -(NSArray *)itemsForItemHandler:(ItemHandler *)handler{
     
     NSDate *endDate = [NSDate date];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)",endDate];
+    NSString* userId = SLACKWEBAPI.userId;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES  AND (toUserId = %@ OR ANY assignees.userId == %@)",endDate, userId, userId];
     NSArray *results = [KPToDo MR_findAllSortedBy:@"order" ascending:NO withPredicate:predicate];
     BOOL newItemsToBottom = [[kSettings valueForSetting:SettingAddToBottom] boolValue];
     return [KPToDo sortOrderForItems:results newItemsOnTop:!newItemsToBottom save:YES context:nil];
 }
+
 - (UITableViewCell *)cellIdenticalToCellAtIndexPath:(NSIndexPath *)indexPath forDragTableViewController:(KPReorderTableView *)dragTableViewController {
     ToDoCell *cell = [[ToDoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     [UIView animateWithDuration:0.3 animations:^{
@@ -131,6 +137,7 @@
     [self.itemHandler setDraggingIndexPath:dragRow];
     [self deselectAllRows:self];
 }
+
 -(void)dragTableViewController:(KPReorderTableView *)dragTableViewController didEndDraggingToRow:(NSIndexPath *)destinationIndexPath{
     
     [self.itemHandler moveItem:self.dragRow toIndexPath:destinationIndexPath];
@@ -139,9 +146,11 @@
     [[self parent] setCurrentState:KPControlCurrentStateAdd];
     [kAudio playSoundWithName:@"Succesful action.m4a"];
 }
+
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 6;
 }
+
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
     UIFont *font = SECTION_HEADER_FONT;
@@ -153,6 +162,7 @@
     [self updateSectionHeader];
     return self.sectionHeader;
 }
+
 -(void)updateSectionHeader{
     NSDate *endOfToday = [[NSDate dateTomorrow] dateAtStartOfDay];
     NSDate *startOfToday = [[NSDate date] dateAtStartOfDay];

@@ -13,22 +13,29 @@ extern const struct KPToDoAttributes {
 	__unsafe_unretained NSString *order;
 	__unsafe_unretained NSString *origin;
 	__unsafe_unretained NSString *originIdentifier;
+	__unsafe_unretained NSString *ownerId;
 	__unsafe_unretained NSString *priority;
+	__unsafe_unretained NSString *projectLocalId;
+	__unsafe_unretained NSString *projectOrder;
 	__unsafe_unretained NSString *repeatOption;
 	__unsafe_unretained NSString *repeatedDate;
 	__unsafe_unretained NSString *schedule;
 	__unsafe_unretained NSString *state;
 	__unsafe_unretained NSString *tagString;
 	__unsafe_unretained NSString *title;
+	__unsafe_unretained NSString *toUserId;
+	__unsafe_unretained NSString *userId;
 } KPToDoAttributes;
 
 extern const struct KPToDoRelationships {
+	__unsafe_unretained NSString *assignees;
 	__unsafe_unretained NSString *attachments;
 	__unsafe_unretained NSString *parent;
 	__unsafe_unretained NSString *subtasks;
 	__unsafe_unretained NSString *tags;
 } KPToDoRelationships;
 
+@class KPAssignee;
 @class KPAttachment;
 @class KPToDo;
 @class KPToDo;
@@ -83,6 +90,10 @@ extern const struct KPToDoRelationships {
 
 //- (BOOL)validateOriginIdentifier:(id*)value_ error:(NSError**)error_;
 
+@property (nonatomic, strong) NSString* ownerId;
+
+//- (BOOL)validateOwnerId:(id*)value_ error:(NSError**)error_;
+
 @property (nonatomic, strong) NSNumber* priority;
 
 @property (atomic) int16_t priorityValue;
@@ -90,6 +101,18 @@ extern const struct KPToDoRelationships {
 - (void)setPriorityValue:(int16_t)value_;
 
 //- (BOOL)validatePriority:(id*)value_ error:(NSError**)error_;
+
+@property (nonatomic, strong) NSString* projectLocalId;
+
+//- (BOOL)validateProjectLocalId:(id*)value_ error:(NSError**)error_;
+
+@property (nonatomic, strong) NSNumber* projectOrder;
+
+@property (atomic) int32_t projectOrderValue;
+- (int32_t)projectOrderValue;
+- (void)setProjectOrderValue:(int32_t)value_;
+
+//- (BOOL)validateProjectOrder:(id*)value_ error:(NSError**)error_;
 
 @property (nonatomic, strong) NSNumber* repeatOption;
 
@@ -119,6 +142,18 @@ extern const struct KPToDoRelationships {
 
 //- (BOOL)validateTitle:(id*)value_ error:(NSError**)error_;
 
+@property (nonatomic, strong) NSString* toUserId;
+
+//- (BOOL)validateToUserId:(id*)value_ error:(NSError**)error_;
+
+@property (nonatomic, strong) NSString* userId;
+
+//- (BOOL)validateUserId:(id*)value_ error:(NSError**)error_;
+
+@property (nonatomic, strong) NSSet *assignees;
+
+- (NSMutableSet*)assigneesSet;
+
 @property (nonatomic, strong) NSSet *attachments;
 
 - (NSMutableSet*)attachmentsSet;
@@ -134,6 +169,14 @@ extern const struct KPToDoRelationships {
 @property (nonatomic, strong) NSSet *tags;
 
 - (NSMutableSet*)tagsSet;
+
+@end
+
+@interface _KPToDo (AssigneesCoreDataGeneratedAccessors)
+- (void)addAssignees:(NSSet*)value_;
+- (void)removeAssignees:(NSSet*)value_;
+- (void)addAssigneesObject:(KPAssignee*)value_;
+- (void)removeAssigneesObject:(KPAssignee*)value_;
 
 @end
 
@@ -193,11 +236,23 @@ extern const struct KPToDoRelationships {
 - (NSString*)primitiveOriginIdentifier;
 - (void)setPrimitiveOriginIdentifier:(NSString*)value;
 
+- (NSString*)primitiveOwnerId;
+- (void)setPrimitiveOwnerId:(NSString*)value;
+
 - (NSNumber*)primitivePriority;
 - (void)setPrimitivePriority:(NSNumber*)value;
 
 - (int16_t)primitivePriorityValue;
 - (void)setPrimitivePriorityValue:(int16_t)value_;
+
+- (NSString*)primitiveProjectLocalId;
+- (void)setPrimitiveProjectLocalId:(NSString*)value;
+
+- (NSNumber*)primitiveProjectOrder;
+- (void)setPrimitiveProjectOrder:(NSNumber*)value;
+
+- (int32_t)primitiveProjectOrderValue;
+- (void)setPrimitiveProjectOrderValue:(int32_t)value_;
 
 - (NSNumber*)primitiveRepeatOption;
 - (void)setPrimitiveRepeatOption:(NSNumber*)value;
@@ -219,6 +274,15 @@ extern const struct KPToDoRelationships {
 
 - (NSString*)primitiveTitle;
 - (void)setPrimitiveTitle:(NSString*)value;
+
+- (NSString*)primitiveToUserId;
+- (void)setPrimitiveToUserId:(NSString*)value;
+
+- (NSString*)primitiveUserId;
+- (void)setPrimitiveUserId:(NSString*)value;
+
+- (NSMutableSet*)primitiveAssignees;
+- (void)setPrimitiveAssignees:(NSMutableSet*)value;
 
 - (NSMutableSet*)primitiveAttachments;
 - (void)setPrimitiveAttachments:(NSMutableSet*)value;

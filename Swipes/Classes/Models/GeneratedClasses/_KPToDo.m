@@ -12,16 +12,22 @@ const struct KPToDoAttributes KPToDoAttributes = {
 	.order = @"order",
 	.origin = @"origin",
 	.originIdentifier = @"originIdentifier",
+	.ownerId = @"ownerId",
 	.priority = @"priority",
+	.projectLocalId = @"projectLocalId",
+	.projectOrder = @"projectOrder",
 	.repeatOption = @"repeatOption",
 	.repeatedDate = @"repeatedDate",
 	.schedule = @"schedule",
 	.state = @"state",
 	.tagString = @"tagString",
 	.title = @"title",
+	.toUserId = @"toUserId",
+	.userId = @"userId",
 };
 
 const struct KPToDoRelationships KPToDoRelationships = {
+	.assignees = @"assignees",
 	.attachments = @"attachments",
 	.parent = @"parent",
 	.subtasks = @"subtasks",
@@ -66,6 +72,11 @@ const struct KPToDoRelationships KPToDoRelationships = {
 	}
 	if ([key isEqualToString:@"priorityValue"]) {
 		NSSet *affectingKey = [NSSet setWithObject:@"priority"];
+		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
+		return keyPaths;
+	}
+	if ([key isEqualToString:@"projectOrderValue"]) {
+		NSSet *affectingKey = [NSSet setWithObject:@"projectOrder"];
 		keyPaths = [keyPaths setByAddingObjectsFromSet:affectingKey];
 		return keyPaths;
 	}
@@ -130,6 +141,8 @@ const struct KPToDoRelationships KPToDoRelationships = {
 
 @dynamic originIdentifier;
 
+@dynamic ownerId;
+
 @dynamic priority;
 
 - (int16_t)priorityValue {
@@ -148,6 +161,28 @@ const struct KPToDoRelationships KPToDoRelationships = {
 
 - (void)setPrimitivePriorityValue:(int16_t)value_ {
 	[self setPrimitivePriority:[NSNumber numberWithShort:value_]];
+}
+
+@dynamic projectLocalId;
+
+@dynamic projectOrder;
+
+- (int32_t)projectOrderValue {
+	NSNumber *result = [self projectOrder];
+	return [result intValue];
+}
+
+- (void)setProjectOrderValue:(int32_t)value_ {
+	[self setProjectOrder:[NSNumber numberWithInt:value_]];
+}
+
+- (int32_t)primitiveProjectOrderValue {
+	NSNumber *result = [self primitiveProjectOrder];
+	return [result intValue];
+}
+
+- (void)setPrimitiveProjectOrderValue:(int32_t)value_ {
+	[self setPrimitiveProjectOrder:[NSNumber numberWithInt:value_]];
 }
 
 @dynamic repeatOption;
@@ -179,6 +214,21 @@ const struct KPToDoRelationships KPToDoRelationships = {
 @dynamic tagString;
 
 @dynamic title;
+
+@dynamic toUserId;
+
+@dynamic userId;
+
+@dynamic assignees;
+
+- (NSMutableSet*)assigneesSet {
+	[self willAccessValueForKey:@"assignees"];
+
+	NSMutableSet *result = (NSMutableSet*)[self mutableSetValueForKey:@"assignees"];
+
+	[self didAccessValueForKey:@"assignees"];
+	return result;
+}
 
 @dynamic attachments;
 

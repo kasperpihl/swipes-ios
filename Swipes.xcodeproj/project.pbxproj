@@ -523,6 +523,16 @@
 		DA571A861BB95BBE0016DF4C /* SlackUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571A7F1BB95BAF0016DF4C /* SlackUser.m */; settings = {ASSET_TAGS = (); }; };
 		DA571A871BB95BBF0016DF4C /* SlackUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571A7F1BB95BAF0016DF4C /* SlackUser.m */; settings = {ASSET_TAGS = (); }; };
 		DA571A8A1BB98E830016DF4C /* SlackWebAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571A891BB98E830016DF4C /* SlackWebAPIClient.m */; settings = {ASSET_TAGS = (); }; };
+		DA571ABA1BBAADB60016DF4C /* _KPAssignee.h in Headers */ = {isa = PBXBuildFile; fileRef = DA571AB81BBAADB60016DF4C /* _KPAssignee.h */; settings = {ASSET_TAGS = (); }; };
+		DA571ABB1BBAADB60016DF4C /* _KPAssignee.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571AB91BBAADB60016DF4C /* _KPAssignee.m */; settings = {ASSET_TAGS = (); }; };
+		DA571ABC1BBAADC00016DF4C /* _KPAssignee.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571AB91BBAADB60016DF4C /* _KPAssignee.m */; settings = {ASSET_TAGS = (); }; };
+		DA571ABD1BBAADC00016DF4C /* _KPAssignee.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571AB91BBAADB60016DF4C /* _KPAssignee.m */; settings = {ASSET_TAGS = (); }; };
+		DA571ABE1BBAADC10016DF4C /* _KPAssignee.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571AB91BBAADB60016DF4C /* _KPAssignee.m */; settings = {ASSET_TAGS = (); }; };
+		DA571AC11BBAADD90016DF4C /* KPAssignee.h in Headers */ = {isa = PBXBuildFile; fileRef = DA571ABF1BBAADD90016DF4C /* KPAssignee.h */; settings = {ASSET_TAGS = (); }; };
+		DA571AC21BBAADD90016DF4C /* KPAssignee.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571AC01BBAADD90016DF4C /* KPAssignee.m */; settings = {ASSET_TAGS = (); }; };
+		DA571AC31BBAADD90016DF4C /* KPAssignee.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571AC01BBAADD90016DF4C /* KPAssignee.m */; settings = {ASSET_TAGS = (); }; };
+		DA571AC41BBAADD90016DF4C /* KPAssignee.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571AC01BBAADD90016DF4C /* KPAssignee.m */; settings = {ASSET_TAGS = (); }; };
+		DA571AC51BBAADD90016DF4C /* KPAssignee.m in Sources */ = {isa = PBXBuildFile; fileRef = DA571AC01BBAADD90016DF4C /* KPAssignee.m */; settings = {ASSET_TAGS = (); }; };
 		DA57B29D1ACF66C4000F2377 /* UIView+Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A771356E17BABB5A0090BE89 /* UIView+Utilities.m */; };
 		DA67301418A99C7100CA4C1A /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA67301318A99C7100CA4C1A /* DropboxSDK.framework */; };
 		DA69247E19B879D30082D1E4 /* AnalyticsHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A717BF1D17611162004791BF /* AnalyticsHandler.h */; };
@@ -1260,6 +1270,11 @@
 		DA571A7F1BB95BAF0016DF4C /* SlackUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlackUser.m; path = Swipes/Classes/Handlers/SlackUser.m; sourceTree = SOURCE_ROOT; };
 		DA571A881BB98E830016DF4C /* SlackWebAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlackWebAPIClient.h; sourceTree = "<group>"; };
 		DA571A891BB98E830016DF4C /* SlackWebAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlackWebAPIClient.m; sourceTree = "<group>"; };
+		DA571AB31BBAA8E70016DF4C /* Datamodel 3.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 3.0.xcdatamodel"; sourceTree = "<group>"; };
+		DA571AB81BBAADB60016DF4C /* _KPAssignee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _KPAssignee.h; sourceTree = "<group>"; };
+		DA571AB91BBAADB60016DF4C /* _KPAssignee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _KPAssignee.m; sourceTree = "<group>"; };
+		DA571ABF1BBAADD90016DF4C /* KPAssignee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPAssignee.h; sourceTree = "<group>"; };
+		DA571AC01BBAADD90016DF4C /* KPAssignee.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPAssignee.m; sourceTree = "<group>"; };
 		DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Datamodel 2.0.xcdatamodel"; sourceTree = "<group>"; };
 		DA67301318A99C7100CA4C1A /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = Swipes/Ressources/Libs/DropboxSDK.framework; sourceTree = "<group>"; };
 		DA6A361E1B2EF946009BD8A9 /* swipes-notification.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "swipes-notification.m4a"; sourceTree = "<group>"; };
@@ -1944,6 +1959,8 @@
 		A781284717294C56002226C8 /* CustomClasses */ = {
 			isa = PBXGroup;
 			children = (
+				DA571ABF1BBAADD90016DF4C /* KPAssignee.h */,
+				DA571AC01BBAADD90016DF4C /* KPAssignee.m */,
 				A7F9D79718BA2E7A003D8833 /* KPAttachment.h */,
 				A7F9D79818BA2E7A003D8833 /* KPAttachment.m */,
 				A781284817294C56002226C8 /* KPParseObject.h */,
@@ -1959,6 +1976,8 @@
 		A781284E17294C56002226C8 /* GeneratedClasses */ = {
 			isa = PBXGroup;
 			children = (
+				DA571AB81BBAADB60016DF4C /* _KPAssignee.h */,
+				DA571AB91BBAADB60016DF4C /* _KPAssignee.m */,
 				A7F9D79418BA2E73003D8833 /* _KPAttachment.h */,
 				A7F9D79518BA2E73003D8833 /* _KPAttachment.m */,
 				A781284F17294C56002226C8 /* _KPParseObject.h */,
@@ -2862,6 +2881,7 @@
 				DA23231619B39C4600D996EB /* KPTag.h in Headers */,
 				DA09B0981AB228D6002632DC /* MagicalRecordShorthand.h in Headers */,
 				DA69248A19B87B690082D1E4 /* IntegrationHandler.h in Headers */,
+				DA571ABA1BBAADB60016DF4C /* _KPAssignee.h in Headers */,
 				DA6924AB19BDCF330082D1E4 /* CoreSyncHandler.h in Headers */,
 				A7A3C25B19E26D0B0025E877 /* NSDate+UtilitiesiOS8.h in Headers */,
 				DA23231419B39C4600D996EB /* KPAttachment.h in Headers */,
@@ -2899,6 +2919,7 @@
 				DA69248719B87B160082D1E4 /* UserHandler.h in Headers */,
 				DA09B0501AB228D6002632DC /* NSManagedObjectContext+MagicalObserving.h in Headers */,
 				DA09B01E1AB228D6002632DC /* NSNumber+MagicalDataImport.h in Headers */,
+				DA571AC11BBAADD90016DF4C /* KPAssignee.h in Headers */,
 				DA09B0191AB228D6002632DC /* NSEntityDescription+MagicalDataImport.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3437,7 +3458,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd Swipes/Classes/Models\nmogenerator -m \"Datamodel.xcdatamodeld/Datamodel 2.2.xcdatamodel/\" -M GeneratedClasses -H CustomClasses --template-var arc=true";
+			shellScript = "cd Swipes/Classes/Models\nmogenerator -m \"Datamodel.xcdatamodeld/Datamodel 3.0.xcdatamodel/\" -M GeneratedClasses -H CustomClasses --template-var arc=true";
 		};
 		A8AF6FFAA34042669C52BBD9 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3498,6 +3519,7 @@
 				A78128BE17294C56002226C8 /* KPParseCommunicator.m in Sources */,
 				DA7AEE971A9FBCAA00436CE3 /* IntegrationTitleView.m in Sources */,
 				DA09B0291AB228D6002632DC /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
+				DA571ABE1BBAADC10016DF4C /* _KPAssignee.m in Sources */,
 				A78128BF17294C56002226C8 /* KPParseObject.m in Sources */,
 				A78128C017294C56002226C8 /* KPToDo.m in Sources */,
 				A78128C217294C56002226C8 /* _KPParseObject.m in Sources */,
@@ -3579,6 +3601,7 @@
 				A75DB210173119FE00FA256B /* ItemHandler.m in Sources */,
 				A717DD3618B8A2C800EE359C /* (null) in Sources */,
 				A7B260931733D1FD000BADDE /* NotificationHandler.m in Sources */,
+				DA571AC21BBAADD90016DF4C /* KPAssignee.m in Sources */,
 				A7D06868190E654C00699B4E /* MMDrawerBarButtonItem.m in Sources */,
 				A798DCD119E53A6700386C80 /* TopMenu.m in Sources */,
 				A7090B70175DF3F900728A3A /* LoginViewController.m in Sources */,
@@ -3720,6 +3743,7 @@
 				DAE2B16519CB7B0C00A9074E /* Datamodel.xcdatamodeld in Sources */,
 				DA09B06B1AB228D6002632DC /* NSPersistentStore+MagicalRecord.m in Sources */,
 				A7D8692A19E4060900CE0923 /* SwipingOverlayView.m in Sources */,
+				DA571ABD1BBAADC00016DF4C /* _KPAssignee.m in Sources */,
 				DAE2B16D19CB7B1B00A9074E /* _KPToDo.m in Sources */,
 				DAE2B16819CB7B1B00A9074E /* KPTag.m in Sources */,
 				DAE2B16F19CB7D6400A9074E /* EvernoteToDoProcessor.m in Sources */,
@@ -3746,6 +3770,7 @@
 				DA09B08E1AB228D6002632DC /* MagicalRecord+ShorthandSupport.m in Sources */,
 				DA09B03E1AB228D6002632DC /* NSManagedObject+MagicalFinders.m in Sources */,
 				DA09B0111AB228D6002632DC /* MagicalImportFunctions.m in Sources */,
+				DA571AC31BBAADD90016DF4C /* KPAssignee.m in Sources */,
 				A711247019DC16BF00FD9DAE /* ThemeHandler.m in Sources */,
 				DA09B0481AB228D6002632DC /* NSManagedObject+MagicalRequests.m in Sources */,
 				DA09B07A1AB228D6002632DC /* MagicalRecord+ErrorHandling.m in Sources */,
@@ -3846,6 +3871,8 @@
 				DA09AFA41AB1CE0B002632DC /* GmailAuthViewController.m in Sources */,
 				DA09B0491AB228D6002632DC /* NSManagedObject+MagicalRequests.m in Sources */,
 				DA09B0211AB228D6002632DC /* NSNumber+MagicalDataImport.m in Sources */,
+				DA571AC41BBAADD90016DF4C /* KPAssignee.m in Sources */,
+				DA571ABC1BBAADC00016DF4C /* _KPAssignee.m in Sources */,
 				DA09B0761AB228D6002632DC /* MagicalRecord+Actions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3857,6 +3884,7 @@
 				DA69248C19B87B6D0082D1E4 /* IntegrationHandler.m in Sources */,
 				DA69247F19B879D70082D1E4 /* AnalyticsHandler.m in Sources */,
 				DA69248819B87B190082D1E4 /* UserHandler.m in Sources */,
+				DA571AC51BBAADD90016DF4C /* KPAssignee.m in Sources */,
 				DA09B05E1AB228D6002632DC /* NSManagedObjectContext+MagicalSaves.m in Sources */,
 				DA09B06D1AB228D6002632DC /* NSPersistentStore+MagicalRecord.m in Sources */,
 				DAD78B791A67E958009992C3 /* KPStringScanner.m in Sources */,
@@ -3891,6 +3919,7 @@
 				DA23232B19B4738000D996EB /* UtilityClass.m in Sources */,
 				DA6924A519BDCF2D0082D1E4 /* EvernoteToDoProcessor.m in Sources */,
 				DA09B04F1AB228D6002632DC /* NSManagedObjectContext+MagicalChainSave.m in Sources */,
+				DA571ABB1BBAADB60016DF4C /* _KPAssignee.m in Sources */,
 				DA23231819B39C5A00D996EB /* _KPAttachment.m in Sources */,
 				DA09B0901AB228D6002632DC /* MagicalRecord+ShorthandSupport.m in Sources */,
 				DA09B0591AB228D6002632DC /* NSManagedObjectContext+MagicalRecord.m in Sources */,
@@ -5371,13 +5400,14 @@
 		A7AF9B5817E2244E00F9B26F /* Datamodel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				DA571AB31BBAA8E70016DF4C /* Datamodel 3.0.xcdatamodel */,
 				A747954C19CD58D700488020 /* Datamodel 2.2.xcdatamodel */,
 				A7AF9B5917E2244F00F9B26F /* Datamodel 1.0.3.xcdatamodel */,
 				A7AF9B5A17E2244F00F9B26F /* Datamodel 1.1.xcdatamodel */,
 				DA5B522718B117FF00740026 /* Datamodel 2.0.xcdatamodel */,
 				A7AF9B5B17E2244F00F9B26F /* Datamodel.xcdatamodel */,
 			);
-			currentVersion = A747954C19CD58D700488020 /* Datamodel 2.2.xcdatamodel */;
+			currentVersion = DA571AB31BBAA8E70016DF4C /* Datamodel 3.0.xcdatamodel */;
 			path = Datamodel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
