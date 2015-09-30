@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-//typedef void (^SlackCallbackBlock)(NSDictionary* result);
+typedef void (^SlackCallbackBlock)(NSError* error);
+typedef void (^SlackCallbackBlockDictionary)(NSDictionary* result, NSError* error);
+typedef void (^SlackCallbackBlockString)(NSString* result, NSError* error);
 
 #define SLACKWEBAPI [SlackWebAPIClient sharedInstance]
 
@@ -29,5 +31,8 @@
 - (BOOL)testCall;
 
 - (BOOL)authTest;
+
+- (void)userNameFromUserId:(NSString *)userId callback:(SlackCallbackBlockString)callback;
+- (void)nameFromId:(NSString *)slackId callback:(SlackCallbackBlockString)callback;
 
 @end
