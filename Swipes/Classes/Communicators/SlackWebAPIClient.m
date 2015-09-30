@@ -401,18 +401,6 @@ static NSTimeInterval const kTimeoutInterval = 35;
     }
 }
 
-- (void)userNameFromUserId:(NSString *)userId callback:(SlackCallbackBlockString)callback
-{
-    dispatch_queue_t currentQueue = [NSOperationQueue currentQueue].underlyingQueue;
-    dispatch_async(_workQueue, ^{
-        NSError* error;
-        NSString* result = [self userNameFromUserId:userId error:&error];
-        dispatch_async(currentQueue, ^{
-            callback(result, error);
-        });
-    });
-}
-
 - (void)nameFromId:(NSString *)slackId callback:(SlackCallbackBlockString)callback
 {
     if (!slackId || 0 == slackId.length) {

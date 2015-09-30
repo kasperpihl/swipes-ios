@@ -14,6 +14,7 @@
 #import "NSDate-Utilities.h"
 #import "UIColor+Utilities.h"
 #import "StyleHandler.h"
+#import "SlackWebAPIClient.h"
 #import "AudioHandler.h"
 #define TITLE_LABEL_TAG 3
 #define TAGS_LABEL_TAG 4
@@ -258,7 +259,7 @@
     
     [self updateActionSteps];
     
-    __block BOOL showBottomLine = NO;
+    __block BOOL showBottomLine = YES;
     __block CGFloat deltaX = CELL_LABEL_X;
     __block BOOL alarmLabel = NO;
     
@@ -337,8 +338,23 @@
         //if(deltaX > CELL_LABEL_X && self.tagsLabel.text.length > 0) self.tagsLabel.text = [@"//  " stringByAppendingString:self.tagsLabel.text];
     }
     
+    if (toDo.projectLocalId) {
+        [SLACKWEBAPI nameFromId:toDo.projectLocalId callback:^(NSString *result, NSError *error) {
+            if (result) {
+                NSString* currentText = self.tagsLabel.text && self.tagsLabel.text.length > 0 ? [NSString stringWithFormat:@"%@ ", self.tagsLabel.text] : @"";
+                currentText = [currentText stringByAppendingFormat:@"%@", result];
+                self.tagsLabel.text = currentText;
+            }
+        }];
+    }
+    else {
+        NSString* currentText = self.tagsLabel.text && self.tagsLabel.text.length > 0 ? [NSString stringWithFormat:@"%@ ", self.tagsLabel.text] : @"";
+        currentText = [currentText stringByAppendingString:NSLocalizedString(@"Personal", nil)];
+        self.tagsLabel.text = currentText;
+    }
+    
     [self setTextLabels:showBottomLine];
-
+    
 }
 
 -(void)setDotColor:(CellType)cellType{

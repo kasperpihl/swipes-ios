@@ -32,7 +32,6 @@ typedef void (^SlackCallbackBlockString)(NSString* result, NSError* error);
 
 - (BOOL)authTest;
 
-- (void)userNameFromUserId:(NSString *)userId callback:(SlackCallbackBlockString)callback;
 - (void)nameFromId:(NSString *)slackId callback:(SlackCallbackBlockString)callback;
 
 @end
