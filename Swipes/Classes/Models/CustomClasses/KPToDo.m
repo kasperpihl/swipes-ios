@@ -360,7 +360,7 @@
 -(NSArray*)updateWithObjectFromServer:(NSDictionary *)object context:(NSManagedObjectContext *)context{
     [super updateWithObjectFromServer:object context:context];
     
-    DLog(@"updateWithObjectFromServer: %@", object);
+//    DLog(@"updateWithObjectFromServer: %@", object);
     
     
     __block NSMutableSet *changedAttributesSet = [NSMutableSet set];

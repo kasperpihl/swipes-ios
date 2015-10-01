@@ -17,6 +17,9 @@ typedef void (^SlackCallbackBlockString)(NSString* result, NSError* error);
 @interface SlackWebAPIClient : NSObject
 
 + (instancetype)sharedInstance;
++ (NSString *)escapeValueForURLParameter:(NSString *)valueToEscape;
++ (NSString *)unescapeValueForURLParameter:(NSString *)valueToUnescape;
++ (NSString *)serializeParams:(NSDictionary *)params;
 
 - (instancetype)init;
 - (instancetype)initWithToken:(NSString *)token;
@@ -32,6 +35,9 @@ typedef void (^SlackCallbackBlockString)(NSString* result, NSError* error);
 
 - (BOOL)authTest;
 
+#pragma mark - Async methods
+
+- (void)oauthAccess:(NSString *)clientId clientSecret:(NSString *)clientSecret code:(NSString *)code redirectURI:(NSString *)redirectURI callback:(SlackCallbackBlockDictionary)callback;
 - (void)nameFromId:(NSString *)slackId callback:(SlackCallbackBlockString)callback;
 
 @end

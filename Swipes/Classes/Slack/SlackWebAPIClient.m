@@ -58,6 +58,41 @@ static NSTimeInterval const kTimeoutInterval = 35;
     return sharedInstance;
 }
 
++ (NSString *)escapeValueForURLParameter:(NSString *)valueToEscape
+{
+    return (__bridge_transfer NSString *) CFURLCreateStringByAddingPercentEscapes(NULL, (__bridge CFStringRef) valueToEscape,
+                                                                                  NULL, (CFStringRef) @"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
+}
+
++ (NSString *)unescapeValueForURLParameter:(NSString *)valueToUnescape
+{
+    return (__bridge_transfer NSString *) CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (__bridge CFStringRef) valueToUnescape,
+                                                                                  NULL, kCFStringEncodingUTF8);
+}
+
++ (NSString *)serializeParams:(NSDictionary *)params
+{
+    NSMutableArray *pairs = [NSMutableArray array];
+    for (NSString *key in params.keyEnumerator) {
+        id value = params[key];
+        if ([value isKindOfClass:[NSDictionary class]]) {
+            for (NSString *subKey in value) {
+                [pairs addObject:[NSString stringWithFormat:@"%@[%@]=%@", key, subKey, [self.class escapeValueForURLParameter:[value objectForKey:subKey]]]];
+            }
+        }
+        else if ([value isKindOfClass:[NSArray class]]) {
+            for (NSString *subValue in value) {
+                [pairs addObject:[NSString stringWithFormat:@"%@[]=%@", key, [self.class escapeValueForURLParameter:subValue]]];
+            }
+        }
+        else {
+            [pairs addObject:[NSString stringWithFormat:@"%@=%@", key, [self.class escapeValueForURLParameter:value]]];
+        }
+    }
+    return [pairs componentsJoinedByString:@"&"];
+    
+}
+
 - (instancetype)init
 {
     self = [super init];
@@ -154,35 +189,6 @@ static NSTimeInterval const kTimeoutInterval = 35;
     return _teamId;
 }
 
-- (NSString *)escapeValueForURLParameter:(NSString *)valueToEscape
-{
-    return (__bridge_transfer NSString *) CFURLCreateStringByAddingPercentEscapes(NULL, (__bridge CFStringRef) valueToEscape,
-                                                                                  NULL, (CFStringRef) @"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
-}
-
-- (NSString *)serializeParams:(NSDictionary *)params
-{
-    NSMutableArray *pairs = [NSMutableArray array];
-    for (NSString *key in params.keyEnumerator) {
-        id value = params[key];
-        if ([value isKindOfClass:[NSDictionary class]]) {
-            for (NSString *subKey in value) {
-                [pairs addObject:[NSString stringWithFormat:@"%@[%@]=%@", key, subKey, [self escapeValueForURLParameter:[value objectForKey:subKey]]]];
-            }
-        }
-        else if ([value isKindOfClass:[NSArray class]]) {
-            for (NSString *subValue in value) {
-                [pairs addObject:[NSString stringWithFormat:@"%@[]=%@", key, [self escapeValueForURLParameter:subValue]]];
-            }
-        }
-        else {
-            [pairs addObject:[NSString stringWithFormat:@"%@=%@", key, [self escapeValueForURLParameter:value]]];
-        }
-    }
-    return [pairs componentsJoinedByString:@"&"];
-    
-}
-
 - (NSDictionary *)callWebAPIMethod:(NSString *)method params:(NSDictionary *)params error:(NSError **)errorOut
 {
     if (errorOut) {
@@ -192,7 +198,7 @@ static NSTimeInterval const kTimeoutInterval = 35;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[kSlackAPIURL stringByAppendingString:method]]];
     [request setTimeoutInterval:kTimeoutInterval];
     [request setHTTPMethod:@"POST"];
-    NSString* paramsString = params ? [self serializeParams:params] : nil;
+    NSString* paramsString = params ? [self.class serializeParams:params] : nil;
     [request setHTTPBody:[paramsString dataUsingEncoding:NSUTF8StringEncoding]];
     
     NSHTTPURLResponse *response;
@@ -253,6 +259,21 @@ static NSTimeInterval const kTimeoutInterval = 35;
         _userId = res[kKeyUserId];
     }
     return error == nil;
+}
+
+- (void)oauthAccess:(NSString *)clientId clientSecret:(NSString *)clientSecret code:(NSString *)code redirectURI:(NSString *)redirectURI callback:(SlackCallbackBlockDictionary)callback
+{
+    dispatch_queue_t currentQueue = [NSOperationQueue currentQueue].underlyingQueue;
+    dispatch_async(_workQueue, ^{
+        NSError* error;
+        NSDictionary* res = [self callWebAPIMethod:@"oauth.access"
+                                            params:@{@"client_id": clientId, @"client_secret": clientSecret, @"code": code, @"redirect_uri": redirectURI}
+                                             error:&error];
+        dispatch_async(currentQueue, ^{
+            callback(res, error);
+        });
+    });
+    
 }
 
 - (NSString *)userNameFromUserId:(NSString *)userId error:(NSError **)error

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SlackLoginViewController">
+            <connections>
+                <outlet property="btnCancel" destination="Nck-2f-lSZ" id="gmb-lG-9q1"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="webView" destination="XLo-Pn-6yI" id="430-yE-BfM"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nck-2f-lSZ">
+                    <rect key="frame" x="544" y="20" width="48" height="30"/>
+                    <state key="normal" title="Cancel"/>
+                    <connections>
+                        <action selector="onCancel:" destination="-1" eventType="touchUpInside" id="wRn-Qp-4QZ"/>
+                    </connections>
+                </button>
+                <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XLo-Pn-6yI">
+                    <rect key="frame" x="0.0" y="58" width="600" height="542"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="9Ig-Ta-te9"/>
+                    </connections>
+                </webView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="Nck-2f-lSZ" secondAttribute="trailing" constant="8" id="G76-Nu-zcp"/>
+                <constraint firstAttribute="bottom" secondItem="XLo-Pn-6yI" secondAttribute="bottom" id="I5P-KI-duH"/>
+                <constraint firstItem="XLo-Pn-6yI" firstAttribute="top" secondItem="Nck-2f-lSZ" secondAttribute="bottom" constant="8" id="OVP-UN-cNV"/>
+                <constraint firstItem="Nck-2f-lSZ" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="RnY-hd-hzX"/>
+                <constraint firstAttribute="trailing" secondItem="XLo-Pn-6yI" secondAttribute="trailing" id="a4A-EO-7bY"/>
+                <constraint firstItem="XLo-Pn-6yI" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="nWi-RO-F0N"/>
+            </constraints>
+        </view>
+    </objects>
+</document>
