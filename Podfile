@@ -14,7 +14,7 @@ def shared_pods
     pod 'GoogleAnalytics'
 end
 
-target :Swipes do
+target :'Swipes for Teams' do
     shared_pods
     pod 'M13BadgeView'
     pod 'youtube-ios-player-helper'
@@ -25,13 +25,15 @@ target :Swipes do
     pod 'NSURL+QueryDictionary'
     pod 'DHCShakeNotifier'
     pod 'BobPullToRefresh'
+    pod 'Fabric'
+    pod 'Crashlytics'
 end
 
-target :SwipesToday do
+target :'Swipes for Teams Today' do
     shared_pods
 end
 
-target :SwipesShare do
+target :'Swipes for Teams Share' do
     shared_pods
     pod 'UITextView+Placeholder'
 end
