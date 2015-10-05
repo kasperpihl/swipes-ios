@@ -11,11 +11,14 @@
 
 static NSString* const kSlackAuthURL = @"https://slack.com/oauth/authorize?";
 static NSString* const kLetters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+static NSString* const kKeyState = @"state";
+static NSString* const kKeyAccessToken = @"access_token";
 
 @interface SlackLoginViewController () <UIWebViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UIButton* btnCancel;
 @property (nonatomic, weak) IBOutlet UIWebView* webView;
+@property (nonatomic, weak) IBOutlet UILabel* titleLabel;
 @property (nonatomic, copy) SlackCallbackBlockDictionary callback;
 @property (nonatomic, strong) NSString* state;
 @property (nonatomic, strong) NSString* clientId;
@@ -73,12 +76,12 @@ static NSString* const kLetters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
     self.redirectURI = redirectURI;
     self.state = [self.class randomStringWithLength:8];
     
-    NSMutableDictionary* params = @{@"client_id": clientId, @"state": self.state}.mutableCopy;
+    NSMutableDictionary* params = @{@"client_id": clientId, kKeyState: self.state}.mutableCopy;
     if (redirectURI)
         params[@"redirect_uri"] = redirectURI;
     if (scope)
         params[@"scope"] = scope;
-    NSString* urlString = [kSlackAuthURL stringByAppendingString:[SlackWebAPIClient serializeParams:params]];
+    NSString* urlString = [kSlackAuthURL stringByAppendingString:[params uq_URLQueryString]];
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]]];
 }
 
@@ -102,13 +105,17 @@ static NSString* const kLetters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
         if (!dict) {
             NSLog(@"bad URL: %@", request.URL);
         }
-        if (![self.state isEqualToString:dict[@"state"]]) {
-            NSLog(@"bad state: %@ != %@", self.state, dict[@"state"]);
+        if (![self.state isEqualToString:dict[kKeyState]]) {
+            NSLog(@"bad state: %@ != %@", self.state, dict[kKeyState]);
         }
         
         SlackWebAPIClient* client = [SlackWebAPIClient new];
         [client oauthAccess:self.clientId clientSecret:self.clientSecret code:dict[@"code"] redirectURI:self.redirectURI callback:^(NSDictionary *result, NSError *error) {
             
+            if (result && result[kKeyAccessToken]) {
+                DLog(@"token is: %@", result[kKeyAccessToken]);
+                SLACKWEBAPI.token = result[kKeyAccessToken];
+            }
             if (self.callback) {
                 self.callback(result, error);
             }
@@ -126,6 +133,11 @@ static NSString* const kLetters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
     if (self.callback) {
         self.callback(nil, error);
     }
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    _titleLabel.text = NSLocalizedString(@"Login with Slack", @"Title for Slack login dialog");
 }
 
 @end

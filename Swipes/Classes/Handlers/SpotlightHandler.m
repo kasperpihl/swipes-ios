@@ -170,6 +170,8 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
 
 - (void)setAllWithCompletionHandler:(void (^ __nullable)(NSError * __nullable error))completionHandler
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isLocallyDeleted <> YES"];
     NSArray<KPToDo *> *results = [KPToDo MR_findAllWithPredicate:predicate inContext:contextForThread];
@@ -188,6 +190,7 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
     }];
     [USER_DEFAULTS setObject:@(YES) forKey:kSwipesIdentifier];
     [USER_DEFAULTS synchronize];
+#pragma clang diagnostic pop
 }
 
 - (void)resetWithCompletionHandler:(void (^ __nullable)(NSError * __nullable error))completionHandler

@@ -7,7 +7,6 @@
 //
 
 #import <KitLocate/KitLocate.h>
-#import "NotificationHandler.h"
 #import "UtilityClass.h"
 #import "NSDate-Utilities.h"
 #import "KPToDo.h"
@@ -15,6 +14,8 @@
 #import "UserHandler.h"
 #import "KPTopClock.h"
 #import "Intercom.h"
+#import "SlackWebAPIClient.h"
+#import "NotificationHandler.h"
 
 // TODO
 // this is full of iOS8 related deprecation warnings
@@ -196,6 +197,7 @@ static BOOL g_registeredForNotifications = NO;
     }
     else{
         NSDate *now = [NSDate date];
+        NSString* userId = SLACKWEBAPI.userId;
         
         NSNumber *dayStart = (NSNumber*)[kSettings valueForSetting:SettingWeekendStartTime];
         NSInteger dayHours = dayStart.integerValue/D_HOUR;
@@ -209,10 +211,10 @@ static BOOL g_registeredForNotifications = NO;
         NSDate *mondayStart = [NSDate dateThisOrNextWeekWithDay:weekStart.integerValue hours:0 minutes:0];
         NSDate *mondayEnd = [[mondayStart dateByAddingDays:1] dateAtStartOfDay];
         
-        NSPredicate *leftForNowPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [NSDate date] ];
-        NSPredicate *leftForTodayPredicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [[NSDate dateTomorrow] dateAtStartOfDay]];
+        NSPredicate *leftForNowPredicate = [NSPredicate predicateWithFormat:@"schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES AND (toUserId = %@ OR ANY assignees.userId == %@)", [NSDate date], userId, userId];
+        NSPredicate *leftForTodayPredicate = [NSPredicate predicateWithFormat:@"schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES AND (toUserId = %@ OR ANY assignees.userId == %@)", [[NSDate dateTomorrow] dateAtStartOfDay], userId, userId];
         //NSPredicate *tomorrowPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", [[NSDate dateTomorrow] dateAtStartOfDay],[[[NSDate dateTomorrow] dateByAddingDays:1] dateAtStartOfDay]];
-        NSPredicate *mondayPredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", mondayStart, mondayEnd];
+        NSPredicate *mondayPredicate = [NSPredicate predicateWithFormat:@"schedule > %@ AND schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES AND (toUserId = %@ OR ANY assignees.userId == %@)", mondayStart, mondayEnd, userId, userId];
         
         NSInteger numberOfTasksLeftNow = [KPToDo MR_countOfEntitiesWithPredicate:leftForNowPredicate];
         NSInteger numberOfTasksLeftToday = [KPToDo MR_countOfEntitiesWithPredicate:leftForTodayPredicate];

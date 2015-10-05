@@ -8,6 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
+#ifndef DLog
+    #ifdef DEBUG
+    #    define DLog(__FORMAT__, ...) NSLog((@"%s [Line %d]\n" __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+    #else
+    #    define DLog(...) /* */
+    #endif
+#endif
+
+#ifndef USER_DEFAULTS
+#define USER_DEFAULTS [NSUserDefaults standardUserDefaults]
+#endif
+
+extern NSString* const kNotificationUserData;
+
 typedef void (^SlackCallbackBlock)(NSError* error);
 typedef void (^SlackCallbackBlockDictionary)(NSDictionary* result, NSError* error);
 typedef void (^SlackCallbackBlockString)(NSString* result, NSError* error);
@@ -17,12 +31,10 @@ typedef void (^SlackCallbackBlockString)(NSString* result, NSError* error);
 @interface SlackWebAPIClient : NSObject
 
 + (instancetype)sharedInstance;
-+ (NSString *)escapeValueForURLParameter:(NSString *)valueToEscape;
-+ (NSString *)unescapeValueForURLParameter:(NSString *)valueToUnescape;
-+ (NSString *)serializeParams:(NSDictionary *)params;
 
 - (instancetype)init;
 - (instancetype)initWithToken:(NSString *)token;
+- (void)logout;
 
 @property (nonatomic, strong) NSString* token;
 @property (nonatomic, strong, readonly) NSString* userId;
@@ -30,8 +42,6 @@ typedef void (^SlackCallbackBlockString)(NSString* result, NSError* error);
 @property (nonatomic, strong, readonly) NSString* teamURL;
 @property (nonatomic, strong, readonly) NSString* teamName;
 @property (nonatomic, strong, readonly) NSString* teamId;
-
-- (BOOL)testCall;
 
 - (BOOL)authTest;
 

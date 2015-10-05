@@ -235,9 +235,8 @@ static NSUInteger defaultBatchSize = kMagicalRecordDefaultBatchSize;
     
 	NSArray *objectsToTruncate = [self MR_executeFetchRequest:request inContext:context];
     
-	for (id objectToTruncate in objectsToTruncate) 
-    {
-		[objectToTruncate MR_deleteInContext:context];
+	for (id objectToTruncate in objectsToTruncate) {
+		[objectToTruncate MR_deleteEntityInContext:context];
 	}
     
 	return YES;

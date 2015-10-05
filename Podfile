@@ -6,12 +6,13 @@ inhibit_all_warnings!
 def shared_pods
     pod 'Parse'
     pod 'ParseFacebookUtils'
-    pod 'evernote-cloud-sdk-ios'
+    pod 'evernote-cloud-sdk-ios', '2.0.2'
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'Base64'
     pod 'Intercom'
     pod 'GoogleAnalytics'
+    pod 'SSKeychain'
 end
 
 target :'Swipes for Teams' do

@@ -6,21 +6,20 @@
 //  Copyright © 2015 Swipes Incorporated. All rights reserved.
 //
 
+#import <SSKeychain/SSKeychain.h>
+#import "NSURL+QueryDictionary.h"
 #import "SlackWebAPIClient.h"
 
-#ifndef DLog
-    #ifdef DEBUG
-    #    define DLog(__FORMAT__, ...) NSLog((@"%s [Line %d]\n" __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
-    #else
-    #    define DLog(...) /* */
-    #endif
-#endif
+NSString* const kNotificationUserData = @"slack_user_data";
 
 static NSString* const kSlackAPIURL = @"https://slack.com/api/";
+
+static NSString* const kKeychainAccount = @"swipesteam";
+static NSString* const kKeychainService = @"slack_token";
+
 static NSString* const kKeyOk = @"ok";
 static NSString* const kKeyError = @"error";
 static NSString* const kKeyToken = @"token";
-
 static NSString* const kKeyURL = @"url";
 static NSString* const kKeyTeam = @"team";
 static NSString* const kKeyTeamId = @"team_id";
@@ -32,6 +31,8 @@ static NSString* const kKeyChannel = @"channel";
 static NSString* const kKeyGroup = @"group";
 
 static NSTimeInterval const kTimeoutInterval = 35;
+
+#define SETTINGS_KEY(key) [NSString stringWithFormat:@"slack_%@", key]
 
 @interface SlackWebAPIClient ()
 
@@ -46,6 +47,7 @@ static NSTimeInterval const kTimeoutInterval = 35;
 
 @implementation SlackWebAPIClient {
     dispatch_queue_t _workQueue;
+    NSString* _token;
 }
 
 + (instancetype)sharedInstance
@@ -58,46 +60,14 @@ static NSTimeInterval const kTimeoutInterval = 35;
     return sharedInstance;
 }
 
-+ (NSString *)escapeValueForURLParameter:(NSString *)valueToEscape
-{
-    return (__bridge_transfer NSString *) CFURLCreateStringByAddingPercentEscapes(NULL, (__bridge CFStringRef) valueToEscape,
-                                                                                  NULL, (CFStringRef) @"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8);
-}
-
-+ (NSString *)unescapeValueForURLParameter:(NSString *)valueToUnescape
-{
-    return (__bridge_transfer NSString *) CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (__bridge CFStringRef) valueToUnescape,
-                                                                                  NULL, kCFStringEncodingUTF8);
-}
-
-+ (NSString *)serializeParams:(NSDictionary *)params
-{
-    NSMutableArray *pairs = [NSMutableArray array];
-    for (NSString *key in params.keyEnumerator) {
-        id value = params[key];
-        if ([value isKindOfClass:[NSDictionary class]]) {
-            for (NSString *subKey in value) {
-                [pairs addObject:[NSString stringWithFormat:@"%@[%@]=%@", key, subKey, [self.class escapeValueForURLParameter:[value objectForKey:subKey]]]];
-            }
-        }
-        else if ([value isKindOfClass:[NSArray class]]) {
-            for (NSString *subValue in value) {
-                [pairs addObject:[NSString stringWithFormat:@"%@[]=%@", key, [self.class escapeValueForURLParameter:subValue]]];
-            }
-        }
-        else {
-            [pairs addObject:[NSString stringWithFormat:@"%@=%@", key, [self.class escapeValueForURLParameter:value]]];
-        }
-    }
-    return [pairs componentsJoinedByString:@"&"];
-    
-}
-
 - (instancetype)init
 {
     self = [super init];
     if (self) {
         [self reset];
+        if (self.token) {
+            [self reloadCaches];
+        }
     }
     return self;
 }
@@ -106,7 +76,7 @@ static NSTimeInterval const kTimeoutInterval = 35;
 {
     self = [super init];
     if (self) {
-        self.token = token;
+        self.token = token; // reset and reloadCaches are done when setting the token
     }
     return self;
 }
@@ -125,22 +95,58 @@ static NSTimeInterval const kTimeoutInterval = 35;
     }
 }
 
+- (void)logout
+{
+    self.token = nil;
+    NSUserDefaults* ud = USER_DEFAULTS;
+    [ud removeObjectForKey:SETTINGS_KEY(kKeyURL)];
+    [ud removeObjectForKey:SETTINGS_KEY(kKeyTeam)];
+    [ud removeObjectForKey:SETTINGS_KEY(kKeyTeamId)];
+    [ud removeObjectForKey:SETTINGS_KEY(kKeyUser)];
+    [ud removeObjectForKey:SETTINGS_KEY(kKeyUserId)];
+    [ud synchronize];
+}
+
 - (void)setToken:(NSString *)token
 {
     [self reset];
     _token = token;
-    // reinit caches and data for the new token
-    [self reloadCaches];
+    
+    NSError* error;
+    if (token) {
+        if (![SSKeychain setPassword:token forService:kKeychainService account:kKeychainAccount error:&error]) {
+            NSLog(@"Error setting password: %@", error);
+        }
+        // reinit caches and data for the new token
+        [self reloadCaches];
+    }
+    else {
+        if (![SSKeychain deletePasswordForService:kKeychainService account:kKeychainAccount error:&error]) {
+            NSLog(@"Error deleting password: %@", error);
+        }
+    }
+}
+
+- (NSString *)token
+{
+    NSError* error;
+    _token = [SSKeychain passwordForService:kKeychainService account:kKeychainAccount error:&error];
+    if (error) {
+        NSLog(@"Error getting password: %@", error);
+    }
+    return _token;
 }
 
 - (void)reloadCaches
 {
     dispatch_async(_workQueue, ^{
-        [self authTest];
-        [self cacheUsersListWithError:nil];
-        [self cacheChannelListWithError:nil];
-        [self cacheGroupsWithError:nil];
-        [self cacheDirectMessagesWithError:nil];
+        if (_token) {
+            [self authTest];
+            [self cacheUsersListWithError:nil];
+            [self cacheChannelListWithError:nil];
+            [self cacheGroupsWithError:nil];
+            [self cacheDirectMessagesWithError:nil];
+        }
     });
 }
 
@@ -152,7 +158,9 @@ static NSTimeInterval const kTimeoutInterval = 35;
 - (NSString *)userId
 {
     if (nil == _userId && _token) {
-        [self authTest];
+        _userId = [USER_DEFAULTS objectForKey:SETTINGS_KEY(kKeyUserId)];
+        if (nil == _userId)
+            [self authTest];
     }
     return _userId;
 }
@@ -160,7 +168,9 @@ static NSTimeInterval const kTimeoutInterval = 35;
 - (NSString *)userName
 {
     if (nil == _userName && _token) {
-        [self authTest];
+        _userName = [USER_DEFAULTS objectForKey:SETTINGS_KEY(kKeyUser)];
+        if (nil == _userName)
+            [self authTest];
     }
     return _userName;
 }
@@ -168,7 +178,9 @@ static NSTimeInterval const kTimeoutInterval = 35;
 - (NSString *)teamURL
 {
     if (nil == _teamURL && _token) {
-        [self authTest];
+        _teamURL = [USER_DEFAULTS objectForKey:SETTINGS_KEY(kKeyURL)];
+        if (nil == _teamURL)
+            [self authTest];
     }
     return _teamURL;
 }
@@ -176,7 +188,9 @@ static NSTimeInterval const kTimeoutInterval = 35;
 - (NSString *)teamName
 {
     if (nil == _teamName && _token) {
-        [self authTest];
+        _teamName = [USER_DEFAULTS objectForKey:SETTINGS_KEY(kKeyTeam)];
+        if (nil == _teamName)
+            [self authTest];
     }
     return _teamName;
 }
@@ -184,7 +198,9 @@ static NSTimeInterval const kTimeoutInterval = 35;
 - (NSString *)teamId
 {
     if (nil == _teamId && _token) {
-        [self authTest];
+        _teamId = [USER_DEFAULTS objectForKey:SETTINGS_KEY(kKeyTeamId)];
+        if (nil == _teamId)
+            [self authTest];
     }
     return _teamId;
 }
@@ -198,7 +214,7 @@ static NSTimeInterval const kTimeoutInterval = 35;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[kSlackAPIURL stringByAppendingString:method]]];
     [request setTimeoutInterval:kTimeoutInterval];
     [request setHTTPMethod:@"POST"];
-    NSString* paramsString = params ? [self.class serializeParams:params] : nil;
+    NSString* paramsString = params ? [params uq_URLQueryString] : nil;
     [request setHTTPBody:[paramsString dataUsingEncoding:NSUTF8StringEncoding]];
     
     NSHTTPURLResponse *response;
@@ -245,6 +261,11 @@ static NSTimeInterval const kTimeoutInterval = 35;
     return error || (nil == res) ? NO : YES;
 }
 
+- (NSString *)settingsKeyForKey:(NSString *)key
+{
+    return [NSString stringWithFormat:@"slack_%@", key];
+}
+
 - (BOOL)authTest
 {
     if (!_token)
@@ -257,6 +278,16 @@ static NSTimeInterval const kTimeoutInterval = 35;
         _teamId = res[kKeyTeamId];
         _userName = res[kKeyUser];
         _userId = res[kKeyUserId];
+        NSUserDefaults* ud = USER_DEFAULTS;
+        [ud setObject:_teamURL forKey:SETTINGS_KEY(kKeyURL)];
+        [ud setObject:_teamName forKey:SETTINGS_KEY(kKeyTeam)];
+        [ud setObject:_teamId forKey:SETTINGS_KEY(kKeyTeamId)];
+        [ud setObject:_userName forKey:SETTINGS_KEY(kKeyUser)];
+        [ud setObject:_userId forKey:SETTINGS_KEY(kKeyUserId)];
+        [ud synchronize];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:kNotificationUserData object:nil]];
+        });
     }
     return error == nil;
 }
