@@ -85,8 +85,7 @@ static char * const kPwd = "The Swipes Team";
             [errorObject setObject:attachment forKey:@"attachment"];
         if ([error code])
             [errorObject setObject:@([error code]) forKey:@"code"];
-        if (kCurrent)
-            [errorObject setObject:kCurrent forKey:@"user"];
+        [errorObject setObject:kCurrent.objectId forKey:@"user"];
         if (type)
             [errorObject setObject:type forKey:@"type"];
         [errorObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -111,8 +110,7 @@ static char * const kPwd = "The Swipes Team";
             [errorObject addObject:exception.userInfo forKey:@"userInfo"];
         if (attachment)
             [errorObject setObject:attachment forKey:@"attachment"];
-        if (kCurrent)
-            [errorObject setObject:kCurrent forKey:@"user"];
+        [errorObject setObject:kCurrent.objectId forKey:@"user"];
         if (type)
             [errorObject setObject:type forKey:@"type"];
         [errorObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {

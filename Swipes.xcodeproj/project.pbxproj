@@ -499,6 +499,10 @@
 		DA3A07041A95E7B400F47C59 /* IntegrationBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3A07021A95E7B400F47C59 /* IntegrationBaseViewController.m */; };
 		DA3A07071A95EAA400F47C59 /* IntegrationSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3A07061A95EAA400F47C59 /* IntegrationSettingCell.m */; };
 		DA3A070A1A95EAC000F47C59 /* IntegrationSeparatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3A07091A95EAC000F47C59 /* IntegrationSeparatorCell.m */; };
+		DA3BA8551BC3CA3E001F109F /* KPLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3BA8531BC3CA3E001F109F /* KPLoginViewController.m */; settings = {ASSET_TAGS = (); }; };
+		DA3BA8561BC3CA3E001F109F /* KPLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA3BA8541BC3CA3E001F109F /* KPLoginViewController.xib */; settings = {ASSET_TAGS = (); }; };
+		DA3BA85B1BC69C38001F109F /* SlackWebAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = DAAD7C181BBD5C5D00B0A08F /* SlackWebAPIClient.m */; settings = {ASSET_TAGS = (); }; };
+		DA3BA85C1BC69C38001F109F /* SlackWebAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = DAAD7C181BBD5C5D00B0A08F /* SlackWebAPIClient.m */; settings = {ASSET_TAGS = (); }; };
 		DA3E54421A15498500C2116F /* ENNoteRefInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = DA3E54411A15498500C2116F /* ENNoteRefInternal.h */; };
 		DA3F0B90188CB4750094F866 /* EvernoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3F0B8F188CB4750094F866 /* EvernoteView.m */; };
 		DA446DE81ABA4632002BE386 /* SWAUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = DA446DE71ABA4632002BE386 /* SWAUtility.m */; };
@@ -1232,6 +1236,9 @@
 		DA3A07061A95EAA400F47C59 /* IntegrationSettingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationSettingCell.m; path = Integrations/IntegrationSettingCell.m; sourceTree = "<group>"; };
 		DA3A07081A95EAC000F47C59 /* IntegrationSeparatorCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntegrationSeparatorCell.h; path = Integrations/IntegrationSeparatorCell.h; sourceTree = "<group>"; };
 		DA3A07091A95EAC000F47C59 /* IntegrationSeparatorCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IntegrationSeparatorCell.m; path = Integrations/IntegrationSeparatorCell.m; sourceTree = "<group>"; };
+		DA3BA8521BC3CA3E001F109F /* KPLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KPLoginViewController.h; sourceTree = "<group>"; };
+		DA3BA8531BC3CA3E001F109F /* KPLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KPLoginViewController.m; sourceTree = "<group>"; };
+		DA3BA8541BC3CA3E001F109F /* KPLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KPLoginViewController.xib; sourceTree = "<group>"; };
 		DA3E54411A15498500C2116F /* ENNoteRefInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENNoteRefInternal.h; path = Integrations/ENNoteRefInternal.h; sourceTree = "<group>"; };
 		DA3F0B8E188CB4750094F866 /* EvernoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteView.h; path = Components/EvernoteView.h; sourceTree = "<group>"; };
 		DA3F0B8F188CB4750094F866 /* EvernoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteView.m; path = Components/EvernoteView.m; sourceTree = "<group>"; };
@@ -1617,6 +1624,9 @@
 			children = (
 				A7090B6E175DF3F900728A3A /* LoginViewController.h */,
 				A7090B6F175DF3F900728A3A /* LoginViewController.m */,
+				DA3BA8521BC3CA3E001F109F /* KPLoginViewController.h */,
+				DA3BA8531BC3CA3E001F109F /* KPLoginViewController.m */,
+				DA3BA8541BC3CA3E001F109F /* KPLoginViewController.xib */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -3224,6 +3234,7 @@
 				A763D5541A13AC670060D994 /* alldonefortoday.png in Resources */,
 				A772B14119671D9F00C07909 /* swipesandevernote.png in Resources */,
 				A708BEE61A15FE3400C7E15A /* GothamRounded-Bold.ttf in Resources */,
+				DA3BA8561BC3CA3E001F109F /* KPLoginViewController.xib in Resources */,
 				DA4F29CD1AA73D8C0048C71A /* swipes-ui-gmail-integrations-2@2x.png in Resources */,
 				DACD545618A1ACFC00C378DF /* page_white_dvd.png in Resources */,
 				DA4F29CF1AA73D8C0048C71A /* swipes-ui-gmail-integrations-3@2x.png in Resources */,
@@ -3562,6 +3573,7 @@
 				A72FD5DE19E9D10D00DDEB02 /* FilterTopMenu.m in Sources */,
 				A7A976E7184119D6001C0A51 /* PaymentHandler.m in Sources */,
 				A7F4067217296C0500DDE644 /* KPControlHandler.m in Sources */,
+				DA3BA8551BC3CA3E001F109F /* KPLoginViewController.m in Sources */,
 				DA09B08D1AB228D6002632DC /* MagicalRecord+ShorthandSupport.m in Sources */,
 				DA3A070A1A95EAC000F47C59 /* IntegrationSeparatorCell.m in Sources */,
 				A7933049172AB63700F1505E /* TodayListViewController.m in Sources */,
@@ -3731,6 +3743,7 @@
 				DA09B0201AB228D6002632DC /* NSNumber+MagicalDataImport.m in Sources */,
 				DA09B0431AB228D6002632DC /* NSManagedObject+MagicalRecord.m in Sources */,
 				DAE2B16519CB7B0C00A9074E /* Datamodel.xcdatamodeld in Sources */,
+				DA3BA85B1BC69C38001F109F /* SlackWebAPIClient.m in Sources */,
 				DA09B06B1AB228D6002632DC /* NSPersistentStore+MagicalRecord.m in Sources */,
 				A7D8692A19E4060900CE0923 /* SwipingOverlayView.m in Sources */,
 				DA571ABD1BBAADC00016DF4C /* _KPAssignee.m in Sources */,
@@ -3858,6 +3871,7 @@
 				DA09AFAE1AB1CE5A002632DC /* KPParseObject.m in Sources */,
 				DA09B0711AB228D6002632DC /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
 				DA09AF951AB1CDD1002632DC /* UtilityClass.m in Sources */,
+				DA3BA85C1BC69C38001F109F /* SlackWebAPIClient.m in Sources */,
 				DA09AFA41AB1CE0B002632DC /* GmailAuthViewController.m in Sources */,
 				DA09B0491AB228D6002632DC /* NSManagedObject+MagicalRequests.m in Sources */,
 				DA09B0211AB228D6002632DC /* NSNumber+MagicalDataImport.m in Sources */,

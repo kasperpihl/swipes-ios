@@ -147,5 +147,10 @@
 		<string>en</string>
 		<string>dbx-mailbox</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

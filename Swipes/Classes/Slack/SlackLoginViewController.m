@@ -104,9 +104,11 @@ static NSString* const kKeyAccessToken = @"access_token";
         NSDictionary* dict = [request.URL uq_queryDictionary];
         if (!dict) {
             NSLog(@"bad URL: %@", request.URL);
+            return YES;
         }
         if (![self.state isEqualToString:dict[kKeyState]]) {
             NSLog(@"bad state: %@ != %@", self.state, dict[kKeyState]);
+            return YES;
         }
         
         SlackWebAPIClient* client = [SlackWebAPIClient new];

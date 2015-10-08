@@ -6,6 +6,7 @@
 //  Copyright © 2015 Pihl IT. All rights reserved.
 //
 
+#import "SlackWebAPIClient.h"
 #import "SlackUser.h"
 
 static SlackUser* g_currentUser;
@@ -26,27 +27,29 @@ static SlackUser* g_currentUser;
 
 - (NSString *)sessionToken
 {
-    return @"xoxp-2345135970-2886072657-9831874343-485880";
+    return SLACKWEBAPI.token;
 }
 
 - (BOOL)isAuthenticated
 {
-    return YES;
+    return SLACKWEBAPI.token != nil;
 }
 
 - (NSString *)username
 {
-    return @"some user";
+    return SLACKWEBAPI.userName;
 }
 
 - (NSString *)email
 {
-    return @"change_me@host.com";
+    return SLACKWEBAPI.userId;
 }
 
 - (NSString *)objectId
 {
-    return @"U02A53ZUL";
+    if (SLACKWEBAPI.teamId && SLACKWEBAPI.userId)
+        return [NSString stringWithFormat:@"%@|%@", SLACKWEBAPI.teamId, SLACKWEBAPI.userId];
+    return nil;
 }
 
 - (id _Nullable)objectForKey:(NSString * _Nonnull)defaultName

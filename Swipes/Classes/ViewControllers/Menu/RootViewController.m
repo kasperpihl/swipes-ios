@@ -12,6 +12,7 @@
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "SlackUser.h"
+#import "SlackWebAPIClient.h"
 #import "RootViewController.h"
 #import "FacebookCommunicator.h"
 #import "URLHandler.h"
@@ -20,7 +21,7 @@
 #import "TodayListViewController.h"
 #import "DoneViewController.h"
 
-#import "LoginViewController.h"
+#import "KPLoginViewController.h"
 #import "AnalyticsHandler.h"
 
 #import "MenuViewController.h"
@@ -53,7 +54,7 @@
 
 #import "Intercom.h"
 
-@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate, HintHandlerDelegate,YTPlayerViewDelegate>
+@interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,MFMailComposeViewControllerDelegate,KPLoginViewControllerDelegate, HintHandlerDelegate,YTPlayerViewDelegate>
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;
 
@@ -85,41 +86,19 @@
     if(self.currentMenu != KPMenuLogin) self.lockSettings = NO;
 }
 
-
--(void)didLoginUser:(PFUser*)user{
+-(void)didLoginUser {
     [self.settingsViewController renderSubviews];
-    voidBlock block = ^{
-        NSDictionary* attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:[[NSBundle mainBundle] bundlePath] error:nil];
-        NSNumber *daysSinceInstall = @([[NSDate date] daysAfterDate:[attrs fileCreationDate]]);
-        NSString *didTryApp = [[USER_DEFAULTS objectForKey:isTryingString] boolValue] ? @"Yes" : @"No";
-        if(user.isNew) {
-            [ANALYTICS trackCategory:@"Onboarding" action:@"Signed Up" label:didTryApp value:daysSinceInstall];
-        }
-        else{
-            [ANALYTICS trackCategory:@"Onboarding" action:@"Logged In" label:didTryApp value:daysSinceInstall];
-        }
-        [ANALYTICS checkForUpdatesOnIdentity];
-        [self changeToMenu:KPMenuHome animated:YES];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
-    };
-    if([USER_DEFAULTS boolForKey:isTryingString]){
-        [UTILITY confirmBoxWithTitle:NSLocalizedString(@"Keep data", nil) andMessage:NSLocalizedString(@"Do you want to keep the data from the test period?", nil) block:^(BOOL succeeded, NSError *error) {
-            if(!succeeded) [KPCORE clearAndDeleteData];
-            block();
-        }];
-    }
-    else{
-        if(user.isNew) [[CoreSyncHandler sharedInstance] seedObjectsSave:YES];
-        block();
-    }
-    
+    [ANALYTICS checkForUpdatesOnIdentity];
+    [self changeToMenu:KPMenuHome animated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"logged in" object:self];
 }
 
 // Sent to the delegate when a PFUser is logged in.
-- (void)loginViewController:(LoginViewController *)logInController didLoginUser:(PFUser *)user
+-(void)loginViewController:(KPLoginViewController *)viewController error:(NSError*)error
 {
-    [self didLoginUser:user];
+    if (!error) {
+        [self didLoginUser];
+    }
 }
 
 -(void)walkthrough:(WalkthroughViewController *)walkthrough didFinishSuccesfully:(BOOL)successfully
@@ -136,7 +115,7 @@
         UIViewController *viewController;
         switch(menu) {
             case KPMenuLogin:{
-                LoginViewController *loginVC = [[LoginViewController alloc] init];
+                KPLoginViewController *loginVC = [[KPLoginViewController alloc] init];
                 loginVC.delegate = self;
                 self.lockSettings = YES;
                 viewController = loginVC;
@@ -178,7 +157,8 @@ static RootViewController *sharedObject;
     [USER_DEFAULTS removeObjectForKey:kLastSyncServerString];
     [USER_DEFAULTS synchronize];
 
-    [PFUser logOut];
+    //[PFUser logOut];
+    [SLACKWEBAPI logout];
     [[CoreSyncHandler sharedInstance] clearAndDeleteData];
     [kUserHandler didLogout];
     [kHints reset];
@@ -468,14 +448,9 @@ static RootViewController *sharedObject;
     
     self.viewControllers = @[self.drawerViewController];
     
-    if(!kCurrent){
-        if([USER_DEFAULTS objectForKey:isTryingString]){
-            [self changeToMenu:KPMenuHome animated:NO];
-        }
-        else{
-            [kHints turnHintsOff:NO];
-            [self changeToMenu:KPMenuLogin animated:NO];
-        }
+    if(!kCurrent.sessionToken){
+       [kHints turnHintsOff:NO];
+       [self changeToMenu:KPMenuLogin animated:NO];
     }
     else
         [self changeToMenu:KPMenuHome animated:NO];
