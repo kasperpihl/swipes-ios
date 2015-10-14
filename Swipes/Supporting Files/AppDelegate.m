@@ -9,7 +9,7 @@
 #import <Parse/Parse.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <Crashlytics/Crashlytics.h>
-
+#import <Fabric/Fabric.h>
 #import <DropboxSDK/DropboxSDK.h>
 
 #import "Intercom.h"
@@ -76,7 +76,8 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     
     [PFFacebookUtils initializeFacebook];
     
-    [Crashlytics startWithAPIKey:[UtilityClass decrypt:@"ZV8ERTZCDxFdRRkyV1UPY1hQRWNHDRIERURgVgJYZQoAQzVCCkcARw=="]]; //@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
+//    [Crashlytics startWithAPIKey:[UtilityClass decrypt:@"ZV8ERTZCDxFdRRkyV1UPY1hQRWNHDRIERURgVgJYZQoAQzVCCkcARw=="]]; //@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
+    [Fabric with:@[CrashlyticsKit]];
     if(kCurrent){
         [[Crashlytics sharedInstance] setUserIdentifier:kCurrent.objectId];
         [[Crashlytics sharedInstance] setUserEmail:kCurrent.username];

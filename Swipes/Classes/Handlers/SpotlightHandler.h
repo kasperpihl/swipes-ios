@@ -14,7 +14,7 @@
 
 @interface SpotlightHandler : NSObject
 
-+ (instancetype)sharedInstance;
++ (instancetype _Null_unspecified)sharedInstance;
 
 - (void)resetWithCompletionHandler:(void (^ __nullable)(NSError * __nullable error))completionHandler;
 - (void)clearAllWithCompletionHandler:(void (^ __nullable)(NSError * __nullable error))completionHandler;

@@ -73,7 +73,6 @@
 		A714369019346823009AC8A4 /* SyncLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A714368F19346823009AC8A4 /* SyncLabel.m */; };
 		A714369319349EB3009AC8A4 /* CheckmarkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A714369219349EB3009AC8A4 /* CheckmarkButton.m */; };
 		A717BF1F17611163004791BF /* AnalyticsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A717BF1E17611162004791BF /* AnalyticsHandler.m */; };
-		A717DD1018B6440A00EE359C /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A717DD0F18B6440A00EE359C /* Crashlytics.framework */; };
 		A717DD2118B6775B00EE359C /* NexaHeavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A717DD2018B6775800EE359C /* NexaHeavy.ttf */; };
 		A717DD2418B7C3F700EE359C /* LightSchemeAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A717DD2318B7C3F700EE359C /* LightSchemeAlert.m */; };
 		A717DD2E18B7E12300EE359C /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -613,7 +612,6 @@
 		DACD546318A1ACFC00C378DF /* powerpoint.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544118A1ACFC00C378DF /* powerpoint.png */; };
 		DACD546418A1ACFC00C378DF /* word.png in Resources */ = {isa = PBXBuildFile; fileRef = DACD544218A1ACFC00C378DF /* word.png */; };
 		DAD501561B11535700A1E6D0 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD501541B11535700A1E6D0 /* libc++.dylib */; };
-		DAD501571B11535700A1E6D0 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD501551B11535700A1E6D0 /* Fabric.framework */; };
 		DAD78B761A67E958009992C3 /* KPStringScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = DAD78B741A67E958009992C3 /* KPStringScanner.h */; };
 		DAD78B771A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
 		DAD78B781A67E958009992C3 /* KPStringScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD78B751A67E958009992C3 /* KPStringScanner.m */; };
@@ -829,7 +827,6 @@
 		A717BEEB175E6857004791BF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		A717BF1D17611162004791BF /* AnalyticsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnalyticsHandler.h; path = ../Swipes/Classes/Handlers/AnalyticsHandler.h; sourceTree = "<group>"; };
 		A717BF1E17611162004791BF /* AnalyticsHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnalyticsHandler.m; path = ../Swipes/Classes/Handlers/AnalyticsHandler.m; sourceTree = "<group>"; };
-		A717DD0F18B6440A00EE359C /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		A717DD2018B6775800EE359C /* NexaHeavy.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = NexaHeavy.ttf; path = Font/NexaHeavy.ttf; sourceTree = "<group>"; };
 		A717DD2218B7C3F700EE359C /* LightSchemeAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightSchemeAlert.h; sourceTree = "<group>"; };
 		A717DD2318B7C3F700EE359C /* LightSchemeAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LightSchemeAlert.m; sourceTree = "<group>"; };
@@ -1326,7 +1323,6 @@
 		DACD544118A1ACFC00C378DF /* powerpoint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = powerpoint.png; sourceTree = "<group>"; };
 		DACD544218A1ACFC00C378DF /* word.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = word.png; sourceTree = "<group>"; };
 		DAD501541B11535700A1E6D0 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
-		DAD501551B11535700A1E6D0 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		DAD78B741A67E958009992C3 /* KPStringScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPStringScanner.h; path = Swipes/Classes/Utilities/KPStringScanner.h; sourceTree = SOURCE_ROOT; };
 		DAD78B751A67E958009992C3 /* KPStringScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPStringScanner.m; path = Swipes/Classes/Utilities/KPStringScanner.m; sourceTree = SOURCE_ROOT; };
 		DAE2B14F19CB7A4D00A9074E /* SwipesToday.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SwipesToday.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1363,7 +1359,6 @@
 				A7E9F60919DAAE8800CAA1D1 /* MobileCoreServices.framework in Frameworks */,
 				A74D3FC718D9A6890056D124 /* AdSupport.framework in Frameworks */,
 				A74D3FC618D9A18B0056D124 /* CoreTelephony.framework in Frameworks */,
-				A717DD1018B6440A00EE359C /* Crashlytics.framework in Frameworks */,
 				A7ADCB3817DD352F00780F88 /* libz.dylib in Frameworks */,
 				A75545DE179B481800CE2F4E /* Accelerate.framework in Frameworks */,
 				A78F392E16F7DC1900A8C78D /* MessageUI.framework in Frameworks */,
@@ -1389,7 +1384,6 @@
 				A761B5A516EB59370095A9A8 /* SystemConfiguration.framework in Frameworks */,
 				A761B5A316EB59320095A9A8 /* CoreData.framework in Frameworks */,
 				A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */,
-				DAD501571B11535700A1E6D0 /* Fabric.framework in Frameworks */,
 				A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */,
 				A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */,
 				51309AE023584D4FA13F00A9 /* libPods-Swipes.a in Frameworks */,
@@ -2078,8 +2072,6 @@
 				DA09AFCF1AB228D6002632DC /* MagicalRecord */,
 				A7D0685A190E654C00699B4E /* MMDrawerController */,
 				DAD501541B11535700A1E6D0 /* libc++.dylib */,
-				DAD501551B11535700A1E6D0 /* Fabric.framework */,
-				A717DD0F18B6440A00EE359C /* Crashlytics.framework */,
 				A74D3FCC18D9E7AC0056D124 /* GrowingTextView */,
 			);
 			path = Libs;
@@ -2921,12 +2913,12 @@
 			buildConfigurationList = A7778D0216EB5884004D95E5 /* Build configuration list for PBXNativeTarget "Swipes" */;
 			buildPhases = (
 				A8AF6FFAA34042669C52BBD9 /* Check Pods Manifest.lock */,
-				A781A9FC16F9C13C00F30272 /* Run Script */,
+				A781A9FC16F9C13C00F30272 /* Build number */,
 				A7778CC616EB5884004D95E5 /* Sources */,
 				A7778CC716EB5884004D95E5 /* Frameworks */,
 				A7778CC816EB5884004D95E5 /* Resources */,
 				14A4BEEC691D48EDAF59F6F0 /* Copy Pods Resources */,
-				A7A976DC18410F56001C0A51 /* Run Script */,
+				A7A976DC18410F56001C0A51 /* Fabric */,
 				DAE2B15B19CB7A4D00A9074E /* Embed App Extensions */,
 			);
 			buildRules = (
@@ -3408,33 +3400,33 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		A781A9FC16F9C13C00F30272 /* Run Script */ = {
+		A781A9FC16F9C13C00F30272 /* Build number */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Run Script";
+			name = "Build number";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
 		};
-		A7A976DC18410F56001C0A51 /* Run Script */ = {
+		A7A976DC18410F56001C0A51 /* Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Run Script";
+			name = Fabric;
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "./Swipes/Ressources/Libs/Crashlytics.framework/run 17aee5fa869f24b705e00dba6d43c51becf5c7e4 18503ba4a511e5ff371707e57ef3f51edb669c35ae9206253a6edcdf35c1fa7c";
+			shellScript = "\"${PODS_ROOT}/Fabric/Fabric.framework/run\" 17aee5fa869f24b705e00dba6d43c51becf5c7e4 18503ba4a511e5ff371707e57ef3f51edb669c35ae9206253a6edcdf35c1fa7c";
 			showEnvVarsInLog = 0;
 		};
 		A7F0B9BB1700BA51003BBDD1 /* ShellScript */ = {
