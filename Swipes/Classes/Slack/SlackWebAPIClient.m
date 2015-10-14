@@ -7,6 +7,7 @@
 //
 
 #import <SSKeychain/SSKeychain.h>
+#import <PocketSocket/PSWebSocket.h>
 #import "NSURL+QueryDictionary.h"
 #import "SlackWebAPIClient.h"
 
@@ -34,7 +35,7 @@ static NSTimeInterval const kTimeoutInterval = 35;
 
 #define SETTINGS_KEY(key) [NSString stringWithFormat:@"slack_%@", key]
 
-@interface SlackWebAPIClient ()
+@interface SlackWebAPIClient () <PSWebSocketDelegate>
 
 @property (nonatomic, strong) NSString* userId;
 @property (nonatomic, strong) NSString* userName;
@@ -42,6 +43,7 @@ static NSTimeInterval const kTimeoutInterval = 35;
 @property (nonatomic, strong) NSString* teamName;
 @property (nonatomic, strong) NSString* teamId;
 @property (nonatomic, strong) NSCache* idCache;
+@property (nonatomic, strong) PSWebSocket* ws;
 
 @end
 
@@ -90,6 +92,10 @@ static NSTimeInterval const kTimeoutInterval = 35;
     _teamName = nil;
     _teamURL = nil;
     _idCache = [[NSCache alloc] init];
+    if (self.ws) {
+        [self.ws close];
+        self.ws = nil;
+    }
     if (!_workQueue) {
         _workQueue = dispatch_queue_create("SlackWebAPI worker", DISPATCH_QUEUE_SERIAL);
     }
@@ -98,6 +104,10 @@ static NSTimeInterval const kTimeoutInterval = 35;
 - (void)logout
 {
     self.token = nil;
+    if (self.ws) {
+        [self.ws close];
+        self.ws = nil;
+    }
     NSUserDefaults* ud = USER_DEFAULTS;
     [ud removeObjectForKey:SETTINGS_KEY(kKeyURL)];
     [ud removeObjectForKey:SETTINGS_KEY(kKeyTeam)];
@@ -520,5 +530,54 @@ static NSTimeInterval const kTimeoutInterval = 35;
     });
 }
 
+- (void)statRTMWithError:(NSError **)error
+{
+    __autoreleasing NSError* myError;
+    if (error)
+        *error = nil;
+    else
+        error = &myError;
+    
+    NSDictionary* res = [self callWebAPIMethod:@"rtm.start" params:@{kKeyToken: _token} error:error];
+    DLog(@"rtm:\n%@", res);
+    if (!*error) {
+        NSURL* url = [NSURL URLWithString:res[kKeyURL]];
+        DLog(@"URL: %@", url);
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        self.ws = [PSWebSocket clientSocketWithRequest:request];
+        self.ws.delegate = self;
+        [self.ws open];
+    }
+}
+
+#pragma mark - Web Socket delegate
+
+- (void)webSocketDidOpen:(PSWebSocket *)webSocket
+{
+    DLog(@"WS: connected");
+}
+
+- (void)webSocket:(PSWebSocket *)webSocket didFailWithError:(NSError *)error
+{
+    DLog(@"WS: disconnected: %@", error);
+}
+
+- (void)webSocket:(PSWebSocket *)webSocket didReceiveMessage:(id)message
+{
+    DLog(@"WS: got some message: %@", message);
+    dispatch_async(dispatch_get_main_queue(),^{
+        //do some UI work
+    });
+}
+
+- (void)webSocket:(PSWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
+{
+    DLog(@"WS: didCloseWithCode: %ld, reason: %@, wasClean: %d", (long)code, reason, wasClean);
+}
+
+-(void)websocketDidDisconnect:(PSWebSocket*)socket error:(NSError*)error
+{
+    DLog(@"WS: disconnected: %@", error);
+}
 
 @end

@@ -13,6 +13,7 @@ def shared_pods
     pod 'Intercom'
     pod 'GoogleAnalytics'
     pod 'SSKeychain'
+    pod 'PocketSocket'
 end
 
 target :'Swipes for Teams' do

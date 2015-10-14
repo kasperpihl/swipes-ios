@@ -19,7 +19,7 @@ static ContactHandler *sharedObject;
 -(APAddressBook *)ab{
     if(!_ab){
         _ab = [[APAddressBook alloc] init];
-        _ab.fieldsMask = APContactFieldFirstName | APContactFieldLastName | APContactFieldPhones | APContactFieldEmails;
+        _ab.fieldsMask = APContactFieldName | APContactFieldPhonesWithLabels | APContactFieldEmailsWithLabels;
         _ab.filterBlock = ^BOOL(APContact *contact)
         {
             return (contact.phones.count > 0 | contact.emails.count > 0);

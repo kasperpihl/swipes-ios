@@ -71,11 +71,11 @@
     
     APContact* contact = self.contacts[indexPath.row];
     NSString *name = @"";
-    if (contact.firstName)
-        name = [name stringByAppendingString:contact.firstName];
-    if(contact.lastName){
+    if (contact.name.firstName)
+        name = [name stringByAppendingString:contact.name.firstName];
+    if(contact.name.lastName){
         if(name.length > 0) name = [name stringByAppendingString:@" "];
-        name = [name stringByAppendingString:contact.lastName];
+        name = [name stringByAppendingString:contact.name.lastName];
     }
     cell.textLabel.text = name;
     return cell;

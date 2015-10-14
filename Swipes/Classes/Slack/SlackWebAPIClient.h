@@ -8,17 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
-//#ifndef DLog
-//    #ifdef DEBUG
-//    #    define DLog(__FORMAT__, ...) NSLog((@"%s [Line %d]\n" __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
-//    #else
-//    #    define DLog(...) /* */
-//    #endif
-//#endif
-//
-//#ifndef USER_DEFAULTS
-//#define USER_DEFAULTS [NSUserDefaults standardUserDefaults]
-//#endif
+#ifndef DLog
+    #ifdef DEBUG
+    #    define DLog(__FORMAT__, ...) NSLog((@"%s [Line %d]\n" __FORMAT__), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+    #else
+    #    define DLog(...) /* */
+    #endif
+#endif
+
+#ifndef USER_DEFAULTS
+#define USER_DEFAULTS [NSUserDefaults standardUserDefaults]
+#endif
 
 extern NSString* const kNotificationUserData;
 
@@ -44,6 +44,7 @@ typedef void (^SlackCallbackBlockString)(NSString* result, NSError* error);
 @property (nonatomic, strong, readonly) NSString* teamId;
 
 - (BOOL)authTest;
+- (void)statRTMWithError:(NSError **)error;
 
 #pragma mark - Async methods
 
