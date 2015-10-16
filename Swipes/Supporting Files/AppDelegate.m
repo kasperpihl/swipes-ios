@@ -10,7 +10,6 @@
  Known issues:
  
  - On logout Apple watch app gets confused because we delete the database
- - entering inside task does not take status bar into account
  - login screen does not show "Login" button when you start typing without keyboard
  
  

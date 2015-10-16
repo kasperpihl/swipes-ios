@@ -7,6 +7,7 @@
 //
 
 #import <sys/utsname.h>
+#import "SettingsHandler.h"
 #import "GlobalApp.h"
 
 static int g_activityIndicatorStack = 0;
@@ -51,12 +52,16 @@ static int g_activityIndicatorStack = 0;
 
 + (CGFloat)statusBarHeight
 {
-    if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-        return [UIApplication sharedApplication].statusBarFrame.size.height;
+    BOOL value = [[kSettings valueForSetting:SettingUseStandardStatusBar] boolValue];
+    if (value) {
+        if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+            return [UIApplication sharedApplication].statusBarFrame.size.height;
+        }
+        else {
+            return [UIApplication sharedApplication].statusBarFrame.size.width;
+        }
     }
-    else {
-        return [UIApplication sharedApplication].statusBarFrame.size.width;
-    }
+    return 20; // this is a constant in KPTopClock
 }
 
 + (UIImage*)screenshot
