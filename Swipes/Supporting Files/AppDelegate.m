@@ -6,6 +6,16 @@
 //  Copyright (c) 2013 Pihl IT. All rights reserved.
 //
 
+/**
+ Known issues:
+ 
+ - On logout Apple watch app gets confused because we delete the database
+ - entering inside task does not take status bar into account
+ - login screen does not show "Login" button when you start typing without keyboard
+ 
+ 
+ */
+
 #import <Parse/Parse.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <Crashlytics/Crashlytics.h>
@@ -354,6 +364,8 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
 
 - (void)application:(UIApplication *)application handleWatchKitExtensionRequest:(NSDictionary *)userInfo reply:(void (^)(NSDictionary *replyInfo))reply
 {
+    [[GlobalApp sharedInstance] startBackgroundHandler];
+    DLog(@"handleWatchKitExtensionRequest: %@", userInfo);
     NSMutableDictionary* replyInfo = [NSMutableDictionary dictionary];
     id tempId;
 //    tempId = [userInfo valueForKey:kKeyCmdDelete];
@@ -406,7 +418,9 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
         }
     }
     
+    DLog(@"handleWatchKitExtensionRequest reply: %@", replyInfo);
     reply(replyInfo);
+    [[GlobalApp sharedInstance] endBackgroundHandler];
 }
 
 @end

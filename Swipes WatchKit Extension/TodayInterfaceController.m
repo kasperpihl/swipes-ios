@@ -95,13 +95,13 @@ static BOOL g_isNotFirstRun = NO;
     NSError* error;
 //    DLog(@"Reloading data");
     NSArray* newTodos = [[SWACoreDataModel sharedInstance] loadTodosWithError:&error oneResult:NO];
-    if ((nil == _todos) || (newTodos.count != _todos.count) || [self areDifferentArrays:newTodos]) {
+//    if ((nil == _todos) || (newTodos.count != _todos.count) || [self areDifferentArrays:newTodos]) {
         _todos = newTodos;
         [self fillData];
-    }
-    else {
-        _todos = newTodos;
-    }
+//    }
+//    else {
+//        _todos = newTodos;
+//    }
 }
 
 - (void)fillData

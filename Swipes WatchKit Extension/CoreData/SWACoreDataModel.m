@@ -130,7 +130,7 @@ static NSString* const DATABASE_FOLDER = @"database";
                 [SWAUtility sendErrorToHost:error];
             }
             #ifdef DEBUG
-            //abort();
+            abort();
             #endif
         }
     }
@@ -138,11 +138,14 @@ static NSString* const DATABASE_FOLDER = @"database";
 
 - (NSArray *)loadTodosWithError:(NSError **)error oneResult:(BOOL)oneResult
 {
-    _managedObjectContext = nil; // force refresh!
+    // force refresh!
+    //_persistentStoreCoordinator = nil;
+    _managedObjectContext = nil;
     //_persistentStoreCoordinator = nil; // force refresh!
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ToDo" inManagedObjectContext:self.managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];
+    request.shouldRefreshRefetchedObjects = YES;
     
     NSDate *endDate = [NSDate date];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)",endDate];

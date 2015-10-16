@@ -17,8 +17,14 @@
 #define kKeyCmdError @"error"
 #define kKeyCmdAdd @"add"
 #define kKeyCmdAnalytics @"analytics"
+#define kKeyCmdList @"list"
+
 #define kKeyAnalyticsCategory @"category"
 #define kKeyAnalyticsAction @"action"
 #define kKeyAnalyticsValue @"value"
+
+#define kKeyTodos @"todos"
+#define kKeyTitle @"title"
+#define kKeyTempId @"tempId"
 
 #endif
