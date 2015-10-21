@@ -21,11 +21,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		137CA93FEEDD28557C76343D /* libPods-SwipesShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2221C0316ECCD8E41E51F6C1 /* libPods-SwipesShare.a */; };
+		369F34BD0ECB106BCC69B6F4 /* libPods-Swipes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 185A896539A29E7104DD298C /* libPods-Swipes.a */; };
 		41DF0824188ECD5A0074DDFB /* EvernoteViewerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41DF0823188ECD5A0074DDFB /* EvernoteViewerView.m */; };
-		51309AE023584D4FA13F00A9 /* libPods-Swipes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB2A69EAA2C418DA2E0283E /* libPods-Swipes.a */; };
-		789C9AAD8BA447088AAD221A /* libPods-SwipesKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 368054CA6302490B9AFBAEFE /* libPods-SwipesKit.a */; };
-		81A0C94F1F16434CAE0AA041 /* libPods-SwipesToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A3901B41E5E94AAE9A1FED2F /* libPods-SwipesToday.a */; };
+		71F0F3C737E6207BB81881D6 /* libPods-SwipesToday.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04287423A716BF7ABC6E3A51 /* libPods-SwipesToday.a */; };
+		8CF6C40A91F1205DBC3B8D56 /* libPods-SwipesShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B9A1C62F368F9DC89FC163AD /* libPods-SwipesShare.a */; };
 		A70188181A7682FD00C039DF /* AttachmentEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = A70188171A7682FD00C039DF /* AttachmentEditView.m */; };
 		A701BD2E1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A701BD2D1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png */; };
 		A702E0671A29B9AD00EC3624 /* HelpTopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = A702E0661A29B9AD00EC3624 /* HelpTopMenu.m */; };
@@ -733,19 +732,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		059DABC09F70AFFB6FC54751 /* Pods-Swipes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swipes.release.xcconfig"; path = "Pods/Target Support Files/Pods-Swipes/Pods-Swipes.release.xcconfig"; sourceTree = "<group>"; };
-		06EF8387A4A07C425F582A22 /* Pods-SwipesShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesShare.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesShare/Pods-SwipesShare.debug.xcconfig"; sourceTree = "<group>"; };
-		2221C0316ECCD8E41E51F6C1 /* libPods-SwipesShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwipesShare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2A574DC6041F17E4233CE71E /* Pods-SwipesToday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.debug.xcconfig"; sourceTree = "<group>"; };
-		340434FCBE05383D728BE275 /* Pods-Swipes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swipes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Swipes/Pods-Swipes.debug.xcconfig"; sourceTree = "<group>"; };
-		368054CA6302490B9AFBAEFE /* libPods-SwipesKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwipesKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		04287423A716BF7ABC6E3A51 /* libPods-SwipesToday.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwipesToday.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		095DE804F5018CF6BB050042 /* Pods-SwipesToday.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.debug.xcconfig"; sourceTree = "<group>"; };
+		185A896539A29E7104DD298C /* libPods-Swipes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Swipes.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A28E2CABDD98C85629B0B4D /* Pods-SwipesShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesShare.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesShare/Pods-SwipesShare.release.xcconfig"; sourceTree = "<group>"; };
 		41DF0822188ECD5A0074DDFB /* EvernoteViewerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EvernoteViewerView.h; path = Components/EvernoteViewerView.h; sourceTree = "<group>"; };
 		41DF0823188ECD5A0074DDFB /* EvernoteViewerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EvernoteViewerView.m; path = Components/EvernoteViewerView.m; sourceTree = "<group>"; };
-		4FB2A69EAA2C418DA2E0283E /* libPods-Swipes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Swipes.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6E45E45BF7F32F791A91F78A /* Pods-SwipesKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.release.xcconfig"; sourceTree = "<group>"; };
-		8A10ECBCD0054ECEBA611D47 /* Pods-SwipesKit.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.adhoc.xcconfig"; sourceTree = "<group>"; };
-		95C4AF8B8AAEA0FB6B31A03A /* Pods-SwipesShare.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesShare.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesShare/Pods-SwipesShare.adhoc.xcconfig"; sourceTree = "<group>"; };
-		A3901B41E5E94AAE9A1FED2F /* libPods-SwipesToday.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwipesToday.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D5BEA326EAFB3A3221FBDC6 /* Pods-Swipes.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swipes.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-Swipes/Pods-Swipes.adhoc.xcconfig"; sourceTree = "<group>"; };
+		7B12B9CE6EEB8BDEF1214802 /* Pods-SwipesShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesShare.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesShare/Pods-SwipesShare.debug.xcconfig"; sourceTree = "<group>"; };
+		7C71E17C267F18C80D2B36EB /* Pods-SwipesToday.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.adhoc.xcconfig"; sourceTree = "<group>"; };
+		7C894DB2B680D0DE2923E7F1 /* Pods-Swipes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swipes.release.xcconfig"; path = "Pods/Target Support Files/Pods-Swipes/Pods-Swipes.release.xcconfig"; sourceTree = "<group>"; };
+		800DB99F5DE936C1C499DD31 /* Pods-SwipesToday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.release.xcconfig"; sourceTree = "<group>"; };
 		A70188161A7682FD00C039DF /* AttachmentEditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentEditView.h; sourceTree = "<group>"; };
 		A70188171A7682FD00C039DF /* AttachmentEditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentEditView.m; sourceTree = "<group>"; };
 		A701BD2D1A1DEF2D006D8DD8 /* swipes-logo-app@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipes-logo-app@2x.png"; sourceTree = "<group>"; };
@@ -838,6 +835,7 @@
 		A71E9FC41951CE4B00FC9B0B /* NSString+Levenshtein.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Levenshtein.m"; sourceTree = "<group>"; };
 		A724B02017A96B8B00E0EF83 /* UIColor+Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utilities.h"; sourceTree = "<group>"; };
 		A724B02117A96B8B00E0EF83 /* UIColor+Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Utilities.m"; sourceTree = "<group>"; };
+		A7256A305CF6D22F11CDBE11 /* Pods-SwipesShare.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesShare.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesShare/Pods-SwipesShare.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A72702131A23689C007FA2CA /* HelpingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelpingViewController.h; path = Settings/HelpingViewController.h; sourceTree = "<group>"; };
 		A72702141A23689C007FA2CA /* HelpingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = HelpingViewController.m; path = Settings/HelpingViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A72C334E1908F65C00767456 /* CWStatusBarNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWStatusBarNotification.h; sourceTree = "<group>"; };
@@ -1104,8 +1102,8 @@
 		A7FA8B1C17AF094D00134ED0 /* SnoozesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnoozesViewController.m; sourceTree = "<group>"; };
 		A7FE4400182825A1002AFB2E /* UIImage+Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Blur.h"; sourceTree = "<group>"; };
 		A7FE4401182825A1002AFB2E /* UIImage+Blur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Blur.m"; sourceTree = "<group>"; };
-		B2FE7C8A8128F5F6A156B8E7 /* Pods-SwipesToday.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.adhoc.xcconfig"; sourceTree = "<group>"; };
-		B7787A22A22720D18819F98F /* Pods-SwipesShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesShare.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesShare/Pods-SwipesShare.release.xcconfig"; sourceTree = "<group>"; };
+		AAD3AC7FF447841B518C6884 /* Pods-Swipes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swipes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Swipes/Pods-Swipes.debug.xcconfig"; sourceTree = "<group>"; };
+		B9A1C62F368F9DC89FC163AD /* libPods-SwipesShare.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwipesShare.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA04465019D5CDC70083F816 /* Swipes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Swipes.entitlements; path = ../Swipes.entitlements; sourceTree = "<group>"; };
 		DA044DA91A994E8F009BB4ED /* TodoInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodoInterfaceController.h; sourceTree = "<group>"; };
 		DA044DAA1A994E8F009BB4ED /* TodoInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodoInterfaceController.m; sourceTree = "<group>"; };
@@ -1343,9 +1341,6 @@
 		DAE9CFE019AF3AC600246B64 /* SwipesKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwipesKit.h; sourceTree = "<group>"; };
 		DAE9D00219AF3B2900246B64 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		DAEBBE62188B2BB8002655CB /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		E05A80E8EEB25CD6DB2767FA /* Pods-SwipesKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit.debug.xcconfig"; sourceTree = "<group>"; };
-		F17D8C581F2A222D9CA9DE7E /* Pods-SwipesToday.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipesToday.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday.release.xcconfig"; sourceTree = "<group>"; };
-		FA01441E525669BA3638C6B1 /* Pods-Swipes.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swipes.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-Swipes/Pods-Swipes.adhoc.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1386,7 +1381,14 @@
 				A7778CCE16EB5884004D95E5 /* UIKit.framework in Frameworks */,
 				A7778CD016EB5884004D95E5 /* Foundation.framework in Frameworks */,
 				A7778CD216EB5884004D95E5 /* CoreGraphics.framework in Frameworks */,
-				51309AE023584D4FA13F00A9 /* libPods-Swipes.a in Frameworks */,
+				369F34BD0ECB106BCC69B6F4 /* libPods-Swipes.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C18AB5172E3A0BD92C25625D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1405,7 +1407,7 @@
 				DA6B61BD19DAF27B00089877 /* libxml2.dylib in Frameworks */,
 				DA6B61BC19DAF26900089877 /* MobileCoreServices.framework in Frameworks */,
 				DAE2B15019CB7A4D00A9074E /* NotificationCenter.framework in Frameworks */,
-				81A0C94F1F16434CAE0AA041 /* libPods-SwipesToday.a in Frameworks */,
+				71F0F3C737E6207BB81881D6 /* libPods-SwipesToday.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1418,7 +1420,7 @@
 				DA09AFBF1AB1D215002632DC /* libxml2.dylib in Frameworks */,
 				DA09AFC41AB1D225002632DC /* MobileCoreServices.framework in Frameworks */,
 				DA09AFC51AB1D22B002632DC /* NotificationCenter.framework in Frameworks */,
-				137CA93FEEDD28557C76343D /* libPods-SwipesShare.a in Frameworks */,
+				8CF6C40A91F1205DBC3B8D56 /* libPods-SwipesShare.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1428,28 +1430,24 @@
 			files = (
 				A7E9F60C19DAAECD00CAA1D1 /* libxml2.dylib in Frameworks */,
 				A7E9F60B19DAAEC500CAA1D1 /* MobileCoreServices.framework in Frameworks */,
-				789C9AAD8BA447088AAD221A /* libPods-SwipesKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9BA9EC75C706A45E18C4AB77 /* Pods */ = {
+		2F0104D89780336E9C9385CE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				340434FCBE05383D728BE275 /* Pods-Swipes.debug.xcconfig */,
-				059DABC09F70AFFB6FC54751 /* Pods-Swipes.release.xcconfig */,
-				FA01441E525669BA3638C6B1 /* Pods-Swipes.adhoc.xcconfig */,
-				E05A80E8EEB25CD6DB2767FA /* Pods-SwipesKit.debug.xcconfig */,
-				6E45E45BF7F32F791A91F78A /* Pods-SwipesKit.release.xcconfig */,
-				8A10ECBCD0054ECEBA611D47 /* Pods-SwipesKit.adhoc.xcconfig */,
-				2A574DC6041F17E4233CE71E /* Pods-SwipesToday.debug.xcconfig */,
-				F17D8C581F2A222D9CA9DE7E /* Pods-SwipesToday.release.xcconfig */,
-				B2FE7C8A8128F5F6A156B8E7 /* Pods-SwipesToday.adhoc.xcconfig */,
-				06EF8387A4A07C425F582A22 /* Pods-SwipesShare.debug.xcconfig */,
-				B7787A22A22720D18819F98F /* Pods-SwipesShare.release.xcconfig */,
-				95C4AF8B8AAEA0FB6B31A03A /* Pods-SwipesShare.adhoc.xcconfig */,
+				AAD3AC7FF447841B518C6884 /* Pods-Swipes.debug.xcconfig */,
+				7C894DB2B680D0DE2923E7F1 /* Pods-Swipes.release.xcconfig */,
+				6D5BEA326EAFB3A3221FBDC6 /* Pods-Swipes.adhoc.xcconfig */,
+				7B12B9CE6EEB8BDEF1214802 /* Pods-SwipesShare.debug.xcconfig */,
+				1A28E2CABDD98C85629B0B4D /* Pods-SwipesShare.release.xcconfig */,
+				A7256A305CF6D22F11CDBE11 /* Pods-SwipesShare.adhoc.xcconfig */,
+				095DE804F5018CF6BB050042 /* Pods-SwipesToday.debug.xcconfig */,
+				800DB99F5DE936C1C499DD31 /* Pods-SwipesToday.release.xcconfig */,
+				7C71E17C267F18C80D2B36EB /* Pods-SwipesToday.adhoc.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1818,7 +1816,7 @@
 				DA3282CD1A4CB7CF0054CE04 /* Swipes WatchKit App */,
 				A7778CCC16EB5884004D95E5 /* Frameworks */,
 				A7778CCB16EB5884004D95E5 /* Products */,
-				9BA9EC75C706A45E18C4AB77 /* Pods */,
+				2F0104D89780336E9C9385CE /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1872,10 +1870,9 @@
 				A7778CD116EB5884004D95E5 /* CoreGraphics.framework */,
 				A7778CF116EB5884004D95E5 /* SenTestingKit.framework */,
 				DAE9D00219AF3B2900246B64 /* NotificationCenter.framework */,
-				4FB2A69EAA2C418DA2E0283E /* libPods-Swipes.a */,
-				368054CA6302490B9AFBAEFE /* libPods-SwipesKit.a */,
-				A3901B41E5E94AAE9A1FED2F /* libPods-SwipesToday.a */,
-				2221C0316ECCD8E41E51F6C1 /* libPods-SwipesShare.a */,
+				185A896539A29E7104DD298C /* libPods-Swipes.a */,
+				B9A1C62F368F9DC89FC163AD /* libPods-SwipesShare.a */,
+				04287423A716BF7ABC6E3A51 /* libPods-SwipesToday.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2912,14 +2909,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A7778D0216EB5884004D95E5 /* Build configuration list for PBXNativeTarget "Swipes" */;
 			buildPhases = (
-				A8AF6FFAA34042669C52BBD9 /* Check Pods Manifest.lock */,
-				A781A9FC16F9C13C00F30272 /* Build number */,
+				43011930FCAB0F0A75C1E77C /* Check Pods Manifest.lock */,
 				A7778CC616EB5884004D95E5 /* Sources */,
 				A7778CC716EB5884004D95E5 /* Frameworks */,
 				A7778CC816EB5884004D95E5 /* Resources */,
-				14A4BEEC691D48EDAF59F6F0 /* Copy Pods Resources */,
 				A7A976DC18410F56001C0A51 /* Fabric */,
 				DAE2B15B19CB7A4D00A9074E /* Embed App Extensions */,
+				2AF5CD530B445DDA9BABD51F /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2957,6 +2953,7 @@
 			buildConfigurationList = DA3282DE1A4CB7D00054CE04 /* Build configuration list for PBXNativeTarget "Swipes WatchKit App" */;
 			buildPhases = (
 				DA3282C71A4CB7CF0054CE04 /* Resources */,
+				C18AB5172E3A0BD92C25625D /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2971,11 +2968,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAE2B16219CB7A4D00A9074E /* Build configuration list for PBXNativeTarget "SwipesToday" */;
 			buildPhases = (
-				55B612736F3C4BA69AFD8093 /* Check Pods Manifest.lock */,
+				B1D1E6FA146AAAA4B3BD0045 /* Check Pods Manifest.lock */,
 				DAE2B14B19CB7A4D00A9074E /* Sources */,
 				DAE2B14C19CB7A4D00A9074E /* Frameworks */,
 				DAE2B14D19CB7A4D00A9074E /* Resources */,
-				BE783074BCA54B29AE05AD61 /* Copy Pods Resources */,
+				E675AC76CAABBAEAB89758D0 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2990,11 +2987,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAE4D6051AB1C474001BDC52 /* Build configuration list for PBXNativeTarget "SwipesShare" */;
 			buildPhases = (
-				5AC53DE9070C89F909827633 /* Check Pods Manifest.lock */,
+				AD3E0A72640CC82CB9C86EF3 /* Check Pods Manifest.lock */,
 				DAE4D5EE1AB1C473001BDC52 /* Sources */,
 				DAE4D5EF1AB1C473001BDC52 /* Frameworks */,
 				DAE4D5F01AB1C473001BDC52 /* Resources */,
-				4689ED791854DC30828E2C5C /* Copy Pods Resources */,
+				7655E29283C2C826A0A8E116 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3009,12 +3006,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAE9CFF419AF3AC700246B64 /* Build configuration list for PBXNativeTarget "SwipesKit" */;
 			buildPhases = (
-				AA8D92A74413416DB7EBBCFD /* Check Pods Manifest.lock */,
 				DAE9CFD719AF3AC600246B64 /* Sources */,
 				DAE9CFD819AF3AC600246B64 /* Frameworks */,
 				DAE9CFD919AF3AC600246B64 /* Headers */,
 				DAE9CFDA19AF3AC600246B64 /* Resources */,
-				41FABED8EFD1494BAF34A8F9 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -3325,7 +3320,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		14A4BEEC691D48EDAF59F6F0 /* Copy Pods Resources */ = {
+		2AF5CD530B445DDA9BABD51F /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3340,37 +3335,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Swipes/Pods-Swipes-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		41FABED8EFD1494BAF34A8F9 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwipesKit/Pods-SwipesKit-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4689ED791854DC30828E2C5C /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwipesShare/Pods-SwipesShare-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		55B612736F3C4BA69AFD8093 /* Check Pods Manifest.lock */ = {
+		43011930FCAB0F0A75C1E77C /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3385,34 +3350,20 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		5AC53DE9070C89F909827633 /* Check Pods Manifest.lock */ = {
+		7655E29283C2C826A0A8E116 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "#\"${SRCROOT}/Pods/Target Support Files/Pods-SwipesShare/Pods-SwipesShare-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		A781A9FC16F9C13C00F30272 /* Build number */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Build number";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-			shellPath = /bin/sh;
-			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
 		};
 		A7A976DC18410F56001C0A51 /* Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3442,7 +3393,7 @@
 			shellPath = /bin/sh;
 			shellScript = "cd Swipes/Classes/Models\nmogenerator -m \"Datamodel.xcdatamodeld/Datamodel 2.2.xcdatamodel/\" -M GeneratedClasses -H CustomClasses --template-var arc=true";
 		};
-		A8AF6FFAA34042669C52BBD9 /* Check Pods Manifest.lock */ = {
+		AD3E0A72640CC82CB9C86EF3 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3457,7 +3408,7 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		AA8D92A74413416DB7EBBCFD /* Check Pods Manifest.lock */ = {
+		B1D1E6FA146AAAA4B3BD0045 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3469,10 +3420,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Pods root is ${PODS_ROOT}\"\ndiff \"${SRCROOT}/Podfile.lock\" \"${SRCROOT}/Pods/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		BE783074BCA54B29AE05AD61 /* Copy Pods Resources */ = {
+		E675AC76CAABBAEAB89758D0 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3484,7 +3435,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday-resources.sh\"\n";
+			shellScript = "#\"${SRCROOT}/Pods/Target Support Files/Pods-SwipesToday/Pods-SwipesToday-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -4029,7 +3980,7 @@
 		};
 		A7680D4E172D54F400BCB2D9 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FA01441E525669BA3638C6B1 /* Pods-Swipes.adhoc.xcconfig */;
+			baseConfigurationReference = 6D5BEA326EAFB3A3221FBDC6 /* Pods-Swipes.adhoc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -4205,7 +4156,7 @@
 		};
 		A7778D0316EB5884004D95E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 340434FCBE05383D728BE275 /* Pods-Swipes.debug.xcconfig */;
+			baseConfigurationReference = AAD3AC7FF447841B518C6884 /* Pods-Swipes.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -4301,14 +4252,14 @@
 		};
 		A7778D0416EB5884004D95E5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 059DABC09F70AFFB6FC54751 /* Pods-Swipes.release.xcconfig */;
+			baseConfigurationReference = 7C894DB2B680D0DE2923E7F1 /* Pods-Swipes.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Swipes/Swipes.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4393,8 +4344,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "9ed06210-d574-481e-8c01-b79788254c6d";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9ed06210-d574-481e-8c01-b79788254c6d";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -4462,8 +4413,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = "Swipes WatchKit Extension/Swipes WatchKit Extension.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4485,7 +4436,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "363e0879-8fee-433b-a188-e84ebb6bcf62";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -4568,8 +4519,8 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4583,7 +4534,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "a6290933-1859-4847-a306-7f9a53e00cd9";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -4624,7 +4575,7 @@
 		};
 		DAE2B15F19CB7A4D00A9074E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2A574DC6041F17E4233CE71E /* Pods-SwipesToday.debug.xcconfig */;
+			baseConfigurationReference = 095DE804F5018CF6BB050042 /* Pods-SwipesToday.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -4691,7 +4642,7 @@
 		};
 		DAE2B16019CB7A4D00A9074E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F17D8C581F2A222D9CA9DE7E /* Pods-SwipesToday.release.xcconfig */;
+			baseConfigurationReference = 800DB99F5DE936C1C499DD31 /* Pods-SwipesToday.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -4699,8 +4650,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesToday/SwipesToday.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -4752,15 +4703,15 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "129a4962-88fb-4cff-95ed-95d28b798ed5";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "129a4962-88fb-4cff-95ed-95d28b798ed5";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
 		DAE2B16119CB7A4D00A9074E /* AdHoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B2FE7C8A8128F5F6A156B8E7 /* Pods-SwipesToday.adhoc.xcconfig */;
+			baseConfigurationReference = 7C71E17C267F18C80D2B36EB /* Pods-SwipesToday.adhoc.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -4829,7 +4780,7 @@
 		};
 		DAE4D5FE1AB1C474001BDC52 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 06EF8387A4A07C425F582A22 /* Pods-SwipesShare.debug.xcconfig */;
+			baseConfigurationReference = 7B12B9CE6EEB8BDEF1214802 /* Pods-SwipesShare.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -4892,7 +4843,7 @@
 		};
 		DAE4D5FF1AB1C474001BDC52 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B7787A22A22720D18819F98F /* Pods-SwipesShare.release.xcconfig */;
+			baseConfigurationReference = 1A28E2CABDD98C85629B0B4D /* Pods-SwipesShare.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -4900,8 +4851,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = SwipesShare/SwipesShare.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Swipes Incorporated (85LTPM52WY)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -4950,15 +4901,15 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "a4f3cb08-0215-400c-9c33-57a7c5978a95";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a4f3cb08-0215-400c-9c33-57a7c5978a95";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
 		DAE4D6001AB1C474001BDC52 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 95C4AF8B8AAEA0FB6B31A03A /* Pods-SwipesShare.adhoc.xcconfig */;
+			baseConfigurationReference = A7256A305CF6D22F11CDBE11 /* Pods-SwipesShare.adhoc.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -5023,7 +4974,6 @@
 		};
 		DAE9CFF519AF3AC700246B64 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E05A80E8EEB25CD6DB2767FA /* Pods-SwipesKit.debug.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
@@ -5116,7 +5066,6 @@
 		};
 		DAE9CFF619AF3AC700246B64 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6E45E45BF7F32F791A91F78A /* Pods-SwipesKit.release.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
@@ -5206,7 +5155,6 @@
 		};
 		DAE9CFF719AF3AC700246B64 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A10ECBCD0054ECEBA611D47 /* Pods-SwipesKit.adhoc.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
