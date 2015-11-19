@@ -82,7 +82,10 @@ NSString* const URL_SERVICE = @"url";
 }
 -(NSDictionary *)jsonForSaving
 {
-    return @{ @"service": self.service, @"identifier": self.identifier, @"title": self.title, @"sync": self.sync };
+    return @{ @"service": self.service ? self.service : @"",
+              @"identifier": self.identifier ? self.identifier : @"",
+              @"title": self.title ? self.title : @"",
+              @"sync": self.sync ? self.sync : @""};
 }
 
 - (NSString *)description

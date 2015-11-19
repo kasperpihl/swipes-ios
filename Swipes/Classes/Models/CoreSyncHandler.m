@@ -562,13 +562,13 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
             [SPOTLIGHT resetWithCompletionHandler:nil];
 #endif
 #endif
-        if (_isAsync)
-            [self endBackgroundHandler];
         if (handler)
             handler(syncResult);
         [self sendStatus:SyncStatusSuccess userInfo:coreUserInfo error:nil];
         
         DLog(@"Sync finished with result: %lu", (unsigned long)syncResult);
+        //if (_isAsync)
+            [self endBackgroundHandler];
     });
 }
 
@@ -635,7 +635,7 @@ static NSString * const kKeyOrphanedCleared = @"CoreSyncOrphanedCleared";
     UIBackgroundFetchResult syncResult = UIBackgroundFetchResultNoData;
     self._isSyncing = YES;
     
-    if (async)
+    //if (_isAsync)
         [self startBackgroundHandler];
     /* Prepare all the objects to be send */
     [self sendStatus:SyncStatusStarted userInfo:nil error:nil];

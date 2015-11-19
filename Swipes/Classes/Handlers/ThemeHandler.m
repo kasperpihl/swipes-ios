@@ -32,7 +32,9 @@ static ThemeHandler *sharedObject;
 +(ThemeHandler *)sharedInstance{
     if(!sharedObject){
         sharedObject = [[ThemeHandler alloc] init];
-        sharedObject.currentTheme = [USER_DEFAULTS integerForKey:@"theme"];
+        NSUserDefaults* ud = USER_DEFAULTS;
+        if (ud)
+            sharedObject.currentTheme = [ud integerForKey:@"theme"];
     }
     return sharedObject;
 }

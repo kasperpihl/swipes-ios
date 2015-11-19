@@ -54,12 +54,11 @@ static int g_activityIndicatorStack = 0;
 {
     BOOL value = [[kSettings valueForSetting:SettingUseStandardStatusBar] boolValue];
     if (value) {
-        if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-            return [UIApplication sharedApplication].statusBarFrame.size.height;
-        }
-        else {
-            return [UIApplication sharedApplication].statusBarFrame.size.width;
-        }
+        CGSize size = [UIApplication sharedApplication].statusBarFrame.size;
+        CGFloat result = MIN(size.height, size.width);
+        if (100 < result)
+            return 20; // not normal!
+        return result;
     }
     return 20; // this is a constant in KPTopClock
 }

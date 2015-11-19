@@ -31,6 +31,7 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
 @interface SpotlightHandler () <CSSearchableIndexDelegate>
 
 @property (nonatomic, strong) CSSearchableIndex* index;
+@property (nonatomic, assign) BOOL isIndexing;
 
 @end
 
@@ -170,24 +171,32 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
 
 - (void)setAllWithCompletionHandler:(void (^ __nullable)(NSError * __nullable error))completionHandler
 {
-    NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isLocallyDeleted <> YES"];
-    NSArray<KPToDo *> *results = [KPToDo MR_findAllWithPredicate:predicate inContext:contextForThread];
-    
-    [_index beginIndexBatch];
-    for (KPToDo* todo in results) {
-        [self setTodoItem:todo index:_index];
-    }
-    [_index endIndexBatchWithClientState:[@"done" dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] completionHandler:^(NSError * _Nullable error) {
-        if (error) {
-            [UtilityClass sendError:error type:@"CoreSpotlight: endIndexBatchWithClientState"];
+    if (NO == _isIndexing) {
+        NSManagedObjectContext *contextForThread = [NSManagedObjectContext MR_contextForCurrentThread];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isLocallyDeleted <> YES"];
+        NSArray<KPToDo *> *results = [KPToDo MR_findAllWithPredicate:predicate inContext:contextForThread];
+
+        _isIndexing = YES;
+        [_index beginIndexBatch];
+        for (KPToDo* todo in results) {
+            [self setTodoItem:todo index:_index];
         }
+        [_index endIndexBatchWithClientState:[@"done" dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] completionHandler:^(NSError * _Nullable error) {
+            if (error) {
+                [UtilityClass sendError:error type:@"CoreSpotlight: endIndexBatchWithClientState"];
+            }
+            if (completionHandler)
+                completionHandler(error);
+            DLog(@"CS: INDEXING DONE");
+            _isIndexing = NO;
+        }];
+        [USER_DEFAULTS setObject:@(YES) forKey:kSwipesIdentifier];
+        [USER_DEFAULTS synchronize];
+    }
+    else {
         if (completionHandler)
-            completionHandler(error);
-        DLog(@"CS: INDEXING DONE");
-    }];
-    [USER_DEFAULTS setObject:@(YES) forKey:kSwipesIdentifier];
-    [USER_DEFAULTS synchronize];
+            completionHandler(nil);
+    }
 }
 
 - (void)resetWithCompletionHandler:(void (^ __nullable)(NSError * __nullable error))completionHandler

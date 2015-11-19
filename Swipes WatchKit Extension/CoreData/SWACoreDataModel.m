@@ -148,7 +148,7 @@ static NSString* const DATABASE_FOLDER = @"database";
     request.shouldRefreshRefetchedObjects = YES;
     
     NSDate *endDate = [NSDate date];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)",endDate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(schedule < %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES AND tempId <> nil)",endDate];
     [request setPredicate:predicate];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
     [request setSortDescriptors:@[sortDescriptor]];
@@ -197,7 +197,7 @@ static NSString* const DATABASE_FOLDER = @"database";
     [request setEntity:entityDescription];
     
     NSDate *startDate = [NSDate date];
-    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES)", startDate];
+    NSPredicate *schedulePredicate = [NSPredicate predicateWithFormat:@"(schedule > %@ AND completionDate = nil AND parent = nil AND isLocallyDeleted <> YES AND tempId <> nil)", startDate];
     
     [request setPredicate:schedulePredicate];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"schedule" ascending:YES];
@@ -212,7 +212,7 @@ static NSString* const DATABASE_FOLDER = @"database";
     // check unspecified
     request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];
-    NSPredicate *unspecifiedPredicate = [NSPredicate predicateWithFormat:@"(schedule = nil AND completionDate = nil) AND parent = nil AND isLocallyDeleted <> YES"];
+    NSPredicate *unspecifiedPredicate = [NSPredicate predicateWithFormat:@"(schedule = nil AND completionDate = nil) AND parent = nil AND isLocallyDeleted <> YES AND tempId <> nil"];
     
     [request setPredicate:unspecifiedPredicate];
     [request setFetchLimit:1];

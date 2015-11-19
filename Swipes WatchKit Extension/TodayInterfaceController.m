@@ -126,6 +126,9 @@ static NSString* const kNotFirstRun = @"AppleWatchNotFirstRun";
             [cell.group setBackgroundColor:TASKS_COLOR];
             [cell.label setText:todo.title];
             [cell.label setTextColor:TEXT_COLOR];
+            if (nil == todo.tempId) {
+                todo.tempId = [KPToDo generateIdWithLength:14];
+            }
             [_todoTempIds addObject:todo.tempId];
             DLog(@"TODO: %@: %@", todo.title, todo.tempId);
         }

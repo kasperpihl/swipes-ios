@@ -10,6 +10,8 @@
 
 @interface KPToDo : _KPToDo
 
++(NSString*)generateIdWithLength:(NSInteger)length;
+
 -(void)complete;
 -(void)scheduleForDate:(NSDate*)date;
 
