@@ -177,21 +177,27 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
         NSArray<KPToDo *> *results = [KPToDo MR_findAllWithPredicate:predicate inContext:contextForThread];
 
         _isIndexing = YES;
-        [_index beginIndexBatch];
-        for (KPToDo* todo in results) {
-            [self setTodoItem:todo index:_index];
-        }
-        [_index endIndexBatchWithClientState:[@"done" dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] completionHandler:^(NSError * _Nullable error) {
-            if (error) {
-                [UtilityClass sendError:error type:@"CoreSpotlight: endIndexBatchWithClientState"];
+        @try {
+            [_index beginIndexBatch];
+            for (KPToDo* todo in results) {
+                [self setTodoItem:todo index:_index];
             }
-            if (completionHandler)
-                completionHandler(error);
-            DLog(@"CS: INDEXING DONE");
-            _isIndexing = NO;
-        }];
-        [USER_DEFAULTS setObject:@(YES) forKey:kSwipesIdentifier];
-        [USER_DEFAULTS synchronize];
+            [_index endIndexBatchWithClientState:[@"done" dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] completionHandler:^(NSError * _Nullable error) {
+                if (error) {
+                    [UtilityClass sendError:error type:@"CoreSpotlight: endIndexBatchWithClientState"];
+                }
+                if (completionHandler)
+                    completionHandler(error);
+                DLog(@"CS: INDEXING DONE");
+                _isIndexing = NO;
+            }];
+            [USER_DEFAULTS setObject:@(YES) forKey:kSwipesIdentifier];
+            [USER_DEFAULTS synchronize];
+        }
+        @catch (NSException *exception) {
+            [UtilityClass sendException:exception type:@"CoreSpotlight: setAllWithCompletionHandler"];
+            NSLog(@"Exception during setAllWithCompletionHandler");
+        }
     }
     else {
         if (completionHandler)
