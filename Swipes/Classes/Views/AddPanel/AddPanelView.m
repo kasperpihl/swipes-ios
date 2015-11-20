@@ -36,7 +36,7 @@
 
 @interface AddPanelView () <AddViewDelegate, KPTagListAddDelegate, KPBlurryDelegate>
 @property (nonatomic, strong) UIButton *closeButton;
-@property (nonatomic, weak) KPAddView *addView;
+@property (nonatomic, strong) KPAddView *addView;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) KPTagList *tagList;
 
@@ -131,7 +131,7 @@
     if(self.lock){
         return;
     }
-    if ( !self.hasClosed )
+    if ( !self.hasClosed && OSVER < 9 )
         [self pressedClose];
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];

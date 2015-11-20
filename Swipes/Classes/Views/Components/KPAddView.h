@@ -13,8 +13,8 @@
 -(void)addViewPressedDoneButton:(KPAddView*)addView;
 @end
 @interface KPAddView : UIView
-@property (nonatomic) IBOutlet UIButton *doneEditingButton;
+@property (nonatomic, strong) UIButton *doneEditingButton;
+@property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, weak) id<AddViewDelegate> delegate;
-@property (nonatomic) IBOutlet UITextField *textField;
 -(void)setText:(NSString*)text;
 @end
