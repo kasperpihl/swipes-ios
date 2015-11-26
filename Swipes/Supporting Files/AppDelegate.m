@@ -254,6 +254,9 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
                 handler(result);
             }];
         }
+        else {
+            handler(UIBackgroundFetchResultNoData);
+        }
     }
     else {
         //[PFPush handlePush:userInfo];

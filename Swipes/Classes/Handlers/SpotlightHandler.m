@@ -51,7 +51,7 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
 {
     self = [super init];
     if (self) {
-        if (OSVER >= 9) {
+        if (OSVER >= 9 && [CSSearchableIndex isIndexingAvailable]) {
             _index = [[CSSearchableIndex alloc] initWithName:kSwipesIdentifier];
             _index.indexDelegate = self;
             if (![USER_DEFAULTS objectForKey:kSwipesIdentifier]) {
@@ -64,7 +64,7 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
 
 - (void)clearAllWithCompletionHandler:(void (^ __nullable)(NSError * __nullable error))completionHandler
 {
-    if (OSVER >= 9) {
+    if (OSVER >= 9 && [CSSearchableIndex isIndexingAvailable]) {
         [_index deleteAllSearchableItemsWithCompletionHandler:^(NSError * _Nullable error) {
             if (error) {
                 [UtilityClass sendError:error type:@"CoreSpotlight: clearAllWithCompletionHandler"];
@@ -207,7 +207,7 @@ typedef NS_ENUM(NSUInteger, IMAGE_TYPES)
 
 - (void)resetWithCompletionHandler:(void (^ __nullable)(NSError * __nullable error))completionHandler
 {
-    if (OSVER >= 9) {
+    if (OSVER >= 9 && [CSSearchableIndex isIndexingAvailable]) {
         UIApplicationState state = [UIApplication sharedApplication].applicationState;
         if (UIApplicationStateBackground != state) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
