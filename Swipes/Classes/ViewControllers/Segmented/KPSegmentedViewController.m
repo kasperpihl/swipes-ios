@@ -943,17 +943,22 @@
 
 
 -(void)keyboardWillHide:(NSNotification*)notification{
-    if(self.currentTopMenu != TopMenuSearch)
-        return;
-    [NSTimer scheduledTimerWithTimeInterval:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] target:self selector:@selector(removeOverlay) userInfo:nil repeats:NO];
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
-    [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    
-    CGRectSetY(self.topOverlay, self.view.frame.size.height);
-    [UIView commitAnimations];
+    // BT keyboard on iOS9 sends keyboardWillHide initially so no way to close on this event
+    // it is just opened at this moment
+
+    if (OSVER < 9) {
+        if(self.currentTopMenu != TopMenuSearch)
+            return;
+        [NSTimer scheduledTimerWithTimeInterval:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] target:self selector:@selector(removeOverlay) userInfo:nil repeats:NO];
+
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue]];
+        [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+        [UIView setAnimationBeginsFromCurrentState:YES];
+        
+        CGRectSetY(self.topOverlay, self.view.frame.size.height);
+        [UIView commitAnimations];
+    }
 }
 -(void)removeOverlay{
     [self setTopMenu:nil state:TopMenuDefault animated:YES];
