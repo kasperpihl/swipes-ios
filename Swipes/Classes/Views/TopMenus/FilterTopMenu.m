@@ -170,7 +170,7 @@
 
 -(void)tagList:(KPTagList *)tagList changedSize:(CGSize)size{
     CGFloat maxHeight = [[UIScreen mainScreen] bounds].size.height / 4 * 3;
-    CGFloat maxY = CGRectGetMaxY(tagList.frame);
+    CGFloat maxY = CGRectGetMaxY(tagList.frame) + 48;
     CGFloat targetHeight = (maxY > maxHeight) ? maxHeight : maxY;
     
     self.scrollView.contentSize = CGSizeMake(tagList.frame.size.width, tagList.frame.size.height);
