@@ -98,6 +98,7 @@
 		<string>dbx-mailbox</string>
 		<string>googlegmail</string>
 		<string>cloudmagic</string>
+		<string>fbauth2</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

@@ -404,8 +404,20 @@ typedef enum {
         [UTILITY alertWithTitle:NSLocalizedString(@"Email wasn't found.", nil) andMessage:NSLocalizedString(@"We couldn't recognize the email.", nil)];
         return;
     }
-    [UTILITY alertWithTitle:NSLocalizedString(@"Something went wrong.", nil) andMessage:NSLocalizedString(@"Please try again.", nil)];
-    [UtilityClass sendError:error type:@"Login"];
+    
+    NSString* errorMessage = NSLocalizedString(@"Please try again.", nil);
+    if ([error respondsToSelector:@selector(fberrorUserMessage)] && error.fberrorUserMessage) {
+        errorMessage = [errorMessage stringByAppendingString:[NSString stringWithFormat:@" (%@)", error.fberrorUserMessage]];
+    }
+    else if (error.localizedDescription) {
+        errorMessage = [errorMessage stringByAppendingString:[NSString stringWithFormat:@" (%@)", error.localizedDescription]];
+    }
+//    else if (error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"message"]) {
+//        errorMessage = [errorMessage stringByAppendingString:[NSString stringWithFormat:@" (%@)", error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"message"]]];
+//    }
+    
+    [UTILITY alertWithTitle:NSLocalizedString(@"Something went wrong.", nil) andMessage:errorMessage];
+    [UtilityClass sendError:error type:@"Login" attachment:@{@"message": errorMessage}];
 }
 -(void)setCurrentState:(LoginState)currentState animated:(BOOL)animated
 {
@@ -461,8 +473,8 @@ typedef enum {
     [self showIndicator:YES onElement:sender];
     
     [PFFacebookUtils logInWithPermissions:@[@"email"] block:^(PFUser *user, NSError *error) {
+        [self showIndicator:NO onElement:sender];
         if(error){
-            [self showIndicator:NO onElement:sender];
             if([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"code"] integerValue] == 190){
                 if([error.userInfo[FBErrorParsedJSONResponseKey][@"body"][@"error"][@"error_subcode"] integerValue] == 458){
                     [self pressedFacebook:sender];
@@ -475,9 +487,9 @@ typedef enum {
             else{
                 [self handleErrorFromLogin:error];
             }
+            [PFUser logOut]; // new code, try to actively logout in order to detach FB from Parse
         }
         else{
-            [self showIndicator:NO onElement:sender];
             [self.delegate loginViewController:self didLoginUser:user];
         }
     }];
