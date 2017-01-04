@@ -16,7 +16,7 @@
 #import "UserHandler.h"
 #import "EvernoteIntegration.h"
 #import "GmailIntegration.h"
-#import "Intercom.h"
+#import <Intercom/Intercom.h>
 #import "GAI.h"
 #import "GAIFields.h"
 #import "GAIDictionaryBuilder.h"

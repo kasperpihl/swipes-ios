@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
-#import "Intercom.h"
+#import <Intercom/Intercom.h>
 #import "RootViewController.h"
 #import "UtilityClass.h"
 #import "KPAlert.h"

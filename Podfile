@@ -4,9 +4,9 @@ platform :ios, '7.0'
 inhibit_all_warnings!
 
 def shared_pods
-    pod 'Parse'
+    pod 'Parse', '1.11.0'
     pod 'ParseFacebookUtils'
-    pod 'evernote-cloud-sdk-ios', '2.0.2'
+    pod 'evernote-cloud-sdk-ios'
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'Base64'
@@ -51,7 +51,7 @@ end
 #link_with 'Swipes', 'SwipesKit'
 
 post_install do |installer|
-  installer.project.targets.each do |target|
+  installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       s = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS']
     if s==nil then s = [ '$(inherited)' ] end

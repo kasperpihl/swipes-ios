@@ -21,7 +21,7 @@
 #import <Fabric/Fabric.h>
 #import <DropboxSDK/DropboxSDK.h>
 
-#import "Intercom.h"
+#import <Intercom/Intercom.h>
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
 #import "UtilityClass.h"
