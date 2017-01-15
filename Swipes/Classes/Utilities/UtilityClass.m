@@ -8,7 +8,6 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "AppDelegate.h"
-#import "KPParseCommunicator.h"
 #import "NSDate-Utilities.h"
 #import "MF_Base64Additions.h"
 #ifndef NOT_APPLICATION
@@ -43,7 +42,7 @@ static char * const kPwd = "The Swipes Team";
     [self.class sendError:error type:type attachment:nil];
 }
 
-+ (PFObject*)emptyErrorObjectForDevice{
+/*+ (PFObject*)emptyErrorObjectForDevice{
     PFObject *errorObject = [PFObject objectWithClassName:@"Error"];
     [errorObject setObject:@"iOS" forKey:@"Platform"];
     [errorObject setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] forKey:@"AppVersion"];
@@ -54,11 +53,12 @@ static char * const kPwd = "The Swipes Team";
     if (data)
         [errorObject setObject:data forKey:@"Device"];
     return errorObject;
-}
+}*/
 
 + (void)sendError:(NSError *)error type:(NSString *)type attachment:(NSDictionary*)attachment{
     DLog(@"Sending error: '%@' of type: '%@'", error, type);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    return;
+    /*dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [self.class emptyErrorObjectForDevice];
         if ([error description])
             [errorObject setObject:[error description] forKey:@"error"];
@@ -94,6 +94,7 @@ static char * const kPwd = "The Swipes Team";
         }];
         return;
     });
+     */
     
 }
 +(void)sendException:(NSException*)exception type:(NSString*)type{
@@ -101,6 +102,8 @@ static char * const kPwd = "The Swipes Team";
 }
 +(void)sendException:(NSException *)exception type:(NSString *)type attachment:(NSDictionary *)attachment{
     DLog(@"Sending exception: '%@' of type: '%@'", exception, type);
+    return;
+    /*
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFObject *errorObject = [self.class emptyErrorObjectForDevice];
         if ([exception description])
@@ -120,6 +123,7 @@ static char * const kPwd = "The Swipes Team";
         }];
         return;
     });
+     */
 }
 +(NSString *)readableTime:(NSDate*)time showTime:(BOOL)showTime{
     if(!time) return nil;

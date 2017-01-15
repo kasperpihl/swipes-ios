@@ -32,47 +32,7 @@ static KPParseCommunicator *sharedObject;
     }
     return _queue;
 }
--(void)runCloudFunction:(NSString *)functionName withOptions:(NSDictionary *)options priority:(BOOL)priority block:(ResultBlock)block{
-    dispatch_queue_t queue = priority ? self.priorityQueue : self.queue;
-    dispatch_async(queue, ^{
-        NSError *error;
-        id result = [PFCloud callFunction:functionName withParameters:options error:&error];
-        if(error){
-            // Handling error
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(block) block(result,error);
-        });
-        
-    });
-}
--(void)downloadFile:(PFFile*)file priority:(BOOL)priority withCompletionBlock:(DataBlock)block{
-    if (file) {
-        if(file.isDataAvailable){
-            block(KPDLResultSuccess,file.getData,nil);
-            return;
-        }
-        if(priority){
-            DLog(@"file is downloading prior");
-            [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-                if(!error) block(KPDLResultSuccess,data,error);
-                else block(KPDLResultError,nil,error);
-            }];
-        }
-        else{
-            dispatch_queue_t queue = self.queue;
-            dispatch_async(queue, ^{
-                NSError *error;
-                NSData *data = [file getData:&error];
-                if(!error) block(KPDLResultSuccess,data,error);
-                else block(KPDLResultError,nil,error);
-            });
-        }
-    }
-    else{
-        block(KPDLResultError,nil,nil);
-    }
-}
+
 -(void)uploadFile:(PFFile *)file withCompletionBlock:(void(^)(PFFile* file, NSError *error))completionBlock andProgressBlock:(void(^)(float progress))progressBlock{
     [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if(error || !succeeded){
@@ -83,15 +43,5 @@ static KPParseCommunicator *sharedObject;
         float percentFloat = (float)percentDone/100;
         if(progressBlock) progressBlock(percentFloat);
     }];
-}
--(void)saveObject:(PFObject *)object priority:(BOOL)priority handler:(SuccessfulBlock)block{
-    dispatch_queue_t queue = priority ? self.priorityQueue : self.queue;
-    dispatch_async(queue, ^{
-        NSError *error;
-        BOOL saved = [object save:&error];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(block) block(saved,error);
-        });
-    });
 }
 @end

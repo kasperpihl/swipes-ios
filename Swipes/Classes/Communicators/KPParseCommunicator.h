@@ -16,8 +16,5 @@ typedef void (^PFObjectBlock) (PFObject *object, NSError *error);
 
 @interface KPParseCommunicator : NSObject
 +(KPParseCommunicator*)sharedInstance;
--(void)runCloudFunction:(NSString *)functionName withOptions:(NSDictionary *)options priority:(BOOL)priority block:(ResultBlock)block;
--(void)saveObject:(PFObject*)object priority:(BOOL)priority handler:(SuccessfulBlock)block;
--(void)downloadFile:(PFFile*)file priority:(BOOL)priority withCompletionBlock:(DataBlock)block;
 -(void)uploadFile:(PFFile *)file withCompletionBlock:(void(^)(PFFile* file, NSError *error))completionBlock andProgressBlock:(void(^)(float progress))progressBlock;
 @end
