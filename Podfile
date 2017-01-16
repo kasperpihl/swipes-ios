@@ -4,7 +4,7 @@ platform :ios, '7.0'
 inhibit_all_warnings!
 
 def shared_pods
-    pod 'Parse', '1.11.0'
+    pod 'Parse'
     pod 'ParseFacebookUtils'
     pod 'evernote-cloud-sdk-ios'
     pod 'Reachability'
@@ -60,4 +60,3 @@ post_install do |installer|
     end
   end
 end
-

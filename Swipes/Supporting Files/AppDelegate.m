@@ -80,9 +80,16 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     
     // Enable data sharing in main app.
     [Parse enableDataSharingWithApplicationGroupIdentifier:SHARED_GROUP_NAME];
-    [Parse setApplicationId:[UtilityClass decrypt:@"Og5cTB4HASAqGxM+PwgbLBk0QR42DkY8P1QuCQcbBgIgWAYyIiMxQA=="] // @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
-                  clientKey:[UtilityClass decrypt:@"BxoOVhgNLx1QQk42LjtePBIQVz0xESA1CRJgLFgIJgMPVjgRWSgfIA=="]]; //@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"
     
+    [Parse initializeWithConfiguration:[ParseClientConfiguration configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
+        configuration.applicationId = [UtilityClass decrypt:@"Og5cTB4HASAqGxM+PwgbLBk0QR42DkY8P1QuCQcbBgIgWAYyIiMxQA=="];
+        configuration.clientKey = [UtilityClass decrypt:@"BxoOVhgNLx1QQk42LjtePBIQVz0xESA1CRJgLFgIJgMPVjgRWSgfIA=="];
+        configuration.server = @"https://pg-app-7zd37b94rjuze3x1cwrxfhlf9qj292.scalabl.cloud/1/";
+    }]];
+    
+    /*[Parse setApplicationId:[UtilityClass decrypt:@"Og5cTB4HASAqGxM+PwgbLBk0QR42DkY8P1QuCQcbBgIgWAYyIiMxQA=="] // @"nf9lMphPOh3jZivxqQaMAg6YLtzlfvRjExUEKST3"
+                  clientKey:[UtilityClass decrypt:@"BxoOVhgNLx1QQk42LjtePBIQVz0xESA1CRJgLFgIJgMPVjgRWSgfIA=="]]; //@"SrkvKzFm51nbKZ3hzuwnFxPPz24I9erkjvkf0XzS"*/
+    [PFUser enableRevocableSessionInBackground];
     [PFFacebookUtils initializeFacebook];
     
 //    [Crashlytics startWithAPIKey:[UtilityClass decrypt:@"ZV8ERTZCDxFdRRkyV1UPY1hQRWNHDRIERURgVgJYZQoAQzVCCkcARw=="]]; //@"17aee5fa869f24b705e00dba6d43c51becf5c7e4"];
