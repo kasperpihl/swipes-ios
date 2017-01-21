@@ -10,7 +10,6 @@ def shared_pods
     pod 'Reachability'
     pod 'Underscore.m'
     pod 'Base64'
-    pod 'Intercom'
     pod 'GoogleAnalytics'
 end
 

@@ -50,8 +50,6 @@
 #import "AwesomeMenu.h"
 #import "SpotlightHandler.h"
 
-#import <Intercom/Intercom.h>
-
 @interface RootViewController () <UINavigationControllerDelegate,WalkthroughDelegate,KPBlurryDelegate,MFMailComposeViewControllerDelegate,LoginViewControllerDelegate, HintHandlerDelegate,YTPlayerViewDelegate>
 
 @property (nonatomic,strong) MenuViewController *settingsViewController;

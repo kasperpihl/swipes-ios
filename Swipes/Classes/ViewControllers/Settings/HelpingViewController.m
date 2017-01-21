@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Pihl IT. All rights reserved.
 //
 
-#import <Intercom/Intercom.h>
 #import "RootViewController.h"
 #import "UtilityClass.h"
 #import "KPAlert.h"
@@ -62,7 +61,7 @@ static NSString* kOpenTitle;
                         kKeyCellType: @(kIntegrationCellTypeViewMore),
                         kKeyTouchSelector: NSStringFromSelector(@selector(onWalkthroughTouch))
                         },
-                      @{kKeyTitle: NSLocalizedString(@"Contact Swipes", nil),
+                      @{kKeyTitle: [NSLocalizedString(@"Contact Swipes", nil) stringByAppendingString:@": support@swipesapp.com"],
                         kKeyCellType: @(kIntegrationCellTypeViewMore),
                         kKeyTouchSelector: NSStringFromSelector(@selector(onContactSwipesTouch))
                         },
@@ -121,7 +120,7 @@ static NSString* kOpenTitle;
 
 - (void)onContactSwipesTouch
 {
-    [Intercom presentConversationList];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:support@swipesapp.com"]];
 }
 
 @end

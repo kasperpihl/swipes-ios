@@ -16,7 +16,6 @@
 #import "UserHandler.h"
 #import "EvernoteIntegration.h"
 #import "GmailIntegration.h"
-#import <Intercom/Intercom.h>
 #import "GAI.h"
 #import "GAIFields.h"
 #import "GAIDictionaryBuilder.h"
@@ -36,83 +35,10 @@ static AnalyticsHandler *sharedObject;
     return sharedObject;
 }
 -(void)initialize{
-    [self initializeIntercom];
-    [self registerUser];
-    notify(@"logged in", registerUser);
-    notify(@"trying out", registerUser);
 }
--(void)initializeIntercom{
-//    NSString* encrypted = [UtilityClass encrypt:@"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1"];
-//    DLog(@"%@ = %@", @"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1", encrypted);
-//    DLog(@"%@ = %@", encrypted, [UtilityClass decrypt:encrypted]);
-//
-//    encrypted = [UtilityClass encrypt:@"yobuz4ff"];
-//    DLog(@"%@ = %@", @"yobuz4ff", encrypted);
-//    DLog(@"%@ = %@", encrypted, [UtilityClass decrypt:encrypted]);
-    
-    [Intercom setApiKey:[UtilityClass decrypt:@"PQcWfyATAl1VRhAwVwJYYFxQRGpHWhQBEkRhAFRUMgwHFzIVUBVVQhVgVlJdZwlU"] // @"ios_sdk-050d2c5445d903ddad5e59fdb7ab9e01543303a1"
-               forAppId:[UtilityClass decrypt:@"LQcHVSlDDxY="]]; // @"yobuz4ff"
-    [Intercom setPreviewPaddingWithX:0 y:0];
-    NSString *hmac = [USER_DEFAULTS objectForKey:@"intercom-hmac"];
-    if(hmac){
-        [self setHmac:hmac];
-    }
-    //[Intercom enableLogging];
-}
--(void)fetchHmacForTestUser{
-    NSString *testIntercomId = [USER_DEFAULTS objectForKey:@"intercom-test-userid"];
-    if(!testIntercomId){
-        testIntercomId = [@"test-" stringByAppendingString:[UtilityClass generateIdWithLength:10]];
-        [USER_DEFAULTS setObject:testIntercomId forKey:@"intercom-test-userid"];
-    }
 
-    NSString *url = @"https://api.swipesapp.com:443/hmac";
-    NSDictionary *syncData = @{@"identifier": testIntercomId};
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
-    [request setTimeoutInterval:35];
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:syncData
-                                                       options:0 // Pass 0 if you don't care about the readability of the generated string
-                                                         error:&error];
-    if(error){
-        return;
-    }
-    
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    [request setHTTPBody:jsonData];
-
-    NSHTTPURLResponse *response;
-    NSData *resData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    if(error){
-        return;
-    }
-    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:resData options:NSJSONReadingAllowFragments error:&error];
-    if(error){
-        return;
-    }
-    if([result objectForKey:@"intercom-hmac"]){
-        [USER_DEFAULTS setObject:[result objectForKey:@"intercom-hmac"] forKey:@"intercom-hmac"];
-        [USER_DEFAULTS synchronize];
-        [self setHmac:[result objectForKey:@"intercom-hmac"]];
-    }
-    
-}
--(void)registerUser{
-    if(kCurrent){
-        [Intercom registerUserWithUserId:kCurrent.objectId];
-    }
-    else if([USER_DEFAULTS objectForKey:isTryingString]){
-        [Intercom registerUnidentifiedUser];
-        if(![USER_DEFAULTS objectForKey:@"intercom-hmac"])
-            [self fetchHmacForTestUser];
-    }
-    
-}
 -(void)logout{
     [self clearViews];
-    [Intercom reset];
 }
 
 -(NSMutableArray *)views{
@@ -128,12 +54,6 @@ static AnalyticsHandler *sharedObject;
 -(void)trackEvent:(NSString *)event options:(NSDictionary *)options{
     if(self.analyticsOff)
         return;
-    if(!options || options.count == 0){
-        [Intercom logEventWithName:event];
-    }
-    else{
-        [Intercom logEventWithName:event metaData:options];
-    }
 }
 
 -(void)checkForUpdatesOnIdentity{
@@ -150,8 +70,6 @@ static AnalyticsHandler *sharedObject;
     BOOL gaUpdate = NO;
     
     GAIDictionaryBuilder *gaCustomBuilder = [GAIDictionaryBuilder createEventWithCategory:@"Session" action:@"Updated Identity" label:nil value:nil];
-    NSMutableDictionary *intercomAttributes = [@{} mutableCopy];
-    NSMutableDictionary *customIntercomAttributes = [@{} mutableCopy];
     
     
     // User ID Checking
@@ -179,8 +97,6 @@ static AnalyticsHandler *sharedObject;
     if(email && ![email isEqualToString:currentEmail]){
         shouldUpdate = YES;
         [currentValues setObject:email forKey:@"email"];
-        
-        [intercomAttributes setObject:email forKey:@"email"];
     }
 
     
@@ -196,7 +112,6 @@ static AnalyticsHandler *sharedObject;
             
             [currentValues setObject:isoSignup forKey:@"signup_date"];
             
-            [intercomAttributes setObject:isoSignup forKey:@"remote_created_at"];
         }
     }
     
@@ -221,7 +136,6 @@ static AnalyticsHandler *sharedObject;
         [tracker set:[GAIFields customDimensionForIndex:1]
                value:userLevel];
         [gaCustomBuilder set:userLevel forKey:[GAIFields customDimensionForIndex:1]];
-        [customIntercomAttributes setObject:userLevel forKey:@"user_level"];
     }
    
     
@@ -249,8 +163,6 @@ static AnalyticsHandler *sharedObject;
         [tracker set:[GAIFields customDimensionForIndex:2]
                value:evernoteUserLevel];
         [gaCustomBuilder set:evernoteUserLevel forKey:[GAIFields customDimensionForIndex:2]];
-        
-        [customIntercomAttributes setObject:evernoteUserLevel forKey:@"evernote_user_level"];
     }
     
     
@@ -272,8 +184,6 @@ static AnalyticsHandler *sharedObject;
         [tracker set:[GAIFields customDimensionForIndex:8]
                value:gmailUserLevel];
         [gaCustomBuilder set:gmailUserLevel forKey:[GAIFields customDimensionForIndex:8]];
-        
-        [customIntercomAttributes setObject:gmailUserLevel forKey:@"gmail_user_level"];
     }
     
     
@@ -290,8 +200,6 @@ static AnalyticsHandler *sharedObject;
         [tracker set:[GAIFields customDimensionForIndex:3]
                value:theme];
         [gaCustomBuilder set:theme forKey:[GAIFields customDimensionForIndex:3]];
-        
-        [customIntercomAttributes setObject:theme forKey:@"active_theme"];
     }
     
     
@@ -307,8 +215,6 @@ static AnalyticsHandler *sharedObject;
         [tracker set:[GAIFields customDimensionForIndex:4]
                value:[numberOfRecurring stringValue]];
         [gaCustomBuilder set:[numberOfRecurring stringValue] forKey:[GAIFields customDimensionForIndex:4]];
-        
-        [customIntercomAttributes setObject:numberOfRecurring forKey:@"recurring_tasks"];
     }
     
     
@@ -323,7 +229,6 @@ static AnalyticsHandler *sharedObject;
         [tracker set:[GAIFields customDimensionForIndex:5]
                value:[numberOfTags stringValue]];
         [gaCustomBuilder set:[numberOfTags stringValue] forKey:[GAIFields customDimensionForIndex:5]];
-        [customIntercomAttributes setObject:numberOfTags forKey:@"number_of_tags"];
     }
     
     
@@ -341,8 +246,6 @@ static AnalyticsHandler *sharedObject;
         [tracker set:[GAIFields customDimensionForIndex:6]
                value:isMailboxInstalled];
         [gaCustomBuilder set:isMailboxInstalled forKey:[GAIFields customDimensionForIndex:6]];
-        
-        [customIntercomAttributes setObject:isMailboxInstalled forKey:@"mailbox_installed"];
     }
     
     NSString *currentPlatform = [currentValues objectForKey:@"platform"];
@@ -360,29 +263,12 @@ static AnalyticsHandler *sharedObject;
 
     
     // Update Intercom / start session
-    if(shouldUpdate){
-        [intercomAttributes setObject:customIntercomAttributes forKey:@"custom_attributes"];
-        [Intercom updateUserWithAttributes:intercomAttributes];
-    
-    }
     if(shouldUpdate || gaUpdate){
         [USER_DEFAULTS setObject:[currentValues copy] forKey:@"identityValues"];
         [USER_DEFAULTS synchronize];
     }
     // Update Google Analytics Custom
 }
-
--(void)setHmac:(NSString*)hmac{
-    NSString *data;
-    if(kCurrent.objectId)
-        data = kCurrent.objectId;
-    else if([USER_DEFAULTS objectForKey:@"intercom-test-userid"])
-        data = [USER_DEFAULTS objectForKey:@"intercom-test-userid"];
-    else return;
-    [Intercom setHMAC:hmac data:data];
-    [self checkForUpdatesOnIdentity];
-}
-
 
 -(void)pushView:(NSString *)view{
     

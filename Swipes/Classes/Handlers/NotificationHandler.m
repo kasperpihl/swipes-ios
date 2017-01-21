@@ -14,7 +14,6 @@
 #import "SettingsHandler.h"
 #import "UserHandler.h"
 #import "KPTopClock.h"
-#import <Intercom/Intercom.h>
 
 // TODO
 // this is full of iOS8 related deprecation warnings

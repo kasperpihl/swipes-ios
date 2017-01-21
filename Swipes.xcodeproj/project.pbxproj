@@ -4363,8 +4363,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = Swipes;
-				PROVISIONING_PROFILE = "9ed06210-d574-481e-8c01-b79788254c6d";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9ed06210-d574-481e-8c01-b79788254c6d";
+				PROVISIONING_PROFILE = "12c2a4e7-8956-439f-8bb8-419fa172dca4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "12c2a4e7-8956-439f-8bb8-419fa172dca4";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -4455,7 +4455,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "363e0879-8fee-433b-a188-e84ebb6bcf62";
+				PROVISIONING_PROFILE = "8af5f6a6-eb0c-469e-bbf2-4d72de93b337";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -4553,7 +4553,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a6290933-1859-4847-a306-7f9a53e00cd9";
+				PROVISIONING_PROFILE = "b811e859-495f-4a2b-9d9a-3afaa01b08fa";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -4718,8 +4718,8 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "129a4962-88fb-4cff-95ed-95d28b798ed5";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "129a4962-88fb-4cff-95ed-95d28b798ed5";
+				PROVISIONING_PROFILE = "98820f0d-665b-4df2-8011-d208a24b7952";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "98820f0d-665b-4df2-8011-d208a24b7952";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -4916,8 +4916,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a4f3cb08-0215-400c-9c33-57a7c5978a95";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a4f3cb08-0215-400c-9c33-57a7c5978a95";
+				PROVISIONING_PROFILE = "ebc05d1c-ee31-4ef4-ae18-90fba2b3be7f";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ebc05d1c-ee31-4ef4-ae18-90fba2b3be7f";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;

@@ -21,7 +21,6 @@
 #import <Fabric/Fabric.h>
 #import <DropboxSDK/DropboxSDK.h>
 
-#import <Intercom/Intercom.h>
 #import "NSDate-Utilities.h"
 #import "Appirater.h"
 #import "UtilityClass.h"
@@ -254,7 +253,6 @@ static NSString * const kFromAppleWatch = @"Apple Watch";
     }
     [currentInstallation saveInBackground];
     
-    [Intercom setDeviceToken:deviceToken];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
